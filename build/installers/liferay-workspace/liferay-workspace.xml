@@ -359,6 +359,17 @@
         <deleteFile>
             <path>${installdir}</path>
         </deleteFile>
+        <deleteFile>
+            <path>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Liferay Workspace</path>
+            <ruleList>
+                <compareText>
+                    <logic>contains</logic>
+                    <nocase>1</nocase>
+                    <text>${platform_name}</text>
+                    <value>win</value>
+                </compareText>
+            </ruleList>
+        </deleteFile>
         <runProgram>
             <program>chown</program>
             <programArguments>-R ${env(SUDO_USER)} ${lrws}</programArguments>

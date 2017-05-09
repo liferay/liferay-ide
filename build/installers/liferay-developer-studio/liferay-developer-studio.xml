@@ -164,6 +164,10 @@
                             <name>studioZipPath</name>
                             <value>${installdir}${platform_path_separator}com.liferay.ide.studio-macosx.cocoa.x86_64.zip</value>
                         </setInstallerVariable>
+                        <setInstallerVariable>
+                            <name>installdir</name>
+                            <value>${user_home_directory}/${product_shortname}</value>
+                        </setInstallerVariable>
                     </actionList>
                     <conditionRuleList>
                         <compareText>
@@ -408,13 +412,6 @@
         </runProgram>
         <createDirectory>
             <path>${user_home_directory}${platform_path_separator}.gradle</path>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-            </ruleList>
         </createDirectory>
         <setInstallerVariable>
             <name>bladeCommondPath</name>
@@ -424,25 +421,11 @@
             <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
             <key>dxpCustomerEmail</key>
             <value>${email}</value>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-            </ruleList>
         </propertiesFileSet>
         <propertiesFileSet>
             <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
             <key>dxpCustomerPassword</key>
             <value>${password}</value>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-            </ruleList>
         </propertiesFileSet>
         <runProgram>
             <program>chown</program>
@@ -457,11 +440,6 @@
                     <text>${platform_name}</text>
                     <value>win</value>
                 </compareText>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
             </ruleList>
         </runProgram>
         <runProgram>
@@ -476,13 +454,6 @@
             <file>${lrws}${platform_path_separator}gradle.properties</file>
             <key>liferay.workspace.bundle.url</key>
             <value>https://api.liferay.com/downloads/portal/7.0.10.2/liferay-dxp-digital-enterprise-tomcat-7.0-sp2-20170317165321327.zip</value>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-            </ruleList>
         </propertiesFileSet>
         <runProgram>
             <program>chown</program>
@@ -519,6 +490,17 @@
         </deleteFile>
         <deleteFile>
             <path>${studioZipPath}</path>
+        </deleteFile>
+        <deleteFile>
+            <path>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Liferay Developer Studio</path>
+            <ruleList>
+                <compareText>
+                    <logic>contains</logic>
+                    <nocase>1</nocase>
+                    <text>${platform_name}</text>
+                    <value>win</value>
+                </compareText>
+            </ruleList>
         </deleteFile>
     </postInstallationActionList>
     <createUninstaller>0</createUninstaller>
@@ -569,34 +551,9 @@
             <mustExist>0</mustExist>
             <width>30</width>
         </directoryParameter>
-        <choiceParameterGroup>
-            <name>isdxp</name>
-            <title>Liferay DXP Customer?</title>
-            <description></description>
-            <explanation>If you are a DXP customer, you can specify the following details and Liferay Workspace will be configured with the latest DXP bundle instead of Liferay Portal Community Edition.
-If you aren't currently a customer, select the DXP Trial.</explanation>
-            <value></value>
-            <default></default>
-            <parameterList>
-                <labelParameter>
-                    <name>dxp</name>
-                    <title>dxp</title>
-                    <description>Liferay DXP Bundle</description>
-                    <explanation></explanation>
-                    <image></image>
-                </labelParameter>
-                <labelParameter>
-                    <name>ce</name>
-                    <title>ce</title>
-                    <description>DXP Trial</description>
-                    <explanation></explanation>
-                    <image></image>
-                </labelParameter>
-            </parameterList>
-        </choiceParameterGroup>
         <parameterGroup>
             <name>dxpinfo</name>
-            <title>DXP Customer Info</title>
+            <title>Download Liferay DXP Bundle</title>
             <explanation></explanation>
             <value></value>
             <default></default>
@@ -608,7 +565,7 @@ If you aren't currently a customer, select the DXP Trial.</explanation>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
+                    <allowEmptyValue>0</allowEmptyValue>
                     <width>30</width>
                 </stringParameter>
                 <passwordParameter>
@@ -618,19 +575,12 @@ If you aren't currently a customer, select the DXP Trial.</explanation>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
-                    <allowEmptyValue>1</allowEmptyValue>
+                    <allowEmptyValue>0</allowEmptyValue>
                     <askForConfirmation>0</askForConfirmation>
                     <descriptionRetype></descriptionRetype>
                     <width>20</width>
                 </passwordParameter>
             </parameterList>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-            </ruleList>
         </parameterGroup>
     </parameterList>
 </project>
