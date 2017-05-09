@@ -532,4 +532,5 @@ If you aren't currently a customer, select the Community Edition.</explanation>
             </ruleList>
         </parameterGroup>
     </parameterList>
+    <startMenuGroupName></startMenuGroupName>
 </project>
