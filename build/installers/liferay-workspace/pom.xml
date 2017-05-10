@@ -31,7 +31,7 @@
     <name>Liferay IDE Workspace Installer</name>
 
     <properties>
-        <blade-latest-download-url>https://releases.liferay.com/tools/blade-cli/latest/blade.jar</blade-latest-download-url>
+        <blade-latest-download-url>https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/103/artifact/build/generated/p2/plugins/com.liferay.blade.cli_2.1.1.201705101640.jar</blade-latest-download-url>
         <workspace-installer-version>1.2.4</workspace-installer-version>
     </properties>
 
@@ -51,6 +51,8 @@
                         <configuration>
                             <url>${blade-latest-download-url}</url>
                             <outputDirectory>../shared/download/</outputDirectory>
+                            <outputFileName>blade.jar</outputFileName>
+                            <md5>4ecc17c805735fdfbe967d79de63b512</md5>
                         </configuration>
                     </execution>
                 </executions>

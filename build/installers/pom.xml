@@ -51,6 +51,12 @@
                         <fileset>
                             <directory>outputs</directory>
                         </fileset>
+                        <fileset>
+                            <directory>shared/download</directory>
+                            <includes>
+                                <include>blade.jar</include>
+                            </includes>
+                        </fileset>
                     </filesets>
                 </configuration>
             </plugin>
