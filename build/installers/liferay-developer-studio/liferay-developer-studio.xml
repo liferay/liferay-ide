@@ -546,6 +546,7 @@
     <disableSplashScreen>1</disableSplashScreen>
     <enableRollback>1</enableRollback>
     <enableTimestamp>1</enableTimestamp>
+    <outputDirectory>../outputs</outputDirectory>
     <startMenuGroupName></startMenuGroupName>
     <vendor>Liferay, Inc</vendor>
     <parameterList>
