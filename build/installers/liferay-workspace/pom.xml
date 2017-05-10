@@ -32,6 +32,7 @@
 
     <properties>
         <blade-latest-download-url>https://releases.liferay.com/tools/blade-cli/latest/blade.jar</blade-latest-download-url>
+        <workspace-installer-version>1.2.4</workspace-installer-version>
     </properties>
 
     <build>
@@ -105,6 +106,32 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>delete-osx-app</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <target>
+                                <delete dir="../outputs/LiferayWorkspace-${workspace-installer-version}-osx-installer.app"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant-nodeps</artifactId>
+                        <version>1.8.1</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
