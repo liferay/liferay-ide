@@ -134,13 +134,6 @@
                             </arguments>
                         </configuration>
                     </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <executions>
                     <execution>
                         <id>osx-app-zip</id>
                         <phase>package</phase>
