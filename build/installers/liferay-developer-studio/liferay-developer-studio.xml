@@ -30,7 +30,7 @@
                             <origin>../shared/download/liferay-dxp-digital-enterprise-tomcat-7.0-sp2-20170317165321327.zip</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../shared/download/com.liferay.portal.plugins.sdk-1.0.7-withdependencies.zip</origin>
+                            <origin>../shared/download/com.liferay.portal.plugins.sdk-1.0.9-withdependencies.zip</origin>
                         </distributionFile>
                     </distributionFileList>
                 </folder>
@@ -205,8 +205,8 @@
             </ruleList>
         </copyFile>
         <copyFile>
-            <destination>${liferayBundlesPath}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.7-withdependencies.zip</destination>
-            <origin>${installdir}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.7-withdependencies.zip</origin>
+            <destination>${liferayBundlesPath}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.9-withdependencies.zip</destination>
+            <origin>${installdir}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.9-withdependencies.zip</origin>
             <ruleList>
                 <compareValues>
                     <logic>equals</logic>
@@ -527,7 +527,7 @@
             <path>${installdir}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp2-20170317165321327.zip</path>
         </deleteFile>
         <deleteFile>
-            <path>${installdir}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.7-withdependencies.zip</path>
+            <path>${installdir}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.9-withdependencies.zip</path>
         </deleteFile>
         <deleteFile>
             <path>${installdir}${platform_path_separator}blade.jar</path>
