@@ -164,10 +164,6 @@
                             <name>studioZipPath</name>
                             <value>${installdir}${platform_path_separator}com.liferay.ide.studio-macosx.cocoa.x86_64.zip</value>
                         </setInstallerVariable>
-                        <setInstallerVariable>
-                            <name>installdir</name>
-                            <value>${user_home_directory}/${product_shortname}</value>
-                        </setInstallerVariable>
                     </actionList>
                     <conditionRuleList>
                         <compareText>
@@ -550,7 +546,7 @@
     <disableSplashScreen>1</disableSplashScreen>
     <enableRollback>1</enableRollback>
     <enableTimestamp>1</enableTimestamp>
-    <outputDirectory>../outputs</outputDirectory>
+    <startMenuGroupName></startMenuGroupName>
     <vendor>Liferay, Inc</vendor>
     <parameterList>
         <directoryParameter>
@@ -671,5 +667,4 @@
             </ruleList>
         </parameterGroup>
     </parameterList>
-    <startMenuGroupName></startMenuGroupName>
 </project>
