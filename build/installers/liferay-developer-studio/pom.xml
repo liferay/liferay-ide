@@ -38,6 +38,7 @@
         <plugin-sdk-zip-name>com.liferay.portal.plugins.sdk-1.0.7-withdependencies.zip</plugin-sdk-zip-name>
         <plugin-sdk-version>1.0.7</plugin-sdk-version>
         <blade-latest-download-url>https://releases.liferay.com/tools/blade-cli/latest/blade.jar</blade-latest-download-url>
+        <studio-installer-version>3.1.0-b1</studio-installer-version>
     </properties>
 
     <build>
@@ -130,6 +131,30 @@
                                 <argument>build</argument>
                                 <argument>./liferay-developer-studio.xml</argument>
                                 <argument>osx</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>osx-app-zip</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>zip</executable>
+                            <workingDirectory>../outputs/</workingDirectory>
+                            <arguments>
+                                <argument>-m</argument>
+                                <argument>LiferayDeveloperStudio-${studio-installer-version}-osx-installer.app.zip</argument>
+                                <argument>-r</argument>
+                                <argument>LiferayDeveloperStudio-${studio-installer-version}-osx-installer.app/</argument>
                             </arguments>
                         </configuration>
                     </execution>

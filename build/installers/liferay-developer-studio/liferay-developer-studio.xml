@@ -564,6 +564,20 @@
             <mustBeWritable>1</mustBeWritable>
             <mustExist>0</mustExist>
             <width>30</width>
+            <preShowPageActionList>
+                <setInstallerVariable>
+                    <name>installdir</name>
+                    <value>${user_home_directory}/${product_shortname}</value>
+                    <ruleList>
+                        <compareText>
+                            <logic>contains</logic>
+                            <nocase>1</nocase>
+                            <text>${platform_name}</text>
+                            <value>osx</value>
+                        </compareText>
+                    </ruleList>
+                </setInstallerVariable>
+            </preShowPageActionList>
             <validationActionList>
                 <if>
                     <explanation>is empty</explanation>
@@ -596,10 +610,9 @@
         </directoryParameter>
         <choiceParameterGroup>
             <name>isdxp</name>
-            <title>Liferay DXP Customer?</title>
+            <title>Configure Liferay Workspace Server Bundle</title>
             <description></description>
-            <explanation>If you are a DXP customer, you can specify the following details and Liferay Workspace will be configured with the latest DXP bundle instead of Liferay Portal Community Edition.
-If you aren't currently a customer, select the Community Edition Bundle.</explanation>
+            <explanation>When initializing a new Liferay Workspace, Liferay Customers can use Liferay DXP Bundle. Community members should choose Liferay Portal Community Edition.</explanation>
             <value></value>
             <default></default>
             <parameterList>
