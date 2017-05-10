@@ -200,10 +200,24 @@
         <copyFile>
             <destination>${liferayBundlesPath}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp2-20170317165321327.zip</destination>
             <origin>${installdir}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp2-20170317165321327.zip</origin>
+            <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${isdxp}</value1>
+                    <value2>dxp</value2>
+                </compareValues>
+            </ruleList>
         </copyFile>
         <copyFile>
             <destination>${liferayBundlesPath}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.7-withdependencies.zip</destination>
             <origin>${installdir}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.7-withdependencies.zip</origin>
+            <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${isdxp}</value1>
+                    <value2>dxp</value2>
+                </compareValues>
+            </ruleList>
         </copyFile>
         <runProgram>
             <program>java</program>
@@ -412,6 +426,13 @@
         </runProgram>
         <createDirectory>
             <path>${user_home_directory}${platform_path_separator}.gradle</path>
+            <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${isdxp}</value1>
+                    <value2>dxp</value2>
+                </compareValues>
+            </ruleList>
         </createDirectory>
         <setInstallerVariable>
             <name>bladeCommondPath</name>
@@ -421,11 +442,25 @@
             <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
             <key>dxpCustomerEmail</key>
             <value>${email}</value>
+            <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${isdxp}</value1>
+                    <value2>dxp</value2>
+                </compareValues>
+            </ruleList>
         </propertiesFileSet>
         <propertiesFileSet>
             <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
             <key>dxpCustomerPassword</key>
             <value>${password}</value>
+            <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${isdxp}</value1>
+                    <value2>dxp</value2>
+                </compareValues>
+            </ruleList>
         </propertiesFileSet>
         <runProgram>
             <program>chown</program>
@@ -440,6 +475,11 @@
                     <text>${platform_name}</text>
                     <value>win</value>
                 </compareText>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${isdxp}</value1>
+                    <value2>dxp</value2>
+                </compareValues>
             </ruleList>
         </runProgram>
         <runProgram>
@@ -449,11 +489,25 @@
         <copyFile>
             <destination>${lrws}${platform_path_separator}build.gradle</destination>
             <origin>${installdir}${platform_path_separator}build.gradle</origin>
+            <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${isdxp}</value1>
+                    <value2>dxp</value2>
+                </compareValues>
+            </ruleList>
         </copyFile>
         <propertiesFileSet>
             <file>${lrws}${platform_path_separator}gradle.properties</file>
             <key>liferay.workspace.bundle.url</key>
             <value>https://api.liferay.com/downloads/portal/7.0.10.2/liferay-dxp-digital-enterprise-tomcat-7.0-sp2-20170317165321327.zip</value>
+            <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${isdxp}</value1>
+                    <value2>dxp</value2>
+                </compareValues>
+            </ruleList>
         </propertiesFileSet>
         <runProgram>
             <program>chown</program>
@@ -540,6 +594,31 @@
             <mustExist>0</mustExist>
             <width>30</width>
         </directoryParameter>
+        <choiceParameterGroup>
+            <name>isdxp</name>
+            <title>Liferay DXP Customer?</title>
+            <description></description>
+            <explanation>If you are a DXP customer, you can specify the following details and Liferay Workspace will be configured with the latest DXP bundle instead of Liferay Portal Community Edition.
+If you aren't currently a customer, select the Community Edition Bundle.</explanation>
+            <value></value>
+            <default></default>
+            <parameterList>
+                <labelParameter>
+                    <name>dxp</name>
+                    <title>dxp</title>
+                    <description>Liferay DXP Bundle</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
+                <labelParameter>
+                    <name>ce</name>
+                    <title>ce</title>
+                    <description>Community Edition Bundle</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
+            </parameterList>
+        </choiceParameterGroup>
         <parameterGroup>
             <name>dxpinfo</name>
             <title>Download Liferay DXP Bundle</title>
@@ -570,6 +649,13 @@
                     <width>20</width>
                 </passwordParameter>
             </parameterList>
+            <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${isdxp}</value1>
+                    <value2>dxp</value2>
+                </compareValues>
+            </ruleList>
         </parameterGroup>
     </parameterList>
     <startMenuGroupName></startMenuGroupName>
