@@ -463,10 +463,9 @@
         </choiceParameterGroup>
         <choiceParameterGroup>
             <name>isdxp</name>
-            <title>Liferay DXP Customer?</title>
+            <title>Configure Liferay Workspace Server Bundle</title>
             <description></description>
-            <explanation>If you are a DXP customer, you can specify the following details and Liferay Workspace will be configured with the latest DXP bundle instead of Liferay Portal Community Edition.
-If you aren't currently a customer, select the Community Edition.</explanation>
+            <explanation>When initializing a new Liferay Workspace, Liferay Customers can use Liferay DXP Bundle. Community members should choose Liferay Portal Community Edition.</explanation>
             <value></value>
             <default></default>
             <parameterList>
@@ -480,7 +479,7 @@ If you aren't currently a customer, select the Community Edition.</explanation>
                 <labelParameter>
                     <name>ce</name>
                     <title>ce</title>
-                    <description>Community Edition Bundle</description>
+                    <description>Liferay Portal Community Edition Bundle</description>
                     <explanation></explanation>
                     <image></image>
                 </labelParameter>
@@ -495,14 +494,14 @@ If you aren't currently a customer, select the Community Edition.</explanation>
         </choiceParameterGroup>
         <parameterGroup>
             <name>dxpinfo</name>
-            <title>DXP Customer Info</title>
-            <explanation></explanation>
+            <title>Liferay DXP Customer Credentials</title>
+            <explanation>This information will be stored in your {user.home}/.gradle/gradle.properties file. Please do not share this file with anyone.</explanation>
             <value></value>
             <default></default>
             <parameterList>
                 <stringParameter>
                     <name>email</name>
-                    <title>liferay.com email address</title>
+                    <title>Email</title>
                     <description>liferay.com Email Address:</description>
                     <explanation></explanation>
                     <value></value>
@@ -513,7 +512,7 @@ If you aren't currently a customer, select the Community Edition.</explanation>
                 <passwordParameter>
                     <name>password</name>
                     <title>Password</title>
-                    <description>liferay.com Email Password:</description>
+                    <description>liferay.com Password:</description>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
