@@ -6,9 +6,9 @@
          <!--
       <runtimeType
             class="com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime60"
-            description="%liferay.v60.ce.tomcat60.runtime.type.description"
+            description="%liferay.v60.tomcat60.runtime.type.description"
             id="com.liferay.ide.eclipse.server.tomcat.runtime.60"
-            name="%liferay.v60.ce.tomcat60.runtime.type.name"
+            name="%liferay.v60.tomcat60.runtime.type.name"
             vendor="Liferay, Inc."
             version="6.0">
          <moduleType
@@ -22,9 +22,9 @@
       </runtimeType>
       <runtimeType
             class="com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime70"
-            description="%liferay.v61.ce.tomcat70.runtime.type.description"
+            description="%liferay.v61.tomcat70.runtime.type.description"
             id="com.liferay.ide.eclipse.server.tomcat.runtime.70"
-            name="%liferay.v61.ce.tomcat70.runtime.type.name"
+            name="%liferay.v61.tomcat70.runtime.type.name"
             vendor="Liferay, Inc."
             version="7.0">
          <moduleType
@@ -39,9 +39,9 @@
       -->
       <runtimeType
             class="com.liferay.ide.server.tomcat.core.Liferay62TomcatRuntime70"
-            description="%liferay.v62.ce.tomcat70.runtime.type.description"
+            description="%liferay.v62.tomcat70.runtime.type.description"
             id="com.liferay.ide.server.62.tomcat.runtime.70"
-            name="%liferay.v62.ce.tomcat70.runtime.type.name"
+            name="%liferay.v62.tomcat70.runtime.type.name"
             vendor="Liferay, Inc."
             version="6.2">
          <moduleType
@@ -69,12 +69,12 @@
       <serverType
             behaviourClass="com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior"
             class="com.liferay.ide.server.tomcat.core.LiferayTomcatServer"
-            description="%liferay.v60.ce.tomcat60.server.type.description"
+            description="%liferay.v60.tomcat60.server.type.description"
             hasConfiguration="true"
             id="com.liferay.ide.eclipse.server.tomcat.60"
             initialState="stopped"
             launchConfigId="com.liferay.ide.eclipse.server.tomcat.60.launchConfigurationType"
-            name="%liferay.v60.ce.tomcat60.server.type.name"
+            name="%liferay.v60.tomcat60.server.type.name"
             runtime="true"
             runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.60"
             startTimeout="900000"
@@ -84,12 +84,12 @@
       <serverType
             behaviourClass="com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior"
             class="com.liferay.ide.server.tomcat.core.LiferayTomcatServer"
-            description="%liferay.v61.ce.tomcat70.server.type.description"
+            description="%liferay.v61.tomcat70.server.type.description"
             hasConfiguration="true"
             id="com.liferay.ide.eclipse.server.tomcat.70"
             initialState="stopped"
             launchConfigId="com.liferay.ide.eclipse.server.tomcat.70.launchConfigurationType"
-            name="%liferay.v61.ce.tomcat70.server.type.name"
+            name="%liferay.v61.tomcat70.server.type.name"
             runtime="true"
             runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.70"
             startTimeout="900000"
@@ -100,12 +100,12 @@
       <serverType
             behaviourClass="com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior"
             class="com.liferay.ide.server.tomcat.core.LiferayTomcatServer"
-            description="%liferay.v62.ce.tomcat70.server.type.description"
+            description="%liferay.v62.tomcat70.server.type.description"
             hasConfiguration="true"
             id="com.liferay.ide.eclipse.server.tomcat.7062"
             initialState="stopped"
             launchConfigId="com.liferay.ide.server.62.tomcat.70.launchConfigurationType"
-            name="%liferay.v62.ce.tomcat70.server.type.name"
+            name="%liferay.v62.tomcat70.server.type.name"
             runtime="true"
             runtimeTypeId="com.liferay.ide.server.62.tomcat.runtime.70"
             startTimeout="900000"
@@ -119,7 +119,7 @@
             delegate="org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchConfigurationDelegate"
             id="com.liferay.ide.eclipse.server.tomcat.60.launchConfigurationType"
             modes="run, debug, profile"
-            name="%liferay.v60.ce.tomcat60.launch.config.type.name"
+            name="%liferay.v60.tomcat60.launch.config.type.name"
             sourceLocatorId="com.liferay.ide.server.core.portal.sourceLocator"
             sourcePathComputerId="com.liferay.ide.server.tomcat.sourcePathComputer">
       </launchConfigurationType>
@@ -127,7 +127,7 @@
             delegate="org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchConfigurationDelegate"
             id="com.liferay.ide.eclipse.server.tomcat.70.launchConfigurationType"
             modes="run, debug, profile"
-            name="%liferay.v61.ce.tomcat70.launch.config.type.name"
+            name="%liferay.v61.tomcat70.launch.config.type.name"
             sourceLocatorId="com.liferay.ide.server.core.portal.sourceLocator"
             sourcePathComputerId="com.liferay.ide.server.tomcat.sourcePathComputer">
       </launchConfigurationType-->
@@ -135,7 +135,7 @@
             delegate="com.liferay.ide.server.tomcat.core.LiferayTomcatLaunchConfigDelegate"
             id="com.liferay.ide.server.62.tomcat.70.launchConfigurationType"
             modes="run, debug, profile"
-            name="%liferay.v62.ce.tomcat70.launch.config.type.name"
+            name="%liferay.v62.tomcat70.launch.config.type.name"
             sourceLocatorId="com.liferay.ide.server.core.portal.sourceLocator"
             sourcePathComputerId="com.liferay.ide.server.tomcat.sourcePathComputer">
       </launchConfigurationType>
