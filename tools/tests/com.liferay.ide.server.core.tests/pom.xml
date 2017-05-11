@@ -58,6 +58,7 @@
                         <skipServerTests>${skipServerTests}</skipServerTests>
                         <skipBundleTests>${skipBundleTests}</skipBundleTests>
                     </systemProperties>
+                    <skipTests>${skipTests}</skipTests>
                 </configuration>
             </plugin>
             <plugin>

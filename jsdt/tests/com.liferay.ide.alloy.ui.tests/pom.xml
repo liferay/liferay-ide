@@ -215,6 +215,7 @@
                             <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
                             <skipBundleTests>${skipBundleTests}</skipBundleTests>
                         </systemProperties>
+                        <skipTests>${skipTests}</skipTests>
                         <dependencies>
 	                        <dependency>
 	                            <type>eclipse-feature</type>

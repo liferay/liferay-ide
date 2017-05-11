@@ -50,6 +50,7 @@
                         <osgi.console>1234</osgi.console>
                         <skipBundleTests>${skipBundleTests}</skipBundleTests>
                     </systemProperties>
+                    <skipTests>${skipTests}</skipTests>
                 </configuration>
             </plugin>
             <plugin>

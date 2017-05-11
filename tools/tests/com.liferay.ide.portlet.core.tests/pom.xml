@@ -41,6 +41,7 @@
                         <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
                         <skipBundleTests>${skipBundleTests}</skipBundleTests>
                     </systemProperties>
+                    <skipTests>${skipTests}</skipTests>
                 </configuration>
             </plugin>
             <plugin>

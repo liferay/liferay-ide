@@ -63,6 +63,7 @@
                         <skipBundleTests>${skipBundleTests}</skipBundleTests>
                         <!--osgi.console>1234</osgi.console-->
                     </systemProperties>
+                    <skipTests>${skipTests}</skipTests>
                     <excludes>
                         <exclude>${exclude.tests}</exclude>
                     </excludes>
