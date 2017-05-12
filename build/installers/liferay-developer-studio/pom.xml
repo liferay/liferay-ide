@@ -136,23 +136,6 @@
                             </arguments>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>osx-app-zip</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>zip</executable>
-                            <workingDirectory>../outputs/</workingDirectory>
-                            <arguments>
-                                <argument>-m</argument>
-                                <argument>LiferayDeveloperStudio-${studio-installer-version}-osx-installer.app.zip</argument>
-                                <argument>-r</argument>
-                                <argument>LiferayDeveloperStudio-${studio-installer-version}-osx-installer.app/</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
             <plugin>

@@ -668,4 +668,5 @@
             </ruleList>
         </parameterGroup>
     </parameterList>
+    <createOsxBundleDmg>1</createOsxBundleDmg>
 </project>
