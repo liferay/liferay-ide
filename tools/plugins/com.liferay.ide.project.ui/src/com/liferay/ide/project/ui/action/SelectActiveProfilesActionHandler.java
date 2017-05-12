@@ -20,12 +20,16 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.Profile;
 import com.liferay.ide.project.ui.wizard.NewLiferayPluginProjectWizard;
 
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
+import org.eclipse.sapphire.ui.forms.DialogDef;
 import org.eclipse.sapphire.ui.forms.PropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
 import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
+import org.eclipse.swt.widgets.Shell;
 
 
 /**
@@ -80,8 +84,8 @@ public class SelectActiveProfilesActionHandler extends PropertyEditorActionHandl
                 }
             }
 
-            final SapphireDialog dialog =
-                new SapphireDialog( swt.shell(), op, DefinitionLoader.sdef(
+            final CustomSapphireDialog dialog =
+                new CustomSapphireDialog( swt.shell(), op, DefinitionLoader.sdef(
                     NewLiferayPluginProjectWizard.class ).dialog( "SelectActiveProfiles" ) );
 
             dialog.setBlockOnOpen( true );
@@ -103,4 +107,17 @@ public class SelectActiveProfilesActionHandler extends PropertyEditorActionHandl
         return null;
     }
 
+    static class CustomSapphireDialog extends SapphireDialog
+    {
+        public CustomSapphireDialog( Shell shell, Element element, Reference<DialogDef> definition )
+        {
+            super( shell, element, definition );
+        }
+
+        @Override
+        protected boolean performOkOperation()
+        {
+            return true;
+        }
+    }
 }
