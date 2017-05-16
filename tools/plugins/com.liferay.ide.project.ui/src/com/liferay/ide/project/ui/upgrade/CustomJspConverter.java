@@ -21,8 +21,10 @@ import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
+import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.CustomJspPage;
 import com.liferay.ide.server.core.ILiferayRuntime;
@@ -62,6 +64,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
@@ -577,6 +581,21 @@ public class CustomJspConverter
         throws Exception
     {
         String projectName = originProjectName + "-" + portlet + "-fragment";
+
+        if( ProjectUtil.getProject( projectName ).exists() )
+        {
+            UIUtil.sync( new Runnable()
+            {
+
+                @Override
+                public void run()
+                {
+                    MessageDialog.openInformation( UIUtil.getActiveShell(), "Convert Custom JSP", projectName + "already be converted" );
+                }
+            } );
+
+            return projectName;
+        }
 
         String module = portlet2ModuleMap.get( portlet );
 
