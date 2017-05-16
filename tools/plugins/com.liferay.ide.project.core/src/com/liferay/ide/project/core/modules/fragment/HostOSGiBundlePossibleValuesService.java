@@ -72,10 +72,13 @@ public class HostOSGiBundlePossibleValuesService extends PossibleValuesService
 
                 IRuntime runtime = ServerUtil.getRuntime( runtimeName );
 
-                bundles = ServerUtil.getModuleFileListFrom70Server(runtime);
+                if ( runtime != null )
+                {
+                    bundles = ServerUtil.getModuleFileListFrom70Server(runtime);
+                    values.addAll( bundles );
+                }
             }
 
-            values.addAll( bundles );
         }
     }
 
