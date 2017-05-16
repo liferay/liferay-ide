@@ -70,16 +70,20 @@ public class ResourceBundleJumpActionHandler extends JumpActionHandler
             final IWorkspaceRoot wroot = workspace.getRoot();
             final IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
             String ioFileName = PortletUtil.convertJavaToIoFileName( text, RB_FILE_EXTENSION );
-            for( IClasspathEntry iClasspathEntry : cpEntries )
+
+            if ( cpEntries != null )
             {
-                if( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() )
+                for( IClasspathEntry iClasspathEntry : cpEntries )
                 {
-                    IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
-                    entryPath = entryPath.append( ioFileName );
-                    IFile resourceBundleFile = wroot.getFileForLocation( entryPath );
-                    if( resourceBundleFile != null && resourceBundleFile.exists() )
+                    if( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() )
                     {
-                        return true;
+                        IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
+                        entryPath = entryPath.append( ioFileName );
+                        IFile resourceBundleFile = wroot.getFileForLocation( entryPath );
+                        if( resourceBundleFile != null && resourceBundleFile.exists() )
+                        {
+                            return true;
+                        }
                     }
                 }
             }
