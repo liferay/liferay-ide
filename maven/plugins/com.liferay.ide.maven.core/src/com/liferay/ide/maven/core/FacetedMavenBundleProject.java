@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.ILiferayPortal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,18 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
         this.bundleProject = new MavenBundlePluginProject( project );
     }
 
+    @Override
+    public <T> T adapt( Class<T> adapterType )
+    {
+        if( ILiferayPortal.class.equals( adapterType ) )
+        {
+            return null;
+        }
+
+        return super.adapt( adapterType );
+    }
+    
+    
     @Override
     public boolean filterResource( IPath resourcePath )
     {
