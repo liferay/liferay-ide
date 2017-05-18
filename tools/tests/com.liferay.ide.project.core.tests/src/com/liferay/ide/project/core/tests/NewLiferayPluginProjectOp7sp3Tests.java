@@ -17,19 +17,19 @@ package com.liferay.ide.project.core.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.platform.PathBridge;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -38,22 +38,22 @@ import org.junit.Test;
 /**
  * @author Terry Jia
  */
-public class NewLiferayPluginProjectOp701Tests extends NewLiferayPluginProjectOpBase
+public class NewLiferayPluginProjectOp7sp3Tests extends NewLiferayPluginProjectOpBase
 {
 
     protected IPath getLiferayPluginsSdkDir()
     {
-        return ProjectCore.getDefault().getStateLocation().append( "com.liferay.portal.plugins.sdk-7.0" );
+        return ProjectCore.getDefault().getStateLocation().append( "com.liferay.portal.plugins.sdk-1.0.9-withdependencies" );
     }
 
     protected IPath getLiferayPluginsSDKZip()
     {
-        return getLiferayBundlesPath().append( "com.liferay.portal.plugins.sdk-7.0-ga3-20160804222206210.zip" );
+        return getLiferayBundlesPath().append( "com.liferay.portal.plugins.sdk-1.0.9-withdependencies.zip" );
     }
 
     protected String getLiferayPluginsSdkZipFolder()
     {
-        return "com.liferay.portal.plugins.sdk-7.0/";
+        return "com.liferay.portal.plugins.sdk-1.0.9-withdependencies/";
     }
 
     @AfterClass
@@ -135,12 +135,12 @@ public class NewLiferayPluginProjectOp701Tests extends NewLiferayPluginProjectOp
     {
     }
 
+    @Ignore
     @Override
     @Test
     public void testNewThemeProjects() throws Exception
     {
-        if( shouldSkipBundleTests() )
-            return;
+        if( shouldSkipBundleTests() ) return;
 
         super.testNewThemeProjects();
     }
@@ -178,44 +178,25 @@ public class NewLiferayPluginProjectOp701Tests extends NewLiferayPluginProjectOp
     }
 
     @Test
-    public void testNewExtAntProjectNotSupported() throws Exception
-    {
-        if( shouldSkipBundleTests() )
-            return;
-
-        final String projectName = "test-ext-project-sdk";
-        final NewLiferayPluginProjectOp op = newProjectOp( projectName );
-
-        op.setPluginType( PluginType.ext );
-
-        Status validation = op.validation();
-        assertEquals(
-            validation.message(),
-            "The selected Plugins SDK does not support creating ext type plugins. Please try to confirm whether sdk has ext folder." );
-    }
-
-    @Test
     public void testNewExtAntProjectNotSupportedWithWorkspaceSDK() throws Exception
     {
         if( shouldSkipBundleTests() )
             return;
-
-        SDK sdk = SDKUtil.createSDKFromLocation( getLiferayPluginsSdkDir() );
-
-        assertEquals( true, sdk.isValid() );
-        SDKUtil.openAsProject( sdk );
-
+       
         final String projectName = "test-ext-project-sdk";
         final NewLiferayPluginProjectOp op = newProjectOp( projectName );
 
         op.setPluginType( PluginType.ext );
-
+        op.setSdkLocation( PathBridge.create( getLiferayPluginsSdkDir() ) );
         Status validation = op.validation();
-        assertEquals(
-            validation.message(),
-            "The selected Plugins SDK does not support creating ext type plugins. Please try to confirm whether sdk has ext folder." );
-    }
+        assertEquals( true, validation.ok() );
+        
+        final IProject extProject = createAntProject( op );
 
+        assertNotNull( extProject );
+    }
+        
+    
     @BeforeClass
     public static void removeAllProjects() throws Exception
     {
@@ -228,5 +209,5 @@ public class NewLiferayPluginProjectOp701Tests extends NewLiferayPluginProjectOp
             assertFalse( project.exists() );
         }
     }
-
+   
 }

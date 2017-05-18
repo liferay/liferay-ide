@@ -145,6 +145,15 @@ public class SDKLocationValidationService extends ValidationService
                             requiredVersion );
                 }
             }
+            else if ( op().getPluginType().content().equals( PluginType.ext ) )
+            {
+                if ( !supportsTypePlugin( op(), "ext" ) )
+                {
+                    retval =
+                        Status.createErrorStatus( "The selected Plugins SDK does not support creating ext type plugins. " +
+                                        "Please try to confirm whether sdk has ext folder.");
+                }
+            }
         }
 
         return retval;

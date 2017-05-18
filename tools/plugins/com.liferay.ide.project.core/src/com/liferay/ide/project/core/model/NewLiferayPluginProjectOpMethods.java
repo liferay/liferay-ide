@@ -380,8 +380,21 @@ public class NewLiferayPluginProjectOpMethods
 
                 final boolean greaterThan700 = CoreUtil.compareVersions( version, ILiferayConstants.V700 ) >= 0;
 
-                if( ( greaterThan700 && "web".equals( type ) ) || ( ( !greaterThan700 ) && "ext".equals( type ) ) ||
-                    ( !greaterThan700 ) && "theme".equals( type ) )
+                if( ( greaterThan700 && "web".equals( type ) ) || ( !greaterThan700 ) && "theme".equals( type ) )
+                {
+                    retval = true;
+                }
+
+                if (  greaterThan700 && "ext".equals( type ) )
+                {
+                    IPath extFolder = sdk.getLocation().append( "ext" );
+
+                    if ( extFolder.toFile().exists() && extFolder.append( "build.xml" ).toFile().exists() )
+                    {
+                        retval = true;
+                    }
+                }
+                else if (  !greaterThan700 && "ext".equals( type ) )
                 {
                     retval = true;
                 }
