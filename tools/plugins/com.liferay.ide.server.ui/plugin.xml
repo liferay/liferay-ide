@@ -102,6 +102,13 @@
                class="com.liferay.ide.server.ui.navigator.PropertiesActionProvider"
                id="com.liferay.ide.server.ui.serverview.properties.actions"
                priority="highest">
+               <enablement>
+                  <or>
+                     <instanceof
+                           value="com.liferay.ide.server.ui.navigator.PropertiesFile">
+                     </instanceof>
+                  </or>
+               </enablement>
          </actionProvider>
       </navigatorContent>
       <!--
