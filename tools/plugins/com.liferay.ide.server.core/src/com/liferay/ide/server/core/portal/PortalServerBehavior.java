@@ -839,8 +839,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
     private boolean shouldSetUpAriesJmxBundles()
     {
-        boolean retVal = false;
-
         File portalImplFile =
             getPortalRuntime().getAppServerPortalDir().append( "WEB-INF/lib/portal-impl.jar" ).toFile();
 
@@ -851,30 +849,32 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
         try(JarFile jarFile = new JarFile( portalImplFile ))
         {
-            String pacthAttr = jarFile.getManifest().getMainAttributes().getValue( "Liferay-Portal-Installed-Patches" );
+            String patchAttr = jarFile.getManifest().getMainAttributes().getValue( "Liferay-Portal-Installed-Patches" );
 
-            if( CoreUtil.empty( pacthAttr ) )
+            if( CoreUtil.empty( patchAttr ) )
             {
-                return false;
+                return true;
             }
-
-            String[] result = pacthAttr.trim().split( "-" );
-
-            if( result == null || result.length < 3 )
+            else
             {
-                return false;
+                String[] result = patchAttr.trim().split( "-" );
+
+                if( result == null || result.length < 3 )
+                {
+                    return false;
+                }
+
+                int patchVersion = Integer.parseInt( result[1] );
+
+                // from dxp fix pack 9 (de-9-7010) , the aries jmx bundle is removed
+                return patchVersion >= 9;
             }
-
-            int patchVersion = Integer.parseInt( result[1] );
-
-            // from dxp fix pack 9 (de-9-7010) , the aries jmx bundle is removed
-            return patchVersion >= 9;
         }
         catch( Exception e )
         {
         }
 
-        return retVal;
+        return false;
     }
 
     @Override
