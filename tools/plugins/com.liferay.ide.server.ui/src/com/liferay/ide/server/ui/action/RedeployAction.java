@@ -16,16 +16,21 @@
 package com.liferay.ide.server.ui.action;
 
 import com.liferay.ide.server.core.ILiferayServerBehavior;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.statushandlers.StatusManager;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 
@@ -66,14 +71,25 @@ public class RedeployAction extends AbstractServerRunningAction
 
                 if( liferayServerBehavior != null )
                 {
-                    try
+                    Job redployJob = new Job( "Liferay redeploy job....")
                     {
-                        liferayServerBehavior.redeployModule( moduleServer.getModule() );
-                    }
-                    catch( CoreException e )
-                    {
-                        StatusManager.getManager().handle( e.getStatus(), StatusManager.SHOW );
-                    }
+
+                        @Override
+                        protected IStatus run( IProgressMonitor monitor )
+                        {
+                            try
+                            {
+                                liferayServerBehavior.redeployModule( moduleServer.getModule() );
+                            }
+                            catch( CoreException e )
+                            {
+                                LiferayServerCore.logError( e );
+                            }
+                            return Status.OK_STATUS;
+                        }
+                    };
+                    redployJob.setUser( false );
+                    redployJob.schedule();
                 }
             }
         }
