@@ -21,7 +21,6 @@ import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
-import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -64,7 +63,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.swt.widgets.Display;
@@ -93,7 +91,7 @@ public class CustomJspConverter
 
         public FileVisitorImpl( Path source )
         {
-            filePaths = new ArrayList<String>();
+            filePaths = new ArrayList<>();
 
             this.source = source;
         }
@@ -153,7 +151,7 @@ public class CustomJspConverter
 
     static
     {
-        portlet2ModuleMap = new HashMap<String, String>();
+        portlet2ModuleMap = new HashMap<>();
 
         portlet2ModuleMap.put( "activities", "com.liferay.social.activities.web" );
         // mapper.put( "amazon_rankings", "com.liferay.amazon.rankings.web");
@@ -239,7 +237,7 @@ public class CustomJspConverter
         portlet2ModuleMap.put( "workflow_tasks", "com.liferay.portal.workflow.task.web" );
         portlet2ModuleMap.put( "xsl_content", "com.liferay.xsl.content.web" );
 
-        jspPathMap = new ArrayList<String>();
+        jspPathMap = new ArrayList<>();
 
         jspPathMap.add( "bookmarks" );
         jspPathMap.add( "blogs" );
@@ -268,7 +266,7 @@ public class CustomJspConverter
 
     public static String[] getConvertResult( String filter )
     {
-        List<String> results = new ArrayList<String>();
+        List<String> results = new ArrayList<>();
 
         IPath path = ProjectUI.getDefault().getStateLocation().append( resultFileName );
 
@@ -586,13 +584,13 @@ public class CustomJspConverter
         {
             UIUtil.sync( new Runnable()
             {
-
                 @Override
                 public void run()
                 {
-                    MessageDialog.openInformation( UIUtil.getActiveShell(), "Convert Custom JSP", projectName + "already be converted" );
+                    MessageDialog.openInformation(
+                        UIUtil.getActiveShell(), "Convert Custom JSP", projectName + " has already been converted." );
                 }
-            } );
+            });
 
             return projectName;
         }
@@ -715,7 +713,7 @@ public class CustomJspConverter
 
     private List<String> getAllFilesFromModuleJar( String portlet ) throws Exception
     {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
 
         File moduleFile = getModuleFile( portlet );
 
@@ -754,7 +752,7 @@ public class CustomJspConverter
 
     private List<String> getAllRelativizeFilePaths( File file )
     {
-        List<String> retVal = new ArrayList<String>();
+        List<String> retVal = new ArrayList<>();
 
         Path source = file.toPath();
 
