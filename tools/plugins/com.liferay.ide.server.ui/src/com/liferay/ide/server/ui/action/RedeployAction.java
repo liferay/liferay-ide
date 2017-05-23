@@ -71,9 +71,8 @@ public class RedeployAction extends AbstractServerRunningAction
 
                 if( liferayServerBehavior != null )
                 {
-                    Job redployJob = new Job( "Liferay redeploy job....")
+                    Job redeployJob = new Job( "Redeploying " + moduleServer.getModuleDisplayName() )
                     {
-
                         @Override
                         protected IStatus run( IProgressMonitor monitor )
                         {
@@ -83,13 +82,17 @@ public class RedeployAction extends AbstractServerRunningAction
                             }
                             catch( CoreException e )
                             {
-                                LiferayServerCore.logError( e );
+                                LiferayServerCore.logError(
+                                    "Error redeploying " + moduleServer.getModuleDisplayName(), e );
                             }
+
                             return Status.OK_STATUS;
                         }
                     };
-                    redployJob.setUser( false );
-                    redployJob.schedule();
+
+                    redeployJob.setUser( true );
+                    redeployJob.setRule( moduleServer.getServer() );
+                    redeployJob.schedule();
                 }
             }
         }
@@ -102,7 +105,7 @@ public class RedeployAction extends AbstractServerRunningAction
 
         if( !selection.isEmpty() )
         {
-            final List<ModuleServer> newModules = new ArrayList<ModuleServer>();
+            final List<ModuleServer> newModules = new ArrayList<>();
 
             if( selection instanceof IStructuredSelection )
             {
