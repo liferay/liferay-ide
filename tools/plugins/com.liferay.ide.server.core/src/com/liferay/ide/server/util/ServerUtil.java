@@ -54,8 +54,6 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -73,7 +71,6 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.internal.launching.StandardVMType;
-import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.wst.common.componentcore.ComponentCore;
@@ -108,8 +105,8 @@ import org.w3c.dom.NodeList;
 public class ServerUtil
 {
 
-    private static Pattern aQuteAgentPortPattern = Pattern.compile( "-DaQute.agent.server.port=([0-9]+)" );
-    private static Pattern jmxRemotePortPattern = Pattern.compile( "-Dcom.sun.management.jmxremote.port=([0-9]+)" );
+    //private static Pattern aQuteAgentPortPattern = Pattern.compile( "-DaQute.agent.server.port=([0-9]+)" );
+    //private static Pattern jmxRemotePortPattern = Pattern.compile( "-Dcom.sun.management.jmxremote.port=([0-9]+)" );
 
     public static boolean bsnExists( String bsn, BundleDTO[] bundles )
     {
@@ -150,6 +147,7 @@ public class ServerUtil
         int aQuteAgentPort = Agent.DEFAULT_PORT;
         int jmxPort = portalRuntime.getPortalBundle().getJmxRemotePort();
 
+        /*
         try
         {
             String launchVmArguments = server.getLaunchConfiguration( true, null ).getWorkingCopy().getAttribute(
@@ -186,6 +184,7 @@ public class ServerUtil
         {
             LiferayServerCore.logError( "can't get agent or jmx port from server launch configuration ", e );
         }
+        */
 
         BundleSupervisor bundleSupervisor = new BundleSupervisor( jmxPort );
 
@@ -361,7 +360,7 @@ public class ServerUtil
 
     public static Set<IRuntime> getAvailableLiferayRuntimes()
     {
-        Set<IRuntime> retval = new HashSet<IRuntime>();
+        Set<IRuntime> retval = new HashSet<>();
 
         IRuntime[] runtimes = ServerCore.getRuntimes();
 
@@ -659,7 +658,7 @@ public class ServerUtil
 
     public static List<String> getModuleFileListFrom70Server(IRuntime runtime )
     {
-        List<String> bundles = new ArrayList<String>();
+        List<String> bundles = new ArrayList<>();
 
         PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
 
@@ -946,7 +945,7 @@ public class ServerUtil
 
     public static Map<String, String> getSDKRequiredProperties( ILiferayRuntime appServer )
     {
-        Map<String, String> properties = new HashMap<String, String>();
+        Map<String, String> properties = new HashMap<>();
 
         String type = appServer.getAppServerType();
 
@@ -988,7 +987,7 @@ public class ServerUtil
 
     public static IServer[] getServersForRuntime( IRuntime runtime )
     {
-        List<IServer> serverList = new ArrayList<IServer>();
+        List<IServer> serverList = new ArrayList<>();
 
         if( runtime != null )
         {
@@ -1011,7 +1010,7 @@ public class ServerUtil
 
     public static String[] getServletFilterNames( IPath portalDir ) throws Exception
     {
-        List<String> retval = new ArrayList<String>();
+        List<String> retval = new ArrayList<>();
 
         File filtersWebXmlFile = portalDir.append( "WEB-INF/liferay-web.xml" ).toFile(); //$NON-NLS-1$
 
