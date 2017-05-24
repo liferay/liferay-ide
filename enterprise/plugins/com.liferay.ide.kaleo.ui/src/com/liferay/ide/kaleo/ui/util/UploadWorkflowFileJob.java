@@ -75,9 +75,10 @@ public class UploadWorkflowFileJob extends Job
             }
 
             final JSONObject def = kaleoConnection.getKaleoDefinitions().getJSONObject( 0 );
-            long userId = def.getLong( "userId" );
             int companyId = def.getInt("companyId");
             long groupId = def.getLong( "groupId" );
+
+            long userId = kaleoConnection.getUserByEmailAddress().getLong( "userId" );
 
             WorkflowDefinition workflowDefinition =
                 WorkflowDefinition.TYPE.instantiate(

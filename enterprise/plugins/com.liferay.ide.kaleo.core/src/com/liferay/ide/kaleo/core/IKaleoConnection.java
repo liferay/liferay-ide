@@ -36,6 +36,7 @@ public interface IKaleoConnection extends IRemoteConnection
     final String GET_PORTAL_USER_API = _USER + "/get-user-by-id";
     final String GET_KALEO_DRAFT_DEFINITIONS_API = _KALEODRAFTDEFINITION + "/get-kaleo-draft-definitions";
     final String GET_LATEST_KALEO_DRAFT_DEFINITION_API = _KALEODRAFTDEFINITION + "/get-latest-kaleo-draft-definition";
+    final String GET_USER_BY_EMAIL_ADDRESS_API = _USER + "/get-user-by-email-address";
     final String PUBLISH_KALEO_DRAFT_DEFINITION_API = _KALEODRAFTDEFINITION + "/publish-kaleo-draft-definition";
     final String UPDATE_KALEO_DRAFT_DEFINITION = _KALEODRAFTDEFINITION + "/update-kaleo-draft-definition";
 
@@ -56,6 +57,8 @@ public interface IKaleoConnection extends IRemoteConnection
     String getPortalLocale( long userId ) throws KaleoAPIException;
 
     JSONObject getPortalUserById( long userId ) throws KaleoAPIException;
+
+    JSONObject getUserByEmailAddress() throws KaleoAPIException;
 
     void publishKaleoDraftDefinition( String name, String titleMap, String content, String companyId, String userId, String groupId )
         throws KaleoAPIException;

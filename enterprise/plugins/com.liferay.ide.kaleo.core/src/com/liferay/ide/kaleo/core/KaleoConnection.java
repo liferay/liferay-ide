@@ -106,7 +106,7 @@ public class KaleoConnection extends RemoteConnection implements IKaleoConnectio
 
         try
         {
-            Object response = getJSONAPI( getCompanyByVirtualHostAPI(), new Object[] { "virtualHost", getHost() } );
+            Object response = getJSONAPI( new Object[] { getCompanyByVirtualHostAPI(),"virtualHost", getHost() } );
 
             if( ( response != null ) && ( response instanceof JSONObject ) )
             {
@@ -329,6 +329,41 @@ public class KaleoConnection extends RemoteConnection implements IKaleoConnectio
     public String getServerName()
     {
         return serverName;
+    }
+
+    @Override
+    public JSONObject getUserByEmailAddress() throws KaleoAPIException
+    {
+        JSONObject user = null;
+        Exception apiException = null;
+
+        try
+        {
+            Object response = getJSONAPI(
+                new Object[] { getUserByEmailAddressAPI(), "companyId",
+                    getCompanyIdByVirtualHost().getLong( "companyId" ), "emailAddress", getUsername() } );
+
+            if( ( response != null ) && ( response instanceof JSONObject ) )
+            {
+                user = (JSONObject) response;
+            }
+        }
+        catch( Exception e )
+        {
+            apiException = new KaleoAPIException( getUserByEmailAddressAPI(), e );
+        }
+
+        if( user == null )
+        {
+            throw new KaleoAPIException( getUserByEmailAddressAPI(), apiException );
+        }
+
+        return user;
+    }
+
+    public String getUserByEmailAddressAPI()
+    {
+        return getPortalAPIUrl() + GET_USER_BY_EMAIL_ADDRESS_API;
     }
 
     public void publishKaleoDraftDefinition(
