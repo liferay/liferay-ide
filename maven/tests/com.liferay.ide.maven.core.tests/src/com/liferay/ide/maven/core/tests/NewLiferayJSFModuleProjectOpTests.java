@@ -220,66 +220,89 @@ public class NewLiferayJSFModuleProjectOpTests extends ProjectCoreBase
         importWorkspaceProject( "testWorkspace" );
         IProject workspaceProject = CoreUtil.getProject( "testWorkspace" );
         assertNotNull( workspaceProject );
-        NewLiferayJSFModuleProjectOp gradleProjectop = NewLiferayJSFModuleProjectOp.TYPE.instantiate();
-        gradleProjectop.setProjectProvider( "maven-jsf" );
-        gradleProjectop.setProjectName( "Test13" );
-        gradleProjectop.setTemplateName( "jsf" );
+        NewLiferayJSFModuleProjectOp op = NewLiferayJSFModuleProjectOp.TYPE.instantiate();
+        op.setProjectProvider( "maven-jsf" );
+        op.setProjectName( "Test13" );
+        op.setTemplateName( "jsf" );
         assertNotNull( workspaceProject.getLocation() );
-        gradleProjectop.setLocation( workspaceProject.getLocation().append( "wars" ).toOSString() );
-        Status gradleProjectStatus = NewLiferayJSFModuleProjectOpMethods.execute(
-            gradleProjectop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
-        assertTrue( gradleProjectStatus.ok() );
+        op.setLocation( workspaceProject.getLocation().append( "wars" ).toOSString() );
+        Status status = NewLiferayJSFModuleProjectOpMethods.execute(
+            op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
-        IProject gradleProject = CoreUtil.getProject( "Test13" );
-        assertNotNull( gradleProject );
+        waitForBuildAndValidation2();
 
-        NewLiferayJSFModuleProjectOp alloyGradleProjectop = NewLiferayJSFModuleProjectOp.TYPE.instantiate();
-        alloyGradleProjectop.setProjectProvider( "gradle-jsf" );
-        alloyGradleProjectop.setProjectName( "Test14" );
-        alloyGradleProjectop.setTemplateName( "alloy" );
-        alloyGradleProjectop.setLocation( workspaceProject.getLocation().append( "wars" ).toOSString() );
-        Status alloyGradleProjectStatus = NewLiferayJSFModuleProjectOpMethods.execute(
-            alloyGradleProjectop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
-        assertTrue( alloyGradleProjectStatus.ok() );
+        assertTrue( status.ok() );
 
-        IProject alloyGradleProject = CoreUtil.getProject( "Test14" );
-        assertNotNull( alloyGradleProject );
+        IProject project = CoreUtil.getProject( "Test13" );
+        assertNotNull( project );
+    }
 
-        NewLiferayJSFModuleProjectOp icefacesGradleProjectop = NewLiferayJSFModuleProjectOp.TYPE.instantiate();
-        icefacesGradleProjectop.setProjectProvider( "gradle-jsf" );
-        icefacesGradleProjectop.setProjectName( "Test15" );
-        icefacesGradleProjectop.setTemplateName( "icefaces" );
-        icefacesGradleProjectop.setLocation( workspaceProject.getLocation().append( "wars" ).toOSString() );
-        Status icefacesGradleProjectStatus = NewLiferayJSFModuleProjectOpMethods.execute(
-            icefacesGradleProjectop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
-        assertTrue( icefacesGradleProjectStatus.ok() );
+    @Test
+    public void testAlloyGradleJSFProject() throws Exception
+    {
+        NewLiferayJSFModuleProjectOp op = NewLiferayJSFModuleProjectOp.TYPE.instantiate();
+        op.setProjectProvider( "gradle-jsf" );
+        op.setProjectName( "Test14" );
+        op.setTemplateName( "alloy" );
+        Status status = NewLiferayJSFModuleProjectOpMethods.execute(
+            op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+        assertTrue( status.ok() );
 
-        IProject icefaceGradleProject = CoreUtil.getProject( "Test15" );
-        assertNotNull( icefaceGradleProject );
+        waitForBuildAndValidation2();
 
-        NewLiferayJSFModuleProjectOp primefacesGradleProjectop = NewLiferayJSFModuleProjectOp.TYPE.instantiate();
-        primefacesGradleProjectop.setProjectProvider( "gradle-jsf" );
-        primefacesGradleProjectop.setProjectName( "Test16" );
-        primefacesGradleProjectop.setTemplateName( "primefaces" );
-        primefacesGradleProjectop.setLocation( workspaceProject.getLocation().append( "wars" ).toOSString() );
-        Status primefacesGradleProjectStatus = NewLiferayJSFModuleProjectOpMethods.execute(
-            primefacesGradleProjectop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
-        assertTrue( primefacesGradleProjectStatus.ok() );
+        IProject project = CoreUtil.getProject( "Test14" );
+        assertNotNull( project );
+    }
 
-        IProject primefacesGradleProject = CoreUtil.getProject( "Test16" );
-        assertNotNull( primefacesGradleProject );
+    @Test
+    public void testIcefacesGradleJSFProject() throws Exception
+    {
+        NewLiferayJSFModuleProjectOp op = NewLiferayJSFModuleProjectOp.TYPE.instantiate();
+        op.setProjectProvider( "gradle-jsf" );
+        op.setProjectName( "Test15" );
+        op.setTemplateName( "icefaces" );
+        Status status = NewLiferayJSFModuleProjectOpMethods.execute(
+            op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+        assertTrue( status.ok() );
 
-        NewLiferayJSFModuleProjectOp richefacesGradleProjectop = NewLiferayJSFModuleProjectOp.TYPE.instantiate();
-        richefacesGradleProjectop.setProjectProvider( "gradle-jsf" );
-        richefacesGradleProjectop.setProjectName( "Test17" );
-        richefacesGradleProjectop.setTemplateName( "richfaces" );
-        richefacesGradleProjectop.setLocation( workspaceProject.getLocation().append( "wars" ).toOSString() );
-        Status richfacesGradleProjectStatus = NewLiferayJSFModuleProjectOpMethods.execute(
-            richefacesGradleProjectop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
-        assertTrue( richfacesGradleProjectStatus.ok() );
+        waitForBuildAndValidation2();
 
-        IProject richefacesGradleProject = CoreUtil.getProject( "Test17" );
-        assertNotNull( richefacesGradleProject );
+        IProject project = CoreUtil.getProject( "Test15" );
+        assertNotNull( project );
+    }
+
+    @Test
+    public void testPrimefacesGradleJSFProject() throws Exception
+    {
+        NewLiferayJSFModuleProjectOp op = NewLiferayJSFModuleProjectOp.TYPE.instantiate();
+        op.setProjectProvider( "gradle-jsf" );
+        op.setProjectName( "Test16" );
+        op.setTemplateName( "primefaces" );
+        Status status = NewLiferayJSFModuleProjectOpMethods.execute(
+            op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+        assertTrue( status.ok() );
+
+        waitForBuildAndValidation2();
+
+        IProject project = CoreUtil.getProject( "Test16" );
+        assertNotNull( project );
+    }
+
+    @Test
+    public void testRichfacesGradleProject() throws Exception
+    {
+        NewLiferayJSFModuleProjectOp op = NewLiferayJSFModuleProjectOp.TYPE.instantiate();
+        op.setProjectProvider( "gradle-jsf" );
+        op.setProjectName( "Test17" );
+        op.setTemplateName( "richfaces" );
+        Status status = NewLiferayJSFModuleProjectOpMethods.execute(
+            op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+        assertTrue( status.ok() );
+
+        waitForBuildAndValidation2();
+
+        IProject project = CoreUtil.getProject( "Test17" );
+        assertNotNull( project );
     }
 
     @Before
