@@ -38,24 +38,27 @@ public class TransitionReferenceService extends ReferenceService<Node>
 
             List<Node> nodes = new ArrayList<Node>();
 
-            nodes.addAll( workflow.getTasks() );
-            nodes.addAll( workflow.getStates() );
-            nodes.addAll( workflow.getConditions() );
-            nodes.addAll( workflow.getForks() );
-            nodes.addAll( workflow.getJoins() );
-
-            final Version version = workflow.getSchemaVersion().content();
-
-            if( version.compareTo( new Version( "6.2" ) ) >= 0 )
+            if ( workflow != null )
             {
-                nodes.addAll( workflow.getJoinXors() );
-            }
+                nodes.addAll( workflow.getTasks() );
+                nodes.addAll( workflow.getStates() );
+                nodes.addAll( workflow.getConditions() );
+                nodes.addAll( workflow.getForks() );
+                nodes.addAll( workflow.getJoins() );
 
-            for( Node node : nodes )
-            {
-                if( reference.equals( node.getName().content() ) )
+                final Version version = workflow.getSchemaVersion().content();
+
+                if( version.compareTo( new Version( "6.2" ) ) >= 0 )
                 {
-                    return node;
+                    nodes.addAll( workflow.getJoinXors() );
+                }
+
+                for( Node node : nodes )
+                {
+                    if( reference.equals( node.getName().content() ) )
+                    {
+                        return node;
+                    }
                 }
             }
         }
