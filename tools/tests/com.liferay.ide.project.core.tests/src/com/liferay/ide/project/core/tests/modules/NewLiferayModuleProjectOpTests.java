@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.tests.modules;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -152,6 +153,19 @@ public class NewLiferayModuleProjectOpTests
         assertEquals( "my.test.foo1", op.getPackageName().content( true ) );
     }
 
+    @Test
+    public void testNewLiferayModuleProjectNameValidataionService() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "my-test-project" );
+
+        assertTrue( op.validation().ok() );
+
+        op.setProjectName( "my-test-project-" );
+
+        assertFalse( op.getProjectName().validation().ok() );
+    }
 
     @Test
     public void testNewLiferayModuleProjectNewProperties() throws Exception
