@@ -56,6 +56,8 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     {
         IProject project = createProject( op );
 
+        waitForBuildAndValidation( project );
+
         assertEquals( true, project.getFolder( "src" ).exists() );
 
         return project;
@@ -74,7 +76,17 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     public void testCreateNewMavenProject() throws Exception
     {
         createMavenProjectName( "test-name-1" );
+    }
+
+    @Test
+    public void testCreateProjectNameWithSpaces() throws Exception
+    {
         createMavenProjectName( "Test With Spaces" );
+    }
+
+    @Test
+    public void testCreateProjectNameWithUnderscores() throws Exception
+    {
         createMavenProjectName( "test_name_1" );
     }
 
@@ -353,6 +365,8 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
         op.setPluginType( PluginType.servicebuilder );
 
         final IProject project = base.createProject( op, op.getProjectName() + "-portlet" );
+
+        waitForBuildAndValidation( project );
 
         String projectName = project.getName();
         String finalProjectName = projectName.substring( 0, projectName.lastIndexOf( "-" ) );
