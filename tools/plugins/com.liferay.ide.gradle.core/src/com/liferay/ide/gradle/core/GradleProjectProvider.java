@@ -176,18 +176,7 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
 
                 if( workspaceLocation != null )
                 {
-                    String liferayWorkspaceProjectModulesDir =
-                        LiferayWorkspaceUtil.getModulesDir( liferayWorkspaceProject );
-
-                    if( liferayWorkspaceProjectModulesDir != null )
-                    {
-                        IPath modulesPath = workspaceLocation.append( liferayWorkspaceProjectModulesDir );
-
-                        if( modulesPath.isPrefixOf( projectLocation ) )
-                        {
-                            inWorkspacePath = true;
-                        }
-                    }
+                    inWorkspacePath = workspaceLocation.isPrefixOf( projectLocation );
                 }
             }
 

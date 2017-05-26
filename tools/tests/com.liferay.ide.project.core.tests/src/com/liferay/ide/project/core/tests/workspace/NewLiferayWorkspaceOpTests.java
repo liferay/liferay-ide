@@ -23,13 +23,16 @@ import static org.junit.Assert.assertTrue;
 import com.liferay.ide.core.ILiferayProjectImporter;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.ZipUtil;
+import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.tests.ProjectCoreBase;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.FileLocator;
@@ -113,5 +116,47 @@ public class NewLiferayWorkspaceOpTests extends ProjectCoreBase
         assertTrue( wsFile.exists() );
 
         assertTrue( LiferayWorkspaceUtil.isValidWorkspaceLocation( wsLocation ) );
+
+        File propertiesFile = new File( wsFile, "gradle.properties" );
+        Properties prop = PropertiesUtil.loadProperties( propertiesFile );
+        prop.setProperty( "liferay.workspace.wars.dir", "wars,wars2" );
+        PropertiesUtil.saveProperties( prop, propertiesFile );
+
+        NewLiferayModuleProjectOp moduleProjectOp = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        moduleProjectOp.setProjectName( "testThemeWarDefault" );
+        moduleProjectOp.setProjectTemplateName( "theme" );
+
+        moduleProjectOp.execute( new ProgressMonitor() );
+
+        waitForBuildAndValidation();
+
+        assertTrue( CoreUtil.getProject( "testThemeWarDefault" ).exists() );
+
+        moduleProjectOp = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        moduleProjectOp.setProjectName( "testThemeWarNotDefault" );
+        moduleProjectOp.setProjectTemplateName( "theme" );
+        moduleProjectOp.setUseDefaultLocation( false );
+        moduleProjectOp.setLocation( wsLocation + "/wars" );
+
+        moduleProjectOp.execute( new ProgressMonitor() );
+
+        waitForBuildAndValidation();
+
+        assertTrue( CoreUtil.getProject( "testThemeWarNotDefault" ).exists() );
+
+        moduleProjectOp = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        moduleProjectOp.setProjectName( "testThemeWar2" );
+        moduleProjectOp.setProjectTemplateName( "theme" );
+        moduleProjectOp.setUseDefaultLocation( false );
+        moduleProjectOp.setLocation( wsLocation + "/wars2" );
+
+        moduleProjectOp.execute( new ProgressMonitor() );
+
+        waitForBuildAndValidation();
+
+        assertTrue( CoreUtil.getProject( "testThemeWar2" ).exists() );
     }
 }
