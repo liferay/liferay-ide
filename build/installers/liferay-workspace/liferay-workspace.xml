@@ -52,7 +52,7 @@
     <postInstallationActionList>
         <runProgram>
             <program>java</program>
-            <programArguments>-jar ${installdir}${platform_path_separator}biz.aQute.jpm.run.jar -u init</programArguments>
+            <programArguments>-jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" -u init</programArguments>
         </runProgram>
         <if>
             <explanation>is linux</explanation>
@@ -218,7 +218,7 @@
         </setInstallerVariable>
         <runProgram>
             <program>${jpmFilePath}</program>
-            <programArguments>install -fl ${bladeFilePath}</programArguments>
+            <programArguments>install -fl "${bladeFilePath}"</programArguments>
         </runProgram>
         <runProgram>
             <program>chown</program>
@@ -265,7 +265,7 @@
                 </setInstallerVariable>
                 <runProgram>
                     <program>${bladeCommondPath}</program>
-                    <programArguments>-b ${lrws} init</programArguments>
+                    <programArguments>-b "${lrws}" init</programArguments>
                 </runProgram>
                 <createDirectory>
                     <path>${user_home_directory}${platform_path_separator}.gradle</path>
