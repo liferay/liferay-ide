@@ -43,9 +43,9 @@ import org.osgi.framework.dto.BundleDTO;
 public class BundlePublishFullAdd extends BundlePublishOperation
 {
 
-    public BundlePublishFullAdd( IServer s, IModule[] modules, BundleDTO[] existingBundles )
+    public BundlePublishFullAdd( IServer s, IModule[] modules )
     {
-        super( s, modules, existingBundles );
+        super( s, modules );
     }
 
     private IStatus autoDeploy( IPath output ) throws CoreException
@@ -118,7 +118,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
                             monitor.subTask(
                                 "Remotely deploying " + module.getName() + " to Liferay module framework..." );
 
-                            retval = remoteDeploy( bundleProject.getSymbolicName(), outputJar, _existingBundles );
+                            retval = remoteDeploy( bundleProject.getSymbolicName(), outputJar );
                         }
                         else
                         {
@@ -177,7 +177,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
         return bundleUrl;
     }
 
-    private IStatus remoteDeploy( String bsn , IPath output, BundleDTO[] existingBundles )
+    private IStatus remoteDeploy( String bsn , IPath output )
     {
         IStatus retval = null;
 
@@ -190,7 +190,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
                 bundleSupervisor = createBundleSupervisor();
 
                 BundleDTO deployed = bundleSupervisor.deploy(
-                    bsn, output.toFile(), getBundleUrl( output.toFile(), bsn ), existingBundles );
+                    bsn, output.toFile(), getBundleUrl( output.toFile(), bsn ) );
 
                 if( deployed instanceof BundleDTOWithStatus )
                 {

@@ -62,8 +62,6 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.internal.Server;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 import org.osgi.framework.Version;
-import org.osgi.framework.dto.BundleDTO;
-
 
 /**
  * @author Gregory Amerson
@@ -909,37 +907,37 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
                 try
                 {
                     final String symbolicName = bundleProject.getSymbolicName();
+
                     supervisor = createBundleSupervisor();
 
-                    BundleDTO[] existingBundles = supervisor.getAgent().getBundles().toArray( new BundleDTO[0] );
+                    long bundleId = supervisor.getBundleId( symbolicName );
 
-                    for( BundleDTO bundle : existingBundles )
+                    if( bundleId > 0 )
                     {
-                        if( symbolicName.equals( bundle.symbolicName ) )
+                        if( action.equals( "start" ) )
                         {
-                            if( action.equals( "start" ) )
-                            {
-                                String error = supervisor.getAgent().start( bundle.id );
+                            String error = supervisor.getAgent().start( bundleId );
 
-                                if( error == null )
-                                {
-                                    setModuleState( new IModule[] { module }, IServer.STATE_STARTED );
-                                }
-                                else {
-                                    LiferayServerCore.logError( "Unable to start this bundle" );
-                                }
+                            if( error == null )
+                            {
+                                setModuleState( new IModule[] { module }, IServer.STATE_STARTED );
                             }
-                            else if( action.equals( "stop" ) )
+                            else
                             {
-                                String error = supervisor.getAgent().stop( bundle.id );
+                                LiferayServerCore.logError( "Unable to start this bundle" );
+                            }
+                        }
+                        else if( action.equals( "stop" ) )
+                        {
+                            String error = supervisor.getAgent().stop( bundleId );
 
-                                if( error == null )
-                                {
-                                    setModuleState( new IModule[] { module }, IServer.STATE_STOPPED );
-                                }
-                                else {
-                                    LiferayServerCore.logError( "Unable to stop this bundle" );
-                                }
+                            if( error == null )
+                            {
+                                setModuleState( new IModule[] { module }, IServer.STATE_STOPPED );
+                            }
+                            else
+                            {
+                                LiferayServerCore.logError( "Unable to stop this bundle" );
                             }
                         }
                     }

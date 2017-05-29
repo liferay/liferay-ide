@@ -17,7 +17,6 @@ package com.liferay.ide.server.core.portal;
 
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
-import org.osgi.framework.dto.BundleDTO;
 
 /**
  * @author Terry Jia
@@ -25,9 +24,9 @@ import org.osgi.framework.dto.BundleDTO;
 public class BundlePublishFullAddCleanBuild extends BundlePublishFullAdd
 {
 
-    public BundlePublishFullAddCleanBuild( IServer s, IModule[] modules, BundleDTO[] existingBundles )
+    public BundlePublishFullAddCleanBuild( IServer s, IModule[] modules)
     {
-        super( s, modules, existingBundles );
+        super( s, modules );
     }
 
     protected boolean cleanBuildNeeded()

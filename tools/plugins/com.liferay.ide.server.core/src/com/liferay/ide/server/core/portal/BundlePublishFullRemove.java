@@ -18,7 +18,6 @@ package com.liferay.ide.server.core.portal;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.IOException;
 
@@ -31,7 +30,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
-import org.osgi.framework.dto.BundleDTO;
 
 /**
  * @author Gregory Amerson
@@ -40,9 +38,9 @@ import org.osgi.framework.dto.BundleDTO;
 public class BundlePublishFullRemove extends BundlePublishOperation
 {
 
-    public BundlePublishFullRemove( IServer server, IModule[] modules, BundleDTO[] existingBundles )
+    public BundlePublishFullRemove( IServer server, IModule[] modules )
     {
-        super( server, modules, existingBundles );
+        super( server, modules );
     }
 
     @Override
@@ -94,64 +92,44 @@ public class BundlePublishFullRemove extends BundlePublishOperation
         }
     }
 
-    private IStatus remoteUninstall( IBundleProject bundleProject , String symbolicName, IProgressMonitor monitor ) throws CoreException
+    private IStatus remoteUninstall( IBundleProject bundleProject, String symbolicName, IProgressMonitor monitor ) throws CoreException
     {
         IStatus retval = null;
 
         IPath outputJar = bundleProject.getOutputBundle( false, monitor );
 
-        String fragmentHostName = ServerUtil.getFragemtHostName( outputJar.toFile() );
+        BundleSupervisor bundleSupervisor = null;
 
-        boolean isFragment = (fragmentHostName != null);
-
-        if( symbolicName != null && _existingBundles != null )
+        try
         {
-            BundleSupervisor bundleSupervisor = null;
+            bundleSupervisor = createBundleSupervisor();
 
-            try
+            String error = bundleSupervisor.uninstall( bundleProject, outputJar );
+
+            if( error == null )
             {
-                bundleSupervisor = createBundleSupervisor();
+                retval = Status.OK_STATUS;
+            }
+            else
+            {
+                retval = LiferayServerCore.error( "Unable to uninstall bundle " + error );
+            }
 
-                for( BundleDTO bundle : _existingBundles )
+        }
+        catch( Exception e )
+        {
+            retval = LiferayServerCore.error( "Unable to uninstall bundle " + symbolicName, e );
+        }
+        finally
+        {
+            if( bundleSupervisor != null )
+            {
+                try
                 {
-                    if( symbolicName.equals( bundle.symbolicName ) )
-                    {
-                        String error = bundleSupervisor.getAgent().uninstall( bundle.id );
-
-                        if( isFragment )
-                        {
-                            bundleSupervisor.refreshHostBundle( fragmentHostName, _existingBundles );
-                        }
-
-                        if( error == null )
-                        {
-                            retval = Status.OK_STATUS;
-                        }
-                        else
-                        {
-                            retval = LiferayServerCore.error( "Unable to uninstall bundle " + error );
-                        }
-
-                        break;
-                    }
+                    bundleSupervisor.close();
                 }
-
-            }
-            catch( Exception e )
-            {
-                retval = LiferayServerCore.error( "Unable to uninstall bundle " + symbolicName, e );
-            }
-            finally
-            {
-                if( bundleSupervisor != null )
+                catch( IOException e )
                 {
-                    try
-                    {
-                        bundleSupervisor.close();
-                    }
-                    catch( IOException e )
-                    {
-                    }
                 }
             }
         }

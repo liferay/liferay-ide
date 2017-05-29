@@ -26,8 +26,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.PublishOperation;
-import org.osgi.framework.dto.BundleDTO;
-
 
 /**
  * @author Gregory Amerson
@@ -39,9 +37,8 @@ public class BundlePublishOperation extends PublishOperation
     protected final PortalRuntime portalRuntime;
     protected final PortalServerBehavior portalServerBehavior;
     protected final IServer server;
-    protected final BundleDTO[] _existingBundles;
 
-    public BundlePublishOperation( IServer s, IModule[] modules, BundleDTO[] existingBundles )
+    public BundlePublishOperation( IServer s, IModule[] modules )
     {
         this.server = s;
         this.modules = new ArrayList<IModule>( Arrays.asList( modules ) );
@@ -58,8 +55,6 @@ public class BundlePublishOperation extends PublishOperation
         {
             throw new IllegalArgumentException( "Could not get portal server behavior from server " + s.getName() );
         }
-
-        _existingBundles = existingBundles;
     }
 
     public void addModule( IModule[] module )

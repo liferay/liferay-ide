@@ -15,18 +15,20 @@
 
 package com.liferay.ide.server.core.portal;
 
+import aQute.remote.api.Agent;
+import aQute.remote.api.Event;
+import aQute.remote.api.Supervisor;
+import aQute.remote.util.AgentSupervisor;
+
+import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.server.core.jmx.PortalBundleDeployer;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.IOException;
 
+import org.eclipse.core.runtime.IPath;
 import org.osgi.framework.dto.BundleDTO;
-
-import aQute.remote.api.Agent;
-import aQute.remote.api.Event;
-import aQute.remote.api.Supervisor;
-import aQute.remote.util.AgentSupervisor;
 
 /**
  * @author Gregory Amerson
@@ -71,7 +73,7 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
     }
 
     public BundleDTO deploy(
-        final String bsn, final File bundleFile, final String bundleUrl, BundleDTO[] existingBundles ) throws Exception
+        final String bsn, final File bundleFile, final String bundleUrl) throws Exception
     {
         BundleDTO retval = null;
 
@@ -85,18 +87,7 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
 
         final Agent agent = getAgent();
 
-        long bundleId = -1;
-
-        for( BundleDTO bundle : existingBundles )
-        {
-            if( bsn != null && bsn.equals( bundle.symbolicName ) )
-            {
-                bundleId = bundle.id;
-                retval = bundle;
-                break;
-            }
-        }
-
+        long bundleId  = getBundleId( bsn );
 
         if( bundleId > 0 )
         {
@@ -119,6 +110,10 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
             {
                 agent.start( bundleId );
             }
+
+            retval = new BundleDTO();
+
+            retval.id = bundleId;
         }
         else
         {
@@ -143,11 +138,45 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
             }
             else
             {
-                refreshHostBundle( fragmentHostName, existingBundles );
+                refreshHostBundle( fragmentHostName );
             }
         }
 
         return retval;
+    }
+
+    public long getBundleId( String bsn ) throws Exception
+    {
+        long id = -1;
+
+        try
+        {
+            String result = getAgent().shell( "lb -s " + bsn );
+
+            String[] lines = result.split( "\n" );
+
+            for( String line : lines )
+            {
+                if( line.contains( "(" ) && line.contains( ")" ) )
+                {
+                    String[] bundleAttris = line.split( "\\|" );
+
+                    String bsnTemp = bundleAttris[3].substring( 0, bundleAttris[3].indexOf( "(" ) ).trim();
+
+                    if( bsn.equals( bsnTemp ) )
+                    {
+                        id = Long.parseLong( bundleAttris[0].trim() );
+                        break;
+                    }
+                }
+            }
+
+            return id;
+        }
+        catch( Exception e )
+        {
+            return id;
+        }
     }
 
     public String getOutInfo()
@@ -171,18 +200,9 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
         return true;
     }
 
-    public void refreshHostBundle( String fragmentHostName, BundleDTO[] existingBundles ) throws Exception
+    public void refreshHostBundle( String fragmentHostName ) throws Exception
     {
-        long fragmentHostId = -1;
-
-        for( BundleDTO bundle : existingBundles )
-        {
-            if( bundle.symbolicName.equals( fragmentHostName ) )
-            {
-                fragmentHostId = bundle.id;
-                break;
-            }
-        }
+        long fragmentHostId = getBundleId( fragmentHostName );
 
         if( fragmentHostId > 0 )
         {
@@ -191,6 +211,34 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
             agent.stdin( "refresh " + fragmentHostId );
             agent.redirect( Agent.NONE );
         }
+    }
+
+    public String uninstall( IBundleProject bundleProject, IPath outputJar ) throws Exception
+    {
+        String retVal = null;
+
+        String fragmentHostName = ServerUtil.getFragemtHostName( outputJar.toFile() );
+
+        boolean isFragment = ( fragmentHostName != null );
+
+        final String symbolicName = bundleProject.getSymbolicName();
+
+        if( symbolicName != null )
+        {
+            long bundleId = getBundleId( symbolicName );
+
+            if( bundleId > 0 )
+            {
+                retVal = getAgent().uninstall( bundleId );
+
+                if( isFragment )
+                {
+                    refreshHostBundle( fragmentHostName );
+                }
+            }
+        }
+
+        return retVal;
     }
 
 }

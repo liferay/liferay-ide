@@ -19,7 +19,6 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +35,6 @@ import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.eclipse.wst.server.core.model.PublishOperation;
 import org.eclipse.wst.server.core.model.PublishTaskDelegate;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
-import org.osgi.framework.dto.BundleDTO;
 
 /**
  * @author Gregory Amerson
@@ -52,7 +50,7 @@ public class PortalPublishTask extends PublishTaskDelegate
 
     private void addOperation(
         Class<? extends BundlePublishOperation> opClass, List<BundlePublishOperation> tasks, IServer server,
-        IModule[] module, BundleDTO[] existingBundles )
+        IModule[] module )
     {
         for( BundlePublishOperation task : tasks )
         {
@@ -66,9 +64,7 @@ public class PortalPublishTask extends PublishTaskDelegate
         try
         {
             BundlePublishOperation op =
-                opClass.getConstructor(
-                    IServer.class, IModule[].class, BundleDTO[].class ).newInstance(
-                        server, module, existingBundles );
+                opClass.getConstructor( IServer.class, IModule[].class ).newInstance( server, module );
             tasks.add( op );
         }
         catch( Exception e )
@@ -84,34 +80,6 @@ public class PortalPublishTask extends PublishTaskDelegate
 
         final PortalServerBehavior serverBehavior =
             (PortalServerBehavior) server.loadAdapter( PortalServerBehavior.class, null );
-
-        BundleDTO[] existingBundles = new BundleDTO[0];
-        BundleSupervisor supervisor = null;
-
-        if( server.getServerState() == IServer.STATE_STARTED )
-        {
-            try
-            {
-                supervisor = serverBehavior.createBundleSupervisor();
-                existingBundles = supervisor.getAgent().getBundles().toArray( new BundleDTO[0] );
-            }
-            catch( Exception e )
-            {
-            }
-            finally
-            {
-                if( supervisor != null )
-                {
-                    try
-                    {
-                        supervisor.close();
-                    }
-                    catch( IOException e )
-                    {
-                    }
-                }
-            }
-        }
 
         if( !CoreUtil.isNullOrEmpty( modules ) )
         {
@@ -146,23 +114,23 @@ public class PortalPublishTask extends PublishTaskDelegate
                         switch( deltaKind )
                         {
                             case ServerBehaviourDelegate.ADDED:
-                                addOperation( BundlePublishFullAddCleanBuild.class, tasks, server, module, existingBundles );
+                                addOperation( BundlePublishFullAddCleanBuild.class, tasks, server, module );
                                 break;
 
                             case ServerBehaviourDelegate.CHANGED:
                                 if (needClean)
                                 {
-                                    addOperation( BundlePublishFullAddCleanBuild.class, tasks, server, module, existingBundles );
+                                    addOperation( BundlePublishFullAddCleanBuild.class, tasks, server, module );
                                 }
                                 else
                                 {
-                                    addOperation( BundlePublishFullAdd.class, tasks, server, module, existingBundles );
+                                    addOperation( BundlePublishFullAdd.class, tasks, server, module );
                                 }
 
                                 break;
 
                             case ServerBehaviourDelegate.REMOVED:
-                                addOperation( BundlePublishFullRemove.class, tasks, server, module, existingBundles );
+                                addOperation( BundlePublishFullRemove.class, tasks, server, module );
                                 break;
 
                             case ServerBehaviourDelegate.NO_CHANGE:
@@ -174,10 +142,10 @@ public class PortalPublishTask extends PublishTaskDelegate
                                     try
                                     {
                                         if( isUserRedeploy( serverBehavior, module[0] ) ||
-                                            !ServerUtil.bsnExists( bundleProject.getSymbolicName(), existingBundles ) )
+                                           !isDeployed(server,serverBehavior,bundleProject.getSymbolicName()) )
                                         {
                                             addOperation(
-                                                BundlePublishFullAddCleanBuild.class, tasks, server, module, existingBundles );
+                                                BundlePublishFullAddCleanBuild.class, tasks, server, module );
                                         }
                                     }
                                     catch( CoreException e )
@@ -210,7 +178,42 @@ public class PortalPublishTask extends PublishTaskDelegate
         return super.getTasks( server, modules );
     }
 
-    private boolean isUserRedeploy( PortalServerBehavior serverBehavior, IModule module  )
+    private boolean isDeployed(IServer server , PortalServerBehavior serverBehavior , String bsn )
+    {
+        BundleSupervisor supervisor = null;
+
+        boolean isDeployed = false;
+
+        if( server.getServerState() == IServer.STATE_STARTED )
+        {
+            try
+            {
+                supervisor = serverBehavior.createBundleSupervisor();
+
+                isDeployed = supervisor.getBundleId( bsn ) > 0 ? true: false;
+            }
+            catch( Exception e )
+            {
+            }
+            finally
+            {
+                if( supervisor != null )
+                {
+                    try
+                    {
+                        supervisor.close();
+                    }
+                    catch( IOException e )
+                    {
+                    }
+                }
+            }
+        }
+
+        return isDeployed;
+    }
+
+    private boolean isUserRedeploy( PortalServerBehavior serverBehavior, IModule module )
     {
         if( serverBehavior.getInfo() != null )
         {

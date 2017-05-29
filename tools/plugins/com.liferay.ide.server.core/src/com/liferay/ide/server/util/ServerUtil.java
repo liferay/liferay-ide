@@ -88,7 +88,6 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.osgi.framework.Version;
-import org.osgi.framework.dto.BundleDTO;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -107,22 +106,6 @@ public class ServerUtil
 
     //private static Pattern aQuteAgentPortPattern = Pattern.compile( "-DaQute.agent.server.port=([0-9]+)" );
     //private static Pattern jmxRemotePortPattern = Pattern.compile( "-Dcom.sun.management.jmxremote.port=([0-9]+)" );
-
-    public static boolean bsnExists( String bsn, BundleDTO[] bundles )
-    {
-        if( bsn != null )
-        {
-            for( BundleDTO bundle : bundles )
-            {
-                if( bsn.equals( bundle.symbolicName ) )
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
 
     public static Map<String, String> configureAppServerProperties( ILiferayRuntime liferayRuntime )
     {
