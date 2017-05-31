@@ -38,7 +38,7 @@ import org.eclipse.sapphire.services.ValidationService;
 public class ModuleProjectNameValidationService extends ValidationService
 {
 
-    private static final String PROJECT_NAME_REGEX = "[A-Za-z0-9_\\-.]+[A-Za-z0-9]$";
+    private static final String PROJECT_NAME_REGEX = "([A-Za-z0-9_\\-.]+[A-Za-z0-9]$)|([A-Za-z0-9])";
 
     private FilteredListener<PropertyContentEvent> listener;
 

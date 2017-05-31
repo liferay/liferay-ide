@@ -162,7 +162,27 @@ public class NewLiferayModuleProjectOpTests
 
         assertTrue( op.validation().ok() );
 
+        op.setProjectName( "1" );
+
+        assertTrue( op.getProjectName().validation().ok() );
+
+        op.setProjectName( "a" );
+
+        assertTrue( op.getProjectName().validation().ok() );
+
+        op.setProjectName( "A" );
+
+        assertTrue( op.getProjectName().validation().ok() );
+
         op.setProjectName( "my-test-project-" );
+
+        assertFalse( op.getProjectName().validation().ok() );
+
+        op.setProjectName( "my-test-project." );
+
+        assertFalse( op.getProjectName().validation().ok() );
+
+        op.setProjectName( "my-test-project_" );
 
         assertFalse( op.getProjectName().validation().ok() );
     }
