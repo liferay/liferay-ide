@@ -108,7 +108,7 @@ public abstract class BaseLiferayProject implements ILiferayProject
             {
                 final IJavaProject javaproject = JavaCore.create( project );
 
-                if( javaproject != null  )
+                if( javaproject != null && javaproject.exists() )
                 {
                     if( !javaproject.isOpen() )
                     {
