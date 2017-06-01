@@ -376,7 +376,7 @@ public class BuildPage extends Page
                 SharedImages.IMG_OBJ_PROJECT ).createImage();
         }
 
-        URL greenTickUrl = ProjectUI.getDefault().getBundle().getEntry( "/images/greentick.png" );
+        URL greenTickUrl = ProjectUI.getDefault().getBundle().getEntry( "/images/yes_badge.png" );
         imageSuccess = ImageDescriptor.createFromURL( greenTickUrl ).createImage();
         imageSuccess.getImageData().scaledTo( 16, 16 );
 

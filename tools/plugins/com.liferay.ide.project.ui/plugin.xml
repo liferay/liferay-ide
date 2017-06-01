@@ -24,7 +24,7 @@
       <wizard
             category="com.liferay.ide.newWizards"
             finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
-            icon="icons/e16/bundle.png"
+            icon="icons/n16/bundle_new.png"
             id="com.liferay.ide.project.ui.newModuleFragmentWizard"
             name="Liferay Module Project Fragment"
             preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
@@ -105,7 +105,7 @@
       <wizard
             category="com.liferay.ide.newWizards"
             finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
-            icon="icons/e16/liferay_logo_16.png"
+            icon="icons/n16/liferay_new.png"
             id="com.liferay.ide.project.ui.workspace.newLiferayWorkspaceWizard"
             name="Liferay Workspace Project"
             preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
