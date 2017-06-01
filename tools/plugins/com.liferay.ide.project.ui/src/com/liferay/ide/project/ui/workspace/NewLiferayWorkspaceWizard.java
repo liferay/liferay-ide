@@ -24,7 +24,6 @@ import com.liferay.ide.ui.util.ProjectExplorerLayoutUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
@@ -53,30 +52,24 @@ public class NewLiferayWorkspaceWizard extends BaseProjectWizard<NewLiferayWorks
         {
             final SapphireWizardPage wizardPage = (SapphireWizardPage) wizardPages[0];
 
-            final String message = wizardPage.getMessage();
-            final int messageType = wizardPage.getMessageType();
-
-            if( messageType == IMessageProvider.ERROR && !CoreUtil.isNullOrEmpty( message ) )
+            try
             {
-                try
+                if( LiferayWorkspaceUtil.hasWorkspace() )
                 {
-                    if( LiferayWorkspaceUtil.hasWorkspace() )
-                    {
-                        wizardPage.setMessage(
-                            LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR );
-                    }
-                    else
-                    {
-                        wizardPage.setMessage( "Please enter the workspace name.", SapphireWizardPage.NONE );
-                    }
+                    wizardPage.setMessage(
+                        LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR );
                 }
-                catch( CoreException e )
+                else
                 {
-                    wizardPage.setMessage( LiferayWorkspaceUtil.multiWorkspaceErrorMsg, SapphireWizardPage.ERROR );
+                    wizardPage.setMessage( "Please enter the workspace name.", SapphireWizardPage.NONE );
                 }
-
-                firstErrorMessageRemoved = true;
             }
+            catch( CoreException e )
+            {
+                wizardPage.setMessage( LiferayWorkspaceUtil.multiWorkspaceErrorMsg, SapphireWizardPage.ERROR );
+            }
+
+            firstErrorMessageRemoved = true;
         }
 
         return wizardPages;
