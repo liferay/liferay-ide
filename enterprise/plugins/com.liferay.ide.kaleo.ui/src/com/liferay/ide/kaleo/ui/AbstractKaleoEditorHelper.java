@@ -19,6 +19,7 @@ import com.liferay.ide.kaleo.ui.editor.ScriptPropertyEditorInput;
 import com.liferay.ide.kaleo.core.model.Node;
 
 import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -114,7 +115,7 @@ public abstract class AbstractKaleoEditorHelper implements IKaleoEditorHelper
 
         try
         {
-            final ByteArrayInputStream source = new ByteArrayInputStream( fileContents.getBytes() );
+            final ByteArrayInputStream source = new ByteArrayInputStream( fileContents.getBytes( "UTF-8" ) );
 
             if( tempFile.exists() )
             {
@@ -125,7 +126,7 @@ public abstract class AbstractKaleoEditorHelper implements IKaleoEditorHelper
                 tempFile.create( source, true, null );
             }
         }
-        catch( CoreException e )
+        catch( CoreException | UnsupportedEncodingException e )
         {
             e.printStackTrace();
         }

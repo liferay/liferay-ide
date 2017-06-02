@@ -282,7 +282,7 @@
         </action-handler-filter>
         <action>
             <id>Kaleo.Diagram.Find.Part</id>
-            <label>final diagram part...</label>
+            <label>find diagram part...</label>
             <key-binding>CONTROL+f</key-binding>
             <key-binding-behavior>propagated</key-binding-behavior>
             <location>after:Sapphire.Diagram.Guides.Toggle</location>
