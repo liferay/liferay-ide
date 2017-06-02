@@ -78,5 +78,6 @@ Export-Package: com.liferay.ide.project.ui,
  com.liferay.ide.project.ui.dialog,
  com.liferay.ide.project.ui.handlers,
  com.liferay.ide.project.ui.pref,
- com.liferay.ide.project.ui.wizard
+ com.liferay.ide.project.ui.wizard,
+ com.liferay.ide.project.ui.workspace
 Service-Component: OSGI-INF/com.liferay.ide.project.ui.migration.IDEReporter.xml

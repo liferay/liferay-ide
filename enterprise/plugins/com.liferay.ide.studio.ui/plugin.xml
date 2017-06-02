@@ -76,4 +76,7 @@
             splashId="com.liferay.ide.studio.ui.splashHandler">
         </splashHandlerProductBinding>
    </extension>
+   <extension point="org.eclipse.ui.intro.configExtension">
+      <configExtension configId="org.eclipse.ui.intro.universalConfig" content="/intro/studioExtensionContent.xml" />
+   </extension>
 </plugin>

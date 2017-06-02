@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<introContent>
+	<extensionContent id="com.liferay.ide.studio.ui" name="Liferay IDE"
+		style="css/whatsnew.css" alt-style="css/whatsnew.properties" path="whatsnew/@">
+		<group id="content-group" style-id="content-group">
+			<link label="Liferay IDE"
+				url="http://org.eclipse.ui.intro/runAction?pluginId=com.liferay.ide.studio.ui&amp;class=com.liferay.ide.studio.ui.ImportLiferayWorkspaceAction"
+				id="liferay" style-id="content-link">
+				<text>
+					Import Liferay Workspace
+				</text>
+			</link>
+		</group>
+	</extensionContent>
+</introContent>

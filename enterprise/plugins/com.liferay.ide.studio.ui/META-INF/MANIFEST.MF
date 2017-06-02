@@ -28,7 +28,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.e4.ui.css.swt.theme,
  com.liferay.ide.gradle.core,
  org.eclipse.sapphire.ui,
- com.liferay.ide.gradle.ui
+ com.liferay.ide.gradle.ui,
+ org.eclipse.ui.intro
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
