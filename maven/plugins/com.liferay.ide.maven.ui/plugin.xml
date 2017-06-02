@@ -52,6 +52,18 @@
             <groupMarker
                   name="theme-merge">
             </groupMarker>
+            <groupMarker
+                  name="init-bundle">
+            </groupMarker>
+            <groupMarker
+                  name="clean">
+            </groupMarker>
+            <groupMarker
+                  name="clean-service-builder-db">
+            </groupMarker>
+            <groupMarker
+                  name="dist">
+            </groupMarker>
          </menu>
       </objectContribution>
       <objectContribution
@@ -64,7 +76,7 @@
                enablesFor="1"
                icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.build-css"
-               label="liferay:build-css"
+               label="build-css"
                menubarPath="liferayPopupMenuCategory/build-css">
           </action>
           <action
@@ -72,7 +84,7 @@
                enablesFor="1"
                icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.build-db"
-               label="liferay:build-db"
+               label="build-db"
                menubarPath="liferayPopupMenuCategory/build-db">
          </action>
          <action
@@ -80,7 +92,7 @@
                enablesFor="1"
                icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.build-ext"
-               label="liferay:build-ext"
+               label="build-ext"
                menubarPath="liferayPopupMenuCategory/build-ext">
          </action>
          <action
@@ -88,7 +100,7 @@
                enablesFor="1"
                icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.build-lang"
-               label="liferay:build-lang"
+               label="build-lang"
                menubarPath="liferayPopupMenuCategory/build-lang">
          </action>
          <action
@@ -96,7 +108,7 @@
                enablesFor="1"
                icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.build-service"
-               label="liferay:build-service"
+               label="build-service"
                menubarPath="liferayPopupMenuCategory/build-service">
          </action>
          <action
@@ -104,7 +116,7 @@
                enablesFor="1"
                icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.build-thumbnail"
-               label="liferay:build-thumbnail"
+               label="build-thumbnail"
                menubarPath="liferayPopupMenuCategory/build-thumbnail">
          </action>
          <action
@@ -112,7 +124,7 @@
                enablesFor="1"
                icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.build-wsdd"
-               label="liferay:build-wsdd"
+               label="build-wsdd"
                menubarPath="liferayPopupMenuCategory/build-wsdd">
          </action>
          <action
@@ -120,7 +132,7 @@
                enablesFor="1"
                icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.deploy"
-               label="liferay:deploy"
+               label="deploy"
                menubarPath="liferayPopupMenuCategory/deploy">
          </action>
          <action
@@ -128,7 +140,7 @@
                enablesFor="1"
                icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.direct-deploy"
-               label="liferay:direct-deploy"
+               label="direct-deploy"
                menubarPath="liferayPopupMenuCategory/direct-deploy">
          </action>
          <action
@@ -136,8 +148,40 @@
                enablesFor="1"
                icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.theme-merge"
-               label="liferay:theme-merge"
+               label="theme-merge"
                menubarPath="liferayPopupMenuCategory/theme-merge">
+         </action>
+         <action
+               class="com.liferay.ide.maven.ui.action.InitBundleGoalAction"
+               enablesFor="1"
+               icon="icons/e16/m2e-liferay.png"
+               id="com.liferay.ide.maven.popup.action.init-bundle"
+               label="init-bundle"
+               menubarPath="liferayPopupMenuCategory/init-bundle">
+         </action>
+         <action
+               class="com.liferay.ide.maven.ui.action.CleanGoalAction"
+               enablesFor="1"
+               icon="icons/e16/m2e-liferay.png"
+               id="com.liferay.ide.maven.popup.action.clean"
+               label="clean"
+               menubarPath="liferayPopupMenuCategory/clean">
+         </action>
+         <action
+               class="com.liferay.ide.maven.ui.action.CleanServiceBuilderDBGoalAction"
+               enablesFor="1"
+               icon="icons/e16/m2e-liferay.png"
+               id="com.liferay.ide.maven.popup.action.clean-service-builder-db"
+               label="clean-service-builder-db"
+               menubarPath="liferayPopupMenuCategory/clean-service-builder-db">
+         </action>
+         <action
+               class="com.liferay.ide.maven.ui.action.DistGoalAction"
+               enablesFor="1"
+               icon="icons/e16/m2e-liferay.png"
+               id="com.liferay.ide.maven.popup.action.dist"
+               label="dist-bundle"
+               menubarPath="liferayPopupMenuCategory/dist">
          </action>
          <enablement>
                <adapt type="org.eclipse.core.resources.IResource">

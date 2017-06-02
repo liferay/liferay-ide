@@ -12,13 +12,17 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.maven.ui.action;
 
-import com.liferay.ide.maven.core.ILiferayMavenConstants;
+import org.osgi.framework.Version;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.maven.core.ILiferayMavenConstants;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public class BuildCSSGoalAction extends MavenGoalAction
 {
@@ -26,7 +30,36 @@ public class BuildCSSGoalAction extends MavenGoalAction
     @Override
     protected String getMavenGoals()
     {
-        return "compile " + ILiferayMavenConstants.PLUGIN_GOAL_BUILD_CSS;
+        if( plugin == null )
+        {
+            return "build-css";
+        }
+
+        String goals = "compile ";
+
+        if( CoreUtil.compareVersions( new Version( plugin.getVersion() ), new Version( "1.0.24" ) ) >= 0 &&
+            plugin.getArtifactId().equals( getPluginKey() ) )
+        {
+            goals = goals + "css-builder:build";
+        }
+        else if( CoreUtil.compareVersions( new Version( plugin.getVersion() ), new Version( "1.0.21" ) ) >= 0 &&
+            CoreUtil.compareVersions( new Version( plugin.getVersion() ), new Version( "1.0.23" ) ) <= 0 &&
+            plugin.getArtifactId().equals( getPluginKey() ) )
+        {
+            goals = goals + "liferay-css:build-css";
+        }
+        else
+        {
+            goals = goals + ILiferayMavenConstants.PLUGIN_GOAL_BUILD_CSS;
+        }
+
+        return goals;
+    }
+
+    @Override
+    protected String getPluginKey()
+    {
+        return ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_CSS_BUILDER_KEY;
     }
 
 }

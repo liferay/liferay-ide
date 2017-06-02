@@ -12,16 +12,19 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.maven.ui.action;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
-
+import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public class DeployGoalAction extends MavenGoalAction
 {
@@ -29,12 +32,35 @@ public class DeployGoalAction extends MavenGoalAction
     @Override
     protected String getMavenGoals()
     {
-        return "package " + ILiferayMavenConstants.PLUGIN_GOAL_DEPLOY;
+        if( plugin == null )
+        {
+            return "deploy";
+        }
+
+        String goals = "package ";
+
+        if( CoreUtil.compareVersions( new Version( plugin.getVersion() ), new Version( "2.0.2" ) ) >= 0 &&
+            plugin.getArtifactId().equals( getPluginKey() ) )
+        {
+            goals = goals + "bundle-support:deploy";
+        }
+        else
+        {
+            goals = goals + ILiferayMavenConstants.PLUGIN_GOAL_DEPLOY;
+        }
+
+        return goals;
     }
 
     @Override
     protected void updateProject( IProject p, IProgressMonitor monitor )
     {
+    }
+
+    @Override
+    protected String getPluginKey()
+    {
+        return ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_BUNDLE_SUPPORT_KEY;
     }
 
 }

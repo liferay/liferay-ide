@@ -12,10 +12,10 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.maven.ui.action;
 
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
-
 
 /**
  * @author Gregory Amerson

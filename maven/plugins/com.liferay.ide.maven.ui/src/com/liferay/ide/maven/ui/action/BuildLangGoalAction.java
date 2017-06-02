@@ -12,13 +12,17 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.maven.ui.action;
 
-import com.liferay.ide.maven.core.ILiferayMavenConstants;
+import org.osgi.framework.Version;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.maven.core.ILiferayMavenConstants;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public class BuildLangGoalAction extends MavenGoalAction
 {
@@ -26,7 +30,26 @@ public class BuildLangGoalAction extends MavenGoalAction
     @Override
     protected String getMavenGoals()
     {
-        return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_LANG;
+        if( plugin == null )
+        {
+            return "build-lang";
+        }
+
+        if( CoreUtil.compareVersions( new Version( plugin.getVersion() ), new Version( "1.0.11" ) ) >= 0 &&
+            plugin.getArtifactId().equals( getPluginKey() ) )
+        {
+            return "lang-builder:build";
+        }
+        else
+        {
+            return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_LANG;
+        }
+    }
+
+    @Override
+    protected String getPluginKey()
+    {
+        return ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_LANG_BUILDER_KEY;
     }
 
 }

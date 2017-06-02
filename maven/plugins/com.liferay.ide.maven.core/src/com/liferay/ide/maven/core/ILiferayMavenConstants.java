@@ -110,4 +110,18 @@ public interface ILiferayMavenConstants
 
     String WEB_PLUGIN_TYPE = "web";
 
+    String NEW_LIFERAY_MAVEN_PLUGINS_GROUP_ID = "com.liferay";
+
+    String LIFERAY_MAVEN_PLUGINS_CSS_BUILDER_KEY = "com.liferay.css.builder";
+
+    String LIFERAY_MAVEN_PLUGINS_LANG_BUILDER_KEY = "com.liferay.lang.builder";
+
+    String LIFERAY_MAVEN_PLUGINS_SERVICE_BUILDER_KEY = "com.liferay.portal.tools.service.builder";
+
+    String LIFERAY_MAVEN_PLUGINS_WSDD_BUILDER_KEY = "com.liferay.portal.tools.wsdd.builder";
+
+    String LIFERAY_MAVEN_PLUGINS_BUNDLE_SUPPORT_KEY = "com.liferay.portal.tools.bundle.support";
+
+    String LIFERAY_MAVEN_PLUGINS_DB_SUPPORT_KEY = "com.liferay.portal.tools.db.support";
+
 }

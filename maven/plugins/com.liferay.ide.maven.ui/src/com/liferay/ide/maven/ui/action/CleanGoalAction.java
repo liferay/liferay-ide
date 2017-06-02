@@ -17,21 +17,16 @@ package com.liferay.ide.maven.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
-import com.liferay.ide.maven.core.MavenProjectBuilder;
-import com.liferay.ide.maven.core.MavenUtil;
-import com.liferay.ide.maven.ui.LiferayMavenUI;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public class BuildServiceGoalAction extends MavenGoalAction
+public class CleanGoalAction extends MavenGoalAction
 {
 
     @Override
@@ -39,41 +34,28 @@ public class BuildServiceGoalAction extends MavenGoalAction
     {
         if( plugin == null )
         {
-            return "build-service";
+            return "clean";
         }
 
-        if( CoreUtil.compareVersions( new Version( plugin.getVersion() ), new Version( "1.0.145" ) ) >= 0 &&
-            plugin.getArtifactId().equals( getPluginKey() ) )
+        if( CoreUtil.compareVersions( new Version( plugin.getVersion() ), new Version( "2.0.2" ) ) >= 0 )
         {
-            return "service-builder:build";
+            return "bundle-support:clean";
         }
         else
         {
-            return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_SERVICE;
+            return "liferay:clean";
         }
     }
 
     @Override
     protected void updateProject( IProject p, IProgressMonitor monitor )
     {
-        final MavenProjectBuilder builder = new MavenProjectBuilder( p );
-
-        try
-        {
-            final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( p, monitor );
-
-            builder.refreshSiblingProject( projectFacade, monitor );
-        }
-        catch( CoreException e )
-        {
-            LiferayMavenUI.logError( "Unable to refresh sibling project", e );
-        }
     }
 
     @Override
     protected String getPluginKey()
     {
-        return ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_SERVICE_BUILDER_KEY;
+        return ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_BUNDLE_SUPPORT_KEY;
     }
 
 }
