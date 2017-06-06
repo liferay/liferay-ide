@@ -15,9 +15,6 @@
 
 package com.liferay.ide.server.ui.action;
 
-import com.liferay.ide.server.core.ILiferayServerBehavior;
-import com.liferay.ide.server.core.LiferayServerCore;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -32,6 +29,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
+
+import com.liferay.ide.server.core.ILiferayServerBehavior;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 /**
  * @author Greg Amerson
@@ -90,7 +90,6 @@ public class RedeployAction extends AbstractServerRunningAction
                     };
 
                     redeployJob.setUser( true );
-                    redeployJob.setRule( moduleServer.getServer() );
                     redeployJob.schedule();
                 }
             }

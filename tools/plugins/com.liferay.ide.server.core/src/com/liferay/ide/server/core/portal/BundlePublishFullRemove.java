@@ -55,7 +55,7 @@ public class BundlePublishFullRemove extends BundlePublishOperation
                 continue;
             }
 
-            IStatus status = null;
+            IStatus status = Status.OK_STATUS;
 
             final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
 
