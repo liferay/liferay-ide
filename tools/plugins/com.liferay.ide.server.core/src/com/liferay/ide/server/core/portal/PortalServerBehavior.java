@@ -33,6 +33,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 
 import org.eclipse.core.resources.IProject;
@@ -847,29 +848,44 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
         try(JarFile jarFile = new JarFile( portalImplFile ))
         {
-            String patchAttr = jarFile.getManifest().getMainAttributes().getValue( "Liferay-Portal-Installed-Patches" );
+            Attributes manifest = jarFile.getManifest().getMainAttributes();
 
-            if( CoreUtil.empty( patchAttr ) )
+            String buildNumber = manifest.getValue( "Liferay-Portal-Build-Number" ).trim();
+
+            String patchAttr = manifest.getValue( "Liferay-Portal-Installed-Patches" );
+
+            // dxp version
+            if( buildNumber.equals( "7010" ) )
             {
-                return true;
+                if( CoreUtil.empty( patchAttr ) )
+                {
+                    // dxp-ga1
+                    return false;
+                }
+                else
+                {
+                    String[] result = patchAttr.trim().split( "-" );
+
+                    if( result == null || result.length < 3 )
+                    {
+                        return false;
+                    }
+
+                    int patchVersion = Integer.parseInt( result[1] );
+
+                    // from dxp fix pack 9 (de-9-7010) , the aries jmx bundle is removed
+                    return patchVersion >= 9;
+                }
             }
             else
             {
-                String[] result = patchAttr.trim().split( "-" );
-
-                if( result == null || result.length < 3 )
-                {
-                    return false;
-                }
-
-                int patchVersion = Integer.parseInt( result[1] );
-
-                // from dxp fix pack 9 (de-9-7010) , the aries jmx bundle is removed
-                return patchVersion >= 9;
+                // ce ga1,ga2,ga3
+                return false;
             }
         }
         catch( Exception e )
         {
+            LiferayServerCore.logError( "get portal version and patch info error", e );
         }
 
         return false;
