@@ -18,7 +18,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.net.URL;
 
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProduct;
 import org.eclipse.core.runtime.IStatus;

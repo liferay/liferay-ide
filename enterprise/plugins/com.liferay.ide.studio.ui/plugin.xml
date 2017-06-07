@@ -69,11 +69,11 @@
         point="org.eclipse.ui.splashHandlers">
         <splashHandler
             class="com.liferay.ide.studio.ui.StudioSplashHandler"
-            id="com.liferay.ide.studio.ui.splashHandler">
+            id="com.liferay.ide.poroduct.splashHandler">
        </splashHandler>
        <splashHandlerProductBinding
             productId="com.liferay.ide.studio.ui.product"
-            splashId="com.liferay.ide.studio.ui.splashHandler">
+            splashId="com.liferay.ide.poroduct.splashHandler">
         </splashHandlerProductBinding>
    </extension>
    <extension

@@ -16,7 +16,7 @@
    <launcherArgs>
       <programArgs>
 -product
-com.liferay.ide.studio.product
+com.liferay.ide.studio.ui.product
 --launcher.defaultAction
 openFile
 --launcher.XXMaxPermSize
