@@ -104,8 +104,8 @@ import org.w3c.dom.NodeList;
 public class ServerUtil
 {
 
-    //private static Pattern aQuteAgentPortPattern = Pattern.compile( "-DaQute.agent.server.port=([0-9]+)" );
-    //private static Pattern jmxRemotePortPattern = Pattern.compile( "-Dcom.sun.management.jmxremote.port=([0-9]+)" );
+    // private static Pattern aQuteAgentPortPattern = Pattern.compile( "-DaQute.agent.server.port=([0-9]+)" );
+    // private static Pattern jmxRemotePortPattern = Pattern.compile( "-Dcom.sun.management.jmxremote.port=([0-9]+)" );
 
     public static Map<String, String> configureAppServerProperties( ILiferayRuntime liferayRuntime )
     {
@@ -182,7 +182,7 @@ public class ServerUtil
     }
 
     public static void addPortalRuntimeAndServer( String serverRuntimeName, IPath location, IProgressMonitor monitor )
-                    throws CoreException
+        throws CoreException
     {
         final IRuntimeWorkingCopy runtimeWC =
             ServerCore.findRuntimeType( PortalRuntime.ID ).createRuntime( serverRuntimeName, monitor );
@@ -199,7 +199,7 @@ public class ServerUtil
         serverWC.save( true, monitor );
     }
 
-    public static void deleteRuntimeAndServer( String runtimeType , File portalBundle ) throws Exception
+    public static void deleteRuntimeAndServer( String runtimeType, File portalBundle ) throws Exception
     {
         IRuntime[] runtimes = ServerCore.getRuntimes();
 
@@ -240,7 +240,7 @@ public class ServerUtil
     {
         IProject retval = null;
 
-        if( ! CoreUtil.isNullOrEmpty( contextName ) )
+        if( !CoreUtil.isNullOrEmpty( contextName ) )
         {
             for( IProject project : CoreUtil.getAllProjects() )
             {
@@ -322,7 +322,8 @@ public class ServerUtil
             final String type = runtime.getAppServerType();
 
             if( ( CoreUtil.compareVersions( version, ILiferayConstants.V6130 ) >= 0 ) ||
-                ( CoreUtil.compareVersions( version, ILiferayConstants.V612 ) >= 0 && CoreUtil.compareVersions( version, ILiferayConstants.V6110 ) < 0 ) )
+                ( CoreUtil.compareVersions( version, ILiferayConstants.V612 ) >= 0 &&
+                    CoreUtil.compareVersions( version, ILiferayConstants.V6110 ) < 0 ) )
             {
                 retval = MessageFormat.format( propertyAppServerDeployDir, "." + type + "." ); //$NON-NLS-1$ //$NON-NLS-2$
             }
@@ -367,7 +368,8 @@ public class ServerUtil
         final String myKey = "category.my"; //$NON-NLS-1$
         final String categoryMy = categories.getProperty( myKey );
 
-        if( ( portalVersion == null ) || ( CoreUtil.compareVersions( new Version( portalVersion ), ILiferayConstants.V620 ) < 0 ) )
+        if( ( portalVersion == null ) ||
+            ( CoreUtil.compareVersions( new Version( portalVersion ), ILiferayConstants.V620 ) < 0 ) )
         {
             final String portalKey = "category.portal"; //$NON-NLS-1$
             final String serverKey = "category.server"; //$NON-NLS-1$
@@ -546,17 +548,18 @@ public class ServerUtil
 
         File[] files = marketplace.listFiles( new FilenameFilter()
         {
+
             @Override
             public boolean accept( File dir, String name )
             {
                 return name.matches( ".*\\.lpkg" );
             }
-        });
+        } );
 
         return files;
     }
 
-    public static File getModuleFileFrom70Server(IRuntime runtime , String hostOsgiBundle , IPath temp)
+    public static File getModuleFileFrom70Server( IRuntime runtime, String hostOsgiBundle, IPath temp )
     {
         PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
 
@@ -570,6 +573,8 @@ public class ServerUtil
 
             if( moduleOsgiBundle.exists() )
             {
+                FileUtil.copyFile( moduleOsgiBundle, temp.toFile() );
+
                 return moduleOsgiBundle;
             }
         }
@@ -639,7 +644,7 @@ public class ServerUtil
         return f;
     }
 
-    public static List<String> getModuleFileListFrom70Server(IRuntime runtime )
+    public static List<String> getModuleFileListFrom70Server( IRuntime runtime )
     {
         List<String> bundles = new ArrayList<>();
 
@@ -655,7 +660,7 @@ public class ServerUtil
                 {
                     File dirFile = portalBundle.getOSGiBundlesDir().append( dir ).toFile();
 
-                    if(dirFile.exists())
+                    if( dirFile.exists() )
                     {
                         File[] files = dirFile.listFiles( new FilenameFilter()
                         {
@@ -779,10 +784,11 @@ public class ServerUtil
 
     public static IRuntime getRuntime( IProject project ) throws CoreException
     {
-        return (IRuntime) getRuntimeAdapter( ProjectFacetsManager.create( project ).getPrimaryRuntime(), IRuntime.class );
+        return (IRuntime) getRuntimeAdapter(
+            ProjectFacetsManager.create( project ).getPrimaryRuntime(), IRuntime.class );
     }
 
-    public static PortalBundle getPortalBundle(IProject project)  throws CoreException
+    public static PortalBundle getPortalBundle( IProject project ) throws CoreException
     {
         SDK sdk = SDKUtil.getSDKFromProjectDir( project.getLocation().toFile() );
 
@@ -797,7 +803,7 @@ public class ServerUtil
 
         PortalBundleFactory factory = LiferayServerCore.getPortalBundleFactories( appServerType );
 
-        if ( factory != null )
+        if( factory != null )
         {
             final IPath path = factory.canCreateFromPath( appServerProperties );
 
@@ -821,7 +827,7 @@ public class ServerUtil
     {
         IRuntime retval = null;
 
-        if( ! CoreUtil.isNullOrEmpty( runtimeName ) )
+        if( !CoreUtil.isNullOrEmpty( runtimeName ) )
         {
             final IRuntime[] runtimes = ServerCore.getRuntimes();
 
@@ -1068,6 +1074,7 @@ public class ServerUtil
         }
         return retval;
     }
+
     public static boolean isExistingVMName( String name )
     {
         for( IVMInstall vm : JavaRuntime.getVMInstallType( StandardVMType.ID_STANDARD_VM_TYPE ).getVMInstalls() )
@@ -1150,16 +1157,16 @@ public class ServerUtil
         }
     }
 
-    public static boolean verifyPath(final String verifyPath)
+    public static boolean verifyPath( final String verifyPath )
     {
-        if ( verifyPath == null)
+        if( verifyPath == null )
         {
             return false;
         }
 
-        final IPath verifyLocation = new Path(verifyPath);
+        final IPath verifyLocation = new Path( verifyPath );
 
-        if ( verifyLocation.toFile().exists() && verifyLocation.toFile().isDirectory())
+        if( verifyLocation.toFile().exists() && verifyLocation.toFile().isDirectory() )
         {
             return true;
         }

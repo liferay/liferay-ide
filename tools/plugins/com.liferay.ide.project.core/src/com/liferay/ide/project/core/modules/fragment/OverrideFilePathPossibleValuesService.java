@@ -100,7 +100,7 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 
                             if( ( name.startsWith( "META-INF/resources/" ) &&
                                 ( name.endsWith( ".jsp" ) || name.endsWith( ".jspf" ) ) ) ||
-                                name.equals( "portlet.properties" ) )
+                                name.equals( "portlet.properties" ) || name.equals( "resource-actions/default.xml" ) )
                             {
                                 possibleValues.add( name );
                             }
@@ -185,7 +185,8 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
             }
         }
 
-        if( count >= 0 && possibleValues.contains( value.content().toString() ) )
+        if( count >= 0 && ( possibleValues.contains( value.content().toString() ) ||
+            possibleValues.contains( "resource-actions/default.xml" ) ) )
         {
             return Status.createOkStatus();
         }

@@ -85,7 +85,7 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog
 
                             if( ( name.startsWith( "META-INF/resources/" ) &&
                                 ( name.endsWith( ".jsp" ) || name.endsWith( ".jspf" ) ) ) ||
-                                name.equals( "portlet.properties" ) )
+                                name.equals( "portlet.properties" ) || name.equals( "resource-actions/default.xml" ) )
                             {
                                 possibleValues.add( name );
                             }
@@ -144,6 +144,7 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog
         public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
         {
         }
+
     }
 
     protected static class FileLabelProvider extends LabelProvider
