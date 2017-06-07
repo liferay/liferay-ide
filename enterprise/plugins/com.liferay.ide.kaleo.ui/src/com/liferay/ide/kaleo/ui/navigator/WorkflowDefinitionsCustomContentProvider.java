@@ -214,10 +214,21 @@ public class WorkflowDefinitionsCustomContentProvider extends PluginsCustomConte
         return null;
     }
 
-    public boolean hasChildren( Object element )
+    public boolean hasChildren( Object element)
+    {
+        return element instanceof WorkflowDefinitionsFolder;
+    }
+
+    public boolean hasChildren( Object element, boolean currentHasChildren )
     {
         if( element instanceof IServer )
         {
+            // higher priority extension should consider Properties File extension's result
+            if( currentHasChildren )
+            {
+                return true;
+            }
+
             IServer server = (IServer) element;
 
             final WorkflowDefinitionsFolder definitionsNode = this.workflowDefinitionFolders.get( server.getId() );
@@ -235,12 +246,8 @@ public class WorkflowDefinitionsCustomContentProvider extends PluginsCustomConte
                 }
             }
         }
-        else if( element instanceof WorkflowDefinitionsFolder )
-        {
-            return true;
-        }
 
-        return false;
+        return currentHasChildren;
     }
 
     @SuppressWarnings( { "rawtypes", "unchecked" } )

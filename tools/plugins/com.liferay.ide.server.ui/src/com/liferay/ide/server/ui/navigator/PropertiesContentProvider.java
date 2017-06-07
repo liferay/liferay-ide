@@ -55,6 +55,31 @@ public class PropertiesContentProvider extends AbstractNavigatorContentProvider
         return null;
     }
 
+    private File[] getExtPropertiesFiles( ILiferayRuntime liferayRuntime )
+    {
+        File[] retVal = new File[0];
+
+        final IPath liferayHome = liferayRuntime.getLiferayHome();
+
+        if( liferayHome != null )
+        {
+            final File liferayHomeDir = liferayHome.toFile();
+
+            final File[] files = liferayHomeDir.listFiles( new FilenameFilter()
+            {
+
+                public boolean accept( File dir, String name )
+                {
+                    return dir.equals( liferayHomeDir ) && name.endsWith( "-ext.properties" );
+                }
+            } );
+
+            retVal = files;
+        }
+
+        return retVal;
+    }
+
     @Override
     @SuppressWarnings( { "rawtypes", "unchecked" } )
     public void getPipelinedChildren( Object parent, Set currentChildren )
@@ -71,30 +96,17 @@ public class PropertiesContentProvider extends AbstractNavigatorContentProvider
 
                 if( runtime != null )
                 {
-                    final IPath liferayHome = runtime.getLiferayHome();
+                    File[] files = getExtPropertiesFiles(runtime);
 
-                    if( liferayHome != null )
+                    final List<PropertiesFile> newFiles = new ArrayList<PropertiesFile>();
+
+                    for( File file : files )
                     {
-                        final File liferayHomeDir = liferayHome.toFile();
-
-                        final File[] files = liferayHomeDir.listFiles( new FilenameFilter()
-                        {
-                            public boolean accept( File dir, String name )
-                            {
-                                return dir.equals( liferayHomeDir ) && name.endsWith( "-ext.properties" );
-                            }
-                        });
-
-                        final List<PropertiesFile> newFiles = new ArrayList<PropertiesFile>();
-
-                        for( File file : files )
-                        {
-                            newFiles.add( new PropertiesFile( file ) );
-                        }
-
-                        propertiesFiles = newFiles.toArray( new PropertiesFile[0] );
-                        this.propertiesFilesMap.put( server.getId() , propertiesFiles );
+                        newFiles.add( new PropertiesFile( file ) );
                     }
+
+                    propertiesFiles = newFiles.toArray( new PropertiesFile[0] );
+                    this.propertiesFilesMap.put( server.getId() , propertiesFiles );
                 }
             }
 
@@ -111,19 +123,23 @@ public class PropertiesContentProvider extends AbstractNavigatorContentProvider
     @Override
     public boolean hasChildren( Object element )
     {
-        boolean retval = false;
+        boolean retVal = false;
 
         if( element instanceof IServer )
         {
             final IServer server = (IServer) element;
 
-            if( ServerUtil.isLiferayRuntime( server ) )
+            ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( server );
+
+            if( liferayRuntime != null )
             {
-                retval = true;
+                File[] files = getExtPropertiesFiles( liferayRuntime );
+
+                return files.length > 0;
             }
         }
 
-        return retval;
+        return retVal;
     }
 
     @Override

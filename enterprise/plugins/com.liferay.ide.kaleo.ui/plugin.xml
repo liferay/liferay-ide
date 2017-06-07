@@ -102,17 +102,17 @@
             class="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsActionProvider"
             id="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsActionProvider"
             priority="highest">
-         <enablement>
-            <or>
-               <instanceof
+            <enablement>
+              <or>
+                <instanceof
                      value="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsFolder">
-               </instanceof>
-               <instanceof
+                </instanceof>
+                <instanceof
                      value="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionEntry">
-               </instanceof>
-            </or>
-         </enablement>
-      </actionProvider>
+                </instanceof>
+              </or>
+            </enablement>
+         </actionProvider>
          <dropAssistant
                class="com.liferay.ide.kaleo.ui.navigator.WorkflowDropAdapterAssistant"
                id="com.liferay.ide.server.ui.serverview.workflowdefinitions.dropAssistant">

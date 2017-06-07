@@ -21,6 +21,7 @@ import aQute.remote.api.Supervisor;
 import aQute.remote.util.AgentSupervisor;
 
 import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.jmx.PortalBundleDeployer;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -175,6 +176,7 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
         }
         catch( Exception e )
         {
+            LiferayServerCore.logError( "Get result error when executing shell(lb -s " + bsn + ")", e );
             return id;
         }
     }

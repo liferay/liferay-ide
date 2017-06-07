@@ -143,7 +143,7 @@ public class PluginsCustomContentProvider extends AbstractNavigatorContentProvid
         return null;
     }
 
-    public boolean hasChildren( Object element )
+    public boolean hasChildren( Object element, boolean currentHasChildren)
     {
         if( element instanceof ModuleServer )
         {
@@ -164,7 +164,7 @@ public class PluginsCustomContentProvider extends AbstractNavigatorContentProvid
     @Override
     public boolean hasPipelinedChildren( Object element, boolean currentHasChildren )
     {
-        return hasChildren( element );
+        return hasChildren( element, currentHasChildren );
     }
 
     public boolean interceptRefresh( PipelinedViewerUpdate aRefreshSynchronization )
