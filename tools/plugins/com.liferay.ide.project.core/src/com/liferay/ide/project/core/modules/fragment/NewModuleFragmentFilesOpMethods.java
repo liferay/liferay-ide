@@ -101,6 +101,38 @@ public class NewModuleFragmentFilesOpMethods
 
                         FileUtil.copyFileToDir( fragmentFile, "portlet-ext.properties", folder );
                     }
+                    else if( fragmentFile.getName().contains( "default.xml" ) )
+                    {
+                        String parent = fragmentFile.getPath();
+                        parent = parent.replaceAll( "\\\\", "/" );
+                        String metaInfResources = "resource-actions";
+
+                        parent = parent.substring( parent.indexOf( metaInfResources ) + metaInfResources.length() );
+
+                        IPath resources = project.getLocation().append( "src/main/resources/resource-actions" );
+
+                        folder = resources.toFile();
+                        folder.mkdirs();
+
+                        FileUtil.copyFileToDir( fragmentFile, "default-ext.xml", folder );
+
+                        try
+                        {
+                            File ext = new File(
+                                project.getLocation().append( "src/main/resources" ) + "/portlet-ext.properties" );
+
+                            ext.createNewFile();
+
+                            String extFileContent =
+                                "resource.actions.configs=resource-actions/default.xml,resource-actions/default-ext.xml";
+
+                            FileUtil.writeFile( ext, extFileContent, null );
+                        }
+                        catch( Exception e )
+                        {
+                            throw new CoreException( ProjectCore.createErrorStatus( e ) );
+                        }
+                    }
                     else
                     {
                         String parent = fragmentFile.getParentFile().getPath();
