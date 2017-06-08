@@ -57,7 +57,9 @@ public class ProjectNameValidationService extends ValidationService
             @Override
             protected void handleTypedEvent( PropertyContentEvent event )
             {
-                if( ! event.property().definition().equals( NewLiferayPluginProjectOp.PROP_FINAL_PROJECT_NAME )
+                if( ! event.property().definition().equals( NewLiferayPluginProjectOp.PROP_DISPLAY_NAME )
+                                && ! event.property().definition().equals( NewLiferayPluginProjectOp.PROP_FINAL_PROJECT_NAME )
+                                && ! event.property().definition().equals( NewLiferayPluginProjectOp.PROP_PORTLET_NAME )
                                 && ! event.property().definition().equals( NewLiferayPluginProjectOp.PROP_PROJECT_NAMES )
                                 && ! event.property().definition().equals( NewLiferayPluginProjectOp.PROP_PROJECT_NAME ) )
                 {
