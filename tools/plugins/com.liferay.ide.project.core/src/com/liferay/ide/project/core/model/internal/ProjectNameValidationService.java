@@ -60,7 +60,13 @@ public class ProjectNameValidationService extends ValidationService
                                 && ! event.property().definition().equals( NewLiferayPluginProjectOp.PROP_PROJECT_NAMES )
                                 && ! event.property().definition().equals( NewLiferayPluginProjectOp.PROP_PROJECT_NAME ) )
                 {
-                    refresh();
+                    try
+                    {
+                        refresh();
+                    }
+                    catch( Exception e )
+                    {
+                    }
                 }
             }
         };
