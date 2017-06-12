@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.server.core.portal;
 
 import aQute.remote.api.Agent;
@@ -19,6 +20,7 @@ import aQute.remote.api.Agent;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayRuntimeClasspathEntry;
+import com.liferay.ide.core.properties.PortalPropertiesConfiguration;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
@@ -27,7 +29,9 @@ import com.liferay.ide.server.util.PingThread;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -36,6 +40,7 @@ import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
@@ -234,6 +239,53 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
     private String[] getRuntimeStartVMArguments()
     {
+        if( !getPortalServer().getLaunchSettings() )
+        {
+            File portalext = getPortalRuntime().getLiferayHome().append( "portal-ext.properties" ).toFile();
+
+            if( getPortalServer().getDeveloperMode() )
+            {
+                try
+                {
+                    if( !portalext.exists() )
+                    {
+                        portalext.createNewFile();
+                    }
+
+                    final PortalPropertiesConfiguration config = new PortalPropertiesConfiguration();
+
+                    InputStream in = new FileInputStream( portalext );
+
+                    config.load( in );
+
+                    in.close();
+
+                    config.addProperty( "include-and-override", "portal-developer.properties" );
+
+                    config.save( portalext );
+                }
+                catch( Exception e )
+                {
+                    LiferayServerCore.logError( e );
+                }
+            }
+            else if( portalext.exists() )
+            {
+                String contents = FileUtil.readContents( portalext, true );
+
+                contents = contents.replace( "include-and-override=portal-developer.properties", "" );
+
+                try
+                {
+                    FileUtils.write( portalext, contents );
+                }
+                catch( IOException e )
+                {
+                    LiferayServerCore.logError( e );
+                }
+            }
+        }
+
         final List<String> retval = new ArrayList<>();
 
         Collections.addAll( retval, getPortalServer().getMemoryArgs() );
