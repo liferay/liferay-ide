@@ -85,7 +85,7 @@
 							<action>
 								<id>NewLiferayRuntime</id>
 								<label>New Liferay runtime...</label>
-								<image>server_new.png</image>
+								<image>icons/n16/server_new.png</image>
 							</action>
 							<action-handler>
 								<action>NewLiferayRuntime</action>

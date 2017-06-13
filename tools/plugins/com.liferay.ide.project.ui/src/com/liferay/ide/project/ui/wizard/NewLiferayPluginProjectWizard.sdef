@@ -52,7 +52,7 @@
                     <action>
                         <id>Select.Active.Profiles</id>
                         <label>Select active profiles...</label>
-                        <image>Browse.png</image>
+                        <image>icons/e16/Browse.png</image>
                     </action>
                     <action-handler>
                         <action>Select.Active.Profiles</action>
@@ -63,7 +63,7 @@
                     <action>
                         <id>Sapphire.Add</id>
                         <label>Create New Maven Profile based on Liferay runtime...</label>
-                        <image>new_liferay_profile.gif</image>
+                        <image>icons/e16/new_liferay_profile.gif</image>
                     </action>
                     <action-handler>
                         <action>Sapphire.Add</action>
@@ -265,7 +265,7 @@
                 <action>
                     <id>NewLiferayRuntime</id>
                     <label>New Liferay runtime...</label>
-                    <image>server_new.png</image>
+                    <image>icons/n16/server_new.png</image>
                 </action>
                 <action-handler>
                     <action>NewLiferayRuntime</action>
