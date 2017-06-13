@@ -12,9 +12,11 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -32,7 +34,6 @@ import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.sapphire.services.ValidationService;
-
 
 /**
  * @author Gregory Amerson
@@ -66,6 +67,7 @@ public class ProjectNameValidationService extends ValidationService
                     }
                     catch( Exception e )
                     {
+                        ProjectCore.logError( e );
                     }
                 }
             }
