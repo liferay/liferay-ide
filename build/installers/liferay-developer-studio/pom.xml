@@ -37,7 +37,7 @@
         <plugin-sdk-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk</plugin-sdk-download-base>
         <plugin-sdk-zip-name>com.liferay.portal.plugins.sdk-1.0.9-withdependencies.zip</plugin-sdk-zip-name>
         <plugin-sdk-version>1.0.9</plugin-sdk-version>
-        <studio-installer-version>3.1.0-b1</studio-installer-version>
+        <studio-installer-version>3.1.0</studio-installer-version>
     </properties>
 
     <build>
