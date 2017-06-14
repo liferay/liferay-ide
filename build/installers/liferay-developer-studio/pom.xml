@@ -37,7 +37,6 @@
         <plugin-sdk-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk</plugin-sdk-download-base>
         <plugin-sdk-zip-name>com.liferay.portal.plugins.sdk-1.0.9-withdependencies.zip</plugin-sdk-zip-name>
         <plugin-sdk-version>1.0.9</plugin-sdk-version>
-        <blade-latest-download-url>https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/103/artifact/build/generated/p2/plugins/com.liferay.blade.cli_2.1.1.201705101640.jar</blade-latest-download-url>
         <studio-installer-version>3.1.0-b1</studio-installer-version>
     </properties>
 
@@ -80,7 +79,7 @@
                             <url>${blade-latest-download-url}</url>
                             <outputDirectory>../shared/download/</outputDirectory>
                             <outputFileName>blade.jar</outputFileName>
-                            <md5>4ecc17c805735fdfbe967d79de63b512</md5>
+                            <md5>${blade-latest-md5}</md5>
                         </configuration>
                     </execution>
                 </executions>
