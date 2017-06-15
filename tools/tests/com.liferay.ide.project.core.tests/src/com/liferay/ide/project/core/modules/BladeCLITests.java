@@ -182,9 +182,11 @@ public class BladeCLITests
 
         assertNotNull( projectTemplates );
 
-        assertEquals( "activator", projectTemplates[0] );
+        assertTrue( projectTemplates[0], projectTemplates[0].startsWith("activator"));
 
-        assertEquals( "theme-contributor", projectTemplates[projectTemplates.length - 1] );
+        assertTrue(
+            projectTemplates[projectTemplates.length - 1],
+            projectTemplates[projectTemplates.length - 1].startsWith( "theme-contributor" ) );
     }
 
 }
