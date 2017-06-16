@@ -42,6 +42,18 @@
                value="images/liferay-16x16.png,images/liferay-32x32.png,images/liferay-48x48.png,images/liferay-64x64.png,images/liferay-128x128.png">
          </property>
          <property
+               name="introTitle"
+               value="Liferay Developer Studio">
+         </property>
+         <property
+               name="introBrandingImageText"
+               value="Liferay Developer Studio">
+         </property>
+         <property
+              name="introBrandingImage"
+              value="product:images/liferay_logo_large.png">
+         </property>
+         <property
                name="buildIdRect"
                value="172,85,404,52">
          </property>
