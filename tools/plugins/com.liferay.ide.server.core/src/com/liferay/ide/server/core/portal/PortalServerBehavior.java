@@ -37,7 +37,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 
@@ -261,9 +260,20 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
                     in.close();
 
-                    Properties p = config.getProperties( "include-and-override" );
+                    String[] p = config.getStringArray( "include-and-override" );
 
-                    if( !p.containsValue( "portal-developer.properties" ) )
+                    boolean existing = false;
+
+                    for( String prop : p )
+                    {
+                        if( prop.equals( "portal-developer.properties" ) )
+                        {
+                            existing = true;
+                            break;
+                        }
+                    }
+
+                    if( !existing )
                     {
                         config.addProperty( "include-and-override", "portal-developer.properties" );
                     }
