@@ -922,7 +922,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
         if( !portalImplFile.exists() )
         {
-            return false;
+            return true;
         }
 
         try(JarFile jarFile = new JarFile( portalImplFile ))
@@ -952,14 +952,18 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
                     int patchVersion = Integer.parseInt( result[1] );
 
-                    // from dxp fix pack 9 (de-9-7010) , the aries jmx bundle is removed
+                    // from dxp fix pack 9 (de-9-7010), the aries jmx bundles are removed
                     return patchVersion >= 9;
                 }
             }
-            else
+            else if( buildNumber.startsWith( "700" ) )
             {
-                // ce ga1,ga2,ga3
-                return false;
+                // ce version
+                Version lp70ga3 = new Version( "7002" );
+                Version currentCEVersion = new Version( buildNumber );
+
+                // from ce-ga4, the aries jmx bundles are removed
+                return currentCEVersion.compareTo( lp70ga3 ) > 0;
             }
         }
         catch( Exception e )
@@ -967,7 +971,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
             LiferayServerCore.logError( "get portal version and patch info error", e );
         }
 
-        return false;
+        return true;
     }
 
     @Override
