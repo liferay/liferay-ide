@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Server UI Tests
+Bundle-SymbolicName: com.liferay.ide.swtbot.server.ui.tests
+Bundle-Version: 3.1.0.qualifier
+Bundle-Vendor: Liferay
+Require-Bundle: org.junit,
+ com.liferay.ide.swtbot.ui.tests,
+ org.eclipse.swtbot.go,
+ org.eclipse.swtbot.swt.finder,
+ com.liferay.ide.swtbot.project.ui.tests
+Export-Package: com.liferay.ide.swtbot.server.ui.tests,
+ com.liferay.ide.swtbot.server.ui.tests.page
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Import-Package: com.liferay.ide.swtbot.project.ui.tests

@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay Workspace Project Tests
+Bundle-SymbolicName: com.liferay.ide.swtbot.gradle.ui.tests
+Bundle-Version: 3.1.0.qualifier
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: com.liferay.ide.swtbot.project.ui.tests,
+ com.liferay.ide.swtbot.ui.tests,
+ org.eclipse.swtbot.go,
+ org.junit
+Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.swtbot.gradle.tests
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: com.liferay.ide.swtbot.server.ui.tests.page

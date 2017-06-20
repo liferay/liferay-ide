@@ -1,0 +1,7 @@
+Bundle-SymbolicName: servicebuildermodule-api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.example.exception,\
+	com.example.model,\
+	com.example.service,\
+	com.example.service.persistence

@@ -1,0 +1,8 @@
+bundle/builder/
+bundle/downloads/
+bundle/target/
+bundle/work/
+bundle/bundle.*.properties
+/.project
+/.settings
+*.bak

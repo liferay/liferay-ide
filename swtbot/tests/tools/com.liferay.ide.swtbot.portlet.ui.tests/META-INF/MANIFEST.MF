@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay Portlet UI Tests
+Bundle-SymbolicName: com.liferay.ide.swtbot.portlet.ui.tests
+Bundle-Version: 3.1.0.qualifier
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: com.liferay.ide.swtbot.ui.tests,
+ org.eclipse.core.resources,
+ org.eclipse.swtbot.go,
+ org.junit,
+ com.liferay.ide.swtbot.project.ui.tests
+Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.swtbot.portlet.ui.tests,
+ com.liferay.ide.swtbot.portlet.ui.tests.page
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: com.liferay.ide.swtbot.project.ui.tests.page

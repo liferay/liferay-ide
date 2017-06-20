@@ -34,7 +34,8 @@
         <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.6/R-4.6.3-201703010400/</eclipse-project-update-site>
         <wtp-site>http://download.eclipse.org/webtools/downloads/drops/R3.8.2/R-3.8.2-20170308000057/repository/</wtp-site>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20170307180635/repository/</orbit-site>
-        <tm-site>http://download.eclipse.org/tm/terminal/updates/4.2/</tm-site>
+        <tm-site>http://download.eclipse.org/tm/terminal/updates/4.2/</tm-site>		
+        <liferay-ide-swtbot-testing-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
         <osgi-bundles-site>https://dl.bintray.com/gamerson/liferay-ide-deps/</osgi-bundles-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>

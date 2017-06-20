@@ -52,6 +52,26 @@
             </modules>
         </profile>
         <profile>
+            <id>swtbotTestsOnly</id>
+            <modules>
+                <module>../swtbot</module>
+                <module>com.liferay.ide.swtbot.testing-repository</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>swtbotTests</id>
+            <modules>
+                <module>../tools</module>
+                <module>../jsdt</module>
+                <module>../maven</module>
+                <module>../enterprise</module>
+                <module>../swtbot</module>
+                <module>com.liferay.ide-repository</module>
+                <module>com.liferay.ide.testing-repository</module>
+                <module>com.liferay.ide.swtbot.testing-repository</module>
+            </modules>
+        </profile>
+        <profile>
             <id>skipTests</id>
             <modules>
                 <module>../tools/plugins</module>

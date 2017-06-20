@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay Project Code Upgrade UI Tests
+Bundle-SymbolicName: com.liferay.ide.swtbot.project.code.upgrade.ui.tests
+Bundle-Version: 3.1.0.qualifier
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: org.junit,
+ org.eclipse.ui.console,
+ org.eclipse.swtbot.go,
+ com.liferay.ide.swtbot.ui.tests,
+ org.eclipse.core.resources
+Export-Package: com.liferay.ide.swtbot.project.upgrade.ui.tests,
+ com.liferay.ide.swtbot.project.upgrade.ui.tests.page
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
