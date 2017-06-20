@@ -35,6 +35,8 @@ import org.eclipse.sapphire.platform.PathBridge;
 public class ModuleProjectNameListener extends FilteredListener<PropertyContentEvent>
 {
 
+    private static String[] WAR_TYPE_PROJECT = new String[] { "layout-template", "spring-mvc-portlet", "theme" };
+
     @Override
     protected void handleTypedEvent( PropertyContentEvent event )
     {
@@ -109,9 +111,12 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
 
                     String projectTemplateName = moduleProjectOp.getProjectTemplateName().content();
 
-                    if( "theme".equals( projectTemplateName ) )
+                    for( String projectType : WAR_TYPE_PROJECT )
                     {
-                        isThemeProject = true;
+                        if( projectType.equals( projectTemplateName ) )
+                        {
+                            isThemeProject = true;
+                        }
                     }
                 }
 

@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -206,9 +205,21 @@ public class BladeCLI
     {
         List<String> templateNames = new ArrayList<>();
 
-        String[] retval = execute( "create -l" );
+        String[] executeResult = execute( "create -l" );
 
-        Collections.addAll( templateNames, retval );
+        for( String name : executeResult )
+        {
+            // for latest blade which print template descriptor
+            if( name.trim().indexOf( " " ) != -1 )
+            {
+                templateNames.add( name.substring( 0, name.indexOf( " " ) ) );
+            }
+            // for legacy blade
+            else
+            {
+                templateNames.add( name );
+            }
+        }
 
         return templateNames.toArray( new String[0] );
     }

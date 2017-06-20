@@ -68,8 +68,10 @@ public class LiferayMavenCore extends Plugin
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_CONTENT_TARGETING_RULE = "archetype-project-template-content-targeting-rule";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_CONTENT_TARGETING_TRACKING_ACTION = "archetype-project-template-content-targeting-tracking-action";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_CONTROL_MENU_ENTRY = "archetype-project-template-control-menu-entry";
-    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_FRAGMENT = "archetype-project-template-fragment";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_FORM_FIELD = "archetype-project-template-form-field";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_FRAGMENT = "archetype-project-template-fragment";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_FREEMERKER_PORTLET = "archetype-project-template-freemarker-portlet";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_LAYOUT_TEMPLATE = "archetype-project-template-layout-template";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_MVC_PORTLET = "archetype-project-template-mvc-portlet";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_PANEL_APP = "archetype-project-template-panel-app";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_PORTLET = "archetype-project-template-portlet";
@@ -81,6 +83,8 @@ public class LiferayMavenCore extends Plugin
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_SERVICE_BUILDER = "archetype-project-template-service-builder";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_SERVICE_WRAPPER = "archetype-project-template-service-wrapper";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_SIMULATION_PANEL_ENTRY = "archetype-project-template-simulation-panel-entry";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_SOY_PORTLET = "archetype-project-template-soy-portlet";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_SPRING_MVC_PORTLET = "archetype-project-template-spring-mvc-portlet";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_TEMPLATE_CONTEXT_CONTRIBUTOR = "archetype-project-template-template-context-contributor";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_THEME = "archetype-project-template-theme";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_THEME_CONTRIBUTOR = "archetype-project-template-theme-contributor";
