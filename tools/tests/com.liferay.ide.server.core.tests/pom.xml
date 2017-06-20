@@ -47,7 +47,7 @@
                 <groupId>org.eclipse.tycho</groupId>
                 <artifactId>tycho-surefire-plugin</artifactId>
                 <configuration>
-                    <argLine>-Xmx1024m -XX:MaxPermSize=512m</argLine>
+                    <argLine>-Xmx1024m</argLine>
                     <useUIHarness>false</useUIHarness>
                     <useUIThread>false</useUIThread>
                     <systemProperties>

@@ -57,7 +57,7 @@
                     <useUIHarness>false</useUIHarness>
                     <useUIThread>false</useUIThread>
                     <!--argLine>-Xmx1024m -XX:MaxPermSize=512m -Xdebug -Xrunjdwp:transport=dt_socket,address=8100,server=y,suspend=y</argLine-->
-                    <argLine>-Xmx1024m -XX:MaxPermSize=512m</argLine>
+                    <argLine>-Xmx1024m</argLine>
                     <systemProperties>
                         <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
                         <skipBundleTests>${skipBundleTests}</skipBundleTests>
