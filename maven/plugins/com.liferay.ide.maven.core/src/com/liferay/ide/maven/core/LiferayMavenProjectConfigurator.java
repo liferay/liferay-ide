@@ -367,9 +367,20 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
     private boolean shouldAddLiferayNature( MavenProject mavenProject, IFacetedProject facetedProject )
     {
+        boolean isLayoutTemplateProject = false;
+
+        IProject project = facetedProject.getProject();
+
+        if( project != null && project.exists() &&
+            project.getFile( "src/main/webapp/WEB-INF/liferay-layout-templates.xml" ).exists() )
+        {
+            isLayoutTemplateProject = true;
+        }
+
         return mavenProject.getPlugin( ILiferayMavenConstants.BND_MAVEN_PLUGIN_KEY ) != null ||
             mavenProject.getPlugin( ILiferayMavenConstants.MAVEN_BUNDLE_PLUGIN_KEY ) != null ||
-            mavenProject.getPlugin( ILiferayMavenConstants.LIFERAY_THEME_BUILDER_PLUGIN_KEY ) != null;
+            mavenProject.getPlugin( ILiferayMavenConstants.LIFERAY_THEME_BUILDER_PLUGIN_KEY ) != null ||
+            isLayoutTemplateProject;
     }
 
     public static IPath getThemeTargetFolder( MavenProject mavenProject, IProject project )
