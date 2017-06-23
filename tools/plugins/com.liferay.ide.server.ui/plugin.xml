@@ -610,6 +610,13 @@
             order="10"
             typeIds="com.liferay.ide.server.portal">
       </section>
+      <section
+            class="com.liferay.ide.server.ui.editor.PortalServerPortsEditorSection"
+            id="com.liferay.ide.server.editor.instance"
+            insertionId="org.eclipse.wst.server.editor.overview.right"
+            order="10"
+            typeIds="com.liferay.ide.server.portal">
+      </section>
    </extension>
    <!--
    <extension

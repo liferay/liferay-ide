@@ -36,4 +36,6 @@ public interface PortalServerConstants
 
     String DEFAULT_USERNAME = "test@liferay.com";
 
+    String DEFAULT_HTTP_PORT = "8080";
+
 }

@@ -30,6 +30,7 @@ import java.util.List;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IModuleType;
@@ -44,6 +45,7 @@ import org.eclipse.wst.server.core.model.ServerDelegate;
 @SuppressWarnings( "restriction" )
 public class PortalServerDelegate extends ServerDelegate implements PortalServerWorkingCopy
 {
+
     private final static List<String> SUPPORT_TYPES_LIST = Arrays.asList( "liferay.bundle", "jst.web", "jst.utility" );
 
     public PortalServerDelegate()
@@ -74,13 +76,13 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
 
     public int getAutoPublishTime()
     {
-        return getAttribute(Server.PROP_AUTO_PUBLISH_TIME, 0);
+        return getAttribute( Server.PROP_AUTO_PUBLISH_TIME, 0 );
     }
 
     @Override
     public String getHttpPort()
     {
-        return getAttribute( PROPERTY_HTTP_PORT, DEFAULT_HTTP_PORT );
+        return getAttribute( ATTR_HTTP_PORT, DEFAULT_HTTP_PORT );
     }
 
     @Override
@@ -104,8 +106,7 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
     @Override
     public boolean getDeveloperMode()
     {
-        return getAttribute(
-            PROPERTY_DEVELOPER_MODE, PortalServerConstants.DEFAULT_DEVELOPER_MODE );
+        return getAttribute( PROPERTY_DEVELOPER_MODE, PortalServerConstants.DEFAULT_DEVELOPER_MODE );
     }
 
     public String getExternalProperties()
@@ -172,7 +173,7 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
     {
         try
         {
-            return new URL("http://localhost:8080");
+            return new URL( "http://localhost:" + getHttpPort() );
         }
         catch( Exception e )
         {
@@ -249,6 +250,16 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
     public void setUsername( String username )
     {
         setAttribute( ATTR_USERNAME, username );
+    }
+
+    public void setHttpPort( String httpPort )
+    {
+        setAttribute( ATTR_HTTP_PORT, httpPort );
+
+        PortalRuntime runtime =
+            (PortalRuntime) getServer().getRuntime().loadAdapter( PortalRuntime.class, new NullProgressMonitor() );
+
+        runtime.getPortalBundle().setHttpPort( httpPort );
     }
 
 }

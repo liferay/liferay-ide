@@ -30,4 +30,5 @@ public interface PortalServerWorkingCopy extends PortalServer, ILiferayServerWor
     public void setLaunchSettings( boolean launchSettings );
 
     public void setMemoryArgs( String memoryArgs );
+
 }

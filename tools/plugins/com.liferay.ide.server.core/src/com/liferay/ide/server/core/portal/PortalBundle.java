@@ -55,7 +55,7 @@ public interface PortalBundle extends ILiferayPortal
     String[] getRuntimeStopProgArgs();
 
     String getType();
-    
+
     String getDisplayName();
 
     IPath[] getBundleDependencyJars();
@@ -63,4 +63,7 @@ public interface PortalBundle extends ILiferayPortal
     IPath[] getUserLibs();
 
     String getHttpPort();
+
+    void setHttpPort( String port );
+
 }

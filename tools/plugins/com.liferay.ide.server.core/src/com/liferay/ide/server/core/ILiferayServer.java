@@ -35,6 +35,8 @@ public interface ILiferayServer
 
     String ATTR_USERNAME = "username";
 
+    String ATTR_HTTP_PORT = "http-port";
+
     String DEFAULT_PASSWORD = defaultPrefs.get( "default.password", StringPool.EMPTY );
 
     String DEFAULT_USERNAME = defaultPrefs.get( "default.username", StringPool.EMPTY );

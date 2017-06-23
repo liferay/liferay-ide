@@ -30,7 +30,7 @@ import org.eclipse.core.runtime.Path;
 /**
  * @author Simon Jiang
  */
-public class PortalJBossBundle extends AbstractPortalBundle implements PortalBundle
+public class PortalJBossBundle extends AbstractPortalBundle
 {
     public static final int DEFAULT_JMX_PORT = 2099;
 
@@ -90,6 +90,11 @@ public class PortalJBossBundle extends AbstractPortalBundle implements PortalBun
         }
 
         return retVal;
+    }
+
+    @Override
+    public void setHttpPort( String port )
+    {
     }
 
     @Override

@@ -25,12 +25,8 @@ import com.liferay.ide.server.ui.cmd.SetMemoryArgsCommand;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.util.NLS;
@@ -40,130 +36,56 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.forms.IFormColors;
-import org.eclipse.ui.forms.events.HyperlinkAdapter;
-import org.eclipse.ui.forms.events.HyperlinkEvent;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Hyperlink;
-import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.help.IWorkbenchHelpSystem;
-import org.eclipse.wst.server.core.IPublishListener;
-import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.internal.Server;
-import org.eclipse.wst.server.core.util.PublishAdapter;
-import org.eclipse.wst.server.ui.editor.ServerEditorSection;
-import org.eclipse.wst.server.ui.internal.ContextIds;
 
+/**
+ * @author Terry Jia
+ */
 @SuppressWarnings( "restriction" )
-public class PortalServerLaunchEditorSection extends ServerEditorSection
+public class PortalServerLaunchEditorSection extends AbstractPortalServerEditorSection
 {
 
-    protected Section section;
-    protected PortalServer portalServer;
-
-    protected Hyperlink setDefault;
-
-    protected boolean defaultDeployDirIsSet;
+    protected Button customLaunchSettings;
+    protected Button defaultLaunchSettings;
+    protected Button developerMode;
+    protected Text externalProperties;
+    protected Button externalPropertiesBrowse;
 
     protected Text memoryArgs;
-    protected Text externalProperties;
-    protected Button developerMode;
-    protected Button externalPropertiesBrowse;
-    protected Button defaultLaunchSettings;
-    protected Button customLaunchSettings;
-    protected boolean updating;
 
-    protected PropertyChangeListener listener;
-    protected IPublishListener publishListener;
-    protected IPath workspacePath;
-    protected IPath defaultDeployPath;
-
-    protected boolean allowRestrictedEditing;
-    protected IPath tempDirPath;
-    protected IPath installDirPath;
-
-    /**
-     * ServerGeneralEditorPart constructor comment.
-     */
     public PortalServerLaunchEditorSection()
     {
         super();
     }
 
-    /**
-     * Add listeners to detect undo changes and publishing of the server.
-     */
-    protected void addChangeListeners()
+    @Override
+    protected void addPropertyListeners( PropertyChangeEvent event )
     {
-        listener = new PropertyChangeListener()
+        if( PortalServer.PROPERTY_MEMORY_ARGS.equals( event.getPropertyName() ) )
         {
-            public void propertyChange( PropertyChangeEvent event )
-            {
-                if( updating )
-                {
-                    return;
-                }
-
-                updating = true;
-
-                if( PortalServer.PROPERTY_MEMORY_ARGS.equals( event.getPropertyName() ) )
-                {
-                    String s = (String) event.getNewValue();
-                    PortalServerLaunchEditorSection.this.memoryArgs.setText( s );
-                }
-                else if( PortalServer.PROPERTY_EXTERNAL_PROPERTIES.equals( event.getPropertyName() ) )
-                {
-                    String s = (String) event.getNewValue();
-                    PortalServerLaunchEditorSection.this.externalProperties.setText( s );
-                }
-                else if( PortalServer.PROPERTY_DEVELOPER_MODE.equals( event.getPropertyName() ) )
-                {
-                    boolean s = (Boolean) event.getNewValue();
-                    developerMode.setSelection( s );
-                }
-                else if( PortalServer.PROPERTY_LAUNCH_SETTINGS.equals( event.getPropertyName() ) )
-                {
-                    boolean s = (Boolean) event.getNewValue();
-                    defaultLaunchSettings.setSelection( s );
-                    customLaunchSettings.setSelection( !s );
-                }
-
-                validate();
-
-                updating = false;
-            }
-        };
-
-        server.addPropertyChangeListener( listener );
-
-        publishListener = new PublishAdapter()
+            memoryArgs.setText( (String) event.getNewValue() );
+        }
+        else if( PortalServer.PROPERTY_EXTERNAL_PROPERTIES.equals( event.getPropertyName() ) )
         {
-            public void publishFinished( IServer server2, IStatus status )
-            {
-                boolean flag = false;
-                if( status.isOK() && server2.getModules().length == 0 )
-                {
-                    flag = true;
-                }
+            externalProperties.setText( (String) event.getNewValue() );
+        }
+        else if( PortalServer.PROPERTY_DEVELOPER_MODE.equals( event.getPropertyName() ) )
+        {
+            developerMode.setSelection( (Boolean) event.getNewValue() );
+        }
+        else if( PortalServer.PROPERTY_LAUNCH_SETTINGS.equals( event.getPropertyName() ) )
+        {
+            boolean s = (Boolean) event.getNewValue();
 
-                if( flag != allowRestrictedEditing )
-                {
-                    allowRestrictedEditing = flag;
-                }
-            }
-        };
-
-        server.getOriginal().addPublishListener( publishListener );
+            defaultLaunchSettings.setSelection( s );
+            customLaunchSettings.setSelection( !s );
+        }
     }
 
     private void applyDefaultPortalServerSetting( final boolean useDefaultPortalSeverSetting )
@@ -184,38 +106,9 @@ public class PortalServerLaunchEditorSection extends ServerEditorSection
         }
     }
 
-    /**
-     * Creates the SWT controls for this workbench part.
-     *
-     * @param parent
-     *            the parent control
-     */
-    public void createSection( Composite parent )
+    @Override
+    protected void createEditorSection( FormToolkit toolkit, Composite composite )
     {
-        super.createSection( parent );
-        FormToolkit toolkit = getFormToolkit( parent.getDisplay() );
-
-        section =
-            toolkit.createSection( parent, ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED |
-                ExpandableComposite.TITLE_BAR | Section.DESCRIPTION | ExpandableComposite.FOCUS_TITLE );
-        section.setText( Msgs.liferayLaunch );
-        section.setLayoutData( new GridData( GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL ) );
-
-        Composite composite = toolkit.createComposite( section );
-        GridLayout layout = new GridLayout();
-        layout.numColumns = 3;
-        layout.marginHeight = 5;
-        layout.marginWidth = 10;
-        layout.verticalSpacing = 5;
-        layout.horizontalSpacing = 15;
-        composite.setLayout( layout );
-        composite.setLayoutData( new GridData( GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL ) );
-        IWorkbenchHelpSystem whs = PlatformUI.getWorkbench().getHelpSystem();
-        whs.setHelp( composite, ContextIds.EDITOR_SERVER );
-        whs.setHelp( section, ContextIds.EDITOR_SERVER );
-        toolkit.paintBordersFor( composite );
-        section.setClient( composite );
-
         GridData data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
 
         defaultLaunchSettings = new Button( composite, SWT.RADIO );
@@ -225,6 +118,7 @@ public class PortalServerLaunchEditorSection extends ServerEditorSection
 
         defaultLaunchSettings.addSelectionListener( new SelectionAdapter()
         {
+
             public void widgetSelected( SelectionEvent e )
             {
                 updating = true;
@@ -235,7 +129,7 @@ public class PortalServerLaunchEditorSection extends ServerEditorSection
                 customLaunchSettings.setSelection( !defaultLaunchSettings.getSelection() );
                 validate();
             }
-        });
+        } );
 
         customLaunchSettings = new Button( composite, SWT.RADIO );
         customLaunchSettings.setText( Msgs.customLaunchSettings );
@@ -244,6 +138,7 @@ public class PortalServerLaunchEditorSection extends ServerEditorSection
 
         customLaunchSettings.addSelectionListener( new SelectionAdapter()
         {
+
             public void widgetSelected( SelectionEvent e )
             {
                 updating = true;
@@ -254,7 +149,7 @@ public class PortalServerLaunchEditorSection extends ServerEditorSection
                 defaultLaunchSettings.setSelection( !customLaunchSettings.getSelection() );
                 validate();
             }
-        });
+        } );
 
         Label label = createLabel( toolkit, composite, Msgs.memoryArgsLabel );
         data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
@@ -266,6 +161,7 @@ public class PortalServerLaunchEditorSection extends ServerEditorSection
         memoryArgs.setLayoutData( data );
         memoryArgs.addModifyListener( new ModifyListener()
         {
+
             public void modifyText( ModifyEvent e )
             {
                 if( updating )
@@ -273,12 +169,12 @@ public class PortalServerLaunchEditorSection extends ServerEditorSection
                     return;
                 }
                 updating = true;
-                execute(new SetMemoryArgsCommand(server, memoryArgs.getText().trim()));
+                execute( new SetMemoryArgsCommand( server, memoryArgs.getText().trim() ) );
                 updating = false;
                 validate();
             }
 
-        });
+        } );
 
         label = createLabel( toolkit, composite, StringPool.EMPTY );
         data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
@@ -294,6 +190,7 @@ public class PortalServerLaunchEditorSection extends ServerEditorSection
         externalProperties.setLayoutData( data );
         externalProperties.addModifyListener( new ModifyListener()
         {
+
             public void modifyText( ModifyEvent e )
             {
                 if( updating )
@@ -302,16 +199,17 @@ public class PortalServerLaunchEditorSection extends ServerEditorSection
                 }
 
                 updating = true;
-                execute(new SetExternalPropertiesCommand(server, externalProperties.getText().trim()));
+                execute( new SetExternalPropertiesCommand( server, externalProperties.getText().trim() ) );
                 updating = false;
                 validate();
             }
-        });
+        } );
 
         externalPropertiesBrowse = toolkit.createButton( composite, Msgs.editorBrowse, SWT.PUSH );
         externalPropertiesBrowse.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false, false ) );
         externalPropertiesBrowse.addSelectionListener( new SelectionAdapter()
         {
+
             public void widgetSelected( SelectionEvent se )
             {
                 FileDialog dialog = new FileDialog( externalPropertiesBrowse.getShell() );
@@ -321,13 +219,13 @@ public class PortalServerLaunchEditorSection extends ServerEditorSection
                 if( selectedFile != null && !selectedFile.equals( externalPropertiesBrowse.getText() ) )
                 {
                     updating = true;
-                    execute(new SetExternalPropertiesCommand(server, selectedFile));
+                    execute( new SetExternalPropertiesCommand( server, selectedFile ) );
                     externalProperties.setText( selectedFile );
                     updating = false;
                     validate();
                 }
             }
-        });
+        } );
 
         label = createLabel( toolkit, composite, StringPool.EMPTY );
         data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
@@ -340,6 +238,7 @@ public class PortalServerLaunchEditorSection extends ServerEditorSection
 
         developerMode.addSelectionListener( new SelectionAdapter()
         {
+
             public void widgetSelected( SelectionEvent e )
             {
                 if( updating )
@@ -352,107 +251,7 @@ public class PortalServerLaunchEditorSection extends ServerEditorSection
                 updating = false;
                 validate();
             }
-        });
-
-        label = createLabel( toolkit, composite, StringPool.EMPTY );
-        data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        label.setLayoutData( data );
-
-        setDefault = toolkit.createHyperlink( composite, Msgs.restoreDefaultsLink, SWT.WRAP );
-        setDefault.addHyperlinkListener( new HyperlinkAdapter()
-        {
-            public void linkActivated( HyperlinkEvent e )
-            {
-                updating = true;
-                execute( new SetMemoryArgsCommand( server, PortalServerConstants.DEFAULT_MEMORY_ARGS ) );
-                memoryArgs.setText( PortalServerConstants.DEFAULT_MEMORY_ARGS );
-                execute( new SetExternalPropertiesCommand( server, StringPool.EMPTY ) );
-                externalProperties.setText( StringPool.EMPTY );
-                execute( new SetDeveloperModeCommand(
-                    server, PortalServerConstants.DEFAULT_DEVELOPER_MODE ) );
-                developerMode.setSelection( PortalServerConstants.DEFAULT_DEVELOPER_MODE );
-
-                execute( new SetLaunchSettingsCommand(
-                    server, PortalServerConstants.DEFAULT_LAUNCH_SETTING ) );
-                defaultLaunchSettings.setSelection( PortalServerConstants.DEFAULT_LAUNCH_SETTING );
-                customLaunchSettings.setSelection( !PortalServerConstants.DEFAULT_LAUNCH_SETTING );
-                applyDefaultPortalServerSetting( PortalServerConstants.DEFAULT_LAUNCH_SETTING );
-
-                updating = false;
-                validate();
-            }
-        });
-
-        data = new GridData( SWT.FILL, SWT.CENTER, true, false );
-        data.horizontalSpan = 3;
-        setDefault.setLayoutData( data );
-
-        initialize();
-    }
-
-    protected Label createLabel( FormToolkit toolkit, Composite parent, String text )
-    {
-        Label label = toolkit.createLabel( parent, text );
-        label.setForeground( toolkit.getColors().getColor( IFormColors.TITLE ) );
-
-        return label;
-    }
-
-    /**
-     * @see ServerEditorSection#dispose()
-     */
-    public void dispose()
-    {
-        if( server != null )
-        {
-            server.removePropertyChangeListener( listener );
-
-            if( server.getOriginal() != null )
-            {
-                server.getOriginal().removePublishListener( publishListener );
-            }
-        }
-    }
-
-    /**
-     * @see ServerEditorSection#init(IEditorSite, IEditorInput)
-     */
-    public void init( IEditorSite site, IEditorInput input )
-    {
-        super.init( site, input );
-
-        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-        workspacePath = root.getLocation();
-
-        if( server != null )
-        {
-            portalServer = (PortalServer) server.loadAdapter( PortalServer.class, null );
-            addChangeListeners();
-        }
-    }
-
-    /**
-     * Initialize the fields in this editor.
-     */
-    protected void initialize()
-    {
-        if( portalServer == null )
-        {
-            return;
-        }
-
-        updating = true;
-
-        applyDefaultPortalServerSetting( portalServer.getLaunchSettings() );
-        customLaunchSettings.setSelection( !portalServer.getLaunchSettings() );
-        defaultLaunchSettings.setSelection( portalServer.getLaunchSettings() );
-        developerMode.setSelection( portalServer.getDeveloperMode() );
-        externalProperties.setText( portalServer.getExternalProperties() );
-        memoryArgs.setText( StringUtil.merge( portalServer.getMemoryArgs(), " " ) );
-        server.setAttribute( Server.PROP_AUTO_PUBLISH_TIME, portalServer.getAutoPublishTime() );
-
-        updating = false;
-        validate();
+        } );
     }
 
     public IStatus[] getSaveStatus()
@@ -463,14 +262,49 @@ public class PortalServerLaunchEditorSection extends ServerEditorSection
         {
             File externalPropertiesFile = new File( externalPropetiesValue );
 
-            if( ( !externalPropertiesFile.exists() ) || ( !ServerUtil.isValidPropertiesFile( externalPropertiesFile ) ) )
+            if( ( !externalPropertiesFile.exists() ) ||
+                ( !ServerUtil.isValidPropertiesFile( externalPropertiesFile ) ) )
             {
-                return new IStatus[] { new Status(
-                    IStatus.ERROR, LiferayServerUI.PLUGIN_ID, Msgs.invalidExternalPropertiesFile ) };
+                return new IStatus[] {
+                    new Status( IStatus.ERROR, LiferayServerUI.PLUGIN_ID, Msgs.invalidExternalPropertiesFile ) };
             }
         }
 
         return super.getSaveStatus();
+    }
+
+    @Override
+    protected String getSectionLabel()
+    {
+        return Msgs.liferayLaunch;
+    }
+
+    @Override
+    protected void initProperties()
+    {
+        applyDefaultPortalServerSetting( portalServer.getLaunchSettings() );
+        customLaunchSettings.setSelection( !portalServer.getLaunchSettings() );
+        defaultLaunchSettings.setSelection( portalServer.getLaunchSettings() );
+        developerMode.setSelection( portalServer.getDeveloperMode() );
+        externalProperties.setText( portalServer.getExternalProperties() );
+        memoryArgs.setText( StringUtil.merge( portalServer.getMemoryArgs(), " " ) );
+        server.setAttribute( Server.PROP_AUTO_PUBLISH_TIME, portalServer.getAutoPublishTime() );
+    }
+
+    @Override
+    protected void setDefault()
+    {
+        execute( new SetMemoryArgsCommand( server, PortalServerConstants.DEFAULT_MEMORY_ARGS ) );
+        memoryArgs.setText( PortalServerConstants.DEFAULT_MEMORY_ARGS );
+        execute( new SetExternalPropertiesCommand( server, StringPool.EMPTY ) );
+        externalProperties.setText( StringPool.EMPTY );
+        execute( new SetDeveloperModeCommand( server, PortalServerConstants.DEFAULT_DEVELOPER_MODE ) );
+        developerMode.setSelection( PortalServerConstants.DEFAULT_DEVELOPER_MODE );
+
+        execute( new SetLaunchSettingsCommand( server, PortalServerConstants.DEFAULT_LAUNCH_SETTING ) );
+        defaultLaunchSettings.setSelection( PortalServerConstants.DEFAULT_LAUNCH_SETTING );
+        customLaunchSettings.setSelection( !PortalServerConstants.DEFAULT_LAUNCH_SETTING );
+        applyDefaultPortalServerSetting( PortalServerConstants.DEFAULT_LAUNCH_SETTING );
     }
 
     protected void validate()
@@ -494,11 +328,17 @@ public class PortalServerLaunchEditorSection extends ServerEditorSection
 
             setErrorMessage( null );
         }
+    }
 
+    @Override
+    protected boolean needCreate()
+    {
+        return true;
     }
 
     private static class Msgs extends NLS
     {
+
         public static String customLaunchSettings;
         public static String defaultLaunchSettings;
         public static String editorBrowse;
@@ -506,7 +346,6 @@ public class PortalServerLaunchEditorSection extends ServerEditorSection
         public static String invalidExternalPropertiesFile;
         public static String liferayLaunch;
         public static String memoryArgsLabel;
-        public static String restoreDefaultsLink;
         public static String useDeveloperMode;
 
         static
@@ -514,4 +353,5 @@ public class PortalServerLaunchEditorSection extends ServerEditorSection
             initializeMessages( PortalServerLaunchEditorSection.class.getName(), Msgs.class );
         }
     }
+
 }

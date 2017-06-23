@@ -30,8 +30,6 @@ public interface IRemoteServer extends ILiferayServer, IURLProvider
 
     String ATTR_HOSTNAME = "hostname"; //$NON-NLS-1$
 
-    String ATTR_HTTP_PORT = "http-port"; //$NON-NLS-1$
-
     String ATTR_LIFERAY_PORTAL_CONTEXT_PATH = "liferay-portal-context-path"; //$NON-NLS-1$
 
     String ATTR_SERVER_MANAGER_CONTEXT_PATH = "server-manager-context-path"; //$NON-NLS-1$

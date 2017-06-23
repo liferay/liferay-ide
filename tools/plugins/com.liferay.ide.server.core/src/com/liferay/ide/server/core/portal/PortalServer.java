@@ -33,8 +33,6 @@ public interface PortalServer extends ILiferayServer
 
     String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties";
 
-    String PROPERTY_HTTP_PORT = "http-port";
-
     String PROPERTY_MEMORY_ARGS = "memoryArgs";
 
     String PROPERTY_SERVER_MODE = "serverMode";
