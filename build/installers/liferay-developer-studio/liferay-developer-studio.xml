@@ -194,8 +194,8 @@
             <path>${liferayBundlesPath}</path>
         </createDirectory>
         <copyFile>
-            <destination>${liferayBundlesPath}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp2-20170317165321327.zip</destination>
-            <origin>${installdir}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp2-20170317165321327.zip</origin>
+            <destination>${liferayBundlesPath}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp3-20170503123037723.zip</destination>
+            <origin>${installdir}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp3-20170503123037723.zip</origin>
             <ruleList>
                 <compareValues>
                     <logic>equals</logic>
@@ -382,7 +382,7 @@
         <propertiesFileSet>
             <file>${lrws}${platform_path_separator}gradle.properties</file>
             <key>liferay.workspace.bundle.url</key>
-            <value>https://api.liferay.com/downloads/portal/7.0.10.2/liferay-dxp-digital-enterprise-tomcat-7.0-sp2-20170317165321327.zip</value>
+            <value>https://api.liferay.com/downloads/portal/7.0.10.3/liferay-dxp-digital-enterprise-tomcat-7.0-sp3-20170503123037723.zip</value>
             <ruleList>
                 <compareValues>
                     <logic>equals</logic>
@@ -410,7 +410,7 @@
             </ruleList>
         </runProgram>
         <deleteFile>
-            <path>${installdir}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp2-20170317165321327.zip</path>
+            <path>${installdir}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp3-20170503123037723.zip</path>
         </deleteFile>
         <deleteFile>
             <path>${installdir}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.11-withdependencies.zip</path>
