@@ -81,12 +81,12 @@ public class ProjectLocationValidationService extends ValidationService
             if( version != null )
             {
                 Version sdkVersion = new Version( version );
-                int result = sdkVersion.compareTo( new Version( "6.2.0" ) );
+                int result = sdkVersion.compareTo( new Version( "6.1.0" ) );
 
                 if( result < 0 )
                 {
                     return StatusBridge.create(
-                        ProjectCore.createErrorStatus( "This tool doesn't support 6.1.x." ) );
+                        ProjectCore.createErrorStatus( "This tool doesn't support 6.0.x." ) );
                 }
             }
         }
