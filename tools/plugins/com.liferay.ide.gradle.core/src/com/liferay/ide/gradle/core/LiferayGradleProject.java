@@ -107,6 +107,13 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
             {
                 for( File outputFile : outputFiles )
                 {
+                	if( outputFile.getName().endsWith("javadoc.jar" ) ||
+                	    outputFile.getName().endsWith("jspc.jar" ) 	  ||
+                	    outputFile.getName().endsWith("sources.jar" ) )
+                	{
+                		continue;
+                	}
+
                     if( outputFile.getName().endsWith( ".jar" ) )
                     {
                         bundleFile = outputFile;
@@ -278,11 +285,11 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
             if( cleanBuild )
             {
-                launcher.forTasks( "clean", "build" ).run( handler );
+                launcher.forTasks( "clean", "assemble" ).run( handler );
             }
             else
             {
-                launcher.forTasks( "build" ).run( handler );
+                launcher.forTasks( "assemble" ).run( handler );
             }
 
             handler.getResult();
