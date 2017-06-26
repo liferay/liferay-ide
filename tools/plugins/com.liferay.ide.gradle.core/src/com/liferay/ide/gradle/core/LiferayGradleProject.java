@@ -107,14 +107,16 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
             {
                 for( File outputFile : outputFiles )
                 {
-                	if( outputFile.getName().endsWith("javadoc.jar" ) ||
-                	    outputFile.getName().endsWith("jspc.jar" ) 	  ||
-                	    outputFile.getName().endsWith("sources.jar" ) )
-                	{
-                		continue;
-                	}
+                    final String name = outputFile.getName();
 
-                    if( outputFile.getName().endsWith( ".jar" ) )
+                    if( name.endsWith("javadoc.jar" ) ||
+                        name.endsWith("jspc.jar" ) ||
+                        name.endsWith("sources.jar" ) )
+                    {
+                        continue;
+                    }
+
+                    if( name.endsWith( ".jar" ) )
                     {
                         bundleFile = outputFile;
                         break;
@@ -213,7 +215,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
             existingRawClasspath = Arrays.asList( javaProject.getRawClasspath() );
 
-            List<IClasspathEntry> newRawClasspath = new ArrayList<IClasspathEntry>();
+            List<IClasspathEntry> newRawClasspath = new ArrayList<>();
 
             IClasspathAttribute[] attributes =
                 new IClasspathAttribute[] { JavaCore.newClasspathAttribute( "FROM_GRADLE_MODEL", "true" ) }; //$NON-NLS-1$ //$NON-NLS-2$
