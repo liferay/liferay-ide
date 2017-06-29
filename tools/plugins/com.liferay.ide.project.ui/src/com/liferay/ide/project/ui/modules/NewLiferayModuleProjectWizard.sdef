@@ -69,7 +69,7 @@
             <content>
                 <property-editor>
                     <property>ComponentName</property>
-                    <visible-when>${ProjectTemplateName != 'servicebuilder'}</visible-when>
+                    <visible-when>${ProjectTemplateName != 'service-builder'}</visible-when>
                 </property-editor>
                  <property-editor>PackageName</property-editor>
                 <property-editor>
