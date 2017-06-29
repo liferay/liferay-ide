@@ -846,10 +846,14 @@ public class ProjectUtil
 
                 if( sdk != null )
                 {
+                    String projectType =
+                        getLiferayPluginType( sdkProject.getProject().getLocation().toPortableString() );
+
                     Version version = new Version( sdk.getVersion() );
                     Version sdk70 = ILiferayConstants.V700;
-                    // sdk 7.x proejct
-                    if( CoreUtil.compareVersions( version, sdk70 ) >= 0 )
+                    // sdk 7.x proejct and not ext project
+                    if( CoreUtil.compareVersions( version, sdk70 ) >= 0 &&
+                        !ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER.equals( projectType ) )
                     {
                         return true;
                     }
