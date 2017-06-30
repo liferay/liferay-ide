@@ -7,9 +7,9 @@ import org.osgi.framework.dto.BundleDTO;
 public class PortalBundleDeployer extends JMXBundleDeployer
 {
 
-    public PortalBundleDeployer( int jmxPort )
+    public PortalBundleDeployer( String host, int jmxPort )
     {
-        super( jmxPort );
+        super( host, jmxPort );
     }
 
     public BundleDTO installBundleFromURL( String url ) throws Exception
