@@ -69,7 +69,6 @@
             <content>
                 <property-editor>
                     <property>ComponentName</property>
-                    <visible-when>${ProjectTemplateName != 'service-builder'}</visible-when>
                 </property-editor>
                  <property-editor>PackageName</property-editor>
                 <property-editor>
@@ -82,13 +81,25 @@
                      <show-label>true</show-label>
                      <child-property>Name</child-property>
                      <child-property>Value</child-property>
-                    <visible-when>${ProjectTemplateName != 'activator' &amp;&amp; ProjectTemplateName != 'service-builder' &amp;&amp; ProjectTemplateName != 'api' &amp;&amp; ProjectTemplateName != 'theme-contributor' &amp;&amp; ProjectTemplateName != 'portlet-provider'  &amp;&amp; ProjectTemplateName != 'content-targeting-report' &amp;&amp; ProjectTemplateName != 'content-targeting-tracking-action'}</visible-when>
+                    <visible-when>${ProjectTemplateName != 'activator' &amp;&amp; ProjectTemplateName != 'api' &amp;&amp; ProjectTemplateName != 'theme-contributor' &amp;&amp; ProjectTemplateName != 'portlet-provider'  &amp;&amp; ProjectTemplateName != 'content-targeting-report' &amp;&amp; ProjectTemplateName != 'content-targeting-tracking-action'}</visible-when>
                  </property-editor>
             </content>
             <initial-focus>PropertyKeys</initial-focus>
             <margin-right>10</margin-right>
             <margin-left>0</margin-left>
-            <visible-when>${ProjectTemplateName != 'theme'}</visible-when>
+            <visible-when>${ProjectTemplateName != 'theme'  &amp;&amp;  ProjectTemplateName != 'service-builder'}</visible-when>
+        </page>
+        <page>
+            <id>LiferayPortletServiceBuilderModuleSettingWizardPage</id>
+            <label>Liferay Module Project</label>
+            <description>Configure Package Name</description>
+            <content>
+                <property-editor>PackageName</property-editor>
+            </content>
+            <initial-focus>null</initial-focus>
+            <margin-right>10</margin-right>
+            <margin-left>0</margin-left>
+            <visible-when>${ProjectTemplateName == 'service-builder'}</visible-when>
         </page>
     </wizard>
 </definition>
