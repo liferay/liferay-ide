@@ -1117,7 +1117,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
             wc.setAttribute( ATTR_STOP, "true" );
 
             wc.launch( ILaunchManager.RUN_MODE, new NullProgressMonitor() );
-            stopModules();
         }
         catch( Exception e )
         {
@@ -1173,67 +1172,4 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         return ServerUtil.createBundleSupervisor( getPortalRuntime(), getServer() );
     }
 
-
-    public void startModules()
-    {
-        IServer server = getServer();
-        final List<IModule[]> moduleList = getAllModules();
-
-        for( IModule[] module : moduleList )
-        {
-            try
-            {
-                int moduleState = server.getModuleState( module );
-                boolean hasBeenPublished = hasBeenPublished( module );
-                int length = getPublishedResourceDelta( module ).length;
-
-                if( hasBeenPublished == true )
-                {
-                    if( moduleState != IServer.STATE_STARTED || length != 0 )
-                    {
-                        startModule( module, new NullProgressMonitor() );
-                    }
-                }
-                else
-                {
-                    redeployModule( module );
-                }
-            }
-            catch( CoreException e )
-            {
-                LiferayServerCore.logError( e );
-            }
-        }
-    }
-
-    public void stopModules()
-    {
-        IServer server = getServer();
-        final List<IModule[]> moduleList = getAllModules();
-
-        for( IModule[] module : moduleList )
-        {
-            int moduleState = server.getModuleState( module );
-            boolean hasBeenPublished = hasBeenPublished( module );
-
-            if( hasBeenPublished == true )
-            {
-                if( moduleState != IServer.STATE_STOPPED )
-                {
-                    try
-                    {
-                        stopModule( module, new NullProgressMonitor() );
-                    }
-                    catch( CoreException e )
-                    {
-                        LiferayServerCore.logError( e );
-                    }
-                }
-            }
-            else
-            {
-                setModuleState( module, IServer.STATE_STOPPED );
-            }
-        }
-    }
 }

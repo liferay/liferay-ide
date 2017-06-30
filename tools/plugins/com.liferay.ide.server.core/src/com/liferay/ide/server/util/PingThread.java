@@ -74,7 +74,6 @@ public class PingThread {
 			try {
 				if (count == maxPings) {
 					try {
-					    behaviour.stopModules();
 						server.stop(false);
 					} catch (Exception e) {
 					}
@@ -93,7 +92,6 @@ public class PingThread {
 				if (!stop && code != 404) {
 					Thread.sleep(200);
 					behaviour.setServerStarted();
-					behaviour.startModules();
 					stop = true;
 				}
 				Thread.sleep(1000);
@@ -104,7 +102,6 @@ public class PingThread {
 					// ignore
 				}
 				behaviour.setServerStarted();
-				behaviour.startModules();
 				stop = true;
 			} catch (Exception e) {
 				// pinging failed
