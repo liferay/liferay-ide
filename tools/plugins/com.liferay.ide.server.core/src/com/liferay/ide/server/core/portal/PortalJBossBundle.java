@@ -17,6 +17,7 @@ package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,8 +25,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Simon Jiang
@@ -95,6 +107,9 @@ public class PortalJBossBundle extends AbstractPortalBundle
     @Override
     public void setHttpPort( String port )
     {
+        File standaloneXmlFile = new File( getAppServerDir().toPortableString(), "standalone/configuration/standalone.xml" );
+
+        setHttpPortValue( standaloneXmlFile, "socket-binding", "name", "http", "port", port );
     }
 
     @Override
@@ -246,4 +261,59 @@ public class PortalJBossBundle extends AbstractPortalBundle
 
         return libs.toArray( new IPath[libs.size()] );
     }
+
+    private void setHttpPortValue(
+        File xmlFile, String tagName, String attriName, String attriValue, String targetName, String value )
+    {
+        DocumentBuilder db = null;
+
+        DocumentBuilderFactory dbf = null;
+
+        try
+        {
+            dbf = DocumentBuilderFactory.newInstance();
+
+            db = dbf.newDocumentBuilder();
+
+            Document document = db.parse( xmlFile );
+
+            NodeList connectorNodes = document.getElementsByTagName( tagName );
+
+            for( int i = 0; i < connectorNodes.getLength(); i++ )
+            {
+                Node node = connectorNodes.item( i );
+
+                NamedNodeMap attributes = node.getAttributes();
+
+                Node protocolNode = attributes.getNamedItem( attriName );
+
+                if( protocolNode != null )
+                {
+                    if( protocolNode.getNodeValue().equals( attriValue ) )
+                    {
+                        Node portNode = attributes.getNamedItem( targetName );
+
+                        portNode.setNodeValue( value );
+
+                        break;
+                    }
+                }
+            }
+
+            TransformerFactory factory = TransformerFactory.newInstance();
+
+            Transformer transformer = factory.newTransformer();
+
+            DOMSource domSource = new DOMSource( document );
+
+            StreamResult result = new StreamResult( xmlFile );
+
+            transformer.transform( domSource, result );
+        }
+        catch( Exception e )
+        {
+            LiferayServerCore.logError( e );
+        }
+    }
+
 }

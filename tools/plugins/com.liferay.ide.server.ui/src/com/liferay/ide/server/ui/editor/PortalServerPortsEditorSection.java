@@ -114,7 +114,7 @@ public class PortalServerPortsEditorSection extends AbstractPortalServerEditorSe
         PortalRuntime runtime =
             (PortalRuntime) server.getRuntime().loadAdapter( PortalRuntime.class, new NullProgressMonitor() );
 
-        return runtime != null && runtime.getAppServerType().equals( "tomcat" );
+        return runtime != null;
     }
 
 }
