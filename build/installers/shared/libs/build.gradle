@@ -1,4 +1,0 @@
-downloadBundle {
-	username dxpCustomerEmail
-	password dxpCustomerPassword
-}

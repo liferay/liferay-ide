@@ -24,7 +24,7 @@
                             <origin>../shared/download/blade.jar</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../shared/libs/build.gradle</origin>
+                            <origin>../shared/download/com.liferay.portal.tools.bundle.support.jar</origin>
                         </distributionFile>
                     </distributionFileList>
                 </folder>
@@ -50,6 +50,32 @@
         </component>
     </componentList>
     <postInstallationActionList>
+        <runProgram>
+            <customErrorMessage>Could not create DXP download token. Make sure you type correct email address and password and are connected to the internet.</customErrorMessage>
+            <program>java</program>
+            <programArguments>-jar "${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar" createToken --force --email ${email} --password ${password}</programArguments>
+            <onErrorActionList>
+                <deleteFile>
+                    <path>${installdir}</path>
+                </deleteFile>
+            </onErrorActionList>
+            <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${isdxp}</value1>
+                    <value2>dxp</value2>
+                </compareValues>
+                <fileTest>
+                    <condition>not_exists</condition>
+                    <path>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}token</path>
+                </fileTest>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${initlrws}</value1>
+                    <value2>lrws</value2>
+                </compareValues>
+            </ruleList>
+        </runProgram>
         <runProgram>
             <program>java</program>
             <programArguments>-jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" -u init</programArguments>
@@ -153,78 +179,22 @@
                     <program>${bladeCommondPath}</program>
                     <programArguments>-b "${lrws}" init</programArguments>
                 </runProgram>
-                <createDirectory>
-                    <path>${user_home_directory}${platform_path_separator}.gradle</path>
-                    <ruleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${isdxp}</value1>
-                            <value2>dxp</value2>
-                        </compareValues>
-                    </ruleList>
-                </createDirectory>
-                <runProgram>
-                    <program>chown</program>
-                    <programArguments>-R ${env(SUDO_USER)} ${user_home_directory}/.gradle</programArguments>
-                    <ruleList>
-                        <isTrue>
-                            <value>${installer_is_root_install}</value>
-                        </isTrue>
-                        <compareText>
-                            <logic>does_not_contain</logic>
-                            <nocase>1</nocase>
-                            <text>${platform_name}</text>
-                            <value>win</value>
-                        </compareText>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${isdxp}</value1>
-                            <value2>dxp</value2>
-                        </compareValues>
-                        <fileExists>
-                            <path>${user_home_directory}/.gradle</path>
-                        </fileExists>
-                    </ruleList>
-                </runProgram>
-                <propertiesFileSet>
-                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                    <key>dxpCustomerEmail</key>
-                    <value>${email}</value>
-                    <ruleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${isdxp}</value1>
-                            <value2>dxp</value2>
-                        </compareValues>
-                    </ruleList>
-                </propertiesFileSet>
-                <propertiesFileSet>
-                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                    <key>dxpCustomerPassword</key>
-                    <value>${password}</value>
-                    <ruleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${isdxp}</value1>
-                            <value2>dxp</value2>
-                        </compareValues>
-                    </ruleList>
-                </propertiesFileSet>
-                <copyFile>
-                    <destination>${lrws}${platform_path_separator}build.gradle</destination>
-                    <origin>${installdir}${platform_path_separator}build.gradle</origin>
-                    <ruleList>
-                        <compareValues>
-                            <logic>equals</logic>
-                            <value1>${isdxp}</value1>
-                            <value2>dxp</value2>
-                        </compareValues>
-                    </ruleList>
-                </copyFile>
                 <propertiesFileSet>
                     <file>${lrws}${platform_path_separator}gradle.properties</file>
                     <key>liferay.workspace.bundle.url</key>
-                    <value>https://api.liferay.com/downloads/portal/7.0.10.2/liferay-dxp-digital-enterprise-tomcat-7.0-sp2-20170317165321327.zip</value>
+                    <value>https://api.liferay.com/downloads/portal/7.0.10.3/liferay-dxp-digital-enterprise-tomcat-7.0-sp3-20170503123037723.zip</value>
+                    <ruleList>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${isdxp}</value1>
+                            <value2>dxp</value2>
+                        </compareValues>
+                    </ruleList>
+                </propertiesFileSet>
+                <propertiesFileSet>
+                    <file>${lrws}${platform_path_separator}gradle.properties</file>
+                    <key>liferay.workspace.bundle.token.download</key>
+                    <value>true</value>
                     <ruleList>
                         <compareValues>
                             <logic>equals</logic>
@@ -275,11 +245,13 @@
             </ruleList>
         </runProgram>
     </postInstallationActionList>
+    <createOsxBundleDmg>1</createOsxBundleDmg>
     <createUninstaller>0</createUninstaller>
     <disableSplashScreen>1</disableSplashScreen>
     <enableRollback>1</enableRollback>
     <enableTimestamp>1</enableTimestamp>
     <outputDirectory>../outputs</outputDirectory>
+    <startMenuGroupName></startMenuGroupName>
     <vendor>Liferay, Inc</vendor>
     <parameterList>
         <directoryParameter>
@@ -381,7 +353,7 @@
         <parameterGroup>
             <name>dxpinfo</name>
             <title>Liferay DXP Customer Credentials</title>
-            <explanation>This information will be stored in your {user.home}/.gradle/gradle.properties file. Please do not share this file with anyone.</explanation>
+            <explanation>Email address and password are used for generating a download token. Your password will not be saved locally.</explanation>
             <value></value>
             <default></default>
             <parameterList>
@@ -414,9 +386,12 @@
                     <value1>${isdxp}</value1>
                     <value2>dxp</value2>
                 </compareValues>
+                <fileTest>
+                    <condition>not_exists</condition>
+                    <path>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}token</path>
+                </fileTest>
             </ruleList>
         </parameterGroup>
     </parameterList>
-    <startMenuGroupName></startMenuGroupName>
-    <createOsxBundleDmg>1</createOsxBundleDmg>
 </project>
+

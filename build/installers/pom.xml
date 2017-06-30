@@ -34,6 +34,9 @@
 
     <properties>
         <install-builder-executable>${install-builder-home}/bin/builder</install-builder-executable>
+        <bundle-support-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/com.liferay.portal.tools.bundle.support</bundle-support-download-base>
+        <bundle-support-name>com.liferay.portal.tools.bundle.support-3.0.1.jar</bundle-support-name>
+        <bundle-support-version>3.0.1</bundle-support-version>
     </properties>
 
     <modules>
