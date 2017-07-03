@@ -14,6 +14,7 @@ package com.liferay.ide.studio.ui;
 import com.liferay.ide.project.core.workspace.ImportLiferayWorkspaceOp;
 import com.liferay.ide.project.ui.workspace.ImportLiferayWorkspaceWizard;
 
+import java.io.File;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.IPath;
@@ -37,7 +38,15 @@ public class ImportLiferayWorkspaceAction implements IIntroAction
     {
         ImportLiferayWorkspaceWizard wizard = new ImportLiferayWorkspaceWizard();
 
-        IPath path = new Path( Platform.getInstallLocation().getURL().getFile() );
+        File location = new File( Platform.getInstallLocation().getURL().getFile() );
+
+        if( Platform.getOS().equals( Platform.OS_MACOSX ) )
+        {
+
+            location = location.getParentFile().getParentFile();
+        }
+
+        IPath path = new Path( location.getAbsolutePath() );
 
         ImportLiferayWorkspaceOp op = wizard.element().nearest( ImportLiferayWorkspaceOp.class );
 
