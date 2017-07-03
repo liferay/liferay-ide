@@ -169,7 +169,7 @@ public class PortalJBossBundle extends AbstractPortalBundle
 
         args.add( "-mp \"" + this.bundlePath.toPortableString() +  "/modules" + "\"" );
         args.add( "org.jboss.as.cli" );
-        args.add( "--controller=localhost:" + 9999 );
+        args.add( "--controller=localhost" );
         args.add( "--connect" );
         args.add( "--command=:shutdown" );
 

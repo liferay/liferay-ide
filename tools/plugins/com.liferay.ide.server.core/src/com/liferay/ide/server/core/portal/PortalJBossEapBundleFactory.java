@@ -31,7 +31,7 @@ import org.eclipse.core.runtime.Path;
 public class PortalJBossEapBundleFactory extends PortalJBossBundleFactory
 {
 
-    private static final String EAP61_DIR_META_INF = "modules/system/layers/base/org/jboss/as/product/eap/dir/META-INF";
+    private static final String EAP_DIR_META_INF = "modules/system/layers/base/org/jboss/as/product/eap/dir/META-INF";
 
     @Override
     public PortalBundle create( Map<String, String> appServerProperties )
@@ -53,17 +53,18 @@ public class PortalJBossEapBundleFactory extends PortalJBossBundleFactory
             return false;
         }
 
-        if( path.append( "bundles" ).toFile().exists() && path.append( "modules" ).toFile().exists() &&
-            path.append( "standalone" ).toFile().exists() && path.append( "bin" ).toFile().exists() )
+        if( path.append( "modules" ).toFile().exists() && path.append( "standalone" ).toFile().exists() 
+              && path.append( "bin" ).toFile().exists() )
         {
-            return getEAP6xVersion( path.toFile(), EAP61_DIR_META_INF, "6.", "eap", "EAP" ) != null;
+            String eapVersion = getEAPVersion( path.toFile(), EAP_DIR_META_INF, new String[] {"6.", "7."}, "eap", "EAP" );
+            return eapVersion != null;
         }
 
         return false;
     }
 
-    private String getEAP6xVersion(
-        File location, String metaInfPath, String versionPrefix, String slot, String releaseName )
+    private String getEAPVersion(
+        File location, String metaInfPath, String[] versionPrefix, String slot, String releaseName )
     {
         IPath rootPath = new Path( location.getAbsolutePath() );
         IPath productConf = rootPath.append( "bin/product.conf" );
@@ -78,7 +79,7 @@ public class PortalJBossEapBundleFactory extends PortalJBossBundleFactory
 
                 if( slot.equals( product ) )
                 {
-                    return getEAP6xVersionNoSlotCheck( location, metaInfPath, versionPrefix, releaseName );
+                    return getEAPVersionNoSlotCheck( location, metaInfPath, versionPrefix, releaseName );
                 }
             }
         }
@@ -86,8 +87,8 @@ public class PortalJBossEapBundleFactory extends PortalJBossBundleFactory
         return null;
     }
 
-    public static String getEAP6xVersionNoSlotCheck(
-        File location, String metaInfPath, String versionPrefix, String releaseName )
+    public static String getEAPVersionNoSlotCheck(
+        File location, String metaInfPath, String versionPrefixs[], String releaseName )
     {
         IPath rootPath = new Path( location.getAbsolutePath() );
         IPath eapDir = rootPath.append( metaInfPath );
@@ -97,11 +98,17 @@ public class PortalJBossEapBundleFactory extends PortalJBossBundleFactory
             IPath manifest = eapDir.append( "MANIFEST.MF" );
             String type = JavaUtil.getManifestProperty( manifest.toFile(), "JBoss-Product-Release-Name" );
             String version = JavaUtil.getManifestProperty( manifest.toFile(), "JBoss-Product-Release-Version" );
-            boolean matchesName = releaseName == null || releaseName.equals( type );
-            boolean matchesVersion = versionPrefix == null || version.startsWith( versionPrefix );
+            boolean matchesName = type.contains( releaseName );
 
-            if( matchesName && matchesVersion )
-                return version;
+            for( String prefixVersion : versionPrefixs )
+            {
+                boolean matchesVersion = version.startsWith( prefixVersion );
+
+                if( matchesName && matchesVersion )
+                {
+                    return version;
+                }
+            }
         }
 
         return null;
