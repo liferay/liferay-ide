@@ -95,7 +95,15 @@
             productId="com.liferay.ide.studio.ui.product">
       </introProductBinding>
    </extension>
-   <extension point="org.eclipse.ui.intro.configExtension">
-      <configExtension configId="org.eclipse.ui.intro.universalConfig" content="/intro/studioExtensionContent.xml" />
+   <extension
+         point="org.eclipse.ui.intro.quicklinks">
+      <url
+            location="http://org.eclipse.ui.intro/runAction?pluginId=com.liferay.ide.studio.ui&amp;amp;class=com.liferay.ide.studio.ui.ImportLiferayWorkspaceAction"
+            label="Import Liferay Workspace"
+            description="Import an existing Liferay Workspace into Liferay Developer Studio"
+            icon="images/liferay_logo_large.png"
+            importance="high"
+            >
+      </url>
    </extension>
 </plugin>
