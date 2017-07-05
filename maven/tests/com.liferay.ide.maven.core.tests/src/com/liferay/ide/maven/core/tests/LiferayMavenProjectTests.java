@@ -42,6 +42,7 @@ public class LiferayMavenProjectTests extends LiferayMavenProjectTestCase
         assertTrue( pomContents.contains( "<artifactId>liferay-maven-plugin</artifactId>" ) );
         assertTrue( pomContents.contains( "<artifactId>portal-service</artifactId>" ) );
 
+        waitForJobsToComplete();
         project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
         waitForJobsToComplete();
 
@@ -68,6 +69,7 @@ public class LiferayMavenProjectTests extends LiferayMavenProjectTestCase
         assertTrue( pomContents.contains( "<pluginType>layouttpl</pluginType>" ) );
         assertTrue( pomContents.contains( "<artifactId>liferay-maven-plugin</artifactId>" ) );
 
+        waitForJobsToComplete();
         project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
         waitForJobsToComplete();
 
@@ -97,6 +99,7 @@ public class LiferayMavenProjectTests extends LiferayMavenProjectTestCase
         assertTrue( pomContents.contains( "<artifactId>liferay-maven-plugin</artifactId>" ) );
         assertTrue( pomContents.contains( "<artifactId>portal-service</artifactId>" ) );
 
+        waitForJobsToComplete();
         project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
         waitForJobsToComplete();
 
@@ -128,6 +131,7 @@ public class LiferayMavenProjectTests extends LiferayMavenProjectTestCase
         assertTrue( pomContents.contains( "<artifactId>liferay-maven-plugin</artifactId>" ) );
         assertTrue( pomContents.contains( "<name>servicebuilder Portlet</name>" ) );
 
+        waitForJobsToComplete();
         project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
         waitForJobsToComplete();
 
@@ -160,6 +164,7 @@ public class LiferayMavenProjectTests extends LiferayMavenProjectTestCase
         assertTrue( pomContents.contains( "<pluginType>theme</pluginType>" ) );
         assertTrue( pomContents.contains( "<artifactId>liferay-maven-plugin</artifactId>" ) );
 
+        waitForJobsToComplete();
         project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
         waitForJobsToComplete();
 
