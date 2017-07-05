@@ -9,10 +9,10 @@ Require-Bundle: org.eclipse.jst.server.core;bundle-version="[1.2.0,2.0.0)";visib
  org.eclipse.wst.server.core;bundle-version="[1.1.102,2.0.0)";visibility:=reexport,
  org.eclipse.debug.core;visibility:=reexport,
  org.eclipse.jdt.launching;visibility:=reexport,
- org.eclipse.jst.server.tomcat.core;bundle-version="[1.1.106,1.2.0)";visibility:=reexport,
+ org.eclipse.jst.server.tomcat.core;bundle-version="[1.1.106,2)";visibility:=reexport,
  com.liferay.ide.core,
  org.eclipse.jdt.core;visibility:=reexport,
- com.liferay.ide.server.core;bundle-version="1.2.0",
+ com.liferay.ide.server.core,
  com.liferay.ide.project.core,
  org.apache.commons.lang;bundle-version="2.6.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
