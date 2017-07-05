@@ -17,27 +17,40 @@ package com.liferay.ide.swtbot.ui.tests.eclipse.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
-import com.liferay.ide.swtbot.ui.tests.page.CanvasPO;
+import com.liferay.ide.swtbot.ui.tests.UIBase;
+import com.liferay.ide.swtbot.ui.tests.page.TextPO;
+import com.liferay.ide.swtbot.ui.tests.page.WizardPO;
 
 /**
- * @author Terry Jia
+ * @author Ying Xu
  */
-public class GearPO extends CanvasPO
+public class NewJavaPackagePO extends WizardPO implements UIBase
 {
 
-    int x = 52;
-    int y = 52;
-    int step = 64;
+    private TextPO _name;
+    private TextPO _sourceFolder;
 
-    public GearPO( SWTBot bot, int index )
+    public NewJavaPackagePO( SWTBot bot )
     {
-        super( bot, index );
+        this( bot, TEXT_BLANK, BUTTON_CANCEL, BUTTON_FINISH );
     }
 
-    public void clickGear( int i )
+    public NewJavaPackagePO( SWTBot bot, String title, String cancelButtonText, String finishButtonText )
     {
-        click( x + step * i, y );
-        sleep();
+        super( bot, title, cancelButtonText, finishButtonText, TEXT_BLANK, TEXT_BLANK );
+        _sourceFolder = new TextPO( bot, LABEL_SOURCE_FOLDER );
+        _name = new TextPO( bot, LABEL_NAME );
+
+    }
+
+    public TextPO getSourceFolderText()
+    {
+        return _sourceFolder;
+    }
+
+    public void setName( String packageName )
+    {
+        _name.setText( packageName );
     }
 
 }

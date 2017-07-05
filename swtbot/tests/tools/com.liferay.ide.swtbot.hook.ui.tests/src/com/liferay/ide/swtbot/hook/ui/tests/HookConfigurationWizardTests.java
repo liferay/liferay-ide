@@ -95,7 +95,6 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
     @BeforeClass
     public static void unzipServerAndSdk() throws IOException
     {
-
         Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
 
         unzipPluginsSDK();

@@ -15,5 +15,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.swtbot.ui.tests,
  com.liferay.ide.swtbot.ui.tests.eclipse.page,
+ com.liferay.ide.swtbot.ui.tests.liferay.page,
  com.liferay.ide.swtbot.ui.tests.page,
  com.liferay.ide.swtbot.ui.tests.util

@@ -22,12 +22,12 @@ import org.eclipse.swtbot.swt.finder.keyboard.Keyboard;
 import org.eclipse.swtbot.swt.finder.keyboard.KeyboardFactory;
 
 import com.liferay.ide.swtbot.ui.tests.UIBase;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.CodeUpgradeViewPO;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.CreateLifeayProjectToolbarDropDownButtonPO;
 import com.liferay.ide.swtbot.ui.tests.eclipse.page.ErrorLogViewPO;
 import com.liferay.ide.swtbot.ui.tests.eclipse.page.NewToolbarDropDownButtonPO;
 import com.liferay.ide.swtbot.ui.tests.eclipse.page.PackageExplorerViewPO;
 import com.liferay.ide.swtbot.ui.tests.eclipse.page.ProgressViewPO;
+import com.liferay.ide.swtbot.ui.tests.liferay.page.CodeUpgradeViewPO;
+import com.liferay.ide.swtbot.ui.tests.liferay.page.CreateLifeayProjectToolbarDropDownButtonPO;
 
 /**
  * @author Terry Jia

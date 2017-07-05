@@ -17,7 +17,6 @@ package com.liferay.ide.swtbot.ui.tests;
 
 import static org.junit.Assert.assertEquals;
 
-import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
@@ -36,14 +35,10 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jface.bindings.keys.KeyStroke;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
-import org.eclipse.swtbot.swt.finder.keyboard.Keyboard;
-import org.eclipse.swtbot.swt.finder.keyboard.KeyboardFactory;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -56,6 +51,8 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
 import com.liferay.ide.swtbot.ui.tests.page.EclipsePO;
+import com.liferay.ide.swtbot.ui.tests.util.BundleInfo;
+import com.liferay.ide.swtbot.ui.tests.util.CSVReader;
 import com.liferay.ide.swtbot.ui.tests.util.CoreUtil;
 import com.liferay.ide.swtbot.ui.tests.util.FileUtil;
 import com.liferay.ide.swtbot.ui.tests.util.ZipUtil;
@@ -67,15 +64,14 @@ import com.liferay.ide.swtbot.ui.tests.util.ZipUtil;
  * @author Ying Xu
  */
 @RunWith( SWTBotJunit4ClassRunner.class )
-public class SWTBotBase implements UIBase
+public class SWTBotBase implements UIBase, Keys
 {
 
-    public final static String BUNDLE_ZIP = "liferay-ce-portal-tomcat-7.0-ga3-20160804222206210.zip";
-    public final static String BUNDLE_DIR = "liferay-ce-portal-7.0-ga3";
-    public final static String TOMCAT_NAME = "tomcat-8.0.32";
     public final static String IVY_CACHE_ZIP = "ivy-cache-7.0.zip";
-    public final static String PLUGINS_SDK_ZIP = "com.liferay.portal.plugins.sdk-7.0-ga3-20160804222206210.zip";
-    public final static String PLUGINS_SDK_DIR = "com.liferay.portal.plugins.sdk-7.0";
+    public final static String PLUGINS_SDK_ZIP = "com.liferay.portal.plugins.sdk-1.0.11-withdependencies-20170613175008905.zip";
+    public final static String PLUGINS_SDK_DIR = "com.liferay.portal.plugins.sdk-1.0.11-withdependencies";
+
+    public static BundleInfo[] bundleInfos;
 
     private final static String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
     protected final static String runTest = System.getProperty( "runTest" );
@@ -87,17 +83,6 @@ public class SWTBotBase implements UIBase
 
     protected final static String eclipseWorkspace = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
 
-    protected Keyboard keyPress = KeyboardFactory.getAWTKeyboard();
-
-    protected KeyStroke ctrl = KeyStroke.getInstance( SWT.CTRL, 0 );
-    protected KeyStroke N = KeyStroke.getInstance( 'N' );
-    protected KeyStroke M = KeyStroke.getInstance( 'M' );
-    protected KeyStroke alt = KeyStroke.getInstance( SWT.ALT, 0 );
-    protected KeyStroke enter = KeyStroke.getInstance( KeyEvent.VK_ENTER );
-    protected KeyStroke up = KeyStroke.getInstance( KeyEvent.VK_UP );
-    protected KeyStroke S = KeyStroke.getInstance( 'S' );
-    protected KeyStroke slash = KeyStroke.getInstance( '/' );
-
     public static SWTWorkbenchBot bot;
     public static EclipsePO eclipse;
 
@@ -108,13 +93,14 @@ public class SWTBotBase implements UIBase
 
         eclipse = new EclipsePO( bot );
 
+        bundleInfos = getBundleInfos();
+
         try
         {
             eclipse.getWelcomeView().close();
         }
         catch( Exception e )
         {
-            // e.printStackTrace();
         }
 
         eclipse.getLiferayPerspective().activate();
@@ -136,7 +122,6 @@ public class SWTBotBase implements UIBase
 
     protected static void copyFileToStartServer()
     {
-
         String filename = "com.liferay.ip.geocoder.internal.IPGeocoderConfiguration.cfg";
 
         File source = new File( liferayBundlesDir + "/" + filename );
@@ -181,9 +166,51 @@ public class SWTBotBase implements UIBase
         return liferayBundlesPath;
     }
 
+    protected static BundleInfo[] getBundleInfos()
+    {
+        File bundleCSV = new File( liferayBundlesDir, "bundles.csv" );
+
+        String[][] infos = CSVReader.readCSV( bundleCSV );
+
+        BundleInfo[] bundleInfos = new BundleInfo[infos.length];
+
+        for( int i = 0; i < infos.length; i++ )
+        {
+            bundleInfos[i] = new BundleInfo();
+
+            String[] columns = infos[i];
+
+            for( int t = 0; t < columns.length; t++ )
+            {
+                if( t == 0 )
+                {
+                    bundleInfos[i].setBundleZip( columns[t] );
+                }
+                else if( t == 1 )
+                {
+                    bundleInfos[i].setBundleDir( columns[t] );
+                }
+                else if( t == 2 )
+                {
+                    bundleInfos[i].setTomcatDir( columns[t] );
+                }
+                else if( t == 3 )
+                {
+                    bundleInfos[i].setType( columns[t] );
+                }
+                else if( t == 4 )
+                {
+                    bundleInfos[i].setVersion( columns[t] );
+                }
+            }
+        }
+
+        return bundleInfos;
+    }
+
     protected static String getLiferayPluginServerName()
     {
-        return TOMCAT_NAME;
+        return bundleInfos[0].getTomcatDir();
     }
 
     protected static IPath getLiferayPluginsSdkDir()
@@ -208,17 +235,17 @@ public class SWTBotBase implements UIBase
 
     protected static IPath getLiferayServerDir()
     {
-        return new Path( liferayBundlesDir + "/bundles/" ).append( BUNDLE_DIR + "/" );
+        return new Path( liferayBundlesDir + "/bundles/" ).append( bundleInfos[0].getBundleDir() + "/" );
     }
 
     protected static IPath getLiferayServerZip()
     {
-        return getLiferayBundlesPath().append( BUNDLE_ZIP );
+        return getLiferayBundlesPath().append( bundleInfos[0].getBundleZip() );
     }
 
     protected static String getLiferayServerZipFolder()
     {
-        return BUNDLE_DIR + "/";
+        return bundleInfos[0].getBundleDir() + "/";
     }
 
     protected File getProjectZip( String bundleId, String projectName ) throws IOException

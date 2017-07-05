@@ -18,7 +18,7 @@ package com.liferay.ide.swtbot.project.upgrade.ui.tests;
 import org.junit.Test;
 
 import com.liferay.ide.swtbot.ui.tests.SWTBotBase;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.CodeUpgradeViewPO;
+import com.liferay.ide.swtbot.ui.tests.liferay.page.CodeUpgradeViewPO;
 
 /**
  * @author Terry Jia

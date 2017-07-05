@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
 /*******************************************************************************
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -14,19 +12,23 @@
  * details.
  *
  *******************************************************************************/
- -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.liferay.ide.swtbot.tests.common</groupId>
-        <artifactId>common-tests</artifactId>
-        <version>3.1.0-SNAPSHOT</version>
-    </parent>
+package com.liferay.ide.swtbot.ui.tests.eclipse.page;
 
-    <artifactId>com.liferay.ide.swtbot.ui.tests</artifactId>
-    <packaging>eclipse-plugin</packaging>
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
-    <name>Liferay IDE Swtbot UI Tests</name>
-</project>
+import com.liferay.ide.swtbot.ui.tests.UIBase;
+import com.liferay.ide.swtbot.ui.tests.page.ViewPO;
+
+/**
+ * @author Terry Jia
+ */
+public class ServersViewPO extends ViewPO implements UIBase
+{
+
+    public ServersViewPO( SWTWorkbenchBot bot )
+    {
+        super( bot, LABEL_PACKAGE_EXPLORER );
+    }
+
+}

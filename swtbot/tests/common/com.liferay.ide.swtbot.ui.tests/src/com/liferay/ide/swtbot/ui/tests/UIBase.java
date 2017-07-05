@@ -60,7 +60,7 @@ public interface UIBase
     public final String LABEL_LIFERAY_PLUGINS = "Liferay Plugins";
     public final String LABEL_LIFERAY_WORKSPACE = "Liferay Workspace";
     public final String LABEL_OTHER = "Other...";
-    public final String LABEL_PACKAGE_EXPLORER = "Package Explorer";
+    public final String LABEL_PACKAGE_EXPLORER = "Servers";
     public final String LABEL_PROGRESS = "Progress";
     public final String LABEL_SHOW_VIEW = "Show View";
     public final String LABEL_WELCOME = "Welcome";

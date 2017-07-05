@@ -13,9 +13,10 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.swtbot.ui.tests.eclipse.page;
+package com.liferay.ide.swtbot.ui.tests.liferay.page;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 import com.liferay.ide.swtbot.ui.tests.UIBase;
 import com.liferay.ide.swtbot.ui.tests.page.CanvasPO;
@@ -29,6 +30,26 @@ import com.liferay.ide.swtbot.ui.tests.page.ViewPO;
  */
 public class CodeUpgradeViewPO extends ViewPO implements UIBase
 {
+
+	public class GearPO extends CanvasPO
+	{
+
+	    int x = 52;
+	    int y = 52;
+	    int step = 64;
+
+	    public GearPO( SWTBot bot, int index )
+	    {
+	        super( bot, index );
+	    }
+
+	    public void clickGear( int i )
+	    {
+	        click( x + step * i, y );
+	        sleep();
+	    }
+
+	}
 
     private GearPO gear;
     private CanvasPO navigator;

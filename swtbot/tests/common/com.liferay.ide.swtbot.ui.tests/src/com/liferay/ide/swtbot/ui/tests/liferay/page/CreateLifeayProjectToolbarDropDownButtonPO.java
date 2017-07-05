@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.swtbot.ui.tests.eclipse.page;
+package com.liferay.ide.swtbot.ui.tests.liferay.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 

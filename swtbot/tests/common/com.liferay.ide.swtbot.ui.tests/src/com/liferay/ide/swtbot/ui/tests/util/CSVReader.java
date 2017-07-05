@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
 /*******************************************************************************
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -14,19 +12,42 @@
  * details.
  *
  *******************************************************************************/
- -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.liferay.ide.swtbot.tests.common</groupId>
-        <artifactId>common-tests</artifactId>
-        <version>3.1.0-SNAPSHOT</version>
-    </parent>
+package com.liferay.ide.swtbot.ui.tests.util;
 
-    <artifactId>com.liferay.ide.swtbot.ui.tests</artifactId>
-    <packaging>eclipse-plugin</packaging>
+import java.io.File;
 
-    <name>Liferay IDE Swtbot UI Tests</name>
-</project>
+/**
+ * @author Terry Jia
+ */
+public class CSVReader
+{
+
+    public static String[][] readCSV( File file )
+    {
+        String[] lines = FileUtil.readLinesFromFile( file );
+
+        if( lines == null || lines.length == 0 )
+        {
+            return null;
+        }
+
+        String[][] results = new String[lines.length][lines[0].split( "," ).length];
+
+        for( int i = 0; i < lines.length; i++ )
+        {
+            String line = lines[i];
+
+            String[] columns = line.split( "," );
+
+            for( int t = 0; t < columns.length; t++ )
+            {
+                results[i][t] = columns[t];
+            }
+        }
+
+        return results;
+
+    }
+
+}
