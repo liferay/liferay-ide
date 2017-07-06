@@ -161,6 +161,7 @@ public class ProjectCoreBase extends ServerCoreBase
 
         final IProject project = createProject( op );
 
+        /*
         assertEquals(
             "SDK project layout is not standard, /src folder exists.", false, project.getFolder( "src" ).exists() );
 
@@ -184,8 +185,10 @@ public class ProjectCoreBase extends ServerCoreBase
             default:
                 break;
         }
+        */
 
         project.refreshLocal( IResource.DEPTH_INFINITE, null );
+
         return project;
     }
 
