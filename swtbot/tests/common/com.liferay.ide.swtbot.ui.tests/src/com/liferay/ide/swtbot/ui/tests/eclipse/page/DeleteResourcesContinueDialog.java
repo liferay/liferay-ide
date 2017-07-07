@@ -13,39 +13,31 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.swtbot.server.ui.tests.page;
+package com.liferay.ide.swtbot.ui.tests.eclipse.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
-import com.liferay.ide.swtbot.server.ui.tests.ServerRuntimeWizard;
+import com.liferay.ide.swtbot.ui.tests.UIBase;
 import com.liferay.ide.swtbot.ui.tests.page.ButtonPO;
 import com.liferay.ide.swtbot.ui.tests.page.DialogPO;
-import com.liferay.ide.swtbot.ui.tests.page.TablePO;
 
 /**
  * @author Ying Xu
  */
-public class DeleteRuntimePO extends DialogPO implements ServerRuntimeWizard
+public class DeleteResourcesContinueDialog extends DialogPO implements UIBase
 {
 
-    private TablePO _serverRuntimeEnvironments;
-    private ButtonPO _remove;
+    private ButtonPO _continueButton;
 
-    public DeleteRuntimePO( SWTBot bot )
+    public DeleteResourcesContinueDialog( SWTBot bot, String title )
     {
-        super( bot, BUTTON_CANCEL, BUTTON_OK );
-        _serverRuntimeEnvironments = new TablePO( bot, LABEL_RUNTIEME_ENVIRONMENTS );
-        _remove = new ButtonPO( bot, BUTTON_REMOVE );
+        super( bot, title, BUTTON_CANCEL, BUTTON_OK );
+        _continueButton = new ButtonPO( bot, BUTTON_CONTINUE );
     }
 
-    public TablePO getServerRuntimeEnvironments()
+    public void clickContinueButton()
     {
-        return _serverRuntimeEnvironments;
-    }
-
-    public ButtonPO getRemove()
-    {
-        return _remove;
+        _continueButton.click();
     }
 
 }

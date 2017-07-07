@@ -15,35 +15,42 @@
 
 package com.liferay.ide.swtbot.ui.tests.eclipse.page;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 import com.liferay.ide.swtbot.ui.tests.UIBase;
 import com.liferay.ide.swtbot.ui.tests.page.TextPO;
-import com.liferay.ide.swtbot.ui.tests.page.ViewPO;
+import com.liferay.ide.swtbot.ui.tests.page.WizardPO;
 
 /**
- * @author Terry Jia
+ * @author Ying Xu
  */
-public class ProgressViewPO extends ViewPO implements UIBase
+public class NewJavaPackageWizard extends WizardPO implements UIBase
 {
 
-    private TextPO noOperationsText;
+    private TextPO _name;
+    private TextPO _sourceFolder;
 
-    public ProgressViewPO( SWTWorkbenchBot bot )
+    public NewJavaPackageWizard( SWTBot bot )
     {
-        super( bot, LABEL_PROGRESS );
-
-        noOperationsText = new TextPO( bot, INDEX_DEFAULT_START );
+        this( bot, TEXT_BLANK, BUTTON_CANCEL, BUTTON_FINISH );
     }
 
-    public String getNoOperationText()
+    public NewJavaPackageWizard( SWTBot bot, String title, String cancelButtonText, String finishButtonText )
     {
-        return noOperationsText.getText();
+        super( bot, title, cancelButtonText, finishButtonText, TEXT_BLANK, TEXT_BLANK );
+
+        _sourceFolder = new TextPO( bot, LABEL_SOURCE_FOLDER );
+        _name = new TextPO( bot, LABEL_NAME );
     }
 
-    public boolean noRunningProgress()
+    public TextPO getSourceFolderText()
     {
-        return getNoOperationText().equals( TEXT_NO_OPERTAIONS );
+        return _sourceFolder;
+    }
+
+    public void setName( String packageName )
+    {
+        _name.setText( packageName );
     }
 
 }

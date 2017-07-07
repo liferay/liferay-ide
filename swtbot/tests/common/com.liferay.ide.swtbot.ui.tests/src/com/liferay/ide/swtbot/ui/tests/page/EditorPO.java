@@ -15,11 +15,11 @@
 
 package com.liferay.ide.swtbot.ui.tests.page;
 
-import com.liferay.ide.swtbot.ui.tests.condition.EditorActiveCondition;
-
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.swt.finder.SWTBot;
+
+import com.liferay.ide.swtbot.ui.tests.condition.EditorActiveCondition;
 
 /**
  * @author Terry Jia

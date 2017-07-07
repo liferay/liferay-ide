@@ -12,8 +12,6 @@
 
 package com.liferay.ide.swtbot.ui.tests.condition;
 
-import org.junit.Assert;
-
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
@@ -23,6 +21,7 @@ import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.BoolResult;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
+import org.junit.Assert;
 
 /**
  * ICondition implementation to wait for a view to become visible or not visible This is useful when the creation of a

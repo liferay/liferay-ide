@@ -17,13 +17,13 @@ package com.liferay.ide.swtbot.service.ui.tests.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
-import com.liferay.ide.swtbot.service.ui.tests.ServiceBuilderWizard;
+import com.liferay.ide.swtbot.service.ui.tests.ServiceBuilderTestsBase;
 import com.liferay.ide.swtbot.ui.tests.page.TextPO;
 
 /**
  * @author Ying Xu
  */
-public class ServiceBuilderEntitiesPO extends TextPO implements ServiceBuilderWizard
+public class ServiceBuilderEntitiesPO extends TextPO implements ServiceBuilderTestsBase
 {
 
     private TextPO _entityName;

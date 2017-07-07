@@ -24,6 +24,11 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTable;
 public class TablePO extends AbstractWidgetPO
 {
 
+    public TablePO( SWTBot bot )
+    {
+        super( bot );
+    }
+
     public TablePO( SWTBot bot, String label )
     {
         super( bot, label );

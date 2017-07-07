@@ -37,9 +37,9 @@ import com.liferay.ide.swtbot.project.ui.tests.page.CreateProjectWizardPO;
 import com.liferay.ide.swtbot.project.ui.tests.page.SetSDKLocationPO;
 import com.liferay.ide.swtbot.service.ui.tests.page.ServiceBuilderEntitiesPO;
 import com.liferay.ide.swtbot.service.ui.tests.page.ServiceBuilderPackageSelectionPO;
-import com.liferay.ide.swtbot.service.ui.tests.page.ServiceBuilderWizardPO;
+import com.liferay.ide.swtbot.service.ui.tests.page.ServiceBuilderWizard;
 import com.liferay.ide.swtbot.ui.tests.SWTBotBase;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.NewJavaPackagePO;
+import com.liferay.ide.swtbot.ui.tests.eclipse.page.NewJavaPackageWizard;
 import com.liferay.ide.swtbot.ui.tests.page.CTabItemPO;
 import com.liferay.ide.swtbot.ui.tests.page.DialogPO;
 import com.liferay.ide.swtbot.ui.tests.page.TextEditorPO;
@@ -49,10 +49,11 @@ import com.liferay.ide.swtbot.ui.tests.page.TreePO;
 /**
  * @author Ying Xu
  */
-public class NewLiferayServiceBuilderWizardTests extends SWTBotBase implements ServiceBuilderWizard, ProjectWizard
+public class NewLiferayServiceBuilderWizardTests extends SWTBotBase
+    implements ServiceBuilderTestsBase, ProjectWizard
 {
 
-    ServiceBuilderWizardPO newServiceBuilderWizard = new ServiceBuilderWizardPO( bot, TITLE_NEW_SERVICE_BUILDER );
+    ServiceBuilderWizard newServiceBuilderWizard = new ServiceBuilderWizard( bot, TITLE_NEW_SERVICE_BUILDER );
 
     String author = System.getenv( "USERNAME" );
 
@@ -121,7 +122,7 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase implements S
             setSDKLocation.finish();
         }
 
-        ServiceBuilderWizardPO newServiceBuilderWizard = new ServiceBuilderWizardPO( bot, TITLE_NEW_SERVICE_BUILDER );
+        ServiceBuilderWizard newServiceBuilderWizard = new ServiceBuilderWizard( bot, TITLE_NEW_SERVICE_BUILDER );
 
         // newServiceBuilderWizard.waitForPageToOpen();
         newServiceBuilderWizard.setFocus();
@@ -330,7 +331,7 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase implements S
             setSDKLocation.finish();
         }
 
-        ServiceBuilderWizardPO newServiceBuilderWizard = new ServiceBuilderWizardPO( bot, TITLE_NEW_SERVICE_BUILDER );
+        ServiceBuilderWizard newServiceBuilderWizard = new ServiceBuilderWizard( bot, TITLE_NEW_SERVICE_BUILDER );
 
         // newServiceBuilderWizard.waitForPageToOpen();
         // assertTrue( newServiceBuilderWizard.getBrowseButton().isEnabled() );
@@ -361,7 +362,7 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase implements S
 
         eclipse.getNewToolbar().getNewPackage().click();
 
-        NewJavaPackagePO newJavaPackage = new NewJavaPackagePO( bot );
+        NewJavaPackageWizard newJavaPackage = new NewJavaPackageWizard( bot );
 
         newJavaPackage.setName( "newpackage" );
         assertEquals( projectName + "-portlet/docroot/WEB-INF/src", newJavaPackage.getSourceFolderText().getText() );

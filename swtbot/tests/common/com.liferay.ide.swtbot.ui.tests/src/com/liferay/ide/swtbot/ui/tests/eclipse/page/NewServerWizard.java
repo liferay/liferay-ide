@@ -13,13 +13,12 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.swtbot.server.ui.tests.page;
+package com.liferay.ide.swtbot.ui.tests.eclipse.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
-import com.liferay.ide.swtbot.server.ui.tests.ServerRuntimeWizard;
+import com.liferay.ide.swtbot.ui.tests.UIBase;
 import com.liferay.ide.swtbot.ui.tests.page.TextPO;
-import com.liferay.ide.swtbot.ui.tests.page.ToolbarButtonWithTooltipPO;
 import com.liferay.ide.swtbot.ui.tests.page.TreePO;
 import com.liferay.ide.swtbot.ui.tests.page.WizardPO;
 
@@ -27,32 +26,37 @@ import com.liferay.ide.swtbot.ui.tests.page.WizardPO;
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class NewServerPO extends WizardPO implements ServerRuntimeWizard
+public class NewServerWizard extends WizardPO implements UIBase
 {
 
-    TreePO _serverTypeTree;
-    TextPO _serverHostName;
-    TextPO _serverName;
-    ToolbarButtonWithTooltipPO _resetDefault;
+    private TreePO _serverTypes;
 
-    public NewServerPO( SWTBot bot )
+    private TextPO _serverHostName;
+    private TextPO _serverName;
+
+    public NewServerWizard( SWTBot bot )
     {
         this( bot, CHOOSE_SERVER_TYPE_INDEX );
     }
 
-    public NewServerPO( SWTBot bot, int validationMessageIndex )
+    public NewServerWizard( SWTBot bot, int validationMessageIndex )
     {
         super( bot, TITLE_NEW_SERVER, BUTTON_CANCEL, BUTTON_FINISH, BUTTON_BACK, BUTTON_NEXT, validationMessageIndex );
 
-        _serverTypeTree = new TreePO( bot );
+        _serverTypes = new TreePO( bot );
+
         _serverHostName = new TextPO( bot, LABEL_SERVER_HOST_NAME );
         _serverName = new TextPO( bot, LABEL_SERVER_NAME );
-        _resetDefault = new ToolbarButtonWithTooltipPO( bot, BUTTON_RESET_DEFAULT );
     }
 
-    public TreePO getServerTypeTree()
+    public TreePO getServerTypes()
     {
-        return _serverTypeTree;
+        return _serverTypes;
+    }
+
+    public void selectServerType( String categroy, String item )
+    {
+        _serverTypes.selectTreeItem( categroy, item );
     }
 
     public TextPO getServerHostName()
@@ -62,7 +66,7 @@ public class NewServerPO extends WizardPO implements ServerRuntimeWizard
 
     public void setServerHostName( TextPO serverHostName )
     {
-        this._serverHostName = serverHostName;
+        _serverHostName = serverHostName;
     }
 
     public TextPO getServerName()
@@ -72,12 +76,7 @@ public class NewServerPO extends WizardPO implements ServerRuntimeWizard
 
     public void setServerName( TextPO serverName )
     {
-        this._serverName = serverName;
-    }
-
-    public ToolbarButtonWithTooltipPO getResetDefault()
-    {
-        return _resetDefault;
+        _serverName = serverName;
     }
 
 }

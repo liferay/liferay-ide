@@ -15,10 +15,10 @@
 
 package com.liferay.ide.swtbot.ui.tests.page;
 
-import com.liferay.ide.swtbot.ui.tests.condition.WidgetEnabledCondition;
-
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotCheckBox;
+
+import com.liferay.ide.swtbot.ui.tests.condition.WidgetEnabledCondition;
 
 /**
  * @author Terry Jia

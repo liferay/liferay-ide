@@ -52,6 +52,11 @@ public abstract class AbstractWidgetPO extends AbstractPO
         this.label = label;
     }
 
+    public void contextMenu( String menu )
+    {
+        getWidget().contextMenu( menu ).click();
+    }
+
     public String getLabel()
     {
         return label;
@@ -77,6 +82,11 @@ public abstract class AbstractWidgetPO extends AbstractPO
     public boolean isVisible()
     {
         return getWidget().isVisible();
+    }
+
+    public void rightClick( String menu )
+    {
+        contextMenu( menu );
     }
 
     public void setFocus()

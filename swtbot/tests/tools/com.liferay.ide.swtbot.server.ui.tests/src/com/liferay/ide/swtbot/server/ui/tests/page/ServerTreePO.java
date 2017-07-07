@@ -20,7 +20,6 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
 import com.liferay.ide.swtbot.server.ui.tests.ServerAction;
 import com.liferay.ide.swtbot.ui.tests.page.ConfirmPO;
-import com.liferay.ide.swtbot.ui.tests.page.ToolbarButtonWithTooltipPO;
 import com.liferay.ide.swtbot.ui.tests.page.TreeItemPO;
 import com.liferay.ide.swtbot.ui.tests.page.TreePO;
 
@@ -31,11 +30,8 @@ import com.liferay.ide.swtbot.ui.tests.page.TreePO;
 public class ServerTreePO extends TreeItemPO implements ServerAction
 {
 
-    private AddAndRemoveProjectPO _addAndRemovePage;
+    private AddAndRemoveDialog _addAndRemovePage;
     private String _serverName;
-    private ToolbarButtonWithTooltipPO _start;
-    private ToolbarButtonWithTooltipPO _stop;
-    private ToolbarButtonWithTooltipPO _debug;
 
     int serverTreeIndex = 1;
 
@@ -49,10 +45,7 @@ public class ServerTreePO extends TreeItemPO implements ServerAction
         super( bot );
 
         _serverName = serverName;
-        _addAndRemovePage = new AddAndRemoveProjectPO( bot );
-        _start = new ToolbarButtonWithTooltipPO( bot, SERVER_START_BUTTON );
-        _stop = new ToolbarButtonWithTooltipPO( bot, SERVER_STOP_BUTTON );
-        _debug = new ToolbarButtonWithTooltipPO( bot, SERVER_DEBUG_BUTTON );
+        _addAndRemovePage = new AddAndRemoveDialog( bot );
     }
 
     public void addALL()
@@ -102,6 +95,7 @@ public class ServerTreePO extends TreeItemPO implements ServerAction
     public void deployProject( String... projectItemNames )
     {
         doAction( MENU_ADD_AND_REMOVE );
+
         _addAndRemovePage.add( projectItemNames );
         _addAndRemovePage.confirm();
     }
@@ -130,6 +124,7 @@ public class ServerTreePO extends TreeItemPO implements ServerAction
     public void removeALL()
     {
         doAction( MENU_ADD_AND_REMOVE );
+
         _addAndRemovePage.removeAll();
         _addAndRemovePage.confirm();
     }
@@ -150,21 +145,6 @@ public class ServerTreePO extends TreeItemPO implements ServerAction
     {
         doAction( MENU_STOP );
         checkConsoleHasMessage( MESAGE_SERVER_STOP, 10000 );
-    }
-
-    public ToolbarButtonWithTooltipPO getStart()
-    {
-        return _start;
-    }
-
-    public ToolbarButtonWithTooltipPO getStop()
-    {
-        return _stop;
-    }
-
-    public ToolbarButtonWithTooltipPO getDebug()
-    {
-        return _debug;
     }
 
 }

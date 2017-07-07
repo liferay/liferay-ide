@@ -17,7 +17,7 @@ package com.liferay.ide.swtbot.project.ui.tests.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesDialogPO;
+import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesDialog;
 import com.liferay.ide.swtbot.ui.tests.page.TreeItemPO;
 import com.liferay.ide.swtbot.ui.tests.page.TreePO;
 
@@ -27,13 +27,13 @@ import com.liferay.ide.swtbot.ui.tests.page.TreePO;
 public class ProjectTreePO extends TreeItemPO implements ProjectBuildAction
 {
 
-    DeleteResourcesDialogPO _deleteDialog;
+    DeleteResourcesDialog _deleteDialog;
 
     public ProjectTreePO( SWTBot bot, String nodeText )
     {
         super( bot, new TreePO( bot ), nodeText );
 
-        _deleteDialog = new DeleteResourcesDialogPO( bot );
+        _deleteDialog = new DeleteResourcesDialog( bot );
     }
 
     public void deleteProject()

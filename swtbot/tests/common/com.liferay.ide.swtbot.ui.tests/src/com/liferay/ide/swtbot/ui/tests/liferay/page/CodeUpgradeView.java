@@ -28,7 +28,7 @@ import com.liferay.ide.swtbot.ui.tests.page.ViewPO;
  * @author Terry Jia
  * @author Ashley Yuan
  */
-public class CodeUpgradeViewPO extends ViewPO implements UIBase
+public class CodeUpgradeView extends ViewPO implements UIBase
 {
 
 	public class GearPO extends CanvasPO
@@ -59,7 +59,7 @@ public class CodeUpgradeViewPO extends ViewPO implements UIBase
     private DialogPO restartDialog;
     private DialogPO showAllPagesDialog;
 
-    public CodeUpgradeViewPO( SWTWorkbenchBot bot, String viewIdentifier )
+    public CodeUpgradeView( SWTWorkbenchBot bot, String viewIdentifier )
     {
         super( bot, viewIdentifier );
 

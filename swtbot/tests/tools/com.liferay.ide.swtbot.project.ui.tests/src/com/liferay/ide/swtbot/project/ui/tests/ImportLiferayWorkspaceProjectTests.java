@@ -15,7 +15,7 @@ import org.junit.Test;
 import com.liferay.ide.swtbot.project.ui.tests.page.ImportLiferayWorkspaceProjectPO;
 import com.liferay.ide.swtbot.project.ui.tests.page.SelectTypePO;
 import com.liferay.ide.swtbot.ui.tests.SWTBotBase;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesContinueDialogPO;
+import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesContinueDialog;
 import com.liferay.ide.swtbot.ui.tests.page.CTabItemPO;
 import com.liferay.ide.swtbot.ui.tests.page.TextEditorPO;
 import com.liferay.ide.swtbot.ui.tests.page.TreePO;
@@ -39,8 +39,8 @@ public class ImportLiferayWorkspaceProjectTests extends SWTBotBase implements Im
     SelectTypePO selectImportPage =
         new SelectTypePO( bot, INDEX_SELECT_IMPORT_LIFERAY_WORKSPACE_PROJECT_VALIDATION_MESSAGE );
 
-    DeleteResourcesContinueDialogPO continueDeleteResources =
-        new DeleteResourcesContinueDialogPO( bot, "Delete Resources" );
+    DeleteResourcesContinueDialog continueDeleteResources =
+        new DeleteResourcesContinueDialog( bot, "Delete Resources" );
 
     @Before
     public void importWorkspaceProject()

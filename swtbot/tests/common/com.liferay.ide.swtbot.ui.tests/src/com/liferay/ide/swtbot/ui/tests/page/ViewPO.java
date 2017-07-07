@@ -71,18 +71,21 @@ public class ViewPO extends AbstractPO
     public void maximize()
     {
         getView().setFocus();
+
         maximizeButton.click();
     }
 
     public void minimize()
     {
         getView().setFocus();
+
         minimizeButton.click();
     }
 
     public void restore()
     {
         getView().setFocus();
+
         restoreButton.click();
     }
 

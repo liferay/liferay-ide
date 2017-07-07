@@ -18,7 +18,7 @@ package com.liferay.ide.swtbot.project.upgrade.ui.tests;
 import org.junit.Test;
 
 import com.liferay.ide.swtbot.ui.tests.SWTBotBase;
-import com.liferay.ide.swtbot.ui.tests.liferay.page.CodeUpgradeViewPO;
+import com.liferay.ide.swtbot.ui.tests.liferay.page.CodeUpgradeView;
 
 /**
  * @author Terry Jia
@@ -29,7 +29,7 @@ public class CodeUpgradeToolTests extends SWTBotBase implements CodeUpgradeTool
     @Test
     public void testGear()
     {
-        CodeUpgradeViewPO codeUpgrade = eclipse.showCodeUpgradeView();
+        CodeUpgradeView codeUpgrade = eclipse.showCodeUpgradeView();
 
         codeUpgrade.getGear().clickGear( 0 );
         keyPress.pressShortcut( ctrl, M );

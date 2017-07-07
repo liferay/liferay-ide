@@ -60,7 +60,8 @@ public interface UIBase
     public final String LABEL_LIFERAY_PLUGINS = "Liferay Plugins";
     public final String LABEL_LIFERAY_WORKSPACE = "Liferay Workspace";
     public final String LABEL_OTHER = "Other...";
-    public final String LABEL_PACKAGE_EXPLORER = "Servers";
+    public final String LABEL_PACKAGE_EXPLORER = "Package Explorer";
+    public final String LABEL_SERVERS = "Servers";
     public final String LABEL_PROGRESS = "Progress";
     public final String LABEL_SHOW_VIEW = "Show View";
     public final String LABEL_WELCOME = "Welcome";
@@ -164,7 +165,29 @@ public interface UIBase
 
     public final String NODE_LIFERAY_7X = "Liferay 7.x";
     public final String NODE_LIFERAY_INC = "Liferay, Inc.";
-    public final String SERVER_START_BUTTON = "Start the server (Ctrl+Alt+R)";
-    public final String SERVER_STOP_BUTTON = "Stop the server (Ctrl+Alt+S)";
-    public final String SERVER_DEBUG_BUTTON = "Start the server in debug mode (Ctrl+Alt+D)";
+    public final String LEBAL_SERVER_START_BUTTON = "Start the server (Ctrl+Alt+R)";
+    public final String LEBAL_SERVER_STOP_BUTTON = "Stop the server (Ctrl+Alt+S)";
+    public final String LEBAL_SERVER_DEBUG_BUTTON = "Start the server in debug mode (Ctrl+Alt+D)";
+
+    public final String LABEL_BUNDLE_TYPE = "Detected portal bundle type";
+    public final String LABEL_RUNTIME_NAME = "Name";
+    public final String LABEL_RUNTIEME_ENVIRONMENTS = "Server runtime environments:";
+    public final String LABEL_ECLIPSE_WORKSPACE = "Workspace:";
+    public final String TITLE_NEW_SERVER = "New Server";
+    public final String TITLE_NEW_SERVER_RUNTIME_ENVIRONMENT = "New Server Runtime Environmet";
+
+    public final String TEXT_CHOOSE_THE_SERVER_TYPE = "Choose the type of server to create";
+    public final String TEXT_SERVER_HOST_NAME_MUST_BE_SET = " Server's host name must be set.";
+    public final String TEXT_DEFAULT_SERVER_HOST_NAME = "localhost";
+    public final String TEXT_DEFAULT_SERVER_NAME = "Liferay 7.x at localhost";
+    public final String TEXT_SPECIFY_PORTAL_BUNDLE_LOCATION =
+        "Specify the installation directory of the portal bundle.";
+    public final String TEXT_ENTER_RUNTIME_ENVIRONMENT_NAME = " Enter a name for the runtime environment.";
+    public final String TEXT_PORTAL_BUNDLE_DOES_NOT_EXIST = " Portal bundle does not exist";
+
+    public final String BUTTON_RESET_DEFAULT = "Rese&t default";
+
+    public final int CHOOSE_SERVER_TYPE_INDEX = 3;
+    public final int SPECIFY_PORTAL_BUNDLE_LOCATION_INDEX = 3;
+
 }

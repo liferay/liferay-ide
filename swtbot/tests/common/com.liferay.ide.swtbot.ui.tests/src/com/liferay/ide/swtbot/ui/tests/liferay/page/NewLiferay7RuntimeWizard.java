@@ -13,11 +13,11 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.swtbot.server.ui.tests.page;
+package com.liferay.ide.swtbot.ui.tests.liferay.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
-import com.liferay.ide.swtbot.server.ui.tests.ServerRuntimeWizard;
+import com.liferay.ide.swtbot.ui.tests.UIBase;
 import com.liferay.ide.swtbot.ui.tests.page.TextPO;
 import com.liferay.ide.swtbot.ui.tests.page.WizardPO;
 
@@ -25,19 +25,19 @@ import com.liferay.ide.swtbot.ui.tests.page.WizardPO;
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class NewServerRuntimeEnvPO extends WizardPO implements ServerRuntimeWizard
+public class NewLiferay7RuntimeWizard extends WizardPO implements UIBase
 {
 
     private TextPO _portalBundleType;
     private TextPO _serverLocation;
     private TextPO _name;
 
-    public NewServerRuntimeEnvPO( SWTBot bot )
+    public NewLiferay7RuntimeWizard( SWTBot bot )
     {
         this( bot, TITLE_NEW_SERVER_RUNTIME_ENVIRONMENT, SPECIFY_PORTAL_BUNDLE_LOCATION_INDEX );
     }
 
-    public NewServerRuntimeEnvPO( SWTBot bot, String title, int validationMessageIndex )
+    public NewLiferay7RuntimeWizard( SWTBot bot, String title, int validationMessageIndex )
     {
         super( bot, title, BUTTON_CANCEL, BUTTON_FINISH, BUTTON_BACK, BUTTON_NEXT, validationMessageIndex );
 

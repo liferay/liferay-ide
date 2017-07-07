@@ -15,9 +15,9 @@
 
 package com.liferay.ide.swtbot.ui.tests.page;
 
-import com.liferay.ide.swtbot.ui.tests.UIBase;
-
 import org.eclipse.swtbot.swt.finder.SWTBot;
+
+import com.liferay.ide.swtbot.ui.tests.UIBase;
 
 /**
  * @author Terry Jia

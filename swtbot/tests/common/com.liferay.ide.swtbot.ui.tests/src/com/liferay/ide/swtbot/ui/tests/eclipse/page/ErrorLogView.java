@@ -15,42 +15,39 @@
 
 package com.liferay.ide.swtbot.ui.tests.eclipse.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 import com.liferay.ide.swtbot.ui.tests.UIBase;
-import com.liferay.ide.swtbot.ui.tests.page.TextPO;
-import com.liferay.ide.swtbot.ui.tests.page.WizardPO;
+import com.liferay.ide.swtbot.ui.tests.page.ToolbarButtonWithTooltipPO;
+import com.liferay.ide.swtbot.ui.tests.page.ViewPO;
 
 /**
- * @author Ying Xu
+ * @author Terry Jia
  */
-public class NewJavaPackagePO extends WizardPO implements UIBase
+public class ErrorLogView extends ViewPO implements UIBase
 {
 
-    private TextPO _name;
-    private TextPO _sourceFolder;
+    private ToolbarButtonWithTooltipPO clearLogViewerToolbar;
 
-    public NewJavaPackagePO( SWTBot bot )
+    public ErrorLogView( SWTWorkbenchBot bot )
     {
-        this( bot, TEXT_BLANK, BUTTON_CANCEL, BUTTON_FINISH );
+        super( bot, LABEL_ERROR_LOG_FULL );
+
+        clearLogViewerToolbar = new ToolbarButtonWithTooltipPO( bot, LABEL_CLEAR_LOG_VIEWER );
     }
 
-    public NewJavaPackagePO( SWTBot bot, String title, String cancelButtonText, String finishButtonText )
+    public void clearLogViewer()
     {
-        super( bot, title, cancelButtonText, finishButtonText, TEXT_BLANK, TEXT_BLANK );
-        _sourceFolder = new TextPO( bot, LABEL_SOURCE_FOLDER );
-        _name = new TextPO( bot, LABEL_NAME );
-
+        if( hasProblems() )
+        {
+            clearLogViewerToolbar.click();
+        }
     }
 
-    public TextPO getSourceFolderText()
+    public boolean hasProblems()
     {
-        return _sourceFolder;
-    }
-
-    public void setName( String packageName )
-    {
-        _name.setText( packageName );
+        // return( problemTree.getAllItems().length > 0 );
+        return true;
     }
 
 }

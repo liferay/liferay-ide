@@ -27,7 +27,7 @@ import com.liferay.ide.swtbot.ui.tests.page.ToolbarDropDownButtonPO;
  * @author Ying Xu
  * @author Li Lu
  */
-public class CreateLifeayProjectToolbarDropDownButtonPO extends ToolbarDropDownButtonPO implements UIBase
+public class CreateLifeayProjectToolbarDropDownButton extends ToolbarDropDownButtonPO implements UIBase
 {
 
     private MenuItemPO _newLiferayHookConfiguration;
@@ -44,7 +44,7 @@ public class CreateLifeayProjectToolbarDropDownButtonPO extends ToolbarDropDownB
     private MenuItemPO _newLiferayModuleProject;
     private MenuItemPO _newLiferayJSFProject;
 
-    public CreateLifeayProjectToolbarDropDownButtonPO( SWTBot bot )
+    public CreateLifeayProjectToolbarDropDownButton( SWTBot bot )
     {
         super( bot, TOOLBAR_CREATE_LIFERAY_PROJECT );
 

@@ -27,7 +27,7 @@ import com.liferay.ide.swtbot.ui.tests.page.TreePO;
  * @author Li Lu
  * @author Terry Jia
  */
-public class AddAndRemoveProjectPO extends DialogPO implements ServerAction
+public class AddAndRemoveDialog extends DialogPO implements ServerAction
 {
 
     private ButtonPO _addAllButton;
@@ -35,12 +35,12 @@ public class AddAndRemoveProjectPO extends DialogPO implements ServerAction
     private ButtonPO _removeAllButton;
     private ButtonPO _removeButton;
 
-    public AddAndRemoveProjectPO( SWTBot bot )
+    public AddAndRemoveDialog( SWTBot bot )
     {
         this( bot, MENU_ADD_AND_REMOVE, BUTTON_CANCEL, BUTTON_FINISH );
     }
 
-    public AddAndRemoveProjectPO( SWTBot bot, String title, String cancelButtonText, String confirmButtonText )
+    public AddAndRemoveDialog( SWTBot bot, String title, String cancelButtonText, String confirmButtonText )
     {
         super( bot, title, cancelButtonText, confirmButtonText );
 

@@ -18,27 +18,36 @@ package com.liferay.ide.swtbot.ui.tests.eclipse.page;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
 import com.liferay.ide.swtbot.ui.tests.UIBase;
-import com.liferay.ide.swtbot.ui.tests.page.CheckBoxPO;
 import com.liferay.ide.swtbot.ui.tests.page.DialogPO;
+import com.liferay.ide.swtbot.ui.tests.page.TreePO;
 
 /**
- * @author Li Lu
+ * @author Terry Jia
  */
-public class DeleteResourcesDialogPO extends DialogPO implements UIBase
+public class PreferencesDialog extends DialogPO implements UIBase
 {
 
-    private CheckBoxPO _deleteFromDiskCheckBox;
+    private TreePO _preferencesTypes;
 
-    public DeleteResourcesDialogPO( SWTBot bot )
+    public PreferencesDialog( SWTBot bot )
     {
-        super( bot, LABEL_DELETE_RESOURCE, BUTTON_CANCEL, BUTTON_OK );
+        super( bot, "Preferences", BUTTON_CANCEL, BUTTON_OK );
 
-        _deleteFromDiskCheckBox = new CheckBoxPO( bot, LABEL_DELETE_FROM_DISK );
+        _preferencesTypes = new TreePO( bot );
     }
 
-    public void confirmDeleteFromDisk()
+    public void selectPreferencesType( String categroy, String item )
     {
-        _deleteFromDiskCheckBox.select();
+        _preferencesTypes.getTreeItem( categroy ).expand();
+
+        _preferencesTypes.getTreeItem( categroy ).getTreeItem( item ).select();
+    }
+
+    public ServerRuntimeEnvironmentsPreferencesPage selectServerRuntimeEnvironmentsPage()
+    {
+        selectPreferencesType( "Server", "Runtime Environments" );
+
+        return new ServerRuntimeEnvironmentsPreferencesPage( bot );
     }
 
 }

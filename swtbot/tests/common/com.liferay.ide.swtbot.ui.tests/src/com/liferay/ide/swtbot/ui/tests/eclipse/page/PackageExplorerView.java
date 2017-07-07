@@ -25,19 +25,19 @@ import com.liferay.ide.swtbot.ui.tests.page.ViewPO;
 /**
  * @author Terry Jia
  */
-public class PackageExplorerViewPO extends ViewPO implements UIBase
+public class PackageExplorerView extends ViewPO implements UIBase
 {
 
     private TreePO _projectsTree;
-    private DeleteResourcesDialogPO _deleteResourcesDialog;
+    private DeleteResourcesDialog _deleteResourcesDialog;
     private DialogPO _continueDeleteResourcesDialog;
 
-    public PackageExplorerViewPO( SWTWorkbenchBot bot )
+    public PackageExplorerView( SWTWorkbenchBot bot )
     {
         super( bot, LABEL_PACKAGE_EXPLORER );
 
         _projectsTree = new TreePO( bot );
-        _deleteResourcesDialog = new DeleteResourcesDialogPO( bot );
+        _deleteResourcesDialog = new DeleteResourcesDialog( bot );
         _continueDeleteResourcesDialog = new DialogPO( bot, TITLE_DELETE_RESOURCES, BUTTON_CANCEL, BUTTON_CONTINUE );
     }
 

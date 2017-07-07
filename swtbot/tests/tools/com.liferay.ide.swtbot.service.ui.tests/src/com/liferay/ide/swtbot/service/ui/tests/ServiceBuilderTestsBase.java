@@ -20,7 +20,7 @@ import com.liferay.ide.swtbot.ui.tests.UIBase;
 /**
  * @author Ying Xu
  */
-public interface ServiceBuilderWizard extends UIBase
+public interface ServiceBuilderTestsBase extends UIBase
 {
 
     public final String LABEL_PACKAGE_PATH = "Package path:";

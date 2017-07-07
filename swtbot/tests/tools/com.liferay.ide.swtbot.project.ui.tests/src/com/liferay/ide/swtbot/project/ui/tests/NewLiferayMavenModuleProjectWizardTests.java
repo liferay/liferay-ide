@@ -23,8 +23,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import com.liferay.ide.swtbot.project.ui.tests.page.NewLiferayModuleProjectWizardPO;
 import com.liferay.ide.swtbot.project.ui.tests.page.NewLiferayModuleProjectWizardSecondPagePO;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesContinueDialogPO;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesDialogPO;
+import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesContinueDialog;
+import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesDialog;
 import com.liferay.ide.swtbot.ui.tests.page.TreePO;
 
 /**
@@ -515,9 +515,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends AbstractNewLiferayM
 
         openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
 
-        DeleteResourcesDialogPO deleteResources = new DeleteResourcesDialogPO( bot );
-        DeleteResourcesContinueDialogPO continueDeleteResources =
-            new DeleteResourcesContinueDialogPO( bot, "Delete Resources" );
+        DeleteResourcesDialog deleteResources = new DeleteResourcesDialog( bot );
+        DeleteResourcesContinueDialog continueDeleteResources =
+            new DeleteResourcesContinueDialog( bot, "Delete Resources" );
 
         projectTree.getTreeItem( projectName ).doAction( BUTTON_DELETE );
         sleep( 2000 );

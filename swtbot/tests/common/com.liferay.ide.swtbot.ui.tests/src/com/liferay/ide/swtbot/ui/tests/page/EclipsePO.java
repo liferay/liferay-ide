@@ -15,19 +15,16 @@
 
 package com.liferay.ide.swtbot.ui.tests.page;
 
-import org.eclipse.jface.bindings.keys.KeyStroke;
-import org.eclipse.swt.SWT;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.keyboard.Keyboard;
-import org.eclipse.swtbot.swt.finder.keyboard.KeyboardFactory;
 
 import com.liferay.ide.swtbot.ui.tests.UIBase;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.ErrorLogViewPO;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.NewToolbarDropDownButtonPO;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.PackageExplorerViewPO;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.ProgressViewPO;
-import com.liferay.ide.swtbot.ui.tests.liferay.page.CodeUpgradeViewPO;
-import com.liferay.ide.swtbot.ui.tests.liferay.page.CreateLifeayProjectToolbarDropDownButtonPO;
+import com.liferay.ide.swtbot.ui.tests.eclipse.page.ErrorLogView;
+import com.liferay.ide.swtbot.ui.tests.eclipse.page.NewToolbarDropDownButton;
+import com.liferay.ide.swtbot.ui.tests.eclipse.page.PackageExplorerView;
+import com.liferay.ide.swtbot.ui.tests.eclipse.page.ProgressView;
+import com.liferay.ide.swtbot.ui.tests.eclipse.page.ServersView;
+import com.liferay.ide.swtbot.ui.tests.liferay.page.CodeUpgradeView;
+import com.liferay.ide.swtbot.ui.tests.liferay.page.CreateLifeayProjectToolbarDropDownButton;
 
 /**
  * @author Terry Jia
@@ -37,34 +34,31 @@ import com.liferay.ide.swtbot.ui.tests.liferay.page.CreateLifeayProjectToolbarDr
 public class EclipsePO extends AbstractPO implements UIBase
 {
 
-    protected Keyboard keyPress = KeyboardFactory.getAWTKeyboard();
-    protected KeyStroke ctrl = KeyStroke.getInstance( SWT.CTRL, 0 );
-    protected KeyStroke M = KeyStroke.getInstance( 'M' );
-
-    private CreateLifeayProjectToolbarDropDownButtonPO _createLiferayProjectToolbar;
-    private NewToolbarDropDownButtonPO _newToolbar;
+    private CreateLifeayProjectToolbarDropDownButton _createLiferayProjectToolbar;
+    private NewToolbarDropDownButton _newToolbar;
     private PerspectivePO _liferayPerspective;
     private PerspectivePO _liferayWorkspacePerspective;
-    private PackageExplorerViewPO _packageExporerView;
+    private PackageExplorerView _packageExporerView;
     private TreePO _projectTree;
     private ViewPO _welcomeView;
-    private ProgressViewPO _progressView;
+    private ProgressView _progressView;
     private MenuPO _otherMenu;
     private ShowViewDialogPO _showViewDialog;
-    private ErrorLogViewPO _errorLogView;
+    private ErrorLogView _errorLogView;
     private MenuPO _fileMenu;
     private ViewPO _projectExplorerView;
-    private CodeUpgradeViewPO _codeUpgradeView;
+    private CodeUpgradeView _codeUpgradeView;
     private MenuPO _preferencesMenu;
+    private ServersView _serversView;
 
     public EclipsePO( SWTWorkbenchBot bot )
     {
         super( bot );
 
-        _createLiferayProjectToolbar = new CreateLifeayProjectToolbarDropDownButtonPO( bot );
-        _packageExporerView = new PackageExplorerViewPO( bot );
+        _createLiferayProjectToolbar = new CreateLifeayProjectToolbarDropDownButton( bot );
+        _packageExporerView = new PackageExplorerView( bot );
         _welcomeView = new ViewPO( bot, LABEL_WELCOME );
-        _progressView = new ProgressViewPO( bot );
+        _progressView = new ProgressView( bot );
         _liferayPerspective = new PerspectivePO( bot, LABEL_LIFERAY_PLUGINS );
         _liferayWorkspacePerspective = new PerspectivePO( bot, LABEL_LIFERAY_WORKSPACE );
         _projectTree = new TreePO( bot );
@@ -77,12 +71,13 @@ public class EclipsePO extends AbstractPO implements UIBase
         _otherMenu = new MenuPO( bot, otherLabel );
 
         _showViewDialog = new ShowViewDialogPO( bot );
-        _errorLogView = new ErrorLogViewPO( bot );
-        _newToolbar = new NewToolbarDropDownButtonPO( bot );
+        _errorLogView = new ErrorLogView( bot );
+        _newToolbar = new NewToolbarDropDownButton( bot );
 
         _projectExplorerView = new ViewPO( bot, LABEL_PROJECT_EXPLORER );
         _liferayWorkspacePerspective = new PerspectivePO( bot, LABEL_LIFERAY_WORKSPACE );
-        _codeUpgradeView = new CodeUpgradeViewPO( bot, LABEL_LIFERAY_CODE_UPGRADE );
+        _codeUpgradeView = new CodeUpgradeView( bot, LABEL_LIFERAY_CODE_UPGRADE );
+        _serversView = new ServersView( bot );
     }
 
     public void closeShell( String title )
@@ -92,7 +87,7 @@ public class EclipsePO extends AbstractPO implements UIBase
         shell.closeIfOpen();
     }
 
-    public NewToolbarDropDownButtonPO getNewToolbar()
+    public NewToolbarDropDownButton getNewToolbar()
     {
         return _newToolbar;
     }
@@ -102,7 +97,7 @@ public class EclipsePO extends AbstractPO implements UIBase
         return _fileMenu;
     }
 
-    public CreateLifeayProjectToolbarDropDownButtonPO getCreateLiferayProjectToolbar()
+    public CreateLifeayProjectToolbarDropDownButton getCreateLiferayProjectToolbar()
     {
         return _createLiferayProjectToolbar;
     }
@@ -117,7 +112,7 @@ public class EclipsePO extends AbstractPO implements UIBase
         return _liferayWorkspacePerspective;
     }
 
-    public PackageExplorerViewPO getPackageExporerView()
+    public PackageExplorerView getPackageExporerView()
     {
         return _packageExporerView;
     }
@@ -137,14 +132,14 @@ public class EclipsePO extends AbstractPO implements UIBase
         return _projectExplorerView;
     }
 
-    public PackageExplorerViewPO showPackageExporerView()
+    public PackageExplorerView showPackageExporerView()
     {
         _packageExporerView.show();
 
         return _packageExporerView;
     }
 
-    public CodeUpgradeViewPO showCodeUpgradeView()
+    public CodeUpgradeView showCodeUpgradeView()
     {
         try
         {
@@ -166,7 +161,34 @@ public class EclipsePO extends AbstractPO implements UIBase
         return _codeUpgradeView;
     }
 
-    public ProgressViewPO showProgressView()
+    public ServersView showServersView()
+    {
+        try
+        {
+            _serversView.show();
+        }
+        catch( Exception e )
+        {
+            _otherMenu.click();
+
+            _showViewDialog.setSearchText( "Servers" );
+
+            sleep( 100 );
+
+            _showViewDialog.confirm();
+
+            _serversView.show();
+        }
+
+        return _serversView;
+    }
+
+    public ServersView getServersView()
+    {
+        return _serversView;
+    }
+
+    public ProgressView showProgressView()
     {
         try
         {
@@ -178,7 +200,7 @@ public class EclipsePO extends AbstractPO implements UIBase
 
             _showViewDialog.setSearchText( LABEL_PROGRESS );
 
-            sleep( 500 );
+            sleep( 100 );
 
             _showViewDialog.confirm();
 
@@ -188,7 +210,7 @@ public class EclipsePO extends AbstractPO implements UIBase
         return _progressView;
     }
 
-    public ErrorLogViewPO showErrorLogView()
+    public ErrorLogView showErrorLogView()
     {
         try
         {
@@ -200,7 +222,7 @@ public class EclipsePO extends AbstractPO implements UIBase
 
             _showViewDialog.setSearchText( LABEL_ERROR_LOG );
 
-            sleep( 500 );
+            sleep( 100 );
 
             _showViewDialog.confirm();
 

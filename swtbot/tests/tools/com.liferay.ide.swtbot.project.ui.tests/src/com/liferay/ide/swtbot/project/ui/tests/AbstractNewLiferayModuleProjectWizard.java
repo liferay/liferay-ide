@@ -30,7 +30,7 @@ import com.liferay.ide.swtbot.project.ui.tests.page.NewLiferayModuleProjectWizar
 import com.liferay.ide.swtbot.project.ui.tests.page.NewLiferayWorkspaceProjectWizardPO;
 import com.liferay.ide.swtbot.project.ui.tests.page.SelectModuleServiceNamePO;
 import com.liferay.ide.swtbot.ui.tests.SWTBotBase;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesDialogPO;
+import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesDialog;
 import com.liferay.ide.swtbot.ui.tests.page.CTabItemPO;
 import com.liferay.ide.swtbot.ui.tests.page.TextEditorPO;
 import com.liferay.ide.swtbot.ui.tests.page.TreePO;
@@ -46,7 +46,7 @@ public abstract class AbstractNewLiferayModuleProjectWizard extends SWTBotBase i
 
     static TreePO projectTree = eclipse.getPackageExporerView().getProjectTree();
 
-    static DeleteResourcesDialogPO deleteResources = new DeleteResourcesDialogPO( bot );
+    static DeleteResourcesDialog deleteResources = new DeleteResourcesDialog( bot );
 
     @AfterClass
     public static void cleanAll()

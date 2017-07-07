@@ -18,26 +18,27 @@ package com.liferay.ide.swtbot.ui.tests.eclipse.page;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
 import com.liferay.ide.swtbot.ui.tests.UIBase;
-import com.liferay.ide.swtbot.ui.tests.page.ButtonPO;
+import com.liferay.ide.swtbot.ui.tests.page.CheckBoxPO;
 import com.liferay.ide.swtbot.ui.tests.page.DialogPO;
 
 /**
- * @author Ying Xu
+ * @author Li Lu
  */
-public class DeleteResourcesContinueDialogPO extends DialogPO implements UIBase
+public class DeleteResourcesDialog extends DialogPO implements UIBase
 {
 
-    private ButtonPO _continueButton;
+    private CheckBoxPO _deleteFromDiskCheckBox;
 
-    public DeleteResourcesContinueDialogPO( SWTBot bot, String title )
+    public DeleteResourcesDialog( SWTBot bot )
     {
-        super( bot, title, BUTTON_CANCEL, BUTTON_OK );
-        _continueButton = new ButtonPO( bot, BUTTON_CONTINUE );
+        super( bot, LABEL_DELETE_RESOURCE, BUTTON_CANCEL, BUTTON_OK );
+
+        _deleteFromDiskCheckBox = new CheckBoxPO( bot, LABEL_DELETE_FROM_DISK );
     }
 
-    public void clickContinueButton()
+    public void confirmDeleteFromDisk()
     {
-        _continueButton.click();
+        _deleteFromDiskCheckBox.select();
     }
 
 }

@@ -18,17 +18,32 @@ package com.liferay.ide.swtbot.ui.tests.eclipse.page;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 import com.liferay.ide.swtbot.ui.tests.UIBase;
+import com.liferay.ide.swtbot.ui.tests.page.TextPO;
 import com.liferay.ide.swtbot.ui.tests.page.ViewPO;
 
 /**
  * @author Terry Jia
  */
-public class ServersViewPO extends ViewPO implements UIBase
+public class ProgressView extends ViewPO implements UIBase
 {
 
-    public ServersViewPO( SWTWorkbenchBot bot )
+    private TextPO noOperationsText;
+
+    public ProgressView( SWTWorkbenchBot bot )
     {
-        super( bot, LABEL_PACKAGE_EXPLORER );
+        super( bot, LABEL_PROGRESS );
+
+        noOperationsText = new TextPO( bot, INDEX_DEFAULT_START );
+    }
+
+    public String getNoOperationText()
+    {
+        return noOperationsText.getText();
+    }
+
+    public boolean noRunningProgress()
+    {
+        return getNoOperationText().equals( TEXT_NO_OPERTAIONS );
     }
 
 }

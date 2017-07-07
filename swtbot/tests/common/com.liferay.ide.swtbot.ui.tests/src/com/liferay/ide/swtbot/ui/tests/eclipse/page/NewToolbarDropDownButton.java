@@ -24,7 +24,7 @@ import com.liferay.ide.swtbot.ui.tests.page.ToolbarDropDownButtonPO;
 /**
  * @author Ying Xu
  */
-public class NewToolbarDropDownButtonPO extends ToolbarDropDownButtonPO implements UIBase
+public class NewToolbarDropDownButton extends ToolbarDropDownButtonPO implements UIBase
 {
 
     private MenuItemPO _liferayPluginProject;
@@ -37,7 +37,7 @@ public class NewToolbarDropDownButtonPO extends ToolbarDropDownButtonPO implemen
     private MenuItemPO _liferayLayoutTemplate;
     private MenuItemPO _newPackage;
 
-    public NewToolbarDropDownButtonPO( SWTBot bot )
+    public NewToolbarDropDownButton( SWTBot bot )
     {
         super( bot, TOOLBAR_NEW );
 

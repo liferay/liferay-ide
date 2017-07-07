@@ -17,7 +17,7 @@ package com.liferay.ide.swtbot.service.ui.tests.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
-import com.liferay.ide.swtbot.service.ui.tests.ServiceBuilderWizard;
+import com.liferay.ide.swtbot.service.ui.tests.ServiceBuilderTestsBase;
 import com.liferay.ide.swtbot.ui.tests.page.ButtonPO;
 import com.liferay.ide.swtbot.ui.tests.page.CheckBoxPO;
 import com.liferay.ide.swtbot.ui.tests.page.ComboBoxPO;
@@ -27,7 +27,7 @@ import com.liferay.ide.swtbot.ui.tests.page.WizardPO;
 /**
  * @author Ying Xu
  */
-public class ServiceBuilderWizardPO extends WizardPO implements ServiceBuilderWizard
+public class ServiceBuilderWizard extends WizardPO implements ServiceBuilderTestsBase
 {
 
     private TextPO _author;
@@ -40,19 +40,20 @@ public class ServiceBuilderWizardPO extends WizardPO implements ServiceBuilderWi
     private ComboBoxPO _pluginProjectComboBox;
     private CheckBoxPO _includeSampleEntityCheckBox;
 
-    public ServiceBuilderWizardPO( SWTBot bot )
+    public ServiceBuilderWizard( SWTBot bot )
     {
         this( bot, TEXT_BLANK );
     }
 
-    public ServiceBuilderWizardPO( SWTBot bot, String title )
+    public ServiceBuilderWizard( SWTBot bot, String title )
     {
         this( bot, title, INDEX_VALIDATION_MESSAGE );
     }
 
-    public ServiceBuilderWizardPO( SWTBot bot, String title, int validationMessageIndex )
+    public ServiceBuilderWizard( SWTBot bot, String title, int validationMessageIndex )
     {
         super( bot, title, BUTTON_CANCEL, BUTTON_FINISH, BUTTON_BROWSE_WITH_DOT, TEXT_BLANK, validationMessageIndex );
+
         _packagePath = new TextPO( bot, LABEL_PACKAGE_PATH );
         _namespace = new TextPO( bot, LABEL_NAMESPACE );
         _author = new TextPO( bot, LABEL_AUTHOR );

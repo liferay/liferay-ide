@@ -67,8 +67,8 @@ import com.liferay.ide.swtbot.ui.tests.util.ZipUtil;
 public class SWTBotBase implements UIBase, Keys
 {
 
-    public final static String IVY_CACHE_ZIP = "ivy-cache-7.0.zip";
-    public final static String PLUGINS_SDK_ZIP = "com.liferay.portal.plugins.sdk-1.0.11-withdependencies-20170613175008905.zip";
+    public final static String PLUGINS_SDK_ZIP =
+        "com.liferay.portal.plugins.sdk-1.0.11-withdependencies-20170613175008905.zip";
     public final static String PLUGINS_SDK_DIR = "com.liferay.portal.plugins.sdk-1.0.11-withdependencies";
 
     public static BundleInfo[] bundleInfos;
@@ -105,27 +105,34 @@ public class SWTBotBase implements UIBase, Keys
 
         eclipse.getLiferayPerspective().activate();
 
-        try
-        {
-            eclipse.showProgressView();
-            eclipse.showErrorLogView().clearLogViewer();
-        }
-        catch( Exception e )
-        {
-            e.printStackTrace();
-        }
-
         SWTBotPreferences.TIMEOUT = 30000;
 
         SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
     }
 
-    protected static void copyFileToStartServer()
+    protected static void prepareGeoFile()
     {
         String filename = "com.liferay.ip.geocoder.internal.IPGeocoderConfiguration.cfg";
 
         File source = new File( liferayBundlesDir + "/" + filename );
         File dest = new File( getLiferayServerDir().toString() + "osgi/configs/" + filename );
+
+        try
+        {
+            FileUtil.copyFile( source, dest );
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
+    }
+
+    protected static void preparePortalExtFile()
+    {
+        String filename = "portal-ext.properties";
+
+        File source = new File( liferayBundlesDir + "/" + filename );
+        File dest = new File( getLiferayServerDir().toString() + "/" + filename );
 
         try
         {
@@ -149,11 +156,6 @@ public class SWTBotBase implements UIBase, Keys
         String className = fullClassName.substring( fullClassName.lastIndexOf( '.' ) ).substring( 1 );
 
         return( className.equals( runTest ) );
-    }
-
-    protected static IPath getIvyCacheZip()
-    {
-        return getLiferayBundlesPath().append( IVY_CACHE_ZIP );
     }
 
     protected static IPath getLiferayBundlesPath()
@@ -289,29 +291,22 @@ public class SWTBotBase implements UIBase, Keys
 
         assertEquals( true, liferayPluginsSdkDirFile.exists() );
 
-        final File ivyCacheDir = new File( liferayPluginsSdkDirFile, ".ivy" );
+        Map<String, String> evnMap = System.getenv();
 
-        final File ivyCacheZipFile = getIvyCacheZip().toFile();
+        String username = evnMap.get( "USERNAME" );
 
-        assertEquals(
-            "Expected ivy-cache.zip to be here: " + ivyCacheZipFile.getAbsolutePath(), true, ivyCacheZipFile.exists() );
-
-        ZipUtil.unzip( ivyCacheZipFile, liferayPluginsSdkDirFile );
-
-        assertEquals( "Expected .ivy folder to be here: " + ivyCacheDir.getAbsolutePath(), true, ivyCacheDir.exists() );
-
-        Map<String, String> map = System.getenv();
-        String username = map.get( "USERNAME" );
         File userBuildFile = new File( liferayPluginsSdkDirFile, "build." + username + ".properties" );
 
         if( !userBuildFile.exists() )
         {
             userBuildFile.createNewFile();
+
             String appServerParentDir =
                 "app.server.parent.dir=" + getLiferayServerDir().toFile().getPath().replace( "\\", "/" );
             try
             {
                 FileWriter writer = new FileWriter( userBuildFile.getPath(), true );
+
                 writer.write( appServerParentDir );
                 writer.close();
             }

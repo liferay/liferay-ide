@@ -19,35 +19,49 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 import com.liferay.ide.swtbot.ui.tests.UIBase;
 import com.liferay.ide.swtbot.ui.tests.page.ToolbarButtonWithTooltipPO;
+import com.liferay.ide.swtbot.ui.tests.page.TreePO;
 import com.liferay.ide.swtbot.ui.tests.page.ViewPO;
 
 /**
  * @author Terry Jia
  */
-public class ErrorLogViewPO extends ViewPO implements UIBase
+public class ServersView extends ViewPO implements UIBase
 {
 
-    private ToolbarButtonWithTooltipPO clearLogViewerToolbar;
+    private ToolbarButtonWithTooltipPO _debug;
+    private TreePO _servers;
+    private ToolbarButtonWithTooltipPO _start;
+    private ToolbarButtonWithTooltipPO _stop;
 
-    public ErrorLogViewPO( SWTWorkbenchBot bot )
+    public ServersView( SWTWorkbenchBot bot )
     {
-        super( bot, LABEL_ERROR_LOG_FULL );
+        super( bot, LABEL_SERVERS );
 
-        clearLogViewerToolbar = new ToolbarButtonWithTooltipPO( bot, LABEL_CLEAR_LOG_VIEWER );
+        _start = new ToolbarButtonWithTooltipPO( bot, LEBAL_SERVER_START_BUTTON );
+        _stop = new ToolbarButtonWithTooltipPO( bot, LEBAL_SERVER_STOP_BUTTON );
+        _debug = new ToolbarButtonWithTooltipPO( bot, LEBAL_SERVER_DEBUG_BUTTON );
+
+        _servers = new TreePO( bot, 1 );
     }
 
-    public void clearLogViewer()
+    public ToolbarButtonWithTooltipPO getDebug()
     {
-        if( hasProblems() )
-        {
-            clearLogViewerToolbar.click();
-        }
+        return _debug;
     }
 
-    public boolean hasProblems()
+    public ToolbarButtonWithTooltipPO getStart()
     {
-        // return( problemTree.getAllItems().length > 0 );
-        return true;
+        return _start;
+    }
+
+    public ToolbarButtonWithTooltipPO getStop()
+    {
+        return _stop;
+    }
+
+    public TreePO getServers()
+    {
+        return _servers;
     }
 
 }
