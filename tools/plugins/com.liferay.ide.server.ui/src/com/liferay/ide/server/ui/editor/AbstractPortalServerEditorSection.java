@@ -13,6 +13,8 @@
 package com.liferay.ide.server.ui.editor;
 
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.server.core.portal.PortalBundle;
+import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.core.portal.PortalServer;
 
 import java.beans.PropertyChangeEvent;
@@ -51,6 +53,8 @@ public abstract class AbstractPortalServerEditorSection extends ServerEditorSect
 
     protected boolean allowRestrictedEditing;
     protected PropertyChangeListener listener;
+    protected PortalBundle portalBundle;
+    protected PortalRuntime portalRuntime;
     protected PortalServer portalServer;
     protected IPublishListener publishListener;
     protected Section section;
@@ -196,13 +200,18 @@ public abstract class AbstractPortalServerEditorSection extends ServerEditorSect
         if( server != null )
         {
             portalServer = (PortalServer) server.loadAdapter( PortalServer.class, null );
+
+            portalRuntime = (PortalRuntime) server.getRuntime().loadAdapter( PortalRuntime.class, null );
+
+            portalBundle = portalRuntime.getPortalBundle();
+
             addChangeListeners();
         }
     }
 
     protected void initialize()
     {
-        if( portalServer == null )
+        if( portalServer == null || portalBundle == null)
         {
             return;
         }

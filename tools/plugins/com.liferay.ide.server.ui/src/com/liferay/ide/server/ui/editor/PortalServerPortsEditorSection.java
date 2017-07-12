@@ -87,7 +87,7 @@ public class PortalServerPortsEditorSection extends AbstractPortalServerEditorSe
 
     protected void initProperties()
     {
-        httpPort.setText( portalServer.getHttpPort() );
+        httpPort.setText( portalBundle.getHttpPort() );
     }
 
     protected void setDefault()
