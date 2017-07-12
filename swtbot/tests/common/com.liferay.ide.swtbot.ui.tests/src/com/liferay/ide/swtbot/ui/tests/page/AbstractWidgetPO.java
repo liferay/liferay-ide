@@ -15,7 +15,11 @@
 
 package com.liferay.ide.swtbot.ui.tests.page;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.swtbot.swt.finder.widgets.AbstractSWTBot;
 
 /**
@@ -92,6 +96,90 @@ public abstract class AbstractWidgetPO extends AbstractPO
     public void setFocus()
     {
         getWidget().setFocus();
+    }
+
+    protected Event createMouseEvent( int x, int y, int button, int stateMask, int count )
+    {
+        Event event = new Event();
+        event.time = (int) System.currentTimeMillis();
+        event.widget = getWidget().widget;
+        event.display = getWidget().display;
+        event.x = x;
+        event.y = y;
+        event.button = button;
+        event.stateMask = stateMask;
+        event.count = count;
+        return event;
+    }
+
+    private void mouseDown( final int x, final int y, final int button )
+    {
+        asyncExec( new VoidResult()
+        {
+
+            @Override
+            public void run()
+            {
+                Event event = createMouseEvent( x, y, button, 0, 0 );
+                event.type = SWT.MouseDown;
+                getWidget().display.post( event );
+            }
+        } );
+    }
+
+    private void moveMouse( final int x, final int y )
+    {
+        asyncExec( new VoidResult()
+        {
+
+            @Override
+            public void run()
+            {
+                Event event = createMouseEvent( x, y, 0, 0, 0 );
+                event.type = SWT.MouseMove;
+                getWidget().display.post( event );
+            }
+        } );
+    }
+
+    protected void syncExec( VoidResult toExecute )
+    {
+        UIThreadRunnable.syncExec( getWidget().display, toExecute );
+    }
+
+    public void click( final int x, final int y )
+    {
+        syncExec( new VoidResult()
+        {
+
+            @Override
+            public void run()
+            {
+                moveMouse( x, y );
+                mouseDown( x, y, 1 );
+                mouseUp( x, y, 1 );
+            }
+        } );
+    }
+
+    private void mouseUp( final int x, final int y, final int button )
+    {
+        asyncExec( new VoidResult()
+        {
+
+            @Override
+            public void run()
+            {
+                Event event = createMouseEvent( x, y, button, 0, 0 );
+                event.type = SWT.MouseUp;
+                getWidget().display.post( event );
+            }
+        } );
+    }
+
+    protected void asyncExec( VoidResult toExecute )
+    {
+        UIThreadRunnable.asyncExec( getWidget().display, toExecute );
     }
 
 }

@@ -50,6 +50,7 @@ public class EclipsePO extends AbstractPO implements UIBase
     private CodeUpgradeView _codeUpgradeView;
     private MenuPO _preferencesMenu;
     private ServersView _serversView;
+    private BrowserPO _browser;
 
     public EclipsePO( SWTWorkbenchBot bot )
     {
@@ -78,6 +79,7 @@ public class EclipsePO extends AbstractPO implements UIBase
         _liferayWorkspacePerspective = new PerspectivePO( bot, LABEL_LIFERAY_WORKSPACE );
         _codeUpgradeView = new CodeUpgradeView( bot, LABEL_LIFERAY_CODE_UPGRADE );
         _serversView = new ServersView( bot );
+        _browser = new BrowserPO( bot );
     }
 
     public void closeShell( String title )
@@ -230,6 +232,11 @@ public class EclipsePO extends AbstractPO implements UIBase
         }
 
         return _errorLogView;
+    }
+
+    public BrowserPO getBrowser()
+    {
+        return _browser;
     }
 
     public boolean hasProjects()

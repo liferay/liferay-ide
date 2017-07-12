@@ -56,6 +56,8 @@ public class ServerTomcatTests extends ServerTestsBase
 
         preparePortalExtFile();
 
+        preparePortalSetupWizardFile();
+
         final String serverName = "Liferay 7-initialization";
 
         addLiferay7Server( serverName );
@@ -66,13 +68,19 @@ public class ServerTomcatTests extends ServerTestsBase
 
         serversView.getStart().click();
 
-        sleep( 300000 );
+        sleep( 200000 );
 
-        serversView.getServers().getTreeItem( serverName + "  [Started]" ).select();
+        final String serverStartedLabel = serverName + "  [Started]";
+
+        serversView.getServers().getTreeItem( serverStartedLabel ).contextMenu( "Open Liferay Portal Home" );
+
+        sleep( 20000 );
+
+        serversView.getServers().getTreeItem( serverStartedLabel ).select();
 
         serversView.getStop().click();
 
-        sleep( 30000 );
+        sleep( 20000 );
     }
 
     @After

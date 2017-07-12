@@ -22,6 +22,7 @@ import com.liferay.ide.swtbot.ui.tests.eclipse.page.PreferencesDialog;
 import com.liferay.ide.swtbot.ui.tests.eclipse.page.ServerRuntimeEnvironmentsPreferencesPage;
 import com.liferay.ide.swtbot.ui.tests.eclipse.page.ServersView;
 import com.liferay.ide.swtbot.ui.tests.liferay.page.NewLiferay7RuntimeWizard;
+import com.liferay.ide.swtbot.ui.tests.page.BrowserPO;
 
 /**
  * @author Terry Jia
@@ -41,5 +42,7 @@ public class ServerTestsBase extends SWTBotBase
         new ServerRuntimeEnvironmentsPreferencesPage( bot );
 
     protected static ServersView serversView = eclipse.getServersView();
+
+    protected static BrowserPO browser = eclipse.getBrowser();
 
 }

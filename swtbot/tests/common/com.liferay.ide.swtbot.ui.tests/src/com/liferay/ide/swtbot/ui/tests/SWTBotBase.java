@@ -39,6 +39,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.utils.FileUtils;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -120,6 +121,8 @@ public class SWTBotBase implements UIBase, Keys
         try
         {
             FileUtil.copyFile( source, dest );
+            String content = "filePath=" + liferayBundlesDir + "/GeoLiteCity.dat";
+            FileUtils.write( content, dest );
         }
         catch( Exception e )
         {
@@ -130,6 +133,23 @@ public class SWTBotBase implements UIBase, Keys
     protected static void preparePortalExtFile()
     {
         String filename = "portal-ext.properties";
+
+        File source = new File( liferayBundlesDir + "/" + filename );
+        File dest = new File( getLiferayServerDir().toString() + "/" + filename );
+
+        try
+        {
+            FileUtil.copyFile( source, dest );
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
+    }
+
+    protected static void preparePortalSetupWizardFile()
+    {
+        String filename = "portal-setup-wizard.properties";
 
         File source = new File( liferayBundlesDir + "/" + filename );
         File dest = new File( getLiferayServerDir().toString() + "/" + filename );

@@ -38,5 +38,6 @@ public interface Keys
     public KeyStroke up = KeyStroke.getInstance( KeyEvent.VK_UP );
     public KeyStroke S = KeyStroke.getInstance( 'S' );
     public KeyStroke slash = KeyStroke.getInstance( '/' );
+    public KeyStroke page_down = KeyStroke.getInstance( SWT.PAGE_DOWN );
 
 }
