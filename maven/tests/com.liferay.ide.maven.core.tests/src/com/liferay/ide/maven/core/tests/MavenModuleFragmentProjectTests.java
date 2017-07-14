@@ -15,16 +15,19 @@
 
 package com.liferay.ide.maven.core.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOpMethods;
 import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
 import com.liferay.ide.server.core.tests.ServerCoreBase;
+import com.liferay.ide.server.util.ServerUtil;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -110,52 +113,65 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase
 
         assertNotNull( runtime );
 
-        op.setProjectName( "test-gradle-module-fragment" );
-        op.setProjectProvider( "gradle-module-fragment" );
-        op.setLiferayRuntimeName( runtimeName );
-        op.setHostOsgiBundle( "com.liferay.asset.display.web-1.0.3.jar" );
-        OverrideFilePath overrideFilePath = op.getOverrideFiles().insert();
-        overrideFilePath.setValue( "META-INF/resources/view.jsp" );
+        List<String> bundles = ServerUtil.getModuleFileListFrom70Server( runtime );
 
-        Status gradleExeStatus =
-            NewModuleFragmentOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+        assertNotNull( bundles );
 
-        assertTrue( gradleExeStatus.ok() );
+        for( String hostOsgiBundle : bundles )
+        {
+            if( hostOsgiBundle.contains( "com.liferay.asset.display.web" ) )
+            {
+                op.setProjectName( "test-gradle-module-fragment" );
+                op.setProjectProvider( "gradle-module-fragment" );
+                op.setLiferayRuntimeName( runtimeName );
+                op.setHostOsgiBundle( hostOsgiBundle );
+                OverrideFilePath overrideFilePath = op.getOverrideFiles().insert();
+                overrideFilePath.setValue( "META-INF/resources/view.jsp" );
 
-        IProject existedGradleProject = CoreUtil.getProject( op.getProjectName().content() );
+                Status gradleExeStatus =
+                    NewModuleFragmentOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
-        assertNotNull( existedGradleProject );
+                assertTrue( gradleExeStatus.ok() );
 
-        IFile gradleFile = existedGradleProject.getFile( "build.gradle" );
+                IProject existedGradleProject = CoreUtil.getProject( op.getProjectName().content() );
 
-        assertTrue( gradleFile.exists() );
+                assertNotNull( existedGradleProject );
 
-        IFile overrideFile = existedGradleProject.getFile( "src/main/resources/META-INF/resources/view.jsp" );
+                IFile gradleFile = existedGradleProject.getFile( "build.gradle" );
 
-        assertTrue( overrideFile.exists() );
+                assertTrue( gradleFile.exists() );
 
-        op.setProjectName( "test-maven-module-fragment" );
-        op.setProjectProvider( "maven-module-fragment" );
-        op.setLiferayRuntimeName( runtimeName );
-        op.setHostOsgiBundle( "com.liferay.login.web-1.1.18.jar" );
-        OverrideFilePath file = op.getOverrideFiles().insert();
-        file.setValue( "META-INF/resources/login.jsp" );
+                IFile overrideFile = existedGradleProject.getFile( "src/main/resources/META-INF/resources/view.jsp" );
 
-        Status mavenExeStatus =
-            NewModuleFragmentOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+                assertTrue( overrideFile.exists() );
+            }
 
-        assertTrue( mavenExeStatus.ok() );
+            if( hostOsgiBundle.contains( "com.liferay.login.web" ) )
+            {
+                op.setProjectName( "test-maven-module-fragment" );
+                op.setProjectProvider( "maven-module-fragment" );
+                op.setLiferayRuntimeName( runtimeName );
+                op.setHostOsgiBundle( hostOsgiBundle );
+                OverrideFilePath file = op.getOverrideFiles().insert();
+                file.setValue( "META-INF/resources/login.jsp" );
 
-        IProject existedMavenProject = CoreUtil.getProject( op.getProjectName().content() );
+                Status mavenExeStatus =
+                    NewModuleFragmentOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
-        assertNotNull( existedMavenProject );
+                assertTrue( mavenExeStatus.ok() );
 
-        IFile pomFile = existedMavenProject.getFile( "pom.xml" );
+                IProject existedMavenProject = CoreUtil.getProject( op.getProjectName().content() );
 
-        assertTrue( pomFile.exists() );
+                assertNotNull( existedMavenProject );
 
-        IFile overrideFile1 = existedMavenProject.getFile( "src/main/resources/META-INF/resources/login.jsp" );
+                IFile pomFile = existedMavenProject.getFile( "pom.xml" );
 
-        assertTrue( overrideFile1.exists() );
+                assertTrue( pomFile.exists() );
+
+                IFile overrideFile1 = existedMavenProject.getFile( "src/main/resources/META-INF/resources/login.jsp" );
+
+                assertTrue( overrideFile1.exists() );
+            }
+        }
     }
 }
