@@ -81,58 +81,82 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
     public static IPath getOutputBundlePath( IProject gradleProject )
     {
-        IPath retval = null;
+        File buildFolder = gradleProject.getLocation().append( "build/libs" ).toFile();
 
-        final CustomModel model = GradleCore.getToolingModel( CustomModel.class, gradleProject );
+        String[] fileNames = buildFolder.list();
 
-        Set<File> outputFiles = model.getOutputFiles();
-
-        if( outputFiles.size() > 0 )
+        // find the only file
+        if( fileNames != null && fileNames.length == 1 )
         {
-            // first check to see if there are any outputfiles that are wars, if so use that one.
-            File bundleFile = null;
+            File outputFile = new File( buildFolder, fileNames[0] );
 
-            for( File outputFile : outputFiles )
+            return new Path( outputFile.getAbsolutePath() );
+        }
+        else
+        {
+            File nodeThemeOutput =
+                gradleProject.getLocation().append( "dist/" + gradleProject.getName() + ".war" ).toFile();
+
+            if( nodeThemeOutput.exists() )
             {
-                if( outputFile.getName().endsWith( ".war" ) )
-                {
-                    bundleFile = outputFile;
-                    break;
-                }
+                return new Path( nodeThemeOutput.getAbsolutePath() );
             }
-
-            if( bundleFile == null )
+            else
             {
-                for( File outputFile : outputFiles )
-                {
-                    final String name = outputFile.getName();
+                // using CustomModel if can't find output
+                IPath retval = null;
 
-                    if( name.endsWith("javadoc.jar" ) ||
-                        name.endsWith("jspc.jar" ) ||
-                        name.endsWith("sources.jar" ) )
+                final CustomModel model = GradleCore.getToolingModel( CustomModel.class, gradleProject );
+
+                Set<File> outputFiles = model.getOutputFiles();
+
+                if( outputFiles.size() > 0 )
+                {
+                    // first check to see if there are any outputfiles that are wars, if so use that one.
+                    File bundleFile = null;
+
+                    for( File outputFile : outputFiles )
                     {
-                        continue;
+                        if( outputFile.getName().endsWith( ".war" ) )
+                        {
+                            bundleFile = outputFile;
+                            break;
+                        }
                     }
 
-                    if( name.endsWith( ".jar" ) )
+                    if( bundleFile == null )
                     {
-                        bundleFile = outputFile;
-                        break;
+                        for( File outputFile : outputFiles )
+                        {
+                            final String name = outputFile.getName();
+
+                            if( name.endsWith( "javadoc.jar" ) || name.endsWith( "jspc.jar" ) ||
+                                name.endsWith( "sources.jar" ) )
+                            {
+                                continue;
+                            }
+
+                            if( name.endsWith( ".jar" ) )
+                            {
+                                bundleFile = outputFile;
+                                break;
+                            }
+                        }
+                    }
+
+                    if( bundleFile != null )
+                    {
+                        retval = new Path( bundleFile.getAbsolutePath() );
                     }
                 }
-            }
+                else if( model.hasPlugin( "com.liferay.gradle.plugins.gulp.GulpPlugin" ) )
+                {
+                    retval = gradleProject.getLocation().append( "dist/" + gradleProject.getName() + ".war" );
+                }
 
-            if( bundleFile != null )
-            {
-                retval = new Path( bundleFile.getAbsolutePath() );
+                return retval;
             }
         }
-        else if( model.hasPlugin( "com.liferay.gradle.plugins.gulp.GulpPlugin" ) )
-        {
-            retval = gradleProject.getLocation().append( "dist/" + gradleProject.getName() + ".war" );
-        }
-
-        return retval;
     }
 
     public LiferayGradleProject( IProject project )
