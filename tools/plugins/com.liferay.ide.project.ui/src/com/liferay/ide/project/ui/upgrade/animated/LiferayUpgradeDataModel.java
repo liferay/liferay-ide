@@ -31,7 +31,7 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 public interface LiferayUpgradeDataModel extends Element
 {
 
-    String DEFAULT_BUNDLE_URL = "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.2-ga3/liferay-ce-portal-tomcat-7.0-ga3-20160804222206210.zip";
+    String DEFAULT_BUNDLE_URL = "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.3-ga4/liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip";
 
     ElementType TYPE = new ElementType( LiferayUpgradeDataModel.class );
 

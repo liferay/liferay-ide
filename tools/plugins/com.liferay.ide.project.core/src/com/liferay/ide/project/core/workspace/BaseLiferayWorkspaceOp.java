@@ -32,7 +32,7 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 public interface BaseLiferayWorkspaceOp extends ExecutableElement
 {
     public static final String defaultBundleUrl =
-                    "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.2-ga3/liferay-ce-portal-tomcat-7.0-ga3-20160804222206210.zip";
+                    "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.3-ga4/liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip";
 
     ElementType TYPE = new ElementType( BaseLiferayWorkspaceOp.class );
 
