@@ -196,4 +196,16 @@ public interface UIBase
     public final String TOOLBAR_PACKAGE = "Package";
     public final String TOOLBAR_SAVE = "Save (Ctrl+S)";
 
+    public final int INDEX_VALIDATION_WORKSPACE_NAME_MESSAGE = 2;
+
+    public final String LABEL_DOWNLOAD_LIFERAY_BUNDLE = "Download Liferay bundle";
+
+    public final String TEXT_CREATE_LIFERAY_WORKSPACE = "Create a new liferay workspace";
+    public final String TEXT_INVALID_BUNDLE_URL = " The bundle URL should be a vaild URL.";
+    public final String TEXT_INVALID_NAME_PROJECT = " The name is invalid for a project.";
+    public final String TEXT_PLEASE_ENTER_THE_WORKSPACE_NAME = "Please enter the workspace name.";
+    public final String TEXT_WORKSPACE_ALREADY_EXISTS =
+        " A Liferay Workspace project already exists in this Eclipse instance.";
+    public final String TEXT_WORKSPACE_NAME_COULD_NOT_EMPTY = " Liferay Workspace name could not be empty.";
+
 }
