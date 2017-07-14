@@ -13,11 +13,11 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.swtbot.server.ui.tests.page;
+package com.liferay.ide.swtbot.ui.tests.eclipse.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
-import com.liferay.ide.swtbot.server.ui.tests.ServerAction;
+import com.liferay.ide.swtbot.ui.tests.UIBase;
 import com.liferay.ide.swtbot.ui.tests.page.ButtonPO;
 import com.liferay.ide.swtbot.ui.tests.page.DialogPO;
 import com.liferay.ide.swtbot.ui.tests.page.TreeItemPO;
@@ -27,7 +27,7 @@ import com.liferay.ide.swtbot.ui.tests.page.TreePO;
  * @author Li Lu
  * @author Terry Jia
  */
-public class AddAndRemoveDialog extends DialogPO implements ServerAction
+public class AddAndRemoveDialog extends DialogPO implements UIBase
 {
 
     private ButtonPO _addAllButton;
@@ -35,26 +35,37 @@ public class AddAndRemoveDialog extends DialogPO implements ServerAction
     private ButtonPO _removeAllButton;
     private ButtonPO _removeButton;
 
+    private TreePO _availableTree;
+    private TreePO _configuredTree;
+
     public AddAndRemoveDialog( SWTBot bot )
     {
-        this( bot, MENU_ADD_AND_REMOVE, BUTTON_CANCEL, BUTTON_FINISH );
-    }
-
-    public AddAndRemoveDialog( SWTBot bot, String title, String cancelButtonText, String confirmButtonText )
-    {
-        super( bot, title, cancelButtonText, confirmButtonText );
+        super( bot, MENU_ADD_AND_REMOVE, BUTTON_CANCEL, BUTTON_FINISH );
 
         _addButton = new ButtonPO( bot, BUTTON_ADD_PROJECT );
         _addAllButton = new ButtonPO( bot, BUTTON_ADD_ALL );
         _removeButton = new ButtonPO( bot, BUTTON_REMOVE_PROJECT );
         _removeAllButton = new ButtonPO( bot, BUTTON_REMOVE_ALL );
+
+        _availableTree = new TreePO( bot, 0 );
+        _configuredTree = new TreePO( bot, 1 );
+    }
+
+    public TreePO getAvailableTree()
+    {
+        return _availableTree;
+    }
+
+    public TreePO getConfiguredTree()
+    {
+        return _configuredTree;
     }
 
     public void add( String... projectItemNames )
     {
         for( String projectItemName : projectItemNames )
         {
-            TreeItemPO projectTree = new TreeItemPO( bot, new TreePO( bot ), projectItemName );
+            TreeItemPO projectTree = new TreeItemPO( bot, _availableTree, projectItemName );
 
             projectTree.select();
 
@@ -71,7 +82,7 @@ public class AddAndRemoveDialog extends DialogPO implements ServerAction
     {
         for( String projectItemName : projectItemNames )
         {
-            TreeItemPO projectTree = new TreeItemPO( bot, new TreePO( bot ), projectItemName );
+            TreeItemPO projectTree = new TreeItemPO( bot, _configuredTree, projectItemName );
             projectTree.select();
 
             _removeButton.click();

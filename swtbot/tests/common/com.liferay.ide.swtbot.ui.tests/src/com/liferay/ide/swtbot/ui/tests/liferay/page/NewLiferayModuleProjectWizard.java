@@ -13,10 +13,9 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.swtbot.project.ui.tests.page;
+package com.liferay.ide.swtbot.ui.tests.liferay.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
-import com.liferay.ide.swtbot.project.ui.tests.NewLiferayModuleProjectWizard;
 import com.liferay.ide.swtbot.ui.tests.page.CheckBoxPO;
 import com.liferay.ide.swtbot.ui.tests.page.ComboBoxPO;
 import com.liferay.ide.swtbot.ui.tests.page.TextPO;
@@ -27,7 +26,7 @@ import com.liferay.ide.swtbot.ui.tests.page.WizardPO;
  * @author Sunny Shi
  * @author Ashley Yuan
  */
-public class NewLiferayModuleProjectWizardPO extends WizardPO implements NewLiferayModuleProjectWizard
+public class NewLiferayModuleProjectWizard extends WizardPO
 {
 
     private ComboBoxPO _projectTemplateNameComboBox;
@@ -36,27 +35,27 @@ public class NewLiferayModuleProjectWizardPO extends WizardPO implements NewLife
     private CheckBoxPO _useDefaultLocation;
     private TextPO _location;
 
-    public NewLiferayModuleProjectWizardPO( SWTBot bot )
+    public NewLiferayModuleProjectWizard( SWTBot bot )
     {
         this( bot, TEXT_BLANK );
     }
 
-    public NewLiferayModuleProjectWizardPO( SWTBot bot, int validationMessageIndex )
+    public NewLiferayModuleProjectWizard( SWTBot bot, int validationMessageIndex )
     {
         this( bot, TEXT_BLANK, validationMessageIndex );
     }
 
-    public NewLiferayModuleProjectWizardPO( SWTBot bot, String title )
+    public NewLiferayModuleProjectWizard( SWTBot bot, String title )
     {
         this( bot, title, INDEX_DEFAULT_VALIDATION_MESSAGE );
     }
 
-    public NewLiferayModuleProjectWizardPO( SWTBot bot, String title, int validationMessageIndex )
+    public NewLiferayModuleProjectWizard( SWTBot bot, String title, int validationMessageIndex )
     {
         super( bot, title, BUTTON_CANCEL, BUTTON_FINISH, BUTTON_BACK, BUTTON_NEXT, validationMessageIndex );
-        _projectTemplateNameComboBox = new ComboBoxPO( bot, LABEL_MODULE_PROJECT_TEMPLATE_NAME );
+        _projectTemplateNameComboBox = new ComboBoxPO( bot, "Project Template Name:" );
         _projectNameText = new TextPO( bot, LABEL_PROJECT_NAME );
-        _useDefaultLocation = new CheckBoxPO( bot, CHECKBOX_USE_DEFAULT_LOCATION );
+        _useDefaultLocation = new CheckBoxPO( bot, "Use default location" );
         _location = new TextPO( bot, LABEL_LOCATION );
         _buildType = new ComboBoxPO( bot, LABEL_BUILD_TYPE );
     }

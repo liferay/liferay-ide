@@ -32,13 +32,13 @@ import com.liferay.ide.swtbot.project.ui.tests.page.ComponentModelClassSelection
 import com.liferay.ide.swtbot.project.ui.tests.page.ComponentPackageSelectionPO;
 import com.liferay.ide.swtbot.project.ui.tests.page.FragmentHostOSGIBundlePO;
 import com.liferay.ide.swtbot.project.ui.tests.page.NewLiferayComponentWizardPO;
-import com.liferay.ide.swtbot.project.ui.tests.page.NewLiferayModuleProjectWizardPO;
 import com.liferay.ide.swtbot.project.ui.tests.page.NewLiferayServerPO;
 import com.liferay.ide.swtbot.project.ui.tests.page.NewLiferayServerRuntimePO;
 import com.liferay.ide.swtbot.project.ui.tests.page.NewModuleFragmentWizardPO;
 import com.liferay.ide.swtbot.project.ui.tests.page.NewModuleFragmentWizardSecondPagePO;
 import com.liferay.ide.swtbot.project.ui.tests.page.SelectModuleServiceNamePO;
 import com.liferay.ide.swtbot.ui.tests.SWTBotBase;
+import com.liferay.ide.swtbot.ui.tests.liferay.page.NewLiferayModuleProjectWizard;
 import com.liferay.ide.swtbot.ui.tests.page.TextEditorPO;
 import com.liferay.ide.swtbot.ui.tests.page.TreePO;
 
@@ -47,7 +47,7 @@ import com.liferay.ide.swtbot.ui.tests.page.TreePO;
  * @author Ashley Yuan
  */
 public class NewLiferayComponentWizardTests extends SWTBotBase
-    implements NewLiferayComponentWizard, NewLiferayModuleProjectWizard, NewServerRuntimeWizard
+    implements NewLiferayComponentWizard, NewServerRuntimeWizard
 {
 
     static String projectName = "testComponent";
@@ -87,7 +87,7 @@ public class NewLiferayComponentWizardTests extends SWTBotBase
         setRuntime.finish();
     }
 
-    NewLiferayModuleProjectWizardPO createModuleProjectWizard = new NewLiferayModuleProjectWizardPO( bot );
+    NewLiferayModuleProjectWizard createModuleProjectWizard = new NewLiferayModuleProjectWizard( bot );
 
     NewLiferayComponentWizardPO newLiferayComponentWizard =
         new NewLiferayComponentWizardPO( bot, LABEL_NEW_LIFERAY_COMPONENT, INDEX_VALIDATION_MESSAGE );
@@ -421,7 +421,7 @@ public class NewLiferayComponentWizardTests extends SWTBotBase
             eclipse.getPackageExporerView().deleteResouceByName( projectName, true );
         }
 
-        createModuleProject( MENU_MODULE_THEME );
+        createModuleProject( "theme" );
 
         eclipse.getCreateLiferayProjectToolbar().getNewLiferayComponentClass().click();
 

@@ -25,12 +25,12 @@ import java.io.File;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import com.liferay.ide.swtbot.project.ui.tests.page.NewLiferayModuleProjectWizardPO;
 import com.liferay.ide.swtbot.project.ui.tests.page.NewLiferayModuleProjectWizardSecondPagePO;
 import com.liferay.ide.swtbot.project.ui.tests.page.NewLiferayWorkspaceProjectWizardPO;
 import com.liferay.ide.swtbot.project.ui.tests.page.SelectModuleServiceNamePO;
 import com.liferay.ide.swtbot.ui.tests.SWTBotBase;
 import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesDialog;
+import com.liferay.ide.swtbot.ui.tests.liferay.page.NewLiferayModuleProjectWizard;
 import com.liferay.ide.swtbot.ui.tests.page.CTabItemPO;
 import com.liferay.ide.swtbot.ui.tests.page.TextEditorPO;
 import com.liferay.ide.swtbot.ui.tests.page.TreePO;
@@ -39,7 +39,7 @@ import com.liferay.ide.swtbot.ui.tests.page.TreePO;
  * @author Ashley Yuan
  * @author Sunny Shi
  */
-public abstract class AbstractNewLiferayModuleProjectWizard extends SWTBotBase implements NewLiferayModuleProjectWizard
+public abstract class AbstractNewLiferayModuleProjectWizard extends SWTBotBase implements ModuleWizardUIBase
 {
 
     static NewLiferayWorkspaceProjectWizardPO newLiferayWorkspace = new NewLiferayWorkspaceProjectWizardPO( bot );
@@ -77,8 +77,8 @@ public abstract class AbstractNewLiferayModuleProjectWizard extends SWTBotBase i
         sleep( 20000 );
     }
 
-    NewLiferayModuleProjectWizardPO createModuleProjectWizard =
-        new NewLiferayModuleProjectWizardPO( bot, INDEX_NEW_LIFERAY_MODULE_PROJECT_VALIDATION_MESSAGE );
+    NewLiferayModuleProjectWizard createModuleProjectWizard =
+        new NewLiferayModuleProjectWizard( bot, INDEX_NEW_LIFERAY_MODULE_PROJECT_VALIDATION_MESSAGE );
 
     NewLiferayModuleProjectWizardSecondPagePO createModuleProjectSecondPageWizard =
         new NewLiferayModuleProjectWizardSecondPagePO( bot, INDEX_CONFIGURE_COMPONENT_CLASS_VALIDATION_MESSAGE );

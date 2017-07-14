@@ -21,17 +21,17 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import com.liferay.ide.swtbot.project.ui.tests.page.NewLiferayModuleProjectWizardPO;
+
 import com.liferay.ide.swtbot.project.ui.tests.page.NewLiferayModuleProjectWizardSecondPagePO;
 import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesContinueDialog;
 import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesDialog;
+import com.liferay.ide.swtbot.ui.tests.liferay.page.NewLiferayModuleProjectWizard;
 import com.liferay.ide.swtbot.ui.tests.page.TreePO;
 
 /**
  * @author Sunny Shi
  */
 public class NewLiferayMavenModuleProjectWizardTests extends AbstractNewLiferayModuleProjectWizard
-    implements NewLiferayModuleProjectWizard
 {
 
     static String fullClassname = new SecurityManager()
@@ -47,8 +47,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends AbstractNewLiferayM
 
     TreePO projectTree = eclipse.getPackageExporerView().getProjectTree();
 
-    NewLiferayModuleProjectWizardPO createMavenModuleProjectWizard =
-        new NewLiferayModuleProjectWizardPO( bot, INDEX_NEW_LIFERAY_MODULE_PROJECT_VALIDATION_MESSAGE );
+    NewLiferayModuleProjectWizard createMavenModuleProjectWizard =
+        new NewLiferayModuleProjectWizard( bot, INDEX_NEW_LIFERAY_MODULE_PROJECT_VALIDATION_MESSAGE );
 
     NewLiferayModuleProjectWizardSecondPagePO createMavenModuleProjectSecondPageWizard =
         new NewLiferayModuleProjectWizardSecondPagePO( bot );
@@ -60,8 +60,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends AbstractNewLiferayM
 
         if( addedProjects() )
         {
-            eclipse.getPackageExporerView().deleteProjectExcludeNames( new String[] { getLiferayPluginsSdkName() },
-                true );
+            eclipse.getPackageExporerView().deleteProjectExcludeNames(
+                new String[] { getLiferayPluginsSdkName() }, true );
         }
     }
 
@@ -98,9 +98,10 @@ public class NewLiferayMavenModuleProjectWizardTests extends AbstractNewLiferayM
 
         openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
 
-        assertTrue( projectTree.expandNode(
-            projectName, "src/main/java", "testMvcportletProject.portlet",
-            "TestMvcportletProjectPortlet.java" ).isVisible() );
+        assertTrue(
+            projectTree.expandNode(
+                projectName, "src/main/java", "testMvcportletProject.portlet",
+                "TestMvcportletProjectPortlet.java" ).isVisible() );
     }
 
     @Test
@@ -145,8 +146,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends AbstractNewLiferayM
         projectTree.getTreeItem( projectName + "-service" ).doAction( "Liferay", "liferay:build-service" );
         sleep( 10000 );
 
-        assertTrue( projectTree.expandNode(
-            projectName + "-api", "src/main/java", "testServiceBuilderProject.service" ).isVisible() );
+        assertTrue(
+            projectTree.expandNode(
+                projectName + "-api", "src/main/java", "testServiceBuilderProject.service" ).isVisible() );
 
         assertTrue(
             projectTree.expandNode(
@@ -204,7 +206,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends AbstractNewLiferayM
         String pomContent = "<artifactId>testContentTargetingReportProject</artifactId>";
 
         openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
-        openEditorAndCheck( javaContent, projectName, projectName, "src/main/java",
+        openEditorAndCheck(
+            javaContent, projectName, projectName, "src/main/java",
             "testContentTargetingReportProject.content.targeting.report", javaFileName );
 
     }
@@ -225,7 +228,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends AbstractNewLiferayM
         String pomContent = "<groupId>com.liferay.content-targeting</groupId>";
 
         openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
-        openEditorAndCheck( javaContent, projectName, projectName, "src/main/java",
+        openEditorAndCheck(
+            javaContent, projectName, projectName, "src/main/java",
             "testContentTargetingRuleProject.content.targeting.rule", javaFileName );
     }
 
@@ -261,8 +265,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends AbstractNewLiferayM
         String pomContent = "com.liferay.product.navigation.control.menu.api";
 
         openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
-        openEditorAndCheck( javaContent, projectName, projectName, "src/main/java",
-            "testControlMenuEntryProject.control.menu", javaFileName );
+        openEditorAndCheck(
+            javaContent, projectName, projectName, "src/main/java", "testControlMenuEntryProject.control.menu",
+            javaFileName );
     }
 
     @Test
@@ -288,8 +293,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends AbstractNewLiferayM
 
         openEditorAndCheck(
             javaContent1, projectName, projectName, "src/main/java", "testFormFieldProject.form.field", javaFileName1 );
-        openEditorAndCheck( javaContent2, projectName, projectName, "src/main/java", "testFormFieldProject.form.field",
-            javaFileName2 );
+        openEditorAndCheck(
+            javaContent2, projectName, projectName, "src/main/java", "testFormFieldProject.form.field", javaFileName2 );
 
         String pomXmlFileName = "pom.xml";
         String pomContent = "<artifactId>testFormFieldProject</artifactId>";
@@ -379,8 +384,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends AbstractNewLiferayM
         openEditorAndCheck(
             javaContent1, projectName, projectName, "src/main/java", "testPortletProviderProject.portlet",
             javaFileName1 );
-        openEditorAndCheck( javaContent2, projectName, projectName, "src/main/java",
-            "testPortletProviderProject.portlet", javaFileName2 );
+        openEditorAndCheck(
+            javaContent2, projectName, projectName, "src/main/java", "testPortletProviderProject.portlet",
+            javaFileName2 );
 
         String pomXmlFileName = "pom.xml";
         String pomContent = "<artifactId>testPortletProviderProject</artifactId>";
@@ -538,8 +544,10 @@ public class NewLiferayMavenModuleProjectWizardTests extends AbstractNewLiferayM
             TEXT_BUILD_TYPE_MAVEN, projectName, MENU_MODULE_THEME_CONTRIBUTOR, eclipseWorkspace, false, TEXT_BLANK,
             TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
 
-        assertTrue( projectTree.expandNode(
-            projectName, "src/main/resources", "META-INF", "resources", "css", projectName + "_rtl.css" ).isVisible() );
+        assertTrue(
+            projectTree.expandNode(
+                projectName, "src/main/resources", "META-INF", "resources", "css",
+                projectName + "_rtl.css" ).isVisible() );
         assertTrue(
             projectTree.expandNode(
                 projectName, "src/main/resources", "META-INF", "resources", "css", projectName + ".css" ).isVisible() );

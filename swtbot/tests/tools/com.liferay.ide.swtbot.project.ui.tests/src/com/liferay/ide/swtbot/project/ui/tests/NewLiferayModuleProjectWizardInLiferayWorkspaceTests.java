@@ -31,7 +31,6 @@ import org.junit.Test;
  * @author Sunny Shi
  */
 public class NewLiferayModuleProjectWizardInLiferayWorkspaceTests extends AbstractNewLiferayModuleProjectWizard
-    implements NewLiferayModuleProjectWizard
 {
 
     static String liferayWorkspaceName = "liferayWorkspace";

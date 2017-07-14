@@ -104,7 +104,7 @@ public class SWTBotBase implements UIBase, Keys
         {
         }
 
-        eclipse.getLiferayPerspective().activate();
+        eclipse.getLiferayWorkspacePerspective().activate();
 
         SWTBotPreferences.TIMEOUT = 30000;
 

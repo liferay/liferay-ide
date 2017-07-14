@@ -36,6 +36,12 @@ public class TreePO extends AbstractWidgetPO
         super( bot );
     }
 
+    public TreePO( SWTBot bot, String label )
+    {
+        this( bot );
+        this.label = label;
+    }
+
     public TreePO( SWTBot bot, int index )
     {
         this( bot );
@@ -81,18 +87,11 @@ public class TreePO extends AbstractWidgetPO
         return subNodes;
     }
 
-    public String[] getSelection()
+    public SWTBotTreeItem[] getAllTreeItems()
     {
-        selection = getWidget().selection();
+        SWTBotTreeItem[] items = getWidget().getAllItems();
 
-        String[] elements = new String[selection.rowCount()];
-
-        for( int i = 0; i < selection.rowCount(); i++ )
-        {
-            elements[i] = selection.get( i, 0 );
-        }
-
-        return elements;
+        return items;
     }
 
     protected SWTBotTree getWidget()
@@ -100,6 +99,11 @@ public class TreePO extends AbstractWidgetPO
         if( index >= 0 )
         {
             return bot.tree( index );
+        }
+
+        if( label != null )
+        {
+            return bot.treeWithLabel( label );
         }
         else
         {

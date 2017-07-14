@@ -19,6 +19,7 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
 import com.liferay.ide.swtbot.server.ui.tests.ServerAction;
+import com.liferay.ide.swtbot.ui.tests.eclipse.page.AddAndRemoveDialog;
 import com.liferay.ide.swtbot.ui.tests.page.ConfirmPO;
 import com.liferay.ide.swtbot.ui.tests.page.TreeItemPO;
 import com.liferay.ide.swtbot.ui.tests.page.TreePO;

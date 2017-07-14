@@ -17,7 +17,7 @@ package com.liferay.ide.swtbot.project.ui.tests.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
-import com.liferay.ide.swtbot.project.ui.tests.NewLiferayModuleProjectWizard;
+import com.liferay.ide.swtbot.project.ui.tests.ModuleWizardUIBase;
 import com.liferay.ide.swtbot.ui.tests.page.TablePO;
 import com.liferay.ide.swtbot.ui.tests.page.TextPO;
 import com.liferay.ide.swtbot.ui.tests.page.ToolbarButtonWithTooltipPO;
@@ -26,7 +26,7 @@ import com.liferay.ide.swtbot.ui.tests.page.WizardPO;
 /**
  * @author Ying Xu
  */
-public class NewLiferayModuleProjectWizardSecondPagePO extends WizardPO implements NewLiferayModuleProjectWizard
+public class NewLiferayModuleProjectWizardSecondPagePO extends WizardPO implements ModuleWizardUIBase
 {
 
     private TextPO _componentClassName;

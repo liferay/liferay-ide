@@ -184,6 +184,6 @@ public class TreeItemPO extends AbstractWidgetPO
         }
 
         treeItem.select();
-
     }
+
 }

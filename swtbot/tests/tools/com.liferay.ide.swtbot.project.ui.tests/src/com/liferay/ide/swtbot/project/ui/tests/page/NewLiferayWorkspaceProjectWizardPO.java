@@ -17,7 +17,7 @@ package com.liferay.ide.swtbot.project.ui.tests.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
-import com.liferay.ide.swtbot.project.ui.tests.NewLiferayModuleProjectWizard;
+import com.liferay.ide.swtbot.project.ui.tests.ModuleWizardUIBase;
 import com.liferay.ide.swtbot.ui.tests.page.ComboBoxPO;
 import com.liferay.ide.swtbot.ui.tests.page.TextPO;
 import com.liferay.ide.swtbot.ui.tests.page.WizardPO;
@@ -26,7 +26,7 @@ import com.liferay.ide.swtbot.ui.tests.page.WizardPO;
  * @author Ying Xu
  * @author Ashley Xu
  */
-public class NewLiferayWorkspaceProjectWizardPO extends WizardPO implements NewLiferayModuleProjectWizard
+public class NewLiferayWorkspaceProjectWizardPO extends WizardPO implements ModuleWizardUIBase
 {
 
     private TextPO _workspaceNameText;

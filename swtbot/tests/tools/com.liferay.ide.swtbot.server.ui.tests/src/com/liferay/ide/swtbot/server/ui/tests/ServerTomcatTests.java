@@ -95,28 +95,6 @@ public class ServerTomcatTests extends ServerTestsBase
         Assume.assumeTrue( runTest() || runAllTests() );
     }
 
-    public static void addLiferay7Runtime( String runtimeName )
-    {
-        eclipse.getPreferencesMenu().click();
-
-        preferencesDialog.selectServerRuntimeEnvironmentsPage();
-
-        serverRuntimePage.getAddButton().click();
-
-        newRuntimeWizard.selectServerType( "Liferay, Inc.", "Liferay 7.x" );
-
-        newRuntimeWizard.next();
-
-        newliferay7RuntimeWizard.getName().setText( runtimeName );
-
-        newliferay7RuntimeWizard.getServerLocation().setText(
-            getLiferayServerDir().toString() + "/" + getLiferayPluginServerName() );
-
-        newliferay7RuntimeWizard.finish();
-
-        serverRuntimePage.confirm();
-    }
-
     @Test
     public void addLiferay7RuntimeFromPreferences()
     {
@@ -139,19 +117,6 @@ public class ServerTomcatTests extends ServerTestsBase
         serverRuntimePage.getRemoveButton().click();
 
         serverRuntimePage.confirm();
-    }
-
-    public static void addLiferay7Server( String serverName )
-    {
-        addLiferay7Runtime( serverName );
-
-        eclipse.getCreateLiferayProjectToolbar().getNewLiferayServer().click();
-
-        newServerWizard.getServerName().setText( serverName );
-
-        newServerWizard.finish();
-
-        eclipse.showServersView();
     }
 
     @Test

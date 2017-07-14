@@ -22,7 +22,7 @@ import com.liferay.ide.swtbot.ui.tests.UIBase;
  * @author Sunny Shi
  * @author Ashley Yuan
  */
-public interface NewLiferayModuleProjectWizard extends UIBase
+public interface ModuleWizardUIBase extends UIBase
 {
 
     public final String LABEL_MODULE_PROJECT_TEMPLATE_NAME = "Project Template Name:";
