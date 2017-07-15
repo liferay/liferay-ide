@@ -16,22 +16,23 @@
 package com.liferay.ide.swtbot.project.ui.tests;
 
 import static org.junit.Assert.assertTrue;
+
 import org.junit.After;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.liferay.ide.swtbot.project.ui.tests.page.NewLiferayModuleProjectWizardSecondPagePO;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesContinueDialog;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesDialog;
-import com.liferay.ide.swtbot.ui.tests.liferay.page.NewLiferayModuleProjectWizard;
-import com.liferay.ide.swtbot.ui.tests.page.TreePO;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferayModuleProjectWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferayModuleProjectWizardSecondPageWizard;
+import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesContinueDialog;
+import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesDialog;
+import com.liferay.ide.swtbot.ui.page.Tree;
 
 /**
  * @author Sunny Shi
  */
-public class NewLiferayMavenModuleProjectWizardTests extends AbstractNewLiferayModuleProjectWizard
+public class NewLiferayMavenModuleProjectWizardTests extends BaseNewLiferayModuleProjectWizard
 {
 
     static String fullClassname = new SecurityManager()
@@ -45,23 +46,22 @@ public class NewLiferayMavenModuleProjectWizardTests extends AbstractNewLiferayM
 
     static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
 
-    TreePO projectTree = eclipse.getPackageExporerView().getProjectTree();
+    Tree projectTree = ide.getPackageExporerView().getProjectTree();
 
     NewLiferayModuleProjectWizard createMavenModuleProjectWizard =
         new NewLiferayModuleProjectWizard( bot, INDEX_NEW_LIFERAY_MODULE_PROJECT_VALIDATION_MESSAGE );
 
-    NewLiferayModuleProjectWizardSecondPagePO createMavenModuleProjectSecondPageWizard =
-        new NewLiferayModuleProjectWizardSecondPagePO( bot );
+    NewLiferayModuleProjectWizardSecondPageWizard createMavenModuleProjectSecondPageWizard =
+        new NewLiferayModuleProjectWizardSecondPageWizard( bot );
 
     @After
     public void clean()
     {
-        eclipse.closeShell( LABEL_NEW_LIFERAY_MODULE_PROJECT );
+        ide.closeShell( LABEL_NEW_LIFERAY_MODULE_PROJECT );
 
         if( addedProjects() )
         {
-            eclipse.getPackageExporerView().deleteProjectExcludeNames(
-                new String[] { getLiferayPluginsSdkName() }, true );
+            ide.getPackageExporerView().deleteProjectExcludeNames( new String[] { getLiferayPluginsSdkName() }, true );
         }
     }
 
@@ -70,8 +70,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends AbstractNewLiferayM
     {
         Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
 
-        eclipse.getLiferayWorkspacePerspective().activate();
-        eclipse.getProjectExplorerView().show();
+        ide.getLiferayWorkspacePerspective().activate();
+        ide.getProjectExplorerView().show();
     }
 
     @Before
@@ -525,7 +525,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends AbstractNewLiferayM
         DeleteResourcesContinueDialog continueDeleteResources =
             new DeleteResourcesContinueDialog( bot, "Delete Resources" );
 
-        projectTree.getTreeItem( projectName ).doAction( BUTTON_DELETE );
+        projectTree.getTreeItem( projectName ).doAction( DELETE );
         sleep( 2000 );
 
         deleteResources.confirmDeleteFromDisk();

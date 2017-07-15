@@ -22,16 +22,16 @@ import org.junit.AfterClass;
 import org.junit.Assume;
 import org.junit.Before;
 
-import com.liferay.ide.swtbot.project.ui.tests.AbstractNewLiferayModuleProjectWizard;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesContinueDialog;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesDialog;
-import com.liferay.ide.swtbot.ui.tests.liferay.page.NewLiferayWorkspaceWizard;
-import com.liferay.ide.swtbot.ui.tests.page.TreePO;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferayWorkspaceWizard;
+import com.liferay.ide.swtbot.project.ui.tests.BaseNewLiferayModuleProjectWizard;
+import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesContinueDialog;
+import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesDialog;
+import com.liferay.ide.swtbot.ui.page.Tree;
 
 /**
  * @author Terry Jia
  */
-public class BaseLiferayWorkspaceWizardTests extends AbstractNewLiferayModuleProjectWizard
+public class BaseLiferayWorkspaceWizardTests extends BaseNewLiferayModuleProjectWizard
 {
 
     protected String projectName = "workspace-project";
@@ -41,21 +41,21 @@ public class BaseLiferayWorkspaceWizardTests extends AbstractNewLiferayModulePro
     protected NewLiferayWorkspaceWizard newLiferayWorkspaceProjectWizard =
         new NewLiferayWorkspaceWizard( bot, INDEX_VALIDATION_WORKSPACE_NAME_MESSAGE );
 
-    protected TreePO projectTree = eclipse.getPackageExporerView().getProjectTree();
+    protected Tree projectTree = ide.getPackageExporerView().getProjectTree();
 
     @Before
     public void openWizard()
     {
         Assume.assumeTrue( runTest() || runAllTests() );
 
-        eclipse.getCreateLiferayProjectToolbar().getNewLiferayWorkspaceProject().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayWorkspaceProject().click();
         sleep();
     }
 
     @AfterClass
     public static void cleanAll()
     {
-        eclipse.closeShell( LABEL_NEW_LIFERAY_WORPSPACE_PROJECT );
+        ide.closeShell( LABEL_NEW_LIFERAY_WORPSPACE_PROJECT );
     }
 
     @After
@@ -63,14 +63,14 @@ public class BaseLiferayWorkspaceWizardTests extends AbstractNewLiferayModulePro
     {
         killGradleProcess();
 
-        if( eclipse.getPackageExporerView().hasProjects() )
+        if( ide.getPackageExporerView().hasProjects() )
         {
             DeleteResourcesDialog deleteResources = new DeleteResourcesDialog( bot );
 
             DeleteResourcesContinueDialog continueDeleteResources =
                 new DeleteResourcesContinueDialog( bot, "Delete Resources" );
 
-            projectTree.getTreeItem( projectName ).doAction( BUTTON_DELETE );
+            projectTree.getTreeItem( projectName ).doAction( DELETE );
             sleep( 2000 );
 
             deleteResources.confirmDeleteFromDisk();
@@ -78,7 +78,6 @@ public class BaseLiferayWorkspaceWizardTests extends AbstractNewLiferayModulePro
 
             try
             {
-                sleep();
                 continueDeleteResources.clickContinueButton();
             }
             catch( Exception e )
@@ -88,8 +87,7 @@ public class BaseLiferayWorkspaceWizardTests extends AbstractNewLiferayModulePro
 
             sleep( 5000 );
 
-            eclipse.getPackageExporerView().deleteProjectExcludeNames(
-                new String[] { getLiferayPluginsSdkName() }, true );
+            ide.getPackageExporerView().deleteProjectExcludeNames( new String[] { getLiferayPluginsSdkName() }, true );
         }
     }
 

@@ -15,16 +15,16 @@
 
 package com.liferay.ide.swtbot.server.ui.tests;
 
-import com.liferay.ide.swtbot.ui.tests.SWTBotBase;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.AddAndRemoveDialog;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.NewRuntimeWizard;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.NewServerWizard;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.PreferencesDialog;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.ServerRuntimeEnvironmentsPreferencesPage;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.ServersView;
-import com.liferay.ide.swtbot.ui.tests.liferay.page.NewLiferay7RuntimeWizard;
-import com.liferay.ide.swtbot.ui.tests.liferay.page.NewLiferayModuleProjectWizard;
-import com.liferay.ide.swtbot.ui.tests.page.BrowserPO;
+import com.liferay.ide.swtbot.liferay.ui.SWTBotBase;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferay7RuntimeWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferayModuleProjectWizard;
+import com.liferay.ide.swtbot.ui.eclipse.page.AddAndRemoveDialog;
+import com.liferay.ide.swtbot.ui.eclipse.page.NewRuntimeWizard;
+import com.liferay.ide.swtbot.ui.eclipse.page.NewServerWizard;
+import com.liferay.ide.swtbot.ui.eclipse.page.PreferencesDialog;
+import com.liferay.ide.swtbot.ui.eclipse.page.ServerRuntimeEnvironmentsPreferencesDialog;
+import com.liferay.ide.swtbot.ui.eclipse.page.ServersView;
+import com.liferay.ide.swtbot.ui.page.Browser;
 
 /**
  * @author Terry Jia
@@ -34,7 +34,7 @@ public class ServerTestsBase extends SWTBotBase
 
     protected static AddAndRemoveDialog addAndRemoveDialog = new AddAndRemoveDialog( bot );
 
-    protected static BrowserPO browser = eclipse.getBrowser();
+    protected static Browser browser = ide.getBrowser();
 
     protected static NewLiferay7RuntimeWizard newliferay7RuntimeWizard = new NewLiferay7RuntimeWizard( bot );
 
@@ -44,16 +44,16 @@ public class ServerTestsBase extends SWTBotBase
 
     protected static PreferencesDialog preferencesDialog = new PreferencesDialog( bot );
 
-    protected static ServerRuntimeEnvironmentsPreferencesPage serverRuntimePage =
-        new ServerRuntimeEnvironmentsPreferencesPage( bot );
+    protected static ServerRuntimeEnvironmentsPreferencesDialog serverRuntimePage =
+        new ServerRuntimeEnvironmentsPreferencesDialog( bot );
 
     protected static NewLiferayModuleProjectWizard newModuleProjectWizard = new NewLiferayModuleProjectWizard( bot );
 
-    protected static ServersView serversView = eclipse.getServersView();
+    protected static ServersView serversView = ide.getServersView();
 
     public static void addLiferay7Runtime( String runtimeName )
     {
-        eclipse.getPreferencesMenu().click();
+        ide.getPreferencesMenu().click();
 
         preferencesDialog.selectServerRuntimeEnvironmentsPage();
 
@@ -77,13 +77,13 @@ public class ServerTestsBase extends SWTBotBase
     {
         addLiferay7Runtime( serverName );
 
-        eclipse.getCreateLiferayProjectToolbar().getNewLiferayServer().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayServer().click();
 
         newServerWizard.getServerName().setText( serverName );
 
         newServerWizard.finish();
 
-        eclipse.showServersView();
+        ide.showServersView();
     }
 
 }

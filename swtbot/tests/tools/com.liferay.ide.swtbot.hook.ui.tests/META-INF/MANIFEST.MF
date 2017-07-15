@@ -5,7 +5,8 @@ Bundle-SymbolicName: com.liferay.ide.swtbot.hook.ui.tests
 Bundle-Version: 3.1.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.swtbot.project.ui.tests,
- com.liferay.ide.swtbot.ui.tests,
+ com.liferay.ide.swtbot.ui,
+ com.liferay.ide.swtbot.liferay.ui,
  org.eclipse.swtbot.go,
  org.junit
 Bundle-ActivationPolicy: lazy

@@ -19,11 +19,13 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.liferay.ide.swtbot.liferay.ui.NewLiferayJSFProjectWizardUI;
+
 /**
  * @author Ying Xu
  */
-public class NewLiferayMavenJSFProjectWizardTests extends AbstractNewLiferayJSFProjectWizard
-    implements NewLiferayJSFProjectWizard
+public class NewLiferayMavenJSFProjectWizardTests extends BaseNewLiferayJSFProjectWizard
+    implements NewLiferayJSFProjectWizardUI
 {
 
     @Test

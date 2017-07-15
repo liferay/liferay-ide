@@ -15,66 +15,69 @@
 
 package com.liferay.ide.swtbot.project.ui.tests;
 
-import static org.eclipse.swtbot.swt.finder.SWTBotAssert.*;
-import static org.junit.Assert.*;
+import static org.eclipse.swtbot.swt.finder.SWTBotAssert.assertContains;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.liferay.ide.swtbot.project.ui.tests.page.ImportLiferayModuleProjectPO;
-import com.liferay.ide.swtbot.project.ui.tests.page.SelectTypePO;
-import com.liferay.ide.swtbot.ui.tests.SWTBotBase;
-import com.liferay.ide.swtbot.ui.tests.page.TextEditorPO;
-import com.liferay.ide.swtbot.ui.tests.page.TreeItemPO;
-import com.liferay.ide.swtbot.ui.tests.page.TreePO;
+import com.liferay.ide.swtbot.liferay.ui.SWTBotBase;
+import com.liferay.ide.swtbot.liferay.ui.WizardUI;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.ImportLiferayModuleProjectWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.SelectTypeWizard;
+import com.liferay.ide.swtbot.ui.page.Editor;
+import com.liferay.ide.swtbot.ui.page.Tree;
+import com.liferay.ide.swtbot.ui.page.TreeItem;
 
 /**
  * @author Ashley Yuan
  */
-public class ImportLiferayModuleProjectTests extends SWTBotBase implements ImportLiferayModuleProject
+public class ImportLiferayModuleProjectTests extends SWTBotBase implements WizardUI
 {
 
-    TextEditorPO buildGradleText = new TextEditorPO( bot, "build.gradle" );
+    Editor buildGradleText = new Editor( bot, "build.gradle" );
     private String existingDirectory = getLiferayServerDir().toOSString();
-    ImportLiferayModuleProjectPO importLiferayModulePage = new ImportLiferayModuleProjectPO(
+    ImportLiferayModuleProjectWizard importLiferayModulePage = new ImportLiferayModuleProjectWizard(
         bot, TITLE_IMPORT_LIFERAY_MODULE_PROJECT, INDEX_IMPORT_LIFERAY_WORKSPACE_LOCATION_VALIDATION_MESSAGE );
     private String inexistentLocation = "c:/123";
     private String invalidLocation = "1.*";
 
     private String moduleRootPath = System.getProperty( "user.dir" );
 
-    TreePO projectTree = eclipse.showPackageExporerView().getProjectTree();
+    Tree projectTree = ide.showPackageExporerView().getProjectTree();
 
-    SelectTypePO selectImportPage =
-        new SelectTypePO( bot, INDEX_SELECT_IMPORT_LIFERAY_MODULE_PROJECTS_VALIDATION_MESSAGE );
+    SelectTypeWizard selectImportPage =
+        new SelectTypeWizard( bot, INDEX_SELECT_IMPORT_LIFERAY_MODULE_PROJECTS_VALIDATION_MESSAGE );
 
-    TextEditorPO settingsGradleText = new TextEditorPO( bot, "settings.gradle" );
+    Editor settingsGradleText = new Editor( bot, "settings.gradle" );
 
     private String wrongPath = "123";
 
     @After
     public void clean()
     {
-        eclipse.closeShell( TITLE_IMPORT_LIFERAY_MODULE_PROJECT );
+        ide.closeShell( TITLE_IMPORT_LIFERAY_MODULE_PROJECT );
 
-        eclipse.getPackageExporerView().deleteProjectExcludeNames( new String[] { getLiferayPluginsSdkName() }, false );
+        ide.getPackageExporerView().deleteProjectExcludeNames( new String[] { getLiferayPluginsSdkName() }, false );
     }
 
     @Test
     public void importASingleModule()
     {
         // import module that out of liferay workpsace
-        importLiferayModulePage.get_locationText().setText( moduleRootPath + "/projects/MvcportletModule" );
+        importLiferayModulePage.getLocation().setText( moduleRootPath + "/projects/MvcportletModule" );
 
         sleep();
-        assertContains( TEXT_SELECT_LOCATION_OF_MODULE_PROJECT_DIRECTORY,
-            importLiferayModulePage.getValidationMessage() );
+        assertContains(
+            TEXT_SELECT_LOCATION_OF_MODULE_PROJECT_DIRECTORY, importLiferayModulePage.getValidationMsg() );
 
-        assertEquals( "gradle", importLiferayModulePage.get_buildTypeText().getText() );
-        assertTrue( importLiferayModulePage.finishButton().isEnabled() );
-        assertFalse( importLiferayModulePage.nextButton().isEnabled() );
+        assertEquals( "gradle", importLiferayModulePage.getBuildType().getText() );
+        assertTrue( importLiferayModulePage.finishBtn().isEnabled() );
+        assertFalse( importLiferayModulePage.nextBtn().isEnabled() );
 
         importLiferayModulePage.finish();
         importLiferayModulePage.waitForPageToClose();
@@ -89,21 +92,21 @@ public class ImportLiferayModuleProjectTests extends SWTBotBase implements Impor
         // import an existing module project
         importLiferayModuleProjects();
 
-        importLiferayModulePage.get_locationText().setText( moduleRootPath + "/projects/MvcportletModule" );
+        importLiferayModulePage.getLocation().setText( moduleRootPath + "/projects/MvcportletModule" );
 
         sleep();
-        assertContains( TEXT_PROJECT_ALREADY_EXISTS, importLiferayModulePage.getValidationMessage() );
+        assertContains( TEXT_PROJECT_ALREADY_EXISTS, importLiferayModulePage.getValidationMsg() );
 
         // import servicebuilder module which have sub-modules
-        importLiferayModulePage.get_locationText().setText( moduleRootPath + "/projects/ServicebuilderModule" );
+        importLiferayModulePage.getLocation().setText( moduleRootPath + "/projects/ServicebuilderModule" );
 
         sleep();
-        assertContains( TEXT_SELECT_LOCATION_OF_MODULE_PROJECT_DIRECTORY,
-            importLiferayModulePage.getValidationMessage() );
-        assertEquals( "gradle", importLiferayModulePage.get_buildTypeText().getText() );
+        assertContains(
+            TEXT_SELECT_LOCATION_OF_MODULE_PROJECT_DIRECTORY, importLiferayModulePage.getValidationMsg() );
+        assertEquals( "gradle", importLiferayModulePage.getBuildType().getText() );
 
-        assertTrue( importLiferayModulePage.finishButton().isEnabled() );
-        assertFalse( importLiferayModulePage.nextButton().isEnabled() );
+        assertTrue( importLiferayModulePage.finishBtn().isEnabled() );
+        assertFalse( importLiferayModulePage.nextBtn().isEnabled() );
 
         importLiferayModulePage.finish();
         importLiferayModulePage.waitForPageToClose();
@@ -130,7 +133,7 @@ public class ImportLiferayModuleProjectTests extends SWTBotBase implements Impor
         projectTree.getTreeItem( "ServicebuilderModule-service" ).getTreeItem( "build.gradle" ).doubleClick();
         sleep( 200 );
 
-        TreeItemPO serviceXml = new TreeItemPO( bot, projectTree, "ServicebuilderModule-service", "service.xml" );
+        TreeItem serviceXml = new TreeItem( bot, projectTree, "ServicebuilderModule-service", "service.xml" );
 
         assertTrue( serviceXml.isVisible() );
         assertContains(
@@ -144,27 +147,27 @@ public class ImportLiferayModuleProjectTests extends SWTBotBase implements Impor
         // import a module which in liferay workspace
         importLiferayModuleProjects();
 
-        importLiferayModulePage.get_locationText().setText(
+        importLiferayModulePage.getLocation().setText(
             moduleRootPath + "/projects/testWorkspace/modules/PortletModule" );
 
         sleep();
-        assertEquals( TEXT_BLANK, importLiferayModulePage.get_buildTypeText().getText() );
+        assertEquals( TEXT_BLANK, importLiferayModulePage.getBuildType().getText() );
         assertContains(
-            TEXT_NOT_ROOT_LOCATION_OF_MULTI_MODULE_PROJECT, importLiferayModulePage.getValidationMessage() );
-        assertFalse( importLiferayModulePage.finishButton().isEnabled() );
+            TEXT_NOT_ROOT_LOCATION_OF_MULTI_MODULE_PROJECT, importLiferayModulePage.getValidationMsg() );
+        assertFalse( importLiferayModulePage.finishBtn().isEnabled() );
 
         importLiferayModulePage.cancel();
 
-        eclipse.getPackageExporerView().deleteResouceByName( "ServicebuilderModule", false );
+        ide.getPackageExporerView().deleteResouceByName( "ServicebuilderModule", false );
     }
 
     public void importLiferayModuleProjects()
     {
-        eclipse.getFileMenu().clickMenu( LABEL_IMPORT );
+        ide.getFileMenu().clickMenu( LABEL_IMPORT );
 
         selectImportPage.selectItem( "liferay", "Liferay", LABEL_IMPORT_MODULE_PROJECTS );
         assertEquals(
-            TEXT_SELECT_IMPORT_LIFERAY_MODULE_PROJECTS_VALIDATION_MESSAGE, selectImportPage.getValidationMessage() );
+            TEXT_SELECT_IMPORT_LIFERAY_MODULE_PROJECTS_VALIDATION_MESSAGE, selectImportPage.getValidationMsg() );
 
         selectImportPage.next();
     }
@@ -180,25 +183,25 @@ public class ImportLiferayModuleProjectTests extends SWTBotBase implements Impor
     @Test
     public void importMultipleModules()
     {
-        importLiferayModulePage.get_locationText().setText( moduleRootPath + "/projects" );
+        importLiferayModulePage.getLocation().setText( moduleRootPath + "/projects" );
 
         sleep();
-        assertFalse( importLiferayModulePage.finishButton().isEnabled() );
+        assertFalse( importLiferayModulePage.finishBtn().isEnabled() );
         assertContains(
-            TEXT_LOCATION_NOT_RECOGNIZED_AS_A_VALID_PROJECT_TYPE, importLiferayModulePage.getValidationMessage() );
+            TEXT_LOCATION_NOT_RECOGNIZED_AS_A_VALID_PROJECT_TYPE, importLiferayModulePage.getValidationMsg() );
 
-        importLiferayModulePage.get_locationText().setText( moduleRootPath + "/projects/testWorkspace" );
+        importLiferayModulePage.getLocation().setText( moduleRootPath + "/projects/testWorkspace" );
 
         sleep();
-        assertContains( TEXT_SELECT_LOCATION_OF_MODULE_PROJECT_DIRECTORY,
-            importLiferayModulePage.getValidationMessage() );
+        assertContains(
+            TEXT_SELECT_LOCATION_OF_MODULE_PROJECT_DIRECTORY, importLiferayModulePage.getValidationMsg() );
 
         importLiferayModulePage.finish();
         importLiferayModulePage.waitForPageToClose();
 
         assertTrue( projectTree.getTreeItem( "testWorkspace" ).isVisible() );
 
-        eclipse.getLiferayWorkspacePerspective().activate();
+        ide.getLiferayWorkspacePerspective().activate();
 
         projectTree.expandNode( "testWorkspace", "modules" );
 
@@ -213,51 +216,51 @@ public class ImportLiferayModuleProjectTests extends SWTBotBase implements Impor
     {
         // initial state check
         assertContains(
-            TEXT_SELECT_LOCATION_OF_MODULE_PROJECT_DIRECTORY, importLiferayModulePage.getValidationMessage() );
-        assertEquals( TEXT_BLANK, importLiferayModulePage.get_locationText().getText() );
-        assertEquals( TEXT_BLANK, importLiferayModulePage.get_buildTypeText().getText() );
+            TEXT_SELECT_LOCATION_OF_MODULE_PROJECT_DIRECTORY, importLiferayModulePage.getValidationMsg() );
+        assertEquals( TEXT_BLANK, importLiferayModulePage.getLocation().getText() );
+        assertEquals( TEXT_BLANK, importLiferayModulePage.getBuildType().getText() );
 
-        assertTrue( importLiferayModulePage.get_locationText().isEnabled() );
-        assertFalse( importLiferayModulePage.get_buildTypeText().isActive() );
-        assertTrue( importLiferayModulePage.get_browseButton().isEnabled() );
+        assertTrue( importLiferayModulePage.getLocation().isEnabled() );
+        assertFalse( importLiferayModulePage.getBuildType().isActive() );
+        assertTrue( importLiferayModulePage.getBrowseBtn().isEnabled() );
 
         // location validation
-        importLiferayModulePage.get_locationText().setText( invalidLocation );
+        importLiferayModulePage.getLocation().setText( invalidLocation );
 
         sleep();
-        assertContains( "\"" + invalidLocation + "\"" + TEXT_IS_NOT_A_VALID_PATH,
-            importLiferayModulePage.getValidationMessage() );
-        assertEquals( TEXT_BLANK, importLiferayModulePage.get_buildTypeText().getText() );
+        assertContains(
+            "\"" + invalidLocation + "\"" + TEXT_IS_NOT_A_VALID_PATH, importLiferayModulePage.getValidationMsg() );
+        assertEquals( TEXT_BLANK, importLiferayModulePage.getBuildType().getText() );
 
-        importLiferayModulePage.get_locationText().setText( wrongPath );
-
-        sleep();
-        assertContains( "\"" + wrongPath + "\"" + TEXT_IS_NOT_AN_ABSOLUTE_PATH,
-            importLiferayModulePage.getValidationMessage() );
-        assertEquals( TEXT_BLANK, importLiferayModulePage.get_buildTypeText().getText() );
-
-        importLiferayModulePage.get_locationText().setText( inexistentLocation );
+        importLiferayModulePage.getLocation().setText( wrongPath );
 
         sleep();
-        assertContains( TEXT_DIRECTORY_DOESNT_EXIST, importLiferayModulePage.getValidationMessage() );
-        assertEquals( TEXT_BLANK, importLiferayModulePage.get_buildTypeText().getText() );
+        assertContains(
+            "\"" + wrongPath + "\"" + TEXT_IS_NOT_AN_ABSOLUTE_PATH, importLiferayModulePage.getValidationMsg() );
+        assertEquals( TEXT_BLANK, importLiferayModulePage.getBuildType().getText() );
 
-        importLiferayModulePage.get_locationText().setText( existingDirectory );
-
-        sleep();
-        assertContains( TEXT_LOCATION_NOT_RECOGNIZED_AS_A_VALID_PROJECT_TYPE,
-            importLiferayModulePage.getValidationMessage() );
-        assertEquals( TEXT_BLANK, importLiferayModulePage.get_buildTypeText().getText() );
-
-        importLiferayModulePage.get_locationText().setText( "projects/MvcportletModule" );
+        importLiferayModulePage.getLocation().setText( inexistentLocation );
 
         sleep();
-        assertContains( TEXT_IS_NOT_AN_ABSOLUTE_PATH, importLiferayModulePage.getValidationMessage() );
-        assertEquals( "gradle", importLiferayModulePage.get_buildTypeText().getText() );
+        assertContains( TEXT_DIRECTORY_DOESNT_EXIST, importLiferayModulePage.getValidationMsg() );
+        assertEquals( TEXT_BLANK, importLiferayModulePage.getBuildType().getText() );
 
-        assertFalse( importLiferayModulePage.finishButton().isEnabled() );
-        assertTrue( importLiferayModulePage.backButton().isEnabled() );
-        assertFalse( importLiferayModulePage.nextButton().isEnabled() );
+        importLiferayModulePage.getLocation().setText( existingDirectory );
+
+        sleep();
+        assertContains(
+            TEXT_LOCATION_NOT_RECOGNIZED_AS_A_VALID_PROJECT_TYPE, importLiferayModulePage.getValidationMsg() );
+        assertEquals( TEXT_BLANK, importLiferayModulePage.getBuildType().getText() );
+
+        importLiferayModulePage.getLocation().setText( "projects/MvcportletModule" );
+
+        sleep();
+        assertContains( TEXT_IS_NOT_AN_ABSOLUTE_PATH, importLiferayModulePage.getValidationMsg() );
+        assertEquals( "gradle", importLiferayModulePage.getBuildType().getText() );
+
+        assertFalse( importLiferayModulePage.finishBtn().isEnabled() );
+        assertTrue( importLiferayModulePage.backBtn().isEnabled() );
+        assertFalse( importLiferayModulePage.nextBtn().isEnabled() );
 
         importLiferayModulePage.cancel();
     }

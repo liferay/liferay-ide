@@ -35,25 +35,26 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.liferay.ide.swtbot.project.ui.tests.page.LiferayProjectFromExistSourceWizardPO;
-import com.liferay.ide.swtbot.ui.tests.SWTBotBase;
-import com.liferay.ide.swtbot.ui.tests.page.DialogPO;
-import com.liferay.ide.swtbot.ui.tests.page.TreeItemPO;
-import com.liferay.ide.swtbot.ui.tests.page.ViewPO;
-import com.liferay.ide.swtbot.ui.tests.util.CoreUtil;
-import com.liferay.ide.swtbot.ui.tests.util.ZipUtil;
+import com.liferay.ide.swtbot.liferay.ui.MigrateProjectWizardUI;
+import com.liferay.ide.swtbot.liferay.ui.SWTBotBase;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.LiferayProjectFromExistSourceWizard;
+import com.liferay.ide.swtbot.liferay.ui.util.CoreUtil;
+import com.liferay.ide.swtbot.liferay.ui.util.ZipUtil;
+import com.liferay.ide.swtbot.ui.page.Dialog;
+import com.liferay.ide.swtbot.ui.page.TreeItem;
+import com.liferay.ide.swtbot.ui.page.View;
 
 /**
  * @author Li Lu
  */
 @RunWith( SWTBotJunit4ClassRunner.class )
-public class MigrationToolTests extends SWTBotBase implements MigrateProjectWizard
+public class MigrationToolTests extends SWTBotBase implements MigrateProjectWizardUI
 {
 
     String MARKER_TYPE = "com.liferay.ide.swtbot.project.core.MigrationProblemMarker";
     private static final String BUNDLE_ID = "com.liferay.ide.swtbot.project.ui.tests";
     private static IProject project;
-    
+
     static String fullClassname = new SecurityManager()
     {
 
@@ -69,7 +70,7 @@ public class MigrationToolTests extends SWTBotBase implements MigrateProjectWiza
     public static void unzipServerAndSdk() throws IOException
     {
         Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-        
+
         unzipServer();
         unzipPluginsSDK();
     }
@@ -79,7 +80,7 @@ public class MigrationToolTests extends SWTBotBase implements MigrateProjectWiza
     {
         try
         {
-            eclipse.getPackageExporerView().deleteResouceByName( project.getName(), true );
+            ide.getPackageExporerView().deleteResouceByName( project.getName(), true );
         }
         catch( Exception e )
         {
@@ -96,18 +97,18 @@ public class MigrationToolTests extends SWTBotBase implements MigrateProjectWiza
         }
     }
 
-    public IMarker findMigrationMarker( IResource resource, String markerMessage, boolean fullMatch )
+    public IMarker findMigrationMarker( IResource resource, String markerMsg, boolean fullMatch )
         throws CoreException
     {
         IMarker[] markers = resource.findMarkers( MARKER_TYPE, false, IResource.DEPTH_INFINITE );
 
         for( IMarker marker : markers )
         {
-            if( fullMatch && marker.getAttribute( IMarker.MESSAGE ).toString().equals( markerMessage ) )
+            if( fullMatch && marker.getAttribute( IMarker.MESSAGE ).toString().equals( markerMsg ) )
             {
                 return marker;
             }
-            else if( !fullMatch && marker.getAttribute( IMarker.MESSAGE ).toString().matches( markerMessage ) )
+            else if( !fullMatch && marker.getAttribute( IMarker.MESSAGE ).toString().matches( markerMsg ) )
             {
                 return marker;
             }
@@ -126,8 +127,8 @@ public class MigrationToolTests extends SWTBotBase implements MigrateProjectWiza
 
         ZipUtil.unzip( projectZipFile, copyDir.toFile() );
 
-        eclipse.getCreateLiferayProjectToolbar().menuClick( MENU_NEW_LIFERAY_PROJECT_EXIS_SOURCE );
-        LiferayProjectFromExistSourceWizardPO _wizard = new LiferayProjectFromExistSourceWizardPO( bot );
+        ide.getCreateLiferayProjectToolbar().menuClick( MENU_NEW_LIFERAY_PROJECT_EXIS_SOURCE );
+        LiferayProjectFromExistSourceWizard _wizard = new LiferayProjectFromExistSourceWizard( bot );
         _wizard.importProject( copyDir.append( "knowledge-base-portlet" ).toOSString() );
     }
 
@@ -143,17 +144,17 @@ public class MigrationToolTests extends SWTBotBase implements MigrateProjectWiza
         IMarker marker = findMigrationMarker( project, ".*", false );
         assertNull( marker );
 
-        TreeItemPO projectTreeItem = eclipse.getProjectTree().getTreeItem( "knowledge-base-portlet" );
+        TreeItem projectTreeItem = ide.getProjectTree().getTreeItem( "knowledge-base-portlet" );
 
         projectTreeItem.doAction( MENU_LIFERAY, MENU_FIND_LIFERAY7_BREAKING_API_CHANGES );
 
-        DialogPO migrateDialog = new DialogPO( bot, TITLE_FINDING_MIGRATION_PROBLEMS );
+        Dialog migrateDialog = new Dialog( bot, TITLE_FINDING_MIGRATION_PROBLEMS );
 
         migrateDialog.waitForPageToOpen();
         assertTrue( migrateDialog.isOpen() );
 
         sleep( 120000 );
-        ViewPO view = new ViewPO( bot, TITLE_LIFERAY7_MIGRATION_PROBLEMS );
+        View view = new View( bot, TITLE_LIFERAY7_MIGRATION_PROBLEMS );
         assertTrue( view.isActive() );
 
         migrateDialog.closeIfOpen();

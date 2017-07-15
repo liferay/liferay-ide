@@ -23,29 +23,26 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.junit.After;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import com.liferay.ide.swtbot.project.ui.tests.page.LiferayProjectFromExistSourceWizardPO;
-import com.liferay.ide.swtbot.ui.tests.SWTBotBase;
-import com.liferay.ide.swtbot.ui.tests.page.DialogPO;
-import com.liferay.ide.swtbot.ui.tests.page.TreeItemPO;
-import com.liferay.ide.swtbot.ui.tests.page.TreePO;
-import com.liferay.ide.swtbot.ui.tests.util.FileUtil;
-import com.liferay.ide.swtbot.ui.tests.util.ZipUtil;
+import com.liferay.ide.swtbot.liferay.ui.SWTBotBase;
+import com.liferay.ide.swtbot.liferay.ui.WizardUI;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.LiferayProjectFromExistSourceWizard;
+import com.liferay.ide.swtbot.liferay.ui.util.FileUtil;
+import com.liferay.ide.swtbot.liferay.ui.util.ZipUtil;
+import com.liferay.ide.swtbot.ui.page.Dialog;
+import com.liferay.ide.swtbot.ui.page.Tree;
+import com.liferay.ide.swtbot.ui.page.TreeItem;
 
 /**
  * @author Li Lu
  * @author Ying Xu
  */
-
-@RunWith( SWTBotJunit4ClassRunner.class )
-public class SDKProjectImportWizardTests extends SWTBotBase implements LiferayProjectFromExistSourceWizard
+public class SDKProjectImportWizardTests extends SWTBotBase implements WizardUI
 {
 
     static String fullClassname = new SecurityManager()
@@ -61,11 +58,11 @@ public class SDKProjectImportWizardTests extends SWTBotBase implements LiferayPr
 
     private static final String BUNDLE_ID = "com.liferay.ide.swtbot.project.ui.tests";
 
-    private LiferayProjectFromExistSourceWizardPO _wizard = new LiferayProjectFromExistSourceWizardPO( bot );
+    private LiferayProjectFromExistSourceWizard wizard = new LiferayProjectFromExistSourceWizard( bot );
 
-    TreePO projectTreeItem = eclipse.getPackageExporerView().getProjectTree();
+    Tree projectTreeItem = ide.getPackageExporerView().getProjectTree();
 
-    TreeItemPO sdkTreeItem = eclipse.getPackageExporerView().getProjectTree().getTreeItem( getLiferayPluginsSdkName() );
+    TreeItem sdkTreeItem = ide.getPackageExporerView().getProjectTree().getTreeItem( getLiferayPluginsSdkName() );
 
     @BeforeClass
     public static void unzipServerAndSdk() throws IOException
@@ -81,10 +78,10 @@ public class SDKProjectImportWizardTests extends SWTBotBase implements LiferayPr
     {
         try
         {
-            DialogPO shell = new DialogPO( bot, TITLE_NEW_LIFERAY_PROJECT_EXIS_SOURCE );
+            Dialog shell = new Dialog( bot, TITLE_NEW_LIFERAY_PROJECT_EXIS_SOURCE );
             shell.closeIfOpen();
 
-            eclipse.getPackageExporerView().deleteProjectExcludeNames(
+            ide.getPackageExporerView().deleteProjectExcludeNames(
                 ( new String[] { getLiferayPluginsSdkName() } ), true );
         }
         catch( Exception e )
@@ -103,7 +100,7 @@ public class SDKProjectImportWizardTests extends SWTBotBase implements LiferayPr
 
     public void openWizard()
     {
-        eclipse.getCreateLiferayProjectToolbar().menuClick( MENU_NEW_LIFERAY_PROJECT_EXIS_SOURCE );
+        ide.getCreateLiferayProjectToolbar().menuClick( MENU_NEW_LIFERAY_PROJECT_EXIS_SOURCE );
     }
 
     @Before
@@ -117,26 +114,26 @@ public class SDKProjectImportWizardTests extends SWTBotBase implements LiferayPr
     {
         if( sdkTreeItem.isVisible() )
         {
-            eclipse.getPackageExporerView().deleteResouceByName( getLiferayPluginsSdkName(), true );
+            ide.getPackageExporerView().deleteResouceByName( getLiferayPluginsSdkName(), true );
         }
 
         openWizard();
 
-        assertEquals( MESSAGE_DEFAULT, _wizard.getValidationMessage() );
+        assertEquals( MESSAGE_DEFAULT, wizard.getValidationMsg() );
 
-        assertTrue( _wizard.getSdkDirectoryText().isEnabled() );
-        assertTrue( _wizard.getBrowseSdkDirectory().isEnabled() );
-        assertTrue( _wizard.getSdkVersionText().isEnabled() );
+        assertTrue( wizard.getSdkDirectory().isEnabled() );
+        assertTrue( wizard.getBrowseSdkDirectoryBtn().isEnabled() );
+        assertTrue( wizard.getSdkVersion().isEnabled() );
 
-        assertTrue( _wizard.getSdkDirectoryText().isActive() );
-        assertFalse( _wizard.getBrowseSdkDirectory().isActive() );
-        assertFalse( _wizard.getSdkVersionText().isActive() );
+        assertTrue( wizard.getSdkDirectory().isActive() );
+        assertFalse( wizard.getBrowseSdkDirectoryBtn().isActive() );
+        assertFalse( wizard.getSdkVersion().isActive() );
 
-        assertTrue( _wizard.getSelectAllButton().isEnabled() );
-        assertTrue( _wizard.getDeselectAllButton().isEnabled() );
-        assertTrue( _wizard.getRefreshButton().isEnabled() );
+        assertTrue( wizard.getSelectAllBtn().isEnabled() );
+        assertTrue( wizard.getDeselectAllBtn().isEnabled() );
+        assertTrue( wizard.getRefreshBtn().isEnabled() );
 
-        _wizard.cancel();
+        wizard.cancel();
     }
 
     @Test
@@ -150,23 +147,23 @@ public class SDKProjectImportWizardTests extends SWTBotBase implements LiferayPr
 
         openWizard();
 
-        if( _wizard.getBrowseSdkDirectory().isEnabled() )
+        if( wizard.getBrowseSdkDirectoryBtn().isEnabled() )
         {
-            _wizard.getSdkDirectoryText().setText( getLiferayPluginsSdkDir().toString() );
+            wizard.getSdkDirectory().setText( getLiferayPluginsSdkDir().toString() );
         }
 
         sleep( 1000 );
-        assertEquals( MESSAGE_DEFAULT, _wizard.getValidationMessage() );
+        assertEquals( MESSAGE_DEFAULT, wizard.getValidationMsg() );
 
-        _wizard.getSelectAllButton().click();
-        _wizard.getDeselectAllButton().click();
-        _wizard.getRefreshButton().click();
+        wizard.getSelectAllBtn().click();
+        wizard.getDeselectAllBtn().click();
+        wizard.getRefreshBtn().click();
 
-        _wizard.getSelectAllButton().click();
-        assertEquals( "7.0.0", _wizard.getSdkVersionText().getText() );
-        assertTrue( _wizard.finishButton().isEnabled() );
+        wizard.getSelectAllBtn().click();
+        assertEquals( "7.0.0", wizard.getSdkVersion().getText() );
+        assertTrue( wizard.finishBtn().isEnabled() );
 
-        _wizard.finish();
+        wizard.finish();
 
         assertTrue( sdkTreeItem.isVisible() );
 
@@ -182,41 +179,40 @@ public class SDKProjectImportWizardTests extends SWTBotBase implements LiferayPr
     {
         openWizard();
 
-        if( !_wizard.getBrowseSdkDirectory().isEnabled() )
+        if( !wizard.getBrowseSdkDirectoryBtn().isEnabled() )
         {
-            _wizard.cancel();
+            wizard.cancel();
 
-            eclipse.getPackageExporerView().deleteResouceByName( getLiferayPluginsSdkName(), true );
+            ide.getPackageExporerView().deleteResouceByName( getLiferayPluginsSdkName(), true );
 
             openWizard();
         }
 
         unzipPluginsSDK();
 
-        _wizard.getSdkDirectoryText().setText( "AAA" );
+        wizard.getSdkDirectory().setText( "AAA" );
         sleep( 1000 );
-        assertEquals( " \"AAA\" is not an absolute path.", _wizard.getValidationMessage() );
-        assertFalse( _wizard.finishButton().isEnabled() );
+        assertEquals( " \"AAA\" is not an absolute path.", wizard.getValidationMsg() );
+        assertFalse( wizard.finishBtn().isEnabled() );
 
-        _wizard.getSdkDirectoryText().setText( "C:/" );
+        wizard.getSdkDirectory().setText( "C:/" );
         sleep( 1000 );
-        assertEquals( MESSAGE_INVALID_PROJECT_LOCATION, _wizard.getValidationMessage() );
-        assertFalse( _wizard.finishButton().isEnabled() );
+        assertEquals( MESSAGE_INVALID_PROJECT_LOCATION, wizard.getValidationMsg() );
+        assertFalse( wizard.finishBtn().isEnabled() );
 
         unzipSDKProject( "portlets", "Import-223-portlet" );
 
-        _wizard.getSdkDirectoryText().setText( getLiferayPluginsSdkDir().toString() );
+        wizard.getSdkDirectory().setText( getLiferayPluginsSdkDir().toString() );
         sleep( 1000 );
-        assertEquals( MESSAGE_MUST_SPECIFY_ONE_PROJECT, _wizard.getValidationMessage() );
+        assertEquals( MESSAGE_MUST_SPECIFY_ONE_PROJECT, wizard.getValidationMsg() );
 
-        _wizard.getSelectAllButton().click();
-        assertEquals( "7.0.0", _wizard.getSdkVersionText().getText() );
-        assertTrue( _wizard.finishButton().isEnabled() );
+        wizard.getSelectAllBtn().click();
+        assertEquals( "7.0.0", wizard.getSdkVersion().getText() );
+        assertTrue( wizard.finishBtn().isEnabled() );
 
-        _wizard.finish();
+        wizard.finish();
 
-        TreeItemPO sdkTreeItem =
-            eclipse.getPackageExporerView().getProjectTree().getTreeItem( getLiferayPluginsSdkName() );
+        TreeItem sdkTreeItem = ide.getPackageExporerView().getProjectTree().getTreeItem( getLiferayPluginsSdkName() );
 
         assertTrue( sdkTreeItem.isVisible() );
 
@@ -230,12 +226,12 @@ public class SDKProjectImportWizardTests extends SWTBotBase implements LiferayPr
         openWizard();
         sleep( 1000 );
 
-        assertFalse( _wizard.getSdkDirectoryText().isEnabled() );
-        assertFalse( _wizard.getBrowseSdkDirectory().isEnabled() );
-        assertFalse( _wizard.getSdkVersionText().isEnabled() );
-        assertFalse( _wizard.finishButton().isEnabled() );
+        assertFalse( wizard.getSdkDirectory().isEnabled() );
+        assertFalse( wizard.getBrowseSdkDirectoryBtn().isEnabled() );
+        assertFalse( wizard.getSdkVersion().isEnabled() );
+        assertFalse( wizard.finishBtn().isEnabled() );
 
-        _wizard.cancel();
+        wizard.cancel();
 
         FileUtil.deleteDir( sdk2Dir.toFile(), true );
     }

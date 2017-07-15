@@ -43,12 +43,12 @@ public class MavenLiferayWorkspaceWizardTests extends BaseLiferayWorkspaceWizard
     {
         newLiferayWorkspaceProjectWizard.getBuildTypes().setSelection( TEXT_BUILD_TYPE_MAVEN );
 
-        assertEquals( TEXT_PLEASE_ENTER_THE_WORKSPACE_NAME, newLiferayWorkspaceProjectWizard.getValidationMessage() );
+        assertEquals( TEXT_PLEASE_ENTER_THE_WORKSPACE_NAME, newLiferayWorkspaceProjectWizard.getValidationMsg() );
         assertEquals( "", newLiferayWorkspaceProjectWizard.getWorkspaceName() );
-        assertEquals( false, newLiferayWorkspaceProjectWizard.isDownloadLiferayBundleChecked() );
+        assertEquals( false, newLiferayWorkspaceProjectWizard.getDownloadLiferayBundle().isChecked() );
 
-        newLiferayWorkspaceProjectWizard.setWorkspaceName( projectName );
-        sleep();
+        newLiferayWorkspaceProjectWizard.getWorkspaceName().setText( projectName );
+
         newLiferayWorkspaceProjectWizard.finish();
         sleep( 30000 );
 
@@ -97,11 +97,11 @@ public class MavenLiferayWorkspaceWizardTests extends BaseLiferayWorkspaceWizard
         projectTree.setFocus();
         assertTrue( projectTree.getTreeItem( projectName ).isVisible() );
 
-        eclipse.getCreateLiferayProjectToolbar().getNewLiferayWorkspaceProject().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayWorkspaceProject().click();
 
-        newLiferayWorkspaceProjectWizard.setWorkspaceName( "test" );
+        newLiferayWorkspaceProjectWizard.getWorkspaceName().setText( "test" );
         sleep();
-        assertEquals( TEXT_WORKSPACE_ALREADY_EXISTS, newLiferayWorkspaceProjectWizard.getValidationMessage() );
+        assertEquals( TEXT_WORKSPACE_ALREADY_EXISTS, newLiferayWorkspaceProjectWizard.getValidationMsg() );
 
         newLiferayWorkspaceProjectWizard.cancel();
     }

@@ -60,7 +60,7 @@ public class TomcatDeployTests extends ServerTestsBase
 
         serversView.getServers().getTreeItem( serverStoppedLabel ).select();
 
-        serversView.getStart().click();
+        serversView.clickStartBtn();
 
         sleep( 200000 );
     }
@@ -68,12 +68,12 @@ public class TomcatDeployTests extends ServerTestsBase
     @Test
     public void deploySampleProject()
     {
-        eclipse.getCreateLiferayProjectToolbar().getNewLiferayModuleProject().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayModuleProject().click();
 
         newModuleProjectWizard.createModuleProject( "test" );
         newModuleProjectWizard.finish();
 
-        eclipse.getCreateLiferayProjectToolbar().getNewLiferayModuleProject().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayModuleProject().click();
 
         newModuleProjectWizard.createModuleProject( "test2" );
         newModuleProjectWizard.finish();
@@ -84,7 +84,7 @@ public class TomcatDeployTests extends ServerTestsBase
 
         addAndRemoveDialog.confirm();
 
-        sleep(10000);
+        sleep( 10000 );
     }
 
     @AfterClass
@@ -92,7 +92,7 @@ public class TomcatDeployTests extends ServerTestsBase
     {
         serversView.getServers().getTreeItem( serverStartedLabel ).select();
 
-        serversView.getStop().click();
+        serversView.clickStopBtn();
 
         sleep( 20000 );
     }

@@ -33,7 +33,8 @@
     <name>Liferay IDE Common Tests</name>
 
     <modules>
-        <module>com.liferay.ide.swtbot.ui.tests</module>
+        <module>com.liferay.ide.swtbot.ui</module>
+        <module>com.liferay.ide.swtbot.liferay.ui</module>
     </modules>
 </project>
 

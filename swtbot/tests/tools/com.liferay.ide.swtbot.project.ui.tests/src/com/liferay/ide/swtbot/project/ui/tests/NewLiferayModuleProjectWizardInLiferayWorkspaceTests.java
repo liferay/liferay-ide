@@ -30,7 +30,7 @@ import org.junit.Test;
  * @author Ashley Yuan
  * @author Sunny Shi
  */
-public class NewLiferayModuleProjectWizardInLiferayWorkspaceTests extends AbstractNewLiferayModuleProjectWizard
+public class NewLiferayModuleProjectWizardInLiferayWorkspaceTests extends BaseNewLiferayModuleProjectWizard
 {
 
     static String liferayWorkspaceName = "liferayWorkspace";
@@ -49,7 +49,7 @@ public class NewLiferayModuleProjectWizardInLiferayWorkspaceTests extends Abstra
     @AfterClass
     public static void cleanAll()
     {
-        eclipse.getPackageExporerView().deleteResouceByName( liferayWorkspaceName, true );
+        ide.getPackageExporerView().deleteResouceByName( liferayWorkspaceName, true );
     }
 
     @BeforeClass
@@ -194,10 +194,11 @@ public class NewLiferayModuleProjectWizardInLiferayWorkspaceTests extends Abstra
         openEditorAndCheck(
             gradleContent, projectName, liferayWorkspaceName, "modules", projectName, buildGradleFileName );
 
-        assertTrue( projectTree.expandNode(
-            liferayWorkspaceName, "modules", projectName, "src/main/java",
-            "testControlMenuEntryProjectInLS.control.menu",
-            "TestControlMenuEntryProjectInLSProductNavigationControlMenuEntry.java" ).isVisible() );
+        assertTrue(
+            projectTree.expandNode(
+                liferayWorkspaceName, "modules", projectName, "src/main/java",
+                "testControlMenuEntryProjectInLS.control.menu",
+                "TestControlMenuEntryProjectInLSProductNavigationControlMenuEntry.java" ).isVisible() );
     }
 
     @Test
@@ -253,7 +254,7 @@ public class NewLiferayModuleProjectWizardInLiferayWorkspaceTests extends Abstra
 
         openEditorAndCheck( buildGradleContent, projectName, projectName, buildGradleFileName );
 
-        eclipse.getPackageExporerView().deleteResouceByName( "testMvcportletProject", true );
+        ide.getPackageExporerView().deleteResouceByName( "testMvcportletProject", true );
 
     }
 
@@ -526,8 +527,8 @@ public class NewLiferayModuleProjectWizardInLiferayWorkspaceTests extends Abstra
 
         try
         {
-            projectTree.expandNode( liferayWorkspaceName, "modules", projectName ).doAction( "Gradle",
-                "Refresh Gradle Project" );
+            projectTree.expandNode( liferayWorkspaceName, "modules", projectName ).doAction(
+                "Gradle", "Refresh Gradle Project" );
         }
         catch( Exception e )
         {
@@ -536,9 +537,10 @@ public class NewLiferayModuleProjectWizardInLiferayWorkspaceTests extends Abstra
         }
 
         sleep( 10000 );
-        assertTrue( projectTree.expandNode(
-            liferayWorkspaceName, "modules", projectName, projectName + "-api", "src/main/java",
-            "testServiceBuilderProjectInLS.service" ).isVisible() );
+        assertTrue(
+            projectTree.expandNode(
+                liferayWorkspaceName, "modules", projectName, projectName + "-api", "src/main/java",
+                "testServiceBuilderProjectInLS.service" ).isVisible() );
         assertTrue(
             projectTree.expandNode(
                 liferayWorkspaceName, "modules", projectName, projectName + "-service", "src/main/java",

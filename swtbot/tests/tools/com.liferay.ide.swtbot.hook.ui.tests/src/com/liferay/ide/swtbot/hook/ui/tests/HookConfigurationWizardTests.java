@@ -16,7 +16,6 @@
 package com.liferay.ide.swtbot.hook.ui.tests;
 
 import static org.eclipse.swtbot.swt.finder.SWTBotAssert.assertContains;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -29,37 +28,36 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.liferay.ide.swtbot.hook.ui.tests.page.AddEventActionPO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.AddJSPFilePathPO;
-//import com.liferay.ide.swtbot.swtbot.hook.ui.tests.page.AddLanguagePropertyPO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.AddPortalPropertiesOverridePO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.AddServiceWarningPO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.AddServiceWrapperPO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.ContainerSelectionPO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.CreateCustomJSPsPO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.EventSelectionPO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.CreateLiferayHookConfigurationPO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.LanguagePropertiesPO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.LiferayCustomJSPPO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.NewClassPO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.NewImplClassPO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.PortalPropertiesFilePO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.PortalPropertiesPO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.PropertySelectionPO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.ServicesPO;
-import com.liferay.ide.swtbot.hook.ui.tests.page.SuperclassSelectionPO;
-import com.liferay.ide.swtbot.project.ui.tests.page.CreateProjectWizardPO;
-import com.liferay.ide.swtbot.project.ui.tests.page.SetSDKLocationPO;
-import com.liferay.ide.swtbot.ui.tests.SWTBotBase;
-import com.liferay.ide.swtbot.ui.tests.page.DialogPO;
-import com.liferay.ide.swtbot.ui.tests.page.TextEditorPO;
-import com.liferay.ide.swtbot.ui.tests.page.TreePO;
+import com.liferay.ide.swtbot.liferay.ui.DialogUI;
+import com.liferay.ide.swtbot.liferay.ui.SWTBotBase;
+import com.liferay.ide.swtbot.liferay.ui.page.dialog.AddEventActionDialog;
+import com.liferay.ide.swtbot.liferay.ui.page.dialog.AddJSPFilePathDialog;
+import com.liferay.ide.swtbot.liferay.ui.page.dialog.AddPortalPropertiesOverrideDialog;
+import com.liferay.ide.swtbot.liferay.ui.page.dialog.AddServiceWrapperDialog;
+import com.liferay.ide.swtbot.liferay.ui.page.dialog.ContainerSelectionDialog;
+import com.liferay.ide.swtbot.liferay.ui.page.dialog.EventSelectionDialog;
+import com.liferay.ide.swtbot.liferay.ui.page.dialog.LiferayCustomJSPDialog;
+import com.liferay.ide.swtbot.liferay.ui.page.dialog.NewClassDialog;
+import com.liferay.ide.swtbot.liferay.ui.page.dialog.NewImplClassDialog;
+import com.liferay.ide.swtbot.liferay.ui.page.dialog.PortalPropertiesFileDialog;
+import com.liferay.ide.swtbot.liferay.ui.page.dialog.PropertySelectionDialog;
+import com.liferay.ide.swtbot.liferay.ui.page.dialog.SuperClassDialog;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.CreateCustomJSPsWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.CreateLiferayHookConfigurationWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.LanguagePropertiesWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewSdkProjectWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.PortalPropertiesWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.ServicesWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.SetSDKLocationWizard;
+import com.liferay.ide.swtbot.ui.page.Dialog;
+import com.liferay.ide.swtbot.ui.page.Editor;
+import com.liferay.ide.swtbot.ui.page.Tree;
 
 /**
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class HookConfigurationWizardTests extends SWTBotBase implements HookConfigurationWizard
+public class HookConfigurationWizardTests extends SWTBotBase implements DialogUI
 {
 
     static String fullClassname = new SecurityManager()
@@ -73,9 +71,9 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
 
     static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
 
-    CreateLiferayHookConfigurationPO createLiferayHookConfiguration =
-        new CreateLiferayHookConfigurationPO( bot, TITLE_NEW_LIFERAY_HOOK, INDEX_NEW_LIFERAY_HOOK_VALIDATION_MESSAGE );
-    CreateProjectWizardPO createProjectWizard = new CreateProjectWizardPO( bot, INDEX_VALIDATION_MESSAGE );
+    CreateLiferayHookConfigurationWizard createLiferayHookConfiguration = new CreateLiferayHookConfigurationWizard(
+        bot, TITLE_NEW_LIFERAY_HOOK, INDEX_NEW_LIFERAY_HOOK_VALIDATION_MESSAGE );
+    NewSdkProjectWizard createProjectWizard = new NewSdkProjectWizard( bot, INDEX_VALIDATION_MESSAGE );
     String projectHookName = "hook-configuration-wizard";
 
     @AfterClass
@@ -83,9 +81,8 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
     {
         try
         {
-            eclipse.closeShell( TITLE_NEW_LIFERAY_HOOK );
-            eclipse.getPackageExporerView().deleteProjectExcludeNames(
-                new String[] { getLiferayPluginsSdkName() }, true );
+            ide.closeShell( TITLE_NEW_LIFERAY_HOOK );
+            ide.getPackageExporerView().deleteProjectExcludeNames( new String[] { getLiferayPluginsSdkName() }, true );
         }
         catch( Exception e )
         {
@@ -104,9 +101,9 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
     @Test
     public void hookConfigurationAllHookTypes()
     {
-        CreateCustomJSPsPO customJSPpage = new CreateCustomJSPsPO( bot, INDEX_CUSTOM_JSPS_VALIDATION_MESSAGE );
+        CreateCustomJSPsWizard customJSPpage = new CreateCustomJSPsWizard( bot, INDEX_CUSTOM_JSPS_VALIDATION_MESSAGE );
 
-        eclipse.getCreateLiferayProjectToolbar().getNewLiferayHookConfiguration().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayHookConfiguration().click();
 
         createLiferayHookConfiguration.getCustomJSPs().select();
         createLiferayHookConfiguration.getPortalProperties().select();
@@ -114,42 +111,42 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
         createLiferayHookConfiguration.getLanguageProperties().select();
 
         // check it doesn't support new language properties with sdk 7
-        LanguagePropertiesPO languageProperties = new LanguagePropertiesPO(
+        LanguagePropertiesWizard languageProperties = new LanguagePropertiesWizard(
             bot, TITLE_NEW_LIFERAY_HOOK, INDEX_LANGUAGE_PROPERTIES_WITH_SDK7_VALIDATION_MESSAGE );
-        assertEquals( LABLE_LANGUAGE_PROPERTIES_IN_SDK7_IS_NOT_SUPPORTED, languageProperties.getValidationMessage() );
-        assertFalse( languageProperties.nextButton().isEnabled() );
+        assertEquals( LABLE_LANGUAGE_PROPERTIES_IN_SDK7_IS_NOT_SUPPORTED, languageProperties.getValidationMsg() );
+        assertFalse( languageProperties.nextBtn().isEnabled() );
 
         createLiferayHookConfiguration.getLanguageProperties().deselect();
         createLiferayHookConfiguration.next();
 
         // Custom JSPs
-        AddJSPFilePathPO jspFile = new AddJSPFilePathPO( bot );
+        AddJSPFilePathDialog jspFile = new AddJSPFilePathDialog( bot );
 
-        customJSPpage.getAddButton().click();
-        jspFile.setJSPFilePathText( "CustomJsps.jsp" );
+        customJSPpage.getAddBtn().click();
+        jspFile.getJspFilePath().setText( "CustomJsps.jsp" );
         jspFile.confirm();
         customJSPpage.next();
 
         // Portal Properties
-        PortalPropertiesPO portalPropertiesPage =
-            new PortalPropertiesPO( bot, INDEX_PORTAL_PROPERTIES_VALIDATION_MESSAGE );
-        AddEventActionPO eventActionPage = new AddEventActionPO( bot );
+        PortalPropertiesWizard portalPropertiesPage =
+            new PortalPropertiesWizard( bot, INDEX_PORTAL_PROPERTIES_VALIDATION_MESSAGE );
+        AddEventActionDialog eventActionPage = new AddEventActionDialog( bot );
 
-        portalPropertiesPage.getEventAddButton().click();
-        eventActionPage.setEvent( "portalProperties" );
-        eventActionPage.setEventActionclass( "portalPropertiesClass" );
+        portalPropertiesPage.getEventAddBtn().click();
+        eventActionPage.getEvent().setText( "portalProperties" );
+        eventActionPage.getEventActionClass().setText( "portalPropertiesClass" );
         eventActionPage.confirm();
         sleep();
 
         portalPropertiesPage.next();
 
         // Service
-        ServicesPO servicesPage = new ServicesPO( bot, INDEX_SERVICES_MESSAGE );
-        AddServiceWrapperPO serviceWrapperPage = new AddServiceWrapperPO( bot );
+        ServicesWizard servicesPage = new ServicesWizard( bot, INDEX_SERVICES_MESSAGE );
+        AddServiceWrapperDialog serviceWrapperPage = new AddServiceWrapperDialog( bot );
 
-        servicesPage.getAddButton().click();
-        serviceWrapperPage.setServiceTypeText( "com.liferay.portal.service.AddressService" );
-        serviceWrapperPage.setImplClassText( "com.liferay.portal.service.AddressServiceWrapper" );
+        servicesPage.getAddBtn().click();
+        serviceWrapperPage.getServiceType().setText( "com.liferay.portal.service.AddressService" );
+        serviceWrapperPage.getImplClass().setText( "com.liferay.portal.service.AddressServiceWrapper" );
         serviceWrapperPage.confirm();
 
         // servicesPage.next();
@@ -162,7 +159,7 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
         // AddLanguagePropertyPO languageProperty = new AddLanguagePropertyPO(
         // bot );
         //
-        // languagePropertiesPage.getAddButton().click();
+        // languagePropertiesPage.getAddBtn().click();
         // languageProperty.setLanguagePropertyFileText(
         // "languageTest.properties" );
         // languageProperty.confirm();
@@ -170,7 +167,7 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
 
         servicesPage.finish();
 
-        TreePO projectTree = eclipse.showPackageExporerView().getProjectTree();
+        Tree projectTree = ide.showPackageExporerView().getProjectTree();
 
         String fileName = "CustomJsps.jsp";
 
@@ -182,29 +179,20 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
         projectTree.expandNode( new String[] { projectHookName + "-hook", "docroot/WEB-INF/src" } ).doubleClick(
             fileName );
 
-        TextEditorPO textEditor = eclipse.getTextEditor( fileName );
+        Editor editor = ide.getEditor( fileName );
 
-        assertTrue( textEditor.isActive() );
-        assertContains( "portalProperties=portalPropertiesClass", textEditor.getText() );
-
-        // projectTree = eclipse.showPackageExporerView().getProjectTree();
-        //
-        // fileName = "languageTest.properties";
-        //
-        // projectTree.expandNode(
-        // new String[] { projectHookName + "-hook", "docroot/WEB-INF/src",
-        // "content" } ).doubleClick( fileName );
-
+        assertTrue( editor.isActive() );
+        assertContains( "portalProperties=portalPropertiesClass", editor.getText() );
     }
 
     @Test
     public void hookConfigurationCustomJSPs()
     {
-        String defaultMessage = "Create customs JSP folder and select JSPs to override.";
-        String errorMessage01 = " Custom JSPs folder not configured.";
-        String errorMessage02 = " Need to specify at least one JSP to override.";
-        String warningMessage = " Shouldn't add same jsp file.";
-        CreateCustomJSPsPO customJSPpage = new CreateCustomJSPsPO( bot, INDEX_CUSTOM_JSPS_VALIDATION_MESSAGE );
+        String defaultMsg = "Create customs JSP folder and select JSPs to override.";
+        String errorMsg01 = " Custom JSPs folder not configured.";
+        String errorMsg02 = " Need to specify at least one JSP to override.";
+        String warningMsg = " Shouldn't add same jsp file.";
+        CreateCustomJSPsWizard customJSPpage = new CreateCustomJSPsWizard( bot, INDEX_CUSTOM_JSPS_VALIDATION_MESSAGE );
 
         assertEquals(
             projectHookName + "-hook", createLiferayHookConfiguration.getHookPluginProjectComboBox().getText() );
@@ -213,66 +201,66 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
         createLiferayHookConfiguration.next();
 
         // Custom JSPs page
-        assertEquals( defaultMessage, customJSPpage.getValidationMessage() );
+        assertEquals( defaultMsg, customJSPpage.getValidationMsg() );
         assertEquals( "hook-configuration-wizard-hook", customJSPpage.getSelectedProject().getText() );
         assertEquals( "docroot", customJSPpage.getWebRootFolder().getText() );
         assertEquals( "/META-INF/custom_jsps", customJSPpage.getCustomJSPfolder().getText() );
 
-        customJSPpage.setCustomJSPfolder( "" );
-        assertEquals( errorMessage01, customJSPpage.getValidationMessage() );
+        customJSPpage.getCustomJSPfolder().setText( "" );
+        assertEquals( errorMsg01, customJSPpage.getValidationMsg() );
 
-        customJSPpage.setCustomJSPfolder( "22" );
-        assertEquals( errorMessage02, customJSPpage.getValidationMessage() );
+        customJSPpage.getCustomJSPfolder().setText( "22" );
+        assertEquals( errorMsg02, customJSPpage.getValidationMsg() );
 
-        customJSPpage.getBrowseButton().click();
+        customJSPpage.getBrowseBtn().click();
 
-        ContainerSelectionPO chooseFolder = new ContainerSelectionPO( bot );
+        ContainerSelectionDialog chooseFolder = new ContainerSelectionDialog( bot );
 
         chooseFolder.select( "hook-configuration-wizard-hook", "docroot", "META-INF" );
         chooseFolder.confirm();
-        customJSPpage.setCustomJSPfolder( "/META-INF/custom_jsps" );
+        customJSPpage.getCustomJSPfolder().setText( "/META-INF/custom_jsps" );
 
         // JSP files to override
-        LiferayCustomJSPPO chooseCustomJSP = new LiferayCustomJSPPO( bot );
-        customJSPpage.getAddFromLiferayButton().click();
+        LiferayCustomJSPDialog chooseCustomJSP = new LiferayCustomJSPDialog( bot );
+        customJSPpage.getAddFromLiferayBtn().click();
 
         chooseCustomJSP.select( "html", "common", "themes", "bottom.jsp" );
         chooseCustomJSP.cancel();
 
-        customJSPpage.getAddFromLiferayButton().click();
+        customJSPpage.getAddFromLiferayBtn().click();
         chooseCustomJSP.getSelectJspToCustomize().setText( "bottom.jsp" );
         chooseCustomJSP.select( "html", "common", "themes", "bottom.jsp" );
         chooseCustomJSP.confirm();
 
-        customJSPpage.getAddFromLiferayButton().click();
+        customJSPpage.getAddFromLiferayBtn().click();
         chooseCustomJSP.select( "html", "common", "themes", "bottom.jsp" );
         chooseCustomJSP.confirm();
 
-        assertEquals( warningMessage, customJSPpage.getValidationMessage() );
+        assertEquals( warningMsg, customJSPpage.getValidationMsg() );
         customJSPpage.getJspFilesToOverride().click( 1, 0 );
-        customJSPpage.getRemoveButton().click();
+        customJSPpage.getRemoveBtn().click();
 
-        AddJSPFilePathPO jspFile = new AddJSPFilePathPO( bot );
-        customJSPpage.getAddButton().click();
-        jspFile.setJSPFilePathText( "test.jsp" );
+        AddJSPFilePathDialog jspFile = new AddJSPFilePathDialog( bot );
+        customJSPpage.getAddBtn().click();
+        jspFile.getJspFilePath().setText( "test.jsp" );
         jspFile.cancel();
 
-        customJSPpage.getAddButton().click();
-        jspFile.setJSPFilePathText( "test.jsp" );
+        customJSPpage.getAddBtn().click();
+        jspFile.getJspFilePath().setText( "test.jsp" );
         jspFile.confirm();
 
         customJSPpage.getJspFilesToOverride().click( 1, 0 );
-        customJSPpage.getEditButton().click();
+        customJSPpage.getEditBtn().click();
 
-        jspFile.setJSPFilePathText( "hooktest.jsp" );
+        jspFile.getJspFilePath().setText( "hooktest.jsp" );
         jspFile.confirm();
 
         customJSPpage.getJspFilesToOverride().click( 1, 0 );
-        customJSPpage.getRemoveButton().click();
+        customJSPpage.getRemoveBtn().click();
         assertTrue( customJSPpage.getDisableJspSyntaxValidation().isChecked() );
         customJSPpage.finish();
 
-        TreePO projectTree = eclipse.showPackageExporerView().getProjectTree();
+        Tree projectTree = ide.showPackageExporerView().getProjectTree();
 
         projectTree.expandNode(
             new String[] { projectHookName + "-hook", "docroot", "META-INF", "custom_jsps", "html", "common",
@@ -282,99 +270,31 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
     @Test
     public void hookConfigurationLanguageProperties()
     {
-        // String defaultMessage = "Create new Language properties files.";
-        // String errorMessage = " Content folder not configured.";
-        eclipse.getCreateLiferayProjectToolbar().getNewLiferayHookConfiguration().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayHookConfiguration().click();
         createLiferayHookConfiguration.getLanguageProperties().select();
 
-        LanguagePropertiesPO languageProperties = new LanguagePropertiesPO(
+        LanguagePropertiesWizard languageProperties = new LanguagePropertiesWizard(
             bot, TITLE_NEW_LIFERAY_HOOK, INDEX_LANGUAGE_PROPERTIES_WITH_SDK7_VALIDATION_MESSAGE );
         sleep( 3000 );
-        assertEquals( LABLE_LANGUAGE_PROPERTIES_IN_SDK7_IS_NOT_SUPPORTED, languageProperties.getValidationMessage() );
+        assertEquals( LABLE_LANGUAGE_PROPERTIES_IN_SDK7_IS_NOT_SUPPORTED, languageProperties.getValidationMsg() );
         sleep( 3000 );
-        assertFalse( languageProperties.nextButton().isEnabled() );
+        assertFalse( languageProperties.nextBtn().isEnabled() );
         sleep( 3000 );
         createLiferayHookConfiguration.cancel();
 
-        // should test with sdk 6.2
-        // newHookTypesPage.next();
-        //
-        // LanguagePropertiesPO languagePropertiesPage = new
-        // LanguagePropertiesPO(
-        // bot, "New Liferay Hook Configuration",
-        // INDEX_LANGUAGE_PROPERTIES_VALIDATION_MESSAGE );
-        //
-        // assertEquals( defaultMessage,
-        // languagePropertiesPage.getValidationMessage() );
-        // assertEquals(
-        // "/hook-configuration-wizard-hook/docroot/WEB-INF/src/content",
-        // languagePropertiesPage.getContentFolderText() );
-        //
-        // languagePropertiesPage.setContentFolderText( "" );
-        // sleep( 500 );
-        //
-        // assertEquals( errorMessage,
-        // languagePropertiesPage.getValidationMessage() );
-        //
-        // languagePropertiesPage.getBrowseButton().click();
-        // sleep( 500 );
-        // ContainerSelectionPO chooseFolder = new ContainerSelectionPO( bot );
-        //
-        // chooseFolder.select( "hook-configuration-wizard-hook", "docroot",
-        // "WEB-INF", "src" );
-        //
-        // chooseFolder.confirm();
-        //
-        // sleep( 500 );
-        //
-        // // Language property files
-        // languagePropertiesPage.getAddButton().click();
-        //
-        // AddLanguagePropertyPO languageProperty = new AddLanguagePropertyPO(
-        // bot );
-        // languageProperty.setLanguagePropertyFileText( "test.properties" );
-        // languageProperty.confirm();
-        //
-        // languagePropertiesPage.getAddButton().click();
-        //
-        // languageProperty.setLanguagePropertyFileText( "test-hook" );
-        // languageProperty.confirm();
-        //
-        // languagePropertiesPage.setFocus();
-        // languagePropertiesPage.clickLanguagePropertyFiles( 1 );
-        //
-        // languagePropertiesPage.getEditButton().click();
-        //
-        // languageProperty.setLanguagePropertyFileText( "hook" );
-        // languageProperty.confirm();
-        //
-        // languagePropertiesPage.setFocus();
-        // languagePropertiesPage.clickLanguagePropertyFiles( 1 );
-        //
-        // languagePropertiesPage.getRemoveButton().click();
-        //
-        // languagePropertiesPage.finish();
-        //
-        // TreePO projectTree =
-        // eclipse.showPackageExporerView().getProjectTree();
-        //
-        // projectTree.expandNode(
-        // new String[] { projectHookName + "-hook", "docroot/WEB-INF/src",
-        // "content" } ).doubleClick(
-        // "test.properties" );
     }
 
     @Test
     public void hookConfigurationPortalProperties()
     {
-        String defaultMessage = "Specify which portal properties to override.";
-        String errorMessage1 = " portal.properties file not configured.";
-        String errorMessage2 = " Need to specify at least one Event Action or Property to override.";
+        String defaultMsg = "Specify which portal properties to override.";
+        String errorMsg1 = " portal.properties file not configured.";
+        String errorMsg2 = " Need to specify at least one Event Action or Property to override.";
 
-        PortalPropertiesPO portalPropertiesPage =
-            new PortalPropertiesPO( bot, INDEX_PORTAL_PROPERTIES_VALIDATION_MESSAGE );
+        PortalPropertiesWizard portalPropertiesPage =
+            new PortalPropertiesWizard( bot, INDEX_PORTAL_PROPERTIES_VALIDATION_MESSAGE );
 
-        eclipse.getCreateLiferayProjectToolbar().getNewLiferayHookConfiguration().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayHookConfiguration().click();
 
         assertEquals(
             projectHookName + "-hook", createLiferayHookConfiguration.getHookPluginProjectComboBox().getText() );
@@ -382,209 +302,209 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
         createLiferayHookConfiguration.getPortalProperties().select();
         createLiferayHookConfiguration.next();
 
-        assertEquals( defaultMessage, portalPropertiesPage.getValidationMessage() );
+        assertEquals( defaultMsg, portalPropertiesPage.getValidationMsg() );
         assertEquals(
             "/hook-configuration-wizard-hook/docroot/WEB-INF/src/portal.properties",
             portalPropertiesPage.getPortalPropertiesFile().getText() );
 
-        portalPropertiesPage.setPortalPropertiesFile( " " );
-        assertEquals( errorMessage1, portalPropertiesPage.getValidationMessage() );
+        portalPropertiesPage.getPortalPropertiesFile().setText( " " );
+        assertEquals( errorMsg1, portalPropertiesPage.getValidationMsg() );
 
-        portalPropertiesPage.setPortalPropertiesFile( "123" );
-        assertEquals( errorMessage2, portalPropertiesPage.getValidationMessage() );
+        portalPropertiesPage.getPortalPropertiesFile().setText( "123" );
+        assertEquals( errorMsg2, portalPropertiesPage.getValidationMsg() );
 
-        portalPropertiesPage.getBrowseButton().click();
-        PortalPropertiesFilePO propertiesPage = new PortalPropertiesFilePO( bot );
+        portalPropertiesPage.getBrowseBtn().click();
+        PortalPropertiesFileDialog propertiesPage = new PortalPropertiesFileDialog( bot );
         propertiesPage.select( "hook-configuration-wizard-hook", "docroot", "WEB-INF", "src" );
         propertiesPage.cancel();
 
-        portalPropertiesPage.getBrowseButton().click();
+        portalPropertiesPage.getBrowseBtn().click();
         propertiesPage.select( "hook-configuration-wizard-hook", "docroot", "WEB-INF", "src" );
         propertiesPage.confirm();
 
         // Define actions to be executed on portal events
-        AddEventActionPO eventActionPage = new AddEventActionPO( bot );
+        AddEventActionDialog eventActionPage = new AddEventActionDialog( bot );
 
-        portalPropertiesPage.getEventAddButton().click();
+        portalPropertiesPage.getEventAddBtn().click();
         portalPropertiesPage.cancel();
-        portalPropertiesPage.getEventAddButton().click();
+        portalPropertiesPage.getEventAddBtn().click();
 
-        eventActionPage.getNewButton().click();
+        eventActionPage.getNewBtn().click();
         eventActionPage.cancel();
-        eventActionPage.getNewButton().click();
+        eventActionPage.getNewBtn().click();
 
-        NewClassPO newClassPage = new NewClassPO( bot );
+        NewClassDialog newClassPage = new NewClassDialog( bot );
 
-        newClassPage.setClassName( "test" );
-        newClassPage.getBrowseButton().click();
+        newClassPage.getClassName().setText( "test" );
+        newClassPage.getBrowseBtn().click();
         newClassPage.cancel();
-        newClassPage.setJavaPackage( "hook" );
+        newClassPage.getJavaPackage().setText( "hook" );
 
         assertEquals( "com.liferay.portal.kernel.events.SimpleAction", newClassPage.getSuperClass().getText() );
-        newClassPage.getCreateButton().click();
+        newClassPage.getCreateBtn().click();
 
-        PropertySelectionPO propertySelectionPage = new PropertySelectionPO( bot );
+        PropertySelectionDialog propertySelectionPage = new PropertySelectionDialog( bot );
 
-        eventActionPage.getSelectEventButton().click();
-        propertySelectionPage.setPleaseSelectProperty( "*startup.events" );
+        eventActionPage.getSelectEventBtn().click();
+        propertySelectionPage.getSelectProperty().setText( "*startup.events" );
         propertySelectionPage.select( "application.startup.events" );
         propertySelectionPage.confirm();
 
-        portalPropertiesPage.getAddEventAction().setFocus();
+        portalPropertiesPage.getAddEventActionDialog().setFocus();
         eventActionPage.confirm();
 
-        portalPropertiesPage.getEventAddButton().click();
-        eventActionPage.getSelectEventButton().click();
+        portalPropertiesPage.getEventAddBtn().click();
+        eventActionPage.getSelectEventBtn().click();
         propertySelectionPage.select( "application.startup.events" );
         propertySelectionPage.confirm();
-        portalPropertiesPage.getAddEventAction().setFocus();
+        portalPropertiesPage.getAddEventActionDialog().setFocus();
 
-        EventSelectionPO eventSelectionPage = new EventSelectionPO( bot );
-        eventActionPage.getSelectClass().click();
-        eventSelectionPage.setEventAction( " " );
+        EventSelectionDialog eventSelectionPage = new EventSelectionDialog( bot );
+        eventActionPage.getSelectClassBtn().click();
+        eventSelectionPage.getEventAction().setText( " " );
         sleep( 3000 );
         eventSelectionPage.cancel();
 
-        eventActionPage.getSelectClass().click();
+        eventActionPage.getSelectClassBtn().click();
         sleep( 30000 );
-        eventSelectionPage.setEventAction( "wwww" );
+        eventSelectionPage.getEventAction().setText( "wwww" );
         sleep( 3000 );
-        assertFalse( eventActionPage.confirmButton().isEnabled() );
+        assertFalse( eventActionPage.confirmBtn().isEnabled() );
         eventSelectionPage.cancel();
 
-        eventActionPage.getSelectClass().click();
+        eventActionPage.getSelectClassBtn().click();
         sleep( 30000 );
-        eventSelectionPage.setEventAction( "ObjectAction" );
+        eventSelectionPage.getEventAction().setText( "ObjectAction" );
         eventSelectionPage.confirm();
         sleep( 2000 );
         eventActionPage.confirm();
 
         portalPropertiesPage.getDefineActionsOnPortalEvents().click( 1, 1 );
-        portalPropertiesPage.getEventRemoveButton().click();
+        portalPropertiesPage.getEventRemoveBtn().click();
 
         portalPropertiesPage.getDefineActionsOnPortalEvents().click( 0, 1 );
-        portalPropertiesPage.getEventEditButton().click();
+        portalPropertiesPage.getEventEditBtn().click();
 
-        eventActionPage.setEventActionclass( "test_hook" );
+        eventActionPage.getEventActionClass().setText( "test_hook" );
         eventActionPage.confirm();
 
         // Specify properties to override
-        AddPortalPropertiesOverridePO propertyOverridePage = new AddPortalPropertiesOverridePO( bot );
+        AddPortalPropertiesOverrideDialog propertyOverridePage = new AddPortalPropertiesOverrideDialog( bot );
 
-        portalPropertiesPage.getPropertyAddButton().click();
+        portalPropertiesPage.getPropertyAddBtn().click();
         portalPropertiesPage.cancel();
-        portalPropertiesPage.getPropertyAddButton().click();
+        portalPropertiesPage.getPropertyAddBtn().click();
 
-        propertyOverridePage.getSelectProperty().click();
+        propertyOverridePage.getSelectPropertyBtn().click();
 
         propertySelectionPage.select( "admin.default.group.names" );
         propertySelectionPage.confirm();
 
-        portalPropertiesPage.getAddPropertyOverride().setFocus();
-        propertyOverridePage.setValue( "1" );
+        portalPropertiesPage.getAddPropertyOverrideDialog().setFocus();
+        propertyOverridePage.getValue().setText( "1" );
         propertyOverridePage.confirm();
 
-        portalPropertiesPage.getPropertyAddButton().click();
-        propertyOverridePage.setProperty( "test" );
-        propertyOverridePage.setValue( "2" );
+        portalPropertiesPage.getPropertyAddBtn().click();
+        propertyOverridePage.getProperty().setText( "test" );
+        propertyOverridePage.getValue().setText( "2" );
         propertyOverridePage.confirm();
 
-        portalPropertiesPage.getNewLiferayHookConfiguration().setFocus();
-        portalPropertiesPage.getSpecifyPropertiesToOverride().click( 1, 1 );
-        portalPropertiesPage.getPropertyEditButton().click();
+        portalPropertiesPage.getNewLiferayHookConfigurationDialog().setFocus();
+        portalPropertiesPage.getSpecifyProperties().click( 1, 1 );
+        portalPropertiesPage.getPropertyEditBtn().click();
 
-        propertyOverridePage.setProperty( "test_hook" );
-        propertyOverridePage.setValue( "3" );
+        propertyOverridePage.getProperty().setText( "test_hook" );
+        propertyOverridePage.getValue().setText( "3" );
         propertyOverridePage.confirm();
 
-        portalPropertiesPage.getNewLiferayHookConfiguration().setFocus();
-        portalPropertiesPage.getSpecifyPropertiesToOverride().click( 1, 1 );
+        portalPropertiesPage.getNewLiferayHookConfigurationDialog().setFocus();
+        portalPropertiesPage.getSpecifyProperties().click( 1, 1 );
 
-        portalPropertiesPage.getPropertyRemoveButton().click();
+        portalPropertiesPage.getPropertyRemoveBtn().click();
         portalPropertiesPage.finish();
 
-        TreePO projectTree = eclipse.getPackageExporerView().getProjectTree();
+        Tree projectTree = ide.getPackageExporerView().getProjectTree();
 
         String fileName = "portal.properties";
 
         projectTree.expandNode( new String[] { projectHookName + "-hook", "docroot/WEB-INF/src" } ).doubleClick(
             fileName );
 
-        TextEditorPO textEditor = eclipse.getTextEditor( fileName );
+        Editor editor = ide.getEditor( fileName );
 
-        assertTrue( textEditor.isActive() );
+        assertTrue( editor.isActive() );
 
-        assertContains( "application.startup.events=test_hook", textEditor.getText() );
-        assertContains( "admin.default.group.names=1", textEditor.getText() );
+        assertContains( "application.startup.events=test_hook", editor.getText() );
+        assertContains( "admin.default.group.names=1", editor.getText() );
 
-        projectTree = eclipse.showPackageExporerView().getProjectTree();
+        projectTree = ide.showPackageExporerView().getProjectTree();
 
         fileName = "test.java";
 
         projectTree.expandNode( new String[] { projectHookName + "-hook", "docroot/WEB-INF/src", "hook" } ).doubleClick(
             fileName );
 
-        textEditor = eclipse.getTextEditor( fileName );
+        editor = ide.getEditor( fileName );
 
-        assertTrue( textEditor.isActive() );
+        assertTrue( editor.isActive() );
 
-        assertContains( "SimpleAction", textEditor.getText() );
+        assertContains( "SimpleAction", editor.getText() );
     }
 
     @Test
     public void hookConfigurationServices()
     {
-        String defaultMessage = "Specify which Liferay services to extend.";
-        String errorMessage = " Need to specify at least one Service to override.";
+        String defaultMsg = "Specify which Liferay services to extend.";
+        String errorMsg = " Need to specify at least one Service to override.";
 
-        ServicesPO servicesPage = new ServicesPO( bot, INDEX_SERVICES_MESSAGE );
+        ServicesWizard servicesPage = new ServicesWizard( bot, INDEX_SERVICES_MESSAGE );
 
-        eclipse.getCreateLiferayProjectToolbar().getNewLiferayHookConfiguration().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayHookConfiguration().click();
 
         createLiferayHookConfiguration.getServices().select();
 
         createLiferayHookConfiguration.next();
 
-        assertEquals( defaultMessage, servicesPage.getValidationMessage() );
+        assertEquals( defaultMsg, servicesPage.getValidationMsg() );
 
-        servicesPage.getAddButton().click();
+        servicesPage.getAddBtn().click();
         servicesPage.cancel();
-        servicesPage.getAddButton().click();
+        servicesPage.getAddBtn().click();
 
-        AddServiceWrapperPO serviceWrapperPage = new AddServiceWrapperPO( bot );
-        AddServiceWarningPO serviceWarningPage = new AddServiceWarningPO( bot );
+        AddServiceWrapperDialog serviceWrapperPage = new AddServiceWrapperDialog( bot );
+        Dialog serviceWarningPage = new Dialog( bot );
 
-        serviceWrapperPage.getNewButton().click();
-        servicesPage.getAddService().setFocus();
-        serviceWarningPage.getOkButton().click();
+        serviceWrapperPage.getNewBtn().click();
+        servicesPage.getAddServiceDialog().setFocus();
+        serviceWarningPage.confirm();
 
-        servicesPage.getAddServiceWrapper().setFocus();
+        servicesPage.getAddServiceWrapperDialog().setFocus();
         serviceWrapperPage.getSelectImplClass( 1 ).click();
 
-        serviceWarningPage.getOkButton().click();
+        serviceWarningPage.confirm();
 
-        servicesPage.getAddServiceWrapper().setFocus();
-        serviceWrapperPage.setServiceTypeText( "test" );
-        serviceWrapperPage.setImplClassText( "test" );
+        servicesPage.getAddServiceWrapperDialog().setFocus();
+        serviceWrapperPage.getServiceType().setText( "test" );
+        serviceWrapperPage.getImplClass().setText( "test" );
 
-        servicesPage.getAddServiceWrapper().setFocus();
+        servicesPage.getAddServiceWrapperDialog().setFocus();
         serviceWrapperPage.confirm();
         servicesPage.getDefinePortalServices().click( 0, 1 );
-        servicesPage.getRemoveButton().click();
+        servicesPage.getRemoveBtn().click();
 
-        assertEquals( errorMessage, servicesPage.getValidationMessage() );
+        assertEquals( errorMsg, servicesPage.getValidationMsg() );
 
-        servicesPage.getAddButton().click();
+        servicesPage.getAddBtn().click();
         serviceWrapperPage.getSelectServiceType().click();
         serviceWrapperPage.cancel();
         serviceWrapperPage.getSelectServiceType().click();
         sleep( 15000 );
 
-        SuperclassSelectionPO superclassPage = new SuperclassSelectionPO( bot );
+        SuperClassDialog superclassPage = new SuperClassDialog( bot );
 
-        NewImplClassPO newImplClassPage = new NewImplClassPO( bot );
+        NewImplClassDialog newImplClassPage = new NewImplClassDialog( bot );
 
-        superclassPage.setSuperclass( "AccountService" );
+        superclassPage.getSuperClass().setText( "AccountService" );
         superclassPage.confirm();
 
         serviceWrapperPage.getSelectImplClass( 1 ).click();
@@ -592,41 +512,41 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
         serviceWrapperPage.getSelectImplClass( 1 ).click();
         serviceWrapperPage.confirm();
 
-        servicesPage.getAddServiceWrapper().setFocus();
-        serviceWrapperPage.getNewButton().click();
-        newImplClassPage.getClassname().setText( " " );
+        servicesPage.getAddServiceWrapperDialog().setFocus();
+        serviceWrapperPage.getNewBtn().click();
+        newImplClassPage.getClassName().setText( " " );
 
-        assertFalse( newImplClassPage.getCreateButton().isEnabled() );
+        assertFalse( newImplClassPage.getCreateBtn().isEnabled() );
 
-        newImplClassPage.getClassname().setText( "ExtAccountLocalService" );
+        newImplClassPage.getClassName().setText( "ExtAccountLocalService" );
 
-        newImplClassPage.getBrowseButton().click();
+        newImplClassPage.getBrowseBtn().click();
         newImplClassPage.cancel();
         newImplClassPage.getJavaPackage().setText( "hookservice" );
 
-        newImplClassPage.getCreateButton().click();
+        newImplClassPage.getCreateBtn().click();
 
-        servicesPage.getAddServiceWrapper().setFocus();
+        servicesPage.getAddServiceWrapperDialog().setFocus();
         serviceWrapperPage.confirm();
         servicesPage.getDefinePortalServices().click( 0, 1 );
-        servicesPage.getEditButton().click();
+        servicesPage.getEditBtn().click();
 
         serviceWrapperPage.getImplClass().setText( "hookservice.ExtAccountService" );
         serviceWrapperPage.confirm();
 
         servicesPage.finish();
 
-        TreePO projectTree = eclipse.getPackageExporerView().getProjectTree();
+        Tree projectTree = ide.getPackageExporerView().getProjectTree();
 
         String fileName = "ExtAccountLocalService.java";
         projectTree.expandNode(
             new String[] { projectHookName + "-hook", "docroot/WEB-INF/src", "hookservice" } ).doubleClick( fileName );
 
-        TextEditorPO textEditor = eclipse.getTextEditor( fileName );
+        Editor editor = ide.getEditor( fileName );
 
-        assertTrue( textEditor.isActive() );
+        assertTrue( editor.isActive() );
 
-        assertContains( "ExtAccountLocalService", textEditor.getText() );
+        assertContains( "ExtAccountLocalService", editor.getText() );
     }
 
     @Before
@@ -643,10 +563,10 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
 
         sleep( 3000 );
 
-        eclipse.getCreateLiferayProjectToolbar().getNewLiferayHookConfiguration().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayHookConfiguration().click();
         sleep( 3000 );
 
-        DialogPO dialogPage = new DialogPO( bot, LABEL_NEW_LIFERAY_HOOK_CONFIGURATION, BUTTON_NO, BUTTON_YES );
+        Dialog dialogPage = new Dialog( bot, LABEL_NEW_LIFERAY_HOOK_CONFIGURATION, NO, YES );
         dialogPage.cancel();
         sleep( 3000 );
 
@@ -658,11 +578,11 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
         createLiferayHookConfiguration.getLanguageProperties().select();
         sleep( 5000 );
 
-        assertEquals( TEXT_ENTER_A_PROJECT_NAME, createLiferayHookConfiguration.getValidationMessage() );
+        assertEquals( TEXT_ENTER_A_PROJECT_NAME, createLiferayHookConfiguration.getValidationMsg() );
 
         createLiferayHookConfiguration.cancel();
 
-        eclipse.getCreateLiferayProjectToolbar().getNewLiferayHookConfiguration().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayHookConfiguration().click();
         dialogPage.confirm();
 
         createProjectWizard.createSDKProject( projectHookName, MENU_HOOK );
@@ -675,9 +595,9 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
         {
             createProjectWizard.next();
 
-            SetSDKLocationPO setSDKLocation = new SetSDKLocationPO( bot );
+            SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
-            setSDKLocation.setSdkLocation( getLiferayPluginsSdkDir().toString() );
+            setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
 
             setSDKLocation.finish();
         }

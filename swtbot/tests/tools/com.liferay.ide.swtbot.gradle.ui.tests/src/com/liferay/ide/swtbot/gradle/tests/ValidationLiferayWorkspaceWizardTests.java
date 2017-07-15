@@ -30,13 +30,13 @@ public class ValidationLiferayWorkspaceWizardTests extends BaseLiferayWorkspaceW
     @Test
     public void initialStateTest()
     {
-        assertEquals( TEXT_PLEASE_ENTER_THE_WORKSPACE_NAME, newLiferayWorkspaceProjectWizard.getValidationMessage() );
+        assertEquals( TEXT_PLEASE_ENTER_THE_WORKSPACE_NAME, newLiferayWorkspaceProjectWizard.getValidationMsg() );
         assertEquals( "", newLiferayWorkspaceProjectWizard.getWorkspaceName() );
 
         checkBuildTypes();
 
         assertTrue( newLiferayWorkspaceProjectWizard.getUseDefaultLocation().isChecked() );
-        assertEquals( false, newLiferayWorkspaceProjectWizard.isDownloadLiferayBundleChecked() );
+        assertEquals( false, newLiferayWorkspaceProjectWizard.getDownloadLiferayBundle().isChecked() );
 
         newLiferayWorkspaceProjectWizard.getUseDefaultLocation().deselect();
         assertEquals( eclipseWorkspace, newLiferayWorkspaceProjectWizard.getLocation().getText() );
@@ -53,38 +53,37 @@ public class ValidationLiferayWorkspaceWizardTests extends BaseLiferayWorkspaceW
     @Test
     public void validationWorkspaceName()
     {
-        newLiferayWorkspaceProjectWizard.setWorkspaceName( ".." );
+        newLiferayWorkspaceProjectWizard.getWorkspaceName().setText( ".." );
 
         sleep();
 
-        assertEquals(
-            " '..'" + TEXT_INVALID_NAME_ON_PLATFORM, newLiferayWorkspaceProjectWizard.getValidationMessage() );
+        assertEquals( " '..'" + TEXT_INVALID_NAME_ON_PLATFORM, newLiferayWorkspaceProjectWizard.getValidationMsg() );
 
-        newLiferayWorkspaceProjectWizard.setWorkspaceName( "##" );
+        newLiferayWorkspaceProjectWizard.getWorkspaceName().setText( "##" );
 
         sleep();
 
-        assertEquals( TEXT_INVALID_NAME_PROJECT, newLiferayWorkspaceProjectWizard.getValidationMessage() );
+        assertEquals( TEXT_INVALID_NAME_PROJECT, newLiferayWorkspaceProjectWizard.getValidationMsg() );
 
-        newLiferayWorkspaceProjectWizard.setWorkspaceName( "*" );
+        newLiferayWorkspaceProjectWizard.getWorkspaceName().setText( "*" );
 
         sleep();
 
         assertEquals(
             " *" + TEXT_INVALID_CHARACTER_IN_RESOURCE_NAME + "'*'.",
-            newLiferayWorkspaceProjectWizard.getValidationMessage() );
+            newLiferayWorkspaceProjectWizard.getValidationMsg() );
 
-        newLiferayWorkspaceProjectWizard.setWorkspaceName( TEXT_BLANK );
-
-        sleep();
-
-        assertEquals( TEXT_WORKSPACE_NAME_COULD_NOT_EMPTY, newLiferayWorkspaceProjectWizard.getValidationMessage() );
-
-        newLiferayWorkspaceProjectWizard.setWorkspaceName( projectName );
+        newLiferayWorkspaceProjectWizard.getWorkspaceName().setText( TEXT_BLANK );
 
         sleep();
 
-        assertEquals( TEXT_CREATE_LIFERAY_WORKSPACE, newLiferayWorkspaceProjectWizard.getValidationMessage() );
+        assertEquals( TEXT_WORKSPACE_NAME_COULD_NOT_EMPTY, newLiferayWorkspaceProjectWizard.getValidationMsg() );
+
+        newLiferayWorkspaceProjectWizard.getWorkspaceName().setText( projectName );
+
+        sleep();
+
+        assertEquals( TEXT_CREATE_LIFERAY_WORKSPACE, newLiferayWorkspaceProjectWizard.getValidationMsg() );
 
         newLiferayWorkspaceProjectWizard.cancel();
     }

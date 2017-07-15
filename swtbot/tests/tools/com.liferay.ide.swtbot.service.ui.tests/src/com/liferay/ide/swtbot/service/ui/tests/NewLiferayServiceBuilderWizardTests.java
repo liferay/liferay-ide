@@ -32,25 +32,25 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.liferay.ide.swtbot.project.ui.tests.ProjectWizard;
-import com.liferay.ide.swtbot.project.ui.tests.page.CreateProjectWizardPO;
-import com.liferay.ide.swtbot.project.ui.tests.page.SetSDKLocationPO;
-import com.liferay.ide.swtbot.service.ui.tests.page.ServiceBuilderEntitiesPO;
-import com.liferay.ide.swtbot.service.ui.tests.page.ServiceBuilderPackageSelectionPO;
-import com.liferay.ide.swtbot.service.ui.tests.page.ServiceBuilderWizard;
-import com.liferay.ide.swtbot.ui.tests.SWTBotBase;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.NewJavaPackageWizard;
-import com.liferay.ide.swtbot.ui.tests.page.CTabItemPO;
-import com.liferay.ide.swtbot.ui.tests.page.DialogPO;
-import com.liferay.ide.swtbot.ui.tests.page.TextEditorPO;
-import com.liferay.ide.swtbot.ui.tests.page.TreeItemPO;
-import com.liferay.ide.swtbot.ui.tests.page.TreePO;
+import com.liferay.ide.swtbot.liferay.ui.SWTBotBase;
+import com.liferay.ide.swtbot.liferay.ui.ServiceBuilderUI;
+import com.liferay.ide.swtbot.liferay.ui.WizardUI;
+import com.liferay.ide.swtbot.liferay.ui.page.dialog.ServiceBuilderPackageSelectionDialog;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewSdkProjectWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.ServiceBuilderWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.SetSDKLocationWizard;
+import com.liferay.ide.swtbot.ui.eclipse.page.NewJavaPackageWizard;
+import com.liferay.ide.swtbot.ui.page.CTabItem;
+import com.liferay.ide.swtbot.ui.page.Dialog;
+import com.liferay.ide.swtbot.ui.page.Editor;
+import com.liferay.ide.swtbot.ui.page.Text;
+import com.liferay.ide.swtbot.ui.page.Tree;
+import com.liferay.ide.swtbot.ui.page.TreeItem;
 
 /**
  * @author Ying Xu
  */
-public class NewLiferayServiceBuilderWizardTests extends SWTBotBase
-    implements ServiceBuilderTestsBase, ProjectWizard
+public class NewLiferayServiceBuilderWizardTests extends SWTBotBase implements ServiceBuilderUI, WizardUI
 {
 
     ServiceBuilderWizard newServiceBuilderWizard = new ServiceBuilderWizard( bot, TITLE_NEW_SERVICE_BUILDER );
@@ -71,13 +71,12 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase
     @AfterClass
     public static void cleanAll()
     {
-        eclipse.closeShell( LABEL_NEW_LIFERAY_PLUGIN_PROJECT );
-        eclipse.closeShell( TITLE_NEW_SERVICE_BUILDER );
+        ide.closeShell( LABEL_NEW_LIFERAY_PLUGIN_PROJECT );
+        ide.closeShell( TITLE_NEW_SERVICE_BUILDER );
 
         try
         {
-            eclipse.getPackageExporerView().deleteProjectExcludeNames(
-                new String[] { getLiferayPluginsSdkName() }, true );
+            ide.getPackageExporerView().deleteProjectExcludeNames( new String[] { getLiferayPluginsSdkName() }, true );
         }
         catch( Exception e )
         {
@@ -98,11 +97,11 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase
     {
         String projectName = "sbwizardtest";
 
-        DialogPO noProjectDialog = new DialogPO( bot, LABEL_NEW_LIFERAY_SERVICE_BUILDER, BUTTON_NO, BUTTON_YES );
+        Dialog noProjectDialog = new Dialog( bot, LABEL_NEW_LIFERAY_SERVICE_BUILDER, NO, YES );
 
         noProjectDialog.confirm();
 
-        CreateProjectWizardPO createProjectWizard = new CreateProjectWizardPO( bot, LABEL_NEW_LIFERAY_PLUGIN_PROJECT );
+        NewSdkProjectWizard createProjectWizard = new NewSdkProjectWizard( bot, LABEL_NEW_LIFERAY_PLUGIN_PROJECT );
 
         createProjectWizard.waitForPageToOpen();
         createProjectWizard.createSDKProject( projectName, MENU_PORTLET, true );
@@ -116,9 +115,9 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase
         {
             createProjectWizard.next();
 
-            SetSDKLocationPO setSDKLocation = new SetSDKLocationPO( bot );
+            SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
-            setSDKLocation.setSdkLocation( getLiferayPluginsSdkDir().toString() );
+            setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
             setSDKLocation.finish();
         }
 
@@ -128,75 +127,75 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase
         newServiceBuilderWizard.setFocus();
 
         // check initial state
-        assertEquals( author, newServiceBuilderWizard.getAuthorText().getText() );
-        assertEquals( projectName + "-portlet", newServiceBuilderWizard.getPluginProjectComboBox().getText() );
-        assertEquals( TEXT_SERVICE_FILE_VALUE, newServiceBuilderWizard.getServiceFileText().getText() );
-        assertEquals( TEXT_DEFAULT_PACKAGE_PAHT_VALUE, newServiceBuilderWizard.getPackagePathText().getText() );
-        assertEquals( TEXT_DEFAULT_NAMESPACE_VALUE, newServiceBuilderWizard.getNamespaceText().getText() );
-        assertTrue( newServiceBuilderWizard.getIncludeSampleEntityCheckBox().isChecked() );
-        assertFalse( newServiceBuilderWizard.finishButton().isEnabled() );
-        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMessage() );
-        newServiceBuilderWizard.NewServiceBuilder( "packagePath", "namespace" );
+        assertEquals( author, newServiceBuilderWizard.getAuthor().getText() );
+        assertEquals( projectName + "-portlet", newServiceBuilderWizard.getIncludeSampleEntity().getText() );
+        assertEquals( TEXT_SERVICE_FILE_VALUE, newServiceBuilderWizard.getServiceFile().getText() );
+        assertEquals( TEXT_DEFAULT_PACKAGE_PAHT_VALUE, newServiceBuilderWizard.getPackagePath().getText() );
+        assertEquals( TEXT_DEFAULT_NAMESPACE_VALUE, newServiceBuilderWizard.getNamespace().getText() );
+        assertTrue( newServiceBuilderWizard.getIncludeSampleEntity().isChecked() );
+        assertFalse( newServiceBuilderWizard.finishBtn().isEnabled() );
+        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMsg() );
+        newServiceBuilderWizard.createServiceBuilder( "packagePath", "namespace" );
 
         // validation test for package path
-        newServiceBuilderWizard.getPackagePathText().setText( "_" );
-        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMessage() );
-        assertTrue( newServiceBuilderWizard.finishButton().isEnabled() );
-        newServiceBuilderWizard.getPackagePathText().setText( "1" );
+        newServiceBuilderWizard.getPackagePath().setText( "_" );
+        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMsg() );
+        assertTrue( newServiceBuilderWizard.finishBtn().isEnabled() );
+        newServiceBuilderWizard.getPackagePath().setText( "1" );
         assertEquals(
             TEXT_VALIDATION_PACKAGE_PATH_MESSAGE + "'1' is not a valid Java identifier",
-            newServiceBuilderWizard.getValidationMessage() );
-        assertFalse( newServiceBuilderWizard.finishButton().isEnabled() );
-        newServiceBuilderWizard.getPackagePathText().setText( "-" );
+            newServiceBuilderWizard.getValidationMsg() );
+        assertFalse( newServiceBuilderWizard.finishBtn().isEnabled() );
+        newServiceBuilderWizard.getPackagePath().setText( "-" );
         assertEquals(
             TEXT_VALIDATION_PACKAGE_PATH_MESSAGE + "'-' is not a valid Java identifier",
-            newServiceBuilderWizard.getValidationMessage() );
-        assertFalse( newServiceBuilderWizard.finishButton().isEnabled() );
-        newServiceBuilderWizard.getPackagePathText().setText( "P" );
+            newServiceBuilderWizard.getValidationMsg() );
+        assertFalse( newServiceBuilderWizard.finishBtn().isEnabled() );
+        newServiceBuilderWizard.getPackagePath().setText( "P" );
         assertEquals(
             " Warning: By convention, package names usually start with a lowercase letter",
-            newServiceBuilderWizard.getValidationMessage() );
-        assertTrue( newServiceBuilderWizard.finishButton().isEnabled() );
-        newServiceBuilderWizard.getPackagePathText().setText( "a1" );
-        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMessage() );
-        assertTrue( newServiceBuilderWizard.finishButton().isEnabled() );
-        newServiceBuilderWizard.getPackagePathText().setText( "a_" );
-        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMessage() );
-        assertTrue( newServiceBuilderWizard.finishButton().isEnabled() );
-        newServiceBuilderWizard.getPackagePathText().setText( "a-" );
+            newServiceBuilderWizard.getValidationMsg() );
+        assertTrue( newServiceBuilderWizard.finishBtn().isEnabled() );
+        newServiceBuilderWizard.getPackagePath().setText( "a1" );
+        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMsg() );
+        assertTrue( newServiceBuilderWizard.finishBtn().isEnabled() );
+        newServiceBuilderWizard.getPackagePath().setText( "a_" );
+        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMsg() );
+        assertTrue( newServiceBuilderWizard.finishBtn().isEnabled() );
+        newServiceBuilderWizard.getPackagePath().setText( "a-" );
         assertEquals(
             TEXT_VALIDATION_PACKAGE_PATH_MESSAGE + "'a-' is not a valid Java identifier",
-            newServiceBuilderWizard.getValidationMessage() );
-        assertFalse( newServiceBuilderWizard.finishButton().isEnabled() );
-        newServiceBuilderWizard.getPackagePathText().setText( "packagePath" );
-        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMessage() );
-        assertTrue( newServiceBuilderWizard.finishButton().isEnabled() );
+            newServiceBuilderWizard.getValidationMsg() );
+        assertFalse( newServiceBuilderWizard.finishBtn().isEnabled() );
+        newServiceBuilderWizard.getPackagePath().setText( "packagePath" );
+        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMsg() );
+        assertTrue( newServiceBuilderWizard.finishBtn().isEnabled() );
 
         // validation test for namespace
-        newServiceBuilderWizard.getNamespaceText().setText( "a1" );
-        assertEquals( TEXT_VALIDATION_NAMESPACE_MESSAGE, newServiceBuilderWizard.getValidationMessage() );
-        assertFalse( newServiceBuilderWizard.finishButton().isEnabled() );
-        newServiceBuilderWizard.getNamespaceText().setText( "a-" );
-        assertEquals( TEXT_VALIDATION_NAMESPACE_MESSAGE, newServiceBuilderWizard.getValidationMessage() );
-        assertFalse( newServiceBuilderWizard.finishButton().isEnabled() );
-        newServiceBuilderWizard.getNamespaceText().setText( "a_" );
-        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMessage() );
-        assertTrue( newServiceBuilderWizard.finishButton().isEnabled() );
-        newServiceBuilderWizard.getNamespaceText().setText( "namespace" );
-        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMessage() );
-        assertTrue( newServiceBuilderWizard.finishButton().isEnabled() );
+        newServiceBuilderWizard.getNamespace().setText( "a1" );
+        assertEquals( TEXT_VALIDATION_NAMESPACE_MESSAGE, newServiceBuilderWizard.getValidationMsg() );
+        assertFalse( newServiceBuilderWizard.finishBtn().isEnabled() );
+        newServiceBuilderWizard.getNamespace().setText( "a-" );
+        assertEquals( TEXT_VALIDATION_NAMESPACE_MESSAGE, newServiceBuilderWizard.getValidationMsg() );
+        assertFalse( newServiceBuilderWizard.finishBtn().isEnabled() );
+        newServiceBuilderWizard.getNamespace().setText( "a_" );
+        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMsg() );
+        assertTrue( newServiceBuilderWizard.finishBtn().isEnabled() );
+        newServiceBuilderWizard.getNamespace().setText( "namespace" );
+        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMsg() );
+        assertTrue( newServiceBuilderWizard.finishBtn().isEnabled() );
 
         newServiceBuilderWizard.finish();
         sleep();
 
-        TreePO projectTree = eclipse.getPackageExporerView().getProjectTree();
+        Tree projectTree = ide.getPackageExporerView().getProjectTree();
 
         String fileName = "service.xml";
 
         projectTree.expandNode( new String[] { projectName + "-portlet", "docroot", "WEB-INF" } ).doubleClick(
             fileName );
 
-        TextEditorPO textEditor = eclipse.getTextEditor( fileName );
+        Editor textEditor = ide.getEditor( fileName );
 
         assertTrue( textEditor.isActive() );
         assertContains( "Foo", textEditor.getText() );
@@ -231,21 +230,21 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase
 
         assertTrue( textEditor.isActive() );
 
-        CTabItemPO switchCTabItem = new CTabItemPO( bot, "Overview" );
+        CTabItem switchCTabItem = new CTabItem( bot, "Overview" );
 
         switchCTabItem.click();
 
-        TreePO outlineTree = new TreePO( bot, 1 );
+        Tree outlineTree = new Tree( bot, 1 );
 
-        TreeItemPO addEntities = new TreeItemPO( bot, outlineTree, "Service Builder", "Entities" );
+        TreeItem addEntities = new TreeItem( bot, outlineTree, "Service Builder", "Entities" );
 
         addEntities.doAction( "Add Entity" );
 
-        ServiceBuilderEntitiesPO requireAttributeName = new ServiceBuilderEntitiesPO( bot );
+        Text requireAttributeName = new Text( bot, LABEL_ENTITY_NAME );
 
-        requireAttributeName.SetServiceBuilderEntitiesName( "entity" );
+        requireAttributeName.setText( "entity" );
 
-        switchCTabItem = new CTabItemPO( bot, "Source" );
+        switchCTabItem = new CTabItem( bot, "Source" );
 
         switchCTabItem.click();
         keyPress.pressShortcut( ctrl, S );
@@ -254,24 +253,23 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase
         textEditor.close();
         serviceXMLFile.delete();
 
-        eclipse.getNewToolbar().getLiferayServiceBuilder().click();
-        newServiceBuilderWizard.NewServiceBuilder( "packagePath1", "namespace1" );
-        assertEquals(
-            TEXT_ALREADY_HAS_SERVICE_BUILDER_XML_FILE_MESSAGE, newServiceBuilderWizard.getValidationMessage() );
-        assertFalse( newServiceBuilderWizard.finishButton().isEnabled() );
+        ide.getNewToolbar().getLiferayServiceBuilder().click();
+        newServiceBuilderWizard.createServiceBuilder( "packagePath1", "namespace1" );
+        assertEquals( TEXT_ALREADY_HAS_SERVICE_BUILDER_XML_FILE_MESSAGE, newServiceBuilderWizard.getValidationMsg() );
+        assertFalse( newServiceBuilderWizard.finishBtn().isEnabled() );
         newServiceBuilderWizard.cancel();
 
-        eclipse.getPackageExporerView().deleteResouceByName( projectName + "-portlet", true );
+        ide.getPackageExporerView().deleteResouceByName( projectName + "-portlet", true );
     }
 
     @Test
     public void createServiceBuilderWizardWithoutPortletProject()
     {
-        DialogPO noProjectDialog = new DialogPO( bot, LABEL_NEW_LIFERAY_SERVICE_BUILDER, BUTTON_NO, BUTTON_YES );
+        Dialog noProjectDialog = new Dialog( bot, LABEL_NEW_LIFERAY_SERVICE_BUILDER, NO, YES );
 
         noProjectDialog.confirm();
 
-        CreateProjectWizardPO createProjectWizard = new CreateProjectWizardPO( bot, LABEL_NEW_LIFERAY_PLUGIN_PROJECT );
+        NewSdkProjectWizard createProjectWizard = new NewSdkProjectWizard( bot, LABEL_NEW_LIFERAY_PLUGIN_PROJECT );
 
         createProjectWizard.waitForPageToOpen();
         createProjectWizard.cancel();
@@ -285,19 +283,19 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase
         newServiceBuilderWizard.setFocus();
 
         // check service builder default initial state
-        assertEquals( author, newServiceBuilderWizard.getAuthorText().getText() );
-        assertEquals( TEXT_DEFAULT_PLUGIN_PROJECT_VALUE, newServiceBuilderWizard.getPluginProjectComboBox().getText() );
-        assertEquals( TEXT_SERVICE_FILE_VALUE, newServiceBuilderWizard.getServiceFileText().getText() );
-        assertEquals( TEXT_DEFAULT_PACKAGE_PAHT_VALUE, newServiceBuilderWizard.getPackagePathText().getText() );
-        assertEquals( TEXT_DEFAULT_NAMESPACE_VALUE, newServiceBuilderWizard.getNamespaceText().getText() );
-        assertTrue( newServiceBuilderWizard.getIncludeSampleEntityCheckBox().isChecked() );
+        assertEquals( author, newServiceBuilderWizard.getAuthor().getText() );
+        assertEquals( TEXT_DEFAULT_PLUGIN_PROJECT_VALUE, newServiceBuilderWizard.getIncludeSampleEntity().getText() );
+        assertEquals( TEXT_SERVICE_FILE_VALUE, newServiceBuilderWizard.getServiceFile().getText() );
+        assertEquals( TEXT_DEFAULT_PACKAGE_PAHT_VALUE, newServiceBuilderWizard.getPackagePath().getText() );
+        assertEquals( TEXT_DEFAULT_NAMESPACE_VALUE, newServiceBuilderWizard.getNamespace().getText() );
+        assertTrue( newServiceBuilderWizard.getIncludeSampleEntity().isChecked() );
         assertTrue( newServiceBuilderWizard.getBrowseButton().isEnabled() );
-        assertTrue( newServiceBuilderWizard.cancelButton().isEnabled() );
-        assertFalse( newServiceBuilderWizard.finishButton().isEnabled() );
+        assertTrue( newServiceBuilderWizard.cancelBtn().isEnabled() );
+        assertFalse( newServiceBuilderWizard.finishBtn().isEnabled() );
 
-        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMessage() );
-        newServiceBuilderWizard.NewServiceBuilder( "packagePath", "namespace" );
-        assertEquals( TEXT_ENTER_A_PROJECT_NAME, newServiceBuilderWizard.getValidationMessage() );
+        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMsg() );
+        newServiceBuilderWizard.createServiceBuilder( "packagePath", "namespace" );
+        assertEquals( TEXT_ENTER_A_PROJECT_NAME, newServiceBuilderWizard.getValidationMsg() );
         newServiceBuilderWizard.cancel();
 
     }
@@ -307,11 +305,11 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase
     {
         String projectName = "sbwizardtestwithoutentity";
 
-        DialogPO noProjectDialog = new DialogPO( bot, LABEL_NEW_LIFERAY_SERVICE_BUILDER, BUTTON_NO, BUTTON_YES );
+        Dialog noProjectDialog = new Dialog( bot, LABEL_NEW_LIFERAY_SERVICE_BUILDER, NO, YES );
 
         noProjectDialog.confirm();
 
-        CreateProjectWizardPO createProjectWizard = new CreateProjectWizardPO( bot, LABEL_NEW_LIFERAY_PLUGIN_PROJECT );
+        NewSdkProjectWizard createProjectWizard = new NewSdkProjectWizard( bot, LABEL_NEW_LIFERAY_PLUGIN_PROJECT );
 
         createProjectWizard.waitForPageToOpen();
         createProjectWizard.createSDKProject( projectName, MENU_PORTLET, true );
@@ -325,9 +323,9 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase
         {
             createProjectWizard.next();
 
-            SetSDKLocationPO setSDKLocation = new SetSDKLocationPO( bot );
+            SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
-            setSDKLocation.setSdkLocation( getLiferayPluginsSdkDir().toString() );
+            setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
             setSDKLocation.finish();
         }
 
@@ -340,27 +338,26 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase
         newServiceBuilderWizard.setFocus();
         newServiceBuilderWizard.getBrowseButton().click();
 
-        ServiceBuilderPackageSelectionPO chooseOnePackage =
-            new ServiceBuilderPackageSelectionPO( bot, BUTTON_CANCEL, BUTTON_OK );
+        ServiceBuilderPackageSelectionDialog chooseOnePackage = new ServiceBuilderPackageSelectionDialog( bot );
 
-        chooseOnePackage.selectPackage( "a" );
+        chooseOnePackage.getPackageSelection().setText( "a" );
         sleep( 200 );
-        assertFalse( chooseOnePackage.getOkButton().isEnabled() );
-        chooseOnePackage.selectPackage( "" );
+        assertFalse( chooseOnePackage.confirmBtn().isEnabled() );
+        chooseOnePackage.getPackageSelection().setText( "" );
         sleep( 200 );
-        assertTrue( chooseOnePackage.getOkButton().isEnabled() );
+        assertTrue( chooseOnePackage.confirmBtn().isEnabled() );
         chooseOnePackage.confirm();
-        assertEquals( TEXT_PACKAGE_PATH_EMPTY_MESSAGE, newServiceBuilderWizard.getValidationMessage() );
-        assertFalse( newServiceBuilderWizard.finishButton().isEnabled() );
-        newServiceBuilderWizard.getPackagePathText().setText( "path1" );
-        assertEquals( TEXT_NAMESPACE_EMPTY_MESSAGE, newServiceBuilderWizard.getValidationMessage() );
-        assertFalse( newServiceBuilderWizard.finishButton().isEnabled() );
+        assertEquals( TEXT_PACKAGE_PATH_EMPTY_MESSAGE, newServiceBuilderWizard.getValidationMsg() );
+        assertFalse( newServiceBuilderWizard.finishBtn().isEnabled() );
+        newServiceBuilderWizard.getPackagePath().setText( "path1" );
+        assertEquals( TEXT_NAMESPACE_EMPTY_MESSAGE, newServiceBuilderWizard.getValidationMsg() );
+        assertFalse( newServiceBuilderWizard.finishBtn().isEnabled() );
         newServiceBuilderWizard.cancel();
 
         // new a java package
-        TreePO projectTree = eclipse.getPackageExporerView().getProjectTree();
+        Tree projectTree = ide.getPackageExporerView().getProjectTree();
 
-        eclipse.getNewToolbar().getNewPackage().click();
+        ide.getNewToolbar().getNewPackage().click();
 
         NewJavaPackageWizard newJavaPackage = new NewJavaPackageWizard( bot );
 
@@ -370,16 +367,16 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase
         assertTrue(
             projectTree.expandNode( projectName + "-portlet", "docroot/WEB-INF/src", "newpackage" ).isVisible() );
 
-        eclipse.getFileMenu().clickMenu( MENU_NEW, LABEL_LIFERAY_SERVICE_BUILDER );
+        ide.getFileMenu().clickMenu( MENU_NEW, LABEL_LIFERAY_SERVICE_BUILDER );
         newServiceBuilderWizard.getBrowseButton().click();
-        chooseOnePackage.selectPackage( "newpackage" );
-        assertTrue( chooseOnePackage.getOkButton().isEnabled() );
+        chooseOnePackage.getPackageSelection().setText( "newpackage" );
+        assertTrue( chooseOnePackage.confirmBtn().isEnabled() );
         chooseOnePackage.confirm();
-        newServiceBuilderWizard.getNamespaceText().setText( "namespace" );
-        newServiceBuilderWizard.getAuthorText().setText( author + "-v" );
-        newServiceBuilderWizard.getIncludeSampleEntityCheckBox().deselect();
-        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMessage() );
-        assertTrue( newServiceBuilderWizard.finishButton().isEnabled() );
+        newServiceBuilderWizard.getNamespace().setText( "namespace" );
+        newServiceBuilderWizard.getAuthor().setText( author + "-v" );
+        newServiceBuilderWizard.getIncludeSampleEntity().deselect();
+        assertEquals( TEXT_NEW_SERVICE_BUILDER_XML_FILE, newServiceBuilderWizard.getValidationMsg() );
+        assertTrue( newServiceBuilderWizard.finishBtn().isEnabled() );
         newServiceBuilderWizard.finish();
 
         String fileName = "service.xml";
@@ -387,7 +384,7 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase
         projectTree.expandNode( new String[] { projectName + "-portlet", "docroot", "WEB-INF" } ).doubleClick(
             fileName );
 
-        TextEditorPO textEditor = eclipse.getTextEditor( fileName );
+        Editor textEditor = ide.getEditor( fileName );
 
         assertTrue( textEditor.isActive() );
 
@@ -395,7 +392,7 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase
         assertContains( "namespace", textEditor.getText() );
         assertContains( author + "-v", textEditor.getText() );
 
-        eclipse.getPackageExporerView().deleteResouceByName( projectName + "-portlet", true );
+        ide.getPackageExporerView().deleteResouceByName( projectName + "-portlet", true );
     }
 
     @Before
@@ -405,7 +402,7 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase
 
         hasAddedProject = addedProjects();
 
-        eclipse.getCreateLiferayProjectToolbar().getNewLiferayServiceBuilder().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayServiceBuilder().click();
     }
 
     @After

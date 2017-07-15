@@ -23,11 +23,13 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.liferay.ide.swtbot.liferay.ui.NewLiferayJSFProjectWizardUI;
+
 /**
  * @author Ying Xu
  */
-public class NewLiferayJSFProjectWizardTests extends AbstractNewLiferayJSFProjectWizard
-    implements NewLiferayJSFProjectWizard
+public class NewLiferayJSFProjectWizardTests extends BaseNewLiferayJSFProjectWizard
+    implements NewLiferayJSFProjectWizardUI
 {
 
     @Test
@@ -43,8 +45,8 @@ public class NewLiferayJSFProjectWizardTests extends AbstractNewLiferayJSFProjec
         String gradleContent = "compile group: 'org.icefaces', name: 'icefaces-ace', version:'4.1.1'";
 
         checkProjectAndFileExist( projectName, projectName, "src/main/resources", i18nPropertiesFileName );
-        checkProjectAndFileExist( projectName, projectName, "src", "main", "webapp", "WEB-INF",
-            facesConfigXmlFileName );
+        checkProjectAndFileExist(
+            projectName, projectName, "src", "main", "webapp", "WEB-INF", facesConfigXmlFileName );
         checkProjectAndFileExist( projectName, projectName, buildGradleFileName );
 
         openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
@@ -63,8 +65,8 @@ public class NewLiferayJSFProjectWizardTests extends AbstractNewLiferayJSFProjec
         String gradleContent = "providedCompile group: 'javax.faces', name: 'javax.faces-api', version:'2.2'";
 
         checkProjectAndFileExist( projectName, projectName, "src/main/resources", i18nPropertiesFileName );
-        checkProjectAndFileExist( projectName, projectName, "src", "main", "webapp", "WEB-INF",
-            facesConfigXmlFileName );
+        checkProjectAndFileExist(
+            projectName, projectName, "src", "main", "webapp", "WEB-INF", facesConfigXmlFileName );
         checkProjectAndFileExist( projectName, projectName, buildGradleFileName );
 
         openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
@@ -83,8 +85,8 @@ public class NewLiferayJSFProjectWizardTests extends AbstractNewLiferayJSFProjec
         String gradleContent = "compile group: 'com.liferay.faces', name: 'com.liferay.faces.alloy', version:'3.0.0'";
 
         checkProjectAndFileExist( projectName, projectName, "src/main/resources", i18nPropertiesFileName );
-        checkProjectAndFileExist( projectName, projectName, "src", "main", "webapp", "WEB-INF",
-            facesConfigXmlFileName );
+        checkProjectAndFileExist(
+            projectName, projectName, "src", "main", "webapp", "WEB-INF", facesConfigXmlFileName );
         checkProjectAndFileExist( projectName, projectName, buildGradleFileName );
 
         openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
@@ -103,8 +105,8 @@ public class NewLiferayJSFProjectWizardTests extends AbstractNewLiferayJSFProjec
         String gradleContent = "compile group: 'org.primefaces', name: 'primefaces', version:'6.0'";
 
         checkProjectAndFileExist( projectName, projectName, "src/main/resources", i18nPropertiesFileName );
-        checkProjectAndFileExist( projectName, projectName, "src", "main", "webapp", "WEB-INF",
-            facesConfigXmlFileName );
+        checkProjectAndFileExist(
+            projectName, projectName, "src", "main", "webapp", "WEB-INF", facesConfigXmlFileName );
         checkProjectAndFileExist( projectName, projectName, buildGradleFileName );
 
         openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
@@ -123,8 +125,8 @@ public class NewLiferayJSFProjectWizardTests extends AbstractNewLiferayJSFProjec
         String gradleContent = "compile group: 'org.richfaces', name: 'richfaces', version:'4.5.17.Final'";
 
         checkProjectAndFileExist( projectName, projectName, "src/main/resources", i18nPropertiesFileName );
-        checkProjectAndFileExist( projectName, projectName, "src", "main", "webapp", "WEB-INF",
-            facesConfigXmlFileName );
+        checkProjectAndFileExist(
+            projectName, projectName, "src", "main", "webapp", "WEB-INF", facesConfigXmlFileName );
         checkProjectAndFileExist( projectName, projectName, buildGradleFileName );
 
         openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
@@ -133,44 +135,43 @@ public class NewLiferayJSFProjectWizardTests extends AbstractNewLiferayJSFProjec
     @Before
     public void shouldRunTests()
     {
-
         Assume.assumeTrue( runTest() || runAllTests() );
 
         hasAddedProject = addedProjects();
-
     }
 
     @Test
     public void validateProjectName()
     {
-        assertEquals( TEXT_PLEASE_ENTER_A_PROJECT_NAME, newJSFProject.getValidationMessage() );
-        assertFalse( newJSFProject.finishButton().isEnabled() );
+        assertEquals( TEXT_PLEASE_ENTER_A_PROJECT_NAME, newJSFProject.getValidationMsg() );
+        assertFalse( newJSFProject.finishBtn().isEnabled() );
 
-        newJSFProject.createJSFProject( "." );
+        newJSFProject.getProjectName().setText( "." );
         sleep();
-        assertEquals( " '.'" + TEXT_INVALID_NAME_ON_PLATFORM, newJSFProject.getValidationMessage() );
-        assertFalse( newJSFProject.finishButton().isEnabled() );
+        assertEquals( " '.'" + TEXT_INVALID_NAME_ON_PLATFORM, newJSFProject.getValidationMsg() );
+        assertFalse( newJSFProject.finishBtn().isEnabled() );
 
-        newJSFProject.createJSFProject( "/" );
+        newJSFProject.getProjectName().setText( "/" );
         sleep();
-        assertEquals( " /" + TEXT_INVALID_CHARACTER_IN_RESOURCE_NAME + "'/'.", newJSFProject.getValidationMessage() );
-        assertFalse( newJSFProject.finishButton().isEnabled() );
+        assertEquals( " /" + TEXT_INVALID_CHARACTER_IN_RESOURCE_NAME + "'/'.", newJSFProject.getValidationMsg() );
+        assertFalse( newJSFProject.finishBtn().isEnabled() );
 
-        newJSFProject.createJSFProject( "$" );
+        newJSFProject.getProjectName().setText( "$" );
         sleep();
-        assertEquals( TEXT_THE_PROJECT_NAME_INVALID, newJSFProject.getValidationMessage() );
-        assertFalse( newJSFProject.finishButton().isEnabled() );
+        assertEquals( TEXT_THE_PROJECT_NAME_INVALID, newJSFProject.getValidationMsg() );
+        assertFalse( newJSFProject.finishBtn().isEnabled() );
 
-        newJSFProject.createJSFProject( "" );
+        newJSFProject.getProjectName().setText( "" );
         sleep();
-        assertEquals( TEXT_PROJECT_NAME_MUST_BE_SPECIFIED, newJSFProject.getValidationMessage() );
-        assertFalse( newJSFProject.finishButton().isEnabled() );
+        assertEquals( TEXT_PROJECT_NAME_MUST_BE_SPECIFIED, newJSFProject.getValidationMsg() );
+        assertFalse( newJSFProject.finishBtn().isEnabled() );
 
-        newJSFProject.createJSFProject( "a" );
+        newJSFProject.getProjectName().setText( "a" );
         sleep();
-        assertEquals( TEXT_CHOOSE_TEMPLATE_FOR_NEW_JSF_PROJECT, newJSFProject.getValidationMessage() );
-        assertTrue( newJSFProject.finishButton().isEnabled() );
+        assertEquals( TEXT_CHOOSE_TEMPLATE_FOR_NEW_JSF_PROJECT, newJSFProject.getValidationMsg() );
+        assertTrue( newJSFProject.finishBtn().isEnabled() );
 
         newJSFProject.cancel();
     }
+
 }

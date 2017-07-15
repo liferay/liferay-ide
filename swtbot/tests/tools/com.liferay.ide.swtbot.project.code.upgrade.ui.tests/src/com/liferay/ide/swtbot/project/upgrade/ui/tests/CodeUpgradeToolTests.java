@@ -17,8 +17,8 @@ package com.liferay.ide.swtbot.project.upgrade.ui.tests;
 
 import org.junit.Test;
 
-import com.liferay.ide.swtbot.ui.tests.SWTBotBase;
-import com.liferay.ide.swtbot.ui.tests.liferay.page.CodeUpgradeView;
+import com.liferay.ide.swtbot.liferay.ui.SWTBotBase;
+import com.liferay.ide.swtbot.liferay.ui.page.view.CodeUpgradeView;
 
 /**
  * @author Terry Jia
@@ -29,10 +29,9 @@ public class CodeUpgradeToolTests extends SWTBotBase implements CodeUpgradeTool
     @Test
     public void testGear()
     {
-        CodeUpgradeView codeUpgrade = eclipse.showCodeUpgradeView();
+        CodeUpgradeView codeUpgrade = ide.showCodeUpgradeView();
 
         codeUpgrade.getGear().clickGear( 0 );
-        keyPress.pressShortcut( ctrl, M );
 
         // the number of gears starts from 0, that means, the Import Page should be 1 or not 2
         codeUpgrade.getGear().clickGear( 1 );

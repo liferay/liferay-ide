@@ -23,7 +23,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.liferay.ide.swtbot.server.ui.tests.page.ServerEditor;
+import com.liferay.ide.swtbot.liferay.ui.page.editor.ServerEditor;
 
 /**
  * @author Terry Jia
@@ -66,7 +66,7 @@ public class ServerTomcatTests extends ServerTestsBase
 
         serversView.getServers().getTreeItem( serverStoppedLabel ).select();
 
-        serversView.getStart().click();
+        serversView.clickStartBtn();
 
         sleep( 200000 );
 
@@ -78,7 +78,7 @@ public class ServerTomcatTests extends ServerTestsBase
 
         serversView.getServers().getTreeItem( serverStartedLabel ).select();
 
-        serversView.getStop().click();
+        serversView.clickStopBtn();
 
         sleep( 20000 );
     }
@@ -86,7 +86,7 @@ public class ServerTomcatTests extends ServerTestsBase
     @After
     public void closeWizard()
     {
-        eclipse.closeShell( TITLE_NEW_SERVER );
+        ide.closeShell( TITLE_NEW_SERVER );
     }
 
     @Before
@@ -108,7 +108,7 @@ public class ServerTomcatTests extends ServerTestsBase
 
         addLiferay7Runtime( runtimeName );
 
-        eclipse.getPreferencesMenu().click();
+        ide.getPreferencesMenu().click();
 
         preferencesDialog.selectServerRuntimeEnvironmentsPage();
 
@@ -136,7 +136,7 @@ public class ServerTomcatTests extends ServerTestsBase
 
         serversView.getServers().getTreeItem( serverStoppedLabel ).select();
 
-        serversView.getDebug().click();
+        serversView.clickDebugBtn();
 
         sleep( 100000 );
 
@@ -144,7 +144,7 @@ public class ServerTomcatTests extends ServerTestsBase
 
         serversView.getServers().getTreeItem( serverDebuggingLabel ).select();
 
-        serversView.getStop().click();
+        serversView.clickStopBtn();
 
         sleep( 20000 );
     }
@@ -263,7 +263,7 @@ public class ServerTomcatTests extends ServerTestsBase
 
         serversView.getServers().getTreeItem( serverStoppedLabel ).select();
 
-        serversView.getStart().click();
+        serversView.clickStartBtn();
 
         sleep( 100000 );
 
@@ -271,7 +271,7 @@ public class ServerTomcatTests extends ServerTestsBase
 
         serversView.getServers().getTreeItem( serverStartedLabel ).select();
 
-        serversView.getStop().click();
+        serversView.clickStopBtn();
 
         sleep( 20000 );
 
@@ -437,7 +437,7 @@ public class ServerTomcatTests extends ServerTestsBase
 
         serversView.getServers().getTreeItem( serverStoppedLabel ).select();
 
-        serversView.getStart().click();
+        serversView.clickStartBtn();
 
         sleep( 100000 );
 
@@ -445,7 +445,7 @@ public class ServerTomcatTests extends ServerTestsBase
 
         serversView.getServers().getTreeItem( serverStartedLabel ).select();
 
-        serversView.getStop().click();
+        serversView.clickStopBtn();
 
         sleep( 20000 );
 

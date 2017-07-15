@@ -27,19 +27,19 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.liferay.ide.swtbot.project.ui.tests.page.NewLiferayModuleProjectWizardSecondPagePO;
-import com.liferay.ide.swtbot.project.ui.tests.page.NewLiferayWorkspaceProjectWizardPO;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesContinueDialog;
-import com.liferay.ide.swtbot.ui.tests.eclipse.page.DeleteResourcesDialog;
-import com.liferay.ide.swtbot.ui.tests.liferay.page.NewLiferayModuleProjectWizard;
-import com.liferay.ide.swtbot.ui.tests.page.TreePO;
+import com.liferay.ide.swtbot.liferay.ui.ModuleWizardUI;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferayModuleProjectWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferayModuleProjectWizardSecondPageWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferayWorkspaceProjectWizard;
+import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesContinueDialog;
+import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesDialog;
+import com.liferay.ide.swtbot.ui.page.Tree;
 
 /**
  * @author Ying Xu
  * @author Sunny Shi
  */
-public class NewLiferayModuleProjectWizardTests extends AbstractNewLiferayModuleProjectWizard
-    implements ModuleWizardUIBase
+public class NewLiferayModuleProjectWizardTests extends BaseNewLiferayModuleProjectWizard implements ModuleWizardUI
 {
 
     static String fullClassname = new SecurityManager()
@@ -53,19 +53,19 @@ public class NewLiferayModuleProjectWizardTests extends AbstractNewLiferayModule
 
     static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
 
-    TreePO projectTree = eclipse.getPackageExporerView().getProjectTree();
+    Tree projectTree = ide.getPackageExporerView().getProjectTree();
 
     NewLiferayModuleProjectWizard createModuleProjectWizard =
         new NewLiferayModuleProjectWizard( bot, INDEX_NEW_LIFERAY_MODULE_PROJECT_VALIDATION_MESSAGE );
 
-    NewLiferayModuleProjectWizardSecondPagePO createModuleProjectSecondPageWizard =
-        new NewLiferayModuleProjectWizardSecondPagePO( bot, INDEX_CONFIGURE_COMPONENT_CLASS_VALIDATION_MESSAGE );
+    NewLiferayModuleProjectWizardSecondPageWizard createModuleProjectSecondPageWizard =
+        new NewLiferayModuleProjectWizardSecondPageWizard( bot, INDEX_CONFIGURE_COMPONENT_CLASS_VALIDATION_MESSAGE );
 
     @AfterClass
     public static void cleanAll()
     {
-        eclipse.closeShell( LABEL_NEW_LIFERAY_MODULE_PROJECT );
-        eclipse.getPackageExporerView().deleteProjectExcludeNames( new String[] { getLiferayPluginsSdkName() }, true );
+        ide.closeShell( LABEL_NEW_LIFERAY_MODULE_PROJECT );
+        ide.getPackageExporerView().deleteProjectExcludeNames( new String[] { getLiferayPluginsSdkName() }, true );
     }
 
     @BeforeClass
@@ -73,44 +73,44 @@ public class NewLiferayModuleProjectWizardTests extends AbstractNewLiferayModule
     {
         Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
 
-        eclipse.getLiferayWorkspacePerspective().activate();
-        eclipse.getProjectExplorerView().show();
+        ide.getLiferayWorkspacePerspective().activate();
+        ide.getProjectExplorerView().show();
     }
 
     @Test
     public void validationProjectName()
     {
-        eclipse.getCreateLiferayProjectToolbar().getNewLiferayModuleProject().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayModuleProject().click();
         sleep();
 
-        assertEquals( TEXT_PLEASE_ENTER_A_PROJECT_NAME, createModuleProjectWizard.getValidationMessage() );
-        assertFalse( createModuleProjectWizard.finishButton().isEnabled() );
+        assertEquals( TEXT_PLEASE_ENTER_A_PROJECT_NAME, createModuleProjectWizard.getValidationMsg() );
+        assertFalse( createModuleProjectWizard.finishBtn().isEnabled() );
 
         createModuleProjectWizard.createModuleProject( "." );
         sleep( 1000 );
-        assertEquals( " '.'" + TEXT_INVALID_NAME_ON_PLATFORM, createModuleProjectWizard.getValidationMessage() );
-        assertFalse( createModuleProjectWizard.finishButton().isEnabled() );
+        assertEquals( " '.'" + TEXT_INVALID_NAME_ON_PLATFORM, createModuleProjectWizard.getValidationMsg() );
+        assertFalse( createModuleProjectWizard.finishBtn().isEnabled() );
 
         createModuleProjectWizard.createModuleProject( "/" );
         sleep( 1000 );
         assertEquals(
-            " /" + TEXT_INVALID_CHARACTER_IN_RESOURCE_NAME + "'/'.", createModuleProjectWizard.getValidationMessage() );
-        assertFalse( createModuleProjectWizard.finishButton().isEnabled() );
+            " /" + TEXT_INVALID_CHARACTER_IN_RESOURCE_NAME + "'/'.", createModuleProjectWizard.getValidationMsg() );
+        assertFalse( createModuleProjectWizard.finishBtn().isEnabled() );
 
         createModuleProjectWizard.createModuleProject( "$" );
         sleep( 1000 );
-        assertEquals( TEXT_THE_PROJECT_NAME_INVALID, createModuleProjectWizard.getValidationMessage() );
-        assertFalse( createModuleProjectWizard.finishButton().isEnabled() );
+        assertEquals( TEXT_THE_PROJECT_NAME_INVALID, createModuleProjectWizard.getValidationMsg() );
+        assertFalse( createModuleProjectWizard.finishBtn().isEnabled() );
 
         createModuleProjectWizard.createModuleProject( "" );
         sleep( 1000 );
-        assertEquals( TEXT_PROJECT_NAME_MUST_BE_SPECIFIED, createModuleProjectWizard.getValidationMessage() );
-        assertFalse( createModuleProjectWizard.finishButton().isEnabled() );
+        assertEquals( TEXT_PROJECT_NAME_MUST_BE_SPECIFIED, createModuleProjectWizard.getValidationMsg() );
+        assertFalse( createModuleProjectWizard.finishBtn().isEnabled() );
 
         createModuleProjectWizard.createModuleProject( "a" );
         sleep( 1000 );
-        assertEquals( TEXT_NEW_LIFERAY_MODULE_MESSAGE, createModuleProjectWizard.getValidationMessage() );
-        assertTrue( createModuleProjectWizard.finishButton().isEnabled() );
+        assertEquals( TEXT_NEW_LIFERAY_MODULE_MESSAGE, createModuleProjectWizard.getValidationMsg() );
+        assertTrue( createModuleProjectWizard.finishBtn().isEnabled() );
 
         createModuleProjectWizard.cancel();
     }
@@ -118,7 +118,7 @@ public class NewLiferayModuleProjectWizardTests extends AbstractNewLiferayModule
     @Test
     public void validationTheSecondPage()
     {
-        eclipse.getCreateLiferayProjectToolbar().getNewLiferayModuleProject().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayModuleProject().click();
         sleep();
 
         createModuleProjectWizard.createModuleProject( "test" );
@@ -126,33 +126,33 @@ public class NewLiferayModuleProjectWizardTests extends AbstractNewLiferayModule
 
         createModuleProjectSecondPageWizard.getComponentClassName().setText( "@@" );
         sleep();
-        assertEquals( TEXT_INVALID_CLASS_NAME, createModuleProjectSecondPageWizard.getValidationMessage() );
+        assertEquals( TEXT_INVALID_CLASS_NAME, createModuleProjectSecondPageWizard.getValidationMsg() );
         createModuleProjectSecondPageWizard.getComponentClassName().setText( "testClassName" );
         sleep();
 
         createModuleProjectSecondPageWizard.getPackageName().setText( "!!" );
         sleep();
-        assertEquals( TEXT_INVALID_PACKAGE_NAME, createModuleProjectSecondPageWizard.getValidationMessage() );
+        assertEquals( TEXT_INVALID_PACKAGE_NAME, createModuleProjectSecondPageWizard.getValidationMsg() );
         createModuleProjectSecondPageWizard.getPackageName().setText( "testPackageName" );
         sleep();
 
-        createModuleProjectSecondPageWizard.getAddPropertyKeyButton().click();
+        createModuleProjectSecondPageWizard.getAddPropertyKeyBtn().click();
         sleep();
         createModuleProjectSecondPageWizard.getProperties().setFocus();
-        assertEquals( TEXT_NAME_MUST_BE_SPECIFIED, createModuleProjectSecondPageWizard.getValidationMessage() );
-        assertTrue( createModuleProjectSecondPageWizard.getDeleteButton().isEnabled() );
-        createModuleProjectSecondPageWizard.getDeleteButton().click();
+        assertEquals( TEXT_NAME_MUST_BE_SPECIFIED, createModuleProjectSecondPageWizard.getValidationMsg() );
+        assertTrue( createModuleProjectSecondPageWizard.getDeleteBtn().isEnabled() );
+        createModuleProjectSecondPageWizard.getDeleteBtn().click();
 
-        createModuleProjectSecondPageWizard.getAddPropertyKeyButton().click();
+        createModuleProjectSecondPageWizard.getAddPropertyKeyBtn().click();
         sleep();
-        createModuleProjectSecondPageWizard.setPropertiesText( 2, "a" );
+        createModuleProjectSecondPageWizard.getProperties().setText( 2, "a" );
         createModuleProjectSecondPageWizard.getProperties().setFocus();
         sleep();
-        assertEquals( TEXT_VALUE_MUST_BE_SPECIFIED, createModuleProjectSecondPageWizard.getValidationMessage() );
+        assertEquals( TEXT_VALUE_MUST_BE_SPECIFIED, createModuleProjectSecondPageWizard.getValidationMsg() );
         sleep( 2000 );
         createModuleProjectSecondPageWizard.getProperties().doubleClick( 0, 1 );
         sleep();
-        createModuleProjectSecondPageWizard.setPropertiesText( 2, "b" );
+        createModuleProjectSecondPageWizard.getProperties().setText( 2, "b" );
         createModuleProjectSecondPageWizard.cancel();
     }
 
@@ -179,7 +179,7 @@ public class NewLiferayModuleProjectWizardTests extends AbstractNewLiferayModule
 
         openEditorAndCheck( buildGradleContent, projectName, projectName, buildGradleFileName );
 
-        eclipse.getPackageExporerView().deleteResouceByName( "testMvcportletProject", true );
+        ide.getPackageExporerView().deleteResouceByName( "testMvcportletProject", true );
     }
 
     @Test
@@ -189,12 +189,12 @@ public class NewLiferayModuleProjectWizardTests extends AbstractNewLiferayModule
         String liferayWorkspaceName = "liferayWorkspace";
         String projectName = "testMvcportletInLS";
 
-        eclipse.getCreateLiferayProjectToolbar().getNewLiferayWorkspaceProject().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayWorkspaceProject().click();
         sleep( 2000 );
 
-        NewLiferayWorkspaceProjectWizardPO newLiferayWorkspace = new NewLiferayWorkspaceProjectWizardPO( bot );
+        NewLiferayWorkspaceProjectWizard newLiferayWorkspace = new NewLiferayWorkspaceProjectWizard( bot );
 
-        newLiferayWorkspace.setWorkspaceNameText( liferayWorkspaceName );
+        newLiferayWorkspace.getWorkspaceName().setText( liferayWorkspaceName );
         newLiferayWorkspace.finish();
         newLiferayWorkspace.waitForPageToClose();
 
@@ -226,7 +226,7 @@ public class NewLiferayModuleProjectWizardTests extends AbstractNewLiferayModule
         DeleteResourcesContinueDialog continueDeleteResources =
             new DeleteResourcesContinueDialog( bot, "Delete Resources" );
 
-        projectTree.getTreeItem( liferayWorkspaceName ).doAction( BUTTON_DELETE );
+        projectTree.getTreeItem( liferayWorkspaceName ).doAction( DELETE );
         sleep( 2000 );
 
         deleteResources.confirmDeleteFromDisk();
