@@ -66,7 +66,7 @@ public class GradleProjectCreatedListener implements EventListener
 
     private void configureIfLiferayProject( final IProject project ) throws CoreException
     {
-        if( project.hasNature( GradleProjectNature.ID ) && !LiferayNature.hasNature( project ) )
+        if( GradleProjectNature.isPresentOn( project ) && !LiferayNature.hasNature( project ) )
         {
             final boolean[] needAddNature = new boolean[1];
 
