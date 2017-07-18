@@ -487,13 +487,18 @@ public class SWTBotBase implements UI, Keys
             }
         }
 
-        for( String pid : result )
+        try
         {
-            String allGradleProcess[] = pid.split( " " );
+            for( String pid : result )
+            {
+                String allGradleProcess[] = pid.split( " " );
 
-            Runtime.getRuntime().exec( "taskkill /F /PID " + allGradleProcess[0] );
+                Runtime.getRuntime().exec( "taskkill /F /PID " + allGradleProcess[0] );
+            }
         }
-
+        catch( Exception e )
+        {
+        }
     }
 
 }

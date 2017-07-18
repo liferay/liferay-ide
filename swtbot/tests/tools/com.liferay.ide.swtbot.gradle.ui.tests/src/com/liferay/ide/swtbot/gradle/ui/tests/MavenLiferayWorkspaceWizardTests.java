@@ -13,18 +13,24 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.swtbot.gradle.tests;
+package com.liferay.ide.swtbot.gradle.ui.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
+import org.junit.After;
 import org.junit.Test;
+
+import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesContinueDialog;
+import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesDialog;
 
 /**
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class MavenLiferayWorkspaceWizardTests extends BaseLiferayWorkspaceWizardTests
+public class MavenLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardTestsBase
 {
 
     static String fullClassname = new SecurityManager()
@@ -41,10 +47,12 @@ public class MavenLiferayWorkspaceWizardTests extends BaseLiferayWorkspaceWizard
     @Test
     public void newMavenLiferayWorkspaceProjectWizard()
     {
+        ide.getCreateLiferayProjectToolbar().getNewLiferayWorkspaceProject().click();
+
         newLiferayWorkspaceProjectWizard.getBuildTypes().setSelection( TEXT_BUILD_TYPE_MAVEN );
 
         assertEquals( TEXT_PLEASE_ENTER_THE_WORKSPACE_NAME, newLiferayWorkspaceProjectWizard.getValidationMsg() );
-        assertEquals( "", newLiferayWorkspaceProjectWizard.getWorkspaceName() );
+        assertEquals( "", newLiferayWorkspaceProjectWizard.getWorkspaceName().getText() );
         assertEquals( false, newLiferayWorkspaceProjectWizard.getDownloadLiferayBundle().isChecked() );
 
         newLiferayWorkspaceProjectWizard.getWorkspaceName().setText( projectName );
@@ -104,6 +112,33 @@ public class MavenLiferayWorkspaceWizardTests extends BaseLiferayWorkspaceWizard
         assertEquals( TEXT_WORKSPACE_ALREADY_EXISTS, newLiferayWorkspaceProjectWizard.getValidationMsg() );
 
         newLiferayWorkspaceProjectWizard.cancel();
+    }
+
+    @After
+    public void deleteLiferayWorkspace() throws IOException
+    {
+        killGradleProcess();
+
+        if( ide.getPackageExporerView().hasProjects() )
+        {
+            DeleteResourcesDialog deleteResources = new DeleteResourcesDialog( bot );
+
+            DeleteResourcesContinueDialog continueDeleteResources =
+                new DeleteResourcesContinueDialog( bot, "Delete Resources" );
+
+            projectTree.getTreeItem( projectName ).doAction( DELETE );
+
+            deleteResources.getDeleteFromDisk().select();
+            deleteResources.confirm();
+
+            try
+            {
+                continueDeleteResources.getContinueBtn().click();
+            }
+            catch( Exception e )
+            {
+            }
+        }
     }
 
 }

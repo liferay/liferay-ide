@@ -13,13 +13,19 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.swtbot.gradle.tests;
+package com.liferay.ide.swtbot.gradle.ui.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
+import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesContinueDialog;
+import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesDialog;
 import com.liferay.ide.swtbot.ui.page.Editor;
 import com.liferay.ide.swtbot.ui.page.Tree;
 
@@ -27,7 +33,7 @@ import com.liferay.ide.swtbot.ui.page.Tree;
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class GradleLiferayWorkspaceWizardTests extends BaseLiferayWorkspaceWizardTests
+public class GradleLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardTestsBase
 {
 
     static String fullClassname = new SecurityManager()
@@ -42,8 +48,11 @@ public class GradleLiferayWorkspaceWizardTests extends BaseLiferayWorkspaceWizar
     static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
 
     @Test
+    @Ignore
     public void newGradleLiferayWorksapceProjectWizard()
     {
+        ide.getCreateLiferayProjectToolbar().getNewLiferayWorkspaceProject().click();
+
         newLiferayWorkspaceProjectWizard.getWorkspaceName().setText( projectName );
         sleep();
         newLiferayWorkspaceProjectWizard.getBuildTypes().setSelection( TEXT_BUILD_TYPE_GRADLE );
@@ -119,19 +128,21 @@ public class GradleLiferayWorkspaceWizardTests extends BaseLiferayWorkspaceWizar
     @Test
     public void newGradleLiferayWorkspaceProjectWithoutDownloadBundle()
     {
+        ide.getCreateLiferayProjectToolbar().getNewLiferayWorkspaceProject().click();
+
         newLiferayWorkspaceProjectWizard.getBuildTypes().setSelection( TEXT_BUILD_TYPE_GRADLE );
 
         assertEquals( TEXT_PLEASE_ENTER_THE_WORKSPACE_NAME, newLiferayWorkspaceProjectWizard.getValidationMsg() );
-        assertEquals( "", newLiferayWorkspaceProjectWizard.getWorkspaceName() );
+        assertEquals( "", newLiferayWorkspaceProjectWizard.getWorkspaceName().getText() );
 
         assertEquals( false, newLiferayWorkspaceProjectWizard.getDownloadLiferayBundle().isChecked() );
 
         newLiferayWorkspaceProjectWizard.getWorkspaceName().setText( projectName );
 
         newLiferayWorkspaceProjectWizard.finish();
-        sleep( 30000 );
 
         projectTree.setFocus();
+
         assertTrue( projectTree.getTreeItem( projectName ).isVisible() );
         assertTrue( projectTree.expandNode( projectName, "modules" ).isVisible() );
         assertTrue( projectTree.expandNode( projectName, "themes" ).isVisible() );
@@ -142,7 +153,6 @@ public class GradleLiferayWorkspaceWizardTests extends BaseLiferayWorkspaceWizar
 
         // rename folder in liferay workspace
         projectTree.expandNode( projectName, "gradle.properties" ).doubleClick();
-        sleep( 3000 );
 
         Editor gradlePropertiesEditor = ide.getEditor( "gradle.properties" );
 
@@ -159,7 +169,6 @@ public class GradleLiferayWorkspaceWizardTests extends BaseLiferayWorkspaceWizar
             TEXT_BUILD_TYPE_GRADLE, moduleProjectName, MENU_MODULE_MVC_PORTLET,
             eclipseWorkspace + "/" + projectName + "/modulesTest", false, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK,
             TEXT_BLANK, false );
-        sleep( 10000 );
 
         projectTree.setFocus();
 
@@ -171,7 +180,6 @@ public class GradleLiferayWorkspaceWizardTests extends BaseLiferayWorkspaceWizar
             TEXT_BUILD_TYPE_GRADLE, themeProjectName, MENU_MODULE_THEME,
             eclipseWorkspace + "/" + projectName + "/warsTest", false, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK,
             false );
-        sleep( 10000 );
 
         projectTree.setFocus();
         assertTrue( projectTree.expandNode( projectName, "warsTest", themeProjectName ).isVisible() );
@@ -179,18 +187,43 @@ public class GradleLiferayWorkspaceWizardTests extends BaseLiferayWorkspaceWizar
         // init bundle
         projectTree.getTreeItem( projectName ).doAction( "Liferay", "Initialize Server Bundle" );
 
-        sleep( 90000 );
-
         projectTree.setFocus();
         assertTrue( projectTree.expandNode( projectName, "bundlesTest" ).isVisible() );
 
         ide.getCreateLiferayProjectToolbar().getNewLiferayWorkspaceProject().click();
 
         newLiferayWorkspaceProjectWizard.getWorkspaceName().setText( "test" );
-        sleep();
+
         assertEquals( TEXT_WORKSPACE_ALREADY_EXISTS, newLiferayWorkspaceProjectWizard.getValidationMsg() );
 
         newLiferayWorkspaceProjectWizard.cancel();
+    }
+
+    @After
+    public void deleteLiferayWorkspace() throws IOException
+    {
+        killGradleProcess();
+
+        if( ide.getPackageExporerView().hasProjects() )
+        {
+            DeleteResourcesDialog deleteResources = new DeleteResourcesDialog( bot );
+
+            DeleteResourcesContinueDialog continueDeleteResources =
+                new DeleteResourcesContinueDialog( bot, "Delete Resources" );
+
+            projectTree.getTreeItem( projectName ).doAction( DELETE );
+
+            deleteResources.getDeleteFromDisk().select();
+            deleteResources.confirm();
+
+            try
+            {
+                continueDeleteResources.getContinueBtn().click();
+            }
+            catch( Exception e )
+            {
+            }
+        }
     }
 
 }

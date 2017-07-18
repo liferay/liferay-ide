@@ -104,6 +104,8 @@ public class Wizard extends CancelableShell
             return null;
         }
 
+        sleep();
+
         return bot.text( validationMsgIndex ).getText();
     }
 

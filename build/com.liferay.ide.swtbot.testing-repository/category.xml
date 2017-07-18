@@ -4,5 +4,6 @@
     <bundle id="com.liferay.ide.swtbot.portlet.ui.tests" version="0.0.0" />
     <bundle id="com.liferay.ide.swtbot.project.ui.tests" version="0.0.0" />
     <bundle id="com.liferay.ide.swtbot.server.ui.tests" version="0.0.0" />
-    <bundle id="com.liferay.ide.swtbot.ui.tests" version="0.0.0" />
+    <bundle id="com.liferay.ide.swtbot.ui" version="0.0.0" />
+    <bundle id="com.liferay.ide.swtbot.liferay.ui" version="0.0.0" />
 </site>
