@@ -18,7 +18,6 @@ package com.liferay.ide.swtbot.ui;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 import com.liferay.ide.swtbot.ui.eclipse.page.ErrorLogView;
-import com.liferay.ide.swtbot.ui.eclipse.page.NewToolbarDropDownButton;
 import com.liferay.ide.swtbot.ui.eclipse.page.PackageExplorerView;
 import com.liferay.ide.swtbot.ui.eclipse.page.ProgressView;
 import com.liferay.ide.swtbot.ui.eclipse.page.ServersView;
@@ -39,7 +38,6 @@ import com.liferay.ide.swtbot.ui.page.View;
 public class Eclipse extends BasePageObject
 {
 
-    protected NewToolbarDropDownButton newBtn;
     protected PackageExplorerView packageExporerView;
     protected Tree projectTree;
     protected View welcomeView;
@@ -71,10 +69,7 @@ public class Eclipse extends BasePageObject
 
         showViewDialog = new ShowViewDialog( bot );
         errorLogView = new ErrorLogView( bot );
-        newBtn = new NewToolbarDropDownButton( bot );
-
         projectExplorerView = new View( bot, LABEL_PROJECT_EXPLORER );
-
         serversView = new ServersView( bot );
         browser = new Browser( bot );
     }
@@ -84,11 +79,6 @@ public class Eclipse extends BasePageObject
         Dialog shell = new Dialog( bot, title );
 
         shell.closeIfOpen();
-    }
-
-    public NewToolbarDropDownButton getNewToolbar()
-    {
-        return newBtn;
     }
 
     public Menu getFileMenu()

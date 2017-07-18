@@ -36,9 +36,9 @@ public class DeleteResourcesContinueDialog extends Dialog implements UI
         continueBtn = new Button( bot, CONTINUE );
     }
 
-    public void clickContinueButton()
+    public Button getContinueBtn()
     {
-        continueBtn.click();
+        return continueBtn;
     }
 
 }

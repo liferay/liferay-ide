@@ -112,9 +112,9 @@ public class ServerTomcatTests extends ServerTestsBase
 
         preferencesDialog.selectServerRuntimeEnvironmentsPage();
 
-        serverRuntimePage.selectRuntime( runtimeName );
+        serverRuntimePage.getRuntimes().click( runtimeName );
 
-        serverRuntimePage.getRemoveButton().click();
+        serverRuntimePage.getRemoveBtn().click();
 
         serverRuntimePage.confirm();
     }

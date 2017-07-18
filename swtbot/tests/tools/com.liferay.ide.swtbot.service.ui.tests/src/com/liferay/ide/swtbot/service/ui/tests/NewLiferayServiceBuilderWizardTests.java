@@ -253,7 +253,7 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase implements S
         textEditor.close();
         serviceXMLFile.delete();
 
-        ide.getNewToolbar().getLiferayServiceBuilder().click();
+        ide.getNewBtn().getLiferayServiceBuilder().click();
         newServiceBuilderWizard.createServiceBuilder( "packagePath1", "namespace1" );
         assertEquals( TEXT_ALREADY_HAS_SERVICE_BUILDER_XML_FILE_MESSAGE, newServiceBuilderWizard.getValidationMsg() );
         assertFalse( newServiceBuilderWizard.finishBtn().isEnabled() );
@@ -357,12 +357,12 @@ public class NewLiferayServiceBuilderWizardTests extends SWTBotBase implements S
         // new a java package
         Tree projectTree = ide.getPackageExporerView().getProjectTree();
 
-        ide.getNewToolbar().getNewPackage().click();
+        ide.getNewBtn().getNewPackage().click();
 
         NewJavaPackageWizard newJavaPackage = new NewJavaPackageWizard( bot );
 
-        newJavaPackage.setName( "newpackage" );
-        assertEquals( projectName + "-portlet/docroot/WEB-INF/src", newJavaPackage.getSourceFolderText().getText() );
+        newJavaPackage.getName().setText( "newpackage" );
+        assertEquals( projectName + "-portlet/docroot/WEB-INF/src", newJavaPackage.getSourceFolder().getText() );
         newJavaPackage.finish();
         assertTrue(
             projectTree.expandNode( projectName + "-portlet", "docroot/WEB-INF/src", "newpackage" ).isVisible() );

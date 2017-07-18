@@ -29,10 +29,10 @@ import com.liferay.ide.swtbot.ui.page.Wizard;
 public class NewServerWizard extends Wizard implements UI
 {
 
-    private Tree _serverTypes;
+    private Text serverHostName;
 
-    private Text _serverHostName;
-    private Text _serverName;
+    private Text serverName;
+    private Tree serverTypes;
 
     public NewServerWizard( SWTBot bot )
     {
@@ -43,40 +43,30 @@ public class NewServerWizard extends Wizard implements UI
     {
         super( bot, TITLE_NEW_SERVER, validationMsgIndex );
 
-        _serverTypes = new Tree( bot );
+        serverTypes = new Tree( bot );
 
-        _serverHostName = new Text( bot, LABEL_SERVER_HOST_NAME );
-        _serverName = new Text( bot, LABEL_SERVER_NAME );
-    }
-
-    public Tree getServerTypes()
-    {
-        return _serverTypes;
-    }
-
-    public void selectServerType( String categroy, String item )
-    {
-        _serverTypes.selectTreeItem( categroy, item );
+        serverHostName = new Text( bot, LABEL_SERVER_HOST_NAME );
+        serverName = new Text( bot, LABEL_SERVER_NAME );
     }
 
     public Text getServerHostName()
     {
-        return _serverHostName;
-    }
-
-    public void setServerHostName( Text serverHostName )
-    {
-        _serverHostName = serverHostName;
+        return serverHostName;
     }
 
     public Text getServerName()
     {
-        return _serverName;
+        return serverName;
     }
 
-    public void setServerName( Text serverName )
+    public Tree getServerTypes()
     {
-        _serverName = serverName;
+        return serverTypes;
+    }
+
+    public void selectServerType( String categroy, String item )
+    {
+        serverTypes.selectTreeItem( categroy, item );
     }
 
 }

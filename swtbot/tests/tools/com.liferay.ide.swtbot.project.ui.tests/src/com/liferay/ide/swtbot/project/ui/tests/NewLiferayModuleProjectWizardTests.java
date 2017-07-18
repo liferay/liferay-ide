@@ -229,12 +229,12 @@ public class NewLiferayModuleProjectWizardTests extends BaseNewLiferayModuleProj
         projectTree.getTreeItem( liferayWorkspaceName ).doAction( DELETE );
         sleep( 2000 );
 
-        deleteResources.confirmDeleteFromDisk();
+        deleteResources.getDeleteFromDisk().select();
         deleteResources.confirm();
 
         try
         {
-            continueDeleteResources.clickContinueButton();
+            continueDeleteResources.getContinueBtn().click();
         }
         catch( Exception e )
         {

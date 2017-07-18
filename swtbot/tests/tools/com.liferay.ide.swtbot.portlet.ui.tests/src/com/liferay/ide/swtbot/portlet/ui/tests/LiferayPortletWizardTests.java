@@ -125,7 +125,7 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
         String projectName = "liferayProject";
 
         // click new liferay portlet wizard without projects
-        ide.getNewToolbar().getLiferayPortlet().click();
+        ide.getNewBtn().getLiferayPortlet().click();
 
         Dialog dialogPage1 = new Dialog( bot, TITLE_NEW_LIFERAY_PORTLET, NO, YES );
 
@@ -196,7 +196,7 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
         {
         }
 
-        ide.getNewToolbar().getLiferayPortlet().click();
+        ide.getNewBtn().getLiferayPortlet().click();
 
         Dialog dialogPage5 = new Dialog( bot, "New Liferay Portlet", NO, YES );
 
@@ -313,7 +313,7 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
     @Test
     public void launchNewPortletInitialTest()
     {
-        ide.getNewToolbar().getLiferayPluginProject().click();
+        ide.getNewBtn().getLiferayPluginProject().click();
 
         assertEquals( "Portlet", newLiferayProjectPage.getPluginTypes().getText() );
 
@@ -1102,7 +1102,7 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
 
         Boolean hasProject = addedProjects();
 
-        ide.getNewToolbar().getLiferayPluginProject().click();
+        ide.getNewBtn().getLiferayPluginProject().click();
 
         newLiferayProjectPage.createSDKProject( "test", "Portlet", true, false );
 
@@ -1309,7 +1309,7 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
         assertContains( "public class NewPortlet extends GenericPortlet", portletJavaPage.getText() );
         assertTrue( portletJavaPage.isActive() );
 
-        ide.getNewToolbar().menuClick( LABEL_LIFERAY_PORTLET );
+        ide.getNewBtn().menuClick( LABEL_LIFERAY_PORTLET );
 
         newPortletPage.createLiferayPortlet( "test-portlet", "MySecondPortlet", null, "com.test.NewPortlet" );
         newPortletPage.finish();
@@ -1318,7 +1318,7 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
 
         assertContains( "public class MySecondPortlet extends NewPortlet", mySecondPortletJavaPage.getText() );
 
-        ide.getNewToolbar().menuClick( LABEL_LIFERAY_PORTLET );
+        ide.getNewBtn().menuClick( LABEL_LIFERAY_PORTLET );
 
         newPortletPage.createLiferayPortlet( "test-portlet" );
 

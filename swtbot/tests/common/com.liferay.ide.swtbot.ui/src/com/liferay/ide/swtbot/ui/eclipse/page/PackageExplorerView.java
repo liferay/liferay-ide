@@ -28,25 +28,25 @@ import com.liferay.ide.swtbot.ui.page.View;
 public class PackageExplorerView extends View implements UI
 {
 
-    private Tree _projectsTree;
-    private DeleteResourcesDialog _deleteResourcesDialog;
-    private Dialog _continueDeleteResourcesDialog;
+    private Tree projects;
+    private DeleteResourcesDialog deleteResourcesDialog;
+    private Dialog continueDeleteResourcesDialog;
 
     public PackageExplorerView( SWTWorkbenchBot bot )
     {
         super( bot, LABEL_PACKAGE_EXPLORER );
 
-        _projectsTree = new Tree( bot );
-        _deleteResourcesDialog = new DeleteResourcesDialog( bot );
-        _continueDeleteResourcesDialog = new Dialog( bot, TITLE_DELETE_RESOURCES, CANCEL, CONTINUE );
+        projects = new Tree( bot );
+        deleteResourcesDialog = new DeleteResourcesDialog( bot );
+        continueDeleteResourcesDialog = new Dialog( bot, TITLE_DELETE_RESOURCES, CANCEL, CONTINUE );
     }
 
     public void deleteProjectExcludeNames( String[] names, boolean deleteFromDisk )
     {
-        if( !_projectsTree.hasItems() )
+        if( !projects.hasItems() )
             return;
 
-        String[] allItemNames = _projectsTree.getAllItems();
+        String[] allItemNames = projects.getAllItems();
 
         for( String itemName : allItemNames )
         {
@@ -65,7 +65,7 @@ public class PackageExplorerView extends View implements UI
                     }
 
                 }
-                _projectsTree.getTreeItem( itemName ).collapse();
+                projects.getTreeItem( itemName ).collapse();
             }
 
             if( !include )
@@ -86,32 +86,32 @@ public class PackageExplorerView extends View implements UI
 
     public void deleteResouceByName( String name, boolean deleteFromDisk )
     {
-        if( !_projectsTree.hasItems() )
+        if( !projects.hasItems() )
             return;
 
-        _projectsTree.getTreeItem( name ).doAction( DELETE );
+        projects.getTreeItem( name ).doAction( DELETE );
 
         sleep( 1000 );
 
         if( deleteFromDisk )
         {
-            _deleteResourcesDialog.confirmDeleteFromDisk();
+            deleteResourcesDialog.getDeleteFromDisk().select();
         }
 
-        _deleteResourcesDialog.confirm();
+        deleteResourcesDialog.confirm();
 
         sleep( 1000 );
-        _continueDeleteResourcesDialog.closeIfOpen();
+        continueDeleteResourcesDialog.closeIfOpen();
     }
 
     public boolean hasProjects()
     {
-        return _projectsTree.hasItems();
+        return projects.hasItems();
     }
 
     public Tree getProjectTree()
     {
-        return _projectsTree;
+        return projects;
     }
 
 }

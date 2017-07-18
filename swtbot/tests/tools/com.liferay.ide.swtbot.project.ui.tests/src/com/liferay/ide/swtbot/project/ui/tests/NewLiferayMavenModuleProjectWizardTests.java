@@ -528,9 +528,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends BaseNewLiferayModul
         projectTree.getTreeItem( projectName ).doAction( DELETE );
         sleep( 2000 );
 
-        deleteResources.confirmDeleteFromDisk();
+        deleteResources.getDeleteFromDisk().select();
         deleteResources.confirm();
-        continueDeleteResources.clickContinueButton();
+        continueDeleteResources.getContinueBtn().click();
 
     }
 

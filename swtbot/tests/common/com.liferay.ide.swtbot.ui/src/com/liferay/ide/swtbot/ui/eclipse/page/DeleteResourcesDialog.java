@@ -36,9 +36,9 @@ public class DeleteResourcesDialog extends Dialog implements UI
         deleteFromDisk = new CheckBox( bot, LABEL_DELETE_FROM_DISK );
     }
 
-    public void confirmDeleteFromDisk()
+    public CheckBox getDeleteFromDisk()
     {
-        deleteFromDisk.select();
+        return deleteFromDisk;
     }
 
 }

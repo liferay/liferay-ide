@@ -39,9 +39,14 @@ public class NewRuntimeWizard extends Wizard implements UI
         serverTypes = new Tree( bot );
     }
 
-    public void search( String key )
+    public Text getSearch()
     {
-        search.setText( key );
+        return search;
+    }
+
+    public Tree getServerTypes()
+    {
+        return serverTypes;
     }
 
     public void selectServerType( String category, String serverType )

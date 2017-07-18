@@ -54,7 +54,7 @@ public class ServerTree extends TreeItem implements ServerActionUI
     {
         doAction( MENU_ADD_AND_REMOVE );
 
-        addAndRemoveDialog.addAll();
+        addAndRemoveDialog.getAddAllBtn().click();
 
         addAndRemoveDialog.confirm();
     }
@@ -128,7 +128,7 @@ public class ServerTree extends TreeItem implements ServerActionUI
     {
         doAction( MENU_ADD_AND_REMOVE );
 
-        addAndRemoveDialog.removeAll();
+        addAndRemoveDialog.getRemoveAllBtn().click();
         addAndRemoveDialog.confirm();
     }
 

@@ -41,7 +41,7 @@ public class ProjectTree extends TreeItem implements ContextMenuUI
     {
         doAction( DELETE );
 
-        deleteDialog.confirmDeleteFromDisk();
+        deleteDialog.getDeleteFromDisk().select();
 
         deleteDialog.confirm();
     }

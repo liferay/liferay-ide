@@ -32,11 +32,10 @@ public class AddAndRemoveDialog extends Dialog implements UI
 
     private Button addAllBtn;
     private Button addBtn;
-    private Button removeAllBtn;
-    private Button removeBtn;
-
     private Tree availables;
     private Tree configureds;
+    private Button removeAllBtn;
+    private Button removeBtn;
 
     public AddAndRemoveDialog( SWTBot bot )
     {
@@ -46,19 +45,8 @@ public class AddAndRemoveDialog extends Dialog implements UI
         addAllBtn = new Button( bot, ADD_ALL_WITH_TWO_BRACKETS );
         removeBtn = new Button( bot, REMOVE_PROJECT );
         removeAllBtn = new Button( bot, REMOVE_ALL );
-
         availables = new Tree( bot, 0 );
         configureds = new Tree( bot, 1 );
-    }
-
-    public Tree getAvailableTree()
-    {
-        return availables;
-    }
-
-    public Tree getConfiguredTree()
-    {
-        return configureds;
     }
 
     public void add( String... projectItemNames )
@@ -73,9 +61,34 @@ public class AddAndRemoveDialog extends Dialog implements UI
         }
     }
 
-    public void addAll()
+    public Button getAddAllBtn()
     {
-        addAllBtn.click();
+        return addAllBtn;
+    }
+
+    public Button getAddBtn()
+    {
+        return addBtn;
+    }
+
+    public Tree getAvailables()
+    {
+        return availables;
+    }
+
+    public Tree getConfigureds()
+    {
+        return configureds;
+    }
+
+    public Button getRemoveAllBtn()
+    {
+        return removeAllBtn;
+    }
+
+    public Button getRemoveBtn()
+    {
+        return removeBtn;
     }
 
     public void remove( String... projectItemNames )
@@ -87,11 +100,6 @@ public class AddAndRemoveDialog extends Dialog implements UI
 
             removeBtn.click();
         }
-    }
-
-    public void removeAll()
-    {
-        removeAllBtn.click();
     }
 
 }

@@ -27,25 +27,25 @@ import com.liferay.ide.swtbot.ui.page.Wizard;
 public class NewJavaPackageWizard extends Wizard implements UI
 {
 
-    private Text _name;
-    private Text _sourceFolder;
+    private Text name;
+    private Text sourceFolder;
 
     public NewJavaPackageWizard( SWTBot bot )
     {
         super( bot, TEXT_BLANK, CANCEL, FINISH, TEXT_BLANK, TEXT_BLANK );
 
-        _sourceFolder = new Text( bot, LABEL_SOURCE_FOLDER );
-        _name = new Text( bot, LABEL_NAME );
+        sourceFolder = new Text( bot, LABEL_SOURCE_FOLDER );
+        name = new Text( bot, LABEL_NAME );
     }
 
-    public Text getSourceFolderText()
+    public Text getName()
     {
-        return _sourceFolder;
+        return name;
     }
 
-    public void setName( String packageName )
+    public Text getSourceFolder()
     {
-        _name.setText( packageName );
+        return sourceFolder;
     }
 
 }

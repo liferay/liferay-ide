@@ -27,20 +27,20 @@ import com.liferay.ide.swtbot.ui.page.Tree;
 public class PreferencesDialog extends Dialog implements UI
 {
 
-    private Tree _preferencesTypes;
+    private Tree preferencesTypes;
 
     public PreferencesDialog( SWTBot bot )
     {
         super( bot, "Preferences" );
 
-        _preferencesTypes = new Tree( bot );
+        preferencesTypes = new Tree( bot );
     }
 
     public void selectPreferencesType( String categroy, String item )
     {
-        _preferencesTypes.getTreeItem( categroy ).expand();
+        preferencesTypes.getTreeItem( categroy ).expand();
 
-        _preferencesTypes.getTreeItem( categroy ).getTreeItem( item ).select();
+        preferencesTypes.getTreeItem( categroy ).getTreeItem( item ).select();
     }
 
     public ServerRuntimeEnvironmentsPreferencesDialog selectServerRuntimeEnvironmentsPage()

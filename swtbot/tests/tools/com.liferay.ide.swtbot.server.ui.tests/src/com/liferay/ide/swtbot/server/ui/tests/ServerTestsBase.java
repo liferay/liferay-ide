@@ -57,7 +57,7 @@ public class ServerTestsBase extends SWTBotBase
 
         preferencesDialog.selectServerRuntimeEnvironmentsPage();
 
-        serverRuntimePage.getAddButton().click();
+        serverRuntimePage.getAddBtn().click();
 
         newRuntimeWizard.selectServerType( "Liferay, Inc.", "Liferay 7.x" );
 

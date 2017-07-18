@@ -28,41 +28,41 @@ import com.liferay.ide.swtbot.ui.page.Table;
 public class ServerRuntimeEnvironmentsPreferencesDialog extends Dialog implements UI
 {
 
-    private Table _runtimes;
+    private Button addBtn;
 
-    private Button _add;
-    private Button _edit;
-    private Button _remove;
+    private Button editBtn;
+    private Button removeBtn;
+    private Table runtimes;
 
     public ServerRuntimeEnvironmentsPreferencesDialog( SWTBot bot )
     {
         super( bot, "Preferences" );
 
-        _runtimes = new Table( bot, "Server runtime environments:" );
+        runtimes = new Table( bot, "Server runtime environments:" );
 
-        _add = new Button( bot, "Add..." );
-        _edit = new Button( bot, "Edit..." );
-        _remove = new Button( bot, "Remove" );
+        addBtn = new Button( bot, "Add..." );
+        editBtn = new Button( bot, "Edit..." );
+        removeBtn = new Button( bot, "Remove" );
     }
 
-    public void selectRuntime( String runtimeName )
+    public Button getAddBtn()
     {
-        _runtimes.click( runtimeName );
+        return addBtn;
     }
 
-    public Button getAddButton()
+    public Button getEditBtn()
     {
-        return _add;
+        return editBtn;
     }
 
-    public Button getEditButton()
+    public Button getRemoveBtn()
     {
-        return _edit;
+        return removeBtn;
     }
 
-    public Button getRemoveButton()
+    public Table getRuntimes()
     {
-        return _remove;
+        return runtimes;
     }
 
 }
