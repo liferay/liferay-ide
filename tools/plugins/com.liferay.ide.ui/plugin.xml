@@ -217,4 +217,24 @@
             name="Preferences">
       </settingsTransfer>
    </extension>
+      <extension
+         point="org.eclipse.epp.logging.aeri.ide.servers">
+           <server
+           class="org.eclipse.epp.internal.logging.aeri.ide.server.mars.ServerConnection"
+           icon16="icons/liferay_logo_16.png"
+           icon32="icons/liferay_logo_32.png"
+           id="com.liferay.ide.error.server"
+           name="Liferay IDE Error Reporter">
+
+           <link rel="provider"
+               title="Liferay IDE"
+               href="https://www.liferay.com"
+           />
+
+           <link rel="discovery"
+               title="Discovery URL"
+               href="https://aer.ctrlflow.com/liferay/community/discovery"
+           />
+     </server>
+     </extension>
 </plugin>

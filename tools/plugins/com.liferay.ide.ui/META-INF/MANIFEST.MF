@@ -30,7 +30,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.sapphire.ui;bundle-version="[9,10)",
  org.eclipse.sapphire.ui.swt.xml.editor;bundle-version="[9,10)",
  org.eclipse.sapphire.modeling;bundle-version="[9,10)",
- com.liferay.ide.sdk.core
+ com.liferay.ide.sdk.core,
+ org.eclipse.epp.logging.aeri.ide;resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.ui,
