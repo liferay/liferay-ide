@@ -21,14 +21,13 @@ import com.liferay.ide.core.util.FileUtil;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
+import java.util.jar.JarFile;
 
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.FileLocator;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ModelBuilder;
 import org.gradle.tooling.ProjectConnection;
-import org.osgi.framework.Bundle;
+import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
@@ -40,17 +39,76 @@ public class GradleTooling
 
     private static void extractJar( File depsDir, String jarName ) throws IOException
     {
-        InputStream in = GradleTooling.class.getResourceAsStream( "/lib/" + jarName+".jar" );
+        String fullFileName = jarName + ".jar";
 
-        Bundle bundle = Platform.getBundle( GradleCore.PLUGIN_ID );
+        File[] files = depsDir.listFiles();
 
-        String bundleVersion = bundle.getVersion().toString();
-
-        File modelJar = new File( depsDir, jarName+"_"+bundleVersion+".jar" );
-
-        if( !modelJar.exists() )
+        // clear legacy dependency files
+        for( File file : files )
         {
-            FileUtil.writeFileFromStream( modelJar, in );
+            if( file.isFile() && file.getName().startsWith( jarName ) && !file.getName().equals( fullFileName ) )
+            {
+                if( !file.delete() )
+                {
+                    GradleCore.logError( "Error: delete file " + file.getAbsolutePath() + " fail" );
+                }
+            }
+        }
+
+        String embeddedJarVersion = null;
+
+        File embeddedJarFile = new File(
+            FileLocator.toFileURL( GradleCore.getDefault().getBundle().getEntry( "lib/" + fullFileName ) ).getFile() );
+
+        try(JarFile embededJarFile = new JarFile( embeddedJarFile ))
+        {
+            embeddedJarVersion = embededJarFile.getManifest().getMainAttributes().getValue( "Bundle-Version" );
+        }
+        catch( IOException e )
+        {
+        }
+
+        File jarFile = new File( depsDir, fullFileName );
+
+        if( jarFile.exists() )
+        {
+            boolean shouldDelete = false;
+
+            try(JarFile jar = new JarFile( jarFile ))
+            {
+                String bundleVersion = jar.getManifest().getMainAttributes().getValue( "Bundle-Version" );
+
+                if( !CoreUtil.empty( bundleVersion ) )
+                {
+                    Version rightVersion = new Version( embeddedJarVersion );
+                    Version version = new Version( bundleVersion );
+
+                    if( version.compareTo( rightVersion ) != 0 )
+                    {
+                        shouldDelete = true;
+                    }
+                }
+                else
+                {
+                    shouldDelete = true;
+                }
+            }
+            catch( Exception e )
+            {
+            }
+
+            if( shouldDelete )
+            {
+                if( !jarFile.delete() )
+                {
+                    GradleCore.logError( "Error: delete file " + jarFile.getAbsolutePath() + " fail" );
+                }
+            }
+        }
+
+        if( !jarFile.exists() )
+        {
+            FileUtil.copyFile( embeddedJarFile, jarFile );
         }
     }
 
@@ -82,12 +140,14 @@ public class GradleTooling
             final String initScriptTemplate =
                 CoreUtil.readStreamToString( GradleTooling.class.getResourceAsStream( "init.gradle" ) );
 
-            final String initScriptContents = initScriptTemplate.replaceFirst(
-                "%deps%", path);
+            final String initScriptContents = initScriptTemplate.replaceFirst( "%deps%", path );
 
-            
-            //TODO should not create temp file and just use one file
-            final File scriptFile = Files.createTempFile( "ide", "init.gradle" ).toFile();
+            final File scriptFile = new File( cacheDir, "init.gradle" );
+
+            if( !scriptFile.exists() )
+            {
+                scriptFile.createNewFile();
+            }
 
             FileUtil.writeFileFromStream( scriptFile, new ByteArrayInputStream( initScriptContents.getBytes() ) );
 
