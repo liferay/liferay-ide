@@ -140,6 +140,9 @@
         </component>
     </componentList>
     <postInstallationActionList>
+        <createDirectory>
+            <path>${user_home_directory}${platform_path_separator}.liferay</path>
+        </createDirectory>
         <runProgram>
             <customErrorMessage>Could not create DXP download token. Make sure you type correct email address and password and are connected to the internet.</customErrorMessage>
             <program>java</program>
