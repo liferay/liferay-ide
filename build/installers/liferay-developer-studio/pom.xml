@@ -32,8 +32,8 @@
 
     <properties>
         <portal-download-base>http://mirrors/files.liferay.com/private/ee/portal</portal-download-base>
-        <portal-version>7.0.10.3</portal-version>
-        <portal-zip-name>liferay-dxp-digital-enterprise-tomcat-7.0-sp3-20170503123037723.zip</portal-zip-name>
+        <portal-version>7.0.10.4</portal-version>
+        <portal-zip-name>liferay-dxp-digital-enterprise-tomcat-7.0-sp4-20170705142422877.zip</portal-zip-name>
         <plugin-sdk-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk</plugin-sdk-download-base>
         <plugin-sdk-zip-name>com.liferay.portal.plugins.sdk-1.0.11-withdependencies.zip</plugin-sdk-zip-name>
         <plugin-sdk-version>1.0.11</plugin-sdk-version>
