@@ -14,8 +14,12 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaConventions;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.sapphire.java.JavaPackageName;
 import org.eclipse.sapphire.modeling.Status;
@@ -23,6 +27,7 @@ import org.eclipse.sapphire.services.ValidationService;
 
 /**
  * @author Simon Jiang
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class JavaPackageNameValidationService extends ValidationService
@@ -32,6 +37,15 @@ public class JavaPackageNameValidationService extends ValidationService
     protected Status compute()
     {
         Status retval = Status.createOkStatus();
+
+        final IJavaProject javaproject = JavaCore.create( CoreUtil.getProject( op().getProjectName().text( false ) ) );
+
+        if( CoreUtil.getSourceFolders( javaproject ).size() == 0 )
+        {
+            retval = Status.createErrorStatus( "Unable to find any source folders." );
+
+            return retval;
+        }
 
         final JavaPackageName packageName = op().getPackageName().content( true );
 
