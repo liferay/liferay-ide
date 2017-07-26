@@ -44,16 +44,16 @@
         <m2e-archiver-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.2/N/0.17.2.201606141937/</m2e-archiver-site>
         <eclipse-xml-search-site>https://dl.bintray.com/gamerson/eclipse-wtp-xml-search/</eclipse-xml-search-site>
         <tern-site>http://oss.opensagres.fr/tern.repository/1.2.1/</tern-site>
-        <bndtools-site>https://bndtools.ci.cloudbees.com/job/bndtools.master/2434/artifact/build/generated/p2/</bndtools-site>
+        <bndtools-site>https://dl.bintray.com/bndtools/bndtools/3.4.0/</bndtools-site>
         <gradle-site>http://download.eclipse.org/buildship/updates/e46/releases/2.x/2.1.1.v20170713-0942/</gradle-site>
         <tycho-m2e-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.9.0/N/0.9.0.201412222151/</tycho-m2e-site>
-        <blade-site>https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/</blade-site>
-        <swtbot-site>http://download.eclipse.org/technology/swtbot/releases/latest</swtbot-site>
+        <blade-site>https://releases.liferay.com/tools/blade-cli/2.2.0.201707061805/</blade-site>
+        <swtbot-site>http://download.eclipse.org/technology/swtbot/releases/2.6.0/</swtbot-site>
         <sapphire-site>http://download.eclipse.org/sapphire/9.1/repository/</sapphire-site>
         <maven-deps-plugin-site>http://ianbrandt.github.io/m2e-maven-dependency-plugin/0.0.4/</maven-deps-plugin-site>
         <gmaven.runtime>1.8</gmaven.runtime>
-        <blade-latest-download-url>https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/167/artifact/build/generated/p2/plugins/com.liferay.blade.cli_2.2.0.201707052044.jar</blade-latest-download-url>
-        <blade-latest-md5>e7d9fe28a535df2ff702ff0aeaadcd5b</blade-latest-md5>
+        <blade-latest-download-url>https://releases.liferay.com/tools/blade-cli/2.2.0.201707061805/plugins/com.liferay.blade.cli_2.2.0.201707061805.jar</blade-latest-download-url>
+        <blade-latest-md5>f3f503915055437463cc6f57c27284a8</blade-latest-md5>
     </properties>
 
     <repositories>
