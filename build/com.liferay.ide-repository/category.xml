@@ -12,6 +12,9 @@
     <feature id="com.liferay.ide.enterprise" version="0.0.0">
         <category name="liferay-ide" />
     </feature>
+    <feature id="org.eclipse.buildship" version="0.0.0">
+        <category name="liferay-ide" />
+    </feature>
 
     <category-def name="liferay-ide" label="Liferay IDE">
         <description>
