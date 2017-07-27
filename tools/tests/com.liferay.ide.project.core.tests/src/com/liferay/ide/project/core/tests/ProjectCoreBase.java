@@ -149,9 +149,7 @@ public class ProjectCoreBase extends ServerCoreBase
 
     protected void waitForBuildAndValidation(IProject project) throws Exception
     {
-        project.build(IncrementalProjectBuilder.CLEAN_BUILD, new NullProgressMonitor());
-        waitForBuildAndValidation();
-        project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
+        project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, new NullProgressMonitor());
         waitForBuildAndValidation();
     }
 
