@@ -53,7 +53,7 @@
         <runProgram>
             <customErrorMessage>Could not create DXP download token. Make sure you type correct email address and password and are connected to the internet.</customErrorMessage>
             <program>java</program>
-            <programArguments>-jar "${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar" createToken --force --email ${email} --password ${password}</programArguments>
+            <programArguments>-jar "${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar" createToken --force --email ${email} --password ${password.password}</programArguments>
             <onErrorActionList>
                 <deleteFile>
                     <path>${installdir}</path>
