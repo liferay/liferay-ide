@@ -113,7 +113,7 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase
         op.setProjectName( "test-gradle-module-fragment" );
         op.setProjectProvider( "gradle-module-fragment" );
         op.setLiferayRuntimeName( runtimeName );
-        op.setHostOsgiBundle( "com.liferay.asset.display.web-1.0.2.jar" );
+        op.setHostOsgiBundle( "com.liferay.asset.display.web-1.0.3.jar" );
         OverrideFilePath overrideFilePath = op.getOverrideFiles().insert();
         overrideFilePath.setValue( "META-INF/resources/view.jsp" );
 
@@ -137,7 +137,7 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase
         op.setProjectName( "test-maven-module-fragment" );
         op.setProjectProvider( "maven-module-fragment" );
         op.setLiferayRuntimeName( runtimeName );
-        op.setHostOsgiBundle( "com.liferay.login.web-1.0.7.jar" );
+        op.setHostOsgiBundle( "com.liferay.login.web-1.1.18.jar" );
         OverrideFilePath file = op.getOverrideFiles().insert();
         file.setValue( "META-INF/resources/login.jsp" );
 
