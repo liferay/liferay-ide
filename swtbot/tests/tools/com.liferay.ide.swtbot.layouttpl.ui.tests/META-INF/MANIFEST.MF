@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Layout Template UI Tests
 Bundle-SymbolicName: com.liferay.ide.swtbot.layouttpl.ui.tests
-Bundle-Version: 3.1.0.qualifier
+Bundle-Version: 3.1.1.qualifier
 Bundle-Vendor: Liferay
 Require-Bundle: org.eclipse.swtbot.go,
  com.liferay.ide.swtbot.ui,
