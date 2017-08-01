@@ -50,16 +50,31 @@
         </component>
     </componentList>
     <postInstallationActionList>
-        <runProgram>
-            <customErrorMessage>Could not create DXP download token. Make sure you type correct email address and password and are connected to the internet.</customErrorMessage>
-            <program>java</program>
-            <programArguments>-jar "${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar" createToken --force --email '${email}' --password '${password.password}'</programArguments>
-            <onErrorActionList>
+        <createDirectory>
+            <path>${user_home_directory}${platform_path_separator}.liferay</path>
+        </createDirectory>
+        <if>
+            <actionList>
+                <writeFile>
+                    <encoding>utf-8</encoding>
+                    <path>${installdir}${platform_path_separator}pwd</path>
+                    <text>${password.password}</text>
+                </writeFile>
+                <runProgram>
+                    <customErrorMessage>Could not create DXP download token. Make sure you type correct email address and password and are connected to the internet.</customErrorMessage>
+                    <program>java</program>
+                    <programArguments>-jar "${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar" createToken --force --email '${email}' --password-file '${installdir}${platform_path_separator}pwd'</programArguments>
+                    <onErrorActionList>
+                        <deleteFile>
+                            <path>${installdir}</path>
+                        </deleteFile>
+                    </onErrorActionList>
+                </runProgram>
                 <deleteFile>
-                    <path>${installdir}</path>
+                    <path>${installdir}${platform_path_separator}pwd</path>
                 </deleteFile>
-            </onErrorActionList>
-            <ruleList>
+            </actionList>
+            <conditionRuleList>
                 <compareValues>
                     <logic>equals</logic>
                     <value1>${isdxp}</value1>
@@ -74,8 +89,8 @@
                     <value1>${initlrws}</value1>
                     <value2>lrws</value2>
                 </compareValues>
-            </ruleList>
-        </runProgram>
+            </conditionRuleList>
+        </if>
         <runProgram>
             <program>java</program>
             <programArguments>-jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" -u init</programArguments>

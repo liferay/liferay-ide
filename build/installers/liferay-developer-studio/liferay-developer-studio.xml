@@ -143,16 +143,28 @@
         <createDirectory>
             <path>${user_home_directory}${platform_path_separator}.liferay</path>
         </createDirectory>
-        <runProgram>
-            <customErrorMessage>Could not create DXP download token. Make sure you type correct email address and password and are connected to the internet.</customErrorMessage>
-            <program>java</program>
-            <programArguments>-jar "${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar" createToken --force --email '${email}' --password '${password.password}'</programArguments>
-            <onErrorActionList>
+        <if>
+            <actionList>
+                <writeFile>
+                    <encoding>utf-8</encoding>
+                    <path>${installdir}${platform_path_separator}pwd</path>
+                    <text>${password.password}</text>
+                </writeFile>
+                <runProgram>
+                    <customErrorMessage>Could not create DXP download token. Make sure you type correct email address and password and are connected to the internet.</customErrorMessage>
+                    <program>java</program>
+                    <programArguments>-jar "${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar" createToken --force --email '${email}' --password-file '${installdir}${platform_path_separator}pwd'</programArguments>
+                    <onErrorActionList>
+                        <deleteFile>
+                            <path>${installdir}</path>
+                        </deleteFile>
+                    </onErrorActionList>
+                </runProgram>
                 <deleteFile>
-                    <path>${installdir}</path>
+                    <path>${installdir}${platform_path_separator}pwd</path>
                 </deleteFile>
-            </onErrorActionList>
-            <ruleList>
+            </actionList>
+            <conditionRuleList>
                 <compareValues>
                     <logic>equals</logic>
                     <value1>${isdxp}</value1>
@@ -162,8 +174,8 @@
                     <condition>not_exists</condition>
                     <path>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}token</path>
                 </fileTest>
-            </ruleList>
-        </runProgram>
+            </conditionRuleList>
+        </if>
         <if>
             <explanation>is linux</explanation>
             <actionList>
@@ -419,6 +431,7 @@
             <path>${studioZipPath}</path>
         </deleteFile>
     </postInstallationActionList>
+    <createOsxBundleDmg>1</createOsxBundleDmg>
     <createUninstaller>0</createUninstaller>
     <disableSplashScreen>1</disableSplashScreen>
     <enableRollback>1</enableRollback>
@@ -549,6 +562,6 @@
             </ruleList>
         </parameterGroup>
     </parameterList>
-    <createOsxBundleDmg>1</createOsxBundleDmg>
     <showFileUnpackingProgress>0</showFileUnpackingProgress>
 </project>
+
