@@ -22,7 +22,7 @@ import com.liferay.ide.swtbot.ui.page.Tree;
 /**
  * @author Terry Jia
  */
-public class LiferayWorkspaceWizardTestsBase extends BaseNewLiferayModuleProjectWizard
+public class LiferayWorkspaceWizardBase extends BaseNewLiferayModuleProjectWizard
 {
 
     protected String projectName = "workspace-project";

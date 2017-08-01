@@ -74,6 +74,8 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
     {
         Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
 
+        ide.getLiferayPerspective().activate();
+
         unzipServer();
         unzipPluginsSDK();
     }

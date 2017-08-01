@@ -21,6 +21,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 
 import org.junit.After;
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesContinueDialog;
@@ -30,7 +32,7 @@ import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesDialog;
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class MavenLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardTestsBase
+public class MavenLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardBase
 {
 
     static String fullClassname = new SecurityManager()
@@ -74,7 +76,7 @@ public class MavenLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardTest
         String themeProjectName = "testMavenThemeModuleInLWS";
 
         newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, themeProjectName, MENU_MODULE_THEME, eclipseWorkspace + "/" + projectName + "/wars",
+            TEXT_BUILD_TYPE_MAVEN, themeProjectName, MODULE_THEME, eclipseWorkspace + "/" + projectName + "/wars",
             false, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
         sleep( 10000 );
 
@@ -85,7 +87,7 @@ public class MavenLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardTest
         String moduleProjectName = "testMavenModuleInLWS";
 
         newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, moduleProjectName, MENU_MODULE_MVC_PORTLET,
+            TEXT_BUILD_TYPE_MAVEN, moduleProjectName, MODULE_MVC_PORTLET,
             eclipseWorkspace + "/" + projectName + "/modules", false, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK,
             false );
         sleep( 10000 );
@@ -98,8 +100,8 @@ public class MavenLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardTest
         String projectName = "testGradleModuleInMavenLWS";
 
         newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MENU_MODULE_MVC_PORTLET, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_MVC_PORTLET, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
+            TEXT_BLANK, TEXT_BLANK, false );
         sleep( 10000 );
 
         projectTree.setFocus();
@@ -139,6 +141,12 @@ public class MavenLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardTest
             {
             }
         }
+    }
+
+    @Before
+    public void importModuleProject()
+    {
+        Assume.assumeTrue( runTest() || runAllTests() );
     }
 
 }

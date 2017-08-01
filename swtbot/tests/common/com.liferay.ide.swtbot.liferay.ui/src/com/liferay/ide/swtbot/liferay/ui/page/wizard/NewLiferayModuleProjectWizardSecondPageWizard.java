@@ -57,15 +57,15 @@ public class NewLiferayModuleProjectWizardSecondPageWizard extends Wizard implem
     public NewLiferayModuleProjectWizardSecondPageWizard( SWTBot bot, String title, int validationMsgIndex )
     {
         super( bot, title, validationMsgIndex );
-        componentClassName = new Text( bot, LABEL_MODULE_COMPONENT_CLASS_NAME );
+        componentClassName = new Text( bot, MODULE_COMPONENT_CLASS_NAME );
         packageName = new Text( bot, LABEL_PACKAGE_NAME_UPPERCASE );
         serviceName = new Text( bot, LABEL_SERVICE_NAME );
-        properties = new Table( bot, LABEL_MODULE_PROPERTIES );
+        properties = new Table( bot, MODULE_PROPERTIES );
         browseBtn = new ToolbarButtonWithTooltip( bot, BROWSE );
-        addPropertyKeyBtn = new ToolbarButtonWithTooltip( bot, TOOLBARBOTTON_ADD_PROPERTY_KEY );
-        moveUpBtn = new ToolbarButtonWithTooltip( bot, TOOLBARBOTTON_MOVE_UP );
-        moveDownBtn = new ToolbarButtonWithTooltip( bot, TOOLBARBOTTON_MOVE_DOWN );
-        deleteBtn = new ToolbarButtonWithTooltip( bot, TOOLBARBOTTON_DELETE );
+        addPropertyKeyBtn = new ToolbarButtonWithTooltip( bot, ADD_PROPERTY_KEY );
+        moveUpBtn = new ToolbarButtonWithTooltip( bot, MOVE_UP );
+        moveDownBtn = new ToolbarButtonWithTooltip( bot, MOVE_DOWN );
+        deleteBtn = new ToolbarButtonWithTooltip( bot, DELETE );
     }
 
     public ToolbarButtonWithTooltip getAddPropertyKeyBtn()

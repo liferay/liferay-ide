@@ -94,6 +94,8 @@ public class HookConfigurationWizardTests extends SWTBotBase implements DialogUI
     {
         Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
 
+        ide.getLiferayPerspective().activate();
+
         unzipPluginsSDK();
         unzipServer();
     }
@@ -422,6 +424,7 @@ public class HookConfigurationWizardTests extends SWTBotBase implements DialogUI
 
         portalPropertiesPage.getPropertyRemoveBtn().click();
         portalPropertiesPage.finish();
+        sleep();
 
         Tree projectTree = ide.getPackageExporerView().getProjectTree();
 

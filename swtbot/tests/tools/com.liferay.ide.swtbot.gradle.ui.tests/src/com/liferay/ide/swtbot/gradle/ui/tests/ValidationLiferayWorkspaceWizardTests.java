@@ -21,6 +21,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 
 import org.junit.After;
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesContinueDialog;
@@ -30,8 +32,19 @@ import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesDialog;
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class ValidationLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardTestsBase
+public class ValidationLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardBase
 {
+
+    static String fullClassname = new SecurityManager()
+    {
+
+        public String getClassName()
+        {
+            return getClassContext()[1].getName();
+        }
+    }.getClassName();
+
+    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
 
     @Test
     public void initialStateTest()
@@ -73,7 +86,9 @@ public class ValidationLiferayWorkspaceWizardTests extends LiferayWorkspaceWizar
 
         newLiferayWorkspaceProjectWizard.getWorkspaceName().setText( "*" );
 
-        assertEquals( " The name is invalid for a project.", newLiferayWorkspaceProjectWizard.getValidationMsg() );
+        assertEquals(
+            " *" + TEXT_INVALID_CHARACTER_IN_RESOURCE_NAME + "'*'.",
+            newLiferayWorkspaceProjectWizard.getValidationMsg() );
 
         newLiferayWorkspaceProjectWizard.getWorkspaceName().setText( TEXT_BLANK );
 
@@ -111,6 +126,12 @@ public class ValidationLiferayWorkspaceWizardTests extends LiferayWorkspaceWizar
             {
             }
         }
+    }
+
+    @Before
+    public void importModuleProject()
+    {
+        Assume.assumeTrue( runTest() || runAllTests() );
     }
 
 }

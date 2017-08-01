@@ -85,6 +85,8 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
     {
         Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
 
+        ide.getLiferayPerspective().activate();
+
         unzipPluginsSDK();
         unzipServer();
     }
@@ -135,6 +137,7 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
         assertFalse( newLiferayProjectPage.nextBtn().isEnabled() );
 
         newLiferayProjectPage.createSDKPortletProject( projectName );
+        sleep();
         assertTrue( newLiferayProjectPage.nextBtn().isEnabled() );
 
         newLiferayProjectPage.cancel();
@@ -217,9 +220,9 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
         newPortletPage.waitForPageToOpen();
 
         assertEquals( TEXT_CREATE_A_PORTLET_CLASS, newPortletPage.getValidationMsg() );
-        assertEquals( "liferayProject-portlet", newPortletPage.getPortletPluginProjects() );
+        assertEquals( "liferayProject-portlet", newPortletPage.getPortletPluginProjects().getText() );
         assertTrue( newPortletPage.getNewPortlet().isSelected() );
-        assertEquals( "com.liferay.util.bridges.mvc.MVCPortlet", newPortletPage.getSuperClasses() );
+        assertEquals( "com.liferay.util.bridges.mvc.MVCPortlet", newPortletPage.getSuperClasses().getText() );
 
         newPortletPage.finish();
     }
@@ -274,8 +277,8 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
 
         PackageSelectionDialog selectPackagePage = new PackageSelectionDialog( bot, "Package Selection", 0 );
 
-        assertEquals( "Choose a package:", selectPackagePage.getDialogLabel() );
-        selectPackagePage.getAvailablePackages().click( 0 );
+        assertEquals( "Choose a package:", selectPackagePage.getDialogLabel( 0 ) );
+        // selectPackagePage.getAvailablePackages().click( 0 );
 
         selectPackagePage.confirm();
 
@@ -327,7 +330,7 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
         newPortletPage.waitForPageToOpen();
 
         // check initial state
-        assertEquals( projectName + "-portlet", newPortletPage.getPortletPluginProjects() );
+        assertEquals( projectName + "-portlet", newPortletPage.getPortletPluginProjects().getText() );
         assertEquals( "/mytest-portlet/docroot/WEB-INF/src", newPortletPage.getSourceFolder().getText() );
         assertEquals( "NewPortlet", newPortletPage.getPortletClass().getText() );
         assertEquals( "com.test", newPortletPage.getJavaPackage().getText() );
@@ -396,8 +399,9 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
             Arrays.equals(
                 availableEntryCategories70,
                 specifyLiferayPortletDeploymentDescriptorPage.getEntryCategory().items() ) );
-        assertEquals( "1.5", specifyLiferayPortletDeploymentDescriptorPage.getEntryWeight() );
-        assertEquals( "NewPortletOneControlPanelEntry", specifyLiferayPortletDeploymentDescriptorPage.getEntryClass() );
+        assertEquals( "1.5", specifyLiferayPortletDeploymentDescriptorPage.getEntryWeight().getText() );
+        assertEquals(
+            "NewPortletOneControlPanelEntry", specifyLiferayPortletDeploymentDescriptorPage.getEntryClass().getText() );
         assertTrue( specifyLiferayPortletDeploymentDescriptorPage.getEntryCategory().isEnabled() );
         assertTrue( specifyLiferayPortletDeploymentDescriptorPage.getEntryWeight().isEnabled() );
         assertTrue( specifyLiferayPortletDeploymentDescriptorPage.getEntryClass().isEnabled() );
@@ -448,15 +452,15 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
             TEXT_SPECIFY_LIFERAY_PORTLET_DEPLOYMENT_DESCRIPTOR_DETAILS,
             specifyLiferayPortletDeploymentDescriptorPage.getValidationMsg() );
 
-        specifyLiferayPortletDeploymentDescriptorPage.getEntryClass().setText( TEXT_BLANK );
+        specifyLiferayPortletDeploymentDescriptorPage.getEntryWeight().setText( TEXT_BLANK );
         assertEquals(
             TEXT_MUST_SPECIFY_VALID_ENTRY_WEIGHT, specifyLiferayPortletDeploymentDescriptorPage.getValidationMsg() );
 
-        specifyLiferayPortletDeploymentDescriptorPage.getEntryClass().setText( "**" );
+        specifyLiferayPortletDeploymentDescriptorPage.getEntryWeight().setText( "**" );
         assertEquals(
             TEXT_MUST_SPECIFY_VALID_ENTRY_WEIGHT, specifyLiferayPortletDeploymentDescriptorPage.getValidationMsg() );
 
-        specifyLiferayPortletDeploymentDescriptorPage.getEntryClass().setText( ".1" );
+        specifyLiferayPortletDeploymentDescriptorPage.getEntryWeight().setText( ".1" );
         assertEquals(
             TEXT_SPECIFY_LIFERAY_PORTLET_DEPLOYMENT_DESCRIPTOR_DETAILS,
             specifyLiferayPortletDeploymentDescriptorPage.getValidationMsg() );
@@ -547,10 +551,10 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
             "com.liferay.portal.kernel.portlet.LiferayPortlet" );
         newPortletPage.next();
 
-        assertEquals( "new-portlet-portlet", specifyPortletDeploymentDescriptorPage.getPortletName() );
-        assertEquals( "New Portlet Portlet", specifyPortletDeploymentDescriptorPage.getDisplayName() );
-        assertEquals( "New Portlet Portlet", specifyPortletDeploymentDescriptorPage.getPortletTitle() );
-        assertEquals( "/html/newportletportlet", specifyPortletDeploymentDescriptorPage.getJspFolder() );
+        assertEquals( "new-portlet-portlet", specifyPortletDeploymentDescriptorPage.getPortletName().getText() );
+        assertEquals( "New Portlet Portlet", specifyPortletDeploymentDescriptorPage.getDisplayName().getText() );
+        assertEquals( "New Portlet Portlet", specifyPortletDeploymentDescriptorPage.getPortletTitle().getText() );
+        assertEquals( "/html/newportletportlet", specifyPortletDeploymentDescriptorPage.getJspFolder().getText() );
 
         newPortletPage.next();
 
@@ -562,7 +566,7 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
 
         SelectionDialog iconSelectPage = new SelectionDialog( bot, "Icon Selection" );
 
-        assertEquals( "Choose an icon file:", iconSelectPage.getDialogLabel() );
+        assertEquals( "Choose an icon file:", iconSelectPage.getDialogLabel( 0 ) );
         assertFalse( iconSelectPage.confirmBtn().isEnabled() );
         assertTrue( iconSelectPage.cancelBtn().isEnabled() );
 
@@ -581,7 +585,7 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
 
         SelectionDialog cssSelectPage = new SelectionDialog( bot, "CSS Selection" );
 
-        assertEquals( "Choose a css file:", cssSelectPage.getDialogLabel() );
+        assertEquals( "Choose a css file:", cssSelectPage.getDialogLabel( 0 ) );
         assertFalse( cssSelectPage.confirmBtn().isEnabled() );
         assertTrue( cssSelectPage.cancelBtn().isEnabled() );
 
@@ -593,14 +597,14 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
         assertTrue( cssSelectPage.cancelBtn().isEnabled() );
         cssSelectPage.confirm();
 
-        assertEquals( "/view.jsp", specifyLiferayPortletDeploymentDescriptorPage.getCss() );
+        assertEquals( "/view.jsp", specifyLiferayPortletDeploymentDescriptorPage.getCss().getText() );
 
         // browse javaScript tests
         specifyLiferayPortletDeploymentDescriptorPage.getBrowseJavaScriptBtn().click();
 
         SelectionDialog javaScriptSelectPage = new SelectionDialog( bot, "JavaScript Selection" );
 
-        assertEquals( "Choose a javascript file:", javaScriptSelectPage.getDialogLabel() );
+        assertEquals( "Choose a javascript file:", javaScriptSelectPage.getDialogLabel( 0 ) );
         assertFalse( javaScriptSelectPage.confirmBtn().isEnabled() );
         assertTrue( javaScriptSelectPage.cancelBtn().isEnabled() );
 
@@ -612,7 +616,7 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
         assertTrue( javaScriptSelectPage.cancelBtn().isEnabled() );
         javaScriptSelectPage.confirm();
 
-        assertEquals( "/view.jsp", specifyLiferayPortletDeploymentDescriptorPage.getJavaScript() );
+        assertEquals( "/view.jsp", specifyLiferayPortletDeploymentDescriptorPage.getJavaScript().getText() );
 
         newPortletPage.finish();
 
@@ -654,10 +658,10 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
             TEXT_SPECIFY_LIFERAY_PORTLET_DEPLOYMENT_DESCRIPTOR_DETAILS,
             specifyLiferayPortletDeploymentDescriptorPage.getValidationMsg() );
 
-        assertEquals( "/icon.png", specifyLiferayPortletDeploymentDescriptorPage.getIcon() );
+        assertEquals( "/icon.png", specifyLiferayPortletDeploymentDescriptorPage.getIcon().getText() );
         assertFalse( specifyLiferayPortletDeploymentDescriptorPage.getAddToControlPanel().isChecked() );
-        assertEquals( "/css/main.css", specifyLiferayPortletDeploymentDescriptorPage.getCss() );
-        assertEquals( "/js/main.js", specifyLiferayPortletDeploymentDescriptorPage.getJavaScript() );
+        assertEquals( "/css/main.css", specifyLiferayPortletDeploymentDescriptorPage.getCss().getText() );
+        assertEquals( "/js/main.js", specifyLiferayPortletDeploymentDescriptorPage.getJavaScript().getText() );
         assertEquals( "new-portlet", specifyLiferayPortletDeploymentDescriptorPage.getCssClassWrapper().getText() );
 
         assertEquals( "Sample", specifyLiferayPortletDeploymentDescriptorPage.getDisplayCategory().getText() );
@@ -666,7 +670,7 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
                 specifyLiferayPortletDeploymentDescriptorPage.getDisplayCategory().items(),
                 availableDisplayCategories70 ) );
 
-        assertFalse( specifyLiferayPortletDeploymentDescriptorPage.getAddToControlPanel().isEnabled() );
+        assertTrue( specifyLiferayPortletDeploymentDescriptorPage.getAddToControlPanel().isEnabled() );
         assertFalse( specifyLiferayPortletDeploymentDescriptorPage.getEntryCategory().isEnabled() );
         assertFalse( specifyLiferayPortletDeploymentDescriptorPage.getEntryWeight().isEnabled() );
         assertFalse( specifyLiferayPortletDeploymentDescriptorPage.getCreateEntryClass().isEnabled() );
@@ -674,9 +678,10 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
 
         assertEquals(
             "My Account Administration", specifyLiferayPortletDeploymentDescriptorPage.getEntryCategory().getText() );
-        assertEquals( "1.5", specifyLiferayPortletDeploymentDescriptorPage.getEntryWeight() );
+        assertEquals( "1.5", specifyLiferayPortletDeploymentDescriptorPage.getEntryWeight().getText() );
         assertFalse( specifyLiferayPortletDeploymentDescriptorPage.getCreateEntryClass().isChecked() );
-        assertEquals( "NewPortletControlPanelEntry", specifyLiferayPortletDeploymentDescriptorPage.getEntryClass() );
+        assertEquals(
+            "NewPortletControlPanelEntry", specifyLiferayPortletDeploymentDescriptorPage.getEntryClass().getText() );
 
         newPortletPage.finish();
 
@@ -921,16 +926,17 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
         assertEquals(
             TEXT_SPECIFY_PORTLET_DEPLOYMENT_DESCRIPTOR_DETAILS,
             specifyPortletDeploymentDescriptorPage.getValidationMsg() );
-        assertEquals( "new", specifyPortletDeploymentDescriptorPage.getPortletName() );
-        assertEquals( "New", specifyPortletDeploymentDescriptorPage.getDisplayName() );
-        assertEquals( "New", specifyPortletDeploymentDescriptorPage.getPortletTitle() );
+        assertEquals( "new", specifyPortletDeploymentDescriptorPage.getPortletName().getText() );
+        assertEquals( "New", specifyPortletDeploymentDescriptorPage.getDisplayName().getText() );
+        assertEquals( "New", specifyPortletDeploymentDescriptorPage.getPortletTitle().getText() );
         assertTrue( specifyPortletDeploymentDescriptorPage.getView().isChecked() );
         assertTrue( specifyPortletDeploymentDescriptorPage.getCreateJspFiles().isChecked() );
-        assertEquals( "/html/new", specifyPortletDeploymentDescriptorPage.getJspFolder() );
+        assertEquals( "/html/new", specifyPortletDeploymentDescriptorPage.getJspFolder().getText() );
         assertFalse( specifyPortletDeploymentDescriptorPage.getCreateResourceBundleFile().isChecked() );
         assertFalse( specifyPortletDeploymentDescriptorPage.getResourceBundleFilePath().isEnabled() );
         assertEquals(
-            "content/Language.properties", specifyPortletDeploymentDescriptorPage.getResourceBundleFilePath() );
+            "content/Language.properties",
+            specifyPortletDeploymentDescriptorPage.getResourceBundleFilePath().getText() );
 
         newPortletPage.finish();
 
@@ -966,15 +972,15 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
         newPortletPage.createLiferayPortlet( TEXT_BLANK, "MyNewPortlet", null, null );
         newPortletPage.next();
 
-        assertEquals( "my-new", specifyPortletDeploymentDescriptorPage.getPortletName() );
-        assertEquals( "My New", specifyPortletDeploymentDescriptorPage.getDisplayName() );
-        assertEquals( "My New", specifyPortletDeploymentDescriptorPage.getPortletTitle() );
-        assertEquals( "/html/mynew", specifyPortletDeploymentDescriptorPage.getJspFolder() );
+        assertEquals( "my-new", specifyPortletDeploymentDescriptorPage.getPortletName().getText() );
+        assertEquals( "My New", specifyPortletDeploymentDescriptorPage.getDisplayName().getText() );
+        assertEquals( "My New", specifyPortletDeploymentDescriptorPage.getPortletTitle().getText() );
+        assertEquals( "/html/mynew", specifyPortletDeploymentDescriptorPage.getJspFolder().getText() );
 
         specifyPortletDeploymentDescriptorPage.getPortletName().setText( "mynew" );
-        assertEquals( "Mynew", specifyPortletDeploymentDescriptorPage.getDisplayName() );
-        assertEquals( "Mynew", specifyPortletDeploymentDescriptorPage.getPortletTitle() );
-        assertEquals( "/html/mynew", specifyPortletDeploymentDescriptorPage.getJspFolder() );
+        assertEquals( "Mynew", specifyPortletDeploymentDescriptorPage.getDisplayName().getText() );
+        assertEquals( "Mynew", specifyPortletDeploymentDescriptorPage.getPortletTitle().getText() );
+        assertEquals( "/html/mynew", specifyPortletDeploymentDescriptorPage.getJspFolder().getText() );
 
         newPortletPage.back();
 
@@ -982,19 +988,19 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
         newPortletPage.createLiferayPortlet( TEXT_BLANK, "MyTestPortlet", null, null );
         newPortletPage.next();
 
-        assertEquals( "mynew", specifyPortletDeploymentDescriptorPage.getPortletName() );
-        assertEquals( "Mynew", specifyPortletDeploymentDescriptorPage.getDisplayName() );
-        assertEquals( "Mynew", specifyPortletDeploymentDescriptorPage.getPortletTitle() );
-        assertEquals( "/html/mytest", specifyPortletDeploymentDescriptorPage.getJspFolder() );
+        assertEquals( "mynew", specifyPortletDeploymentDescriptorPage.getPortletName().getText() );
+        assertEquals( "Mynew", specifyPortletDeploymentDescriptorPage.getDisplayName().getText() );
+        assertEquals( "Mynew", specifyPortletDeploymentDescriptorPage.getPortletTitle().getText() );
+        assertEquals( "/html/mytest", specifyPortletDeploymentDescriptorPage.getJspFolder().getText() );
 
         specifyPortletDeploymentDescriptorPage.getDisplayName().setText( "Mynew1" );
-        assertEquals( "Mynew", specifyPortletDeploymentDescriptorPage.getPortletTitle() );
+        assertEquals( "Mynew", specifyPortletDeploymentDescriptorPage.getPortletTitle().getText() );
 
         specifyPortletDeploymentDescriptorPage.getPortletName().setText( TEXT_BLANK );
 
         assertEquals( TEXT_PORTLET_NAME_IS_EMPTY, specifyPortletDeploymentDescriptorPage.getValidationMsg() );
-        assertEquals( "Mynew1", specifyPortletDeploymentDescriptorPage.getDisplayName() );
-        assertEquals( TEXT_BLANK, specifyPortletDeploymentDescriptorPage.getPortletTitle() );
+        assertEquals( "Mynew1", specifyPortletDeploymentDescriptorPage.getDisplayName().getText() );
+        assertEquals( TEXT_BLANK, specifyPortletDeploymentDescriptorPage.getPortletTitle().getText() );
 
         specifyPortletDeploymentDescriptorPage.speficyPortletInfo( "my-new", "Mynew1", TEXT_BLANK );
 
@@ -1055,7 +1061,7 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
         assertContains( "<portlet-mode>help</portlet-mode>", portletXmlPage.getText() );
         assertContains( "<portlet-mode>about</portlet-mode>", portletXmlPage.getText() );
         assertContains( "<portlet-mode>config</portlet-mode>", portletXmlPage.getText() );
-        assertContains( "<portlet-mode>editDefaults</portlet-mode>", portletXmlPage.getText() );
+        assertContains( "<portlet-mode>edit_defaults</portlet-mode>", portletXmlPage.getText() );
         assertContains( "<portlet-mode>edit_guest</portlet-mode>", portletXmlPage.getText() );
         assertContains( "<portlet-mode>preview</portlet-mode>", portletXmlPage.getText() );
         assertContains( "<portlet-mode>print</portlet-mode>", portletXmlPage.getText() );
@@ -1077,9 +1083,9 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
         newPortletPage.createLiferayPortlet( TEXT_BLANK, "MyPortletPortlet", null, "javax.portlet.GenericPortlet" );
         newPortletPage.next();
 
-        assertEquals( "my-portlet", specifyPortletDeploymentDescriptorPage.getPortletName() );
-        assertEquals( "My Portlet", specifyPortletDeploymentDescriptorPage.getDisplayName() );
-        assertEquals( "My Portlet", specifyPortletDeploymentDescriptorPage.getPortletTitle() );
+        assertEquals( "my-portlet", specifyPortletDeploymentDescriptorPage.getPortletName().getText() );
+        assertEquals( "My Portlet", specifyPortletDeploymentDescriptorPage.getDisplayName().getText() );
+        assertEquals( "My Portlet", specifyPortletDeploymentDescriptorPage.getPortletTitle().getText() );
 
         assertFalse( specifyPortletDeploymentDescriptorPage.getAbout().isEnabled() );
         assertFalse( specifyPortletDeploymentDescriptorPage.getConfig().isEnabled() );
@@ -1164,9 +1170,9 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
         assertEquals( TEXT_SOUCCE_FOLDER_MUST_BE_ABSOLUTE_PATH, newPortletPage.getValidationMsg() );
 
         newPortletPage.getBrowseSourceBtn().click();
-        SelectionDialog browseSourceFolderPage = new SelectionDialog( bot, "Container Selection", 0 );
+        SelectionDialog browseSourceFolderPage = new SelectionDialog( bot, "Container Selection" );
 
-        assertEquals( "Choose a Container:", browseSourceFolderPage.getDialogLabel() );
+        assertEquals( "Choose a Container:", browseSourceFolderPage.getDialogLabel( 0 ) );
         assertFalse( browseSourceFolderPage.confirmBtn().isEnabled() );
         assertTrue( browseSourceFolderPage.cancelBtn().isEnabled() );
 
@@ -1287,13 +1293,14 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
         assertEquals( TEXT_CREATE_A_PORTLET_CLASS, newPortletPage.getValidationMsg() );
 
         newPortletPage.getBrowseSuperClassBtn().click();
+        sleep();
 
         SuperClassSelectionDialog selectSuperclassPage =
             new SuperClassSelectionDialog( bot, "Superclass Selection", 0 );
 
-        assertEquals( "Choose a superclass:", selectSuperclassPage.getDialogLabel() );
+        assertEquals( "Choose a superclass:", selectSuperclassPage.getDialogLabel( 0 ) );
 
-        selectSuperclassPage.getAvailableSuperClasses().click( 0 );
+        // selectSuperclassPage.getAvailableSuperClasses().click( 0 );
         selectSuperclassPage.confirm();
 
         assertEquals( "com.liferay.util.bridges.bsf.BaseBSFPortlet", newPortletPage.getSuperClasses().getText() );

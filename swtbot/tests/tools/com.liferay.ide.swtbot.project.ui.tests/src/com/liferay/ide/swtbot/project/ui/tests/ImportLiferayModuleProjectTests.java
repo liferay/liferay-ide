@@ -202,6 +202,7 @@ public class ImportLiferayModuleProjectTests extends SWTBotBase implements Wizar
         assertTrue( projectTree.getTreeItem( "testWorkspace" ).isVisible() );
 
         ide.getLiferayWorkspacePerspective().activate();
+        ide.getProjectExplorerView().show();
 
         projectTree.expandNode( "testWorkspace", "modules" );
 

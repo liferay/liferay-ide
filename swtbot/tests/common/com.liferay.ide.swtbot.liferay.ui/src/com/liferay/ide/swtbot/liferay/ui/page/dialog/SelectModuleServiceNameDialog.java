@@ -33,7 +33,7 @@ public class SelectModuleServiceNameDialog extends Dialog implements ModuleWizar
     {
         super( bot );
 
-        serviceName = new Text( bot, LABEL_MODULE_SELECT_SERVICE_NAME );
+        serviceName = new Text( bot, MODULE_SELECT_SERVICE_NAME );
     }
 
     public Text getServiceName()

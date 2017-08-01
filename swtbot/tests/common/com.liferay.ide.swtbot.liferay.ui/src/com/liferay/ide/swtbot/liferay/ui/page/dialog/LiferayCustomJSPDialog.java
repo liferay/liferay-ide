@@ -36,6 +36,7 @@ public class LiferayCustomJSPDialog extends Dialog implements DialogUI, WizardUI
     {
         super( bot );
 
+        paths = new Tree( bot );
         selectJspToCustomize = new Text( bot, LABEL_SELECT_A_JSP_TO_CUSTOMIZE );
     }
 

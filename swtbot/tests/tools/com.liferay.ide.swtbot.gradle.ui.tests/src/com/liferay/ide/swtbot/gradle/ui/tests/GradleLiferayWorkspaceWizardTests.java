@@ -21,6 +21,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 
 import org.junit.After;
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -33,7 +35,7 @@ import com.liferay.ide.swtbot.ui.page.Tree;
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class GradleLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardTestsBase
+public class GradleLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardBase
 {
 
     static String fullClassname = new SecurityManager()
@@ -88,7 +90,7 @@ public class GradleLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardTes
         String moduleProjectName = "testModuleInLWS";
 
         newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, moduleProjectName, MENU_MODULE_MVC_PORTLET,
+            TEXT_BUILD_TYPE_GRADLE, moduleProjectName, MODULE_MVC_PORTLET,
             eclipseWorkspace + "/" + projectName + "/modules", false, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK,
             false );
         sleep( 10000 );
@@ -99,7 +101,7 @@ public class GradleLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardTes
         String themeProjectName = "testThemeModuleInLWS";
 
         newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, themeProjectName, MENU_MODULE_THEME, eclipseWorkspace + "/" + projectName + "/wars",
+            TEXT_BUILD_TYPE_GRADLE, themeProjectName, MODULE_THEME, eclipseWorkspace + "/" + projectName + "/wars",
             false, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
         sleep( 10000 );
 
@@ -109,8 +111,8 @@ public class GradleLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardTes
         String projectName = "testMavenModuleInGradleLWS";
 
         newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MENU_MODULE_MVC_PORTLET, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_MVC_PORTLET, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
+            TEXT_BLANK, TEXT_BLANK, false );
         sleep( 10000 );
 
         projectTree.setFocus();
@@ -166,7 +168,7 @@ public class GradleLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardTes
         String moduleProjectName = "testModuleInLWS";
 
         newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, moduleProjectName, MENU_MODULE_MVC_PORTLET,
+            TEXT_BUILD_TYPE_GRADLE, moduleProjectName, MODULE_MVC_PORTLET,
             eclipseWorkspace + "/" + projectName + "/modulesTest", false, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK,
             TEXT_BLANK, false );
 
@@ -177,15 +179,15 @@ public class GradleLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardTes
         String themeProjectName = "testThemeModuleInLWS";
 
         newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, themeProjectName, MENU_MODULE_THEME,
-            eclipseWorkspace + "/" + projectName + "/warsTest", false, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK,
-            false );
+            TEXT_BUILD_TYPE_GRADLE, themeProjectName, MODULE_THEME, eclipseWorkspace + "/" + projectName + "/warsTest",
+            false, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
 
         projectTree.setFocus();
         assertTrue( projectTree.expandNode( projectName, "warsTest", themeProjectName ).isVisible() );
 
         // init bundle
         projectTree.getTreeItem( projectName ).doAction( "Liferay", "Initialize Server Bundle" );
+        sleep( 45000 );
 
         projectTree.setFocus();
         assertTrue( projectTree.expandNode( projectName, "bundlesTest" ).isVisible() );
@@ -224,6 +226,12 @@ public class GradleLiferayWorkspaceWizardTests extends LiferayWorkspaceWizardTes
             {
             }
         }
+    }
+
+    @Before
+    public void importModuleProject()
+    {
+        Assume.assumeTrue( runTest() || runAllTests() );
     }
 
 }

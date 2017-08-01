@@ -44,6 +44,8 @@ public class LiferayIDE extends Eclipse
 
         liferayPerspective = new Perspective( bot, LABEL_LIFERAY_PLUGINS );
         liferayWorkspacePerspective = new Perspective( bot, LABEL_LIFERAY_WORKSPACE );
+
+        newBtn = new NewToolbarDropDownButton( bot );
     }
 
     public CreateLifeayProjectToolbarDropDownButton getCreateLiferayProjectToolbar()

@@ -117,20 +117,21 @@ public class CreateLiferayPortletWizard extends Wizard implements LiferayPortlet
 
             assertTrue( newPortlet.isSelected() );
             assertFalse( useDefault.isSelected() );
+
+            if( portletClass != null )
+            {
+                portletClass.setText( portletClassValue );
+            }
+            if( javaPackage != null )
+            {
+                javaPackage.setText( javaPackageValue );
+            }
+            if( superClass != null )
+            {
+                setSuperClassCombobox( superClass );
+            }
         }
 
-        if( portletClass != null )
-        {
-            portletClass.setText( portletClassValue );
-        }
-        if( javaPackage != null )
-        {
-            javaPackage.setText( javaPackageValue );
-        }
-        if( superClass != null )
-        {
-            setSuperClassCombobox( superClass );
-        }
     }
 
     public void createLiferayPortlet( String projectName, String portletClass, String javaPackage, String superClass )

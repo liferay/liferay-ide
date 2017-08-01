@@ -138,9 +138,34 @@ public class LiferayPortletDeploymentDescriptorWizard extends Wizard implements 
         {
             addToControlPanel.select();
 
+            if( entryCategories != null )
+            {
+                String[] avilableEntryCategoryValues = displayCategories.items();
+
+                for( String myEntryCategory : avilableEntryCategoryValues )
+                {
+                    if( myEntryCategory.equals( entryCategories ) )
+                    {
+                        entryCategories.setSelection( entryCategoryValue );
+                    }
+                }
+
+                entryCategories.setText( entryCategoryValue );
+            }
+
+            if( entryWeight != null )
+            {
+                entryWeight.setText( entryWeightValue );
+            }
+
             if( createEntryClassValue )
             {
                 createEntryClass.select();
+
+                if( entryClass != null )
+                {
+                    entryClass.setText( entryClassValue );
+                }
             }
             else
             {
@@ -150,46 +175,6 @@ public class LiferayPortletDeploymentDescriptorWizard extends Wizard implements 
         else
         {
             addToControlPanel.deselect();
-        }
-
-        if( entryCategories != null )
-        {
-            String[] avilableEntryCategoryValues = displayCategories.items();
-
-            for( String myEntryCategory : avilableEntryCategoryValues )
-            {
-                if( myEntryCategory.equals( entryCategories ) )
-                {
-                    entryCategories.setSelection( entryCategoryValue );
-                }
-            }
-
-            entryCategories.setText( entryCategoryValue );
-        }
-
-        if( entryWeight != null )
-        {
-            entryWeight.setText( entryWeightValue );
-        }
-
-        if( !addToControlPanelValue )
-        {
-            addToControlPanel.select();
-
-            if( createEntryClassValue )
-            {
-                createEntryClass.select();
-            }
-            else
-            {
-                createEntryClass.deselect();
-            }
-            addToControlPanel.deselect();
-        }
-
-        if( entryClass != null )
-        {
-            entryClass.setText( entryClassValue );
         }
     }
 

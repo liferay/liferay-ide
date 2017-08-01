@@ -87,7 +87,7 @@ public class NewSourceFolderWizard extends Wizard implements WizardUI
         String projectNameValue, String folderNameValue, boolean updateExclusionFiltersValue,
         boolean IgnoreOptionCompileProblemsValue )
     {
-        if( projectName != null && !projectName.equals( "" ) )
+        if( projectName != null && projectName.equals( "" ) )
         {
             projectName.setText( projectNameValue );
         }
