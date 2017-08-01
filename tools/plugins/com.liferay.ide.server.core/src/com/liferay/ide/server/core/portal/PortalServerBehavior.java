@@ -555,7 +555,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     }
 
     @Override
-    public void publish( int kind, List<IModule[]> modules, IProgressMonitor monitor, IAdaptable info )
+    synchronized public void publish( int kind, List<IModule[]> modules, IProgressMonitor monitor, IAdaptable info )
         throws CoreException
     {
         this.info = info;// save info
