@@ -44,18 +44,22 @@ public class BundleToolTip implements IServerToolTip
 
         for( IProject project : projects )
         {
-            try
+            if( project.isOpen() )
             {
-                IMarker[] markers = project.findMarkers( LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE, false, 0 );
-
-                if( markers.length > 0 )
+                try
                 {
-                    sb.append( "Error \"Could not create output jar\" happened on " + project.getName() + "\n" );
+                    IMarker[] markers =
+                        project.findMarkers( LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE, false, 0 );
+
+                    if( markers.length > 0 )
+                    {
+                        sb.append( "Error \"Could not create output jar\" happened on " + project.getName() + "\n" );
+                    }
                 }
-            }
-            catch( CoreException e )
-            {
-                LiferayServerUI.logError( e );
+                catch( CoreException e )
+                {
+                    LiferayServerUI.logError( e );
+                }
             }
         }
 
