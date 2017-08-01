@@ -38,13 +38,19 @@ public class JavaPackageNameValidationService extends ValidationService
     {
         Status retval = Status.createOkStatus();
 
-        final IJavaProject javaproject = JavaCore.create( CoreUtil.getProject( op().getProjectName().text( false ) ) );
+        final String projectName = op().getProjectName().text( false );
 
-        if( CoreUtil.getSourceFolders( javaproject ).size() == 0 )
+        if( projectName != null )
         {
-            retval = Status.createErrorStatus( "Unable to find any source folders." );
+            final IJavaProject javaproject =
+                JavaCore.create( CoreUtil.getProject( op().getProjectName().text( false ) ) );
 
-            return retval;
+            if( CoreUtil.getSourceFolders( javaproject ).size() == 0 )
+            {
+                retval = Status.createErrorStatus( "Unable to find any source folders." );
+
+                return retval;
+            }
         }
 
         final JavaPackageName packageName = op().getPackageName().content( true );
