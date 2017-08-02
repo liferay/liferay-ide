@@ -92,7 +92,7 @@
                             <url>${bundle-support-download-base}/${bundle-support-version}/${bundle-support-name}</url>
                             <outputDirectory>../shared/download/</outputDirectory>
                             <outputFileName>com.liferay.portal.tools.bundle.support.jar</outputFileName>
-                            <md5>262ed4d82708682f789be16ac3c20d95</md5>
+                            <md5>${bundle-support-md5}</md5>
                         </configuration>
                     </execution>
                 </executions>

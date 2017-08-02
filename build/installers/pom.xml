@@ -37,6 +37,7 @@
         <bundle-support-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/com.liferay.portal.tools.bundle.support</bundle-support-download-base>
         <bundle-support-name>com.liferay.portal.tools.bundle.support-3.1.0.jar</bundle-support-name>
         <bundle-support-version>3.1.0</bundle-support-version>
+        <bundle-support-md5>262ed4d82708682f789be16ac3c20d95</bundle-support-md5>
     </properties>
 
     <modules>
