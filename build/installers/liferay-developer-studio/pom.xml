@@ -80,6 +80,7 @@
                             <outputDirectory>../shared/download/</outputDirectory>
                             <outputFileName>blade.jar</outputFileName>
                             <md5>${blade-latest-md5}</md5>
+                            <checkSignature>true</checkSignature>
                         </configuration>
                     </execution>
                     <execution>
@@ -93,6 +94,7 @@
                             <outputDirectory>../shared/download/</outputDirectory>
                             <outputFileName>com.liferay.portal.tools.bundle.support.jar</outputFileName>
                             <md5>${bundle-support-md5}</md5>
+                            <checkSignature>true</checkSignature>
                         </configuration>
                     </execution>
                 </executions>
