@@ -550,4 +550,5 @@
         </parameterGroup>
     </parameterList>
     <createOsxBundleDmg>1</createOsxBundleDmg>
+    <showFileUnpackingProgress>0</showFileUnpackingProgress>
 </project>
