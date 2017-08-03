@@ -161,20 +161,6 @@
                                     <source>${pom.basedir}/../installers/shared/scripts/SignApp.groovy</source>
                                 </configuration>
                             </execution>
-                            <execution>
-                                <id>zipMac</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>execute</goal>
-                                </goals>
-                                <configuration>
-                                    <properties>
-                                        <inputDir>${pom.basedir}/target/products/com.liferay.ide.studio/macosx/cocoa/x86_64/</inputDir>
-                                        <outputFile>${pom.basedir}/target/products/com.liferay.ide.studio-macosx.cocoa.x86_64.zip</outputFile>
-                                    </properties>
-                                    <source>${pom.basedir}/../installers/shared/scripts/ZipDir.groovy</source>
-                                </configuration>
-                            </execution>
                         </executions>
                     </plugin>
                 </plugins>

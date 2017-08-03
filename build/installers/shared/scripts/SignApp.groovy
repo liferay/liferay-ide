@@ -1,3 +1,5 @@
+import java.nio.file.*
+
 def signApps = properties["signApps"]
 
 if (!"true".equals(signApps)) {
@@ -32,24 +34,28 @@ if (appPath.exists() && serverURL != null) {
 	}
 
 	println "Modified appPath = ${appPath}"
+	def workingAppPath = appPath
+	Path tempDir = Files.createTempDirectory("zipAppPath")
 
-	if (!appPath.fileName.endsWith(".zip")) {
+	if (appPath.name.endsWith(".app")) {
 		println "Zipping appPath..."
 
-		File zipFile = new File(appPath.parentFile, appPath.name + ".zip")
+		Files.move(workingAppPath.toPath(), tempDir.resolve(workingAppPath.name))
 
-		ant.zip(destfile: zipFile, basedir: appPath)
+		File zipFile = new File(workingAppPath.parentFile, workingAppPath.name + ".zip")
 
-		appPath = zipFile
+		ant.zip(destfile: zipFile, basedir: tempDir.toFile())
 
-		println "New zipped appPath = ${appPath}"
+		workingAppPath = zipFile
+
+		println "New zipped workingAppPath = ${workingAppPath}"
 	}
 
 	println "Calling codesign service..."
 
 	def url = new URL(serverURL)
 	def post = url.openConnection()
-	def path = appPath.toURI().toASCIIString().replaceAll("^file:","")
+	def path = workingAppPath.toURI().toASCIIString().replaceAll("^file:","")
 	def body = "path=${path}&identity=${certificate}&createDmg=${createDmg}"
 
 	println("Posting to ${url} with body=${body}")
@@ -69,5 +75,17 @@ if (appPath.exists() && serverURL != null) {
 
 	if (postResponseCode.equals(200)) {
 		println(post.getInputStream().getText())
+	}
+
+	if (appPath.name.endsWith(".app") && (createDmg == null || createDmg.equals("false"))) {
+		ant.delete(dir: appPath)
+
+		ant.unzip(src: workingAppPath, dest: appPath.parentFile)
+	}
+
+	ant.delete(dir: tempDir.toFile())
+
+	if (workingAppPath != appPath) {
+		ant.delete(file: workingAppPath)
 	}
 }
