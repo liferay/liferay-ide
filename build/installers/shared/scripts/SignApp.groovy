@@ -40,7 +40,7 @@ if (appPath.exists() && serverURL != null) {
 	if (appPath.name.endsWith(".app")) {
 		println "Zipping appPath..."
 
-		Files.move(workingAppPath.toPath(), tempDir.resolve(workingAppPath.name))
+		Files.copy(workingAppPath.toPath(), tempDir.resolve(workingAppPath.name))
 
 		File zipFile = new File(workingAppPath.parentFile, workingAppPath.name + ".zip")
 
