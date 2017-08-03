@@ -4,40 +4,52 @@ if (!"true".equals(signApps)) {
 	return
 }
 
-def appDir = new File(properties["appDir"]).canonicalFile
+def appPath = new File(properties["appPath"]).canonicalFile
 def searchPath = properties["signingServerSearchPath"]
 def replacePath = properties["signingServerReplacePath"]
 def serverURL = properties["signingServerURL"]
 def certificate = properties["certificate"]
 def createDmg = properties["createDmg"]
 
-println appDir
+println appPath
 println searchPath
 println replacePath
 println serverURL
 println certificate
 
-if (appDir.exists() && serverURL != null) {
-	println "Initial appDir = ${appDir}"
+if (appPath.exists() && serverURL != null) {
+	println "Initial appPath = ${appPath}"
 
 	if (searchPath != null && searchPath.length() > 0) {
-		def absolutePath = appDir.absolutePath
+		def absolutePath = appPath.absolutePath
 
 		println "absolutePath = ${absolutePath}"
 
 		if (absolutePath.startsWith(searchPath)) {
 			absolutePath = absolutePath.replaceAll(searchPath, replacePath)
-			appDir = new File(absolutePath)
+			appPath = new File(absolutePath)
 		}
 	}
 
-	println "Modified appDir = ${appDir}"
+	println "Modified appPath = ${appPath}"
+
+	if (!appPath.fileName.endsWith(".zip")) {
+		println "Zipping appPath..."
+
+		File zipFile = new File(appPath.parentFile, appPath.name + ".zip")
+
+		ant.zip(destfile: zipFile, basedir: appPath)
+
+		appPath = zipFile
+
+		println "New zipped appPath = ${appPath}"
+	}
 
 	println "Calling codesign service..."
 
 	def url = new URL(serverURL)
 	def post = url.openConnection()
-	def path = appDir.toURI().toASCIIString().replaceAll("^file:","")
+	def path = appPath.toURI().toASCIIString().replaceAll("^file:","")
 	def body = "path=${path}&identity=${certificate}&createDmg=${createDmg}"
 
 	println("Posting to ${url} with body=${body}")

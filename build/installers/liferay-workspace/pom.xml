@@ -138,7 +138,7 @@
                 </executions>
                 <configuration>
                     <properties>
-                        <appDir>${pom.basedir}/../outputs/LiferayWorkspace-${workspace-installer-version}-osx-installer.app</appDir>
+                        <appPath>${pom.basedir}/../outputs/LiferayWorkspace-${workspace-installer-version}-osx-installer.app</appPath>
                         <signingServerURL>${signingServerURL}</signingServerURL>
                         <signApps>${signApps}</signApps>
                         <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
