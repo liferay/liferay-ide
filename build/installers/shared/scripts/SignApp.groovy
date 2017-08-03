@@ -5,6 +5,8 @@ if (!"true".equals(signApps)) {
 }
 
 def appDir = new File(properties["appDir"]).canonicalFile
+def searchPath = properties["signingServerSearchPath"]
+def replacePath = properties["signingServerReplacePath"]
 def serverURL = properties["signingServerURL"]
 def certificate = properties["certificate"]
 def createDmg = properties["createDmg"]
@@ -14,6 +16,19 @@ println serverURL
 println certificate
 
 if (appDir.exists() && serverURL != null) {
+	println "Initial appDir = ${appDir}"
+
+	if (searchPath != null && searchPath.length() > 0) {
+		def absolutePath = appDir.absolutePath
+
+		if (absolutePath.startsWith(searchPath)) {
+			absolutePath = absolutePath.replaceAll(searchPath, replacePath)
+			appDir = new File(absolutePath)
+		}
+	}
+
+	println "Modified appDir = ${appDir}"
+
 	println "Calling codesign service..."
 
 	def url = new URL(serverURL)

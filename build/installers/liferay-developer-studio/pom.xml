@@ -172,6 +172,8 @@
                         <signApps>${signApps}</signApps>
                         <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
                         <createDmg>true</createDmg>
+                        <signingServerSearchPath>${signingServerSearchPath}</signingServerSearchPath>
+                        <signingServerReplacePath>${signingServerReplacePath}</signingServerReplacePath>
                     </properties>
                     <source>${pom.basedir}/../shared/scripts/SignApp.groovy</source>
                 </configuration>
