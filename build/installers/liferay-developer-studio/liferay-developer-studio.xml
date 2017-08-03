@@ -431,7 +431,7 @@
             <path>${studioZipPath}</path>
         </deleteFile>
     </postInstallationActionList>
-    <createOsxBundleDmg>1</createOsxBundleDmg>
+    <createOsxBundleDmg>0</createOsxBundleDmg>
     <createUninstaller>0</createUninstaller>
     <disableSplashScreen>1</disableSplashScreen>
     <enableRollback>1</enableRollback>
