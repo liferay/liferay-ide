@@ -133,7 +133,7 @@
                                     <id>com.liferay.ide.studio</id>
                                     <rootFolder>liferay-developer-studio</rootFolder>
                                     <rootFolders>
-                                        <macosx>DeveloperStudio.app</macosx>
+                                        <macosx>LiferayDeveloperStudio.app</macosx>
                                     </rootFolders>
                                 </product>
                             </products>
