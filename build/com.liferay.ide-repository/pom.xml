@@ -133,15 +133,52 @@
                                     <id>com.liferay.ide.studio</id>
                                     <rootFolder>liferay-developer-studio</rootFolder>
                                     <rootFolders>
-                                        <macosx>DeveloperStudio.app</macosx>
+                                        <macosx>LiferayDeveloperStudio.app</macosx>
                                     </rootFolders>
                                 </product>
                             </products>
                         </configuration>
                     </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.gmaven</groupId>
+                        <artifactId>groovy-maven-plugin</artifactId>
+                        <version>2.0</version>
+                        <executions>
+                            <execution>
+                                <id>sign-app</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <properties>
+                                        <appDir>${pom.basedir}/target/products/com.liferay.ide.studio/macosx/cocoa/x86_64/LiferayDeveloperStudio.app</appDir>
+                                        <signingServerURL>${signingServerURL}</signingServerURL>
+                                        <signApps>${signApps}</signApps>
+                                        <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
+                                        <createDmg>false</createDmg>
+                                    </properties>
+                                    <source>${pom.basedir}/../installers/shared/scripts/SignApp.groovy</source>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>zipMac</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <properties>
+                                        <inputDir>${pom.basedir}/target/products/com.liferay.ide.studio/macosx/cocoa/x86_64/</inputDir>
+                                        <outputFile>${pom.basedir}/target/products/com.liferay.ide.studio-macosx.cocoa.x86_64.zip</outputFile>
+                                    </properties>
+                                    <source>${pom.basedir}/../installers/shared/scripts/ZipDir.groovy</source>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
-
 </project>

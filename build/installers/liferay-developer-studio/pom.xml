@@ -37,7 +37,7 @@
         <plugin-sdk-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk</plugin-sdk-download-base>
         <plugin-sdk-zip-name>com.liferay.portal.plugins.sdk-1.0.11-withdependencies.zip</plugin-sdk-zip-name>
         <plugin-sdk-version>1.0.11</plugin-sdk-version>
-        <studio-installer-version>3.1.1</studio-installer-version>
+        <studio-installer-version>3.1.1-ga2</studio-installer-version>
     </properties>
 
     <build>
@@ -151,6 +151,32 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>groovy-maven-plugin</artifactId>
+                <version>2.0</version>
+                <executions>
+                    <execution>
+                        <id>sign-app</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <properties>
+                        <appDir>${pom.basedir}/../outputs/LiferayDeveloperStudio-${studio-installer-version}-osx-installer.app</appDir>
+                        <signingServerURL>${signingServerURL}</signingServerURL>
+                        <signApps>${signApps}</signApps>
+                        <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
+                        <createDmg>true</createDmg>
+                        <signingServerSearchPath>${signingServerSearchPath}</signingServerSearchPath>
+                        <signingServerReplacePath>${signingServerReplacePath}</signingServerReplacePath>
+                    </properties>
+                    <source>${pom.basedir}/../shared/scripts/SignApp.groovy</source>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
