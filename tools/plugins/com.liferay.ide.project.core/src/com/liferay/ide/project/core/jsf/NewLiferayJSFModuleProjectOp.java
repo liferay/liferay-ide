@@ -74,7 +74,7 @@ public interface NewLiferayJSFModuleProjectOp extends BaseModuleOp
     void setTemplateName( String value );
     // *** ProjectProvider ***
 
-    @Label( standard = "Build Framework" )
+    @Label( standard = "Build type:" )
     @Listeners( JSFModuleProjectNameListener.class )
     @Service( impl = JSFModuleProjectProviderPossibleValuesService.class )
     @Service( impl = JSFModuleProjectProviderDefaultValueService.class )

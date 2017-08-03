@@ -44,7 +44,7 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp
     // *** WorkspaceName ***
 
     @Required
-    @Label( standard = "workspace name" )
+    @Label( standard = "Project name:" )
     @Service( impl = WorkspaceNameValidationService.class )
     ValueProperty PROP_WORKSPACE_NAME = new ValueProperty( TYPE, "WorkspaceName" );
 

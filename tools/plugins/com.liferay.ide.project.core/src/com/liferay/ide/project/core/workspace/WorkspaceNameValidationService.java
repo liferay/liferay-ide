@@ -64,7 +64,7 @@ public class WorkspaceNameValidationService extends ValidationService
 
         if( CoreUtil.isNullOrEmpty( currentWorkspaceName ) )
         {
-            return Status.createErrorStatus( "Liferay Workspace name could not be empty." );
+            return Status.createErrorStatus( "Liferay Workspace project name could not be empty." );
         }
 
         final IStatus nameStatus = CoreUtil.getWorkspace().validateName( currentWorkspaceName, IResource.PROJECT );

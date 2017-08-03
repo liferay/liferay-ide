@@ -56,12 +56,11 @@ public class NewLiferayWorkspaceWizard extends BaseProjectWizard<NewLiferayWorks
             {
                 if( LiferayWorkspaceUtil.hasWorkspace() )
                 {
-                    wizardPage.setMessage(
-                        LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR );
+                    wizardPage.setMessage( LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR );
                 }
                 else
                 {
-                    wizardPage.setMessage( "Please enter the workspace name.", SapphireWizardPage.NONE );
+                    wizardPage.setMessage( "Please enter the workspace project name.", SapphireWizardPage.NONE );
                 }
             }
             catch( CoreException e )
