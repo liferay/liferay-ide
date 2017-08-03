@@ -260,7 +260,7 @@
             </ruleList>
         </runProgram>
     </postInstallationActionList>
-    <createOsxBundleDmg>0</createOsxBundleDmg>
+    <createOsxBundleDmg>1</createOsxBundleDmg>
     <createUninstaller>0</createUninstaller>
     <disableSplashScreen>1</disableSplashScreen>
     <enableRollback>1</enableRollback>
