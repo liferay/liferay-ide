@@ -54,6 +54,7 @@
         <gmaven.runtime>1.8</gmaven.runtime>
         <blade-latest-download-url>https://releases.liferay.com/tools/blade-cli/2.2.0.201707061805/plugins/com.liferay.blade.cli_2.2.0.201707061805.jar</blade-latest-download-url>
         <blade-latest-md5>f3f503915055437463cc6f57c27284a8</blade-latest-md5>
+        <sign-apps>false</sign-apps>
     </properties>
 
     <repositories>
