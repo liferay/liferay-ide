@@ -12,6 +12,8 @@ def certificate = properties["certificate"]
 def createDmg = properties["createDmg"]
 
 println appDir
+println searchPath
+println replacePath
 println serverURL
 println certificate
 
@@ -20,6 +22,8 @@ if (appDir.exists() && serverURL != null) {
 
 	if (searchPath != null && searchPath.length() > 0) {
 		def absolutePath = appDir.absolutePath
+
+		println "absolutePath = ${absolutePath}"
 
 		if (absolutePath.startsWith(searchPath)) {
 			absolutePath = absolutePath.replaceAll(searchPath, replacePath)
