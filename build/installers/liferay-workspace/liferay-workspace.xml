@@ -197,7 +197,7 @@
                 <propertiesFileSet>
                     <file>${lrws}${platform_path_separator}gradle.properties</file>
                     <key>liferay.workspace.bundle.url</key>
-                    <value>https://api.liferay.com/downloads/portal/7.0.10.3/liferay-dxp-digital-enterprise-tomcat-7.0-sp3-20170503123037723.zip</value>
+                    <value>https://api.liferay.com/downloads/portal/7.0.10.4/liferay-dxp-digital-enterprise-tomcat-7.0-sp4-20170705142422877.zip</value>
                     <ruleList>
                         <compareValues>
                             <logic>equals</logic>
