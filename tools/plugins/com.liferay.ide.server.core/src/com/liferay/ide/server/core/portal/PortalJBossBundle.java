@@ -20,6 +20,7 @@ import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -139,6 +140,31 @@ public class PortalJBossBundle extends AbstractPortalBundle
         if( this.bundlePath.toFile().exists() )
         {
             paths.add( bundlePath.append( "jboss-modules.jar" ) );
+            IPath loggManagerPath = bundlePath.append( "modules/system/layers/base/org/jboss/logmanager/main" );
+
+            if ( loggManagerPath.toFile().exists() )
+            {
+                File[] libFiles = loggManagerPath.toFile().listFiles( new FileFilter()
+                {
+                    @Override
+                    public boolean accept( File libFile )
+                    {
+                        if ( libFile.isFile() && libFile.getName().endsWith( ".jar" ))
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+
+                if ( libFiles != null )
+                {
+                    for( File libFile : libFiles )
+                    {
+                        paths.add( loggManagerPath.append( libFile.getName() ) );
+                    }
+                }
+            }
         }
 
         return paths.toArray( new IPath[0] );
