@@ -91,7 +91,7 @@ if (appPath.exists() && serverURL != null) {
 
 	ant.delete(dir: tempDir.toFile())
 
-	if (workingAppPath != appPath && workingAppPath.absolutePath.startsWith(replacePath) {
+	if (workingAppPath != appPath && workingAppPath.absolutePath.startsWith(replacePath)) {
 		ant.delete(file: workingAppPath)
 	}
 }
