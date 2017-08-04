@@ -13,11 +13,11 @@ def serverURL = properties["signingServerURL"]
 def certificate = properties["certificate"]
 def createDmg = properties["createDmg"]
 
-println appPath
-println searchPath
-println replacePath
-println serverURL
-println certificate
+println "appPath=${appPath}"
+println "searchPath=${searchPath}"
+println "replacePath=${replacePath}"
+println "serverURL=${serverURL}"
+println "certificate=${certificate}"
 
 if (appPath.exists() && serverURL != null) {
 	println "Initial appPath = ${appPath}"
@@ -45,13 +45,13 @@ if (appPath.exists() && serverURL != null) {
 	}
 
 	if (searchPath != null && searchPath.length() > 0) {
-		def absolutePath = appPath.absolutePath
+		def absolutePath = workingAppPath.absolutePath
 
 		println "absolutePath = ${absolutePath}"
 
 		if (absolutePath.startsWith(searchPath)) {
 			absolutePath = absolutePath.replaceAll(searchPath, replacePath)
-			appPath = new File(absolutePath)
+			workingAppPath = new File(absolutePath)
 		}
 	}
 
