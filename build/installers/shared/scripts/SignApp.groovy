@@ -22,20 +22,9 @@ println certificate
 if (appPath.exists() && serverURL != null) {
 	println "Initial appPath = ${appPath}"
 
-	if (searchPath != null && searchPath.length() > 0) {
-		def absolutePath = appPath.absolutePath
-
-		println "absolutePath = ${absolutePath}"
-
-		if (absolutePath.startsWith(searchPath)) {
-			absolutePath = absolutePath.replaceAll(searchPath, replacePath)
-			appPath = new File(absolutePath)
-		}
-	}
-
-	println "Modified appPath = ${appPath}"
-	def workingAppPath = appPath
 	Path tempDir = Files.createTempDirectory("zipAppPath")
+
+	def workingAppPath = appPath
 
 	if (appPath.name.endsWith(".app")) {
 		println "Zipping appPath..."
@@ -52,8 +41,21 @@ if (appPath.exists() && serverURL != null) {
 
 		workingAppPath = zipFile
 
-		println "New zipped workingAppPath = ${workingAppPath}"
+		println "New zipped appPath = ${workingAppPath}"
 	}
+
+	if (searchPath != null && searchPath.length() > 0) {
+		def absolutePath = appPath.absolutePath
+
+		println "absolutePath = ${absolutePath}"
+
+		if (absolutePath.startsWith(searchPath)) {
+			absolutePath = absolutePath.replaceAll(searchPath, replacePath)
+			appPath = new File(absolutePath)
+		}
+	}
+
+	println "Modified appPath = ${appPath}"
 
 	println "Calling codesign service..."
 
