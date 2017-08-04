@@ -79,8 +79,11 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         return null;
     }
 
-    public static IPath getOutputBundlePath( IProject gradleProject )
+    @Override
+    public IPath getOutputBundlePath()
     {
+        IProject gradleProject = getProject();
+
         File buildFolder = gradleProject.getLocation().append( "build/libs" ).toFile();
 
         String[] fileNames = buildFolder.list();
@@ -319,6 +322,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         catch( Exception e )
         {
             GradleCore.logError( "Project " + getProject().getName() + " build output error", e );
+            //throw e;
         }
         finally
         {
@@ -328,7 +332,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
             }
         }
 
-        IPath outputBundlePath = getOutputBundlePath( getProject() );
+        IPath outputBundlePath = getOutputBundlePath();
 
         if( outputBundlePath.toFile().exists() )
         {
@@ -356,7 +360,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
         String retval = null;
 
-        final IPath outputBundle = getOutputBundlePath( getProject() );
+        final IPath outputBundle = getOutputBundlePath();
 
         if( outputBundle == null || outputBundle.lastSegment().endsWith( ".war" ) )
         {

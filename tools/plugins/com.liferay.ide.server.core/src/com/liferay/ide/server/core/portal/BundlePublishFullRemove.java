@@ -94,9 +94,10 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
     private IStatus remoteUninstall( IBundleProject bundleProject, String symbolicName, IProgressMonitor monitor ) throws CoreException
     {
+        //TODO we should get bsn first and try use the bsn to uninstall
         IStatus retval = null;
 
-        IPath outputJar = bundleProject.getOutputBundle( false, monitor );
+        IPath outputJar = bundleProject.getOutputBundlePath();
 
         BundleSupervisor bundleSupervisor = null;
 

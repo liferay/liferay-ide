@@ -261,6 +261,43 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
     }
 
     @Override
+    public IPath getOutputBundlePath()
+    {
+        IPath retval = null;
+
+        final SDK sdk = getSDK();
+        final IStatus status = sdk.validate();
+
+        if( !status.isOK() )
+        {
+            return retval;
+        }
+
+        final IPath distPath = sdk.getLocation().append( "dist" );
+
+        final File[] distFiles = distPath.toFile().listFiles( new FilenameFilter()
+        {
+
+            @Override
+            public boolean accept( File dir, String name )
+            {
+                return name.contains( getProject().getLocation().lastSegment() );
+            }
+        } );
+
+        try
+        {
+            retval = new Path( distFiles[0].getCanonicalPath() );
+        }
+        catch( IOException e )
+        {
+            ProjectCore.createErrorStatus( e );
+        }
+
+        return retval;
+    }
+
+    @Override
     public String getSymbolicName() throws CoreException
     {
         return this.getProject().getLocation().lastSegment();

@@ -53,8 +53,8 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
 
         return super.adapt( adapterType );
     }
-    
-    
+
+
     @Override
     public boolean filterResource( IPath resourcePath )
     {
@@ -92,7 +92,7 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
         final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
         final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
 
-        final String targetName = mavenProject.getBuild().getFinalName() + ".war";
+        final String targetName = mavenProject.getBuild().getFinalName() + "." + getBundleShape();
 
         final IFolder targetFolder = getProject().getFolder( "target" );
 
@@ -112,6 +112,38 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
             throw new CoreException(
                 LiferayMavenCore.createErrorStatus(
                     "Unable to get output bundle for project " + getProject().getName() ) );
+        }
+
+        return outputJar;
+    }
+
+    @Override
+    public IPath getOutputBundlePath()
+    {
+        IPath outputJar = null;
+
+        try
+        {
+            final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), null );
+            final MavenProject mavenProject = projectFacade.getMavenProject( null );
+
+            final String targetName = mavenProject.getBuild().getFinalName() + "." + getBundleShape();
+
+            final IFolder targetFolder = getProject().getFolder( "target" );
+
+            if( targetFolder.exists() )
+            {
+                final IPath targetFile = targetFolder.getRawLocation().append( targetName );
+
+                if( targetFile.toFile().exists() )
+                {
+                    outputJar = targetFile;
+                }
+            }
+        }
+        catch( Exception e )
+        {
+            LiferayMavenCore.logError( e );
         }
 
         return outputJar;

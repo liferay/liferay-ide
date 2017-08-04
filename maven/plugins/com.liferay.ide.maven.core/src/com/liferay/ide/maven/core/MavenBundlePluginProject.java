@@ -127,7 +127,7 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 
         final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
 
-        final String targetName = mavenProject.getBuild().getFinalName() + ".jar";
+        final String targetName = mavenProject.getBuild().getFinalName() + "." + getBundleShape();
 
         final String buildDirectory = mavenProject.getBuild().getDirectory();
         final File baseDirectory = mavenProject.getBasedir();
@@ -148,6 +148,38 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
             {
                 outputJar = targetFile;
             }
+        }
+
+        return outputJar;
+    }
+
+    @Override
+    public IPath getOutputBundlePath()
+    {
+        IPath outputJar = null;
+
+        try
+        {
+            final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), null );
+            final MavenProject mavenProject = projectFacade.getMavenProject( null );
+
+            final String targetName = mavenProject.getBuild().getFinalName() + "." + getBundleShape();
+
+            final IFolder targetFolder = getProject().getFolder( "target" );
+
+            if( targetFolder.exists() )
+            {
+                final IPath targetFile = targetFolder.getRawLocation().append( targetName );
+
+                if( targetFile.toFile().exists() )
+                {
+                    outputJar = targetFile;
+                }
+            }
+        }
+        catch( Exception e )
+        {
+            LiferayMavenCore.logError( e );
         }
 
         return outputJar;

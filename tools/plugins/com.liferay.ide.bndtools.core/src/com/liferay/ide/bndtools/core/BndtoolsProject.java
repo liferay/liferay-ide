@@ -103,6 +103,33 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
     }
 
     @Override
+    public IPath getOutputBundlePath()
+    {
+        IPath retval = null;
+
+        try
+        {
+            final File[] buildFiles = this.bndProject.getBuildFiles( false );
+
+            if( !CoreUtil.isNullOrEmpty( buildFiles ) )
+            {
+                final File buildFile = buildFiles[0];
+
+                if( buildFile.exists() )
+                {
+                    retval = new Path( buildFile.getCanonicalPath() );
+                }
+            }
+        }
+        catch( Exception e )
+        {
+            BndtoolsCore.logError( "Unable to get output jar for " + this.getProject().getName(), e );
+        }
+
+        return retval;
+    }
+
+    @Override
     public String getSymbolicName() throws CoreException
     {
         String retval = this.bndProject.getName();

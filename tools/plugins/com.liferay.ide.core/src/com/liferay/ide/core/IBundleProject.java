@@ -31,6 +31,8 @@ public interface IBundleProject extends ILiferayProject
 
     IPath getOutputBundle( boolean cleanBuild, IProgressMonitor monitor ) throws CoreException;
 
+    IPath getOutputBundlePath();
+
     String getSymbolicName() throws CoreException;
 
     boolean isFragmentBundle();
