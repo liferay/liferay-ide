@@ -16,6 +16,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 
 import org.eclipse.sapphire.modeling.Path;
@@ -44,6 +45,14 @@ public class ImportModuleProjectLocationValidationService extends ValidationServ
 
             if( !retval.ok() )
             {
+                return retval;
+            }
+
+            if( LiferayWorkspaceUtil.isValidWorkspaceLocation( location ) )
+            {
+                retval = Status.createErrorStatus(
+                    "Can't import Liferay Workspace, please use Import Liferay Workspace Project wizard." );
+
                 return retval;
             }
 
