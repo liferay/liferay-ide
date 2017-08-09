@@ -64,7 +64,7 @@ public class LiferayRuntimeStubComposite extends Composite
         super( parent, SWT.NONE );
         this.wizard = wizard;
 
-        createControl();
+        createControl( parent );
         initialize();
         validate();
     }
@@ -86,10 +86,11 @@ public class LiferayRuntimeStubComposite extends Composite
         validate();
     }
 
-    protected void createControl()
+    protected void createControl( Composite parent )
     {
         setLayout( new GridLayout( 2, false ) );
         setLayoutData( new GridData( GridData.FILL_BOTH ) );
+        setBackground( parent.getBackground() );
 
         Label lblName = new Label( this, SWT.NONE );
         lblName.setText( Msgs.name );

@@ -177,8 +177,8 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
     protected void createControl()
     {
         setLayout( createLayout() );
-
         setLayoutData( new GridData( GridData.FILL_BOTH ) );
+        setBackground( this.getParent().getBackground() );
 
         createFields();
 

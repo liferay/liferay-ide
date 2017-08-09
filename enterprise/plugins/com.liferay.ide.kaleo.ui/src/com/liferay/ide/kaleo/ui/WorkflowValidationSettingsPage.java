@@ -136,6 +136,7 @@ public class WorkflowValidationSettingsPage extends AbstractValidationSettingsPa
 
         int columns = 3;
         twistie = createTwistie( body, "Workflow Validation", columns );
+        twistie.setBackground( parent.getBackground() );
         Composite inner = createInnerComposite( parent, twistie, columns );
 
         inner = createInnerComposite( parent, twistie, columns );

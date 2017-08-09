@@ -40,7 +40,6 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -268,12 +267,10 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         composite.setLayout( new GridLayout( 1, true ) );
 
         GridData grData = new GridData( GridData.FILL_BOTH );
-        Color backgroundColor = composite.getDisplay().getSystemColor( SWT.COLOR_WIDGET_BACKGROUND );
 
         grData.grabExcessVerticalSpace = true;
         grData.grabExcessHorizontalSpace = true;
         composite.setLayoutData( grData );
-        composite.setBackground( backgroundColor );
 
         final GearControl gear = new GearControl( composite, SWT.NONE );
 
@@ -283,7 +280,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         gridData.heightHint = 150;
 
         gear.setLayoutData( gridData );
-        gear.setBackground( backgroundColor );
+        gear.setBackground( parent.getBackground() );
 
         StackLayout stackLayout = new StackLayout();
 
@@ -373,6 +370,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
 
         navigator.addPageNavigateListener( gear );
         navigator.addPageActionListener( gear );
+        navigator.setBackground( parent.getBackground() );
 
         gear.addSelectionChangedListener( navigator );
         gear.addSelectionChangedListener( this );
@@ -385,11 +383,8 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         GridData navData = new GridData( GridData.FILL_HORIZONTAL );
 
         navData.grabExcessHorizontalSpace = true;
-//        navData.widthHint = 400;
-//        navData.heightHint = 55;
 
         navigator.setLayoutData( navData );
-        navigator.setBackground( backgroundColor );
 
         scrolledComposite.setContent(container);
 //        scrolledComposite.setMinSize(container.computeSize(SWT.DEFAULT, 670));

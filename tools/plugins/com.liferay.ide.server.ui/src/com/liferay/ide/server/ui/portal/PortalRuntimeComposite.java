@@ -86,8 +86,8 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
     {
         setLayout( createLayout() );
         setLayoutData( createLayoutData() );
-
         setBackground( parent.getBackground() );
+
         createFields();
 
         enableJREControls( false );

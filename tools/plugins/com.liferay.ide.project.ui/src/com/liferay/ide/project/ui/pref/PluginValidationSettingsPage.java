@@ -131,6 +131,7 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
 
         Composite body = pageContent.getBody();
         body.setLayout( layout );
+        body.setBackground( parent.getBackground() );
 
         GridData gd = new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 );
         gd.horizontalIndent = 0;
@@ -145,6 +146,7 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
         int columns = 3;
 
         twistie = createTwistie( body, Msgs.portletXMLDescriptor, columns );
+        twistie.setBackground( parent.getBackground() );
         Composite inner = createInnerComposite( parent, twistie, columns );
 
         createCombo( inner, Msgs.syntaxInvalid, ValidationPreferences.PORTLET_XML_SYNTAX_INVALID );
@@ -154,6 +156,7 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
         createCombo( inner, Msgs.referenceNotFound, ValidationPreferences.PORTLET_XML_REFERENCE_NOT_FOUND );
 
         twistie = createTwistie( body, Msgs.serviceXMLDescriptor, columns );
+        twistie.setBackground( parent.getBackground() );
         inner = createInnerComposite( parent, twistie, columns );
 
         createCombo( inner, Msgs.syntaxInvalid, ValidationPreferences.SERVICE_XML_SYNTAX_INVALID );
@@ -163,6 +166,7 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
         createCombo( inner, Msgs.referenceNotFound, ValidationPreferences.SERVICE_XML_REFERENCE_NOT_FOUND );
 
         twistie = createTwistie( body, Msgs.liferayPortletXMLDescriptor, columns );
+        twistie.setBackground( parent.getBackground() );
         inner = createInnerComposite( parent, twistie, columns );
 
         createCombo( inner, Msgs.syntaxInvalid, ValidationPreferences.LIFERAY_PORTLET_XML_SYNTAX_INVALID );
@@ -172,6 +176,7 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
         createCombo( inner, Msgs.referenceNotFound, ValidationPreferences.LIFERAY_PORTLET_XML_REFERENCE_NOT_FOUND );
 
         twistie = createTwistie( body, Msgs.liferayHookXMLDescriptor, columns );
+        twistie.setBackground( parent.getBackground() );
         inner = createInnerComposite( parent, twistie, columns );
 
         createCombo( inner, Msgs.syntaxInvalid, ValidationPreferences.LIFERAY_HOOK_XML_SYNTAX_INVALID );
@@ -181,6 +186,7 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
         createCombo( inner, Msgs.referenceNotFound, ValidationPreferences.LIFERAY_HOOK_XML_REFERENCE_NOT_FOUND );
 
         twistie = createTwistie( body, Msgs.liferayDisplayXMLDescriptor, columns );
+        twistie.setBackground( parent.getBackground() );
         inner = createInnerComposite( parent, twistie, columns );
 
         createCombo( inner, Msgs.syntaxInvalid, ValidationPreferences.LIFERAY_DISPLAY_XML_SYNTAX_INVALID );
@@ -190,6 +196,7 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
         createCombo( inner, Msgs.referenceNotFound, ValidationPreferences.LIFERAY_DISPLAY_XML_REFERENCE_NOT_FOUND );
 
         twistie = createTwistie( body, Msgs.liferayLayoutTemplatesDescriptor, columns );
+        twistie.setBackground( parent.getBackground() );
         inner = createInnerComposite( parent, twistie, columns );
 
         createCombo( inner, Msgs.syntaxInvalid, ValidationPreferences.LIFERAY_LAYOUTTPL_XML_SYNTAX_INVALID );
@@ -199,6 +206,7 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
         createCombo( inner, Msgs.referenceNotFound, ValidationPreferences.LIFERAY_LAYOUTTPL_XML_REFERENCE_NOT_FOUND );
 
         twistie = createTwistie( body, Msgs.liferayJspFiles, columns );
+        twistie.setBackground( parent.getBackground() );
         inner = createInnerComposite( parent, twistie, columns );
 
         createCombo( inner, Msgs.syntaxInvalid, ValidationPreferences.LIFERAY_JSP_SYNTAX_INVALID );

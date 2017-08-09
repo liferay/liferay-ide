@@ -28,7 +28,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 
 /**
  * @author Simon Jiang
@@ -60,8 +59,6 @@ public class NavigatorControl extends AbstractCanvas implements SelectionChanged
 
     private Rectangle[] actionBoxes;
 
-    private Display display;
-
     private int select = 0;
 
     private boolean needRedraw = false;
@@ -75,10 +72,6 @@ public class NavigatorControl extends AbstractCanvas implements SelectionChanged
     public NavigatorControl( Composite parent, int style )
     {
         super( parent, style | SWT.DOUBLE_BUFFERED );
-
-        display = getDisplay();
-
-        setBackground( display.getSystemColor( SWT.COLOR_WHITE ) );
 
         init();
 

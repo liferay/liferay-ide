@@ -83,7 +83,7 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
         this.fragment = fragment;
         this.wizard = wizard;
 
-        createControl();
+        createControl( parent );
     }
 
     public void modifyText( ModifyEvent e )
@@ -165,9 +165,10 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
         validate();
     }
 
-    protected void createControl()
+    protected void createControl( Composite parent )
     {
         setLayout( new GridLayout( 1, false ) );
+        setBackground( parent.getBackground() );
 
         disableValidation = true;
         Group connectionGroup = SWTUtil.createGroup( this, Msgs.connectionSettings, 2 );
