@@ -21,11 +21,15 @@ import com.liferay.ide.gradle.core.GradleUtil;
 import java.util.List;
 
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.JavaCore;
 
 /**
  * @author Lovett Li
  * @author Terry Jia
+ * @author Andy Wu
  */
 public class BuildServiceTaskAction extends GradleTaskAction
 {
@@ -38,12 +42,46 @@ public class BuildServiceTaskAction extends GradleTaskAction
 
     protected void afterTask()
     {
+        boolean refresh = false;
+
+        IProject[] projects = CoreUtil.getClasspathProjects( _project );
+
+        for( IProject project : projects )
+        {
+            List<IFolder> folders = CoreUtil.getSourceFolders( JavaCore.create( project ) );
+
+            if( folders.size() == 0 )
+            {
+                refresh = true;
+            }
+            else
+            {
+                try
+                {
+                    project.refreshLocal( IResource.DEPTH_INFINITE, null );
+                }
+                catch( CoreException e )
+                {
+                }
+            }
+        }
+
         List<IFolder> folders = CoreUtil.getSourceFolders( JavaCore.create( _project ) );
 
-        if( folders.size() == 0 )
+        if( folders.size() == 0 || refresh )
         {
+            // refresh this project will also transmit to refresh -api project
             GradleUtil.refreshGradleProject( _project );
         }
+        else
+        {
+            try
+            {
+                _project.refreshLocal( IResource.DEPTH_INFINITE, null );
+            }
+            catch( CoreException e )
+            {
+            }
+        }
     }
-
 }

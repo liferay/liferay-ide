@@ -21,9 +21,7 @@ import com.gradleware.tooling.toolingutils.binding.Validator;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.buildship.core.CorePlugin;
 import org.eclipse.buildship.core.configuration.BuildConfiguration;
@@ -160,11 +158,8 @@ public class GradleUtil
 
     public static void refreshGradleProject( IProject project )
     {
-        Set<IProject> projects = new HashSet<>();
-
-        projects.add( project );
-        
-		CorePlugin.gradleWorkspaceManager().getGradleBuilds(projects).synchronize(NewProjectHandler.IMPORT_AND_MERGE);
+        CorePlugin.gradleWorkspaceManager().getGradleBuild( project ).get().synchronize(
+            NewProjectHandler.IMPORT_AND_MERGE );
     }
 
     public static void runGradleTask( IProject project, String[] tasks, IProgressMonitor monitor ) throws CoreException

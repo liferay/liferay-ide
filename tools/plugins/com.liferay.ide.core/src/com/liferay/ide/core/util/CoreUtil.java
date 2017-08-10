@@ -52,7 +52,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -236,6 +237,48 @@ public class CoreUtil
             }
         }
         return null;
+    }
+
+    public static IProject[] getClasspathProjects( IProject project )
+    {
+        List<IProject> retval = new ArrayList<IProject>();
+
+        try
+        {
+            IJavaProject javaProject = JavaCore.create( project );
+
+            IClasspathEntry[] classpathEntries = getClasspathEntries( project );
+
+            for( IClasspathEntry classpathEntry : classpathEntries )
+            {
+                if( classpathEntry.getEntryKind() == IClasspathEntry.CPE_CONTAINER )
+                {
+                    IClasspathContainer container =
+                        JavaCore.getClasspathContainer( classpathEntry.getPath(), javaProject );
+
+                    IClasspathEntry[] containerClasspathEntries = container.getClasspathEntries();
+
+                    for( IClasspathEntry containerClasspathEntry : containerClasspathEntries )
+                    {
+                        if( containerClasspathEntry.getEntryKind() == IClasspathEntry.CPE_PROJECT )
+                        {
+                            IResource member =
+                                CoreUtil.getWorkspaceRoot().findMember( containerClasspathEntry.getPath() );
+
+                            if( member != null && member.getType() == IResource.PROJECT )
+                            {
+                                retval.add( (IProject) member );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch( JavaModelException e )
+        {
+        }
+
+        return retval.toArray( new IProject[0] );
     }
 
     public static IFolder getDefaultDocrootFolder( IProject project )
@@ -571,7 +614,7 @@ public class CoreUtil
 
     public static IProgressMonitor newSubMonitor( final IProgressMonitor parent, final int ticks )
     {
-        return( parent == null ? null : new SubProgressMonitor( parent, ticks ) );
+        return( parent == null ? null : SubMonitor.convert( parent, ticks ) );
     }
 
     public static void prepareFolder( IFolder folder ) throws CoreException
