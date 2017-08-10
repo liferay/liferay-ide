@@ -57,6 +57,16 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
 
     public void connect( String host, int port ) throws Exception
     {
+        // TODO need to read configuration to get port waiting multiple server support merged
+        GogoTelnetClient gogoShell = new GogoTelnetClient( host, 11311 );
+
+        makeSureBundlesStarted( gogoShell, "biz.aQute.remote.agent" );
+        makeSureBundlesStarted( gogoShell, "org.apache.aries.jmx.api" );
+        makeSureBundlesStarted( gogoShell, "org.apache.aries.jmx.core" );
+        makeSureBundlesStarted( gogoShell, "org.apache.aries.util" );
+
+        gogoShell.close();
+
         super.connect( Agent.class, this, host, port, 600 );
         bundleDeployer = new PortalBundleDeployer( host, jmxPort );
     }
@@ -181,9 +191,86 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
         }
     }
 
+    private BundleDTOWithStatus getBundleDTOwithStatus( String result, String bsn )
+    {
+        BundleDTOWithStatus bundleDTOWithStatus = null;
+
+        long id;
+
+        String status = null;
+
+        String[] lines = result.split( "\n" );
+
+        for( String line : lines )
+        {
+            if( line.contains( "(" ) && line.contains( ")" ) )
+            {
+                String[] bundleAttris = line.split( "\\|" );
+
+                String bsnTemp = bundleAttris[3].substring( 0, bundleAttris[3].indexOf( "(" ) ).trim();
+
+                if( bsn.equals( bsnTemp ) )
+                {
+                    status = bundleAttris[1].trim();
+                    id = Long.parseLong( bundleAttris[0].trim() );
+
+                    bundleDTOWithStatus = new BundleDTOWithStatus( id, status, bsn );
+
+                    return bundleDTOWithStatus;
+                }
+            }
+        }
+
+        return bundleDTOWithStatus;
+    }
+
     public String getOutInfo()
     {
         return lastOutput;
+    }
+
+    private void makeSureBundlesStarted( GogoTelnetClient gogoShell, String bsn ) throws Exception
+    {
+        String result = gogoShell.send( "lb -s " + bsn );
+
+        BundleDTOWithStatus bundleDTO = getBundleDTOwithStatus( result, bsn );
+
+        if( bundleDTO == null )
+        {
+            throw new Exception( "can't find " + bsn + " in running liferay instance" );
+        }
+
+        if( bundleDTO._status.equals( "Active" ) )
+        {
+            return;
+        }
+
+        if( bundleDTO._status.equals( "Resolved" ) )
+        {
+            gogoShell.send( "start " + bundleDTO.id );
+
+            result = gogoShell.send( "lb -s " + bsn );
+
+            bundleDTO = getBundleDTOwithStatus( result, bsn );
+
+            if( bundleDTO == null )
+            {
+                throw new Exception( "can't find " + bsn + " in running liferay instance" );
+            }
+
+            if( bundleDTO._status.equals( "Active" ) )
+            {
+                return;
+            }
+            else
+            {
+                throw new Exception( "can't start " + bsn + " in running liferay instance" );
+            }
+        }
+        else
+        {
+            throw new Exception( "unknow status of " + bsn + " in running liferay instance" );
+        }
     }
 
     @Override
