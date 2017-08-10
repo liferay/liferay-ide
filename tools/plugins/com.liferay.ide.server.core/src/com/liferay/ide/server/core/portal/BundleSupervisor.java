@@ -42,17 +42,18 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
     private final int jmxPort;
     private PortalBundleDeployer bundleDeployer;
 
-    public BundleSupervisor(int jmxPort)
+    public BundleSupervisor( int jmxPort )
     {
         super();
 
         this.jmxPort = jmxPort;
     }
 
-    @Override
-    public boolean stderr( String out ) throws Exception
+    public void close() throws IOException
     {
-        return true;
+        super.close();
+
+        bundleDeployer.close();
     }
 
     public void connect( String host, int port ) throws Exception
@@ -71,20 +72,7 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
         bundleDeployer = new PortalBundleDeployer( host, jmxPort );
     }
 
-    public void close() throws IOException
-    {
-        super.close();
-
-        bundleDeployer.close();
-    }
-
-    @Override
-    public void event( Event e ) throws Exception
-    {
-    }
-
-    public BundleDTO deploy(
-        final String bsn, final File bundleFile, final String bundleUrl) throws Exception
+    public BundleDTO deploy( final String bsn, final File bundleFile, final String bundleUrl ) throws Exception
     {
         BundleDTO retval = null;
 
@@ -98,7 +86,7 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
 
         final Agent agent = getAgent();
 
-        long bundleId  = getBundleId( bsn );
+        long bundleId = getBundleId( bsn );
 
         if( bundleId > 0 )
         {
@@ -156,39 +144,9 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
         return retval;
     }
 
-    public long getBundleId( String bsn ) throws Exception
+    @Override
+    public void event( Event e ) throws Exception
     {
-        long id = -1;
-
-        try
-        {
-            String result = getAgent().shell( "lb -s " + bsn );
-
-            String[] lines = result.split( "\n" );
-
-            for( String line : lines )
-            {
-                if( line.contains( "(" ) && line.contains( ")" ) )
-                {
-                    String[] bundleAttris = line.split( "\\|" );
-
-                    String bsnTemp = bundleAttris[3].substring( 0, bundleAttris[3].indexOf( "(" ) ).trim();
-
-                    if( bsn.equals( bsnTemp ) )
-                    {
-                        id = Long.parseLong( bundleAttris[0].trim() );
-                        break;
-                    }
-                }
-            }
-
-            return id;
-        }
-        catch( Exception e )
-        {
-            LiferayServerCore.logError( "Get result error when executing shell(lb -s " + bsn + ")", e );
-            return id;
-        }
     }
 
     private BundleDTOWithStatus getBundleDTOwithStatus( String result, String bsn )
@@ -222,6 +180,41 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
         }
 
         return bundleDTOWithStatus;
+    }
+
+    public long getBundleId( String bsn ) throws Exception
+    {
+        long id = -1;
+
+        try
+        {
+            String result = getAgent().shell( "lb -s " + bsn );
+
+            String[] lines = result.split( "\n" );
+
+            for( String line : lines )
+            {
+                if( line.contains( "(" ) && line.contains( ")" ) )
+                {
+                    String[] bundleAttris = line.split( "\\|" );
+
+                    String bsnTemp = bundleAttris[3].substring( 0, bundleAttris[3].indexOf( "(" ) ).trim();
+
+                    if( bsn.equals( bsnTemp ) )
+                    {
+                        id = Long.parseLong( bundleAttris[0].trim() );
+                        break;
+                    }
+                }
+            }
+
+            return id;
+        }
+        catch( Exception e )
+        {
+            LiferayServerCore.logError( "Get result error when executing shell(lb -s " + bsn + ")", e );
+            return id;
+        }
     }
 
     public String getOutInfo()
@@ -273,6 +266,25 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
         }
     }
 
+    public void refreshHostBundle( String fragmentHostName ) throws Exception
+    {
+        long fragmentHostId = getBundleId( fragmentHostName );
+
+        if( fragmentHostId > 0 )
+        {
+            Agent agent = getAgent();
+            agent.redirect( Agent.COMMAND_SESSION );
+            agent.stdin( "refresh " + fragmentHostId );
+            agent.redirect( Agent.NONE );
+        }
+    }
+
+    @Override
+    public boolean stderr( String out ) throws Exception
+    {
+        return true;
+    }
+
     @Override
     public boolean stdout( String out ) throws Exception
     {
@@ -287,19 +299,6 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
         }
 
         return true;
-    }
-
-    public void refreshHostBundle( String fragmentHostName ) throws Exception
-    {
-        long fragmentHostId = getBundleId( fragmentHostName );
-
-        if( fragmentHostId > 0 )
-        {
-            Agent agent = getAgent();
-            agent.redirect( Agent.COMMAND_SESSION );
-            agent.stdin( "refresh " + fragmentHostId );
-            agent.redirect( Agent.NONE );
-        }
     }
 
     public String uninstall( IBundleProject bundleProject, IPath outputJar ) throws Exception
