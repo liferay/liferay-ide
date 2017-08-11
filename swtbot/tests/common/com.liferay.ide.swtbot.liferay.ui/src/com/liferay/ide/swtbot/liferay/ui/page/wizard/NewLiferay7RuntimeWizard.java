@@ -27,17 +27,17 @@ import com.liferay.ide.swtbot.ui.page.Wizard;
 public class NewLiferay7RuntimeWizard extends Wizard
 {
 
+    private Text location;
     private Text name;
-    private Text portalBundleType;
-    private Text serverLocation;
+    private Text type;
 
     public NewLiferay7RuntimeWizard( SWTBot bot )
     {
-        super( bot, TITLE_NEW_SERVER_RUNTIME_ENVIRONMENT, SPECIFY_PORTAL_BUNDLE_LOCATION_INDEX );
+        super( bot, 3 );
 
-        serverLocation = new Text( bot, LABEL_SERVER_LOCATION );
-        portalBundleType = new Text( bot, LABEL_BUNDLE_TYPE );
-        name = new Text( bot, LABEL_RUNTIME_NAME );
+        location = new Text( bot, LIFERAY_PORTAL_BUNDLE_DIRECTORY );
+        type = new Text( bot, DETECTED_PORTAL_BUNDLE_TYPE );
+        name = new Text( bot, NAME );
     }
 
     public Text getName()
@@ -47,12 +47,12 @@ public class NewLiferay7RuntimeWizard extends Wizard
 
     public Text getPortalBundleType()
     {
-        return portalBundleType;
+        return type;
     }
 
-    public Text getServerLocation()
+    public Text getLocation()
     {
-        return serverLocation;
+        return location;
     }
 
 }

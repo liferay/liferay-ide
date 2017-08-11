@@ -15,16 +15,15 @@
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.ui.UI;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Tree;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
  */
-public class PreferencesDialog extends Dialog implements UI
+public class PreferencesDialog extends Dialog
 {
 
     private Tree preferencesTypes;

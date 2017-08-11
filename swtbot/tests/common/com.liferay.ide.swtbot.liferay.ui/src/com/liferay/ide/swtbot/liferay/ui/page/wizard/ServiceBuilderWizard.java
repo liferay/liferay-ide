@@ -15,19 +15,18 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.ServiceBuilderUI;
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.CheckBox;
 import com.liferay.ide.swtbot.ui.page.ComboBox;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Ying Xu
  */
-public class ServiceBuilderWizard extends Wizard implements ServiceBuilderUI
+public class ServiceBuilderWizard extends Wizard
 {
 
     private Text author;
@@ -40,25 +39,15 @@ public class ServiceBuilderWizard extends Wizard implements ServiceBuilderUI
 
     public ServiceBuilderWizard( SWTBot bot )
     {
-        this( bot, TEXT_BLANK );
-    }
+        super( bot, NEW_SERVICE_BUILDER, 2 );
 
-    public ServiceBuilderWizard( SWTBot bot, String title )
-    {
-        this( bot, title, INDEX_VALIDATION_MESSAGE );
-    }
-
-    public ServiceBuilderWizard( SWTBot bot, String title, int validationMsgIndex )
-    {
-        super( bot, title, validationMsgIndex );
-
-        packagePath = new Text( bot, LABEL_PACKAGE_PATH );
-        namespace = new Text( bot, LABEL_NAMESPACE );
-        author = new Text( bot, LABEL_AUTHOR );
-        serviceFile = new Text( bot, LABEL_SERVICE_FILE );
-        includeSampleEntity = new CheckBox( bot, CHECKBOX_INCLUDE_SAMPLE_ENTITY );
-        pluginProjects = new ComboBox( bot, COMBOBOX_PLUGIN_PROJECT );
-        browseButton = new Button( bot, BROWSE_WITH_THREE_DOT );
+        packagePath = new Text( bot, PACKAGE_PATH );
+        namespace = new Text( bot, NAMESPACE );
+        author = new Text( bot, AUTHOR );
+        serviceFile = new Text( bot, SERVICE_FILE );
+        includeSampleEntity = new CheckBox( bot, INCLUDE_SAMPLE_ENTITY_IN_NEW_FILE );
+        pluginProjects = new ComboBox( bot, PLUGIN_PROJECT );
+        browseButton = new Button( bot, BROWSE_WITH_DOT );
     }
 
     public void createServiceBuilder( String packagePathText, String namespaceText )

@@ -15,21 +15,19 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.LiferayPortletWizardUI;
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.CheckBox;
 import com.liferay.ide.swtbot.ui.page.ComboBox;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Ashley Yuan
  * @author Li Lu
  */
-public class LiferayPortletDeploymentDescriptorWizard extends Wizard implements LiferayPortletWizardUI, WizardUI
+public class LiferayPortletDeploymentDescriptorWizard extends Wizard
 {
 
     private CheckBox addToControlPanel;
@@ -49,34 +47,22 @@ public class LiferayPortletDeploymentDescriptorWizard extends Wizard implements 
 
     public LiferayPortletDeploymentDescriptorWizard( SWTBot bot )
     {
-        this( bot, TEXT_BLANK, BACK_WITH_LEFT_BRACKET, NEXT_WITH_BRACKET, FINISH, CANCEL, INDEX_SPECIFY_LIFERAY_PORTLET_DEPLOYMENT_DESCRIPTOR_PAGE );
-    }
+        super( bot, 6 );
 
-    public LiferayPortletDeploymentDescriptorWizard( SWTBot bot, int validationMsgIndex )
-    {
-        this( bot, TEXT_BLANK, BACK_WITH_LEFT_BRACKET, NEXT_WITH_BRACKET, FINISH, CANCEL, validationMsgIndex );
-    }
-
-    public LiferayPortletDeploymentDescriptorWizard(
-        SWTBot bot, String title, String cancelButtonText, String finishBtnText, String backBtnText,
-        String nextButtonText, int validationMsgIndex )
-    {
-        super( bot, title, BACK_WITH_LEFT_BRACKET, NEXT_WITH_BRACKET, FINISH, CANCEL, validationMsgIndex );
-
-        icon = new Text( bot, LABEL_ICON );
-        allowMultipleInstances = new CheckBox( bot, CHECKBOX_ALLOW_MULTIPLE_INSTANCES );
-        css = new Text( bot, LABEL_CSS );
-        javaScript = new Text( bot, LABEL_JAVASCRIPT );
-        cssClassWrapper = new Text( bot, LABEL_CSS_CLASS_WRAPPER );
-        displayCategories = new ComboBox( bot, LABEL_DISPLAY_CATEGORY );
-        addToControlPanel = new CheckBox( bot, CHECKBOX_ADD_TO_CONTROL_PANEL );
-        entryCategories = new ComboBox( bot, LABEL_ENTRY_CATEGORY );
-        entryWeight = new Text( bot, LABEL_ENTRY_WEIGHT );
-        createEntryClass = new CheckBox( bot, CHECKBOX_CREATE_ENTRY_CLASS );
-        entryClass = new Text( bot, LABEL_ENTRY_CLASS );
-        browseIconBtn = new Button( bot, BROWSE_WITH_THREE_DOT, 0 );
-        browseCssBtn = new Button( bot, BROWSE_WITH_THREE_DOT, 1 );
-        browseJavaScriptBtn = new Button( bot, BROWSE_WITH_THREE_DOT, 2 );
+        icon = new Text( bot, ICON );
+        allowMultipleInstances = new CheckBox( bot, ALLOW_MULTIPLE_INSTANCES );
+        css = new Text( bot, CSS );
+        javaScript = new Text( bot, JAVASCRIPT );
+        cssClassWrapper = new Text( bot, CSS_CLASS_WRAPPER );
+        displayCategories = new ComboBox( bot, DISPLAY_CATEGORY );
+        addToControlPanel = new CheckBox( bot, ADD_TO_CONTROL_PANEL );
+        entryCategories = new ComboBox( bot, ENTRY_CATEGORY );
+        entryWeight = new Text( bot, ENTRY_WEIGHT );
+        createEntryClass = new CheckBox( bot, CREATE_ENTRY_CLASS );
+        entryClass = new Text( bot, ENTRY_CLASS );
+        browseIconBtn = new Button( bot, BROWSE_WITH_DOT, 0 );
+        browseCssBtn = new Button( bot, BROWSE_WITH_DOT, 1 );
+        browseJavaScriptBtn = new Button( bot, BROWSE_WITH_DOT, 2 );
     }
 
     public void setDisplayCategoryCombobox( String displayCategoryCombobox )

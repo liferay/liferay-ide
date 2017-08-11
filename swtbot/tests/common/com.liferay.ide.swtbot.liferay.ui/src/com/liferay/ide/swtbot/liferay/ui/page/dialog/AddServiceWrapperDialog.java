@@ -15,18 +15,16 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.dialog;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.DialogUI;
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Text;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Vicky Wang
  */
-public class AddServiceWrapperDialog extends Dialog implements DialogUI, WizardUI
+public class AddServiceWrapperDialog extends Dialog
 {
 
     private Text implClass;
@@ -39,11 +37,11 @@ public class AddServiceWrapperDialog extends Dialog implements DialogUI, WizardU
     {
         super( bot );
 
-        serviceType = new Text( bot, LABLE_SERVICE_TYPE );
-        implClass = new Text( bot, LABLE_IMPL_CLASS );
-        selectServiceTypeBtn = new Button( bot, BUTTON_SELECT );
-        selectImplClassBtn = new Button( bot, BUTTON_SELECT );
-        newBtn = new Button( bot, BUTTON_NEW );
+        serviceType = new Text( bot, SERVICE_TYPE );
+        implClass = new Text( bot, IMPL_CLASS );
+        selectServiceTypeBtn = new Button( bot, SELECT );
+        selectImplClassBtn = new Button( bot, SELECT );
+        newBtn = new Button( bot, NEW_WITH_DOT );
     }
 
     public Text getImplClass()

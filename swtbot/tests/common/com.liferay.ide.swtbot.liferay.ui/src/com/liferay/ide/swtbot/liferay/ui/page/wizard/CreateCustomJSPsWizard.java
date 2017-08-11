@@ -15,20 +15,18 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.DialogUI;
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.CheckBox;
 import com.liferay.ide.swtbot.ui.page.Table;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Vicky Wang
  */
-public class CreateCustomJSPsWizard extends Wizard implements DialogUI, WizardUI
+public class CreateCustomJSPsWizard extends Wizard
 {
 
     private Button addBtn;
@@ -42,25 +40,20 @@ public class CreateCustomJSPsWizard extends Wizard implements DialogUI, WizardUI
     private Text selectedProjects;
     private Text webRootFolder;
 
-    public CreateCustomJSPsWizard( SWTBot bot, int indexCustomJSPsValidationMsg )
+    public CreateCustomJSPsWizard( SWTBot bot )
     {
-        this( bot, TEXT_BLANK, indexCustomJSPsValidationMsg );
-    }
+        super( bot, 3 );
 
-    public CreateCustomJSPsWizard( SWTBot bot, String title, int indexCustomJSPsValidationMsg )
-    {
-        super( bot, title, indexCustomJSPsValidationMsg );
-
-        selectedProjects = new Text( bot, LABLE_SELECTED_PROJECT );
-        webRootFolder = new Text( bot, LABLE_WEB_ROOT_FOLDER );
-        customJSPfolder = new Text( bot, LABLE_CUSTOM_JSP_FOLDER );
-        jspFilesToOverride = new Table( bot, LABLE_JSP_FILES_TO_OVERRIDE );
-        browseBtn = new Button( bot, BROWSE_WITH_THREE_DOT );
-        addFromLiferayBtn = new Button( bot, BUTTON_ADD_FROM_LIFERAY );
-        addBtn = new Button( bot, ADD_WITH_THREE_DOT );
-        editBtn = new Button( bot, BUTTON_EDIT );
-        removeBtn = new Button( bot, REMOVE_WITH_THREE_DOT );
-        disableJspSyntaxValidation = new CheckBox( bot, CHECKBOX_DISABLE_JSP_SYNTAX_VALIDATION );
+        selectedProjects = new Text( bot, SELECTED_PROJECT );
+        webRootFolder = new Text( bot, WEB_ROOT_FOLDER );
+        customJSPfolder = new Text( bot, CUSTOM_JSP_FOLDER );
+        jspFilesToOverride = new Table( bot, JSP_FILES_TO_OVERRIDE );
+        browseBtn = new Button( bot, BROWSE_WITH_DOT );
+        addFromLiferayBtn = new Button( bot, ADD_FROM_LIFERAY );
+        addBtn = new Button( bot, ADD_WITH_DOT );
+        editBtn = new Button( bot, EDIT_WITH_DOT );
+        removeBtn = new Button( bot, REMOVE_WITH_DOT );
+        disableJspSyntaxValidation = new CheckBox( bot, DISABLE_JSP_SYNTAX );
     }
 
     public Button getAddBtn()

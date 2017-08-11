@@ -15,21 +15,19 @@
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.ui.UI;
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Table;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Terry Jia
  */
-public class ServerRuntimeEnvironmentsPreferencesDialog extends Dialog implements UI
+public class ServerRuntimeEnvironmentsPreferencesDialog extends Dialog
 {
 
     private Button addBtn;
-
     private Button editBtn;
     private Button removeBtn;
     private Table runtimes;

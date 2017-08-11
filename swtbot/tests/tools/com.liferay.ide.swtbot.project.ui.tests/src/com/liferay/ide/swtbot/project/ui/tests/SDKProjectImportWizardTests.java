@@ -19,6 +19,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.LiferayProjectFromExistSourceWizard;
+import com.liferay.ide.swtbot.liferay.ui.util.FileUtil;
+import com.liferay.ide.swtbot.liferay.ui.util.ZipUtil;
+import com.liferay.ide.swtbot.ui.page.Tree;
+import com.liferay.ide.swtbot.ui.page.TreeItem;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -29,20 +36,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.liferay.ide.swtbot.liferay.ui.SWTBotBase;
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.LiferayProjectFromExistSourceWizard;
-import com.liferay.ide.swtbot.liferay.ui.util.FileUtil;
-import com.liferay.ide.swtbot.liferay.ui.util.ZipUtil;
-import com.liferay.ide.swtbot.ui.page.Dialog;
-import com.liferay.ide.swtbot.ui.page.Tree;
-import com.liferay.ide.swtbot.ui.page.TreeItem;
-
 /**
  * @author Li Lu
  * @author Ying Xu
  */
-public class SDKProjectImportWizardTests extends SWTBotBase implements WizardUI
+public class SDKProjectImportWizardTests extends SwtbotBase
 {
 
     static String fullClassname = new SecurityManager()
@@ -60,9 +58,9 @@ public class SDKProjectImportWizardTests extends SWTBotBase implements WizardUI
 
     private LiferayProjectFromExistSourceWizard wizard = new LiferayProjectFromExistSourceWizard( bot );
 
-    Tree projectTreeItem = ide.getPackageExporerView().getProjectTree();
+    Tree projectTreeItem = viewAction.getProjects();
 
-    TreeItem sdkTreeItem = ide.getPackageExporerView().getProjectTree().getTreeItem( getLiferayPluginsSdkName() );
+    TreeItem sdkTreeItem = viewAction.getProjects().getTreeItem( getLiferayPluginsSdkName() );
 
     @BeforeClass
     public static void unzipServerAndSdk() throws IOException
@@ -76,17 +74,7 @@ public class SDKProjectImportWizardTests extends SWTBotBase implements WizardUI
     @After
     public void cleanUp()
     {
-        try
-        {
-            Dialog shell = new Dialog( bot, TITLE_NEW_LIFERAY_PROJECT_EXIS_SOURCE );
-            shell.closeIfOpen();
-
-            ide.getPackageExporerView().deleteProjectExcludeNames(
-                ( new String[] { getLiferayPluginsSdkName() } ), true );
-        }
-        catch( Exception e )
-        {
-        }
+        viewAction.deleteProjectsExcludeNames( getLiferayPluginsSdkName() );
     }
 
     public void unzipSDKProject( String path, String projectName ) throws Exception
@@ -98,42 +86,10 @@ public class SDKProjectImportWizardTests extends SWTBotBase implements WizardUI
         ZipUtil.unzip( projectZipFile, new File( path ) );
     }
 
-    public void openWizard()
-    {
-        ide.getCreateLiferayProjectToolbar().menuClick( MENU_NEW_LIFERAY_PROJECT_EXIS_SOURCE );
-    }
-
     @Before
     public void shouldRunTests()
     {
         Assume.assumeTrue( runTest() || runAllTests() );
-    }
-
-    @Test
-    public void testDefaults()
-    {
-        if( sdkTreeItem.isVisible() )
-        {
-            ide.getPackageExporerView().deleteResouceByName( getLiferayPluginsSdkName(), true );
-        }
-
-        openWizard();
-
-        assertEquals( MESSAGE_DEFAULT, wizard.getValidationMsg() );
-
-        assertTrue( wizard.getSdkDirectory().isEnabled() );
-        assertTrue( wizard.getBrowseSdkDirectoryBtn().isEnabled() );
-        assertTrue( wizard.getSdkVersion().isEnabled() );
-
-        assertTrue( wizard.getSdkDirectory().isActive() );
-        assertFalse( wizard.getBrowseSdkDirectoryBtn().isActive() );
-        assertFalse( wizard.getSdkVersion().isActive() );
-
-        assertTrue( wizard.getSelectAllBtn().isEnabled() );
-        assertTrue( wizard.getDeselectAllBtn().isEnabled() );
-        assertTrue( wizard.getRefreshBtn().isEnabled() );
-
-        wizard.cancel();
     }
 
     @Test
@@ -145,25 +101,19 @@ public class SDKProjectImportWizardTests extends SWTBotBase implements WizardUI
         unzipSDKProject( "ext", "Import-223-ext" );
         unzipSDKProject( "layouttpl", "Import-223-layouttpl" );
 
-        openWizard();
+        wizardAction.openNewLiferayPluginProjectsFromExistingSourceWizard();
 
-        if( wizard.getBrowseSdkDirectoryBtn().isEnabled() )
-        {
-            wizard.getSdkDirectory().setText( getLiferayPluginsSdkDir().toString() );
-        }
-
-        sleep( 1000 );
-        assertEquals( MESSAGE_DEFAULT, wizard.getValidationMsg() );
+        wizard.getSdkDirectory().setText( getLiferayPluginsSdkDir().toString() );
 
         wizard.getSelectAllBtn().click();
         wizard.getDeselectAllBtn().click();
         wizard.getRefreshBtn().click();
 
         wizard.getSelectAllBtn().click();
-        assertEquals( "7.0.0", wizard.getSdkVersion().getText() );
-        assertTrue( wizard.finishBtn().isEnabled() );
 
-        wizard.finish();
+        assertEquals( "7.0.0", wizard.getSdkVersion().getText() );
+
+        wizardAction.finish();
 
         assertTrue( sdkTreeItem.isVisible() );
 
@@ -177,34 +127,34 @@ public class SDKProjectImportWizardTests extends SWTBotBase implements WizardUI
     @Test
     public void testSdkDirValidation() throws Exception
     {
-        openWizard();
+        wizardAction.openNewLiferayPluginProjectsFromExistingSourceWizard();
 
         if( !wizard.getBrowseSdkDirectoryBtn().isEnabled() )
         {
             wizard.cancel();
 
-            ide.getPackageExporerView().deleteResouceByName( getLiferayPluginsSdkName(), true );
+            viewAction.deleteProjectsExcludeNames( getLiferayPluginsSdkName() );
 
-            openWizard();
+            wizardAction.openNewLiferayPluginProjectsFromExistingSourceWizard();
         }
 
         unzipPluginsSDK();
 
         wizard.getSdkDirectory().setText( "AAA" );
-        sleep( 1000 );
+
         assertEquals( " \"AAA\" is not an absolute path.", wizard.getValidationMsg() );
         assertFalse( wizard.finishBtn().isEnabled() );
 
         wizard.getSdkDirectory().setText( "C:/" );
-        sleep( 1000 );
-        assertEquals( MESSAGE_INVALID_PROJECT_LOCATION, wizard.getValidationMsg() );
+
+        assertEquals( SDK_DOES_NOT_EXIST, wizard.getValidationMsg() );
         assertFalse( wizard.finishBtn().isEnabled() );
 
         unzipSDKProject( "portlets", "Import-223-portlet" );
 
         wizard.getSdkDirectory().setText( getLiferayPluginsSdkDir().toString() );
-        sleep( 1000 );
-        assertEquals( MESSAGE_MUST_SPECIFY_ONE_PROJECT, wizard.getValidationMsg() );
+
+        assertEquals( AT_LEAST_ONE_PROJECT_MUST_BE_SPECIFY, wizard.getValidationMsg() );
 
         wizard.getSelectAllBtn().click();
         assertEquals( "7.0.0", wizard.getSdkVersion().getText() );
@@ -212,19 +162,17 @@ public class SDKProjectImportWizardTests extends SWTBotBase implements WizardUI
 
         wizard.finish();
 
-        TreeItem sdkTreeItem = ide.getPackageExporerView().getProjectTree().getTreeItem( getLiferayPluginsSdkName() );
+        TreeItem sdkTreeItem = viewAction.getProjects().getTreeItem( getLiferayPluginsSdkName() );
 
         assertTrue( sdkTreeItem.isVisible() );
 
         assertTrue( projectTreeItem.getTreeItem( "Import-223-portlet" ).isVisible() );
 
-        // import project from another SDK
         IPath sdk2Dir = getLiferayPluginsSdkDir().removeLastSegments( 1 ).append( "sdk2" );
 
         FileUtil.copyDirectiory( getLiferayPluginsSdkDir().toOSString(), sdk2Dir.toOSString() );
 
-        openWizard();
-        sleep( 1000 );
+        wizardAction.openNewLiferayPluginProjectsFromExistingSourceWizard();
 
         assertFalse( wizard.getSdkDirectory().isEnabled() );
         assertFalse( wizard.getBrowseSdkDirectoryBtn().isEnabled() );
@@ -235,4 +183,5 @@ public class SDKProjectImportWizardTests extends SWTBotBase implements WizardUI
 
         FileUtil.deleteDir( sdk2Dir.toFile(), true );
     }
+
 }

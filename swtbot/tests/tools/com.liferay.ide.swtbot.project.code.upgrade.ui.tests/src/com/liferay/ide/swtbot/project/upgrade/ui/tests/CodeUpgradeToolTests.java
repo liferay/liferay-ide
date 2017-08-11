@@ -17,13 +17,13 @@ package com.liferay.ide.swtbot.project.upgrade.ui.tests;
 
 import org.junit.Test;
 
-import com.liferay.ide.swtbot.liferay.ui.SWTBotBase;
+import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 import com.liferay.ide.swtbot.liferay.ui.page.view.CodeUpgradeView;
 
 /**
  * @author Terry Jia
  */
-public class CodeUpgradeToolTests extends SWTBotBase implements CodeUpgradeTool
+public class CodeUpgradeToolTests extends SwtbotBase
 {
 
     @Test

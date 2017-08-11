@@ -15,20 +15,19 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.view;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.ui.UI;
 import com.liferay.ide.swtbot.ui.page.Canvas;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.swtbot.ui.page.View;
 
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Terry Jia
  * @author Ashley Yuan
  */
-public class CodeUpgradeView extends View implements UI
+public class CodeUpgradeView extends View
 {
 
     public class GearPO extends Canvas
@@ -68,7 +67,7 @@ public class CodeUpgradeView extends View implements UI
 
         showAllPagesBtn = new ToolbarButtonWithTooltip( bot, SHOW_ALL_PAGES );
         restartBtn = new ToolbarButtonWithTooltip( bot, RESTART_UPGRADE );
-        restartDialog = new Dialog( bot, LABEL_RESTART_CODE_UPGRADE, NO, YES );
+        restartDialog = new Dialog( bot, RESTART_CODE_UPGRADE, NO, YES );
         showAllPagesDialog = new Dialog( bot, SHOW_ALL_PAGES, NO, YES );
     }
 

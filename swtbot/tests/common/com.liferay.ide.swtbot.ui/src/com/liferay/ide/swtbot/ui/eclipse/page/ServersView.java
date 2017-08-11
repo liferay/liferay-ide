@@ -30,24 +30,24 @@ public class ServersView extends View
 
     public ServersView( SWTWorkbenchBot bot )
     {
-        super( bot, LABEL_SERVERS );
+        super( bot, SERVERS );
 
         servers = new Tree( bot, 1 );
     }
 
     public void clickStartBtn()
     {
-        clickToolbarButton( LEBAL_SERVER_START_BUTTON );
+        clickToolbarButton( START_THE_SERVER );
     }
 
     public void clickStopBtn()
     {
-        clickToolbarButton( LEBAL_SERVER_STOP_BUTTON );
+        clickToolbarButton( STOP_THE_SERVER );
     }
 
     public void clickDebugBtn()
     {
-        clickToolbarButton( LEBAL_SERVER_DEBUG_BUTTON );
+        clickToolbarButton( START_THE_SERVER_IN_DEBUG_MODE );
     }
 
     public Tree getServers()

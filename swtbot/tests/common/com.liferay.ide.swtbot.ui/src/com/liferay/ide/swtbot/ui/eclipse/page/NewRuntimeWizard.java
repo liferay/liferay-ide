@@ -15,17 +15,16 @@
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.ui.UI;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Tree;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Terry Jia
  */
-public class NewRuntimeWizard extends Wizard implements UI
+public class NewRuntimeWizard extends Wizard
 {
 
     private Text search;
@@ -33,7 +32,7 @@ public class NewRuntimeWizard extends Wizard implements UI
 
     public NewRuntimeWizard( SWTBot bot )
     {
-        super( bot, TITLE_NEW_SERVER_RUNTIME_ENVIRONMENT, SPECIFY_PORTAL_BUNDLE_LOCATION_INDEX );
+        super( bot, NEW_SERVER_RUNTIME_ENVIRONMENT, 3 );
 
         search = new Text( bot );
         serverTypes = new Tree( bot );

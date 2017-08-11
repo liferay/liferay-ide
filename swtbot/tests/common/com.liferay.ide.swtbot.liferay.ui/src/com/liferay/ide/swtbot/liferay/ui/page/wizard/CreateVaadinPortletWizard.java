@@ -15,16 +15,15 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.VaadinPortletWizardUI;
 import com.liferay.ide.swtbot.ui.page.ComboBox;
 import com.liferay.ide.swtbot.ui.page.Text;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Li Lu
  */
-public class CreateVaadinPortletWizard extends CreateLiferayPortletWizard implements VaadinPortletWizardUI
+public class CreateVaadinPortletWizard extends CreateLiferayPortletWizard
 {
 
     private Text applicationClass;
@@ -33,16 +32,11 @@ public class CreateVaadinPortletWizard extends CreateLiferayPortletWizard implem
 
     public CreateVaadinPortletWizard( SWTBot bot )
     {
-        this( bot, INDEX_VAADIN_VALIDATION_MESSAGE1 );
-    }
+        super( bot, 3 );
 
-    public CreateVaadinPortletWizard( SWTBot bot, int validationMsgIndex )
-    {
-        super( bot, TEXT_BLANK, validationMsgIndex );
-
-        applicationClass = new Text( bot, LABEL_APPLICATION_CLASS );
-        vaadinPortletClasses = new ComboBox( bot, LABEL_PORTLET_CLASS );
-        portletClasses = new ComboBox( bot, LABEL_PORTLET_CLASS );
+        applicationClass = new Text( bot, APPLICATION_CLASS );
+        vaadinPortletClasses = new ComboBox( bot, PORTLET_CLASS );
+        portletClasses = new ComboBox( bot, PORTLET_CLASS );
     }
 
     public Text getApplicationClass()

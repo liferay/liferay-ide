@@ -15,19 +15,18 @@
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.ui.UI;
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Tree;
 import com.liferay.ide.swtbot.ui.page.TreeItem;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Li Lu
  * @author Terry Jia
  */
-public class AddAndRemoveDialog extends Dialog implements UI
+public class AddAndRemoveDialog extends Dialog
 {
 
     private Button addAllBtn;
@@ -39,10 +38,10 @@ public class AddAndRemoveDialog extends Dialog implements UI
 
     public AddAndRemoveDialog( SWTBot bot )
     {
-        super( bot, MENU_ADD_AND_REMOVE, CANCEL, FINISH );
+        super( bot, ADD_AND_REMOVE, CANCEL, FINISH );
 
         addBtn = new Button( bot, ADD_WITH_BRACKET );
-        addAllBtn = new Button( bot, ADD_ALL_WITH_TWO_BRACKETS );
+        addAllBtn = new Button( bot, ADD_ALL );
         removeBtn = new Button( bot, REMOVE_PROJECT );
         removeAllBtn = new Button( bot, REMOVE_ALL );
         availables = new Tree( bot, 0 );

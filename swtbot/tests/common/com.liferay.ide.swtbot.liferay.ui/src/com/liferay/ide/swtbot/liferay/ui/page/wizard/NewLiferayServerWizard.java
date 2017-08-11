@@ -15,19 +15,18 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.Tree;
 import com.liferay.ide.swtbot.ui.page.Wizard;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ying Xu
  */
-public class NewLiferayServerWizard extends Wizard implements WizardUI
+public class NewLiferayServerWizard extends Wizard
 {
 
-    Tree serverTypes;
+    private Tree serverTypes;
 
     public NewLiferayServerWizard( SWTBot bot )
     {

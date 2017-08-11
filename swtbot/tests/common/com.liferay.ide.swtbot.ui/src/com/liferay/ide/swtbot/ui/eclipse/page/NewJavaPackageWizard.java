@@ -15,16 +15,16 @@
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.ui.UI;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
+import com.liferay.ide.swtbot.ui.util.StringPool;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ying Xu
  */
-public class NewJavaPackageWizard extends Wizard implements UI
+public class NewJavaPackageWizard extends Wizard
 {
 
     private Text name;
@@ -32,10 +32,10 @@ public class NewJavaPackageWizard extends Wizard implements UI
 
     public NewJavaPackageWizard( SWTBot bot )
     {
-        super( bot, TEXT_BLANK, CANCEL, FINISH, TEXT_BLANK, TEXT_BLANK );
+        super( bot, StringPool.BLANK, CANCEL, FINISH, StringPool.BLANK, StringPool.BLANK );
 
-        sourceFolder = new Text( bot, LABEL_SOURCE_FOLDER );
-        name = new Text( bot, LABEL_NAME );
+        sourceFolder = new Text( bot, SOURCE_FOLDER );
+        name = new Text( bot, NAME );
     }
 
     public Text getName()

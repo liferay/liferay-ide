@@ -15,20 +15,18 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.DialogUI;
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Table;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Vicky Wang
  */
-public class PortalPropertiesWizard extends Wizard implements DialogUI, WizardUI
+public class PortalPropertiesWizard extends Wizard
 {
 
     private Dialog addEventActionDialog;
@@ -45,29 +43,24 @@ public class PortalPropertiesWizard extends Wizard implements DialogUI, WizardUI
     private Button propertyRemoveBtn;
     private Table specifyProperties;
 
-    public PortalPropertiesWizard( SWTBot bot, int indexPortalPropertiesValidationMsg )
+    public PortalPropertiesWizard( SWTBot bot )
     {
-        this( bot, TEXT_BLANK, indexPortalPropertiesValidationMsg );
-    }
+        super( bot, 1 );
 
-    public PortalPropertiesWizard( SWTBot bot, String title, int indexPortalPropertiesValidationMsg )
-    {
-        super( bot, title, indexPortalPropertiesValidationMsg );
-
-        portalPropertiesFile = new Text( bot, LABLE_PORTAL_PROPERTIES_FILE );
-        defineActionsOnPortalEvents = new Table( bot, LABLE_DEFINE_ACTIONS );
-        specifyProperties = new Table( bot, LABLE_SPECIFY_PROPERTIES );
-        addEventActionDialog = new Dialog( bot, WINDOW_ADD_EVENT_ACTION );
-        addPropertyOverrideDialog = new Dialog( bot, WINDOW_ADD_PROPERTY_OVERRIDE );
+        portalPropertiesFile = new Text( bot, PORTAL_PROPERTIES_FILE );
+        defineActionsOnPortalEvents = new Table( bot, DEFINE_ACTIONS_ON_PORTAL_EVENTS );
+        specifyProperties = new Table( bot, SPECIFY_PROPERTIES_TO_OVERRIDE );
+        addEventActionDialog = new Dialog( bot, ADD_EVENT_ACTION );
+        addPropertyOverrideDialog = new Dialog( bot, ADD_PROPERTY_OVERRIDE );
         newLiferayHookConfigurationDialog =
-            new Dialog( bot, TITLE_NEW_LIFERAY_HOOK, BACK_WITH_LEFT_BRACKET, NEXT_WITH_BRACKET );
-        browseBtn = new Button( bot, BROWSE_WITH_THREE_DOT, 0 );
-        eventAddBtn = new Button( bot, ADD_WITH_THREE_DOT, 0 );
-        eventEditBtn = new Button( bot, BUTTON_EDIT, 0 );
-        eventRemoveBtn = new Button( bot, REMOVE_WITH_THREE_DOT, 0 );
-        propertyAddBtn = new Button( bot, ADD_WITH_THREE_DOT, 1 );
-        propertyEditBtn = new Button( bot, BUTTON_EDIT, 1 );
-        propertyRemoveBtn = new Button( bot, REMOVE_WITH_THREE_DOT, 1 );
+            new Dialog( bot, NEW_LIFERAY_HOOK, BACK_WITH_LEFT_BRACKET, NEXT_WITH_BRACKET );
+        browseBtn = new Button( bot, BROWSE_WITH_DOT, 0 );
+        eventAddBtn = new Button( bot, ADD_WITH_DOT, 0 );
+        eventEditBtn = new Button( bot, EDIT_WITH_DOT, 0 );
+        eventRemoveBtn = new Button( bot, REMOVE_WITH_DOT, 0 );
+        propertyAddBtn = new Button( bot, ADD_WITH_DOT, 1 );
+        propertyEditBtn = new Button( bot, EDIT_WITH_DOT, 1 );
+        propertyRemoveBtn = new Button( bot, REMOVE_WITH_DOT, 1 );
     }
 
     public Dialog getAddEventActionDialog()

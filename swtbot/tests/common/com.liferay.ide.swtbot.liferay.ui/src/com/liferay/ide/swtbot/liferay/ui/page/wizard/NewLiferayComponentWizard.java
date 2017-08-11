@@ -15,18 +15,17 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.NewLiferayComponentWizardUI;
 import com.liferay.ide.swtbot.ui.page.ComboBox;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Ying Xu
  */
-public class NewLiferayComponentWizard extends Wizard implements NewLiferayComponentWizardUI
+public class NewLiferayComponentWizard extends Wizard
 {
 
     private ToolbarButtonWithTooltip browseBtn;
@@ -38,20 +37,21 @@ public class NewLiferayComponentWizard extends Wizard implements NewLiferayCompo
     private ComboBox projectNames;
     private Text serviceName;
 
-    public NewLiferayComponentWizard( SWTBot bot, String title )
+    public NewLiferayComponentWizard( SWTBot bot )
     {
-        this( bot, title, INDEX_VALIDATION_MESSAGE );
+        this( bot, -1 );
     }
 
-    public NewLiferayComponentWizard( SWTBot bot, String title, int validationMsgIndex )
+    public NewLiferayComponentWizard( SWTBot bot, int validationMsgIndex )
     {
-        super( bot, title, BACK_WITH_LEFT_BRACKET, NEXT_WITH_BRACKET, FINISH, CANCEL, validationMsgIndex );
-        packageName = new Text( bot, LABEL_PACKAGE_NAME );
-        componentClassName = new Text( bot, LABEL_COMPONENT_CLASS_NAME );
-        serviceName = new Text( bot, LABEL_SERVICE_NAME );
-        modelClassName = new Text( bot, LABEL_MODEL_CLASS );
-        projectNames = new ComboBox( bot, COMBOBOX_PROJECT_NAME );
-        componentClassTemplates = new ComboBox( bot, COMBOBOX_COMPONENT_CLASS_TEMPLATE );
+        super( bot, NEW_LIFERAY_COMPONENT, 4 );
+
+        packageName = new Text( bot, PACKAGE_NAME );
+        componentClassName = new Text( bot, COMPONENT_CLASS_NAME );
+        serviceName = new Text( bot, SERVICE_NAME );
+        modelClassName = new Text( bot, MODEL_CLASS );
+        projectNames = new ComboBox( bot, PROJECT_NAME );
+        componentClassTemplates = new ComboBox( bot, COMPONENT_CLASS_TEMPLATE );
         browseBtn = new ToolbarButtonWithTooltip( bot, BROWSE, 1 );
         packageBrowseBtn = new ToolbarButtonWithTooltip( bot, BROWSE, 0 );
     }

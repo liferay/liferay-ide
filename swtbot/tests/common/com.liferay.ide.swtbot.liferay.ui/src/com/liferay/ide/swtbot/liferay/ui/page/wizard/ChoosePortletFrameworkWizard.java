@@ -15,19 +15,18 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.Radio;
 import com.liferay.ide.swtbot.ui.page.Text;
+import com.liferay.ide.swtbot.ui.page.Wizard;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Li Lu
  */
-public class ChoosePortletFrameworkWizard extends NewSdkProjectWizard implements WizardUI
+public class ChoosePortletFrameworkWizard extends Wizard
 {
 
-    static int defaultvalidationMsgIndex = 3;
     private Text archetype;
     private Text displayName;
     private Radio jsf2x;
@@ -37,20 +36,14 @@ public class ChoosePortletFrameworkWizard extends NewSdkProjectWizard implements
 
     public ChoosePortletFrameworkWizard( SWTBot bot )
     {
-        this( bot, TEXT_BLANK, defaultvalidationMsgIndex );
+        super( bot, 3 );
 
-    }
-
-    public ChoosePortletFrameworkWizard( SWTBot bot, String title, int validationMsgIndex )
-    {
-        super( bot, title, validationMsgIndex );
-
-        liferayMvc = new Radio( bot, LABEL_LIFERAY_MVC_FRAMEWORK );
-        jsf2x = new Radio( bot, LABEL_JSF_FRAMEWORK );
-        springMvc = new Radio( bot, LABEL_SPRING_MVC_FRAMEWORK );
-        vaadin = new Radio( bot, LABEL_VAADIN_FRAMEWORK );
-        displayName = new Text( bot, LABEL_DISPLAY_NAME );
-        archetype = new Text( bot, LABLE_ARCHETYPE );
+        liferayMvc = new Radio( bot, LIFERAY_MVC );
+        jsf2x = new Radio( bot, JSF_2_X );
+        springMvc = new Radio( bot, SPRING_MVC );
+        vaadin = new Radio( bot, VAADIN );
+        displayName = new Text( bot, DISPLAY_NAME );
+        archetype = new Text( bot, ARCHETYPE );
     }
 
     public Text getArchetypeText()
@@ -67,18 +60,18 @@ public class ChoosePortletFrameworkWizard extends NewSdkProjectWizard implements
     {
         switch( label )
         {
-        case LABEL_LIFERAY_MVC_FRAMEWORK:
+        case LIFERAY_MVC:
 
             liferayMvc.click();
             break;
-        case LABEL_JSF_FRAMEWORK:
+        case JSF_2_X:
             jsf2x.click();
             break;
 
-        case LABEL_SPRING_MVC_FRAMEWORK:
+        case SPRING_MVC:
             springMvc.click();
             break;
-        case LABEL_VAADIN_FRAMEWORK:
+        case VAADIN:
             vaadin.click();
         }
     }

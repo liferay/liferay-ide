@@ -15,86 +15,85 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.button;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.ui.UI;
 import com.liferay.ide.swtbot.ui.page.MenuItem;
 import com.liferay.ide.swtbot.ui.page.ToolbarDropDownButton;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ying Xu
  */
-public class NewToolbarDropDownButton extends ToolbarDropDownButton implements UI
+public class NewToolbarDropDownButton extends ToolbarDropDownButton
 {
 
-    private MenuItem _liferayPluginProject;
-    private MenuItem _liferayModuleProject;
-    private MenuItem _liferayPortlet;
-    private MenuItem _liferayJSFPortlet;
-    private MenuItem _liferayVaadinPortlet;
-    private MenuItem _liferayHookConfiguration;
-    private MenuItem _liferayServiceBuilder;
-    private MenuItem _liferayLayoutTemplate;
-    private MenuItem _newPackage;
+    private MenuItem liferayPluginProject;
+    private MenuItem liferayModuleProject;
+    private MenuItem liferayPortlet;
+    private MenuItem liferayJSFPortlet;
+    private MenuItem liferayVaadinPortlet;
+    private MenuItem liferayHookConfiguration;
+    private MenuItem liferayServiceBuilder;
+    private MenuItem liferayLayoutTemplate;
+    private MenuItem newPackage;
 
     public NewToolbarDropDownButton( SWTBot bot )
     {
-        super( bot, TOOLBAR_NEW );
+        super( bot, NEW );
 
-        _liferayPluginProject = new MenuItem( bot, this, LABEL_LIFERAY_PLUGIN_PROJECT );
-        _liferayModuleProject = new MenuItem( bot, this, LABEL_LIFERAY_MODULE_PROJECT );
-        _liferayPortlet = new MenuItem( bot, this, LABEL_LIFERAY_PORTLET );
-        _liferayJSFPortlet = new MenuItem( bot, this, LABEL_LIFERAY_JSF_PORTLET );
-        _liferayVaadinPortlet = new MenuItem( bot, this, LABEL_LIFERAY_VAADIN_PORTLET );
-        _liferayHookConfiguration = new MenuItem( bot, this, LABEL_LIFERAY_HOOK_CONFIGURATION );
-        _liferayServiceBuilder = new MenuItem( bot, this, LABEL_LIFERAY_SERVICE_BUILDER );
-        _liferayLayoutTemplate = new MenuItem( bot, this, LABEL_LIFERAY_LAYOUT_TEMPLATE );
-        _newPackage = new MenuItem( bot, this, TOOLBAR_PACKAGE );
+        liferayPluginProject = new MenuItem( bot, this, LIFERAY_PLUGIN_PROJECT );
+        liferayModuleProject = new MenuItem( bot, this, LIFERAY_MODULE_PROJECT );
+        liferayPortlet = new MenuItem( bot, this, LIFERAY_PORTLET );
+        liferayJSFPortlet = new MenuItem( bot, this, LIFERAY_JSF_PORTLET );
+        liferayVaadinPortlet = new MenuItem( bot, this, LIFERAY_VAADIN_PORTLET );
+        liferayHookConfiguration = new MenuItem( bot, this, LIFERAY_HOOK_CONFIGURATION );
+        liferayServiceBuilder = new MenuItem( bot, this, LIFERAY_SERVICE_BUILDER );
+        liferayLayoutTemplate = new MenuItem( bot, this, LIFERAY_LAYOUT_TEMPLATE );
+        newPackage = new MenuItem( bot, this, PACKAGE );
     }
 
     public MenuItem getLiferayPluginProject()
     {
-        return _liferayPluginProject;
+        return liferayPluginProject;
     }
 
     public MenuItem getLiferayModuleProject()
     {
-        return _liferayModuleProject;
+        return liferayModuleProject;
     }
 
     public MenuItem getLiferayPortlet()
     {
-        return _liferayPortlet;
+        return liferayPortlet;
     }
 
     public MenuItem getLiferayJSFPortlet()
     {
-        return _liferayJSFPortlet;
+        return liferayJSFPortlet;
     }
 
     public MenuItem getLiferayVaadinPortlet()
     {
-        return _liferayVaadinPortlet;
+        return liferayVaadinPortlet;
     }
 
     public MenuItem getLiferayHookConfiguration()
     {
-        return _liferayHookConfiguration;
+        return liferayHookConfiguration;
     }
 
     public MenuItem getLiferayServiceBuilder()
     {
-        return _liferayServiceBuilder;
+        return liferayServiceBuilder;
     }
 
     public MenuItem getLiferayLayoutTemplate()
     {
-        return _liferayLayoutTemplate;
+        return liferayLayoutTemplate;
     }
 
     public MenuItem getNewPackage()
     {
-        return _newPackage;
+        return newPackage;
     }
 
 }

@@ -15,6 +15,8 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
+import com.liferay.ide.swtbot.ui.util.StringPool;
+
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
@@ -38,7 +40,7 @@ public class Dialog extends CancelableShell
 
     public Dialog( SWTBot bot, String cancelBtnLabel, String confirmBtnLabel )
     {
-        this( bot, "", cancelBtnLabel, confirmBtnLabel );
+        this( bot, StringPool.BLANK, cancelBtnLabel, confirmBtnLabel );
     }
 
     public Dialog( SWTBot bot, String title, String cancelBtnLabel, String confirmBtnLabel )

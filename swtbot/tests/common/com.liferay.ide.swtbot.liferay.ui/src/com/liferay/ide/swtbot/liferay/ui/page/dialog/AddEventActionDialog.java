@@ -15,18 +15,16 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.dialog;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.DialogUI;
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Text;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Vicky Wang
  */
-public class AddEventActionDialog extends Dialog implements DialogUI, WizardUI
+public class AddEventActionDialog extends Dialog
 {
 
     private Text event;
@@ -39,11 +37,11 @@ public class AddEventActionDialog extends Dialog implements DialogUI, WizardUI
     {
         super( bot );
 
-        event = new Text( bot, LABLE_EVENT );
-        eventActionClass = new Text( bot, LABLE_CLASS );
-        selectEventBtn = new Button( bot, BUTTON_SELECT, 0 );
-        selectClassBtn = new Button( bot, BUTTON_SELECT, 1 );
-        newBtn = new Button( bot, BUTTON_NEW );
+        event = new Text( bot, EVENT );
+        eventActionClass = new Text( bot, CLASS );
+        selectEventBtn = new Button( bot, SELECT, 0 );
+        selectClassBtn = new Button( bot, SELECT, 1 );
+        newBtn = new Button( bot, NEW );
     }
 
     public Text getEvent()

@@ -15,29 +15,28 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Ashley Yuan
  */
-public class ImportLiferayModuleProjectWizard extends Wizard implements WizardUI
+public class ImportLiferayModuleProjectWizard extends Wizard
 {
 
     private ToolbarButtonWithTooltip browseBtn;
     private Text buildType;
     private Text location;
 
-    public ImportLiferayModuleProjectWizard( SWTBot bot, String title, int validationMsgIndex )
+    public ImportLiferayModuleProjectWizard( SWTBot bot )
     {
-        super( bot, title, validationMsgIndex );
+        super( bot, IMPORT_LIFERAY_MODULE_PROJECT, 2 );
 
-        location = new Text( bot, LABEL_LOCATION );
-        buildType = new Text( bot, LABEL_BUILD_TYPE );
+        location = new Text( bot, LOCATION_WITH_COLON );
+        buildType = new Text( bot, BUILD_TYPE );
         browseBtn = new ToolbarButtonWithTooltip( bot, BROWSE );
     }
 

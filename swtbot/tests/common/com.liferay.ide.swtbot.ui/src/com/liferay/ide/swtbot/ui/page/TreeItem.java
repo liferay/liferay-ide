@@ -1,17 +1,4 @@
 /*******************************************************************************
-
-
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -38,8 +25,8 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 public class TreeItem extends AbstractWidget
 {
 
-    protected String[] _nodeText;
-    protected Tree _tree;
+    protected String[] nodeText;
+    protected Tree tree;
 
     public TreeItem( SWTBot bot )
     {
@@ -50,8 +37,8 @@ public class TreeItem extends AbstractWidget
     {
         super( bot );
 
-        _tree = tree;
-        _nodeText = nodeText;
+        this.tree = tree;
+        this.nodeText = nodeText;
     }
 
     public void collapse()
@@ -59,13 +46,13 @@ public class TreeItem extends AbstractWidget
         getWidget().collapse();
     }
 
-    public void doAction( String... action )
+    public void doAction( String... actions )
     {
-        SWTBotMenu goalMenu = getWidget().contextMenu( action[0] ).click();
+        SWTBotMenu goalMenu = getWidget().contextMenu( actions[0] ).click();
 
-        for( int i = 1; i < action.length; i++ )
+        for( int i = 1; i < actions.length; i++ )
         {
-            goalMenu = goalMenu.menu( action[i] ).click();
+            goalMenu = goalMenu.menu( actions[i] ).click();
         }
     }
 
@@ -126,12 +113,12 @@ public class TreeItem extends AbstractWidget
 
     public TreeItem getTreeItem( String... items )
     {
-        String[] fullNodeText = new String[_nodeText.length + items.length];
+        String[] fullNodeText = new String[nodeText.length + items.length];
 
-        System.arraycopy( _nodeText, 0, fullNodeText, 0, _nodeText.length );
-        System.arraycopy( items, 0, fullNodeText, _nodeText.length, items.length );
+        System.arraycopy( nodeText, 0, fullNodeText, 0, nodeText.length );
+        System.arraycopy( items, 0, fullNodeText, nodeText.length, items.length );
 
-        return new TreeItem( bot, _tree, fullNodeText );
+        return new TreeItem( bot, tree, fullNodeText );
     }
 
     @Override
@@ -139,16 +126,16 @@ public class TreeItem extends AbstractWidget
     {
         SWTBotTreeItem treeItem = null;
 
-        if( _nodeText != null )
+        if( nodeText != null )
         {
-            treeItem = _tree.getWidget().getTreeItem( _nodeText[0] );
+            treeItem = tree.getWidget().getTreeItem( nodeText[0] );
         }
 
-        for( int i = 1; i < _nodeText.length; i++ )
+        for( int i = 1; i < nodeText.length; i++ )
         {
             treeItem.expand();
 
-            treeItem = treeItem.getNode( _nodeText[i] );
+            treeItem = treeItem.getNode( nodeText[i] );
         }
 
         return treeItem;
@@ -188,11 +175,11 @@ public class TreeItem extends AbstractWidget
     {
         SWTBotTreeItem treeItem = getWidget();
 
-        for( int i = 0; i < _nodeText.length; i++ )
+        for( int i = 0; i < nodeText.length; i++ )
         {
             treeItem.expand();
 
-            treeItem = treeItem.getNode( _nodeText[i] );
+            treeItem = treeItem.getNode( nodeText[i] );
         }
 
         treeItem.select();

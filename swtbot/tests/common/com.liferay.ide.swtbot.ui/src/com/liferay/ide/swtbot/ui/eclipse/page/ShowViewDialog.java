@@ -30,7 +30,7 @@ public class ShowViewDialog extends Dialog
 
     public ShowViewDialog( SWTBot bot )
     {
-        super( bot, LABEL_SHOW_VIEW );
+        super( bot, SHOW_VIEW );
 
         search = new Text( bot );
     }

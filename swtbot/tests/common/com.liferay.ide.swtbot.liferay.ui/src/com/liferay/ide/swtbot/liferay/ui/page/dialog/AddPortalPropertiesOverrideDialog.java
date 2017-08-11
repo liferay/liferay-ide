@@ -15,18 +15,16 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.dialog;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.DialogUI;
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Text;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Vicky Wang
  */
-public class AddPortalPropertiesOverrideDialog extends Dialog implements DialogUI, WizardUI
+public class AddPortalPropertiesOverrideDialog extends Dialog
 {
 
     private Text property;
@@ -37,9 +35,9 @@ public class AddPortalPropertiesOverrideDialog extends Dialog implements DialogU
     {
         super( bot );
 
-        value = new Text( bot, LABLE_VALUE );
-        property = new Text( bot, LABLE_PROPERTY );
-        selectPropertyBtn = new Button( bot, BUTTON_SELECT );
+        value = new Text( bot, VALUE );
+        property = new Text( bot, PROPERTY );
+        selectPropertyBtn = new Button( bot, SELECT );
     }
 
     public Text getProperty()

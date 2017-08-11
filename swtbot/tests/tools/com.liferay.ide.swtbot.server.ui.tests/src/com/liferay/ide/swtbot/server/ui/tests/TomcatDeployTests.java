@@ -68,14 +68,14 @@ public class TomcatDeployTests extends ServerTestsBase
     @Test
     public void deploySampleProject()
     {
-        ide.getCreateLiferayProjectToolbar().getNewLiferayModuleProject().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayModule().click();
 
-        newModuleProjectWizard.createModuleProject( "test" );
+        newModuleProjectWizard.getProjectName().setText( "test" );
         newModuleProjectWizard.finish();
 
-        ide.getCreateLiferayProjectToolbar().getNewLiferayModuleProject().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayModule().click();
 
-        newModuleProjectWizard.createModuleProject( "test2" );
+        newModuleProjectWizard.getProjectName().setText( "test2" );
         newModuleProjectWizard.finish();
 
         serversView.getServers().getTreeItem( serverStartedLabel ).contextMenu( "Add and Remove..." );

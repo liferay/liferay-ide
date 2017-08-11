@@ -15,15 +15,14 @@
 
 package com.liferay.ide.swtbot.server.ui.tests;
 
+import com.liferay.ide.swtbot.liferay.ui.page.editor.ServerEditor;
+
 import java.io.IOException;
 
-import org.junit.After;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.liferay.ide.swtbot.liferay.ui.page.editor.ServerEditor;
 
 /**
  * @author Terry Jia
@@ -81,12 +80,6 @@ public class ServerTomcatTests extends ServerTestsBase
         serversView.clickStopBtn();
 
         sleep( 20000 );
-    }
-
-    @After
-    public void closeWizard()
-    {
-        ide.closeShell( TITLE_NEW_SERVER );
     }
 
     @Before

@@ -12,28 +12,27 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.dialog;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.LiferayPortletWizardUI;
-import com.liferay.ide.swtbot.ui.page.SelectionDialog;
+import com.liferay.ide.swtbot.ui.eclipse.page.TreeDialog;
 import com.liferay.ide.swtbot.ui.page.Table;
 import com.liferay.ide.swtbot.ui.page.Text;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ashley Yuan
  */
-public class PackageSelectionDialog extends SelectionDialog implements LiferayPortletWizardUI
+public class PackageSelectionDialog extends TreeDialog
 {
 
     private Text packageToSelect;
     private Table availablePackages;
 
-    public PackageSelectionDialog( SWTBot bot, String title, int labelIndex )
+    public PackageSelectionDialog( SWTBot bot )
     {
-        super( bot, title, labelIndex );
+        super( bot );
 
         packageToSelect = new Text( bot );
-        availablePackages = new Table( bot, 0 );
+        availablePackages = new Table( bot );
     }
 
     public Table getAvailablePackages()

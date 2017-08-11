@@ -1,10 +1,11 @@
-build.commands=org.eclipse.jdt.core.javabuilder
+#Wed Aug 09 14:58:28 CST 2017
 connection.arguments=
-connection.gradle.distribution=GRADLE_DISTRIBUTION(WRAPPER)
-connection.java.home=null
 connection.jvm.arguments=
-connection.project.dir=..\\..
-derived.resources=.gradle,build
-eclipse.preferences.version=1
+build.commands=org.eclipse.jdt.core.javabuilder
+connection.project.dir=../..
 natures=org.eclipse.jdt.core.javanature
+eclipse.preferences.version=1
+connection.java.home=null
+derived.resources=.gradle,build
 project.path=\:modules\:PortletModule
+connection.gradle.distribution=GRADLE_DISTRIBUTION(WRAPPER)

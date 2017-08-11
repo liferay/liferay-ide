@@ -15,9 +15,11 @@ Require-Bundle: org.junit,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.swtbot.liferay.ui,
+ com.liferay.ide.swtbot.liferay.ui.action,
  com.liferay.ide.swtbot.liferay.ui.page,
  com.liferay.ide.swtbot.liferay.ui.page.tree,
  com.liferay.ide.swtbot.liferay.ui.page.wizard,
+ com.liferay.ide.swtbot.liferay.ui.page.wizard.project,
  com.liferay.ide.swtbot.liferay.ui.page.dialog,
  com.liferay.ide.swtbot.liferay.ui.page.button,
  com.liferay.ide.swtbot.liferay.ui.page.view,

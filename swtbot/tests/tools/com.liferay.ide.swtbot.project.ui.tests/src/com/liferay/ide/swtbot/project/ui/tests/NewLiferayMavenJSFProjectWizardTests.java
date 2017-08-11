@@ -15,130 +15,94 @@
 
 package com.liferay.ide.swtbot.project.ui.tests;
 
+import static org.junit.Assert.assertTrue;
+
+import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
+
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.liferay.ide.swtbot.liferay.ui.NewLiferayJSFProjectWizardUI;
-
 /**
  * @author Ying Xu
  */
-public class NewLiferayMavenJSFProjectWizardTests extends BaseNewLiferayJSFProjectWizard
-    implements NewLiferayJSFProjectWizardUI
+public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase
 {
 
     @Test
     public void createMavenICEFacesProject()
     {
-        String projectName = "testMavenICEFacesProject";
+        final String projectName = "testMavenICEFacesProject";
 
-        newLiferayJSFProject( projectName, TEXT_BUILD_TYPE_MAVEN, MENU_ICEFACES, TEXT_BLANK );
+        wizardAction.openNewLiferayJsfProjectWizard();
+        wizardAction.prepareJsfProjectMaven( projectName, ICEFACES );
+        wizardAction.finish();
 
-        String i18nPropertiesFileName = " i18n.properties";
-        String facesConfigXmlFileName = "faces-config.xml";
-        String pomFileName = "pom.xml";
-        String pomContent = "<artifactId>icefaces-ace</artifactId>";
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
 
-        checkProjectAndFileExist(
-            projectName, projectName, "Java Resources", "src/main/resources", i18nPropertiesFileName );
-        checkProjectAndFileExist(
-            projectName, projectName, "src", "main", "webapp", "WEB-INF", facesConfigXmlFileName );
-        checkProjectAndFileExist( projectName, projectName, pomFileName );
-
-        openEditorAndCheck( pomContent, projectName, projectName, pomFileName );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createMavenJSFStandardProject()
     {
-        String projectName = "testMavenJSFStandardProject";
+        final String projectName = "testMavenJSFStandardProject";
 
-        newLiferayJSFProject( projectName, TEXT_BUILD_TYPE_MAVEN, MENU_JSF_STANDARD, TEXT_BLANK );
+        wizardAction.openNewLiferayJsfProjectWizard();
+        wizardAction.prepareJsfProjectMaven( projectName, JSF_STANDARD );
+        wizardAction.finish();
 
-        String i18nPropertiesFileName = " i18n.properties";
-        String facesConfigXmlFileName = "faces-config.xml";
-        String pomFileName = "pom.xml";
-        String pomContent = "<groupId>com.liferay.faces</groupId>";
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
 
-        checkProjectAndFileExist(
-            projectName, projectName, "Java Resources", "src/main/resources", i18nPropertiesFileName );
-        checkProjectAndFileExist(
-            projectName, projectName, "src", "main", "webapp", "WEB-INF", facesConfigXmlFileName );
-        checkProjectAndFileExist( projectName, projectName, pomFileName );
-
-        openEditorAndCheck( pomContent, projectName, projectName, pomFileName );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createMavenLiferayFacesAlloyProject()
     {
-        String projectName = "testMavenLiferayFacesAlloyProject";
+        final String projectName = "testMavenLiferayFacesAlloyProject";
 
-        newLiferayJSFProject( projectName, TEXT_BUILD_TYPE_MAVEN, MENU_LIFERAY_FACES_ALLOY, TEXT_BLANK );
+        wizardAction.openNewLiferayJsfProjectWizard();
+        wizardAction.prepareJsfProjectMaven( projectName, LIFERAY_FACES_ALLOY );
+        wizardAction.finish();
 
-        String i18nPropertiesFileName = " i18n.properties";
-        String facesConfigXmlFileName = "faces-config.xml";
-        String pomFileName = "pom.xml";
-        String pomContent = "<artifactId>com.liferay.faces.alloy</artifactId>";
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
 
-        checkProjectAndFileExist(
-            projectName, projectName, "Java Resources", "src/main/resources", i18nPropertiesFileName );
-        checkProjectAndFileExist(
-            projectName, projectName, "src", "main", "webapp", "WEB-INF", facesConfigXmlFileName );
-        checkProjectAndFileExist( projectName, projectName, pomFileName );
-
-        openEditorAndCheck( pomContent, projectName, projectName, pomFileName );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createMavenPrimeFacesProject()
     {
-        String projectName = "testMavenPrimeFacesProject";
+        final String projectName = "testMavenPrimeFacesProject";
 
-        newLiferayJSFProject( projectName, TEXT_BUILD_TYPE_MAVEN, MENU_PRIMEFACES, TEXT_BLANK );
+        wizardAction.openNewLiferayJsfProjectWizard();
+        wizardAction.prepareJsfProjectMaven( projectName, PRIMEFACES );
+        wizardAction.finish();
 
-        String i18nPropertiesFileName = " i18n.properties";
-        String facesConfigXmlFileName = "faces-config.xml";
-        String pomFileName = "pom.xml";
-        String pomContent = "<artifactId>primefaces</artifactId>";
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
 
-        checkProjectAndFileExist(
-            projectName, projectName, "Java Resources", "src/main/resources", i18nPropertiesFileName );
-        checkProjectAndFileExist(
-            projectName, projectName, "src", "main", "webapp", "WEB-INF", facesConfigXmlFileName );
-        checkProjectAndFileExist( projectName, projectName, pomFileName );
-
-        openEditorAndCheck( pomContent, projectName, projectName, pomFileName );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createMavenRichFacesProject()
     {
-        String projectName = "testMavenRichFacesProject";
+        final String projectName = "testMavenRichFacesProject";
 
-        newLiferayJSFProject( projectName, TEXT_BUILD_TYPE_MAVEN, MENU_RICHFFACES, TEXT_BLANK );
+        wizardAction.openNewLiferayJsfProjectWizard();
+        wizardAction.prepareJsfProjectMaven( projectName, RICHFACES );
+        wizardAction.finish();
 
-        String i18nPropertiesFileName = " i18n.properties";
-        String facesConfigXmlFileName = "faces-config.xml";
-        String pomFileName = "pom.xml";
-        String pomContent = "<artifactId>richfaces</artifactId>";
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
 
-        checkProjectAndFileExist(
-            projectName, projectName, "Java Resources", "src/main/resources", i18nPropertiesFileName );
-        checkProjectAndFileExist(
-            projectName, projectName, "src", "main", "webapp", "WEB-INF", facesConfigXmlFileName );
-        checkProjectAndFileExist( projectName, projectName, pomFileName );
-
-        openEditorAndCheck( pomContent, projectName, projectName, pomFileName );
+        viewAction.deleteProject( projectName );
     }
 
     @Before
     public void shouldRunTests()
     {
-
         Assume.assumeTrue( runTest() || runAllTests() );
-
     }
 
 }

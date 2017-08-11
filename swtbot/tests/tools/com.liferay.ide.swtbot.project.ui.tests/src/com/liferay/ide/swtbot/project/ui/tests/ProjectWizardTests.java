@@ -20,6 +20,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewSdkProjectWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.SelectPortletFrameworkWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.SetSDKLocationWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.ThemeWizard;
+import com.liferay.ide.swtbot.ui.page.Editor;
+import com.liferay.ide.swtbot.ui.page.Shell;
+import com.liferay.ide.swtbot.ui.page.Tree;
+
 import java.io.IOException;
 
 import org.junit.After;
@@ -30,23 +39,13 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
-import com.liferay.ide.swtbot.liferay.ui.SWTBotBase;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewSdkProjectWizard;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.SelectPortletFrameworkWizard;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.SetSDKLocationWizard;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.ThemeWizard;
-import com.liferay.ide.swtbot.ui.page.Editor;
-import com.liferay.ide.swtbot.ui.page.Shell;
-import com.liferay.ide.swtbot.ui.page.Tree;
-
 /**
  * @author Terry Jia
  * @author Ashley Yuan
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class ProjectWizardTests extends SWTBotBase implements WizardUI
+public class ProjectWizardTests extends SwtbotBase
 {
 
     static String fullClassname = new SecurityManager()
@@ -63,9 +62,9 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
     @AfterClass
     public static void cleanAll()
     {
-        ide.closeShell( LABEL_NEW_LIFERAY_PLUGIN_PROJECT );
-        ide.closeShell( LABEL_NEW_LIFERAY_PORTLET );
-        // ide.getPackageExporerView().deleteProjectExcludeNames( new String[] { getLiferayPluginsSdkName() }, true
+        ide.closeShell( NEW_LIFERAY_PLUGIN_PROJECT );
+        ide.closeShell( NEW_LIFERAY_PORTLET );
+        // viewAction.deleteProjectsExcludeNames( new String[] { getLiferayPluginsSdkName() }, true
         // );
     }
 
@@ -84,25 +83,24 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
     @Test
     public void createExtProject()
     {
-        NewSdkProjectWizard createProjectWizard =
-            new NewSdkProjectWizard( bot, INDEX_NEW_LIFERAY_PLUGIN_PROJECT_VALIDATION_MESSAGE );
+        NewSdkProjectWizard createProjectWizard = new NewSdkProjectWizard( bot );
 
-        createProjectWizard.createSDKProject( "text", MENU_EXT );
+        createProjectWizard.createSDKProject( "text", EXT );
 
         if( hasAddedProject )
         {
-            assertEquals( MESAGE_SDK_NOT_SUPPORT, createProjectWizard.getValidationMsg() );
+            assertEquals( SDK_NOT_SUPPORT, createProjectWizard.getValidationMsg() );
             createProjectWizard.cancel();
         }
         else
         {
             createProjectWizard.next();
 
-            SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot, INDEX_SDK_SETTING_VALIDATION_MESSAGE );
+            SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
             setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
 
-            assertEquals( MESAGE_SDK_NOT_SUPPORT, setSDKLocation.getValidationMsg() );
+            assertEquals( SDK_NOT_SUPPORT, setSDKLocation.getValidationMsg() );
             setSDKLocation.cancel();
         }
     }
@@ -112,7 +110,7 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
     {
         NewSdkProjectWizard createProjectWizard = new NewSdkProjectWizard( bot );
 
-        createProjectWizard.createSDKProject( "text", MENU_HOOK );
+        createProjectWizard.createSDKProject( "text", HOOK );
 
         if( hasAddedProject )
         {
@@ -135,7 +133,7 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
     {
         NewSdkProjectWizard createProjectWizard = new NewSdkProjectWizard( bot );
 
-        createProjectWizard.createSDKProject( "text", MENU_LAYOUT_TEMPLATE );
+        createProjectWizard.createSDKProject( "text", LAYOUT_TEMPLATE );
 
         if( hasAddedProject )
         {
@@ -158,13 +156,11 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
     {
         String projectName = "testPortlet";
 
-        NewSdkProjectWizard createProjectWizard =
-            new NewSdkProjectWizard( bot, INDEX_NEW_LIFERAY_PLUGIN_PROJECT_VALIDATION_MESSAGE );
+        NewSdkProjectWizard createProjectWizard = new NewSdkProjectWizard( bot );
 
-        assertEquals( TEXT_PLEASE_ENTER_A_PROJECT_NAME, createProjectWizard.getValidationMsg() );
+        assertEquals( PLEASE_ENTER_A_PROJECT_NAME, createProjectWizard.getValidationMsg() );
 
-        String[] expectedPluginTypeItems = { MENU_EXT, MENU_HOOK, MENU_LAYOUT_TEMPLATE, MENU_PORTLET,
-            MENU_SERVICE_BUILDER_PORTLET, MENU_THEME, MENU_WEB };
+        String[] expectedPluginTypeItems = { EXT, HOOK, LAYOUT_TEMPLATE, PORTLET, SERVICE_BUILDER_PORTLET, THEME, WEB };
 
         for( String expectedPluginTypeItem : expectedPluginTypeItems )
         {
@@ -176,7 +172,7 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
         assertFalse( createProjectWizard.finishBtn().isEnabled() );
         assertTrue( createProjectWizard.cancelBtn().isEnabled() );
 
-        createProjectWizard.createSDKProject( projectName, MENU_PORTLET, true, false );
+        createProjectWizard.createSDKProject( projectName, PORTLET, true, false );
 
         createProjectWizard.next();
 
@@ -198,7 +194,7 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
 
         createProjectWizard.finish();
 
-        Tree projectTree = ide.showPackageExporerView().getProjectTree();
+        Tree projectTree = viewAction.getProjects();
 
         String fileName = "liferay-display.xml";
 
@@ -217,10 +213,10 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
         bot.button( "Next >" ).click();
 
         createProjectWizard.createSDKPortletProject( projectName );
-        assertEquals( TEXT_PROJECT_ALREADY_EXISTS, createProjectWizard.getValidationMsg() );
+        assertEquals( A_PROJECT_WITH_THAT_NAME_ALREADY_EXISTS, createProjectWizard.getValidationMsg() );
 
         createProjectWizard.createSDKPortletProject( projectName + "-portlet" );
-        assertEquals( TEXT_PROJECT_ALREADY_EXISTS, createProjectWizard.getValidationMsg() );
+        assertEquals( A_PROJECT_WITH_THAT_NAME_ALREADY_EXISTS, createProjectWizard.getValidationMsg() );
 
         createProjectWizard.cancel();
 
@@ -231,13 +227,13 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
         bot.button( "Next >" ).click();
         createProjectWizard.createSDKPortletProject( "test with space" );
 
-        assertContains( TEXT_CREATE_NEW_PROJECT_AS_LIFERAY_PLUGIN, createProjectWizard.getValidationMsg() );
+        assertContains( CREATE_NEW_PROJECT_AS_LIFERAY_PLUGIN, createProjectWizard.getValidationMsg() );
         createProjectWizard.finish();
         sleep();
 
         assertTrue( projectTree.getTreeItem( "test with space-portlet" ).isVisible() );
 
-        ide.getPackageExporerView().deleteResouceByName( projectName + "-portlet", true );
+        viewAction.deleteProject( projectName + "-portlet" );
     }
 
     @Test
@@ -245,7 +241,7 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
     {
         NewSdkProjectWizard createProjectWizard = new NewSdkProjectWizard( bot );
 
-        createProjectWizard.createSDKProject( "NoSampleTest", MENU_PORTLET, false, true );
+        createProjectWizard.createSDKProject( "NoSampleTest", PORTLET, false, true );
 
         createProjectWizard.next();
 
@@ -271,7 +267,7 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
         newPortletPage.waitForPageToOpen();
 
         sleep();
-        assertContains( LABEL_NEW_LIFERAY_PORTLET, newPortletPage.getTitle() );
+        assertContains( NEW_LIFERAY_PORTLET, newPortletPage.getTitle() );
 
         newPortletPage.closeIfOpen();
     }
@@ -281,7 +277,7 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
     {
         NewSdkProjectWizard createProjectWizard = new NewSdkProjectWizard( bot );
 
-        createProjectWizard.createSDKProject( "textsb", MENU_SERVICE_BUILDER_PORTLET, true );
+        createProjectWizard.createSDKProject( "textsb", SERVICE_BUILDER_PORTLET, true );
 
         if( hasAddedProject )
         {
@@ -306,7 +302,7 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
     {
         NewSdkProjectWizard createProjectWizard = new NewSdkProjectWizard( bot );
 
-        createProjectWizard.createSDKProject( "textsbwithoutcode", MENU_SERVICE_BUILDER_PORTLET, false );
+        createProjectWizard.createSDKProject( "textsbwithoutcode", SERVICE_BUILDER_PORTLET, false );
 
         if( hasAddedProject )
         {
@@ -329,11 +325,11 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
     {
         NewSdkProjectWizard createProjectWizard = new NewSdkProjectWizard( bot );
 
-        ThemeWizard selectThemeOptions = new ThemeWizard( bot, INDEX_THEME_PARENT_AND_FRAMEWORK_VALIDATIONG_MESSAGE );
+        ThemeWizard selectThemeOptions = new ThemeWizard( bot );
 
         String projectThemeName = "test";
 
-        createProjectWizard.createSDKProject( projectThemeName, MENU_THEME );
+        createProjectWizard.createSDKProject( projectThemeName, THEME );
 
         if( hasAddedProject )
         {
@@ -345,15 +341,15 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
         {
             createProjectWizard.next();
 
-            assertEquals( THEME_DEFAULT_MESSAGE, selectThemeOptions.getValidationMsg() );
+            assertEquals( SELECT_OPTIONS_FOR_CREATING_NEW_THEME_PROJECT, selectThemeOptions.getValidationMsg() );
 
-            selectThemeOptions.setParentFramework( MENU_THEME_PARENT_UNSTYLED, MENU_THEME_FRAMEWORK_JSP );
-            assertEquals( THEME_WARNING_MESSAGE, selectThemeOptions.getValidationMsg() );
+            selectThemeOptions.setParentFramework( UNSTYLED, JSP );
+            assertEquals( FOR_ADVANCED_THEME_DEVELOPERS_ONLY, selectThemeOptions.getValidationMsg() );
 
-            selectThemeOptions.setParentFramework( MENU_THEME_PARENT_CLASSIC, MENU_THEME_FRAMEWORK_VELOCITY );
-            assertEquals( THEME_DEFAULT_MESSAGE, selectThemeOptions.getValidationMsg() );
+            selectThemeOptions.setParentFramework( CLASSIC, VELOCITY );
+            assertEquals( SELECT_OPTIONS_FOR_CREATING_NEW_THEME_PROJECT, selectThemeOptions.getValidationMsg() );
 
-            selectThemeOptions.setParentFramework( MENU_THEME_PARENT_STYLED, MENU_THEME_FRAMEWORK_FREEMARKER );
+            selectThemeOptions.setParentFramework( STYLED, FREEMARKER );
 
             selectThemeOptions.next();
 
@@ -373,7 +369,7 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
     {
         NewSdkProjectWizard createProjectWizard = new NewSdkProjectWizard( bot );
 
-        createProjectWizard.createSDKProject( "text", MENU_WEB );
+        createProjectWizard.createSDKProject( "text", WEB );
 
         if( hasAddedProject )
         {
@@ -411,13 +407,12 @@ public class ProjectWizardTests extends SWTBotBase implements WizardUI
     {
         String invalidNameDoubleDash = "--";
 
-        NewSdkProjectWizard createProjectWizard =
-            new NewSdkProjectWizard( bot, INDEX_NEW_LIFERAY_PLUGIN_PROJECT_VALIDATION_MESSAGE );
+        NewSdkProjectWizard createProjectWizard = new NewSdkProjectWizard( bot );
 
         createProjectWizard.createSDKPortletProject( invalidNameDoubleDash );
 
         sleep();
-        assertEquals( TEXT_THE_PROJECT_NAME_INVALID, createProjectWizard.getValidationMsg() );
+        assertEquals( THE_PROJECT_NAME_IS_INVALID, createProjectWizard.getValidationMsg() );
 
         createProjectWizard.cancel();
     }

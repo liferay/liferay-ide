@@ -40,7 +40,7 @@
 		<module>com.liferay.ide.swtbot.server.ui.tests</module>
 		<module>com.liferay.ide.swtbot.layouttpl.ui.tests</module>
 		<module>com.liferay.ide.swtbot.service.ui.tests</module>
-		<module>com.liferay.ide.swtbot.gradle.ui.tests</module>
+		<module>com.liferay.ide.swtbot.workspace.ui.tests</module>
 		<module>com.liferay.ide.swtbot.project.code.upgrade.ui.tests</module>
 	</modules>
 </project>

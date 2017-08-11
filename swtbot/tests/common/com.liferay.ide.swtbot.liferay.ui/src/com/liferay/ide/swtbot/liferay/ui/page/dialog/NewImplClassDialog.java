@@ -15,18 +15,16 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.dialog;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.DialogUI;
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Text;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Vicky Wang
  */
-public class NewImplClassDialog extends Dialog implements DialogUI, WizardUI
+public class NewImplClassDialog extends Dialog
 {
 
     private Button browseBtn;
@@ -38,10 +36,10 @@ public class NewImplClassDialog extends Dialog implements DialogUI, WizardUI
     {
         super( bot );
 
-        javaPackage = new Text( bot, LABLE_JAVA_PACKAGE );
-        createBtn = new Button( bot, BUTTON_CREATE );
-        className = new Text( bot, LABLE_CLASS_NAME );
-        browseBtn = new Button( bot, BROWSE_WITH_THREE_DOT );
+        javaPackage = new Text( bot, JAVA_PACKAGE );
+        createBtn = new Button( bot, CREATE );
+        className = new Text( bot, CLASSNAME );
+        browseBtn = new Button( bot, BROWSE_WITH_DOT );
     }
 
     public Button getBrowseBtn()

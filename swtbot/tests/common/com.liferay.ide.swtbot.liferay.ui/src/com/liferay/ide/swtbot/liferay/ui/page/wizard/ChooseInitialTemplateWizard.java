@@ -15,21 +15,20 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.CreateLayouttplWizard;
 import com.liferay.ide.swtbot.ui.page.Radio;
 import com.liferay.ide.swtbot.ui.page.Wizard;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Li Lu
  */
-public class ChooseInitialTemplateWizard extends Wizard implements CreateLayouttplWizard
+public class ChooseInitialTemplateWizard extends Wizard
 {
 
     public ChooseInitialTemplateWizard( SWTBot bot )
     {
-        super( bot, TEXT_BLANK, INDEX_LAYOUTTPL_VALIDATION_MESSAGE2 );
+        super( bot, 0 );
     }
 
     public boolean isRadioSelected( int index )

@@ -15,31 +15,21 @@
 
 package com.liferay.ide.swtbot.project.ui.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 
 import java.io.IOException;
 
-import org.junit.AfterClass;
 import org.junit.Assume;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.liferay.ide.swtbot.liferay.ui.ModuleWizardUI;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferayModuleProjectWizard;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferayModuleProjectWizardSecondPageWizard;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferayWorkspaceProjectWizard;
-import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesContinueDialog;
-import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesDialog;
-import com.liferay.ide.swtbot.ui.page.Tree;
 
 /**
  * @author Ying Xu
  * @author Sunny Shi
  */
-public class NewLiferayModuleProjectWizardTests extends BaseNewLiferayModuleProjectWizard implements ModuleWizardUI
+public class NewLiferayModuleProjectWizardTests extends SwtbotBase
 {
 
     static String fullClassname = new SecurityManager()
@@ -53,706 +43,380 @@ public class NewLiferayModuleProjectWizardTests extends BaseNewLiferayModuleProj
 
     static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
 
-    Tree projectTree = ide.getPackageExporerView().getProjectTree();
-
-    NewLiferayModuleProjectWizard createModuleProjectWizard =
-        new NewLiferayModuleProjectWizard( bot, INDEX_NEW_LIFERAY_MODULE_PROJECT_VALIDATION_MESSAGE );
-
-    NewLiferayModuleProjectWizardSecondPageWizard createModuleProjectSecondPageWizard =
-        new NewLiferayModuleProjectWizardSecondPageWizard( bot, INDEX_CONFIGURE_COMPONENT_CLASS_VALIDATION_MESSAGE );
-
-    @AfterClass
-    public static void cleanAll()
-    {
-        ide.closeShell( LABEL_NEW_LIFERAY_MODULE_PROJECT );
-        ide.getPackageExporerView().deleteProjectExcludeNames( new String[] { getLiferayPluginsSdkName() }, true );
-    }
-
-    @BeforeClass
-    public static void switchToLiferayWorkspacePerspective()
-    {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-
-        ide.getLiferayWorkspacePerspective().activate();
-        ide.getProjectExplorerView().show();
-    }
-
-    @Test
-    public void validationProjectName()
-    {
-        ide.getCreateLiferayProjectToolbar().getNewLiferayModuleProject().click();
-        sleep();
-
-        assertEquals( TEXT_PLEASE_ENTER_A_PROJECT_NAME, createModuleProjectWizard.getValidationMsg() );
-        assertFalse( createModuleProjectWizard.finishBtn().isEnabled() );
-
-        createModuleProjectWizard.createModuleProject( "." );
-        sleep( 1000 );
-        assertEquals( " '.'" + TEXT_INVALID_NAME_ON_PLATFORM, createModuleProjectWizard.getValidationMsg() );
-        assertFalse( createModuleProjectWizard.finishBtn().isEnabled() );
-
-        createModuleProjectWizard.createModuleProject( "/" );
-        sleep( 1000 );
-        assertEquals(
-            " /" + TEXT_INVALID_CHARACTER_IN_RESOURCE_NAME + "'/'.", createModuleProjectWizard.getValidationMsg() );
-        assertFalse( createModuleProjectWizard.finishBtn().isEnabled() );
-
-        createModuleProjectWizard.createModuleProject( "$" );
-        sleep( 1000 );
-        assertEquals( TEXT_THE_PROJECT_NAME_INVALID, createModuleProjectWizard.getValidationMsg() );
-        assertFalse( createModuleProjectWizard.finishBtn().isEnabled() );
-
-        createModuleProjectWizard.createModuleProject( "" );
-        sleep( 1000 );
-        assertEquals( TEXT_PROJECT_NAME_MUST_BE_SPECIFIED, createModuleProjectWizard.getValidationMsg() );
-        assertFalse( createModuleProjectWizard.finishBtn().isEnabled() );
-
-        createModuleProjectWizard.createModuleProject( "a" );
-        sleep( 1000 );
-        assertEquals( NEW_LIFERAY_MODULE_MESSAGE, createModuleProjectWizard.getValidationMsg() );
-        assertTrue( createModuleProjectWizard.finishBtn().isEnabled() );
-
-        createModuleProjectWizard.cancel();
-    }
-
-    @Test
-    public void validationTheSecondPage()
-    {
-        ide.getCreateLiferayProjectToolbar().getNewLiferayModuleProject().click();
-        sleep();
-
-        createModuleProjectWizard.createModuleProject( "test" );
-        createModuleProjectWizard.next();
-
-        createModuleProjectSecondPageWizard.getComponentClassName().setText( "@@" );
-        sleep();
-        assertEquals( TEXT_INVALID_CLASS_NAME, createModuleProjectSecondPageWizard.getValidationMsg() );
-        createModuleProjectSecondPageWizard.getComponentClassName().setText( "testClassName" );
-        sleep();
-
-        createModuleProjectSecondPageWizard.getPackageName().setText( "!!" );
-        sleep();
-        assertEquals( INVALID_PACKAGE_NAME, createModuleProjectSecondPageWizard.getValidationMsg() );
-        createModuleProjectSecondPageWizard.getPackageName().setText( "testPackageName" );
-        sleep();
-
-        createModuleProjectSecondPageWizard.getAddPropertyKeyBtn().click();
-        sleep();
-        createModuleProjectSecondPageWizard.getProperties().setFocus();
-        assertEquals( NAME_MUST_BE_SPECIFIED, createModuleProjectSecondPageWizard.getValidationMsg() );
-        assertTrue( createModuleProjectSecondPageWizard.getDeleteBtn().isEnabled() );
-        createModuleProjectSecondPageWizard.getDeleteBtn().click();
-
-        createModuleProjectSecondPageWizard.getAddPropertyKeyBtn().click();
-        sleep();
-        createModuleProjectSecondPageWizard.getProperties().setText( 2, "a" );
-        createModuleProjectSecondPageWizard.getProperties().setFocus();
-        sleep();
-        assertEquals( VALUE_MUST_BE_SPECIFIED, createModuleProjectSecondPageWizard.getValidationMsg() );
-        sleep( 2000 );
-        createModuleProjectSecondPageWizard.getProperties().doubleClick( 0, 1 );
-        sleep();
-        createModuleProjectSecondPageWizard.getProperties().setText( 2, "b" );
-        createModuleProjectSecondPageWizard.cancel();
-    }
-
     @Test
     public void createMvcportletModuleProject()
     {
-        String projectName = "testMvcportletProject";
+        final String projectName = "testMvcportletProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_MVC_PORTLET, eclipseWorkspace, true,
-            eclipseWorkspace + "newFolder", TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, true );
+        wizardAction.openNewLiferayModuleWizard();
 
-        createModuleProjectSecondPageWizard.waitForPageToClose();
+        wizardAction.prepareLiferayModuleGradle( projectName, MVC_PORTLET );
 
-        String javaFileName = "TestMvcportletProjectPortlet.java";
-        String javaContent = "extends MVCPortlet";
+        wizardAction.finish();
 
-        openEditorAndCheck(
-            javaContent, projectName, projectName, "src/main/java", "testMvcportletProject.portlet", javaFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
 
-        String buildGradleFileName = "build.gradle";
-        String buildGradleContent =
-            "apply plugin: \"com.liferay.plugin\"\n\ndependencies {\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.0.0\"\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.util.taglib\", version: \"2.0.0\"\n\tcompileOnly group: \"javax.portlet\", name: \"portlet-api\", version: \"2.0\"\n\tcompileOnly group: \"javax.servlet\", name: \"javax.servlet-api\", version: \"3.0.1\"\n\tcompileOnly group: \"jstl\", name: \"jstl\", version: \"1.2\"\n\tcompileOnly group: \"org.osgi\", name: \"osgi.cmpn\", version: \"6.0.0\"";
-
-        openEditorAndCheck( buildGradleContent, projectName, projectName, buildGradleFileName );
-
-        ide.getPackageExporerView().deleteResouceByName( "testMvcportletProject", true );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
-    public void createMvcportletModuleProjectInLiferayWorkspace() throws IOException
+    public void createMvcPortletModuleProjectInLiferayWorkspace() throws IOException
     {
+        wizardAction.openNewLiferayWorkspaceWizard();
 
-        String liferayWorkspaceName = "liferayWorkspace";
-        String projectName = "testMvcportletInLS";
+        final String liferayWorkspaceName = "liferayWorkspace";
 
-        ide.getCreateLiferayProjectToolbar().getNewLiferayWorkspaceProject().click();
-        sleep( 2000 );
+        wizardAction.prepareLiferayWorkspaceGradle( liferayWorkspaceName );
 
-        NewLiferayWorkspaceProjectWizard newLiferayWorkspace = new NewLiferayWorkspaceProjectWizard( bot );
+        wizardAction.finish();
 
-        newLiferayWorkspace.getWorkspaceName().setText( liferayWorkspaceName );
-        newLiferayWorkspace.finish();
-        newLiferayWorkspace.waitForPageToClose();
+        wizardAction.openNewLiferayModuleWizard();
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_MVC_PORTLET,
-            eclipseWorkspace + "/" + liferayWorkspaceName + "/modules", false, eclipseWorkspace + "newFolder",
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        final String projectName = "testMvcportletInLS";
 
-        createModuleProjectSecondPageWizard.waitForPageToClose();
+        wizardAction.prepareLiferayModuleGradle( projectName, MVC_PORTLET );
 
-        String javaFileName = "TestMvcportletInLSPortlet.java";
-        String javaContent = "extends MVCPortlet";
+        wizardAction.finish();
 
-        openEditorAndCheck(
-            javaContent, projectName, liferayWorkspaceName, "modules", projectName, "src/main/java",
-            "testMvcportletInLS.portlet", javaFileName );
+        assertTrue( viewAction.fetchProjectFile( liferayWorkspaceName, "modules", projectName ).isVisible() );
 
-        String buildGradleFileName = "build.gradle";
-        String buildGradleContent =
-            "dependencies {\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.0.0\"\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.util.taglib\", version: \"2.0.0\"\n\tcompileOnly group: \"javax.portlet\", name: \"portlet-api\", version: \"2.0\"\n\tcompileOnly group: \"javax.servlet\", name: \"javax.servlet-api\", version: \"3.0.1\"\n\tcompileOnly group: \"jstl\", name: \"jstl\", version: \"1.2\"\n\tcompileOnly group: \"org.osgi\", name: \"osgi.cmpn\", version: \"6.0.0\"";
-
-        openEditorAndCheck(
-            buildGradleContent, projectName, liferayWorkspaceName, "modules", projectName, buildGradleFileName );
-
-        killGradleProcess();
-
-        DeleteResourcesDialog deleteResources = new DeleteResourcesDialog( bot );
-
-        DeleteResourcesContinueDialog continueDeleteResources =
-            new DeleteResourcesContinueDialog( bot, "Delete Resources" );
-
-        projectTree.getTreeItem( liferayWorkspaceName ).doAction( DELETE );
-        sleep( 2000 );
-
-        deleteResources.getDeleteFromDisk().select();
-        deleteResources.confirm();
-
-        try
-        {
-            continueDeleteResources.getContinueBtn().click();
-        }
-        catch( Exception e )
-        {
-            e.printStackTrace();
-        }
+        viewAction.deleteProject( liferayWorkspaceName );
     }
 
     @Test
     public void createServiceModuleProject()
     {
-        String projectName = "testServiceProject";
+        final String projectName = "testServiceProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_SERVICE, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, "*lifecycleAction", true );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String javaFileName = "TestServiceProject.java";
-        String javaContent = "implements LifecycleAction";
+        wizardAction.prepareLiferayModuleGradle( projectName, SERVICE );
 
-        openEditorAndCheck(
-            javaContent, projectName, projectName, "src/main/java", "testServiceProject", javaFileName );
+        wizardAction.next();
 
-        String buildGradleFileName = "build.gradle";;
-        String buildGradleContent =
-            "dependencies {\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.0.0\"\n\tcompileOnly group: \"org.osgi\", name: \"osgi.cmpn\", version: \"6.0.0\"";
+        wizardAction.openSelectServiceDialog();
 
-        openEditorAndCheck( buildGradleContent, projectName, projectName, buildGradleFileName );
+        dialogAction.prepareText( "*lifecycleAction" );
+
+        dialogAction.confirm();
+
+        wizardAction.finish();
+
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
+
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createServiceBuilderModuleProject()
     {
-        String projectName = "testServiceBuilderProject";
+        final String projectName = "testServiceBuilderProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_SERVICE_BUILDER, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue( projectTree.expandNode( projectName ).isVisible() );
-        assertTrue( projectTree.expandNode( projectName, projectName + "-api" ).isVisible() );
-        assertTrue( projectTree.expandNode( projectName, projectName + "-service" ).isVisible() );
-        assertTrue( projectTree.expandNode( projectName, projectName + "-service", "service.xml" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, SERVICE_BUILDER );
 
-        String buildGradleFileName = "build.gradle";
-        String apiContent =
-            "dependencies {\n\tcompileOnly group: \"biz.aQute.bnd\", name: \"biz.aQute.bndlib\", version: \"3.1.0\"\n\tcompileOnly group: \"com.liferay\", name: \"com.liferay.osgi.util\", version: \"3.0.0\"\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.0.0\"\n\tcompileOnly group: \"org.osgi\", name: \"org.osgi.core\", version: \"6.0.0\"";
+        wizardAction.finish();
 
-        openEditorAndCheck( apiContent, projectName, projectName, projectName + "-api", buildGradleFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
 
-        String serviceContent = "buildService {\n\tapiDir = \"../testServiceBuilderProject-api/src/main/java\"";
-        openEditorAndCheck( serviceContent, projectName, projectName, projectName + "-service", buildGradleFileName );
-
-        projectTree.expandNode( projectName, projectName + "-service" ).doAction( "Liferay", "build-service" );
-        sleep( 10000 );
-
-        try
-        {
-            projectTree.expandNode( projectName ).doAction( "Gradle", "Refresh Gradle Project" );
-        }
-        catch( Exception e )
-        {
-            projectTree.expandNode( projectName ).doAction( "Gradle", "Refresh Gradle Project" );
-        }
-
-        sleep( 10000 );
-        assertTrue(
-            projectTree.expandNode(
-                projectName, projectName + "-api", "src/main/java", "testServiceBuilderProject.service" ).isVisible() );
-        assertTrue(
-            projectTree.expandNode(
-                projectName, projectName + "-service", "src/main/java",
-                "testServiceBuilderProject.model.impl" ).isVisible() );
-
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createActivatorModuleProject()
     {
-        String projectName = "testActivatorProject";
+        final String projectName = "testActivatorProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_ACTIVATOR, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String buildGradleFileName = "build.gradle";
-        String gradleContent =
-            "dependencies {\n\tcompileOnly group: \"org.osgi\", name: \"org.osgi.core\", version: \"6.0.0\"";
+        wizardAction.prepareLiferayModuleGradle( projectName, ACTIVATOR );
 
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
+        wizardAction.finish();
 
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
+
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createApiModuleProject()
     {
-        String projectName = "testApiProject";
+        final String projectName = "testApiProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_API, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testApiProject.api", "TestApiProject.java" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, API );
 
-        String buildGradleFileName = "build.gradle";
+        wizardAction.finish();
 
-        String gradleContent =
-            "dependencies {\n\tcompileOnly group: \"org.osgi\", name: \"org.osgi.core\", version: \"6.0.0\"\n\tcompileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\", version: \"1.3.0\"";
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
 
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createContentTargetingReportModuleProject()
     {
-        String projectName = "testContentTargetingReportProject";
+        final String projectName = "testContentTargetingReportProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_CONTENT_TARGETING_REPORT, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testContentTargetingReportProject.content.targeting.report",
-                "TestContentTargetingReportProjectReport.java" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, CONTENT_TARGETING_REPORT );
 
-        String buildGradleFileName = "build.gradle";
-        String gradleContent =
-            "dependencies {\n\tcompileOnly group: \"com.liferay.content-targeting\", name: \"com.liferay.content.targeting.analytics.api\", version: \"3.0.0\"\n\tcompileOnly group: \"com.liferay.content-targeting\", name: \"com.liferay.content.targeting.anonymous.users.api\", version: \"2.0.2\"\n\tcompileOnly group: \"com.liferay.content-targeting\", name: \"com.liferay.content.targeting.api\", version: \"4.0.0\"\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.3.0\"\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.util.taglib\", version: \"2.0.0\"\n\tcompileOnly group: \"javax.portlet\", name: \"portlet-api\", version: \"2.0\"\n\tcompileOnly group: \"javax.servlet\", name: \"javax.servlet-api\", version: \"3.0.1\"\n\tcompileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\", version: \"1.3.0\"";
+        wizardAction.finish();
 
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
 
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createContentTargetingRuleModuleProject()
     {
-        String projectName = "testContentTargetingRuleProject";
+        final String projectName = "testContentTargetingRuleProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_CONTENT_TARGETING_RULE, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testContentTargetingRuleProject.content.targeting.rule",
-                "TestContentTargetingRuleProjectRule.java" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, CONTENT_TARGETING_RULE );
 
-        String buildGradleFileName = "build.gradle";
-        String gradleContent =
-            "dependencies {\n\tcompileOnly group: \"com.liferay.content-targeting\", name: \"com.liferay.content.targeting.analytics.api\", version: \"3.0.0\"\n\tcompileOnly group: \"com.liferay.content-targeting\", name: \"com.liferay.content.targeting.anonymous.users.api\", version: \"2.0.2\"\n\tcompileOnly group: \"com.liferay.content-targeting\", name: \"com.liferay.content.targeting.api\", version: \"4.0.0\"\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.3.0\"\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.util.taglib\", version: \"2.0.0\"\n\tcompileOnly group: \"javax.portlet\", name: \"portlet-api\", version: \"2.0\"\n\tcompileOnly group: \"javax.servlet\", name: \"javax.servlet-api\", version: \"3.0.1\"\n\tcompileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\", version: \"1.3.0\"";
+        wizardAction.finish();
 
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
+
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createContentTargetingTrackingActionModuleProject()
     {
-        String projectName = "testContentTargetingTrackingActionProject";
+        final String projectName = "testContentTargetingTrackingActionProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_CONTENT_TARGETING_TRACKING_ACTION, eclipseWorkspace, false,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java",
-                "testContentTargetingTrackingActionProject.content.targeting.tracking.action",
-                "TestContentTargetingTrackingActionProjectTrackingAction.java" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, CONTENT_TARGETING_TRACKING_ACTION );
 
-        String buildGradleFileName = "build.gradle";
-        String gradleContent =
-            "dependencies {\n\tcompileOnly group: \"com.liferay.content-targeting\", name: \"com.liferay.content.targeting.analytics.api\", version: \"3.0.0\"\n\tcompileOnly group: \"com.liferay.content-targeting\", name: \"com.liferay.content.targeting.anonymous.users.api\", version: \"2.0.2\"\n\tcompileOnly group: \"com.liferay.content-targeting\", name: \"com.liferay.content.targeting.api\", version: \"4.0.0\"\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.3.0\"\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.util.taglib\", version: \"2.0.0\"\n\tcompileOnly group: \"javax.portlet\", name: \"portlet-api\", version: \"2.0\"\n\tcompileOnly group: \"javax.servlet\", name: \"javax.servlet-api\", version: \"3.0.1\"\n\tcompileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\", version: \"1.3.0\"";
+        wizardAction.finish();
 
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
+
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createControlMenuEntryModuleProject()
     {
-        String projectName = "testControlMenuEntryProject";
+        final String projectName = "testControlMenuEntryProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_CONTROL_MENU_ENTRY, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String buildGradleFileName = "build.gradle";
-        String gradleContent =
-            "dependencies {\n\tcompileOnly group: \"com.liferay\", name: \"com.liferay.product.navigation.control.menu.api\", version: \"3.0.0\"\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.0.0\"\n\tcompileOnly group: \"javax.servlet\", name: \"javax.servlet-api\", version: \"3.0.1\"\n\tcompileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\", version: \"1.3.0\"";
+        wizardAction.prepareLiferayModuleGradle( projectName, CONTROL_MENU_ENTRY );
 
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
+        wizardAction.finish();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testControlMenuEntryProject.control.menu",
-                "TestControlMenuEntryProjectProductNavigationControlMenuEntry.java" ).isVisible() );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
+
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createFormFieldModuleProject()
     {
-        String projectName = "testFormFieldProject";
+        final String projectName = "testFormFieldProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_FORM_FIELD, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testFormFieldProject.form.field",
-                "TestFormFieldProjectDDMFormFieldRenderer.java" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, FORM_FIELD );
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testFormFieldProject.form.field",
-                "TestFormFieldProjectDDMFormFieldType.java" ).isVisible() );
+        wizardAction.finish();
 
-        String buildGradleFileName = "build.gradle";
-        String gradleContent =
-            "dependencies {\n\tcompileOnly group: \"com.liferay\", name: \"com.liferay.dynamic.data.mapping.api\", version: \"3.2.0\"\n\tcompileOnly group: \"com.liferay\", name: \"com.liferay.dynamic.data.mapping.form.field.type\", version: \"2.0.0\"\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.0.0\"\n\tcompileOnly group: \"org.osgi\", name: \"osgi.cmpn\", version: \"6.0.0\"";
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
 
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
-
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createPanelAppModuleProject()
     {
-        String projectName = "testPanelAppProject";
+        final String projectName = "testPanelAppProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_PANEL_APP, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testPanelAppProject.application.list" ).isVisible() );
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testPanelAppProject.application.list",
-                "TestPanelAppProjectPanelApp.java" ).isVisible() );
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testPanelAppProject.application.list",
-                "TestPanelAppProjectPanelCategory.java" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, PANEL_APP );
 
-        assertTrue(
-            projectTree.expandNode( projectName, "src/main/java", "testPanelAppProject.constants" ).isVisible() );
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testPanelAppProject.constants",
-                "TestPanelAppProjectPanelCategoryKeys.java" ).isVisible() );
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testPanelAppProject.constants",
-                "TestPanelAppProjectPortletKeys.java" ).isVisible() );
+        wizardAction.finish();
 
-        assertTrue( projectTree.expandNode( projectName, "src/main/java", "testPanelAppProject.portlet" ).isVisible() );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testPanelAppProject.portlet",
-                "TestPanelAppProjectPortlet.java" ).isVisible() );
-
-        String buildGradleFileName = "build.gradle";
-        String gradleContent =
-            "dependencies {\n\tcompileOnly group: \"com.liferay\", name: \"com.liferay.application.list.api\", version: \"2.0.0\"\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.0.0\"\n\tcompileOnly group: \"javax.portlet\", name: \"portlet-api\", version: \"2.0\"\n\tcompileOnly group: \"javax.servlet\", name: \"javax.servlet-api\", version: \"3.0.1\"\n\tcompileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\", version: \"1.3.0\"";
-
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createPortletModuleProject()
     {
-        String projectName = "testPortletProject";
+        final String projectName = "testPortletProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_PORTLET, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue( projectTree.expandNode( projectName, "src/main/java", "testPortletProject.portlet" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, PORTLET );
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testPortletProject.portlet",
-                "TestPortletProjectPortlet.java" ).isVisible() );
+        wizardAction.finish();
 
-        String buildGradleFileName = "build.gradle";
-        String gradleContent =
-            "dependencies {\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.0.0\"\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.util.taglib\", version: \"2.0.0\"\n\tcompileOnly group: \"javax.portlet\", name: \"portlet-api\", version: \"2.0\"\n\tcompileOnly group: \"javax.servlet\", name: \"javax.servlet-api\", version: \"3.0.1\"\n\tcompileOnly group: \"jstl\", name: \"jstl\", version: \"1.2\"\n\tcompileOnly group: \"org.osgi\", name: \"osgi.cmpn\", version: \"6.0.0\"";
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
 
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createPortletConfigurationIconModuleProject()
     {
-        String projectName = "testPortletConfigurationIconProject";
+        final String projectName = "testPortletConfigurationIconProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_PORTLET_CONFIGURATION_ICON, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testPortletConfigurationIconProject.portlet.configuration.icon",
-                "TestPortletConfigurationIconProjectPortletConfigurationIcon.java" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, PORTLET_CONFIGURATION_ICON );
 
-        String buildGradleFileName = "build.gradle";
-        String gradleContent =
-            "dependencies {\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.0.0\"\n\tcompileOnly group: \"javax.portlet\", name: \"portlet-api\", version: \"2.0\"\n\tcompileOnly group: \"javax.servlet\", name: \"javax.servlet-api\", version: \"3.0.1\"\n\tcompileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\", version: \"1.3.0\"";
+        wizardAction.finish();
 
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
+
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createPortletProviderModuleProject()
     {
-        String projectName = "testPortletProviderProject";
+        final String projectName = "testPortletProviderProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_PORTLET_PROVIDER, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testPortletProviderProject.constants" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, PORTLET_PROVIDER );
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testPortletProviderProject.constants",
-                "TestPortletProviderProjectPortletKeys.java" ).isVisible() );
+        wizardAction.finish();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testPortletProviderProject.constants",
-                "TestPortletProviderProjectWebKeys.java" ).isVisible() );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
 
-        assertTrue(
-            projectTree.expandNode( projectName, "src/main/java", "testPortletProviderProject.portlet" ).isVisible() );
-
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testPortletProviderProject.portlet",
-                "TestPortletProviderProjectAddPortletProvider.java" ).isVisible() );
-
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testPortletProviderProject.portlet",
-                "TestPortletProviderProjectPortlet.java" ).isVisible() );
-
-        String buildGradleFileName = "build.gradle";
-        String gradleContent =
-            "dependencies {\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.0.0\"\n\tcompileOnly group: \"javax.portlet\", name: \"portlet-api\", version: \"2.0\"\n\tcompileOnly group: \"javax.servlet\", name: \"javax.servlet-api\", version: \"3.0.1\"\n\tcompileOnly group: \"org.osgi\", name: \"osgi.cmpn\", version: \"6.0.0\"";
-
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createPortletToolbarContributorModuleProject()
     {
-        String projectName = "testPortletToolbarContributorProject";
+        final String projectName = "testPortletToolbarContributorProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_PORTLET_TOOLBAR_CONTRIBUTOR, eclipseWorkspace, false,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testPortletToolbarContributorProject.portlet.toolbar.contributor",
-                "TestPortletToolbarContributorProjectPortletToolbarContributor.java" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, PORTLET_TOOLBAR_CONTRIBUTOR );
 
-        String buildGradleFileName = "build.gradle";
-        String gradleContent =
-            "dependencies {\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.0.0\"\n\tcompileOnly group: \"javax.portlet\", name: \"portlet-api\", version: \"2.0\"\n\tcompileOnly group: \"javax.servlet\", name: \"javax.servlet-api\", version: \"3.0.1\"\n\tcompileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\", version: \"1.3.0\"";
+        wizardAction.finish();
 
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
+
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createRestModuleProject()
     {
-        String projectName = "testRestProject";
+        final String projectName = "testRestProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_REST, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testRestProject.application",
-                "TestRestProjectApplication.java" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, REST );
 
-        String buildGradleFileName = "build.gradle";
-        String gradleContent =
-            "dependencies {\n\tcompileOnly group: \"javax.ws.rs\", name: \"javax.ws.rs-api\", version: \"2.0.1\"\n\tcompileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\", version: \"1.3.0\"";
+        wizardAction.finish();
 
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
+
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createServiceWrapperModuleProject()
     {
-        String projectName = "testServiceWrapperProject";
+        final String projectName = "testServiceWrapperProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_SERVICE_WRAPPER, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, "*BookmarksEntryLocalServiceWrapper", true );
+        wizardAction.openNewLiferayModuleWizard();
 
-        sleep( 5000 );
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", projectName, "TestServiceWrapperProject.java" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, SERVICE_WRAPPER );
 
-        String javaFileName = "TestServiceWrapperProject.java";
-        String javaContent = "extends BookmarksEntryLocalServiceWrapper";
+        wizardAction.next();
 
-        openEditorAndCheck( javaContent, projectName, projectName, "src/main/java", projectName, javaFileName );
+        wizardAction.openSelectServiceDialog();
 
-        String buildGradleFileName = "build.gradle";
-        String gradleContent =
-            "dependencies {\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.0.0\"\n\tcompileOnly group: \"org.osgi\", name: \"osgi.cmpn\", version: \"6.0.0\"";
+        dialogAction.prepareText( "*BookmarksEntryLocalServiceWrapper" );
 
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
+        dialogAction.confirm();
+
+        wizardAction.finish();
+
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
+
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createSimulationPanelEntryModuleProject()
     {
-        String projectName = "testSimulationPanelEntryProject";
+        final String projectName = "testSimulationPanelEntryProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_SIMULATION_PANEL_ENTRY, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testSimulationPanelEntryProject.application.list",
-                "TestSimulationPanelEntryProjectSimulationPanelApp.java" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, SIMULATION_PANEL_ENTRY );
 
-        String buildGradleFileName = "build.gradle";
-        String gradleContent =
-            "dependencies {\n\tcompileOnly group: \"com.liferay\", name: \"com.liferay.application.list.api\", version: \"2.0.0\"\n\tcompileOnly group: \"com.liferay\", name: \"com.liferay.product.navigation.simulation\", version: \"2.0.0\"\n\tcompileOnly group: \"com.liferay\", name: \"com.liferay.product.navigation.simulation.web\", version: \"2.0.0\"\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.3.0\"\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.util.taglib\", version: \"2.0.0\"\n\tcompileOnly group: \"javax.portlet\", name: \"portlet-api\", version: \"2.0\"\n\tcompileOnly group: \"javax.servlet\", name: \"javax.servlet-api\", version: \"3.0.1\"\n\tcompileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\", version: \"1.3.0\"";
+        wizardAction.finish();
 
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
+
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createTemplateContextContributorModuleProject()
     {
-        String projectName = "testTemplateContextContributorProject";
+        final String projectName = "testTemplateContextContributorProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_TEMPLATE_CONTEXT_CONTRIBUTOR, eclipseWorkspace, false,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testTemplateContextContributorProject.context.contributor",
-                "TestTemplateContextContributorProjectTemplateContextContributor.java" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR );
 
-        String buildGradleFileName = "build.gradle";
-        String gradleContent =
-            "dependencies {\n\tcompileOnly group: \"com.liferay.portal\", name: \"com.liferay.portal.kernel\", version: \"2.0.0\"\n\tcompileOnly group: \"javax.servlet\", name: \"javax.servlet-api\", version: \"3.0.1\"\n\tcompileOnly group: \"org.osgi\", name: \"org.osgi.service.component.annotations\", version: \"1.3.0\"";
+        wizardAction.finish();
 
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
+
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createThemeModuleProject()
     {
-        String projectName = "testThemeProject";
+        final String projectName = "test-theme";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_THEME, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue( projectTree.expandNode( projectName, "src", "main", "webapp", "css", "_custom.scss" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, THEME );
 
-        String buildGradleFileName = "build.gradle";
-        String gradleContent =
-            "apply plugin: \"com.liferay.portal.tools.theme.builder\"\n\ndependencies {\n\tparentThemes group: \"com.liferay\", name: \"com.liferay.frontend.theme.styled\", version: \"2.0.13\"\n\tparentThemes group: \"com.liferay\", name: \"com.liferay.frontend.theme.unstyled\", version: \"2.0.13\"\n\n\tportalCommonCSS group: \"com.liferay\", name: \"com.liferay.frontend.css.common\", version: \"2.0.3\"\n\n\tthemeBuilder group: \"com.liferay\", name: \"com.liferay.portal.tools.theme.builder\", version: \"1.1.3\"";
+        wizardAction.finish();
 
-        openEditorAndCheck( gradleContent, projectName, projectName, buildGradleFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
+
+        viewAction.deleteProject( projectName );
     }
 
     @Test
-    public void createThemeContributorModuleProject()
+    public void createThemeContributor()
     {
-        String projectName = "testThemeContributorProject";
+        final String projectName = "test-theme-contributor";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_GRADLE, projectName, MODULE_THEME_CONTRIBUTOR, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/resources", "META-INF", "resources", "css", projectName,
-                "_body.scss" ).isVisible() );
+        wizardAction.prepareLiferayModuleGradle( projectName, THEME_CONTRIBUTOR );
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/resources", "META-INF", "resources", "css", projectName,
-                "_control_menu.scss" ).isVisible() );
+        wizardAction.finish();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/resources", "META-INF", "resources", "css", projectName,
-                "_product_menu.scss" ).isVisible() );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/resources", "META-INF", "resources", "css", projectName,
-                "_simulation_panel.scss" ).isVisible() );
-
-        // build.gradle is empry in theme-contributor template
-        assertTrue( projectTree.expandNode( projectName, "build.gradle" ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Before

@@ -18,6 +18,16 @@ package com.liferay.ide.swtbot.portlet.ui.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.ChoosePortletFrameworkWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.CreateJSFPortletWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.LiferayPortletDeploymentDescriptorWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.PortletDeploymentDescriptorWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewSdkProjectWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.SetSDKLocationWizard;
+import com.liferay.ide.swtbot.ui.page.TreeItem;
+import com.liferay.ide.swtbot.ui.util.StringPool;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assume;
@@ -26,22 +36,11 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
-import com.liferay.ide.swtbot.liferay.ui.JSFPortletWizardUI;
-import com.liferay.ide.swtbot.liferay.ui.SWTBotBase;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.ChoosePortletFrameworkWizard;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.CreateJSFPortletWizard;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.LiferayPortletDeploymentDescriptorWizard;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewSdkProjectWizard;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.PortletDeploymentDescriptorWizard;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.SetSDKLocationWizard;
-import com.liferay.ide.swtbot.ui.page.TreeItem;
-
 /**
  * @author Li Lu
  */
 @Ignore
-public class NewJSFPortletWizardTests extends SWTBotBase implements JSFPortletWizardUI, WizardUI
+public class NewJSFPortletWizardTests extends SwtbotBase
 {
 
     static String projectName = "test";
@@ -65,14 +64,14 @@ public class NewJSFPortletWizardTests extends SWTBotBase implements JSFPortletWi
         unzipPluginsSDK();
         unzipServer();
 
-        ide.getCreateLiferayProjectToolbar().getNewLiferayPluginProject().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayPlugin().click();
 
         NewSdkProjectWizard page1 = new NewSdkProjectWizard( bot );
         page1.createSDKPortletProject( projectName );
         page1.next();
 
         ChoosePortletFrameworkWizard page2 = new ChoosePortletFrameworkWizard( bot );
-        page2.selectPortletFramework( LABEL_JSF_FRAMEWORK );
+        page2.selectPortletFramework( JSF_2_X );
 
         if( page1.finishBtn().isEnabled() )
         {
@@ -83,7 +82,7 @@ public class NewJSFPortletWizardTests extends SWTBotBase implements JSFPortletWi
         {
             page1.next();
             page1.next();
-            SetSDKLocationWizard page3 = new SetSDKLocationWizard( bot, "" );
+            SetSDKLocationWizard page3 = new SetSDKLocationWizard( bot );
             page3.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
             page2.finish();
         }
@@ -92,7 +91,7 @@ public class NewJSFPortletWizardTests extends SWTBotBase implements JSFPortletWi
     @AfterClass
     public static void deleteProject()
     {
-        ide.getPackageExporerView().deleteProjectExcludeNames( new String[] { getLiferayPluginsSdkName() }, true );
+        viewAction.deleteProjectsExcludeNames( getLiferayPluginsSdkName() );
     }
 
     CreateJSFPortletWizard page = new CreateJSFPortletWizard( bot );
@@ -102,7 +101,7 @@ public class NewJSFPortletWizardTests extends SWTBotBase implements JSFPortletWi
     @After
     public void closeWizard()
     {
-        ide.closeShell( LABEL_NEW_LIFERAY_JSF_PORTLET );
+        ide.closeShell( NEW_LIFERAY_JSF_PORTLET );
     }
 
     @Before
@@ -159,7 +158,7 @@ public class NewJSFPortletWizardTests extends SWTBotBase implements JSFPortletWi
     public void testCreateResourcesGroup() throws Exception
     {
         page.next();
-        page = new CreateJSFPortletWizard( bot, INDEX_JSF_VALIDATION_MESSAGE2 );
+        page = new CreateJSFPortletWizard( bot );
 
         assertEquals( true, page.isViewFolderEnabled() );
 
@@ -183,14 +182,14 @@ public class NewJSFPortletWizardTests extends SWTBotBase implements JSFPortletWi
         openWizard();
         page.next();
 
-        page.setViewFolderText( "" );;
+        page.setViewFolderText( StringPool.BLANK );;
         String message = page.getValidationMsg();
-        assertEquals( TEXT_JSP_FOLDER_CANOT_BE_EMPTY, message );
+        assertEquals( JSP_FOLDER_CANOT_BE_EMPTY, message );
         assertEquals( false, page.finishBtn().isEnabled() );
 
         page.setViewFolderText( "/views/" );
         message = page.getValidationMsg();
-        assertEquals( TEXT_VIEWS_SHOULD_IN_WEB_INF_FOLDER, message );
+        assertEquals( VIEWS_SHOULD_IN_WEB_INF_FOLDER, message );
         assertEquals( false, page.finishBtn().isEnabled() );
 
         page.deSelectCreateViewFiles();
@@ -198,24 +197,24 @@ public class NewJSFPortletWizardTests extends SWTBotBase implements JSFPortletWi
 
         page.selectCreateViewFiles();
         page.setViewFolderText( "/WEB-INF/views/jspfolderchanged" );
-        message = page.getValidationMsg();
-        assertEquals( TEXT_VIEW_FILE_OEVERWRITTEN, message );
+
+        assertEquals( VIEW_FILE_OEVERWRITTEN, page.getValidationMsg() );
     }
 
     @Test
     public void testPortletClass() throws Exception
     {
-        page.getPortletClass().setText( "" );
+        page.getPortletClass().setText( StringPool.BLANK );
         String message = page.getValidationMsg();
-        assertEquals( TEXT_MUST_SPECIFY_JSF_PORTLET_CLASS, message );
+        assertEquals( MUST_SPECIFY_JSF_PORTLET_CLASS, message );
         assertEquals( false, page.finishBtn().isEnabled() );
 
         page.getPortletClass().setText( "NewJSFPortlet1" );
         message = page.getValidationMsg();
-        assertEquals( TEXT_MUST_BE_VALID_PORTLET_CLASS, message );
+        assertEquals( JSF_PORTLET_CLASS_MUST_BE_A_VALID_PORTLET_CLASS, message );
         assertEquals( false, page.finishBtn().isEnabled() );
 
-        page.getPortletClass().setText( PORTLET_CLASS_DEFAULT_VALUE );
+        page.getPortletClass().setText( JAVAX_PORTLET_FACES_GENERICFACESPORTLET );
         assertEquals( true, page.finishBtn().isEnabled() );
     }
 
@@ -248,7 +247,7 @@ public class NewJSFPortletWizardTests extends SWTBotBase implements JSFPortletWi
         assertEquals( true, page.isRichFacesEnbled() );
         assertEquals( true, page.isPrimeFacesEnbled() );
 
-        page.selectViewTemplate( LABEL_ICE_FACES );
+        page.selectViewTemplate( ICEFACES );
         page2.getPortletName().setText( "icefacestemplate" );
         page.finish();
 
@@ -260,7 +259,7 @@ public class NewJSFPortletWizardTests extends SWTBotBase implements JSFPortletWi
 
         openWizard();
         page.next();
-        page.selectViewTemplate( LABEL_LIFERAY_FACES_ALLOY );
+        page.selectViewTemplate( LIFERAY_FACES_ALLOY );
         page2.getPortletName().setText( "liferayfacesalloytemplate" );
         page.finish();
         sleep( 2000 );
@@ -268,7 +267,7 @@ public class NewJSFPortletWizardTests extends SWTBotBase implements JSFPortletWi
 
         openWizard();
         page.next();
-        page.selectViewTemplate( LABEL_PRIME_FACES );
+        page.selectViewTemplate( PRIMEFACES );
         page2.getPortletName().setText( "primefacestemplate" );
         page.finish();
         sleep( 2000 );
@@ -276,7 +275,7 @@ public class NewJSFPortletWizardTests extends SWTBotBase implements JSFPortletWi
 
         openWizard();
         page.next();
-        page.selectViewTemplate( LABEL_RICH_FACES );
+        page.selectViewTemplate( RICHFACES );
         page2.getPortletName().setText( "richfacestemplate" );
         page.finish();
         sleep( 2000 );

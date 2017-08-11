@@ -3,7 +3,7 @@
 
 <service-builder package-path="com.example">
 	<namespace>FOO</namespace>
-	<!--<entity data-source="sampleDataSource" local-service="true" name="Foo" remote-service="false" session-factory="sampleSessionFactory" table="foo" tx-manager="sampleTransactionManager uuid="true"">-->
+	<!--<entity data-source="sampleDataSource" local-service="true" name="Foo" remote-service="false" session-factory="sampleSessionFactory" table="foo" tx-manager="sampleTransactionManager uuid="trueStringPool.BLANK>-->
 	<entity local-service="true" name="Foo" remote-service="true" uuid="true">
 
 		<!-- PK fields -->

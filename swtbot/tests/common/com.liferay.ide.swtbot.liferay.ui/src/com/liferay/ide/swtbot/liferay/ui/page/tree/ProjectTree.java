@@ -15,17 +15,16 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.tree;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.ContextMenuUI;
 import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesDialog;
 import com.liferay.ide.swtbot.ui.page.Tree;
 import com.liferay.ide.swtbot.ui.page.TreeItem;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Li Lu
  */
-public class ProjectTree extends TreeItem implements ContextMenuUI
+public class ProjectTree extends TreeItem
 {
 
     DeleteResourcesDialog deleteDialog;

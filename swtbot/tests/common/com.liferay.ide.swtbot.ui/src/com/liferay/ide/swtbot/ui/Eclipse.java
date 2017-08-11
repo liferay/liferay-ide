@@ -15,11 +15,10 @@
 
 package com.liferay.ide.swtbot.ui;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-
 import com.liferay.ide.swtbot.ui.eclipse.page.ErrorLogView;
 import com.liferay.ide.swtbot.ui.eclipse.page.PackageExplorerView;
 import com.liferay.ide.swtbot.ui.eclipse.page.ProgressView;
+import com.liferay.ide.swtbot.ui.eclipse.page.ProjectExplorerView;
 import com.liferay.ide.swtbot.ui.eclipse.page.ServersView;
 import com.liferay.ide.swtbot.ui.eclipse.page.ShowViewDialog;
 import com.liferay.ide.swtbot.ui.page.BasePageObject;
@@ -29,6 +28,8 @@ import com.liferay.ide.swtbot.ui.page.Editor;
 import com.liferay.ide.swtbot.ui.page.Menu;
 import com.liferay.ide.swtbot.ui.page.Tree;
 import com.liferay.ide.swtbot.ui.page.View;
+
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
@@ -46,7 +47,7 @@ public class Eclipse extends BasePageObject
     protected ShowViewDialog showViewDialog;
     protected ErrorLogView errorLogView;
     protected Menu fileMenu;
-    protected View projectExplorerView;
+    protected ProjectExplorerView projectExplorerView;
     protected Menu preferencesMenu;
     protected ServersView serversView;
     protected Browser browser;
@@ -56,20 +57,20 @@ public class Eclipse extends BasePageObject
         super( bot );
 
         packageExporerView = new PackageExplorerView( bot );
-        welcomeView = new View( bot, LABEL_WELCOME );
+        welcomeView = new View( bot, WELCOME );
         progressView = new ProgressView( bot );
         projectTree = new Tree( bot );
-        fileMenu = new Menu( bot, MENU_FILE );
+        fileMenu = new Menu( bot, FILE );
 
-        String[] otherLabel = { LABEL_WINDOW, LABEL_SHOW_VIEW, LABEL_OTHER };
-        String[] preferencesLabel = { LABEL_WINDOW, LABEL_PREFERENCES };
+        String[] otherLabel = { WINDOW, SHOW_VIEW, OTHER };
+        String[] preferencesLabel = { WINDOW, PREFERENCES };
 
         preferencesMenu = new Menu( bot, preferencesLabel );
         otherMenu = new Menu( bot, otherLabel );
 
         showViewDialog = new ShowViewDialog( bot );
         errorLogView = new ErrorLogView( bot );
-        projectExplorerView = new View( bot, LABEL_PROJECT_EXPLORER );
+        projectExplorerView = new ProjectExplorerView( bot );
         serversView = new ServersView( bot );
         browser = new Browser( bot );
     }
@@ -101,7 +102,7 @@ public class Eclipse extends BasePageObject
         return welcomeView;
     }
 
-    public View getProjectExplorerView()
+    public ProjectExplorerView getProjectExplorerView()
     {
         return projectExplorerView;
     }
@@ -161,7 +162,7 @@ public class Eclipse extends BasePageObject
         {
             otherMenu.click();
 
-            showViewDialog.getSearch().setText( ( LABEL_PROGRESS ) );
+            showViewDialog.getSearch().setText( ( PROGRESS ) );
 
             sleep( 100 );
 
@@ -183,7 +184,7 @@ public class Eclipse extends BasePageObject
         {
             otherMenu.click();
 
-            showViewDialog.getSearch().setText( ( LABEL_ERROR_LOG ) );
+            showViewDialog.getSearch().setText( ( ERROR_LOG ) );
 
             sleep( 100 );
 

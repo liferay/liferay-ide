@@ -19,6 +19,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.LiferayProjectFromExistSourceWizard;
+import com.liferay.ide.swtbot.liferay.ui.util.CoreUtil;
+import com.liferay.ide.swtbot.liferay.ui.util.ZipUtil;
+import com.liferay.ide.swtbot.ui.page.Dialog;
+import com.liferay.ide.swtbot.ui.page.TreeItem;
+import com.liferay.ide.swtbot.ui.page.View;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -27,28 +35,17 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.junit.After;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import com.liferay.ide.swtbot.liferay.ui.MigrateProjectWizardUI;
-import com.liferay.ide.swtbot.liferay.ui.SWTBotBase;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.LiferayProjectFromExistSourceWizard;
-import com.liferay.ide.swtbot.liferay.ui.util.CoreUtil;
-import com.liferay.ide.swtbot.liferay.ui.util.ZipUtil;
-import com.liferay.ide.swtbot.ui.page.Dialog;
-import com.liferay.ide.swtbot.ui.page.TreeItem;
-import com.liferay.ide.swtbot.ui.page.View;
 
 /**
  * @author Li Lu
  */
-@RunWith( SWTBotJunit4ClassRunner.class )
-public class MigrationToolTests extends SWTBotBase implements MigrateProjectWizardUI
+public class MigrationToolTests extends SwtbotBase
 {
 
     String MARKER_TYPE = "com.liferay.ide.swtbot.project.core.MigrationProblemMarker";
@@ -80,7 +77,7 @@ public class MigrationToolTests extends SWTBotBase implements MigrateProjectWiza
     {
         try
         {
-            ide.getPackageExporerView().deleteResouceByName( project.getName(), true );
+            viewAction.deleteProject( project.getName() );
         }
         catch( Exception e )
         {
@@ -97,8 +94,7 @@ public class MigrationToolTests extends SWTBotBase implements MigrateProjectWiza
         }
     }
 
-    public IMarker findMigrationMarker( IResource resource, String markerMsg, boolean fullMatch )
-        throws CoreException
+    public IMarker findMigrationMarker( IResource resource, String markerMsg, boolean fullMatch ) throws CoreException
     {
         IMarker[] markers = resource.findMarkers( MARKER_TYPE, false, IResource.DEPTH_INFINITE );
 
@@ -117,6 +113,7 @@ public class MigrationToolTests extends SWTBotBase implements MigrateProjectWiza
     }
 
     @Before
+    @Ignore
     public void importProject() throws IOException
     {
         if( !( runTest() || runAllTests() ) )
@@ -127,7 +124,7 @@ public class MigrationToolTests extends SWTBotBase implements MigrateProjectWiza
 
         ZipUtil.unzip( projectZipFile, copyDir.toFile() );
 
-        ide.getCreateLiferayProjectToolbar().menuClick( MENU_NEW_LIFERAY_PROJECT_EXIS_SOURCE );
+        // ide.getCreateLiferayProjectToolbar().menuClick( NEW_LIFERAY_PROJECT_EXIS_SOURCE );
         LiferayProjectFromExistSourceWizard _wizard = new LiferayProjectFromExistSourceWizard( bot );
         _wizard.importProject( copyDir.append( "knowledge-base-portlet" ).toOSString() );
     }
@@ -146,15 +143,15 @@ public class MigrationToolTests extends SWTBotBase implements MigrateProjectWiza
 
         TreeItem projectTreeItem = ide.getProjectTree().getTreeItem( "knowledge-base-portlet" );
 
-        projectTreeItem.doAction( MENU_LIFERAY, MENU_FIND_LIFERAY7_BREAKING_API_CHANGES );
+        projectTreeItem.doAction( LIFERAY, FIND_LIFERAY_7_BREAKING_API_CHANGES );
 
-        Dialog migrateDialog = new Dialog( bot, TITLE_FINDING_MIGRATION_PROBLEMS );
+        Dialog migrateDialog = new Dialog( bot, FINDING_MIGRATION_PROBLEMS );
 
         migrateDialog.waitForPageToOpen();
         assertTrue( migrateDialog.isOpen() );
 
         sleep( 120000 );
-        View view = new View( bot, TITLE_LIFERAY7_MIGRATION_PROBLEMS );
+        View view = new View( bot, LIFERAY_7_MIGRATION_PROBLEMS );
         assertTrue( view.isActive() );
 
         migrateDialog.closeIfOpen();

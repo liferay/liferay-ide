@@ -25,11 +25,11 @@ import com.liferay.ide.swtbot.ui.page.View;
 public class ErrorLogView extends View
 {
 
-    private String clearErrorLogBtnLabel = LABEL_CLEAR_LOG_VIEWER;
+    private String clearErrorLogBtnLabel = CLEAR_LOG_VIEWER;
 
     public ErrorLogView( SWTWorkbenchBot bot )
     {
-        super( bot, LABEL_ERROR_LOG_FULL );
+        super( bot, ERROR_LOG_WORKSPACE_LOG );
     }
 
     public void clearErrorLog()

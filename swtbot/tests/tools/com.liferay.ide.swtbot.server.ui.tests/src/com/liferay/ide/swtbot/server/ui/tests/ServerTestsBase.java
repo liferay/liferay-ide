@@ -15,9 +15,9 @@
 
 package com.liferay.ide.swtbot.server.ui.tests;
 
-import com.liferay.ide.swtbot.liferay.ui.SWTBotBase;
+import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferay7RuntimeWizard;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferayModuleProjectWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewLiferayModuleWizard;
 import com.liferay.ide.swtbot.ui.eclipse.page.AddAndRemoveDialog;
 import com.liferay.ide.swtbot.ui.eclipse.page.NewRuntimeWizard;
 import com.liferay.ide.swtbot.ui.eclipse.page.NewServerWizard;
@@ -29,7 +29,7 @@ import com.liferay.ide.swtbot.ui.page.Browser;
 /**
  * @author Terry Jia
  */
-public class ServerTestsBase extends SWTBotBase
+public class ServerTestsBase extends SwtbotBase
 {
 
     protected static AddAndRemoveDialog addAndRemoveDialog = new AddAndRemoveDialog( bot );
@@ -47,7 +47,7 @@ public class ServerTestsBase extends SWTBotBase
     protected static ServerRuntimeEnvironmentsPreferencesDialog serverRuntimePage =
         new ServerRuntimeEnvironmentsPreferencesDialog( bot );
 
-    protected static NewLiferayModuleProjectWizard newModuleProjectWizard = new NewLiferayModuleProjectWizard( bot );
+    protected static NewLiferayModuleWizard newModuleProjectWizard = new NewLiferayModuleWizard( bot );
 
     protected static ServersView serversView = ide.getServersView();
 
@@ -65,7 +65,7 @@ public class ServerTestsBase extends SWTBotBase
 
         newliferay7RuntimeWizard.getName().setText( runtimeName );
 
-        newliferay7RuntimeWizard.getServerLocation().setText(
+        newliferay7RuntimeWizard.getLocation().setText(
             getLiferayServerDir().toString() + "/" + getLiferayPluginServerName() );
 
         newliferay7RuntimeWizard.finish();
@@ -77,7 +77,7 @@ public class ServerTestsBase extends SWTBotBase
     {
         addLiferay7Runtime( serverName );
 
-        ide.getCreateLiferayProjectToolbar().getNewLiferayServer().click();
+        wizardAction.openNewLiferayServerWizard();
 
         newServerWizard.getServerName().setText( serverName );
 

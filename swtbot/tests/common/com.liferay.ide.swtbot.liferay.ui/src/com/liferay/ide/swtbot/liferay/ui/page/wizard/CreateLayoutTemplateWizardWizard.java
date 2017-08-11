@@ -15,18 +15,17 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.CreateLayouttplWizard;
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.ComboBox;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Li Lu
  */
-public class CreateLayoutTemplateWizardWizard extends Wizard implements CreateLayouttplWizard
+public class CreateLayoutTemplateWizardWizard extends Wizard
 {
 
     private Text id;
@@ -38,14 +37,14 @@ public class CreateLayoutTemplateWizardWizard extends Wizard implements CreateLa
 
     public CreateLayoutTemplateWizardWizard( SWTBot bot )
     {
-        super( bot, TEXT_BLANK, INDEX_LAYOUTTPL_VALIDATION_MESSAGE1 );
+        super( bot, 5 );
 
-        layoutPluginProjects = new ComboBox( bot, LABEL_LAYOUT_PLUGIN_PROJECT );
-        name = new Text( bot, LABEL_NAME );
-        id = new Text( bot, LABEL_ID );
-        templateFile = new Text( bot, LABEL_TEMPLATE_FILE );
-        wapTemplateFile = new Text( bot, LABEL_WAP_TEMPLATE_FILE );
-        thumbnailFile = new Text( bot, LABEL_THUMBNAIL_FILE );
+        layoutPluginProjects = new ComboBox( bot, LAYOUT_PLUGIN_PROJECT );
+        name = new Text( bot, NAME );
+        id = new Text( bot, ID );
+        templateFile = new Text( bot, TEMPLATE_FILE );
+        wapTemplateFile = new Text( bot, WAP_TEMPLATE_FILE );
+        thumbnailFile = new Text( bot, THUMBNAIL_FILE );
     }
 
     public void clickBrowseButton( int index )

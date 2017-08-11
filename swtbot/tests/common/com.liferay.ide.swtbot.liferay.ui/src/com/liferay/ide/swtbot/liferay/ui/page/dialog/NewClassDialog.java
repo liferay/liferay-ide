@@ -15,20 +15,18 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.dialog;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.DialogUI;
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.ComboBox;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Tree;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Vicky Wang
  */
-public class NewClassDialog extends Dialog implements DialogUI, WizardUI
+public class NewClassDialog extends Dialog
 {
 
     private Button browseBtn;
@@ -42,12 +40,12 @@ public class NewClassDialog extends Dialog implements DialogUI, WizardUI
     {
         super( bot );
 
-        className = new Text( bot, LABLE_CLASS_NAME );
-        javaPackage = new Text( bot, LABLE_JAVA_PACKAGE );
-        createBtn = new Button( bot, BUTTON_CREATE );
-        browseBtn = new Button( bot, BROWSE_WITH_THREE_DOT );
+        className = new Text( bot, CLASSNAME );
+        javaPackage = new Text( bot, JAVA_PACKAGE );
+        createBtn = new Button( bot, CREATE );
+        browseBtn = new Button( bot, BROWSE_WITH_DOT );
         paths = new Tree( bot );
-        superClasses = new ComboBox( bot, COMBOBOX_SUPERCLASS );
+        superClasses = new ComboBox( bot, SUPERCLASS );
     }
 
     public Button getBrowseBtn()

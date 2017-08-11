@@ -1,0 +1,5 @@
+..,".." is not an absolute path.
+1.*,"1.*" is not an absolute path.
+,Workspace location must be specified
+C://non-exist-dir,"C:/non-exist-dir" is not an absolute path.
+C:/Users,"C:/Users" is not an absolute path.

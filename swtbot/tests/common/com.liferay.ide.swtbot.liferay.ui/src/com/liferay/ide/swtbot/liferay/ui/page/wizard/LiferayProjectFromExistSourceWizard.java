@@ -15,19 +15,18 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Li Lu
  * @author Ying Xu
  */
-public class LiferayProjectFromExistSourceWizard extends Wizard implements WizardUI
+public class LiferayProjectFromExistSourceWizard extends Wizard
 {
 
     private ToolbarButtonWithTooltip browseSdkDirectoryBtn;
@@ -39,21 +38,14 @@ public class LiferayProjectFromExistSourceWizard extends Wizard implements Wizar
 
     public LiferayProjectFromExistSourceWizard( SWTBot bot )
     {
-        this( bot, TITLE_NEW_LIFERAY_PROJECT_EXIS_SOURCE, BACK_WITH_LEFT_BRACKET, NEXT_WITH_BRACKET, FINISH, CANCEL, INDEX_DEFAULT_WIZARD_VALIDATION_MESSAGE );
-    }
+        super( bot, 2 );
 
-    public LiferayProjectFromExistSourceWizard(
-        SWTBot bot, String title, String cancelButtonText, String finishBtnText, String backBtnText,
-        String nextButtonText, int validationMsgIndex )
-    {
-        super( bot, title, cancelButtonText, finishBtnText, backBtnText, nextButtonText, validationMsgIndex );
-        sdkDirectory = new Text( bot, LABEL_SDK_DIRECTORY );
-        sdkVersion = new Text( bot, LABLE_SDK_VERSION );
+        sdkDirectory = new Text( bot, SDK_DIRECTORY );
+        sdkVersion = new Text( bot, SDK_VERSION );
         browseSdkDirectoryBtn = new ToolbarButtonWithTooltip( bot, BROWSE );
-        selectAllBtn = new Button( bot, BUTTON_SELECT_ALL );
-        deselectAllBtn = new Button( bot, BUTTON_DESELECT_ALL );
-        refreshBtn = new Button( bot, BUTTON_REFRESH );
-
+        selectAllBtn = new Button( bot, SELECT_ALL );
+        deselectAllBtn = new Button( bot, DESELECT_ALL );
+        refreshBtn = new Button( bot, REFRESH );
     }
 
     public ToolbarButtonWithTooltip getBrowseSdkDirectoryBtn()

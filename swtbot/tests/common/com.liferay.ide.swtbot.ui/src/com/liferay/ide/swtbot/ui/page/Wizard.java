@@ -40,6 +40,13 @@ public class Wizard extends CancelableShell
         super( bot, title );
     }
 
+    public Wizard( SWTBot bot, int validationMsgIndex )
+    {
+        super( bot );
+
+        this.validationMsgIndex = validationMsgIndex;
+    }
+
     public Wizard( SWTBot bot, String title, int validationMsgIndex )
     {
         super( bot, title );
@@ -88,6 +95,8 @@ public class Wizard extends CancelableShell
     public void finish()
     {
         clickBtn( finishBtn() );
+
+        sleep();
     }
 
     public Button finishBtn()
@@ -95,7 +104,7 @@ public class Wizard extends CancelableShell
         return new Button( bot, finishBtnLabel );
     }
 
-    public String getValidationMsg()
+    public String getValidationMsg( int validationMsgIndex )
     {
         if( validationMsgIndex < 0 )
         {
@@ -106,7 +115,12 @@ public class Wizard extends CancelableShell
 
         sleep();
 
-        return bot.text( validationMsgIndex ).getText();
+        return bot.text( validationMsgIndex ).getText().trim();
+    }
+
+    public String getValidationMsg()
+    {
+        return getValidationMsg( validationMsgIndex );
     }
 
     public void next()

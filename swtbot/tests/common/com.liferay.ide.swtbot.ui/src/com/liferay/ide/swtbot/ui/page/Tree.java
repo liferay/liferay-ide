@@ -34,11 +34,6 @@ public class Tree extends AbstractWidget
         super( bot );
     }
 
-    public Tree( SWTBot bot, String label )
-    {
-        super( bot, label );
-    }
-
     public Tree( SWTBot bot, int index )
     {
         super( bot, index );
@@ -107,7 +102,7 @@ public class Tree extends AbstractWidget
         }
     }
 
-    public void selectMulty( final String... items )
+    public void select( final String... items )
     {
         getWidget().select( items );
     }

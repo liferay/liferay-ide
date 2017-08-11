@@ -17,22 +17,16 @@ package com.liferay.ide.swtbot.project.ui.tests;
 
 import static org.junit.Assert.assertTrue;
 
-import org.junit.After;
+import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
+
 import org.junit.Assume;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferayModuleProjectWizard;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferayModuleProjectWizardSecondPageWizard;
-import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesContinueDialog;
-import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesDialog;
-import com.liferay.ide.swtbot.ui.page.Tree;
 
 /**
  * @author Sunny Shi
  */
-public class NewLiferayMavenModuleProjectWizardTests extends BaseNewLiferayModuleProjectWizard
+public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 {
 
     static String fullClassname = new SecurityManager()
@@ -46,522 +40,316 @@ public class NewLiferayMavenModuleProjectWizardTests extends BaseNewLiferayModul
 
     static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
 
-    Tree projectTree = ide.getPackageExporerView().getProjectTree();
-
-    NewLiferayModuleProjectWizard createMavenModuleProjectWizard =
-        new NewLiferayModuleProjectWizard( bot, INDEX_NEW_LIFERAY_MODULE_PROJECT_VALIDATION_MESSAGE );
-
-    NewLiferayModuleProjectWizardSecondPageWizard createMavenModuleProjectSecondPageWizard =
-        new NewLiferayModuleProjectWizardSecondPageWizard( bot );
-
-    @After
-    public void clean()
-    {
-        ide.closeShell( LABEL_NEW_LIFERAY_MODULE_PROJECT );
-
-        // if( addedProjects() )
-        // {
-        // ide.getPackageExporerView().deleteProjectExcludeNames( new String[] { getLiferayPluginsSdkName() }, true );
-        // }
-    }
-
-    @BeforeClass
-    public static void switchToLiferayWorkspacePerspective()
-    {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-
-        ide.getLiferayWorkspacePerspective().activate();
-        ide.getProjectExplorerView().show();
-    }
-
     @Before
     public void openWizard()
     {
         Assume.assumeTrue( runTest() || runAllTests() );
-
     }
 
     @Test
-    public void createMvcportletModuleProject()
+    public void createMvcPortlet()
     {
-        String projectName = "testMvcportletProject";
+        final String projectName = "test-mvn-portlet";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_MVC_PORTLET, eclipseWorkspace, true,
-            eclipseWorkspace + "newFolder", TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, true );
+        wizardAction.openNewLiferayModuleWizard();
 
-        createMavenModuleProjectSecondPageWizard.waitForPageToClose();
+        wizardAction.prepareLiferayModuleMaven( projectName, MVC_PORTLET );
 
-        String pomXmlFileName = "pom.xml";
+        wizardAction.finish();
 
-        String pomContent = "<artifactId>testMvcportletProject</artifactId>";
-
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
-
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testMvcportletProject.portlet",
-                "TestMvcportletProjectPortlet.java" ).isVisible() );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createServiceModuleProject()
+    public void createService()
     {
-        String projectName = "testServiceProject";
+        final String projectName = "test-service";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_SERVICE, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, "*lifecycleAction", true );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String javaFileName = "TestServiceProject.java";
-        String javaContent = "service = LifecycleAction.class";
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<artifactId>testServiceProject</artifactId>";
+        wizardAction.prepareLiferayModuleMaven( projectName, SERVICE );
 
-        openEditorAndCheck(
-            javaContent, projectName, projectName, "src/main/java", "testServiceProject", javaFileName );
+        wizardAction.openSelectServiceDialog();
 
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
+        dialogAction.prepareText( "*lifecycleAction" );
+
+        dialogAction.confirm();
+
+        wizardAction.finish();
+
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createServiceBuilderModuleProject()
+    public void createServiceBuilder()
     {
-        // ide.getProjectExplorerView().show();
+        final String projectName = "test-service-builder";
 
-        String projectName = "testServiceBuilderProject";
+        wizardAction.openNewLiferayModuleWizard();
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_SERVICE_BUILDER, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.prepareLiferayModuleMaven( projectName, SERVICE_BUILDER );
 
-        assertTrue( projectTree.expandNode( projectName ).isVisible() );
-        assertTrue( projectTree.expandNode( projectName, projectName + "-api" ).isVisible() );
-        assertTrue( projectTree.expandNode( projectName, projectName + "-service" ).isVisible() );
-        assertTrue( projectTree.expandNode( projectName, projectName + "-service", "service.xml" ).isVisible() );
+        wizardAction.finish();
 
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<artifactId>testServiceBuilderProject</artifactId>";
-
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
-
-        projectTree.expandNode( projectName, projectName + "-service" ).doAction( "Liferay", "build-service" );
-        sleep( 10000 );
-
-        assertTrue(
-            projectTree.expandNode(
-                projectName, projectName + "-api", "src/main/java", "testServiceBuilderProject.service" ).isVisible() );
-
-        assertTrue(
-            projectTree.expandNode(
-                projectName, projectName + "-service", "src/main/java",
-                "testServiceBuilderProject.model.impl" ).isVisible() );
-
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createActivatorModuleProject()
+    public void createActivator()
     {
-        String projectName = "testActivatorProject";
+        final String projectName = "test-activator";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_ACTIVATOR, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String javaFileName = "TestActivatorProjectActivator.java";
-        String javaContent = "implements BundleActivator";
+        wizardAction.prepareLiferayModuleMaven( projectName, ACTIVATOR );
 
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<artifactId>testActivatorProject</artifactId>";
+        wizardAction.finish();
 
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
-        openEditorAndCheck( javaContent, projectName, projectName, "src/main/java", projectName, javaFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createApiModuleProject()
+    public void createApi()
     {
-        String projectName = "testApiProject";
+        final String projectName = "test-api";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_API, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<artifactId>testApiProject</artifactId>";
+        wizardAction.prepareLiferayModuleMaven( projectName, API );
 
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
+        wizardAction.finish();
 
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createContentTargetingReportModuleProject()
+    public void createContentTargetingReport()
     {
-        String projectName = "testContentTargetingReportProject";
+        final String projectName = "test-content-targeting-report";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_CONTENT_TARGETING_REPORT, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String javaFileName = "TestContentTargetingReportProjectReport.java";
-        String javaContent = "extends BaseJSPReport";
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<artifactId>testContentTargetingReportProject</artifactId>";
+        wizardAction.prepareLiferayModuleMaven( projectName, CONTENT_TARGETING_REPORT );
 
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
-        openEditorAndCheck(
-            javaContent, projectName, projectName, "src/main/java",
-            "testContentTargetingReportProject.content.targeting.report", javaFileName );
+        wizardAction.finish();
 
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createContentTargetingRuleModuleProject()
+    public void createContentTargetingRule()
     {
-        String projectName = "testContentTargetingRuleProject";
+        final String projectName = "test-content-targeting-rule";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_CONTENT_TARGETING_RULE, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String javaFileName = "TestContentTargetingRuleProjectRule.java";
-        String javaContent = "osgi.web.symbolicname=testContentTargetingRuleProject";
+        wizardAction.prepareLiferayModuleMaven( projectName, CONTENT_TARGETING_RULE );
 
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<groupId>com.liferay.content-targeting</groupId>";
+        wizardAction.finish();
 
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
-        openEditorAndCheck(
-            javaContent, projectName, projectName, "src/main/java",
-            "testContentTargetingRuleProject.content.targeting.rule", javaFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createContentTargetingTrackingActionModuleProject()
+    public void createContentTargetingTrackingAction()
     {
-        String projectName = "testContentTargetingTrackingActionProject";
+        final String projectName = "test-content-targeting-tracking-action";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_CONTENT_TARGETING_RULE, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<groupId>testContentTargetingTrackingActionProject</groupId>";
+        wizardAction.prepareLiferayModuleMaven( projectName, CONTENT_TARGETING_TRACKING_ACTION );
 
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
+        wizardAction.finish();
 
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createControlMenuEntryModuleProject()
+    public void createControlMenuEntry()
     {
-        String projectName = "testControlMenuEntryProject";
+        final String projectName = "test-control-menu-entry";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_CONTROL_MENU_ENTRY, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String javaFileName = "TestControlMenuEntryProjectProductNavigationControlMenuEntry.java";
-        String javaContent = "extends BaseProductNavigationControlMenuEntry";
+        wizardAction.prepareLiferayModuleMaven( projectName, CONTROL_MENU_ENTRY );
 
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "com.liferay.product.navigation.control.menu.api";
+        wizardAction.finish();
 
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
-        openEditorAndCheck(
-            javaContent, projectName, projectName, "src/main/java", "testControlMenuEntryProject.control.menu",
-            javaFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createFormFieldModuleProject()
+    public void createFormField()
     {
-        String projectName = "testFormFieldProject";
+        final String projectName = "test-form-field";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_FORM_FIELD, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String javaFileName1 = "TestFormFieldProjectDDMFormFieldRenderer.java";
-        String javaContent1 = "extends BaseDDMFormFieldRenderer";
-        String javaFileName2 = "TestFormFieldProjectDDMFormFieldType.java";
-        String javaContent2 = "service = DDMFormFieldType.class";
+        wizardAction.prepareLiferayModuleMaven( projectName, FORM_FIELD );
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testFormFieldProject.form.field", javaFileName1 ).isVisible() );
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/java", "testFormFieldProject.form.field", javaFileName2 ).isVisible() );
+        wizardAction.finish();
 
-        openEditorAndCheck(
-            javaContent1, projectName, projectName, "src/main/java", "testFormFieldProject.form.field", javaFileName1 );
-        openEditorAndCheck(
-            javaContent2, projectName, projectName, "src/main/java", "testFormFieldProject.form.field", javaFileName2 );
-
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<artifactId>testFormFieldProject</artifactId>";
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
-
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createPanelAppModuleProject()
+    public void createPanelApp()
     {
-        String projectName = "testPanelAppProject";
+        final String projectName = "test-panel-app";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_PANEL_APP, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue( projectTree.getTreeItem( projectName ).isVisible() );
-        assertTrue(
-            projectTree.expandNode( projectName, "src/main/java", projectName + ".application.list" ).isVisible() );
-        assertTrue( projectTree.expandNode( projectName, "src/main/java", projectName + ".constants" ).isVisible() );
-        assertTrue( projectTree.expandNode( projectName, "src/main/java", projectName + ".portlet" ).isVisible() );
+        wizardAction.prepareLiferayModuleMaven( projectName, PANEL_APP );
 
-        String javaFileName = "TestPanelAppProjectPortlet.java";
-        String javaContent = "TestPanelAppProjectPortletKeys.TestPanelAppProject";
-        openEditorAndCheck(
-            javaContent, projectName, projectName, "src/main/java", "testPanelAppProject.portlet", javaFileName );
+        wizardAction.finish();
 
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<artifactId>testPanelAppProject</artifactId>";
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createPortletModuleProject()
+    public void createPortlet()
     {
-        String projectName = "testPortletProject";
+        final String projectName = "test-portlet";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_PORTLET, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String javaFileName = "TestPortletProjectPortlet.java";
-        String javaContent = "service = Portlet.class";
-        openEditorAndCheck(
-            javaContent, projectName, projectName, "src/main/java", "testPortletProject.portlet", javaFileName );
+        wizardAction.prepareLiferayModuleMaven( projectName, PORTLET );
 
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<artifactId>testPortletProject</artifactId>";
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
+        wizardAction.finish();
 
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createPortletConfigurationIconModuleProject()
+    public void createPortletConfigurationIcon()
     {
-        String projectName = "testPortletConfigurationIconProject";
+        final String projectName = "test-portlet-configuration-icon";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_PORTLET_CONFIGURATION_ICON, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String javaFileName = "TestPortletConfigurationIconProjectPortletConfigurationIcon.java";
-        String javaContent = "extends BasePortletConfigurationIcon";
-        openEditorAndCheck(
-            javaContent, projectName, projectName, "src/main/java",
-            "testPortletConfigurationIconProject.portlet.configuration.icon", javaFileName );
+        wizardAction.prepareLiferayModuleMaven( projectName, PORTLET_CONFIGURATION_ICON );
 
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<artifactId>testPortletConfigurationIconProject</artifactId>";
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
+        wizardAction.finish();
+
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createPortletProviderModuleProject()
+    public void createPortletProvider()
     {
-        String projectName = "testPortletProviderProject";
+        final String projectName = "test-portlet-provider";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_PORTLET_PROVIDER, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String javaFileName1 = "TestPortletProviderProjectAddPortletProvider.java";
-        String javaContent1 = "service = AddPortletProvider.class";
-        String javaFileName2 = "TestPortletProviderProjectPortlet.java";
-        String javaContent2 = "TestPortletProviderProjectPortletKeys.TestPortletProviderProject";
+        wizardAction.prepareLiferayModuleMaven( projectName, PORTLET_PROVIDER );
 
-        openEditorAndCheck(
-            javaContent1, projectName, projectName, "src/main/java", "testPortletProviderProject.portlet",
-            javaFileName1 );
-        openEditorAndCheck(
-            javaContent2, projectName, projectName, "src/main/java", "testPortletProviderProject.portlet",
-            javaFileName2 );
+        wizardAction.finish();
 
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<artifactId>testPortletProviderProject</artifactId>";
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createPortletToolBarContributorModuleProject()
+    public void createPortletToolbarContributor()
     {
-        String projectName = "testPortletToolBarContributorProject";
+        final String projectName = "test-portlet-toolbar-contributor";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_PORTLET_TOOLBAR_CONTRIBUTOR, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String javaFileName = "TestPortletToolBarContributorProjectPortletToolbarContributor.java";
-        String javaContent = "service = PortletToolbarContributor.class";
+        wizardAction.prepareLiferayModuleMaven( projectName, PORTLET_TOOLBAR_CONTRIBUTOR );
 
-        openEditorAndCheck(
-            javaContent, projectName, projectName, "src/main/java",
-            "testPortletToolBarContributorProject.portlet.toolbar.contributor", javaFileName );
+        wizardAction.finish();
 
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<artifactId>testPortletToolBarContributorProject</artifactId>";
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createRestModuleProject()
-
+    public void createRest()
     {
-        String projectName = "testRestProject";
+        final String projectName = "test-rest";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_REST, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String javaFileName = "TestRestProjectApplication.java";
-        String javaContent = "TestRestProjectApplication extends Application";
+        wizardAction.prepareLiferayModuleMaven( projectName, REST );
 
-        openEditorAndCheck(
-            javaContent, projectName, projectName, "src/main/java", "testRestProject.application", javaFileName );
+        wizardAction.finish();
 
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<artifactId>testRestProject</artifactId>";
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createServiceWrapperModuleProject()
-
+    public void createServiceWrapper()
     {
-        String projectName = "testServiceWrapperProject";
+        final String projectName = "testServiceWrapperProject";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_SERVICE_WRAPPER, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, "*bookmarksEntryServiceWrapper", true );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String javaFileName = "TestServiceWrapperProject.java";
-        String javaContent = "extends BookmarksEntryServiceWrapper";
+        wizardAction.prepareLiferayModuleMaven( projectName, SERVICE_WRAPPER );
 
-        openEditorAndCheck(
-            javaContent, projectName, projectName, "src/main/java", "testServiceWrapperProject", javaFileName );
+        wizardAction.openSelectServiceDialog();
 
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<groupId>testServiceWrapperProject</groupId>";
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
+        dialogAction.prepareText( "*bookmarksEntryServiceWrapper" );
 
+        dialogAction.confirm();
+
+        wizardAction.finish();
+
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createSimulationPanelEntryModuleProject()
-
+    public void createSimulationPanelEntry()
     {
-        String projectName = "testSimulationPanelEntryProject";
+        final String projectName = "test-simulation-panel-entry";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_SIMULATION_PANEL_ENTRY, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String javaFileName = "TestSimulationPanelEntryProjectSimulationPanelApp.java";
-        String javaContent = "SimulationPanelCategory.SIMULATION";
+        wizardAction.prepareLiferayModuleMaven( projectName, SIMULATION_PANEL_ENTRY );
 
-        openEditorAndCheck(
-            javaContent, projectName, projectName, "src/main/java", "testSimulationPanelEntryProject.application.list",
-            javaFileName );
+        wizardAction.finish();
 
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<artifactId>testSimulationPanelEntryProject</artifactId>";
-
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
-
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createTemplateContextContributorModuleProject()
-
+    public void createTemplateContextContributor()
     {
-        String projectName = "testTemplateContextContributorProject";
+        final String projectName = "test-template-context-contributor";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_TEMPLATE_CONTEXT_CONTRIBUTOR, eclipseWorkspace, false,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String javaFileName = "TestTemplateContextContributorProjectTemplateContextContributor.java";
-        String javaContent = "implements TemplateContextContributor";
+        wizardAction.prepareLiferayModuleMaven( projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR );
 
-        openEditorAndCheck(
-            javaContent, projectName, projectName, "src/main/java",
-            "testTemplateContextContributorProject.context.contributor", javaFileName );
+        wizardAction.finish();
 
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<artifactId>testTemplateContextContributorProject</artifactId>";
-
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createThemeModuleProject()
+    public void createTheme()
     {
-        String projectName = "testThemeProject";
+        final String projectName = "test-theme";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_THEME, eclipseWorkspace, false, TEXT_BLANK, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        String scssFileName = "_custom.scss";
-        assertTrue( projectTree.expandNode( projectName, "src", "main", "webapp", "css", scssFileName ).isVisible() );
+        wizardAction.prepareLiferayModuleMaven( projectName, THEME );
 
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<artifactId>testThemeProject</artifactId>";
+        wizardAction.finish();
 
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
-
-        DeleteResourcesDialog deleteResources = new DeleteResourcesDialog( bot );
-        DeleteResourcesContinueDialog continueDeleteResources =
-            new DeleteResourcesContinueDialog( bot, "Delete Resources" );
-
-        projectTree.getTreeItem( projectName ).doAction( DELETE );
-        sleep( 2000 );
-
-        deleteResources.getDeleteFromDisk().select();
-        deleteResources.confirm();
-        continueDeleteResources.getContinueBtn().click();
-
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
 
     @Test
-    public void createThemeContributorModuleProject()
-
+    public void createThemeContributor()
     {
-        String projectName = "testThemeContributorProject";
+        final String projectName = "test-theme-contributor";
 
-        newLiferayModuleProject(
-            TEXT_BUILD_TYPE_MAVEN, projectName, MODULE_THEME_CONTRIBUTOR, eclipseWorkspace, false, TEXT_BLANK,
-            TEXT_BLANK, TEXT_BLANK, TEXT_BLANK, false );
+        wizardAction.openNewLiferayModuleWizard();
 
-        assertTrue(
-            projectTree.expandNode(
-                projectName, "src/main/resources", "META-INF", "resources", "css",
-                projectName + ".scss" ).isVisible() );
+        wizardAction.prepareLiferayModuleMaven( projectName, THEME_CONTRIBUTOR );
 
-        projectTree.setFocus();
-        String scssFileName = "_body.scss";
-        String scssFileContent = "background-color";
+        wizardAction.finish();
 
-        openEditorAndCheck(
-            scssFileContent, projectName, projectName, "src/main/resources", "META-INF", "resources", "css",
-            projectName, scssFileName );
-
-        String pomXmlFileName = "pom.xml";
-        String pomContent = "<groupId>testThemeContributorProject</groupId>";
-        openEditorAndCheck( pomContent, projectName, projectName, pomXmlFileName );
+        assertTrue( viewAction.getProject( projectName ).isVisible() );
     }
+
 }

@@ -11,6 +11,8 @@
 
 package com.liferay.ide.swtbot.liferay.ui.util;
 
+import com.liferay.ide.swtbot.ui.util.StringPool;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -171,7 +173,7 @@ public final class ZipUtil
                 }
                 else
                 {
-                    entryName = entry.getName().replaceFirst( entryToStart, "" ); //$NON-NLS-1$
+                    entryName = entry.getName().replaceFirst( entryToStart, StringPool.BLANK );
                 }
 
                 final File f = new File( destdir, entryName );
@@ -258,7 +260,7 @@ public final class ZipUtil
 
         try
         {
-            zipDir( target, zip, dir, filenameFilter, "" ); //$NON-NLS-1$
+            zipDir( target, zip, dir, filenameFilter, StringPool.BLANK ); // $NON-NLS-1$
         }
         finally
         {

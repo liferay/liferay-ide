@@ -15,17 +15,19 @@
 
 package com.liferay.ide.swtbot.liferay.ui.util;
 
+import com.liferay.ide.swtbot.ui.util.StringPool;
+
 /**
  * @author Terry Jia
  */
 public class BundleInfo
 {
 
-    private String bundleZip = "";
-    private String bundleDir = "";
-    private String tomcatDir = "";
-    private String type = "";
-    private String version = "";
+    private String bundleZip = StringPool.BLANK;
+    private String bundleDir = StringPool.BLANK;
+    private String tomcatDir = StringPool.BLANK;
+    private String type = StringPool.BLANK;
+    private String version = StringPool.BLANK;
 
     public String getType()
     {

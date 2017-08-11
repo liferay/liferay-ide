@@ -15,17 +15,16 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.JSFPortletWizardUI;
 import com.liferay.ide.swtbot.ui.page.CheckBox;
 import com.liferay.ide.swtbot.ui.page.Radio;
 import com.liferay.ide.swtbot.ui.page.Text;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Li Lu
  */
-public class CreateJSFPortletWizard extends CreateLiferayPortletWizard implements JSFPortletWizardUI
+public class CreateJSFPortletWizard extends CreateLiferayPortletWizard
 {
 
     private CheckBox createViewFiles;
@@ -38,20 +37,15 @@ public class CreateJSFPortletWizard extends CreateLiferayPortletWizard implement
 
     public CreateJSFPortletWizard( SWTBot bot )
     {
-        this( bot, INDEX__JSF_VALIDATION_MESSAGE1 );
-    }
-
-    public CreateJSFPortletWizard( SWTBot bot, int validationMsgIndex )
-    {
-        super( bot, TEXT_BLANK, validationMsgIndex );
+        super( bot, 4 );
 
         createViewFiles = new CheckBox( bot, CREATE_VIRW_FILES );
-        viewFolder = new Text( bot, LABEL_VIEW_FOLDER );
-        standardJSF = new Radio( bot, LABEL_STANDARD_JSF );
-        iceFaces = new Radio( bot, LABEL_ICE_FACES );
-        liferayFacesAlloy = new Radio( bot, LABEL_LIFERAY_FACES_ALLOY );
-        primeFaces = new Radio( bot, LABEL_PRIME_FACES );
-        richFaces = new Radio( bot, LABEL_RICH_FACES );
+        viewFolder = new Text( bot, VIEW_FOLDER );
+        standardJSF = new Radio( bot, STANDARD_JSF );
+        iceFaces = new Radio( bot, ICEFACES );
+        liferayFacesAlloy = new Radio( bot, LIFERAY_FACES_ALLOY );
+        primeFaces = new Radio( bot, PRIMEFACES );
+        richFaces = new Radio( bot, RICHFACES );
     }
 
     public boolean _isLiferayFacesAlloySelected()
@@ -133,15 +127,15 @@ public class CreateJSFPortletWizard extends CreateLiferayPortletWizard implement
     {
         switch( lable )
         {
-        case LABEL_STANDARD_JSF:
+        case STANDARD_JSF:
             standardJSF.click();
-        case LABEL_ICE_FACES:
+        case ICEFACES:
             iceFaces.click();
-        case LABEL_LIFERAY_FACES_ALLOY:
+        case LIFERAY_FACES_ALLOY:
             liferayFacesAlloy.click();
-        case LABEL_PRIME_FACES:
+        case PRIMEFACES:
             primeFaces.click();
-        case LABEL_RICH_FACES:
+        case RICHFACES:
             richFaces.click();
         }
     }

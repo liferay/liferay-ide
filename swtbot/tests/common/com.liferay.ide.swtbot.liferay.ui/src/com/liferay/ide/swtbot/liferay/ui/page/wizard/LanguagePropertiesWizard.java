@@ -15,19 +15,17 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.DialogUI;
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.Table;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Vicky Wang
  */
-public class LanguagePropertiesWizard extends Wizard implements DialogUI, WizardUI
+public class LanguagePropertiesWizard extends Wizard
 {
 
     private Button addBtn;
@@ -35,25 +33,18 @@ public class LanguagePropertiesWizard extends Wizard implements DialogUI, Wizard
     private Text contentFolder;
     private Button editBtn;
     private Table languagePropertyFiles;
-
     private Button removeBtn;
 
-    public LanguagePropertiesWizard( SWTBot bot, int index )
+    public LanguagePropertiesWizard( SWTBot bot )
     {
-        this( bot, TEXT_BLANK, index );
-    }
+        super( bot, NEW_LIFERAY_HOOK, 0 );
 
-    public LanguagePropertiesWizard( SWTBot bot, String title, int index )
-    {
-        super( bot, title, index );
-
-        contentFolder = new Text( bot, LABLE_CONTENT_FOLDER );
-        languagePropertyFiles = new Table( bot, LABLE_LANGUAGE_PROPERTY_FILES );
-
-        browseBtn = new Button( bot, BROWSE_WITH_THREE_DOT );
-        addBtn = new Button( bot, ADD_WITH_THREE_DOT );
-        editBtn = new Button( bot, BUTTON_EDIT );
-        removeBtn = new Button( bot, REMOVE_WITH_THREE_DOT );
+        contentFolder = new Text( bot, CONTENT_FOLDER );
+        languagePropertyFiles = new Table( bot, LANGUAGE_PROPERTY_FILES );
+        browseBtn = new Button( bot, BROWSE_WITH_DOT );
+        addBtn = new Button( bot, ADD_WITH_DOT );
+        editBtn = new Button( bot, EDIT_WITH_DOT );
+        removeBtn = new Button( bot, REMOVE_WITH_DOT );
     }
 
     public Button getAddBtn()

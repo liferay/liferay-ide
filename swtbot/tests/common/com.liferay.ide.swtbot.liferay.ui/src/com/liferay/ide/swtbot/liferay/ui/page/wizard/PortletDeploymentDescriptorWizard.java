@@ -15,18 +15,16 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.LiferayPortletWizardUI;
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.CheckBox;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Ashley Yuan
  */
-public class PortletDeploymentDescriptorWizard extends Wizard implements LiferayPortletWizardUI, WizardUI
+public class PortletDeploymentDescriptorWizard extends Wizard
 {
 
     private CheckBox about;
@@ -48,39 +46,24 @@ public class PortletDeploymentDescriptorWizard extends Wizard implements Liferay
 
     public PortletDeploymentDescriptorWizard( SWTBot bot )
     {
-        this( bot, INDEX_SPECIFY_PORTLET_DEPLOYMENT_DESCRIPTOR_PAGE );
-    }
+        super( bot, 5 );
 
-    public PortletDeploymentDescriptorWizard( SWTBot bot, int validationMsgIndex )
-    {
-        this( bot, TEXT_BLANK, validationMsgIndex );
-    }
-
-    public PortletDeploymentDescriptorWizard( SWTBot bot, String title )
-    {
-        this( bot, title, INDEX_DEFAULT_VALIDATION_MESSAGE );
-    }
-
-    public PortletDeploymentDescriptorWizard( SWTBot bot, String title, int validationMsgIndex )
-    {
-        super( bot, title, validationMsgIndex );
-
-        portletName = new Text( bot, LABEL_NAME );
-        displayName = new Text( bot, LABEL_DISPLAY_NAME );
-        portletTitle = new Text( bot, LABEL_TITLE );
-        view = new CheckBox( bot, CHECKBOX_PORTLET_MODE_VIEW );
-        edit = new CheckBox( bot, CHECKBOX_PORTLET_MODE_EDIT );
-        help = new CheckBox( bot, CHECKBOX_PORTLET_MODE_HELP );
-        about = new CheckBox( bot, CHECKBOX_LIFERAY_PORTLET_MODE_ABOUT );
-        config = new CheckBox( bot, CHECKBOX_LIFERAY_PORTLET_MODE_CONFIG );
-        editDefaults = new CheckBox( bot, CHECKBOX_LIFERAY_PORTLET_MODE_EDITDEFAULTS );
-        editGuest = new CheckBox( bot, CHECKBOX_LIFERAY_PORTLET_MODE_EDITGUEST );
-        preview = new CheckBox( bot, CHECKBOX_LIFERAY_PORTLET_MODE_PREVIEW );
-        print = new CheckBox( bot, CHECKBOX_LIFERAY_PORTLET_MODE_PRINT );
-        createJspFiles = new CheckBox( bot, CHECKBOX_CREATE_JSP_FILES );
-        jspFolder = new Text( bot, LABEL_JSP_FOLDER );
-        createResourceBundleFile = new CheckBox( bot, CHECKBOX_CREATE_RESOURCE_BUNDLE_FILE );
-        resourceBundleFilePath = new Text( bot, LABEL_RESOURCE_BUNDLE_FILE_PATH );
+        portletName = new Text( bot, NAME );
+        displayName = new Text( bot, DISPLAY_NAME );
+        portletTitle = new Text( bot, TITLE );
+        view = new CheckBox( bot, VIEW );
+        edit = new CheckBox( bot, EDIT );
+        help = new CheckBox( bot, HELP );
+        about = new CheckBox( bot, ABOUT );
+        config = new CheckBox( bot, CONFIG );
+        editDefaults = new CheckBox( bot, EDIT_DEFAULTS );
+        editGuest = new CheckBox( bot, EDIT_GUEST );
+        preview = new CheckBox( bot, PREVIEW );
+        print = new CheckBox( bot, PRINT );
+        createJspFiles = new CheckBox( bot, CREATE_JSP_FILES );
+        jspFolder = new Text( bot, JSP_FOLDER );
+        createResourceBundleFile = new CheckBox( bot, CREATE_RESOURCE_BUNDLE_FILE );
+        resourceBundleFilePath = new Text( bot, RESOURCE_BUNDLE_FILE_PATH );
     }
 
     public CheckBox getAbout()

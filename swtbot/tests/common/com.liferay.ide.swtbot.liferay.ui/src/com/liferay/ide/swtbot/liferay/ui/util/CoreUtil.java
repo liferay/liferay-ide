@@ -1,6 +1,8 @@
 
 package com.liferay.ide.swtbot.liferay.ui.util;
 
+import com.liferay.ide.swtbot.ui.util.StringPool;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;

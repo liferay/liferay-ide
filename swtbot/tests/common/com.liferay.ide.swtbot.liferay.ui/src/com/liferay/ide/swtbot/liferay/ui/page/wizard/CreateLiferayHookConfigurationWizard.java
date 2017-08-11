@@ -15,80 +15,63 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.DialogUI;
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.CheckBox;
 import com.liferay.ide.swtbot.ui.page.ComboBox;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
 /**
  * @author Vicky Wang
  */
-public class CreateLiferayHookConfigurationWizard extends Wizard implements DialogUI, WizardUI
+public class CreateLiferayHookConfigurationWizard extends Wizard
 {
 
-    private CheckBox _customJSPsCheckBox;
-    private CheckBox _languagePropertiesCheckBox;
-    private CheckBox _portalPropertiesCheckBox;
-    private CheckBox _servicesCheckBox;
-    private ComboBox _hookPluginProjectComboBox;
+    private CheckBox customJSPs;
+    private CheckBox languageProperties;
+    private CheckBox portalProperties;
+    private CheckBox services;
+    private ComboBox hookPluginProject;
 
     public CreateLiferayHookConfigurationWizard( SWTBot bot )
     {
-        this( bot, INDEX_DEFAULT_VALIDATION_MESSAGE );
-    }
+        super( bot, NEW_LIFERAY_HOOK, 0 );
 
-    public CreateLiferayHookConfigurationWizard( SWTBot bot, int index )
-    {
-        this( bot, TEXT_BLANK, index );
-    }
-
-    public CreateLiferayHookConfigurationWizard( SWTBot bot, String title )
-    {
-        this( bot, title, INDEX_DEFAULT_VALIDATION_MESSAGE );
-    }
-
-    public CreateLiferayHookConfigurationWizard( SWTBot bot, String title, int validationMsgIndex )
-    {
-        super( bot, title, validationMsgIndex );
-
-        _customJSPsCheckBox = new CheckBox( bot, LABLE_CUSTOM_JSPS );
-        _portalPropertiesCheckBox = new CheckBox( bot, LABLE_PORTAL_PROPERTIES );
-        _servicesCheckBox = new CheckBox( bot, LABLE_SERVICES );
-        _languagePropertiesCheckBox = new CheckBox( bot, LABLE_LANGUAGE_PROPERTIES );
-        _hookPluginProjectComboBox = new ComboBox( bot, COMBOBOX_HOOK_PLUGIN_PROJECT );
+        customJSPs = new CheckBox( bot, CUSTOM_JSPS );
+        portalProperties = new CheckBox( bot, PORTAL_PROPERTIES );
+        services = new CheckBox( bot, SERVICES );
+        languageProperties = new CheckBox( bot, LANGUAGE_PROPERTIES );
+        hookPluginProject = new ComboBox( bot, HOOK_PLUGIN_PROJECT );
     }
 
     public CheckBox getCustomJSPs()
     {
-        return _customJSPsCheckBox;
+        return customJSPs;
     }
 
     public CheckBox getLanguageProperties()
     {
-        return _languagePropertiesCheckBox;
+        return languageProperties;
     }
 
     public CheckBox getPortalProperties()
     {
-        return _portalPropertiesCheckBox;
+        return portalProperties;
     }
 
     public CheckBox getServices()
     {
-        return _servicesCheckBox;
+        return services;
     }
 
     public ComboBox getHookPluginProjectComboBox()
     {
-        return _hookPluginProjectComboBox;
+        return hookPluginProject;
     }
 
     public void setHookPluginProjectComboBox( String hookPluginProjectComboBox )
     {
-        this._hookPluginProjectComboBox.setText( hookPluginProjectComboBox );
+        this.hookPluginProject.setText( hookPluginProjectComboBox );
     }
 
 }

@@ -15,20 +15,20 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.tree;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-
-import com.liferay.ide.swtbot.liferay.ui.ServerActionUI;
 import com.liferay.ide.swtbot.ui.eclipse.page.AddAndRemoveDialog;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Tree;
 import com.liferay.ide.swtbot.ui.page.TreeItem;
+import com.liferay.ide.swtbot.ui.util.StringPool;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
 /**
  * @author Li Lu
  * @author Ying Xu
  */
-public class ServerTree extends TreeItem implements ServerActionUI
+public class ServerTree extends TreeItem
 {
 
     private AddAndRemoveDialog addAndRemoveDialog;
@@ -38,7 +38,7 @@ public class ServerTree extends TreeItem implements ServerActionUI
 
     public ServerTree( SWTBot bot )
     {
-        this( bot, TEXT_BLANK );
+        this( bot, StringPool.BLANK );
     }
 
     public ServerTree( SWTBot bot, String serverNameValue )
@@ -52,7 +52,7 @@ public class ServerTree extends TreeItem implements ServerActionUI
 
     public void addALL()
     {
-        doAction( MENU_ADD_AND_REMOVE );
+        doAction( ADD_AND_REMOVE );
 
         addAndRemoveDialog.getAddAllBtn().click();
 
@@ -83,21 +83,21 @@ public class ServerTree extends TreeItem implements ServerActionUI
 
     public void debugServer()
     {
-        doAction( MENU_DEBUG );
+        doAction( DEBUG );
     }
 
     public void deleteServer()
     {
         doAction( DELETE );
 
-        Dialog deleteDialog = new Dialog( bot, TITLE_DELETE_SERVER_WIZARD );
+        Dialog deleteDialog = new Dialog( bot, DELETE_SERVER );
 
         deleteDialog.confirm();
     }
 
     public void deployProject( String... projectItemNames )
     {
-        doAction( MENU_ADD_AND_REMOVE );
+        doAction( ADD_AND_REMOVE );
 
         addAndRemoveDialog.add( projectItemNames );
         addAndRemoveDialog.confirm();
@@ -115,7 +115,7 @@ public class ServerTree extends TreeItem implements ServerActionUI
             if( server.contains( serverName ) || server.equals( serverName ) )
             {
                 index = serverTreeIndex;
-                _nodeText = new String[] { server };
+                nodeText = new String[] { server };
 
                 return super.getWidget();
             }
@@ -126,7 +126,7 @@ public class ServerTree extends TreeItem implements ServerActionUI
 
     public void removeALL()
     {
-        doAction( MENU_ADD_AND_REMOVE );
+        doAction( ADD_AND_REMOVE );
 
         addAndRemoveDialog.getRemoveAllBtn().click();
         addAndRemoveDialog.confirm();
@@ -134,20 +134,20 @@ public class ServerTree extends TreeItem implements ServerActionUI
 
     public void removeProject( String... projectItemNames )
     {
-        doAction( MENU_ADD_AND_REMOVE );
+        doAction( ADD_AND_REMOVE );
         addAndRemoveDialog.remove( projectItemNames );
         addAndRemoveDialog.confirm();
     }
 
     public void startServer()
     {
-        doAction( MENU_START );
+        doAction( START );
     }
 
     public void stopServer()
     {
-        doAction( MENU_STOP );
-        checkConsoleHasMsg( MESAGE_SERVER_STOP, 10000 );
+        doAction( STOP );
+        checkConsoleHasMsg( DESTROYING_PROTOCALHANDLER, 10000 );
     }
 
 }

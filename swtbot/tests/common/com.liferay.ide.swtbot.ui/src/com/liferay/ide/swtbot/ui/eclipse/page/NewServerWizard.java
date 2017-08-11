@@ -15,38 +15,30 @@
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.ui.UI;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Tree;
 import com.liferay.ide.swtbot.ui.page.Wizard;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class NewServerWizard extends Wizard implements UI
+public class NewServerWizard extends Wizard
 {
 
     private Text serverHostName;
-
     private Text serverName;
     private Tree serverTypes;
 
     public NewServerWizard( SWTBot bot )
     {
-        this( bot, CHOOSE_SERVER_TYPE_INDEX );
-    }
-
-    public NewServerWizard( SWTBot bot, int validationMsgIndex )
-    {
-        super( bot, TITLE_NEW_SERVER, validationMsgIndex );
+        super( bot, NEW_SERVER, 3 );
 
         serverTypes = new Tree( bot );
-
-        serverHostName = new Text( bot, LABEL_SERVER_HOST_NAME );
-        serverName = new Text( bot, LABEL_SERVER_NAME );
+        serverHostName = new Text( bot, SERVERS_HOST_NAME );
+        serverName = new Text( bot, SERVER_NAME );
     }
 
     public Text getServerHostName()
@@ -62,11 +54,6 @@ public class NewServerWizard extends Wizard implements UI
     public Tree getServerTypes()
     {
         return serverTypes;
-    }
-
-    public void selectServerType( String categroy, String item )
-    {
-        serverTypes.selectTreeItem( categroy, item );
     }
 
 }

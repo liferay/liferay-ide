@@ -12,25 +12,24 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.dialog;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.LiferayPortletWizardUI;
-import com.liferay.ide.swtbot.ui.page.SelectionDialog;
+import com.liferay.ide.swtbot.ui.eclipse.page.TreeDialog;
 import com.liferay.ide.swtbot.ui.page.Table;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ashley Yuan
  */
-public class SuperClassSelectionDialog extends SelectionDialog implements LiferayPortletWizardUI
+public class SuperClassSelectionDialog extends TreeDialog
 {
 
     private Table availableSuperClasses;
 
-    public SuperClassSelectionDialog( SWTBot bot, String title, int labelIndex )
+    public SuperClassSelectionDialog( SWTBot bot )
     {
-        super( bot, title, labelIndex );
+        super( bot );
 
-        availableSuperClasses = new Table( bot, 0 );
+        availableSuperClasses = new Table( bot );
     }
 
     public Table getAvailableSuperClasses()

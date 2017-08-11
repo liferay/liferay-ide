@@ -18,20 +18,19 @@ package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.LiferayPortletWizardUI;
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.ComboBox;
 import com.liferay.ide.swtbot.ui.page.Radio;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
+import com.liferay.ide.swtbot.ui.util.StringPool;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ashley Yuan
  */
-public class CreateLiferayPortletWizard extends Wizard implements LiferayPortletWizardUI, WizardUI
+public class CreateLiferayPortletWizard extends Wizard
 {
 
     private Button browsePackageBtn;
@@ -45,35 +44,30 @@ public class CreateLiferayPortletWizard extends Wizard implements LiferayPortlet
     private ComboBox superClasses;
     private Radio useDefault;
 
-    public CreateLiferayPortletWizard( SWTBot bot )
+    public CreateLiferayPortletWizard( SWTBot bot, int validationMsgIndex )
     {
-        this( bot, TEXT_BLANK );
-    }
-
-    public CreateLiferayPortletWizard( SWTBot bot, String title )
-    {
-        this( bot, title, INDEX_DEFAULT_VALIDATION_MESSAGE );
+        this( bot, StringPool.BLANK, validationMsgIndex );
     }
 
     public CreateLiferayPortletWizard( SWTBot bot, String title, int validationMsgIndex )
     {
         super( bot, title, validationMsgIndex );
 
-        portletPluginProjects = new ComboBox( bot, LABEL_PORTLET_PLUGIN_PROJECT );
-        sourceFolder = new Text( bot, LABEL_SOURCE_FOLDER );
-        newPortlet = new Radio( bot, RADIO_CREATE_NEW_PORTLET );
-        useDefault = new Radio( bot, RADIO_USE_DEFAULT_PORTLET );
-        portletClass = new Text( bot, LABEL_PORTLET_CLASS );
-        javaPackage = new Text( bot, LABEL_JAVA_PACKAGE );
-        superClasses = new ComboBox( bot, LABEL_SUPERCLASS );
-        browseSourceBtn = new Button( bot, BROWSE_WITH_THREE_DOT );
-        browsePackageBtn = new Button( bot, BROWSE_WITH_THREE_DOT, 1 );
-        browseSuperClassBtn = new Button( bot, BROWSE_WITH_THREE_DOT, 2 );
+        portletPluginProjects = new ComboBox( bot, PORTLET_PLUGIN_PROJECT );
+        sourceFolder = new Text( bot, SOURCE_FOLDER );
+        newPortlet = new Radio( bot, CREATE_NEW_PORTLET );
+        useDefault = new Radio( bot, USE_DEFAULT_PORTLET_MVCPORTLET );
+        portletClass = new Text( bot, PORTLET_CLASS );
+        javaPackage = new Text( bot, JAVA_PACKAGE );
+        superClasses = new ComboBox( bot, SUPERCLASS );
+        browseSourceBtn = new Button( bot, BROWSE_WITH_DOT );
+        browsePackageBtn = new Button( bot, BROWSE_WITH_DOT, 1 );
+        browseSuperClassBtn = new Button( bot, BROWSE_WITH_DOT, 2 );
     }
 
     public void createLiferayPortlet( boolean defaultMvc )
     {
-        createLiferayPortlet( TEXT_BLANK, null, defaultMvc, null, null, null );
+        createLiferayPortlet( StringPool.BLANK, null, defaultMvc, null, null, null );
     }
 
     public void createLiferayPortlet( String projectName )
@@ -95,7 +89,7 @@ public class CreateLiferayPortletWizard extends Wizard implements LiferayPortlet
         String projectName, String srcFolder, boolean defaultMvc, String portletClassValue, String javaPackageValue,
         String superClass )
     {
-        if( projectName != null && !projectName.equals( "" ) )
+        if( projectName != null && !projectName.equals( StringPool.BLANK ) )
         {
             portletPluginProjects.setSelection( projectName );
         }

@@ -22,6 +22,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 
 import com.liferay.ide.swtbot.ui.condition.ShellCondition;
+import com.liferay.ide.swtbot.ui.util.StringPool;
 
 /**
  * @author Terry Jia
@@ -75,7 +76,7 @@ public class Shell extends BasePageObject
             {
                 if( shell.getText().equals( label ) )
                 {
-                    log.warn( "force closing of still open shell\"" + shell.getText() + "\"" );
+                    log.warn( "force closing of still open shell\"" + shell.getText() + StringPool.DOUBLE_QUOTE );
 
                     shell.close();
 

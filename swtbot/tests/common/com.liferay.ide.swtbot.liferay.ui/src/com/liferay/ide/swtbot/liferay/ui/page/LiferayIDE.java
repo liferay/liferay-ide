@@ -15,13 +15,14 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-
 import com.liferay.ide.swtbot.liferay.ui.page.button.CreateLifeayProjectToolbarDropDownButton;
 import com.liferay.ide.swtbot.liferay.ui.page.button.NewToolbarDropDownButton;
 import com.liferay.ide.swtbot.liferay.ui.page.view.CodeUpgradeView;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewLiferayWorkspaceWizard;
 import com.liferay.ide.swtbot.ui.Eclipse;
 import com.liferay.ide.swtbot.ui.page.Perspective;
+
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
@@ -31,21 +32,21 @@ public class LiferayIDE extends Eclipse
 
     private CodeUpgradeView codeUpgradeView;
     private CreateLifeayProjectToolbarDropDownButton createLiferayProjectToolbar;
-    protected Perspective liferayPerspective;
-    protected Perspective liferayWorkspacePerspective;
-    protected NewToolbarDropDownButton newBtn;
+    private Perspective liferayPerspective;
+    private Perspective liferayWorkspacePerspective;
+    private NewToolbarDropDownButton newBtn;
+    private NewLiferayWorkspaceWizard newLiferayWorkspaceProjectWizard;
 
     public LiferayIDE( SWTWorkbenchBot bot )
     {
         super( bot );
 
         createLiferayProjectToolbar = new CreateLifeayProjectToolbarDropDownButton( bot );
-        codeUpgradeView = new CodeUpgradeView( bot, LABEL_LIFERAY_CODE_UPGRADE );
-
-        liferayPerspective = new Perspective( bot, LABEL_LIFERAY_PLUGINS );
-        liferayWorkspacePerspective = new Perspective( bot, LABEL_LIFERAY_WORKSPACE );
-
+        codeUpgradeView = new CodeUpgradeView( bot, LIFERAY_CODE_UPGRADE );
+        liferayPerspective = new Perspective( bot, LIFERAY_PLUGINS );
+        liferayWorkspacePerspective = new Perspective( bot, LIFERAY_WORKSPACE );
         newBtn = new NewToolbarDropDownButton( bot );
+        newLiferayWorkspaceProjectWizard = new NewLiferayWorkspaceWizard( bot );
     }
 
     public CreateLifeayProjectToolbarDropDownButton getCreateLiferayProjectToolbar()
@@ -66,6 +67,11 @@ public class LiferayIDE extends Eclipse
     public NewToolbarDropDownButton getNewBtn()
     {
         return newBtn;
+    }
+
+    public NewLiferayWorkspaceWizard getNewLiferayWorkspaceProjectWizard()
+    {
+        return newLiferayWorkspaceProjectWizard;
     }
 
     public CodeUpgradeView showCodeUpgradeView()

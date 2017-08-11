@@ -15,25 +15,24 @@
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-
-import com.liferay.ide.swtbot.ui.UI;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.View;
+
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  */
-public class ProgressView extends View implements UI
+public class ProgressView extends View
 {
 
     private Text noOperationsText;
 
     public ProgressView( SWTWorkbenchBot bot )
     {
-        super( bot, LABEL_PROGRESS );
+        super( bot, PROGRESS );
 
-        noOperationsText = new Text( bot, INDEX_DEFAULT_START );
+        noOperationsText = new Text( bot, 0 );
     }
 
     public String getNoOperationText()
@@ -43,7 +42,7 @@ public class ProgressView extends View implements UI
 
     public boolean noRunningProgress()
     {
-        return getNoOperationText().equals( TEXT_NO_OPERTAIONS );
+        return getNoOperationText().equals( NO_OPERTAIONS );
     }
 
 }

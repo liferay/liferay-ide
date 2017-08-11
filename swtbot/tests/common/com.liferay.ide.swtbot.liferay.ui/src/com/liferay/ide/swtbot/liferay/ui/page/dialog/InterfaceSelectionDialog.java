@@ -15,33 +15,27 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.dialog;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.LiferayPortletWizardUI;
-import com.liferay.ide.swtbot.ui.page.SelectionDialog;
+import com.liferay.ide.swtbot.ui.eclipse.page.TreeDialog;
 import com.liferay.ide.swtbot.ui.page.Table;
 import com.liferay.ide.swtbot.ui.page.Text;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ashley Yuan
  */
-public class InterfaceSelectionDialog extends SelectionDialog implements LiferayPortletWizardUI
+public class InterfaceSelectionDialog extends TreeDialog
 {
 
     private Text itemToOpen;
     private Table matchItems;
 
-    public InterfaceSelectionDialog( SWTBot bot, String title, int labelIndex )
+    public InterfaceSelectionDialog( SWTBot bot )
     {
-        super( bot, title, labelIndex );
+        super( bot );
 
         itemToOpen = new Text( bot );
-        matchItems = new Table( bot, 0 );
-    }
-
-    public InterfaceSelectionDialog( SWTBot bot, String title )
-    {
-        this( bot, title, INDEX_DEFAULT_START );
+        matchItems = new Table( bot );
     }
 
     public Text getItemToOpen()

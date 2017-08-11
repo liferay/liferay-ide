@@ -15,17 +15,17 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.liferay.ui.WizardUI;
 import com.liferay.ide.swtbot.ui.page.CheckBox;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
+import com.liferay.ide.swtbot.ui.util.StringPool;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ashley Yuan
  */
-public class NewSourceFolderWizard extends Wizard implements WizardUI
+public class NewSourceFolderWizard extends Wizard
 {
 
     private Text folderName;
@@ -35,27 +35,12 @@ public class NewSourceFolderWizard extends Wizard implements WizardUI
 
     public NewSourceFolderWizard( SWTBot bot )
     {
-        this( bot, INDEX_DEFAULT_VALIDATION_MESSAGE );
-    }
+        super( bot, 2);
 
-    public NewSourceFolderWizard( SWTBot bot, int validationMsgIndex )
-    {
-        this( bot, TEXT_BLANK, validationMsgIndex );
-    }
-
-    public NewSourceFolderWizard( SWTBot bot, String title )
-    {
-        this( bot, title, INDEX_DEFAULT_VALIDATION_MESSAGE );
-    }
-
-    public NewSourceFolderWizard( SWTBot bot, String title, int validationMsgIndex )
-    {
-        super( bot, title, validationMsgIndex );
-
-        projectName = new Text( bot, LABEL_PROJECT_NAME );
-        folderName = new Text( bot, LABEL_FOLDER_NAME );
-        updateExclusionFilters = new CheckBox( bot, LABEL_UPDATE_EXCLUSION_FILTERS );
-        ignoreOptionCompileProblems = new CheckBox( bot, LABEL_IGNORE_OPTIONAL_COMPILE_PROBLEMS );
+        projectName = new Text( bot, PROJECT_NAME );
+        folderName = new Text( bot, FOLDER_NAME );
+        updateExclusionFilters = new CheckBox( bot, UPDATE_EXCLUSION_FILTERS );
+        ignoreOptionCompileProblems = new CheckBox( bot, IGNORE_OPTIONAL_COMPILE_PROBLEMS );
     }
 
     public Text getFolderName()
@@ -80,7 +65,7 @@ public class NewSourceFolderWizard extends Wizard implements WizardUI
 
     public void newSourceFolder( String folderName )
     {
-        newSourceFolder( TEXT_BLANK, folderName, false, false );
+        newSourceFolder( StringPool.BLANK, folderName, false, false );
     }
 
     public void newSourceFolder(

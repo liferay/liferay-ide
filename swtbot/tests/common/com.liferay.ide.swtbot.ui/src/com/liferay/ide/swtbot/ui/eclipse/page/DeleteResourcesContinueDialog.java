@@ -15,30 +15,20 @@
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
-import com.liferay.ide.swtbot.ui.UI;
-import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.Dialog;
+import com.liferay.ide.swtbot.ui.util.StringPool;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ying Xu
  */
-public class DeleteResourcesContinueDialog extends Dialog implements UI
+public class DeleteResourcesContinueDialog extends Dialog
 {
 
-    private Button continueBtn;
-
-    public DeleteResourcesContinueDialog( SWTBot bot, String title )
+    public DeleteResourcesContinueDialog( SWTBot bot )
     {
-        super( bot, title );
-
-        continueBtn = new Button( bot, CONTINUE );
-    }
-
-    public Button getContinueBtn()
-    {
-        return continueBtn;
+        super( bot, StringPool.BLANK, CONTINUE );
     }
 
 }
