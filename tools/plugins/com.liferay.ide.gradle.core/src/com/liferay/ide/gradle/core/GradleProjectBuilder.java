@@ -18,6 +18,7 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.gradle.core.parser.GradleDependency;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -102,7 +103,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder
     @Override
     public IStatus execInitBundle( IProject project, String taskName,  String bundleUrl, IProgressMonitor monitor ) throws CoreException
     {
-        String bundleUrlProperty = "\n\nliferay.workspace.bundle.url=" + bundleUrl;
+        String bundleUrlProperty = "\n\n" + LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
 
         final File gradlePropertiesFile = project.getFile( "gradle.properties" ).getLocation().toFile();
 

@@ -106,7 +106,7 @@ public class LiferayGradleWorkspaceProjectProvider extends AbstractLiferayProjec
 
                     String content = FileUtil.readContents( gradlePropertiesFile.getContents() );
 
-                    String bundleUrlProp = "liferay.workspace.bundle.url=" + bundleUrl;
+                    String bundleUrlProp = LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
 
                     String separator = System.getProperty( "line.separator", "\n" );
 

@@ -39,6 +39,24 @@ public class LiferayWorkspaceUtil
     private static final String _GRADLE_PROPERTIES_FILE_NAME = "gradle.properties";
     private static final String _SETTINGS_GRADLE_FILE_NAME = "settings.gradle";
     private static final String _BUILD_GRADLE_FILE_NAME = "build.gradle";
+
+    public static final String LIFERAY_WORKSPACE_BUNDLE_TOKEN_DOWNLOAD = "liferay.workspace.bundle.token.download";
+    public static final String LIFERAY_WORKSPACE_BUNDLE_TOKEN_EMAIL_ADDRESS =
+        "liferay.workspace.bundle.token.email.address";
+    public static final String LIFERAY_WORKSPACE_BUNDLE_TOKEN_FORCE = "liferay.workspace.bundle.token.force";
+    public static final String LIFERAY_WORKSPACE_BUNDLE_TOKEN_PASSWORD = "liferay.workspace.bundle.token.password";
+    public static final String LIFERAY_WORKSPACE_BUNDLE_URL = "liferay.workspace.bundle.url";
+    public static final String LIFERAY_WORKSPACE_DEFAULT_REPOSITORY_ENABLED =
+        "liferay.workspace.default.repository.enabled";
+    public static final String LIFERAY_WORKSPACE_ENVIRONMENT = "liferay.workspace.environment";
+    public static final String LIFERAY_WORKSPACE_HOME_DIR = "liferay.workspace.home.dir";
+    public static final String LIFERAY_WORKSPACE_MODULES_DEFAULT_REPOSITORY_ENABLED =
+        "liferay.workspace.modules.default.repository.enabled";
+    public static final String LIFERAY_WORKSPACE_MODULES_DIR = "liferay.workspace.modules.dir";
+    public static final String LIFERAY_WORKSPACE_PLUGINS_SDK_DIR = "liferay.workspace.plugins.sdk.dir";
+    public static final String LIFERAY_WORKSPACE_THEMES_DIR = "liferay.workspace.themes.dir";
+    public static final String LIFERAY_WORKSPACE_WARS_DIR = "liferay.workspace.wars.dir";
+
     public static String multiWorkspaceErrorMsg = "More than one Liferay workspace build in current Eclipse workspace.";
 
     public static String hasLiferayWorkspaceMsg =
@@ -223,7 +241,7 @@ public class LiferayWorkspaceUtil
         return false;
     }
 
-    private static String getGradleProperty( String projectLocation, String key, String defaultValue )
+    public static String getGradleProperty( String projectLocation, String key, String defaultValue )
     {
         File gradleProperties = new File( projectLocation, "gradle.properties" );
 
@@ -269,7 +287,7 @@ public class LiferayWorkspaceUtil
             if( projectLocation != null )
             {
                 String val =
-                    getGradleProperty( projectLocation.toPortableString(), "liferay.workspace.modules.dir", "modules" );
+                    getGradleProperty( projectLocation.toPortableString(), LIFERAY_WORKSPACE_MODULES_DIR, "modules" );
 
                 val = ( CoreUtil.empty( val ) ? "modules" : val );
 
@@ -291,7 +309,7 @@ public class LiferayWorkspaceUtil
             if( projectLocation != null )
             {
                 retval = getGradleProperty( projectLocation.toPortableString(),
-                    "liferay.workspace.themes.dir", "themes" );
+                    LIFERAY_WORKSPACE_THEMES_DIR, "themes" );
             }
         }
 
@@ -309,7 +327,7 @@ public class LiferayWorkspaceUtil
             if( projectLocation != null )
             {
                 String val = getGradleProperty( projectLocation.toPortableString(),
-                    "liferay.workspace.wars.dir", "wars" );
+                    LIFERAY_WORKSPACE_WARS_DIR, "wars" );
 
                 val = ( CoreUtil.empty( val ) ? "wars" : val );
 
@@ -341,7 +359,7 @@ public class LiferayWorkspaceUtil
 
     public static String getHomeDir( String location )
     {
-        String result = getGradleProperty( location, "liferay.workspace.home.dir", "bundles" );
+        String result = getGradleProperty( location, LIFERAY_WORKSPACE_HOME_DIR, "bundles" );
 
         return CoreUtil.empty( result ) ? "bundles" : result;
     }
@@ -369,7 +387,7 @@ public class LiferayWorkspaceUtil
 
     public static String getPluginsSDKDir( String location )
     {
-        String result = getGradleProperty( location, "liferay.workspace.plugins.sdk.dir", "plugins-sdk" );
+        String result = getGradleProperty( location, LIFERAY_WORKSPACE_PLUGINS_SDK_DIR, "plugins-sdk" );
 
         return CoreUtil.empty( result ) ? "bundles" : result;
     }
@@ -382,11 +400,6 @@ public class LiferayWorkspaceUtil
     public static File getWorkspaceDir( File dir )
     {
         return findParentFile( dir, new String[] { _SETTINGS_GRADLE_FILE_NAME, _GRADLE_PROPERTIES_FILE_NAME }, true );
-    }
-
-    public static String loadConfiguredHomeDir( String location )
-    {
-        return getLiferayWorkspaceGradleProperty( location, "liferay.workspace.home.dir", "bundles" );
     }
 
     public static String read( File file ) throws IOException
@@ -426,27 +439,11 @@ public class LiferayWorkspaceUtil
 
         if( workspaceLocation != null )
         {
-            String val = getLiferayWorkspaceGradleProperty( workspaceLocation, "liferay.workspace.wars.dir", "wars" );
+            String val = getGradleProperty( workspaceLocation, LIFERAY_WORKSPACE_WARS_DIR, "wars" );
 
             retval = val.split( "," );
         }
 
         return retval;
-    }
-
-    public static String getLiferayWorkspaceGradleProperty( String projectLocation, String key, String defaultValue )
-    {
-        File gradleProperties = new File( projectLocation, "gradle.properties" );
-
-        String retVal = null;
-
-        if( gradleProperties.exists() )
-        {
-            Properties properties = PropertiesUtil.loadProperties( gradleProperties );
-
-            retVal = properties.getProperty( key, defaultValue );
-        }
-
-        return retVal;
     }
 }
