@@ -119,7 +119,7 @@ public class NewLiferayWorkspaceOpTests extends ProjectCoreBase
 
         File propertiesFile = new File( wsFile, "gradle.properties" );
         Properties prop = PropertiesUtil.loadProperties( propertiesFile );
-        prop.setProperty( "liferay.workspace.wars.dir", "wars,wars2" );
+        prop.setProperty( LiferayWorkspaceUtil.LIFERAY_WORKSPACE_WARS_DIR, "wars,wars2" );
         PropertiesUtil.saveProperties( prop, propertiesFile );
 
         NewLiferayModuleProjectOp moduleProjectOp = NewLiferayModuleProjectOp.TYPE.instantiate();

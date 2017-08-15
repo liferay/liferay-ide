@@ -78,6 +78,11 @@ public interface ImportLiferayWorkspaceOp extends BaseLiferayWorkspaceOp
     @Service( impl = ImportLiferayWorkspaceServerNameService.class )
     ValueProperty PROP_SERVER_NAME = new ValueProperty( TYPE, BaseLiferayWorkspaceOp.PROP_SERVER_NAME );
 
+    // *** bundleUrl ***
+
+    @Service( impl = BundleUrlDefaultValueService.class )
+    ValueProperty PROP_BUNDLE_URL = new ValueProperty( TYPE, BaseLiferayWorkspaceOp.PROP_BUNDLE_URL );
+
     // *** Method: execute ***
 
     @Override
