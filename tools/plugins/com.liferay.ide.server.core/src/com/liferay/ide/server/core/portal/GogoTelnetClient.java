@@ -73,32 +73,62 @@ public class GogoTelnetClient implements AutoCloseable {
 		sendCommand(255, 250, 24, 0, 'V', 'T', '2', '2', '0', 255, 240);
 
 		// read gogo shell prompt
-		readUntilNextGogoPrompt();
+		readUntilNextGogoPrompt(0);
 	}
 
-	private String readUntilNextGogoPrompt() throws IOException {
-		StringBuilder sb = new StringBuilder();
+   private String readUntilNextGogoPrompt( int ignoreLenth ) throws IOException {
+        StringBuilder sb = new StringBuilder();
 
-		int c = _inputStream.read();
+        int c = _inputStream.read();
+        
+        int replyCount = 0;
 
-		while (c != -1) {
-			sb.append((char) c);
+        while (c != -1) {
 
-			if(sb.toString().endsWith("g! ")) {
-				break;
-			}
+            if ( ignoreLenth > 0 )
+            {
+                if( replyCount >= ignoreLenth ){
+                    sb.append((char) c);                
+                }
+                else
+                {
+                    replyCount++;  
+                }
+            }
+            else
+            {
+                sb.append((char) c);  
+            }
 
-			c = _inputStream.read();
-		}
+            if(sb.toString().endsWith("g! ")) {
+                break;
+            }
+            
+            c = _inputStream.read();
+        }
 
-		String output = sb.substring(0, sb.length() - 3);
+        String output = sb.substring(0, sb.length() - 3);
 
-		return output.trim();
-	}
+        return output.trim();
+    }
+   public String send(String command, boolean ignoreInput) throws IOException {
+       byte[] bytes = command.getBytes();
+       int[] codes = new int[bytes.length + 2];
 
+       for (int i = 0; i < bytes.length; i++) {
+           codes[i] = bytes[i];
+       }
+
+       codes[bytes.length] = '\r';
+       codes[bytes.length + 1] = '\n';
+
+       sendCommand(codes);
+
+       return readUntilNextGogoPrompt( ignoreInput?codes.length:0 );
+   }
+   
 	public String send(String command) throws IOException {
 		byte[] bytes = command.getBytes();
-
 		int[] codes = new int[bytes.length + 2];
 
 		for (int i = 0; i < bytes.length; i++) {
@@ -110,7 +140,7 @@ public class GogoTelnetClient implements AutoCloseable {
 
 		sendCommand(codes);
 
-		return readUntilNextGogoPrompt();
+		return readUntilNextGogoPrompt(0);
 	}
 
 	private void sendCommand(int... codes) throws IOException {

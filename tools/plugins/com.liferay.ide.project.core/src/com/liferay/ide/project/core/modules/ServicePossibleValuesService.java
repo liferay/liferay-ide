@@ -15,9 +15,6 @@
 
 package com.liferay.ide.project.core.modules;
 
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.server.core.portal.PortalServer;
-
 import java.util.Set;
 
 import org.eclipse.sapphire.FilteredListener;
@@ -26,8 +23,9 @@ import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.ServerCore;
+
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.util.TargetPlatformUtil;
 
 /**
  * @author Simon Jiang
@@ -57,24 +55,12 @@ public class ServicePossibleValuesService extends PossibleValuesService
     {
         final NewLiferayModuleProjectOp op = op();
         final String template = op.getProjectTemplateName().content(true);
-        IServer runningServer = null;
-        final IServer[] servers = ServerCore.getServers();
 
         if( template.equals( "service-wrapper" ) )
         {
-            for( IServer server : servers )
-            {
-                if( server.getServerType().getId().equals( PortalServer.ID ) )
-                {
-                    runningServer = server;
-                    break;
-                }
-            }
-
             try
             {
-                ServiceContainer serviceWrapperList = new ServiceWrapperCommand( runningServer ).execute();
-                values.addAll( serviceWrapperList.getServiceList() );
+                values.addAll( TargetPlatformUtil.getServiceWrapperList().getServiceList() );
             }
             catch( Exception e )
             {
@@ -83,23 +69,9 @@ public class ServicePossibleValuesService extends PossibleValuesService
         }
         else if( template.equals( "service" ) )
         {
-            for( IServer server : servers )
-            {
-                if( server.getServerState() == IServer.STATE_STARTED &&
-                    server.getServerType().getId().equals( PortalServer.ID ) )
-                {
-                    runningServer = server;
-                    break;
-                }
-            }
-
             try
             {
-                ServiceCommand serviceCommand = new ServiceCommand( runningServer );
-
-                ServiceContainer allServices = serviceCommand.execute();
-
-                values.addAll( allServices.getServiceList() );
+                values.addAll( TargetPlatformUtil.getServicesList().getServiceList() );
             }
             catch( Exception e )
             {
