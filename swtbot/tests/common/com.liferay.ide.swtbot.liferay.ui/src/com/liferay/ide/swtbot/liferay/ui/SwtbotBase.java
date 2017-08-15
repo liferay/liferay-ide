@@ -114,6 +114,20 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants
 
         bundleInfos = getBundleInfos();
 
+        try
+        {
+            long origin = SWTBotPreferences.TIMEOUT;
+
+            SWTBotPreferences.TIMEOUT = 1000;
+
+            ide.getWelcomeView().close();
+
+            SWTBotPreferences.TIMEOUT = origin;
+        }
+        catch( Exception e )
+        {
+        }
+
         ide.getLiferayWorkspacePerspective().activate();
 
         SWTBotPreferences.TIMEOUT = 30000;
