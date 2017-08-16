@@ -18,6 +18,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
+import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -64,7 +65,7 @@ import org.eclipse.osgi.util.NLS;
  * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
-public class MavenProjectBuilder extends AbstractProjectBuilder
+public class MavenProjectBuilder extends AbstractProjectBuilder implements IWorkspaceProjectBuilder
 {
     private final String ATTR_GOALS = "M2_GOALS";
     private final String ATTR_POM_DIR = IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY;
@@ -419,9 +420,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
         }
     }
 
-    @Override
-    public IStatus execInitBundle( IProject project, String taskName, String bundleUrl, IProgressMonitor monitor )
-        throws CoreException
+    public IStatus initBundle( IProject project, String bundleUrl, IProgressMonitor monitor ) throws CoreException
     {
         final IMavenProjectFacade facade = MavenUtil.getProjectFacade( project, monitor );
 

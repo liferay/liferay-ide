@@ -114,7 +114,7 @@ public class LiferayMavenWorkspaceProjectProvider extends LiferayMavenProjectPro
 
             final MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder( workspaceProject );
 
-            mavenProjectBuilder.execInitBundle( workspaceProject, "init-bundle", bundleUrl, monitor );
+            mavenProjectBuilder.initBundle( workspaceProject, bundleUrl, monitor );
         }
 
         return retval;
@@ -162,7 +162,7 @@ public class LiferayMavenWorkspaceProjectProvider extends LiferayMavenProjectPro
 
                 final MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder( workspaceProject );
 
-                mavenProjectBuilder.execInitBundle( workspaceProject, "init-bundle", bundleUrl, monitor );
+                mavenProjectBuilder.initBundle( workspaceProject, bundleUrl, monitor );
             }
         }
         catch( Exception e )

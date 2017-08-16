@@ -23,6 +23,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.IOUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
+import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
@@ -821,13 +822,13 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                 final String bundleName = dataModel.getBundleName().content();
 
-                IProjectBuilder projectBuilder = getProjectBuilder( project );
+                IWorkspaceProjectBuilder projectBuilder = getWorkspaceProjectBuilder( project );
 
                 progress.worked( 30 );
 
                 if( bundleUrl != null && projectBuilder != null )
                 {
-                    projectBuilder.execInitBundle( project, "initBundle", bundleUrl, monitor );
+                    projectBuilder.initBundle( project, bundleUrl, monitor );
                 }
 
                 if( sdkLocation.append( "bundles" ).toFile().exists() )
@@ -915,7 +916,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         ServerCore.addServerLifecycleListener( this );
 
         IServer[] servers = ServerCore.getServers();
-        List<String> serverNames = new ArrayList<String>();
+        List<String> serverNames = new ArrayList<>();
 
         if( !CoreUtil.isNullOrEmpty( servers ) )
         {
@@ -1058,7 +1059,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         return "Select project(s) to upgrade";
     }
 
-    private IProjectBuilder getProjectBuilder( IProject project ) throws CoreException
+    private IWorkspaceProjectBuilder getWorkspaceProjectBuilder( IProject project ) throws CoreException
     {
         final ILiferayProject liferayProject = LiferayCore.create( project );
 
@@ -1067,7 +1068,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             throw new CoreException( ProjectUI.createErrorStatus( "Can't find Liferay workspace project." ) );
         }
 
-        final IProjectBuilder builder = liferayProject.adapt( IProjectBuilder.class );
+        final IWorkspaceProjectBuilder builder = liferayProject.adapt( IWorkspaceProjectBuilder.class );
 
         if( builder == null )
         {
@@ -1183,9 +1184,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     private void importSDKProject( IPath targetSDKLocation, IProgressMonitor monitor )
     {
-        Collection<File> eclipseProjectFiles = new ArrayList<File>();
+        Collection<File> eclipseProjectFiles = new ArrayList<>();
 
-        Collection<File> liferayProjectDirs = new ArrayList<File>();
+        Collection<File> liferayProjectDirs = new ArrayList<>();
 
         if( ProjectUtil.collectSDKProjectsFromDirectory(
             eclipseProjectFiles, liferayProjectDirs, targetSDKLocation.toFile(), null, true, monitor ) )

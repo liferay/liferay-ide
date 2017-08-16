@@ -100,8 +100,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder
         return status;
     }
 
-    @Override
-    public IStatus execInitBundle( IProject project, String taskName,  String bundleUrl, IProgressMonitor monitor ) throws CoreException
+    public IStatus initBundle( IProject project, String bundleUrl, IProgressMonitor monitor ) throws CoreException
     {
         String bundleUrlProperty = "\n\n" + LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
 
@@ -116,7 +115,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder
             GradleCore.logError( "Error append bundle url property", e );
         }
 
-        runGradleTask( taskName, monitor );
+        runGradleTask( "initBundle", monitor );
 
         project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
 

@@ -30,7 +30,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jdt.core.ClasspathContainerInitializer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -77,7 +77,7 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
 
         if( servicesFile != null && servicesFile.exists() )
         {
-            final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+            final IProgressMonitor sub = SubMonitor.convert( monitor );
 
             sub.beginTask( Msgs.buildingServices, 100 );
 
@@ -125,7 +125,7 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
 
         if( servicesFile != null && servicesFile.exists() )
         {
-            final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+            final IProgressMonitor sub = SubMonitor.convert( monitor );
 
             sub.beginTask( Msgs.buildingServices, 100 );
 
@@ -217,13 +217,6 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
         {
             initializeMessages( SDKProjectBuilder.class.getName(), Msgs.class );
         }
-    }
-
-    @Override
-    public IStatus execInitBundle( IProject project, String taskName, String bundleUrl, IProgressMonitor monitor )
-        throws CoreException
-    {
-        return Status.OK_STATUS;
     }
 
     @Override
