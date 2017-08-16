@@ -70,12 +70,12 @@ public class BundleUrlDefaultValueService extends DefaultValueService
             {
                 bundleURL = LiferayWorkspaceUtil.getGradleProperty(
                     workspaceLocation, LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL,
-                    BaseLiferayWorkspaceOp.defaultBundleUrl );
+                    BaseLiferayWorkspaceOp.DEFAULT_BUNDLE_URL );
             }
             // for maven type liferay workspace
             else
             {
-                bundleURL = BaseLiferayWorkspaceOp.defaultBundleUrl;
+                bundleURL = BaseLiferayWorkspaceOp.DEFAULT_BUNDLE_URL;
             }
         }
 

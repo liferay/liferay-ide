@@ -31,8 +31,8 @@ import org.eclipse.sapphire.modeling.annotations.Service;
  */
 public interface BaseLiferayWorkspaceOp extends ExecutableElement
 {
-    public static final String defaultBundleUrl =
-                    "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.3-ga4/liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip";
+    public static final String DEFAULT_BUNDLE_URL =
+        "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.3-ga4/liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip";
 
     ElementType TYPE = new ElementType( BaseLiferayWorkspaceOp.class );
 
@@ -57,7 +57,7 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement
 
     // *** bundleUrl ***
 
-    @DefaultValue( text = defaultBundleUrl )
+    @DefaultValue( text = DEFAULT_BUNDLE_URL )
     @Service( impl = BundleUrlValidationService.class )
     ValueProperty PROP_BUNDLE_URL = new ValueProperty( TYPE, "bundleUrl" );
 
