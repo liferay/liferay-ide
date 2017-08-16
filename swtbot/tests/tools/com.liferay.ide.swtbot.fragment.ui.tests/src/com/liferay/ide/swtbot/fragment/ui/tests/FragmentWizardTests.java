@@ -20,7 +20,6 @@ import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 import java.io.IOException;
 
 import org.junit.Assume;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -41,12 +40,6 @@ public class FragmentWizardTests extends SwtbotBase
     }.getClassName();
 
     static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
-
-    @Before
-    public void isRunTest()
-    {
-        Assume.assumeTrue( runTest() || runAllTests() );
-    }
 
     @BeforeClass
     public static void init() throws IOException

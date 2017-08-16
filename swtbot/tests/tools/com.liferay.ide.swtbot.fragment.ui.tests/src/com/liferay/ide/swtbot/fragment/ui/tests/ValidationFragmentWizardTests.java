@@ -23,7 +23,10 @@ import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewFragmentWizard;
 import com.liferay.ide.swtbot.liferay.ui.util.ValidationMsg;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.junit.Assume;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -45,6 +48,12 @@ public class ValidationFragmentWizardTests extends SwtbotBase
     static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
 
     NewFragmentWizard newFragmentWizard = new NewFragmentWizard( bot );
+
+    @BeforeClass
+    public static void init() throws IOException
+    {
+        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
+    }
 
     @Test
     public void validationProjectName()
