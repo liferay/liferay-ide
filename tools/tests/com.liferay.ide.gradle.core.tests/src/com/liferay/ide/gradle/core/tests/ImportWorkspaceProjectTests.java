@@ -142,6 +142,12 @@ public class ImportWorkspaceProjectTests
         op.setWorkspaceLocation( dst.getAbsolutePath() );
         op.setProvisionLiferayBundle( true );
 
+        String bundleUrl = op.getBundleUrl().content( true );
+
+        assertEquals(
+            "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.3-ga4/liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip",
+            bundleUrl );
+
         final NullProgressMonitor monitor = new NullProgressMonitor();
 
         op.execute( ProgressMonitorBridge.create( monitor ) );
@@ -165,35 +171,20 @@ public class ImportWorkspaceProjectTests
         IWorkspace ws = ResourcesPlugin.getWorkspace();
         IWorkspaceRoot root = ws.getRoot();
 
-        File src = new File( "projects/testWorkspace" );
+        File src = new File( "projects/testWorkspaceCustomBundleUrl" );
         File dst = new File( root.getLocation().toFile(), src.getName() );
 
         TestUtil.copyDir( src, dst );
 
-        String bundleUrl = "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.1-ga2/liferay-ce-portal-tomcat-7.0-ga2-20160610113014153.zip";
-
         ImportLiferayWorkspaceOp op = ImportLiferayWorkspaceOp.TYPE.instantiate();
 
         op.setWorkspaceLocation( dst.getAbsolutePath() );
-        op.setProvisionLiferayBundle( true );
-        op.setBundleUrl( bundleUrl );
 
-        op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+        String bundleUrl = op.getBundleUrl().content( true );
 
-        IProject eeProject = CoreUtil.getProject( "testWorkspace" );
-
-        assertNotNull( eeProject );
-
-        Util.waitForBuildAndValidation();
-
-        assertNotLiferayProject("testWorkspace");
-        assertLiferayProject( "sample-portlet" );
-
-        File importedProperties = eeProject.getFile( "gradle.properties" ).getLocation().toFile();
-
-        String importedContent = CoreUtil.readStreamToString( new FileInputStream( importedProperties ) );
-
-        assertTrue( importedContent, importedContent.contains( bundleUrl ) );
+        assertEquals(
+            "https://api.liferay.com/downloads/portal/7.0.10.4/liferay-dxp-digital-enterprise-tomcat-7.0-sp4-20170705142422877.zip",
+            bundleUrl );
     }
 
     private void assertSourceFolders( String projectName, String expectedSourceFolderName )
