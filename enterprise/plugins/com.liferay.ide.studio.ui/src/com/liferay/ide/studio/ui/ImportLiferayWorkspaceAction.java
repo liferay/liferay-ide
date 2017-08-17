@@ -11,15 +11,10 @@
 
 package com.liferay.ide.studio.ui;
 
-import com.liferay.ide.project.core.workspace.ImportLiferayWorkspaceOp;
 import com.liferay.ide.project.ui.workspace.ImportLiferayWorkspaceWizard;
 
-import java.io.File;
 import java.util.Properties;
 
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.internal.intro.impl.IntroPlugin;
@@ -37,20 +32,6 @@ public class ImportLiferayWorkspaceAction implements IIntroAction
     public void run( IIntroSite site, Properties params )
     {
         ImportLiferayWorkspaceWizard wizard = new ImportLiferayWorkspaceWizard();
-
-        File location = new File( Platform.getInstallLocation().getURL().getFile() );
-
-        if( Platform.getOS().equals( Platform.OS_MACOSX ) )
-        {
-
-            location = location.getParentFile().getParentFile();
-        }
-
-        IPath path = new Path( location.getAbsolutePath() );
-
-        ImportLiferayWorkspaceOp op = wizard.element().nearest( ImportLiferayWorkspaceOp.class );
-
-        op.setWorkspaceLocation( path.append( "../liferay-workspace" ).toPortableString() );
 
         WizardDialog dialog = new WizardDialog( site.getShell(), wizard );
 
