@@ -1,14 +1,17 @@
 <idea-plugin>
-  <id>org.intellij.examples.simple.plugin</id>
-  <name>SimplePlugin</name>
-  <version>1.0</version>
-  <vendor url="https://jetbrains.com">JetBrains</vendor>
-  <description>Subplugin with MessageProvider service implementation</description>
+  <id>com.liferay.ide.workspace.plugin</id>
+  <name>LiferayWorkspacePlugin</name>
+  <version>0.1</version>
+  <vendor url="https://www.liferay.com">Liferay Inc.</vendor>
+  <description>Liferay IDE Plugin for IntelliJ IDEA</description>
   <change-notes/>
   <actions>
-    <action class="org.intellij.examples.dependencies.plugin.HelloAction" id="SayHello" text="Say Hello">
-      <add-to-group group-id="ToolsMenu"/>
-      <add-to-group group-id="WelcomeScreen.QuickStart"/>
-    </action>
+    <group id="com.liferay.ide.menu" text="_Liferay" description="Liferay Menu">
+      <add-to-group group-id="MainMenu" anchor="last"  />
+      <action id="NewLiferayModule" class="com.liferay.ide.workspace.ui.action.NewLiferayModuleAction" text="New Liferay _Module..." description="Add new liferay module to the liferay workspace"/>
+    </group>
   </actions>
+  <extensions defaultExtensionNs="com.intellij">
+    <moduleBuilder builderClass="com.liferay.ide.workspace.ui.builder.LiferayWorkspaceBuilder"/>
+  </extensions>
 </idea-plugin>
