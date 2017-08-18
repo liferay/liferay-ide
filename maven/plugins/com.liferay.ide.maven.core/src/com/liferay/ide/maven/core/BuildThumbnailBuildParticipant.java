@@ -23,7 +23,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.osgi.util.NLS;
 
@@ -38,7 +37,7 @@ public class BuildThumbnailBuildParticipant extends ThemePluginBuildParticipant
     @Override
     public Set<IProject> build( int kind, IProgressMonitor monitor ) throws Exception
     {
-        IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+        IProgressMonitor sub = CoreUtil.newSubMonitor( monitor, 100 );
 
         sub.beginTask( Msgs.thumbnailBuilder, 100 );
 

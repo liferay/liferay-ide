@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -104,16 +103,16 @@ public class WorkflowSupportManager
             return project;
         }
 
-        project.create( new SubProgressMonitor( monitor, 1 ) );
-        project.open( new SubProgressMonitor( monitor, 1 ) );
+        project.create( CoreUtil.newSubMonitor(monitor,1) );
+        project.open( CoreUtil.newSubMonitor(monitor,1) );
 
         CoreUtil.makeFolders( project.getFolder( "src" ) );
 
-        CoreUtil.addNaturesToProject( project, new String[] { JavaCore.NATURE_ID }, new SubProgressMonitor( monitor, 1 ) );
+        CoreUtil.addNaturesToProject( project, new String[] { JavaCore.NATURE_ID }, CoreUtil.newSubMonitor(monitor,1) );
 
         IJavaProject jProject = JavaCore.create( project );
-        jProject.setOutputLocation( project.getFullPath().append( "bin" ), new SubProgressMonitor( monitor, 1 ) );
-        computeClasspath( jProject, new SubProgressMonitor( monitor, 1 ) );
+        jProject.setOutputLocation( project.getFullPath().append( "bin" ), CoreUtil.newSubMonitor(monitor,1) );
+        computeClasspath( jProject, CoreUtil.newSubMonitor(monitor,1) );
 
         return project;
     }

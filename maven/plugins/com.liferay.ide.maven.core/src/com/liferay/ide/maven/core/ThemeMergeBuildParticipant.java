@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.osgi.util.NLS;
@@ -42,7 +41,7 @@ public class ThemeMergeBuildParticipant extends ThemePluginBuildParticipant
     @Override
     public Set<IProject> build( int kind, IProgressMonitor monitor ) throws Exception
     {
-        IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+        IProgressMonitor sub = CoreUtil.newSubMonitor( monitor, 100 );
 
         sub.beginTask( Msgs.mergingTheme, 100 );
 

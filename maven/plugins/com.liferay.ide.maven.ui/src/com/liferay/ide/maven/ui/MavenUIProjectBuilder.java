@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.ui;
 
 import com.liferay.ide.core.adapter.LaunchAdapter;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
 import com.liferay.ide.maven.core.IMavenProject;
 import com.liferay.ide.maven.core.MavenProjectBuilder;
@@ -28,7 +29,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfigurationType;
@@ -67,7 +67,7 @@ public class MavenUIProjectBuilder extends MavenProjectBuilder
     @Override
     public IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException
     {
-        final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+        final IProgressMonitor sub = CoreUtil.newSubMonitor( monitor, 100 );
 
         sub.beginTask( Msgs.buildingLanguages, 100 );
 

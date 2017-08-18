@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.SDKPluginFacetUtil;
 import com.liferay.ide.sdk.core.SDK;
@@ -34,7 +35,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelOperation;
@@ -112,7 +112,7 @@ public class SDKProjectConvertOperation extends AbstractDataModelOperation
 
         monitor.beginTask( Msgs.importingProject, 100 );
 
-        project.open( IResource.FORCE, new SubProgressMonitor( monitor, 70 ) );
+        project.open( IResource.FORCE, CoreUtil.newSubMonitor( monitor, 70 ) );
 
         IFacetedProject fProject = ProjectFacetsManager.create( project, true, monitor );
 

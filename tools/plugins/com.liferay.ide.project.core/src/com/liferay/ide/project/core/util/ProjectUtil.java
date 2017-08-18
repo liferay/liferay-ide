@@ -69,7 +69,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IAccessRule;
 import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -387,9 +386,9 @@ public class ProjectUtil
 
         monitor.beginTask( Msgs.importingProject, 100 );
 
-        project.create( record.description, new SubProgressMonitor( monitor, 30 ) );
+        project.create( record.description, CoreUtil.newSubMonitor( monitor, 30 ) );
 
-        project.open( IResource.FORCE, new SubProgressMonitor( monitor, 70 ) );
+        project.open( IResource.FORCE, CoreUtil.newSubMonitor( monitor, 70 ) );
 
         // need to check to see if we an ext project with source folders with incorrect parent attributes
         if( project.getName().endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
@@ -736,9 +735,9 @@ public class ProjectUtil
             record.description.setName( projectName );
         }
 
-        project.create( record.description, new SubProgressMonitor( monitor, 30 ) );
+        project.create( record.description, CoreUtil.newSubMonitor( monitor, 30 ) );
 
-        project.open( IResource.FORCE, new SubProgressMonitor( monitor, 70 ) );
+        project.open( IResource.FORCE, CoreUtil.newSubMonitor( monitor, 70 ) );
 
         // need to check to see if we an ext project with source folders with incorrect parent attributes
         if( project.getName().endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
