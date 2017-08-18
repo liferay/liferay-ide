@@ -33,6 +33,7 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 
 /**
  * @author Terry Jia
+ * @author Ying Xu
  */
 public class WizardAction extends UIAction
 {
@@ -115,7 +116,7 @@ public class WizardAction extends UIAction
 
     public void openNewLiferayJsfProjectWizard()
     {
-        ide.getCreateLiferayProjectToolbar().getNewLiferayJSFPortlet().click();
+        ide.getCreateLiferayProjectToolbar().getNewLiferayJSFProject().click();
     }
 
     public void openNewLiferayModuleWizard()

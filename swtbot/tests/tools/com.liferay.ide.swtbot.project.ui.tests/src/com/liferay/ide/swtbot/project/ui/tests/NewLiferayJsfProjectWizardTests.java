@@ -15,14 +15,11 @@
 
 package com.liferay.ide.swtbot.project.ui.tests;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Assume;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
-import com.liferay.ide.swtbot.liferay.ui.action.WizardAction;
-
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author Ying Xu
@@ -30,18 +27,33 @@ import org.junit.Test;
 public class NewLiferayJsfProjectWizardTests extends SwtbotBase
 {
 
-    WizardAction wizardAction = new WizardAction( bot );
+    static String fullClassname = new SecurityManager()
+    {
+
+        public String getClassName()
+        {
+            return getClassContext()[1].getName();
+        }
+    }.getClassName();
+
+    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
+
+    @BeforeClass
+    public static void shouldRunTests()
+    {
+        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
+    }
 
     @Test
     public void createICEFacesProject()
     {
         String projectName = "testICEFacesProject";
 
+        wizardAction.openNewLiferayJsfProjectWizard();
+
         wizardAction.prepareJsfProjectGradle( projectName, ICEFACES );
 
-        wizardAction.finish();
-
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        wizardAction.finishToWait();
 
         viewAction.deleteProject( projectName );
     }
@@ -51,11 +63,11 @@ public class NewLiferayJsfProjectWizardTests extends SwtbotBase
     {
         String projectName = "testJSFStandardProject";
 
+        wizardAction.openNewLiferayJsfProjectWizard();
+
         wizardAction.prepareJsfProjectGradle( projectName, JSF_STANDARD );
 
-        wizardAction.finish();
-
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        wizardAction.finishToWait();
 
         viewAction.deleteProject( projectName );
     }
@@ -65,11 +77,11 @@ public class NewLiferayJsfProjectWizardTests extends SwtbotBase
     {
         String projectName = "testLiferayFacesAlloyProject";
 
+        wizardAction.openNewLiferayJsfProjectWizard();
+
         wizardAction.prepareJsfProjectGradle( projectName, LIFERAY_FACES_ALLOY );
 
-        wizardAction.finish();
-
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        wizardAction.finishToWait();
 
         viewAction.deleteProject( projectName );
     }
@@ -79,11 +91,11 @@ public class NewLiferayJsfProjectWizardTests extends SwtbotBase
     {
         String projectName = "testPrimeFacesProject";
 
+        wizardAction.openNewLiferayJsfProjectWizard();
+
         wizardAction.prepareJsfProjectGradle( projectName, PRIMEFACES );
 
-        wizardAction.finish();
-
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        wizardAction.finishToWait();
 
         viewAction.deleteProject( projectName );
     }
@@ -93,23 +105,13 @@ public class NewLiferayJsfProjectWizardTests extends SwtbotBase
     {
         String projectName = "testRichFacesProject";
 
+        wizardAction.openNewLiferayJsfProjectWizard();
+
         wizardAction.prepareJsfProjectGradle( projectName, RICHFACES );
 
-        wizardAction.finish();
-
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        wizardAction.finishToWait();
 
         viewAction.deleteProject( projectName );
-    }
-
-    @Before
-    public void shouldRunTests()
-    {
-        Assume.assumeTrue( runTest() || runAllTests() );
-
-        hasAddedProject = addedProjects();
-
-        ide.getCreateLiferayProjectToolbar().getNewLiferayJSFProject().click();
     }
 
 }

@@ -38,8 +38,8 @@ public class NewModuleFragmentInfoWizard extends Wizard
 
         browseOsgiBtn = new ToolbarButtonWithTooltip( bot, BROWSE );
         addOverrideFilesBtn = new ToolbarButtonWithTooltip( bot, ADD_FILES_FROM_OSGI_TO_OVERRIDE );
-        files = new Table( bot, LABLE_OVERRIDDEN_FILES );
-        addOverrideFilePathBtn = new ToolbarButtonWithTooltip( bot, BUTTON_ADD_FILE_PATH );
+        files = new Table( bot, OVERRIDDEN_FILES );
+        addOverrideFilePathBtn = new ToolbarButtonWithTooltip( bot, ADD_FILE_PATH );
     }
 
     public ToolbarButtonWithTooltip getAddOverrideFilePathBtn()

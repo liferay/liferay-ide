@@ -15,12 +15,10 @@
 
 package com.liferay.ide.swtbot.project.ui.tests;
 
-import static org.junit.Assert.assertTrue;
-
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 
 import org.junit.Assume;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -29,6 +27,17 @@ import org.junit.Test;
 public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase
 {
 
+    static String fullClassname = new SecurityManager()
+    {
+
+        public String getClassName()
+        {
+            return getClassContext()[1].getName();
+        }
+    }.getClassName();
+
+    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
+
     @Test
     public void createMavenICEFacesProject()
     {
@@ -36,9 +45,7 @@ public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase
 
         wizardAction.openNewLiferayJsfProjectWizard();
         wizardAction.prepareJsfProjectMaven( projectName, ICEFACES );
-        wizardAction.finish();
-
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        wizardAction.finishToWait();
 
         viewAction.deleteProject( projectName );
     }
@@ -50,9 +57,7 @@ public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase
 
         wizardAction.openNewLiferayJsfProjectWizard();
         wizardAction.prepareJsfProjectMaven( projectName, JSF_STANDARD );
-        wizardAction.finish();
-
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        wizardAction.finishToWait();
 
         viewAction.deleteProject( projectName );
     }
@@ -64,9 +69,7 @@ public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase
 
         wizardAction.openNewLiferayJsfProjectWizard();
         wizardAction.prepareJsfProjectMaven( projectName, LIFERAY_FACES_ALLOY );
-        wizardAction.finish();
-
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        wizardAction.finishToWait();
 
         viewAction.deleteProject( projectName );
     }
@@ -78,9 +81,7 @@ public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase
 
         wizardAction.openNewLiferayJsfProjectWizard();
         wizardAction.prepareJsfProjectMaven( projectName, PRIMEFACES );
-        wizardAction.finish();
-
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        wizardAction.finishToWait();
 
         viewAction.deleteProject( projectName );
     }
@@ -92,17 +93,15 @@ public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase
 
         wizardAction.openNewLiferayJsfProjectWizard();
         wizardAction.prepareJsfProjectMaven( projectName, RICHFACES );
-        wizardAction.finish();
-
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        wizardAction.finishToWait();
 
         viewAction.deleteProject( projectName );
     }
 
-    @Before
-    public void shouldRunTests()
+    @BeforeClass
+    public static void shouldRunTests()
     {
-        Assume.assumeTrue( runTest() || runAllTests() );
+        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
     }
 
 }

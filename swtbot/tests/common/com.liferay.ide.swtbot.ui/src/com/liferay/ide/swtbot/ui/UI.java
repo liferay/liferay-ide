@@ -24,17 +24,9 @@ package com.liferay.ide.swtbot.ui;
  */
 public interface UI
 {
-    
-    public final String LABEL_OSGI_BUNDLE = "Host OSGi Bundle:";
-    public final String LABEL_RUNTIME_NAME = "Liferay runtime name:";
-    public final String LABLE_OVERRIDDEN_FILES = "Overridden files:";
-    public final String LABLE_SELECT_OVERRIDE_FILE_PATH = "Select Override File Path:";
 
-    public final String TEXT_INVALID_GRADLE_PROJECT = "The project name is invalid.";
-    public final String TEXT_OSGI_BUNDLE_BLANK = " Host OSGi Bundle must be specified";
-    public final String TEXT_LIFERAY_RUNTIME_MUST_BE_CONFIGURED = " Liferay runtime must be configured.";
-    public final String BUTTON_ADD_FILE_PATH = "Add Override File Path";
-
+    public final String OVERRIDDEN_FILES = "Overridden files:";
+    public final String ADD_FILE_PATH = "Add Override File Path";
 
     public final String ABOUT = "About";
     public final String ABSTRACT = "abstract";
@@ -264,7 +256,8 @@ public interface UI
     public final String POLLER_PROCESSOR = "Poller Processor";
     public final String PORTAL_PROPERTIES = "Portal properties";
     public final String PORTAL_PROPERTIES_FILE = "Portal properties file:";
-    public final String PORTLET = "Portlet";
+    public final String PORTLET = "portlet";
+    public final String PORTLET_UPCASE = "Portlet";
     public final String PORTLET_ACTION_COMMAND = "Portlet Action Command";
     public final String PORTLET_CLASS = "Portlet class:";
     public final String PORTLET_CONFIGURATION_ICON = "portlet-configuration-icon";

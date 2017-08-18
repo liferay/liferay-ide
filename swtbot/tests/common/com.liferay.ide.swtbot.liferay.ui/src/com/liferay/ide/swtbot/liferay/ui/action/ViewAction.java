@@ -67,6 +67,29 @@ public class ViewAction extends UIAction
         }
     }
 
+    public void deleteProject( String... nodes )
+    {
+        getProjects().expandNode( nodes ).doAction( DELETE );
+
+        deleteResourcesDialog.getDeleteFromDisk().select();
+
+        deleteResourcesDialog.confirm();
+
+        try
+        {
+            long origin = SWTBotPreferences.TIMEOUT;
+
+            SWTBotPreferences.TIMEOUT = 1500;
+
+            continueDeleteResourcesDialog.confirm();
+
+            SWTBotPreferences.TIMEOUT = origin;
+        }
+        catch( Exception e )
+        {
+        }
+    }
+
     public void deleteProjects()
     {
         final Tree projects = getProjects();

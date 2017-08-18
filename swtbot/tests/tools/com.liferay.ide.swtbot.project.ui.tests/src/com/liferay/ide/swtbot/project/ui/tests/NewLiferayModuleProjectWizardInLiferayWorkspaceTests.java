@@ -33,6 +33,8 @@ import org.junit.Test;
 public class NewLiferayModuleProjectWizardInLiferayWorkspaceTests extends SwtbotBase
 {
 
+    static String liferayWorkspaceName = "test-liferay-workspace";
+
     static String fullClassname = new SecurityManager()
     {
 
@@ -47,275 +49,315 @@ public class NewLiferayModuleProjectWizardInLiferayWorkspaceTests extends Swtbot
     @AfterClass
     public static void cleanAll()
     {
-        viewAction.deleteProjects();
+        viewAction.deleteProject( liferayWorkspaceName );
     }
 
     @BeforeClass
     public static void createGradleLiferayWorkspace()
     {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-
         wizardAction.openNewLiferayWorkspaceWizard();
 
-        wizardAction.prepareLiferayWorkspaceGradle( "test-liferay-workspace" );
+        wizardAction.prepareLiferayWorkspaceGradle( liferayWorkspaceName );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
     }
 
     @Test
     public void createActivatorModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testActivatorProjectInLS";
+        String projectName = "test-activator-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, ACTIVATOR );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createApiModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testApiProjectInLS";
+        String projectName = "test-api-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, API );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createContentTargetingReportModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testContentTargetingReportProjectInLS";
+        String projectName = "test-content-targeting-report-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, CONTENT_TARGETING_REPORT );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createContentTargetingRuleModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testContentTargetingRuleProjectInLS";
+        String projectName = "test-content-targeting-rule-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, CONTENT_TARGETING_RULE );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createContentTargetingTrackingActionModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testContentTargetingTrackingActionProjectInLS";
+        String projectName = "test-content-targeting-tracking-action-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, CONTENT_TARGETING_TRACKING_ACTION );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createControlMenuEntryModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testControlMenuEntryProjectInLS";
+        String projectName = "test-control-menu-entry-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, CONTROL_MENU_ENTRY );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createFormFieldModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testFormFieldProjectInLS";
+        String projectName = "test-form-field-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, FORM_FIELD );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
-    public void createMvcPortletModuleProject()
+    public void createMvcPortletModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testMvcportletProject";
+        String projectName = "test-mvc-portlet";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, MVC_PORTLET );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createPanelAppModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testPanelAppProjectInLS";
+        String projectName = "test-panel-app-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, PANEL_APP );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createPortletConfigurationIconModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testPortletConfigurationIconProjectInLS";
+        String projectName = "test-portlet-configuration-icon-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, PORTLET_CONFIGURATION_ICON );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createPortletModuleProjectInLiferayWorkspace() throws IOException
     {
-        String projectName = "testPortletProjectInLS";
+        String projectName = "test-portlet-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, PORTLET );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createPortletProviderModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testPortletProviderProjectInLS";
+        String projectName = "test-portlet-provider-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, PORTLET_PROVIDER );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createPortletToolbarContributorModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testPortletToolbarContributorProjectInLS";
+        String projectName = "test-portlet-toolbar-contributor-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, PORTLET_TOOLBAR_CONTRIBUTOR );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createRestModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testRestProjectInLS";
+        String projectName = "test-rest-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, REST );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createServiceBuilderModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testServiceBuilderProjectInLS";
+        String projectName = "test-service-builder-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, SERVICE_BUILDER );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createServiceModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testServiceProjectInLS";
+        String projectName = "test-service-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, SERVICE );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createServiceWrapperModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testServiceWrapperProjectInLS";
+        String projectName = "test-service-wrapper-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, SERVICE_WRAPPER );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createSimulationPanelEntryModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testSimulationPanelEntryProjectInLS";
+        String projectName = "test-simulation-panel-entry-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, SIMULATION_PANEL_ENTRY );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createTemplateContextContributorModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testTemplateContextContributorProjectInLS";
+        String projectName = "test-template-context-contributor-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createThemeContributorModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testThemeContributorProjectInLS";
+        String projectName = "test-theme-contributor-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, THEME_CONTRIBUTOR );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "modules", projectName );
     }
 
     @Test
     public void createThemeModuleProjectInLiferayWorkspace()
     {
-        String projectName = "testThemeProjectInLS";
+        String projectName = "test-theme-in-lws";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleGradle( projectName, THEME );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
+
+        viewAction.deleteProject( liferayWorkspaceName, "wars", projectName );
     }
 
     @Before
-    public void openWizard()
+    public void init()
     {
         Assume.assumeTrue( runTest() || runAllTests() );
     }

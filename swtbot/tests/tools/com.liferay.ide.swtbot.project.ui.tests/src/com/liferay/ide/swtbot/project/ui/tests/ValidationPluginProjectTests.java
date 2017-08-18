@@ -19,6 +19,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Assume;
+import org.junit.BeforeClass;
+
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.LiferayProjectFromExistSourceWizard;
 
@@ -31,6 +34,23 @@ public class ValidationPluginProjectTests extends SwtbotBase
 {
 
     private LiferayProjectFromExistSourceWizard pluginFromSourcewizard = new LiferayProjectFromExistSourceWizard( bot );
+
+    static String fullClassname = new SecurityManager()
+    {
+
+        public String getClassName()
+        {
+            return getClassContext()[1].getName();
+        }
+    }.getClassName();
+
+    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
+
+    @BeforeClass
+    public static void shouldRunTests()
+    {
+        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
+    }
 
     @Test
     public void testDefaults()

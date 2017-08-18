@@ -60,7 +60,7 @@ public class ImportLiferayModuleProjectTests extends SwtbotBase
     {
         ide.closeShell( IMPORT_LIFERAY_MODULE_PROJECT );
 
-        viewAction.deleteProjectsExcludeNames( getLiferayPluginsSdkName() );
+        // viewAction.deleteProjectsExcludeNames( getLiferayPluginsSdkName() );
     }
 
     @Test
