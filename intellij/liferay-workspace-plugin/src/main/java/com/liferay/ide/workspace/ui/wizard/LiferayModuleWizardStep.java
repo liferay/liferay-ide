@@ -1,14 +1,25 @@
+/*******************************************************************************
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
+
 package com.liferay.ide.workspace.ui.wizard;
 
-import com.intellij.ide.projectWizard.NewProjectWizard;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
-import com.intellij.ide.wizard.AbstractWizard;
-import com.intellij.ide.wizard.StepAdapter;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
-import com.intellij.util.ui.UIUtil;
 import com.liferay.blade.cli.InitCommand;
 import com.liferay.ide.workspace.ui.builder.LiferayModuleBuilder;
 import com.liferay.ide.workspace.ui.util.BladeCLI;
@@ -21,10 +32,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeSelectionModel;
-import java.io.IOException;
 
 /**
- * Created by wswdk on 2017/7/23.
+ * @author Terry Jia
  */
 public class LiferayModuleWizardStep extends ModuleWizardStep {
     private JPanel mainPanel;

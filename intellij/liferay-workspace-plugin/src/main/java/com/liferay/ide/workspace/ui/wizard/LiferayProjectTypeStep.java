@@ -1,23 +1,39 @@
+/*******************************************************************************
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
+
 package com.liferay.ide.workspace.ui.wizard;
 
 import com.intellij.framework.addSupport.FrameworkSupportInModuleProvider;
-import com.intellij.ide.projectWizard.*;
+import com.intellij.ide.projectWizard.ProjectCategory;
+import com.intellij.ide.projectWizard.ProjectCategoryUsagesCollector;
+import com.intellij.ide.projectWizard.TemplateBasedCategory;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.ide.util.frameworkSupport.FrameworkRole;
 import com.intellij.ide.util.frameworkSupport.FrameworkSupportUtil;
 import com.intellij.ide.util.newProjectWizard.*;
 import com.intellij.ide.util.newProjectWizard.impl.FrameworkSupportModelBase;
-import com.intellij.ide.util.projectWizard.*;
+import com.intellij.ide.util.projectWizard.ModuleBuilder;
+import com.intellij.ide.util.projectWizard.ModuleWizardStep;
+import com.intellij.ide.util.projectWizard.SettingsStep;
+import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.ide.wizard.CommitStepException;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
@@ -30,7 +46,10 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.platform.ProjectTemplate;
 import com.intellij.platform.ProjectTemplateEP;
 import com.intellij.platform.ProjectTemplatesFactory;
-import com.intellij.platform.templates.*;
+import com.intellij.platform.templates.ArchivedProjectTemplate;
+import com.intellij.platform.templates.BuilderBasedTemplate;
+import com.intellij.platform.templates.LocalArchivedTemplate;
+import com.intellij.platform.templates.TemplateModuleBuilder;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.IdeBorderFactory;
@@ -42,13 +61,11 @@ import com.intellij.ui.popup.list.GroupedItemsListRenderer;
 import com.intellij.util.Function;
 import com.intellij.util.containers.*;
 import com.intellij.util.ui.UIUtil;
-import com.intellij.util.ui.update.UiNotifyConnector;
 import com.liferay.ide.workspace.ui.builder.LiferayModuleBuilder;
 import com.liferay.ide.workspace.ui.builder.LiferayModuleFragmentBuilder;
 import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -58,12 +75,14 @@ import java.net.URL;
 import java.util.*;
 import java.util.List;
 
+/**
+ * @author Terry Jia
+ */
 public class LiferayProjectTypeStep extends ModuleWizardStep implements SettingsStep, Disposable {
-    private static final Logger LOG = Logger.getInstance(LiferayProjectTypeStep.class);
-
     public static final Convertor<FrameworkSupportInModuleProvider, String> PROVIDER_STRING_CONVERTOR =
             o -> o.getId();
     public static final Function<FrameworkSupportNode, String> NODE_STRING_FUNCTION = FrameworkSupportNodeBase::getId;
+    private static final Logger LOG = Logger.getInstance(LiferayProjectTypeStep.class);
     private static final String TEMPLATES_CARD = "templates card";
     private static final String FRAMEWORKS_CARD = "frameworks card";
     private static final String PROJECT_WIZARD_GROUP = "project.wizard.group";
@@ -72,7 +91,6 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
     private final ModulesProvider myModulesProvider;
     private final AddSupportForFrameworksPanel myFrameworksPanel;
     private final ModuleBuilder.ModuleConfigurationUpdater myConfigurationUpdater;
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final Map<ProjectTemplate, ModuleBuilder> myBuilders = FactoryMap.createMap(key -> (ModuleBuilder) key.createModuleBuilder());
     private final Map<String, ModuleWizardStep> myCustomSteps = new THashMap<>();
     private final MultiMap<TemplatesGroup, ProjectTemplate> myTemplatesMap;
@@ -200,9 +218,6 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
                     myWizard.getSequence().addStepsForBuilder(builder, context, modulesProvider);
                 }
             }
-//            for (ProjectTemplate template : myTemplatesMap.get(templatesGroup)) {
-//                myWizard.getSequence().addStepsForBuilder(myBuilders.get(template), context, modulesProvider);
-//            }
         }
 
         final String groupId = PropertiesComponent.getInstance().getValue(PROJECT_WIZARD_GROUP);
@@ -508,52 +523,6 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
         return map;
     }
 
-    void loadRemoteTemplates(final LiferayChooseTemplateStep chooseTemplateStep) {
-        if (!ApplicationManager.getApplication().isUnitTestMode()) {
-            UiNotifyConnector.doWhenFirstShown(myPanel, () -> startLoadingRemoteTemplates(chooseTemplateStep));
-        } else {
-            startLoadingRemoteTemplates(chooseTemplateStep);
-        }
-    }
-
-    private void startLoadingRemoteTemplates(LiferayChooseTemplateStep chooseTemplateStep) {
-        myTemplatesList.setPaintBusy(true);
-        chooseTemplateStep.getTemplateList().setPaintBusy(true);
-        ProgressManager.getInstance().run(new Task.Backgroundable(myContext.getProject(), "Loading Templates") {
-            @Override
-            public void run(@NotNull ProgressIndicator indicator) {
-                RemoteTemplatesFactory factory = new RemoteTemplatesFactory();
-                for (String group : factory.getGroups()) {
-                    ProjectTemplate[] templates = factory.createTemplates(group, myContext);
-                    for (ProjectTemplate template : templates) {
-                        String id = ((ArchivedProjectTemplate) template).getCategory();
-                        for (TemplatesGroup templatesGroup : myTemplatesMap.keySet()) {
-                            if (Comparing.equal(id, templatesGroup.getId()) || Comparing.equal(group, templatesGroup.getName())) {
-                                myTemplatesMap.putValue(templatesGroup, template);
-                            }
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onSuccess() {
-                super.onSuccess();
-                TemplatesGroup group = getSelectedGroup();
-                if (group == null) return;
-                Collection<ProjectTemplate> templates = myTemplatesMap.get(group);
-                setTemplatesList(group, templates, true);
-                chooseTemplateStep.updateStep();
-            }
-
-            @Override
-            public void onFinished() {
-                myTemplatesList.setPaintBusy(false);
-                chooseTemplateStep.getTemplateList().setPaintBusy(false);
-            }
-        });
-    }
-
     private void updateSelection() {
         ProjectTemplate template = getSelectedTemplate();
         if (template != null) {
@@ -569,42 +538,6 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
         }
         myWizard.setDelegate(builder instanceof WizardDelegate ? (WizardDelegate) builder : null);
         myWizard.updateWizardButtons();
-    }
-
-    @TestOnly
-    public String availableTemplateGroupsToString() {
-        ListModel model = myProjectTypeList.getModel();
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < model.getSize(); i++) {
-            if (builder.length() > 0) {
-                builder.append(", ");
-            }
-            builder.append(((TemplatesGroup) model.getElementAt(i)).getName());
-        }
-        return builder.toString();
-    }
-
-    @TestOnly
-    public boolean setSelectedTemplate(@NotNull String group, @Nullable String name) {
-        ListModel model = myProjectTypeList.getModel();
-        for (int i = 0; i < model.getSize(); i++) {
-            TemplatesGroup templatesGroup = (TemplatesGroup) model.getElementAt(i);
-            if (group.equals(templatesGroup.getName())) {
-                myProjectTypeList.setSelectedIndex(i);
-                if (name == null) {
-                    return getSelectedGroup().getName().equals(group);
-                } else {
-                    setTemplatesList(templatesGroup, myTemplatesMap.get(templatesGroup), false);
-                    return myTemplatesList.setSelectedTemplate(name);
-                }
-            }
-        }
-        return false;
-    }
-
-    @TestOnly
-    public AddSupportForFrameworksPanel getFrameworksPanel() {
-        return myFrameworksPanel;
     }
 
     @Override
@@ -628,7 +561,6 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 
     @Override
     public void addExpertField(@NotNull String label, @NotNull JComponent field) {
-
     }
 
     @Override
@@ -643,4 +575,5 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
         }
         return myContext.isCreatingNewProject() ? "Project_Category_and_Options" : "Module_Category_and_Options";
     }
+
 }

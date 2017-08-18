@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
+
 package com.liferay.ide.workspace.ui.wizard;
 
 import com.intellij.ide.util.PropertiesComponent;
@@ -24,6 +39,9 @@ import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @author Terry Jia
+ */
 public class LiferayProjectTemplateList extends JPanel {
 
     private static final String PROJECT_WIZARD_TEMPLATE = "project.wizard.template";
@@ -109,8 +127,7 @@ public class LiferayProjectTemplateList extends JPanel {
         myList.setEnabled(enabled);
         if (!enabled) {
             myList.clearSelection();
-        }
-        else {
+        } else {
             myList.setSelectedIndex(0);
         }
         myDescriptionPane.setEnabled(enabled);
@@ -120,7 +137,7 @@ public class LiferayProjectTemplateList extends JPanel {
         final String templateName = PropertiesComponent.getInstance().getValue(PROJECT_WIZARD_TEMPLATE);
         if (templateName != null && myList.getModel() instanceof CollectionListModel) {
             @SuppressWarnings("unchecked")
-            List<ProjectTemplate> list = ((CollectionListModel<ProjectTemplate>)myList.getModel()).toList();
+            List<ProjectTemplate> list = ((CollectionListModel<ProjectTemplate>) myList.getModel()).toList();
             ProjectTemplate template = ContainerUtil.find(list, template1 -> templateName.equals(template1.getName()));
             if (template != null) {
                 myList.setSelectedValue(template, true);
@@ -137,28 +154,8 @@ public class LiferayProjectTemplateList extends JPanel {
         });
     }
 
-    public JBList getList() {
-        return myList;
-    }
-
     public void addListSelectionListener(ListSelectionListener listener) {
         myList.addListSelectionListener(listener);
     }
 
-    public void setPaintBusy(boolean b) {
-        myList.setPaintBusy(b);
-    }
-
-    @TestOnly
-    public boolean setSelectedTemplate(String name) {
-        ListModel model1 = myList.getModel();
-        for (int j = 0; j < model1.getSize(); j++) {
-            if (name.equals(((ProjectTemplate)model1.getElementAt(j)).getName())) {
-                myList.setSelectedIndex(j);
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

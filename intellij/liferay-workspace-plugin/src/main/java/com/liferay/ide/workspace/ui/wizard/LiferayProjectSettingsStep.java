@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
+
 package com.liferay.ide.workspace.ui.wizard;
 
 import com.intellij.ide.util.newProjectWizard.SelectTemplateSettings;
@@ -12,12 +27,14 @@ import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.JBUI;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class LiferayProjectSettingsStep  extends ModuleWizardStep implements SettingsStep {
+/**
+ * @author Terry Jia
+ */
+public class LiferayProjectSettingsStep extends ModuleWizardStep implements SettingsStep {
     private JPanel mySettingsPanel;
 
     private JPanel myExpertPlaceholder;
@@ -35,7 +52,6 @@ public class LiferayProjectSettingsStep  extends ModuleWizardStep implements Set
     private ModuleWizardStep mySettingsStep;
 
     public LiferayProjectSettingsStep(WizardContext context) {
-
         myWizardContext = context;
 
         myFormatPanel = new ProjectFormatPanel();
@@ -45,8 +61,7 @@ public class LiferayProjectSettingsStep  extends ModuleWizardStep implements Set
         if (context.isCreatingNewProject()) {
             mySettingsPanel.add(myNamePathComponent, BorderLayout.NORTH);
             addExpertPanel(modulePanel);
-        }
-        else {
+        } else {
             mySettingsPanel.add(modulePanel, BorderLayout.NORTH);
         }
         myModuleNameLocationComponent.bindModuleSettings(myNamePathComponent);
@@ -78,7 +93,7 @@ public class LiferayProjectSettingsStep  extends ModuleWizardStep implements Set
     }
 
     private void setupPanels() {
-        ModuleBuilder moduleBuilder = (ModuleBuilder)myWizardContext.getProjectBuilder();
+        ModuleBuilder moduleBuilder = (ModuleBuilder) myWizardContext.getProjectBuilder();
         restorePanel(myNamePathComponent, 4);
         restorePanel(getModulePanel(), myWizardContext.isCreatingNewProject() ? 8 : 6);
         restorePanel(myExpertPanel, myWizardContext.isCreatingNewProject() ? 1 : 0);
@@ -201,12 +216,6 @@ public class LiferayProjectSettingsStep  extends ModuleWizardStep implements Set
         return getNameComponent();
     }
 
-    @TestOnly
-    @Nullable
-    public ModuleWizardStep getSettingsStep() {
-        return mySettingsStep;
-    }
-
     @Override
     public Icon getIcon() {
         return null;
@@ -216,11 +225,4 @@ public class LiferayProjectSettingsStep  extends ModuleWizardStep implements Set
         myModuleNameLocationComponent = new LiferayModuleNameLocationComponent(myWizardContext);
     }
 
-    public void setModuleName(String moduleName) {
-        myModuleNameLocationComponent.setModuleName(moduleName);
-    }
-
-    public void bindModuleSettings() {
-        myModuleNameLocationComponent.bindModuleSettings(myNamePathComponent);
-    }
 }

@@ -53,7 +53,6 @@ public class NewLiferayModuleWizard extends AbstractProjectWizard {
         Disposer.register(getDisposable(), projectTypeStep);
 
         mySequence.addCommonStep(projectTypeStep);
-        mySequence.addCommonStep(new LiferayChooseTemplateStep(myWizardContext, projectTypeStep));
 
         mySequence.addCommonFinishingStep(new LiferayProjectSettingsStep(myWizardContext), null);
 
