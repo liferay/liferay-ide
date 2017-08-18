@@ -18,6 +18,7 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.gradle.core.parser.GradleDependency;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
+import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.io.File;
@@ -38,7 +39,7 @@ import org.eclipse.core.runtime.Status;
 /**
  * @author Terry Jia
  */
-public class GradleProjectBuilder extends AbstractProjectBuilder
+public class GradleProjectBuilder extends AbstractProjectBuilder implements IWorkspaceProjectBuilder
 {
 
     private IFile gradleBuildFile;

@@ -18,6 +18,7 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.project.core.IProjectBuilder;
+import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 
@@ -56,7 +57,7 @@ public class LiferayWorkspaceProject extends BaseLiferayProject
             }
         }
 
-        if( IProjectBuilder.class.equals( adapterType ) )
+        if( IProjectBuilder.class.equals( adapterType ) || IWorkspaceProjectBuilder.class.equals( adapterType ) )
         {
             final IProjectBuilder projectBuilder = new GradleProjectBuilder( getProject() );
 
