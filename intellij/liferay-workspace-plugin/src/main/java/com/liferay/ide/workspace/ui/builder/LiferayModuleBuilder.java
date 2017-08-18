@@ -15,13 +15,15 @@
 
 package com.liferay.ide.workspace.ui.builder;
 
-import com.intellij.ide.util.projectWizard.*;
+import com.intellij.ide.util.projectWizard.ModuleBuilder;
+import com.intellij.ide.util.projectWizard.ModuleWizardStep;
+import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.module.JavaModuleType;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.StdModuleTypes;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -29,6 +31,7 @@ import com.liferay.ide.workspace.ui.UI;
 import com.liferay.ide.workspace.ui.util.BladeCLI;
 import com.liferay.ide.workspace.ui.wizard.LiferayModuleWizardStep;
 
+import javax.swing.*;
 import java.io.File;
 
 /**
@@ -106,6 +109,11 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 
     public ModuleWizardStep getCustomOptionsStep(WizardContext context, Disposable parentDisposable) {
         return new LiferayModuleWizardStep(this);
+    }
+
+    @Override
+    public Icon getNodeIcon() {
+        return IconLoader.getIcon("/icons/liferay.png");
     }
 
 }

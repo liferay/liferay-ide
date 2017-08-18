@@ -2,6 +2,9 @@ buildscript {
     repositories {
         mavenCentral()
         maven {
+            url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+        }
+        maven {
             url "https://oss.sonatype.org/content/repositories/snapshots/"
         }
         maven {

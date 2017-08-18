@@ -1,0 +1,7 @@
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.apache.ant:ant:1.10.1'
+}

@@ -15,8 +15,6 @@
 
 package com.liferay.ide.workspace.ui.util;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -104,11 +102,7 @@ public class ServerUtil {
             moduleOsgiBundle = new File(new File(new File(runtime, "osgi"), dir), hostOsgiBundle);
 
             if (moduleOsgiBundle.exists()) {
-                try {
-                    FileUtils.copyFile(moduleOsgiBundle, new File(temp, hostOsgiBundle));
-                } catch (IOException e) {
-
-                }
+                FileUtil.copyFile(moduleOsgiBundle, new File(temp, hostOsgiBundle));
 
                 return moduleOsgiBundle;
             }

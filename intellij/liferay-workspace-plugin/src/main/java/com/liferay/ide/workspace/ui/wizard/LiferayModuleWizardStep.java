@@ -20,7 +20,6 @@ import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
-import com.liferay.blade.cli.InitCommand;
 import com.liferay.ide.workspace.ui.builder.LiferayModuleBuilder;
 import com.liferay.ide.workspace.ui.util.BladeCLI;
 import org.jetbrains.annotations.Nullable;
@@ -65,7 +64,6 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 
             }
         });
-        String s = InitCommand.DESCRIPTION;
 
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
 

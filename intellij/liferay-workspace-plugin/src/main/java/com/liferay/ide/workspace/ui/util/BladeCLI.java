@@ -20,6 +20,8 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Java;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -36,7 +38,19 @@ public class BladeCLI {
         javaTask.setProject(project);
         javaTask.setFork(true);
         javaTask.setFailonerror(true);
-        javaTask.setJar(new File("/Users/terry/work/github/liferay/liferay-ide/intellij/liferay-workspace-plugin/src/main/resources/libs/com.liferay.blade.cli.jar"));
+
+        File temp = new File(System.getProperties().getProperty("user.home"), ".liferay-ide");
+
+        File bladeJar = new File(temp, "com.liferay.blade.cli.jar");
+
+        if (!bladeJar.exists()) {
+            try (InputStream in = BladeCLI.class.getClassLoader().getResourceAsStream("/libs/com.liferay.blade.cli.jar")) {
+                FileUtil.writeFile(bladeJar, in);
+            } catch (IOException e) {
+            }
+        }
+
+        javaTask.setJar(bladeJar);
         javaTask.setArgs(args);
 
         final DefaultLogger logger = new DefaultLogger();
