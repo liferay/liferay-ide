@@ -15,16 +15,16 @@
 
 package com.liferay.ide.swtbot.project.ui.tests;
 
-import static org.junit.Assert.assertTrue;
-
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 
 import org.junit.Assume;
-import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Sunny Shi
+ * @author Ying Xu
  */
 public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 {
@@ -40,24 +40,24 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
     static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
 
-    @Before
-    public void openWizard()
+    @BeforeClass
+    public static void shouldRunTests()
     {
-        Assume.assumeTrue( runTest() || runAllTests() );
+        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
     }
 
     @Test
     public void createMvcPortlet()
     {
-        final String projectName = "test-mvn-portlet";
+        final String projectName = "test-mvc-portlet";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleMaven( projectName, MVC_PORTLET );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -69,15 +69,17 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, SERVICE );
 
+        wizardAction.next();
+
         wizardAction.openSelectServiceDialog();
 
         dialogAction.prepareText( "*lifecycleAction" );
 
         dialogAction.confirm();
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -89,9 +91,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, SERVICE_BUILDER );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -103,9 +105,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, ACTIVATOR );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -117,9 +119,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, API );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -131,9 +133,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, CONTENT_TARGETING_REPORT );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -145,9 +147,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, CONTENT_TARGETING_RULE );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -159,9 +161,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, CONTENT_TARGETING_TRACKING_ACTION );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -173,9 +175,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, CONTROL_MENU_ENTRY );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -187,9 +189,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, FORM_FIELD );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -201,9 +203,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, PANEL_APP );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -215,9 +217,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, PORTLET );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -229,9 +231,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, PORTLET_CONFIGURATION_ICON );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -243,9 +245,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, PORTLET_PROVIDER );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -257,9 +259,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, PORTLET_TOOLBAR_CONTRIBUTOR );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -271,19 +273,21 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, REST );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
     public void createServiceWrapper()
     {
-        final String projectName = "testServiceWrapperProject";
+        final String projectName = "test-service-wrapper";
 
         wizardAction.openNewLiferayModuleWizard();
 
         wizardAction.prepareLiferayModuleMaven( projectName, SERVICE_WRAPPER );
+
+        wizardAction.next();
 
         wizardAction.openSelectServiceDialog();
 
@@ -291,9 +295,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         dialogAction.confirm();
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -305,9 +309,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, SIMULATION_PANEL_ENTRY );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -319,11 +323,12 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
+    @Ignore
     @Test
     public void createTheme()
     {
@@ -333,9 +338,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, THEME );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
     @Test
@@ -347,9 +352,9 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 
         wizardAction.prepareLiferayModuleMaven( projectName, THEME_CONTRIBUTOR );
 
-        wizardAction.finish();
+        wizardAction.finishToWait();
 
-        assertTrue( viewAction.getProject( projectName ).isVisible() );
+        viewAction.deleteProject( projectName );
     }
 
 }
