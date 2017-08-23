@@ -142,6 +142,7 @@
     <postInstallationActionList>
         <createDirectory>
             <path>${user_home_directory}${platform_path_separator}.liferay</path>
+            <progressText>Creating directory...</progressText>
         </createDirectory>
         <if>
             <actionList>
@@ -221,6 +222,7 @@
         <unzip>
             <destinationDirectory>${installdir}</destinationDirectory>
             <zipFile>${studioZipPath}</zipFile>
+            <progressText>Unpacking files</progressText>
         </unzip>
         <setInstallerVariable>
             <name>liferayBundlesPath</name>
@@ -228,6 +230,7 @@
         </setInstallerVariable>
         <createDirectory>
             <path>${liferayBundlesPath}</path>
+            <progressText>Creating directory...</progressText>
         </createDirectory>
         <copyFile>
             <destination>${liferayBundlesPath}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp4-20170705142422877.zip</destination>
