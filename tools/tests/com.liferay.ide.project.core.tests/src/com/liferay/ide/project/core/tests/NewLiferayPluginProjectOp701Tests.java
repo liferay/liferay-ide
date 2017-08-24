@@ -15,21 +15,15 @@
 
 package com.liferay.ide.project.core.tests;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
-import com.liferay.ide.project.core.model.PluginType;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.sapphire.modeling.Status;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -41,19 +35,24 @@ import org.junit.Test;
 public class NewLiferayPluginProjectOp701Tests extends NewLiferayPluginProjectOpBase
 {
 
+    @Override
     protected IPath getLiferayPluginsSdkDir()
     {
-        return ProjectCore.getDefault().getStateLocation().append( "com.liferay.portal.plugins.sdk-7.0" );
+        return ProjectCore.getDefault().getStateLocation().append(
+            "com.liferay.portal.plugins.sdk-1.0.11-withdependencies" );
     }
 
+    @Override
     protected IPath getLiferayPluginsSDKZip()
     {
-        return getLiferayBundlesPath().append( "com.liferay.portal.plugins.sdk-7.0-ga3-20160804222206210.zip" );
+        return getLiferayBundlesPath().append(
+            "com.liferay.portal.plugins.sdk-1.0.11-withdependencies-20170613175008905.zip" );
     }
 
+    @Override
     protected String getLiferayPluginsSdkZipFolder()
     {
-        return "com.liferay.portal.plugins.sdk-7.0/";
+        return "com.liferay.portal.plugins.sdk-1.0.11-withdependencies/";
     }
 
     @AfterClass
@@ -175,45 +174,6 @@ public class NewLiferayPluginProjectOp701Tests extends NewLiferayPluginProjectOp
     @Ignore
     public void testNewWebAntProjectValidation() throws Exception
     {
-    }
-
-    @Test
-    public void testNewExtAntProjectNotSupported() throws Exception
-    {
-        if( shouldSkipBundleTests() )
-            return;
-
-        final String projectName = "test-ext-project-sdk";
-        final NewLiferayPluginProjectOp op = newProjectOp( projectName );
-
-        op.setPluginType( PluginType.ext );
-
-        Status validation = op.validation();
-        assertEquals(
-            validation.message(),
-            "The selected Plugins SDK does not support creating ext type plugins. Please try to confirm whether sdk has ext folder." );
-    }
-
-    @Test
-    public void testNewExtAntProjectNotSupportedWithWorkspaceSDK() throws Exception
-    {
-        if( shouldSkipBundleTests() )
-            return;
-
-        SDK sdk = SDKUtil.createSDKFromLocation( getLiferayPluginsSdkDir() );
-
-        assertEquals( true, sdk.isValid() );
-        SDKUtil.openAsProject( sdk );
-
-        final String projectName = "test-ext-project-sdk";
-        final NewLiferayPluginProjectOp op = newProjectOp( projectName );
-
-        op.setPluginType( PluginType.ext );
-
-        Status validation = op.validation();
-        assertEquals(
-            validation.message(),
-            "The selected Plugins SDK does not support creating ext type plugins. Please try to confirm whether sdk has ext folder." );
     }
 
     @BeforeClass

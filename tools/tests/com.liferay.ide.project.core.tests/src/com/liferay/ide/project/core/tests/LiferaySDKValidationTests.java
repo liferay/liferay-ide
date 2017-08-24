@@ -35,14 +35,16 @@ import org.junit.Test;
  */
 public class LiferaySDKValidationTests extends ProjectCoreBase
 {
+
     @AfterClass
     public static void removePluginsSDK() throws Exception
     {
         deleteAllWorkspaceProjects();
 
-        IPath sdkPath = ProjectCore.getDefault().getStateLocation().append( "com.liferay.portal.plugins.sdk-7.0" );
+        IPath sdkPath = ProjectCore.getDefault().getStateLocation().append(
+            "com.liferay.portal.plugins.sdk-1.0.11-withdependencies" );
 
-        if ( sdkPath != null && sdkPath.toFile() != null )
+        if( sdkPath != null && sdkPath.toFile() != null )
         {
             sdkPath.toFile().delete();
         }
@@ -51,7 +53,8 @@ public class LiferaySDKValidationTests extends ProjectCoreBase
     @Test
     public void testSDKLocationValidation() throws Exception
     {
-        if( shouldSkipBundleTests() )return;
+        if( shouldSkipBundleTests() )
+            return;
 
         NewLiferayPluginProjectOp op = newProjectOp( "test-sdk" );
 
@@ -84,26 +87,28 @@ public class LiferaySDKValidationTests extends ProjectCoreBase
         // sdk has no build.USERNAME.properties file
         sdkLocation.append( "build." + System.getProperty( "user.name" ) + ".properties" ).toFile().delete();
         IStatus validateStatus = sdk.validate( true );
-        assertEquals(false, validateStatus.isOK());
+        assertEquals( false, validateStatus.isOK() );
 
     }
 
     @Override
     protected IPath getLiferayPluginsSdkDir()
     {
-        return ProjectCore.getDefault().getStateLocation().append( "com.liferay.portal.plugins.sdk-7.0" );
+        return ProjectCore.getDefault().getStateLocation().append(
+            "com.liferay.portal.plugins.sdk-1.0.11-withdependencies" );
     }
 
     @Override
     protected IPath getLiferayPluginsSDKZip()
     {
-        return getLiferayBundlesPath().append( "com.liferay.portal.plugins.sdk-7.0-ga3-20160804222206210.zip" );
+        return getLiferayBundlesPath().append(
+            "com.liferay.portal.plugins.sdk-1.0.11-withdependencies-20170613175008905.zip" );
     }
 
     @Override
     protected String getLiferayPluginsSdkZipFolder()
     {
-        return "com.liferay.portal.plugins.sdk-7.0/";
+        return "com.liferay.portal.plugins.sdk-1.0.11-withdependencies/";
     }
 
 }

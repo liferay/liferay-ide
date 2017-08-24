@@ -41,19 +41,24 @@ import org.junit.Test;
 public class NewLiferayPluginProjectOp7sp3Tests extends NewLiferayPluginProjectOpBase
 {
 
+    @Override
     protected IPath getLiferayPluginsSdkDir()
     {
-        return ProjectCore.getDefault().getStateLocation().append( "com.liferay.portal.plugins.sdk-1.0.9-withdependencies" );
+        return ProjectCore.getDefault().getStateLocation().append(
+            "com.liferay.portal.plugins.sdk-1.0.11-withdependencies" );
     }
 
+    @Override
     protected IPath getLiferayPluginsSDKZip()
     {
-        return getLiferayBundlesPath().append( "com.liferay.portal.plugins.sdk-1.0.9-withdependencies.zip" );
+        return getLiferayBundlesPath().append(
+            "com.liferay.portal.plugins.sdk-1.0.11-withdependencies-20170613175008905.zip" );
     }
 
+    @Override
     protected String getLiferayPluginsSdkZipFolder()
     {
-        return "com.liferay.portal.plugins.sdk-1.0.9-withdependencies/";
+        return "com.liferay.portal.plugins.sdk-1.0.11-withdependencies/";
     }
 
     @AfterClass
@@ -140,7 +145,8 @@ public class NewLiferayPluginProjectOp7sp3Tests extends NewLiferayPluginProjectO
     @Test
     public void testNewThemeProjects() throws Exception
     {
-        if( shouldSkipBundleTests() ) return;
+        if( shouldSkipBundleTests() )
+            return;
 
         super.testNewThemeProjects();
     }
@@ -182,7 +188,7 @@ public class NewLiferayPluginProjectOp7sp3Tests extends NewLiferayPluginProjectO
     {
         if( shouldSkipBundleTests() )
             return;
-       
+
         final String projectName = "test-ext-project-sdk";
         final NewLiferayPluginProjectOp op = newProjectOp( projectName );
 
@@ -190,13 +196,12 @@ public class NewLiferayPluginProjectOp7sp3Tests extends NewLiferayPluginProjectO
         op.setSdkLocation( PathBridge.create( getLiferayPluginsSdkDir() ) );
         Status validation = op.validation();
         assertEquals( true, validation.ok() );
-        
+
         final IProject extProject = createAntProject( op );
 
         assertNotNull( extProject );
     }
-        
-    
+
     @BeforeClass
     public static void removeAllProjects() throws Exception
     {
@@ -209,5 +214,5 @@ public class NewLiferayPluginProjectOp7sp3Tests extends NewLiferayPluginProjectO
             assertFalse( project.exists() );
         }
     }
-   
+
 }

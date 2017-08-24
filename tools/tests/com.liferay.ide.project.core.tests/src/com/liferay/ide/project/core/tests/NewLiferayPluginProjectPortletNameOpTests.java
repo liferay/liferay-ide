@@ -38,22 +38,25 @@ import org.junit.Test;
  */
 public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
 {
+
     @Override
     protected IPath getLiferayPluginsSdkDir()
     {
-        return ProjectCore.getDefault().getStateLocation().append( "com.liferay.portal.plugins.sdk-7.0" );
+        return ProjectCore.getDefault().getStateLocation().append(
+            "com.liferay.portal.plugins.sdk-1.0.11-withdependencies" );
     }
 
     @Override
     protected IPath getLiferayPluginsSDKZip()
     {
-        return getLiferayBundlesPath().append( "com.liferay.portal.plugins.sdk-7.0-ga3-20160804222206210.zip" );
+        return getLiferayBundlesPath().append(
+            "com.liferay.portal.plugins.sdk-1.0.11-withdependencies-20170613175008905.zip" );
     }
 
     @Override
     protected String getLiferayPluginsSdkZipFolder()
     {
-        return "com.liferay.portal.plugins.sdk-7.0/";
+        return "com.liferay.portal.plugins.sdk-1.0.11-withdependencies/";
     }
 
     @AfterClass
@@ -63,7 +66,7 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
 
         for( IProject project : projects )
         {
-            if ( project != null && project.isAccessible() && project.exists())
+            if( project != null && project.isAccessible() && project.exists() )
             {
                 project.delete( true, true, new NullProgressMonitor() );
             }
@@ -71,7 +74,7 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
     }
 
     protected IProject createNewJSFPortletProjectCustomPortletName(
-        final String  jsfSuite, String suffix, String customPortletName ) throws Exception
+        final String jsfSuite, String suffix, String customPortletName ) throws Exception
     {
         final String projectName = "test-" + jsfSuite + suffix + "-sdk-project";
         final NewLiferayPluginProjectOp op = newProjectOp( projectName );
@@ -110,16 +113,16 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
     @Test
     public void testNewJSFPortletProjectPortletName() throws Exception
     {
-        if( shouldSkipBundleTests() ) return;
+        if( shouldSkipBundleTests() )
+            return;
 
         final String jsfSuite = "jsf-2.x";
         final String suffix = "";
         final String customPortletName = "test111";
 
-        IProject jsfProject = createNewJSFPortletProjectCustomPortletName(jsfSuite,suffix,customPortletName);
+        IProject jsfProject = createNewJSFPortletProjectCustomPortletName( jsfSuite, suffix, customPortletName );
 
-        final IFolder defaultDocroot =
-            LiferayCore.create( IWebProject.class, jsfProject ).getDefaultDocrootFolder();
+        final IFolder defaultDocroot = LiferayCore.create( IWebProject.class, jsfProject ).getDefaultDocrootFolder();
 
         final IFile portletXml = defaultDocroot.getFile( "WEB-INF/portlet.xml" );
 
@@ -149,11 +152,12 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
     @Test
     public void testNewMVCPortletProjectCustomPortletName() throws Exception
     {
-        if( shouldSkipBundleTests() ) return;
+        if( shouldSkipBundleTests() )
+            return;
 
         final String customPortletName = "test111";
 
-        IProject jsfProject = createNewMVCPortletProjectCustomPortletName(customPortletName);
+        IProject jsfProject = createNewMVCPortletProjectCustomPortletName( customPortletName );
 
         final IFolder docroot = LiferayCore.create( IWebProject.class, jsfProject ).getDefaultDocrootFolder();
 
