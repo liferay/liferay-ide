@@ -53,7 +53,7 @@ public class NewLiferayComponentWizard extends Wizard
         projectNames = new ComboBox( bot, PROJECT_NAME );
         componentClassTemplates = new ComboBox( bot, COMPONENT_CLASS_TEMPLATE );
         browseBtn = new ToolbarButtonWithTooltip( bot, BROWSE, 1 );
-        packageBrowseBtn = new ToolbarButtonWithTooltip( bot, BROWSE, 0 );
+        packageBrowseBtn = new ToolbarButtonWithTooltip( bot, BROWSE );
     }
 
     public ToolbarButtonWithTooltip getBrowseBtn()

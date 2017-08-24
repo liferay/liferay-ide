@@ -15,8 +15,6 @@
 
 package com.liferay.ide.swtbot.project.ui.tests;
 
-import org.junit.Assume;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
@@ -26,23 +24,6 @@ import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
  */
 public class NewLiferayJsfProjectWizardTests extends SwtbotBase
 {
-
-    static String fullClassname = new SecurityManager()
-    {
-
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
-
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
-
-    @BeforeClass
-    public static void shouldRunTests()
-    {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-    }
 
     @Test
     public void createICEFacesProject()

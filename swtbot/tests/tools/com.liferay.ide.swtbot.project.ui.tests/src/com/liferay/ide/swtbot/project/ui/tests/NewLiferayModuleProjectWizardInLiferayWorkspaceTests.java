@@ -20,8 +20,6 @@ import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 import java.io.IOException;
 
 import org.junit.AfterClass;
-import org.junit.Assume;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -34,17 +32,6 @@ public class NewLiferayModuleProjectWizardInLiferayWorkspaceTests extends Swtbot
 {
 
     static String liferayWorkspaceName = "test-liferay-workspace";
-
-    static String fullClassname = new SecurityManager()
-    {
-
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
-
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
 
     @AfterClass
     public static void cleanAll()
@@ -354,12 +341,6 @@ public class NewLiferayModuleProjectWizardInLiferayWorkspaceTests extends Swtbot
         wizardAction.finishToWait();
 
         viewAction.deleteProject( liferayWorkspaceName, "wars", projectName );
-    }
-
-    @Before
-    public void init()
-    {
-        Assume.assumeTrue( runTest() || runAllTests() );
     }
 
 }

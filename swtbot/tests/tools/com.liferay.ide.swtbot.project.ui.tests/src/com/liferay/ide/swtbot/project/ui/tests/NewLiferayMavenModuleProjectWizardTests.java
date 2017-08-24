@@ -17,8 +17,6 @@ package com.liferay.ide.swtbot.project.ui.tests;
 
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 
-import org.junit.Assume;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -28,23 +26,6 @@ import org.junit.Test;
  */
 public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
 {
-
-    static String fullClassname = new SecurityManager()
-    {
-
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
-
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
-
-    @BeforeClass
-    public static void shouldRunTests()
-    {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-    }
 
     @Test
     public void createMvcPortlet()

@@ -317,6 +317,7 @@ public interface UI
     public final String SERVICE_NAME = "Service Name:";
     public final String SERVICE_TYPE = "Service Type:";
     public final String SERVICE_WRAPPER = "service-wrapper";
+    public final String SERVICE_WRAPPER_UPCASE = "Service Wrapper";
     public final String SERVICE_XML = "service.xml";
     public final String SERVICES = "Services";
     public final String SHOW_ALL_PAGES = "Show All Pages";

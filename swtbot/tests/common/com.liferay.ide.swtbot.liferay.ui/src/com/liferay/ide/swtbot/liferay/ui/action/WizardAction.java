@@ -17,6 +17,7 @@ package com.liferay.ide.swtbot.liferay.ui.action;
 
 import com.liferay.ide.swtbot.liferay.ui.UIAction;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferay7RuntimeWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferayComponentWizard;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewFragmentWizard;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewLiferayJsfProjectWizard;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewLiferayModuleInfoWizard;
@@ -43,6 +44,7 @@ public class WizardAction extends UIAction
     final NewFragmentWizard newFragmentWizard = new NewFragmentWizard( bot );
     final NewLiferayJsfProjectWizard newJsfProjectWizard = new NewLiferayJsfProjectWizard( bot );
     final NewLiferay7RuntimeWizard newLiferay7RuntimeWizard = new NewLiferay7RuntimeWizard( bot );
+    final NewLiferayComponentWizard newLiferayComponentWizard = new NewLiferayComponentWizard( bot );
     final NewLiferayModuleInfoWizard newModuleInfoWizard = new NewLiferayModuleInfoWizard( bot );
     final NewLiferayModuleWizard newModuleWizard = new NewLiferayModuleWizard( bot );
     final NewServerWizard newServerWizard = new NewServerWizard( bot );
@@ -114,6 +116,11 @@ public class WizardAction extends UIAction
         ide.getCreateLiferayProjectToolbar().getNewLiferayModuleFragment().click();
     }
 
+    public void openNewLiferayComponentClassWizard()
+    {
+        ide.getCreateLiferayProjectToolbar().getNewLiferayComponentClass().click();
+    }
+
     public void openNewLiferayJsfProjectWizard()
     {
         ide.getCreateLiferayProjectToolbar().getNewLiferayJSFProject().click();
@@ -144,9 +151,27 @@ public class WizardAction extends UIAction
         newFragmentWizard.getNewRuntimeBtn().click();
     }
 
+    public void openSelectModelClassAndServiceDialog()
+    {
+        newLiferayComponentWizard.getBrowseBtn().click();
+    }
+
     public void openSelectServiceDialog()
     {
         newModuleInfoWizard.getBrowseBtn().click();
+    }
+
+    public void prepareComponentClass( String projectName )
+    {
+        newLiferayComponentWizard.getProjectNames().setSelection( projectName );
+    }
+
+    public void prepareComponentClass( String projectName, String componentClassTemplate )
+    {
+        newLiferayComponentWizard.getProjectNames().setSelection( projectName );
+        newLiferayComponentWizard.getComponentClassTemplates().setSelection( componentClassTemplate );
+
+        ide.sleep();
     }
 
     public void prepareFragment( String projectName, String buildType )
