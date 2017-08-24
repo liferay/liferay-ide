@@ -397,6 +397,35 @@
                 </compareValues>
             </ruleList>
         </propertiesFileSet>
+        <createDirectory>
+            <path>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy</path>
+            <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${isdxp}</value1>
+                    <value2>dxp</value2>
+                </compareValues>
+                <fileTest>
+                    <condition>exists</condition>
+                    <path>${activationKey}</path>
+                </fileTest>
+            </ruleList>
+        </createDirectory>
+        <copyFile>
+             <destination>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy${platform_path_separator}activation_key.xml</destination>
+             <origin>${activationKey}</origin>
+             <ruleList>
+                 <compareValues>
+                     <logic>equals</logic>
+                     <value1>${isdxp}</value1>
+                     <value2>dxp</value2>
+                 </compareValues>
+                 <fileTest>
+                     <condition>exists</condition>
+                     <path>${activationKey}</path>
+                 </fileTest>
+            </ruleList>
+        </copyFile>
         <runProgram>
             <program>chown</program>
             <programArguments>-R ${env(SUDO_USER)} ${lrws}</programArguments>
@@ -565,6 +594,25 @@
                 </fileTest>
             </ruleList>
         </parameterGroup>
+        <fileParameter>
+            <name>activationKey</name>
+            <title>DXP Activation Key (Optional)</title>
+            <description>activation key file</description>
+            <explanation>Please select the activation key file for Liferay DXP. If you skip this step, you can add the activation key into auto-deploy folder later.</explanation>
+            <value></value>
+            <default></default>
+            <allowEmptyValue>1</allowEmptyValue>
+            <mustBeWritable>0</mustBeWritable>
+            <mustExist>1</mustExist>
+            <width>30</width>
+            <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${isdxp}</value1>
+                    <value2>dxp</value2>
+                </compareValues>
+            </ruleList>
+        </fileParameter>
     </parameterList>
     <showFileUnpackingProgress>0</showFileUnpackingProgress>
 </project>
