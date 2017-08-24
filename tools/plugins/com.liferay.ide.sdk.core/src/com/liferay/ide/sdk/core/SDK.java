@@ -1232,12 +1232,11 @@ public class SDK
                             SDKCorePlugin.getDefault().getLog().log( logStatus );
 
                             status.add( logStatus );
-
-
                         }
 
                         break;
                     }
+
                     default:
                 }
             }

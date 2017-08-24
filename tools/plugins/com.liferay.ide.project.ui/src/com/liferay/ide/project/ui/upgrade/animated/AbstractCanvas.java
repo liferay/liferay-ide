@@ -92,9 +92,33 @@ public abstract class AbstractCanvas extends Canvas
         return rectangle;
     }
 
-    public static Rectangle drawTextNotCenter( GC gc, int cX, int cY, String text, int box )
+    protected Rectangle drawTextNotCenter( GC gc, int cX, int cY, String text, int box )
     {
+        int maxWidth = getSize().x - 60;
+
+        String line1 = null;
+        String line2 = null;
+
+        boolean isMultipleLine = false;
+
         Point extent = gc.stringExtent( text );
+
+        int width = extent.x;
+        int height = extent.y;
+
+        if( extent.x > maxWidth )
+        {
+            line1 = text.substring( 0, text.length() / 2 );
+            line2 = text.substring( text.length() / 2, text.length() );
+
+            Point line1Point = gc.stringExtent( line1 );
+            Point line2Point = gc.stringExtent( line2 );
+
+            width = Math.max( line1Point.x, line2Point.x );
+            height = line1Point.y + line2Point.y;
+
+            isMultipleLine = true;
+        }
 
         int x = (int) ( cX - extent.x / 2 );
 
@@ -103,7 +127,14 @@ public abstract class AbstractCanvas extends Canvas
             x = box;
         }
 
-        Rectangle rectangle = new Rectangle( cX, cY, extent.x, extent.y );
+        int cyFinal = cY;
+
+        if( isMultipleLine )
+        {
+            cyFinal -= extent.y;
+        }
+
+        Rectangle rectangle = new Rectangle( cX, cyFinal, width, height );
 
         if( box > 0 )
         {
@@ -115,10 +146,15 @@ public abstract class AbstractCanvas extends Canvas
             gc.fillRectangle( rectangle );
         }
 
-        // System.out.println( x+" "+y+" "+extent.x+" "+extent.y +" "+rectangle.x+" "+rectangle.y+" "+rectangle.width+"
-        // "+rectangle.height);
-
-        gc.drawText( text, cX, cY, true );
+        if( isMultipleLine )
+        {
+            gc.drawText( line1, cX, cyFinal, true );
+            gc.drawText( line2, cX, cY, true );
+        }
+        else
+        {
+            gc.drawText( text, cX, cY, true );
+        }
 
         return rectangle;
     }
