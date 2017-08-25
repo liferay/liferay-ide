@@ -787,7 +787,7 @@ public class PropertiesUtil
                                     }
                                 }
 
-                                if( supportedLocaleValues.size() > 0 )
+                                if( supportedLocaleValues.size() > 0 && resourceBundlesPatterns.length > 0 )
                                 {
                                     final String resourceBundleValueBase = resourceBundlesPatterns[0];
 
