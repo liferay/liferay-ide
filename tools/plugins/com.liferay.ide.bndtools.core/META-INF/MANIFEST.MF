@@ -7,11 +7,11 @@ Bundle-Activator: com.liferay.ide.bndtools.core.BndtoolsCore
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
- com.liferay.ide.core;bundle-version="3.0.0",
- biz.aQute.bndlib;bundle-version="3.1.0",
- bndtools.core;bundle-version="3.1.1",
+ com.liferay.ide.core,
+ biz.aQute.bndlib,
+ bndtools.core,
  com.liferay.ide.server.core,
- bndtools.api;bundle-version="3.1.1",
+ bndtools.api,
  org.apache.commons.lang
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

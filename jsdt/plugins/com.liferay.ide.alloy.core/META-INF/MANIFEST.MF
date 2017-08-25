@@ -7,17 +7,17 @@ Bundle-Activator: com.liferay.ide.alloy.core.AlloyCore
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
- com.liferay.ide.core;bundle-version="2.0.0",
+ com.liferay.ide.core,
  org.eclipse.debug.core,
  com.liferay.ide.project.core,
- tern.eclipse.ide.core;bundle-version="0.7.0",
+ tern.eclipse.ide.core,
  org.eclipse.core.filebuffers,
  org.eclipse.core.filesystem,
  org.eclipse.jst.jsp.core,
  org.eclipse.wst.jsdt.core,
  org.eclipse.wst.jsdt.web.core,
  org.apache.commons.io,
- tern.core;bundle-version="0.7.0",
+ tern.core,
  org.eclipse.wst.html.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

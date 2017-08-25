@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jst.j2ee.web,
  com.liferay.ide.portlet.core,
  org.eclipse.jdt.core,
- org.apache.commons.lang;bundle-version="2.6.0"
+ org.apache.commons.lang
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.portlet.vaadin.core,

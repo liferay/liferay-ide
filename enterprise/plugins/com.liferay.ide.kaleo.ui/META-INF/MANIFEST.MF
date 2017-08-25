@@ -33,7 +33,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.ui,
  org.eclipse.sapphire.ui.swt.gef,
  org.eclipse.sapphire.java,
- org.json;bundle-version="20131018.0.0",
+ org.json,
  org.eclipse.sapphire.modeling,
  org.eclipse.wst.jsdt.ui,
  com.liferay.ide.project.ui

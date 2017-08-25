@@ -6,7 +6,7 @@ Bundle-Version: 3.1.2.qualifier
 Bundle-Activator: com.liferay.ide.server.ui.LiferayServerUI
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: org.eclipse.ui,
- org.eclipse.wst.server.ui;bundle-version="[1.1.103,2.0.0)";visibility:=reexport,
+ org.eclipse.wst.server.ui;visibility:=reexport,
  org.eclipse.debug.ui,
  org.eclipse.jdt.debug.ui,
  com.liferay.ide.server.core,
@@ -19,9 +19,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.ui,
  org.eclipse.jdt.core,
  org.eclipse.ui.editors,
- org.eclipse.wst.ws.parser;bundle-version="[1.0.402,2)",
- org.eclipse.wst.ws.explorer;bundle-version="[1.0.408,2)",
- org.eclipse.wst.ws;bundle-version="[1.1.103,2)",
+ org.eclipse.wst.ws.parser,
+ org.eclipse.wst.ws.explorer,
+ org.eclipse.wst.ws,
  org.eclipse.wst.common.project.facet.ui,
  org.eclipse.ui.forms;visibility:=reexport,
  org.eclipse.wst.sse.ui,
@@ -37,9 +37,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.mylyn.commons.workbench,
  org.eclipse.mylyn.commons.ui,
  org.eclipse.wst.server.core,
- org.eclipse.tm.terminal.view.ui;bundle-version="4.0.0",
- org.eclipse.tm.terminal.connector.telnet;bundle-version="4.0.0",
- org.eclipse.tm.terminal.view.core;bundle-version="4.0.0"
+ org.eclipse.tm.terminal.view.ui,
+ org.eclipse.tm.terminal.connector.telnet,
+ org.eclipse.tm.terminal.view.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.server.ui,

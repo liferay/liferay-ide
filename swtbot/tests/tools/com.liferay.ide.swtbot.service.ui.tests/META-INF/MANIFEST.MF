@@ -5,7 +5,7 @@ Bundle-SymbolicName: com.liferay.ide.swtbot.service.ui.tests
 Bundle-Version: 3.1.2.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: 
- org.eclipse.swtbot.go;bundle-version="2.3.0",
+ org.eclipse.swtbot.go,
  com.liferay.ide.swtbot.ui,
  com.liferay.ide.swtbot.liferay.ui,
  com.liferay.ide.swtbot.project.ui.tests
