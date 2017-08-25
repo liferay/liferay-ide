@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SWTBot UI Base
 Bundle-SymbolicName: com.liferay.ide.swtbot.ui
-Bundle-Version: 3.1.1.qualifier
+Bundle-Version: 3.1.2.qualifier
 Bundle-Vendor: Liferay
 Require-Bundle: org.junit,
  org.eclipse.debug.ui,

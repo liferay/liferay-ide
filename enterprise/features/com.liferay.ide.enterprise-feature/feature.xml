@@ -2,7 +2,7 @@
 <feature
       id="com.liferay.ide.enterprise"
       label="Liferay IDE Enterprise"
-      version="3.1.1.qualifier"
+      version="3.1.2.qualifier"
       provider-name="Liferay, Inc.">
 
    <copyright url="http://www.liferay.com/products/liferay-portal/lgpl">

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Project Code Upgrade UI Tests
 Bundle-SymbolicName: com.liferay.ide.swtbot.project.code.upgrade.ui.tests
-Bundle-Version: 3.1.1.qualifier
+Bundle-Version: 3.1.2.qualifier
 Bundle-Vendor: Liferay
 Require-Bundle: org.junit,
  org.eclipse.ui.console,

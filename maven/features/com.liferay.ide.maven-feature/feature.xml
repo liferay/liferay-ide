@@ -2,7 +2,7 @@
 <feature
       id="com.liferay.ide.maven"
       label="Liferay IDE Maven Support (includes Eclipse m2e plugins)"
-      version="3.1.1.qualifier"
+      version="3.1.2.qualifier"
       provider-name="Liferay, Inc."
       plugin="com.liferay.ide.maven.ui">
 
