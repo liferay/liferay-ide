@@ -50,7 +50,7 @@ public class FacetedGradleBundleProject extends LiferayGradleProject implements 
     public IFolder getDefaultDocrootFolder()
     {
         IFolder webAppDir = getProject().getFolder( "src/main/webapp" );
-        
+
         if( webAppDir.exists() )
         {
             return webAppDir;
@@ -64,15 +64,19 @@ public class FacetedGradleBundleProject extends LiferayGradleProject implements 
     @Override
     public IFile getDescriptorFile( String name )
     {
-        IFile file = getDefaultDocrootFolder().getFile( "WEB-INF/" + name );
+        IFolder defaultDocrootFolder = getDefaultDocrootFolder();
 
-        if( file.exists() )
+        if( defaultDocrootFolder != null )
         {
-            return file;
+            IFile file = defaultDocrootFolder.getFile( "WEB-INF/" + name );
+
+            if( file.exists() )
+            {
+                return file;
+            }
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
+
 }

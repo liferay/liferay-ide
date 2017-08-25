@@ -11,6 +11,7 @@
 
 package com.liferay.ide.project.ui.tests;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.LiferayCore;
@@ -116,9 +117,15 @@ public class MavenProjectDeploymentTests extends ProjectUITestBase
         project = createMavenProject( op );
 
         File liferayDisplayXML = LiferayCore.create( project ).getDescriptorFile( "liferay-display.xml" ).getRawLocation().toFile();
+
+        assertNotNull( liferayDisplayXML );
+
         FileUtil.searchAndReplace( liferayDisplayXML, "7.4.0", "6.2.0" );
         
         File liferayPortletXML = LiferayCore.create( project ).getDescriptorFile( "liferay-portlet.xml" ).getRawLocation().toFile();
+
+        assertNotNull( liferayPortletXML );
+
         FileUtil.searchAndReplace( liferayPortletXML, "7.4.0", "6.2.0" );
         
         project.refreshLocal( IResource.DEPTH_INFINITE, null );

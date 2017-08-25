@@ -229,6 +229,9 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
 
         final IFile liferayHookXml =
             LiferayCore.create( hookProject ).getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+
+        assertNotNull( liferayHookXml );
+
         removeSpecifiedNode( liferayHookXml, "language-properties", "content/RemoveThisLineTest.properties" );
 
         waitForBuildAndValidation( hookProject );

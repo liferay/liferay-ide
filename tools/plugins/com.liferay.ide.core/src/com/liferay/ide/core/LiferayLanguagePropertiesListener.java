@@ -70,7 +70,7 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
                 {
                     final IFile portletXml = lrproject.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
 
-                    if( file.equals( portletXml ) )
+                    if( portletXml != null && file.equals( portletXml ) )
                     {
                         final IFile[] files = PropertiesUtil.getLanguagePropertiesFromPortletXml( portletXml );
                         validateLanguagePropertiesEncoding( files, CoreUtil.getLiferayProject( file ) );
