@@ -246,7 +246,7 @@ public class LiferayJspValidator extends LiferayBaseValidator
     {
         final String languageKey = DOMUtils.getNodeValue( node );
 
-        if( !languageKey.contains( JSP_TAG_START ) && !languageKey.contains( JSP_TAG_END ) )
+        if( file.exists() && !languageKey.contains( JSP_TAG_START ) && !languageKey.contains( JSP_TAG_END ) )
         {
             final IValidationResult result =
                 referenceTo.getSearcher().searchForValidation( node, languageKey, -1, -1, file, referenceTo );
