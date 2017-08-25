@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IModuleType;
+import org.eclipse.wst.server.core.ServerUtil;
 import org.eclipse.wst.server.core.internal.Server;
 import org.eclipse.wst.server.core.model.ServerDelegate;
 
@@ -224,6 +225,7 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
     {
         setAttribute( Server.PROP_AUTO_PUBLISH_TIME, getAutoPublishTime() );
         setAttribute( ILiferayServerBehavior.AGENT_PORT, Agent.DEFAULT_PORT );
+        ServerUtil.setServerDefaultName(getServerWorkingCopy());
     }
 
     @Override
