@@ -105,11 +105,9 @@ public class BundlePublishFullAdd extends BundlePublishOperation
 
                 monitor.subTask( "Building " + module.getName() + " output bundle..." );
 
-                IPath outputJar = null;
-
                 try
                 {
-                    outputJar = bundleProject.getOutputBundle( cleanBuildNeeded(), monitor );
+                    IPath outputJar = bundleProject.getOutputBundle( cleanBuildNeeded(), monitor );
 
                     if( outputJar != null && outputJar.toFile().exists() )
                     {

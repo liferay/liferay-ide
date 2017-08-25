@@ -101,18 +101,29 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
             }
             else
             {
-                String url = bundleFile.toURI().toURL().toExternalForm();
-                bundleDeployer.updateBundleFromURL( bundleId, url );
+                bundleDeployer.updateBundleFromURL( bundleId, bundleFile.toURI().toURL().toExternalForm() );
             }
 
             if( !isFragment )
             {
-                agent.start( bundleId );
+                String startStatus = agent.start( bundleId );
+
+                if( startStatus != null )
+                {
+                    retval = new BundleDTO();
+
+                    retval.id = bundleId;
+
+                    retval = new BundleDTOWithStatus( retval, startStatus );
+                }
             }
 
-            retval = new BundleDTO();
+            if( retval == null )
+            {
+                retval = new BundleDTO();
 
-            retval.id = bundleId;
+                retval.id = bundleId;
+            }
         }
         else
         {
