@@ -86,6 +86,12 @@ public class ComponentPropertiesCompletionProposalComputer implements IJavaCompl
                 {
                     hasQuot = true;
                     int prefixStartPos = lineRegion.getOffset() + lastQuotPos + 1;
+
+                    if ( ( invocationOffset - prefixStartPos ) < 0 )
+                    {
+                        hasQuot = false;
+                        break;
+                    }
                     source = document.get( prefixStartPos, invocationOffset - prefixStartPos ).trim();
 
                     if( ( quotPos + lineRegion.getOffset() ) > wholeLineEndPos )
