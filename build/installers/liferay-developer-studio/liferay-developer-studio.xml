@@ -1,7 +1,7 @@
 <project>
     <shortName>LiferayDeveloperStudio</shortName>
     <fullName>Liferay Developer Studio</fullName>
-    <version>3.1.1-ga2</version>
+    <version>3.1.2-ga3</version>
     <logoImage>../shared/images/studio_logo.png</logoImage>
     <componentList>
         <component>
