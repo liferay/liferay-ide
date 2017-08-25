@@ -658,11 +658,15 @@ public class PropertiesUtil
             {
                 for( final IFolder srcFolder : srcFolders )
                 {
-                    final IFile[] languagePropertiesFiles = visitPropertiesFiles( srcFolder, languagePropertiesVal );
-
-                    if( languagePropertiesFiles != null && languagePropertiesFiles.length > 0 )
+                    if( srcFolder.exists() )
                     {
-                        retval.addAll( Arrays.asList( languagePropertiesFiles ) );
+                        final IFile[] languagePropertiesFiles =
+                            visitPropertiesFiles( srcFolder, languagePropertiesVal );
+
+                        if( languagePropertiesFiles != null && languagePropertiesFiles.length > 0 )
+                        {
+                            retval.addAll( Arrays.asList( languagePropertiesFiles ) );
+                        }
                     }
                 }
             }
