@@ -138,7 +138,7 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
 
     public String[] getMemoryArgs()
     {
-        String[] retval = null;
+        String[] retval = new String[0];
 
         final String args = getAttribute( PROPERTY_MEMORY_ARGS, PortalServerConstants.DEFAULT_MEMORY_ARGS );
 
