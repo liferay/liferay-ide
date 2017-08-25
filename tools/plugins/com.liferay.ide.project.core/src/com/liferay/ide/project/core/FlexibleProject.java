@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.BaseLiferayProject;
@@ -37,7 +38,6 @@ import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
-
 
 /**
  * @author Gregory Amerson
@@ -81,7 +81,7 @@ public abstract class FlexibleProject extends BaseLiferayProject implements IWeb
     {
         IVirtualFolder retval = null;
 
-        if( project != null )
+        if( project != null && project.isOpen() )
         {
             IVirtualComponent comp = ComponentCore.createComponent( project );
 
