@@ -15,6 +15,7 @@
     <moduleBuilder builderClass="com.liferay.ide.workspace.ui.builder.LiferayWorkspaceBuilder"/>
 
     <configurationType implementation="com.liferay.ide.workspace.ui.bundle.LiferayBundleConfigurationType"/>
-    <programRunner implementation="com.liferay.ide.workspace.ui.bundle.LiferayBundleRunner"/>
+    <programRunner id="Run" implementation="com.liferay.ide.workspace.ui.bundle.LiferayBundleRunner"/>
+    <programRunner id="Debug" implementation="com.liferay.ide.workspace.ui.bundle.LiferayBundleDebugger"/>
   </extensions>
 </idea-plugin>

@@ -13,27 +13,27 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.workspace.ui.bundle;
+package com.liferay.ide.workspace.ui.core;
 
-import com.intellij.execution.configurations.RunProfile;
-import com.intellij.execution.executors.DefaultRunExecutor;
-import com.intellij.execution.runners.DefaultProgramRunner;
-import org.jetbrains.annotations.NotNull;
+import java.nio.file.Path;
+import java.util.Properties;
+
 
 /**
+ * @author Gregory Amerson
  * @author Terry Jia
  */
-public class LiferayBundleRunner extends DefaultProgramRunner {
+public interface ILiferayPortal
+{
 
-    @NotNull
-    @Override
-    public String getRunnerId() {
-        return "LiferayBundleRunner";
-    }
+    Path getAppServerPortalDir();
 
-    @Override
-    public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
-        return DefaultRunExecutor.EXECUTOR_ID.equals(executorId) && profile instanceof LiferayBundleConfiguration;
-    }
+    String[] getHookSupportedProperties();
+
+    Properties getPortletCategories();
+
+    Properties getPortletEntryCategories();
+
+    String getVersion();
 
 }

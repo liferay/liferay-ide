@@ -17,11 +17,13 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.xmlb.SkipDefaultValuesSerializationFilters;
 import com.intellij.util.xmlb.XmlSerializer;
 import com.intellij.util.xmlb.XmlSerializerUtil;
+import com.liferay.ide.workspace.ui.util.LiferayWorkspaceUtil;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -34,7 +36,10 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
 
     public LiferayBundleConfiguration(Project project, ConfigurationFactory factory, String name) {
         super(project, factory, name);
+
         myConfigurationModule = new JavaRunConfigurationModule(project, true);
+        myBean.liferayBundle = Paths.get(project.getBasePath(), LiferayWorkspaceUtil.getHomeDir(project.getBasePath())).toString();
+        myBean.VM_PARAMETERS = "-Xmx1024m";
     }
 
     @NotNull
@@ -58,7 +63,7 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
 
     @Override
     public RunConfiguration clone() {
-        LiferayBundleConfiguration clone = (LiferayBundleConfiguration)super.clone();
+        LiferayBundleConfiguration clone = (LiferayBundleConfiguration) super.clone();
         clone.myEnvs = new LinkedHashMap<>(myEnvs);
         clone.myConfigurationModule = new JavaRunConfigurationModule(getProject(), true);
         clone.myConfigurationModule.setModule(myConfigurationModule.getModule());
@@ -88,11 +93,15 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
     @Override
     public void checkConfiguration() throws RuntimeConfigurationException {
         JavaParametersUtil.checkAlternativeJRE(this);
+
         ProgramParametersUtil.checkWorkingDirectoryExist(this, getProject(), null);
-        File jarFile = new File(getJarPath());
-        if (!jarFile.exists()) {
-            throw new RuntimeConfigurationWarning("JAR file '" + jarFile.getAbsolutePath() + "' doesn't exist");
+
+        File liferayHome = new File(getLiferayBundle());
+
+        if (!liferayHome.exists()) {
+            throw new RuntimeConfigurationWarning("JAR file '" + liferayHome.getAbsolutePath() + "' doesn't exist");
         }
+
         JavaRunConfigurationExtensionManager.checkConfigurationIsValid(this);
     }
 
@@ -112,14 +121,6 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
     @Override
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment environment) throws ExecutionException {
         return new LiferayBundleCommandLineState(this, environment);
-    }
-
-    public String getJarPath() {
-        return myBean.JAR_PATH;
-    }
-
-    public void setJarPath(String jarPath) {
-        myBean.JAR_PATH = jarPath;
     }
 
     @Override
@@ -167,30 +168,36 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
 
     @Override
     public void setProgramParameters(@Nullable String value) {
-        myBean.PROGRAM_PARAMETERS = value;
     }
 
     @Nullable
     @Override
     public String getProgramParameters() {
-        return myBean.PROGRAM_PARAMETERS;
+        return null;
     }
 
     @Override
     public void setWorkingDirectory(@Nullable String value) {
-        myBean.WORKING_DIRECTORY = value;
     }
 
     @Nullable
     @Override
     public String getWorkingDirectory() {
-        return myBean.WORKING_DIRECTORY;
+        return null;
     }
 
     @Override
     public void setEnvs(@NotNull Map<String, String> envs) {
         myEnvs.clear();
         myEnvs.putAll(envs);
+    }
+
+    public String getLiferayBundle() {
+        return myBean.liferayBundle;
+    }
+
+    public void setLiferayBundle(String liferayBundle) {
+        myBean.liferayBundle = liferayBundle;
     }
 
     @NotNull
@@ -210,14 +217,11 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
     }
 
     private static class LiferayBundleConfigurationBean {
-        public String JAR_PATH = "";
+        public String liferayBundle = "";
         public String VM_PARAMETERS = "";
-        public String PROGRAM_PARAMETERS = "";
-        public String WORKING_DIRECTORY = "";
         public boolean ALTERNATIVE_JRE_PATH_ENABLED;
         public String ALTERNATIVE_JRE_PATH = "";
         public boolean PASS_PARENT_ENVS = true;
     }
-
 
 }

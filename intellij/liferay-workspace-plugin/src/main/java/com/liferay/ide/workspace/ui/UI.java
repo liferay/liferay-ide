@@ -27,5 +27,8 @@ public class UI {
     public static final String LIFERAY_FRAGMENT_MODULES = "Liferay Fragment Modules";
     public static final String LIFERAY = "Liferay";
     public static final String LIFERAY_WORKSPACE = "Liferay Workspace";
+    public static final String LIFERAY_BUNDLE = "Liferay Bundle";
+    public static final String RUN_OR_DEBUG_LIFERAY_BUNDLE = "Run or Debug Liferay Bundle";
+
 
 }
