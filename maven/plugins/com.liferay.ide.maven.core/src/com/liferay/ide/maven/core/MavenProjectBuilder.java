@@ -152,7 +152,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 
         sub.beginTask( Msgs.buildingServices, 100 );
 
-        return buildSB( serviceFile, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_SERVICE, sub );
+        return buildSB( serviceFile, MavenGoalUtil.getMavenBuildServiceGoal( getProject() ), sub );
     }
 
     @Override
@@ -164,7 +164,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 
         sub.beginTask( Msgs.buildingServices, 100 );
 
-        return buildSB( serviceFile, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_WSDD, sub );
+        return buildSB( serviceFile, MavenGoalUtil.getMavenBuildWSDDGoal( getProject() ), sub );
     }
 
     public IStatus execGoals( final List<String> goals, final IProgressMonitor monitor ) throws CoreException
@@ -287,26 +287,29 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
     }
 
     public IProject getPortletProject( IMavenProjectFacade projectFacade, IProgressMonitor monitor )
-        throws CoreException
     {
         IProject retVal = null;
         try
         {
-            final Xpp3Dom config = (Xpp3Dom) MavenUtil.getLiferayMavenPluginConfig( projectFacade.getMavenProject() );
-            final Xpp3Dom webAppDir = config.getChild( ILiferayMavenConstants.PLUGIN_CONFIG_WEBAPPBASE_DIR );
-            final Xpp3Dom pluginName = config.getChild( ILiferayMavenConstants.PLUGIN_CONFIG_PLUGIN_NAME );
-            // this should be the name path of a project that should be in user's workspace that we can refresh
+            final Xpp3Dom config = MavenUtil.getLiferayMavenPluginConfig( projectFacade.getMavenProject() );
 
-            if( webAppDir != null )
+            if( config != null )
             {
-                final String webAppDirValue = webAppDir.getValue();
-                String projectPath = Path.fromOSString( webAppDirValue ).lastSegment();
-                retVal = ResourcesPlugin.getWorkspace().getRoot().getProject( projectPath );
-            }
-            else if( pluginName != null )
-            {
-                final String pluginNameValue = pluginName.getValue();
-                retVal = CoreUtil.getProject( pluginNameValue );
+                final Xpp3Dom webAppDir = config.getChild( ILiferayMavenConstants.PLUGIN_CONFIG_WEBAPPBASE_DIR );
+                final Xpp3Dom pluginName = config.getChild( ILiferayMavenConstants.PLUGIN_CONFIG_PLUGIN_NAME );
+                // this should be the name path of a project that should be in user's workspace that we can refresh
+
+                if( webAppDir != null )
+                {
+                    final String webAppDirValue = webAppDir.getValue();
+                    String projectPath = Path.fromOSString( webAppDirValue ).lastSegment();
+                    retVal = ResourcesPlugin.getWorkspace().getRoot().getProject( projectPath );
+                }
+                else if( pluginName != null )
+                {
+                    final String pluginNameValue = pluginName.getValue();
+                    retVal = CoreUtil.getProject( pluginNameValue );
+                }
             }
         }
         catch( Exception e )

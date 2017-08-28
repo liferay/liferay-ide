@@ -15,8 +15,8 @@
 
 package com.liferay.ide.maven.ui.action;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
+import com.liferay.ide.maven.core.MavenGoalUtil;
 import com.liferay.ide.maven.core.MavenProjectBuilder;
 import com.liferay.ide.maven.core.MavenUtil;
 import com.liferay.ide.maven.ui.LiferayMavenUI;
@@ -25,7 +25,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
-import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
@@ -37,20 +36,7 @@ public class BuildServiceGoalAction extends MavenGoalAction
     @Override
     protected String getMavenGoals()
     {
-        if( plugin == null )
-        {
-            return "build-service";
-        }
-
-        if( CoreUtil.compareVersions( new Version( plugin.getVersion() ), new Version( "1.0.145" ) ) >= 0 &&
-            plugin.getArtifactId().equals( getPluginKey() ) )
-        {
-            return "service-builder:build";
-        }
-        else
-        {
-            return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_SERVICE;
-        }
+        return MavenGoalUtil.getMavenBuildServiceGoal( plugin );
     }
 
     @Override

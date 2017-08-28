@@ -15,10 +15,8 @@
 
 package com.liferay.ide.maven.ui.action;
 
-import org.osgi.framework.Version;
-
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
+import com.liferay.ide.maven.core.MavenGoalUtil;
 
 /**
  * @author Gregory Amerson
@@ -30,20 +28,7 @@ public class BuildWSDDGoalAction extends MavenGoalAction
     @Override
     protected String getMavenGoals()
     {
-        if( plugin == null )
-        {
-            return "build-wsdd";
-        }
-
-        if( CoreUtil.compareVersions( new Version( plugin.getVersion() ), new Version( "1.0.7" ) ) >= 0 &&
-            plugin.getArtifactId().equals( getPluginKey() ) )
-        {
-            return "wsdd-builder:build";
-        }
-        else
-        {
-            return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_WSDD;
-        }
+        return MavenGoalUtil.getMavenBuildWSDDGoal( plugin );
     }
 
     @Override
