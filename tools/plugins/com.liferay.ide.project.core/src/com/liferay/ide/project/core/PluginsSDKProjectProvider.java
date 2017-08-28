@@ -230,45 +230,53 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider im
         return retval;
     }
 
-    private static SDK getSDK( NewLiferayPluginProjectOp op ) throws CoreException
+    private static SDK getSDK( NewLiferayPluginProjectOp op )
     {
-        boolean validateSDK = false;
-
-        SDK sdk = SDKUtil.getWorkspaceSDK();
-
-        if( sdk != null )
+        SDK sdk = null;
+        try
         {
-            IStatus sdkStatus = sdk.validate();
+            boolean sdkValid = false;
 
-            if( sdkStatus.isOK() )
+            sdk = SDKUtil.getWorkspaceSDK();
+
+            if( sdk != null )
             {
-                validateSDK = true;
-            }
-        }
+                IStatus sdkStatus = sdk.validate();
 
-        if( validateSDK == false )
-        {
-            Path sdkLocation = op.getSdkLocation().content( true );
-
-            if( sdkLocation != null )
-            {
-                sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkLocation ) );
-
-                if( sdk != null )
+                if( sdkStatus.isOK() )
                 {
-                    IStatus sdkStatus = sdk.validate();
+                    sdkValid = true;
+                }
+            }
 
-                    if( sdkStatus.isOK() )
+            if( sdkValid == false )
+            {
+                Path sdkLocation = op.getSdkLocation().content( true );
+
+                if( sdkLocation != null )
+                {
+                    sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkLocation ) );
+
+                    if( sdk != null )
                     {
-                        validateSDK = true;
+                        IStatus sdkStatus = sdk.validate();
+
+                        if( sdkStatus.isOK() )
+                        {
+                            sdkValid = true;
+                        }
                     }
                 }
             }
-        }
 
-        if( sdk == null || !validateSDK )
+            if ( !sdkValid )
+            {
+                return null;
+            }
+        }
+        catch( CoreException e)
         {
-            throw new CoreException( ProjectCore.createErrorStatus( "Can't get correct sdk." ) );
+            return null;
         }
 
         return sdk;
@@ -296,6 +304,11 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider im
         final boolean separateJRE = true;
 
         SDK sdk = getSDK( op );
+
+        if ( sdk == null )
+        {
+            return ProjectCore.createErrorStatus( "Can not get correct SDK for " + fixedProjectName + ", Please check SDK configuration setting." );
+        }
 
         // workingDir should always be the directory of the type of plugin /sdk/portlets/ for a portlet, etc
         String workingDir = null;

@@ -68,6 +68,11 @@ public class SDKCorePlugin extends Plugin
         return LiferayCore.createErrorStatus( PLUGIN_ID, t );
     }
 
+    public static IStatus createErrorStatus( String pluginId, String msg )
+    {
+        return new Status( IStatus.ERROR, pluginId, msg );
+    }
+
     /**
      * Returns the shared instance
      *

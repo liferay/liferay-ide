@@ -167,9 +167,16 @@ public class IvyUtil
                     if( status.isOK() )
                     {
                         final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
-                        final IFolder webinfFolder = webproject.getDefaultDocrootFolder().getFolder( "WEB-INF" );
 
-                        ComponentUtil.validateFolder( webinfFolder, monitor );
+                        if ( webproject != null )
+                        {
+                            final IFolder webinfFolder = webproject.getDefaultDocrootFolder().getFolder( "WEB-INF" );
+
+                            if ( webinfFolder != null )
+                            {
+                                ComponentUtil.validateFolder( webinfFolder, monitor );
+                            }
+                        }
                     }
                     else
                     {

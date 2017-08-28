@@ -1226,12 +1226,8 @@ public class SDK
 
                         if( !propertyPath.toFile().exists() )
                         {
-                            final IStatus logStatus = SDKCorePlugin.createErrorStatus(
-                                propertyKey + " is invalid. Please reconfigure Plugins SDK setting: " + propertyKey + "=" + propertyValue );
-
-                            SDKCorePlugin.getDefault().getLog().log( logStatus );
-
-                            status.add( logStatus );
+                            final String errorMessage = new String( propertyKey + " is invalid. Please reconfigure Plugins SDK setting: " + propertyKey + "=" + propertyValue );
+                            status.add( SDKCorePlugin.createErrorStatus( SDKCorePlugin.PLUGIN_ID, errorMessage ) );
                         }
 
                         break;
