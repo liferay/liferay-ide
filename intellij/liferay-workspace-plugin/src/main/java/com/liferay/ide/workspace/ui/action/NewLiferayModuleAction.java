@@ -15,21 +15,35 @@
 
 package com.liferay.ide.workspace.ui.action;
 
+import com.intellij.ide.util.newProjectWizard.AbstractProjectWizard;
+import com.intellij.ide.util.projectWizard.ModuleBuilder;
+import com.intellij.ide.util.projectWizard.ProjectBuilder;
+import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ui.configuration.DefaultModulesProvider;
-import com.intellij.openapi.roots.ui.configuration.actions.NewModuleAction;
+import com.intellij.openapi.roots.ui.configuration.ModulesConfigurator;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.liferay.ide.workspace.ui.UI;
 import com.liferay.ide.workspace.ui.util.LiferayWorkspaceUtil;
 import com.liferay.ide.workspace.ui.wizard.NewLiferayModuleWizard;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * @author Terry Jia
  */
-public class NewLiferayModuleAction extends NewModuleAction {
+public class NewLiferayModuleAction extends AnAction implements DumbAware {
+
+    public NewLiferayModuleAction() {
+        super(IconLoader.getIcon("/icons/liferay.png"));
+    }
 
     @Override
     public void actionPerformed(AnActionEvent e) {
@@ -58,4 +72,50 @@ public class NewLiferayModuleAction extends NewModuleAction {
         }
     }
 
+    @Nullable
+    public Module createModuleFromWizard(Project project, @Nullable Object dataFromContext, AbstractProjectWizard wizard) {
+        final ProjectBuilder builder = wizard.getProjectBuilder();
+        if (builder instanceof ModuleBuilder) {
+            final ModuleBuilder moduleBuilder = (ModuleBuilder) builder;
+            if (moduleBuilder.getName() == null) {
+                moduleBuilder.setName(wizard.getProjectName());
+            }
+            if (moduleBuilder.getModuleFilePath() == null) {
+                moduleBuilder.setModuleFilePath(wizard.getModuleFilePath());
+            }
+        }
+        if (!builder.validate(project, project)) {
+            return null;
+        }
+        Module module;
+        if (builder instanceof ModuleBuilder) {
+            module = ((ModuleBuilder) builder).commitModule(project, null);
+            if (module != null) {
+                processCreatedModule(module, dataFromContext);
+            }
+            return module;
+        } else {
+            List<Module> modules = builder.commit(project, null, new DefaultModulesProvider(project));
+            if (builder.isOpenProjectSettingsAfter()) {
+                ModulesConfigurator.showDialog(project, null, null);
+            }
+            module = modules == null || modules.isEmpty() ? null : modules.get(0);
+        }
+        project.save();
+        return module;
+    }
+
+    @Nullable
+    protected Object prepareDataFromContext(final AnActionEvent e) {
+        return null;
+    }
+
+    protected void processCreatedModule(final Module module, @Nullable final Object dataFromContext) {
+    }
+
+    @Override
+    public void update(AnActionEvent e) {
+        super.update(e);
+        e.getPresentation().setEnabled(getEventProject(e) != null);
+    }
 }

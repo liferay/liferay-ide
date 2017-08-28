@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 public class LiferayBundleDebugger extends GenericDebuggerRunner {
 
     @NotNull
+    @Override
     public String getRunnerId() {
         return "LiferayBundleDebugger";
     }

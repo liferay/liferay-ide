@@ -18,7 +18,9 @@ package com.liferay.ide.workspace.ui.wizard;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.highlighter.ModuleFileType;
 import com.intellij.ide.util.BrowseFilesListener;
-import com.intellij.ide.util.projectWizard.*;
+import com.intellij.ide.util.projectWizard.AbstractModuleBuilder;
+import com.intellij.ide.util.projectWizard.ProjectWizardUtil;
+import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.options.ConfigurationException;
@@ -42,17 +44,17 @@ import java.io.File;
  * @author Terry Jia
  */
 public class LiferayModuleNameLocationComponent {
-    private final WizardContext myWizardContext;
-    private JTextField myModuleName;
-    private TextFieldWithBrowseButton myModuleContentRoot;
-    private TextFieldWithBrowseButton myModuleFileLocation;
-    private JPanel myModulePanel;
+    private final WizardContext wizardContext;
+    private JTextField moduleName;
+    private TextFieldWithBrowseButton moduleContentRoot;
+    private TextFieldWithBrowseButton moduleFileLocation;
+    private JPanel modulePanel;
 
-    private boolean myModuleNameChangedByUser = false;
-    private boolean myModuleNameDocListenerEnabled = true;
+    private boolean moduleNameChangedByUser = false;
+    private boolean moduleNameDocListenerEnabled = true;
 
-    private boolean myContentRootChangedByUser = false;
-    private boolean myContentRootDocListenerEnabled = true;
+    private boolean contentRootChangedByUser = false;
+    private boolean contentRootDocListenerEnabled = true;
 
     private boolean myImlLocationChangedByUser = false;
     private boolean myImlLocationDocListenerEnabled = true;
@@ -60,118 +62,124 @@ public class LiferayModuleNameLocationComponent {
     private boolean myUpdatePathsWhenNameIsChanged;
 
     public LiferayModuleNameLocationComponent(@NotNull WizardContext wizardContext) {
-        myWizardContext = wizardContext;
+        this.wizardContext = wizardContext;
     }
 
     @Nullable
     public AbstractModuleBuilder getModuleBuilder() {
-        return ((AbstractModuleBuilder)myWizardContext.getProjectBuilder());
+        return ((AbstractModuleBuilder) wizardContext.getProjectBuilder());
     }
 
-    /**
-     * @see ModuleWizardStep#validate()
-     */
     public boolean validate() throws ConfigurationException {
         AbstractModuleBuilder builder = getModuleBuilder();
-        if (builder != null && !builder.validateModuleName(getModuleName())) return false;
-        if (!validateModulePaths()) return false;
+
+        if (builder != null && !builder.validateModuleName(getModuleName())) {
+            return false;
+        }
+
+        if (!validateModulePaths()) {
+            return false;
+        }
+
         validateExistingModuleName();
+
         return true;
     }
 
-    /**
-     * @see ModuleWizardStep#updateDataModel()
-     */
     public void updateDataModel() {
-        AbstractModuleBuilder moduleBuilder = getModuleBuilder();
-        if (moduleBuilder == null) return;
+        final AbstractModuleBuilder moduleBuilder = getModuleBuilder();
+
+        if (moduleBuilder == null) {
+            return;
+        }
 
         final String moduleName = getModuleName();
+
         moduleBuilder.setName(moduleName);
         moduleBuilder.setModuleFilePath(
-                FileUtil.toSystemIndependentName(myModuleFileLocation.getText()) + "/" + moduleName + ModuleFileType.DOT_DEFAULT_EXTENSION);
+                FileUtil.toSystemIndependentName(moduleFileLocation.getText()) + "/" + moduleName + ModuleFileType.DOT_DEFAULT_EXTENSION);
         moduleBuilder.setContentEntryPath(FileUtil.toSystemIndependentName(getModuleContentRoot()));
     }
 
     public JPanel getModulePanel() {
-        return myModulePanel;
+        return modulePanel;
     }
 
     public void bindModuleSettings(final LiferayNamePathComponent namePathComponent) {
         namePathComponent.getNameComponent().getDocument().addDocumentListener(new DocumentAdapter() {
             protected void textChanged(final DocumentEvent e) {
-                if (!myModuleNameChangedByUser) {
+                if (!moduleNameChangedByUser) {
                     setModuleName(namePathComponent.getNameValue());
                 }
             }
         });
 
-        myModuleContentRoot.addBrowseFolderListener(ProjectBundle.message("project.new.wizard.module.content.root.chooser.title"),
+        moduleContentRoot.addBrowseFolderListener(ProjectBundle.message("project.new.wizard.module.content.root.chooser.title"),
                 ProjectBundle.message("project.new.wizard.module.content.root.chooser.description"),
-                myWizardContext.getProject(), BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR);
+                wizardContext.getProject(), BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR);
 
         namePathComponent.getPathComponent().getDocument().addDocumentListener(new DocumentAdapter() {
             protected void textChanged(final DocumentEvent e) {
-                if (!myContentRootChangedByUser) {
+                if (!contentRootChangedByUser) {
                     setModuleContentRoot(namePathComponent.getPath());
                 }
             }
         });
-        myModuleName.getDocument().addDocumentListener(new DocumentAdapter() {
+        moduleName.getDocument().addDocumentListener(new DocumentAdapter() {
             protected void textChanged(final DocumentEvent e) {
                 if (!myUpdatePathsWhenNameIsChanged) {
                     return;
                 }
 
-                if (myModuleNameDocListenerEnabled) {
-                    myModuleNameChangedByUser = true;
+                if (moduleNameDocListenerEnabled) {
+                    moduleNameChangedByUser = true;
                 }
-                String path = getDefaultBaseDir(myWizardContext, namePathComponent);
+                String path = getDefaultBaseDir(wizardContext, namePathComponent);
                 final String moduleName = getModuleName();
                 if (path.length() > 0 && !Comparing.strEqual(moduleName, namePathComponent.getNameValue())) {
                     path += "/modules/" + moduleName;
                 }
-                if (!myContentRootChangedByUser) {
-                    final boolean f = myModuleNameChangedByUser;
-                    myModuleNameChangedByUser = true;
+                if (!contentRootChangedByUser) {
+                    final boolean f = moduleNameChangedByUser;
+                    moduleNameChangedByUser = true;
                     setModuleContentRoot(path);
-                    myModuleNameChangedByUser = f;
+                    moduleNameChangedByUser = f;
                 }
                 if (!myImlLocationChangedByUser) {
                     setImlFileLocation(path);
                 }
             }
         });
-        myModuleContentRoot.getTextField().getDocument().addDocumentListener(new DocumentAdapter() {
+        moduleContentRoot.getTextField().getDocument().addDocumentListener(new DocumentAdapter() {
             protected void textChanged(final DocumentEvent e) {
-                if (myContentRootDocListenerEnabled) {
-                    myContentRootChangedByUser = true;
+                if (contentRootDocListenerEnabled) {
+                    contentRootChangedByUser = true;
                 }
                 if (!myImlLocationChangedByUser) {
                     setImlFileLocation(getModuleContentRoot());
                 }
-                if (!myModuleNameChangedByUser) {
+                if (!moduleNameChangedByUser) {
                     final String path = FileUtil.toSystemIndependentName(getModuleContentRoot());
                     final int idx = path.lastIndexOf("/");
 
-                    boolean f = myContentRootChangedByUser;
-                    myContentRootChangedByUser = true;
+                    boolean f = contentRootChangedByUser;
+                    contentRootChangedByUser = true;
 
                     boolean i = myImlLocationChangedByUser;
                     myImlLocationChangedByUser = true;
 
                     setModuleName(idx >= 0 ? path.substring(idx + 1) : "");
 
-                    myContentRootChangedByUser = f;
+                    contentRootChangedByUser = f;
                     myImlLocationChangedByUser = i;
                 }
             }
         });
 
-        myModuleFileLocation.addBrowseFolderListener(ProjectBundle.message("project.new.wizard.module.file.chooser.title"),
+        moduleFileLocation.addBrowseFolderListener(ProjectBundle.message("project.new.wizard.module.file.chooser.title"),
                 ProjectBundle.message("project.new.wizard.module.file.description"),
-                myWizardContext.getProject(), BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR);
-        myModuleFileLocation.getTextField().getDocument().addDocumentListener(new DocumentAdapter() {
+                wizardContext.getProject(), BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR);
+        moduleFileLocation.getTextField().getDocument().addDocumentListener(new DocumentAdapter() {
             protected void textChanged(final DocumentEvent e) {
                 if (myImlLocationDocListenerEnabled) {
                     myImlLocationChangedByUser = true;
@@ -185,47 +193,55 @@ public class LiferayModuleNameLocationComponent {
                 }
             }
         });
+
         myUpdatePathsWhenNameIsChanged = true;
-        if (myWizardContext.isCreatingNewProject()) {
+
+        if (wizardContext.isCreatingNewProject()) {
             setModuleName(namePathComponent.getNameValue());
             setModuleContentRoot(namePathComponent.getPath());
             setImlFileLocation(namePathComponent.getPath());
-        }
-        else {
-            final Project project = myWizardContext.getProject();
+        } else {
+            final Project project = wizardContext.getProject();
             assert project != null;
-            VirtualFile baseDir = project.getBaseDir();
+            final VirtualFile baseDir = project.getBaseDir();
+
             if (baseDir != null) { //e.g. was deleted
                 final String baseDirPath = baseDir.getPath();
                 String moduleName = ProjectWizardUtil.findNonExistingFileName(baseDirPath, "untitled", "");
                 String contentRoot = baseDirPath + "/" + moduleName;
-                if (!Comparing.strEqual(project.getName(), myWizardContext.getProjectName()) &&
-                        !myWizardContext.isCreatingNewProject() &&
-                        myWizardContext.getProjectName() != null) {
+                if (!Comparing.strEqual(project.getName(), wizardContext.getProjectName()) &&
+                        !wizardContext.isCreatingNewProject() &&
+                        wizardContext.getProjectName() != null) {
                     moduleName =
-                            ProjectWizardUtil.findNonExistingFileName(myWizardContext.getProjectFileDirectory(), myWizardContext.getProjectName(), "");
-                    contentRoot = myWizardContext.getProjectFileDirectory();
-                    myUpdatePathsWhenNameIsChanged = !myWizardContext.isProjectFileDirectorySetExplicitly();
+                            ProjectWizardUtil.findNonExistingFileName(wizardContext.getProjectFileDirectory(), wizardContext.getProjectName(), "");
+                    contentRoot = wizardContext.getProjectFileDirectory();
+                    myUpdatePathsWhenNameIsChanged = !wizardContext.isProjectFileDirectorySetExplicitly();
                 }
                 setModuleName(moduleName);
                 setModuleContentRoot(contentRoot);
                 setImlFileLocation(contentRoot);
-                myModuleName.select(0, moduleName.length());
+
+                this.moduleName.select(0, moduleName.length());
             }
         }
     }
 
     private void validateExistingModuleName() throws ConfigurationException {
-        Project project = myWizardContext.getProject();
-        if (project == null) return;
+        final Project project = wizardContext.getProject();
+
+        if (project == null) {
+            return;
+        }
 
         final String moduleName = getModuleName();
+
         final Module module;
+
         final ProjectStructureConfigurable fromConfigurable = ProjectStructureConfigurable.getInstance(project);
+
         if (fromConfigurable != null) {
             module = fromConfigurable.getModulesConfig().getModule(moduleName);
-        }
-        else {
+        } else {
             module = ModuleManager.getInstance(project).findModuleByName(moduleName);
         }
         if (module != null) {
@@ -235,10 +251,12 @@ public class LiferayModuleNameLocationComponent {
 
     private boolean validateModulePaths() throws ConfigurationException {
         final String moduleName = getModuleName();
-        final String moduleFileDirectory = myModuleFileLocation.getText();
+        final String moduleFileDirectory = moduleFileLocation.getText();
+
         if (moduleFileDirectory.length() == 0) {
             throw new ConfigurationException("Enter module file location");
         }
+
         if (moduleName.length() == 0) {
             throw new ConfigurationException("Enter a module name");
         }
@@ -247,12 +265,14 @@ public class LiferayModuleNameLocationComponent {
                 myImlLocationChangedByUser)) {
             return false;
         }
-        if (!ProjectWizardUtil.createDirectoryIfNotExists(IdeBundle.message("directory.module.content.root"), myModuleContentRoot.getText(),
-                myContentRootChangedByUser)) {
+
+        if (!ProjectWizardUtil.createDirectoryIfNotExists(IdeBundle.message("directory.module.content.root"), moduleContentRoot.getText(),
+                contentRootChangedByUser)) {
             return false;
         }
 
-        File moduleFile = new File(moduleFileDirectory, moduleName + ModuleFileType.DOT_DEFAULT_EXTENSION);
+        final File moduleFile = new File(moduleFileDirectory, moduleName + ModuleFileType.DOT_DEFAULT_EXTENSION);
+
         if (moduleFile.exists()) {
             int answer = Messages.showYesNoDialog(IdeBundle.message("prompt.overwrite.project.file", moduleFile.getAbsolutePath(),
                     IdeBundle.message("project.new.wizard.module.identification")),
@@ -261,21 +281,24 @@ public class LiferayModuleNameLocationComponent {
                 return false;
             }
         }
+
         return true;
     }
 
     private String getModuleContentRoot() {
-        return myModuleContentRoot.getText();
+        return moduleContentRoot.getText();
     }
 
     private static String getDefaultBaseDir(WizardContext wizardContext, LiferayNamePathComponent namePathComponent) {
         if (wizardContext.isCreatingNewProject()) {
             return namePathComponent.getPath();
-        }
-        else {
+        } else {
             final Project project = wizardContext.getProject();
+
             assert project != null;
+
             final VirtualFile baseDir = project.getBaseDir();
+
             if (baseDir != null) {
                 return baseDir.getPath();
             }
@@ -285,27 +308,28 @@ public class LiferayModuleNameLocationComponent {
 
     private void setImlFileLocation(final String path) {
         myImlLocationDocListenerEnabled = false;
-        myModuleFileLocation.setText(FileUtil.toSystemDependentName(path));
+        moduleFileLocation.setText(FileUtil.toSystemDependentName(path));
         myImlLocationDocListenerEnabled = true;
     }
 
     private void setModuleContentRoot(final String path) {
-        myContentRootDocListenerEnabled = false;
-        myModuleContentRoot.setText(FileUtil.toSystemDependentName(path));
-        myContentRootDocListenerEnabled = true;
+        contentRootDocListenerEnabled = false;
+        moduleContentRoot.setText(FileUtil.toSystemDependentName(path));
+        contentRootDocListenerEnabled = true;
     }
 
     public void setModuleName(String moduleName) {
-        myModuleNameDocListenerEnabled = false;
-        myModuleName.setText(moduleName);
-        myModuleNameDocListenerEnabled = true;
+        moduleNameDocListenerEnabled = false;
+        this.moduleName.setText(moduleName);
+        moduleNameDocListenerEnabled = true;
     }
 
     public JTextField getModuleNameField() {
-        return myModuleName;
+        return moduleName;
     }
 
     private String getModuleName() {
-        return myModuleName.getText().trim();
+        return moduleName.getText().trim();
     }
+
 }

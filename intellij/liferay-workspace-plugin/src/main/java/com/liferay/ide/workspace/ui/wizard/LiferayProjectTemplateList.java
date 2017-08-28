@@ -30,7 +30,6 @@ import com.intellij.ui.components.JBList;
 import com.intellij.ui.popup.list.GroupedItemsListRenderer;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -46,13 +45,14 @@ public class LiferayProjectTemplateList extends JPanel {
 
     private static final String PROJECT_WIZARD_TEMPLATE = "project.wizard.template";
 
-    private JBList<ProjectTemplate> myList;
-    private JPanel myPanel;
-    private JTextPane myDescriptionPane;
+    private JBList<ProjectTemplate> templateList;
+    private JPanel mainPanel;
+    private JTextPane description;
 
     public LiferayProjectTemplateList() {
         super(new BorderLayout());
-        add(myPanel, BorderLayout.CENTER);
+
+        add(mainPanel, BorderLayout.CENTER);
 
         GroupedItemsListRenderer<ProjectTemplate> renderer = new GroupedItemsListRenderer<ProjectTemplate>(new ListItemDescriptorAdapter<ProjectTemplate>() {
             @Nullable
@@ -67,39 +67,47 @@ public class LiferayProjectTemplateList extends JPanel {
                 return value.getIcon();
             }
         }) {
-
             @Override
             protected void customizeComponent(JList<? extends ProjectTemplate> list, ProjectTemplate value, boolean isSelected) {
                 super.customizeComponent(list, value, isSelected);
-                Icon icon = myTextLabel.getIcon();
+
+                final Icon icon = myTextLabel.getIcon();
+
                 if (icon != null && myTextLabel.getDisabledIcon() == icon) {
                     myTextLabel.setDisabledIcon(IconLoader.getDisabledIcon(icon));
                 }
-                myTextLabel.setEnabled(myList.isEnabled());
+
+                myTextLabel.setEnabled(templateList.isEnabled());
                 myTextLabel.setBorder(IdeBorderFactory.createEmptyBorder(3, 3, 3, 3));
             }
         };
-        myList.setCellRenderer(renderer);
-        myList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+        templateList.setCellRenderer(renderer);
+
+        templateList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 updateSelection();
             }
         });
 
-        Messages.installHyperlinkSupport(myDescriptionPane);
+        Messages.installHyperlinkSupport(description);
     }
 
     private void updateSelection() {
-        myDescriptionPane.setText("");
-        ProjectTemplate template = getSelectedTemplate();
+        description.setText("");
+
+        final ProjectTemplate template = getSelectedTemplate();
+
         if (template != null) {
             String description = template.getDescription();
+
             if (StringUtil.isNotEmpty(description)) {
                 description = "<html><body><font " +
                         (SystemInfo.isMac ? "" : "face=\"Verdana\" size=\"-1\"") + '>' + description +
                         "</font></body></html>";
-                myDescriptionPane.setText(description);
+
+                this.description.setText(description);
             }
         }
     }
@@ -107,43 +115,51 @@ public class LiferayProjectTemplateList extends JPanel {
     public void setTemplates(List<ProjectTemplate> list, boolean preserveSelection) {
         Collections.sort(list, (o1, o2) -> Comparing.compare(o1 instanceof ArchivedProjectTemplate, o2 instanceof ArchivedProjectTemplate));
 
-        int index = preserveSelection ? myList.getSelectedIndex() : -1;
-        //noinspection unchecked
-        myList.setModel(new CollectionListModel<>(list));
-        if (myList.isEnabled()) {
-            myList.setSelectedIndex(index == -1 ? 0 : index);
+        final int index = preserveSelection ? templateList.getSelectedIndex() : -1;
+
+        templateList.setModel(new CollectionListModel<>(list));
+
+        if (templateList.isEnabled()) {
+            templateList.setSelectedIndex(index == -1 ? 0 : index);
         }
+
         updateSelection();
     }
 
     @Nullable
     public ProjectTemplate getSelectedTemplate() {
-        return myList.getSelectedValue();
+        return templateList.getSelectedValue();
     }
 
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        myList.setEnabled(enabled);
+
+        templateList.setEnabled(enabled);
+
         if (!enabled) {
-            myList.clearSelection();
+            templateList.clearSelection();
         } else {
-            myList.setSelectedIndex(0);
+            templateList.setSelectedIndex(0);
         }
-        myDescriptionPane.setEnabled(enabled);
+
+        description.setEnabled(enabled);
     }
 
     void restoreSelection() {
         final String templateName = PropertiesComponent.getInstance().getValue(PROJECT_WIZARD_TEMPLATE);
-        if (templateName != null && myList.getModel() instanceof CollectionListModel) {
-            @SuppressWarnings("unchecked")
-            List<ProjectTemplate> list = ((CollectionListModel<ProjectTemplate>) myList.getModel()).toList();
-            ProjectTemplate template = ContainerUtil.find(list, template1 -> templateName.equals(template1.getName()));
+
+        if (templateName != null && templateList.getModel() instanceof CollectionListModel) {
+            List<ProjectTemplate> list = ((CollectionListModel<ProjectTemplate>) templateList.getModel()).toList();
+
+            final ProjectTemplate template = ContainerUtil.find(list, template1 -> templateName.equals(template1.getName()));
+
             if (template != null) {
-                myList.setSelectedValue(template, true);
+                templateList.setSelectedValue(template, true);
             }
         }
-        myList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+        templateList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 ProjectTemplate template = getSelectedTemplate();
@@ -155,7 +171,7 @@ public class LiferayProjectTemplateList extends JPanel {
     }
 
     public void addListSelectionListener(ListSelectionListener listener) {
-        myList.addListSelectionListener(listener);
+        templateList.addListSelectionListener(listener);
     }
 
 }

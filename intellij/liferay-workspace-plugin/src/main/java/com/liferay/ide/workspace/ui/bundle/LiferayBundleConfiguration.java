@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
+
 package com.liferay.ide.workspace.ui.bundle;
 
 import com.intellij.diagnostic.logging.LogConfigurationPanel;
@@ -27,66 +42,73 @@ import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * @author Terry Jia
+ */
 public class LiferayBundleConfiguration extends LocatableConfigurationBase implements CommonJavaRunConfigurationParameters, SearchScopeProvidingRunProfile {
 
     private static final SkipDefaultValuesSerializationFilters SERIALIZATION_FILTERS = new SkipDefaultValuesSerializationFilters();
-    private LiferayBundleConfiguration.LiferayBundleConfigurationBean myBean = new LiferayBundleConfiguration.LiferayBundleConfigurationBean();
-    private Map<String, String> myEnvs = new LinkedHashMap<>();
-    private JavaRunConfigurationModule myConfigurationModule;
+    private LiferayBundleConfiguration.LiferayBundleConfigurationBean bean = new LiferayBundleConfiguration.LiferayBundleConfigurationBean();
+    private Map<String, String> envs = new LinkedHashMap<>();
+    private JavaRunConfigurationModule configurationModule;
 
     public LiferayBundleConfiguration(Project project, ConfigurationFactory factory, String name) {
         super(project, factory, name);
 
-        myConfigurationModule = new JavaRunConfigurationModule(project, true);
-        myBean.liferayBundle = Paths.get(project.getBasePath(), LiferayWorkspaceUtil.getHomeDir(project.getBasePath())).toString();
-        myBean.VM_PARAMETERS = "-Xmx1024m";
+        configurationModule = new JavaRunConfigurationModule(project, true);
+        bean.liferayBundle = Paths.get(project.getBasePath(), LiferayWorkspaceUtil.getHomeDir(project.getBasePath())).toString();
+        bean.vmParameters = "-Xmx1024m";
     }
 
     @NotNull
     @Override
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-        SettingsEditorGroup<LiferayBundleConfiguration> group = new SettingsEditorGroup<>();
+        final SettingsEditorGroup<LiferayBundleConfiguration> group = new SettingsEditorGroup<>();
+
         group.addEditor(ExecutionBundle.message("run.configuration.configuration.tab.title"), new LiferayBundleConfigurable(getProject()));
         JavaRunConfigurationExtensionManager.getInstance().appendEditors(this, group);
         group.addEditor(ExecutionBundle.message("logs.tab.title"), new LogConfigurationPanel<>());
+
         return group;
     }
 
     @Override
     public void readExternal(Element element) throws InvalidDataException {
         super.readExternal(element);
+
         JavaRunConfigurationExtensionManager.getInstance().readExternal(this, element);
-        XmlSerializer.deserializeInto(myBean, element);
+        XmlSerializer.deserializeInto(bean, element);
         EnvironmentVariablesComponent.readExternal(element, getEnvs());
-        myConfigurationModule.readExternal(element);
+
+        configurationModule.readExternal(element);
     }
 
     @Override
     public RunConfiguration clone() {
         LiferayBundleConfiguration clone = (LiferayBundleConfiguration) super.clone();
-        clone.myEnvs = new LinkedHashMap<>(myEnvs);
-        clone.myConfigurationModule = new JavaRunConfigurationModule(getProject(), true);
-        clone.myConfigurationModule.setModule(myConfigurationModule.getModule());
-        clone.myBean = XmlSerializerUtil.createCopy(myBean);
+        clone.envs = new LinkedHashMap<>(envs);
+        clone.configurationModule = new JavaRunConfigurationModule(getProject(), true);
+        clone.configurationModule.setModule(configurationModule.getModule());
+        clone.bean = XmlSerializerUtil.createCopy(bean);
         return clone;
     }
 
     public void setModule(Module module) {
-        myConfigurationModule.setModule(module);
+        configurationModule.setModule(module);
     }
 
     public Module getModule() {
-        return myConfigurationModule.getModule();
+        return configurationModule.getModule();
     }
 
     @Override
     public void writeExternal(Element element) throws WriteExternalException {
         super.writeExternal(element);
         JavaRunConfigurationExtensionManager.getInstance().writeExternal(this, element);
-        XmlSerializer.serializeInto(myBean, element, SERIALIZATION_FILTERS);
+        XmlSerializer.serializeInto(bean, element, SERIALIZATION_FILTERS);
         EnvironmentVariablesComponent.writeExternal(element, getEnvs());
-        if (myConfigurationModule.getModule() != null) {
-            myConfigurationModule.writeExternal(element);
+        if (configurationModule.getModule() != null) {
+            configurationModule.writeExternal(element);
         }
     }
 
@@ -99,7 +121,9 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
         File liferayHome = new File(getLiferayBundle());
 
         if (!liferayHome.exists()) {
-            throw new RuntimeConfigurationWarning("JAR file '" + liferayHome.getAbsolutePath() + "' doesn't exist");
+            throw new RuntimeConfigurationWarning(
+                    "Unable to detect liferay bundle from '" + liferayHome.toPath() +
+                            "', you may need to run gradle task initBundle firstly");
         }
 
         JavaRunConfigurationExtensionManager.checkConfigurationIsValid(this);
@@ -107,7 +131,7 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
 
     @NotNull
     public Module[] getModules() {
-        Module module = myConfigurationModule.getModule();
+        Module module = configurationModule.getModule();
         return module != null ? new Module[]{module} : Module.EMPTY_ARRAY;
     }
 
@@ -125,33 +149,33 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
 
     @Override
     public void setVMParameters(String value) {
-        myBean.VM_PARAMETERS = value;
+        bean.vmParameters = value;
     }
 
     @Override
     public String getVMParameters() {
-        return myBean.VM_PARAMETERS;
+        return bean.vmParameters;
     }
 
     @Override
     public boolean isAlternativeJrePathEnabled() {
-        return myBean.ALTERNATIVE_JRE_PATH_ENABLED;
+        return bean.ALTERNATIVE_JRE_PATH_ENABLED;
     }
 
     @Override
     public void setAlternativeJrePathEnabled(boolean enabled) {
-        myBean.ALTERNATIVE_JRE_PATH_ENABLED = enabled;
+        bean.ALTERNATIVE_JRE_PATH_ENABLED = enabled;
     }
 
     @Nullable
     @Override
     public String getAlternativeJrePath() {
-        return myBean.ALTERNATIVE_JRE_PATH;
+        return bean.ALTERNATIVE_JRE_PATH;
     }
 
     @Override
     public void setAlternativeJrePath(String path) {
-        myBean.ALTERNATIVE_JRE_PATH = path;
+        bean.ALTERNATIVE_JRE_PATH = path;
     }
 
     @Nullable
@@ -188,37 +212,37 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
 
     @Override
     public void setEnvs(@NotNull Map<String, String> envs) {
-        myEnvs.clear();
-        myEnvs.putAll(envs);
+        this.envs.clear();
+        this.envs.putAll(envs);
     }
 
     public String getLiferayBundle() {
-        return myBean.liferayBundle;
+        return bean.liferayBundle;
     }
 
     public void setLiferayBundle(String liferayBundle) {
-        myBean.liferayBundle = liferayBundle;
+        bean.liferayBundle = liferayBundle;
     }
 
     @NotNull
     @Override
     public Map<String, String> getEnvs() {
-        return myEnvs;
+        return envs;
     }
 
     @Override
     public void setPassParentEnvs(boolean passParentEnvs) {
-        myBean.PASS_PARENT_ENVS = passParentEnvs;
+        bean.PASS_PARENT_ENVS = passParentEnvs;
     }
 
     @Override
     public boolean isPassParentEnvs() {
-        return myBean.PASS_PARENT_ENVS;
+        return bean.PASS_PARENT_ENVS;
     }
 
     private static class LiferayBundleConfigurationBean {
         public String liferayBundle = "";
-        public String VM_PARAMETERS = "";
+        public String vmParameters = "";
         public boolean ALTERNATIVE_JRE_PATH_ENABLED;
         public String ALTERNATIVE_JRE_PATH = "";
         public boolean PASS_PARENT_ENVS = true;

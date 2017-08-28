@@ -1,21 +1,22 @@
 <idea-plugin>
-  <id>com.liferay.ide.workspace.plugin</id>
-  <name>LiferayWorkspacePlugin</name>
-  <version>0.1</version>
-  <vendor url="https://www.liferay.com">Liferay Inc.</vendor>
-  <description>Liferay IDE Plugin for IntelliJ IDEA</description>
-  <change-notes/>
-  <actions>
-    <group id="com.liferay.ide.menu" text="_Liferay" description="Liferay Menu">
-      <add-to-group group-id="MainMenu" anchor="last"  />
-      <action id="NewLiferayModule" class="com.liferay.ide.workspace.ui.action.NewLiferayModuleAction" text="New Liferay _Module..." description="Add new liferay module to the liferay workspace"/>
-    </group>
-  </actions>
-  <extensions defaultExtensionNs="com.intellij">
-    <moduleBuilder builderClass="com.liferay.ide.workspace.ui.builder.LiferayWorkspaceBuilder"/>
+    <id>com.liferay.ide.workspace.plugin</id>
+    <name>LiferayWorkspacePlugin</name>
+    <version>0.1</version>
+    <vendor url="https://www.liferay.com">Liferay Inc.</vendor>
+    <description>Liferay IDE Plugin for IntelliJ IDEA</description>
+    <change-notes/>
 
-    <configurationType implementation="com.liferay.ide.workspace.ui.bundle.LiferayBundleConfigurationType"/>
-    <programRunner id="Run" implementation="com.liferay.ide.workspace.ui.bundle.LiferayBundleRunner"/>
-    <programRunner id="Debug" implementation="com.liferay.ide.workspace.ui.bundle.LiferayBundleDebugger"/>
-  </extensions>
+    <actions>
+        <action id="NewLiferayModule" class="com.liferay.ide.workspace.ui.action.NewLiferayModuleAction"
+                text="Liferay Module" description="Add new liferay module to the liferay workspace">
+            <add-to-group group-id="NewGroup" anchor="last"/>
+        </action>
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <moduleBuilder builderClass="com.liferay.ide.workspace.ui.builder.LiferayWorkspaceBuilder"/>
+        <configurationType implementation="com.liferay.ide.workspace.ui.bundle.LiferayBundleConfigurationType"/>
+        <programRunner id="Run" implementation="com.liferay.ide.workspace.ui.bundle.LiferayBundleRunner"/>
+        <programRunner id="Debug" implementation="com.liferay.ide.workspace.ui.bundle.LiferayBundleDebugger"/>
+    </extensions>
 </idea-plugin>

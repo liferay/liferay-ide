@@ -16,9 +16,9 @@
 package com.liferay.ide.workspace.ui.wizard;
 
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
-import com.intellij.ide.util.projectWizard.WizardContext;
+import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
 import com.liferay.ide.workspace.ui.builder.LiferayModuleBuilder;
 import com.liferay.ide.workspace.ui.util.BladeCLI;
@@ -38,13 +38,10 @@ import javax.swing.tree.TreeSelectionModel;
 public class LiferayModuleWizardStep extends ModuleWizardStep {
     private JPanel mainPanel;
     private JPanel typesPanel;
-    private JTextArea typeDescriptionField;
-    private JBScrollPane typeDescriptionScrollPane;
     private JTextField packageName;
     private JTextField className;
     private final LiferayModuleBuilder builder;
     private final Tree typesTree;
-    private WizardContext wizardContext;
 
     public LiferayModuleWizardStep(LiferayModuleBuilder builder) {
         this.builder = builder;
@@ -61,13 +58,32 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 
         typesTree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
             public void valueChanged(TreeSelectionEvent e) {
+                String type = e.getNewLeadSelectionPath().getLastPathComponent().toString();
 
+                if (type.equals("activator") || type.equals("api") || type.equals("theme-contributor") ||
+                        type.equals("portlet-provider") || type.equals("content-targeting-report") ||
+                        type.equals("content-targeting-tracking-action")) {
+
+                    packageName.setEditable(false);
+                    className.setEditable(false);
+                    packageName.setEnabled(false);
+                    className.setEnabled(false);
+                } else {
+                    packageName.setEditable(true);
+                    className.setEditable(true);
+                    packageName.setEnabled(true);
+                    className.setEnabled(true);
+                }
             }
         });
 
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
 
-        for (String type: BladeCLI.getProjectTemplates()){
+        for (String type : BladeCLI.getProjectTemplates()) {
+            if (type.equals("fragment")) {
+                continue;
+            }
+
             DefaultMutableTreeNode node1 = new DefaultMutableTreeNode(type, true);
             root.add(node1);
         }
@@ -89,16 +105,23 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
         builder.setPackageName(getPackageName());
     }
 
+    @Override
+    public boolean validate() throws ConfigurationException {
+        // Need to add validation for className and PackageName
+
+        return true;
+    }
+
     @Nullable
     public String getSelectedType() {
         return typesTree.getLastSelectedPathComponent().toString();
     }
 
-    public String getPackageName(){
+    public String getPackageName() {
         return packageName.getText();
     }
 
-    public String getClassName(){
+    public String getClassName() {
         return className.getText();
     }
 

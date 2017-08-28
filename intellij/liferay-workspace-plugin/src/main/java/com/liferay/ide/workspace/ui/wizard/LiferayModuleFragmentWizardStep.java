@@ -65,10 +65,14 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
         if (!liferayHomeDir.exists()) {
             osgiHost.addItem("unable to get liferay bundle");
+
             DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
             DefaultMutableTreeNode node = new DefaultMutableTreeNode("unable to get liferay bundle", true);
+
             root.add(node);
-            TreeModel model = new DefaultTreeModel(root);
+
+            final TreeModel model = new DefaultTreeModel(root);
+
             jspsTree.setModel(model);
 
             return;
@@ -79,6 +83,7 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
         for (String bundle : bundles) {
             osgiHost.addItem(bundle);
         }
+
         osgiHost.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -106,8 +111,8 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
                     } catch (IOException e1) {
                     }
                 }
-                TreeModel model = new DefaultTreeModel(root);
-                jspsTree.setModel(model);
+
+                jspsTree.setModel(new DefaultTreeModel(root));
             }
         });
     }
