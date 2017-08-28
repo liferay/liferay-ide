@@ -10,8 +10,10 @@ import com.liferay.ide.server.remote.IRemoteServerPublisher;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+import org.junit.After;
 import org.junit.Test;
 
 
@@ -21,6 +23,19 @@ import org.junit.Test;
 @SuppressWarnings( "restriction" )
 public class LiferayMavenProjectTests extends LiferayMavenProjectTestCase
 {
+
+    @After
+    public void afterTestDeleteAllProjects() throws Exception
+    {
+        for( IProject project : CoreUtil.getAllProjects() )
+        {
+            project.delete( true, new NullProgressMonitor() );
+        }
+
+        IProject[] projects = CoreUtil.getAllProjects();
+
+        assertEquals( 0, projects.length );
+    }
 
     @Test
     public void testNewLiferayHookProject() throws Exception
