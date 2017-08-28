@@ -21,6 +21,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.util.ValidationUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.server.util.ComponentUtil;
 import com.liferay.ide.server.util.ServerUtil;
@@ -597,7 +598,10 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
                         {
                             final IResource resource = delta.getResource();
 
-                            processPropertiesFile( (IFile) resource );
+                            if ( !ValidationUtil.isProjectTargetDirFile( resource.getLocation().toFile() ) ) 
+                            {
+                                processPropertiesFile( (IFile) resource );
+                            }
 
                             return Status.OK_STATUS;
                         }
