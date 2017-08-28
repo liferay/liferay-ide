@@ -21,12 +21,16 @@ import static org.junit.Assert.assertNull;
 
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.core.portal.PortalRuntime;
+import com.liferay.ide.server.core.portal.PortalServer;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
+import org.eclipse.wst.server.core.IServerType;
+import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
+import org.eclipse.wst.server.core.model.ServerDelegate;
 import org.junit.Test;
 
 /**
@@ -181,6 +185,31 @@ public class PortalBundleTests extends ServerCoreBase
         assertNotNull( portalRuntime );
 
         assertNull( portalRuntime.getPortalBundle() );
+    }
+
+    @Test
+    public void testPortalServiceDelegateName() throws Exception {
+        if( shouldSkipBundleTests() ) return;
+
+        IServerType portalServerType = ServerCore.findServerType( PortalServer.ID );
+
+        assertNotNull( portalServerType );
+
+        IProgressMonitor monitor = new NullProgressMonitor();
+
+        IServerWorkingCopy newServer = portalServerType.createServer( null, null, monitor );
+
+        assertNotNull( newServer );
+
+        assertEquals( "Liferay 7.x at localhost", newServer.getName() );
+
+        newServer.setHost( "127.0.0.1" );
+
+        ServerDelegate delegate = (ServerDelegate) newServer.loadAdapter( ServerDelegate.class, monitor );
+
+        delegate.newServerDetailsChanged( monitor );
+
+        assertEquals( "Liferay 7.x at 127.0.0.1", newServer.getName() );
     }
 }
 
