@@ -219,11 +219,32 @@
                 </if>
             </elseActionList>
         </if>
-        <unzip>
-            <destinationDirectory>${installdir}</destinationDirectory>
-            <zipFile>${studioZipPath}</zipFile>
-            <progressText>Unpacking files</progressText>
-        </unzip>
+        <if>
+            <actionList>
+                <runProgram>
+                    <program>chown</program>
+                    <programArguments>-R $USER "${installdir}"</programArguments>
+                </runProgram>
+                <runProgram>
+                    <program>unzip</program>
+                    <programArguments>${studioZipPath}</programArguments>
+                    <progressText>unzipping</progressText>
+                    <workingDirectory>${installdir}</workingDirectory>
+                </runProgram>
+            </actionList>
+            <conditionRuleList>
+                <platformTest>
+                    <type>osx</type>
+                </platformTest>
+            </conditionRuleList>
+            <elseActionList>
+                <unzip>
+                    <destinationDirectory>${installdir}</destinationDirectory>
+                    <progressText>Unpacking files</progressText>
+                    <zipFile>${studioZipPath}</zipFile>
+                </unzip>
+            </elseActionList>
+        </if>
         <setInstallerVariable>
             <name>liferayBundlesPath</name>
             <value>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}bundles</value>
