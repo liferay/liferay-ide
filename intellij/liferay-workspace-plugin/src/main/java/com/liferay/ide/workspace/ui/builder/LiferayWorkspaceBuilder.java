@@ -15,15 +15,23 @@
 
 package com.liferay.ide.workspace.ui.builder;
 
+import com.intellij.ide.actions.ImportModuleAction;
+import com.intellij.ide.util.newProjectWizard.AddModuleWizard;
 import com.intellij.ide.util.projectWizard.ModuleBuilder;
+import com.intellij.ide.util.projectWizard.ModuleBuilderListener;
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.StdModuleTypes;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.util.IconLoader;
+import com.intellij.projectImport.ProjectImportProvider;
 import com.liferay.ide.workspace.ui.UI;
 import com.liferay.ide.workspace.ui.util.BladeCLI;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
@@ -31,6 +39,12 @@ import javax.swing.*;
  * @author Terry Jia
  */
 public class LiferayWorkspaceBuilder extends ModuleBuilder {
+
+    public LiferayWorkspaceBuilder() {
+        super();
+
+        this.addListener(new LiferayWorkpaceBuilderListener());
+    }
 
     @Override
     public void setupRootModel(ModifiableRootModel model) throws ConfigurationException {
@@ -74,6 +88,33 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
     @Override
     public Icon getNodeIcon() {
         return IconLoader.getIcon("/icons/liferay.png");
+    }
+
+    static class LiferayWorkpaceBuilderListener implements ModuleBuilderListener {
+        @Override
+        public void moduleCreated(@NotNull Module module) {
+            Project project = module.getProject();
+            ProjectImportProvider[] importProviders = ProjectImportProvider.PROJECT_IMPORT_PROVIDER.getExtensions();
+
+            for (ProjectImportProvider importProvider : importProviders) {
+                if (importProvider.getId().equals("Gradle")) {
+                    AddModuleWizard wizard = new AddModuleWizard(project, project.getBasePath(), importProvider);
+
+                    Application application = ApplicationManager.getApplication();
+
+                    application.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (wizard.showAndGet()) {
+                                ImportModuleAction.createFromWizard(project, wizard);
+                            }
+                        }
+                    });
+
+                    break;
+                }
+            }
+        }
     }
 
 }
