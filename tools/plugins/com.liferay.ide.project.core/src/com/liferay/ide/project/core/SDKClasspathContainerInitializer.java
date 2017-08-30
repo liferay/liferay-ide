@@ -17,6 +17,7 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.server.core.portal.EmptyPortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -37,6 +38,7 @@ import org.eclipse.jst.common.jdt.internal.classpath.ClasspathDecorationsManager
 @SuppressWarnings( "restriction" )
 public class SDKClasspathContainerInitializer extends ClasspathContainerInitializer
 {
+
     protected static final ClasspathDecorationsManager cpDecorations = SDKClasspathContainer.getDecorationsManager();
 
     @Override
@@ -51,7 +53,7 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
 
         SDK sdk = SDKUtil.getSDKFromProjectDir( project.getProject().getLocation().toFile() );
 
-        if ( sdk != null )
+        if( sdk != null )
         {
             dependencyJarPaths = sdk.getDependencyJarPaths();
         }
@@ -72,12 +74,11 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
             throw new CoreException( ProjectCore.createErrorStatus( msg + SDKClasspathContainer.ID ) );
         }
 
-        PortalBundle bundle = ServerUtil.getPortalBundle(project.getProject());
+        PortalBundle bundle = ServerUtil.getPortalBundle( project.getProject() );
 
-        if ( bundle == null )
+        if( bundle instanceof EmptyPortalBundle )
         {
-            final String msg = "Invalid sdk properties setting.";
-            throw new CoreException( ProjectCore.createErrorStatus( msg ) );
+            throw new CoreException( ProjectCore.createErrorStatus( ( (EmptyPortalBundle) bundle ).getMsg() ) );
         }
 
         IPath globalDir = bundle.getAppServerLibGlobalDir();
@@ -95,10 +96,9 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
             return;
         }
 
-        classpathContainer =
-            new SDKClasspathContainer(
-                containerPath, project, portalDir, null, null, globalDir, bundleDir, bundleDependencyJars,
-                sdkDependencyJarPaths );
+        classpathContainer = new SDKClasspathContainer(
+            containerPath, project, portalDir, null, null, globalDir, bundleDir, bundleDependencyJars,
+            sdkDependencyJarPaths );
 
         JavaCore.setClasspathContainer(
             containerPath, new IJavaProject[] { project }, new IClasspathContainer[] { classpathContainer }, null );
@@ -145,7 +145,7 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
         IPath bundleDir = null;
         IPath[] bundleDependencyJarPaths = null;
 
-        PortalBundle bundle = ServerUtil.getPortalBundle(project.getProject());
+        PortalBundle bundle = ServerUtil.getPortalBundle( project.getProject() );
 
         boolean containerChanged = true;
 
@@ -158,15 +158,15 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
             sourceLocation = ( (SDKClasspathContainer) containerSuggestion ).getSourceLocation();
             bundleDependencyJarPaths = ( (SDKClasspathContainer) containerSuggestion ).getBundleLibDependencyPath();
 
-            if ( bundle != null && bundle.getAppServerPortalDir().equals( portalDir ) )
+            if( !( bundle instanceof EmptyPortalBundle ) && bundle.getAppServerPortalDir().equals( portalDir ) )
             {
                 containerChanged = false;
             }
         }
 
-        if ( containerChanged == true)
+        if( containerChanged == true )
         {
-            if ( bundle == null )
+            if( bundle == null )
             {
                 return;
             }
@@ -180,10 +180,9 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
 
         if( portalDir != null && portalGlobalDir != null )
         {
-            IClasspathContainer newContainer =
-                new SDKClasspathContainer(
-                    containerPath, project, portalDir, javadocURL, sourceLocation, portalGlobalDir, bundleDir,
-                    bundleDependencyJarPaths, sdkDependencyPaths );
+            IClasspathContainer newContainer = new SDKClasspathContainer(
+                containerPath, project, portalDir, javadocURL, sourceLocation, portalGlobalDir, bundleDir,
+                bundleDependencyJarPaths, sdkDependencyPaths );
 
             JavaCore.setClasspathContainer(
                 containerPath, new IJavaProject[] { project }, new IClasspathContainer[] { newContainer }, null );
