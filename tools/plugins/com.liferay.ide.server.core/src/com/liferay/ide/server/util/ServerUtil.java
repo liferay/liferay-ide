@@ -30,6 +30,7 @@ import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.BundleSupervisor;
+import com.liferay.ide.server.core.portal.EmptyPortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
 import com.liferay.ide.server.core.portal.PortalRuntime;
@@ -131,43 +132,15 @@ public class ServerUtil
         int jmxPort = portalRuntime.getPortalBundle().getJmxRemotePort();
 
         /*
-        try
-        {
-            String launchVmArguments = server.getLaunchConfiguration( true, null ).getWorkingCopy().getAttribute(
-                IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "" );
-
-            Matcher aQutematcher = aQuteAgentPortPattern.matcher( launchVmArguments );
-            Matcher jmxMatcher = jmxRemotePortPattern.matcher( launchVmArguments );
-
-            String agentPortStr = null;
-
-            if( aQutematcher.find() )
-            {
-                agentPortStr = aQutematcher.group( 1 );
-            }
-
-            if( !CoreUtil.empty( agentPortStr ) )
-            {
-                aQuteAgentPort = Integer.parseInt( agentPortStr );
-            }
-
-            String jmxPortStr = null;
-
-            if( jmxMatcher.find() )
-            {
-                jmxPortStr = jmxMatcher.group( 1 );
-            }
-
-            if( !CoreUtil.empty( jmxPortStr ) )
-            {
-                jmxPort = Integer.parseInt( jmxPortStr );
-            }
-        }
-        catch( Exception e )
-        {
-            LiferayServerCore.logError( "can't get agent or jmx port from server launch configuration ", e );
-        }
-        */
+         * try { String launchVmArguments = server.getLaunchConfiguration( true, null ).getWorkingCopy().getAttribute(
+         * IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "" ); Matcher aQutematcher =
+         * aQuteAgentPortPattern.matcher( launchVmArguments ); Matcher jmxMatcher = jmxRemotePortPattern.matcher(
+         * launchVmArguments ); String agentPortStr = null; if( aQutematcher.find() ) { agentPortStr =
+         * aQutematcher.group( 1 ); } if( !CoreUtil.empty( agentPortStr ) ) { aQuteAgentPort = Integer.parseInt(
+         * agentPortStr ); } String jmxPortStr = null; if( jmxMatcher.find() ) { jmxPortStr = jmxMatcher.group( 1 ); }
+         * if( !CoreUtil.empty( jmxPortStr ) ) { jmxPort = Integer.parseInt( jmxPortStr ); } } catch( Exception e ) {
+         * LiferayServerCore.logError( "can't get agent or jmx port from server launch configuration ", e ); }
+         */
 
         BundleSupervisor bundleSupervisor = new BundleSupervisor( jmxPort );
 
@@ -746,8 +719,7 @@ public class ServerUtil
         Properties categories = new Properties();
         Enumeration<?> names = props.propertyNames();
 
-        String[] controlPanelCategories =
-        {   "category.my", //$NON-NLS-1$
+        String[] controlPanelCategories = { "category.my", //$NON-NLS-1$
             "category.users", //$NON-NLS-1$
             "category.apps", //$NON-NLS-1$
             "category.configuration", //$NON-NLS-1$
@@ -794,7 +766,7 @@ public class ServerUtil
 
         if( sdk == null || !sdk.validate().isOK() )
         {
-            return null;
+            return new EmptyPortalBundle( "Unable to detect plugin sdk or plugin sdk setting are incorrent" );
         }
 
         final Map<String, Object> appServerProperties = sdk.getBuildProperties();
@@ -815,7 +787,8 @@ public class ServerUtil
             }
         }
 
-        return null;
+        return new EmptyPortalBundle(
+            "Unable to get Liferay Bundle by properties 'app.server.type=" + appServerType + "'" );
     }
 
     public static IRuntime getRuntime( org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime )
@@ -950,8 +923,7 @@ public class ServerUtil
 
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_TYPE, type );
 
-        final String appServerDirKey =
-            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DIR, appServer );
+        final String appServerDirKey = getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DIR, appServer );
         final String appServerDeployDirKey =
             getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, appServer );
         final String appServerLibGlobalDirKey =
@@ -962,7 +934,8 @@ public class ServerUtil
         properties.put( appServerDirKey, dir );
         properties.put( appServerDeployDirKey, deployDir );
         properties.put( appServerLibGlobalDirKey, libGlobalDir );
-        //IDE-1268 need to always specify app.server.parent.dir, even though it is only useful in 6.1.2/6.2.0 or greater
+        // IDE-1268 need to always specify app.server.parent.dir, even though it is only useful in 6.1.2/6.2.0 or
+        // greater
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_PARENT_DIR, parentDir );
         properties.put( appServerPortalDirKey, portalDir );
 
@@ -971,7 +944,8 @@ public class ServerUtil
 
     public static IServerManagerConnection getServerManagerConnection( IServer server, IProgressMonitor monitor )
     {
-        return LiferayServerCore.getRemoteConnection( (IRemoteServer) server.loadAdapter( IRemoteServer.class, monitor ) );
+        return LiferayServerCore.getRemoteConnection(
+            (IRemoteServer) server.loadAdapter( IRemoteServer.class, monitor ) );
     }
 
     public static IServer[] getServersForRuntime( IRuntime runtime )
