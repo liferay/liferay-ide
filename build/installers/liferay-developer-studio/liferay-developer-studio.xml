@@ -436,11 +436,6 @@
              <destination>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy${platform_path_separator}activation_key.xml</destination>
              <origin>${activationKey}</origin>
              <ruleList>
-                 <compareValues>
-                     <logic>equals</logic>
-                     <value1>${isdxp}</value1>
-                     <value2>dxp</value2>
-                 </compareValues>
                  <fileTest>
                      <condition>exists</condition>
                      <path>${activationKey}</path>
@@ -626,13 +621,6 @@
             <mustBeWritable>0</mustBeWritable>
             <mustExist>1</mustExist>
             <width>30</width>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-            </ruleList>
         </fileParameter>
     </parameterList>
     <showFileUnpackingProgress>0</showFileUnpackingProgress>
