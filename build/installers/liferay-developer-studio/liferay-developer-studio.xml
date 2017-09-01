@@ -421,11 +421,6 @@
         <createDirectory>
             <path>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy</path>
             <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
                 <fileTest>
                     <condition>exists</condition>
                     <path>${activationKey}</path>
