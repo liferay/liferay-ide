@@ -21,15 +21,15 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.wst.html.ui,
  org.eclipse.wst.xml.ui,
  org.eclipse.jface.text,
- org.eclipse.sapphire.ui.swt.xml.editor,
- org.eclipse.sapphire.ui,
  org.eclipse.help,
  org.eclipse.ui.views.properties.tabbed,
  com.liferay.ide.layouttpl.core,
  com.liferay.ide.project.ui,
  com.liferay.ide.ui,
- org.eclipse.sapphire.osgi,
- org.eclipse.sapphire.java
+ org.eclipse.sapphire.ui.swt.xml.editor;bundle-version="[9,10)",
+ org.eclipse.sapphire.ui;bundle-version="[9,10)",
+ org.eclipse.sapphire.osgi;bundle-version="[9,10)",
+ org.eclipse.sapphire.java;bundle-version="[9,10)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.layouttpl.ui,

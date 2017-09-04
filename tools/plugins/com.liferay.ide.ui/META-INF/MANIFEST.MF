@@ -27,9 +27,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface,
  com.liferay.ide.server.core,
  org.apache.commons.lang,
- org.eclipse.sapphire.ui,
- org.eclipse.sapphire.ui.swt.xml.editor,
- org.eclipse.sapphire.modeling,
+ org.eclipse.sapphire.ui;bundle-version="[9,10)",
+ org.eclipse.sapphire.ui.swt.xml.editor;bundle-version="[9,10)",
+ org.eclipse.sapphire.modeling;bundle-version="[9,10)",
  com.liferay.ide.sdk.core,
  org.eclipse.epp.logging.aeri.ide;resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

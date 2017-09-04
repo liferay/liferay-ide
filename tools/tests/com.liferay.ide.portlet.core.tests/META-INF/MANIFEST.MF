@@ -13,9 +13,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.common.project.facet.core,
  org.eclipse.wst.common.frameworks,
  com.liferay.ide.project.core,
- org.eclipse.sapphire.modeling.xml,
- org.eclipse.sapphire.modeling,
- org.eclipse.sapphire.java,
+ org.eclipse.sapphire.modeling.xml;bundle-version="[9,10)",
+ org.eclipse.sapphire.modeling;bundle-version="[9,10)",
+ org.eclipse.sapphire.java;bundle-version="[9,10)",
  com.liferay.ide.server.core.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

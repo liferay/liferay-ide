@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.project.core.tests,
  com.liferay.ide.server.core.tests,
  org.apache.commons.lang,
- org.eclipse.sapphire.modeling,
+ org.eclipse.sapphire.modeling;bundle-version="[9,10)",
  org.eclipse.m2e.maven.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

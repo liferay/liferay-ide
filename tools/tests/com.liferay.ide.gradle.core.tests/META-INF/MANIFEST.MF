@@ -11,10 +11,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.console,
  com.liferay.ide.gradle.core,
  org.apache.commons.io,
- org.eclipse.sapphire.modeling,
+ org.eclipse.sapphire.modeling;bundle-version="[9,10)",
+ org.eclipse.sapphire.platform;bundle-version="[9,10)",
  org.eclipse.wst.server.core,
  com.liferay.ide.server.core,
- org.eclipse.sapphire.platform,
  com.liferay.ide.project.core,
  org.eclipse.buildship.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
