@@ -38,9 +38,9 @@ Require-Bundle: org.eclipse.wst.common.project.facet.core;visibility:=reexport,
  com.liferay.blade.api,
  org.apache.felix.gogo.runtime,
  org.apache.ant,
- biz.aQute.bndlib,
- biz.aQute.repository,
- biz.aQute.remote.api
+ biz.aQute.bndlib;bundle-version="[3.4,4.0)",
+ biz.aQute.remote.api;bundle-version="[3.4,4.0)",
+ biz.aQute.repository;bundle-version="[3.4,4.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.core,
