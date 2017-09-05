@@ -9,3 +9,6 @@ liferay-dxp-digital-enterprise-{bundle-type}-${version-and-timestamp}.zip,lifera
 for example:
 liferay-ce-portal-tomcat-7.0-ga3-20160804222206210.zip,liferay-ce-portal-7.0-ga3,tomcat-8.0.32,tomcat,7.0-ga3
 
+for unit tests, you need to put the following files:
+1. liferay-portal-tomcat-6.2-ce-{version-annd-timestamp}.zip
+2. liferay-plugins-sdk-6.2-ce-{version-annd-timestamp}.zip
