@@ -16,6 +16,9 @@
 package com.liferay.ide.swtbot.liferay.ui.action;
 
 import com.liferay.ide.swtbot.liferay.ui.UIAction;
+import com.liferay.ide.swtbot.ui.eclipse.page.AddAndRemoveDialog;
+import com.liferay.ide.swtbot.ui.eclipse.page.PreferencesDialog;
+import com.liferay.ide.swtbot.ui.eclipse.page.ServerRuntimeEnvironmentsPreferencesDialog;
 import com.liferay.ide.swtbot.ui.eclipse.page.TextDialog;
 import com.liferay.ide.swtbot.ui.eclipse.page.TreeDialog;
 import com.liferay.ide.swtbot.ui.page.Dialog;
@@ -28,18 +31,49 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class DialogAction extends UIAction
 {
 
-    Dialog dialog = new Dialog( bot );
-    TextDialog textDialog = new TextDialog( bot );
-    TreeDialog treeDialog = new TreeDialog( bot );
+    private final AddAndRemoveDialog addAndRemoveDialog = new AddAndRemoveDialog( bot );
+    private final Dialog dialog = new Dialog( bot );
+    private final PreferencesDialog preferencesDialog = new PreferencesDialog( bot );
+    private final ServerRuntimeEnvironmentsPreferencesDialog serverRuntimeEnvironmentsDialog =
+        new ServerRuntimeEnvironmentsPreferencesDialog( bot );
+    private final TextDialog textDialog = new TextDialog( bot );
+    private final TreeDialog treeDialog = new TreeDialog( bot );
 
     public DialogAction( SWTWorkbenchBot bot )
     {
         super( bot );
     }
 
+    public void addModule( String projectName )
+    {
+        addAndRemoveDialog.add( projectName );
+    }
+
     public void confirm()
     {
         dialog.confirm();
+    }
+
+    public void deleteRuntime( final String runtimeName )
+    {
+        serverRuntimeEnvironmentsDialog.getRuntimes().click( runtimeName );
+
+        serverRuntimeEnvironmentsDialog.getRemoveBtn().click();
+    }
+
+    public void openNewRuntimeWizard()
+    {
+        serverRuntimeEnvironmentsDialog.getAddBtn().click();
+    }
+
+    public void openPreferencesDialog()
+    {
+        ide.getPreferencesMenu().click();
+    }
+
+    public void openServerRuntimeEnvironmentsDialog()
+    {
+        preferencesDialog.selectPreferencesType( "Server", "Runtime Environments" );
     }
 
     public void prepareText( String text )

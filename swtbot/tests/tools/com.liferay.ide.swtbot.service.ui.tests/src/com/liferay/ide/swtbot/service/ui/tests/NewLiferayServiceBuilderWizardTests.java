@@ -40,7 +40,6 @@ import java.io.IOException;
 import org.eclipse.swtbot.swt.finder.keyboard.Keyboard;
 import org.eclipse.swtbot.swt.finder.keyboard.KeyboardFactory;
 import org.junit.AfterClass;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -74,7 +73,7 @@ public class NewLiferayServiceBuilderWizardTests extends SwtbotBase
 
         try
         {
-            viewAction.deleteProjectsExcludeNames( getLiferayPluginsSdkName() );
+            viewAction.deleteProjectsExcludeNames( envAction.getLiferayPluginsSdkName() );
         }
         catch( Exception e )
         {
@@ -84,10 +83,8 @@ public class NewLiferayServiceBuilderWizardTests extends SwtbotBase
     @BeforeClass
     public static void unzipServerAndSdk() throws IOException
     {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-
-        unzipServer();
-        unzipPluginsSDK();
+        envAction.unzipServer();
+        envAction.unzipPluginsSDK();
     }
 
     @Test
@@ -115,7 +112,7 @@ public class NewLiferayServiceBuilderWizardTests extends SwtbotBase
 
             SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
-            setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
+            setSDKLocation.getSdkLocation().setText( envAction.getLiferayPluginsSdkDir().toString() );
             setSDKLocation.finish();
         }
 
@@ -211,7 +208,7 @@ public class NewLiferayServiceBuilderWizardTests extends SwtbotBase
 
         textEditor.close();
 
-        File serviceXMLFile = getLiferayBundlesPath().append( fileName ).toFile();
+        File serviceXMLFile = envAction.getLiferayBundlesPath().append( fileName ).toFile();
 
         if( !serviceXMLFile.exists() )
         {
@@ -323,7 +320,7 @@ public class NewLiferayServiceBuilderWizardTests extends SwtbotBase
 
             SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
-            setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
+            setSDKLocation.getSdkLocation().setText( envAction.getLiferayPluginsSdkDir().toString() );
             setSDKLocation.finish();
         }
 
@@ -396,8 +393,6 @@ public class NewLiferayServiceBuilderWizardTests extends SwtbotBase
     @Before
     public void openWizard()
     {
-        Assume.assumeTrue( runTest() || runAllTests() );
-
         hasAddedProject = addedProjects();
 
         ide.getCreateLiferayProjectToolbar().getNewLiferayServiceBuilder().click();

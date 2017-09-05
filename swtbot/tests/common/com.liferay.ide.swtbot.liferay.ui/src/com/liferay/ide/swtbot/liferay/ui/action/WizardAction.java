@@ -25,6 +25,7 @@ import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewLiferayModuleWiz
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewLiferayWorkspaceWizard;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewModuleFragmentInfoWizard;
 import com.liferay.ide.swtbot.ui.eclipse.page.ImportProjectWizard;
+import com.liferay.ide.swtbot.ui.eclipse.page.NewRuntimeWizard;
 import com.liferay.ide.swtbot.ui.eclipse.page.NewServerWizard;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 import com.liferay.ide.swtbot.ui.util.StringPool;
@@ -39,18 +40,19 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 public class WizardAction extends UIAction
 {
 
-    final ImportProjectWizard importProjectWizard = new ImportProjectWizard( bot );
-    final NewModuleFragmentInfoWizard newFragmentInfoWizard = new NewModuleFragmentInfoWizard( bot );
-    final NewFragmentWizard newFragmentWizard = new NewFragmentWizard( bot );
-    final NewLiferayJsfProjectWizard newJsfProjectWizard = new NewLiferayJsfProjectWizard( bot );
-    final NewLiferay7RuntimeWizard newLiferay7RuntimeWizard = new NewLiferay7RuntimeWizard( bot );
-    final NewLiferayComponentWizard newLiferayComponentWizard = new NewLiferayComponentWizard( bot );
-    final NewLiferayModuleInfoWizard newModuleInfoWizard = new NewLiferayModuleInfoWizard( bot );
-    final NewLiferayModuleWizard newModuleWizard = new NewLiferayModuleWizard( bot );
-    final NewServerWizard newServerWizard = new NewServerWizard( bot );
-    final NewLiferayWorkspaceWizard newWorkspaceWizard = new NewLiferayWorkspaceWizard( bot );
+    private final ImportProjectWizard importProjectWizard = new ImportProjectWizard( bot );
+    private final NewModuleFragmentInfoWizard newFragmentInfoWizard = new NewModuleFragmentInfoWizard( bot );
+    private final NewFragmentWizard newFragmentWizard = new NewFragmentWizard( bot );
+    private final NewLiferayJsfProjectWizard newJsfProjectWizard = new NewLiferayJsfProjectWizard( bot );
+    private final NewLiferay7RuntimeWizard newLiferay7RuntimeWizard = new NewLiferay7RuntimeWizard( bot );
+    private final NewLiferayComponentWizard newLiferayComponentWizard = new NewLiferayComponentWizard( bot );
+    private final NewLiferayModuleInfoWizard newModuleInfoWizard = new NewLiferayModuleInfoWizard( bot );
+    private final NewLiferayModuleWizard newModuleWizard = new NewLiferayModuleWizard( bot );
+    private final NewRuntimeWizard newRuntimeWizard = new NewRuntimeWizard( bot );
+    private final NewServerWizard newServerWizard = new NewServerWizard( bot );
+    private final NewLiferayWorkspaceWizard newWorkspaceWizard = new NewLiferayWorkspaceWizard( bot );
 
-    Wizard wizard = new Wizard( bot );
+    private final Wizard wizard = new Wizard( bot );
 
     public WizardAction( SWTWorkbenchBot bot )
     {
@@ -202,6 +204,11 @@ public class WizardAction extends UIAction
         prepareJsfProject( projectName, GRADLE, componentSuite );
     }
 
+    public void prepareNewServer( final String serverName )
+    {
+        newServerWizard.getServerName().setText( serverName );
+    }
+
     public void prepareJsfProjectMaven( String projectName, String componentSuite )
     {
         prepareJsfProject( projectName, MAVEN, componentSuite );
@@ -216,6 +223,11 @@ public class WizardAction extends UIAction
     {
         newLiferay7RuntimeWizard.getName().setText( name );
         newLiferay7RuntimeWizard.getLocation().setText( location );
+    }
+
+    public void prepareLiferay7RuntimeType()
+    {
+        newRuntimeWizard.selectServerType( "Liferay, Inc.", "Liferay 7.x" );
     }
 
     public void prepareLiferayModule( String projectName )
@@ -325,6 +337,11 @@ public class WizardAction extends UIAction
         prepareLiferayWorkspace( projectName, MAVEN );
     }
 
+    public void prepareRuntimeType( final String category, final String type )
+    {
+        newRuntimeWizard.selectServerType( category, type );
+    }
+
     public void selectImportType( String selectTypeTree, String selectTypeNode )
     {
         selectImportType( StringPool.BLANK, selectTypeTree, selectTypeNode );
@@ -340,11 +357,6 @@ public class WizardAction extends UIAction
     public void selectServerType( String category, String type )
     {
         selectImportType( StringPool.BLANK, category, type );
-    }
-
-    public void selectServerType( String filterText, String category, String type )
-    {
-        newServerWizard.getServerTypes().expandNode( category, type ).select();
     }
 
 }

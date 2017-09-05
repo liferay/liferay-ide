@@ -19,9 +19,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Assume;
-import org.junit.BeforeClass;
-
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewLiferayJsfProjectWizard;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewLiferayModuleInfoWizard;
@@ -42,23 +39,6 @@ public class ValidationModuleProjectTests extends SwtbotBase
     NewLiferayModuleWizard createModuleProjectWizard = new NewLiferayModuleWizard( bot );
 
     NewLiferayModuleInfoWizard createModuleProjectSecondPageWizard = new NewLiferayModuleInfoWizard( bot );
-
-    static String fullClassname = new SecurityManager()
-    {
-
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
-
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
-
-    @BeforeClass
-    public static void shouldRunTests()
-    {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-    }
 
     @Test
     public void validationTheSecondPage()

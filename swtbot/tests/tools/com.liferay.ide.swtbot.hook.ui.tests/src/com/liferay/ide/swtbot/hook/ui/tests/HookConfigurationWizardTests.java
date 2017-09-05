@@ -44,7 +44,6 @@ import com.liferay.ide.swtbot.ui.util.StringPool;
 import java.io.IOException;
 
 import org.junit.AfterClass;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -78,7 +77,7 @@ public class HookConfigurationWizardTests extends SwtbotBase
         try
         {
             ide.closeShell( NEW_LIFERAY_HOOK );
-            viewAction.deleteProjectsExcludeNames( getLiferayPluginsSdkName() );
+            viewAction.deleteProjectsExcludeNames( envAction.getLiferayPluginsSdkName() );
         }
         catch( Exception e )
         {
@@ -88,12 +87,10 @@ public class HookConfigurationWizardTests extends SwtbotBase
     @BeforeClass
     public static void unzipServerAndSdk() throws IOException
     {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-
         ide.getLiferayPerspective().activate();
 
-        unzipPluginsSDK();
-        unzipServer();
+        envAction.unzipPluginsSDK();
+        envAction.unzipServer();
     }
 
     @Test
@@ -547,8 +544,6 @@ public class HookConfigurationWizardTests extends SwtbotBase
     @Before
     public void openWizardCreateProject()
     {
-        Assume.assumeTrue( runTest() || runAllTests() );
-
         hasAddedProject = addedProjects();
 
         if( hasAddedProject )
@@ -592,7 +587,7 @@ public class HookConfigurationWizardTests extends SwtbotBase
 
             SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
-            setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
+            setSDKLocation.getSdkLocation().setText( envAction.getLiferayPluginsSdkDir().toString() );
 
             setSDKLocation.finish();
         }

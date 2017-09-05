@@ -15,13 +15,13 @@
 
 package com.liferay.ide.swtbot.server.ui.tests;
 
+import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 import com.liferay.ide.swtbot.liferay.ui.page.editor.ServerEditor;
 
 import java.io.IOException;
 
-import org.junit.Assume;
-import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -30,68 +30,114 @@ import org.junit.Test;
  * @author Ashley Yuan
  * @author Ying Xu
  */
-public class ServerTomcatTests extends ServerTestsBase
+public class ServerTomcatTests extends SwtbotBase
 {
-
-    static String fullClassname = new SecurityManager()
-    {
-
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
-
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
 
     @BeforeClass
     public static void prepareServer() throws IOException
     {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
+        envAction.unzipServer();
 
-        unzipServer();
+        envAction.prepareGeoFile();
 
-        prepareGeoFile();
+        envAction.preparePortalExtFile();
 
-        preparePortalExtFile();
-
-        preparePortalSetupWizardFile();
+        envAction.preparePortalSetupWizardFile();
 
         final String serverName = "Liferay 7-initialization";
 
-        addLiferay7Server( serverName );
+        dialogAction.openPreferencesDialog();
+
+        dialogAction.openServerRuntimeEnvironmentsDialog();
+
+        dialogAction.openNewRuntimeWizard();
+
+        wizardAction.prepareLiferay7RuntimeType();
+
+        wizardAction.next();
+
+        wizardAction.prepareLiferay7Runtime(
+            serverName, envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+
+        wizardAction.finish();
+
+        dialogAction.confirm();
+
+        wizardAction.openNewLiferayServerWizard();
+
+        wizardAction.prepareNewServer( serverName );
+
+        wizardAction.finish();
+
+        viewAction.showServersView();
 
         final String serverStoppedLabel = serverName + "  [Stopped]";
 
-        serversView.getServers().getTreeItem( serverStoppedLabel ).select();
-
-        serversView.clickStartBtn();
+        viewAction.serverStart( serverStoppedLabel );
 
         sleep( 200000 );
 
         final String serverStartedLabel = serverName + "  [Started]";
 
-        serversView.getServers().getTreeItem( serverStartedLabel ).contextMenu( "Open Liferay Portal Home" );
+        viewAction.openLiferayPortalHome( serverStartedLabel );
 
         sleep( 20000 );
 
-        serversView.getServers().getTreeItem( serverStartedLabel ).select();
-
-        serversView.clickStopBtn();
+        viewAction.serverStop( serverStartedLabel );
 
         sleep( 20000 );
-    }
-
-    @Before
-    public void openWizard()
-    {
-        Assume.assumeTrue( runTest() || runAllTests() );
     }
 
     @Test
     public void addLiferay7RuntimeFromPreferences()
     {
-        addLiferay7Runtime( "Liferay 7-add-runtime" );
+        dialogAction.openPreferencesDialog();
+
+        dialogAction.openServerRuntimeEnvironmentsDialog();
+
+        dialogAction.openNewRuntimeWizard();
+
+        wizardAction.prepareLiferay7RuntimeType();
+
+        wizardAction.next();
+
+        wizardAction.prepareLiferay7Runtime(
+            "Liferay 7-add-runtime",
+            envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+
+        wizardAction.finish();
+
+        dialogAction.confirm();
+    }
+
+    @Test
+    public void addLiferay7ServerFromMenu()
+    {
+        dialogAction.openPreferencesDialog();
+
+        dialogAction.openServerRuntimeEnvironmentsDialog();
+
+        dialogAction.openNewRuntimeWizard();
+
+        wizardAction.prepareLiferay7RuntimeType();
+
+        wizardAction.next();
+
+        wizardAction.prepareLiferay7Runtime(
+            "Liferay 7-add-server",
+            envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+
+        wizardAction.finish();
+
+        dialogAction.confirm();
+
+        wizardAction.openNewLiferayServerWizard();
+
+        wizardAction.prepareNewServer( "Liferay 7-add-server" );
+
+        wizardAction.finish();
+
+        viewAction.showServersView();
     }
 
     @Test
@@ -99,203 +145,31 @@ public class ServerTomcatTests extends ServerTestsBase
     {
         final String runtimeName = "Liferay 7-delete";
 
-        addLiferay7Runtime( runtimeName );
+        dialogAction.openPreferencesDialog();
 
-        ide.getPreferencesMenu().click();
+        dialogAction.openServerRuntimeEnvironmentsDialog();
 
-        preferencesDialog.selectServerRuntimeEnvironmentsPage();
+        dialogAction.openNewRuntimeWizard();
 
-        serverRuntimePage.getRuntimes().click( runtimeName );
+        wizardAction.prepareLiferay7RuntimeType();
 
-        serverRuntimePage.getRemoveBtn().click();
+        wizardAction.next();
 
-        serverRuntimePage.confirm();
-    }
+        wizardAction.prepareLiferay7Runtime(
+            runtimeName,
+            envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
 
-    @Test
-    public void addLiferay7ServerFromMenu()
-    {
-        addLiferay7Server( "Liferay 7-add-server" );
-    }
+        wizardAction.finish();
 
-    @Test
-    public void testLiferay7ServerDebug()
-    {
-        final String serverName = "Liferay 7-debug";
+        dialogAction.confirm();
 
-        addLiferay7Server( serverName );
+        dialogAction.openPreferencesDialog();
 
-        final String serverStoppedLabel = serverName + "  [Stopped]";
+        dialogAction.openServerRuntimeEnvironmentsDialog();
 
-        serversView.getServers().getTreeItem( serverStoppedLabel ).select();
+        dialogAction.deleteRuntime( runtimeName );
 
-        serversView.clickDebugBtn();
-
-        sleep( 100000 );
-
-        final String serverDebuggingLabel = serverName + "  [Debugging]";
-
-        serversView.getServers().getTreeItem( serverDebuggingLabel ).select();
-
-        serversView.clickStopBtn();
-
-        sleep( 20000 );
-    }
-
-    @Test
-    public void serverEditorPortsChange()
-    {
-        final String serverName = "Liferay 7-http-port-change";
-
-        addLiferay7Server( serverName );
-
-        final String serverStoppedLabel = serverName + "  [Stopped]";
-
-        serversView.getServers().getTreeItem( serverStoppedLabel ).doubleClick();
-
-        final ServerEditor serverEditor = new ServerEditor( bot, serverName );
-        final ServerEditor serverEditorWithLabel = new ServerEditor( bot, serverStoppedLabel );
-
-        try
-        {
-            serverEditor.getHttpPort().setText( "8081" );
-        }
-        catch( Exception e )
-        {
-            serverEditorWithLabel.getHttpPort().setText( "8081" );
-        }
-
-        try
-        {
-            serverEditor.save();
-        }
-        catch( Exception e )
-        {
-            serverEditorWithLabel.save();
-        }
-
-        try
-        {
-            serverEditor.close();
-        }
-        catch( Exception e )
-        {
-            serverEditorWithLabel.close();
-        }
-
-        serversView.getServers().getTreeItem( serverStoppedLabel ).doubleClick();
-
-        try
-        {
-            serverEditor.getHttpPort().setText( "8080" );
-        }
-        catch( Exception e )
-        {
-            serverEditorWithLabel.getHttpPort().setText( "8080" );
-        }
-
-        try
-        {
-            serverEditor.save();
-        }
-        catch( Exception e )
-        {
-            serverEditorWithLabel.save();
-        }
-
-        try
-        {
-            serverEditor.close();
-        }
-        catch( Exception e )
-        {
-            serverEditorWithLabel.close();
-        }
-    }
-
-    @Test
-    public void serverEditorPortsChangeAndStart()
-    {
-        final String serverName = "Liferay 7-http-port-change-and-start";
-
-        addLiferay7Server( serverName );
-
-        final String serverStoppedLabel = serverName + "  [Stopped]";
-
-        serversView.getServers().getTreeItem( serverStoppedLabel ).doubleClick();
-
-        final ServerEditor serverEditor = new ServerEditor( bot, serverName );
-        final ServerEditor serverEditorWithLabelStopped = new ServerEditor( bot, serverStoppedLabel );
-
-        try
-        {
-            serverEditor.getHttpPort().setText( "8082" );
-        }
-        catch( Exception e )
-        {
-            serverEditorWithLabelStopped.getHttpPort().setText( "8082" );
-        }
-
-        try
-        {
-            serverEditor.save();
-        }
-        catch( Exception e )
-        {
-            serverEditorWithLabelStopped.save();
-        }
-
-        try
-        {
-            serverEditor.close();
-        }
-        catch( Exception e )
-        {
-            serverEditorWithLabelStopped.close();
-        }
-
-        serversView.getServers().getTreeItem( serverStoppedLabel ).select();
-
-        serversView.clickStartBtn();
-
-        sleep( 100000 );
-
-        final String serverStartedLabel = serverName + "  [Started]";
-
-        serversView.getServers().getTreeItem( serverStartedLabel ).select();
-
-        serversView.clickStopBtn();
-
-        sleep( 20000 );
-
-        serversView.getServers().getTreeItem( serverStoppedLabel ).doubleClick();
-
-        try
-        {
-            serverEditor.getHttpPort().setText( "8080" );
-        }
-        catch( Exception e )
-        {
-            serverEditorWithLabelStopped.getHttpPort().setText( "8080" );
-        }
-
-        try
-        {
-            serverEditor.save();
-        }
-        catch( Exception e )
-        {
-            serverEditorWithLabelStopped.save();
-        }
-
-        try
-        {
-            serverEditor.close();
-        }
-        catch( Exception e )
-        {
-            serverEditorWithLabelStopped.close();
-        }
+        dialogAction.confirm();
     }
 
     @Test
@@ -303,11 +177,34 @@ public class ServerTomcatTests extends ServerTestsBase
     {
         final String serverName = "Liferay 7-custom-launch-settings";
 
-        addLiferay7Server( serverName );
+        dialogAction.openPreferencesDialog();
+
+        dialogAction.openServerRuntimeEnvironmentsDialog();
+
+        dialogAction.openNewRuntimeWizard();
+
+        wizardAction.prepareLiferay7RuntimeType();
+
+        wizardAction.next();
+
+        wizardAction.prepareLiferay7Runtime(
+            serverName, envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+
+        wizardAction.finish();
+
+        dialogAction.confirm();
+
+        wizardAction.openNewLiferayServerWizard();
+
+        wizardAction.prepareNewServer( serverName );
+
+        wizardAction.finish();
+
+        viewAction.showServersView();
 
         final String serverStoppedLabel = serverName + "  [Stopped]";
 
-        serversView.getServers().getTreeItem( serverStoppedLabel ).doubleClick();
+        viewAction.openServerEditor( serverStoppedLabel );
 
         final ServerEditor serverEditor = new ServerEditor( bot, serverName );
         final ServerEditor serverEditorWithLabel = new ServerEditor( bot, serverStoppedLabel );
@@ -348,7 +245,7 @@ public class ServerTomcatTests extends ServerTestsBase
             serverEditorWithLabel.close();
         }
 
-        serversView.getServers().getTreeItem( serverStoppedLabel ).doubleClick();
+        viewAction.openServerEditor( serverStoppedLabel );
 
         try
         {
@@ -383,11 +280,34 @@ public class ServerTomcatTests extends ServerTestsBase
     {
         final String serverName = "Liferay 7-custom-launch-settings-start";
 
-        addLiferay7Server( serverName );
+        dialogAction.openPreferencesDialog();
+
+        dialogAction.openServerRuntimeEnvironmentsDialog();
+
+        dialogAction.openNewRuntimeWizard();
+
+        wizardAction.prepareLiferay7RuntimeType();
+
+        wizardAction.next();
+
+        wizardAction.prepareLiferay7Runtime(
+            serverName, envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+
+        wizardAction.finish();
+
+        dialogAction.confirm();
+
+        wizardAction.openNewLiferayServerWizard();
+
+        wizardAction.prepareNewServer( serverName );
+
+        wizardAction.finish();
+
+        viewAction.showServersView();
 
         final String serverStoppedLabel = serverName + "  [Stopped]";
 
-        serversView.getServers().getTreeItem( serverStoppedLabel ).doubleClick();
+        viewAction.openServerEditor( serverStoppedLabel );
 
         final ServerEditor serverEditor = new ServerEditor( bot, serverName );
         final ServerEditor serverEditorWithLabelStopped = new ServerEditor( bot, serverStoppedLabel );
@@ -428,21 +348,17 @@ public class ServerTomcatTests extends ServerTestsBase
             serverEditorWithLabelStopped.close();
         }
 
-        serversView.getServers().getTreeItem( serverStoppedLabel ).select();
-
-        serversView.clickStartBtn();
+        viewAction.serverStart( serverStoppedLabel );
 
         sleep( 100000 );
 
         final String serverStartedLabel = serverName + "  [Started]";
 
-        serversView.getServers().getTreeItem( serverStartedLabel ).select();
-
-        serversView.clickStopBtn();
+        viewAction.serverStop( serverStartedLabel );
 
         sleep( 20000 );
 
-        serversView.getServers().getTreeItem( serverStoppedLabel ).doubleClick();
+        viewAction.openServerEditor( serverStoppedLabel );
 
         try
         {
@@ -470,6 +386,249 @@ public class ServerTomcatTests extends ServerTestsBase
         {
             serverEditorWithLabelStopped.close();
         }
+    }
+
+    @Test
+    @Ignore( "To wait for IDE-3343" )
+    public void serverEditorPortsChange()
+    {
+        final String serverName = "Liferay 7-http-port-change";
+
+        dialogAction.openPreferencesDialog();
+
+        dialogAction.openServerRuntimeEnvironmentsDialog();
+
+        dialogAction.openNewRuntimeWizard();
+
+        wizardAction.prepareLiferay7RuntimeType();
+
+        wizardAction.next();
+
+        wizardAction.prepareLiferay7Runtime(
+            serverName, envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+
+        wizardAction.finish();
+
+        dialogAction.confirm();
+
+        wizardAction.openNewLiferayServerWizard();
+
+        wizardAction.prepareNewServer( serverName );
+
+        wizardAction.finish();
+
+        viewAction.showServersView();
+
+        final String serverStoppedLabel = serverName + "  [Stopped]";
+
+        viewAction.openServerEditor( serverStoppedLabel );
+
+        final ServerEditor serverEditor = new ServerEditor( bot, serverName );
+        final ServerEditor serverEditorWithLabel = new ServerEditor( bot, serverStoppedLabel );
+
+        try
+        {
+            serverEditor.getHttpPort().setText( "8081" );
+        }
+        catch( Exception e )
+        {
+            serverEditorWithLabel.getHttpPort().setText( "8081" );
+        }
+
+        try
+        {
+            serverEditor.save();
+        }
+        catch( Exception e )
+        {
+            serverEditorWithLabel.save();
+        }
+
+        try
+        {
+            serverEditor.close();
+        }
+        catch( Exception e )
+        {
+            serverEditorWithLabel.close();
+        }
+
+        viewAction.openServerEditor( serverStoppedLabel );
+
+        try
+        {
+            serverEditor.getHttpPort().setText( "8080" );
+        }
+        catch( Exception e )
+        {
+            serverEditorWithLabel.getHttpPort().setText( "8080" );
+        }
+
+        try
+        {
+            serverEditor.save();
+        }
+        catch( Exception e )
+        {
+            serverEditorWithLabel.save();
+        }
+
+        try
+        {
+            serverEditor.close();
+        }
+        catch( Exception e )
+        {
+            serverEditorWithLabel.close();
+        }
+    }
+
+    @Test
+    @Ignore( "To wait for IDE-3343" )
+    public void serverEditorPortsChangeAndStart()
+    {
+        final String serverName = "Liferay 7-http-port-change-and-start";
+
+        dialogAction.openPreferencesDialog();
+
+        dialogAction.openServerRuntimeEnvironmentsDialog();
+
+        dialogAction.openNewRuntimeWizard();
+
+        wizardAction.prepareLiferay7RuntimeType();
+
+        wizardAction.next();
+
+        wizardAction.prepareLiferay7Runtime(
+            serverName, envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+
+        wizardAction.finish();
+
+        dialogAction.confirm();
+
+        wizardAction.openNewLiferayServerWizard();
+
+        wizardAction.prepareNewServer( serverName );
+
+        wizardAction.finish();
+
+        viewAction.showServersView();
+
+        final String serverStoppedLabel = serverName + "  [Stopped]";
+
+        viewAction.openServerEditor( serverStoppedLabel );
+
+        final ServerEditor serverEditor = new ServerEditor( bot, serverName );
+        final ServerEditor serverEditorWithLabelStopped = new ServerEditor( bot, serverStoppedLabel );
+
+        try
+        {
+            serverEditor.getHttpPort().setText( "8082" );
+        }
+        catch( Exception e )
+        {
+            serverEditorWithLabelStopped.getHttpPort().setText( "8082" );
+        }
+
+        try
+        {
+            serverEditor.save();
+        }
+        catch( Exception e )
+        {
+            serverEditorWithLabelStopped.save();
+        }
+
+        try
+        {
+            serverEditor.close();
+        }
+        catch( Exception e )
+        {
+            serverEditorWithLabelStopped.close();
+        }
+
+        viewAction.serverStart( serverStoppedLabel );
+
+        sleep( 100000 );
+
+        final String serverStartedLabel = serverName + "  [Started]";
+
+        viewAction.serverStop( serverStartedLabel );
+
+        sleep( 20000 );
+
+        viewAction.openServerEditor( serverStoppedLabel );
+
+        try
+        {
+            serverEditor.getHttpPort().setText( "8080" );
+        }
+        catch( Exception e )
+        {
+            serverEditorWithLabelStopped.getHttpPort().setText( "8080" );
+        }
+
+        try
+        {
+            serverEditor.save();
+        }
+        catch( Exception e )
+        {
+            serverEditorWithLabelStopped.save();
+        }
+
+        try
+        {
+            serverEditor.close();
+        }
+        catch( Exception e )
+        {
+            serverEditorWithLabelStopped.close();
+        }
+    }
+
+    @Test
+    public void testLiferay7ServerDebug()
+    {
+        final String serverName = "Liferay 7-debug";
+
+        dialogAction.openPreferencesDialog();
+
+        dialogAction.openServerRuntimeEnvironmentsDialog();
+
+        dialogAction.openNewRuntimeWizard();
+
+        wizardAction.prepareLiferay7RuntimeType();
+
+        wizardAction.next();
+
+        wizardAction.prepareLiferay7Runtime(
+            serverName, envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+
+        wizardAction.finish();
+
+        dialogAction.confirm();
+
+        wizardAction.openNewLiferayServerWizard();
+
+        wizardAction.prepareNewServer( serverName );
+
+        wizardAction.finish();
+
+        viewAction.showServersView();
+
+        final String serverStoppedLabel = serverName + "  [Stopped]";
+
+        viewAction.serverDebug( serverStoppedLabel );
+
+        sleep( 100000 );
+
+        final String serverDebuggingLabel = serverName + "  [Debugging]";
+
+        viewAction.serverStop( serverDebuggingLabel );
+
+        sleep( 20000 );
     }
 
 }

@@ -31,8 +31,6 @@ import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
 import org.junit.After;
-import org.junit.Assume;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -43,53 +41,34 @@ import org.junit.Test;
 public class SDKProjectImportWizardTests extends SwtbotBase
 {
 
-    static String fullClassname = new SecurityManager()
-    {
-
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
-
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
-
     private static final String BUNDLE_ID = "com.liferay.ide.swtbot.project.ui.tests";
 
     private LiferayProjectFromExistSourceWizard wizard = new LiferayProjectFromExistSourceWizard( bot );
 
     Tree projectTreeItem = viewAction.getProjects();
 
-    TreeItem sdkTreeItem = viewAction.getProjects().getTreeItem( getLiferayPluginsSdkName() );
+    TreeItem sdkTreeItem = viewAction.getProjects().getTreeItem( envAction.getLiferayPluginsSdkName() );
 
     @BeforeClass
     public static void unzipServerAndSdk() throws IOException
     {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-
-        unzipServer();
-        unzipPluginsSDK();
+        envAction.unzipServer();
+        envAction.unzipPluginsSDK();
     }
 
     @After
     public void cleanUp()
     {
-        viewAction.deleteProjectsExcludeNames( getLiferayPluginsSdkName() );
+        viewAction.deleteProjectsExcludeNames( envAction.getLiferayPluginsSdkName() );
     }
 
     public void unzipSDKProject( String path, String projectName ) throws Exception
     {
-        path = getLiferayPluginsSdkDir().append( path ).toOSString();
+        path = envAction.getLiferayPluginsSdkDir().append( path ).toOSString();
 
         final File projectZipFile = getProjectZip( BUNDLE_ID, projectName );
 
         ZipUtil.unzip( projectZipFile, new File( path ) );
-    }
-
-    @Before
-    public void shouldRunTests()
-    {
-        Assume.assumeTrue( runTest() || runAllTests() );
     }
 
     @Test
@@ -103,7 +82,7 @@ public class SDKProjectImportWizardTests extends SwtbotBase
 
         wizardAction.openNewLiferayPluginProjectsFromExistingSourceWizard();
 
-        wizard.getSdkDirectory().setText( getLiferayPluginsSdkDir().toString() );
+        wizard.getSdkDirectory().setText( envAction.getLiferayPluginsSdkDir().toString() );
 
         wizard.getSelectAllBtn().click();
         wizard.getDeselectAllBtn().click();
@@ -133,12 +112,12 @@ public class SDKProjectImportWizardTests extends SwtbotBase
         {
             wizard.cancel();
 
-            viewAction.deleteProjectsExcludeNames( getLiferayPluginsSdkName() );
+            viewAction.deleteProjectsExcludeNames( envAction.getLiferayPluginsSdkName() );
 
             wizardAction.openNewLiferayPluginProjectsFromExistingSourceWizard();
         }
 
-        unzipPluginsSDK();
+        envAction.unzipPluginsSDK();
 
         wizard.getSdkDirectory().setText( "AAA" );
 
@@ -152,7 +131,7 @@ public class SDKProjectImportWizardTests extends SwtbotBase
 
         unzipSDKProject( "portlets", "Import-223-portlet" );
 
-        wizard.getSdkDirectory().setText( getLiferayPluginsSdkDir().toString() );
+        wizard.getSdkDirectory().setText( envAction.getLiferayPluginsSdkDir().toString() );
 
         assertEquals( AT_LEAST_ONE_PROJECT_MUST_BE_SPECIFY, wizard.getValidationMsg() );
 
@@ -162,15 +141,15 @@ public class SDKProjectImportWizardTests extends SwtbotBase
 
         wizard.finish();
 
-        TreeItem sdkTreeItem = viewAction.getProjects().getTreeItem( getLiferayPluginsSdkName() );
+        TreeItem sdkTreeItem = viewAction.getProjects().getTreeItem( envAction.getLiferayPluginsSdkName() );
 
         assertTrue( sdkTreeItem.isVisible() );
 
         assertTrue( projectTreeItem.getTreeItem( "Import-223-portlet" ).isVisible() );
 
-        IPath sdk2Dir = getLiferayPluginsSdkDir().removeLastSegments( 1 ).append( "sdk2" );
+        IPath sdk2Dir = envAction.getLiferayPluginsSdkDir().removeLastSegments( 1 ).append( "sdk2" );
 
-        FileUtil.copyDirectiory( getLiferayPluginsSdkDir().toOSString(), sdk2Dir.toOSString() );
+        FileUtil.copyDirectiory( envAction.getLiferayPluginsSdkDir().toOSString(), sdk2Dir.toOSString() );
 
         wizardAction.openNewLiferayPluginProjectsFromExistingSourceWizard();
 

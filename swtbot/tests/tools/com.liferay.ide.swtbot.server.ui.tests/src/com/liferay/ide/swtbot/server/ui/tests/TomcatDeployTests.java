@@ -15,29 +15,19 @@
 
 package com.liferay.ide.swtbot.server.ui.tests;
 
+import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
+
 import java.io.IOException;
 
 import org.junit.AfterClass;
-import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class TomcatDeployTests extends ServerTestsBase
+public class TomcatDeployTests extends SwtbotBase
 {
-
-    static String fullClassname = new SecurityManager()
-    {
-
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
-
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
 
     final static String serverName = "Liferay 7-deploy";
     final static String serverStoppedLabel = serverName + "  [Stopped]";
@@ -46,21 +36,40 @@ public class TomcatDeployTests extends ServerTestsBase
     @BeforeClass
     public static void startServer() throws IOException
     {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
+        envAction.unzipServer();
 
-        unzipServer();
+        envAction.prepareGeoFile();
 
-        prepareGeoFile();
+        envAction.preparePortalExtFile();
 
-        preparePortalExtFile();
+        envAction.preparePortalSetupWizardFile();
 
-        preparePortalSetupWizardFile();
+        dialogAction.openPreferencesDialog();
 
-        addLiferay7Server( serverName );
+        dialogAction.openServerRuntimeEnvironmentsDialog();
 
-        serversView.getServers().getTreeItem( serverStoppedLabel ).select();
+        dialogAction.openNewRuntimeWizard();
 
-        serversView.clickStartBtn();
+        wizardAction.prepareLiferay7RuntimeType();
+
+        wizardAction.next();
+
+        wizardAction.prepareLiferay7Runtime(
+            serverName, envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+
+        wizardAction.finish();
+
+        dialogAction.confirm();
+
+        wizardAction.openNewLiferayServerWizard();
+
+        wizardAction.prepareNewServer( serverName );
+
+        wizardAction.finish();
+
+        viewAction.showServersView();
+
+        viewAction.serverStart( serverStoppedLabel );
 
         sleep( 200000 );
     }
@@ -68,21 +77,23 @@ public class TomcatDeployTests extends ServerTestsBase
     @Test
     public void deploySampleProject()
     {
-        ide.getCreateLiferayProjectToolbar().getNewLiferayModule().click();
+        wizardAction.openNewLiferayModuleWizard();
 
-        newModuleProjectWizard.getProjectName().setText( "test" );
-        newModuleProjectWizard.finish();
+        wizardAction.prepareLiferayModule( "test" );
 
-        ide.getCreateLiferayProjectToolbar().getNewLiferayModule().click();
+        wizardAction.finishToWait();
 
-        newModuleProjectWizard.getProjectName().setText( "test2" );
-        newModuleProjectWizard.finish();
+        wizardAction.openNewLiferayModuleWizard();
 
-        serversView.getServers().getTreeItem( serverStartedLabel ).contextMenu( "Add and Remove..." );
+        wizardAction.prepareLiferayModule( "test2" );
 
-        addAndRemoveDialog.add( "test" );
+        wizardAction.finishToWait();
 
-        addAndRemoveDialog.confirm();
+        viewAction.openAddAndRemoveDialog( serverStartedLabel );
+
+        dialogAction.addModule( "test" );
+
+        dialogAction.confirm();
 
         sleep( 10000 );
     }
@@ -90,9 +101,7 @@ public class TomcatDeployTests extends ServerTestsBase
     @AfterClass
     public static void stopServer() throws IOException
     {
-        serversView.getServers().getTreeItem( serverStartedLabel ).select();
-
-        serversView.clickStopBtn();
+        viewAction.serverStop( serverStartedLabel );
 
         sleep( 20000 );
     }

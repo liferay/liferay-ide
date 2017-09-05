@@ -26,7 +26,7 @@ import com.liferay.ide.swtbot.ui.page.View;
 public class ServersView extends View
 {
 
-    private Tree servers;
+    private final Tree servers;
 
     public ServersView( SWTWorkbenchBot bot )
     {

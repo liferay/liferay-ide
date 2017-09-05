@@ -33,11 +33,12 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 public class ViewAction extends UIAction
 {
 
-    DeleteResourcesContinueDialog continueDeleteResourcesDialog = new DeleteResourcesContinueDialog( bot );
-    DeleteResourcesDialog deleteResourcesDialog = new DeleteResourcesDialog( bot );
-    PackageExplorerView packageExplorerView = new PackageExplorerView( bot );
-    ProjectExplorerView projectExplorerView = new ProjectExplorerView( bot );
-    ServersView serversView = new ServersView( bot );
+    private final DeleteResourcesContinueDialog continueDeleteResourcesDialog =
+        new DeleteResourcesContinueDialog( bot );
+    private final DeleteResourcesDialog deleteResourcesDialog = new DeleteResourcesDialog( bot );
+    private final PackageExplorerView packageExplorerView = new PackageExplorerView( bot );
+    private final ProjectExplorerView projectExplorerView = new ProjectExplorerView( bot );
+    private final ServersView serversView = new ServersView( bot );
 
     public ViewAction( SWTWorkbenchBot bot )
     {
@@ -161,6 +162,47 @@ public class ViewAction extends UIAction
         {
             return packageExplorerView.getProjects();
         }
+    }
+
+    public void openAddAndRemoveDialog( final String serverLabel )
+    {
+        serversView.getServers().getTreeItem( serverLabel ).contextMenu( ADD_AND_REMOVE );
+    }
+
+    public void openLiferayPortalHome( final String serverLabel )
+    {
+        serversView.getServers().getTreeItem( serverLabel ).contextMenu( "Open Liferay Portal Home" );
+    }
+
+    public void openServerEditor( String serverLabel )
+    {
+        serversView.getServers().getTreeItem( serverLabel ).doubleClick();
+    }
+
+    public void serverDebug( String serverLabel )
+    {
+        serversView.getServers().getTreeItem( serverLabel ).select();
+
+        serversView.clickDebugBtn();
+    }
+
+    public void serverStart( String serverLabel )
+    {
+        serversView.getServers().getTreeItem( serverLabel ).select();
+
+        serversView.clickStartBtn();
+    }
+
+    public void serverStop( String serverLabel )
+    {
+        serversView.getServers().getTreeItem( serverLabel ).select();
+
+        serversView.clickStopBtn();
+    }
+
+    public void showServersView()
+    {
+        ide.showServersView();
     }
 
 }

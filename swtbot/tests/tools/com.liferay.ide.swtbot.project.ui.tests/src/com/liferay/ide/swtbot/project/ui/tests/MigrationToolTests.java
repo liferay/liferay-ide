@@ -36,7 +36,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.junit.After;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -52,24 +51,11 @@ public class MigrationToolTests extends SwtbotBase
     private static final String BUNDLE_ID = "com.liferay.ide.swtbot.project.ui.tests";
     private static IProject project;
 
-    static String fullClassname = new SecurityManager()
-    {
-
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
-
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
-
     @BeforeClass
     public static void unzipServerAndSdk() throws IOException
     {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-
-        unzipServer();
-        unzipPluginsSDK();
+        envAction.unzipServer();
+        envAction.unzipPluginsSDK();
     }
 
     @After
@@ -116,11 +102,8 @@ public class MigrationToolTests extends SwtbotBase
     @Ignore
     public void importProject() throws IOException
     {
-        if( !( runTest() || runAllTests() ) )
-            return;
-
         File projectZipFile = getProjectZip( BUNDLE_ID, "knowledge-base-portlet" );
-        IPath copyDir = getLiferayPluginsSdkDir().append( "/portlets" );
+        IPath copyDir = envAction.getLiferayPluginsSdkDir().append( "/portlets" );
 
         ZipUtil.unzip( projectZipFile, copyDir.toFile() );
 
@@ -132,9 +115,6 @@ public class MigrationToolTests extends SwtbotBase
     @Test
     public void testMigrateProjectHandlerCancelOnMenu() throws Exception
     {
-        if( !( runTest() || runAllTests() ) )
-            return;
-
         project = CoreUtil.getProject( "knowledge-base-portlet" );
 
         sleep( 2000 );

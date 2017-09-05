@@ -31,7 +31,6 @@ import com.liferay.ide.swtbot.ui.util.StringPool;
 
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -41,17 +40,6 @@ import org.junit.Test;
  */
 public class NewVaadinPortletWizardTests extends SwtbotBase
 {
-
-    static String fullClassname = new SecurityManager()
-    {
-
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
-
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
 
     static CreateVaadinPortletWizard newVaadinPortletPage = new CreateVaadinPortletWizard( bot );
 
@@ -71,10 +59,8 @@ public class NewVaadinPortletWizardTests extends SwtbotBase
     @BeforeClass
     public static void unzipServerAndSdk() throws Exception
     {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-
-        unzipPluginsSDK();
-        unzipServer();
+        envAction.unzipPluginsSDK();
+        envAction.unzipServer();
 
         createVaddinPorltetWithoutLiferayProjects();
         sleep( 3000 );
@@ -120,7 +106,7 @@ public class NewVaadinPortletWizardTests extends SwtbotBase
         else
         {
             newVaadinPortletPage.next();
-            setSDKLocationPage.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
+            setSDKLocationPage.getSdkLocation().setText( envAction.getLiferayPluginsSdkDir().toString() );
             setSDKLocationPage.finish();
             setSDKLocationPage.waitForPageToClose();
             sleep( 50000 );
@@ -131,7 +117,7 @@ public class NewVaadinPortletWizardTests extends SwtbotBase
     @AfterClass
     public static void deleteProject()
     {
-        viewAction.deleteProjectsExcludeNames( getLiferayPluginsSdkName() );
+        viewAction.deleteProjectsExcludeNames( envAction.getLiferayPluginsSdkName() );
     }
 
     @After
@@ -143,8 +129,6 @@ public class NewVaadinPortletWizardTests extends SwtbotBase
     @Before
     public void openWizard()
     {
-        Assume.assumeTrue( runTest() || runAllTests() );
-
         ide.getCreateLiferayProjectToolbar().getNewLiferayVaadinPortlet().click();
     }
 

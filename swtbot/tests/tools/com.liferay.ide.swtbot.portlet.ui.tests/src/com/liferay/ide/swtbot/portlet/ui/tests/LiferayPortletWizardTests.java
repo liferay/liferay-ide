@@ -43,7 +43,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.After;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -107,12 +106,10 @@ public class LiferayPortletWizardTests extends SwtbotBase
     @BeforeClass
     public static void unzipServerAndSdk() throws IOException
     {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-
         ide.getLiferayPerspective().activate();
 
-        unzipPluginsSDK();
-        unzipServer();
+        envAction.unzipPluginsSDK();
+        envAction.unzipServer();
     }
 
     @After
@@ -122,7 +119,7 @@ public class LiferayPortletWizardTests extends SwtbotBase
         {
             ide.getProjectTree().setFocus();
 
-            viewAction.deleteProjectsExcludeNames( getLiferayPluginsSdkName() );
+            viewAction.deleteProjectsExcludeNames( envAction.getLiferayPluginsSdkName() );
         }
     }
 
@@ -448,8 +445,8 @@ public class LiferayPortletWizardTests extends SwtbotBase
             "unexistentIcon", false, "unexistentCss", "unexistentJavaScript", null );
 
         assertTrue(
-            isInAvailableLists(
-                specifyLiferayPortletDeploymentDescriptorPage.getDisplayCategory().items(), "my1category" ) );
+            Arrays.asList( specifyLiferayPortletDeploymentDescriptorPage.getDisplayCategory().items() ).contains(
+                "my1category" ) );
 
         // entry tests after checked add to control panel
         specifyLiferayPortletDeploymentDescriptorPage.specifyLiferayDisplay( null, true, null, null, true, null );
@@ -1108,8 +1105,6 @@ public class LiferayPortletWizardTests extends SwtbotBase
     @Before
     public void preparePortletPlguinProject() throws Exception
     {
-        Assume.assumeTrue( runTest() || runAllTests() );
-
         Boolean hasProject = addedProjects();
 
         ide.getNewBtn().getLiferayPluginProject().click();
@@ -1124,7 +1119,7 @@ public class LiferayPortletWizardTests extends SwtbotBase
 
             SetSDKLocationWizard setSdkPage = new SetSDKLocationWizard( bot );
 
-            setSdkPage.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
+            setSdkPage.getSdkLocation().setText( envAction.getLiferayPluginsSdkDir().toString() );
         }
         sleep( 4000 );
         newLiferayProjectPage.finish();

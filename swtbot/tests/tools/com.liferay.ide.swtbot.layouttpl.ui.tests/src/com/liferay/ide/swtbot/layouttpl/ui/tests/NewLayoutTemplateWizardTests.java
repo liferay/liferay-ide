@@ -29,7 +29,6 @@ import com.liferay.ide.swtbot.ui.util.StringPool;
 import java.io.IOException;
 
 import org.junit.After;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -43,24 +42,11 @@ public class NewLayoutTemplateWizardTests extends SwtbotBase
 
     static String projectName = "test-layouttpl";
 
-    static String fullClassname = new SecurityManager()
-    {
-
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
-
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
-
     @BeforeClass
     public static void createProject() throws IOException
     {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-
-        unzipPluginsSDK();
-        unzipServer();
+        envAction.unzipPluginsSDK();
+        envAction.unzipServer();
 
         ide.getCreateLiferayProjectToolbar().getNewLiferayPlugin().click();
 
@@ -78,7 +64,7 @@ public class NewLayoutTemplateWizardTests extends SwtbotBase
 
             SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
-            setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
+            setSDKLocation.getSdkLocation().setText( envAction.getLiferayPluginsSdkDir().toString() );
 
             setSDKLocation.finish();
         }
@@ -99,8 +85,6 @@ public class NewLayoutTemplateWizardTests extends SwtbotBase
     @Before
     public void openWizard()
     {
-        Assume.assumeTrue( runTest() || runAllTests() );
-
         ide.getCreateLiferayProjectToolbar().getNewLiferayLayoutTemplate().click();
     }
 

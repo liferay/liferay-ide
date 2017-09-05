@@ -29,7 +29,6 @@ import com.liferay.ide.swtbot.ui.page.TreeItem;
 import com.liferay.ide.swtbot.ui.util.StringPool;
 
 import org.junit.After;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,7 +39,7 @@ public class ImportLiferayModuleProjectTests extends SwtbotBase
 {
 
     Editor buildGradleText = new Editor( bot, "build.gradle" );
-    private String existingDirectory = getLiferayServerDir().toOSString();
+    private String existingDirectory = envAction.getLiferayServerDir().toOSString();
     ImportLiferayModuleProjectWizard importLiferayModulePage = new ImportLiferayModuleProjectWizard( bot );
     private String inexistentLocation = "c:/123";
     private String invalidLocation = "1.*";
@@ -156,8 +155,6 @@ public class ImportLiferayModuleProjectTests extends SwtbotBase
     @Before
     public void importModuleProject()
     {
-        Assume.assumeTrue( runTest() || runAllTests() );
-
         wizardAction.openImportLiferayWorkspaceWizard();
     }
 

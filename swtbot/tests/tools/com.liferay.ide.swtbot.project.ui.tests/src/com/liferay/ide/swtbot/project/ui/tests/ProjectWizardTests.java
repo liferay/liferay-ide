@@ -33,7 +33,6 @@ import java.io.IOException;
 
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -48,35 +47,20 @@ import org.junit.Test;
 public class ProjectWizardTests extends SwtbotBase
 {
 
-    static String fullClassname = new SecurityManager()
-    {
-
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
-
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
-
     @AfterClass
     public static void cleanAll()
     {
         ide.closeShell( NEW_LIFERAY_PLUGIN_PROJECT );
         ide.closeShell( NEW_LIFERAY_PORTLET );
-        // viewAction.deleteProjectsExcludeNames( new String[] { getLiferayPluginsSdkName() }, true
-        // );
     }
 
     @BeforeClass
     public static void unzipServerAndSdk() throws IOException
     {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-
         ide.getLiferayPerspective().activate();
 
-        unzipServer();
-        unzipPluginsSDK();
+        envAction.unzipServer();
+        envAction.unzipPluginsSDK();
     }
 
     @Ignore
@@ -98,7 +82,7 @@ public class ProjectWizardTests extends SwtbotBase
 
             SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
-            setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
+            setSDKLocation.getSdkLocation().setText( envAction.getLiferayPluginsSdkDir().toString() );
 
             assertEquals( SDK_NOT_SUPPORT, setSDKLocation.getValidationMsg() );
             setSDKLocation.cancel();
@@ -122,7 +106,7 @@ public class ProjectWizardTests extends SwtbotBase
 
             SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
-            setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
+            setSDKLocation.getSdkLocation().setText( envAction.getLiferayPluginsSdkDir().toString() );
 
             setSDKLocation.finish();
         }
@@ -145,7 +129,7 @@ public class ProjectWizardTests extends SwtbotBase
 
             SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
-            setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
+            setSDKLocation.getSdkLocation().setText( envAction.getLiferayPluginsSdkDir().toString() );
 
             setSDKLocation.finish();
         }
@@ -159,13 +143,6 @@ public class ProjectWizardTests extends SwtbotBase
         NewSdkProjectWizard createProjectWizard = new NewSdkProjectWizard( bot );
 
         assertEquals( PLEASE_ENTER_A_PROJECT_NAME, createProjectWizard.getValidationMsg() );
-
-        String[] expectedPluginTypeItems = { EXT, HOOK, LAYOUT_TEMPLATE, PORTLET, SERVICE_BUILDER_PORTLET, THEME, WEB };
-
-        for( String expectedPluginTypeItem : expectedPluginTypeItems )
-        {
-            assertTrue( isInAvailableLists( expectedPluginTypeItems, expectedPluginTypeItem ) );
-        }
 
         assertTrue( createProjectWizard.backBtn().isEnabled() );
         assertFalse( createProjectWizard.nextBtn().isEnabled() );
@@ -189,7 +166,7 @@ public class ProjectWizardTests extends SwtbotBase
 
             SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
-            setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
+            setSDKLocation.getSdkLocation().setText( envAction.getLiferayPluginsSdkDir().toString() );
         }
 
         createProjectWizard.finish();
@@ -255,7 +232,7 @@ public class ProjectWizardTests extends SwtbotBase
 
             SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
-            setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
+            setSDKLocation.getSdkLocation().setText( envAction.getLiferayPluginsSdkDir().toString() );
         }
 
         createProjectWizard.finish();
@@ -291,7 +268,7 @@ public class ProjectWizardTests extends SwtbotBase
 
             SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
-            setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
+            setSDKLocation.getSdkLocation().setText( envAction.getLiferayPluginsSdkDir().toString() );
 
             setSDKLocation.finish();
         }
@@ -314,7 +291,7 @@ public class ProjectWizardTests extends SwtbotBase
 
             SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
-            setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
+            setSDKLocation.getSdkLocation().setText( envAction.getLiferayPluginsSdkDir().toString() );
 
             setSDKLocation.finish();
         }
@@ -355,7 +332,7 @@ public class ProjectWizardTests extends SwtbotBase
 
             SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
-            setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
+            setSDKLocation.getSdkLocation().setText( envAction.getLiferayPluginsSdkDir().toString() );
 
             // TO-DO
             // assertEquals( THEME_DONOT_SUPPORT_MESSAGE, setSDKLocation.getValidationMsg() );
@@ -381,7 +358,7 @@ public class ProjectWizardTests extends SwtbotBase
 
             SetSDKLocationWizard setSDKLocation = new SetSDKLocationWizard( bot );
 
-            setSDKLocation.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
+            setSDKLocation.getSdkLocation().setText( envAction.getLiferayPluginsSdkDir().toString() );
 
             setSDKLocation.finish();
         }
@@ -390,8 +367,6 @@ public class ProjectWizardTests extends SwtbotBase
     @Before
     public void openWizard()
     {
-        Assume.assumeTrue( runTest() || runAllTests() );
-
         hasAddedProject = addedProjects();
 
         ide.getFileMenu().clickMenu( "New", "Other..." );

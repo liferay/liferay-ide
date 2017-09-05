@@ -30,7 +30,6 @@ import com.liferay.ide.swtbot.ui.util.StringPool;
 
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -45,24 +44,11 @@ public class NewJSFPortletWizardTests extends SwtbotBase
 
     static String projectName = "test";
 
-    static String fullClassname = new SecurityManager()
-    {
-
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
-
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
-
     @BeforeClass
     public static void createJSFPortletProject() throws Exception
     {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-
-        unzipPluginsSDK();
-        unzipServer();
+        envAction.unzipPluginsSDK();
+        envAction.unzipServer();
 
         ide.getCreateLiferayProjectToolbar().getNewLiferayPlugin().click();
 
@@ -83,7 +69,7 @@ public class NewJSFPortletWizardTests extends SwtbotBase
             page1.next();
             page1.next();
             SetSDKLocationWizard page3 = new SetSDKLocationWizard( bot );
-            page3.getSdkLocation().setText( getLiferayPluginsSdkDir().toString() );
+            page3.getSdkLocation().setText( envAction.getLiferayPluginsSdkDir().toString() );
             page2.finish();
         }
     }
@@ -91,7 +77,7 @@ public class NewJSFPortletWizardTests extends SwtbotBase
     @AfterClass
     public static void deleteProject()
     {
-        viewAction.deleteProjectsExcludeNames( getLiferayPluginsSdkName() );
+        viewAction.deleteProjectsExcludeNames( envAction.getLiferayPluginsSdkName() );
     }
 
     CreateJSFPortletWizard page = new CreateJSFPortletWizard( bot );
@@ -107,8 +93,6 @@ public class NewJSFPortletWizardTests extends SwtbotBase
     @Before
     public void openWizard()
     {
-        Assume.assumeTrue( runTest() || runAllTests() );
-
         ide.getCreateLiferayProjectToolbar().getNewLiferayJSFPortlet().click();
     }
 
