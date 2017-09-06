@@ -72,6 +72,11 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
         }
     }
 
+    @Override
+    public void _init() {
+        moduleNameLocationComponent.updateLocations();
+    }
+
     private JPanel getModulePanel() {
         return moduleNameLocationComponent.getModulePanel();
     }

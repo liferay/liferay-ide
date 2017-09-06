@@ -29,6 +29,7 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.liferay.ide.workspace.ui.UI;
 import com.liferay.ide.workspace.ui.util.BladeCLI;
+import com.liferay.ide.workspace.ui.util.CoreUtil;
 import com.liferay.ide.workspace.ui.wizard.LiferayModuleWizardStep;
 
 import javax.swing.*;
@@ -45,6 +46,10 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getType() {
+        return this.type;
     }
 
     public void setClassName(String className) {
@@ -77,8 +82,15 @@ public class LiferayModuleBuilder extends ModuleBuilder {
         sb.append("create ");
         sb.append("-d \"" + moduleDir.getParent().getPath() + "\" ");
         sb.append("-t " + type + " ");
-        sb.append("-c " + className + " ");
-        sb.append("-p " + packageName + " ");
+
+        if (!CoreUtil.isNullOrEmpty(className)) {
+            sb.append("-c " + className + " ");
+        }
+
+        if (!CoreUtil.isNullOrEmpty(packageName)) {
+            sb.append("-p " + packageName + " ");
+        }
+
         sb.append("\"" + moduleDir.getName() + "\" ");
 
         BladeCLI.execute(sb.toString());

@@ -33,6 +33,7 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.DocumentAdapter;
+import com.liferay.ide.workspace.ui.builder.LiferayModuleBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,8 +59,6 @@ public class LiferayModuleNameLocationComponent {
 
     private boolean myImlLocationChangedByUser = false;
     private boolean myImlLocationDocListenerEnabled = true;
-
-    private boolean myUpdatePathsWhenNameIsChanged;
 
     public LiferayModuleNameLocationComponent(@NotNull WizardContext wizardContext) {
         this.wizardContext = wizardContext;
@@ -125,26 +124,26 @@ public class LiferayModuleNameLocationComponent {
                 }
             }
         });
+
         moduleName.getDocument().addDocumentListener(new DocumentAdapter() {
             protected void textChanged(final DocumentEvent e) {
-                if (!myUpdatePathsWhenNameIsChanged) {
-                    return;
-                }
-
                 if (moduleNameDocListenerEnabled) {
                     moduleNameChangedByUser = true;
                 }
                 String path = getDefaultBaseDir(wizardContext, namePathComponent);
                 final String moduleName = getModuleName();
+
                 if (path.length() > 0 && !Comparing.strEqual(moduleName, namePathComponent.getNameValue())) {
-                    path += "/modules/" + moduleName;
+                    path += "/" + getTargetFolderName() + "/" + moduleName;
                 }
+
                 if (!contentRootChangedByUser) {
                     final boolean f = moduleNameChangedByUser;
                     moduleNameChangedByUser = true;
                     setModuleContentRoot(path);
                     moduleNameChangedByUser = f;
                 }
+
                 if (!myImlLocationChangedByUser) {
                     setImlFileLocation(path);
                 }
@@ -193,36 +192,23 @@ public class LiferayModuleNameLocationComponent {
                 }
             }
         });
+    }
 
-        myUpdatePathsWhenNameIsChanged = true;
+    public void updateLocations() {
+        final Project project = wizardContext.getProject();
+        assert project != null;
+        final VirtualFile baseDir = project.getBaseDir();
 
-        if (wizardContext.isCreatingNewProject()) {
-            setModuleName(namePathComponent.getNameValue());
-            setModuleContentRoot(namePathComponent.getPath());
-            setImlFileLocation(namePathComponent.getPath());
-        } else {
-            final Project project = wizardContext.getProject();
-            assert project != null;
-            final VirtualFile baseDir = project.getBaseDir();
+        if (baseDir != null) { //e.g. was deleted
+            final String baseDirPath = baseDir.getPath();
+            String moduleName = ProjectWizardUtil.findNonExistingFileName(baseDirPath, "untitled", "");
+            String contentRoot = baseDirPath + "/" + getTargetFolderName() + "/" + moduleName;
 
-            if (baseDir != null) { //e.g. was deleted
-                final String baseDirPath = baseDir.getPath();
-                String moduleName = ProjectWizardUtil.findNonExistingFileName(baseDirPath, "untitled", "");
-                String contentRoot = baseDirPath + "/" + moduleName;
-                if (!Comparing.strEqual(project.getName(), wizardContext.getProjectName()) &&
-                        !wizardContext.isCreatingNewProject() &&
-                        wizardContext.getProjectName() != null) {
-                    moduleName =
-                            ProjectWizardUtil.findNonExistingFileName(wizardContext.getProjectFileDirectory(), wizardContext.getProjectName(), "");
-                    contentRoot = wizardContext.getProjectFileDirectory();
-                    myUpdatePathsWhenNameIsChanged = !wizardContext.isProjectFileDirectorySetExplicitly();
-                }
-                setModuleName(moduleName);
-                setModuleContentRoot(contentRoot);
-                setImlFileLocation(contentRoot);
+            setModuleName(moduleName);
+            setModuleContentRoot(contentRoot);
+            setImlFileLocation(contentRoot);
 
-                this.moduleName.select(0, moduleName.length());
-            }
+            this.moduleName.select(0, moduleName.length());
         }
     }
 
@@ -330,6 +316,27 @@ public class LiferayModuleNameLocationComponent {
 
     private String getModuleName() {
         return moduleName.getText().trim();
+    }
+
+    private String getTargetFolderName() {
+        AbstractModuleBuilder builder = getModuleBuilder();
+        LiferayModuleBuilder liferayModuleBuilder = null;
+
+        if (builder instanceof LiferayModuleBuilder) {
+            liferayModuleBuilder = (LiferayModuleBuilder) builder;
+        }
+
+        String targetFolder = "modules";
+
+        if (liferayModuleBuilder != null) {
+            String templateType = liferayModuleBuilder.getType();
+            if ("theme".equals(templateType) || "layout-template".equals(templateType)
+                    || "spring-mvc-portlet".equals(templateType)) {
+                targetFolder = "wars";
+            }
+        }
+
+        return targetFolder;
     }
 
 }

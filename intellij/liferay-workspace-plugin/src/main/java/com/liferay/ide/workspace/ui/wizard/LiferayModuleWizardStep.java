@@ -17,11 +17,16 @@ package com.liferay.ide.workspace.ui.wizard;
 
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiNameHelper;
+import com.intellij.psi.impl.file.PsiDirectoryFactory;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.treeStructure.Tree;
 import com.liferay.ide.workspace.ui.builder.LiferayModuleBuilder;
 import com.liferay.ide.workspace.ui.util.BladeCLI;
+import com.liferay.ide.workspace.ui.util.CoreUtil;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -56,27 +61,6 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
         typesTree.setShowsRootHandles(true);
         typesTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-        typesTree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
-            public void valueChanged(TreeSelectionEvent e) {
-                String type = e.getNewLeadSelectionPath().getLastPathComponent().toString();
-
-                if (type.equals("activator") || type.equals("api") || type.equals("theme-contributor") ||
-                        type.equals("portlet-provider") || type.equals("content-targeting-report") ||
-                        type.equals("content-targeting-tracking-action")) {
-
-                    packageName.setEditable(false);
-                    className.setEditable(false);
-                    packageName.setEnabled(false);
-                    className.setEnabled(false);
-                } else {
-                    packageName.setEditable(true);
-                    className.setEditable(true);
-                    packageName.setEnabled(true);
-                    className.setEnabled(true);
-                }
-            }
-        });
-
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
 
         for (String type : BladeCLI.getProjectTemplates()) {
@@ -84,8 +68,8 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
                 continue;
             }
 
-            DefaultMutableTreeNode node1 = new DefaultMutableTreeNode(type, true);
-            root.add(node1);
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(type, true);
+            root.add(node);
         }
 
         TreeModel model = new DefaultTreeModel(root);
@@ -107,14 +91,36 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 
     @Override
     public boolean validate() throws ConfigurationException {
-        // Need to add validation for className and PackageName
+        String validationTitle = "Validation Error";
+
+        if (CoreUtil.isNullOrEmpty(getSelectedType())) {
+            throw new ConfigurationException("Please click one of the items to select a template", validationTitle);
+        }
+
+        Project workspaceProject = ProjectManager.getInstance().getOpenProjects()[0];
+
+        String packageNameValue = getPackageName();
+        String classNameValue = getClassName();
+
+        if (!CoreUtil.isNullOrEmpty(packageNameValue) && !PsiDirectoryFactory.getInstance(workspaceProject).isValidPackageName(packageNameValue)) {
+            throw new ConfigurationException(packageNameValue + " is not a valid package name", validationTitle);
+        }
+
+        if (!CoreUtil.isNullOrEmpty(classNameValue) && !PsiNameHelper.getInstance(workspaceProject).isQualifiedName(classNameValue)) {
+            throw new ConfigurationException(classNameValue + " is not a valid java class name", validationTitle);
+        }
 
         return true;
     }
 
     @Nullable
     public String getSelectedType() {
-        return typesTree.getLastSelectedPathComponent().toString();
+        Object selectedType = typesTree.getLastSelectedPathComponent();
+        if (selectedType != null) {
+            return selectedType.toString();
+        } else {
+            return null;
+        }
     }
 
     public String getPackageName() {

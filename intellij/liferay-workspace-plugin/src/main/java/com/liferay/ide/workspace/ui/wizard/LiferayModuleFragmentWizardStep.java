@@ -17,13 +17,11 @@ package com.liferay.ide.workspace.ui.wizard;
 
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
+import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.treeStructure.Tree;
 import com.liferay.ide.workspace.ui.builder.LiferayModuleFragmentBuilder;
-import com.liferay.ide.workspace.ui.util.FileUtil;
-import com.liferay.ide.workspace.ui.util.LiferayWorkspaceUtil;
-import com.liferay.ide.workspace.ui.util.ServerUtil;
-import com.liferay.ide.workspace.ui.util.ZipUtil;
+import com.liferay.ide.workspace.ui.util.*;
 
 import javax.swing.*;
 import javax.swing.tree.*;
@@ -133,6 +131,11 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
     public String[] getSelectedJsps() {
         TreePath[] paths = jspsTree.getSelectionPaths();
+
+        if (CoreUtil.isNullOrEmpty(paths)) {
+            return null;
+        }
+
         String[] jsps = new String[paths.length];
 
         for (int i = 0; i < paths.length; i++) {
@@ -178,6 +181,17 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
         }
 
         return new String[]{bundleSymbolicName, version};
+    }
+
+    @Override
+    public boolean validate() throws ConfigurationException {
+        String validationTitle = "Validation Error";
+
+        if (CoreUtil.isNullOrEmpty(getSelectedJsps())) {
+            throw new ConfigurationException("At least select one jsp to override", validationTitle);
+        }
+
+        return true;
     }
 
 }
