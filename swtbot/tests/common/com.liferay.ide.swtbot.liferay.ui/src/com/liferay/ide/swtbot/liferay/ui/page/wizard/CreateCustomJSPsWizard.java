@@ -21,7 +21,7 @@ import com.liferay.ide.swtbot.ui.page.Table;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Vicky Wang
@@ -29,18 +29,18 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class CreateCustomJSPsWizard extends Wizard
 {
 
-    private Button addBtn;
-    private Button addFromLiferayBtn;
-    private Button browseBtn;
-    private Text customJSPfolder;
-    private CheckBox disableJspSyntaxValidation;
-    private Button editBtn;
-    private Table jspFilesToOverride;
-    private Button removeBtn;
-    private Text selectedProjects;
-    private Text webRootFolder;
+    private final Button addBtn;
+    private final Button addFromLiferayBtn;
+    private final Button browseBtn;
+    private final Text customJSPfolder;
+    private final CheckBox disableJspSyntaxValidation;
+    private final Button editBtn;
+    private final Table jspFilesToOverride;
+    private final Button removeBtn;
+    private final Text selectedProjects;
+    private final Text webRootFolder;
 
-    public CreateCustomJSPsWizard( SWTBot bot )
+    public CreateCustomJSPsWizard( final SWTWorkbenchBot bot )
     {
         super( bot, 3 );
 

@@ -17,9 +17,8 @@ package com.liferay.ide.swtbot.ui.eclipse.page;
 
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
-import com.liferay.ide.swtbot.ui.util.StringPool;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ying Xu
@@ -27,12 +26,12 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class NewJavaPackageWizard extends Wizard
 {
 
-    private Text name;
-    private Text sourceFolder;
+    private final Text name;
+    private final Text sourceFolder;
 
-    public NewJavaPackageWizard( SWTBot bot )
+    public NewJavaPackageWizard( final SWTWorkbenchBot bot )
     {
-        super( bot, StringPool.BLANK, CANCEL, FINISH, StringPool.BLANK, StringPool.BLANK );
+        super( bot );
 
         sourceFolder = new Text( bot, SOURCE_FOLDER );
         name = new Text( bot, NAME );

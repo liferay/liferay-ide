@@ -15,7 +15,7 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotRadio;
 
 /**
@@ -26,17 +26,17 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotRadio;
 public class Radio extends AbstractWidget
 {
 
-    public Radio( SWTBot bot, int index )
+    public Radio( final SWTWorkbenchBot bot, final int index )
     {
         super( bot, index );
     }
 
-    public Radio( SWTBot bot, String label )
+    public Radio( final SWTWorkbenchBot bot, final String label )
     {
         super( bot, label );
     }
 
-    public Radio( SWTBot bot, String label, int index )
+    public Radio( final SWTWorkbenchBot bot, final String label, final int index )
     {
         super( bot, label, index );
     }
@@ -49,12 +49,7 @@ public class Radio extends AbstractWidget
     @Override
     protected SWTBotRadio getWidget()
     {
-        if( isLabelNull() )
-        {
-            return bot.radio( index );
-        }
-
-        return bot.radio( label );
+        return isLabelNull() ? bot.radio( index ) : bot.radio( label );
     }
 
     public boolean isSelected()

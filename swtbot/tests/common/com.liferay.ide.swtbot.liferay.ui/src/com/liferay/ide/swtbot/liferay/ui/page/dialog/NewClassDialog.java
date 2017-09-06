@@ -21,7 +21,7 @@ import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Tree;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Vicky Wang
@@ -29,14 +29,14 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class NewClassDialog extends Dialog
 {
 
-    private Button browseBtn;
-    private Text className;
-    private Button createBtn;
-    private Text javaPackage;
-    private Tree paths;
-    private ComboBox superClasses;
+    private final Button browseBtn;
+    private final Text className;
+    private final Button createBtn;
+    private final Text javaPackage;
+    private final Tree paths;
+    private final ComboBox superClasses;
 
-    public NewClassDialog( SWTBot bot )
+    public NewClassDialog( final SWTWorkbenchBot bot )
     {
         super( bot );
 
@@ -68,14 +68,13 @@ public class NewClassDialog extends Dialog
         return javaPackage;
     }
 
+    public Tree getPaths()
+    {
+        return paths;
+    }
+
     public ComboBox getSuperClass()
     {
         return superClasses;
     }
-
-    public void select( String... items )
-    {
-        paths.selectTreeItem( items );
-    }
-
 }

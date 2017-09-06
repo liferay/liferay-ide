@@ -19,7 +19,7 @@ import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Tree;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Vicky Wang
@@ -32,7 +32,7 @@ public class NewServerWizard extends Wizard
     private Text serverName;
     private Tree serverTypes;
 
-    public NewServerWizard( SWTBot bot )
+    public NewServerWizard( final SWTWorkbenchBot bot )
     {
         super( bot, NEW_SERVER, 3 );
 

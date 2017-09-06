@@ -19,7 +19,7 @@ import com.liferay.ide.swtbot.ui.page.CheckBox;
 import com.liferay.ide.swtbot.ui.page.Radio;
 import com.liferay.ide.swtbot.ui.page.Text;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Li Lu
@@ -27,35 +27,35 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class CreateJSFPortletWizard extends CreateLiferayPortletWizard
 {
 
-    private CheckBox createViewFiles;
-    private Radio iceFaces;
-    private Radio liferayFacesAlloy;
-    private Radio primeFaces;
-    private Radio richFaces;
-    private Radio standardJSF;
-    private Text viewFolder;
+    private final CheckBox createViewFiles;
+    private final Radio iceFaces;
+    private final Radio liferayFacesAlloy;
+    private final Radio primeFaces;
+    private final Radio richFaces;
+    private final Radio standardJsf;
+    private final Text viewFolder;
 
-    public CreateJSFPortletWizard( SWTBot bot )
+    public CreateJSFPortletWizard( final SWTWorkbenchBot bot )
     {
         super( bot, 4 );
 
         createViewFiles = new CheckBox( bot, CREATE_VIRW_FILES );
         viewFolder = new Text( bot, VIEW_FOLDER );
-        standardJSF = new Radio( bot, STANDARD_JSF );
+        standardJsf = new Radio( bot, STANDARD_JSF );
         iceFaces = new Radio( bot, ICEFACES );
         liferayFacesAlloy = new Radio( bot, LIFERAY_FACES_ALLOY );
         primeFaces = new Radio( bot, PRIMEFACES );
         richFaces = new Radio( bot, RICHFACES );
     }
 
-    public boolean _isLiferayFacesAlloySelected()
+    public boolean isLiferayFacesAlloySelected()
     {
         return liferayFacesAlloy.isSelected();
     }
 
     public boolean _isStandardJSFSelected()
     {
-        return standardJSF.isSelected();
+        return standardJsf.isSelected();
     }
 
     public void deSelectCreateViewFiles()
@@ -110,7 +110,7 @@ public class CreateJSFPortletWizard extends CreateLiferayPortletWizard
 
     public boolean isStandardJSFEnabled()
     {
-        return standardJSF.isEnabled();
+        return standardJsf.isEnabled();
     }
 
     public boolean isViewFolderEnabled()
@@ -128,7 +128,7 @@ public class CreateJSFPortletWizard extends CreateLiferayPortletWizard
         switch( lable )
         {
         case STANDARD_JSF:
-            standardJSF.click();
+            standardJsf.click();
         case ICEFACES:
             iceFaces.click();
         case LIFERAY_FACES_ALLOY:

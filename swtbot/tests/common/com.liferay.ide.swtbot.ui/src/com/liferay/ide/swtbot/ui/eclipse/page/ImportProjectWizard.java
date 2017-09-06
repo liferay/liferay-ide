@@ -19,7 +19,7 @@ import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Tree;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ashley Yuan
@@ -27,10 +27,10 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class ImportProjectWizard extends Wizard
 {
 
-    private Text filterText;
-    private Tree types;
+    private final Text filterText;
+    private final Tree types;
 
-    public ImportProjectWizard( SWTBot bot )
+    public ImportProjectWizard( final SWTWorkbenchBot bot )
     {
         super( bot, 1 );
 

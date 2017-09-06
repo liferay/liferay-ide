@@ -26,9 +26,9 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class ExplorerView extends View
 {
 
-    private Tree projects;
+    private final Tree projects;
 
-    public ExplorerView( SWTWorkbenchBot bot, String title )
+    public ExplorerView( final SWTWorkbenchBot bot, final String title )
     {
         super( bot, title );
 

@@ -15,12 +15,12 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.editor;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
 import com.liferay.ide.swtbot.ui.page.CheckBox;
 import com.liferay.ide.swtbot.ui.page.Editor;
 import com.liferay.ide.swtbot.ui.page.Radio;
 import com.liferay.ide.swtbot.ui.page.Text;
+
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
@@ -28,12 +28,23 @@ import com.liferay.ide.swtbot.ui.page.Text;
 public class ServerEditor extends Editor
 {
 
-    private Text httpPort;
-    private Radio customLaunchSettings;
-    private Radio defaultLaunchSettings;
-    private CheckBox useDeveloperMode;
+    private final Text httpPort;
+    private final Radio customLaunchSettings;
+    private final Radio defaultLaunchSettings;
+    private final CheckBox useDeveloperMode;
 
-    public ServerEditor( SWTBot bot, String editorName )
+    public ServerEditor( final SWTWorkbenchBot bot )
+    {
+        super( bot );
+
+        httpPort = new Text( bot, "Http Port:" );
+
+        defaultLaunchSettings = new Radio( bot, "Default Launch Settings" );
+        customLaunchSettings = new Radio( bot, "Custom Launch Settings" );
+        useDeveloperMode = new CheckBox( bot, "Use developer mode" );
+    }
+
+    public ServerEditor( final SWTWorkbenchBot bot, final String editorName )
     {
         super( bot, editorName );
 

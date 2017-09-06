@@ -15,7 +15,7 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
 
 /**
@@ -25,22 +25,22 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
 public class Button extends AbstractWidget
 {
 
-    public Button( SWTBot bot )
+    public Button( final SWTWorkbenchBot bot )
     {
         super( bot );
     }
 
-    public Button( SWTBot bot, int index )
+    public Button( final SWTWorkbenchBot bot, final int index )
     {
         super( bot, index );
     }
 
-    public Button( SWTBot bot, String label )
+    public Button( final SWTWorkbenchBot bot, final String label )
     {
         super( bot, label );
     }
 
-    public Button( SWTBot bot, String label, int index )
+    public Button( final SWTWorkbenchBot bot, final String label, final int index )
     {
         super( bot, label, index );
     }

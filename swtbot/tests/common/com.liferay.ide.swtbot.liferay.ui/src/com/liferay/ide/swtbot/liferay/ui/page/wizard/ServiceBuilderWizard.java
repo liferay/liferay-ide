@@ -21,7 +21,7 @@ import com.liferay.ide.swtbot.ui.page.ComboBox;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ying Xu
@@ -29,15 +29,15 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class ServiceBuilderWizard extends Wizard
 {
 
-    private Text author;
-    private Button browseButton;
-    private CheckBox includeSampleEntity;
-    private Text namespace;
-    private Text packagePath;
-    private ComboBox pluginProjects;
-    private Text serviceFile;
+    private final Text author;
+    private final Button browseButton;
+    private final CheckBox includeSampleEntity;
+    private final Text namespace;
+    private final Text packagePath;
+    private final ComboBox pluginProjects;
+    private final Text serviceFile;
 
-    public ServiceBuilderWizard( SWTBot bot )
+    public ServiceBuilderWizard( final SWTWorkbenchBot bot )
     {
         super( bot, NEW_SERVICE_BUILDER, 2 );
 
@@ -50,12 +50,13 @@ public class ServiceBuilderWizard extends Wizard
         browseButton = new Button( bot, BROWSE_WITH_DOT );
     }
 
-    public void createServiceBuilder( String packagePathText, String namespaceText )
+    public void createServiceBuilder( final String packagePathText, final String namespaceText )
     {
         createServiceBuilder( packagePathText, namespaceText, true );
     }
 
-    public void createServiceBuilder( String packagePathText, String namespaceText, boolean includeSampleEntityValue )
+    public void createServiceBuilder(
+        final String packagePathText, final String namespaceText, final boolean includeSampleEntityValue )
     {
         packagePath.setText( packagePathText );
         namespace.setText( namespaceText );

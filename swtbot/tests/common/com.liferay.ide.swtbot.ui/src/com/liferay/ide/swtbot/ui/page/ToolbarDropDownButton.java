@@ -15,7 +15,7 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotToolbarDropDownButton;
 
 /**
@@ -24,7 +24,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotToolbarDropDownButton;
 public class ToolbarDropDownButton extends AbstractWidget
 {
 
-    public ToolbarDropDownButton( SWTBot bot, String label )
+    public ToolbarDropDownButton( final SWTWorkbenchBot bot, final String label )
     {
         super( bot, label );
     }
@@ -35,12 +35,13 @@ public class ToolbarDropDownButton extends AbstractWidget
         return bot.toolbarDropDownButtonWithTooltip( label );
     }
 
-    public void menuClick( String menuItemLabel )
+    public void menuClick( final String menuItemLabel )
     {
         new MenuItem( bot, this, menuItemLabel ).click();
     }
 
-    public void click(){
+    public void click()
+    {
         getWidget().click();
     }
 

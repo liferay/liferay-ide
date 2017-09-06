@@ -20,7 +20,7 @@ import com.liferay.ide.swtbot.ui.page.ComboBox;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Li Lu
@@ -28,14 +28,14 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class CreateLayoutTemplateWizardWizard extends Wizard
 {
 
-    private Text id;
-    private ComboBox layoutPluginProjects;
-    private Text name;
-    private Text templateFile;
-    private Text thumbnailFile;
-    private Text wapTemplateFile;
+    private final Text id;
+    private final ComboBox layoutPluginProjects;
+    private final Text name;
+    private final Text templateFile;
+    private final Text thumbnailFile;
+    private final Text wapTemplateFile;
 
-    public CreateLayoutTemplateWizardWizard( SWTBot bot )
+    public CreateLayoutTemplateWizardWizard( final SWTWorkbenchBot bot )
     {
         super( bot, 5 );
 
@@ -47,7 +47,7 @@ public class CreateLayoutTemplateWizardWizard extends Wizard
         thumbnailFile = new Text( bot, THUMBNAIL_FILE );
     }
 
-    public void clickBrowseButton( int index )
+    public void clickBrowseButton( final int index )
     {
         new Button( bot, index ).click();
     }

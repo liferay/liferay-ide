@@ -19,7 +19,7 @@ import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ashley Yuan
@@ -27,11 +27,11 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class ImportLiferayModuleProjectWizard extends Wizard
 {
 
-    private ToolbarButtonWithTooltip browseBtn;
-    private Text buildType;
-    private Text location;
+    private final ToolbarButtonWithTooltip browseBtn;
+    private final Text buildType;
+    private final Text location;
 
-    public ImportLiferayModuleProjectWizard( SWTBot bot )
+    public ImportLiferayModuleProjectWizard( final SWTWorkbenchBot bot )
     {
         super( bot, IMPORT_LIFERAY_MODULE_PROJECT, 2 );
 

@@ -19,7 +19,7 @@ import com.liferay.ide.swtbot.ui.page.CheckBox;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
@@ -27,14 +27,14 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class ImportLiferayWorkspaceProjectWizard extends Wizard
 {
 
-    private CheckBox addProjectToWorkingSet;
-    private Text buildType;
-    private Text bundleUrl;
-    private CheckBox downloadLiferaybundle;
-    private Text serverName;
-    private Text location;
+    private final CheckBox addProjectToWorkingSet;
+    private final Text buildType;
+    private final Text bundleUrl;
+    private final CheckBox downloadLiferaybundle;
+    private final Text location;
+    private final Text serverName;
 
-    public ImportLiferayWorkspaceProjectWizard( SWTBot bot )
+    public ImportLiferayWorkspaceProjectWizard( SWTWorkbenchBot bot )
     {
         super( bot, IMPORT_LIFERAY_WORKSPACE, 2 );
 
@@ -74,31 +74,6 @@ public class ImportLiferayWorkspaceProjectWizard extends Wizard
     public Text getWorkspaceLocation()
     {
         return location;
-    }
-
-    public void setBuildTypeText( String buildTypeText )
-    {
-        this.buildType.setText( buildTypeText );
-    }
-
-    public void setBundleUrl( String bundleUrl )
-    {
-        this.bundleUrl.setText( bundleUrl );
-    }
-
-    public void setDownloadLiferaybundle( CheckBox downloadLiferaybundle )
-    {
-        this.downloadLiferaybundle = downloadLiferaybundle;
-    }
-
-    public void setServerName( String serverName )
-    {
-        this.serverName.setText( serverName );
-    }
-
-    public void setWorkspaceLocation( String workspaceLocation )
-    {
-        this.location.setText( workspaceLocation );;
     }
 
 }

@@ -18,7 +18,7 @@ package com.liferay.ide.swtbot.liferay.ui.page.button;
 import com.liferay.ide.swtbot.ui.page.MenuItem;
 import com.liferay.ide.swtbot.ui.page.ToolbarDropDownButton;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ying Xu
@@ -26,17 +26,17 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class NewToolbarDropDownButton extends ToolbarDropDownButton
 {
 
-    private MenuItem liferayPluginProject;
-    private MenuItem liferayModuleProject;
-    private MenuItem liferayPortlet;
-    private MenuItem liferayJSFPortlet;
-    private MenuItem liferayVaadinPortlet;
-    private MenuItem liferayHookConfiguration;
-    private MenuItem liferayServiceBuilder;
-    private MenuItem liferayLayoutTemplate;
-    private MenuItem newPackage;
+    private final MenuItem liferayPluginProject;
+    private final MenuItem liferayModuleProject;
+    private final MenuItem liferayPortlet;
+    private final MenuItem liferayJSFPortlet;
+    private final MenuItem liferayVaadinPortlet;
+    private final MenuItem liferayHookConfiguration;
+    private final MenuItem liferayServiceBuilder;
+    private final MenuItem liferayLayoutTemplate;
+    private final MenuItem newPackage;
 
-    public NewToolbarDropDownButton( SWTBot bot )
+    public NewToolbarDropDownButton( final SWTWorkbenchBot bot )
     {
         super( bot, NEW );
 

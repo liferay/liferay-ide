@@ -23,7 +23,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class ProjectExplorerView extends ExplorerView
 {
 
-    public ProjectExplorerView( SWTWorkbenchBot bot )
+    public ProjectExplorerView( final SWTWorkbenchBot bot )
     {
         super( bot, PROJECT_EXPLORER );
     }

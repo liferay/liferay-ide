@@ -15,10 +15,11 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
-import org.apache.log4j.Logger;
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
 import com.liferay.ide.swtbot.ui.UI;
+import com.liferay.ide.swtbot.ui.util.StringPool;
+
+import org.apache.log4j.Logger;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
@@ -27,7 +28,7 @@ import com.liferay.ide.swtbot.ui.UI;
 public class BasePageObject implements UI
 {
 
-    protected SWTBot bot;
+    protected SWTWorkbenchBot bot;
 
     private long DEFAULT_SLEEP_MILLIS = 1000;
 
@@ -36,28 +37,28 @@ public class BasePageObject implements UI
 
     protected Logger log;
 
-    public BasePageObject( SWTBot bot )
+    public BasePageObject( SWTWorkbenchBot bot )
     {
         this.bot = bot;
 
         log = Logger.getLogger( this.getClass() );
     }
 
-    public BasePageObject( SWTBot bot, int index )
+    public BasePageObject( final SWTWorkbenchBot bot, final int index )
     {
         this( bot );
 
         this.index = index;
     }
 
-    public BasePageObject( SWTBot bot, String label )
+    public BasePageObject( final SWTWorkbenchBot bot, final String label )
     {
         this( bot );
 
         this.label = label;
     }
 
-    public BasePageObject( SWTBot bot, String label, int index )
+    public BasePageObject( final SWTWorkbenchBot bot, final String label, final int index )
     {
         this( bot );
 
@@ -72,7 +73,7 @@ public class BasePageObject implements UI
 
     protected boolean isLabelNull()
     {
-        return label.equals( "" ) || label == null;
+        return label.equals( StringPool.BLANK );
     }
 
     public void sleep()
@@ -80,7 +81,7 @@ public class BasePageObject implements UI
         sleep( DEFAULT_SLEEP_MILLIS );
     }
 
-    public void sleep( long millis )
+    public void sleep( final long millis )
     {
         bot.sleep( millis );
     }

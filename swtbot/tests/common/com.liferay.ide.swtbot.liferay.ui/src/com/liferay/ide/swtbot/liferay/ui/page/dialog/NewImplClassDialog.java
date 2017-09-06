@@ -19,7 +19,7 @@ import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Text;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Vicky Wang
@@ -27,12 +27,12 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class NewImplClassDialog extends Dialog
 {
 
-    private Button browseBtn;
-    private Text className;
-    private Button createBtn;
-    private Text javaPackage;
+    private final Button browseBtn;
+    private final Text className;
+    private final Button createBtn;
+    private final Text javaPackage;
 
-    public NewImplClassDialog( SWTBot bot )
+    public NewImplClassDialog( final SWTWorkbenchBot bot )
     {
         super( bot );
 

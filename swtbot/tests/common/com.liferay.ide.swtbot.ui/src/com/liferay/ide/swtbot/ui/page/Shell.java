@@ -15,14 +15,14 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import com.liferay.ide.swtbot.ui.condition.ShellCondition;
+import com.liferay.ide.swtbot.ui.util.StringPool;
+
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
-
-import com.liferay.ide.swtbot.ui.condition.ShellCondition;
-import com.liferay.ide.swtbot.ui.util.StringPool;
 
 /**
  * @author Terry Jia
@@ -32,17 +32,17 @@ import com.liferay.ide.swtbot.ui.util.StringPool;
 public class Shell extends BasePageObject
 {
 
-    public Shell( SWTBot bot )
+    public Shell( final SWTWorkbenchBot bot )
     {
         super( bot );
     }
 
-    public Shell( SWTBot bot, String label )
+    public Shell( final SWTWorkbenchBot bot, final String label )
     {
         super( bot, label );
     }
 
-    public Shell( SWTBot bot, String label, int index )
+    public Shell( final SWTWorkbenchBot bot, final String label, final int index )
     {
         super( bot, label, index );
     }
@@ -52,14 +52,14 @@ public class Shell extends BasePageObject
         getShell().isActive();
     }
 
-    public void close()
-    {
-        getShell().close();
-    }
-
     public void clickBtn( Button btn )
     {
         btn.click();
+    }
+
+    public void close()
+    {
+        getShell().close();
     }
 
     public void closeIfOpen()
@@ -100,12 +100,7 @@ public class Shell extends BasePageObject
 
     protected SWTBotShell getShell()
     {
-        if( hasIndex() )
-        {
-            return bot.shell( label, index );
-        }
-
-        return bot.shell( label );
+        return hasIndex() ? bot.shell( label, index ) : bot.shell( label );
     }
 
     public String getTitle()

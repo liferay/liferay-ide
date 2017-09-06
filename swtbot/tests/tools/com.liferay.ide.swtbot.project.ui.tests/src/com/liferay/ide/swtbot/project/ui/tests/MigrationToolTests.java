@@ -102,7 +102,7 @@ public class MigrationToolTests extends SwtbotBase
     @Ignore
     public void importProject() throws IOException
     {
-        File projectZipFile = getProjectZip( BUNDLE_ID, "knowledge-base-portlet" );
+        File projectZipFile = envAction.getProjectZip( BUNDLE_ID, "knowledge-base-portlet" );
         IPath copyDir = envAction.getLiferayPluginsSdkDir().append( "/portlets" );
 
         ZipUtil.unzip( projectZipFile, copyDir.toFile() );

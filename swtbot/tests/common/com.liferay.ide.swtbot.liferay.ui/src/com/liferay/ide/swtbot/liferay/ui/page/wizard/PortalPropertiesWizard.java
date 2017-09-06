@@ -21,7 +21,7 @@ import com.liferay.ide.swtbot.ui.page.Table;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Vicky Wang
@@ -29,21 +29,21 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class PortalPropertiesWizard extends Wizard
 {
 
-    private Dialog addEventActionDialog;
-    private Dialog addPropertyOverrideDialog;
-    private Button browseBtn;
-    private Table defineActionsOnPortalEvents;
-    private Button eventAddBtn;
-    private Button eventEditBtn;
-    private Button eventRemoveBtn;
-    private Dialog newLiferayHookConfigurationDialog;
-    private Text portalPropertiesFile;
-    private Button propertyAddBtn;
-    private Button propertyEditBtn;
-    private Button propertyRemoveBtn;
-    private Table specifyProperties;
+    private final Dialog addEventActionDialog;
+    private final Dialog addPropertyOverrideDialog;
+    private final Button browseBtn;
+    private final Table defineActionsOnPortalEvents;
+    private final Button eventAddBtn;
+    private final Button eventEditBtn;
+    private final Button eventRemoveBtn;
+    private final Dialog newLiferayHookConfigurationDialog;
+    private final Text portalPropertiesFile;
+    private final Button propertyAddBtn;
+    private final Button propertyEditBtn;
+    private final Button propertyRemoveBtn;
+    private final Table specifyProperties;
 
-    public PortalPropertiesWizard( SWTBot bot )
+    public PortalPropertiesWizard( final SWTWorkbenchBot bot )
     {
         super( bot, 1 );
 

@@ -308,7 +308,7 @@ public class LiferayPortletWizardTests extends SwtbotBase
 
         ImportProjectWizard newSelectLiferayPage = new ImportProjectWizard( bot );
 
-        wizardAction.selectImportType( "liferay", "Liferay", LIFERAY_PORTLET );
+        wizardAction.prepareImportType( "liferay", "Liferay", LIFERAY_PORTLET );
 
         newSelectLiferayPage.next();
         newPortletPage.createLiferayPortlet( "test-portlet", "MySecondPortlet", StringPool.BLANK, null );
@@ -1146,7 +1146,7 @@ public class LiferayPortletWizardTests extends SwtbotBase
         portletXmlItem.doAction( "New", "Other..." );
         ImportProjectWizard newTypePage = new ImportProjectWizard( bot );
 
-        wizardAction.selectImportType( "Source Folder", "Java", "Source Folder" );
+        wizardAction.prepareImportType( "Source Folder", "Java", "Source Folder" );
 
         assertEquals( "Create a Java source folder", newTypePage.getValidationMsg() );
         newTypePage.next();

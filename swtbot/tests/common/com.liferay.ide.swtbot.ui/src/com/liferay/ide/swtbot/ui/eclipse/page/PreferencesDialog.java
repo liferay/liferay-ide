@@ -18,7 +18,7 @@ package com.liferay.ide.swtbot.ui.eclipse.page;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Tree;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
@@ -26,27 +26,18 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class PreferencesDialog extends Dialog
 {
 
-    private Tree preferencesTypes;
+    private final Tree preferencesTypes;
 
-    public PreferencesDialog( SWTBot bot )
+    public PreferencesDialog( final SWTWorkbenchBot bot )
     {
-        super( bot, "Preferences" );
+        super( bot );
 
         preferencesTypes = new Tree( bot );
     }
 
-    public void selectPreferencesType( String categroy, String item )
+    public Tree getPreferencesTypes()
     {
-        preferencesTypes.getTreeItem( categroy ).expand();
-
-        preferencesTypes.getTreeItem( categroy ).getTreeItem( item ).select();
-    }
-
-    public ServerRuntimeEnvironmentsPreferencesDialog selectServerRuntimeEnvironmentsPage()
-    {
-        selectPreferencesType( "Server", "Runtime Environments" );
-
-        return new ServerRuntimeEnvironmentsPreferencesDialog( bot );
+        return preferencesTypes;
     }
 
 }

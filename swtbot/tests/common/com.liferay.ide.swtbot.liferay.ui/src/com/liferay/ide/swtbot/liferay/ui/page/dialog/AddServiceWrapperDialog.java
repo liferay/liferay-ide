@@ -19,7 +19,7 @@ import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Text;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Vicky Wang
@@ -27,13 +27,13 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class AddServiceWrapperDialog extends Dialog
 {
 
-    private Text implClass;
-    private Button newBtn;
-    private Button selectImplClassBtn;
-    private Button selectServiceTypeBtn;
-    private Text serviceType;
+    private final Text implClass;
+    private final Button newBtn;
+    private final Button selectImplClassBtn;
+    private final Button selectServiceTypeBtn;
+    private final Text serviceType;
 
-    public AddServiceWrapperDialog( SWTBot bot )
+    public AddServiceWrapperDialog( final SWTWorkbenchBot bot )
     {
         super( bot );
 

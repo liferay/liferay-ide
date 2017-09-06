@@ -26,7 +26,7 @@ public class Perspective extends BasePageObject
 
     private final String label;
 
-    public Perspective( SWTWorkbenchBot bot, String label )
+    public Perspective( final SWTWorkbenchBot bot, final String label )
     {
         super( bot );
 
@@ -40,7 +40,7 @@ public class Perspective extends BasePageObject
 
     protected SWTBotPerspective getPerspective()
     {
-        return ( (SWTWorkbenchBot) bot ).perspectiveByLabel( label );
+        return bot.perspectiveByLabel( label );
     }
 
 }

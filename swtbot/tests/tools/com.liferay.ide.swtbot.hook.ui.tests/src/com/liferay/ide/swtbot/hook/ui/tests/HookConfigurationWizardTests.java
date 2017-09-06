@@ -100,7 +100,7 @@ public class HookConfigurationWizardTests extends SwtbotBase
 
         ide.getCreateLiferayProjectToolbar().getNewLiferayHookConfiguration().click();
 
-        createLiferayHookConfiguration.getCustomJSPs().select();
+        createLiferayHookConfiguration.getCustomJsps().select();
         createLiferayHookConfiguration.getPortalProperties().select();
         createLiferayHookConfiguration.getServices().select();
         createLiferayHookConfiguration.getLanguageProperties().select();
@@ -190,7 +190,7 @@ public class HookConfigurationWizardTests extends SwtbotBase
         assertEquals(
             projectHookName + "-hook", createLiferayHookConfiguration.getHookPluginProjectComboBox().getText() );
 
-        createLiferayHookConfiguration.getCustomJSPs().select();
+        createLiferayHookConfiguration.getCustomJsps().select();
         createLiferayHookConfiguration.next();
 
         // Custom JSPs page
@@ -562,7 +562,7 @@ public class HookConfigurationWizardTests extends SwtbotBase
 
         assertEquals( StringPool.BLANK, createLiferayHookConfiguration.getHookPluginProjectComboBox().getText() );
 
-        createLiferayHookConfiguration.getCustomJSPs().select();
+        createLiferayHookConfiguration.getCustomJsps().select();
         createLiferayHookConfiguration.getPortalProperties().select();
         createLiferayHookConfiguration.getServices().select();
         createLiferayHookConfiguration.getLanguageProperties().select();

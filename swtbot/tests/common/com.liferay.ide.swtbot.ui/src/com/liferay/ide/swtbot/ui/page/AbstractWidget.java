@@ -17,7 +17,7 @@ package com.liferay.ide.swtbot.ui.page;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.swtbot.swt.finder.widgets.AbstractSWTBot;
@@ -29,22 +29,22 @@ import org.eclipse.swtbot.swt.finder.widgets.AbstractSWTBot;
 public abstract class AbstractWidget extends BasePageObject
 {
 
-    public AbstractWidget( SWTBot bot )
+    public AbstractWidget( final SWTWorkbenchBot bot )
     {
         super( bot );
     }
 
-    public AbstractWidget( SWTBot bot, int index )
+    public AbstractWidget( final SWTWorkbenchBot bot, final int index )
     {
         super( bot, index );
     }
 
-    public AbstractWidget( SWTBot bot, String label )
+    public AbstractWidget( final SWTWorkbenchBot bot, final String label )
     {
         super( bot, label );
     }
 
-    public AbstractWidget( SWTBot bot, String label, int index )
+    public AbstractWidget( final SWTWorkbenchBot bot, final String label, final int index )
     {
         super( bot, label, index );
     }

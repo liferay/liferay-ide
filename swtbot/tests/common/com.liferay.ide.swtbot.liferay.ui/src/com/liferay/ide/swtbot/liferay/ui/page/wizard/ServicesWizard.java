@@ -20,7 +20,7 @@ import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Table;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Vicky Wang
@@ -28,14 +28,14 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class ServicesWizard extends Wizard
 {
 
-    private Button addBtn;
-    private Dialog addServiceDialog;
-    private Dialog addServiceWrapperDialog;
-    private Table definePortalServices;
-    private Button editBtn;
-    private Button removeBtn;
+    private final Button addBtn;
+    private final Dialog addServiceDialog;
+    private final Dialog addServiceWrapperDialog;
+    private final Table definePortalServices;
+    private final Button editBtn;
+    private final Button removeBtn;
 
-    public ServicesWizard( SWTBot bot )
+    public ServicesWizard( final SWTWorkbenchBot bot )
     {
         super( bot, 0 );
 

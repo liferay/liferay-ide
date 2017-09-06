@@ -19,7 +19,7 @@ import com.liferay.ide.swtbot.ui.page.Table;
 import com.liferay.ide.swtbot.ui.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ying Xu
@@ -27,12 +27,12 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class NewModuleFragmentInfoWizard extends Wizard
 {
 
-    private ToolbarButtonWithTooltip addOverrideFilePathBtn;
-    private ToolbarButtonWithTooltip addOverrideFilesBtn;
-    private ToolbarButtonWithTooltip browseOsgiBtn;
-    private Table files;
+    private final ToolbarButtonWithTooltip addOverrideFilePathBtn;
+    private final ToolbarButtonWithTooltip addOverrideFilesBtn;
+    private final ToolbarButtonWithTooltip browseOsgiBtn;
+    private final Table files;
 
-    public NewModuleFragmentInfoWizard( SWTBot bot )
+    public NewModuleFragmentInfoWizard( final SWTWorkbenchBot bot )
     {
         super( bot, 1 );
 

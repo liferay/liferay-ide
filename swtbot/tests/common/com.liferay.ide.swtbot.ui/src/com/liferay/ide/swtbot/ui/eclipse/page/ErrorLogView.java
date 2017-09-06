@@ -15,9 +15,9 @@
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-
 import com.liferay.ide.swtbot.ui.page.View;
+
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
@@ -25,9 +25,9 @@ import com.liferay.ide.swtbot.ui.page.View;
 public class ErrorLogView extends View
 {
 
-    private String clearErrorLogBtnLabel = CLEAR_LOG_VIEWER;
+    private final String clearErrorLogBtnLabel = CLEAR_LOG_VIEWER;
 
-    public ErrorLogView( SWTWorkbenchBot bot )
+    public ErrorLogView( final SWTWorkbenchBot bot )
     {
         super( bot, ERROR_LOG_WORKSPACE_LOG );
     }

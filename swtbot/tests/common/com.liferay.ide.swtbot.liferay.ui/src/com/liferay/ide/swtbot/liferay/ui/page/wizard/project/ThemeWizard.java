@@ -18,7 +18,7 @@ package com.liferay.ide.swtbot.liferay.ui.page.wizard.project;
 import com.liferay.ide.swtbot.ui.page.ComboBox;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Vicky Wang
@@ -26,10 +26,10 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class ThemeWizard extends Wizard
 {
 
-    ComboBox themeFrameworkTypes;
-    ComboBox themeParentTypes;
+    private final ComboBox themeFrameworkTypes;
+    private final ComboBox themeParentTypes;
 
-    public ThemeWizard( SWTBot bot )
+    public ThemeWizard( final SWTWorkbenchBot bot )
     {
         super( bot, 0 );
 

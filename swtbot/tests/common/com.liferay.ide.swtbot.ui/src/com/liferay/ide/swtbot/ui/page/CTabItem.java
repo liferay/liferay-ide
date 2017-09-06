@@ -16,7 +16,7 @@
 package com.liferay.ide.swtbot.ui.page;
 
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotCTabItem;
 
 /**
@@ -25,7 +25,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotCTabItem;
 public class CTabItem extends AbstractWidget
 {
 
-    public CTabItem( SWTBot bot, String lable )
+    public CTabItem( final SWTWorkbenchBot bot, final String lable )
     {
         super( bot, lable );
 

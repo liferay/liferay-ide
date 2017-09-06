@@ -25,10 +25,14 @@ import com.liferay.ide.swtbot.liferay.ui.util.CoreUtil;
 import com.liferay.ide.swtbot.liferay.ui.util.FileUtil;
 import com.liferay.ide.swtbot.liferay.ui.util.ZipUtil;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -45,14 +49,14 @@ import org.eclipse.swtbot.swt.finder.utils.FileUtils;
 public class EnvAction extends UIAction
 {
 
-    public BundleInfo[] bundleInfos;
+    private final BundleInfo[] bundleInfos;
     private final String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
     private IPath liferayBundlesPath;
-    public final String PLUGINS_SDK_DIR = "com.liferay.portal.plugins.sdk-1.0.11-withdependencies";
-    public final String PLUGINS_SDK_ZIP =
+    private final String PLUGINS_SDK_DIR = "com.liferay.portal.plugins.sdk-1.0.11-withdependencies";
+    private final String PLUGINS_SDK_ZIP =
         "com.liferay.portal.plugins.sdk-1.0.11-withdependencies-20170613175008905.zip";
 
-    public EnvAction( SWTWorkbenchBot bot )
+    public EnvAction( final SWTWorkbenchBot bot )
     {
         super( bot );
 
@@ -73,7 +77,7 @@ public class EnvAction extends UIAction
         {
             bundleInfos[i] = new BundleInfo();
 
-            String[] columns = infos[i];
+            final String[] columns = infos[i];
 
             for( int t = 0; t < columns.length; t++ )
             {
@@ -157,6 +161,11 @@ public class EnvAction extends UIAction
         return getLiferayBundlesPath().append( "bundles" ).append( bundleInfos[0].getBundleDir() );
     }
 
+    public IPath getLiferayServerFullDir()
+    {
+        return getLiferayServerDir().append( getLiferayPluginServerName() );
+    }
+
     public IPath getLiferayServerZip()
     {
         return getLiferayBundlesPath().append( bundleInfos[0].getBundleZip() );
@@ -167,9 +176,54 @@ public class EnvAction extends UIAction
         return bundleInfos[0].getBundleDir();
     }
 
+    public File getProjectZip( String bundleId, String projectName ) throws IOException
+    {
+        final URL projectZipUrl = Platform.getBundle( bundleId ).getEntry( "projects/" + projectName + ".zip" );
+
+        final File projectZipFile = new File( FileLocator.toFileURL( projectZipUrl ).getFile() );
+
+        return projectZipFile;
+    }
+
     public File getValidationFolder()
     {
         return getLiferayBundlesPath().append( "validation" ).toFile();
+    }
+
+    public void killGradleProcess() throws IOException
+    {
+        String jpsCmd = "jps";
+
+        Process proc = Runtime.getRuntime().exec( jpsCmd );
+
+        BufferedReader in = new BufferedReader( new InputStreamReader( proc.getInputStream() ) );
+
+        String temp = in.readLine();
+
+        List<String> result = new ArrayList<String>();
+
+        while( temp != null )
+        {
+            temp = in.readLine();
+
+            if( temp != null && temp.contains( "GradleDaemon" ) )
+            {
+                result.add( temp );
+            }
+        }
+
+        try
+        {
+            for( String pid : result )
+            {
+                String allGradleProcess[] = pid.split( " " );
+
+                Runtime.getRuntime().exec( "taskkill /F /PID " + allGradleProcess[0] );
+            }
+        }
+        catch( Exception e )
+        {
+        }
     }
 
     public void prepareGeoFile()
@@ -311,4 +365,5 @@ public class EnvAction extends UIAction
         }
 
     }
+
 }

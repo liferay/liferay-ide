@@ -19,7 +19,7 @@ import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Text;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Vicky Wang
@@ -27,13 +27,13 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class AddEventActionDialog extends Dialog
 {
 
-    private Text event;
-    private Text eventActionClass;
-    private Button newBtn;
-    private Button selectClassBtn;
-    private Button selectEventBtn;
+    private final Text event;
+    private final Text eventActionClass;
+    private final Button newBtn;
+    private final Button selectClassBtn;
+    private final Button selectEventBtn;
 
-    public AddEventActionDialog( SWTBot bot )
+    public AddEventActionDialog( final SWTWorkbenchBot bot )
     {
         super( bot );
 

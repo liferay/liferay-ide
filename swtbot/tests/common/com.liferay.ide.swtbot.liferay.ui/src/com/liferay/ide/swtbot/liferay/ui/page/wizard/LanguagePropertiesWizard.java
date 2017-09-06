@@ -20,7 +20,7 @@ import com.liferay.ide.swtbot.ui.page.Table;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Vicky Wang
@@ -28,14 +28,14 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class LanguagePropertiesWizard extends Wizard
 {
 
-    private Button addBtn;
-    private Button browseBtn;
-    private Text contentFolder;
-    private Button editBtn;
-    private Table languagePropertyFiles;
-    private Button removeBtn;
+    private final Button addBtn;
+    private final Button browseBtn;
+    private final Text contentFolder;
+    private final Button editBtn;
+    private final Table languagePropertyFiles;
+    private final Button removeBtn;
 
-    public LanguagePropertiesWizard( SWTBot bot )
+    public LanguagePropertiesWizard( SWTWorkbenchBot bot )
     {
         super( bot, NEW_LIFERAY_HOOK, 0 );
 

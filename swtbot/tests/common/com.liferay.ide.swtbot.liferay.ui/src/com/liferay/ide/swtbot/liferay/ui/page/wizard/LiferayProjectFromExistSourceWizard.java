@@ -20,7 +20,7 @@ import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Li Lu
@@ -29,14 +29,14 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class LiferayProjectFromExistSourceWizard extends Wizard
 {
 
-    private ToolbarButtonWithTooltip browseSdkDirectoryBtn;
-    private Button deselectAllBtn;
-    private Button refreshBtn;
-    private Text sdkDirectory;
-    private Text sdkVersion;
-    private Button selectAllBtn;
+    private final ToolbarButtonWithTooltip browseSdkDirectoryBtn;
+    private final Button deselectAllBtn;
+    private final Button refreshBtn;
+    private final Text sdkDirectory;
+    private final Text sdkVersion;
+    private final Button selectAllBtn;
 
-    public LiferayProjectFromExistSourceWizard( SWTBot bot )
+    public LiferayProjectFromExistSourceWizard( final SWTWorkbenchBot bot )
     {
         super( bot, 2 );
 

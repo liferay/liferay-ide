@@ -21,7 +21,7 @@ import com.liferay.ide.swtbot.ui.page.Tree;
 import com.liferay.ide.swtbot.ui.page.TreeItem;
 import com.liferay.ide.swtbot.ui.util.StringPool;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
 /**
@@ -31,17 +31,17 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 public class ServerTree extends TreeItem
 {
 
-    private AddAndRemoveDialog addAndRemoveDialog;
-    private String serverName;
+    private final AddAndRemoveDialog addAndRemoveDialog;
+    private final String serverName;
 
     int serverTreeIndex = 1;
 
-    public ServerTree( SWTBot bot )
+    public ServerTree( final SWTWorkbenchBot bot )
     {
         this( bot, StringPool.BLANK );
     }
 
-    public ServerTree( SWTBot bot, String serverNameValue )
+    public ServerTree( final SWTWorkbenchBot bot, final String serverNameValue )
     {
         super( bot );
 
@@ -59,7 +59,7 @@ public class ServerTree extends TreeItem
         addAndRemoveDialog.confirm();
     }
 
-    public boolean checkConsoleHasMsg( String expectedMsg, int timeout )
+    public boolean checkConsoleHasMsg( final String expectedMsg, final int timeout )
     {
         long timeoutExpiredMs = System.currentTimeMillis() + timeout;
 

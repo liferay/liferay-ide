@@ -40,12 +40,12 @@ public class ViewAction extends UIAction
     private final ProjectExplorerView projectExplorerView = new ProjectExplorerView( bot );
     private final ServersView serversView = new ServersView( bot );
 
-    public ViewAction( SWTWorkbenchBot bot )
+    public ViewAction( final SWTWorkbenchBot bot )
     {
         super( bot );
     }
 
-    public void deleteProject( String name )
+    public void deleteProject( final String name )
     {
         getProjects().getTreeItem( name ).doAction( DELETE );
 
@@ -68,7 +68,7 @@ public class ViewAction extends UIAction
         }
     }
 
-    public void deleteProject( String... nodes )
+    public void deleteProject( final String... nodes )
     {
         getProjects().expandNode( nodes ).doAction( DELETE );
 
@@ -95,41 +95,37 @@ public class ViewAction extends UIAction
     {
         final Tree projects = getProjects();
 
-        String[] names = projects.getAllItems();
+        final String[] names = projects.getAllItems();
 
-        for( String name : names )
+        for( final String name : names )
         {
             deleteProject( name );
         }
     }
 
-    public void deleteProjects( String[] names )
+    public void deleteProjects( final String[] names )
     {
-        for( String name : names )
+        for( final String name : names )
         {
             deleteProject( name );
         }
     }
 
-    public void deleteProjectsExcludeNames( String... names )
+    public void deleteProjectsExcludeNames( final String... names )
     {
         final String[] projectNames = getProjects().getAllItems();
 
-        for( String projectName : projectNames )
+        for( final String projectName : projectNames )
         {
             boolean include = false;
 
-            if( names != null )
+            for( final String name : names )
             {
-
-                for( String name : names )
+                if( name.equals( projectName ) )
                 {
-                    if( name.equals( projectName ) )
-                    {
-                        include = true;
+                    include = true;
 
-                        break;
-                    }
+                    break;
                 }
 
                 getProjects().getTreeItem( projectName ).collapse();
@@ -142,12 +138,12 @@ public class ViewAction extends UIAction
         }
     }
 
-    public TreeItem fetchProjectFile( String... files )
+    public TreeItem fetchProjectFile( final String... files )
     {
         return getProjects().expandNode( files );
     }
 
-    public TreeItem getProject( String name )
+    public TreeItem getProject( final String name )
     {
         return getProjects().getTreeItem( name );
     }
@@ -171,7 +167,7 @@ public class ViewAction extends UIAction
 
     public void openLiferayPortalHome( final String serverLabel )
     {
-        serversView.getServers().getTreeItem( serverLabel ).contextMenu( "Open Liferay Portal Home" );
+        serversView.getServers().getTreeItem( serverLabel ).contextMenu( OPEN_LIFERAY_PORTAL_HOME );
     }
 
     public void openServerEditor( String serverLabel )

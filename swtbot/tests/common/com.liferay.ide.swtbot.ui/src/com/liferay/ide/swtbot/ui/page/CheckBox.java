@@ -15,7 +15,7 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotCheckBox;
 
 /**
@@ -25,22 +25,22 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotCheckBox;
 public class CheckBox extends AbstractWidget
 {
 
-    public CheckBox( SWTBot bot )
+    public CheckBox( final SWTWorkbenchBot bot )
     {
         super( bot );
     }
 
-    public CheckBox( SWTBot bot, String label )
+    public CheckBox( final SWTWorkbenchBot bot, final String label )
     {
         super( bot, label );
     }
 
-    public CheckBox( SWTBot bot, int index )
+    public CheckBox( final SWTWorkbenchBot bot, final int index )
     {
         super( bot, index );
     }
 
-    public CheckBox( SWTBot bot, String label, int index )
+    public CheckBox( final SWTWorkbenchBot bot, final String label, final int index )
     {
         super( bot, label, index );
     }

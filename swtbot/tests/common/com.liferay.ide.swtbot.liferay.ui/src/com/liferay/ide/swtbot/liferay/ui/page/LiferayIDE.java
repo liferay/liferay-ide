@@ -30,14 +30,14 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class LiferayIDE extends Eclipse
 {
 
-    private CodeUpgradeView codeUpgradeView;
-    private CreateLifeayProjectToolbarDropDownButton createLiferayProjectToolbar;
-    private Perspective liferayPerspective;
-    private Perspective liferayWorkspacePerspective;
-    private NewToolbarDropDownButton newBtn;
-    private NewLiferayWorkspaceWizard newLiferayWorkspaceProjectWizard;
+    private final CodeUpgradeView codeUpgradeView;
+    private final CreateLifeayProjectToolbarDropDownButton createLiferayProjectToolbar;
+    private final Perspective liferayPerspective;
+    private final Perspective liferayWorkspacePerspective;
+    private final NewToolbarDropDownButton newBtn;
+    private final NewLiferayWorkspaceWizard newLiferayWorkspaceProjectWizard;
 
-    public LiferayIDE( SWTWorkbenchBot bot )
+    public LiferayIDE( final SWTWorkbenchBot bot )
     {
         super( bot );
 
@@ -84,7 +84,7 @@ public class LiferayIDE extends Eclipse
         {
             otherMenu.click();
 
-            showViewDialog.getSearch().setText( ( "Liferay Code Upgrade" ) );
+            showViewDialog.getText().setText( LIFERAY_CODE_UPGRADE );
 
             showViewDialog.confirm();
 

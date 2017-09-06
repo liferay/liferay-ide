@@ -19,7 +19,7 @@ import com.liferay.ide.swtbot.ui.page.Radio;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ashley Yuan
@@ -28,14 +28,14 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class SelectPortletFrameworkWizard extends Wizard
 {
 
-    private Text displayName;
-    private Radio jsf;
-    private Radio liferayMvc;
-    private Text portletName;
-    private Radio springMvc;
-    private Radio vaadin;
+    private final Text displayName;
+    private final Radio jsf;
+    private final Radio liferayMvc;
+    private final Text portletName;
+    private final Radio springMvc;
+    private final Radio vaadin;
 
-    public SelectPortletFrameworkWizard( SWTBot bot )
+    public SelectPortletFrameworkWizard( final SWTWorkbenchBot bot )
     {
         super( bot );
 

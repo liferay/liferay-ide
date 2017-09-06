@@ -27,19 +27,11 @@ import com.liferay.ide.swtbot.liferay.ui.util.ValidationMsg;
 import com.liferay.ide.swtbot.ui.Keys;
 import com.liferay.ide.swtbot.ui.UI;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
@@ -68,7 +60,6 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants
     public static EnvAction envAction;
     public static boolean hasAddedProject = false;
     public static LiferayIDE ide;
-    protected final static String runTest = System.getProperty( "runTest" );
     public static ViewAction viewAction;
     public static WizardAction wizardAction;
 
@@ -162,51 +153,6 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants
         ide.showPackageExporerView();
 
         return ide.hasProjects();
-    }
-
-    protected File getProjectZip( String bundleId, String projectName ) throws IOException
-    {
-        final URL projectZipUrl = Platform.getBundle( bundleId ).getEntry( "projects/" + projectName + ".zip" );
-
-        final File projectZipFile = new File( FileLocator.toFileURL( projectZipUrl ).getFile() );
-
-        return projectZipFile;
-    }
-
-    public void killGradleProcess() throws IOException
-    {
-        String jpsCmd = "jps";
-
-        Process proc = Runtime.getRuntime().exec( jpsCmd );
-
-        BufferedReader in = new BufferedReader( new InputStreamReader( proc.getInputStream() ) );
-
-        String string_Temp = in.readLine();
-
-        List<String> result = new ArrayList<String>();
-
-        while( string_Temp != null )
-        {
-            string_Temp = in.readLine();
-
-            if( string_Temp != null && string_Temp.contains( "GradleDaemon" ) )
-            {
-                result.add( string_Temp );
-            }
-        }
-
-        try
-        {
-            for( String pid : result )
-            {
-                String allGradleProcess[] = pid.split( " " );
-
-                Runtime.getRuntime().exec( "taskkill /F /PID " + allGradleProcess[0] );
-            }
-        }
-        catch( Exception e )
-        {
-        }
     }
 
     public void openFile( final String path ) throws Exception

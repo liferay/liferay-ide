@@ -15,10 +15,10 @@
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
+
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Vicky Wang
@@ -27,11 +27,11 @@ import com.liferay.ide.swtbot.ui.page.Wizard;
 public class NewLiferay7RuntimeWizard extends Wizard
 {
 
-    private Text location;
-    private Text name;
-    private Text type;
+    private final Text location;
+    private final Text name;
+    private final Text type;
 
-    public NewLiferay7RuntimeWizard( SWTBot bot )
+    public NewLiferay7RuntimeWizard( final SWTWorkbenchBot bot )
     {
         super( bot, 3 );
 

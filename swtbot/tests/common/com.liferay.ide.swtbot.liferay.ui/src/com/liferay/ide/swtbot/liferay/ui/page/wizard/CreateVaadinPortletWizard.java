@@ -18,7 +18,7 @@ package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 import com.liferay.ide.swtbot.ui.page.ComboBox;
 import com.liferay.ide.swtbot.ui.page.Text;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Li Lu
@@ -26,11 +26,11 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class CreateVaadinPortletWizard extends CreateLiferayPortletWizard
 {
 
-    private Text applicationClass;
-    private ComboBox portletClasses;
-    private ComboBox vaadinPortletClasses;
+    private final Text applicationClass;
+    private final ComboBox portletClasses;
+    private final ComboBox vaadinPortletClasses;
 
-    public CreateVaadinPortletWizard( SWTBot bot )
+    public CreateVaadinPortletWizard( final SWTWorkbenchBot bot )
     {
         super( bot, 3 );
 

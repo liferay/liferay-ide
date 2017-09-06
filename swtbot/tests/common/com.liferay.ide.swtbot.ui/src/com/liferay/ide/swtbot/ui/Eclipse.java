@@ -20,7 +20,7 @@ import com.liferay.ide.swtbot.ui.eclipse.page.PackageExplorerView;
 import com.liferay.ide.swtbot.ui.eclipse.page.ProgressView;
 import com.liferay.ide.swtbot.ui.eclipse.page.ProjectExplorerView;
 import com.liferay.ide.swtbot.ui.eclipse.page.ServersView;
-import com.liferay.ide.swtbot.ui.eclipse.page.ShowViewDialog;
+import com.liferay.ide.swtbot.ui.eclipse.page.TextDialog;
 import com.liferay.ide.swtbot.ui.page.BasePageObject;
 import com.liferay.ide.swtbot.ui.page.Browser;
 import com.liferay.ide.swtbot.ui.page.Dialog;
@@ -39,20 +39,20 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class Eclipse extends BasePageObject
 {
 
-    protected PackageExplorerView packageExporerView;
-    protected Tree projectTree;
-    protected View welcomeView;
-    protected ProgressView progressView;
-    protected Menu otherMenu;
-    protected ShowViewDialog showViewDialog;
-    protected ErrorLogView errorLogView;
-    protected Menu fileMenu;
-    protected ProjectExplorerView projectExplorerView;
-    protected Menu preferencesMenu;
-    protected ServersView serversView;
-    protected Browser browser;
+    protected final PackageExplorerView packageExporerView;
+    protected final Tree projectTree;
+    protected final View welcomeView;
+    protected final ProgressView progressView;
+    protected final Menu otherMenu;
+    protected final TextDialog showViewDialog;
+    protected final ErrorLogView errorLogView;
+    protected final Menu fileMenu;
+    protected final ProjectExplorerView projectExplorerView;
+    protected final Menu preferencesMenu;
+    protected final ServersView serversView;
+    protected final Browser browser;
 
-    public Eclipse( SWTWorkbenchBot bot )
+    public Eclipse( final SWTWorkbenchBot bot )
     {
         super( bot );
 
@@ -68,7 +68,7 @@ public class Eclipse extends BasePageObject
         preferencesMenu = new Menu( bot, preferencesLabel );
         otherMenu = new Menu( bot, otherLabel );
 
-        showViewDialog = new ShowViewDialog( bot );
+        showViewDialog = new TextDialog( bot );
         errorLogView = new ErrorLogView( bot );
         projectExplorerView = new ProjectExplorerView( bot );
         serversView = new ServersView( bot );
@@ -116,7 +116,7 @@ public class Eclipse extends BasePageObject
         catch( Exception e )
         {
             otherMenu.click();
-            showViewDialog.getSearch().setText( ( "Package Explorer" ) );
+            showViewDialog.getText().setText( ( "Package Explorer" ) );
 
             showViewDialog.confirm();
 
@@ -135,7 +135,7 @@ public class Eclipse extends BasePageObject
         {
             otherMenu.click();
 
-            showViewDialog.getSearch().setText( ( "Servers" ) );
+            showViewDialog.getText().setText( ( "Servers" ) );
 
             sleep( 100 );
 
@@ -162,7 +162,7 @@ public class Eclipse extends BasePageObject
         {
             otherMenu.click();
 
-            showViewDialog.getSearch().setText( ( PROGRESS ) );
+            showViewDialog.getText().setText( ( PROGRESS ) );
 
             sleep( 100 );
 
@@ -184,7 +184,7 @@ public class Eclipse extends BasePageObject
         {
             otherMenu.click();
 
-            showViewDialog.getSearch().setText( ( ERROR_LOG ) );
+            showViewDialog.getText().setText( ( ERROR_LOG ) );
 
             sleep( 100 );
 

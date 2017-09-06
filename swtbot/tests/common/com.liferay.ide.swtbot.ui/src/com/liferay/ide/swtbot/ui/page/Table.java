@@ -15,7 +15,7 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTable;
 
 /**
@@ -24,57 +24,52 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTable;
 public class Table extends AbstractWidget
 {
 
-    public Table( SWTBot bot )
+    public Table( final SWTWorkbenchBot bot )
     {
         super( bot );
     }
 
-    public Table( SWTBot bot, String label )
+    public Table( final SWTWorkbenchBot bot, final String label )
     {
         super( bot, label );
     }
 
-    public Table( SWTBot bot, int index )
+    public Table( final SWTWorkbenchBot bot, final int index )
     {
         super( bot, index );
     }
 
     protected SWTBotTable getWidget()
     {
-        if( label != null )
-        {
-            return bot.tableWithLabel( label, 0 );
-        }
-
-        return bot.table( index );
+        return isLabelNull() ? bot.table( index ) : bot.tableWithLabel( label, 0 );
     }
 
-    public void click( int row, int column )
+    public void click( final int row, final int column )
     {
         getWidget().click( row, column );
     }
 
-    public void click( String itemText )
+    public void click( final String itemText )
     {
         getWidget().getTableItem( itemText ).click();
     }
 
-    public void doubleClick( int row, int column )
+    public void doubleClick( final int row, final int column )
     {
         getWidget().doubleClick( row, column );
     }
 
-    public void click( int row )
+    public void click( final int row )
     {
         getWidget().getTableItem( row ).click();
     }
 
-    public boolean containsItem( String item )
+    public boolean containsItem( final String item )
     {
         return getWidget().containsItem( item );
     }
 
-    public void setText( int index, String text )
+    public void setText( final int index, final String text )
     {
         bot.text( index ).setText( text );
     }

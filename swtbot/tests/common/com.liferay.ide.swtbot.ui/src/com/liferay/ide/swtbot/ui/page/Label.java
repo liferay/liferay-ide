@@ -15,7 +15,7 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotLabel;
 
@@ -26,7 +26,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotLabel;
 public class Label extends AbstractWidget
 {
 
-    public Label( SWTBot bot, String label )
+    public Label( final SWTWorkbenchBot bot, final String label )
     {
         super( bot, label );
     }
@@ -37,7 +37,7 @@ public class Label extends AbstractWidget
         return bot.label( label );
     }
 
-    public boolean isVisible( String label )
+    public boolean isVisible( final String label )
     {
         long oldTimeOut = SWTBotPreferences.TIMEOUT;
 

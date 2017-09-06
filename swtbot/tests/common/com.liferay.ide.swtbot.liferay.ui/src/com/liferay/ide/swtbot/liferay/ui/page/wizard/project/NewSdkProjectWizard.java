@@ -20,7 +20,7 @@ import com.liferay.ide.swtbot.ui.page.ComboBox;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.util.StringPool;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
@@ -29,17 +29,17 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class NewSdkProjectWizard extends NewProjectWizard
 {
 
-    private Text displayName;
-    private CheckBox includeSimpleCode;
-    private CheckBox launchNewPortletWizard;
-    private ComboBox pluginTypes;
+    private final Text displayName;
+    private final CheckBox includeSimpleCode;
+    private final CheckBox launchNewPortletWizard;
+    private final ComboBox pluginTypes;
 
-    public NewSdkProjectWizard( SWTBot bot )
+    public NewSdkProjectWizard( final SWTWorkbenchBot bot )
     {
         this( bot, NEW_LIFERAY_PLUGIN_PROJECT, 2 );
     }
 
-    public NewSdkProjectWizard( SWTBot bot, String title, int validationMsgIndex )
+    public NewSdkProjectWizard( final SWTWorkbenchBot bot, final String title, final int validationMsgIndex )
     {
         super( bot, title, validationMsgIndex );
 

@@ -15,7 +15,7 @@ package com.liferay.ide.swtbot.liferay.ui.page.dialog;
 import com.liferay.ide.swtbot.ui.eclipse.page.TreeDialog;
 import com.liferay.ide.swtbot.ui.page.Table;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ashley Yuan
@@ -23,9 +23,9 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class SuperClassSelectionDialog extends TreeDialog
 {
 
-    private Table availableSuperClasses;
+    private final Table availableSuperClasses;
 
-    public SuperClassSelectionDialog( SWTBot bot )
+    public SuperClassSelectionDialog( final SWTWorkbenchBot bot )
     {
         super( bot );
 

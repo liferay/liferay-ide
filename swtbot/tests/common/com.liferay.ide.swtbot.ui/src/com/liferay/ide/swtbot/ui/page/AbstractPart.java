@@ -15,8 +15,8 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotWorkbenchPart;
-import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
@@ -24,7 +24,12 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public abstract class AbstractPart extends BasePageObject
 {
 
-    public AbstractPart( SWTBot bot, String label )
+    public AbstractPart( final SWTWorkbenchBot bot )
+    {
+        super( bot );
+    }
+
+    public AbstractPart( final SWTWorkbenchBot bot, final String label )
     {
         super( bot, label );
     }

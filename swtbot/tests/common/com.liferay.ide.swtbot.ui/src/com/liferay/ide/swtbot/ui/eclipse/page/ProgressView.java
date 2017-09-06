@@ -26,9 +26,9 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class ProgressView extends View
 {
 
-    private Text noOperationsText;
+    private final Text noOperationsText;
 
-    public ProgressView( SWTWorkbenchBot bot )
+    public ProgressView( final SWTWorkbenchBot bot )
     {
         super( bot, PROGRESS );
 

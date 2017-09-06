@@ -25,7 +25,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class EditorAction extends UIAction
 {
 
-    public EditorAction( SWTWorkbenchBot bot )
+    public EditorAction( final SWTWorkbenchBot bot )
     {
         super( bot );
     }

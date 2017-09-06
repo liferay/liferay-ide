@@ -28,16 +28,16 @@ import org.eclipse.swtbot.swt.finder.keyboard.KeyboardFactory;
 public interface Keys
 {
 
-    public Keyboard keyPress = KeyboardFactory.getAWTKeyboard();
+    public final Keyboard keyPress = KeyboardFactory.getAWTKeyboard();
 
-    public KeyStroke ctrl = KeyStroke.getInstance( SWT.CTRL, 0 );
-    public KeyStroke N = KeyStroke.getInstance( 'N' );
-    public KeyStroke M = KeyStroke.getInstance( 'M' );
-    public KeyStroke alt = KeyStroke.getInstance( SWT.ALT, 0 );
-    public KeyStroke enter = KeyStroke.getInstance( KeyEvent.VK_ENTER );
-    public KeyStroke up = KeyStroke.getInstance( KeyEvent.VK_UP );
-    public KeyStroke S = KeyStroke.getInstance( 'S' );
-    public KeyStroke slash = KeyStroke.getInstance( '/' );
-    public KeyStroke page_down = KeyStroke.getInstance( SWT.PAGE_DOWN );
+    public final KeyStroke ctrl = KeyStroke.getInstance( SWT.CTRL, 0 );
+    public final KeyStroke N = KeyStroke.getInstance( 'N' );
+    public final KeyStroke M = KeyStroke.getInstance( 'M' );
+    public final KeyStroke alt = KeyStroke.getInstance( SWT.ALT, 0 );
+    public final KeyStroke enter = KeyStroke.getInstance( KeyEvent.VK_ENTER );
+    public final KeyStroke up = KeyStroke.getInstance( KeyEvent.VK_UP );
+    public final KeyStroke S = KeyStroke.getInstance( 'S' );
+    public final KeyStroke slash = KeyStroke.getInstance( '/' );
+    public final KeyStroke page_down = KeyStroke.getInstance( SWT.PAGE_DOWN );
 
 }

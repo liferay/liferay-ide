@@ -19,7 +19,7 @@ import com.liferay.ide.swtbot.ui.page.CheckBox;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ashley Yuan
@@ -27,30 +27,30 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class PortletDeploymentDescriptorWizard extends Wizard
 {
 
-    private CheckBox about;
-    private CheckBox config;
-    private CheckBox createJspFiles;
-    private CheckBox createResourceBundleFile;
-    private Text displayName;
-    private CheckBox edit;
-    private CheckBox editDefaults;
-    private CheckBox editGuest;
-    private CheckBox help;
-    private Text jspFolder;
-    private Text portletName;
-    private Text portletTitle;
-    private CheckBox preview;
-    private CheckBox print;
-    private Text resourceBundleFilePath;
-    private CheckBox view;
+    private final CheckBox about;
+    private final CheckBox config;
+    private final CheckBox createJspFiles;
+    private final CheckBox createResourceBundleFile;
+    private final Text displayName;
+    private final CheckBox edit;
+    private final CheckBox editDefaults;
+    private final CheckBox editGuest;
+    private final CheckBox help;
+    private final Text jspFolder;
+    private final Text name;
+    private final CheckBox preview;
+    private final CheckBox print;
+    private final Text resourceBundleFilePath;
+    private final Text title;
+    private final CheckBox view;
 
-    public PortletDeploymentDescriptorWizard( SWTBot bot )
+    public PortletDeploymentDescriptorWizard( final SWTWorkbenchBot bot )
     {
         super( bot, 5 );
 
-        portletName = new Text( bot, NAME );
+        name = new Text( bot, NAME );
         displayName = new Text( bot, DISPLAY_NAME );
-        portletTitle = new Text( bot, TITLE );
+        title = new Text( bot, TITLE );
         view = new CheckBox( bot, VIEW );
         edit = new CheckBox( bot, EDIT );
         help = new CheckBox( bot, HELP );
@@ -118,12 +118,12 @@ public class PortletDeploymentDescriptorWizard extends Wizard
 
     public Text getPortletName()
     {
-        return portletName;
+        return name;
     }
 
     public Text getPortletTitle()
     {
-        return portletTitle;
+        return title;
     }
 
     public CheckBox getPreview()
@@ -241,7 +241,7 @@ public class PortletDeploymentDescriptorWizard extends Wizard
     {
         if( portletNameValue != null )
         {
-            portletName.setText( portletNameValue );
+            name.setText( portletNameValue );
         }
 
         if( displayName != null )
@@ -249,9 +249,9 @@ public class PortletDeploymentDescriptorWizard extends Wizard
             displayName.setText( displayNameValue );
         }
 
-        if( portletTitle != null )
+        if( title != null )
         {
-            portletTitle.setText( portletTitleValue );
+            title.setText( portletTitleValue );
         }
     }
 

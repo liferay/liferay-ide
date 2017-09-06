@@ -369,10 +369,10 @@ public class ProjectWizardTests extends SwtbotBase
     {
         hasAddedProject = addedProjects();
 
-        ide.getFileMenu().clickMenu( "New", "Other..." );
+        ide.getFileMenu().clickMenu( NEW, "Other..." );
 
-        bot.tree().getTreeItem( "Liferay" ).expand();
-        bot.tree().getTreeItem( "Liferay" ).getNode( "Liferay Plugin Project" ).select();
+        bot.tree().getTreeItem( LIFERAY ).expand();
+        bot.tree().getTreeItem( LIFERAY ).getNode( "Liferay Plugin Project" ).select();
 
         bot.button( "Next >" ).click();
     }

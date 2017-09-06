@@ -15,7 +15,7 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotCanvas;
 
 /**
@@ -24,7 +24,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotCanvas;
 public class Canvas extends AbstractWidget
 {
 
-    public Canvas( SWTBot bot, int index )
+    public Canvas( final SWTWorkbenchBot bot, final int index )
     {
         super( bot, index );
     }
@@ -35,7 +35,7 @@ public class Canvas extends AbstractWidget
         return bot.canvas( index );
     }
 
-    public void click( int x, int y )
+    public void click( final int x, final int y )
     {
         getWidget().click( x, y );
     }

@@ -23,20 +23,20 @@ import java.io.File;
 public class CSVReader
 {
 
-    public static String[][] readCSV( File file )
+    public static String[][] readCSV( final File file )
     {
-        String[] lines = FileUtil.readLinesFromFile( file );
+        final String[] lines = FileUtil.readLinesFromFile( file );
 
         if( lines == null || lines.length == 0 )
         {
             return null;
         }
 
-        String[][] results = new String[lines.length][lines[0].split( "," ).length];
+        final String[][] results = new String[lines.length][lines[0].split( "," ).length];
 
         for( int i = 0; i < lines.length; i++ )
         {
-            String line = lines[i];
+            final String line = lines[i];
 
             String[] columns = line.split( "," );
 

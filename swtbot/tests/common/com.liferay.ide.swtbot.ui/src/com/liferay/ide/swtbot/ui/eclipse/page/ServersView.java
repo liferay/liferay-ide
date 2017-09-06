@@ -28,7 +28,7 @@ public class ServersView extends View
 
     private final Tree servers;
 
-    public ServersView( SWTWorkbenchBot bot )
+    public ServersView( final SWTWorkbenchBot bot )
     {
         super( bot, SERVERS );
 

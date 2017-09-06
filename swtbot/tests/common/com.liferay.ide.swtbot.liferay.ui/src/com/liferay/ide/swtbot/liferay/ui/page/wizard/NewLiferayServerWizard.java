@@ -18,7 +18,7 @@ package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 import com.liferay.ide.swtbot.ui.page.Tree;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ying Xu
@@ -26,9 +26,9 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class NewLiferayServerWizard extends Wizard
 {
 
-    private Tree serverTypes;
+    private final Tree serverTypes;
 
-    public NewLiferayServerWizard( SWTBot bot )
+    public NewLiferayServerWizard( final SWTWorkbenchBot bot )
     {
         super( bot );
 

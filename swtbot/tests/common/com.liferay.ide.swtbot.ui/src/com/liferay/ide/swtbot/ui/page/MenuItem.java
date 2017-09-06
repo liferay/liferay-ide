@@ -15,7 +15,7 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 
 /**
@@ -24,9 +24,9 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 public class MenuItem extends AbstractWidget
 {
 
-    private ToolbarDropDownButton dropDownBtn;
+    private final ToolbarDropDownButton dropDownBtn;
 
-    public MenuItem( SWTBot bot, ToolbarDropDownButton dropDownBtn, String label )
+    public MenuItem( final SWTWorkbenchBot bot, final ToolbarDropDownButton dropDownBtn, String label )
     {
         super( bot, label );
 

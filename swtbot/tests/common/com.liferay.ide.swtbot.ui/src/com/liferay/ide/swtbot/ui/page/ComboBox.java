@@ -15,7 +15,7 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotCombo;
 
 /**
@@ -26,7 +26,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotCombo;
 public class ComboBox extends AbstractWidget
 {
 
-    public ComboBox( SWTBot bot, String label )
+    public ComboBox( final SWTWorkbenchBot bot, final String label )
     {
         super( bot, label );
     }
@@ -42,12 +42,12 @@ public class ComboBox extends AbstractWidget
         return bot.comboBoxWithLabel( label );
     }
 
-    public void setSelection( String value )
+    public void setSelection( final String value )
     {
         getWidget().setSelection( value );
     }
 
-    public void setText( String text )
+    public void setText( final String text )
     {
         getWidget().setText( text );
     }

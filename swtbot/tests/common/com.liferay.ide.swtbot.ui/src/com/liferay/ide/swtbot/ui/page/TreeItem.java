@@ -15,7 +15,7 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
@@ -28,12 +28,12 @@ public class TreeItem extends AbstractWidget
     protected String[] nodeText;
     protected Tree tree;
 
-    public TreeItem( SWTBot bot )
+    public TreeItem( final SWTWorkbenchBot bot )
     {
         super( bot );
     }
 
-    public TreeItem( SWTBot bot, Tree tree, String... nodeText )
+    public TreeItem( final SWTWorkbenchBot bot, final Tree tree, final String... nodeText )
     {
         super( bot );
 
@@ -46,7 +46,7 @@ public class TreeItem extends AbstractWidget
         getWidget().collapse();
     }
 
-    public void doAction( String... actions )
+    public void doAction( final String... actions )
     {
         SWTBotMenu goalMenu = getWidget().contextMenu( actions[0] ).click();
 
@@ -71,7 +71,7 @@ public class TreeItem extends AbstractWidget
         getWidget().expand();
     }
 
-    public void expandAll( SWTBotTreeItem... node )
+    public void expandAll( final SWTBotTreeItem... node )
     {
         SWTBotTreeItem treeItem = getWidget().expand();
 

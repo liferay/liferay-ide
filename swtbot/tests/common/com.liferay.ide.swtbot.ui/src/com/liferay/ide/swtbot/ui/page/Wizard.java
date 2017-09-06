@@ -15,7 +15,7 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
@@ -30,24 +30,24 @@ public class Wizard extends CancelableShell
 
     private int validationMsgIndex = -1;
 
-    public Wizard( SWTBot bot )
+    public Wizard( final SWTWorkbenchBot bot )
     {
         super( bot );
     }
 
-    public Wizard( SWTBot bot, String title )
+    public Wizard( final SWTWorkbenchBot bot, final String title )
     {
         super( bot, title );
     }
 
-    public Wizard( SWTBot bot, int validationMsgIndex )
+    public Wizard( final SWTWorkbenchBot bot, final int validationMsgIndex )
     {
         super( bot );
 
         this.validationMsgIndex = validationMsgIndex;
     }
 
-    public Wizard( SWTBot bot, String title, int validationMsgIndex )
+    public Wizard( final SWTWorkbenchBot bot, final String title, final int validationMsgIndex )
     {
         super( bot, title );
 
@@ -55,8 +55,8 @@ public class Wizard extends CancelableShell
     }
 
     public Wizard(
-        SWTBot bot, String title, String cancelBtnLabel, String finishBtnLabel, String backBtnLabel,
-        String nextButtonText )
+        final SWTWorkbenchBot bot, final String title, final String cancelBtnLabel, final String finishBtnLabel,
+        final String backBtnLabel, final String nextButtonText )
     {
         super( bot, title, cancelBtnLabel );
 
@@ -68,8 +68,8 @@ public class Wizard extends CancelableShell
     }
 
     public Wizard(
-        SWTBot bot, String title, String cancelBtnLabel, String finishBtnLabel, String backBtnLabel,
-        String nextBtnLabel, int validationMsgIndex )
+        final SWTWorkbenchBot bot, final String title, final String cancelBtnLabel, final String finishBtnLabel,
+        final String backBtnLabel, final String nextBtnLabel, final int validationMsgIndex )
     {
         super( bot, title, cancelBtnLabel );
 
@@ -104,7 +104,7 @@ public class Wizard extends CancelableShell
         return new Button( bot, finishBtnLabel );
     }
 
-    public String getValidationMsg( int validationMsgIndex )
+    public String getValidationMsg( final int validationMsgIndex )
     {
         if( validationMsgIndex < 0 )
         {

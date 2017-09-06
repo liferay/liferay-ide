@@ -15,7 +15,7 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
@@ -26,17 +26,17 @@ public class CancelableShell extends Shell
 
     protected String cancelBtnLabel = CANCEL;
 
-    public CancelableShell( SWTBot bot)
+    public CancelableShell( final SWTWorkbenchBot bot )
     {
         super( bot );
     }
 
-    public CancelableShell( SWTBot bot, String label )
+    public CancelableShell( final SWTWorkbenchBot bot, final String label )
     {
         super( bot, label );
     }
 
-    public CancelableShell( SWTBot bot, String label, String cancelBtnLabel )
+    public CancelableShell( final SWTWorkbenchBot bot, final String label, final String cancelBtnLabel )
     {
         super( bot, label );
 

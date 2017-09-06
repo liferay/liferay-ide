@@ -25,15 +25,13 @@ package com.liferay.ide.swtbot.ui;
 public interface UI
 {
 
-    public final String OVERRIDDEN_FILES = "Overridden files:";
-    public final String ADD_FILE_PATH = "Add Override File Path";
-
     public final String ABOUT = "About";
     public final String ABSTRACT = "abstract";
     public final String ACTIVATOR = "activator";
     public final String ADD_ALL = "Add All >>";
     public final String ADD_AND_REMOVE = "Add and Remove...";
     public final String ADD_EVENT_ACTION = "Add Event Action";
+    public final String ADD_FILE_PATH = "Add Override File Path";
     public final String ADD_FILES_FROM_OSGI_TO_OVERRIDE = "Add Files From OSGi Bundle to Override...";
     public final String ADD_FROM_LIFERAY = "Add from Liferay...";
     public final String ADD_PROJECT_TO_WORKING_SET = "Add project to working set";
@@ -194,8 +192,8 @@ public interface UI
     public final String LIFERAY_MVC = "Liferay MVC";
     public final String LIFERAY_PLUGIN_PROJECT = "Liferay Plugin Project";
     public final String LIFERAY_PLUGINS = "Liferay Plugins";
-    public final String LIFERAY_PORTLET = "Liferay Portlet";
     public final String LIFERAY_PORTAL_BUNDLE_DIRECTORY = "Liferay Portal Bundle Directory";
+    public final String LIFERAY_PORTLET = "Liferay Portlet";
     public final String LIFERAY_PROJECT_FROM_EXISTING_SOURCE = "Liferay Project from Existing Source";
     public final String LIFERAY_RUNTIME_NAME = "Liferay runtime name:";
     public final String LIFERAY_SERVICE_BUILDER = "Liferay Service Builder";
@@ -244,7 +242,9 @@ public interface UI
     public final String NO_OPERTAIONS = "No operations to display at this time.";
     public final String OK = "OK";
     public final String OPEN_LIFERAY_HOME_FOLDER = "Open Liferay Home Folder";
+    public final String OPEN_LIFERAY_PORTAL_HOME = "Open Liferay Portal Home";
     public final String OTHER = "Other...";
+    public final String OVERRIDDEN_FILES = "Overridden files:";
     public final String PACKAGE = "Package";
     public final String PACKAGE_EXPLORER = "Package Explorer";
     public final String PACKAGE_NAME = "Package name:";
@@ -257,7 +257,6 @@ public interface UI
     public final String PORTAL_PROPERTIES = "Portal properties";
     public final String PORTAL_PROPERTIES_FILE = "Portal properties file:";
     public final String PORTLET = "portlet";
-    public final String PORTLET_UPCASE = "Portlet";
     public final String PORTLET_ACTION_COMMAND = "Portlet Action Command";
     public final String PORTLET_CLASS = "Portlet class:";
     public final String PORTLET_CONFIGURATION_ICON = "portlet-configuration-icon";
@@ -266,6 +265,7 @@ public interface UI
     public final String PORTLET_PLUGIN_PROJECT = "Portlet plugin project:";
     public final String PORTLET_PROVIDER = "portlet-provider";
     public final String PORTLET_TOOLBAR_CONTRIBUTOR = "portlet-toolbar-contributor";
+    public final String PORTLET_UPCASE = "Portlet";
     public final String PREFERENCES = "Preferences";
     public final String PREVIEW = "Preview";
     public final String PRIMEFACES = "PrimeFaces";
@@ -289,6 +289,7 @@ public interface UI
     public final String RESTART_CODE_UPGRADE = "Restart code upgrade?";
     public final String RESTART_UPGRADE = "Restart Upgrade";
     public final String RICHFACES = "RichFaces";
+    public final String RUNTIME_ENVIRONMENTS = "Runtime Environments";
     public final String SAVE = "Save (Ctrl+S)";
     public final String SDK = "SDK";
     public final String SDK_DIRECTORY = "SDK Directory:";
@@ -303,6 +304,7 @@ public interface UI
     public final String SELECT_MODEL_CLASS = "Select Model Class:";
     public final String SELECT_SERVICE_NAME = "Select Service Name:";
     public final String SELECTED_PROJECT = "Selected project:";
+    public final String SERVER = "Server";
     public final String SERVER_NAME = "Server name:";
     public final String SERVER_RUNTIEME_ENVIRONMENTS = "Server runtime environments:";
     public final String SERVER_STARTUP_IN = "Server startup in";

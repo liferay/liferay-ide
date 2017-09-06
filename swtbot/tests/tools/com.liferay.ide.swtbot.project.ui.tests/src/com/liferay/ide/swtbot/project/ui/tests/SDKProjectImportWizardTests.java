@@ -66,7 +66,7 @@ public class SDKProjectImportWizardTests extends SwtbotBase
     {
         path = envAction.getLiferayPluginsSdkDir().append( path ).toOSString();
 
-        final File projectZipFile = getProjectZip( BUNDLE_ID, projectName );
+        final File projectZipFile = envAction.getProjectZip( BUNDLE_ID, projectName );
 
         ZipUtil.unzip( projectZipFile, new File( path ) );
     }

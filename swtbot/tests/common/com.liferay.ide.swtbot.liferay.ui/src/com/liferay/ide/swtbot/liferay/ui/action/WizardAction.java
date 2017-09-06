@@ -84,7 +84,7 @@ public class WizardAction extends UIAction
         SWTBotPreferences.TIMEOUT = origin;
     }
 
-    public String getValidationMsg( int validationMsgIndex )
+    public String getValidationMsg( final int validationMsgIndex )
     {
         return wizard.getValidationMsg( validationMsgIndex );
     }
@@ -108,7 +108,7 @@ public class WizardAction extends UIAction
     {
         ide.getFileMenu().clickMenu( IMPORT );
 
-        selectImportType( LIFERAY, LIFERAY_WORKSPACE_PROJECT );
+        prepareImportType( LIFERAY, LIFERAY_WORKSPACE_PROJECT );
 
         next();
     }
@@ -163,12 +163,12 @@ public class WizardAction extends UIAction
         newModuleInfoWizard.getBrowseBtn().click();
     }
 
-    public void prepareComponentClass( String projectName )
+    public void prepareComponentClass( final String projectName )
     {
         newLiferayComponentWizard.getProjectNames().setSelection( projectName );
     }
 
-    public void prepareComponentClass( String projectName, String componentClassTemplate )
+    public void prepareComponentClass( final String projectName, final String componentClassTemplate )
     {
         newLiferayComponentWizard.getProjectNames().setSelection( projectName );
         newLiferayComponentWizard.getComponentClassTemplates().setSelection( componentClassTemplate );
@@ -176,50 +176,57 @@ public class WizardAction extends UIAction
         ide.sleep();
     }
 
-    public void prepareFragment( String projectName, String buildType )
+    public void prepareFragment( final String projectName, final String buildType )
     {
         newFragmentWizard.getProjectName().setText( projectName );
         newFragmentWizard.getBuildTypes().setSelection( buildType );
     }
 
-    public void prepareFragmentGradle( String projectName )
+    public void prepareFragmentGradle( final String projectName )
     {
         prepareFragment( projectName, GRADLE );
     }
 
-    public void prepareFragmentMaven( String projectName )
+    public void prepareFragmentMaven( final String projectName )
     {
         prepareFragment( projectName, MAVEN );
     }
 
-    public void prepareJsfProject( String projectName, String buildType, String componentSuite )
+    public void prepareImportType( final String category, final String type )
+    {
+        prepareImportType( StringPool.BLANK, category, type );
+    }
+
+    public void prepareImportType( final String filterText, final String category, final String type )
+    {
+        importProjectWizard.getFilterText().setText( filterText );
+
+        importProjectWizard.getTypes().expandNode( category, type ).select();
+    }
+
+    public void prepareJsfProject( final String projectName, final String buildType, final String componentSuite )
     {
         newJsfProjectWizard.getProjectName().setText( projectName );
         newJsfProjectWizard.getBuildTypes().setSelection( buildType );
         newJsfProjectWizard.getComponentSuite().setSelection( componentSuite );
     }
 
-    public void prepareJsfProjectGradle( String projectName, String componentSuite )
+    public void prepareJsfProjectGradle( final String projectName, final String componentSuite )
     {
         prepareJsfProject( projectName, GRADLE, componentSuite );
     }
 
-    public void prepareNewServer( final String serverName )
-    {
-        newServerWizard.getServerName().setText( serverName );
-    }
-
-    public void prepareJsfProjectMaven( String projectName, String componentSuite )
+    public void prepareJsfProjectMaven( final String projectName, final String componentSuite )
     {
         prepareJsfProject( projectName, MAVEN, componentSuite );
     }
 
-    public void prepareLiferay7Runtime( String location )
+    public void prepareLiferay7RuntimeInfo( final String location )
     {
         newLiferay7RuntimeWizard.getLocation().setText( location );
     }
 
-    public void prepareLiferay7Runtime( String name, String location )
+    public void prepareLiferay7RuntimeInfo( final String name, final String location )
     {
         newLiferay7RuntimeWizard.getName().setText( name );
         newLiferay7RuntimeWizard.getLocation().setText( location );
@@ -227,21 +234,21 @@ public class WizardAction extends UIAction
 
     public void prepareLiferay7RuntimeType()
     {
-        newRuntimeWizard.selectServerType( "Liferay, Inc.", "Liferay 7.x" );
+        prepareRuntimeType( LIFERAY_INC, LIFERAY_7_X );
     }
 
-    public void prepareLiferayModule( String projectName )
+    public void prepareLiferayModule( final String projectName )
     {
         newModuleWizard.getProjectName().setText( projectName );
     }
 
-    public void prepareLiferayModule( String projectName, String buildType )
+    public void prepareLiferayModule( final String projectName, final String buildType )
     {
         newModuleWizard.getProjectName().setText( projectName );
         newModuleWizard.getBuildTypes().setSelection( buildType );
     }
 
-    public void prepareLiferayModule( String projectName, String buildType, String template )
+    public void prepareLiferayModule( final String projectName, final String buildType, final String template )
     {
         newModuleWizard.getProjectName().setText( projectName );
         newModuleWizard.getBuildTypes().setSelection( buildType );
@@ -249,7 +256,8 @@ public class WizardAction extends UIAction
     }
 
     public void prepareLiferayModule(
-        String projectName, String buildType, String template, boolean useDefaultLocation, String location )
+        final String projectName, final String buildType, final String template, final boolean useDefaultLocation,
+        final String location )
     {
         prepareLiferayModule( projectName, buildType, template );
 
@@ -264,41 +272,41 @@ public class WizardAction extends UIAction
         }
     }
 
-    public void prepareLiferayModuleGradle( String projectName )
+    public void prepareLiferayModuleGradle( final String projectName )
     {
         prepareLiferayModule( projectName, GRADLE, MVC_PORTLET );
     }
 
-    public void prepareLiferayModuleGradle( String projectName, String template )
+    public void prepareLiferayModuleGradle( final String projectName, final String template )
     {
         prepareLiferayModule( projectName, GRADLE, template );
     }
 
-    public void prepareLiferayModuleInfo( String className, String packageName )
+    public void prepareLiferayModuleInfo( final String className, final String packageName )
     {
         newModuleInfoWizard.getComponentClassName().setText( className );
 
     }
 
-    public void prepareLiferayModuleMaven( String projectName, String template )
+    public void prepareLiferayModuleMaven( final String projectName, final String template )
     {
         prepareLiferayModule( projectName, MAVEN, template );
     }
 
-    public void prepareLiferayWorkspace( String projectName )
+    public void prepareLiferayWorkspace( final String projectName )
     {
         newWorkspaceWizard.getProjectName().setText( projectName );
     }
 
-    public void prepareLiferayWorkspace( String projectName, String buildType )
+    public void prepareLiferayWorkspace( final String projectName, final String buildType )
     {
         newWorkspaceWizard.getProjectName().setText( projectName );
         newWorkspaceWizard.getBuildTypes().setSelection( buildType );
     }
 
     public void prepareLiferayWorkspace(
-        String projectName, String buildType, boolean downloadLiferayBundle, String serverName,
-        boolean useDefaultBundleUrl, String bundleUrl )
+        final String projectName, final String buildType, final boolean downloadLiferayBundle, final String serverName,
+        final boolean useDefaultBundleUrl, final String bundleUrl )
     {
         prepareLiferayWorkspace( projectName, buildType );
 
@@ -319,44 +327,32 @@ public class WizardAction extends UIAction
         }
     }
 
-    public void prepareLiferayWorkspaceGradle( String projectName )
+    public void prepareLiferayWorkspaceGradle( final String projectName )
     {
         prepareLiferayWorkspace( projectName, GRADLE );
     }
 
     public void prepareLiferayWorkspaceGradle(
-        String projectName, boolean downloadLiferayBundle, String serverName, boolean useDefaultBundleUrl,
-        String bundleUrl )
+        final String projectName, final boolean downloadLiferayBundle, final String serverName,
+        final boolean useDefaultBundleUrl, final String bundleUrl )
     {
         prepareLiferayWorkspace(
             projectName, GRADLE, downloadLiferayBundle, serverName, useDefaultBundleUrl, bundleUrl );
     }
 
-    public void prepareLiferayWorkspaceMaven( String projectName )
+    public void prepareLiferayWorkspaceMaven( final String projectName )
     {
         prepareLiferayWorkspace( projectName, MAVEN );
     }
 
+    public void prepareNewServer( final String serverName )
+    {
+        newServerWizard.getServerName().setText( serverName );
+    }
+
     public void prepareRuntimeType( final String category, final String type )
     {
-        newRuntimeWizard.selectServerType( category, type );
-    }
-
-    public void selectImportType( String selectTypeTree, String selectTypeNode )
-    {
-        selectImportType( StringPool.BLANK, selectTypeTree, selectTypeNode );
-    }
-
-    public void selectImportType( String filterText, String category, String type )
-    {
-        importProjectWizard.getFilterText().setText( filterText );
-
-        importProjectWizard.getTypes().expandNode( category, type ).select();
-    }
-
-    public void selectServerType( String category, String type )
-    {
-        selectImportType( StringPool.BLANK, category, type );
+        newRuntimeWizard.getServerTypes().getTreeItem( category ).getTreeItem( type ).select();
     }
 
 }

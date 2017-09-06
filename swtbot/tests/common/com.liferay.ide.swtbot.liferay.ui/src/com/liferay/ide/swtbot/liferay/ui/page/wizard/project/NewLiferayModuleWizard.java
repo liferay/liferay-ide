@@ -17,7 +17,7 @@ package com.liferay.ide.swtbot.liferay.ui.page.wizard.project;
 
 import com.liferay.ide.swtbot.ui.page.ComboBox;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ying Xu
@@ -27,9 +27,9 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class NewLiferayModuleWizard extends NewProjectWizard
 {
 
-    private ComboBox projectTemplates;
+    private final ComboBox projectTemplates;
 
-    public NewLiferayModuleWizard( SWTBot bot )
+    public NewLiferayModuleWizard( final SWTWorkbenchBot bot )
     {
         super( bot, 2 );
 

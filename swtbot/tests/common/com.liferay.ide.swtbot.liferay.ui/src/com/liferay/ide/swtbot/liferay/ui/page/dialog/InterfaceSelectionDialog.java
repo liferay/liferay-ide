@@ -19,7 +19,7 @@ import com.liferay.ide.swtbot.ui.eclipse.page.TreeDialog;
 import com.liferay.ide.swtbot.ui.page.Table;
 import com.liferay.ide.swtbot.ui.page.Text;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ashley Yuan
@@ -27,10 +27,10 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class InterfaceSelectionDialog extends TreeDialog
 {
 
-    private Text itemToOpen;
-    private Table matchItems;
+    private final Text itemToOpen;
+    private final Table matchItems;
 
-    public InterfaceSelectionDialog( SWTBot bot )
+    public InterfaceSelectionDialog( final SWTWorkbenchBot bot )
     {
         super( bot );
 

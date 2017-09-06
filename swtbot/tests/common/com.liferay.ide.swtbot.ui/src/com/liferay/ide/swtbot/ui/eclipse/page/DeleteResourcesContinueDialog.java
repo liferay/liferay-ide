@@ -18,7 +18,7 @@ package com.liferay.ide.swtbot.ui.eclipse.page;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.util.StringPool;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ying Xu
@@ -26,7 +26,7 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class DeleteResourcesContinueDialog extends Dialog
 {
 
-    public DeleteResourcesContinueDialog( SWTBot bot )
+    public DeleteResourcesContinueDialog( final SWTWorkbenchBot bot )
     {
         super( bot, StringPool.BLANK, CONTINUE );
     }

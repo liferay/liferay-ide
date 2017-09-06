@@ -20,7 +20,7 @@ import com.liferay.ide.swtbot.ui.page.CheckBox;
 import com.liferay.ide.swtbot.ui.page.Table;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ashley Yuan
@@ -28,30 +28,29 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class ModifiersInterfacesMethodStubsWizard extends Wizard
 {
 
-    private Button addBtn;
-    private CheckBox constrcutFromSuperClass;
-    private CheckBox createEntryClass;
-    private CheckBox destory;
-    private CheckBox doAbout;
-    private CheckBox doConfig;
-    private CheckBox doEdit;
-    private CheckBox doEditDefaults;
-    private CheckBox doEditGuest;
-    private CheckBox doHelp;
-    private CheckBox doPreview;
-    private CheckBox doPrint;
-    private CheckBox doView;
-    private CheckBox inheritedAbstractMethods;
-    private CheckBox init;
-    private Table interfaces;
-    private CheckBox isAbstract;
-    private CheckBox isFinal;
-    private CheckBox isPublic;
-    private CheckBox processAction;
-    private Button removeBtn;
-    private CheckBox serveResource;
+    private final Button addBtn;
+    private final CheckBox constrcutFromSuperClass;
+    private final CheckBox destory;
+    private final CheckBox doAbout;
+    private final CheckBox doConfig;
+    private final CheckBox doEdit;
+    private final CheckBox doEditDefaults;
+    private final CheckBox doEditGuest;
+    private final CheckBox doHelp;
+    private final CheckBox doPreview;
+    private final CheckBox doPrint;
+    private final CheckBox doView;
+    private final CheckBox inheritedAbstractMethods;
+    private final CheckBox init;
+    private final Table interfaces;
+    private final CheckBox isAbstract;
+    private final CheckBox isFinal;
+    private final CheckBox isPublic;
+    private final CheckBox processAction;
+    private final Button removeBtn;
+    private final CheckBox serveResource;
 
-    public ModifiersInterfacesMethodStubsWizard( SWTBot bot )
+    public ModifiersInterfacesMethodStubsWizard( final SWTWorkbenchBot bot )
     {
         super( bot, 0 );
 
@@ -86,11 +85,6 @@ public class ModifiersInterfacesMethodStubsWizard extends Wizard
     public CheckBox getConstrcutFromSuperClass()
     {
         return constrcutFromSuperClass;
-    }
-
-    public CheckBox getCreateEntryClass()
-    {
-        return createEntryClass;
     }
 
     public CheckBox getDestory()

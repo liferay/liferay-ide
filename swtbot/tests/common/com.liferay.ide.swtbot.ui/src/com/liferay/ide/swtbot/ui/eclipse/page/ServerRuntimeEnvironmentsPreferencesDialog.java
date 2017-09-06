@@ -19,7 +19,7 @@ import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Table;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
@@ -27,17 +27,16 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class ServerRuntimeEnvironmentsPreferencesDialog extends Dialog
 {
 
-    private Button addBtn;
-    private Button editBtn;
-    private Button removeBtn;
-    private Table runtimes;
+    private final Button addBtn;
+    private final Button editBtn;
+    private final Button removeBtn;
+    private final Table runtimes;
 
-    public ServerRuntimeEnvironmentsPreferencesDialog( SWTBot bot )
+    public ServerRuntimeEnvironmentsPreferencesDialog( final SWTWorkbenchBot bot )
     {
-        super( bot, "Preferences" );
+        super( bot );
 
         runtimes = new Table( bot, "Server runtime environments:" );
-
         addBtn = new Button( bot, "Add..." );
         editBtn = new Button( bot, "Edit..." );
         removeBtn = new Button( bot, "Remove" );

@@ -18,7 +18,7 @@ package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 import com.liferay.ide.swtbot.ui.page.Radio;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Li Lu
@@ -26,27 +26,27 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class ChooseInitialTemplateWizard extends Wizard
 {
 
-    public ChooseInitialTemplateWizard( SWTBot bot )
+    public ChooseInitialTemplateWizard( final SWTWorkbenchBot bot )
     {
         super( bot, 0 );
     }
 
-    public boolean isRadioSelected( int index )
+    public boolean isRadioSelected( final int index )
     {
         return new Radio( bot, index ).isSelected();
     }
 
-    public boolean isRadioSelected( String label )
+    public boolean isRadioSelected( final String label )
     {
         return new Radio( bot, label ).isSelected();
     }
 
-    public void selectRadio( int index )
+    public void selectRadio( final int index )
     {
         new Radio( bot, index ).click();
     }
 
-    public void selectRadio( String label )
+    public void selectRadio( final String label )
     {
         new Radio( bot, label ).click();
     }

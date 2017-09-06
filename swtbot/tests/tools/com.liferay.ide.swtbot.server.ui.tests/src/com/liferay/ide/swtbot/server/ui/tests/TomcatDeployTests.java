@@ -29,9 +29,9 @@ import org.junit.Test;
 public class TomcatDeployTests extends SwtbotBase
 {
 
-    final static String serverName = "Liferay 7-deploy";
-    final static String serverStoppedLabel = serverName + "  [Stopped]";
-    final static String serverStartedLabel = serverName + "  [Started]";
+    private final static String serverName = "Liferay 7-deploy";
+    private final static String serverStoppedLabel = serverName + "  [Stopped]";
+    private final static String serverStartedLabel = serverName + "  [Started]";
 
     @BeforeClass
     public static void startServer() throws IOException
@@ -54,8 +54,7 @@ public class TomcatDeployTests extends SwtbotBase
 
         wizardAction.next();
 
-        wizardAction.prepareLiferay7Runtime(
-            serverName, envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+        wizardAction.prepareLiferay7RuntimeInfo( serverName, envAction.getLiferayServerFullDir().toOSString() );
 
         wizardAction.finish();
 

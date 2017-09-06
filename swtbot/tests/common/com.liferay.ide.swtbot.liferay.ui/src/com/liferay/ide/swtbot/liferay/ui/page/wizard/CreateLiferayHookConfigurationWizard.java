@@ -19,7 +19,7 @@ import com.liferay.ide.swtbot.ui.page.CheckBox;
 import com.liferay.ide.swtbot.ui.page.ComboBox;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Vicky Wang
@@ -27,26 +27,31 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class CreateLiferayHookConfigurationWizard extends Wizard
 {
 
-    private CheckBox customJSPs;
-    private CheckBox languageProperties;
-    private CheckBox portalProperties;
-    private CheckBox services;
-    private ComboBox hookPluginProject;
+    private final CheckBox customJsps;
+    private final ComboBox hookPluginProject;
+    private final CheckBox languageProperties;
+    private final CheckBox portalProperties;
+    private final CheckBox services;
 
-    public CreateLiferayHookConfigurationWizard( SWTBot bot )
+    public CreateLiferayHookConfigurationWizard( final SWTWorkbenchBot bot )
     {
         super( bot, NEW_LIFERAY_HOOK, 0 );
 
-        customJSPs = new CheckBox( bot, CUSTOM_JSPS );
+        customJsps = new CheckBox( bot, CUSTOM_JSPS );
         portalProperties = new CheckBox( bot, PORTAL_PROPERTIES );
         services = new CheckBox( bot, SERVICES );
         languageProperties = new CheckBox( bot, LANGUAGE_PROPERTIES );
         hookPluginProject = new ComboBox( bot, HOOK_PLUGIN_PROJECT );
     }
 
-    public CheckBox getCustomJSPs()
+    public CheckBox getCustomJsps()
     {
-        return customJSPs;
+        return customJsps;
+    }
+
+    public ComboBox getHookPluginProjectComboBox()
+    {
+        return hookPluginProject;
     }
 
     public CheckBox getLanguageProperties()
@@ -62,11 +67,6 @@ public class CreateLiferayHookConfigurationWizard extends Wizard
     public CheckBox getServices()
     {
         return services;
-    }
-
-    public ComboBox getHookPluginProjectComboBox()
-    {
-        return hookPluginProject;
     }
 
     public void setHookPluginProjectComboBox( String hookPluginProjectComboBox )

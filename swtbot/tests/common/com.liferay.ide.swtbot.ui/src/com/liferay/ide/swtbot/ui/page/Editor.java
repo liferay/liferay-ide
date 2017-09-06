@@ -17,7 +17,6 @@ package com.liferay.ide.swtbot.ui.page;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
-import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
@@ -26,19 +25,19 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class Editor extends AbstractPart
 {
 
-    public Editor( SWTBot bot, String label )
+    public Editor( final SWTWorkbenchBot bot )
+    {
+        super( bot );
+    }
+
+    public Editor( final SWTWorkbenchBot bot, final String label )
     {
         super( bot, label );
     }
 
     protected SWTBotEditor getPart()
     {
-        return ( (SWTWorkbenchBot) bot ).editorByTitle( label );
-    }
-
-    public void save()
-    {
-        getPart().save();
+        return bot.editorByTitle( label );
     }
 
     public String getText()
@@ -46,7 +45,12 @@ public class Editor extends AbstractPart
         return getPart().toTextEditor().getText();
     }
 
-    public void setText( String text )
+    public void save()
+    {
+        getPart().save();
+    }
+
+    public void setText( final String text )
     {
         getPart().toTextEditor().setText( text );
     }

@@ -21,7 +21,7 @@ import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 import com.liferay.ide.swtbot.ui.util.StringPool;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
@@ -30,24 +30,24 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class NewProjectWizard extends Wizard
 {
 
-    private CheckBox addToWorkingSet;
-    private ComboBox buildTypes;
-    private Text location;
-    private Text projectName;
-    private CheckBox useDefaultLocation;
-    private ComboBox workingSets;
+    private final CheckBox addToWorkingSet;
+    private final ComboBox buildTypes;
+    private final Text location;
+    private final Text projectName;
+    private final CheckBox useDefaultLocation;
+    private final ComboBox workingSets;
 
-    public NewProjectWizard( SWTBot bot )
+    public NewProjectWizard( final SWTWorkbenchBot bot )
     {
         this( bot, -1 );
     }
 
-    public NewProjectWizard( SWTBot bot, int index )
+    public NewProjectWizard( final SWTWorkbenchBot bot, int index )
     {
         this( bot, StringPool.BLANK, index );
     }
 
-    public NewProjectWizard( SWTBot bot, String title, int index )
+    public NewProjectWizard( final SWTWorkbenchBot bot, String title, int index )
     {
         super( bot, title, index );
 

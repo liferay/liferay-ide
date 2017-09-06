@@ -19,7 +19,7 @@ import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Text;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Vicky Wang
@@ -27,11 +27,11 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class AddPortalPropertiesOverrideDialog extends Dialog
 {
 
-    private Text property;
-    private Button selectPropertyBtn;
-    private Text value;
+    private final Text property;
+    private final Button selectPropertyBtn;
+    private final Text value;
 
-    public AddPortalPropertiesOverrideDialog( SWTBot bot )
+    public AddPortalPropertiesOverrideDialog( final SWTWorkbenchBot bot )
     {
         super( bot );
 

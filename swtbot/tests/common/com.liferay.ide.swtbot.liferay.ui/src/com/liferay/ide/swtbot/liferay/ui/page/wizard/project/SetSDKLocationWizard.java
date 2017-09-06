@@ -18,7 +18,7 @@ package com.liferay.ide.swtbot.liferay.ui.page.wizard.project;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
@@ -28,9 +28,9 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class SetSDKLocationWizard extends Wizard
 {
 
-    private Text sdkLocation;
+    private final Text sdkLocation;
 
-    public SetSDKLocationWizard( SWTBot bot )
+    public SetSDKLocationWizard( final SWTWorkbenchBot bot )
     {
         super( bot, 1 );
 

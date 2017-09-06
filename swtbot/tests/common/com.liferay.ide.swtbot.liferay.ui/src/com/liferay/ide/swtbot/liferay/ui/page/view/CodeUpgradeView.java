@@ -21,7 +21,6 @@ import com.liferay.ide.swtbot.ui.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.swtbot.ui.page.View;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
@@ -37,7 +36,7 @@ public class CodeUpgradeView extends View
         int x = 52;
         int y = 52;
 
-        public GearPO( SWTBot bot, int index )
+        public GearPO( SWTWorkbenchBot bot, int index )
         {
             super( bot, index );
         }
@@ -50,15 +49,14 @@ public class CodeUpgradeView extends View
 
     }
 
-    private GearPO gear;
-    private Canvas navigator;
+    private final GearPO gear;
+    private final Canvas navigator;
+    private final ToolbarButtonWithTooltip restartBtn;
+    private final Dialog restartDialog;
+    private final ToolbarButtonWithTooltip showAllPagesBtn;
+    private final Dialog showAllPagesDialog;
 
-    private ToolbarButtonWithTooltip restartBtn;
-    private Dialog restartDialog;
-    private ToolbarButtonWithTooltip showAllPagesBtn;
-    private Dialog showAllPagesDialog;
-
-    public CodeUpgradeView( SWTWorkbenchBot bot, String viewIdentifier )
+    public CodeUpgradeView( final SWTWorkbenchBot bot, final String viewIdentifier )
     {
         super( bot, viewIdentifier );
 

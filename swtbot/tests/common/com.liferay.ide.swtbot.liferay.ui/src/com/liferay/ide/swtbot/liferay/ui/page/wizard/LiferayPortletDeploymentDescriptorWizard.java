@@ -21,7 +21,7 @@ import com.liferay.ide.swtbot.ui.page.ComboBox;
 import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ashley Yuan
@@ -30,22 +30,22 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class LiferayPortletDeploymentDescriptorWizard extends Wizard
 {
 
-    private CheckBox addToControlPanel;
-    private CheckBox allowMultipleInstances;
-    private Button browseCssBtn;
-    private Button browseIconBtn;
-    private Button browseJavaScriptBtn;
-    private CheckBox createEntryClass;
-    private Text css;
-    private Text cssClassWrapper;
-    private ComboBox displayCategories;
-    private ComboBox entryCategories;
-    private Text entryClass;
-    private Text entryWeight;
-    private Text icon;
-    private Text javaScript;
+    private final CheckBox addToControlPanel;
+    private final CheckBox allowMultipleInstances;
+    private final Button browseCssBtn;
+    private final Button browseIconBtn;
+    private final Button browseJavaScriptBtn;
+    private final CheckBox createEntryClass;
+    private final Text css;
+    private final Text cssClassWrapper;
+    private final ComboBox displayCategories;
+    private final ComboBox entryCategories;
+    private final Text entryClass;
+    private final Text entryWeight;
+    private final Text icon;
+    private final Text javaScript;
 
-    public LiferayPortletDeploymentDescriptorWizard( SWTBot bot )
+    public LiferayPortletDeploymentDescriptorWizard( SWTWorkbenchBot bot )
     {
         super( bot, 6 );
 
@@ -63,6 +63,76 @@ public class LiferayPortletDeploymentDescriptorWizard extends Wizard
         browseIconBtn = new Button( bot, BROWSE_WITH_DOT, 0 );
         browseCssBtn = new Button( bot, BROWSE_WITH_DOT, 1 );
         browseJavaScriptBtn = new Button( bot, BROWSE_WITH_DOT, 2 );
+    }
+
+    public CheckBox getAddToControlPanel()
+    {
+        return addToControlPanel;
+    }
+
+    public CheckBox getAllowMultipleInstances()
+    {
+        return allowMultipleInstances;
+    }
+
+    public Button getBrowseCssBtn()
+    {
+        return browseCssBtn;
+    }
+
+    public Button getBrowseIconBtn()
+    {
+        return browseIconBtn;
+    }
+
+    public Button getBrowseJavaScriptBtn()
+    {
+        return browseJavaScriptBtn;
+    }
+
+    public CheckBox getCreateEntryClass()
+    {
+        return createEntryClass;
+    }
+
+    public Text getCss()
+    {
+        return css;
+    }
+
+    public Text getCssClassWrapper()
+    {
+        return cssClassWrapper;
+    }
+
+    public ComboBox getDisplayCategory()
+    {
+        return displayCategories;
+    }
+
+    public ComboBox getEntryCategory()
+    {
+        return entryCategories;
+    }
+
+    public Text getEntryClass()
+    {
+        return entryClass;
+    }
+
+    public Text getEntryWeight()
+    {
+        return entryWeight;
+    }
+
+    public Text getIcon()
+    {
+        return icon;
+    }
+
+    public Text getJavaScript()
+    {
+        return javaScript;
     }
 
     public void setDisplayCategoryCombobox( String displayCategoryCombobox )
@@ -196,146 +266,6 @@ public class LiferayPortletDeploymentDescriptorWizard extends Wizard
         {
             cssClassWrapper.setText( cssClassWrapperValue );
         }
-    }
-
-    public CheckBox getAddToControlPanel()
-    {
-        return addToControlPanel;
-    }
-
-    public void setAddToControlPanel( CheckBox addToControlPanel )
-    {
-        this.addToControlPanel = addToControlPanel;
-    }
-
-    public CheckBox getAllowMultipleInstances()
-    {
-        return allowMultipleInstances;
-    }
-
-    public void setAllowMultipleInstances( CheckBox allowMultipleInstances )
-    {
-        this.allowMultipleInstances = allowMultipleInstances;
-    }
-
-    public Button getBrowseCssBtn()
-    {
-        return browseCssBtn;
-    }
-
-    public void setBrowseCssBtn( Button browseCssBtn )
-    {
-        this.browseCssBtn = browseCssBtn;
-    }
-
-    public Button getBrowseIconBtn()
-    {
-        return browseIconBtn;
-    }
-
-    public void setBrowseIconBtn( Button browseIconBtn )
-    {
-        this.browseIconBtn = browseIconBtn;
-    }
-
-    public Button getBrowseJavaScriptBtn()
-    {
-        return browseJavaScriptBtn;
-    }
-
-    public void setBrowseJavaScriptBtn( Button browseJavaScriptBtn )
-    {
-        this.browseJavaScriptBtn = browseJavaScriptBtn;
-    }
-
-    public CheckBox getCreateEntryClass()
-    {
-        return createEntryClass;
-    }
-
-    public void setCreateEntryClass( CheckBox createEntryClass )
-    {
-        this.createEntryClass = createEntryClass;
-    }
-
-    public Text getCss()
-    {
-        return css;
-    }
-
-    public void setCss( Text css )
-    {
-        this.css = css;
-    }
-
-    public Text getCssClassWrapper()
-    {
-        return cssClassWrapper;
-    }
-
-    public void setCssClassWrapper( Text cssClassWrapper )
-    {
-        this.cssClassWrapper = cssClassWrapper;
-    }
-
-    public ComboBox getDisplayCategory()
-    {
-        return displayCategories;
-    }
-
-    public void setDisplayCategory( ComboBox displayCategory )
-    {
-        this.displayCategories = displayCategory;
-    }
-
-    public ComboBox getEntryCategory()
-    {
-        return entryCategories;
-    }
-
-    public void setEntryCategory( ComboBox entryCategory )
-    {
-        this.entryCategories = entryCategory;
-    }
-
-    public Text getEntryClass()
-    {
-        return entryClass;
-    }
-
-    public void setEntryClass( Text entryClass )
-    {
-        this.entryClass = entryClass;
-    }
-
-    public Text getEntryWeight()
-    {
-        return entryWeight;
-    }
-
-    public void setEntryWeight( Text entryWeight )
-    {
-        this.entryWeight = entryWeight;
-    }
-
-    public Text getIcon()
-    {
-        return icon;
-    }
-
-    public void setIcon( Text icon )
-    {
-        this.icon = icon;
-    }
-
-    public Text getJavaScript()
-    {
-        return javaScript;
-    }
-
-    public void setJavaScript( Text javaScript )
-    {
-        this.javaScript = javaScript;
     }
 
 }

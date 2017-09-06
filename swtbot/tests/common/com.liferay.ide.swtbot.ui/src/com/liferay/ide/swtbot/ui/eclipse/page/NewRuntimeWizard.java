@@ -19,7 +19,7 @@ import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Tree;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
@@ -27,10 +27,10 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class NewRuntimeWizard extends Wizard
 {
 
-    private Text search;
-    private Tree serverTypes;
+    private final Text search;
+    private final Tree serverTypes;
 
-    public NewRuntimeWizard( SWTBot bot )
+    public NewRuntimeWizard( final SWTWorkbenchBot bot )
     {
         super( bot, NEW_SERVER_RUNTIME_ENVIRONMENT, 3 );
 
@@ -46,11 +46,6 @@ public class NewRuntimeWizard extends Wizard
     public Tree getServerTypes()
     {
         return serverTypes;
-    }
-
-    public void selectServerType( String category, String serverType )
-    {
-        serverTypes.getTreeItem( category ).getTreeItem( serverType ).select();
     }
 
 }

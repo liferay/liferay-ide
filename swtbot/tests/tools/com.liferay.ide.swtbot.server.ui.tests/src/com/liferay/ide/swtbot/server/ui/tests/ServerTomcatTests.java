@@ -56,7 +56,7 @@ public class ServerTomcatTests extends SwtbotBase
 
         wizardAction.next();
 
-        wizardAction.prepareLiferay7Runtime(
+        wizardAction.prepareLiferay7RuntimeInfo(
             serverName, envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
 
         wizardAction.finish();
@@ -101,9 +101,8 @@ public class ServerTomcatTests extends SwtbotBase
 
         wizardAction.next();
 
-        wizardAction.prepareLiferay7Runtime(
-            "Liferay 7-add-runtime",
-            envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+        wizardAction.prepareLiferay7RuntimeInfo(
+            "Liferay 7-add-runtime", envAction.getLiferayServerFullDir().toOSString() );
 
         wizardAction.finish();
 
@@ -123,9 +122,8 @@ public class ServerTomcatTests extends SwtbotBase
 
         wizardAction.next();
 
-        wizardAction.prepareLiferay7Runtime(
-            "Liferay 7-add-server",
-            envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+        wizardAction.prepareLiferay7RuntimeInfo(
+            "Liferay 7-add-server", envAction.getLiferayServerFullDir().toOSString() );
 
         wizardAction.finish();
 
@@ -155,9 +153,7 @@ public class ServerTomcatTests extends SwtbotBase
 
         wizardAction.next();
 
-        wizardAction.prepareLiferay7Runtime(
-            runtimeName,
-            envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+        wizardAction.prepareLiferay7RuntimeInfo( runtimeName, envAction.getLiferayServerFullDir().toOSString() );
 
         wizardAction.finish();
 
@@ -187,8 +183,7 @@ public class ServerTomcatTests extends SwtbotBase
 
         wizardAction.next();
 
-        wizardAction.prepareLiferay7Runtime(
-            serverName, envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+        wizardAction.prepareLiferay7RuntimeInfo( serverName, envAction.getLiferayServerFullDir().toOSString() );
 
         wizardAction.finish();
 
@@ -290,8 +285,7 @@ public class ServerTomcatTests extends SwtbotBase
 
         wizardAction.next();
 
-        wizardAction.prepareLiferay7Runtime(
-            serverName, envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+        wizardAction.prepareLiferay7RuntimeInfo( serverName, envAction.getLiferayServerFullDir().toOSString() );
 
         wizardAction.finish();
 
@@ -404,8 +398,7 @@ public class ServerTomcatTests extends SwtbotBase
 
         wizardAction.next();
 
-        wizardAction.prepareLiferay7Runtime(
-            serverName, envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+        wizardAction.prepareLiferay7RuntimeInfo( serverName, envAction.getLiferayServerFullDir().toOSString() );
 
         wizardAction.finish();
 
@@ -499,8 +492,7 @@ public class ServerTomcatTests extends SwtbotBase
 
         wizardAction.next();
 
-        wizardAction.prepareLiferay7Runtime(
-            serverName, envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+        wizardAction.prepareLiferay7RuntimeInfo( serverName, envAction.getLiferayServerFullDir().toOSString() );
 
         wizardAction.finish();
 
@@ -603,8 +595,7 @@ public class ServerTomcatTests extends SwtbotBase
 
         wizardAction.next();
 
-        wizardAction.prepareLiferay7Runtime(
-            serverName, envAction.getLiferayServerDir().append( envAction.getLiferayPluginServerName() ).toOSString() );
+        wizardAction.prepareLiferay7RuntimeInfo( serverName, envAction.getLiferayServerFullDir().toOSString() );
 
         wizardAction.finish();
 

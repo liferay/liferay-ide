@@ -117,7 +117,7 @@ public class NewJSFPortletWizardTests extends SwtbotBase
         assertEquals( "/WEB-INF/views/new-jsf", page.getViewFolderText() );
         assertEquals( true, page._isStandardJSFSelected() );
         assertEquals( false, page.isICEfacesSelected() );
-        assertEquals( false, page._isLiferayFacesAlloySelected() );
+        assertEquals( false, page.isLiferayFacesAlloySelected() );
         assertEquals( false, page.isPrimeFacesSelected() );
         assertEquals( false, page.isRichFacesSelected() );
 

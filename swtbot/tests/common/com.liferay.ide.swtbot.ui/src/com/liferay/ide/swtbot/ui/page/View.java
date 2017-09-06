@@ -28,36 +28,29 @@ public class View extends AbstractPart
 
     private final boolean isId;
 
-    public View( SWTWorkbenchBot bot, String viewIdentifier )
+    public View( final SWTWorkbenchBot bot, final String viewIdentifier )
     {
         this( bot, viewIdentifier, false );
     }
 
-    public View( SWTWorkbenchBot bot, String identifier, boolean isId )
+    public View( final SWTWorkbenchBot bot, final String identifier, final boolean isId )
     {
         super( bot, identifier );
 
         this.isId = isId;
     }
 
-    public void clickToolbarButton( String btnLabel )
+    public void clickToolbarButton( final String btnLabel )
     {
         toolbarBtn( btnLabel ).click();
     }
 
     protected SWTBotView getPart()
     {
-        if( isId )
-        {
-            return ( (SWTWorkbenchBot) bot ).viewById( label );
-        }
-        else
-        {
-            return ( (SWTWorkbenchBot) bot ).viewByTitle( label );
-        }
+        return isId ? bot.viewById( label ) : bot.viewByTitle( label );
     }
 
-    public SWTBotToolbarButton toolbarBtn( String btnLabel )
+    public SWTBotToolbarButton toolbarBtn( final String btnLabel )
     {
         return getPart().toolbarButton( btnLabel );
     }

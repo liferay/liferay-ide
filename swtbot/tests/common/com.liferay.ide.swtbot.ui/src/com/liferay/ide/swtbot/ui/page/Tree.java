@@ -15,7 +15,7 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.utils.TableCollection;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -29,12 +29,12 @@ public class Tree extends AbstractWidget
 
     protected TableCollection selection;
 
-    public Tree( SWTBot bot )
+    public Tree( SWTWorkbenchBot bot )
     {
         super( bot );
     }
 
-    public Tree( SWTBot bot, int index )
+    public Tree( SWTWorkbenchBot bot, int index )
     {
         super( bot, index );
     }
@@ -44,7 +44,7 @@ public class Tree extends AbstractWidget
         return getWidget().hasItems();
     }
 
-    public boolean hasTreeItem( String... items )
+    public boolean hasTreeItem( final String... items )
     {
         try
         {
@@ -56,6 +56,7 @@ public class Tree extends AbstractWidget
                 treeItem.expand();
                 treeItem = treeItem.getNode( items[i] ).expand();
             }
+
             return true;
         }
         catch( Exception e )
@@ -107,7 +108,7 @@ public class Tree extends AbstractWidget
         getWidget().select( items );
     }
 
-    public void selectTreeItem( String... items )
+    public void selectTreeItem( final String... items )
     {
         SWTBotTreeItem treeItem = getWidget().getTreeItem( items[0] );
 
@@ -125,12 +126,12 @@ public class Tree extends AbstractWidget
         getWidget().unselect();
     }
 
-    public TreeItem getTreeItem( String nodeText )
+    public TreeItem getTreeItem( final String nodeText )
     {
         return new TreeItem( bot, this, nodeText );
     }
 
-    public TreeItem expandNode( String... nodes )
+    public TreeItem expandNode( final String... nodes )
     {
         getWidget().expandNode( nodes );
 

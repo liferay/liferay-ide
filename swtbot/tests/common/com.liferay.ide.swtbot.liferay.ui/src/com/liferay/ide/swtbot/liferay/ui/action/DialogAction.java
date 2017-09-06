@@ -39,12 +39,12 @@ public class DialogAction extends UIAction
     private final TextDialog textDialog = new TextDialog( bot );
     private final TreeDialog treeDialog = new TreeDialog( bot );
 
-    public DialogAction( SWTWorkbenchBot bot )
+    public DialogAction( final SWTWorkbenchBot bot )
     {
         super( bot );
     }
 
-    public void addModule( String projectName )
+    public void addModule( final String projectName )
     {
         addAndRemoveDialog.add( projectName );
     }
@@ -71,22 +71,28 @@ public class DialogAction extends UIAction
         ide.getPreferencesMenu().click();
     }
 
-    public void openServerRuntimeEnvironmentsDialog()
+    public void openPreferenceTypeDialog( final String categroy, final String type )
     {
-        preferencesDialog.selectPreferencesType( "Server", "Runtime Environments" );
+        preferencesDialog.getPreferencesTypes().getTreeItem( categroy ).expand();
+        preferencesDialog.getPreferencesTypes().getTreeItem( categroy ).getTreeItem( type ).select();
     }
 
-    public void prepareText( String text )
+    public void openServerRuntimeEnvironmentsDialog()
+    {
+        openPreferenceTypeDialog( SERVER, RUNTIME_ENVIRONMENTS );
+    }
+
+    public void prepareText( final String text )
     {
         textDialog.getText().setText( text );
     }
 
-    public void selectItem( String item )
+    public void selectItem( final String item )
     {
         treeDialog.getItems().select( item );
     }
 
-    public void selectItems( String... items )
+    public void selectItems( final String... items )
     {
         treeDialog.getItems().select( items );
     }

@@ -25,7 +25,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class ConsoleView extends View
 {
 
-    public ConsoleView( SWTWorkbenchBot bot )
+    public ConsoleView( final SWTWorkbenchBot bot )
     {
         super( bot, CONSOLE );
     }

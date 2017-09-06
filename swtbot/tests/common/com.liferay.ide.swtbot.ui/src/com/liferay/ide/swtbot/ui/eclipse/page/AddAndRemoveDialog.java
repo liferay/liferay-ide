@@ -20,7 +20,7 @@ import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Tree;
 import com.liferay.ide.swtbot.ui.page.TreeItem;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Li Lu
@@ -29,14 +29,14 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class AddAndRemoveDialog extends Dialog
 {
 
-    private Button addAllBtn;
-    private Button addBtn;
-    private Tree availables;
-    private Tree configureds;
-    private Button removeAllBtn;
-    private Button removeBtn;
+    private final Button addAllBtn;
+    private final Button addBtn;
+    private final Tree availables;
+    private final Tree configureds;
+    private final Button removeAllBtn;
+    private final Button removeBtn;
 
-    public AddAndRemoveDialog( SWTBot bot )
+    public AddAndRemoveDialog( final SWTWorkbenchBot bot )
     {
         super( bot, ADD_AND_REMOVE, CANCEL, FINISH );
 
@@ -48,7 +48,7 @@ public class AddAndRemoveDialog extends Dialog
         configureds = new Tree( bot, 1 );
     }
 
-    public void add( String... projectItemNames )
+    public void add( final String... projectItemNames )
     {
         for( String projectItemName : projectItemNames )
         {

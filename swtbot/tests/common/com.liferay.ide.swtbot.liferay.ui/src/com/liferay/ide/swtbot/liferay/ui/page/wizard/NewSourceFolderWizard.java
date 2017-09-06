@@ -20,7 +20,7 @@ import com.liferay.ide.swtbot.ui.page.Text;
 import com.liferay.ide.swtbot.ui.page.Wizard;
 import com.liferay.ide.swtbot.ui.util.StringPool;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ashley Yuan
@@ -28,14 +28,14 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class NewSourceFolderWizard extends Wizard
 {
 
-    private Text folderName;
-    private CheckBox ignoreOptionCompileProblems;
-    private Text projectName;
-    private CheckBox updateExclusionFilters;
+    private final Text folderName;
+    private final CheckBox ignoreOptionCompileProblems;
+    private final Text projectName;
+    private final CheckBox updateExclusionFilters;
 
-    public NewSourceFolderWizard( SWTBot bot )
+    public NewSourceFolderWizard( final SWTWorkbenchBot bot )
     {
-        super( bot, 2);
+        super( bot, 2 );
 
         projectName = new Text( bot, PROJECT_NAME );
         folderName = new Text( bot, FOLDER_NAME );
