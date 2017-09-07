@@ -79,29 +79,40 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
 	@Nullable
     public Module createModuleFromWizard(Project project, AbstractProjectWizard wizard) {
         final ProjectBuilder builder = wizard.getProjectBuilder();
+
         if (builder instanceof ModuleBuilder) {
             final ModuleBuilder moduleBuilder = (ModuleBuilder) builder;
+
             if (moduleBuilder.getName() == null) {
                 moduleBuilder.setName(wizard.getProjectName());
             }
+
             if (moduleBuilder.getModuleFilePath() == null) {
                 moduleBuilder.setModuleFilePath(wizard.getModuleFilePath());
             }
         }
+
         if (!builder.validate(project, project)) {
             return null;
         }
+
         Module module;
+
         if (builder instanceof ModuleBuilder) {
             return ((ModuleBuilder) builder).commitModule(project, null);
-        } else {
+        } 
+        else {
             List<Module> modules = builder.commit(project, null, new DefaultModulesProvider(project));
+
             if (builder.isOpenProjectSettingsAfter()) {
                 ModulesConfigurator.showDialog(project, null, null);
             }
+
             module = modules == null || modules.isEmpty() ? null : modules.get(0);
         }
+
         project.save();
+
         return module;
     }
 
