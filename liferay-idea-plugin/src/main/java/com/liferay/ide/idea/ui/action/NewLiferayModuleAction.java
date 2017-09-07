@@ -119,6 +119,7 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
     @Override
     public void update(AnActionEvent e) {
         super.update(e);
-        e.getPresentation().setEnabled(getEventProject(e) != null);
+
+        e.getPresentation().setEnabled(_isValidWorkspaceLocation(getEventProject(e)));
     }
 }
