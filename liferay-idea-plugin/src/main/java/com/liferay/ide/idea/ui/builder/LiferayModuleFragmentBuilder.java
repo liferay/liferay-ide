@@ -45,7 +45,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
     private String[] _files;
     private String _bsn;
     private String _version;
-    private File temp = new File(new File(System.getProperties().getProperty("user.home"), ".liferay-ide"), "bundles");
+    private static final File _USER_BUNDLES_DIR = new File(new File(System.getProperty("user.home"), ".liferay-ide"), "bundles");
 
     public void setFragmentHost(String fragmentHost) {
         _fragmentHost = fragmentHost;
@@ -103,7 +103,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
         BladeCLI.execute(sb.toString());
 
         for (String file : _files) {
-            final File tempBundle = new File(temp, _fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
+            final File tempBundle = new File(_USER_BUNDLES_DIR, _fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
 
             File fragmentFile = new File(tempBundle, file);
 
