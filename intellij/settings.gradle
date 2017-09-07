@@ -1,4 +1,0 @@
-rootProject.name = 'intellij'
-
-include 'liferay-workspace-plugin'
-

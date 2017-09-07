@@ -1,0 +1,35 @@
+buildscript {
+	dependencies {
+		classpath "org.jetbrains.intellij.plugins:gradle-intellij-plugin:0.2.0-SNAPSHOT"
+	}
+
+	repositories {
+		maven {
+			url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+		}
+		maven {
+			url 'http://dl.bintray.com/jetbrains/intellij-plugin-service'
+		}
+		maven {
+			url "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'org.jetbrains.intellij'
+
+dependencies {
+	compile group: "org.apache.ant", name: "ant", version: "1.10.1"
+	compile group: "org.osgi", name: "org.osgi.core", version: "6.0.0"
+}
+
+intellij {
+	version "2017.2"
+}
+
+repositories {
+	maven {
+		url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+	}
+}
