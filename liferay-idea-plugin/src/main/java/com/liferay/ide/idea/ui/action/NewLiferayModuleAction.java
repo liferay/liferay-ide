@@ -57,8 +57,6 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
             return;
         }
 
-        final Object dataFromContext = prepareDataFromContext(e);
-
         String defaultPath = null;
 
         final VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
@@ -70,7 +68,7 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
         final NewLiferayModuleWizard wizard = new NewLiferayModuleWizard(project, new DefaultModulesProvider(project), defaultPath);
 
         if (wizard.showAndGet()) {
-            createModuleFromWizard(project, dataFromContext, wizard);
+            createModuleFromWizard(project, null, wizard);
         }
     }
 
@@ -109,11 +107,6 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
         }
         project.save();
         return module;
-    }
-
-    @Nullable
-    protected Object prepareDataFromContext(final AnActionEvent e) {
-        return null;
     }
 
     protected void processCreatedModule(final Module module, @Nullable final Object dataFromContext) {
