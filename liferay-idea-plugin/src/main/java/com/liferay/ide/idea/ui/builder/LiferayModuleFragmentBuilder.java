@@ -28,6 +28,7 @@ import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.ui.wizard.LiferayModuleFragmentWizardStep;
 import com.liferay.ide.idea.util.BladeCLI;
 
@@ -187,7 +188,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
     @Override
     public Icon getNodeIcon() {
-        return IconLoader.getIcon("/icons/liferay.png");
+        return LiferayIdeaUI.LIFERAY_ICON;
     }
     
     private final static String _LIFERAY_FRAGMENT_MODULES = "Liferay Fragment Modules";

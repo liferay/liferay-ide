@@ -23,6 +23,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.liferay.ide.idea.ui.LiferayIdeaUI;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +34,7 @@ public class LiferayBundleConfigurationType extends ConfigurationTypeBase implem
 
     public LiferayBundleConfigurationType() {
         super("LiferayBundleConfiguration", "Liferay Bundle",
-        		"Run or Debug Liferay Bundle", IconLoader.getIcon("/icons/liferay.png"));
+        		"Run or Debug Liferay Bundle", LiferayIdeaUI.LIFERAY_ICON);
 
         addFactory(new ConfigurationFactoryEx(this) {
 

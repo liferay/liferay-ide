@@ -27,6 +27,7 @@ import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.ui.wizard.LiferayModuleWizardStep;
 import com.liferay.ide.idea.util.BladeCLI;
 import com.liferay.ide.idea.util.CoreUtil;
@@ -124,7 +125,7 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 
     @Override
     public Icon getNodeIcon() {
-        return IconLoader.getIcon("/icons/liferay.png");
+        return LiferayIdeaUI.LIFERAY_ICON;
     }
 
     private final static String _LIFERAY_MODULES = "Liferay Modules";

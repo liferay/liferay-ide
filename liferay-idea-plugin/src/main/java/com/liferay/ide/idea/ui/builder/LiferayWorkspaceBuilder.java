@@ -29,6 +29,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.projectImport.ProjectImportProvider;
+import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.util.BladeCLI;
 
 import org.jetbrains.annotations.NotNull;
@@ -87,7 +88,7 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
 
     @Override
     public Icon getNodeIcon() {
-        return IconLoader.getIcon("/icons/liferay.png");
+        return LiferayIdeaUI.LIFERAY_ICON;
     }
 
     static class LiferayWorkpaceBuilderListener implements ModuleBuilderListener {

@@ -27,8 +27,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ui.configuration.DefaultModulesProvider;
 import com.intellij.openapi.roots.ui.configuration.ModulesConfigurator;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.ui.wizard.NewLiferayModuleWizard;
 import com.liferay.ide.idea.util.LiferayWorkspaceUtil;
 
@@ -42,7 +42,7 @@ import java.util.List;
 public class NewLiferayModuleAction extends AnAction implements DumbAware {
 
     public NewLiferayModuleAction() {
-        super(IconLoader.getIcon("/icons/liferay.png"));
+        super(LiferayIdeaUI.LIFERAY_ICON);
     }
 
     @Override
