@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.idea.ui.core;
+package com.liferay.ide.idea.core;
 
 import com.liferay.ide.idea.ui.util.*;
 

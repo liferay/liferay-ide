@@ -13,56 +13,27 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.idea.ui.core;
+package com.liferay.ide.idea.core;
 
 import java.nio.file.Path;
+import java.util.Properties;
+
 
 /**
  * @author Gregory Amerson
- * @author Simon Jiang
- *@author Terry Jia
+ * @author Terry Jia
  */
-public interface PortalBundle extends ILiferayPortal
+public interface ILiferayPortal
 {
 
-    Path getAutoDeployPath();
+    Path getAppServerPortalDir();
 
-    Path getAppServerDeployDir();
+    String[] getHookSupportedProperties();
 
-    Path getAppServerLibGlobalDir();
+    Properties getPortletCategories();
 
-    int getJmxRemotePort();
+    Properties getPortletEntryCategories();
 
-    Path getLiferayHome();
-
-    Path getAppServerDir();
-
-    String getMainClass();
-
-    Path getModulesPath();
-
-    Path getOSGiBundlesDir();
-
-    Path[] getRuntimeClasspath();
-
-    String[] getRuntimeStartVMArgs();
-
-    String[] getRuntimeStopVMArgs();
-
-    String[] getRuntimeStartProgArgs();
-
-    String[] getRuntimeStopProgArgs();
-
-    String getType();
-
-    String getDisplayName();
-
-    Path[] getBundleDependencyJars();
-
-    Path[] getUserLibs();
-
-    String getHttpPort();
-
-    void setHttpPort(String port);
+    String getVersion();
 
 }
