@@ -96,10 +96,10 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
             return null;
         }
 
-        Module module;
+        Module module = null;
 
         if (builder instanceof ModuleBuilder) {
-            return ((ModuleBuilder) builder).commitModule(project, null);
+            module = ((ModuleBuilder) builder).commitModule(project, null);
         } 
         else {
             List<Module> modules = builder.commit(project, null, new DefaultModulesProvider(project));
