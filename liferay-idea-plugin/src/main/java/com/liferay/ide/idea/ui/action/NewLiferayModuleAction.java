@@ -68,7 +68,7 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
         final NewLiferayModuleWizard wizard = new NewLiferayModuleWizard(project, new DefaultModulesProvider(project), defaultPath);
 
         if (wizard.showAndGet()) {
-            createModuleFromWizard(project, null, wizard);
+            createModuleFromWizard(project, wizard);
         }
     }
 
@@ -77,7 +77,7 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
 	}
 
 	@Nullable
-    public Module createModuleFromWizard(Project project, @Nullable Object dataFromContext, AbstractProjectWizard wizard) {
+    public Module createModuleFromWizard(Project project, AbstractProjectWizard wizard) {
         final ProjectBuilder builder = wizard.getProjectBuilder();
         if (builder instanceof ModuleBuilder) {
             final ModuleBuilder moduleBuilder = (ModuleBuilder) builder;
@@ -93,11 +93,7 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
         }
         Module module;
         if (builder instanceof ModuleBuilder) {
-            module = ((ModuleBuilder) builder).commitModule(project, null);
-            if (module != null) {
-                processCreatedModule(module, dataFromContext);
-            }
-            return module;
+            return ((ModuleBuilder) builder).commitModule(project, null);
         } else {
             List<Module> modules = builder.commit(project, null, new DefaultModulesProvider(project));
             if (builder.isOpenProjectSettingsAfter()) {
@@ -107,9 +103,6 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
         }
         project.save();
         return module;
-    }
-
-    protected void processCreatedModule(final Module module, @Nullable final Object dataFromContext) {
     }
 
     @Override
