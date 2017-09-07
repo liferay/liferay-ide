@@ -47,10 +47,6 @@ import org.w3c.dom.NodeList;
  */
 public abstract class AbstractPortalBundle implements PortalBundle
 {
-    private static final String CONFIG_TYPE_SERVER = "server";
-    private static final String CONFIG_TYPE_VERSION = "version";
-    private static final Version MANIFEST_VERSION_REQUIRED = ILiferayConstants.V700;
-
     protected Path autoDeployPath;
     protected Path liferayHome;
     protected Path modulesPath;
