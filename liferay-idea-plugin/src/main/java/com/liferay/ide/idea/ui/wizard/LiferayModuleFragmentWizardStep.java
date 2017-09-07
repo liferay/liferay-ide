@@ -21,7 +21,7 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.treeStructure.Tree;
 import com.liferay.ide.idea.ui.builder.LiferayModuleFragmentBuilder;
-import com.liferay.ide.idea.ui.util.*;
+import com.liferay.ide.idea.util.*;
 
 import javax.swing.*;
 import javax.swing.tree.*;

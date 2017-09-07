@@ -27,9 +27,9 @@ import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.liferay.ide.idea.ui.util.BladeCLI;
-import com.liferay.ide.idea.ui.util.CoreUtil;
 import com.liferay.ide.idea.ui.wizard.LiferayModuleWizardStep;
+import com.liferay.ide.idea.util.BladeCLI;
+import com.liferay.ide.idea.util.CoreUtil;
 
 import javax.swing.*;
 import java.io.File;

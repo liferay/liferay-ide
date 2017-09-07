@@ -15,7 +15,7 @@
 
 package com.liferay.ide.idea.core;
 
-import com.liferay.ide.idea.ui.util.*;
+import com.liferay.ide.idea.util.*;
 
 import java.io.File;
 import java.io.FileInputStream;

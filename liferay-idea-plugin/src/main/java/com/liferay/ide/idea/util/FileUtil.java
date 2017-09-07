@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.idea.ui.util;
+package com.liferay.ide.idea.util;
 
 import java.io.*;
 import java.util.ArrayList;

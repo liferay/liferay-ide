@@ -15,9 +15,9 @@
 
 package com.liferay.ide.idea.core;
 
-import com.liferay.ide.idea.ui.util.CoreUtil;
-import com.liferay.ide.idea.ui.util.FileListing;
-import com.liferay.ide.idea.ui.util.FileUtil;
+import com.liferay.ide.idea.util.CoreUtil;
+import com.liferay.ide.idea.util.FileListing;
+import com.liferay.ide.idea.util.FileUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;

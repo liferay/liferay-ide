@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.idea.ui.util;
+package com.liferay.ide.idea.util;
 
 import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;

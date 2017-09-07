@@ -28,8 +28,8 @@ import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.liferay.ide.idea.ui.util.BladeCLI;
 import com.liferay.ide.idea.ui.wizard.LiferayModuleFragmentWizardStep;
+import com.liferay.ide.idea.util.BladeCLI;
 
 import javax.swing.*;
 import java.io.File;
@@ -117,13 +117,13 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
                 if (fragmentFile.getName().equals("portlet.properties")) {
                     folder = FileSystems.getDefault().getPath(root.getPath(), "src", "main", "java").toFile();
 
-                    com.liferay.ide.idea.ui.util.FileUtil.copyFileToDir(fragmentFile, "portlet-ext.properties", folder);
+                    com.liferay.ide.idea.util.FileUtil.copyFileToDir(fragmentFile, "portlet-ext.properties", folder);
                 } else if (fragmentFile.getName().contains("default.xml")) {
                     folder = FileSystems.getDefault().getPath(root.getPath(), "src", "main", "resources", "resource-actions").toFile();
 
                     folder.mkdirs();
 
-                    com.liferay.ide.idea.ui.util.FileUtil.copyFileToDir(fragmentFile, "default-ext.xml", folder);
+                    com.liferay.ide.idea.util.FileUtil.copyFileToDir(fragmentFile, "default-ext.xml", folder);
 
                     try {
                         File ext = FileSystems.getDefault().getPath(root.getPath(), "src", "main", "resources", "portlet-ext.properties").toFile();
@@ -133,7 +133,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
                         String extFileContent =
                                 "resource.actions.configs=resource-actions/default.xml,resource-actions/default-ext.xml";
 
-                        com.liferay.ide.idea.ui.util.FileUtil.writeFile(ext, extFileContent, null);
+                        com.liferay.ide.idea.util.FileUtil.writeFile(ext, extFileContent, null);
                     } catch (Exception e) {
                     }
                 } else {
@@ -152,7 +152,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
                         folder.mkdirs();
                     }
 
-                    com.liferay.ide.idea.ui.util.FileUtil.copyFileToDir(fragmentFile, folder);
+                    com.liferay.ide.idea.util.FileUtil.copyFileToDir(fragmentFile, folder);
                 }
             }
         }

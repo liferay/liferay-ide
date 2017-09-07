@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.idea.ui.util;
+package com.liferay.ide.idea.util;
 
 import java.io.File;
 import java.util.Properties;

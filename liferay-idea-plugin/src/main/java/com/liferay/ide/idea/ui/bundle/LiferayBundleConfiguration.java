@@ -32,7 +32,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.xmlb.SkipDefaultValuesSerializationFilters;
 import com.intellij.util.xmlb.XmlSerializer;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-import com.liferay.ide.idea.ui.util.LiferayWorkspaceUtil;
+import com.liferay.ide.idea.util.LiferayWorkspaceUtil;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;

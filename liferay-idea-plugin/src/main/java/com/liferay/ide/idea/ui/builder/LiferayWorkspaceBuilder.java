@@ -29,7 +29,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.projectImport.ProjectImportProvider;
-import com.liferay.ide.idea.ui.util.BladeCLI;
+import com.liferay.ide.idea.util.BladeCLI;
 
 import org.jetbrains.annotations.NotNull;
 

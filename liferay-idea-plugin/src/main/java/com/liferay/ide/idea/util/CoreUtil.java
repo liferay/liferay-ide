@@ -1,4 +1,4 @@
-package com.liferay.ide.idea.ui.util;
+package com.liferay.ide.idea.util;
 
 import java.security.MessageDigest;
 import java.util.List;

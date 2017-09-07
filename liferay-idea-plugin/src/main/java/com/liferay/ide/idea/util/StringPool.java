@@ -12,7 +12,7 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.idea.ui.util;
+package com.liferay.ide.idea.util;
 
 /**
  * @author Gregory Amerson

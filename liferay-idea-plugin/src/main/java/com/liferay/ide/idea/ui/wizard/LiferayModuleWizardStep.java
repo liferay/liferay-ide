@@ -25,8 +25,8 @@ import com.intellij.psi.impl.file.PsiDirectoryFactory;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.treeStructure.Tree;
 import com.liferay.ide.idea.ui.builder.LiferayModuleBuilder;
-import com.liferay.ide.idea.ui.util.BladeCLI;
-import com.liferay.ide.idea.ui.util.CoreUtil;
+import com.liferay.ide.idea.util.BladeCLI;
+import com.liferay.ide.idea.util.CoreUtil;
 
 import org.jetbrains.annotations.Nullable;
 
