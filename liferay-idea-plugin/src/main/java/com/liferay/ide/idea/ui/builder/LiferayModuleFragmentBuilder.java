@@ -42,7 +42,7 @@ import java.nio.file.FileSystems;
 public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
     private String _fragmentHost;
-    private String[] _files;
+    private String[] _overrideFiles;
     private String _bsn;
     private String _version;
     private static final File _USER_BUNDLES_DIR = new File(new File(System.getProperty("user.home"), ".liferay-ide"), "bundles");
@@ -59,8 +59,8 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
         _version = version;
     }
 
-    public void setFiles(String[] files) {
-        this._files = files;
+    public void setOverrideFiles(String[] overrideFiles) {
+        _overrideFiles = overrideFiles;
     }
 
     @Override
@@ -82,12 +82,12 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
     public void setupRootModel(ModifiableRootModel rootModel) throws ConfigurationException {
         final Project project = rootModel.getProject();
 
-        final VirtualFile root = createAndGetContentEntry(project);
+        final VirtualFile projectRoot = createAndGetContentEntry(project);
 
         StringBuilder sb = new StringBuilder();
 
         sb.append("create ");
-        sb.append("-d \"" + root.getParent().getPath() + "\" ");
+        sb.append("-d \"" + projectRoot.getParent().getPath() + "\" ");
         sb.append("-t " + "fragment" + " ");
 
         if (!_bsn.equals("")) {
@@ -98,11 +98,11 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
             sb.append("-H " + _version + " ");
         }
 
-        sb.append("\"" + root.getName() + "\" ");
+        sb.append("\"" + projectRoot.getName() + "\" ");
 
         BladeCLI.execute(sb.toString());
 
-        for (String file : _files) {
+        for (String file : _overrideFiles) {
             final File tempBundle = new File(_USER_BUNDLES_DIR, _fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
 
             File fragmentFile = new File(tempBundle, file);
@@ -111,18 +111,18 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
                 File folder = null;
 
                 if (fragmentFile.getName().equals("portlet.properties")) {
-                    folder = FileSystems.getDefault().getPath(root.getPath(), "src", "main", "java").toFile();
+                    folder = FileSystems.getDefault().getPath(projectRoot.getPath(), "src", "main", "java").toFile();
 
                     com.liferay.ide.idea.util.FileUtil.copyFileToDir(fragmentFile, "portlet-ext.properties", folder);
                 } else if (fragmentFile.getName().contains("default.xml")) {
-                    folder = FileSystems.getDefault().getPath(root.getPath(), "src", "main", "resources", "resource-actions").toFile();
+                    folder = FileSystems.getDefault().getPath(projectRoot.getPath(), "src", "main", "resources", "resource-actions").toFile();
 
                     folder.mkdirs();
 
                     com.liferay.ide.idea.util.FileUtil.copyFileToDir(fragmentFile, "default-ext.xml", folder);
 
                     try {
-                        File ext = FileSystems.getDefault().getPath(root.getPath(), "src", "main", "resources", "portlet-ext.properties").toFile();
+                        File ext = FileSystems.getDefault().getPath(projectRoot.getPath(), "src", "main", "resources", "portlet-ext.properties").toFile();
 
                         ext.createNewFile();
 
@@ -139,7 +139,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
                     parent = parent.substring(parent.indexOf(metaInfResources) + metaInfResources.length());
 
-                    folder = FileSystems.getDefault().getPath(root.getPath(), "src", "main", "resources", "META-INF", "resources").toFile();
+                    folder = FileSystems.getDefault().getPath(projectRoot.getPath(), "src", "main", "resources", "META-INF", "resources").toFile();
 
                     folder.mkdirs();
 
@@ -153,7 +153,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
             }
         }
 
-        rootModel.addContentEntry(root);
+        rootModel.addContentEntry(projectRoot);
 
         if (myJdk != null) {
             rootModel.setSdk(myJdk);
