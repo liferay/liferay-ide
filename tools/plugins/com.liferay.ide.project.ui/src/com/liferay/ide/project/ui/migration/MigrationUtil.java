@@ -358,12 +358,13 @@ public class MigrationUtil
         final String autoCorrectContext = marker.getAttribute( "migrationProblem.autoCorrectContext", "" );
         final int status = marker.getAttribute( "migrationProblem.status", 0 );
         final long markerId = marker.getId();
+        final int markerType = marker.getAttribute( IMarker.SEVERITY, 2 );
 
         final File file = new File( marker.getResource().getLocationURI() );
 
         return new Problem( UUID.randomUUID().toString(),
             title, summary, type, ticket, file, lineNumber, startOffset, endOffset, html, autoCorrectContext,
-            status, markerId );
+            status, markerId, markerType );
     }
 
     public static void openEditor( Problem problem )
@@ -479,9 +480,8 @@ public class MigrationUtil
         marker.setAttribute( "migrationProblem.status", problem.status );
         marker.setAttribute( "migrationProblem.html", problem.html );
         marker.setAttribute( "migrationProblem.autoCorrectContext", problem.getAutoCorrectContext() );
-
         marker.setAttribute( IMarker.LOCATION, problem.file.getName() );
-        marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_ERROR );
+        marker.setAttribute( IMarker.SEVERITY, problem.markerType );
     }
 
     public static boolean removeMigrationProblems( MigrationProblems migrationProblems )
