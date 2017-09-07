@@ -122,7 +122,7 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
     @Override
     public void updateDataModel() {
-        builder.setOsgiHost(getOsgiHost());
+        builder.setFragmentHost(getOsgiHost());
         builder.setFiles(getSelectedJsps());
         String[] bsnAndVerion = getBsnAndVersion(getOsgiHost());
         builder.setBsnName(bsnAndVerion[0]);

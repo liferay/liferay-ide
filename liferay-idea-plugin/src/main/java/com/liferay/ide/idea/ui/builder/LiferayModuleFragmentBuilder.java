@@ -41,32 +41,27 @@ import java.nio.file.FileSystems;
  */
 public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
-    private String osgiHost;
-    private String[] files;
-    private String bsnName;
-    private String version;
+    private String _fragmentHost;
+    private String[] _files;
+    private String _bsn;
+    private String _version;
     private File temp = new File(new File(System.getProperties().getProperty("user.home"), ".liferay-ide"), "bundles");
 
-    public void setOsgiHost(String osgiHost) {
-        this.osgiHost = osgiHost;
+    public void setFragmentHost(String fragmentHost) {
+        _fragmentHost = fragmentHost;
     }
 
-    public void setBsnName(String bsnName) {
-        this.bsnName = bsnName;
+    public void setBsnName(String bsn) {
+        _bsn = bsn;
     }
 
     public void setVersion(String version) {
-        this.version = version;
+        _version = version;
     }
 
     public void setFiles(String[] files) {
-        this.files = files;
+        this._files = files;
     }
-
-    public String getOsgiHost() {
-        return osgiHost;
-    }
-
 
     @Override
     public String getBuilderId() {
@@ -95,20 +90,20 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
         sb.append("-d \"" + root.getParent().getPath() + "\" ");
         sb.append("-t " + "fragment" + " ");
 
-        if (!bsnName.equals("")) {
-            sb.append("-h " + bsnName + " ");
+        if (!_bsn.equals("")) {
+            sb.append("-h " + _bsn + " ");
         }
 
-        if (!version.equals("")) {
-            sb.append("-H " + version + " ");
+        if (!_version.equals("")) {
+            sb.append("-H " + _version + " ");
         }
 
         sb.append("\"" + root.getName() + "\" ");
 
         BladeCLI.execute(sb.toString());
 
-        for (String file : files) {
-            final File tempBundle = new File(temp, osgiHost.substring(0, osgiHost.lastIndexOf(".jar")));
+        for (String file : _files) {
+            final File tempBundle = new File(temp, _fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
 
             File fragmentFile = new File(tempBundle, file);
 
