@@ -29,7 +29,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.projectImport.ProjectImportProvider;
-import com.liferay.ide.idea.ui.UI;
 import com.liferay.ide.idea.ui.util.BladeCLI;
 
 import org.jetbrains.annotations.NotNull;
@@ -73,17 +72,17 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
 
     @Override
     public String getPresentableName() {
-        return UI.LIFERAY_WORKSPACE;
+        return _LIFERAY_WORKSPACE;
     }
 
     @Override
     public String getParentGroup() {
-        return UI.LIFERAY;
+        return "Liferay";
     }
 
     @Override
     public String getDescription() {
-        return UI.LIFERAY_WORKSPACE;
+        return _LIFERAY_WORKSPACE;
     }
 
     @Override
@@ -117,5 +116,7 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
             }
         }
     }
+    
+    private final static String _LIFERAY_WORKSPACE = "Liferay Workspace";
 
 }

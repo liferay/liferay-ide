@@ -28,7 +28,6 @@ import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.liferay.ide.idea.ui.UI;
 import com.liferay.ide.idea.ui.util.BladeCLI;
 import com.liferay.ide.idea.ui.wizard.LiferayModuleFragmentWizardStep;
 
@@ -174,12 +173,12 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
     @Override
     public String getPresentableName() {
-        return UI.LIFERAY_FRAGMENT_MODULES;
+        return _LIFERAY_FRAGMENT_MODULES;
     }
 
     @Override
     public String getDescription() {
-        return UI.LIFERAY_FRAGMENT_MODULES;
+        return _LIFERAY_FRAGMENT_MODULES;
     }
 
     public ModuleWizardStep getCustomOptionsStep(WizardContext context, Disposable parentDisposable) {
@@ -190,5 +189,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
     public Icon getNodeIcon() {
         return IconLoader.getIcon("/icons/liferay.png");
     }
+    
+    private final static String _LIFERAY_FRAGMENT_MODULES = "Liferay Fragment Modules";
 
 }

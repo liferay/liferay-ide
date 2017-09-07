@@ -29,7 +29,6 @@ import com.intellij.openapi.roots.ui.configuration.ModulesConfigurator;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.liferay.ide.idea.ui.UI;
 import com.liferay.ide.idea.ui.util.LiferayWorkspaceUtil;
 import com.liferay.ide.idea.ui.wizard.NewLiferayModuleWizard;
 
@@ -51,7 +50,9 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
         final Project project = getEventProject(e);
 
         if (project == null || !LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(project.getBasePath())) {
-            Messages.showErrorDialog(UI.UNABLE_TO_DETECT_CURRENT_PROJECT_AS_LIFERAY_WORKSPACE, UI.NO_LIFERAY_WORKSPACE);
+            Messages.showErrorDialog(
+            	"Unable to detect current project as a Liferay workspace", 
+            	"No Liferay workspace");
 
             return;
         }

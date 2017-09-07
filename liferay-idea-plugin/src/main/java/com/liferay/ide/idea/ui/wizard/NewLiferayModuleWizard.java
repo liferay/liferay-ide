@@ -26,7 +26,6 @@ import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
 import com.intellij.openapi.util.Disposer;
-import com.liferay.ide.idea.ui.UI;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +40,7 @@ public class NewLiferayModuleWizard extends AbstractProjectWizard {
     private final StepSequence mySequence = new StepSequence();
 
     public NewLiferayModuleWizard(@Nullable Project project, @NotNull ModulesProvider modulesProvider, @Nullable String defaultPath) {
-        super(UI.NEW_LIFERAY_MODULES, project, defaultPath);
+        super("New Liferay Modules", project, defaultPath);
 
         init(modulesProvider);
     }
