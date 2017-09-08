@@ -88,23 +88,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
         final VirtualFile projectRoot = createAndGetContentEntry(project);
 
-        final StringBuilder sb = new StringBuilder();
-
-        sb.append("create ");
-        sb.append("-d \"" + projectRoot.getParent().getPath() + "\" ");
-        sb.append("-t " + "fragment" + " ");
-
-        if (!_bsn.equals("")) {
-            sb.append("-h " + _bsn + " ");
-        }
-
-        if (!_version.equals("")) {
-            sb.append("-H " + _version + " ");
-        }
-
-        sb.append("\"" + projectRoot.getName() + "\" ");
-
-        BladeCLI.execute(sb.toString());
+        _createProject(projectRoot);
 
         final File hostBundle = new File(_USER_BUNDLES_DIR, _fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
 
@@ -134,6 +118,26 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
             rootModel.inheritSdk();
         }
     }
+
+	private void _createProject(final VirtualFile projectRoot) {
+		final StringBuilder sb = new StringBuilder();
+
+        sb.append("create ");
+        sb.append("-d \"" + projectRoot.getParent().getPath() + "\" ");
+        sb.append("-t " + "fragment" + " ");
+
+        if (!_bsn.equals("")) {
+            sb.append("-h " + _bsn + " ");
+        }
+
+        if (!_version.equals("")) {
+            sb.append("-H " + _version + " ");
+        }
+
+        sb.append("\"" + projectRoot.getName() + "\" ");
+
+        BladeCLI.execute(sb.toString());
+	}
 
 	private void _copyOtherResource(final VirtualFile projectRoot, final File fragmentFile) {
 		String parent = fragmentFile.getParentFile().getPath();
