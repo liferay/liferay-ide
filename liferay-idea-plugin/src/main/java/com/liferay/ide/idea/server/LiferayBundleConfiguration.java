@@ -48,8 +48,7 @@ import java.util.Map;
  */
 public class LiferayBundleConfiguration extends LocatableConfigurationBase implements CommonJavaRunConfigurationParameters, SearchScopeProvidingRunProfile {
 
-    private static final SkipDefaultValuesSerializationFilters SERIALIZATION_FILTERS = new SkipDefaultValuesSerializationFilters();
-    private LiferayBundleConfiguration.LiferayBundleConfigurationBean bean = new LiferayBundleConfiguration.LiferayBundleConfigurationBean();
+    private LiferayBundleConfig config = new LiferayBundleConfig();
     private Map<String, String> envs = new LinkedHashMap<>();
     private JavaRunConfigurationModule configurationModule;
 
@@ -57,8 +56,8 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
         super(project, factory, name);
 
         configurationModule = new JavaRunConfigurationModule(project, true);
-        bean.liferayBundle = Paths.get(project.getBasePath(), LiferayWorkspaceUtil.getHomeDir(project.getBasePath())).toString();
-        bean.vmParameters = "-Xmx1024m";
+        config.liferayBundle = Paths.get(project.getBasePath(), LiferayWorkspaceUtil.getHomeDir(project.getBasePath())).toString();
+        config.vmParameters = "-Xmx1024m";
     }
 
     @NotNull
@@ -67,7 +66,9 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
         final SettingsEditorGroup<LiferayBundleConfiguration> group = new SettingsEditorGroup<>();
 
         group.addEditor(ExecutionBundle.message("run.configuration.configuration.tab.title"), new LiferayBundleConfigurable(getProject()));
+
         JavaRunConfigurationExtensionManager.getInstance().appendEditors(this, group);
+
         group.addEditor(ExecutionBundle.message("logs.tab.title"), new LogConfigurationPanel<>());
 
         return group;
@@ -78,7 +79,7 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
         super.readExternal(element);
 
         JavaRunConfigurationExtensionManager.getInstance().readExternal(this, element);
-        XmlSerializer.deserializeInto(bean, element);
+        XmlSerializer.deserializeInto(config, element);
         EnvironmentVariablesComponent.readExternal(element, getEnvs());
 
         configurationModule.readExternal(element);
@@ -90,7 +91,7 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
         clone.envs = new LinkedHashMap<>(envs);
         clone.configurationModule = new JavaRunConfigurationModule(getProject(), true);
         clone.configurationModule.setModule(configurationModule.getModule());
-        clone.bean = XmlSerializerUtil.createCopy(bean);
+        clone.config = XmlSerializerUtil.createCopy(config);
         return clone;
     }
 
@@ -106,7 +107,7 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
     public void writeExternal(Element element) throws WriteExternalException {
         super.writeExternal(element);
         JavaRunConfigurationExtensionManager.getInstance().writeExternal(this, element);
-        XmlSerializer.serializeInto(bean, element, SERIALIZATION_FILTERS);
+        XmlSerializer.serializeInto(config, element, new SkipDefaultValuesSerializationFilters());
         EnvironmentVariablesComponent.writeExternal(element, getEnvs());
         if (configurationModule.getModule() != null) {
             configurationModule.writeExternal(element);
@@ -124,7 +125,7 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
         if (!liferayHome.exists()) {
             throw new RuntimeConfigurationWarning(
                     "Unable to detect liferay bundle from '" + liferayHome.toPath() +
-                            "', you may need to run gradle task initBundle firstly");
+                            "', you need to run gradle task 'initBundle' first.");
         }
 
         JavaRunConfigurationExtensionManager.checkConfigurationIsValid(this);
@@ -150,33 +151,33 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
 
     @Override
     public void setVMParameters(String value) {
-        bean.vmParameters = value;
+        config.vmParameters = value;
     }
 
     @Override
     public String getVMParameters() {
-        return bean.vmParameters;
+        return config.vmParameters;
     }
 
     @Override
     public boolean isAlternativeJrePathEnabled() {
-        return bean.ALTERNATIVE_JRE_PATH_ENABLED;
+        return config.alternativeJrePathEnabled;
     }
 
     @Override
     public void setAlternativeJrePathEnabled(boolean enabled) {
-        bean.ALTERNATIVE_JRE_PATH_ENABLED = enabled;
+        config.alternativeJrePathEnabled = enabled;
     }
 
     @Nullable
     @Override
     public String getAlternativeJrePath() {
-        return bean.ALTERNATIVE_JRE_PATH;
+        return config.alternativeJrePath;
     }
 
     @Override
     public void setAlternativeJrePath(String path) {
-        bean.ALTERNATIVE_JRE_PATH = path;
+        config.alternativeJrePath = path;
     }
 
     @Nullable
@@ -218,11 +219,11 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
     }
 
     public String getLiferayBundle() {
-        return bean.liferayBundle;
+        return config.liferayBundle;
     }
 
     public void setLiferayBundle(String liferayBundle) {
-        bean.liferayBundle = liferayBundle;
+        config.liferayBundle = liferayBundle;
     }
 
     @NotNull
@@ -233,20 +234,20 @@ public class LiferayBundleConfiguration extends LocatableConfigurationBase imple
 
     @Override
     public void setPassParentEnvs(boolean passParentEnvs) {
-        bean.PASS_PARENT_ENVS = passParentEnvs;
+        config.passParentEnvs = passParentEnvs;
     }
 
     @Override
     public boolean isPassParentEnvs() {
-        return bean.PASS_PARENT_ENVS;
+        return config.passParentEnvs;
     }
 
-    private static class LiferayBundleConfigurationBean {
+    private static class LiferayBundleConfig {
         public String liferayBundle = "";
         public String vmParameters = "";
-        public boolean ALTERNATIVE_JRE_PATH_ENABLED;
-        public String ALTERNATIVE_JRE_PATH = "";
-        public boolean PASS_PARENT_ENVS = true;
+        public boolean alternativeJrePathEnabled;
+        public String alternativeJrePath = "";
+        public boolean passParentEnvs = true;
     }
 
 }
