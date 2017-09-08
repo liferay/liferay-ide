@@ -24,17 +24,21 @@ import com.intellij.openapi.module.StdModuleTypes;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModifiableRootModel;
-import com.intellij.openapi.util.IconLoader;
-import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.io.FileUtilRt;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.ui.wizard.LiferayModuleFragmentWizardStep;
 import com.liferay.ide.idea.util.BladeCLI;
+import com.liferay.ide.idea.util.FileUtil;
+import com.liferay.ide.idea.util.SwitchConsumer;
+import com.liferay.ide.idea.util.SwitchConsumer.SwitchConsumerBuilder;
 
-import javax.swing.*;
 import java.io.File;
 import java.nio.file.FileSystems;
+import java.util.stream.Stream;
+
+import javax.swing.Icon;
 
 /**
  * @author Terry Jia
@@ -69,7 +73,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
     }
 
     private VirtualFile createAndGetContentEntry(Project project) {
-        String path = FileUtil.toSystemIndependentName(getContentEntryPath());
+        String path = FileUtilRt.toSystemIndependentName(getContentEntryPath());
 
         File file = new File(path);
 
@@ -84,7 +88,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
         final VirtualFile projectRoot = createAndGetContentEntry(project);
 
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
 
         sb.append("create ");
         sb.append("-d \"" + projectRoot.getParent().getPath() + "\" ");
@@ -102,56 +106,25 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
         BladeCLI.execute(sb.toString());
 
-        for (String file : _overrideFiles) {
-            final File tempBundle = new File(_USER_BUNDLES_DIR, _fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
+        final File hostBundle = new File(_USER_BUNDLES_DIR, _fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
 
-            File fragmentFile = new File(tempBundle, file);
+        SwitchConsumerBuilder<File> switch_ = SwitchConsumer.newBuilder();
 
-            if (fragmentFile.exists()) {
-                File folder = null;
-
-                if (fragmentFile.getName().equals("portlet.properties")) {
-                    folder = FileSystems.getDefault().getPath(projectRoot.getPath(), "src", "main", "java").toFile();
-
-                    com.liferay.ide.idea.util.FileUtil.copyFileToDir(fragmentFile, "portlet-ext.properties", folder);
-                } else if (fragmentFile.getName().contains("default.xml")) {
-                    folder = FileSystems.getDefault().getPath(projectRoot.getPath(), "src", "main", "resources", "resource-actions").toFile();
-
-                    folder.mkdirs();
-
-                    com.liferay.ide.idea.util.FileUtil.copyFileToDir(fragmentFile, "default-ext.xml", folder);
-
-                    try {
-                        File ext = FileSystems.getDefault().getPath(projectRoot.getPath(), "src", "main", "resources", "portlet-ext.properties").toFile();
-
-                        ext.createNewFile();
-
-                        String extFileContent =
-                                "resource.actions.configs=resource-actions/default.xml,resource-actions/default-ext.xml";
-
-                        com.liferay.ide.idea.util.FileUtil.writeFile(ext, extFileContent, null);
-                    } catch (Exception e) {
-                    }
-                } else {
-                    String parent = fragmentFile.getParentFile().getPath();
-                    parent = parent.replaceAll("\\\\", "/");
-                    String metaInfResources = "META-INF/resources";
-
-                    parent = parent.substring(parent.indexOf(metaInfResources) + metaInfResources.length());
-
-                    folder = FileSystems.getDefault().getPath(projectRoot.getPath(), "src", "main", "resources", "META-INF", "resources").toFile();
-
-                    folder.mkdirs();
-
-                    if (!parent.equals("resources") && !parent.equals("")) {
-                        folder = new File(folder, parent);
-                        folder.mkdirs();
-                    }
-
-                    com.liferay.ide.idea.util.FileUtil.copyFileToDir(fragmentFile, folder);
-                }
-            }
-        }
+		Stream.of(_overrideFiles).map(
+			overrideFile -> new File(hostBundle, overrideFile)
+		).filter(
+			file -> file.exists()
+		).forEach(
+			switch_.addCase(
+				f -> f.getName().equals("portlet.properties"),
+				f -> _copyPortletExtProperties(projectRoot, f))
+			.addCase(
+				f -> f.getName().contains("default.xml"),
+				f -> _createDefaultExtXmlFile(projectRoot, f))
+			.setDefault(
+				f -> _copyOtherResource(projectRoot, f))
+			.build()
+		);
 
         rootModel.addContentEntry(projectRoot);
 
@@ -160,8 +133,53 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
         } else {
             rootModel.inheritSdk();
         }
-
     }
+
+	private void _copyOtherResource(final VirtualFile projectRoot, final File fragmentFile) {
+		String parent = fragmentFile.getParentFile().getPath();
+		parent = parent.replaceAll("\\\\", "/");
+		String metaInfResources = "META-INF/resources";
+
+		parent = parent.substring(parent.indexOf(metaInfResources) + metaInfResources.length());
+
+		File folder = FileSystems.getDefault().getPath(projectRoot.getPath(), "src", "main", "resources", "META-INF", "resources").toFile();
+
+		folder.mkdirs();
+
+		if (!parent.equals("resources") && !parent.equals("")) {
+		    folder = new File(folder, parent);
+		    folder.mkdirs();
+		}
+
+		FileUtil.copyFileToDir(fragmentFile, folder);
+	}
+
+	private void _createDefaultExtXmlFile(final VirtualFile projectRoot, File f) {
+		File folder = FileSystems.getDefault().getPath(projectRoot.getPath(), "src", "main", "resources", "resource-actions").toFile();
+
+		folder.mkdirs();
+
+		FileUtil.copyFileToDir(f, "default-ext.xml", folder);
+
+		try {
+		    File ext = FileSystems.getDefault().getPath(projectRoot.getPath(), "src", "main", "resources", "portlet-ext.properties").toFile();
+
+		    ext.createNewFile();
+
+		    String extFileContent =
+		            "resource.actions.configs=resource-actions/default.xml,resource-actions/default-ext.xml";
+
+		    FileUtil.writeFile(ext, extFileContent, null);
+		}
+		catch (Exception e) {
+		}
+	}
+
+	private void _copyPortletExtProperties(final VirtualFile projectRoot, File f) {
+		File folder = FileSystems.getDefault().getPath(projectRoot.getPath(), "src", "main", "java").toFile();
+
+		FileUtil.copyFileToDir(f, "portlet-ext.properties", folder);
+	}
 
     public ModuleType getModuleType() {
         return StdModuleTypes.JAVA;
