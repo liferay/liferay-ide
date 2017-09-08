@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.idea.ui.bundle;
+package com.liferay.ide.idea.server;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.application.BaseJavaApplicationCommandLineState;
