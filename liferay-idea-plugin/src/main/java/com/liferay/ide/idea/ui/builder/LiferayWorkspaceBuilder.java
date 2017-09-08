@@ -51,7 +51,11 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
     public void setupRootModel(ModifiableRootModel model) throws ConfigurationException {
         final Project project = model.getProject();
 
-        StringBuilder sb = new StringBuilder();
+        _initWorkspace(project);
+    }
+
+	private void _initWorkspace(final Project project) {
+		StringBuilder sb = new StringBuilder();
 
         sb.append("-b ");
         sb.append("\"" + project.getBasePath() + "\"");
@@ -60,7 +64,7 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
         sb.append("-f");
 
         BladeCLI.execute(sb.toString());
-    }
+	}
 
     public ModuleType getModuleType() {
         return StdModuleTypes.JAVA;
