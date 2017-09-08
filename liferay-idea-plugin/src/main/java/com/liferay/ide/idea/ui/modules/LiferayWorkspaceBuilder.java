@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.idea.ui.builder;
+package com.liferay.ide.idea.ui.modules;
 
 import com.intellij.ide.actions.ImportModuleAction;
 import com.intellij.ide.util.newProjectWizard.AddModuleWizard;

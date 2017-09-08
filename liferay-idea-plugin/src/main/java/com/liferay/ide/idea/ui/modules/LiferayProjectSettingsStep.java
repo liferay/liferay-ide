@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.idea.ui.wizard;
+package com.liferay.ide.idea.ui.modules;
 
 import com.intellij.ide.util.newProjectWizard.SelectTemplateSettings;
 import com.intellij.ide.util.projectWizard.*;
@@ -25,6 +25,7 @@ import com.intellij.ui.HideableDecorator;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.JBUI;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

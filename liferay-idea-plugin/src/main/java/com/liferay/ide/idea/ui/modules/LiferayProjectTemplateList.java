@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.idea.ui.wizard;
+package com.liferay.ide.idea.ui.modules;
 
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.ui.Messages;

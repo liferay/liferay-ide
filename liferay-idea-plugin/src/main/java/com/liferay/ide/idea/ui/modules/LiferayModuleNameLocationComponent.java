@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.idea.ui.wizard;
+package com.liferay.ide.idea.ui.modules;
 
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.highlighter.ModuleFileType;
@@ -33,7 +33,6 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.DocumentAdapter;
-import com.liferay.ide.idea.ui.builder.LiferayModuleBuilder;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

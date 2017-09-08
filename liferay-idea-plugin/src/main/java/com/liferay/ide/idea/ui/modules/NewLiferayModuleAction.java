@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.idea.ui.action;
+package com.liferay.ide.idea.ui.modules;
 
 import com.intellij.ide.util.newProjectWizard.AbstractProjectWizard;
 import com.intellij.ide.util.projectWizard.ModuleBuilder;
@@ -29,7 +29,6 @@ import com.intellij.openapi.roots.ui.configuration.ModulesConfigurator;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
-import com.liferay.ide.idea.ui.wizard.NewLiferayModuleWizard;
 import com.liferay.ide.idea.util.LiferayWorkspaceUtil;
 
 import org.jetbrains.annotations.Nullable;

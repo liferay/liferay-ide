@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.idea.ui.wizard;
+package com.liferay.ide.idea.ui.modules;
 
 import com.intellij.framework.addSupport.FrameworkSupportInModuleProvider;
 import com.intellij.ide.projectWizard.ProjectCategory;
@@ -57,8 +57,6 @@ import com.intellij.ui.popup.list.GroupedItemsListRenderer;
 import com.intellij.util.Function;
 import com.intellij.util.containers.*;
 import com.intellij.util.ui.UIUtil;
-import com.liferay.ide.idea.ui.builder.LiferayModuleBuilder;
-import com.liferay.ide.idea.ui.builder.LiferayModuleFragmentBuilder;
 
 import gnu.trove.THashMap;
 import org.jetbrains.annotations.NotNull;

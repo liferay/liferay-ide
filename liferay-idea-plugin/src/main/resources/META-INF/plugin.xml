@@ -14,7 +14,7 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <moduleBuilder builderClass="com.liferay.ide.idea.ui.builder.LiferayWorkspaceBuilder"/>
+        <moduleBuilder builderClass="com.liferay.ide.idea.ui.modules.LiferayWorkspaceBuilder"/>
         <configurationType implementation="com.liferay.ide.idea.ui.bundle.LiferayBundleConfigurationType"/>
         <programRunner id="Run" implementation="com.liferay.ide.idea.ui.bundle.LiferayBundleRunner"/>
         <programRunner id="Debug" implementation="com.liferay.ide.idea.ui.bundle.LiferayBundleDebugger"/>
