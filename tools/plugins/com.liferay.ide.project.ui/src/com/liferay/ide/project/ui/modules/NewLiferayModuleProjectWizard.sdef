@@ -87,7 +87,7 @@
             <initial-focus>PropertyKeys</initial-focus>
             <margin-right>10</margin-right>
             <margin-left>0</margin-left>
-            <visible-when>${ProjectTemplateName != 'theme'  &amp;&amp;  ProjectTemplateName != 'service-builder'}</visible-when>
+            <visible-when>${ProjectTemplateName != 'theme-contributor' &amp;&amp; ProjectTemplateName != 'theme'  &amp;&amp;  ProjectTemplateName != 'service-builder'}</visible-when>
         </page>
         <page>
             <id>LiferayPortletServiceBuilderModuleSettingWizardPage</id>
