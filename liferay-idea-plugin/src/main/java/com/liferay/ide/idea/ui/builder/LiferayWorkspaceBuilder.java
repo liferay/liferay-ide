@@ -32,6 +32,8 @@ import com.intellij.projectImport.ProjectImportProvider;
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.util.BladeCLI;
 
+import java.util.stream.Stream;
+
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -101,24 +103,25 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
             Project project = module.getProject();
             ProjectImportProvider[] importProviders = ProjectImportProvider.PROJECT_IMPORT_PROVIDER.getExtensions();
 
-            for (ProjectImportProvider importProvider : importProviders) {
-                if (importProvider.getId().equals("Gradle")) {
-                    AddModuleWizard wizard = new AddModuleWizard(project, project.getBasePath(), importProvider);
+            Stream.of(
+                importProviders
+            ).filter(
+                importProvider -> importProvider.getId().equals("Gradle")
+            ).findFirst(
+            ).ifPresent(importProvider -> {
+                AddModuleWizard wizard = new AddModuleWizard(project, project.getBasePath(), importProvider);
 
-                    Application application = ApplicationManager.getApplication();
+                Application application = ApplicationManager.getApplication();
 
-                    application.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (wizard.showAndGet()) {
-                                ImportModuleAction.createFromWizard(project, wizard);
-                            }
+                application.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (wizard.showAndGet()) {
+                            ImportModuleAction.createFromWizard(project, wizard);
                         }
-                    });
-
-                    break;
-                }
-            }
+                    }
+                });
+            });
         }
     }
     
