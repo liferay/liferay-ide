@@ -146,7 +146,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
 		parent = parent.substring(parent.indexOf(metaInfResources) + metaInfResources.length());
 
-		File folder = FileSystems.getDefault().getPath(projectRoot.getPath(), "src", "main", "resources", "META-INF", "resources").toFile();
+		File folder = _getProjectFile(projectRoot, "src/main/resources/META-INF/resources");
 
 		folder.mkdirs();
 
@@ -158,29 +158,33 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		FileUtil.copyFileToDir(fragmentFile, folder);
 	}
 
+	private File _getProjectFile(final VirtualFile projectRoot, String path) {
+		return FileSystems.getDefault().getPath(projectRoot.getPath(), path).toFile();
+	}
+
 	private void _createDefaultExtXmlFile(final VirtualFile projectRoot, File f) {
-		File folder = FileSystems.getDefault().getPath(projectRoot.getPath(), "src", "main", "resources", "resource-actions").toFile();
+		File folder = _getProjectFile(projectRoot,  "src/main/resources/resource-actions");
 
 		folder.mkdirs();
 
 		FileUtil.copyFileToDir(f, "default-ext.xml", folder);
 
 		try {
-		    File ext = FileSystems.getDefault().getPath(projectRoot.getPath(), "src", "main", "resources", "portlet-ext.properties").toFile();
+		    File extFile = _getProjectFile(projectRoot, "src/main/resources/portlet-ext.properties");
 
-		    ext.createNewFile();
+		    extFile.createNewFile();
 
 		    String extFileContent =
 		            "resource.actions.configs=resource-actions/default.xml,resource-actions/default-ext.xml";
 
-		    FileUtil.writeFile(ext, extFileContent, null);
+		    FileUtil.writeFile(extFile, extFileContent, null);
 		}
 		catch (Exception e) {
 		}
 	}
 
 	private void _copyPortletExtProperties(final VirtualFile projectRoot, File f) {
-		File folder = FileSystems.getDefault().getPath(projectRoot.getPath(), "src", "main", "java").toFile();
+		File folder = _getProjectFile(projectRoot, "src/main/java");
 
 		FileUtil.copyFileToDir(f, "portlet-ext.properties", folder);
 	}
