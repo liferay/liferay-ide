@@ -48,7 +48,6 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
     private String[] _overrideFiles;
     private String _bsn;
     private String _version;
-    private static final File _USER_BUNDLES_DIR = new File(new File(System.getProperty("user.home"), ".liferay-ide"), "bundles");
 
     public void setFragmentHost(String fragmentHost) {
         _fragmentHost = fragmentHost;
@@ -89,7 +88,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
         _createProject(projectRoot);
 
-        final File hostBundle = new File(_USER_BUNDLES_DIR, _fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
+        final File hostBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, _fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
 
         SwitchConsumerBuilder<File> switch_ = SwitchConsumer.newBuilder();
 

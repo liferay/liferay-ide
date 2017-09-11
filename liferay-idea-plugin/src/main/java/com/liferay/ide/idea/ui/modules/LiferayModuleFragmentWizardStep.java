@@ -20,6 +20,7 @@ import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.treeStructure.Tree;
+import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.util.*;
 
 import javax.swing.*;
@@ -37,20 +38,17 @@ import java.util.jar.JarFile;
  * @author Terry Jia
  */
 public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
+
     private JPanel mainPanel;
     private JPanel jspsPanel;
-    private JComboBox osgiHost;
+    private JComboBox<String> fragmentHost;
     private final LiferayModuleFragmentBuilder builder;
     private final Tree jspsTree;
-    private WizardContext wizardContext;
-    private File temp = new File(new File(System.getProperties().getProperty("user.home"), ".liferay-ide"), "bundles");
 
     public LiferayModuleFragmentWizardStep(WizardContext wizardContext, LiferayModuleFragmentBuilder builder) {
-        this.wizardContext = wizardContext;
         this.builder = builder;
         jspsTree = new Tree();
         jspsTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
-        temp.mkdirs();
         JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(jspsTree);
 
         jspsPanel.add(typesScrollPane, "archetypes");
@@ -61,7 +59,7 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
         final File liferayHomeDir = new File(wizardContext.getProject().getBasePath(), LiferayWorkspaceUtil.getHomeDir(wizardContext.getProject().getBasePath()));
 
         if (!liferayHomeDir.exists()) {
-            osgiHost.addItem("unable to get liferay bundle");
+            fragmentHost.addItem("unable to get liferay bundle");
 
             DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
             DefaultMutableTreeNode node = new DefaultMutableTreeNode("unable to get liferay bundle", true);
@@ -78,17 +76,17 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
         List<String> bundles = ServerUtil.getModuleFileListFrom70Server(liferayHomeDir);
 
         for (String bundle : bundles) {
-            osgiHost.addItem(bundle);
+            fragmentHost.addItem(bundle);
         }
 
-        osgiHost.addActionListener(new ActionListener() {
+        fragmentHost.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
 
-                ServerUtil.getModuleFileFrom70Server(liferayHomeDir, osgiHost.getSelectedItem().toString(), temp);
+                ServerUtil.getModuleFileFrom70Server(liferayHomeDir, fragmentHost.getSelectedItem().toString(), LiferayIdeaUI.USER_BUNDLES_DIR);
 
-                File currentOsgiBundle = new File(temp, osgiHost.getSelectedItem().toString());
+                File currentOsgiBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, fragmentHost.getSelectedItem().toString());
 
                 if (currentOsgiBundle.exists()) {
                     try (JarFile jar = new JarFile(currentOsgiBundle)) {
@@ -121,10 +119,11 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
     @Override
     public void updateDataModel() {
-        builder.setFragmentHost(getOsgiHost());
-        builder.setOverrideFiles(getSelectedJsps());
-        String[] bsnAndVerion = getBsnAndVersion(getOsgiHost());
+        String[] bsnAndVerion = getBsnAndVersion(getFragmentHost());
+
         builder.setBsnName(bsnAndVerion[0]);
+        builder.setFragmentHost(getFragmentHost());
+        builder.setOverrideFiles(getSelectedJsps());
         builder.setVersion(bsnAndVerion[1]);
     }
 
@@ -143,15 +142,15 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
         return jsps;
     }
 
-    public String getOsgiHost() {
-        return osgiHost.getSelectedItem().toString();
+    public String getFragmentHost() {
+        return fragmentHost.getSelectedItem().toString();
     }
 
     public String[] getBsnAndVersion(String hostBundleName) {
-        final File tempBundle = new File(temp, hostBundleName.substring(0, hostBundleName.lastIndexOf(".jar")));
+        final File tempBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, hostBundleName.substring(0, hostBundleName.lastIndexOf(".jar")));
 
         if (!tempBundle.exists()) {
-            File hostBundle = new File(temp, hostBundleName);
+            File hostBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, hostBundleName);
 
             try {
                 ZipUtil.unzip(hostBundle, tempBundle);
