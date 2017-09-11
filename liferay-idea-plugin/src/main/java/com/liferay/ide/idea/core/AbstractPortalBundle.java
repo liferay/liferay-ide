@@ -40,11 +40,8 @@ import org.w3c.dom.NodeList;
  */
 public abstract class AbstractPortalBundle implements PortalBundle {
 
-	public AbstractPortalBundle(Path path)
-	{
-
-		if (path == null)
-		{
+	public AbstractPortalBundle(Path path) {
+		if (path == null) {
 			throw new IllegalArgumentException("path cannot be null");
 		}
 
@@ -58,83 +55,63 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 	}
 
 	@Override
-	public Path getAppServerDir()
-	{
-
+	public Path getAppServerDir() {
 		return bundlePath;
 	}
 
 	@Override
-	public Path getAutoDeployPath()
-	{
-
+	public Path getAutoDeployPath() {
 		return autoDeployPath;
 	}
 
 	@Override
-	public Path[] getBundleDependencyJars()
-	{
-
+	public Path[] getBundleDependencyJars() {
 		final List<Path> libs = new ArrayList<>();
 		Path bundleLibPath = getAppServerLibDir();
 		List<File> libFiles;
 
-		try
-		{
+		try {
 			libFiles = FileListing.getFileListing(
-	new File(bundleLibPath.toString()));
+				new File(bundleLibPath.toString()));
 
-			for (File lib : libFiles)
-			{
-				if (lib.exists() && lib.getName().endsWith(".jar"))
-				{
+			for (File lib : libFiles) {
+				if (lib.exists() && lib.getName().endsWith(".jar")) {
 					libs.add(lib.toPath());
 				}
 			}
 		}
-		catch (FileNotFoundException e)
-		{
+		catch (FileNotFoundException fnfe) {
 		}
 
 		return libs.toArray(new Path[libs.size()]);
 	}
 
 	@Override
-	public String[] getHookSupportedProperties()
-	{
-
+	public String[] getHookSupportedProperties() {
 		Path portalDir = getAppServerPortalDir();
 		Path[] extraLibs = getBundleDependencyJars();
 
 		return new LiferayPortalValueLoader(
-	portalDir, extraLibs).loadHookPropertiesFromClass();
+			portalDir, extraLibs).loadHookPropertiesFromClass();
 	}
 
 	@Override
-	public int getJmxRemotePort()
-	{
-
+	public int getJmxRemotePort() {
 		return getDefaultJMXRemotePort();
 	}
 
 	@Override
-	public Path getLiferayHome()
-	{
-
+	public Path getLiferayHome() {
 		return liferayHome;
 	}
 
 	@Override
-	public Path getModulesPath()
-	{
-
+	public Path getModulesPath() {
 		return modulesPath;
 	}
 
 	@Override
-	public Path getOSGiBundlesDir()
-	{
-
+	public Path getOSGiBundlesDir() {
 		if (liferayHome == null) {
 			return null;
 		}
@@ -143,23 +120,17 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 	}
 
 	@Override
-	public Properties getPortletCategories()
-	{
-
+	public Properties getPortletCategories() {
 		return null;
 	}
 
 	@Override
-	public Properties getPortletEntryCategories()
-	{
-
+	public Properties getPortletEntryCategories() {
 		return null;
 	}
 
 	@Override
-	public String getVersion()
-	{
-
+	public String getVersion() {
 		return "";
 	}
 
@@ -169,15 +140,13 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 
 	protected String getHttpPortValue(
 		File xmlFile, String tagName, String attriName, String attriValue,
-		String targetName)
-			{
+		String targetName) {
 
 		DocumentBuilder db = null;
 
 		DocumentBuilderFactory dbf = null;
 
-		try
-		{
+		try {
 			dbf = DocumentBuilderFactory.newInstance();
 
 			db = dbf.newDocumentBuilder();
@@ -186,18 +155,15 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 
 			NodeList connectorNodes = document.getElementsByTagName(tagName);
 
-			for (int i = 0; i < connectorNodes.getLength(); i++)
-			{
+			for (int i = 0; i < connectorNodes.getLength(); i++) {
 				Node node = connectorNodes.item(i);
 
 				NamedNodeMap attributes = node.getAttributes();
 
 				Node protocolNode = attributes.getNamedItem(attriName);
 
-				if (protocolNode != null)
-				{
-					if (protocolNode.getNodeValue().equals(attriValue))
-					{
+				if (protocolNode != null) {
+					if (protocolNode.getNodeValue().equals(attriValue)) {
 						Node portNode = attributes.getNamedItem(targetName);
 
 						return portNode.getNodeValue();
@@ -205,8 +171,7 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 				}
 			}
 		}
-		catch (Exception e)
-		{
+		catch (Exception e) {
 		}
 
 		return null;
