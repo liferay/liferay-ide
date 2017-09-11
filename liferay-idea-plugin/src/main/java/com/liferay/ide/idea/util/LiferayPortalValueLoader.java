@@ -17,13 +17,17 @@ package com.liferay.ide.idea.util;
 
 import java.io.File;
 import java.io.FilenameFilter;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,141 +37,151 @@ import org.osgi.framework.Version;
  * @author Simon Jiang
  * @author Gregory Amerson
  */
-public class LiferayPortalValueLoader
-{
+public class LiferayPortalValueLoader {
 
-    private Path[] userLibs;
-    private Path portalDir;
+	public LiferayPortalValueLoader(Path appServerPortalDir, Path[] extraLibs)
+	{
 
-    public LiferayPortalValueLoader( Path[] extraLibs )
-    {
-        this.userLibs = extraLibs;
-    }
+		this.portalDir = appServerPortalDir;
+		this.userLibs = extraLibs;
+	}
 
-    public LiferayPortalValueLoader( Path appServerPortalDir, Path[] extraLibs )
-    {
-        this.portalDir = appServerPortalDir;
-        this.userLibs = extraLibs;
-    }
+	public LiferayPortalValueLoader(Path[] extraLibs)
+	{
 
-    private void addLibs( File libDir, List<URL> libUrlList ) throws MalformedURLException
-    {
-        if( libDir.exists() )
-        {
-            final File[] libs = libDir.listFiles
-            (
-                new FilenameFilter()
-                {
-                    @Override
-                    public boolean accept( File dir, String fileName )
-                    {
-                        return fileName.toLowerCase().endsWith( ".jar" );
-                    }
-                }
-            );
+		this.userLibs = extraLibs;
+	}
 
-            if( ! CoreUtil.isNullOrEmpty( libs ) )
-            {
-                for( File portaLib : libs )
-                {
-                    libUrlList.add( portaLib.toURI().toURL() );
-                }
-            }
-        }
-    }
+	public String[] loadHookPropertiesFromClass()
+	{
 
-    private Object[] getFieldValuesFromClass( String loadClassName, String fieldName)
-    {
-        Object[] retval = new Object[0];
+		final String loadClassName = "com.liferay.portal.deploy.hot.HookHotDeployListener"; //$NON-NLS-1$
+		final String fieldName = "SUPPORTED_PROPERTIES"; //$NON-NLS-1$
 
-        try
-        {
-            final Class<?> classRef = loadClass(loadClassName);
-            final Field propertiesField = classRef.getDeclaredField( fieldName );
+		return (String[])getFieldValuesFromClass(loadClassName, fieldName);
+	}
 
-            retval = ( Object[] ) ( propertiesField.get( propertiesField ) );
-        }
-        catch( Exception e )
-        {
-        }
+	public String loadServerInfoFromClass()
+	{
 
-        return retval;
-    }
+		final String loadClassName = "com.liferay.portal.kernel.util.ReleaseInfo"; //$NON-NLS-1$
+		final String methodName = "getServerInfo"; //$NON-NLS-1$
 
-    private Object getMethodValueFromClass( String loadClassName, String methodName)
-    {
-        Object retval = null;
+		return (String)getMethodValueFromClass(loadClassName, methodName);
+	}
 
-        try
-        {
-            final Class<?> classRef = loadClass( loadClassName );
-            final Method method = classRef.getMethod( methodName );
-            retval = method.invoke( null );
-        }
-        catch( Exception e )
-        {
-        }
+	public Version loadVersionFromClass()
+	{
 
-        return retval;
-    }
+		final String loadClassName = "com.liferay.portal.kernel.util.ReleaseInfo"; //$NON-NLS-1$
+		final String methodName = "getVersion"; //$NON-NLS-1$
 
-    private Class<?> loadClass( String className ) throws Exception
-    {
-        final List<URL> libUrlList = new ArrayList<URL>();
+		Version retval = Version.emptyVersion;
 
-        if ( portalDir != null )
-        {
-            final File libDir = Paths.get(portalDir.toString(), "WEB-INF", "lib").toFile();
+		try
+		{
+			final String versionString = (String)getMethodValueFromClass(
+	loadClassName, methodName); retval = Version.parseVersion(versionString);
+		}
+		catch (Exception e)
+		{
+		}
 
-            addLibs( libDir, libUrlList );
-        }
+		return retval;
+	}
 
-        if( ! CoreUtil.isNullOrEmpty( userLibs ) )
-        {
-            for( Path url : userLibs )
-            {
-                libUrlList.add( url.toFile().toURI().toURL() );
-            }
-        }
+	private void addLibs(File libDir, List<URL> libUrlList) throws MalformedURLException
+	{
 
-        final URL[] urls = libUrlList.toArray( new URL[libUrlList.size()] );
+		if (libDir.exists())
+		{
+			final File[] libs = libDir.listFiles(
 
-        return new URLClassLoader( urls ).loadClass( className );
-    }
+				new FilenameFilter()
+				{
+					@Override
+					public boolean accept(File dir, String fileName)
+					{
+						return fileName.toLowerCase().endsWith(".jar");
+					}
+				});
 
-    public String[] loadHookPropertiesFromClass()
-    {
-        final String loadClassName = "com.liferay.portal.deploy.hot.HookHotDeployListener"; //$NON-NLS-1$
-        final String fieldName = "SUPPORTED_PROPERTIES"; //$NON-NLS-1$
+			if (! CoreUtil.isNullOrEmpty(libs))
+			{
+				for (File portaLib : libs)
+				{
+					libUrlList.add(portaLib.toURI().toURL());
+				}
+			}
+		}
+	}
 
-        return ( String[] ) getFieldValuesFromClass( loadClassName, fieldName );
-    }
+	private Object[] getFieldValuesFromClass(
+		String loadClassName, String fieldName)
+			{
 
-    public String loadServerInfoFromClass()
-    {
-        final String loadClassName = "com.liferay.portal.kernel.util.ReleaseInfo"; //$NON-NLS-1$
-        final String methodName = "getServerInfo"; //$NON-NLS-1$
+		Object[] retval = new Object[0];
 
-        return ( String )getMethodValueFromClass( loadClassName, methodName);
-    }
+		try
+		{
+			final Class<?> classRef = loadClass(loadClassName);
+			final Field propertiesField = classRef.getDeclaredField(fieldName);
 
-    public Version loadVersionFromClass()
-    {
-        final String loadClassName = "com.liferay.portal.kernel.util.ReleaseInfo"; //$NON-NLS-1$
-        final String methodName = "getVersion"; //$NON-NLS-1$
+			retval = (Object[]) (propertiesField.get(propertiesField));
+		}
+		catch (Exception e)
+		{
+		}
 
-        Version retval = Version.emptyVersion;
+		return retval;
+	}
 
-        try
-        {
-            final String versionString = ( String )getMethodValueFromClass( loadClassName, methodName);
-            retval = Version.parseVersion( versionString );
-        }
-        catch( Exception e )
-        {
-        }
+	private Object getMethodValueFromClass(
+		String loadClassName, String methodName)
+			{
 
-        return retval;
-    }
+		Object retval = null;
+
+		try
+		{
+			final Class<?> classRef = loadClass(loadClassName);
+			final Method method = classRef.getMethod(methodName);
+			retval = method.invoke(null);
+		}
+		catch (Exception e)
+		{
+		}
+
+		return retval;
+	}
+
+	private Class<?> loadClass(String className) throws Exception
+	{
+
+		final List<URL> libUrlList = new ArrayList<>();
+
+		if (portalDir != null)
+		{
+			final File libDir = Paths.get(
+	portalDir.toString(), "WEB-INF", "lib").toFile();
+
+			addLibs(libDir, libUrlList);
+		}
+
+		if (! CoreUtil.isNullOrEmpty(userLibs))
+		{
+			for (Path url : userLibs)
+			{
+				libUrlList.add(url.toFile().toURI().toURL());
+			}
+		}
+
+		final URL[] urls = libUrlList.toArray(new URL[libUrlList.size()]);
+
+		return new URLClassLoader(urls).loadClass(className);
+	}
+
+	private Path portalDir;
+	private Path[] userLibs;
 
 }

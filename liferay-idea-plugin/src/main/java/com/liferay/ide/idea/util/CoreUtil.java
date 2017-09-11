@@ -1,89 +1,115 @@
 package com.liferay.ide.idea.util;
 
 import java.security.MessageDigest;
+
 import java.util.List;
+
 import org.osgi.framework.Version;
 
 public class CoreUtil {
 
-    public static boolean isNotNullOrEmpty( Object[] array )
-    {
-        return !isNullOrEmpty( array );
-    }
+	public static int compareVersions(Version v1, Version v2)
+	{
 
-    public static boolean isNullOrEmpty( List<?> list )
-    {
-        return list == null || list.size() == 0;
-    }
+		if (v2 == v1)
+		{
 
-    public static boolean isNullOrEmpty( Object[] array )
-    {
-        return array == null || array.length == 0;
-    }
+			// quicktest
 
-    public static boolean isNullOrEmpty( String val )
-    {
-        return val == null || val.equals( StringPool.EMPTY ) || val.trim().equals( StringPool.EMPTY );
-    }
+			return 0;
+		}
 
-    public static final String createStringDigest( final String str )
-    {
-        try
-        {
-            final MessageDigest md = MessageDigest.getInstance( "SHA-256" ); //$NON-NLS-1$
-            final byte[] input = str.getBytes( "UTF-8" ); //$NON-NLS-1$
-            final byte[] digest = md.digest( input );
+		int result = v1.getMajor() - v2.getMajor();
 
-            final StringBuilder buf = new StringBuilder();
+		if (result != 0)
+		{
+			return result;
+		}
 
-            for( int i = 0; i < digest.length; i++ )
-            {
-                String hex = Integer.toHexString( 0xFF & digest[ i ] );
+		result = v1.getMinor() - v2.getMinor();
 
-                if( hex.length() == 1 )
-                {
-                    buf.append( '0' );
-                }
+		if (result != 0)
+		{
+			return result;
+		}
 
-                buf.append( hex );
-            }
+		result = v1.getMicro() - v2.getMicro();
 
-            return buf.toString();
-        }
-        catch( Exception e )
-        {
-            throw new RuntimeException( e );
-        }
-    }
+		if (result != 0)
+		{
+			return result;
+		}
 
-    public static int compareVersions( Version v1, Version v2 )
-    {
-        if( v2 == v1 )
-        { // quicktest
-            return 0;
-        }
+		return v1.getQualifier().compareTo(v2.getQualifier());
+	}
 
-        int result = v1.getMajor() - v2.getMajor();
+	public static final String createStringDigest(final String str)
+	{
 
-        if( result != 0 )
-        {
-            return result;
-        }
+		try
+		{
+			final MessageDigest md = MessageDigest.getInstance("SHA-256"); //$NON-NLS-1$
+			final byte[] input = str.getBytes("UTF-8"); //$NON-NLS-1$
+			final byte[] digest = md.digest(input);
 
-        result = v1.getMinor() - v2.getMinor();
+			final StringBuilder buf = new StringBuilder();
 
-        if( result != 0 )
-        {
-            return result;
-        }
+			for (int i = 0; i < digest.length; i++)
+			{
+				String hex = Integer.toHexString(0xFF & digest[ i ]);
 
-        result = v1.getMicro() - v2.getMicro();
+				if (hex.length() == 1)
+				{
+					buf.append('0');
+				}
 
-        if( result != 0 )
-        {
-            return result;
-        }
+				buf.append(hex);
+			}
 
-        return v1.getQualifier().compareTo( v2.getQualifier() );
-    }
+			return buf.toString();
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static boolean isNotNullOrEmpty(Object[] array)
+	{
+
+		return !isNullOrEmpty(array);
+	}
+
+	public static boolean isNullOrEmpty(List<?> list)
+	{
+
+		if (list == null || list.size() == 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean isNullOrEmpty(Object[] array)
+	{
+
+		if (array == null || array.length == 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean isNullOrEmpty(String val)
+	{
+
+		if (val == null || val.equals(StringPool.EMPTY) ||
+			val.trim().equals(StringPool.EMPTY)) {
+
+			return true;
+		}
+
+		return false;
+	}
+
 }

@@ -16,6 +16,7 @@
 package com.liferay.ide.idea.util;
 
 import java.io.*;
+
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -25,107 +26,118 @@ import java.util.zip.ZipFile;
  */
 public class ZipUtil {
 
-    public static ZipFile open(final File file) throws IOException {
-        try {
-            return new ZipFile(file);
-        } catch (FileNotFoundException e) {
-            final FileNotFoundException fnfe = new FileNotFoundException(file.getAbsolutePath());
+	public static ZipFile open(final File file) throws IOException {
+		try {
+			return new ZipFile(file);
+		} catch (FileNotFoundException e) {
+			final FileNotFoundException fnfe = new FileNotFoundException(
+	file.getAbsolutePath());
 
-            fnfe.initCause(e);
+			fnfe.initCause(e);
 
-            throw fnfe;
-        }
-    }
+			throw fnfe;
+		}
+	}
 
-    public static void unzip(final File file, final File destdir) throws IOException {
-        unzip(file, null, destdir);
-    }
+	public static void unzip(final File file, final File destdir)
+		throws IOException {
 
-    public static void unzip(final File file, final String entryToStart, final File destdir) throws IOException {
-        final ZipFile zip = open(file);
+		unzip(file, null, destdir);
+	}
 
-        try {
-            final Enumeration<? extends ZipEntry> entries = zip.entries();
+	public static void unzip(
+			final File file, final String entryToStart, final File destdir)
+		throws IOException {
 
-            final int totalWork = zip.size();
+		final ZipFile zip = open(file);
 
-            int c = 0;
-            boolean foundStartEntry = entryToStart == null;
+		try {
+			final Enumeration<? extends ZipEntry> entries = zip.entries();
 
-            while (entries.hasMoreElements()) {
-                final ZipEntry entry = entries.nextElement();
+			final int totalWork = zip.size();
 
-                if (!foundStartEntry) {
-                    foundStartEntry = entryToStart.equals(entry.getName());
-                    continue;
-                }
+			int c = 0;
 
-                String entryName = null;
+			boolean foundStartEntry = false;
 
-                if (entryToStart == null) {
-                    entryName = entry.getName();
-                } else {
-                    entryName = entry.getName().replaceFirst(entryToStart, ""); //$NON-NLS-1$
-                }
+			if (entryToStart == null) {
+				foundStartEntry = true;
+			}
 
-                if (entry.isDirectory()) {
-                    File emptyDir = new File(destdir, entryName);
+			while (entries.hasMoreElements()) {
+				final ZipEntry entry = entries.nextElement();
 
-                    mkdir(emptyDir);
+				if (!foundStartEntry) {
+					foundStartEntry = entryToStart.equals(entry.getName());
+					continue;
+				}
 
-                    continue;
-                }
+				String entryName = null;
 
-                final File f = new File(destdir, entryName);
-                final File dir = f.getParentFile();
+				if (entryToStart == null) {
+					entryName = entry.getName();
+				} else {
+					entryName = entry.getName().replaceFirst(entryToStart, ""); //$NON-NLS-1$
+				}
 
-                mkdir(dir);
+				if (entry.isDirectory()) {
+					File emptyDir = new File(destdir, entryName);
 
-                InputStream in = null;
-                FileOutputStream out = null;
+					mkdir(emptyDir);
 
-                try {
-                    in = zip.getInputStream(entry);
-                    out = new FileOutputStream(f);
+					continue;
+				}
 
-                    final byte[] bytes = new byte[1024];
-                    int count = in.read(bytes);
+				final File f = new File(destdir, entryName);
+				final File dir = f.getParentFile();
 
-                    while (count != -1) {
-                        out.write(bytes, 0, count);
-                        count = in.read(bytes);
-                    }
+				mkdir(dir);
 
-                    out.flush();
-                } finally {
-                    if (in != null) {
-                        try {
-                            in.close();
-                        } catch (IOException e) {
-                        }
-                    }
+				InputStream in = null;
+				FileOutputStream out = null;
 
-                    if (out != null) {
-                        try {
-                            out.close();
-                        } catch (IOException e) {
-                        }
-                    }
-                }
-            }
-        } finally {
-            try {
-                zip.close();
-            } catch (IOException e) {
-            }
-        }
-    }
+				try {
+					in = zip.getInputStream(entry);
+					out = new FileOutputStream(f);
 
-    private static void mkdir(File dir) throws IOException {
-        if (!dir.exists() && !dir.mkdirs()) {
-            final String msg = "Could not create dir: " + dir.getPath();
-            throw new IOException(msg);
-        }
-    }
+					final byte[] bytes = new byte[1024];
+					int count = in.read(bytes);
+
+					while (count != -1) {
+						out.write(bytes, 0, count);
+						count = in.read(bytes);
+					}
+
+					out.flush();
+				} finally {
+					if (in != null) {
+						try {
+							in.close();
+						} catch (IOException e) {
+						}
+					}
+
+					if (out != null) {
+						try {
+							out.close();
+						} catch (IOException e) {
+						}
+					}
+				}
+			}
+		} finally {
+			try {
+				zip.close();
+			} catch (IOException e) {
+			}
+		}
+	}
+
+	private static void mkdir(File dir) throws IOException {
+		if (!dir.exists() && !dir.mkdirs()) {
+			final String msg = "Could not create dir: " + dir.getPath();
+			throw new IOException(msg);
+		}
+	}
 
 }

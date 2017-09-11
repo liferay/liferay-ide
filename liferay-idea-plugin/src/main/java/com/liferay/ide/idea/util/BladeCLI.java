@@ -15,95 +15,104 @@
 
 package com.liferay.ide.idea.util;
 
-import org.apache.tools.ant.DefaultLogger;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.taskdefs.Java;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import org.apache.tools.ant.DefaultLogger;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.Java;
 
 /**
  * @author Terry Jia
  */
 public class BladeCLI {
 
-    public static String[] execute(String args) {
-        final Project project = new Project();
-        final Java javaTask = new Java();
+	public static String[] execute(String args) {
+		final Project project = new Project();
+		final Java javaTask = new Java();
 
-        javaTask.setProject(project);
-        javaTask.setFork(true);
-        javaTask.setFailonerror(true);
+		javaTask.setProject(project);
+		javaTask.setFork(true);
+		javaTask.setFailonerror(true);
 
-        File temp = new File(System.getProperties().getProperty("user.home"), ".liferay-ide");
+		File temp = new File(
+	System.getProperties().getProperty("user.home"), ".liferay-ide");
 
-        File bladeJar = new File(temp, "com.liferay.blade.cli.jar");
+		File bladeJar = new File(temp, "com.liferay.blade.cli.jar");
 
-        if (!bladeJar.exists()) {
-            try (InputStream in = BladeCLI.class.getClassLoader().getResourceAsStream("/libs/com.liferay.blade.cli.jar")) {
-                FileUtil.writeFile(bladeJar, in);
-            } catch (IOException e) {
-            }
-        }
+		if (!bladeJar.exists()) {
+			try (InputStream in =
+BladeCLI.class.getClassLoader().getResourceAsStream(
+"/libs/com.liferay.blade.cli.jar")) {
 
-        javaTask.setJar(bladeJar);
-        javaTask.setArgs(args);
+				FileUtil.writeFile(bladeJar, in);
+			} catch (IOException e) {
+			}
+		}
 
-        final DefaultLogger logger = new DefaultLogger();
-        project.addBuildListener(logger);
+		javaTask.setJar(bladeJar);
+		javaTask.setArgs(args);
 
-        final StringBufferOutputStream out = new StringBufferOutputStream();
+		final DefaultLogger logger = new DefaultLogger();
+		project.addBuildListener(logger);
 
-        logger.setOutputPrintStream(new PrintStream(out));
-        logger.setMessageOutputLevel(Project.MSG_INFO);
+		final StringBufferOutputStream out = new StringBufferOutputStream();
 
-        int returnCode = javaTask.executeJava();
+		logger.setOutputPrintStream(new PrintStream(out));
+		logger.setMessageOutputLevel(Project.MSG_INFO);
 
-        final java.util.List<String> lines = new ArrayList<>();
-        final Scanner scanner = new Scanner(out.toString());
+		int returnCode = javaTask.executeJava();
 
-        while (scanner.hasNextLine()) {
-            lines.add(scanner.nextLine().replaceAll(".*\\[null\\] ", ""));
-        }
+		final java.util.List<String> lines = new ArrayList<>();
+		final Scanner scanner = new Scanner(out.toString());
 
-        scanner.close();
+		while (scanner.hasNextLine()) {
+			lines.add(scanner.nextLine().replaceAll(".*\\[null\\] ", ""));
+		}
 
-        boolean hasErrors = false;
+		scanner.close();
 
-        final StringBuilder errors = new StringBuilder();
+		boolean hasErrors = false;
 
-        for (String line : lines) {
-            if (line.startsWith("Error")) {
-                hasErrors = true;
-            } else if (hasErrors) {
-                errors.append(line);
-            }
-        }
+		final StringBuilder errors = new StringBuilder();
 
-        return lines.toArray(new String[0]);
-    }
+		for (String line : lines) {
+			if (line.startsWith("Error")) {
+				hasErrors = true;
+			} else if (hasErrors) {
+				errors.append(line);
+			}
+		}
 
-    public static synchronized String[] getProjectTemplates() {
-        java.util.List<String> templateNames = new ArrayList<>();
+		return lines.toArray(new String[0]);
+	}
 
-        String[] executeResult = execute("create -l");
+	public static synchronized String[] getProjectTemplates() {
+		java.util.List<String> templateNames = new ArrayList<>();
 
-        for (String name : executeResult) {
-            // for latest blade which print template descriptor
-            if (name.trim().indexOf(" ") != -1) {
-                templateNames.add(name.substring(0, name.indexOf(" ")));
-            }
-            // for legacy blade
-            else {
-                templateNames.add(name);
-            }
-        }
+		String[] executeResult = execute("create -l");
 
-        return templateNames.toArray(new String[0]);
-    }
+		for (String name : executeResult) {
+
+			// for latest blade which print template descriptor
+
+			if (name.trim().indexOf(" ") != -1) {
+				templateNames.add(name.substring(0, name.indexOf(" ")));
+			}
+
+			// for legacy blade
+
+			else {
+				templateNames.add(name);
+			}
+		}
+
+		return templateNames.toArray(new String[0]);
+	}
 
 }

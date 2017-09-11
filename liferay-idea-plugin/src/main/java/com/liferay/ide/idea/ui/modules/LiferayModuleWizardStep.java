@@ -19,116 +19,125 @@ import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiNameHelper;
 import com.intellij.psi.impl.file.PsiDirectoryFactory;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.treeStructure.Tree;
+
 import com.liferay.ide.idea.util.BladeCLI;
 import com.liferay.ide.idea.util.CoreUtil;
 
-import org.jetbrains.annotations.Nullable;
-
 import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * @author Terry Jia
  */
 public class LiferayModuleWizardStep extends ModuleWizardStep {
-    private JPanel mainPanel;
-    private JPanel typesPanel;
-    private JTextField packageName;
-    private JTextField className;
-    private final LiferayModuleBuilder builder;
-    private final Tree typesTree;
 
-    public LiferayModuleWizardStep(LiferayModuleBuilder builder) {
-        this.builder = builder;
-        typesTree = new Tree();
-        typesTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
+	public LiferayModuleWizardStep(LiferayModuleBuilder builder) {
+		this.builder = builder;
+		typesTree = new Tree();
+		typesTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
 
-        JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(typesTree);
+		JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(
+	typesTree);
 
-        typesPanel.add(typesScrollPane, "archetypes");
+		typesPanel.add(typesScrollPane, "archetypes");
 
-        typesTree.setRootVisible(false);
-        typesTree.setShowsRootHandles(true);
-        typesTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		typesTree.setRootVisible(false);
+		typesTree.setShowsRootHandles(true);
+		typesTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
 
-        for (String type : BladeCLI.getProjectTemplates()) {
-            if (type.equals("fragment")) {
-                continue;
-            }
+		for (String type : BladeCLI.getProjectTemplates()) {
+			if (type.equals("fragment")) {
+				continue;
+			}
 
-            DefaultMutableTreeNode node = new DefaultMutableTreeNode(type, true);
-            root.add(node);
-        }
+			DefaultMutableTreeNode node = new DefaultMutableTreeNode(
+	type, true); root.add(node);
+		}
 
-        TreeModel model = new DefaultTreeModel(root);
+		TreeModel model = new DefaultTreeModel(root);
 
-        typesTree.setModel(model);
-    }
+		typesTree.setModel(model);
+	}
 
+	public String getClassName() {
+		return className.getText();
+	}
 
-    public JComponent getComponent() {
-        return mainPanel;
-    }
+	public JComponent getComponent() {
+		return mainPanel;
+	}
 
-    @Override
-    public void updateDataModel() {
-        builder.setType(getSelectedType());
-        builder.setClassName(getClassName());
-        builder.setPackageName(getPackageName());
-    }
+	public String getPackageName() {
+		return packageName.getText();
+	}
 
-    @Override
-    public boolean validate() throws ConfigurationException {
-        String validationTitle = "Validation Error";
+	@Nullable
+	public String getSelectedType() {
+		Object selectedType = typesTree.getLastSelectedPathComponent();
 
-        if (CoreUtil.isNullOrEmpty(getSelectedType())) {
-            throw new ConfigurationException("Please click one of the items to select a template", validationTitle);
-        }
+		if (selectedType != null) {
+			return selectedType.toString();
+		} else {
+			return null;
+		}
+	}
 
-        Project workspaceProject = ProjectManager.getInstance().getOpenProjects()[0];
+	@Override
+	public void updateDataModel() {
+		builder.setType(getSelectedType());
+		builder.setClassName(getClassName());
+		builder.setPackageName(getPackageName());
+	}
 
-        String packageNameValue = getPackageName();
-        String classNameValue = getClassName();
+	@Override
+	public boolean validate() throws ConfigurationException {
+		String validationTitle = "Validation Error";
 
-        if (!CoreUtil.isNullOrEmpty(packageNameValue) && !PsiDirectoryFactory.getInstance(workspaceProject).isValidPackageName(packageNameValue)) {
-            throw new ConfigurationException(packageNameValue + " is not a valid package name", validationTitle);
-        }
+		if (CoreUtil.isNullOrEmpty(getSelectedType())) {
+			throw new ConfigurationException(
+	"Please click one of the items to select a template", validationTitle);
+		}
 
-        if (!CoreUtil.isNullOrEmpty(classNameValue) && !PsiNameHelper.getInstance(workspaceProject).isQualifiedName(classNameValue)) {
-            throw new ConfigurationException(classNameValue + " is not a valid java class name", validationTitle);
-        }
+		Project workspaceProject =
+	ProjectManager.getInstance().getOpenProjects()[0];
 
-        return true;
-    }
+		String packageNameValue = getPackageName();
+		String classNameValue = getClassName();
 
-    @Nullable
-    public String getSelectedType() {
-        Object selectedType = typesTree.getLastSelectedPathComponent();
-        if (selectedType != null) {
-            return selectedType.toString();
-        } else {
-            return null;
-        }
-    }
+		if (!CoreUtil.isNullOrEmpty(packageNameValue) &&
+!PsiDirectoryFactory.getInstance(
+workspaceProject).isValidPackageName(packageNameValue)) {
 
-    public String getPackageName() {
-        return packageName.getText();
-    }
+			throw new ConfigurationException(
+	packageNameValue + " is not a valid package name", validationTitle);
+		}
 
-    public String getClassName() {
-        return className.getText();
-    }
+		if (!CoreUtil.isNullOrEmpty(classNameValue) &&
+!PsiNameHelper.getInstance(workspaceProject).isQualifiedName(classNameValue)) {
+
+			throw new ConfigurationException(
+	classNameValue + " is not a valid java class name", validationTitle);
+		}
+
+		return true;
+	}
+
+	private final LiferayModuleBuilder builder;
+	private JTextField className;
+	private JPanel mainPanel;
+	private JTextField packageName;
+	private JPanel typesPanel;
+	private final Tree typesTree;
 
 }

@@ -28,97 +28,110 @@ import com.intellij.openapi.roots.ui.configuration.DefaultModulesProvider;
 import com.intellij.openapi.roots.ui.configuration.ModulesConfigurator;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
+
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.util.LiferayWorkspaceUtil;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Terry Jia
  */
 public class NewLiferayModuleAction extends AnAction implements DumbAware {
 
-    public NewLiferayModuleAction() {
-        super(LiferayIdeaUI.LIFERAY_ICON);
-    }
+	public NewLiferayModuleAction() {
+		super(LiferayIdeaUI.LIFERAY_ICON);
+	}
 
-    @Override
-    public void actionPerformed(AnActionEvent e) {
-        final Project project = getEventProject(e);
+	@Override
+	public void actionPerformed(AnActionEvent e) {
+		final Project project = getEventProject(e);
 
-        if (!_isValidWorkspaceLocation(project)) {
-            Messages.showErrorDialog(
-            	"Unable to detect current project as a Liferay workspace", 
-            	"No Liferay workspace");
+		if (!_isValidWorkspaceLocation(project)) {
+			Messages.showErrorDialog(
+				"Unable to detect current project as a Liferay workspace",
+				"No Liferay workspace");
 
-            return;
-        }
+			return;
+		}
 
-        String defaultPath = null;
+		String defaultPath = null;
 
-        final VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
+		final VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
 
-        if (virtualFile != null && virtualFile.isDirectory()) {
-            defaultPath = virtualFile.getPath();
-        }
+		if (virtualFile != null && virtualFile.isDirectory()) {
+			defaultPath = virtualFile.getPath();
+		}
 
-        final NewLiferayModuleWizard wizard = new NewLiferayModuleWizard(project, new DefaultModulesProvider(project), defaultPath);
+		final NewLiferayModuleWizard wizard = new NewLiferayModuleWizard(
+	project, new DefaultModulesProvider(project), defaultPath);
 
-        if (wizard.showAndGet()) {
-            createModuleFromWizard(project, wizard);
-        }
-    }
-
-    private boolean _isValidWorkspaceLocation(Project project) {
-    	return project != null && LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(project.getBasePath());
+		if (wizard.showAndGet()) {
+			createModuleFromWizard(project, wizard);
+		}
 	}
 
 	@Nullable
-    public Module createModuleFromWizard(Project project, AbstractProjectWizard wizard) {
-        final ProjectBuilder builder = wizard.getProjectBuilder();
+	public Module createModuleFromWizard(
+		Project project, AbstractProjectWizard wizard) {
 
-        if (builder instanceof ModuleBuilder) {
-            final ModuleBuilder moduleBuilder = (ModuleBuilder) builder;
+		final ProjectBuilder builder = wizard.getProjectBuilder();
 
-            if (moduleBuilder.getName() == null) {
-                moduleBuilder.setName(wizard.getProjectName());
-            }
+		if (builder instanceof ModuleBuilder) {
+			final ModuleBuilder moduleBuilder = (ModuleBuilder)builder;
 
-            if (moduleBuilder.getModuleFilePath() == null) {
-                moduleBuilder.setModuleFilePath(wizard.getModuleFilePath());
-            }
-        }
+			if (moduleBuilder.getName() == null) {
+				moduleBuilder.setName(wizard.getProjectName());
+			}
 
-        if (!builder.validate(project, project)) {
-            return null;
-        }
+			if (moduleBuilder.getModuleFilePath() == null) {
+				moduleBuilder.setModuleFilePath(wizard.getModuleFilePath());
+			}
+		}
 
-        Module module = null;
+		if (!builder.validate(project, project)) {
+			return null;
+		}
 
-        if (builder instanceof ModuleBuilder) {
-            module = ((ModuleBuilder) builder).commitModule(project, null);
-        } 
-        else {
-            List<Module> modules = builder.commit(project, null, new DefaultModulesProvider(project));
+		Module module = null;
 
-            if (builder.isOpenProjectSettingsAfter()) {
-                ModulesConfigurator.showDialog(project, null, null);
-            }
+		if (builder instanceof ModuleBuilder) {
+			module = ((ModuleBuilder)builder).commitModule(project, null);
+		}
+		else {
+			List<Module> modules = builder.commit(
+	project, null, new DefaultModulesProvider(project));
 
-            module = modules == null || modules.isEmpty() ? null : modules.get(0);
-        }
+			if (builder.isOpenProjectSettingsAfter()) {
+				ModulesConfigurator.showDialog(project, null, null);
+			}
 
-        project.save();
+			module =
+	modules == null || modules.isEmpty() ? null : modules.get(0);
+		}
 
-        return module;
-    }
+		project.save();
 
-    @Override
-    public void update(AnActionEvent e) {
-        super.update(e);
+		return module;
+	}
 
-        e.getPresentation().setEnabled(_isValidWorkspaceLocation(getEventProject(e)));
-    }
+	@Override
+	public void update(AnActionEvent e) {
+		super.update(e);
+
+		e.getPresentation().setEnabled(_isValidWorkspaceLocation(getEventProject(e)));
+	}
+
+	private boolean _isValidWorkspaceLocation(Project project) {
+		if (project != null &&
+LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(project.getBasePath())) {
+
+			return true;
+		}
+
+		return false;
+	}
+
 }

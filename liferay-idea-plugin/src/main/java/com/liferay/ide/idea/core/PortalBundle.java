@@ -22,47 +22,46 @@ import java.nio.file.Path;
  * @author Simon Jiang
  *@author Terry Jia
  */
-public interface PortalBundle extends ILiferayPortal
-{
+public interface PortalBundle extends ILiferayPortal {
 
-    Path getAutoDeployPath();
+	Path getAutoDeployPath();
 
-    Path getAppServerDeployDir();
+	Path getAppServerDeployDir();
 
-    Path getAppServerLibGlobalDir();
+	Path getAppServerLibGlobalDir();
 
-    int getJmxRemotePort();
+	int getJmxRemotePort();
 
-    Path getLiferayHome();
+	Path getLiferayHome();
 
-    Path getAppServerDir();
+	Path getAppServerDir();
 
-    String getMainClass();
+	String getMainClass();
 
-    Path getModulesPath();
+	Path getModulesPath();
 
-    Path getOSGiBundlesDir();
+	Path getOSGiBundlesDir();
 
-    Path[] getRuntimeClasspath();
+	Path[] getRuntimeClasspath();
 
-    String[] getRuntimeStartVMArgs();
+	String[] getRuntimeStartVMArgs();
 
-    String[] getRuntimeStopVMArgs();
+	String[] getRuntimeStopVMArgs();
 
-    String[] getRuntimeStartProgArgs();
+	String[] getRuntimeStartProgArgs();
 
-    String[] getRuntimeStopProgArgs();
+	String[] getRuntimeStopProgArgs();
 
-    String getType();
+	String getType();
 
-    String getDisplayName();
+	String getDisplayName();
 
-    Path[] getBundleDependencyJars();
+	Path[] getBundleDependencyJars();
 
-    Path[] getUserLibs();
+	Path[] getUserLibs();
 
-    String getHttpPort();
+	String getHttpPort();
 
-    void setHttpPort(String port);
+	void setHttpPort(String port);
 
 }

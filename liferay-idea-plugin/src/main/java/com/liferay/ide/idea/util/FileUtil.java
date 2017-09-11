@@ -16,6 +16,7 @@
 package com.liferay.ide.idea.util;
 
 import java.io.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,184 +25,202 @@ import java.util.List;
  */
 public class FileUtil {
 
-    public static String[] readLinesFromFile(File file) {
-        return readLinesFromFile(file, false);
-    }
+	public static void copyFile(File src, File dest) {
+		if (src == null || (!src.exists()) || dest == null ||
+dest.isDirectory()) {
 
-    public static String[] readLinesFromFile(File file, boolean includeNewlines) {
-        if (file == null) {
-            return null;
-        }
+			return;
+		}
 
-        if (!file.exists()) {
-            return null;
-        }
+		byte[] buf = new byte[4096];
 
-        List<String> lines = new ArrayList<String>();
-        BufferedReader bufferedReader = null;
+		OutputStream out = null;
+		FileInputStream in = null;
 
-        try {
-            FileReader fileReader = new FileReader(file);
+		try {
+			out = new FileOutputStream(dest);
+			in = new FileInputStream(src);
 
-            bufferedReader = new BufferedReader(fileReader);
+			int avail = in.read(buf);
+			while (avail > 0) {
+				out.write(buf, 0, avail);
+				avail = in.read(buf);
+			}
+		} catch (Exception e) {
+		} finally {
+			try {
+				if (in != null)in.close();
+			} catch (Exception ex) {
 
-            String line;
+				// ignore
 
-            while ((line = bufferedReader.readLine()) != null) {
-                StringBuffer contents = new StringBuffer(line);
+			}
 
-                if (includeNewlines) {
-                    contents.append(System.getProperty("line.separator")); //$NON-NLS-1$
-                }
+			try {
+				if (out != null)out.close();
+			} catch (Exception ex) {
 
-                lines.add(contents.toString());
-            }
-        } catch (Exception e) {
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (Exception e) {
-                    // no need to log, best effort
-                }
-            }
-        }
+				// ignore
 
-        return lines.toArray(new String[lines.size()]);
-    }
+			}
+		}
+	}
 
-    public static void copyFileToDir(File src, File dir) {
-        copyFileToDir(src, src.getName(), dir);
-    }
+	public static void copyFileToDir(File src, File dir) {
+		copyFileToDir(src, src.getName(), dir);
+	}
 
-    public static void copyFileToDir(File src, String newName, File dir) {
-        copyFile(src, new File(dir, newName));
-    }
+	public static void copyFileToDir(File src, String newName, File dir) {
+		copyFile(src, new File(dir, newName));
+	}
 
-    public static void copyFile(File src, File dest) {
-        if (src == null || (!src.exists()) || dest == null || dest.isDirectory()) {
-            return;
-        }
+	public static String readContents(File file, boolean includeNewlines) {
+		if (file == null) {
+			return null;
+		}
 
-        byte[] buf = new byte[4096];
+		if (!file.exists()) {
+			return null;
+		}
 
-        OutputStream out = null;
-        FileInputStream in = null;
+		StringBuffer contents = new StringBuffer();
+		BufferedReader bufferedReader = null;
 
-        try {
-            out = new FileOutputStream(dest);
-            in = new FileInputStream(src);
+		try {
+			FileReader fileReader = new FileReader(file);
 
-            int avail = in.read(buf);
-            while (avail > 0) {
-                out.write(buf, 0, avail);
-                avail = in.read(buf);
-            }
-        } catch (Exception e) {
-        } finally {
-            try {
-                if (in != null)
-                    in.close();
-            } catch (Exception ex) {
-                // ignore
-            }
-            try {
-                if (out != null)
-                    out.close();
-            } catch (Exception ex) {
-                // ignore
-            }
-        }
-    }
+			bufferedReader = new BufferedReader(fileReader);
 
-    public static void writeFile(final File f, final byte[] contents, final String expectedProjectName) {
-        writeFile(f, new ByteArrayInputStream(contents), expectedProjectName);
-    }
+			String line;
 
-    public static void writeFile(final File f, final InputStream contents) {
-        writeFile(f, contents, null);
-    }
+			while ((line = bufferedReader.readLine()) != null) {
+				contents.append(line);
 
-    public static void writeFile(final File f, final InputStream contents, final String expectedProjectName) {
-        if (f.exists()) {
-            if (f.isDirectory()) {
-            }
-        } else {
-            f.getParentFile().mkdirs();
-        }
+				if (includeNewlines) {
+					contents.append(System.getProperty("line.separator"));
+				}
+			}
+		} catch (Exception e) {
+		} finally {
+			if (bufferedReader != null) {
+				try {
+					bufferedReader.close();
+				} catch (IOException e) {
 
-        if (f.exists() && !f.canWrite()) {
-            return;
-        }
+					// best effort no need to log
 
-        final byte[] buffer = new byte[1024];
-        FileOutputStream out = null;
+				}
+			}
+		}
 
-        try {
-            out = new FileOutputStream(f);
+		return contents.toString();
+	}
 
-            for (int count; (count = contents.read(buffer)) != -1; ) {
-                out.write(buffer, 0, count);
-            }
+	public static String[] readLinesFromFile(File file) {
+		return readLinesFromFile(file, false);
+	}
 
-            out.flush();
-        } catch (IOException e) {
-        } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                }
-            }
-        }
+	public static String[] readLinesFromFile(
+		File file, boolean includeNewlines) {
 
-    }
+		if (file == null) {
+			return null;
+		}
 
-    public static void writeFile(final File f, final String contents, final String expectedProjectName) {
-        try {
-            writeFile(f, contents.getBytes("UTF-8"), expectedProjectName);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-    }
+		if (!file.exists()) {
+			return null;
+		}
 
-    public static String readContents(File file, boolean includeNewlines) {
-        if (file == null) {
-            return null;
-        }
+		List<String> lines = new ArrayList<>();
+		BufferedReader bufferedReader = null;
 
-        if (!file.exists()) {
-            return null;
-        }
+		try {
+			FileReader fileReader = new FileReader(file);
 
-        StringBuffer contents = new StringBuffer();
-        BufferedReader bufferedReader = null;
+			bufferedReader = new BufferedReader(fileReader);
 
-        try {
-            FileReader fileReader = new FileReader(file);
+			String line;
 
-            bufferedReader = new BufferedReader(fileReader);
+			while ((line = bufferedReader.readLine()) != null) {
+				StringBuffer contents = new StringBuffer(line);
 
-            String line;
+				if (includeNewlines) {
+					contents.append(System.getProperty("line.separator")); //$NON-NLS-1$
+				}
 
-            while ((line = bufferedReader.readLine()) != null) {
-                contents.append(line);
+				lines.add(contents.toString());
+			}
+		} catch (Exception e) {
+		} finally {
+			if (bufferedReader != null) {
+				try {
+					bufferedReader.close();
+				} catch (Exception e) {
 
-                if (includeNewlines) {
-                    contents.append(System.getProperty("line.separator"));
-                }
-            }
-        } catch (Exception e) {
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException e) {
-                    // best effort no need to log
-                }
-            }
-        }
+					// no need to log, best effort
 
-        return contents.toString();
-    }
+				}
+			}
+		}
+
+		return lines.toArray(new String[lines.size()]);
+	}
+
+	public static void writeFile(
+		final File f, final byte[] contents, final String expectedProjectName) {
+
+		writeFile(f, new ByteArrayInputStream(contents), expectedProjectName);
+	}
+
+	public static void writeFile(final File f, final InputStream contents) {
+		writeFile(f, contents, null);
+	}
+
+	public static void writeFile(
+		final File f, final InputStream contents,
+		final String expectedProjectName) {
+
+		if (f.exists()) {
+			if (f.isDirectory()) {
+			}
+		} else {
+			f.getParentFile().mkdirs();
+		}
+
+		if (f.exists() && !f.canWrite()) {
+			return;
+		}
+
+		final byte[] buffer = new byte[1024];
+		FileOutputStream out = null;
+
+		try {
+			out = new FileOutputStream(f);
+
+			for (int count; (count = contents.read(buffer)) != -1;) {
+				out.write(buffer, 0, count);
+			}
+
+			out.flush();
+		} catch (IOException e) {
+		} finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+				}
+			}
+		}
+	}
+
+	public static void writeFile(
+		final File f, final String contents, final String expectedProjectName) {
+
+		try {
+			writeFile(f, contents.getBytes("UTF-8"), expectedProjectName);
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 }

@@ -20,176 +20,205 @@ import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.treeStructure.Tree;
+
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.util.*;
 
-import javax.swing.*;
-import javax.swing.tree.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.io.File;
 import java.io.IOException;
+
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
+import javax.swing.*;
+import javax.swing.tree.*;
 
 /**
  * @author Terry Jia
  */
 public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
-    private JPanel mainPanel;
-    private JPanel jspsPanel;
-    private JComboBox<String> fragmentHost;
-    private final LiferayModuleFragmentBuilder builder;
-    private final Tree jspsTree;
+	public LiferayModuleFragmentWizardStep(
+		WizardContext wizardContext, LiferayModuleFragmentBuilder builder) {
 
-    public LiferayModuleFragmentWizardStep(WizardContext wizardContext, LiferayModuleFragmentBuilder builder) {
-        this.builder = builder;
-        jspsTree = new Tree();
-        jspsTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
-        JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(jspsTree);
+		this.builder = builder;
+		jspsTree = new Tree();
+		jspsTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
+		JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(
+	jspsTree);
 
-        jspsPanel.add(typesScrollPane, "archetypes");
-        jspsTree.setRootVisible(false);
-        jspsTree.setShowsRootHandles(true);
-        jspsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+		jspsPanel.add(typesScrollPane, "archetypes");
+		jspsTree.setRootVisible(false);
+		jspsTree.setShowsRootHandles(true);
+		jspsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
-        final File liferayHomeDir = new File(wizardContext.getProject().getBasePath(), LiferayWorkspaceUtil.getHomeDir(wizardContext.getProject().getBasePath()));
+		final File liferayHomeDir = new File(
+	wizardContext.getProject().getBasePath(),
+	LiferayWorkspaceUtil.getHomeDir(wizardContext.getProject().getBasePath()));
 
-        if (!liferayHomeDir.exists()) {
-            fragmentHost.addItem("unable to get liferay bundle");
+		if (!liferayHomeDir.exists()) {
+			fragmentHost.addItem("unable to get liferay bundle");
 
-            DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
-            DefaultMutableTreeNode node = new DefaultMutableTreeNode("unable to get liferay bundle", true);
+			DefaultMutableTreeNode root = new DefaultMutableTreeNode(
+	"root", true);
+			DefaultMutableTreeNode node = new DefaultMutableTreeNode(
+	"unable to get liferay bundle", true);
 
-            root.add(node);
+			root.add(node);
 
-            final TreeModel model = new DefaultTreeModel(root);
+			final TreeModel model = new DefaultTreeModel(root);
 
-            jspsTree.setModel(model);
+			jspsTree.setModel(model);
 
-            return;
-        }
+			return;
+		}
 
-        List<String> bundles = ServerUtil.getModuleFileListFrom70Server(liferayHomeDir);
+		List<String> bundles = ServerUtil.getModuleFileListFrom70Server(
+	liferayHomeDir);
 
-        for (String bundle : bundles) {
-            fragmentHost.addItem(bundle);
-        }
+		for (String bundle : bundles) {
+			fragmentHost.addItem(bundle);
+		}
 
-        fragmentHost.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
+		fragmentHost.addActionListener(new ActionListener() {
 
-                ServerUtil.getModuleFileFrom70Server(liferayHomeDir, fragmentHost.getSelectedItem().toString(), LiferayIdeaUI.USER_BUNDLES_DIR);
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				DefaultMutableTreeNode root = new DefaultMutableTreeNode(
+	"root", true);
 
-                File currentOsgiBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, fragmentHost.getSelectedItem().toString());
+				ServerUtil.getModuleFileFrom70Server(
+	liferayHomeDir, fragmentHost.getSelectedItem().toString(),
+	LiferayIdeaUI.USER_BUNDLES_DIR);
 
-                if (currentOsgiBundle.exists()) {
-                    try (JarFile jar = new JarFile(currentOsgiBundle)) {
-                        Enumeration<JarEntry> enu = jar.entries();
+				File currentOsgiBundle = new File(
+	LiferayIdeaUI.USER_BUNDLES_DIR, fragmentHost.getSelectedItem().toString());
 
-                        while (enu.hasMoreElements()) {
-                            JarEntry entry = enu.nextElement();
-                            String name = entry.getName();
+				if (currentOsgiBundle.exists()) {
+					try (JarFile jar = new JarFile(currentOsgiBundle)) {
+						Enumeration<JarEntry> enu = jar.entries();
 
-                            if ((name.startsWith("META-INF/resources/") &&
-                                    (name.endsWith(".jsp") || name.endsWith(".jspf"))) ||
-                                    name.equals("portlet.properties") || name.equals("resource-actions/default.xml")) {
-                                DefaultMutableTreeNode node1 = new DefaultMutableTreeNode(name, true);
-                                root.add(node1);
-                            }
-                        }
-                    } catch (IOException e1) {
-                    }
-                }
+						while (enu.hasMoreElements()) {
+							JarEntry entry = enu.nextElement();
 
-                jspsTree.setModel(new DefaultTreeModel(root));
-            }
-        });
-    }
+							String name = entry.getName();
 
+							if ((name.startsWith("META-INF/resources/") &&
+								 (name.endsWith(".jsp") ||
+name.endsWith(".jspf"))) ||
+									name.equals("portlet.properties") ||
+name.equals("resource-actions/default.xml")) {
 
-    public JComponent getComponent() {
-        return mainPanel;
-    }
+								DefaultMutableTreeNode node1 =
+	new DefaultMutableTreeNode(name, true);
+								root.add(node1);
+							}
+						}
+					} catch (IOException e1) {
+					}
+				}
 
-    @Override
-    public void updateDataModel() {
-        String[] bsnAndVerion = getBsnAndVersion(getFragmentHost());
+				jspsTree.setModel(new DefaultTreeModel(root));
+			}
 
-        builder.setBsnName(bsnAndVerion[0]);
-        builder.setFragmentHost(getFragmentHost());
-        builder.setOverrideFiles(getSelectedJsps());
-        builder.setVersion(bsnAndVerion[1]);
-    }
+		});
+	}
 
-    public String[] getSelectedJsps() {
-        TreePath[] paths = jspsTree.getSelectionPaths();
+	public String[] getBsnAndVersion(String hostBundleName) {
+		final File tempBundle = new File(
+	LiferayIdeaUI.USER_BUNDLES_DIR,
+	hostBundleName.substring(0, hostBundleName.lastIndexOf(".jar")));
 
-        if (CoreUtil.isNullOrEmpty(paths)) {
-            return null;
-        }
+		if (!tempBundle.exists()) {
+			File hostBundle = new File(
+	LiferayIdeaUI.USER_BUNDLES_DIR, hostBundleName);
 
-        String[] jsps = new String[paths.length];
+			try {
+				ZipUtil.unzip(hostBundle, tempBundle);
+			} catch (IOException e) {
+			}
+		}
 
-        for (int i = 0; i < paths.length; i++) {
-            jsps[i] = paths[i].getLastPathComponent().toString();
-        }
-        return jsps;
-    }
+		String bundleSymbolicName = "";
+		String version = "";
 
-    public String getFragmentHost() {
-        return fragmentHost.getSelectedItem().toString();
-    }
+		if (tempBundle.exists()) {
+			final File file = new File(
+	new File(tempBundle, "META-INF"), "MANIFEST.MF");
+		final String[] contents = FileUtil.readLinesFromFile(file);
 
-    public String[] getBsnAndVersion(String hostBundleName) {
-        final File tempBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, hostBundleName.substring(0, hostBundleName.lastIndexOf(".jar")));
+			for (String content : contents) {
+				if (content.contains("Bundle-SymbolicName:")) {
+					bundleSymbolicName = content.substring(
+							content.indexOf("Bundle-SymbolicName:") +
+	"Bundle-SymbolicName:".length());
+				}
 
-        if (!tempBundle.exists()) {
-            File hostBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, hostBundleName);
+				if (content.contains("Bundle-Version:")) {
+					version = content.substring(
+content.indexOf("Bundle-Version:") + "Bundle-Version:".length()).trim();
+				}
+			}
+		}
 
-            try {
-                ZipUtil.unzip(hostBundle, tempBundle);
-            } catch (IOException e) {
-            }
-        }
+		return new String[] {bundleSymbolicName, version};
+	}
 
-        String bundleSymbolicName = "";
-        String version = "";
+	public JComponent getComponent() {
+		return mainPanel;
+	}
 
-        if (tempBundle.exists()) {
-            final File file = new File(new File(tempBundle, "META-INF"), "MANIFEST.MF");
-            final String[] contents = FileUtil.readLinesFromFile(file);
+	public String getFragmentHost() {
+		return fragmentHost.getSelectedItem().toString();
+	}
 
-            for (String content : contents) {
-                if (content.contains("Bundle-SymbolicName:")) {
-                    bundleSymbolicName = content.substring(
-                            content.indexOf("Bundle-SymbolicName:") + "Bundle-SymbolicName:".length());
-                }
+	public String[] getSelectedJsps() {
+		TreePath[] paths = jspsTree.getSelectionPaths();
 
-                if (content.contains("Bundle-Version:")) {
-                    version =
-                            content.substring(content.indexOf("Bundle-Version:") + "Bundle-Version:".length()).trim();
-                }
-            }
-        }
+		if (CoreUtil.isNullOrEmpty(paths)) {
+			return null;
+		}
 
-        return new String[]{bundleSymbolicName, version};
-    }
+		String[] jsps = new String[paths.length];
 
-    @Override
-    public boolean validate() throws ConfigurationException {
-        String validationTitle = "Validation Error";
+		for (int i = 0; i < paths.length; i++) {
+			jsps[i] = paths[i].getLastPathComponent().toString();
+		}
 
-        if (CoreUtil.isNullOrEmpty(getSelectedJsps())) {
-            throw new ConfigurationException("At least select one jsp to override", validationTitle);
-        }
+		return jsps;
+	}
 
-        return true;
-    }
+	@Override
+	public void updateDataModel() {
+		String[] bsnAndVerion = getBsnAndVersion(getFragmentHost());
+
+		builder.setBsnName(bsnAndVerion[0]);
+		builder.setFragmentHost(getFragmentHost());
+		builder.setOverrideFiles(getSelectedJsps());
+		builder.setVersion(bsnAndVerion[1]);
+	}
+
+	@Override
+	public boolean validate() throws ConfigurationException {
+		String validationTitle = "Validation Error";
+
+		if (CoreUtil.isNullOrEmpty(getSelectedJsps())) {
+			throw new ConfigurationException(
+	"At least select one jsp to override", validationTitle);
+		}
+
+		return true;
+	}
+
+	private final LiferayModuleFragmentBuilder builder;
+	private JComboBox<String> fragmentHost;
+	private JPanel jspsPanel;
+	private final Tree jspsTree;
+	private JPanel mainPanel;
 
 }

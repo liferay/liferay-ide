@@ -23,60 +23,71 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.util.JavaParametersUtil;
 import com.intellij.util.PathsList;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Terry Jia
  */
-public class LiferayBundleCommandLineState extends BaseJavaApplicationCommandLineState<LiferayBundleConfiguration> {
+public class LiferayBundleCommandLineState
+	extends BaseJavaApplicationCommandLineState<LiferayBundleConfiguration> {
 
-    public LiferayBundleCommandLineState(@NotNull final LiferayBundleConfiguration configuration, final ExecutionEnvironment environment) {
-        super(environment, configuration);
-    }
+	public LiferayBundleCommandLineState(
+		@NotNull final LiferayBundleConfiguration configuration,
+		final ExecutionEnvironment environment) {
 
-    @Override
-    protected JavaParameters createJavaParameters() throws ExecutionException {
-        final JavaParameters params = new JavaParameters();
+		super(environment, configuration);
+	}
 
-        LiferayBundleConfiguration configuration = getConfiguration();
+	@Override
+	protected JavaParameters createJavaParameters() throws ExecutionException {
+		final JavaParameters params = new JavaParameters();
 
-		final String jreHome = configuration.isAlternativeJrePathEnabled() ? configuration.getAlternativeJrePath() : null;
+		LiferayBundleConfiguration configuration = getConfiguration();
 
-        params.setJdk(JavaParametersUtil.createProjectJdk(configuration.getProject(), jreHome));
+		final String jreHome =
+			configuration.isAlternativeJrePathEnabled() ? configuration.getAlternativeJrePath() : null;
 
-        final String tomcat = configuration.getLiferayBundle() + "/tomcat-8.0.32";
+		params.setJdk(
+	JavaParametersUtil.createProjectJdk(configuration.getProject(), jreHome));
 
-        PathsList classPath = params.getClassPath();
+		final String tomcat =
+	configuration.getLiferayBundle() + "/tomcat-8.0.32";
+
+		PathsList classPath = params.getClassPath();
 
 		classPath.add(new File(tomcat + "/bin/tomcat-juli.jar"));
-        classPath.add(new File(tomcat + "/bin/bootstrap.jar"));
-        classPath.add(new File(tomcat + "/bin/commons-daemon.jar"));
+		classPath.add(new File(tomcat + "/bin/bootstrap.jar"));
+		classPath.add(new File(tomcat + "/bin/commons-daemon.jar"));
 
-        params.setMainClass("org.apache.catalina.startup.Bootstrap");
+		params.setMainClass("org.apache.catalina.startup.Bootstrap");
 
-        ParametersList vmParametersList = params.getVMParametersList();
+		ParametersList vmParametersList = params.getVMParametersList();
 
 		vmParametersList.addParametersString(configuration.getVMParameters());
 
-        vmParametersList.add("-Dcatalina.base=" + tomcat);
-        vmParametersList.add("-Dcatalina.home=" + tomcat);
-        vmParametersList.add("-Dcom.sun.management.jmxremote");
-        vmParametersList.add("-Dcom.sun.management.jmxremote.authenticate=false");
-        vmParametersList.add("-Dcom.sun.management.jmxremote.port=8099");
-        vmParametersList.add("-Dcom.sun.management.jmxremote.ssl=false");
-        vmParametersList.add("-Dfile.encoding=UTF8");
-        vmParametersList.add("-Djava.endorsed.dirs=" + tomcat + "/endorsed");
-        vmParametersList.add("-Djava.io.tmpdir=" + tomcat + "/temp");
-        vmParametersList.add("-Djava.net.preferIPv4Stack=true");
-        vmParametersList.add("-Djava.util.logging.config.file=" + tomcat + "/conf/logging.properties");
-        vmParametersList.add("-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager");
-        vmParametersList.add("-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false");
+		vmParametersList.add("-Dcatalina.base=" + tomcat);
+		vmParametersList.add("-Dcatalina.home=" + tomcat);
+		vmParametersList.add("-Dcom.sun.management.jmxremote");
+		vmParametersList.add(
+	"-Dcom.sun.management.jmxremote.authenticate=false");
+		vmParametersList.add("-Dcom.sun.management.jmxremote.port=8099");
+		vmParametersList.add("-Dcom.sun.management.jmxremote.ssl=false");
+		vmParametersList.add("-Dfile.encoding=UTF8");
+		vmParametersList.add("-Djava.endorsed.dirs=" + tomcat + "/endorsed");
+		vmParametersList.add("-Djava.io.tmpdir=" + tomcat + "/temp");
+		vmParametersList.add("-Djava.net.preferIPv4Stack=true");
+		vmParametersList.add(
+	"-Djava.util.logging.config.file=" + tomcat + "/conf/logging.properties");
+		vmParametersList.add(
+	"-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager");
+		vmParametersList.add(
+	"-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false");
 
-        setupJavaParameters(params);
+		setupJavaParameters(params);
 
-        return params;
-    }
+		return params;
+	}
 
 }

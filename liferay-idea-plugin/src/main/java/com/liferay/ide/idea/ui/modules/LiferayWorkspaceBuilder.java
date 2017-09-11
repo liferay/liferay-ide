@@ -27,104 +27,109 @@ import com.intellij.openapi.module.StdModuleTypes;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModifiableRootModel;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.projectImport.ProjectImportProvider;
+
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.util.BladeCLI;
 
 import java.util.stream.Stream;
 
-import org.jetbrains.annotations.NotNull;
-
 import javax.swing.*;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Terry Jia
  */
 public class LiferayWorkspaceBuilder extends ModuleBuilder {
 
-    public LiferayWorkspaceBuilder() {
-        super();
+	public LiferayWorkspaceBuilder() {
+		this.addListener(new LiferayWorkpaceBuilderListener());
+	}
 
-        this.addListener(new LiferayWorkpaceBuilderListener());
-    }
+	@Override
+	public String getBuilderId() {
+		return getClass().getName();
+	}
 
-    @Override
-    public void setupRootModel(ModifiableRootModel model) throws ConfigurationException {
-        final Project project = model.getProject();
+	@Override
+	public String getDescription() {
+		return _LIFERAY_WORKSPACE;
+	}
 
-        _initWorkspace(project);
-    }
+	public ModuleType getModuleType() {
+		return StdModuleTypes.JAVA;
+	}
+
+	@Override
+	public Icon getNodeIcon() {
+		return LiferayIdeaUI.LIFERAY_ICON;
+	}
+
+	@Override
+	public String getParentGroup() {
+		return "Liferay";
+	}
+
+	@Override
+	public String getPresentableName() {
+		return _LIFERAY_WORKSPACE;
+	}
+
+	@Override
+	public void setupRootModel(ModifiableRootModel model)
+		throws ConfigurationException {
+
+		final Project project = model.getProject();
+
+		_initWorkspace(project);
+	}
 
 	private void _initWorkspace(final Project project) {
 		StringBuilder sb = new StringBuilder();
 
-        sb.append("-b ");
-        sb.append("\"" + project.getBasePath() + "\"");
-        sb.append(" ");
-        sb.append("init ");
-        sb.append("-f");
+		sb.append("-b ");
+		sb.append("\"" + project.getBasePath() + "\" ");
+		sb.append("");
+		sb.append("init ");
+		sb.append("-f");
 
-        BladeCLI.execute(sb.toString());
+		BladeCLI.execute(sb.toString());
 	}
 
-    public ModuleType getModuleType() {
-        return StdModuleTypes.JAVA;
-    }
+	static class LiferayWorkpaceBuilderListener implements ModuleBuilderListener {
+		@Override
+		public void moduleCreated(@NotNull Module module) {
+			Project project = module.getProject();
+			ProjectImportProvider[] importProviders =
+	ProjectImportProvider.PROJECT_IMPORT_PROVIDER.getExtensions();
 
-    @Override
-    public String getBuilderId() {
-        return getClass().getName();
-    }
+			Stream.of(
+				importProviders
+			).filter(
+				importProvider -> importProvider.getId().equals("Gradle")
+			).findFirst(
+			).ifPresent(importProvider -> {
+				AddModuleWizard wizard = new AddModuleWizard(
+	project, project.getBasePath(), importProvider);
 
-    @Override
-    public String getPresentableName() {
-        return _LIFERAY_WORKSPACE;
-    }
+				Application application = ApplicationManager.getApplication();
 
-    @Override
-    public String getParentGroup() {
-        return "Liferay";
-    }
+				application.invokeLater(new Runnable() {
 
-    @Override
-    public String getDescription() {
-        return _LIFERAY_WORKSPACE;
-    }
+					@Override
+					public void run() {
+						if (wizard.showAndGet()) {
+							ImportModuleAction.createFromWizard(
+	project, wizard);
+						}
+					}
 
-    @Override
-    public Icon getNodeIcon() {
-        return LiferayIdeaUI.LIFERAY_ICON;
-    }
+				});
+			});
+		}
+	}
 
-    static class LiferayWorkpaceBuilderListener implements ModuleBuilderListener {
-        @Override
-        public void moduleCreated(@NotNull Module module) {
-            Project project = module.getProject();
-            ProjectImportProvider[] importProviders = ProjectImportProvider.PROJECT_IMPORT_PROVIDER.getExtensions();
-
-            Stream.of(
-                importProviders
-            ).filter(
-                importProvider -> importProvider.getId().equals("Gradle")
-            ).findFirst(
-            ).ifPresent(importProvider -> {
-                AddModuleWizard wizard = new AddModuleWizard(project, project.getBasePath(), importProvider);
-
-                Application application = ApplicationManager.getApplication();
-
-                application.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (wizard.showAndGet()) {
-                            ImportModuleAction.createFromWizard(project, wizard);
-                        }
-                    }
-                });
-            });
-        }
-    }
-    
-    private final static String _LIFERAY_WORKSPACE = "Liferay Workspace";
+	private static final String _LIFERAY_WORKSPACE = "Liferay Workspace";
 
 }

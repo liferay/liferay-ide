@@ -18,6 +18,7 @@ package com.liferay.ide.idea.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+
 import java.util.Properties;
 
 /**
@@ -25,16 +26,16 @@ import java.util.Properties;
  */
 public class PropertiesUtil {
 
-    public static Properties loadProperties(final File f) {
-        final Properties properties = new Properties();
+	public static Properties loadProperties(final File f) {
+		final Properties properties = new Properties();
 
-        try (FileInputStream stream = new FileInputStream(f)) {
-            properties.load(stream);
+		try (FileInputStream stream = new FileInputStream(f)) {
+			properties.load(stream);
 
-            return properties;
-        } catch (IOException ioe) {
-            return null;
-        }
-    }
+			return properties;
+		} catch (IOException ioe) {
+			return null;
+		}
+	}
 
 }

@@ -23,25 +23,24 @@ import java.io.OutputStream;
  */
 public class StringBufferOutputStream extends OutputStream {
 
-    protected StringBuffer buffer = new StringBuffer();
+	public StringBufferOutputStream() {
+	}
 
-    public StringBufferOutputStream() {
-        super();
-    }
+	public void clear() {
+		buffer.delete(0, buffer.length());
+	}
 
-    public void clear() {
-        buffer.delete(0, buffer.length());
-    }
+	public String toString() {
+		return buffer.toString();
+	}
 
-    public String toString() {
-        return buffer.toString();
-    }
+	/**
+	 * @see OutputStream#write(int)
+	 */
+	public void write(int write) throws IOException {
+		buffer.append((char)write);
+	}
 
-    /*
-     * @see java.io.OutputStream#write(int)
-     */
-    public void write(int write) throws IOException {
-        buffer.append((char) write);
-    }
+	protected StringBuffer buffer = new StringBuffer();
 
 }

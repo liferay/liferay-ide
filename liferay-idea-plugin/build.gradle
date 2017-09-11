@@ -1,6 +1,6 @@
 buildscript {
 	dependencies {
-		classpath "org.jetbrains.intellij.plugins:gradle-intellij-plugin:0.2.0-SNAPSHOT"
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "latest.release"
 	}
 
 	repositories {
@@ -8,16 +8,17 @@ buildscript {
 			url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
 		}
 		maven {
-			url 'http://dl.bintray.com/jetbrains/intellij-plugin-service'
-		}
-		maven {
 			url "https://oss.sonatype.org/content/repositories/snapshots/"
 		}
 	}
 }
 
+plugins {
+	id "org.jetbrains.intellij" version "0.2.17"
+}
+
 apply plugin: 'java'
-apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'com.liferay.source.formatter'
 
 dependencies {
 	compile group: "org.apache.ant", name: "ant", version: "1.10.1"

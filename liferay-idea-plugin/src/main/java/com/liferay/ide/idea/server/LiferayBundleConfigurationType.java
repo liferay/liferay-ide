@@ -20,9 +20,9 @@ import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.ConfigurationTypeBase;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
 
 import org.jetbrains.annotations.NotNull;
@@ -30,27 +30,38 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author Terry Jia
  */
-public class LiferayBundleConfigurationType extends ConfigurationTypeBase implements ConfigurationType {
+public class LiferayBundleConfigurationType
+	extends ConfigurationTypeBase implements ConfigurationType {
 
-    public LiferayBundleConfigurationType() {
-        super("LiferayBundleConfiguration", "Liferay Bundle",
-        		"Run or Debug a Liferay Bundle", LiferayIdeaUI.LIFERAY_ICON);
+	public LiferayBundleConfigurationType() {
+		super("LiferayBundleConfiguration", "Liferay Bundle",
+			"Run or Debug a Liferay Bundle", LiferayIdeaUI.LIFERAY_ICON);
 
-        addFactory(new ConfigurationFactoryEx(this) {
+		addFactory(new ConfigurationFactoryEx(this) {
 
-            @Override
-            public void onNewConfigurationCreated(@NotNull RunConfiguration configuration) {
-                LiferayBundleConfiguration jarApplicationConfiguration = (LiferayBundleConfiguration) configuration;
-                if (StringUtil.isEmpty(jarApplicationConfiguration.getWorkingDirectory())) {
-                    String baseDir = FileUtil.toSystemIndependentName(StringUtil.notNullize(configuration.getProject().getBasePath()));
-                    jarApplicationConfiguration.setWorkingDirectory(baseDir);
-                }
-            }
+			@Override
+			public void onNewConfigurationCreated(
+	@NotNull RunConfiguration configuration) {
 
-            public RunConfiguration createTemplateConfiguration(Project project) {
-                return new LiferayBundleConfiguration(project, this, "");
-            }
-        });
-    }
+				LiferayBundleConfiguration jarApplicationConfiguration =
+	(LiferayBundleConfiguration)configuration;
+
+				if (StringUtil.isEmpty(
+jarApplicationConfiguration.getWorkingDirectory())) {
+
+					String baseDir = FileUtil.toSystemIndependentName(
+	StringUtil.notNullize(configuration.getProject().getBasePath()));
+					jarApplicationConfiguration.setWorkingDirectory(baseDir);
+				}
+			}
+
+			public RunConfiguration createTemplateConfiguration(
+	Project project) {
+
+				return new LiferayBundleConfiguration(project, this, "");
+			}
+
+		});
+	}
 
 }

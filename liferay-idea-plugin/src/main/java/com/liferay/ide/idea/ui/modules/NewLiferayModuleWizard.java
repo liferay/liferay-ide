@@ -15,11 +15,6 @@
 
 package com.liferay.ide.idea.ui.modules;
 
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.projectWizard.ChooseTemplateStep;
-import com.intellij.ide.projectWizard.NewProjectWizard;
-import com.intellij.ide.projectWizard.ProjectSettingsStep;
-import com.intellij.ide.projectWizard.ProjectTypeStep;
 import com.intellij.ide.util.newProjectWizard.AbstractProjectWizard;
 import com.intellij.ide.util.newProjectWizard.StepSequence;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
@@ -27,51 +22,56 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
 import com.intellij.openapi.util.Disposer;
 
+import java.awt.*;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.awt.*;
 
 /**
  * @author Terry Jia
  */
 public class NewLiferayModuleWizard extends AbstractProjectWizard {
 
-    private final StepSequence mySequence = new StepSequence();
+	public NewLiferayModuleWizard(
+		@Nullable Project project, @NotNull ModulesProvider modulesProvider,
+		@Nullable String defaultPath) {
 
-    public NewLiferayModuleWizard(@Nullable Project project, @NotNull ModulesProvider modulesProvider, @Nullable String defaultPath) {
-        super("New Liferay Modules", project, defaultPath);
+		super("New Liferay Modules", project, defaultPath);
 
-        init(modulesProvider);
-    }
+		init(modulesProvider);
+	}
 
-    protected void init(@NotNull ModulesProvider modulesProvider) {
-        myWizardContext.setModulesProvider(modulesProvider);
+	@Override
+	public StepSequence getSequence() {
+		return mySequence;
+	}
 
-        final LiferayProjectTypeStep projectTypeStep = new LiferayProjectTypeStep(myWizardContext, this, modulesProvider);
+	@Nullable
+	@Override
+	protected String getDimensionServiceKey() {
+		return "new project wizard";
+	}
 
-        Disposer.register(getDisposable(), projectTypeStep);
+	protected void init(@NotNull ModulesProvider modulesProvider) {
+		myWizardContext.setModulesProvider(modulesProvider);
 
-        mySequence.addCommonStep(projectTypeStep);
+		final LiferayProjectTypeStep projectTypeStep =
+	new LiferayProjectTypeStep(myWizardContext, this, modulesProvider);
 
-        mySequence.addCommonFinishingStep(new LiferayProjectSettingsStep(myWizardContext), null);
+		Disposer.register(getDisposable(), projectTypeStep);
 
-        for (ModuleWizardStep step : mySequence.getAllSteps()) {
-            addStep(step);
-        }
+		mySequence.addCommonStep(projectTypeStep);
 
-        super.init();
-    }
+		mySequence.addCommonFinishingStep(
+	new LiferayProjectSettingsStep(myWizardContext), null);
 
-    @Nullable
-    @Override
-    protected String getDimensionServiceKey() {
-        return "new project wizard";
-    }
+		for (ModuleWizardStep step : mySequence.getAllSteps()) {
+			addStep(step);
+		}
 
-    @Override
-    public StepSequence getSequence() {
-        return mySequence;
-    }
+		super.init();
+	}
+
+	private final StepSequence mySequence = new StepSequence();
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,32 +10,25 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.idea.core;
 
 import com.liferay.ide.idea.util.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.osgi.framework.Version;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -45,163 +38,183 @@ import org.w3c.dom.NodeList;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public abstract class AbstractPortalBundle implements PortalBundle
-{
-    protected Path autoDeployPath;
-    protected Path liferayHome;
-    protected Path modulesPath;
-    protected Path bundlePath;
+public abstract class AbstractPortalBundle implements PortalBundle {
 
-    public AbstractPortalBundle( Path path )
-    {
-        if( path == null )
-        {
-            throw new IllegalArgumentException( "path cannot be null" );
-        }
+	public AbstractPortalBundle(Path path)
+	{
 
-        bundlePath = path;
+		if (path == null)
+		{
+			throw new IllegalArgumentException("path cannot be null");
+		}
 
-        liferayHome = Paths.get(bundlePath.toString(), "..");
+		bundlePath = path;
 
-        autoDeployPath = Paths.get(liferayHome.toString(), "deploy");
+		liferayHome = Paths.get(bundlePath.toString(), "..");
 
-        modulesPath = Paths.get(liferayHome.toString(), "osgi");
-    }
+		autoDeployPath = Paths.get(liferayHome.toString(), "deploy");
 
-    @Override
-    public Path getAppServerDir()
-    {
-        return bundlePath;
-    }
+		modulesPath = Paths.get(liferayHome.toString(), "osgi");
+	}
 
-    @Override
-    public Path[] getBundleDependencyJars()
-    {
-        final List<Path> libs = new ArrayList<Path>();
-        Path bundleLibPath =  getAppServerLibDir();
-        List<File> libFiles;
+	@Override
+	public Path getAppServerDir()
+	{
 
-        try
-        {
-            libFiles = FileListing.getFileListing( new File( bundleLibPath.toString() ) );
+		return bundlePath;
+	}
 
-            for( File lib : libFiles )
-            {
-                if( lib.exists() && lib.getName().endsWith( ".jar" ) )
-                {
-                    libs.add( lib.toPath() );
-                }
-            }
-        }
-        catch( FileNotFoundException e )
-        {
-        }
+	@Override
+	public Path getAutoDeployPath()
+	{
 
-        return libs.toArray( new Path[libs.size()] );
-    }
+		return autoDeployPath;
+	}
 
-    protected abstract Path getAppServerLibDir();
+	@Override
+	public Path[] getBundleDependencyJars()
+	{
 
-    protected abstract int getDefaultJMXRemotePort();
+		final List<Path> libs = new ArrayList<>();
+		Path bundleLibPath = getAppServerLibDir();
+		List<File> libFiles;
 
-    @Override
-    public String[] getHookSupportedProperties()
-    {
-        Path portalDir = getAppServerPortalDir();
-        Path[] extraLibs = getBundleDependencyJars();
+		try
+		{
+			libFiles = FileListing.getFileListing(
+	new File(bundleLibPath.toString()));
 
-        return new LiferayPortalValueLoader( portalDir, extraLibs ).loadHookPropertiesFromClass();
-    }
+			for (File lib : libFiles)
+			{
+				if (lib.exists() && lib.getName().endsWith(".jar"))
+				{
+					libs.add(lib.toPath());
+				}
+			}
+		}
+		catch (FileNotFoundException e)
+		{
+		}
 
-    protected String getHttpPortValue(
-        File xmlFile, String tagName, String attriName, String attriValue, String targetName )
-    {
-        DocumentBuilder db = null;
+		return libs.toArray(new Path[libs.size()]);
+	}
 
-        DocumentBuilderFactory dbf = null;
+	@Override
+	public String[] getHookSupportedProperties()
+	{
 
-        try
-        {
-            dbf = DocumentBuilderFactory.newInstance();
+		Path portalDir = getAppServerPortalDir();
+		Path[] extraLibs = getBundleDependencyJars();
 
-            db = dbf.newDocumentBuilder();
+		return new LiferayPortalValueLoader(
+	portalDir, extraLibs).loadHookPropertiesFromClass();
+	}
 
-            Document document = db.parse( xmlFile );
+	@Override
+	public int getJmxRemotePort()
+	{
 
-            NodeList connectorNodes = document.getElementsByTagName( tagName );
+		return getDefaultJMXRemotePort();
+	}
 
-            for( int i = 0; i < connectorNodes.getLength(); i++ )
-            {
-                Node node = connectorNodes.item( i );
+	@Override
+	public Path getLiferayHome()
+	{
 
-                NamedNodeMap attributes = node.getAttributes();
+		return liferayHome;
+	}
 
-                Node protocolNode = attributes.getNamedItem( attriName );
+	@Override
+	public Path getModulesPath()
+	{
 
-                if( protocolNode != null )
-                {
-                    if( protocolNode.getNodeValue().equals( attriValue ) )
-                    {
-                        Node portNode = attributes.getNamedItem( targetName );
+		return modulesPath;
+	}
 
-                        return portNode.getNodeValue();
-                    }
-                }
-            }
-        }
-        catch( Exception e )
-        {
-        }
+	@Override
+	public Path getOSGiBundlesDir()
+	{
 
-        return null;
-    }
+		if (liferayHome == null) {
+			return null;
+		}
 
-    @Override
-    public int getJmxRemotePort()
-    {
-        return getDefaultJMXRemotePort();
-    }
+		return Paths.get(liferayHome.toString(), "osgi");
+	}
 
-    @Override
-    public Path getAutoDeployPath()
-    {
-        return autoDeployPath;
-    }
+	@Override
+	public Properties getPortletCategories()
+	{
 
-    @Override
-    public Path getModulesPath()
-    {
-        return modulesPath;
-    }
+		return null;
+	}
 
-    @Override
-    public Path getLiferayHome()
-    {
-        return liferayHome;
-    }
+	@Override
+	public Properties getPortletEntryCategories()
+	{
 
-    @Override
-    public String getVersion()
-    {
-        return "";
-    }
+		return null;
+	}
 
-    @Override
-    public Path getOSGiBundlesDir()
-    {
-        return liferayHome == null ? null : Paths.get(liferayHome.toString(),"osgi");
-    }
+	@Override
+	public String getVersion()
+	{
 
-    @Override
-    public Properties getPortletCategories()
-    {
-        return null;
-    }
+		return "";
+	}
 
-    @Override
-    public Properties getPortletEntryCategories()
-    {
-        return null;
-    }
+	protected abstract Path getAppServerLibDir();
+
+	protected abstract int getDefaultJMXRemotePort();
+
+	protected String getHttpPortValue(
+		File xmlFile, String tagName, String attriName, String attriValue,
+		String targetName)
+			{
+
+		DocumentBuilder db = null;
+
+		DocumentBuilderFactory dbf = null;
+
+		try
+		{
+			dbf = DocumentBuilderFactory.newInstance();
+
+			db = dbf.newDocumentBuilder();
+
+			Document document = db.parse(xmlFile);
+
+			NodeList connectorNodes = document.getElementsByTagName(tagName);
+
+			for (int i = 0; i < connectorNodes.getLength(); i++)
+			{
+				Node node = connectorNodes.item(i);
+
+				NamedNodeMap attributes = node.getAttributes();
+
+				Node protocolNode = attributes.getNamedItem(attriName);
+
+				if (protocolNode != null)
+				{
+					if (protocolNode.getNodeValue().equals(attriValue))
+					{
+						Node portNode = attributes.getNamedItem(targetName);
+
+						return portNode.getNodeValue();
+					}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+		}
+
+		return null;
+	}
+
+	protected Path autoDeployPath;
+	protected Path bundlePath;
+	protected Path liferayHome;
+	protected Path modulesPath;
 
 }

@@ -23,109 +23,115 @@ import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.StdModuleTypes;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.roots.ModifiableRootModel;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.util.BladeCLI;
 import com.liferay.ide.idea.util.CoreUtil;
 
-import javax.swing.*;
 import java.io.File;
+
+import javax.swing.*;
 
 /**
  * @author Terry Jia
  */
 public class LiferayModuleBuilder extends ModuleBuilder {
 
-    private String type;
-    private String className;
-    private String packageName;
+	@Override
+	public String getBuilderId() {
+		return getClass().getName();
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public ModuleWizardStep getCustomOptionsStep(
+		WizardContext context, Disposable parentDisposable) {
 
-    public String getType() {
-        return this.type;
-    }
+		return new LiferayModuleWizardStep(this);
+	}
 
-    public void setClassName(String className) {
-        this.className = className;
-    }
+	@Override
+	public String getDescription() {
+		return _LIFERAY_MODULES;
+	}
 
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
-    }
+	public ModuleType getModuleType() {
+		return StdModuleTypes.JAVA;
+	}
 
-    @Override
-    public String getBuilderId() {
-        return getClass().getName();
-    }
+	@Override
+	public Icon getNodeIcon() {
+		return LiferayIdeaUI.LIFERAY_ICON;
+	}
 
-    private VirtualFile createAndGetContentEntry() {
-        final String path = FileUtil.toSystemIndependentName(getContentEntryPath());
+	@Override
+	public String getPresentableName() {
+		return _LIFERAY_MODULES;
+	}
 
-        new File(path).mkdirs();
+	public String getType() {
+		return this.type;
+	}
 
-        return LocalFileSystem.getInstance().refreshAndFindFileByPath(path);
-    }
+	public void setClassName(String className) {
+		this.className = className;
+	}
 
-    @Override
-    public void setupRootModel(ModifiableRootModel rootModel) throws ConfigurationException {
-        final VirtualFile moduleDir = createAndGetContentEntry();
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
 
-        StringBuilder sb = new StringBuilder();
+	public void setType(String type) {
+		this.type = type;
+	}
 
-        sb.append("create ");
-        sb.append("-d \"" + moduleDir.getParent().getPath() + "\" ");
-        sb.append("-t " + type + " ");
+	@Override
+	public void setupRootModel(ModifiableRootModel rootModel)
+		throws ConfigurationException {
 
-        if (!CoreUtil.isNullOrEmpty(className)) {
-            sb.append("-c " + className + " ");
-        }
+		final VirtualFile moduleDir = createAndGetContentEntry();
 
-        if (!CoreUtil.isNullOrEmpty(packageName)) {
-            sb.append("-p " + packageName + " ");
-        }
+		StringBuilder sb = new StringBuilder();
 
-        sb.append("\"" + moduleDir.getName() + "\" ");
+		sb.append("create ");
+		sb.append("-d \"" + moduleDir.getParent().getPath() + "\" ");
+		sb.append("-t " + type + " ");
 
-        BladeCLI.execute(sb.toString());
+		if (!CoreUtil.isNullOrEmpty(className)) {
+			sb.append("-c " + className + " ");
+		}
 
-        rootModel.addContentEntry(moduleDir);
+		if (!CoreUtil.isNullOrEmpty(packageName)) {
+			sb.append("-p " + packageName + " ");
+		}
 
-        if (myJdk != null) {
-            rootModel.setSdk(myJdk);
-        } else {
-            rootModel.inheritSdk();
-        }
+		sb.append("\"" + moduleDir.getName() + "\" ");
 
-    }
+		BladeCLI.execute(sb.toString());
 
-    public ModuleType getModuleType() {
-        return StdModuleTypes.JAVA;
-    }
+		rootModel.addContentEntry(moduleDir);
 
-    @Override
-    public String getPresentableName() {
-        return _LIFERAY_MODULES;
-    }
+		if (myJdk != null) {
+			rootModel.setSdk(myJdk);
+		} else {
+			rootModel.inheritSdk();
+		}
+	}
 
-    @Override
-    public String getDescription() {
-        return _LIFERAY_MODULES;
-    }
+	private VirtualFile createAndGetContentEntry() {
+		final String path = FileUtil.toSystemIndependentName(
+	getContentEntryPath());
 
-    public ModuleWizardStep getCustomOptionsStep(WizardContext context, Disposable parentDisposable) {
-        return new LiferayModuleWizardStep(this);
-    }
+		new File(path).mkdirs();
 
-    @Override
-    public Icon getNodeIcon() {
-        return LiferayIdeaUI.LIFERAY_ICON;
-    }
+		return LocalFileSystem.getInstance().refreshAndFindFileByPath(path);
+	}
 
-    private final static String _LIFERAY_MODULES = "Liferay Modules";
+	private static final String _LIFERAY_MODULES = "Liferay Modules";
+
+	private String className;
+	private String packageName;
+	private String type;
+
 }

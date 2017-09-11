@@ -27,6 +27,7 @@ import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.util.io.FileUtilRt;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.util.BladeCLI;
 import com.liferay.ide.idea.util.FileUtil;
@@ -34,7 +35,9 @@ import com.liferay.ide.idea.util.SwitchConsumer;
 import com.liferay.ide.idea.util.SwitchConsumer.SwitchConsumerBuilder;
 
 import java.io.File;
+
 import java.nio.file.FileSystems;
+
 import java.util.stream.Stream;
 
 import javax.swing.Icon;
@@ -44,53 +47,63 @@ import javax.swing.Icon;
  */
 public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
-    private String _fragmentHost;
-    private String[] _overrideFiles;
-    private String _bsn;
-    private String _version;
+	@Override
+	public String getBuilderId() {
+		return getClass().getName();
+	}
 
-    public void setFragmentHost(String fragmentHost) {
-        _fragmentHost = fragmentHost;
-    }
+	public ModuleWizardStep getCustomOptionsStep(
+		WizardContext context, Disposable parentDisposable) {
 
-    public void setBsnName(String bsn) {
-        _bsn = bsn;
-    }
+		return new LiferayModuleFragmentWizardStep(context, this);
+	}
 
-    public void setVersion(String version) {
-        _version = version;
-    }
+	@Override
+	public String getDescription() {
+		return _LIFERAY_FRAGMENT_MODULES;
+	}
 
-    public void setOverrideFiles(String[] overrideFiles) {
-        _overrideFiles = overrideFiles;
-    }
+	public ModuleType getModuleType() {
+		return StdModuleTypes.JAVA;
+	}
 
-    @Override
-    public String getBuilderId() {
-        return getClass().getName();
-    }
+	@Override
+	public Icon getNodeIcon() {
+		return LiferayIdeaUI.LIFERAY_ICON;
+	}
 
-    private VirtualFile createAndGetContentEntry(Project project) {
-        String path = FileUtilRt.toSystemIndependentName(getContentEntryPath());
+	@Override
+	public String getPresentableName() {
+		return _LIFERAY_FRAGMENT_MODULES;
+	}
 
-        File file = new File(path);
+	public void setBsnName(String bsn) {
+		_bsn = bsn;
+	}
 
-        file.mkdirs();
+	public void setFragmentHost(String fragmentHost) {
+		_fragmentHost = fragmentHost;
+	}
 
-        return LocalFileSystem.getInstance().refreshAndFindFileByPath(path);
-    }
+	public void setOverrideFiles(String[] overrideFiles) {
+		_overrideFiles = overrideFiles;
+	}
 
-    @Override
-    public void setupRootModel(ModifiableRootModel rootModel) throws ConfigurationException {
-        final Project project = rootModel.getProject();
+	@Override
+	public void setupRootModel(ModifiableRootModel rootModel)
+		throws ConfigurationException {
 
-        final VirtualFile projectRoot = createAndGetContentEntry(project);
+		final Project project = rootModel.getProject();
 
-        _createProject(projectRoot);
+		final VirtualFile projectRoot = createAndGetContentEntry(project);
 
-        final File hostBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, _fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
+		_createProject(projectRoot);
 
-        SwitchConsumerBuilder<File> switch_ = SwitchConsumer.newBuilder();
+		final File hostBundle = new File(
+	LiferayIdeaUI.USER_BUNDLES_DIR,
+	_fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
+
+		SwitchConsumerBuilder<File> switch_ = SwitchConsumer.newBuilder();
 
 		Stream.of(_overrideFiles).map(
 			overrideFile -> new File(hostBundle, overrideFile)
@@ -103,113 +116,120 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 			.addCase(
 				f -> f.getName().contains("default.xml"),
 				f -> _createDefaultExtXmlFile(projectRoot, f))
-			.setDefault(
-				f -> _copyOtherResource(projectRoot, f))
+			.setDefault(f -> _copyOtherResource(projectRoot, f))
 			.build()
 		);
 
-        rootModel.addContentEntry(projectRoot);
+		rootModel.addContentEntry(projectRoot);
 
-        if (myJdk != null) {
-            rootModel.setSdk(myJdk);
-        } else {
-            rootModel.inheritSdk();
-        }
-    }
-
-	private void _createProject(final VirtualFile projectRoot) {
-		final StringBuilder sb = new StringBuilder();
-
-        sb.append("create ");
-        sb.append("-d \"" + projectRoot.getParent().getPath() + "\" ");
-        sb.append("-t " + "fragment" + " ");
-
-        if (!_bsn.equals("")) {
-            sb.append("-h " + _bsn + " ");
-        }
-
-        if (!_version.equals("")) {
-            sb.append("-H " + _version + " ");
-        }
-
-        sb.append("\"" + projectRoot.getName() + "\" ");
-
-        BladeCLI.execute(sb.toString());
+		if (myJdk != null) {
+			rootModel.setSdk(myJdk);
+		} else {
+			rootModel.inheritSdk();
+		}
 	}
 
-	private void _copyOtherResource(final VirtualFile projectRoot, final File fragmentFile) {
+	public void setVersion(String version) {
+		_version = version;
+	}
+
+	private void _copyOtherResource(
+		final VirtualFile projectRoot, final File fragmentFile) {
+
 		String parent = fragmentFile.getParentFile().getPath();
+
 		parent = parent.replaceAll("\\\\", "/");
 		String metaInfResources = "META-INF/resources";
 
-		parent = parent.substring(parent.indexOf(metaInfResources) + metaInfResources.length());
+		parent = parent.substring(
+			parent.indexOf(metaInfResources) + metaInfResources.length());
 
-		File folder = _getProjectFile(projectRoot, "src/main/resources/META-INF/resources");
+		File folder = _getProjectFile(
+			projectRoot, "src/main/resources/META-INF/resources");
 
 		folder.mkdirs();
 
 		if (!parent.equals("resources") && !parent.equals("")) {
-		    folder = new File(folder, parent);
-		    folder.mkdirs();
+			folder = new File(folder, parent);
+			folder.mkdirs();
 		}
 
 		FileUtil.copyFileToDir(fragmentFile, folder);
 	}
 
-	private File _getProjectFile(final VirtualFile projectRoot, String path) {
-		return FileSystems.getDefault().getPath(projectRoot.getPath(), path).toFile();
+	private void _copyPortletExtProperties(
+		final VirtualFile projectRoot, File f) {
+
+		File folder = _getProjectFile(projectRoot, "src/main/java");
+
+		FileUtil.copyFileToDir(f, "portlet-ext.properties", folder);
 	}
 
-	private void _createDefaultExtXmlFile(final VirtualFile projectRoot, File f) {
-		File folder = _getProjectFile(projectRoot,  "src/main/resources/resource-actions");
+	private void _createDefaultExtXmlFile(
+		final VirtualFile projectRoot, File f) {
+
+		File folder = _getProjectFile(
+			projectRoot, "src/main/resources/resource-actions");
 
 		folder.mkdirs();
 
 		FileUtil.copyFileToDir(f, "default-ext.xml", folder);
 
 		try {
-		    File extFile = _getProjectFile(projectRoot, "src/main/resources/portlet-ext.properties");
+			File extFile = _getProjectFile(
+			projectRoot, "src/main/resources/portlet-ext.properties");
 
-		    extFile.createNewFile();
+			extFile.createNewFile();
 
-		    String extFileContent =
-		            "resource.actions.configs=resource-actions/default.xml,resource-actions/default-ext.xml";
+			String extFileContent =
+				"resource.actions.configs=resource-actions/default.xml,resource-actions/default-ext.xml";
 
-		    FileUtil.writeFile(extFile, extFileContent, null);
+			FileUtil.writeFile(extFile, extFileContent, null);
 		}
 		catch (Exception e) {
 		}
 	}
 
-	private void _copyPortletExtProperties(final VirtualFile projectRoot, File f) {
-		File folder = _getProjectFile(projectRoot, "src/main/java");
+	private void _createProject(final VirtualFile projectRoot) {
+		final StringBuilder sb = new StringBuilder();
 
-		FileUtil.copyFileToDir(f, "portlet-ext.properties", folder);
+		sb.append("create ");
+		sb.append("-d \"" + projectRoot.getParent().getPath() + "\" ");
+		sb.append("-t " + "fragment" + " ");
+
+		if (!_bsn.equals("")) {
+			sb.append("-h " + _bsn + " ");
+		}
+
+		if (!_version.equals("")) {
+			sb.append("-H " + _version + " ");
+		}
+
+		sb.append("\"" + projectRoot.getName() + "\" ");
+
+		BladeCLI.execute(sb.toString());
 	}
 
-    public ModuleType getModuleType() {
-        return StdModuleTypes.JAVA;
-    }
+	private File _getProjectFile(final VirtualFile projectRoot, String path) {
+		return FileSystems.getDefault().getPath(projectRoot.getPath(), path).toFile();
+	}
 
-    @Override
-    public String getPresentableName() {
-        return _LIFERAY_FRAGMENT_MODULES;
-    }
+	private VirtualFile createAndGetContentEntry(Project project) {
+		String path = FileUtilRt.toSystemIndependentName(getContentEntryPath());
 
-    @Override
-    public String getDescription() {
-        return _LIFERAY_FRAGMENT_MODULES;
-    }
+		File file = new File(path);
 
-    public ModuleWizardStep getCustomOptionsStep(WizardContext context, Disposable parentDisposable) {
-        return new LiferayModuleFragmentWizardStep(context, this);
-    }
+		file.mkdirs();
 
-    @Override
-    public Icon getNodeIcon() {
-        return LiferayIdeaUI.LIFERAY_ICON;
-    }
-    
-    private final static String _LIFERAY_FRAGMENT_MODULES = "Liferay Fragment Modules";
+		return LocalFileSystem.getInstance().refreshAndFindFileByPath(path);
+	}
+
+	private static final String _LIFERAY_FRAGMENT_MODULES =
+	"Liferay Fragment Modules";
+
+	private String _bsn;
+	private String _fragmentHost;
+	private String[] _overrideFiles;
+	private String _version;
 
 }
