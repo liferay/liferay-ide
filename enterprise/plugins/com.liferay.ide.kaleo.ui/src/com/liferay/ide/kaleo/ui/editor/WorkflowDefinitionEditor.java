@@ -13,18 +13,15 @@ package com.liferay.ide.kaleo.ui.editor;
 
 import static com.liferay.ide.core.util.CoreUtil.empty;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.kaleo.core.IKaleoConnection;
 import com.liferay.ide.kaleo.core.KaleoCore;
 import com.liferay.ide.kaleo.core.model.WorkflowDefinition;
-import com.liferay.ide.kaleo.core.util.IWorkflowValidation;
 import com.liferay.ide.kaleo.ui.KaleoUI;
 import com.liferay.ide.kaleo.ui.KaleoUIPreferenceConstants;
 import com.liferay.ide.kaleo.ui.WorkflowDesignerPerspectiveFactory;
 import com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionEntry;
 import com.liferay.ide.kaleo.ui.util.KaleoUtil;
 
-import java.io.ByteArrayInputStream;
 import java.util.Iterator;
 import java.util.Locale;
 
@@ -35,7 +32,6 @@ import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.swt.gef.SapphireDiagramEditor;
@@ -49,7 +45,6 @@ import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.json.JSONException;
@@ -270,7 +265,7 @@ public class WorkflowDefinitionEditor extends SapphireEditorForXml
     {
         IEditorInput editorInput = this.getEditorInput();
 
-        if( editorInput instanceof WorkflowDefinitionEditorInput )
+       /* if( editorInput instanceof WorkflowDefinitionEditorInput )
         {
             WorkflowDefinitionEditorInput definitionInput = (WorkflowDefinitionEditorInput) editorInput;
 
@@ -295,7 +290,7 @@ public class WorkflowDefinitionEditor extends SapphireEditorForXml
             {
                 //do nothing
             }
-        }
+        }*/
 
         if( this.diagramEditor != null )
         {
