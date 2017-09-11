@@ -93,7 +93,9 @@
                         <content>${ Name == null ? &quot;&lt;state&gt;&quot; : Name }</content>
                         <sequence-layout-constraint>
                             <horizontal-alignment>center</horizontal-alignment>
+                            <margin-right>5</margin-right>
                         </sequence-layout-constraint>
+                        <truncatable>false</truncatable>
                     </text>
                 </content>
                 <sequence-layout>
@@ -373,7 +375,9 @@
                         <content>${ Name == null ? &quot;&lt;task&gt;&quot; : Name }</content>
                         <sequence-layout-constraint>
                             <horizontal-alignment>center</horizontal-alignment>
+                            <margin-right>5</margin-right>
                         </sequence-layout-constraint>
+                        <truncatable>false</truncatable>
                     </text>
                 </content>
             </rectangle>
@@ -685,7 +689,9 @@
                         <content>${ Name == null ? &quot;&lt;condition&gt;&quot; : Name }</content>
                         <sequence-layout-constraint>
                             <horizontal-alignment>center</horizontal-alignment>
+                            <margin-right>5</margin-right>
                         </sequence-layout-constraint>
+                        <truncatable>false</truncatable>
                     </text>
                 </content>
             </rectangle>
@@ -940,7 +946,9 @@
                         <content>${ Name == null ? &quot;&lt;fork&gt;&quot; : Name }</content>
                         <sequence-layout-constraint>
                             <horizontal-alignment>center</horizontal-alignment>
+                            <margin-right>5</margin-right>
                         </sequence-layout-constraint>
+                        <truncatable>false</truncatable>
                     </text>
                 </content>
             </rectangle>
@@ -1103,7 +1111,9 @@
                         <content>${ Name == null ? &quot;&lt;join&gt;&quot; : Name }</content>
                         <sequence-layout-constraint>
                             <horizontal-alignment>center</horizontal-alignment>
+                            <margin-right>5</margin-right>
                         </sequence-layout-constraint>
+                        <truncatable>false</truncatable>
                     </text>
                 </content>
             </rectangle>
@@ -1293,7 +1303,9 @@
                         <content>${ Name == null ? &quot;&lt;join-xor&gt;&quot; : Name }</content>
                         <sequence-layout-constraint>
                             <horizontal-alignment>center</horizontal-alignment>
+                            <margin-right>5</margin-right>
                         </sequence-layout-constraint>
+                        <truncatable>false</truncatable>
                     </text>
                 </content>
             </rectangle>
