@@ -31,24 +31,17 @@ import java.util.List;
  */
 public class FileListing {
 
-	static public List<File> getFileListing(File aStartingDir) throws FileNotFoundException
-	{
+	static public List<File> getFileListing(File aStartingDir) throws FileNotFoundException {
 		List<File> result = new ArrayList<>();
 
 		File[] filesAndDirs = aStartingDir.listFiles();
 
 		List<File> filesDirs = Arrays.asList(filesAndDirs);
 
-		for (File file : filesDirs)
-		{
-			result.add(file); // always add, even if directory
+		for (File file : filesDirs) {
+			result.add(file);
 
-			if (!file.isFile())
-			{
-
-				// must be a directory
-				// recursive call!
-
+			if (!file.isFile()) {
 				List<File> deeperList = getFileListing(file);
 
 				result.addAll(deeperList);
@@ -65,14 +58,12 @@ public class FileListing {
 	 * @param aStartingDir
 	 *            is a valid directory, which can be read.
 	 */
-	static public List<File> getFileListing(File aStartingDir, boolean sort) throws FileNotFoundException
-	{
+	static public List<File> getFileListing(File aStartingDir, boolean sort) throws FileNotFoundException {
 		validateDirectory(aStartingDir);
 
 		List<File> result = getFileListing(aStartingDir);
 
-		if (sort)
-		{
+		if (sort) {
 			Collections.sort(result);
 		}
 
@@ -82,27 +73,21 @@ public class FileListing {
 	/**
 	 * Directory is valid if it exists, does not represent a file, and can be read.
 	 */
-	static private void validateDirectory(File aDirectory) throws FileNotFoundException
-	{
-		if (aDirectory == null)
-		{
-			throw new IllegalArgumentException("Directory should not be null."); //$NON-NLS-1$
+	static private void validateDirectory(File aDirectory) throws FileNotFoundException {
+		if (aDirectory == null) {
+			throw new IllegalArgumentException("Directory should not be null.");
 		}
 
-		if (!aDirectory.exists())
-		{
-			throw new FileNotFoundException("Directory does not exist: " + aDirectory); //$NON-NLS-1$
+		if (!aDirectory.exists()) {
+			throw new FileNotFoundException("Directory does not exist: " + aDirectory);
 		}
 
-		if (!aDirectory.isDirectory())
-		{
-			throw new IllegalArgumentException("Is not a directory: " + aDirectory); //$NON-NLS-1$
+		if (!aDirectory.isDirectory()) {
+			throw new IllegalArgumentException("Is not a directory: " + aDirectory);
 		}
 
-		if (!aDirectory.canRead())
-		{
-			throw new IllegalArgumentException("Directory cannot be read: " + aDirectory); //$NON-NLS-1$
+		if (!aDirectory.canRead()) {
+			throw new IllegalArgumentException("Directory cannot be read: " + aDirectory);
 		}
 	}
-
 }

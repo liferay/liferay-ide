@@ -116,8 +116,7 @@ public class LiferayPortalValueLoader {
 		}
 	}
 
-	private Object[] getFieldValuesFromClass(
-		String loadClassName, String fieldName)
+	private Object[] getFieldValuesFromClass(String loadClassName, String fieldName)
 			{
 
 		Object[] retval = new Object[0];
@@ -136,8 +135,7 @@ public class LiferayPortalValueLoader {
 		return retval;
 	}
 
-	private Object getMethodValueFromClass(
-		String loadClassName, String methodName)
+	private Object getMethodValueFromClass(String loadClassName, String methodName)
 			{
 
 		Object retval = null;
@@ -162,8 +160,7 @@ public class LiferayPortalValueLoader {
 
 		if (portalDir != null)
 		{
-			final File libDir = Paths.get(
-	portalDir.toString(), "WEB-INF", "lib").toFile();
+			final File libDir = Paths.get(portalDir.toString(), "WEB-INF", "lib").toFile();
 
 			addLibs(libDir, libUrlList);
 		}

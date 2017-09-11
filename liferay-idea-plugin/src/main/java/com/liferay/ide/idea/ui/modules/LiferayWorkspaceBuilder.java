@@ -77,9 +77,7 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
 	}
 
 	@Override
-	public void setupRootModel(ModifiableRootModel model)
-		throws ConfigurationException {
-
+	public void setupRootModel(ModifiableRootModel model) throws ConfigurationException {
 		final Project project = model.getProject();
 
 		_initWorkspace(project);
@@ -110,8 +108,7 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
 				importProvider -> importProvider.getId().equals("Gradle")
 			).findFirst(
 			).ifPresent(importProvider -> {
-				AddModuleWizard wizard = new AddModuleWizard(
-	project, project.getBasePath(), importProvider);
+				AddModuleWizard wizard = new AddModuleWizard(project, project.getBasePath(), importProvider);
 
 				Application application = ApplicationManager.getApplication();
 
@@ -120,8 +117,7 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
 					@Override
 					public void run() {
 						if (wizard.showAndGet()) {
-							ImportModuleAction.createFromWizard(
-	project, wizard);
+							ImportModuleAction.createFromWizard(project, wizard);
 						}
 					}
 

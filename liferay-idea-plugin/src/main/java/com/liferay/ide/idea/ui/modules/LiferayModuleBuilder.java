@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.ui.modules;
@@ -33,7 +32,7 @@ import com.liferay.ide.idea.util.CoreUtil;
 
 import java.io.File;
 
-import javax.swing.*;
+import javax.swing.Icon;
 
 /**
  * @author Terry Jia
@@ -45,9 +44,7 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 		return getClass().getName();
 	}
 
-	public ModuleWizardStep getCustomOptionsStep(
-		WizardContext context, Disposable parentDisposable) {
-
+	public ModuleWizardStep getCustomOptionsStep(WizardContext context, Disposable parentDisposable) {
 		return new LiferayModuleWizardStep(this);
 	}
 
@@ -87,26 +84,34 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 	}
 
 	@Override
-	public void setupRootModel(ModifiableRootModel rootModel)
-		throws ConfigurationException {
-
+	public void setupRootModel(ModifiableRootModel rootModel) throws ConfigurationException {
 		final VirtualFile moduleDir = createAndGetContentEntry();
 
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("create ");
-		sb.append("-d \"" + moduleDir.getParent().getPath() + "\" ");
-		sb.append("-t " + type + " ");
+		sb.append("-d \"");
+		sb.append(moduleDir.getParent().getPath());
+		sb.append("\" ");
+		sb.append("-t ");
+		sb.append(type);
+		sb.append(" ");
 
 		if (!CoreUtil.isNullOrEmpty(className)) {
-			sb.append("-c " + className + " ");
+			sb.append("-c ");
+			sb.append(className);
+			sb.append(" ");
 		}
 
 		if (!CoreUtil.isNullOrEmpty(packageName)) {
-			sb.append("-p " + packageName + " ");
+			sb.append("-p ");
+			sb.append(packageName);
+			sb.append(" ");
 		}
 
-		sb.append("\"" + moduleDir.getName() + "\" ");
+		sb.append("\"");
+		sb.append(moduleDir.getName());
+		sb.append("\" ");
 
 		BladeCLI.execute(sb.toString());
 
@@ -114,14 +119,14 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 
 		if (myJdk != null) {
 			rootModel.setSdk(myJdk);
-		} else {
+		}
+		else {
 			rootModel.inheritSdk();
 		}
 	}
 
 	private VirtualFile createAndGetContentEntry() {
-		final String path = FileUtil.toSystemIndependentName(
-	getContentEntryPath());
+		final String path = FileUtil.toSystemIndependentName(getContentEntryPath());
 
 		new File(path).mkdirs();
 

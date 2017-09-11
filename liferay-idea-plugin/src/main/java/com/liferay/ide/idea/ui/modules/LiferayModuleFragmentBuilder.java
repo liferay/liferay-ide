@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.ui.modules;
@@ -52,9 +51,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		return getClass().getName();
 	}
 
-	public ModuleWizardStep getCustomOptionsStep(
-		WizardContext context, Disposable parentDisposable) {
-
+	public ModuleWizardStep getCustomOptionsStep(WizardContext context, Disposable parentDisposable) {
 		return new LiferayModuleFragmentWizardStep(context, this);
 	}
 
@@ -90,34 +87,34 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 	}
 
 	@Override
-	public void setupRootModel(ModifiableRootModel rootModel)
-		throws ConfigurationException {
-
+	public void setupRootModel(ModifiableRootModel rootModel) throws ConfigurationException {
 		final Project project = rootModel.getProject();
 
 		final VirtualFile projectRoot = createAndGetContentEntry(project);
 
 		_createProject(projectRoot);
 
-		final File hostBundle = new File(
-	LiferayIdeaUI.USER_BUNDLES_DIR,
-	_fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
+		final File hostBundle = 
+			new File(
+				LiferayIdeaUI.USER_BUNDLES_DIR, 
+				_fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
 
 		SwitchConsumerBuilder<File> switch_ = SwitchConsumer.newBuilder();
+
+		SwitchConsumer<File> switchConsumer = switch_.addCase(
+			f -> f.getName().equals("portlet.properties"), f -> _copyPortletExtProperties(projectRoot, f)
+		).addCase(
+			f -> f.getName().contains("default.xml"), f -> _createDefaultExtXmlFile(projectRoot, f)
+		).setDefault(
+			f -> _copyOtherResource(projectRoot, f)
+		).build();
 
 		Stream.of(_overrideFiles).map(
 			overrideFile -> new File(hostBundle, overrideFile)
 		).filter(
 			file -> file.exists()
 		).forEach(
-			switch_.addCase(
-				f -> f.getName().equals("portlet.properties"),
-				f -> _copyPortletExtProperties(projectRoot, f))
-			.addCase(
-				f -> f.getName().contains("default.xml"),
-				f -> _createDefaultExtXmlFile(projectRoot, f))
-			.setDefault(f -> _copyOtherResource(projectRoot, f))
-			.build()
+			switchConsumer
 		);
 
 		rootModel.addContentEntry(projectRoot);
@@ -133,19 +130,15 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		_version = version;
 	}
 
-	private void _copyOtherResource(
-		final VirtualFile projectRoot, final File fragmentFile) {
-
+	private void _copyOtherResource(final VirtualFile projectRoot, final File fragmentFile) {
 		String parent = fragmentFile.getParentFile().getPath();
 
 		parent = parent.replaceAll("\\\\", "/");
 		String metaInfResources = "META-INF/resources";
 
-		parent = parent.substring(
-			parent.indexOf(metaInfResources) + metaInfResources.length());
+		parent = parent.substring(parent.indexOf(metaInfResources) + metaInfResources.length());
 
-		File folder = _getProjectFile(
-			projectRoot, "src/main/resources/META-INF/resources");
+		File folder = _getProjectFile(projectRoot, "src/main/resources/META-INF/resources");
 
 		folder.mkdirs();
 
@@ -157,27 +150,21 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		FileUtil.copyFileToDir(fragmentFile, folder);
 	}
 
-	private void _copyPortletExtProperties(
-		final VirtualFile projectRoot, File f) {
-
+	private void _copyPortletExtProperties(final VirtualFile projectRoot, File f) {
 		File folder = _getProjectFile(projectRoot, "src/main/java");
 
 		FileUtil.copyFileToDir(f, "portlet-ext.properties", folder);
 	}
 
-	private void _createDefaultExtXmlFile(
-		final VirtualFile projectRoot, File f) {
-
-		File folder = _getProjectFile(
-			projectRoot, "src/main/resources/resource-actions");
+	private void _createDefaultExtXmlFile(final VirtualFile projectRoot, File f) {
+		File folder = _getProjectFile(projectRoot, "src/main/resources/resource-actions");
 
 		folder.mkdirs();
 
 		FileUtil.copyFileToDir(f, "default-ext.xml", folder);
 
 		try {
-			File extFile = _getProjectFile(
-			projectRoot, "src/main/resources/portlet-ext.properties");
+			File extFile = _getProjectFile(projectRoot, "src/main/resources/portlet-ext.properties");
 
 			extFile.createNewFile();
 
@@ -194,18 +181,26 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		final StringBuilder sb = new StringBuilder();
 
 		sb.append("create ");
-		sb.append("-d \"" + projectRoot.getParent().getPath() + "\" ");
-		sb.append("-t " + "fragment" + " ");
+		sb.append("-d \"");
+		sb.append(projectRoot.getParent().getPath());
+		sb.append("\" ");
+		sb.append("-t fragment ");
 
 		if (!_bsn.equals("")) {
-			sb.append("-h " + _bsn + " ");
+			sb.append("-h ");
+			sb.append(_bsn);
+			sb.append(" ");
 		}
 
 		if (!_version.equals("")) {
-			sb.append("-H " + _version + " ");
+			sb.append("-H ");
+			sb.append(_version);
+			sb.append(" ");
 		}
 
-		sb.append("\"" + projectRoot.getName() + "\" ");
+		sb.append("\"");
+		sb.append(projectRoot.getName());
+		sb.append("\" ");
 
 		BladeCLI.execute(sb.toString());
 	}

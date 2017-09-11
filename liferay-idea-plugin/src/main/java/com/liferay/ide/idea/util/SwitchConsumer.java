@@ -21,19 +21,16 @@ public class SwitchConsumer<T> implements Consumer<T> {
 		return new SwitchConsumerBuilder<>();
 	}
 
-	public SwitchConsumer(
-		Map<Predicate<T>, Consumer<T>> cases, Consumer<T> defaultConsumer) {
-
+	public SwitchConsumer(Map<Predicate<T>, Consumer<T>> cases, Consumer<T> defaultConsumer) {
 		_cases = cases;
 		_defaultConsumer = defaultConsumer;
 	}
 
 	@Override
 	public void accept(T t) {
-		Optional<Entry<Predicate<T>, Consumer<T>>> matchingCase =
-			_cases.entrySet().stream().filter(
-				e -> e.getKey().test(t)
-			).findFirst();
+		Optional<Entry<Predicate<T>, Consumer<T>>> matchingCase = _cases.entrySet().stream().filter(
+			e -> e.getKey().test(t)
+		).findFirst();
 
 		if (matchingCase.isPresent()) {
 			matchingCase.get().getValue().accept(t);

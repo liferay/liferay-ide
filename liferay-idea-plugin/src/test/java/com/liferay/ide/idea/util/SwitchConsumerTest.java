@@ -51,8 +51,7 @@ public class SwitchConsumerTest {
 		Assert.assertEquals(_expected, output.toString());
 	}
 
-	private static final String _expected =
-		"case1 foo\ncase2 bar\ndefault baz\ndefault quux\n";
+	private static final String _expected = "case1 foo\ncase2 bar\ndefault baz\ndefault quux\n";
 	private static final String[] _strings = {"foo", "bar", "baz", "quux"};
 
 }

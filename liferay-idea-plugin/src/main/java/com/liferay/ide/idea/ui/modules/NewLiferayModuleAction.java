@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.ui.modules;
@@ -50,9 +49,7 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
 		final Project project = getEventProject(e);
 
 		if (!_isValidWorkspaceLocation(project)) {
-			Messages.showErrorDialog(
-				"Unable to detect current project as a Liferay workspace",
-				"No Liferay workspace");
+			Messages.showErrorDialog("Unable to detect current project as a Liferay workspace", "No Liferay workspace");
 
 			return;
 		}
@@ -61,12 +58,12 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
 
 		final VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
 
-		if (virtualFile != null && virtualFile.isDirectory()) {
+		if ((virtualFile != null) && virtualFile.isDirectory()) {
 			defaultPath = virtualFile.getPath();
 		}
 
 		final NewLiferayModuleWizard wizard = new NewLiferayModuleWizard(
-	project, new DefaultModulesProvider(project), defaultPath);
+			project, new DefaultModulesProvider(project), defaultPath);
 
 		if (wizard.showAndGet()) {
 			createModuleFromWizard(project, wizard);
@@ -74,9 +71,7 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
 	}
 
 	@Nullable
-	public Module createModuleFromWizard(
-		Project project, AbstractProjectWizard wizard) {
-
+	public Module createModuleFromWizard(Project project, AbstractProjectWizard wizard) {
 		final ProjectBuilder builder = wizard.getProjectBuilder();
 
 		if (builder instanceof ModuleBuilder) {
@@ -101,15 +96,13 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
 			module = ((ModuleBuilder)builder).commitModule(project, null);
 		}
 		else {
-			List<Module> modules = builder.commit(
-	project, null, new DefaultModulesProvider(project));
+			List<Module> modules = builder.commit(project, null, new DefaultModulesProvider(project));
 
 			if (builder.isOpenProjectSettingsAfter()) {
 				ModulesConfigurator.showDialog(project, null, null);
 			}
 
-			module =
-	modules == null || modules.isEmpty() ? null : modules.get(0);
+			module = modules == null || modules.isEmpty() ? null : modules.get(0);
 		}
 
 		project.save();
@@ -125,9 +118,7 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
 	}
 
 	private boolean _isValidWorkspaceLocation(Project project) {
-		if (project != null &&
-LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(project.getBasePath())) {
-
+		if ((project != null) && LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(project.getBasePath())) {
 			return true;
 		}
 

@@ -30,8 +30,7 @@ public class ZipUtil {
 		try {
 			return new ZipFile(file);
 		} catch (FileNotFoundException e) {
-			final FileNotFoundException fnfe = new FileNotFoundException(
-	file.getAbsolutePath());
+			final FileNotFoundException fnfe = new FileNotFoundException(file.getAbsolutePath());
 
 			fnfe.initCause(e);
 
@@ -39,16 +38,11 @@ public class ZipUtil {
 		}
 	}
 
-	public static void unzip(final File file, final File destdir)
-		throws IOException {
-
+	public static void unzip(final File file, final File destdir) throws IOException {
 		unzip(file, null, destdir);
 	}
 
-	public static void unzip(
-			final File file, final String entryToStart, final File destdir)
-		throws IOException {
-
+	public static void unzip(final File file, final String entryToStart, final File destdir) throws IOException {
 		final ZipFile zip = open(file);
 
 		try {

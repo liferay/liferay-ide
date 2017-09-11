@@ -46,18 +46,14 @@ public class ServerUtil {
 		return files;
 	}
 
-	public static File getModuleFileFrom70Server(
-		File runtime, String hostOsgiBundle, File temp) {
-
+	public static File getModuleFileFrom70Server(File runtime, String hostOsgiBundle, File temp) {
 		File moduleOsgiBundle = null;
 
 		for (String dir : osgiBundleDirs) {
-			moduleOsgiBundle = new File(
-	new File(new File(runtime, "osgi"), dir), hostOsgiBundle);
+			moduleOsgiBundle = new File(new File(new File(runtime, "osgi"), dir), hostOsgiBundle);
 
 			if (moduleOsgiBundle.exists()) {
-				FileUtil.copyFile(
-	moduleOsgiBundle, new File(temp, hostOsgiBundle));
+				FileUtil.copyFile(moduleOsgiBundle, new File(temp, hostOsgiBundle));
 
 				return moduleOsgiBundle;
 			}
@@ -164,7 +160,6 @@ dirFile.listFiles(new FilenameFilter() {
 		return bundles;
 	}
 
-	private static String[] osgiBundleDirs =
-		{"core", "modules", "portal", "static"};
+	private static String[] osgiBundleDirs = {"core", "modules", "portal", "static"};
 
 }

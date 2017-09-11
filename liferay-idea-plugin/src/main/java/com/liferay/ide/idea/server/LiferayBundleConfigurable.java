@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.server;
@@ -32,9 +31,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author Terry Jia
  */
-public class LiferayBundleConfigurable
-	extends SettingsEditor<LiferayBundleConfiguration>
-	implements PanelWithAnchor {
+public class LiferayBundleConfigurable extends SettingsEditor<LiferayBundleConfiguration> implements PanelWithAnchor {
 
 	public LiferayBundleConfigurable(final Project project) {
 		ModulesComboBox modulesComboBox = modules.getComponent();
@@ -44,17 +41,12 @@ public class LiferayBundleConfigurable
 
 		liferayBundle.setEditable(false);
 		liferayBundle.setEnabled(false);
-		jrePath.setDefaultJreSelector(
-	DefaultJreSelector.fromModuleDependencies(modulesComboBox, true));
+		jrePath.setDefaultJreSelector(DefaultJreSelector.fromModuleDependencies(modulesComboBox, true));
 	}
 
-	public void applyEditorTo(
-			@NotNull final LiferayBundleConfiguration configuration)
-		throws ConfigurationException {
-
+	public void applyEditorTo(@NotNull final LiferayBundleConfiguration configuration) throws ConfigurationException {
 		configuration.setAlternativeJrePath(jrePath.getJrePathOrName());
-		configuration.setAlternativeJrePathEnabled(
-	jrePath.isAlternativeJreSelected());
+		configuration.setAlternativeJrePathEnabled(jrePath.isAlternativeJreSelected());
 		configuration.setModule(modules.getComponent().getSelectedModule());
 		configuration.setLiferayBundle(liferayBundle.getText());
 		configuration.setVMParameters(vmParams.getText());
@@ -70,14 +62,10 @@ public class LiferayBundleConfigurable
 		return anchor;
 	}
 
-	public void resetEditorFrom(
-		@NotNull final LiferayBundleConfiguration configuration) {
-
+	public void resetEditorFrom(@NotNull final LiferayBundleConfiguration configuration) {
 		vmParams.setText(configuration.getVMParameters());
 		liferayBundle.setText(configuration.getLiferayBundle());
-		jrePath.setPathOrName(
-	configuration.getAlternativeJrePath(),
-	configuration.isAlternativeJrePathEnabled());
+		jrePath.setPathOrName(configuration.getAlternativeJrePath(), configuration.isAlternativeJrePathEnabled());
 		modules.getComponent().setSelectedModule(configuration.getModule());
 	}
 

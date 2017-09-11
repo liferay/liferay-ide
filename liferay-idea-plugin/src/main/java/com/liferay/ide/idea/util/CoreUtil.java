@@ -103,9 +103,7 @@ public class CoreUtil {
 	public static boolean isNullOrEmpty(String val)
 	{
 
-		if (val == null || val.equals(StringPool.EMPTY) ||
-			val.trim().equals(StringPool.EMPTY)) {
-
+		if (val == null || val.equals(StringPool.EMPTY) || val.trim().equals(StringPool.EMPTY)) {
 			return true;
 		}
 

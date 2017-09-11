@@ -71,8 +71,7 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 		List<File> libFiles;
 
 		try {
-			libFiles = FileListing.getFileListing(
-				new File(bundleLibPath.toString()));
+			libFiles = FileListing.getFileListing(new File(bundleLibPath.toString()));
 
 			for (File lib : libFiles) {
 				if (lib.exists() && lib.getName().endsWith(".jar")) {
@@ -91,8 +90,7 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 		Path portalDir = getAppServerPortalDir();
 		Path[] extraLibs = getBundleDependencyJars();
 
-		return new LiferayPortalValueLoader(
-			portalDir, extraLibs).loadHookPropertiesFromClass();
+		return new LiferayPortalValueLoader(portalDir, extraLibs).loadHookPropertiesFromClass();
 	}
 
 	@Override
@@ -139,8 +137,7 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 	protected abstract int getDefaultJMXRemotePort();
 
 	protected String getHttpPortValue(
-		File xmlFile, String tagName, String attriName, String attriValue,
-		String targetName) {
+		File xmlFile, String tagName, String attriName, String attriValue, String targetName) {
 
 		DocumentBuilder db = null;
 

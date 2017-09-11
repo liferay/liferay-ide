@@ -12,6 +12,7 @@
  * details.
  *
  */
+
 package com.liferay.ide.idea.util;
 
 /**

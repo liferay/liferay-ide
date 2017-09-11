@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.server;
@@ -30,34 +29,32 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author Terry Jia
  */
-public class LiferayBundleConfigurationType
-	extends ConfigurationTypeBase implements ConfigurationType {
+public class LiferayBundleConfigurationType extends ConfigurationTypeBase implements ConfigurationType {
 
 	public LiferayBundleConfigurationType() {
-		super("LiferayBundleConfiguration", "Liferay Bundle",
-			"Run or Debug a Liferay Bundle", LiferayIdeaUI.LIFERAY_ICON);
+		super(
+			"LiferayBundleConfiguration", "Liferay Bundle", "Run or Debug a Liferay Bundle",
+			LiferayIdeaUI.LIFERAY_ICON);
 
 		addFactory(new ConfigurationFactoryEx(this) {
 
 			@Override
-			public void onNewConfigurationCreated(
-	@NotNull RunConfiguration configuration) {
+			public void onNewConfigurationCreated(@NotNull RunConfiguration configuration) {
 
-				LiferayBundleConfiguration jarApplicationConfiguration =
-	(LiferayBundleConfiguration)configuration;
+				LiferayBundleConfiguration jarApplicationConfiguration = (LiferayBundleConfiguration)configuration;
 
-				if (StringUtil.isEmpty(
-jarApplicationConfiguration.getWorkingDirectory())) {
+				if (StringUtil.isEmpty(jarApplicationConfiguration.getWorkingDirectory())) {
+					Project project = configuration.getProject();
 
-					String baseDir = FileUtil.toSystemIndependentName(
-	StringUtil.notNullize(configuration.getProject().getBasePath()));
+					String basePath = StringUtil.notNullize(project.getBasePath());
+
+					String baseDir = FileUtil.toSystemIndependentName(basePath);
+
 					jarApplicationConfiguration.setWorkingDirectory(baseDir);
 				}
 			}
 
-			public RunConfiguration createTemplateConfiguration(
-	Project project) {
-
+			public RunConfiguration createTemplateConfiguration(Project project) {
 				return new LiferayBundleConfiguration(project, this, "");
 			}
 

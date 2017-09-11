@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.server;
@@ -51,28 +50,22 @@ import org.jetbrains.annotations.Nullable;
  * @author Terry Jia
  */
 public class LiferayBundleConfiguration
-	extends LocatableConfigurationBase
-	implements CommonJavaRunConfigurationParameters,
-			   SearchScopeProvidingRunProfile {
+	extends LocatableConfigurationBase implements CommonJavaRunConfigurationParameters, SearchScopeProvidingRunProfile {
 
-	public LiferayBundleConfiguration(
-		Project project, ConfigurationFactory factory, String name) {
-
+	public LiferayBundleConfiguration(Project project, ConfigurationFactory factory, String name) {
 		super(project, factory, name);
 
 		configurationModule = new JavaRunConfigurationModule(project, true);
 		config.liferayBundle = Paths.get(
 	project.getBasePath(),
-	LiferayWorkspaceUtil.getHomeDir(project.getBasePath())).toString();
-		config.vmParameters = "-Xmx1024m";
+	LiferayWorkspaceUtil.getHomeDir(project.getBasePath())).toString(); config.vmParameters = "-Xmx1024m";
 	}
 
 	@Override
 	public void checkConfiguration() throws RuntimeConfigurationException {
 		JavaParametersUtil.checkAlternativeJRE(this);
 
-		ProgramParametersUtil.checkWorkingDirectoryExist(
-	this, getProject(), null);
+		ProgramParametersUtil.checkWorkingDirectoryExist(this, getProject(), null);
 
 		File liferayHome = new File(getLiferayBundle());
 
@@ -91,8 +84,7 @@ public class LiferayBundleConfiguration
 	(LiferayBundleConfiguration)super.clone();
 
 		clone.envs = new LinkedHashMap<>(envs);
-		clone.configurationModule = new JavaRunConfigurationModule(
-	getProject(), true);
+		clone.configurationModule = new JavaRunConfigurationModule(getProject(), true);
 		clone.configurationModule.setModule(configurationModule.getModule());
 		clone.config = XmlSerializerUtil.createCopy(config);
 
@@ -112,13 +104,11 @@ public class LiferayBundleConfiguration
 	new SettingsEditorGroup<>();
 
 		group.addEditor(
-	ExecutionBundle.message("run.configuration.configuration.tab.title"),
-	new LiferayBundleConfigurable(getProject()));
+	ExecutionBundle.message("run.configuration.configuration.tab.title"), new LiferayBundleConfigurable(getProject()));
 
 		JavaRunConfigurationExtensionManager.getInstance().appendEditors(this, group);
 
-		group.addEditor(
-	ExecutionBundle.message("logs.tab.title"), new LogConfigurationPanel<>());
+		group.addEditor(ExecutionBundle.message("logs.tab.title"), new LogConfigurationPanel<>());
 
 		return group;
 	}
@@ -174,9 +164,7 @@ public class LiferayBundleConfiguration
 
 	@Nullable
 	@Override
-	public RunProfileState getState(
-			@NotNull Executor executor,
-			@NotNull ExecutionEnvironment environment)
+	public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment environment)
 		throws ExecutionException {
 
 		return new LiferayBundleCommandLineState(this, environment);
@@ -260,8 +248,7 @@ public class LiferayBundleConfiguration
 	public void writeExternal(Element element) throws WriteExternalException {
 		super.writeExternal(element);
 		JavaRunConfigurationExtensionManager.getInstance().writeExternal(this, element);
-		XmlSerializer.serializeInto(
-	config, element, new SkipDefaultValuesSerializationFilters());
+		XmlSerializer.serializeInto(config, element, new SkipDefaultValuesSerializationFilters());
 		EnvironmentVariablesComponent.writeExternal(element, getEnvs());
 
 		if (configurationModule.getModule() != null) {

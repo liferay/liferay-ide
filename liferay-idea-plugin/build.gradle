@@ -25,6 +25,10 @@ dependencies {
 	compile group: "org.osgi", name: "org.osgi.core", version: "6.0.0"
 }
 
+formatSource {
+	maxLineLength = 120
+}
+
 intellij {
 	version "2017.2"
 }

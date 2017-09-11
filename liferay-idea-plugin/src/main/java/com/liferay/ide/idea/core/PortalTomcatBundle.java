@@ -78,11 +78,9 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 
 	@Override
 	public String getHttpPort() {
-		File serverXmlFile = Paths.get(
-			getAppServerDir().toString(), "conf", "server.xml").toFile();
+		File serverXmlFile = Paths.get(getAppServerDir().toString(), "conf", "server.xml").toFile();
 
-		String portValue = getHttpPortValue(
-			serverXmlFile, "Connector", "protocol", "HTTP/1.1", "port");
+		String portValue = getHttpPortValue(serverXmlFile, "Connector", "protocol", "HTTP/1.1", "port");
 
 		if (CoreUtil.isNullOrEmpty(portValue)) {
 			return "8080";
@@ -152,9 +150,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 
 		try {
 			List<File> portallibFiles = FileListing.getFileListing(
-				Paths.get(
-					getAppServerPortalDir().toString(), "WEB-INF",
-					"lib").toFile());
+				Paths.get(getAppServerPortalDir().toString(), "WEB-INF", "lib").toFile());
 
 			for (File lib : portallibFiles) {
 				if (lib.exists() && lib.getName().endsWith(".jar")) {
@@ -162,8 +158,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 				}
 			}
 
-			List<File> libFiles = FileListing.getFileListing(
-				getAppServerLibDir().toFile());
+			List<File> libFiles = FileListing.getFileListing(getAppServerLibDir().toFile());
 
 			for (File lib : libFiles) {
 				if (lib.exists() && lib.getName().endsWith(".jar")) {
@@ -171,8 +166,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 				}
 			}
 
-			List<File> extlibFiles = FileListing.getFileListing(
-				getAppServerLibGlobalDir().toFile());
+			List<File> extlibFiles = FileListing.getFileListing(getAppServerLibGlobalDir().toFile());
 
 			for (File lib : extlibFiles) {
 				if (lib.exists() && lib.getName().endsWith(".jar")) {
@@ -188,8 +182,9 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 
 	@Override
 	public void setHttpPort(String port) {
-		setHttpPortValue(Paths.get(getAppServerDir().toString(), "conf", "server.xml").toFile(), "Connector", "protocol", "HTTP/1.1",
-			"port", port);
+		File serviceXmlFile = Paths.get(getAppServerDir().toString(), "conf", "server.xml").toFile();
+
+		setHttpPortValue(serviceXmlFile, "Connector", "protocol", "HTTP/1.1", "port", port);
 	}
 
 	@Override
@@ -201,18 +196,15 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 	protected int getDefaultJMXRemotePort() {
 		int retval = 8099;
 
-		final Path setenv = Paths.get(
-			getAppServerDir().toString(), "bin",
-			"setenv."+ getShellExtension());
+		final Path setenv = Paths.get(getAppServerDir().toString(), "bin", "setenv."+ getShellExtension());
 
 		final String contents = FileUtil.readContents(setenv.toFile(), true);
 
 		String port = null;
 
 		if (contents != null) {
-			final Matcher matcher =
-				Pattern.compile(".*-Dcom.sun.management.jmxremote.port(\\s*)=(\\s*)([0-9]+).*").matcher(
-					contents);
+			final Matcher matcher = Pattern.compile(
+				".*-Dcom.sun.management.jmxremote.port(\\s*)=(\\s*)([0-9]+).*").matcher(contents);
 
 			if (matcher.matches()) {
 				port = matcher.group(3);
@@ -238,18 +230,15 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 		args.add("-Dcom.sun.management.jmxremote.ssl=false");
 		args.add("-Dfile.encoding=UTF8");
 
-		args.add(
-			"-Djava.endorsed.dirs=" + "\"" + Paths.get(bundlePath.toString(), "endorsed").toString() + "\"");
-		args.add(
-			"-Djava.io.tmpdir=" + "\"" + Paths.get(bundlePath.toString(), "temp").toString() + "\"");
+		args.add("-Djava.endorsed.dirs=" + "\"" + Paths.get(bundlePath.toString(), "endorsed").toString() + "\"");
+		args.add("-Djava.io.tmpdir=" + "\"" + Paths.get(bundlePath.toString(), "temp").toString() + "\"");
 		args.add("-Djava.net.preferIPv4Stack=true");
 
-		args.add("-Djava.util.logging.config.file=" + "\"" + Paths.get(bundlePath.toString(), "conf", "logging.properties").toString() +
-			"\"");
-		args.add(
-			"-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager");
-		args.add(
-			"-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false");
+		String loggingPath = Paths.get(bundlePath.toString(), "conf", "logging.properties").toString();
+
+		args.add("-Djava.util.logging.config.file=" + "\"" + loggingPath + "\"");
+		args.add("-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager");
+		args.add("-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false");
 		args.add("-Duser.timezone=GMT");
 
 		return args.toArray(new String[0]);
@@ -264,8 +253,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 	}
 
 	private void setHttpPortValue(
-		File xmlFile, String tagName, String attriName, String attriValue,
-		String targetName, String value) {
+		File xmlFile, String tagName, String attriName, String attriValue, String targetName, String value) {
 
 		DocumentBuilder db = null;
 

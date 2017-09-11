@@ -26,8 +26,7 @@ import java.util.regex.Pattern;
 public class LiferayWorkspaceUtil {
 
 	public static String getHomeDir(String location) {
-		final String result = getGradleProperty(
-	location, "liferay.workspace.home.dir", "bundles");
+		final String result = getGradleProperty(location, "liferay.workspace.home.dir", "bundles");
 
 		if ((result == null || result.equals(""))) {
 			return "bundles";
@@ -40,38 +39,27 @@ public class LiferayWorkspaceUtil {
 		File workspaceDir = new File(location);
 
 		File buildGradle = new File(workspaceDir, _BUILD_GRADLE_FILE_NAME);
-		File settingsGradle = new File(
-	workspaceDir, _SETTINGS_GRADLE_FILE_NAME);
-		File gradleProperties = new File(
-	workspaceDir, _GRADLE_PROPERTIES_FILE_NAME);
+		File settingsGradle = new File(workspaceDir, _SETTINGS_GRADLE_FILE_NAME);
+		File gradleProperties = new File(workspaceDir, _GRADLE_PROPERTIES_FILE_NAME);
 
-		if (!(buildGradle.exists() && settingsGradle.exists() &&
-gradleProperties.exists())) {
-
+		if (!(buildGradle.exists() && settingsGradle.exists() && gradleProperties.exists())) {
 			return false;
 		}
 
-		final String settingsContent = FileUtil.readContents(
-	settingsGradle, true);
+		final String settingsContent = FileUtil.readContents(settingsGradle, true);
 
-		if (settingsContent != null && PATTERN_WORKSPACE_PLUGIN.matcher(
-				settingsContent).matches()) {
-
+		if (settingsContent != null && PATTERN_WORKSPACE_PLUGIN.matcher(settingsContent).matches()) {
 			return true;
 		}
 
 		return false;
 	}
 
-	private static String getGradleProperty(
-		String projectLocation, String key, String defaultValue) {
-
-		final File gradleProperties = new File(
-	projectLocation, "gradle.properties");
+	private static String getGradleProperty(String projectLocation, String key, String defaultValue) {
+		final File gradleProperties = new File(projectLocation, "gradle.properties");
 
 		if (gradleProperties.exists()) {
-			final Properties properties = PropertiesUtil.loadProperties(
-	gradleProperties);
+			final Properties properties = PropertiesUtil.loadProperties(gradleProperties);
 
 			return properties.getProperty(key, defaultValue);
 		}

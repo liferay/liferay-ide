@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.ui.modules;
@@ -47,15 +46,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public class LiferayModuleNameLocationComponent {
 
-	public LiferayModuleNameLocationComponent(
-		@NotNull WizardContext wizardContext) {
-
+	public LiferayModuleNameLocationComponent(@NotNull WizardContext wizardContext) {
 		this.wizardContext = wizardContext;
 	}
 
-	public void bindModuleSettings(
-		final LiferayNamePathComponent namePathComponent) {
-
+	public void bindModuleSettings(final LiferayNamePathComponent namePathComponent) {
 		namePathComponent.getNameComponent().getDocument().addDocumentListener(
 new DocumentAdapter() {
 
@@ -90,13 +85,10 @@ new DocumentAdapter() {
 					moduleNameChangedByUser = true;
 				}
 
-				String path = getDefaultBaseDir(
-	wizardContext, namePathComponent);
+				String path = getDefaultBaseDir(wizardContext, namePathComponent);
 				final String moduleName = getModuleName();
 
-				if (path.length() > 0 &&
-!Comparing.strEqual(moduleName, namePathComponent.getNameValue())) {
-
+				if (path.length() > 0 && !Comparing.strEqual(moduleName, namePathComponent.getNameValue())) {
 					path += "/" + getTargetFolderName() + "/" + moduleName;
 				}
 
@@ -126,8 +118,7 @@ new DocumentAdapter() {
 				}
 
 				if (!moduleNameChangedByUser) {
-					final String path = FileUtil.toSystemIndependentName(
-	getModuleContentRoot());
+					final String path = FileUtil.toSystemIndependentName(getModuleContentRoot());
 					final int idx = path.lastIndexOf("/");
 
 					boolean f = contentRootChangedByUser;
@@ -146,8 +137,7 @@ new DocumentAdapter() {
 		});
 
 		moduleFileLocation.addBrowseFolderListener(ProjectBundle.message("project.new.wizard.module.file.chooser.title"),
-				ProjectBundle.message("project.new.wizard.module.file.description"),
-				wizardContext.getProject(),
+				ProjectBundle.message("project.new.wizard.module.file.description"), wizardContext.getProject(),
 BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR);
 		moduleFileLocation.getTextField().getDocument().addDocumentListener(
 new DocumentAdapter() {
@@ -201,10 +191,9 @@ new DocumentAdapter() {
 
 		moduleBuilder.setName(moduleName);
 		moduleBuilder.setModuleFilePath(
-				FileUtil.toSystemIndependentName(
-	moduleFileLocation.getText()) + "/" + moduleName + ModuleFileType.DOT_DEFAULT_EXTENSION);
-		moduleBuilder.setContentEntryPath(
-	FileUtil.toSystemIndependentName(getModuleContentRoot()));
+				FileUtil.toSystemIndependentName(moduleFileLocation.getText()) +
+	"/" + moduleName + ModuleFileType.DOT_DEFAULT_EXTENSION);
+		moduleBuilder.setContentEntryPath(FileUtil.toSystemIndependentName(getModuleContentRoot()));
 	}
 
 	public void updateLocations() {
@@ -212,10 +201,9 @@ new DocumentAdapter() {
 		assert project != null;
 		final VirtualFile baseDir = project.getBaseDir();
 
-		if (baseDir != null) {//e.g. was deleted final String baseDirPath =
-			baseDir.getPath();
-			String moduleName = ProjectWizardUtil.findNonExistingFileName(
-	baseDirPath, "untitled", "");
+		if (baseDir != null) {
+			final String baseDirPath = baseDir.getPath();
+			String moduleName = ProjectWizardUtil.findNonExistingFileName(baseDirPath, "untitled", "");
 			String contentRoot =
 	baseDirPath + "/" + getTargetFolderName() + "/" + moduleName;
 
@@ -243,10 +231,7 @@ new DocumentAdapter() {
 		return true;
 	}
 
-	private static String getDefaultBaseDir(
-		WizardContext wizardContext,
-		LiferayNamePathComponent namePathComponent) {
-
+	private static String getDefaultBaseDir(WizardContext wizardContext, LiferayNamePathComponent namePathComponent) {
 		if (wizardContext.isCreatingNewProject()) {
 			return namePathComponent.getPath();
 		} else {
@@ -285,9 +270,8 @@ new DocumentAdapter() {
 		if (liferayModuleBuilder != null) {
 			String templateType = liferayModuleBuilder.getType();
 
-			if ("theme".equals(templateType) ||
-"layout-template".equals(templateType) ||
-					 "spring-mvc-portlet".equals(templateType)) {
+			if ("theme".equals(templateType) || "layout-template".equals(templateType) ||
+				"spring-mvc-portlet".equals(templateType)) {
 
 				targetFolder = "wars";
 			}
@@ -319,14 +303,12 @@ new DocumentAdapter() {
 
 		final Module module;
 
-		final ProjectStructureConfigurable fromConfigurable =
-	ProjectStructureConfigurable.getInstance(project);
+		final ProjectStructureConfigurable fromConfigurable = ProjectStructureConfigurable.getInstance(project);
 
 		if (fromConfigurable != null) {
 			module = fromConfigurable.getModulesConfig().getModule(moduleName);
 		} else {
-			module = ModuleManager.getInstance(
-	project).findModuleByName(moduleName);
+			module = ModuleManager.getInstance(project).findModuleByName(moduleName);
 		}
 
 		if (module != null) {
@@ -359,8 +341,7 @@ new DocumentAdapter() {
 			return false;
 		}
 
-		final File moduleFile = new File(
-	moduleFileDirectory, moduleName + ModuleFileType.DOT_DEFAULT_EXTENSION);
+		final File moduleFile = new File(moduleFileDirectory, moduleName + ModuleFileType.DOT_DEFAULT_EXTENSION);
 
 		if (moduleFile.exists()) {
 			int answer = Messages.showYesNoDialog(IdeBundle.message("prompt.overwrite.project.file", moduleFile.getAbsolutePath(),

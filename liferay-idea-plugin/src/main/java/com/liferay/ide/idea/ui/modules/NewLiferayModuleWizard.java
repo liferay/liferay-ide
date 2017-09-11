@@ -33,8 +33,7 @@ import org.jetbrains.annotations.Nullable;
 public class NewLiferayModuleWizard extends AbstractProjectWizard {
 
 	public NewLiferayModuleWizard(
-		@Nullable Project project, @NotNull ModulesProvider modulesProvider,
-		@Nullable String defaultPath) {
+		@Nullable Project project, @NotNull ModulesProvider modulesProvider, @Nullable String defaultPath) {
 
 		super("New Liferay Modules", project, defaultPath);
 
@@ -55,15 +54,14 @@ public class NewLiferayModuleWizard extends AbstractProjectWizard {
 	protected void init(@NotNull ModulesProvider modulesProvider) {
 		myWizardContext.setModulesProvider(modulesProvider);
 
-		final LiferayProjectTypeStep projectTypeStep =
-	new LiferayProjectTypeStep(myWizardContext, this, modulesProvider);
+		final LiferayProjectTypeStep projectTypeStep = new LiferayProjectTypeStep(
+	myWizardContext, this, modulesProvider);
 
 		Disposer.register(getDisposable(), projectTypeStep);
 
 		mySequence.addCommonStep(projectTypeStep);
 
-		mySequence.addCommonFinishingStep(
-	new LiferayProjectSettingsStep(myWizardContext), null);
+		mySequence.addCommonFinishingStep(new LiferayProjectSettingsStep(myWizardContext), null);
 
 		for (ModuleWizardStep step : mySequence.getAllSteps()) {
 			addStep(step);

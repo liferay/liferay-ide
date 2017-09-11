@@ -26,9 +26,7 @@ import java.util.List;
 public class FileUtil {
 
 	public static void copyFile(File src, File dest) {
-		if (src == null || (!src.exists()) || dest == null ||
-dest.isDirectory()) {
-
+		if (src == null || (!src.exists()) || dest == null || dest.isDirectory()) {
 			return;
 		}
 
@@ -120,9 +118,7 @@ dest.isDirectory()) {
 		return readLinesFromFile(file, false);
 	}
 
-	public static String[] readLinesFromFile(
-		File file, boolean includeNewlines) {
-
+	public static String[] readLinesFromFile(File file, boolean includeNewlines) {
 		if (file == null) {
 			return null;
 		}
@@ -166,9 +162,7 @@ dest.isDirectory()) {
 		return lines.toArray(new String[lines.size()]);
 	}
 
-	public static void writeFile(
-		final File f, final byte[] contents, final String expectedProjectName) {
-
+	public static void writeFile(final File f, final byte[] contents, final String expectedProjectName) {
 		writeFile(f, new ByteArrayInputStream(contents), expectedProjectName);
 	}
 
@@ -176,10 +170,7 @@ dest.isDirectory()) {
 		writeFile(f, contents, null);
 	}
 
-	public static void writeFile(
-		final File f, final InputStream contents,
-		final String expectedProjectName) {
-
+	public static void writeFile(final File f, final InputStream contents, final String expectedProjectName) {
 		if (f.exists()) {
 			if (f.isDirectory()) {
 			}
@@ -213,9 +204,7 @@ dest.isDirectory()) {
 		}
 	}
 
-	public static void writeFile(
-		final File f, final String contents, final String expectedProjectName) {
-
+	public static void writeFile(final File f, final String contents, final String expectedProjectName) {
 		try {
 			writeFile(f, contents.getBytes("UTF-8"), expectedProjectName);
 		} catch (UnsupportedEncodingException e) {

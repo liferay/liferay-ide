@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.server;
@@ -27,12 +26,8 @@ import org.jetbrains.annotations.NotNull;
 public class LiferayBundleRunner extends DefaultProgramRunner {
 
 	@Override
-	public boolean canRun(
-		@NotNull String executorId, @NotNull RunProfile profile) {
-
-		if (DefaultRunExecutor.EXECUTOR_ID.equals(executorId) &&
-			profile instanceof LiferayBundleConfiguration) {
-
+	public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
+		if (DefaultRunExecutor.EXECUTOR_ID.equals(executorId) && profile instanceof LiferayBundleConfiguration) {
 			return true;
 		}
 

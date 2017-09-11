@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.ui.modules;
@@ -45,8 +44,7 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 		typesTree = new Tree();
 		typesTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
 
-		JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(
-	typesTree);
+		JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(typesTree);
 
 		typesPanel.add(typesScrollPane, "archetypes");
 
@@ -61,8 +59,7 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 				continue;
 			}
 
-			DefaultMutableTreeNode node = new DefaultMutableTreeNode(
-	type, true); root.add(node);
+			DefaultMutableTreeNode node = new DefaultMutableTreeNode(type, true); root.add(node);
 		}
 
 		TreeModel model = new DefaultTreeModel(root);
@@ -105,8 +102,7 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 		String validationTitle = "Validation Error";
 
 		if (CoreUtil.isNullOrEmpty(getSelectedType())) {
-			throw new ConfigurationException(
-	"Please click one of the items to select a template", validationTitle);
+			throw new ConfigurationException("Please click one of the items to select a template", validationTitle);
 		}
 
 		Project workspaceProject =
@@ -116,18 +112,15 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 		String classNameValue = getClassName();
 
 		if (!CoreUtil.isNullOrEmpty(packageNameValue) &&
-!PsiDirectoryFactory.getInstance(
-workspaceProject).isValidPackageName(packageNameValue)) {
+!PsiDirectoryFactory.getInstance(workspaceProject).isValidPackageName(packageNameValue)) {
 
-			throw new ConfigurationException(
-	packageNameValue + " is not a valid package name", validationTitle);
+			throw new ConfigurationException(packageNameValue + " is not a valid package name", validationTitle);
 		}
 
 		if (!CoreUtil.isNullOrEmpty(classNameValue) &&
 !PsiNameHelper.getInstance(workspaceProject).isQualifiedName(classNameValue)) {
 
-			throw new ConfigurationException(
-	classNameValue + " is not a valid java class name", validationTitle);
+			throw new ConfigurationException(classNameValue + " is not a valid java class name", validationTitle);
 		}
 
 		return true;

@@ -40,15 +40,13 @@ public class BladeCLI {
 		javaTask.setFork(true);
 		javaTask.setFailonerror(true);
 
-		File temp = new File(
-	System.getProperties().getProperty("user.home"), ".liferay-ide");
+		File temp = new File(System.getProperties().getProperty("user.home"), ".liferay-ide");
 
 		File bladeJar = new File(temp, "com.liferay.blade.cli.jar");
 
 		if (!bladeJar.exists()) {
 			try (InputStream in =
-BladeCLI.class.getClassLoader().getResourceAsStream(
-"/libs/com.liferay.blade.cli.jar")) {
+BladeCLI.class.getClassLoader().getResourceAsStream("/libs/com.liferay.blade.cli.jar")) {
 
 				FileUtil.writeFile(bladeJar, in);
 			} catch (IOException e) {

@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.ui.modules;
@@ -18,6 +17,7 @@ package com.liferay.ide.idea.ui.modules;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.project.Project;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.treeStructure.Tree;
 
@@ -43,31 +43,28 @@ import javax.swing.tree.*;
  */
 public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
-	public LiferayModuleFragmentWizardStep(
-		WizardContext wizardContext, LiferayModuleFragmentBuilder builder) {
-
+	public LiferayModuleFragmentWizardStep(WizardContext wizardContext, LiferayModuleFragmentBuilder builder) {
 		this.builder = builder;
 		jspsTree = new Tree();
 		jspsTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
-		JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(
-	jspsTree);
+		JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(jspsTree);
 
 		jspsPanel.add(typesScrollPane, "archetypes");
 		jspsTree.setRootVisible(false);
 		jspsTree.setShowsRootHandles(true);
 		jspsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
-		final File liferayHomeDir = new File(
-	wizardContext.getProject().getBasePath(),
-	LiferayWorkspaceUtil.getHomeDir(wizardContext.getProject().getBasePath()));
+		Project project = wizardContext.getProject();
+
+		String homeDir = LiferayWorkspaceUtil.getHomeDir(project.getBasePath());
+
+		final File liferayHomeDir = new File(project.getBasePath(), homeDir);
 
 		if (!liferayHomeDir.exists()) {
 			fragmentHost.addItem("unable to get liferay bundle");
 
-			DefaultMutableTreeNode root = new DefaultMutableTreeNode(
-	"root", true);
-			DefaultMutableTreeNode node = new DefaultMutableTreeNode(
-	"unable to get liferay bundle", true);
+			DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
+			DefaultMutableTreeNode node = new DefaultMutableTreeNode("unable to get liferay bundle", true);
 
 			root.add(node);
 
@@ -78,8 +75,7 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 			return;
 		}
 
-		List<String> bundles = ServerUtil.getModuleFileListFrom70Server(
-	liferayHomeDir);
+		List<String> bundles = ServerUtil.getModuleFileListFrom70Server(liferayHomeDir);
 
 		for (String bundle : bundles) {
 			fragmentHost.addItem(bundle);
@@ -89,15 +85,13 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DefaultMutableTreeNode root = new DefaultMutableTreeNode(
-	"root", true);
+				DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
 
 				ServerUtil.getModuleFileFrom70Server(
-	liferayHomeDir, fragmentHost.getSelectedItem().toString(),
-	LiferayIdeaUI.USER_BUNDLES_DIR);
+					liferayHomeDir, fragmentHost.getSelectedItem().toString(), LiferayIdeaUI.USER_BUNDLES_DIR);
 
 				File currentOsgiBundle = new File(
-	LiferayIdeaUI.USER_BUNDLES_DIR, fragmentHost.getSelectedItem().toString());
+					LiferayIdeaUI.USER_BUNDLES_DIR, fragmentHost.getSelectedItem().toString());
 
 				if (currentOsgiBundle.exists()) {
 					try (JarFile jar = new JarFile(currentOsgiBundle)) {
@@ -109,38 +103,36 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 							String name = entry.getName();
 
 							if ((name.startsWith("META-INF/resources/") &&
-								 (name.endsWith(".jsp") ||
-name.endsWith(".jspf"))) ||
-									name.equals("portlet.properties") ||
-name.equals("resource-actions/default.xml")) {
+								 (name.endsWith(".jsp") || name.endsWith(".jspf"))) ||
+								name.equals("portlet.properties") || name.equals("resource-actions/default.xml")) {
 
-								DefaultMutableTreeNode node1 =
-	new DefaultMutableTreeNode(name, true);
+								DefaultMutableTreeNode node1 = new DefaultMutableTreeNode(name, true);
+
 								root.add(node1);
 							}
 						}
-					} catch (IOException e1) {
+					} 
+					catch (IOException e1) {
 					}
 				}
 
 				jspsTree.setModel(new DefaultTreeModel(root));
 			}
-
 		});
 	}
 
 	public String[] getBsnAndVersion(String hostBundleName) {
-		final File tempBundle = new File(
-	LiferayIdeaUI.USER_BUNDLES_DIR,
-	hostBundleName.substring(0, hostBundleName.lastIndexOf(".jar")));
+		String child = hostBundleName.substring(0, hostBundleName.lastIndexOf(".jar"));
+
+		final File tempBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, child);
 
 		if (!tempBundle.exists()) {
-			File hostBundle = new File(
-	LiferayIdeaUI.USER_BUNDLES_DIR, hostBundleName);
+			File hostBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, hostBundleName);
 
 			try {
 				ZipUtil.unzip(hostBundle, tempBundle);
-			} catch (IOException e) {
+			} 
+			catch (IOException e) {
 			}
 		}
 
@@ -148,20 +140,17 @@ name.equals("resource-actions/default.xml")) {
 		String version = "";
 
 		if (tempBundle.exists()) {
-			final File file = new File(
-	new File(tempBundle, "META-INF"), "MANIFEST.MF");
-		final String[] contents = FileUtil.readLinesFromFile(file);
+			final File file = new File(new File(tempBundle, "META-INF"), "MANIFEST.MF");
+			final String[] contents = FileUtil.readLinesFromFile(file);
 
 			for (String content : contents) {
 				if (content.contains("Bundle-SymbolicName:")) {
 					bundleSymbolicName = content.substring(
-							content.indexOf("Bundle-SymbolicName:") +
-	"Bundle-SymbolicName:".length());
+							content.indexOf("Bundle-SymbolicName:") + "Bundle-SymbolicName:".length());
 				}
 
 				if (content.contains("Bundle-Version:")) {
-					version = content.substring(
-content.indexOf("Bundle-Version:") + "Bundle-Version:".length()).trim();
+					version = content.substring(content.indexOf("Bundle-Version:") + "Bundle-Version:".length()).trim();
 				}
 			}
 		}
@@ -208,8 +197,7 @@ content.indexOf("Bundle-Version:") + "Bundle-Version:".length()).trim();
 		String validationTitle = "Validation Error";
 
 		if (CoreUtil.isNullOrEmpty(getSelectedJsps())) {
-			throw new ConfigurationException(
-	"At least select one jsp to override", validationTitle);
+			throw new ConfigurationException("At least select one jsp to override", validationTitle);
 		}
 
 		return true;
