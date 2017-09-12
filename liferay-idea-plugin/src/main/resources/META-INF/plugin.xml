@@ -7,7 +7,7 @@
 	<change-notes/>
 
 	<actions>
-		<action id="NewLiferayModule" class="com.liferay.ide.idea.ui.action.NewLiferayModuleAction"
+		<action id="NewLiferayModule" class="com.liferay.ide.idea.ui.modules.NewLiferayModuleAction"
 				text="Liferay Module" description="Add new liferay module to the liferay workspace">
 			<add-to-group anchor="last" group-id="NewGroup" />
 		</action>
@@ -15,8 +15,8 @@
 
 	<extensions defaultExtensionNs="com.intellij">
 		<moduleBuilder builderClass="com.liferay.ide.idea.ui.modules.LiferayWorkspaceBuilder" />
-		<configurationType implementation="com.liferay.ide.idea.ui.bundle.LiferayBundleConfigurationType" />
-		<programRunner id="Run" implementation="com.liferay.ide.idea.ui.bundle.LiferayBundleRunner" />
-		<programRunner id="Debug" implementation="com.liferay.ide.idea.ui.bundle.LiferayBundleDebugger" />
+		<configurationType implementation="com.liferay.ide.idea.server.LiferayBundleConfigurationType" />
+		<programRunner id="Run" implementation="com.liferay.ide.idea.server.LiferayBundleRunner" />
+		<programRunner id="Debug" implementation="com.liferay.ide.idea.server.LiferayBundleDebugger" />
 	</extensions>
 </idea-plugin>
