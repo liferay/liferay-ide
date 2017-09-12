@@ -43,16 +43,10 @@ import java.util.List;
  */
 public class LiferayProjectTemplateList extends JPanel {
 
-    private static final String PROJECT_WIZARD_TEMPLATE = "project.wizard.template";
-
-    private JBList<ProjectTemplate> templateList;
-    private JPanel mainPanel;
-    private JTextPane description;
-
     public LiferayProjectTemplateList() {
         super(new BorderLayout());
 
-        add(mainPanel, BorderLayout.CENTER);
+        add(_mainPanel, BorderLayout.CENTER);
 
         GroupedItemsListRenderer<ProjectTemplate> renderer = new GroupedItemsListRenderer<ProjectTemplate>(new ListItemDescriptorAdapter<ProjectTemplate>() {
             @Nullable
@@ -77,25 +71,25 @@ public class LiferayProjectTemplateList extends JPanel {
                     myTextLabel.setDisabledIcon(IconLoader.getDisabledIcon(icon));
                 }
 
-                myTextLabel.setEnabled(templateList.isEnabled());
+                myTextLabel.setEnabled(_templateList.isEnabled());
                 myTextLabel.setBorder(IdeBorderFactory.createEmptyBorder(3, 3, 3, 3));
             }
         };
 
-        templateList.setCellRenderer(renderer);
+        _templateList.setCellRenderer(renderer);
 
-        templateList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        _templateList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 _updateSelection();
             }
         });
 
-        Messages.installHyperlinkSupport(description);
+        Messages.installHyperlinkSupport(_description);
     }
 
     private void _updateSelection() {
-        description.setText("");
+        _description.setText("");
 
         ProjectTemplate template = getSelectedTemplate();
 
@@ -107,7 +101,7 @@ public class LiferayProjectTemplateList extends JPanel {
                         (SystemInfo.isMac ? "" : "face=\"Verdana\" size=\"-1\"") + '>' + description +
                         "</font></body></html>";
 
-                this.description.setText(description);
+                this._description.setText(description);
             }
         }
     }
@@ -115,12 +109,12 @@ public class LiferayProjectTemplateList extends JPanel {
     public void setTemplates(List<ProjectTemplate> list, boolean preserveSelection) {
         Collections.sort(list, (o1, o2) -> Comparing.compare(o1 instanceof ArchivedProjectTemplate, o2 instanceof ArchivedProjectTemplate));
 
-        int index = preserveSelection ? templateList.getSelectedIndex() : -1;
+        int index = preserveSelection ? _templateList.getSelectedIndex() : -1;
 
-        templateList.setModel(new CollectionListModel<>(list));
+        _templateList.setModel(new CollectionListModel<>(list));
 
-        if (templateList.isEnabled()) {
-            templateList.setSelectedIndex(index == -1 ? 0 : index);
+        if (_templateList.isEnabled()) {
+            _templateList.setSelectedIndex(index == -1 ? 0 : index);
         }
 
         _updateSelection();
@@ -128,50 +122,55 @@ public class LiferayProjectTemplateList extends JPanel {
 
     @Nullable
     public ProjectTemplate getSelectedTemplate() {
-        return templateList.getSelectedValue();
+        return _templateList.getSelectedValue();
     }
 
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
 
-        templateList.setEnabled(enabled);
+        _templateList.setEnabled(enabled);
 
         if (!enabled) {
-            templateList.clearSelection();
+            _templateList.clearSelection();
         } else {
-            templateList.setSelectedIndex(0);
+            _templateList.setSelectedIndex(0);
         }
 
-        description.setEnabled(enabled);
+        _description.setEnabled(enabled);
     }
 
     void restoreSelection() {
-        String templateName = PropertiesComponent.getInstance().getValue(PROJECT_WIZARD_TEMPLATE);
+        String templateName = PropertiesComponent.getInstance().getValue(_PROJECT_WIZARD_TEMPLATE);
 
-        if (templateName != null && templateList.getModel() instanceof CollectionListModel) {
-            List<ProjectTemplate> list = ((CollectionListModel<ProjectTemplate>) templateList.getModel()).toList();
+        if (templateName != null && _templateList.getModel() instanceof CollectionListModel) {
+            List<ProjectTemplate> list = ((CollectionListModel<ProjectTemplate>) _templateList.getModel()).toList();
 
             ProjectTemplate template = ContainerUtil.find(list, template1 -> templateName.equals(template1.getName()));
 
             if (template != null) {
-                templateList.setSelectedValue(template, true);
+                _templateList.setSelectedValue(template, true);
             }
         }
 
-        templateList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        _templateList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 ProjectTemplate template = getSelectedTemplate();
                 if (template != null) {
-                    PropertiesComponent.getInstance().setValue(PROJECT_WIZARD_TEMPLATE, template.getName());
+                    PropertiesComponent.getInstance().setValue(_PROJECT_WIZARD_TEMPLATE, template.getName());
                 }
             }
         });
     }
 
     public void addListSelectionListener(ListSelectionListener listener) {
-        templateList.addListSelectionListener(listener);
+        _templateList.addListSelectionListener(listener);
     }
+
+    private static final String _PROJECT_WIZARD_TEMPLATE = "project.wizard.template";
+    private JTextPane _description;
+    private JBList<ProjectTemplate> _templateList;
+    private JPanel _mainPanel;
 
 }

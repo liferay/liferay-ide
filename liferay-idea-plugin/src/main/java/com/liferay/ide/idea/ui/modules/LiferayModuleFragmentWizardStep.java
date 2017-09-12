@@ -45,14 +45,14 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
 	public LiferayModuleFragmentWizardStep(WizardContext wizardContext, LiferayModuleFragmentBuilder builder) {
 		this._builder = builder;
-		jspsTree = new Tree();
-		jspsTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
-		JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(jspsTree);
+		_jspsTree = new Tree();
+		_jspsTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
+		JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(_jspsTree);
 
-		jspsPanel.add(typesScrollPane, "archetypes");
-		jspsTree.setRootVisible(false);
-		jspsTree.setShowsRootHandles(true);
-		jspsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+		_jspsPanel.add(typesScrollPane, "archetypes");
+		_jspsTree.setRootVisible(false);
+		_jspsTree.setShowsRootHandles(true);
+		_jspsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
 		Project project = wizardContext.getProject();
 
@@ -61,7 +61,7 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 		File liferayHomeDir = new File(project.getBasePath(), homeDir);
 
 		if (!liferayHomeDir.exists()) {
-			fragmentHost.addItem("unable to get liferay bundle");
+			_fragmentHost.addItem("unable to get liferay bundle");
 
 			DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
 			DefaultMutableTreeNode node = new DefaultMutableTreeNode("unable to get liferay bundle", true);
@@ -70,7 +70,7 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
 			TreeModel model = new DefaultTreeModel(root);
 
-			jspsTree.setModel(model);
+			_jspsTree.setModel(model);
 
 			return;
 		}
@@ -78,20 +78,20 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 		List<String> bundles = ServerUtil.getModuleFileListFrom70Server(liferayHomeDir);
 
 		for (String bundle : bundles) {
-			fragmentHost.addItem(bundle);
+			_fragmentHost.addItem(bundle);
 		}
 
-		fragmentHost.addActionListener(new ActionListener() {
+		_fragmentHost.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
 
 				ServerUtil.getModuleFileFrom70Server(
-					liferayHomeDir, fragmentHost.getSelectedItem().toString(), LiferayIdeaUI.USER_BUNDLES_DIR);
+					liferayHomeDir, _fragmentHost.getSelectedItem().toString(), LiferayIdeaUI.USER_BUNDLES_DIR);
 
 				File currentOsgiBundle = new File(
-					LiferayIdeaUI.USER_BUNDLES_DIR, fragmentHost.getSelectedItem().toString());
+					LiferayIdeaUI.USER_BUNDLES_DIR, _fragmentHost.getSelectedItem().toString());
 
 				if (currentOsgiBundle.exists()) {
 					try (JarFile jar = new JarFile(currentOsgiBundle)) {
@@ -116,7 +116,7 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 					}
 				}
 
-				jspsTree.setModel(new DefaultTreeModel(root));
+				_jspsTree.setModel(new DefaultTreeModel(root));
 			}
 		});
 	}
@@ -159,15 +159,15 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 	}
 
 	public JComponent getComponent() {
-		return mainPanel;
+		return _mainPanel;
 	}
 
 	public String getFragmentHost() {
-		return fragmentHost.getSelectedItem().toString();
+		return _fragmentHost.getSelectedItem().toString();
 	}
 
 	public String[] getSelectedJsps() {
-		TreePath[] paths = jspsTree.getSelectionPaths();
+		TreePath[] paths = _jspsTree.getSelectionPaths();
 
 		if (CoreUtil.isNullOrEmpty(paths)) {
 			return null;
@@ -204,9 +204,9 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 	}
 
 	private LiferayModuleFragmentBuilder _builder;
-	private JComboBox<String> fragmentHost;
-	private JPanel jspsPanel;
-	private Tree jspsTree;
-	private JPanel mainPanel;
+	private JComboBox<String> _fragmentHost;
+	private JPanel _jspsPanel;
+	private Tree _jspsTree;
+	private JPanel _mainPanel;
 
 }

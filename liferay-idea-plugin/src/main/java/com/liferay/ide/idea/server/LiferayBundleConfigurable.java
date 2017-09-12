@@ -34,52 +34,52 @@ import org.jetbrains.annotations.Nullable;
 public class LiferayBundleConfigurable extends SettingsEditor<LiferayBundleConfiguration> implements PanelWithAnchor {
 
 	public LiferayBundleConfigurable(Project project) {
-		ModulesComboBox modulesComboBox = modules.getComponent();
+		ModulesComboBox modulesComboBox = _modules.getComponent();
 
 		modulesComboBox.allowEmptySelection("<whole project>");
 		modulesComboBox.fillModules(project);
 
-		liferayBundle.setEditable(false);
-		liferayBundle.setEnabled(false);
-		jrePath.setDefaultJreSelector(DefaultJreSelector.fromModuleDependencies(modulesComboBox, true));
+		_liferayBundle.setEditable(false);
+		_liferayBundle.setEnabled(false);
+		_jrePath.setDefaultJreSelector(DefaultJreSelector.fromModuleDependencies(modulesComboBox, true));
 	}
 
 	public void applyEditorTo(@NotNull LiferayBundleConfiguration configuration) throws ConfigurationException {
-		configuration.setAlternativeJrePath(jrePath.getJrePathOrName());
-		configuration.setAlternativeJrePathEnabled(jrePath.isAlternativeJreSelected());
-		configuration.setModule(modules.getComponent().getSelectedModule());
-		configuration.setLiferayBundle(liferayBundle.getText());
-		configuration.setVMParameters(vmParams.getText());
+		configuration.setAlternativeJrePath(_jrePath.getJrePathOrName());
+		configuration.setAlternativeJrePathEnabled(_jrePath.isAlternativeJreSelected());
+		configuration.setModule(_modules.getComponent().getSelectedModule());
+		configuration.setLiferayBundle(_liferayBundle.getText());
+		configuration.setVMParameters(_vmParams.getText());
 	}
 
 	@NotNull
 	public JComponent createEditor() {
-		return mainPanel;
+		return _mainPanel;
 	}
 
 	@Override
 	public JComponent getAnchor() {
-		return anchor;
+		return _anchor;
 	}
 
 	public void resetEditorFrom(@NotNull LiferayBundleConfiguration configuration) {
-		vmParams.setText(configuration.getVMParameters());
-		liferayBundle.setText(configuration.getLiferayBundle());
-		jrePath.setPathOrName(configuration.getAlternativeJrePath(), configuration.isAlternativeJrePathEnabled());
-		modules.getComponent().setSelectedModule(configuration.getModule());
+		_vmParams.setText(configuration.getVMParameters());
+		_liferayBundle.setText(configuration.getLiferayBundle());
+		_jrePath.setPathOrName(configuration.getAlternativeJrePath(), configuration.isAlternativeJrePathEnabled());
+		_modules.getComponent().setSelectedModule(configuration.getModule());
 	}
 
 	@Override
 	public void setAnchor(@Nullable JComponent anchor) {
-		this.anchor = anchor;
-		jrePath.setAnchor(anchor);
+		_anchor = anchor;
+		_jrePath.setAnchor(anchor);
 	}
 
-	private JComponent anchor;
-	private JrePathEditor jrePath;
-	private JTextField liferayBundle;
-	private JPanel mainPanel;
-	private LabeledComponent<ModulesComboBox> modules;
-	private JTextField vmParams;
+	private JComponent _anchor;
+	private JrePathEditor _jrePath;
+	private JTextField _liferayBundle;
+	private JPanel _mainPanel;
+	private LabeledComponent<ModulesComboBox> _modules;
+	private JTextField _vmParams;
 
 }

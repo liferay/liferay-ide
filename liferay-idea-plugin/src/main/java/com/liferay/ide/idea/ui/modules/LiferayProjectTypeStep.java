@@ -111,9 +111,9 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 		List<TemplatesGroup> groups = fillTemplatesMap(context);
 		LOG.debug("groups=" + groups);
 
-		projectTypeList.setModel(new CollectionListModel<>(groups));
-		projectTypeList.setSelectionModel(new SingleSelectionModel());
-		projectTypeList.addListSelectionListener(new ListSelectionListener() {
+		_projectTypeList.setModel(new CollectionListModel<>(groups));
+		_projectTypeList.setSelectionModel(new SingleSelectionModel());
+		_projectTypeList.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -122,7 +122,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 
 		});
 
-		projectTypeList.setCellRenderer(
+		_projectTypeList.setCellRenderer(
 new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<TemplatesGroup>() {
 
 			@Nullable
@@ -168,7 +168,7 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 
 		});
 
-		new ListSpeedSearch(projectTypeList) {
+		new ListSpeedSearch(_projectTypeList) {
 
 			@Override
 			protected String getElementText(Object element) {
@@ -200,28 +200,28 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 
 		};
 
-		frameworksPanel = new AddSupportForFrameworksPanel(Collections.emptyList(), model, true, headerPanel);
+		_frameworksPanel = new AddSupportForFrameworksPanel(Collections.emptyList(), model, true, _headerPanel);
 
-		Disposer.register(this, frameworksPanel);
+		Disposer.register(this, _frameworksPanel);
 
-		frameworksPanelPlaceholder.add(frameworksPanel.getMainPanel());
+		_frameworksPanelPlaceholder.add(_frameworksPanel.getMainPanel());
 
-		frameworksLabel.setLabelFor(frameworksPanel.getFrameworksTree());
+		_frameworksLabel.setLabelFor(_frameworksPanel.getFrameworksTree());
 
-		frameworksLabel.setBorder(IdeBorderFactory.createEmptyBorder(3));
+		_frameworksLabel.setBorder(IdeBorderFactory.createEmptyBorder(3));
 
 		_configurationUpdater = new ModuleBuilder.ModuleConfigurationUpdater() {
 
 			@Override
 			public void update(@NotNull Module module, @NotNull ModifiableRootModel rootModel) {
 				if (isFrameworksMode()) {
-					frameworksPanel.addSupport(module, rootModel);
+					_frameworksPanel.addSupport(module, rootModel);
 				}
 			}
 
 		};
 
-		projectTypeList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+		_projectTypeList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -255,12 +255,12 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 			TemplatesGroup group = ContainerUtil.find(groups, group1 -> groupId.equals(group1.getId()));
 
 			if (group != null) {
-				projectTypeList.setSelectedValue(group, true);
+				_projectTypeList.setSelectedValue(group, true);
 			}
 		}
 
-		if (projectTypeList.getSelectedValue() == null) {
-			projectTypeList.setSelectedIndex(0);
+		if (_projectTypeList.getSelectedValue() == null) {
+			_projectTypeList.setSelectedIndex(0);
 		}
 
 		_templatesList.restoreSelection();
@@ -280,12 +280,12 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 
 	@Override
 	public void addSettingsField(@NotNull String label, @NotNull JComponent field) {
-		LiferayProjectSettingsStep.addField(label, field, headerPanel);
+		LiferayProjectSettingsStep.addField(label, field, _headerPanel);
 	}
 
 	@Override
 	public void dispose() {
-		lastSelectedGroup = null;
+		_lastSelectedGroup = null;
 		_settingsStep = null;
 		_templatesMap.clear();
 		_builders.clear();
@@ -299,7 +299,7 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 
 	@Override
 	public JComponent getComponent() {
-		return mainPanel;
+		return _mainPanel;
 	}
 
 	@Override
@@ -327,7 +327,7 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 
 	@Override
 	public JComponent getPreferredFocusedComponent() {
-		return projectTypeList;
+		return _projectTypeList;
 	}
 
 	@Nullable
@@ -341,7 +341,7 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 
 	public void onWizardFinished() throws CommitStepException {
 		if (isFrameworksMode()) {
-			boolean ok = frameworksPanel.downloadLibraries(_wizard.getContentComponent());
+			boolean ok = _frameworksPanel.downloadLibraries(_wizard.getContentComponent());
 
 			if (!ok) {
 				throw new CommitStepException(null);
@@ -358,18 +358,18 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 	public void projectTypeChanged() {
 		TemplatesGroup group = getSelectedGroup();
 
-		if (group == null || group == lastSelectedGroup) {
+		if (group == null || group == _lastSelectedGroup) {
 			return;
 		}
 
-		lastSelectedGroup = group;
+		_lastSelectedGroup = group;
 
 		PropertiesComponent.getInstance().setValue(_PROJECT_WIZARD_GROUP, group.getId());
 
 		ModuleBuilder groupModuleBuilder = group.getModuleBuilder();
 
 		_settingsStep = null;
-		headerPanel.removeAll();
+		_headerPanel.removeAll();
 
 		if (groupModuleBuilder != null && groupModuleBuilder.getModuleType() != null) {
 			_settingsStep = groupModuleBuilder.modifyProjectTypeStep(this);
@@ -404,11 +404,11 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 					}
 				}
 
-				frameworksPanel.setProviders(new ArrayList<>(set),
+				_frameworksPanel.setProviders(new ArrayList<>(set),
 						new java.util.HashSet<>(Arrays.asList(category.getAssociatedFrameworkIds())),
 						new java.util.HashSet<>(Arrays.asList(category.getPreselectedFrameworkIds())));
 			} else {
-				frameworksPanel.setProviders(providers);
+				_frameworksPanel.setProviders(providers);
 			}
 
 			getSelectedBuilder().addModuleConfigurationUpdater(_configurationUpdater);
@@ -416,9 +416,9 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 			showCard(_FRAMEWORKS_CARD);
 		}
 
-		headerPanel.setVisible(headerPanel.getComponentCount() > 0);
+		_headerPanel.setVisible(_headerPanel.getComponentCount() > 0);
 
-		List<JLabel> labels = UIUtil.findComponentsOfType(headerPanel, JLabel.class);
+		List<JLabel> labels = UIUtil.findComponentsOfType(_headerPanel, JLabel.class);
 
 		int width = 0;
 
@@ -432,8 +432,8 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 			label.setPreferredSize(new Dimension(width, label.getPreferredSize().height));
 		}
 
-		headerPanel.revalidate();
-		headerPanel.repaint();
+		_headerPanel.revalidate();
+		_headerPanel.repaint();
 
 		_updateSelection();
 	}
@@ -467,7 +467,7 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 			return false;
 		}
 
-		if (isFrameworksMode() && !frameworksPanel.validate()) {
+		if (isFrameworksMode() && !_frameworksPanel.validate()) {
 			return false;
 		}
 
@@ -528,7 +528,7 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 	}
 
 	private TemplatesGroup getSelectedGroup() {
-		return projectTypeList.getSelectedValue();
+		return _projectTypeList.getSelectedValue();
 	}
 
 	private boolean isFrameworksMode() {
@@ -554,7 +554,7 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 	}
 
 	private void showCard(String card) {
-		((CardLayout)optionsPanel.getLayout()).show(optionsPanel, card);
+		((CardLayout) _optionsPanel.getLayout()).show(_optionsPanel, card);
 		_currentCard = card;
 	}
 
@@ -571,7 +571,7 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 			step.updateStep();
 
 			_customSteps.put(card, step);
-			optionsPanel.add(step.getComponent(), card);
+			_optionsPanel.add(step.getComponent(), card);
 		}
 
 		showCard(card);
@@ -617,20 +617,18 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 	private ModuleBuilder.ModuleConfigurationUpdater _configurationUpdater;
 	private String _currentCard;
 	private Map<String, ModuleWizardStep> _customSteps = new THashMap<>();
-	private JBLabel frameworksLabel;
-	private AddSupportForFrameworksPanel frameworksPanel;
-	private JPanel frameworksPanelPlaceholder;
-	private JPanel headerPanel;
-	private TemplatesGroup lastSelectedGroup;
-	private JPanel mainPanel;
+	private JBLabel _frameworksLabel;
+	private AddSupportForFrameworksPanel _frameworksPanel;
+	private JPanel _frameworksPanelPlaceholder;
+	private JPanel _headerPanel;
+	private TemplatesGroup _lastSelectedGroup;
+	private JPanel _mainPanel;
 	private ModulesProvider _modulesProvider;
 	private WizardContext _context;
-	private JPanel optionsPanel;
-	private JBList<TemplatesGroup> projectTypeList;
-
+	private JPanel _optionsPanel;
+	private JBList<TemplatesGroup> _projectTypeList;
 	@Nullable
 	private ModuleWizardStep _settingsStep;
-
 	private LiferayProjectTemplateList _templatesList;
 	private MultiMap<TemplatesGroup, ProjectTemplate> _templatesMap;
 	private NewLiferayModuleWizard _wizard;

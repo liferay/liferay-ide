@@ -41,16 +41,16 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 
 	public LiferayModuleWizardStep(LiferayModuleBuilder builder) {
 		this._builder = builder;
-		typesTree = new Tree();
-		typesTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
+		_typesTree = new Tree();
+		_typesTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
 
-		JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(typesTree);
+		JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(_typesTree);
 
-		typesPanel.add(typesScrollPane, "archetypes");
+		_typesPanel.add(typesScrollPane, "archetypes");
 
-		typesTree.setRootVisible(false);
-		typesTree.setShowsRootHandles(true);
-		typesTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		_typesTree.setRootVisible(false);
+		_typesTree.setShowsRootHandles(true);
+		_typesTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
 
@@ -64,24 +64,24 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 
 		TreeModel model = new DefaultTreeModel(root);
 
-		typesTree.setModel(model);
+		_typesTree.setModel(model);
 	}
 
 	public String getClassName() {
-		return className.getText();
+		return _className.getText();
 	}
 
 	public JComponent getComponent() {
-		return mainPanel;
+		return _mainPanel;
 	}
 
 	public String getPackageName() {
-		return packageName.getText();
+		return _packageName.getText();
 	}
 
 	@Nullable
 	public String getSelectedType() {
-		Object selectedType = typesTree.getLastSelectedPathComponent();
+		Object selectedType = _typesTree.getLastSelectedPathComponent();
 
 		if (selectedType != null) {
 			return selectedType.toString();
@@ -127,10 +127,10 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 	}
 
 	private LiferayModuleBuilder _builder;
-	private JTextField className;
-	private JPanel mainPanel;
-	private JTextField packageName;
-	private JPanel typesPanel;
-	private Tree typesTree;
+	private JTextField _className;
+	private JPanel _mainPanel;
+	private JTextField _packageName;
+	private JPanel _typesPanel;
+	private Tree _typesTree;
 
 }
