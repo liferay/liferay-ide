@@ -49,7 +49,7 @@ public class ServerUtil {
 	public static File getModuleFileFrom70Server(File runtime, String hostOsgiBundle, File temp) {
 		File moduleOsgiBundle = null;
 
-		for (String dir : osgiBundleDirs) {
+		for (String dir : _osgiBundleDirs) {
 			moduleOsgiBundle = new File(new File(new File(runtime, "osgi"), dir), hostOsgiBundle);
 
 			if (moduleOsgiBundle.exists()) {
@@ -113,7 +113,7 @@ public class ServerUtil {
 		List<String> bundles = new ArrayList<>();
 
 		try {
-			for (String dir : osgiBundleDirs) {
+			for (String dir : _osgiBundleDirs) {
 				File dirFile = new File(new File(runtime, "osgi"), dir);
 
 				if (dirFile.exists()) {
@@ -160,6 +160,6 @@ dirFile.listFiles(new FilenameFilter() {
 		return bundles;
 	}
 
-	private static String[] osgiBundleDirs = {"core", "modules", "portal", "static"};
+	private static String[] _osgiBundleDirs = {"core", "modules", "portal", "static"};
 
 }

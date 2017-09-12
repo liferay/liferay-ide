@@ -104,10 +104,10 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 	public LiferayProjectTypeStep(
 		WizardContext context, NewLiferayModuleWizard wizard, ModulesProvider modulesProvider) {
 
-		myContext = context;
-		this.wizard = wizard;
+		_context = context;
+		_wizard = wizard;
 
-		templatesMap = new ConcurrentMultiMap<>();
+		_templatesMap = new ConcurrentMultiMap<>();
 		List<TemplatesGroup> groups = fillTemplatesMap(context);
 		LOG.debug("groups=" + groups);
 
@@ -117,7 +117,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				updateSelection();
+				_updateSelection();
 			}
 
 		});
@@ -177,7 +177,7 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 
 		};
 
-		this.modulesProvider = modulesProvider;
+		this._modulesProvider = modulesProvider;
 
 		Project project = context.getProject();
 
@@ -210,7 +210,7 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 
 		frameworksLabel.setBorder(IdeBorderFactory.createEmptyBorder(3));
 
-		configurationUpdater = new ModuleBuilder.ModuleConfigurationUpdater() {
+		_configurationUpdater = new ModuleBuilder.ModuleConfigurationUpdater() {
 
 			@Override
 			public void update(@NotNull Module module, @NotNull ModifiableRootModel rootModel) {
@@ -230,26 +230,26 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 
 		});
 
-		templatesList.addListSelectionListener(new ListSelectionListener() {
+		_templatesList.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				updateSelection();
+				_updateSelection();
 			}
 
 		});
 
-		for (TemplatesGroup templatesGroup : templatesMap.keySet()) {
+		for (TemplatesGroup templatesGroup : _templatesMap.keySet()) {
 			ModuleBuilder builder = templatesGroup.getModuleBuilder();
 
 			if (builder instanceof LiferayModuleBuilder) {
 				if (builder != null) {
-					this.wizard.getSequence().addStepsForBuilder(builder, context, modulesProvider);
+					_wizard.getSequence().addStepsForBuilder(builder, context, modulesProvider);
 				}
 			}
 		}
 
-		String groupId = PropertiesComponent.getInstance().getValue(PROJECT_WIZARD_GROUP);
+		String groupId = PropertiesComponent.getInstance().getValue(_PROJECT_WIZARD_GROUP);
 
 		if (groupId != null) {
 			TemplatesGroup group = ContainerUtil.find(groups, group1 -> groupId.equals(group1.getId()));
@@ -263,7 +263,7 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 			projectTypeList.setSelectedIndex(0);
 		}
 
-		templatesList.restoreSelection();
+		_templatesList.restoreSelection();
 	}
 
 	@Override
@@ -286,10 +286,10 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 	@Override
 	public void dispose() {
 		lastSelectedGroup = null;
-		settingsStep = null;
-		templatesMap.clear();
-		builders.clear();
-		customSteps.clear();
+		_settingsStep = null;
+		_templatesMap.clear();
+		_builders.clear();
+		_customSteps.clear();
 	}
 
 	@Override
@@ -304,7 +304,7 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 
 	@Override
 	public WizardContext getContext() {
-		return myContext;
+		return _context;
 	}
 
 	@Override
@@ -313,7 +313,7 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 			return getCustomStep().getHelpId();
 		}
 
-		if (myContext.isCreatingNewProject()) {
+		if (_context.isCreatingNewProject()) {
 			return "Project_Category_and_Options";
 		}
 
@@ -332,8 +332,8 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 
 	@Nullable
 	public ProjectTemplate getSelectedTemplate() {
-		if (currentCard == TEMPLATES_CARD) {
-			return templatesList.getSelectedTemplate();
+		if (_currentCard == _TEMPLATES_CARD) {
+			return _templatesList.getSelectedTemplate();
 		}
 
 		return null;
@@ -341,7 +341,7 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 
 	public void onWizardFinished() throws CommitStepException {
 		if (isFrameworksMode()) {
-			boolean ok = frameworksPanel.downloadLibraries(wizard.getContentComponent());
+			boolean ok = frameworksPanel.downloadLibraries(_wizard.getContentComponent());
 
 			if (!ok) {
 				throw new CommitStepException(null);
@@ -364,19 +364,19 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 
 		lastSelectedGroup = group;
 
-		PropertiesComponent.getInstance().setValue(PROJECT_WIZARD_GROUP, group.getId());
+		PropertiesComponent.getInstance().setValue(_PROJECT_WIZARD_GROUP, group.getId());
 
 		ModuleBuilder groupModuleBuilder = group.getModuleBuilder();
 
-		settingsStep = null;
+		_settingsStep = null;
 		headerPanel.removeAll();
 
 		if (groupModuleBuilder != null && groupModuleBuilder.getModuleType() != null) {
-			settingsStep = groupModuleBuilder.modifyProjectTypeStep(this);
+			_settingsStep = groupModuleBuilder.modifyProjectTypeStep(this);
 		}
 
 		if (groupModuleBuilder == null || groupModuleBuilder.isTemplateBased()) {
-			showTemplates(group);
+			_showTemplates(group);
 		} else if (!showCustomOptions(groupModuleBuilder)) {
 			List<FrameworkSupportInModuleProvider> providers = FrameworkSupportUtil.getProviders(
 	groupModuleBuilder);
@@ -411,9 +411,9 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 				frameworksPanel.setProviders(providers);
 			}
 
-			getSelectedBuilder().addModuleConfigurationUpdater(configurationUpdater);
+			getSelectedBuilder().addModuleConfigurationUpdater(_configurationUpdater);
 
-			showCard(FRAMEWORKS_CARD);
+			showCard(_FRAMEWORKS_CARD);
 		}
 
 		headerPanel.setVisible(headerPanel.getComponentCount() > 0);
@@ -435,14 +435,14 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 		headerPanel.revalidate();
 		headerPanel.repaint();
 
-		updateSelection();
+		_updateSelection();
 	}
 
 	@Override
 	public void updateDataModel() {
 		ModuleBuilder builder = getSelectedBuilder();
 
-		wizard.getSequence().addStepsForBuilder(builder, myContext, modulesProvider);
+		_wizard.getSequence().addStepsForBuilder(builder, _context, _modulesProvider);
 
 		ModuleWizardStep step = getCustomStep();
 
@@ -450,15 +450,15 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 			step.updateDataModel();
 		}
 
-		if (settingsStep != null) {
-			settingsStep.updateDataModel();
+		if (_settingsStep != null) {
+			_settingsStep.updateDataModel();
 		}
 	}
 
 	@Override
 	public boolean validate() throws ConfigurationException {
-		if (settingsStep != null) {
-			if (!settingsStep.validate()) return false;
+		if (_settingsStep != null) {
+			if (!_settingsStep.validate()) return false;
 		}
 
 		ModuleWizardStep step = getCustomStep();
@@ -496,10 +496,10 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 	}
 
 	private List<TemplatesGroup> fillTemplatesMap(WizardContext context) {
-		templatesMap.put(new TemplatesGroup(new LiferayModuleBuilder()), new ArrayList<>());
-		templatesMap.put(new TemplatesGroup(new LiferayModuleFragmentBuilder()), new ArrayList<>());
+		_templatesMap.put(new TemplatesGroup(new LiferayModuleBuilder()), new ArrayList<>());
+		_templatesMap.put(new TemplatesGroup(new LiferayModuleFragmentBuilder()), new ArrayList<>());
 
-		List<TemplatesGroup> groups = new ArrayList<>(templatesMap.keySet());
+		List<TemplatesGroup> groups = new ArrayList<>(_templatesMap.keySet());
 
 		MultiMap<ModuleType, TemplatesGroup> moduleTypes = new MultiMap<>();
 
@@ -514,14 +514,14 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 
 	@Nullable
 	private ModuleWizardStep getCustomStep() {
-		return customSteps.get(currentCard);
+		return _customSteps.get(_currentCard);
 	}
 
 	private ModuleBuilder getSelectedBuilder() {
 		ProjectTemplate template = getSelectedTemplate();
 
 		if (template != null) {
-			return builders.get(template);
+			return _builders.get(template);
 		}
 
 		return getSelectedGroup().getModuleBuilder();
@@ -532,7 +532,7 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 	}
 
 	private boolean isFrameworksMode() {
-		if (FRAMEWORKS_CARD.equals(currentCard) && getSelectedBuilder().equals(myContext.getProjectBuilder())) {
+		if (_FRAMEWORKS_CARD.equals(_currentCard) && getSelectedBuilder().equals(_context.getProjectBuilder())) {
 			return true;
 		}
 
@@ -550,19 +550,19 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 			list.add(0, new BuilderBasedTemplate(moduleBuilder));
 		}
 
-		templatesList.setTemplates(list, preserveSelection);
+		_templatesList.setTemplates(list, preserveSelection);
 	}
 
 	private void showCard(String card) {
 		((CardLayout)optionsPanel.getLayout()).show(optionsPanel, card);
-		currentCard = card;
+		_currentCard = card;
 	}
 
 	private boolean showCustomOptions(@NotNull ModuleBuilder builder) {
 		String card = builder.getBuilderId();
 
-		if (!customSteps.containsKey(card)) {
-			ModuleWizardStep step = builder.getCustomOptionsStep(myContext, this);
+		if (!_customSteps.containsKey(card)) {
+			ModuleWizardStep step = builder.getCustomOptionsStep(_context, this);
 
 			if (step == null) {
 				return false;
@@ -570,7 +570,7 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 
 			step.updateStep();
 
-			customSteps.put(card, step);
+			_customSteps.put(card, step);
 			optionsPanel.add(step.getComponent(), card);
 		}
 
@@ -579,60 +579,60 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 		return true;
 	}
 
-	private void showTemplates(TemplatesGroup group) {
-		setTemplatesList(group, templatesMap.get(group), false);
+	private void _showTemplates(TemplatesGroup group) {
+		setTemplatesList(group, _templatesMap.get(group), false);
 
-		showCard(TEMPLATES_CARD);
+		showCard(_TEMPLATES_CARD);
 	}
 
-	private void updateSelection() {
+	private void _updateSelection() {
 		ProjectTemplate template = getSelectedTemplate();
 
 		if (template != null) {
-			myContext.setProjectTemplate(template);
+			_context.setProjectTemplate(template);
 		}
 
 		ModuleBuilder builder = getSelectedBuilder();
 
-		myContext.setProjectBuilder(builder);
+		_context.setProjectBuilder(builder);
 
 		if (builder != null) {
-			wizard.getSequence().setType(builder.getBuilderId());
+			_wizard.getSequence().setType(builder.getBuilderId());
 		}
 
-		wizard.setDelegate(builder instanceof WizardDelegate ? (WizardDelegate)builder : null);
-		wizard.updateWizardButtons();
+		_wizard.setDelegate(builder instanceof WizardDelegate ? (WizardDelegate)builder : null);
+		_wizard.updateWizardButtons();
 	}
 
-	private static final String FRAMEWORKS_CARD = "frameworks card";
+	private static final String _FRAMEWORKS_CARD = "frameworks card";
 
 	private static final Logger LOG = Logger.getInstance(LiferayProjectTypeStep.class);
 
-	private static final String PROJECT_WIZARD_GROUP = "project.wizard.group";
+	private static final String _PROJECT_WIZARD_GROUP = "project.wizard.group";
 
-	private static final String TEMPLATES_CARD = "templates card";
+	private static final String _TEMPLATES_CARD = "templates card";
 
-	private Map<ProjectTemplate, ModuleBuilder> builders = FactoryMap.createMap(
+	private Map<ProjectTemplate, ModuleBuilder> _builders = FactoryMap.createMap(
 	key -> (ModuleBuilder)key.createModuleBuilder());
-	private ModuleBuilder.ModuleConfigurationUpdater configurationUpdater;
-	private String currentCard;
-	private Map<String, ModuleWizardStep> customSteps = new THashMap<>();
+	private ModuleBuilder.ModuleConfigurationUpdater _configurationUpdater;
+	private String _currentCard;
+	private Map<String, ModuleWizardStep> _customSteps = new THashMap<>();
 	private JBLabel frameworksLabel;
 	private AddSupportForFrameworksPanel frameworksPanel;
 	private JPanel frameworksPanelPlaceholder;
 	private JPanel headerPanel;
 	private TemplatesGroup lastSelectedGroup;
 	private JPanel mainPanel;
-	private ModulesProvider modulesProvider;
-	private WizardContext myContext;
+	private ModulesProvider _modulesProvider;
+	private WizardContext _context;
 	private JPanel optionsPanel;
 	private JBList<TemplatesGroup> projectTypeList;
 
 	@Nullable
-	private ModuleWizardStep settingsStep;
+	private ModuleWizardStep _settingsStep;
 
-	private LiferayProjectTemplateList templatesList;
-	private MultiMap<TemplatesGroup, ProjectTemplate> templatesMap;
-	private NewLiferayModuleWizard wizard;
+	private LiferayProjectTemplateList _templatesList;
+	private MultiMap<TemplatesGroup, ProjectTemplate> _templatesMap;
+	private NewLiferayModuleWizard _wizard;
 
 }

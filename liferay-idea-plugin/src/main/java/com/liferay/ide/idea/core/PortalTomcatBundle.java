@@ -123,7 +123,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 
 	@Override
 	public String[] getRuntimeStartVMArgs() {
-		return getRuntimeVMArgs();
+		return _getRuntimeVMArgs();
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 
 	@Override
 	public String[] getRuntimeStopVMArgs() {
-		return getRuntimeVMArgs();
+		return _getRuntimeVMArgs();
 	}
 
 	@Override
@@ -184,7 +184,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 	public void setHttpPort(String port) {
 		File serviceXmlFile = Paths.get(getAppServerDir().toString(), "conf", "server.xml").toFile();
 
-		setHttpPortValue(serviceXmlFile, "Connector", "protocol", "HTTP/1.1", "port", port);
+		_setHttpPortValue(serviceXmlFile, "Connector", "protocol", "HTTP/1.1", "port", port);
 	}
 
 	@Override
@@ -196,7 +196,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 	protected int getDefaultJMXRemotePort() {
 		int retval = 8099;
 
-		Path setenv = Paths.get(getAppServerDir().toString(), "bin", "setenv."+ getShellExtension());
+		Path setenv = Paths.get(getAppServerDir().toString(), "bin", "setenv."+ _getShellExtension());
 
 		String contents = FileUtil.readContents(setenv.toFile(), true);
 
@@ -218,7 +218,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 		return retval;
 	}
 
-	private String[] getRuntimeVMArgs() {
+	private String[] _getRuntimeVMArgs() {
 		List<String> args = new ArrayList<>();
 
 		args.add("-Dcatalina.base=" + "\"" + bundlePath.toString() + "\"");
@@ -244,7 +244,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 		return args.toArray(new String[0]);
 	}
 
-	private String getShellExtension() {
+	private String _getShellExtension() {
 		if (System.getProperty("os.name").startsWith("Win")) {
 			return "bat";
 		}
@@ -252,7 +252,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 		return "sh";
 	}
 
-	private void setHttpPortValue(
+	private void _setHttpPortValue(
 		File xmlFile, String tagName, String attriName, String attriValue, String targetName, String value) {
 
 		DocumentBuilder db = null;

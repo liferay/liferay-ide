@@ -22,8 +22,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
 import com.intellij.openapi.util.Disposer;
 
-import java.awt.*;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,7 +40,7 @@ public class NewLiferayModuleWizard extends AbstractProjectWizard {
 
 	@Override
 	public StepSequence getSequence() {
-		return mySequence;
+		return _sequence;
 	}
 
 	@Nullable
@@ -55,21 +53,21 @@ public class NewLiferayModuleWizard extends AbstractProjectWizard {
 		myWizardContext.setModulesProvider(modulesProvider);
 
 		LiferayProjectTypeStep projectTypeStep = new LiferayProjectTypeStep(
-	myWizardContext, this, modulesProvider);
+			myWizardContext, this, modulesProvider);
 
 		Disposer.register(getDisposable(), projectTypeStep);
 
-		mySequence.addCommonStep(projectTypeStep);
+		_sequence.addCommonStep(projectTypeStep);
 
-		mySequence.addCommonFinishingStep(new LiferayProjectSettingsStep(myWizardContext), null);
+		_sequence.addCommonFinishingStep(new LiferayProjectSettingsStep(myWizardContext), null);
 
-		for (ModuleWizardStep step : mySequence.getAllSteps()) {
+		for (ModuleWizardStep step : _sequence.getAllSteps()) {
 			addStep(step);
 		}
 
 		super.init();
 	}
 
-	private StepSequence mySequence = new StepSequence();
+	private StepSequence _sequence = new StepSequence();
 
 }

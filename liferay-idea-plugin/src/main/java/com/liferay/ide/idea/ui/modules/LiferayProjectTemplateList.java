@@ -87,14 +87,14 @@ public class LiferayProjectTemplateList extends JPanel {
         templateList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                updateSelection();
+                _updateSelection();
             }
         });
 
         Messages.installHyperlinkSupport(description);
     }
 
-    private void updateSelection() {
+    private void _updateSelection() {
         description.setText("");
 
         ProjectTemplate template = getSelectedTemplate();
@@ -123,7 +123,7 @@ public class LiferayProjectTemplateList extends JPanel {
             templateList.setSelectedIndex(index == -1 ? 0 : index);
         }
 
-        updateSelection();
+        _updateSelection();
     }
 
     @Nullable

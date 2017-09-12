@@ -40,7 +40,7 @@ import org.jetbrains.annotations.Nullable;
 public class LiferayModuleWizardStep extends ModuleWizardStep {
 
 	public LiferayModuleWizardStep(LiferayModuleBuilder builder) {
-		this.builder = builder;
+		this._builder = builder;
 		typesTree = new Tree();
 		typesTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
 
@@ -92,9 +92,9 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 
 	@Override
 	public void updateDataModel() {
-		builder.setType(getSelectedType());
-		builder.setClassName(getClassName());
-		builder.setPackageName(getPackageName());
+		_builder.setType(getSelectedType());
+		_builder.setClassName(getClassName());
+		_builder.setPackageName(getPackageName());
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 		return true;
 	}
 
-	private LiferayModuleBuilder builder;
+	private LiferayModuleBuilder _builder;
 	private JTextField className;
 	private JPanel mainPanel;
 	private JTextField packageName;

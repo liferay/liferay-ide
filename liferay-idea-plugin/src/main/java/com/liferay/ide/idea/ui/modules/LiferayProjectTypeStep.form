@@ -66,7 +66,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <nested-form id="b063c" form-file="com/liferay/ide/workspace/ui/wizard/LiferayProjectTemplateList.form" binding="templatesList">
+                  <nested-form id="b063c" form-file="com/liferay/ide/workspace/ui/wizard/LiferayProjectTemplateList.form" binding="_templatesList">
                     <constraints border-constraint="Center"/>
                   </nested-form>
                 </children>

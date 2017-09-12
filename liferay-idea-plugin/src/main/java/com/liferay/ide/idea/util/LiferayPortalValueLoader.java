@@ -42,14 +42,13 @@ public class LiferayPortalValueLoader {
 	public LiferayPortalValueLoader(Path appServerPortalDir, Path[] extraLibs)
 	{
 
-		this.portalDir = appServerPortalDir;
-		this.userLibs = extraLibs;
+		this._portalDir = appServerPortalDir;
+		this._userLibs = extraLibs;
 	}
 
 	public LiferayPortalValueLoader(Path[] extraLibs)
 	{
-
-		this.userLibs = extraLibs;
+		this._userLibs = extraLibs;
 	}
 
 	public String[] loadHookPropertiesFromClass()
@@ -57,7 +56,7 @@ public class LiferayPortalValueLoader {
 		String loadClassName = "com.liferay.portal.deploy.hot.HookHotDeployListener"; //$NON-NLS-1$
 		String fieldName = "SUPPORTED_PROPERTIES"; //$NON-NLS-1$
 
-		return (String[])getFieldValuesFromClass(loadClassName, fieldName);
+		return (String[]) _getFieldValuesFromClass(loadClassName, fieldName);
 	}
 
 	public String loadServerInfoFromClass()
@@ -65,7 +64,7 @@ public class LiferayPortalValueLoader {
 		String loadClassName = "com.liferay.portal.kernel.util.ReleaseInfo"; //$NON-NLS-1$
 		String methodName = "getServerInfo"; //$NON-NLS-1$
 
-		return (String)getMethodValueFromClass(loadClassName, methodName);
+		return (String) _getMethodValueFromClass(loadClassName, methodName);
 	}
 
 	public Version loadVersionFromClass()
@@ -78,7 +77,7 @@ public class LiferayPortalValueLoader {
 
 		try
 		{
-			String versionString = (String)getMethodValueFromClass(
+			String versionString = (String) _getMethodValueFromClass(
 	loadClassName, methodName); retval = Version.parseVersion(versionString);
 		}
 		catch (Exception e)
@@ -114,59 +113,47 @@ public class LiferayPortalValueLoader {
 		}
 	}
 
-	private Object[] getFieldValuesFromClass(String loadClassName, String fieldName)
-			{
+	private Object[] _getFieldValuesFromClass(String loadClassName, String fieldName) {
 
 		Object[] retval = new Object[0];
 
-		try
-		{
-			Class<?> classRef = loadClass(loadClassName);
+		try {
+			Class<?> classRef = _loadClass(loadClassName);
 			Field propertiesField = classRef.getDeclaredField(fieldName);
 
 			retval = (Object[]) (propertiesField.get(propertiesField));
 		}
-		catch (Exception e)
-		{
+		catch (Exception e) {
 		}
 
 		return retval;
 	}
 
-	private Object getMethodValueFromClass(String loadClassName, String methodName)
-			{
-
+	private Object _getMethodValueFromClass(String loadClassName, String methodName) {
 		Object retval = null;
 
-		try
-		{
-			Class<?> classRef = loadClass(loadClassName);
+		try {
+			Class<?> classRef = _loadClass(loadClassName);
 			Method method = classRef.getMethod(methodName);
 			retval = method.invoke(null);
 		}
-		catch (Exception e)
-		{
+		catch (Exception e) {
 		}
 
 		return retval;
 	}
 
-	private Class<?> loadClass(String className) throws Exception
-	{
-
+	private Class<?> _loadClass(String className) throws Exception {
 		List<URL> libUrlList = new ArrayList<>();
 
-		if (portalDir != null)
-		{
-			File libDir = Paths.get(portalDir.toString(), "WEB-INF", "lib").toFile();
+		if (_portalDir != null) {
+			File libDir = Paths.get(_portalDir.toString(), "WEB-INF", "lib").toFile();
 
 			addLibs(libDir, libUrlList);
 		}
 
-		if (! CoreUtil.isNullOrEmpty(userLibs))
-		{
-			for (Path url : userLibs)
-			{
+		if (! CoreUtil.isNullOrEmpty(_userLibs)) {
+			for (Path url : _userLibs) {
 				libUrlList.add(url.toFile().toURI().toURL());
 			}
 		}
@@ -176,7 +163,7 @@ public class LiferayPortalValueLoader {
 		return new URLClassLoader(urls).loadClass(className);
 	}
 
-	private Path portalDir;
-	private Path[] userLibs;
+	private Path _portalDir;
+	private Path[] _userLibs;
 
 }

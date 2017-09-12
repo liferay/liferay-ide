@@ -77,7 +77,7 @@ public class ZipUtil {
 				if (entry.isDirectory()) {
 					File emptyDir = new File(destdir, entryName);
 
-					mkdir(emptyDir);
+					_mkdir(emptyDir);
 
 					continue;
 				}
@@ -85,7 +85,7 @@ public class ZipUtil {
 				File f = new File(destdir, entryName);
 				File dir = f.getParentFile();
 
-				mkdir(dir);
+				_mkdir(dir);
 
 				InputStream in = null;
 				FileOutputStream out = null;
@@ -127,7 +127,7 @@ public class ZipUtil {
 		}
 	}
 
-	private static void mkdir(File dir) throws IOException {
+	private static void _mkdir(File dir) throws IOException {
 		if (!dir.exists() && !dir.mkdirs()) {
 			String msg = "Could not create dir: " + dir.getPath();
 			throw new IOException(msg);

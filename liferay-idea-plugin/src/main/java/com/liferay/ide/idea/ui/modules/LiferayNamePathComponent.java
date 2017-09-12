@@ -108,7 +108,7 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 
 			public void actionPerformed(ActionEvent e) {
 				super.actionPerformed(e);
-				isPathChangedByUser = true;
+				_isPathChangedByUser = true;
 			}
 
 		};
@@ -149,42 +149,42 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 	}
 
 	public boolean isPathChangedByUser() {
-		return isPathChangedByUser;
+		return _isPathChangedByUser;
 	}
 
 	public boolean isSyncEnabled() {
-		return isSyncEnabled;
+		return _isSyncEnabled;
 	}
 
 	public void setNameValue(String name) {
-		boolean isNameChangedByUser = this.isNameChangedByUser;
+		boolean isNameChangedByUser = this._isNameChangedByUser;
 
-		setNamePathSyncEnabled(false);
+		_setNamePathSyncEnabled(false);
 
 		try {
 			this.name.setText(name);
 		} finally {
-			this.isNameChangedByUser = isNameChangedByUser;
+			this._isNameChangedByUser = isNameChangedByUser;
 
-			setNamePathSyncEnabled(true);
+			_setNamePathSyncEnabled(true);
 		}
 	}
 
 	public void setPath(String path) {
-		boolean isPathChangedByUser = this.isPathChangedByUser;
+		boolean isPathChangedByUser = this._isPathChangedByUser;
 
-		setPathNameSyncEnabled(false);
+		_setPathNameSyncEnabled(false);
 
 		try {
 			this.path.setText(FileUtil.getLocationRelativeToUserHome(FileUtil.toSystemDependentName(path)));
 		} finally {
-			this.isPathChangedByUser = isPathChangedByUser;
-			setPathNameSyncEnabled(true);
+			this._isPathChangedByUser = isPathChangedByUser;
+			_setPathNameSyncEnabled(true);
 		}
 	}
 
 	public void setShouldBeAbsolute(boolean shouldBeAbsolute) {
-		this.shouldBeAbsolute = shouldBeAbsolute;
+		this._shouldBeAbsolute = shouldBeAbsolute;
 	}
 
 	public boolean validateNameAndPath(WizardContext context, boolean defaultFormat) throws ConfigurationException {
@@ -203,7 +203,7 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 	IdeBundle.message("prompt.enter.project.file.location", context.getPresentationName()));
 		}
 
-		if (shouldBeAbsolute && !new File(projectDirectory).isAbsolute()) {
+		if (_shouldBeAbsolute && !new File(projectDirectory).isAbsolute()) {
 			throw new ConfigurationException(
 	StringUtil.capitalize(IdeBundle.message("file.location.should.be.absolute", context.getPresentationName())));
 		}
@@ -248,51 +248,51 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 		return shouldContinue;
 	}
 
-	private boolean isNamePathSyncEnabled() {
+	private boolean _isNamePathSyncEnabled() {
 		if (!isSyncEnabled()) {
 			return false;
 		}
 
-		return isNamePathSyncEnabled;
+		return _isNamePathSyncEnabled;
 	}
 
-	private boolean isPathNameSyncEnabled() {
+	private boolean _isPathNameSyncEnabled() {
 		if (!isSyncEnabled()) {
 			return false;
 		}
 
-		return isPathNameSyncEnabled;
+		return _isPathNameSyncEnabled;
 	}
 
-	private void setNamePathSyncEnabled(boolean isNamePathSyncEnabled) {
-		this.isNamePathSyncEnabled = isNamePathSyncEnabled;
+	private void _setNamePathSyncEnabled(boolean isNamePathSyncEnabled) {
+		this._isNamePathSyncEnabled = isNamePathSyncEnabled;
 	}
 
-	private void setPathNameSyncEnabled(boolean isPathNameSyncEnabled) {
-		this.isPathNameSyncEnabled = isPathNameSyncEnabled;
+	private void _setPathNameSyncEnabled(boolean isPathNameSyncEnabled) {
+		this._isPathNameSyncEnabled = isPathNameSyncEnabled;
 	}
 
 	private static final Logger LOG = Logger.getInstance("#com.liferay.ide.idea.wizard.LiferayNamePathComponent");
 
-	private boolean isNameChangedByUser = false;
-	private boolean isNamePathSyncEnabled = true;
-	private boolean isPathChangedByUser = false;
-	private boolean isPathNameSyncEnabled = true;
-	private boolean isSyncEnabled = true;
+	private boolean _isNameChangedByUser = false;
+	private boolean _isNamePathSyncEnabled = true;
+	private boolean _isPathChangedByUser = false;
+	private boolean _isPathNameSyncEnabled = true;
+	private boolean _isSyncEnabled = true;
 	private JTextField name;
 	private JLabel nameLabel;
 	private JTextField path;
 	private JLabel pathLabel;
 	private FieldPanel pathPanel;
-	private boolean shouldBeAbsolute;
+	private boolean _shouldBeAbsolute;
 
 	private class NameFieldDocument extends PlainDocument {
 
 		public NameFieldDocument() {
 			addDocumentListener(new DocumentAdapter() {
 				public void textChanged(DocumentEvent event) {
-					isNameChangedByUser = true;
-					syncNameAndPath();
+					_isNameChangedByUser = true;
+					_syncNameAndPath();
 				}
 
 			});
@@ -311,10 +311,10 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 			}
 		}
 
-		private void syncNameAndPath() {
-			if (isNamePathSyncEnabled() && !isPathChangedByUser) {
+		private void _syncNameAndPath() {
+			if (_isNamePathSyncEnabled() && !_isPathChangedByUser) {
 				try {
-					setPathNameSyncEnabled(false);
+					_setPathNameSyncEnabled(false);
 					String name = getText(0, getLength());
 					String path = LiferayNamePathComponent.this.path.getText().trim();
 					int lastSeparatorIndex = path.lastIndexOf(File.separator);
@@ -325,7 +325,7 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 				} catch (BadLocationException e) {
 					LOG.error(e);
 				} finally {
-					setPathNameSyncEnabled(true);
+					_setPathNameSyncEnabled(true);
 				}
 			}
 		}
@@ -337,17 +337,17 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 		public PathFieldDocument() {
 			addDocumentListener(new DocumentAdapter() {
 				public void textChanged(DocumentEvent event) {
-					isPathChangedByUser = true;
-					syncPathAndName();
+					_isPathChangedByUser = true;
+					_syncPathAndName();
 				}
 
 			});
 		}
 
-		private void syncPathAndName() {
-			if (isPathNameSyncEnabled() && !isNameChangedByUser) {
+		private void _syncPathAndName() {
+			if (_isPathNameSyncEnabled() && !_isNameChangedByUser) {
 				try {
-					setNamePathSyncEnabled(false);
+					_setNamePathSyncEnabled(false);
 					String path = getText(0, getLength());
 					int lastSeparatorIndex = path.lastIndexOf(File.separator);
 
@@ -357,7 +357,7 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 				} catch (BadLocationException e) {
 					LOG.error(e);
 				} finally {
-					setNamePathSyncEnabled(true);
+					_setNamePathSyncEnabled(true);
 				}
 			}
 		}

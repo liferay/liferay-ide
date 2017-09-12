@@ -90,7 +90,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 	public void setupRootModel(ModifiableRootModel rootModel) throws ConfigurationException {
 		Project project = rootModel.getProject();
 
-		VirtualFile projectRoot = createAndGetContentEntry(project);
+		VirtualFile projectRoot = _createAndGetContentEntry(project);
 
 		_createProject(projectRoot);
 
@@ -209,7 +209,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		return FileSystems.getDefault().getPath(projectRoot.getPath(), path).toFile();
 	}
 
-	private VirtualFile createAndGetContentEntry(Project project) {
+	private VirtualFile _createAndGetContentEntry(Project project) {
 		String path = FileUtilRt.toSystemIndependentName(getContentEntryPath());
 
 		File file = new File(path);

@@ -68,24 +68,24 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 	}
 
 	public String getType() {
-		return this.type;
+		return this._type;
 	}
 
 	public void setClassName(String className) {
-		this.className = className;
+		this._className = className;
 	}
 
 	public void setPackageName(String packageName) {
-		this.packageName = packageName;
+		this._packageName = packageName;
 	}
 
 	public void setType(String type) {
-		this.type = type;
+		this._type = type;
 	}
 
 	@Override
 	public void setupRootModel(ModifiableRootModel rootModel) throws ConfigurationException {
-		VirtualFile moduleDir = createAndGetContentEntry();
+		VirtualFile moduleDir = _createAndGetContentEntry();
 
 		StringBuilder sb = new StringBuilder();
 
@@ -94,18 +94,18 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 		sb.append(moduleDir.getParent().getPath());
 		sb.append("\" ");
 		sb.append("-t ");
-		sb.append(type);
+		sb.append(_type);
 		sb.append(" ");
 
-		if (!CoreUtil.isNullOrEmpty(className)) {
+		if (!CoreUtil.isNullOrEmpty(_className)) {
 			sb.append("-c ");
-			sb.append(className);
+			sb.append(_className);
 			sb.append(" ");
 		}
 
-		if (!CoreUtil.isNullOrEmpty(packageName)) {
+		if (!CoreUtil.isNullOrEmpty(_packageName)) {
 			sb.append("-p ");
-			sb.append(packageName);
+			sb.append(_packageName);
 			sb.append(" ");
 		}
 
@@ -125,7 +125,7 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 		}
 	}
 
-	private VirtualFile createAndGetContentEntry() {
+	private VirtualFile _createAndGetContentEntry() {
 		String path = FileUtil.toSystemIndependentName(getContentEntryPath());
 
 		new File(path).mkdirs();
@@ -135,8 +135,8 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 
 	private static final String _LIFERAY_MODULES = "Liferay Modules";
 
-	private String className;
-	private String packageName;
-	private String type;
+	private String _className;
+	private String _packageName;
+	private String _type;
 
 }

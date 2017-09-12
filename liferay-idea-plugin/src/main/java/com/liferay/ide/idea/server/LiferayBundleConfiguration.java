@@ -55,10 +55,10 @@ public class LiferayBundleConfiguration
 	public LiferayBundleConfiguration(Project project, ConfigurationFactory factory, String name) {
 		super(project, factory, name);
 
-		configurationModule = new JavaRunConfigurationModule(project, true);
-		config.liferayBundle = Paths.get(
+		_configurationModule = new JavaRunConfigurationModule(project, true);
+		_config.liferayBundle = Paths.get(
 	project.getBasePath(),
-	LiferayWorkspaceUtil.getHomeDir(project.getBasePath())).toString(); config.vmParameters = "-Xmx1024m";
+	LiferayWorkspaceUtil.getHomeDir(project.getBasePath())).toString(); _config.vmParameters = "-Xmx1024m";
 	}
 
 	@Override
@@ -83,10 +83,10 @@ public class LiferayBundleConfiguration
 		LiferayBundleConfiguration clone =
 	(LiferayBundleConfiguration)super.clone();
 
-		clone.envs = new LinkedHashMap<>(envs);
-		clone.configurationModule = new JavaRunConfigurationModule(getProject(), true);
-		clone.configurationModule.setModule(configurationModule.getModule());
-		clone.config = XmlSerializerUtil.createCopy(config);
+		clone._envs = new LinkedHashMap<>(_envs);
+		clone._configurationModule = new JavaRunConfigurationModule(getProject(), true);
+		clone._configurationModule.setModule(_configurationModule.getModule());
+		clone._config = XmlSerializerUtil.createCopy(_config);
 
 		return clone;
 	}
@@ -94,7 +94,7 @@ public class LiferayBundleConfiguration
 	@Nullable
 	@Override
 	public String getAlternativeJrePath() {
-		return config.alternativeJrePath;
+		return _config.alternativeJrePath;
 	}
 
 	@NotNull
@@ -116,20 +116,20 @@ public class LiferayBundleConfiguration
 	@NotNull
 	@Override
 	public Map<String, String> getEnvs() {
-		return envs;
+		return _envs;
 	}
 
 	public String getLiferayBundle() {
-		return config.liferayBundle;
+		return _config.liferayBundle;
 	}
 
 	public Module getModule() {
-		return configurationModule.getModule();
+		return _configurationModule.getModule();
 	}
 
 	@NotNull
 	public Module[] getModules() {
-		Module module = configurationModule.getModule();
+		Module module = _configurationModule.getModule();
 
 		if (module != null) {
 			return new Module[] {module};
@@ -172,7 +172,7 @@ public class LiferayBundleConfiguration
 
 	@Override
 	public String getVMParameters() {
-		return config.vmParameters;
+		return _config.vmParameters;
 	}
 
 	@Nullable
@@ -183,12 +183,12 @@ public class LiferayBundleConfiguration
 
 	@Override
 	public boolean isAlternativeJrePathEnabled() {
-		return config.alternativeJrePathEnabled;
+		return _config.alternativeJrePathEnabled;
 	}
 
 	@Override
 	public boolean isPassParentEnvs() {
-		return config.passParentEnvs;
+		return _config.passParentEnvs;
 	}
 
 	@Override
@@ -196,39 +196,39 @@ public class LiferayBundleConfiguration
 		super.readExternal(element);
 
 		JavaRunConfigurationExtensionManager.getInstance().readExternal(this, element);
-		XmlSerializer.deserializeInto(config, element);
+		XmlSerializer.deserializeInto(_config, element);
 		EnvironmentVariablesComponent.readExternal(element, getEnvs());
 
-		configurationModule.readExternal(element);
+		_configurationModule.readExternal(element);
 	}
 
 	@Override
 	public void setAlternativeJrePath(String path) {
-		config.alternativeJrePath = path;
+		_config.alternativeJrePath = path;
 	}
 
 	@Override
 	public void setAlternativeJrePathEnabled(boolean enabled) {
-		config.alternativeJrePathEnabled = enabled;
+		_config.alternativeJrePathEnabled = enabled;
 	}
 
 	@Override
 	public void setEnvs(@NotNull Map<String, String> envs) {
-		this.envs.clear();
-		this.envs.putAll(envs);
+		_envs.clear();
+		_envs.putAll(envs);
 	}
 
 	public void setLiferayBundle(String liferayBundle) {
-		config.liferayBundle = liferayBundle;
+		_config.liferayBundle = liferayBundle;
 	}
 
 	public void setModule(Module module) {
-		configurationModule.setModule(module);
+		_configurationModule.setModule(module);
 	}
 
 	@Override
 	public void setPassParentEnvs(boolean passParentEnvs) {
-		config.passParentEnvs = passParentEnvs;
+		_config.passParentEnvs = passParentEnvs;
 	}
 
 	@Override
@@ -237,7 +237,7 @@ public class LiferayBundleConfiguration
 
 	@Override
 	public void setVMParameters(String value) {
-		config.vmParameters = value;
+		_config.vmParameters = value;
 	}
 
 	@Override
@@ -248,17 +248,17 @@ public class LiferayBundleConfiguration
 	public void writeExternal(Element element) throws WriteExternalException {
 		super.writeExternal(element);
 		JavaRunConfigurationExtensionManager.getInstance().writeExternal(this, element);
-		XmlSerializer.serializeInto(config, element, new SkipDefaultValuesSerializationFilters());
+		XmlSerializer.serializeInto(_config, element, new SkipDefaultValuesSerializationFilters());
 		EnvironmentVariablesComponent.writeExternal(element, getEnvs());
 
-		if (configurationModule.getModule() != null) {
-			configurationModule.writeExternal(element);
+		if (_configurationModule.getModule() != null) {
+			_configurationModule.writeExternal(element);
 		}
 	}
 
-	private LiferayBundleConfig config = new LiferayBundleConfig();
-	private JavaRunConfigurationModule configurationModule;
-	private Map<String, String> envs = new LinkedHashMap<>();
+	private LiferayBundleConfig _config = new LiferayBundleConfig();
+	private JavaRunConfigurationModule _configurationModule;
+	private Map<String, String> _envs = new LinkedHashMap<>();
 
 	private static class LiferayBundleConfig {
 

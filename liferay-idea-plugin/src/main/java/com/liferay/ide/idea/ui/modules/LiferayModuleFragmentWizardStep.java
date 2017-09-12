@@ -44,7 +44,7 @@ import javax.swing.tree.*;
 public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
 	public LiferayModuleFragmentWizardStep(WizardContext wizardContext, LiferayModuleFragmentBuilder builder) {
-		this.builder = builder;
+		this._builder = builder;
 		jspsTree = new Tree();
 		jspsTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
 		JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(jspsTree);
@@ -186,10 +186,10 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 	public void updateDataModel() {
 		String[] bsnAndVerion = getBsnAndVersion(getFragmentHost());
 
-		builder.setBsnName(bsnAndVerion[0]);
-		builder.setFragmentHost(getFragmentHost());
-		builder.setOverrideFiles(getSelectedJsps());
-		builder.setVersion(bsnAndVerion[1]);
+		_builder.setBsnName(bsnAndVerion[0]);
+		_builder.setFragmentHost(getFragmentHost());
+		_builder.setOverrideFiles(getSelectedJsps());
+		_builder.setVersion(bsnAndVerion[1]);
 	}
 
 	@Override
@@ -203,7 +203,7 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 		return true;
 	}
 
-	private LiferayModuleFragmentBuilder builder;
+	private LiferayModuleFragmentBuilder _builder;
 	private JComboBox<String> fragmentHost;
 	private JPanel jspsPanel;
 	private Tree jspsTree;
