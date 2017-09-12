@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.ui.modules;
@@ -87,8 +86,9 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("-b ");
-		sb.append("\"" + project.getBasePath() + "\" ");
-		sb.append("");
+		sb.append("\"");
+		sb.append(project.getBasePath());
+		sb.append("\" ");
 		sb.append("init ");
 		sb.append("-f");
 
@@ -99,31 +99,34 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
 		@Override
 		public void moduleCreated(@NotNull Module module) {
 			Project project = module.getProject();
-			ProjectImportProvider[] importProviders =
-	ProjectImportProvider.PROJECT_IMPORT_PROVIDER.getExtensions();
+			ProjectImportProvider[] importProviders = ProjectImportProvider.PROJECT_IMPORT_PROVIDER.getExtensions();
 
 			Stream.of(
 				importProviders
 			).filter(
 				importProvider -> importProvider.getId().equals("Gradle")
 			).findFirst(
-			).ifPresent(importProvider -> {
-				AddModuleWizard wizard = new AddModuleWizard(project, project.getBasePath(), importProvider);
+			).ifPresent(
+				importProvider -> {
+					AddModuleWizard wizard = new AddModuleWizard(project, project.getBasePath(), importProvider);
 
-				Application application = ApplicationManager.getApplication();
+					Application application = ApplicationManager.getApplication();
 
-				application.invokeLater(new Runnable() {
+					application.invokeLater(
+						new Runnable() {
 
-					@Override
-					public void run() {
-						if (wizard.showAndGet()) {
-							ImportModuleAction.createFromWizard(project, wizard);
-						}
-					}
+							@Override
+							public void run() {
+								if (wizard.showAndGet()) {
+									ImportModuleAction.createFromWizard(project, wizard);
+								}
+							}
 
-				});
-			});
+					});
+				}
+			);
 		}
+
 	}
 
 	private static final String _LIFERAY_WORKSPACE = "Liferay Workspace";

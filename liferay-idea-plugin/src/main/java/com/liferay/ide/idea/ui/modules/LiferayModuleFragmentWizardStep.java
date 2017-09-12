@@ -81,7 +81,8 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 			_fragmentHost.addItem(bundle);
 		}
 
-		_fragmentHost.addActionListener(new ActionListener() {
+		_fragmentHost.addActionListener(
+			new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -111,13 +112,14 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 								root.add(node1);
 							}
 						}
-					} 
-					catch (IOException e1) {
+					}
+					catch (IOException ioe) {
 					}
 				}
 
 				_jspsTree.setModel(new DefaultTreeModel(root));
 			}
+
 		});
 	}
 
@@ -131,8 +133,8 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
 			try {
 				ZipUtil.unzip(hostBundle, tempBundle);
-			} 
-			catch (IOException e) {
+			}
+			catch (IOException ioe) {
 			}
 		}
 
@@ -146,7 +148,7 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 			for (String content : contents) {
 				if (content.contains("Bundle-SymbolicName:")) {
 					bundleSymbolicName = content.substring(
-							content.indexOf("Bundle-SymbolicName:") + "Bundle-SymbolicName:".length());
+						content.indexOf("Bundle-SymbolicName:") + "Bundle-SymbolicName:".length());
 				}
 
 				if (content.contains("Bundle-Version:")) {

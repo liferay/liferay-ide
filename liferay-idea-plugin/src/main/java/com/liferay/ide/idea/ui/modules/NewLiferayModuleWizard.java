@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.ui.modules;
@@ -52,8 +51,7 @@ public class NewLiferayModuleWizard extends AbstractProjectWizard {
 	protected void init(@NotNull ModulesProvider modulesProvider) {
 		myWizardContext.setModulesProvider(modulesProvider);
 
-		LiferayProjectTypeStep projectTypeStep = new LiferayProjectTypeStep(
-			myWizardContext, this, modulesProvider);
+		LiferayProjectTypeStep projectTypeStep = new LiferayProjectTypeStep(myWizardContext, this, modulesProvider);
 
 		Disposer.register(getDisposable(), projectTypeStep);
 

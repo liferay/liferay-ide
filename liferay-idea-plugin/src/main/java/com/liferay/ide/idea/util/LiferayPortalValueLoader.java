@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.util;
@@ -19,7 +18,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,67 +29,26 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.osgi.framework.Version;
-
 /**
  * @author Simon Jiang
  * @author Gregory Amerson
  */
 public class LiferayPortalValueLoader {
 
-	public LiferayPortalValueLoader(Path appServerPortalDir, Path[] extraLibs)
-	{
-
-		this._portalDir = appServerPortalDir;
-		this._userLibs = extraLibs;
+	public LiferayPortalValueLoader(Path appServerPortalDir, Path[] extraLibs) {
+		_portalDir = appServerPortalDir;
+		_userLibs = extraLibs;
 	}
 
-	public LiferayPortalValueLoader(Path[] extraLibs)
-	{
-		this._userLibs = extraLibs;
-	}
-
-	public String[] loadHookPropertiesFromClass()
-	{
+	public String[] loadHookPropertiesFromClass() {
 		String loadClassName = "com.liferay.portal.deploy.hot.HookHotDeployListener"; //$NON-NLS-1$
 		String fieldName = "SUPPORTED_PROPERTIES"; //$NON-NLS-1$
 
 		return (String[]) _getFieldValuesFromClass(loadClassName, fieldName);
 	}
 
-	public String loadServerInfoFromClass()
-	{
-		String loadClassName = "com.liferay.portal.kernel.util.ReleaseInfo"; //$NON-NLS-1$
-		String methodName = "getServerInfo"; //$NON-NLS-1$
-
-		return (String) _getMethodValueFromClass(loadClassName, methodName);
-	}
-
-	public Version loadVersionFromClass()
-	{
-
-		String loadClassName = "com.liferay.portal.kernel.util.ReleaseInfo"; //$NON-NLS-1$
-		String methodName = "getVersion"; //$NON-NLS-1$
-
-		Version retval = Version.emptyVersion;
-
-		try
-		{
-			String versionString = (String) _getMethodValueFromClass(
-	loadClassName, methodName); retval = Version.parseVersion(versionString);
-		}
-		catch (Exception e)
-		{
-		}
-
-		return retval;
-	}
-
-	private void addLibs(File libDir, List<URL> libUrlList) throws MalformedURLException
-	{
-
-		if (libDir.exists())
-		{
+	private void _addLibs(File libDir, List<URL> libUrlList) throws MalformedURLException {
+		if (libDir.exists()) {
 			File[] libs = libDir.listFiles(
 
 				new FilenameFilter()
@@ -103,8 +60,7 @@ public class LiferayPortalValueLoader {
 					}
 				});
 
-			if (! CoreUtil.isNullOrEmpty(libs))
-			{
+			if (! CoreUtil.isNullOrEmpty(libs)) {
 				for (File portaLib : libs)
 				{
 					libUrlList.add(portaLib.toURI().toURL());
@@ -114,7 +70,6 @@ public class LiferayPortalValueLoader {
 	}
 
 	private Object[] _getFieldValuesFromClass(String loadClassName, String fieldName) {
-
 		Object[] retval = new Object[0];
 
 		try {
@@ -129,27 +84,13 @@ public class LiferayPortalValueLoader {
 		return retval;
 	}
 
-	private Object _getMethodValueFromClass(String loadClassName, String methodName) {
-		Object retval = null;
-
-		try {
-			Class<?> classRef = _loadClass(loadClassName);
-			Method method = classRef.getMethod(methodName);
-			retval = method.invoke(null);
-		}
-		catch (Exception e) {
-		}
-
-		return retval;
-	}
-
 	private Class<?> _loadClass(String className) throws Exception {
 		List<URL> libUrlList = new ArrayList<>();
 
 		if (_portalDir != null) {
 			File libDir = Paths.get(_portalDir.toString(), "WEB-INF", "lib").toFile();
 
-			addLibs(libDir, libUrlList);
+			_addLibs(libDir, libUrlList);
 		}
 
 		if (! CoreUtil.isNullOrEmpty(_userLibs)) {

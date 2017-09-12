@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.util;
@@ -45,11 +44,12 @@ public class BladeCLI {
 		File bladeJar = new File(temp, "com.liferay.blade.cli.jar");
 
 		if (!bladeJar.exists()) {
-			try (InputStream in =
-BladeCLI.class.getClassLoader().getResourceAsStream("/libs/com.liferay.blade.cli.jar")) {
+			try (InputStream in = BladeCLI.class.getClassLoader().getResourceAsStream(
+				"/libs/com.liferay.blade.cli.jar")) {
 
 				FileUtil.writeFile(bladeJar, in);
-			} catch (IOException e) {
+			}
+			catch (IOException ioe) {
 			}
 		}
 
@@ -82,7 +82,8 @@ BladeCLI.class.getClassLoader().getResourceAsStream("/libs/com.liferay.blade.cli
 		for (String line : lines) {
 			if (line.startsWith("Error")) {
 				hasErrors = true;
-			} else if (hasErrors) {
+			}
+			else if (hasErrors) {
 				errors.append(line);
 			}
 		}
@@ -96,15 +97,9 @@ BladeCLI.class.getClassLoader().getResourceAsStream("/libs/com.liferay.blade.cli
 		String[] executeResult = execute("create -l");
 
 		for (String name : executeResult) {
-
-			// for latest blade which print template descriptor
-
 			if (name.trim().indexOf(" ") != -1) {
 				templateNames.add(name.substring(0, name.indexOf(" ")));
 			}
-
-			// for legacy blade
-
 			else {
 				templateNames.add(name);
 			}

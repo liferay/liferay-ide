@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.util;
@@ -33,7 +32,8 @@ public class PropertiesUtil {
 			properties.load(stream);
 
 			return properties;
-		} catch (IOException ioe) {
+		}
+		catch (IOException ioe) {
 			return null;
 		}
 	}

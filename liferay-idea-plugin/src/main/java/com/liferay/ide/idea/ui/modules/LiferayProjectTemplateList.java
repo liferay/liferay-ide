@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.ui.modules;
@@ -29,148 +28,169 @@ import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.popup.list.GroupedItemsListRenderer;
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.Nullable;
+
+import java.awt.*;
+
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.*;
-import java.util.Collections;
-import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Terry Jia
  */
 public class LiferayProjectTemplateList extends JPanel {
 
-    public LiferayProjectTemplateList() {
-        super(new BorderLayout());
+	public LiferayProjectTemplateList() {
+		super(new BorderLayout());
 
-        add(_mainPanel, BorderLayout.CENTER);
+		add(_mainPanel, BorderLayout.CENTER);
 
-        GroupedItemsListRenderer<ProjectTemplate> renderer = new GroupedItemsListRenderer<ProjectTemplate>(new ListItemDescriptorAdapter<ProjectTemplate>() {
-            @Nullable
-            @Override
-            public String getTextFor(ProjectTemplate value) {
-                return value.getName();
-            }
+		GroupedItemsListRenderer<ProjectTemplate> renderer = new GroupedItemsListRenderer<ProjectTemplate>(
+						new ListItemDescriptorAdapter<ProjectTemplate>() {
 
-            @Nullable
-            @Override
-            public Icon getIconFor(ProjectTemplate value) {
-                return value.getIcon();
-            }
-        }) {
-            @Override
-            protected void customizeComponent(JList<? extends ProjectTemplate> list, ProjectTemplate value, boolean isSelected) {
-                super.customizeComponent(list, value, isSelected);
+							@Nullable
+							@Override
+							public String getTextFor(ProjectTemplate value) {
+								return value.getName();
+							}
 
-                Icon icon = myTextLabel.getIcon();
+							@Nullable
+							@Override
+							public Icon getIconFor(ProjectTemplate value) {
+								return value.getIcon();
+							}
 
-                if (icon != null && myTextLabel.getDisabledIcon() == icon) {
-                    myTextLabel.setDisabledIcon(IconLoader.getDisabledIcon(icon));
-                }
+						}) {
 
-                myTextLabel.setEnabled(_templateList.isEnabled());
-                myTextLabel.setBorder(IdeBorderFactory.createEmptyBorder(3, 3, 3, 3));
-            }
-        };
+					@Override
+					protected void customizeComponent(
+							JList<? extends ProjectTemplate> list, ProjectTemplate value, boolean isSelected) {
 
-        _templateList.setCellRenderer(renderer);
+						super.customizeComponent(list, value, isSelected);
 
-        _templateList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                _updateSelection();
-            }
-        });
+						Icon icon = myTextLabel.getIcon();
 
-        Messages.installHyperlinkSupport(_description);
-    }
+						if ((icon != null) && (myTextLabel.getDisabledIcon() == icon)) {
+							myTextLabel.setDisabledIcon(IconLoader.getDisabledIcon(icon));
+						}
 
-    private void _updateSelection() {
-        _description.setText("");
+						myTextLabel.setEnabled(_templateList.isEnabled());
+						myTextLabel.setBorder(IdeBorderFactory.createEmptyBorder(3, 3, 3, 3));
+					}
 
-        ProjectTemplate template = getSelectedTemplate();
+				};
 
-        if (template != null) {
-            String description = template.getDescription();
+		_templateList.setCellRenderer(renderer);
 
-            if (StringUtil.isNotEmpty(description)) {
-                description = "<html><body><font " +
-                        (SystemInfo.isMac ? "" : "face=\"Verdana\" size=\"-1\"") + '>' + description +
-                        "</font></body></html>";
+		_templateList.getSelectionModel().addListSelectionListener(
+				new ListSelectionListener() {
 
-                this._description.setText(description);
-            }
-        }
-    }
+					@Override
+					public void valueChanged(ListSelectionEvent e) {
+						_updateSelection();
+					}
 
-    public void setTemplates(List<ProjectTemplate> list, boolean preserveSelection) {
-        Collections.sort(list, (o1, o2) -> Comparing.compare(o1 instanceof ArchivedProjectTemplate, o2 instanceof ArchivedProjectTemplate));
+				});
 
-        int index = preserveSelection ? _templateList.getSelectedIndex() : -1;
+		Messages.installHyperlinkSupport(_description);
+	}
 
-        _templateList.setModel(new CollectionListModel<>(list));
+	public void addListSelectionListener(ListSelectionListener listener) {
+		_templateList.addListSelectionListener(listener);
+	}
 
-        if (_templateList.isEnabled()) {
-            _templateList.setSelectedIndex(index == -1 ? 0 : index);
-        }
+	@Nullable
+	public ProjectTemplate getSelectedTemplate() {
+		return _templateList.getSelectedValue();
+	}
 
-        _updateSelection();
-    }
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
 
-    @Nullable
-    public ProjectTemplate getSelectedTemplate() {
-        return _templateList.getSelectedValue();
-    }
+		_templateList.setEnabled(enabled);
 
-    @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
+		if (!enabled) {
+			_templateList.clearSelection();
+		}
+		else {
+			_templateList.setSelectedIndex(0);
+		}
 
-        _templateList.setEnabled(enabled);
+		_description.setEnabled(enabled);
+	}
 
-        if (!enabled) {
-            _templateList.clearSelection();
-        } else {
-            _templateList.setSelectedIndex(0);
-        }
+	public void setTemplates(List<ProjectTemplate> list, boolean preserveSelection) {
+		Collections.sort(
+				list,
+(o1, o2) -> Comparing.compare(o1 instanceof ArchivedProjectTemplate, o2 instanceof ArchivedProjectTemplate));
 
-        _description.setEnabled(enabled);
-    }
+		int index = preserveSelection ? _templateList.getSelectedIndex() : -1;
 
-    void restoreSelection() {
-        String templateName = PropertiesComponent.getInstance().getValue(_PROJECT_WIZARD_TEMPLATE);
+		_templateList.setModel(new CollectionListModel<>(list));
 
-        if (templateName != null && _templateList.getModel() instanceof CollectionListModel) {
-            List<ProjectTemplate> list = ((CollectionListModel<ProjectTemplate>) _templateList.getModel()).toList();
+		if (_templateList.isEnabled()) {
+			_templateList.setSelectedIndex(index == -1 ? 0 : index);
+		}
 
-            ProjectTemplate template = ContainerUtil.find(list, template1 -> templateName.equals(template1.getName()));
+		_updateSelection();
+	}
 
-            if (template != null) {
-                _templateList.setSelectedValue(template, true);
-            }
-        }
+	void restoreSelection() {
+		String templateName = PropertiesComponent.getInstance().getValue(_PROJECT_WIZARD_TEMPLATE);
 
-        _templateList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                ProjectTemplate template = getSelectedTemplate();
-                if (template != null) {
-                    PropertiesComponent.getInstance().setValue(_PROJECT_WIZARD_TEMPLATE, template.getName());
-                }
-            }
-        });
-    }
+		if ((templateName != null) && (_templateList.getModel() instanceof CollectionListModel)) {
+			List<ProjectTemplate> list = ((CollectionListModel<ProjectTemplate>) _templateList.getModel()).toList();
 
-    public void addListSelectionListener(ListSelectionListener listener) {
-        _templateList.addListSelectionListener(listener);
-    }
+			ProjectTemplate template = ContainerUtil.find(list, template1 -> templateName.equals(template1.getName()));
 
-    private static final String _PROJECT_WIZARD_TEMPLATE = "project.wizard.template";
-    private JTextPane _description;
-    private JBList<ProjectTemplate> _templateList;
-    private JPanel _mainPanel;
+			if (template != null) {
+				_templateList.setSelectedValue(template, true);
+			}
+		}
+
+		_templateList.getSelectionModel().addListSelectionListener(
+			new ListSelectionListener() {
+
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					ProjectTemplate template = getSelectedTemplate();
+
+					if (template != null) {
+						PropertiesComponent.getInstance().setValue(_PROJECT_WIZARD_TEMPLATE, template.getName());
+					}
+				}
+
+		});
+	}
+
+	private void _updateSelection() {
+		_description.setText("");
+
+		ProjectTemplate template = getSelectedTemplate();
+
+		if (template != null) {
+			String description = template.getDescription();
+
+			if (StringUtil.isNotEmpty(description)) {
+				description =
+					"<html><body><font " + (SystemInfo.isMac ? "" : "face=\"Verdana\" size=\"-1\"") + '>' +
+					description + "</font></body></html>";
+
+				_description.setText(description);
+			}
+		}
+	}
+
+	private static final String _PROJECT_WIZARD_TEMPLATE = "project.wizard.template";
+
+	private JTextPane _description;
+	private JPanel _mainPanel;
+	private JBList<ProjectTemplate> _templateList;
 
 }

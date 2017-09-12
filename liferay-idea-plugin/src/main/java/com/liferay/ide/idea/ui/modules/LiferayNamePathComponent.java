@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.ui.modules;
@@ -49,16 +48,21 @@ import javax.swing.text.PlainDocument;
 public class LiferayNamePathComponent extends JPanel {
 
 	public static LiferayNamePathComponent initNamePathComponent(WizardContext context) {
+		String nameLabel = IdeBundle.message("label.project.name");
+		String filesLocationLabel = IdeBundle.message("label.project.files.location");
+		String fileDirectoryTitle = IdeBundle.message(
+		"title.select.project.file.directory", IdeBundle.message("project.new.wizard.project.identification"));
+		String fileDirectoryDescription = IdeBundle.message(
+		"description.select.project.file.directory",
+		StringUtil.capitalize(IdeBundle.message("project.new.wizard.project.identification")));
+
 		LiferayNamePathComponent component = new LiferayNamePathComponent(
-				IdeBundle.message("label.project.name"), IdeBundle.message("label.project.files.location"),
-				IdeBundle.message("title.select.project.file.directory", IdeBundle.message("project.new.wizard.project.identification")),
-				IdeBundle.message("description.select.project.file.directory", StringUtil
-					.capitalize(IdeBundle.message("project.new.wizard.project.identification"))), true, false);
+			nameLabel, filesLocationLabel, fileDirectoryTitle, fileDirectoryDescription, true, false);
 
 		String baseDir = context.getProjectFileDirectory();
 		String projectName = context.getProjectName();
 		String initialProjectName = projectName != null ? projectName : ProjectWizardUtil.findNonExistingFileName(
-	baseDir, "untitled", "");
+			baseDir, "untitled", "");
 
 		component.setPath(projectName == null ? (baseDir + File.separator + initialProjectName) : baseDir);
 		component.setNameValue(initialProjectName);
@@ -67,85 +71,98 @@ public class LiferayNamePathComponent extends JPanel {
 		return component;
 	}
 
-	public LiferayNamePathComponent(String nameLabelText, String pathLabelText, String pathChooserTitle,
-									String pathChooserDescription, boolean hideIgnored, boolean bold) {
+	public LiferayNamePathComponent(
+		String nameLabelText, String pathLabelText, String pathChooserTitle, String pathChooserDescription,
+		boolean hideIgnored, boolean bold) {
 
 		super(new GridBagLayout());
 
-		name = new JTextField();
-		name.setDocument(new NameFieldDocument());
-		name.setPreferredSize(new Dimension(200, name.getPreferredSize().height));
+		_name = new JTextField();
+		_name.setDocument(new NameFieldDocument());
+		_name.setPreferredSize(new Dimension(200, _name.getPreferredSize().height));
 
-		path = new JTextField();
-		path.setDocument(new PathFieldDocument());
-		path.setPreferredSize(new Dimension(200, path.getPreferredSize().height));
+		_path = new JTextField();
+		_path.setDocument(new PathFieldDocument());
+		_path.setPreferredSize(new Dimension(200, _path.getPreferredSize().height));
 
-		nameLabel = new JLabel(nameLabelText);
+		_nameLabel = new JLabel(nameLabelText);
 
 		if (bold) {
-			nameLabel.setFont(UIUtil.getLabelFont().deriveFont(Font.BOLD));
+			_nameLabel.setFont(UIUtil.getLabelFont().deriveFont(Font.BOLD));
 		}
 
-		nameLabel.setLabelFor(name);
+		_nameLabel.setLabelFor(_name);
 
 		Insets insets = JBUI.insets(0, 0, 5, 4);
 
-		this.add(nameLabel, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
-			insets, 0, 0));
+		GridBagConstraints gridBagConstraints = new GridBagConstraints(
+				0, GridBagConstraints.RELATIVE, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
+				insets, 0, 0);
+
+				this.add(_nameLabel, gridBagConstraints);
 
 		insets = JBUI.insets(0, 0, 5, 0);
 
-		this.add(name, new GridBagConstraints(1, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-			insets, 0, 0));
+		gridBagConstraints = new GridBagConstraints(
+				1, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST,
+				GridBagConstraints.HORIZONTAL, insets, 0, 0);
+
+		this.add(_name, gridBagConstraints);
 
 		FileChooserDescriptor chooserDescriptor =
-	(FileChooserDescriptor)BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR.clone();
+			(FileChooserDescriptor)BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR.clone();
 
 		chooserDescriptor.setHideIgnored(hideIgnored);
 
 		BrowseFilesListener browseButtonActionListener =
-new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserDescriptor) {
+				new BrowseFilesListener(_path, pathChooserTitle, pathChooserDescription, chooserDescriptor) {
 
-			public void actionPerformed(ActionEvent e) {
-				super.actionPerformed(e);
-				_isPathChangedByUser = true;
-			}
+					public void actionPerformed(ActionEvent e) {
+						super.actionPerformed(e);
+						_isPathChangedByUser = true;
+					}
 
-		};
+				};
 
-		pathPanel = new FieldPanel(path, null, null, browseButtonActionListener, null);
-		pathLabel = new JLabel(pathLabelText);
-		pathLabel.setLabelFor(path);
+		_pathPanel = new FieldPanel(_path, null, null, browseButtonActionListener, null);
+		_pathLabel = new JLabel(pathLabelText);
+		_pathLabel.setLabelFor(_path);
 
 		if (bold) {
-			pathLabel.setFont(UIUtil.getLabelFont().deriveFont(Font.BOLD));
+			_pathLabel.setFont(UIUtil.getLabelFont().deriveFont(Font.BOLD));
 		}
 
 		insets = JBUI.insets(0, 0, 5, 4);
 
-		this.add(pathLabel, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
-			insets, 0, 0));
+		this.add(
+			_pathLabel,
+			new GridBagConstraints(
+				0, GridBagConstraints.RELATIVE, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
+				insets, 0, 0));
 
 		insets = JBUI.insets(0, 0, 5, 0);
 
-		this.add(pathPanel, new GridBagConstraints(1, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-			insets, 0, 0));
+		this.add(
+			_pathPanel,
+			new GridBagConstraints(
+				1, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST,
+				GridBagConstraints.HORIZONTAL, insets, 0, 0));
 	}
 
 	public JTextField getNameComponent() {
-		return name;
+		return _name;
 	}
 
 	public String getNameValue() {
-		return name.getText().trim();
+		return _name.getText().trim();
 	}
 
 	public String getPath() {
-		return FileUtil.expandUserHome(FileUtil.toSystemIndependentName(path.getText().trim()));
+		return FileUtil.expandUserHome(FileUtil.toSystemIndependentName(_path.getText().trim()));
 	}
 
 	public JTextField getPathComponent() {
-		return path;
+		return _path;
 	}
 
 	public boolean isPathChangedByUser() {
@@ -157,14 +174,15 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 	}
 
 	public void setNameValue(String name) {
-		boolean isNameChangedByUser = this._isNameChangedByUser;
+		boolean isNameChangedByUser = _isNameChangedByUser;
 
 		_setNamePathSyncEnabled(false);
 
 		try {
-			this.name.setText(name);
-		} finally {
-			this._isNameChangedByUser = isNameChangedByUser;
+			this._name.setText(name);
+		}
+		finally {
+			_isNameChangedByUser = isNameChangedByUser;
 
 			_setNamePathSyncEnabled(true);
 		}
@@ -176,8 +194,9 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 		_setPathNameSyncEnabled(false);
 
 		try {
-			this.path.setText(FileUtil.getLocationRelativeToUserHome(FileUtil.toSystemDependentName(path)));
-		} finally {
+			this._path.setText(FileUtil.getLocationRelativeToUserHome(FileUtil.toSystemDependentName(path)));
+		}
+		finally {
 			this._isPathChangedByUser = isPathChangedByUser;
 			_setPathNameSyncEnabled(true);
 		}
@@ -192,20 +211,22 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 
 		if (StringUtil.isEmptyOrSpaces(name)) {
 			throw new ConfigurationException(
-	IdeBundle.message(
-		"prompt.new.project.file.name", ApplicationInfo.getInstance().getVersionName(), context.getPresentationName()));
+					IdeBundle.message(
+							"prompt.new.project.file.name", ApplicationInfo.getInstance().getVersionName(),
+context.getPresentationName()));
 		}
 
 		String projectDirectory = getPath();
 
 		if (StringUtil.isEmptyOrSpaces(projectDirectory)) {
 			throw new ConfigurationException(
-	IdeBundle.message("prompt.enter.project.file.location", context.getPresentationName()));
+				IdeBundle.message("prompt.enter.project.file.location", context.getPresentationName()));
 		}
 
 		if (_shouldBeAbsolute && !new File(projectDirectory).isAbsolute()) {
 			throw new ConfigurationException(
-	StringUtil.capitalize(IdeBundle.message("file.location.should.be.absolute", context.getPresentationName())));
+					StringUtil.capitalize(
+	IdeBundle.message("file.location.should.be.absolute", context.getPresentationName())));
 		}
 
 		String message = IdeBundle.message("directory.project.file.directory", context.getPresentationName());
@@ -217,30 +238,32 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 		File file = new File(projectDirectory);
 
 		if (file.exists() && !file.canWrite()) {
-			throw new ConfigurationException(
-	String.format("Directory '%s' is not seem to be writable. Please consider another location.", projectDirectory));
+			String msg = String.format(
+				"Directory '%s' is not seem to be writable. Please consider another location.", projectDirectory);
+
+			throw new ConfigurationException(msg);
 		}
 
 		for (Project project : ProjectManager.getInstance().getOpenProjects()) {
 			if (ProjectUtil.isSameProject(projectDirectory, project)) {
-				throw new ConfigurationException(
-	String.format(
-		"Directory '%s' is already taken by the project '%s'. Please consider another location.", projectDirectory,
-		project.getName()));
+				String msg = String.format(
+					"Directory '%s' is already taken by the project '%s'. Please consider another location.",
+					projectDirectory, project.getName());
+
+				throw new ConfigurationException(msg);
 			}
 		}
 
 		boolean shouldContinue = true;
-		String fileName =
-	defaultFormat ? name + ProjectFileType.DOT_DEFAULT_EXTENSION : Project.DIRECTORY_STORE_FOLDER;
+		String fileName = defaultFormat ? name + ProjectFileType.DOT_DEFAULT_EXTENSION : Project.DIRECTORY_STORE_FOLDER;
 		File projectFile = new File(file, fileName);
 
 		if (projectFile.exists()) {
 			message = IdeBundle.message(
-	"prompt.overwrite.project.file", projectFile.getAbsolutePath(), context.getPresentationName());
+				"prompt.overwrite.project.file", projectFile.getAbsolutePath(), context.getPresentationName());
 
 			int answer = Messages.showYesNoDialog(
-	message, IdeBundle.message("title.file.already.exists"), Messages.getQuestionIcon());
+				message, IdeBundle.message("title.file.already.exists"), Messages.getQuestionIcon());
 
 			shouldContinue = (answer == Messages.YES);
 		}
@@ -279,21 +302,23 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 	private boolean _isPathChangedByUser = false;
 	private boolean _isPathNameSyncEnabled = true;
 	private boolean _isSyncEnabled = true;
-	private JTextField name;
-	private JLabel nameLabel;
-	private JTextField path;
-	private JLabel pathLabel;
-	private FieldPanel pathPanel;
+	private JTextField _name;
+	private JLabel _nameLabel;
+	private JTextField _path;
+	private JLabel _pathLabel;
+	private FieldPanel _pathPanel;
 	private boolean _shouldBeAbsolute;
 
 	private class NameFieldDocument extends PlainDocument {
 
 		public NameFieldDocument() {
-			addDocumentListener(new DocumentAdapter() {
-				public void textChanged(DocumentEvent event) {
-					_isNameChangedByUser = true;
-					_syncNameAndPath();
-				}
+			addDocumentListener(
+				new DocumentAdapter() {
+
+					public void textChanged(DocumentEvent event) {
+						_isNameChangedByUser = true;
+						_syncNameAndPath();
+					}
 
 			});
 		}
@@ -316,15 +341,18 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 				try {
 					_setPathNameSyncEnabled(false);
 					String name = getText(0, getLength());
-					String path = LiferayNamePathComponent.this.path.getText().trim();
+					String path = LiferayNamePathComponent.this._path.getText().trim();
+
 					int lastSeparatorIndex = path.lastIndexOf(File.separator);
 
 					if (lastSeparatorIndex >= 0) {
 						setPath(path.substring(0, lastSeparatorIndex + 1) + name);
 					}
-				} catch (BadLocationException e) {
-					LOG.error(e);
-				} finally {
+				}
+				catch (BadLocationException ble) {
+					LOG.error(ble);
+				}
+				finally {
 					_setPathNameSyncEnabled(true);
 				}
 			}
@@ -335,11 +363,13 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 	private class PathFieldDocument extends PlainDocument {
 
 		public PathFieldDocument() {
-			addDocumentListener(new DocumentAdapter() {
-				public void textChanged(DocumentEvent event) {
-					_isPathChangedByUser = true;
-					_syncPathAndName();
-				}
+			addDocumentListener(
+				new DocumentAdapter() {
+
+					public void textChanged(DocumentEvent event) {
+						_isPathChangedByUser = true;
+						_syncPathAndName();
+					}
 
 			});
 		}
@@ -349,14 +379,17 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 				try {
 					_setNamePathSyncEnabled(false);
 					String path = getText(0, getLength());
+
 					int lastSeparatorIndex = path.lastIndexOf(File.separator);
 
-					if (lastSeparatorIndex >= 0 && (lastSeparatorIndex + 1) < path.length()) {
+					if ((lastSeparatorIndex >= 0) && ((lastSeparatorIndex + 1) < path.length())) {
 						setNameValue(path.substring(lastSeparatorIndex + 1));
 					}
-				} catch (BadLocationException e) {
-					LOG.error(e);
-				} finally {
+				}
+				catch (BadLocationException ble) {
+					LOG.error(ble);
+				}
+				finally {
 					_setNamePathSyncEnabled(true);
 				}
 			}

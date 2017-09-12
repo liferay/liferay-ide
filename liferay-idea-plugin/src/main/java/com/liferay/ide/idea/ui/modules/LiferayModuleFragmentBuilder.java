@@ -94,10 +94,8 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
 		_createProject(projectRoot);
 
-		File hostBundle =
-			new File(
-				LiferayIdeaUI.USER_BUNDLES_DIR, 
-				_fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
+		File hostBundle = new File(
+			LiferayIdeaUI.USER_BUNDLES_DIR, _fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
 
 		SwitchConsumerBuilder<File> switch_ = SwitchConsumer.newBuilder();
 
@@ -121,7 +119,8 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
 		if (myJdk != null) {
 			rootModel.setSdk(myJdk);
-		} else {
+		}
+		else {
 			rootModel.inheritSdk();
 		}
 	}
@@ -154,6 +153,16 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		File folder = _getProjectFile(projectRoot, "src/main/java");
 
 		FileUtil.copyFileToDir(f, "portlet-ext.properties", folder);
+	}
+
+	private VirtualFile _createAndGetContentEntry(Project project) {
+		String path = FileUtilRt.toSystemIndependentName(getContentEntryPath());
+
+		File file = new File(path);
+
+		file.mkdirs();
+
+		return LocalFileSystem.getInstance().refreshAndFindFileByPath(path);
 	}
 
 	private void _createDefaultExtXmlFile(VirtualFile projectRoot, File f) {
@@ -207,16 +216,6 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
 	private File _getProjectFile(VirtualFile projectRoot, String path) {
 		return FileSystems.getDefault().getPath(projectRoot.getPath(), path).toFile();
-	}
-
-	private VirtualFile _createAndGetContentEntry(Project project) {
-		String path = FileUtilRt.toSystemIndependentName(getContentEntryPath());
-
-		File file = new File(path);
-
-		file.mkdirs();
-
-		return LocalFileSystem.getInstance().refreshAndFindFileByPath(path);
 	}
 
 	private static final String _LIFERAY_FRAGMENT_MODULES =

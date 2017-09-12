@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.util;
@@ -26,41 +25,20 @@ import java.util.List;
 public class FileUtil {
 
 	public static void copyFile(File src, File dest) {
-		if (src == null || (!src.exists()) || dest == null || dest.isDirectory()) {
+		if ((src == null) || !src.exists() || (dest == null) || dest.isDirectory()) {
 			return;
 		}
 
 		byte[] buf = new byte[4096];
 
-		OutputStream out = null;
-		FileInputStream in = null;
-
-		try {
-			out = new FileOutputStream(dest);
-			in = new FileInputStream(src);
-
+		try (FileInputStream in = new FileInputStream(src); OutputStream out =new FileOutputStream(dest)) {
 			int avail = in.read(buf);
 			while (avail > 0) {
 				out.write(buf, 0, avail);
 				avail = in.read(buf);
 			}
-		} catch (Exception e) {
-		} finally {
-			try {
-				if (in != null)in.close();
-			} catch (Exception ex) {
-
-				// ignore
-
-			}
-
-			try {
-				if (out != null)out.close();
-			} catch (Exception ex) {
-
-				// ignore
-
-			}
+		}
+		catch (Exception e) {
 		}
 	}
 
@@ -98,15 +76,15 @@ public class FileUtil {
 					contents.append(System.getProperty("line.separator"));
 				}
 			}
-		} catch (Exception e) {
-		} finally {
+		}
+		catch (Exception e) {
+		}
+		finally {
 			if (bufferedReader != null) {
 				try {
 					bufferedReader.close();
-				} catch (IOException e) {
-
-					// best effort no need to log
-
+				}
+				catch (IOException ioe) {
 				}
 			}
 		}
@@ -146,15 +124,15 @@ public class FileUtil {
 
 				lines.add(contents.toString());
 			}
-		} catch (Exception e) {
-		} finally {
+		}
+		catch (Exception e) {
+		}
+		finally {
 			if (bufferedReader != null) {
 				try {
 					bufferedReader.close();
-				} catch (Exception e) {
-
-					// no need to log, best effort
-
+				}
+				catch (Exception e) {
 				}
 			}
 		}
@@ -174,7 +152,8 @@ public class FileUtil {
 		if (f.exists()) {
 			if (f.isDirectory()) {
 			}
-		} else {
+		}
+		else {
 			f.getParentFile().mkdirs();
 		}
 
@@ -183,32 +162,24 @@ public class FileUtil {
 		}
 
 		byte[] buffer = new byte[1024];
-		FileOutputStream out = null;
 
-		try {
-			out = new FileOutputStream(f);
-
+		try (FileOutputStream out = new FileOutputStream(f)) {
 			for (int count; (count = contents.read(buffer)) != -1;) {
 				out.write(buffer, 0, count);
 			}
 
 			out.flush();
-		} catch (IOException e) {
-		} finally {
-			if (out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {
-				}
-			}
+		}
+		catch (IOException ioe) {
 		}
 	}
 
 	public static void writeFile(File f, String contents, String expectedProjectName) {
 		try {
 			writeFile(f, contents.getBytes("UTF-8"), expectedProjectName);
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
+		}
+		catch (UnsupportedEncodingException uee) {
+			throw new RuntimeException(uee);
 		}
 	}
 

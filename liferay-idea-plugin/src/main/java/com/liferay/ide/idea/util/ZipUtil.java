@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.util;
@@ -29,12 +28,13 @@ public class ZipUtil {
 	public static ZipFile open(File file) throws IOException {
 		try {
 			return new ZipFile(file);
-		} catch (FileNotFoundException e) {
-			FileNotFoundException fnfe = new FileNotFoundException(file.getAbsolutePath());
+		}
+		catch (FileNotFoundException fnfe) {
+			FileNotFoundException e = new FileNotFoundException(file.getAbsolutePath());
 
-			fnfe.initCause(e);
+			e.initCause(fnfe);
 
-			throw fnfe;
+			throw e;
 		}
 	}
 
@@ -70,7 +70,8 @@ public class ZipUtil {
 
 				if (entryToStart == null) {
 					entryName = entry.getName();
-				} else {
+				}
+				else {
 					entryName = entry.getName().replaceFirst(entryToStart, ""); //$NON-NLS-1$
 				}
 
@@ -83,17 +84,12 @@ public class ZipUtil {
 				}
 
 				File f = new File(destdir, entryName);
+
 				File dir = f.getParentFile();
 
 				_mkdir(dir);
 
-				InputStream in = null;
-				FileOutputStream out = null;
-
-				try {
-					in = zip.getInputStream(entry);
-					out = new FileOutputStream(f);
-
+				try (InputStream in = zip.getInputStream(entry); FileOutputStream out = new FileOutputStream(f)) {
 					byte[] bytes = new byte[1024];
 					int count = in.read(bytes);
 
@@ -103,26 +99,14 @@ public class ZipUtil {
 					}
 
 					out.flush();
-				} finally {
-					if (in != null) {
-						try {
-							in.close();
-						} catch (IOException e) {
-						}
-					}
-
-					if (out != null) {
-						try {
-							out.close();
-						} catch (IOException e) {
-						}
-					}
 				}
 			}
-		} finally {
+		}
+		finally {
 			try {
 				zip.close();
-			} catch (IOException e) {
+			}
+			catch (IOException ioe) {
 			}
 		}
 	}

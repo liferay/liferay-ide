@@ -36,7 +36,8 @@ public class LiferayBundleConfigurationType extends ConfigurationTypeBase implem
 			"LiferayBundleConfiguration", "Liferay Bundle", "Run or Debug a Liferay Bundle",
 			LiferayIdeaUI.LIFERAY_ICON);
 
-		addFactory(new ConfigurationFactoryEx(this) {
+		addFactory(
+			new ConfigurationFactoryEx(this) {
 
 			@Override
 			public void onNewConfigurationCreated(@NotNull RunConfiguration configuration) {

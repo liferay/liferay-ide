@@ -26,8 +26,10 @@ import javax.swing.Icon;
 public class LiferayIdeaUI {
 
 	public static final Icon LIFERAY_ICON = IconLoader.getIcon("/icons/liferay.png");
-	public static final File USER_BUNDLES_DIR = new File(new File(System.getProperty("user.home"), ".liferay-ide"), "bundles");
-	
+
+	public static final File USER_BUNDLES_DIR = new File(
+		new File(System.getProperty("user.home"), ".liferay-ide"), "bundles");
+
 	static {
 		USER_BUNDLES_DIR.mkdirs();
 	}

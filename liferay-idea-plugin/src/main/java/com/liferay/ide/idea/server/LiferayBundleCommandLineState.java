@@ -43,8 +43,7 @@ public class LiferayBundleCommandLineState extends BaseJavaApplicationCommandLin
 
 		LiferayBundleConfiguration configuration = getConfiguration();
 
-		String jreHome =
-			configuration.isAlternativeJrePathEnabled() ? configuration.getAlternativeJrePath() : null;
+		String jreHome = configuration.isAlternativeJrePathEnabled() ? configuration.getAlternativeJrePath() : null;
 
 		params.setJdk(JavaParametersUtil.createProjectJdk(configuration.getProject(), jreHome));
 

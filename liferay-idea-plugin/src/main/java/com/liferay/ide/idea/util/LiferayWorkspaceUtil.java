@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.util;
@@ -28,7 +27,7 @@ public class LiferayWorkspaceUtil {
 	public static String getHomeDir(String location) {
 		String result = _getGradleProperty(location, "liferay.workspace.home.dir", "bundles");
 
-		if ((result == null || result.equals(""))) {
+		if ((result == null) || result.equals("")) {
 			return "bundles";
 		}
 
@@ -48,7 +47,7 @@ public class LiferayWorkspaceUtil {
 
 		String settingsContent = FileUtil.readContents(settingsGradle, true);
 
-		if (settingsContent != null && _PATTERN_WORKSPACE_PLUGIN.matcher(settingsContent).matches()) {
+		if (((settingsContent != null) && _PATTERN_WORKSPACE_PLUGIN.matcher(settingsContent).matches())) {
 			return true;
 		}
 
@@ -72,10 +71,10 @@ public class LiferayWorkspaceUtil {
 	private static final String _GRADLE_PROPERTIES_FILE_NAME =
 	"gradle.properties";
 
-	private static final String _SETTINGS_GRADLE_FILE_NAME = "settings.gradle";
-
 	private static final Pattern _PATTERN_WORKSPACE_PLUGIN = Pattern.compile(
 			".*apply.*plugin.*:.*[\'\"]com\\.liferay\\.workspace[\'\"].*",
 Pattern.MULTILINE | Pattern.DOTALL);
+
+	private static final String _SETTINGS_GRADLE_FILE_NAME = "settings.gradle";
 
 }

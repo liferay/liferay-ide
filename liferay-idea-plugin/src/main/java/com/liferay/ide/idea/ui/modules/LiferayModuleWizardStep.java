@@ -85,7 +85,8 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 
 		if (selectedType != null) {
 			return selectedType.toString();
-		} else {
+		}
+		else {
 			return null;
 		}
 	}

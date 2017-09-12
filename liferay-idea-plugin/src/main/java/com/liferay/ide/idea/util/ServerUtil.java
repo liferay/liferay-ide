@@ -10,7 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
  */
 
 package com.liferay.ide.idea.util;
@@ -34,12 +33,13 @@ public class ServerUtil {
 	public static File[] getMarketplaceLpkgFiles(File runtime) {
 		File marketplace = new File(new File(runtime, "osgi"), "marketplace");
 
-		File[] files = marketplace.listFiles(new FilenameFilter() {
+		File[] files = marketplace.listFiles(
+			new FilenameFilter() {
 
-			@Override
-			public boolean accept(File dir, String name) {
-				return name.matches(".*\\.lpkg");
-			}
+				@Override
+				public boolean accept(File dir, String name) {
+					return name.matches(".*\\.lpkg");
+				}
 
 		});
 
@@ -96,12 +96,15 @@ public class ServerUtil {
 					}
 				}
 			}
-		} catch (Exception e) {
-		} finally {
+		}
+		catch (Exception e) {
+		}
+		finally {
 			if (in != null) {
 				try {
 					in.close();
-				} catch (IOException e) {
+				}
+				catch (IOException ioe) {
 				}
 			}
 		}
@@ -117,24 +120,25 @@ public class ServerUtil {
 				File dirFile = new File(new File(runtime, "osgi"), dir);
 
 				if (dirFile.exists()) {
-					File[] files =
-dirFile.listFiles(new FilenameFilter() {
+					File[] files = dirFile.listFiles(
+						new FilenameFilter() {
 
-						@Override
-						public boolean accept(File dir, String name) {
-							return name.matches(".*\\.jar");
-						}
+							@Override
+							public boolean accept(File dir, String name) {
+								return name.matches(".*\\.jar");
+							}
 
-					});
+						});
 
-					if (files != null && files.length > 0) {
+					if ((files != null) && (files.length > 0)) {
 						for (File file : files) {
 							bundles.add(file.getName());
 						}
 					}
 				}
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -153,7 +157,8 @@ dirFile.listFiles(new FilenameFilter() {
 						bundles.add(name);
 					}
 				}
-			} catch (IOException e) {
+			}
+			catch (IOException ioe) {
 			}
 		}
 

@@ -62,10 +62,10 @@ new DocumentAdapter() {
 
 		});
 
-		_moduleContentRoot.addBrowseFolderListener(ProjectBundle.message("project.new.wizard.module.content.root.chooser.title"),
+		_moduleContentRoot.addBrowseFolderListener(
+				ProjectBundle.message("project.new.wizard.module.content.root.chooser.title"),
 				ProjectBundle.message("project.new.wizard.module.content.root.chooser.description"),
-				_context.getProject(),
-BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR);
+				_context.getProject(), BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR);
 
 		namePathComponent.getPathComponent().getDocument().addDocumentListener(
 new DocumentAdapter() {
@@ -78,7 +78,8 @@ new DocumentAdapter() {
 
 		});
 
-		_moduleName.getDocument().addDocumentListener(new DocumentAdapter() {
+		_moduleName.getDocument().addDocumentListener(
+			new DocumentAdapter() {
 
 			protected void textChanged(DocumentEvent e) {
 				if (_moduleNameDocListenerEnabled) {
@@ -88,7 +89,7 @@ new DocumentAdapter() {
 				String path = _getDefaultBaseDir(_context, namePathComponent);
 				String moduleName = _getModuleName();
 
-				if (path.length() > 0 && !Comparing.strEqual(moduleName, namePathComponent.getNameValue())) {
+				if ((path.length() > 0) && !Comparing.strEqual(moduleName, namePathComponent.getNameValue())) {
 					path += "/" + _getTargetFolderName() + "/" + moduleName;
 				}
 
@@ -119,6 +120,7 @@ new DocumentAdapter() {
 
 				if (!_moduleNameChangedByUser) {
 					String path = FileUtil.toSystemIndependentName(_getModuleContentRoot());
+
 					int idx = path.lastIndexOf("/");
 
 					boolean f = _contentRootChangedByUser;
@@ -136,9 +138,11 @@ new DocumentAdapter() {
 
 		});
 
-		_moduleFileLocation.addBrowseFolderListener(ProjectBundle.message("project.new.wizard.module.file.chooser.title"),
-				ProjectBundle.message("project.new.wizard.module.file.description"), _context.getProject(),
-BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR);
+		_moduleFileLocation.addBrowseFolderListener(
+			ProjectBundle.message("project.new.wizard.module.file.chooser.title"),
+			ProjectBundle.message("project.new.wizard.module.file.description"), _context.getProject(),
+			BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR);
+
 		_moduleFileLocation.getTextField().getDocument().addDocumentListener(
 new DocumentAdapter() {
 
@@ -218,7 +222,7 @@ new DocumentAdapter() {
 	public boolean validate() throws ConfigurationException {
 		AbstractModuleBuilder builder = getModuleBuilder();
 
-		if (builder != null && !builder.validateModuleName(_getModuleName())) {
+		if ((builder != null) && !builder.validateModuleName(_getModuleName())) {
 			return false;
 		}
 
@@ -234,7 +238,8 @@ new DocumentAdapter() {
 	private static String _getDefaultBaseDir(WizardContext wizardContext, LiferayNamePathComponent namePathComponent) {
 		if (wizardContext.isCreatingNewProject()) {
 			return namePathComponent.getPath();
-		} else {
+		}
+		else {
 			Project project = wizardContext.getProject();
 
 			assert project != null;
@@ -307,7 +312,8 @@ new DocumentAdapter() {
 
 		if (fromConfigurable != null) {
 			module = fromConfigurable.getModulesConfig().getModule(moduleName);
-		} else {
+		}
+		else {
 			module = ModuleManager.getInstance(project).findModuleByName(moduleName);
 		}
 
@@ -329,13 +335,14 @@ new DocumentAdapter() {
 			throw new ConfigurationException("Enter a module name");
 		}
 
-		if (!ProjectWizardUtil.createDirectoryIfNotExists(IdeBundle.message("directory.module.file"), moduleFileDirectory,
-				_imlLocationChangedByUser)) {
+		if (!ProjectWizardUtil.createDirectoryIfNotExists(
+				IdeBundle.message("directory.module.file"), moduleFileDirectory, _imlLocationChangedByUser)) {
 
 			return false;
 		}
 
-		if (!ProjectWizardUtil.createDirectoryIfNotExists(IdeBundle.message("directory.module.content.root"), _moduleContentRoot.getText(),
+		if (!ProjectWizardUtil.createDirectoryIfNotExists(
+				IdeBundle.message("directory.module.content.root"), _moduleContentRoot.getText(),
 				_contentRootChangedByUser)) {
 
 			return false;
@@ -344,10 +351,11 @@ new DocumentAdapter() {
 		File moduleFile = new File(moduleFileDirectory, moduleName + ModuleFileType.DOT_DEFAULT_EXTENSION);
 
 		if (moduleFile.exists()) {
-			int answer = Messages.showYesNoDialog(IdeBundle.message("prompt.overwrite.project.file", moduleFile.getAbsolutePath(),
+			int answer = Messages.showYesNoDialog(
+				IdeBundle.message(
+					"prompt.overwrite.project.file", moduleFile.getAbsolutePath(),
 					IdeBundle.message("project.new.wizard.module.identification")),
-					IdeBundle.message("title.file.already.exists"),
-Messages.getQuestionIcon());
+					IdeBundle.message("title.file.already.exists"), Messages.getQuestionIcon());
 
 			if (answer != Messages.YES) {
 				return false;
@@ -359,14 +367,14 @@ Messages.getQuestionIcon());
 
 	private boolean _contentRootChangedByUser = false;
 	private boolean _contentRootDocListenerEnabled = true;
+	private WizardContext _context;
+	private boolean _imlLocationChangedByUser = false;
+	private boolean _imlLocationDocListenerEnabled = true;
 	private TextFieldWithBrowseButton _moduleContentRoot;
 	private TextFieldWithBrowseButton _moduleFileLocation;
 	private JTextField _moduleName;
 	private boolean _moduleNameChangedByUser = false;
 	private boolean _moduleNameDocListenerEnabled = true;
 	private JPanel _modulePanel;
-	private boolean _imlLocationChangedByUser = false;
-	private boolean _imlLocationDocListenerEnabled = true;
-	private WizardContext _context;
 
 }
