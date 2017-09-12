@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 public class LiferayWorkspaceUtil {
 
 	public static String getHomeDir(String location) {
-		final String result = getGradleProperty(location, "liferay.workspace.home.dir", "bundles");
+		String result = getGradleProperty(location, "liferay.workspace.home.dir", "bundles");
 
 		if ((result == null || result.equals(""))) {
 			return "bundles";
@@ -46,7 +46,7 @@ public class LiferayWorkspaceUtil {
 			return false;
 		}
 
-		final String settingsContent = FileUtil.readContents(settingsGradle, true);
+		String settingsContent = FileUtil.readContents(settingsGradle, true);
 
 		if (settingsContent != null && PATTERN_WORKSPACE_PLUGIN.matcher(settingsContent).matches()) {
 			return true;
@@ -56,10 +56,10 @@ public class LiferayWorkspaceUtil {
 	}
 
 	private static String getGradleProperty(String projectLocation, String key, String defaultValue) {
-		final File gradleProperties = new File(projectLocation, "gradle.properties");
+		File gradleProperties = new File(projectLocation, "gradle.properties");
 
 		if (gradleProperties.exists()) {
-			final Properties properties = PropertiesUtil.loadProperties(gradleProperties);
+			Properties properties = PropertiesUtil.loadProperties(gradleProperties);
 
 			return properties.getProperty(key, defaultValue);
 		}

@@ -96,14 +96,14 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 
 	@Override
 	public Path[] getRuntimeClasspath() {
-		final List<Path> paths = new ArrayList<>();
+		List<Path> paths = new ArrayList<>();
 
-		final Path binPath = Paths.get(bundlePath.toString(), "bin");
+		Path binPath = Paths.get(bundlePath.toString(), "bin");
 
 		if (binPath.toFile().exists()) {
 			paths.add(Paths.get(binPath.toString(), "bootstrap.jar"));
 
-			final Path juli = Paths.get(binPath.toString(), "tomcat-juli.jar");
+			Path juli = Paths.get(binPath.toString(), "tomcat-juli.jar");
 
 			if (juli.toFile().exists()) {
 				paths.add(juli);
@@ -115,7 +115,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 
 	@Override
 	public String[] getRuntimeStartProgArgs() {
-		final String[] retval = new String[1];
+		String[] retval = new String[1];
 		retval[0] = "start";
 
 		return retval;
@@ -128,7 +128,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 
 	@Override
 	public String[] getRuntimeStopProgArgs() {
-		final String[] retval = new String[1];
+		String[] retval = new String[1];
 		retval[0] = "stop";
 
 		return retval;
@@ -196,14 +196,14 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 	protected int getDefaultJMXRemotePort() {
 		int retval = 8099;
 
-		final Path setenv = Paths.get(getAppServerDir().toString(), "bin", "setenv."+ getShellExtension());
+		Path setenv = Paths.get(getAppServerDir().toString(), "bin", "setenv."+ getShellExtension());
 
-		final String contents = FileUtil.readContents(setenv.toFile(), true);
+		String contents = FileUtil.readContents(setenv.toFile(), true);
 
 		String port = null;
 
 		if (contents != null) {
-			final Matcher matcher = Pattern.compile(
+			Matcher matcher = Pattern.compile(
 				".*-Dcom.sun.management.jmxremote.port(\\s*)=(\\s*)([0-9]+).*").matcher(contents);
 
 			if (matcher.matches()) {
@@ -219,7 +219,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle {
 	}
 
 	private String[] getRuntimeVMArgs() {
-		final List<String> args = new ArrayList<>();
+		List<String> args = new ArrayList<>();
 
 		args.add("-Dcatalina.base=" + "\"" + bundlePath.toString() + "\"");
 		args.add("-Dcatalina.home=" + "\"" + bundlePath.toString() + "\"");

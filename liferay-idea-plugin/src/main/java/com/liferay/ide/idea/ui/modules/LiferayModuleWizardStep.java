@@ -126,11 +126,11 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 		return true;
 	}
 
-	private final LiferayModuleBuilder builder;
+	private LiferayModuleBuilder builder;
 	private JTextField className;
 	private JPanel mainPanel;
 	private JTextField packageName;
 	private JPanel typesPanel;
-	private final Tree typesTree;
+	private Tree typesTree;
 
 }

@@ -46,7 +46,7 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
 
 	@Override
 	public void actionPerformed(AnActionEvent e) {
-		final Project project = getEventProject(e);
+		Project project = getEventProject(e);
 
 		if (!_isValidWorkspaceLocation(project)) {
 			Messages.showErrorDialog("Unable to detect current project as a Liferay workspace", "No Liferay workspace");
@@ -56,13 +56,13 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
 
 		String defaultPath = null;
 
-		final VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
+		VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
 
 		if ((virtualFile != null) && virtualFile.isDirectory()) {
 			defaultPath = virtualFile.getPath();
 		}
 
-		final NewLiferayModuleWizard wizard = new NewLiferayModuleWizard(
+		NewLiferayModuleWizard wizard = new NewLiferayModuleWizard(
 			project, new DefaultModulesProvider(project), defaultPath);
 
 		if (wizard.showAndGet()) {
@@ -72,10 +72,10 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
 
 	@Nullable
 	public Module createModuleFromWizard(Project project, AbstractProjectWizard wizard) {
-		final ProjectBuilder builder = wizard.getProjectBuilder();
+		ProjectBuilder builder = wizard.getProjectBuilder();
 
 		if (builder instanceof ModuleBuilder) {
-			final ModuleBuilder moduleBuilder = (ModuleBuilder)builder;
+			ModuleBuilder moduleBuilder = (ModuleBuilder)builder;
 
 			if (moduleBuilder.getName() == null) {
 				moduleBuilder.setName(wizard.getProjectName());

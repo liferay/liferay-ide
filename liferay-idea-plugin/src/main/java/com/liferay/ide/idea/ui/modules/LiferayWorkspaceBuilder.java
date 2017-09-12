@@ -78,12 +78,12 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
 
 	@Override
 	public void setupRootModel(ModifiableRootModel model) throws ConfigurationException {
-		final Project project = model.getProject();
+		Project project = model.getProject();
 
 		_initWorkspace(project);
 	}
 
-	private void _initWorkspace(final Project project) {
+	private void _initWorkspace(Project project) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("-b ");

@@ -59,7 +59,7 @@ public class ServerUtil {
 			}
 		}
 
-		final File f = new File(temp, hostOsgiBundle);
+		File f = new File(temp, hostOsgiBundle);
 
 		if (f.exists()) {
 			return f;
@@ -110,14 +110,14 @@ public class ServerUtil {
 	}
 
 	public static List<String> getModuleFileListFrom70Server(File runtime) {
-		final List<String> bundles = new ArrayList<>();
+		List<String> bundles = new ArrayList<>();
 
 		try {
 			for (String dir : osgiBundleDirs) {
-				final File dirFile = new File(new File(runtime, "osgi"), dir);
+				File dirFile = new File(new File(runtime, "osgi"), dir);
 
 				if (dirFile.exists()) {
-					final File[] files =
+					File[] files =
 dirFile.listFiles(new FilenameFilter() {
 
 						@Override
@@ -128,7 +128,7 @@ dirFile.listFiles(new FilenameFilter() {
 					});
 
 					if (files != null && files.length > 0) {
-						for (final File file : files) {
+						for (File file : files) {
 							bundles.add(file.getName());
 						}
 					}
@@ -138,7 +138,7 @@ dirFile.listFiles(new FilenameFilter() {
 			e.printStackTrace();
 		}
 
-		final File[] files = getMarketplaceLpkgFiles(runtime);
+		File[] files = getMarketplaceLpkgFiles(runtime);
 
 		for (File file : files) {
 			try (JarFile jar = new JarFile(file)) {

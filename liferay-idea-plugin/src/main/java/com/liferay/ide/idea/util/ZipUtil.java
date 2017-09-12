@@ -26,11 +26,11 @@ import java.util.zip.ZipFile;
  */
 public class ZipUtil {
 
-	public static ZipFile open(final File file) throws IOException {
+	public static ZipFile open(File file) throws IOException {
 		try {
 			return new ZipFile(file);
 		} catch (FileNotFoundException e) {
-			final FileNotFoundException fnfe = new FileNotFoundException(file.getAbsolutePath());
+			FileNotFoundException fnfe = new FileNotFoundException(file.getAbsolutePath());
 
 			fnfe.initCause(e);
 
@@ -38,17 +38,17 @@ public class ZipUtil {
 		}
 	}
 
-	public static void unzip(final File file, final File destdir) throws IOException {
+	public static void unzip(File file, File destdir) throws IOException {
 		unzip(file, null, destdir);
 	}
 
-	public static void unzip(final File file, final String entryToStart, final File destdir) throws IOException {
-		final ZipFile zip = open(file);
+	public static void unzip(File file, String entryToStart, File destdir) throws IOException {
+		ZipFile zip = open(file);
 
 		try {
-			final Enumeration<? extends ZipEntry> entries = zip.entries();
+			Enumeration<? extends ZipEntry> entries = zip.entries();
 
-			final int totalWork = zip.size();
+			int totalWork = zip.size();
 
 			int c = 0;
 
@@ -59,7 +59,7 @@ public class ZipUtil {
 			}
 
 			while (entries.hasMoreElements()) {
-				final ZipEntry entry = entries.nextElement();
+				ZipEntry entry = entries.nextElement();
 
 				if (!foundStartEntry) {
 					foundStartEntry = entryToStart.equals(entry.getName());
@@ -82,8 +82,8 @@ public class ZipUtil {
 					continue;
 				}
 
-				final File f = new File(destdir, entryName);
-				final File dir = f.getParentFile();
+				File f = new File(destdir, entryName);
+				File dir = f.getParentFile();
 
 				mkdir(dir);
 
@@ -94,7 +94,7 @@ public class ZipUtil {
 					in = zip.getInputStream(entry);
 					out = new FileOutputStream(f);
 
-					final byte[] bytes = new byte[1024];
+					byte[] bytes = new byte[1024];
 					int count = in.read(bytes);
 
 					while (count != -1) {
@@ -129,7 +129,7 @@ public class ZipUtil {
 
 	private static void mkdir(File dir) throws IOException {
 		if (!dir.exists() && !dir.mkdirs()) {
-			final String msg = "Could not create dir: " + dir.getPath();
+			String msg = "Could not create dir: " + dir.getPath();
 			throw new IOException(msg);
 		}
 	}

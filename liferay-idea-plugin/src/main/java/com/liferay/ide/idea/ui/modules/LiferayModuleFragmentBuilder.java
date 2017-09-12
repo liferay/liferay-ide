@@ -88,13 +88,13 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
 	@Override
 	public void setupRootModel(ModifiableRootModel rootModel) throws ConfigurationException {
-		final Project project = rootModel.getProject();
+		Project project = rootModel.getProject();
 
-		final VirtualFile projectRoot = createAndGetContentEntry(project);
+		VirtualFile projectRoot = createAndGetContentEntry(project);
 
 		_createProject(projectRoot);
 
-		final File hostBundle = 
+		File hostBundle =
 			new File(
 				LiferayIdeaUI.USER_BUNDLES_DIR, 
 				_fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
@@ -130,7 +130,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		_version = version;
 	}
 
-	private void _copyOtherResource(final VirtualFile projectRoot, final File fragmentFile) {
+	private void _copyOtherResource(VirtualFile projectRoot, File fragmentFile) {
 		String parent = fragmentFile.getParentFile().getPath();
 
 		parent = parent.replaceAll("\\\\", "/");
@@ -150,13 +150,13 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		FileUtil.copyFileToDir(fragmentFile, folder);
 	}
 
-	private void _copyPortletExtProperties(final VirtualFile projectRoot, File f) {
+	private void _copyPortletExtProperties(VirtualFile projectRoot, File f) {
 		File folder = _getProjectFile(projectRoot, "src/main/java");
 
 		FileUtil.copyFileToDir(f, "portlet-ext.properties", folder);
 	}
 
-	private void _createDefaultExtXmlFile(final VirtualFile projectRoot, File f) {
+	private void _createDefaultExtXmlFile(VirtualFile projectRoot, File f) {
 		File folder = _getProjectFile(projectRoot, "src/main/resources/resource-actions");
 
 		folder.mkdirs();
@@ -177,8 +177,8 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		}
 	}
 
-	private void _createProject(final VirtualFile projectRoot) {
-		final StringBuilder sb = new StringBuilder();
+	private void _createProject(VirtualFile projectRoot) {
+		StringBuilder sb = new StringBuilder();
 
 		sb.append("create ");
 		sb.append("-d \"");
@@ -205,7 +205,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		BladeCLI.execute(sb.toString());
 	}
 
-	private File _getProjectFile(final VirtualFile projectRoot, String path) {
+	private File _getProjectFile(VirtualFile projectRoot, String path) {
 		return FileSystems.getDefault().getPath(projectRoot.getPath(), path).toFile();
 	}
 

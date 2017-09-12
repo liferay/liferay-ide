@@ -66,7 +66,7 @@ public abstract class AbstractPortalBundle implements PortalBundle {
 
 	@Override
 	public Path[] getBundleDependencyJars() {
-		final List<Path> libs = new ArrayList<>();
+		List<Path> libs = new ArrayList<>();
 		Path bundleLibPath = getAppServerLibDir();
 		List<File> libFiles;
 

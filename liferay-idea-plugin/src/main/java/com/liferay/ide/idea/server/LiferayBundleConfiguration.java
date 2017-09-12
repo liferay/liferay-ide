@@ -100,7 +100,7 @@ public class LiferayBundleConfiguration
 	@NotNull
 	@Override
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-		final SettingsEditorGroup<LiferayBundleConfiguration> group =
+		SettingsEditorGroup<LiferayBundleConfiguration> group =
 	new SettingsEditorGroup<>();
 
 		group.addEditor(

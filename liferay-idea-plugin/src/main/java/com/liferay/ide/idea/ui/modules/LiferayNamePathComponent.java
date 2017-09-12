@@ -49,15 +49,15 @@ import javax.swing.text.PlainDocument;
 public class LiferayNamePathComponent extends JPanel {
 
 	public static LiferayNamePathComponent initNamePathComponent(WizardContext context) {
-		final LiferayNamePathComponent component = new LiferayNamePathComponent(
+		LiferayNamePathComponent component = new LiferayNamePathComponent(
 				IdeBundle.message("label.project.name"), IdeBundle.message("label.project.files.location"),
 				IdeBundle.message("title.select.project.file.directory", IdeBundle.message("project.new.wizard.project.identification")),
 				IdeBundle.message("description.select.project.file.directory", StringUtil
 					.capitalize(IdeBundle.message("project.new.wizard.project.identification"))), true, false);
 
-		final String baseDir = context.getProjectFileDirectory();
-		final String projectName = context.getProjectName();
-		final String initialProjectName = projectName != null ? projectName : ProjectWizardUtil.findNonExistingFileName(
+		String baseDir = context.getProjectFileDirectory();
+		String projectName = context.getProjectName();
+		String initialProjectName = projectName != null ? projectName : ProjectWizardUtil.findNonExistingFileName(
 	baseDir, "untitled", "");
 
 		component.setPath(projectName == null ? (baseDir + File.separator + initialProjectName) : baseDir);
@@ -67,8 +67,8 @@ public class LiferayNamePathComponent extends JPanel {
 		return component;
 	}
 
-	public LiferayNamePathComponent(String nameLabelText, String pathLabelText, final String pathChooserTitle,
-									final String pathChooserDescription, boolean hideIgnored, boolean bold) {
+	public LiferayNamePathComponent(String nameLabelText, String pathLabelText, String pathChooserTitle,
+									String pathChooserDescription, boolean hideIgnored, boolean bold) {
 
 		super(new GridBagLayout());
 
@@ -98,12 +98,12 @@ public class LiferayNamePathComponent extends JPanel {
 		this.add(name, new GridBagConstraints(1, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
 			insets, 0, 0));
 
-		final FileChooserDescriptor chooserDescriptor =
+		FileChooserDescriptor chooserDescriptor =
 	(FileChooserDescriptor)BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR.clone();
 
 		chooserDescriptor.setHideIgnored(hideIgnored);
 
-		final BrowseFilesListener browseButtonActionListener =
+		BrowseFilesListener browseButtonActionListener =
 new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserDescriptor) {
 
 			public void actionPerformed(ActionEvent e) {
@@ -157,7 +157,7 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 	}
 
 	public void setNameValue(String name) {
-		final boolean isNameChangedByUser = this.isNameChangedByUser;
+		boolean isNameChangedByUser = this.isNameChangedByUser;
 
 		setNamePathSyncEnabled(false);
 
@@ -171,7 +171,7 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 	}
 
 	public void setPath(String path) {
-		final boolean isPathChangedByUser = this.isPathChangedByUser;
+		boolean isPathChangedByUser = this.isPathChangedByUser;
 
 		setPathNameSyncEnabled(false);
 
@@ -188,7 +188,7 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 	}
 
 	public boolean validateNameAndPath(WizardContext context, boolean defaultFormat) throws ConfigurationException {
-		final String name = getNameValue();
+		String name = getNameValue();
 
 		if (StringUtil.isEmptyOrSpaces(name)) {
 			throw new ConfigurationException(
@@ -196,7 +196,7 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 		"prompt.new.project.file.name", ApplicationInfo.getInstance().getVersionName(), context.getPresentationName()));
 		}
 
-		final String projectDirectory = getPath();
+		String projectDirectory = getPath();
 
 		if (StringUtil.isEmptyOrSpaces(projectDirectory)) {
 			throw new ConfigurationException(
@@ -214,7 +214,7 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 			return false;
 		}
 
-		final File file = new File(projectDirectory);
+		File file = new File(projectDirectory);
 
 		if (file.exists() && !file.canWrite()) {
 			throw new ConfigurationException(
@@ -231,9 +231,9 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 		}
 
 		boolean shouldContinue = true;
-		final String fileName =
+		String fileName =
 	defaultFormat ? name + ProjectFileType.DOT_DEFAULT_EXTENSION : Project.DIRECTORY_STORE_FOLDER;
-		final File projectFile = new File(file, fileName);
+		File projectFile = new File(file, fileName);
 
 		if (projectFile.exists()) {
 			message = IdeBundle.message(
@@ -315,9 +315,9 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 			if (isNamePathSyncEnabled() && !isPathChangedByUser) {
 				try {
 					setPathNameSyncEnabled(false);
-					final String name = getText(0, getLength());
-					final String path = LiferayNamePathComponent.this.path.getText().trim();
-					final int lastSeparatorIndex = path.lastIndexOf(File.separator);
+					String name = getText(0, getLength());
+					String path = LiferayNamePathComponent.this.path.getText().trim();
+					int lastSeparatorIndex = path.lastIndexOf(File.separator);
 
 					if (lastSeparatorIndex >= 0) {
 						setPath(path.substring(0, lastSeparatorIndex + 1) + name);
@@ -348,8 +348,8 @@ new BrowseFilesListener(path, pathChooserTitle, pathChooserDescription, chooserD
 			if (isPathNameSyncEnabled() && !isNameChangedByUser) {
 				try {
 					setNamePathSyncEnabled(false);
-					final String path = getText(0, getLength());
-					final int lastSeparatorIndex = path.lastIndexOf(File.separator);
+					String path = getText(0, getLength());
+					int lastSeparatorIndex = path.lastIndexOf(File.separator);
 
 					if (lastSeparatorIndex >= 0 && (lastSeparatorIndex + 1) < path.length()) {
 						setNameValue(path.substring(lastSeparatorIndex + 1));

@@ -162,15 +162,15 @@ public class FileUtil {
 		return lines.toArray(new String[lines.size()]);
 	}
 
-	public static void writeFile(final File f, final byte[] contents, final String expectedProjectName) {
+	public static void writeFile(File f, byte[] contents, String expectedProjectName) {
 		writeFile(f, new ByteArrayInputStream(contents), expectedProjectName);
 	}
 
-	public static void writeFile(final File f, final InputStream contents) {
+	public static void writeFile(File f, InputStream contents) {
 		writeFile(f, contents, null);
 	}
 
-	public static void writeFile(final File f, final InputStream contents, final String expectedProjectName) {
+	public static void writeFile(File f, InputStream contents, String expectedProjectName) {
 		if (f.exists()) {
 			if (f.isDirectory()) {
 			}
@@ -182,7 +182,7 @@ public class FileUtil {
 			return;
 		}
 
-		final byte[] buffer = new byte[1024];
+		byte[] buffer = new byte[1024];
 		FileOutputStream out = null;
 
 		try {
@@ -204,7 +204,7 @@ public class FileUtil {
 		}
 	}
 
-	public static void writeFile(final File f, final String contents, final String expectedProjectName) {
+	public static void writeFile(File f, String contents, String expectedProjectName) {
 		try {
 			writeFile(f, contents.getBytes("UTF-8"), expectedProjectName);
 		} catch (UnsupportedEncodingException e) {

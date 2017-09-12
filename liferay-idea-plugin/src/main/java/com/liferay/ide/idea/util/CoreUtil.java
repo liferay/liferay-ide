@@ -43,16 +43,16 @@ public class CoreUtil {
 		return v1.getQualifier().compareTo(v2.getQualifier());
 	}
 
-	public static final String createStringDigest(final String str)
+	public static String createStringDigest(String str)
 	{
 
 		try
 		{
-			final MessageDigest md = MessageDigest.getInstance("SHA-256"); //$NON-NLS-1$
-			final byte[] input = str.getBytes("UTF-8"); //$NON-NLS-1$
-			final byte[] digest = md.digest(input);
+			MessageDigest md = MessageDigest.getInstance("SHA-256"); //$NON-NLS-1$
+			byte[] input = str.getBytes("UTF-8"); //$NON-NLS-1$
+			byte[] digest = md.digest(input);
 
-			final StringBuilder buf = new StringBuilder();
+			StringBuilder buf = new StringBuilder();
 
 			for (int i = 0; i < digest.length; i++)
 			{

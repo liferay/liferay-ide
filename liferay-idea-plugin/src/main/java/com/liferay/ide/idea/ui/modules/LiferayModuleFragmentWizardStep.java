@@ -58,7 +58,7 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
 		String homeDir = LiferayWorkspaceUtil.getHomeDir(project.getBasePath());
 
-		final File liferayHomeDir = new File(project.getBasePath(), homeDir);
+		File liferayHomeDir = new File(project.getBasePath(), homeDir);
 
 		if (!liferayHomeDir.exists()) {
 			fragmentHost.addItem("unable to get liferay bundle");
@@ -68,7 +68,7 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
 			root.add(node);
 
-			final TreeModel model = new DefaultTreeModel(root);
+			TreeModel model = new DefaultTreeModel(root);
 
 			jspsTree.setModel(model);
 
@@ -124,7 +124,7 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 	public String[] getBsnAndVersion(String hostBundleName) {
 		String child = hostBundleName.substring(0, hostBundleName.lastIndexOf(".jar"));
 
-		final File tempBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, child);
+		File tempBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, child);
 
 		if (!tempBundle.exists()) {
 			File hostBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, hostBundleName);
@@ -140,8 +140,8 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 		String version = "";
 
 		if (tempBundle.exists()) {
-			final File file = new File(new File(tempBundle, "META-INF"), "MANIFEST.MF");
-			final String[] contents = FileUtil.readLinesFromFile(file);
+			File file = new File(new File(tempBundle, "META-INF"), "MANIFEST.MF");
+			String[] contents = FileUtil.readLinesFromFile(file);
 
 			for (String content : contents) {
 				if (content.contains("Bundle-SymbolicName:")) {
@@ -203,10 +203,10 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 		return true;
 	}
 
-	private final LiferayModuleFragmentBuilder builder;
+	private LiferayModuleFragmentBuilder builder;
 	private JComboBox<String> fragmentHost;
 	private JPanel jspsPanel;
-	private final Tree jspsTree;
+	private Tree jspsTree;
 	private JPanel mainPanel;
 
 }

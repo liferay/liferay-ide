@@ -54,18 +54,16 @@ public class LiferayPortalValueLoader {
 
 	public String[] loadHookPropertiesFromClass()
 	{
-
-		final String loadClassName = "com.liferay.portal.deploy.hot.HookHotDeployListener"; //$NON-NLS-1$
-		final String fieldName = "SUPPORTED_PROPERTIES"; //$NON-NLS-1$
+		String loadClassName = "com.liferay.portal.deploy.hot.HookHotDeployListener"; //$NON-NLS-1$
+		String fieldName = "SUPPORTED_PROPERTIES"; //$NON-NLS-1$
 
 		return (String[])getFieldValuesFromClass(loadClassName, fieldName);
 	}
 
 	public String loadServerInfoFromClass()
 	{
-
-		final String loadClassName = "com.liferay.portal.kernel.util.ReleaseInfo"; //$NON-NLS-1$
-		final String methodName = "getServerInfo"; //$NON-NLS-1$
+		String loadClassName = "com.liferay.portal.kernel.util.ReleaseInfo"; //$NON-NLS-1$
+		String methodName = "getServerInfo"; //$NON-NLS-1$
 
 		return (String)getMethodValueFromClass(loadClassName, methodName);
 	}
@@ -73,14 +71,14 @@ public class LiferayPortalValueLoader {
 	public Version loadVersionFromClass()
 	{
 
-		final String loadClassName = "com.liferay.portal.kernel.util.ReleaseInfo"; //$NON-NLS-1$
-		final String methodName = "getVersion"; //$NON-NLS-1$
+		String loadClassName = "com.liferay.portal.kernel.util.ReleaseInfo"; //$NON-NLS-1$
+		String methodName = "getVersion"; //$NON-NLS-1$
 
 		Version retval = Version.emptyVersion;
 
 		try
 		{
-			final String versionString = (String)getMethodValueFromClass(
+			String versionString = (String)getMethodValueFromClass(
 	loadClassName, methodName); retval = Version.parseVersion(versionString);
 		}
 		catch (Exception e)
@@ -95,7 +93,7 @@ public class LiferayPortalValueLoader {
 
 		if (libDir.exists())
 		{
-			final File[] libs = libDir.listFiles(
+			File[] libs = libDir.listFiles(
 
 				new FilenameFilter()
 				{
@@ -123,8 +121,8 @@ public class LiferayPortalValueLoader {
 
 		try
 		{
-			final Class<?> classRef = loadClass(loadClassName);
-			final Field propertiesField = classRef.getDeclaredField(fieldName);
+			Class<?> classRef = loadClass(loadClassName);
+			Field propertiesField = classRef.getDeclaredField(fieldName);
 
 			retval = (Object[]) (propertiesField.get(propertiesField));
 		}
@@ -142,8 +140,8 @@ public class LiferayPortalValueLoader {
 
 		try
 		{
-			final Class<?> classRef = loadClass(loadClassName);
-			final Method method = classRef.getMethod(methodName);
+			Class<?> classRef = loadClass(loadClassName);
+			Method method = classRef.getMethod(methodName);
 			retval = method.invoke(null);
 		}
 		catch (Exception e)
@@ -156,11 +154,11 @@ public class LiferayPortalValueLoader {
 	private Class<?> loadClass(String className) throws Exception
 	{
 
-		final List<URL> libUrlList = new ArrayList<>();
+		List<URL> libUrlList = new ArrayList<>();
 
 		if (portalDir != null)
 		{
-			final File libDir = Paths.get(portalDir.toString(), "WEB-INF", "lib").toFile();
+			File libDir = Paths.get(portalDir.toString(), "WEB-INF", "lib").toFile();
 
 			addLibs(libDir, libUrlList);
 		}
@@ -173,7 +171,7 @@ public class LiferayPortalValueLoader {
 			}
 		}
 
-		final URL[] urls = libUrlList.toArray(new URL[libUrlList.size()]);
+		URL[] urls = libUrlList.toArray(new URL[libUrlList.size()]);
 
 		return new URLClassLoader(urls).loadClass(className);
 	}

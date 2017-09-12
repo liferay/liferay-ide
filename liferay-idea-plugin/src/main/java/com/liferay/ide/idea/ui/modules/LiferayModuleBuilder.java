@@ -85,7 +85,7 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 
 	@Override
 	public void setupRootModel(ModifiableRootModel rootModel) throws ConfigurationException {
-		final VirtualFile moduleDir = createAndGetContentEntry();
+		VirtualFile moduleDir = createAndGetContentEntry();
 
 		StringBuilder sb = new StringBuilder();
 
@@ -126,7 +126,7 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 	}
 
 	private VirtualFile createAndGetContentEntry() {
-		final String path = FileUtil.toSystemIndependentName(getContentEntryPath());
+		String path = FileUtil.toSystemIndependentName(getContentEntryPath());
 
 		new File(path).mkdirs();
 

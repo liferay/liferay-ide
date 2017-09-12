@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class LiferayBundleConfigurable extends SettingsEditor<LiferayBundleConfiguration> implements PanelWithAnchor {
 
-	public LiferayBundleConfigurable(final Project project) {
+	public LiferayBundleConfigurable(Project project) {
 		ModulesComboBox modulesComboBox = modules.getComponent();
 
 		modulesComboBox.allowEmptySelection("<whole project>");
@@ -44,7 +44,7 @@ public class LiferayBundleConfigurable extends SettingsEditor<LiferayBundleConfi
 		jrePath.setDefaultJreSelector(DefaultJreSelector.fromModuleDependencies(modulesComboBox, true));
 	}
 
-	public void applyEditorTo(@NotNull final LiferayBundleConfiguration configuration) throws ConfigurationException {
+	public void applyEditorTo(@NotNull LiferayBundleConfiguration configuration) throws ConfigurationException {
 		configuration.setAlternativeJrePath(jrePath.getJrePathOrName());
 		configuration.setAlternativeJrePathEnabled(jrePath.isAlternativeJreSelected());
 		configuration.setModule(modules.getComponent().getSelectedModule());
@@ -62,7 +62,7 @@ public class LiferayBundleConfigurable extends SettingsEditor<LiferayBundleConfi
 		return anchor;
 	}
 
-	public void resetEditorFrom(@NotNull final LiferayBundleConfiguration configuration) {
+	public void resetEditorFrom(@NotNull LiferayBundleConfiguration configuration) {
 		vmParams.setText(configuration.getVMParameters());
 		liferayBundle.setText(configuration.getLiferayBundle());
 		jrePath.setPathOrName(configuration.getAlternativeJrePath(), configuration.isAlternativeJrePathEnabled());

@@ -54,7 +54,7 @@ public class NewLiferayModuleWizard extends AbstractProjectWizard {
 	protected void init(@NotNull ModulesProvider modulesProvider) {
 		myWizardContext.setModulesProvider(modulesProvider);
 
-		final LiferayProjectTypeStep projectTypeStep = new LiferayProjectTypeStep(
+		LiferayProjectTypeStep projectTypeStep = new LiferayProjectTypeStep(
 	myWizardContext, this, modulesProvider);
 
 		Disposer.register(getDisposable(), projectTypeStep);
@@ -70,6 +70,6 @@ public class NewLiferayModuleWizard extends AbstractProjectWizard {
 		super.init();
 	}
 
-	private final StepSequence mySequence = new StepSequence();
+	private StepSequence mySequence = new StepSequence();
 
 }

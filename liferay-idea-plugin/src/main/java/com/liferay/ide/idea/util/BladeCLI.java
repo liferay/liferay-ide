@@ -33,8 +33,8 @@ import org.apache.tools.ant.taskdefs.Java;
 public class BladeCLI {
 
 	public static String[] execute(String args) {
-		final Project project = new Project();
-		final Java javaTask = new Java();
+		Project project = new Project();
+		Java javaTask = new Java();
 
 		javaTask.setProject(project);
 		javaTask.setFork(true);
@@ -56,18 +56,18 @@ BladeCLI.class.getClassLoader().getResourceAsStream("/libs/com.liferay.blade.cli
 		javaTask.setJar(bladeJar);
 		javaTask.setArgs(args);
 
-		final DefaultLogger logger = new DefaultLogger();
+		DefaultLogger logger = new DefaultLogger();
 		project.addBuildListener(logger);
 
-		final StringBufferOutputStream out = new StringBufferOutputStream();
+		StringBufferOutputStream out = new StringBufferOutputStream();
 
 		logger.setOutputPrintStream(new PrintStream(out));
 		logger.setMessageOutputLevel(Project.MSG_INFO);
 
 		int returnCode = javaTask.executeJava();
 
-		final java.util.List<String> lines = new ArrayList<>();
-		final Scanner scanner = new Scanner(out.toString());
+		java.util.List<String> lines = new ArrayList<>();
+		Scanner scanner = new Scanner(out.toString());
 
 		while (scanner.hasNextLine()) {
 			lines.add(scanner.nextLine().replaceAll(".*\\[null\\] ", ""));
@@ -77,7 +77,7 @@ BladeCLI.class.getClassLoader().getResourceAsStream("/libs/com.liferay.blade.cli
 
 		boolean hasErrors = false;
 
-		final StringBuilder errors = new StringBuilder();
+		StringBuilder errors = new StringBuilder();
 
 		for (String line : lines) {
 			if (line.startsWith("Error")) {

@@ -26,8 +26,8 @@ import java.util.Properties;
  */
 public class PropertiesUtil {
 
-	public static Properties loadProperties(final File f) {
-		final Properties properties = new Properties();
+	public static Properties loadProperties(File f) {
+		Properties properties = new Properties();
 
 		try (FileInputStream stream = new FileInputStream(f)) {
 			properties.load(stream);

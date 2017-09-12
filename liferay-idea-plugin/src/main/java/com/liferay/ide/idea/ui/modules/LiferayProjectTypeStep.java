@@ -81,7 +81,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 	public static final Convertor<FrameworkSupportInModuleProvider, String> PROVIDER_STRING_CONVERTOR = o -> o.getId();
 
 	public static MultiMap<TemplatesGroup, ProjectTemplate> getTemplatesMap(WizardContext context) {
-		final MultiMap<TemplatesGroup, ProjectTemplate> groups = new MultiMap<>();
+		MultiMap<TemplatesGroup, ProjectTemplate> groups = new MultiMap<>();
 
 		for (ProjectTemplatesFactory factory : ProjectTemplatesFactory.EP_NAME.getExtensions()) {
 			for (String group : factory.getGroups()) {
@@ -108,7 +108,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 		this.wizard = wizard;
 
 		templatesMap = new ConcurrentMultiMap<>();
-		final List<TemplatesGroup> groups = fillTemplatesMap(context);
+		List<TemplatesGroup> groups = fillTemplatesMap(context);
 		LOG.debug("groups=" + groups);
 
 		projectTypeList.setModel(new CollectionListModel<>(groups));
@@ -179,9 +179,9 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 
 		this.modulesProvider = modulesProvider;
 
-		final Project project = context.getProject();
+		Project project = context.getProject();
 
-		final LibrariesContainer container = LibrariesContainerFactory.createContainer(context, modulesProvider);
+		LibrariesContainer container = LibrariesContainerFactory.createContainer(context, modulesProvider);
 
 		FrameworkSupportModelBase model = new FrameworkSupportModelBase(project, null, container) {
 
@@ -240,7 +240,7 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 		});
 
 		for (TemplatesGroup templatesGroup : templatesMap.keySet()) {
-			final ModuleBuilder builder = templatesGroup.getModuleBuilder();
+			ModuleBuilder builder = templatesGroup.getModuleBuilder();
 
 			if (builder instanceof LiferayModuleBuilder) {
 				if (builder != null) {
@@ -249,7 +249,7 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 			}
 		}
 
-		final String groupId = PropertiesComponent.getInstance().getValue(PROJECT_WIZARD_GROUP);
+		String groupId = PropertiesComponent.getInstance().getValue(PROJECT_WIZARD_GROUP);
 
 		if (groupId != null) {
 			TemplatesGroup group = ContainerUtil.find(groups, group1 -> groupId.equals(group1.getId()));
@@ -348,7 +348,7 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 			}
 		}
 
-		final TemplatesGroup group = getSelectedGroup();
+		TemplatesGroup group = getSelectedGroup();
 
 		if (group != null) {
 			ProjectCategoryUsagesCollector.projectTypeUsed(group.getId());
@@ -356,7 +356,7 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 	}
 
 	public void projectTypeChanged() {
-		final TemplatesGroup group = getSelectedGroup();
+		TemplatesGroup group = getSelectedGroup();
 
 		if (group == null || group == lastSelectedGroup) {
 			return;
@@ -366,7 +366,7 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 
 		PropertiesComponent.getInstance().setValue(PROJECT_WIZARD_GROUP, group.getId());
 
-		final ModuleBuilder groupModuleBuilder = group.getModuleBuilder();
+		ModuleBuilder groupModuleBuilder = group.getModuleBuilder();
 
 		settingsStep = null;
 		headerPanel.removeAll();
@@ -378,25 +378,25 @@ new GroupedItemsListRenderer<TemplatesGroup>(new ListItemDescriptorAdapter<Templ
 		if (groupModuleBuilder == null || groupModuleBuilder.isTemplateBased()) {
 			showTemplates(group);
 		} else if (!showCustomOptions(groupModuleBuilder)) {
-			final List<FrameworkSupportInModuleProvider> providers = FrameworkSupportUtil.getProviders(
+			List<FrameworkSupportInModuleProvider> providers = FrameworkSupportUtil.getProviders(
 	groupModuleBuilder);
 
-			final ProjectCategory category = group.getProjectCategory();
+			ProjectCategory category = group.getProjectCategory();
 
 			if (category != null) {
-				final List<FrameworkSupportInModuleProvider> filtered = ContainerUtil.filter(
+				List<FrameworkSupportInModuleProvider> filtered = ContainerUtil.filter(
 	providers, provider -> matchFramework(category, provider));
 
-				final Map<String, FrameworkSupportInModuleProvider> map = ContainerUtil.newMapFromValues(
+				Map<String, FrameworkSupportInModuleProvider> map = ContainerUtil.newMapFromValues(
 	providers.iterator(), PROVIDER_STRING_CONVERTOR);
 
-				final Set<FrameworkSupportInModuleProvider> set = new java.util.HashSet<>(filtered);
+				Set<FrameworkSupportInModuleProvider> set = new java.util.HashSet<>(filtered);
 
 				for (FrameworkSupportInModuleProvider provider : filtered) {
 					for (FrameworkSupportInModuleProvider.
 FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 
-						final FrameworkSupportInModuleProvider dependency = map.get(depId.getFrameworkId());
+						FrameworkSupportInModuleProvider dependency = map.get(depId.getFrameworkId());
 
 						if (dependency != null) {
 							set.add(dependency);
@@ -418,7 +418,7 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 
 		headerPanel.setVisible(headerPanel.getComponentCount() > 0);
 
-		final List<JLabel> labels = UIUtil.findComponentsOfType(headerPanel, JLabel.class);
+		List<JLabel> labels = UIUtil.findComponentsOfType(headerPanel, JLabel.class);
 
 		int width = 0;
 
@@ -440,11 +440,11 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 
 	@Override
 	public void updateDataModel() {
-		final ModuleBuilder builder = getSelectedBuilder();
+		ModuleBuilder builder = getSelectedBuilder();
 
 		wizard.getSequence().addStepsForBuilder(builder, myContext, modulesProvider);
 
-		final ModuleWizardStep step = getCustomStep();
+		ModuleWizardStep step = getCustomStep();
 
 		if (step != null) {
 			step.updateDataModel();
@@ -461,7 +461,7 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 			if (!settingsStep.validate()) return false;
 		}
 
-		final ModuleWizardStep step = getCustomStep();
+		ModuleWizardStep step = getCustomStep();
 
 		if (step != null && !step.validate()) {
 			return false;
@@ -475,7 +475,7 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 	}
 
 	private static ModuleType getModuleType(TemplatesGroup group) {
-		final ModuleBuilder moduleBuilder = group.getModuleBuilder();
+		ModuleBuilder moduleBuilder = group.getModuleBuilder();
 
 		if (moduleBuilder == null) {
 			return null;
@@ -485,7 +485,7 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 	}
 
 	private static boolean matchFramework(ProjectCategory projectCategory, FrameworkSupportInModuleProvider framework) {
-		final FrameworkRole[] roles = framework.getRoles();
+		FrameworkRole[] roles = framework.getRoles();
 
 		if (roles.length == 0) {
 			return true;
@@ -499,12 +499,12 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 		templatesMap.put(new TemplatesGroup(new LiferayModuleBuilder()), new ArrayList<>());
 		templatesMap.put(new TemplatesGroup(new LiferayModuleFragmentBuilder()), new ArrayList<>());
 
-		final List<TemplatesGroup> groups = new ArrayList<>(templatesMap.keySet());
+		List<TemplatesGroup> groups = new ArrayList<>(templatesMap.keySet());
 
-		final MultiMap<ModuleType, TemplatesGroup> moduleTypes = new MultiMap<>();
+		MultiMap<ModuleType, TemplatesGroup> moduleTypes = new MultiMap<>();
 
-		for (final TemplatesGroup group : groups) {
-			final ModuleType type = getModuleType(group);
+		for (TemplatesGroup group : groups) {
+			ModuleType type = getModuleType(group);
 
 			moduleTypes.putValue(type, group);
 		}
@@ -518,7 +518,7 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 	}
 
 	private ModuleBuilder getSelectedBuilder() {
-		final ProjectTemplate template = getSelectedTemplate();
+		ProjectTemplate template = getSelectedTemplate();
 
 		if (template != null) {
 			return builders.get(template);
@@ -542,9 +542,9 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 	private void setTemplatesList(
 		TemplatesGroup group, Collection<ProjectTemplate> templates, boolean preserveSelection) {
 
-		final List<ProjectTemplate> list = new ArrayList<>(templates);
+		List<ProjectTemplate> list = new ArrayList<>(templates);
 
-		final ModuleBuilder moduleBuilder = group.getModuleBuilder();
+		ModuleBuilder moduleBuilder = group.getModuleBuilder();
 
 		if (moduleBuilder != null && !(moduleBuilder instanceof TemplateModuleBuilder)) {
 			list.add(0, new BuilderBasedTemplate(moduleBuilder));
@@ -559,10 +559,10 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 	}
 
 	private boolean showCustomOptions(@NotNull ModuleBuilder builder) {
-		final String card = builder.getBuilderId();
+		String card = builder.getBuilderId();
 
 		if (!customSteps.containsKey(card)) {
-			final ModuleWizardStep step = builder.getCustomOptionsStep(myContext, this);
+			ModuleWizardStep step = builder.getCustomOptionsStep(myContext, this);
 
 			if (step == null) {
 				return false;
@@ -586,13 +586,13 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 	}
 
 	private void updateSelection() {
-		final ProjectTemplate template = getSelectedTemplate();
+		ProjectTemplate template = getSelectedTemplate();
 
 		if (template != null) {
 			myContext.setProjectTemplate(template);
 		}
 
-		final ModuleBuilder builder = getSelectedBuilder();
+		ModuleBuilder builder = getSelectedBuilder();
 
 		myContext.setProjectBuilder(builder);
 
@@ -612,19 +612,19 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 
 	private static final String TEMPLATES_CARD = "templates card";
 
-	private final Map<ProjectTemplate, ModuleBuilder> builders = FactoryMap.createMap(
+	private Map<ProjectTemplate, ModuleBuilder> builders = FactoryMap.createMap(
 	key -> (ModuleBuilder)key.createModuleBuilder());
-	private final ModuleBuilder.ModuleConfigurationUpdater configurationUpdater;
+	private ModuleBuilder.ModuleConfigurationUpdater configurationUpdater;
 	private String currentCard;
-	private final Map<String, ModuleWizardStep> customSteps = new THashMap<>();
+	private Map<String, ModuleWizardStep> customSteps = new THashMap<>();
 	private JBLabel frameworksLabel;
-	private final AddSupportForFrameworksPanel frameworksPanel;
+	private AddSupportForFrameworksPanel frameworksPanel;
 	private JPanel frameworksPanelPlaceholder;
 	private JPanel headerPanel;
 	private TemplatesGroup lastSelectedGroup;
 	private JPanel mainPanel;
-	private final ModulesProvider modulesProvider;
-	private final WizardContext myContext;
+	private ModulesProvider modulesProvider;
+	private WizardContext myContext;
 	private JPanel optionsPanel;
 	private JBList<TemplatesGroup> projectTypeList;
 
@@ -632,7 +632,7 @@ FrameworkDependency depId : provider.getDependenciesFrameworkIds()) {
 	private ModuleWizardStep settingsStep;
 
 	private LiferayProjectTemplateList templatesList;
-	private final MultiMap<TemplatesGroup, ProjectTemplate> templatesMap;
-	private final NewLiferayModuleWizard wizard;
+	private MultiMap<TemplatesGroup, ProjectTemplate> templatesMap;
+	private NewLiferayModuleWizard wizard;
 
 }

@@ -32,23 +32,23 @@ import org.jetbrains.annotations.NotNull;
 public class LiferayBundleCommandLineState extends BaseJavaApplicationCommandLineState<LiferayBundleConfiguration> {
 
 	public LiferayBundleCommandLineState(
-		@NotNull final LiferayBundleConfiguration configuration, final ExecutionEnvironment environment) {
+		@NotNull LiferayBundleConfiguration configuration, ExecutionEnvironment environment) {
 
 		super(environment, configuration);
 	}
 
 	@Override
 	protected JavaParameters createJavaParameters() throws ExecutionException {
-		final JavaParameters params = new JavaParameters();
+		JavaParameters params = new JavaParameters();
 
 		LiferayBundleConfiguration configuration = getConfiguration();
 
-		final String jreHome =
+		String jreHome =
 			configuration.isAlternativeJrePathEnabled() ? configuration.getAlternativeJrePath() : null;
 
 		params.setJdk(JavaParametersUtil.createProjectJdk(configuration.getProject(), jreHome));
 
-		final String tomcat = configuration.getLiferayBundle() + "/tomcat-8.0.32";
+		String tomcat = configuration.getLiferayBundle() + "/tomcat-8.0.32";
 
 		PathsList classPath = params.getClassPath();
 

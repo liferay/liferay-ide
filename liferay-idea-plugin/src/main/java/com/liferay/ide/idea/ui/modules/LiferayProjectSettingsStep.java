@@ -39,12 +39,12 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
     private JPanel settingsPanel;
     private JPanel expertPlaceholder;
     private JPanel expertPanel;
-    private final HideableDecorator expertDecorator;
-    private final LiferayNamePathComponent namePathComponent;
-    private final ProjectFormatPanel formatPanel;
+    private HideableDecorator expertDecorator;
+    private LiferayNamePathComponent namePathComponent;
+    private ProjectFormatPanel formatPanel;
     private JPanel mainPanel;
     private LiferayModuleNameLocationComponent moduleNameLocationComponent;
-    private final WizardContext wizardContext;
+    private WizardContext wizardContext;
     @Nullable
     private ModuleWizardStep settingsStep;
 
@@ -54,7 +54,7 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
         namePathComponent = LiferayNamePathComponent.initNamePathComponent(context);
         namePathComponent.setShouldBeAbsolute(true);
 
-        final JPanel modulePanel = getModulePanel();
+        JPanel modulePanel = getModulePanel();
 
         if (context.isCreatingNewProject()) {
             settingsPanel.add(namePathComponent, BorderLayout.NORTH);
@@ -96,7 +96,7 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
     }
 
     private void setupPanels() {
-        final ModuleBuilder moduleBuilder = (ModuleBuilder) wizardContext.getProjectBuilder();
+        ModuleBuilder moduleBuilder = (ModuleBuilder) wizardContext.getProjectBuilder();
 
         restorePanel(namePathComponent, 4);
         restorePanel(getModulePanel(), wizardContext.isCreatingNewProject() ? 8 : 6);
@@ -166,7 +166,7 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
         formatPanel.updateData(wizardContext);
         moduleNameLocationComponent.updateDataModel();
 
-        final ProjectBuilder moduleBuilder = wizardContext.getProjectBuilder();
+        ProjectBuilder moduleBuilder = wizardContext.getProjectBuilder();
 
         if (moduleBuilder instanceof TemplateModuleBuilder) {
             wizardContext.setProjectStorageFormat(StorageScheme.DIRECTORY_BASED);
@@ -189,13 +189,13 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 
     @Override
     public void addSettingsField(@NotNull String label, @NotNull JComponent field) {
-        final JPanel panel = wizardContext.isCreatingNewProject() ? namePathComponent : getModulePanel();
+        JPanel panel = wizardContext.isCreatingNewProject() ? namePathComponent : getModulePanel();
 
         addField(label, field, panel);
     }
 
     static void addField(String label, JComponent field, JPanel panel) {
-        final JLabel jLabel = new JBLabel(label);
+        JLabel jLabel = new JBLabel(label);
 
         jLabel.setLabelFor(field);
 
@@ -207,7 +207,7 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 
     @Override
     public void addSettingsComponent(@NotNull JComponent component) {
-        final JPanel panel = wizardContext.isCreatingNewProject() ? namePathComponent : getModulePanel();
+        JPanel panel = wizardContext.isCreatingNewProject() ? namePathComponent : getModulePanel();
 
         panel.add(component, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 2, 1, 1.0, 0, GridBagConstraints.NORTHWEST,
                 GridBagConstraints.HORIZONTAL, JBUI.emptyInsets(), 0, 0));
@@ -221,7 +221,7 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 
     @Override
     public void addExpertField(@NotNull String label, @NotNull JComponent field) {
-        final JPanel panel = wizardContext.isCreatingNewProject() ? getModulePanel() : expertPanel;
+        JPanel panel = wizardContext.isCreatingNewProject() ? getModulePanel() : expertPanel;
 
         addField(label, field, panel);
     }

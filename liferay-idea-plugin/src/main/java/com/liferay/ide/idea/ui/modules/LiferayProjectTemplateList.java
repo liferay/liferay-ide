@@ -71,7 +71,7 @@ public class LiferayProjectTemplateList extends JPanel {
             protected void customizeComponent(JList<? extends ProjectTemplate> list, ProjectTemplate value, boolean isSelected) {
                 super.customizeComponent(list, value, isSelected);
 
-                final Icon icon = myTextLabel.getIcon();
+                Icon icon = myTextLabel.getIcon();
 
                 if (icon != null && myTextLabel.getDisabledIcon() == icon) {
                     myTextLabel.setDisabledIcon(IconLoader.getDisabledIcon(icon));
@@ -97,7 +97,7 @@ public class LiferayProjectTemplateList extends JPanel {
     private void updateSelection() {
         description.setText("");
 
-        final ProjectTemplate template = getSelectedTemplate();
+        ProjectTemplate template = getSelectedTemplate();
 
         if (template != null) {
             String description = template.getDescription();
@@ -115,7 +115,7 @@ public class LiferayProjectTemplateList extends JPanel {
     public void setTemplates(List<ProjectTemplate> list, boolean preserveSelection) {
         Collections.sort(list, (o1, o2) -> Comparing.compare(o1 instanceof ArchivedProjectTemplate, o2 instanceof ArchivedProjectTemplate));
 
-        final int index = preserveSelection ? templateList.getSelectedIndex() : -1;
+        int index = preserveSelection ? templateList.getSelectedIndex() : -1;
 
         templateList.setModel(new CollectionListModel<>(list));
 
@@ -147,12 +147,12 @@ public class LiferayProjectTemplateList extends JPanel {
     }
 
     void restoreSelection() {
-        final String templateName = PropertiesComponent.getInstance().getValue(PROJECT_WIZARD_TEMPLATE);
+        String templateName = PropertiesComponent.getInstance().getValue(PROJECT_WIZARD_TEMPLATE);
 
         if (templateName != null && templateList.getModel() instanceof CollectionListModel) {
             List<ProjectTemplate> list = ((CollectionListModel<ProjectTemplate>) templateList.getModel()).toList();
 
-            final ProjectTemplate template = ContainerUtil.find(list, template1 -> templateName.equals(template1.getName()));
+            ProjectTemplate template = ContainerUtil.find(list, template1 -> templateName.equals(template1.getName()));
 
             if (template != null) {
                 templateList.setSelectedValue(template, true);
