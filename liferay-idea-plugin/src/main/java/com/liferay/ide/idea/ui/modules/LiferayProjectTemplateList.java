@@ -29,12 +29,15 @@ import com.intellij.ui.components.JBList;
 import com.intellij.ui.popup.list.GroupedItemsListRenderer;
 import com.intellij.util.containers.ContainerUtil;
 
-import java.awt.*;
+import java.awt.BorderLayout;
 
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JTextPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 

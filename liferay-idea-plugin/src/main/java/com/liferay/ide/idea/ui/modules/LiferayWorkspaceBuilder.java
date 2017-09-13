@@ -33,7 +33,7 @@ import com.liferay.ide.idea.util.BladeCLI;
 
 import java.util.stream.Stream;
 
-import javax.swing.*;
+import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
 

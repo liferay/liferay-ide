@@ -20,7 +20,11 @@ import com.intellij.ide.projectWizard.ProjectCategoryUsagesCollector;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.ide.util.frameworkSupport.FrameworkRole;
 import com.intellij.ide.util.frameworkSupport.FrameworkSupportUtil;
-import com.intellij.ide.util.newProjectWizard.*;
+import com.intellij.ide.util.newProjectWizard.AddSupportForFrameworksPanel;
+import com.intellij.ide.util.newProjectWizard.FrameworkSupportNode;
+import com.intellij.ide.util.newProjectWizard.FrameworkSupportNodeBase;
+import com.intellij.ide.util.newProjectWizard.TemplatesGroup;
+import com.intellij.ide.util.newProjectWizard.WizardDelegate;
 import com.intellij.ide.util.newProjectWizard.impl.FrameworkSupportModelBase;
 import com.intellij.ide.util.projectWizard.ModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
@@ -53,17 +57,31 @@ import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.popup.list.GroupedItemsListRenderer;
 import com.intellij.util.Function;
-import com.intellij.util.containers.*;
+import com.intellij.util.containers.ConcurrentMultiMap;
+import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.containers.Convertor;
+import com.intellij.util.containers.FactoryMap;
+import com.intellij.util.containers.MultiMap;
 import com.intellij.util.ui.UIUtil;
 
 import gnu.trove.THashMap;
 
-import java.awt.*;
+import java.awt.CardLayout;
+import java.awt.Dimension;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 

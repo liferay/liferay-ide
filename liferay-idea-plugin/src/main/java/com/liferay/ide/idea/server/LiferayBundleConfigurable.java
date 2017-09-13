@@ -23,7 +23,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.ui.PanelWithAnchor;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

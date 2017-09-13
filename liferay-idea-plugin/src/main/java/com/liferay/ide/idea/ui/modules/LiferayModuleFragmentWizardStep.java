@@ -22,7 +22,11 @@ import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.treeStructure.Tree;
 
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
-import com.liferay.ide.idea.util.*;
+import com.liferay.ide.idea.util.CoreUtil;
+import com.liferay.ide.idea.util.FileUtil;
+import com.liferay.ide.idea.util.LiferayWorkspaceUtil;
+import com.liferay.ide.idea.util.ServerUtil;
+import com.liferay.ide.idea.util.ZipUtil;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,8 +39,15 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import javax.swing.*;
-import javax.swing.tree.*;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 /**
  * @author Terry Jia

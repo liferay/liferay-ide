@@ -26,7 +26,10 @@ import com.intellij.ui.treeStructure.Tree;
 import com.liferay.ide.idea.util.BladeCLI;
 import com.liferay.ide.idea.util.CoreUtil;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;

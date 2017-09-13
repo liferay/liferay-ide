@@ -15,9 +15,21 @@
 package com.liferay.ide.idea.server;
 
 import com.intellij.diagnostic.logging.LogConfigurationPanel;
-import com.intellij.execution.*;
+import com.intellij.execution.CommonJavaRunConfigurationParameters;
+import com.intellij.execution.ExecutionBundle;
+import com.intellij.execution.ExecutionException;
+import com.intellij.execution.Executor;
+import com.intellij.execution.JavaRunConfigurationExtensionManager;
 import com.intellij.execution.configuration.EnvironmentVariablesComponent;
-import com.intellij.execution.configurations.*;
+import com.intellij.execution.configurations.ConfigurationFactory;
+import com.intellij.execution.configurations.JavaRunConfigurationModule;
+import com.intellij.execution.configurations.LocatableConfigurationBase;
+import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.execution.configurations.RunProfileState;
+import com.intellij.execution.configurations.RuntimeConfigurationException;
+import com.intellij.execution.configurations.RuntimeConfigurationWarning;
+import com.intellij.execution.configurations.SearchScopeProvider;
+import com.intellij.execution.configurations.SearchScopeProvidingRunProfile;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.util.JavaParametersUtil;
 import com.intellij.execution.util.ProgramParametersUtil;

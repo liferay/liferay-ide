@@ -15,7 +15,12 @@
 package com.liferay.ide.idea.ui.modules;
 
 import com.intellij.ide.util.newProjectWizard.SelectTemplateSettings;
-import com.intellij.ide.util.projectWizard.*;
+import com.intellij.ide.util.projectWizard.EmptyModuleBuilder;
+import com.intellij.ide.util.projectWizard.ModuleBuilder;
+import com.intellij.ide.util.projectWizard.ModuleWizardStep;
+import com.intellij.ide.util.projectWizard.ProjectBuilder;
+import com.intellij.ide.util.projectWizard.SettingsStep;
+import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.components.StorageScheme;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.platform.templates.TemplateModuleBuilder;
@@ -25,9 +30,15 @@ import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.JBUI;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

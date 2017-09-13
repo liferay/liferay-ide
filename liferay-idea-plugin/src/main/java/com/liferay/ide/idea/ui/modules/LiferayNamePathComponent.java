@@ -34,12 +34,18 @@ import com.intellij.ui.FieldPanel;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 
 import java.io.File;
 
-import javax.swing.*;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
