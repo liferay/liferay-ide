@@ -27,7 +27,7 @@ public class LiferayBundleDebugger extends GenericDebuggerRunner {
 
 	@Override
 	public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
-		if ((DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && profile instanceof LiferayBundleConfiguration)) {
+		if (DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && profile instanceof LiferayBundleConfiguration) {
 			return true;
 		}
 

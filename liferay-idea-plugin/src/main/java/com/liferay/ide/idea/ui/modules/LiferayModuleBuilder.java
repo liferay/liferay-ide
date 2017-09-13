@@ -68,19 +68,19 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 	}
 
 	public String getType() {
-		return this._type;
+		return _type;
 	}
 
 	public void setClassName(String className) {
-		this._className = className;
+		_className = className;
 	}
 
 	public void setPackageName(String packageName) {
-		this._packageName = packageName;
+		_packageName = packageName;
 	}
 
 	public void setType(String type) {
-		this._type = type;
+		_type = type;
 	}
 
 	@Override

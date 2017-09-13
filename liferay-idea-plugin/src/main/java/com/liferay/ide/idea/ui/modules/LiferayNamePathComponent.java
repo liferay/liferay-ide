@@ -45,16 +45,19 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
+/**
+ * @author Terry Jia
+ */
 public class LiferayNamePathComponent extends JPanel {
 
 	public static LiferayNamePathComponent initNamePathComponent(WizardContext context) {
 		String nameLabel = IdeBundle.message("label.project.name");
 		String filesLocationLabel = IdeBundle.message("label.project.files.location");
 		String fileDirectoryTitle = IdeBundle.message(
-		"title.select.project.file.directory", IdeBundle.message("project.new.wizard.project.identification"));
+			"title.select.project.file.directory", IdeBundle.message("project.new.wizard.project.identification"));
 		String fileDirectoryDescription = IdeBundle.message(
-		"description.select.project.file.directory",
-		StringUtil.capitalize(IdeBundle.message("project.new.wizard.project.identification")));
+			"description.select.project.file.directory",
+			StringUtil.capitalize(IdeBundle.message("project.new.wizard.project.identification")));
 
 		LiferayNamePathComponent component = new LiferayNamePathComponent(
 			nameLabel, filesLocationLabel, fileDirectoryTitle, fileDirectoryDescription, true, false);
@@ -96,18 +99,18 @@ public class LiferayNamePathComponent extends JPanel {
 		Insets insets = JBUI.insets(0, 0, 5, 4);
 
 		GridBagConstraints gridBagConstraints = new GridBagConstraints(
-				0, GridBagConstraints.RELATIVE, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
-				insets, 0, 0);
+			0, GridBagConstraints.RELATIVE, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, insets, 0,
+			0);
 
-				this.add(_nameLabel, gridBagConstraints);
+		add(_nameLabel, gridBagConstraints);
 
 		insets = JBUI.insets(0, 0, 5, 0);
 
 		gridBagConstraints = new GridBagConstraints(
-				1, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST,
-				GridBagConstraints.HORIZONTAL, insets, 0, 0);
+			1, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+			insets, 0, 0);
 
-		this.add(_name, gridBagConstraints);
+		add(_name, gridBagConstraints);
 
 		FileChooserDescriptor chooserDescriptor =
 			(FileChooserDescriptor)BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR.clone();
@@ -115,14 +118,14 @@ public class LiferayNamePathComponent extends JPanel {
 		chooserDescriptor.setHideIgnored(hideIgnored);
 
 		BrowseFilesListener browseButtonActionListener =
-				new BrowseFilesListener(_path, pathChooserTitle, pathChooserDescription, chooserDescriptor) {
+			new BrowseFilesListener(_path, pathChooserTitle, pathChooserDescription, chooserDescriptor) {
 
-					public void actionPerformed(ActionEvent e) {
-						super.actionPerformed(e);
-						_isPathChangedByUser = true;
-					}
+				public void actionPerformed(ActionEvent e) {
+					super.actionPerformed(e);
+					_pathChangedByUser = true;
+				}
 
-				};
+			};
 
 		_pathPanel = new FieldPanel(_path, null, null, browseButtonActionListener, null);
 		_pathLabel = new JLabel(pathLabelText);
@@ -134,7 +137,7 @@ public class LiferayNamePathComponent extends JPanel {
 
 		insets = JBUI.insets(0, 0, 5, 4);
 
-		this.add(
+		add(
 			_pathLabel,
 			new GridBagConstraints(
 				0, GridBagConstraints.RELATIVE, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
@@ -142,7 +145,7 @@ public class LiferayNamePathComponent extends JPanel {
 
 		insets = JBUI.insets(0, 0, 5, 0);
 
-		this.add(
+		add(
 			_pathPanel,
 			new GridBagConstraints(
 				1, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST,
@@ -166,44 +169,45 @@ public class LiferayNamePathComponent extends JPanel {
 	}
 
 	public boolean isPathChangedByUser() {
-		return _isPathChangedByUser;
+		return _pathChangedByUser;
 	}
 
 	public boolean isSyncEnabled() {
-		return _isSyncEnabled;
+		return _syncEnabled;
 	}
 
 	public void setNameValue(String name) {
-		boolean isNameChangedByUser = _isNameChangedByUser;
+		boolean isNameChangedByUser = _nameChangedByUser;
 
 		_setNamePathSyncEnabled(false);
 
 		try {
-			this._name.setText(name);
+			_name.setText(name);
 		}
 		finally {
-			_isNameChangedByUser = isNameChangedByUser;
+			_nameChangedByUser = isNameChangedByUser;
 
 			_setNamePathSyncEnabled(true);
 		}
 	}
 
 	public void setPath(String path) {
-		boolean isPathChangedByUser = this._isPathChangedByUser;
+		boolean pathChangedByUser = _pathChangedByUser;
 
 		_setPathNameSyncEnabled(false);
 
 		try {
-			this._path.setText(FileUtil.getLocationRelativeToUserHome(FileUtil.toSystemDependentName(path)));
+			_path.setText(FileUtil.getLocationRelativeToUserHome(FileUtil.toSystemDependentName(path)));
 		}
 		finally {
-			this._isPathChangedByUser = isPathChangedByUser;
+			_pathChangedByUser = pathChangedByUser;
+
 			_setPathNameSyncEnabled(true);
 		}
 	}
 
 	public void setShouldBeAbsolute(boolean shouldBeAbsolute) {
-		this._shouldBeAbsolute = shouldBeAbsolute;
+		_shouldBeAbsolute = shouldBeAbsolute;
 	}
 
 	public boolean validateNameAndPath(WizardContext context, boolean defaultFormat) throws ConfigurationException {
@@ -211,9 +215,9 @@ public class LiferayNamePathComponent extends JPanel {
 
 		if (StringUtil.isEmptyOrSpaces(name)) {
 			throw new ConfigurationException(
-					IdeBundle.message(
-							"prompt.new.project.file.name", ApplicationInfo.getInstance().getVersionName(),
-context.getPresentationName()));
+				IdeBundle.message(
+					"prompt.new.project.file.name", ApplicationInfo.getInstance().getVersionName(),
+					context.getPresentationName()));
 		}
 
 		String projectDirectory = getPath();
@@ -225,8 +229,8 @@ context.getPresentationName()));
 
 		if (_shouldBeAbsolute && !new File(projectDirectory).isAbsolute()) {
 			throw new ConfigurationException(
-					StringUtil.capitalize(
-	IdeBundle.message("file.location.should.be.absolute", context.getPresentationName())));
+				StringUtil.capitalize(
+					IdeBundle.message("file.location.should.be.absolute", context.getPresentationName())));
 		}
 
 		String message = IdeBundle.message("directory.project.file.directory", context.getPresentationName());
@@ -276,7 +280,7 @@ context.getPresentationName()));
 			return false;
 		}
 
-		return _isNamePathSyncEnabled;
+		return _namePathSyncEnabled;
 	}
 
 	private boolean _isPathNameSyncEnabled() {
@@ -284,30 +288,30 @@ context.getPresentationName()));
 			return false;
 		}
 
-		return _isPathNameSyncEnabled;
+		return _pathNameSyncEnabled;
 	}
 
-	private void _setNamePathSyncEnabled(boolean isNamePathSyncEnabled) {
-		this._isNamePathSyncEnabled = isNamePathSyncEnabled;
+	private void _setNamePathSyncEnabled(boolean namePathSyncEnabled) {
+		_namePathSyncEnabled = namePathSyncEnabled;
 	}
 
-	private void _setPathNameSyncEnabled(boolean isPathNameSyncEnabled) {
-		this._isPathNameSyncEnabled = isPathNameSyncEnabled;
+	private void _setPathNameSyncEnabled(boolean pathNameSyncEnabled) {
+		_pathNameSyncEnabled = pathNameSyncEnabled;
 	}
 
-	private static final Logger LOG = Logger.getInstance("#com.liferay.ide.idea.wizard.LiferayNamePathComponent");
+	private static final Logger _log = Logger.getInstance("#com.liferay.ide.idea.wizard.LiferayNamePathComponent");
 
-	private boolean _isNameChangedByUser = false;
-	private boolean _isNamePathSyncEnabled = true;
-	private boolean _isPathChangedByUser = false;
-	private boolean _isPathNameSyncEnabled = true;
-	private boolean _isSyncEnabled = true;
 	private JTextField _name;
+	private boolean _nameChangedByUser = false;
 	private JLabel _nameLabel;
+	private boolean _namePathSyncEnabled = true;
 	private JTextField _path;
+	private boolean _pathChangedByUser = false;
 	private JLabel _pathLabel;
+	private boolean _pathNameSyncEnabled = true;
 	private FieldPanel _pathPanel;
 	private boolean _shouldBeAbsolute;
+	private boolean _syncEnabled = true;
 
 	private class NameFieldDocument extends PlainDocument {
 
@@ -316,11 +320,11 @@ context.getPresentationName()));
 				new DocumentAdapter() {
 
 					public void textChanged(DocumentEvent event) {
-						_isNameChangedByUser = true;
+						_nameChangedByUser = true;
 						_syncNameAndPath();
 					}
 
-			});
+				});
 		}
 
 		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
@@ -337,11 +341,12 @@ context.getPresentationName()));
 		}
 
 		private void _syncNameAndPath() {
-			if (_isNamePathSyncEnabled() && !_isPathChangedByUser) {
+			if (_isNamePathSyncEnabled() && !_pathChangedByUser) {
 				try {
 					_setPathNameSyncEnabled(false);
+
 					String name = getText(0, getLength());
-					String path = LiferayNamePathComponent.this._path.getText().trim();
+					String path = _path.getText().trim();
 
 					int lastSeparatorIndex = path.lastIndexOf(File.separator);
 
@@ -350,7 +355,7 @@ context.getPresentationName()));
 					}
 				}
 				catch (BadLocationException ble) {
-					LOG.error(ble);
+					_log.error(ble);
 				}
 				finally {
 					_setPathNameSyncEnabled(true);
@@ -367,15 +372,15 @@ context.getPresentationName()));
 				new DocumentAdapter() {
 
 					public void textChanged(DocumentEvent event) {
-						_isPathChangedByUser = true;
+						_pathChangedByUser = true;
 						_syncPathAndName();
 					}
 
-			});
+				});
 		}
 
 		private void _syncPathAndName() {
-			if (_isPathNameSyncEnabled() && !_isNameChangedByUser) {
+			if (_isPathNameSyncEnabled() && !_nameChangedByUser) {
 				try {
 					_setNamePathSyncEnabled(false);
 					String path = getText(0, getLength());
@@ -387,7 +392,7 @@ context.getPresentationName()));
 					}
 				}
 				catch (BadLocationException ble) {
-					LOG.error(ble);
+					_log.error(ble);
 				}
 				finally {
 					_setNamePathSyncEnabled(true);

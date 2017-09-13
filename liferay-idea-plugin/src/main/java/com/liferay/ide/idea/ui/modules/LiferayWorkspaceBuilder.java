@@ -43,7 +43,7 @@ import org.jetbrains.annotations.NotNull;
 public class LiferayWorkspaceBuilder extends ModuleBuilder {
 
 	public LiferayWorkspaceBuilder() {
-		this.addListener(new LiferayWorkpaceBuilderListener());
+		addListener(new LiferayWorkpaceBuilderListener());
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
 								}
 							}
 
-					});
+						});
 				}
 			);
 		}

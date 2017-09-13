@@ -40,17 +40,18 @@ import org.jetbrains.annotations.Nullable;
 public class LiferayModuleWizardStep extends ModuleWizardStep {
 
 	public LiferayModuleWizardStep(LiferayModuleBuilder builder) {
-		this._builder = builder;
+		_builder = builder;
+
 		_typesTree = new Tree();
+
 		_typesTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
+		_typesTree.setRootVisible(false);
+		_typesTree.setShowsRootHandles(true);
+		_typesTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
 		JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(_typesTree);
 
 		_typesPanel.add(typesScrollPane, "archetypes");
-
-		_typesTree.setRootVisible(false);
-		_typesTree.setShowsRootHandles(true);
-		_typesTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
 
@@ -59,7 +60,9 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 				continue;
 			}
 
-			DefaultMutableTreeNode node = new DefaultMutableTreeNode(type, true); root.add(node);
+			DefaultMutableTreeNode node = new DefaultMutableTreeNode(type, true);
+
+			root.add(node);
 		}
 
 		TreeModel model = new DefaultTreeModel(root);
@@ -106,14 +109,13 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 			throw new ConfigurationException("Please click one of the items to select a template", validationTitle);
 		}
 
-		Project workspaceProject =
-	ProjectManager.getInstance().getOpenProjects()[0];
+		Project workspaceProject = ProjectManager.getInstance().getOpenProjects()[0];
 
 		String packageNameValue = getPackageName();
 		String classNameValue = getClassName();
 
 		if (!CoreUtil.isNullOrEmpty(packageNameValue) &&
-!PsiDirectoryFactory.getInstance(workspaceProject).isValidPackageName(packageNameValue)) {
+			!PsiDirectoryFactory.getInstance(workspaceProject).isValidPackageName(packageNameValue)) {
 
 			throw new ConfigurationException(packageNameValue + " is not a valid package name", validationTitle);
 		}

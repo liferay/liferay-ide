@@ -41,7 +41,7 @@ public class ServerUtil {
 					return name.matches(".*\\.lpkg");
 				}
 
-		});
+			});
 
 		return files;
 	}

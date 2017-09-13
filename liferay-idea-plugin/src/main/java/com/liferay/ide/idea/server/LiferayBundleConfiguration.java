@@ -57,8 +57,8 @@ public class LiferayBundleConfiguration
 
 		_configurationModule = new JavaRunConfigurationModule(project, true);
 		_config.liferayBundle = Paths.get(
-	project.getBasePath(),
-	LiferayWorkspaceUtil.getHomeDir(project.getBasePath())).toString(); _config.vmParameters = "-Xmx1024m";
+			project.getBasePath(), LiferayWorkspaceUtil.getHomeDir(project.getBasePath())).toString();
+		_config.vmParameters = "-Xmx1024m";
 	}
 
 	@Override
@@ -71,8 +71,8 @@ public class LiferayBundleConfiguration
 
 		if (!liferayHome.exists()) {
 			throw new RuntimeConfigurationWarning(
-					"Unable to detect liferay bundle from '" + liferayHome.toPath() +
-						"', you need to run gradle task 'initBundle' first.");
+				"Unable to detect liferay bundle from '" + liferayHome.toPath() +
+					"', you need to run gradle task 'initBundle' first.");
 		}
 
 		JavaRunConfigurationExtensionManager.checkConfigurationIsValid(this);
@@ -80,8 +80,7 @@ public class LiferayBundleConfiguration
 
 	@Override
 	public RunConfiguration clone() {
-		LiferayBundleConfiguration clone =
-	(LiferayBundleConfiguration)super.clone();
+		LiferayBundleConfiguration clone = (LiferayBundleConfiguration)super.clone();
 
 		clone._envs = new LinkedHashMap<>(_envs);
 		clone._configurationModule = new JavaRunConfigurationModule(getProject(), true);
@@ -100,11 +99,11 @@ public class LiferayBundleConfiguration
 	@NotNull
 	@Override
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-		SettingsEditorGroup<LiferayBundleConfiguration> group =
-	new SettingsEditorGroup<>();
+		SettingsEditorGroup<LiferayBundleConfiguration> group = new SettingsEditorGroup<>();
 
-		group.addEditor(
-	ExecutionBundle.message("run.configuration.configuration.tab.title"), new LiferayBundleConfigurable(getProject()));
+		String title = ExecutionBundle.message("run.configuration.configuration.tab.title");
+
+		group.addEditor(title, new LiferayBundleConfigurable(getProject()));
 
 		JavaRunConfigurationExtensionManager.getInstance().appendEditors(this, group);
 

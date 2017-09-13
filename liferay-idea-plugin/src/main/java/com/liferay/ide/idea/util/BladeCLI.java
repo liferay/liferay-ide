@@ -45,7 +45,7 @@ public class BladeCLI {
 
 		if (!bladeJar.exists()) {
 			try (InputStream in = BladeCLI.class.getClassLoader().getResourceAsStream(
-				"/libs/com.liferay.blade.cli.jar")) {
+					"/libs/com.liferay.blade.cli.jar")) {
 
 				FileUtil.writeFile(bladeJar, in);
 			}
@@ -57,11 +57,13 @@ public class BladeCLI {
 		javaTask.setArgs(args);
 
 		DefaultLogger logger = new DefaultLogger();
+
 		project.addBuildListener(logger);
 
 		StringBufferOutputStream out = new StringBufferOutputStream();
 
 		logger.setOutputPrintStream(new PrintStream(out));
+
 		logger.setMessageOutputLevel(Project.MSG_INFO);
 
 		int returnCode = javaTask.executeJava();

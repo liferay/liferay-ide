@@ -46,97 +46,98 @@ import org.jetbrains.annotations.Nullable;
  */
 public class LiferayModuleNameLocationComponent {
 
-	public LiferayModuleNameLocationComponent(@NotNull WizardContext wizardContext) {
-		this._context = wizardContext;
+	public LiferayModuleNameLocationComponent(@NotNull WizardContext context) {
+		_context = context;
 	}
 
 	public void bindModuleSettings(LiferayNamePathComponent namePathComponent) {
 		namePathComponent.getNameComponent().getDocument().addDocumentListener(
-new DocumentAdapter() {
+			new DocumentAdapter() {
 
-			protected void textChanged(DocumentEvent e) {
-				if (!_moduleNameChangedByUser) {
-					setModuleName(namePathComponent.getNameValue());
+				protected void textChanged(DocumentEvent e) {
+					if (!_moduleNameChangedByUser) {
+						setModuleName(namePathComponent.getNameValue());
+					}
 				}
-			}
 
 		});
 
 		_moduleContentRoot.addBrowseFolderListener(
-				ProjectBundle.message("project.new.wizard.module.content.root.chooser.title"),
-				ProjectBundle.message("project.new.wizard.module.content.root.chooser.description"),
-				_context.getProject(), BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR);
+			ProjectBundle.message("project.new.wizard.module.content.root.chooser.title"),
+			ProjectBundle.message("project.new.wizard.module.content.root.chooser.description"), _context.getProject(),
+			BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR);
 
 		namePathComponent.getPathComponent().getDocument().addDocumentListener(
-new DocumentAdapter() {
+			new DocumentAdapter() {
 
-			protected void textChanged(DocumentEvent e) {
-				if (!_contentRootChangedByUser) {
-					_setModuleContentRoot(namePathComponent.getPath());
+				protected void textChanged(DocumentEvent e) {
+					if (!_contentRootChangedByUser) {
+						_setModuleContentRoot(namePathComponent.getPath());
+					}
 				}
-			}
 
 		});
 
 		_moduleName.getDocument().addDocumentListener(
 			new DocumentAdapter() {
 
-			protected void textChanged(DocumentEvent e) {
-				if (_moduleNameDocListenerEnabled) {
-					_moduleNameChangedByUser = true;
+				protected void textChanged(DocumentEvent e) {
+					if (_moduleNameDocListenerEnabled) {
+						_moduleNameChangedByUser = true;
+					}
+
+					String path = _getDefaultBaseDir(_context, namePathComponent);
+					String moduleName = _getModuleName();
+
+					if ((path.length() > 0) && !Comparing.strEqual(moduleName, namePathComponent.getNameValue())) {
+						path += "/" + _getTargetFolderName() + "/" + moduleName;
+					}
+
+					if (!_contentRootChangedByUser) {
+						boolean f = _moduleNameChangedByUser;
+						_moduleNameChangedByUser = true;
+						_setModuleContentRoot(path);
+						_moduleNameChangedByUser = f;
+					}
+
+					if (!_imlLocationChangedByUser) {
+						_setImlFileLocation(path);
+					}
 				}
 
-				String path = _getDefaultBaseDir(_context, namePathComponent);
-				String moduleName = _getModuleName();
+			});
 
-				if ((path.length() > 0) && !Comparing.strEqual(moduleName, namePathComponent.getNameValue())) {
-					path += "/" + _getTargetFolderName() + "/" + moduleName;
-				}
-
-				if (!_contentRootChangedByUser) {
-					boolean f = _moduleNameChangedByUser;
-					_moduleNameChangedByUser = true;
-					_setModuleContentRoot(path);
-					_moduleNameChangedByUser = f;
-				}
-
-				if (!_imlLocationChangedByUser) {
-					_setImlFileLocation(path);
-				}
-			}
-
-		});
 		_moduleContentRoot.getTextField().getDocument().addDocumentListener(
-new DocumentAdapter() {
+			new DocumentAdapter() {
 
-			protected void textChanged(DocumentEvent e) {
-				if (_contentRootDocListenerEnabled) {
-					_contentRootChangedByUser = true;
+				protected void textChanged(DocumentEvent e) {
+					if (_contentRootDocListenerEnabled) {
+						_contentRootChangedByUser = true;
+					}
+
+					if (!_imlLocationChangedByUser) {
+						_setImlFileLocation(_getModuleContentRoot());
+					}
+
+					if (!_moduleNameChangedByUser) {
+						String path = FileUtil.toSystemIndependentName(_getModuleContentRoot());
+
+						int idx = path.lastIndexOf("/");
+
+						boolean f = _contentRootChangedByUser;
+						_contentRootChangedByUser = true;
+
+						boolean i = _imlLocationChangedByUser;
+						_imlLocationChangedByUser = true;
+
+						setModuleName(idx >= 0 ? path.substring(idx + 1) : "");
+
+						_contentRootChangedByUser = f;
+						_imlLocationChangedByUser = i;
+					}
 				}
 
-				if (!_imlLocationChangedByUser) {
-					_setImlFileLocation(_getModuleContentRoot());
-				}
-
-				if (!_moduleNameChangedByUser) {
-					String path = FileUtil.toSystemIndependentName(_getModuleContentRoot());
-
-					int idx = path.lastIndexOf("/");
-
-					boolean f = _contentRootChangedByUser;
-					_contentRootChangedByUser = true;
-
-					boolean i = _imlLocationChangedByUser;
-					_imlLocationChangedByUser = true;
-
-					setModuleName(idx >= 0 ? path.substring(idx + 1) : "");
-
-					_contentRootChangedByUser = f;
-					_imlLocationChangedByUser = i;
-				}
-			}
-
-		});
+			});
 
 		_moduleFileLocation.addBrowseFolderListener(
 			ProjectBundle.message("project.new.wizard.module.file.chooser.title"),
@@ -144,30 +145,30 @@ new DocumentAdapter() {
 			BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR);
 
 		_moduleFileLocation.getTextField().getDocument().addDocumentListener(
-new DocumentAdapter() {
+			new DocumentAdapter() {
 
-			protected void textChanged(DocumentEvent e) {
-				if (_imlLocationDocListenerEnabled) {
-					_imlLocationChangedByUser = true;
+				protected void textChanged(DocumentEvent e) {
+					if (_imlLocationDocListenerEnabled) {
+						_imlLocationChangedByUser = true;
+					}
 				}
-			}
 
-		});
+			});
 		namePathComponent.getPathComponent().getDocument().addDocumentListener(
-new DocumentAdapter() {
+			new DocumentAdapter() {
 
-			protected void textChanged(DocumentEvent e) {
-				if (!_imlLocationChangedByUser) {
-					_setImlFileLocation(namePathComponent.getPath());
+				protected void textChanged(DocumentEvent e) {
+					if (!_imlLocationChangedByUser) {
+						_setImlFileLocation(namePathComponent.getPath());
+					}
 				}
-			}
 
-		});
+			});
 	}
 
 	@Nullable
 	public AbstractModuleBuilder getModuleBuilder() {
-		return ((AbstractModuleBuilder) _context.getProjectBuilder());
+		return (AbstractModuleBuilder)_context.getProjectBuilder();
 	}
 
 	public JTextField getModuleNameField() {
@@ -180,7 +181,7 @@ new DocumentAdapter() {
 
 	public void setModuleName(String moduleName) {
 		_moduleNameDocListenerEnabled = false;
-		this._moduleName.setText(moduleName);
+		_moduleName.setText(moduleName);
 		_moduleNameDocListenerEnabled = true;
 	}
 
@@ -195,27 +196,32 @@ new DocumentAdapter() {
 
 		moduleBuilder.setName(moduleName);
 		moduleBuilder.setModuleFilePath(
-				FileUtil.toSystemIndependentName(_moduleFileLocation.getText()) +
-	"/" + moduleName + ModuleFileType.DOT_DEFAULT_EXTENSION);
+			FileUtil.toSystemIndependentName(_moduleFileLocation.getText()) + "/" + moduleName +
+				ModuleFileType.DOT_DEFAULT_EXTENSION);
+
 		moduleBuilder.setContentEntryPath(FileUtil.toSystemIndependentName(_getModuleContentRoot()));
 	}
 
 	public void updateLocations() {
 		Project project = _context.getProject();
+
 		assert project != null;
+
 		VirtualFile baseDir = project.getBaseDir();
 
 		if (baseDir != null) {
 			String baseDirPath = baseDir.getPath();
+
 			String moduleName = ProjectWizardUtil.findNonExistingFileName(baseDirPath, "untitled", "");
-			String contentRoot =
-	baseDirPath + "/" + _getTargetFolderName() + "/" + moduleName;
 
 			setModuleName(moduleName);
+
+			String contentRoot = baseDirPath + "/" + _getTargetFolderName() + "/" + moduleName;
+
 			_setModuleContentRoot(contentRoot);
 			_setImlFileLocation(contentRoot);
 
-			this._moduleName.select(0, moduleName.length());
+			_moduleName.select(0, moduleName.length());
 		}
 	}
 
@@ -318,8 +324,9 @@ new DocumentAdapter() {
 		}
 
 		if (module != null) {
-			throw new ConfigurationException(
-	"Module \'" + moduleName + "\' already exist in project. Please, specify another name.");
+			String msg = "Module \'" + moduleName + "\' already exist in project. Please, specify another name.";
+
+			throw new ConfigurationException(msg);
 		}
 	}
 
@@ -351,11 +358,12 @@ new DocumentAdapter() {
 		File moduleFile = new File(moduleFileDirectory, moduleName + ModuleFileType.DOT_DEFAULT_EXTENSION);
 
 		if (moduleFile.exists()) {
-			int answer = Messages.showYesNoDialog(
-				IdeBundle.message(
-					"prompt.overwrite.project.file", moduleFile.getAbsolutePath(),
-					IdeBundle.message("project.new.wizard.module.identification")),
-					IdeBundle.message("title.file.already.exists"), Messages.getQuestionIcon());
+			String identification = IdeBundle.message("project.new.wizard.module.identification");
+			String existsTitle = IdeBundle.message("title.file.already.exists");
+			String filePrompt = IdeBundle.message(
+				"prompt.overwrite.project.file", moduleFile.getAbsolutePath(), identification);
+
+			int answer = Messages.showYesNoDialog(filePrompt, existsTitle, Messages.getQuestionIcon());
 
 			if (answer != Messages.YES) {
 				return false;

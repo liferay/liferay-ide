@@ -44,15 +44,18 @@ import javax.swing.tree.*;
 public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
 	public LiferayModuleFragmentWizardStep(WizardContext wizardContext, LiferayModuleFragmentBuilder builder) {
-		this._builder = builder;
-		_jspsTree = new Tree();
-		_jspsTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
-		JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(_jspsTree);
+		_builder = builder;
 
-		_jspsPanel.add(typesScrollPane, "archetypes");
+		_jspsTree = new Tree();
+
+		_jspsTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
 		_jspsTree.setRootVisible(false);
 		_jspsTree.setShowsRootHandles(true);
 		_jspsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+
+		JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(_jspsTree);
+
+		_jspsPanel.add(typesScrollPane, "archetypes");
 
 		Project project = wizardContext.getProject();
 
@@ -84,43 +87,43 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 		_fragmentHost.addActionListener(
 			new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
 
-				ServerUtil.getModuleFileFrom70Server(
-					liferayHomeDir, _fragmentHost.getSelectedItem().toString(), LiferayIdeaUI.USER_BUNDLES_DIR);
+					ServerUtil.getModuleFileFrom70Server(
+						liferayHomeDir, _fragmentHost.getSelectedItem().toString(), LiferayIdeaUI.USER_BUNDLES_DIR);
 
-				File currentOsgiBundle = new File(
-					LiferayIdeaUI.USER_BUNDLES_DIR, _fragmentHost.getSelectedItem().toString());
+					File currentOsgiBundle = new File(
+						LiferayIdeaUI.USER_BUNDLES_DIR, _fragmentHost.getSelectedItem().toString());
 
-				if (currentOsgiBundle.exists()) {
-					try (JarFile jar = new JarFile(currentOsgiBundle)) {
-						Enumeration<JarEntry> enu = jar.entries();
+					if (currentOsgiBundle.exists()) {
+						try (JarFile jar = new JarFile(currentOsgiBundle)) {
+							Enumeration<JarEntry> enu = jar.entries();
 
-						while (enu.hasMoreElements()) {
-							JarEntry entry = enu.nextElement();
+							while (enu.hasMoreElements()) {
+								JarEntry entry = enu.nextElement();
 
-							String name = entry.getName();
+								String name = entry.getName();
 
-							if ((name.startsWith("META-INF/resources/") &&
-								 (name.endsWith(".jsp") || name.endsWith(".jspf"))) ||
-								name.equals("portlet.properties") || name.equals("resource-actions/default.xml")) {
+								if ((name.startsWith("META-INF/resources/") &&
+									 (name.endsWith(".jsp") || name.endsWith(".jspf"))) ||
+									name.equals("portlet.properties") || name.equals("resource-actions/default.xml")) {
 
-								DefaultMutableTreeNode node1 = new DefaultMutableTreeNode(name, true);
+									DefaultMutableTreeNode node1 = new DefaultMutableTreeNode(name, true);
 
-								root.add(node1);
+									root.add(node1);
+								}
 							}
 						}
+						catch (IOException ioe) {
+						}
 					}
-					catch (IOException ioe) {
-					}
+
+					_jspsTree.setModel(new DefaultTreeModel(root));
 				}
 
-				_jspsTree.setModel(new DefaultTreeModel(root));
-			}
-
-		});
+			});
 	}
 
 	public String[] getBsnAndVersion(String hostBundleName) {
@@ -143,6 +146,7 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
 		if (tempBundle.exists()) {
 			File file = new File(new File(tempBundle, "META-INF"), "MANIFEST.MF");
+
 			String[] contents = FileUtil.readLinesFromFile(file);
 
 			for (String content : contents) {
@@ -189,9 +193,10 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 		String[] bsnAndVerion = getBsnAndVersion(getFragmentHost());
 
 		_builder.setBsnName(bsnAndVerion[0]);
+		_builder.setVersion(bsnAndVerion[1]);
+
 		_builder.setFragmentHost(getFragmentHost());
 		_builder.setOverrideFiles(getSelectedJsps());
-		_builder.setVersion(bsnAndVerion[1]);
 	}
 
 	@Override

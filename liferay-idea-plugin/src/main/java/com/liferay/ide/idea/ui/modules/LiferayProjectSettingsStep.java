@@ -37,13 +37,31 @@ import org.jetbrains.annotations.Nullable;
  */
 public class LiferayProjectSettingsStep extends ModuleWizardStep implements SettingsStep {
 
+	public static void addField(String label, JComponent field, JPanel panel) {
+		JLabel jLabel = new JBLabel(label);
+
+		jLabel.setLabelFor(field);
+
+		GridBagConstraints gridBagConstraints = new GridBagConstraints(
+			0, GridBagConstraints.RELATIVE, 1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE,
+			JBUI.insetsBottom(5), 4, 0);
+
+		panel.add(jLabel, gridBagConstraints);
+
+		gridBagConstraints = new GridBagConstraints(
+			1, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+			JBUI.insetsBottom(5), 0, 0);
+
+		panel.add(field, gridBagConstraints);
+	}
+
 	public LiferayProjectSettingsStep(WizardContext context) {
 		_context = context;
 		_formatPanel = new ProjectFormatPanel();
 		_namePathComponent = LiferayNamePathComponent.initNamePathComponent(context);
 		_namePathComponent.setShouldBeAbsolute(true);
 
-		JPanel modulePanel = getModulePanel();
+		JPanel modulePanel = _getModulePanel();
 
 		if (context.isCreatingNewProject()) {
 			_settingsPanel.add(_namePathComponent, BorderLayout.NORTH);
@@ -59,7 +77,7 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 		_expertDecorator.setContentComponent(_expertPanel);
 
 		if (_context.isCreatingNewProject()) {
-			addProjectFormat(modulePanel);
+			_addProjectFormat(modulePanel);
 		}
 	}
 
@@ -70,7 +88,7 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 
 	@Override
 	public void addExpertField(@NotNull String label, @NotNull JComponent field) {
-		JPanel panel = _context.isCreatingNewProject() ? getModulePanel() : _expertPanel;
+		JPanel panel = _context.isCreatingNewProject() ? _getModulePanel() : _expertPanel;
 
 		addField(label, field, panel);
 	}
@@ -86,7 +104,7 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 
 	@Override
 	public void addSettingsComponent(@NotNull JComponent component) {
-		JPanel panel = _context.isCreatingNewProject() ? _namePathComponent : getModulePanel();
+		JPanel panel = _context.isCreatingNewProject() ? _namePathComponent : _getModulePanel();
 
 		panel.add(
 			component,
@@ -97,7 +115,7 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 
 	@Override
 	public void addSettingsField(@NotNull String label, @NotNull JComponent field) {
-		JPanel panel = _context.isCreatingNewProject() ? _namePathComponent : getModulePanel();
+		JPanel panel = _context.isCreatingNewProject() ? _namePathComponent : _getModulePanel();
 
 		addField(label, field, panel);
 	}
@@ -128,7 +146,7 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 
 	@NotNull
 	public JTextField getModuleNameField() {
-		return getNameComponent();
+		return _getNameComponent();
 	}
 
 	@Override
@@ -138,7 +156,7 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 
 	@Override
 	public JComponent getPreferredFocusedComponent() {
-		return getNameComponent();
+		return _getNameComponent();
 	}
 
 	@Override
@@ -168,7 +186,7 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 	public void updateStep() {
 		_expertDecorator.setOn(SelectTemplateSettings.getInstance().EXPERT_MODE);
 
-		setupPanels();
+		_setupPanels();
 	}
 
 	@Override
@@ -190,38 +208,21 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 		return true;
 	}
 
-	static void addField(String label, JComponent field, JPanel panel) {
-		JLabel jLabel = new JBLabel(label);
-
-		jLabel.setLabelFor(field);
-
-		panel.add(
-			jLabel, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 0, 0, GridBagConstraints.WEST,
-			GridBagConstraints.NONE, JBUI.insetsBottom(5), 4, 0));
-		panel.add(
-			field, new GridBagConstraints(1, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0, GridBagConstraints.CENTER,
-			GridBagConstraints.HORIZONTAL, JBUI.insetsBottom(5), 0, 0));
-	}
-
-	private static void restorePanel(JPanel component, int i) {
+	private static void _restorePanel(JPanel component, int i) {
 		while (component.getComponentCount() > i) {
 			component.remove(component.getComponentCount() - 1);
 		}
 	}
 
-	private void addProjectFormat(JPanel panel) {
+	private void _addProjectFormat(JPanel panel) {
 		addField("Project \u001bformat:", _formatPanel.getStorageFormatComboBox(), panel);
 	}
 
-	private void createUIComponents() {
-		_moduleNameLocationComponent = new LiferayModuleNameLocationComponent(_context);
-	}
-
-	private JPanel getModulePanel() {
+	private JPanel _getModulePanel() {
 		return _moduleNameLocationComponent.getModulePanel();
 	}
 
-	private JTextField getNameComponent() {
+	private JTextField _getNameComponent() {
 		if (_context.isCreatingNewProject()) {
 			return _namePathComponent.getNameComponent();
 		}
@@ -229,24 +230,28 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 		return _moduleNameLocationComponent.getModuleNameField();
 	}
 
-	private void setupPanels() {
-		ModuleBuilder moduleBuilder = (ModuleBuilder) _context.getProjectBuilder();
+	private void _setupPanels() {
+		ModuleBuilder moduleBuilder = (ModuleBuilder)_context.getProjectBuilder();
 
-		restorePanel(_namePathComponent, 4);
-		restorePanel(getModulePanel(), _context.isCreatingNewProject() ? 8 : 6);
-		restorePanel(_expertPanel, _context.isCreatingNewProject() ? 1 : 0);
+		_restorePanel(_namePathComponent, 4);
+		_restorePanel(_getModulePanel(), _context.isCreatingNewProject() ? 8 : 6);
+		_restorePanel(_expertPanel, _context.isCreatingNewProject() ? 1 : 0);
 
 		_settingsStep = moduleBuilder == null ? null : moduleBuilder.modifySettingsStep(this);
 
 		_expertPlaceholder.setVisible(
-	!(moduleBuilder instanceof TemplateModuleBuilder) && _expertPanel.getComponentCount() > 0);
+			!(moduleBuilder instanceof TemplateModuleBuilder) && _expertPanel.getComponentCount() > 0);
 
 		for (int i = 0; i < 6; i++) {
-			getModulePanel().getComponent(i).setVisible(!(moduleBuilder instanceof EmptyModuleBuilder));
+			_getModulePanel().getComponent(i).setVisible(!(moduleBuilder instanceof EmptyModuleBuilder));
 		}
 
 		_settingsPanel.revalidate();
 		_settingsPanel.repaint();
+	}
+
+	private void createUIComponents() {
+		_moduleNameLocationComponent = new LiferayModuleNameLocationComponent(_context);
 	}
 
 	private WizardContext _context;

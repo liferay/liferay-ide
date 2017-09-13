@@ -14,6 +14,9 @@
 
 package com.liferay.ide.idea.util;
 
+/**
+ * @author Terry Jia
+ */
 public class CoreUtil {
 
 	public static boolean isNullOrEmpty(Object[] array) {

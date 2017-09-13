@@ -91,6 +91,7 @@ public class ZipUtil {
 
 				try (InputStream in = zip.getInputStream(entry); FileOutputStream out = new FileOutputStream(f)) {
 					byte[] bytes = new byte[1024];
+
 					int count = in.read(bytes);
 
 					while (count != -1) {
@@ -114,6 +115,7 @@ public class ZipUtil {
 	private static void _mkdir(File dir) throws IOException {
 		if (!dir.exists() && !dir.mkdirs()) {
 			String msg = "Could not create dir: " + dir.getPath();
+
 			throw new IOException(msg);
 		}
 	}

@@ -39,27 +39,26 @@ public class LiferayBundleConfigurationType extends ConfigurationTypeBase implem
 		addFactory(
 			new ConfigurationFactoryEx(this) {
 
-			@Override
-			public void onNewConfigurationCreated(@NotNull RunConfiguration configuration) {
-
-				LiferayBundleConfiguration jarApplicationConfiguration = (LiferayBundleConfiguration)configuration;
-
-				if (StringUtil.isEmpty(jarApplicationConfiguration.getWorkingDirectory())) {
-					Project project = configuration.getProject();
-
-					String basePath = StringUtil.notNullize(project.getBasePath());
-
-					String baseDir = FileUtil.toSystemIndependentName(basePath);
-
-					jarApplicationConfiguration.setWorkingDirectory(baseDir);
+				public RunConfiguration createTemplateConfiguration(Project project) {
+					return new LiferayBundleConfiguration(project, this, "");
 				}
-			}
 
-			public RunConfiguration createTemplateConfiguration(Project project) {
-				return new LiferayBundleConfiguration(project, this, "");
-			}
+				@Override
+				public void onNewConfigurationCreated(@NotNull RunConfiguration configuration) {
+					LiferayBundleConfiguration jarApplicationConfiguration = (LiferayBundleConfiguration)configuration;
 
-		});
+					if (StringUtil.isEmpty(jarApplicationConfiguration.getWorkingDirectory())) {
+						Project project = configuration.getProject();
+
+						String basePath = StringUtil.notNullize(project.getBasePath());
+
+						String baseDir = FileUtil.toSystemIndependentName(basePath);
+
+						jarApplicationConfiguration.setWorkingDirectory(baseDir);
+					}
+				}
+
+			});
 	}
 
 }

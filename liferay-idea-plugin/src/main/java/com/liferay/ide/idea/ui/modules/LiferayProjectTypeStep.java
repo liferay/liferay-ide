@@ -85,13 +85,17 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 		for (ProjectTemplatesFactory factory : ProjectTemplatesFactory.EP_NAME.getExtensions()) {
 			for (String group : factory.getGroups()) {
 				ProjectTemplate[] templates = factory.createTemplates(group, context);
+
 				List<ProjectTemplate> values = Arrays.asList(templates);
 
 				if (!values.isEmpty()) {
 					Icon icon = factory.getGroupIcon(group);
+
 					String parentGroup = factory.getParentGroup(group);
+
 					TemplatesGroup templatesGroup = new TemplatesGroup(
-	group, null, icon, factory.getGroupWeight(group), parentGroup, group, null);
+						group, null, icon, factory.getGroupWeight(group), parentGroup, group, null);
+
 					groups.putValues(templatesGroup, values);
 				}
 			}
@@ -107,8 +111,11 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 		_wizard = wizard;
 
 		_templatesMap = new ConcurrentMultiMap<>();
-		List<TemplatesGroup> groups = _fillTemplatesMap(context);
-		LOG.debug("groups=" + groups);
+		List<TemplatesGroup> groups = _fillTemplatesMap();
+
+		if (_log.isDebugEnabled()) {
+			_log.debug("groups=" + groups);
+		}
 
 		_projectTypeList.setModel(new CollectionListModel<>(groups));
 		_projectTypeList.setSelectionModel(new SingleSelectionModel());
@@ -120,7 +127,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 					_updateSelection();
 				}
 
-		});
+			});
 
 		_projectTypeList.setCellRenderer(
 			new GroupedItemsListRenderer<TemplatesGroup>(
@@ -162,7 +169,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 							!Comparing.equal(upper.getName(), value.getParentGroup());
 					}
 
-			}) {
+				}) {
 
 				@Override
 				protected JComponent createItemComponent() {
@@ -235,7 +242,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 					projectTypeChanged();
 				}
 
-		});
+			});
 
 		_templatesList.addListSelectionListener(
 			new ListSelectionListener() {
@@ -245,7 +252,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 					_updateSelection();
 				}
 
-		});
+			});
 
 		for (TemplatesGroup templatesGroup : _templatesMap.keySet()) {
 			ModuleBuilder builder = templatesGroup.getModuleBuilder();
@@ -391,7 +398,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 
 			if (category != null) {
 				List<FrameworkSupportInModuleProvider> filtered = ContainerUtil.filter(
-					providers, provider -> matchFramework(category, provider));
+					providers, provider -> _matchFramework(category, provider));
 
 				Map<String, FrameworkSupportInModuleProvider> map = ContainerUtil.newMapFromValues(
 					providers.iterator(), PROVIDER_STRING_CONVERTOR);
@@ -400,7 +407,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 
 				for (FrameworkSupportInModuleProvider provider : filtered) {
 					for (FrameworkSupportInModuleProvider.FrameworkDependency depId :
-						provider.getDependenciesFrameworkIds()) {
+							provider.getDependenciesFrameworkIds()) {
 
 						FrameworkSupportInModuleProvider dependency = map.get(depId.getFrameworkId());
 
@@ -481,7 +488,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 		return super.validate();
 	}
 
-	private static ModuleType getModuleType(TemplatesGroup group) {
+	private static ModuleType _getModuleType(TemplatesGroup group) {
 		ModuleBuilder moduleBuilder = group.getModuleBuilder();
 
 		if (moduleBuilder == null) {
@@ -491,7 +498,9 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 		return moduleBuilder.getModuleType();
 	}
 
-	private static boolean matchFramework(ProjectCategory projectCategory, FrameworkSupportInModuleProvider framework) {
+	private static boolean _matchFramework(
+		ProjectCategory projectCategory, FrameworkSupportInModuleProvider framework) {
+
 		FrameworkRole[] roles = framework.getRoles();
 
 		if (roles.length == 0) {
@@ -502,7 +511,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 			Arrays.asList(roles), Arrays.asList(projectCategory.getAcceptableFrameworkRoles()));
 	}
 
-	private List<TemplatesGroup> _fillTemplatesMap(WizardContext context) {
+	private List<TemplatesGroup> _fillTemplatesMap() {
 		_templatesMap.put(new TemplatesGroup(new LiferayModuleBuilder()), new ArrayList<>());
 		_templatesMap.put(new TemplatesGroup(new LiferayModuleFragmentBuilder()), new ArrayList<>());
 
@@ -511,7 +520,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 		MultiMap<ModuleType, TemplatesGroup> moduleTypes = new MultiMap<>();
 
 		for (TemplatesGroup group : groups) {
-			ModuleType type = getModuleType(group);
+			ModuleType type = _getModuleType(group);
 
 			moduleTypes.putValue(type, group);
 		}
@@ -561,7 +570,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 	}
 
 	private void _showCard(String card) {
-		((CardLayout) _optionsPanel.getLayout()).show(_optionsPanel, card);
+		((CardLayout)_optionsPanel.getLayout()).show(_optionsPanel, card);
 		_currentCard = card;
 	}
 
@@ -617,7 +626,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 
 	private static final String _TEMPLATES_CARD = "templates card";
 
-	private static final Logger LOG = Logger.getInstance(LiferayProjectTypeStep.class);
+	private static final Logger _log = Logger.getInstance(LiferayProjectTypeStep.class);
 
 	private Map<ProjectTemplate, ModuleBuilder> _builders = FactoryMap.createMap(
 		key -> (ModuleBuilder)key.createModuleBuilder());

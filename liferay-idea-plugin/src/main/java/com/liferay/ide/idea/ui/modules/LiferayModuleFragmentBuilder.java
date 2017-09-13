@@ -21,7 +21,6 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.StdModuleTypes;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.util.io.FileUtilRt;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -88,9 +87,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
 	@Override
 	public void setupRootModel(ModifiableRootModel rootModel) throws ConfigurationException {
-		Project project = rootModel.getProject();
-
-		VirtualFile projectRoot = _createAndGetContentEntry(project);
+		VirtualFile projectRoot = _createAndGetContentEntry();
 
 		_createProject(projectRoot);
 
@@ -133,6 +130,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		String parent = fragmentFile.getParentFile().getPath();
 
 		parent = parent.replaceAll("\\\\", "/");
+
 		String metaInfResources = "META-INF/resources";
 
 		parent = parent.substring(parent.indexOf(metaInfResources) + metaInfResources.length());
@@ -143,6 +141,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
 		if (!parent.equals("resources") && !parent.equals("")) {
 			folder = new File(folder, parent);
+
 			folder.mkdirs();
 		}
 
@@ -155,7 +154,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		FileUtil.copyFileToDir(f, "portlet-ext.properties", folder);
 	}
 
-	private VirtualFile _createAndGetContentEntry(Project project) {
+	private VirtualFile _createAndGetContentEntry() {
 		String path = FileUtilRt.toSystemIndependentName(getContentEntryPath());
 
 		File file = new File(path);
@@ -218,8 +217,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		return FileSystems.getDefault().getPath(projectRoot.getPath(), path).toFile();
 	}
 
-	private static final String _LIFERAY_FRAGMENT_MODULES =
-	"Liferay Fragment Modules";
+	private static final String _LIFERAY_FRAGMENT_MODULES = "Liferay Fragment Modules";
 
 	private String _bsn;
 	private String _fragmentHost;
