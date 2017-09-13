@@ -21,6 +21,10 @@ import java.util.stream.Stream;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * @author Christopher Bryan Boyd
+ * @author Gregory Amerson
+ */
 public class SwitchConsumerTest {
 
 	@Test
@@ -29,7 +33,9 @@ public class SwitchConsumerTest {
 
 		SwitchConsumerBuilder<String> switch_ = SwitchConsumer.newBuilder();
 
-		Stream.of(_strings).filter(
+		Stream stream = Stream.of(_strings);
+
+		stream.filter(
 			s -> s != null
 		).forEach(
 			switch_.addCase(

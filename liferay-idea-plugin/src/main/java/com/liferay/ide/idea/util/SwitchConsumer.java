@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * @author Christopher Bryan Boyd
@@ -42,12 +43,16 @@ public class SwitchConsumer<T> implements Consumer<T> {
 
 	@Override
 	public void accept(T t) {
-		Optional<Entry<Predicate<T>, Consumer<T>>> matchingCase = _cases.entrySet().stream().filter(
+		Stream<Entry<Predicate<T>, Consumer<T>>> stream = _cases.entrySet().stream();
+
+		Optional<Entry<Predicate<T>, Consumer<T>>> matchingCase = stream.filter(
 			e -> e.getKey().test(t)
 		).findFirst();
 
 		if (matchingCase.isPresent()) {
-			matchingCase.get().getValue().accept(t);
+			Entry<Predicate<T>, Consumer<T>> value = matchingCase.get();
+
+			value.getValue().accept(t);
 		}
 		else if (_defaultConsumer != null) {
 			_defaultConsumer.accept(t);

@@ -48,7 +48,9 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
 
 	@Override
 	public String getBuilderId() {
-		return getClass().getName();
+		Class<?> clazz = getClass();
+
+		return clazz.getName();
 	}
 
 	@Override
@@ -95,15 +97,18 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
 		BladeCLI.execute(sb.toString());
 	}
 
-	static class LiferayWorkpaceBuilderListener implements ModuleBuilderListener {
+	private static final String _LIFERAY_WORKSPACE = "Liferay Workspace";
+
+	private static class LiferayWorkpaceBuilderListener implements ModuleBuilderListener {
+
 		@Override
 		public void moduleCreated(@NotNull Module module) {
 			Project project = module.getProject();
 			ProjectImportProvider[] importProviders = ProjectImportProvider.PROJECT_IMPORT_PROVIDER.getExtensions();
 
-			Stream.of(
-				importProviders
-			).filter(
+			Stream<ProjectImportProvider> stream = Stream.of(importProviders);
+
+			stream.filter(
 				importProvider -> importProvider.getId().equals("Gradle")
 			).findFirst(
 			).ifPresent(
@@ -128,7 +133,5 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
 		}
 
 	}
-
-	private static final String _LIFERAY_WORKSPACE = "Liferay Workspace";
 
 }

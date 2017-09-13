@@ -64,8 +64,11 @@ public class LiferayNamePathComponent extends JPanel {
 
 		String baseDir = context.getProjectFileDirectory();
 		String projectName = context.getProjectName();
-		String initialProjectName = projectName != null ? projectName : ProjectWizardUtil.findNonExistingFileName(
-			baseDir, "untitled", "");
+		String initialProjectName = ProjectWizardUtil.findNonExistingFileName(baseDir, "untitled", "");
+
+		if (projectName != null) {
+			initialProjectName = projectName;
+		}
 
 		component.setPath(projectName == null ? (baseDir + File.separator + initialProjectName) : baseDir);
 		component.setNameValue(initialProjectName);
@@ -81,10 +84,12 @@ public class LiferayNamePathComponent extends JPanel {
 		super(new GridBagLayout());
 
 		_name = new JTextField();
+
 		_name.setDocument(new NameFieldDocument());
 		_name.setPreferredSize(new Dimension(200, _name.getPreferredSize().height));
 
 		_path = new JTextField();
+
 		_path.setDocument(new PathFieldDocument());
 		_path.setPreferredSize(new Dimension(200, _path.getPreferredSize().height));
 
@@ -127,8 +132,8 @@ public class LiferayNamePathComponent extends JPanel {
 
 			};
 
-		_pathPanel = new FieldPanel(_path, null, null, browseButtonActionListener, null);
 		_pathLabel = new JLabel(pathLabelText);
+
 		_pathLabel.setLabelFor(_path);
 
 		if (bold) {
@@ -136,6 +141,8 @@ public class LiferayNamePathComponent extends JPanel {
 		}
 
 		insets = JBUI.insets(0, 0, 5, 4);
+
+		_pathPanel = new FieldPanel(_path, null, null, browseButtonActionListener, null);
 
 		add(
 			_pathLabel,
@@ -177,7 +184,7 @@ public class LiferayNamePathComponent extends JPanel {
 	}
 
 	public void setNameValue(String name) {
-		boolean isNameChangedByUser = _nameChangedByUser;
+		boolean nameChangedByUser = _nameChangedByUser;
 
 		_setNamePathSyncEnabled(false);
 
@@ -185,7 +192,7 @@ public class LiferayNamePathComponent extends JPanel {
 			_name.setText(name);
 		}
 		finally {
-			_nameChangedByUser = isNameChangedByUser;
+			_nameChangedByUser = nameChangedByUser;
 
 			_setNamePathSyncEnabled(true);
 		}
@@ -260,6 +267,7 @@ public class LiferayNamePathComponent extends JPanel {
 
 		boolean shouldContinue = true;
 		String fileName = defaultFormat ? name + ProjectFileType.DOT_DEFAULT_EXTENSION : Project.DIRECTORY_STORE_FOLDER;
+
 		File projectFile = new File(file, fileName);
 
 		if (projectFile.exists()) {
@@ -269,7 +277,7 @@ public class LiferayNamePathComponent extends JPanel {
 			int answer = Messages.showYesNoDialog(
 				message, IdeBundle.message("title.file.already.exists"), Messages.getQuestionIcon());
 
-			shouldContinue = (answer == Messages.YES);
+			shouldContinue = answer == Messages.YES;
 		}
 
 		return shouldContinue;
@@ -332,6 +340,7 @@ public class LiferayNamePathComponent extends JPanel {
 
 			for (int idx = 0; idx < str.length() && ok; idx++) {
 				char ch = str.charAt(idx);
+
 				ok = ch != File.separatorChar && ch != '\\' && ch != '/' && ch != '|' && ch != ':';
 			}
 

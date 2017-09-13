@@ -41,7 +41,9 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 
 	@Override
 	public String getBuilderId() {
-		return getClass().getName();
+		Class<?> clazz = getClass();
+
+		return clazz.getName();
 	}
 
 	public ModuleWizardStep getCustomOptionsStep(WizardContext context, Disposable parentDisposable) {

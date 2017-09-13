@@ -35,6 +35,7 @@ import com.liferay.ide.idea.util.SwitchConsumer.SwitchConsumerBuilder;
 import java.io.File;
 
 import java.nio.file.FileSystems;
+import java.nio.file.Path;
 
 import java.util.stream.Stream;
 
@@ -47,7 +48,9 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
 	@Override
 	public String getBuilderId() {
-		return getClass().getName();
+		Class<?> clazz = getClass();
+
+		return clazz.getName();
 	}
 
 	public ModuleWizardStep getCustomOptionsStep(WizardContext context, Disposable parentDisposable) {
@@ -104,7 +107,9 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 			f -> _copyOtherResource(projectRoot, f)
 		).build();
 
-		Stream.of(_overrideFiles).map(
+		Stream<String> stream = Stream.of(_overrideFiles);
+
+		stream.map(
 			overrideFile -> new File(hostBundle, overrideFile)
 		).filter(
 			file -> file.exists()
@@ -214,7 +219,9 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 	}
 
 	private File _getProjectFile(VirtualFile projectRoot, String path) {
-		return FileSystems.getDefault().getPath(projectRoot.getPath(), path).toFile();
+		Path finalPath = FileSystems.getDefault().getPath(projectRoot.getPath(), path);
+
+		return finalPath.toFile();
 	}
 
 	private static final String _LIFERAY_FRAGMENT_MODULES = "Liferay Fragment Modules";

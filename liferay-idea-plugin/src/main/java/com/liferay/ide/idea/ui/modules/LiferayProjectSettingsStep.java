@@ -59,12 +59,14 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 		_context = context;
 		_formatPanel = new ProjectFormatPanel();
 		_namePathComponent = LiferayNamePathComponent.initNamePathComponent(context);
+
 		_namePathComponent.setShouldBeAbsolute(true);
 
 		JPanel modulePanel = _getModulePanel();
 
 		if (context.isCreatingNewProject()) {
 			_settingsPanel.add(_namePathComponent, BorderLayout.NORTH);
+
 			addExpertPanel(modulePanel);
 		}
 		else {
@@ -243,7 +245,9 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 			!(moduleBuilder instanceof TemplateModuleBuilder) && _expertPanel.getComponentCount() > 0);
 
 		for (int i = 0; i < 6; i++) {
-			_getModulePanel().getComponent(i).setVisible(!(moduleBuilder instanceof EmptyModuleBuilder));
+			Component component = _getModulePanel().getComponent(i);
+
+			component.setVisible(!(moduleBuilder instanceof EmptyModuleBuilder));
 		}
 
 		_settingsPanel.revalidate();

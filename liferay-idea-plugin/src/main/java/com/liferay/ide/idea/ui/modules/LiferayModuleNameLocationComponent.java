@@ -37,6 +37,7 @@ import java.io.File;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
+import javax.swing.text.Document;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +52,9 @@ public class LiferayModuleNameLocationComponent {
 	}
 
 	public void bindModuleSettings(LiferayNamePathComponent namePathComponent) {
-		namePathComponent.getNameComponent().getDocument().addDocumentListener(
+		Document nameDocument = namePathComponent.getNameComponent().getDocument();
+
+		nameDocument.addDocumentListener(
 			new DocumentAdapter() {
 
 				protected void textChanged(DocumentEvent e) {
@@ -60,14 +63,16 @@ public class LiferayModuleNameLocationComponent {
 					}
 				}
 
-		});
+			});
 
 		_moduleContentRoot.addBrowseFolderListener(
 			ProjectBundle.message("project.new.wizard.module.content.root.chooser.title"),
 			ProjectBundle.message("project.new.wizard.module.content.root.chooser.description"), _context.getProject(),
 			BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR);
 
-		namePathComponent.getPathComponent().getDocument().addDocumentListener(
+		Document pathDocument = namePathComponent.getPathComponent().getDocument();
+
+		pathDocument.addDocumentListener(
 			new DocumentAdapter() {
 
 				protected void textChanged(DocumentEvent e) {
@@ -76,7 +81,7 @@ public class LiferayModuleNameLocationComponent {
 					}
 				}
 
-		});
+			});
 
 		_moduleName.getDocument().addDocumentListener(
 			new DocumentAdapter() {
@@ -107,7 +112,9 @@ public class LiferayModuleNameLocationComponent {
 
 			});
 
-		_moduleContentRoot.getTextField().getDocument().addDocumentListener(
+		Document moduleContentRootDocument = _moduleContentRoot.getTextField().getDocument();
+
+		moduleContentRootDocument.addDocumentListener(
 			new DocumentAdapter() {
 
 				protected void textChanged(DocumentEvent e) {
@@ -144,7 +151,9 @@ public class LiferayModuleNameLocationComponent {
 			ProjectBundle.message("project.new.wizard.module.file.description"), _context.getProject(),
 			BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR);
 
-		_moduleFileLocation.getTextField().getDocument().addDocumentListener(
+		Document moduleFileLocationDocument = _moduleFileLocation.getTextField().getDocument();
+
+		moduleFileLocationDocument.addDocumentListener(
 			new DocumentAdapter() {
 
 				protected void textChanged(DocumentEvent e) {
@@ -154,7 +163,10 @@ public class LiferayModuleNameLocationComponent {
 				}
 
 			});
-		namePathComponent.getPathComponent().getDocument().addDocumentListener(
+
+		Document namePathDocument = namePathComponent.getPathComponent().getDocument();
+
+		namePathDocument.addDocumentListener(
 			new DocumentAdapter() {
 
 				protected void textChanged(DocumentEvent e) {
