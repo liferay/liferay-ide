@@ -62,6 +62,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		return _LIFERAY_FRAGMENT_MODULES;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ModuleType getModuleType() {
 		return StdModuleTypes.JAVA;
 	}

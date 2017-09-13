@@ -34,10 +34,11 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
-import java.util.Enumeration;
+import java.util.Collections;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.stream.Stream;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -75,10 +76,10 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 		File liferayHomeDir = new File(project.getBasePath(), homeDir);
 
 		if (!liferayHomeDir.exists()) {
-			_fragmentHost.addItem("unable to get liferay bundle");
+			_fragmentHost.addItem("Unable to get Liferay bundle");
 
 			DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
-			DefaultMutableTreeNode node = new DefaultMutableTreeNode("unable to get liferay bundle", true);
+			DefaultMutableTreeNode node = new DefaultMutableTreeNode("Unable to get Liferay bundle", true);
 
 			root.add(node);
 
@@ -91,9 +92,7 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
 		List<String> bundles = ServerUtil.getModuleFileListFrom70Server(liferayHomeDir);
 
-		for (String bundle : bundles) {
-			_fragmentHost.addItem(bundle);
-		}
+		bundles.stream().forEach(b -> _fragmentHost.addItem(b));
 
 		_fragmentHost.addActionListener(
 			new ActionListener() {
@@ -102,30 +101,22 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 				public void actionPerformed(ActionEvent e) {
 					DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
 
-					ServerUtil.getModuleFileFrom70Server(
+					File currentOsgiBundle = ServerUtil.getModuleFileFrom70Server(
 						liferayHomeDir, _fragmentHost.getSelectedItem().toString(), LiferayIdeaUI.USER_BUNDLES_DIR);
-
-					File currentOsgiBundle = new File(
-						LiferayIdeaUI.USER_BUNDLES_DIR, _fragmentHost.getSelectedItem().toString());
 
 					if (currentOsgiBundle.exists()) {
 						try (JarFile jar = new JarFile(currentOsgiBundle)) {
-							Enumeration<JarEntry> enu = jar.entries();
+							Stream<JarEntry> stream = Collections.list(jar.entries()).stream();
 
-							while (enu.hasMoreElements()) {
-								JarEntry entry = enu.nextElement();
-
-								String name = entry.getName();
-
-								if ((name.startsWith("META-INF/resources/") &&
-									 (name.endsWith(".jsp") || name.endsWith(".jspf"))) ||
-									name.equals("portlet.properties") || name.equals("resource-actions/default.xml")) {
-
-									DefaultMutableTreeNode node1 = new DefaultMutableTreeNode(name, true);
-
-									root.add(node1);
-								}
-							}
+							stream.map(
+								entry -> entry.getName()
+							).filter(
+								name -> _isInterestingName(name)
+							).map(
+								name -> new DefaultMutableTreeNode(name, true)
+							).forEach(
+								node -> root.add(node)
+							);
 						}
 						catch (IOException ioe) {
 						}
@@ -219,6 +210,22 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 		}
 
 		return true;
+	}
+
+	private boolean _isInterestingName(String name) {
+		boolean jsp = false;
+
+		if (name.endsWith(".jsp") || name.endsWith(".jspf")) {
+			jsp = true;
+		}
+
+		if ((name.startsWith("META-INF/resources/") && jsp) || name.equals("portlet.properties") ||
+			name.equals("resource-actions/default.xml")) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	private LiferayModuleFragmentBuilder _builder;
