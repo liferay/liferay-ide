@@ -53,22 +53,23 @@ public class LiferayProjectTemplateList extends JPanel {
 
 		add(_mainPanel, BorderLayout.CENTER);
 
-		GroupedItemsListRenderer<ProjectTemplate> renderer = new GroupedItemsListRenderer<ProjectTemplate>(
-			new ListItemDescriptorAdapter<ProjectTemplate>() {
+		ListItemDescriptorAdapter<ProjectTemplate> descriptor = new ListItemDescriptorAdapter<ProjectTemplate>() {
 
-				@Nullable
-				@Override
-				public String getTextFor(ProjectTemplate value) {
-					return value.getName();
-				}
+			@Nullable
+			@Override
+			public Icon getIconFor(ProjectTemplate value) {
+				return value.getIcon();
+			}
 
-				@Nullable
-				@Override
-				public Icon getIconFor(ProjectTemplate value) {
-					return value.getIcon();
-				}
+			@Nullable
+			@Override
+			public String getTextFor(ProjectTemplate value) {
+				return value.getName();
+			}
 
-			}) {
+		};
+
+		GroupedItemsListRenderer<ProjectTemplate> renderer = new GroupedItemsListRenderer<ProjectTemplate>(descriptor) {
 
 			@Override
 			protected void customizeComponent(
@@ -192,6 +193,8 @@ public class LiferayProjectTemplateList extends JPanel {
 	}
 
 	private static final String _PROJECT_WIZARD_TEMPLATE = "project.wizard.template";
+
+	private static final long serialVersionUID = 7608936525034551298L;
 
 	private JTextPane _description;
 	private JPanel _mainPanel;

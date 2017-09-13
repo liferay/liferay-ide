@@ -64,18 +64,24 @@ import com.intellij.util.containers.FactoryMap;
 import com.intellij.util.containers.MultiMap;
 import com.intellij.util.ui.UIUtil;
 
+import com.liferay.ide.idea.util.CoreUtil;
+
 import gnu.trove.THashMap;
 
 import java.awt.CardLayout;
 import java.awt.Dimension;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -101,12 +107,16 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 		MultiMap<TemplatesGroup, ProjectTemplate> groups = new MultiMap<>();
 
 		for (ProjectTemplatesFactory factory : ProjectTemplatesFactory.EP_NAME.getExtensions()) {
-			for (String group : factory.getGroups()) {
-				ProjectTemplate[] templates = factory.createTemplates(group, context);
+			Stream<String> stream = Stream.of(factory.getGroups());
 
-				List<ProjectTemplate> values = Arrays.asList(templates);
+			stream.map(
+				group -> new AbstractMap.SimpleEntry<>(group, factory.createTemplates(group, context))
+			).filter(
+				pair -> !CoreUtil.isNullOrEmpty(pair.getValue())
+			).forEach(
+				pair -> {
+					String group = pair.getKey();
 
-				if (!values.isEmpty()) {
 					Icon icon = factory.getGroupIcon(group);
 
 					String parentGroup = factory.getParentGroup(group);
@@ -114,9 +124,9 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 					TemplatesGroup templatesGroup = new TemplatesGroup(
 						group, null, icon, factory.getGroupWeight(group), parentGroup, group, null);
 
-					groups.putValues(templatesGroup, values);
+					groups.putValues(templatesGroup, Arrays.asList(pair.getValue()));
 				}
-			}
+			);
 		}
 
 		return groups;
@@ -272,13 +282,17 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 
 			});
 
-		for (TemplatesGroup templatesGroup : _templatesMap.keySet()) {
-			ModuleBuilder builder = templatesGroup.getModuleBuilder();
+		Set<TemplatesGroup> keys = _templatesMap.keySet();
 
-			if (builder instanceof LiferayModuleBuilder) {
-				_wizard.getSequence().addStepsForBuilder(builder, context, modulesProvider);
-			}
-		}
+		Stream<TemplatesGroup> stream = keys.stream();
+
+		stream.map(
+			templatesGroup -> templatesGroup.getModuleBuilder()
+		).filter(
+			builder -> builder instanceof LiferayModuleBuilder
+		).forEach(
+			builder -> _wizard.getSequence().addStepsForBuilder(builder, context, modulesProvider)
+		);
 
 		String groupId = PropertiesComponent.getInstance().getValue(_PROJECT_WIZARD_GROUP);
 
@@ -421,23 +435,21 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 				Map<String, FrameworkSupportInModuleProvider> map = ContainerUtil.newMapFromValues(
 					providers.iterator(), PROVIDER_STRING_CONVERTOR);
 
-				Set<FrameworkSupportInModuleProvider> set = new java.util.HashSet<>(filtered);
+				Stream<FrameworkSupportInModuleProvider> stream = filtered.stream();
 
-				for (FrameworkSupportInModuleProvider provider : filtered) {
-					for (FrameworkSupportInModuleProvider.FrameworkDependency depId :
-							provider.getDependenciesFrameworkIds()) {
-
-						FrameworkSupportInModuleProvider dependency = map.get(depId.getFrameworkId());
-
-						if (dependency != null) {
-							set.add(dependency);
-						}
-					}
-				}
+				Set<FrameworkSupportInModuleProvider> set = stream.flatMap(
+					provider -> provider.getDependenciesFrameworkIds().stream()
+				).map(
+					depId -> map.get(depId.getFrameworkId())
+				).filter(
+					dependency -> dependency != null
+				).collect(
+					Collectors.toSet()
+				);
 
 				_frameworksPanel.setProviders(
-					new ArrayList<>(set), new java.util.HashSet<>(Arrays.asList(category.getAssociatedFrameworkIds())),
-					new java.util.HashSet<>(Arrays.asList(category.getPreselectedFrameworkIds())));
+					new ArrayList<>(set), new HashSet<>(Arrays.asList(category.getAssociatedFrameworkIds())),
+					new HashSet<>(Arrays.asList(category.getPreselectedFrameworkIds())));
 			}
 			else {
 				_frameworksPanel.setProviders(providers);

@@ -315,6 +315,8 @@ public class LiferayNamePathComponent extends JPanel {
 
 	private static final Logger _log = Logger.getInstance("#com.liferay.ide.idea.wizard.LiferayNamePathComponent");
 
+	private static final long serialVersionUID = -6184786008797586234L;
+
 	private JTextField _name;
 	private boolean _nameChangedByUser = false;
 	private JLabel _nameLabel;
@@ -377,6 +379,8 @@ public class LiferayNamePathComponent extends JPanel {
 				}
 			}
 		}
+
+		private static final long serialVersionUID = -5824446550196631956L;
 
 	}
 
