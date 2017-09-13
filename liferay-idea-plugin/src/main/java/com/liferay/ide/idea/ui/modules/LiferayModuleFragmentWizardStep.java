@@ -14,6 +14,8 @@
 
 package com.liferay.ide.idea.ui.modules;
 
+import aQute.bnd.osgi.Domain;
+
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.options.ConfigurationException;
@@ -23,7 +25,6 @@ import com.intellij.ui.treeStructure.Tree;
 
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.util.CoreUtil;
-import com.liferay.ide.idea.util.FileUtil;
 import com.liferay.ide.idea.util.LiferayWorkspaceUtil;
 import com.liferay.ide.idea.util.ServerUtil;
 import com.liferay.ide.idea.util.ZipUtil;
@@ -128,44 +129,6 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 			});
 	}
 
-	public String[] getBsnAndVersion(String hostBundleName) {
-		String child = hostBundleName.substring(0, hostBundleName.lastIndexOf(".jar"));
-
-		File tempBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, child);
-
-		if (!tempBundle.exists()) {
-			File hostBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, hostBundleName);
-
-			try {
-				ZipUtil.unzip(hostBundle, tempBundle);
-			}
-			catch (IOException ioe) {
-			}
-		}
-
-		String bundleSymbolicName = "";
-		String version = "";
-
-		if (tempBundle.exists()) {
-			File file = new File(new File(tempBundle, "META-INF"), "MANIFEST.MF");
-
-			String[] contents = FileUtil.readLinesFromFile(file);
-
-			for (String content : contents) {
-				if (content.contains("Bundle-SymbolicName:")) {
-					bundleSymbolicName = content.substring(
-						content.indexOf("Bundle-SymbolicName:") + "Bundle-SymbolicName:".length());
-				}
-
-				if (content.contains("Bundle-Version:")) {
-					version = content.substring(content.indexOf("Bundle-Version:") + "Bundle-Version:".length()).trim();
-				}
-			}
-		}
-
-		return new String[] {bundleSymbolicName, version};
-	}
-
 	public JComponent getComponent() {
 		return _mainPanel;
 	}
@@ -192,10 +155,10 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
 	@Override
 	public void updateDataModel() {
-		String[] bsnAndVerion = getBsnAndVersion(getFragmentHost());
+		Domain domain = _getBsnAndVersion(getFragmentHost());
 
-		_builder.setBsnName(bsnAndVerion[0]);
-		_builder.setVersion(bsnAndVerion[1]);
+		_builder.setBsnName(domain.getBundleSymbolicName().getKey());
+		_builder.setVersion(domain.getBundleVersion());
 
 		_builder.setFragmentHost(getFragmentHost());
 		_builder.setOverrideFiles(getSelectedJsps());
@@ -210,6 +173,36 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 		}
 
 		return true;
+	}
+
+	private Domain _getBsnAndVersion(String hostBundleName) {
+		Domain retval = null;
+
+		String child = hostBundleName.substring(0, hostBundleName.lastIndexOf(".jar"));
+
+		File tempBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, child);
+
+		if (!tempBundle.exists()) {
+			File hostBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, hostBundleName);
+
+			try {
+				ZipUtil.unzip(hostBundle, tempBundle);
+			}
+			catch (IOException ioe) {
+			}
+		}
+
+		if (tempBundle.exists()) {
+			File bundle = new File(new File(tempBundle, "META-INF"), "MANIFEST.MF");
+
+			try {
+				retval = Domain.domain(bundle);
+			}
+			catch (IOException ioe) {
+			}
+		}
+
+		return retval;
 	}
 
 	private boolean _isInterestingName(String name) {

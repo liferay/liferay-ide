@@ -337,7 +337,7 @@ public class LiferayModuleNameLocationComponent {
 		}
 
 		if (module != null) {
-			String msg = "Module \'" + moduleName + "\' already exist in project. Please, specify another name.";
+			String msg = "Module \'" + moduleName + "\' already exists in project. Please specify another name.";
 
 			throw new ConfigurationException(msg);
 		}
