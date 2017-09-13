@@ -55,6 +55,7 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 		return _LIFERAY_MODULES;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ModuleType getModuleType() {
 		return StdModuleTypes.JAVA;
 	}
