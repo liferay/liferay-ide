@@ -265,10 +265,6 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 		_settingsPanel.repaint();
 	}
 
-	private void createUIComponents() {
-		_moduleNameLocationComponent = new LiferayModuleNameLocationComponent(_context);
-	}
-
 	private WizardContext _context;
 	private HideableDecorator _expertDecorator;
 	private JPanel _expertPanel;
