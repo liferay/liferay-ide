@@ -33,18 +33,20 @@ public class SwitchConsumerTest {
 
 		SwitchConsumerBuilder<String> switch_ = SwitchConsumer.newBuilder();
 
-		Stream stream = Stream.of(_strings);
+		Stream<String> stream = Stream.of(_strings);
+
+		SwitchConsumer<String> switchConsumer = switch_.addCase(
+			s -> s.equals("foo"), s -> output.append("case1 " + s + "\n")
+		).addCase(
+			s -> s.equals("bar"), s -> output.append("case2 " + s + "\n")
+		).setDefault(
+			s -> output.append("default " + s + "\n")
+		).build();
 
 		stream.filter(
 			s -> s != null
 		).forEach(
-			switch_.addCase(
-				s -> s.equals("foo"), s -> output.append("case1 " + s + "\n")
-			).addCase(
-				s -> s.equals("bar"), s -> output.append("case2 " + s + "\n")
-			).setDefault(
-				s -> output.append("default " + s + "\n")
-			).build()
+			switchConsumer
 		);
 
 		Assert.assertEquals(_expected, output.toString());
