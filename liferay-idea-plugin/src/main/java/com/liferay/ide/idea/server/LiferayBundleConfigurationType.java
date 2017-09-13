@@ -37,7 +37,7 @@ public class LiferayBundleConfigurationType extends ConfigurationTypeBase implem
 			LiferayIdeaUI.LIFERAY_ICON);
 
 		addFactory(
-			new ConfigurationFactoryEx(this) {
+			new ConfigurationFactoryEx<RunConfiguration>(this) {
 
 				public RunConfiguration createTemplateConfiguration(Project project) {
 					return new LiferayBundleConfiguration(project, this, "");
