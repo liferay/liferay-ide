@@ -94,10 +94,15 @@ public class LiferayBundleConfiguration
 	public RunConfiguration clone() {
 		LiferayBundleConfiguration clone = (LiferayBundleConfiguration)super.clone();
 
-		clone._envs = new LinkedHashMap<>(_envs);
-		clone._configurationModule = new JavaRunConfigurationModule(getProject(), true);
-		clone._configurationModule.setModule(_configurationModule.getModule());
-		clone._config = XmlSerializerUtil.createCopy(_config);
+		clone.setConfig(XmlSerializerUtil.createCopy(_config));
+
+		JavaRunConfigurationModule configurationModule = new JavaRunConfigurationModule(getProject(), true);
+
+		configurationModule.setModule(_configurationModule.getModule());
+
+		clone.setConfigurationModule(configurationModule);
+
+		clone.setEnvs(new LinkedHashMap<>(clone.getEnvs()));
 
 		return clone;
 	}
@@ -223,6 +228,14 @@ public class LiferayBundleConfiguration
 		_config.alternativeJrePathEnabled = enabled;
 	}
 
+	public void setConfig(LiferayBundleConfig config) {
+		_config = config;
+	}
+
+	public void setConfigurationModule(JavaRunConfigurationModule configurationModule) {
+		_configurationModule = configurationModule;
+	}
+
 	@Override
 	public void setEnvs(@NotNull Map<String, String> envs) {
 		_envs.clear();
@@ -258,6 +271,7 @@ public class LiferayBundleConfiguration
 	@Override
 	public void writeExternal(Element element) throws WriteExternalException {
 		super.writeExternal(element);
+
 		JavaRunConfigurationExtensionManager.getInstance().writeExternal(this, element);
 		XmlSerializer.serializeInto(_config, element, new SkipDefaultValuesSerializationFilters());
 		EnvironmentVariablesComponent.writeExternal(element, getEnvs());
