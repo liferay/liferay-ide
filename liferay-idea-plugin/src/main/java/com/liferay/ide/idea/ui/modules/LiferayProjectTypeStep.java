@@ -42,7 +42,6 @@ import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
 import com.intellij.openapi.roots.ui.configuration.projectRoot.LibrariesContainer;
 import com.intellij.openapi.roots.ui.configuration.projectRoot.LibrariesContainerFactory;
 import com.intellij.openapi.ui.popup.ListItemDescriptorAdapter;
-import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.platform.ProjectTemplate;
@@ -181,20 +180,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 
 					@Override
 					public boolean hasSeparatorAboveOf(TemplatesGroup value) {
-						int index = groups.indexOf(value);
-
-						if (index < 1) {
-							return false;
-						}
-
-						TemplatesGroup upper = groups.get(index - 1);
-
-						if ((upper.getParentGroup() == null) && (value.getParentGroup() == null)) {
-							return true;
-						}
-
-						return !Comparing.equal(upper.getParentGroup(), value.getParentGroup()) &&
-							!Comparing.equal(upper.getName(), value.getParentGroup());
+						return false;
 					}
 
 				}) {

@@ -61,18 +61,20 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 
 				if ("theme-contributor".equals(type) || "theme".equals(type) || "layout-template".equals(type)) {
 					_packageName.setEditable(false);
-					_className.setEditable(false);
 					_packageName.setEnabled(false);
+					_className.setEditable(false);
 					_className.setEnabled(false);
 				}
 				else if ("service-builder".equals(type)) {
 					_packageName.setEditable(true);
+					_packageName.setEnabled(true);
+					_className.setEditable(false);
 					_className.setEditable(false);
 				}
 				else {
 					_packageName.setEditable(true);
-					_className.setEditable(true);
 					_packageName.setEnabled(true);
+					_className.setEditable(true);
 					_className.setEnabled(true);
 				}
 			});
