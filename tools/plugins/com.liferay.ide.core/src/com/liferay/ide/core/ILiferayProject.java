@@ -16,6 +16,7 @@ package com.liferay.ide.core;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 
 
@@ -30,6 +31,8 @@ public interface ILiferayProject
     IFile getDescriptorFile( String name );
 
     IPath getLibraryPath( String filename );
+
+    IProject getProject();
 
     String getProperty( String key, String defaultValue );
 
