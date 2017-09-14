@@ -133,6 +133,10 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 		addField(label, field, panel);
 	}
 
+	public void createUIComponents() {
+		_moduleNameLocationComponent = new LiferayModuleNameLocationComponent(_context);
+	}
+
 	@Override
 	public JComponent getComponent() {
 		return _mainPanel;
