@@ -34,17 +34,23 @@ import org.codehaus.jackson.map.ObjectMapper;
 public class TargetPlatformUtil {
 
 	public static ServiceContainer getServicesList() throws Exception {
-		File tpIndexFile = _checkCurrentTargetPlatform("service");
+		if (_service == null) {
+			File tpIndexFile = _checkCurrentTargetPlatform("service");
 
-		return _getServicesNameList(tpIndexFile);
+			_service = _getServicesNameList(tpIndexFile);
+		}
+
+		return _service;
 	}
 
-	public static ServiceContainer getServiceWrapperList() throws Exception
-	{
+	public static ServiceContainer getServiceWrapperList() throws Exception {
+		if (_serviceWrapper == null) {
+			File tpIndexFile = _checkCurrentTargetPlatform("servicewrapper");
 
-		File tpIndexFile = _checkCurrentTargetPlatform("servicewrapper");
+			_serviceWrapper = _getServicesNameList(tpIndexFile);
+		}
 
-		return _getServicesNameList(tpIndexFile);
+		return _serviceWrapper;
 	}
 
 	private static File _checkCurrentTargetPlatform(String type) throws IOException {
@@ -80,5 +86,8 @@ public class TargetPlatformUtil {
 
 		return file;
 	}
+
+	private static ServiceContainer _service = null;
+	private static ServiceContainer _serviceWrapper = null;
 
 }
