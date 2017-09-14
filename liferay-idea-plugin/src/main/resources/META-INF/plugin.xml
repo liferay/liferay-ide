@@ -13,6 +13,19 @@
 				text="Liferay Module" description="Add new liferay module to the liferay workspace">
 			<add-to-group anchor="last" group-id="NewGroup" />
 		</action>
+
+		<group id="LiferayActionGroup" popup="true" text="Liferay">
+			<add-to-group group-id="ProjectViewPopupMenu" />
+		</group>
+
+		<action class="com.liferay.ide.idea.ui.actions.DeployModuleAction" id="DeployLiferayModule">
+			<add-to-group group-id="LiferayActionGroup" />
+		</action>
+
+		<action class="com.liferay.ide.idea.ui.actions.InitBundleAction" id="InitBundle">
+			<add-to-group group-id="LiferayActionGroup" />
+		</action>
+
 	</actions>
 
 	<extensions defaultExtensionNs="com.intellij">
