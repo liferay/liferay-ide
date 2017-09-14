@@ -33,6 +33,7 @@ import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.jetbrains.annotations.Nullable;
@@ -51,6 +52,30 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 		_typesTree.setRootVisible(false);
 		_typesTree.setShowsRootHandles(true);
 		_typesTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+
+		_typesTree.getSelectionModel().addTreeSelectionListener(
+			(e) -> {
+				TreePath treePath = e.getNewLeadSelectionPath();
+
+				String type = treePath.getLastPathComponent().toString();
+
+				if ("theme-contributor".equals(type) || "theme".equals(type) || "layout-template".equals(type)) {
+					_packageName.setEditable(false);
+					_className.setEditable(false);
+					_packageName.setEnabled(false);
+					_className.setEnabled(false);
+				}
+				else if ("service-builder".equals(type)) {
+					_packageName.setEditable(true);
+					_className.setEditable(false);
+				}
+				else {
+					_packageName.setEditable(true);
+					_className.setEditable(true);
+					_packageName.setEnabled(true);
+					_className.setEnabled(true);
+				}
+			});
 
 		JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(_typesTree);
 
@@ -74,7 +99,11 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 	}
 
 	public String getClassName() {
-		return _className.getText();
+		if (_className.isEditable()) {
+			return _className.getText();
+		}
+
+		return null;
 	}
 
 	public JComponent getComponent() {
@@ -82,7 +111,11 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 	}
 
 	public String getPackageName() {
-		return _packageName.getText();
+		if (_packageName.isEditable()) {
+			return _packageName.getText();
+		}
+
+		return null;
 	}
 
 	@Nullable
@@ -124,7 +157,7 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 		}
 
 		if (!CoreUtil.isNullOrEmpty(classNameValue) &&
-!PsiNameHelper.getInstance(workspaceProject).isQualifiedName(classNameValue)) {
+			!PsiNameHelper.getInstance(workspaceProject).isQualifiedName(classNameValue)) {
 
 			throw new ConfigurationException(classNameValue + " is not a valid java class name", validationTitle);
 		}
