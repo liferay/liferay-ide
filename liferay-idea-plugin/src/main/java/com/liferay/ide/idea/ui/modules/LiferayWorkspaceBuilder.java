@@ -20,18 +20,17 @@ import com.intellij.ide.util.projectWizard.ModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleBuilderListener;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.externalSystem.service.project.ProjectDataManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.StdModuleTypes;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModifiableRootModel;
-import com.intellij.projectImport.ProjectImportProvider;
 
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.util.BladeCLI;
-
-import java.util.stream.Stream;
 
 import javax.swing.Icon;
 
@@ -104,32 +103,30 @@ public class LiferayWorkspaceBuilder extends ModuleBuilder {
 		@Override
 		public void moduleCreated(@NotNull Module module) {
 			Project project = module.getProject();
-			ProjectImportProvider[] importProviders = ProjectImportProvider.PROJECT_IMPORT_PROVIDER.getExtensions();
 
-			Stream<ProjectImportProvider> stream = Stream.of(importProviders);
+			ProjectDataManager projectDataManager = ServiceManager.getService(ProjectDataManager.class);
 
-			stream.filter(
-				importProvider -> importProvider.getId().equals("Gradle")
-			).findFirst(
-			).ifPresent(
-				importProvider -> {
-					AddModuleWizard wizard = new AddModuleWizard(project, project.getBasePath(), importProvider);
+			LiferayGradleProjectImportBuilder gradleProjectImportBuilder = new LiferayGradleProjectImportBuilder(
+				projectDataManager);
 
-					Application application = ApplicationManager.getApplication();
+			LiferayGradleProjectImportProvider gradleProjectImportProvider = new LiferayGradleProjectImportProvider(
+				gradleProjectImportBuilder);
 
-					application.invokeLater(
-						new Runnable() {
+			AddModuleWizard wizard = new AddModuleWizard(project, project.getBasePath(), gradleProjectImportProvider);
 
-							@Override
-							public void run() {
-								if (wizard.showAndGet()) {
-									ImportModuleAction.createFromWizard(project, wizard);
-								}
-							}
+			Application application = ApplicationManager.getApplication();
 
-						});
-				}
-			);
+			application.invokeLater(
+				new Runnable() {
+
+					@Override
+					public void run() {
+						if (wizard.showAndGet()) {
+							ImportModuleAction.createFromWizard(project, wizard);
+						}
+					}
+
+				});
 		}
 
 	}

@@ -6,6 +6,8 @@
 	<description>Liferay Plugin for IntelliJ IDEA</description>
 	<change-notes/>
 
+	<depends>org.jetbrains.plugins.gradle</depends>
+
 	<actions>
 		<action id="NewLiferayModule" class="com.liferay.ide.idea.ui.modules.NewLiferayModuleAction"
 				text="Liferay Module" description="Add new liferay module to the liferay workspace">
