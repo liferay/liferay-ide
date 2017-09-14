@@ -450,7 +450,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         gridData.minimumHeight = 200;
 
         _problemsViewer =
-            new TableViewer( container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER );
+            new TableViewer( container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER | SWT.VIRTUAL );
 
         _problemsViewer.getTable().setLayoutData( gridData );
 

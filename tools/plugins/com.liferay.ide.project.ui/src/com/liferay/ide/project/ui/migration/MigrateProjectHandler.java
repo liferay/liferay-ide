@@ -265,7 +265,7 @@ public class MigrateProjectHandler extends AbstractHandler
                     {
                         allProblems = new ArrayList<>();
 
-                        if( !override.isCanceled() )
+                        if( !override.isCanceled() && shouldSearch( locations[j].toFile() ) )
                         {
                             List<Problem> problems = null;
 
@@ -459,19 +459,8 @@ public class MigrateProjectHandler extends AbstractHandler
         return markers != null && markers.length > 0;
     }
 
-    @SuppressWarnings( "deprecation" )
     private boolean shouldAdd( Problem problem )
     {
-        File file = problem.getFile();
-
-        String path = file.getAbsolutePath().replaceAll( "\\\\", "/" );
-
-        if( path.contains( "WEB-INF/classes" ) || path.contains( "WEB-INF/service" ) ||
-            ValidationUtil.isProjectTargetDirFile( file ) )
-        {
-            return false;
-        }
-
         IgnoredProblemsContainer ignoredProblemsContainer = MigrationUtil.getIgnoredProblemsContainer();
 
         if( ignoredProblemsContainer != null )
@@ -499,10 +488,23 @@ public class MigrateProjectHandler extends AbstractHandler
             }
         }
 
+        return true;
+    }
+
+    @SuppressWarnings( "deprecation" )
+    private boolean shouldSearch( File file )
+    {
+        String path = file.getAbsolutePath().replaceAll( "\\\\", "/" );
+
+        if( path.contains( "WEB-INF/classes" ) || path.contains( "WEB-INF/service" ) ||
+            ValidationUtil.isProjectTargetDirFile( file ) )
+        {
+            return false;
+        }
+
         if( path.endsWith( "java" ) )
         {
-            CompilationUnit ast =
-                CUCache.getCU( problem.getFile(), FileUtil.readContents( problem.getFile() ).toCharArray() );
+            CompilationUnit ast = CUCache.getCU( file, FileUtil.readContents( file ).toCharArray() );
 
             Name superClass = ( (TypeDeclaration) ast.types().get( 0 ) ).getSuperclass();
 
