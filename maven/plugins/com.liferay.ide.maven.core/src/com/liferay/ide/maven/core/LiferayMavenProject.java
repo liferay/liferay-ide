@@ -36,12 +36,14 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.jdt.IClasspathManager;
 import org.eclipse.m2e.jdt.MavenJdtPlugin;
+import org.eclipse.m2e.jdt.internal.launch.MavenRuntimeClasspathProvider;
 
 
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  */
+@SuppressWarnings("restriction")
 public abstract class LiferayMavenProject extends BaseLiferayProject  implements IMavenProject
 {
 
@@ -50,7 +52,8 @@ public abstract class LiferayMavenProject extends BaseLiferayProject  implements
         super( project );
     }
 
-    public <T> T adapt( Class<T> adapterType )
+    @Override
+	public <T> T adapt( Class<T> adapterType )
     {
         T adapter = super.adapt( adapterType );
 
@@ -81,7 +84,8 @@ public abstract class LiferayMavenProject extends BaseLiferayProject  implements
         return null;
     }
 
-    public IPath getLibraryPath( String filename )
+    @Override
+	public IPath getLibraryPath( String filename )
     {
         final IPath[] libs = getUserLibs();
 
@@ -129,7 +133,8 @@ public abstract class LiferayMavenProject extends BaseLiferayProject  implements
         return retval;
     }
 
-    public String getProperty( String key, String defaultValue )
+    @Override
+	public String getProperty( String key, String defaultValue )
     {
         String retval = defaultValue;
 
@@ -156,11 +161,15 @@ public abstract class LiferayMavenProject extends BaseLiferayProject  implements
                 }
             }
         }
+        else if ("ATTR_SOURCE_PATH_PROVIDER".equals(key)) {
+            return MavenRuntimeClasspathProvider.MAVEN_SOURCEPATH_PROVIDER;
+        }
 
         return retval;
     }
 
-    public IFolder getSourceFolder( String classification )
+    @Override
+	public IFolder getSourceFolder( String classification )
     {
         IFolder retval = super.getSourceFolder( classification );
 
@@ -179,7 +188,8 @@ public abstract class LiferayMavenProject extends BaseLiferayProject  implements
         return retval;
     }
 
-    public IPath[] getUserLibs()
+    @Override
+	public IPath[] getUserLibs()
     {
         final List<IPath> libs = new ArrayList<IPath>();
 
