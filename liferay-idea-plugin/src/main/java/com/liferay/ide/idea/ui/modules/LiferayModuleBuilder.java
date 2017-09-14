@@ -70,6 +70,10 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 		return _LIFERAY_MODULES;
 	}
 
+	public String getServiceName() {
+		return _serviceName;
+	}
+
 	public String getType() {
 		return _type;
 	}
@@ -80,6 +84,10 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 
 	public void setPackageName(String packageName) {
 		_packageName = packageName;
+	}
+
+	public void setServiceName(String serviceName) {
+		_serviceName = serviceName;
 	}
 
 	public void setType(String type) {
@@ -112,6 +120,12 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 			sb.append(" ");
 		}
 
+		if ((_type.equals("service") || _type.equals("service-wrapper")) && !CoreUtil.isNullOrEmpty(_serviceName)) {
+			sb.append("-s ");
+			sb.append(_serviceName);
+			sb.append(" ");
+		}
+
 		sb.append("\"");
 		sb.append(moduleDir.getName());
 		sb.append("\" ");
@@ -140,6 +154,7 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 
 	private String _className;
 	private String _packageName;
+	private String _serviceName;
 	private String _type;
 
 }

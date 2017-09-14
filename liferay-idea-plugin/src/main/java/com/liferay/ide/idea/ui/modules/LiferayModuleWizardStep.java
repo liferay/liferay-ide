@@ -25,7 +25,12 @@ import com.intellij.ui.treeStructure.Tree;
 
 import com.liferay.ide.idea.util.BladeCLI;
 import com.liferay.ide.idea.util.CoreUtil;
+import com.liferay.ide.idea.util.ServiceContainer;
+import com.liferay.ide.idea.util.TargetPlatformUtil;
 
+import java.util.List;
+
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -54,8 +59,8 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 		_typesTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
 		_typesTree.getSelectionModel().addTreeSelectionListener(
-			(e) -> {
-				TreePath treePath = e.getNewLeadSelectionPath();
+			(event) -> {
+				TreePath treePath = event.getNewLeadSelectionPath();
 
 				String type = treePath.getLastPathComponent().toString();
 
@@ -64,18 +69,65 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 					_packageName.setEnabled(false);
 					_className.setEditable(false);
 					_className.setEnabled(false);
+					_servcieName.setEnabled(false);
+					_servcieName.setEditable(false);
+					_servcieName.removeAllItems();
 				}
 				else if ("service-builder".equals(type)) {
 					_packageName.setEditable(true);
 					_packageName.setEnabled(true);
 					_className.setEditable(false);
 					_className.setEditable(false);
+					_servcieName.setEnabled(false);
+					_servcieName.setEditable(false);
+					_servcieName.removeAllItems();
+				}
+				else if ("service".equals(type)) {
+					_packageName.setEditable(true);
+					_packageName.setEnabled(true);
+					_className.setEditable(true);
+					_className.setEnabled(true);
+					_servcieName.setEnabled(true);
+					_servcieName.removeAllItems();
+
+					try {
+						ServiceContainer serviceContainer = TargetPlatformUtil.getServicesList();
+
+						List<String> services = serviceContainer.getServiceList();
+
+						services.stream().forEach(b -> _servcieName.addItem(b));
+					}
+					catch (Exception e) {
+						_servcieName.addItem("Unable to get services");
+					}
+				}
+				else if ("service-wrapper".equals(type)) {
+					_packageName.setEditable(true);
+					_packageName.setEnabled(true);
+					_className.setEditable(true);
+					_className.setEnabled(true);
+					_servcieName.setEnabled(true);
+					_servcieName.removeAllItems();
+
+					try {
+						ServiceContainer serviceContainer = TargetPlatformUtil.getServiceWrapperList();
+
+						List<String> services = serviceContainer.getServiceList();
+
+						services.stream().forEach(b -> _servcieName.addItem(b));
+					}
+					catch (Exception e) {
+						_servcieName.addItem("Unable to get services");
+					}
 				}
 				else {
 					_packageName.setEditable(true);
 					_packageName.setEnabled(true);
 					_className.setEditable(true);
 					_className.setEnabled(true);
+					_servcieName.setEnabled(false);
+					_servcieName.setEditable(false);
+					_servcieName.removeAllItems();
 				}
 			});
 
@@ -98,6 +150,8 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 		TreeModel model = new DefaultTreeModel(root);
 
 		_typesTree.setModel(model);
+
+		_typesTree.setSelectionRow(0);
 	}
 
 	public String getClassName() {
@@ -132,11 +186,19 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 		}
 	}
 
+	public String getServiceName() {
+		return _servcieName.getSelectedItem().toString();
+	}
+
 	@Override
 	public void updateDataModel() {
 		_builder.setType(getSelectedType());
 		_builder.setClassName(getClassName());
 		_builder.setPackageName(getPackageName());
+
+		if (getSelectedType().equals("service") || getSelectedType().equals("service-wrapper")) {
+			_builder.setServiceName(getServiceName());
+		}
 	}
 
 	@Override
@@ -171,6 +233,7 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 	private JTextField _className;
 	private JPanel _mainPanel;
 	private JTextField _packageName;
+	private JComboBox<String> _servcieName;
 	private JPanel _typesPanel;
 	private Tree _typesTree;
 
