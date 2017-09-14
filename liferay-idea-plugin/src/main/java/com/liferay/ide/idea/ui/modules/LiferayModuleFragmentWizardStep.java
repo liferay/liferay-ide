@@ -182,9 +182,9 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
 		File tempBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, child);
 
-		if (!tempBundle.exists()) {
-			File hostBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, hostBundleName);
+		File hostBundle = new File(LiferayIdeaUI.USER_BUNDLES_DIR, hostBundleName);
 
+		if (!tempBundle.exists()) {
 			try {
 				ZipUtil.unzip(hostBundle, tempBundle);
 			}
@@ -193,12 +193,11 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 		}
 
 		if (tempBundle.exists()) {
-			File bundle = new File(new File(tempBundle, "META-INF"), "MANIFEST.MF");
-
 			try {
-				retval = Domain.domain(bundle);
+				retval = Domain.domain(hostBundle);
 			}
 			catch (IOException ioe) {
+				ioe.printStackTrace();
 			}
 		}
 
