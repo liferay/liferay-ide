@@ -29,6 +29,7 @@ dependencies {
 
 formatSource {
 	maxLineLength = 120
+	baseDirName = "src"
 }
 
 intellij {

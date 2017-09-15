@@ -109,7 +109,7 @@ public abstract class AbstractLiferayGradleTaskAction extends AnAction {
 		}
 	}
 
-	public boolean isVisible(AnActionEvent e) {
+	public boolean isEnableAndVisible(AnActionEvent e) {
 		return true;
 	}
 
@@ -117,7 +117,7 @@ public abstract class AbstractLiferayGradleTaskAction extends AnAction {
 	public void update(AnActionEvent e) {
 		super.update(e);
 
-		e.getPresentation().setVisible(isVisible(e));
+		e.getPresentation().setEnabledAndVisible(isEnableAndVisible(e));
 	}
 
 	protected abstract String getTaskName();

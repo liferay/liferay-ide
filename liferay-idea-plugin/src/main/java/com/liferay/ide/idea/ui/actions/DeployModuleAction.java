@@ -14,8 +14,10 @@
 
 package com.liferay.ide.idea.ui.actions;
 
+import com.intellij.ide.projectView.impl.ProjectRootsUtil;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -32,8 +34,11 @@ public class DeployModuleAction extends AbstractLiferayGradleTaskAction {
 	}
 
 	@Override
-	public boolean isVisible(AnActionEvent e) {
-		if (getVirtualFile(e) != null) {
+	public boolean isEnableAndVisible(AnActionEvent e) {
+		Project project = e.getProject();
+		VirtualFile file = getVirtualFile(e);
+
+		if ((file != null) && ProjectRootsUtil.isModuleContentRoot(file, project)) {
 			return true;
 		}
 

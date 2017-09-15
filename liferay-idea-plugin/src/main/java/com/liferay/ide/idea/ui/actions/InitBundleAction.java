@@ -30,8 +30,10 @@ public class InitBundleAction extends AbstractLiferayGradleTaskAction {
 	}
 
 	@Override
-	public boolean isVisible(AnActionEvent e) {
-		if (getVirtualFile(e) != null) {
+	public boolean isEnableAndVisible(AnActionEvent e) {
+		Project project = e.getProject();
+
+		if (project.getBaseDir().equals(getVirtualFile(e))) {
 			return true;
 		}
 
