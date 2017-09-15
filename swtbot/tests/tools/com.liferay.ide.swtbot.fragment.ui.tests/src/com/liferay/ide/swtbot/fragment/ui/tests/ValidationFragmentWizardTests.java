@@ -18,16 +18,13 @@ package com.liferay.ide.swtbot.fragment.ui.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.junit.Test;
+
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewFragmentWizard;
 import com.liferay.ide.swtbot.liferay.ui.util.ValidationMsg;
-
-import java.io.File;
-import java.io.IOException;
-
-import org.junit.Assume;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  * @author Vicky Wang
@@ -36,24 +33,7 @@ import org.junit.Test;
 public class ValidationFragmentWizardTests extends SwtbotBase
 {
 
-    static String fullClassname = new SecurityManager()
-    {
-
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
-
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
-
     NewFragmentWizard newFragmentWizard = new NewFragmentWizard( bot );
-
-    @BeforeClass
-    public static void init() throws IOException
-    {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-    }
 
     @Test
     public void validationProjectName()
@@ -61,7 +41,7 @@ public class ValidationFragmentWizardTests extends SwtbotBase
         wizardAction.openNewFragmentWizard();
 
         for( ValidationMsg msg : getValidationMsgs(
-            new File( getValidationFolder(), "new-fragment-wizard-project-name.csv" ) ) )
+            new File( envAction.getValidationFolder(), "new-fragment-wizard-project-name.csv" ) ) )
         {
             newFragmentWizard.getProjectName().setText( msg.getInput() );
 

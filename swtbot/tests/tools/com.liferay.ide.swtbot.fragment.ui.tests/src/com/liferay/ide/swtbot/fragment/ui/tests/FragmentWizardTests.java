@@ -15,13 +15,12 @@
 
 package com.liferay.ide.swtbot.fragment.ui.tests;
 
-import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
-
 import java.io.IOException;
 
-import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 
 /**
  * @author Vicky Wang
@@ -30,23 +29,10 @@ import org.junit.Test;
 public class FragmentWizardTests extends SwtbotBase
 {
 
-    static String fullClassname = new SecurityManager()
-    {
-
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
-
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
-
     @BeforeClass
     public static void init() throws IOException
     {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-
-        unzipServer();
+    		envAction.unzipServer();
     }
 
     @Test
@@ -62,7 +48,7 @@ public class FragmentWizardTests extends SwtbotBase
 
         wizardAction.next();
 
-        wizardAction.prepareLiferay7Runtime( getLiferayServerDir().toOSString() );
+        wizardAction.prepareLiferay7RuntimeInfo( envAction.getLiferayServerDir().toOSString() );
 
         wizardAction.finish();
 
@@ -114,7 +100,7 @@ public class FragmentWizardTests extends SwtbotBase
 
         wizardAction.next();
 
-        wizardAction.prepareLiferay7Runtime( getLiferayServerDir().toOSString() );
+        wizardAction.prepareLiferay7RuntimeInfo( envAction.getLiferayServerDir().toOSString() );
 
         wizardAction.finish();
 

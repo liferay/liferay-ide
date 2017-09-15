@@ -16,6 +16,7 @@
 package com.liferay.ide.swtbot.liferay.ui.action;
 
 import com.liferay.ide.swtbot.liferay.ui.UIAction;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.ImportLiferayWorkspaceProjectWizard;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferay7RuntimeWizard;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.NewLiferayComponentWizard;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewFragmentWizard;
@@ -41,6 +42,7 @@ public class WizardAction extends UIAction
 {
 
     private final ImportProjectWizard importProjectWizard = new ImportProjectWizard( bot );
+    private final ImportLiferayWorkspaceProjectWizard importLiferayWorkspaceProjectWizard = new ImportLiferayWorkspaceProjectWizard( bot );
     private final NewModuleFragmentInfoWizard newFragmentInfoWizard = new NewModuleFragmentInfoWizard( bot );
     private final NewFragmentWizard newFragmentWizard = new NewFragmentWizard( bot );
     private final NewLiferayJsfProjectWizard newJsfProjectWizard = new NewLiferayJsfProjectWizard( bot );
@@ -187,6 +189,10 @@ public class WizardAction extends UIAction
         prepareFragment( projectName, GRADLE );
     }
 
+    public void prepareImportLiferayWorkspace(String location) {
+    		importLiferayWorkspaceProjectWizard.getWorkspaceLocation().setText(location);
+    }
+    
     public void prepareFragmentMaven( final String projectName )
     {
         prepareFragment( projectName, MAVEN );

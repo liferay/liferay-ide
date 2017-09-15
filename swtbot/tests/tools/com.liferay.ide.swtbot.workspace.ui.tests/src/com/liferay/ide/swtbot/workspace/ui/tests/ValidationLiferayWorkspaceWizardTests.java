@@ -19,19 +19,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+
+import org.junit.Test;
+
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.ImportLiferayWorkspaceProjectWizard;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewLiferayWorkspaceWizard;
 import com.liferay.ide.swtbot.liferay.ui.util.ValidationMsg;
 import com.liferay.ide.swtbot.ui.util.StringPool;
-
-import java.io.File;
-import java.io.IOException;
-
-import org.junit.After;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author Vicky Wang
@@ -40,25 +36,8 @@ import org.junit.Test;
 public class ValidationLiferayWorkspaceWizardTests extends SwtbotBase
 {
 
-    static String fullClassname = new SecurityManager()
-    {
-
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
-
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
-
     NewLiferayWorkspaceWizard newLiferayWorkspaceProjectWizard = new NewLiferayWorkspaceWizard( bot );
     ImportLiferayWorkspaceProjectWizard importLiferayWorkspaceProject = new ImportLiferayWorkspaceProjectWizard( bot );
-
-    @After
-    public void deleteLiferayWorkspace() throws IOException
-    {
-        killGradleProcess();
-    }
 
     @Test
     public void exsitingLiferayWorkspace()
@@ -80,12 +59,6 @@ public class ValidationLiferayWorkspaceWizardTests extends SwtbotBase
         viewAction.deleteProject( "test" );
     }
 
-    @Before
-    public void importModuleProject()
-    {
-        Assume.assumeTrue( runTest() || runAllTests() );
-    }
-
     @Test
     public void initialStateAndValidationProjectName()
     {
@@ -103,7 +76,7 @@ public class ValidationLiferayWorkspaceWizardTests extends SwtbotBase
         assertTrue( importLiferayWorkspaceProject.cancelBtn().isEnabled() );
 
         for( ValidationMsg msg : getValidationMsgs(
-            new File( getValidationFolder(), "import-liferay-workspace-wizard-location.csv" ) ) )
+            new File( envAction.getValidationFolder(), "import-liferay-workspace-wizard-location.csv" ) ) )
         {
             importLiferayWorkspaceProject.getWorkspaceLocation().setText( msg.getInput() );
 
@@ -142,7 +115,7 @@ public class ValidationLiferayWorkspaceWizardTests extends SwtbotBase
         wizardAction.openNewLiferayWorkspaceWizard();
 
         for( ValidationMsg msg : getValidationMsgs(
-            new File( getValidationFolder(), "new-liferay-workspace-wizard-project-name.csv" ) ) )
+            new File( envAction.getValidationFolder(), "new-liferay-workspace-wizard-project-name.csv" ) ) )
         {
             newLiferayWorkspaceProjectWizard.getProjectName().setText( msg.getInput() );
 

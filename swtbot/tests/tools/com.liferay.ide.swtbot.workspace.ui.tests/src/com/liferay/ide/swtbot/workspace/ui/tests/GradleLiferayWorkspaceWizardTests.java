@@ -18,8 +18,6 @@ package com.liferay.ide.swtbot.workspace.ui.tests;
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 import com.liferay.ide.swtbot.ui.page.Editor;
 
-import org.junit.Assume;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -108,12 +106,6 @@ public class GradleLiferayWorkspaceWizardTests extends SwtbotBase
         wizardAction.finishToWait();
 
         viewAction.deleteProject( workspaceName );
-    }
-
-    @Before
-    public void importModuleProject()
-    {
-        Assume.assumeTrue( runTest() || runAllTests() );
     }
 
 }

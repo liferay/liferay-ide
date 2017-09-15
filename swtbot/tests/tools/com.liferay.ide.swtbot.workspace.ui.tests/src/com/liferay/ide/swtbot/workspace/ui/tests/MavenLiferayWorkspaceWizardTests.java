@@ -15,11 +15,9 @@
 
 package com.liferay.ide.swtbot.workspace.ui.tests;
 
-import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
-
-import org.junit.Assume;
-import org.junit.Before;
 import org.junit.Test;
+
+import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 
 /**
  * @author Vicky Wang
@@ -77,12 +75,6 @@ public class MavenLiferayWorkspaceWizardTests extends SwtbotBase
         viewAction.deleteProject( projectName );
 
         viewAction.deleteProject( workspaceName );
-    }
-
-    @Before
-    public void importModuleProject()
-    {
-        Assume.assumeTrue( runTest() || runAllTests() );
     }
 
 }

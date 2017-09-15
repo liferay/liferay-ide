@@ -20,16 +20,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Test;
+
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.ImportLiferayWorkspaceProjectWizard;
 import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesContinueDialog;
 import com.liferay.ide.swtbot.ui.page.CTabItem;
 import com.liferay.ide.swtbot.ui.page.Editor;
 import com.liferay.ide.swtbot.ui.page.Tree;
-
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author Sunny Shi
@@ -45,19 +43,12 @@ public class ImportLiferayWorkspaceProjectTests extends SwtbotBase
 
     DeleteResourcesContinueDialog continueDeleteResources = new DeleteResourcesContinueDialog( bot );
 
-    @Before
-    public void before()
-    {
-        Assume.assumeTrue( runTest() || runAllTests() );
-    }
-
     @Test
     public void importGradleLiferayWorkspaceProject()
     {
         wizardAction.openImportLiferayWorkspaceWizard();
 
-        importLiferayWorkspaceProject.setWorkspaceLocation(
-            liferayWorkspaceRootPath + "/projects/testGradleWorkspace" );
+        wizardAction.prepareImportLiferayWorkspace(liferayWorkspaceRootPath + "/projects/testGradleWorkspace");
 
         final String workspaceName = "testGradleWorkspace";
 
@@ -69,8 +60,7 @@ public class ImportLiferayWorkspaceProjectTests extends SwtbotBase
 
         wizardAction.openImportLiferayWorkspaceWizard();
 
-        importLiferayWorkspaceProject.setWorkspaceLocation(
-            liferayWorkspaceRootPath + "/projects/testGradleWorkspace" );
+        wizardAction.prepareImportLiferayWorkspace(liferayWorkspaceRootPath + "/projects/testGradleWorkspace");
 
         importLiferayWorkspaceProject.getDownloadLiferaybundle().select();
 
@@ -118,16 +108,15 @@ public class ImportLiferayWorkspaceProjectTests extends SwtbotBase
 
         String liferayWorkspaceName = "testMavenWorkspace";
 
-        importLiferayWorkspaceProject.setWorkspaceLocation( liferayWorkspaceRootPath + "/projects/testMavenWorkspace" );
-        sleep();
+        wizardAction.prepareImportLiferayWorkspace(liferayWorkspaceRootPath + "/projects/testGradleWorkspace");
+
         assertEquals(
             SELECT_LOCATION_OF_LIFERAY_WORKSPACE_PARENT_DIRECTORY, importLiferayWorkspaceProject.getValidationMsg() );
 
         assertEquals( MAVEN_LIFERAY_WORKSPACE, importLiferayWorkspaceProject.getBuildTypeText().getText() );
         assertFalse( importLiferayWorkspaceProject.getDownloadLiferaybundle().isChecked() );
 
-        importLiferayWorkspaceProject.finish();
-        sleep( 6000 );
+        wizardAction.finishToWait();
 
         projectTree.setFocus();
         bot.viewByTitle( "Package Explorer" ).show();
