@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard.project;
 
@@ -25,77 +24,66 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Ying Xu
  */
-public class NewLiferayModuleInfoWizard extends Wizard
-{
+public class NewLiferayModuleInfoWizard extends Wizard {
 
-    private ToolbarButtonWithTooltip addPropertyKeyBtn;
-    private ToolbarButtonWithTooltip browseBtn;
-    private Text componentClassName;
-    private ToolbarButtonWithTooltip deleteBtn;
-    private ToolbarButtonWithTooltip moveDownBtn;
-    private ToolbarButtonWithTooltip moveUpBtn;
-    private Text packageName;
-    private Table properties;
-    private Text serviceName;
+	public NewLiferayModuleInfoWizard(SWTWorkbenchBot bot) {
+		super(bot, 2);
 
-    public NewLiferayModuleInfoWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, 2 );
+		_componentClassName = new Text(bot, COMPONENT_CLASS_NAME);
+		_packageName = new Text(bot, PACKAGE_NAME);
+		_serviceName = new Text(bot, SERVICE_NAME);
+		_properties = new Table(bot, PROPERTIES);
+		_browseBtn = new ToolbarButtonWithTooltip(bot, BROWSE);
+		_addPropertyKeyBtn = new ToolbarButtonWithTooltip(bot, ADD_PROPERTY_KEY);
+		_moveUpBtn = new ToolbarButtonWithTooltip(bot, MOVE_UP);
+		_moveDownBtn = new ToolbarButtonWithTooltip(bot, MOVE_DOWN);
+		_deleteBtn = new ToolbarButtonWithTooltip(bot, DELETE);
+	}
 
-        componentClassName = new Text( bot, COMPONENT_CLASS_NAME );
-        packageName = new Text( bot, PACKAGE_NAME );
-        serviceName = new Text( bot, SERVICE_NAME );
-        properties = new Table( bot, PROPERTIES );
-        browseBtn = new ToolbarButtonWithTooltip( bot, BROWSE );
-        addPropertyKeyBtn = new ToolbarButtonWithTooltip( bot, ADD_PROPERTY_KEY );
-        moveUpBtn = new ToolbarButtonWithTooltip( bot, MOVE_UP );
-        moveDownBtn = new ToolbarButtonWithTooltip( bot, MOVE_DOWN );
-        deleteBtn = new ToolbarButtonWithTooltip( bot, DELETE );
-    }
+	public ToolbarButtonWithTooltip getAddPropertyKeyBtn() {
+		return _addPropertyKeyBtn;
+	}
 
-    public ToolbarButtonWithTooltip getAddPropertyKeyBtn()
-    {
-        return addPropertyKeyBtn;
-    }
+	public ToolbarButtonWithTooltip getBrowseBtn() {
+		return _browseBtn;
+	}
 
-    public ToolbarButtonWithTooltip getBrowseBtn()
-    {
-        return browseBtn;
-    }
+	public Text getComponentClassName() {
+		return _componentClassName;
+	}
 
-    public Text getComponentClassName()
-    {
-        return componentClassName;
-    }
+	public ToolbarButtonWithTooltip getDeleteBtn() {
+		return _deleteBtn;
+	}
 
-    public ToolbarButtonWithTooltip getDeleteBtn()
-    {
-        return deleteBtn;
-    }
+	public ToolbarButtonWithTooltip getMoveDownBtn() {
+		return _moveDownBtn;
+	}
 
-    public ToolbarButtonWithTooltip getMoveDownBtn()
-    {
-        return moveDownBtn;
-    }
+	public ToolbarButtonWithTooltip getMoveUpBtn() {
+		return _moveUpBtn;
+	}
 
-    public ToolbarButtonWithTooltip getMoveUpBtn()
-    {
-        return moveUpBtn;
-    }
+	public Text getPackageName() {
+		return _packageName;
+	}
 
-    public Text getPackageName()
-    {
-        return packageName;
-    }
+	public Table getProperties() {
+		return _properties;
+	}
 
-    public Table getProperties()
-    {
-        return properties;
-    }
+	public Text getServiceName() {
+		return _serviceName;
+	}
 
-    public Text getServiceName()
-    {
-        return serviceName;
-    }
+	private ToolbarButtonWithTooltip _addPropertyKeyBtn;
+	private ToolbarButtonWithTooltip _browseBtn;
+	private Text _componentClassName;
+	private ToolbarButtonWithTooltip _deleteBtn;
+	private ToolbarButtonWithTooltip _moveDownBtn;
+	private ToolbarButtonWithTooltip _moveUpBtn;
+	private Text _packageName;
+	private Table _properties;
+	private Text _serviceName;
 
 }

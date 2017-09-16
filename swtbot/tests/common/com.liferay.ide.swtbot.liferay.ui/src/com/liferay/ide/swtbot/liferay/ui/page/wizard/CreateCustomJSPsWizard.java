@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -26,84 +25,72 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Vicky Wang
  */
-public class CreateCustomJSPsWizard extends Wizard
-{
+public class CreateCustomJSPsWizard extends Wizard {
 
-    private Button addBtn;
-    private Button addFromLiferayBtn;
-    private Button browseBtn;
-    private Text customJSPfolder;
-    private CheckBox disableJspSyntaxValidation;
-    private Button editBtn;
-    private Table jspFilesToOverride;
-    private Button removeBtn;
-    private Text selectedProjects;
-    private Text webRootFolder;
+	public CreateCustomJSPsWizard(SWTWorkbenchBot bot) {
+		super(bot, 3);
 
-    public CreateCustomJSPsWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, 3 );
+		_selectedProjects = new Text(bot, SELECTED_PROJECT);
+		_webRootFolder = new Text(bot, WEB_ROOT_FOLDER);
+		_customJSPfolder = new Text(bot, CUSTOM_JSP_FOLDER);
+		_jspFilesToOverride = new Table(bot, JSP_FILES_TO_OVERRIDE);
+		_browseBtn = new Button(bot, BROWSE_WITH_DOT);
+		_addFromLiferayBtn = new Button(bot, ADD_FROM_LIFERAY);
+		_addBtn = new Button(bot, ADD_WITH_DOT);
+		_editBtn = new Button(bot, EDIT_WITH_DOT);
+		_removeBtn = new Button(bot, REMOVE_WITH_DOT);
+		_disableJspSyntaxValidation = new CheckBox(bot, DISABLE_JSP_SYNTAX);
+	}
 
-        selectedProjects = new Text( bot, SELECTED_PROJECT );
-        webRootFolder = new Text( bot, WEB_ROOT_FOLDER );
-        customJSPfolder = new Text( bot, CUSTOM_JSP_FOLDER );
-        jspFilesToOverride = new Table( bot, JSP_FILES_TO_OVERRIDE );
-        browseBtn = new Button( bot, BROWSE_WITH_DOT );
-        addFromLiferayBtn = new Button( bot, ADD_FROM_LIFERAY );
-        addBtn = new Button( bot, ADD_WITH_DOT );
-        editBtn = new Button( bot, EDIT_WITH_DOT );
-        removeBtn = new Button( bot, REMOVE_WITH_DOT );
-        disableJspSyntaxValidation = new CheckBox( bot, DISABLE_JSP_SYNTAX );
-    }
+	public Button getAddBtn() {
+		return _addBtn;
+	}
 
-    public Button getAddBtn()
-    {
-        return addBtn;
-    }
+	public Button getAddFromLiferayBtn() {
+		return _addFromLiferayBtn;
+	}
 
-    public Button getAddFromLiferayBtn()
-    {
-        return addFromLiferayBtn;
-    }
+	public Button getBrowseBtn() {
+		return _browseBtn;
+	}
 
-    public Button getBrowseBtn()
-    {
-        return browseBtn;
-    }
+	public Text getCustomJSPfolder() {
+		return _customJSPfolder;
+	}
 
-    public Text getCustomJSPfolder()
-    {
-        return customJSPfolder;
-    }
+	public CheckBox getDisableJspSyntaxValidation() {
+		return _disableJspSyntaxValidation;
+	}
 
-    public CheckBox getDisableJspSyntaxValidation()
-    {
-        return disableJspSyntaxValidation;
-    }
+	public Button getEditBtn() {
+		return _editBtn;
+	}
 
-    public Button getEditBtn()
-    {
-        return editBtn;
-    }
+	public Table getJspFilesToOverride() {
+		return _jspFilesToOverride;
+	}
 
-    public Table getJspFilesToOverride()
-    {
-        return jspFilesToOverride;
-    }
+	public Button getRemoveBtn() {
+		return _removeBtn;
+	}
 
-    public Button getRemoveBtn()
-    {
-        return removeBtn;
-    }
+	public Text getSelectedProject() {
+		return _selectedProjects;
+	}
 
-    public Text getSelectedProject()
-    {
-        return selectedProjects;
-    }
+	public Text getWebRootFolder() {
+		return _webRootFolder;
+	}
 
-    public Text getWebRootFolder()
-    {
-        return webRootFolder;
-    }
+	private Button _addBtn;
+	private Button _addFromLiferayBtn;
+	private Button _browseBtn;
+	private Text _customJSPfolder;
+	private CheckBox _disableJspSyntaxValidation;
+	private Button _editBtn;
+	private Table _jspFilesToOverride;
+	private Button _removeBtn;
+	private Text _selectedProjects;
+	private Text _webRootFolder;
 
 }

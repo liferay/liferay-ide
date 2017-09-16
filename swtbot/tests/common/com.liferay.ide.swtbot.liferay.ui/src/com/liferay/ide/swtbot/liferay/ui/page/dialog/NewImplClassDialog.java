@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.dialog;
 
@@ -24,42 +23,36 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Vicky Wang
  */
-public class NewImplClassDialog extends Dialog
-{
+public class NewImplClassDialog extends Dialog {
 
-    private Button browseBtn;
-    private Text className;
-    private Button createBtn;
-    private Text javaPackage;
+	public NewImplClassDialog(SWTWorkbenchBot bot) {
+		super(bot);
 
-    public NewImplClassDialog( SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_javaPackage = new Text(bot, JAVA_PACKAGE);
+		_createBtn = new Button(bot, CREATE);
+		_className = new Text(bot, CLASSNAME);
+		_browseBtn = new Button(bot, BROWSE_WITH_DOT);
+	}
 
-        javaPackage = new Text( bot, JAVA_PACKAGE );
-        createBtn = new Button( bot, CREATE );
-        className = new Text( bot, CLASSNAME );
-        browseBtn = new Button( bot, BROWSE_WITH_DOT );
-    }
+	public Button getBrowseBtn() {
+		return _browseBtn;
+	}
 
-    public Button getBrowseBtn()
-    {
-        return browseBtn;
-    }
+	public Text getClassName() {
+		return _className;
+	}
 
-    public Text getClassName()
-    {
-        return className;
-    }
+	public Button getCreateBtn() {
+		return _createBtn;
+	}
 
-    public Button getCreateBtn()
-    {
-        return createBtn;
-    }
+	public Text getJavaPackage() {
+		return _javaPackage;
+	}
 
-    public Text getJavaPackage()
-    {
-        return javaPackage;
-    }
+	private Button _browseBtn;
+	private Text _className;
+	private Button _createBtn;
+	private Text _javaPackage;
 
 }

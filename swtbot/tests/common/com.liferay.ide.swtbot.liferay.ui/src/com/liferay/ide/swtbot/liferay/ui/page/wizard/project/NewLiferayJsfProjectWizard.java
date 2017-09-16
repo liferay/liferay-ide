@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard.project;
 
@@ -22,21 +21,18 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Ying Xu
  */
-public class NewLiferayJsfProjectWizard extends NewProjectWizard
-{
+public class NewLiferayJsfProjectWizard extends NewProjectWizard {
 
-    private ComboBox componentSuite;
+	public NewLiferayJsfProjectWizard(SWTWorkbenchBot bot) {
+		super(bot, 2);
 
-    public NewLiferayJsfProjectWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, 2 );
+		_componentSuite = new ComboBox(bot, COMPONENT_SUITE);
+	}
 
-        componentSuite = new ComboBox( bot, COMPONENT_SUITE );
-    }
+	public ComboBox getComponentSuite() {
+		return _componentSuite;
+	}
 
-    public ComboBox getComponentSuite()
-    {
-        return componentSuite;
-    }
+	private ComboBox _componentSuite;
 
 }

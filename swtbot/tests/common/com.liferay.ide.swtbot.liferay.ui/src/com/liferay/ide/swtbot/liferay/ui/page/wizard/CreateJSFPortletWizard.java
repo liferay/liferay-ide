@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -24,125 +23,105 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Li Lu
  */
-public class CreateJSFPortletWizard extends CreateLiferayPortletWizard
-{
+public class CreateJSFPortletWizard extends CreateLiferayPortletWizard {
 
-    private CheckBox createViewFiles;
-    private Radio iceFaces;
-    private Radio liferayFacesAlloy;
-    private Radio primeFaces;
-    private Radio richFaces;
-    private Radio standardJsf;
-    private Text viewFolder;
+	public CreateJSFPortletWizard(SWTWorkbenchBot bot) {
+		super(bot, 4);
 
-    public CreateJSFPortletWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, 4 );
+		_createViewFiles = new CheckBox(bot, CREATE_VIRW_FILES);
+		_viewFolder = new Text(bot, VIEW_FOLDER);
+		_standardJsf = new Radio(bot, STANDARD_JSF);
+		_iceFaces = new Radio(bot, ICEFACES);
+		_liferayFacesAlloy = new Radio(bot, LIFERAY_FACES_ALLOY);
+		_primeFaces = new Radio(bot, PRIMEFACES);
+		_richFaces = new Radio(bot, RICHFACES);
+	}
 
-        createViewFiles = new CheckBox( bot, CREATE_VIRW_FILES );
-        viewFolder = new Text( bot, VIEW_FOLDER );
-        standardJsf = new Radio( bot, STANDARD_JSF );
-        iceFaces = new Radio( bot, ICEFACES );
-        liferayFacesAlloy = new Radio( bot, LIFERAY_FACES_ALLOY );
-        primeFaces = new Radio( bot, PRIMEFACES );
-        richFaces = new Radio( bot, RICHFACES );
-    }
+	public void deSelectCreateViewFiles() {
+		_createViewFiles.deselect();
+	}
 
-    public boolean isLiferayFacesAlloySelected()
-    {
-        return liferayFacesAlloy.isSelected();
-    }
+	public String getViewFolderText() {
+		return _viewFolder.getText();
+	}
 
-    public boolean _isStandardJSFSelected()
-    {
-        return standardJsf.isSelected();
-    }
+	public boolean isCreateViewFilesChecked() {
+		return _createViewFiles.isChecked();
+	}
 
-    public void deSelectCreateViewFiles()
-    {
-        createViewFiles.deselect();
-    }
+	public boolean isICEfacesEnabled() {
+		return _iceFaces.isEnabled();
+	}
 
-    public String getViewFolderText()
-    {
-        return viewFolder.getText();
-    }
+	public boolean isICEfacesSelected() {
+		return _iceFaces.isSelected();
+	}
 
-    public boolean isCreateViewFilesChecked()
-    {
-        return createViewFiles.isChecked();
-    }
+	public boolean isliferayFacesAlloyEnbled() {
+		return _liferayFacesAlloy.isEnabled();
+	}
 
-    public boolean isICEfacesEnabled()
-    {
-        return iceFaces.isEnabled();
-    }
+	public boolean isLiferayFacesAlloySelected() {
+		return _liferayFacesAlloy.isSelected();
+	}
 
-    public boolean isICEfacesSelected()
-    {
-        return iceFaces.isSelected();
-    }
+	public boolean isPrimeFacesEnbled() {
+		return _primeFaces.isEnabled();
+	}
 
-    public boolean isliferayFacesAlloyEnbled()
-    {
-        return liferayFacesAlloy.isEnabled();
-    }
+	public boolean isPrimeFacesSelected() {
+		return _primeFaces.isSelected();
+	}
 
-    public boolean isPrimeFacesEnbled()
-    {
-        return primeFaces.isEnabled();
-    }
+	public boolean isRichFacesEnbled() {
+		return _richFaces.isEnabled();
+	}
 
-    public boolean isPrimeFacesSelected()
-    {
-        return primeFaces.isSelected();
-    }
+	public boolean isRichFacesSelected() {
+		return _richFaces.isSelected();
+	}
 
-    public boolean isRichFacesEnbled()
-    {
-        return richFaces.isEnabled();
-    }
+	public boolean isStandardJSFEnabled() {
+		return _standardJsf.isEnabled();
+	}
 
-    public boolean isRichFacesSelected()
-    {
-        return richFaces.isSelected();
-    }
+	public boolean isStandardJSFSelected() {
+		return _standardJsf.isSelected();
+	}
 
-    public boolean isStandardJSFEnabled()
-    {
-        return standardJsf.isEnabled();
-    }
+	public boolean isViewFolderEnabled() {
+		return _viewFolder.isEnabled();
+	}
 
-    public boolean isViewFolderEnabled()
-    {
-        return viewFolder.isEnabled();
-    }
+	public void selectCreateViewFiles() {
+		_createViewFiles.select();
+	}
 
-    public void selectCreateViewFiles()
-    {
-        createViewFiles.select();
-    }
+	public void selectViewTemplate(String lable) {
+		switch (lable) {
+			case STANDARD_JSF:
+				_standardJsf.click();
+			case ICEFACES:
+				_iceFaces.click();
+			case LIFERAY_FACES_ALLOY:
+				_liferayFacesAlloy.click();
+			case PRIMEFACES:
+				_primeFaces.click();
+			case RICHFACES:
+				_richFaces.click();
+		}
+	}
 
-    public void selectViewTemplate( String lable )
-    {
-        switch( lable )
-        {
-        case STANDARD_JSF:
-            standardJsf.click();
-        case ICEFACES:
-            iceFaces.click();
-        case LIFERAY_FACES_ALLOY:
-            liferayFacesAlloy.click();
-        case PRIMEFACES:
-            primeFaces.click();
-        case RICHFACES:
-            richFaces.click();
-        }
-    }
+	public void setViewFolderText(String text) {
+		_viewFolder.setText(text);
+	}
 
-    public void setViewFolderText( String text )
-    {
-        viewFolder.setText( text );
-    }
+	private CheckBox _createViewFiles;
+	private Radio _iceFaces;
+	private Radio _liferayFacesAlloy;
+	private Radio _primeFaces;
+	private Radio _richFaces;
+	private Radio _standardJsf;
+	private Text _viewFolder;
 
 }

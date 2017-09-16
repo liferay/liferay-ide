@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -24,35 +23,30 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Ashley Yuan
  */
-public class ImportLiferayModuleProjectWizard extends Wizard
-{
+public class ImportLiferayModuleProjectWizard extends Wizard {
 
-    private ToolbarButtonWithTooltip browseBtn;
-    private Text buildType;
-    private Text location;
+	public ImportLiferayModuleProjectWizard(SWTWorkbenchBot bot) {
+		super(bot, IMPORT_LIFERAY_MODULE_PROJECT, 2);
 
-    public ImportLiferayModuleProjectWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, IMPORT_LIFERAY_MODULE_PROJECT, 2 );
+		_location = new Text(bot, LOCATION_WITH_COLON);
+		_buildType = new Text(bot, BUILD_TYPE);
+		_browseBtn = new ToolbarButtonWithTooltip(bot, BROWSE);
+	}
 
-        location = new Text( bot, LOCATION_WITH_COLON );
-        buildType = new Text( bot, BUILD_TYPE );
-        browseBtn = new ToolbarButtonWithTooltip( bot, BROWSE );
-    }
+	public ToolbarButtonWithTooltip getBrowseBtn() {
+		return _browseBtn;
+	}
 
-    public ToolbarButtonWithTooltip getBrowseBtn()
-    {
-        return browseBtn;
-    }
+	public Text getBuildType() {
+		return _buildType;
+	}
 
-    public Text getBuildType()
-    {
-        return buildType;
-    }
+	public Text getLocation() {
+		return _location;
+	}
 
-    public Text getLocation()
-    {
-        return location;
-    }
+	private ToolbarButtonWithTooltip _browseBtn;
+	private Text _buildType;
+	private Text _location;
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard.project;
 
@@ -25,161 +24,138 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Ashley Yuan
  */
-public class ModifiersInterfacesMethodStubsWizard extends Wizard
-{
+public class ModifiersInterfacesMethodStubsWizard extends Wizard {
 
-    private Button addBtn;
-    private CheckBox constrcutFromSuperClass;
-    private CheckBox destory;
-    private CheckBox doAbout;
-    private CheckBox doConfig;
-    private CheckBox doEdit;
-    private CheckBox doEditDefaults;
-    private CheckBox doEditGuest;
-    private CheckBox doHelp;
-    private CheckBox doPreview;
-    private CheckBox doPrint;
-    private CheckBox doView;
-    private CheckBox inheritedAbstractMethods;
-    private CheckBox init;
-    private Table interfaces;
-    private CheckBox isAbstract;
-    private CheckBox isFinal;
-    private CheckBox isPublic;
-    private CheckBox processAction;
-    private Button removeBtn;
-    private CheckBox serveResource;
+	public ModifiersInterfacesMethodStubsWizard(SWTWorkbenchBot bot) {
+		super(bot, 0);
 
-    public ModifiersInterfacesMethodStubsWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, 0 );
+		_isPublic = new CheckBox(bot, PUBLIC);
+		_isAbstract = new CheckBox(bot, ABSTRACT);
+		_isFinal = new CheckBox(bot, FINAL);
+		_interfaces = new Table(bot, INTERFACES);
+		_addBtn = new Button(bot, ADD_WITH_DOT);
+		_removeBtn = new Button(bot, REMOVE);
+		_constrcutFromSuperClass = new CheckBox(bot, CONSTRUCTORS_FROM_SUPERCLASS);
+		_inheritedAbstractMethods = new CheckBox(bot, INHERITED_ABSTRACT_METHODS);
+		_init = new CheckBox(bot, INIT);
+		_destory = new CheckBox(bot, DESTROY);
+		_doView = new CheckBox(bot, DOVIEW);
+		_doEdit = new CheckBox(bot, DOEDIT);
+		_doHelp = new CheckBox(bot, DOHELP);
+		_doAbout = new CheckBox(bot, DOABOUT);
+		_doConfig = new CheckBox(bot, DOCONFIG);
+		_doEditDefaults = new CheckBox(bot, DOEDITDEFAULTS);
+		_doEditGuest = new CheckBox(bot, DOEDITGUEST);
+		_doPreview = new CheckBox(bot, DOPREVIEW);
+		_doPrint = new CheckBox(bot, DOPRINT);
+		_processAction = new CheckBox(bot, PROCESSACTION);
+		_serveResource = new CheckBox(bot, SERVERESOURCE);
+	}
 
-        isPublic = new CheckBox( bot, PUBLIC );
-        isAbstract = new CheckBox( bot, ABSTRACT );
-        isFinal= new CheckBox( bot, FINAL);
-        interfaces = new Table( bot, INTERFACES );
-        addBtn = new Button( bot, ADD_WITH_DOT );
-        removeBtn = new Button( bot, REMOVE );
-        constrcutFromSuperClass = new CheckBox( bot, CONSTRUCTORS_FROM_SUPERCLASS );
-        inheritedAbstractMethods = new CheckBox( bot, INHERITED_ABSTRACT_METHODS );
-        init = new CheckBox( bot, INIT );
-        destory = new CheckBox( bot, DESTROY );
-        doView = new CheckBox( bot, DOVIEW );
-        doEdit = new CheckBox( bot, DOEDIT );
-        doHelp = new CheckBox( bot, DOHELP );
-        doAbout = new CheckBox( bot, DOABOUT );
-        doConfig = new CheckBox( bot, DOCONFIG );
-        doEditDefaults = new CheckBox( bot, DOEDITDEFAULTS );
-        doEditGuest = new CheckBox( bot, DOEDITGUEST );
-        doPreview = new CheckBox( bot, DOPREVIEW );
-        doPrint = new CheckBox( bot, DOPRINT );
-        processAction = new CheckBox( bot, PROCESSACTION );
-        serveResource = new CheckBox( bot, SERVERESOURCE );
-    }
+	public Button getAddBtn() {
+		return _addBtn;
+	}
 
-    public Button getAddBtn()
-    {
-        return addBtn;
-    }
+	public CheckBox getConstrcutFromSuperClass() {
+		return _constrcutFromSuperClass;
+	}
 
-    public CheckBox getConstrcutFromSuperClass()
-    {
-        return constrcutFromSuperClass;
-    }
+	public CheckBox getDestory() {
+		return _destory;
+	}
 
-    public CheckBox getDestory()
-    {
-        return destory;
-    }
+	public CheckBox getDoAbout() {
+		return _doAbout;
+	}
 
-    public CheckBox getDoAbout()
-    {
-        return doAbout;
-    }
+	public CheckBox getDoConfig() {
+		return _doConfig;
+	}
 
-    public CheckBox getDoConfig()
-    {
-        return doConfig;
-    }
+	public CheckBox getDoEdit() {
+		return _doEdit;
+	}
 
-    public CheckBox getDoEdit()
-    {
-        return doEdit;
-    }
+	public CheckBox getDoEditDefaults() {
+		return _doEditDefaults;
+	}
 
-    public CheckBox getDoEditDefaults()
-    {
-        return doEditDefaults;
-    }
+	public CheckBox getDoEditGuest() {
+		return _doEditGuest;
+	}
 
-    public CheckBox getDoEditGuest()
-    {
-        return doEditGuest;
-    }
+	public CheckBox getDoHelp() {
+		return _doHelp;
+	}
 
-    public CheckBox getDoHelp()
-    {
-        return doHelp;
-    }
+	public CheckBox getDoPreview() {
+		return _doPreview;
+	}
 
-    public CheckBox getDoPreview()
-    {
-        return doPreview;
-    }
+	public CheckBox getDoPrint() {
+		return _doPrint;
+	}
 
-    public CheckBox getDoPrint()
-    {
-        return doPrint;
-    }
+	public CheckBox getDoView() {
+		return _doView;
+	}
 
-    public CheckBox getDoView()
-    {
-        return doView;
-    }
+	public CheckBox getInheritedAbstractMethods() {
+		return _inheritedAbstractMethods;
+	}
 
-    public CheckBox getInheritedAbstractMethods()
-    {
-        return inheritedAbstractMethods;
-    }
+	public CheckBox getInit() {
+		return _init;
+	}
 
-    public CheckBox getInit()
-    {
-        return init;
-    }
+	public Table getInterfaces() {
+		return _interfaces;
+	}
 
-    public Table getInterfaces()
-    {
-        return interfaces;
-    }
+	public CheckBox getIsAbstract() {
+		return _isAbstract;
+	}
 
-    public CheckBox getIsAbstract()
-    {
-        return isAbstract;
-    }
+	public CheckBox getIsFinal() {
+		return _isFinal;
+	}
 
-    public CheckBox getIsFinal()
-    {
-        return isFinal;
-    }
+	public CheckBox getIsPublic() {
+		return _isPublic;
+	}
 
-    public CheckBox getIsPublic()
-    {
-        return isPublic;
-    }
+	public CheckBox getProcessAction() {
+		return _processAction;
+	}
 
-    public CheckBox getProcessAction()
-    {
-        return processAction;
-    }
+	public Button getRemoveBtn() {
+		return _removeBtn;
+	}
 
-    public Button getRemoveBtn()
-    {
-        return removeBtn;
-    }
+	public CheckBox getServeResource() {
+		return _serveResource;
+	}
 
-    public CheckBox getServeResource()
-    {
-        return serveResource;
-    }
+	private Button _addBtn;
+	private CheckBox _constrcutFromSuperClass;
+	private CheckBox _destory;
+	private CheckBox _doAbout;
+	private CheckBox _doConfig;
+	private CheckBox _doEdit;
+	private CheckBox _doEditDefaults;
+	private CheckBox _doEditGuest;
+	private CheckBox _doHelp;
+	private CheckBox _doPreview;
+	private CheckBox _doPrint;
+	private CheckBox _doView;
+	private CheckBox _inheritedAbstractMethods;
+	private CheckBox _init;
+	private Table _interfaces;
+	private CheckBox _isAbstract;
+	private CheckBox _isFinal;
+	private CheckBox _isPublic;
+	private CheckBox _processAction;
+	private Button _removeBtn;
+	private CheckBox _serveResource;
 
 }

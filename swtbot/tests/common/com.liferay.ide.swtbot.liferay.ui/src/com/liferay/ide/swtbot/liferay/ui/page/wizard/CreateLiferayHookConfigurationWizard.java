@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -24,54 +23,46 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Vicky Wang
  */
-public class CreateLiferayHookConfigurationWizard extends Wizard
-{
+public class CreateLiferayHookConfigurationWizard extends Wizard {
 
-    private CheckBox customJsps;
-    private ComboBox hookPluginProject;
-    private CheckBox languageProperties;
-    private CheckBox portalProperties;
-    private CheckBox services;
+	public CreateLiferayHookConfigurationWizard(SWTWorkbenchBot bot) {
+		super(bot, NEW_LIFERAY_HOOK, 0);
 
-    public CreateLiferayHookConfigurationWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, NEW_LIFERAY_HOOK, 0 );
+		_customJsps = new CheckBox(bot, CUSTOM_JSPS);
+		_portalProperties = new CheckBox(bot, PORTAL_PROPERTIES);
+		_services = new CheckBox(bot, SERVICES);
+		_languageProperties = new CheckBox(bot, LANGUAGE_PROPERTIES);
+		_hookPluginProject = new ComboBox(bot, HOOK_PLUGIN_PROJECT);
+	}
 
-        customJsps = new CheckBox( bot, CUSTOM_JSPS );
-        portalProperties = new CheckBox( bot, PORTAL_PROPERTIES );
-        services = new CheckBox( bot, SERVICES );
-        languageProperties = new CheckBox( bot, LANGUAGE_PROPERTIES );
-        hookPluginProject = new ComboBox( bot, HOOK_PLUGIN_PROJECT );
-    }
+	public CheckBox getCustomJsps() {
+		return _customJsps;
+	}
 
-    public CheckBox getCustomJsps()
-    {
-        return customJsps;
-    }
+	public ComboBox getHookPluginProjectComboBox() {
+		return _hookPluginProject;
+	}
 
-    public ComboBox getHookPluginProjectComboBox()
-    {
-        return hookPluginProject;
-    }
+	public CheckBox getLanguageProperties() {
+		return _languageProperties;
+	}
 
-    public CheckBox getLanguageProperties()
-    {
-        return languageProperties;
-    }
+	public CheckBox getPortalProperties() {
+		return _portalProperties;
+	}
 
-    public CheckBox getPortalProperties()
-    {
-        return portalProperties;
-    }
+	public CheckBox getServices() {
+		return _services;
+	}
 
-    public CheckBox getServices()
-    {
-        return services;
-    }
+	public void setHookPluginProjectComboBox(String hookPluginProjectComboBox) {
+		this._hookPluginProject.setText(hookPluginProjectComboBox);
+	}
 
-    public void setHookPluginProjectComboBox( String hookPluginProjectComboBox )
-    {
-        this.hookPluginProject.setText( hookPluginProjectComboBox );
-    }
+	private CheckBox _customJsps;
+	private ComboBox _hookPluginProject;
+	private CheckBox _languageProperties;
+	private CheckBox _portalProperties;
+	private CheckBox _services;
 
 }

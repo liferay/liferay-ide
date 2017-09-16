@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -25,61 +24,52 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Li Lu
  */
-public class CreateLayoutTemplateWizardWizard extends Wizard
-{
+public class CreateLayoutTemplateWizardWizard extends Wizard {
 
-    private Text id;
-    private ComboBox layoutPluginProjects;
-    private Text name;
-    private Text templateFile;
-    private Text thumbnailFile;
-    private Text wapTemplateFile;
+	public CreateLayoutTemplateWizardWizard(SWTWorkbenchBot bot) {
+		super(bot, 5);
 
-    public CreateLayoutTemplateWizardWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, 5 );
+		_layoutPluginProjects = new ComboBox(bot, LAYOUT_PLUGIN_PROJECT);
+		_name = new Text(bot, NAME);
+		_id = new Text(bot, ID);
+		_templateFile = new Text(bot, TEMPLATE_FILE);
+		_wapTemplateFile = new Text(bot, WAP_TEMPLATE_FILE);
+		_thumbnailFile = new Text(bot, THUMBNAIL_FILE);
+	}
 
-        layoutPluginProjects = new ComboBox( bot, LAYOUT_PLUGIN_PROJECT );
-        name = new Text( bot, NAME );
-        id = new Text( bot, ID );
-        templateFile = new Text( bot, TEMPLATE_FILE );
-        wapTemplateFile = new Text( bot, WAP_TEMPLATE_FILE );
-        thumbnailFile = new Text( bot, THUMBNAIL_FILE );
-    }
+	public void clickBrowseButton(int index) {
+		new Button(bot, index).click();
+	}
 
-    public void clickBrowseButton( int index )
-    {
-        new Button( bot, index ).click();
-    }
+	public Text getId() {
+		return _id;
+	}
 
-    public Text getId()
-    {
-        return id;
-    }
+	public ComboBox getLayoutPluginProjects() {
+		return _layoutPluginProjects;
+	}
 
-    public ComboBox getLayoutPluginProjects()
-    {
-        return layoutPluginProjects;
-    }
+	public Text getName() {
+		return _name;
+	}
 
-    public Text getName()
-    {
-        return name;
-    }
+	public Text getTemplateFile() {
+		return _templateFile;
+	}
 
-    public Text getTemplateFile()
-    {
-        return templateFile;
-    }
+	public Text getThumbnailFile() {
+		return _thumbnailFile;
+	}
 
-    public Text getThumbnailFile()
-    {
-        return thumbnailFile;
-    }
+	public Text getWapTemplateFile() {
+		return _wapTemplateFile;
+	}
 
-    public Text getWapTemplateFile()
-    {
-        return wapTemplateFile;
-    }
+	private Text _id;
+	private ComboBox _layoutPluginProjects;
+	private Text _name;
+	private Text _templateFile;
+	private Text _thumbnailFile;
+	private Text _wapTemplateFile;
 
 }

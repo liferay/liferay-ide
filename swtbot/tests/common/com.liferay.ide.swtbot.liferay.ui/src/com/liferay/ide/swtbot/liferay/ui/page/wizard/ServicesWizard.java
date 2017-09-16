@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -25,56 +24,48 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Vicky Wang
  */
-public class ServicesWizard extends Wizard
-{
+public class ServicesWizard extends Wizard {
 
-    private Button addBtn;
-    private Dialog addServiceDialog;
-    private Dialog addServiceWrapperDialog;
-    private Table definePortalServices;
-    private Button editBtn;
-    private Button removeBtn;
+	public ServicesWizard(SWTWorkbenchBot bot) {
+		super(bot, 0);
 
-    public ServicesWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, 0 );
+		_addServiceDialog = new Dialog(bot, ADD_SERVICE);
+		_addServiceWrapperDialog = new Dialog(bot, ADD_SERVICE_WRAPPER);
+		_definePortalServices = new Table(bot, DEFINE_PORTAL_SERVICES_TO_EXTEND);
+		_addBtn = new Button(bot, ADD_WITH_DOT);
+		_editBtn = new Button(bot, EDIT_WITH_DOT);
+		_removeBtn = new Button(bot, REMOVE_WITH_DOT);
+	}
 
-        addServiceDialog = new Dialog( bot, ADD_SERVICE );
-        addServiceWrapperDialog = new Dialog( bot, ADD_SERVICE_WRAPPER );
-        definePortalServices = new Table( bot, DEFINE_PORTAL_SERVICES_TO_EXTEND );
-        addBtn = new Button( bot, ADD_WITH_DOT );
-        editBtn = new Button( bot, EDIT_WITH_DOT );
-        removeBtn = new Button( bot, REMOVE_WITH_DOT );
-    }
+	public Button getAddBtn() {
+		return _addBtn;
+	}
 
-    public Button getAddBtn()
-    {
-        return addBtn;
-    }
+	public Dialog getAddServiceDialog() {
+		return _addServiceDialog;
+	}
 
-    public Dialog getAddServiceDialog()
-    {
-        return addServiceDialog;
-    }
+	public Dialog getAddServiceWrapperDialog() {
+		return _addServiceWrapperDialog;
+	}
 
-    public Dialog getAddServiceWrapperDialog()
-    {
-        return addServiceWrapperDialog;
-    }
+	public Table getDefinePortalServices() {
+		return _definePortalServices;
+	}
 
-    public Table getDefinePortalServices()
-    {
-        return definePortalServices;
-    }
+	public Button getEditBtn() {
+		return _editBtn;
+	}
 
-    public Button getEditBtn()
-    {
-        return editBtn;
-    }
+	public Button getRemoveBtn() {
+		return _removeBtn;
+	}
 
-    public Button getRemoveBtn()
-    {
-        return removeBtn;
-    }
+	private Button _addBtn;
+	private Dialog _addServiceDialog;
+	private Dialog _addServiceWrapperDialog;
+	private Table _definePortalServices;
+	private Button _editBtn;
+	private Button _removeBtn;
 
 }

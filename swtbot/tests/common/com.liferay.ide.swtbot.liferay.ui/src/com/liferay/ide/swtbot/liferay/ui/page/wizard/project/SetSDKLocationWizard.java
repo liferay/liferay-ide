@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard.project;
 
@@ -25,21 +24,18 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  * @author Ying Xu
  * @author Ashley Yuan
  */
-public class SetSDKLocationWizard extends Wizard
-{
+public class SetSDKLocationWizard extends Wizard {
 
-    private Text sdkLocation;
+	public SetSDKLocationWizard(SWTWorkbenchBot bot) {
+		super(bot, 1);
 
-    public SetSDKLocationWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, 1 );
+		_sdkLocation = new Text(bot, SDK_LOCATION);
+	}
 
-        sdkLocation = new Text( bot, SDK_LOCATION );
-    }
+	public Text getSdkLocation() {
+		return _sdkLocation;
+	}
 
-    public Text getSdkLocation()
-    {
-        return sdkLocation;
-    }
+	private Text _sdkLocation;
 
 }

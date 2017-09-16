@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -26,84 +25,70 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Ying Xu
  */
-public class ServiceBuilderWizard extends Wizard
-{
+public class ServiceBuilderWizard extends Wizard {
 
-    private Text author;
-    private Button browseButton;
-    private CheckBox includeSampleEntity;
-    private Text namespace;
-    private Text packagePath;
-    private ComboBox pluginProjects;
-    private Text serviceFile;
+	public ServiceBuilderWizard(SWTWorkbenchBot bot) {
+		super(bot, NEW_SERVICE_BUILDER, 2);
 
-    public ServiceBuilderWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, NEW_SERVICE_BUILDER, 2 );
+		_packagePath = new Text(bot, PACKAGE_PATH);
+		_namespace = new Text(bot, NAMESPACE);
+		_author = new Text(bot, AUTHOR);
+		_serviceFile = new Text(bot, SERVICE_FILE);
+		_includeSampleEntity = new CheckBox(bot, INCLUDE_SAMPLE_ENTITY_IN_NEW_FILE);
+		_pluginProjects = new ComboBox(bot, PLUGIN_PROJECT);
+		_browseButton = new Button(bot, BROWSE_WITH_DOT);
+	}
 
-        packagePath = new Text( bot, PACKAGE_PATH );
-        namespace = new Text( bot, NAMESPACE );
-        author = new Text( bot, AUTHOR );
-        serviceFile = new Text( bot, SERVICE_FILE );
-        includeSampleEntity = new CheckBox( bot, INCLUDE_SAMPLE_ENTITY_IN_NEW_FILE );
-        pluginProjects = new ComboBox( bot, PLUGIN_PROJECT );
-        browseButton = new Button( bot, BROWSE_WITH_DOT );
-    }
+	public void createServiceBuilder(String packagePathText, String namespaceText) {
+		createServiceBuilder(packagePathText, namespaceText, true);
+	}
 
-    public void createServiceBuilder( String packagePathText, String namespaceText )
-    {
-        createServiceBuilder( packagePathText, namespaceText, true );
-    }
+	public void createServiceBuilder(String packagePathText, String namespaceText, boolean includeSampleEntityValue) {
+		_packagePath.setText(packagePathText);
+		_namespace.setText(namespaceText);
 
-    public void createServiceBuilder(
-        String packagePathText, String namespaceText, boolean includeSampleEntityValue )
-    {
-        packagePath.setText( packagePathText );
-        namespace.setText( namespaceText );
+		if (includeSampleEntityValue) {
+			_includeSampleEntity.select();
+		}
+		else {
+			_includeSampleEntity.deselect();
+		}
+	}
 
-        if( includeSampleEntityValue )
-        {
-            includeSampleEntity.select();
-        }
-        else
-        {
-            includeSampleEntity.deselect();
-        }
-    }
+	public Text getAuthor() {
+		return _author;
+	}
 
-    public Text getAuthor()
-    {
-        return author;
-    }
+	public Button getBrowseButton() {
+		return _browseButton;
+	}
 
-    public Button getBrowseButton()
-    {
-        return browseButton;
-    }
+	public CheckBox getIncludeSampleEntity() {
+		return _includeSampleEntity;
+	}
 
-    public CheckBox getIncludeSampleEntity()
-    {
-        return includeSampleEntity;
-    }
+	public Text getNamespace() {
+		return _namespace;
+	}
 
-    public Text getNamespace()
-    {
-        return namespace;
-    }
+	public Text getPackagePath() {
+		return _packagePath;
+	}
 
-    public Text getPackagePath()
-    {
-        return packagePath;
-    }
+	public ComboBox getPluginProjects() {
+		return _pluginProjects;
+	}
 
-    public ComboBox getPluginProjects()
-    {
-        return pluginProjects;
-    }
+	public Text getServiceFile() {
+		return _serviceFile;
+	}
 
-    public Text getServiceFile()
-    {
-        return serviceFile;
-    }
+	private Text _author;
+	private Button _browseButton;
+	private CheckBox _includeSampleEntity;
+	private Text _namespace;
+	private Text _packagePath;
+	private ComboBox _pluginProjects;
+	private Text _serviceFile;
 
 }

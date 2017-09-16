@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -24,35 +23,30 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class NewLiferay7RuntimeWizard extends Wizard
-{
+public class NewLiferay7RuntimeWizard extends Wizard {
 
-    private Text location;
-    private Text name;
-    private Text type;
+	public NewLiferay7RuntimeWizard(SWTWorkbenchBot bot) {
+		super(bot, 3);
 
-    public NewLiferay7RuntimeWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, 3 );
+		_location = new Text(bot, LIFERAY_PORTAL_BUNDLE_DIRECTORY);
+		_type = new Text(bot, DETECTED_PORTAL_BUNDLE_TYPE);
+		_name = new Text(bot, NAME);
+	}
 
-        location = new Text( bot, LIFERAY_PORTAL_BUNDLE_DIRECTORY );
-        type = new Text( bot, DETECTED_PORTAL_BUNDLE_TYPE );
-        name = new Text( bot, NAME );
-    }
+	public Text getLocation() {
+		return _location;
+	}
 
-    public Text getName()
-    {
-        return name;
-    }
+	public Text getName() {
+		return _name;
+	}
 
-    public Text getPortalBundleType()
-    {
-        return type;
-    }
+	public Text getPortalBundleType() {
+		return _type;
+	}
 
-    public Text getLocation()
-    {
-        return location;
-    }
+	private Text _location;
+	private Text _name;
+	private Text _type;
 
 }

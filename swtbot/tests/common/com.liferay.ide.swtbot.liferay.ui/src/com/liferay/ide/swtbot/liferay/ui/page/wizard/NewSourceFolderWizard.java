@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -25,69 +24,59 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Ashley Yuan
  */
-public class NewSourceFolderWizard extends Wizard
-{
+public class NewSourceFolderWizard extends Wizard {
 
-    private Text folderName;
-    private CheckBox ignoreOptionCompileProblems;
-    private Text projectName;
-    private CheckBox updateExclusionFilters;
+	public NewSourceFolderWizard(SWTWorkbenchBot bot) {
+		super(bot, 2);
 
-    public NewSourceFolderWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, 2 );
+		_projectName = new Text(bot, PROJECT_NAME);
+		_folderName = new Text(bot, FOLDER_NAME);
+		_updateExclusionFilters = new CheckBox(bot, UPDATE_EXCLUSION_FILTERS);
+		_ignoreOptionCompileProblems = new CheckBox(bot, IGNORE_OPTIONAL_COMPILE_PROBLEMS);
+	}
 
-        projectName = new Text( bot, PROJECT_NAME );
-        folderName = new Text( bot, FOLDER_NAME );
-        updateExclusionFilters = new CheckBox( bot, UPDATE_EXCLUSION_FILTERS );
-        ignoreOptionCompileProblems = new CheckBox( bot, IGNORE_OPTIONAL_COMPILE_PROBLEMS );
-    }
+	public Text getFolderName() {
+		return _folderName;
+	}
 
-    public Text getFolderName()
-    {
-        return folderName;
-    }
+	public CheckBox getIgnoreOptionCompileProblems() {
+		return _ignoreOptionCompileProblems;
+	}
 
-    public CheckBox getIgnoreOptionCompileProblems()
-    {
-        return ignoreOptionCompileProblems;
-    }
+	public Text getProjectName() {
+		return _projectName;
+	}
 
-    public Text getProjectName()
-    {
-        return projectName;
-    }
+	public CheckBox getUpdateExclusionFilters() {
+		return _updateExclusionFilters;
+	}
 
-    public CheckBox getUpdateExclusionFilters()
-    {
-        return updateExclusionFilters;
-    }
+	public void newSourceFolder(String folderName) {
+		newSourceFolder(StringPool.BLANK, folderName, false, false);
+	}
 
-    public void newSourceFolder( String folderName )
-    {
-        newSourceFolder( StringPool.BLANK, folderName, false, false );
-    }
+	public void newSourceFolder(
+		String projectNameValue, String folderNameValue, boolean updateExclusionFiltersValue,
+		boolean ignoreOptionCompileProblemsValue) {
 
-    public void newSourceFolder(
-        String projectNameValue, String folderNameValue, boolean updateExclusionFiltersValue,
-        boolean IgnoreOptionCompileProblemsValue )
-    {
-        if( projectName != null && projectName.equals( "" ) )
-        {
-            projectName.setText( projectNameValue );
-        }
+		if ((_projectName != null) && _projectName.equals(StringPool.BLANK)) {
+			_projectName.setText(projectNameValue);
+		}
 
-        folderName.setText( folderNameValue );
+		_folderName.setText(folderNameValue);
 
-        if( updateExclusionFiltersValue )
-        {
-            updateExclusionFilters.select();
-        }
+		if (updateExclusionFiltersValue) {
+			_updateExclusionFilters.select();
+		}
 
-        if( IgnoreOptionCompileProblemsValue )
-        {
-            ignoreOptionCompileProblems.select();
-        }
-    }
+		if (ignoreOptionCompileProblemsValue) {
+			_ignoreOptionCompileProblems.select();
+		}
+	}
+
+	private Text _folderName;
+	private CheckBox _ignoreOptionCompileProblems;
+	private Text _projectName;
+	private CheckBox _updateExclusionFilters;
 
 }

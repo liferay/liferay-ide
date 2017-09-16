@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.tree;
 
@@ -28,126 +27,107 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
  * @author Li Lu
  * @author Ying Xu
  */
-public class ServerTree extends TreeItem
-{
+public class ServerTree extends TreeItem {
 
-    private AddAndRemoveDialog addAndRemoveDialog;
-    private String serverName;
+	public ServerTree(SWTWorkbenchBot bot) {
+		this(bot, StringPool.BLANK);
+	}
 
-    int serverTreeIndex = 1;
+	public ServerTree(SWTWorkbenchBot bot, String serverNameValue) {
+		super(bot);
 
-    public ServerTree( SWTWorkbenchBot bot )
-    {
-        this( bot, StringPool.BLANK );
-    }
+		_serverName = serverNameValue;
 
-    public ServerTree( SWTWorkbenchBot bot, String serverNameValue )
-    {
-        super( bot );
+		_addAndRemoveDialog = new AddAndRemoveDialog(bot);
+	}
 
-        serverName = serverNameValue;
+	public void addALL() {
+		doAction(ADD_AND_REMOVE);
 
-        addAndRemoveDialog = new AddAndRemoveDialog( bot );
-    }
+		_addAndRemoveDialog.getAddAllBtn().click();
 
-    public void addALL()
-    {
-        doAction( ADD_AND_REMOVE );
+		_addAndRemoveDialog.confirm();
+	}
 
-        addAndRemoveDialog.getAddAllBtn().click();
+	public boolean checkConsoleHasMsg(String expectedMsg, int timeout) {
+		long timeoutExpiredMs = System.currentTimeMillis() + timeout;
 
-        addAndRemoveDialog.confirm();
-    }
+		while (true) {
+			sleep();
 
-    public boolean checkConsoleHasMsg( String expectedMsg, int timeout )
-    {
-        long timeoutExpiredMs = System.currentTimeMillis() + timeout;
+			String content = bot.styledText().getText();
 
-        while( true )
-        {
-            sleep();
+			if (content.contains(expectedMsg) || content.matches(expectedMsg)) {
+				return true;
+			}
 
-            String content = bot.styledText().getText();
+			if (System.currentTimeMillis() >= timeoutExpiredMs) {
+				return false;
+			}
+		}
+	}
 
-            if( content.contains( expectedMsg ) || content.matches( expectedMsg ) )
-            {
-                return true;
-            }
+	public void debugServer() {
+		doAction(DEBUG);
+	}
 
-            if( System.currentTimeMillis() >= timeoutExpiredMs )
-            {
-                return false;
-            }
-        }
-    }
+	public void deleteServer() {
+		doAction(DELETE);
 
-    public void debugServer()
-    {
-        doAction( DEBUG );
-    }
+		Dialog deleteDialog = new Dialog(bot, DELETE_SERVER);
 
-    public void deleteServer()
-    {
-        doAction( DELETE );
+		deleteDialog.confirm();
+	}
 
-        Dialog deleteDialog = new Dialog( bot, DELETE_SERVER );
+	public void deployProject(String... projectItemNames) {
+		doAction(ADD_AND_REMOVE);
 
-        deleteDialog.confirm();
-    }
+		_addAndRemoveDialog.add(projectItemNames);
+		_addAndRemoveDialog.confirm();
+	}
 
-    public void deployProject( String... projectItemNames )
-    {
-        doAction( ADD_AND_REMOVE );
+	public void removeALL() {
+		doAction(ADD_AND_REMOVE);
 
-        addAndRemoveDialog.add( projectItemNames );
-        addAndRemoveDialog.confirm();
-    }
+		_addAndRemoveDialog.getRemoveAllBtn().click();
+		_addAndRemoveDialog.confirm();
+	}
 
-    @Override
-    protected SWTBotTreeItem getWidget()
-    {
-        Tree tree = new Tree( bot, serverTreeIndex );
+	public void removeProject(String... projectItemNames) {
+		doAction(ADD_AND_REMOVE);
+		_addAndRemoveDialog.remove(projectItemNames);
+		_addAndRemoveDialog.confirm();
+	}
 
-        String[] servers = tree.getAllItems();
+	public void startServer() {
+		doAction(START);
+	}
 
-        for( String server : servers )
-        {
-            if( server.contains( serverName ) || server.equals( serverName ) )
-            {
-                index = serverTreeIndex;
-                nodeText = new String[] { server };
+	public void stopServer() {
+		doAction(STOP);
+		checkConsoleHasMsg(DESTROYING_PROTOCALHANDLER, 10000);
+	}
 
-                return super.getWidget();
-            }
-        }
+	@Override
+	protected SWTBotTreeItem getWidget() {
+		Tree tree = new Tree(bot, _serverTreeIndex);
 
-        return null;
-    }
+		String[] servers = tree.getAllItems();
 
-    public void removeALL()
-    {
-        doAction( ADD_AND_REMOVE );
+		for (String server : servers) {
+			if (server.contains(_serverName) || server.equals(_serverName)) {
+				index = _serverTreeIndex;
+				nodeText = new String[] {server};
 
-        addAndRemoveDialog.getRemoveAllBtn().click();
-        addAndRemoveDialog.confirm();
-    }
+				return super.getWidget();
+			}
+		}
 
-    public void removeProject( String... projectItemNames )
-    {
-        doAction( ADD_AND_REMOVE );
-        addAndRemoveDialog.remove( projectItemNames );
-        addAndRemoveDialog.confirm();
-    }
+		return null;
+	}
 
-    public void startServer()
-    {
-        doAction( START );
-    }
-
-    public void stopServer()
-    {
-        doAction( STOP );
-        checkConsoleHasMsg( DESTROYING_PROTOCALHANDLER, 10000 );
-    }
+	private AddAndRemoveDialog _addAndRemoveDialog;
+	private String _serverName;
+	private int _serverTreeIndex = 1;
 
 }

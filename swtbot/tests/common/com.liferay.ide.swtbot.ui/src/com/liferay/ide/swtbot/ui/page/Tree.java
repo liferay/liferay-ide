@@ -41,7 +41,7 @@ public class Tree extends AbstractWidget {
 	public String[] getAllItems() {
 		SWTBotTreeItem[] items = getWidget().getAllItems();
 
-		String nodes[] = new String[items.length];
+		String[] nodes = new String[items.length];
 
 		for (int i = 0; i < items.length; i++) {
 			nodes[i] = items[i].getText();

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -25,56 +24,48 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Vicky Wang
  */
-public class LanguagePropertiesWizard extends Wizard
-{
+public class LanguagePropertiesWizard extends Wizard {
 
-    private Button addBtn;
-    private Button browseBtn;
-    private Text contentFolder;
-    private Button editBtn;
-    private Table languagePropertyFiles;
-    private Button removeBtn;
+	public LanguagePropertiesWizard(SWTWorkbenchBot bot) {
+		super(bot, NEW_LIFERAY_HOOK, 0);
 
-    public LanguagePropertiesWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, NEW_LIFERAY_HOOK, 0 );
+		_contentFolder = new Text(bot, CONTENT_FOLDER);
+		_languagePropertyFiles = new Table(bot, LANGUAGE_PROPERTY_FILES);
+		_browseBtn = new Button(bot, BROWSE_WITH_DOT);
+		_addBtn = new Button(bot, ADD_WITH_DOT);
+		_editBtn = new Button(bot, EDIT_WITH_DOT);
+		_removeBtn = new Button(bot, REMOVE_WITH_DOT);
+	}
 
-        contentFolder = new Text( bot, CONTENT_FOLDER );
-        languagePropertyFiles = new Table( bot, LANGUAGE_PROPERTY_FILES );
-        browseBtn = new Button( bot, BROWSE_WITH_DOT );
-        addBtn = new Button( bot, ADD_WITH_DOT );
-        editBtn = new Button( bot, EDIT_WITH_DOT );
-        removeBtn = new Button( bot, REMOVE_WITH_DOT );
-    }
+	public Button getAddBtn() {
+		return _addBtn;
+	}
 
-    public Button getAddBtn()
-    {
-        return addBtn;
-    }
+	public Button getBrowseBtn() {
+		return _browseBtn;
+	}
 
-    public Button getBrowseBtn()
-    {
-        return browseBtn;
-    }
+	public Text getContentFolder() {
+		return _contentFolder;
+	}
 
-    public Text getContentFolder()
-    {
-        return contentFolder;
-    }
+	public Button getEditBtn() {
+		return _editBtn;
+	}
 
-    public Button getEditBtn()
-    {
-        return editBtn;
-    }
+	public Table getLanguagePropertyFiles() {
+		return _languagePropertyFiles;
+	}
 
-    public Table getLanguagePropertyFiles()
-    {
-        return languagePropertyFiles;
-    }
+	public Button getRemoveBtn() {
+		return _removeBtn;
+	}
 
-    public Button getRemoveBtn()
-    {
-        return removeBtn;
-    }
+	private Button _addBtn;
+	private Button _browseBtn;
+	private Text _contentFolder;
+	private Button _editBtn;
+	private Table _languagePropertyFiles;
+	private Button _removeBtn;
 
 }

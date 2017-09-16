@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard.project;
 
@@ -25,56 +24,48 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  * @author Ashley Yuan
  * @author Li Lu
  */
-public class SelectPortletFrameworkWizard extends Wizard
-{
+public class SelectPortletFrameworkWizard extends Wizard {
 
-    private Text displayName;
-    private Radio jsf;
-    private Radio liferayMvc;
-    private Text portletName;
-    private Radio springMvc;
-    private Radio vaadin;
+	public SelectPortletFrameworkWizard(SWTWorkbenchBot bot) {
+		super(bot);
 
-    public SelectPortletFrameworkWizard( SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_liferayMvc = new Radio(bot, LIFERAY_MVC);
+		_jsf = new Radio(bot, JSF_2_X);
+		_springMvc = new Radio(bot, SPRING_MVC);
+		_vaadin = new Radio(bot, VAADIN);
+		_portletName = new Text(bot, PORTLET_NAME);
+		_displayName = new Text(bot, DISPLAY_NAME);
+	}
 
-        liferayMvc = new Radio( bot, LIFERAY_MVC );
-        jsf = new Radio( bot, JSF_2_X );
-        springMvc = new Radio( bot, SPRING_MVC );
-        vaadin = new Radio( bot, VAADIN );
-        portletName = new Text( bot, PORTLET_NAME );
-        displayName = new Text( bot, DISPLAY_NAME );
-    }
+	public Text getDisplayName() {
+		return _displayName;
+	}
 
-    public Text getDisplayName()
-    {
-        return displayName;
-    }
+	public Radio getJsf() {
+		return _jsf;
+	}
 
-    public Radio getJsf()
-    {
-        return jsf;
-    }
+	public Radio getLiferayMvc() {
+		return _liferayMvc;
+	}
 
-    public Radio getLiferayMvc()
-    {
-        return liferayMvc;
-    }
+	public Text getPortletName() {
+		return _portletName;
+	}
 
-    public Text getPortletName()
-    {
-        return portletName;
-    }
+	public Radio getSpringMvc() {
+		return _springMvc;
+	}
 
-    public Radio getSpringMvc()
-    {
-        return springMvc;
-    }
+	public Radio getVaadin() {
+		return _vaadin;
+	}
 
-    public Radio getVaadin()
-    {
-        return vaadin;
-    }
+	private Text _displayName;
+	private Radio _jsf;
+	private Radio _liferayMvc;
+	private Text _portletName;
+	private Radio _springMvc;
+	private Radio _vaadin;
 
 }

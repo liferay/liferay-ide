@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -24,256 +23,212 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Ashley Yuan
  */
-public class PortletDeploymentDescriptorWizard extends Wizard
-{
+public class PortletDeploymentDescriptorWizard extends Wizard {
 
-    private CheckBox about;
-    private CheckBox config;
-    private CheckBox createJspFiles;
-    private CheckBox createResourceBundleFile;
-    private Text displayName;
-    private CheckBox edit;
-    private CheckBox editDefaults;
-    private CheckBox editGuest;
-    private CheckBox help;
-    private Text jspFolder;
-    private Text name;
-    private CheckBox preview;
-    private CheckBox print;
-    private Text resourceBundleFilePath;
-    private Text title;
-    private CheckBox view;
+	public PortletDeploymentDescriptorWizard(SWTWorkbenchBot bot) {
+		super(bot, 5);
 
-    public PortletDeploymentDescriptorWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, 5 );
+		_name = new Text(bot, NAME);
+		_displayName = new Text(bot, DISPLAY_NAME);
+		_title = new Text(bot, TITLE);
+		_view = new CheckBox(bot, VIEW);
+		_edit = new CheckBox(bot, EDIT);
+		_help = new CheckBox(bot, HELP);
+		_about = new CheckBox(bot, ABOUT);
+		_config = new CheckBox(bot, CONFIG);
+		_editDefaults = new CheckBox(bot, EDIT_DEFAULTS);
+		_eitGuest = new CheckBox(bot, EDIT_GUEST);
+		_preview = new CheckBox(bot, PREVIEW);
+		_print = new CheckBox(bot, PRINT);
+		_ceateJspFiles = new CheckBox(bot, CREATE_JSP_FILES);
+		_jspFolder = new Text(bot, JSP_FOLDER);
+		_createResourceBundleFile = new CheckBox(bot, CREATE_RESOURCE_BUNDLE_FILE);
+		_resourceBundleFilePath = new Text(bot, RESOURCE_BUNDLE_FILE_PATH);
+	}
 
-        name = new Text( bot, NAME );
-        displayName = new Text( bot, DISPLAY_NAME );
-        title = new Text( bot, TITLE );
-        view = new CheckBox( bot, VIEW );
-        edit = new CheckBox( bot, EDIT );
-        help = new CheckBox( bot, HELP );
-        about = new CheckBox( bot, ABOUT );
-        config = new CheckBox( bot, CONFIG );
-        editDefaults = new CheckBox( bot, EDIT_DEFAULTS );
-        editGuest = new CheckBox( bot, EDIT_GUEST );
-        preview = new CheckBox( bot, PREVIEW );
-        print = new CheckBox( bot, PRINT );
-        createJspFiles = new CheckBox( bot, CREATE_JSP_FILES );
-        jspFolder = new Text( bot, JSP_FOLDER );
-        createResourceBundleFile = new CheckBox( bot, CREATE_RESOURCE_BUNDLE_FILE );
-        resourceBundleFilePath = new Text( bot, RESOURCE_BUNDLE_FILE_PATH );
-    }
+	public CheckBox getAbout() {
+		return _about;
+	}
 
-    public CheckBox getAbout()
-    {
-        return about;
-    }
+	public CheckBox getConfig() {
+		return _config;
+	}
 
-    public CheckBox getConfig()
-    {
-        return config;
-    }
+	public CheckBox getCreateJspFiles() {
+		return _ceateJspFiles;
+	}
 
-    public CheckBox getCreateJspFiles()
-    {
-        return createJspFiles;
-    }
+	public CheckBox getCreateResourceBundleFile() {
+		return _createResourceBundleFile;
+	}
 
-    public CheckBox getCreateResourceBundleFile()
-    {
-        return createResourceBundleFile;
-    }
+	public Text getDisplayName() {
+		return _displayName;
+	}
 
-    public Text getDisplayName()
-    {
-        return displayName;
-    }
+	public CheckBox getEdit() {
+		return _edit;
+	}
 
-    public CheckBox getEdit()
-    {
-        return edit;
-    }
+	public CheckBox getEditDefaults() {
+		return _editDefaults;
+	}
 
-    public CheckBox getEditDefaults()
-    {
-        return editDefaults;
-    }
+	public CheckBox getEditGuest() {
+		return _eitGuest;
+	}
 
-    public CheckBox getEditGuest()
-    {
-        return editGuest;
-    }
+	public CheckBox getHelp() {
+		return _help;
+	}
 
-    public CheckBox getHelp()
-    {
-        return help;
-    }
+	public Text getJspFolder() {
+		return _jspFolder;
+	}
 
-    public Text getJspFolder()
-    {
-        return jspFolder;
-    }
+	public Text getPortletName() {
+		return _name;
+	}
 
-    public Text getPortletName()
-    {
-        return name;
-    }
+	public Text getPortletTitle() {
+		return _title;
+	}
 
-    public Text getPortletTitle()
-    {
-        return title;
-    }
+	public CheckBox getPreview() {
+		return _preview;
+	}
 
-    public CheckBox getPreview()
-    {
-        return preview;
-    }
+	public CheckBox getPrint() {
+		return _print;
+	}
 
-    public CheckBox getPrint()
-    {
-        return print;
-    }
+	public Text getResourceBundleFilePath() {
+		return _resourceBundleFilePath;
+	}
 
-    public Text getResourceBundleFilePath()
-    {
-        return resourceBundleFilePath;
-    }
+	public CheckBox getView() {
+		return _view;
+	}
 
-    public CheckBox getView()
-    {
-        return view;
-    }
+	public void specifyResources(
+		boolean createJspFilesValue, String jspFolderValue, boolean createResourceBundleFileValue,
+		String resourceBundleFilePathValue) {
 
-    public void specifyResources(
-        boolean createJspFilesValue, String jspFolderValue, boolean createResourceBundleFileValue,
-        String resourceBundleFilePathValue )
-    {
+		if (createJspFilesValue) {
+			_ceateJspFiles.select();
 
-        if( createJspFilesValue )
-        {
-            createJspFiles.select();
-            if( jspFolder != null )
-            {
-                jspFolder.setText( jspFolderValue );
-            }
-        }
-        else
-        {
-            createJspFiles.deselect();
-        }
+			if (_jspFolder != null) {
+				_jspFolder.setText(jspFolderValue);
+			}
+		}
+		else {
+			_ceateJspFiles.deselect();
+		}
 
-        if( createResourceBundleFileValue )
-        {
-            createResourceBundleFile.select();
-            if( resourceBundleFilePath != null )
-            {
-                resourceBundleFilePath.setText( resourceBundleFilePathValue );
-            }
-        }
-        else
-        {
-            createResourceBundleFile.deselect();
-        }
-    }
+		if (createResourceBundleFileValue) {
+			_createResourceBundleFile.select();
 
-    public void speficyLiferayPortletModes(
-        boolean aboutLiferayMode, boolean configLiferayMode, boolean editDefaultsLiferayMode,
-        boolean editGuestLiferayMode, boolean previewLiferayMode, boolean printLiferayMode )
-    {
-        if( aboutLiferayMode )
-        {
-            about.select();
-        }
-        else
-        {
-            about.deselect();
-        }
+			if (_resourceBundleFilePath != null) {
+				_resourceBundleFilePath.setText(resourceBundleFilePathValue);
+			}
+		}
+		else {
+			_createResourceBundleFile.deselect();
+		}
+	}
 
-        if( configLiferayMode )
-        {
-            config.select();
-        }
-        else
-        {
-            config.deselect();
-        }
+	public void speficyLiferayPortletModes(
+		boolean aboutLiferayMode, boolean configLiferayMode, boolean editDefaultsLiferayMode,
+		boolean editGuestLiferayMode, boolean previewLiferayMode, boolean printLiferayMode) {
 
-        if( editDefaultsLiferayMode )
-        {
-            editDefaults.select();
-        }
-        else
-        {
-            editDefaults.deselect();
-        }
+		if (aboutLiferayMode) {
+			_about.select();
+		}
+		else {
+			_about.deselect();
+		}
 
-        if( editGuestLiferayMode )
-        {
-            editGuest.select();
-        }
-        else
-        {
-            editGuest.deselect();
-        }
+		if (configLiferayMode) {
+			_config.select();
+		}
+		else {
+			_config.deselect();
+		}
 
-        if( previewLiferayMode )
-        {
-            preview.select();
-        }
-        else
-        {
-            preview.deselect();
-        }
+		if (editDefaultsLiferayMode) {
+			_editDefaults.select();
+		}
+		else {
+			_editDefaults.deselect();
+		}
 
-        if( printLiferayMode )
-        {
-            print.select();
-        }
-        else
-        {
-            print.deselect();
-        }
-    }
+		if (editGuestLiferayMode) {
+			_eitGuest.select();
+		}
+		else {
+			_eitGuest.deselect();
+		}
 
-    public void speficyPortletInfo( String portletNameValue, String displayNameValue, String portletTitleValue )
-    {
-        if( portletNameValue != null )
-        {
-            name.setText( portletNameValue );
-        }
+		if (previewLiferayMode) {
+			_preview.select();
+		}
+		else {
+			_preview.deselect();
+		}
 
-        if( displayName != null )
-        {
-            displayName.setText( displayNameValue );
-        }
+		if (printLiferayMode) {
+			_print.select();
+		}
+		else {
+			_print.deselect();
+		}
+	}
 
-        if( title != null )
-        {
-            title.setText( portletTitleValue );
-        }
-    }
+	public void speficyPortletInfo(String portletNameValue, String displayNameValue, String portletTitleValue) {
+		if (portletNameValue != null) {
+			_name.setText(portletNameValue);
+		}
 
-    public void speficyPortletModes( boolean editMode, boolean helpMode )
-    {
-        if( editMode )
-        {
-            edit.select();
-        }
-        else
-        {
-            edit.deselect();
-        }
+		if (_displayName != null) {
+			_displayName.setText(displayNameValue);
+		}
 
-        if( helpMode )
-        {
-            help.select();
-        }
-        else
-        {
-            help.deselect();
-        }
-    }
+		if (_title != null) {
+			_title.setText(portletTitleValue);
+		}
+	}
+
+	public void speficyPortletModes(boolean editMode, boolean helpMode) {
+		if (editMode) {
+			_edit.select();
+		}
+		else {
+			_edit.deselect();
+		}
+
+		if (helpMode) {
+			_help.select();
+		}
+		else {
+			_help.deselect();
+		}
+	}
+
+	private CheckBox _about;
+	private CheckBox _ceateJspFiles;
+	private CheckBox _config;
+	private CheckBox _createResourceBundleFile;
+	private Text _displayName;
+	private CheckBox _edit;
+	private CheckBox _editDefaults;
+	private CheckBox _eitGuest;
+	private CheckBox _help;
+	private Text _jspFolder;
+	private Text _name;
+	private CheckBox _preview;
+	private CheckBox _print;
+	private Text _resourceBundleFilePath;
+	private Text _title;
+	private CheckBox _view;
 
 }

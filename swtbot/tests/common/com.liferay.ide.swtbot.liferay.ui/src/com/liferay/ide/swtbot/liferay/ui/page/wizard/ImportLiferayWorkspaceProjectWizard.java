@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -24,56 +23,48 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  */
-public class ImportLiferayWorkspaceProjectWizard extends Wizard
-{
+public class ImportLiferayWorkspaceProjectWizard extends Wizard {
 
-    private CheckBox addProjectToWorkingSet;
-    private Text buildType;
-    private Text bundleUrl;
-    private CheckBox downloadLiferaybundle;
-    private Text location;
-    private Text serverName;
+	public ImportLiferayWorkspaceProjectWizard(SWTWorkbenchBot bot) {
+		super(bot, IMPORT_LIFERAY_WORKSPACE, 2);
 
-    public ImportLiferayWorkspaceProjectWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, IMPORT_LIFERAY_WORKSPACE, 2 );
+		_buildType = new Text(bot, BUILD_TYPE);
+		_location = new Text(bot, WORKSPACE_LOCATION);
+		_downloadLiferaybundle = new CheckBox(bot, DOWNLOAD_LIFERAY_BUNDLE);
+		_serverName = new Text(bot, SERVER_NAME);
+		_bundleUrl = new Text(bot, BUNDLE_URL);
+		_addProjectToWorkingSet = new CheckBox(bot, ADD_PROJECT_TO_WORKING_SET);
+	}
 
-        buildType = new Text( bot, BUILD_TYPE );
-        location = new Text( bot, WORKSPACE_LOCATION );
-        downloadLiferaybundle = new CheckBox( bot, DOWNLOAD_LIFERAY_BUNDLE );
-        serverName = new Text( bot, SERVER_NAME );
-        bundleUrl = new Text( bot, BUNDLE_URL );
-        addProjectToWorkingSet = new CheckBox( bot, ADD_PROJECT_TO_WORKING_SET );
-    }
+	public CheckBox getAddProjectToWorkingSet() {
+		return _addProjectToWorkingSet;
+	}
 
-    public CheckBox getAddProjectToWorkingSet()
-    {
-        return addProjectToWorkingSet;
-    }
+	public Text getBuildTypeText() {
+		return _buildType;
+	}
 
-    public Text getBuildTypeText()
-    {
-        return buildType;
-    }
+	public Text getBundleUrl() {
+		return _bundleUrl;
+	}
 
-    public Text getBundleUrl()
-    {
-        return bundleUrl;
-    }
+	public CheckBox getDownloadLiferaybundle() {
+		return _downloadLiferaybundle;
+	}
 
-    public CheckBox getDownloadLiferaybundle()
-    {
-        return downloadLiferaybundle;
-    }
+	public Text getServerName() {
+		return _serverName;
+	}
 
-    public Text getServerName()
-    {
-        return serverName;
-    }
+	public Text getWorkspaceLocation() {
+		return _location;
+	}
 
-    public Text getWorkspaceLocation()
-    {
-        return location;
-    }
+	private CheckBox _addProjectToWorkingSet;
+	private Text _buildType;
+	private Text _bundleUrl;
+	private CheckBox _downloadLiferaybundle;
+	private Text _location;
+	private Text _serverName;
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui;
 
@@ -23,18 +22,15 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  */
-public class UIAction implements UI
-{
+public class UIAction implements UI {
 
-    protected SWTWorkbenchBot bot;
+	public UIAction(SWTWorkbenchBot bot) {
+		this.bot = bot;
 
-    protected LiferayIDE ide;
+		ide = new LiferayIDE(bot);
+	}
 
-    public UIAction( SWTWorkbenchBot bot )
-    {
-        this.bot = bot;
-
-        ide = new LiferayIDE( bot );
-    }
+	protected SWTWorkbenchBot bot;
+	protected LiferayIDE ide;
 
 }

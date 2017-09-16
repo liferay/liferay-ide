@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.util;
 
@@ -20,63 +19,52 @@ import com.liferay.ide.swtbot.ui.util.StringPool;
 /**
  * @author Terry Jia
  */
-public class BundleInfo
-{
+public class BundleInfo {
 
-    private String bundleZip = StringPool.BLANK;
-    private String bundleDir = StringPool.BLANK;
-    private String tomcatDir = StringPool.BLANK;
-    private String type = StringPool.BLANK;
-    private String version = StringPool.BLANK;
+	public String getBundleDir() {
+		return _bundleDir;
+	}
 
-    public String getType()
-    {
-        return type;
-    }
+	public String getBundleZip() {
+		return _bundleZip;
+	}
 
-    public void setType( String type )
-    {
-        this.type = type;
-    }
+	public String getTomcatDir() {
+		return _tomcatDir;
+	}
 
-    public String getVersion()
-    {
-        return version;
-    }
+	public String getType() {
+		return _type;
+	}
 
-    public void setVersion( String version )
-    {
-        this.version = version;
-    }
+	public String getVersion() {
+		return _version;
+	}
 
-    public String getBundleZip()
-    {
-        return bundleZip;
-    }
+	public void setBundleDir(String bundleDir) {
+		_bundleDir = bundleDir;
+	}
 
-    public void setBundleZip( String bundleZip )
-    {
-        this.bundleZip = bundleZip;
-    }
+	public void setBundleZip(String bundleZip) {
+		_bundleZip = bundleZip;
+	}
 
-    public String getBundleDir()
-    {
-        return bundleDir;
-    }
+	public void setTomcatDir(String tomcatDir) {
+		_tomcatDir = tomcatDir;
+	}
 
-    public void setBundleDir( String bundleDir )
-    {
-        this.bundleDir = bundleDir;
-    }
+	public void setType(String type) {
+		_type = type;
+	}
 
-    public String getTomcatDir()
-    {
-        return tomcatDir;
-    }
+	public void setVersion(String version) {
+		_version = version;
+	}
 
-    public void setTomcatDir( String tomcatDir )
-    {
-        this.tomcatDir = tomcatDir;
-    }
+	private String _bundleDir = StringPool.BLANK;
+	private String _bundleZip = StringPool.BLANK;
+	private String _tomcatDir = StringPool.BLANK;
+	private String _type = StringPool.BLANK;
+	private String _version = StringPool.BLANK;
 
 }

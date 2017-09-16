@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -23,35 +22,30 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Li Lu
  */
-public class CreateVaadinPortletWizard extends CreateLiferayPortletWizard
-{
+public class CreateVaadinPortletWizard extends CreateLiferayPortletWizard {
 
-    private Text applicationClass;
-    private ComboBox portletClasses;
-    private ComboBox vaadinPortletClasses;
+	public CreateVaadinPortletWizard(SWTWorkbenchBot bot) {
+		super(bot, 3);
 
-    public CreateVaadinPortletWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, 3 );
+		_applicationClass = new Text(bot, APPLICATION_CLASS);
+		_vaadinPortletClasses = new ComboBox(bot, PORTLET_CLASS);
+		_portletClasses = new ComboBox(bot, PORTLET_CLASS);
+	}
 
-        applicationClass = new Text( bot, APPLICATION_CLASS );
-        vaadinPortletClasses = new ComboBox( bot, PORTLET_CLASS );
-        portletClasses = new ComboBox( bot, PORTLET_CLASS );
-    }
+	public Text getApplicationClass() {
+		return _applicationClass;
+	}
 
-    public Text getApplicationClass()
-    {
-        return applicationClass;
-    }
+	public ComboBox getPortletClasses() {
+		return _portletClasses;
+	}
 
-    public ComboBox getPortletClasses()
-    {
-        return portletClasses;
-    }
+	public ComboBox getVaadinPortletClasses() {
+		return _vaadinPortletClasses;
+	}
 
-    public ComboBox getVaadinPortletClasses()
-    {
-        return vaadinPortletClasses;
-    }
+	private Text _applicationClass;
+	private ComboBox _portletClasses;
+	private ComboBox _vaadinPortletClasses;
 
 }

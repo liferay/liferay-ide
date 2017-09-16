@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -24,55 +23,50 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Li Lu
  */
-public class ChoosePortletFrameworkWizard extends Wizard
-{
+public class ChoosePortletFrameworkWizard extends Wizard {
 
-    private Text archetype;
-    private Text displayName;
-    private Radio jsf2x;
-    private Radio liferayMvc;
-    private Radio springMvc;
-    private Radio vaadin;
+	public ChoosePortletFrameworkWizard(SWTWorkbenchBot bot) {
+		super(bot, 3);
 
-    public ChoosePortletFrameworkWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, 3 );
+		_liferayMvc = new Radio(bot, LIFERAY_MVC);
+		_jsf2x = new Radio(bot, JSF_2_X);
+		_springMvc = new Radio(bot, SPRING_MVC);
+		_vaadin = new Radio(bot, VAADIN);
+		_displayName = new Text(bot, DISPLAY_NAME);
+		_archetype = new Text(bot, ARCHETYPE);
+	}
 
-        liferayMvc = new Radio( bot, LIFERAY_MVC );
-        jsf2x = new Radio( bot, JSF_2_X );
-        springMvc = new Radio( bot, SPRING_MVC );
-        vaadin = new Radio( bot, VAADIN );
-        displayName = new Text( bot, DISPLAY_NAME );
-        archetype = new Text( bot, ARCHETYPE );
-    }
+	public Text getArchetypeText() {
+		return _archetype;
+	}
 
-    public Text getArchetypeText()
-    {
-        return archetype;
-    }
+	public Text getDisplayNameText() {
+		return _displayName;
+	}
 
-    public Text getDisplayNameText()
-    {
-        return displayName;
-    }
+	public void selectPortletFramework(String label) {
+		switch (label) {
+			case LIFERAY_MVC:
 
-    public void selectPortletFramework( String label )
-    {
-        switch( label )
-        {
-        case LIFERAY_MVC:
+				_liferayMvc.click();
+				break;
+			case JSF_2_X:
+				_jsf2x.click();
+				break;
 
-            liferayMvc.click();
-            break;
-        case JSF_2_X:
-            jsf2x.click();
-            break;
+			case SPRING_MVC:
+				_springMvc.click();
+				break;
+			case VAADIN:
+				_vaadin.click();
+		}
+	}
 
-        case SPRING_MVC:
-            springMvc.click();
-            break;
-        case VAADIN:
-            vaadin.click();
-        }
-    }
+	private Text _archetype;
+	private Text _displayName;
+	private Radio _jsf2x;
+	private Radio _liferayMvc;
+	private Radio _springMvc;
+	private Radio _vaadin;
+
 }

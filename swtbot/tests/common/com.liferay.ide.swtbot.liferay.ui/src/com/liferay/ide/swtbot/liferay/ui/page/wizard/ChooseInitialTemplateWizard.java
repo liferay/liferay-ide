@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -23,32 +22,26 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Li Lu
  */
-public class ChooseInitialTemplateWizard extends Wizard
-{
+public class ChooseInitialTemplateWizard extends Wizard {
 
-    public ChooseInitialTemplateWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, 0 );
-    }
+	public ChooseInitialTemplateWizard(SWTWorkbenchBot bot) {
+		super(bot, 0);
+	}
 
-    public boolean isRadioSelected( int index )
-    {
-        return new Radio( bot, index ).isSelected();
-    }
+	public boolean isRadioSelected(int index) {
+		return new Radio(bot, index).isSelected();
+	}
 
-    public boolean isRadioSelected( String label )
-    {
-        return new Radio( bot, label ).isSelected();
-    }
+	public boolean isRadioSelected(String label) {
+		return new Radio(bot, label).isSelected();
+	}
 
-    public void selectRadio( int index )
-    {
-        new Radio( bot, index ).click();
-    }
+	public void selectRadio(int index) {
+		new Radio(bot, index).click();
+	}
 
-    public void selectRadio( String label )
-    {
-        new Radio( bot, label ).click();
-    }
+	public void selectRadio(String label) {
+		new Radio(bot, label).click();
+	}
 
 }

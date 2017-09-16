@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -26,63 +25,54 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  * @author Li Lu
  * @author Ying Xu
  */
-public class LiferayProjectFromExistSourceWizard extends Wizard
-{
+public class LiferayProjectFromExistSourceWizard extends Wizard {
 
-    private ToolbarButtonWithTooltip browseSdkDirectoryBtn;
-    private Button deselectAllBtn;
-    private Button refreshBtn;
-    private Text sdkDirectory;
-    private Text sdkVersion;
-    private Button selectAllBtn;
+	public LiferayProjectFromExistSourceWizard(SWTWorkbenchBot bot) {
+		super(bot, 2);
 
-    public LiferayProjectFromExistSourceWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, 2 );
+		_sdkDirectory = new Text(bot, SDK_DIRECTORY);
+		_sdkVersion = new Text(bot, SDK_VERSION);
+		_browseSdkDirectoryBtn = new ToolbarButtonWithTooltip(bot, BROWSE);
+		_selectAllBtn = new Button(bot, SELECT_ALL);
+		_deselectAllBtn = new Button(bot, DESELECT_ALL);
+		_refreshBtn = new Button(bot, REFRESH);
+	}
 
-        sdkDirectory = new Text( bot, SDK_DIRECTORY );
-        sdkVersion = new Text( bot, SDK_VERSION );
-        browseSdkDirectoryBtn = new ToolbarButtonWithTooltip( bot, BROWSE );
-        selectAllBtn = new Button( bot, SELECT_ALL );
-        deselectAllBtn = new Button( bot, DESELECT_ALL );
-        refreshBtn = new Button( bot, REFRESH );
-    }
+	public ToolbarButtonWithTooltip getBrowseSdkDirectoryBtn() {
+		return _browseSdkDirectoryBtn;
+	}
 
-    public ToolbarButtonWithTooltip getBrowseSdkDirectoryBtn()
-    {
-        return browseSdkDirectoryBtn;
-    }
+	public Button getDeselectAllBtn() {
+		return _deselectAllBtn;
+	}
 
-    public Button getDeselectAllBtn()
-    {
-        return deselectAllBtn;
-    }
+	public Button getRefreshBtn() {
+		return _refreshBtn;
+	}
 
-    public Button getRefreshBtn()
-    {
-        return refreshBtn;
-    }
+	public Text getSdkDirectory() {
+		return _sdkDirectory;
+	}
 
-    public Text getSdkDirectory()
-    {
-        return sdkDirectory;
-    }
+	public Text getSdkVersion() {
+		return _sdkVersion;
+	}
 
-    public Text getSdkVersion()
-    {
-        return sdkVersion;
-    }
+	public Button getSelectAllBtn() {
+		return _selectAllBtn;
+	}
 
-    public Button getSelectAllBtn()
-    {
-        return selectAllBtn;
-    }
+	public void importProject(String path) {
+		_sdkDirectory.setText(path);
 
-    public void importProject( String path )
-    {
-        sdkDirectory.setText( path );
+		finish();
+	}
 
-        finish();
-    }
+	private ToolbarButtonWithTooltip _browseSdkDirectoryBtn;
+	private Button _deselectAllBtn;
+	private Button _refreshBtn;
+	private Text _sdkDirectory;
+	private Text _sdkVersion;
+	private Button _selectAllBtn;
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard.project;
 
@@ -23,23 +22,21 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Vicky Wang
  */
-public class ThemeWizard extends Wizard
-{
+public class ThemeWizard extends Wizard {
 
-    private ComboBox themeFrameworkTypes;
-    private ComboBox themeParentTypes;
+	public ThemeWizard(SWTWorkbenchBot bot) {
+		super(bot, 0);
 
-    public ThemeWizard( SWTWorkbenchBot bot )
-    {
-        super( bot, 0 );
+		_themeParentTypes = new ComboBox(bot, THEME_PARENT);
+		_themeFrameworkTypes = new ComboBox(bot, FARMEWORK_TYPE);
+	}
 
-        themeParentTypes = new ComboBox( bot, THEME_PARENT );
-        themeFrameworkTypes = new ComboBox( bot, FARMEWORK_TYPE );
-    }
+	public void setParentFramework(String parent, String framework) {
+		_themeParentTypes.setSelection(parent);
+		_themeFrameworkTypes.setSelection(framework);
+	}
 
-    public void setParentFramework( String parent, String framework )
-    {
-        themeParentTypes.setSelection( parent );
-        themeFrameworkTypes.setSelection( framework );
-    }
+	private ComboBox _themeFrameworkTypes;
+	private ComboBox _themeParentTypes;
+
 }

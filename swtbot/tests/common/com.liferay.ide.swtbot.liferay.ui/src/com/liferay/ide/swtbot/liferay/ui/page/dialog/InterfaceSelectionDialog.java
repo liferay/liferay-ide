@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.dialog;
 
@@ -24,28 +23,24 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Ashley Yuan
  */
-public class InterfaceSelectionDialog extends TreeDialog
-{
+public class InterfaceSelectionDialog extends TreeDialog {
 
-    private Text itemToOpen;
-    private Table matchItems;
+	public InterfaceSelectionDialog(SWTWorkbenchBot bot) {
+		super(bot);
 
-    public InterfaceSelectionDialog( SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_itemToOpen = new Text(bot);
+		_matchItems = new Table(bot);
+	}
 
-        itemToOpen = new Text( bot );
-        matchItems = new Table( bot );
-    }
+	public Text getItemToOpen() {
+		return _itemToOpen;
+	}
 
-    public Text getItemToOpen()
-    {
-        return itemToOpen;
-    }
+	public Table getMatchItems() {
+		return _matchItems;
+	}
 
-    public Table getMatchItems()
-    {
-        return matchItems;
-    }
+	private Text _itemToOpen;
+	private Table _matchItems;
 
 }

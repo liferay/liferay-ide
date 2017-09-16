@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.action;
 
@@ -30,175 +29,163 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 /**
  * @author Terry Jia
  */
-public class ViewAction extends UIAction
-{
+public class ViewAction extends UIAction {
 
-    private DeleteResourcesContinueDialog continueDeleteResourcesDialog =
-        new DeleteResourcesContinueDialog( bot );
-    private DeleteResourcesDialog deleteResourcesDialog = new DeleteResourcesDialog( bot );
-    private PackageExplorerView packageExplorerView = new PackageExplorerView( bot );
-    private ProjectExplorerView projectExplorerView = new ProjectExplorerView( bot );
-    private ServersView serversView = new ServersView( bot );
+	public ViewAction(SWTWorkbenchBot bot) {
+		super(bot);
+	}
 
-    public ViewAction( SWTWorkbenchBot bot )
-    {
-        super( bot );
-    }
+	public void deleteProject(String name) {
+		TreeItem item = getProjects().getTreeItem(name);
 
-    public void deleteProject( String name )
-    {
-        getProjects().getTreeItem( name ).doAction( DELETE );
+		item.doAction(DELETE);
 
-        deleteResourcesDialog.getDeleteFromDisk().select();
+		_deleteResourcesDialog.getDeleteFromDisk().select();
 
-        deleteResourcesDialog.confirm();
+		_deleteResourcesDialog.confirm();
 
-        try
-        {
-            long origin = SWTBotPreferences.TIMEOUT;
+		try {
+			long origin = SWTBotPreferences.TIMEOUT;
 
-            SWTBotPreferences.TIMEOUT = 1500;
+			SWTBotPreferences.TIMEOUT = 1500;
 
-            continueDeleteResourcesDialog.confirm();
+			_continueDeleteResourcesDialog.confirm();
 
-            SWTBotPreferences.TIMEOUT = origin;
-        }
-        catch( Exception e )
-        {
-        }
-    }
+			SWTBotPreferences.TIMEOUT = origin;
+		}
+		catch (Exception e) {
+		}
+	}
 
-    public void deleteProject( String... nodes )
-    {
-        getProjects().expandNode( nodes ).doAction( DELETE );
+	public void deleteProject(String... nodes) {
+		TreeItem nodesItem = getProjects().expandNode(nodes);
 
-        deleteResourcesDialog.getDeleteFromDisk().select();
+		nodesItem.doAction(DELETE);
 
-        deleteResourcesDialog.confirm();
+		_deleteResourcesDialog.getDeleteFromDisk().select();
 
-        try
-        {
-            long origin = SWTBotPreferences.TIMEOUT;
+		_deleteResourcesDialog.confirm();
 
-            SWTBotPreferences.TIMEOUT = 1500;
+		try {
+			long origin = SWTBotPreferences.TIMEOUT;
 
-            continueDeleteResourcesDialog.confirm();
+			SWTBotPreferences.TIMEOUT = 1500;
 
-            SWTBotPreferences.TIMEOUT = origin;
-        }
-        catch( Exception e )
-        {
-        }
-    }
+			_continueDeleteResourcesDialog.confirm();
 
-    public void deleteProjects()
-    {
-        Tree projects = getProjects();
+			SWTBotPreferences.TIMEOUT = origin;
+		}
+		catch (Exception e) {
+		}
+	}
 
-        String[] names = projects.getAllItems();
+	public void deleteProjects() {
+		Tree projects = getProjects();
 
-        for( String name : names )
-        {
-            deleteProject( name );
-        }
-    }
+		String[] names = projects.getAllItems();
 
-    public void deleteProjects( String[] names )
-    {
-        for( String name : names )
-        {
-            deleteProject( name );
-        }
-    }
+		for (String name : names) {
+			deleteProject(name);
+		}
+	}
 
-    public void deleteProjectsExcludeNames( String... names )
-    {
-        String[] projectNames = getProjects().getAllItems();
+	public void deleteProjects(String[] names) {
+		for (String name : names) {
+			deleteProject(name);
+		}
+	}
 
-        for( String projectName : projectNames )
-        {
-            boolean include = false;
+	public void deleteProjectsExcludeNames(String... names) {
+		String[] projectNames = getProjects().getAllItems();
 
-            for( String name : names )
-            {
-                if( name.equals( projectName ) )
-                {
-                    include = true;
+		for (String projectName : projectNames) {
+			boolean include = false;
 
-                    break;
-                }
+			for (String name : names) {
+				if (name.equals(projectName)) {
+					include = true;
 
-                getProjects().getTreeItem( projectName ).collapse();
-            }
+					break;
+				}
 
-            if( !include )
-            {
-                deleteProject( projectName );
-            }
-        }
-    }
+				TreeItem projectItem = getProjects().getTreeItem(projectName);
 
-    public TreeItem fetchProjectFile( String... files )
-    {
-        return getProjects().expandNode( files );
-    }
+				projectItem.collapse();
+			}
 
-    public TreeItem getProject( String name )
-    {
-        return getProjects().getTreeItem( name );
-    }
+			if (!include) {
+				deleteProject(projectName);
+			}
+		}
+	}
 
-    public Tree getProjects()
-    {
-        try
-        {
-            return projectExplorerView.getProjects();
-        }
-        catch( Exception e )
-        {
-            return packageExplorerView.getProjects();
-        }
-    }
+	public TreeItem fetchProjectFile(String... files) {
+		return getProjects().expandNode(files);
+	}
 
-    public void openAddAndRemoveDialog( String serverLabel )
-    {
-        serversView.getServers().getTreeItem( serverLabel ).contextMenu( ADD_AND_REMOVE );
-    }
+	public TreeItem getProject(String name) {
+		return getProjects().getTreeItem(name);
+	}
 
-    public void openLiferayPortalHome( String serverLabel )
-    {
-        serversView.getServers().getTreeItem( serverLabel ).contextMenu( OPEN_LIFERAY_PORTAL_HOME );
-    }
+	public Tree getProjects() {
+		try {
+			return _projectExplorerView.getProjects();
+		}
+		catch (Exception e) {
+			return _packageExplorerView.getProjects();
+		}
+	}
 
-    public void openServerEditor( String serverLabel )
-    {
-        serversView.getServers().getTreeItem( serverLabel ).doubleClick();
-    }
+	public void openAddAndRemoveDialog(String serverLabel) {
+		TreeItem item = _serversView.getServers().getTreeItem(serverLabel);
 
-    public void serverDebug( String serverLabel )
-    {
-        serversView.getServers().getTreeItem( serverLabel ).select();
+		item.contextMenu(ADD_AND_REMOVE);
+	}
 
-        serversView.clickDebugBtn();
-    }
+	public void openLiferayPortalHome(String serverLabel) {
+		TreeItem item = _serversView.getServers().getTreeItem(serverLabel);
 
-    public void serverStart( String serverLabel )
-    {
-        serversView.getServers().getTreeItem( serverLabel ).select();
+		item.contextMenu(OPEN_LIFERAY_PORTAL_HOME);
+	}
 
-        serversView.clickStartBtn();
-    }
+	public void openServerEditor(String serverLabel) {
+		TreeItem item = _serversView.getServers().getTreeItem(serverLabel);
 
-    public void serverStop( String serverLabel )
-    {
-        serversView.getServers().getTreeItem( serverLabel ).select();
+		item.doubleClick();
+	}
 
-        serversView.clickStopBtn();
-    }
+	public void serverDebug(String serverLabel) {
+		TreeItem item = _serversView.getServers().getTreeItem(serverLabel);
 
-    public void showServersView()
-    {
-        ide.showServersView();
-    }
+		item.select();
+
+		_serversView.clickDebugBtn();
+	}
+
+	public void serverStart(String serverLabel) {
+		TreeItem item = _serversView.getServers().getTreeItem(serverLabel);
+
+		item.select();
+
+		_serversView.clickStartBtn();
+	}
+
+	public void serverStop(String serverLabel) {
+		TreeItem item = _serversView.getServers().getTreeItem(serverLabel);
+
+		item.select();
+
+		_serversView.clickStopBtn();
+	}
+
+	public void showServersView() {
+		ide.showServersView();
+	}
+
+	private DeleteResourcesContinueDialog _continueDeleteResourcesDialog = new DeleteResourcesContinueDialog(bot);
+	private DeleteResourcesDialog _deleteResourcesDialog = new DeleteResourcesDialog(bot);
+	private PackageExplorerView _packageExplorerView = new PackageExplorerView(bot);
+	private ProjectExplorerView _projectExplorerView = new ProjectExplorerView(bot);
+	private ServersView _serversView = new ServersView(bot);
 
 }
