@@ -30,24 +30,24 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class NewProjectWizard extends Wizard
 {
 
-    private final CheckBox addToWorkingSet;
-    private final ComboBox buildTypes;
-    private final Text location;
-    private final Text projectName;
-    private final CheckBox useDefaultLocation;
-    private final ComboBox workingSets;
+    private CheckBox addToWorkingSet;
+    private ComboBox buildTypes;
+    private Text location;
+    private Text projectName;
+    private CheckBox useDefaultLocation;
+    private ComboBox workingSets;
 
-    public NewProjectWizard( final SWTWorkbenchBot bot )
+    public NewProjectWizard( SWTWorkbenchBot bot )
     {
         this( bot, -1 );
     }
 
-    public NewProjectWizard( final SWTWorkbenchBot bot, int index )
+    public NewProjectWizard( SWTWorkbenchBot bot, int index )
     {
         this( bot, StringPool.BLANK, index );
     }
 
-    public NewProjectWizard( final SWTWorkbenchBot bot, String title, int index )
+    public NewProjectWizard( SWTWorkbenchBot bot, String title, int index )
     {
         super( bot, title, index );
 

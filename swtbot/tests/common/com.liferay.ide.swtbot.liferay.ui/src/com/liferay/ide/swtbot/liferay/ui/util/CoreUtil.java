@@ -339,7 +339,7 @@ public class CoreUtil
             return null;
         }
 
-        final char[] buffer = new char[0x10000];
+        char[] buffer = new char[0x10000];
 
         StringBuilder out = new StringBuilder();
 
@@ -405,7 +405,7 @@ public class CoreUtil
             return;
         }
 
-        final char[] buffer = new char[0x10000];
+        char[] buffer = new char[0x10000];
 
         Reader in = new InputStreamReader( new ByteArrayInputStream( contents.getBytes( "UTF-8" ) ) ); //$NON-NLS-1$
 

@@ -29,18 +29,18 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class CreateCustomJSPsWizard extends Wizard
 {
 
-    private final Button addBtn;
-    private final Button addFromLiferayBtn;
-    private final Button browseBtn;
-    private final Text customJSPfolder;
-    private final CheckBox disableJspSyntaxValidation;
-    private final Button editBtn;
-    private final Table jspFilesToOverride;
-    private final Button removeBtn;
-    private final Text selectedProjects;
-    private final Text webRootFolder;
+    private Button addBtn;
+    private Button addFromLiferayBtn;
+    private Button browseBtn;
+    private Text customJSPfolder;
+    private CheckBox disableJspSyntaxValidation;
+    private Button editBtn;
+    private Table jspFilesToOverride;
+    private Button removeBtn;
+    private Text selectedProjects;
+    private Text webRootFolder;
 
-    public CreateCustomJSPsWizard( final SWTWorkbenchBot bot )
+    public CreateCustomJSPsWizard( SWTWorkbenchBot bot )
     {
         super( bot, 3 );
 

@@ -41,7 +41,7 @@ public class GradleLiferayWorkspaceWizardTests extends SwtbotBase
     @Test
     public void newGradleLiferayWorksapceProjectWizard()
     {
-        final String workspaceName = "test-gradle-liferay-workspace";
+        String workspaceName = "test-gradle-liferay-workspace";
 
         wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -75,7 +75,7 @@ public class GradleLiferayWorkspaceWizardTests extends SwtbotBase
     @Test
     public void newGradleLiferayWorkspaceProjectWithoutDownloadBundle()
     {
-        final String workspaceName = "test-gradle-liferay-workspace-without-bundle";
+        String workspaceName = "test-gradle-liferay-workspace-without-bundle";
 
         wizardAction.openNewLiferayWorkspaceWizard();
 

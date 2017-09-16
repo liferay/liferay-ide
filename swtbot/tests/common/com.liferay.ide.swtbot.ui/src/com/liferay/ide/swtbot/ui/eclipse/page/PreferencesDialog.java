@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
@@ -23,21 +22,18 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  */
-public class PreferencesDialog extends Dialog
-{
+public class PreferencesDialog extends Dialog {
 
-    private final Tree preferencesTypes;
+	public PreferencesDialog(SWTWorkbenchBot bot) {
+		super(bot);
 
-    public PreferencesDialog( final SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_preferencesTypes = new Tree(bot);
+	}
 
-        preferencesTypes = new Tree( bot );
-    }
+	public Tree getPreferencesTypes() {
+		return _preferencesTypes;
+	}
 
-    public Tree getPreferencesTypes()
-    {
-        return preferencesTypes;
-    }
+	private Tree _preferencesTypes;
 
 }

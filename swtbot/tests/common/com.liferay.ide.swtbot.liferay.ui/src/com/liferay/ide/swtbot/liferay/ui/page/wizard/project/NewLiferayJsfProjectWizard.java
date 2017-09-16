@@ -25,9 +25,9 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class NewLiferayJsfProjectWizard extends NewProjectWizard
 {
 
-    private final ComboBox componentSuite;
+    private ComboBox componentSuite;
 
-    public NewLiferayJsfProjectWizard( final SWTWorkbenchBot bot )
+    public NewLiferayJsfProjectWizard( SWTWorkbenchBot bot )
     {
         super( bot, 2 );
 

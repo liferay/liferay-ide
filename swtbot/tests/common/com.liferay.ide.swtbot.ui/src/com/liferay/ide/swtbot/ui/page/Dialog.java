@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
@@ -23,42 +22,34 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  * @author Terry Jia
  * @author Ashley Yuan
  */
-public class Dialog extends CancelableShell
-{
+public class Dialog extends CancelableShell {
 
-    private String confirmBtnLabel = OK;
+	public Dialog(SWTWorkbenchBot bot) {
+		super(bot);
+	}
 
-    public Dialog( final SWTWorkbenchBot bot )
-    {
-        super( bot );
-    }
+	public Dialog(SWTWorkbenchBot bot, String title) {
+		super(bot, title);
+	}
 
-    public Dialog( final SWTWorkbenchBot bot, final String title )
-    {
-        super( bot, title );
-    }
+	public Dialog(SWTWorkbenchBot bot, String cancelBtnLabel, String confirmBtnLabel) {
+		this(bot, StringPool.BLANK, cancelBtnLabel, confirmBtnLabel);
+	}
 
-    public Dialog( final SWTWorkbenchBot bot, final String cancelBtnLabel, final String confirmBtnLabel )
-    {
-        this( bot, StringPool.BLANK, cancelBtnLabel, confirmBtnLabel );
-    }
+	public Dialog(SWTWorkbenchBot bot, String title, String cancelBtnLabel, String confirmBtnLabel) {
+		super(bot, title, cancelBtnLabel);
 
-    public Dialog(
-        final SWTWorkbenchBot bot, final String title, final String cancelBtnLabel, final String confirmBtnLabel )
-    {
-        super( bot, title, cancelBtnLabel );
+		_confirmBtnLabel = confirmBtnLabel;
+	}
 
-        this.confirmBtnLabel = confirmBtnLabel;
-    }
+	public void confirm() {
+		clickBtn(confirmBtn());
+	}
 
-    public void confirm()
-    {
-        clickBtn( confirmBtn() );
-    }
+	public Button confirmBtn() {
+		return new Button(bot, _confirmBtnLabel);
+	}
 
-    public Button confirmBtn()
-    {
-        return new Button( bot, confirmBtnLabel );
-    }
+	private String _confirmBtnLabel = OK;
 
 }

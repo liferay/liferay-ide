@@ -54,11 +54,11 @@ public class ValidationFragmentWizardTests extends SwtbotBase
     @Test
     public void checkBuildType()
     {
-        final String[] expectedBuildTypes = { GRADLE, MAVEN };
+        String[] expectedBuildTypes = { GRADLE, MAVEN };
 
         wizardAction.openNewFragmentWizard();
 
-        final String[] buildTypes = newFragmentWizard.getBuildTypes().items();
+        String[] buildTypes = newFragmentWizard.getBuildTypes().items();
 
         assertEquals( expectedBuildTypes.length, buildTypes.length );
 

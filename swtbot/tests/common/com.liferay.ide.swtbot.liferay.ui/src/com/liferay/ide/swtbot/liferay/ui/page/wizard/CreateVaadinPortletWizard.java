@@ -26,11 +26,11 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class CreateVaadinPortletWizard extends CreateLiferayPortletWizard
 {
 
-    private final Text applicationClass;
-    private final ComboBox portletClasses;
-    private final ComboBox vaadinPortletClasses;
+    private Text applicationClass;
+    private ComboBox portletClasses;
+    private ComboBox vaadinPortletClasses;
 
-    public CreateVaadinPortletWizard( final SWTWorkbenchBot bot )
+    public CreateVaadinPortletWizard( SWTWorkbenchBot bot )
     {
         super( bot, 3 );
 

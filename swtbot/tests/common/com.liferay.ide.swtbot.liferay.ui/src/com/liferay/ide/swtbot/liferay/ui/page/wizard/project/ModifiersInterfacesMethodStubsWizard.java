@@ -28,35 +28,35 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class ModifiersInterfacesMethodStubsWizard extends Wizard
 {
 
-    private final Button addBtn;
-    private final CheckBox constrcutFromSuperClass;
-    private final CheckBox destory;
-    private final CheckBox doAbout;
-    private final CheckBox doConfig;
-    private final CheckBox doEdit;
-    private final CheckBox doEditDefaults;
-    private final CheckBox doEditGuest;
-    private final CheckBox doHelp;
-    private final CheckBox doPreview;
-    private final CheckBox doPrint;
-    private final CheckBox doView;
-    private final CheckBox inheritedAbstractMethods;
-    private final CheckBox init;
-    private final Table interfaces;
-    private final CheckBox isAbstract;
-    private final CheckBox isFinal;
-    private final CheckBox isPublic;
-    private final CheckBox processAction;
-    private final Button removeBtn;
-    private final CheckBox serveResource;
+    private Button addBtn;
+    private CheckBox constrcutFromSuperClass;
+    private CheckBox destory;
+    private CheckBox doAbout;
+    private CheckBox doConfig;
+    private CheckBox doEdit;
+    private CheckBox doEditDefaults;
+    private CheckBox doEditGuest;
+    private CheckBox doHelp;
+    private CheckBox doPreview;
+    private CheckBox doPrint;
+    private CheckBox doView;
+    private CheckBox inheritedAbstractMethods;
+    private CheckBox init;
+    private Table interfaces;
+    private CheckBox isAbstract;
+    private CheckBox isFinal;
+    private CheckBox isPublic;
+    private CheckBox processAction;
+    private Button removeBtn;
+    private CheckBox serveResource;
 
-    public ModifiersInterfacesMethodStubsWizard( final SWTWorkbenchBot bot )
+    public ModifiersInterfacesMethodStubsWizard( SWTWorkbenchBot bot )
     {
         super( bot, 0 );
 
         isPublic = new CheckBox( bot, PUBLIC );
         isAbstract = new CheckBox( bot, ABSTRACT );
-        isFinal = new CheckBox( bot, FINAL );
+        isFinal= new CheckBox( bot, FINAL);
         interfaces = new Table( bot, INTERFACES );
         addBtn = new Button( bot, ADD_WITH_DOT );
         removeBtn = new Button( bot, REMOVE );

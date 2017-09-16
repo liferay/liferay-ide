@@ -29,21 +29,21 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class PortalPropertiesWizard extends Wizard
 {
 
-    private final Dialog addEventActionDialog;
-    private final Dialog addPropertyOverrideDialog;
-    private final Button browseBtn;
-    private final Table defineActionsOnPortalEvents;
-    private final Button eventAddBtn;
-    private final Button eventEditBtn;
-    private final Button eventRemoveBtn;
-    private final Dialog newLiferayHookConfigurationDialog;
-    private final Text portalPropertiesFile;
-    private final Button propertyAddBtn;
-    private final Button propertyEditBtn;
-    private final Button propertyRemoveBtn;
-    private final Table specifyProperties;
+    private Dialog addEventActionDialog;
+    private Dialog addPropertyOverrideDialog;
+    private Button browseBtn;
+    private Table defineActionsOnPortalEvents;
+    private Button eventAddBtn;
+    private Button eventEditBtn;
+    private Button eventRemoveBtn;
+    private Dialog newLiferayHookConfigurationDialog;
+    private Text portalPropertiesFile;
+    private Button propertyAddBtn;
+    private Button propertyEditBtn;
+    private Button propertyRemoveBtn;
+    private Table specifyProperties;
 
-    public PortalPropertiesWizard( final SWTWorkbenchBot bot )
+    public PortalPropertiesWizard( SWTWorkbenchBot bot )
     {
         super( bot, 1 );
 

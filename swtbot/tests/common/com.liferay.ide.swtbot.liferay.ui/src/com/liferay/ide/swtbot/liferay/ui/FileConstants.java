@@ -21,14 +21,14 @@ package com.liferay.ide.swtbot.liferay.ui;
 public interface FileConstants
 {
 
-    public static final String I18N_PROPERTIES = "i18n.properties";
-    public static final String FACES_CONFIG_XML = "faces-config.xml";
-    public static final String POM_XML = "pom.xml";
-    public static final String SRC = "src";
-    public static final String MAIN = "main";
-    public static final String WEBAPP = "webapp";
-    public static final String WEB_INF = "WEB-INF";
-    public static final String SRC_MAIN_RESOURCES = "src/main/resources";
-    public static final String JAVA_RESOURCES = "Java Resources";
+    public static String I18N_PROPERTIES = "i18n.properties";
+    public static String FACES_CONFIG_XML = "faces-config.xml";
+    public static String POM_XML = "pom.xml";
+    public static String SRC = "src";
+    public static String MAIN = "main";
+    public static String WEBAPP = "webapp";
+    public static String WEB_INF = "WEB-INF";
+    public static String SRC_MAIN_RESOURCES = "src/main/resources";
+    public static String JAVA_RESOURCES = "Java Resources";
 
 }

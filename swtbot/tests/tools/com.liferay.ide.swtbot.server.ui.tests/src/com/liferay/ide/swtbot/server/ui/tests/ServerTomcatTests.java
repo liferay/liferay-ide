@@ -44,7 +44,7 @@ public class ServerTomcatTests extends SwtbotBase
 
         envAction.preparePortalSetupWizardFile();
 
-        final String serverName = "Liferay 7-initialization";
+        String serverName = "Liferay 7-initialization";
 
         dialogAction.openPreferencesDialog();
 
@@ -71,13 +71,13 @@ public class ServerTomcatTests extends SwtbotBase
 
         viewAction.showServersView();
 
-        final String serverStoppedLabel = serverName + "  [Stopped]";
+        String serverStoppedLabel = serverName + "  [Stopped]";
 
         viewAction.serverStart( serverStoppedLabel );
 
         sleep( 200000 );
 
-        final String serverStartedLabel = serverName + "  [Started]";
+        String serverStartedLabel = serverName + "  [Started]";
 
         viewAction.openLiferayPortalHome( serverStartedLabel );
 
@@ -141,7 +141,7 @@ public class ServerTomcatTests extends SwtbotBase
     @Test
     public void deleteLiferay7RuntimeFromPreferences()
     {
-        final String runtimeName = "Liferay 7-delete";
+        String runtimeName = "Liferay 7-delete";
 
         dialogAction.openPreferencesDialog();
 
@@ -171,7 +171,7 @@ public class ServerTomcatTests extends SwtbotBase
     @Test
     public void serverEditorCustomLaunchSettingsChange()
     {
-        final String serverName = "Liferay 7-custom-launch-settings";
+        String serverName = "Liferay 7-custom-launch-settings";
 
         dialogAction.openPreferencesDialog();
 
@@ -197,12 +197,12 @@ public class ServerTomcatTests extends SwtbotBase
 
         viewAction.showServersView();
 
-        final String serverStoppedLabel = serverName + "  [Stopped]";
+        String serverStoppedLabel = serverName + "  [Stopped]";
 
         viewAction.openServerEditor( serverStoppedLabel );
 
-        final ServerEditor serverEditor = new ServerEditor( bot, serverName );
-        final ServerEditor serverEditorWithLabel = new ServerEditor( bot, serverStoppedLabel );
+        ServerEditor serverEditor = new ServerEditor( bot, serverName );
+        ServerEditor serverEditorWithLabel = new ServerEditor( bot, serverStoppedLabel );
 
         try
         {
@@ -273,7 +273,7 @@ public class ServerTomcatTests extends SwtbotBase
     @Test
     public void serverEditorCustomLaunchSettingsChangeAndStart()
     {
-        final String serverName = "Liferay 7-custom-launch-settings-start";
+        String serverName = "Liferay 7-custom-launch-settings-start";
 
         dialogAction.openPreferencesDialog();
 
@@ -299,12 +299,12 @@ public class ServerTomcatTests extends SwtbotBase
 
         viewAction.showServersView();
 
-        final String serverStoppedLabel = serverName + "  [Stopped]";
+        String serverStoppedLabel = serverName + "  [Stopped]";
 
         viewAction.openServerEditor( serverStoppedLabel );
 
-        final ServerEditor serverEditor = new ServerEditor( bot, serverName );
-        final ServerEditor serverEditorWithLabelStopped = new ServerEditor( bot, serverStoppedLabel );
+        ServerEditor serverEditor = new ServerEditor( bot, serverName );
+        ServerEditor serverEditorWithLabelStopped = new ServerEditor( bot, serverStoppedLabel );
 
         try
         {
@@ -346,7 +346,7 @@ public class ServerTomcatTests extends SwtbotBase
 
         sleep( 100000 );
 
-        final String serverStartedLabel = serverName + "  [Started]";
+        String serverStartedLabel = serverName + "  [Started]";
 
         viewAction.serverStop( serverStartedLabel );
 
@@ -386,7 +386,7 @@ public class ServerTomcatTests extends SwtbotBase
     @Ignore( "To wait for IDE-3343" )
     public void serverEditorPortsChange()
     {
-        final String serverName = "Liferay 7-http-port-change";
+        String serverName = "Liferay 7-http-port-change";
 
         dialogAction.openPreferencesDialog();
 
@@ -412,12 +412,12 @@ public class ServerTomcatTests extends SwtbotBase
 
         viewAction.showServersView();
 
-        final String serverStoppedLabel = serverName + "  [Stopped]";
+        String serverStoppedLabel = serverName + "  [Stopped]";
 
         viewAction.openServerEditor( serverStoppedLabel );
 
-        final ServerEditor serverEditor = new ServerEditor( bot, serverName );
-        final ServerEditor serverEditorWithLabel = new ServerEditor( bot, serverStoppedLabel );
+        ServerEditor serverEditor = new ServerEditor( bot, serverName );
+        ServerEditor serverEditorWithLabel = new ServerEditor( bot, serverStoppedLabel );
 
         try
         {
@@ -480,7 +480,7 @@ public class ServerTomcatTests extends SwtbotBase
     @Ignore( "To wait for IDE-3343" )
     public void serverEditorPortsChangeAndStart()
     {
-        final String serverName = "Liferay 7-http-port-change-and-start";
+        String serverName = "Liferay 7-http-port-change-and-start";
 
         dialogAction.openPreferencesDialog();
 
@@ -506,12 +506,12 @@ public class ServerTomcatTests extends SwtbotBase
 
         viewAction.showServersView();
 
-        final String serverStoppedLabel = serverName + "  [Stopped]";
+        String serverStoppedLabel = serverName + "  [Stopped]";
 
         viewAction.openServerEditor( serverStoppedLabel );
 
-        final ServerEditor serverEditor = new ServerEditor( bot, serverName );
-        final ServerEditor serverEditorWithLabelStopped = new ServerEditor( bot, serverStoppedLabel );
+        ServerEditor serverEditor = new ServerEditor( bot, serverName );
+        ServerEditor serverEditorWithLabelStopped = new ServerEditor( bot, serverStoppedLabel );
 
         try
         {
@@ -544,7 +544,7 @@ public class ServerTomcatTests extends SwtbotBase
 
         sleep( 100000 );
 
-        final String serverStartedLabel = serverName + "  [Started]";
+        String serverStartedLabel = serverName + "  [Started]";
 
         viewAction.serverStop( serverStartedLabel );
 
@@ -583,7 +583,7 @@ public class ServerTomcatTests extends SwtbotBase
     @Test
     public void testLiferay7ServerDebug()
     {
-        final String serverName = "Liferay 7-debug";
+        String serverName = "Liferay 7-debug";
 
         dialogAction.openPreferencesDialog();
 
@@ -609,13 +609,13 @@ public class ServerTomcatTests extends SwtbotBase
 
         viewAction.showServersView();
 
-        final String serverStoppedLabel = serverName + "  [Stopped]";
+        String serverStoppedLabel = serverName + "  [Stopped]";
 
         viewAction.serverDebug( serverStoppedLabel );
 
         sleep( 100000 );
 
-        final String serverDebuggingLabel = serverName + "  [Debugging]";
+        String serverDebuggingLabel = serverName + "  [Debugging]";
 
         viewAction.serverStop( serverDebuggingLabel );
 

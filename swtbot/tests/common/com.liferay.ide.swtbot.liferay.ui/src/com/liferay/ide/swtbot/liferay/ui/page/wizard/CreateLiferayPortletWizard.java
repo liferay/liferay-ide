@@ -33,23 +33,23 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class CreateLiferayPortletWizard extends Wizard
 {
 
-    private final Button browsePackageBtn;
-    private final Button browseSourceBtn;
-    private final Button browseSuperClassBtn;
-    private final Text javaPackage;
-    private final Radio newPortlet;
-    private final Text portletClass;
-    private final ComboBox portletPluginProjects;
-    private final Text sourceFolder;
-    private final ComboBox superClasses;
-    private final Radio useDefault;
+    private Button browsePackageBtn;
+    private Button browseSourceBtn;
+    private Button browseSuperClassBtn;
+    private Text javaPackage;
+    private Radio newPortlet;
+    private Text portletClass;
+    private ComboBox portletPluginProjects;
+    private Text sourceFolder;
+    private ComboBox superClasses;
+    private Radio useDefault;
 
-    public CreateLiferayPortletWizard( final SWTWorkbenchBot bot, final int validationMsgIndex )
+    public CreateLiferayPortletWizard( SWTWorkbenchBot bot, int validationMsgIndex )
     {
         this( bot, StringPool.BLANK, validationMsgIndex );
     }
 
-    public CreateLiferayPortletWizard( final SWTWorkbenchBot bot, final String title, final int validationMsgIndex )
+    public CreateLiferayPortletWizard( SWTWorkbenchBot bot, String title, int validationMsgIndex )
     {
         super( bot, title, validationMsgIndex );
 
@@ -65,22 +65,22 @@ public class CreateLiferayPortletWizard extends Wizard
         browseSuperClassBtn = new Button( bot, BROWSE_WITH_DOT, 2 );
     }
 
-    public void createLiferayPortlet( final boolean defaultMvc )
+    public void createLiferayPortlet( boolean defaultMvc )
     {
         createLiferayPortlet( StringPool.BLANK, null, defaultMvc, null, null, null );
     }
 
-    public void createLiferayPortlet( final String projectName )
+    public void createLiferayPortlet( String projectName )
     {
         createLiferayPortlet( projectName, null, false, null, null, null );
     }
 
-    public void createLiferayPortlet( final String projectName, final boolean defaultMvc )
+    public void createLiferayPortlet( String projectName, boolean defaultMvc )
     {
         createLiferayPortlet( projectName, null, defaultMvc, null, null, null );
     }
 
-    public void createLiferayPortlet( final String projectName, final String srcFolder )
+    public void createLiferayPortlet( String projectName, String srcFolder )
     {
         createLiferayPortlet( projectName, srcFolder, false, null, null, null );
     }

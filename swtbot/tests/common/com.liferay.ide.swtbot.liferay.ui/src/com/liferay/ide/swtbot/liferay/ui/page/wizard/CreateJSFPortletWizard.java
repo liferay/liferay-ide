@@ -27,15 +27,15 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class CreateJSFPortletWizard extends CreateLiferayPortletWizard
 {
 
-    private final CheckBox createViewFiles;
-    private final Radio iceFaces;
-    private final Radio liferayFacesAlloy;
-    private final Radio primeFaces;
-    private final Radio richFaces;
-    private final Radio standardJsf;
-    private final Text viewFolder;
+    private CheckBox createViewFiles;
+    private Radio iceFaces;
+    private Radio liferayFacesAlloy;
+    private Radio primeFaces;
+    private Radio richFaces;
+    private Radio standardJsf;
+    private Text viewFolder;
 
-    public CreateJSFPortletWizard( final SWTWorkbenchBot bot )
+    public CreateJSFPortletWizard( SWTWorkbenchBot bot )
     {
         super( bot, 4 );
 

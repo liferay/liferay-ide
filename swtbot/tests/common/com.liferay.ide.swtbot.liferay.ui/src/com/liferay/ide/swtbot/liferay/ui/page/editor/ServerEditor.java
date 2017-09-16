@@ -28,12 +28,12 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class ServerEditor extends Editor
 {
 
-    private final Text httpPort;
-    private final Radio customLaunchSettings;
-    private final Radio defaultLaunchSettings;
-    private final CheckBox useDeveloperMode;
+    private Text httpPort;
+    private Radio customLaunchSettings;
+    private Radio defaultLaunchSettings;
+    private CheckBox useDeveloperMode;
 
-    public ServerEditor( final SWTWorkbenchBot bot )
+    public ServerEditor( SWTWorkbenchBot bot )
     {
         super( bot );
 
@@ -44,7 +44,7 @@ public class ServerEditor extends Editor
         useDeveloperMode = new CheckBox( bot, "Use developer mode" );
     }
 
-    public ServerEditor( final SWTWorkbenchBot bot, final String editorName )
+    public ServerEditor( SWTWorkbenchBot bot, String editorName )
     {
         super( bot, editorName );
 

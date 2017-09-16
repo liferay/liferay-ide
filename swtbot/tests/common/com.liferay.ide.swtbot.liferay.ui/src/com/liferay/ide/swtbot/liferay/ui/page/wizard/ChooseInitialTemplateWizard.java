@@ -26,27 +26,27 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class ChooseInitialTemplateWizard extends Wizard
 {
 
-    public ChooseInitialTemplateWizard( final SWTWorkbenchBot bot )
+    public ChooseInitialTemplateWizard( SWTWorkbenchBot bot )
     {
         super( bot, 0 );
     }
 
-    public boolean isRadioSelected( final int index )
+    public boolean isRadioSelected( int index )
     {
         return new Radio( bot, index ).isSelected();
     }
 
-    public boolean isRadioSelected( final String label )
+    public boolean isRadioSelected( String label )
     {
         return new Radio( bot, label ).isSelected();
     }
 
-    public void selectRadio( final int index )
+    public void selectRadio( int index )
     {
         new Radio( bot, index ).click();
     }
 
-    public void selectRadio( final String label )
+    public void selectRadio( String label )
     {
         new Radio( bot, label ).click();
     }

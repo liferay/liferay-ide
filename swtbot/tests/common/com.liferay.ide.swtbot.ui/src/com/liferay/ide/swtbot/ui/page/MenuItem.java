@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
@@ -21,27 +20,23 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 /**
  * @author Terry Jia
  */
-public class MenuItem extends AbstractWidget
-{
+public class MenuItem extends AbstractWidget {
 
-    private final ToolbarDropDownButton dropDownBtn;
+	public MenuItem(SWTWorkbenchBot bot, ToolbarDropDownButton dropDownBtn, String label) {
+		super(bot, label);
 
-    public MenuItem( final SWTWorkbenchBot bot, final ToolbarDropDownButton dropDownBtn, String label )
-    {
-        super( bot, label );
+		_dropDownBtn = dropDownBtn;
+	}
 
-        this.dropDownBtn = dropDownBtn;
-    }
+	public void click() {
+		getWidget().click();
+	}
 
-    public void click()
-    {
-        getWidget().click();
-    }
+	@Override
+	protected SWTBotMenu getWidget() {
+		return _dropDownBtn.getWidget().menuItem(label);
+	}
 
-    @Override
-    protected SWTBotMenu getWidget()
-    {
-        return dropDownBtn.getWidget().menuItem( label );
-    }
+	private ToolbarDropDownButton _dropDownBtn;
 
 }

@@ -26,10 +26,10 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class ThemeWizard extends Wizard
 {
 
-    private final ComboBox themeFrameworkTypes;
-    private final ComboBox themeParentTypes;
+    private ComboBox themeFrameworkTypes;
+    private ComboBox themeParentTypes;
 
-    public ThemeWizard( final SWTWorkbenchBot bot )
+    public ThemeWizard( SWTWorkbenchBot bot )
     {
         super( bot, 0 );
 

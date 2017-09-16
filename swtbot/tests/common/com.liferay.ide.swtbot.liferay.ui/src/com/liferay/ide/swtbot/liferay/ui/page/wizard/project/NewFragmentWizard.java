@@ -26,10 +26,10 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class NewFragmentWizard extends NewProjectWizard
 {
 
-    private final ComboBox liferyRuntimes;
-    private final ToolbarButtonWithTooltip newRuntimeBtn;
+    private ComboBox liferyRuntimes;
+    private ToolbarButtonWithTooltip newRuntimeBtn;
 
-    public NewFragmentWizard( final SWTWorkbenchBot bot )
+    public NewFragmentWizard( SWTWorkbenchBot bot )
     {
         super( bot, 2 );
 

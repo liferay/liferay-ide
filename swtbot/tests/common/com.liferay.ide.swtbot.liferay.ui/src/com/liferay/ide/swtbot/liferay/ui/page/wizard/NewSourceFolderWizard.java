@@ -28,12 +28,12 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class NewSourceFolderWizard extends Wizard
 {
 
-    private final Text folderName;
-    private final CheckBox ignoreOptionCompileProblems;
-    private final Text projectName;
-    private final CheckBox updateExclusionFilters;
+    private Text folderName;
+    private CheckBox ignoreOptionCompileProblems;
+    private Text projectName;
+    private CheckBox updateExclusionFilters;
 
-    public NewSourceFolderWizard( final SWTWorkbenchBot bot )
+    public NewSourceFolderWizard( SWTWorkbenchBot bot )
     {
         super( bot, 2 );
 

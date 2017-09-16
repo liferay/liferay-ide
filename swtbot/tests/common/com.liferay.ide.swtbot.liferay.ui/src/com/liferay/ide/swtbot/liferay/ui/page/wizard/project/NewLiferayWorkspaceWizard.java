@@ -27,11 +27,11 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class NewLiferayWorkspaceWizard extends NewProjectWizard
 {
 
-    private final Text bundleUrl;
-    private final CheckBox downloadLiferayBundle;
-    private final Text serverName;
+    private Text bundleUrl;
+    private CheckBox downloadLiferayBundle;
+    private Text serverName;
 
-    public NewLiferayWorkspaceWizard( final SWTWorkbenchBot bot )
+    public NewLiferayWorkspaceWizard( SWTWorkbenchBot bot )
     {
         super( bot, 2 );
 

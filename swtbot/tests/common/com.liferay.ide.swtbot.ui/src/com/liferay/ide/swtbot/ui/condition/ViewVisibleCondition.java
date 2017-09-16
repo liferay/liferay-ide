@@ -1,14 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2008 Ketan Padegaonkar and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- * Kay-Uwe Graw - initial API and implementation
-
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.swtbot.ui.condition;
 
@@ -21,116 +23,97 @@ import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.BoolResult;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
+
 import org.junit.Assert;
 
 /**
- * ICondition implementation to wait for a view to become visible or not visible This is useful when the creation of a
- * view takes a while after the initiating user action has been carried out
- *
- * @author Kay-Uwe Graw &lt;kugraw [at] web [dot] de&gt;
+ * @author Terry Jia
  */
-public class ViewVisibleCondition implements ICondition
-{
+public class ViewVisibleCondition implements ICondition {
 
-    private final String identifier;
+	public ViewVisibleCondition(String viewIdentifier, boolean visible, boolean id) {
+		_identifier = viewIdentifier;
 
-    private SWTWorkbenchBot bot;
+		_visible = visible;
 
-    private final boolean visible;
-    private final boolean isId;
+		_id = id;
+	}
 
-    public ViewVisibleCondition( String viewIdentifier, boolean visible, boolean isId )
-    {
-        this.identifier = viewIdentifier;
+	public String getFailureMessage() {
+		if (_visible) {
+			return "wait for view " + _identifier + " is visible failed"; //$NON-NLS-1$
+		}
+		else {
+			return "wait for view " + _identifier + " is not visible failed"; //$NON-NLS-1$
+		}
+	}
 
-        this.visible = visible;
+	public void init(SWTBot bot) {
+		if (bot instanceof SWTWorkbenchBot) {
+			_bot = SWTWorkbenchBot.class.cast(bot);
+		}
+		else {
+			Assert.fail("init with wrong bot class");
+		}
+	}
 
-        this.isId = isId;
-    }
+	public boolean test() throws Exception {
+		if (_viewIsVisible() == _visible) {
+			return true;
+		}
 
-    public String getFailureMessage()
-    {
-        if( visible )
-        {
-            return "wait for view " + identifier + " is visible failed"; //$NON-NLS-1$
-        }
-        else
-        {
-            return "wait for view " + identifier + " is not visible failed"; //$NON-NLS-1$
-        }
-    }
+		return false;
+	}
 
-    public void init( SWTBot bot )
-    {
-        if( bot instanceof SWTWorkbenchBot )
-        {
-            this.bot = SWTWorkbenchBot.class.cast( bot );
-        }
-        else
-        {
-            Assert.fail( "init with wrong bot class" );
-        }
-    }
+	private SWTBotView _getView() {
+		long oldTimeOut = SWTBotPreferences.TIMEOUT;
 
-    public boolean test() throws Exception
-    {
-        return viewIsVisible() == visible;
-    }
+		SWTBotPreferences.TIMEOUT = 1000;
 
-    private SWTBotView getView()
-    {
-        long oldTimeOut = SWTBotPreferences.TIMEOUT;
+		SWTBotView view = null;
 
-        SWTBotPreferences.TIMEOUT = 1000;
+		try {
+			if (_id) {
+				view = _bot.viewById(_identifier);
+			}
+			else {
+				view = _bot.viewByTitle(_identifier);
+			}
+		}
+		catch (WidgetNotFoundException wnfe) {
+		}
+		finally {
+			SWTBotPreferences.TIMEOUT = oldTimeOut;
+		}
 
-        SWTBotView view = null;
+		return view;
+	}
 
-        try
-        {
-            if( isId )
-            {
-                view = bot.viewById( identifier );
-            }
-            else
-            {
-                view = bot.viewByTitle( identifier );
-            }
+	private boolean _viewIsVisible() {
+		SWTBotView view = _getView();
 
-        }
-        catch( WidgetNotFoundException e )
-        {
-        }
-        finally
-        {
-            SWTBotPreferences.TIMEOUT = oldTimeOut;
-        }
+		if (view != null) {
+			return UIThreadRunnable.syncExec(
+				new BoolResult() {
 
-        return view;
-    }
+					public Boolean run() {
+						if (view.getWidget() instanceof Control) {
+							return ((Control)view.getWidget()).isVisible();
+						}
+						else {
+							return false;
+						}
+					}
 
-    private boolean viewIsVisible()
-    {
-        final SWTBotView view = getView();
+				});
+		}
 
-        if( view != null )
-        {
-            return UIThreadRunnable.syncExec( new BoolResult()
-            {
+		return false;
+	}
 
-                public Boolean run()
-                {
-                    if( view.getWidget() instanceof Control )
-                    {
-                        return ( (Control) view.getWidget() ).isVisible();
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            } );
-        }
+	private SWTWorkbenchBot _bot;
+	private boolean _id;
+	private String _identifier;
+	private boolean _visible;
 
-        return false;
-    }
 }

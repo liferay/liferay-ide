@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,68 +10,65 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTable;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTableItem;
 
 /**
  * @author Li Lu
  */
-public class Table extends AbstractWidget
-{
+public class Table extends AbstractWidget {
 
-    public Table( final SWTWorkbenchBot bot )
-    {
-        super( bot );
-    }
+	public Table(SWTWorkbenchBot bot) {
+		super(bot);
+	}
 
-    public Table( final SWTWorkbenchBot bot, final String label )
-    {
-        super( bot, label );
-    }
+	public Table(SWTWorkbenchBot bot, int index) {
+		super(bot, index);
+	}
 
-    public Table( final SWTWorkbenchBot bot, final int index )
-    {
-        super( bot, index );
-    }
+	public Table(SWTWorkbenchBot bot, String label) {
+		super(bot, label);
+	}
 
-    protected SWTBotTable getWidget()
-    {
-        return isLabelNull() ? bot.table( index ) : bot.tableWithLabel( label, 0 );
-    }
+	public void click(int row) {
+		SWTBotTableItem tableItem = getWidget().getTableItem(row);
 
-    public void click( final int row, final int column )
-    {
-        getWidget().click( row, column );
-    }
+		tableItem.click();
+	}
 
-    public void click( final String itemText )
-    {
-        getWidget().getTableItem( itemText ).click();
-    }
+	public void click(int row, int column) {
+		getWidget().click(row, column);
+	}
 
-    public void doubleClick( final int row, final int column )
-    {
-        getWidget().doubleClick( row, column );
-    }
+	public void click(String item) {
+		SWTBotTableItem tableItem = getWidget().getTableItem(item);
 
-    public void click( final int row )
-    {
-        getWidget().getTableItem( row ).click();
-    }
+		tableItem.click();
+	}
 
-    public boolean containsItem( final String item )
-    {
-        return getWidget().containsItem( item );
-    }
+	public boolean containsItem(String item) {
+		return getWidget().containsItem(item);
+	}
 
-    public void setText( final int index, final String text )
-    {
-        bot.text( index ).setText( text );
-    }
+	public void doubleClick(int row, int column) {
+		getWidget().doubleClick(row, column);
+	}
+
+	public void setText(int index, String text) {
+		bot.text(index).setText(text);
+	}
+
+	protected SWTBotTable getWidget() {
+		if (isLabelNull()) {
+			return bot.table(index);
+		}
+
+		return bot.tableWithLabel(label, 0);
+	}
 
 }

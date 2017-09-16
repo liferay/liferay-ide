@@ -1,67 +1,59 @@
-/*******************************************************************************
- * Copyright (c) 2008 Ketan Padegaonkar and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- * Kay-Uwe Graw - initial API and implementation
-
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.swtbot.ui.condition;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 
 /**
- * ICondition implementation to wait for active shell to have a specific title or not
- *
- * @author Kay-Uwe Graw &lt;kugraw [at] web [dot] de&gt;
+ * @author Terry Jia
  */
-public class ShellCondition implements ICondition
-{
+public class ShellCondition implements ICondition {
 
-    private final String title;
-    private SWTBot bot;
-    private final boolean equal;
+	public ShellCondition(String title, boolean equal) {
+		_title = title;
 
-    /**
-     * constructor
-     *
-     * @param title
-     *            - the title name
-     * @param equal
-     *            - flag whether title of active shell should be equal or not to title name parameter
-     */
-    public ShellCondition( String title, boolean equal )
-    {
-        this.title = title;
+		_equal = equal;
+	}
 
-        this.equal = equal;
-    }
+	public String getFailureMessage() {
+		if (_equal) {
+			return "shell \"" + _title + "\" still not active";
+		}
+		else {
+			return "shell \"" + _title + "\" still active";
+		}
+	}
 
-    public String getFailureMessage()
-    {
-        if( equal )
-        {
-            return "shell \"" + title + "\" still not active";
-        }
-        else
-        {
-            return "shell \"" + title + "\" still active";
-        }
-    }
+	public void init(SWTBot bot) {
+		_bot = bot;
+	}
 
-    public void init( SWTBot bot )
-    {
-        this.bot = bot;
-    }
+	public boolean test() throws Exception {
+		SWTBotShell shell = _bot.activeShell();
 
-    public boolean test() throws Exception
-    {
-        return bot.activeShell().getText().equals( title ) == equal;
-    }
+		if (shell.getText().equals(_title) == _equal) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private SWTBot _bot;
+	private boolean _equal;
+	private String _title;
 
 }

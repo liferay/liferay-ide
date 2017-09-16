@@ -28,9 +28,9 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class SetSDKLocationWizard extends Wizard
 {
 
-    private final Text sdkLocation;
+    private Text sdkLocation;
 
-    public SetSDKLocationWizard( final SWTWorkbenchBot bot )
+    public SetSDKLocationWizard( SWTWorkbenchBot bot )
     {
         super( bot, 1 );
 

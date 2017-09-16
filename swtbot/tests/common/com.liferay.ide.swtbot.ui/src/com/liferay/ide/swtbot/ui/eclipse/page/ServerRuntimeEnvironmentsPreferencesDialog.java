@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
@@ -24,42 +23,36 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  */
-public class ServerRuntimeEnvironmentsPreferencesDialog extends Dialog
-{
+public class ServerRuntimeEnvironmentsPreferencesDialog extends Dialog {
 
-    private final Button addBtn;
-    private final Button editBtn;
-    private final Button removeBtn;
-    private final Table runtimes;
+	public ServerRuntimeEnvironmentsPreferencesDialog(SWTWorkbenchBot bot) {
+		super(bot);
 
-    public ServerRuntimeEnvironmentsPreferencesDialog( final SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_runtimes = new Table(bot, SERVER_RUNTIEME_ENVIRONMENTS);
+		_addBtn = new Button(bot, ADD_WITH_DOT);
+		_editBtn = new Button(bot, EDIT_WITH_DOT);
+		_removeBtn = new Button(bot, REMOVE);
+	}
 
-        runtimes = new Table( bot, "Server runtime environments:" );
-        addBtn = new Button( bot, "Add..." );
-        editBtn = new Button( bot, "Edit..." );
-        removeBtn = new Button( bot, "Remove" );
-    }
+	public Button getAddBtn() {
+		return _addBtn;
+	}
 
-    public Button getAddBtn()
-    {
-        return addBtn;
-    }
+	public Button getEditBtn() {
+		return _editBtn;
+	}
 
-    public Button getEditBtn()
-    {
-        return editBtn;
-    }
+	public Button getRemoveBtn() {
+		return _removeBtn;
+	}
 
-    public Button getRemoveBtn()
-    {
-        return removeBtn;
-    }
+	public Table getRuntimes() {
+		return _runtimes;
+	}
 
-    public Table getRuntimes()
-    {
-        return runtimes;
-    }
+	private Button _addBtn;
+	private Button _editBtn;
+	private Button _removeBtn;
+	private Table _runtimes;
 
 }

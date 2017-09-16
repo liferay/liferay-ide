@@ -30,7 +30,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createMvcPortlet()
     {
-        final String projectName = "test-mvc-portlet";
+        String projectName = "test-mvc-portlet";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -44,7 +44,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createService()
     {
-        final String projectName = "test-service";
+        String projectName = "test-service";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -66,7 +66,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createServiceBuilder()
     {
-        final String projectName = "test-service-builder";
+        String projectName = "test-service-builder";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -80,7 +80,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createActivator()
     {
-        final String projectName = "test-activator";
+        String projectName = "test-activator";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -94,7 +94,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createApi()
     {
-        final String projectName = "test-api";
+        String projectName = "test-api";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -108,7 +108,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createContentTargetingReport()
     {
-        final String projectName = "test-content-targeting-report";
+        String projectName = "test-content-targeting-report";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -122,7 +122,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createContentTargetingRule()
     {
-        final String projectName = "test-content-targeting-rule";
+        String projectName = "test-content-targeting-rule";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -136,7 +136,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createContentTargetingTrackingAction()
     {
-        final String projectName = "test-content-targeting-tracking-action";
+        String projectName = "test-content-targeting-tracking-action";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -150,7 +150,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createControlMenuEntry()
     {
-        final String projectName = "test-control-menu-entry";
+        String projectName = "test-control-menu-entry";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -164,7 +164,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createFormField()
     {
-        final String projectName = "test-form-field";
+        String projectName = "test-form-field";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -178,7 +178,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createPanelApp()
     {
-        final String projectName = "test-panel-app";
+        String projectName = "test-panel-app";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -192,7 +192,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createPortlet()
     {
-        final String projectName = "test-portlet";
+        String projectName = "test-portlet";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -206,7 +206,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createPortletConfigurationIcon()
     {
-        final String projectName = "test-portlet-configuration-icon";
+        String projectName = "test-portlet-configuration-icon";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -220,7 +220,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createPortletProvider()
     {
-        final String projectName = "test-portlet-provider";
+        String projectName = "test-portlet-provider";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -234,7 +234,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createPortletToolbarContributor()
     {
-        final String projectName = "test-portlet-toolbar-contributor";
+        String projectName = "test-portlet-toolbar-contributor";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -248,7 +248,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createRest()
     {
-        final String projectName = "test-rest";
+        String projectName = "test-rest";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -262,7 +262,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createServiceWrapper()
     {
-        final String projectName = "test-service-wrapper";
+        String projectName = "test-service-wrapper";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -284,7 +284,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createSimulationPanelEntry()
     {
-        final String projectName = "test-simulation-panel-entry";
+        String projectName = "test-simulation-panel-entry";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -298,7 +298,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createTemplateContextContributor()
     {
-        final String projectName = "test-template-context-contributor";
+        String projectName = "test-template-context-contributor";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -313,7 +313,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createTheme()
     {
-        final String projectName = "test-theme";
+        String projectName = "test-theme";
 
         wizardAction.openNewLiferayModuleWizard();
 
@@ -327,7 +327,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
     @Test
     public void createThemeContributor()
     {
-        final String projectName = "test-theme-contributor";
+        String projectName = "test-theme-contributor";
 
         wizardAction.openNewLiferayModuleWizard();
 

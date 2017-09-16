@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
@@ -19,71 +18,65 @@ import com.liferay.ide.swtbot.ui.UI;
 import com.liferay.ide.swtbot.ui.util.StringPool;
 
 import org.apache.log4j.Logger;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  * @author Ashley Yuan
  */
-public class BasePageObject implements UI
-{
+public class BasePageObject implements UI {
 
-    protected SWTWorkbenchBot bot;
+	public BasePageObject(SWTWorkbenchBot bot) {
+		this.bot = bot;
 
-    private long DEFAULT_SLEEP_MILLIS = 1000;
+		log = Logger.getLogger(getClass());
+	}
 
-    protected int index = -1;
-    protected String label = "";
+	public BasePageObject(SWTWorkbenchBot bot, int index) {
+		this(bot);
 
-    protected Logger log;
+		this.index = index;
+	}
 
-    public BasePageObject( SWTWorkbenchBot bot )
-    {
-        this.bot = bot;
+	public BasePageObject(SWTWorkbenchBot bot, String label) {
+		this(bot);
 
-        log = Logger.getLogger( this.getClass() );
-    }
+		this.label = label;
+	}
 
-    public BasePageObject( final SWTWorkbenchBot bot, final int index )
-    {
-        this( bot );
+	public BasePageObject(SWTWorkbenchBot bot, String label, int index) {
+		this(bot);
 
-        this.index = index;
-    }
+		this.label = label;
+		this.index = index;
+	}
 
-    public BasePageObject( final SWTWorkbenchBot bot, final String label )
-    {
-        this( bot );
+	public void sleep() {
+		sleep(_DEFAULT_SLEEP_MILLIS);
+	}
 
-        this.label = label;
-    }
+	public void sleep(long millis) {
+		bot.sleep(millis);
+	}
 
-    public BasePageObject( final SWTWorkbenchBot bot, final String label, final int index )
-    {
-        this( bot );
+	protected boolean hasIndex() {
+		if (index >= 0) {
+			return true;
+		}
 
-        this.label = label;
-        this.index = index;
-    }
+		return false;
+	}
 
-    protected boolean hasIndex()
-    {
-        return index >= 0;
-    }
+	protected boolean isLabelNull() {
+		return label.equals(StringPool.BLANK);
+	}
 
-    protected boolean isLabelNull()
-    {
-        return label.equals( StringPool.BLANK );
-    }
+	protected SWTWorkbenchBot bot;
+	protected int index = -1;
+	protected String label = "";
+	protected Logger log;
 
-    public void sleep()
-    {
-        sleep( DEFAULT_SLEEP_MILLIS );
-    }
-
-    public void sleep( final long millis )
-    {
-        bot.sleep( millis );
-    }
+	private static final long _DEFAULT_SLEEP_MILLIS = 1000;
 
 }

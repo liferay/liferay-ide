@@ -49,14 +49,14 @@ public class CodeUpgradeView extends View
 
     }
 
-    private final GearPO gear;
-    private final Canvas navigator;
-    private final ToolbarButtonWithTooltip restartBtn;
-    private final Dialog restartDialog;
-    private final ToolbarButtonWithTooltip showAllPagesBtn;
-    private final Dialog showAllPagesDialog;
+    private GearPO gear;
+    private Canvas navigator;
+    private ToolbarButtonWithTooltip restartBtn;
+    private Dialog restartDialog;
+    private ToolbarButtonWithTooltip showAllPagesBtn;
+    private Dialog showAllPagesDialog;
 
-    public CodeUpgradeView( final SWTWorkbenchBot bot, final String viewIdentifier )
+    public CodeUpgradeView( SWTWorkbenchBot bot, String viewIdentifier )
     {
         super( bot, viewIdentifier );
 

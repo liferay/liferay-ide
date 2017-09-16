@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
@@ -22,167 +21,147 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 /**
  * @author Li Lu
  */
-public class TreeItem extends AbstractWidget
-{
+public class TreeItem extends AbstractWidget {
 
-    protected String[] nodeText;
-    protected Tree tree;
+	public TreeItem(SWTWorkbenchBot bot) {
+		super(bot);
+	}
 
-    public TreeItem( final SWTWorkbenchBot bot )
-    {
-        super( bot );
-    }
+	public TreeItem(SWTWorkbenchBot bot, Tree tree, String... nodeText) {
+		super(bot);
 
-    public TreeItem( final SWTWorkbenchBot bot, final Tree tree, final String... nodeText )
-    {
-        super( bot );
+		_tree = tree;
+		this.nodeText = nodeText;
+	}
 
-        this.tree = tree;
-        this.nodeText = nodeText;
-    }
+	public void collapse() {
+		getWidget().collapse();
+	}
 
-    public void collapse()
-    {
-        getWidget().collapse();
-    }
+	public void doAction(String... actions) {
+		SWTBotMenu menu = getWidget().contextMenu(actions[0]);
 
-    public void doAction( final String... actions )
-    {
-        SWTBotMenu goalMenu = getWidget().contextMenu( actions[0] ).click();
+		SWTBotMenu goalMenu = menu.click();
 
-        for( int i = 1; i < actions.length; i++ )
-        {
-            goalMenu = goalMenu.menu( actions[i] ).click();
-        }
-    }
+		for (int i = 1; i < actions.length; i++) {
+			goalMenu = goalMenu.menu(actions[i]).click();
+		}
+	}
 
-    public void doubleClick()
-    {
-        getWidget().doubleClick();
-    }
+	public void doubleClick() {
+		getWidget().doubleClick();
+	}
 
-    public void doubleClick( String node )
-    {
-        getWidget().getNode( node ).doubleClick();
-    }
+	public void doubleClick(String node) {
+		SWTBotTreeItem treeItem = getWidget().getNode(node);
 
-    public void expand()
-    {
-        getWidget().expand();
-    }
+		treeItem.doubleClick();
+	}
 
-    public void expandAll( final SWTBotTreeItem... node )
-    {
-        SWTBotTreeItem treeItem = getWidget().expand();
+	public void expand() {
+		getWidget().expand();
+	}
 
-        SWTBotTreeItem[] subNodes = treeItem.getItems();
+	public void expandAll(SWTBotTreeItem... node) {
+		SWTBotTreeItem treeItem = getWidget().expand();
 
-        if( subNodes != null )
-        {
-            for( SWTBotTreeItem subNode : subNodes )
-            {
-                if( subNode.getText().contains( "JRE" ) )
-                    continue;
+		SWTBotTreeItem[] subnodes = treeItem.getItems();
 
-                treeItem = subNode.expand();
+		if (subnodes != null) {
+			for (SWTBotTreeItem subnode : subnodes) {
+				if (subnode.getText().contains("JRE")) {
+					continue;
+				}
 
-                expandAll( subNode );
-            }
-        }
-    }
+				treeItem = subnode.expand();
 
-    public void expandNode( String... nodes )
-    {
-        getWidget().expandNode( nodes );
-    }
+				expandAll(subnode);
+			}
+		}
+	}
 
-    public String[] getAllItems()
-    {
-        expand();
+	public void expandNode(String... nodes) {
+		getWidget().expandNode(nodes);
+	}
 
-        SWTBotTreeItem[] items = getWidget().getItems();
-        String subNodes[] = new String[items.length];
+	public String[] getAllItems() {
+		expand();
 
-        for( int i = 0; i < items.length; i++ )
-        {
-            subNodes[i] = items[i].getText();
-        }
+		SWTBotTreeItem[] items = getWidget().getItems();
 
-        return subNodes;
-    }
+		String nodes[] = new String[items.length];
 
-    public TreeItem getTreeItem( String... items )
-    {
-        String[] fullNodeText = new String[nodeText.length + items.length];
+		for (int i = 0; i < items.length; i++) {
+			nodes[i] = items[i].getText();
+		}
 
-        System.arraycopy( nodeText, 0, fullNodeText, 0, nodeText.length );
-        System.arraycopy( items, 0, fullNodeText, nodeText.length, items.length );
+		return nodes;
+	}
 
-        return new TreeItem( bot, tree, fullNodeText );
-    }
+	public TreeItem getTreeItem(String... items) {
+		String[] fullNodeText = new String[nodeText.length + items.length];
 
-    @Override
-    protected SWTBotTreeItem getWidget()
-    {
-        SWTBotTreeItem treeItem = null;
+		System.arraycopy(nodeText, 0, fullNodeText, 0, nodeText.length);
+		System.arraycopy(items, 0, fullNodeText, nodeText.length, items.length);
 
-        if( nodeText != null )
-        {
-            treeItem = tree.getWidget().getTreeItem( nodeText[0] );
-        }
+		return new TreeItem(bot, _tree, fullNodeText);
+	}
 
-        for( int i = 1; i < nodeText.length; i++ )
-        {
-            treeItem.expand();
+	public boolean isEnabled() {
+		return getWidget().isEnabled();
+	}
 
-            treeItem = treeItem.getNode( nodeText[i] );
-        }
+	public boolean isExpanded() {
+		return getWidget().isExpanded();
+	}
 
-        return treeItem;
-    }
+	public boolean isSelected() {
+		return getWidget().isSelected();
+	}
 
-    public boolean isEnabled()
-    {
-        return getWidget().isEnabled();
-    }
+	public boolean isVisible() {
+		return getWidget().isVisible();
+	}
 
-    public boolean isExpanded()
-    {
-        return getWidget().isExpanded();
-    }
+	public void select() {
+		getWidget().select();
+	}
 
-    public boolean isSelected()
-    {
-        return getWidget().isSelected();
-    }
+	public void selectMulty(String... items) {
+		getWidget().select(items);
+	}
 
-    public boolean isVisible()
-    {
-        return getWidget().isVisible();
-    }
+	public void selectTreeItem(String... items) {
+		SWTBotTreeItem treeItem = getWidget();
 
-    public void select()
-    {
-        getWidget().select();
-    }
+		for (int i = 0; i < nodeText.length; i++) {
+			treeItem.expand();
 
-    public void selectMulty( String... items )
-    {
-        getWidget().select( items );
-    }
+			treeItem = treeItem.getNode(nodeText[i]);
+		}
 
-    public void selectTreeItem( String... items )
-    {
-        SWTBotTreeItem treeItem = getWidget();
+		treeItem.select();
+	}
 
-        for( int i = 0; i < nodeText.length; i++ )
-        {
-            treeItem.expand();
+	@Override
+	protected SWTBotTreeItem getWidget() {
+		SWTBotTreeItem treeItem = null;
 
-            treeItem = treeItem.getNode( nodeText[i] );
-        }
+		if (nodeText != null) {
+			treeItem = _tree.getWidget().getTreeItem(nodeText[0]);
+		}
 
-        treeItem.select();
-    }
+		for (int i = 1; i < nodeText.length; i++) {
+			treeItem.expand();
+
+			treeItem = treeItem.getNode(nodeText[i]);
+		}
+
+		return treeItem;
+	}
+
+	protected String[] nodeText;
+
+	private Tree _tree;
 
 }

@@ -28,12 +28,12 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class LanguagePropertiesWizard extends Wizard
 {
 
-    private final Button addBtn;
-    private final Button browseBtn;
-    private final Text contentFolder;
-    private final Button editBtn;
-    private final Table languagePropertyFiles;
-    private final Button removeBtn;
+    private Button addBtn;
+    private Button browseBtn;
+    private Text contentFolder;
+    private Button editBtn;
+    private Table languagePropertyFiles;
+    private Button removeBtn;
 
     public LanguagePropertiesWizard( SWTWorkbenchBot bot )
     {

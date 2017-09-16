@@ -27,10 +27,10 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class InterfaceSelectionDialog extends TreeDialog
 {
 
-    private final Text itemToOpen;
-    private final Table matchItems;
+    private Text itemToOpen;
+    private Table matchItems;
 
-    public InterfaceSelectionDialog( final SWTWorkbenchBot bot )
+    public InterfaceSelectionDialog( SWTWorkbenchBot bot )
     {
         super( bot );
 

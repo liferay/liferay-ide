@@ -29,9 +29,9 @@ import org.junit.Test;
 public class TomcatDeployTests extends SwtbotBase
 {
 
-    private final static String serverName = "Liferay 7-deploy";
-    private final static String serverStoppedLabel = serverName + "  [Stopped]";
-    private final static String serverStartedLabel = serverName + "  [Started]";
+    private static String serverName = "Liferay 7-deploy";
+    private static String serverStoppedLabel = serverName + "  [Stopped]";
+    private static String serverStartedLabel = serverName + "  [Started]";
 
     @BeforeClass
     public static void startServer() throws IOException

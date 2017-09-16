@@ -28,21 +28,21 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class NewLiferayComponentWizard extends Wizard
 {
 
-    private final ToolbarButtonWithTooltip browseBtn;
-    private final Text componentClassName;
-    private final ComboBox componentClassTemplates;
-    private final Text modelClassName;
-    private final ToolbarButtonWithTooltip packageBrowseBtn;
-    private final Text packageName;
-    private final ComboBox projectNames;
-    private final Text serviceName;
+    private ToolbarButtonWithTooltip browseBtn;
+    private Text componentClassName;
+    private ComboBox componentClassTemplates;
+    private Text modelClassName;
+    private ToolbarButtonWithTooltip packageBrowseBtn;
+    private Text packageName;
+    private ComboBox projectNames;
+    private Text serviceName;
 
-    public NewLiferayComponentWizard( final SWTWorkbenchBot bot )
+    public NewLiferayComponentWizard( SWTWorkbenchBot bot )
     {
         this( bot, -1 );
     }
 
-    public NewLiferayComponentWizard( final SWTWorkbenchBot bot, final int validationMsgIndex )
+    public NewLiferayComponentWizard( SWTWorkbenchBot bot, int validationMsgIndex )
     {
         super( bot, NEW_LIFERAY_COMPONENT, 4 );
 

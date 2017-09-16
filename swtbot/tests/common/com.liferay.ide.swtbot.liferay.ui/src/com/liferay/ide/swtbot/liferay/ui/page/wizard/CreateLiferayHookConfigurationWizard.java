@@ -27,13 +27,13 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class CreateLiferayHookConfigurationWizard extends Wizard
 {
 
-    private final CheckBox customJsps;
-    private final ComboBox hookPluginProject;
-    private final CheckBox languageProperties;
-    private final CheckBox portalProperties;
-    private final CheckBox services;
+    private CheckBox customJsps;
+    private ComboBox hookPluginProject;
+    private CheckBox languageProperties;
+    private CheckBox portalProperties;
+    private CheckBox services;
 
-    public CreateLiferayHookConfigurationWizard( final SWTWorkbenchBot bot )
+    public CreateLiferayHookConfigurationWizard( SWTWorkbenchBot bot )
     {
         super( bot, NEW_LIFERAY_HOOK, 0 );
 

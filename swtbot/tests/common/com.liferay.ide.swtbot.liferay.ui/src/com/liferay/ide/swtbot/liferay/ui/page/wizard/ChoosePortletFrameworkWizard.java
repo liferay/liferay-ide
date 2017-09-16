@@ -27,14 +27,14 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class ChoosePortletFrameworkWizard extends Wizard
 {
 
-    private final Text archetype;
-    private final Text displayName;
-    private final Radio jsf2x;
-    private final Radio liferayMvc;
-    private final Radio springMvc;
-    private final Radio vaadin;
+    private Text archetype;
+    private Text displayName;
+    private Radio jsf2x;
+    private Radio liferayMvc;
+    private Radio springMvc;
+    private Radio vaadin;
 
-    public ChoosePortletFrameworkWizard( final SWTWorkbenchBot bot )
+    public ChoosePortletFrameworkWizard( SWTWorkbenchBot bot )
     {
         super( bot, 3 );
 
@@ -56,7 +56,7 @@ public class ChoosePortletFrameworkWizard extends Wizard
         return displayName;
     }
 
-    public void selectPortletFramework( final String label )
+    public void selectPortletFramework( String label )
     {
         switch( label )
         {

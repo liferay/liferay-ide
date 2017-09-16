@@ -29,22 +29,22 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class CreateLifeayProjectToolbarDropDownButton extends ToolbarDropDownButton
 {
 
-    private final MenuItem newLiferayComponentClass;
-    private final MenuItem newLiferayHookConfiguration;
-    private final MenuItem newLiferayJSFPortlet;
-    private final MenuItem newLiferayJSFProject;
-    private final MenuItem newLiferayLayouTemplate;
-    private final MenuItem newLiferayModule;
-    private final MenuItem newLiferayModuleFragment;
-    private final MenuItem newLiferayPlugin;
-    private final MenuItem newLiferayPluginProjectFromExistingSource;
-    private final MenuItem newLiferayPortlet;
-    private final MenuItem newLiferayServer;
-    private final MenuItem newLiferayServiceBuilder;
-    private final MenuItem newLiferayVaadinPortlet;
-    private final MenuItem newLiferayWorkspaceProject;
+    private MenuItem newLiferayComponentClass;
+    private MenuItem newLiferayHookConfiguration;
+    private MenuItem newLiferayJSFPortlet;
+    private MenuItem newLiferayJSFProject;
+    private MenuItem newLiferayLayouTemplate;
+    private MenuItem newLiferayModule;
+    private MenuItem newLiferayModuleFragment;
+    private MenuItem newLiferayPlugin;
+    private MenuItem newLiferayPluginProjectFromExistingSource;
+    private MenuItem newLiferayPortlet;
+    private MenuItem newLiferayServer;
+    private MenuItem newLiferayServiceBuilder;
+    private MenuItem newLiferayVaadinPortlet;
+    private MenuItem newLiferayWorkspaceProject;
 
-    public CreateLifeayProjectToolbarDropDownButton( final SWTWorkbenchBot bot )
+    public CreateLifeayProjectToolbarDropDownButton( SWTWorkbenchBot bot )
     {
         super( bot, CREATE_A_NEW_LIFERAY_MODULE_PROJECT );
 

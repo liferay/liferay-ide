@@ -156,7 +156,7 @@ public class FileUtil
         directory.delete();
     }
 
-    public static void deleteDirContents( final File directory )
+    public static void deleteDirContents( File directory )
     {
         if( directory == null || !directory.isDirectory() )
         {
@@ -189,13 +189,13 @@ public class FileUtil
         } );
     }
 
-    public static IContainer getWorkspaceContainer( final File f )
+    public static IContainer getWorkspaceContainer( File f )
     {
-        final IWorkspace ws = ResourcesPlugin.getWorkspace();
-        final IWorkspaceRoot wsroot = ws.getRoot();
-        final IPath path = new Path( f.getAbsolutePath() );
+        IWorkspace ws = ResourcesPlugin.getWorkspace();
+        IWorkspaceRoot wsroot = ws.getRoot();
+        IPath path = new Path( f.getAbsolutePath() );
 
-        final IContainer[] wsContainers = wsroot.findContainersForLocationURI( path.toFile().toURI() );
+        IContainer[] wsContainers = wsroot.findContainersForLocationURI( path.toFile().toURI() );
 
         if( wsContainers.length > 0 )
         {
@@ -205,13 +205,13 @@ public class FileUtil
         return null;
     }
 
-    public static IFile getWorkspaceFile( final File f, String expectedProjectName )
+    public static IFile getWorkspaceFile( File f, String expectedProjectName )
     {
-        final IWorkspace ws = ResourcesPlugin.getWorkspace();
-        final IWorkspaceRoot wsroot = ws.getRoot();
-        final IPath path = new Path( f.getAbsolutePath() );
+        IWorkspace ws = ResourcesPlugin.getWorkspace();
+        IWorkspaceRoot wsroot = ws.getRoot();
+        IPath path = new Path( f.getAbsolutePath() );
 
-        final IFile[] wsFiles = wsroot.findFilesForLocationURI( path.toFile().toURI() );
+        IFile[] wsFiles = wsroot.findFilesForLocationURI( path.toFile().toURI() );
 
         if( wsFiles.length > 0 )
         {
@@ -401,9 +401,9 @@ public class FileUtil
 
         if( file.exists() )
         {
-            final String searchContents = CoreUtil.readStreamToString( new FileInputStream( file ) );
+            String searchContents = CoreUtil.readStreamToString( new FileInputStream( file ) );
 
-            final String replaceContents = searchContents.replaceAll( search, replace );
+            String replaceContents = searchContents.replaceAll( search, replace );
 
             replaced = !searchContents.equals( replaceContents );
 
@@ -413,10 +413,10 @@ public class FileUtil
         return replaced;
     }
 
-    public static void validateEdit( final IFile... files ) throws CoreException
+    public static void validateEdit( IFile... files ) throws CoreException
     {
-        final IWorkspace ws = ResourcesPlugin.getWorkspace();
-        final IStatus st = ws.validateEdit( files, IWorkspace.VALIDATE_PROMPT );
+        IWorkspace ws = ResourcesPlugin.getWorkspace();
+        IStatus st = ws.validateEdit( files, IWorkspace.VALIDATE_PROMPT );
 
         if( st.getSeverity() == IStatus.ERROR )
         {

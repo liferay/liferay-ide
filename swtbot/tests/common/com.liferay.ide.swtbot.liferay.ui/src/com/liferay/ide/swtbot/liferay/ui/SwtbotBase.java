@@ -56,7 +56,7 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants
 
     public static SWTWorkbenchBot bot;
     public static DialogAction dialogAction;
-    protected final static String eclipseWorkspace = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
+    protected static String eclipseWorkspace = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
     public static EnvAction envAction;
     public static boolean hasAddedProject = false;
     public static LiferayIDE ide;
@@ -111,19 +111,19 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants
         wizardAction.finishToWait();
     }
 
-    protected static ValidationMsg[] getValidationMsgs( final File csv )
+    protected static ValidationMsg[] getValidationMsgs( File csv )
     {
         assertTrue( csv.exists() );
 
-        final String[][] msgs = CSVReader.readCSV( csv );
+        String[][] msgs = CSVReader.readCSV( csv );
 
-        final ValidationMsg[] validationMsgs = new ValidationMsg[msgs.length];
+        ValidationMsg[] validationMsgs = new ValidationMsg[msgs.length];
 
         for( int i = 0; i < msgs.length; i++ )
         {
             validationMsgs[i] = new ValidationMsg();
 
-            final String[] columns = msgs[i];
+            String[] columns = msgs[i];
 
             for( int t = 0; t < columns.length; t++ )
             {
@@ -146,7 +146,7 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants
         bot.sleep( millis );
     }
 
-    private final long DEFAULT_SLEEP_MILLIS = 1000;
+    private long DEFAULT_SLEEP_MILLIS = 1000;
 
     public boolean addedProjects()
     {
@@ -155,7 +155,7 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants
         return ide.hasProjects();
     }
 
-    public void openFile( final String path ) throws Exception
+    public void openFile( String path ) throws Exception
     {
         Display.getDefault().syncExec( new Runnable()
         {

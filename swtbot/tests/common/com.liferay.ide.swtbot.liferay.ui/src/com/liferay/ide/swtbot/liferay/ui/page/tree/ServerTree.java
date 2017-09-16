@@ -31,17 +31,17 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 public class ServerTree extends TreeItem
 {
 
-    private final AddAndRemoveDialog addAndRemoveDialog;
-    private final String serverName;
+    private AddAndRemoveDialog addAndRemoveDialog;
+    private String serverName;
 
     int serverTreeIndex = 1;
 
-    public ServerTree( final SWTWorkbenchBot bot )
+    public ServerTree( SWTWorkbenchBot bot )
     {
         this( bot, StringPool.BLANK );
     }
 
-    public ServerTree( final SWTWorkbenchBot bot, final String serverNameValue )
+    public ServerTree( SWTWorkbenchBot bot, String serverNameValue )
     {
         super( bot );
 
@@ -59,7 +59,7 @@ public class ServerTree extends TreeItem
         addAndRemoveDialog.confirm();
     }
 
-    public boolean checkConsoleHasMsg( final String expectedMsg, final int timeout )
+    public boolean checkConsoleHasMsg( String expectedMsg, int timeout )
     {
         long timeoutExpiredMs = System.currentTimeMillis() + timeout;
 

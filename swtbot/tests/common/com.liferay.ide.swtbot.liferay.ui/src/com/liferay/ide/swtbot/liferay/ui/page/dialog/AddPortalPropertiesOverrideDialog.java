@@ -27,11 +27,11 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class AddPortalPropertiesOverrideDialog extends Dialog
 {
 
-    private final Text property;
-    private final Button selectPropertyBtn;
-    private final Text value;
+    private Text property;
+    private Button selectPropertyBtn;
+    private Text value;
 
-    public AddPortalPropertiesOverrideDialog( final SWTWorkbenchBot bot )
+    public AddPortalPropertiesOverrideDialog( SWTWorkbenchBot bot )
     {
         super( bot );
 

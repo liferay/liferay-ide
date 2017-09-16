@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui;
 
@@ -36,194 +35,177 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  * @author Ying Xu
  * @author Vicky Wang
  */
-public class Eclipse extends BasePageObject
-{
+public class Eclipse extends BasePageObject {
 
-    protected final PackageExplorerView packageExporerView;
-    protected final Tree projectTree;
-    protected final View welcomeView;
-    protected final ProgressView progressView;
-    protected final Menu otherMenu;
-    protected final TextDialog showViewDialog;
-    protected final ErrorLogView errorLogView;
-    protected final Menu fileMenu;
-    protected final ProjectExplorerView projectExplorerView;
-    protected final Menu preferencesMenu;
-    protected final ServersView serversView;
-    protected final Browser browser;
+	public Eclipse(SWTWorkbenchBot bot) {
+		super(bot);
 
-    public Eclipse( final SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_packageExporerView = new PackageExplorerView(bot);
+		_welcomeView = new View(bot, WELCOME);
+		_progressView = new ProgressView(bot);
+		_projectTree = new Tree(bot);
+		_fileMenu = new Menu(bot, FILE);
 
-        packageExporerView = new PackageExplorerView( bot );
-        welcomeView = new View( bot, WELCOME );
-        progressView = new ProgressView( bot );
-        projectTree = new Tree( bot );
-        fileMenu = new Menu( bot, FILE );
+		String[] otherLabel = {WINDOW, SHOW_VIEW, OTHER};
+		String[] preferencesLabel = {WINDOW, PREFERENCES};
 
-        String[] otherLabel = { WINDOW, SHOW_VIEW, OTHER };
-        String[] preferencesLabel = { WINDOW, PREFERENCES };
+		_preferencesMenu = new Menu(bot, preferencesLabel);
 
-        preferencesMenu = new Menu( bot, preferencesLabel );
-        otherMenu = new Menu( bot, otherLabel );
+		_otherMenu = new Menu(bot, otherLabel);
 
-        showViewDialog = new TextDialog( bot );
-        errorLogView = new ErrorLogView( bot );
-        projectExplorerView = new ProjectExplorerView( bot );
-        serversView = new ServersView( bot );
-        browser = new Browser( bot );
-    }
+		_showViewDialog = new TextDialog(bot);
+		_errorLogView = new ErrorLogView(bot);
+		_projectExplorerView = new ProjectExplorerView(bot);
+		_serversView = new ServersView(bot);
+		_browser = new Browser(bot);
+	}
 
-    public void closeShell( String title )
-    {
-        Dialog shell = new Dialog( bot, title );
+	public void closeShell(String title) {
+		Dialog shell = new Dialog(bot, title);
 
-        shell.closeIfOpen();
-    }
+		shell.closeIfOpen();
+	}
 
-    public Menu getFileMenu()
-    {
-        return fileMenu;
-    }
+	public Browser getBrowser() {
+		return _browser;
+	}
 
-    public PackageExplorerView getPackageExporerView()
-    {
-        return packageExporerView;
-    }
+	public Editor getEditor(String fileName) {
+		return new Editor(bot, fileName);
+	}
 
-    public Tree getProjectTree()
-    {
-        return projectTree;
-    }
+	public Menu getFileMenu() {
+		return _fileMenu;
+	}
 
-    public View getWelcomeView()
-    {
-        return welcomeView;
-    }
+	public Menu getOtherMenu() {
+		return _otherMenu;
+	}
 
-    public ProjectExplorerView getProjectExplorerView()
-    {
-        return projectExplorerView;
-    }
+	public PackageExplorerView getPackageExporerView() {
+		return _packageExporerView;
+	}
 
-    public PackageExplorerView showPackageExporerView()
-    {
-        try
-        {
-            packageExporerView.show();
-        }
-        catch( Exception e )
-        {
-            otherMenu.click();
-            showViewDialog.getText().setText( ( "Package Explorer" ) );
+	public Menu getPreferencesMenu() {
+		return _preferencesMenu;
+	}
 
-            showViewDialog.confirm();
+	public ProjectExplorerView getProjectExplorerView() {
+		return _projectExplorerView;
+	}
 
-            packageExporerView.show();
-        }
-        return packageExporerView;
-    }
+	public Tree getProjectTree() {
+		return _projectTree;
+	}
 
-    public ServersView showServersView()
-    {
-        try
-        {
-            serversView.show();
-        }
-        catch( Exception e )
-        {
-            otherMenu.click();
+	public ServersView getServersView() {
+		return _serversView;
+	}
 
-            showViewDialog.getText().setText( ( "Servers" ) );
+	public TextDialog getShowViewDialog() {
+		return _showViewDialog;
+	}
 
-            sleep( 100 );
+	public View getWelcomeView() {
+		return _welcomeView;
+	}
 
-            showViewDialog.confirm();
+	public boolean hasProjects() {
+		_packageExporerView.show();
 
-            serversView.show();
-        }
+		try {
+			return _projectTree.hasItems();
+		}
+		catch (Exception e) {
+		}
 
-        return serversView;
-    }
+		return false;
+	}
 
-    public ServersView getServersView()
-    {
-        return serversView;
-    }
+	public ErrorLogView showErrorLogView() {
+		try {
+			_errorLogView.show();
+		}
+		catch (Exception e) {
+			_otherMenu.click();
 
-    public ProgressView showProgressView()
-    {
-        try
-        {
-            progressView.show();
-        }
-        catch( Exception e )
-        {
-            otherMenu.click();
+			_showViewDialog.getText().setText(ERROR_LOG);
 
-            showViewDialog.getText().setText( ( PROGRESS ) );
+			sleep(100);
 
-            sleep( 100 );
+			_showViewDialog.confirm();
 
-            showViewDialog.confirm();
+			_errorLogView.show();
+		}
 
-            progressView.show();
-        }
+		return _errorLogView;
+	}
 
-        return progressView;
-    }
+	public PackageExplorerView showPackageExporerView() {
+		try {
+			_packageExporerView.show();
+		}
+		catch (Exception e) {
+			_otherMenu.click();
+			_showViewDialog.getText().setText(PACKAGE_EXPLORER);
 
-    public ErrorLogView showErrorLogView()
-    {
-        try
-        {
-            errorLogView.show();
-        }
-        catch( Exception e )
-        {
-            otherMenu.click();
+			_showViewDialog.confirm();
 
-            showViewDialog.getText().setText( ( ERROR_LOG ) );
+			_packageExporerView.show();
+		}
 
-            sleep( 100 );
+		return _packageExporerView;
+	}
 
-            showViewDialog.confirm();
+	public ProgressView showProgressView() {
+		try {
+			_progressView.show();
+		}
+		catch (Exception e) {
+			_otherMenu.click();
 
-            errorLogView.show();
-        }
+			_showViewDialog.getText().setText(PROGRESS);
 
-        return errorLogView;
-    }
+			sleep(100);
 
-    public Browser getBrowser()
-    {
-        return browser;
-    }
+			_showViewDialog.confirm();
 
-    public boolean hasProjects()
-    {
-        packageExporerView.show();
+			_progressView.show();
+		}
 
-        try
-        {
-            return projectTree.hasItems();
-        }
-        catch( Exception e )
-        {
-        }
+		return _progressView;
+	}
 
-        return false;
-    }
+	public ServersView showServersView() {
+		try {
+			_serversView.show();
+		}
+		catch (Exception e) {
+			_otherMenu.click();
 
-    public Editor getEditor( String fileName )
-    {
-        return new Editor( bot, fileName );
-    }
+			_showViewDialog.getText().setText(SERVERS);
 
-    public Menu getPreferencesMenu()
-    {
-        return preferencesMenu;
-    }
+			sleep(100);
+
+			_showViewDialog.confirm();
+
+			_serversView.show();
+		}
+
+		return _serversView;
+	}
+
+	private Browser _browser;
+	private ErrorLogView _errorLogView;
+	private Menu _fileMenu;
+	private Menu _otherMenu;
+	private PackageExplorerView _packageExporerView;
+	private Menu _preferencesMenu;
+	private ProgressView _progressView;
+	private ProjectExplorerView _projectExplorerView;
+	private Tree _projectTree;
+	private ServersView _serversView;
+	private TextDialog _showViewDialog;
+	private View _welcomeView;
 
 }

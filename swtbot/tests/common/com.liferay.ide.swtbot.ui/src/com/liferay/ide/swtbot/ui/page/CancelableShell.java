@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
@@ -21,36 +20,30 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  * @author Terry Jia
  * @author Ashley Yuan
  */
-public class CancelableShell extends Shell
-{
+public class CancelableShell extends Shell {
 
-    protected String cancelBtnLabel = CANCEL;
+	public CancelableShell(SWTWorkbenchBot bot) {
+		super(bot);
+	}
 
-    public CancelableShell( final SWTWorkbenchBot bot )
-    {
-        super( bot );
-    }
+	public CancelableShell(SWTWorkbenchBot bot, String label) {
+		super(bot, label);
+	}
 
-    public CancelableShell( final SWTWorkbenchBot bot, final String label )
-    {
-        super( bot, label );
-    }
+	public CancelableShell(SWTWorkbenchBot bot, String label, String cancelBtnLabel) {
+		super(bot, label);
 
-    public CancelableShell( final SWTWorkbenchBot bot, final String label, final String cancelBtnLabel )
-    {
-        super( bot, label );
+		_cancelBtnLabel = cancelBtnLabel;
+	}
 
-        this.cancelBtnLabel = cancelBtnLabel;
-    }
+	public void cancel() {
+		clickBtn(cancelBtn());
+	}
 
-    public void cancel()
-    {
-        clickBtn( cancelBtn() );
-    }
+	public Button cancelBtn() {
+		return new Button(bot, _cancelBtnLabel);
+	}
 
-    public Button cancelBtn()
-    {
-        return new Button( bot, cancelBtnLabel );
-    }
+	private String _cancelBtnLabel = CANCEL;
 
 }

@@ -26,17 +26,17 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class NewToolbarDropDownButton extends ToolbarDropDownButton
 {
 
-    private final MenuItem liferayPluginProject;
-    private final MenuItem liferayModuleProject;
-    private final MenuItem liferayPortlet;
-    private final MenuItem liferayJSFPortlet;
-    private final MenuItem liferayVaadinPortlet;
-    private final MenuItem liferayHookConfiguration;
-    private final MenuItem liferayServiceBuilder;
-    private final MenuItem liferayLayoutTemplate;
-    private final MenuItem newPackage;
+    private MenuItem liferayPluginProject;
+    private MenuItem liferayModuleProject;
+    private MenuItem liferayPortlet;
+    private MenuItem liferayJSFPortlet;
+    private MenuItem liferayVaadinPortlet;
+    private MenuItem liferayHookConfiguration;
+    private MenuItem liferayServiceBuilder;
+    private MenuItem liferayLayoutTemplate;
+    private MenuItem newPackage;
 
-    public NewToolbarDropDownButton( final SWTWorkbenchBot bot )
+    public NewToolbarDropDownButton( SWTWorkbenchBot bot )
     {
         super( bot, NEW );
 

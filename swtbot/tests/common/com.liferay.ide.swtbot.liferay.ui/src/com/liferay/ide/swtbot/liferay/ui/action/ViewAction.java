@@ -33,19 +33,19 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 public class ViewAction extends UIAction
 {
 
-    private final DeleteResourcesContinueDialog continueDeleteResourcesDialog =
+    private DeleteResourcesContinueDialog continueDeleteResourcesDialog =
         new DeleteResourcesContinueDialog( bot );
-    private final DeleteResourcesDialog deleteResourcesDialog = new DeleteResourcesDialog( bot );
-    private final PackageExplorerView packageExplorerView = new PackageExplorerView( bot );
-    private final ProjectExplorerView projectExplorerView = new ProjectExplorerView( bot );
-    private final ServersView serversView = new ServersView( bot );
+    private DeleteResourcesDialog deleteResourcesDialog = new DeleteResourcesDialog( bot );
+    private PackageExplorerView packageExplorerView = new PackageExplorerView( bot );
+    private ProjectExplorerView projectExplorerView = new ProjectExplorerView( bot );
+    private ServersView serversView = new ServersView( bot );
 
-    public ViewAction( final SWTWorkbenchBot bot )
+    public ViewAction( SWTWorkbenchBot bot )
     {
         super( bot );
     }
 
-    public void deleteProject( final String name )
+    public void deleteProject( String name )
     {
         getProjects().getTreeItem( name ).doAction( DELETE );
 
@@ -68,7 +68,7 @@ public class ViewAction extends UIAction
         }
     }
 
-    public void deleteProject( final String... nodes )
+    public void deleteProject( String... nodes )
     {
         getProjects().expandNode( nodes ).doAction( DELETE );
 
@@ -93,33 +93,33 @@ public class ViewAction extends UIAction
 
     public void deleteProjects()
     {
-        final Tree projects = getProjects();
+        Tree projects = getProjects();
 
-        final String[] names = projects.getAllItems();
+        String[] names = projects.getAllItems();
 
-        for( final String name : names )
+        for( String name : names )
         {
             deleteProject( name );
         }
     }
 
-    public void deleteProjects( final String[] names )
+    public void deleteProjects( String[] names )
     {
-        for( final String name : names )
+        for( String name : names )
         {
             deleteProject( name );
         }
     }
 
-    public void deleteProjectsExcludeNames( final String... names )
+    public void deleteProjectsExcludeNames( String... names )
     {
-        final String[] projectNames = getProjects().getAllItems();
+        String[] projectNames = getProjects().getAllItems();
 
-        for( final String projectName : projectNames )
+        for( String projectName : projectNames )
         {
             boolean include = false;
 
-            for( final String name : names )
+            for( String name : names )
             {
                 if( name.equals( projectName ) )
                 {
@@ -138,12 +138,12 @@ public class ViewAction extends UIAction
         }
     }
 
-    public TreeItem fetchProjectFile( final String... files )
+    public TreeItem fetchProjectFile( String... files )
     {
         return getProjects().expandNode( files );
     }
 
-    public TreeItem getProject( final String name )
+    public TreeItem getProject( String name )
     {
         return getProjects().getTreeItem( name );
     }
@@ -160,12 +160,12 @@ public class ViewAction extends UIAction
         }
     }
 
-    public void openAddAndRemoveDialog( final String serverLabel )
+    public void openAddAndRemoveDialog( String serverLabel )
     {
         serversView.getServers().getTreeItem( serverLabel ).contextMenu( ADD_AND_REMOVE );
     }
 
-    public void openLiferayPortalHome( final String serverLabel )
+    public void openLiferayPortalHome( String serverLabel )
     {
         serversView.getServers().getTreeItem( serverLabel ).contextMenu( OPEN_LIFERAY_PORTAL_HOME );
     }

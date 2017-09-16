@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
@@ -23,33 +22,27 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotCombo;
  * @author Ashley Yuan
  * @author Ying Xu
  */
-public class ComboBox extends AbstractWidget
-{
+public class ComboBox extends AbstractWidget {
 
-    public ComboBox( final SWTWorkbenchBot bot, final String label )
-    {
-        super( bot, label );
-    }
+	public ComboBox(SWTWorkbenchBot bot, String label) {
+		super(bot, label);
+	}
 
-    public String[] items()
-    {
-        return getWidget().items();
-    }
+	public String[] items() {
+		return getWidget().items();
+	}
 
-    @Override
-    protected SWTBotCombo getWidget()
-    {
-        return bot.comboBoxWithLabel( label );
-    }
+	public void setSelection(String value) {
+		getWidget().setSelection(value);
+	}
 
-    public void setSelection( final String value )
-    {
-        getWidget().setSelection( value );
-    }
+	public void setText(String text) {
+		getWidget().setText(text);
+	}
 
-    public void setText( final String text )
-    {
-        getWidget().setText( text );
-    }
+	@Override
+	protected SWTBotCombo getWidget() {
+		return bot.comboBoxWithLabel(label);
+	}
 
 }

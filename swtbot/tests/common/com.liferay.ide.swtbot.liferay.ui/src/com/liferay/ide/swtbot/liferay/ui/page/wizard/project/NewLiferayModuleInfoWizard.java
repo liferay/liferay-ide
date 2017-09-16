@@ -28,17 +28,17 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class NewLiferayModuleInfoWizard extends Wizard
 {
 
-    private final ToolbarButtonWithTooltip addPropertyKeyBtn;
-    private final ToolbarButtonWithTooltip browseBtn;
-    private final Text componentClassName;
-    private final ToolbarButtonWithTooltip deleteBtn;
-    private final ToolbarButtonWithTooltip moveDownBtn;
-    private final ToolbarButtonWithTooltip moveUpBtn;
-    private final Text packageName;
-    private final Table properties;
-    private final Text serviceName;
+    private ToolbarButtonWithTooltip addPropertyKeyBtn;
+    private ToolbarButtonWithTooltip browseBtn;
+    private Text componentClassName;
+    private ToolbarButtonWithTooltip deleteBtn;
+    private ToolbarButtonWithTooltip moveDownBtn;
+    private ToolbarButtonWithTooltip moveUpBtn;
+    private Text packageName;
+    private Table properties;
+    private Text serviceName;
 
-    public NewLiferayModuleInfoWizard( final SWTWorkbenchBot bot )
+    public NewLiferayModuleInfoWizard( SWTWorkbenchBot bot )
     {
         super( bot, 2 );
 

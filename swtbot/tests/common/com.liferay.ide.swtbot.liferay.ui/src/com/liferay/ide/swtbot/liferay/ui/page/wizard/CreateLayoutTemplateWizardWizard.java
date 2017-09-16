@@ -28,14 +28,14 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class CreateLayoutTemplateWizardWizard extends Wizard
 {
 
-    private final Text id;
-    private final ComboBox layoutPluginProjects;
-    private final Text name;
-    private final Text templateFile;
-    private final Text thumbnailFile;
-    private final Text wapTemplateFile;
+    private Text id;
+    private ComboBox layoutPluginProjects;
+    private Text name;
+    private Text templateFile;
+    private Text thumbnailFile;
+    private Text wapTemplateFile;
 
-    public CreateLayoutTemplateWizardWizard( final SWTWorkbenchBot bot )
+    public CreateLayoutTemplateWizardWizard( SWTWorkbenchBot bot )
     {
         super( bot, 5 );
 
@@ -47,7 +47,7 @@ public class CreateLayoutTemplateWizardWizard extends Wizard
         thumbnailFile = new Text( bot, THUMBNAIL_FILE );
     }
 
-    public void clickBrowseButton( final int index )
+    public void clickBrowseButton( int index )
     {
         new Button( bot, index ).click();
     }

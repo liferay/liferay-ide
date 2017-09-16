@@ -50,7 +50,7 @@ public class ImportLiferayWorkspaceProjectTests extends SwtbotBase
 
         wizardAction.prepareImportLiferayWorkspace(liferayWorkspaceRootPath + "/projects/testGradleWorkspace");
 
-        final String workspaceName = "testGradleWorkspace";
+        String workspaceName = "testGradleWorkspace";
 
         wizardAction.finishToWait();
 

@@ -27,24 +27,24 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class PortletDeploymentDescriptorWizard extends Wizard
 {
 
-    private final CheckBox about;
-    private final CheckBox config;
-    private final CheckBox createJspFiles;
-    private final CheckBox createResourceBundleFile;
-    private final Text displayName;
-    private final CheckBox edit;
-    private final CheckBox editDefaults;
-    private final CheckBox editGuest;
-    private final CheckBox help;
-    private final Text jspFolder;
-    private final Text name;
-    private final CheckBox preview;
-    private final CheckBox print;
-    private final Text resourceBundleFilePath;
-    private final Text title;
-    private final CheckBox view;
+    private CheckBox about;
+    private CheckBox config;
+    private CheckBox createJspFiles;
+    private CheckBox createResourceBundleFile;
+    private Text displayName;
+    private CheckBox edit;
+    private CheckBox editDefaults;
+    private CheckBox editGuest;
+    private CheckBox help;
+    private Text jspFolder;
+    private Text name;
+    private CheckBox preview;
+    private CheckBox print;
+    private Text resourceBundleFilePath;
+    private Text title;
+    private CheckBox view;
 
-    public PortletDeploymentDescriptorWizard( final SWTWorkbenchBot bot )
+    public PortletDeploymentDescriptorWizard( SWTWorkbenchBot bot )
     {
         super( bot, 5 );
 

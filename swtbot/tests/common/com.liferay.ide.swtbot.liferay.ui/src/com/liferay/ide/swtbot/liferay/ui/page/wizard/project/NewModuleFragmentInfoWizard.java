@@ -27,12 +27,12 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class NewModuleFragmentInfoWizard extends Wizard
 {
 
-    private final ToolbarButtonWithTooltip addOverrideFilePathBtn;
-    private final ToolbarButtonWithTooltip addOverrideFilesBtn;
-    private final ToolbarButtonWithTooltip browseOsgiBtn;
-    private final Table files;
+    private ToolbarButtonWithTooltip addOverrideFilePathBtn;
+    private ToolbarButtonWithTooltip addOverrideFilesBtn;
+    private ToolbarButtonWithTooltip browseOsgiBtn;
+    private Table files;
 
-    public NewModuleFragmentInfoWizard( final SWTWorkbenchBot bot )
+    public NewModuleFragmentInfoWizard( SWTWorkbenchBot bot )
     {
         super( bot, 1 );
 

@@ -26,9 +26,9 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class NewLiferayServerWizard extends Wizard
 {
 
-    private final Tree serverTypes;
+    private Tree serverTypes;
 
-    public NewLiferayServerWizard( final SWTWorkbenchBot bot )
+    public NewLiferayServerWizard( SWTWorkbenchBot bot )
     {
         super( bot );
 

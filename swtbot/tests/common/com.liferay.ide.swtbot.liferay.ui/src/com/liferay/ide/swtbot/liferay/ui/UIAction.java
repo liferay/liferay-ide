@@ -26,11 +26,11 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class UIAction implements UI
 {
 
-    protected final SWTWorkbenchBot bot;
+    protected SWTWorkbenchBot bot;
 
-    protected final LiferayIDE ide;
+    protected LiferayIDE ide;
 
-    public UIAction( final SWTWorkbenchBot bot )
+    public UIAction( SWTWorkbenchBot bot )
     {
         this.bot = bot;
 

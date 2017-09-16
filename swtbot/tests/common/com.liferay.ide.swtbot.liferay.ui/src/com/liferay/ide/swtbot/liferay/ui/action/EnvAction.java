@@ -49,14 +49,14 @@ import org.eclipse.swtbot.swt.finder.utils.FileUtils;
 public class EnvAction extends UIAction
 {
 
-    private final BundleInfo[] bundleInfos;
-    private final String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
+    private BundleInfo[] bundleInfos;
+    private String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
     private IPath liferayBundlesPath;
-    private final String PLUGINS_SDK_DIR = "com.liferay.portal.plugins.sdk-1.0.11-withdependencies";
-    private final String PLUGINS_SDK_ZIP =
+    private String PLUGINS_SDK_DIR = "com.liferay.portal.plugins.sdk-1.0.11-withdependencies";
+    private String PLUGINS_SDK_ZIP =
         "com.liferay.portal.plugins.sdk-1.0.11-withdependencies-20170613175008905.zip";
 
-    public EnvAction( final SWTWorkbenchBot bot )
+    public EnvAction( SWTWorkbenchBot bot )
     {
         super( bot );
 
@@ -65,19 +65,19 @@ public class EnvAction extends UIAction
 
     public BundleInfo[] getBundleInfos()
     {
-        final File bundleCSV = getLiferayBundlesPath().append( "bundles.csv" ).toFile();
+        File bundleCSV = getLiferayBundlesPath().append( "bundles.csv" ).toFile();
 
         assertTrue( bundleCSV.exists() );
 
-        final String[][] infos = CSVReader.readCSV( bundleCSV );
+        String[][] infos = CSVReader.readCSV( bundleCSV );
 
-        final BundleInfo[] bundleInfos = new BundleInfo[infos.length];
+        BundleInfo[] bundleInfos = new BundleInfo[infos.length];
 
         for( int i = 0; i < infos.length; i++ )
         {
             bundleInfos[i] = new BundleInfo();
 
-            final String[] columns = infos[i];
+            String[] columns = infos[i];
 
             for( int t = 0; t < columns.length; t++ )
             {
@@ -113,7 +113,7 @@ public class EnvAction extends UIAction
         {
             if( liferayBundlesDir == null || liferayBundlesDir.equals( "" ) )
             {
-                final URL rootUrl = Platform.getBundle( "com.liferay.ide.swtbot.liferay.ui" ).getEntry( "/" );
+                URL rootUrl = Platform.getBundle( "com.liferay.ide.swtbot.liferay.ui" ).getEntry( "/" );
 
                 try
                 {
@@ -178,9 +178,9 @@ public class EnvAction extends UIAction
 
     public File getProjectZip( String bundleId, String projectName ) throws IOException
     {
-        final URL projectZipUrl = Platform.getBundle( bundleId ).getEntry( "projects/" + projectName + ".zip" );
+        URL projectZipUrl = Platform.getBundle( bundleId ).getEntry( "projects/" + projectName + ".zip" );
 
-        final File projectZipFile = new File( FileLocator.toFileURL( projectZipUrl ).getFile() );
+        File projectZipFile = new File( FileLocator.toFileURL( projectZipUrl ).getFile() );
 
         return projectZipFile;
     }
@@ -228,16 +228,16 @@ public class EnvAction extends UIAction
 
     public void prepareGeoFile()
     {
-        final String filename = "com.liferay.ip.geocoder.internal.IPGeocoderConfiguration.cfg";
+        String filename = "com.liferay.ip.geocoder.internal.IPGeocoderConfiguration.cfg";
 
-        final File source = getLiferayBundlesPath().append( filename ).toFile();
-        final File dest = getLiferayServerDir().append( "osgi" ).append( "configs" ).append( filename ).toFile();
+        File source = getLiferayBundlesPath().append( filename ).toFile();
+        File dest = getLiferayServerDir().append( "osgi" ).append( "configs" ).append( filename ).toFile();
 
         try
         {
             FileUtil.copyFile( source, dest );
 
-            final String content = "filePath=" + getLiferayBundlesPath().toPortableString() + "/GeoLiteCity.dat";
+            String content = "filePath=" + getLiferayBundlesPath().toPortableString() + "/GeoLiteCity.dat";
 
             FileUtils.write( content, dest );
         }
@@ -248,10 +248,10 @@ public class EnvAction extends UIAction
 
     public void preparePortalExtFile()
     {
-        final String filename = "portal-ext.properties";
+        String filename = "portal-ext.properties";
 
-        final File source = getLiferayBundlesPath().append( filename ).toFile();
-        final File dest = getLiferayServerDir().append( filename ).toFile();
+        File source = getLiferayBundlesPath().append( filename ).toFile();
+        File dest = getLiferayServerDir().append( filename ).toFile();
 
         try
         {
@@ -265,10 +265,10 @@ public class EnvAction extends UIAction
 
     public void preparePortalSetupWizardFile()
     {
-        final String filename = "portal-setup-wizard.properties";
+        String filename = "portal-setup-wizard.properties";
 
-        final File source = getLiferayBundlesPath().append( filename ).toFile();
-        final File dest = getLiferayServerDir().append( filename ).toFile();
+        File source = getLiferayBundlesPath().append( filename ).toFile();
+        File dest = getLiferayServerDir().append( filename ).toFile();
 
         try
         {
@@ -288,13 +288,13 @@ public class EnvAction extends UIAction
             "Expected file to be not exist:" + getLiferayPluginsSdkDir().toPortableString(), false,
             getLiferayPluginsSdkDir().toFile().exists() );
 
-        final File liferayPluginsSdkZipFile = getLiferayPluginsSDKZip().toFile();
+        File liferayPluginsSdkZipFile = getLiferayPluginsSDKZip().toFile();
 
         assertEquals(
             "Expected file to exist: " + liferayPluginsSdkZipFile.getAbsolutePath(), true,
             liferayPluginsSdkZipFile.exists() );
 
-        final File liferayPluginsSdkDirFile = getLiferayPluginsSdkDir().toFile();
+        File liferayPluginsSdkDirFile = getLiferayPluginsSdkDir().toFile();
 
         liferayPluginsSdkDirFile.mkdirs();
 
@@ -343,16 +343,16 @@ public class EnvAction extends UIAction
             "Expected file to be not exist:" + getLiferayServerDir().toPortableString(), false,
             getLiferayServerDir().toFile().exists() );
 
-        final File liferayServerZipFile = getLiferayServerZip().toFile();
+        File liferayServerZipFile = getLiferayServerZip().toFile();
 
         assertEquals(
             "Expected file to exist: " + liferayServerZipFile.getAbsolutePath(), true, liferayServerZipFile.exists() );
 
-        final File liferayServerDirFile = getLiferayServerDir().toFile();
+        File liferayServerDirFile = getLiferayServerDir().toFile();
 
         liferayServerDirFile.mkdirs();
 
-        final String liferayServerZipFolder = getLiferayServerZipFolder();
+        String liferayServerZipFolder = getLiferayServerZipFolder();
 
         if( CoreUtil.isNullOrEmpty( liferayServerZipFolder ) )
         {

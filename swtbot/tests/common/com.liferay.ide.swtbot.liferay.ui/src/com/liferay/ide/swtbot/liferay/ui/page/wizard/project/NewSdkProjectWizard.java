@@ -29,17 +29,17 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class NewSdkProjectWizard extends NewProjectWizard
 {
 
-    private final Text displayName;
-    private final CheckBox includeSimpleCode;
-    private final CheckBox launchNewPortletWizard;
-    private final ComboBox pluginTypes;
+    private Text displayName;
+    private CheckBox includeSimpleCode;
+    private CheckBox launchNewPortletWizard;
+    private ComboBox pluginTypes;
 
-    public NewSdkProjectWizard( final SWTWorkbenchBot bot )
+    public NewSdkProjectWizard( SWTWorkbenchBot bot )
     {
         this( bot, NEW_LIFERAY_PLUGIN_PROJECT, 2 );
     }
 
-    public NewSdkProjectWizard( final SWTWorkbenchBot bot, final String title, final int validationMsgIndex )
+    public NewSdkProjectWizard( SWTWorkbenchBot bot, String title, int validationMsgIndex )
     {
         super( bot, title, validationMsgIndex );
 

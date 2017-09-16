@@ -29,14 +29,14 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class NewClassDialog extends Dialog
 {
 
-    private final Button browseBtn;
-    private final Text className;
-    private final Button createBtn;
-    private final Text javaPackage;
-    private final Tree paths;
-    private final ComboBox superClasses;
+    private Button browseBtn;
+    private Text className;
+    private Button createBtn;
+    private Text javaPackage;
+    private Tree paths;
+    private ComboBox superClasses;
 
-    public NewClassDialog( final SWTWorkbenchBot bot )
+    public NewClassDialog( SWTWorkbenchBot bot )
     {
         super( bot );
 

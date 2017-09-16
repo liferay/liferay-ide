@@ -29,15 +29,15 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class ServiceBuilderWizard extends Wizard
 {
 
-    private final Text author;
-    private final Button browseButton;
-    private final CheckBox includeSampleEntity;
-    private final Text namespace;
-    private final Text packagePath;
-    private final ComboBox pluginProjects;
-    private final Text serviceFile;
+    private Text author;
+    private Button browseButton;
+    private CheckBox includeSampleEntity;
+    private Text namespace;
+    private Text packagePath;
+    private ComboBox pluginProjects;
+    private Text serviceFile;
 
-    public ServiceBuilderWizard( final SWTWorkbenchBot bot )
+    public ServiceBuilderWizard( SWTWorkbenchBot bot )
     {
         super( bot, NEW_SERVICE_BUILDER, 2 );
 
@@ -50,13 +50,13 @@ public class ServiceBuilderWizard extends Wizard
         browseButton = new Button( bot, BROWSE_WITH_DOT );
     }
 
-    public void createServiceBuilder( final String packagePathText, final String namespaceText )
+    public void createServiceBuilder( String packagePathText, String namespaceText )
     {
         createServiceBuilder( packagePathText, namespaceText, true );
     }
 
     public void createServiceBuilder(
-        final String packagePathText, final String namespaceText, final boolean includeSampleEntityValue )
+        String packagePathText, String namespaceText, boolean includeSampleEntityValue )
     {
         packagePath.setText( packagePathText );
         namespace.setText( namespaceText );

@@ -1,14 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2008 Ketan Padegaonkar and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- * Kay-Uwe Graw - initial API and implementation
-
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.swtbot.ui.condition;
 
@@ -17,68 +19,47 @@ import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
 /**
- * wait condition, which does a refresh on a tree node and waits for a specific sub node to appear after refresh this
- * conditions assumes that the parentTreeItem has a context menu which does a refresh this is useful in situations where
- * sub nodes only become visible after refresh, e.q. package explorer eclipse ide
- *
- * @author Kay-Uwe Graw &lt;kugraw [at] web [dot] de&gt;
+ * @author Terry Jia
  */
-public class RefreshForSubnodeCondition implements ICondition
-{
+public class RefreshForSubnodeCondition implements ICondition {
 
-    private final String itsSubnodeText;
+	public RefreshForSubnodeCondition(SWTBotTreeItem parentItem, String subnodeText, String refreshContextMenuText) {
+		_itsParentItem = parentItem;
 
-    private SWTBotTreeItem itsParentItem;
+		_itsSubnodeText = subnodeText;
 
-    private final String itsRefreshContextMenuText;
+		_itsRefreshContextMenuText = refreshContextMenuText;
+	}
 
-    /**
-     * @param parentItem
-     *            - the parent item
-     * @param subnodeText
-     *            - the text for the expected child tree item
-     * @param refreshContextMenuText
-     *            - the text for the refresh context menu item of the parent item
-     */
-    public RefreshForSubnodeCondition( SWTBotTreeItem parentItem, String subnodeText, String refreshContextMenuText )
-    {
-        itsParentItem = parentItem;
+	public String getFailureMessage() {
+		return "sub node " + _itsSubnodeText + " not found after refresh";
+	}
 
-        itsSubnodeText = subnodeText;
+	public void init(SWTBot bot) {
+	}
 
-        itsRefreshContextMenuText = refreshContextMenuText;
-    }
+	public boolean test() throws Exception {
+		boolean ret = false;
 
-    public String getFailureMessage()
-    {
-        return "sub node " + itsSubnodeText + " not found after refresh";
-    }
+		for (String itemText : _itsParentItem.getNodes()) {
+			if (itemText.equals(_itsSubnodeText)) {
+				ret = true;
 
-    public void init( SWTBot bot )
-    {
-    }
+				break;
+			}
+		}
 
-    public boolean test() throws Exception
-    {
-        boolean ret = false;
+		if (!ret) {
+			_itsParentItem.contextMenu(_itsRefreshContextMenuText).click();
 
-        for( String itemText : itsParentItem.getNodes() )
-        {
-            if( itemText.equals( itsSubnodeText ) )
-            {
-                ret = true;
+			_itsParentItem = _itsParentItem.select().expand();
+		}
 
-                break;
-            }
-        }
+		return ret;
+	}
 
-        if( !ret )
-        {
-            itsParentItem.contextMenu( itsRefreshContextMenuText ).click();
+	private SWTBotTreeItem _itsParentItem;
+	private String _itsRefreshContextMenuText;
+	private String _itsSubnodeText;
 
-            itsParentItem = itsParentItem.select().expand();
-        }
-
-        return ret;
-    }
 }

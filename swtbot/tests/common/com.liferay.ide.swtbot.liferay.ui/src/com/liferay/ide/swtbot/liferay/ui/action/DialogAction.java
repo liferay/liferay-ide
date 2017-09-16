@@ -31,20 +31,20 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class DialogAction extends UIAction
 {
 
-    private final AddAndRemoveDialog addAndRemoveDialog = new AddAndRemoveDialog( bot );
-    private final Dialog dialog = new Dialog( bot );
-    private final PreferencesDialog preferencesDialog = new PreferencesDialog( bot );
-    private final ServerRuntimeEnvironmentsPreferencesDialog serverRuntimeEnvironmentsDialog =
+    private AddAndRemoveDialog addAndRemoveDialog = new AddAndRemoveDialog( bot );
+    private Dialog dialog = new Dialog( bot );
+    private PreferencesDialog preferencesDialog = new PreferencesDialog( bot );
+    private ServerRuntimeEnvironmentsPreferencesDialog serverRuntimeEnvironmentsDialog =
         new ServerRuntimeEnvironmentsPreferencesDialog( bot );
-    private final TextDialog textDialog = new TextDialog( bot );
-    private final TreeDialog treeDialog = new TreeDialog( bot );
+    private TextDialog textDialog = new TextDialog( bot );
+    private TreeDialog treeDialog = new TreeDialog( bot );
 
-    public DialogAction( final SWTWorkbenchBot bot )
+    public DialogAction( SWTWorkbenchBot bot )
     {
         super( bot );
     }
 
-    public void addModule( final String projectName )
+    public void addModule( String projectName )
     {
         addAndRemoveDialog.add( projectName );
     }
@@ -54,7 +54,7 @@ public class DialogAction extends UIAction
         dialog.confirm();
     }
 
-    public void deleteRuntime( final String runtimeName )
+    public void deleteRuntime( String runtimeName )
     {
         serverRuntimeEnvironmentsDialog.getRuntimes().click( runtimeName );
 
@@ -71,7 +71,7 @@ public class DialogAction extends UIAction
         ide.getPreferencesMenu().click();
     }
 
-    public void openPreferenceTypeDialog( final String categroy, final String type )
+    public void openPreferenceTypeDialog( String categroy, String type )
     {
         preferencesDialog.getPreferencesTypes().getTreeItem( categroy ).expand();
         preferencesDialog.getPreferencesTypes().getTreeItem( categroy ).getTreeItem( type ).select();
@@ -82,17 +82,17 @@ public class DialogAction extends UIAction
         openPreferenceTypeDialog( SERVER, RUNTIME_ENVIRONMENTS );
     }
 
-    public void prepareText( final String text )
+    public void prepareText( String text )
     {
         textDialog.getText().setText( text );
     }
 
-    public void selectItem( final String item )
+    public void selectItem( String item )
     {
         treeDialog.getItems().select( item );
     }
 
-    public void selectItems( final String... items )
+    public void selectItems( String... items )
     {
         treeDialog.getItems().select( items );
     }

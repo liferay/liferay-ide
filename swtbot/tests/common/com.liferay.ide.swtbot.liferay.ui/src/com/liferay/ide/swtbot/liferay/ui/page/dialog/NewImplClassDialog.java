@@ -27,12 +27,12 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class NewImplClassDialog extends Dialog
 {
 
-    private final Button browseBtn;
-    private final Text className;
-    private final Button createBtn;
-    private final Text javaPackage;
+    private Button browseBtn;
+    private Text className;
+    private Button createBtn;
+    private Text javaPackage;
 
-    public NewImplClassDialog( final SWTWorkbenchBot bot )
+    public NewImplClassDialog( SWTWorkbenchBot bot )
     {
         super( bot );
 

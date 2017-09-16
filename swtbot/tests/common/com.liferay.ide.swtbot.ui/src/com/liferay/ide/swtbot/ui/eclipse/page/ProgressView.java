@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
@@ -23,26 +22,22 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  */
-public class ProgressView extends View
-{
+public class ProgressView extends View {
 
-    private final Text noOperationsText;
+	public ProgressView(SWTWorkbenchBot bot) {
+		super(bot, PROGRESS);
 
-    public ProgressView( final SWTWorkbenchBot bot )
-    {
-        super( bot, PROGRESS );
+		_noOperations = new Text(bot, 0);
+	}
 
-        noOperationsText = new Text( bot, 0 );
-    }
+	public boolean noRunningProgress() {
+		return _getNoOperation().equals(NO_OPERTAIONS);
+	}
 
-    public String getNoOperationText()
-    {
-        return noOperationsText.getText();
-    }
+	private String _getNoOperation() {
+		return _noOperations.getText();
+	}
 
-    public boolean noRunningProgress()
-    {
-        return getNoOperationText().equals( NO_OPERTAIONS );
-    }
+	private Text _noOperations;
 
 }

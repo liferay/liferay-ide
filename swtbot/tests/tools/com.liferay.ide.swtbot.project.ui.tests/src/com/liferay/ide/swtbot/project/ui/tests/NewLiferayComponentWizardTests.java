@@ -31,7 +31,7 @@ public class NewLiferayComponentWizardTests extends SwtbotBase
     @Test
     public void newComponentClassOnModelListenerTest()
     {
-        final String projectName = "test-component-maven";
+        String projectName = "test-component-maven";
 
         wizardAction.openNewLiferayModuleWizard();
         wizardAction.prepareLiferayModuleMaven( projectName, MVC_PORTLET );
@@ -57,7 +57,7 @@ public class NewLiferayComponentWizardTests extends SwtbotBase
     @Test
     public void newComponentClassOnPortletTest()
     {
-        final String projectName = "test-component";
+        String projectName = "test-component";
 
         wizardAction.openNewLiferayModuleWizard();
         wizardAction.prepareLiferayModuleGradle( projectName );
@@ -77,7 +77,7 @@ public class NewLiferayComponentWizardTests extends SwtbotBase
     @Test
     public void newComponentClassOnServiceWrapperTest()
     {
-        final String projectName = "test-component-gradle";
+        String projectName = "test-component-gradle";
 
         wizardAction.openNewLiferayModuleWizard();
         wizardAction.prepareLiferayModuleGradle( projectName );

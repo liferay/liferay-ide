@@ -27,11 +27,11 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class ImportLiferayModuleProjectWizard extends Wizard
 {
 
-    private final ToolbarButtonWithTooltip browseBtn;
-    private final Text buildType;
-    private final Text location;
+    private ToolbarButtonWithTooltip browseBtn;
+    private Text buildType;
+    private Text location;
 
-    public ImportLiferayModuleProjectWizard( final SWTWorkbenchBot bot )
+    public ImportLiferayModuleProjectWizard( SWTWorkbenchBot bot )
     {
         super( bot, IMPORT_LIFERAY_MODULE_PROJECT, 2 );
 

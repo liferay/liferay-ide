@@ -29,14 +29,14 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class LiferayProjectFromExistSourceWizard extends Wizard
 {
 
-    private final ToolbarButtonWithTooltip browseSdkDirectoryBtn;
-    private final Button deselectAllBtn;
-    private final Button refreshBtn;
-    private final Text sdkDirectory;
-    private final Text sdkVersion;
-    private final Button selectAllBtn;
+    private ToolbarButtonWithTooltip browseSdkDirectoryBtn;
+    private Button deselectAllBtn;
+    private Button refreshBtn;
+    private Text sdkDirectory;
+    private Text sdkVersion;
+    private Button selectAllBtn;
 
-    public LiferayProjectFromExistSourceWizard( final SWTWorkbenchBot bot )
+    public LiferayProjectFromExistSourceWizard( SWTWorkbenchBot bot )
     {
         super( bot, 2 );
 

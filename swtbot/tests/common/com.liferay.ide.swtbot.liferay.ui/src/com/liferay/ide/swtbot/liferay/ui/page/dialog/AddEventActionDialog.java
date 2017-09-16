@@ -27,13 +27,13 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class AddEventActionDialog extends Dialog
 {
 
-    private final Text event;
-    private final Text eventActionClass;
-    private final Button newBtn;
-    private final Button selectClassBtn;
-    private final Button selectEventBtn;
+    private Text event;
+    private Text eventActionClass;
+    private Button newBtn;
+    private Button selectClassBtn;
+    private Button selectEventBtn;
 
-    public AddEventActionDialog( final SWTWorkbenchBot bot )
+    public AddEventActionDialog( SWTWorkbenchBot bot )
     {
         super( bot );
 

@@ -23,9 +23,9 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class SuperClassSelectionDialog extends TreeDialog
 {
 
-    private final Table availableSuperClasses;
+    private Table availableSuperClasses;
 
-    public SuperClassSelectionDialog( final SWTWorkbenchBot bot )
+    public SuperClassSelectionDialog( SWTWorkbenchBot bot )
     {
         super( bot );
 

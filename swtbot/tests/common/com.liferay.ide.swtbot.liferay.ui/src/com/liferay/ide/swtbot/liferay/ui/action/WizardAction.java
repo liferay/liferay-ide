@@ -41,20 +41,20 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 public class WizardAction extends UIAction
 {
 
-    private final ImportProjectWizard importProjectWizard = new ImportProjectWizard( bot );
-    private final ImportLiferayWorkspaceProjectWizard importLiferayWorkspaceProjectWizard = new ImportLiferayWorkspaceProjectWizard( bot );
-    private final NewModuleFragmentInfoWizard newFragmentInfoWizard = new NewModuleFragmentInfoWizard( bot );
-    private final NewFragmentWizard newFragmentWizard = new NewFragmentWizard( bot );
-    private final NewLiferayJsfProjectWizard newJsfProjectWizard = new NewLiferayJsfProjectWizard( bot );
-    private final NewLiferay7RuntimeWizard newLiferay7RuntimeWizard = new NewLiferay7RuntimeWizard( bot );
-    private final NewLiferayComponentWizard newLiferayComponentWizard = new NewLiferayComponentWizard( bot );
-    private final NewLiferayModuleInfoWizard newModuleInfoWizard = new NewLiferayModuleInfoWizard( bot );
-    private final NewLiferayModuleWizard newModuleWizard = new NewLiferayModuleWizard( bot );
-    private final NewRuntimeWizard newRuntimeWizard = new NewRuntimeWizard( bot );
-    private final NewServerWizard newServerWizard = new NewServerWizard( bot );
-    private final NewLiferayWorkspaceWizard newWorkspaceWizard = new NewLiferayWorkspaceWizard( bot );
+    private ImportProjectWizard importProjectWizard = new ImportProjectWizard( bot );
+    private ImportLiferayWorkspaceProjectWizard importLiferayWorkspaceProjectWizard = new ImportLiferayWorkspaceProjectWizard( bot );
+    private NewModuleFragmentInfoWizard newFragmentInfoWizard = new NewModuleFragmentInfoWizard( bot );
+    private NewFragmentWizard newFragmentWizard = new NewFragmentWizard( bot );
+    private NewLiferayJsfProjectWizard newJsfProjectWizard = new NewLiferayJsfProjectWizard( bot );
+    private NewLiferay7RuntimeWizard newLiferay7RuntimeWizard = new NewLiferay7RuntimeWizard( bot );
+    private NewLiferayComponentWizard newLiferayComponentWizard = new NewLiferayComponentWizard( bot );
+    private NewLiferayModuleInfoWizard newModuleInfoWizard = new NewLiferayModuleInfoWizard( bot );
+    private NewLiferayModuleWizard newModuleWizard = new NewLiferayModuleWizard( bot );
+    private NewRuntimeWizard newRuntimeWizard = new NewRuntimeWizard( bot );
+    private NewServerWizard newServerWizard = new NewServerWizard( bot );
+    private NewLiferayWorkspaceWizard newWorkspaceWizard = new NewLiferayWorkspaceWizard( bot );
 
-    private final Wizard wizard = new Wizard( bot );
+    private Wizard wizard = new Wizard( bot );
 
     public WizardAction( SWTWorkbenchBot bot )
     {
@@ -86,7 +86,7 @@ public class WizardAction extends UIAction
         SWTBotPreferences.TIMEOUT = origin;
     }
 
-    public String getValidationMsg( final int validationMsgIndex )
+    public String getValidationMsg( int validationMsgIndex )
     {
         return wizard.getValidationMsg( validationMsgIndex );
     }
@@ -165,12 +165,12 @@ public class WizardAction extends UIAction
         newModuleInfoWizard.getBrowseBtn().click();
     }
 
-    public void prepareComponentClass( final String projectName )
+    public void prepareComponentClass( String projectName )
     {
         newLiferayComponentWizard.getProjectNames().setSelection( projectName );
     }
 
-    public void prepareComponentClass( final String projectName, final String componentClassTemplate )
+    public void prepareComponentClass( String projectName, String componentClassTemplate )
     {
         newLiferayComponentWizard.getProjectNames().setSelection( projectName );
         newLiferayComponentWizard.getComponentClassTemplates().setSelection( componentClassTemplate );
@@ -178,13 +178,13 @@ public class WizardAction extends UIAction
         ide.sleep();
     }
 
-    public void prepareFragment( final String projectName, final String buildType )
+    public void prepareFragment( String projectName, String buildType )
     {
         newFragmentWizard.getProjectName().setText( projectName );
         newFragmentWizard.getBuildTypes().setSelection( buildType );
     }
 
-    public void prepareFragmentGradle( final String projectName )
+    public void prepareFragmentGradle( String projectName )
     {
         prepareFragment( projectName, GRADLE );
     }
@@ -193,46 +193,46 @@ public class WizardAction extends UIAction
     		importLiferayWorkspaceProjectWizard.getWorkspaceLocation().setText(location);
     }
     
-    public void prepareFragmentMaven( final String projectName )
+    public void prepareFragmentMaven( String projectName )
     {
         prepareFragment( projectName, MAVEN );
     }
 
-    public void prepareImportType( final String category, final String type )
+    public void prepareImportType( String category, String type )
     {
         prepareImportType( StringPool.BLANK, category, type );
     }
 
-    public void prepareImportType( final String filterText, final String category, final String type )
+    public void prepareImportType( String filterText, String category, String type )
     {
-        importProjectWizard.getFilterText().setText( filterText );
+        importProjectWizard.getFilter().setText( filterText );
 
         importProjectWizard.getTypes().expandNode( category, type ).select();
     }
 
-    public void prepareJsfProject( final String projectName, final String buildType, final String componentSuite )
+    public void prepareJsfProject( String projectName, String buildType, String componentSuite )
     {
         newJsfProjectWizard.getProjectName().setText( projectName );
         newJsfProjectWizard.getBuildTypes().setSelection( buildType );
         newJsfProjectWizard.getComponentSuite().setSelection( componentSuite );
     }
 
-    public void prepareJsfProjectGradle( final String projectName, final String componentSuite )
+    public void prepareJsfProjectGradle( String projectName, String componentSuite )
     {
         prepareJsfProject( projectName, GRADLE, componentSuite );
     }
 
-    public void prepareJsfProjectMaven( final String projectName, final String componentSuite )
+    public void prepareJsfProjectMaven( String projectName, String componentSuite )
     {
         prepareJsfProject( projectName, MAVEN, componentSuite );
     }
 
-    public void prepareLiferay7RuntimeInfo( final String location )
+    public void prepareLiferay7RuntimeInfo( String location )
     {
         newLiferay7RuntimeWizard.getLocation().setText( location );
     }
 
-    public void prepareLiferay7RuntimeInfo( final String name, final String location )
+    public void prepareLiferay7RuntimeInfo( String name, String location )
     {
         newLiferay7RuntimeWizard.getName().setText( name );
         newLiferay7RuntimeWizard.getLocation().setText( location );
@@ -243,18 +243,18 @@ public class WizardAction extends UIAction
         prepareRuntimeType( LIFERAY_INC, LIFERAY_7_X );
     }
 
-    public void prepareLiferayModule( final String projectName )
+    public void prepareLiferayModule( String projectName )
     {
         newModuleWizard.getProjectName().setText( projectName );
     }
 
-    public void prepareLiferayModule( final String projectName, final String buildType )
+    public void prepareLiferayModule( String projectName, String buildType )
     {
         newModuleWizard.getProjectName().setText( projectName );
         newModuleWizard.getBuildTypes().setSelection( buildType );
     }
 
-    public void prepareLiferayModule( final String projectName, final String buildType, final String template )
+    public void prepareLiferayModule( String projectName, String buildType, String template )
     {
         newModuleWizard.getProjectName().setText( projectName );
         newModuleWizard.getBuildTypes().setSelection( buildType );
@@ -262,8 +262,8 @@ public class WizardAction extends UIAction
     }
 
     public void prepareLiferayModule(
-        final String projectName, final String buildType, final String template, final boolean useDefaultLocation,
-        final String location )
+        String projectName, String buildType, String template, boolean useDefaultLocation,
+        String location )
     {
         prepareLiferayModule( projectName, buildType, template );
 
@@ -278,41 +278,41 @@ public class WizardAction extends UIAction
         }
     }
 
-    public void prepareLiferayModuleGradle( final String projectName )
+    public void prepareLiferayModuleGradle( String projectName )
     {
         prepareLiferayModule( projectName, GRADLE, MVC_PORTLET );
     }
 
-    public void prepareLiferayModuleGradle( final String projectName, final String template )
+    public void prepareLiferayModuleGradle( String projectName, String template )
     {
         prepareLiferayModule( projectName, GRADLE, template );
     }
 
-    public void prepareLiferayModuleInfo( final String className, final String packageName )
+    public void prepareLiferayModuleInfo( String className, String packageName )
     {
         newModuleInfoWizard.getComponentClassName().setText( className );
 
     }
 
-    public void prepareLiferayModuleMaven( final String projectName, final String template )
+    public void prepareLiferayModuleMaven( String projectName, String template )
     {
         prepareLiferayModule( projectName, MAVEN, template );
     }
 
-    public void prepareLiferayWorkspace( final String projectName )
+    public void prepareLiferayWorkspace( String projectName )
     {
         newWorkspaceWizard.getProjectName().setText( projectName );
     }
 
-    public void prepareLiferayWorkspace( final String projectName, final String buildType )
+    public void prepareLiferayWorkspace( String projectName, String buildType )
     {
         newWorkspaceWizard.getProjectName().setText( projectName );
         newWorkspaceWizard.getBuildTypes().setSelection( buildType );
     }
 
     public void prepareLiferayWorkspace(
-        final String projectName, final String buildType, final boolean downloadLiferayBundle, final String serverName,
-        final boolean useDefaultBundleUrl, final String bundleUrl )
+        String projectName, String buildType, boolean downloadLiferayBundle, String serverName,
+        boolean useDefaultBundleUrl, String bundleUrl )
     {
         prepareLiferayWorkspace( projectName, buildType );
 
@@ -333,30 +333,30 @@ public class WizardAction extends UIAction
         }
     }
 
-    public void prepareLiferayWorkspaceGradle( final String projectName )
+    public void prepareLiferayWorkspaceGradle( String projectName )
     {
         prepareLiferayWorkspace( projectName, GRADLE );
     }
 
     public void prepareLiferayWorkspaceGradle(
-        final String projectName, final boolean downloadLiferayBundle, final String serverName,
-        final boolean useDefaultBundleUrl, final String bundleUrl )
+        String projectName, boolean downloadLiferayBundle, String serverName,
+        boolean useDefaultBundleUrl, String bundleUrl )
     {
         prepareLiferayWorkspace(
             projectName, GRADLE, downloadLiferayBundle, serverName, useDefaultBundleUrl, bundleUrl );
     }
 
-    public void prepareLiferayWorkspaceMaven( final String projectName )
+    public void prepareLiferayWorkspaceMaven( String projectName )
     {
         prepareLiferayWorkspace( projectName, MAVEN );
     }
 
-    public void prepareNewServer( final String serverName )
+    public void prepareNewServer( String serverName )
     {
         newServerWizard.getServerName().setText( serverName );
     }
 
-    public void prepareRuntimeType( final String category, final String type )
+    public void prepareRuntimeType( String category, String type )
     {
         newRuntimeWizard.getServerTypes().getTreeItem( category ).getTreeItem( type ).select();
     }

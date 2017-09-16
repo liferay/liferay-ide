@@ -1,18 +1,18 @@
-/*******************************************************************************
- * Copyright (c) 2008 Ketan Padegaonkar and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- * Kay-Uwe Graw - initial API and implementation
-
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.swtbot.ui.condition;
-
-import org.junit.Assert;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
@@ -23,95 +23,81 @@ import org.eclipse.swtbot.swt.finder.results.BoolResult;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
 
+import org.junit.Assert;
+
 /**
- * ICondition implementation to wait for an editor to become active or inactive This is useful when the creation of an
- * editor takes a while after the initiating user action has been carried out
- *
- * @author Kay-Uwe Graw &lt;kugraw [at] web [dot] de&gt;
+ * @author Terry Jia
  */
-public class EditorActiveCondition implements ICondition
-{
+public class EditorActiveCondition implements ICondition {
 
-    private final String name;
+	public EditorActiveCondition(String name, boolean active) {
+		_name = name;
 
-    private SWTWorkbenchBot bot;
+		_active = active;
+	}
 
-    private final boolean active;
+	public String getFailureMessage() {
+		if (_active) {
+			return "wait for editor " + _name + " is active failed";
+		}
+		else {
+			return "wait for editor " + _name + " is not active failed";
+		}
+	}
 
-    public EditorActiveCondition( String name, boolean active )
-    {
-        this.name = name;
+	public void init(SWTBot bot) {
+		if (bot instanceof SWTWorkbenchBot) {
+			_bot = SWTWorkbenchBot.class.cast(bot);
+		}
+		else {
+			Assert.fail("init with wrong bot class");
+		}
+	}
 
-        this.active = active;
-    }
+	public boolean test() throws Exception {
+		if (_editorIsActive(_name) == _active) {
+			return true;
+		}
 
-    public String getFailureMessage()
-    {
-        if( active )
-        {
-            return "wait for editor " + name + " is active failed";
-        }
-        else
-        {
-            return "wait for editor " + name + " is not active failed";
-        }
-    }
+		return false;
+	}
 
-    public void init( SWTBot bot )
-    {
-        if( bot instanceof SWTWorkbenchBot )
-        {
-            this.bot = SWTWorkbenchBot.class.cast( bot );
-        }
-        else
-        {
-            Assert.fail( "init with wrong bot class" );
-        }
-    }
+	private boolean _editorIsActive(String editorName) {
+		SWTBotEditor editor = _getEditor(editorName);
 
-    public boolean test() throws Exception
-    {
-        return editorIsActive( name ) == active;
-    }
+		if (editor != null) {
+			return UIThreadRunnable.syncExec(
+				new BoolResult() {
 
-    private SWTBotEditor getEditor( String name )
-    {
-        long oldTimeOut = SWTBotPreferences.TIMEOUT;
+					public Boolean run() {
+						return editor.isActive();
+					}
 
-        SWTBotPreferences.TIMEOUT = 1000;
+				});
+		}
 
-        try
-        {
-            return bot.editorByTitle( name );
+		return false;
+	}
 
-        }
-        catch( WidgetNotFoundException e )
-        {
-        }
-        finally
-        {
-            SWTBotPreferences.TIMEOUT = oldTimeOut;
-        }
+	private SWTBotEditor _getEditor(String name) {
+		long oldTimeOut = SWTBotPreferences.TIMEOUT;
 
-        return null;
-    }
+		SWTBotPreferences.TIMEOUT = 1000;
 
-    private boolean editorIsActive( String editorName )
-    {
-        final SWTBotEditor editor = getEditor( editorName );
+		try {
+			return _bot.editorByTitle(name);
+		}
+		catch (WidgetNotFoundException wnfe) {
+		}
+		finally {
+			SWTBotPreferences.TIMEOUT = oldTimeOut;
+		}
 
-        if( editor != null )
-        {
-            return UIThreadRunnable.syncExec( new BoolResult()
-            {
+		return null;
+	}
 
-                public Boolean run()
-                {
-                    return editor.isActive();
-                }
-            } );
-        }
+	private boolean _active;
+	private SWTWorkbenchBot _bot;
+	private String _name;
 
-        return false;
-    }
 }

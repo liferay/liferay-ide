@@ -27,13 +27,13 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class AddServiceWrapperDialog extends Dialog
 {
 
-    private final Text implClass;
-    private final Button newBtn;
-    private final Button selectImplClassBtn;
-    private final Button selectServiceTypeBtn;
-    private final Text serviceType;
+    private Text implClass;
+    private Button newBtn;
+    private Button selectImplClassBtn;
+    private Button selectServiceTypeBtn;
+    private Text serviceType;
 
-    public AddServiceWrapperDialog( final SWTWorkbenchBot bot )
+    public AddServiceWrapperDialog( SWTWorkbenchBot bot )
     {
         super( bot );
 

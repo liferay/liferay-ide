@@ -28,14 +28,14 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class ServicesWizard extends Wizard
 {
 
-    private final Button addBtn;
-    private final Dialog addServiceDialog;
-    private final Dialog addServiceWrapperDialog;
-    private final Table definePortalServices;
-    private final Button editBtn;
-    private final Button removeBtn;
+    private Button addBtn;
+    private Dialog addServiceDialog;
+    private Dialog addServiceWrapperDialog;
+    private Table definePortalServices;
+    private Button editBtn;
+    private Button removeBtn;
 
-    public ServicesWizard( final SWTWorkbenchBot bot )
+    public ServicesWizard( SWTWorkbenchBot bot )
     {
         super( bot, 0 );
 

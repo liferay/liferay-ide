@@ -24,10 +24,10 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class PackageSelectionDialog extends TreeDialog
 {
 
-    private final Text packageToSelect;
-    private final Table availablePackages;
+    private Text packageToSelect;
+    private Table availablePackages;
 
-    public PackageSelectionDialog( final SWTWorkbenchBot bot )
+    public PackageSelectionDialog( SWTWorkbenchBot bot )
     {
         super( bot );
 

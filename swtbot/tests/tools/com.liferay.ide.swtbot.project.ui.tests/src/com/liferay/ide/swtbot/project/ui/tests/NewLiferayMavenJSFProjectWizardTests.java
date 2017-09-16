@@ -28,7 +28,7 @@ public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase
     @Test
     public void createMavenICEFacesProject()
     {
-        final String projectName = "testMavenICEFacesProject";
+        String projectName = "testMavenICEFacesProject";
 
         wizardAction.openNewLiferayJsfProjectWizard();
         wizardAction.prepareJsfProjectMaven( projectName, ICEFACES );
@@ -40,7 +40,7 @@ public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase
     @Test
     public void createMavenJSFStandardProject()
     {
-        final String projectName = "testMavenJSFStandardProject";
+        String projectName = "testMavenJSFStandardProject";
 
         wizardAction.openNewLiferayJsfProjectWizard();
         wizardAction.prepareJsfProjectMaven( projectName, JSF_STANDARD );
@@ -52,7 +52,7 @@ public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase
     @Test
     public void createMavenLiferayFacesAlloyProject()
     {
-        final String projectName = "testMavenLiferayFacesAlloyProject";
+        String projectName = "testMavenLiferayFacesAlloyProject";
 
         wizardAction.openNewLiferayJsfProjectWizard();
         wizardAction.prepareJsfProjectMaven( projectName, LIFERAY_FACES_ALLOY );
@@ -64,7 +64,7 @@ public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase
     @Test
     public void createMavenPrimeFacesProject()
     {
-        final String projectName = "testMavenPrimeFacesProject";
+        String projectName = "testMavenPrimeFacesProject";
 
         wizardAction.openNewLiferayJsfProjectWizard();
         wizardAction.prepareJsfProjectMaven( projectName, PRIMEFACES );
@@ -76,7 +76,7 @@ public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase
     @Test
     public void createMavenRichFacesProject()
     {
-        final String projectName = "testMavenRichFacesProject";
+        String projectName = "testMavenRichFacesProject";
 
         wizardAction.openNewLiferayJsfProjectWizard();
         wizardAction.prepareJsfProjectMaven( projectName, RICHFACES );

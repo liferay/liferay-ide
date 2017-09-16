@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
@@ -22,53 +21,42 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
  * @author Terry Jia
  * @author Ashley Yuan
  */
-public class Button extends AbstractWidget
-{
+public class Button extends AbstractWidget {
 
-    public Button( final SWTWorkbenchBot bot )
-    {
-        super( bot );
-    }
+	public Button(SWTWorkbenchBot bot) {
+		super(bot);
+	}
 
-    public Button( final SWTWorkbenchBot bot, final int index )
-    {
-        super( bot, index );
-    }
+	public Button(SWTWorkbenchBot bot, int index) {
+		super(bot, index);
+	}
 
-    public Button( final SWTWorkbenchBot bot, final String label )
-    {
-        super( bot, label );
-    }
+	public Button(SWTWorkbenchBot bot, String label) {
+		super(bot, label);
+	}
 
-    public Button( final SWTWorkbenchBot bot, final String label, final int index )
-    {
-        super( bot, label, index );
-    }
+	public Button(SWTWorkbenchBot bot, String label, int index) {
+		super(bot, label, index);
+	}
 
-    public void click()
-    {
-        getWidget().click();
-    }
+	public void click() {
+		getWidget().click();
+	}
 
-    @Override
-    protected SWTBotButton getWidget()
-    {
-        if( !isLabelNull() && hasIndex() )
-        {
-            return bot.button( label, index );
-        }
-        else if( isLabelNull() && hasIndex() )
-        {
-            return bot.button( index );
-        }
-        else if( !isLabelNull() && !hasIndex() )
-        {
-            return bot.button( label );
-        }
-        else
-        {
-            return bot.button();
-        }
-    }
+	@Override
+	protected SWTBotButton getWidget() {
+		if (!isLabelNull() && hasIndex()) {
+			return bot.button(label, index);
+		}
+		else if (isLabelNull() && hasIndex()) {
+			return bot.button(index);
+		}
+		else if (!isLabelNull() && !hasIndex()) {
+			return bot.button(label);
+		}
+		else {
+			return bot.button();
+		}
+	}
 
 }

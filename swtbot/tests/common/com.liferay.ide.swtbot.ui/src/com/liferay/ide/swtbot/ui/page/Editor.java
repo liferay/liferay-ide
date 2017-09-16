@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,49 +10,46 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEclipseEditor;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 
 /**
  * @author Terry Jia
  * @author Ashley Yuan
  */
-public class Editor extends AbstractPart
-{
+public class Editor extends AbstractPart {
 
-    public Editor( final SWTWorkbenchBot bot )
-    {
-        super( bot );
-    }
+	public Editor(SWTWorkbenchBot bot) {
+		super(bot);
+	}
 
-    public Editor( final SWTWorkbenchBot bot, final String label )
-    {
-        super( bot, label );
-    }
+	public Editor(SWTWorkbenchBot bot, String label) {
+		super(bot, label);
+	}
 
-    protected SWTBotEditor getPart()
-    {
-        return bot.editorByTitle( label );
-    }
+	public String getText() {
+		SWTBotEclipseEditor botEditor = getPart().toTextEditor();
 
-    public String getText()
-    {
-        return getPart().toTextEditor().getText();
-    }
+		return botEditor.getText();
+	}
 
-    public void save()
-    {
-        getPart().save();
-    }
+	public void save() {
+		getPart().save();
+	}
 
-    public void setText( final String text )
-    {
-        getPart().toTextEditor().setText( text );
-    }
+	public void setText(String text) {
+		SWTBotEclipseEditor botEditor = getPart().toTextEditor();
+
+		botEditor.setText(text);
+	}
+
+	protected SWTBotEditor getPart() {
+		return bot.editorByTitle(label);
+	}
 
 }

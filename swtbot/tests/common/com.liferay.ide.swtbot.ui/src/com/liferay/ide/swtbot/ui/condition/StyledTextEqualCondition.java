@@ -1,14 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2008 Ketan Padegaonkar and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- * Kay-Uwe Graw - initial API and implementation
-
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.swtbot.ui.condition;
 
@@ -17,44 +19,38 @@ import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotStyledText;
 
 /**
- * ICondition implementation to wait for the content of styled text control to become equal or unequal to a specific
- * string value This is useful when the content change of a styled text takes a while after the initiating user action
- * has been carried out
- *
- * @author Kay-Uwe Graw &lt;kugraw [at] web [dot] de&gt;
+ * @author Terry Jia
  */
-public class StyledTextEqualCondition implements ICondition
-{
+public class StyledTextEqualCondition implements ICondition {
 
-    private final String content;
-    private final SWTBotStyledText styledText;
-    private final boolean equal;
+	public StyledTextEqualCondition(SWTBotStyledText styledText, String content, boolean equal) {
+		_styledText = styledText;
+		_content = content;
+		_equal = equal;
+	}
 
-    public StyledTextEqualCondition( SWTBotStyledText styledText, String content, boolean equal )
-    {
-        this.content = content;
-        this.styledText = styledText;
-        this.equal = equal;
-    }
+	public String getFailureMessage() {
+		if (_equal) {
+			return "wait for styled text equals " + _content + " failed"; //$NON-NLS-1$
+		}
+		else {
+			return "wait for styled text not equals " + _content + " failed"; //$NON-NLS-1$
+		}
+	}
 
-    public String getFailureMessage()
-    {
-        if( equal )
-        {
-            return "wait for styled text equals " + content + " failed"; //$NON-NLS-1$
-        }
-        else
-        {
-            return "wait for styled text not equals " + content + " failed"; //$NON-NLS-1$
-        }
-    }
+	public void init(SWTBot bot) {
+	}
 
-    public void init( SWTBot bot )
-    {
-    }
+	public boolean test() throws Exception {
+		if (_styledText.getText().equals(_content) == _equal) {
+			return true;
+		}
 
-    public boolean test() throws Exception
-    {
-        return styledText.getText().equals( content ) == equal;
-    }
+		return false;
+	}
+
+	private String _content;
+	private boolean _equal;
+	private SWTBotStyledText _styledText;
+
 }

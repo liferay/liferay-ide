@@ -40,7 +40,7 @@ public class MavenLiferayWorkspaceWizardTests extends SwtbotBase
     @Test
     public void newMavenLiferayWorkspaceProjectWizard()
     {
-        final String workspaceName = "maven-liferay-workspace";
+        String workspaceName = "maven-liferay-workspace";
 
         wizardAction.openNewLiferayWorkspaceWizard();
 

@@ -30,20 +30,20 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class LiferayPortletDeploymentDescriptorWizard extends Wizard
 {
 
-    private final CheckBox addToControlPanel;
-    private final CheckBox allowMultipleInstances;
-    private final Button browseCssBtn;
-    private final Button browseIconBtn;
-    private final Button browseJavaScriptBtn;
-    private final CheckBox createEntryClass;
-    private final Text css;
-    private final Text cssClassWrapper;
-    private final ComboBox displayCategories;
-    private final ComboBox entryCategories;
-    private final Text entryClass;
-    private final Text entryWeight;
-    private final Text icon;
-    private final Text javaScript;
+    private CheckBox addToControlPanel;
+    private CheckBox allowMultipleInstances;
+    private Button browseCssBtn;
+    private Button browseIconBtn;
+    private Button browseJavaScriptBtn;
+    private CheckBox createEntryClass;
+    private Text css;
+    private Text cssClassWrapper;
+    private ComboBox displayCategories;
+    private ComboBox entryCategories;
+    private Text entryClass;
+    private Text entryWeight;
+    private Text icon;
+    private Text javaScript;
 
     public LiferayPortletDeploymentDescriptorWizard( SWTWorkbenchBot bot )
     {

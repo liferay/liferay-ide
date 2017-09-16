@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
@@ -21,158 +20,146 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.swtbot.swt.finder.widgets.AbstractSWTBot;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 
 /**
  * @author Terry Jia
  * @author Ashley Yuan
  */
-public abstract class AbstractWidget extends BasePageObject
-{
+public abstract class AbstractWidget extends BasePageObject {
 
-    public AbstractWidget( final SWTWorkbenchBot bot )
-    {
-        super( bot );
-    }
+	public AbstractWidget(SWTWorkbenchBot bot) {
+		super(bot);
+	}
 
-    public AbstractWidget( final SWTWorkbenchBot bot, final int index )
-    {
-        super( bot, index );
-    }
+	public AbstractWidget(SWTWorkbenchBot bot, int index) {
+		super(bot, index);
+	}
 
-    public AbstractWidget( final SWTWorkbenchBot bot, final String label )
-    {
-        super( bot, label );
-    }
+	public AbstractWidget(SWTWorkbenchBot bot, String label) {
+		super(bot, label);
+	}
 
-    public AbstractWidget( final SWTWorkbenchBot bot, final String label, final int index )
-    {
-        super( bot, label, index );
-    }
+	public AbstractWidget(SWTWorkbenchBot bot, String label, int index) {
+		super(bot, label, index);
+	}
 
-    protected void asyncExec( VoidResult toExecute )
-    {
-        UIThreadRunnable.asyncExec( getWidget().display, toExecute );
-    }
+	public void click(int x, int y) {
+		syncExec(
+			new VoidResult() {
 
-    public void click( final int x, final int y )
-    {
-        syncExec( new VoidResult()
-        {
+				@Override
+				public void run() {
+					_moveMouse(x, y);
+					_mouseDown(x, y, 1);
+					_mouseUp(x, y, 1);
+				}
 
-            @Override
-            public void run()
-            {
-                moveMouse( x, y );
-                mouseDown( x, y, 1 );
-                mouseUp( x, y, 1 );
-            }
-        } );
-    }
+			});
+	}
 
-    public void contextMenu( String menu )
-    {
-        getWidget().contextMenu( menu ).click();
-    }
+	public void contextMenu(String menu) {
+		SWTBotMenu botMenu = getWidget().contextMenu(menu);
 
-    protected Event createMouseEvent( int x, int y, int button, int stateMask, int count )
-    {
-        Event event = new Event();
-        event.time = (int) System.currentTimeMillis();
-        event.widget = getWidget().widget;
-        event.display = getWidget().display;
-        event.x = x;
-        event.y = y;
-        event.button = button;
-        event.stateMask = stateMask;
-        event.count = count;
-        return event;
-    }
+		botMenu.click();
+	}
 
-    public String getLabel()
-    {
-        return label;
-    }
+	public String getLabel() {
+		return label;
+	}
 
-    public String getText()
-    {
-        return getWidget().getText();
-    }
+	public String getText() {
+		return getWidget().getText();
+	}
 
-    protected abstract AbstractSWTBot<?> getWidget();
+	public boolean isActive() {
+		return getWidget().isActive();
+	}
 
-    public boolean isActive()
-    {
-        return getWidget().isActive();
-    }
+	public boolean isEnabled() {
+		return getWidget().isEnabled();
+	}
 
-    public boolean isEnabled()
-    {
-        return getWidget().isEnabled();
-    }
+	public boolean isVisible() {
+		return getWidget().isVisible();
+	}
 
-    public boolean isVisible()
-    {
-        return getWidget().isVisible();
-    }
+	public void rightClick(String menu) {
+		contextMenu(menu);
+	}
 
-    private void mouseDown( final int x, final int y, final int button )
-    {
-        asyncExec( new VoidResult()
-        {
+	public void setFocus() {
+		getWidget().setFocus();
+	}
 
-            @Override
-            public void run()
-            {
-                Event event = createMouseEvent( x, y, button, 0, 0 );
-                event.type = SWT.MouseDown;
-                getWidget().display.post( event );
-            }
-        } );
-    }
+	protected void asyncExec(VoidResult toExecute) {
+		UIThreadRunnable.asyncExec(getWidget().display, toExecute);
+	}
 
-    private void mouseUp( final int x, final int y, final int button )
-    {
-        asyncExec( new VoidResult()
-        {
+	protected Event createMouseEvent(int x, int y, int button, int stateMask, int count) {
+		Event event = new Event();
 
-            @Override
-            public void run()
-            {
-                Event event = createMouseEvent( x, y, button, 0, 0 );
-                event.type = SWT.MouseUp;
-                getWidget().display.post( event );
-            }
-        } );
-    }
+		event.time = (int)System.currentTimeMillis();
+		event.widget = getWidget().widget;
+		event.display = getWidget().display;
+		event.x = x;
+		event.y = y;
+		event.button = button;
+		event.stateMask = stateMask;
+		event.count = count;
 
-    private void moveMouse( final int x, final int y )
-    {
-        asyncExec( new VoidResult()
-        {
+		return event;
+	}
 
-            @Override
-            public void run()
-            {
-                Event event = createMouseEvent( x, y, 0, 0, 0 );
-                event.type = SWT.MouseMove;
-                getWidget().display.post( event );
-            }
-        } );
-    }
+	protected abstract AbstractSWTBot<?> getWidget();
 
-    public void rightClick( String menu )
-    {
-        contextMenu( menu );
-    }
+	protected void syncExec(VoidResult toExecute) {
+		UIThreadRunnable.syncExec(getWidget().display, toExecute);
+	}
 
-    public void setFocus()
-    {
-        getWidget().setFocus();
-    }
+	private void _mouseDown(int x, int y, int button) {
+		asyncExec(
+			new VoidResult() {
 
-    protected void syncExec( VoidResult toExecute )
-    {
-        UIThreadRunnable.syncExec( getWidget().display, toExecute );
-    }
+				@Override
+				public void run() {
+					Event event = createMouseEvent(x, y, button, 0, 0);
+
+					event.type = SWT.MouseDown;
+					getWidget().display.post(event);
+				}
+
+			});
+	}
+
+	private void _mouseUp(int x, int y, int button) {
+		asyncExec(
+			new VoidResult() {
+
+				@Override
+				public void run() {
+					Event event = createMouseEvent(x, y, button, 0, 0);
+
+					event.type = SWT.MouseUp;
+					getWidget().display.post(event);
+				}
+
+			});
+	}
+
+	private void _moveMouse(int x, int y) {
+		asyncExec(
+			new VoidResult() {
+
+				@Override
+				public void run() {
+					Event event = createMouseEvent(x, y, 0, 0, 0);
+
+					event.type = SWT.MouseMove;
+					getWidget().display.post(event);
+				}
+
+			});
+	}
 
 }

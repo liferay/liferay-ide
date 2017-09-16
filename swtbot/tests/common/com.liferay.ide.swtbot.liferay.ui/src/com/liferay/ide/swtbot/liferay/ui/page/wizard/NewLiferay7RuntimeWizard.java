@@ -27,11 +27,11 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class NewLiferay7RuntimeWizard extends Wizard
 {
 
-    private final Text location;
-    private final Text name;
-    private final Text type;
+    private Text location;
+    private Text name;
+    private Text type;
 
-    public NewLiferay7RuntimeWizard( final SWTWorkbenchBot bot )
+    public NewLiferay7RuntimeWizard( SWTWorkbenchBot bot )
     {
         super( bot, 3 );
 

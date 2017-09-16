@@ -38,7 +38,7 @@ public class FragmentWizardTests extends SwtbotBase
     @Test
     public void moduleFragmentProjectWizard()
     {
-        final String projectName = "test-fragment";
+        String projectName = "test-fragment";
 
         wizardAction.openNewFragmentWizard();
 
@@ -72,7 +72,7 @@ public class FragmentWizardTests extends SwtbotBase
 
         dialogAction.confirm();
 
-        final String[] files = new String[] { "META-INF/resources/blogs_admin/configuration.jsp",
+        String[] files = new String[] { "META-INF/resources/blogs_admin/configuration.jsp",
             "META-INF/resources/blogs_aggregator/init.jsp", "META-INF/resources/blogs/asset/abstract.jsp",
             "META-INF/resources/blogs/edit_entry.jsp", "portlet.properties" };
 
@@ -90,7 +90,7 @@ public class FragmentWizardTests extends SwtbotBase
     @Test
     public void mavenModuleFragmentProjectWizard()
     {
-        final String projectName = "test-fragment-maven";
+        String projectName = "test-fragment-maven";
 
         wizardAction.openNewFragmentWizard();
 
@@ -112,7 +112,7 @@ public class FragmentWizardTests extends SwtbotBase
 
         dialogAction.confirm();
 
-        final String[] files = new String[] { "META-INF/resources/blogs_admin/configuration.jsp",
+        String[] files = new String[] { "META-INF/resources/blogs_admin/configuration.jsp",
             "META-INF/resources/blogs_aggregator/init.jsp", "META-INF/resources/blogs/asset/abstract.jsp",
             "META-INF/resources/blogs/edit_entry.jsp", "portlet.properties" };
 

@@ -27,12 +27,12 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class ImportLiferayWorkspaceProjectWizard extends Wizard
 {
 
-    private final CheckBox addProjectToWorkingSet;
-    private final Text buildType;
-    private final Text bundleUrl;
-    private final CheckBox downloadLiferaybundle;
-    private final Text location;
-    private final Text serverName;
+    private CheckBox addProjectToWorkingSet;
+    private Text buildType;
+    private Text bundleUrl;
+    private CheckBox downloadLiferaybundle;
+    private Text location;
+    private Text serverName;
 
     public ImportLiferayWorkspaceProjectWizard( SWTWorkbenchBot bot )
     {
