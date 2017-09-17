@@ -36,14 +36,12 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.jdt.IClasspathManager;
 import org.eclipse.m2e.jdt.MavenJdtPlugin;
-import org.eclipse.m2e.jdt.internal.launch.MavenRuntimeClasspathProvider;
 
 
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-@SuppressWarnings("restriction")
 public abstract class LiferayMavenProject extends BaseLiferayProject  implements IMavenProject
 {
 
@@ -160,9 +158,6 @@ public abstract class LiferayMavenProject extends BaseLiferayProject  implements
                             mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_PARENT_THEME );
                 }
             }
-        }
-        else if ("ATTR_SOURCE_PATH_PROVIDER".equals(key)) {
-            return MavenRuntimeClasspathProvider.MAVEN_SOURCEPATH_PROVIDER;
         }
 
         return retval;

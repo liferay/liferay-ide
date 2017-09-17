@@ -1364,14 +1364,6 @@
             typeIds="com.liferay.ide.server.portal">
       </publishTask>
    </extension>
-   <!--<extension
-         point="org.eclipse.debug.core.sourceLocators">
-      <sourceLocator
-            class="com.liferay.ide.server.core.PortalSourceLookupDirector"
-            id="com.liferay.ide.server.core.portal.sourceLocator"
-            name="Portal Source Lookup Director">
-      </sourceLocator>
-   </extension>-->
    <extension
          point="org.eclipse.debug.core.sourcePathComputers">
       <sourcePathComputer

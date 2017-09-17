@@ -14,26 +14,20 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core.tests;
 
+import com.liferay.ide.core.tests.TestUtil;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.project.core.model.ProfileLocation;
 import com.liferay.ide.project.core.tests.ProjectCoreBase;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
 import org.eclipse.sapphire.PossibleValuesService;
-import org.eclipse.wst.validation.internal.operations.ValidatorManager;
 import org.osgi.framework.Version;
 
 
@@ -89,13 +83,6 @@ public abstract class LiferayMavenProjectTestCase extends AbstractMavenProjectTe
         op.setActiveProfilesValue( "test-bundle" );
     }
 
-    public void failTest( Exception e )
-    {
-        StringWriter s = new StringWriter();
-        e.printStackTrace( new PrintWriter( s ) );
-        fail( s.toString() );
-    }
-
     @Override
     protected void setUp() throws Exception
     {
@@ -106,47 +93,12 @@ public abstract class LiferayMavenProjectTestCase extends AbstractMavenProjectTe
 
     protected boolean shouldSkipBundleTests() { return "true".equals( skipBundleTests ); }
 
-    public void waitForBuildAndValidation() throws Exception
-    {
-        IWorkspaceRoot root = null;
-
-        try
-        {
-            ResourcesPlugin.getWorkspace().checkpoint( true );
-            Job.getJobManager().join( ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor() );
-            Job.getJobManager().join( ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor() );
-            Job.getJobManager().join( ValidatorManager.VALIDATOR_JOB_FAMILY, new NullProgressMonitor() );
-            Job.getJobManager().join( ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor() );
-            Thread.sleep( 200 );
-            Job.getJobManager().beginRule( root = ResourcesPlugin.getWorkspace().getRoot(), null );
-        }
-        catch( InterruptedException e )
-        {
-            failTest( e );
-        }
-        catch( IllegalArgumentException e )
-        {
-            failTest( e );
-        }
-        catch( OperationCanceledException e )
-        {
-            failTest( e );
-        }
-        finally
-        {
-            if( root != null )
-            {
-                Job.getJobManager().endRule( root );
-            }
-        }
-    }
-
     public void waitForBuildAndValidation( IProject project ) throws Exception
     {
         project.build( IncrementalProjectBuilder.CLEAN_BUILD, new NullProgressMonitor() );
-        waitForBuildAndValidation();
+        TestUtil.waitForBuildAndValidation();
         project.build( IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor() );
-        waitForBuildAndValidation();
+        TestUtil.waitForBuildAndValidation();
     }
 
 }

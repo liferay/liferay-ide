@@ -18,13 +18,11 @@ package com.liferay.ide.server.tomcat.core;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.PortalLaunchParticipant;
-import com.liferay.ide.server.core.PortalSourceLookupDirector;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchConfigurationDelegate;
 
 /**
@@ -58,12 +56,6 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
         final ILaunchConfiguration configuration, String mode, final ILaunch launch, IProgressMonitor monitor )
         throws CoreException
     {
-        if( ILaunchManager.DEBUG_MODE.equals( mode ) )
-        {
-            PortalSourceLookupDirector director = (PortalSourceLookupDirector) launch.getSourceLocator();
-            director.configureLaunch( launch );
-        }
-
         for( PortalLaunchParticipant participant : LiferayServerCore.getPortalLaunchParticipants() )
         {
             participant.portalPreLaunch( configuration, mode, launch, monitor );

@@ -15,7 +15,6 @@
 package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +30,8 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.sourcelookup.ISourceContainer;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.sourcelookup.containers.JavaSourcePathComputer;
+import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.ServerUtil;
 
 
 /**
@@ -52,14 +53,14 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer
     {
         final List<ISourceContainer> sourceContainers = new ArrayList<ISourceContainer>();
 
-        Stream.of(CoreUtil.getAllProjects()).map(
-            project -> LiferayCore.create(project)
+        final IServer server = ServerUtil.getServer( configuration );
+
+        Stream.of(server.getModules()).map(
+            module -> LiferayCore.create(module.getProject())
         ).filter(
             liferayProject -> liferayProject != null
         ).forEach( liferayProject -> {
             String projectName = liferayProject.getProject().getName();
-
-            String attrSourcePathProvider = liferayProject.getProperty("ATTR_SOURCE_PATH_PROVIDER", null);
 
             try {
                 ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
@@ -68,7 +69,6 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer
 
                 sourceLookupConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, true);
                 sourceLookupConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, projectName);
-                sourceLookupConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_SOURCE_PATH_PROVIDER, attrSourcePathProvider);
 
                 ISourceContainer[] computedSourceContainers = super.computeSourceContainers(sourceLookupConfig, monitor);
 
@@ -81,6 +81,7 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer
             }
         });
 
+        // TODO at least add a source container for the Liferay Target Platform
         return sourceContainers.toArray(new ISourceContainer[0]);
     }
 

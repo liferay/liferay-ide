@@ -15,6 +15,7 @@
 package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
 import java.util.Map;
@@ -24,12 +25,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.sourcelookup.AbstractSourceLookupDirector;
 import org.eclipse.jdt.launching.AbstractJavaLaunchConfigurationDelegate;
 import org.eclipse.jdt.launching.ExecutionArguments;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.jdt.launching.VMRunnerConfiguration;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.IServerListener;
+import org.eclipse.wst.server.core.ServerEvent;
 import org.eclipse.wst.server.core.ServerUtil;
 
 
@@ -39,6 +43,9 @@ import org.eclipse.wst.server.core.ServerUtil;
 public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigurationDelegate
 {
 
+    public static final String ID = "com.liferay.ide.server.portal.launch";
+
+    @Override
     public void launch( ILaunchConfiguration config, String mode, ILaunch launch, IProgressMonitor monitor )
         throws CoreException
     {
@@ -96,6 +103,41 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
         }
 
         portalServer.launchServer( launch, mode, monitor );
+
+        server.addServerListener(new IServerListener()
+        {
+            @Override
+            public void serverChanged( ServerEvent event )
+            {
+                if( ( event.getKind() & ServerEvent.MODULE_CHANGE ) > 0 )
+                {
+                    AbstractSourceLookupDirector sourceLocator = (AbstractSourceLookupDirector) launch.getSourceLocator();
+
+                    try
+                    {
+                        final String memento =
+                            config.getAttribute( ILaunchConfiguration.ATTR_SOURCE_LOCATOR_MEMENTO, (String) null );
+
+                        if( memento != null )
+                        {
+                            sourceLocator.initializeFromMemento( memento, config);
+                        }
+                        else
+                        {
+                            sourceLocator.initializeDefaults( config );
+                        }
+                    }
+                    catch( CoreException e )
+                    {
+                        LiferayServerCore.logError( "Could not reinitialize source lookup director", e );
+                    }
+                }
+                else if((event.getKind() & ServerEvent.SERVER_CHANGE)>0 && event.getState() == IServer.STATE_STOPPED)
+                {
+                    server.removeServerListener( this );
+                }
+            }
+        });
 
         try
         {

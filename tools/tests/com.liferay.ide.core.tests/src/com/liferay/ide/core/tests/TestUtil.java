@@ -22,11 +22,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.wst.validation.internal.operations.ValidatorManager;
+
+import junit.framework.TestCase;
 
 
 /**
  * @author Gregory Amerson
  */
+@SuppressWarnings( "restriction" )
 public class TestUtil
 {
 
@@ -88,6 +100,48 @@ public class TestUtil
 
         out.close();
         in.close();
+    }
+
+    public static void waitForBuildAndValidation() throws Exception
+    {
+        IWorkspaceRoot root = null;
+
+        try
+        {
+            ResourcesPlugin.getWorkspace().checkpoint( true );
+            Job.getJobManager().join( ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor() );
+            Job.getJobManager().join( ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor() );
+            Job.getJobManager().join( ValidatorManager.VALIDATOR_JOB_FAMILY, new NullProgressMonitor() );
+            Job.getJobManager().join( ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor() );
+            Thread.sleep( 200 );
+            Job.getJobManager().beginRule( root = ResourcesPlugin.getWorkspace().getRoot(), null );
+        }
+        catch( InterruptedException e )
+        {
+            failTest( e );
+        }
+        catch( IllegalArgumentException e )
+        {
+            failTest( e );
+        }
+        catch( OperationCanceledException e )
+        {
+            failTest( e );
+        }
+        finally
+        {
+            if( root != null )
+            {
+                Job.getJobManager().endRule( root );
+            }
+        }
+    }
+
+    public static void failTest( Exception e )
+    {
+        StringWriter s = new StringWriter();
+        e.printStackTrace( new PrintWriter( s ) );
+        TestCase.fail( s.toString() );
     }
 
 }

@@ -59,7 +59,7 @@ public class BundleFactoryDelegate extends ProjectModuleFactoryDelegate
         return retval;
     }
 
-    private IModule createSimpleModule( IProject project )
+    public IModule createSimpleModule( IProject project )
     {
         return createModule( project.getName(), project.getName(), "liferay.bundle", "1.0", project );
     }
