@@ -23,6 +23,8 @@ import com.liferay.ide.swtbot.ui.eclipse.page.ServersView;
 import com.liferay.ide.swtbot.ui.page.Tree;
 import com.liferay.ide.swtbot.ui.page.TreeItem;
 
+import java.util.List;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 
@@ -119,6 +121,10 @@ public class ViewAction extends UIAction {
 		}
 	}
 
+	public void doActionOnProjectFile(List<String> actions, String... files) {
+		fetchProjectFile(files).doAction(actions.toArray(new String[0]));
+	}
+
 	public TreeItem fetchProjectFile(String... files) {
 		return getProjects().expandNode(files);
 	}
@@ -146,6 +152,10 @@ public class ViewAction extends UIAction {
 		TreeItem item = _serversView.getServers().getTreeItem(serverLabel);
 
 		item.contextMenu(OPEN_LIFERAY_PORTAL_HOME);
+	}
+
+	public void openProjectFile(String... files) {
+		fetchProjectFile(files).doubleClick();
 	}
 
 	public void openServerEditor(String serverLabel) {

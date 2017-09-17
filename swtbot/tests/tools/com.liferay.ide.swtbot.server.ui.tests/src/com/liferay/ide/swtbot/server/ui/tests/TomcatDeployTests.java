@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.server.ui.tests;
 
@@ -26,83 +25,79 @@ import org.junit.Test;
 /**
  * @author Terry Jia
  */
-public class TomcatDeployTests extends SwtbotBase
-{
+public class TomcatDeployTests extends SwtbotBase {
 
-    private static String serverName = "Liferay 7-deploy";
-    private static String serverStoppedLabel = serverName + "  [Stopped]";
-    private static String serverStartedLabel = serverName + "  [Started]";
+	@BeforeClass
+	public static void startServer() throws IOException {
+		envAction.unzipServer();
 
-    @BeforeClass
-    public static void startServer() throws IOException
-    {
-        envAction.unzipServer();
+		envAction.prepareGeoFile();
 
-        envAction.prepareGeoFile();
+		envAction.preparePortalExtFile();
 
-        envAction.preparePortalExtFile();
+		envAction.preparePortalSetupWizardFile();
 
-        envAction.preparePortalSetupWizardFile();
+		dialogAction.openPreferencesDialog();
 
-        dialogAction.openPreferencesDialog();
+		dialogAction.openServerRuntimeEnvironmentsDialog();
 
-        dialogAction.openServerRuntimeEnvironmentsDialog();
+		dialogAction.openNewRuntimeWizard();
 
-        dialogAction.openNewRuntimeWizard();
+		wizardAction.prepareLiferay7RuntimeType();
 
-        wizardAction.prepareLiferay7RuntimeType();
+		wizardAction.next();
 
-        wizardAction.next();
+		wizardAction.prepareLiferay7RuntimeInfo(_serverName, envAction.getLiferayServerFullDir().toOSString());
 
-        wizardAction.prepareLiferay7RuntimeInfo( serverName, envAction.getLiferayServerFullDir().toOSString() );
+		wizardAction.finish();
 
-        wizardAction.finish();
+		dialogAction.confirm();
 
-        dialogAction.confirm();
+		wizardAction.openNewLiferayServerWizard();
 
-        wizardAction.openNewLiferayServerWizard();
+		wizardAction.prepareNewServer(_serverName);
 
-        wizardAction.prepareNewServer( serverName );
+		wizardAction.finish();
 
-        wizardAction.finish();
+		viewAction.showServersView();
 
-        viewAction.showServersView();
+		viewAction.serverStart(_serverStoppedLabel);
 
-        viewAction.serverStart( serverStoppedLabel );
+		sleep(200000);
+	}
 
-        sleep( 200000 );
-    }
+	@AfterClass
+	public static void stopServer() throws IOException {
+		viewAction.serverStop(_serverStartedLabel);
 
-    @Test
-    public void deploySampleProject()
-    {
-        wizardAction.openNewLiferayModuleWizard();
+		sleep(20000);
+	}
 
-        wizardAction.prepareLiferayModule( "test" );
+	@Test
+	public void deploySampleProject() {
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModule("test");
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.finishToWait();
 
-        wizardAction.prepareLiferayModule( "test2" );
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModule("test2");
 
-        viewAction.openAddAndRemoveDialog( serverStartedLabel );
+		wizardAction.finishToWait();
 
-        dialogAction.addModule( "test" );
+		viewAction.openAddAndRemoveDialog(_serverStartedLabel);
 
-        dialogAction.confirm();
+		dialogAction.addModule("test");
 
-        sleep( 10000 );
-    }
+		dialogAction.confirm();
 
-    @AfterClass
-    public static void stopServer() throws IOException
-    {
-        viewAction.serverStop( serverStartedLabel );
+		sleep(10000);
+	}
 
-        sleep( 20000 );
-    }
+	private static final String _serverName = "Liferay 7-deploy";
+	private static final String _serverStartedLabel = _serverName + "  [Started]";
+	private static final String _serverStoppedLabel = _serverName + "  [Stopped]";
 
 }

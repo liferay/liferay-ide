@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,18 +10,9 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.workspace.ui.tests;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-
-import org.junit.Test;
 
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.ImportLiferayWorkspaceProjectWizard;
@@ -29,100 +20,102 @@ import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewLiferayWorkspace
 import com.liferay.ide.swtbot.liferay.ui.util.ValidationMsg;
 import com.liferay.ide.swtbot.ui.util.StringPool;
 
+import java.io.File;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 /**
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class ValidationLiferayWorkspaceWizardTests extends SwtbotBase
-{
+public class ValidationLiferayWorkspaceWizardTests extends SwtbotBase {
 
-    NewLiferayWorkspaceWizard newLiferayWorkspaceProjectWizard = new NewLiferayWorkspaceWizard( bot );
-    ImportLiferayWorkspaceProjectWizard importLiferayWorkspaceProject = new ImportLiferayWorkspaceProjectWizard( bot );
+	@Test
+	public void exsitingLiferayWorkspace() {
+		wizardAction.openNewLiferayWorkspaceWizard();
 
-    @Test
-    public void exsitingLiferayWorkspace()
-    {
-        wizardAction.openNewLiferayWorkspaceWizard();
+		wizardAction.prepareLiferayWorkspace("test");
 
-        wizardAction.prepareLiferayWorkspace( "test" );
+		wizardAction.finish();
 
-        wizardAction.finish();
+		wizardAction.openNewLiferayWorkspaceWizard();
 
-        wizardAction.openNewLiferayWorkspaceWizard();
+		wizardAction.prepareLiferayWorkspace("test");
 
-        wizardAction.prepareLiferayWorkspace( "test" );
+		Assert.assertEquals(
+			A_LIFERAY_WORKSPACE_PROJECT_ALREADY_EXISTS, _newLiferayWorkspaceProjectWizard.getValidationMsg());
 
-        assertEquals( A_LIFERAY_WORKSPACE_PROJECT_ALREADY_EXISTS, newLiferayWorkspaceProjectWizard.getValidationMsg() );
+		wizardAction.cancel();
 
-        wizardAction.cancel();
+		viewAction.deleteProject("test");
+	}
 
-        viewAction.deleteProject( "test" );
-    }
+	@Test
+	public void initialStateAndValidationProjectName() {
+		wizardAction.openImportLiferayWorkspaceWizard();
 
-    @Test
-    public void initialStateAndValidationProjectName()
-    {
-        wizardAction.openImportLiferayWorkspaceWizard();
+		Assert.assertEquals(PLEASE_SELECT_THE_WORKSPACE_LOCATION, _importLiferayWorkspaceProject.getValidationMsg());
 
-        assertEquals( PLEASE_SELECT_THE_WORKSPACE_LOCATION, importLiferayWorkspaceProject.getValidationMsg() );
+		Assert.assertEquals(StringPool.BLANK, _importLiferayWorkspaceProject.getWorkspaceLocation().getText());
+		Assert.assertEquals(StringPool.BLANK, _importLiferayWorkspaceProject.getBuildTypeText().getText());
+		Assert.assertFalse(_importLiferayWorkspaceProject.getAddProjectToWorkingSet().isChecked());
 
-        assertEquals( StringPool.BLANK, importLiferayWorkspaceProject.getWorkspaceLocation().getText() );
-        assertEquals( StringPool.BLANK, importLiferayWorkspaceProject.getBuildTypeText().getText() );
-        assertFalse( importLiferayWorkspaceProject.getAddProjectToWorkingSet().isChecked() );
+		Assert.assertTrue(_importLiferayWorkspaceProject.backBtn().isEnabled());
+		Assert.assertFalse(_importLiferayWorkspaceProject.nextBtn().isEnabled());
+		Assert.assertFalse(_importLiferayWorkspaceProject.finishBtn().isEnabled());
+		Assert.assertTrue(_importLiferayWorkspaceProject.cancelBtn().isEnabled());
 
-        assertTrue( importLiferayWorkspaceProject.backBtn().isEnabled() );
-        assertFalse( importLiferayWorkspaceProject.nextBtn().isEnabled() );
-        assertFalse( importLiferayWorkspaceProject.finishBtn().isEnabled() );
-        assertTrue( importLiferayWorkspaceProject.cancelBtn().isEnabled() );
+		for (ValidationMsg msg : getValidationMsgs(
+				new File(envAction.getValidationFolder(), "import-liferay-workspace-wizard-location.csv"))) {
 
-        for( ValidationMsg msg : getValidationMsgs(
-            new File( envAction.getValidationFolder(), "import-liferay-workspace-wizard-location.csv" ) ) )
-        {
-            importLiferayWorkspaceProject.getWorkspaceLocation().setText( msg.getInput() );
+			_importLiferayWorkspaceProject.getWorkspaceLocation().setText(msg.getInput());
 
-            assertEquals( msg.getExpect(), wizardAction.getValidationMsg( 2 ) );
-        }
+			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
+		}
 
-        wizardAction.cancel();;
-    }
+		wizardAction.cancel();
+	}
 
-    @Test
-    public void initialStateTest()
-    {
-        wizardAction.openNewLiferayWorkspaceWizard();
+	@Test
+	public void initialStateTest() {
+		wizardAction.openNewLiferayWorkspaceWizard();
 
-        assertEquals( PLEASE_ENTER_THE_WORKSPACE_NAME, newLiferayWorkspaceProjectWizard.getValidationMsg() );
-        assertEquals( StringPool.BLANK, newLiferayWorkspaceProjectWizard.getProjectName().getText() );
+		Assert.assertEquals(PLEASE_ENTER_THE_WORKSPACE_NAME, _newLiferayWorkspaceProjectWizard.getValidationMsg());
+		Assert.assertEquals(StringPool.BLANK, _newLiferayWorkspaceProjectWizard.getProjectName().getText());
 
-        assertTrue( newLiferayWorkspaceProjectWizard.getUseDefaultLocation().isChecked() );
-        assertEquals( false, newLiferayWorkspaceProjectWizard.getDownloadLiferayBundle().isChecked() );
+		Assert.assertTrue(_newLiferayWorkspaceProjectWizard.getUseDefaultLocation().isChecked());
+		Assert.assertEquals(false, _newLiferayWorkspaceProjectWizard.getDownloadLiferayBundle().isChecked());
 
-        newLiferayWorkspaceProjectWizard.getUseDefaultLocation().deselect();
+		_newLiferayWorkspaceProjectWizard.getUseDefaultLocation().deselect();
 
-        assertEquals( eclipseWorkspace, newLiferayWorkspaceProjectWizard.getLocation().getText() );
+		Assert.assertEquals(eclipseWorkspace, _newLiferayWorkspaceProjectWizard.getLocation().getText());
 
-        newLiferayWorkspaceProjectWizard.getUseDefaultLocation().select();
+		_newLiferayWorkspaceProjectWizard.getUseDefaultLocation().select();
 
-        newLiferayWorkspaceProjectWizard.getDownloadLiferayBundle().select();
-        newLiferayWorkspaceProjectWizard.getDownloadLiferayBundle().deselect();
+		_newLiferayWorkspaceProjectWizard.getDownloadLiferayBundle().select();
+		_newLiferayWorkspaceProjectWizard.getDownloadLiferayBundle().deselect();
 
-        wizardAction.cancel();
-    }
+		wizardAction.cancel();
+	}
 
-    @Test
-    public void validationWorkspaceName()
-    {
-        wizardAction.openNewLiferayWorkspaceWizard();
+	@Test
+	public void validationWorkspaceName() {
+		wizardAction.openNewLiferayWorkspaceWizard();
 
-        for( ValidationMsg msg : getValidationMsgs(
-            new File( envAction.getValidationFolder(), "new-liferay-workspace-wizard-project-name.csv" ) ) )
-        {
-            newLiferayWorkspaceProjectWizard.getProjectName().setText( msg.getInput() );
+		for (ValidationMsg msg : getValidationMsgs(
+				new File(envAction.getValidationFolder(), "new-liferay-workspace-wizard-project-name.csv"))) {
 
-            assertEquals( msg.getExpect(), wizardAction.getValidationMsg( 2 ) );
-        }
+			_newLiferayWorkspaceProjectWizard.getProjectName().setText(msg.getInput());
 
-        wizardAction.cancel();
-    }
+			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
+		}
+
+		wizardAction.cancel();
+	}
+
+	private ImportLiferayWorkspaceProjectWizard _importLiferayWorkspaceProject =
+		new ImportLiferayWorkspaceProjectWizard(bot);
+	private NewLiferayWorkspaceWizard _newLiferayWorkspaceProjectWizard = new NewLiferayWorkspaceWizard(bot);
 
 }

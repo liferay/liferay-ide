@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,64 +10,59 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.fragment.ui.tests;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-
-import org.junit.Test;
 
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewFragmentWizard;
 import com.liferay.ide.swtbot.liferay.ui.util.ValidationMsg;
 
+import java.io.File;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 /**
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class ValidationFragmentWizardTests extends SwtbotBase
-{
+public class ValidationFragmentWizardTests extends SwtbotBase {
 
-    NewFragmentWizard newFragmentWizard = new NewFragmentWizard( bot );
+	@Test
+	public void checkBuildType() {
+		String[] expectedBuildTypes = {GRADLE, MAVEN};
+		String[] buildTypes = _newFragmentWizard.getBuildTypes().items();
 
-    @Test
-    public void validationProjectName()
-    {
-        wizardAction.openNewFragmentWizard();
+		int expectedLength = expectedBuildTypes.length;
+		int length = buildTypes.length;
 
-        for( ValidationMsg msg : getValidationMsgs(
-            new File( envAction.getValidationFolder(), "new-fragment-wizard-project-name.csv" ) ) )
-        {
-            newFragmentWizard.getProjectName().setText( msg.getInput() );
+		wizardAction.openNewFragmentWizard();
 
-            assertEquals( msg.getExpect(), wizardAction.getValidationMsg( 2 ) );
-        }
+		Assert.assertEquals(expectedLength, length);
 
-        wizardAction.cancel();
-    }
+		for (int i = 0; i < buildTypes.length; i++) {
+			Assert.assertTrue(buildTypes[i].equals(expectedBuildTypes[i]));
+		}
 
-    @Test
-    public void checkBuildType()
-    {
-        String[] expectedBuildTypes = { GRADLE, MAVEN };
+		wizardAction.cancel();
+	}
 
-        wizardAction.openNewFragmentWizard();
+	@Test
+	public void validationProjectName() {
+		wizardAction.openNewFragmentWizard();
 
-        String[] buildTypes = newFragmentWizard.getBuildTypes().items();
+		for (ValidationMsg msg : getValidationMsgs(
+				new File(envAction.getValidationFolder(), "new-fragment-wizard-project-name.csv"))) {
 
-        assertEquals( expectedBuildTypes.length, buildTypes.length );
+			_newFragmentWizard.getProjectName().setText(msg.getInput());
 
-        for( int i = 0; i < buildTypes.length; i++ )
-        {
-            assertTrue( buildTypes[i].equals( expectedBuildTypes[i] ) );
-        }
+			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
+		}
 
-        wizardAction.cancel();
-    }
+		wizardAction.cancel();
+	}
+
+	private static final NewFragmentWizard _newFragmentWizard = new NewFragmentWizard(bot);
 
 }

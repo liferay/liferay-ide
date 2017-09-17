@@ -14,30 +14,30 @@
  * details.
  *
  *******************************************************************************/
- -->
+-->
 
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <modelVersion>4.0.0</modelVersion>
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.liferay.ide.swtbot.tests</groupId>
-        <artifactId>tests</artifactId>
-        <version>3.1.2-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<groupId>com.liferay.ide.swtbot.tests</groupId>
+		<artifactId>tests</artifactId>
+		<version>3.1.2-SNAPSHOT</version>
+	</parent>
 
-    <groupId>com.liferay.ide.swtbot.tests.tools</groupId>
-    <artifactId>tools-tests</artifactId>
+	<groupId>com.liferay.ide.swtbot.tests.tools</groupId>
+	<artifactId>tools-tests</artifactId>
 
-    <name>Liferay IDE Tools Tests</name>
+	<name>Liferay IDE Tools Tests</name>
 
-    <packaging>pom</packaging>
+	<packaging>pom</packaging>
 
-    <modules>
+	<modules>
 		<module>com.liferay.ide.swtbot.fragment.ui.tests</module>
 		<module>com.liferay.ide.swtbot.project.ui.tests</module>
 		<module>com.liferay.ide.swtbot.hook.ui.tests</module>
- 		<module>com.liferay.ide.swtbot.portlet.ui.tests</module>
+		<module>com.liferay.ide.swtbot.portlet.ui.tests</module>
 		<module>com.liferay.ide.swtbot.server.ui.tests</module>
 		<module>com.liferay.ide.swtbot.layouttpl.ui.tests</module>
 		<module>com.liferay.ide.swtbot.service.ui.tests</module>

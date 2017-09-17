@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,121 +10,120 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.fragment.ui.tests;
+
+import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 
 import java.io.IOException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
-
 /**
  * @author Vicky Wang
  * @author Sunny Shi
  */
-public class FragmentWizardTests extends SwtbotBase
-{
+public class FragmentWizardTests extends SwtbotBase {
 
-    @BeforeClass
-    public static void init() throws IOException
-    {
-    		envAction.unzipServer();
-    }
+	@BeforeClass
+	public static void init() throws IOException {
+		envAction.unzipServer();
+	}
 
-    @Test
-    public void moduleFragmentProjectWizard()
-    {
-        String projectName = "test-fragment";
+	@Test
+	public void mavenModuleFragmentProjectWizard() {
+		String projectName = "test-fragment-maven";
 
-        wizardAction.openNewFragmentWizard();
+		wizardAction.openNewFragmentWizard();
 
-        wizardAction.prepareFragmentGradle( "test-fragment" );
+		wizardAction.prepareFragmentMaven(projectName);
 
-        wizardAction.openNewRuntimeWizardFragment();
+		wizardAction.openNewRuntimeWizardFragment();
 
-        wizardAction.next();
+		wizardAction.next();
 
-        wizardAction.prepareLiferay7RuntimeInfo( envAction.getLiferayServerDir().toOSString() );
+		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
 
-        wizardAction.finish();
+		wizardAction.finish();
 
-        wizardAction.next();
+		wizardAction.next();
 
-        wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.openBrowseOsgiBundleDialog();
 
-        dialogAction.prepareText( "com.liferay.announcements." );
+		dialogAction.prepareText("com.liferay.blogs.web");
 
-        dialogAction.confirm();
+		dialogAction.confirm();
 
-        wizardAction.openAddOverrideFilesDialog();
+		String[] files = {
+			"META-INF/resources/blogs_admin/configuration.jsp", "META-INF/resources/blogs_aggregator/init.jsp",
+			"META-INF/resources/blogs/asset/abstract.jsp", "META-INF/resources/blogs/edit_entry.jsp",
+			"portlet.properties"
+		};
 
-        dialogAction.selectItem( "META-INF/resources/configuration.jsp" );
+		wizardAction.openAddOverrideFilesDialog();
 
-        dialogAction.confirm();
+		dialogAction.selectItems(files);
 
-        wizardAction.openBrowseOsgiBundleDialog();
+		dialogAction.confirm();
 
-        dialogAction.prepareText( "com.liferay.blogs.web" );
+		wizardAction.finishToWait();
 
-        dialogAction.confirm();
+		viewAction.deleteProject(projectName);
+	}
 
-        String[] files = new String[] { "META-INF/resources/blogs_admin/configuration.jsp",
-            "META-INF/resources/blogs_aggregator/init.jsp", "META-INF/resources/blogs/asset/abstract.jsp",
-            "META-INF/resources/blogs/edit_entry.jsp", "portlet.properties" };
+	@Test
+	public void moduleFragmentProjectWizard() {
+		String projectName = "test-fragment";
 
-        wizardAction.openAddOverrideFilesDialog();
+		wizardAction.openNewFragmentWizard();
 
-        dialogAction.selectItems( files );
+		wizardAction.prepareFragmentGradle("test-fragment");
 
-        dialogAction.confirm();
+		wizardAction.openNewRuntimeWizardFragment();
 
-        wizardAction.finishToWait();
+		wizardAction.next();
 
-        viewAction.deleteProject( projectName );
-    }
+		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
 
-    @Test
-    public void mavenModuleFragmentProjectWizard()
-    {
-        String projectName = "test-fragment-maven";
+		wizardAction.finish();
 
-        wizardAction.openNewFragmentWizard();
+		wizardAction.next();
 
-        wizardAction.prepareFragmentMaven( projectName );
+		wizardAction.openBrowseOsgiBundleDialog();
 
-        wizardAction.openNewRuntimeWizardFragment();
+		dialogAction.prepareText("com.liferay.announcements.");
 
-        wizardAction.next();
+		dialogAction.confirm();
 
-        wizardAction.prepareLiferay7RuntimeInfo( envAction.getLiferayServerDir().toOSString() );
+		wizardAction.openAddOverrideFilesDialog();
 
-        wizardAction.finish();
+		dialogAction.selectItem("META-INF/resources/configuration.jsp");
 
-        wizardAction.next();
+		dialogAction.confirm();
 
-        wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.openBrowseOsgiBundleDialog();
 
-        dialogAction.prepareText( "com.liferay.blogs.web" );
+		dialogAction.prepareText("com.liferay.blogs.web");
 
-        dialogAction.confirm();
+		dialogAction.confirm();
 
-        String[] files = new String[] { "META-INF/resources/blogs_admin/configuration.jsp",
-            "META-INF/resources/blogs_aggregator/init.jsp", "META-INF/resources/blogs/asset/abstract.jsp",
-            "META-INF/resources/blogs/edit_entry.jsp", "portlet.properties" };
+		String[] files = {
+			"META-INF/resources/blogs_admin/configuration.jsp", "META-INF/resources/blogs_aggregator/init.jsp",
+			"META-INF/resources/blogs/asset/abstract.jsp", "META-INF/resources/blogs/edit_entry.jsp",
+			"portlet.properties"
+		};
 
-        wizardAction.openAddOverrideFilesDialog();
+		wizardAction.openAddOverrideFilesDialog();
 
-        dialogAction.selectItems( files );
+		dialogAction.selectItems(files);
 
-        dialogAction.confirm();
+		dialogAction.confirm();
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        viewAction.deleteProject( projectName );
-    }
+		viewAction.deleteProject(projectName);
+	}
 
 }

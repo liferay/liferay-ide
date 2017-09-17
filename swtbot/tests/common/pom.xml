@@ -14,27 +14,26 @@
  * details.
  *
  *******************************************************************************/
- -->
+-->
 
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <modelVersion>4.0.0</modelVersion>
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.liferay.ide.swtbot.tests</groupId>
-        <artifactId>tests</artifactId>
-        <version>3.1.2-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<groupId>com.liferay.ide.swtbot.tests</groupId>
+		<artifactId>tests</artifactId>
+		<version>3.1.2-SNAPSHOT</version>
+	</parent>
 
-    <groupId>com.liferay.ide.swtbot.tests.common</groupId>
-    <artifactId>common-tests</artifactId>
-    <packaging>pom</packaging>
+	<groupId>com.liferay.ide.swtbot.tests.common</groupId>
+	<artifactId>common-tests</artifactId>
+	<packaging>pom</packaging>
 
-    <name>Liferay IDE Common Tests</name>
+	<name>Liferay IDE Common Tests</name>
 
-    <modules>
-        <module>com.liferay.ide.swtbot.ui</module>
-        <module>com.liferay.ide.swtbot.liferay.ui</module>
-    </modules>
+	<modules>
+		<module>com.liferay.ide.swtbot.ui</module>
+		<module>com.liferay.ide.swtbot.liferay.ui</module>
+	</modules>
 </project>
-

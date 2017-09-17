@@ -1,2 +1,3 @@
-Bundle-SymbolicName: mvcportletmodule
+Bundle-Name: Mvc Portlet module
+Bundle-SymbolicName: mvc.portlet.module
 Bundle-Version: 1.0.0

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.project.ui.tests;
 
@@ -24,318 +23,296 @@ import org.junit.Test;
  * @author Sunny Shi
  * @author Ying Xu
  */
-public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase
-{
+public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
-    @Test
-    public void createMvcPortlet()
-    {
-        String projectName = "test-mvc-portlet";
+	@Test
+	public void createActivator() {
+		String projectName = "test-activator";
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.prepareLiferayModuleMaven( projectName, MVC_PORTLET );
+		wizardAction.prepareLiferayModuleMaven(projectName, ACTIVATOR);
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        viewAction.deleteProject( projectName );
-    }
+		viewAction.deleteProject(projectName);
+	}
 
-    @Test
-    public void createService()
-    {
-        String projectName = "test-service";
+	@Test
+	public void createApi() {
+		String projectName = "test-api";
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.prepareLiferayModuleMaven( projectName, SERVICE );
+		wizardAction.prepareLiferayModuleMaven(projectName, API);
 
-        wizardAction.next();
+		wizardAction.finishToWait();
 
-        wizardAction.openSelectServiceDialog();
+		viewAction.deleteProject(projectName);
+	}
 
-        dialogAction.prepareText( "*lifecycleAction" );
+	@Test
+	public void createContentTargetingReport() {
+		String projectName = "test-content-targeting-report";
 
-        dialogAction.confirm();
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModuleMaven(projectName, CONTENT_TARGETING_REPORT);
 
-        viewAction.deleteProject( projectName );
-    }
+		wizardAction.finishToWait();
 
-    @Test
-    public void createServiceBuilder()
-    {
-        String projectName = "test-service-builder";
+		viewAction.deleteProject(projectName);
+	}
 
-        wizardAction.openNewLiferayModuleWizard();
+	@Test
+	public void createContentTargetingRule() {
+		String projectName = "test-content-targeting-rule";
 
-        wizardAction.prepareLiferayModuleMaven( projectName, SERVICE_BUILDER );
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModuleMaven(projectName, CONTENT_TARGETING_RULE);
 
-        viewAction.deleteProject( projectName );
-    }
+		wizardAction.finishToWait();
 
-    @Test
-    public void createActivator()
-    {
-        String projectName = "test-activator";
+		viewAction.deleteProject(projectName);
+	}
 
-        wizardAction.openNewLiferayModuleWizard();
+	@Test
+	public void createContentTargetingTrackingAction() {
+		String projectName = "test-content-targeting-tracking-action";
 
-        wizardAction.prepareLiferayModuleMaven( projectName, ACTIVATOR );
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModuleMaven(projectName, CONTENT_TARGETING_TRACKING_ACTION);
 
-        viewAction.deleteProject( projectName );
-    }
+		wizardAction.finishToWait();
 
-    @Test
-    public void createApi()
-    {
-        String projectName = "test-api";
+		viewAction.deleteProject(projectName);
+	}
 
-        wizardAction.openNewLiferayModuleWizard();
+	@Test
+	public void createControlMenuEntry() {
+		String projectName = "test-control-menu-entry";
 
-        wizardAction.prepareLiferayModuleMaven( projectName, API );
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModuleMaven(projectName, CONTROL_MENU_ENTRY);
 
-        viewAction.deleteProject( projectName );
-    }
+		wizardAction.finishToWait();
 
-    @Test
-    public void createContentTargetingReport()
-    {
-        String projectName = "test-content-targeting-report";
+		viewAction.deleteProject(projectName);
+	}
 
-        wizardAction.openNewLiferayModuleWizard();
+	@Test
+	public void createFormField() {
+		String projectName = "test-form-field";
 
-        wizardAction.prepareLiferayModuleMaven( projectName, CONTENT_TARGETING_REPORT );
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModuleMaven(projectName, FORM_FIELD);
 
-        viewAction.deleteProject( projectName );
-    }
+		wizardAction.finishToWait();
 
-    @Test
-    public void createContentTargetingRule()
-    {
-        String projectName = "test-content-targeting-rule";
+		viewAction.deleteProject(projectName);
+	}
 
-        wizardAction.openNewLiferayModuleWizard();
+	@Test
+	public void createMvcPortlet() {
+		String projectName = "test-mvc-portlet";
 
-        wizardAction.prepareLiferayModuleMaven( projectName, CONTENT_TARGETING_RULE );
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModuleMaven(projectName, MVC_PORTLET);
 
-        viewAction.deleteProject( projectName );
-    }
+		wizardAction.finishToWait();
 
-    @Test
-    public void createContentTargetingTrackingAction()
-    {
-        String projectName = "test-content-targeting-tracking-action";
+		viewAction.deleteProject(projectName);
+	}
 
-        wizardAction.openNewLiferayModuleWizard();
+	@Test
+	public void createPanelApp() {
+		String projectName = "test-panel-app";
 
-        wizardAction.prepareLiferayModuleMaven( projectName, CONTENT_TARGETING_TRACKING_ACTION );
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModuleMaven(projectName, PANEL_APP);
 
-        viewAction.deleteProject( projectName );
-    }
+		wizardAction.finishToWait();
 
-    @Test
-    public void createControlMenuEntry()
-    {
-        String projectName = "test-control-menu-entry";
+		viewAction.deleteProject(projectName);
+	}
 
-        wizardAction.openNewLiferayModuleWizard();
+	@Test
+	public void createPortlet() {
+		String projectName = "test-portlet";
 
-        wizardAction.prepareLiferayModuleMaven( projectName, CONTROL_MENU_ENTRY );
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET);
 
-        viewAction.deleteProject( projectName );
-    }
+		wizardAction.finishToWait();
 
-    @Test
-    public void createFormField()
-    {
-        String projectName = "test-form-field";
+		viewAction.deleteProject(projectName);
+	}
 
-        wizardAction.openNewLiferayModuleWizard();
+	@Test
+	public void createPortletConfigurationIcon() {
+		String projectName = "test-portlet-configuration-icon";
 
-        wizardAction.prepareLiferayModuleMaven( projectName, FORM_FIELD );
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET_CONFIGURATION_ICON);
 
-        viewAction.deleteProject( projectName );
-    }
+		wizardAction.finishToWait();
 
-    @Test
-    public void createPanelApp()
-    {
-        String projectName = "test-panel-app";
+		viewAction.deleteProject(projectName);
+	}
 
-        wizardAction.openNewLiferayModuleWizard();
+	@Test
+	public void createPortletProvider() {
+		String projectName = "test-portlet-provider";
 
-        wizardAction.prepareLiferayModuleMaven( projectName, PANEL_APP );
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET_PROVIDER);
 
-        viewAction.deleteProject( projectName );
-    }
+		wizardAction.finishToWait();
 
-    @Test
-    public void createPortlet()
-    {
-        String projectName = "test-portlet";
+		viewAction.deleteProject(projectName);
+	}
 
-        wizardAction.openNewLiferayModuleWizard();
+	@Test
+	public void createPortletToolbarContributor() {
+		String projectName = "test-portlet-toolbar-contributor";
 
-        wizardAction.prepareLiferayModuleMaven( projectName, PORTLET );
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET_TOOLBAR_CONTRIBUTOR);
 
-        viewAction.deleteProject( projectName );
-    }
+		wizardAction.finishToWait();
 
-    @Test
-    public void createPortletConfigurationIcon()
-    {
-        String projectName = "test-portlet-configuration-icon";
+		viewAction.deleteProject(projectName);
+	}
 
-        wizardAction.openNewLiferayModuleWizard();
+	@Test
+	public void createRest() {
+		String projectName = "test-rest";
 
-        wizardAction.prepareLiferayModuleMaven( projectName, PORTLET_CONFIGURATION_ICON );
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModuleMaven(projectName, REST);
 
-        viewAction.deleteProject( projectName );
-    }
+		wizardAction.finishToWait();
 
-    @Test
-    public void createPortletProvider()
-    {
-        String projectName = "test-portlet-provider";
+		viewAction.deleteProject(projectName);
+	}
 
-        wizardAction.openNewLiferayModuleWizard();
+	@Test
+	public void createService() {
+		String projectName = "test-service";
 
-        wizardAction.prepareLiferayModuleMaven( projectName, PORTLET_PROVIDER );
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModuleMaven(projectName, SERVICE);
 
-        viewAction.deleteProject( projectName );
-    }
+		wizardAction.next();
 
-    @Test
-    public void createPortletToolbarContributor()
-    {
-        String projectName = "test-portlet-toolbar-contributor";
+		wizardAction.openSelectServiceDialog();
 
-        wizardAction.openNewLiferayModuleWizard();
+		dialogAction.prepareText("*lifecycleAction");
 
-        wizardAction.prepareLiferayModuleMaven( projectName, PORTLET_TOOLBAR_CONTRIBUTOR );
+		dialogAction.confirm();
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        viewAction.deleteProject( projectName );
-    }
+		viewAction.deleteProject(projectName);
+	}
 
-    @Test
-    public void createRest()
-    {
-        String projectName = "test-rest";
+	@Test
+	public void createServiceBuilder() {
+		String projectName = "test-service-builder";
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.prepareLiferayModuleMaven( projectName, REST );
+		wizardAction.prepareLiferayModuleMaven(projectName, SERVICE_BUILDER);
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        viewAction.deleteProject( projectName );
-    }
+		viewAction.deleteProject(projectName);
+	}
 
-    @Test
-    public void createServiceWrapper()
-    {
-        String projectName = "test-service-wrapper";
+	@Test
+	public void createServiceWrapper() {
+		String projectName = "test-service-wrapper";
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.prepareLiferayModuleMaven( projectName, SERVICE_WRAPPER );
+		wizardAction.prepareLiferayModuleMaven(projectName, SERVICE_WRAPPER);
 
-        wizardAction.next();
+		wizardAction.next();
 
-        wizardAction.openSelectServiceDialog();
+		wizardAction.openSelectServiceDialog();
 
-        dialogAction.prepareText( "*bookmarksEntryServiceWrapper" );
+		dialogAction.prepareText("*bookmarksEntryServiceWrapper");
 
-        dialogAction.confirm();
+		dialogAction.confirm();
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        viewAction.deleteProject( projectName );
-    }
+		viewAction.deleteProject(projectName);
+	}
 
-    @Test
-    public void createSimulationPanelEntry()
-    {
-        String projectName = "test-simulation-panel-entry";
+	@Test
+	public void createSimulationPanelEntry() {
+		String projectName = "test-simulation-panel-entry";
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.prepareLiferayModuleMaven( projectName, SIMULATION_PANEL_ENTRY );
+		wizardAction.prepareLiferayModuleMaven(projectName, SIMULATION_PANEL_ENTRY);
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        viewAction.deleteProject( projectName );
-    }
+		viewAction.deleteProject(projectName);
+	}
 
-    @Test
-    public void createTemplateContextContributor()
-    {
-        String projectName = "test-template-context-contributor";
+	@Test
+	public void createTemplateContextContributor() {
+		String projectName = "test-template-context-contributor";
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.prepareLiferayModuleMaven( projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR );
+		wizardAction.prepareLiferayModuleMaven(projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR);
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        viewAction.deleteProject( projectName );
-    }
+		viewAction.deleteProject(projectName);
+	}
 
-    @Ignore
-    @Test
-    public void createTheme()
-    {
-        String projectName = "test-theme";
+	@Ignore
+	@Test
+	public void createTheme() {
+		String projectName = "test-theme";
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.prepareLiferayModuleMaven( projectName, THEME );
+		wizardAction.prepareLiferayModuleMaven(projectName, THEME);
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        viewAction.deleteProject( projectName );
-    }
+		viewAction.deleteProject(projectName);
+	}
 
-    @Test
-    public void createThemeContributor()
-    {
-        String projectName = "test-theme-contributor";
+	@Test
+	public void createThemeContributor() {
+		String projectName = "test-theme-contributor";
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.prepareLiferayModuleMaven( projectName, THEME_CONTRIBUTOR );
+		wizardAction.prepareLiferayModuleMaven(projectName, THEME_CONTRIBUTOR);
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        viewAction.deleteProject( projectName );
-    }
+		viewAction.deleteProject(projectName);
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.workspace.ui.tests;
 
@@ -24,88 +23,80 @@ import org.junit.Test;
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class GradleLiferayWorkspaceWizardTests extends SwtbotBase
-{
+public class GradleLiferayWorkspaceWizardTests extends SwtbotBase {
 
-    static String fullClassname = new SecurityManager()
-    {
+	@Test
+	public void newGradleLiferayWorksapceProjectWizard() {
+		String workspaceName = "test-gradle-liferay-workspace";
 
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
+		wizardAction.openNewLiferayWorkspaceWizard();
 
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
+		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
 
-    @Test
-    public void newGradleLiferayWorksapceProjectWizard()
-    {
-        String workspaceName = "test-gradle-liferay-workspace";
+		wizardAction.finishToWait();
 
-        wizardAction.openNewLiferayWorkspaceWizard();
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.prepareLiferayWorkspaceGradle( workspaceName );
+		wizardAction.prepareLiferayModuleGradle("test-mvn-portlet-in-ws", MVC_PORTLET);
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.prepareLiferayModuleGradle( "test-mvn-portlet-in-ws", MVC_PORTLET );
+		wizardAction.prepareLiferayModuleGradle("test-theme-in-ws", THEME);
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.prepareLiferayModuleGradle( "test-theme-in-ws", THEME );
+		wizardAction.prepareLiferayModuleMaven("test-maven-mvc-portlet", MVC_PORTLET);
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        wizardAction.openNewLiferayModuleWizard();
+		viewAction.deleteProject("test-maven-mvc-portlet");
 
-        wizardAction.prepareLiferayModuleMaven( "test-maven-mvc-portlet", MVC_PORTLET );
+		viewAction.deleteProject(workspaceName);
+	}
 
-        wizardAction.finishToWait();
+	@Test
+	public void newGradleLiferayWorkspaceProjectWithoutDownloadBundle() {
+		String workspaceName = "test-gradle-liferay-workspace-without-bundle";
 
-        viewAction.deleteProject( "test-maven-mvc-portlet" );
+		wizardAction.openNewLiferayWorkspaceWizard();
 
-        viewAction.deleteProject( workspaceName );
-    }
+		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
 
-    @Test
-    public void newGradleLiferayWorkspaceProjectWithoutDownloadBundle()
-    {
-        String workspaceName = "test-gradle-liferay-workspace-without-bundle";
+		wizardAction.finishToWait();
 
-        wizardAction.openNewLiferayWorkspaceWizard();
+		viewAction.fetchProjectFile(workspaceName, "gradle.properties").doubleClick();
 
-        wizardAction.prepareLiferayWorkspaceGradle( workspaceName );
+		Editor gradlePropertiesEditor = ide.getEditor("gradle.properties");
 
-        wizardAction.finishToWait();
+		StringBuffer sb = new StringBuffer();
 
-        viewAction.fetchProjectFile( workspaceName, "gradle.properties" ).doubleClick();
+		sb.append("liferay.workspace.home.dir=bundlesTest");
+		sb.append("\r");
+		sb.append("liferay.workspace.modules.dir=modulesTest");
+		sb.append("\r");
+		sb.append("liferay.workspace.wars.dir=warsTest");
 
-        Editor gradlePropertiesEditor = ide.getEditor( "gradle.properties" );
+		gradlePropertiesEditor.setText(sb.toString());
 
-        gradlePropertiesEditor.setText(
-            "liferay.workspace.home.dir=bundlesTest" + "\r" + "liferay.workspace.modules.dir=modulesTest" + "\r" +
-                "liferay.workspace.wars.dir=warsTest" );
+		gradlePropertiesEditor.save();
 
-        gradlePropertiesEditor.save();
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.prepareLiferayModuleGradle("test-mvc-portlet", MVC_PORTLET);
 
-        wizardAction.prepareLiferayModuleGradle( "test-mvc-portlet", MVC_PORTLET );
+		wizardAction.finishToWait();
 
-        wizardAction.finishToWait();
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.prepareLiferayModuleGradle("test-theme", THEME);
 
-        wizardAction.prepareLiferayModuleGradle( "test-theme", THEME );
+		wizardAction.finishToWait();
 
-        wizardAction.finishToWait();
-
-        viewAction.deleteProject( workspaceName );
-    }
+		viewAction.deleteProject(workspaceName);
+	}
 
 }

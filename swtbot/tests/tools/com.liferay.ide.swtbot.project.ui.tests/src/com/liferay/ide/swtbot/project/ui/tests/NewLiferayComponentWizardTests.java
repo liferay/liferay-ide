@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,93 +10,93 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.project.ui.tests;
 
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Ying Xu
  * @author Ashley Yuan
  */
-public class NewLiferayComponentWizardTests extends SwtbotBase
-{
+public class NewLiferayComponentWizardTests extends SwtbotBase {
 
-    @Test
-    public void newComponentClassOnModelListenerTest()
-    {
-        String projectName = "test-component-maven";
+	@Test
+	public void newComponentClassOnModelListenerTest()
+	{
 
-        wizardAction.openNewLiferayModuleWizard();
-        wizardAction.prepareLiferayModuleMaven( projectName, MVC_PORTLET );
-        wizardAction.finishToWait();
+		String projectName = "test-component-maven";
 
-        wizardAction.openNewLiferayComponentClassWizard();
-        wizardAction.prepareComponentClass( projectName, MODEL_LISTENER );
-        wizardAction.openSelectModelClassAndServiceDialog();
+		wizardAction.openNewLiferayModuleWizard();
+		wizardAction.prepareLiferayModuleMaven(projectName, MVC_PORTLET);
+		wizardAction.finishToWait();
 
-        dialogAction.prepareText( "*com.liferay.blogs.kernel.model.BlogsEntry" );
-        dialogAction.confirm();
+		wizardAction.openNewLiferayComponentClassWizard();
+		wizardAction.prepareComponentClass(projectName, MODEL_LISTENER);
+		wizardAction.openSelectModelClassAndServiceDialog();
 
-        wizardAction.finishToWait();
+		dialogAction.prepareText("*com.liferay.blogs.kernel.model.BlogsEntry");
+		dialogAction.confirm();
 
-        assertTrue(
-            viewAction.fetchProjectFile(
-                projectName, "src/main/java", "test.component.maven.portlet",
-                "TestComponentMavenModelListener.java" ).isVisible() );
+		wizardAction.finishToWait();
 
-        viewAction.deleteProject( projectName );
-    }
+		Assert.assertTrue(
+			viewAction.fetchProjectFile(
+				projectName, "src/main/java", "test.component.maven.portlet",
+				"TestComponentMavenModelListener.java").isVisible());
 
-    @Test
-    public void newComponentClassOnPortletTest()
-    {
-        String projectName = "test-component";
+		viewAction.deleteProject(projectName);
+	}
 
-        wizardAction.openNewLiferayModuleWizard();
-        wizardAction.prepareLiferayModuleGradle( projectName );
-        wizardAction.finishToWait();
+	@Test
+	public void newComponentClassOnPortletTest()
+	{
 
-        wizardAction.openNewLiferayComponentClassWizard();
-        wizardAction.prepareComponentClass( projectName );
-        wizardAction.finishToWait();
+		String projectName = "test-component";
 
-        assertTrue(
-            viewAction.fetchProjectFile(
-                projectName, "src/main/java", "content", "TestComponentPortlet.java" ).isVisible() );
+		wizardAction.openNewLiferayModuleWizard();
+		wizardAction.prepareLiferayModuleGradle(projectName);
+		wizardAction.finishToWait();
 
-        viewAction.deleteProject( projectName );
-    }
+		wizardAction.openNewLiferayComponentClassWizard();
+		wizardAction.prepareComponentClass(projectName);
+		wizardAction.finishToWait();
 
-    @Test
-    public void newComponentClassOnServiceWrapperTest()
-    {
-        String projectName = "test-component-gradle";
+		Assert.assertTrue(
+			viewAction.fetchProjectFile(
+				projectName, "src/main/java", "content", "TestComponentPortlet.java").isVisible());
 
-        wizardAction.openNewLiferayModuleWizard();
-        wizardAction.prepareLiferayModuleGradle( projectName );
-        wizardAction.finishToWait();
+		viewAction.deleteProject(projectName);
+	}
 
-        wizardAction.openNewLiferayComponentClassWizard();
-        wizardAction.prepareComponentClass( projectName, SERVICE_WRAPPER_UPCASE );
-        wizardAction.openSelectModelClassAndServiceDialog();
+	@Test
+	public void newComponentClassOnServiceWrapperTest()
+	{
 
-        dialogAction.prepareText( "*bookmarksEntryLocal" );
-        dialogAction.confirm();
+		String projectName = "test-component-gradle";
 
-        wizardAction.finishToWait();
+		wizardAction.openNewLiferayModuleWizard();
+		wizardAction.prepareLiferayModuleGradle(projectName);
+		wizardAction.finishToWait();
 
-        assertTrue(
-            viewAction.fetchProjectFile(
-                projectName, "src/main/java", "content", "TestComponentGradleServiceHook.java" ).isVisible() );
+		wizardAction.openNewLiferayComponentClassWizard();
+		wizardAction.prepareComponentClass(projectName, SERVICE_WRAPPER_UPCASE);
+		wizardAction.openSelectModelClassAndServiceDialog();
 
-        viewAction.deleteProject( projectName );
-    }
+		dialogAction.prepareText("*bookmarksEntryLocal");
+		dialogAction.confirm();
+
+		wizardAction.finishToWait();
+
+		Assert.assertTrue(
+			viewAction.fetchProjectFile(
+				projectName, "src/main/java", "content", "TestComponentGradleServiceHook.java").isVisible());
+
+		viewAction.deleteProject(projectName);
+	}
 
 }

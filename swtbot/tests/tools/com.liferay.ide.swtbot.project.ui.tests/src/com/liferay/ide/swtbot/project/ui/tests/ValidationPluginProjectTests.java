@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,48 +10,43 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.project.ui.tests;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.LiferayProjectFromExistSourceWizard;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class ValidationPluginProjectTests extends SwtbotBase
-{
+public class ValidationPluginProjectTests extends SwtbotBase {
 
-    private LiferayProjectFromExistSourceWizard pluginFromSourcewizard = new LiferayProjectFromExistSourceWizard( bot );
+	@Test
+	public void testDefaults() {
+		wizardAction.openNewLiferayPluginProjectsFromExistingSourceWizard();
 
-    @Test
-    public void testDefaults()
-    {
-        wizardAction.openNewLiferayPluginProjectsFromExistingSourceWizard();
+		Assert.assertEquals(PLEASE_SELECT_AT_LEAST_ONE_PROJECT_TO_IMPORT, _pluginFromSourceWizard.getValidationMsg());
 
-        assertEquals( PLEASE_SELECT_AT_LEAST_ONE_PROJECT_TO_IMPORT, pluginFromSourcewizard.getValidationMsg() );
+		Assert.assertTrue(_pluginFromSourceWizard.getSdkDirectory().isEnabled());
+		Assert.assertTrue(_pluginFromSourceWizard.getBrowseSdkDirectoryBtn().isEnabled());
+		Assert.assertTrue(_pluginFromSourceWizard.getSdkVersion().isEnabled());
 
-        assertTrue( pluginFromSourcewizard.getSdkDirectory().isEnabled() );
-        assertTrue( pluginFromSourcewizard.getBrowseSdkDirectoryBtn().isEnabled() );
-        assertTrue( pluginFromSourcewizard.getSdkVersion().isEnabled() );
+		Assert.assertTrue(_pluginFromSourceWizard.getSdkDirectory().isActive());
+		Assert.assertFalse(_pluginFromSourceWizard.getBrowseSdkDirectoryBtn().isActive());
+		Assert.assertFalse(_pluginFromSourceWizard.getSdkVersion().isActive());
 
-        assertTrue( pluginFromSourcewizard.getSdkDirectory().isActive() );
-        assertFalse( pluginFromSourcewizard.getBrowseSdkDirectoryBtn().isActive() );
-        assertFalse( pluginFromSourcewizard.getSdkVersion().isActive() );
+		Assert.assertTrue(_pluginFromSourceWizard.getSelectAllBtn().isEnabled());
+		Assert.assertTrue(_pluginFromSourceWizard.getDeselectAllBtn().isEnabled());
+		Assert.assertTrue(_pluginFromSourceWizard.getRefreshBtn().isEnabled());
 
-        assertTrue( pluginFromSourcewizard.getSelectAllBtn().isEnabled() );
-        assertTrue( pluginFromSourcewizard.getDeselectAllBtn().isEnabled() );
-        assertTrue( pluginFromSourcewizard.getRefreshBtn().isEnabled() );
+		wizardAction.cancel();
+	}
 
-        wizardAction.cancel();
-    }
+	private static final LiferayProjectFromExistSourceWizard _pluginFromSourceWizard =
+		new LiferayProjectFromExistSourceWizard(bot);
 
 }
