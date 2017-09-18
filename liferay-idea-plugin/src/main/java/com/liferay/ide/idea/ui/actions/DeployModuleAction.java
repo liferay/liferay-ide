@@ -38,7 +38,9 @@ public class DeployModuleAction extends AbstractLiferayGradleTaskAction {
 		Project project = e.getProject();
 		VirtualFile file = getVirtualFile(e);
 
-		if ((file != null) && ProjectRootsUtil.isModuleContentRoot(file, project)) {
+		if ((file != null) && ProjectRootsUtil.isModuleContentRoot(file, project) &&
+			!project.getBaseDir().equals(file)) {
+
 			return true;
 		}
 
