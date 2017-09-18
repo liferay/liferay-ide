@@ -16,7 +16,6 @@ package com.liferay.ide.idea.ui.modules;
 
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.highlighter.ModuleFileType;
-import com.intellij.ide.util.BrowseFilesListener;
 import com.intellij.ide.util.projectWizard.AbstractModuleBuilder;
 import com.intellij.ide.util.projectWizard.ProjectWizardUtil;
 import com.intellij.ide.util.projectWizard.WizardContext;
@@ -24,10 +23,8 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectBundle;
 import com.intellij.openapi.roots.ui.configuration.ProjectStructureConfigurable;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -50,6 +47,10 @@ public class LiferayModuleNameLocationComponent {
 
 	public LiferayModuleNameLocationComponent(@NotNull WizardContext context) {
 		_context = context;
+
+		_moduleContentRoot.setEnabled(false);
+
+		_moduleFileLocation.setEnabled(false);
 	}
 
 	public void bindModuleSettings(LiferayNamePathComponent namePathComponent) {
@@ -65,11 +66,6 @@ public class LiferayModuleNameLocationComponent {
 				}
 
 			});
-
-		_moduleContentRoot.addBrowseFolderListener(
-			ProjectBundle.message("project.new.wizard.module.content.root.chooser.title"),
-			ProjectBundle.message("project.new.wizard.module.content.root.chooser.description"), _context.getProject(),
-			BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR);
 
 		Document pathDocument = namePathComponent.getPathComponent().getDocument();
 
@@ -113,7 +109,7 @@ public class LiferayModuleNameLocationComponent {
 
 			});
 
-		Document moduleContentRootDocument = _moduleContentRoot.getTextField().getDocument();
+		Document moduleContentRootDocument = _moduleContentRoot.getDocument();
 
 		moduleContentRootDocument.addDocumentListener(
 			new DocumentAdapter() {
@@ -147,12 +143,7 @@ public class LiferayModuleNameLocationComponent {
 
 			});
 
-		_moduleFileLocation.addBrowseFolderListener(
-			ProjectBundle.message("project.new.wizard.module.file.chooser.title"),
-			ProjectBundle.message("project.new.wizard.module.file.description"), _context.getProject(),
-			BrowseFilesListener.SINGLE_DIRECTORY_DESCRIPTOR);
-
-		Document moduleFileLocationDocument = _moduleFileLocation.getTextField().getDocument();
+		Document moduleFileLocationDocument = _moduleFileLocation.getDocument();
 
 		moduleFileLocationDocument.addDocumentListener(
 			new DocumentAdapter() {
@@ -391,8 +382,8 @@ public class LiferayModuleNameLocationComponent {
 	private WizardContext _context;
 	private boolean _imlLocationChangedByUser = false;
 	private boolean _imlLocationDocListenerEnabled = true;
-	private TextFieldWithBrowseButton _moduleContentRoot;
-	private TextFieldWithBrowseButton _moduleFileLocation;
+	private JTextField _moduleContentRoot;
+	private JTextField _moduleFileLocation;
 	private JTextField _moduleName;
 	private boolean _moduleNameChangedByUser = false;
 	private boolean _moduleNameDocListenerEnabled = true;
