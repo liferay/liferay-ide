@@ -45,6 +45,7 @@ public class LiferayImportFromGradleControl
 	@Override
 	public void setCurrentProject(@Nullable Project currentProject) {
 		super.setCurrentProject(currentProject);
+
 		((GradleProjectSettingsControl)getProjectSettingsControl()).setCurrentProject(currentProject);
 	}
 

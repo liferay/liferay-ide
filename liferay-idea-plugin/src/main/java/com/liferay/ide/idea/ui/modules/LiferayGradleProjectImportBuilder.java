@@ -16,6 +16,7 @@ package com.liferay.ide.idea.ui.modules;
 
 import com.intellij.externalSystem.JavaProjectData;
 import com.intellij.ide.util.projectWizard.WizardContext;
+import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.externalSystem.model.DataNode;
@@ -159,15 +160,17 @@ public class LiferayGradleProjectImportBuilder
 				Runnable importTask = () -> ServiceManager.getService(
 					ProjectDataManager.class).importData(externalProject, project, false);
 
-				boolean showSelectiveImportDialog = GradleSettings.getInstance(
-					project).showSelectiveImportDialogOnInitialImport();
+				GradleSettings gradleProjectSettings = GradleSettings.getInstance(project);
 
-				if (showSelectiveImportDialog && !ApplicationManager.getApplication().isHeadlessEnvironment()) {
-					ApplicationManager.getApplication(
-					).invokeLater(
+				boolean showSelectiveImportDialog = gradleProjectSettings.showSelectiveImportDialogOnInitialImport();
+
+				Application application = ApplicationManager.getApplication();
+
+				if (showSelectiveImportDialog && !application.isHeadlessEnvironment()) {
+					application.invokeLater(
 						() -> {
 							selectDataTask.run();
-							ApplicationManager.getApplication().executeOnPooledThread(importTask);
+							application.executeOnPooledThread(importTask);
 						}
 					);
 				}
