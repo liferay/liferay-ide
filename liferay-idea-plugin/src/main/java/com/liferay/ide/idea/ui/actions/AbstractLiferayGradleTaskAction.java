@@ -54,34 +54,26 @@ import org.jetbrains.plugins.gradle.util.GradleConstants;
  */
 public abstract class AbstractLiferayGradleTaskAction extends AnAction {
 
-	public AbstractLiferayGradleTaskAction(@Nullable String text, @Nullable String description, @Nullable Icon icon) {
+	public AbstractLiferayGradleTaskAction(
+		@Nullable String text, @Nullable String description, @Nullable Icon icon, String taskName) {
+
 		super(text, description, icon);
+		_taskName = taskName;
 	}
 
 	@Override
-	public void actionPerformed(AnActionEvent e) {
-		Project project = e.getRequiredData(CommonDataKeys.PROJECT);
+	public void actionPerformed(AnActionEvent event) {
+		Project project = event.getRequiredData(CommonDataKeys.PROJECT);
 
-		String workDirectory = getWorkDirectory(e);
-		String task = getTaskName();
+		String workingDirectory = getWorkingDirectory(event);
 
-		if (CoreUtil.isNullOrEmpty(workDirectory)) {
+		if (CoreUtil.isNullOrEmpty(workingDirectory)) {
 			return;
 		}
 
-		ExternalTaskExecutionInfo taskExecutionInfo;
-		try {
-			taskExecutionInfo = _buildTaskInfo(workDirectory, task);
-		}
-		catch (CommandLineArgumentException clae) {
-			NotificationData notificationData = new NotificationData(
-				"<b>Command-line arguments cannot be parsed</b>", "<i>" + task + "</i> \n" + clae.getMessage(),
-				NotificationCategory.WARNING, NotificationSource.TASK_EXECUTION);
+		ExternalTaskExecutionInfo taskExecutionInfo = _buildTaskExecutionInfo(project, workingDirectory, _taskName);
 
-			notificationData.setBalloonNotification(true);
-			ExternalSystemNotificationManager.getInstance(
-				project).showNotification(GradleConstants.SYSTEM_ID, notificationData);
-
+		if (taskExecutionInfo == null) {
 			return;
 		}
 
@@ -109,18 +101,16 @@ public abstract class AbstractLiferayGradleTaskAction extends AnAction {
 		}
 	}
 
-	public boolean isEnableAndVisible(AnActionEvent e) {
+	public boolean isEnabledAndVisible(AnActionEvent e) {
 		return true;
 	}
 
 	@Override
-	public void update(AnActionEvent e) {
-		super.update(e);
+	public void update(AnActionEvent event) {
+		super.update(event);
 
-		e.getPresentation().setEnabledAndVisible(isEnableAndVisible(e));
+		event.getPresentation().setEnabledAndVisible(isEnabledAndVisible(event));
 	}
-
-	protected abstract String getTaskName();
 
 	protected VirtualFile getVirtualFile(AnActionEvent e) {
 		Object virtualFileObject = e.getData(CommonDataKeys.VIRTUAL_FILE);
@@ -132,10 +122,10 @@ public abstract class AbstractLiferayGradleTaskAction extends AnAction {
 		return null;
 	}
 
-	protected abstract String getWorkDirectory(AnActionEvent e);
+	protected abstract String getWorkingDirectory(AnActionEvent e);
 
-	private ExternalTaskExecutionInfo _buildTaskInfo(@NotNull String projectPath, @NotNull String fullCommandLine)
-		throws CommandLineArgumentException {
+	private ExternalTaskExecutionInfo _buildTaskExecutionInfo(
+		Project project, @NotNull String projectPath, @NotNull String fullCommandLine) {
 
 		CommandLineParser gradleCmdParser = new CommandLineParser();
 
@@ -145,39 +135,53 @@ public abstract class AbstractLiferayGradleTaskAction extends AnAction {
 
 		ParsedCommandLine parsedCommandLine = gradleCmdParser.parse(ParametersListUtil.parse(fullCommandLine, true));
 
-		Map<String, List<String>> optionsMap = commandLineConverter.convert(parsedCommandLine, new HashMap<>());
+		try {
+			Map<String, List<String>> optionsMap = commandLineConverter.convert(parsedCommandLine, new HashMap<>());
 
-		List<String> systemProperties = optionsMap.remove("system-prop");
+			List<String> systemProperties = optionsMap.remove("system-prop");
 
-		String vmOptions =
-			systemProperties == null ? "" : StringUtil.join(systemProperties, entry -> "-D" + entry, " ");
+			String vmOptions =
+				systemProperties == null ? "" : StringUtil.join(systemProperties, entry -> "-D" + entry, " ");
 
-		String scriptParameters = StringUtil.join(
-			optionsMap.entrySet(),
-			entry -> {
-				List<String> values = entry.getValue();
-				String longOptionName = entry.getKey();
+			String scriptParameters = StringUtil.join(
+				optionsMap.entrySet(),
+				entry -> {
+					List<String> values = entry.getValue();
+					String longOptionName = entry.getKey();
 
-				if ((values != null) && !values.isEmpty()) {
-					return StringUtil.join(values, entry1 -> "--" + longOptionName + ' ' + entry1, " ");
-				}
-				else {
-					return "--" + longOptionName;
-				}
-			},
-			" ");
+					if ((values != null) && !values.isEmpty()) {
+						return StringUtil.join(values, entry1 -> "--" + longOptionName + ' ' + entry1, " ");
+					}
+					else {
+						return "--" + longOptionName;
+					}
+				},
+				" ");
 
-		List<String> tasks = parsedCommandLine.getExtraArguments();
+			ExternalSystemTaskExecutionSettings settings = new ExternalSystemTaskExecutionSettings();
 
-		ExternalSystemTaskExecutionSettings settings = new ExternalSystemTaskExecutionSettings();
+			settings.setExternalProjectPath(projectPath);
+			settings.setExternalSystemIdString(GradleConstants.SYSTEM_ID.toString());
+			settings.setScriptParameters(scriptParameters);
+			settings.setTaskNames(parsedCommandLine.getExtraArguments());
+			settings.setVmOptions(vmOptions);
 
-		settings.setExternalProjectPath(projectPath);
-		settings.setTaskNames(tasks);
-		settings.setScriptParameters(scriptParameters);
-		settings.setVmOptions(vmOptions);
-		settings.setExternalSystemIdString(GradleConstants.SYSTEM_ID.toString());
+			return new ExternalTaskExecutionInfo(settings, DefaultRunExecutor.EXECUTOR_ID);
+		}
+		catch (CommandLineArgumentException clae) {
+			NotificationData notificationData = new NotificationData(
+				"<b>Command-line arguments cannot be parsed</b>", "<i>" + _taskName + "</i> \n" + clae.getMessage(),
+				NotificationCategory.WARNING, NotificationSource.TASK_EXECUTION);
 
-		return new ExternalTaskExecutionInfo(settings, DefaultRunExecutor.EXECUTOR_ID);
+			notificationData.setBalloonNotification(true);
+
+			ExternalSystemNotificationManager.getInstance(
+				project).showNotification(GradleConstants.SYSTEM_ID, notificationData);
+
+			return null;
+		}
 	}
+
+	private final String _taskName;
 
 }

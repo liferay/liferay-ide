@@ -20,6 +20,12 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'com.liferay.source.formatter'
 
+check.dependsOn checkSourceFormatting
+
+checkSourceFormatting {
+	maxLineLength = 120
+}
+
 dependencies {
 	compile group: "biz.aQute.bnd", name: "biz.aQute.bndlib", version: "3.4.0"
 	compile group: "org.apache.ant", name: "ant", version: "1.10.1"
@@ -29,7 +35,6 @@ dependencies {
 
 formatSource {
 	maxLineLength = 120
-	baseDirName = "src"
 }
 
 intellij {

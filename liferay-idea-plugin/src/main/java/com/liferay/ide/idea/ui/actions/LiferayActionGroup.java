@@ -26,10 +26,10 @@ import java.util.stream.Stream;
  */
 public class LiferayActionGroup extends DefaultActionGroup {
 
-	public void update(AnActionEvent e) {
-		Presentation presentation = e.getPresentation();
+	public void update(AnActionEvent event) {
+		Presentation presentation = event.getPresentation();
 
-		AnAction[] actions = getChildren(e);
+		AnAction[] actions = getChildren(event);
 
 		Stream<AnAction> stream = Stream.of(actions);
 
@@ -38,7 +38,7 @@ public class LiferayActionGroup extends DefaultActionGroup {
 		).map(
 			action -> (AbstractLiferayGradleTaskAction)action
 		).filter(
-			action -> action.isEnableAndVisible(e)
+			action -> action.isEnabledAndVisible(event)
 		).count();
 
 		presentation.setEnabledAndVisible(count > 0);

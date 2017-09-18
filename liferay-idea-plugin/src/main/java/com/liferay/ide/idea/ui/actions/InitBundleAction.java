@@ -26,11 +26,11 @@ import com.liferay.ide.idea.ui.LiferayIdeaUI;
 public class InitBundleAction extends AbstractLiferayGradleTaskAction {
 
 	public InitBundleAction() {
-		super("InitBundle", "Run initBundle task", LiferayIdeaUI.LIFERAY_ICON);
+		super("InitBundle", "Run initBundle task", LiferayIdeaUI.LIFERAY_ICON, "initBundle");
 	}
 
 	@Override
-	public boolean isEnableAndVisible(AnActionEvent e) {
+	public boolean isEnabledAndVisible(AnActionEvent e) {
 		Project project = e.getProject();
 
 		if (project.getBaseDir().equals(getVirtualFile(e))) {
@@ -41,13 +41,8 @@ public class InitBundleAction extends AbstractLiferayGradleTaskAction {
 	}
 
 	@Override
-	protected String getTaskName() {
-		return "initBundle";
-	}
-
-	@Override
-	protected String getWorkDirectory(AnActionEvent e) {
-		Project project = e.getRequiredData(CommonDataKeys.PROJECT);
+	protected String getWorkingDirectory(AnActionEvent event) {
+		Project project = event.getRequiredData(CommonDataKeys.PROJECT);
 
 		return project.getBasePath();
 	}

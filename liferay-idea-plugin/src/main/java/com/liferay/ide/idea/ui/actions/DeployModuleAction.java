@@ -30,13 +30,13 @@ import com.liferay.ide.idea.ui.LiferayIdeaUI;
 public class DeployModuleAction extends AbstractLiferayGradleTaskAction {
 
 	public DeployModuleAction() {
-		super("Deploy", "Run deploy task", LiferayIdeaUI.LIFERAY_ICON);
+		super("Deploy", "Run deploy task", LiferayIdeaUI.LIFERAY_ICON, "deploy");
 	}
 
 	@Override
-	public boolean isEnableAndVisible(AnActionEvent e) {
-		Project project = e.getProject();
-		VirtualFile file = getVirtualFile(e);
+	public boolean isEnabledAndVisible(AnActionEvent event) {
+		Project project = event.getProject();
+		VirtualFile file = getVirtualFile(event);
 
 		if ((file != null) && ProjectRootsUtil.isModuleContentRoot(file, project) &&
 			!project.getBaseDir().equals(file)) {
@@ -48,15 +48,10 @@ public class DeployModuleAction extends AbstractLiferayGradleTaskAction {
 	}
 
 	@Override
-	protected String getTaskName() {
-		return "deploy";
-	}
+	protected String getWorkingDirectory(AnActionEvent event) {
+		VirtualFile virtualFile = getVirtualFile(event);
 
-	@Override
-	protected String getWorkDirectory(AnActionEvent e) {
-		VirtualFile virtualFile = getVirtualFile(e);
-
-		ProjectRootManager projectRootManager = ProjectRootManager.getInstance(e.getProject());
+		ProjectRootManager projectRootManager = ProjectRootManager.getInstance(event.getProject());
 
 		Module module = projectRootManager.getFileIndex().getModuleForFile(virtualFile);
 
