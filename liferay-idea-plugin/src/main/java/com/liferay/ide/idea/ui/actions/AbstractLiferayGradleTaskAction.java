@@ -101,7 +101,7 @@ public abstract class AbstractLiferayGradleTaskAction extends AnAction {
 		}
 	}
 
-	public boolean isEnabledAndVisible(AnActionEvent e) {
+	public boolean isEnabledAndVisible(AnActionEvent event) {
 		return true;
 	}
 
@@ -112,8 +112,8 @@ public abstract class AbstractLiferayGradleTaskAction extends AnAction {
 		event.getPresentation().setEnabledAndVisible(isEnabledAndVisible(event));
 	}
 
-	protected VirtualFile getVirtualFile(AnActionEvent e) {
-		Object virtualFileObject = e.getData(CommonDataKeys.VIRTUAL_FILE);
+	protected VirtualFile getVirtualFile(AnActionEvent event) {
+		Object virtualFileObject = event.getData(CommonDataKeys.VIRTUAL_FILE);
 
 		if ((virtualFileObject != null) && (virtualFileObject instanceof VirtualFile)) {
 			return (VirtualFile)virtualFileObject;
@@ -122,7 +122,7 @@ public abstract class AbstractLiferayGradleTaskAction extends AnAction {
 		return null;
 	}
 
-	protected abstract String getWorkingDirectory(AnActionEvent e);
+	protected abstract String getWorkingDirectory(AnActionEvent event);
 
 	private ExternalTaskExecutionInfo _buildTaskExecutionInfo(
 		Project project, @NotNull String projectPath, @NotNull String fullCommandLine) {

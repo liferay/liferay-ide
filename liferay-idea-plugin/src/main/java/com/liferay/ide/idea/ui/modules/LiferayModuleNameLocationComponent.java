@@ -59,7 +59,7 @@ public class LiferayModuleNameLocationComponent {
 		nameDocument.addDocumentListener(
 			new DocumentAdapter() {
 
-				protected void textChanged(DocumentEvent e) {
+				protected void textChanged(DocumentEvent event) {
 					if (!_moduleNameChangedByUser) {
 						setModuleName(namePathComponent.getNameValue());
 					}
@@ -72,7 +72,7 @@ public class LiferayModuleNameLocationComponent {
 		pathDocument.addDocumentListener(
 			new DocumentAdapter() {
 
-				protected void textChanged(DocumentEvent e) {
+				protected void textChanged(DocumentEvent event) {
 					if (!_contentRootChangedByUser) {
 						_setModuleContentRoot(namePathComponent.getPath());
 					}
@@ -83,7 +83,7 @@ public class LiferayModuleNameLocationComponent {
 		_moduleName.getDocument().addDocumentListener(
 			new DocumentAdapter() {
 
-				protected void textChanged(DocumentEvent e) {
+				protected void textChanged(DocumentEvent event) {
 					if (_moduleNameDocListenerEnabled) {
 						_moduleNameChangedByUser = true;
 					}
@@ -114,7 +114,7 @@ public class LiferayModuleNameLocationComponent {
 		moduleContentRootDocument.addDocumentListener(
 			new DocumentAdapter() {
 
-				protected void textChanged(DocumentEvent e) {
+				protected void textChanged(DocumentEvent event) {
 					if (_contentRootDocListenerEnabled) {
 						_contentRootChangedByUser = true;
 					}
@@ -148,7 +148,7 @@ public class LiferayModuleNameLocationComponent {
 		moduleFileLocationDocument.addDocumentListener(
 			new DocumentAdapter() {
 
-				protected void textChanged(DocumentEvent e) {
+				protected void textChanged(DocumentEvent event) {
 					if (_imlLocationDocListenerEnabled) {
 						_imlLocationChangedByUser = true;
 					}
@@ -161,7 +161,7 @@ public class LiferayModuleNameLocationComponent {
 		namePathDocument.addDocumentListener(
 			new DocumentAdapter() {
 
-				protected void textChanged(DocumentEvent e) {
+				protected void textChanged(DocumentEvent event) {
 					if (!_imlLocationChangedByUser) {
 						_setImlFileLocation(namePathComponent.getPath());
 					}

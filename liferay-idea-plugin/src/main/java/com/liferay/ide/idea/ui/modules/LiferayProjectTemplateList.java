@@ -95,7 +95,7 @@ public class LiferayProjectTemplateList extends JPanel {
 			new ListSelectionListener() {
 
 				@Override
-				public void valueChanged(ListSelectionEvent e) {
+				public void valueChanged(ListSelectionEvent event) {
 					_updateSelection();
 				}
 
@@ -130,7 +130,7 @@ public class LiferayProjectTemplateList extends JPanel {
 			new ListSelectionListener() {
 
 				@Override
-				public void valueChanged(ListSelectionEvent e) {
+				public void valueChanged(ListSelectionEvent event) {
 					ProjectTemplate template = getSelectedTemplate();
 
 					if (template != null) {

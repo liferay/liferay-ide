@@ -150,7 +150,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 			new ListSelectionListener() {
 
 				@Override
-				public void valueChanged(ListSelectionEvent e) {
+				public void valueChanged(ListSelectionEvent event) {
 					_updateSelection();
 				}
 
@@ -195,7 +195,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 
 			});
 
-		new ListSpeedSearch(_projectTypeList) {
+		new ListSpeedSearch<TemplatesGroup>(_projectTypeList) {
 
 			@Override
 			protected String getElementText(Object element) {
@@ -252,7 +252,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 			new ListSelectionListener() {
 
 				@Override
-				public void valueChanged(ListSelectionEvent e) {
+				public void valueChanged(ListSelectionEvent event) {
 					projectTypeChanged();
 				}
 
@@ -262,7 +262,7 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 			new ListSelectionListener() {
 
 				@Override
-				public void valueChanged(ListSelectionEvent e) {
+				public void valueChanged(ListSelectionEvent event) {
 					_updateSelection();
 				}
 

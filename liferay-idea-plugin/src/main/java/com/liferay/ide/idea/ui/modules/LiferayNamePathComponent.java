@@ -131,8 +131,8 @@ public class LiferayNamePathComponent extends JPanel {
 		BrowseFilesListener browseButtonActionListener =
 			new BrowseFilesListener(_path, pathChooserTitle, pathChooserDescription, chooserDescriptor) {
 
-				public void actionPerformed(ActionEvent e) {
-					super.actionPerformed(e);
+				public void actionPerformed(ActionEvent event) {
+					super.actionPerformed(event);
 					_pathChangedByUser = true;
 				}
 
@@ -418,6 +418,8 @@ public class LiferayNamePathComponent extends JPanel {
 				}
 			}
 		}
+
+		private static final long serialVersionUID = -1045916924224928928L;
 
 	}
 

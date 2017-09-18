@@ -66,7 +66,7 @@ public class BladeCLI {
 
 		logger.setMessageOutputLevel(Project.MSG_INFO);
 
-		int returnCode = javaTask.executeJava();
+		javaTask.executeJava();
 
 		java.util.List<String> lines = new ArrayList<>();
 		Scanner scanner = new Scanner(out.toString());

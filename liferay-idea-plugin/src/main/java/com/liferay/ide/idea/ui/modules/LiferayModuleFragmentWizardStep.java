@@ -99,7 +99,7 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 			new ActionListener() {
 
 				@Override
-				public void actionPerformed(ActionEvent e) {
+				public void actionPerformed(ActionEvent event) {
 					DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
 
 					File currentOsgiBundle = ServerUtil.getModuleFileFrom70Server(
