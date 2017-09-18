@@ -27,10 +27,6 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class NewLiferayComponentWizard extends Wizard {
 
 	public NewLiferayComponentWizard(SWTWorkbenchBot bot) {
-		this(bot, -1);
-	}
-
-	public NewLiferayComponentWizard(SWTWorkbenchBot bot, int validationMsgIndex) {
 		super(bot, NEW_LIFERAY_COMPONENT, 4);
 
 		_packageName = new Text(bot, PACKAGE_NAME);

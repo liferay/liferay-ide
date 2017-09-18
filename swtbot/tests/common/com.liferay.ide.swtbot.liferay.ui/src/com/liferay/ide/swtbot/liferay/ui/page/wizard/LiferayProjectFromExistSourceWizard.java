@@ -62,12 +62,6 @@ public class LiferayProjectFromExistSourceWizard extends Wizard {
 		return _selectAllBtn;
 	}
 
-	public void importProject(String path) {
-		_sdkDirectory.setText(path);
-
-		finish();
-	}
-
 	private ToolbarButtonWithTooltip _browseSdkDirectoryBtn;
 	private Button _deselectAllBtn;
 	private Button _refreshBtn;

@@ -47,20 +47,6 @@ public class NewProjectWizard extends Wizard {
 		_buildTypes = new ComboBox(bot, BUILD_TYPE);
 	}
 
-	public void createProject(String projectName) {
-		createProject(projectName, false, StringPool.BLANK);
-	}
-
-	public void createProject(String name, boolean workingSetBox, String set) {
-		_projectName.setText(name);
-
-		if (workingSetBox) {
-			_addToWorkingSet.select();
-
-			_workingSets.setSelection(set);
-		}
-	}
-
 	public CheckBox getAddToWorkingSet() {
 		return _addToWorkingSet;
 	}
