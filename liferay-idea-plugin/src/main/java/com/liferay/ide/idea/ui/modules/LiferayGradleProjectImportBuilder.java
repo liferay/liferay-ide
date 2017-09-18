@@ -47,6 +47,7 @@ import icons.GradleIcons;
 import java.io.File;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.swing.Icon;
 
@@ -171,8 +172,7 @@ public class LiferayGradleProjectImportBuilder
 						() -> {
 							selectDataTask.run();
 							application.executeOnPooledThread(importTask);
-						}
-					);
+						});
 				}
 				else {
 					importTask.run();
@@ -219,20 +219,24 @@ public class LiferayGradleProjectImportBuilder
 
 		List<Sdk> javaSdks = ProjectJdkTable.getInstance().getSdksOfType(javaSdk);
 
-		Sdk candidate = null;
+		Stream<Sdk> stream = javaSdks.stream();
 
-		for (Sdk sdk : javaSdks) {
-			JavaSdkVersion v = javaSdk.getVersion(sdk);
+		Sdk candidate = stream.filter(
+			sdk -> {
+				JavaSdkVersion sdkVersion = javaSdk.getVersion(sdk);
 
-			if (v == version) {
-				return sdk;
+				if (version.equals(sdkVersion) ||
+					((sdkVersion != null) && version.getMaxLanguageLevel().isAtLeast(version.getMaxLanguageLevel()))) {
+
+					return true;
+				}
+
+				return false;
 			}
-			else if ((candidate == null) && (v != null) &&
-					 version.getMaxLanguageLevel().isAtLeast(version.getMaxLanguageLevel())) {
-
-				candidate = sdk;
-			}
-		}
+		).findFirst(
+		).orElse(
+			null
+		);
 
 		return candidate;
 	}
