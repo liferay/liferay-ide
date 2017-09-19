@@ -59,15 +59,7 @@ public class PortalSourceLookupTests
 
     @Before
     public void setUpTest() throws Exception {
-        Stream.of( CoreUtil.getAllProjects() ).forEach(project -> {
-            try
-            {
-                project.delete( true, new NullProgressMonitor() );
-            }
-            catch( CoreException e )
-            {
-            }
-        });
+        Stream.of( CoreUtil.getAllProjects() ).forEach(this::deleteProject);
 
         Assert.assertEquals( 0, CoreUtil.getAllProjects().length );
 
@@ -94,6 +86,17 @@ public class PortalSourceLookupTests
         Assert.assertTrue( CoreUtil.getProject( "debug-lib" ).exists() );
 
         Assert.assertTrue( CoreUtil.getProject( "debug-test" ).exists() );
+    }
+
+    private void deleteProject( IProject project )
+    {
+        try
+        {
+            project.delete( true, new NullProgressMonitor() );
+        }
+        catch( CoreException e )
+        {
+        }
     }
 
     private ILaunchConfiguration[] getPortalServerLaunchConfigurations() throws CoreException

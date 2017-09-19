@@ -55,11 +55,14 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer
 
         final IServer server = ServerUtil.getServer( configuration );
 
-        Stream.of(server.getModules()).map(
+        Stream.of(
+            server.getModules()
+        ).map(
             module -> LiferayCore.create(module.getProject())
         ).filter(
             liferayProject -> liferayProject != null
-        ).forEach( liferayProject -> {
+        ).forEach(
+            liferayProject -> {
             String projectName = liferayProject.getProject().getName();
 
             try {
@@ -67,12 +70,13 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer
                 ILaunchConfigurationType launchConfigurationType = manager.getLaunchConfigurationType("org.eclipse.jdt.launching.localJavaApplication");
                 ILaunchConfigurationWorkingCopy sourceLookupConfig = launchConfigurationType.newInstance(null, configuration.getName());
 
-                sourceLookupConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, true);
                 sourceLookupConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, projectName);
 
                 ISourceContainer[] computedSourceContainers = super.computeSourceContainers(sourceLookupConfig, monitor);
 
-                Stream.of(computedSourceContainers).filter(
+                Stream.of(
+                    computedSourceContainers
+                ).filter(
                     computedSourceContainer -> !sourceContainers.contains(computedSourceContainer)
                 ).forEach(
                     sourceContainers::add

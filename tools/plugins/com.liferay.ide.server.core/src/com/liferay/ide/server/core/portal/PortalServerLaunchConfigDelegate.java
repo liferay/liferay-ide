@@ -120,7 +120,7 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 
                         if( memento != null )
                         {
-                            sourceLocator.initializeFromMemento( memento, config);
+                            sourceLocator.initializeFromMemento( memento );
                         }
                         else
                         {
