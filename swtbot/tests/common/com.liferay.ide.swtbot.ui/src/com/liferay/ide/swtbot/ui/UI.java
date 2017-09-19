@@ -478,6 +478,8 @@ public interface UI {
 
 	public final String POLLER_PROCESSOR = "Poller Processor";
 
+	public final String POM_XML = "pom.xml";
+
 	public final String PORTAL_PROPERTIES = "Portal properties";
 
 	public final String PORTAL_PROPERTIES_FILE = "Portal properties file:";

@@ -15,7 +15,6 @@
 package com.liferay.ide.swtbot.workspace.ui.tests;
 
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
-import com.liferay.ide.swtbot.ui.page.Editor;
 
 import org.junit.Test;
 
@@ -68,9 +67,7 @@ public class GradleLiferayWorkspaceWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
-		viewAction.fetchProjectFile(workspaceName, "gradle.properties").doubleClick();
-
-		Editor gradlePropertiesEditor = ide.getEditor("gradle.properties");
+		viewAction.openProjectFile(workspaceName, "gradle.properties");
 
 		StringBuffer sb = new StringBuffer();
 
@@ -80,9 +77,11 @@ public class GradleLiferayWorkspaceWizardTests extends SwtbotBase {
 		sb.append("\r");
 		sb.append("liferay.workspace.wars.dir=warsTest");
 
-		gradlePropertiesEditor.setText(sb.toString());
+		editorAction.setText(sb.toString());
 
-		gradlePropertiesEditor.save();
+		editorAction.save();
+
+		editorAction.close();
 
 		wizardAction.openNewLiferayModuleWizard();
 

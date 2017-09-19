@@ -12,10 +12,9 @@
  * details.
  */
 
-package com.liferay.ide.swtbot.liferay.ui.action;
+package com.liferay.ide.swtbot.liferay.ui.page.editor;
 
-import com.liferay.ide.swtbot.liferay.ui.UIAction;
-import com.liferay.ide.swtbot.liferay.ui.page.editor.PomXmlEditor;
+import com.liferay.ide.swtbot.ui.page.CTabItem;
 import com.liferay.ide.swtbot.ui.page.Editor;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -23,33 +22,24 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  */
-public class EditorAction extends UIAction {
+public class PomXmlEditor extends Editor {
 
-	public EditorAction(SWTWorkbenchBot bot) {
+	public PomXmlEditor(SWTWorkbenchBot bot) {
 		super(bot);
+
+		_pomXml = new CTabItem(bot, POM_XML);
 	}
 
-	public void close() {
-		_editor.close();
+	public PomXmlEditor(SWTWorkbenchBot bot, String editorName) {
+		super(bot, editorName);
+
+		_pomXml = new CTabItem(bot, POM_XML);
 	}
 
-	public String getContent() {
-		return _editor.getText();
+	public CTabItem getPomXml() {
+		return _pomXml;
 	}
 
-	public void save() {
-		_editor.save();
-	}
-
-	public void setText(String text) {
-		_editor.setText(text);
-	}
-
-	public void switchTabPomXml() {
-		_pomXmlEditor.getPomXml().click();
-	}
-
-	private Editor _editor = new Editor(bot);
-	private PomXmlEditor _pomXmlEditor = new PomXmlEditor(bot);
+	private CTabItem _pomXml;
 
 }

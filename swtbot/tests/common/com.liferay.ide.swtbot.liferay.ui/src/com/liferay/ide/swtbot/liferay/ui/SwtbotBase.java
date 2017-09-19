@@ -15,6 +15,7 @@
 package com.liferay.ide.swtbot.liferay.ui;
 
 import com.liferay.ide.swtbot.liferay.ui.action.DialogAction;
+import com.liferay.ide.swtbot.liferay.ui.action.EditorAction;
 import com.liferay.ide.swtbot.liferay.ui.action.EnvAction;
 import com.liferay.ide.swtbot.liferay.ui.action.ViewAction;
 import com.liferay.ide.swtbot.liferay.ui.action.WizardAction;
@@ -54,6 +55,7 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 
 	public static SWTWorkbenchBot bot;
 	public static DialogAction dialogAction;
+	public static EditorAction editorAction;
 	public static EnvAction envAction;
 	public static boolean hasAddedProject = false;
 	public static LiferayIDE ide;
@@ -71,10 +73,11 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 
 		ide = new LiferayIDE(bot);
 
-		wizardAction = new WizardAction(bot);
-		viewAction = new ViewAction(bot);
 		dialogAction = new DialogAction(bot);
 		envAction = new EnvAction(bot);
+		editorAction = new EditorAction(bot);
+		wizardAction = new WizardAction(bot);
+		viewAction = new ViewAction(bot);
 
 		try {
 			long origin = SWTBotPreferences.TIMEOUT;

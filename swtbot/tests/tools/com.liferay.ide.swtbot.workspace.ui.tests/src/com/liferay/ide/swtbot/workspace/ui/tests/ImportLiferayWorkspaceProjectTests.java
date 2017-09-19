@@ -16,8 +16,6 @@ package com.liferay.ide.swtbot.workspace.ui.tests;
 
 import com.liferay.ide.swtbot.liferay.ui.Actions;
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
-import com.liferay.ide.swtbot.ui.page.CTabItem;
-import com.liferay.ide.swtbot.ui.page.Editor;
 
 import org.eclipse.swtbot.swt.finder.SWTBotAssert;
 
@@ -26,6 +24,7 @@ import org.junit.Test;
 
 /**
  * @author Sunny Shi
+ * @author Terry Jia
  */
 public class ImportLiferayWorkspaceProjectTests extends SwtbotBase {
 
@@ -68,21 +67,17 @@ public class ImportLiferayWorkspaceProjectTests extends SwtbotBase {
 
 		viewAction.openProjectFile(workspaceName, gradlePropertyFileName);
 
-		Editor gradlePropertiesFile = ide.getEditor(gradlePropertyFileName);
+		SWTBotAssert.assertContains("liferay.workspace.modules.dir", editorAction.getContent());
+		SWTBotAssert.assertContains("liferay.workspace.home.dir", editorAction.getContent());
 
-		SWTBotAssert.assertContains("liferay.workspace.modules.dir", gradlePropertiesFile.getText());
-		SWTBotAssert.assertContains("liferay.workspace.home.dir", gradlePropertiesFile.getText());
-
-		gradlePropertiesFile.close();
+		editorAction.close();
 
 		viewAction.openProjectFile(workspaceName, settingGradleFileName);
 
-		Editor settingGradleFile = ide.getEditor(settingGradleFileName);
+		SWTBotAssert.assertContains("buildscript", editorAction.getContent());
+		SWTBotAssert.assertContains("repositories", editorAction.getContent());
 
-		SWTBotAssert.assertContains("buildscript", settingGradleFile.getText());
-		SWTBotAssert.assertContains("repositories", settingGradleFile.getText());
-
-		settingGradleFile.close();
+		editorAction.close();
 	}
 
 	@Test
@@ -99,26 +94,20 @@ public class ImportLiferayWorkspaceProjectTests extends SwtbotBase {
 
 		viewAction.openProjectFile(liferayWorkspaceName, "testMavenWorkspace-modules", "pom.xml");
 
-		CTabItem switchCTabItem = new CTabItem(bot, "pom.xml");
-		sleep();
-		switchCTabItem.click();
+		editorAction.switchTabPomXml();
 
-		Editor pomXmlFileModules = ide.getEditor("testMavenWorkspace-modules/pom.xml");
+		SWTBotAssert.assertContains("testMavenWorkspace-modules", editorAction.getContent());
+		SWTBotAssert.assertContains("artifactId", editorAction.getContent());
 
-		SWTBotAssert.assertContains("testMavenWorkspace-modules", pomXmlFileModules.getText());
-		SWTBotAssert.assertContains("artifactId", pomXmlFileModules.getText());
-
-		pomXmlFileModules.close();
+		editorAction.close();
 
 		viewAction.openProjectFile(liferayWorkspaceName, "pom.xml");
 
-		switchCTabItem.click();
+		editorAction.switchTabPomXml();
 
-		Editor pomXmlFile = ide.getEditor("testMavenWorkspace/pom.xml");
+		SWTBotAssert.assertContains("testMavenWorkspace", editorAction.getContent());
 
-		SWTBotAssert.assertContains("testMavenWorkspace", pomXmlFile.getText());
-
-		pomXmlFile.close();
+		editorAction.close();
 	}
 
 }
