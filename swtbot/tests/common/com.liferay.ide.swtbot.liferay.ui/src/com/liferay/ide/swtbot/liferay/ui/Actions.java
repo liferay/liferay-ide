@@ -14,10 +14,10 @@
 
 package com.liferay.ide.swtbot.liferay.ui;
 
+import com.liferay.ide.swtbot.ui.UI;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.liferay.ide.swtbot.ui.UI;
 
 /**
  * @author Terry Jia
@@ -29,6 +29,16 @@ public class Actions implements UI {
 
 		actions.add(DELETE);
 
-		return null;
+		return actions;
 	}
+
+	public static List<String> getLiferayInitializeServerBundle() {
+		List<String> actions = new ArrayList<>();
+
+		actions.add(LIFERAY);
+		actions.add(INITIALIZE_SERVER_BUNDLE);
+
+		return actions;
+	}
+
 }

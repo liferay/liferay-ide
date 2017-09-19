@@ -88,13 +88,7 @@ public class FileUtil {
 
 		byte[] buf = new byte[4096];
 
-		OutputStream out = null;
-		FileInputStream in = null;
-
-		try {
-			out = new FileOutputStream(dest);
-			in = new FileInputStream(src);
-
+		try (FileInputStream in = new FileInputStream(src); OutputStream out = new FileOutputStream(dest)) {
 			int avail = in.read(buf);
 
 			while (avail > 0) {
@@ -104,23 +98,6 @@ public class FileUtil {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-		}
-		finally {
-			try {
-				if (in != null) {
-					in.close();
-				}
-			}
-			catch (Exception ex) {
-			}
-
-			try {
-				if (out != null) {
-					out.close();
-				}
-			}
-			catch (Exception ex) {
-			}
 		}
 	}
 
@@ -244,9 +221,6 @@ public class FileUtil {
 					bufferedReader.close();
 				}
 				catch (IOException ioe) {
-
-					// best effort no need to log
-
 				}
 			}
 		}

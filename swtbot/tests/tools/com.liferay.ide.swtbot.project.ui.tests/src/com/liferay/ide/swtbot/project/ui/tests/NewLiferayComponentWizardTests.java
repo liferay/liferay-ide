@@ -26,9 +26,7 @@ import org.junit.Test;
 public class NewLiferayComponentWizardTests extends SwtbotBase {
 
 	@Test
-	public void newComponentClassOnModelListenerTest()
-	{
-
+	public void newComponentClassOnModelListenerTest() {
 		String projectName = "test-component-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -53,9 +51,7 @@ public class NewLiferayComponentWizardTests extends SwtbotBase {
 	}
 
 	@Test
-	public void newComponentClassOnPortletTest()
-	{
-
+	public void newComponentClassOnPortletTest() {
 		String projectName = "test-component";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -74,9 +70,7 @@ public class NewLiferayComponentWizardTests extends SwtbotBase {
 	}
 
 	@Test
-	public void newComponentClassOnServiceWrapperTest()
-	{
-
+	public void newComponentClassOnServiceWrapperTest() {
 		String projectName = "test-component-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();

@@ -201,17 +201,8 @@ public class ZipUtil {
 			_delete(target);
 		}
 
-		ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(target));
-
-		try {
+		try (ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(target))) {
 			_zipDir(target, zip, dir, filenameFilter, StringPool.BLANK);
-		}
-		finally {
-			try {
-				zip.close();
-			}
-			catch (IOException ioe) {
-			}
 		}
 	}
 

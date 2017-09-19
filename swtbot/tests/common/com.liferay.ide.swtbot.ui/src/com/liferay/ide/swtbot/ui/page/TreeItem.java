@@ -29,11 +29,11 @@ public class TreeItem extends AbstractWidget {
 		super(bot);
 	}
 
-	public TreeItem(SWTWorkbenchBot bot, Tree tree, String... nodeText) {
+	public TreeItem(SWTWorkbenchBot bot, Tree tree, String... nodes) {
 		super(bot);
 
 		_tree = tree;
-		this.nodeText = nodeText;
+		_nodes = nodes;
 	}
 
 	public void collapse() {
@@ -105,10 +105,10 @@ public class TreeItem extends AbstractWidget {
 	}
 
 	public TreeItem getTreeItem(String... items) {
-		String[] fullNodeText = new String[nodeText.length + items.length];
+		String[] fullNodeText = new String[_nodes.length + items.length];
 
-		System.arraycopy(nodeText, 0, fullNodeText, 0, nodeText.length);
-		System.arraycopy(items, 0, fullNodeText, nodeText.length, items.length);
+		System.arraycopy(_nodes, 0, fullNodeText, 0, _nodes.length);
+		System.arraycopy(items, 0, fullNodeText, _nodes.length, items.length);
 
 		return new TreeItem(bot, _tree, fullNodeText);
 	}
@@ -140,10 +140,10 @@ public class TreeItem extends AbstractWidget {
 	public void selectTreeItem(String... items) {
 		SWTBotTreeItem treeItem = getWidget();
 
-		for (int i = 0; i < nodeText.length; i++) {
+		for (int i = 0; i < _nodes.length; i++) {
 			treeItem.expand();
 
-			treeItem = treeItem.getNode(nodeText[i]);
+			treeItem = treeItem.getNode(_nodes[i]);
 		}
 
 		treeItem.select();
@@ -153,21 +153,20 @@ public class TreeItem extends AbstractWidget {
 	protected SWTBotTreeItem getWidget() {
 		SWTBotTreeItem treeItem = null;
 
-		if (nodeText != null) {
-			treeItem = _tree.getWidget().getTreeItem(nodeText[0]);
+		if (_nodes != null) {
+			treeItem = _tree.getWidget().getTreeItem(_nodes[0]);
 		}
 
-		for (int i = 1; i < nodeText.length; i++) {
+		for (int i = 1; i < _nodes.length; i++) {
 			treeItem.expand();
 
-			treeItem = treeItem.getNode(nodeText[i]);
+			treeItem = treeItem.getNode(_nodes[i]);
 		}
 
 		return treeItem;
 	}
 
-	protected String[] nodeText;
-
+	private String[] _nodes;
 	private Tree _tree;
 
 }

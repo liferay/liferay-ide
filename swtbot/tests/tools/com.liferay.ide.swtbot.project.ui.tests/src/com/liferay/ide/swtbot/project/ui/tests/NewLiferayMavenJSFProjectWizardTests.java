@@ -24,9 +24,7 @@ import org.junit.Test;
 public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase {
 
 	@Test
-	public void createMavenICEFacesProject()
-	{
-
+	public void createMavenICEFacesProject() {
 		String projectName = "testMavenICEFacesProject";
 
 		wizardAction.openNewLiferayJsfProjectWizard();
@@ -37,9 +35,7 @@ public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createMavenJSFStandardProject()
-	{
-
+	public void createMavenJSFStandardProject() {
 		String projectName = "testMavenJSFStandardProject";
 
 		wizardAction.openNewLiferayJsfProjectWizard();
@@ -50,9 +46,7 @@ public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createMavenLiferayFacesAlloyProject()
-	{
-
+	public void createMavenLiferayFacesAlloyProject() {
 		String projectName = "testMavenLiferayFacesAlloyProject";
 
 		wizardAction.openNewLiferayJsfProjectWizard();
@@ -63,9 +57,7 @@ public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createMavenPrimeFacesProject()
-	{
-
+	public void createMavenPrimeFacesProject() {
 		String projectName = "testMavenPrimeFacesProject";
 
 		wizardAction.openNewLiferayJsfProjectWizard();
@@ -76,9 +68,7 @@ public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createMavenRichFacesProject()
-	{
-
+	public void createMavenRichFacesProject() {
 		String projectName = "testMavenRichFacesProject";
 
 		wizardAction.openNewLiferayJsfProjectWizard();

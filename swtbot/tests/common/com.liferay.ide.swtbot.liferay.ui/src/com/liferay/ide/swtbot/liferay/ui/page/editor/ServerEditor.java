@@ -26,16 +26,6 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class ServerEditor extends Editor {
 
-	public ServerEditor(SWTWorkbenchBot bot) {
-		super(bot);
-
-		_httpPort = new Text(bot, "Http Port:");
-
-		_defaultLaunchSettings = new Radio(bot, "Default Launch Settings");
-		_customLaunchSettings = new Radio(bot, "Custom Launch Settings");
-		_useDeveloperMode = new CheckBox(bot, "Use developer mode");
-	}
-
 	public ServerEditor(SWTWorkbenchBot bot, String editorName) {
 		super(bot, editorName);
 

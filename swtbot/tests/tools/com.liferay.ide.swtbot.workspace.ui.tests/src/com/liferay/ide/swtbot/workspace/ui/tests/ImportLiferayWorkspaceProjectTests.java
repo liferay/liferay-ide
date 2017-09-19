@@ -14,14 +14,10 @@
 
 package com.liferay.ide.swtbot.workspace.ui.tests;
 
+import com.liferay.ide.swtbot.liferay.ui.Actions;
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.ImportLiferayWorkspaceProjectWizard;
 import com.liferay.ide.swtbot.ui.page.CTabItem;
 import com.liferay.ide.swtbot.ui.page.Editor;
-import com.liferay.ide.swtbot.ui.page.Tree;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.swtbot.swt.finder.SWTBotAssert;
 
@@ -45,40 +41,23 @@ public class ImportLiferayWorkspaceProjectTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
-		List<String> actions = new ArrayList<>();
-
-		actions.add(DELETE);
-
-		viewAction.fetchProjectFile(workspaceName, "bundles").doAction(DELETE);
+		viewAction.doActionOnProjectFile(Actions.getDelete(), workspaceName, "bundles");
 
 		dialogAction.confirm();
 
 		wizardAction.openImportLiferayWorkspaceWizard();
 
-		wizardAction.prepareImportLiferayWorkspace(userHome + "/projects/testGradleWorkspace");
-
-		_importLiferayWorkspaceProject.getDownloadLiferaybundle().select();
-
-		_importLiferayWorkspaceProject.getServerName().setText("test-lrws");
+		wizardAction.prepareImportLiferayWorkspace(userHome + "/projects/testGradleWorkspace", true, "test-lrws");
 
 		wizardAction.finishToWait();
 
-		viewAction.doActionOnProjectFile(actions, workspaceName, "bundles");
+		viewAction.doActionOnProjectFile(Actions.getDelete(), workspaceName, "bundles");
 
 		dialogAction.confirm();
 
-		actions = new ArrayList<>();
-
-		actions.add("Liferay");
-		actions.add("Initialize Server Bundle");
-
-		viewAction.doActionOnProjectFile(actions, workspaceName);
+		viewAction.doActionOnProjectFile(Actions.getLiferayInitializeServerBundle(), workspaceName);
 
 		sleep(10000);
-
-		_projectTree.getTreeItem(workspaceName).expand();
-
-		sleep(2000);
 
 		Assert.assertTrue(viewAction.fetchProjectFile(workspaceName, "bundles").isVisible());
 		Assert.assertTrue(viewAction.fetchProjectFile(workspaceName, "configs").isVisible());
@@ -96,9 +75,7 @@ public class ImportLiferayWorkspaceProjectTests extends SwtbotBase {
 
 		gradlePropertiesFile.close();
 
-		sleep();
-
-		_projectTree.expandNode(workspaceName, settingGradleFileName).doubleClick();
+		viewAction.openProjectFile(workspaceName, settingGradleFileName);
 
 		Editor settingGradleFile = ide.getEditor(settingGradleFileName);
 
@@ -143,9 +120,5 @@ public class ImportLiferayWorkspaceProjectTests extends SwtbotBase {
 
 		pomXmlFile.close();
 	}
-
-	private static final ImportLiferayWorkspaceProjectWizard _importLiferayWorkspaceProject =
-		new ImportLiferayWorkspaceProjectWizard(bot);
-	private static final Tree _projectTree = viewAction.getProjects();
 
 }

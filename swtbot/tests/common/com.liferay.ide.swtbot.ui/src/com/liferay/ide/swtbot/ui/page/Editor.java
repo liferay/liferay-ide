@@ -49,6 +49,10 @@ public class Editor extends AbstractPart {
 	}
 
 	protected SWTBotEditor getPart() {
+		if (isLabelNull()) {
+			return bot.activeEditor();
+		}
+
 		return bot.editorByTitle(label);
 	}
 

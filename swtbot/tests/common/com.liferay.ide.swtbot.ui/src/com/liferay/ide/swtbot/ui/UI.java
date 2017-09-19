@@ -293,6 +293,8 @@ public interface UI {
 
 	public final String INIT = "init";
 
+	public final String INITIALIZE_SERVER_BUNDLE = "Initialize Server Bundle";
+
 	public final String INTERFACES = "Interfaces:";
 
 	public final String JAVA_PACKAGE = "Java package:";

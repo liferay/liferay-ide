@@ -35,7 +35,11 @@ public class DialogAction extends UIAction {
 	}
 
 	public void addModule(String projectName) {
-		_addAndRemoveDialog.add(projectName);
+		TreeItem projectTree = _addAndRemoveDialog.getAvailables().getTreeItem(projectName);
+
+		projectTree.select();
+
+		_addAndRemoveDialog.getAddBtn().click();
 	}
 
 	public void confirm() {

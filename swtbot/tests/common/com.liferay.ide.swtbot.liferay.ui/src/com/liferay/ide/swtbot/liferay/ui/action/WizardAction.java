@@ -174,6 +174,24 @@ public class WizardAction extends UIAction {
 		_importLiferayWorkspaceProjectWizard.getWorkspaceLocation().setText(location);
 	}
 
+	public void prepareImportLiferayWorkspace(String location, boolean downloadLiferayBundle) {
+		_importLiferayWorkspaceProjectWizard.getWorkspaceLocation().setText(location);
+
+		if (downloadLiferayBundle) {
+			_importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle().select();
+		}
+	}
+
+	public void prepareImportLiferayWorkspace(String location, boolean downloadLiferayBundle, String serverName) {
+		_importLiferayWorkspaceProjectWizard.getWorkspaceLocation().setText(location);
+
+		if (downloadLiferayBundle) {
+			_importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle().select();
+
+			_importLiferayWorkspaceProjectWizard.getServerName().setText(serverName);
+		}
+	}
+
 	public void prepareImportType(String category, String type) {
 		prepareImportType(StringPool.BLANK, category, type);
 	}
