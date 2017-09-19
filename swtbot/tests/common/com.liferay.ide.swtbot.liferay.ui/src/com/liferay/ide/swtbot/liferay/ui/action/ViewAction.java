@@ -14,6 +14,7 @@
 
 package com.liferay.ide.swtbot.liferay.ui.action;
 
+import com.liferay.ide.swtbot.liferay.ui.Actions;
 import com.liferay.ide.swtbot.liferay.ui.UIAction;
 import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesContinueDialog;
 import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesDialog;
@@ -40,7 +41,7 @@ public class ViewAction extends UIAction {
 	public void deleteProject(String name) {
 		TreeItem item = getProjects().getTreeItem(name);
 
-		item.doAction(DELETE);
+		item.doAction(Actions.getDelete());
 
 		_deleteResourcesDialog.getDeleteFromDisk().select();
 
@@ -62,7 +63,7 @@ public class ViewAction extends UIAction {
 	public void deleteProject(String... nodes) {
 		TreeItem nodesItem = getProjects().expandNode(nodes);
 
-		nodesItem.doAction(DELETE);
+		nodesItem.doAction(Actions.getDelete());
 
 		_deleteResourcesDialog.getDeleteFromDisk().select();
 

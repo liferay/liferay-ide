@@ -14,6 +14,8 @@
 
 package com.liferay.ide.swtbot.ui.page;
 
+import java.util.List;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -36,6 +38,10 @@ public class TreeItem extends AbstractWidget {
 
 	public void collapse() {
 		getWidget().collapse();
+	}
+
+	public void doAction(List<String> actions) {
+		doAction(actions.toArray(new String[0]));
 	}
 
 	public void doAction(String... actions) {
