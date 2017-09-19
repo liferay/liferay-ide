@@ -149,12 +149,17 @@ public class PortalSourceLookupTests
         Assert.assertNotNull( sourceContainers );
 
         Assert.assertEquals( 1,
-            Stream.of( sourceContainers ).filter(
+            Stream.of(
+                sourceContainers
+            ).filter(
                 sourceContainer -> sourceContainer instanceof JavaProjectSourceContainer
-            ).count());
+            ).count()
+        );
 
         Assert.assertFalse(
-            Stream.of( sourceContainers ).filter(
+            Stream.of(
+                sourceContainers
+            ).filter(
                 sourceContainer -> sourceContainer instanceof PackageFragmentRootSourceContainer
             ).map(
                 sourceContainer -> ((PackageFragmentRootSourceContainer)sourceContainer).getPath()
@@ -167,23 +172,23 @@ public class PortalSourceLookupTests
 
         portalServer = addProjectToServer( debugTestProject, portalServer );
 
-        Assert.assertTrue( deleteLaunchConfig( launchConfiguration ) );
+        ISourceContainer[] updatedSourceContainers =
+            portalSourcePathComputer.computeSourceContainers( launchConfiguration, _NPM );
 
-        launchConfiguration = portalServer.getLaunchConfiguration( true, _NPM );
-
-        portalSourcePathComputer = getPortalSourcePathComputer( launchConfiguration );
-
-        sourceContainers = portalSourcePathComputer.computeSourceContainers( launchConfiguration, _NPM );
-
-        Assert.assertNotNull( sourceContainers );
+        Assert.assertNotNull( updatedSourceContainers );
 
         Assert.assertEquals( 2,
-            Stream.of( sourceContainers ).filter(
+            Stream.of(
+                updatedSourceContainers
+            ).filter(
                 sourceContainer -> sourceContainer instanceof JavaProjectSourceContainer
-            ).count());
+            ).count()
+        );
 
         Assert.assertTrue(
-            Stream.of( sourceContainers ).filter(
+            Stream.of(
+                updatedSourceContainers
+            ).filter(
                 sourceContainer -> sourceContainer instanceof PackageFragmentRootSourceContainer
             ).map(
                 sourceContainer -> ((PackageFragmentRootSourceContainer)sourceContainer).getPath()
