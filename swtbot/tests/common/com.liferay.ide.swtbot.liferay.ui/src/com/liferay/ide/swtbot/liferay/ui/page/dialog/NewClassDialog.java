@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.dialog;
 
@@ -26,55 +25,48 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Vicky Wang
  */
-public class NewClassDialog extends Dialog
-{
+public class NewClassDialog extends Dialog {
 
-    private final Button browseBtn;
-    private final Text className;
-    private final Button createBtn;
-    private final Text javaPackage;
-    private final Tree paths;
-    private final ComboBox superClasses;
+	public NewClassDialog(SWTWorkbenchBot bot) {
+		super(bot);
 
-    public NewClassDialog( final SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_className = new Text(bot, CLASSNAME);
+		_javaPackage = new Text(bot, JAVA_PACKAGE);
+		_createBtn = new Button(bot, CREATE);
+		_browseBtn = new Button(bot, BROWSE_WITH_DOT);
+		_paths = new Tree(bot);
+		_superClasses = new ComboBox(bot, SUPERCLASS);
+	}
 
-        className = new Text( bot, CLASSNAME );
-        javaPackage = new Text( bot, JAVA_PACKAGE );
-        createBtn = new Button( bot, CREATE );
-        browseBtn = new Button( bot, BROWSE_WITH_DOT );
-        paths = new Tree( bot );
-        superClasses = new ComboBox( bot, SUPERCLASS );
-    }
+	public Button getBrowseBtn() {
+		return _browseBtn;
+	}
 
-    public Button getBrowseBtn()
-    {
-        return browseBtn;
-    }
+	public Text getClassName() {
+		return _className;
+	}
 
-    public Text getClassName()
-    {
-        return className;
-    }
+	public Button getCreateBtn() {
+		return _createBtn;
+	}
 
-    public Button getCreateBtn()
-    {
-        return createBtn;
-    }
+	public Text getJavaPackage() {
+		return _javaPackage;
+	}
 
-    public Text getJavaPackage()
-    {
-        return javaPackage;
-    }
+	public Tree getPaths() {
+		return _paths;
+	}
 
-    public Tree getPaths()
-    {
-        return paths;
-    }
+	public ComboBox getSuperClass() {
+		return _superClasses;
+	}
 
-    public ComboBox getSuperClass()
-    {
-        return superClasses;
-    }
+	private Button _browseBtn;
+	private Text _className;
+	private Button _createBtn;
+	private Text _javaPackage;
+	private Tree _paths;
+	private ComboBox _superClasses;
+
 }

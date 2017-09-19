@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
@@ -20,12 +19,10 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  */
-public class ProjectExplorerView extends ExplorerView
-{
+public class ProjectExplorerView extends ExplorerView {
 
-    public ProjectExplorerView( final SWTWorkbenchBot bot )
-    {
-        super( bot, PROJECT_EXPLORER );
-    }
+	public ProjectExplorerView(SWTWorkbenchBot bot) {
+		super(bot, PROJECT_EXPLORER);
+	}
 
 }

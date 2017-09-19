@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.fragment.ui.tests;
 
@@ -19,7 +18,6 @@ import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 
 import java.io.IOException;
 
-import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -27,118 +25,105 @@ import org.junit.Test;
  * @author Vicky Wang
  * @author Sunny Shi
  */
-public class FragmentWizardTests extends SwtbotBase
-{
+public class FragmentWizardTests extends SwtbotBase {
 
-    static String fullClassname = new SecurityManager()
-    {
+	@BeforeClass
+	public static void init() throws IOException {
+		envAction.unzipServer();
+	}
 
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
+	@Test
+	public void mavenModuleFragmentProjectWizard() {
+		String projectName = "test-fragment-maven";
 
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
+		wizardAction.openNewFragmentWizard();
 
-    @BeforeClass
-    public static void init() throws IOException
-    {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
+		wizardAction.prepareFragmentMaven(projectName);
 
-        unzipServer();
-    }
+		wizardAction.openNewRuntimeWizardFragment();
 
-    @Test
-    public void moduleFragmentProjectWizard()
-    {
-        final String projectName = "test-fragment";
+		wizardAction.next();
 
-        wizardAction.openNewFragmentWizard();
+		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
 
-        wizardAction.prepareFragmentGradle( "test-fragment" );
+		wizardAction.finish();
 
-        wizardAction.openNewRuntimeWizardFragment();
+		wizardAction.next();
 
-        wizardAction.next();
+		wizardAction.openBrowseOsgiBundleDialog();
 
-        wizardAction.prepareLiferay7Runtime( getLiferayServerDir().toOSString() );
+		dialogAction.prepareText("com.liferay.blogs.web");
 
-        wizardAction.finish();
+		dialogAction.confirm();
 
-        wizardAction.next();
+		String[] files = {
+			"META-INF/resources/blogs_admin/configuration.jsp", "META-INF/resources/blogs_aggregator/init.jsp",
+			"META-INF/resources/blogs/asset/abstract.jsp", "META-INF/resources/blogs/edit_entry.jsp",
+			"portlet.properties"
+		};
 
-        wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.openAddOverrideFilesDialog();
 
-        dialogAction.prepareText( "com.liferay.announcements." );
+		dialogAction.selectItems(files);
 
-        dialogAction.confirm();
+		dialogAction.confirm();
 
-        wizardAction.openAddOverrideFilesDialog();
+		wizardAction.finishToWait();
 
-        dialogAction.selectItem( "META-INF/resources/configuration.jsp" );
+		viewAction.deleteProject(projectName);
+	}
 
-        dialogAction.confirm();
+	@Test
+	public void moduleFragmentProjectWizard() {
+		String projectName = "test-fragment";
 
-        wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.openNewFragmentWizard();
 
-        dialogAction.prepareText( "com.liferay.blogs.web" );
+		wizardAction.prepareFragmentGradle("test-fragment");
 
-        dialogAction.confirm();
+		wizardAction.openNewRuntimeWizardFragment();
 
-        final String[] files = new String[] { "META-INF/resources/blogs_admin/configuration.jsp",
-            "META-INF/resources/blogs_aggregator/init.jsp", "META-INF/resources/blogs/asset/abstract.jsp",
-            "META-INF/resources/blogs/edit_entry.jsp", "portlet.properties" };
+		wizardAction.next();
 
-        wizardAction.openAddOverrideFilesDialog();
+		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
 
-        dialogAction.selectItems( files );
+		wizardAction.finish();
 
-        dialogAction.confirm();
+		wizardAction.next();
 
-        wizardAction.finishToWait();
+		wizardAction.openBrowseOsgiBundleDialog();
 
-        viewAction.deleteProject( projectName );
-    }
+		dialogAction.prepareText("com.liferay.announcements.");
 
-    @Test
-    public void mavenModuleFragmentProjectWizard()
-    {
-        final String projectName = "test-fragment-maven";
+		dialogAction.confirm();
 
-        wizardAction.openNewFragmentWizard();
+		wizardAction.openAddOverrideFilesDialog();
 
-        wizardAction.prepareFragmentMaven( projectName );
+		dialogAction.selectItem("META-INF/resources/configuration.jsp");
 
-        wizardAction.openNewRuntimeWizardFragment();
+		dialogAction.confirm();
 
-        wizardAction.next();
+		wizardAction.openBrowseOsgiBundleDialog();
 
-        wizardAction.prepareLiferay7Runtime( getLiferayServerDir().toOSString() );
+		dialogAction.prepareText("com.liferay.blogs.web");
 
-        wizardAction.finish();
+		dialogAction.confirm();
 
-        wizardAction.next();
+		String[] files = {
+			"META-INF/resources/blogs_admin/configuration.jsp", "META-INF/resources/blogs_aggregator/init.jsp",
+			"META-INF/resources/blogs/asset/abstract.jsp", "META-INF/resources/blogs/edit_entry.jsp",
+			"portlet.properties"
+		};
 
-        wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.openAddOverrideFilesDialog();
 
-        dialogAction.prepareText( "com.liferay.blogs.web" );
+		dialogAction.selectItems(files);
 
-        dialogAction.confirm();
+		dialogAction.confirm();
 
-        final String[] files = new String[] { "META-INF/resources/blogs_admin/configuration.jsp",
-            "META-INF/resources/blogs_aggregator/init.jsp", "META-INF/resources/blogs/asset/abstract.jsp",
-            "META-INF/resources/blogs/edit_entry.jsp", "portlet.properties" };
+		wizardAction.finishToWait();
 
-        wizardAction.openAddOverrideFilesDialog();
-
-        dialogAction.selectItems( files );
-
-        dialogAction.confirm();
-
-        wizardAction.finishToWait();
-
-        viewAction.deleteProject( projectName );
-    }
+		viewAction.deleteProject(projectName);
+	}
 
 }

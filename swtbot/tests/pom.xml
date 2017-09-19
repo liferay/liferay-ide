@@ -14,32 +14,41 @@
  * details.
  *
  *******************************************************************************/
- -->
+-->
 
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <modelVersion>4.0.0</modelVersion>
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.liferay.ide.swtbot</groupId>
-        <artifactId>swtbot</artifactId>
-        <version>3.1.2-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
-    </parent>
+	<parent>
+		<groupId>com.liferay.ide.swtbot</groupId>
+		<artifactId>swtbot</artifactId>
+		<version>3.1.2-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
 
-    <groupId>com.liferay.ide.swtbot.tests</groupId>
-    <artifactId>tests</artifactId>
+	<groupId>com.liferay.ide.swtbot.tests</groupId>
+	<artifactId>tests</artifactId>
 
-    <name>Liferay IDE Swtbot Tests</name>
+	<name>Liferay IDE Swtbot Tests</name>
 
-    <packaging>pom</packaging>
+	<packaging>pom</packaging>
 
-    <modules>
-        <module>common</module>
-        <module>tools</module>
-    </modules>
+	<modules>
+		<module>common</module>
+		<module>tools</module>
+	</modules>
 
-
-
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.liferay</groupId>
+				<artifactId>com.liferay.source.formatter</artifactId>
+				<version>1.0.462</version>
+				<configuration>
+					<maxLineLength>120</maxLineLength>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
-

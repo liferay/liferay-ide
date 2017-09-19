@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page;
 
@@ -21,77 +20,70 @@ import com.liferay.ide.swtbot.liferay.ui.page.view.CodeUpgradeView;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewLiferayWorkspaceWizard;
 import com.liferay.ide.swtbot.ui.Eclipse;
 import com.liferay.ide.swtbot.ui.page.Perspective;
+import com.liferay.ide.swtbot.ui.page.Text;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  */
-public class LiferayIDE extends Eclipse
-{
+public class LiferayIDE extends Eclipse {
 
-    private final CodeUpgradeView codeUpgradeView;
-    private final CreateLifeayProjectToolbarDropDownButton createLiferayProjectToolbar;
-    private final Perspective liferayPerspective;
-    private final Perspective liferayWorkspacePerspective;
-    private final NewToolbarDropDownButton newBtn;
-    private final NewLiferayWorkspaceWizard newLiferayWorkspaceProjectWizard;
+	public LiferayIDE(SWTWorkbenchBot bot) {
+		super(bot);
 
-    public LiferayIDE( final SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_createLiferayProjectToolbar = new CreateLifeayProjectToolbarDropDownButton(bot);
+		_codeUpgradeView = new CodeUpgradeView(bot, LIFERAY_CODE_UPGRADE);
+		_liferayPerspective = new Perspective(bot, LIFERAY_PLUGINS);
+		_liferayWorkspacePerspective = new Perspective(bot, LIFERAY_WORKSPACE);
+		_newBtn = new NewToolbarDropDownButton(bot);
+		_newLiferayWorkspaceProjectWizard = new NewLiferayWorkspaceWizard(bot);
+	}
 
-        createLiferayProjectToolbar = new CreateLifeayProjectToolbarDropDownButton( bot );
-        codeUpgradeView = new CodeUpgradeView( bot, LIFERAY_CODE_UPGRADE );
-        liferayPerspective = new Perspective( bot, LIFERAY_PLUGINS );
-        liferayWorkspacePerspective = new Perspective( bot, LIFERAY_WORKSPACE );
-        newBtn = new NewToolbarDropDownButton( bot );
-        newLiferayWorkspaceProjectWizard = new NewLiferayWorkspaceWizard( bot );
-    }
+	public CreateLifeayProjectToolbarDropDownButton getCreateLiferayProjectToolbar() {
+		return _createLiferayProjectToolbar;
+	}
 
-    public CreateLifeayProjectToolbarDropDownButton getCreateLiferayProjectToolbar()
-    {
-        return createLiferayProjectToolbar;
-    }
+	public Perspective getLiferayPerspective() {
+		return _liferayPerspective;
+	}
 
-    public Perspective getLiferayPerspective()
-    {
-        return liferayPerspective;
-    }
+	public Perspective getLiferayWorkspacePerspective() {
+		return _liferayWorkspacePerspective;
+	}
 
-    public Perspective getLiferayWorkspacePerspective()
-    {
-        return liferayWorkspacePerspective;
-    }
+	public NewToolbarDropDownButton getNewBtn() {
+		return _newBtn;
+	}
 
-    public NewToolbarDropDownButton getNewBtn()
-    {
-        return newBtn;
-    }
+	public NewLiferayWorkspaceWizard getNewLiferayWorkspaceProjectWizard() {
+		return _newLiferayWorkspaceProjectWizard;
+	}
 
-    public NewLiferayWorkspaceWizard getNewLiferayWorkspaceProjectWizard()
-    {
-        return newLiferayWorkspaceProjectWizard;
-    }
+	public CodeUpgradeView showCodeUpgradeView() {
+		try {
+			_codeUpgradeView.show();
+		}
+		catch (Exception e) {
+			getOtherMenu().click();
 
-    public CodeUpgradeView showCodeUpgradeView()
-    {
-        try
-        {
-            codeUpgradeView.show();
-        }
-        catch( Exception e )
-        {
-            otherMenu.click();
+			Text text = getShowViewDialog().getText();
 
-            showViewDialog.getText().setText( LIFERAY_CODE_UPGRADE );
+			text.setText(LIFERAY_CODE_UPGRADE);
 
-            showViewDialog.confirm();
+			getShowViewDialog().confirm();
 
-            codeUpgradeView.show();
-        }
+			_codeUpgradeView.show();
+		}
 
-        return codeUpgradeView;
-    }
+		return _codeUpgradeView;
+	}
+
+	private CodeUpgradeView _codeUpgradeView;
+	private CreateLifeayProjectToolbarDropDownButton _createLiferayProjectToolbar;
+	private Perspective _liferayPerspective;
+	private Perspective _liferayWorkspacePerspective;
+	private NewToolbarDropDownButton _newBtn;
+	private NewLiferayWorkspaceWizard _newLiferayWorkspaceProjectWizard;
 
 }

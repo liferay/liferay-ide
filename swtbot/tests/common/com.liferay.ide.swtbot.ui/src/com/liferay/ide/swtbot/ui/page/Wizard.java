@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,127 +10,114 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 
 /**
  * @author Terry Jia
  * @author Ashley Yuan
  */
-public class Wizard extends CancelableShell
-{
+public class Wizard extends CancelableShell {
 
-    private String backBtnLabel = BACK_WITH_LEFT_BRACKET;
-    private String finishBtnLabel = FINISH;
-    private String nextBtnLabel = NEXT_WITH_BRACKET;
+	public Wizard(SWTWorkbenchBot bot) {
+		super(bot);
+	}
 
-    private int validationMsgIndex = -1;
+	public Wizard(SWTWorkbenchBot bot, int validationMsgIndex) {
+		super(bot);
 
-    public Wizard( final SWTWorkbenchBot bot )
-    {
-        super( bot );
-    }
+		_validationMsgIndex = validationMsgIndex;
+	}
 
-    public Wizard( final SWTWorkbenchBot bot, final String title )
-    {
-        super( bot, title );
-    }
+	public Wizard(SWTWorkbenchBot bot, String title) {
+		super(bot, title);
+	}
 
-    public Wizard( final SWTWorkbenchBot bot, final int validationMsgIndex )
-    {
-        super( bot );
+	public Wizard(SWTWorkbenchBot bot, String title, int validationMsgIndex) {
+		super(bot, title);
 
-        this.validationMsgIndex = validationMsgIndex;
-    }
+		_validationMsgIndex = validationMsgIndex;
+	}
 
-    public Wizard( final SWTWorkbenchBot bot, final String title, final int validationMsgIndex )
-    {
-        super( bot, title );
+	public Wizard(
+		SWTWorkbenchBot bot, String title, String cancelBtnLabel, String finishBtnLabel, String backBtnLabel,
+		String nextButtonText) {
 
-        this.validationMsgIndex = validationMsgIndex;
-    }
+		super(bot, title, cancelBtnLabel);
 
-    public Wizard(
-        final SWTWorkbenchBot bot, final String title, final String cancelBtnLabel, final String finishBtnLabel,
-        final String backBtnLabel, final String nextButtonText )
-    {
-        super( bot, title, cancelBtnLabel );
+		_finishBtnLabel = finishBtnLabel;
 
-        this.finishBtnLabel = finishBtnLabel;
+		_backBtnLabel = backBtnLabel;
 
-        this.backBtnLabel = backBtnLabel;
+		_nextBtnLabel = nextButtonText;
+	}
 
-        this.nextBtnLabel = nextButtonText;
-    }
+	public Wizard(
+		SWTWorkbenchBot bot, String title, String cancelBtnLabel, String finishBtnLabel, String backBtnLabel,
+		String nextBtnLabel, int validationMsgIndex) {
 
-    public Wizard(
-        final SWTWorkbenchBot bot, final String title, final String cancelBtnLabel, final String finishBtnLabel,
-        final String backBtnLabel, final String nextBtnLabel, final int validationMsgIndex )
-    {
-        super( bot, title, cancelBtnLabel );
+		super(bot, title, cancelBtnLabel);
 
-        this.finishBtnLabel = finishBtnLabel;
+		_finishBtnLabel = finishBtnLabel;
 
-        this.backBtnLabel = backBtnLabel;
+		_backBtnLabel = backBtnLabel;
 
-        this.nextBtnLabel = nextBtnLabel;
+		_nextBtnLabel = nextBtnLabel;
 
-        this.validationMsgIndex = validationMsgIndex;
-    }
+		_validationMsgIndex = validationMsgIndex;
+	}
 
-    public void back()
-    {
-        clickBtn( backBtn() );
-    }
+	public void back() {
+		clickBtn(backBtn());
+	}
 
-    public Button backBtn()
-    {
-        return new Button( bot, backBtnLabel );
-    }
+	public Button backBtn() {
+		return new Button(bot, _backBtnLabel);
+	}
 
-    public void finish()
-    {
-        clickBtn( finishBtn() );
+	public void finish() {
+		clickBtn(finishBtn());
 
-        sleep();
-    }
+		sleep();
+	}
 
-    public Button finishBtn()
-    {
-        return new Button( bot, finishBtnLabel );
-    }
+	public Button finishBtn() {
+		return new Button(bot, _finishBtnLabel);
+	}
 
-    public String getValidationMsg( final int validationMsgIndex )
-    {
-        if( validationMsgIndex < 0 )
-        {
-            log.error( "Validation Msg Index error" );
+	public String getValidationMsg() {
+		return getValidationMsg(_validationMsgIndex);
+	}
 
-            return null;
-        }
+	public String getValidationMsg(int validationMsgIndex) {
+		if (validationMsgIndex < 0) {
+			log.error("Validation Msg Index error");
 
-        sleep();
+			return null;
+		}
 
-        return bot.text( validationMsgIndex ).getText().trim();
-    }
+		sleep();
 
-    public String getValidationMsg()
-    {
-        return getValidationMsg( validationMsgIndex );
-    }
+		SWTBotText text = bot.text(validationMsgIndex);
 
-    public void next()
-    {
-        clickBtn( nextBtn() );
-    }
+		return text.getText().trim();
+	}
 
-    public Button nextBtn()
-    {
-        return new Button( bot, nextBtnLabel );
-    }
+	public void next() {
+		clickBtn(nextBtn());
+	}
+
+	public Button nextBtn() {
+		return new Button(bot, _nextBtnLabel);
+	}
+
+	private String _backBtnLabel = BACK_WITH_LEFT_BRACKET;
+	private String _finishBtnLabel = FINISH;
+	private String _nextBtnLabel = NEXT_WITH_BRACKET;
+	private int _validationMsgIndex = -1;
 
 }

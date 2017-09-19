@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -25,75 +24,60 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Ying Xu
  */
-public class NewLiferayComponentWizard extends Wizard
-{
+public class NewLiferayComponentWizard extends Wizard {
 
-    private final ToolbarButtonWithTooltip browseBtn;
-    private final Text componentClassName;
-    private final ComboBox componentClassTemplates;
-    private final Text modelClassName;
-    private final ToolbarButtonWithTooltip packageBrowseBtn;
-    private final Text packageName;
-    private final ComboBox projectNames;
-    private final Text serviceName;
+	public NewLiferayComponentWizard(SWTWorkbenchBot bot) {
+		super(bot, NEW_LIFERAY_COMPONENT, 4);
 
-    public NewLiferayComponentWizard( final SWTWorkbenchBot bot )
-    {
-        this( bot, -1 );
-    }
+		_packageName = new Text(bot, PACKAGE_NAME);
+		_componentClassName = new Text(bot, COMPONENT_CLASS_NAME);
+		_serviceName = new Text(bot, SERVICE_NAME);
+		_modelClassName = new Text(bot, MODEL_CLASS);
+		_projectNames = new ComboBox(bot, PROJECT_NAME);
+		_componentClassTemplates = new ComboBox(bot, COMPONENT_CLASS_TEMPLATE);
+		_browseBtn = new ToolbarButtonWithTooltip(bot, BROWSE, 1);
+		_packageBrowseBtn = new ToolbarButtonWithTooltip(bot, BROWSE);
+	}
 
-    public NewLiferayComponentWizard( final SWTWorkbenchBot bot, final int validationMsgIndex )
-    {
-        super( bot, NEW_LIFERAY_COMPONENT, 4 );
+	public ToolbarButtonWithTooltip getBrowseBtn() {
+		return _browseBtn;
+	}
 
-        packageName = new Text( bot, PACKAGE_NAME );
-        componentClassName = new Text( bot, COMPONENT_CLASS_NAME );
-        serviceName = new Text( bot, SERVICE_NAME );
-        modelClassName = new Text( bot, MODEL_CLASS );
-        projectNames = new ComboBox( bot, PROJECT_NAME );
-        componentClassTemplates = new ComboBox( bot, COMPONENT_CLASS_TEMPLATE );
-        browseBtn = new ToolbarButtonWithTooltip( bot, BROWSE, 1 );
-        packageBrowseBtn = new ToolbarButtonWithTooltip( bot, BROWSE );
-    }
+	public Text getComponentClassName() {
+		return _componentClassName;
+	}
 
-    public ToolbarButtonWithTooltip getBrowseBtn()
-    {
-        return browseBtn;
-    }
+	public ComboBox getComponentClassTemplates() {
+		return _componentClassTemplates;
+	}
 
-    public Text getComponentClassName()
-    {
-        return componentClassName;
-    }
+	public Text getModelClassName() {
+		return _modelClassName;
+	}
 
-    public ComboBox getComponentClassTemplates()
-    {
-        return componentClassTemplates;
-    }
+	public ToolbarButtonWithTooltip getPackageBrowseBtn() {
+		return _packageBrowseBtn;
+	}
 
-    public Text getModelClassName()
-    {
-        return modelClassName;
-    }
+	public Text getPackageName() {
+		return _packageName;
+	}
 
-    public ToolbarButtonWithTooltip getPackageBrowseBtn()
-    {
-        return packageBrowseBtn;
-    }
+	public ComboBox getProjectNames() {
+		return _projectNames;
+	}
 
-    public Text getPackageName()
-    {
-        return packageName;
-    }
+	public Text getServiceName() {
+		return _serviceName;
+	}
 
-    public ComboBox getProjectNames()
-    {
-        return projectNames;
-    }
-
-    public Text getServiceName()
-    {
-        return serviceName;
-    }
+	private ToolbarButtonWithTooltip _browseBtn;
+	private Text _componentClassName;
+	private ComboBox _componentClassTemplates;
+	private Text _modelClassName;
+	private ToolbarButtonWithTooltip _packageBrowseBtn;
+	private Text _packageName;
+	private ComboBox _projectNames;
+	private Text _serviceName;
 
 }

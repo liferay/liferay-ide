@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
 
@@ -23,21 +22,18 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Ying Xu
  */
-public class NewLiferayServerWizard extends Wizard
-{
+public class NewLiferayServerWizard extends Wizard {
 
-    private final Tree serverTypes;
+	public NewLiferayServerWizard(SWTWorkbenchBot bot) {
+		super(bot);
 
-    public NewLiferayServerWizard( final SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_serverTypes = new Tree(bot);
+	}
 
-        serverTypes = new Tree( bot );
-    }
+	public Tree getServerTypeTree() {
+		return _serverTypes;
+	}
 
-    public Tree getServerTypeTree()
-    {
-        return serverTypes;
-    }
+	private Tree _serverTypes;
 
 }

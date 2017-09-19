@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
@@ -24,28 +23,24 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Ashley Yuan
  */
-public class ImportProjectWizard extends Wizard
-{
+public class ImportProjectWizard extends Wizard {
 
-    private final Text filterText;
-    private final Tree types;
+	public ImportProjectWizard(SWTWorkbenchBot bot) {
+		super(bot, 1);
 
-    public ImportProjectWizard( final SWTWorkbenchBot bot )
-    {
-        super( bot, 1 );
+		_filter = new Text(bot);
+		_types = new Tree(bot);
+	}
 
-        filterText = new Text( bot );
-        types = new Tree( bot );
-    }
+	public Text getFilter() {
+		return _filter;
+	}
 
-    public Text getFilterText()
-    {
-        return filterText;
-    }
+	public Tree getTypes() {
+		return _types;
+	}
 
-    public Tree getTypes()
-    {
-        return types;
-    }
+	private Text _filter;
+	private Tree _types;
 
 }

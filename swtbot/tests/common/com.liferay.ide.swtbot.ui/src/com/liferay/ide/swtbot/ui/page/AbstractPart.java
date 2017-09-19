@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
@@ -21,39 +20,32 @@ import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotWorkbenchPart;
 /**
  * @author Terry Jia
  */
-public abstract class AbstractPart extends BasePageObject
-{
+public abstract class AbstractPart extends BasePageObject {
 
-    public AbstractPart( final SWTWorkbenchBot bot )
-    {
-        super( bot );
-    }
+	public AbstractPart(SWTWorkbenchBot bot) {
+		super(bot);
+	}
 
-    public AbstractPart( final SWTWorkbenchBot bot, final String label )
-    {
-        super( bot, label );
-    }
+	public AbstractPart(SWTWorkbenchBot bot, String label) {
+		super(bot, label);
+	}
 
-    protected abstract SWTBotWorkbenchPart<?> getPart();
+	public void close() {
+		getPart().close();
+	}
 
-    public void close()
-    {
-        getPart().close();
-    }
+	public boolean isActive() {
+		return getPart().isActive();
+	}
 
-    public boolean isActive()
-    {
-        return getPart().isActive();
-    }
+	public void setFocus() {
+		getPart().setFocus();
+	}
 
-    public void setFocus()
-    {
-        getPart().setFocus();
-    }
+	public void show() {
+		getPart().show();
+	}
 
-    public void show()
-    {
-        getPart().show();
-    }
+	protected abstract SWTBotWorkbenchPart<?> getPart();
 
 }

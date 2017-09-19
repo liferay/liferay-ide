@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,151 +10,115 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.workspace.ui.tests;
 
-import static org.eclipse.swtbot.swt.finder.SWTBotAssert.assertContains;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+import com.liferay.ide.swtbot.liferay.ui.Actions;
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.ImportLiferayWorkspaceProjectWizard;
-import com.liferay.ide.swtbot.ui.eclipse.page.DeleteResourcesContinueDialog;
 import com.liferay.ide.swtbot.ui.page.CTabItem;
 import com.liferay.ide.swtbot.ui.page.Editor;
-import com.liferay.ide.swtbot.ui.page.Tree;
 
-import org.junit.Assume;
-import org.junit.Before;
+import org.eclipse.swtbot.swt.finder.SWTBotAssert;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author Sunny Shi
  */
-public class ImportLiferayWorkspaceProjectTests extends SwtbotBase
-{
+public class ImportLiferayWorkspaceProjectTests extends SwtbotBase {
 
-    private String liferayWorkspaceRootPath = System.getProperty( "user.dir" );
+	@Test
+	public void importGradleLiferayWorkspaceProject() {
+		String userHome = System.getProperty("user.dir");
 
-    Tree projectTree = viewAction.getProjects();
+		wizardAction.openImportLiferayWorkspaceWizard();
 
-    ImportLiferayWorkspaceProjectWizard importLiferayWorkspaceProject = new ImportLiferayWorkspaceProjectWizard( bot );
+		wizardAction.prepareImportLiferayWorkspace(userHome + "/projects/testGradleWorkspace");
 
-    DeleteResourcesContinueDialog continueDeleteResources = new DeleteResourcesContinueDialog( bot );
+		String workspaceName = "testGradleWorkspace";
 
-    @Before
-    public void before()
-    {
-        Assume.assumeTrue( runTest() || runAllTests() );
-    }
+		wizardAction.finishToWait();
 
-    @Test
-    public void importGradleLiferayWorkspaceProject()
-    {
-        wizardAction.openImportLiferayWorkspaceWizard();
+		viewAction.doActionOnProjectFile(Actions.getDelete(), workspaceName, "bundles");
 
-        importLiferayWorkspaceProject.setWorkspaceLocation(
-            liferayWorkspaceRootPath + "/projects/testGradleWorkspace" );
+		dialogAction.confirm();
 
-        final String workspaceName = "testGradleWorkspace";
+		wizardAction.openImportLiferayWorkspaceWizard();
 
-        wizardAction.finishToWait();
+		wizardAction.prepareImportLiferayWorkspace(userHome + "/projects/testGradleWorkspace", true, "test-lrws");
 
-        viewAction.fetchProjectFile( workspaceName, "bundles" ).doAction( DELETE );
+		wizardAction.finishToWait();
 
-        dialogAction.confirm();
+		viewAction.doActionOnProjectFile(Actions.getDelete(), workspaceName, "bundles");
 
-        wizardAction.openImportLiferayWorkspaceWizard();
+		dialogAction.confirm();
 
-        importLiferayWorkspaceProject.setWorkspaceLocation(
-            liferayWorkspaceRootPath + "/projects/testGradleWorkspace" );
+		viewAction.doActionOnProjectFile(Actions.getLiferayInitializeServerBundle(), workspaceName);
 
-        importLiferayWorkspaceProject.getDownloadLiferaybundle().select();
+		sleep(10000);
 
-        importLiferayWorkspaceProject.getServerName().setText( "test-lrws" );
-        importLiferayWorkspaceProject.finish();
+		Assert.assertTrue(viewAction.fetchProjectFile(workspaceName, "bundles").isVisible());
+		Assert.assertTrue(viewAction.fetchProjectFile(workspaceName, "configs").isVisible());
+		Assert.assertTrue(viewAction.fetchProjectFile(workspaceName, "gradle").isVisible());
 
-        viewAction.fetchProjectFile( workspaceName, "bundles" ).doAction( DELETE );
+		String gradlePropertyFileName = "gradle.properties";
+		String settingGradleFileName = "settings.gradle";
 
-        dialogAction.confirm();
+		viewAction.openProjectFile(workspaceName, gradlePropertyFileName);
 
-        projectTree.getTreeItem( workspaceName ).doAction( "Liferay", "Initialize Server Bundle" );
+		Editor gradlePropertiesFile = ide.getEditor(gradlePropertyFileName);
 
-        sleep( 10000 );
-        projectTree.getTreeItem( workspaceName ).expand();
+		SWTBotAssert.assertContains("liferay.workspace.modules.dir", gradlePropertiesFile.getText());
+		SWTBotAssert.assertContains("liferay.workspace.home.dir", gradlePropertiesFile.getText());
 
-        sleep( 2000 );
-        assertTrue( projectTree.getTreeItem( workspaceName ).getTreeItem( "bundles" ).isVisible() );
-        assertTrue( projectTree.getTreeItem( workspaceName ).getTreeItem( "configs" ).isVisible() );
-        assertTrue( projectTree.getTreeItem( workspaceName ).getTreeItem( "gradle" ).isVisible() );
+		gradlePropertiesFile.close();
 
-        String gradlePropertyFileName = "gradle.properties";
-        String settingGradleFileName = "settings.gradle";
+		viewAction.openProjectFile(workspaceName, settingGradleFileName);
 
-        projectTree.expandNode( workspaceName, gradlePropertyFileName ).doubleClick();
-        Editor gradlePropertiesFile = ide.getEditor( gradlePropertyFileName );
+		Editor settingGradleFile = ide.getEditor(settingGradleFileName);
 
-        assertContains( "liferay.workspace.modules.dir", gradlePropertiesFile.getText() );
-        assertContains( "liferay.workspace.home.dir", gradlePropertiesFile.getText() );
-        gradlePropertiesFile.close();
-        sleep();
+		SWTBotAssert.assertContains("buildscript", settingGradleFile.getText());
+		SWTBotAssert.assertContains("repositories", settingGradleFile.getText());
 
-        projectTree.expandNode( workspaceName, settingGradleFileName ).doubleClick();
-        Editor settingGradleFile = ide.getEditor( settingGradleFileName );
+		settingGradleFile.close();
+	}
 
-        assertContains( "buildscript", settingGradleFile.getText() );
-        assertContains( "repositories", settingGradleFile.getText() );
+	@Test
+	public void importMavenLiferayWorkspaceProject() {
+		wizardAction.openImportLiferayWorkspaceWizard();
 
-        settingGradleFile.close();
-    }
+		String liferayWorkspaceName = "testMavenWorkspace";
 
-    @Test
-    public void importMavenLiferayWorkspaceProject()
-    {
-        wizardAction.openImportLiferayWorkspaceWizard();
+		String userHome = System.getProperty("user.dir");
 
-        String liferayWorkspaceName = "testMavenWorkspace";
+		wizardAction.prepareImportLiferayWorkspace(userHome + "/projects/testGradleWorkspace");
 
-        importLiferayWorkspaceProject.setWorkspaceLocation( liferayWorkspaceRootPath + "/projects/testMavenWorkspace" );
-        sleep();
-        assertEquals(
-            SELECT_LOCATION_OF_LIFERAY_WORKSPACE_PARENT_DIRECTORY, importLiferayWorkspaceProject.getValidationMsg() );
+		wizardAction.finishToWait();
 
-        assertEquals( MAVEN_LIFERAY_WORKSPACE, importLiferayWorkspaceProject.getBuildTypeText().getText() );
-        assertFalse( importLiferayWorkspaceProject.getDownloadLiferaybundle().isChecked() );
+		viewAction.openProjectFile(liferayWorkspaceName, "testMavenWorkspace-modules", "pom.xml");
 
-        importLiferayWorkspaceProject.finish();
-        sleep( 6000 );
+		CTabItem switchCTabItem = new CTabItem(bot, "pom.xml");
+		sleep();
+		switchCTabItem.click();
 
-        projectTree.setFocus();
-        bot.viewByTitle( "Package Explorer" ).show();
-        projectTree.expandNode( liferayWorkspaceName ).doubleClick();
-        assertTrue( projectTree.getTreeItem( "testMavenWorkspace-modules" ).isVisible() );
-        assertTrue( projectTree.getTreeItem( "testMavenWorkspace-themes" ).isVisible() );
-        assertTrue( projectTree.getTreeItem( "testMavenWorkspace-wars" ).isVisible() );
-        projectTree.getTreeItem( "testMavenWorkspace-modules" ).getTreeItem( "pom.xml" ).doubleClick();
+		Editor pomXmlFileModules = ide.getEditor("testMavenWorkspace-modules/pom.xml");
 
-        CTabItem switchCTabItem = new CTabItem( bot, "pom.xml" );
-        sleep();
-        switchCTabItem.click();
+		SWTBotAssert.assertContains("testMavenWorkspace-modules", pomXmlFileModules.getText());
+		SWTBotAssert.assertContains("artifactId", pomXmlFileModules.getText());
 
-        Editor pomXmlFileModules = ide.getEditor( "testMavenWorkspace-modules/pom.xml" );
-        assertContains( "testMavenWorkspace-modules", pomXmlFileModules.getText() );
-        assertContains( "artifactId", pomXmlFileModules.getText() );
+		pomXmlFileModules.close();
 
-        pomXmlFileModules.close();
+		viewAction.openProjectFile(liferayWorkspaceName, "pom.xml");
 
-        projectTree.expandNode( liferayWorkspaceName, "pom.xml" ).doubleClick();
+		switchCTabItem.click();
 
-        switchCTabItem.click();
+		Editor pomXmlFile = ide.getEditor("testMavenWorkspace/pom.xml");
 
-        Editor pomXmlFile = ide.getEditor( "testMavenWorkspace/pom.xml" );
-        assertContains( "testMavenWorkspace", pomXmlFile.getText() );
+		SWTBotAssert.assertContains("testMavenWorkspace", pomXmlFile.getText());
 
-        pomXmlFile.close();
-    }
+		pomXmlFile.close();
+	}
 
 }

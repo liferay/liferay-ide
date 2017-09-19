@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard.project;
 
@@ -24,35 +23,30 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class NewLiferayWorkspaceWizard extends NewProjectWizard
-{
+public class NewLiferayWorkspaceWizard extends NewProjectWizard {
 
-    private final Text bundleUrl;
-    private final CheckBox downloadLiferayBundle;
-    private final Text serverName;
+	public NewLiferayWorkspaceWizard(SWTWorkbenchBot bot) {
+		super(bot, 2);
 
-    public NewLiferayWorkspaceWizard( final SWTWorkbenchBot bot )
-    {
-        super( bot, 2 );
+		_serverName = new Text(bot, SERVER_NAME);
+		_bundleUrl = new Text(bot, BUNDLE_URL);
+		_downloadLiferayBundle = new CheckBox(bot, DOWNLOAD_LIFERAY_BUNDLE);
+	}
 
-        serverName = new Text( bot, SERVER_NAME );
-        bundleUrl = new Text( bot, BUNDLE_URL );
-        downloadLiferayBundle = new CheckBox( bot, DOWNLOAD_LIFERAY_BUNDLE );
-    }
+	public Text getBundleUrl() {
+		return _bundleUrl;
+	}
 
-    public Text getBundleUrl()
-    {
-        return bundleUrl;
-    }
+	public CheckBox getDownloadLiferayBundle() {
+		return _downloadLiferayBundle;
+	}
 
-    public CheckBox getDownloadLiferayBundle()
-    {
-        return downloadLiferayBundle;
-    }
+	public Text getServerName() {
+		return _serverName;
+	}
 
-    public Text getServerName()
-    {
-        return serverName;
-    }
+	private Text _bundleUrl;
+	private CheckBox _downloadLiferayBundle;
+	private Text _serverName;
 
 }

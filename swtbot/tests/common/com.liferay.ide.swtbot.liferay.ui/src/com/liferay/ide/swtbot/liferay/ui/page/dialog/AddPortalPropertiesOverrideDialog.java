@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.dialog;
 
@@ -24,35 +23,30 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Vicky Wang
  */
-public class AddPortalPropertiesOverrideDialog extends Dialog
-{
+public class AddPortalPropertiesOverrideDialog extends Dialog {
 
-    private final Text property;
-    private final Button selectPropertyBtn;
-    private final Text value;
+	public AddPortalPropertiesOverrideDialog(SWTWorkbenchBot bot) {
+		super(bot);
 
-    public AddPortalPropertiesOverrideDialog( final SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_value = new Text(bot, VALUE);
+		_property = new Text(bot, PROPERTY);
+		_selectPropertyBtn = new Button(bot, SELECT);
+	}
 
-        value = new Text( bot, VALUE );
-        property = new Text( bot, PROPERTY );
-        selectPropertyBtn = new Button( bot, SELECT );
-    }
+	public Text getProperty() {
+		return _property;
+	}
 
-    public Text getProperty()
-    {
-        return property;
-    }
+	public Button getSelectPropertyBtn() {
+		return _selectPropertyBtn;
+	}
 
-    public Button getSelectPropertyBtn()
-    {
-        return selectPropertyBtn;
-    }
+	public Text getValue() {
+		return _value;
+	}
 
-    public Text getValue()
-    {
-        return value;
-    }
+	private Text _property;
+	private Button _selectPropertyBtn;
+	private Text _value;
 
 }

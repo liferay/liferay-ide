@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
@@ -21,28 +20,23 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotToolbarDropDownButton;
 /**
  * @author Terry Jia
  */
-public class ToolbarDropDownButton extends AbstractWidget
-{
+public class ToolbarDropDownButton extends AbstractWidget {
 
-    public ToolbarDropDownButton( final SWTWorkbenchBot bot, final String label )
-    {
-        super( bot, label );
-    }
+	public ToolbarDropDownButton(SWTWorkbenchBot bot, String label) {
+		super(bot, label);
+	}
 
-    @Override
-    protected SWTBotToolbarDropDownButton getWidget()
-    {
-        return bot.toolbarDropDownButtonWithTooltip( label );
-    }
+	public void click() {
+		getWidget().click();
+	}
 
-    public void menuClick( final String menuItemLabel )
-    {
-        new MenuItem( bot, this, menuItemLabel ).click();
-    }
+	public void menuClick(String menuItemLabel) {
+		new MenuItem(bot, this, menuItemLabel).click();
+	}
 
-    public void click()
-    {
-        getWidget().click();
-    }
+	@Override
+	protected SWTBotToolbarDropDownButton getWidget() {
+		return bot.toolbarDropDownButtonWithTooltip(label);
+	}
 
 }

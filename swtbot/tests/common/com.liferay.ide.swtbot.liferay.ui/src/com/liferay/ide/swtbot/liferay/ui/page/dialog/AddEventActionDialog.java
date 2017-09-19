@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.dialog;
 
@@ -24,49 +23,42 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Vicky Wang
  */
-public class AddEventActionDialog extends Dialog
-{
+public class AddEventActionDialog extends Dialog {
 
-    private final Text event;
-    private final Text eventActionClass;
-    private final Button newBtn;
-    private final Button selectClassBtn;
-    private final Button selectEventBtn;
+	public AddEventActionDialog(SWTWorkbenchBot bot) {
+		super(bot);
 
-    public AddEventActionDialog( final SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_event = new Text(bot, EVENT);
+		_eventActionClass = new Text(bot, CLASS);
+		_selectEventBtn = new Button(bot, SELECT, 0);
+		_selectClassBtn = new Button(bot, SELECT, 1);
+		_newBtn = new Button(bot, NEW);
+	}
 
-        event = new Text( bot, EVENT );
-        eventActionClass = new Text( bot, CLASS );
-        selectEventBtn = new Button( bot, SELECT, 0 );
-        selectClassBtn = new Button( bot, SELECT, 1 );
-        newBtn = new Button( bot, NEW );
-    }
+	public Text getEvent() {
+		return _event;
+	}
 
-    public Text getEvent()
-    {
-        return event;
-    }
+	public Text getEventActionClass() {
+		return _eventActionClass;
+	}
 
-    public Text getEventActionClass()
-    {
-        return eventActionClass;
-    }
+	public Button getNewBtn() {
+		return _newBtn;
+	}
 
-    public Button getNewBtn()
-    {
-        return newBtn;
-    }
+	public Button getSelectClassBtn() {
+		return _selectClassBtn;
+	}
 
-    public Button getSelectClassBtn()
-    {
-        return selectClassBtn;
-    }
+	public Button getSelectEventBtn() {
+		return _selectEventBtn;
+	}
 
-    public Button getSelectEventBtn()
-    {
-        return selectEventBtn;
-    }
+	private Text _event;
+	private Text _eventActionClass;
+	private Button _newBtn;
+	private Button _selectClassBtn;
+	private Button _selectEventBtn;
 
 }

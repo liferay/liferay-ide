@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
@@ -23,28 +22,24 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Ying Xu
  */
-public class NewJavaPackageWizard extends Wizard
-{
+public class NewJavaPackageWizard extends Wizard {
 
-    private final Text name;
-    private final Text sourceFolder;
+	public NewJavaPackageWizard(SWTWorkbenchBot bot) {
+		super(bot);
 
-    public NewJavaPackageWizard( final SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_sourceFolder = new Text(bot, SOURCE_FOLDER);
+		_name = new Text(bot, NAME);
+	}
 
-        sourceFolder = new Text( bot, SOURCE_FOLDER );
-        name = new Text( bot, NAME );
-    }
+	public Text getName() {
+		return _name;
+	}
 
-    public Text getName()
-    {
-        return name;
-    }
+	public Text getSourceFolder() {
+		return _sourceFolder;
+	}
 
-    public Text getSourceFolder()
-    {
-        return sourceFolder;
-    }
+	private Text _name;
+	private Text _sourceFolder;
 
 }

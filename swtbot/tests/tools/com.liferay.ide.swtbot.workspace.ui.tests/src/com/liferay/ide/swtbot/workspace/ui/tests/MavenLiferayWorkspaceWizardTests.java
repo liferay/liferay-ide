@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,79 +10,57 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.workspace.ui.tests;
 
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 
-import org.junit.Assume;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class MavenLiferayWorkspaceWizardTests extends SwtbotBase
-{
+public class MavenLiferayWorkspaceWizardTests extends SwtbotBase {
 
-    static String fullClassname = new SecurityManager()
-    {
+	@Test
+	public void newMavenLiferayWorkspaceProjectWizard() {
+		String workspaceName = "maven-liferay-workspace";
 
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
+		wizardAction.openNewLiferayWorkspaceWizard();
 
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
+		wizardAction.prepareLiferayWorkspaceMaven(workspaceName);
 
-    @Test
-    public void newMavenLiferayWorkspaceProjectWizard()
-    {
-        final String workspaceName = "maven-liferay-workspace";
+		wizardAction.finishToWait();
 
-        wizardAction.openNewLiferayWorkspaceWizard();
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.prepareLiferayWorkspaceMaven( workspaceName );
+		String projectName = "test-maven-theme-in-lr-ws";
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModuleMaven(projectName, THEME);
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.finishToWait();
 
-        String projectName = "test-maven-theme-in-lr-ws";
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.prepareLiferayModuleMaven( projectName, THEME );
+		projectName = "test-maven-mvc-portlet-in-lr-ws";
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModuleMaven(projectName, MVC_PORTLET);
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.finishToWait();
 
-        projectName = "test-maven-mvc-portlet-in-lr-ws";
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.prepareLiferayModuleMaven( projectName, MVC_PORTLET );
+		projectName = "test-gradle-mvc-portlet";
 
-        wizardAction.finishToWait();
+		wizardAction.prepareLiferayModuleGradle(projectName, MVC_PORTLET);
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.finishToWait();
 
-        projectName = "test-gradle-mvc-portlet";
+		viewAction.deleteProject(projectName);
 
-        wizardAction.prepareLiferayModuleGradle( projectName, MVC_PORTLET );
-
-        wizardAction.finishToWait();
-
-        viewAction.deleteProject( projectName );
-
-        viewAction.deleteProject( workspaceName );
-    }
-
-    @Before
-    public void importModuleProject()
-    {
-        Assume.assumeTrue( runTest() || runAllTests() );
-    }
+		viewAction.deleteProject(workspaceName);
+	}
 
 }

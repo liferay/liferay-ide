@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
@@ -29,103 +28,87 @@ import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
  * @author Ashley Yuan
  * @author Ying Xu
  */
-public class Shell extends BasePageObject
-{
+public class Shell extends BasePageObject {
 
-    public Shell( final SWTWorkbenchBot bot )
-    {
-        super( bot );
-    }
+	public Shell(SWTWorkbenchBot bot) {
+		super(bot);
+	}
 
-    public Shell( final SWTWorkbenchBot bot, final String label )
-    {
-        super( bot, label );
-    }
+	public Shell(SWTWorkbenchBot bot, String label) {
+		super(bot, label);
+	}
 
-    public Shell( final SWTWorkbenchBot bot, final String label, final int index )
-    {
-        super( bot, label, index );
-    }
+	public Shell(SWTWorkbenchBot bot, String label, int index) {
+		super(bot, label, index);
+	}
 
-    public void activate()
-    {
-        getShell().isActive();
-    }
+	public void activate() {
+		getShell().isActive();
+	}
 
-    public void clickBtn( Button btn )
-    {
-        btn.click();
-    }
+	public void clickBtn(Button btn) {
+		btn.click();
+	}
 
-    public void close()
-    {
-        getShell().close();
-    }
+	public void close() {
+		getShell().close();
+	}
 
-    public void closeIfOpen()
-    {
-        long oldTimeOut = SWTBotPreferences.TIMEOUT;
+	public void closeIfOpen() {
+		long oldTimeOut = SWTBotPreferences.TIMEOUT;
 
-        SWTBotPreferences.TIMEOUT = 1000;
+		SWTBotPreferences.TIMEOUT = 1000;
 
-        try
-        {
-            SWTBotShell[] shells = bot.shells();
+		try {
+			SWTBotShell[] shells = bot.shells();
 
-            for( SWTBotShell shell : shells )
-            {
-                if( shell.getText().equals( label ) )
-                {
-                    log.warn( "force closing of still open shell\"" + shell.getText() + StringPool.DOUBLE_QUOTE );
+			for (SWTBotShell shell : shells) {
+				if (shell.getText().equals(label)) {
+					log.warn("force closing of still open shell\"" + shell.getText() + StringPool.DOUBLE_QUOTE);
 
-                    shell.close();
+					shell.close();
 
-                    bot.waitUntil( new ShellCondition( label, false ) );
+					bot.waitUntil(new ShellCondition(label, false));
 
-                    break;
-                }
-            }
-        }
-        catch( WidgetNotFoundException e )
-        {
-        }
-        catch( TimeoutException e )
-        {
-        }
-        finally
-        {
-            SWTBotPreferences.TIMEOUT = oldTimeOut;
-        }
-    }
+					break;
+				}
+			}
+		}
+		catch (WidgetNotFoundException wnfe) {
+		}
+		catch (TimeoutException te) {
+		}
+		finally {
+			SWTBotPreferences.TIMEOUT = oldTimeOut;
+		}
+	}
 
-    protected SWTBotShell getShell()
-    {
-        return hasIndex() ? bot.shell( label, index ) : bot.shell( label );
-    }
+	public String getTitle() {
+		return label;
+	}
 
-    public String getTitle()
-    {
-        return label;
-    }
+	public boolean isOpen() {
+		return getShell().isVisible();
+	}
 
-    public boolean isOpen()
-    {
-        return getShell().isVisible();
-    }
+	public void setFocus() {
+		getShell().setFocus();
+	}
 
-    public void setFocus()
-    {
-        getShell().setFocus();
-    }
+	public void waitForPageToClose() {
+		bot.waitUntil(new ShellCondition(label, false));
+	}
 
-    public void waitForPageToClose()
-    {
-        bot.waitUntil( new ShellCondition( label, false ) );
-    }
+	public void waitForPageToOpen() {
+		bot.waitUntil(new ShellCondition(label, true));
+	}
 
-    public void waitForPageToOpen()
-    {
-        bot.waitUntil( new ShellCondition( label, true ) );
-    }
+	protected SWTBotShell getShell() {
+		if (hasIndex()) {
+			return bot.shell(label, index);
+		}
+
+		return bot.shell(label);
+	}
 
 }

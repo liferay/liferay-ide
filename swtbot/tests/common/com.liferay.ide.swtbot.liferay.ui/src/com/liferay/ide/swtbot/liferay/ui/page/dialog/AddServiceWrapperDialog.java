@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.dialog;
 
@@ -24,49 +23,42 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Vicky Wang
  */
-public class AddServiceWrapperDialog extends Dialog
-{
+public class AddServiceWrapperDialog extends Dialog {
 
-    private final Text implClass;
-    private final Button newBtn;
-    private final Button selectImplClassBtn;
-    private final Button selectServiceTypeBtn;
-    private final Text serviceType;
+	public AddServiceWrapperDialog(SWTWorkbenchBot bot) {
+		super(bot);
 
-    public AddServiceWrapperDialog( final SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_serviceType = new Text(bot, SERVICE_TYPE);
+		_implClass = new Text(bot, IMPL_CLASS);
+		_selectServiceTypeBtn = new Button(bot, SELECT);
+		_selectImplClassBtn = new Button(bot, SELECT);
+		_newBtn = new Button(bot, NEW_WITH_DOT);
+	}
 
-        serviceType = new Text( bot, SERVICE_TYPE );
-        implClass = new Text( bot, IMPL_CLASS );
-        selectServiceTypeBtn = new Button( bot, SELECT );
-        selectImplClassBtn = new Button( bot, SELECT );
-        newBtn = new Button( bot, NEW_WITH_DOT );
-    }
+	public Text getImplClass() {
+		return _implClass;
+	}
 
-    public Text getImplClass()
-    {
-        return implClass;
-    }
+	public Button getNewBtn() {
+		return _newBtn;
+	}
 
-    public Button getNewBtn()
-    {
-        return newBtn;
-    }
+	public Button getSelectImplClass(int index) {
+		return _selectImplClassBtn;
+	}
 
-    public Button getSelectImplClass( int index )
-    {
-        return selectImplClassBtn;
-    }
+	public Button getSelectServiceType() {
+		return _selectServiceTypeBtn;
+	}
 
-    public Button getSelectServiceType()
-    {
-        return selectServiceTypeBtn;
-    }
+	public Text getServiceType() {
+		return _serviceType;
+	}
 
-    public Text getServiceType()
-    {
-        return serviceType;
-    }
+	private Text _implClass;
+	private Button _newBtn;
+	private Button _selectImplClassBtn;
+	private Button _selectServiceTypeBtn;
+	private Text _serviceType;
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,38 +10,32 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.util;
 
 /**
  * @author Terry Jia
  */
-public class ValidationMsg
-{
+public class ValidationMsg {
 
-    private String expect;
-    private String input;
+	public String getExpect() {
+		return _expect;
+	}
 
-    public String getExpect()
-    {
-        return expect;
-    }
+	public String getInput() {
+		return _input;
+	}
 
-    public String getInput()
-    {
-        return input;
-    }
+	public void setExpect(String expect) {
+		_expect = expect;
+	}
 
-    public void setExpect( String expect )
-    {
-        this.expect = expect;
-    }
+	public void setInput(String input) {
+		_input = input;
+	}
 
-    public void setInput( String input )
-    {
-        this.input = input;
-    }
+	private String _expect;
+	private String _input;
 
 }

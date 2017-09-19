@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.button;
 
@@ -23,77 +22,66 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Ying Xu
  */
-public class NewToolbarDropDownButton extends ToolbarDropDownButton
-{
+public class NewToolbarDropDownButton extends ToolbarDropDownButton {
 
-    private final MenuItem liferayPluginProject;
-    private final MenuItem liferayModuleProject;
-    private final MenuItem liferayPortlet;
-    private final MenuItem liferayJSFPortlet;
-    private final MenuItem liferayVaadinPortlet;
-    private final MenuItem liferayHookConfiguration;
-    private final MenuItem liferayServiceBuilder;
-    private final MenuItem liferayLayoutTemplate;
-    private final MenuItem newPackage;
+	public NewToolbarDropDownButton(SWTWorkbenchBot bot) {
+		super(bot, NEW);
 
-    public NewToolbarDropDownButton( final SWTWorkbenchBot bot )
-    {
-        super( bot, NEW );
+		_liferayPluginProject = new MenuItem(bot, this, LIFERAY_PLUGIN_PROJECT);
+		_liferayModuleProject = new MenuItem(bot, this, LIFERAY_MODULE_PROJECT);
+		_liferayPortlet = new MenuItem(bot, this, LIFERAY_PORTLET);
+		_liferayJSFPortlet = new MenuItem(bot, this, LIFERAY_JSF_PORTLET);
+		_liferayVaadinPortlet = new MenuItem(bot, this, LIFERAY_VAADIN_PORTLET);
+		_liferayHookConfiguration = new MenuItem(bot, this, LIFERAY_HOOK_CONFIGURATION);
+		_liferayServiceBuilder = new MenuItem(bot, this, LIFERAY_SERVICE_BUILDER);
+		_liferayLayoutTemplate = new MenuItem(bot, this, LIFERAY_LAYOUT_TEMPLATE);
+		_newPackage = new MenuItem(bot, this, PACKAGE);
+	}
 
-        liferayPluginProject = new MenuItem( bot, this, LIFERAY_PLUGIN_PROJECT );
-        liferayModuleProject = new MenuItem( bot, this, LIFERAY_MODULE_PROJECT );
-        liferayPortlet = new MenuItem( bot, this, LIFERAY_PORTLET );
-        liferayJSFPortlet = new MenuItem( bot, this, LIFERAY_JSF_PORTLET );
-        liferayVaadinPortlet = new MenuItem( bot, this, LIFERAY_VAADIN_PORTLET );
-        liferayHookConfiguration = new MenuItem( bot, this, LIFERAY_HOOK_CONFIGURATION );
-        liferayServiceBuilder = new MenuItem( bot, this, LIFERAY_SERVICE_BUILDER );
-        liferayLayoutTemplate = new MenuItem( bot, this, LIFERAY_LAYOUT_TEMPLATE );
-        newPackage = new MenuItem( bot, this, PACKAGE );
-    }
+	public MenuItem getLiferayHookConfiguration() {
+		return _liferayHookConfiguration;
+	}
 
-    public MenuItem getLiferayPluginProject()
-    {
-        return liferayPluginProject;
-    }
+	public MenuItem getLiferayJSFPortlet() {
+		return _liferayJSFPortlet;
+	}
 
-    public MenuItem getLiferayModuleProject()
-    {
-        return liferayModuleProject;
-    }
+	public MenuItem getLiferayLayoutTemplate() {
+		return _liferayLayoutTemplate;
+	}
 
-    public MenuItem getLiferayPortlet()
-    {
-        return liferayPortlet;
-    }
+	public MenuItem getLiferayModuleProject() {
+		return _liferayModuleProject;
+	}
 
-    public MenuItem getLiferayJSFPortlet()
-    {
-        return liferayJSFPortlet;
-    }
+	public MenuItem getLiferayPluginProject() {
+		return _liferayPluginProject;
+	}
 
-    public MenuItem getLiferayVaadinPortlet()
-    {
-        return liferayVaadinPortlet;
-    }
+	public MenuItem getLiferayPortlet() {
+		return _liferayPortlet;
+	}
 
-    public MenuItem getLiferayHookConfiguration()
-    {
-        return liferayHookConfiguration;
-    }
+	public MenuItem getLiferayServiceBuilder() {
+		return _liferayServiceBuilder;
+	}
 
-    public MenuItem getLiferayServiceBuilder()
-    {
-        return liferayServiceBuilder;
-    }
+	public MenuItem getLiferayVaadinPortlet() {
+		return _liferayVaadinPortlet;
+	}
 
-    public MenuItem getLiferayLayoutTemplate()
-    {
-        return liferayLayoutTemplate;
-    }
+	public MenuItem getNewPackage() {
+		return _newPackage;
+	}
 
-    public MenuItem getNewPackage()
-    {
-        return newPackage;
-    }
+	private MenuItem _liferayHookConfiguration;
+	private MenuItem _liferayJSFPortlet;
+	private MenuItem _liferayLayoutTemplate;
+	private MenuItem _liferayModuleProject;
+	private MenuItem _liferayPluginProject;
+	private MenuItem _liferayPortlet;
+	private MenuItem _liferayServiceBuilder;
+	private MenuItem _liferayVaadinPortlet;
+	private MenuItem _newPackage;
 
 }

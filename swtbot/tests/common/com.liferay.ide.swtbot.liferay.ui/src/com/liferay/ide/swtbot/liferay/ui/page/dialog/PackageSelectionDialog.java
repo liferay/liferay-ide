@@ -1,14 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2008 Ketan Padegaonkar and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- * Kay-Uwe Graw - initial API and implementation
-
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.dialog;
 
@@ -21,28 +23,24 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Ashley Yuan
  */
-public class PackageSelectionDialog extends TreeDialog
-{
+public class PackageSelectionDialog extends TreeDialog {
 
-    private final Text packageToSelect;
-    private final Table availablePackages;
+	public PackageSelectionDialog(SWTWorkbenchBot bot) {
+		super(bot);
 
-    public PackageSelectionDialog( final SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_packageToSelect = new Text(bot);
+		_availablePackages = new Table(bot);
+	}
 
-        packageToSelect = new Text( bot );
-        availablePackages = new Table( bot );
-    }
+	public Table getAvailablePackages() {
+		return _availablePackages;
+	}
 
-    public Table getAvailablePackages()
-    {
-        return availablePackages;
-    }
+	public Text getPackageToSelect() {
+		return _packageToSelect;
+	}
 
-    public Text getPackageToSelect()
-    {
-        return packageToSelect;
-    }
+	private Table _availablePackages;
+	private Text _packageToSelect;
 
 }

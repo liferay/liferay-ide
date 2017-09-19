@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,89 +10,82 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.project.ui.tests;
 
-import org.junit.Test;
-
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
+
+import org.junit.Test;
 
 /**
  * @author Ying Xu
  */
-public class NewLiferayJsfProjectWizardTests extends SwtbotBase
-{
+public class NewLiferayJsfProjectWizardTests extends SwtbotBase {
 
-    @Test
-    public void createICEFacesProject()
-    {
-        String projectName = "testICEFacesProject";
+	@Test
+	public void createICEFacesProject() {
+		String projectName = "testICEFacesProject";
 
-        wizardAction.openNewLiferayJsfProjectWizard();
+		wizardAction.openNewLiferayJsfProjectWizard();
 
-        wizardAction.prepareJsfProjectGradle( projectName, ICEFACES );
+		wizardAction.prepareJsfProjectGradle(projectName, ICEFACES);
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        viewAction.deleteProject( projectName );
-    }
+		viewAction.deleteProject(projectName);
+	}
 
-    @Test
-    public void createJSFStandardProject()
-    {
-        String projectName = "testJSFStandardProject";
+	@Test
+	public void createJSFStandardProject() {
+		String projectName = "testJSFStandardProject";
 
-        wizardAction.openNewLiferayJsfProjectWizard();
+		wizardAction.openNewLiferayJsfProjectWizard();
 
-        wizardAction.prepareJsfProjectGradle( projectName, JSF_STANDARD );
+		wizardAction.prepareJsfProjectGradle(projectName, JSF_STANDARD);
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        viewAction.deleteProject( projectName );
-    }
+		viewAction.deleteProject(projectName);
+	}
 
-    @Test
-    public void createLiferayFacesAlloyProject()
-    {
-        String projectName = "testLiferayFacesAlloyProject";
+	@Test
+	public void createLiferayFacesAlloyProject() {
+		String projectName = "testLiferayFacesAlloyProject";
 
-        wizardAction.openNewLiferayJsfProjectWizard();
+		wizardAction.openNewLiferayJsfProjectWizard();
 
-        wizardAction.prepareJsfProjectGradle( projectName, LIFERAY_FACES_ALLOY );
+		wizardAction.prepareJsfProjectGradle(projectName, LIFERAY_FACES_ALLOY);
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        viewAction.deleteProject( projectName );
-    }
+		viewAction.deleteProject(projectName);
+	}
 
-    @Test
-    public void createPrimeFacesProject()
-    {
-        String projectName = "testPrimeFacesProject";
+	@Test
+	public void createPrimeFacesProject() {
+		String projectName = "testPrimeFacesProject";
 
-        wizardAction.openNewLiferayJsfProjectWizard();
+		wizardAction.openNewLiferayJsfProjectWizard();
 
-        wizardAction.prepareJsfProjectGradle( projectName, PRIMEFACES );
+		wizardAction.prepareJsfProjectGradle(projectName, PRIMEFACES);
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        viewAction.deleteProject( projectName );
-    }
+		viewAction.deleteProject(projectName);
+	}
 
-    @Test
-    public void createRichFacesProject()
-    {
-        String projectName = "testRichFacesProject";
+	@Test
+	public void createRichFacesProject() {
+		String projectName = "testRichFacesProject";
 
-        wizardAction.openNewLiferayJsfProjectWizard();
+		wizardAction.openNewLiferayJsfProjectWizard();
 
-        wizardAction.prepareJsfProjectGradle( projectName, RICHFACES );
+		wizardAction.prepareJsfProjectGradle(projectName, RICHFACES);
 
-        wizardAction.finishToWait();
+		wizardAction.finishToWait();
 
-        viewAction.deleteProject( projectName );
-    }
+		viewAction.deleteProject(projectName);
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
@@ -22,39 +21,31 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotCTabItem;
 /**
  * @author Ying Xu
  */
-public class CTabItem extends AbstractWidget
-{
+public class CTabItem extends AbstractWidget {
 
-    public CTabItem( final SWTWorkbenchBot bot, final String lable )
-    {
-        super( bot, lable );
+	public CTabItem(SWTWorkbenchBot bot, String lable) {
+		super(bot, lable);
+	}
 
-    }
+	public void click() {
+		Display.getDefault().syncExec(
+			new Runnable() {
 
-    public void click()
-    {
-        Display.getDefault().syncExec( new Runnable()
-        {
+				public void run() {
+					try {
+						getWidget().activate();
+					}
+					catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
 
-            public void run()
-            {
-                try
-                {
-                    getWidget().activate();
-                }
-                catch( Exception ex )
-                {
-                    ex.printStackTrace();
-                }
-            }
-        } );
+			});
+	}
 
-    }
-
-    @Override
-    protected SWTBotCTabItem getWidget()
-    {
-        return bot.cTabItem( label );
-    }
+	@Override
+	protected SWTBotCTabItem getWidget() {
+		return bot.cTabItem(label);
+	}
 
 }

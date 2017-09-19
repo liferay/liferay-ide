@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.action;
 
@@ -22,79 +21,75 @@ import com.liferay.ide.swtbot.ui.eclipse.page.ServerRuntimeEnvironmentsPreferenc
 import com.liferay.ide.swtbot.ui.eclipse.page.TextDialog;
 import com.liferay.ide.swtbot.ui.eclipse.page.TreeDialog;
 import com.liferay.ide.swtbot.ui.page.Dialog;
+import com.liferay.ide.swtbot.ui.page.TreeItem;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  */
-public class DialogAction extends UIAction
-{
+public class DialogAction extends UIAction {
 
-    private final AddAndRemoveDialog addAndRemoveDialog = new AddAndRemoveDialog( bot );
-    private final Dialog dialog = new Dialog( bot );
-    private final PreferencesDialog preferencesDialog = new PreferencesDialog( bot );
-    private final ServerRuntimeEnvironmentsPreferencesDialog serverRuntimeEnvironmentsDialog =
-        new ServerRuntimeEnvironmentsPreferencesDialog( bot );
-    private final TextDialog textDialog = new TextDialog( bot );
-    private final TreeDialog treeDialog = new TreeDialog( bot );
+	public DialogAction(SWTWorkbenchBot bot) {
+		super(bot);
+	}
 
-    public DialogAction( final SWTWorkbenchBot bot )
-    {
-        super( bot );
-    }
+	public void addModule(String projectName) {
+		TreeItem projectTree = _addAndRemoveDialog.getAvailables().getTreeItem(projectName);
 
-    public void addModule( final String projectName )
-    {
-        addAndRemoveDialog.add( projectName );
-    }
+		projectTree.select();
 
-    public void confirm()
-    {
-        dialog.confirm();
-    }
+		_addAndRemoveDialog.getAddBtn().click();
+	}
 
-    public void deleteRuntime( final String runtimeName )
-    {
-        serverRuntimeEnvironmentsDialog.getRuntimes().click( runtimeName );
+	public void confirm() {
+		_dialog.confirm();
+	}
 
-        serverRuntimeEnvironmentsDialog.getRemoveBtn().click();
-    }
+	public void deleteRuntime(String runtimeName) {
+		_serverRuntimeEnvironmentsDialog.getRuntimes().click(runtimeName);
 
-    public void openNewRuntimeWizard()
-    {
-        serverRuntimeEnvironmentsDialog.getAddBtn().click();
-    }
+		_serverRuntimeEnvironmentsDialog.getRemoveBtn().click();
+	}
 
-    public void openPreferencesDialog()
-    {
-        ide.getPreferencesMenu().click();
-    }
+	public void openNewRuntimeWizard() {
+		_serverRuntimeEnvironmentsDialog.getAddBtn().click();
+	}
 
-    public void openPreferenceTypeDialog( final String categroy, final String type )
-    {
-        preferencesDialog.getPreferencesTypes().getTreeItem( categroy ).expand();
-        preferencesDialog.getPreferencesTypes().getTreeItem( categroy ).getTreeItem( type ).select();
-    }
+	public void openPreferencesDialog() {
+		ide.getPreferencesMenu().click();
+	}
 
-    public void openServerRuntimeEnvironmentsDialog()
-    {
-        openPreferenceTypeDialog( SERVER, RUNTIME_ENVIRONMENTS );
-    }
+	public void openPreferenceTypeDialog(String categroy, String type) {
+		TreeItem treeItem = _preferencesDialog.getPreferencesTypes().getTreeItem(categroy);
 
-    public void prepareText( final String text )
-    {
-        textDialog.getText().setText( text );
-    }
+		treeItem.expand();
 
-    public void selectItem( final String item )
-    {
-        treeDialog.getItems().select( item );
-    }
+		treeItem.select();
+	}
 
-    public void selectItems( final String... items )
-    {
-        treeDialog.getItems().select( items );
-    }
+	public void openServerRuntimeEnvironmentsDialog() {
+		openPreferenceTypeDialog(SERVER, RUNTIME_ENVIRONMENTS);
+	}
+
+	public void prepareText(String text) {
+		_textDialog.getText().setText(text);
+	}
+
+	public void selectItem(String item) {
+		_treeDialog.getItems().select(item);
+	}
+
+	public void selectItems(String... items) {
+		_treeDialog.getItems().select(items);
+	}
+
+	private AddAndRemoveDialog _addAndRemoveDialog = new AddAndRemoveDialog(bot);
+	private Dialog _dialog = new Dialog(bot);
+	private PreferencesDialog _preferencesDialog = new PreferencesDialog(bot);
+	private ServerRuntimeEnvironmentsPreferencesDialog _serverRuntimeEnvironmentsDialog =
+		new ServerRuntimeEnvironmentsPreferencesDialog(bot);
+	private TextDialog _textDialog = new TextDialog(bot);
+	private TreeDialog _treeDialog = new TreeDialog(bot);
 
 }

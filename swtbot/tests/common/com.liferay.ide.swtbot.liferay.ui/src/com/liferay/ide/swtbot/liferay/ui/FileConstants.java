@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,25 +10,31 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui;
 
 /**
  * @author Terry Jia
  */
-public interface FileConstants
-{
+public interface FileConstants {
 
-    public static final String I18N_PROPERTIES = "i18n.properties";
-    public static final String FACES_CONFIG_XML = "faces-config.xml";
-    public static final String POM_XML = "pom.xml";
-    public static final String SRC = "src";
-    public static final String MAIN = "main";
-    public static final String WEBAPP = "webapp";
-    public static final String WEB_INF = "WEB-INF";
-    public static final String SRC_MAIN_RESOURCES = "src/main/resources";
-    public static final String JAVA_RESOURCES = "Java Resources";
+	public static final String FACES_CONFIG_XML = "faces-config.xml";
+
+	public static final String I18N_PROPERTIES = "i18n.properties";
+
+	public static final String JAVA_RESOURCES = "Java Resources";
+
+	public static final String MAIN = "main";
+
+	public static final String POM_XML = "pom.xml";
+
+	public static final String SRC = "src";
+
+	public static final String SRC_MAIN_RESOURCES = "src/main/resources";
+
+	public static final String WEB_INF = "WEB-INF";
+
+	public static final String WEBAPP = "webapp";
 
 }

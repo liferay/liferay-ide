@@ -11,5 +11,4 @@ Require-Bundle: com.liferay.ide.swtbot.ui,
  com.liferay.ide.swtbot.liferay.ui,
  com.liferay.ide.swtbot.project.ui.tests
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.swtbot.portlet.ui.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

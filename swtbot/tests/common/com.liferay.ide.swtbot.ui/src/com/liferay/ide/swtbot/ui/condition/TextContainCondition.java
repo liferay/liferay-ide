@@ -1,14 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2008 Ketan Padegaonkar and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- * Kay-Uwe Graw - initial API and implementation
-
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.swtbot.ui.condition;
 
@@ -17,44 +19,38 @@ import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 
 /**
- * ICondition implementation to wait for the content of a text control to contain or not to contain a specific string
- * value This is useful when the content change of a text takes a while after the initiating user action has been
- * carried out
- *
- * @author Kay-Uwe Graw &lt;kugraw [at] web [dot] de&gt;
+ * @author Terry Jia
  */
-public class TextContainCondition implements ICondition
-{
+public class TextContainCondition implements ICondition {
 
-    private final String content;
-    private final SWTBotText text;
-    private final boolean contain;
+	public TextContainCondition(SWTBotText text, String content, boolean contain) {
+		_text = text;
+		_content = content;
+		_contain = contain;
+	}
 
-    public TextContainCondition( SWTBotText text, String content, boolean contain )
-    {
-        this.content = content;
-        this.text = text;
-        this.contain = contain;
-    }
+	public String getFailureMessage() {
+		if (_contain) {
+			return "wait for text content contains " + _content + " failed"; //$NON-NLS-1$
+		}
+		else {
+			return "wait for text content contains not " + _content + " failed"; //$NON-NLS-1$
+		}
+	}
 
-    public String getFailureMessage()
-    {
-        if( contain )
-        {
-            return "wait for text content contains " + content + " failed"; //$NON-NLS-1$
-        }
-        else
-        {
-            return "wait for text content contains not " + content + " failed"; //$NON-NLS-1$
-        }
-    }
+	public void init(SWTBot bot) {
+	}
 
-    public void init( SWTBot bot )
-    {
-    }
+	public boolean test() throws Exception {
+		if (_text.getText().contains(_content) == _contain) {
+			return true;
+		}
 
-    public boolean test() throws Exception
-    {
-        return text.getText().contains( content ) == contain;
-    }
+		return false;
+	}
+
+	private boolean _contain;
+	private String _content;
+	private SWTBotText _text;
+
 }

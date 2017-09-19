@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.editor;
 
@@ -25,54 +24,37 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  */
-public class ServerEditor extends Editor
-{
+public class ServerEditor extends Editor {
 
-    private final Text httpPort;
-    private final Radio customLaunchSettings;
-    private final Radio defaultLaunchSettings;
-    private final CheckBox useDeveloperMode;
+	public ServerEditor(SWTWorkbenchBot bot, String editorName) {
+		super(bot, editorName);
 
-    public ServerEditor( final SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_httpPort = new Text(bot, "Http Port:");
 
-        httpPort = new Text( bot, "Http Port:" );
+		_defaultLaunchSettings = new Radio(bot, "Default Launch Settings");
+		_customLaunchSettings = new Radio(bot, "Custom Launch Settings");
+		_useDeveloperMode = new CheckBox(bot, "Use developer mode");
+	}
 
-        defaultLaunchSettings = new Radio( bot, "Default Launch Settings" );
-        customLaunchSettings = new Radio( bot, "Custom Launch Settings" );
-        useDeveloperMode = new CheckBox( bot, "Use developer mode" );
-    }
+	public Radio getCustomLaunchSettings() {
+		return _customLaunchSettings;
+	}
 
-    public ServerEditor( final SWTWorkbenchBot bot, final String editorName )
-    {
-        super( bot, editorName );
+	public Radio getDefaultLaunchSettings() {
+		return _defaultLaunchSettings;
+	}
 
-        httpPort = new Text( bot, "Http Port:" );
+	public Text getHttpPort() {
+		return _httpPort;
+	}
 
-        defaultLaunchSettings = new Radio( bot, "Default Launch Settings" );
-        customLaunchSettings = new Radio( bot, "Custom Launch Settings" );
-        useDeveloperMode = new CheckBox( bot, "Use developer mode" );
-    }
+	public CheckBox getUseDeveloperMode() {
+		return _useDeveloperMode;
+	}
 
-    public Text getHttpPort()
-    {
-        return httpPort;
-    }
-
-    public Radio getCustomLaunchSettings()
-    {
-        return customLaunchSettings;
-    }
-
-    public Radio getDefaultLaunchSettings()
-    {
-        return defaultLaunchSettings;
-    }
-
-    public CheckBox getUseDeveloperMode()
-    {
-        return useDeveloperMode;
-    }
+	private Radio _customLaunchSettings;
+	private Radio _defaultLaunchSettings;
+	private Text _httpPort;
+	private CheckBox _useDeveloperMode;
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
@@ -24,21 +23,18 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  * @author Terry Jia
  * @author Ashley Yuan
  */
-public class TreeDialog extends Dialog
-{
+public class TreeDialog extends Dialog {
 
-    private final Tree items;
+	public TreeDialog(SWTWorkbenchBot bot) {
+		super(bot);
 
-    public TreeDialog( final SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_items = new Tree(bot);
+	}
 
-        items = new Tree( bot );
-    }
+	public Tree getItems() {
+		return _items;
+	}
 
-    public Tree getItems()
-    {
-        return items;
-    }
+	private Tree _items;
 
 }

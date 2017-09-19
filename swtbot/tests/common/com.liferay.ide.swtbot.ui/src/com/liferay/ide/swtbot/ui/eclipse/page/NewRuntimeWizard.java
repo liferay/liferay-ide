@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
@@ -24,28 +23,24 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  */
-public class NewRuntimeWizard extends Wizard
-{
+public class NewRuntimeWizard extends Wizard {
 
-    private final Text search;
-    private final Tree serverTypes;
+	public NewRuntimeWizard(SWTWorkbenchBot bot) {
+		super(bot, NEW_SERVER_RUNTIME_ENVIRONMENT, 3);
 
-    public NewRuntimeWizard( final SWTWorkbenchBot bot )
-    {
-        super( bot, NEW_SERVER_RUNTIME_ENVIRONMENT, 3 );
+		_search = new Text(bot);
+		_serverTypes = new Tree(bot);
+	}
 
-        search = new Text( bot );
-        serverTypes = new Tree( bot );
-    }
+	public Text getSearch() {
+		return _search;
+	}
 
-    public Text getSearch()
-    {
-        return search;
-    }
+	public Tree getServerTypes() {
+		return _serverTypes;
+	}
 
-    public Tree getServerTypes()
-    {
-        return serverTypes;
-    }
+	private Text _search;
+	private Tree _serverTypes;
 
 }

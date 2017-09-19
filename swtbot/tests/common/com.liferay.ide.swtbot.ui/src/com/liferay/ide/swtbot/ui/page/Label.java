@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
@@ -23,44 +22,36 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotLabel;
  * @author Terry Jia
  * @author Ashley Yuan
  */
-public class Label extends AbstractWidget
-{
+public class Label extends AbstractWidget {
 
-    public Label( final SWTWorkbenchBot bot, final String label )
-    {
-        super( bot, label );
-    }
+	public Label(SWTWorkbenchBot bot, String label) {
+		super(bot, label);
+	}
 
-    @Override
-    protected SWTBotLabel getWidget()
-    {
-        return bot.label( label );
-    }
+	public boolean isVisible(String label) {
+		long oldTimeOut = SWTBotPreferences.TIMEOUT;
 
-    public boolean isVisible( final String label )
-    {
-        long oldTimeOut = SWTBotPreferences.TIMEOUT;
+		SWTBotPreferences.TIMEOUT = 1000;
 
-        SWTBotPreferences.TIMEOUT = 1000;
+		try {
+			return getWidget().isVisible();
+		}
+		catch (Exception e) {
+			if (e.getMessage().contains(label)) {
+				return false;
+			}
+			else {
+				throw e;
+			}
+		}
+		finally {
+			SWTBotPreferences.TIMEOUT = oldTimeOut;
+		}
+	}
 
-        try
-        {
-            return getWidget().isVisible();
-        }
-        catch( Exception e )
-        {
-            if( e.getMessage().contains( label ) )
-            {
-                return false;
-            }
-            else
-            {
-                throw e;
-            }
-        }
-        finally
-        {
-            SWTBotPreferences.TIMEOUT = oldTimeOut;
-        }
-    }
+	@Override
+	protected SWTBotLabel getWidget() {
+		return bot.label(label);
+	}
+
 }

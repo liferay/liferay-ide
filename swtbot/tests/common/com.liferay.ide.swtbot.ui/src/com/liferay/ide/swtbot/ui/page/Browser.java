@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
@@ -21,39 +20,31 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
 /**
  * @author Terry Jia
  */
-public class Browser extends AbstractWidget
-{
+public class Browser extends AbstractWidget {
 
-    public Browser( final SWTWorkbenchBot bot )
-    {
-        super( bot );
-    }
+	public Browser(SWTWorkbenchBot bot) {
+		super(bot);
+	}
 
-    public Browser( final SWTWorkbenchBot bot, final String label )
-    {
-        super( bot, label );
-    }
+	public Browser(SWTWorkbenchBot bot, String label) {
+		super(bot, label);
+	}
 
-    @Override
-    protected SWTBotBrowser getWidget()
-    {
-        if( isLabelNull() && hasIndex() )
-        {
-            return bot.browser( index );
-        }
-        else if( !isLabelNull() && !hasIndex() )
-        {
-            return bot.browserWithLabel( label );
-        }
-        else
-        {
-            return bot.browser();
-        }
-    }
+	public void setUrl(String url) {
+		getWidget().setUrl(url);
+	}
 
-    public void setUrl( final String url )
-    {
-        getWidget().setUrl( url );
-    }
+	@Override
+	protected SWTBotBrowser getWidget() {
+		if (isLabelNull() && hasIndex()) {
+			return bot.browser(index);
+		}
+		else if (!isLabelNull() && !hasIndex()) {
+			return bot.browserWithLabel(label);
+		}
+		else {
+			return bot.browser();
+		}
+	}
 
 }

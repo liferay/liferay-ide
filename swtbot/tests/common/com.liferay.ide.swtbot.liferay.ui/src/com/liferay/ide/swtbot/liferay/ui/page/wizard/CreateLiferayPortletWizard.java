@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,13 +10,9 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.ComboBox;
@@ -27,181 +23,156 @@ import com.liferay.ide.swtbot.ui.util.StringPool;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
+import org.junit.Assert;
+
 /**
  * @author Ashley Yuan
  */
-public class CreateLiferayPortletWizard extends Wizard
-{
+public class CreateLiferayPortletWizard extends Wizard {
 
-    private final Button browsePackageBtn;
-    private final Button browseSourceBtn;
-    private final Button browseSuperClassBtn;
-    private final Text javaPackage;
-    private final Radio newPortlet;
-    private final Text portletClass;
-    private final ComboBox portletPluginProjects;
-    private final Text sourceFolder;
-    private final ComboBox superClasses;
-    private final Radio useDefault;
+	public CreateLiferayPortletWizard(SWTWorkbenchBot bot, int validationMsgIndex) {
+		this(bot, StringPool.BLANK, validationMsgIndex);
+	}
 
-    public CreateLiferayPortletWizard( final SWTWorkbenchBot bot, final int validationMsgIndex )
-    {
-        this( bot, StringPool.BLANK, validationMsgIndex );
-    }
+	public CreateLiferayPortletWizard(SWTWorkbenchBot bot, String title, int validationMsgIndex) {
+		super(bot, title, validationMsgIndex);
 
-    public CreateLiferayPortletWizard( final SWTWorkbenchBot bot, final String title, final int validationMsgIndex )
-    {
-        super( bot, title, validationMsgIndex );
+		_portletPluginProjects = new ComboBox(bot, PORTLET_PLUGIN_PROJECT);
+		_sourceFolder = new Text(bot, SOURCE_FOLDER);
+		_newPortlet = new Radio(bot, CREATE_NEW_PORTLET);
+		_useDefault = new Radio(bot, USE_DEFAULT_PORTLET_MVCPORTLET);
+		_portletClass = new Text(bot, PORTLET_CLASS);
+		_javaPackage = new Text(bot, JAVA_PACKAGE);
+		_superClasses = new ComboBox(bot, SUPERCLASS);
+		_browseSourceBtn = new Button(bot, BROWSE_WITH_DOT);
+		_browsePackageBtn = new Button(bot, BROWSE_WITH_DOT, 1);
+		_browseSuperClassBtn = new Button(bot, BROWSE_WITH_DOT, 2);
+	}
 
-        portletPluginProjects = new ComboBox( bot, PORTLET_PLUGIN_PROJECT );
-        sourceFolder = new Text( bot, SOURCE_FOLDER );
-        newPortlet = new Radio( bot, CREATE_NEW_PORTLET );
-        useDefault = new Radio( bot, USE_DEFAULT_PORTLET_MVCPORTLET );
-        portletClass = new Text( bot, PORTLET_CLASS );
-        javaPackage = new Text( bot, JAVA_PACKAGE );
-        superClasses = new ComboBox( bot, SUPERCLASS );
-        browseSourceBtn = new Button( bot, BROWSE_WITH_DOT );
-        browsePackageBtn = new Button( bot, BROWSE_WITH_DOT, 1 );
-        browseSuperClassBtn = new Button( bot, BROWSE_WITH_DOT, 2 );
-    }
+	public void createLiferayPortlet(boolean defaultMvc) {
+		createLiferayPortlet(StringPool.BLANK, null, defaultMvc, null, null, null);
+	}
 
-    public void createLiferayPortlet( final boolean defaultMvc )
-    {
-        createLiferayPortlet( StringPool.BLANK, null, defaultMvc, null, null, null );
-    }
+	public void createLiferayPortlet(String projectName) {
+		createLiferayPortlet(projectName, null, false, null, null, null);
+	}
 
-    public void createLiferayPortlet( final String projectName )
-    {
-        createLiferayPortlet( projectName, null, false, null, null, null );
-    }
+	public void createLiferayPortlet(String projectName, boolean defaultMvc) {
+		createLiferayPortlet(projectName, null, defaultMvc, null, null, null);
+	}
 
-    public void createLiferayPortlet( final String projectName, final boolean defaultMvc )
-    {
-        createLiferayPortlet( projectName, null, defaultMvc, null, null, null );
-    }
+	public void createLiferayPortlet(String projectName, String srcFolder) {
+		createLiferayPortlet(projectName, srcFolder, false, null, null, null);
+	}
 
-    public void createLiferayPortlet( final String projectName, final String srcFolder )
-    {
-        createLiferayPortlet( projectName, srcFolder, false, null, null, null );
-    }
+	public void createLiferayPortlet(
+		String projectName, String srcFolder, boolean defaultMvc, String portletClassValue, String javaPackageValue,
+		String superClass) {
 
-    public void createLiferayPortlet(
-        String projectName, String srcFolder, boolean defaultMvc, String portletClassValue, String javaPackageValue,
-        String superClass )
-    {
-        if( projectName != null && !projectName.equals( StringPool.BLANK ) )
-        {
-            portletPluginProjects.setSelection( projectName );
-        }
-        if( srcFolder != null )
-        {
-            sourceFolder.setText( srcFolder );
-        }
+		if ((projectName != null) && !projectName.equals(StringPool.BLANK)) {
+			_portletPluginProjects.setSelection(projectName);
+		}
 
-        if( defaultMvc )
-        {
-            useDefault.click();
+		if (srcFolder != null) {
+			_sourceFolder.setText(srcFolder);
+		}
 
-            assertFalse( newPortlet.isSelected() );
-            assertTrue( useDefault.isSelected() );
-        }
-        else
-        {
-            newPortlet.click();
+		if (defaultMvc) {
+			_useDefault.click();
 
-            assertTrue( newPortlet.isSelected() );
-            assertFalse( useDefault.isSelected() );
+			Assert.assertFalse(_newPortlet.isSelected());
+			Assert.assertTrue(_useDefault.isSelected());
+		}
+		else {
+			_newPortlet.click();
 
-            if( portletClass != null )
-            {
-                portletClass.setText( portletClassValue );
-            }
-            if( javaPackage != null )
-            {
-                javaPackage.setText( javaPackageValue );
-            }
-            if( superClass != null )
-            {
-                setSuperClassCombobox( superClass );
-            }
-        }
+			Assert.assertTrue(_newPortlet.isSelected());
+			Assert.assertFalse(_useDefault.isSelected());
 
-    }
+			if (_portletClass != null) {
+				_portletClass.setText(portletClassValue);
+			}
 
-    public void createLiferayPortlet( String projectName, String portletClass, String javaPackage, String superClass )
-    {
-        createLiferayPortlet( projectName, null, false, portletClass, javaPackage, superClass );
-    }
+			if (_javaPackage != null) {
+				_javaPackage.setText(javaPackageValue);
+			}
 
-    public String[] getAvailableSuperClasses()
-    {
-        return superClasses.items();
-    }
+			if (superClass != null) {
+				setSuperClassCombobox(superClass);
+			}
+		}
+	}
 
-    public Button getBrowsePackageBtn()
-    {
-        return browsePackageBtn;
-    }
+	public void createLiferayPortlet(String projectName, String portletClass, String javaPackage, String superClass) {
+		createLiferayPortlet(projectName, null, false, portletClass, javaPackage, superClass);
+	}
 
-    public Button getBrowseSourceBtn()
-    {
-        return browseSourceBtn;
-    }
+	public String[] getAvailableSuperClasses() {
+		return _superClasses.items();
+	}
 
-    public Button getBrowseSuperClassBtn()
-    {
-        return browseSuperClassBtn;
-    }
+	public Button getBrowsePackageBtn() {
+		return _browsePackageBtn;
+	}
 
-    public Text getJavaPackage()
-    {
-        return javaPackage;
-    }
+	public Button getBrowseSourceBtn() {
+		return _browseSourceBtn;
+	}
 
-    public Radio getNewPortlet()
-    {
-        return newPortlet;
-    }
+	public Button getBrowseSuperClassBtn() {
+		return _browseSuperClassBtn;
+	}
 
-    public Text getPortletClass()
-    {
-        return portletClass;
-    }
+	public Text getJavaPackage() {
+		return _javaPackage;
+	}
 
-    public ComboBox getPortletPluginProjects()
-    {
-        return portletPluginProjects;
-    }
+	public Radio getNewPortlet() {
+		return _newPortlet;
+	}
 
-    public Text getSourceFolder()
-    {
-        return sourceFolder;
-    }
+	public Text getPortletClass() {
+		return _portletClass;
+	}
 
-    public ComboBox getSuperClasses()
-    {
-        return superClasses;
-    }
+	public ComboBox getPortletPluginProjects() {
+		return _portletPluginProjects;
+	}
 
-    public Radio getUseDefault()
-    {
-        return useDefault;
-    }
+	public Text getSourceFolder() {
+		return _sourceFolder;
+	}
 
-    public void setSuperClassCombobox( String superclassName )
-    {
-        String[] avilableSuperclasses = superClasses.items();
+	public ComboBox getSuperClasses() {
+		return _superClasses;
+	}
 
-        for( String mySuperclass : avilableSuperclasses )
-        {
-            if( mySuperclass.equals( superclassName ) )
-            {
-                this.superClasses.setSelection( superclassName );
-                return;
-            }
-        }
+	public Radio getUseDefault() {
+		return _useDefault;
+	}
 
-        superClasses.setText( superclassName );
-    }
+	public void setSuperClassCombobox(String superclassName) {
+		String[] avilableSuperclasses = _superClasses.items();
+
+		for (String mySuperclass : avilableSuperclasses) {
+			if (mySuperclass.equals(superclassName)) {
+				this._superClasses.setSelection(superclassName);
+				return;
+			}
+		}
+
+		_superClasses.setText(superclassName);
+	}
+
+	private Button _browsePackageBtn;
+	private Button _browseSourceBtn;
+	private Button _browseSuperClassBtn;
+	private Text _javaPackage;
+	private Radio _newPortlet;
+	private Text _portletClass;
+	private ComboBox _portletPluginProjects;
+	private Text _sourceFolder;
+	private ComboBox _superClasses;
+	private Radio _useDefault;
 
 }

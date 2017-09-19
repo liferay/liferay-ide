@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
@@ -22,28 +21,20 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  */
-public class ErrorLogView extends View
-{
+public class ErrorLogView extends View {
 
-    private final String clearErrorLogBtnLabel = CLEAR_LOG_VIEWER;
+	public ErrorLogView(SWTWorkbenchBot bot) {
+		super(bot, ERROR_LOG_WORKSPACE_LOG);
+	}
 
-    public ErrorLogView( final SWTWorkbenchBot bot )
-    {
-        super( bot, ERROR_LOG_WORKSPACE_LOG );
-    }
+	public void clearErrorLog() {
+		if (hasProblems()) {
+			clickToolbarButton(CLEAR_LOG_VIEWER);
+		}
+	}
 
-    public void clearErrorLog()
-    {
-        if( hasProblems() )
-        {
-            clickToolbarButton( clearErrorLogBtnLabel );
-        }
-    }
-
-    public boolean hasProblems()
-    {
-        // return( problemTree.getAllItems().length > 0 );
-        return false;
-    }
+	public boolean hasProblems() {
+		return false;
+	}
 
 }

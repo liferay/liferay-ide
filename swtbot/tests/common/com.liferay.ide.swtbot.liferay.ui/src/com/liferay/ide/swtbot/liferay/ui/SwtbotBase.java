@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,12 +10,9 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui;
-
-import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.swtbot.liferay.ui.action.DialogAction;
 import com.liferay.ide.swtbot.liferay.ui.action.EnvAction;
@@ -40,7 +37,9 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
@@ -50,141 +49,125 @@ import org.junit.runner.RunWith;
  * @author Vicky Wang
  * @author Ying Xu
  */
-@RunWith( SWTBotJunit4ClassRunner.class )
-public class SwtbotBase implements UI, Keys, Messages, FileConstants
-{
+@RunWith(SWTBotJunit4ClassRunner.class)
+public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 
-    public static SWTWorkbenchBot bot;
-    public static DialogAction dialogAction;
-    protected final static String eclipseWorkspace = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
-    public static EnvAction envAction;
-    public static boolean hasAddedProject = false;
-    public static LiferayIDE ide;
-    public static ViewAction viewAction;
-    public static WizardAction wizardAction;
+	public static SWTWorkbenchBot bot;
+	public static DialogAction dialogAction;
+	public static EnvAction envAction;
+	public static boolean hasAddedProject = false;
+	public static LiferayIDE ide;
+	public static ViewAction viewAction;
+	public static WizardAction wizardAction;
 
-    @AfterClass
-    public static void afterClass()
-    {
-        viewAction.deleteProject( "init-project" );
-    }
+	@AfterClass
+	public static void afterClass() {
+		viewAction.deleteProject("init-project");
+	}
 
-    @BeforeClass
-    public static void beforeClass() throws Exception
-    {
-        bot = new SWTWorkbenchBot();
+	@BeforeClass
+	public static void beforeClass() throws Exception {
+		bot = new SWTWorkbenchBot();
 
-        ide = new LiferayIDE( bot );
+		ide = new LiferayIDE(bot);
 
-        wizardAction = new WizardAction( bot );
-        viewAction = new ViewAction( bot );
-        dialogAction = new DialogAction( bot );
-        envAction = new EnvAction( bot );
+		wizardAction = new WizardAction(bot);
+		viewAction = new ViewAction(bot);
+		dialogAction = new DialogAction(bot);
+		envAction = new EnvAction(bot);
 
-        try
-        {
-            long origin = SWTBotPreferences.TIMEOUT;
+		try {
+			long origin = SWTBotPreferences.TIMEOUT;
 
-            SWTBotPreferences.TIMEOUT = 1000;
+			SWTBotPreferences.TIMEOUT = 1000;
 
-            ide.getWelcomeView().close();
+			ide.getWelcomeView().close();
 
-            SWTBotPreferences.TIMEOUT = origin;
-        }
-        catch( Exception e )
-        {
-        }
+			SWTBotPreferences.TIMEOUT = origin;
+		}
+		catch (Exception e) {
+		}
 
-        ide.getLiferayWorkspacePerspective().activate();
+		ide.getLiferayWorkspacePerspective().activate();
 
-        SWTBotPreferences.TIMEOUT = 30 * 1000;
+		SWTBotPreferences.TIMEOUT = 30 * 1000;
 
-        System.setProperty( SWTBotPreferenceConstants.KEY_TIMEOUT, "30000" );
-        System.setProperty( SWTBotPreferenceConstants.KEY_DEFAULT_POLL_DELAY, "5000" );
+		System.setProperty(SWTBotPreferenceConstants.KEY_TIMEOUT, "30000");
+		System.setProperty(SWTBotPreferenceConstants.KEY_DEFAULT_POLL_DELAY, "5000");
 
-        SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
+		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
 
-        wizardAction.openNewLiferayModuleWizard();
+		wizardAction.openNewLiferayModuleWizard();
 
-        wizardAction.prepareLiferayModuleGradle( "init-project" );
+		wizardAction.prepareLiferayModuleGradle("init-project");
 
-        wizardAction.finishToWait();
-    }
+		wizardAction.finishToWait();
+	}
 
-    protected static ValidationMsg[] getValidationMsgs( final File csv )
-    {
-        assertTrue( csv.exists() );
+	public boolean addedProjects() {
+		ide.showPackageExporerView();
 
-        final String[][] msgs = CSVReader.readCSV( csv );
+		return ide.hasProjects();
+	}
 
-        final ValidationMsg[] validationMsgs = new ValidationMsg[msgs.length];
+	public void openFile(String path) throws Exception {
+		Display.getDefault().syncExec(
+			new Runnable() {
 
-        for( int i = 0; i < msgs.length; i++ )
-        {
-            validationMsgs[i] = new ValidationMsg();
+				public void run() {
+					try {
+						File fileToOpen = new File(path);
 
-            final String[] columns = msgs[i];
+						if (fileToOpen.exists() && fileToOpen.isFile()) {
+							IFileStore fileStore = EFS.getLocalFileSystem().getStore(fileToOpen.toURI());
+							IWorkbenchPage page = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getPages()[0];
 
-            for( int t = 0; t < columns.length; t++ )
-            {
-                if( t == 0 )
-                {
-                    validationMsgs[i].setInput( columns[t] );
-                }
-                else if( t == 1 )
-                {
-                    validationMsgs[i].setExpect( columns[t] );
-                }
-            }
-        }
+							IDE.openInternalEditorOnFileStore(page, fileStore);
+						}
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
 
-        return validationMsgs;
-    }
+			});
+	}
 
-    protected static void sleep( long millis )
-    {
-        bot.sleep( millis );
-    }
+	protected static ValidationMsg[] getValidationMsgs(File csv) {
+		Assert.assertTrue(csv.exists());
 
-    private final long DEFAULT_SLEEP_MILLIS = 1000;
+		String[][] msgs = CSVReader.readCSV(csv);
 
-    public boolean addedProjects()
-    {
-        ide.showPackageExporerView();
+		ValidationMsg[] validationMsgs = new ValidationMsg[msgs.length];
 
-        return ide.hasProjects();
-    }
+		for (int i = 0; i < msgs.length; i++) {
+			validationMsgs[i] = new ValidationMsg();
 
-    public void openFile( final String path ) throws Exception
-    {
-        Display.getDefault().syncExec( new Runnable()
-        {
+			String[] columns = msgs[i];
 
-            public void run()
-            {
-                try
-                {
-                    File fileToOpen = new File( path );
+			for (int t = 0; t < columns.length; t++) {
+				if (t == 0) {
+					validationMsgs[i].setInput(columns[t]);
+				}
+				else if (t == 1) {
+					validationMsgs[i].setExpect(columns[t]);
+				}
+			}
+		}
 
-                    if( fileToOpen.exists() && fileToOpen.isFile() )
-                    {
-                        IFileStore fileStore = EFS.getLocalFileSystem().getStore( fileToOpen.toURI() );
-                        IWorkbenchPage page = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getPages()[0];
-                        IDE.openInternalEditorOnFileStore( page, fileStore );
-                    }
-                }
-                catch( Exception e )
-                {
-                    e.printStackTrace();
-                }
-            }
-        } );
+		return validationMsgs;
+	}
 
-    }
+	protected static void sleep(long millis) {
+		bot.sleep(millis);
+	}
 
-    protected void sleep()
-    {
-        sleep( DEFAULT_SLEEP_MILLIS );
-    }
+	protected void sleep() {
+		sleep(_DEFAULT_SLEEP_MILLIS);
+	}
+
+	protected static String eclipseWorkspace = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
+
+	private static final long _DEFAULT_SLEEP_MILLIS = 1000;
 
 }

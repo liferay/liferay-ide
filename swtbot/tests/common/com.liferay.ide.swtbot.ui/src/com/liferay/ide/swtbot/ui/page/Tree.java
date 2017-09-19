@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,13 +10,11 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.utils.TableCollection;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
@@ -24,118 +22,94 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
  * @author Li Lu
  * @author Ashley Yuan
  */
-public class Tree extends AbstractWidget
-{
+public class Tree extends AbstractWidget {
 
-    protected TableCollection selection;
+	public Tree(SWTWorkbenchBot bot) {
+		super(bot);
+	}
 
-    public Tree( SWTWorkbenchBot bot )
-    {
-        super( bot );
-    }
+	public Tree(SWTWorkbenchBot bot, int index) {
+		super(bot, index);
+	}
 
-    public Tree( SWTWorkbenchBot bot, int index )
-    {
-        super( bot, index );
-    }
+	public TreeItem expandNode(String... nodes) {
+		getWidget().expandNode(nodes);
 
-    public boolean hasItems()
-    {
-        return getWidget().hasItems();
-    }
+		return new TreeItem(bot, this, nodes);
+	}
 
-    public boolean hasTreeItem( final String... items )
-    {
-        try
-        {
-            SWTBotTreeItem treeItem = getWidget().getTreeItem( items[0] );
+	public String[] getAllItems() {
+		SWTBotTreeItem[] items = getWidget().getAllItems();
 
-            for( int i = 1; i < items.length; i++ )
-            {
+		String[] nodes = new String[items.length];
 
-                treeItem.expand();
-                treeItem = treeItem.getNode( items[i] ).expand();
-            }
+		for (int i = 0; i < items.length; i++) {
+			nodes[i] = items[i].getText();
+		}
 
-            return true;
-        }
-        catch( Exception e )
-        {
-            return false;
-        }
-    }
+		return nodes;
+	}
 
-    public String[] getAllItems()
-    {
-        SWTBotTreeItem[] items = getWidget().getAllItems();
+	public SWTBotTreeItem[] getAllTreeItems() {
+		SWTBotTreeItem[] items = getWidget().getAllItems();
 
-        String subNodes[] = new String[items.length];
+		return items;
+	}
 
-        for( int i = 0; i < items.length; i++ )
-        {
-            subNodes[i] = items[i].getText();
-        }
+	public TreeItem getTreeItem(String nodeText) {
+		return new TreeItem(bot, this, nodeText);
+	}
 
-        return subNodes;
-    }
+	public boolean hasItems() {
+		return getWidget().hasItems();
+	}
 
-    public SWTBotTreeItem[] getAllTreeItems()
-    {
-        SWTBotTreeItem[] items = getWidget().getAllItems();
+	public boolean hasTreeItem(String... items) {
+		try {
+			SWTBotTreeItem treeItem = getWidget().getTreeItem(items[0]);
 
-        return items;
-    }
+			for (int i = 1; i < items.length; i++) {
+				treeItem.expand();
+				treeItem = treeItem.getNode(items[i]).expand();
+			}
 
-    protected SWTBotTree getWidget()
-    {
-        if( hasIndex() )
-        {
-            return bot.tree( index );
-        }
+			return true;
+		}
+		catch (Exception e) {
+			return false;
+		}
+	}
 
-        if( !isLabelNull() )
-        {
-            return bot.treeWithLabel( label );
-        }
-        else
-        {
-            return bot.tree();
-        }
-    }
+	public void select(String... items) {
+		getWidget().select(items);
+	}
 
-    public void select( final String... items )
-    {
-        getWidget().select( items );
-    }
+	public void selectTreeItem(String... items) {
+		SWTBotTreeItem treeItem = getWidget().getTreeItem(items[0]);
 
-    public void selectTreeItem( final String... items )
-    {
-        SWTBotTreeItem treeItem = getWidget().getTreeItem( items[0] );
+		for (int i = 1; i < items.length; i++) {
+			treeItem.expand();
+			treeItem = treeItem.getNode(items[i]).expand();
+		}
 
-        for( int i = 1; i < items.length; i++ )
-        {
-            treeItem.expand();
-            treeItem = treeItem.getNode( items[i] ).expand();
-        }
+		treeItem.select();
+	}
 
-        treeItem.select();
-    }
+	public void unselect() {
+		getWidget().unselect();
+	}
 
-    public void unselect()
-    {
-        getWidget().unselect();
-    }
+	protected SWTBotTree getWidget() {
+		if (hasIndex()) {
+			return bot.tree(index);
+		}
 
-    public TreeItem getTreeItem( final String nodeText )
-    {
-        return new TreeItem( bot, this, nodeText );
-    }
-
-    public TreeItem expandNode( final String... nodes )
-    {
-        getWidget().expandNode( nodes );
-
-        return new TreeItem( bot, this, nodes );
-    }
+		if (!isLabelNull()) {
+			return bot.treeWithLabel(label);
+		}
+		else {
+			return bot.tree();
+		}
+	}
 
 }

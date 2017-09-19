@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.util;
 
@@ -20,34 +19,28 @@ import java.io.File;
 /**
  * @author Terry Jia
  */
-public class CSVReader
-{
+public class CSVReader {
 
-    public static String[][] readCSV( final File file )
-    {
-        final String[] lines = FileUtil.readLinesFromFile( file );
+	public static String[][] readCSV(File file) {
+		String[] lines = FileUtil.readLinesFromFile(file);
 
-        if( lines == null || lines.length == 0 )
-        {
-            return null;
-        }
+		if ((lines == null) || (lines.length == 0)) {
+			return null;
+		}
 
-        final String[][] results = new String[lines.length][lines[0].split( "," ).length];
+		String[][] results = new String[lines.length][lines[0].split(",").length];
 
-        for( int i = 0; i < lines.length; i++ )
-        {
-            final String line = lines[i];
+		for (int i = 0; i < lines.length; i++) {
+			String line = lines[i];
 
-            String[] columns = line.split( "," );
+			String[] columns = line.split(",");
 
-            for( int t = 0; t < columns.length; t++ )
-            {
-                results[i][t] = columns[t];
-            }
-        }
+			for (int t = 0; t < columns.length; t++) {
+				results[i][t] = columns[t];
+			}
+		}
 
-        return results;
-
-    }
+		return results;
+	}
 
 }

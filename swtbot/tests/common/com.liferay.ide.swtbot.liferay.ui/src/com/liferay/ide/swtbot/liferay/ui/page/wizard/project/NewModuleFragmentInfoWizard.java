@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard.project;
 
@@ -24,42 +23,36 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Ying Xu
  */
-public class NewModuleFragmentInfoWizard extends Wizard
-{
+public class NewModuleFragmentInfoWizard extends Wizard {
 
-    private final ToolbarButtonWithTooltip addOverrideFilePathBtn;
-    private final ToolbarButtonWithTooltip addOverrideFilesBtn;
-    private final ToolbarButtonWithTooltip browseOsgiBtn;
-    private final Table files;
+	public NewModuleFragmentInfoWizard(SWTWorkbenchBot bot) {
+		super(bot, 1);
 
-    public NewModuleFragmentInfoWizard( final SWTWorkbenchBot bot )
-    {
-        super( bot, 1 );
+		_browseOsgiBtn = new ToolbarButtonWithTooltip(bot, BROWSE);
+		_addOverrideFilesBtn = new ToolbarButtonWithTooltip(bot, ADD_FILES_FROM_OSGI_TO_OVERRIDE);
+		_files = new Table(bot, OVERRIDDEN_FILES);
+		_addOverrideFilePathBtn = new ToolbarButtonWithTooltip(bot, ADD_FILE_PATH);
+	}
 
-        browseOsgiBtn = new ToolbarButtonWithTooltip( bot, BROWSE );
-        addOverrideFilesBtn = new ToolbarButtonWithTooltip( bot, ADD_FILES_FROM_OSGI_TO_OVERRIDE );
-        files = new Table( bot, OVERRIDDEN_FILES );
-        addOverrideFilePathBtn = new ToolbarButtonWithTooltip( bot, ADD_FILE_PATH );
-    }
+	public ToolbarButtonWithTooltip getAddOverrideFilePathBtn() {
+		return _addOverrideFilePathBtn;
+	}
 
-    public ToolbarButtonWithTooltip getAddOverrideFilePathBtn()
-    {
-        return addOverrideFilePathBtn;
-    }
+	public ToolbarButtonWithTooltip getAddOverrideFilesBtn() {
+		return _addOverrideFilesBtn;
+	}
 
-    public ToolbarButtonWithTooltip getAddOverrideFilesBtn()
-    {
-        return addOverrideFilesBtn;
-    }
+	public ToolbarButtonWithTooltip getBrowseOsgiBtn() {
+		return _browseOsgiBtn;
+	}
 
-    public ToolbarButtonWithTooltip getBrowseOsgiBtn()
-    {
-        return browseOsgiBtn;
-    }
+	public Table getFiles() {
+		return _files;
+	}
 
-    public Table getFiles()
-    {
-        return files;
-    }
+	private ToolbarButtonWithTooltip _addOverrideFilePathBtn;
+	private ToolbarButtonWithTooltip _addOverrideFilesBtn;
+	private ToolbarButtonWithTooltip _browseOsgiBtn;
+	private Table _files;
 
 }

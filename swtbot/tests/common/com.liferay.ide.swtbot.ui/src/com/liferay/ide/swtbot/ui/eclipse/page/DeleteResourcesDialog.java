@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
@@ -23,21 +22,18 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Li Lu
  */
-public class DeleteResourcesDialog extends Dialog
-{
+public class DeleteResourcesDialog extends Dialog {
 
-    private final CheckBox deleteFromDisk;
+	public DeleteResourcesDialog(SWTWorkbenchBot bot) {
+		super(bot);
 
-    public DeleteResourcesDialog( final SWTWorkbenchBot bot )
-    {
-        super( bot );
+		_deleteFromDisk = new CheckBox(bot, DELETE_FROM_DISK);
+	}
 
-        deleteFromDisk = new CheckBox( bot, DELETE_FROM_DISK );
-    }
+	public CheckBox getDeleteFromDisk() {
+		return _deleteFromDisk;
+	}
 
-    public CheckBox getDeleteFromDisk()
-    {
-        return deleteFromDisk;
-    }
+	private CheckBox _deleteFromDisk;
 
 }

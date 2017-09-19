@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.view;
 
@@ -26,69 +25,61 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  * @author Terry Jia
  * @author Ashley Yuan
  */
-public class CodeUpgradeView extends View
-{
+public class CodeUpgradeView extends View {
 
-    public class GearPO extends Canvas
-    {
+	public CodeUpgradeView(SWTWorkbenchBot bot, String viewIdentifier) {
+		super(bot, viewIdentifier);
 
-        int step = 64;
-        int x = 52;
-        int y = 52;
+		_gear = new GearPO(bot, 3);
+		_navigator = new Canvas(bot, 4);
 
-        public GearPO( SWTWorkbenchBot bot, int index )
-        {
-            super( bot, index );
-        }
+		_showAllPagesBtn = new ToolbarButtonWithTooltip(bot, SHOW_ALL_PAGES);
+		_restartBtn = new ToolbarButtonWithTooltip(bot, RESTART_UPGRADE);
+		_restartDialog = new Dialog(bot, RESTART_CODE_UPGRADE, NO, YES);
+		_showAllPagesDialog = new Dialog(bot, SHOW_ALL_PAGES, NO, YES);
+	}
 
-        public void clickGear( int i )
-        {
-            click( x + step * i, y );
-            sleep();
-        }
+	public GearPO getGear() {
+		return _gear;
+	}
 
-    }
+	public Canvas getNavigator() {
+		return _navigator;
+	}
 
-    private final GearPO gear;
-    private final Canvas navigator;
-    private final ToolbarButtonWithTooltip restartBtn;
-    private final Dialog restartDialog;
-    private final ToolbarButtonWithTooltip showAllPagesBtn;
-    private final Dialog showAllPagesDialog;
+	public void restartWithConfirm() {
+		_restartBtn.click();
+		_restartDialog.confirm();
+	}
 
-    public CodeUpgradeView( final SWTWorkbenchBot bot, final String viewIdentifier )
-    {
-        super( bot, viewIdentifier );
+	public void showAllPagesWithConfirm() {
+		_showAllPagesBtn.click();
+		_showAllPagesDialog.confirm();
+	}
 
-        gear = new GearPO( bot, 3 );
-        navigator = new Canvas( bot, 4 );
+	public class GearPO extends Canvas {
 
-        showAllPagesBtn = new ToolbarButtonWithTooltip( bot, SHOW_ALL_PAGES );
-        restartBtn = new ToolbarButtonWithTooltip( bot, RESTART_UPGRADE );
-        restartDialog = new Dialog( bot, RESTART_CODE_UPGRADE, NO, YES );
-        showAllPagesDialog = new Dialog( bot, SHOW_ALL_PAGES, NO, YES );
-    }
+		public GearPO(SWTWorkbenchBot bot, int index) {
+			super(bot, index);
+		}
 
-    public GearPO getGear()
-    {
-        return gear;
-    }
+		public void clickGear(int i) {
+			click(_x + _step * i, _y);
 
-    public Canvas getNavigator()
-    {
-        return navigator;
-    }
+			sleep();
+		}
 
-    public void restartWithConfirm()
-    {
-        restartBtn.click();
-        restartDialog.confirm();
-    }
+		private int _step = 64;
+		private int _x = 52;
+		private int _y = 52;
 
-    public void showAllPagesWithConfirm()
-    {
-        showAllPagesBtn.click();
-        showAllPagesDialog.confirm();
-    }
+	}
+
+	private GearPO _gear;
+	private Canvas _navigator;
+	private ToolbarButtonWithTooltip _restartBtn;
+	private Dialog _restartDialog;
+	private ToolbarButtonWithTooltip _showAllPagesBtn;
+	private Dialog _showAllPagesDialog;
 
 }

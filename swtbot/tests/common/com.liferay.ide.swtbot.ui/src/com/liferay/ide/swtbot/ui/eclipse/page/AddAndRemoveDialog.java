@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,15 +10,13 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.eclipse.page;
 
 import com.liferay.ide.swtbot.ui.page.Button;
 import com.liferay.ide.swtbot.ui.page.Dialog;
 import com.liferay.ide.swtbot.ui.page.Tree;
-import com.liferay.ide.swtbot.ui.page.TreeItem;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
@@ -26,79 +24,48 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  * @author Li Lu
  * @author Terry Jia
  */
-public class AddAndRemoveDialog extends Dialog
-{
+public class AddAndRemoveDialog extends Dialog {
 
-    private final Button addAllBtn;
-    private final Button addBtn;
-    private final Tree availables;
-    private final Tree configureds;
-    private final Button removeAllBtn;
-    private final Button removeBtn;
+	public AddAndRemoveDialog(SWTWorkbenchBot bot) {
+		super(bot, ADD_AND_REMOVE, CANCEL, FINISH);
 
-    public AddAndRemoveDialog( final SWTWorkbenchBot bot )
-    {
-        super( bot, ADD_AND_REMOVE, CANCEL, FINISH );
+		_addBtn = new Button(bot, ADD_WITH_BRACKET);
+		_addAllBtn = new Button(bot, ADD_ALL);
+		_removeBtn = new Button(bot, REMOVE_PROJECT);
+		_removeAllBtn = new Button(bot, REMOVE_ALL);
+		_availables = new Tree(bot, 0);
+		_configureds = new Tree(bot, 1);
+	}
 
-        addBtn = new Button( bot, ADD_WITH_BRACKET );
-        addAllBtn = new Button( bot, ADD_ALL );
-        removeBtn = new Button( bot, REMOVE_PROJECT );
-        removeAllBtn = new Button( bot, REMOVE_ALL );
-        availables = new Tree( bot, 0 );
-        configureds = new Tree( bot, 1 );
-    }
+	public Button getAddAllBtn() {
+		return _addAllBtn;
+	}
 
-    public void add( final String... projectItemNames )
-    {
-        for( String projectItemName : projectItemNames )
-        {
-            TreeItem projectTree = new TreeItem( bot, availables, projectItemName );
+	public Button getAddBtn() {
+		return _addBtn;
+	}
 
-            projectTree.select();
+	public Tree getAvailables() {
+		return _availables;
+	}
 
-            addBtn.click();
-        }
-    }
+	public Tree getConfigureds() {
+		return _configureds;
+	}
 
-    public Button getAddAllBtn()
-    {
-        return addAllBtn;
-    }
+	public Button getRemoveAllBtn() {
+		return _removeAllBtn;
+	}
 
-    public Button getAddBtn()
-    {
-        return addBtn;
-    }
+	public Button getRemoveBtn() {
+		return _removeBtn;
+	}
 
-    public Tree getAvailables()
-    {
-        return availables;
-    }
-
-    public Tree getConfigureds()
-    {
-        return configureds;
-    }
-
-    public Button getRemoveAllBtn()
-    {
-        return removeAllBtn;
-    }
-
-    public Button getRemoveBtn()
-    {
-        return removeBtn;
-    }
-
-    public void remove( String... projectItemNames )
-    {
-        for( String projectItemName : projectItemNames )
-        {
-            TreeItem projectTree = new TreeItem( bot, configureds, projectItemName );
-            projectTree.select();
-
-            removeBtn.click();
-        }
-    }
+	private Button _addAllBtn;
+	private Button _addBtn;
+	private Tree _availables;
+	private Tree _configureds;
+	private Button _removeAllBtn;
+	private Button _removeBtn;
 
 }

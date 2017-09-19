@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
@@ -22,54 +21,45 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
  * @author Terry Jia
  * @author Ashley Yuan
  */
-public class Menu extends AbstractWidget
-{
+public class Menu extends AbstractWidget {
 
-    private String[] labels;
+	public Menu(SWTWorkbenchBot bot, String label) {
+		super(bot, label);
+	}
 
-    public Menu( final SWTWorkbenchBot bot, final String label )
-    {
-        super( bot, label );
-    }
+	public Menu(SWTWorkbenchBot bot, String[] labels) {
+		super(bot);
 
-    public Menu( final SWTWorkbenchBot bot, final String[] labels )
-    {
-        super( bot );
+		_labels = labels;
+	}
 
-        this.labels = labels;
-    }
+	public void click() {
+		getWidget().click();
+	}
 
-    @Override
-    protected SWTBotMenu getWidget()
-    {
-        if( !isLabelNull() )
-        {
-            return bot.menu( label );
-        }
+	public void clickMenu(String... menus) {
+		SWTBotMenu menu = getWidget();
 
-        SWTBotMenu menu = bot.menu( labels[0] );
+		for (String menuItemLabel : menus) {
+			menu = menu.menu(menuItemLabel).click();
+		}
+	}
 
-        for( int i = 1; i < labels.length; i++ )
-        {
-            menu = menu.menu( labels[i] );
-        }
+	@Override
+	protected SWTBotMenu getWidget() {
+		if (!isLabelNull()) {
+			return bot.menu(label);
+		}
 
-        return menu;
-    }
+		SWTBotMenu menu = bot.menu(_labels[0]);
 
-    public void click()
-    {
-        getWidget().click();
-    }
+		for (int i = 1; i < _labels.length; i++) {
+			menu = menu.menu(_labels[i]);
+		}
 
-    public void clickMenu( final String... menus )
-    {
-        SWTBotMenu menu = getWidget();
+		return menu;
+	}
 
-        for( String menuItemLabel : menus )
-        {
-            menu = menu.menu( menuItemLabel ).click();
-        }
-    }
+	private String[] _labels;
 
 }

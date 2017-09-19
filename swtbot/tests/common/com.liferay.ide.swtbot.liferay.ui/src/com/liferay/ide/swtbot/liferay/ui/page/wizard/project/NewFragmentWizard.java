@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.liferay.ui.page.wizard.project;
 
@@ -23,28 +22,24 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Ying Xu
  */
-public class NewFragmentWizard extends NewProjectWizard
-{
+public class NewFragmentWizard extends NewProjectWizard {
 
-    private final ComboBox liferyRuntimes;
-    private final ToolbarButtonWithTooltip newRuntimeBtn;
+	public NewFragmentWizard(SWTWorkbenchBot bot) {
+		super(bot, 2);
 
-    public NewFragmentWizard( final SWTWorkbenchBot bot )
-    {
-        super( bot, 2 );
+		_liferyRuntimes = new ComboBox(bot, LIFERAY_RUNTIME_NAME);
+		_newRuntimeBtn = new ToolbarButtonWithTooltip(bot, "New Liferay Runtime...");
+	}
 
-        liferyRuntimes = new ComboBox( bot, LIFERAY_RUNTIME_NAME );
-        newRuntimeBtn = new ToolbarButtonWithTooltip( bot, "New Liferay Runtime..." );
-    }
+	public ComboBox getLiferyRuntimes() {
+		return _liferyRuntimes;
+	}
 
-    public ComboBox getLiferyRuntimes()
-    {
-        return liferyRuntimes;
-    }
+	public ToolbarButtonWithTooltip getNewRuntimeBtn() {
+		return _newRuntimeBtn;
+	}
 
-    public ToolbarButtonWithTooltip getNewRuntimeBtn()
-    {
-        return newRuntimeBtn;
-    }
+	private ComboBox _liferyRuntimes;
+	private ToolbarButtonWithTooltip _newRuntimeBtn;
 
 }

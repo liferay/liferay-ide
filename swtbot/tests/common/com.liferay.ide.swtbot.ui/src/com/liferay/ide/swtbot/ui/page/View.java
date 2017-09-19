@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.ui.page;
 
@@ -23,36 +22,34 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotToolbarButton;
  * @author Terry Jia
  * @author Ashley Yuan
  */
-public class View extends AbstractPart
-{
+public class View extends AbstractPart {
 
-    private final boolean isId;
+	public View(SWTWorkbenchBot bot, String viewIdentifier) {
+		this(bot, viewIdentifier, false);
+	}
 
-    public View( final SWTWorkbenchBot bot, final String viewIdentifier )
-    {
-        this( bot, viewIdentifier, false );
-    }
+	public View(SWTWorkbenchBot bot, String identifier, boolean id) {
+		super(bot, identifier);
 
-    public View( final SWTWorkbenchBot bot, final String identifier, final boolean isId )
-    {
-        super( bot, identifier );
+		_id = id;
+	}
 
-        this.isId = isId;
-    }
+	public void clickToolbarButton(String btnLabel) {
+		toolbarBtn(btnLabel).click();
+	}
 
-    public void clickToolbarButton( final String btnLabel )
-    {
-        toolbarBtn( btnLabel ).click();
-    }
+	public SWTBotToolbarButton toolbarBtn(String btnLabel) {
+		return getPart().toolbarButton(btnLabel);
+	}
 
-    protected SWTBotView getPart()
-    {
-        return isId ? bot.viewById( label ) : bot.viewByTitle( label );
-    }
+	protected SWTBotView getPart() {
+		if (_id) {
+			return bot.viewById(label);
+		}
 
-    public SWTBotToolbarButton toolbarBtn( final String btnLabel )
-    {
-        return getPart().toolbarButton( btnLabel );
-    }
+		return bot.viewByTitle(label);
+	}
+
+	private boolean _id;
 
 }

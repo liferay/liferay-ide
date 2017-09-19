@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,84 +10,59 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.swtbot.fragment.ui.tests;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewFragmentWizard;
 import com.liferay.ide.swtbot.liferay.ui.util.ValidationMsg;
 
 import java.io.File;
-import java.io.IOException;
 
-import org.junit.Assume;
-import org.junit.BeforeClass;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author Vicky Wang
  * @author Ying Xu
  */
-public class ValidationFragmentWizardTests extends SwtbotBase
-{
+public class ValidationFragmentWizardTests extends SwtbotBase {
 
-    static String fullClassname = new SecurityManager()
-    {
+	@Test
+	public void checkBuildType() {
+		String[] expectedBuildTypes = {GRADLE, MAVEN};
+		String[] buildTypes = _newFragmentWizard.getBuildTypes().items();
 
-        public String getClassName()
-        {
-            return getClassContext()[1].getName();
-        }
-    }.getClassName();
+		int expectedLength = expectedBuildTypes.length;
+		int length = buildTypes.length;
 
-    static String currentClassname = fullClassname.substring( fullClassname.lastIndexOf( '.' ) ).substring( 1 );
+		wizardAction.openNewFragmentWizard();
 
-    NewFragmentWizard newFragmentWizard = new NewFragmentWizard( bot );
+		Assert.assertEquals(expectedLength, length);
 
-    @BeforeClass
-    public static void init() throws IOException
-    {
-        Assume.assumeTrue( currentClassname.equals( runTest ) || runAllTests() );
-    }
+		for (int i = 0; i < buildTypes.length; i++) {
+			Assert.assertTrue(buildTypes[i].equals(expectedBuildTypes[i]));
+		}
 
-    @Test
-    public void validationProjectName()
-    {
-        wizardAction.openNewFragmentWizard();
+		wizardAction.cancel();
+	}
 
-        for( ValidationMsg msg : getValidationMsgs(
-            new File( getValidationFolder(), "new-fragment-wizard-project-name.csv" ) ) )
-        {
-            newFragmentWizard.getProjectName().setText( msg.getInput() );
+	@Test
+	public void validationProjectName() {
+		wizardAction.openNewFragmentWizard();
 
-            assertEquals( msg.getExpect(), wizardAction.getValidationMsg( 2 ) );
-        }
+		for (ValidationMsg msg : getValidationMsgs(
+				new File(envAction.getValidationFolder(), "new-fragment-wizard-project-name.csv"))) {
 
-        wizardAction.cancel();
-    }
+			_newFragmentWizard.getProjectName().setText(msg.getInput());
 
-    @Test
-    public void checkBuildType()
-    {
-        final String[] expectedBuildTypes = { GRADLE, MAVEN };
+			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
+		}
 
-        wizardAction.openNewFragmentWizard();
+		wizardAction.cancel();
+	}
 
-        final String[] buildTypes = newFragmentWizard.getBuildTypes().items();
-
-        assertEquals( expectedBuildTypes.length, buildTypes.length );
-
-        for( int i = 0; i < buildTypes.length; i++ )
-        {
-            assertTrue( buildTypes[i].equals( expectedBuildTypes[i] ) );
-        }
-
-        wizardAction.cancel();
-    }
+	private static final NewFragmentWizard _newFragmentWizard = new NewFragmentWizard(bot);
 
 }
