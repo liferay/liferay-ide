@@ -428,6 +428,8 @@ public interface UI {
 
 	public final String NEW_LIFERAY_PORTLET = "New Liferay Portlet";
 
+	public final String NEW_LIFERAY_RUNTIME = "New Liferay Runtime...";
+
 	public final String NEW_LIFERAY_SERVER = "New Liferay Server";
 
 	public final String NEW_LIFERAY_SERVICE_BUILDER = "New Liferay Service Builder";

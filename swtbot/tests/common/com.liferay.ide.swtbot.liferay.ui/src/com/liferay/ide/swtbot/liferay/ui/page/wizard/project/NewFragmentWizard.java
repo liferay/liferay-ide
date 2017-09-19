@@ -28,7 +28,7 @@ public class NewFragmentWizard extends NewProjectWizard {
 		super(bot, 2);
 
 		_liferyRuntimes = new ComboBox(bot, LIFERAY_RUNTIME_NAME);
-		_newRuntimeBtn = new ToolbarButtonWithTooltip(bot, "New Liferay Runtime...");
+		_newRuntimeBtn = new ToolbarButtonWithTooltip(bot, NEW_LIFERAY_RUNTIME);
 	}
 
 	public ComboBox getLiferyRuntimes() {

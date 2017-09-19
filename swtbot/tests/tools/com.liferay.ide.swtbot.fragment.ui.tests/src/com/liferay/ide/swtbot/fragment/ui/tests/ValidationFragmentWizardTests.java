@@ -24,20 +24,20 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * @author Vicky Wang
+ * @author Ashley Yuan
  * @author Ying Xu
  */
 public class ValidationFragmentWizardTests extends SwtbotBase {
 
 	@Test
 	public void checkBuildType() {
+		wizardAction.openNewFragmentWizard();
+
 		String[] expectedBuildTypes = {GRADLE, MAVEN};
 		String[] buildTypes = _newFragmentWizard.getBuildTypes().items();
 
 		int expectedLength = expectedBuildTypes.length;
 		int length = buildTypes.length;
-
-		wizardAction.openNewFragmentWizard();
 
 		Assert.assertEquals(expectedLength, length);
 
