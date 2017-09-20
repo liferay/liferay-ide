@@ -23,8 +23,8 @@
 
 	<extensions defaultExtensionNs="com.intellij">
 		<moduleBuilder builderClass="com.liferay.ide.idea.ui.modules.LiferayWorkspaceBuilder" />
-		<configurationType implementation="com.liferay.ide.idea.server.LiferayBundleConfigurationType" />
-		<programRunner id="Run" implementation="com.liferay.ide.idea.server.LiferayBundleRunner" />
-		<programRunner id="Debug" implementation="com.liferay.ide.idea.server.LiferayBundleDebugger" />
+		<configurationType implementation="com.liferay.ide.idea.server.LiferayServerConfigurationType" />
+		<programRunner id="Run" implementation="com.liferay.ide.idea.server.LiferayServerRunner" />
+		<programRunner id="Debug" implementation="com.liferay.ide.idea.server.LiferayServerDebugger" />
 	</extensions>
 </idea-plugin>

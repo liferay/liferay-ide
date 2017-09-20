@@ -29,10 +29,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author Terry Jia
  */
-public class LiferayBundleCommandLineState extends BaseJavaApplicationCommandLineState<LiferayBundleConfiguration> {
+public class LiferayServerCommandLineState extends BaseJavaApplicationCommandLineState<LiferayServerConfiguration> {
 
-	public LiferayBundleCommandLineState(
-		@NotNull LiferayBundleConfiguration configuration, ExecutionEnvironment environment) {
+	public LiferayServerCommandLineState(
+		@NotNull LiferayServerConfiguration configuration, ExecutionEnvironment environment) {
 
 		super(environment, configuration);
 	}
@@ -41,7 +41,7 @@ public class LiferayBundleCommandLineState extends BaseJavaApplicationCommandLin
 	protected JavaParameters createJavaParameters() throws ExecutionException {
 		JavaParameters params = new JavaParameters();
 
-		LiferayBundleConfiguration configuration = getConfiguration();
+		LiferayServerConfiguration configuration = getConfiguration();
 
 		String jreHome = configuration.isAlternativeJrePathEnabled() ? configuration.getAlternativeJrePath() : null;
 

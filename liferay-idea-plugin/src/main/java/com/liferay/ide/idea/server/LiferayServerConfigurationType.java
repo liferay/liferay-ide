@@ -29,23 +29,23 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author Terry Jia
  */
-public class LiferayBundleConfigurationType extends ConfigurationTypeBase implements ConfigurationType {
+public class LiferayServerConfigurationType extends ConfigurationTypeBase implements ConfigurationType {
 
-	public LiferayBundleConfigurationType() {
+	public LiferayServerConfigurationType() {
 		super(
-			"LiferayBundleConfiguration", "Liferay Bundle", "Run or Debug a Liferay Bundle",
+			"LiferayServerConfiguration", "Liferay Server", "Run or Debug a Liferay Server",
 			LiferayIdeaUI.LIFERAY_ICON);
 
 		addFactory(
 			new ConfigurationFactoryEx<RunConfiguration>(this) {
 
 				public RunConfiguration createTemplateConfiguration(Project project) {
-					return new LiferayBundleConfiguration(project, this, "");
+					return new LiferayServerConfiguration(project, this, "");
 				}
 
 				@Override
 				public void onNewConfigurationCreated(@NotNull RunConfiguration configuration) {
-					LiferayBundleConfiguration jarApplicationConfiguration = (LiferayBundleConfiguration)configuration;
+					LiferayServerConfiguration jarApplicationConfiguration = (LiferayServerConfiguration)configuration;
 
 					if (StringUtil.isEmpty(jarApplicationConfiguration.getWorkingDirectory())) {
 						Project project = configuration.getProject();

@@ -33,24 +33,24 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author Terry Jia
  */
-public class LiferayBundleConfigurable extends SettingsEditor<LiferayBundleConfiguration> implements PanelWithAnchor {
+public class LiferayServerConfigurable extends SettingsEditor<LiferayServerConfiguration> implements PanelWithAnchor {
 
-	public LiferayBundleConfigurable(Project project) {
+	public LiferayServerConfigurable(Project project) {
 		ModulesComboBox modulesComboBox = _modules.getComponent();
 
 		modulesComboBox.allowEmptySelection("<whole project>");
 		modulesComboBox.fillModules(project);
 
-		_liferayBundle.setEditable(false);
-		_liferayBundle.setEnabled(false);
+		_liferayServer.setEditable(false);
+		_liferayServer.setEnabled(false);
 		_jrePath.setDefaultJreSelector(DefaultJreSelector.fromModuleDependencies(modulesComboBox, true));
 	}
 
-	public void applyEditorTo(@NotNull LiferayBundleConfiguration configuration) throws ConfigurationException {
+	public void applyEditorTo(@NotNull LiferayServerConfiguration configuration) throws ConfigurationException {
 		configuration.setAlternativeJrePath(_jrePath.getJrePathOrName());
 		configuration.setAlternativeJrePathEnabled(_jrePath.isAlternativeJreSelected());
 		configuration.setModule(_modules.getComponent().getSelectedModule());
-		configuration.setLiferayBundle(_liferayBundle.getText());
+		configuration.setLiferayBundle(_liferayServer.getText());
 		configuration.setVMParameters(_vmParams.getText());
 	}
 
@@ -64,9 +64,9 @@ public class LiferayBundleConfigurable extends SettingsEditor<LiferayBundleConfi
 		return _anchor;
 	}
 
-	public void resetEditorFrom(@NotNull LiferayBundleConfiguration configuration) {
+	public void resetEditorFrom(@NotNull LiferayServerConfiguration configuration) {
 		_vmParams.setText(configuration.getVMParameters());
-		_liferayBundle.setText(configuration.getLiferayBundle());
+		_liferayServer.setText(configuration.getLiferayBundle());
 		_jrePath.setPathOrName(configuration.getAlternativeJrePath(), configuration.isAlternativeJrePathEnabled());
 		_modules.getComponent().setSelectedModule(configuration.getModule());
 	}
@@ -79,7 +79,7 @@ public class LiferayBundleConfigurable extends SettingsEditor<LiferayBundleConfi
 
 	private JComponent _anchor;
 	private JrePathEditor _jrePath;
-	private JTextField _liferayBundle;
+	private JTextField _liferayServer;
 	private JPanel _mainPanel;
 	private LabeledComponent<ModulesComboBox> _modules;
 	private JTextField _vmParams;

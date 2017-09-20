@@ -14,20 +14,20 @@
 
 package com.liferay.ide.idea.server;
 
+import com.intellij.debugger.impl.GenericDebuggerRunner;
 import com.intellij.execution.configurations.RunProfile;
-import com.intellij.execution.executors.DefaultRunExecutor;
-import com.intellij.execution.runners.DefaultProgramRunner;
+import com.intellij.execution.executors.DefaultDebugExecutor;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Terry Jia
  */
-public class LiferayBundleRunner extends DefaultProgramRunner {
+public class LiferayServerDebugger extends GenericDebuggerRunner {
 
 	@Override
 	public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
-		if (DefaultRunExecutor.EXECUTOR_ID.equals(executorId) && profile instanceof LiferayBundleConfiguration) {
+		if (DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && profile instanceof LiferayServerConfiguration) {
 			return true;
 		}
 
@@ -37,7 +37,7 @@ public class LiferayBundleRunner extends DefaultProgramRunner {
 	@NotNull
 	@Override
 	public String getRunnerId() {
-		return "LiferayBundleRunner";
+		return "LiferayBundleDebugger";
 	}
 
 }

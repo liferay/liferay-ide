@@ -61,10 +61,10 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author Terry Jia
  */
-public class LiferayBundleConfiguration
+public class LiferayServerConfiguration
 	extends LocatableConfigurationBase implements CommonJavaRunConfigurationParameters, SearchScopeProvidingRunProfile {
 
-	public LiferayBundleConfiguration(Project project, ConfigurationFactory factory, String name) {
+	public LiferayServerConfiguration(Project project, ConfigurationFactory factory, String name) {
 		super(project, factory, name);
 
 		_configurationModule = new JavaRunConfigurationModule(project, true);
@@ -92,7 +92,7 @@ public class LiferayBundleConfiguration
 
 	@Override
 	public RunConfiguration clone() {
-		LiferayBundleConfiguration clone = (LiferayBundleConfiguration)super.clone();
+		LiferayServerConfiguration clone = (LiferayServerConfiguration)super.clone();
 
 		clone.setConfig(XmlSerializerUtil.createCopy(_config));
 
@@ -116,11 +116,11 @@ public class LiferayBundleConfiguration
 	@NotNull
 	@Override
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-		SettingsEditorGroup<LiferayBundleConfiguration> group = new SettingsEditorGroup<>();
+		SettingsEditorGroup<LiferayServerConfiguration> group = new SettingsEditorGroup<>();
 
 		String title = ExecutionBundle.message("run.configuration.configuration.tab.title");
 
-		group.addEditor(title, new LiferayBundleConfigurable(getProject()));
+		group.addEditor(title, new LiferayServerConfigurable(getProject()));
 
 		JavaRunConfigurationExtensionManager.getInstance().appendEditors(this, group);
 
@@ -183,7 +183,7 @@ public class LiferayBundleConfiguration
 	public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment environment)
 		throws ExecutionException {
 
-		return new LiferayBundleCommandLineState(this, environment);
+		return new LiferayServerCommandLineState(this, environment);
 	}
 
 	@Override
