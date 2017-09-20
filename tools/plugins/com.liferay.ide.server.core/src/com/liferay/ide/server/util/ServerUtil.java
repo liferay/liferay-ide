@@ -15,8 +15,6 @@
 
 package com.liferay.ide.server.util;
 
-import aQute.remote.api.Agent;
-
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
@@ -30,10 +28,12 @@ import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.BundleSupervisor;
+import com.liferay.ide.server.core.portal.LiferayServerPort;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.core.portal.PortalServer;
+import com.liferay.ide.server.core.portal.PortalServerDelegate;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 
@@ -107,6 +107,33 @@ public class ServerUtil
     // private static Pattern aQuteAgentPortPattern = Pattern.compile( "-DaQute.agent.server.port=([0-9]+)" );
     // private static Pattern jmxRemotePortPattern = Pattern.compile( "-Dcom.sun.management.jmxremote.port=([0-9]+)" );
 
+    public static List<String> checkUsingPorts( String serverName, LiferayServerPort port )
+    {
+        final List<String> servers = new ArrayList<String>();
+
+        for( final IServer server : ServerCore.getServers() )
+        {
+            final PortalServerDelegate portalServer =
+                ( (PortalServerDelegate) server.loadAdapter( PortalServer.class, null ) );
+
+            if( portalServer != null && !server.getName().equals( serverName ) )
+            {
+                for( final LiferayServerPort usedPort : portalServer.getLiferayServerPorts() )
+                {
+                    if( usedPort.getPort() == port.getPort() )
+                    {
+                        if( !servers.contains( server.getName() ) )
+                        {
+                            servers.add( server.getName() );
+                        }
+                    }
+                }
+            }
+        }
+
+        return servers;
+    }
+
     public static Map<String, String> configureAppServerProperties( ILiferayRuntime liferayRuntime )
     {
         return getSDKRequiredProperties( liferayRuntime );
@@ -127,51 +154,16 @@ public class ServerUtil
     public static BundleSupervisor createBundleSupervisor( PortalRuntime portalRuntime, IServer server )
         throws Exception
     {
-        int aQuteAgentPort = Agent.DEFAULT_PORT;
-        int jmxPort = portalRuntime.getPortalBundle().getJmxRemotePort();
+        PortalServerDelegate portalServerDelegate =
+            (PortalServerDelegate) server.loadAdapter( PortalServer.class, null );
 
-        /*
-        try
-        {
-            String launchVmArguments = server.getLaunchConfiguration( true, null ).getWorkingCopy().getAttribute(
-                IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "" );
-
-            Matcher aQutematcher = aQuteAgentPortPattern.matcher( launchVmArguments );
-            Matcher jmxMatcher = jmxRemotePortPattern.matcher( launchVmArguments );
-
-            String agentPortStr = null;
-
-            if( aQutematcher.find() )
-            {
-                agentPortStr = aQutematcher.group( 1 );
-            }
-
-            if( !CoreUtil.empty( agentPortStr ) )
-            {
-                aQuteAgentPort = Integer.parseInt( agentPortStr );
-            }
-
-            String jmxPortStr = null;
-
-            if( jmxMatcher.find() )
-            {
-                jmxPortStr = jmxMatcher.group( 1 );
-            }
-
-            if( !CoreUtil.empty( jmxPortStr ) )
-            {
-                jmxPort = Integer.parseInt( jmxPortStr );
-            }
-        }
-        catch( Exception e )
-        {
-            LiferayServerCore.logError( "can't get agent or jmx port from server launch configuration ", e );
-        }
-        */
+        int aQuteAgentPort = portalServerDelegate.getAgentPort();
+        int jmxPort = portalServerDelegate.getJmxPort();
+        int telnetPort = portalServerDelegate.getTelnetPort();
 
         BundleSupervisor bundleSupervisor = new BundleSupervisor( jmxPort );
 
-        bundleSupervisor.connect( server.getHost(), aQuteAgentPort );
+        bundleSupervisor.connect( server.getHost(), aQuteAgentPort, telnetPort );
 
         return bundleSupervisor;
     }
@@ -746,8 +738,7 @@ public class ServerUtil
         Properties categories = new Properties();
         Enumeration<?> names = props.propertyNames();
 
-        String[] controlPanelCategories =
-        {   "category.my", //$NON-NLS-1$
+        String[] controlPanelCategories = { "category.my", //$NON-NLS-1$
             "category.users", //$NON-NLS-1$
             "category.apps", //$NON-NLS-1$
             "category.configuration", //$NON-NLS-1$
@@ -950,8 +941,7 @@ public class ServerUtil
 
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_TYPE, type );
 
-        final String appServerDirKey =
-            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DIR, appServer );
+        final String appServerDirKey = getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DIR, appServer );
         final String appServerDeployDirKey =
             getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, appServer );
         final String appServerLibGlobalDirKey =
@@ -962,7 +952,8 @@ public class ServerUtil
         properties.put( appServerDirKey, dir );
         properties.put( appServerDeployDirKey, deployDir );
         properties.put( appServerLibGlobalDirKey, libGlobalDir );
-        //IDE-1268 need to always specify app.server.parent.dir, even though it is only useful in 6.1.2/6.2.0 or greater
+        // IDE-1268 need to always specify app.server.parent.dir, even though it is only useful in 6.1.2/6.2.0 or
+        // greater
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_PARENT_DIR, parentDir );
         properties.put( appServerPortalDirKey, portalDir );
 
@@ -971,7 +962,8 @@ public class ServerUtil
 
     public static IServerManagerConnection getServerManagerConnection( IServer server, IProgressMonitor monitor )
     {
-        return LiferayServerCore.getRemoteConnection( (IRemoteServer) server.loadAdapter( IRemoteServer.class, monitor ) );
+        return LiferayServerCore.getRemoteConnection(
+            (IRemoteServer) server.loadAdapter( IRemoteServer.class, monitor ) );
     }
 
     public static IServer[] getServersForRuntime( IRuntime runtime )

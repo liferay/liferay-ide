@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<servers>
+  <server AGENT_PORT="29998" auto-publish-time="0" hostname="localhost" id="Liferay CE GA4 Wildfly at localhost" name="Liferay CE GA4 Wildfly at localhost" runtime-id="Liferay CE GA4 Wildfly" server-type="com.liferay.ide.server.portal" server-type-id="com.liferay.ide.server.portal" start-timeout="900" stop-timeout="300" timestamp="0"/>
+  <server AGENT_PORT="29998" auto-publish-time="0" hostname="localhost" id="Liferay CE GA4 Tomcat at localhost" name="Liferay CE GA4 Tomcat at localhost" runtime-id="Liferay CE GA4 Tomcat" server-type="com.liferay.ide.server.portal" server-type-id="com.liferay.ide.server.portal" start-timeout="900" stop-timeout="300" timestamp="0"/>
+</servers>

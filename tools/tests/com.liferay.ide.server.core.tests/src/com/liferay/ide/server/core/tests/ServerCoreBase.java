@@ -31,10 +31,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.server.core.IRuntime;
@@ -43,7 +45,12 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
+import org.eclipse.wst.server.core.internal.Base;
+import org.eclipse.wst.server.core.internal.IMemento;
 import org.eclipse.wst.server.core.internal.Module;
+import org.eclipse.wst.server.core.internal.ResourceManager;
+import org.eclipse.wst.server.core.internal.Server;
+import org.eclipse.wst.server.core.internal.XMLMemento;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 import org.eclipse.wst.server.core.model.ServerDelegate;
 import org.junit.AfterClass;
@@ -105,7 +112,7 @@ public abstract class ServerCoreBase extends BaseTests
         }
     }
 
-    protected static void extractRuntime( IPath zip , IPath dir ) throws Exception
+    protected static void extractRuntime( IPath zip, IPath dir ) throws Exception
     {
         final File liferayRuntimeDirFile = dir.toFile();
 
@@ -236,7 +243,8 @@ public abstract class ServerCoreBase extends BaseTests
     @Before
     public void setupRuntime() throws Exception
     {
-        if( shouldSkipBundleTests() ) return;
+        if( shouldSkipBundleTests() )
+            return;
 
         assertNotNull(
             "Expected System.getProperty(\"liferay.bundles.dir\") to not be null",
@@ -270,7 +278,8 @@ public abstract class ServerCoreBase extends BaseTests
         assertNotNull( runtime );
 
         final ILiferayTomcatRuntime liferayRuntime =
-            (ILiferayTomcatRuntime) ServerCore.findRuntime( runtimeName ).loadAdapter( ILiferayTomcatRuntime.class, npm );
+            (ILiferayTomcatRuntime) ServerCore.findRuntime( runtimeName ).loadAdapter(
+                ILiferayTomcatRuntime.class, npm );
 
         assertNotNull( liferayRuntime );
 
@@ -336,5 +345,52 @@ public abstract class ServerCoreBase extends BaseTests
             }
         }
         Thread.sleep( 10000 );
+    }
+
+    public void importExistedServers( InputStream serversFileInputstream )
+    {
+        final IMemento serversMemento = XMLMemento.loadMemento( serversFileInputstream );
+
+        if( serversMemento != null )
+        {
+            final ResourceManager resourceManager = ResourceManager.getInstance();
+
+            final IMemento[] mementos = serversMemento.getChildren( "server" );
+
+            if( !CoreUtil.isNullOrEmpty( mementos ) )
+            {
+                for( IMemento memento : mementos )
+                {
+                    final Server server = new Server( null );
+
+                    try
+                    {
+                        final Method loadFromMemento =
+                            Base.class.getDeclaredMethod( "loadFromMemento", IMemento.class, IProgressMonitor.class );
+
+                        if( loadFromMemento != null )
+                        {
+                            loadFromMemento.setAccessible( true );
+                            loadFromMemento.invoke( server, memento, null );
+
+                            if( ServerCore.findServer( server.getId() ) == null )
+                            {
+                                final Method addServer =
+                                    ResourceManager.class.getDeclaredMethod( "addServer", IServer.class );
+
+                                if( addServer != null )
+                                {
+                                    addServer.setAccessible( true );
+                                    addServer.invoke( resourceManager, server );
+                                }
+                            }
+                        }
+                    }
+                    catch( Exception e )
+                    {
+                    }
+                }
+            }
+        }
     }
 }

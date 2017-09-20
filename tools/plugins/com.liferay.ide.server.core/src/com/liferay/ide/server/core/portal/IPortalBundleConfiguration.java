@@ -11,33 +11,29 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
-package com.liferay.ide.core.remote;
+package com.liferay.ide.server.core.portal;
+
+import java.beans.PropertyChangeListener;
+import java.util.List;
 
 /**
- * @author Gregory Amerson
+ * @author Simon Jiang
  */
-public interface IRemoteConnection
+
+public interface IPortalBundleConfiguration
 {
 
-    String _API = "/api/jsonws"; //$NON-NLS-1$
+    public List<LiferayServerPort> getConfiguredServerPorts();
 
-    String getHost();
+    public void addPropertyChangeListener( PropertyChangeListener listener );
 
-    int getHttpPort();
+    public void removePropertyChangeListener( PropertyChangeListener listener );
 
-    String getPassword();
+    public void modifyServerPort( String id, int port );
 
-    String getUsername();
+    public int getHttpPort();
 
-    void setHost( String host );
-
-    void setHttpPort( int httpPort );
-
-    void setPassword( String password );
-
-    void setUsername( String username );
+    public int getTelnetPort();
 }

@@ -39,12 +39,12 @@ import org.eclipse.osgi.util.NLS;
 public class SocketUtil
 {
 
-    public static IStatus canConnect( String host, String port )
+    public static IStatus canConnect( String host, int port )
     {
         return canConnect( new Socket(), host, port );
     }
 
-    public static IStatus canConnect( Socket socket, String host, String port )
+    public static IStatus canConnect( Socket socket, String host, int port )
     {
         IStatus status = null;
 
@@ -52,7 +52,7 @@ public class SocketUtil
 
         try
         {
-            InetSocketAddress address = new InetSocketAddress( host, Integer.valueOf( port ) );
+            InetSocketAddress address = new InetSocketAddress( host, port );
             InetSocketAddress local = new InetSocketAddress( 0 );
             socket.bind( local );
             socket.connect( address );
@@ -94,12 +94,12 @@ public class SocketUtil
         return status;
     }
 
-    public static IStatus canConnectProxy( String host, String port )
+    public static IStatus canConnectProxy( String host, int port )
     {
         return canConnectProxy( new Socket(), host, port );
     }
 
-    public static IStatus canConnectProxy( Socket socket, String host, String port )
+    public static IStatus canConnectProxy( Socket socket, String host, int port )
     {
         IProxyService proxyService = LiferayCore.getProxyService();
 
@@ -112,7 +112,7 @@ public class SocketUtil
             {
                 if( data.getHost() != null )
                 {
-                    return SocketUtil.canConnect( socket, data.getHost(), String.valueOf( data.getPort() ) );
+                    return SocketUtil.canConnect( socket, data.getHost(),data.getPort() );
                 }
             }
 
@@ -122,7 +122,7 @@ public class SocketUtil
             {
                 if( data.getHost() != null )
                 {
-                    return SocketUtil.canConnect( socket, data.getHost(), String.valueOf( data.getPort() ) );
+                    return SocketUtil.canConnect( socket, data.getHost(), data.getPort() );
                 }
             }
         }

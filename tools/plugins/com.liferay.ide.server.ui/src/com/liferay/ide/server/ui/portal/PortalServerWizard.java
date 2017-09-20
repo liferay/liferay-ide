@@ -17,6 +17,13 @@
  */
 package com.liferay.ide.server.ui.portal;
 
+import com.liferay.ide.server.ui.LiferayServerUI;
+import com.liferay.ide.server.util.ServerUtil;
+
+import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.IServerWorkingCopy;
+import org.eclipse.wst.server.core.TaskModel;
 import org.eclipse.wst.server.ui.wizard.WizardFragment;
 
 
@@ -31,4 +38,21 @@ public class PortalServerWizard extends WizardFragment
         super();
     }
 
+    public void exit()
+    {
+        IServerWorkingCopy serverWorkingCopy = getServerWorkingCopy();
+        IRuntime runtime = serverWorkingCopy.getRuntime();
+        IServer[] servers = ServerUtil.getServersForRuntime( runtime );
+
+        if( servers.length > 1 )
+        {
+            LiferayServerUI.logWarning(
+                "The runtime selected already has server(s), you shouldn't make multiple servers point to the same runtime if you want to launch multiple servers in IDE at one time" );
+        }
+    }
+
+    protected IServerWorkingCopy getServerWorkingCopy()
+    {
+        return (IServerWorkingCopy) getTaskModel().getObject( TaskModel.TASK_SERVER );
+    }
 }

@@ -1394,4 +1394,11 @@
             type="jboss">
       </portalBundle>
    </extension>
+   <extension
+         point="com.liferay.ide.server.core.portalBundles">
+      <portalBundle
+            class="com.liferay.ide.server.core.portal.PortalJBossEap64BundleFactory"
+            type="jboss">
+      </portalBundle>
+   </extension>
 </plugin>

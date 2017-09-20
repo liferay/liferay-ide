@@ -39,7 +39,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.wst.server.core,
  org.eclipse.tm.terminal.view.ui,
  org.eclipse.tm.terminal.connector.telnet,
- org.eclipse.tm.terminal.view.core
+ org.eclipse.tm.terminal.view.core,
+ org.codehaus.jackson.mapper,
+ org.codehaus.jackson.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.server.ui,

@@ -552,7 +552,7 @@ public class LiferayServerCore extends Plugin
     public static void updateConnectionSettings( IRemoteServer server, IServerManagerConnection remoteConnection )
     {
         remoteConnection.setHost( server.getHost() );
-        remoteConnection.setHttpPort( server.getHTTPPort() );
+        remoteConnection.setHttpPort( server.getHttpPort() );
         remoteConnection.setManagerContextPath( server.getServerManagerContextPath() );
         remoteConnection.setUsername( server.getUsername() );
         remoteConnection.setPassword( server.getPassword() );

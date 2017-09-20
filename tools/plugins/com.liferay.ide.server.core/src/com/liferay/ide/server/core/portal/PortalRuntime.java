@@ -16,12 +16,14 @@ package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -34,6 +36,7 @@ import org.eclipse.jdt.launching.IVMInstall2;
 import org.eclipse.jdt.launching.IVMInstallType;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.model.RuntimeDelegate;
 
@@ -367,6 +370,19 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
             return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorPortalNotExisted, null );
         }
 
+        Set<IRuntime> runtimes = ServerUtil.getAvailableLiferayRuntimes();
+
+        for( IRuntime runtime : runtimes )
+        {
+            ILiferayRuntime r =
+                (ILiferayRuntime) runtime.createWorkingCopy().loadAdapter( ILiferayRuntime.class, null );
+
+            if( portalBundle.getLiferayHome().toString().equals( r.getLiferayHome().toString() ) )
+            {
+                return new Status( IStatus.WARNING, LiferayServerCore.PLUGIN_ID, 0, Msgs.wariningRuntimeExisted, null );
+            }
+        }
+
         if( !portalBundle.getVersion().startsWith( "7" ) )
         {
             return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorPortalVersion70, null );
@@ -401,6 +417,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
         public static String errorJRE70;
         public static String errorPortalVersion70;
         public static String errorPortalNotExisted;
+        public static String wariningRuntimeExisted;
 
         static
         {

@@ -25,10 +25,10 @@ import org.eclipse.osgi.util.NLS;
 public class SetHttpPortCommand extends RemoteServerCommand
 {
 
-    protected String oldHttpPort;
-    protected String httpPort;
+    protected int oldHttpPort;
+    protected int httpPort;
 
-    public SetHttpPortCommand( IRemoteServerWorkingCopy server, String httpPort )
+    public SetHttpPortCommand( IRemoteServerWorkingCopy server, int httpPort )
     {
         super( server, Msgs.setHttpPort );
         this.httpPort = httpPort;
@@ -36,13 +36,13 @@ public class SetHttpPortCommand extends RemoteServerCommand
 
     public void execute()
     {
-        oldHttpPort = server.getHTTPPort();
-        server.setHTTPPort( httpPort );
+        oldHttpPort = server.getHttpPort();
+        server.setHttpPort( httpPort );
     }
 
     public void undo()
     {
-        server.setHTTPPort( oldHttpPort );
+        server.setHttpPort( oldHttpPort );
     }
 
     private static class Msgs extends NLS

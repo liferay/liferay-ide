@@ -24,5 +24,4 @@ public interface ILiferayServerWorkingCopy extends ILiferayServer
     void setPassword( String password );
 
     void setUsername( String username );
-
 }

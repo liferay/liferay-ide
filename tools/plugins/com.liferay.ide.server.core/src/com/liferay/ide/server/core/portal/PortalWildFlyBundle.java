@@ -50,27 +50,13 @@ public class PortalWildFlyBundle extends PortalJBossBundle
     }
 
     @Override
-    public String[] getRuntimeStopProgArgs()
-    {
-        final List<String> args = new ArrayList<String>();
-
-        args.add( "-mp \"" + this.bundlePath.toPortableString() + "/modules" + "\"" );
-        args.add( "org.jboss.as.cli" );
-        args.add( "--connect" );
-        args.add( "--controller=localhost:" + 9990 );
-        args.add( "--command=:shutdown" );
-
-        return args.toArray( new String[0] );
-    }
-
-    @Override
     public String[] getRuntimeStartVMArgs()
     {
         final List<String> args = new ArrayList<String>();
 
         args.add( "-Dcom.sun.management.jmxremote" );
         args.add( "-Dcom.sun.management.jmxremote.authenticate=false" );
-        args.add( "-Dcom.sun.management.jmxremote.port=" + getJmxRemotePort() );
+        //args.add( "-Dcom.sun.management.jmxremote.port=" + getJmxRemotePort() );
         args.add( "-Dcom.sun.management.jmxremote.ssl=false" );
 
         args.add( "-Dorg.jboss.resolver.warning=true" );

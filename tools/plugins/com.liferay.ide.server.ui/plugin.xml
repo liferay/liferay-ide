@@ -611,7 +611,7 @@
             typeIds="com.liferay.ide.server.portal">
       </section>
       <section
-            class="com.liferay.ide.server.ui.editor.PortalServerPortsEditorSection"
+            class="com.liferay.ide.server.ui.editor.ConfigurationPortEditorSection"
             id="com.liferay.ide.server.editor.instance"
             insertionId="org.eclipse.wst.server.editor.overview.right"
             order="10"

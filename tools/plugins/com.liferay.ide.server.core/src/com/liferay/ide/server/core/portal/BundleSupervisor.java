@@ -56,10 +56,9 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
         bundleDeployer.close();
     }
 
-    public void connect( String host, int port ) throws Exception
+    public void connect( String host, int port, int telnetPort ) throws Exception
     {
-        // TODO need to read configuration to get port waiting multiple server support merged
-        GogoTelnetClient gogoShell = new GogoTelnetClient( host, 11311 );
+        GogoTelnetClient gogoShell = new GogoTelnetClient( host, telnetPort );
 
         makeSureBundlesStarted( gogoShell, "biz.aQute.remote.agent" );
         makeSureBundlesStarted( gogoShell, "org.apache.aries.jmx.api" );
