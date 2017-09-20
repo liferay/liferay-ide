@@ -107,7 +107,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection
                 }
 
                 updating = true;
-                execute( new SetHttpPortCommand( remoteServer, textHttpPort.getText().trim() ) );
+                execute( new SetHttpPortCommand( remoteServer, Integer.valueOf( textHttpPort.getText().trim() ) ) );
                 updating = false;
                 // validate();
             }
@@ -372,7 +372,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection
 
         updating = true;
 
-        textHttpPort.setText( remoteServer.getHTTPPort() );
+        textHttpPort.setText( String.valueOf( remoteServer.getHttpPort() ) );
 
         textUsername.setText( remoteServer.getUsername() );
 

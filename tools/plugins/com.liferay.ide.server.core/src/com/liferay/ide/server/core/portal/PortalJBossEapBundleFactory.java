@@ -56,14 +56,14 @@ public class PortalJBossEapBundleFactory extends PortalJBossBundleFactory
         if( path.append( "modules" ).toFile().exists() && path.append( "standalone" ).toFile().exists() 
               && path.append( "bin" ).toFile().exists() )
         {
-            String eapVersion = getEAPVersion( path.toFile(), EAP_DIR_META_INF, new String[] {"6.", "7."}, "eap", "EAP" );
+            String eapVersion = getEAPVersion( path.toFile(), EAP_DIR_META_INF, new String[] { "7."}, "eap", "EAP" );
             return eapVersion != null;
         }
 
         return false;
     }
 
-    private String getEAPVersion(
+    protected String getEAPVersion(
         File location, String metaInfPath, String[] versionPrefix, String slot, String releaseName )
     {
         IPath rootPath = new Path( location.getAbsolutePath() );
@@ -87,7 +87,7 @@ public class PortalJBossEapBundleFactory extends PortalJBossBundleFactory
         return null;
     }
 
-    public static String getEAPVersionNoSlotCheck(
+    protected static String getEAPVersionNoSlotCheck(
         File location, String metaInfPath, String versionPrefixs[], String releaseName )
     {
         IPath rootPath = new Path( location.getAbsolutePath() );

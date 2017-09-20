@@ -105,7 +105,7 @@ public class RemoteMonitorProcess extends Process implements IProcess
         if( this.label == null )
         {
             String host = null;
-            String port = null;
+            int port = -1;
 
             if( server != null )
             {
@@ -116,10 +116,10 @@ public class RemoteMonitorProcess extends Process implements IProcess
 
             if( wasServer != null )
             {
-                port = wasServer.getHTTPPort();
+                port = wasServer.getHttpPort();
             }
 
-            this.label = ( host != null ? host : StringPool.EMPTY ) + ":" + ( port != null ? port : StringPool.EMPTY ); //$NON-NLS-1$
+            this.label = ( host != null ? host : StringPool.EMPTY ) + ":" + ( port != -1 ? port : StringPool.EMPTY ); //$NON-NLS-1$
         }
 
         return this.label;

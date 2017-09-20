@@ -15,8 +15,6 @@
 
 package com.liferay.ide.server.ui.action;
 
-import com.liferay.ide.server.core.ILiferayServer;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +24,8 @@ import org.eclipse.tm.terminal.view.core.interfaces.constants.ITerminalsConnecto
 import org.eclipse.tm.terminal.view.ui.interfaces.ILauncherDelegate;
 import org.eclipse.tm.terminal.view.ui.launcher.LauncherDelegateManager;
 import org.eclipse.wst.server.core.IServer;
+
+import com.liferay.ide.server.core.portal.PortalServerDelegate;
 
 /**
  * @author Gregory Amerson
@@ -38,9 +38,9 @@ public class OpenGogoShellAction extends AbstractServerRunningAction
         super();
     }
 
-    protected ILiferayServer getLiferayServer()
+    protected PortalServerDelegate getLiferayServer()
     {
-        return (ILiferayServer) selectedServer.loadAdapter( ILiferayServer.class, null );
+        return (PortalServerDelegate) selectedServer.loadAdapter( PortalServerDelegate.class, null );
     }
 
     @Override
@@ -66,7 +66,7 @@ public class OpenGogoShellAction extends AbstractServerRunningAction
             properties.put( ITerminalsConnectorConstants.PROP_DELEGATE_ID,
                 "org.eclipse.tm.terminal.connector.telnet.launcher.telnet" );
             properties.put( ITerminalsConnectorConstants.PROP_IP_HOST, host );
-            properties.put( ITerminalsConnectorConstants.PROP_IP_PORT, 11311 );
+            properties.put( ITerminalsConnectorConstants.PROP_IP_PORT, getLiferayServer().getTelnetPort() );
             properties.put( ITerminalsConnectorConstants.PROP_TIMEOUT, 5 );
             properties.put( ITerminalsConnectorConstants.PROP_ENCODING, null ); // null specifies default
             properties.put( ITerminalsConnectorConstants.PROP_TITLE, "Liferay Gogo Shell" );

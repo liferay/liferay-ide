@@ -172,7 +172,7 @@ public class ServerManagerTests extends ServerCoreBase
         service = new ServerManagerConnection();
 
         service.setHost( "localhost" );
-        service.setHttpPort( liferayServerStartPort );
+        service.setHttpPort( Integer.parseInt( liferayServerStartPort ) );
         service.setManagerContextPath( "/server-manager-web" );
         service.setUsername( "test@liferay.com" );
         service.setPassword( "test" );

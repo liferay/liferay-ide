@@ -36,8 +36,6 @@ public interface IRemoteServer extends ILiferayServer, IURLProvider
 
     boolean DEFAULT_ADJUST_DEPLOYMENT_TIMESTAMP = defaultPrefs.getBoolean( "adjust.deployment.timestamp", true ); //$NON-NLS-1$
 
-    String DEFAULT_HTTP_PORT = defaultPrefs.get( "default.http.port", StringPool.EMPTY ); //$NON-NLS-1$
-
     String DEFAULT_LIFERAY_PORTAL_CONTEXT_PATH = defaultPrefs.get( "default.liferay.portal.context.path", StringPool.EMPTY ); //$NON-NLS-1$
 
     String DEFAULT_SERVER_MANAGER_CONTEXT_PATH = defaultPrefs.get( "default.server.manager.context.path", StringPool.EMPTY ); //$NON-NLS-1$
@@ -46,7 +44,7 @@ public interface IRemoteServer extends ILiferayServer, IURLProvider
 
     String getHost();
 
-    String getHTTPPort();
+    int getHttpPort();
 
     String getId();
 

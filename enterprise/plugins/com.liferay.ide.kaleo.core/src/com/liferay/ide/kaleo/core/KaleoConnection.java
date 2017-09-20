@@ -477,5 +477,4 @@ public class KaleoConnection extends RemoteConnection implements IKaleoConnectio
     {
         return getKaleoDesignerAPIUrl() + UPDATE_KALEO_DRAFT_DEFINITION;
     }
-
 }

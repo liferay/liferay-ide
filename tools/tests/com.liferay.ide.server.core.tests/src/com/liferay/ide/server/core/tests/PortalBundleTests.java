@@ -207,7 +207,7 @@ public class PortalBundleTests extends ServerCoreBase
 
         ServerDelegate delegate = (ServerDelegate) newServer.loadAdapter( ServerDelegate.class, monitor );
 
-        delegate.newServerDetailsChanged( monitor );
+        //delegate.newServerDetailsChanged( monitor );
 
         assertEquals( "Liferay 7.x at 127.0.0.1", newServer.getName() );
     }

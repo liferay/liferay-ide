@@ -378,16 +378,9 @@ public class RemoteConnection implements IRemoteConnection
         releaseHttpClient();
     }
 
-    public void setHttpPort( String httpPort )
+    public void setHttpPort( int httpPort )
     {
-        if( httpPort != null )
-        {
-            this.httpPort = Integer.parseInt( httpPort );
-        }
-        else
-        {
-            this.httpPort = -1;
-        }
+        this.httpPort = httpPort;
 
         releaseHttpClient();
     }

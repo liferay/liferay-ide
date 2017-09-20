@@ -32,10 +32,6 @@ import java.util.List;
  */
 public class GogoTelnetClient implements AutoCloseable {
 
-	public GogoTelnetClient() throws IOException {
-		this("localhost", 11311);
-	}
-
 	public GogoTelnetClient(String host, int port) throws IOException {
 		_socket = new Socket(host, port);
 		_inputStream = new DataInputStream(_socket.getInputStream());

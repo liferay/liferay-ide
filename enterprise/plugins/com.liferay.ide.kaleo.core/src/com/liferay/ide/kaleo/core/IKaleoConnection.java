@@ -65,7 +65,7 @@ public interface IKaleoConnection extends IRemoteConnection
 
     void setHost( String host );
 
-    void setHttpPort( String httpPort );
+    void setHttpPort( int httpPort );
 
     void setPassword( String password );
 
