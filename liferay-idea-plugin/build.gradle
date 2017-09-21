@@ -47,3 +47,5 @@ repositories {
 		url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
 	}
 }
+
+version = '0.1.0'
