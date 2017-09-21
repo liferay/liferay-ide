@@ -15,9 +15,12 @@
 package com.liferay.ide.swtbot.project.ui.tests;
 
 import com.liferay.ide.swtbot.liferay.ui.SwtbotBase;
-import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewLiferayJsfProjectWizard;
 import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewLiferayModuleInfoWizard;
+import com.liferay.ide.swtbot.liferay.ui.page.wizard.project.NewLiferayModuleWizard;
+import com.liferay.ide.swtbot.liferay.ui.util.ValidationMsg;
 import com.liferay.ide.swtbot.ui.util.StringPool;
+
+import java.io.File;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,84 +28,78 @@ import org.junit.Test;
 /**
  * @author Ying Xu
  * @author Sunny Shi
+ * @author Ashley Yuan
  */
 public class ValidationModuleProjectTests extends SwtbotBase {
 
 	@Test
-	public void validateProjectName() {
-		Assert.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, _newJsfProjectWizard.getValidationMsg());
-		Assert.assertFalse(_newJsfProjectWizard.finishBtn().isEnabled());
+	public void validateComponentClassAndPackageName() {
+		String projectName = "My-test";
 
-		_newJsfProjectWizard.getProjectName().setText(".");
-		sleep();
-		Assert.assertEquals(" '.'" + IS_AN_INVALID_NAME_ON_PLATFORM, _newJsfProjectWizard.getValidationMsg());
-		Assert.assertFalse(_newJsfProjectWizard.finishBtn().isEnabled());
-
-		_newJsfProjectWizard.getProjectName().setText("/");
-		sleep();
-		Assert.assertEquals(
-			" /" + IS_AN_INVALID_CHARACTER_IN_RESOURCE_NAME + "'/'.", _newJsfProjectWizard.getValidationMsg());
-		Assert.assertFalse(_newJsfProjectWizard.finishBtn().isEnabled());
-
-		_newJsfProjectWizard.getProjectName().setText("$");
-		sleep();
-		Assert.assertEquals(THE_PROJECT_NAME_IS_INVALID, _newJsfProjectWizard.getValidationMsg());
-		Assert.assertFalse(_newJsfProjectWizard.finishBtn().isEnabled());
-
-		_newJsfProjectWizard.getProjectName().setText(StringPool.BLANK);
-		sleep();
-		Assert.assertEquals(PROJECT_NAME_MUST_BE_SPECIFIED, _newJsfProjectWizard.getValidationMsg());
-		Assert.assertFalse(_newJsfProjectWizard.finishBtn().isEnabled());
-
-		_newJsfProjectWizard.getProjectName().setText("a");
-		sleep();
-		Assert.assertEquals(
-			ENTER_A_NAME_AND_CHOOSE_TEMPLATE_FOR_NEW_JSF_PROJECT, _newJsfProjectWizard.getValidationMsg());
-		Assert.assertTrue(_newJsfProjectWizard.finishBtn().isEnabled());
-
-		_newJsfProjectWizard.cancel();
-	}
-
-	@Test
-	public void validationTheSecondPage() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModule("test");
+		wizardAction.prepareLiferayModule(projectName);
 
 		wizardAction.next();
 
-		wizardAction.prepareLiferayModuleInfo("@@", StringPool.BLANK);
+		Assert.assertTrue(_newModuleInfoWizard.finishBtn().isEnabled());
+		Assert.assertEquals(CONFIGURE_COMPONENT_CLASS, _newModuleInfoWizard.getValidationMsg());
 
+		wizardAction.prepareLiferayModuleInfo(projectName, StringPool.BLANK);
 		Assert.assertEquals(INVALID_CLASS_NAME, _newModuleInfoWizard.getValidationMsg());
 
 		wizardAction.prepareLiferayModuleInfo(StringPool.BLANK, "!!");
+		Assert.assertEquals(INVALID_PACKAGE_NAME, _newModuleInfoWizard.getValidationMsg());
 
-		Assert.assertEquals(INVALID_CLASS_NAME, _newModuleInfoWizard.getValidationMsg());
+		_newModuleProjectWizard.cancel();
+	}
 
-		wizardAction.prepareLiferayModuleInfo("testClassName", "testPackageName");
+	@Test
+	public void validateProjectName() {
+		wizardAction.openNewLiferayModuleWizard();
+		Assert.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, _newModuleProjectWizard.getValidationMsg());
+		Assert.assertFalse(_newModuleProjectWizard.finishBtn().isEnabled());
 
-		_newModuleInfoWizard.getAddPropertyKeyBtn().click();
-		sleep();
-		_newModuleInfoWizard.getProperties().setFocus();
+		for (ValidationMsg msg : getValidationMsgs(
+				new File(envAction.getValidationFolder(), "new-liferay-module-project-wizard-project-name.csv"))) {
+
+			_newModuleProjectWizard.getProjectName().setText(msg.getInput());
+
+			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
+		}
+
+		_newModuleProjectWizard.cancel();
+	}
+
+	@Test
+	public void validateProperties() {
+		String projectName = "My-test";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.prepareLiferayModule(projectName);
+
+		wizardAction.next();
+
+		wizardAction.prepareLiferayModuleInfoProperties(StringPool.BLANK, StringPool.BLANK);
 		Assert.assertEquals(NAME_MUST_BE_SPECIFIED, _newModuleInfoWizard.getValidationMsg());
-		Assert.assertTrue(_newModuleInfoWizard.getDeleteBtn().isEnabled());
 		_newModuleInfoWizard.getDeleteBtn().click();
 
-		_newModuleInfoWizard.getAddPropertyKeyBtn().click();
-		sleep();
-		_newModuleInfoWizard.getProperties().setText(2, "a");
-		_newModuleInfoWizard.getProperties().setFocus();
-		sleep();
+		wizardAction.prepareLiferayModuleInfoProperties(StringPool.BLANK, projectName);
+		Assert.assertEquals(NAME_MUST_BE_SPECIFIED, _newModuleInfoWizard.getValidationMsg());
+		_newModuleInfoWizard.getDeleteBtn().click();
+
+		wizardAction.prepareLiferayModuleInfoProperties(projectName, StringPool.BLANK);
 		Assert.assertEquals(VALUE_MUST_BE_SPECIFIED, _newModuleInfoWizard.getValidationMsg());
-		sleep(2000);
-		_newModuleInfoWizard.getProperties().doubleClick(0, 1);
-		sleep();
-		_newModuleInfoWizard.getProperties().setText(2, "b");
+		_newModuleInfoWizard.getDeleteBtn().click();
+
+		wizardAction.prepareLiferayModuleInfoProperties(projectName, projectName);
+		Assert.assertEquals(CONFIGURE_COMPONENT_CLASS, _newModuleInfoWizard.getValidationMsg());
 
 		wizardAction.cancel();
 	}
 
-	private static final NewLiferayJsfProjectWizard _newJsfProjectWizard = new NewLiferayJsfProjectWizard(bot);
 	private static final NewLiferayModuleInfoWizard _newModuleInfoWizard = new NewLiferayModuleInfoWizard(bot);
+	private static final NewLiferayModuleWizard _newModuleProjectWizard = new NewLiferayModuleWizard(bot);
 
 }

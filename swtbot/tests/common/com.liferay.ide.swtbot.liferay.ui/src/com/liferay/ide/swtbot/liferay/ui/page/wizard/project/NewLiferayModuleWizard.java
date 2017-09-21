@@ -28,7 +28,7 @@ public class NewLiferayModuleWizard extends NewProjectWizard {
 	public NewLiferayModuleWizard(SWTWorkbenchBot bot) {
 		super(bot, 2);
 
-		_projectTemplates = new ComboBox(bot, "Project Template Name:");
+		_projectTemplates = new ComboBox(bot, PROJECT_TEMPLATE_NAME);
 	}
 
 	public ComboBox getProjectTemplates() {

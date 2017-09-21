@@ -33,6 +33,8 @@ public interface Messages {
 
 	public static final String CATEGORY_NAME_IS_EMPTY = "Category name is empty.";
 
+	public static final String CONFIGURE_COMPONENT_CLASS = "Configure Component Class";
+
 	public static final String COULD_NOT_DETERMINE_SDK = "Could not determine SDK from project location";
 
 	public static final String CREATE_A_LIFERAY_LAYOUT_TEMPLATE = "Create a Liferay layout template.";

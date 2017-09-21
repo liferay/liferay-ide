@@ -120,7 +120,7 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
 
     // *** PackageeName ***
 
-    @Label( standard = "Package Name" )
+    @Label( standard = "Package name" )
     @Service( impl = PackageNameValidationService.class )
     @Service( impl = PackageNameDefaultValueService.class )
     ValueProperty PROP_PACKAGE_NAME = new ValueProperty( TYPE, "PackageName" );

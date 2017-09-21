@@ -39,6 +39,7 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 /**
  * @author Terry Jia
  * @author Ying Xu
+ * @author Ashley Yuan
  */
 public class WizardAction extends UIAction {
 
@@ -272,6 +273,15 @@ public class WizardAction extends UIAction {
 
 	public void prepareLiferayModuleInfo(String className, String packageName) {
 		_newModuleInfoWizard.getComponentClassName().setText(className);
+		_newModuleInfoWizard.getPackageName().setText(packageName);
+	}
+
+	public void prepareLiferayModuleInfoProperties(String propertiesName, String propertiesValue) {
+		_newModuleInfoWizard.getAddPropertyKeyBtn().click();
+		_newModuleInfoWizard.getProperties().setText(2, propertiesName);
+		_newModuleInfoWizard.getProperties().doubleClick(0, 1);
+		_newModuleInfoWizard.getProperties().setText(2, propertiesValue);
+		_newModuleInfoWizard.getProperties().setFocus();
 	}
 
 	public void prepareLiferayModuleMaven(String projectName, String template) {
