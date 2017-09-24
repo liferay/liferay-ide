@@ -244,7 +244,7 @@ public class NewMavenJSFModuleProjectProvider extends LiferayMavenProjectProvide
             String templateName = params[0].toString();
 
             Version latestVersion =
-                extractLatestVersion( "com.liferay.faces.archetype." + templateName + ".portlet:" );
+                extractLatestVersion( "com.liferay.faces.archetype." + templateName + ".portlet" );
 
             final String gav = "com.liferay.faces.archetype:com.liferay.faces.archetype." + templateName +
                 ".portlet:" + latestVersion.toString();
@@ -266,7 +266,6 @@ public class NewMavenJSFModuleProjectProvider extends LiferayMavenProjectProvide
         {
             // create httpget
             HttpGet httpget = new HttpGet( request );
-            System.out.println( "executing request " + httpget.getURI() );
 
             // execute httpRequest
             HttpResponse response = httpclient.execute( httpget );
