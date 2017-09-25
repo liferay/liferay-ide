@@ -60,7 +60,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		Assert.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, _newModuleProjectWizard.getValidationMsg());
 		Assert.assertFalse(_newModuleProjectWizard.finishBtn().isEnabled());
 
-		for (ValidationMsg msg : getValidationMsgs(
+		for (ValidationMsg msg : envAction.getValidationMsgs(
 				new File(envAction.getValidationFolder(), "new-liferay-module-project-wizard-project-name.csv"))) {
 
 			_newModuleProjectWizard.getProjectName().setText(msg.getInput());

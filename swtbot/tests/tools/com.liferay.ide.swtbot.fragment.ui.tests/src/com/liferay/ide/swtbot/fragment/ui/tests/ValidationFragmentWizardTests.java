@@ -52,7 +52,7 @@ public class ValidationFragmentWizardTests extends SwtbotBase {
 	public void validationProjectName() {
 		wizardAction.openNewFragmentWizard();
 
-		for (ValidationMsg msg : getValidationMsgs(
+		for (ValidationMsg msg : envAction.getValidationMsgs(
 				new File(envAction.getValidationFolder(), "new-fragment-wizard-project-name.csv"))) {
 
 			_newFragmentWizard.getProjectName().setText(msg.getInput());

@@ -19,6 +19,7 @@ import com.liferay.ide.swtbot.liferay.ui.util.BundleInfo;
 import com.liferay.ide.swtbot.liferay.ui.util.CSVReader;
 import com.liferay.ide.swtbot.liferay.ui.util.CoreUtil;
 import com.liferay.ide.swtbot.liferay.ui.util.FileUtil;
+import com.liferay.ide.swtbot.liferay.ui.util.ValidationMsg;
 import com.liferay.ide.swtbot.liferay.ui.util.ZipUtil;
 
 import java.io.BufferedReader;
@@ -33,6 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -90,6 +93,12 @@ public class EnvAction extends UIAction {
 		}
 
 		return bundleInfos;
+	}
+
+	public IPath getEclipseWorkspacePath() {
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+
+		return root.getLocation();
 	}
 
 	public IPath getLiferayBundlesPath() {
@@ -163,6 +172,31 @@ public class EnvAction extends UIAction {
 		IPath validationPath = getLiferayBundlesPath().append("validation");
 
 		return validationPath.toFile();
+	}
+
+	public ValidationMsg[] getValidationMsgs(File csv) {
+		Assert.assertTrue(csv.exists());
+
+		String[][] msgs = CSVReader.readCSV(csv);
+
+		ValidationMsg[] validationMsgs = new ValidationMsg[msgs.length];
+
+		for (int i = 0; i < msgs.length; i++) {
+			validationMsgs[i] = new ValidationMsg();
+
+			String[] columns = msgs[i];
+
+			for (int t = 0; t < columns.length; t++) {
+				if (t == 0) {
+					validationMsgs[i].setInput(columns[t]);
+				}
+				else if (t == 1) {
+					validationMsgs[i].setExpect(columns[t]);
+				}
+			}
+		}
+
+		return validationMsgs;
 	}
 
 	public void killGradleProcess() throws IOException {

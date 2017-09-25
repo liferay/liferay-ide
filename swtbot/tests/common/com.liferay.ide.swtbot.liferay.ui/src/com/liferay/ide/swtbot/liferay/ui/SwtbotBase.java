@@ -20,27 +20,15 @@ import com.liferay.ide.swtbot.liferay.ui.action.EnvAction;
 import com.liferay.ide.swtbot.liferay.ui.action.ViewAction;
 import com.liferay.ide.swtbot.liferay.ui.action.WizardAction;
 import com.liferay.ide.swtbot.liferay.ui.page.LiferayIDE;
-import com.liferay.ide.swtbot.liferay.ui.util.CSVReader;
-import com.liferay.ide.swtbot.liferay.ui.util.ValidationMsg;
 import com.liferay.ide.swtbot.ui.Keys;
 import com.liferay.ide.swtbot.ui.UI;
 
-import java.io.File;
-
-import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
 
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
@@ -107,70 +95,12 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 		wizardAction.finishToWait();
 	}
 
-	public boolean addedProjects() {
-		ide.showPackageExporerView();
-
-		return ide.hasProjects();
-	}
-
-	public void openFile(String path) throws Exception {
-		Display.getDefault().syncExec(
-			new Runnable() {
-
-				public void run() {
-					try {
-						File fileToOpen = new File(path);
-
-						if (fileToOpen.exists() && fileToOpen.isFile()) {
-							IFileStore fileStore = EFS.getLocalFileSystem().getStore(fileToOpen.toURI());
-							IWorkbenchPage page = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getPages()[0];
-
-							IDE.openInternalEditorOnFileStore(page, fileStore);
-						}
-					}
-					catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-
-			});
-	}
-
-	protected static ValidationMsg[] getValidationMsgs(File csv) {
-		Assert.assertTrue(csv.exists());
-
-		String[][] msgs = CSVReader.readCSV(csv);
-
-		ValidationMsg[] validationMsgs = new ValidationMsg[msgs.length];
-
-		for (int i = 0; i < msgs.length; i++) {
-			validationMsgs[i] = new ValidationMsg();
-
-			String[] columns = msgs[i];
-
-			for (int t = 0; t < columns.length; t++) {
-				if (t == 0) {
-					validationMsgs[i].setInput(columns[t]);
-				}
-				else if (t == 1) {
-					validationMsgs[i].setExpect(columns[t]);
-				}
-			}
-		}
-
-		return validationMsgs;
-	}
-
 	protected static void sleep(long millis) {
 		bot.sleep(millis);
 	}
 
 	protected void sleep() {
-		sleep(_DEFAULT_SLEEP_MILLIS);
+		sleep(1000);
 	}
-
-	protected static String eclipseWorkspace = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
-
-	private static final long _DEFAULT_SLEEP_MILLIS = 1000;
 
 }
