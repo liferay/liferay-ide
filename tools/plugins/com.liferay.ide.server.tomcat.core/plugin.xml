@@ -136,7 +136,7 @@
             id="com.liferay.ide.server.62.tomcat.70.launchConfigurationType"
             modes="run, debug, profile"
             name="%liferay.v62.tomcat70.launch.config.type.name"
-            sourceLocatorId="com.liferay.ide.server.core.portal.sourceLocator"
+            sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
             sourcePathComputerId="com.liferay.ide.server.tomcat.sourcePathComputer">
       </launchConfigurationType>
    </extension>
