@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: UI Liferay Base
+Bundle-SymbolicName: com.liferay.ide.ui.liferay
+Bundle-Version: 3.1.2.qualifier
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: org.junit,
+ org.eclipse.debug.ui,
+ org.eclipse.swtbot.go,
+ org.eclipse.ui.console,
+ org.eclipse.core.filesystem,
+ org.eclipse.ui.ide,
+ org.eclipse.wst.sse.core,
+ com.liferay.ide.ui.swtbot
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.ui.liferay,
+ com.liferay.ide.ui.liferay.action,
+ com.liferay.ide.ui.liferay.page,
+ com.liferay.ide.ui.liferay.page.wizard,
+ com.liferay.ide.ui.liferay.page.wizard.project,
+ com.liferay.ide.ui.liferay.page.dialog,
+ com.liferay.ide.ui.liferay.page.button,
+ com.liferay.ide.ui.liferay.page.view,
+ com.liferay.ide.ui.liferay.page.editor,
+ com.liferay.ide.ui.liferay.util
