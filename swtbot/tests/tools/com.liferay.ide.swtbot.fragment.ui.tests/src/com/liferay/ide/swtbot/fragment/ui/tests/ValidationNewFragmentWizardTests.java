@@ -27,7 +27,7 @@ import org.junit.Test;
  * @author Ashley Yuan
  * @author Ying Xu
  */
-public class ValidationFragmentWizardTests extends SwtbotBase {
+public class ValidationNewFragmentWizardTests extends SwtbotBase {
 
 	@Test
 	public void checkBuildType() {
@@ -49,7 +49,23 @@ public class ValidationFragmentWizardTests extends SwtbotBase {
 	}
 
 	@Test
-	public void validationProjectName() {
+	public void checkInfoInitialState() {
+	}
+
+	@Test
+	public void checkInitialState() {
+	}
+
+	@Test
+	public void checkLiferayRuntime() {
+	}
+
+	@Test
+	public void checkLocation() {
+	}
+
+	@Test
+	public void checkProjectName() {
 		wizardAction.openNewFragmentWizard();
 
 		for (ValidationMsg msg : envAction.getValidationMsgs(

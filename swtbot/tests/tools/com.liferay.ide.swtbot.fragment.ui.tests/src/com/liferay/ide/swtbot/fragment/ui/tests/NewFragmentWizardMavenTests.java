@@ -25,7 +25,7 @@ import org.junit.Test;
  * @author Vicky Wang
  * @author Sunny Shi
  */
-public class FragmentWizardTests extends SwtbotBase {
+public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 	@BeforeClass
 	public static void init() throws IOException {
@@ -33,7 +33,15 @@ public class FragmentWizardTests extends SwtbotBase {
 	}
 
 	@Test
-	public void mavenModuleFragmentProjectWizard() {
+	public void createFragmentUseTableActions() {
+	}
+
+	@Test
+	public void createFragmentWithJsp() {
+	}
+
+	@Test
+	public void createFragmentWithNoRuntimeWithJsp() {
 		String projectName = "test-fragment-maven";
 
 		wizardAction.openNewFragmentWizard();
@@ -74,56 +82,7 @@ public class FragmentWizardTests extends SwtbotBase {
 	}
 
 	@Test
-	public void moduleFragmentProjectWizard() {
-		String projectName = "test-fragment";
-
-		wizardAction.openNewFragmentWizard();
-
-		wizardAction.prepareFragmentGradle("test-fragment");
-
-		wizardAction.openNewRuntimeWizardFragment();
-
-		wizardAction.next();
-
-		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
-
-		wizardAction.finish();
-
-		wizardAction.next();
-
-		wizardAction.openBrowseOsgiBundleDialog();
-
-		dialogAction.prepareText("com.liferay.announcements.");
-
-		dialogAction.confirm();
-
-		wizardAction.openAddOverrideFilesDialog();
-
-		dialogAction.selectItem("META-INF/resources/configuration.jsp");
-
-		dialogAction.confirm();
-
-		wizardAction.openBrowseOsgiBundleDialog();
-
-		dialogAction.prepareText("com.liferay.blogs.web");
-
-		dialogAction.confirm();
-
-		String[] files = {
-			"META-INF/resources/blogs_admin/configuration.jsp", "META-INF/resources/blogs_aggregator/init.jsp",
-			"META-INF/resources/blogs/asset/abstract.jsp", "META-INF/resources/blogs/edit_entry.jsp",
-			"portlet.properties"
-		};
-
-		wizardAction.openAddOverrideFilesDialog();
-
-		dialogAction.selectItems(files);
-
-		dialogAction.confirm();
-
-		wizardAction.finishToWait();
-
-		viewAction.deleteProject(projectName);
+	public void createFragmentWithResourceAction() {
 	}
 
 }
