@@ -44,9 +44,16 @@ public class TargetPlatformUtil
         return getServicesNameList( tpIndexFile );
     }
 
+    public static ServiceContainer getServiceWrapperBundle( String servicewrapperName ) throws Exception
+    {
+        File tpIndexFile = checkCurrentTargetPlatform( "servicewrapper-dependency" );
+
+        return getBundleAndVersion( tpIndexFile, servicewrapperName );
+    }    
+    
     public static ServiceContainer getServiceBundle( String serviceName ) throws Exception
     {
-        File tpIndexFile = checkCurrentTargetPlatform( "service" );
+        File tpIndexFile = checkCurrentTargetPlatform( "service-dependency" );
 
         return getBundleAndVersion( tpIndexFile , serviceName);
     }
@@ -57,13 +64,21 @@ public class TargetPlatformUtil
 
         return getServicesNameList( tpIndexFile );
     }
-
-    public static ServiceContainer getServiceWrapperBundle( String servicewrapperName ) throws Exception
+    
+    public static ServiceContainer getServiceDependencyList() throws Exception
     {
-        File tpIndexFile = checkCurrentTargetPlatform( "servicewrapper" );
+        File tpIndexFile = checkCurrentTargetPlatform( "service-dependency" );
 
-        return getBundleAndVersion( tpIndexFile, servicewrapperName );
+        return getServicesDependencyNameList( tpIndexFile );
     }
+    
+    public static ServiceContainer getServiceWrapperDependencyList() throws Exception
+    {
+        File tpIndexFile = checkCurrentTargetPlatform( "servicewrapper-dependency" );
+
+        return getServicesDependencyNameList( tpIndexFile );
+    }    
+
 
     private static File checkCurrentTargetPlatform( String type ) throws IOException
     {
@@ -97,6 +112,14 @@ public class TargetPlatformUtil
                 {
                     return true;
                 }
+                if( type.equals( "service-dependency" ) && name.endsWith( "service-dependency.json" ) )
+                {
+                    return true;
+                }
+                if( type.equals( "servicewrapper-dependency" ) && name.endsWith( "servicewrapper-dependency.json" ) )
+                {
+                    return true;
+                }                    
                 return false;
             }
         } );
@@ -134,11 +157,23 @@ public class TargetPlatformUtil
     {
         final ObjectMapper mapper = new ObjectMapper();
 
-        Map<String, String[]> map = mapper.readValue( tpFile, Map.class );
-        String[] services = map.keySet().toArray( new String[0] );
+        List<String> serviceList = mapper.readValue( tpFile, List.class );
+        String[] services = serviceList.toArray( new String[0] );
 
         return new ServiceContainer( Arrays.asList( services ) );
     }
+    
+    @SuppressWarnings( "unchecked" )
+    private static ServiceContainer getServicesDependencyNameList( File tpFile ) throws Exception
+    {
+        final ObjectMapper mapper = new ObjectMapper();
+
+        Map<String, String[]> serviceDependencyList = mapper.readValue( tpFile, Map.class );
+        String[] services = serviceDependencyList.keySet().toArray( new String[0] );
+
+        return new ServiceContainer( Arrays.asList( services ) );
+    }
+    
 
     @SuppressWarnings( "unchecked" )
     private static ServiceContainer getBundleAndVersion( File tpFile, String _serviceName ) throws Exception

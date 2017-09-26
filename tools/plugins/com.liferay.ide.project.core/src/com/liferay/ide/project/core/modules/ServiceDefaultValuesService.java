@@ -15,12 +15,9 @@
 
 package com.liferay.ide.project.core.modules;
 
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.server.core.portal.PortalServer;
-
 import org.eclipse.sapphire.DefaultValueService;
-import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.ServerCore;
+
+import com.liferay.ide.project.core.ProjectCore;
 
 /**
  * @author Terry Jia
@@ -33,25 +30,15 @@ public class ServiceDefaultValuesService extends DefaultValueService
     {
         final NewLiferayModuleProjectOp op = op();
         final String template = op.getProjectTemplateName().content( true );
-        IServer runningServer = null;
-        final IServer[] servers = ServerCore.getServers();
 
         String retVal = "";
         
         if( template.equals( "service-wrapper" ) )
         {
-            for( IServer server : servers )
-            {
-                if( server.getServerType().getId().equals( PortalServer.ID ) )
-                {
-                    runningServer = server;
-                    break;
-                }
-            }
 
             try
             {
-                ServiceContainer serviceWrapperList = new ServiceWrapperCommand( runningServer ).execute();
+                ServiceContainer serviceWrapperList = new ServiceWrapperCommand().execute();
                 retVal = serviceWrapperList.getServiceList().get( 0 );
             }
             catch( Exception e )
@@ -61,19 +48,9 @@ public class ServiceDefaultValuesService extends DefaultValueService
         }
         else if( template.equals( "service" ) )
         {
-            for( IServer server : servers )
-            {
-                if( server.getServerState() == IServer.STATE_STARTED &&
-                    server.getServerType().getId().equals( PortalServer.ID ) )
-                {
-                    runningServer = server;
-                    break;
-                }
-            }
-
             try
             {
-                ServiceCommand serviceCommand = new ServiceCommand( runningServer );
+                ServiceCommand serviceCommand = new ServiceCommand();
 
                 ServiceContainer allServices = serviceCommand.execute();
 

@@ -29,7 +29,10 @@ Require-Bundle: org.eclipse.core.runtime,
  biz.aQute.bndlib;bundle-version="[3.4,4.0)",
  com.liferay.blade.api,
  com.liferay.ide.project.core,
- org.json
+ org.json,
+ biz.aQute.remote.api,
+ org.eclipse.wb.core.lib,
+ org.codehaus.jackson.mapper
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
@@ -37,5 +40,6 @@ Bundle-ClassPath: .,
 Export-Package: com.liferay.ide.maven,
  com.liferay.ide.maven.core,
  com.liferay.ide.maven.core.aether,
- com.liferay.ide.maven.core.model
+ com.liferay.ide.maven.core.model,
+ com.liferay.ide.maven.core.targetplatform
 Service-Component: OSGI-INF/com.liferay.ide.maven.core.LiferayMavenLegacyProjectUpdater.xml

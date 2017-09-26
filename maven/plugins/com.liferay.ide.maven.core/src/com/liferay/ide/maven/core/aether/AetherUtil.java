@@ -43,18 +43,30 @@ public class AetherUtil
     public static Artifact getLatestAvailableArtifact( final String gavCoords )
     {
         Artifact retval = null;
-
+        final String[] gav = gavCoords.split( ":" );
+        Artifact defaultArtifact = new DefaultArtifact( gav[0] + ":" + gav[1] + ":" + gav[2] );
         final RepositorySystem system = newRepositorySystem();
         final RepositorySystemSession session = newRepositorySystemSession( system );
-
         final String latestVersion = AetherUtil.getLatestVersion( gavCoords, system, session );
 
+        retval = fetchArtifact( new String( gav[0] + ":" + gav[1] + ":" + latestVersion ) );
+
+        if( retval == null )
+        {
+            retval = defaultArtifact;
+        }
+
+        return retval;
+    }
+
+    public static Artifact fetchArtifact( final String gavCoords )
+    {
+        Artifact retval = null;
         final String[] gav = gavCoords.split( ":" );
-
-        final Artifact defaultArtifact = new DefaultArtifact( gav[0] + ":" + gav[1] + ":" + latestVersion );
-
+        final RepositorySystem system = newRepositorySystem();
+        final RepositorySystemSession session = newRepositorySystemSession( system );
         ArtifactRequest artifactRequest = new ArtifactRequest();
-        artifactRequest.setArtifact( defaultArtifact );
+        artifactRequest.setArtifact( new DefaultArtifact( gav[0] + ":" + gav[1] + ":" + gav[2] ) );
         artifactRequest.addRepository( newCentralRepository() );
 //        artifactRequest.addRepository( newLiferayRepository() );
 
@@ -66,22 +78,6 @@ public class AetherUtil
         catch( ArtifactResolutionException e )
         {
             LiferayMavenCore.logError( "Unable to get latest Liferay archetype", e );
-
-            artifactRequest.setArtifact( new DefaultArtifact( gavCoords ) );
-
-            try
-            {
-                retval = system.resolveArtifact( session, artifactRequest ).getArtifact();
-            }
-            catch( ArtifactResolutionException e1 )
-            {
-                LiferayMavenCore.logError( "Unable to get default Liferay archetype", e1 );
-            }
-        }
-
-        if( retval == null )
-        {
-            retval = defaultArtifact;
         }
 
         return retval;

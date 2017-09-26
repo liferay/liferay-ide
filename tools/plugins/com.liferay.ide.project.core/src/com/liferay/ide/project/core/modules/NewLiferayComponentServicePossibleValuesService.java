@@ -15,9 +15,6 @@
 
 package com.liferay.ide.project.core.modules;
 
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.server.core.portal.PortalServer;
-
 import java.util.Set;
 
 import org.eclipse.sapphire.FilteredListener;
@@ -26,8 +23,8 @@ import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.ServerCore;
+
+import com.liferay.ide.project.core.ProjectCore;
 
 /**
  * @author Simon Jiang
@@ -58,23 +55,12 @@ public class NewLiferayComponentServicePossibleValuesService extends PossibleVal
     {
         final NewLiferayComponentOp op = op();
         final String template = op.getComponentClassTemplateName().content( true ).getShortName();
-        IServer runningServer = null;
-        final IServer[] servers = ServerCore.getServers();
 
         if( template.equals( "ServiceHook" ) )
         {
-            for( IServer server : servers )
-            {
-                if( server.getServerType().getId().equals( PortalServer.ID ) )
-                {
-                    runningServer = server;
-                    break;
-                }
-            }
-
             try
             {
-                ServiceContainer serviceWrapperList = new ServiceWrapperCommand( runningServer ).execute();
+                ServiceContainer serviceWrapperList = new ServiceWrapperCommand().execute();
                 values.addAll( serviceWrapperList.getServiceList() );
             }
             catch( Exception e )
@@ -84,19 +70,9 @@ public class NewLiferayComponentServicePossibleValuesService extends PossibleVal
         }
         else if( template.equals( "service" ) )
         {
-            for( IServer server : servers )
-            {
-                if( server.getServerState() == IServer.STATE_STARTED &&
-                    server.getServerType().getId().equals( PortalServer.ID ) )
-                {
-                    runningServer = server;
-                    break;
-                }
-            }
-
             try
             {
-                ServiceCommand serviceCommand = new ServiceCommand( runningServer );
+                ServiceCommand serviceCommand = new ServiceCommand();
 
                 ServiceContainer allServices = serviceCommand.execute();
 

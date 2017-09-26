@@ -135,8 +135,8 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor
         List<IJavaCompletionProposal> proposals = new ArrayList<IJavaCompletionProposal>();
         try
         {
-            serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
-            servicesList = TargetPlatformUtil.getServicesList().getServiceList();
+            serviceWrapperList = TargetPlatformUtil.getServiceWrapperDependencyList().getServiceList();
+            servicesList = TargetPlatformUtil.getServiceDependencyList().getServiceList();
 
             if( serviceWrapperList.contains( importName ) )
             {
@@ -183,8 +183,8 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor
 
         try
         {
-            serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
-            servicesList = TargetPlatformUtil.getServicesList().getServiceList();
+            serviceWrapperList = TargetPlatformUtil.getServiceWrapperDependencyList().getServiceList();
+            servicesList = TargetPlatformUtil.getServiceDependencyList().getServiceList();
 
             for( String wrapper : serviceWrapperList )
             {
