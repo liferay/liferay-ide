@@ -25,7 +25,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.apache.commons.lang,
  com.liferay.ide.server.core.tests,
  com.liferay.ide.core,
- biz.aQute.remote.api;bundle-version="[3.4,4.0)",
  biz.aQute.bndlib;bundle-version="[3.4,4.0)",
  org.eclipse.jdt.launching
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
