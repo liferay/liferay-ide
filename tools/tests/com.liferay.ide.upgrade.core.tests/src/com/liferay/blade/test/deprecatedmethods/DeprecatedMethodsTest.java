@@ -16,35 +16,61 @@
 
 package com.liferay.blade.test.deprecatedmethods;
 
-import com.liferay.blade.api.Migration;
+import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
-import com.liferay.blade.util.NullProgressMonitor;
+import com.liferay.blade.test.apichanges.APITestBase;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
 
-public class DeprecatedMethodsTest {
+public class DeprecatedMethodsTest extends APITestBase {
 
-	@Test
-	public void findProblems() throws Exception {
-		ServiceReference<Migration> sr = context.getServiceReference(Migration.class);
+    @Override
+    public int getExpectedNumber() {
+        return 60;
+    }
 
-		Migration m = context.getService(sr);
+    @Override
+    public String getImplClassName() {
+        return "DeprecatedMethodsMigrator";
+    }
 
-		List<Problem> problems = 
-			m.findProblems(new File("projects/deprecated-methods-test"), 
-				new NullProgressMonitor());
+    @Override
+    public File getTestFile() {
+        return new File("projects/deprecated-methods-test/PortalMockFactory.java");
+    }
 
-		assertEquals(118, problems.size());
-	}
+    final File deprecatedMethods61TestFile = new File("projects/deprecated-methods-test/AssetVocabularyServiceSoap.java");
 
-	private final BundleContext context = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
+    @Test
+    public void deprecatedMethods61TestFile() throws Exception {
+        FileMigrator fmigrator = context.getService(fileMigrators[0]);
+
+        List<Problem> problems = fmigrator.analyze(deprecatedMethods61TestFile);
+
+        context.ungetService(fileMigrators[0]);
+
+        assertNotNull(problems);
+        assertEquals(4, problems.size());
+    }
+
+    final File deprecatedMethodsNoneVersionTestFile = new File("projects/deprecated-methods-test/WebServerServlet.java");
+
+    @Test
+    public void deprecatedMethodsNoneVersionTestFile() throws Exception {
+        FileMigrator fmigrator = context.getService(fileMigrators[0]);
+
+        List<Problem> problems = fmigrator.analyze(deprecatedMethodsNoneVersionTestFile);
+
+        context.ungetService(fileMigrators[0]);
+
+        assertNotNull(problems);
+        assertEquals(2, problems.size());
+    }
 
 }

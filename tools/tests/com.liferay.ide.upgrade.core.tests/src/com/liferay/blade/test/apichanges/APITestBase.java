@@ -35,9 +35,9 @@ import org.osgi.util.tracker.ServiceTracker;
 
 public abstract class APITestBase {
 
-	final BundleContext context = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
+    protected final BundleContext context = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
 
-	ServiceReference<FileMigrator>[] fileMigrators;
+    protected ServiceReference<FileMigrator>[] fileMigrators;
 
 	@Before
 	public void beforeTest() throws Exception {

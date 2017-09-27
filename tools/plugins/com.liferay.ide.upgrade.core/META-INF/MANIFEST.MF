@@ -125,7 +125,8 @@ Service-Component: OSGI-INF/com.liferay.blade.eclipse.provider.CUCacheWTP.xml,
  OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.DDMStructureUpdateStructureInvocation.xml,
  OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.ConvertProcessExtends.xml,
  OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.JournalArticleTags.xml,
- OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.PortletConfigGetFormatMethods.xml
+ OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.PortletConfigGetFormatMethods.xml,
+ OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.BaseAssetRendererGetIconPathDecl.xml
 Bundle-ClassPath: .,
  libs/com.liferay.knowledge.base.markdown.converter-1.0.9.jar,
  libs/jsoup-1.10.3.jar

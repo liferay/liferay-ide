@@ -21,7 +21,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 		property = {
 			"file.extensions=java,jsp,jspf",
-			"implName=DeprecatedMethodsInvocation"
+			"implName=DeprecatedMethodsMigrator"
 		},
 		service = FileMigrator.class
 	)
