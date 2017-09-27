@@ -6,7 +6,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: com.liferay.ide.upgrade.core;singleton:=true
 Bundle-Version: 3.1.2.qualifier
 Bundle-Vendor: Liferay, Inc.
-Export-Package: com.liferay.blade.api
+Export-Package: com.liferay.blade.api,
+ com.liferay.blade.util
 Require-Bundle: org.eclipse.core.resources,
  org.eclipse.core.runtime,
  org.eclipse.jdt.core,
