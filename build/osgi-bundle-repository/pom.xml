@@ -48,6 +48,7 @@
 				<artifact><id>org.apache.maven:maven-aether-provider:3.3.9</id></artifact>
 				<artifact><id>org.apache.maven:maven-settings:3.3.9</id></artifact>
 				<artifact><id>org.apache.maven:maven-settings-builder:3.3.9</id></artifact>
+				<artifact><id>biz.aQute.bnd:biz.aQute.remote.api:3.4.0</id></artifact>
                             </artifacts>
                         </configuration>
                     </execution>

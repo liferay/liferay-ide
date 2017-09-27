@@ -59,6 +59,8 @@
         <module>com.liferay.ide.ui</module>
         <module>com.liferay.ide.ui.notifications</module>
         <module>com.liferay.ide.ui.snippets</module>
+        <module>com.liferay.ide.upgrade.core</module>
+        <module>com.liferay.ide.upgrade.ui</module>
         <module>com.liferay.ide.xml.search.ui</module>
     </modules>
 </project>

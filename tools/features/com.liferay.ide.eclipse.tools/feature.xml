@@ -33,7 +33,6 @@
 
    <requires>
       <import feature="bndtools.main.feature" version="3.4.0" match="greaterOrEqual"/>
-      <import feature="com.liferay.blade.tools" version="2.0.0" match="greaterOrEqual"/>
       <import feature="org.apache.ivy.feature" version="2.3.0" match="greaterOrEqual"/>
       <import feature="org.apache.ivyde.feature" version="2.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.buildship" version="2.1.1" match="greaterOrEqual"/>
@@ -238,6 +237,13 @@
 
    <plugin
          id="com.liferay.ide.bndtools.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.liferay.ide.upgrade.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
