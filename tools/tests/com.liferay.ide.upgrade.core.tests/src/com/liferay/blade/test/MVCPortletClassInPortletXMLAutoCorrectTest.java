@@ -69,7 +69,7 @@ public class MVCPortletClassInPortletXMLAutoCorrectTest {
 
 		FileMigrator fileMigrator = (FileMigrator) autoMigrator;
 
-		File testfile = new File("generated/test/MVCPortletClassInPortletXMLAutoCorrectTest/portlet.xml");
+		File testfile = new File("target/test/MVCPortletClassInPortletXMLAutoCorrectTest/portlet.xml");
 
 		if (testfile.exists()) {
 			assertTrue(testfile.delete());
