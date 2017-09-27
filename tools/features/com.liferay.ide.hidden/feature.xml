@@ -2,7 +2,7 @@
 <feature
       id="com.liferay.ide.hidden"
       label="Liferay IDE Hidden"
-      version="3.1.2.qualifier"
+      version="3.2.0.qualifier"
       provider-name="Liferay, Inc.">
 
    <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
