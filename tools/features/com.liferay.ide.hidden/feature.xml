@@ -39,10 +39,6 @@
          version="0.0.0"/>
 
    <includes
-         id="com.liferay.blade.tools"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.buildship"
          version="0.0.0"/>
 
