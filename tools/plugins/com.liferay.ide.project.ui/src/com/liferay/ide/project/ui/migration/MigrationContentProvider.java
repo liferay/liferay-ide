@@ -122,4 +122,9 @@ public class MigrationContentProvider implements ITreeContentProvider
         this._problems = problems;
     }
 
+    public int getProblemsCount()
+    {
+        return this._problems != null ? this._problems.size() : 0;
+    }
+
 }

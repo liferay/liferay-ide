@@ -163,6 +163,7 @@ public class MigrateProjectHandler extends AbstractHandler
                     MarkerUtil.clearMarkers( project, MigrationConstants.MARKER_TYPE, null );
                 }
 
+                setButtonState( false );
                 final IPath location = project.getLocation();
 
                 findMigrationProblems( new IPath[] { location }, new String[] { project.getName() } );
@@ -194,6 +195,7 @@ public class MigrateProjectHandler extends AbstractHandler
                     projectNames.add( iProject.getName() );
                 }
 
+                setButtonState( false );
                 findMigrationProblems( locations.toArray( new IPath[0] ), projectNames.toArray( new String[0] ) );
             }
         }
@@ -745,6 +747,13 @@ public class MigrateProjectHandler extends AbstractHandler
                 }
             }
         }
+    }
+
+    private void setButtonState( boolean enableState )
+    {
+        FindBreakingChangesPage page =
+            UpgradeView.getPage( Page.FINDBREACKINGCHANGES_PAGE_ID, FindBreakingChangesPage.class );
+        page.setButtonState( enableState );
     }
 
 }

@@ -43,6 +43,7 @@ public class IDEReporter implements Reporter
     {
         UIUtil.async( new Runnable()
         {
+
             @Override
             public void run()
             {
@@ -50,8 +51,10 @@ public class IDEReporter implements Reporter
                     UpgradeView.getPage( Page.FINDBREACKINGCHANGES_PAGE_ID, FindBreakingChangesPage.class );
 
                 page.getTreeViewer().setInput( CoreUtil.getWorkspaceRoot() );
+
+                page.setButtonState( true );
             }
-        });
+        } );
     }
 
     @Override
