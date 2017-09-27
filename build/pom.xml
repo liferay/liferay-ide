@@ -54,8 +54,8 @@
         <profile>
             <id>swtbotTestsOnly</id>
             <modules>
-                <module>../swtbot</module>
-                <module>com.liferay.ide.swtbot.testing-repository</module>
+                <module>../ui-tests</module>
+                <module>com.liferay.ide.ui.testing-repository</module>
             </modules>
         </profile>
         <profile>
@@ -65,10 +65,10 @@
                 <module>../jsdt</module>
                 <module>../maven</module>
                 <module>../enterprise</module>
-                <module>../swtbot</module>
+                <module>../ui-tests</module>
                 <module>com.liferay.ide-repository</module>
                 <module>com.liferay.ide.testing-repository</module>
-                <module>com.liferay.ide.swtbot.testing-repository</module>
+                <module>com.liferay.ide.ui.testing-repository</module>
             </modules>
         </profile>
         <profile>

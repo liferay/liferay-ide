@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Service UI Tests
-Bundle-SymbolicName: com.liferay.ide.swtbot.service.ui.tests
+Bundle-SymbolicName: com.liferay.ide.ui.service.tests
 Bundle-Version: 3.2.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: 
