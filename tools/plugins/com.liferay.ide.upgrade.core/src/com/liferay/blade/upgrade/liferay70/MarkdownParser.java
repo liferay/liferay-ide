@@ -53,7 +53,6 @@ public class MarkdownParser {
 				_markdowns.put(fileName, sections);
 
 				retval = sections;
-
 			}
 			catch (Exception e) {
 				e.printStackTrace();
