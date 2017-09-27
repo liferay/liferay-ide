@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ActivationPolicy: lazy
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Upgrade Core
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-SymbolicName: com.liferay.ide.upgrade.core;singleton:=true
+Bundle-Version: 3.1.2.qualifier
+Bundle-Vendor: Liferay, Inc.
+Export-Package: com.liferay.blade.api
+Require-Bundle: org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.jdt.core,
+ org.eclipse.wst.sse.core,
+ org.eclipse.jst.jsp.core,
+ org.eclipse.wst.xml.core
+Service-Component: OSGI-INF/com.liferay.blade.eclipse.provider.CUCacheWTP.xml,
+ OSGI-INF/com.liferay.blade.eclipse.provider.ProjectMigrationService.xml,
+ OSGI-INF/com.liferay.blade.eclipse.provider.JSPFileWTP.xml,
+ OSGI-INF/com.liferay.blade.eclipse.provider.SSEXMLFile.xml,
+ OSGI-INF/com.liferay.blade.eclipse.provider.CUCacheJDT.xml,
+ OSGI-INF/com.liferay.blade.eclipse.provider.JSPFFileWTP.xml,
+ OSGI-INF/com.liferay.blade.eclipse.provider.JavaFileJDT.xml
