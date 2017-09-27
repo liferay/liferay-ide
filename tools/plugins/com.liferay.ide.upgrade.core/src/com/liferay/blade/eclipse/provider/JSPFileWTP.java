@@ -255,9 +255,11 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 			final Collection<ServiceReference<CUCache>> sr = context.getServiceReferences(CUCache.class, "(type=jsp)");
 
 			ServiceReference<CUCache> ref = sr.iterator().next();
-			CUCache cache = context.getService(ref);
 
-			_translation = (JSPTranslationPrime) cache.getCU(file, null);
+			@SuppressWarnings("unchecked")
+			CUCache<JSPTranslationPrime> cache = context.getService(ref);
+
+			_translation = cache.getCU(file, null);
 		}
 		catch (Exception e) {
 			throw new IllegalArgumentException(e);

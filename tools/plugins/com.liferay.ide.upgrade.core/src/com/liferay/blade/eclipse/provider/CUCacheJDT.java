@@ -22,6 +22,7 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.function.Supplier;
 
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
@@ -43,12 +44,14 @@ public class CUCacheJDT extends BaseCUCache implements CUCache<CompilationUnit> 
 	private static final Map<File, WeakReference<CompilationUnit>> _map = new WeakHashMap<>();
 
 	@Override
-	public CompilationUnit getCU(File file, char[] javaSource) {
+	public CompilationUnit getCU(File file, Supplier<char[]> javaSource) {
 		synchronized (_map) {
 			WeakReference<CompilationUnit> astRef = _map.get(file);
 
 			if (astRef == null || astRef.get() == null) {
-				final CompilationUnit newAst = createCompilationUnit(file.getName(), javaSource);
+				char[] chars = javaSource.get();
+
+				final CompilationUnit newAst = createCompilationUnit(file.getName(), chars);
 
 				_map.put(file, new WeakReference<CompilationUnit>(newAst));
 

@@ -17,13 +17,14 @@
 package com.liferay.blade.api;
 
 import java.io.File;
+import java.util.function.Supplier;
 
 /**
  * @author Gregory Amerson
  */
 public interface CUCache<T> {
 
-	public T getCU(File file, char[] javaSource);
+	public T getCU(File file, Supplier<char[]> javaSource);
 
 	public void unget(File file);
 

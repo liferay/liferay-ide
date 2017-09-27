@@ -16,6 +16,9 @@
 
 package com.liferay.blade.eclipse.provider;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.liferay.blade.api.CUCache;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
@@ -27,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Block;
@@ -92,9 +97,10 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 			ServiceReference<CUCache> ref = sr.iterator().next();
 
-			CUCache cache = context.getService(ref);
+			@SuppressWarnings("unchecked")
+			CUCache<CompilationUnit> cache = context.getService(ref);
 
-			_ast = (CompilationUnit) cache.getCU(file, getJavaSource());
+			_ast = cache.getCU(file, () -> getJavaSource());
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -334,6 +340,12 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 		return searchResults;
 	}
 
+	private LoadingCache<Expression, Optional<ITypeBinding>> typeCache = CacheBuilder.newBuilder().build(new CacheLoader<Expression, Optional<ITypeBinding>>(){
+		@Override
+		public Optional<ITypeBinding> load(Expression key) throws Exception {
+			return Optional.ofNullable(key.resolveTypeBinding());
+		}});
+
 	/**
 	 * find the method invocations for a particular method on a given type or expression
 	 *
@@ -359,7 +371,11 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 				ITypeBinding type = null;
 
 				if (expression != null) {
-					type = expression.resolveTypeBinding();
+					try {
+						type = typeCache.get(expression).orElse(null);
+					}
+					catch (ExecutionException e) {
+					}
 				}
 
 				if ( ((methodName.equals(methodNameValue)) || ("*".equals(methodName))) &&
