@@ -70,11 +70,11 @@ public class ProjectLocationValidationService extends ValidationService
                 return StatusBridge.create( status );
             }
 
-            if( isInLiferayWorkspace( location ) )
-            {
-                return StatusBridge.create(
-                    ProjectCore.createErrorStatus( "sdk project is already in a Liferay workspace" ) );
-            }
+//            if( isInLiferayWorkspace( location ) )
+//            {
+//                return StatusBridge.create(
+//                    ProjectCore.createErrorStatus( "sdk project is already in a Liferay workspace" ) );
+//            }
 
             String version = sdk.getVersion();
 

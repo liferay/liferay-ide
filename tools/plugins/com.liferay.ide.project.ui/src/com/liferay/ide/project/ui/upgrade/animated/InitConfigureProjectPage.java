@@ -22,7 +22,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.IOUtil;
 import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
@@ -54,11 +53,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
@@ -152,7 +154,17 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 return;
             }
 
-            if( isMavenProject( path.toPortableString() ) )
+            if( isAlreadyImported( PathBridge.create(path) ) )
+            {
+            		disposeBundleCheckboxElement();
+                disposeBundleElement();
+                disposeServerEelment();
+                disposeMigrateLayoutElement();
+
+                importButton.setText("Continue");
+                pageParent.layout();
+            }
+            else if( isMavenProject( path.toPortableString() ) )
             {
                 disposeBundleCheckboxElement();
                 disposeBundleElement();
@@ -195,7 +207,15 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
             startCheckThread();
         }
+
     }
+
+	private boolean isAlreadyImported(IPath path) {
+		IContainer[] containers =
+			ResourcesPlugin.getWorkspace().getRoot().findContainersForLocationURI(path.toFile().toURI());
+
+		return Stream.of(containers).filter(container -> container instanceof IProject).count() > 0;
+	}
 
     private boolean isMavenProject( String path )
     {
@@ -256,7 +276,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         dirField = createTextField( pageParent, SWT.NONE );
         dirField.addModifyListener( new ModifyListener()
         {
-            public void modifyText( ModifyEvent e )
+            @Override
+			public void modifyText( ModifyEvent e )
             {
                 dataModel.setSdkLocation( dirField.getText() );
 
@@ -517,7 +538,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         {
             private static final int CURSOR_SIZE = 15;
 
-            protected Point getInitialLocation( Point initialSize )
+            @Override
+			protected Point getInitialLocation( Point initialSize )
             {
                 Display display = getShell().getDisplay();
                 Point location = display.getCursorLocation();
@@ -526,7 +548,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 return location;
             }
 
-            protected Control createDialogArea( Composite parent )
+            @Override
+			protected Control createDialogArea( Composite parent )
             {
                 Label label = new Label( parent, SWT.WRAP );
                 label.setText( extensionDec );
@@ -674,7 +697,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         bundleNameField.addModifyListener( new ModifyListener()
         {
 
-            public void modifyText( ModifyEvent e )
+            @Override
+			public void modifyText( ModifyEvent e )
             {
                 dataModel.setBundleName( bundleNameField.getText() );
             }
@@ -692,7 +716,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         bundleUrlField.addModifyListener( new ModifyListener()
         {
 
-            public void modifyText( ModifyEvent e )
+            @Override
+			public void modifyText( ModifyEvent e )
             {
                 dataModel.setBundleUrl( bundleUrlField.getText() );
             }
@@ -1031,7 +1056,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         }
     }
 
-    public int getGridLayoutCount()
+    @Override
+	public int getGridLayoutCount()
     {
         return 2;
     }
@@ -1084,12 +1110,21 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         IPath location = PathBridge.create( dataModel.getSdkLocation().content() );
 
+        if (isAlreadyImported(location))
+        {
+        		Stream.of(CoreUtil.getAllProjects()).forEach(this::checkProjectType);
+
+        		dataModel.setImportFinished(true);
+        		return;
+        }
+
         try
         {
             PlatformUI.getWorkbench().getProgressService().run( true, true, new IRunnableWithProgress()
             {
 
-                public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
+                @Override
+				public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
                 {
                     try
                     {
@@ -1284,18 +1319,18 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                 for( Iterator<Element> resolversIterator = resolversElements.iterator(); resolversIterator.hasNext(); )
                 {
-                    Element resolversElement = (Element) resolversIterator.next();
+                    Element resolversElement = resolversIterator.next();
 
                     List<Element> chainElements = resolversElement.getChildren( "chain" );
 
                     for( Iterator<Element> chainIterator = chainElements.iterator(); chainIterator.hasNext(); )
                     {
-                        Element chainElement = (Element) chainIterator.next();
+                        Element chainElement = chainIterator.next();
                         List<Element> resolverElements = chainElement.getChildren( "resolver" );
 
                         for( Iterator<Element> resolverIterator = resolverElements.iterator(); resolverIterator.hasNext(); )
                         {
-                            Element resolverItem = (Element) resolverIterator.next();
+                            Element resolverItem = resolverIterator.next();
                             String resolverRefItem = resolverItem.getAttributeValue( "ref" );
 
                             if (resolverRefItem.equals( "liferay-private" ))
@@ -1311,7 +1346,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                     for( Iterator<Element> ibiblioIterator = ibiblioElements.iterator(); ibiblioIterator.hasNext(); )
                     {
-                        Element ibiblioElement = (Element) ibiblioIterator.next();
+                        Element ibiblioElement = ibiblioIterator.next();
                         String liferayPrivateName = ibiblioElement.getAttributeValue( "name" );
 
                         if (liferayPrivateName.equals( "liferay-private" ))
@@ -1559,29 +1594,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     }
                     else if( layoutComb.getSelectionIndex() == 0 )
                     {
-                        boolean liferayWorksapceValidation = true;
-                        String workspaceValidationMessage = "ok";
-
-                        try
-                        {
-                            if( LiferayWorkspaceUtil.hasWorkspace() )
-                            {
-                                liferayWorksapceValidation = false;
-                                workspaceValidationMessage = LiferayWorkspaceUtil.hasLiferayWorkspaceMsg;
-                            }
-                        }
-                        catch( CoreException e )
-                        {
-                            liferayWorksapceValidation = false;
-                            workspaceValidationMessage = e.getMessage();
-                        }
-
-                        if( !liferayWorksapceValidation && inputValidation )
-                        {
-                            message = workspaceValidationMessage;
-                            layoutValidation = false;
-                        }
-                        else if( downloadBundle && !bundleNameValidation.compute().ok() )
+                        if( downloadBundle && !bundleNameValidation.compute().ok() )
                         {
                             message = bundleNameValidation.compute().message();
 
@@ -1603,7 +1616,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 if( dataModel.getImportFinished().content() )
                 {
                     message =
-                        "Import has finished. If you want to reimport, please click swirling arrows in the view.";
+                        "Import has finished. If you want to reset, please click reset icon in view toolbar.";
 
                     pe.setType( PageValidateEvent.WARNING );
 
