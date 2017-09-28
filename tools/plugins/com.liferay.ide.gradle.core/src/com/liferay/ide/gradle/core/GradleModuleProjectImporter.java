@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.gradle.core;
 
@@ -19,6 +18,7 @@ import com.liferay.ide.core.AbstractLiferayProjectImporter;
 import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,112 +34,97 @@ import org.eclipse.core.runtime.Status;
 /**
  * @author Andy Wu
  */
-public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter
-{
-    private IProject refreshProject = null;
+public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter {
 
-    @Override
-    public IStatus canImport( String location )
-    {
-        IStatus retval = null;
+	@Override
+	public IStatus canImport(String location) {
+		IStatus retval = null;
 
-        File file = new File( location );
+		File file = new File(location);
 
-        if( findGradleFile( file ) )
-        {
-            if( findSettingsFile( file ) )
-            {
-                return Status.OK_STATUS;
-            }
-            else
-            {
-                File parent = file.getParentFile();
+		if (_findGradleFile(file)) {
+			if (_findSettingsFile(file)) {
+				return Status.OK_STATUS;
+			}
+			else {
+				File parent = file.getParentFile();
 
-                while( parent != null )
-                {
-                    if( findGradleFile( parent ) )
-                    {
-                        File gradleFile = new File( file, "build.gradle" );
-                        IPath gradleFilelocation = Path.fromOSString( gradleFile.getAbsolutePath() );
-                        IFile ifile = CoreUtil.getWorkspaceRoot().getFileForLocation( gradleFilelocation );
+				while (parent != null) {
+					if (_findGradleFile(parent)) {
+						File gradleFile = new File(file, "build.gradle");
 
-                        if( ifile != null && ifile.getProject() != null )
-                        {
-                            refreshProject = ifile.getProject();
+						IPath gradleFilelocation = Path.fromOSString(gradleFile.getAbsolutePath());
 
-                            retval = new Status(
-                                IStatus.WARNING, GradleCore.PLUGIN_ID,
-                                "Project is inside \"" + refreshProject.getName() + "\" project. we will just refresh to import" );
-                        }
-                        else
-                        {
-                            retval = new Status(
-                                IStatus.ERROR, GradleCore.PLUGIN_ID,
-                                "Location is not the root location of a multi-module project." );
-                        }
+						IFile gradleWorkspaceFile = CoreUtil.getWorkspaceRoot().getFileForLocation(gradleFilelocation);
 
-                        return retval;
-                    }
+						if ((gradleWorkspaceFile != null) && (gradleWorkspaceFile.getProject() != null)) {
+							_refreshProject = gradleWorkspaceFile.getProject();
 
-                    parent = parent.getParentFile();
-                }
+							retval = new Status(
+								IStatus.WARNING, GradleCore.PLUGIN_ID,
+								"Project is inside \"" + _refreshProject.getName() +
+									"\" project. we will just refresh to import");
+						}
+						else {
+							retval = new Status(
+								IStatus.ERROR, GradleCore.PLUGIN_ID,
+								"Location is not the root location of a multi-module project.");
+						}
 
-                if( retval == null )
-                {
-                    return Status.OK_STATUS;
-                }
-            }
-        }
+						return retval;
+					}
 
-        return retval;
-    }
+					parent = parent.getParentFile();
+				}
 
-    private boolean findFile( File dir, String name )
-    {
-        boolean retval = false;
+				if (retval == null) {
+					return Status.OK_STATUS;
+				}
+			}
+		}
 
-        if( dir.exists() )
-        {
-            File[] files = dir.listFiles();
+		return retval;
+	}
 
-            for( File file : files )
-            {
-                if( !file.isDirectory() && file.getName().equals( name ) )
-                {
-                    retval = true;
-                }
-            }
-        }
+	@Override
+	public List<IProject> importProjects(String location, IProgressMonitor monitor) throws CoreException {
+		if (_refreshProject != null) {
+			GradleUtil.refreshGradleProject(_refreshProject);
+			_refreshProject = null;
+		}
+		else {
+			GradleUtil.importGradleProject(new File(location), monitor);
+		}
 
-        return retval;
-    }
+		// To-Do need return the projects added
 
-    private boolean findGradleFile( File dir )
-    {
-        return findFile( dir, "build.gradle" );
-    }
+		return new ArrayList<>();
+	}
 
-    private boolean findSettingsFile( File dir )
-    {
-        return findFile( dir, "settings.gradle" );
-    }
+	private boolean _findFile(File dir, String name) {
+		boolean retval = false;
 
-    @Override
-    public List<IProject> importProjects( String location, IProgressMonitor monitor ) throws CoreException
-    {
-        if( refreshProject != null )
-        {
-            GradleUtil.refreshGradleProject( refreshProject );
-            refreshProject = null;
-        }
-        else
-        {
-            GradleUtil.importGradleProject( new File( location ), monitor );
-        }
+		if (dir.exists()) {
+			File[] files = dir.listFiles();
 
-        //To-Do need return the projects added
+			for (File file : files) {
+				if (!file.isDirectory() && file.getName().equals(name)) {
+					retval = true;
+				}
+			}
+		}
 
-        return new ArrayList<>();
-    }
+		return retval;
+	}
+
+	private boolean _findGradleFile(File dir) {
+		return _findFile(dir, "build.gradle");
+	}
+
+	private boolean _findSettingsFile(File dir) {
+		return _findFile(dir, "settings.gradle");
+	}
+
+	private IProject _refreshProject = null;
 
 }

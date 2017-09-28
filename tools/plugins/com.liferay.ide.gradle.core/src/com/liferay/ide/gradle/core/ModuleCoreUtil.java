@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.gradle.core;
 
@@ -20,6 +19,7 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,147 +35,137 @@ import org.eclipse.core.runtime.OperationCanceledException;
 /**
  * @author Andy Wu
  */
-public class ModuleCoreUtil
-{
+public class ModuleCoreUtil {
 
-    public static void addFacetsIfNeeded( final File projectLocation, IProgressMonitor monitor ) throws CoreException
-    {
-        final List<IProject> projects = new ArrayList<IProject>();
+	public static void addFacetsIfNeeded(final File projectLocation, IProgressMonitor monitor) throws CoreException {
+		List<IProject> projects = new ArrayList<>();
 
-        ProjectUtil.collectProjectsFromDirectory( projects, projectLocation );
+		ProjectUtil.collectProjectsFromDirectory(projects, projectLocation);
 
-        for( final IProject project : projects )
-        {
-            if( hasJsp( project ) )
-            {
-                addFacets( project, monitor );
-            }
-        }
-    }
+		for (final IProject project : projects) {
+			if (_hasJsp(project)) {
+				_addFacets(project, monitor);
+			}
+		}
+	}
 
-    private static void addFacets( IProject project, IProgressMonitor monitor ) throws CoreException
-    {
-        addNature( project, "org.eclipse.wst.common.modulecore.ModuleCoreNature", monitor );
-        addNature( project, "org.eclipse.wst.common.project.facet.core.nature", monitor );
+	private static void _addConfigFile(final IProject project) throws CoreException {
+		StringBuilder sb = new StringBuilder();
 
-        addConfigFile( project );
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		sb.append("\n");
+		sb.append("<project-modules id=\"moduleCoreId\" project-version=\"1.5.0\">");
+		sb.append("\n");
+		sb.append("<wb-module deploy-name=\"PROJECT_NAME\">");
+		sb.append("\n");
+		sb.append("<wb-resource deploy-path=\"/\" source-path=\"/src/main/resources/META-INF/resources\" ");
+		sb.append("tag=\"defaultRootSource\"/>");
+		sb.append("\n");
+		sb.append("</wb-module>");
+		sb.append("\n");
+		sb.append("</project-modules>");
+		sb.append("\n");
 
-        project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-    }
+		String finalContent = sb.toString().replace("PROJECT_NAME", project.getName());
 
-    private static void addConfigFile( final IProject project ) throws CoreException
-    {
-        String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-            "<project-modules id=\"moduleCoreId\" project-version=\"1.5.0\">\n" +
-            "<wb-module deploy-name=\"PROJECT_NAME\">\n" + "<wb-resource deploy-path=\"/\" " +
-            "source-path=\"/src/main/resources/META-INF/resources\" " + "tag=\"defaultRootSource\"/>\n" +
-            "</wb-module>\n</project-modules>";
+		File compoment = new File(project.getLocation().toFile(), ".settings/org.eclipse.wst.common.component");
 
-        String finalContent = content.replace( "PROJECT_NAME", project.getName() );
+		if (!compoment.exists()) {
+			FileUtil.writeFile(compoment, finalContent.getBytes(), project.getName());
+		}
+	}
 
-        File compoment = new File( project.getLocation().toFile(), ".settings/org.eclipse.wst.common.component" );
+	private static void _addFacets(IProject project, IProgressMonitor monitor) throws CoreException {
+		_addNature(project, "org.eclipse.wst.common.modulecore.ModuleCoreNature", monitor);
+		_addNature(project, "org.eclipse.wst.common.project.facet.core.nature", monitor);
 
-        if( !compoment.exists() )
-        {
-            FileUtil.writeFile( compoment, finalContent.getBytes(), project.getName() );
-        }
-    }
+		_addConfigFile(project);
 
-    private static void addNature( IProject project, String natureId, IProgressMonitor monitor ) throws CoreException
-    {
-        if( monitor != null && monitor.isCanceled() )
-        {
-            throw new OperationCanceledException();
-        }
+		project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+	}
 
-        if( !hasNature( project, natureId ) )
-        {
-            IProjectDescription description = project.getDescription();
+	private static void _addNature(IProject project, String natureId, IProgressMonitor monitor) throws CoreException {
+		if ((monitor != null) && monitor.isCanceled()) {
+			throw new OperationCanceledException();
+		}
 
-            String[] prevNatures = description.getNatureIds();
-            String[] newNatures = new String[prevNatures.length + 1];
+		if (!_hasNature(project, natureId)) {
+			IProjectDescription description = project.getDescription();
 
-            System.arraycopy( prevNatures, 0, newNatures, 0, prevNatures.length );
+			String[] prevNatures = description.getNatureIds();
 
-            newNatures[prevNatures.length] = natureId;
+			String[] newNatures = new String[prevNatures.length + 1];
 
-            description.setNatureIds( newNatures );
-            project.setDescription( description, monitor );
-        }
-        else
-        {
-            if( monitor != null )
-            {
-                monitor.worked( 1 );
-            }
-        }
-    }
+			System.arraycopy(prevNatures, 0, newNatures, 0, prevNatures.length);
 
-    private static boolean hasJsp( IProject project )
-    {
-        final List<String> list = new ArrayList<String>();
+			newNatures[prevNatures.length] = natureId;
 
-        try
-        {
-            final IPath projectPath = project.getLocation().append( ".project" );
+			description.setNatureIds(newNatures);
 
-            final File projectFile = projectPath.toFile().getCanonicalFile();
+			project.setDescription(description, monitor);
+		}
+		else {
+			if (monitor != null) {
+				monitor.worked(1);
+			}
+		}
+	}
 
-            project.accept( new IResourceVisitor()
-            {
+	private static boolean _hasJsp(IProject project) {
+		List<String> list = new ArrayList<>();
 
-                @Override
-                public boolean visit( IResource resource ) throws CoreException
-                {
-                    try
-                    {
-                        IPath childProject = resource.getLocation().append( ".project" );
+		try {
+			IPath projectPath = project.getLocation().append(".project");
 
-                        File childFile = childProject.toFile().getCanonicalFile();
+			File projectFile = projectPath.toFile().getCanonicalFile();
 
-                        //don't check child project
-                        if( childFile.exists() && !projectFile.equals( childFile ) )
-                        {
-                            return false;
-                        }
+			project.accept(
+				new IResourceVisitor() {
 
-                        String path = resource.getLocation().toPortableString();
+					@Override
+					public boolean visit(IResource resource) throws CoreException {
+						try {
+							IPath childProject = resource.getLocation().append(".project");
 
-                        if( path.contains( "resources/META-INF/resources" ) && resource.getName().endsWith( ".jsp" ) )
-                        {
-                            list.add( path );
-                        }
-                    }
-                    catch( IOException e )
-                    {
-                    }
+							File childFile = childProject.toFile().getCanonicalFile();
 
-                    return true;
-                }
-            } );
-        }
-        catch( Exception e )
-        {
-        }
+							// don't check child project
 
-        return !list.isEmpty();
-    }
+							if (childFile.exists() && !projectFile.equals(childFile)) {
+								return false;
+							}
 
-    private static boolean hasNature( IProject project, String natureId )
-    {
-        try
-        {
-            if( !project.hasNature( natureId ) )
-            {
-                return false;
-            }
-        }
-        catch( CoreException e )
-        {
-            return false;
-        }
+							String path = resource.getLocation().toPortableString();
 
-        return true;
-    }
+							if (path.contains("resources/META-INF/resources") && resource.getName().endsWith(".jsp")) {
+								list.add(path);
+							}
+						}
+						catch (IOException ioe) {
+						}
+
+						return true;
+					}
+
+				});
+		}
+		catch (Exception e) {
+		}
+
+		return !list.isEmpty();
+	}
+
+	private static boolean _hasNature(IProject project, String natureId) {
+		try {
+			if (!project.hasNature(natureId)) {
+				return false;
+			}
+		}
+		catch (CoreException ce) {
+			return false;
+		}
+
+		return true;
+	}
 
 }

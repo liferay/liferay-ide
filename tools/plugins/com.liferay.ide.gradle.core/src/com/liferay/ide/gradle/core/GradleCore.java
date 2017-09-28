@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.gradle.core;
 
@@ -21,9 +20,11 @@ import java.io.File;
 
 import org.eclipse.buildship.core.CorePlugin;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+
 import org.osgi.framework.BundleContext;
 
 /**
@@ -33,122 +34,113 @@ import org.osgi.framework.BundleContext;
  * @author Terry Jia
  * @author Andy Wu
  */
-@SuppressWarnings( "restriction" )
-public class GradleCore extends Plugin
-{
+@SuppressWarnings("restriction")
+public class GradleCore extends Plugin {
 
-    // The shared instance
-    private static GradleCore plugin;
+	// The shared instance
 
-    // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.gradle.core";
+	public static final String PLUGIN_ID = "com.liferay.ide.gradle.core";
 
-    public static final String JobFamilyId = "CheckingGradleConfiguration";
+	// The plugin ID
 
-    public static final File customModelCache = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
-    
-    private final GradleProjectCreatedListener gradleProjectCreatedListener;
+	public static final File customModelCache = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
+	public static final String JobFamilyId = "CheckingGradleConfiguration";
 
-    public static IStatus createErrorStatus( Exception ex )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex );
-    }
+	public static IStatus createErrorStatus(Exception ex) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex);
+	}
 
-    public static IStatus createErrorStatus( String msg )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, msg );
-    }
+	public static IStatus createErrorStatus(String msg) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg);
+	}
 
-    public static IStatus createErrorStatus( String msg, Exception e )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
-    }
+	public static IStatus createErrorStatus(String msg, Exception e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
+	}
 
-    public static IStatus createWarningStatus( String msg )
-    {
-        return new Status( IStatus.WARNING, PLUGIN_ID, msg );
-    }
+	public static IStatus createWarningStatus(String msg) {
+		return new Status(IStatus.WARNING, PLUGIN_ID, msg);
+	}
 
-    /**
-     * Returns the shared instance
-     *
-     * @return the shared instance
-     */
-    public static GradleCore getDefault()
-    {
-        return plugin;
-    }
+	/**
+	 * Returns the shared instance
+	 *
+	 * @return the shared instance
+	 */
+	public static GradleCore getDefault() {
+		return _plugin;
+	}
 
-    public static <T> T getToolingModel( Class<T> modelClass, File projectDir )
-    {
-        T retval = null;
+	public static <T> T getToolingModel(Class<T> modelClass, File projectDir) {
+		T retval = null;
 
-        try
-        {
-            retval =
-                GradleTooling.getModel( modelClass, customModelCache, projectDir );
-        }
-        catch( Exception e )
-        {
-            logError( "Error getting tooling model", e );
-        }
+		try {
+			retval = GradleTooling.getModel(modelClass, customModelCache, projectDir);
+		}
+		catch (Exception e) {
+			logError("Error getting tooling model", e);
+		}
 
-        return retval;
-    }
+		return retval;
+	}
 
-    public static <T> T getToolingModel( Class<T> modelClass, IProject gradleProject )
-    {
-        return getToolingModel( modelClass, gradleProject.getLocation().toFile() );
-    }
+	public static <T> T getToolingModel(Class<T> modelClass, IProject gradleProject) {
+		return getToolingModel(modelClass, gradleProject.getLocation().toFile());
+	}
 
-    public static void logError( Exception ex )
-    {
-        getDefault().getLog().log( createErrorStatus( ex ) );
-    }
+	public static void logError(Exception ex) {
+		ILog log = getDefault().getLog();
 
-    public static void logError( String msg )
-    {
-        getDefault().getLog().log( createErrorStatus( msg ) );
-    }
+		log.log(createErrorStatus(ex));
+	}
 
-    public static void logError( String msg, Exception e )
-    {
-        getDefault().getLog().log( createErrorStatus( msg, e ) );
-    }
+	public static void logError(String msg) {
+		ILog log = getDefault().getLog();
 
-    /**
-     * The constructor
-     */
-    public GradleCore()
-    {
-        super();
+		log.log(createErrorStatus(msg));
+	}
 
-        gradleProjectCreatedListener = new GradleProjectCreatedListener();
-    }
+	public static void logError(String msg, Exception e) {
+		ILog log = getDefault().getLog();
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-     */
-    public void start( BundleContext context ) throws Exception
-    {
-        super.start( context );
+		log.log(createErrorStatus(msg, e));
+	}
 
-        plugin = this;
+	/**
+	 * The constructor
+	 */
+	public GradleCore() {
+		_gradleProjectCreatedListener = new GradleProjectCreatedListener();
+	}
 
-        CorePlugin.listenerRegistry().addEventListener( gradleProjectCreatedListener );
-    }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(BundleContext)
+	 */
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-     */
-    public void stop( BundleContext context ) throws Exception
-    {
-        CorePlugin.listenerRegistry().removeEventListener( gradleProjectCreatedListener );
+		_plugin = this;
 
-        plugin = null;
+		CorePlugin.listenerRegistry().addEventListener(_gradleProjectCreatedListener);
+	}
 
-        super.stop( context );
-    }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(BundleContext)
+	 */
+	public void stop(BundleContext context) throws Exception {
+		CorePlugin.listenerRegistry().removeEventListener(_gradleProjectCreatedListener);
+
+		_plugin = null;
+
+		super.stop(context);
+	}
+
+	private static GradleCore _plugin;
+
+	private final GradleProjectCreatedListener _gradleProjectCreatedListener;
+
 }

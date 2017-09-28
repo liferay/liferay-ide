@@ -1,75 +1,89 @@
-/*
- * Copyright 2011 the original author or authors.
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
+
 package com.liferay.ide.gradle.core;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import org.gradle.internal.UncheckedException;
 import org.gradle.tooling.GradleConnectionException;
 import org.gradle.tooling.ResultHandler;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-
 /**
- * Copied from gradle sdk: tooling-api/org/gradle/tooling/internal/consumer/BlockingResultHandler.java
+ * Copied from gradle sdk:
+ * tooling-api/org/gradle/tooling/internal/consumer/BlockingResultHandler.java
+ *
+ * @author Gregory Amerson
  */
-class BlockingResultHandler<T> implements ResultHandler<T> {
-    private final BlockingQueue<Object> queue = new ArrayBlockingQueue<Object>(1);
-    private final Class<T> resultType;
-    private static final Object NULL = new Object();
+public class BlockingResultHandler<T> implements ResultHandler<T> {
 
-    public BlockingResultHandler(Class<T> resultType) {
-        this.resultType = resultType;
-    }
+	public BlockingResultHandler(Class<T> resultType) {
+		_resultType = resultType;
+	}
 
-    public T getResult() {
-        Object result;
-        try {
-            result = queue.take();
-        } catch (InterruptedException e) {
-            throw UncheckedException.throwAsUncheckedException(e);
-        }
+	public T getResult() {
+		Object result;
+		try {
+			result = _queue.take();
+		}
+		catch (InterruptedException ie) {
+			throw UncheckedException.throwAsUncheckedException(ie);
+		}
 
-        if (result instanceof Throwable) {
-            throw UncheckedException.throwAsUncheckedException(attachCallerThreadStackTrace((Throwable) result));
-        }
-        if (result == NULL) {
-            return null;
-        }
-        return resultType.cast(result);
-    }
+		if (result instanceof Throwable) {
+			throw UncheckedException.throwAsUncheckedException(_attachCallerThreadStackTrace((Throwable)result));
+		}
 
-    private Throwable attachCallerThreadStackTrace(Throwable failure) {
-        List<StackTraceElement> adjusted = new ArrayList<StackTraceElement>();
-        adjusted.addAll(Arrays.asList(failure.getStackTrace()));
-        List<StackTraceElement> currentThreadStack = Arrays.asList(Thread.currentThread().getStackTrace());
-        if (!currentThreadStack.isEmpty()) {
-            adjusted.addAll(currentThreadStack.subList(2, currentThreadStack.size()));
-        }
-        failure.setStackTrace(adjusted.toArray(new StackTraceElement[0]));
-        return failure;
-    }
+		if (result == _NULL) {
+			return null;
+		}
 
-    public void onComplete(T result) {
-        queue.add(result == null ? NULL : result);
-    }
+		return _resultType.cast(result);
+	}
 
-    public void onFailure(GradleConnectionException failure) {
-        queue.add(failure);
-    }
+	public void onComplete(T result) {
+		_queue.add(result == null ? _NULL : result);
+	}
+
+	public void onFailure(GradleConnectionException failure) {
+		_queue.add(failure);
+	}
+
+	private Throwable _attachCallerThreadStackTrace(Throwable failure) {
+		List<StackTraceElement> adjusted = new ArrayList<>();
+
+		Collections.addAll(adjusted, failure.getStackTrace());
+
+		List<StackTraceElement> currentThreadStack = Arrays.asList(Thread.currentThread().getStackTrace());
+
+		if (!currentThreadStack.isEmpty()) {
+			adjusted.addAll(currentThreadStack.subList(2, currentThreadStack.size()));
+		}
+
+		failure.setStackTrace(adjusted.toArray(new StackTraceElement[0]));
+
+		return failure;
+	}
+
+	private static final Object _NULL = new Object();
+
+	private final BlockingQueue<Object> _queue = new ArrayBlockingQueue<>(1);
+	private final Class<T> _resultType;
+
 }
