@@ -1,230 +1,265 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension
-         point="org.eclipse.ui.popupMenus">
-      <objectContribution
-            adaptable="true"
-            id="com.liferay.ide.ui.popupmenu"
-            objectClass="org.eclipse.core.resources.IResource">
-         <menu
-               icon="icons/liferay_logo_16.png"
-               id="liferayPopupMenuCategory"
-               label="Liferay">
-            <separator
-                  name="slot1">
-            </separator>
-            <groupMarker
-                  name="build-lang">
-            </groupMarker>
-            <groupMarker
-                  name="build-css">
-            </groupMarker>
-            <groupMarker
-                  name="build-service">
-            </groupMarker>
-            <groupMarker
-                  name="merge-lang">
-            </groupMarker>
-            <groupMarker
-                  name="init-bundle">
-            </groupMarker>
-         </menu>
-      </objectContribution>
-      <objectContribution
-            adaptable="true"
-            id="com.liferay.ide.gradle.ui.gradle.popup"
-            objectClass="org.eclipse.core.resources.IResource">
-         <action
-               class="com.liferay.ide.gradle.action.BuildLangTaskAction"
-               enablesFor="1"
-               icon="icons/e16/liferay_logo_16.png"
-               id="com.liferay.ide.gradle.popup.action.buildLang"
-               label="build-lang"
-               menubarPath="liferayPopupMenuCategory/build-lang">
-         </action>
-         <action
-               class="com.liferay.ide.gradle.action.InitBundleTaskAction"
-               enablesFor="1"
-               icon="icons/e16/liferay_logo_16.png"
-               id="com.liferay.ide.gradle.popup.action.initBundle"
-               label="Initialize Server Bundle"
-               menubarPath="liferayPopupMenuCategory/init-bundle">
-         </action>
-         <action
-               class="com.liferay.ide.gradle.action.BuildCssTaskAction"
-               enablesFor="1"
-               icon="icons/e16/liferay_logo_16.png"
-               id="com.liferay.ide.gradle.popup.action.buildcss"
-               label="build-css"
-               menubarPath="liferayPopupMenuCategory/build-css">
-         </action>
-         <action
-               class="com.liferay.ide.gradle.action.BuildServiceTaskAction"
-               enablesFor="1"
-               icon="icons/e16/liferay_logo_16.png"
-               id="com.liferay.ide.gradle.popup.action.buildservice"
-               label="build-service"
-               menubarPath="liferayPopupMenuCategory/build-service">
-         </action>
-         <action
-               class="com.liferay.ide.gradle.action.MergeLangTaskAction"
-               enablesFor="1"
-               icon="icons/e16/liferay_logo_16.png"
-               id="com.liferay.ide.gradle.popup.action.mergelang"
-               label="merge-lang"
-               menubarPath="liferayPopupMenuCategory/merge-lang">
-         </action>
-         <enablement>
-               <adapt type="org.eclipse.core.resources.IResource">
-                   <or>
-                       <adapt type="org.eclipse.core.resources.IFile">
-                           <test forcePluginActivation="true"
-                               property="com.liferay.ide.gradle.ui.isBuildFile"
-                               value="true" />
-                       </adapt>
-                       <and>
-                            <adapt type="org.eclipse.core.resources.IProject">
-                               <test forcePluginActivation="true"
-                                   property="com.liferay.ide.gradle.ui.isGradleProject"
-                                   value="true" />
-                           </adapt>
-                        </and>
-                   </or>
-               </adapt>
-         </enablement>
-      </objectContribution>
-      <objectContribution
-            adaptable="true"
-            id="com.liferay.ide.gradle.ui.addJSPValidationSupport"
-            objectClass="org.eclipse.core.resources.IProject">
-         <action
-               class="com.liferay.ide.gradle.ui.action.AddJSPValidationAction"
-               icon="icons/e16/liferay_logo_16.png"
-               id="com.liferay.ide.gradle.ui.action.AddJSPValidationAction"
-               label="Add JSP Validation Support"
-               menubarPath="org.eclipse.ui.projectConfigure/additions">
-         </action>
-         <visibility>
-           <and>
-             <objectState name="open" value="true"/>
-             <objectState name="nature" value="com.liferay.ide.core.liferayNature"/>
-             <not>
-               <and>
-                 <objectState name="nature" value="org.eclipse.wst.common.modulecore.ModuleCoreNature"/>
-                 <objectState name="nature" value="org.eclipse.wst.common.project.facet.core.nature"/>
-               </and>
-             </not>
-           </and>
-         </visibility>
-      </objectContribution>
-  </extension>
-   <extension
-         point="org.eclipse.core.expressions.propertyTesters">
-      <propertyTester
-            class="com.liferay.ide.gradle.ui.GradleProjectPropertyTester"
-            id="com.liferay.ide.gradle.ui.isGradleProject"
-            namespace="com.liferay.ide.gradle.ui"
-            properties="isGradleProject"
-            type="org.eclipse.core.resources.IResource">
-      </propertyTester>
-       <propertyTester
-            class="com.liferay.ide.gradle.ui.FragmentPropertyTester"
-            id="com.liferay.ide.gradle.ui.isFragmentProject"
-            namespace="com.liferay.ide.gradle.ui"
-            properties="isFragmentProject"
-            type="org.eclipse.core.resources.IResource">
-      </propertyTester>
-      <propertyTester
-            class="com.liferay.ide.gradle.ui.BuildFilePropertyTester"
-            id="com.liferay.ide.gradle.ui.isBuildFile"
-            namespace="com.liferay.ide.gradle.ui"
-            properties="isBuildFile"
-            type="org.eclipse.core.resources.IFile">
-      </propertyTester>
-   </extension>
-   <extension
-         point="org.eclipse.ui.navigator.viewer">
-      <viewerContentBinding
-            viewerId="org.eclipse.ui.navigator.ProjectExplorer">
-         <includes>
-            <contentExtension
-                  pattern="com.liferay.ide.gradle.ui.navigatorContent">
-            </contentExtension>
-         </includes>
-      </viewerContentBinding>
-   </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-       <menuContribution
-            allPopups="false"
-            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
-         <menu
-               icon="icons/e16/liferay_logo_16.png"
-               label="Liferay">
-                <visibleWhen
-                   checkEnabled="false">
-                   <or>
-                     <with
-                       variable="activeMenuSelection">
-                       <count value="1"></count>
-                         <reference definitionId="com.liferay.comparehook.definition"/>
-                     </with>
-                     <with
-                          variable="activeMenuEditorInput">
-                             <reference definitionId="com.liferay.comparehook.definition"/>
-                      </with>
-                      </or>
-                 </visibleWhen>
-            <command
-                  commandId="com.liferay.ide.gradle.ui.handler.CompareFileCommand"
-                  label="Compare With Original"
-                  style="push">
-            </command>
-         </menu>
-      </menuContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commands">
-      <command
-            defaultHandler="com.liferay.ide.gradle.ui.handler.CompareFileHandler"
-            id="com.liferay.ide.gradle.ui.handler.CompareFileCommand"
-            name="CompareFileCommand">
-      </command>
-   </extension>
-   <extension point="org.eclipse.core.expressions.definitions">
-    <definition id="com.liferay.comparehook.definition">
-        <iterate>
-           <and>
-              <adapt type="org.eclipse.core.resources.IResource">
-                     <test forcePluginActivation="true"
-                           property="com.liferay.ide.gradle.ui.isGradleProject"
-                           value="true" />
-              </adapt>
-              <adapt type="org.eclipse.core.resources.IResource">
-                     <test forcePluginActivation="true"
-                           property="com.liferay.ide.gradle.ui.isFragmentProject"
-                           value="true" />
-              </adapt>
-               <or>
-                 <adapt type="org.eclipse.core.resources.IResource">
-                    <test property="org.eclipse.core.resources.extension" value="jspf" />
-                 </adapt>
-                 <adapt type="org.eclipse.core.resources.IResource">
-                   <test property="org.eclipse.core.resources.extension" value="jsp" />
-                 </adapt>
-              </or>
-            </and>
-        </iterate>
-    </definition>
-  </extension>
-  <extension
-         point="org.eclipse.ui.bindings">
-      <key
-            commandId="org.eclipse.buildship.ui.commands.refreshproject"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+F5">
-      </key>
-   </extension>
+	<extension
+		point="org.eclipse.ui.popupMenus"
+	>
+		<objectContribution
+			adaptable="true"
+			id="com.liferay.ide.ui.popupmenu"
+			objectClass="org.eclipse.core.resources.IResource"
+		>
+			<menu
+				icon="icons/liferay_logo_16.png"
+				id="liferayPopupMenuCategory"
+				label="Liferay"
+			>
+				<separator
+					name="slot1"
+				>
+				</separator>
+				<groupMarker
+					name="build-lang"
+				>
+				</groupMarker>
+				<groupMarker
+					name="build-css"
+				>
+				</groupMarker>
+				<groupMarker
+					name="build-service"
+				>
+				</groupMarker>
+				<groupMarker
+					name="merge-lang"
+				>
+				</groupMarker>
+				<groupMarker
+					name="init-bundle"
+				>
+				</groupMarker>
+			</menu>
+		</objectContribution>
+		<objectContribution
+			adaptable="true"
+			id="com.liferay.ide.gradle.ui.gradle.popup"
+			objectClass="org.eclipse.core.resources.IResource"
+		>
+			<action
+				class="com.liferay.ide.gradle.action.BuildLangTaskAction"
+				enablesFor="1"
+				icon="icons/e16/liferay_logo_16.png"
+				id="com.liferay.ide.gradle.popup.action.buildLang"
+				label="build-lang"
+				menubarPath="liferayPopupMenuCategory/build-lang"
+			>
+			</action>
+			<action
+				class="com.liferay.ide.gradle.action.InitBundleTaskAction"
+				enablesFor="1"
+				icon="icons/e16/liferay_logo_16.png"
+				id="com.liferay.ide.gradle.popup.action.initBundle"
+				label="Initialize Server Bundle"
+				menubarPath="liferayPopupMenuCategory/init-bundle"
+			>
+			</action>
+			<action
+				class="com.liferay.ide.gradle.action.BuildCssTaskAction"
+				enablesFor="1"
+				icon="icons/e16/liferay_logo_16.png"
+				id="com.liferay.ide.gradle.popup.action.buildcss"
+				label="build-css"
+				menubarPath="liferayPopupMenuCategory/build-css"
+			>
+			</action>
+			<action
+				class="com.liferay.ide.gradle.action.BuildServiceTaskAction"
+				enablesFor="1"
+				icon="icons/e16/liferay_logo_16.png"
+				id="com.liferay.ide.gradle.popup.action.buildservice"
+				label="build-service"
+				menubarPath="liferayPopupMenuCategory/build-service"
+			>
+			</action>
+			<action
+				class="com.liferay.ide.gradle.action.MergeLangTaskAction"
+				enablesFor="1"
+				icon="icons/e16/liferay_logo_16.png"
+				id="com.liferay.ide.gradle.popup.action.mergelang"
+				label="merge-lang"
+				menubarPath="liferayPopupMenuCategory/merge-lang"
+			>
+			</action>
+			<enablement>
+				<adapt type="org.eclipse.core.resources.IResource">
+					<or>
+						<adapt type="org.eclipse.core.resources.IFile">
+							<test forcePluginActivation="true"
+							   property="com.liferay.ide.gradle.ui.isBuildFile"
+							   value="true" />
+						</adapt>
+						<and>
+							<adapt type="org.eclipse.core.resources.IProject">
+								<test forcePluginActivation="true"
+								   property="com.liferay.ide.gradle.ui.isGradleProject"
+								   value="true" />
+							</adapt>
+						</and>
+					</or>
+				</adapt>
+			</enablement>
+		</objectContribution>
+		<objectContribution
+			adaptable="true"
+			id="com.liferay.ide.gradle.ui.addJSPValidationSupport"
+			objectClass="org.eclipse.core.resources.IProject"
+		>
+			<action
+				class="com.liferay.ide.gradle.ui.action.AddJSPValidationAction"
+				icon="icons/e16/liferay_logo_16.png"
+				id="com.liferay.ide.gradle.ui.action.AddJSPValidationAction"
+				label="Add JSP Validation Support"
+				menubarPath="org.eclipse.ui.projectConfigure/additions"
+			>
+			</action>
+			<visibility>
+				<and>
+					<objectState name="open" value="true" />
+					<objectState name="nature" value="com.liferay.ide.core.liferayNature" />
+					<not>
+						<and>
+							<objectState name="nature" value="org.eclipse.wst.common.modulecore.ModuleCoreNature" />
+							<objectState name="nature" value="org.eclipse.wst.common.project.facet.core.nature" />
+						</and>
+					</not>
+				</and>
+			</visibility>
+		</objectContribution>
+	</extension>
+	<extension
+		point="org.eclipse.core.expressions.propertyTesters"
+	>
+		<propertyTester
+			class="com.liferay.ide.gradle.ui.GradleProjectPropertyTester"
+			id="com.liferay.ide.gradle.ui.isGradleProject"
+			namespace="com.liferay.ide.gradle.ui"
+			properties="isGradleProject"
+			type="org.eclipse.core.resources.IResource"
+		>
+		</propertyTester>
+		<propertyTester
+			class="com.liferay.ide.gradle.ui.FragmentPropertyTester"
+			id="com.liferay.ide.gradle.ui.isFragmentProject"
+			namespace="com.liferay.ide.gradle.ui"
+			properties="isFragmentProject"
+			type="org.eclipse.core.resources.IResource"
+		>
+		</propertyTester>
+		<propertyTester
+			class="com.liferay.ide.gradle.ui.BuildFilePropertyTester"
+			id="com.liferay.ide.gradle.ui.isBuildFile"
+			namespace="com.liferay.ide.gradle.ui"
+			properties="isBuildFile"
+			type="org.eclipse.core.resources.IFile"
+		>
+		</propertyTester>
+	</extension>
+	<extension
+		point="org.eclipse.ui.navigator.viewer"
+	>
+		<viewerContentBinding
+			viewerId="org.eclipse.ui.navigator.ProjectExplorer"
+		>
+			<includes>
+				<contentExtension
+					pattern="com.liferay.ide.gradle.ui.navigatorContent"
+				>
+				</contentExtension>
+			</includes>
+		</viewerContentBinding>
+	</extension>
+	<extension
+		point="org.eclipse.ui.menus"
+	>
+		<menuContribution
+			allPopups="false"
+			locationURI="popup:org.eclipse.ui.popup.any?after=additions"
+		>
+			<menu
+				icon="icons/e16/liferay_logo_16.png"
+				label="Liferay"
+			>
+				<visibleWhen
+					checkEnabled="false"
+				>
+					<or>
+						<with
+							variable="activeMenuSelection"
+						>
+							<count value="1"></count>
+							<reference definitionId="com.liferay.comparehook.definition" />
+						</with>
+						<with
+							variable="activeMenuEditorInput"
+						>
+							<reference definitionId="com.liferay.comparehook.definition" />
+						</with>
+					</or>
+				</visibleWhen>
+				<command
+					commandId="com.liferay.ide.gradle.ui.handler.CompareFileCommand"
+					label="Compare With Original"
+					style="push"
+				>
+				</command>
+			</menu>
+		</menuContribution>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands"
+	>
+		<command
+			defaultHandler="com.liferay.ide.gradle.ui.handler.CompareFileHandler"
+			id="com.liferay.ide.gradle.ui.handler.CompareFileCommand"
+			name="CompareFileCommand"
+		>
+		</command>
+	</extension>
+	<extension point="org.eclipse.core.expressions.definitions">
+		<definition id="com.liferay.comparehook.definition">
+			<iterate>
+				<and>
+					<adapt type="org.eclipse.core.resources.IResource">
+						<test forcePluginActivation="true"
+							property="com.liferay.ide.gradle.ui.isGradleProject"
+							value="true" />
+					</adapt>
+					<adapt type="org.eclipse.core.resources.IResource">
+						<test forcePluginActivation="true"
+							property="com.liferay.ide.gradle.ui.isFragmentProject"
+							value="true" />
+					</adapt>
+					<or>
+						<adapt type="org.eclipse.core.resources.IResource">
+							<test property="org.eclipse.core.resources.extension" value="jspf" />
+						</adapt>
+						<adapt type="org.eclipse.core.resources.IResource">
+							<test property="org.eclipse.core.resources.extension" value="jsp" />
+						</adapt>
+					</or>
+				</and>
+			</iterate>
+		</definition>
+	</extension>
+	<extension
+		point="org.eclipse.ui.bindings"
+	>
+		<key
+			commandId="org.eclipse.buildship.ui.commands.refreshproject"
+			contextId="org.eclipse.ui.contexts.window"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+			sequence="M1+F5"
+		>
+		</key>
+	</extension>
 </plugin>

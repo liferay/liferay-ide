@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,30 +10,27 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.gradle.ui;
 
-import org.eclipse.core.expressions.PropertyTester;
-
 import com.liferay.ide.project.core.util.ProjectUtil;
+
+import org.eclipse.core.expressions.PropertyTester;
 
 /**
  * @author Lovett Li
  */
-public class FragmentPropertyTester extends PropertyTester
-{
+public class FragmentPropertyTester extends PropertyTester {
 
-    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
-    {
-        try
-        {
-            return ProjectUtil.isFragmentProject( receiver );
-        }
-        catch( Exception e )
-        {
-        }
+	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
+		try {
+			return ProjectUtil.isFragmentProject(receiver);
+		}
+		catch (Exception e) {
+		}
 
-        return false;
-    }
+		return false;
+	}
+
 }

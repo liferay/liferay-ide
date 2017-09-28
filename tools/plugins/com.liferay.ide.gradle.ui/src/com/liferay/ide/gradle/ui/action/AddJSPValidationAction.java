@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.gradle.ui.action;
 
@@ -27,33 +26,27 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 /**
  * @author Andy Wu
  */
-public class AddJSPValidationAction extends AbstractObjectAction
-{
+public class AddJSPValidationAction extends AbstractObjectAction {
 
-    @Override
-    public void run( IAction action )
-    {
-        if( fSelection instanceof IStructuredSelection )
-        {
-            Object[] elems = ( (IStructuredSelection) fSelection ).toArray();
+	@Override
+	public void run(IAction action) {
+		if (fSelection instanceof IStructuredSelection) {
+			Object[] elems = ((IStructuredSelection)fSelection).toArray();
 
-            IProject project = null;
+			IProject project = null;
 
-            Object elem = elems[0];
+			Object elem = elems[0];
 
-            if( elem instanceof IProject )
-            {
-                project = (IProject) elem;
+			if (elem instanceof IProject) {
+				project = (IProject)elem;
 
-                try
-                {
-                    ModuleCoreUtil.addFacetsIfNeeded( project.getLocation().toFile(), new NullProgressMonitor() );
-                }
-                catch( CoreException e )
-                {
-                }
-            }
-        }
-    }
+				try {
+					ModuleCoreUtil.addFacetsIfNeeded(project.getLocation().toFile(), new NullProgressMonitor());
+				}
+				catch (CoreException ce) {
+				}
+			}
+		}
+	}
 
 }
