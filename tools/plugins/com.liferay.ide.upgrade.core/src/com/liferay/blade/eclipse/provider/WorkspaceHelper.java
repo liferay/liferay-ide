@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -56,12 +57,19 @@ public class WorkspaceHelper {
 	public IFile createIFile(String projectName, File file) throws CoreException, IOException {
 		IJavaProject project = getJavaProject(projectName);
 
-		IFile projectFile = project.getProject().getFile(file.getName());
+		IFile projectFile = project.getProject().getFile( "/temp/" + file.getName() );
 
 		final IProgressMonitor npm = new NullProgressMonitor();
 
 		if (projectFile.exists()) {
 			projectFile.delete(IFile.FORCE, npm);
+		}
+
+		if( !projectFile.getParent().exists() && projectFile.getParent() instanceof IFolder )
+		{
+			IFolder parentFolder = (IFolder) projectFile.getParent();
+
+			parentFolder.create( true, true, npm );
 		}
 
 		byte[] bytes = Files.readAllBytes(file.toPath());
