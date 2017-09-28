@@ -45,7 +45,7 @@
                     <useUIThread>false</useUIThread>
                     <!-- argLine>-Xmx1024m -XX:MaxPermSize=512m -Xdebug -Xrunjdwp:transport=dt_socket,address=8100,server=y,suspend=y</argLine-->
                     <argLine>-Xmx1024m</argLine>
-                    <skipTests>true</skipTests>
+                    <skipTests>${skipTests}</skipTests>
                 </configuration>
             </plugin>
             <plugin>
