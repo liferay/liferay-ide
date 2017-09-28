@@ -66,25 +66,29 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 	}
 
 	public JSONArray[] getDeprecatedMethods() {
-		String fqn = "/com/liferay/blade/upgrade/liferay70/deprecatedmethods/";
+		if (_deprecatedMethods == null) {
+			List<JSONArray> deprecatedMethodsList = new ArrayList<>();
 
-		String[] jsonFilePaths = new String[] {
-			fqn + "deprecatedMethods62.json",
-			fqn + "deprecatedMethods61.json",
-			fqn + "deprecatedMethodsNoneVersionFile.json"
-		};
+			String fqn = "/com/liferay/blade/upgrade/liferay70/deprecatedmethods/";
 
-		JSONArray[] retval = new JSONArray[jsonFilePaths.length];
+			String[] jsonFilePaths = new String[] {
+				fqn + "deprecatedMethods62.json",
+				fqn + "deprecatedMethods61.json",
+				fqn + "deprecatedMethodsNoneVersionFile.json"
+			};
 
-		for (int i = 0; i < jsonFilePaths.length; i++) {
-			try (InputStream in = getClass().getResourceAsStream(jsonFilePaths[i])) {
-				String jsonContent = CoreUtil.readStreamToString(in);
-				retval[i] = new JSONArray(jsonContent);
-			} catch (IOException e) {
+			for (int i = 0; i < jsonFilePaths.length; i++) {
+				try (InputStream in = getClass().getResourceAsStream(jsonFilePaths[i])) {
+					String jsonContent = CoreUtil.readStreamToString(in);
+					deprecatedMethodsList.add(new JSONArray(jsonContent));
+				} catch (IOException e) {
+				}
 			}
+
+			_deprecatedMethods = deprecatedMethodsList.toArray(new JSONArray[0]);
 		}
 
-		return retval;
+		return _deprecatedMethods;
 	}
 
 	@Override
@@ -111,5 +115,7 @@ public class DeprecatedMethodsMigrator extends JavaFileMigrator {
 
 		return searchResults;
 	}
+
+	private JSONArray[] _deprecatedMethods;
 
 }

@@ -104,7 +104,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 
 				if (fileCheckerFile == null) {
 					throw new IllegalArgumentException(
-							"Could not find " + type.getSimpleName() + " service for specified file " + file.getName());
+						"Could not find " + type.getSimpleName() + " service for specified file " + file.getName());
 				}
 				else {
 					fileCheckerFile.setFile(file);

@@ -16,11 +16,9 @@
 
 package com.liferay.blade.upgrade.liferay70;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.knowledge.base.markdown.converter.factory.MarkdownConverterFactoryUtil;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +33,9 @@ import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 
+/**
+ * @author Gregory Amerson
+ */
 public class MarkdownParser {
 
 	private final static Map<String, Map<String, String>> _markdowns = new HashMap<>();
@@ -44,7 +45,7 @@ public class MarkdownParser {
 
 		if (retval == null) {
 			try {
-				final String markdown = new String(Files.readAllBytes(Paths.get(fileName)));
+				final String markdown = CoreUtil.readStreamToString(MarkdownParser.class.getResourceAsStream(fileName));
 				final String html = MarkdownConverterFactoryUtil.create().convert(markdown);
 
 				Map<String, String> sections = parseHtml(html);
@@ -52,7 +53,9 @@ public class MarkdownParser {
 				_markdowns.put(fileName, sections);
 
 				retval = sections;
-			} catch (IOException e) {
+			}
+			catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 

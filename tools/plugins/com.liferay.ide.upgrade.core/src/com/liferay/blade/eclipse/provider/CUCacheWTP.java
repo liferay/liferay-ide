@@ -22,6 +22,7 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.function.Supplier;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -50,7 +51,7 @@ public class CUCacheWTP extends BaseCUCache implements CUCache<JSPTranslationPri
 	private static final Map<File, WeakReference<JSPTranslationPrime>> _map = new WeakHashMap<>();
 
 	@Override
-	public JSPTranslationPrime getCU(File file, char[] javavSource) {
+	public JSPTranslationPrime getCU(File file, Supplier<char[]> javavSource) {
 		try {
 			synchronized (_map) {
 				WeakReference<JSPTranslationPrime> translationRef = _map.get(file);
