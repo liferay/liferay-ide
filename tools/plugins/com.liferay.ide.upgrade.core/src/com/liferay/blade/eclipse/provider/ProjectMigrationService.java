@@ -51,7 +51,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * @author Gregory Amerson
  */
-@Component(immediate = true)
+@Component
 public class ProjectMigrationService implements Migration {
 
 	private BundleContext _context;
