@@ -317,6 +317,20 @@ public class FileUtil {
 		}
 	}
 
+	public static String removeDirPrefix(String dirName) {
+		dirName = dirName.trim();
+
+		if (dirName.startsWith("/") || dirName.startsWith("\\")) {
+			dirName = dirName.substring(1);
+		}
+
+		if (dirName.endsWith("/") || dirName.endsWith("\\")) {
+			dirName = dirName.substring(0, dirName.length() - 1);
+		}
+
+		return dirName;
+	}
+
 	public static boolean searchAndReplace(File file, String search, String replace)
 		throws FileNotFoundException, IOException {
 

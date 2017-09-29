@@ -61,11 +61,11 @@ public class DialogAction extends UIAction {
 	}
 
 	public void openPreferenceTypeDialog(String categroy, String type) {
-		TreeItem treeItem = _preferencesDialog.getPreferencesTypes().getTreeItem(categroy);
+		TreeItem categroyItem = _preferencesDialog.getPreferencesTypes().getTreeItem(categroy);
 
-		treeItem.expand();
+		TreeItem typeItem = categroyItem.getTreeItem(type);
 
-		treeItem.select();
+		typeItem.select();
 	}
 
 	public void openServerRuntimeEnvironmentsDialog() {

@@ -109,7 +109,7 @@ public class EnvAction extends UIAction {
 				try {
 					String filePath = FileLocator.toFileURL(rootUrl).getFile();
 
-					_liferayBundlesPath = new Path(filePath).removeLastSegments(4).append("tests-resources");
+					_liferayBundlesPath = new Path(filePath).removeLastSegments(3).append("tests-resources");
 				}
 				catch (IOException ioe) {
 				}
