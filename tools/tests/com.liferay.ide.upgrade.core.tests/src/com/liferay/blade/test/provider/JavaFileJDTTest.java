@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
+import com.liferay.blade.test.Util;
 
 import java.io.File;
 import java.util.Collection;
@@ -50,18 +51,18 @@ public class JavaFileJDTTest {
 
 		assertNotNull(searchResult);
 
-		// if (Util.isWindows()) {
-		// assertEquals(14, searchResult.startLine);
-		// assertEquals(15, searchResult.endLine);
-		// assertEquals(242, searchResult.startOffset);
-		// assertEquals(265, searchResult.endOffset);
-		// }
-		// else {
+		if (Util.isWindows()) {
+		assertEquals(14, searchResult.startLine);
+		assertEquals(15, searchResult.endLine);
+		assertEquals(242, searchResult.startOffset);
+		assertEquals(265, searchResult.endOffset);
+		}
+		else {
 		assertEquals(14, searchResult.startLine);
 		assertEquals(15, searchResult.endLine);
 		assertEquals(229, searchResult.startOffset);
 		assertEquals(251, searchResult.endOffset);
-		// }
+		}
 	}
 
 	@Test
@@ -83,18 +84,18 @@ public class JavaFileJDTTest {
 
 		assertNotNull(searchResult);
 
-		// if (Util.isWindows()) {
-		// assertEquals(10, searchResult.startLine);
-		// assertEquals(11, searchResult.endLine);
-		// assertEquals(190, searchResult.startOffset);
-		// assertEquals(210, searchResult.endOffset);
-		// }
-		// else {
+		if (Util.isWindows()) {
+		assertEquals(10, searchResult.startLine);
+		assertEquals(11, searchResult.endLine);
+		assertEquals(190, searchResult.startOffset);
+		assertEquals(210, searchResult.endOffset);
+		}
+		else {
 		assertEquals(10, searchResult.startLine);
 		assertEquals(11, searchResult.endLine);
 		assertEquals(181, searchResult.startOffset);
 		assertEquals(200, searchResult.endOffset);
-		// }
+		}
 	}
 
 	@Test

@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
+import com.liferay.blade.test.Util;
 
 import java.io.File;
 import java.util.List;
@@ -50,70 +51,70 @@ public class DDMLegacyAPITest extends APITestBase {
 
 		assertEquals(36, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(1704, problem.startOffset);
-//			assertEquals(1779, problem.endOffset);
-//		}
-//		else {
+		if (Util.isWindows()) {
+			assertEquals(1704, problem.startOffset);
+			assertEquals(1779, problem.endOffset);
+		}
+		else {
 			assertEquals(1669, problem.startOffset);
 			assertEquals(1744, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(1);
 
 		assertEquals(134, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertTrue(problem.startOffset >= 4829 && problem.startOffset <= 4832);
-//			assertTrue(problem.endOffset >= 4886 && problem.endOffset <= 4889);
-//		}
-//		else {
+		if (Util.isWindows()) {
+			assertTrue(problem.startOffset >= 4829 && problem.startOffset <= 4832);
+			assertTrue(problem.endOffset >= 4886 && problem.endOffset <= 4889);
+		}
+		else {
 			assertTrue(problem.startOffset >= 4696 && problem.startOffset <= 4699);
 			assertTrue(problem.endOffset >= 4753 && problem.endOffset <= 4756);
-//		}
+		}
 
 		problem = problems.get(2);
 
 		assertEquals(147, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertTrue(problem.startOffset >= 5177 && problem.startOffset <= 5180);
-//			assertTrue(problem.endOffset >= 5234 && problem.endOffset <= 5237);
-//		}
-//		else {
+		if (Util.isWindows()) {
+			assertTrue(problem.startOffset >= 5177 && problem.startOffset <= 5180);
+			assertTrue(problem.endOffset >= 5234 && problem.endOffset <= 5237);
+		}
+		else {
 			assertTrue(problem.startOffset >= 5031 && problem.startOffset <= 5034);
 			assertTrue(problem.endOffset >= 5088 && problem.endOffset <= 5091);
-//		}
+		}
 
 		problem = problems.get(3);
 
 		assertEquals(37, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertTrue(problem.startOffset >= 1789 && problem.startOffset <= 1792);
-//			assertTrue(problem.endOffset >= 1859 && problem.endOffset <= 1862);
-//		}
-//		else {
+		if (Util.isWindows()) {
+			assertTrue(problem.startOffset >= 1789 && problem.startOffset <= 1792);
+			assertTrue(problem.endOffset >= 1859 && problem.endOffset <= 1862);
+		}
+		else {
 			assertEquals(1753, problem.startOffset);
 			assertEquals(1823, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(4);
 
 		assertEquals(162, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertTrue(problem.startOffset >= 5573 && problem.startOffset <= 5576);
-//			assertTrue(problem.endOffset >= 5690 && problem.endOffset <= 5693);
-//		}
-//		else {
+		if (Util.isWindows()) {
+			assertTrue(problem.startOffset >= 5573 && problem.startOffset <= 5576);
+			assertTrue(problem.endOffset >= 5690 && problem.endOffset <= 5693);
+		}
+		else {
 			assertTrue(
 				String.valueOf(problem.startOffset),
 				problem.startOffset >= 5412 && problem.startOffset <= 5415);
 			assertTrue(
 				String.valueOf(problem.endOffset),
 				problem.endOffset >= 5527 && problem.endOffset <= 5530);
-//		}
+		}
 	}
 
 	@Override

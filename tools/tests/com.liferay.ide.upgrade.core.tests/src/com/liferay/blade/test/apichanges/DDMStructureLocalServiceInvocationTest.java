@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
+import com.liferay.blade.test.Util;
 
 import java.io.File;
 import java.util.List;
@@ -44,13 +45,13 @@ public class DDMStructureLocalServiceInvocationTest extends APITestBase {
 
 		assertEquals(7, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(144, problem.startOffset);
-//			assertEquals(270, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(144, problem.startOffset);
+			assertEquals(270, problem.endOffset);
+		} else {
 			assertEquals(138, problem.startOffset);
 			assertEquals(264, problem.endOffset);
-//		}
+		}
 	}
 
 	@Override

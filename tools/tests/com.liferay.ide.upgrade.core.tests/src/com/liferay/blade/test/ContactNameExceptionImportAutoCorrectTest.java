@@ -44,7 +44,11 @@ public class ContactNameExceptionImportAutoCorrectTest {
 		tmpfolder.deleteOnExit();
 
 		File originalTestfile = new File("javatests/ContactNameExceptionImport.java");
-		Files.copy(originalTestfile.toPath(), new FileOutputStream(testfile));
+
+        try(FileOutputStream testFile = new FileOutputStream( testfile ))
+        {
+            Files.copy( originalTestfile.toPath(), testFile );
+        }
 
 		List<Problem> problems = null;
 		FileMigrator migrator = null;

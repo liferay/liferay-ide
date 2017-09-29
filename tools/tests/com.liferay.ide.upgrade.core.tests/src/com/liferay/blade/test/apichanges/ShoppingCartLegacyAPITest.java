@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
+import com.liferay.blade.test.Util;
 
 import java.io.File;
 import java.util.List;
@@ -59,49 +60,49 @@ public class ShoppingCartLegacyAPITest  extends APITestBase {
 
 		assertEquals(32, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(1475, problem.startOffset);
-//			assertEquals(1540, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(1475, problem.startOffset);
+			assertEquals(1540, problem.endOffset);
+		} else {
 			assertEquals(1444, problem.startOffset);
 			assertEquals(1509, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(1);
 
 		assertEquals(143, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(4691, problem.startOffset);
-//			assertEquals(4858, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(4691, problem.startOffset);
+			assertEquals(4858, problem.endOffset);
+		} else {
 			assertEquals(4549, problem.startOffset);
 			assertEquals(4714, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(2);
 
 		assertEquals(33, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(1550, problem.startOffset);
-//			assertEquals(1615, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(1550, problem.startOffset);
+			assertEquals(1615, problem.endOffset);
+		} else {
 			assertEquals(1518, problem.startOffset);
 			assertEquals(1583, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(3);
 
 		assertEquals(118, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(3987, problem.startOffset);
-//			assertEquals(4031, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(3987, problem.startOffset);
+			assertEquals(4031, problem.endOffset);
+		} else {
 			assertEquals(3870, problem.startOffset);
 			assertEquals(3914, problem.endOffset);
-//		}
+		}
 	}
 
 }

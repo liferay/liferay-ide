@@ -77,8 +77,10 @@ public class MVCPortletClassInPortletXMLAutoCorrectTest {
 
 		testfile.getParentFile().mkdirs();
 
-		Files.copy(new File("projects/test-portlet/docroot/WEB-INF/portlet.xml").toPath(), new FileOutputStream(testfile));
-
+        try(FileOutputStream testFile = new FileOutputStream( testfile ))
+        {
+            Files.copy( new File( "projects/test-portlet/docroot/WEB-INF/portlet.xml" ).toPath(), testFile );
+        }
 
 		List<Problem> problems = fileMigrator.analyze(testfile);
 
@@ -107,7 +109,10 @@ public class MVCPortletClassInPortletXMLAutoCorrectTest {
 
 		testfile.getParentFile().mkdirs();
 
-		Files.copy(new File("projects/test-portlet/docroot/WEB-INF/portlet.xml").toPath(), new FileOutputStream(testfile));
+        try(FileOutputStream testFile = new FileOutputStream( testfile ))
+        {
+            Files.copy( new File( "projects/test-portlet/docroot/WEB-INF/portlet.xml" ).toPath(), testFile );
+        }
 
 		List<Problem> problems = fileMigrator.analyze(testfile);
 

@@ -50,10 +50,6 @@ public class JournalArticleTagsTest {
 
 		assertEquals(4, problem.lineNumber);
 
-		assertEquals(164, problem.startOffset);
-
-		assertEquals(324, problem.endOffset);
-
 		assertEquals("LPS-69321", problem.ticket);
 	}
 

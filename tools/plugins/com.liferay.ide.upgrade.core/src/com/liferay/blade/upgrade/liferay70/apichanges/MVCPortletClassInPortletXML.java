@@ -26,6 +26,7 @@ import com.liferay.blade.upgrade.liferay70.XMLFileMigrator;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -138,12 +139,15 @@ public class MVCPortletClassInPortletXML extends XMLFileMigrator implements Auto
 
         if( corrected > 0 && !xmlFile.getLocation().toFile().equals( file ) )
         {
-			try {
-				Files.copy(xmlFile.getContents(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-			} catch (IOException | CoreException e) {
-				throw new AutoMigrateException("Error writing corrected file.", e);
-			}
-		}
+            try(InputStream xmlFileContent = xmlFile.getContents())
+            {
+                Files.copy( xmlFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING );
+            }
+            catch( IOException | CoreException e )
+            {
+                throw new AutoMigrateException( "Error writing corrected file.", e );
+            }
+        }
 
 		return corrected;
 	}
