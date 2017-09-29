@@ -4327,19 +4327,19 @@ This change was made as a part of the ongoing strategy to deprecate unused tags.
 - **Date:** 2016-Jun-24
 - **JIRA Ticket:** no ticket number
 
-#### What changed? [](id=what-changed-104)
+#### What changed? [](id=what-changed-108)
 
 Many classes from former Liferay 6 JAR file portal-service.jar have been moved into application and framework API modules.
 
-#### Who is affected? [](id=who-is-affected-104)
+#### Who is affected? [](id=who-is-affected-108)
 
 Any code that uses the moved classes.
 
-#### How should I update my code? [](id=how-should-i-update-my-code-104)
+#### How should I update my code? [](id=how-should-i-update-my-code-108)
 
 You should change the package name via "correct automatically" in liferay-ide upgrade tool or you can do it manully. Then add denpencies for them. For more information, see [https://dev.liferay.com/develop/reference/-/knowledge_base/7-0/classes-moved-from-portal-service-jar](https://dev.liferay.com/develop/reference/-/knowledge_base/7-0/classes-moved-from-portal-service-jar)
 
-#### Why was this change made? [](id=why-was-this-change-made-104)
+#### Why was this change made? [](id=why-was-this-change-made-108)
 
 To leverage the benefits of modularization in Liferay 7.
 
@@ -4349,16 +4349,16 @@ To leverage the benefits of modularization in Liferay 7.
 - **Date:** 2017-Sept-27
 - **JIRA Ticket:** no ticket number
 
-#### What changed? [](id=what-changed-105)
+#### What changed? [](id=what-changed-109)
 
 The `getIconPath(ThemeDisplay themeDisplay)` method in the BaseAssetRenderer API have changed into `getIconPath(PortletRequest portletRequest)`.
 
-#### Who is affected? [](id=who-is-affected-105)
+#### Who is affected? [](id=who-is-affected-109)
 
 This method must be updated in all BaseAssetRenderer implementations.
 
-#### How should I update my code? [](id=how-should-i-update-my-code-105)
- 
+#### How should I update my code? [](id=how-should-i-update-my-code-109)
+
 **Example**
 
 Old signature:
@@ -4374,3 +4374,29 @@ New signature:
       "../icon.png";
       }
  }
+
+---------------------------------------
+
+### DateUtil compareTo() with three parameters' method removed [](id=dateutil-compareto-method-removed)
+- **Date:** 2017-Sept-29
+- **JIRA Ticket:** LPS-59192
+
+#### What changed? [](id=what-changed-110)
+
+`DateUtil.compareTo(Date date1, Date date2, boolean ignoreMilliseconds)` method removed.
+
+#### Who is affected? [](id=who-is-affected-110)
+
+This affects any Java code calling the `DateUtil.compareTo(date1,date2,true/false)`.
+
+#### How should I update my code? [](id=how-should-i-update-my-code-110)
+
+**Example**
+
+Old signature:
+
+      DateUtil.compareTo(date1,date2,true);
+
+New signature:
+
+      DateUtil.compareTo(date1,date2);
