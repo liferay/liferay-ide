@@ -25,7 +25,6 @@ import com.liferay.blade.api.XMLFile;
 import com.liferay.blade.upgrade.liferay70.XMLFileMigrator;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -35,7 +34,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
@@ -137,17 +135,14 @@ public class MVCPortletClassInPortletXML extends XMLFileMigrator implements Auto
 			}
 		}
 
-        if( corrected > 0 && !xmlFile.getLocation().toFile().equals( file ) )
-        {
-            try(InputStream xmlFileContent = xmlFile.getContents())
-            {
-                Files.copy( xmlFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING );
-            }
-            catch( IOException | CoreException e )
-            {
-                throw new AutoMigrateException( "Error writing corrected file.", e );
-            }
-        }
+		if( corrected > 0 && !xmlFile.getLocation().toFile().equals( file ) ) {
+			try(InputStream xmlFileContent = xmlFile.getContents()) {
+				Files.copy( xmlFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING );
+			}
+			catch( Exception e ) {
+				throw new AutoMigrateException( "Error writing corrected file.", e );
+			}
+		}
 
 		return corrected;
 	}

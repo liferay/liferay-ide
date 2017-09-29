@@ -25,7 +25,6 @@ import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.util.Collection;
 import java.util.List;
@@ -39,16 +38,14 @@ public class PortalServiceImportsAutoCorrectTest {
 
 	@Test
 	public void autoCorrectProblems() throws Exception {
-		File tmpfolder = Files.createTempDirectory("autocorrect").toFile();
-		File testfile = new File(tmpfolder, "PortalServiceImports.java");
-		tmpfolder.deleteOnExit();
+		File tempFolder = Files.createTempDirectory("autocorrect").toFile();
+		File testFile = new File(tempFolder, "PortalServiceImports.java");
+
+		tempFolder.deleteOnExit();
 
 		File originalTestfile = new File("javatests/PortalServiceImports.java");
 
-        try(FileOutputStream testFile = new FileOutputStream( testfile ))
-        {
-            Files.copy( originalTestfile.toPath(), testFile );
-        }
+		Files.copy(originalTestfile.toPath(), testFile.toPath());
 
 		List<Problem> problems = null;
 		FileMigrator migrator = null;
@@ -58,20 +55,20 @@ public class PortalServiceImportsAutoCorrectTest {
 			migrator = context.getService(mref);
 
 			if (migrator.getClass().getName().contains("PortalServiceImports")) {
-				problems = migrator.analyze(testfile);
+				problems = migrator.analyze(testFile);
 				break;
 			}
 		}
 
 		assertEquals(2, problems.size());
 
-		int problemsFixed = ((AutoMigrator)migrator).correctProblems( testfile, problems );
+		int problemsFixed = ((AutoMigrator)migrator).correctProblems( testFile, problems );
 
 		assertEquals(2, problemsFixed);
 
-		File dest = new File(tmpfolder, "Updated.java");
+		File dest = new File(tempFolder, "Updated.java");
 
-		assertTrue(testfile.renameTo(dest));
+		assertTrue(testFile.renameTo(dest));
 
 		problems = migrator.analyze(dest);
 

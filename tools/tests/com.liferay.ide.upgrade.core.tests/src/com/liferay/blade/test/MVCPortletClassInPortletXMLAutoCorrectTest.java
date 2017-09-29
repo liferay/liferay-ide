@@ -25,7 +25,6 @@ import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.util.Collections;
 import java.util.List;
@@ -77,10 +76,7 @@ public class MVCPortletClassInPortletXMLAutoCorrectTest {
 
 		testfile.getParentFile().mkdirs();
 
-        try(FileOutputStream testFile = new FileOutputStream( testfile ))
-        {
-            Files.copy( new File( "projects/test-portlet/docroot/WEB-INF/portlet.xml" ).toPath(), testFile );
-        }
+		Files.copy(new File("projects/test-portlet/docroot/WEB-INF/portlet.xml").toPath(), testfile.toPath());
 
 		List<Problem> problems = fileMigrator.analyze(testfile);
 
@@ -109,10 +105,7 @@ public class MVCPortletClassInPortletXMLAutoCorrectTest {
 
 		testfile.getParentFile().mkdirs();
 
-        try(FileOutputStream testFile = new FileOutputStream( testfile ))
-        {
-            Files.copy( new File( "projects/test-portlet/docroot/WEB-INF/portlet.xml" ).toPath(), testFile );
-        }
+		Files.copy(new File("projects/test-portlet/docroot/WEB-INF/portlet.xml").toPath(), testfile.toPath());
 
 		List<Problem> problems = fileMigrator.analyze(testfile);
 
