@@ -20,8 +20,8 @@ import com.liferay.blade.api.CUCache;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.function.Supplier;
 
 import org.eclipse.jdt.core.JavaCore;
@@ -41,32 +41,41 @@ import org.osgi.service.component.annotations.Component;
 )
 public class CUCacheJDT extends BaseCUCache implements CUCache<CompilationUnit> {
 
-	private static final Map<File, WeakReference<CompilationUnit>> _map = new WeakHashMap<>();
+	private static final Object _lock = new Object();
+	private static final Map<File, Long> _fileModifiedTimeMap = new HashMap<>();
+	private static final Map<File, WeakReference<CompilationUnit>> _cuMap = new HashMap<>();
 
 	@Override
 	public CompilationUnit getCU(File file, Supplier<char[]> javaSource) {
-		synchronized (_map) {
-			WeakReference<CompilationUnit> astRef = _map.get(file);
+		CompilationUnit retval = null;
 
-			if (astRef == null || astRef.get() == null) {
+		synchronized (_lock) {
+			Long lastModified = _fileModifiedTimeMap.get(file);
+
+			if (lastModified != null && lastModified.equals(file.lastModified())) {
+				retval = _cuMap.get(file).get();
+			}
+
+			if (retval == null) {
 				char[] chars = javaSource.get();
 
 				final CompilationUnit newAst = createCompilationUnit(file.getName(), chars);
 
-				_map.put(file, new WeakReference<CompilationUnit>(newAst));
+				_fileModifiedTimeMap.put(file, file.lastModified());
+				_cuMap.put(file, new WeakReference<CompilationUnit>(newAst));
 
-				return newAst;
-			}
-			else {
-				return astRef.get();
+				retval = newAst;
 			}
 		}
+
+		return retval;
 	}
 
 	@Override
 	public void unget(File file) {
-		synchronized (_map) {
-			_map.remove(file);
+		synchronized (_lock) {
+			_fileModifiedTimeMap.remove(file);
+			_cuMap.remove(file);
 		}
 	}
 

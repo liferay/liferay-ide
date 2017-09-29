@@ -20,8 +20,8 @@ import com.liferay.blade.api.CUCache;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.function.Supplier;
 
 import org.eclipse.core.resources.IFile;
@@ -39,44 +39,53 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings("restriction")
 @Component(
 	property = {
 		"type=jsp"
 	},
 	service = CUCache.class
 )
+@SuppressWarnings("restriction")
 public class CUCacheWTP extends BaseCUCache implements CUCache<JSPTranslationPrime> {
 
-	private static final Map<File, WeakReference<JSPTranslationPrime>> _map = new WeakHashMap<>();
+	private static final Object _lock = new Object();
+	private static final Map<File, Long> _fileModifiedTimeMap = new HashMap<>();
+	private static final Map<File, WeakReference<JSPTranslationPrime>> _jspTranslationMap = new HashMap<>();
 
 	@Override
 	public JSPTranslationPrime getCU(File file, Supplier<char[]> javavSource) {
+		JSPTranslationPrime retval = null;
+
 		try {
-			synchronized (_map) {
-				WeakReference<JSPTranslationPrime> translationRef = _map.get(file);
+			synchronized (_lock) {
+				Long lastModified = _fileModifiedTimeMap.get(file);
 
-				if (translationRef == null || translationRef.get() == null) {
-					final JSPTranslationPrime newTranslation = createJSPTranslation(file);
-
-					_map.put(file, new WeakReference<JSPTranslationPrime>(newTranslation));
-
-					return newTranslation;
+				if (lastModified != null && lastModified.equals(file.lastModified())) {
+					retval = _jspTranslationMap.get(file).get();
 				}
-				else {
-					return translationRef.get();
+
+				if (retval == null) {
+					JSPTranslationPrime newTranslation = createJSPTranslation(file);
+
+					_fileModifiedTimeMap.put(file, file.lastModified());
+					_jspTranslationMap.put(file, new WeakReference<JSPTranslationPrime>(newTranslation));
+
+					retval = newTranslation;
 				}
 			}
 		}
 		catch (Exception e) {
 			throw new IllegalArgumentException(e);
 		}
+
+		return retval;
 	}
 
 	@Override
 	public void unget(File file) {
-		synchronized (_map) {
-			_map.remove(file);
+		synchronized (_lock) {
+			_fileModifiedTimeMap.remove(file);
+			_jspTranslationMap.remove(file);
 		}
 	}
 
