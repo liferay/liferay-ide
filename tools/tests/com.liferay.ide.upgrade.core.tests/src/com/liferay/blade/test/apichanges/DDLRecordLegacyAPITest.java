@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
+import com.liferay.blade.test.Util;
 
 import java.io.File;
 import java.util.List;
@@ -49,40 +50,40 @@ public class DDLRecordLegacyAPITest extends APITestBase {
 
 		assertEquals(30, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(1361, problem.startOffset);
-//			assertEquals(1426, problem.endOffset);
-//		}
-//		else {
+		if (Util.isWindows()) {
+			assertEquals(1361, problem.startOffset);
+			assertEquals(1426, problem.endOffset);
+		}
+		else {
 			assertEquals(1332, problem.startOffset);
 			assertEquals(1397, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(1);
 
 		assertEquals(132, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(4220, problem.startOffset);
-//			assertEquals(4263, problem.endOffset);
-//		}
-//		else {
+		if (Util.isWindows()) {
+			assertEquals(4220, problem.startOffset);
+			assertEquals(4263, problem.endOffset);
+		}
+		else {
 			assertEquals(4089, problem.startOffset);
 			assertEquals(4132, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(2);
 
 		assertEquals(145, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(4619, problem.startOffset);
-//			assertEquals(4699, problem.endOffset);
-//		}
-//		else {
+		if (Util.isWindows()) {
+			assertEquals(4619, problem.startOffset);
+			assertEquals(4699, problem.endOffset);
+		}
+		else {
 			assertEquals(4475, problem.startOffset);
 			assertEquals(4554, problem.endOffset);
-//		}
+		}
 	}
 
 	@Override

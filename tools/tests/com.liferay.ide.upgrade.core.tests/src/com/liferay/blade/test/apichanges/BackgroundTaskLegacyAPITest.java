@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
+import com.liferay.blade.test.Util;
 
 import java.io.File;
 import java.util.List;
@@ -49,26 +50,26 @@ public class BackgroundTaskLegacyAPITest extends APITestBase {
 
 		assertEquals(18, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(688, problem.startOffset);
-//			assertEquals(736, problem.endOffset);
-//		}
-//		else {
+		if (Util.isWindows()) {
+			assertEquals(688, problem.startOffset);
+			assertEquals(736, problem.endOffset);
+		}
+		else {
 			assertEquals(671, problem.startOffset);
 			assertEquals(719, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(1);
 
 		assertEquals(19, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(746, problem.startOffset);
-//			assertEquals(801, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(746, problem.startOffset);
+			assertEquals(801, problem.endOffset);
+		} else {
 			assertEquals(728, problem.startOffset);
 			assertEquals(783, problem.endOffset);
-//		}
+		}
 	}
 
 

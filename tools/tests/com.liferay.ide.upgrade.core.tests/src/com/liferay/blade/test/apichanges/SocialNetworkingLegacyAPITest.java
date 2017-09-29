@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
+import com.liferay.blade.test.Util;
 
 import java.io.File;
 import java.util.List;
@@ -62,25 +63,25 @@ public class SocialNetworkingLegacyAPITest  extends APITestBase {
 
 		assertEquals(20, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(781, problem.startOffset);
-//			assertEquals(843, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(781, problem.startOffset);
+			assertEquals(843, problem.endOffset);
+		} else {
 			assertEquals(762, problem.startOffset);
 			assertEquals(824, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(1);
 
 		assertEquals(31, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(1086, problem.startOffset);
-//			assertEquals(1149, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(1086, problem.startOffset);
+			assertEquals(1149, problem.endOffset);
+		} else {
 			assertEquals(1056, problem.startOffset);
 			assertEquals(1119, problem.endOffset);
-//		}
+		}
 	}
 
 	@Test
@@ -98,72 +99,72 @@ public class SocialNetworkingLegacyAPITest  extends APITestBase {
 
 		assertEquals(24, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(1005, problem.startOffset);
-//			assertEquals(1070, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(1005, problem.startOffset);
+			assertEquals(1070, problem.endOffset);
+		} else {
 			assertEquals(982, problem.startOffset);
 			assertEquals(1047, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(1);
 
 		assertEquals(57, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(1892, problem.startOffset);
-//			assertEquals(1955, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(1892, problem.startOffset);
+			assertEquals(1955, problem.endOffset);
+		} else {
 			assertEquals(1836, problem.startOffset);
 			assertEquals(1899, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(2);
 
 		assertEquals(128, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(4271, problem.startOffset);
-//			assertEquals(4570, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(4271, problem.startOffset);
+			assertEquals(4570, problem.endOffset);
+		} else {
 			assertEquals(4144, problem.startOffset);
 			assertEquals(4439, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(3);
 
 		assertEquals(135, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(4591, problem.startOffset);
-//			assertEquals(4914, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(4591, problem.startOffset);
+			assertEquals(4914, problem.endOffset);
+		} else {
 			assertEquals(4457, problem.startOffset);
 			assertEquals(4775, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(4);
 
 		assertEquals(25, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(1080, problem.startOffset);
-//			assertEquals(1152, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(1080, problem.startOffset);
+			assertEquals(1152, problem.endOffset);
+		} else {
 			assertEquals(1056, problem.startOffset);
 			assertEquals(1128, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(5);
 
 		assertEquals(156, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(5378, problem.startOffset);
-//			assertEquals(5504, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(5378, problem.startOffset);
+			assertEquals(5504, problem.endOffset);
+		} else {
 			assertEquals(5223, problem.startOffset);
 			assertEquals(5348, problem.endOffset);
-//		}
+		}
 	}
 }

@@ -24,7 +24,6 @@ import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.util.Collection;
 import java.util.List;
@@ -38,35 +37,38 @@ public class RenamePortalKernelImportAutoCorrectTest {
 
 	@Test
 	public void autoCorrectProblems() throws Exception {
-		File tmpfolder = Files.createTempDirectory("autocorrect").toFile();
-		File testfile = new File(tmpfolder, "TasksEntryLocalServiceImpl.java");
-		tmpfolder.deleteOnExit();
+		File tempFolder = Files.createTempDirectory("autocorrect").toFile();
+		File testFile = new File(tempFolder, "TasksEntryLocalServiceImpl.java");
+
+		tempFolder.deleteOnExit();
 
 		File originalTestfile = new File("javatests/TasksEntryLocalServiceImpl.java");
-		Files.copy(originalTestfile.toPath(), new FileOutputStream(testfile));
+
+		Files.copy(originalTestfile.toPath(), testFile.toPath());
 
 		List<Problem> problems = null;
 		FileMigrator migrator = null;
 
 		Collection<ServiceReference<FileMigrator>> mrefs = context.getServiceReferences(FileMigrator.class, null);
+
 		for (ServiceReference<FileMigrator> mref : mrefs) {
 			migrator = context.getService(mref);
 
 			if (migrator.getClass().getName().contains("RenamePortalKernelImport")) {
-				problems = migrator.analyze(testfile);
+				problems = migrator.analyze(testFile);
 				break;
 			}
 		}
 
 		assertEquals(10, problems.size());
 
-		int problemsFixed = ((AutoMigrator)migrator).correctProblems( testfile, problems );
+		int problemsFixed = ((AutoMigrator)migrator).correctProblems( testFile, problems );
 
 		assertEquals(10, problemsFixed);
 
-		File dest = new File(tmpfolder, "Updated.java");
+		File dest = new File(tempFolder, "Updated.java");
 
-		assertTrue(testfile.renameTo(dest));
+		assertTrue(testFile.renameTo(dest));
 
 		problems = migrator.analyze(dest);
 

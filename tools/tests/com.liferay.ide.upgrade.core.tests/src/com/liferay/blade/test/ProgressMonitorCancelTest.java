@@ -48,7 +48,7 @@ public class ProgressMonitorCancelTest {
 			public void run() {
 				List<Problem> problems = m
 						.findProblems(new File(
-								"../com.liferay.blade.upgrade.liferay70/projects/"), cancelable);
+								"projects"), cancelable);
 				result.addAll(problems);
 			}
 		};

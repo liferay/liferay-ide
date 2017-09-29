@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
+import com.liferay.blade.test.Util;
 
 import java.io.File;
 import java.util.List;
@@ -59,48 +60,48 @@ public class LockLegacyAPITest extends APITestBase {
 
 		assertEquals(22, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(893, problem.startOffset);
-//			assertEquals(940, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(893, problem.startOffset);
+			assertEquals(940, problem.endOffset);
+		} else {
 			assertEquals(872, problem.startOffset);
 			assertEquals(919, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(1);
 
 		assertEquals(46, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(1420, problem.startOffset);
-//			assertEquals(1484, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(1420, problem.startOffset);
+			assertEquals(1484, problem.endOffset);
+		} else {
 			assertEquals(1375, problem.startOffset);
 			assertEquals(1438, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(2);
 
 		assertEquals(62, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(1747, problem.startOffset);
-//			assertEquals(1806, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(1747, problem.startOffset);
+			assertEquals(1806, problem.endOffset);
+		} else {
 			assertEquals(1686, problem.startOffset);
 			assertEquals(1745, problem.endOffset);
-//		}
+		}
 
 		problem = problems.get(3);
 
 		assertEquals(73, problem.lineNumber);
 
-//		if (Util.isWindows()) {
-//			assertEquals(1971, problem.startOffset);
-//			assertEquals(2044, problem.endOffset);
-//		} else {
+		if (Util.isWindows()) {
+			assertEquals(1971, problem.startOffset);
+			assertEquals(2044, problem.endOffset);
+		} else {
 			assertEquals(1899, problem.startOffset);
 			assertEquals(1971, problem.endOffset);
-//		}
+		}
 	}
 }
