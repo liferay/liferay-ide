@@ -58,7 +58,7 @@ public class ImportLiferayWorkspaceServerNameService extends DefaultValueService
             return StringPool.EMPTY;
         }
 
-        String serverName = path.lastSegment();
+        String serverName = path.lastSegment() + " server";
 
         return serverName;
     }

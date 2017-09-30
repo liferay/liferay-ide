@@ -15,8 +15,10 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.blade.api.MigrationConstants;
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.ui.ProjectUI;
@@ -41,6 +43,7 @@ import com.liferay.ide.ui.util.UIUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
@@ -688,4 +691,14 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         return _problemsViewer;
     }
 
+
+    @Override
+    public void onPageAction(PageActionEvent event) {
+    		if (event.getTargetPageIndex() == this.getIndex() && event.getAction() instanceof PageFinishAction) {
+
+    			Stream.of(CoreUtil.getAllProjects()).forEach( project -> {
+    				MarkerUtil.clearMarkers( project, MigrationConstants.MARKER_TYPE, null );
+			});
+    		}
+    }
 }
