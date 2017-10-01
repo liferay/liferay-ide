@@ -190,11 +190,13 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         _problemsViewer.addSelectionChangedListener( new ISelectionChangedListener()
         {
 
+            @Override
             public void selectionChanged( final SelectionChangedEvent event )
             {
                 UIUtil.async( new Runnable()
                 {
 
+                    @Override
                     public void run()
                     {
                         updateForm( event );
@@ -403,6 +405,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
                 }
             }
 
+            @Override
             public String getText( Object element )
             {
                 return null;
@@ -614,6 +617,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         return new SelectionAdapter()
         {
 
+            @Override
             public void widgetSelected( SelectionEvent e )
             {
                 _comparator.setColumn( index );
@@ -662,6 +666,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         }
     }
 
+    @Override
     public void createSpecialDescriptor( Composite parent, int style )
     {
         final String descriptor =
@@ -681,6 +686,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         return "Find Breaking Changes";
     }
 
+    @Override
     public boolean getGridLayoutEqualWidth()
     {
         return false;
@@ -691,14 +697,14 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         return _problemsViewer;
     }
 
-
     @Override
     public void onPageAction(PageActionEvent event) {
-    		if (event.getTargetPageIndex() == this.getIndex() && event.getAction() instanceof PageFinishAction) {
+       PageAction action = event.getAction();
 
-    			Stream.of(CoreUtil.getAllProjects()).forEach( project -> {
-    				MarkerUtil.clearMarkers( project, MigrationConstants.MARKER_TYPE, null );
-			});
-    		}
+       if (action instanceof PageFinishAction && action.getPageActionName().equals("Find Breaking Changes")) {
+           Stream.of(CoreUtil.getAllProjects()).forEach( project -> {
+               MarkerUtil.clearMarkers( project, MigrationConstants.MARKER_TYPE, null );
+           });
+        }
     }
 }
