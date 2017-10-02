@@ -132,6 +132,7 @@ public class NavigatorControl extends AbstractCanvas implements SelectionChanged
 
         PageActionEvent event = new PageActionEvent();
 
+        event.setAction(targetAction);
         event.setTargetPageIndex( NONE );
 
         if( page.showNextPage() && targetAction != null )

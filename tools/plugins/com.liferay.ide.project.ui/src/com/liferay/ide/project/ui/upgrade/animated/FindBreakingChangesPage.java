@@ -701,7 +701,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
     public void onPageAction(PageActionEvent event) {
        PageAction action = event.getAction();
 
-       if (action instanceof PageFinishAction && action.getPageActionName().equals("Find Breaking Changes")) {
+       if (action instanceof PageFinishAction && event.getTargetPageIndex() == this.getIndex()) {
            Stream.of(CoreUtil.getAllProjects()).forEach( project -> {
                MarkerUtil.clearMarkers( project, MigrationConstants.MARKER_TYPE, null );
            });
