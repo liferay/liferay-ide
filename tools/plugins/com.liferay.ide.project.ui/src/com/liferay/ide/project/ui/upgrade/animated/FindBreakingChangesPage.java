@@ -15,8 +15,10 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.blade.api.MigrationConstants;
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.ui.ProjectUI;
@@ -41,6 +43,7 @@ import com.liferay.ide.ui.util.UIUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
@@ -187,11 +190,13 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         _problemsViewer.addSelectionChangedListener( new ISelectionChangedListener()
         {
 
+            @Override
             public void selectionChanged( final SelectionChangedEvent event )
             {
                 UIUtil.async( new Runnable()
                 {
 
+                    @Override
                     public void run()
                     {
                         updateForm( event );
@@ -400,6 +405,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
                 }
             }
 
+            @Override
             public String getText( Object element )
             {
                 return null;
@@ -611,6 +617,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         return new SelectionAdapter()
         {
 
+            @Override
             public void widgetSelected( SelectionEvent e )
             {
                 _comparator.setColumn( index );
@@ -659,6 +666,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         }
     }
 
+    @Override
     public void createSpecialDescriptor( Composite parent, int style )
     {
         final String descriptor =
@@ -678,6 +686,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         return "Find Breaking Changes";
     }
 
+    @Override
     public boolean getGridLayoutEqualWidth()
     {
         return false;
@@ -688,4 +697,14 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         return _problemsViewer;
     }
 
+    @Override
+    public void onPageAction(PageActionEvent event) {
+       PageAction action = event.getAction();
+
+       if (action instanceof PageFinishAction && event.getTargetPageIndex() == this.getIndex()) {
+           Stream.of(CoreUtil.getAllProjects()).forEach( project -> {
+               MarkerUtil.clearMarkers( project, MigrationConstants.MARKER_TYPE, null );
+           });
+        }
+    }
 }

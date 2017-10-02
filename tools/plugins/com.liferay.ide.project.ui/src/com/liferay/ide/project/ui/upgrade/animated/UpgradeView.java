@@ -372,13 +372,15 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         navigator.addPageActionListener( gear );
         navigator.setBackground( parent.getBackground() );
 
+        staticPageList.stream().forEach(navigator::addPageActionListener);
+
         gear.addSelectionChangedListener( navigator );
         gear.addSelectionChangedListener( this );
-        gear.addSelectionChangedListener( (SelectionChangedListener) initConfigureProjectPage );
-        gear.addSelectionChangedListener( (SelectionChangedListener) descriptorsPage );
-        gear.addSelectionChangedListener( (SelectionChangedListener) upgradePomPage );
-        gear.addSelectionChangedListener( (SelectionChangedListener) layoutTemplatePage );
-        gear.addSelectionChangedListener( (SelectionChangedListener) summaryPage );
+        gear.addSelectionChangedListener( initConfigureProjectPage );
+        gear.addSelectionChangedListener( descriptorsPage );
+        gear.addSelectionChangedListener( upgradePomPage );
+        gear.addSelectionChangedListener( layoutTemplatePage );
+        gear.addSelectionChangedListener( summaryPage );
 
         GridData navData = new GridData( GridData.FILL_HORIZONTAL );
 

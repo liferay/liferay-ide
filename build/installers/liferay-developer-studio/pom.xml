@@ -31,75 +31,11 @@
     <name>Liferay IDE Developer Studio Installer</name>
 
     <properties>
-        <portal-download-base>http://mirrors/files.liferay.com/private/ee/portal</portal-download-base>
-        <portal-version>7.0.10.4</portal-version>
-        <portal-zip-name>liferay-dxp-digital-enterprise-tomcat-7.0-sp4-20170705142422877.zip</portal-zip-name>
-        <plugin-sdk-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk</plugin-sdk-download-base>
-        <plugin-sdk-zip-name>com.liferay.portal.plugins.sdk-1.0.11-withdependencies.zip</plugin-sdk-zip-name>
-        <plugin-sdk-version>1.0.11</plugin-sdk-version>
         <studio-installer-version>3.1.1-ga2</studio-installer-version>
     </properties>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>com.googlecode.maven-download-plugin</groupId>
-                <artifactId>download-maven-plugin</artifactId>
-                <version>1.3.0</version>
-                <executions>
-                    <execution>
-                        <id>download-dxp-bundle</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>${portal-download-base}/${portal-version}/${portal-zip-name}</url>
-                            <outputDirectory>../shared/download/</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>download-plugin-sdk</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>${plugin-sdk-download-base}/${plugin-sdk-version}/${plugin-sdk-zip-name}</url>
-                            <outputDirectory>../shared/download/</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>download-blade</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>${blade-latest-download-url}</url>
-                            <outputDirectory>../shared/download/</outputDirectory>
-                            <outputFileName>blade.jar</outputFileName>
-                            <md5>${blade-latest-md5}</md5>
-                            <checkSignature>true</checkSignature>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>download-bundle-support</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>${bundle-support-download-base}/${bundle-support-version}/${bundle-support-name}</url>
-                            <outputDirectory>../shared/download/</outputDirectory>
-                            <outputFileName>com.liferay.portal.tools.bundle.support.jar</outputFileName>
-                            <md5>${bundle-support-md5}</md5>
-                            <checkSignature>true</checkSignature>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>

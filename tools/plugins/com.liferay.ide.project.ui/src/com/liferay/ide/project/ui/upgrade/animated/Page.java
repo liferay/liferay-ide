@@ -16,6 +16,7 @@
 package com.liferay.ide.project.ui.upgrade.animated;
 
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageActionListener;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageValidationListener;
 import com.liferay.ide.ui.util.SWTUtil;
@@ -41,7 +42,7 @@ import org.eclipse.swt.widgets.Text;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public abstract class Page extends Composite implements SelectionChangedListener
+public abstract class Page extends Composite implements PageActionListener, SelectionChangedListener
 {
 
     public static final int DEFAULT_PAGE_WIDTH = 500;
@@ -292,6 +293,11 @@ public abstract class Page extends Composite implements SelectionChangedListener
 
     @Override
     public void onSelectionChanged( int targetSelection )
+    {
+    }
+
+    @Override
+    public void onPageAction(PageActionEvent event)
     {
     }
 }
