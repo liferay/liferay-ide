@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model.internal;
 
@@ -28,43 +27,42 @@ import org.eclipse.sapphire.modeling.Path;
  * @author Kuo Zhang
  * @author Gregory Amerson
  */
-public class CustomJspDirListener extends FilteredListener<PropertyContentEvent>
-{
+public class CustomJspDirListener extends FilteredListener<PropertyContentEvent> {
 
-    @Override
-    protected void handleTypedEvent( PropertyContentEvent event )
-    {
-        final Property prop = event.property();
+	@Override
+	protected void handleTypedEvent(PropertyContentEvent event) {
+		Property prop = event.property();
 
-        final Hook hook = prop.element().nearest( Hook.class );
+		Hook hook = prop.element().nearest(Hook.class);
 
-        if( hook != null )
-        {
-            // IDE-1132, Listen the change of Property CustomJspDir, and refresh the Property CustomJsps.
-            if( CustomJspDir.PROP_VALUE.equals( prop.definition() ) )
-            {
-                hook.property( Hook.PROP_CUSTOM_JSPS ).refresh();
-            }
-            // IDE-1251 listen for changes to custom_jsp_dir and if it is empty initialize initial content @InitialValue
-            else if( Hook.PROP_CUSTOM_JSP_DIR.equals( prop.definition() ) )
-            {
-                CustomJspDir customJspDir = hook.getCustomJspDir().content( false );
+		if (hook != null) {
+			if (CustomJspDir.PROP_VALUE.equals(prop.definition())) {
 
-                if( customJspDir != null )
-                {
-                    Value<Path> value = customJspDir.getValue();
+				// IDE-1132, Listen the change of Property CustomJspDir, and refresh the
+				// Property CustomJsps.
 
-                    if( value != null )
-                    {
-                        Path path = value.content( false );
+				hook.property(Hook.PROP_CUSTOM_JSPS).refresh();
+			}
+			else if (Hook.PROP_CUSTOM_JSP_DIR.equals(prop.definition())) {
 
-                        if( path == null )
-                        {
-                            customJspDir.initialize();
-                        }
-                    }
-                }
-            }
-        }
-    }
+				// IDE-1251 listen for changes to custom_jsp_dir and if it is empty initialize
+				// initial content @InitialValue
+
+				CustomJspDir customJspDir = hook.getCustomJspDir().content(false);
+
+				if (customJspDir != null) {
+					Value<Path> value = customJspDir.getValue();
+
+					if (value != null) {
+						Path path = value.content(false);
+
+						if (path == null) {
+							customJspDir.initialize();
+						}
+					}
+				}
+			}
+		}
+	}
+
 }

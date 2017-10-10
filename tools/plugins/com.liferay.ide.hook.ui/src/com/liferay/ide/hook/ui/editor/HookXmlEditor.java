@@ -77,7 +77,7 @@ public class HookXmlEditor extends SapphireEditorForXml
 
     public HookXmlEditor()
     {
-        super( Hook6xx.TYPE, null );
+        super( Hook6xx.ELEMENT_TYPE, null );
     }
 
     @Override

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model.internal;
 
@@ -37,67 +34,59 @@ import org.eclipse.sapphire.java.JavaTypeName;
 /**
  * @author Gregory Amerson
  */
-public class ServiceImplJavaTypeConstraintService extends JavaTypeConstraintService
-{
+public class ServiceImplJavaTypeConstraintService extends JavaTypeConstraintService {
 
-    private Set<JavaTypeKind> kinds;
+	@Override
+	protected JavaTypeConstraintServiceData compute() {
+		return new JavaTypeConstraintServiceData(_kinds, _getServiceTypes(), _behavior);
+	}
 
-    private JavaTypeConstraintBehavior behavior;
+	@Override
+	protected void initJavaTypeConstraintService() {
+		super.initJavaTypeConstraintService();
 
-    private ServiceWrapper service;
+		Property property = context().find(Property.class);
 
-    @Override
-    protected void initJavaTypeConstraintService()
-    {
-        super.initJavaTypeConstraintService();
+		JavaTypeConstraint javaTypeConstraintAnnotation = property.definition().getAnnotation(JavaTypeConstraint.class);
 
-        final Property property = context().find( Property.class );
-        final JavaTypeConstraint javaTypeConstraintAnnotation = property.definition().getAnnotation( JavaTypeConstraint.class );
+		Set<JavaTypeKind> kind = EnumSet.noneOf(JavaTypeKind.class);
 
-        final Set<JavaTypeKind> kind = EnumSet.noneOf( JavaTypeKind.class );
+		for (JavaTypeKind k : javaTypeConstraintAnnotation.kind()) {
+			kind.add(k);
+		}
 
-        for( JavaTypeKind k : javaTypeConstraintAnnotation.kind() )
-        {
-            kind.add( k );
-        }
+		_kinds = kind;
 
-        this.kinds = kind;
+		_behavior = javaTypeConstraintAnnotation.behavior();
 
-        this.behavior = javaTypeConstraintAnnotation.behavior();
+		_service = context(ServiceWrapper.class);
 
-        this.service = context( ServiceWrapper.class );
+		Listener listener = new FilteredListener<PropertyContentEvent>() {
 
-        Listener listener = new FilteredListener<PropertyContentEvent>()
-        {
+			@Override
+			public void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
 
-            @Override
-            public void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		};
 
-        this.service.attach( listener, "ServiceType" ); //$NON-NLS-1$
-    }
+		_service.attach(listener, "ServiceType");
+	}
 
-    private Set<String> getServiceTypes()
-    {
-        JavaTypeName type = this.service.getServiceType().content( false );
+	private Set<String> _getServiceTypes() {
+		JavaTypeName type = _service.getServiceType().content(false);
 
-        Set<String> types = new HashSet<String>();
+		Set<String> types = new HashSet<>();
 
-        if( type != null )
-        {
-            types.add( type.qualified() + "Wrapper" ); //$NON-NLS-1$
-        }
+		if (type != null) {
+			types.add(type.qualified() + "Wrapper");
+		}
 
-        return types;
-    }
+		return types;
+	}
 
-    @Override
-    protected JavaTypeConstraintServiceData compute()
-    {
-        return new JavaTypeConstraintServiceData( this.kinds, getServiceTypes(), this.behavior );
-    }
+	private JavaTypeConstraintBehavior _behavior;
+	private Set<JavaTypeKind> _kinds;
+	private ServiceWrapper _service;
 
 }

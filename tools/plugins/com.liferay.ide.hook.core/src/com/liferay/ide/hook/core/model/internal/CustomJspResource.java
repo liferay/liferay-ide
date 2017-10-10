@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,12 +10,11 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
-package com.liferay.ide.hook.core.model.internal;import com.liferay.ide.hook.core.model.CustomJsp;
+package com.liferay.ide.hook.core.model.internal;
+
+import com.liferay.ide.hook.core.model.CustomJsp;
 
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyBinding;
@@ -25,53 +24,47 @@ import org.eclipse.sapphire.ValuePropertyBinding;
 /**
  * @author Gregory Amerson
  */
-public class CustomJspResource extends Resource
-{
+public class CustomJspResource extends Resource {
 
-    private ObjectValue<String> value;
+	public CustomJspResource(Resource parent) {
+		super(parent);
+	}
 
-    public CustomJspResource( Resource parent )
-    {
-        super( parent );
-    }
+	public CustomJspResource(Resource parent, ObjectValue<String> customJsp) {
+		super(parent);
 
-    public CustomJspResource( Resource parent, ObjectValue<String> customJsp )
-    {
-        super( parent );
-        this.value = customJsp;
-    }
+		_value = customJsp;
+	}
 
-    @Override
-    protected PropertyBinding createBinding( final Property property )
-    {
-        if( property.definition() == CustomJsp.PROP_VALUE )
-        {
-            ValuePropertyBinding binding = new ValuePropertyBinding()
-            {
-                @Override
-                public String read()
-                {
-                    return CustomJspResource.this.value.getValue();
-                }
+	public ObjectValue<String> getCustomJsp() {
+		return _value;
+	}
 
-                @Override
-                public void write( final String value )
-                {
-                    CustomJspResource.this.value.setValue( value );
-                }
-            };
+	@Override
+	protected PropertyBinding createBinding(Property property) {
+		if (property.definition() == CustomJsp.PROP_VALUE) {
+			ValuePropertyBinding binding = new ValuePropertyBinding() {
 
-            binding.init( property );
+				@Override
+				public String read() {
+					return CustomJspResource.this._value.getValue();
+				}
 
-            return binding;
-        }
+				@Override
+				public void write(String value) {
+					CustomJspResource.this._value.setValue(value);
+				}
 
-        return null;
-    }
+			};
 
-    public ObjectValue<String> getCustomJsp()
-    {
-        return this.value;
-    }
+			binding.init(property);
+
+			return binding;
+		}
+
+		return null;
+	}
+
+	private ObjectValue<String> _value;
 
 }

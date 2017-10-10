@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model.internal;
 
@@ -30,48 +27,39 @@ import org.eclipse.sapphire.modeling.Path;
 /**
  * @author Gregory Amerson
  */
-public class HookMethods
-{
+public class HookMethods {
 
-    public static IFile getPortalPropertiesFile( Hook hook )
-    {
-        return getPortalPropertiesFile( hook, true );
-    }
+	public static IFile getPortalPropertiesFile(Hook hook) {
+		return getPortalPropertiesFile(hook, true);
+	}
 
-    public static IFile getPortalPropertiesFile( Hook hook, boolean onlyIfExists )
-    {
-        IFile retval = null;
+	public static IFile getPortalPropertiesFile(Hook hook, boolean onlyIfExists) {
+		IFile retval = null;
 
-        if( hook != null )
-        {
-            PortalPropertiesFile portalPropertiesFileElement = hook.getPortalPropertiesFile().content();
+		if (hook != null) {
+			PortalPropertiesFile portalPropertiesFileElement = hook.getPortalPropertiesFile().content();
 
-            if( portalPropertiesFileElement != null )
-            {
-                Path filePath = portalPropertiesFileElement.getValue().content();
+			if (portalPropertiesFileElement != null) {
+				Path filePath = portalPropertiesFileElement.getValue().content();
 
-                if( filePath != null )
-                {
-                    for( IFolder folder : CoreUtil.getSourceFolders( JavaCore.create( hook.adapt( IProject.class ) ) ) )
-                    {
-                        IFile file = folder.getFile( filePath.toPortableString() );
+				if (filePath != null) {
+					for (IFolder folder : CoreUtil.getSourceFolders(JavaCore.create(hook.adapt(IProject.class)))) {
+						IFile file = folder.getFile(filePath.toPortableString());
 
-                        if( onlyIfExists )
-                        {
-                            if( file.exists() )
-                            {
-                                retval = file;
-                            }
-                        }
-                        else
-                        {
-                            retval = file;
-                        }
-                    }
-                }
-            }
-        }
+						if (onlyIfExists) {
+							if (file.exists()) {
+								retval = file;
+							}
+						}
+						else {
+							retval = file;
+						}
+					}
+				}
+			}
+		}
 
-        return retval;
-    }
+		return retval;
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model.internal;
 
@@ -29,67 +28,63 @@ import java.util.TreeSet;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.Value;
 
 /**
  * @author Gregory Amerson
  */
-public class StrutsActionPathPossibleValuesService extends PossibleValuesService
-{
+public class StrutsActionPathPossibleValuesService extends PossibleValuesService {
 
-    private IPath portalDir;
-    private TreeSet<String> possibleValues;
+	@Override
+	protected void compute(Set<String> values) {
+		if ((_portalDir != null) && _portalDir.toFile().exists()) {
+			if (_possibleValues == null) {
+				IPath strutsConfigPath = _portalDir.append("WEB-INF/struts-config.xml");
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        if( this.portalDir != null && this.portalDir.toFile().exists() )
-        {
-            if( this.possibleValues == null )
-            {
-                final IPath strutsConfigPath = this.portalDir.append( "WEB-INF/struts-config.xml" );
-                final StrutsActionPathPossibleValuesCacheService cacheService =
-                    this.context().service( StrutsActionPathPossibleValuesCacheService.class );
+				StrutsActionPathPossibleValuesCacheService cacheService =
+					context().service(StrutsActionPathPossibleValuesCacheService.class);
 
-                this.possibleValues = cacheService.getPossibleValuesForPath( strutsConfigPath );
-            }
+				_possibleValues = cacheService.getPossibleValuesForPath(strutsConfigPath);
+			}
 
-            values.addAll( this.possibleValues );
+			values.addAll(_possibleValues);
 
-            // add the value that is current set by the user
-            String actionPath = context( StrutsAction.class ).getStrutsActionPath().content( false );
+			// add the value that is current set by the user
 
-            if( !empty( actionPath ) )
-            {
-                values.add( actionPath );
-            }
-        }
-    }
+			Value<String> strutsActionPathValue = context(StrutsAction.class).getStrutsActionPath();
 
-    @Override
-    protected void initPossibleValuesService()
-    {
-        super.initPossibleValuesService();
+			String actionPath = strutsActionPathValue.content(false);
 
-        final ILiferayProject liferayProject = LiferayCore.create( project() );
+			if (!empty(actionPath)) {
+				values.add(actionPath);
+			}
+		}
+	}
 
-        if( liferayProject != null )
-        {
-            final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+	protected Hook hook() {
+		return context().find(Hook.class);
+	}
 
-            if( portal != null )
-            {
-                this.portalDir = portal.getAppServerPortalDir();
-            }
-        }
-    }
+	@Override
+	protected void initPossibleValuesService() {
+		super.initPossibleValuesService();
 
-    protected Hook hook()
-    {
-        return this.context().find( Hook.class );
-    }
+		ILiferayProject liferayProject = LiferayCore.create(project());
 
-    protected IProject project()
-    {
-        return this.hook().adapt( IProject.class );
-    }
+		if (liferayProject != null) {
+			ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
+
+			if (portal != null) {
+				_portalDir = portal.getAppServerPortalDir();
+			}
+		}
+	}
+
+	protected IProject project() {
+		return hook().adapt(IProject.class);
+	}
+
+	private IPath _portalDir;
+	private TreeSet<String> _possibleValues;
+
 }

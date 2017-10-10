@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- ******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model.internal;
 
@@ -30,26 +29,24 @@ import org.eclipse.sapphire.services.RelativePathService;
 /**
  * @author Gregory Amerson
  */
-public class SrcFoldersRelativePathService extends RelativePathService
-{
+public class SrcFoldersRelativePathService extends RelativePathService {
 
-    @Override
-    public List<Path> roots()
-    {
-        final List<Path> roots = new ArrayList<Path>();
-        final Hook hook = context( Hook.class );
+	@Override
+	public List<Path> roots() {
+		List<Path> roots = new ArrayList<>();
+		Hook hook = context(Hook.class);
 
-        if( hook != null )
-        {
-            final IProject project = hook.adapt( IProject.class );
-            final List<IFolder> folders = CoreUtil.getSourceFolders( JavaCore.create( project ) );
+		if (hook != null) {
+			IProject project = hook.adapt(IProject.class);
 
-            for( final IFolder folder : folders )
-            {
-                roots.add( new Path( folder.getLocation().toPortableString() ) );
-            }
-        }
+			List<IFolder> folders = CoreUtil.getSourceFolders(JavaCore.create(project));
 
-        return roots;
-    }
+			for (final IFolder folder : folders) {
+				roots.add(new Path(folder.getLocation().toPortableString()));
+			}
+		}
+
+		return roots;
+	}
+
 }

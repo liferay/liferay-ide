@@ -1,20 +1,16 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- *   This library is free software; you can redistribute it and/or modify it under
- *   the terms of the GNU Lesser General Public License as published by the Free
- *   Software Foundation; either version 2.1 of the License, or (at your option)
- *   any later version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *   This library is distributed in the hope that it will be useful, but WITHOUT
- *   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- *   FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- *   details.
- *
- *   Contributors:
- *          Kamesh Sampath - initial implementation
- *          Gregory Amerson - IDE-355
- *******************************************************************************/
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.hook.core.model;
 
@@ -41,46 +37,46 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Kamesh Sampath
  */
-@Image( path = "images/elcl16/filter_16x16.gif" )
-public interface ServletFilter extends Element
-{
+@Image(path = "images/elcl16/filter_16x16.gif")
+public interface ServletFilter extends Element {
 
-    ElementType TYPE = new ElementType( ServletFilter.class );
+	public ElementList<Param> getInitParams();
 
-    // *** Servlet Filter Name ***
+	public ReferenceValue<JavaTypeName, JavaType> getServletFilterImpl();
 
-    @Label( standard = "Servlet Filter Name" )
-    @XmlBinding( path = "servlet-filter-name" )
-    @Required
-    ValueProperty PROP_SERVLET_FILTER_NAME = new ValueProperty( TYPE, "ServletFilterName" ); //$NON-NLS-1$
+	public Value<String> getServletFilterName();
 
-    Value<String> getServletFilterName();
+	public void setServletFilterImpl(JavaTypeName value);
 
-    void setServletFilterName( String value );
+	public void setServletFilterImpl(String value);
 
-    // ** ServletFilterImpl
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @Label( standard = "Servlet Filter Implementation" )
-    @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = { "javax.servlet.Filter" } )
-    @MustExist
-    @Required
-    @XmlBinding( path = "servlet-filter-impl" )
-    ValueProperty PROP_SERVLET_FILTER_IMPL = new ValueProperty( TYPE, "ServletFilterImpl" ); //$NON-NLS-1$
+	public void setServletFilterName(String value);
 
-    ReferenceValue<JavaTypeName, JavaType> getServletFilterImpl();
+	public ElementType ELEMENT_TYPE = new ElementType(ServletFilter.class);
 
-    void setServletFilterImpl( String value );
+	// *** InitParams ***
 
-    void setServletFilterImpl( JavaTypeName value );
+	@Label(standard = "Init Params")
+	@Type(base = Param.class)
+	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "init-param", type = Param.class)})
+	public ListProperty PROP_INIT_PARAMS = new ListProperty(ELEMENT_TYPE, "InitParams");
 
-    // *** InitParams ***
+	// ** ServletFilterImpl
 
-    @Type( base = Param.class )
-    @Label( standard = "Init Params" )
-    @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "init-param", type = Param.class ) } )
-    ListProperty PROP_INIT_PARAMS = new ListProperty( TYPE, "InitParams" ); //$NON-NLS-1$
+	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = {"javax.servlet.Filter"})
+	@Label(standard = "Servlet Filter Implementation")
+	@MustExist
+	@Reference(target = JavaType.class)
+	@Required
+	@Type(base = JavaTypeName.class)
+	@XmlBinding(path = "servlet-filter-impl")
+	public ValueProperty PROP_SERVLET_FILTER_IMPL = new ValueProperty(ELEMENT_TYPE, "ServletFilterImpl");
 
-    ElementList<Param> getInitParams();
+	// *** Servlet Filter Name ***
+
+	@Label(standard = "Servlet Filter Name")
+	@Required
+	@XmlBinding(path = "servlet-filter-name")
+	public ValueProperty PROP_SERVLET_FILTER_NAME = new ValueProperty(ELEMENT_TYPE, "ServletFilterName");
 
 }

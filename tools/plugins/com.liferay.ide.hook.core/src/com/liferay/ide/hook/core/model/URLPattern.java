@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *    Kamesh Sampath - initial implementation
- *    Gregory Amerson - IDE-355
- ******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model;
 
@@ -27,21 +23,19 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
-@Image( path = "images/elcl16/locale_16x16.gif" )
-public interface URLPattern extends Element
-{
+@Image(path = "images/elcl16/locale_16x16.gif")
+public interface URLPattern extends Element {
 
-    ElementType TYPE = new ElementType( URLPattern.class );
+	public Value<String> getURLPattern();
 
-    // *** Value ***
+	public void setURLPattern(String value);
 
-    @Label( standard = "url pattern" )
-    @XmlBinding( path = "" )
-    ValueProperty PROP_URL_PATTERN = new ValueProperty( TYPE, "URLPattern" ); //$NON-NLS-1$
+	// *** Value ***
 
-    Value<String> getURLPattern();
+	@Label(standard = "url pattern")
+	@XmlBinding(path = "")
+	public ValueProperty PROP_URL_PATTERN = new ValueProperty(new ElementType(URLPattern.class), "URLPattern");
 
-    void setURLPattern( String value );
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model.internal;
 
@@ -20,7 +19,7 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.server.util.ServerUtil;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
@@ -31,49 +30,41 @@ import org.eclipse.sapphire.PossibleValuesService;
 /**
  * @author Gregory Amerson
  */
-public class PortalFilterNamesPossibleValuesService extends PossibleValuesService
-{
+public class PortalFilterNamesPossibleValuesService extends PossibleValuesService {
 
-    private String[] servletFilterNames;
+	@Override
+	protected void compute(Set<String> values) {
+		if (_servletFilterNames == null) {
+			Element element = context().find(Element.class);
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        if( this.servletFilterNames == null )
-        {
-            final IFile hookFile = this.context().find( Element.class ).adapt( IFile.class );
+			IFile hookFile = element.adapt(IFile.class);
 
-            if( hookFile != null )
-            {
-                try
-                {
-                    final ILiferayProject liferayProject = LiferayCore.create( hookFile.getProject() );
+			if (hookFile != null) {
+				try {
+					ILiferayProject liferayProject = LiferayCore.create(hookFile.getProject());
 
-                    if( liferayProject != null )
-                    {
-                        final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+					if (liferayProject != null) {
+						ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
-                        if( portal != null )
-                        {
-                            final IPath appServerPortalDir = portal.getAppServerPortalDir();
+						if (portal != null) {
+							IPath appServerPortalDir = portal.getAppServerPortalDir();
 
-                            if( appServerPortalDir != null )
-                            {
-                                this.servletFilterNames = ServerUtil.getServletFilterNames( appServerPortalDir );
-                            }
-                        }
-                    }
-                }
-                catch( Exception e )
-                {
-                }
-            }
-        }
+							if (appServerPortalDir != null) {
+								_servletFilterNames = ServerUtil.getServletFilterNames(appServerPortalDir);
+							}
+						}
+					}
+				}
+				catch (Exception e) {
+				}
+			}
+		}
 
-        if( this.servletFilterNames != null )
-        {
-            values.addAll( Arrays.asList( this.servletFilterNames ) );
-        }
-    }
+		if (_servletFilterNames != null) {
+			Collections.addAll(values, _servletFilterNames);
+		}
+	}
+
+	private String[] _servletFilterNames;
 
 }

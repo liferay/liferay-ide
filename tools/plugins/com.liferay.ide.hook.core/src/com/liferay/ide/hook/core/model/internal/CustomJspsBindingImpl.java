@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model.internal;
 
@@ -30,6 +29,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.Resource;
@@ -37,145 +37,131 @@ import org.eclipse.sapphire.Resource;
 /**
  * @author Gregory Amerson
  */
-public class CustomJspsBindingImpl extends HookListBindingImpl
-{
-    private List<ObjectValue<String>> customJsps;
-    private IPath lastCustomJspDirPath;
-    private IPath portalDir;
+public class CustomJspsBindingImpl extends HookListBindingImpl {
 
-    @Override
-    protected List<?> readUnderlyingList()
-    {
-        IFolder customJspFolder = HookUtil.getCustomJspFolder( this.hook(), project() );
+	@Override
+	public void init(Property property) {
+		super.init(property);
 
-        if( customJspFolder == null || this.portalDir == null )
-        {
-            this.lastCustomJspDirPath = null;
-            return Collections.emptyList();
-        }
+		ILiferayProject liferayProject = LiferayCore.create(project());
 
-        IPath customJspDirPath = customJspFolder.getProjectRelativePath();
+		if (liferayProject != null) {
+			ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
-        if( customJspDirPath != null && customJspDirPath.equals( lastCustomJspDirPath ) )
-        {
-            return this.customJsps;
-        }
+			if (portal != null) {
+				_portalDir = portal.getAppServerPortalDir();
+			}
+		}
+	}
 
-        this.customJsps = new ArrayList<ObjectValue<String>>();
+	@Override
+	public void remove(Resource resource) {
+		ObjectValue<String> customJsp = resource.adapt(CustomJspResource.class).getCustomJsp();
 
-        this.lastCustomJspDirPath = customJspDirPath;
+		_customJsps.remove(customJsp);
+	}
 
-        IFile[] customJspFiles = getCustomJspFiles();
+	@Override
+	public ElementType type(Resource resource) {
+		if (resource instanceof CustomJspResource) {
+			return CustomJsp.ELEMENT_TYPE;
+		}
 
-        for( IFile customJspFile : customJspFiles )
-        {
-            IPath customJspFilePath = customJspFile.getProjectRelativePath();
+		return null;
+	}
 
-            IPath customJspPath =
-                customJspFilePath.removeFirstSegments( customJspFilePath.matchingFirstSegments( customJspDirPath ) );
+	@Override
+	protected Object insertUnderlyingObject(ElementType type, int position) {
+		ObjectValue<String> retval = null;
 
-            this.customJsps.add( new ObjectValue<String>( customJspPath.toPortableString() ) );
-        }
+		if (type.equals(CustomJsp.ELEMENT_TYPE)) {
+			retval = new ObjectValue<>();
 
-        return this.customJsps;
-    }
+			_customJsps.add(retval);
+		}
 
-    @SuppressWarnings( "unchecked" )
-    @Override
-    protected Resource resource( Object obj )
-    {
-        return new CustomJspResource( this.property().element().resource(), (ObjectValue<String>) obj );
-    }
+		return retval;
+	}
 
-    @Override
-    protected Object insertUnderlyingObject( ElementType type, int position )
-    {
-        ObjectValue<String> retval = null;
+	@Override
+	protected List<?> readUnderlyingList() {
+		IFolder customJspFolder = HookUtil.getCustomJspFolder(hook(), project());
 
-        if( type.equals( CustomJsp.TYPE ) )
-        {
-            retval = new ObjectValue<String>();
-            this.customJsps.add( retval );
-        }
+		if ((customJspFolder == null) || (_portalDir == null)) {
+			_lastCustomJspDirPath = null;
 
-        return retval;
-    }
+			return Collections.emptyList();
+		}
 
-    private void findJspFiles( IFolder folder, List<IFile> jspFiles ) throws CoreException
-    {
-        if( folder == null || !folder.exists() )
-        {
-            return;
-        }
+		IPath customJspDirPath = customJspFolder.getProjectRelativePath();
 
-        IResource[] members = folder.members( IResource.FOLDER | IResource.FILE );
+		if ((customJspDirPath != null) && customJspDirPath.equals(_lastCustomJspDirPath)) {
+			return _customJsps;
+		}
 
-        for( IResource member : members )
-        {
-            if( member instanceof IFile && "jsp".equals( member.getFileExtension() ) ) //$NON-NLS-1$
-            {
-                jspFiles.add( (IFile) member );
-            }
-            else if( member instanceof IFolder )
-            {
-                findJspFiles( (IFolder) member, jspFiles );
-            }
-        }
+		_customJsps = new ArrayList<>();
 
-    }
+		_lastCustomJspDirPath = customJspDirPath;
 
-    private IFile[] getCustomJspFiles()
-    {
-        List<IFile> customJspFiles = new ArrayList<IFile>();
+		IFile[] customJspFiles = _getCustomJspFiles();
 
-        IFolder customJspFolder = HookUtil.getCustomJspFolder( hook(), project() );
+		for (IFile customJspFile : customJspFiles) {
+			IPath customJspFilePath = customJspFile.getProjectRelativePath();
 
-        try
-        {
-            findJspFiles( customJspFolder, customJspFiles );
-        }
-        catch( CoreException e )
-        {
-            e.printStackTrace();
-        }
+			int index = customJspFilePath.matchingFirstSegments(customJspDirPath);
 
-        return customJspFiles.toArray( new IFile[0] );
-    }
+			IPath customJspPath = customJspFilePath.removeFirstSegments(index);
 
-    @Override
-    public void init( Property property )
-    {
-        super.init( property );
+			_customJsps.add(new ObjectValue<String>(customJspPath.toPortableString()));
+		}
 
-        final ILiferayProject liferayProject = LiferayCore.create( project() );
+		return _customJsps;
+	}
 
-        if( liferayProject != null )
-        {
-            final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+	@Override
+	@SuppressWarnings("unchecked")
+	protected Resource resource(Object obj) {
+		Element element = property().element();
 
-            if( portal != null )
-            {
-                this.portalDir = portal.getAppServerPortalDir();
-            }
-        }
-    }
+		Resource resource = element.resource();
 
-    @Override
-    public void remove( Resource resource )
-    {
-        ObjectValue<String> customJsp = resource.adapt( CustomJspResource.class ).getCustomJsp();
-        this.customJsps.remove( customJsp );
-    }
+		return new CustomJspResource(resource, (ObjectValue<String>)obj);
+	}
 
-    @Override
-    public ElementType type( Resource resource )
-    {
-        if( resource instanceof CustomJspResource )
-        {
-            return CustomJsp.TYPE;
-        }
+	private void _findJspFiles(IFolder folder, List<IFile> jspFiles) throws CoreException {
+		if ((folder == null) || !folder.exists()) {
+			return;
+		}
 
-        return null;
-    }
+		IResource[] members = folder.members(IResource.FOLDER | IResource.FILE);
+
+		for (IResource member : members) {
+			if ((member instanceof IFile) && "jsp".equals(member.getFileExtension())) {
+				jspFiles.add((IFile)member);
+			}
+			else if (member instanceof IFolder) {
+				_findJspFiles((IFolder)member, jspFiles);
+			}
+		}
+	}
+
+	private IFile[] _getCustomJspFiles() {
+		List<IFile> customJspFiles = new ArrayList<>();
+
+		IFolder customJspFolder = HookUtil.getCustomJspFolder(hook(), project());
+
+		try {
+			_findJspFiles(customJspFolder, customJspFiles);
+		}
+		catch (CoreException ce) {
+			ce.printStackTrace();
+		}
+
+		return customJspFiles.toArray(new IFile[0]);
+	}
+
+	private List<ObjectValue<String>> _customJsps;
+	private IPath _lastCustomJspDirPath;
+	private IPath _portalDir;
 
 }

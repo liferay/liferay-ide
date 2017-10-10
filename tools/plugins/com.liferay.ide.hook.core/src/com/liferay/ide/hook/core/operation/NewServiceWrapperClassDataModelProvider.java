@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.operation;
 
@@ -24,62 +23,54 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class NewServiceWrapperClassDataModelProvider extends NewJavaClassDataModelProvider
-    implements INewJavaClassDataModelProperties
-{
+@SuppressWarnings("restriction")
+public class NewServiceWrapperClassDataModelProvider
+	extends NewJavaClassDataModelProvider implements INewJavaClassDataModelProperties {
 
-    protected IDataModel hookModel;
-    protected String qualifiedClassname;
-    protected String qualifiedSuperclassname;
+	public NewServiceWrapperClassDataModelProvider(
+		IDataModel model, String qualifiedClassname, String qualifiedSuperclassname) {
 
-    public NewServiceWrapperClassDataModelProvider(
-        IDataModel model, String qualifiedClassname, String qualifiedSuperclassname )
-    {
-        this.hookModel = model;
-        this.qualifiedClassname = qualifiedClassname;
-        this.qualifiedSuperclassname = qualifiedSuperclassname;
-    }
+		hookModel = model;
+		this.qualifiedClassname = qualifiedClassname;
+		this.qualifiedSuperclassname = qualifiedSuperclassname;
+	}
 
-    @Override
-    public Object getDefaultProperty( String propertyName )
-    {
-        if( SOURCE_FOLDER.equals( propertyName ) )
-        {
-            return this.hookModel.getProperty( SOURCE_FOLDER );
-        }
-        else if( JAVA_PACKAGE.equals( propertyName ) )
-        {
-            int lastDot = this.qualifiedClassname.lastIndexOf( '.' );
+	@Override
+	public Object getDefaultProperty(String propertyName) {
+		if (SOURCE_FOLDER.equals(propertyName)) {
+			return this.hookModel.getProperty(SOURCE_FOLDER);
+		}
+		else if (JAVA_PACKAGE.equals(propertyName)) {
+			int lastDot = this.qualifiedClassname.lastIndexOf('.');
 
-            if( lastDot > -1 )
-            {
-                return this.qualifiedClassname.substring( 0, lastDot );
-            }
-            else
-            {
-                return StringPool.EMPTY;
-            }
-        }
-        else if( JAVA_PACKAGE_FRAGMENT_ROOT.equals( propertyName ) )
-        {
-            return this.hookModel.getProperty( JAVA_PACKAGE_FRAGMENT_ROOT );
-        }
-        else if( CLASS_NAME.equals( propertyName ) )
-        {
-            return this.qualifiedClassname.substring(
-                this.qualifiedClassname.lastIndexOf( '.' ) + 1, this.qualifiedClassname.length() );
-        }
-        else if( SUPERCLASS.equals( propertyName ) )
-        {
-            return this.qualifiedSuperclassname;
-        }
-        else if( PROJECT_NAME.equals( propertyName ) )
-        {
-            return this.hookModel.getProperty( PROJECT_NAME );
-        }
+			if (lastDot > -1) {
+				return this.qualifiedClassname.substring(0, lastDot);
+			}
+			else {
+				return StringPool.EMPTY;
+			}
+		}
+		else if (JAVA_PACKAGE_FRAGMENT_ROOT.equals(propertyName)) {
+			return this.hookModel.getProperty(JAVA_PACKAGE_FRAGMENT_ROOT);
+		}
+		else if (CLASS_NAME.equals(propertyName)) {
+			int begin = this.qualifiedClassname.lastIndexOf('.') + 1;
+			int end = this.qualifiedClassname.length();
 
-        return super.getDefaultProperty( propertyName );
-    }
+			return this.qualifiedClassname.substring(begin, end);
+		}
+		else if (SUPERCLASS.equals(propertyName)) {
+			return qualifiedSuperclassname;
+		}
+		else if (PROJECT_NAME.equals(propertyName)) {
+			return this.hookModel.getProperty(PROJECT_NAME);
+		}
+
+		return super.getDefaultProperty(propertyName);
+	}
+
+	protected IDataModel hookModel;
+	protected String qualifiedClassname;
+	protected String qualifiedSuperclassname;
 
 }

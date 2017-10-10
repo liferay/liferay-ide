@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model.internal;
 
@@ -22,6 +21,7 @@ import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.File;
 import java.io.FileFilter;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -38,99 +38,87 @@ import org.eclipse.sapphire.modeling.Status;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class CustomJspPossibleValuesService extends PossibleValuesService
-{
+public class CustomJspPossibleValuesService extends PossibleValuesService {
 
-    final FileFilter jspfilter = new FileFilter()
-    {
-        public boolean accept( File pathname )
-        {
-            return pathname.isDirectory() ||
-                   pathname.getName().endsWith( ".jsp" ) || //$NON-NLS-1$
-                   pathname.getName().endsWith( ".jspf" ); //$NON-NLS-1$
-        }
-    };
+	@Override
+	public Status problem(Value<?> value) {
+		return Status.createOkStatus();
+	}
 
-    private Path portalDir;
-    private File[] possibleValues;
+	@Override
+	protected void compute(final Set<String> values) {
+		if (_possibleValues == null) {
+			IProject project = project();
 
+			ILiferayProject liferayProject = LiferayCore.create(project);
 
-    @Override
-    protected void compute( final Set<String> values )
-    {
-        if( possibleValues == null )
-        {
-            final IProject project = project();
+			if (liferayProject != null) {
+				ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
-            final ILiferayProject liferayProject = LiferayCore.create( project );
+				if (portal != null) {
+					_portalDir = new Path(portal.getAppServerPortalDir().toPortableString());
 
-            if( liferayProject != null )
-            {
-                final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+					if (_portalDir != null) {
+						File portalDirFile = _portalDir.toFile();
 
-                if( portal != null )
-                {
-                    this.portalDir = new Path( portal.getAppServerPortalDir().toPortableString() );
+						File htmlDirFile = new File(portalDirFile, "html");
 
-                    if( this.portalDir != null )
-                    {
-                        final File portalDirFile = portalDir.toFile();
-                        final File htmlDirFile = new File( portalDirFile, "html" ); //$NON-NLS-1$
+						List<File> fileValues = new LinkedList<>();
 
-                        final List<File> fileValues = new LinkedList<File>();
+						if (htmlDirFile.exists()) {
+							_findJSPFiles(new File[] {htmlDirFile}, fileValues);
+						}
+						else {
+							File[] files = portalDirFile.listFiles(_jspfilter);
 
-                        if( htmlDirFile.exists() )
-                        {
-                            findJSPFiles( new File[] { htmlDirFile }, fileValues );
-                        }
-                        else
-                        {
-                            final File[] files = portalDirFile.listFiles( jspfilter );
-                            findJSPFiles( files, fileValues );
-                        }
+							_findJSPFiles(files, fileValues);
+						}
 
-                        this.possibleValues = fileValues.toArray( new File[0] );
-                    }
-                }
-            }
-        }
+						_possibleValues = fileValues.toArray(new File[0]);
+					}
+				}
+			}
+		}
 
-        if( possibleValues != null )
-        {
-            for( final File file : possibleValues )
-            {
-                values.add( new Path( file.getAbsolutePath() ).makeRelativeTo( portalDir ).toPortableString() );
-            }
-        }
-    }
+		if (_possibleValues != null) {
+			for (File file : _possibleValues) {
+				values.add(new Path(file.getAbsolutePath()).makeRelativeTo(_portalDir).toPortableString());
+			}
+		}
+	}
 
-    private void findJSPFiles( final File[] files, final List<File> fileValues )
-    {
-        if( ! CoreUtil.isNullOrEmpty( files ) )
-        {
-            for( File file : files )
-            {
-                if( file.isDirectory() )
-                {
-                    findJSPFiles( file.listFiles( jspfilter ), fileValues );
-                }
-                else
-                {
-                    fileValues.add( file );
-                }
-            }
-        }
-    }
+	protected IProject project() {
+		Element root = context(Element.class).root();
 
-    @Override
-    public Status problem( Value<?> value )
-    {
-        return Status.createOkStatus();
-    }
+		return root.adapt(IFile.class).getProject();
+	}
 
-    protected IProject project()
-    {
-        return context( Element.class ).root().adapt( IFile.class ).getProject();
-    }
+	private void _findJSPFiles(File[] files, List<File> fileValues) {
+		if (!CoreUtil.isNullOrEmpty(files)) {
+			for (File file : files) {
+				if (file.isDirectory()) {
+					_findJSPFiles(file.listFiles(_jspfilter), fileValues);
+				}
+				else {
+					fileValues.add(file);
+				}
+			}
+		}
+	}
+
+	private final FileFilter _jspfilter = new FileFilter() {
+
+		public boolean accept(File pathname) {
+			if (pathname.isDirectory() || pathname.getName().endsWith(".jsp") || pathname.getName().endsWith(".jspf")) {
+				return true;
+			}
+
+			return false;
+		}
+
+	};
+
+	private Path _portalDir;
+	private File[] _possibleValues;
 
 }

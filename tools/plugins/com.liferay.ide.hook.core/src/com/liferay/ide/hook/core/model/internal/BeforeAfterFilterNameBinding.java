@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model.internal;
 
@@ -26,47 +23,43 @@ import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 /**
  * @author Gregory Amerson
  */
-public class BeforeAfterFilterNameBinding extends XmlValueBindingImpl
-{
+public class BeforeAfterFilterNameBinding extends XmlValueBindingImpl {
 
-    @Override
-    public String read()
-    {
-        String retval = null;
-        XmlElement filterElement = null;
+	@Override
+	public String read() {
+		String retval = null;
+		XmlElement filterElement = null;
 
-        XmlElement xmlElement = xml();
-        BeforeAfterFilterType filterType = getFilterType();
+		XmlElement xmlElement = xml();
+		BeforeAfterFilterType filterType = _getFilterType();
 
-        String filterTypeText = filterType.getText();
+		String filterTypeText = filterType.getText();
 
-        filterElement = xmlElement.getChildElement( filterTypeText, false );
+		filterElement = xmlElement.getChildElement(filterTypeText, false);
 
-        if( filterElement != null )
-        {
-            retval = filterElement.getText();
-        }
+		if (filterElement != null) {
+			retval = filterElement.getText();
+		}
 
-        return retval;
-    }
+		return retval;
+	}
 
-    @Override
-    public void write( String value )
-    {
-        XmlElement xmlElement = xml();
-        BeforeAfterFilterType filterType = getFilterType();
+	@Override
+	public void write(String value) {
+		XmlElement xmlElement = xml();
+		BeforeAfterFilterType filterType = _getFilterType();
 
-        String filterTypeText = filterType.getText();
+		String filterTypeText = filterType.getText();
 
-        XmlElement filterElement = xmlElement.getChildElement( filterTypeText, true );
+		XmlElement filterElement = xmlElement.getChildElement(filterTypeText, true);
 
-        filterElement.setText( value );
-    }
+		filterElement.setText(value);
+	}
 
-    private BeforeAfterFilterType getFilterType()
-    {
-        ServletFilterMapping servletFilterMapping = property().nearest( ServletFilterMapping.class );
-        return servletFilterMapping.getBeforeAfterFilterType().content( true );
-    }
+	private BeforeAfterFilterType _getFilterType() {
+		ServletFilterMapping servletFilterMapping = property().nearest(ServletFilterMapping.class);
+
+		return servletFilterMapping.getBeforeAfterFilterType().content(true);
+	}
 
 }
