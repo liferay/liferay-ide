@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.ui.wizard;
 
@@ -32,77 +31,78 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizardPa
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class NewServicesHookWizardPage extends DataModelWizardPage implements INewHookDataModelProperties
-{
-    protected ServicesTableWizardSection servicesSection;
+@SuppressWarnings("restriction")
+public class NewServicesHookWizardPage extends DataModelWizardPage implements INewHookDataModelProperties {
 
-    public NewServicesHookWizardPage( IDataModel dataModel, String pageName )
-    {
-        super( dataModel, pageName, Msgs.createServiceHook, HookUI.imageDescriptorFromPlugin(
-            HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) ); //$NON-NLS-1$
+	public NewServicesHookWizardPage(IDataModel dataModel, String pageName) {
+		super(
+			dataModel, pageName, Msgs.createServiceHook,
+			HookUI.imageDescriptorFromPlugin(HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png"));
 
-        setDescription( Msgs.specifyLiferayServices );
-    }
+		setDescription(Msgs.specifyLiferayServices);
+	}
 
-    protected void createServicesFileGroup( Composite topComposite )
-    {
-        Composite composite = SWTUtil.createTopComposite( topComposite, 2 );
-        composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
+	protected void createServicesFileGroup(Composite topComposite) {
+		Composite composite = SWTUtil.createTopComposite(topComposite, 2);
 
-        servicesSection =
-            new ServicesTableWizardSection(
-                composite, Msgs.definePortalServices, Msgs.addServiceWrapper, Msgs.add, Msgs.edit,
-                Msgs.remove, new String[] { Msgs.serviceTypeTitle, Msgs.implClassTitle }, new String[] { Msgs.serviceTypeLabel,
-                    Msgs.impleClassLabel }, null, getDataModel(), SERVICES_ITEMS );
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
 
-        GridData gd = new GridData( SWT.FILL, SWT.CENTER, true, true, 1, 1 );
-        gd.heightHint = 150;
+		String[] titles = {Msgs.serviceTypeTitle, Msgs.implClassTitle};
+		String[] labels = {Msgs.serviceTypeLabel, Msgs.impleClassLabel};
 
-        servicesSection.setLayoutData( gd );
-        servicesSection.setCallback( new StringArrayTableWizardSectionCallback() );
+		servicesSection = new ServicesTableWizardSection(
+			composite, Msgs.definePortalServices, Msgs.addServiceWrapper, Msgs.add, Msgs.edit, Msgs.remove, titles,
+			labels, null, getDataModel(), SERVICES_ITEMS);
 
-        IProject project = CoreUtil.getProject( getDataModel().getStringProperty( PROJECT_NAME ) );
+		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1);
 
-        if( project != null )
-        {
-            servicesSection.setProject( project );
-        }
-    }
+		gd.heightHint = 150;
 
-    @Override
-    protected Composite createTopLevelComposite( Composite parent )
-    {
-        Composite topComposite = SWTUtil.createTopComposite( parent, 3 );
+		servicesSection.setLayoutData(gd);
 
-        createServicesFileGroup( topComposite );
+		servicesSection.setCallback(new StringArrayTableWizardSectionCallback());
 
-        return topComposite;
-    }
+		IProject project = CoreUtil.getProject(getDataModel().getStringProperty(PROJECT_NAME));
 
-    @Override
-    protected String[] getValidationPropertyNames()
-    {
-        return new String[] { SERVICES_ITEMS };
-    }
+		if (project != null) {
+			servicesSection.setProject(project);
+		}
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String add;
-        public static String addServiceWrapper;
-        public static String createServiceHook;
-        public static String definePortalServices;
-        public static String edit;
-        public static String implClassTitle;
-        public static String impleClassLabel;
-        public static String remove;
-        public static String serviceTypeLabel;
-        public static String serviceTypeTitle;
-        public static String specifyLiferayServices;
+	@Override
+	protected Composite createTopLevelComposite(Composite parent) {
+		Composite topComposite = SWTUtil.createTopComposite(parent, 3);
 
-        static
-        {
-            initializeMessages( NewServicesHookWizardPage.class.getName(), Msgs.class );
-        }
-    }
+		createServicesFileGroup(topComposite);
+
+		return topComposite;
+	}
+
+	@Override
+	protected String[] getValidationPropertyNames() {
+		return new String[] {SERVICES_ITEMS};
+	}
+
+	protected ServicesTableWizardSection servicesSection;
+
+	private static class Msgs extends NLS {
+
+		public static String add;
+		public static String addServiceWrapper;
+		public static String createServiceHook;
+		public static String definePortalServices;
+		public static String edit;
+		public static String implClassTitle;
+		public static String impleClassLabel;
+		public static String remove;
+		public static String serviceTypeLabel;
+		public static String serviceTypeTitle;
+		public static String specifyLiferayServices;
+
+		static {
+			initializeMessages(NewServicesHookWizardPage.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

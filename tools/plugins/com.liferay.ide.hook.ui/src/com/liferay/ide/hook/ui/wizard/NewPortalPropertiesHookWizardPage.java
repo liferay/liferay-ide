@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.ui.wizard;
 
@@ -25,6 +24,7 @@ import com.liferay.ide.ui.util.SWTUtil;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -44,6 +44,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IDecoratorManager;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
@@ -56,258 +57,262 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizardPa
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage implements INewHookDataModelProperties
-{
-    protected EventActionsTableWizardSection eventActionsSection;
-    protected Text portalPropertiesFile;
-    protected PropertyOverridesTableWizardSection propertyOverridesSection;
+@SuppressWarnings("restriction")
+public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage implements INewHookDataModelProperties {
 
-    public NewPortalPropertiesHookWizardPage( IDataModel dataModel, String pageName )
-    {
-        super( dataModel, pageName, Msgs.createPortalProperties, HookUI.imageDescriptorFromPlugin(
-            HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) ); //$NON-NLS-1$
+	public NewPortalPropertiesHookWizardPage(IDataModel dataModel, String pageName) {
+		super(
+			dataModel, pageName, Msgs.createPortalProperties,
+			HookUI.imageDescriptorFromPlugin(HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png"));
 
-        setDescription( Msgs.specifyPortalProperties );
-    }
+		setDescription(Msgs.specifyPortalProperties);
+	}
 
-    protected void createEventActionsGroup( Composite topComposite )
-    {
-        Composite composite = SWTUtil.createTopComposite( topComposite, 2 );
-        composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
+	protected void createEventActionsGroup(Composite topComposite) {
+		Composite composite = SWTUtil.createTopComposite(topComposite, 2);
 
-        eventActionsSection =
-            new EventActionsTableWizardSection(
-                composite, Msgs.defineActions, Msgs.addEventAction, Msgs.add, Msgs.edit,
-                Msgs.remove, new String[] { Msgs.eventTitle, Msgs.classTitle }, new String[] { Msgs.eventLabel, Msgs.classLabel }, null,
-                getDataModel(), PORTAL_PROPERTIES_ACTION_ITEMS );
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
 
-        GridData gd = new GridData( SWT.FILL, SWT.CENTER, true, true, 1, 1 );
-        gd.heightHint = 150;
+		String[] titles = {Msgs.eventTitle, Msgs.classTitle};
+		String[] labels = {Msgs.eventLabel, Msgs.classLabel};
 
-        eventActionsSection.setLayoutData( gd );
-        eventActionsSection.setCallback( new StringArrayTableWizardSectionCallback() );
+		eventActionsSection = new EventActionsTableWizardSection(
+			composite, Msgs.defineActions, Msgs.addEventAction, Msgs.add, Msgs.edit, Msgs.remove, titles, labels, null,
+			getDataModel(), PORTAL_PROPERTIES_ACTION_ITEMS);
 
-        IProject project = CoreUtil.getProject( getDataModel().getStringProperty( PROJECT_NAME ) );
+		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1);
 
-        if( project != null )
-        {
-            eventActionsSection.setProject( project );
-        }
-    }
+		gd.heightHint = 150;
 
-    protected void createPortalPropertiesFileGroup( Composite topComposite )
-    {
-        Composite composite = SWTUtil.createTopComposite( topComposite, 3 );
+		eventActionsSection.setLayoutData(gd);
 
-        GridLayout gl = new GridLayout( 3, false );
-        gl.marginLeft = 5;
+		eventActionsSection.setCallback(new StringArrayTableWizardSectionCallback());
 
-        composite.setLayout( gl );
-        composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
+		IProject project = CoreUtil.getProject(getDataModel().getStringProperty(PROJECT_NAME));
 
-        SWTUtil.createLabel( composite, SWT.LEAD, Msgs.portalPropertiesFileLabel, 1 );
+		if (project != null) {
+			eventActionsSection.setProject(project);
+		}
+	}
 
-        portalPropertiesFile = SWTUtil.createText( composite, 1 );
-        this.synchHelper.synchText( portalPropertiesFile, PORTAL_PROPERTIES_FILE, null );
+	protected void createPortalPropertiesFileGroup(Composite topComposite) {
+		Composite composite = SWTUtil.createTopComposite(topComposite, 3);
 
-        Button iconFileBrowse = SWTUtil.createPushButton( composite, Msgs.browse, null );
-        iconFileBrowse.addSelectionListener( new SelectionAdapter()
-        {
+		GridLayout gl = new GridLayout(3, false);
 
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                handleBrowseButton( NewPortalPropertiesHookWizardPage.this.portalPropertiesFile );
-            }
-        } );
-    }
+		gl.marginLeft = 5;
 
-    protected void createPropertiesOverridesGroup( Composite topComposite )
-    {
-        Composite composite = SWTUtil.createTopComposite( topComposite, 2 );
-        composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
+		composite.setLayout(gl);
 
-        propertyOverridesSection =
-            new PropertyOverridesTableWizardSection(
-                composite, Msgs.specifyProperties, Msgs.addPropertyOverride, Msgs.add, Msgs.edit,
-                Msgs.remove, new String[] { Msgs.propertyTitle, Msgs.valueTitle }, new String[] { Msgs.propertyLabel, Msgs.valueLabel }, null,
-                getDataModel(), PORTAL_PROPERTIES_OVERRIDE_ITEMS );
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
 
-        GridData gd = new GridData( SWT.FILL, SWT.CENTER, true, true, 1, 1 );
-        gd.heightHint = 150;
+		SWTUtil.createLabel(composite, SWT.LEAD, Msgs.portalPropertiesFileLabel, 1);
 
-        propertyOverridesSection.setLayoutData( gd );
-        propertyOverridesSection.setCallback( new StringArrayTableWizardSectionCallback() );
+		portalPropertiesFile = SWTUtil.createText(composite, 1);
 
-        IProject project = CoreUtil.getProject( getDataModel().getStringProperty( PROJECT_NAME ) );
+		this.synchHelper.synchText(portalPropertiesFile, PORTAL_PROPERTIES_FILE, null);
 
-        if( project != null )
-        {
-            propertyOverridesSection.setProject( project );
-        }
-    }
+		Button iconFileBrowse = SWTUtil.createPushButton(composite, Msgs.browse, null);
 
-    @Override
-    protected Composite createTopLevelComposite( Composite parent )
-    {
-        Composite topComposite = SWTUtil.createTopComposite( parent, 3 );
-        topComposite.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
+		iconFileBrowse.addSelectionListener(
+			new SelectionAdapter() {
 
-        createPortalPropertiesFileGroup( topComposite );
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					handleBrowseButton(NewPortalPropertiesHookWizardPage.this.portalPropertiesFile);
+				}
 
-        createEventActionsGroup( topComposite );
+			});
+	}
 
-        createPropertiesOverridesGroup( topComposite );
+	protected void createPropertiesOverridesGroup(Composite topComposite) {
+		Composite composite = SWTUtil.createTopComposite(topComposite, 2);
 
-        return topComposite;
-    }
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
 
-    protected ISelectionStatusValidator getContainerDialogSelectionValidator()
-    {
-        return new ISelectionStatusValidator()
-        {
+		String[] titles = {Msgs.propertyTitle, Msgs.valueTitle};
+		String[] labels = {Msgs.propertyLabel, Msgs.valueLabel};
 
-            public IStatus validate( Object[] selection )
-            {
-                if( selection != null && selection.length > 0 && selection[0] != null &&
-                    !( selection[0] instanceof IProject ) )
-                {
-                    return Status.OK_STATUS;
-                }
+		propertyOverridesSection = new PropertyOverridesTableWizardSection(
+			composite, Msgs.specifyProperties, Msgs.addPropertyOverride, Msgs.add, Msgs.edit, Msgs.remove, titles,
+			labels, null, getDataModel(), PORTAL_PROPERTIES_OVERRIDE_ITEMS);
 
-                return HookUI.createErrorStatus( Msgs.chooseValidFileFolder );
-            }
-        };
-    }
+		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1);
 
-    protected ViewerFilter getContainerDialogViewerFilter()
-    {
-        return new ViewerFilter()
-        {
-            @SuppressWarnings( "deprecation" )
-            public boolean select( Viewer viewer, Object parent, Object element )
-            {
-                if( element instanceof IProject )
-                {
-                    IProject project = (IProject) element;
+		gd.heightHint = 150;
 
-                    return project.getName().equals(
-                        model.getProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME ) );
-                }
-                else if( element instanceof IFolder )
-                {
-                    IFolder folder = (IFolder) element;
+		propertyOverridesSection.setLayoutData(gd);
 
-                    // only show source folders
-                    IProject project =
-                        CoreUtil.getProject( model.getStringProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME ) );
+		propertyOverridesSection.setCallback(new StringArrayTableWizardSectionCallback());
 
-                    IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers( project );
+		IProject project = CoreUtil.getProject(getDataModel().getStringProperty(PROJECT_NAME));
 
-                    for( int i = 0; i < sourceFolders.length; i++ )
-                    {
-                        if( sourceFolders[i].getResource() != null && sourceFolders[i].getResource().equals( folder ) )
-                        {
-                            return true;
-                        }
-                        else if( ProjectUtil.isParent( folder, sourceFolders[i].getResource() ) )
-                        {
-                            return true;
-                        }
-                    }
-                }
-                else if( element instanceof IFile )
-                {
-                    IFile file = (IFile) element;
+		if (project != null) {
+			propertyOverridesSection.setProject(project);
+		}
+	}
 
-                    return file.exists() && file.getName().equals( "portal.properties" ); //$NON-NLS-1$
-                }
+	@Override
+	protected Composite createTopLevelComposite(Composite parent) {
+		Composite topComposite = SWTUtil.createTopComposite(parent, 3);
 
-                return false;
-            }
-        };
-    }
+		topComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-    @Override
-    protected String[] getValidationPropertyNames()
-    {
-        return new String[] { PORTAL_PROPERTIES_FILE, PORTAL_PROPERTIES_ACTION_ITEMS, PORTAL_PROPERTIES_OVERRIDE_ITEMS };
-    }
+		createPortalPropertiesFileGroup(topComposite);
 
-    protected void handleBrowseButton( final Text text )
-    {
-        ISelectionStatusValidator validator = getContainerDialogSelectionValidator();
+		createEventActionsGroup(topComposite);
 
-        ViewerFilter filter = getContainerDialogViewerFilter();
+		createPropertiesOverridesGroup(topComposite);
 
-        ITreeContentProvider contentProvider = new WorkbenchContentProvider();
+		return topComposite;
+	}
 
-        ILabelProvider labelProvider =
-            new DecoratingLabelProvider(
-                new WorkbenchLabelProvider(), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator() );
+	protected ISelectionStatusValidator getContainerDialogSelectionValidator() {
+		return new ISelectionStatusValidator() {
 
-        ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog( getShell(), labelProvider, contentProvider );
-        dialog.setValidator( validator );
-        dialog.setTitle( Msgs.portalPropertiesFile );
-        dialog.setMessage( Msgs.portalPropertiesFile );
-        dialog.addFilter( filter );
-        dialog.setInput( CoreUtil.getWorkspaceRoot() );
+			public IStatus validate(Object[] selection) {
+				if ((selection != null) && (selection.length > 0) && (selection[0] != null) &&
+					!(selection[0] instanceof IProject)) {
 
-        if( dialog.open() == Window.OK )
-        {
-            Object element = dialog.getFirstResult();
+					return Status.OK_STATUS;
+				}
 
-            try
-            {
-                if( element instanceof IFile )
-                {
-                    IFile file = (IFile) element;
+				return HookUI.createErrorStatus(Msgs.chooseValidFileFolder);
+			}
 
-                    text.setText( file.getFullPath().toPortableString() );
-                }
-                else if( element instanceof IFolder )
-                {
-                    IFolder folder = (IFolder) element;
+		};
+	}
 
-                    text.setText( folder.getFullPath().append( "portal.properties" ).toPortableString() ); //$NON-NLS-1$
-                }
-            }
-            catch( Exception ex )
-            {
-                // Do nothing
-            }
+	protected ViewerFilter getContainerDialogViewerFilter() {
+		return new ViewerFilter() {
 
-        }
-    }
+			@SuppressWarnings("deprecation")
+			public boolean select(Viewer viewer, Object parent, Object element) {
+				if (element instanceof IProject) {
+					IProject project = (IProject)element;
 
-    private static class Msgs extends NLS
-    {
-        public static String add;
-        public static String addEventAction;
-        public static String addPropertyOverride;
-        public static String browse;
-        public static String chooseValidFileFolder;
-        public static String classLabel;
-        public static String classTitle;
-        public static String createPortalProperties;
-        public static String defineActions;
-        public static String edit;
-        public static String eventLabel;
-        public static String eventTitle;
-        public static String portalPropertiesFileLabel;
-        public static String portalPropertiesFile;
-        public static String propertyLabel;
-        public static String propertyTitle;
-        public static String remove;
-        public static String specifyPortalProperties;
-        public static String specifyProperties;
-        public static String valueLabel;
-        public static String valueTitle;
+					Object property = model.getProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
 
-        static
-        {
-            initializeMessages( NewPortalPropertiesHookWizardPage.class.getName(), Msgs.class );
-        }
-    }
+					return project.getName().equals(property);
+				}
+				else if (element instanceof IFolder) {
+					IFolder folder = (IFolder)element;
+
+					// only show source folders
+
+					IProject project = CoreUtil.getProject(
+						model.getStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME));
+
+					IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers(project);
+
+					for (int i = 0; i < sourceFolders.length; i++) {
+						if ((sourceFolders[i].getResource() != null) && sourceFolders[i].getResource().equals(folder)) {
+							return true;
+						}
+						else if (ProjectUtil.isParent(folder, sourceFolders[i].getResource())) {
+							return true;
+						}
+					}
+				}
+				else if (element instanceof IFile) {
+					IFile file = (IFile)element;
+
+					if (file.exists() && file.getName().equals("portal.properties")) {
+						return true;
+					}
+
+					return false;
+				}
+
+				return false;
+			}
+
+		};
+	}
+
+	@Override
+	protected String[] getValidationPropertyNames() {
+		return new String[] {PORTAL_PROPERTIES_FILE, PORTAL_PROPERTIES_ACTION_ITEMS, PORTAL_PROPERTIES_OVERRIDE_ITEMS};
+	}
+
+	protected void handleBrowseButton(Text text) {
+		ISelectionStatusValidator validator = getContainerDialogSelectionValidator();
+
+		ViewerFilter filter = getContainerDialogViewerFilter();
+
+		ITreeContentProvider contentProvider = new WorkbenchContentProvider();
+
+		IDecoratorManager decoratorManager = PlatformUI.getWorkbench().getDecoratorManager();
+
+		ILabelProvider labelProvider = new DecoratingLabelProvider(
+			new WorkbenchLabelProvider(), decoratorManager.getLabelDecorator());
+
+		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(), labelProvider, contentProvider);
+
+		dialog.setValidator(validator);
+		dialog.setTitle(Msgs.portalPropertiesFile);
+		dialog.setMessage(Msgs.portalPropertiesFile);
+		dialog.addFilter(filter);
+		dialog.setInput(CoreUtil.getWorkspaceRoot());
+
+		if (dialog.open() == Window.OK) {
+			Object element = dialog.getFirstResult();
+
+			try {
+				if (element instanceof IFile) {
+					IFile file = (IFile)element;
+
+					text.setText(file.getFullPath().toPortableString());
+				}
+				else if (element instanceof IFolder) {
+					IFolder folder = (IFolder)element;
+
+					IPath portalPropertiesPath = folder.getFullPath().append("portal.properties");
+
+					text.setText(portalPropertiesPath.toPortableString());
+				}
+			}
+			catch (Exception ex) {
+
+				// Do nothing
+
+			}
+
+		}
+	}
+
+	protected EventActionsTableWizardSection eventActionsSection;
+	protected Text portalPropertiesFile;
+	protected PropertyOverridesTableWizardSection propertyOverridesSection;
+
+	private static class Msgs extends NLS {
+
+		public static String add;
+		public static String addEventAction;
+		public static String addPropertyOverride;
+		public static String browse;
+		public static String chooseValidFileFolder;
+		public static String classLabel;
+		public static String classTitle;
+		public static String createPortalProperties;
+		public static String defineActions;
+		public static String edit;
+		public static String eventLabel;
+		public static String eventTitle;
+		public static String portalPropertiesFile;
+		public static String portalPropertiesFileLabel;
+		public static String propertyLabel;
+		public static String propertyTitle;
+		public static String remove;
+		public static String specifyPortalProperties;
+		public static String specifyProperties;
+		public static String valueLabel;
+		public static String valueTitle;
+
+		static {
+			initializeMessages(NewPortalPropertiesHookWizardPage.class.getName(), Msgs.class);
+		}
+
+	}
+
 }
