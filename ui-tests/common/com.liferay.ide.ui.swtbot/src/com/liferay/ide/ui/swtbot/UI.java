@@ -20,6 +20,7 @@ package com.liferay.ide.ui.swtbot;
  * @author Ying Xu
  * @author Vicky Wang
  * @author Li Lu
+ * @author Simon Jiang
  */
 public interface UI {
 
@@ -669,6 +670,8 @@ public interface UI {
 	public final String SERVER_NAME_UPCASE = "Server Name:";
 
 	public final String SERVER_RUNTIEME_ENVIRONMENTS = "Server runtime environments:";
+
+	public final String SERVER_RUNTIEME_ENVIRONMENT = "Server runtime environment:";
 
 	public final String SERVER_STARTUP_IN = "Server startup in";
 

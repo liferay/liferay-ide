@@ -16,12 +16,11 @@
 package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.util.PingThread;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +34,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.wst.server.core.IServer;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -254,35 +254,33 @@ public class PortalJBossBundle extends AbstractPortalBundle
         return "JBoss AS";
     }
 
+    final FileFilter libfilter = new FileFilter()
+    {
+        public boolean accept( File pathname )
+        {
+            return pathname.isDirectory() ||
+                   pathname.getName().endsWith( ".jar" ) ;
+        }
+    };
+
     @Override
     public IPath[] getUserLibs()
     {
         List<IPath> libs = new ArrayList<IPath>();
 
-        try
+        File[] portallibFiles =
+            new File( getAppServerPortalDir().append( "WEB-INF/lib" ).toPortableString() ).listFiles( libfilter );
+
+        for( File lib : portallibFiles )
         {
-            List<File>  portallibFiles = FileListing.getFileListing( new File( getAppServerPortalDir().append( "WEB-INF/lib" ).toPortableString() ) );
-
-            for( File lib : portallibFiles )
-            {
-                if( lib.exists() && lib.getName().endsWith( ".jar" ) ) //$NON-NLS-1$
-                {
-                    libs.add( new Path( lib.getPath() ) );
-                }
-            }
-
-            List<File>  libFiles = FileListing.getFileListing( new File( getAppServerLibDir().toPortableString() ) );
-
-            for( File lib : libFiles )
-            {
-                if( lib.exists() && lib.getName().endsWith( ".jar" ) )
-                {
-                    libs.add( new Path( lib.getPath() ) );
-                }
-            }
+            libs.add( new Path( lib.getPath() ) );
         }
-        catch( FileNotFoundException e )
+
+        File[] libFiles = ( new File( getAppServerLibDir().toPortableString() ) ).listFiles( libfilter );
+
+        for( File lib : libFiles )
         {
+            libs.add( new Path( lib.getPath() ) );
         }
 
         return libs.toArray( new IPath[libs.size()] );
@@ -340,6 +338,12 @@ public class PortalJBossBundle extends AbstractPortalBundle
         {
             LiferayServerCore.logError( e );
         }
+    }
+
+    @Override
+    public PingThread createPingThread( IServer server, String url, PortalServerBehavior behaviour )
+    {
+        return new JBossPingThread( server, url, behaviour );
     }
 
 }
