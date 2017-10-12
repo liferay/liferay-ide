@@ -43,6 +43,8 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  */
 public interface Hook extends Element {
 
+	public ElementType TYPE = new ElementType(Hook.class);
+
 	public ElementHandle<CustomJspDir> getCustomJspDir();
 
 	public Value<Boolean> getCustomJspGlobal();
@@ -67,15 +69,13 @@ public interface Hook extends Element {
 
 	public void setCustomJspGlobal(String value);
 
-	public ElementType ELEMENT_TYPE = new ElementType(Hook.class);
-
 	// *** CustomJspDir ***
 
 	@Label(standard = "Custom JSP Dir")
 	@Listeners(CustomJspDirListener.class)
 	@Type(base = CustomJspDir.class)
 	@XmlBinding(path = "custom-jsp-dir")
-	public ElementProperty PROP_CUSTOM_JSP_DIR = new ElementProperty(ELEMENT_TYPE, "CustomJspDir");
+	public ElementProperty PROP_CUSTOM_JSP_DIR = new ElementProperty(TYPE, "CustomJspDir");
 
 	// *** CustomJspGlobal ***
 
@@ -83,7 +83,7 @@ public interface Hook extends Element {
 	@Label(standard = "Custom JSP Global")
 	@Type(base = Boolean.class)
 	@XmlBinding(path = "custom-jsp-global")
-	public ValueProperty PROP_CUSTOM_JSP_GLOBAL = new ValueProperty(ELEMENT_TYPE, "CustomJspGlobal");
+	public ValueProperty PROP_CUSTOM_JSP_GLOBAL = new ValueProperty(TYPE, "CustomJspGlobal");
 
 	// *** CustomJsps ***
 
@@ -92,7 +92,7 @@ public interface Hook extends Element {
 	@Label(standard = "custom jsps")
 	@Service(impl = CustomJspsEnablementService.class)
 	@Type(base = CustomJsp.class)
-	public ListProperty PROP_CUSTOM_JSPS = new ListProperty(ELEMENT_TYPE, "CustomJsps");
+	public ListProperty PROP_CUSTOM_JSPS = new ListProperty(TYPE, "CustomJsps");
 
 	// *** IndexerPostProcessors ***
 
@@ -101,28 +101,28 @@ public interface Hook extends Element {
 	@XmlListBinding(
 		mappings = @XmlListBinding.Mapping(element = "indexer-post-processor", type = IndexerPostProcessor.class)
 	)
-	public ListProperty PROP_INDEXER_POST_PROCESSORS = new ListProperty(ELEMENT_TYPE, "IndexerPostProcessors");
+	public ListProperty PROP_INDEXER_POST_PROCESSORS = new ListProperty(TYPE, "IndexerPostProcessors");
 
 	// *** LanguageProperties ***
 
 	@Label(standard = "Language Properties")
 	@Type(base = LanguageProperty.class)
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "language-properties", type = LanguageProperty.class))
-	public ListProperty PROP_LANGUAGE_PROPERTIES = new ListProperty(ELEMENT_TYPE, "LanguageProperties");
+	public ListProperty PROP_LANGUAGE_PROPERTIES = new ListProperty(TYPE, "LanguageProperties");
 
 	// *** PortalPropertiesFile ***
 
 	@Listeners(PortalPropertiesFileListener.class)
 	@Type(base = PortalPropertiesFile.class)
 	@XmlBinding(path = "portal-properties")
-	public ElementProperty PROP_PORTAL_PROPERTIES_FILE = new ElementProperty(ELEMENT_TYPE, "PortalPropertiesFile");
+	public ElementProperty PROP_PORTAL_PROPERTIES_FILE = new ElementProperty(TYPE, "PortalPropertiesFile");
 
 	// *** Services ***
 
 	@Label(standard = "Service Wrappers")
 	@Type(base = ServiceWrapper.class)
 	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "service", type = ServiceWrapper.class)})
-	public ListProperty PROP_SERVICES = new ListProperty(ELEMENT_TYPE, "Services");
+	public ListProperty PROP_SERVICES = new ListProperty(TYPE, "Services");
 
 	// *** ServletFilterMappings ***
 
@@ -131,20 +131,20 @@ public interface Hook extends Element {
 	@XmlListBinding(
 		mappings = @XmlListBinding.Mapping(element = "servlet-filter-mapping", type = ServletFilterMapping.class)
 	)
-	public ListProperty PROP_SERVLET_FILTER_MAPPINGS = new ListProperty(ELEMENT_TYPE, "ServletFilterMappings");
+	public ListProperty PROP_SERVLET_FILTER_MAPPINGS = new ListProperty(TYPE, "ServletFilterMappings");
 
 	// *** ServletFilters ***
 
 	@Label(standard = "Servlet filters")
 	@Type(base = ServletFilter.class)
 	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "servlet-filter", type = ServletFilter.class)})
-	public ListProperty PROP_SERVLET_FILTERS = new ListProperty(ELEMENT_TYPE, "ServletFilters");
+	public ListProperty PROP_SERVLET_FILTERS = new ListProperty(TYPE, "ServletFilters");
 
 	// *** StrutsActions ***
 
 	@Label(standard = "Struts Actions")
 	@Type(base = StrutsAction.class)
 	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "struts-action", type = StrutsAction.class)})
-	public ListProperty PROP_STRUTS_ACTIONS = new ListProperty(ELEMENT_TYPE, "StrutsActions");
+	public ListProperty PROP_STRUTS_ACTIONS = new ListProperty(TYPE, "StrutsActions");
 
 }

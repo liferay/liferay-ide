@@ -40,6 +40,8 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 @Image(path = "images/elcl16/filter_16x16.gif")
 public interface ServletFilter extends Element {
 
+	public ElementType TYPE = new ElementType(ServletFilter.class);
+
 	public ElementList<Param> getInitParams();
 
 	public ReferenceValue<JavaTypeName, JavaType> getServletFilterImpl();
@@ -52,14 +54,12 @@ public interface ServletFilter extends Element {
 
 	public void setServletFilterName(String value);
 
-	public ElementType ELEMENT_TYPE = new ElementType(ServletFilter.class);
-
 	// *** InitParams ***
 
 	@Label(standard = "Init Params")
 	@Type(base = Param.class)
 	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "init-param", type = Param.class)})
-	public ListProperty PROP_INIT_PARAMS = new ListProperty(ELEMENT_TYPE, "InitParams");
+	public ListProperty PROP_INIT_PARAMS = new ListProperty(TYPE, "InitParams");
 
 	// ** ServletFilterImpl
 
@@ -70,13 +70,13 @@ public interface ServletFilter extends Element {
 	@Required
 	@Type(base = JavaTypeName.class)
 	@XmlBinding(path = "servlet-filter-impl")
-	public ValueProperty PROP_SERVLET_FILTER_IMPL = new ValueProperty(ELEMENT_TYPE, "ServletFilterImpl");
+	public ValueProperty PROP_SERVLET_FILTER_IMPL = new ValueProperty(TYPE, "ServletFilterImpl");
 
 	// *** Servlet Filter Name ***
 
 	@Label(standard = "Servlet Filter Name")
 	@Required
 	@XmlBinding(path = "servlet-filter-name")
-	public ValueProperty PROP_SERVLET_FILTER_NAME = new ValueProperty(ELEMENT_TYPE, "ServletFilterName");
+	public ValueProperty PROP_SERVLET_FILTER_NAME = new ValueProperty(TYPE, "ServletFilterName");
 
 }

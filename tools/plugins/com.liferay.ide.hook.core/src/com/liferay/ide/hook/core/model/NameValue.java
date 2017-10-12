@@ -28,6 +28,8 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  */
 public interface NameValue extends Element {
 
+	public ElementType TYPE = new ElementType(NameValue.class);
+
 	public Value<String> getName();
 
 	public Value<String> getValue();
@@ -36,20 +38,18 @@ public interface NameValue extends Element {
 
 	public void setValue(String value);
 
-	public ElementType ELEMENT_TYPE = new ElementType(NameValue.class);
-
 	// *** Name ***
 
 	@Label(standard = "Name")
 	@Required
 	@Unique
 	@XmlBinding(path = "param-name")
-	public ValueProperty PROP_NAME = new ValueProperty(ELEMENT_TYPE, "Name");
+	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
 	// *** Value ***
 
 	@Label(standard = "Value")
 	@XmlBinding(path = "param-value")
-	public ValueProperty PROP_VALUE = new ValueProperty(ELEMENT_TYPE, "Value");
+	public ValueProperty PROP_VALUE = new ValueProperty(TYPE, "Value");
 
 }

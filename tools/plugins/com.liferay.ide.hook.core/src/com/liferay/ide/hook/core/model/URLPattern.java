@@ -28,6 +28,8 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 @Image(path = "images/elcl16/locale_16x16.gif")
 public interface URLPattern extends Element {
 
+	public ElementType TYPE = new ElementType(URLPattern.class);
+
 	public Value<String> getURLPattern();
 
 	public void setURLPattern(String value);

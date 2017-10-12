@@ -36,13 +36,13 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  */
 public interface PortalPropertiesFile extends Element {
 
+	public ElementType TYPE = new ElementType(PortalPropertiesFile.class);
+
 	public Value<Path> getValue();
 
 	public void setValue(Path value);
 
 	public void setValue(String value);
-
-	public ElementType ELEMENT_TYPE = new ElementType(PortalPropertiesFile.class);
 
 	// *** Value ***
 
@@ -54,6 +54,6 @@ public interface PortalPropertiesFile extends Element {
 	@Type(base = Path.class)
 	@ValidFileSystemResourceType(FileSystemResourceType.FILE)
 	@XmlBinding(path = "")
-	public ValueProperty PROP_VALUE = new ValueProperty(ELEMENT_TYPE, "Value");
+	public ValueProperty PROP_VALUE = new ValueProperty(TYPE, "Value");
 
 }

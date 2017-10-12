@@ -29,11 +29,11 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  */
 public interface Dispatcher extends Element {
 
+	public ElementType TYPE = new ElementType(Dispatcher.class);
+
 	public Value<String> getDispatcher();
 
 	public void setDispatcher(String name);
-
-	public ElementType ELEMENT_TYPE = new ElementType(Dispatcher.class);
 
 	// *** Dispatcher ***
 
@@ -42,6 +42,6 @@ public interface Dispatcher extends Element {
 	@PossibleValues(values = {"FORWARD", "REQUEST", "INCLUDE", "ERROR"})
 	@Unique
 	@XmlBinding(path = "")
-	public ValueProperty PROP_DISPATCHER = new ValueProperty(ELEMENT_TYPE, "Dispatcher");
+	public ValueProperty PROP_DISPATCHER = new ValueProperty(TYPE, "Dispatcher");
 
 }

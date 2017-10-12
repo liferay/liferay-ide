@@ -34,11 +34,11 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 @Image(path = "images/elcl16/locale_16x16.gif")
 public interface LanguageProperty extends Element {
 
+	public ElementType TYPE = new ElementType(LanguageProperty.class);
+
 	public Value<String> getValue();
 
 	public void setValue(String value);
-
-	public ElementType ELEMENT_TYPE = new ElementType(LanguageProperty.class);
 
 	// *** Value ***
 
@@ -47,6 +47,6 @@ public interface LanguageProperty extends Element {
 	@Service(impl = GenericResourceBundlePathService.class)
 	@ValidFileSystemResourceType(FileSystemResourceType.FILE)
 	@XmlBinding(path = "")
-	public ValueProperty PROP_VALUE = new ValueProperty(ELEMENT_TYPE, "Value");
+	public ValueProperty PROP_VALUE = new ValueProperty(TYPE, "Value");
 
 }

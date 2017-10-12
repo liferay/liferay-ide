@@ -36,6 +36,8 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 @Image(path = "images/elcl16/index_16x16.gif")
 public interface IndexerPostProcessor extends Element {
 
+	public ElementType TYPE = new ElementType(IndexerPostProcessor.class);
+
 	public ReferenceValue<JavaTypeName, JavaType> getIndexerClassImpl();
 
 	public ReferenceValue<JavaTypeName, JavaType> getIndexerClassName();
@@ -48,8 +50,6 @@ public interface IndexerPostProcessor extends Element {
 
 	public void setIndexerClassName(String value);
 
-	public ElementType ELEMENT_TYPE = new ElementType(IndexerPostProcessor.class);
-
 	// *** Implementation Class ***
 
 	@JavaTypeConstraint(kind = {JavaTypeKind.CLASS}, type = "com.liferay.portal.kernel.search.IndexerPostProcessor")
@@ -59,7 +59,7 @@ public interface IndexerPostProcessor extends Element {
 	@Required
 	@Type(base = JavaTypeName.class)
 	@XmlBinding(path = "indexer-post-processor-impl")
-	public ValueProperty PROP_INDEXER_CLASS_IMPL = new ValueProperty(ELEMENT_TYPE, "IndexerClassImpl");
+	public ValueProperty PROP_INDEXER_CLASS_IMPL = new ValueProperty(TYPE, "IndexerClassImpl");
 
 	// *** IndexerClassName ***
 
@@ -69,6 +69,6 @@ public interface IndexerPostProcessor extends Element {
 	@Required
 	@Type(base = JavaTypeName.class)
 	@XmlBinding(path = "indexer-class-name")
-	public ValueProperty PROP_INDEXER_CLASS_NAME = new ValueProperty(ELEMENT_TYPE, "IndexerClassName");
+	public ValueProperty PROP_INDEXER_CLASS_NAME = new ValueProperty(TYPE, "IndexerClassName");
 
 }

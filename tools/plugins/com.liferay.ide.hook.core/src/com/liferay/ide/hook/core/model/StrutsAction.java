@@ -44,6 +44,8 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 @Image(path = "images/elcl16/action_url_16x16.png")
 public interface StrutsAction extends Element {
 
+	public ElementType TYPE = new ElementType(StrutsAction.class);
+
 	public ReferenceValue<JavaTypeName, JavaType> getStrutsActionImpl();
 
 	public Value<String> getStrutsActionPath();
@@ -53,8 +55,6 @@ public interface StrutsAction extends Element {
 	public void setStrutsActionImpl(String value);
 
 	public void setStrutsActionPath(String value);
-
-	public ElementType ELEMENT_TYPE = new ElementType(StrutsAction.class);
 
 	// ** StrutsActionImpl
 
@@ -68,7 +68,7 @@ public interface StrutsAction extends Element {
 	@Required
 	@Type(base = JavaTypeName.class)
 	@XmlBinding(path = "struts-action-impl")
-	public ValueProperty PROP_STRUTS_ACTION_IMPL = new ValueProperty(ELEMENT_TYPE, "StrutsActionImpl");
+	public ValueProperty PROP_STRUTS_ACTION_IMPL = new ValueProperty(TYPE, "StrutsActionImpl");
 
 	// *** StrutsActionPath ***
 
@@ -79,6 +79,6 @@ public interface StrutsAction extends Element {
 		@Service(impl = StrutsActionPathPossibleValuesService.class)
 	})
 	@XmlBinding(path = "struts-action-path")
-	public ValueProperty PROP_STRUTS_ACTION_PATH = new ValueProperty(ELEMENT_TYPE, "StrutsActionPath");
+	public ValueProperty PROP_STRUTS_ACTION_PATH = new ValueProperty(TYPE, "StrutsActionPath");
 
 }

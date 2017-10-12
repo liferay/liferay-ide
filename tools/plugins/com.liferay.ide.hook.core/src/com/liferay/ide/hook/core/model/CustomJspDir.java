@@ -37,13 +37,13 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  */
 public interface CustomJspDir extends Element {
 
+	public ElementType TYPE = new ElementType(CustomJspDir.class);
+
 	public Value<Path> getValue();
 
 	public void setValue(Path value);
 
 	public void setValue(String value);
-
-	public ElementType ELEMENT_TYPE = new ElementType(CustomJspDir.class);
 
 	// *** Value ***
 
@@ -55,6 +55,6 @@ public interface CustomJspDir extends Element {
 	@Type(base = Path.class)
 	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
 	@XmlBinding(path = "")
-	public ValueProperty PROP_VALUE = new ValueProperty(ELEMENT_TYPE, "Value");
+	public ValueProperty PROP_VALUE = new ValueProperty(TYPE, "Value");
 
 }

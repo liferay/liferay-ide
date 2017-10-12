@@ -27,6 +27,6 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 @XmlBinding(path = "hook")
 public interface Hook6xx extends Hook {
 
-	public ElementType ELEMENT_TYPE = new ElementType(Hook6xx.class);
+	public ElementType TYPE = new ElementType(Hook6xx.class);
 
 }

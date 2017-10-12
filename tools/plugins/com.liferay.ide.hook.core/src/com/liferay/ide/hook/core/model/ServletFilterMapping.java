@@ -41,6 +41,8 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 @Image(path = "images/elcl16/filter_mapping_16x16.gif")
 public interface ServletFilterMapping extends Element {
 
+	public ElementType TYPE = new ElementType(ServletFilterMapping.class);
+
 	public Value<String> getBeforeAfterFilterName();
 
 	public Value<BeforeAfterFilterType> getBeforeAfterFilterType();
@@ -59,33 +61,31 @@ public interface ServletFilterMapping extends Element {
 
 	public void setServletFilterName(String value);
 
-	public ElementType ELEMENT_TYPE = new ElementType(ServletFilterMapping.class);
-
 	// *** Servlet Filter Name ***
 
 	@CustomXmlValueBinding(impl = BeforeAfterFilterNameBinding.class)
 	@Label(standard = "Portal Filter Name")
 	@Service(impl = PortalFilterNamesPossibleValuesService.class)
-	public ValueProperty PROP_BEFORE_AFTER_FILTER_NAME = new ValueProperty(ELEMENT_TYPE, "BeforeAfterFilterName");
+	public ValueProperty PROP_BEFORE_AFTER_FILTER_NAME = new ValueProperty(TYPE, "BeforeAfterFilterName");
 
 	// *** BeforeAfterFilterName ***
 
 	@CustomXmlValueBinding(impl = BeforeAfterFilterTypeBinding.class)
 	@DefaultValue(text = "before-filter")
 	@Type(base = BeforeAfterFilterType.class)
-	public ValueProperty PROP_BEFORE_AFTER_FILTER_TYPE = new ValueProperty(ELEMENT_TYPE, "BeforeAfterFilterType");
+	public ValueProperty PROP_BEFORE_AFTER_FILTER_TYPE = new ValueProperty(TYPE, "BeforeAfterFilterType");
 
 	// *** Dispatchers ***
 
 	@Label(standard = "Dispatchers")
 	@Type(base = Dispatcher.class)
 	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "dispatcher", type = Dispatcher.class)})
-	public ListProperty PROP_DISPATCHERS = new ListProperty(ELEMENT_TYPE, "Dispatchers");
+	public ListProperty PROP_DISPATCHERS = new ListProperty(TYPE, "Dispatchers");
 
 	@Label(standard = "Servlet Filter Name")
 	@PossibleValues(property = "/ServletFilters/ServletFilterName")
 	@XmlBinding(path = "servlet-filter-name")
-	public ValueProperty PROP_SERVLET_FILTER_NAME = new ValueProperty(ELEMENT_TYPE, "ServletFilterName");
+	public ValueProperty PROP_SERVLET_FILTER_NAME = new ValueProperty(TYPE, "ServletFilterName");
 
 	// *** URLPattern ***
 
@@ -93,6 +93,6 @@ public interface ServletFilterMapping extends Element {
 	@Length(min = 1)
 	@Type(base = URLPattern.class)
 	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "url-pattern", type = URLPattern.class)})
-	public ListProperty PROP_URL_PATTERNS = new ListProperty(ELEMENT_TYPE, "URLPatterns");
+	public ListProperty PROP_URL_PATTERNS = new ListProperty(TYPE, "URLPatterns");
 
 }

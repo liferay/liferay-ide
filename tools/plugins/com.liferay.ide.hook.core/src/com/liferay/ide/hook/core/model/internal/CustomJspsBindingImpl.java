@@ -64,7 +64,7 @@ public class CustomJspsBindingImpl extends HookListBindingImpl {
 	@Override
 	public ElementType type(Resource resource) {
 		if (resource instanceof CustomJspResource) {
-			return CustomJsp.ELEMENT_TYPE;
+			return CustomJsp.TYPE;
 		}
 
 		return null;
@@ -74,7 +74,7 @@ public class CustomJspsBindingImpl extends HookListBindingImpl {
 	protected Object insertUnderlyingObject(ElementType type, int position) {
 		ObjectValue<String> retval = null;
 
-		if (type.equals(CustomJsp.ELEMENT_TYPE)) {
+		if (type.equals(CustomJsp.TYPE)) {
 			retval = new ObjectValue<>();
 
 			_customJsps.add(retval);

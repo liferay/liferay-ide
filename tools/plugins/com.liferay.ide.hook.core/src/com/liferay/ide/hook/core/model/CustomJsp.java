@@ -32,11 +32,11 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 @Image(path = "images/elcl16/jsp_type_16x16.gif")
 public interface CustomJsp extends Element {
 
+	public ElementType TYPE = new ElementType(CustomJsp.class);
+
 	public Value<String> getValue();
 
 	public void setValue(String value);
-
-	public ElementType ELEMENT_TYPE = new ElementType(CustomJsp.class);
 
 	// *** Value ***
 
@@ -46,6 +46,6 @@ public interface CustomJsp extends Element {
 	@Service(impl = CustomJspPossibleValuesService.class)
 	@Unique
 	@XmlBinding(path = "")
-	public ValueProperty PROP_VALUE = new ValueProperty(ELEMENT_TYPE, "Value");
+	public ValueProperty PROP_VALUE = new ValueProperty(TYPE, "Value");
 
 }

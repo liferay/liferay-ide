@@ -40,6 +40,8 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 @Label(standard = "Service Wrapper")
 public interface ServiceWrapper extends Element {
 
+	public ElementType TYPE = new ElementType(ServiceWrapper.class);
+
 	public ReferenceValue<JavaTypeName, JavaType> getServiceImpl();
 
 	public ReferenceValue<JavaTypeName, JavaType> getServiceType();
@@ -52,8 +54,6 @@ public interface ServiceWrapper extends Element {
 
 	public void setServiceType(String value);
 
-	public ElementType ELEMENT_TYPE = new ElementType(ServiceWrapper.class);
-
 	// *** ServiceImpl ***
 
 	@JavaTypeConstraint(kind = JavaTypeKind.CLASS)
@@ -64,7 +64,7 @@ public interface ServiceWrapper extends Element {
 	@Service(impl = ServiceImplJavaTypeConstraintService.class)
 	@Type(base = JavaTypeName.class)
 	@XmlBinding(path = "service-impl")
-	public ValueProperty PROP_SERVICE_IMPL = new ValueProperty(ELEMENT_TYPE, "ServiceImpl");
+	public ValueProperty PROP_SERVICE_IMPL = new ValueProperty(TYPE, "ServiceImpl");
 
 	// *** ServiceType ***
 
@@ -75,6 +75,6 @@ public interface ServiceWrapper extends Element {
 	@Required
 	@Type(base = JavaTypeName.class)
 	@XmlBinding(path = "service-type")
-	public ValueProperty PROP_SERVICE_TYPE = new ValueProperty(ELEMENT_TYPE, "ServiceType");
+	public ValueProperty PROP_SERVICE_TYPE = new ValueProperty(TYPE, "ServiceType");
 
 }
