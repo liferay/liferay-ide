@@ -39,7 +39,7 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement
     // *** provision liferay bundle ***
 
     @DefaultValue( text = "false" )
-    @Label( standard = "download liferay bundle" )
+    @Label( standard = "Download Liferay bundle" )
     @Type( base = Boolean.class )
     ValueProperty PROP_PROVISION_LIFERAY_BUNDLE = new ValueProperty( TYPE, "provisionLiferayBundle" );
 

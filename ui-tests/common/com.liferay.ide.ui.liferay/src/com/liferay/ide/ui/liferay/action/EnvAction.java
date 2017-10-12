@@ -48,6 +48,7 @@ import org.junit.Assert;
 
 /**
  * @author Terry Jia
+ * @author Ashley Yuan
  */
 public class EnvAction extends UIAction {
 
@@ -160,12 +161,22 @@ public class EnvAction extends UIAction {
 		return _bundleInfos[0].getBundleDir();
 	}
 
+	public IPath getProjectsFolder() {
+		return getLiferayBundlesPath().append("projects");
+	}
+
 	public File getProjectZip(String bundleId, String projectName) throws IOException {
 		URL projectZipUrl = Platform.getBundle(bundleId).getEntry("projects/" + projectName + ".zip");
 
 		File projectZipFile = new File(FileLocator.toFileURL(projectZipUrl).getFile());
 
 		return projectZipFile;
+	}
+
+	public File getTempDir() {
+		IPath temp = getLiferayBundlesPath().append("temp");
+
+		return temp.toFile();
 	}
 
 	public File getValidationFolder() {
@@ -291,6 +302,14 @@ public class EnvAction extends UIAction {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public File prepareTempProject(File source) throws IOException {
+		File dist = new File(getTempDir(), source.getName());
+
+		FileUtil.copyDirectiory(source.getPath(), dist.getPath());
+
+		return dist;
 	}
 
 	public void unzipPluginsSDK() throws IOException {
