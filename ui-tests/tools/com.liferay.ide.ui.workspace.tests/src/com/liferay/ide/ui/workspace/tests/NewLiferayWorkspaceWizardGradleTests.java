@@ -64,6 +64,8 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		wizardAction.openNewLiferayModuleWizard();
+
 		wizardAction.prepareLiferayModuleMaven("test-maven-mvc-portlet", MVC_PORTLET);
 
 		wizardAction.finishToWait();
