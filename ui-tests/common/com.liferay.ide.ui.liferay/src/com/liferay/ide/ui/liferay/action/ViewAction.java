@@ -50,7 +50,7 @@ public class ViewAction extends UIAction {
 		try {
 			long origin = SWTBotPreferences.TIMEOUT;
 
-			SWTBotPreferences.TIMEOUT = 1500;
+			SWTBotPreferences.TIMEOUT = 3000;
 
 			_continueDeleteResourcesDialog.confirm();
 
@@ -72,7 +72,7 @@ public class ViewAction extends UIAction {
 		try {
 			long origin = SWTBotPreferences.TIMEOUT;
 
-			SWTBotPreferences.TIMEOUT = 1500;
+			SWTBotPreferences.TIMEOUT = 3000;
 
 			_continueDeleteResourcesDialog.confirm();
 

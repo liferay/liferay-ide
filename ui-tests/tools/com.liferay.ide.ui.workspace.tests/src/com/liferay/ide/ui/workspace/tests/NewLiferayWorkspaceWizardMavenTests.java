@@ -94,6 +94,8 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		viewAction.deleteProject(workspaceName, workspaceName + "-wars (in wars)", projectName);
+
 		viewAction.deleteProject(workspaceName);
 	}
 
