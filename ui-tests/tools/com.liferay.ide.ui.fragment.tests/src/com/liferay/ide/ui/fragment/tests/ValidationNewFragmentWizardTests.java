@@ -79,6 +79,29 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 		wizardAction.cancel();
 	}
 
+	@Test
+	public void createFragmentWithoutRuntime() {
+		String projectName = "test-fragment";
+
+		wizardAction.openNewFragmentWizard();
+
+		wizardAction.prepareFragmentGradle(projectName);
+
+		Assert.assertFalse(_newFragmentWizard.nextBtn().isEnabled());
+
+		wizardAction.openNewRuntimeWizardFragment();
+
+		wizardAction.next();
+
+		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
+
+		wizardAction.finish();
+
+		Assert.assertTrue(_newFragmentWizard.nextBtn().isEnabled());
+
+		_newFragmentWizard.cancel();
+	}
+
 	private static final NewFragmentWizard _newFragmentWizard = new NewFragmentWizard(bot);
 
 }
