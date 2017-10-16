@@ -71,7 +71,12 @@ public class LiferayIDE extends Eclipse {
 
 			text.setText(LIFERAY_CODE_UPGRADE);
 
-			getShowViewDialog().confirm();
+			try {
+				getShowViewDialog().confirm();
+			}
+			catch (Exception e1) {
+				getShowViewDialog().open();
+			}
 
 			_codeUpgradeView.show();
 		}

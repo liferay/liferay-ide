@@ -452,6 +452,8 @@ public interface UI {
 
 	public final String OK = "OK";
 
+	public final String OPEN = "Open";
+
 	public final String OPEN_LIFERAY_HOME_FOLDER = "Open Liferay Home Folder";
 
 	public final String OPEN_LIFERAY_PORTAL_HOME = "Open Liferay Portal Home";
