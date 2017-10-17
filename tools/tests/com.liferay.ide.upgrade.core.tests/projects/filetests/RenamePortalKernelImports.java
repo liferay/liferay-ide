@@ -1,5 +1,7 @@
 package com.test;
 
+import java.nio.file.Files;
+
 import com.liferay.portal.model.Role;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
@@ -76,7 +78,7 @@ public class Test extends MVCPortlet {
 		FileInputStream fis = null;
 		
 		try {
-			fis = new FileInputStream(submissionFile);
+			fis = Files.newInputStream(submissionFile.toPath());
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		}

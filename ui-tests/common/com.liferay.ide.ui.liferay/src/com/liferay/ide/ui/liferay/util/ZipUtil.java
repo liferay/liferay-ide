@@ -14,16 +14,13 @@
 
 package com.liferay.ide.ui.liferay.util;
 
-import com.liferay.ide.ui.swtbot.util.StringPool;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -32,6 +29,8 @@ import java.util.zip.ZipOutputStream;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.osgi.util.NLS;
+
+import com.liferay.ide.ui.swtbot.util.StringPool;
 
 /**
  * @author Greg Amerson
@@ -147,11 +146,11 @@ public class ZipUtil {
 				}
 
 				InputStream in = null;
-				FileOutputStream out = null;
+				OutputStream out = null;
 
 				try {
 					in = zip.getInputStream(entry);
-					out = new FileOutputStream(f);
+					out = Files.newOutputStream(f.toPath());
 
 					byte[] bytes = new byte[1024];
 
@@ -201,7 +200,7 @@ public class ZipUtil {
 			_delete(target);
 		}
 
-		try (ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(target))) {
+		try (ZipOutputStream zip = new ZipOutputStream(Files.newOutputStream(target.toPath()))) {
 			_zipDir(target, zip, dir, filenameFilter, StringPool.BLANK);
 		}
 	}
@@ -244,7 +243,7 @@ public class ZipUtil {
 
 			zip.putNextEntry(ze);
 
-			FileInputStream in = new FileInputStream(file);
+			InputStream in = Files.newInputStream(file.toPath());
 
 			try {
 				int bufsize = 8 * 1024;

@@ -20,11 +20,11 @@ import com.liferay.ide.project.core.util.TargetPlatformUtil;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
@@ -189,7 +189,7 @@ public class ServiceWrapperCommand
 
                         try(JarFile jar = new JarFile( lib ))
                         {
-                            jarinput = new JarInputStream( new FileInputStream( lib ) );
+                            jarinput = new JarInputStream( Files.newInputStream( lib.toPath() ) );
 
                             Enumeration<JarEntry> enu = jar.entries();
 

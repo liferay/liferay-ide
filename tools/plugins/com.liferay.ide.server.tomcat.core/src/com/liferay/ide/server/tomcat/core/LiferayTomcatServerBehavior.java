@@ -19,7 +19,7 @@ import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.util.LiferayPublishHelper;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,7 +139,7 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
         {
             Factory factory = new Factory();
             factory.setPackageName( "org.eclipse.jst.server.tomcat.core.internal.xml.server40" ); //$NON-NLS-1$
-            Server publishedServer = (Server) factory.loadDocument( new FileInputStream( serverXml.toFile() ) );
+            Server publishedServer = (Server) factory.loadDocument( Files.newInputStream( serverXml.toFile().toPath() ) );
             ServerInstance publishedInstance = new ServerInstance( publishedServer, null, null );
 
             IPath contextPath = null;

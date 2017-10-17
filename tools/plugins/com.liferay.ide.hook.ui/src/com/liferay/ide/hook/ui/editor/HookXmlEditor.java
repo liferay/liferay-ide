@@ -34,6 +34,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -189,7 +190,7 @@ public class HookXmlEditor extends SapphireEditorForXml
                                     if( portalJsp.toFile().exists() )
                                     {
                                         customJspFile.create(
-                                            new FileInputStream( portalJsp.toFile() ), true, null );
+                                            Files.newInputStream( portalJsp.toFile().toPath() ), true, null );
                                     }
                                     else
                                     {
