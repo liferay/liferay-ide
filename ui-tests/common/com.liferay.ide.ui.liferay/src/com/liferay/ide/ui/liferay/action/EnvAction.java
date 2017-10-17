@@ -222,11 +222,11 @@ public class EnvAction extends UIAction {
 		List<String> result = new ArrayList<>();
 
 		while (temp != null) {
-			temp = in.readLine();
-
 			if ((temp != null) && temp.contains("GradleDaemon")) {
 				result.add(temp);
 			}
+
+			temp = in.readLine();
 		}
 
 		try {

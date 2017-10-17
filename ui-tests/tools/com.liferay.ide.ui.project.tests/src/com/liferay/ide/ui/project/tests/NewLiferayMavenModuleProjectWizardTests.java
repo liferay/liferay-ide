@@ -27,7 +27,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createActivator() {
-		String projectName = "test-activator";
+		String projectName = "test-activator-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -40,7 +40,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createApi() {
-		String projectName = "test-api";
+		String projectName = "test-api-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -53,7 +53,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createContentTargetingReport() {
-		String projectName = "test-content-targeting-report";
+		String projectName = "test-content-targeting-report-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -66,7 +66,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createContentTargetingRule() {
-		String projectName = "test-content-targeting-rule";
+		String projectName = "test-content-targeting-rule-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -79,7 +79,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createContentTargetingTrackingAction() {
-		String projectName = "test-content-targeting-tracking-action";
+		String projectName = "test-content-targeting-tracking-action-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -92,7 +92,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createControlMenuEntry() {
-		String projectName = "test-control-menu-entry";
+		String projectName = "test-control-menu-entry-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -105,7 +105,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createFormField() {
-		String projectName = "test-form-field";
+		String projectName = "test-form-field-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -118,7 +118,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createMvcPortlet() {
-		String projectName = "test-mvc-portlet";
+		String projectName = "test-mvc-portlet-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -131,7 +131,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createPanelApp() {
-		String projectName = "test-panel-app";
+		String projectName = "test-panel-app-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -144,7 +144,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createPortlet() {
-		String projectName = "test-portlet";
+		String projectName = "test-portlet-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -157,7 +157,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createPortletConfigurationIcon() {
-		String projectName = "test-portlet-configuration-icon";
+		String projectName = "test-portlet-configuration-icon-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -170,7 +170,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createPortletProvider() {
-		String projectName = "test-portlet-provider";
+		String projectName = "test-portlet-provider-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -183,7 +183,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createPortletToolbarContributor() {
-		String projectName = "test-portlet-toolbar-contributor";
+		String projectName = "test-portlet-toolbar-contributor-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -196,7 +196,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createRest() {
-		String projectName = "test-rest";
+		String projectName = "test-rest-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -209,7 +209,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createService() {
-		String projectName = "test-service";
+		String projectName = "test-service-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -230,7 +230,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createServiceBuilder() {
-		String projectName = "test-service-builder";
+		String projectName = "test-service-builder-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -243,7 +243,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createServiceWrapper() {
-		String projectName = "test-service-wrapper";
+		String projectName = "test-service-wrapper-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -264,7 +264,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createSimulationPanelEntry() {
-		String projectName = "test-simulation-panel-entry";
+		String projectName = "test-simulation-panel-entry-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -277,7 +277,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createTemplateContextContributor() {
-		String projectName = "test-template-context-contributor";
+		String projectName = "test-template-context-contributor-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -291,7 +291,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 	@Ignore
 	@Test
 	public void createTheme() {
-		String projectName = "test-theme";
+		String projectName = "test-theme-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -304,7 +304,7 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createThemeContributor() {
-		String projectName = "test-theme-contributor";
+		String projectName = "test-theme-contributor-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
