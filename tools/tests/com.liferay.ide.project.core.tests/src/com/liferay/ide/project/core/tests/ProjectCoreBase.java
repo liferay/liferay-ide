@@ -19,30 +19,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.ProjectRecord;
-import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
-import com.liferay.ide.project.core.model.NewLiferayProfile;
-import com.liferay.ide.project.core.model.PluginType;
-import com.liferay.ide.project.core.model.ProfileLocation;
-import com.liferay.ide.project.core.util.ProjectImportUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKCorePlugin;
-import com.liferay.ide.sdk.core.SDKManager;
-import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.core.tests.ServerCoreBase;
-import com.liferay.ide.server.util.ServerUtil;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Properties;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -76,6 +58,25 @@ import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.validation.internal.operations.ValidatorManager;
 import org.junit.Before;
+
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.core.util.ZipUtil;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.ProjectRecord;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.NewLiferayProfile;
+import com.liferay.ide.project.core.model.PluginType;
+import com.liferay.ide.project.core.model.ProfileLocation;
+import com.liferay.ide.project.core.util.ProjectImportUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKCorePlugin;
+import com.liferay.ide.sdk.core.SDKManager;
+import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.server.core.tests.ServerCoreBase;
+import com.liferay.ide.server.util.ServerUtil;
 
 /**
  * @author Gregory Amerson
@@ -484,7 +485,7 @@ public class ProjectCoreBase extends ServerCoreBase
         String userName = System.getProperty( "user.name" ); //$NON-NLS-1$
         File userBuildFile = loc.append( "build." + userName + ".properties" ).toFile(); //$NON-NLS-1$ //$NON-NLS-2$
 
-        try ( FileOutputStream fileOutput = new FileOutputStream( userBuildFile ) )
+        try ( OutputStream fileOutput = Files.newOutputStream( userBuildFile.toPath() ) )
         {
             if( userBuildFile.exists() )
             {

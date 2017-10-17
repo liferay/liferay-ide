@@ -18,10 +18,9 @@ package com.liferay.ide.project.ui.handlers;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
 
 import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.CompareEditorInput;
@@ -179,9 +178,9 @@ public abstract class AbstractCompareFileHandler extends AbstractHandler
         {
             try
             {
-                return new FileInputStream( file );
+                return Files.newInputStream( file.toPath() );
             }
-            catch( FileNotFoundException e )
+            catch( Exception e )
             {
             }
             return null;

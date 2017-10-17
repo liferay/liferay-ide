@@ -21,8 +21,8 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
@@ -78,7 +78,7 @@ public class FileHelper {
 	public int writeFile(File file, String contents) throws IOException {
 		int retval = -1;
 
-		try (FileOutputStream stream = new FileOutputStream(file);
+		try (OutputStream stream = Files.newOutputStream(file.toPath());
 			 BufferedOutputStream out = new BufferedOutputStream( stream );
 			 BufferedInputStream bin = new BufferedInputStream(new ByteArrayInputStream(contents.getBytes()))) {
 

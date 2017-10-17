@@ -15,25 +15,15 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.dialog.CustomProjectSelectionDialog;
-import com.liferay.ide.project.ui.upgrade.CustomJspConverter;
-import com.liferay.ide.server.util.ServerUtil;
-import com.liferay.ide.ui.util.SWTUtil;
-import com.liferay.ide.ui.util.UIUtil;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -101,6 +91,15 @@ import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.ui.ServerUIUtil;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.dialog.CustomProjectSelectionDialog;
+import com.liferay.ide.project.ui.upgrade.CustomJspConverter;
+import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.util.UIUtil;
+
 /**
  * @author Andy Wu
  * @author Simon Jiang
@@ -124,9 +123,9 @@ public class CustomJspPage extends Page
         {
             try
             {
-                return new FileInputStream( new File( fileName ) );
+                return Files.newInputStream( new File( fileName ).toPath() );
             }
-            catch( FileNotFoundException e )
+            catch( Exception e )
             {
                 e.printStackTrace();
             }
@@ -171,7 +170,7 @@ public class CustomJspPage extends Page
 
         private void writeFile( String fileName, byte[] newContent )
         {
-            FileOutputStream fos = null;
+            OutputStream fos = null;
             try
             {
                 File file = new File( fileName );
@@ -182,7 +181,7 @@ public class CustomJspPage extends Page
 
                 file.createNewFile();
 
-                fos = new FileOutputStream( file );
+                fos = Files.newOutputStream( file.toPath() );
                 fos.write( newContent );
                 fos.flush();
 

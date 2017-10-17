@@ -33,7 +33,6 @@ import com.liferay.ide.ui.util.UIUtil;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -330,7 +329,7 @@ public class CustomJspConverter
                 }
             } );
 
-            InputStream input = new FileInputStream( hookFile );
+            InputStream input = Files.newInputStream( hookFile.toPath() );
             Document doc = domBuilder.parse( input );
             Element root = doc.getDocumentElement();
             NodeList nodeList = root.getChildNodes();

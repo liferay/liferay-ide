@@ -15,14 +15,10 @@
 
 package com.liferay.ide.project.ui.upgrade;
 
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.util.SearchFilesVisitor;
-import com.liferay.ide.project.ui.ProjectUI;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -41,6 +37,10 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.util.SearchFilesVisitor;
+import com.liferay.ide.project.ui.ProjectUI;
 
 /**
  * @author Simon Jiang
@@ -107,7 +107,7 @@ public class LiferayDescriptorUpgradeTableViewCustomPart extends AbstractLiferay
         {
             SAXBuilder builder = new SAXBuilder( false );
             builder.setValidation( false );
-            Document doc = builder.build( new FileInputStream( srcFile ) );
+            Document doc = builder.build( Files.newInputStream( srcFile.toPath() ) );
 
             DocType docType = doc.getDocType();
 
@@ -140,7 +140,7 @@ public class LiferayDescriptorUpgradeTableViewCustomPart extends AbstractLiferay
         {
             SAXBuilder builder = new SAXBuilder( false );
             builder.setValidation( false );
-            Document doc = builder.build( new FileInputStream( srcFile ) );
+            Document doc = builder.build( Files.newInputStream( srcFile.toPath() ) );
             DocType docType = doc.getDocType();
 
             if( docType != null )
@@ -175,7 +175,7 @@ public class LiferayDescriptorUpgradeTableViewCustomPart extends AbstractLiferay
     {
         XMLOutputter out = new XMLOutputter();
 
-        try(FileOutputStream fos = new FileOutputStream( templateFile );)
+        try(OutputStream fos = Files.newOutputStream( templateFile.toPath() );)
         {
             Format fm = Format.getPrettyFormat();
             out.setFormat( fm );
@@ -223,7 +223,7 @@ public class LiferayDescriptorUpgradeTableViewCustomPart extends AbstractLiferay
         {
             SAXBuilder builder = new SAXBuilder( false );
             builder.setValidation( false );
-            Document doc = builder.build( new FileInputStream( srcFile ) );
+            Document doc = builder.build( Files.newInputStream( srcFile.toPath() ) );
             DocType docType = doc.getDocType();
 
             if( docType != null )

@@ -27,12 +27,12 @@ import com.liferay.ide.project.core.modules.PropertyKey;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -360,7 +360,7 @@ public abstract class AbstractLiferayComponentTemplate implements IComponentTemp
 
             initBndProperties( bndFile, bndProperty );
 
-            try( OutputStream out = new FileOutputStream( bndFile ) )
+            try( OutputStream out = Files.newOutputStream( bndFile.toPath() ) )
             {
                 setBndProperties( bndProperty );
                 bndProperty.store( out, null );
@@ -401,7 +401,7 @@ public abstract class AbstractLiferayComponentTemplate implements IComponentTemp
 
     protected void doSourceCodeOperation( IFile srcFile ) throws CoreException
     {
-        try(OutputStream fos = new FileOutputStream( srcFile.getLocation().toFile() ))
+        try(OutputStream fos = Files.newOutputStream( srcFile.getLocation().toFile().toPath() ))
         {
             Template temp = cfg.getTemplate( getTemplateFile() );
 

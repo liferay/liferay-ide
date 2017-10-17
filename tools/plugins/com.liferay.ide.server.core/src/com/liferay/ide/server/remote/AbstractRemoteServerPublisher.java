@@ -14,15 +14,11 @@
  *******************************************************************************/
 package com.liferay.ide.server.remote;
 
-import com.liferay.ide.core.IWebProject;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.server.core.LiferayServerCore;
-
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -42,6 +38,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
+
+import com.liferay.ide.core.IWebProject;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 /**
  * @author Simon Jiang
@@ -203,7 +204,7 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
     {
         IPath path = LiferayServerCore.getTempLocation( "partial-war", archiveName ); //$NON-NLS-1$
 
-        FileOutputStream outputStream = null;
+        OutputStream outputStream = null;
         ZipOutputStream zip = null;
         File warfile = path.toFile();
 
@@ -211,7 +212,7 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
 
         try
         {
-            outputStream = new FileOutputStream( warfile );
+            outputStream = Files.newOutputStream( warfile.toPath() );
             zip = new ZipOutputStream( outputStream );
 
             Map<ZipEntry, String> deleteEntries = new HashMap<ZipEntry, String>();
