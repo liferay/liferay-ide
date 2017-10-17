@@ -1,5 +1,5 @@
 ..,".." is not an absolute path.
-1.*,"1.*" is not an absolute path.
+1.*,"1.*" is not a valid path
 ,Workspace location must be specified
-C://non-exist-dir,"C:/non-exist-dir" is not an absolute path.
-C:/Users,"C:/Users" is not an absolute path.
+C://non-exist-dir,Directory doesn't exist.
+C:/Users,Invalid Liferay Workspace

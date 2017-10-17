@@ -1,5 +1,5 @@
 ..,'..' is an invalid name on this platform.
 ##,The name is invalid for a project.
-*,The name is invalid for a project.
+*,* is an invalid character in resource name '*'.
 ,Liferay Workspace project name could not be empty.
 test-liferay-workspace,Create a new liferay workspace
