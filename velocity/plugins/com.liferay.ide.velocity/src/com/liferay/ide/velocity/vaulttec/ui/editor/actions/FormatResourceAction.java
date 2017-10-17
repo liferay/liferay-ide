@@ -4,9 +4,9 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -211,7 +211,7 @@ public class FormatResourceAction implements IObjectActionDelegate
             StringBuffer b = new StringBuffer();
             try
             {
-                BufferedReader in = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(file.getLocation().toFile()))));
+                BufferedReader in = new BufferedReader(new InputStreamReader(new BufferedInputStream(Files.newInputStream(file.getLocation().toFile().toPath()))));
                 while ((line = in.readLine()) != null)
                 {
                     b.append(line);

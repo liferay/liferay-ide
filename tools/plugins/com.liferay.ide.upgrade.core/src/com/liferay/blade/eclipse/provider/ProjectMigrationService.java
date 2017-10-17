@@ -25,7 +25,6 @@ import com.liferay.blade.api.Reporter;
 import com.liferay.blade.util.FileHelper;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.FileVisitResult;
@@ -191,7 +190,7 @@ public class ProjectMigrationService implements Migration {
 				try {
 					outputFile.getParentFile().mkdirs();
 					outputFile.createNewFile();
-					fos = new FileOutputStream(outputFile);
+					fos = Files.newOutputStream(outputFile.toPath());
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

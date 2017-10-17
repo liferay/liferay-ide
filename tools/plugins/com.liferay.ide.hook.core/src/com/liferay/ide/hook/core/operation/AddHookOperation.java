@@ -29,9 +29,10 @@ import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -160,7 +161,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
         {
             if( originalPortalJspPath.toFile().exists() )
             {
-                final FileInputStream fis = new FileInputStream( originalPortalJspPath.toFile() );
+                final InputStream fis = Files.newInputStream( originalPortalJspPath.toFile().toPath() );
 
                 if( newJspFile.exists() )
                 {

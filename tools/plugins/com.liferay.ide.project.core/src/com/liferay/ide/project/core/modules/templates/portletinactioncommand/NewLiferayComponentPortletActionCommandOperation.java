@@ -23,11 +23,11 @@ import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTe
 import com.liferay.ide.project.core.modules.templates.BndProperties;
 import com.liferay.ide.project.core.modules.templates.BndPropertiesValue;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -224,7 +224,7 @@ public class NewLiferayComponentPortletActionCommandOperation extends AbstractLi
 
     private void doSourceCodeOperation( IFile srcFile, String type ) throws CoreException
     {
-        try(OutputStream fos = new FileOutputStream( srcFile.getLocation().toFile() ))
+        try(OutputStream fos = Files.newOutputStream( srcFile.getLocation().toFile().toPath() ))
         {
 
             Template temp = cfg.getTemplate( getTemplateFile() );

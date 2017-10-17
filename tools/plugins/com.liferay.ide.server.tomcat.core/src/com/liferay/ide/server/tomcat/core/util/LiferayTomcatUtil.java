@@ -15,28 +15,12 @@
 
 package com.liferay.ide.server.tomcat.core.util;
 
-import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileListing;
-import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.core.IPluginPublisher;
-import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.tomcat.core.ILiferayTomcatConstants;
-import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
-import com.liferay.ide.server.tomcat.core.ILiferayTomcatServer;
-import com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin;
-import com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime70;
-import com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior;
-import com.liferay.ide.server.util.LiferayPortalValueLoader;
-import com.liferay.ide.server.util.ServerUtil;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -66,6 +50,23 @@ import org.eclipse.wst.server.core.IServerListener;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.ServerEvent;
 import org.osgi.framework.Version;
+
+import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileListing;
+import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.core.IPluginPublisher;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.tomcat.core.ILiferayTomcatConstants;
+import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
+import com.liferay.ide.server.tomcat.core.ILiferayTomcatServer;
+import com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin;
+import com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime70;
+import com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior;
+import com.liferay.ide.server.util.LiferayPortalValueLoader;
+import com.liferay.ide.server.util.ServerUtil;
 
 /**
  * @author Greg Amerson
@@ -344,7 +345,7 @@ public class LiferayTomcatUtil
 
         try
         {
-            props.store( new FileOutputStream( file ), null );
+            props.store( Files.newOutputStream( file.toPath() ), null );
         }
         catch( Exception e )
         {
@@ -430,7 +431,7 @@ public class LiferayTomcatUtil
         {
             try
             {
-                FileInputStream fileInput = new FileInputStream( configInfoFile );
+                InputStream fileInput = Files.newInputStream( configInfoFile.toPath() );
                 properties.load( fileInput );
                 fileInput.close();
                 String configInfo = (String) properties.get( portalDirKey );
@@ -587,7 +588,7 @@ public class LiferayTomcatUtil
 
     public static Context loadContextFile( File contextFile )
     {
-        FileInputStream fis = null;
+        InputStream fis = null;
         Context context = null;
 
         if( contextFile != null && contextFile.exists() )
@@ -596,7 +597,7 @@ public class LiferayTomcatUtil
             {
                 Factory factory = new Factory();
                 factory.setPackageName( "org.eclipse.jst.server.tomcat.core.internal.xml.server40" ); //$NON-NLS-1$
-                fis = new FileInputStream( contextFile );
+                fis = Files.newInputStream( contextFile.toPath() );
                 context = (Context) factory.loadDocument( fis );
                 if( context != null )
                 {
@@ -697,7 +698,7 @@ public class LiferayTomcatUtil
 
                 try
                 {
-                    FileInputStream fileInput = new FileInputStream( versionInfoFile );
+                    InputStream fileInput = Files.newInputStream( versionInfoFile.toPath() );
                     properties.load( fileInput );
                     fileInput.close();
                 }
@@ -714,7 +715,7 @@ public class LiferayTomcatUtil
 
                 try
                 {
-                    FileOutputStream fileOutput = new FileOutputStream( versionInfoFile );
+                    OutputStream fileOutput = Files.newOutputStream( versionInfoFile.toPath() );
                     properties.store( fileOutput, StringPool.EMPTY );
                     fileOutput.close();
                 }
@@ -737,13 +738,13 @@ public class LiferayTomcatUtil
             ExternalPropertiesConfiguration props = new ExternalPropertiesConfiguration();
             try
             {
-                props.load( new FileInputStream( externalPropertiesFile ) );
+                props.load( Files.newInputStream( externalPropertiesFile.toPath() ) );
 
                 props.setProperty( "include-and-override", portalIdePropFile.getAbsolutePath() ); //$NON-NLS-1$
 
                 props.setHeader( "# Last modified by Liferay IDE " + new Date() ); //$NON-NLS-1$
 
-                props.save( new FileOutputStream( externalPropertiesFile ) );
+                props.save( Files.newOutputStream( externalPropertiesFile.toPath() ) );
 
                 retval = externalPropertiesFile;
             }

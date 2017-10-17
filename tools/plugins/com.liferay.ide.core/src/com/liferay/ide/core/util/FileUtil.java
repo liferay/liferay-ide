@@ -21,9 +21,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +29,7 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +88,7 @@ public class FileUtil
 
         try
         {
-            final FileInputStream input = new FileInputStream( file );
+            final InputStream input = Files.newInputStream( file.toPath() );
 
             if( iFile.exists() )
             {
@@ -119,12 +118,12 @@ public class FileUtil
         byte[] buf = new byte[4096];
 
         OutputStream out = null;
-        FileInputStream in = null;
+        InputStream in = null;
 
         try
         {
-            out = new FileOutputStream( dest );
-            in = new FileInputStream( src );
+            out = Files.newOutputStream( dest.toPath() );
+            in = Files.newInputStream( src.toPath() );
 
             int avail = in.read( buf );
             while( avail > 0 )
@@ -523,13 +522,13 @@ public class FileUtil
 
         if( file.exists() )
         {
-            final String searchContents = CoreUtil.readStreamToString( new FileInputStream( file ) );
+            final String searchContents = CoreUtil.readStreamToString( Files.newInputStream( file.toPath() ) );
 
             final String replaceContents = searchContents.replaceAll( search, replace );
 
             replaced = ! searchContents.equals( replaceContents );
 
-            CoreUtil.writeStreamFromString( replaceContents, new FileOutputStream( file ) );
+            CoreUtil.writeStreamFromString( replaceContents, Files.newOutputStream( file.toPath() ) );
         }
 
         return replaced;
@@ -632,11 +631,11 @@ public class FileUtil
             }
 
             final byte[] buffer = new byte[1024];
-            FileOutputStream out = null;
+            OutputStream out = null;
 
             try
             {
-                out = new FileOutputStream( f );
+                out = Files.newOutputStream( f.toPath() );
 
                 for( int count; ( count = contents.read( buffer ) ) != -1; )
                 {
@@ -683,7 +682,7 @@ public class FileUtil
     {
         byte[] buffer = new byte[1024];
 
-        BufferedOutputStream out = new BufferedOutputStream( new FileOutputStream( tempFile ) );
+        BufferedOutputStream out = new BufferedOutputStream( Files.newOutputStream( tempFile.toPath() ) );
         BufferedInputStream bin = new BufferedInputStream( in );
 
         int bytesRead = 0;

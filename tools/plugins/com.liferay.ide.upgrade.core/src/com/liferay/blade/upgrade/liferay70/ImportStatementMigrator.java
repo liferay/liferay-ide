@@ -25,11 +25,11 @@ import com.liferay.blade.api.SearchResult;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -94,7 +94,7 @@ public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaF
 
 		if (importsToRewrite.size() > 0) {
 			try {
-				FileInputStream inputStream = new FileInputStream(file);
+				InputStream inputStream = Files.newInputStream(file.toPath());
 				String[] lines = readLines(inputStream);
 				inputStream.close();
 
