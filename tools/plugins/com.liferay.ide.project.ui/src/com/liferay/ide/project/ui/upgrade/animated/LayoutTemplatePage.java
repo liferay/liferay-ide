@@ -35,7 +35,7 @@ import org.eclipse.core.resources.IResourceProxy;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
@@ -138,11 +138,11 @@ public class LayoutTemplatePage extends AbstractLiferayTableViewCustomPart
     }
 
     @Override
-    protected void createTempFile( final File srcFile, final File templateFile, final String projectName )
+    protected void createTempFile( final IFile srcFile, final File templateFile, final String projectName )
     {
         try
         {
-            String content = upgradeLayouttplContent( FileUtil.readContents( srcFile, true ) );
+            String content = upgradeLayouttplContent( FileUtil.readContents( srcFile.getLocation().toFile(), true ) );
 
             if( templateFile.exists() )
             {
@@ -159,12 +159,12 @@ public class LayoutTemplatePage extends AbstractLiferayTableViewCustomPart
     }
 
     @Override
-    protected void doUpgrade( File srcFile, IProject project )
+    protected void doUpgrade( IFile srcFile, IProject project )
     {
         try
         {
-            String content = upgradeLayouttplContent( FileUtil.readContents( srcFile, true ) );
-            FileUtils.writeStringToFile( srcFile, content, "UTF-8" );
+            String content = upgradeLayouttplContent( FileUtil.readContents( srcFile.getLocation().toFile(), true ) );
+            FileUtils.writeStringToFile( srcFile.getLocation().toFile(), content, "UTF-8" );
         }
         catch( Exception e )
         {
@@ -184,7 +184,7 @@ public class LayoutTemplatePage extends AbstractLiferayTableViewCustomPart
     }
 
     @Override
-    protected IStyledLabelProvider getLableProvider()
+    protected CellLabelProvider getLableProvider()
     {
         return new LiferayUpgradeTabeViewLabelProvider( "Upgrade Layouttpl")
         {
@@ -240,9 +240,9 @@ public class LayoutTemplatePage extends AbstractLiferayTableViewCustomPart
     }
 
     @Override
-    protected boolean isNeedUpgrade( File srcFile )
+    protected boolean isNeedUpgrade( IFile srcFile )
     {
-        final String content = FileUtil.readContents( srcFile );
+        final String content = FileUtil.readContents( srcFile.getLocation().toFile() );
 
         if( content != null && !content.equals( "" ) )
         {

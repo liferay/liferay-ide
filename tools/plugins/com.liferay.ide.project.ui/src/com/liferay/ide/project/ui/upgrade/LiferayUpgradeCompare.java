@@ -85,7 +85,7 @@ public class LiferayUpgradeCompare
             };
 
             editorInput.setTitle(
-                "Compare ('" + soruceFile.toPortableString() + "'-'" + targetFile.toPortableString() + "')" );
+                "Compare ('" + this.fileName + "'-'" + this.fileName + "_preview" + "')" );
 
             CompareUI.openCompareEditor( editorInput );
         }

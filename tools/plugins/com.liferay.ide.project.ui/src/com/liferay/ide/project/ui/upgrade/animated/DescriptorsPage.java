@@ -21,11 +21,10 @@ import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,37 +32,33 @@ import java.util.regex.Pattern;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Link;
-import org.jdom.DocType;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
+import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.xml.core.internal.document.DocumentTypeImpl;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.w3c.dom.DocumentType;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Andy Wu
  * @author Simon Jiang
  * @author Joye Luo
  */
+@SuppressWarnings( "restriction" )
 public class DescriptorsPage extends AbstractLiferayTableViewCustomPart
 {
-    private final static String[][] DESCRIPTORS_AND_IMAGES = 
-    { 
-        { "liferay-portlet.xml", "/icons/e16/portlet.png" },
-        { "liferay-display.xml", "/icons/e16/liferay_display_xml.png" }, 
-        { "service.xml", "/icons/e16/service.png" },
-        { "liferay-hook.xml", "/icons/e16/hook.png" },
-        { "liferay-layout-templates.xml", "/icons/e16/layout.png" },
-        { "liferay-look-and-feel.xml", "/icons/e16/theme.png" }, 
-        { "liferay-portlet-ext.xml", "/icons/e16/ext.png" } 
-    };
+
+    private final static String[][] DESCRIPTORS_AND_IMAGES = { { "liferay-portlet.xml", "/icons/e16/portlet.png" },
+        { "liferay-display.xml", "/icons/e16/liferay_display_xml.png" }, { "service.xml", "/icons/e16/service.png" },
+        { "liferay-hook.xml", "/icons/e16/hook.png" }, { "liferay-layout-templates.xml", "/icons/e16/layout.png" },
+        { "liferay-look-and-feel.xml", "/icons/e16/theme.png" }, { "liferay-portlet-ext.xml", "/icons/e16/ext.png" } };
 
     private final static String PUBLICID_REGREX =
         "-\\//(?:[a-z][a-z]+)\\//(?:[a-z][a-z]+)[\\s+(?:[a-z][a-z0-9_]*)]*\\s+(\\d\\.\\d\\.\\d)\\//(?:[a-z][a-z]+)";
@@ -101,76 +96,70 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart
     }
 
     @Override
-    protected void createTempFile( File srcFile, File templateFile, String projectName )
+    protected void createTempFile( IFile srcFile, File templateFile, String projectName )
     {
-        SAXBuilder builder = new SAXBuilder( false );
-        builder.setValidation( false );
-        builder.setFeature( "http://xml.org/sax/features/validation", false );
-        builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false );
-        builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false ); 
+        IDOMModel domModel = null;
 
-        try( FileInputStream ivyInput = new FileInputStream( srcFile ) )
+        try
         {
-            Document doc = builder.build( ivyInput );
-            DocType docType = doc.getDocType();
+            domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( srcFile );
+            domModel.aboutToChangeModel();
+            IDOMDocument document = domModel.getDocument();
+            DocumentTypeImpl docType = (DocumentTypeImpl) document.getDoctype();
 
             if( docType != null )
             {
-                final String publicId = docType.getPublicID();
+                final String publicId = docType.getPublicId();
                 final String newPublicId = getNewDoctTypeSetting( publicId, "7.0.0", PUBLICID_REGREX );
-                docType.setPublicID( newPublicId );
+                docType.setPublicId( newPublicId );
 
-                final String systemId = docType.getSystemID();
+                final String systemId = docType.getSystemId();
                 final String newSystemId = getNewDoctTypeSetting( systemId, "7_0_0", SYSTEMID_REGREX );
-                docType.setSystemID( newSystemId );
+                docType.setSystemId( newSystemId );
             }
 
-            removeLayoutWapNode( srcFile, doc );
+            removeLayoutWapNode( srcFile, document );
+            OutputStream tmpOutputStream = Files.newOutputStream(
+                templateFile.toPath(), StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE_NEW );
+            domModel.save( tmpOutputStream );
 
-            if( templateFile.exists() )
-            {
-                templateFile.delete();
-            }
-
-            templateFile.createNewFile();
-
-            saveXML( templateFile, doc );
         }
-        catch( JDOMException | IOException e )
+        catch( Exception e )
         {
             ProjectCore.logError( e );
+        }
+        finally
+        {
+            domModel.releaseFromEdit();
         }
     }
 
     @Override
-    protected void doUpgrade( File srcFile, IProject project )
+    protected void doUpgrade( IFile srcFile, IProject project )
     {
-        SAXBuilder builder = new SAXBuilder( false );
-        builder.setValidation( false );
-        builder.setFeature( "http://xml.org/sax/features/validation", false );
-        builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false );
-        builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false );
+        IDOMModel domModel = null;
 
-        try(FileInputStream ivyInput = new FileInputStream( srcFile ) )
+        try
         {
-
-            Document doc = builder.build( ivyInput );
-            DocType docType = doc.getDocType();
+            domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( srcFile );
+            domModel.aboutToChangeModel();
+            IDOMDocument document = domModel.getDocument();
+            DocumentTypeImpl docType = (DocumentTypeImpl) document.getDoctype();
 
             if( docType != null )
             {
-                final String publicId = docType.getPublicID();
+                final String publicId = docType.getPublicId();
                 final String newPublicId = getNewDoctTypeSetting( publicId, "7.0.0", PUBLICID_REGREX );
-                docType.setPublicID( newPublicId );
+                docType.setPublicId( newPublicId );
 
-                final String systemId = docType.getSystemID();
+                final String systemId = docType.getSystemId();
                 final String newSystemId = getNewDoctTypeSetting( systemId, "7_0_0", SYSTEMID_REGREX );
-                docType.setSystemID( newSystemId );
+                docType.setSystemId( newSystemId );
             }
 
-            removeLayoutWapNode( srcFile, doc );
+            removeLayoutWapNode( srcFile, document );
+            domModel.save();
 
-            saveXML( srcFile, doc );
         }
         catch( Exception e )
         {
@@ -195,9 +184,9 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart
     }
 
     @Override
-    protected IStyledLabelProvider getLableProvider()
+    protected CellLabelProvider getLableProvider()
     {
-        return new LiferayUpgradeTabeViewLabelProvider( "Upgrade Descriptors")
+        return new LiferayUpgradeTabeViewLabelProvider( "Upgrade Descriptors" )
         {
 
             @Override
@@ -205,7 +194,7 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart
             {
                 if( element instanceof LiferayUpgradeElement )
                 {
-                    final String itemName = ( (LiferayUpgradeElement) element ).itemName;
+                    final String itemName = ( (LiferayUpgradeElement) element ).getFileName();
 
                     return this.getImageRegistry().get( itemName );
                 }
@@ -225,6 +214,7 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart
                         descName, ProjectUI.imageDescriptorFromPlugin( ProjectUI.PLUGIN_ID, descImage ) );
                 }
             }
+
         };
     }
 
@@ -264,26 +254,22 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart
     }
 
     @Override
-    protected boolean isNeedUpgrade( File srcFile )
+    protected boolean isNeedUpgrade( IFile srcFile )
     {
-        SAXBuilder builder = new SAXBuilder( false );
-        builder.setValidation( false );
-        builder.setFeature( "http://xml.org/sax/features/validation", false );
-        builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false );
-        builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false );
-
-
-        try( FileInputStream ivyInput = new FileInputStream( srcFile ))
+        IDOMModel domModel = null;
+        try
         {
-            Document doc = builder.build( ivyInput );
-            DocType docType = doc.getDocType();
+            domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( srcFile );
+            domModel.aboutToChangeModel();
+            IDOMDocument document = domModel.getDocument();
+            DocumentType docType = document.getDoctype();
 
             if( docType != null )
             {
-                final String publicId = docType.getPublicID();
+                final String publicId = docType.getPublicId();
                 String oldPublicIdVersion = getOldVersion( publicId, PUBLICID_REGREX );
 
-                final String systemId = docType.getSystemID();
+                final String systemId = docType.getSystemId();
                 String oldSystemIdVersion = getOldVersion( systemId, SYSTEMID_REGREX );
 
                 if( ( publicId != null && !oldPublicIdVersion.equals( "7.0.0" ) ) ||
@@ -297,52 +283,24 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart
         {
             ProjectUI.logError( e );
         }
+        finally
+        {
+            domModel.releaseFromRead();
+        }
         return false;
     }
 
-    @SuppressWarnings( "unchecked" )
-    private void removeLayoutWapNode( File srcFile, Document doc )
+    private void removeLayoutWapNode( IFile srcFile, IDOMDocument document )
     {
         if( srcFile.getName().equals( "liferay-layout-templates.xml" ) )
         {
-            Element itemRem = null;
-            Element elementRoot = doc.getRootElement();
-            List<Element> customers = elementRoot.getChildren( "custom" );
-            for( Iterator<Element> customerIterator = customers.iterator(); customerIterator.hasNext(); )
+            NodeList nodeList = document.getElementsByTagName( "wap-template-path" );
+            for( int i = 0; i < nodeList.getLength(); i++ )
             {
-                Element customerElement = (Element) customerIterator.next();
-                List<Element> layoutElements = customerElement.getChildren( "layout-template" );
-                for( Iterator<Element> layoutIterator = layoutElements.iterator(); layoutIterator.hasNext(); )
-                {
-
-                    Element layoutElement = (Element) layoutIterator.next();
-                    List<Element> wapElements = layoutElement.getChildren( "wap-template-path" );
-                    for( Iterator<Element> wapIterator = wapElements.iterator(); wapIterator.hasNext(); )
-                    {
-                        Element removeItem = (Element) wapIterator.next();
-                        wapIterator.remove();
-                        itemRem = removeItem;
-                    }
-                }
+                Node node = nodeList.item( i );
+                Node parentNode = node.getParentNode();
+                parentNode.removeChild( node );
             }
-            elementRoot.removeContent( itemRem );
         }
     }
-
-    private void saveXML( File templateFile, Document doc )
-    {
-        XMLOutputter out = new XMLOutputter();
-
-        try(FileOutputStream fos = new FileOutputStream( templateFile );)
-        {
-            Format fm = Format.getPrettyFormat();
-            out.setFormat( fm );
-            out.output( doc, fos );
-        }
-        catch( Exception e )
-        {
-            ProjectUI.logError( e );
-        }
-    }
-    
 }

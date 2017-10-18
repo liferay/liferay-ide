@@ -24,13 +24,13 @@ import com.liferay.ide.project.core.util.ValidationUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
 import com.liferay.ide.project.ui.upgrade.LiferayUpgradeCompare;
-import com.liferay.ide.project.ui.wizard.ElementLabelProvider;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -42,30 +42,24 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.jface.resource.ColorRegistry;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
-import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StyledCellLabelProvider;
-import org.eclipse.jface.viewers.StyledString;
-import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.window.Window;
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.ValuePropertyContentEvent;
-import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -74,6 +68,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -118,27 +113,14 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
         descData.grabExcessHorizontalSpace = true;
         this.setLayoutData( descData );
 
-        tableViewer = new TableViewer( this );
-
-        tableViewer.setContentProvider( new TableViewContentProvider() );
-
-        tableViewer.setLabelProvider( new DelegatingStyledCellLabelProvider( getLableProvider() ) );
-
-        tableViewer.addDoubleClickListener( new IDoubleClickListener()
-        {
-
-            @Override
-            public void doubleClick( DoubleClickEvent event )
-            {
-                handleCompare( (IStructuredSelection) event.getSelection() );
-            }
-        } );
-
-        final Table table = tableViewer.getTable();
+        final Table table = new Table( this, SWT.FULL_SELECTION );
         final GridData tableData = new GridData( GridData.FILL_BOTH );
         tableData.grabExcessVerticalSpace = true;
         tableData.grabExcessHorizontalSpace = true;
         tableData.horizontalAlignment = SWT.FILL;
+        table.setHeaderVisible( true );
+        table.setLinesVisible( true );
+
         table.setLayoutData( tableData );
         Composite buttonContainer = new Composite( this, SWT.NONE );
         buttonContainer.setLayout( new GridLayout( 1, false ) );
@@ -157,6 +139,66 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
             }
         } );
 
+        tableViewer = new TableViewer( table );
+
+        tableViewer.setContentProvider( new TableViewContentProvider() );
+        tableViewer.addDoubleClickListener( new IDoubleClickListener()
+        {
+
+            @Override
+            public void doubleClick( DoubleClickEvent event )
+            {
+                handleCompare( (IStructuredSelection) event.getSelection() );
+            }
+        } );
+
+        TableViewerColumn colFileName = new TableViewerColumn( tableViewer, SWT.NONE );
+        colFileName.getColumn().setWidth( 50 );
+        colFileName.getColumn().setText( "File Name" );
+        colFileName.setLabelProvider( getLableProvider() );
+
+        TableViewerColumn colProjectName = new TableViewerColumn( tableViewer, SWT.NONE );
+        colProjectName.getColumn().setWidth( 200 );
+        colProjectName.getColumn().setText( "Project Name" );
+        colProjectName.setLabelProvider( new ColumnLabelProvider()
+        {
+
+            @Override
+            public String getText( Object element )
+            {
+                LiferayUpgradeElement tableViewElement = (LiferayUpgradeElement) element;
+                return tableViewElement.getProjectName();
+            }
+        } );
+
+        TableViewerColumn colLocation = new TableViewerColumn( tableViewer, SWT.NONE );
+        colLocation.getColumn().setWidth( 200 );
+        colLocation.getColumn().setText( "File Location" );
+        colLocation.setLabelProvider( new ColumnLabelProvider()
+        {
+
+            @Override
+            public String getText( Object element )
+            {
+                LiferayUpgradeElement tableViewElement = (LiferayUpgradeElement) element;
+                return tableViewElement.getFileLocation();
+            }
+        } );
+
+        TableViewerColumn colUpgradeStatus = new TableViewerColumn( tableViewer, SWT.NONE );
+        colUpgradeStatus.getColumn().setWidth( 200 );
+        colUpgradeStatus.getColumn().setText( "Upgrade Status" );
+        colUpgradeStatus.setLabelProvider( new ColumnLabelProvider()
+        {
+
+            @Override
+            public String getText( Object element )
+            {
+                LiferayUpgradeElement tableViewElement = (LiferayUpgradeElement) element;
+                return tableViewElement.getUpgradeStatus() ? "Yes" : "Not";
+            }
+        } );
+
         dataModel.getImportFinished().attach( new LiferayUpgradeValidationListener() );
     }
 
@@ -169,69 +211,108 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
     public class LiferayUpgradeElement
     {
 
-        public String name;
-        public String context;
-        public final String location;
-        public final String itemName;
+        private IFile file;
+        private IProject project;
+        private boolean upgradeStatus;
 
-        public LiferayUpgradeElement( String name, String context, String location, String itemName )
+        public LiferayUpgradeElement( IFile file, IProject project )
         {
-            this.context = context;
-            this.name = name;
-            this.location = location;
-            this.itemName = itemName;
+            this.file = file;
+            this.project = project;
+            this.upgradeStatus = false;
+        }
+
+        public String getProjectName()
+        {
+            return project.getName();
+        }
+
+        public String getFileName()
+        {
+            return file.getName();
+        }
+
+        public String getFileLocation()
+        {
+            return file.getLocation().toOSString();
+        }
+
+        public IFile getFile()
+        {
+            return this.file;
+        }
+
+        public IProject getProject()
+        {
+            return this.project;
+        }
+
+        public boolean getUpgradeStatus()
+        {
+            return this.upgradeStatus;
+        }
+
+        public void setUpgradeStatus( boolean upgradeStatus )
+        {
+            this.upgradeStatus = upgradeStatus;
         }
     }
 
-    protected abstract class LiferayUpgradeTabeViewLabelProvider extends ElementLabelProvider
-        implements IColorProvider, IStyledLabelProvider
+    private boolean oddFlag = true;
+
+    protected abstract class LiferayUpgradeTabeViewLabelProvider extends ColumnLabelProvider
     {
 
-        private String GREY_COLOR;
+        private final ImageRegistry imageRegistry;
 
-        private final ColorRegistry COLOR_REGISTRY = JFaceResources.getColorRegistry();
+        @Override
+        public void dispose()
+        {
+            this.imageRegistry.dispose();
+        }
 
-        protected Styler GREYED_STYLER;
+        protected ImageRegistry getImageRegistry()
+        {
+            return this.imageRegistry;
+        }
 
         public LiferayUpgradeTabeViewLabelProvider()
         {
-            COLOR_REGISTRY.put( GREY_COLOR, new RGB( 128, 128, 128 ) );
-            GREYED_STYLER = StyledString.createColorRegistryStyler( GREY_COLOR, null );
+            super();
+            this.imageRegistry = new ImageRegistry();
+            initalizeImageRegistry( this.imageRegistry );
         }
 
         public LiferayUpgradeTabeViewLabelProvider( final String greyColorName )
         {
-            this.GREY_COLOR = greyColorName;
+            this.imageRegistry = new ImageRegistry();
+            initalizeImageRegistry( this.imageRegistry );
         }
 
         @Override
-        public Color getForeground( Object element )
+        public String getText( Object element )
         {
-            if( element instanceof LiferayUpgradeElement )
-            {
-                final String srcLableString = ( (LiferayUpgradeElement) element ).context;
-
-                if( srcLableString.contains( "Finished" ) )
-                {
-                    return Display.getCurrent().getSystemColor( SWT.COLOR_BLUE );
-                }
-            }
-
-            return Display.getCurrent().getSystemColor( SWT.COLOR_BLACK );
+            LiferayUpgradeElement tableViewElement = (LiferayUpgradeElement) element;
+            return tableViewElement.getFileName();
         }
 
-        @Override
-        public StyledString getStyledText( Object element )
-        {
-            if( element instanceof LiferayUpgradeElement )
-            {
-                final String srcLableString = ( (LiferayUpgradeElement) element ).context;
-                final String elementName = ( (LiferayUpgradeElement) element ).name;
-                final StyledString styled = new StyledString( elementName );
-                return StyledCellLabelProvider.styleDecoratedString( srcLableString, GREYED_STYLER, styled );
-            }
+        protected abstract void initalizeImageRegistry( ImageRegistry imageRegistry );
 
-            return new StyledString( ( (LiferayUpgradeElement) element ).context );
+        @Override
+        public void update( ViewerCell cell )
+        {
+            super.update( cell );
+            TableItem item = (TableItem) cell.getItem();
+
+            if( oddFlag )
+            {
+                item.setBackground( new Color( tableViewer.getControl().getDisplay(), 225, 225, 225 ) );
+            }
+            else
+            {
+                item.setBackground( new Color( tableViewer.getControl().getDisplay(), 250, 253, 253 ) );
+            }
+            oddFlag = !oddFlag;
         }
     }
 
@@ -260,7 +341,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
         }
     }
 
-    protected abstract boolean isNeedUpgrade( File srcFile );
+    protected abstract boolean isNeedUpgrade( IFile srcFile );
 
     public static IPath getTempLocation( String prefix, String fileName )
     {
@@ -269,21 +350,21 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
                 ( CoreUtil.isNullOrEmpty( fileName ) ? StringPool.EMPTY : "/" + fileName ) );
     }
 
-    protected abstract void createTempFile( final File srcFile, final File templateFile, final String projectName );
+    protected abstract void createTempFile( final IFile srcFile, final File templateFile, final String projectName );
 
-    protected abstract void doUpgrade( File srcFile, IProject project );
+    protected abstract void doUpgrade( IFile srcFile, IProject project );
 
     protected abstract IFile[] getAvaiableUpgradeFiles( IProject project );
 
-    protected abstract IStyledLabelProvider getLableProvider();
+    protected abstract CellLabelProvider getLableProvider();
 
-    private IPath createPreviewerFile( final String projectName, final IPath srcFilePath, final String location )
+    private IPath createPreviewerFile( final IProject project, final IFile srcFile )
     {
-        final IPath templateLocation = getTempLocation( projectName, srcFilePath.lastSegment() );
+        final IPath templateLocation = getTempLocation( project.getName(), srcFile.getName() );
         templateLocation.toFile().getParentFile().mkdirs();
         try
         {
-            createTempFile( new File( location ), templateLocation.toFile(), projectName );
+            createTempFile( srcFile, templateLocation.toFile(), project.getName() );
         }
         catch( Exception e )
         {
@@ -296,8 +377,6 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
     private List<LiferayUpgradeElement> getInitItemsList( List<IProject> projects, IProgressMonitor monitor )
     {
         final List<LiferayUpgradeElement> tableViewElementList = new ArrayList<>();
-
-        String context = null;
 
         int count = projects.size();
 
@@ -323,19 +402,13 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
             monitor.setTaskName( "Finding needed upgrade file for " + project.getName() );
             IFile[] upgradeFiles = getAvaiableUpgradeFiles( project );
 
-            for( IFile upgradeFilePath : upgradeFiles )
+            for( IFile upgradeFile : upgradeFiles )
             {
-                IPath filePath = upgradeFilePath.getLocation();
+                IPath filePath = upgradeFile.getLocation();
 
-                if( !ValidationUtil.isProjectTargetDirFile( filePath.toFile() )  && isNeedUpgrade( filePath.toFile() ) )
+                if( !ValidationUtil.isProjectTargetDirFile( filePath.toFile() ) && isNeedUpgrade( upgradeFile ) )
                 {
-                    final String projectLocation = filePath.makeRelativeTo( project.getLocation() ).toPortableString();
-
-                    context =
-                        filePath.lastSegment() + " (" + project.getName() + " - Location: " + projectLocation + ")";
-
-                    LiferayUpgradeElement tableViewElement = new LiferayUpgradeElement(
-                        project.getName(), context, filePath.toPortableString(), filePath.lastSegment() );
+                    LiferayUpgradeElement tableViewElement = new LiferayUpgradeElement( upgradeFile, project );
 
                     tableViewElementList.add( tableViewElement );
                 }
@@ -346,7 +419,10 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
         {
             for( int j = tableViewElementList.size() - 1; j > i; j-- )
             {
-                if( tableViewElementList.get( j ).location.equals( tableViewElementList.get( i ).location ) )
+                IPath jLocation = tableViewElementList.get( j ).getFile().getLocation();
+                IPath iLocation = tableViewElementList.get( i ).getFile().getLocation();
+
+                if( jLocation.equals( iLocation ) )
                 {
                     tableViewElementList.remove( j );
                 }
@@ -385,14 +461,11 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
     {
         final LiferayUpgradeElement descriptorElement = (LiferayUpgradeElement) selection.getFirstElement();
 
-        final String projectName = descriptorElement.name;
-        final String itemName = descriptorElement.itemName;
-        final String srcFileLocation = descriptorElement.location;
-        final IPath srcFileIPath = PathBridge.create( new Path( srcFileLocation ) );
-        final IPath createPreviewerFile = createPreviewerFile( projectName, srcFileIPath, srcFileLocation );
+        final IPath createPreviewerFile =
+            createPreviewerFile( descriptorElement.getProject(), descriptorElement.getFile() );
 
-        final LiferayUpgradeCompare lifeayDescriptorUpgradeCompre =
-            new LiferayUpgradeCompare( srcFileIPath, createPreviewerFile, itemName );
+        final LiferayUpgradeCompare lifeayDescriptorUpgradeCompre = new LiferayUpgradeCompare(
+            descriptorElement.getFile().getLocation(), createPreviewerFile, descriptorElement.getFile().getName() );
 
         lifeayDescriptorUpgradeCompre.openCompareEditor();
     }
@@ -405,7 +478,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
         {
             if( CoreUtil.isLiferayProject( project ) )
             {
-                if ( !LiferayWorkspaceUtil.isValidWorkspace( project ) )
+                if( !LiferayWorkspaceUtil.isValidWorkspace( project ) )
                 {
                     if( ProjectUtil.isHookProject( project ) || ProjectUtil.isLayoutTplProject( project ) ||
                         ProjectUtil.isWebProject( project ) || ProjectUtil.isPortletProject( project ) )
@@ -427,7 +500,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
 
         try
         {
-            final WorkspaceJob workspaceJob = new WorkspaceJob( "Find needed upgrade files......")
+            final WorkspaceJob workspaceJob = new WorkspaceJob( "Find needed upgrade files......" )
             {
 
                 @Override
@@ -447,6 +520,8 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
                             String message = "ok";
 
                             tableViewer.setInput( tableViewElements );
+
+                            Stream.of( tableViewer.getTable().getColumns() ).forEach( obj -> obj.pack() );
 
                             if( tableViewElements.length < 1 )
                             {
@@ -520,22 +595,17 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
 
                         LiferayUpgradeElement tableViewElement = tableViewElements[i];
 
-                        final String srcFileLocation = tableViewElement.location;
-                        final String projectName = tableViewElement.name;
-                        final String context = tableViewElement.context;
+                        monitor.setTaskName( "Upgrading files for " + tableViewElement.getProjectName() );
 
-                        monitor.setTaskName( "Upgrading files for " + projectName );
-
-                        if( context.contains( "Finished" ) )
+                        if( tableViewElement.getUpgradeStatus() == true )
                         {
                             continue;
                         }
 
                         try
                         {
-                            IProject project = ProjectUtil.getProject( projectName );
-
-                            doUpgrade( new File( srcFileLocation ), project );
+                            IProject project = tableViewElement.getProject();
+                            doUpgrade( tableViewElement.getFile(), project );
 
                             if( project != null )
                             {
@@ -550,11 +620,13 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
                                 @Override
                                 public void run()
                                 {
-                                    tableViewElement.context = tableViewElement.context + "( Finished )";
+                                    tableViewElement.setUpgradeStatus( true );
 
                                     tableViewElements[loopNum] = tableViewElement;
 
                                     tableViewer.setInput( tableViewElements );
+
+                                    Stream.of( tableViewer.getTable().getColumns() ).forEach( obj -> obj.pack() );
 
                                     tableViewer.refresh();
                                 }
@@ -577,11 +649,11 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
     @Override
     public void onSelectionChanged( int targetSelection )
     {
-        Page selectedPage = UpgradeView.getPage(targetSelection);
-        
+        Page selectedPage = UpgradeView.getPage( targetSelection );
+
         String selectedPageId = selectedPage.getPageId();
 
-        if ( !selectedPageId.equals( getPageId() ) )
+        if( !selectedPageId.equals( getPageId() ) )
         {
             return;
         }
