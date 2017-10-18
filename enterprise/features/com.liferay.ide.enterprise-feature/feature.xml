@@ -5,6 +5,10 @@
       version="3.2.0.qualifier"
       provider-name="Liferay, Inc.">
 
+   <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
+      Liferay IDE Enterprise includes Kaleo workflow support
+   </description>
+
    <copyright url="http://www.liferay.com/products/liferay-portal/lgpl">
       /**
 * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
