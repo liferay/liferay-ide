@@ -67,6 +67,8 @@ public interface UI {
 
 	public final String APPLICATION_CLASS = "Application class:";
 
+	public final String APPLY_AND_CLOSE = "Apply and Close";
+
 	public final String ARCHETYPE = "Archetype:";
 
 	public final String AUTH_FAILURES = "Auth Failures";
@@ -640,13 +642,19 @@ public interface UI {
 
 	public final String START = "Start";
 
-	public final String START_THE_SERVER = "Start the server (Ctrl+Alt+R)";
+	public final String START_THE_SERVER_IN_DEBUG_MODE_WITH_KEY = "Start the server in debug mode (Ctrl+Alt+D)";
 
-	public final String START_THE_SERVER_IN_DEBUG_MODE = "Start the server in debug mode (Ctrl+Alt+D)";
+	public final String START_THE_SERVER_IN_DEBUG_MODE_WITH_KEY_MAC = "Start the server in debug mode (⌥⌘D)";
+
+	public final String START_THE_SERVER_WITH_KEYS = "Start the server (Ctrl+Alt+R)";
+
+	public final String START_THE_SERVER_WITH_KEYS_MAC = "Start the server (⌥⌘R)";
 
 	public final String STOP = "Stop";
 
-	public final String STOP_THE_SERVER = "Stop the server (Ctrl+Alt+S)";
+	public final String STOP_THE_SERVER_WITH_KEYS = "Stop the server (Ctrl+Alt+S)";
+
+	public final String STOP_THE_SERVER_WITH_KEYS_MAC = "Stop the server (⌥⌘S)";
 
 	public final String STRUTS_IN_ACTION = "Struts In Action";
 

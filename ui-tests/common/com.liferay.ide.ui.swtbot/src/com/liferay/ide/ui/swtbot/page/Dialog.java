@@ -46,19 +46,14 @@ public class Dialog extends CancelableShell {
 		clickBtn(confirmBtn());
 	}
 
+	public void confirm(String confirmLabel) {
+		clickBtn(new Button(bot, confirmLabel));
+	}
+
 	public Button confirmBtn() {
 		return new Button(bot, _confirmBtnLabel);
 	}
 
-	public void open() {
-		clickBtn(openBtn());
-	}
-
-	public Button openBtn() {
-		return new Button(bot, _openBtnLabel);
-	}
-
 	private String _confirmBtnLabel = OK;
-	private String _openBtnLabel = OPEN;
 
 }

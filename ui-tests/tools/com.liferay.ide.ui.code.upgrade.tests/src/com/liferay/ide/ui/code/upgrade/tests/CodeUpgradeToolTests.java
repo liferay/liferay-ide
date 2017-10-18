@@ -17,6 +17,7 @@ package com.liferay.ide.ui.code.upgrade.tests;
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.page.view.CodeUpgradeView;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -25,6 +26,7 @@ import org.junit.Test;
 public class CodeUpgradeToolTests extends SwtbotBase {
 
 	@Test
+	@Ignore
 	public void testGear()
 	{
 

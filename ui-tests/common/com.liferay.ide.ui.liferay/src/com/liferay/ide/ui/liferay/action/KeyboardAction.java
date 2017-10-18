@@ -12,34 +12,25 @@
  * details.
  */
 
-package com.liferay.ide.ui.swtbot.eclipse.page;
+package com.liferay.ide.ui.liferay.action;
 
-import com.liferay.ide.ui.swtbot.page.Dialog;
-import com.liferay.ide.ui.swtbot.page.Text;
+import com.liferay.ide.ui.liferay.UIAction;
+import com.liferay.ide.ui.swtbot.Keys;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  */
-public class TextDialog extends Dialog {
+public class KeyboardAction extends UIAction implements Keys {
 
-	public TextDialog(SWTWorkbenchBot bot, String cancelBtnLabel, String confirmBtnLabel) {
-		super(bot, cancelBtnLabel, confirmBtnLabel);
-
-		_text = new Text(bot);
-	}
-
-	public TextDialog(SWTWorkbenchBot bot) {
+	public KeyboardAction(SWTWorkbenchBot bot) {
 		super(bot);
-
-		_text = new Text(bot);
 	}
 
-	public Text getText() {
-		return _text;
+	public void pressKeysPreferencesDialogMac() {
+		keyPress.pressShortcut(SWT.COMMAND, ',');
 	}
-
-	private Text _text;
 
 }

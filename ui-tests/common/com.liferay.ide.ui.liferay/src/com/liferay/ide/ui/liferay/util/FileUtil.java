@@ -14,6 +14,8 @@
 
 package com.liferay.ide.ui.liferay.util;
 
+import com.liferay.ide.ui.swtbot.util.CoreUtil;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;

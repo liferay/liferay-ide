@@ -16,6 +16,7 @@ package com.liferay.ide.ui.swtbot.eclipse.page;
 
 import com.liferay.ide.ui.swtbot.page.Tree;
 import com.liferay.ide.ui.swtbot.page.View;
+import com.liferay.ide.ui.swtbot.util.CoreUtil;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
@@ -31,15 +32,30 @@ public class ServersView extends View {
 	}
 
 	public void clickDebugBtn() {
-		clickToolbarButton(START_THE_SERVER_IN_DEBUG_MODE);
+		if (CoreUtil.isMac()) {
+			clickToolbarButton(START_THE_SERVER_IN_DEBUG_MODE_WITH_KEY_MAC);
+		}
+		else {
+			clickToolbarButton(START_THE_SERVER_IN_DEBUG_MODE_WITH_KEY);
+		}
 	}
 
 	public void clickStartBtn() {
-		clickToolbarButton(START_THE_SERVER);
+		if (CoreUtil.isMac()) {
+			clickToolbarButton(START_THE_SERVER_WITH_KEYS_MAC);
+		}
+		else {
+			clickToolbarButton(START_THE_SERVER_WITH_KEYS);
+		}
 	}
 
 	public void clickStopBtn() {
-		clickToolbarButton(STOP_THE_SERVER);
+		if (CoreUtil.isMac()) {
+			clickToolbarButton(STOP_THE_SERVER_WITH_KEYS_MAC);
+		}
+		else {
+			clickToolbarButton(STOP_THE_SERVER_WITH_KEYS);
+		}
 	}
 
 	public Tree getServers() {

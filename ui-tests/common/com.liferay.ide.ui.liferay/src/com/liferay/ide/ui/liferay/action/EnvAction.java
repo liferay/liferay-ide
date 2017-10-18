@@ -17,10 +17,10 @@ package com.liferay.ide.ui.liferay.action;
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.liferay.util.BundleInfo;
 import com.liferay.ide.ui.liferay.util.CSVReader;
-import com.liferay.ide.ui.liferay.util.CoreUtil;
 import com.liferay.ide.ui.liferay.util.FileUtil;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
 import com.liferay.ide.ui.liferay.util.ZipUtil;
+import com.liferay.ide.ui.swtbot.util.CoreUtil;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.ui.swtbot.eclipse.page;
 
+import com.liferay.ide.ui.swtbot.page.StyledText;
 import com.liferay.ide.ui.swtbot.page.View;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -25,6 +26,14 @@ public class ConsoleView extends View {
 
 	public ConsoleView(SWTWorkbenchBot bot) {
 		super(bot, CONSOLE);
+
+		_log = new StyledText(bot);
 	}
+
+	public StyledText getLog() {
+		return _log;
+	}
+
+	private StyledText _log;
 
 }

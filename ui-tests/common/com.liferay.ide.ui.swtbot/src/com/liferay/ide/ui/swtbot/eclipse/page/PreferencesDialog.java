@@ -25,7 +25,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class PreferencesDialog extends Dialog {
 
 	public PreferencesDialog(SWTWorkbenchBot bot) {
-		super(bot);
+		super(bot, CANCEL, APPLY_AND_CLOSE);
 
 		_preferencesTypes = new Tree(bot);
 	}
