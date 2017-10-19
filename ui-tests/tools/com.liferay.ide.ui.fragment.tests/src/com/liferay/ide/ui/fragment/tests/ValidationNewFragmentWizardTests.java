@@ -20,6 +20,7 @@ import com.liferay.ide.ui.liferay.util.ValidationMsg;
 
 import java.io.File;
 
+import org.eclipse.core.runtime.Platform;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -70,6 +71,10 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 
 		for (ValidationMsg msg : envAction.getValidationMsgs(
 				new File(envAction.getValidationFolder(), "new-fragment-wizard-project-name.csv"))) {
+
+			if (!msg.getOs().equals(Platform.getOS())) {
+				continue;
+			}
 
 			_newFragmentWizard.getProjectName().setText(msg.getInput());
 

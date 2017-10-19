@@ -1,5 +1,15 @@
-..,".." is not an absolute path.
-1.*,"1.*" is not a valid path
-,Workspace location must be specified
-C://non-exist-dir,Directory doesn't exist.
-C:/Users,Invalid Liferay Workspace
+..,".." is not an absolute path.,macosx
+1.*,"1.*" is not an absolute path.,macosx
+,Workspace location must be specified,macosx
+C://non-exist-dir,"C:/non-exist-dir" is not an absolute path.,macosx
+C:/Users,"C:/Users" is not an absolute path.,macosx
+..,".." is not an absolute path.,linux
+1.*,"1.*" is not an absolute path.,linux
+,Workspace location must be specified,linux
+C://non-exist-dir,"C:/non-exist-dir" is not an absolute path.,linux
+C:/Users,"C:/Users" is not an absolute path.,linux
+..,".." is not an absolute path.,win32
+1.*,"1.*" is not a valid path,win32
+,Workspace location must be specified,win32
+C://non-exist-dir,Directory doesn't exist.,win32
+C:/Users,Invalid Liferay Workspace,win32

@@ -27,6 +27,10 @@ public class ValidationMsg {
 		return _input;
 	}
 
+	public String getOs() {
+		return _os;
+	}
+
 	public void setExpect(String expect) {
 		_expect = expect;
 	}
@@ -35,7 +39,12 @@ public class ValidationMsg {
 		_input = input;
 	}
 
+	public void setOs(String os) {
+		_os = os;
+	}
+
 	private String _expect;
 	private String _input;
+	private String _os;
 
 }
