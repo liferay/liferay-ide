@@ -22,6 +22,7 @@ import com.liferay.ide.ui.swtbot.eclipse.page.DeleteResourcesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.PackageExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ProjectExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ServersView;
+import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.Tree;
 import com.liferay.ide.ui.swtbot.page.TreeItem;
 
@@ -51,10 +52,16 @@ public class ViewAction extends UIAction {
 
 		long origin = SWTBotPreferences.TIMEOUT;
 
-		SWTBotPreferences.TIMEOUT = 3000;
+		SWTBotPreferences.TIMEOUT = 2000;
 
 		try {
 			_continueDeleteResourcesDialog.confirm();
+		}
+		catch (Exception e) {
+		}
+
+		try {
+			_dialog.confirm();
 		}
 		catch (Exception e) {
 		}
@@ -73,10 +80,16 @@ public class ViewAction extends UIAction {
 
 		long origin = SWTBotPreferences.TIMEOUT;
 
-		SWTBotPreferences.TIMEOUT = 3000;
+		SWTBotPreferences.TIMEOUT = 2000;
 
 		try {
 			_continueDeleteResourcesDialog.confirm();
+		}
+		catch (Exception e) {
+		}
+
+		try {
+			_dialog.confirm();
 		}
 		catch (Exception e) {
 		}
@@ -237,6 +250,7 @@ public class ViewAction extends UIAction {
 	}
 
 	private ConsoleView _consoleView = new ConsoleView(bot);
+	private Dialog _dialog = new Dialog(bot);
 	private DeleteResourcesContinueDialog _continueDeleteResourcesDialog = new DeleteResourcesContinueDialog(bot);
 	private DeleteResourcesDialog _deleteResourcesDialog = new DeleteResourcesDialog(bot);
 	private PackageExplorerView _packageExplorerView = new PackageExplorerView(bot);

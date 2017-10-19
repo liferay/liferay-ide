@@ -5,7 +5,7 @@
 test-liferay-workspace,Create a new liferay workspace,macosx
 ..,'..' is an invalid name on this platform.,linux
 ##,The name is invalid for a project.,linux
-*,* is an invalid character in resource name '*'.,linux
+*,The name is invalid for a project.,linux
 ,Liferay Workspace project name could not be empty.,linux
 test-liferay-workspace,Create a new liferay workspace,linux
 ..,'..' is an invalid name on this platform.,win32

@@ -80,6 +80,8 @@ public class Wizard extends CancelableShell {
 	}
 
 	public void finish() {
+		sleep();
+
 		clickBtn(finishBtn());
 
 		sleep();

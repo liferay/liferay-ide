@@ -33,6 +33,8 @@ public class Tree extends AbstractWidget {
 	}
 
 	public TreeItem expandNode(String... nodes) {
+		sleep(500);
+
 		getWidget().expandNode(nodes);
 
 		return new TreeItem(bot, this, nodes);
