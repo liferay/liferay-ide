@@ -204,7 +204,7 @@ public class EnvAction extends UIAction {
 				else if (t == 1) {
 					validationMsgs[i].setExpect(columns[t]);
 				}
-				else if (t ==2) {
+				else if (t == 2) {
 					validationMsgs[i].setOs(columns[t]);
 				}
 			}

@@ -22,6 +22,7 @@ import com.liferay.ide.ui.swtbot.util.StringPool;
 import java.io.File;
 
 import org.eclipse.core.runtime.Platform;
+
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

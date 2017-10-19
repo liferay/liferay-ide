@@ -25,8 +25,8 @@ import org.junit.Test;
  */
 public class CodeUpgradeToolTests extends SwtbotBase {
 
-	@Test
 	@Ignore
+	@Test
 	public void testGear()
 	{
 

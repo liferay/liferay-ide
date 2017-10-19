@@ -21,6 +21,7 @@ import com.liferay.ide.ui.liferay.util.ValidationMsg;
 import java.io.File;
 
 import org.eclipse.core.runtime.Platform;
+
 import org.junit.Assert;
 import org.junit.Test;
 

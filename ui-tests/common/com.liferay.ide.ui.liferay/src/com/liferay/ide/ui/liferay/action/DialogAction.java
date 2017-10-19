@@ -64,7 +64,7 @@ public class DialogAction extends UIAction {
 		try {
 			confirm();
 		}
-		catch(Exception e) {
+		catch (Exception e) {
 		}
 
 		SWTBotPreferences.TIMEOUT = origin;
@@ -99,7 +99,7 @@ public class DialogAction extends UIAction {
 		try {
 			openPreferenceTypeDialog(SERVER, RUNTIME_ENVIRONMENTS);
 		}
-		catch(Exception e) {
+		catch (Exception e) {
 		}
 
 		SWTBotPreferences.TIMEOUT = origin;

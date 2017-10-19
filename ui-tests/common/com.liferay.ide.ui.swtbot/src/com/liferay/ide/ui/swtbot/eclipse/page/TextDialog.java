@@ -24,14 +24,14 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class TextDialog extends Dialog {
 
-	public TextDialog(SWTWorkbenchBot bot, String cancelBtnLabel, String confirmBtnLabel) {
-		super(bot, cancelBtnLabel, confirmBtnLabel);
+	public TextDialog(SWTWorkbenchBot bot) {
+		super(bot);
 
 		_text = new Text(bot);
 	}
 
-	public TextDialog(SWTWorkbenchBot bot) {
-		super(bot);
+	public TextDialog(SWTWorkbenchBot bot, String cancelBtnLabel, String confirmBtnLabel) {
+		super(bot, cancelBtnLabel, confirmBtnLabel);
 
 		_text = new Text(bot);
 	}
