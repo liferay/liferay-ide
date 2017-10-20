@@ -104,13 +104,20 @@ public class EnvAction extends UIAction {
 
 	public IPath getLiferayBundlesPath() {
 		if (_liferayBundlesPath == null) {
-			if ((_liferayBundlesDir == null) || _liferayBundlesDir.equals("")) {
+			if ((_liferayBundlesDir == null) || _liferayBundlesDir.equals("") || _liferayBundlesDir.equals("null")) {
 				URL rootUrl = Platform.getBundle("com.liferay.ide.ui.liferay").getEntry("/");
 
 				try {
 					String filePath = FileLocator.toFileURL(rootUrl).getFile();
 
-					_liferayBundlesPath = new Path(filePath).removeLastSegments(3).append("tests-resources");
+					if (filePath.contains("target/work/configuration")) {
+						int index = filePath.indexOf("/ui-tests/");
+
+						_liferayBundlesPath = new Path(filePath.substring(0, index) + "/tests-resources");
+					}
+					else {
+						_liferayBundlesPath = new Path(filePath).removeLastSegments(3).append("tests-resources");
+					}
 				}
 				catch (IOException ioe) {
 				}

@@ -250,9 +250,9 @@ public class ViewAction extends UIAction {
 	}
 
 	private ConsoleView _consoleView = new ConsoleView(bot);
-	private Dialog _dialog = new Dialog(bot);
 	private DeleteResourcesContinueDialog _continueDeleteResourcesDialog = new DeleteResourcesContinueDialog(bot);
 	private DeleteResourcesDialog _deleteResourcesDialog = new DeleteResourcesDialog(bot);
+	private Dialog _dialog = new Dialog(bot);
 	private PackageExplorerView _packageExplorerView = new PackageExplorerView(bot);
 	private ProjectExplorerView _projectExplorerView = new ProjectExplorerView(bot);
 	private ServersView _serversView = new ServersView(bot);
