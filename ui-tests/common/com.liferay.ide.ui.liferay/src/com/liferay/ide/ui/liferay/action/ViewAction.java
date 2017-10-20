@@ -201,7 +201,7 @@ public class ViewAction extends UIAction {
 	}
 
 	public void serverStartWait() throws TimeoutException {
-		_serverWaitInConsole(300000, 25000, 10000, "org.apache.catalina.startup.Catalina.start Server startup in");
+		_serverWaitInConsole(300000, 25000, 10000, "Server startup in");
 	}
 
 	public void serverStop(String serverLabel) {
@@ -215,6 +215,10 @@ public class ViewAction extends UIAction {
 	public void serverStopWait() {
 		_serverWaitInConsole(
 			300000, 5000, 1000, "org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler [\"ajp-nio");
+	}
+
+	public void serverStopWait62() {
+		_serverWaitInConsole(300000, 5000, 1000, "Destroying ProtocolHandler [\"ajp-bio-");
 	}
 
 	public void showServersView() {

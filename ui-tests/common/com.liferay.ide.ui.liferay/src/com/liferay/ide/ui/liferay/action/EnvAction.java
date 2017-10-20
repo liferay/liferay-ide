@@ -136,6 +136,10 @@ public class EnvAction extends UIAction {
 		return _bundleInfos[0].getTomcatDir();
 	}
 
+	public String getLiferayPluginServerName62() {
+		return _bundleInfos[1].getTomcatDir();
+	}
+
 	public IPath getLiferayPluginsSdkDir() {
 		IPath bundlesPath = getLiferayBundlesPath().append("bundles");
 
@@ -156,16 +160,34 @@ public class EnvAction extends UIAction {
 		return bundlesPath.append(_bundleInfos[0].getBundleDir());
 	}
 
+	public IPath getLiferayServerDir62() {
+		IPath bundlesPath = getLiferayBundlesPath().append("bundles");
+
+		return bundlesPath.append(_bundleInfos[1].getBundleDir());
+	}
+
 	public IPath getLiferayServerFullDir() {
 		return getLiferayServerDir().append(getLiferayPluginServerName());
+	}
+
+	public IPath getLiferayServerFullDir62() {
+		return getLiferayServerDir62().append(getLiferayPluginServerName62());
 	}
 
 	public IPath getLiferayServerZip() {
 		return getLiferayBundlesPath().append(_bundleInfos[0].getBundleZip());
 	}
 
+	public IPath getLiferayServerZip62() {
+		return getLiferayBundlesPath().append(_bundleInfos[1].getBundleZip());
+	}
+
 	public String getLiferayServerZipFolder() {
 		return _bundleInfos[0].getBundleDir();
+	}
+
+	public String getLiferayServerZipFolder62() {
+		return _bundleInfos[1].getBundleDir();
 	}
 
 	public IPath getProjectsFolder() {
@@ -295,6 +317,25 @@ public class EnvAction extends UIAction {
 		}
 	}
 
+	public void preparePortalExtFile62() {
+		String filename = "portal-ext.properties";
+
+		IPath sourcePortalExtPath = getLiferayBundlesPath().append(filename);
+
+		File source = sourcePortalExtPath.toFile();
+
+		IPath destPortalExtPath = getLiferayServerDir62().append(filename);
+
+		File dest = destPortalExtPath.toFile();
+
+		try {
+			FileUtil.copyFile(source, dest);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void preparePortalSetupWizardFile() {
 		String filename = "portal-setup-wizard.properties";
 
@@ -399,6 +440,35 @@ public class EnvAction extends UIAction {
 		else {
 			ZipUtil.unzip(
 				liferayServerZipFile, liferayServerZipFolder, liferayServerDirFile, new NullProgressMonitor());
+		}
+	}
+
+	public void unzipServer62() throws IOException {
+		FileUtil.deleteDir(getLiferayServerDir62().toFile(), true);
+
+		File serverDir62 = getLiferayServerDir62().toFile();
+
+		Assert.assertEquals(
+			"Expected file to be not exist:" + getLiferayServerDir62().toPortableString(), false, serverDir62.exists());
+
+		File liferayServerZipFile62 = getLiferayServerZip62().toFile();
+
+		Assert.assertEquals(
+			"Expected file to exist: " + liferayServerZipFile62.getAbsolutePath(), true,
+			liferayServerZipFile62.exists());
+
+		File liferayServerDirFile62 = getLiferayServerDir62().toFile();
+
+		liferayServerDirFile62.mkdirs();
+
+		String liferayServerZipFolder62 = getLiferayServerZipFolder62();
+
+		if (CoreUtil.isNullOrEmpty(liferayServerZipFolder62)) {
+			ZipUtil.unzip(liferayServerZipFile62, liferayServerDirFile62);
+		}
+		else {
+			ZipUtil.unzip(
+				liferayServerZipFile62, liferayServerZipFolder62, liferayServerDirFile62, new NullProgressMonitor());
 		}
 	}
 

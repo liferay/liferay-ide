@@ -14,33 +14,26 @@
 
 package com.liferay.ide.ui.swtbot.eclipse.page;
 
+import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.Dialog;
-import com.liferay.ide.ui.swtbot.page.Text;
-import com.liferay.ide.ui.swtbot.page.Tree;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  */
-public class PreferencesDialog extends Dialog {
+public class PreferenceRecorderDialog extends Dialog {
 
-	public PreferencesDialog(SWTWorkbenchBot bot) {
-		super(bot, CANCEL, APPLY_AND_CLOSE);
+	public PreferenceRecorderDialog(SWTWorkbenchBot bot) {
+		super(bot);
 
-		_preferencesTypes = new Tree(bot);
-		_search = new Text(bot);
+		_recordIntoCheckBox = new CheckBox(bot, RECORD_INTO);
 	}
 
-	public Tree getPreferencesTypes() {
-		return _preferencesTypes;
+	public CheckBox getRecordIntoCheckBox() {
+		return _recordIntoCheckBox;
 	}
 
-	public Text getSearch() {
-		return _search;
-	}
-
-	private Tree _preferencesTypes;
-	private Text _search;
+	private CheckBox _recordIntoCheckBox;
 
 }

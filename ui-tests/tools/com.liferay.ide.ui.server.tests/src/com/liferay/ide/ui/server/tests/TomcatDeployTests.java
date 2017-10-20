@@ -51,7 +51,7 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		dialogAction.confirm(APPLY_AND_CLOSE);
+		dialogAction.confirmPreferences();
 
 		wizardAction.openNewLiferayServerWizard();
 
@@ -76,7 +76,7 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		dialogAction.deleteRuntimeTryConfirm(_serverName);
 
-		dialogAction.confirm(APPLY_AND_CLOSE);
+		dialogAction.confirmPreferences();
 	}
 
 	@Test

@@ -16,6 +16,7 @@ package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.swtbot.eclipse.page.AddAndRemoveDialog;
+import com.liferay.ide.ui.swtbot.eclipse.page.PreferenceRecorderDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.PreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.ServerRuntimeEnvironmentsPreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
@@ -52,6 +53,10 @@ public class DialogAction extends UIAction {
 		_dialog.confirm(confirmLabel);
 	}
 
+	public void confirmPreferences() {
+		_preferencesDialog.confirm();
+	}
+
 	public void deleteRuntimeTryConfirm(String runtimeName) {
 		_serverRuntimeEnvironmentsDialog.getRuntimes().click(runtimeName);
 
@@ -83,6 +88,12 @@ public class DialogAction extends UIAction {
 		}
 	}
 
+	public void openPreferencesRecorderDialog() {
+		_preferencesDialog.getSearch().setText(PREFERENCE_RECORDER);
+
+		_preferencesDialog.getPreferencesTypes().selectTreeItem(OOMPH, SETUP_TASKS, PREFERENCE_RECORDER);
+	}
+
 	public void openPreferenceTypeDialog(String categroy, String type) {
 		TreeItem categroyItem = _preferencesDialog.getPreferencesTypes().getTreeItem(categroy);
 
@@ -105,6 +116,10 @@ public class DialogAction extends UIAction {
 		SWTBotPreferences.TIMEOUT = origin;
 	}
 
+	public void preparePreferencesRecorder() {
+		_preferenceRecorderDialog.getRecordIntoCheckBox().deselect();
+	}
+
 	public void prepareText(String text) {
 		_textDialog.getText().setText(text);
 	}
@@ -120,6 +135,7 @@ public class DialogAction extends UIAction {
 	private AddAndRemoveDialog _addAndRemoveDialog = new AddAndRemoveDialog(bot);
 	private Dialog _dialog = new Dialog(bot);
 	private KeyboardAction _keyboradAction = new KeyboardAction(bot);
+	private PreferenceRecorderDialog _preferenceRecorderDialog = new PreferenceRecorderDialog(bot);
 	private PreferencesDialog _preferencesDialog = new PreferencesDialog(bot);
 	private ServerRuntimeEnvironmentsPreferencesDialog _serverRuntimeEnvironmentsDialog =
 		new ServerRuntimeEnvironmentsPreferencesDialog(bot);

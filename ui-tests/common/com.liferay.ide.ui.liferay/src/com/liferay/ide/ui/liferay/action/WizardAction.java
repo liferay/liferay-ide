@@ -16,6 +16,7 @@ package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.liferay.page.wizard.ImportLiferayWorkspaceProjectWizard;
+import com.liferay.ide.ui.liferay.page.wizard.NewLiferay62RuntimeWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewLiferay7RuntimeWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewLiferayComponentWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewFragmentWizard;
@@ -234,6 +235,15 @@ public class WizardAction extends UIAction {
 		prepareRuntimeType(LIFERAY_INC, LIFERAY_7_X);
 	}
 
+	public void prepareLiferay62RuntimeInfo(String name, String location) {
+		_newLiferay62RuntimeWizard.getName().setText(name);
+		_newLiferay62RuntimeWizard.getLocation().setText(location);
+	}
+
+	public void prepareLiferay62RuntimeType() {
+		prepareRuntimeType(LIFERAY_INC, LIFERAY_V_62_TOMCAT_7);
+	}
+
 	public void prepareLiferayModule(String projectName) {
 		_newModuleWizard.getProjectName().setText(projectName);
 	}
@@ -336,6 +346,16 @@ public class WizardAction extends UIAction {
 		_newServerWizard.getServerName().setText(serverName);
 	}
 
+	public void prepareNewServer62(String serverName) {
+		_newServerWizard.getServerName().setText(serverName);
+
+		TreeItem categoryTreeItem = _newServerWizard.getServerTypes().getTreeItem(LIFERAY_INC);
+
+		TreeItem treeTreeItem = categoryTreeItem.getTreeItem(LIFERAY_V_62_SERVER_TOMCAT_7);
+
+		treeTreeItem.select();
+	}
+
 	public void prepareRuntimeType(String category, String type) {
 		TreeItem categoryTreeItem = _newRuntimeWizard.getServerTypes().getTreeItem(category);
 
@@ -351,6 +371,7 @@ public class WizardAction extends UIAction {
 	private NewFragmentWizard _newFragmentWizard = new NewFragmentWizard(bot);
 	private NewLiferayJsfProjectWizard _newJsfProjectWizard = new NewLiferayJsfProjectWizard(bot);
 	private NewLiferay7RuntimeWizard _newLiferay7RuntimeWizard = new NewLiferay7RuntimeWizard(bot);
+	private NewLiferay62RuntimeWizard _newLiferay62RuntimeWizard = new NewLiferay62RuntimeWizard(bot);
 	private NewLiferayComponentWizard _newLiferayComponentWizard = new NewLiferayComponentWizard(bot);
 	private NewLiferayModuleInfoWizard _newModuleInfoWizard = new NewLiferayModuleInfoWizard(bot);
 	private NewLiferayModuleWizard _newModuleWizard = new NewLiferayModuleWizard(bot);

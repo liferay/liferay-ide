@@ -63,7 +63,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		dialogAction.confirm(APPLY_AND_CLOSE);
+		dialogAction.confirmPreferences();
 
 		wizardAction.openNewLiferayServerWizard();
 
@@ -83,7 +83,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		viewAction.openLiferayPortalHome(serverStartedLabel);
 
-		sleep(20000);
+		sleep(10000);
 
 		viewAction.serverStop(serverStartedLabel);
 
@@ -93,7 +93,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		dialogAction.deleteRuntimeTryConfirm(serverName);
 
-		dialogAction.confirm(APPLY_AND_CLOSE);
+		dialogAction.confirmPreferences();
 	}
 
 	@Test
@@ -112,13 +112,13 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		dialogAction.confirm(APPLY_AND_CLOSE);
+		dialogAction.confirmPreferences();
 
 		dialogAction.openPreferencesDialog();
 
 		dialogAction.deleteRuntimeTryConfirm(runtimeName);
 
-		dialogAction.confirm(APPLY_AND_CLOSE);
+		dialogAction.confirmPreferences();
 	}
 
 	@Test
@@ -137,7 +137,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		dialogAction.confirm(APPLY_AND_CLOSE);
+		dialogAction.confirmPreferences();
 
 		wizardAction.openNewLiferayServerWizard();
 
@@ -151,7 +151,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		dialogAction.deleteRuntimeTryConfirm(runtimeName);
 
-		dialogAction.confirm(APPLY_AND_CLOSE);
+		dialogAction.confirmPreferences();
 	}
 
 	@Test
@@ -170,7 +170,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		dialogAction.confirm(APPLY_AND_CLOSE);
+		dialogAction.confirmPreferences();
 
 		wizardAction.openNewLiferayServerWizard();
 
@@ -222,7 +222,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		dialogAction.deleteRuntimeTryConfirm(serverName);
 
-		dialogAction.confirm(APPLY_AND_CLOSE);
+		dialogAction.confirmPreferences();
 	}
 
 	@Test
@@ -241,7 +241,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		dialogAction.confirm(APPLY_AND_CLOSE);
+		dialogAction.confirmPreferences();
 
 		wizardAction.openNewLiferayServerWizard();
 
@@ -303,7 +303,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		dialogAction.deleteRuntimeTryConfirm(serverName);
 
-		dialogAction.confirm(APPLY_AND_CLOSE);
+		dialogAction.confirmPreferences();
 	}
 
 	@Ignore("To wait for IDE-3343")
@@ -323,7 +323,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		dialogAction.confirm(APPLY_AND_CLOSE);
+		dialogAction.confirmPreferences();
 
 		wizardAction.openNewLiferayServerWizard();
 
@@ -382,7 +382,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		dialogAction.confirm(APPLY_AND_CLOSE);
+		dialogAction.confirmPreferences();
 
 		wizardAction.openNewLiferayServerWizard();
 
@@ -450,7 +450,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		dialogAction.confirm(APPLY_AND_CLOSE);
+		dialogAction.confirmPreferences();
 
 		wizardAction.openNewLiferayServerWizard();
 
@@ -476,7 +476,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		dialogAction.deleteRuntimeTryConfirm(serverName);
 
-		dialogAction.confirm(APPLY_AND_CLOSE);
+		dialogAction.confirmPreferences();
 	}
 
 }

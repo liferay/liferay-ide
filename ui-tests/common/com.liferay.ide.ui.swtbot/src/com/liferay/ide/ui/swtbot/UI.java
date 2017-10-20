@@ -365,6 +365,12 @@ public interface UI {
 
 	public final String LIFERAY_SERVICE_BUILDER = "Liferay Service Builder";
 
+	public final String LIFERAY_TOMCAT_DIRECTORY = "Liferay Tomcat directory";
+
+	public final String LIFERAY_V_62_SERVER_TOMCAT_7 = "Liferay v6.2 Server (Tomcat 7)";
+
+	public final String LIFERAY_V_62_TOMCAT_7 = "Liferay v6.2 (Tomcat 7)";
+
 	public final String LIFERAY_VAADIN_PORTLET = "Liferay Vaadin Portlet";
 
 	public final String LIFERAY_WORKSPACE = "Liferay Workspace";
@@ -454,6 +460,8 @@ public interface UI {
 
 	public final String OK = "OK";
 
+	public final String OOMPH = "Oomph";
+
 	public final String OPEN = "Open";
 
 	public final String OPEN_LIFERAY_HOME_FOLDER = "Open Liferay Home Folder";
@@ -508,6 +516,8 @@ public interface UI {
 
 	public final String PORTLET_UPCASE = "Portlet";
 
+	public final String PREFERENCE_RECORDER = "Preference Recorder";
+
 	public final String PREFERENCES = "Preferences";
 
 	public final String PREVIEW = "Preview";
@@ -533,6 +543,8 @@ public interface UI {
 	public final String PROPERTY = "Property:";
 
 	public final String PUBLIC = "public";
+
+	public final String RECORD_INTO = "Record into:";
 
 	public final String REFRESH = "Refresh";
 
@@ -621,6 +633,8 @@ public interface UI {
 	public final String SERVICE_XML = "service.xml";
 
 	public final String SERVICES = "Services";
+
+	public final String SETUP_TASKS = "Setup Tasks";
 
 	public final String SHOW_ALL_PAGES = "Show All Pages";
 
