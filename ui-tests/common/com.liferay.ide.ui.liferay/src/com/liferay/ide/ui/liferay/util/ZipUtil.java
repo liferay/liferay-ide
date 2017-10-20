@@ -14,6 +14,8 @@
 
 package com.liferay.ide.ui.liferay.util;
 
+import com.liferay.ide.ui.swtbot.util.StringPool;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
@@ -29,8 +31,6 @@ import java.util.zip.ZipOutputStream;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.osgi.util.NLS;
-
-import com.liferay.ide.ui.swtbot.util.StringPool;
 
 /**
  * @author Greg Amerson
@@ -143,16 +143,13 @@ public class ZipUtil {
 					String msg = "Could not create dir: " + dir.getPath();
 
 					throw new IOException(msg);
-				}
+                }
 
-				InputStream in = null;
-				OutputStream out = null;
+                try(InputStream in = zip.getInputStream( entry );
+                                OutputStream out = Files.newOutputStream( f.toPath() );)
+                {
 
-				try {
-					in = zip.getInputStream(entry);
-					out = Files.newOutputStream(f.toPath());
-
-					byte[] bytes = new byte[1024];
+                    byte[] bytes = new byte[1024];
 
 					int count = in.read(bytes);
 
@@ -162,23 +159,6 @@ public class ZipUtil {
 					}
 
 					out.flush();
-				}
-				finally {
-					if (in != null) {
-						try {
-							in.close();
-						}
-						catch (IOException ioe) {
-						}
-					}
-
-					if (out != null) {
-						try {
-							out.close();
-						}
-						catch (IOException ioe) {
-						}
-					}
 				}
 			}
 		}
@@ -243,9 +223,8 @@ public class ZipUtil {
 
 			zip.putNextEntry(ze);
 
-			InputStream in = Files.newInputStream(file.toPath());
-
-			try {
+            try(InputStream in = Files.newInputStream( file.toPath() ))
+            {
 				int bufsize = 8 * 1024;
 				long flength = file.length();
 
@@ -263,13 +242,6 @@ public class ZipUtil {
 				while (count != -1) {
 					zip.write(buffer, 0, count);
 					count = in.read(buffer);
-				}
-			}
-			finally {
-				try {
-					in.close();
-				}
-				catch (IOException ioe) {
 				}
 			}
 		}

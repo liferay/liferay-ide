@@ -15,6 +15,14 @@
 
 package com.liferay.ide.project.ui.upgrade;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.upgrade.CodeUpgradeOp;
+import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.ui.dialog.CustomProjectSelectionDialog;
+import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.util.UIUtil;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -75,14 +83,6 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE.SharedImages;
 import org.eclipse.wst.server.core.IRuntime;
-
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.upgrade.CodeUpgradeOp;
-import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.project.ui.dialog.CustomProjectSelectionDialog;
-import com.liferay.ide.server.util.ServerUtil;
-import com.liferay.ide.ui.util.SWTUtil;
-import com.liferay.ide.ui.util.UIUtil;
 
 /**
  * @author Andy Wu

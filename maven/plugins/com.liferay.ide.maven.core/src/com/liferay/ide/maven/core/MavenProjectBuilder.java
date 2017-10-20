@@ -14,6 +14,12 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.LaunchHelper;
+import com.liferay.ide.project.core.AbstractProjectBuilder;
+import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
+
 import java.io.File;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -54,12 +60,6 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.osgi.util.NLS;
-
-import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.LaunchHelper;
-import com.liferay.ide.project.core.AbstractProjectBuilder;
-import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 
 
 /**

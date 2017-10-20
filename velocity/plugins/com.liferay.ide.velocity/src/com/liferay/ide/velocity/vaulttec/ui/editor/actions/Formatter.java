@@ -1,5 +1,15 @@
 package com.liferay.ide.velocity.vaulttec.ui.editor.actions;
 
+import com.liferay.ide.velocity.editor.EditorsUtil;
+import com.liferay.ide.velocity.editor.compare.VelocityCompare;
+import com.liferay.ide.velocity.editor.compare.VelocityInput;
+import com.liferay.ide.velocity.scanner.VelocityPartitionScanner;
+import com.liferay.ide.velocity.ui.editor.xml.IEditorConfiguration;
+import com.liferay.ide.velocity.ui.editor.xml.VelocityAutoIndentStrategy;
+import com.liferay.ide.velocity.vaulttec.ui.VelocityPlugin;
+import com.liferay.ide.velocity.vaulttec.ui.editor.VelocityConfiguration;
+import com.liferay.ide.velocity.vaulttec.ui.model.Directive;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -33,16 +43,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Shell;
-
-import com.liferay.ide.velocity.editor.EditorsUtil;
-import com.liferay.ide.velocity.editor.compare.VelocityCompare;
-import com.liferay.ide.velocity.editor.compare.VelocityInput;
-import com.liferay.ide.velocity.scanner.VelocityPartitionScanner;
-import com.liferay.ide.velocity.ui.editor.xml.IEditorConfiguration;
-import com.liferay.ide.velocity.ui.editor.xml.VelocityAutoIndentStrategy;
-import com.liferay.ide.velocity.vaulttec.ui.VelocityPlugin;
-import com.liferay.ide.velocity.vaulttec.ui.editor.VelocityConfiguration;
-import com.liferay.ide.velocity.vaulttec.ui.model.Directive;
 
 
 public class Formatter

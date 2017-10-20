@@ -29,7 +29,6 @@ import com.liferay.ide.gradle.core.LiferayGradleProject;
 import com.liferay.ide.project.core.workspace.ImportLiferayWorkspaceOp;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.nio.file.Files;
 
 import org.eclipse.core.resources.IFolder;

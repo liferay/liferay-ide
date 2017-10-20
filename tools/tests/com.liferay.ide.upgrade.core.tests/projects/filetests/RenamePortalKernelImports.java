@@ -1,12 +1,12 @@
 package com.test;
 
-import java.nio.file.Files;
-
 import com.liferay.portal.model.Role;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.portlet.asset.model.BaseAssetRenderer;
+
+import java.nio.file.Files;
 
 public class Test extends MVCPortlet {
 	

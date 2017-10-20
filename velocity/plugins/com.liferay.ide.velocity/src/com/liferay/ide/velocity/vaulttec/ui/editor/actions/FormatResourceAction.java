@@ -1,5 +1,8 @@
 package com.liferay.ide.velocity.vaulttec.ui.editor.actions;
 
+import com.liferay.ide.velocity.editor.VelocityEditor;
+import com.liferay.ide.velocity.vaulttec.ui.VelocityPlugin;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -30,9 +33,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
-
-import com.liferay.ide.velocity.editor.VelocityEditor;
-import com.liferay.ide.velocity.vaulttec.ui.VelocityPlugin;
 
 
 /**

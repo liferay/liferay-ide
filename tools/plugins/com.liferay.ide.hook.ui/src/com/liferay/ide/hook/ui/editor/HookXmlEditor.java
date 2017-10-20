@@ -30,7 +30,6 @@ import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.ui.util.UIUtil;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;

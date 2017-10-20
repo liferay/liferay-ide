@@ -14,6 +14,14 @@
  *******************************************************************************/
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileListing;
+import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.util.LiferayPortalValueLoader;
+import com.liferay.ide.server.util.ServerUtil;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,14 +46,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileListing;
-import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.util.LiferayPortalValueLoader;
-import com.liferay.ide.server.util.ServerUtil;
 
 /**
  * @author Simon Jiang

@@ -315,7 +315,7 @@ public class CustomJspConverter
 
         String customJspPath = null;
 
-        try
+        try(InputStream input = Files.newInputStream( hookFile.toPath() ))
         {
             DocumentBuilder domBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
@@ -329,7 +329,6 @@ public class CustomJspConverter
                 }
             } );
 
-            InputStream input = Files.newInputStream( hookFile.toPath() );
             Document doc = domBuilder.parse( input );
             Element root = doc.getDocumentElement();
             NodeList nodeList = root.getChildNodes();
@@ -343,7 +342,6 @@ public class CustomJspConverter
                 }
             }
 
-            input.close();
         }
         catch( Exception e )
         {

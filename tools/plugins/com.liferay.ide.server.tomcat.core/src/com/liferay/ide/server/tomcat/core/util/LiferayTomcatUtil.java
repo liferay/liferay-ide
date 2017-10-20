@@ -15,6 +15,23 @@
 
 package com.liferay.ide.server.tomcat.core.util;
 
+import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileListing;
+import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.core.IPluginPublisher;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.tomcat.core.ILiferayTomcatConstants;
+import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
+import com.liferay.ide.server.tomcat.core.ILiferayTomcatServer;
+import com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin;
+import com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime70;
+import com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior;
+import com.liferay.ide.server.util.LiferayPortalValueLoader;
+import com.liferay.ide.server.util.ServerUtil;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -50,23 +67,6 @@ import org.eclipse.wst.server.core.IServerListener;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.ServerEvent;
 import org.osgi.framework.Version;
-
-import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileListing;
-import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.core.IPluginPublisher;
-import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.tomcat.core.ILiferayTomcatConstants;
-import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
-import com.liferay.ide.server.tomcat.core.ILiferayTomcatServer;
-import com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin;
-import com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime70;
-import com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior;
-import com.liferay.ide.server.util.LiferayPortalValueLoader;
-import com.liferay.ide.server.util.ServerUtil;
 
 /**
  * @author Greg Amerson
@@ -429,11 +429,10 @@ public class LiferayTomcatUtil
 
         if( configInfoFile.exists() )
         {
-            try
-            {
-                InputStream fileInput = Files.newInputStream( configInfoFile.toPath() );
+            try(InputStream fileInput = Files.newInputStream( configInfoFile.toPath() ))
+            { 
                 properties.load( fileInput );
-                fileInput.close();
+
                 String configInfo = (String) properties.get( portalDirKey );
 
                 if( !CoreUtil.isNullOrEmpty( configInfo ) )
@@ -588,16 +587,14 @@ public class LiferayTomcatUtil
 
     public static Context loadContextFile( File contextFile )
     {
-        InputStream fis = null;
         Context context = null;
 
         if( contextFile != null && contextFile.exists() )
         {
-            try
+            try(InputStream fis = Files.newInputStream( contextFile.toPath() ))
             {
                 Factory factory = new Factory();
                 factory.setPackageName( "org.eclipse.jst.server.tomcat.core.internal.xml.server40" ); //$NON-NLS-1$
-                fis = Files.newInputStream( contextFile.toPath() );
                 context = (Context) factory.loadDocument( fis );
                 if( context != null )
                 {
@@ -616,17 +613,6 @@ public class LiferayTomcatUtil
             catch( Exception e )
             {
                 // may be a spurious xml file in the host dir?
-            }
-            finally
-            {
-                try
-                {
-                    fis.close();
-                }
-                catch( IOException e )
-                {
-                    // ignore
-                }
             }
         }
         return context;
@@ -696,11 +682,9 @@ public class LiferayTomcatUtil
                 String portalDirKey = CoreUtil.createStringDigest( portalDir.toPortableString() );
                 Properties properties = new Properties();
 
-                try
-                {
-                    InputStream fileInput = Files.newInputStream( versionInfoFile.toPath() );
+                try(InputStream fileInput = Files.newInputStream( versionInfoFile.toPath() ))
+                {   
                     properties.load( fileInput );
-                    fileInput.close();
                 }
                 catch( FileNotFoundException e )
                 {
@@ -713,11 +697,9 @@ public class LiferayTomcatUtil
 
                 properties.put( portalDirKey, configInfo );
 
-                try
-                {
-                    OutputStream fileOutput = Files.newOutputStream( versionInfoFile.toPath() );
+                try(OutputStream fileOutput = Files.newOutputStream( versionInfoFile.toPath() ))
+                {      
                     properties.store( fileOutput, StringPool.EMPTY );
-                    fileOutput.close();
                 }
                 catch( Exception e )
                 {
