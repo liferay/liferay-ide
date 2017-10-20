@@ -195,10 +195,8 @@ public class CleanAppServerAction extends AbstractObjectAction
         {
             String rootEntryName = null;
 
-            try
+            try(ZipInputStream zis = new ZipInputStream( Files.newInputStream( Paths.get( bundleZipLocation ) ) ))
             {
-                ZipInputStream zis = new ZipInputStream( Files.newInputStream( Paths.get( bundleZipLocation ) ) );
-
                 ZipEntry rootEntry = zis.getNextEntry();
                 rootEntryName = new Path( rootEntry.getName() ).segment( 0 );
 
@@ -226,8 +224,6 @@ public class CleanAppServerAction extends AbstractObjectAction
 
                     entry = zis.getNextEntry();
                 };
-
-                zis.close();
             }
             catch( Exception e )
             {

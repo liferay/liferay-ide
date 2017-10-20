@@ -188,42 +188,22 @@ public final class ZipUtil {
 
                 mkdir( dir );
 
-                InputStream in = null;
-                OutputStream out = null;
-
-                try {
-                    in = zip.getInputStream(entry);
-                    out = Files.newOutputStream(f.toPath());
-
+                try(InputStream in = zip.getInputStream( entry );
+                                OutputStream out = Files.newOutputStream( f.toPath() );)
+                {
                     final byte[] bytes = new byte[1024];
-                    int count = in.read(bytes);
+                    int count = in.read( bytes );
 
-                    while (count != -1) {
-                        out.write(bytes, 0, count);
-                        count = in.read(bytes);
+                    while( count != -1 )
+                    {
+                        out.write( bytes, 0, count );
+                        count = in.read( bytes );
                     }
 
                     out.flush();
                 }
-                finally {
-                    if (in != null) {
-                        try {
-                            in.close();
-                        }
-                        catch (IOException e) {
-                        }
-                    }
-
-                    if (out != null) {
-                        try {
-                            out.close();
-                        }
-                        catch (IOException e) {
-                        }
-                    }
-                }
             }
-	    }
+        }
 	    finally
 	    {
             try

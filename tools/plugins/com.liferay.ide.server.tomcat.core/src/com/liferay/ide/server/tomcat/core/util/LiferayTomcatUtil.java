@@ -429,11 +429,10 @@ public class LiferayTomcatUtil
 
         if( configInfoFile.exists() )
         {
-            try
-            {
-                InputStream fileInput = Files.newInputStream( configInfoFile.toPath() );
+            try(InputStream fileInput = Files.newInputStream( configInfoFile.toPath() ))
+            { 
                 properties.load( fileInput );
-                fileInput.close();
+
                 String configInfo = (String) properties.get( portalDirKey );
 
                 if( !CoreUtil.isNullOrEmpty( configInfo ) )
@@ -588,16 +587,14 @@ public class LiferayTomcatUtil
 
     public static Context loadContextFile( File contextFile )
     {
-        InputStream fis = null;
         Context context = null;
 
         if( contextFile != null && contextFile.exists() )
         {
-            try
+            try(InputStream fis = Files.newInputStream( contextFile.toPath() ))
             {
                 Factory factory = new Factory();
                 factory.setPackageName( "org.eclipse.jst.server.tomcat.core.internal.xml.server40" ); //$NON-NLS-1$
-                fis = Files.newInputStream( contextFile.toPath() );
                 context = (Context) factory.loadDocument( fis );
                 if( context != null )
                 {
@@ -616,17 +613,6 @@ public class LiferayTomcatUtil
             catch( Exception e )
             {
                 // may be a spurious xml file in the host dir?
-            }
-            finally
-            {
-                try
-                {
-                    fis.close();
-                }
-                catch( IOException e )
-                {
-                    // ignore
-                }
             }
         }
         return context;
@@ -696,11 +682,9 @@ public class LiferayTomcatUtil
                 String portalDirKey = CoreUtil.createStringDigest( portalDir.toPortableString() );
                 Properties properties = new Properties();
 
-                try
-                {
-                    InputStream fileInput = Files.newInputStream( versionInfoFile.toPath() );
+                try(InputStream fileInput = Files.newInputStream( versionInfoFile.toPath() ))
+                {   
                     properties.load( fileInput );
-                    fileInput.close();
                 }
                 catch( FileNotFoundException e )
                 {
@@ -713,11 +697,9 @@ public class LiferayTomcatUtil
 
                 properties.put( portalDirKey, configInfo );
 
-                try
-                {
-                    OutputStream fileOutput = Files.newOutputStream( versionInfoFile.toPath() );
+                try(OutputStream fileOutput = Files.newOutputStream( versionInfoFile.toPath() ))
+                {      
                     properties.store( fileOutput, StringPool.EMPTY );
-                    fileOutput.close();
                 }
                 catch( Exception e )
                 {
