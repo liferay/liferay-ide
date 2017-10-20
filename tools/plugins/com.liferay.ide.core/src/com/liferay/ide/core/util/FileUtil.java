@@ -86,10 +86,8 @@ public class FileUtil
     {
         final IFile iFile = folder.getFile( file.getName() );
 
-        try
+        try( final InputStream input = Files.newInputStream( file.toPath() ) )
         {
-            final InputStream input = Files.newInputStream( file.toPath() );
-
             if( iFile.exists() )
             {
                 iFile.setContents( input, true, true, monitor );
@@ -98,8 +96,6 @@ public class FileUtil
             {
                 iFile.create( input, true, monitor );
             }
-
-            input.close();
         }
         catch( Exception e )
         {
@@ -117,14 +113,9 @@ public class FileUtil
 
         byte[] buf = new byte[4096];
 
-        OutputStream out = null;
-        InputStream in = null;
-
-        try
+        try( OutputStream out = Files.newOutputStream( dest.toPath() );
+               InputStream in = Files.newInputStream( src.toPath() ) )
         {
-            out = Files.newOutputStream( dest.toPath() );
-            in = Files.newInputStream( src.toPath() );
-
             int avail = in.read( buf );
             while( avail > 0 )
             {
@@ -135,27 +126,6 @@ public class FileUtil
         catch( Exception e )
         {
             LiferayCore.logError( "Unable to copy file " + src.getName() + " to " + dest.getAbsolutePath(), e );
-        }
-        finally
-        {
-            try
-            {
-                if( in != null )
-                    in.close();
-            }
-            catch( Exception ex )
-            {
-                // ignore
-            }
-            try
-            {
-                if( out != null )
-                    out.close();
-            }
-            catch( Exception ex )
-            {
-                // ignore
-            }
         }
     }
 
@@ -631,12 +601,9 @@ public class FileUtil
             }
 
             final byte[] buffer = new byte[1024];
-            OutputStream out = null;
 
-            try
+            try( OutputStream out = Files.newOutputStream( f.toPath() ) )
             {
-                out = Files.newOutputStream( f.toPath() );
-
                 for( int count; ( count = contents.read( buffer ) ) != -1; )
                 {
                     out.write( buffer, 0, count );
@@ -649,19 +616,6 @@ public class FileUtil
                 final String msg = NLS.bind( Msgs.failedWhileWriting, f.getAbsolutePath() );
 
                 throw new CoreException( LiferayCore.createErrorStatus( msg, e ) );
-            }
-            finally
-            {
-                if( out != null )
-                {
-                    try
-                    {
-                        out.close();
-                    }
-                    catch( IOException e )
-                    {
-                    }
-                }
             }
         }
     }

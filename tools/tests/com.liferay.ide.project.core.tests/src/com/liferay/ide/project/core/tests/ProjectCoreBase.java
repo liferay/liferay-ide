@@ -485,7 +485,7 @@ public class ProjectCoreBase extends ServerCoreBase
         String userName = System.getProperty( "user.name" ); //$NON-NLS-1$
         File userBuildFile = loc.append( "build." + userName + ".properties" ).toFile(); //$NON-NLS-1$ //$NON-NLS-2$
 
-        try ( OutputStream fileOutput = Files.newOutputStream( userBuildFile.toPath() ) )
+        try(OutputStream fileOutput = Files.newOutputStream( userBuildFile.toPath() ))
         {
             if( userBuildFile.exists() )
             {

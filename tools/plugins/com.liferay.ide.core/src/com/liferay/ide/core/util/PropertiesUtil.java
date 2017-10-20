@@ -1003,7 +1003,7 @@ public class PropertiesUtil
     {
         final Properties p = new Properties();
 
-        try( InputStream stream = Files.newInputStream(f.toPath()) )
+        try(InputStream stream = Files.newInputStream( f.toPath() ))
         {
             p.load( stream );
 
@@ -1017,7 +1017,7 @@ public class PropertiesUtil
 
     public static void saveProperties( Properties props, File resultFile )
     {
-        try(OutputStream fos = Files.newOutputStream( resultFile.toPath() );)
+        try(OutputStream fos = Files.newOutputStream( resultFile.toPath() ))
         {
             props.store( fos, "" );
         }

@@ -93,10 +93,9 @@ public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaF
 		}
 
 		if (importsToRewrite.size() > 0) {
-			try {
-				InputStream inputStream = Files.newInputStream(file.toPath());
-				String[] lines = readLines(inputStream);
-				inputStream.close();
+            try(InputStream inputStream = Files.newInputStream( file.toPath() ))
+            {
+                String[] lines = readLines( inputStream );				
 
 				String[] editedLines = new String[lines.length];
 				System.arraycopy(lines, 0, editedLines, 0, lines.length);
