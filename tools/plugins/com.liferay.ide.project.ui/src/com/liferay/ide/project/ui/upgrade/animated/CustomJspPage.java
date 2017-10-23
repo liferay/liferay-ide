@@ -55,9 +55,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
@@ -65,7 +67,7 @@ import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.Listener;
@@ -202,6 +204,46 @@ public class CustomJspPage extends Page
                 }
 
                 fos = null;
+            }
+        }
+    }
+
+    class DoubleClickExpandListener implements IDoubleClickListener
+    {
+
+        private TreeViewer treeViewer;
+
+        public DoubleClickExpandListener( TreeViewer treeViewer )
+        {
+            this.treeViewer = treeViewer;
+        }
+
+        @Override
+        public void doubleClick( DoubleClickEvent event )
+        {
+            final IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+
+            if( selection == null || selection.isEmpty() )
+            {
+                return;
+            }
+
+            final Object obj = selection.getFirstElement();
+
+            final ITreeContentProvider provider = (ITreeContentProvider) treeViewer.getContentProvider();
+
+            if( !provider.hasChildren( obj ) )
+            {
+                return;
+            }
+
+            if( treeViewer.getExpandedState( obj ) )
+            {
+                treeViewer.collapseToLevel( obj, AbstractTreeViewer.ALL_LEVELS );
+            }
+            else
+            {
+                treeViewer.expandToLevel( obj, 1 );
             }
         }
     }
@@ -739,6 +781,8 @@ public class CustomJspPage extends Page
         leftTreeViewer.setContentProvider( new ViewContentProvider() );
         leftTreeViewer.setLabelProvider( new LeftViewLabelProvider() );
 
+        leftTreeViewer.addDoubleClickListener( new DoubleClickExpandListener( leftTreeViewer ) );
+
         leftTreeViewer.addDoubleClickListener( new IDoubleClickListener()
         {
 
@@ -746,6 +790,7 @@ public class CustomJspPage extends Page
             public void doubleClick( DoubleClickEvent event )
             {
                 ISelection selection = event.getSelection();
+
                 File file = (File) ( (ITreeSelection) selection ).getFirstElement();
 
                 if( file.isDirectory() )
@@ -768,7 +813,7 @@ public class CustomJspPage extends Page
             }
         } );
 
-        leftTreeViewer.setSorter( new ViewerSorter()
+        leftTreeViewer.setComparator( new ViewerComparator()
         {
 
             @Override
@@ -816,6 +861,8 @@ public class CustomJspPage extends Page
         rightTreeViewer.setContentProvider( new ViewContentProvider() );
         rightTreeViewer.setLabelProvider( new RightViewLabelProvider() );
 
+        rightTreeViewer.addDoubleClickListener( new DoubleClickExpandListener( rightTreeViewer ) );
+
         rightTreeViewer.addDoubleClickListener( new IDoubleClickListener()
         {
 
@@ -844,7 +891,7 @@ public class CustomJspPage extends Page
             }
         } );
 
-        rightTreeViewer.setSorter( new ViewerSorter()
+        rightTreeViewer.setComparator( new ViewerComparator()
         {
 
             @Override
@@ -1247,10 +1294,12 @@ public class CustomJspPage extends Page
         }
 
         String[] sourcePaths = new String[size];
+        String[] projectNames = new String[size];
 
         for( int i = 0; i < size; i++ )
         {
             sourcePaths[i] = hookProjects.get( i ).getLocation().toOSString();
+            projectNames[i] = hookProjects.get( i ).getName();
         }
 
         CustomJspConverter converter = new CustomJspConverter();
@@ -1288,7 +1337,7 @@ public class CustomJspPage extends Page
             isLiferayWorkapce = true;
         }
 
-        converter.doExecute( sourcePaths, targetPath, isLiferayWorkapce );
+        converter.doExecute( sourcePaths, projectNames, targetPath, isLiferayWorkapce );
     }
 
     public void createSpecialDescriptor( Composite parent, int style )
