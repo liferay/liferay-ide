@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 
 public class Main
 {
@@ -19,18 +20,12 @@ public class Main
 
     public static void copyFile(File source, File dest)
     {
-        try
-        {
-            FileChannel in = new FileInputStream(source).getChannel();
-            if (!dest.getParentFile().exists()) dest.getParentFile().mkdirs();
-            FileChannel out = new FileOutputStream(dest).getChannel();
-            in.transferTo(0, in.size(), out);
-            in.close();
-            out.close();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+    	try {
+    		if (!dest.getParentFile().exists()) dest.getParentFile().mkdirs();
+			Files.copy(source.toPath(), dest.toPath());
+		} catch (IOException e1) {
+
+			e1.printStackTrace();
+		}
     }
 }

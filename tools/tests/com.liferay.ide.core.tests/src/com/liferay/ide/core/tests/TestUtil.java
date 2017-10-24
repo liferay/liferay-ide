@@ -19,11 +19,10 @@ import com.liferay.ide.core.util.FileUtil;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.file.Files;
 
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -88,8 +87,8 @@ public class TestUtil
 
     private static void copyFile( File src, File dst ) throws IOException
     {
-        BufferedInputStream in = new BufferedInputStream( new FileInputStream( src ) );
-        BufferedOutputStream out = new BufferedOutputStream( new FileOutputStream( dst ) );
+        BufferedInputStream in = new BufferedInputStream( Files.newInputStream( src.toPath() ) );
+        BufferedOutputStream out = new BufferedOutputStream( Files.newOutputStream( dst.toPath() ) );
 
         byte[] buf = new byte[10240];
         int len;

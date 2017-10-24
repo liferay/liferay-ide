@@ -91,10 +91,9 @@ import com.liferay.portlet.dynamicdatalists.util.DDLUtil;
 import java.awt.image.RenderedImage;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
+import java.nio.file.Files;
 import java.text.Format;
 
 import java.util.ArrayList;
@@ -925,7 +924,7 @@ public class WebServerServlet extends HttpServlet {
 				if (convertedFile != null) {
 					fileName = FileUtil.stripExtension(fileName).concat(
 						StringPool.PERIOD).concat(targetExtension);
-					inputStream = new FileInputStream(convertedFile);
+					inputStream = Files.newInputStream(convertedFile.toPath());
 					contentLength = convertedFile.length();
 
 					converted = true;

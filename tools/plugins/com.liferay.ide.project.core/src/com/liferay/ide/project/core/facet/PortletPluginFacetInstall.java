@@ -78,7 +78,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
             {
                 try
                 {
-                    tldFile.create( new FileInputStream( portletTld.toFile() ), true, null );
+                    tldFile.create( Files.newInputStream( portletTld.toFile().toPath() ), true, null );
                 }
                 catch( FileNotFoundException e )
                 {

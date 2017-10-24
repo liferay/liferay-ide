@@ -19,11 +19,10 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.IPath;
@@ -70,7 +69,7 @@ public class UpgradeSettingsUtil
         {
             codeUpgradeProperties = new Properties();
 
-            try(InputStream in = new FileInputStream( codeUpgradeFile ))
+            try( InputStream in = Files.newInputStream( codeUpgradeFile.toPath() ) )
             {
                 codeUpgradeProperties.load( in );
             }
@@ -126,7 +125,7 @@ public class UpgradeSettingsUtil
             codeUpgradeProperties.setProperty( String.valueOf( key ), String.valueOf( value ) );
         }
 
-        try(OutputStream out = new FileOutputStream( codeUpgradeFile ))
+        try(OutputStream out = Files.newOutputStream( codeUpgradeFile.toPath() ))
         {
             codeUpgradeProperties.store( out, "" );
         }

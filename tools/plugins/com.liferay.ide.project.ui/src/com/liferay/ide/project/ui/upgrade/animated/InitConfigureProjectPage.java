@@ -15,39 +15,13 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
-import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.ILiferayProjectImporter;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.IOUtil;
-import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.modules.BladeCLI;
-import com.liferay.ide.project.core.modules.BladeCLIException;
-import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.util.ProjectImportUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.project.core.util.SearchFilesVisitor;
-import com.liferay.ide.project.ui.IvyUtil;
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
-import com.liferay.ide.sdk.core.ISDKConstants;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.util.ServerUtil;
-import com.liferay.ide.ui.util.SWTUtil;
-import com.liferay.ide.ui.util.UIUtil;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -113,6 +87,33 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.osgi.framework.Version;
+
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.ILiferayProjectImporter;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.IOUtil;
+import com.liferay.ide.core.util.ZipUtil;
+import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.BladeCLI;
+import com.liferay.ide.project.core.modules.BladeCLIException;
+import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.util.ProjectImportUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.util.SearchFilesVisitor;
+import com.liferay.ide.project.ui.IvyUtil;
+import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
+import com.liferay.ide.sdk.core.ISDKConstants;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 /**
  * @author Simon Jiang
@@ -1307,7 +1308,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false );
         builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false );
 
-        try(FileInputStream ivyInput = new FileInputStream( ivySettingFile ))
+        try( InputStream ivyInput = Files.newInputStream( ivySettingFile.toPath() ) )
         {
             if( ivySettingFile.exists() )
             {
@@ -1445,7 +1446,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     {
         XMLOutputter out = new XMLOutputter();
 
-        try(FileOutputStream fos = new FileOutputStream( templateFile );)
+        try(OutputStream fos = Files.newOutputStream( templateFile.toPath() );)
         {
             out.output( doc, fos );
         }

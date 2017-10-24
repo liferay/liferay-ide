@@ -22,12 +22,11 @@ import com.liferay.ide.core.util.FileUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -133,7 +132,7 @@ public class SDK
 
         Properties p = new Properties();
 
-        try( InputStream in = new FileInputStream( buildFile ); OutputStream out = new FileOutputStream( buildFile ) )
+        try( InputStream in = Files.newInputStream( buildFile.toPath() ); OutputStream out = Files.newOutputStream( buildFile.toPath() ) )
         {
             p.load( in );
 
@@ -905,7 +904,7 @@ public class SDK
 
         try
         {
-            InputStream propertiesInput = new FileInputStream( file );
+            InputStream propertiesInput = Files.newInputStream( file.toPath() );
             properties.load( propertiesInput );
             propertiesInput.close();
         }
