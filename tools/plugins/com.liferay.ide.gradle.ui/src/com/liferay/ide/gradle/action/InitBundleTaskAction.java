@@ -39,12 +39,11 @@ public class InitBundleTaskAction extends GradleTaskAction
 
         IPath bundlesLocation = LiferayWorkspaceUtil.getHomeLocation( project );
 
-        String serverName = bundlesLocation.lastSegment();
-
         try
         {
-            if( bundlesLocation.toFile().exists() )
+            if( bundlesLocation != null && bundlesLocation.toFile().exists() )
             {
+                String serverName = bundlesLocation.lastSegment();
                 ServerUtil.addPortalRuntimeAndServer( serverName, bundlesLocation, new NullProgressMonitor() );
 
                 IProject pluginsSDK = CoreUtil.getProject(
