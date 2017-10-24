@@ -1,5 +1,15 @@
-..,'..' is an invalid name on this platform.
-##,The name is invalid for a project.
-*,The name is invalid for a project.
-,Liferay Workspace project name could not be empty.
-test-liferay-workspace,Create a new liferay workspace
+..,'..' is an invalid name on this platform.,macosx
+##,The name is invalid for a project.,macosx
+*,The name is invalid for a project.,macosx
+,Liferay Workspace project name could not be empty.,macosx
+test-liferay-workspace,Create a new liferay workspace,macosx
+..,'..' is an invalid name on this platform.,linux
+##,The name is invalid for a project.,linux
+*,The name is invalid for a project.,linux
+,Liferay Workspace project name could not be empty.,linux
+test-liferay-workspace,Create a new liferay workspace,linux
+..,'..' is an invalid name on this platform.,win32
+##,The name is invalid for a project.,win32
+*,* is an invalid character in resource name '*'.,win32
+,Liferay Workspace project name could not be empty.,win32
+test-liferay-workspace,Create a new liferay workspace,win32

@@ -55,7 +55,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorksapceWithGradleMvcPortlet() {
-		String workspaceName = "maven-liferay-workspace";
+		String workspaceName = "maven-liferay-workspace-with-gradle-mvc-portlet";
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -78,7 +78,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorksapceWithTheme() {
-		String workspaceName = "maven-liferay-workspace";
+		String workspaceName = "maven-liferay-workspace-with-theme";
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -94,12 +94,14 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		viewAction.deleteProject(workspaceName, workspaceName + "-wars (in wars)", projectName);
+
 		viewAction.deleteProject(workspaceName);
 	}
 
 	@Test
 	public void createLiferayWorkspaceWithMvcPortlet() {
-		String workspaceName = "maven-liferay-workspace";
+		String workspaceName = "maven-liferay-workspace-with-mvc-portlet";
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 

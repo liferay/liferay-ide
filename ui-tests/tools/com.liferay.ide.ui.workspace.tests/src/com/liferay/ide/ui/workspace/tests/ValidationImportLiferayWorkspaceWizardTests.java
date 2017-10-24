@@ -21,6 +21,8 @@ import com.liferay.ide.ui.swtbot.util.StringPool;
 
 import java.io.File;
 
+import org.eclipse.core.runtime.Platform;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -54,6 +56,10 @@ public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 
 		for (ValidationMsg msg : envAction.getValidationMsgs(
 				new File(envAction.getValidationFolder(), "import-liferay-workspace-wizard-location.csv"))) {
+
+			if (!msg.getOs().equals(Platform.getOS())) {
+				continue;
+			}
 
 			_importLiferayWorkspaceProject.getWorkspaceLocation().setText(msg.getInput());
 

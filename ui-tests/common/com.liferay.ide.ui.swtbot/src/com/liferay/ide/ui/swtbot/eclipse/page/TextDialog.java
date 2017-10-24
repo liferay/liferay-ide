@@ -30,6 +30,12 @@ public class TextDialog extends Dialog {
 		_text = new Text(bot);
 	}
 
+	public TextDialog(SWTWorkbenchBot bot, String cancelBtnLabel, String confirmBtnLabel) {
+		super(bot, cancelBtnLabel, confirmBtnLabel);
+
+		_text = new Text(bot);
+	}
+
 	public Text getText() {
 		return _text;
 	}

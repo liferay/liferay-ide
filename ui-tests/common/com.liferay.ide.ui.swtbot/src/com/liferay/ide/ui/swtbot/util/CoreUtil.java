@@ -12,9 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay.util;
-
-import com.liferay.ide.ui.swtbot.util.StringPool;
+package com.liferay.ide.ui.swtbot.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -336,25 +334,6 @@ public class CoreUtil {
 		}
 
 		return out.toString();
-	}
-
-	public static Version readVersionFile(File versionInfoFile) {
-		String versionContents = FileUtil.readContents(versionInfoFile);
-
-		if (isNullOrEmpty(versionContents)) {
-			return Version.emptyVersion;
-		}
-
-		Version version = null;
-
-		try {
-			version = Version.parseVersion(versionContents.trim());
-		}
-		catch (NumberFormatException nfe) {
-			version = Version.emptyVersion;
-		}
-
-		return version;
 	}
 
 	public static void removeChildren(Node node) {

@@ -16,14 +16,17 @@ package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.swtbot.eclipse.page.AddAndRemoveDialog;
+import com.liferay.ide.ui.swtbot.eclipse.page.PreferenceRecorderDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.PreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.ServerRuntimeEnvironmentsPreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TreeDialog;
 import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.TreeItem;
+import com.liferay.ide.ui.swtbot.util.CoreUtil;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 
 /**
  * @author Terry Jia
@@ -46,10 +49,30 @@ public class DialogAction extends UIAction {
 		_dialog.confirm();
 	}
 
-	public void deleteRuntime(String runtimeName) {
+	public void confirm(String confirmLabel) {
+		_dialog.confirm(confirmLabel);
+	}
+
+	public void confirmPreferences() {
+		_preferencesDialog.confirm();
+	}
+
+	public void deleteRuntimeTryConfirm(String runtimeName) {
 		_serverRuntimeEnvironmentsDialog.getRuntimes().click(runtimeName);
 
 		_serverRuntimeEnvironmentsDialog.getRemoveBtn().click();
+
+		long origin = SWTBotPreferences.TIMEOUT;
+
+		SWTBotPreferences.TIMEOUT = 500;
+
+		try {
+			confirm();
+		}
+		catch (Exception e) {
+		}
+
+		SWTBotPreferences.TIMEOUT = origin;
 	}
 
 	public void openNewRuntimeWizard() {
@@ -57,7 +80,18 @@ public class DialogAction extends UIAction {
 	}
 
 	public void openPreferencesDialog() {
-		ide.getPreferencesMenu().click();
+		if (CoreUtil.isMac()) {
+			_keyboradAction.pressKeysPreferencesDialogMac();
+		}
+		else {
+			ide.getPreferencesMenu().click();
+		}
+	}
+
+	public void openPreferencesRecorderDialog() {
+		_preferencesDialog.getSearch().setText(PREFERENCE_RECORDER);
+
+		_preferencesDialog.getPreferencesTypes().selectTreeItem(OOMPH, SETUP_TASKS, PREFERENCE_RECORDER);
 	}
 
 	public void openPreferenceTypeDialog(String categroy, String type) {
@@ -68,8 +102,22 @@ public class DialogAction extends UIAction {
 		typeItem.select();
 	}
 
-	public void openServerRuntimeEnvironmentsDialog() {
-		openPreferenceTypeDialog(SERVER, RUNTIME_ENVIRONMENTS);
+	public void openServerRuntimeEnvironmentsDialogTry() {
+		long origin = SWTBotPreferences.TIMEOUT;
+
+		SWTBotPreferences.TIMEOUT = 500;
+
+		try {
+			openPreferenceTypeDialog(SERVER, RUNTIME_ENVIRONMENTS);
+		}
+		catch (Exception e) {
+		}
+
+		SWTBotPreferences.TIMEOUT = origin;
+	}
+
+	public void preparePreferencesRecorder() {
+		_preferenceRecorderDialog.getRecordIntoCheckBox().deselect();
 	}
 
 	public void prepareText(String text) {
@@ -86,6 +134,8 @@ public class DialogAction extends UIAction {
 
 	private AddAndRemoveDialog _addAndRemoveDialog = new AddAndRemoveDialog(bot);
 	private Dialog _dialog = new Dialog(bot);
+	private KeyboardAction _keyboradAction = new KeyboardAction(bot);
+	private PreferenceRecorderDialog _preferenceRecorderDialog = new PreferenceRecorderDialog(bot);
 	private PreferencesDialog _preferencesDialog = new PreferencesDialog(bot);
 	private ServerRuntimeEnvironmentsPreferencesDialog _serverRuntimeEnvironmentsDialog =
 		new ServerRuntimeEnvironmentsPreferencesDialog(bot);

@@ -12,35 +12,25 @@
  * details.
  */
 
-package com.liferay.ide.ui.swtbot.eclipse.page;
+package com.liferay.ide.ui.liferay.action;
 
-import com.liferay.ide.ui.swtbot.page.Dialog;
-import com.liferay.ide.ui.swtbot.page.Text;
-import com.liferay.ide.ui.swtbot.page.Tree;
+import com.liferay.ide.ui.liferay.UIAction;
+import com.liferay.ide.ui.swtbot.Keys;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  */
-public class PreferencesDialog extends Dialog {
+public class KeyboardAction extends UIAction implements Keys {
 
-	public PreferencesDialog(SWTWorkbenchBot bot) {
-		super(bot, CANCEL, APPLY_AND_CLOSE);
-
-		_preferencesTypes = new Tree(bot);
-		_search = new Text(bot);
+	public KeyboardAction(SWTWorkbenchBot bot) {
+		super(bot);
 	}
 
-	public Tree getPreferencesTypes() {
-		return _preferencesTypes;
+	public void pressKeysPreferencesDialogMac() {
+		keyPress.pressShortcut(SWT.COMMAND, ',');
 	}
-
-	public Text getSearch() {
-		return _search;
-	}
-
-	private Tree _preferencesTypes;
-	private Text _search;
 
 }

@@ -20,24 +20,19 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.liferay.ide</groupId>
-		<artifactId>parent</artifactId>
-		<version>3.2.0-SNAPSHOT</version>
-		<relativePath>../build/parent/pom.xml</relativePath>
-	</parent>
-
 	<groupId>com.liferay.ide</groupId>
 	<artifactId>ui-tests</artifactId>
+	<version>3.2.0-SNAPSHOT</version>
 
 	<name>Liferay IDE UI Tests</name>
 
 	<packaging>pom</packaging>
 
 	<properties>
+		<eclipse-site>http://download.eclipse.org/releases/oxygen/201709271000/</eclipse-site>
+		<tycho-packaging-format>'m1'</tycho-packaging-format>
+		<tycho-version>1.0.0</tycho-version>
 		<liferay-ide-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide-repository/target/repository/</liferay-ide-site>
-		<liferay-ide-swtbot-testing-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
-		<os-jvm-flags/>
 	</properties>
 
 	<repositories>
@@ -47,19 +42,300 @@
 			<url>${liferay-ide-site}</url>
 		</repository>
 		<repository>
-			<id>liferay-ide-swtbot-testing-site</id>
+			<id>eclipse</id>
 			<layout>p2</layout>
-			<url>${liferay-ide-swtbot-testing-site}</url>
+			<url>${eclipse-site}</url>
 		</repository>
 	</repositories>
 
-	<modules>
-		<module>common</module>
-		<module>tools</module>
-	</modules>
+	<profiles>
+		<profile>
+			<id>ui-repo</id>
+			<modules>
+				<module>com.liferay.ide.ui.testing-repository</module>
+				<module>common</module>
+			</modules>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.eclipse.tycho</groupId>
+							<artifactId>target-platform-configuration</artifactId>
+							<version>${tycho-version}</version>
+							<configuration>
+								<dependency-resolution>
+									<extraRequirements>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.eclipse.tools</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.alloy</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.maven</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+									</extraRequirements>
+								</dependency-resolution>
+								<resolver>p2</resolver>
+								<ignoreTychoRepositories>true</ignoreTychoRepositories>
+								<allowConflictingDependencies>true</allowConflictingDependencies>
+								<environments>
+									<environment>
+										<os>win32</os>
+										<ws>win32</ws>
+										<arch>x86_64</arch>
+									</environment>
+									<environment>
+										<os>macosx</os>
+										<ws>cocoa</ws>
+										<arch>x86_64</arch>
+									</environment>
+									<environment>
+										<os>linux</os>
+										<ws>gtk</ws>
+										<arch>x86_64</arch>
+									</environment>
+								</environments>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+		<profile>
+			<id>ui-tests-mac</id>
+			<modules>
+				<module>tools</module>
+			</modules>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.eclipse.tycho</groupId>
+							<artifactId>target-platform-configuration</artifactId>
+							<version>${tycho-version}</version>
+							<configuration>
+								<dependency-resolution>
+									<extraRequirements>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.eclipse.tools</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.alloy</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.maven</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+									</extraRequirements>
+								</dependency-resolution>
+								<resolver>p2</resolver>
+								<ignoreTychoRepositories>true</ignoreTychoRepositories>
+								<allowConflictingDependencies>true</allowConflictingDependencies>
+								<environments>
+									<environment>
+										<os>macosx</os>
+										<ws>cocoa</ws>
+										<arch>x86_64</arch>
+									</environment>
+								</environments>
+							</configuration>
+						</plugin>
+						<plugin>
+							<groupId>org.eclipse.tycho</groupId>
+							<artifactId>tycho-surefire-plugin</artifactId>
+							<version>${tycho-version}</version>
+							<configuration>
+								<application>org.eclipse.ui.ide.workbench</application>
+								<useUIHarness>true</useUIHarness>
+								<useUIThread>false</useUIThread>
+								<failIfNoTests>false</failIfNoTests>
+								<runOrder>filesystem</runOrder>
+								<includes>
+									<include>**/*Test*.class</include>
+								</includes>
+								<argLine>-Xmx1024m -XX:MaxMetaspaceSize=1024m -XstartOnFirstThread</argLine>
+								<systemProperties>
+									<liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
+									<runTest>${runTest}</runTest>
+								</systemProperties>
+								<dependencies>
+									<dependency>
+										<type>eclipse-feature</type>
+										<artifactId>org.eclipse.platform</artifactId>
+										<version>0.0.0</version>
+									</dependency>
+								</dependencies>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+		<profile>
+			<id>ui-tests-linux</id>
+			<modules>
+				<module>tools</module>
+			</modules>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.eclipse.tycho</groupId>
+							<artifactId>target-platform-configuration</artifactId>
+							<version>${tycho-version}</version>
+							<configuration>
+								<dependency-resolution>
+									<extraRequirements>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.eclipse.tools</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.alloy</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.maven</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+									</extraRequirements>
+								</dependency-resolution>
+								<resolver>p2</resolver>
+								<ignoreTychoRepositories>true</ignoreTychoRepositories>
+								<allowConflictingDependencies>true</allowConflictingDependencies>
+								<environments>
+									<environment>
+										<os>linux</os>
+										<ws>gtk</ws>
+										<arch>x86_64</arch>
+									</environment>
+								</environments>
+							</configuration>
+						</plugin>
+						<plugin>
+							<groupId>org.eclipse.tycho</groupId>
+							<artifactId>tycho-surefire-plugin</artifactId>
+							<version>${tycho-version}</version>
+							<configuration>
+								<application>org.eclipse.ui.ide.workbench</application>
+								<useUIHarness>true</useUIHarness>
+								<useUIThread>false</useUIThread>
+								<failIfNoTests>false</failIfNoTests>
+								<runOrder>filesystem</runOrder>
+								<includes>
+									<include>**/*Test*.class</include>
+								</includes>
+								<argLine>-Xmx1024m -XX:MaxMetaspaceSize=1024m</argLine>
+								<systemProperties>
+									<liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
+									<runTest>${runTest}</runTest>
+								</systemProperties>
+								<dependencies>
+									<dependency>
+										<type>eclipse-feature</type>
+										<artifactId>org.eclipse.platform</artifactId>
+										<version>0.0.0</version>
+									</dependency>
+								</dependencies>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+		<profile>
+			<id>ui-tests-win</id>
+			<modules>
+				<module>tools</module>
+			</modules>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.eclipse.tycho</groupId>
+							<artifactId>target-platform-configuration</artifactId>
+							<version>${tycho-version}</version>
+							<configuration>
+								<dependency-resolution>
+									<extraRequirements>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.eclipse.tools</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.alloy</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.maven</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+									</extraRequirements>
+								</dependency-resolution>
+								<resolver>p2</resolver>
+								<ignoreTychoRepositories>true</ignoreTychoRepositories>
+								<allowConflictingDependencies>true</allowConflictingDependencies>
+								<environments>
+									<environment>
+										<os>win32</os>
+										<ws>win32</ws>
+										<arch>x86_64</arch>
+									</environment>
+								</environments>
+							</configuration>
+						</plugin>
+						<plugin>
+							<groupId>org.eclipse.tycho</groupId>
+							<artifactId>tycho-surefire-plugin</artifactId>
+							<version>${tycho-version}</version>
+							<configuration>
+								<application>org.eclipse.ui.ide.workbench</application>
+								<useUIHarness>true</useUIHarness>
+								<useUIThread>false</useUIThread>
+								<failIfNoTests>false</failIfNoTests>
+								<runOrder>filesystem</runOrder>
+								<includes>
+									<include>**/*Test*.class</include>
+								</includes>
+								<argLine>-Xmx1024m -XX:MaxMetaspaceSize=1024m</argLine>
+								<systemProperties>
+									<liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
+									<runTest>${runTest}</runTest>
+								</systemProperties>
+								<dependencies>
+									<dependency>
+										<type>eclipse-feature</type>
+										<artifactId>org.eclipse.platform</artifactId>
+										<version>0.0.0</version>
+									</dependency>
+								</dependencies>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
 
 	<build>
-		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>com.liferay</groupId>
@@ -71,164 +347,37 @@
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
+				<artifactId>tycho-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-packaging-plugin</artifactId>
+				<artifactId>tycho-compiler-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-surefire-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
+				<artifactId>tycho-versions-plugin</artifactId>
 			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.1</version>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-maven-plugin</artifactId>
+					<version>${tycho-version}</version>
+					<extensions>true</extensions>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-compiler-plugin</artifactId>
+					<version>${tycho-version}</version>
 					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
-						<meminitial>256m</meminitial>
-						<maxmem>1024m</maxmem>
-						<compilerArgument>-proc:none</compilerArgument>
+						<encoding>UTF-8</encoding>
 					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
-					<artifactId>target-platform-configuration</artifactId>
+					<artifactId>tycho-versions-plugin</artifactId>
 					<version>${tycho-version}</version>
-					<configuration>
-						<dependency-resolution>
-							<extraRequirements>
-								<requirement>
-									<type>eclipse-feature</type>
-									<id>com.liferay.ide.eclipse.tools</id>
-									<versionRange>3.0.0</versionRange>
-								</requirement>
-								<requirement>
-									<type>eclipse-feature</type>
-									<id>com.liferay.ide.alloy</id>
-									<versionRange>3.0.0</versionRange>
-								</requirement>
-								<requirement>
-									<type>eclipse-feature</type>
-									<id>com.liferay.ide.maven</id>
-									<versionRange>3.0.0</versionRange>
-								</requirement>
-								<requirement>
-									<type>p2-installable-unit</type>
-									<id>org.eclipse.jdt.feature.group</id>
-									<versionRange>0.0.0</versionRange>
-								</requirement>
-							</extraRequirements>
-						</dependency-resolution>
-						<resolver>p2</resolver>
-						<ignoreTychoRepositories>true</ignoreTychoRepositories>
-						<allowConflictingDependencies>true</allowConflictingDependencies>
-						<environments>
-							<environment>
-								<os>win32</os>
-								<ws>win32</ws>
-								<arch>x86_64</arch>
-							</environment>
-							<environment>
-								<os>macosx</os>
-								<ws>cocoa</ws>
-								<arch>x86_64</arch>
-							</environment>
-							<environment>
-								<os>linux</os>
-								<ws>gtk</ws>
-								<arch>x86_64</arch>
-							</environment>
-						</environments>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.eclipse.tycho</groupId>
-					<artifactId>tycho-packaging-plugin</artifactId>
-					<version>${tycho-version}</version>
-					<configuration>
-						<format>${tycho-packaging-format}</format>
-						<archiveSite>true</archiveSite>
-						<environments>
-							<environment>
-								<os>win32</os>
-								<ws>win32</ws>
-								<arch>x86_64</arch>
-							</environment>
-							<environment>
-								<os>macosx</os>
-								<ws>cocoa</ws>
-								<arch>x86_64</arch>
-							</environment>
-							<environment>
-								<os>linux</os>
-								<ws>gtk</ws>
-								<arch>x86_64</arch>
-							</environment>
-						</environments>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.eclipse.tycho</groupId>
-					<artifactId>tycho-surefire-plugin</artifactId>
-					<version>${tycho-version}</version>
-					<configuration>
-						<application>org.eclipse.ui.ide.workbench</application>
-						<useUIHarness>true</useUIHarness>
-						<useUIThread>false</useUIThread>
-						<failIfNoTests>false</failIfNoTests>
-						<runOrder>filesystem</runOrder>
-						<includes>
-							<include>**/*Test*.class</include>
-						</includes>
-						<argLine>${os-jvm-flags} -Xmx1024m -XX:MaxMetaspaceSize=1024m</argLine>
-						<systemProperties>
-							<liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
-							<runTest>${runTest}</runTest>
-						</systemProperties>
-						<dependencies>
-							<dependency>
-								<type>eclipse-feature</type>
-								<artifactId>org.eclipse.platform</artifactId>
-								<version>0.0.0</version>
-							</dependency>
-						</dependencies>
-					</configuration>
-				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-antrun-plugin</artifactId>
-										<versionRange>[1.6,)</versionRange>
-										<goals>
-											<goal>run</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>

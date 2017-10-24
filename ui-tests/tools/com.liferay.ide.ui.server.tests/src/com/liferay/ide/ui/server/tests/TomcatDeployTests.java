@@ -39,7 +39,7 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialog();
+		dialogAction.openServerRuntimeEnvironmentsDialogTry();
 
 		dialogAction.openNewRuntimeWizard();
 
@@ -51,7 +51,7 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		dialogAction.confirm();
+		dialogAction.confirmPreferences();
 
 		wizardAction.openNewLiferayServerWizard();
 
@@ -63,14 +63,20 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		viewAction.serverStart(_serverStoppedLabel);
 
-		sleep(200000);
+		viewAction.serverStartWait();
 	}
 
 	@AfterClass
 	public static void stopServer() throws IOException {
 		viewAction.serverStop(_serverStartedLabel);
 
-		sleep(20000);
+		viewAction.serverStopWait();
+
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.deleteRuntimeTryConfirm(_serverName);
+
+		dialogAction.confirmPreferences();
 	}
 
 	@Test
@@ -91,9 +97,9 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		dialogAction.addModule("test");
 
-		dialogAction.confirm();
+		dialogAction.confirm(FINISH);
 
-		sleep(10000);
+		viewAction.serverDeployWait("test");
 	}
 
 	private static final String _serverName = "Liferay 7-deploy";

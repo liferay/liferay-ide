@@ -20,6 +20,8 @@ import com.liferay.ide.ui.liferay.util.ValidationMsg;
 
 import java.io.File;
 
+import org.eclipse.core.runtime.Platform;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -71,12 +73,39 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 		for (ValidationMsg msg : envAction.getValidationMsgs(
 				new File(envAction.getValidationFolder(), "new-fragment-wizard-project-name.csv"))) {
 
+			if (!msg.getOs().equals(Platform.getOS())) {
+				continue;
+			}
+
 			_newFragmentWizard.getProjectName().setText(msg.getInput());
 
 			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
 
 		wizardAction.cancel();
+	}
+
+	@Test
+	public void createFragmentWithoutRuntime() {
+		String projectName = "test-fragment";
+
+		wizardAction.openNewFragmentWizard();
+
+		wizardAction.prepareFragmentGradle(projectName);
+
+		Assert.assertFalse(_newFragmentWizard.nextBtn().isEnabled());
+
+		wizardAction.openNewRuntimeWizardFragment();
+
+		wizardAction.next();
+
+		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
+
+		wizardAction.finish();
+
+		Assert.assertTrue(_newFragmentWizard.nextBtn().isEnabled());
+
+		_newFragmentWizard.cancel();
 	}
 
 	private static final NewFragmentWizard _newFragmentWizard = new NewFragmentWizard(bot);

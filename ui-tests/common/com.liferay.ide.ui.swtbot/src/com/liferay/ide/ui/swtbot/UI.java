@@ -67,6 +67,8 @@ public interface UI {
 
 	public final String APPLICATION_CLASS = "Application class:";
 
+	public final String APPLY_AND_CLOSE = "Apply and Close";
+
 	public final String ARCHETYPE = "Archetype:";
 
 	public final String AUTH_FAILURES = "Auth Failures";
@@ -363,6 +365,12 @@ public interface UI {
 
 	public final String LIFERAY_SERVICE_BUILDER = "Liferay Service Builder";
 
+	public final String LIFERAY_TOMCAT_DIRECTORY = "Liferay Tomcat directory";
+
+	public final String LIFERAY_V_62_SERVER_TOMCAT_7 = "Liferay v6.2 Server (Tomcat 7)";
+
+	public final String LIFERAY_V_62_TOMCAT_7 = "Liferay v6.2 (Tomcat 7)";
+
 	public final String LIFERAY_VAADIN_PORTLET = "Liferay Vaadin Portlet";
 
 	public final String LIFERAY_WORKSPACE = "Liferay Workspace";
@@ -452,6 +460,10 @@ public interface UI {
 
 	public final String OK = "OK";
 
+	public final String OOMPH = "Oomph";
+
+	public final String OPEN = "Open";
+
 	public final String OPEN_LIFERAY_HOME_FOLDER = "Open Liferay Home Folder";
 
 	public final String OPEN_LIFERAY_PORTAL_HOME = "Open Liferay Portal Home";
@@ -504,6 +516,8 @@ public interface UI {
 
 	public final String PORTLET_UPCASE = "Portlet";
 
+	public final String PREFERENCE_RECORDER = "Preference Recorder";
+
 	public final String PREFERENCES = "Preferences";
 
 	public final String PREVIEW = "Preview";
@@ -529,6 +543,8 @@ public interface UI {
 	public final String PROPERTY = "Property:";
 
 	public final String PUBLIC = "public";
+
+	public final String RECORD_INTO = "Record into:";
 
 	public final String REFRESH = "Refresh";
 
@@ -618,6 +634,8 @@ public interface UI {
 
 	public final String SERVICES = "Services";
 
+	public final String SETUP_TASKS = "Setup Tasks";
+
 	public final String SHOW_ALL_PAGES = "Show All Pages";
 
 	public final String SHOW_VIEW = "Show View";
@@ -638,13 +656,19 @@ public interface UI {
 
 	public final String START = "Start";
 
-	public final String START_THE_SERVER = "Start the server (Ctrl+Alt+R)";
+	public final String START_THE_SERVER_IN_DEBUG_MODE_WITH_KEY = "Start the server in debug mode (Ctrl+Alt+D)";
 
-	public final String START_THE_SERVER_IN_DEBUG_MODE = "Start the server in debug mode (Ctrl+Alt+D)";
+	public final String START_THE_SERVER_IN_DEBUG_MODE_WITH_KEY_MAC = "Start the server in debug mode (⌥⌘D)";
+
+	public final String START_THE_SERVER_WITH_KEYS = "Start the server (Ctrl+Alt+R)";
+
+	public final String START_THE_SERVER_WITH_KEYS_MAC = "Start the server (⌥⌘R)";
 
 	public final String STOP = "Stop";
 
-	public final String STOP_THE_SERVER = "Stop the server (Ctrl+Alt+S)";
+	public final String STOP_THE_SERVER_WITH_KEYS = "Stop the server (Ctrl+Alt+S)";
+
+	public final String STOP_THE_SERVER_WITH_KEYS_MAC = "Stop the server (⌥⌘S)";
 
 	public final String STRUTS_IN_ACTION = "Struts In Action";
 

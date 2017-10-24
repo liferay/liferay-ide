@@ -12,35 +12,34 @@
  * details.
  */
 
-package com.liferay.ide.ui.swtbot.eclipse.page;
+package com.liferay.ide.ui.liferay.page.wizard;
 
-import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.Text;
-import com.liferay.ide.ui.swtbot.page.Tree;
+import com.liferay.ide.ui.swtbot.page.Wizard;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  */
-public class PreferencesDialog extends Dialog {
+public class NewLiferay62RuntimeWizard extends Wizard {
 
-	public PreferencesDialog(SWTWorkbenchBot bot) {
-		super(bot, CANCEL, APPLY_AND_CLOSE);
+	public NewLiferay62RuntimeWizard(SWTWorkbenchBot bot) {
+		super(bot, 3);
 
-		_preferencesTypes = new Tree(bot);
-		_search = new Text(bot);
+		_location = new Text(bot, LIFERAY_TOMCAT_DIRECTORY);
+		_name = new Text(bot, NAME);
 	}
 
-	public Tree getPreferencesTypes() {
-		return _preferencesTypes;
+	public Text getLocation() {
+		return _location;
 	}
 
-	public Text getSearch() {
-		return _search;
+	public Text getName() {
+		return _name;
 	}
 
-	private Tree _preferencesTypes;
-	private Text _search;
+	private Text _location;
+	private Text _name;
 
 }

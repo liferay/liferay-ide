@@ -136,7 +136,7 @@ public class NewLiferayModuleProjectWizardInLiferayWorkspaceTests extends Swtbot
 
 	@Test
 	public void createMvcPortletModuleProjectInLiferayWorkspace() {
-		String projectName = "test-mvc-portlet";
+		String projectName = "test-mvc-portlet-in-lws";
 
 		wizardAction.openNewLiferayModuleWizard();
 

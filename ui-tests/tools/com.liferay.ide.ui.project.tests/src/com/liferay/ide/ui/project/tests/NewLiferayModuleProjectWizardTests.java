@@ -28,7 +28,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createActivatorModuleProject() {
-		String projectName = "test-activator";
+		String projectName = "test-activator-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -41,7 +41,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createApiModuleProject() {
-		String projectName = "test-api";
+		String projectName = "test-api-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -54,7 +54,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createContentTargetingReportModuleProject() {
-		String projectName = "test-content-targeting-report";
+		String projectName = "test-content-targeting-report-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -67,7 +67,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createContentTargetingRuleModuleProject() {
-		String projectName = "test-content-targeting-rule";
+		String projectName = "test-content-targeting-rule-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -80,7 +80,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createContentTargetingTrackingActionModuleProject() {
-		String projectName = "test-content-targeting-tracking-action";
+		String projectName = "test-content-targeting-tracking-action-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -93,7 +93,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createControlMenuEntryModuleProject() {
-		String projectName = "test-control-menu-entry";
+		String projectName = "test-control-menu-entry-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -106,7 +106,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createFormFieldModuleProject() {
-		String projectName = "test-form-field";
+		String projectName = "test-form-field-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -119,7 +119,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createMvcportletModuleProject() {
-		String projectName = "test-mvc-portlet";
+		String projectName = "test-mvc-portlet-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -153,7 +153,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createPanelAppModuleProject() {
-		String projectName = "test-panel-app";
+		String projectName = "test-panel-app-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -166,7 +166,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createPortletConfigurationIconModuleProject() {
-		String projectName = "test-portlet-configuration-icon";
+		String projectName = "test-portlet-configuration-icon-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -179,7 +179,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createPortletModuleProject() {
-		String projectName = "test-portlet";
+		String projectName = "test-portlet-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -192,7 +192,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createPortletProviderModuleProject() {
-		String projectName = "test-portlet-provider";
+		String projectName = "test-portlet-provider-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -205,7 +205,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createPortletToolbarContributorModuleProject() {
-		String projectName = "test-portlet-toolbar-contributor";
+		String projectName = "test-portlet-toolbar-contributor-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -218,7 +218,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createRestModuleProject() {
-		String projectName = "test-rest";
+		String projectName = "test-rest-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -231,7 +231,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createServiceBuilderModuleProject() {
-		String projectName = "test-service-builder";
+		String projectName = "test-service-builder-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -244,7 +244,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createServiceModuleProject() {
-		String projectName = "test-service";
+		String projectName = "test-service-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -265,7 +265,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createServiceWrapperModuleProject() {
-		String projectName = "test-service-wrapper";
+		String projectName = "test-service-wrapper-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -286,7 +286,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createSimulationPanelEntryModuleProject() {
-		String projectName = "test-simulation-panel-entry";
+		String projectName = "test-simulation-panel-entry-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -299,7 +299,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createTemplateContextContributorModuleProject() {
-		String projectName = "test-template-context-contributor";
+		String projectName = "test-template-context-contributor-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -312,7 +312,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createThemeContributor() {
-		String projectName = "test-theme-contributor";
+		String projectName = "test-theme-contributor-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -325,7 +325,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 	@Test
 	public void createThemeModuleProject() {
-		String projectName = "test-theme";
+		String projectName = "test-theme-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 

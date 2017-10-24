@@ -45,7 +45,6 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 	public static DialogAction dialogAction;
 	public static EditorAction editorAction;
 	public static EnvAction envAction;
-	public static boolean hasAddedProject = false;
 	public static LiferayIDE ide;
 	public static ViewAction viewAction;
 	public static WizardAction wizardAction;
@@ -87,6 +86,14 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 		System.setProperty(SWTBotPreferenceConstants.KEY_DEFAULT_POLL_DELAY, "5000");
 
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
+
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.openPreferencesRecorderDialog();
+
+		dialogAction.preparePreferencesRecorder();
+
+		dialogAction.confirmPreferences();
 
 		wizardAction.openNewLiferayModuleWizard();
 

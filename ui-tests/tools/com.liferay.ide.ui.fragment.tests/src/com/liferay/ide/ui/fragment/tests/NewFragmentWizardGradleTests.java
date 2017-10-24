@@ -42,35 +42,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle("test-fragment");
-
-		wizardAction.next();
-
-		wizardAction.openBrowseOsgiBundleDialog();
-
-		dialogAction.prepareText("com.liferay.announcements.");
-
-		dialogAction.confirm();
-
-		wizardAction.openAddOverrideFilesDialog();
-
-		dialogAction.selectItem("META-INF/resources/configuration.jsp");
-
-		dialogAction.confirm();
-
-		wizardAction.finishToWait();
-
-		viewAction.deleteProject(projectName);
-	}
-
-	@Test
-	public void createFragmentWithNoRuntimeWithJsp() {
-		String projectName = "test-fragment";
-
-		wizardAction.openNewFragmentWizard();
-
-		wizardAction.prepareFragmentGradle("test-fragment");
-
 		wizardAction.openNewRuntimeWizardFragment();
 
 		wizardAction.next();
@@ -78,6 +49,8 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
 
 		wizardAction.finish();
+
+		wizardAction.prepareFragmentGradle(projectName);
 
 		wizardAction.next();
 
@@ -104,7 +77,15 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle("test-fragment");
+		wizardAction.openNewRuntimeWizardFragment();
+
+		wizardAction.next();
+
+		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
+
+		wizardAction.finish();
+
+		wizardAction.prepareFragmentGradle(projectName);
 
 		wizardAction.next();
 
