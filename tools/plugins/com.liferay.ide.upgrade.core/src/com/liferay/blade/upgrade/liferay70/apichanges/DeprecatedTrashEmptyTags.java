@@ -16,15 +16,10 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.osgi.service.component.annotations.Component;
 
+import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.api.JSPFile;
-import com.liferay.blade.api.SearchResult;
 import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
 
 @Component(
@@ -34,19 +29,28 @@ import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
 		"problem.section=#removed-the-liferay-uitrash-empty-tag-and-replaced-with-liferay-trashempty",
 		"problem.summary=Removed the liferay-ui:trash-empty Tag and Replaced with liferay-trash:empty",
 		"problem.tickets=LPS-60779",
+		"auto.correct=jsptag",
 		"implName=DeprecatedTrashEmptyTags"
 	},
-	service = FileMigrator.class
+	service = {
+		AutoMigrator.class,
+		FileMigrator.class
+	}
 )
 public class DeprecatedTrashEmptyTags extends JSPFileMigrator {
 
 	@Override
-	protected List<SearchResult> searchFile(File file, JSPFile jspFileChecker) {
-		List<SearchResult> result = new ArrayList<SearchResult>();
+	protected String[] getTagNames() {
+		return new String[] {
+			"liferay-ui:trash-empty"
+		};
+	}
 
-		result.addAll(jspFileChecker.findJSPTags("liferay-ui:trash-empty"));
-
-		return result;
+	@Override
+	protected String[] getNewTagNames() {
+		return new String[] {
+			"liferay-trash:empty"
+		};
 	}
 
 }

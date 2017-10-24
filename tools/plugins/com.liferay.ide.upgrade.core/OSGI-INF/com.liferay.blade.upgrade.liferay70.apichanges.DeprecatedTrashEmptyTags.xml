@@ -5,8 +5,10 @@
    <property name="problem.section" value="#removed-the-liferay-uitrash-empty-tag-and-replaced-with-liferay-trashempty"/>
    <property name="problem.summary" value="Removed the liferay-ui:trash-empty Tag and Replaced with liferay-trash:empty"/>
    <property name="problem.tickets" value="LPS-60779"/>
+   <property name="auto.correct" value="jsptag"/>
    <property name="implName" value="DeprecatedTrashEmptyTags"/>
    <service>
+      <provide interface="com.liferay.blade.api.AutoMigrator"/>
       <provide interface="com.liferay.blade.api.FileMigrator"/>
    </service>
    <implementation class="com.liferay.blade.upgrade.liferay70.apichanges.DeprecatedTrashEmptyTags"/>

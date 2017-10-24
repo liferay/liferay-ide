@@ -16,15 +16,11 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
-import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.api.JSPFile;
-import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
-
-import java.io.File;
-import java.util.List;
-
 import org.osgi.service.component.annotations.Component;
+
+import com.liferay.blade.api.AutoMigrator;
+import com.liferay.blade.api.FileMigrator;
+import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
 
 @Component(
 	property = {
@@ -33,16 +29,35 @@ import org.osgi.service.component.annotations.Component;
 		"problem.section=#changed-usage-of-the-liferay-uiddm-template-selector-tag",
 		"problem.summary=The attribute classNameId of the liferay-ui:ddm-template-selector taglib tag has been renamed className",
 		"problem.tickets=LPS-53790",
+		"auto.correct=jsptag",
 		"implName=DdmTemplateSelectorTags"
 	},
-	service = FileMigrator.class
+	service = {
+		AutoMigrator.class,
+		FileMigrator.class
+	}
 )
 public class DdmTemplateSelectorTags extends JSPFileMigrator {
 
 	@Override
-	protected List<SearchResult> searchFile(File file,
-			JSPFile jspFileChecker) {
-
-		return jspFileChecker.findJSPTags("liferay-ui:ddm-template-selector", new String[]{"classNameId"} );
+	protected String[] getTagNames() {
+		return new String[] {
+			"liferay-ui:ddm-template-selector"
+		};
 	}
+
+	@Override
+	protected String[] getAttrNames() {
+		return new String[] {
+			"classNameId"
+		};
+	}
+
+	@Override
+	protected String[] getNewAttrNames() {
+		return new String[] {
+			"className"
+		};
+	}
+
 }

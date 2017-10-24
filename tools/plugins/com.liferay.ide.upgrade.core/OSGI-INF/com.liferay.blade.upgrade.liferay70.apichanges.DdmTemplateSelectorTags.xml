@@ -5,8 +5,10 @@
    <property name="problem.section" value="#changed-usage-of-the-liferay-uiddm-template-selector-tag"/>
    <property name="problem.summary" value="The attribute classNameId of the liferay-ui:ddm-template-selector taglib tag has been renamed className"/>
    <property name="problem.tickets" value="LPS-53790"/>
+   <property name="auto.correct" value="jsptag"/>
    <property name="implName" value="DdmTemplateSelectorTags"/>
    <service>
+      <provide interface="com.liferay.blade.api.AutoMigrator"/>
       <provide interface="com.liferay.blade.api.FileMigrator"/>
    </service>
    <implementation class="com.liferay.blade.upgrade.liferay70.apichanges.DdmTemplateSelectorTags"/>

@@ -16,15 +16,11 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
-import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.api.JSPFile;
-import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
-
-import java.io.File;
-import java.util.List;
-
 import org.osgi.service.component.annotations.Component;
+
+import com.liferay.blade.api.AutoMigrator;
+import com.liferay.blade.api.FileMigrator;
+import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
 
 @Component(
 	property = {
@@ -33,15 +29,42 @@ import org.osgi.service.component.annotations.Component;
 		"problem.section=#renamed-uri-attribute-used-to-generate-aui-tag-library",
 		"problem.summary=We should use the new AUI URI declaration:http://liferay.com/tld/aui",
 		"problem.tickets=LPS-57809",
+		"auto.correct=jsptag",
 		"implName=AUILiferayTags"
 	},
-	service = FileMigrator.class
+	service = {
+		AutoMigrator.class,
+		FileMigrator.class
+	}
 )
 public class AUILiferayTags extends JSPFileMigrator {
 
 	@Override
-	protected List<SearchResult> searchFile(File file, JSPFile jspFileChecker) {
-		return jspFileChecker.findJSPTags("jsp:directive.taglib", new String[] { "uri" },
-			new String[] { "http://alloy.liferay.com/tld/aui" });
+	protected String[] getTagNames() {
+		return new String[] {
+			"jsp:directive.taglib"
+		};
 	}
+
+	@Override
+	protected String[] getAttrNames() {
+		return new String[] {
+			"uri"
+		};
+	}
+
+	@Override
+	protected String[] getAttrValues() {
+		return new String[] {
+			"http://alloy.liferay.com/tld/aui"
+		};
+	}
+
+	@Override
+	protected String[] getNewAttrValues() {
+		return new String[] {
+			"http://liferay.com/tld/aui"
+		};
+	}
+
 }

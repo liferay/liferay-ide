@@ -188,8 +188,10 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 					int jspStartLine = getJspLine(startOffset);
 					int jspEndLine = getJspLine(endOffset);
 
-					searchResults.add(
-						super.createSearchResult(null, startOffset, endOffset, jspStartLine, jspEndLine, true));
+					SearchResult searchResult =
+						super.createSearchResult(null, startOffset, endOffset, jspStartLine, jspEndLine, true);
+
+					searchResults.add(searchResult);
 				}
 			}
 		}

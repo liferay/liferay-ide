@@ -16,15 +16,11 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
-import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.api.JSPFile;
-import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
-
-import java.io.File;
-import java.util.List;
-
 import org.osgi.service.component.annotations.Component;
+
+import com.liferay.blade.api.AutoMigrator;
+import com.liferay.blade.api.FileMigrator;
+import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
 
 @Component(
 	property = {
@@ -33,14 +29,28 @@ import org.osgi.service.component.annotations.Component;
 		"problem.section=#removed-the-auibutton-item-tag-and-replaced-with-auibutton",
 		"problem.summary=Removed the aui:button-item Tag and Replaced with aui:button",
 		"problem.tickets=LPS-62922",
+		"auto.correct=jsptag",
 		"implName=AUIButtonItemTags"
 	},
-	service = FileMigrator.class
+	service = {
+		AutoMigrator.class,
+		FileMigrator.class
+	}
 )
 public class AUIButtonItemTags extends JSPFileMigrator {
 
 	@Override
-	protected List<SearchResult> searchFile(File file, JSPFile jspFileChecker) {
-		return jspFileChecker.findJSPTags("aui:button-item");
+	protected String[] getTagNames() {
+		return new String[] {
+			"aui:button-item"
+		};
 	}
+
+	@Override
+	protected String[] getNewTagNames() {
+		return new String[] {
+			"aui:button"
+		};
+	}
+
 }
