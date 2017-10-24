@@ -35,8 +35,7 @@ public class AUILiferayTagsTest {
 
 	@Test
 	public void findProblems() throws Exception {
-		ServiceReference<Migration> sr = context
-				.getServiceReference(Migration.class);
+		ServiceReference<Migration> sr = context.getServiceReference(Migration.class);
 
 		Migration m = context.getService(sr);
 
