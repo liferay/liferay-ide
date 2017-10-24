@@ -7,7 +7,7 @@
       plugin="com.liferay.ide.ui">
 
    <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
-      Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development platorm.
+      Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development platform.
    </description>
 
    <copyright url="http://www.liferay.com/products/liferay-portal/lgpl">
