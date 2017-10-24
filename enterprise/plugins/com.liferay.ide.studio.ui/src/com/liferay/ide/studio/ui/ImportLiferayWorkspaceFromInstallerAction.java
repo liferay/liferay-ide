@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.ui.internal.intro.impl.IntroPlugin;
@@ -42,6 +43,25 @@ public class ImportLiferayWorkspaceFromInstallerAction implements IIntroAction
     @Override
     public void run( IIntroSite site, Properties params )
     {
+        File location = new File( Platform.getInstallLocation().getURL().getFile() );
+
+        if( Platform.getOS().equals( Platform.OS_MACOSX ) )
+        {
+            location = location.getParentFile().getParentFile();
+        }
+
+        IPath path = new Path( location.getAbsolutePath() );
+
+        File workspaceDir = path.append( "../liferay-workspace" ).toFile();
+
+        if( !workspaceDir.exists() )
+        {
+            MessageDialog.openInformation(
+                site.getShell(), "Liferay",
+                "Can't import liferay workspace.\nFile \"" + workspaceDir.getAbsolutePath() + "\" doesn't exist." );
+            return;
+        }
+
         Job job = new WorkspaceJob( "Importing Liferay Workspace..." )
         {
 
@@ -50,19 +70,9 @@ public class ImportLiferayWorkspaceFromInstallerAction implements IIntroAction
             {
                 ImportLiferayWorkspaceWizard wizard = new ImportLiferayWorkspaceWizard();
 
-                File location = new File( Platform.getInstallLocation().getURL().getFile() );
-
-                if( Platform.getOS().equals( Platform.OS_MACOSX ) )
-                {
-
-                    location = location.getParentFile().getParentFile();
-                }
-
-                IPath path = new Path( location.getAbsolutePath() );
-
                 ImportLiferayWorkspaceOp op = wizard.element().nearest( ImportLiferayWorkspaceOp.class );
 
-                op.setWorkspaceLocation( path.append( "../liferay-workspace" ).toPortableString() );
+                op.setWorkspaceLocation( workspaceDir.getAbsolutePath() );
 
                 op.setProvisionLiferayBundle( true );
 
