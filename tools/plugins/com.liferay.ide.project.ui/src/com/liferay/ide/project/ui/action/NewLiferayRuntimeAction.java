@@ -30,7 +30,7 @@ public class NewLiferayRuntimeAction extends SapphireActionHandler
     @Override
     protected Object run( Presentation context )
     {
-        ServerUIUtil.showNewRuntimeWizard( ( (SwtPresentation) context ).shell(), null, null, "com.liferay." );
+        ServerUIUtil.showNewRuntimeWizard( ( (SwtPresentation) context ).shell(), "jst.web", null, "com.liferay." );
 
         return Status.createOkStatus();
     }
