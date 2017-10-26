@@ -69,25 +69,28 @@ public class OpenLiferayHomeFolderServerAction extends AbstractServerRunningActi
 
         if( ( selectedServer != null ) && ( selection instanceof IStructuredSelection ) )
         {
-            final IPath path = selectedServer.getRuntime().getLocation();
-
             boolean enabled = false;
 
-            if( path != null )
+            if( selectedServer.getRuntime() != null )
             {
-                try
+                final IPath path = selectedServer.getRuntime().getLocation();
+
+                if( path != null )
                 {
-                    final IStructuredSelection sel = (IStructuredSelection) selection;
-
-                    final String launchCmd = ServerUIUtil.getSystemExplorerCommand( path.toFile() );
-
-                    if( !CoreUtil.isNullOrEmpty( launchCmd ) && ( sel.toList().size() == 1 ) )
+                    try
                     {
-                        enabled = true;
+                        final IStructuredSelection sel = (IStructuredSelection) selection;
+
+                        final String launchCmd = ServerUIUtil.getSystemExplorerCommand( path.toFile() );
+
+                        if( !CoreUtil.isNullOrEmpty( launchCmd ) && ( sel.toList().size() == 1 ) )
+                        {
+                            enabled = true;
+                        }
                     }
-                }
-                catch( IOException e )
-                {
+                    catch( IOException e )
+                    {
+                    }
                 }
             }
 
