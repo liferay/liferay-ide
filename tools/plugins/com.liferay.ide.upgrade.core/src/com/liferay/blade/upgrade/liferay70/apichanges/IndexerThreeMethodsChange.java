@@ -49,8 +49,7 @@ public class IndexerThreeMethodsChange  extends JavaFileMigrator {
 		List<SearchResult> declarations = new ArrayList<>();
 		List<SearchResult> interfaceSearch = javaFileChecker.findImplementsInterface("RelatedEntryIndexer");
 
-		if(interfaceSearch.isEmpty())
-		{
+		if (interfaceSearch.isEmpty()) {
 			declarations = javaFileChecker.findMethodDeclaration("addRelatedEntryFields",
 					new String[] { "Document", "Object" }, null);
 			searchResults.addAll(declarations);
@@ -58,8 +57,7 @@ public class IndexerThreeMethodsChange  extends JavaFileMigrator {
 
 		interfaceSearch = javaFileChecker.findImplementsInterface("DDMStructureIndexer");
 
-		if(interfaceSearch.isEmpty())
-		{
+		if (interfaceSearch.isEmpty()) {
 			declarations = javaFileChecker.findMethodDeclaration(
 					"reindexDDMStructures", new String[] { "List<Long>" }, null);
 			searchResults.addAll(declarations);
