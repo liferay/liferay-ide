@@ -22,10 +22,10 @@ import com.liferay.ide.core.LiferayCore;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1003,7 +1003,7 @@ public class PropertiesUtil
     {
         final Properties p = new Properties();
 
-        try( FileInputStream stream = new FileInputStream( f ) )
+        try(InputStream stream = Files.newInputStream( f.toPath() ))
         {
             p.load( stream );
 
@@ -1017,7 +1017,7 @@ public class PropertiesUtil
 
     public static void saveProperties( Properties props, File resultFile )
     {
-        try(FileOutputStream fos = new FileOutputStream( resultFile );)
+        try(OutputStream fos = Files.newOutputStream( resultFile.toPath() ))
         {
             props.store( fos, "" );
         }

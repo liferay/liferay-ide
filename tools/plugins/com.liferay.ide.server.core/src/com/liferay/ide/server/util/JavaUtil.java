@@ -19,8 +19,8 @@ import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -77,7 +77,7 @@ public class JavaUtil
     {
         try
         {
-            String contents = CoreUtil.readStreamToString( new FileInputStream( manifestFile) );
+            String contents = CoreUtil.readStreamToString( Files.newInputStream( manifestFile.toPath() ) );
 
             if( contents != null )
             {

@@ -64,7 +64,7 @@ public class SnippetsUtil
             return;
         }
 
-        // FileInputStream stream = new FileInputStream(snippetFile);
+        // InputStream stream = Files.newInputStream(snippetFile.toPath());
         SnippetDefinitions definitions = ModelFactoryForUser.getInstance().load( snippetFile.getAbsolutePath() );
 
         final List importCategories = definitions.getCategories();

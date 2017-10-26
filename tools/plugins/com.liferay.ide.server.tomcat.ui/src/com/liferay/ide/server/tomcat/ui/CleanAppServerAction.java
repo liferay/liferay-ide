@@ -24,7 +24,8 @@ import com.liferay.ide.server.tomcat.core.job.CleanAppServerJob;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.action.AbstractObjectAction;
 
-import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -194,10 +195,8 @@ public class CleanAppServerAction extends AbstractObjectAction
         {
             String rootEntryName = null;
 
-            try
+            try(ZipInputStream zis = new ZipInputStream( Files.newInputStream( Paths.get( bundleZipLocation ) ) ))
             {
-                ZipInputStream zis = new ZipInputStream( new FileInputStream( bundleZipLocation ) );
-
                 ZipEntry rootEntry = zis.getNextEntry();
                 rootEntryName = new Path( rootEntry.getName() ).segment( 0 );
 
@@ -225,8 +224,6 @@ public class CleanAppServerAction extends AbstractObjectAction
 
                     entry = zis.getNextEntry();
                 };
-
-                zis.close();
             }
             catch( Exception e )
             {

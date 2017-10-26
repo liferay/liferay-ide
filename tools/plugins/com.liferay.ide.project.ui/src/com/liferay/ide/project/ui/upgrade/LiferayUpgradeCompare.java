@@ -17,9 +17,9 @@ package com.liferay.ide.project.ui.upgrade;
 import com.liferay.ide.project.ui.ProjectUI;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
 
 import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.CompareEditorInput;
@@ -135,7 +135,7 @@ public class LiferayUpgradeCompare
         {
             try
             {
-                return new FileInputStream( file );
+                return Files.newInputStream( file.toPath() );
             }
             catch( Exception e )
             {
