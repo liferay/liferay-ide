@@ -16,10 +16,10 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
+
+import org.osgi.service.component.annotations.Component;
 
 @Component(
 	property = {
@@ -34,18 +34,11 @@ import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
 )
 public class AppViewSearchEntryTags extends JSPFileMigrator {
 
-	@Override
-	protected String[] getTagNames() {
-		return new String[] {
-			"liferay-ui:app-view-search-entry"
-		};
+	public AppViewSearchEntryTags() {
+		super(_attrNames, new String[0], new String[0], new String[0], _tagNames, new String[0]);
 	}
 
-	@Override
-	protected String[] getAttrNames() {
-		return new String[] {
-			"mbMessages", "fileEntryTuples"
-		};
-	}
+	private static final String[] _attrNames = new String[] { "mbMessages", "fileEntryTuples" };
 
+	private static final String[] _tagNames = new String[] { "liferay-ui:app-view-search-entry" };
 }

@@ -16,11 +16,11 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
+
+import org.osgi.service.component.annotations.Component;
 
 @Component(
 	property = {
@@ -39,18 +39,12 @@ import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
 )
 public class LiferayUIFlagsTags extends JSPFileMigrator {
 
-	@Override
-	protected String[] getTagNames() {
-		return new String[] {
-			"liferay-ui:flags"
-		};
+	public LiferayUIFlagsTags() {
+		super(new String[0], new String[0], new String[0], new String[0], _tagNames, _newTagNames);
 	}
 
-	@Override
-	protected String[] getNewTagNames() {
-		return new String[] {
-			"liferay-flags:flags"
-		};
-	}
+	private static final String[] _tagNames = new String[] { "liferay-ui:flags" };
+
+	private static final String[] _newTagNames = new String[] { "liferay-flags:flags" };
 
 }

@@ -16,11 +16,11 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
+
+import org.osgi.service.component.annotations.Component;
 
 @Component(
 	property = {
@@ -39,32 +39,13 @@ import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
 )
 public class AUILiferayTags extends JSPFileMigrator {
 
-	@Override
-	protected String[] getTagNames() {
-		return new String[] {
-			"jsp:directive.taglib"
-		};
+	public AUILiferayTags() {
+		super(_attrNames, new String[0], _attrValues, _newAttrValues, _tagNames, new String[0]);
 	}
 
-	@Override
-	protected String[] getAttrNames() {
-		return new String[] {
-			"uri"
-		};
-	}
-
-	@Override
-	protected String[] getAttrValues() {
-		return new String[] {
-			"http://alloy.liferay.com/tld/aui"
-		};
-	}
-
-	@Override
-	protected String[] getNewAttrValues() {
-		return new String[] {
-			"http://liferay.com/tld/aui"
-		};
-	}
+	private static final String[] _tagNames = new String[] { "jsp:directive.taglib" };
+	private static final String[] _attrNames = new String[] { "uri" };
+	private static final String[] _attrValues = new String[] { "http://alloy.liferay.com/tld/aui" };
+	private static final String[] _newAttrValues = new String[] { "http://liferay.com/tld/aui" };
 
 }

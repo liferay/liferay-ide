@@ -16,10 +16,10 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
+
+import org.osgi.service.component.annotations.Component;
 
 @Component(
 	property = {
@@ -34,25 +34,12 @@ import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
 )
 public class CustomAUIValidatorTags extends JSPFileMigrator {
 
-	@Override
-	protected String[] getTagNames() {
-		return new String[] {
-			"aui:validator"
-		};
+	public CustomAUIValidatorTags() {
+		super(_attrNames, new String[0], _attrValues, new String[0], _tagNames, new String[0]);
 	}
 
-	@Override
-	protected String[] getAttrNames() {
-		return new String[] {
-			"name"
-		};
-	}
-
-	@Override
-	protected String[] getAttrValues() {
-		return new String[] {
-			"custom"
-		};
-	}
+	private static final String[] _tagNames = new String[] { "aui:validator" };
+	private static final String[] _attrNames = new String[] { "name" };
+	private static final String[] _attrValues = new String[] { "custom" };
 
 }

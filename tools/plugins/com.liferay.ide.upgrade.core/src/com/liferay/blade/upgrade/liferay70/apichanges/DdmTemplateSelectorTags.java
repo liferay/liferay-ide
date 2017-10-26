@@ -16,11 +16,11 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
+
+import org.osgi.service.component.annotations.Component;
 
 @Component(
 	property = {
@@ -39,25 +39,12 @@ import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
 )
 public class DdmTemplateSelectorTags extends JSPFileMigrator {
 
-	@Override
-	protected String[] getTagNames() {
-		return new String[] {
-			"liferay-ui:ddm-template-selector"
-		};
+	public DdmTemplateSelectorTags() {
+		super(_attrNames, _newAttrNames, new String[0], new String[0], _tagNames, new String[0]);
 	}
 
-	@Override
-	protected String[] getAttrNames() {
-		return new String[] {
-			"classNameId"
-		};
-	}
-
-	@Override
-	protected String[] getNewAttrNames() {
-		return new String[] {
-			"className"
-		};
-	}
+	private static final String[] _tagNames = new String[] { "liferay-ui:ddm-template-selector" };
+	private static final String[] _attrNames = new String[] { "classNameId" };
+	private static final String[] _newAttrNames = new String[] { "className" };
 
 }

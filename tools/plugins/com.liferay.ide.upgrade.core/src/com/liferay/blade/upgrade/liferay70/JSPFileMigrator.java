@@ -16,6 +16,12 @@
 
 package com.liferay.blade.upgrade.liferay70;
 
+import com.liferay.blade.api.AutoMigrateException;
+import com.liferay.blade.api.AutoMigrator;
+import com.liferay.blade.api.JSPFile;
+import com.liferay.blade.api.Problem;
+import com.liferay.blade.api.SearchResult;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,16 +34,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.liferay.blade.api.AutoMigrateException;
-import com.liferay.blade.api.AutoMigrator;
-import com.liferay.blade.api.JSPFile;
-import com.liferay.blade.api.Problem;
-import com.liferay.blade.api.SearchResult;
+public abstract class JSPFileMigrator extends AbstractFileMigrator<JSPFile> implements AutoMigrator {
 
-public abstract class JSPFileMigrator extends AbstractFileMigrator<JSPFile> implements AutoMigrator{
+	private final String[] _attrNames;
+	private final String[] _newAttrNames;
+	private final String[] _attrValues;
+	private final String[] _newAttrValues;
+	private final String[] _tagNames;
+	private final String[] _newTagNames;
 
-	public JSPFileMigrator() {
+	public JSPFileMigrator(String[] attrNames, String[] newAttrNames, String[] attrValues,
+			String[] newAttrValues, String[] tagNames, String[] newTagNames) {
+
 		super(JSPFile.class);
+
+		_attrNames = attrNames;
+		_newAttrNames = newAttrNames;
+		_attrValues = attrValues;
+		_newAttrValues = newAttrValues;
+		_tagNames = tagNames;
+		_newTagNames = newTagNames;
 	}
 
 	@Override
@@ -49,17 +65,17 @@ public abstract class JSPFileMigrator extends AbstractFileMigrator<JSPFile> impl
 			if (problem.autoCorrectContext instanceof String) {
 				String context = problem.autoCorrectContext;
 
-				if (context != null && context.equals("jsptag:" + getClass().getName())) {
-					if (getNewAttrValues().length > 0) {
-						tagsToRewrite.put(problem.getLineNumber(), getAttrValues());
+				if (context.equals("jsptag:" + getClass().getName())) {
+					if (_newAttrValues.length > 0) {
+						tagsToRewrite.put(problem.getLineNumber(), _attrValues);
 						problemsFixed++;
 					}
-					else if (getNewAttrNames().length > 0) {
-						tagsToRewrite.put(problem.getLineNumber(), getAttrNames());
+					else if (_newAttrNames.length > 0) {
+						tagsToRewrite.put(problem.getLineNumber(), _attrNames);
 						problemsFixed++;
 					}
-					else if (getNewTagNames().length > 0) {
-						tagsToRewrite.put(problem.getLineNumber(), getTagNames());
+					else if (_newTagNames.length > 0) {
+						tagsToRewrite.put(problem.getLineNumber(), _tagNames);
 						problemsFixed++;
 					}
 				}
@@ -83,14 +99,14 @@ public abstract class JSPFileMigrator extends AbstractFileMigrator<JSPFile> impl
 						String oldValue = oldValues[i];
 						String newValue = "";
 
-						if (getNewAttrValues().length > 0) {
-							newValue = getNewAttrValues()[i];
+						if (_newAttrValues.length > 0) {
+							newValue = _newAttrValues[i];
 						}
-						else if (getNewAttrNames().length > 0) {
-							newValue = getNewAttrNames()[i];
+						else if (_newAttrNames.length > 0) {
+							newValue = _newAttrNames[i];
 						}
-						else if (getNewTagNames().length > 0) {
-							newValue = getNewTagNames()[i];
+						else if (_newTagNames.length > 0) {
+							newValue = _newTagNames[i];
 
 							tagNameFix = true;
 						}
@@ -133,28 +149,6 @@ public abstract class JSPFileMigrator extends AbstractFileMigrator<JSPFile> impl
 		return 0;
 	}
 
-	protected String[] getAttrNames() {
-		return new String[0];
-	}
-
-	protected String[] getAttrValues() {
-		return new String[0];
-	}
-
-	protected String[] getNewAttrNames() {
-		return new String[0];
-	}
-
-	protected String[] getNewAttrValues() {
-		return new String[0];
-	}
-
-	protected String[] getNewTagNames() {
-		return new String[0];
-	}
-
-	protected abstract String[] getTagNames();
-
 	private static String[] readLines(InputStream inputStream) {
 		if (inputStream == null) {
 			return null;
@@ -184,17 +178,17 @@ public abstract class JSPFileMigrator extends AbstractFileMigrator<JSPFile> impl
 	protected List<SearchResult> searchFile(File file, JSPFile jspFileChecker) {
 		List<SearchResult> searchResults = new ArrayList<SearchResult>();
 
-		for (String tagName : getTagNames()) {
+		for (String tagName : _tagNames) {
 			List<SearchResult> jspTagResults = new ArrayList<SearchResult>();
 
-			if ((getTagNames().length > 0) && (getAttrNames().length == 0) && (getAttrValues().length == 0)) {
+			if ((_tagNames.length > 0) && (_attrNames.length == 0) && (_attrValues.length == 0)) {
 				jspTagResults = jspFileChecker.findJSPTags(tagName);
 			}
-			else if ((getTagNames().length > 0) && (getAttrNames().length > 0) && (getAttrValues().length == 0)) {
-				jspTagResults = jspFileChecker.findJSPTags(tagName, getAttrNames());
+			else if ((_tagNames.length > 0) && (_attrNames.length > 0) && (_attrValues.length == 0)) {
+				jspTagResults = jspFileChecker.findJSPTags(tagName, _attrNames);
 			}
-			else if ((getTagNames().length > 0) && (getAttrNames().length > 0) && (getAttrValues().length > 0)) {
-				jspTagResults = jspFileChecker.findJSPTags(tagName, getAttrNames(), getAttrValues());
+			else if ((_tagNames.length > 0) && (_attrNames.length > 0) && (_attrValues.length > 0)) {
+				jspTagResults = jspFileChecker.findJSPTags(tagName, _attrNames, _attrValues);
 			}
 
 			if (!jspTagResults.isEmpty()) {
@@ -202,7 +196,7 @@ public abstract class JSPFileMigrator extends AbstractFileMigrator<JSPFile> impl
 			}
 		}
 
-		if (getNewAttrNames().length > 0 || getNewAttrValues().length > 0 || getNewTagNames().length > 0) {
+		if (_newAttrNames.length > 0 || _newAttrValues.length > 0 || _newTagNames.length > 0) {
 			for (SearchResult searchResult : searchResults) {
 				searchResult.autoCorrectContext = "jsptag:" + getClass().getName();
 			}

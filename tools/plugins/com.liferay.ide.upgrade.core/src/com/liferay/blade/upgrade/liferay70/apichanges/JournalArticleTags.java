@@ -16,10 +16,10 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
+
+import org.osgi.service.component.annotations.Component;
 
 @Component(
 	property = {
@@ -34,11 +34,10 @@ import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
 )
 public class JournalArticleTags extends JSPFileMigrator {
 
-	@Override
-	protected String[] getTagNames() {
-		return new String[] {
-			"liferay-ui:journal-article"
-		};
+	public JournalArticleTags() {
+		super(new String[0], new String[0], new String[0], new String[0], _tagNames, new String[0]);
 	}
+
+	private static final String[] _tagNames = new String[] { "liferay-ui:journal-article" };
 
 }
