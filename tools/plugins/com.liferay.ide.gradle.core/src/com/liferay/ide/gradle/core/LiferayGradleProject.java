@@ -110,51 +110,55 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
                 IPath retval = null;
 
                 final CustomModel model = GradleCore.getToolingModel( CustomModel.class, gradleProject );
-
-                Set<File> outputFiles = model.getOutputFiles();
-
-                if( outputFiles.size() > 0 )
+                
+                if( model != null )
                 {
-                    // first check to see if there are any outputfiles that are wars, if so use that one.
-                    File bundleFile = null;
+                    Set<File> outputFiles = model.getOutputFiles();
 
-                    for( File outputFile : outputFiles )
+                    if( outputFiles.size() > 0 )
                     {
-                        if( outputFile.getName().endsWith( ".war" ) )
-                        {
-                            bundleFile = outputFile;
-                            break;
-                        }
-                    }
+                        // first check to see if there are any outputfiles that are wars, if so use that one.
+                        File bundleFile = null;
 
-                    if( bundleFile == null )
-                    {
                         for( File outputFile : outputFiles )
                         {
-                            final String name = outputFile.getName();
-
-                            if( name.endsWith( "javadoc.jar" ) || name.endsWith( "jspc.jar" ) ||
-                                name.endsWith( "sources.jar" ) )
-                            {
-                                continue;
-                            }
-
-                            if( name.endsWith( ".jar" ) )
+                            if( outputFile.getName().endsWith( ".war" ) )
                             {
                                 bundleFile = outputFile;
                                 break;
                             }
                         }
+
+                        if( bundleFile == null )
+                        {
+                            for( File outputFile : outputFiles )
+                            {
+                                final String name = outputFile.getName();
+
+                                if( name.endsWith( "javadoc.jar" ) || name.endsWith( "jspc.jar" ) ||
+                                    name.endsWith( "sources.jar" ) )
+                                {
+                                    continue;
+                                }
+
+                                if( name.endsWith( ".jar" ) )
+                                {
+                                    bundleFile = outputFile;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if( bundleFile != null )
+                        {
+                            retval = new Path( bundleFile.getAbsolutePath() );
+                        }
                     }
 
-                    if( bundleFile != null )
+                    else if( model.hasPlugin( "com.liferay.gradle.plugins.gulp.GulpPlugin" ) )
                     {
-                        retval = new Path( bundleFile.getAbsolutePath() );
+                        retval = gradleProject.getLocation().append( "dist/" + gradleProject.getName() + ".war" );
                     }
-                }
-                else if( model.hasPlugin( "com.liferay.gradle.plugins.gulp.GulpPlugin" ) )
-                {
-                    retval = gradleProject.getLocation().append( "dist/" + gradleProject.getName() + ".war" );
                 }
 
                 return retval;

@@ -13,11 +13,11 @@ package com.liferay.ide.server.util;
 
 import java.io.Closeable;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -102,7 +102,7 @@ public class LayeredModulePathFactory {
         }
         Reader reader = null;
         try {
-            reader = new InputStreamReader(new FileInputStream(layersList), "UTF-8");
+            reader = new InputStreamReader(Files.newInputStream(layersList.toPath()), "UTF-8");
             Properties props = new Properties();
             props.load(reader);
 
@@ -212,7 +212,7 @@ public class LayeredModulePathFactory {
         if(! file.exists()) {
             return Collections.emptyList();
         }
-        final InputStream is = new FileInputStream(file);
+        final InputStream is = Files.newInputStream(file.toPath());
         try {
             return readRefs(is);
         } finally {

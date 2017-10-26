@@ -20,9 +20,10 @@ import com.liferay.ide.project.core.upgrade.ILiferayLegacyProjectUpdater;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.List;
 
 import org.apache.maven.model.Dependency;
@@ -782,7 +783,7 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 
             if( outputFile != null )
             {
-                try(FileOutputStream fos = new FileOutputStream( outputFile ))
+                try(OutputStream fos = Files.newOutputStream( outputFile.toPath() ))
                 {
                     domModel.save( fos );
                 }

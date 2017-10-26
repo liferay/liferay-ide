@@ -33,7 +33,6 @@ import com.liferay.ide.ui.util.UIUtil;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -316,7 +315,7 @@ public class CustomJspConverter
 
         String customJspPath = null;
 
-        try
+        try(InputStream input = Files.newInputStream( hookFile.toPath() ))
         {
             DocumentBuilder domBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
@@ -330,7 +329,6 @@ public class CustomJspConverter
                 }
             } );
 
-            InputStream input = new FileInputStream( hookFile );
             Document doc = domBuilder.parse( input );
             Element root = doc.getDocumentElement();
             NodeList nodeList = root.getChildNodes();
@@ -344,7 +342,6 @@ public class CustomJspConverter
                 }
             }
 
-            input.close();
         }
         catch( Exception e )
         {

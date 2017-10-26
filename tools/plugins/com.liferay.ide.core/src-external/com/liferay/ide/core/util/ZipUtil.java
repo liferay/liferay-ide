@@ -12,12 +12,12 @@
 package com.liferay.ide.core.util;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -188,42 +188,22 @@ public final class ZipUtil {
 
                 mkdir( dir );
 
-                InputStream in = null;
-                FileOutputStream out = null;
-
-                try {
-                    in = zip.getInputStream(entry);
-                    out = new FileOutputStream(f);
-
+                try(InputStream in = zip.getInputStream( entry );
+                                OutputStream out = Files.newOutputStream( f.toPath() );)
+                {
                     final byte[] bytes = new byte[1024];
-                    int count = in.read(bytes);
+                    int count = in.read( bytes );
 
-                    while (count != -1) {
-                        out.write(bytes, 0, count);
-                        count = in.read(bytes);
+                    while( count != -1 )
+                    {
+                        out.write( bytes, 0, count );
+                        count = in.read( bytes );
                     }
 
                     out.flush();
                 }
-                finally {
-                    if (in != null) {
-                        try {
-                            in.close();
-                        }
-                        catch (IOException e) {
-                        }
-                    }
-
-                    if (out != null) {
-                        try {
-                            out.close();
-                        }
-                        catch (IOException e) {
-                        }
-                    }
-                }
             }
-	    }
+        }
 	    finally
 	    {
             try
@@ -249,7 +229,7 @@ public final class ZipUtil {
 			delete(target);
 		}
 
-		final ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(target));
+		final ZipOutputStream zip = new ZipOutputStream(Files.newOutputStream(target.toPath()));
 
 		try {
 			zipDir(target, zip, dir, filenameFilter, ""); //$NON-NLS-1$
@@ -294,7 +274,7 @@ public final class ZipUtil {
 
 			zip.putNextEntry(ze);
 
-			final FileInputStream in = new FileInputStream(file);
+			final InputStream in = Files.newInputStream(file.toPath());
 
 			try {
 				int bufsize = 8 * 1024;

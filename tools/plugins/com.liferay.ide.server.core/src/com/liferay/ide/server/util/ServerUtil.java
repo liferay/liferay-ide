@@ -38,10 +38,10 @@ import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -426,7 +426,7 @@ public class ServerUtil
     {
         String fragmentHostName = null;
 
-        try(JarInputStream jarStream = new JarInputStream( new FileInputStream( bundleFile ) ))
+        try(JarInputStream jarStream = new JarInputStream( Files.newInputStream( bundleFile.toPath() ) ))
         {
             fragmentHostName = jarStream.getManifest().getMainAttributes().getValue( "Fragment-Host" );
 

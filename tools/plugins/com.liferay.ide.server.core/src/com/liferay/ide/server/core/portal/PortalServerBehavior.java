@@ -29,7 +29,6 @@ import com.liferay.ide.server.util.PingThread;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -254,7 +253,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
                     final PortalPropertiesConfiguration config = new PortalPropertiesConfiguration();
 
-                    InputStream in = new FileInputStream( portalext );
+                    InputStream in = Files.newInputStream( portalext.toPath() );
 
                     config.load( in );
 
