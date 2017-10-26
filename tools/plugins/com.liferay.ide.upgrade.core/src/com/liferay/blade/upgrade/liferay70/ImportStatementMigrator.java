@@ -32,7 +32,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -69,7 +68,8 @@ public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaF
 	@Override
 	public int correctProblems(File file, List<Problem> problems) throws AutoMigrateException {
 		int problemsFixed = 0;
-		final Map<Integer,String> importsToRewrite = new HashMap<>();
+
+		final List<String> importsToRewrite = new ArrayList<>();
 
 		for (Problem problem : problems) {
 			boolean problemFound = false;
@@ -81,7 +81,8 @@ public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaF
 					final String importValue = importData.substring(PREFIX.length());
 
 					if (_importFixes.containsKey(importValue)) {
-						importsToRewrite.put(problem.getLineNumber(), importValue);
+						importsToRewrite.add(problem.getLineNumber() + "," + importValue);
+
 						problemFound = true;
 					}
 				}
@@ -101,12 +102,14 @@ public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaF
 				String[] editedLines = new String[lines.length];
 				System.arraycopy(lines, 0, editedLines, 0, lines.length);
 
-				for (int lineNumber : importsToRewrite.keySet()) {
-					String importName = importsToRewrite.get(lineNumber);
-					editedLines[lineNumber - 1] = editedLines[lineNumber - 1].replaceAll("import\\s+" + importName,
-							"import " + _importFixes.get(importName));
-					editedLines[lineNumber - 1] = editedLines[lineNumber - 1]
-							.replaceAll("import\\s*=\\s*\"" + importName, "import=\"" + _importFixes.get(importName));
+				for (String importData : importsToRewrite) {
+					String[] importMap = importData.split(",");
+
+					int lineNumber = Integer.parseInt(importMap[0]);
+					String importName = importMap[1];
+
+					editedLines[lineNumber - 1] =
+						editedLines[lineNumber - 1].replaceAll(importName, _importFixes.get(importName));
 				}
 
 				StringBuilder sb = new StringBuilder();
