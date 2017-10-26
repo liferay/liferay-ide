@@ -27,10 +27,9 @@ import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.server.util.LiferayPublishHelper;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -132,11 +131,11 @@ public abstract class ServerCoreBase extends BaseTests
 
         try
         {
-            String contents = CoreUtil.readStreamToString( new FileInputStream( serverXml ), true );
+            String contents = CoreUtil.readStreamToString( Files.newInputStream( serverXml.toPath() ), true );
 
             contents = contents.replaceAll( currentPort, targetPort );
 
-            CoreUtil.writeStreamFromString( contents, new FileOutputStream( serverXml ) );
+            CoreUtil.writeStreamFromString( contents, Files.newOutputStream( serverXml.toPath() ) );
         }
         catch( IOException e )
         {

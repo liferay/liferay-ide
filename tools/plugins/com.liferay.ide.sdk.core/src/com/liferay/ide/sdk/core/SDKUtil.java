@@ -19,11 +19,11 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -323,7 +323,7 @@ public class SDKUtil
     {
         Properties properties = new Properties();
 
-        try(InputStream in = new FileInputStream( new Path( path ).append( "build.properties" ).toFile() ))
+        try(InputStream in = Files.newInputStream( new Path( path ).append( "build.properties" ).toFile().toPath() ))
         {
             properties.load( in );
         }

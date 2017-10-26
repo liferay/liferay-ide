@@ -22,10 +22,10 @@ import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -90,7 +90,7 @@ public class CreateDBConnectAction extends AbstractServerRunningAction
         {
             if( bundleExtPath.toFile().exists() )
             {
-                final InputStream extInputStream = new FileInputStream( bundleExtPath.toFile() );
+                final InputStream extInputStream = Files.newInputStream( bundleExtPath.toFile().toPath() );
                 pluginPackageProperties.load( extInputStream );
                 extInputStream.close();
 
@@ -102,7 +102,7 @@ public class CreateDBConnectAction extends AbstractServerRunningAction
 
                     if( setupWizardPath.toFile().exists() )
                     {
-                        final InputStream setupInputStream = new FileInputStream( setupWizardPath.toFile() );
+                        final InputStream setupInputStream = Files.newInputStream( setupWizardPath.toFile().toPath() );
                         pluginPackageProperties.load( setupInputStream );
                         setupInputStream.close();
                     }
@@ -114,7 +114,7 @@ public class CreateDBConnectAction extends AbstractServerRunningAction
 
                 if( setupWizardPath.toFile().exists() )
                 {
-                    final InputStream setupInputStream = new FileInputStream( setupWizardPath.toFile() );
+                    final InputStream setupInputStream = Files.newInputStream( setupWizardPath.toFile().toPath() );
                     pluginPackageProperties.load( setupInputStream );
                     setupInputStream.close();
                 }

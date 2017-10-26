@@ -27,7 +27,7 @@ import com.liferay.ide.sdk.core.SDKUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Set;
 
@@ -160,7 +160,7 @@ public class JSFPortletFramework extends BasePortletFramework
                         IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
 
                         defaultDocroot.getFile( "WEB-INF/web.xml" ).setContents(
-                            new FileInputStream( originalWebXmlFile ), IResource.FORCE, null );
+                            Files.newInputStream( originalWebXmlFile.toPath() ), IResource.FORCE, null );
                     }
                 }
             }

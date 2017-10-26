@@ -14,14 +14,9 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
-import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.LaunchHelper;
-import com.liferay.ide.project.core.AbstractProjectBuilder;
-import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
-
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 
@@ -59,6 +54,12 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.osgi.util.NLS;
+
+import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.LaunchHelper;
+import com.liferay.ide.project.core.AbstractProjectBuilder;
+import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 
 
 /**
@@ -475,7 +476,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
                 }
             }
 
-            try(FileOutputStream out = new FileOutputStream( pomFile ))
+            try(OutputStream out = Files.newOutputStream( pomFile.toPath() ))
             {
                 maven.writeModel( model, out );
                 out.flush();
