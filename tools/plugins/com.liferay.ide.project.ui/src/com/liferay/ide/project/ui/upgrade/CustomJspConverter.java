@@ -372,12 +372,17 @@ public class CustomJspConverter
 
     // the main method of converting jsp hook project
     public void convertJspHookProject(
-        String[] sourcePaths, String targetPath, IProgressMonitor monitor, boolean isLiferayWorkspace ) throws Exception
+        String[] sourcePaths, String[] projectNames, String targetPath, IProgressMonitor monitor,
+        boolean isLiferayWorkspace ) throws Exception
     {
         resultProp = new Properties();
 
-        for( String sourcePath : sourcePaths )
+        int size = sourcePaths.length;
+
+        for( int i = 0; i < size; i++ )
         {
+            String sourcePath = sourcePaths[i];
+
             String customJspPath = getCustomJspPath( sourcePath );
 
             if( customJspPath == null || customJspPath.trim().length() <= 0 )
@@ -391,8 +396,7 @@ public class CustomJspConverter
 
             File sourceFile = new File( sourcePath );
 
-            resultProp.setProperty( sourcePrefix + "." + sourceFile.getName(),
-                sourceFile.getName() + ":" + customJspPath );
+            resultProp.setProperty( sourcePrefix + "." + sourceFile.getName(), projectNames[i] + ":" + customJspPath );
         }
 
         saveResultProperties();
@@ -657,7 +661,7 @@ public class CustomJspConverter
         return result;
     }
 
-    public void doExecute( String[] projectPaths, String targetPath, boolean isLiferayWorkspace )
+    public void doExecute( String[] projectPaths, String[] projectNames, String targetPath, boolean isLiferayWorkspace )
     {
         Job job = new WorkspaceJob( "Converting Jsp hook to fragments..." )
         {
@@ -669,7 +673,7 @@ public class CustomJspConverter
 
                 try
                 {
-                    convertJspHookProject( projectPaths, targetPath, monitor, isLiferayWorkspace );
+                    convertJspHookProject( projectPaths, projectNames, targetPath, monitor, isLiferayWorkspace );
 
                     String[] projectPaths = getConvertResult( resultPrefix );
 
