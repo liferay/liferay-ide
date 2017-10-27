@@ -110,7 +110,12 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
                 IPath retval = null;
 
                 final CustomModel model = GradleCore.getToolingModel( CustomModel.class, gradleProject );
-
+                
+                if( model == null )
+                {
+                    return null;
+                }
+                
                 Set<File> outputFiles = model.getOutputFiles();
 
                 if( outputFiles.size() > 0 )
