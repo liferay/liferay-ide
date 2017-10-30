@@ -113,11 +113,6 @@ public class GradleCore extends Plugin {
 		_gradleProjectCreatedListener = new GradleProjectCreatedListener();
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(BundleContext)
-	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
@@ -126,11 +121,6 @@ public class GradleCore extends Plugin {
 		CorePlugin.listenerRegistry().addEventListener(_gradleProjectCreatedListener);
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(BundleContext)
-	 */
 	public void stop(BundleContext context) throws Exception {
 		CorePlugin.listenerRegistry().removeEventListener(_gradleProjectCreatedListener);
 
