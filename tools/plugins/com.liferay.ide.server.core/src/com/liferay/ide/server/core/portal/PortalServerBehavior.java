@@ -323,8 +323,13 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     {
         final List<String> retval = new ArrayList<>();
 
-        Collections.addAll( retval, getPortalServer().getMemoryArgs() );
-
+        final String[] memoryArgs = getPortalServer().getMemoryArgs();
+        
+        if( memoryArgs != null )
+        {
+            Collections.addAll( retval, memoryArgs );
+        }
+        
         Collections.addAll( retval, getPortalRuntime().getPortalBundle().getRuntimeStopVMArgs() );
 
         return retval.toArray( new String[0] );
