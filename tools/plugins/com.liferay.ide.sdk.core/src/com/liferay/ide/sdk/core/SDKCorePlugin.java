@@ -20,8 +20,8 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -131,7 +131,7 @@ public class SDKCorePlugin extends Plugin
             {
                 try
                 {
-                    final IMemento existingMemento = XMLMemento.loadMemento( new FileInputStream( sdkGlobalFile ) );
+                    final IMemento existingMemento = XMLMemento.loadMemento( Files.newInputStream( sdkGlobalFile.toPath() ) );
 
                     if( existingMemento != null )
                     {
@@ -184,7 +184,7 @@ public class SDKCorePlugin extends Plugin
                 addSDKToMemento( sdk, memento );
             }
 
-            final FileOutputStream fos = new FileOutputStream( sdkGlobalFile );
+            final OutputStream fos = Files.newOutputStream( sdkGlobalFile.toPath() );
 
             sdkMementos.save( fos );
         }

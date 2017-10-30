@@ -1,13 +1,22 @@
 package com.liferay.ide.velocity.vaulttec.ui.editor.actions;
 
+import com.liferay.ide.velocity.editor.EditorsUtil;
+import com.liferay.ide.velocity.editor.compare.VelocityCompare;
+import com.liferay.ide.velocity.editor.compare.VelocityInput;
+import com.liferay.ide.velocity.scanner.VelocityPartitionScanner;
+import com.liferay.ide.velocity.ui.editor.xml.IEditorConfiguration;
+import com.liferay.ide.velocity.ui.editor.xml.VelocityAutoIndentStrategy;
+import com.liferay.ide.velocity.vaulttec.ui.VelocityPlugin;
+import com.liferay.ide.velocity.vaulttec.ui.editor.VelocityConfiguration;
+import com.liferay.ide.velocity.vaulttec.ui.model.Directive;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -34,16 +43,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Shell;
-
-import com.liferay.ide.velocity.editor.EditorsUtil;
-import com.liferay.ide.velocity.editor.compare.VelocityCompare;
-import com.liferay.ide.velocity.editor.compare.VelocityInput;
-import com.liferay.ide.velocity.scanner.VelocityPartitionScanner;
-import com.liferay.ide.velocity.ui.editor.xml.IEditorConfiguration;
-import com.liferay.ide.velocity.ui.editor.xml.VelocityAutoIndentStrategy;
-import com.liferay.ide.velocity.vaulttec.ui.VelocityPlugin;
-import com.liferay.ide.velocity.vaulttec.ui.editor.VelocityConfiguration;
-import com.liferay.ide.velocity.vaulttec.ui.model.Directive;
 
 
 public class Formatter
@@ -627,7 +626,7 @@ public class Formatter
             StringBuffer b = new StringBuffer();
             try
             {
-                BufferedReader in = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(file.getLocation().toFile()))));
+                BufferedReader in = new BufferedReader(new InputStreamReader(new BufferedInputStream(Files.newInputStream(file.getLocation().toFile().toPath()))));
                 while ((line = in.readLine()) != null)
                 {
                     b.append(line);
@@ -635,7 +634,7 @@ public class Formatter
                 }
                 document.set(b.toString());
                 document = format(document);
-                awriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file.getLocation().toFile()), "8859_1"));
+                awriter = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(file.getLocation().toFile().toPath()), "8859_1"));
                 awriter.write(document.get());
                 awriter.flush();
                 awriter.close();

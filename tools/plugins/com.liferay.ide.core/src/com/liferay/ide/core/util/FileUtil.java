@@ -21,9 +21,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +29,7 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,10 +86,8 @@ public class FileUtil
     {
         final IFile iFile = folder.getFile( file.getName() );
 
-        try
+        try( final InputStream input = Files.newInputStream( file.toPath() ) )
         {
-            final FileInputStream input = new FileInputStream( file );
-
             if( iFile.exists() )
             {
                 iFile.setContents( input, true, true, monitor );
@@ -99,8 +96,6 @@ public class FileUtil
             {
                 iFile.create( input, true, monitor );
             }
-
-            input.close();
         }
         catch( Exception e )
         {
@@ -118,14 +113,9 @@ public class FileUtil
 
         byte[] buf = new byte[4096];
 
-        OutputStream out = null;
-        FileInputStream in = null;
-
-        try
+        try( OutputStream out = Files.newOutputStream( dest.toPath() );
+               InputStream in = Files.newInputStream( src.toPath() ) )
         {
-            out = new FileOutputStream( dest );
-            in = new FileInputStream( src );
-
             int avail = in.read( buf );
             while( avail > 0 )
             {
@@ -136,27 +126,6 @@ public class FileUtil
         catch( Exception e )
         {
             LiferayCore.logError( "Unable to copy file " + src.getName() + " to " + dest.getAbsolutePath(), e );
-        }
-        finally
-        {
-            try
-            {
-                if( in != null )
-                    in.close();
-            }
-            catch( Exception ex )
-            {
-                // ignore
-            }
-            try
-            {
-                if( out != null )
-                    out.close();
-            }
-            catch( Exception ex )
-            {
-                // ignore
-            }
         }
     }
 
@@ -523,13 +492,13 @@ public class FileUtil
 
         if( file.exists() )
         {
-            final String searchContents = CoreUtil.readStreamToString( new FileInputStream( file ) );
+            final String searchContents = CoreUtil.readStreamToString( Files.newInputStream( file.toPath() ) );
 
             final String replaceContents = searchContents.replaceAll( search, replace );
 
             replaced = ! searchContents.equals( replaceContents );
 
-            CoreUtil.writeStreamFromString( replaceContents, new FileOutputStream( file ) );
+            CoreUtil.writeStreamFromString( replaceContents, Files.newOutputStream( file.toPath() ) );
         }
 
         return replaced;
@@ -632,12 +601,9 @@ public class FileUtil
             }
 
             final byte[] buffer = new byte[1024];
-            FileOutputStream out = null;
 
-            try
+            try( OutputStream out = Files.newOutputStream( f.toPath() ) )
             {
-                out = new FileOutputStream( f );
-
                 for( int count; ( count = contents.read( buffer ) ) != -1; )
                 {
                     out.write( buffer, 0, count );
@@ -650,19 +616,6 @@ public class FileUtil
                 final String msg = NLS.bind( Msgs.failedWhileWriting, f.getAbsolutePath() );
 
                 throw new CoreException( LiferayCore.createErrorStatus( msg, e ) );
-            }
-            finally
-            {
-                if( out != null )
-                {
-                    try
-                    {
-                        out.close();
-                    }
-                    catch( IOException e )
-                    {
-                    }
-                }
             }
         }
     }
@@ -683,7 +636,7 @@ public class FileUtil
     {
         byte[] buffer = new byte[1024];
 
-        BufferedOutputStream out = new BufferedOutputStream( new FileOutputStream( tempFile ) );
+        BufferedOutputStream out = new BufferedOutputStream( Files.newOutputStream( tempFile.toPath() ) );
         BufferedInputStream bin = new BufferedInputStream( in );
 
         int bytesRead = 0;

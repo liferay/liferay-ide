@@ -21,9 +21,9 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -60,7 +60,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
             try
             {
                 FileUtil.writeFileFromStream(
-                    autoDeployPath.append( output.lastSegment() ).toFile(), new FileInputStream( output.toFile() ) );
+                    autoDeployPath.append( output.lastSegment() ).toFile(), Files.newInputStream( output.toFile().toPath() ) );
 
                 retval = Status.OK_STATUS;
             }

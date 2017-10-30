@@ -19,11 +19,11 @@ package com.liferay.blade.upgrade.liferay70;
 import com.liferay.blade.api.SearchResult;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -168,7 +168,7 @@ public class PropertiesFileChecker {
 		this.file = file;
 
 		try {
-			this.keyInfos = parse(new FileInputStream(file));
+			this.keyInfos = parse(Files.newInputStream(file.toPath()));
 		}
 		catch (Exception e) {
 			throw new IllegalArgumentException(e);

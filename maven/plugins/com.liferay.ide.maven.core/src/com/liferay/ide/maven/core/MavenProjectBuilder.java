@@ -21,7 +21,8 @@ import com.liferay.ide.project.core.AbstractProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 
@@ -475,7 +476,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
                 }
             }
 
-            try(FileOutputStream out = new FileOutputStream( pomFile ))
+            try(OutputStream out = Files.newOutputStream( pomFile.toPath() ))
             {
                 maven.writeModel( model, out );
                 out.flush();

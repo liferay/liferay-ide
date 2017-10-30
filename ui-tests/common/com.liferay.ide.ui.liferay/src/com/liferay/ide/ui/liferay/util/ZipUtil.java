@@ -17,13 +17,12 @@ package com.liferay.ide.ui.liferay.util;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -144,16 +143,13 @@ public class ZipUtil {
 					String msg = "Could not create dir: " + dir.getPath();
 
 					throw new IOException(msg);
-				}
+                }
 
-				InputStream in = null;
-				FileOutputStream out = null;
+                try(InputStream in = zip.getInputStream( entry );
+                                OutputStream out = Files.newOutputStream( f.toPath() );)
+                {
 
-				try {
-					in = zip.getInputStream(entry);
-					out = new FileOutputStream(f);
-
-					byte[] bytes = new byte[1024];
+                    byte[] bytes = new byte[1024];
 
 					int count = in.read(bytes);
 
@@ -163,23 +159,6 @@ public class ZipUtil {
 					}
 
 					out.flush();
-				}
-				finally {
-					if (in != null) {
-						try {
-							in.close();
-						}
-						catch (IOException ioe) {
-						}
-					}
-
-					if (out != null) {
-						try {
-							out.close();
-						}
-						catch (IOException ioe) {
-						}
-					}
 				}
 			}
 		}
@@ -201,7 +180,7 @@ public class ZipUtil {
 			_delete(target);
 		}
 
-		try (ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(target))) {
+		try (ZipOutputStream zip = new ZipOutputStream(Files.newOutputStream(target.toPath()))) {
 			_zipDir(target, zip, dir, filenameFilter, StringPool.BLANK);
 		}
 	}
@@ -244,9 +223,8 @@ public class ZipUtil {
 
 			zip.putNextEntry(ze);
 
-			FileInputStream in = new FileInputStream(file);
-
-			try {
+            try(InputStream in = Files.newInputStream( file.toPath() ))
+            {
 				int bufsize = 8 * 1024;
 				long flength = file.length();
 
@@ -264,13 +242,6 @@ public class ZipUtil {
 				while (count != -1) {
 					zip.write(buffer, 0, count);
 					count = in.read(buffer);
-				}
-			}
-			finally {
-				try {
-					in.close();
-				}
-				catch (IOException ioe) {
 				}
 			}
 		}

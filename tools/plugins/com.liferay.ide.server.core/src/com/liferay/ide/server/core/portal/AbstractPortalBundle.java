@@ -23,10 +23,11 @@ import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -271,7 +272,7 @@ public abstract class AbstractPortalBundle implements PortalBundle
 
         if( configInfoFile.exists() )
         {
-            try( FileInputStream fileInput = new FileInputStream( configInfoFile ) )
+            try( InputStream fileInput = Files.newInputStream( configInfoFile.toPath() ) )
             {
                 properties.load( fileInput );
                 String configInfo = (String) properties.get( portalDirKey );
@@ -384,7 +385,7 @@ public abstract class AbstractPortalBundle implements PortalBundle
                 String portalDirKey = CoreUtil.createStringDigest( portalDir.toPortableString() );
                 Properties properties = new Properties();
 
-                try ( FileInputStream fileInput = new FileInputStream( versionInfoFile ) )
+                try ( InputStream fileInput = Files.newInputStream( versionInfoFile.toPath() ) )
                 {
                     properties.load( fileInput );
                 }
@@ -392,7 +393,7 @@ public abstract class AbstractPortalBundle implements PortalBundle
                 {
                 }
 
-                try ( FileOutputStream fileOutput = new FileOutputStream( versionInfoFile ) )
+                try ( OutputStream fileOutput = Files.newOutputStream( versionInfoFile.toPath() ) )
                 {
                     properties.put( portalDirKey, configInfo );
                     properties.store( fileOutput, StringPool.EMPTY );

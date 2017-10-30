@@ -6,6 +6,8 @@ import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.portlet.asset.model.BaseAssetRenderer;
 
+import java.nio.file.Files;
+
 public class Test extends MVCPortlet {
 	
 	String titleURL;
@@ -76,7 +78,7 @@ public class Test extends MVCPortlet {
 		FileInputStream fis = null;
 		
 		try {
-			fis = new FileInputStream(submissionFile);
+			fis = Files.newInputStream(submissionFile.toPath());
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		}

@@ -10,7 +10,6 @@ import com.liferay.ide.gradle.core.parser.GradleDependency;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -59,8 +58,8 @@ public class GradleParseTests
         final File expectedOutputFile = new File( "projects/testParseOutput/testParse.gradle" );
 
         assertEquals(
-            encoding( CoreUtil.readStreamToString( new FileInputStream( expectedOutputFile ) ) ),
-            encoding( CoreUtil.readStreamToString( new FileInputStream( outputfile ) ) ) );
+            encoding( CoreUtil.readStreamToString( Files.newInputStream( expectedOutputFile.toPath() ) ) ),
+            encoding( CoreUtil.readStreamToString( Files.newInputStream( outputfile.toPath() ) ) ) );
     }
 
     @Test
@@ -82,8 +81,8 @@ public class GradleParseTests
         final File expectedOutputFile = new File( "projects/testParseOutput/testParse2.gradle" );
 
         assertEquals(
-            encoding( CoreUtil.readStreamToString( new FileInputStream( expectedOutputFile ) ) ),
-            encoding( CoreUtil.readStreamToString( new FileInputStream( outputfile ) ) ) );
+            encoding( CoreUtil.readStreamToString( Files.newInputStream( expectedOutputFile.toPath() ) ) ),
+            encoding( CoreUtil.readStreamToString( Files.newInputStream( outputfile.toPath() ) ) ) );
     }
 
     @Test
@@ -105,8 +104,8 @@ public class GradleParseTests
         final File expectedOutputFile = new File( "projects/testParseOutput/testParse3.gradle" );
 
         assertEquals(
-            encoding( CoreUtil.readStreamToString( new FileInputStream( expectedOutputFile ) ) ),
-            encoding( CoreUtil.readStreamToString( new FileInputStream( outputfile ) ) ) );
+        	encoding( CoreUtil.readStreamToString( Files.newInputStream( expectedOutputFile.toPath() ) ) ),
+            encoding( CoreUtil.readStreamToString( Files.newInputStream( outputfile.toPath() ) ) ) );
     }
 
     @Test
@@ -128,8 +127,8 @@ public class GradleParseTests
         final File expectedOutputFile = new File( "projects/testParseOutput/testParse4.gradle" );
 
         assertEquals(
-            encoding( CoreUtil.readStreamToString( new FileInputStream( expectedOutputFile ) ) ),
-            encoding( CoreUtil.readStreamToString( new FileInputStream( outputfile ) ) ) );
+        	encoding( CoreUtil.readStreamToString( Files.newInputStream( expectedOutputFile.toPath() ) ) ),
+            encoding( CoreUtil.readStreamToString( Files.newInputStream( outputfile.toPath() ) ) ) );
     }
 
     @Test
@@ -151,8 +150,8 @@ public class GradleParseTests
         final File expectedOutputFile = new File( "projects/testParseOutput/testParse5.gradle" );
 
         assertEquals(
-            encoding( CoreUtil.readStreamToString( new FileInputStream( expectedOutputFile ) ) ),
-            encoding( CoreUtil.readStreamToString( new FileInputStream( outputfile ) ) ) );
+        	encoding( CoreUtil.readStreamToString( Files.newInputStream( expectedOutputFile.toPath() ) ) ),
+            encoding( CoreUtil.readStreamToString( Files.newInputStream( outputfile.toPath() ) ) ) );
     }
 
     @Test

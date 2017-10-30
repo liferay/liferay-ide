@@ -23,12 +23,12 @@ import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -234,7 +234,7 @@ public class NewLiferayComponentPollerProcessorOperation extends AbstractLiferay
 
     private void doSourceCodeOperation( IFile srcFile, String type ) throws CoreException
     {
-        try(OutputStream fos = new FileOutputStream( srcFile.getLocation().toFile() ))
+        try(OutputStream fos = Files.newOutputStream( srcFile.getLocation().toFile().toPath() ))
         {
 
             Template temp = cfg.getTemplate( getTemplateFile() );

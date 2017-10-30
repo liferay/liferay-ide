@@ -30,7 +30,7 @@ public class GradleDependencyUpdater
 
     public GradleDependencyUpdater( File inputfile ) throws MultipleCompilationErrorsException, IOException
     {
-        this( IOUtils.toString( new FileInputStream( inputfile ), "UTF-8" ) );
+        this( IOUtils.toString( Files.newInputStream( inputfile.toPath() ), "UTF-8" ) );
         this.file = inputfile;
     }
 

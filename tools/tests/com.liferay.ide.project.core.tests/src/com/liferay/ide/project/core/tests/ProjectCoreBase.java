@@ -40,9 +40,10 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Properties;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -484,7 +485,7 @@ public class ProjectCoreBase extends ServerCoreBase
         String userName = System.getProperty( "user.name" ); //$NON-NLS-1$
         File userBuildFile = loc.append( "build." + userName + ".properties" ).toFile(); //$NON-NLS-1$ //$NON-NLS-2$
 
-        try ( FileOutputStream fileOutput = new FileOutputStream( userBuildFile ) )
+        try(OutputStream fileOutput = Files.newOutputStream( userBuildFile.toPath() ))
         {
             if( userBuildFile.exists() )
             {

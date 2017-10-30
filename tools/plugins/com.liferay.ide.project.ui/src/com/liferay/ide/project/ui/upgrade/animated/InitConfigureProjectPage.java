@@ -43,11 +43,12 @@ import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -1307,7 +1308,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false );
         builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false );
 
-        try(FileInputStream ivyInput = new FileInputStream( ivySettingFile ))
+        try( InputStream ivyInput = Files.newInputStream( ivySettingFile.toPath() ) )
         {
             if( ivySettingFile.exists() )
             {
@@ -1445,7 +1446,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     {
         XMLOutputter out = new XMLOutputter();
 
-        try(FileOutputStream fos = new FileOutputStream( templateFile );)
+        try(OutputStream fos = Files.newOutputStream( templateFile.toPath() );)
         {
             out.output( doc, fos );
         }

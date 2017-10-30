@@ -26,10 +26,9 @@ import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.server.util.ComponentUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -300,9 +299,9 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
                                 try
                                 {
-                                    newTldFile.create( new FileInputStream( tldFileToCopy.toFile() ), true, null );
+                                    newTldFile.create( Files.newInputStream( tldFileToCopy.toFile().toPath() ), true, null );
                                 }
-                                catch( FileNotFoundException e )
+                                catch( Exception e )
                                 {
                                     throw new CoreException( ProjectCore.createErrorStatus( e ) );
                                 }

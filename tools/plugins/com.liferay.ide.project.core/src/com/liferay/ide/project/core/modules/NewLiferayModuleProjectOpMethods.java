@@ -20,7 +20,8 @@ import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -380,7 +381,7 @@ public class NewLiferayModuleProjectOpMethods
                                 newLrw.insertAt( stringLiteral, 0, null );
                             }
                         }
-                        try(FileOutputStream fos = new FileOutputStream( dest ))
+                        try(OutputStream fos = Files.newOutputStream( dest.toPath() ))
                         {
                             TextEdit edits = rewrite.rewriteAST( document, null );
                             edits.apply( document );

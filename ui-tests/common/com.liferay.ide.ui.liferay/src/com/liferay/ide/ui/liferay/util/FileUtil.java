@@ -22,14 +22,12 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,7 +88,7 @@ public class FileUtil {
 
 		byte[] buf = new byte[4096];
 
-		try (FileInputStream in = new FileInputStream(src); OutputStream out = new FileOutputStream(dest)) {
+		try (InputStream in = Files.newInputStream(src.toPath()); OutputStream out = Files.newOutputStream(dest.toPath())) {
 			int avail = in.read(buf);
 
 			while (avail > 0) {
@@ -339,13 +337,13 @@ public class FileUtil {
 		boolean replaced = false;
 
 		if (file.exists()) {
-			String searchContents = CoreUtil.readStreamToString(new FileInputStream(file));
+			String searchContents = CoreUtil.readStreamToString(Files.newInputStream(file.toPath()));
 
 			String replaceContents = searchContents.replaceAll(search, replace);
 
 			replaced = !searchContents.equals(replaceContents);
 
-			CoreUtil.writeStreamFromString(replaceContents, new FileOutputStream(file));
+			CoreUtil.writeStreamFromString(replaceContents, Files.newOutputStream(file.toPath()));
 		}
 
 		return replaced;
@@ -394,7 +392,7 @@ public class FileUtil {
 	public static int writeFileFromStream(File tempFile, InputStream in) throws IOException {
 		byte[] buffer = new byte[1024];
 
-		BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(tempFile));
+		BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(tempFile.toPath()));
 		BufferedInputStream bin = new BufferedInputStream(in);
 
 		int bytesRead = 0;

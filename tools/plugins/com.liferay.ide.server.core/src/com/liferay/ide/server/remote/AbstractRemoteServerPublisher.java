@@ -20,9 +20,10 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -202,18 +203,14 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
         throws CoreException
     {
         IPath path = LiferayServerCore.getTempLocation( "partial-war", archiveName ); //$NON-NLS-1$
-
-        FileOutputStream outputStream = null;
-        ZipOutputStream zip = null;
+ 
         File warfile = path.toFile();
 
         warfile.getParentFile().mkdirs();
 
-        try
+        try(OutputStream outputStream = Files.newOutputStream( warfile.toPath() );
+                        ZipOutputStream zip = new ZipOutputStream( outputStream ))
         {
-            outputStream = new FileOutputStream( warfile );
-            zip = new ZipOutputStream( outputStream );
-
             Map<ZipEntry, String> deleteEntries = new HashMap<ZipEntry, String>();
 
             processResourceDeltas( deltas, zip, deleteEntries, deletePrefix, StringPool.EMPTY, adjustGMTOffset );
@@ -231,20 +228,6 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
         catch( Exception ex )
         {
             ex.printStackTrace();
-        }
-        finally
-        {
-            if( zip != null )
-            {
-                try
-                {
-                    zip.close();
-                }
-                catch( IOException localIOException1 )
-                {
-
-                }
-            }
         }
 
         return new Path( warfile.getAbsolutePath() );

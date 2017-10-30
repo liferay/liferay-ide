@@ -28,11 +28,11 @@ import com.liferay.ide.server.remote.IServerManagerConnection;
 import com.liferay.ide.server.remote.ServerManagerConnection;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -682,7 +682,7 @@ public class LiferayServerCore extends Plugin
                     try
                     {
                         final IMemento existingMemento =
-                            XMLMemento.loadMemento( new FileInputStream( runtimesGlobalFile ) );
+                            XMLMemento.loadMemento( Files.newInputStream( runtimesGlobalFile.toPath() ) );
 
                         if( existingMemento != null )
                         {
@@ -738,7 +738,7 @@ public class LiferayServerCore extends Plugin
                     }
                 }
 
-                final FileOutputStream fos = new FileOutputStream( runtimesGlobalFile );
+                final OutputStream fos = Files.newOutputStream( runtimesGlobalFile.toPath() );
 
                 runtimeMementos.save( fos );
             }
@@ -766,7 +766,7 @@ public class LiferayServerCore extends Plugin
                     try
                     {
                         final IMemento existingMemento =
-                            XMLMemento.loadMemento( new FileInputStream( globalServersFile ) );
+                            XMLMemento.loadMemento( Files.newInputStream( globalServersFile.toPath() ) );
 
                         if( existingMemento != null )
                         {
@@ -818,7 +818,7 @@ public class LiferayServerCore extends Plugin
 
                 if( mementos.size() > 0 )
                 {
-                    final FileOutputStream fos = new FileOutputStream( globalServersFile );
+                    final OutputStream fos = Files.newOutputStream( globalServersFile.toPath() );
 
                     serverMementos.save( fos );
                 }

@@ -25,13 +25,12 @@ import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,9 +109,9 @@ public class ConvertedProjectTreesPart extends FormComponentPart
             {
                 try
                 {
-                    return new FileInputStream( new File( fileName ) );
+                    return Files.newInputStream( new File( fileName ).toPath() );
                 }
-                catch( FileNotFoundException e )
+                catch( Exception e )
                 {
                     e.printStackTrace();
                 }
@@ -157,7 +156,7 @@ public class ConvertedProjectTreesPart extends FormComponentPart
 
             private void writeFile( String fileName, byte[] newContent )
             {
-                FileOutputStream fos = null;
+                OutputStream fos = null;
                 try
                 {
                     File file = new File( fileName );
@@ -168,7 +167,7 @@ public class ConvertedProjectTreesPart extends FormComponentPart
 
                     file.createNewFile();
 
-                    fos = new FileOutputStream( file );
+                    fos = Files.newOutputStream( file.toPath() );
                     fos.write( newContent );
                     fos.flush();
 

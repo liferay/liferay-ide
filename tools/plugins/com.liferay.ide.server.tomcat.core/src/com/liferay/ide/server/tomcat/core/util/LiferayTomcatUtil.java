@@ -33,10 +33,11 @@ import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -344,7 +345,7 @@ public class LiferayTomcatUtil
 
         try
         {
-            props.store( new FileOutputStream( file ), null );
+            props.store( Files.newOutputStream( file.toPath() ), null );
         }
         catch( Exception e )
         {
@@ -428,11 +429,10 @@ public class LiferayTomcatUtil
 
         if( configInfoFile.exists() )
         {
-            try
-            {
-                FileInputStream fileInput = new FileInputStream( configInfoFile );
+            try(InputStream fileInput = Files.newInputStream( configInfoFile.toPath() ))
+            { 
                 properties.load( fileInput );
-                fileInput.close();
+
                 String configInfo = (String) properties.get( portalDirKey );
 
                 if( !CoreUtil.isNullOrEmpty( configInfo ) )
@@ -587,16 +587,14 @@ public class LiferayTomcatUtil
 
     public static Context loadContextFile( File contextFile )
     {
-        FileInputStream fis = null;
         Context context = null;
 
         if( contextFile != null && contextFile.exists() )
         {
-            try
+            try(InputStream fis = Files.newInputStream( contextFile.toPath() ))
             {
                 Factory factory = new Factory();
                 factory.setPackageName( "org.eclipse.jst.server.tomcat.core.internal.xml.server40" ); //$NON-NLS-1$
-                fis = new FileInputStream( contextFile );
                 context = (Context) factory.loadDocument( fis );
                 if( context != null )
                 {
@@ -615,17 +613,6 @@ public class LiferayTomcatUtil
             catch( Exception e )
             {
                 // may be a spurious xml file in the host dir?
-            }
-            finally
-            {
-                try
-                {
-                    fis.close();
-                }
-                catch( IOException e )
-                {
-                    // ignore
-                }
             }
         }
         return context;
@@ -695,11 +682,9 @@ public class LiferayTomcatUtil
                 String portalDirKey = CoreUtil.createStringDigest( portalDir.toPortableString() );
                 Properties properties = new Properties();
 
-                try
-                {
-                    FileInputStream fileInput = new FileInputStream( versionInfoFile );
+                try(InputStream fileInput = Files.newInputStream( versionInfoFile.toPath() ))
+                {   
                     properties.load( fileInput );
-                    fileInput.close();
                 }
                 catch( FileNotFoundException e )
                 {
@@ -712,11 +697,9 @@ public class LiferayTomcatUtil
 
                 properties.put( portalDirKey, configInfo );
 
-                try
-                {
-                    FileOutputStream fileOutput = new FileOutputStream( versionInfoFile );
+                try(OutputStream fileOutput = Files.newOutputStream( versionInfoFile.toPath() ))
+                {      
                     properties.store( fileOutput, StringPool.EMPTY );
-                    fileOutput.close();
                 }
                 catch( Exception e )
                 {
@@ -737,13 +720,13 @@ public class LiferayTomcatUtil
             ExternalPropertiesConfiguration props = new ExternalPropertiesConfiguration();
             try
             {
-                props.load( new FileInputStream( externalPropertiesFile ) );
+                props.load( Files.newInputStream( externalPropertiesFile.toPath() ) );
 
                 props.setProperty( "include-and-override", portalIdePropFile.getAbsolutePath() ); //$NON-NLS-1$
 
                 props.setHeader( "# Last modified by Liferay IDE " + new Date() ); //$NON-NLS-1$
 
-                props.save( new FileOutputStream( externalPropertiesFile ) );
+                props.save( Files.newOutputStream( externalPropertiesFile.toPath() ) );
 
                 retval = externalPropertiesFile;
             }

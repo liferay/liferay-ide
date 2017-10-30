@@ -29,7 +29,7 @@ import com.liferay.ide.gradle.core.LiferayGradleProject;
 import com.liferay.ide.project.core.workspace.ImportLiferayWorkspaceOp;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.nio.file.Files;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -117,8 +117,8 @@ public class ImportWorkspaceProjectTests
         File originalProperities = new File( "projects/testWorkspace/gradle.properties" );
         File importedProperties = eeProject.getFile( "gradle.properties" ).getLocation().toFile();
 
-        String originalContent = CoreUtil.readStreamToString( new FileInputStream( originalProperities ) );
-        String importedContent = CoreUtil.readStreamToString( new FileInputStream( importedProperties ) );
+        String originalContent = CoreUtil.readStreamToString( Files.newInputStream( originalProperities.toPath() ) );
+        String importedContent = CoreUtil.readStreamToString( Files.newInputStream( importedProperties.toPath() ) );
 
         originalContent = originalContent.replaceAll( "\r", "" );
         importedContent = importedContent.replaceAll( "\r", "" );
