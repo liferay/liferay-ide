@@ -22,18 +22,24 @@ import com.liferay.blade.api.JSPFile;
 import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.SearchResult;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+@SuppressWarnings("restriction")
 public abstract class JSPFileMigrator extends AbstractFileMigrator<JSPFile> implements AutoMigrator {
 
 	private final String[] _attrNames;
@@ -43,8 +49,9 @@ public abstract class JSPFileMigrator extends AbstractFileMigrator<JSPFile> impl
 	private final String[] _tagNames;
 	private final String[] _newTagNames;
 
-	public JSPFileMigrator(String[] attrNames, String[] newAttrNames, String[] attrValues,
-			String[] newAttrValues, String[] tagNames, String[] newTagNames) {
+	public JSPFileMigrator(
+		String[] attrNames, String[] newAttrNames, String[] attrValues, String[] newAttrValues, String[] tagNames,
+		String[] newTagNames) {
 
 		super(JSPFile.class);
 
@@ -58,120 +65,116 @@ public abstract class JSPFileMigrator extends AbstractFileMigrator<JSPFile> impl
 
 	@Override
 	public int correctProblems(File file, List<Problem> problems) throws AutoMigrateException {
-		int problemsFixed = 0;
-		Map<Integer,String[]> tagsToRewrite = new HashMap<>();
+		int corrected = 0;
+		List<Integer> tagsToRewrite = new ArrayList<>();
 
 		for (Problem problem : problems) {
-			if (problem.autoCorrectContext instanceof String) {
-				String context = problem.autoCorrectContext;
-
-				if (context.equals("jsptag:" + getClass().getName())) {
-					if (_newAttrValues.length > 0) {
-						tagsToRewrite.put(problem.getLineNumber(), _attrValues);
-						problemsFixed++;
-					}
-					else if (_newAttrNames.length > 0) {
-						tagsToRewrite.put(problem.getLineNumber(), _attrNames);
-						problemsFixed++;
-					}
-					else if (_newTagNames.length > 0) {
-						tagsToRewrite.put(problem.getLineNumber(), _tagNames);
-						problemsFixed++;
-					}
-				}
+			if ((problem.autoCorrectContext != null)
+				&& (problem.autoCorrectContext.equals("jsptag:" + getClass().getName()))) {
+				tagsToRewrite.add(problem.getStartOffset());
 			}
 		}
+
+		IFile jspFile = getJSPFile(file);
 
 		if (tagsToRewrite.size() > 0) {
-			try  {
-				FileInputStream in = new FileInputStream(file);
-				String[] lines = readLines(in);
-				in.close();
+			IDOMModel domModel = null;
 
-				String[] editedLines = new String[lines.length];
-				System.arraycopy(lines, 0, editedLines, 0, lines.length);
+			try {
+				domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit(jspFile);
 
-				for (int lineNumber : tagsToRewrite.keySet()) {
-					String[] oldValues = tagsToRewrite.get(lineNumber);
-					boolean tagNameFix = false;
+				List<IDOMElement> elementsToCorrect = new ArrayList<>();
 
-					for (int i = 0; i < oldValues.length; i++) {
-						String oldValue = oldValues[i];
-						String newValue = "";
+				for (int startOffset : tagsToRewrite) {
+					IndexedRegion region = domModel.getIndexedRegion(startOffset);
 
-						if (_newAttrValues.length > 0) {
-							newValue = _newAttrValues[i];
-						}
-						else if (_newAttrNames.length > 0) {
-							newValue = _newAttrNames[i];
-						}
-						else if (_newTagNames.length > 0) {
-							newValue = _newTagNames[i];
+					if (region instanceof IDOMElement) {
+						IDOMElement element = (IDOMElement) region;
 
-							tagNameFix = true;
-						}
-
-						if (!newValue.equals("")) {
-							editedLines[lineNumber - 1] = editedLines[lineNumber - 1].replaceAll(oldValue, newValue);
-
-							if (tagNameFix) {
-								String oldEndTag = "</" + oldValue + ">";
-								String newEndTag = "</" + newValue + ">";
-
-								for (int t = lineNumber - 1; t < editedLines.length; t++) {
-									if (editedLines[t].contains(oldEndTag)) {
-										editedLines[t] = editedLines[t].replaceAll(oldEndTag, newEndTag);
-									}
-								}
-							}
-						}
+						elementsToCorrect.add(element);
 					}
 				}
 
-				StringBuilder sb = new StringBuilder();
+				for (IDOMElement element : elementsToCorrect) {
+					domModel.aboutToChangeModel();
 
-				for (String editedLine : editedLines) {
-					sb.append(editedLine);
-					sb.append(System.getProperty("line.separator"));
+					if (_newAttrValues.length == 1) {
+						element.setAttribute(_attrNames[0], _newAttrValues[0]);
+
+						corrected++;
+					}
+					else if (_newAttrNames.length == 1) {
+						String value = element.getAttribute(_attrNames[0]);
+
+						element.removeAttribute(_attrNames[0]);
+
+						element.setAttribute(_newAttrNames[0], value);
+
+						corrected++;
+					}
+					else if (_newTagNames.length > 0) {
+						String tagName = element.getTagName();
+						NamedNodeMap attributes = element.getAttributes();
+						NodeList childNodes = element.getChildNodes();
+						String nodeValue = element.getNodeValue();
+
+						String newTagName = "";
+
+						for (int i = 0; i < _tagNames.length; i++) {
+							if (_tagNames[i].equals(tagName)) {
+								newTagName = _newTagNames[i];
+
+								break;
+							}
+						}
+
+						Element newNode = element.getOwnerDocument().createElement(newTagName);
+
+						newNode.setNodeValue(nodeValue);
+
+						for (int i = 0; i < attributes.getLength(); i++) {
+							Node attribute = attributes.item(i);
+
+							newNode.setAttribute(attribute.getNodeName(), attribute.getNodeValue());
+						}
+
+						for (int i = 0; i < childNodes.getLength(); i++) {
+							Node childNode = childNodes.item(i);
+
+							newNode.appendChild(childNode);
+						}
+
+						element.getParentNode().replaceChild(newNode, element);
+
+						corrected++;
+					}
+
+					domModel.changedModel();
 				}
 
-				FileWriter writer = new FileWriter(file);
-				writer.write(sb.toString());
-				writer.close();
+				domModel.save();
 
-				return problemsFixed;
 			}
-			catch (IOException e) {
+			catch (Exception e) {
 				throw new AutoMigrateException("Unable to auto-correct", e);
 			}
-		}
+			finally {
+				if (domModel != null) {
+					domModel.releaseFromEdit();
+				}
+			}
 
-		return 0;
-	}
-
-	private static String[] readLines(InputStream inputStream) {
-		if (inputStream == null) {
-			return null;
-		}
-
-		List<String> lines = new ArrayList<>();
-
-		try (BufferedReader bufferedReader =
-				new BufferedReader(new InputStreamReader(inputStream))) {
-
-			String line;
-
-			while ((line = bufferedReader.readLine()) != null) {
-				StringBuffer contents = new StringBuffer(line);
-
-				lines.add(contents.toString());
+			if (corrected > 0 && !jspFile.getLocation().toFile().equals(file)) {
+				try (InputStream jspFileContent = jspFile.getContents()) {
+					Files.copy(jspFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				}
+				catch (Exception e) {
+					throw new AutoMigrateException("Error writing corrected file.", e);
+				}
 			}
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
 
-		return lines.toArray(new String[lines.size()]);
+		return corrected;
 	}
 
 	@Override
@@ -203,6 +206,12 @@ public abstract class JSPFileMigrator extends AbstractFileMigrator<JSPFile> impl
 		}
 
 		return searchResults;
+	}
+
+	protected IFile getJSPFile(File file) {
+		final JSPFile jspFileService = _context.getService(_context.getServiceReference(JSPFile.class));
+
+		return jspFileService.getIFile(file);
 	}
 
 }
