@@ -36,8 +36,7 @@ public class AllJSPTagProblemsTest {
 	@Ignore
 	@Test
 	public void allProblems() throws Exception {
-		ServiceReference<Migration> sr = context
-			.getServiceReference(Migration.class);
+		ServiceReference<Migration> sr = context.getServiceReference(Migration.class);
 		Migration m = context.getService(sr);
 		List<Problem> problems = m.findProblems(new File("jsptests/"), new NullProgressMonitor());
 
@@ -51,7 +50,6 @@ public class AllJSPTagProblemsTest {
 		assertEquals(expectedSize, size);
 	}
 
-	private final BundleContext context = FrameworkUtil.getBundle(
-		this.getClass()).getBundleContext();
+	private final BundleContext context = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
 
 }

@@ -16,13 +16,9 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
+import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.api.JSPFile;
-import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
-
-import java.io.File;
-import java.util.List;
+import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -33,14 +29,21 @@ import org.osgi.service.component.annotations.Component;
 		"problem.section=#removed-the-liferay-uiasset-categories-navigation-tag-and-replaced-with-lif",
 		"problem.summary=Removed the liferay-ui:asset-categories-navigation Tag and Replaced with liferay-asset:asset-categories-navigation",
 		"problem.tickets=LPS-60753",
+		"auto.correct=jsptag",
 		"implName=AssetCategoriesNavigationTags"
 	},
-	service = FileMigrator.class
-)
-public class AssetCategoriesNavigationTags extends JSPFileMigrator {
-
-	@Override
-	protected List<SearchResult> searchFile(File file, JSPFile jspFileChecker) {
-		return jspFileChecker.findJSPTags("liferay-ui:asset-categories-navigation");
+	service = {
+		AutoMigrator.class,
+		FileMigrator.class
 	}
+)
+public class AssetCategoriesNavigationTags extends JSPTagMigrator {
+
+	public AssetCategoriesNavigationTags() {
+		super(new String[0], new String[0], new String[0], new String[0], _tagNames, _newTagNames);
+	}
+
+	private static final String[] _tagNames = new String[] { "liferay-ui:asset-categories-navigation" };
+	private static final String[] _newTagNames = new String[] { "liferay-asset:asset-categories-navigation" };
+
 }

@@ -5,8 +5,10 @@
    <property name="problem.section" value="#renamed-uri-attribute-used-to-generate-aui-tag-library"/>
    <property name="problem.summary" value="We should use the new AUI URI declaration:http://liferay.com/tld/aui"/>
    <property name="problem.tickets" value="LPS-57809"/>
+   <property name="auto.correct" value="jsptag"/>
    <property name="implName" value="AUILiferayTags"/>
    <service>
+      <provide interface="com.liferay.blade.api.AutoMigrator"/>
       <provide interface="com.liferay.blade.api.FileMigrator"/>
    </service>
    <implementation class="com.liferay.blade.upgrade.liferay70.apichanges.AUILiferayTags"/>

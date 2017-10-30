@@ -5,8 +5,10 @@
    <property name="problem.section" value="#deprecated-the-liferay-uicaptcha-tag-and-replaced-with-liferay-captchacaptc"/>
    <property name="problem.summary" value="Deprecated the liferay-ui:captcha Tag and Replaced with liferay-captcha:captcha"/>
    <property name="problem.tickets" value="LPS-69383"/>
+   <property name="auto.correct" value="jsptag"/>
    <property name="implName" value="DeprecatedLiferayUICaptchaTags"/>
    <service>
+      <provide interface="com.liferay.blade.api.AutoMigrator"/>
       <provide interface="com.liferay.blade.api.FileMigrator"/>
    </service>
    <implementation class="com.liferay.blade.upgrade.liferay70.apichanges.DeprecatedLiferayUICaptchaTags"/>

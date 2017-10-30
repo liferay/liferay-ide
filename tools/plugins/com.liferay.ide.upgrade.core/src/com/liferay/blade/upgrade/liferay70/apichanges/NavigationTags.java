@@ -16,13 +16,9 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
+import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.api.JSPFile;
-import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
-
-import java.io.File;
-import java.util.List;
+import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -33,15 +29,21 @@ import org.osgi.service.component.annotations.Component;
 		"problem.section=#removed-the-liferay-uinavigation-tag-and-replaced-with-liferay-site-navigat",
 		"problem.summary=Removed the liferay-ui:navigation Tag and Replaced with liferay-site-navigation:navigation Tag",
 		"problem.tickets=LPS-60328",
+		"auto.correct=jsptag",
 		"implName=NavigationTags"
 	},
-	service = FileMigrator.class
-)
-public class NavigationTags extends JSPFileMigrator {
-
-	@Override
-	protected List<SearchResult> searchFile(File file, JSPFile jspFileChecker) {
-		return jspFileChecker.findJSPTags("liferay-ui:navigation");
+	service = {
+		AutoMigrator.class,
+		FileMigrator.class
 	}
+)
+public class NavigationTags extends JSPTagMigrator {
+
+	public NavigationTags() {
+		super(new String[0], new String[0], new String[0], new String[0], _tagNames, _newTagNames);
+	}
+
+	private static final String[] _tagNames = new String[] { "liferay-ui:navigation" };
+	private static final String[] _newTagNames = new String[] { "liferay-site-navigation:navigation" };
 
 }

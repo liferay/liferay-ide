@@ -17,12 +17,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.api.JSPFile;
-import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
-
-import java.io.File;
-import java.util.List;
+import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -37,11 +32,13 @@ import org.osgi.service.component.annotations.Component;
 	},
 	service = FileMigrator.class
 )
-public class AppViewSearchEntryTags extends JSPFileMigrator {
+public class AppViewSearchEntryTags extends JSPTagMigrator {
 
-	@Override
-	protected List<SearchResult> searchFile(File file, JSPFile jspFileChecker) {
-		return jspFileChecker.findJSPTags(
-			"liferay-ui:app-view-search-entry", new String[] { "mbMessages", "fileEntryTuples" } );
+	public AppViewSearchEntryTags() {
+		super(_attrNames, new String[0], new String[0], new String[0], _tagNames, new String[0]);
 	}
+
+	private static final String[] _attrNames = new String[] { "mbMessages", "fileEntryTuples" };
+
+	private static final String[] _tagNames = new String[] { "liferay-ui:app-view-search-entry" };
 }

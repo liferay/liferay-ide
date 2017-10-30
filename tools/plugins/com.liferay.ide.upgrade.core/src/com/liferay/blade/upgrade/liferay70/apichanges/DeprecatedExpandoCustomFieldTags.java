@@ -16,14 +16,9 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
+import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.api.JSPFile;
-import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -34,24 +29,28 @@ import org.osgi.service.component.annotations.Component;
 		"problem.section=#moved-the-expando-custom-field-tags-to-liferay-expando-taglib",
 		"problem.summary=Moved the Expando Custom Field Tags to liferay-expando Taglib",
 		"problem.tickets=LPS-69400",
+		"auto.correct=jsptag",
 		"implName=DeprecatedExpandoCustomFieldTags"
-	}, 
-	service = FileMigrator.class
-)
-public class DeprecatedExpandoCustomFieldTags extends JSPFileMigrator {
-
-	@Override
-	protected List<SearchResult> searchFile(File file, JSPFile jspFileChecker) {
-		List<SearchResult> result = new ArrayList<SearchResult>();
-
-		result.addAll(
-			jspFileChecker.findJSPTags("liferay-ui:custom-attribute"));
-		result.addAll(
-			jspFileChecker.findJSPTags("liferay-ui:custom-attribute-list"));
-		result.addAll(
-			jspFileChecker.findJSPTags("liferay-ui:custom-attributes-available"));
-
-		return result;
+	},
+	service = {
+		AutoMigrator.class,
+		FileMigrator.class
 	}
+)
+public class DeprecatedExpandoCustomFieldTags extends JSPTagMigrator {
+
+	public DeprecatedExpandoCustomFieldTags() {
+		super(new String[0], new String[0], new String[0], new String[0], _tagNames, _newTagNames);
+	}
+
+	private static final String[] _tagNames = new String[] {
+		"liferay-ui:custom-attribute", "liferay-ui:custom-attribute-list",
+		"liferay-ui:custom-attributes-available"
+	};
+
+	private static final String[] _newTagNames = new String[] {
+		"liferay-expando:custom-attribute", "liferay-expando:custom-attribute-list",
+		"liferay-expando:custom-attributes-available"
+	};
 
 }

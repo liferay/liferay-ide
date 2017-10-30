@@ -16,16 +16,11 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import com.liferay.blade.api.AutoMigrator;
+import com.liferay.blade.api.FileMigrator;
+import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
-
-import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.api.JSPFile;
-import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
 
 @Component(
 	property = {
@@ -34,19 +29,21 @@ import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
 		"problem.section=#removed-the-liferay-uitrash-undo-tag-and-replaced-with-liferay-trashundo",
 		"problem.summary=Removed the liferay-ui:trash-undo Tag and Replaced with liferay-trash:undo",
 		"problem.tickets=LPS-60779",
+		"auto.correct=jsptag",
 		"implName=DeprecatedTrashUndoTags"
 	},
-	service = FileMigrator.class
-)
-public class DeprecatedTrashUndoTags extends JSPFileMigrator {
-
-	@Override
-	protected List<SearchResult> searchFile(File file, JSPFile jspFileChecker) {
-		List<SearchResult> result = new ArrayList<SearchResult>();
-
-		result.addAll(jspFileChecker.findJSPTags("liferay-ui:trash-undo"));
-
-		return result;
+	service = {
+		AutoMigrator.class,
+		FileMigrator.class
 	}
+)
+public class DeprecatedTrashUndoTags extends JSPTagMigrator {
+
+	public DeprecatedTrashUndoTags() {
+		super(new String[0], new String[0], new String[0], new String[0], _tagNames, _newTagNames);
+	}
+
+	private static final String[] _tagNames = new String[] { "liferay-ui:trash-undo" };
+	private static final String[] _newTagNames = new String[] { "liferay-trash:undo" };
 
 }

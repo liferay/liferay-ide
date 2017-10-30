@@ -16,13 +16,9 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
+import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.api.JSPFile;
-import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
-
-import java.io.File;
-import java.util.List;
+import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -33,15 +29,22 @@ import org.osgi.service.component.annotations.Component;
 		"problem.section=#deprecated-the-liferay-uiflags-tag-and-replaced-with-liferay-flagsflags",
 		"problem.summary=Deprecated the liferay-ui:flags Tag and Replaced with liferay-flags:flags",
 		"problem.tickets=LPS-60967",
+		"auto.correct=jsptag",
 		"implName=LiferayUIFlagsTags"
 	},
-	service = FileMigrator.class
-)
-public class LiferayUIFlagsTags extends JSPFileMigrator {
-
-	@Override
-	protected List<SearchResult> searchFile(File file, JSPFile jspFileChecker) {
-		return jspFileChecker.findJSPTags("liferay-ui:flags");
+	service = {
+		AutoMigrator.class,
+		FileMigrator.class
 	}
+)
+public class LiferayUIFlagsTags extends JSPTagMigrator {
+
+	public LiferayUIFlagsTags() {
+		super(new String[0], new String[0], new String[0], new String[0], _tagNames, _newTagNames);
+	}
+
+	private static final String[] _tagNames = new String[] { "liferay-ui:flags" };
+
+	private static final String[] _newTagNames = new String[] { "liferay-flags:flags" };
 
 }

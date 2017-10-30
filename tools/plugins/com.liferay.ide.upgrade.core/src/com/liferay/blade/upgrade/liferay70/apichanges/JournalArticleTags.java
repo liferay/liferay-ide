@@ -17,12 +17,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.api.JSPFile;
-import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
-
-import java.io.File;
-import java.util.List;
+import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -37,10 +32,12 @@ import org.osgi.service.component.annotations.Component;
 	},
 	service = FileMigrator.class
 )
-public class JournalArticleTags extends JSPFileMigrator {
+public class JournalArticleTags extends JSPTagMigrator {
 
-	@Override
-	protected List<SearchResult> searchFile(File file, JSPFile jspFileChecker) {
-		return jspFileChecker.findJSPTags("liferay-ui:journal-article");
+	public JournalArticleTags() {
+		super(new String[0], new String[0], new String[0], new String[0], _tagNames, new String[0]);
 	}
+
+	private static final String[] _tagNames = new String[] { "liferay-ui:journal-article" };
+
 }

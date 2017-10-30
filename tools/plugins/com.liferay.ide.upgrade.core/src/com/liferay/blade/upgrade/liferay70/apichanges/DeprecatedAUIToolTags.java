@@ -16,15 +16,10 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
-import java.io.File;
-import java.util.List;
+import com.liferay.blade.api.FileMigrator;
+import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
-
-import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.api.JSPFile;
-import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
 
 @Component(
 	property = {
@@ -37,11 +32,12 @@ import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
 	},
 	service = FileMigrator.class
 )
-public class DeprecatedAUIToolTags extends JSPFileMigrator {
+public class DeprecatedAUIToolTags extends JSPTagMigrator {
 
-	@Override
-	protected List<SearchResult> searchFile(File file, JSPFile jspFileChecker) {
-		return jspFileChecker.findJSPTags("aui:tool");
+	public DeprecatedAUIToolTags() {
+		super(new String[0], new String[0], new String[0], new String[0], _tagNames, new String[0]);
 	}
+
+	private static final String[] _tagNames = new String[] { "aui:tool" };
 
 }

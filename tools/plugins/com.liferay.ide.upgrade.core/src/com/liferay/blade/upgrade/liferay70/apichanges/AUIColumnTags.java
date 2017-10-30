@@ -16,13 +16,9 @@
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
+import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.api.JSPFile;
-import com.liferay.blade.api.SearchResult;
-import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
-
-import java.io.File;
-import java.util.List;
+import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -33,14 +29,21 @@ import org.osgi.service.component.annotations.Component;
 		"problem.section=#removed-the-auicolumn-tag-and-replaced-with-auicol",
 		"problem.summary=The aui:column taglib has been removed and replaced with aui:col taglib",
 		"problem.tickets=LPS-62208",
+		"auto.correct=jsptag",
 		"implName=AUIColumnTags"
 	},
-	service = FileMigrator.class
-)
-public class AUIColumnTags extends JSPFileMigrator {
-
-	@Override
-	protected List<SearchResult> searchFile(File file, JSPFile jspFileChecker) {
-		return jspFileChecker.findJSPTags("aui:column");
+	service = {
+		AutoMigrator.class,
+		FileMigrator.class
 	}
+)
+public class AUIColumnTags extends JSPTagMigrator {
+
+	public AUIColumnTags() {
+		super(new String[0], new String[0], new String[0], new String[0], _tagNames, _newTagNames);
+	}
+
+	private static final String[] _tagNames = new String[] { "aui:column" };
+	private static final String[] _newTagNames = new String[] { "aui:col" };
+
 }
