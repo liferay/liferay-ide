@@ -17,7 +17,7 @@
 package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
+import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -32,7 +32,7 @@ import org.osgi.service.component.annotations.Component;
 	},
 	service = FileMigrator.class
 )
-public class DeprecatedLiferaySecurityEncryptTag extends JSPFileMigrator {
+public class DeprecatedLiferaySecurityEncryptTag extends JSPTagMigrator {
 
 	public DeprecatedLiferaySecurityEncryptTag() {
 		super(new String[0], new String[0], new String[0], new String[0], _tagNames, new String[0]);

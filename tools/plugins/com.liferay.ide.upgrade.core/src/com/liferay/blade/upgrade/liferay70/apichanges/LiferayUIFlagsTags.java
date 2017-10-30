@@ -18,7 +18,7 @@ package com.liferay.blade.upgrade.liferay70.apichanges;
 
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.upgrade.liferay70.JSPFileMigrator;
+import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -37,7 +37,7 @@ import org.osgi.service.component.annotations.Component;
 		FileMigrator.class
 	}
 )
-public class LiferayUIFlagsTags extends JSPFileMigrator {
+public class LiferayUIFlagsTags extends JSPTagMigrator {
 
 	public LiferayUIFlagsTags() {
 		super(new String[0], new String[0], new String[0], new String[0], _tagNames, _newTagNames);

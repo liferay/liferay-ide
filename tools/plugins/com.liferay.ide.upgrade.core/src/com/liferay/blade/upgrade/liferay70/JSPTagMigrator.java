@@ -39,8 +39,11 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * @author Gregory Amerson
+ */
 @SuppressWarnings("restriction")
-public abstract class JSPFileMigrator extends AbstractFileMigrator<JSPFile> implements AutoMigrator {
+public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> implements AutoMigrator {
 
 	private final String[] _attrNames;
 	private final String[] _newAttrNames;
@@ -49,7 +52,7 @@ public abstract class JSPFileMigrator extends AbstractFileMigrator<JSPFile> impl
 	private final String[] _tagNames;
 	private final String[] _newTagNames;
 
-	public JSPFileMigrator(
+	public JSPTagMigrator(
 		String[] attrNames, String[] newAttrNames, String[] attrValues, String[] newAttrValues, String[] tagNames,
 		String[] newTagNames) {
 
@@ -82,6 +85,7 @@ public abstract class JSPFileMigrator extends AbstractFileMigrator<JSPFile> impl
 
 			try {
 				domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit(jspFile);
+				domModel.aboutToChangeModel();
 
 				List<IDOMElement> elementsToCorrect = new ArrayList<>();
 
@@ -96,8 +100,6 @@ public abstract class JSPFileMigrator extends AbstractFileMigrator<JSPFile> impl
 				}
 
 				for (IDOMElement element : elementsToCorrect) {
-					domModel.aboutToChangeModel();
-
 					if (_newAttrValues.length == 1) {
 						element.setAttribute(_attrNames[0], _newAttrValues[0]);
 
@@ -148,12 +150,10 @@ public abstract class JSPFileMigrator extends AbstractFileMigrator<JSPFile> impl
 
 						corrected++;
 					}
-
-					domModel.changedModel();
 				}
 
+				domModel.changedModel();
 				domModel.save();
-
 			}
 			catch (Exception e) {
 				throw new AutoMigrateException("Unable to auto-correct", e);
