@@ -144,7 +144,7 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 
             IPath runtimeLoc = getRuntime().getLocation();
 
-            if( !runtimeLoc.isPrefixOf( vmLoc ) )
+            if( runtimeLoc != null && !runtimeLoc.isPrefixOf( vmLoc ) )
             {
                 // we have a jre that is outside the runtime location, need to
                 // look for new bundled JRE
