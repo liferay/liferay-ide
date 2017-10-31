@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.ui.editor;
 
@@ -32,7 +31,10 @@ import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.net.MalformedURLException;
+import java.net.URL;
+
 import java.nio.file.Files;
 
 import org.eclipse.core.resources.IFile;
@@ -69,252 +71,227 @@ import org.eclipse.ui.part.FileEditorInput;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class HookXmlEditor extends SapphireEditorForXml
-{
-    protected boolean customModelDirty = false;
+public class HookXmlEditor extends SapphireEditorForXml {
 
-    private boolean ignoreCustomModelChanges;
+	public HookXmlEditor() {
+		super(Hook6xx.TYPE, null);
+	}
 
-    public HookXmlEditor()
-    {
-        super( Hook6xx.ELEMENT_TYPE, null );
-    }
+	@Override
+	public void doSave(IProgressMonitor monitor) {
+		if (customModelDirty) {
+			Hook hook = getModelElement().nearest(Hook.class);
 
-    @Override
-    protected void adaptModel( final Element model )
-    {
-        super.adaptModel( model );
+			ElementList<CustomJsp> customJsps = hook.getCustomJsps();
 
-        Listener listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            public void handleTypedEvent( final PropertyContentEvent event )
-            {
-                handleCustomJspsPropertyChangedEvent( event );
-            }
-        };
+			ILiferayProject liferayProject = LiferayCore.create(getProject());
 
-        this.ignoreCustomModelChanges = true;
-        model.attach( listener, Hook.PROP_CUSTOM_JSPS.name() + "/*" ); //$NON-NLS-1$
-        this.ignoreCustomModelChanges = false;
-    }
+			ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
-    @Override
-    protected void createFormPages() throws PartInitException
-    {
-        addDeferredPage( 1, "Overview", "HookConfigurationPage" );
-    }
+			if (portal != null) {
+				IPath portalDir = portal.getAppServerPortalDir();
 
-    private void configureCustomJspValidation( final IProject project, final String customerJspPath )
-    {
-        final IFolder docFolder = CoreUtil.getDefaultDocrootFolder( project );
+				if (portalDir != null) {
+					_copyCustomJspsToProject(portalDir, customJsps);
+				}
+			}
 
-        if( docFolder != null )
-        {
-            final IPath newPath = org.eclipse.core.runtime.Path.fromOSString( customerJspPath );
+			customModelDirty = false;
 
-            final IPath pathValue = docFolder.getFullPath().append( newPath );
+			super.doSave(monitor);
 
-            final IFolder customJspFolder = project.getFolder( pathValue.makeRelativeTo( project.getFullPath() ) );
+			firePropertyChange(IEditorPart.PROP_DIRTY);
 
-            boolean needAddCustomJspValidation =
-                HookUtil.configureJSPSyntaxValidationExclude( project, customJspFolder, false );
+			ElementHandle<CustomJspDir> customJspDir = hook.getCustomJspDir();
 
-            if( !needAddCustomJspValidation )
-            {
-                UIUtil.async( new Runnable()
-                {
+			if ((customJspDir != null) && !customJspDir.empty()) {
+				Value<Path> customJspPath = customJspDir.content().getValue();
 
-                    public void run()
-                    {
-                        final boolean addDisableCustomJspValidation =
-                            MessageDialog.openQuestion(
-                                UIUtil.getActiveShell(), Msgs.disableCustomValidationTitle,
-                                Msgs.disableCustomValidationMsg );
+				Path path = customJspPath.content().makeRelative();
 
-                        if( addDisableCustomJspValidation )
-                        {
-                            new WorkspaceJob( " disable custom jsp validation for " + project.getName() )
-                            {
+				String customeJspValue = path.toPortableString();
 
-                                @Override
-                                public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-                                {
-                                    HookUtil.configureJSPSyntaxValidationExclude(
-                                        project, customJspFolder, true );
-                                    project.build( IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor() );
+				_configureCustomJspValidation(getProject(), customeJspValue);
+			}
+		}
+		else {
+			super.doSave(monitor);
+		}
+	}
 
-                                    return Status.OK_STATUS;
-                                }
-                            }.schedule();
-                        }
-                    }
-                } );
-            }
-        }
-    }
+	public InputStream getFileContents() throws CoreException, IOException, MalformedURLException {
+		IEditorInput editorInput = getEditorInput();
 
-    private void copyCustomJspsToProject( IPath portalDir, ElementList<CustomJsp> customJsps )
-    {
-        try
-        {
-            CustomJspDir customJspDirElement = this.getModelElement().nearest( Hook.class ).getCustomJspDir().content();
+		if (editorInput instanceof FileEditorInput) {
+			return ((FileEditorInput)editorInput).getFile().getContents();
+		}
+		else if (editorInput instanceof IStorageEditorInput) {
+			return ((IStorageEditorInput)editorInput).getStorage().getContents();
+		}
+		else if (editorInput instanceof FileStoreEditorInput) {
+			URL url = ((FileStoreEditorInput)editorInput).getURI().toURL();
 
-            if( customJspDirElement != null && customJspDirElement.validation().ok() )
-            {
-                Path customJspDir = customJspDirElement.getValue().content();
-                final IWebProject webproject = LiferayCore.create( IWebProject.class, getProject() );
+			return url.openStream();
+		}
+		else {
+			return null;
+		}
+	}
 
-                if( webproject != null )
-                {
-                    IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
-                    IFolder customJspFolder = defaultDocroot.getFolder( customJspDir.toPortableString() );
+	@Override
+	public boolean isDirty() {
+		if (customModelDirty) {
+			return true;
+		}
 
-                    for( CustomJsp customJsp : customJsps )
-                    {
-                        String content = customJsp.getValue().content();
+		return super.isDirty();
+	}
 
-                        if( !empty( content ) )
-                        {
-                            IFile customJspFile = customJspFolder.getFile( content );
+	@Override
+	protected void adaptModel(Element model) {
+		super.adaptModel(model);
 
-                            if( !customJspFile.exists() )
-                            {
-                                IPath portalJsp = portalDir.append( content );
+		Listener listener = new FilteredListener<PropertyContentEvent>() {
 
-                                try
-                                {
-                                    CoreUtil.makeFolders( (IFolder) customJspFile.getParent() );
+			@Override
+			public void handleTypedEvent(PropertyContentEvent event) {
+				handleCustomJspsPropertyChangedEvent(event);
+			}
 
-                                    if( portalJsp.toFile().exists() )
-                                    {
-                                        customJspFile.create(
-                                            Files.newInputStream( portalJsp.toFile().toPath() ), true, null );
-                                    }
-                                    else
-                                    {
-                                        CoreUtil.createEmptyFile( customJspFile );
-                                    }
-                                }
-                                catch( Exception e )
-                                {
-                                    HookUI.logError( e );
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            HookUI.logError( e );
-        }
-    }
+		};
 
-    @Override
-    public void doSave( IProgressMonitor monitor )
-    {
-        if( this.customModelDirty )
-        {
-            final Hook hook = getModelElement().nearest( Hook.class );
-            final ElementList<CustomJsp> customJsps = hook.getCustomJsps();
+		_ignoreCustomModelChanges = true;
+		model.attach(listener, Hook.PROP_CUSTOM_JSPS.name() + "/*"); //$NON-NLS-1$
+		_ignoreCustomModelChanges = false;
+	}
 
-            final ILiferayProject liferayProject = LiferayCore.create( getProject() );
-            final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+	@Override
+	protected void createFormPages() throws PartInitException {
+		addDeferredPage(1, "Overview", "HookConfigurationPage");
+	}
 
-            if( portal != null )
-            {
-                final IPath portalDir = portal.getAppServerPortalDir();
+	protected void handleCustomJspsPropertyChangedEvent(PropertyContentEvent event) {
+		if (_ignoreCustomModelChanges) {
+			return;
+		}
 
-                if( portalDir != null )
-                {
-                    copyCustomJspsToProject( portalDir, customJsps );
-                }
-            }
+		customModelDirty = true;
+		firePropertyChange(IEditorPart.PROP_DIRTY);
+	}
 
-            this.customModelDirty = false;
+	@Override
+	protected void pageChange(int pageIndex) {
+		_ignoreCustomModelChanges = true;
+		super.pageChange(pageIndex);
+		_ignoreCustomModelChanges = false;
+	}
 
-            super.doSave( monitor );
+	protected boolean customModelDirty = false;
 
-            this.firePropertyChange( IEditorPart.PROP_DIRTY );
+	private void _configureCustomJspValidation(IProject project, String customerJspPath) {
+		IFolder docFolder = CoreUtil.getDefaultDocrootFolder(project);
 
-            ElementHandle<CustomJspDir> customJspDir = hook.getCustomJspDir();
+		if (docFolder != null) {
+			IPath newPath = org.eclipse.core.runtime.Path.fromOSString(customerJspPath);
 
-            if( customJspDir != null && !customJspDir.empty() )
-            {
-                Value<Path> customJspPath = customJspDir.content().getValue();
-                final String customeJspValue = customJspPath.content().makeRelative().toPortableString();
-                configureCustomJspValidation( getProject(), customeJspValue );
-            }
-        }
-        else
-        {
-            super.doSave( monitor );
-        }
-    }
+			IPath pathValue = docFolder.getFullPath().append(newPath);
 
-    public InputStream getFileContents() throws CoreException, MalformedURLException, IOException
-    {
-        final IEditorInput editorInput = getEditorInput();
+			IFolder customJspFolder = project.getFolder(pathValue.makeRelativeTo(project.getFullPath()));
 
-        if( editorInput instanceof FileEditorInput )
-        {
-            return ( (FileEditorInput) editorInput ).getFile().getContents();
-        }
-        else if( editorInput instanceof IStorageEditorInput )
-        {
-            return ( (IStorageEditorInput) editorInput ).getStorage().getContents();
-        }
-        else if( editorInput instanceof FileStoreEditorInput )
-        {
-            return ( (FileStoreEditorInput) editorInput ).getURI().toURL().openStream();
-        }
-        else
-        {
-            return null;
-        }
-    }
+			boolean needAddCustomJspValidation = HookUtil.configureJSPSyntaxValidationExclude(
+				project, customJspFolder, false);
 
-    protected void handleCustomJspsPropertyChangedEvent( final PropertyContentEvent event )
-    {
-        if( this.ignoreCustomModelChanges )
-        {
-            return;
-        }
+			if (!needAddCustomJspValidation) {
+				UIUtil.async(
+					new Runnable() {
 
-        this.customModelDirty = true;
-        this.firePropertyChange( IEditorPart.PROP_DIRTY );
-    }
+						public void run() {
+							boolean addDisableCustomJspValidation = MessageDialog.openQuestion(
+								UIUtil.getActiveShell(), Msgs.disableCustomValidationTitle,
+								Msgs.disableCustomValidationMsg);
 
-    @Override
-    public boolean isDirty()
-    {
-        if( this.customModelDirty )
-        {
-            return true;
-        }
+							if (addDisableCustomJspValidation) {
+								new WorkspaceJob(" disable custom jsp validation for " + project.getName()) {
 
-        return super.isDirty();
-    }
+									@Override
+									public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+										HookUtil.configureJSPSyntaxValidationExclude(project, customJspFolder, true);
+										project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
 
-    @Override
-    protected void pageChange( int pageIndex )
-    {
-        this.ignoreCustomModelChanges = true;
-        super.pageChange( pageIndex );
-        this.ignoreCustomModelChanges = false;
-    }
+										return Status.OK_STATUS;
+									}
 
-    private static class Msgs extends NLS
-    {
-        public static String disableCustomValidationMsg;
-        public static String disableCustomValidationTitle;
+								}.schedule();
+							}
+						}
 
-        static
-        {
-            initializeMessages( HookXmlEditor.class.getName(), Msgs.class );
-        }
-    }
+					});
+			}
+		}
+	}
+
+	private void _copyCustomJspsToProject(IPath portalDir, ElementList<CustomJsp> customJsps) {
+		try {
+			Hook hook = getModelElement().nearest(Hook.class);
+
+			ElementHandle<CustomJspDir> element = hook.getCustomJspDir();
+
+			CustomJspDir customJspDirElement = element.content();
+
+			if ((customJspDirElement != null) && customJspDirElement.validation().ok()) {
+				Path customJspDir = customJspDirElement.getValue().content();
+				IWebProject webproject = LiferayCore.create(IWebProject.class, getProject());
+
+				if (webproject != null) {
+					IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
+
+					IFolder customJspFolder = defaultDocroot.getFolder(customJspDir.toPortableString());
+
+					for (CustomJsp customJsp : customJsps) {
+						String content = customJsp.getValue().content();
+
+						if (!empty(content)) {
+							IFile customJspFile = customJspFolder.getFile(content);
+
+							if (!customJspFile.exists()) {
+								IPath portalJsp = portalDir.append(content);
+
+								try {
+									CoreUtil.makeFolders((IFolder)customJspFile.getParent());
+
+									if (portalJsp.toFile().exists()) {
+										customJspFile.create(
+											Files.newInputStream(portalJsp.toFile().toPath()), true, null);
+									}
+									else {
+										CoreUtil.createEmptyFile(customJspFile);
+									}
+								}
+								catch (Exception e) {
+									HookUI.logError(e);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			HookUI.logError(e);
+		}
+	}
+
+	private boolean _ignoreCustomModelChanges;
+
+	private static class Msgs extends NLS {
+
+		public static String disableCustomValidationMsg;
+		public static String disableCustomValidationTitle;
+
+		static {
+			initializeMessages(HookXmlEditor.class.getName(), Msgs.class);
+		}
+
+	}
 
 }
