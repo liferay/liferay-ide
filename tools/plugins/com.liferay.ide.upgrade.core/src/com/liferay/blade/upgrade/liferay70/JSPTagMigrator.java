@@ -27,6 +27,8 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -69,14 +71,21 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 	@Override
 	public int correctProblems(File file, List<Problem> problems) throws AutoMigrateException {
 		int corrected = 0;
+
 		List<Integer> tagsToRewrite = new ArrayList<>();
 
 		for (Problem problem : problems) {
-			if ((problem.autoCorrectContext != null)
-				&& (problem.autoCorrectContext.equals("jsptag:" + getClass().getName()))) {
+			if (problem.autoCorrectContext.equals("jsptag:" + getClass().getName())) {
 				tagsToRewrite.add(problem.getStartOffset());
 			}
 		}
+
+		Collections.sort(tagsToRewrite, new Comparator<Integer>() {
+
+			public int compare(Integer i1, Integer i2) {
+				return i2.compareTo(i1);
+			}
+		});
 
 		IFile jspFile = getJSPFile(file);
 
@@ -85,7 +94,6 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 
 			try {
 				domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit(jspFile);
-				domModel.aboutToChangeModel();
 
 				List<IDOMElement> elementsToCorrect = new ArrayList<>();
 
@@ -100,6 +108,8 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 				}
 
 				for (IDOMElement element : elementsToCorrect) {
+					domModel.aboutToChangeModel();
+
 					if (_newAttrValues.length == 1) {
 						element.setAttribute(_attrNames[0], _newAttrValues[0]);
 
@@ -132,7 +142,9 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 
 						Element newNode = element.getOwnerDocument().createElement(newTagName);
 
-						newNode.setNodeValue(nodeValue);
+						if (nodeValue != null) {
+							newNode.setNodeValue(nodeValue);
+						}
 
 						for (int i = 0; i < attributes.getLength(); i++) {
 							Node attribute = attributes.item(i);
@@ -143,17 +155,18 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 						for (int i = 0; i < childNodes.getLength(); i++) {
 							Node childNode = childNodes.item(i);
 
-							newNode.appendChild(childNode);
+							newNode.appendChild(childNode.cloneNode(true));
 						}
 
 						element.getParentNode().replaceChild(newNode, element);
 
 						corrected++;
 					}
-				}
 
-				domModel.changedModel();
-				domModel.save();
+					domModel.changedModel();
+
+					domModel.save();
+				}
 			}
 			catch (Exception e) {
 				throw new AutoMigrateException("Unable to auto-correct", e);

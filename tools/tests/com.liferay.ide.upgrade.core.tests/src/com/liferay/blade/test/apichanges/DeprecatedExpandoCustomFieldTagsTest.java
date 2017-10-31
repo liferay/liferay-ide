@@ -22,7 +22,7 @@ public class DeprecatedExpandoCustomFieldTagsTest extends APITestBase {
 
 	@Override
 	public int getExpectedNumber() {
-		return 3;
+		return 2;
 	}
 
 	@Override

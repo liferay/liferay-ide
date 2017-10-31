@@ -15,8 +15,19 @@
 
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.blade.api.AutoMigrateException;
+import com.liferay.blade.api.AutoMigrator;
+import com.liferay.blade.api.Problem;
+import com.liferay.ide.project.core.upgrade.FileProblems;
+import com.liferay.ide.project.core.upgrade.UpgradeProblems;
+import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
+import com.liferay.ide.ui.util.UIUtil;
+
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -31,15 +42,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-
-import com.liferay.blade.api.AutoMigrateException;
-import com.liferay.blade.api.AutoMigrator;
-import com.liferay.blade.api.Problem;
-import com.liferay.ide.project.core.upgrade.FileProblems;
-import com.liferay.ide.project.core.upgrade.UpgradeProblems;
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
-import com.liferay.ide.ui.util.UIUtil;
 
 /**
  * @author Terry Jia
@@ -79,49 +81,60 @@ public class AutoCorrectAllAction extends Action
                                 for( FileProblems fileProblems : FileProblemsArray )
                                 {
                                     List<Problem> problems = fileProblems.getProblems();
+
+                                    Set<String> fixed = new HashSet<>();
+
                                     for( Problem problem : problems )
                                     {
-                                        if( problem.autoCorrectContext != null )
+                                        final IResource file = MigrationUtil.getIResourceFromProblem( problem );
+
+                                        String fixedKey =
+                                            file.getLocation().toString() + "," + problem.autoCorrectContext;
+
+                                        if( problem.autoCorrectContext == null || fixed.contains(fixedKey))
                                         {
-                                            String autoCorrectKey = null;
+                                            continue;
+                                        }
 
-                                            final int filterKeyIndex = problem.autoCorrectContext.indexOf( ":" );
+                                        String autoCorrectKey = null;
 
-                                            if( filterKeyIndex > -1 )
+                                        final int filterKeyIndex = problem.autoCorrectContext.indexOf( ":" );
+
+                                        if( filterKeyIndex > -1 )
+                                        {
+                                            autoCorrectKey =
+                                                problem.autoCorrectContext.substring( 0, filterKeyIndex );
+                                        }
+                                        else
+                                        {
+                                            autoCorrectKey = problem.autoCorrectContext;
+                                        }
+
+                                        final Collection<ServiceReference<AutoMigrator>> refs =
+                                            context.getServiceReferences(
+                                                AutoMigrator.class, "(auto.correct=" + autoCorrectKey + ")" );
+
+                                        for( ServiceReference<AutoMigrator> ref : refs )
+                                        {
+                                            final AutoMigrator autoMigrator = context.getService( ref );
+
+                                            int problemsCorrected =
+                                                autoMigrator.correctProblems( problem.file, problems );
+
+                                            fixed.add(fixedKey);
+
+                                            if( problemsCorrected > 0 && file != null )
                                             {
-                                                autoCorrectKey =
-                                                    problem.autoCorrectContext.substring( 0, filterKeyIndex );
-                                            }
-                                            else
-                                            {
-                                                autoCorrectKey = problem.autoCorrectContext;
-                                            }
+                                                IMarker problemMarker = file.findMarker( problem.markerId );
 
-                                            final Collection<ServiceReference<AutoMigrator>> refs =
-                                                context.getServiceReferences(
-                                                    AutoMigrator.class, "(auto.correct=" + autoCorrectKey + ")" );
-
-                                            final IResource file = MigrationUtil.getIResourceFromProblem( problem );
-
-                                            for( ServiceReference<AutoMigrator> ref : refs )
-                                            {
-                                                final AutoMigrator autoMigrator = context.getService( ref );
-                                                int problemsCorrected =
-                                                    autoMigrator.correctProblems( problem.file, problems );
-
-                                                if( problemsCorrected > 0 && file != null )
+                                                if( problemMarker != null && problemMarker.exists() )
                                                 {
-                                                    IMarker problemMarker = file.findMarker( problem.markerId );
-
-                                                    if( problemMarker != null && problemMarker.exists() )
-                                                    {
-                                                        problemMarker.delete();
-                                                    }
+                                                    problemMarker.delete();
                                                 }
                                             }
-
-                                            file.refreshLocal( IResource.DEPTH_ONE, monitor );
                                         }
+
+                                        file.refreshLocal( IResource.DEPTH_ONE, monitor );
                                     }
                                 }
                             }
