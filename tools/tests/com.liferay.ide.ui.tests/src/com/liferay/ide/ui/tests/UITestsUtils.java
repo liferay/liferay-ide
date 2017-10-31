@@ -127,6 +127,7 @@ public class UITestsUtils
         {
             if( project != null && project.isAccessible() && project.exists() )
             {
+                project.close( new NullProgressMonitor() );
                 project.delete( true, true, new NullProgressMonitor() );
             }
         }
