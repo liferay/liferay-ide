@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -72,16 +73,27 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 	public int correctProblems(File file, List<Problem> problems) throws AutoMigrateException {
 		int corrected = 0;
 
-		List<Integer> tagsToRewrite = new ArrayList<>();
+		List<Integer> autoCorrectTagOffsets = new ArrayList<>();
+
+		Stream<Problem> stream = problems.stream();
+
+		final String autoCorrectContext = "jsptag:" + getClass().getName();
+
+		stream.filter(
+			p -> p.autoCorrectContext.equals(autoCorrectContext)
+		).map(
+			p -> p.getStartOffset()
+		).sorted();
 
 		for (Problem problem : problems) {
 			if (problem.autoCorrectContext.equals("jsptag:" + getClass().getName())) {
-				tagsToRewrite.add(problem.getStartOffset());
+				autoCorrectTagOffsets.add(problem.getStartOffset());
 			}
 		}
 
-		Collections.sort(tagsToRewrite, new Comparator<Integer>() {
+		Collections.sort(autoCorrectTagOffsets, new Comparator<Integer>() {
 
+			@Override
 			public int compare(Integer i1, Integer i2) {
 				return i2.compareTo(i1);
 			}
@@ -89,7 +101,7 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 
 		IFile jspFile = getJSPFile(file);
 
-		if (tagsToRewrite.size() > 0) {
+		if (autoCorrectTagOffsets.size() > 0) {
 			IDOMModel domModel = null;
 
 			try {
@@ -97,7 +109,7 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 
 				List<IDOMElement> elementsToCorrect = new ArrayList<>();
 
-				for (int startOffset : tagsToRewrite) {
+				for (int startOffset : autoCorrectTagOffsets) {
 					IndexedRegion region = domModel.getIndexedRegion(startOffset);
 
 					if (region instanceof IDOMElement) {
