@@ -177,7 +177,7 @@ public class LaunchHelper implements IDebugEventSetListener
     public boolean isLaunchRunning()
     {
         return this.runningLaunch != null && !this.runningLaunch.isTerminated() &&
-            !this.runningLaunch.getProcesses()[0].isTerminated();
+           ( !( this.runningLaunch.getProcesses().length > 0 && this.runningLaunch.getProcesses()[0].isTerminated() ) );
     }
 
     public boolean isLaunchSync()
@@ -199,7 +199,7 @@ public class LaunchHelper implements IDebugEventSetListener
 
         final ILaunch launch = config.launch( mode, new NullProgressMonitor() );
 
-        final IProcess process = launch.getProcesses()[0];
+        final IProcess process = launch.getProcesses().length > 0 ? launch.getProcesses()[0] : null;
 
         if( isLaunchSync() )
         {
@@ -211,7 +211,10 @@ public class LaunchHelper implements IDebugEventSetListener
                 {
                     if( monitor != null && monitor.isCanceled() && !launch.isTerminated() )
                     {
-                        process.terminate();
+                        if( process != null )
+                        {
+                            process.terminate();
+                        }
                         launch.terminate();
                     }
                     else
@@ -230,7 +233,7 @@ public class LaunchHelper implements IDebugEventSetListener
             }
         }
 
-        return isLaunchSync() ? process.getExitValue() : 0;
+        return isLaunchSync() && process != null ? process.getExitValue() : 0;
     }
 
     public int launch( IProgressMonitor monitor ) throws CoreException
