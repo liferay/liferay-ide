@@ -49,6 +49,7 @@ public class Util
     {
         for( IProject project : CoreUtil.getAllProjects())
         {
+            project.close( new NullProgressMonitor() );
             project.delete( true, new NullProgressMonitor() );
         }
     }

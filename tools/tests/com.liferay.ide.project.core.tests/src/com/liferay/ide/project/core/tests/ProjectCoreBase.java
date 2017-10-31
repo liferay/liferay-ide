@@ -107,7 +107,8 @@ public class ProjectCoreBase extends ServerCoreBase
                     //ignore
                 }
 
-                project.delete( true, true, monitor );
+                project.close( monitor );
+                project.delete( true, monitor );
 
                 assertFalse( project.exists() );
             }
