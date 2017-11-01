@@ -89,9 +89,19 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openPreferencesRecorderDialog();
+		try {
+			long origin = SWTBotPreferences.TIMEOUT;
 
-		dialogAction.preparePreferencesRecorder();
+			SWTBotPreferences.TIMEOUT = 1000;
+			
+			dialogAction.openPreferencesRecorderDialog();
+
+			dialogAction.preparePreferencesRecorder();
+
+			SWTBotPreferences.TIMEOUT = origin;
+		}
+		catch (Exception e) {
+		}
 
 		dialogAction.confirmPreferences();
 
