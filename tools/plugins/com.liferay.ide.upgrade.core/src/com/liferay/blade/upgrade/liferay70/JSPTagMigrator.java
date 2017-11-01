@@ -27,7 +27,10 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -69,27 +72,44 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 	@Override
 	public int correctProblems(File file, List<Problem> problems) throws AutoMigrateException {
 		int corrected = 0;
-		List<Integer> tagsToRewrite = new ArrayList<>();
+
+		List<Integer> autoCorrectTagOffsets = new ArrayList<>();
+
+		Stream<Problem> stream = problems.stream();
+
+		final String autoCorrectContext = "jsptag:" + getClass().getName();
+
+		stream.filter(
+			p -> p.autoCorrectContext.equals(autoCorrectContext)
+		).map(
+			p -> p.getStartOffset()
+		).sorted();
 
 		for (Problem problem : problems) {
-			if ((problem.autoCorrectContext != null)
-				&& (problem.autoCorrectContext.equals("jsptag:" + getClass().getName()))) {
-				tagsToRewrite.add(problem.getStartOffset());
+			if (problem.autoCorrectContext.equals("jsptag:" + getClass().getName())) {
+				autoCorrectTagOffsets.add(problem.getStartOffset());
 			}
 		}
 
+		Collections.sort(autoCorrectTagOffsets, new Comparator<Integer>() {
+
+			@Override
+			public int compare(Integer i1, Integer i2) {
+				return i2.compareTo(i1);
+			}
+		});
+
 		IFile jspFile = getJSPFile(file);
 
-		if (tagsToRewrite.size() > 0) {
+		if (autoCorrectTagOffsets.size() > 0) {
 			IDOMModel domModel = null;
 
 			try {
 				domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit(jspFile);
-				domModel.aboutToChangeModel();
 
 				List<IDOMElement> elementsToCorrect = new ArrayList<>();
 
-				for (int startOffset : tagsToRewrite) {
+				for (int startOffset : autoCorrectTagOffsets) {
 					IndexedRegion region = domModel.getIndexedRegion(startOffset);
 
 					if (region instanceof IDOMElement) {
@@ -100,6 +120,8 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 				}
 
 				for (IDOMElement element : elementsToCorrect) {
+					domModel.aboutToChangeModel();
+
 					if (_newAttrValues.length == 1) {
 						element.setAttribute(_attrNames[0], _newAttrValues[0]);
 
@@ -132,7 +154,9 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 
 						Element newNode = element.getOwnerDocument().createElement(newTagName);
 
-						newNode.setNodeValue(nodeValue);
+						if (nodeValue != null) {
+							newNode.setNodeValue(nodeValue);
+						}
 
 						for (int i = 0; i < attributes.getLength(); i++) {
 							Node attribute = attributes.item(i);
@@ -143,17 +167,18 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 						for (int i = 0; i < childNodes.getLength(); i++) {
 							Node childNode = childNodes.item(i);
 
-							newNode.appendChild(childNode);
+							newNode.appendChild(childNode.cloneNode(true));
 						}
 
 						element.getParentNode().replaceChild(newNode, element);
 
 						corrected++;
 					}
-				}
 
-				domModel.changedModel();
-				domModel.save();
+					domModel.changedModel();
+
+					domModel.save();
+				}
 			}
 			catch (Exception e) {
 				throw new AutoMigrateException("Unable to auto-correct", e);

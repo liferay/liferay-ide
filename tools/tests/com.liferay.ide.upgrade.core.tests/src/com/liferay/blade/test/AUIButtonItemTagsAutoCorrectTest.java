@@ -1,4 +1,3 @@
-
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -17,66 +16,27 @@
 
 package com.liferay.blade.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import com.liferay.blade.api.AutoMigrator;
-import com.liferay.blade.api.FileMigrator;
-import com.liferay.blade.api.Problem;
+import com.liferay.blade.test.apichanges.AutoCorrectJSPTagTestBase;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-import org.junit.Test;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
+public class AUIButtonItemTagsAutoCorrectTest extends AutoCorrectJSPTagTestBase {
 
-public class AUIButtonItemTagsAutoCorrectTest {
-
-	@Test
-	public void autoCorrectProblems() throws Exception {
-		File tempFolder = Files.createTempDirectory("autocorrect").toFile();
-		File testFile = new File(tempFolder, "AUIButtonItemTagTest.jsp");
-
-		tempFolder.deleteOnExit();
-
-		File originalTestfile =
-			new File("jsptests/aui-button/AUIButtonItemTagTest.jsp");
-
-		Files.copy( originalTestfile.toPath(), testFile.toPath());
-
-		List<Problem> problems = null;
-		FileMigrator migrator = null;
-
-		Collection<ServiceReference<FileMigrator>> mrefs = context.getServiceReferences(FileMigrator.class, null);
-
-		for (ServiceReference<FileMigrator> mref : mrefs) {
-			migrator = context.getService(mref);
-
-			if (migrator.getClass().getName().contains("AUIButtonItemTags")) {
-				problems = migrator.analyze(testFile);
-				break;
-			}
-		}
-
-		assertEquals(1, problems.size());
-
-		int problemsFixed = ((AutoMigrator)migrator).correctProblems( testFile, problems );
-
-		assertEquals(1, problemsFixed);
-
-		File dest = new File(tempFolder, "Updated.jsp");
-
-		assertTrue(testFile.renameTo(dest));
-
-		problems = migrator.analyze(dest);
-
-		assertEquals(0, problems.size());
+	@Override
+	public File getOriginalTestFile() {
+		return new File("jsptests/aui-button/AUIButtonItemTagTest.jsp");
 	}
 
-	private final BundleContext context = FrameworkUtil.getBundle(
-		this.getClass()).getBundleContext();
+	@Override
+	public String getImplClassName() {
+		return "AUIButtonItemTags";
+	}
+
+	@Override
+	public List<String> getCheckPoints() {
+		return Collections.singletonList("3,<aui:button></aui:button>");
+	}
+
 }
