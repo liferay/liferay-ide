@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.ui;
 
@@ -20,6 +19,7 @@ import com.liferay.ide.ui.util.UIUtil;
 
 import java.net.URL;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -36,79 +36,76 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IMarkerResolution2;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Simon Jiang
  */
-public class HookCustomJspValidationResolution implements IMarkerResolution2
-{
+public class HookCustomJspValidationResolution implements IMarkerResolution2 {
 
-    public String getDescription()
-    {
-        return getLabel();
-    }
+	public String getDescription() {
+		return getLabel();
+	}
 
-    public Image getImage()
-    {
-        final URL url = HookUI.getDefault().getBundle().getEntry( "/icons/e16/disabled.png" );
-        return ImageDescriptor.createFromURL( url ).createImage();
-    }
+	public Image getImage() {
+		Bundle bundle = HookUI.getDefault().getBundle();
 
-    public String getLabel()
-    {
-        return Msgs.disableCustomJspValidation;
-    }
+		URL url = bundle.getEntry("/icons/e16/disabled.png");
 
-    public void run( IMarker marker )
-    {
-        final IProject project = marker.getResource().getProject();
+		return ImageDescriptor.createFromURL(url).createImage();
+	}
 
-        final IPath customJspPath = HookUtil.getCustomJspPath( project );
+	public String getLabel() {
+		return Msgs.disableCustomJspValidation;
+	}
 
-        if( customJspPath != null )
-        {
-            final boolean retval =
-                HookUtil.configureJSPSyntaxValidationExclude(
-                    project, project.getFolder( customJspPath.makeRelativeTo( project.getFullPath() ) ), true );
+	public void run(IMarker marker) {
+		IProject project = marker.getResource().getProject();
 
-            if( retval )
-            {
-                UIUtil.async( new Runnable()
-                {
-                    public void run()
-                    {
-                        final boolean revalidate =
-                            MessageDialog.openQuestion(
-                                UIUtil.getActiveShell(), Msgs.revalidateTitle, Msgs.revalidateMsg );
+		IPath customJspPath = HookUtil.getCustomJspPath(project);
 
-                        if( revalidate )
-                        {
-                            new WorkspaceJob( "revalidating " + project.getName() )
-                            {
-                                @Override
-                                public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-                                {
-                                    project.build( IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor() );
-                                    return Status.OK_STATUS;
-                                }
-                            }.schedule();
-                        }
-                    }
-                });
-            }
-        }
-    }
+		if (customJspPath != null) {
+			IFolder folder = project.getFolder(customJspPath.makeRelativeTo(project.getFullPath()));
 
-    private static class Msgs extends NLS
-    {
-        public static String disableCustomJspValidation;
-        public static String revalidateMsg;
-        public static String revalidateTitle;
+			boolean retval = HookUtil.configureJSPSyntaxValidationExclude(project, folder, true);
 
-        static
-        {
-            initializeMessages( HookCustomJspValidationResolution.class.getName(), Msgs.class );
-        }
-    }
+			if (retval) {
+				UIUtil.async(
+					new Runnable() {
 
+						public void run() {
+							boolean revalidate = MessageDialog.openQuestion(
+								UIUtil.getActiveShell(), Msgs.revalidateTitle, Msgs.revalidateMsg);
+
+							if (revalidate) {
+								new WorkspaceJob("revalidating " + project.getName()) {
+
+									@Override
+									public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+										project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
+
+										return Status.OK_STATUS;
+									}
+
+								}.schedule();
+							}
+						}
+
+					});
+			}
+		}
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String disableCustomJspValidation;
+		public static String revalidateMsg;
+		public static String revalidateTitle;
+
+		static {
+			initializeMessages(HookCustomJspValidationResolution.class.getName(), Msgs.class);
+		}
+
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,55 +10,51 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model.internal;
 
 /**
  * @author Gregory Amerson
  */
-public class NameValueObject
-{
+public class NameValueObject {
 
-    private String name;
-    private Object value;
+	public NameValueObject() {
+	}
 
-    public NameValueObject( String name, Object value )
-    {
-        this.name = name;
-        this.value = value;
-    }
+	public NameValueObject(String name, Object value) {
+		_name = name;
+		_value = value;
+	}
 
-    public NameValueObject()
-    {
-    }
+	public String getName() {
+		return _name;
+	}
 
-    public String getName()
-    {
-        return this.name;
-    }
+	public Object getValue() {
+		return _value;
+	}
 
-    public void setName( String n )
-    {
-        this.name = n;
-    }
+	public void setName(String n) {
+		_name = n;
+	}
 
-    public Object getValue()
-    {
-        return this.value;
-    }
+	public void setValue(Object v) {
+		_value = v;
+	}
 
-    public void setValue( Object v )
-    {
-        this.value = v;
-    }
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
 
-    @Override
-    public String toString()
-    {
-        return new StringBuilder().append( getName() ).append( '=' ).append( getValue() ).toString();
-    }
+		sb.append(getName());
+		sb.append("=");
+		sb.append(getValue());
+
+		return sb.toString();
+	}
+
+	private String _name;
+	private Object _value;
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.gradle.core;
 
@@ -44,116 +43,106 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Andy Wu
  * @author Terry Jia
  */
-public class LiferayGradleWorkspaceProjectProvider extends AbstractLiferayProjectProvider
-    implements NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp>
-{
+public class LiferayGradleWorkspaceProjectProvider
+	extends AbstractLiferayProjectProvider implements NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> {
 
-    public LiferayGradleWorkspaceProjectProvider()
-    {
-        super( new Class<?>[] { IProject.class } );
-    }
+	public LiferayGradleWorkspaceProjectProvider() {
+		super(new Class<?>[] {IProject.class});
+	}
 
-    @Override
-    public IStatus createNewProject( NewLiferayWorkspaceOp op, IProgressMonitor monitor ) throws CoreException
-    {
-        IPath location = PathBridge.create( op.getLocation().content() );
-        String wsName = op.getWorkspaceName().toString();
+	@Override
+	public IStatus createNewProject(NewLiferayWorkspaceOp op, IProgressMonitor monitor) throws CoreException {
+		IPath location = PathBridge.create(op.getLocation().content());
+		String wsName = op.getWorkspaceName().toString();
 
-        StringBuilder sb = new StringBuilder();
+		IPath wsLocation = location.append(wsName);
 
-        sb.append( "-b " );
-        sb.append( "\"" + location.append( wsName ).toFile().getAbsolutePath() + "\"" );
-        sb.append( " " );
-        sb.append( "init" );
+		StringBuilder sb = new StringBuilder();
 
-        try
-        {
-            BladeCLI.execute( sb.toString() );
-        }
-        catch( BladeCLIException e )
-        {
-            return ProjectCore.createErrorStatus( e );
-        }
+		sb.append("-b ");
+		sb.append("\"");
+		sb.append(wsLocation.toFile().getAbsolutePath());
+		sb.append("\" ");
+		sb.append("");
+		sb.append("init");
 
-        String workspaceLocation = location.append( wsName ).toPortableString();
-        boolean isInitBundle = op.getProvisionLiferayBundle().content();
-        String bundleUrl = op.getBundleUrl().content( false );
+		try {
+			BladeCLI.execute(sb.toString());
+		}
+		catch (BladeCLIException bclie) {
+			return ProjectCore.createErrorStatus(bclie);
+		}
 
-        return importProject( workspaceLocation, monitor, isInitBundle, bundleUrl );
-    }
+		String workspaceLocation = location.append(wsName).toPortableString();
+		boolean initBundle = op.getProvisionLiferayBundle().content();
+		String bundleUrl = op.getBundleUrl().content(false);
 
-    @Override
-    public IStatus importProject( String location, IProgressMonitor monitor, boolean initBundle, String bundleUrl )
-    {
-        try
-        {
-            final IStatus importJob = GradleUtil.importGradleProject( new File( location ), monitor );
+		return importProject(workspaceLocation, monitor, initBundle, bundleUrl);
+	}
 
-            if( !importJob.isOK() || importJob.getException() != null )
-            {
-                return importJob;
-            }
+	@Override
+	public IStatus importProject(String location, IProgressMonitor monitor, boolean initBundle, String bundleUrl) {
+		try {
+			final IStatus importJob = GradleUtil.importGradleProject(new File(location), monitor);
 
-            if( initBundle )
-            {
-                IPath path = new Path( location );
+			if (!importJob.isOK() || (importJob.getException() != null)) {
+				return importJob;
+			}
 
-                IProject project = CoreUtil.getProject( path.lastSegment() );
+			if (initBundle) {
+				IPath path = new Path(location);
 
-                if( bundleUrl != null )
-                {
-                    final IFile gradlePropertiesFile = project.getFile( "gradle.properties" );
+				IProject project = CoreUtil.getProject(path.lastSegment());
 
-                    String content = FileUtil.readContents( gradlePropertiesFile.getContents() );
+				if (bundleUrl != null) {
+					final IFile gradlePropertiesFile = project.getFile("gradle.properties");
 
-                    String bundleUrlProp = LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
+					String content = FileUtil.readContents(gradlePropertiesFile.getContents());
 
-                    String separator = System.getProperty( "line.separator", "\n" );
+					String bundleUrlProp = LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
 
-                    String newContent = content + separator + bundleUrlProp;
+					String separator = System.getProperty("line.separator", "\n");
 
-                    gradlePropertiesFile.setContents(
-                        new ByteArrayInputStream( newContent.getBytes() ), IResource.FORCE, monitor );
-                }
+					String newContent = content + separator + bundleUrlProp;
 
-                GradleUtil.runGradleTask( project, "initBundle", monitor );
+					gradlePropertiesFile.setContents(
+						new ByteArrayInputStream(newContent.getBytes()), IResource.FORCE, monitor);
+				}
 
-                project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-            }
-        }
-        catch( Exception e )
-        {
-            return GradleCore.createErrorStatus( "import Liferay workspace project error", e );
-        }
+				GradleUtil.runGradleTask(project, "initBundle", monitor);
 
-        return Status.OK_STATUS;
-    }
+				project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+			}
+		}
+		catch (Exception e) {
+			return GradleCore.createErrorStatus("import Liferay workspace project error", e);
+		}
 
-    @Override
-    public synchronized ILiferayProject provide( Object adaptable )
-    {
-        ILiferayProject retval = null;
+		return Status.OK_STATUS;
+	}
 
-        if( adaptable instanceof IProject )
-        {
-            final IProject project = (IProject) adaptable;
+	@Override
+	public synchronized ILiferayProject provide(Object adaptable) {
+		ILiferayProject retval = null;
 
-            if( LiferayWorkspaceUtil.isValidWorkspace( project ) )
-            {
-                return new LiferayWorkspaceProject( project );
-            }
-        }
+		if (adaptable instanceof IProject) {
+			final IProject project = (IProject)adaptable;
 
-        return retval;
-    }
+			if (LiferayWorkspaceUtil.isValidWorkspace(project)) {
+				return new LiferayWorkspaceProject(project);
+			}
+		}
 
-    @Override
-    public IStatus validateProjectLocation( String projectName, IPath path )
-    {
-        IStatus retval = Status.OK_STATUS;
+		return retval;
+	}
 
-        // TODO validation gradle project location
+	@Override
+	public IStatus validateProjectLocation(String projectName, IPath path) {
+		IStatus retval = Status.OK_STATUS;
 
-        return retval;
-    }
+		// TODO validation gradle project location
+
+		return retval;
+	}
+
 }

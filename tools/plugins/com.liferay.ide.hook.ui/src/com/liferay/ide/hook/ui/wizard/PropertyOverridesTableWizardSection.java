@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.ui.wizard;
 
@@ -39,159 +38,150 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-public class PropertyOverridesTableWizardSection extends StringArrayTableWizardSection
-{
+public class PropertyOverridesTableWizardSection extends StringArrayTableWizardSection {
 
-    public class AddPropertyOverrideDialog extends AddStringArrayDialog
-    {
-        protected String[] buttonLabels;
+	public PropertyOverridesTableWizardSection(
+		Composite parent, String componentLabel, String dialogTitle, String addButtonLabel, String editButtonLabel,
+		String removeButtonLabel, String[] columnTitles, String[] fieldLabels, Image labelProviderImage,
+		IDataModel model, String propertyName) {
 
-        public AddPropertyOverrideDialog(
-            Shell shell, String windowTitle, String[] labelsForTextField, String[] buttonLabels )
-        {
+		super(
+			parent, componentLabel, dialogTitle, addButtonLabel, editButtonLabel, removeButtonLabel, columnTitles,
+			fieldLabels, labelProviderImage, model, propertyName);
 
-            super( shell, windowTitle, labelsForTextField );
+		buttonLabels = new String[] {Msgs.select, null};
+	}
 
-            setShellStyle( getShellStyle() | SWT.RESIZE );
+	public void setProject(IProject project) {
+		this.project = project;
+	}
 
-            this.buttonLabels = buttonLabels;
+	public class AddPropertyOverrideDialog extends AddStringArrayDialog {
 
-            setWidthHint( 450 );
-        }
+		public AddPropertyOverrideDialog(
+			Shell shell, String windowTitle, String[] labelsForTextField, String[] buttonLabels) {
 
-        @Override
-        protected Text createField( Composite parent, final int index )
-        {
-            Label label = new Label( parent, SWT.LEFT );
-            label.setText( labelsForTextField[index] );
-            label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
+			super(shell, windowTitle, labelsForTextField);
 
-            // Composite composite = new Composite(parent, SWT.NONE);
-            // GridData data = new GridData(GridData.FILL_HORIZONTAL);
-            // composite.setLayoutData(data);
-            // composite.setLayout(new GridLayout(2, false));
+			setShellStyle(getShellStyle() | SWT.RESIZE);
 
-            final Text text = new Text( parent, SWT.SINGLE | SWT.BORDER );
+			this.buttonLabels = buttonLabels;
 
-            GridData data = new GridData( GridData.FILL_HORIZONTAL );
-            // data.widthHint = 200;
+			setWidthHint(450);
+		}
 
-            text.setLayoutData( data );
+		@Override
+		protected Text createField(Composite parent, int index) {
+			Label label = new Label(parent, SWT.LEFT);
 
-            if( buttonLabels[index] != null )
-            {
-                Composite buttonComposite = new Composite( parent, SWT.NONE );
+			label.setText(labelsForTextField[index]);
+			label.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
 
-                String[] buttonLbls = buttonLabels[index].split( "," ); //$NON-NLS-1$
+			// Composite composite = new Composite(parent, SWT.NONE);
+			// GridData data = new GridData(GridData.FILL_HORIZONTAL);
+			// composite.setLayoutData(data);
+			// composite.setLayout(new GridLayout(2, false));
 
-                GridLayout gl = new GridLayout( buttonLbls.length, true );
-                gl.marginWidth = 0;
-                gl.horizontalSpacing = 1;
+			Text text = new Text(parent, SWT.SINGLE | SWT.BORDER);
 
-                buttonComposite.setLayout( gl );
+			GridData data = new GridData(GridData.FILL_HORIZONTAL);
 
-                for( final String lbl : buttonLbls )
-                {
-                    Button button = new Button( buttonComposite, SWT.PUSH );
-                    button.setText( lbl );
-                    button.addSelectionListener( new SelectionAdapter()
-                    {
+			// data.widthHint = 200;
 
-                        @Override
-                        public void widgetSelected( SelectionEvent e )
-                        {
-                            handleArrayDialogButtonSelected( index, lbl, text );
-                        }
+			text.setLayoutData(data);
 
-                    } );
-                }
-            }
+			if (buttonLabels[index] != null) {
+				Composite buttonComposite = new Composite(parent, SWT.NONE);
 
-            return text;
-        }
+				String[] buttonLbls = buttonLabels[index].split(",");
 
-        protected void handleArrayDialogButtonSelected( int index, String label, Text text )
-        {
-            if( index == 0 )
-            { // select event
-                handleSelectPropertyButton( text );
-            }
-        }
+				GridLayout gl = new GridLayout(buttonLbls.length, true);
 
-        protected void handleSelectPropertyButton( Text text )
-        {
-            String[] hookProperties = new String[] {};
+				gl.marginWidth = 0;
+				gl.horizontalSpacing = 1;
 
-            final ILiferayProject liferayProject = LiferayCore.create( project );
+				buttonComposite.setLayout(gl);
 
-            if( liferayProject != null )
-            {
-                final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+				for (String lbl : buttonLbls) {
+					Button button = new Button(buttonComposite, SWT.PUSH);
 
-                if( portal != null )
-                {
-                    hookProperties = portal.getHookSupportedProperties();
-                }
-            }
+					button.setText(lbl);
+					button.addSelectionListener(
+						new SelectionAdapter() {
 
-            PropertiesFilteredDialog dialog = new PropertiesFilteredDialog( getParentShell() );
-            dialog.setTitle( Msgs.propertySelection );
-            dialog.setMessage( Msgs.selectProperty );
-            dialog.setInput( hookProperties );
+							@Override
+							public void widgetSelected(SelectionEvent e) {
+								handleArrayDialogButtonSelected(index, lbl, text);
+							}
+	
+						});
+				}
+			}
 
-            if( dialog.open() == Window.OK )
-            {
-                Object[] selected = dialog.getResult();
+			return text;
+		}
 
-                text.setText( selected[0].toString() );
-            }
-        }
+		protected void handleArrayDialogButtonSelected(int index, String label, Text text) {
+			if (index == 0) {
+				handleSelectPropertyButton(text);
+			}
+		}
 
-    }
+		protected void handleSelectPropertyButton(Text text) {
+			String[] hookProperties = {};
 
-    protected String[] buttonLabels;
+			final ILiferayProject liferayProject = LiferayCore.create(project);
 
-    protected IProject project;
+			if (liferayProject != null) {
+				final ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
-    public PropertyOverridesTableWizardSection(
-        Composite parent, String componentLabel, String dialogTitle, String addButtonLabel, String editButtonLabel,
-        String removeButtonLabel, String[] columnTitles, String[] fieldLabels, Image labelProviderImage,
-        IDataModel model, String propertyName )
-    {
+				if (portal != null) {
+					hookProperties = portal.getHookSupportedProperties();
+				}
+			}
 
-        super( parent, componentLabel, dialogTitle, addButtonLabel, editButtonLabel, removeButtonLabel, columnTitles, fieldLabels, labelProviderImage, model, propertyName );
+			PropertiesFilteredDialog dialog = new PropertiesFilteredDialog(getParentShell());
 
-        this.buttonLabels = new String[] { Msgs.select, null };
-    }
+			dialog.setTitle(Msgs.propertySelection);
+			dialog.setMessage(Msgs.selectProperty);
+			dialog.setInput(hookProperties);
 
-    public void setProject( IProject project )
-    {
-        this.project = project;
-    }
+			if (dialog.open() == Window.OK) {
+				Object[] selected = dialog.getResult();
 
-    @Override
-    protected void handleAddButtonSelected()
-    {
-        AddPropertyOverrideDialog dialog =
-            new AddPropertyOverrideDialog( getShell(), dialogTitle, fieldLabels, buttonLabels );
+				text.setText(selected[0].toString());
+			}
+		}
 
-        if( dialog.open() == Window.OK )
-        {
-            String[] stringArray = dialog.getStringArray();
+		protected String[] buttonLabels;
 
-            addStringArray( stringArray );
-        }
-    }
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String propertySelection;
-        public static String select;
-        public static String selectProperty;
+	@Override
+	protected void handleAddButtonSelected() {
+		AddPropertyOverrideDialog dialog = new AddPropertyOverrideDialog(
+			getShell(), dialogTitle, fieldLabels, buttonLabels);
 
-        static
-        {
-            initializeMessages( PropertyOverridesTableWizardSection.class.getName(), Msgs.class );
-        }
-    }
+		if (dialog.open() == Window.OK) {
+			String[] stringArray = dialog.getStringArray();
+
+			addStringArray(stringArray);
+		}
+	}
+
+	protected String[] buttonLabels;
+	protected IProject project;
+
+	private static class Msgs extends NLS {
+
+		public static String propertySelection;
+		public static String select;
+		public static String selectProperty;
+
+		static {
+			initializeMessages(PropertyOverridesTableWizardSection.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

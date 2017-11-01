@@ -1,18 +1,33 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.gradle.core.parser;
 
 import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.GroovyCodeVisitor;
 import org.codehaus.groovy.ast.builder.AstBuilder;
@@ -21,101 +36,97 @@ import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 /**
  * @author Lovett Li
  */
-public class GradleDependencyUpdater
-{
+public class GradleDependencyUpdater {
 
-    private List<ASTNode> nodes;
-    private File file;
-    private List<String> gradleFileContents;
+	public GradleDependencyUpdater(File file) throws IOException, MultipleCompilationErrorsException {
+		this(IOUtils.toString(Files.newInputStream(file.toPath()), "UTF-8"));
+		_file = file;
+	}
 
-    public GradleDependencyUpdater( File inputfile ) throws MultipleCompilationErrorsException, IOException
-    {
-        this( IOUtils.toString( Files.newInputStream( inputfile.toPath() ), "UTF-8" ) );
-        this.file = inputfile;
-    }
+	public GradleDependencyUpdater(String scriptContents) throws MultipleCompilationErrorsException {
+		AstBuilder builder = new AstBuilder();
 
-    public GradleDependencyUpdater( String scriptContents ) throws MultipleCompilationErrorsException
-    {
-        AstBuilder builder = new AstBuilder();
-        nodes = builder.buildFromString( scriptContents );
-    }
+		_nodes = builder.buildFromString(scriptContents);
+	}
 
-    public FindDependenciesVisitor insertDependency( GradleDependency gradleDependency ) throws IOException
-    {
-        String dependency = "compile group: \"" + gradleDependency.getGroup() + "\", name:\"" +
-            gradleDependency.getName() + "\", version:\"" + gradleDependency.getVersion() + "\"";
+	public List<GradleDependency> getAllDependencies() {
+		FindDependenciesVisitor visitor = new FindDependenciesVisitor();
 
-        return insertDependency( dependency );
-    }
+		walkScript(visitor);
 
-    public FindDependenciesVisitor insertDependency( String dependency ) throws IOException
-    {
-        FindDependenciesVisitor visitor = new FindDependenciesVisitor();
-        walkScript( visitor );
-        gradleFileContents = FileUtils.readLines( file );
+		return visitor.getDependencies();
+	}
 
-        if( !dependency.startsWith( "\t" ) )
-        {
-            dependency = "\t" + dependency;;
-        }
+	public List<String> getGradleFileContents() {
+		return _gradleFileContents;
+	}
 
-        if( visitor.getDependenceLineNum() == -1 )
-        {
-            gradleFileContents.add( "" );
-            gradleFileContents.add( "dependencies {" );
-            gradleFileContents.add( dependency );
-            gradleFileContents.add( "}" );
-        }
-        else
-        {
-            if( visitor.getColumnNum() != -1 )
-            {
-                gradleFileContents = Files.readAllLines( Paths.get( file.toURI() ), StandardCharsets.UTF_8 );
-                StringBuilder builder =
-                    new StringBuilder( gradleFileContents.get( visitor.getDependenceLineNum() - 1 ) );
-                builder.insert( visitor.getColumnNum() - 2, "\n" + dependency + "\n" );
-                String dep = builder.toString();
+	public FindDependenciesVisitor insertDependency(GradleDependency gradleDependency) throws IOException {
+		StringBuilder sb = new StringBuilder();
 
-                if( CoreUtil.isWindows() )
-                {
-                    dep.replace( "\n", "\r\n" );
-                }
-                else if( CoreUtil.isMac() )
-                {
-                    dep.replace( "\n", "\r" );
-                }
+		sb.append("compile group: \"");
+		sb.append(gradleDependency.getGroup());
+		sb.append("\", name:\"");
+		sb.append(gradleDependency.getName());
+		sb.append("\", version:\"");
+		sb.append(gradleDependency.getVersion());
+		sb.append("\"");
 
-                gradleFileContents.remove( visitor.getDependenceLineNum() - 1 );
-                gradleFileContents.add( visitor.getDependenceLineNum() - 1, dep );
-            }
-            else
-            {
-                gradleFileContents.add( visitor.getDependenceLineNum() - 1, dependency );
-            }
-        }
+		return insertDependency(sb.toString());
+	}
 
-        return visitor;
-    }
+	public FindDependenciesVisitor insertDependency(String dependency) throws IOException {
+		FindDependenciesVisitor visitor = new FindDependenciesVisitor();
 
-    public List<GradleDependency> getAllDependencies()
-    {
-        FindDependenciesVisitor visitor = new FindDependenciesVisitor();
-        walkScript( visitor );
+		walkScript(visitor);
 
-        return visitor.getDependencies();
-    }
+		_gradleFileContents = FileUtils.readLines(_file);
 
-    public void walkScript( GroovyCodeVisitor visitor )
-    {
-        for( ASTNode node : nodes )
-        {
-            node.visit( visitor );
-        }
-    }
+		if (!dependency.startsWith("\t")) {
+			dependency = "\t" + dependency;
+		}
 
-    public List<String> getGradleFileContents()
-    {
-        return gradleFileContents;
-    }
+		if (visitor.getDependenceLineNum() == -1) {
+			_gradleFileContents.add("");
+			_gradleFileContents.add("dependencies {");
+			_gradleFileContents.add(dependency);
+			_gradleFileContents.add("}");
+		}
+		else {
+			if (visitor.getColumnNum() != -1) {
+				_gradleFileContents = Files.readAllLines(Paths.get(_file.toURI()), StandardCharsets.UTF_8);
+
+				StringBuilder builder = new StringBuilder(_gradleFileContents.get(visitor.getDependenceLineNum() - 1));
+
+				builder.insert(visitor.getColumnNum() - 2, "\n" + dependency + "\n");
+				String dep = builder.toString();
+
+				if (CoreUtil.isWindows()) {
+					dep.replace("\n", "\r\n");
+				}
+				else if (CoreUtil.isMac()) {
+					dep.replace("\n", "\r");
+				}
+
+				_gradleFileContents.remove(visitor.getDependenceLineNum() - 1);
+				_gradleFileContents.add(visitor.getDependenceLineNum() - 1, dep);
+			}
+			else {
+				_gradleFileContents.add(visitor.getDependenceLineNum() - 1, dependency);
+			}
+		}
+
+		return visitor;
+	}
+
+	public void walkScript(GroovyCodeVisitor visitor) {
+		for (ASTNode node : _nodes) {
+			node.visit(visitor);
+		}
+	}
+
+	private File _file;
+	private List<String> _gradleFileContents;
+	private List<ASTNode> _nodes;
 
 }

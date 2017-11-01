@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *    Kamesh Sampath - initial implementation
- *    Gregory Amerson - IDE-355
- ******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model;
 
@@ -45,46 +41,44 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-@Image( path = "images/elcl16/action_url_16x16.png" )
-public interface StrutsAction extends Element
-{
+@Image(path = "images/elcl16/action_url_16x16.png")
+public interface StrutsAction extends Element {
 
-    ElementType TYPE = new ElementType( StrutsAction.class );
+	public ElementType TYPE = new ElementType(StrutsAction.class);
 
-    // *** StrutsActionPath ***
+	public ReferenceValue<JavaTypeName, JavaType> getStrutsActionImpl();
 
-    @Label( standard = "Struts Action Path" )
-    @XmlBinding( path = "struts-action-path" )
-    @Required
-    @Services
-    (
-        value=
-        {
-            @Service( impl = StrutsActionPathPossibleValuesCacheService.class, context = Context.METAMODEL ),
-            @Service( impl = StrutsActionPathPossibleValuesService.class )
-        }
-    )
-    ValueProperty PROP_STRUTS_ACTION_PATH = new ValueProperty( TYPE, "StrutsActionPath" ); //$NON-NLS-1$
+	public Value<String> getStrutsActionPath();
 
-    Value<String> getStrutsActionPath();
+	public void setStrutsActionImpl(JavaTypeName value);
 
-    void setStrutsActionPath( String value );
+	public void setStrutsActionImpl(String value);
 
-    // ** StrutsActionImpl
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @Label( standard = "Struts Action Impl" )
-    @JavaTypeConstraint( kind = { JavaTypeKind.CLASS }, type = { "com.liferay.portal.kernel.struts.StrutsAction",
-        "com.liferay.portal.kernel.struts.StrutsPortletAction" }, behavior = JavaTypeConstraintBehavior.AT_LEAST_ONE )
-    @MustExist
-    @Required
-    @XmlBinding( path = "struts-action-impl" )
-    ValueProperty PROP_STRUTS_ACTION_IMPL = new ValueProperty( TYPE, "StrutsActionImpl" ); //$NON-NLS-1$
+	public void setStrutsActionPath(String value);
 
-    ReferenceValue<JavaTypeName, JavaType> getStrutsActionImpl();
+	// ** StrutsActionImpl
 
-    void setStrutsActionImpl( String value );
+	@JavaTypeConstraint(
+		behavior = JavaTypeConstraintBehavior.AT_LEAST_ONE, kind = {JavaTypeKind.CLASS},
+		type = {"com.liferay.portal.kernel.struts.StrutsAction", "com.liferay.portal.kernel.struts.StrutsPortletAction"}
+	)
+	@Label(standard = "Struts Action Impl")
+	@MustExist
+	@Reference(target = JavaType.class)
+	@Required
+	@Type(base = JavaTypeName.class)
+	@XmlBinding(path = "struts-action-impl")
+	public ValueProperty PROP_STRUTS_ACTION_IMPL = new ValueProperty(TYPE, "StrutsActionImpl");
 
-    void setStrutsActionImpl( JavaTypeName value );
+	// *** StrutsActionPath ***
+
+	@Label(standard = "Struts Action Path")
+	@Required
+	@Services(value = {
+		@Service(context = Context.METAMODEL, impl = StrutsActionPathPossibleValuesCacheService.class),
+		@Service(impl = StrutsActionPathPossibleValuesService.class)
+	})
+	@XmlBinding(path = "struts-action-path")
+	public ValueProperty PROP_STRUTS_ACTION_PATH = new ValueProperty(TYPE, "StrutsActionPath");
 
 }

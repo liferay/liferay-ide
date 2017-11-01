@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *    Kamesh Sampath - initial implementation
- *    Gregory Amerson - IDE-355
- ******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model;
 
@@ -31,24 +27,21 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-public interface Dispatcher extends Element
-{
+public interface Dispatcher extends Element {
 
-    ElementType TYPE = new ElementType( Dispatcher.class );
+	public ElementType TYPE = new ElementType(Dispatcher.class);
 
-    /*
-     * Dispatcher Element
-     */
+	public Value<String> getDispatcher();
 
-    @Label( standard = "Dispatcher" )
-    @Unique
-    @XmlBinding( path = "" )
-    @PossibleValues( values = { "FORWARD", "REQUEST", "INCLUDE", "ERROR" } )
-    @Collation( ignoreCaseDifferences = "true" )
-    ValueProperty PROP_DISPATCHER = new ValueProperty( TYPE, "Dispatcher" ); //$NON-NLS-1$
+	public void setDispatcher(String name);
 
-    Value<String> getDispatcher();
+	// *** Dispatcher ***
 
-    void setDispatcher( String name );
+	@Collation(ignoreCaseDifferences = "true")
+	@Label(standard = "Dispatcher")
+	@PossibleValues(values = {"FORWARD", "REQUEST", "INCLUDE", "ERROR"})
+	@Unique
+	@XmlBinding(path = "")
+	public ValueProperty PROP_DISPATCHER = new ValueProperty(TYPE, "Dispatcher");
 
 }

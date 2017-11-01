@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.gradle.core;
 
@@ -35,118 +34,113 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Terry Jia
  * @author Lovett Li
  */
-public class GradleModuleFragmentProjectProvider extends AbstractLiferayProjectProvider
-    implements NewLiferayProjectProvider<NewModuleFragmentOp>
-{
+public class GradleModuleFragmentProjectProvider
+	extends AbstractLiferayProjectProvider implements NewLiferayProjectProvider<NewModuleFragmentOp> {
 
-    public GradleModuleFragmentProjectProvider()
-    {
-        super( null );
-    }
-
-    @Override
-    public synchronized ILiferayProject provide( Object adaptable )
-    {
-        return null; // this only provides new projects
-    }
-
+	public GradleModuleFragmentProjectProvider() {
+		super(null);
+	}
 
 	@Override
-    public IStatus createNewProject( NewModuleFragmentOp op, IProgressMonitor monitor ) throws CoreException
-    {
-        IStatus retval = Status.OK_STATUS;
+	public IStatus createNewProject(NewModuleFragmentOp op, IProgressMonitor monitor) throws CoreException {
+		IStatus retval = Status.OK_STATUS;
 
-        final String projectName = op.getProjectName().content();
-        final IPath location = PathBridge.create( op.getLocation().content() );
+		String projectName = op.getProjectName().content();
+		IPath location = PathBridge.create(op.getLocation().content());
 
-        String[] bsnAndVersion = NewModuleFragmentOpMethods.getBsnAndVersion( op );
-        String bundleSymbolicName = bsnAndVersion[0];
-        String version = bsnAndVersion[1];
+		String[] bsnAndVersion = NewModuleFragmentOpMethods.getBsnAndVersion(op);
 
-        final StringBuilder sb = new StringBuilder();
+		String bundleSymbolicName = bsnAndVersion[0];
+		String version = bsnAndVersion[1];
 
-        sb.append( "create " );
-        sb.append( "-d \"" + location.toFile().getAbsolutePath() + "\" " );
-        sb.append( "-t " + "fragment" + " " );
+		StringBuilder sb = new StringBuilder();
 
-        if( !bundleSymbolicName.equals( "" ) )
-        {
-            sb.append( "-h " + bundleSymbolicName + " " );
-        }
+		sb.append("create ");
+		sb.append("");
+		sb.append("-d \"");
+		sb.append(location.toFile().getAbsolutePath());
+		sb.append("\" ");
+		sb.append("");
+		sb.append("-t ");
+		sb.append("");
+		sb.append("fragment ");
+		sb.append("");
 
-        if( !version.equals( "" ) )
-        {
-            sb.append( "-H " + version + " " );
-        }
+		if (!bundleSymbolicName.equals("")) {
+			sb.append("-h ");
+			sb.append(bundleSymbolicName);
+			sb.append(" ");
+		}
 
-        sb.append( "\"" + projectName + "\" " );
+		if (!version.equals("")) {
+			sb.append("-H ");
+			sb.append(version);
+			sb.append(" ");
+		}
 
-        try
-        {
-            BladeCLI.execute( sb.toString() );
-        }
-        catch( Exception e )
-        {
-            return GradleCore.createErrorStatus( "Could not create module fragment project.", e );
-        }
+		sb.append("\"");
+		sb.append(projectName);
+		sb.append("\" ");
 
-        NewModuleFragmentOpMethods.copyOverrideFiles( op );
+		try {
+			BladeCLI.execute(sb.toString());
+		}
+		catch (Exception e) {
+			return GradleCore.createErrorStatus("Could not create module fragment project.", e);
+		}
 
-        IPath projecLocation = location.append( projectName );
+		NewModuleFragmentOpMethods.copyOverrideFiles(op);
 
-        final boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
-        final boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
-        boolean inWorkspacePath = false;
+		IPath projecLocation = location.append(projectName);
 
-        final IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+		boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
+		boolean useDefaultLocation = op.getUseDefaultLocation().content(true);
+		boolean inWorkspacePath = false;
 
-        if( hasGradleWorkspace && liferayWorkspaceProject != null && !useDefaultLocation )
-        {
-            IPath workspaceLocation = liferayWorkspaceProject.getLocation();
+		final IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-            if( workspaceLocation != null )
-            {
-                String liferayWorkspaceProjectModulesDir =
-                    LiferayWorkspaceUtil.getModulesDir( liferayWorkspaceProject );
+		if (hasGradleWorkspace && (liferayWorkspaceProject != null) && !useDefaultLocation) {
+			IPath workspaceLocation = liferayWorkspaceProject.getLocation();
 
-                if( liferayWorkspaceProjectModulesDir != null )
-                {
-                    IPath modulesPath = workspaceLocation.append( liferayWorkspaceProjectModulesDir );
+			if (workspaceLocation != null) {
+				String liferayWorkspaceProjectModulesDir = LiferayWorkspaceUtil.getModulesDir(liferayWorkspaceProject);
 
-                    if( modulesPath.isPrefixOf( projecLocation ) )
-                    {
-                        inWorkspacePath = true;
-                    }
-                }
-            }
-        }
+				if (liferayWorkspaceProjectModulesDir != null) {
+					IPath modulesPath = workspaceLocation.append(liferayWorkspaceProjectModulesDir);
 
-        if( ( hasGradleWorkspace && useDefaultLocation ) || inWorkspacePath )
-        {
-            GradleUtil.refreshGradleProject( liferayWorkspaceProject );
-        }
-        else
-        {
-            GradleUtil.importGradleProject( projecLocation.toFile(), monitor );
-        }
+					if (modulesPath.isPrefixOf(projecLocation)) {
+						inWorkspacePath = true;
+					}
+				}
+			}
+		}
 
-        return retval;
-    }
+		if ((hasGradleWorkspace && useDefaultLocation) || inWorkspacePath) {
+			GradleUtil.refreshGradleProject(liferayWorkspaceProject);
+		}
+		else {
+			GradleUtil.importGradleProject(projecLocation.toFile(), monitor);
+		}
 
-    @Override
-    public IStatus validateProjectLocation( String projectName, IPath path )
-    {
-        IStatus retval = Status.OK_STATUS;
+		return retval;
+	}
 
-        if( path != null )
-        {
-            if( LiferayWorkspaceUtil.isValidGradleWorkspaceLocation( path.toOSString() ) )
-            {
-                retval =
-                    GradleCore.createErrorStatus( " Can't set WorkspaceProject root folder as project directory. " );
-            }
-        }
+	@Override
+	public synchronized ILiferayProject provide(Object adaptable) {
+		return null;
+	}
 
-        return retval;
-    }
+	@Override
+	public IStatus validateProjectLocation(String projectName, IPath path) {
+		IStatus retval = Status.OK_STATUS;
+
+		if (path != null) {
+			if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(path.toOSString())) {
+				retval = GradleCore.createErrorStatus(" Can't set WorkspaceProject root folder as project directory. ");
+			}
+		}
+
+		return retval;
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.gradle.core;
 
@@ -27,6 +26,7 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,175 +46,162 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Andy Wu
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class GradleProjectProvider extends AbstractLiferayProjectProvider
-    implements NewLiferayProjectProvider<NewLiferayModuleProjectOp>
-{
+@SuppressWarnings("restriction")
+public class GradleProjectProvider
+	extends AbstractLiferayProjectProvider implements NewLiferayProjectProvider<NewLiferayModuleProjectOp> {
 
-    public GradleProjectProvider()
-    {
-        super( new Class<?>[] { IProject.class } );
-    }
+	public GradleProjectProvider() {
+		super(new Class<?>[] {IProject.class});
+	}
 
-    @Override
-    public synchronized ILiferayProject provide( Object adaptable )
-    {
-        ILiferayProject retval = null;
+	@Override
+	public IStatus createNewProject(NewLiferayModuleProjectOp op, IProgressMonitor monitor) throws CoreException {
+		IStatus retval = Status.OK_STATUS;
 
-        if( adaptable instanceof IProject )
-        {
-            final IProject project = (IProject) adaptable;
+		String projectName = op.getProjectName().content();
 
-            try
-            {
-                if( LiferayNature.hasNature( project ) && GradleProjectNature.isPresentOn( project ) )
-                {
-                    if( ProjectUtil.isFacetedGradleBundleProject( project ) )
-                    {
-                        return new FacetedGradleBundleProject( project );
-                    }
-                    else
-                    {
-                        return new LiferayGradleProject( project );
-                    }
-                }
-            }
-            catch( Exception e )
-            {
-                // ignore errors
-            }
-        }
+		IPath location = PathBridge.create(op.getLocation().content());
 
-        return retval;
-    }
+		String className = op.getComponentName().content();
 
-    @Override
-    public IStatus createNewProject( NewLiferayModuleProjectOp op, IProgressMonitor monitor ) throws CoreException
-    {
-        IStatus retval = Status.OK_STATUS;
+		String serviceName = op.getServiceName().content();
 
-        final String projectName = op.getProjectName().content();
+		String packageName = op.getPackageName().content();
 
-        IPath location = PathBridge.create( op.getLocation().content() );
+		ElementList<PropertyKey> propertyKeys = op.getPropertyKeys();
 
-        String className = op.getComponentName().content();
+		List<String> properties = new ArrayList<>();
 
-        final String serviceName = op.getServiceName().content();
+		for (PropertyKey propertyKey : propertyKeys) {
+			properties.add(propertyKey.getName().content(true) + "=" + propertyKey.getValue().content(true));
+		}
 
-        final String packageName = op.getPackageName().content();
+		File targetDir = location.toFile();
 
-        ElementList<PropertyKey> propertyKeys = op.getPropertyKeys();
+		targetDir.mkdirs();
 
-        final List<String> properties = new ArrayList<String>();
+		String projectTemplateName = op.getProjectTemplateName().content();
 
-        for( PropertyKey propertyKey : propertyKeys )
-        {
-            properties.add( propertyKey.getName().content( true ) + "=" + propertyKey.getValue().content( true ) );
-        }
+		StringBuilder sb = new StringBuilder();
 
-        File targetDir = location.toFile();
-        targetDir.mkdirs();
+		sb.append("create ");
+		sb.append("-d \"");
+		sb.append(targetDir.getAbsolutePath());
+		sb.append("\" ");
+		sb.append("-t ");
+		sb.append(projectTemplateName);
+		sb.append(" ");
 
-        final String projectTemplateName = op.getProjectTemplateName().content();
+		if (className != null) {
+			sb.append("-c ");
+			sb.append(className);
+			sb.append(" ");
+		}
 
-        StringBuilder sb = new StringBuilder();
-        sb.append( "create " );
-        sb.append( "-d \"" + targetDir.getAbsolutePath() + "\" " );
-        sb.append( "-t " + projectTemplateName + " " );
+		if (serviceName != null) {
+			sb.append("-s ");
+			sb.append(serviceName);
+			sb.append(" ");
+		}
 
-        if( className != null )
-        {
-            sb.append( "-c " + className + " " );
-        }
+		if (packageName != null) {
+			sb.append("-p ");
+			sb.append(packageName);
+			sb.append(" ");
+		}
 
-        if( serviceName != null )
-        {
-            sb.append( "-s " + serviceName + " " );
-        }
+		sb.append("\"");
+		sb.append(projectName);
+		sb.append("\" ");
 
-        if( packageName != null )
-        {
-            sb.append( "-p " + packageName + " " );
-        }
+		try {
+			BladeCLI.execute(sb.toString());
 
-        sb.append( "\"" + projectName + "\" " );
+			ElementList<ProjectName> projectNames = op.getProjectNames();
 
-        try
-        {
-            BladeCLI.execute( sb.toString() );
+			projectNames.insert().setName(projectName);
 
-            ElementList<ProjectName> projectNames = op.getProjectNames();
+			if (projectTemplateName.equals("service-builder")) {
+				projectNames.insert().setName(projectName + "-api");
+				projectNames.insert().setName(projectName + "-service");
+			}
 
-            projectNames.insert().setName( projectName );
+			IPath projectLocation = location;
 
-            if( projectTemplateName.equals( "service-builder" ) )
-            {
-                projectNames.insert().setName( projectName + "-api" );
-                projectNames.insert().setName( projectName + "-service" );
-            }
+			String lastSegment = location.lastSegment();
 
-            IPath projectLocation = location;
+			if ((location != null) && (location.segmentCount() > 0)) {
+				if (!lastSegment.equals(projectName)) {
+					projectLocation = location.append(projectName);
+				}
+			}
 
-            final String lastSegment = location.lastSegment();
+			boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
+			boolean useDefaultLocation = op.getUseDefaultLocation().content(true);
+			boolean inWorkspacePath = false;
 
-            if( location != null && location.segmentCount() > 0 )
-            {
-                if( !lastSegment.equals( projectName ) )
-                {
-                    projectLocation = location.append( projectName );
-                }
-            }
+			IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-            boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
-            boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
-            boolean inWorkspacePath = false;
+			if (hasGradleWorkspace && (liferayWorkspaceProject != null) && !useDefaultLocation) {
+				IPath workspaceLocation = liferayWorkspaceProject.getLocation();
 
-            IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+				if (workspaceLocation != null) {
+					inWorkspacePath = workspaceLocation.isPrefixOf(projectLocation);
+				}
+			}
 
-            if( hasGradleWorkspace && liferayWorkspaceProject != null && !useDefaultLocation )
-            {
-                IPath workspaceLocation = liferayWorkspaceProject.getLocation();
+			if ((hasGradleWorkspace && useDefaultLocation) || inWorkspacePath) {
+				GradleUtil.refreshGradleProject(liferayWorkspaceProject);
+			}
+			else {
+				GradleUtil.importGradleProject(projectLocation.toFile(), monitor);
+			}
+		}
+		catch (Exception e) {
+			retval = GradleCore.createErrorStatus("can't create module project.", e);
+		}
 
-                if( workspaceLocation != null )
-                {
-                    inWorkspacePath = workspaceLocation.isPrefixOf( projectLocation );
-                }
-            }
+		return retval;
+	}
 
-            if( ( hasGradleWorkspace && useDefaultLocation ) || inWorkspacePath )
-            {
-                GradleUtil.refreshGradleProject( liferayWorkspaceProject );
-            }
-            else
-            {
-                GradleUtil.importGradleProject( projectLocation.toFile(), monitor );
-            }
-        }
-        catch( Exception e )
-        {
-            retval = GradleCore.createErrorStatus( "can't create module project.", e );
-        }
+	@Override
+	public synchronized ILiferayProject provide(Object adaptable) {
+		ILiferayProject retval = null;
 
-        return retval;
-    }
+		if (adaptable instanceof IProject) {
+			IProject project = (IProject)adaptable;
 
+			try {
+				if (LiferayNature.hasNature(project) && GradleProjectNature.isPresentOn(project)) {
+					if (ProjectUtil.isFacetedGradleBundleProject(project)) {
+						return new FacetedGradleBundleProject(project);
+					}
+					else {
+						return new LiferayGradleProject(project);
+					}
+				}
+			}
+			catch (Exception e) {
 
+				// ignore errors
 
-    @Override
-    public IStatus validateProjectLocation( String projectName, IPath path )
-    {
-        IStatus retval = Status.OK_STATUS;
+			}
+		}
 
-        if( path != null )
-        {
-            if( LiferayWorkspaceUtil.isValidGradleWorkspaceLocation( path.toOSString() ) )
-            {
-                retval =
-                    GradleCore.createErrorStatus( " Can't set WorkspaceProject root folder as project directory. " );
-            }
-        }
+		return retval;
+	}
 
-        return retval;
-    }
+	@Override
+	public IStatus validateProjectLocation(String projectName, IPath path) {
+		IStatus retval = Status.OK_STATUS;
+
+		if (path != null) {
+			if (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(path.toOSString())) {
+				retval = GradleCore.createErrorStatus(" Can't set WorkspaceProject root folder as project directory. ");
+			}
+		}
+
+		return retval;
+	}
 
 }

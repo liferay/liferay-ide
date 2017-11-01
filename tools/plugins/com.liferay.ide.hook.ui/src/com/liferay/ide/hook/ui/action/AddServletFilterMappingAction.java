@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,31 +10,31 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.ui.action;
 
 import com.liferay.ide.hook.core.model.Hook;
 
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
-
 
 /**
  * @author Gregory Amerson
  */
-public class AddServletFilterMappingAction extends SapphireActionHandler
-{
+public class AddServletFilterMappingAction extends SapphireActionHandler {
 
-    @Override
-    protected Object run( Presentation context )
-    {
-        return context.part().getLocalModelElement().nearest( Hook.class ).getServletFilterMappings().insert();
-    }
+	public AddServletFilterMappingAction() {
+	}
 
-    public AddServletFilterMappingAction()
-    {
-        super();
-    }
+	@Override
+	protected Object run(Presentation context) {
+		Element element = context.part().getLocalModelElement();
+
+		Hook hook = element.nearest(Hook.class);
+
+		return hook.getServletFilterMappings().insert();
+	}
+
 }

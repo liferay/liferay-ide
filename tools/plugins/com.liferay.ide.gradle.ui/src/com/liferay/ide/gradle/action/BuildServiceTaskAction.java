@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.gradle.action;
 
@@ -31,57 +30,48 @@ import org.eclipse.jdt.core.JavaCore;
  * @author Terry Jia
  * @author Andy Wu
  */
-public class BuildServiceTaskAction extends GradleTaskAction
-{
+public class BuildServiceTaskAction extends GradleTaskAction {
 
-    @Override
-    protected String getGradleTask()
-    {
-        return "buildService";
-    }
+	protected void afterTask() {
+		boolean refresh = false;
 
-    protected void afterTask()
-    {
-        boolean refresh = false;
+		IProject[] projects = CoreUtil.getClasspathProjects(project);
 
-        IProject[] projects = CoreUtil.getClasspathProjects( _project );
+		for (IProject project : projects) {
+			List<IFolder> folders = CoreUtil.getSourceFolders(JavaCore.create(project));
 
-        for( IProject project : projects )
-        {
-            List<IFolder> folders = CoreUtil.getSourceFolders( JavaCore.create( project ) );
+			if (folders.isEmpty()) {
+				refresh = true;
+			}
+			else {
+				try {
+					project.refreshLocal(IResource.DEPTH_INFINITE, null);
+				}
+				catch (CoreException ce) {
+				}
+			}
+		}
 
-            if( folders.size() == 0 )
-            {
-                refresh = true;
-            }
-            else
-            {
-                try
-                {
-                    project.refreshLocal( IResource.DEPTH_INFINITE, null );
-                }
-                catch( CoreException e )
-                {
-                }
-            }
-        }
+		List<IFolder> folders = CoreUtil.getSourceFolders(JavaCore.create(project));
 
-        List<IFolder> folders = CoreUtil.getSourceFolders( JavaCore.create( _project ) );
+		if (folders.isEmpty() || refresh) {
 
-        if( folders.size() == 0 || refresh )
-        {
-            // refresh this project will also transmit to refresh -api project
-            GradleUtil.refreshGradleProject( _project );
-        }
-        else
-        {
-            try
-            {
-                _project.refreshLocal( IResource.DEPTH_INFINITE, null );
-            }
-            catch( CoreException e )
-            {
-            }
-        }
-    }
+			// refresh this project will also transmit to refresh -api project
+
+			GradleUtil.refreshGradleProject(project);
+		}
+		else {
+			try {
+				project.refreshLocal(IResource.DEPTH_INFINITE, null);
+			}
+			catch (CoreException ce) {
+			}
+		}
+	}
+
+	@Override
+	protected String getGradleTask() {
+		return "buildService";
+	}
+
 }

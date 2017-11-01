@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.gradle.core;
 
@@ -30,66 +29,56 @@ import org.eclipse.core.runtime.IPath;
 /**
  * @author Andy Wu
  */
-public class LiferayWorkspaceProject extends BaseLiferayProject
-{
+public class LiferayWorkspaceProject extends BaseLiferayProject {
 
-    public LiferayWorkspaceProject( IProject project )
-    {
-        super( project );
-    }
+	public LiferayWorkspaceProject(IProject project) {
+		super(project);
+	}
 
-    @Override
-    public <T> T adapt( Class<T> adapterType )
-    {
-        if( ILiferayPortal.class.equals( adapterType ) )
-        {
-            // check for bundles/ directory
-            final IFolder bundlesFolder = getProject().getFolder( "bundles" );
+	@Override
+	public <T> T adapt(Class<T> adapterType) {
+		if (ILiferayPortal.class.equals(adapterType)) {
 
-            if( bundlesFolder.exists() )
-            {
-                final PortalBundle portalBundle = LiferayServerCore.newPortalBundle( bundlesFolder.getLocation() );
+			// check for bundles/ directory
 
-                if( portalBundle != null )
-                {
-                    return adapterType.cast( portalBundle );
-                }
-            }
-        }
+			IFolder bundlesFolder = getProject().getFolder("bundles");
 
-        if( IProjectBuilder.class.equals( adapterType ) || IWorkspaceProjectBuilder.class.equals( adapterType ) )
-        {
-            final IProjectBuilder projectBuilder = new GradleProjectBuilder( getProject() );
+			if (bundlesFolder.exists()) {
+				PortalBundle portalBundle = LiferayServerCore.newPortalBundle(bundlesFolder.getLocation());
 
-            return adapterType.cast( projectBuilder );
-        }
+				if (portalBundle != null) {
+					return adapterType.cast(portalBundle);
+				}
+			}
+		}
 
+		if (IProjectBuilder.class.equals(adapterType) || IWorkspaceProjectBuilder.class.equals(adapterType)) {
+			IProjectBuilder projectBuilder = new GradleProjectBuilder(getProject());
 
-        return super.adapt( adapterType );
-    }
+			return adapterType.cast(projectBuilder);
+		}
 
-    @Override
-    public IFile getDescriptorFile( String name )
-    {
-        return null;
-    }
+		return super.adapt(adapterType);
+	}
 
-    @Override
-    public IPath getLibraryPath( String filename )
-    {
-        return null;
-    }
+	@Override
+	public IFile getDescriptorFile(String name) {
+		return null;
+	}
 
-    @Override
-    public String getProperty( String key, String defaultValue )
-    {
-        return null;
-    }
+	@Override
+	public IPath getLibraryPath(String filename) {
+		return null;
+	}
 
-    @Override
-    public IFolder[] getSourceFolders()
-    {
-        return null;
-    }
+	@Override
+	public String getProperty(String key, String defaultValue) {
+		return null;
+	}
+
+	@Override
+	public IFolder[] getSourceFolders() {
+		return null;
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.gradle.core;
 
@@ -23,15 +22,19 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -39,120 +42,107 @@ import org.eclipse.core.runtime.Status;
 /**
  * @author Terry Jia
  */
-public class GradleProjectBuilder extends AbstractProjectBuilder implements IWorkspaceProjectBuilder
-{
+public class GradleProjectBuilder extends AbstractProjectBuilder implements IWorkspaceProjectBuilder {
 
-    private IFile gradleBuildFile;
+	public GradleProjectBuilder(IProject project) {
+		super(project);
 
-    public GradleProjectBuilder( IProject project )
-    {
-        super( project );
+		_gradleBuildFile = project.getFile("build.gradle");
+	}
 
-        gradleBuildFile = project.getFile( "build.gradle" );
-    }
+	@Override
+	public IStatus buildLang(IFile langFile, IProgressMonitor monitor) throws CoreException {
+		return _runGradleTask("buildLang", monitor);
+	}
 
-    @Override
-    public IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException
-    {
-        return runGradleTask( "buildLang", monitor );
-    }
+	@Override
+	public IStatus buildService(IProgressMonitor monitor) throws CoreException {
+		return _runGradleTask("buildService", monitor);
+	}
 
-    @Override
-    public IStatus buildService( IProgressMonitor monitor ) throws CoreException
-    {
-        return runGradleTask( "buildService", monitor );
-    }
+	@Override
+	public IStatus buildWSDD(IProgressMonitor monitor) throws CoreException {
 
-    @Override
-    public IStatus buildWSDD( IProgressMonitor monitor ) throws CoreException
-    {
-        // TODO Waiting for IDE-2850
-        return null;
-    }
+		// TODO Waiting for IDE-2850
 
-    private IStatus runGradleTask( String task, IProgressMonitor monitor )
-    {
-        IStatus status = Status.OK_STATUS;
+		return null;
+	}
 
-        if( gradleBuildFile.exists() )
-        {
-            try
-            {
-                monitor.beginTask( task, 100 );
+	public IStatus initBundle(IProject project, String bundleUrl, IProgressMonitor monitor) throws CoreException {
+		String bundleUrlProperty = "\n\n" + LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
 
-                GradleUtil.runGradleTask( getProject(), task, monitor );
+		IPath gradlePropertiesLocation = project.getFile("gradle.properties").getLocation();
 
-                monitor.worked( 80 );
+		File gradlePropertiesFile = gradlePropertiesLocation.toFile();
 
-                getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
+		try {
+			Files.write(gradlePropertiesFile.toPath(), bundleUrlProperty.getBytes(), StandardOpenOption.APPEND);
+		}
+		catch (IOException ioe) {
+			GradleCore.logError("Error append bundle url property", ioe);
+		}
 
-                monitor.worked( 10 );
-            }
-            catch( Exception e )
-            {
-                status = GradleCore.createErrorStatus( "Error running Gradle goal " + task, e );
-            }
-        }
-        else
-        {
-            status = GradleCore.createErrorStatus( "No build.gradle file" );
-        }
+		_runGradleTask("initBundle", monitor);
 
-        return status;
-    }
+		project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 
-    public IStatus initBundle( IProject project, String bundleUrl, IProgressMonitor monitor ) throws CoreException
-    {
-        String bundleUrlProperty = "\n\n" + LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL + "=" + bundleUrl;
+		return Status.OK_STATUS;
+	}
 
-        final File gradlePropertiesFile = project.getFile( "gradle.properties" ).getLocation().toFile();
+	@Override
+	public IStatus updateProjectDependency(IProject project, List<String[]> dependencies) throws CoreException {
+		try {
+			if (_gradleBuildFile.exists()) {
+				GradleDependencyUpdater updater = new GradleDependencyUpdater(_gradleBuildFile.getLocation().toFile());
 
-        try
-        {
-            Files.write( gradlePropertiesFile.toPath(), bundleUrlProperty.getBytes(), StandardOpenOption.APPEND );
-        }
-        catch( IOException e )
-        {
-            GradleCore.logError( "Error append bundle url property", e );
-        }
+				List<GradleDependency> existDependencies = updater.getAllDependencies();
 
-        runGradleTask( "initBundle", monitor );
+				for (String[] dependency : dependencies) {
+					GradleDependency gd = new GradleDependency(dependency[0], dependency[1], dependency[2]);
 
-        project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+					if (!existDependencies.contains(gd)) {
+						updater.insertDependency(gd);
 
-        return Status.OK_STATUS;
-    }
+						FileUtils.writeLines(_gradleBuildFile.getLocation().toFile(), updater.getGradleFileContents());
 
-    @Override
-    public IStatus updateProjectDependency( IProject project, List<String[]> dependencies ) throws CoreException
-    {
-        try
-        {
-            if( gradleBuildFile.exists() )
-            {
-                GradleDependencyUpdater updater = new GradleDependencyUpdater( gradleBuildFile.getLocation().toFile() );
-                List<GradleDependency> existDependencies = updater.getAllDependencies();
+						GradleUtil.refreshGradleProject(project);
+					}
+				}
+			}
+		}
+		catch (IOException ioe) {
+			return GradleCore.createErrorStatus("Error updating gradle project dependency", ioe);
+		}
 
-                for( String[] dependency : dependencies )
-                {
-                    GradleDependency gd = new GradleDependency( dependency[0], dependency[1], dependency[2] );
+		return Status.OK_STATUS;
+	}
 
-                    if( !existDependencies.contains( gd ) )
-                    {
-                        updater.insertDependency( gd );
+	private IStatus _runGradleTask(String task, IProgressMonitor monitor) {
+		IStatus status = Status.OK_STATUS;
 
-                        FileUtils.writeLines( gradleBuildFile.getLocation().toFile(), updater.getGradleFileContents() );
+		if (_gradleBuildFile.exists()) {
+			try {
+				monitor.beginTask(task, 100);
 
-                        GradleUtil.refreshGradleProject( project );
-                    }
-                }
-            }
-        }
-        catch( IOException e )
-        {
-            return GradleCore.createErrorStatus( "Error updating gradle project dependency", e );
-        }
+				GradleUtil.runGradleTask(getProject(), task, monitor);
 
-        return Status.OK_STATUS;
-    }
+				monitor.worked(80);
+
+				getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+
+				monitor.worked(10);
+			}
+			catch (Exception e) {
+				status = GradleCore.createErrorStatus("Error running Gradle goal " + task, e);
+			}
+		}
+		else {
+			status = GradleCore.createErrorStatus("No build.gradle file");
+		}
+
+		return status;
+	}
+
+	private IFile _gradleBuildFile;
+
 }

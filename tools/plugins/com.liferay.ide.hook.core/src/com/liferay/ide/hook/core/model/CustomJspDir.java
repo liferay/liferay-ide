@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *    Gregory Amerson - initial implementation
- ******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model;
 
@@ -38,27 +35,26 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-public interface CustomJspDir extends Element
-{
+public interface CustomJspDir extends Element {
 
-    ElementType TYPE = new ElementType( CustomJspDir.class );
+	public ElementType TYPE = new ElementType(CustomJspDir.class);
 
-    // *** Value ***
+	public Value<Path> getValue();
 
-    @Type( base = Path.class )
-    @Label( standard = "Custom JSP Dir" )
-    @XmlBinding( path = "" )
-    @Service( impl = DocrootRelativePathService.class )
-    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    @InitialValue( text = "/META-INF/custom_jsps" )
-    @MustExist
-    @Listeners( CustomJspDirListener.class )
-    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$
+	public void setValue(Path value);
 
-    Value<Path> getValue();
+	public void setValue(String value);
 
-    void setValue( String value );
+	// *** Value ***
 
-    void setValue( Path value );
+	@InitialValue(text = "/META-INF/custom_jsps")
+	@Label(standard = "Custom JSP Dir")
+	@Listeners(CustomJspDirListener.class)
+	@MustExist
+	@Service(impl = DocrootRelativePathService.class)
+	@Type(base = Path.class)
+	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
+	@XmlBinding(path = "")
+	public ValueProperty PROP_VALUE = new ValueProperty(TYPE, "Value");
 
 }

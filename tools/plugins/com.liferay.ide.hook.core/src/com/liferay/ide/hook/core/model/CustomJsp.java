@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model;
 
@@ -32,22 +29,23 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@Image( path = "images/elcl16/jsp_type_16x16.gif" )
-public interface CustomJsp extends Element
-{
+@Image(path = "images/elcl16/jsp_type_16x16.gif")
+public interface CustomJsp extends Element {
 
-    ElementType TYPE = new ElementType( CustomJsp.class );
+	public ElementType TYPE = new ElementType(CustomJsp.class);
 
-    // *** Value ***
+	public Value<String> getValue();
 
-    @Label( standard = "Liferay Portal JSP" )
-    @XmlBinding( path = "" )
-    @Unique
-    @Service( impl = CustomJspPossibleValuesService.class )
-    // @Service( impl = CustomJspValidationService.class ) } )
-    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$
+	public void setValue(String value);
 
-    Value<String> getValue();
+	// *** Value ***
 
-    void setValue( String value );
+	// @Service( impl = CustomJspValidationService.class ) } )
+
+	@Label(standard = "Liferay Portal JSP")
+	@Service(impl = CustomJspPossibleValuesService.class)
+	@Unique
+	@XmlBinding(path = "")
+	public ValueProperty PROP_VALUE = new ValueProperty(TYPE, "Value");
+
 }

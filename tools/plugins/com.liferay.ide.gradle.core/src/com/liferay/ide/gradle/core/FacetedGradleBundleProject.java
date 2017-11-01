@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.gradle.core;
 
@@ -26,57 +25,47 @@ import org.eclipse.core.runtime.IPath;
 /**
  * @author Andy Wu
  */
-public class FacetedGradleBundleProject extends LiferayGradleProject implements IWebProject
-{
+public class FacetedGradleBundleProject extends LiferayGradleProject implements IWebProject {
 
-    public FacetedGradleBundleProject( IProject project )
-    {
-        super( project );
-    }
+	public FacetedGradleBundleProject(IProject project) {
+		super(project);
+	}
 
-    @Override
-    public IResource findDocrootResource( IPath path )
-    {
-        return null;
-    }
+	@Override
+	public IResource findDocrootResource(IPath path) {
+		return null;
+	}
 
-    @Override
-    public String getBundleShape()
-    {
-        return "war";
-    }
+	@Override
+	public String getBundleShape() {
+		return "war";
+	}
 
-    @Override
-    public IFolder getDefaultDocrootFolder()
-    {
-        IFolder webAppDir = getProject().getFolder( "src/main/webapp" );
+	@Override
+	public IFolder getDefaultDocrootFolder() {
+		IFolder webAppDir = getProject().getFolder("src/main/webapp");
 
-        if( webAppDir.exists() )
-        {
-            return webAppDir;
-        }
-        else
-        {
-            return null;
-        }
-    }
+		if (webAppDir.exists()) {
+			return webAppDir;
+		}
+		else {
+			return null;
+		}
+	}
 
-    @Override
-    public IFile getDescriptorFile( String name )
-    {
-        IFolder defaultDocrootFolder = getDefaultDocrootFolder();
+	@Override
+	public IFile getDescriptorFile(String name) {
+		IFolder defaultDocrootFolder = getDefaultDocrootFolder();
 
-        if( defaultDocrootFolder != null )
-        {
-            IFile file = defaultDocrootFolder.getFile( "WEB-INF/" + name );
+		if (defaultDocrootFolder != null) {
+			IFile file = defaultDocrootFolder.getFile("WEB-INF/" + name);
 
-            if( file.exists() )
-            {
-                return file;
-            }
-        }
+			if (file.exists()) {
+				return file;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
 }

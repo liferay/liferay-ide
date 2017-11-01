@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,72 +10,75 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.gradle.ui;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+
 import org.osgi.framework.BundleContext;
 
 /**
  * @author Gregory Amerson
  */
-public class GradleUI extends Plugin
-{
+public class GradleUI extends Plugin {
 
-    // The plug-in ID
-    public static final String PLUGIN_ID = "com.liferay.ide.gradle.ui"; //$NON-NLS-1$
+	// The plug-in ID
 
-    // The shared instance
-    private static GradleUI plugin;
+	public static final String PLUGIN_ID = "com.liferay.ide.gradle.ui";
 
-    /**
-     * Returns the shared instance
-     *
-     * @return the shared instance
-     */
-    public static GradleUI getDefault()
-    {
-        return plugin;
-    }
+	// The shared instance
 
-    public static void logError( Throwable t )
-    {
-        logError( t.getMessage(), t );
-    }
+	/**
+	 * Returns the shared instance
+	 *
+	 * @return the shared instance
+	 */
+	public static GradleUI getDefault() {
+		return _plugin;
+	}
 
-    public static void logError( String msg, Throwable t )
-    {
-        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, msg, t ) );
-    }
+	public static void logError(String msg, Throwable t) {
+		ILog log = getDefault().getLog();
 
-    /**
-     * The constructor
-     */
-    public GradleUI()
-    {
-    }
+		log.log(new Status(IStatus.ERROR, PLUGIN_ID, msg, t));
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-     */
-    public void start( BundleContext context ) throws Exception
-    {
-        super.start( context );
-        plugin = this;
-    }
+	public static void logError(Throwable t) {
+		logError(t.getMessage(), t);
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-     */
-    public void stop( BundleContext context ) throws Exception
-    {
-        plugin = null;
-        super.stop( context );
-    }
+	/**
+	 * The constructor
+	 */
+	public GradleUI() {
+	}
+
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(BundleContext)
+	 */
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+
+		_plugin = this;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(BundleContext)
+	 */
+	public void stop(BundleContext context) throws Exception {
+		_plugin = null;
+
+		super.stop(context);
+	}
+
+	private static GradleUI _plugin;
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *    Kamesh Sampath - initial implementation
- ******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model;
 
@@ -29,34 +26,30 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-public interface NameValue extends Element
-{
+public interface NameValue extends Element {
 
-    ElementType TYPE = new ElementType( NameValue.class );
+	public ElementType TYPE = new ElementType(NameValue.class);
 
-    /*
-     * Name Element
-     */
+	public Value<String> getName();
 
-    @Label( standard = "Name" )
-    @Required
-    @Unique
-    @XmlBinding( path = "param-name" )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
+	public Value<String> getValue();
 
-    Value<String> getName();
+	public void setName(String name);
 
-    void setName( String name );
+	public void setValue(String value);
 
-    /*
-     * Value Element
-     */
+	// *** Name ***
 
-    @Label( standard = "Value" )
-    @XmlBinding( path = "param-value" )
-    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$
+	@Label(standard = "Name")
+	@Required
+	@Unique
+	@XmlBinding(path = "param-name")
+	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
-    Value<String> getValue();
+	// *** Value ***
 
-    void setValue( String value );
+	@Label(standard = "Value")
+	@XmlBinding(path = "param-value")
+	public ValueProperty PROP_VALUE = new ValueProperty(TYPE, "Value");
+
 }

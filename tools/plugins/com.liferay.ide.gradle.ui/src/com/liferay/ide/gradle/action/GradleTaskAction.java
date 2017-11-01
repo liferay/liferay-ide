@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.gradle.action;
 
@@ -35,110 +34,95 @@ import org.eclipse.jface.viewers.IStructuredSelection;
  * @author Lovett Li
  * @author Terry Jia
  */
-public abstract class GradleTaskAction extends AbstractObjectAction
-{
+public abstract class GradleTaskAction extends AbstractObjectAction {
 
-    IProject _project = null;
+	public GradleTaskAction() {
+	}
 
-    public GradleTaskAction()
-    {
-        super();
-    }
+	public void run(IAction action) {
+		if (fSelection instanceof IStructuredSelection) {
+			Object[] elems = ((IStructuredSelection)fSelection).toArray();
 
-    protected void afterTask()
-    {
-    }
+			IFile gradleBuildFile = null;
 
-    protected abstract String getGradleTask();
+			Object elem = elems[0];
 
-    public void run( IAction action )
-    {
-        if( fSelection instanceof IStructuredSelection )
-        {
-            Object[] elems = ( (IStructuredSelection) fSelection ).toArray();
+			if (elem instanceof IFile) {
+				gradleBuildFile = (IFile)elem;
 
-            IFile gradleBuildFile = null;
+				project = gradleBuildFile.getProject();
+			}
+			else if (elem instanceof IProject) {
+				project = (IProject)elem;
 
-            Object elem = elems[0];
+				gradleBuildFile = project.getFile("build.gradle");
+			}
 
-            if( elem instanceof IFile )
-            {
-                gradleBuildFile = (IFile) elem;
-                _project = gradleBuildFile.getProject();
-            }
-            else if( elem instanceof IProject )
-            {
-                _project = (IProject) elem;
-                gradleBuildFile = _project.getFile( "build.gradle" );
-            }
+			if (gradleBuildFile.exists()) {
+				final Job job = new Job(project.getName() + " - " + getGradleTask()) {
 
-            if( gradleBuildFile.exists() )
-            {
-                final Job job = new Job( _project.getName() + " - " + getGradleTask() )
-                {
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						try {
+							monitor.beginTask(getGradleTask(), 100);
 
-                    @Override
-                    protected IStatus run( IProgressMonitor monitor )
-                    {
-                        try
-                        {
-                            monitor.beginTask( getGradleTask(), 100 );
+							GradleUtil.runGradleTask(project, getGradleTask(), monitor);
 
-                            GradleUtil.runGradleTask( _project, getGradleTask(), monitor );
+							monitor.worked(80);
 
-                            monitor.worked( 80 );
+							project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 
-                            _project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+							monitor.worked(20);
+						}
+						catch (Exception e) {
+							return ProjectUI.createErrorStatus("Error running Gradle goal " + getGradleTask(), e);
+						}
 
-                            monitor.worked( 20 );
-                        }
-                        catch( Exception e )
-                        {
-                            return ProjectUI.createErrorStatus( "Error running Gradle goal " + getGradleTask(), e );
-                        }
+						return Status.OK_STATUS;
+					}
 
-                        return Status.OK_STATUS;
-                    }
-                };
+				};
 
-                job.addJobChangeListener( new IJobChangeListener()
-                {
+				job.addJobChangeListener(
+					new IJobChangeListener() {
 
-                    @Override
-                    public void sleeping( IJobChangeEvent event )
-                    {
-                    }
+						@Override
+						public void aboutToRun(IJobChangeEvent event) {
+						}
 
-                    @Override
-                    public void scheduled( IJobChangeEvent event )
-                    {
-                    }
+						@Override
+						public void awake(IJobChangeEvent event) {
+						}
 
-                    @Override
-                    public void running( IJobChangeEvent event )
-                    {
-                    }
+						@Override
+						public void done(IJobChangeEvent event) {
+							afterTask();
+						}
 
-                    @Override
-                    public void done( IJobChangeEvent event )
-                    {
-                        afterTask();
-                    }
+						@Override
+						public void running(IJobChangeEvent event) {
+						}
 
-                    @Override
-                    public void awake( IJobChangeEvent event )
-                    {
-                    }
+						@Override
+						public void scheduled(IJobChangeEvent event) {
+						}
 
-                    @Override
-                    public void aboutToRun( IJobChangeEvent event )
-                    {
-                    }
-                } );
+						@Override
+						public void sleeping(IJobChangeEvent event) {
+						}
 
-                job.schedule();
-            }
-        }
-    }
+					});
+
+				job.schedule();
+			}
+		}
+	}
+
+	protected void afterTask() {
+	}
+
+	protected abstract String getGradleTask();
+
+	protected IProject project = null;
 
 }

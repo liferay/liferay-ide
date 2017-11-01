@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *    Kamesh Sampath - initial implementation
- *    Gregory Amerson - IDE-355
- ******************************************************************************/
+ */
 
 package com.liferay.ide.hook.core.model;
 
@@ -37,43 +33,42 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-@Image( path = "images/elcl16/index_16x16.gif" )
-public interface IndexerPostProcessor extends Element
-{
+@Image(path = "images/elcl16/index_16x16.gif")
+public interface IndexerPostProcessor extends Element {
 
-    ElementType TYPE = new ElementType( IndexerPostProcessor.class );
+	public ElementType TYPE = new ElementType(IndexerPostProcessor.class);
 
-    // *** IndexerClassName ***
+	public ReferenceValue<JavaTypeName, JavaType> getIndexerClassImpl();
 
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @JavaTypeConstraint( kind = JavaTypeKind.INTERFACE, type = "com.liferay.portal.model.BaseModel" )
-    @Label( standard = "Indexer Class Name" )
-    @XmlBinding( path = "indexer-class-name" )
-    @Required
-    ValueProperty PROP_INDEXER_CLASS_NAME = new ValueProperty( TYPE, "IndexerClassName" ); //$NON-NLS-1$
+	public ReferenceValue<JavaTypeName, JavaType> getIndexerClassName();
 
-    ReferenceValue<JavaTypeName, JavaType> getIndexerClassName();
+	public void setIndexerClassImpl(JavaTypeName value);
 
-    void setIndexerClassName( String value );
+	public void setIndexerClassImpl(String value);
 
-    void setIndexerClassName( JavaTypeName value );
+	public void setIndexerClassName(JavaTypeName value);
 
-    // *** Implementation Class ***
+	public void setIndexerClassName(String value);
 
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @Label( standard = "Indexer Post Processor Impl" )
-    @JavaTypeConstraint( kind = { JavaTypeKind.CLASS }, type = "com.liferay.portal.kernel.search.IndexerPostProcessor" )
-    @MustExist
-    @Required
-    @XmlBinding( path = "indexer-post-processor-impl" )
-    ValueProperty PROP_INDEXER_CLASS_IMPL = new ValueProperty( TYPE, "IndexerClassImpl" ); //$NON-NLS-1$
+	// *** Implementation Class ***
 
-    ReferenceValue<JavaTypeName, JavaType> getIndexerClassImpl();
+	@JavaTypeConstraint(kind = {JavaTypeKind.CLASS}, type = "com.liferay.portal.kernel.search.IndexerPostProcessor")
+	@Label(standard = "Indexer Post Processor Impl")
+	@MustExist
+	@Reference(target = JavaType.class)
+	@Required
+	@Type(base = JavaTypeName.class)
+	@XmlBinding(path = "indexer-post-processor-impl")
+	public ValueProperty PROP_INDEXER_CLASS_IMPL = new ValueProperty(TYPE, "IndexerClassImpl");
 
-    void setIndexerClassImpl( String value );
+	// *** IndexerClassName ***
 
-    void setIndexerClassImpl( JavaTypeName value );
+	@JavaTypeConstraint(kind = JavaTypeKind.INTERFACE, type = "com.liferay.portal.model.BaseModel")
+	@Label(standard = "Indexer Class Name")
+	@Reference(target = JavaType.class)
+	@Required
+	@Type(base = JavaTypeName.class)
+	@XmlBinding(path = "indexer-class-name")
+	public ValueProperty PROP_INDEXER_CLASS_NAME = new ValueProperty(TYPE, "IndexerClassName");
 
 }

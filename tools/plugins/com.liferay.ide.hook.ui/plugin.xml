@@ -12,55 +12,63 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- -->
+-->
 
 <plugin>
-   <extension
-         point="org.eclipse.ui.editors">
-      <editor
-            default="true"
-            filenames="liferay-hook.xml"
-            icon="icons/e16/hook.png"
-            id="com.liferay.ide.eclipse.hook.ui.editor.HookXmlEditor"
-            name="%hook.editor.name"
-            symbolicFontName="org.eclipse.wst.sse.ui.textfont">
-        <class class="com.liferay.ide.hook.ui.editor.HookXmlEditor">
-            <parameter name="sdef" value="com.liferay.ide.hook.ui.editor.HookXmlEditor"/>
-            <parameter name="pageName" value="Overview"/>
-        </class>
-        <contentTypeBinding
-               contentTypeId="com.liferay.ide.hook.core.liferayhookxml">
-         </contentTypeBinding>
-      </editor>
+	<extension
+		point="org.eclipse.ui.editors"
+	>
+		<editor
+			default="true"
+			filenames="liferay-hook.xml"
+			icon="icons/e16/hook.png"
+			id="com.liferay.ide.eclipse.hook.ui.editor.HookXmlEditor"
+			name="%hook.editor.name"
+			symbolicFontName="org.eclipse.wst.sse.ui.textfont"
+		>
+			<class class="com.liferay.ide.hook.ui.editor.HookXmlEditor">
+				<parameter name="sdef" value="com.liferay.ide.hook.ui.editor.HookXmlEditor" />
+				<parameter name="pageName" value="Overview" />
+			</class>
+			<contentTypeBinding
+				contentTypeId="com.liferay.ide.hook.core.liferayhookxml"
+			>
+			</contentTypeBinding>
+		</editor>
 
-   </extension>
-     <extension
-         point="org.eclipse.ui.newWizards">
-      <category
-            id="com.liferay.ide.newWizards"
-            name="%category.name">
-      </category>
-      <wizard
-            category="com.liferay.ide.newWizards"
-            icon="icons/n16/hook_new.png"
-            id="com.liferay.ide.eclipse.portlet.ui.wizard.hook"
-            name="%hook.wizard.name">
-         <class class="com.liferay.ide.hook.ui.wizard.NewHookWizard">
-          <parameter name="liferay_artifact" value="true"/>
-            <parameter name="menuIndex" value="20" />
-            <parameter name="validProjectTypes" value="portlet,hook" />
-         </class>
-         <description>
-            %wizard.description
-         </description>
-      </wizard>
-   </extension>
+	</extension>
+	<extension
+		point="org.eclipse.ui.newWizards"
+	>
+		<category
+			id="com.liferay.ide.newWizards"
+			name="%category.name"
+		>
+		</category>
+		<wizard
+			category="com.liferay.ide.newWizards"
+			icon="icons/n16/hook_new.png"
+			id="com.liferay.ide.eclipse.portlet.ui.wizard.hook"
+			name="%hook.wizard.name"
+		>
+			<class class="com.liferay.ide.hook.ui.wizard.NewHookWizard">
+				<parameter name="liferay_artifact" value="true" />
+				<parameter name="menuIndex" value="20" />
+				<parameter name="validProjectTypes" value="portlet,hook" />
+			</class>
+			<description>
+			%wizard.description
+			</description>
+		</wizard>
+	</extension>
 
-   <extension
-         point="org.eclipse.ui.ide.markerResolution">
-      <markerResolutionGenerator
-            class="com.liferay.ide.hook.ui.HookCustomJspValidationResolutionGenerator"
-            markerType="org.eclipse.jst.jsp.core.validationMarker">
-      </markerResolutionGenerator>
-   </extension>
+	<extension
+		point="org.eclipse.ui.ide.markerResolution"
+	>
+		<markerResolutionGenerator
+			class="com.liferay.ide.hook.ui.HookCustomJspValidationResolutionGenerator"
+			markerType="org.eclipse.jst.jsp.core.validationMarker"
+		>
+		</markerResolutionGenerator>
+	</extension>
 </plugin>

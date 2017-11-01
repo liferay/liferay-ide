@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.gradle.ui.quickfix;
 
 import com.liferay.ide.gradle.core.GradleCore;
@@ -23,15 +23,19 @@ import com.liferay.ide.project.core.modules.ServiceContainer;
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
+import java.io.File;
 import java.io.IOException;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -49,239 +53,226 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Lovett Li
  */
-@SuppressWarnings( "restriction" )
-public class QuickFixGradleDep implements IQuickFixProcessor
-{
+@SuppressWarnings("restriction")
+public class QuickFixGradleDep implements IQuickFixProcessor {
 
-    private IFile gradleFile;
+	@Override
+	public IJavaCompletionProposal[] getCorrections(IInvocationContext context, IProblemLocation[] locations) {
+		if ((locations == null) || (locations.length == 0)) {
+			return null;
+		}
 
-    @Override
-    public boolean hasCorrections( ICompilationUnit unit, int problemId )
-    {
-        switch( problemId )
-        {
-        case IProblem.ImportNotFound:
-        case IProblem.UndefinedType:
-            return true;
-        default:
-            return false;
-        }
-    }
+		IResource resource = context.getCompilationUnit().getResource();
 
-    @Override
-    public IJavaCompletionProposal[] getCorrections( IInvocationContext context, IProblemLocation[] locations )
-    {
-        if( locations == null || locations.length == 0 )
-        {
-            return null;
-        }
+		IProject project = resource.getProject();
 
-        IProject project = context.getCompilationUnit().getResource().getProject();
-        gradleFile = project.getFile( "build.gradle" );
-        List<IJavaCompletionProposal> resultingCollections = new ArrayList<>();
+		_gradleFile = project.getFile("build.gradle");
 
-        if( gradleFile.exists() )
-        {
-            for( int i = 0; i < locations.length; i++ )
-            {
-                IProblemLocation curr = locations[i];
+		List<IJavaCompletionProposal> resultingCollections = new ArrayList<>();
 
-                process( context, curr, resultingCollections );
-            }
-        }
+		if (_gradleFile.exists()) {
+			for (int i = 0; i < locations.length; i++) {
+				IProblemLocation curr = locations[i];
 
-        return resultingCollections.toArray( new IJavaCompletionProposal[resultingCollections.size()] );
-    }
+				_process(context, curr, resultingCollections);
+			}
+		}
 
-    private void process(
-        IInvocationContext context, IProblemLocation problem, List<IJavaCompletionProposal> proposals )
-    {
-        int id = problem.getProblemId();
+		return resultingCollections.toArray(new IJavaCompletionProposal[resultingCollections.size()]);
+	}
 
-        if( id == 0 )
-        {
-            return;
-        }
+	@Override
+	public boolean hasCorrections(ICompilationUnit unit, int problemId) {
+		switch (problemId) {
+			case IProblem.ImportNotFound:
+			case IProblem.UndefinedType:
+				return true;
+			default:
+				return false;
+		}
+	}
 
-        switch( id )
-        {
-        case IProblem.ImportNotFound:
-            importNotFoundProposal( context, problem, proposals );
-            break;
-        case IProblem.UndefinedType:
-            undefinedType( context, problem, proposals );
-            break;
-        default:;
-        }
-    }
+	private void _createDepProposal(
+		IInvocationContext context, Collection<IJavaCompletionProposal> proposals, ServiceContainer bundle) {
 
-    private void undefinedType(
-        IInvocationContext context, IProblemLocation problem, Collection<IJavaCompletionProposal> proposals )
-    {
-        ASTNode selectedNode = problem.getCoveringNode( context.getASTRoot() );
-        String fullyQualifiedName = null;
+		String bundleGroup = bundle.getBundleGroup();
+		String bundleName = bundle.getBundleName();
+		String bundleVersion = bundle.getBundleVersion();
 
-        if( selectedNode instanceof Name )
-        {
-            Name node = (Name) selectedNode;
-            fullyQualifiedName = node.getFullyQualifiedName();
-        }
+		proposals.add(
+			new CUCorrectionProposal("Add Gradle Dependence " + bundleName, context.getCompilationUnit(), null, -0) {
 
-        List<String> serviceWrapperList;
-        List<String> servicesList;
-        boolean depWrapperCanFixed = false;
+				@Override
+				public void apply(IDocument document) {
+					try {
+						GradleDependencyUpdater updater = new GradleDependencyUpdater(
+							_gradleFile.getLocation().toFile());
 
-        try
-        {
-            serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
-            servicesList = TargetPlatformUtil.getServicesList().getServiceList();
+						List<GradleDependency> existDependencies = updater.getAllDependencies();
 
-            for( String wrapper : serviceWrapperList )
-            {
-                if( wrapper.endsWith( fullyQualifiedName ) )
-                {
-                    ServiceContainer bundle = TargetPlatformUtil.getServiceWrapperBundle( wrapper );
-                    createDepProposal( context, proposals, bundle );
-                }
-            }
+						GradleDependency gd = new GradleDependency(bundleGroup, bundleName, bundleVersion);
 
-            if( !depWrapperCanFixed )
-            {
-                for( String service : servicesList )
-                {
-                    if( service.endsWith( fullyQualifiedName ) )
-                    {
-                        ServiceContainer bundle = TargetPlatformUtil.getServiceBundle( service );
-                        createDepProposal( context, proposals, bundle );
-                    }
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            GradleCore.logError( "Gradle dependence got error", e );
-        }
-    }
+						if (!existDependencies.contains(gd)) {
+							updater.insertDependency(gd);
 
-    private void importNotFoundProposal(
-        IInvocationContext context, IProblemLocation problem, Collection<IJavaCompletionProposal> proposals )
-    {
-        ASTNode selectedNode = problem.getCoveringNode( context.getASTRoot() );
+							File gradleFile = _gradleFile.getLocation().toFile();
 
-        if( selectedNode == null )
-        {
-            return;
-        }
+							Files.write(gradleFile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8);
 
-        ImportDeclaration importDeclaration =
-            (ImportDeclaration) ASTNodes.getParent( selectedNode, ASTNode.IMPORT_DECLARATION );
+							IResource resource = context.getCompilationUnit().getResource();
 
-        if( importDeclaration == null )
-        {
-            return;
-        }
+							IProject project = resource.getProject();
 
-        String importName = importDeclaration.getName().toString();
-        List<String> serviceWrapperList;
-        List<String> servicesList;
-        boolean depWrapperCanFixed = false;
+							GradleUtil.refreshGradleProject(project);
+						}
+					}
+					catch (Exception e) {
+						GradleCore.logError("Gradle dependence got error", e);
+					}
+				}
 
-        try
-        {
-            serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
-            servicesList = TargetPlatformUtil.getServicesList().getServiceList();
+				@Override
+				public Object getAdditionalProposalInfo(IProgressMonitor monitor) {
+					return "Add dependenece";
+				}
 
-            if( serviceWrapperList.contains( importName ) )
-            {
-                ServiceContainer bundle = TargetPlatformUtil.getServiceWrapperBundle( importName );
-                depWrapperCanFixed = true;
-                createDepProposal( context, proposals, bundle );
-            }
+				@Override
+				public Image getImage() {
+					Display display = UIUtil.getActiveShell().getDisplay();
+					String file = null;
 
-            if( !depWrapperCanFixed )
-            {
-                if( servicesList.contains( importName ) )
-                {
-                    ServiceContainer bundle = TargetPlatformUtil.getServiceBundle( importName );
-                    createDepProposal( context, proposals, bundle );
-                }
-            }
+					try {
+						Bundle bundle = GradleUI.getDefault().getBundle();
 
-            if( TargetPlatformUtil.getThirdPartyBundleList( importName ) != null )
-            {
-                ServiceContainer bundle = TargetPlatformUtil.getThirdPartyBundleList( importName );
-                createDepProposal( context, proposals, bundle );
-            }
-        }
-        catch( Exception e )
-        {
-            GradleCore.logError( "Gradle dependence got error", e );
-        }
-    }
+						file = FileLocator.toFileURL(bundle.getEntry("icons/e16/liferay_logo_16.png")).getFile();
+					}
+					catch (IOException ioe) {
+						GradleUI.logError(ioe);
+					}
 
-    private void createDepProposal(
-        IInvocationContext context, Collection<IJavaCompletionProposal> proposals, ServiceContainer bundle )
-    {
-        final String bundleGroup = bundle.getBundleGroup();
-        final String bundleName = bundle.getBundleName();
-        final String bundleVersion = bundle.getBundleVersion();
+					return new Image(display, file);
+				}
 
-        proposals.add(
-            new CUCorrectionProposal( "Add Gradle Dependence " + bundleName, context.getCompilationUnit(), null, -0 )
-            {
+			});
+	}
 
-                @Override
-                public void apply( IDocument document )
-                {
-                    try
-                    {
-                        GradleDependencyUpdater updater = new GradleDependencyUpdater( gradleFile.getLocation().toFile() );
-                        List<GradleDependency> existDependencies = updater.getAllDependencies();
-                        GradleDependency gd = new GradleDependency( bundleGroup, bundleName, bundleVersion );
+	private void _importNotFoundProposal(
+		IInvocationContext context, IProblemLocation problem, Collection<IJavaCompletionProposal> proposals) {
 
-                        if( !existDependencies.contains( gd ) )
-                        {
-                            updater.insertDependency( gd );
-                            Files.write(
-                                gradleFile.getLocation().toFile().toPath(), updater.getGradleFileContents(),
-                                StandardCharsets.UTF_8 );
-                            IProject project = context.getCompilationUnit().getResource().getProject();
-                            GradleUtil.refreshGradleProject( project );
-                        }
-                    }
-                    catch( Exception e )
-                    {
-                        GradleCore.logError( "Gradle dependence got error", e );
-                    }
-                }
+		ASTNode selectedNode = problem.getCoveringNode(context.getASTRoot());
 
-                @Override
-                public Object getAdditionalProposalInfo( IProgressMonitor monitor )
-                {
-                    return "Add dependenece";
-                }
+		if (selectedNode == null) {
+			return;
+		}
 
-                @Override
-                public Image getImage()
-                {
-                    Display display = UIUtil.getActiveShell().getDisplay();
-                    String file = null;
+		ImportDeclaration importDeclaration = (ImportDeclaration)ASTNodes.getParent(
+			selectedNode, ASTNode.IMPORT_DECLARATION);
 
-                    try
-                    {
-                        file = FileLocator.toFileURL(
-                            GradleUI.getDefault().getBundle().getEntry( "icons/e16/liferay_logo_16.png" ) ).getFile();
-                    }
-                    catch( IOException e )
-                    {
-                        GradleUI.logError( e );
-                    }
+		if (importDeclaration == null) {
+			return;
+		}
 
-                    return new Image( display, file );
-                }
-            } );
-    }
+		String importName = importDeclaration.getName().toString();
+		List<String> serviceWrapperList;
+		List<String> servicesList;
+		boolean depWrapperCanFixed = false;
+
+		try {
+			serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
+			servicesList = TargetPlatformUtil.getServicesList().getServiceList();
+
+			if (serviceWrapperList.contains(importName)) {
+				ServiceContainer bundle = TargetPlatformUtil.getServiceWrapperBundle(importName);
+				depWrapperCanFixed = true;
+				_createDepProposal(context, proposals, bundle);
+			}
+
+			if (!depWrapperCanFixed) {
+				if (servicesList.contains(importName)) {
+					ServiceContainer bundle = TargetPlatformUtil.getServiceBundle(importName);
+
+					_createDepProposal(context, proposals, bundle);
+				}
+			}
+
+			if (TargetPlatformUtil.getThirdPartyBundleList(importName) != null) {
+				ServiceContainer bundle = TargetPlatformUtil.getThirdPartyBundleList(importName);
+
+				_createDepProposal(context, proposals, bundle);
+			}
+		}
+		catch (Exception e) {
+			GradleCore.logError("Gradle dependence got error", e);
+		}
+	}
+
+	private void _process(
+		IInvocationContext context, IProblemLocation problem, List<IJavaCompletionProposal> proposals) {
+
+		int id = problem.getProblemId();
+
+		if (id == 0) {
+			return;
+		}
+
+		switch (id) {
+			case IProblem.ImportNotFound:
+				_importNotFoundProposal(context, problem, proposals);
+				break;
+			case IProblem.UndefinedType:
+				_undefinedType(context, problem, proposals);
+				break;
+		}
+	}
+
+	private void _undefinedType(
+		IInvocationContext context, IProblemLocation problem, Collection<IJavaCompletionProposal> proposals) {
+
+		ASTNode selectedNode = problem.getCoveringNode(context.getASTRoot());
+		String fullyQualifiedName = null;
+
+		if (selectedNode instanceof Name) {
+			Name node = (Name)selectedNode;
+
+			fullyQualifiedName = node.getFullyQualifiedName();
+		}
+
+		List<String> serviceWrapperList;
+		List<String> servicesList;
+		boolean depWrapperCanFixed = false;
+
+		try {
+			serviceWrapperList = TargetPlatformUtil.getServiceWrapperList().getServiceList();
+			servicesList = TargetPlatformUtil.getServicesList().getServiceList();
+
+			for (String wrapper : serviceWrapperList) {
+				if (wrapper.endsWith(fullyQualifiedName)) {
+					ServiceContainer bundle = TargetPlatformUtil.getServiceWrapperBundle(wrapper);
+
+					_createDepProposal(context, proposals, bundle);
+				}
+			}
+
+			if (!depWrapperCanFixed) {
+				for (String service : servicesList) {
+					if (service.endsWith(fullyQualifiedName)) {
+						ServiceContainer bundle = TargetPlatformUtil.getServiceBundle(service);
+
+						_createDepProposal(context, proposals, bundle);
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			GradleCore.logError("Gradle dependence got error", e);
+		}
+	}
+
+	private IFile _gradleFile;
+
 }

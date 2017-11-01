@@ -1,20 +1,16 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- *   This library is free software; you can redistribute it and/or modify it under
- *   the terms of the GNU Lesser General Public License as published by the Free
- *   Software Foundation; either version 2.1 of the License, or (at your option)
- *   any later version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *   This library is distributed in the hope that it will be useful, but WITHOUT
- *   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- *   FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- *   details.
- *
- *   Contributors:
- *          Kamesh Sampath - initial implementation
- *          Gregory Amerson - IDE-355
- *******************************************************************************/
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.hook.core.model;
 
@@ -40,45 +36,45 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-@Label( standard = "Service Wrapper" )
-@Image( path = "images/elcl16/service_16x16.gif" )
-public interface ServiceWrapper extends Element
-{
+@Image(path = "images/elcl16/service_16x16.gif")
+@Label(standard = "Service Wrapper")
+public interface ServiceWrapper extends Element {
 
-    ElementType TYPE = new ElementType( ServiceWrapper.class );
+	public ElementType TYPE = new ElementType(ServiceWrapper.class);
 
-    // *** ServiceType ***
+	public ReferenceValue<JavaTypeName, JavaType> getServiceImpl();
 
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @JavaTypeConstraint( kind = JavaTypeKind.INTERFACE )
-    @MustExist
-    @Label( standard = "Service Type" )
-    @XmlBinding( path = "service-type" )
-    @Required
-    ValueProperty PROP_SERVICE_TYPE = new ValueProperty( TYPE, "ServiceType" ); //$NON-NLS-1$
+	public ReferenceValue<JavaTypeName, JavaType> getServiceType();
 
-    ReferenceValue<JavaTypeName, JavaType> getServiceType();
+	public void setServiceImpl(JavaTypeName value);
 
-    void setServiceType( String value );
+	public void setServiceImpl(String value);
 
-    void setServiceType( JavaTypeName value );
+	public void setServiceType(JavaTypeName value);
 
-    // *** ServiceImpl ***
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @JavaTypeConstraint( kind = JavaTypeKind.CLASS )
-    @Label( standard = "Service Impl" )
-    @XmlBinding( path = "service-impl" )
-    @MustExist
-    @Required
-    @Service( impl = ServiceImplJavaTypeConstraintService.class )
-    ValueProperty PROP_SERVICE_IMPL = new ValueProperty( TYPE, "ServiceImpl" ); //$NON-NLS-1$
+	public void setServiceType(String value);
 
-    ReferenceValue<JavaTypeName, JavaType> getServiceImpl();
+	// *** ServiceImpl ***
 
-    void setServiceImpl( String value );
+	@JavaTypeConstraint(kind = JavaTypeKind.CLASS)
+	@Label(standard = "Service Impl")
+	@MustExist
+	@Reference(target = JavaType.class)
+	@Required
+	@Service(impl = ServiceImplJavaTypeConstraintService.class)
+	@Type(base = JavaTypeName.class)
+	@XmlBinding(path = "service-impl")
+	public ValueProperty PROP_SERVICE_IMPL = new ValueProperty(TYPE, "ServiceImpl");
 
-    void setServiceImpl( JavaTypeName value );
+	// *** ServiceType ***
+
+	@JavaTypeConstraint(kind = JavaTypeKind.INTERFACE)
+	@Label(standard = "Service Type")
+	@MustExist
+	@Reference(target = JavaType.class)
+	@Required
+	@Type(base = JavaTypeName.class)
+	@XmlBinding(path = "service-type")
+	public ValueProperty PROP_SERVICE_TYPE = new ValueProperty(TYPE, "ServiceType");
 
 }

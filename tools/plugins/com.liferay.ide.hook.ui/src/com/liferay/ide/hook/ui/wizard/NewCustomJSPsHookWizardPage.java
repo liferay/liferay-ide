@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.ui.wizard;
 
@@ -47,6 +46,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IDecoratorManager;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
@@ -61,297 +61,283 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizardPa
  * @author Terry Jia
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements INewHookDataModelProperties
-{
+@SuppressWarnings("restriction")
+public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements INewHookDataModelProperties {
 
-    protected Text customJSPsFolder;
+	public NewCustomJSPsHookWizardPage(IDataModel dataModel, String pageName) {
+		super(
+			dataModel, pageName, Msgs.createCustomJSPs,
+			HookUI.imageDescriptorFromPlugin(HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png"));
 
-    protected Button disableJSPFolderValidation;
+		setDescription(Msgs.createCustomsJSPFolderSelectJSPs);
+	}
 
-    protected CustomJSPsTableWizardSection jspItemsSection;
+	protected void createCustomJSPsGroup(Composite parent) {
+		Composite composite = SWTUtil.createTopComposite(parent, 2);
 
-    protected Text selectedProject;
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
 
-    protected Text webRootFolder;
+		jspItemsSection = new CustomJSPsTableWizardSection(
+			composite, Msgs.jspFilesOverride, Msgs.jspFilePath, Msgs.add, Msgs.edit, Msgs.remove,
+			new String[] {Msgs.add}, new String[] {Msgs.jspFilePath}, null, getDataModel(), CUSTOM_JSPS_ITEMS);
 
-    public NewCustomJSPsHookWizardPage( IDataModel dataModel, String pageName )
-    {
-        super( dataModel, pageName, Msgs.createCustomJSPs, HookUI.imageDescriptorFromPlugin(
-            HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) ); //$NON-NLS-1$
+		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1);
 
-        setDescription( Msgs.createCustomsJSPFolderSelectJSPs );
-    }
+		gd.heightHint = 175;
 
-    protected void createCustomJSPsGroup( Composite parent )
-    {
-        Composite composite = SWTUtil.createTopComposite( parent, 2 );
-        composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
+		jspItemsSection.setLayoutData(gd);
 
-        jspItemsSection =
-            new CustomJSPsTableWizardSection(
-                composite, Msgs.jspFilesOverride, Msgs.jspFilePath, Msgs.add, Msgs.edit, Msgs.remove,
-                new String[] { Msgs.add }, new String[] { Msgs.jspFilePath }, null, getDataModel(), CUSTOM_JSPS_ITEMS );
+		jspItemsSection.setCallback(new StringArrayTableWizardSectionCallback());
 
-        GridData gd = new GridData( SWT.FILL, SWT.CENTER, true, true, 1, 1 );
-        gd.heightHint = 175;
+		IProject project = CoreUtil.getProject(getDataModel().getStringProperty(PROJECT_NAME));
 
-        jspItemsSection.setLayoutData( gd );
-        jspItemsSection.setCallback( new StringArrayTableWizardSectionCallback() );
+		ILiferayProject liferayProject = LiferayCore.create(project);
 
-        IProject project = CoreUtil.getProject( getDataModel().getStringProperty( PROJECT_NAME ) );
+		if (liferayProject != null) {
+			ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
-        final ILiferayProject liferayProject = LiferayCore.create( project );
+			if (portal != null) {
+				IPath portalDir = portal.getAppServerPortalDir();
 
-        if( liferayProject != null )
-        {
-            final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+				if ((portalDir != null) && portalDir.toFile().exists()) {
+					jspItemsSection.setPortalDir(portalDir.toFile());
+				}
+			}
+		}
+	}
 
-            if( portal != null )
-            {
-                final IPath portalDir = portal.getAppServerPortalDir();
+	protected void createDisableJSPFolderValidation(Composite topComposite) {
+		Composite composite = SWTUtil.createTopComposite(topComposite, 3);
 
-                if( portalDir != null && portalDir.toFile().exists() )
-                {
-                    jspItemsSection.setPortalDir( portalDir.toFile() );
-                }
-            }
-        }
-    }
+		GridLayout gl = new GridLayout(1, false);
 
-    protected void createDisableJSPFolderValidation( Composite topComposite )
-    {
-        Composite composite = SWTUtil.createTopComposite( topComposite, 3 );
+		// gl.marginLeft = 5;
 
-        GridLayout gl = new GridLayout( 1, false );
-        // gl.marginLeft = 5;
+		composite.setLayout(gl);
 
-        composite.setLayout( gl );
-        composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
 
-        disableJSPFolderValidation = new Button( composite, SWT.CHECK );
-        disableJSPFolderValidation.setText( Msgs.disableJSPSyntaxValidation );
-        this.synchHelper.synchCheckbox( disableJSPFolderValidation, DISABLE_CUSTOM_JSP_FOLDER_VALIDATION, null );
-    }
+		disableJSPFolderValidation = new Button(composite, SWT.CHECK);
 
-    protected void createJSPFolderGroup( Composite topComposite )
-    {
-        Composite composite = SWTUtil.createTopComposite( topComposite, 3 );
+		disableJSPFolderValidation.setText(Msgs.disableJSPSyntaxValidation);
+		this.synchHelper.synchCheckbox(disableJSPFolderValidation, DISABLE_CUSTOM_JSP_FOLDER_VALIDATION, null);
+	}
 
-        GridLayout gl = new GridLayout( 3, false );
-        // gl.marginLeft = 5;
+	protected void createJSPFolderGroup(Composite topComposite) {
+		Composite composite = SWTUtil.createTopComposite(topComposite, 3);
 
-        composite.setLayout( gl );
-        composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
+		GridLayout gl = new GridLayout(3, false);
 
-        SWTUtil.createLabel( composite, SWT.LEAD, Msgs.customJSPFolder, 1 );
+		// gl.marginLeft = 5;
 
-        customJSPsFolder = SWTUtil.createText( composite, 1 );
+		composite.setLayout(gl);
 
-        this.synchHelper.synchText( customJSPsFolder, CUSTOM_JSPS_FOLDER, null );
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
 
-        Button iconFileBrowse = SWTUtil.createPushButton( composite, Msgs.browse, null );
-        iconFileBrowse.addSelectionListener( new SelectionAdapter()
-        {
+		SWTUtil.createLabel(composite, SWT.LEAD, Msgs.customJSPFolder, 1);
 
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                handleFileBrowseButton( NewCustomJSPsHookWizardPage.this.customJSPsFolder );
-            }
-        } );
-    }
+		customJSPsFolder = SWTUtil.createText(composite, 1);
 
-    protected void createSelectedProjectGroup( Composite topComposite )
-    {
-        Composite composite = SWTUtil.createTopComposite( topComposite, 3 );
+		this.synchHelper.synchText(customJSPsFolder, CUSTOM_JSPS_FOLDER, null);
 
-        GridLayout gl = new GridLayout( 3, false );
+		Button iconFileBrowse = SWTUtil.createPushButton(composite, Msgs.browse, null);
 
-        composite.setLayout( gl );
-        composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
+		iconFileBrowse.addSelectionListener(
+			new SelectionAdapter() {
 
-        SWTUtil.createLabel( composite, SWT.LEAD, Msgs.selectedProject, 1 );
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					handleFileBrowseButton(NewCustomJSPsHookWizardPage.this.customJSPsFolder);
+				}
 
-        selectedProject = SWTUtil.createText( composite, 2 );
+			});
+	}
 
-        selectedProject.setEditable( false );
+	protected void createSelectedProjectGroup(Composite topComposite) {
+		Composite composite = SWTUtil.createTopComposite(topComposite, 3);
 
-        this.synchHelper.synchText( selectedProject, SELECTED_PROJECT, null );
+		GridLayout gl = new GridLayout(3, false);
 
-        SWTUtil.createLabel( composite, SWT.LEAD, Msgs.webRootFolder, 1 );
+		composite.setLayout(gl);
 
-        webRootFolder = SWTUtil.createText( composite, 2 );
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
 
-        webRootFolder.setEditable( false );
+		SWTUtil.createLabel(composite, SWT.LEAD, Msgs.selectedProject, 1);
 
-        this.synchHelper.synchText( webRootFolder, WEB_ROOT_FOLDER, null );
-    }
+		selectedProject = SWTUtil.createText(composite, 2);
 
-    @Override
-    protected Composite createTopLevelComposite( Composite parent )
-    {
-        Composite topComposite = SWTUtil.createTopComposite( parent, 3 );
+		selectedProject.setEditable(false);
 
-        createSelectedProjectGroup( topComposite );
+		this.synchHelper.synchText(selectedProject, SELECTED_PROJECT, null);
 
-        createJSPFolderGroup( topComposite );
+		SWTUtil.createLabel(composite, SWT.LEAD, Msgs.webRootFolder, 1);
 
-        createCustomJSPsGroup( topComposite );
+		webRootFolder = SWTUtil.createText(composite, 2);
 
-        createDisableJSPFolderValidation( topComposite );
+		webRootFolder.setEditable(false);
 
-        return topComposite;
-    }
+		this.synchHelper.synchText(webRootFolder, WEB_ROOT_FOLDER, null);
+	}
 
-    @Override
-    protected void enter()
-    {
-        super.enter();
+	@Override
+	protected Composite createTopLevelComposite(Composite parent) {
+		Composite topComposite = SWTUtil.createTopComposite(parent, 3);
 
-        this.synchHelper.synchAllUIWithModel();
-    }
+		createSelectedProjectGroup(topComposite);
 
-    protected ISelectionStatusValidator getContainerDialogSelectionValidator()
-    {
-        return new ISelectionStatusValidator()
-        {
+		createJSPFolderGroup(topComposite);
 
-            public IStatus validate( Object[] selection )
-            {
-                if( selection != null && selection.length > 0 && selection[0] != null &&
-                    !( selection[0] instanceof IProject ) && !( selection[0] instanceof IFile ) )
-                {
-                    return Status.OK_STATUS;
-                }
+		createCustomJSPsGroup(topComposite);
 
-                return HookUI.createErrorStatus( Msgs.chooseValidFolder );
-            }
-        };
-    }
+		createDisableJSPFolderValidation(topComposite);
 
-    protected ViewerFilter getContainerDialogViewerFilter()
-    {
-        return new ViewerFilter()
-        {
-            public boolean select( Viewer viewer, Object parent, Object element )
-            {
-                if( element instanceof IProject )
-                {
-                    IProject project = (IProject) element;
+		return topComposite;
+	}
 
-                    return project.getName().equals(
-                        model.getProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME ) );
-                }
-                else if( element instanceof IFolder )
-                {
-                    IFolder folder = (IFolder) element;
-
-                    final IWebProject webproject = LiferayCore.create( IWebProject.class, folder.getProject() );
-
-                    if( webproject != null && webproject.getDefaultDocrootFolder().contains( folder ) ||
-                        folder.contains( webproject.getDefaultDocrootFolder() ) )
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-        };
-    }
-
-    @Override
-    protected String[] getValidationPropertyNames()
-    {
-        return new String[] { CUSTOM_JSPS_FOLDER, CUSTOM_JSPS_ITEMS };
-    }
-
-    protected void handleFileBrowseButton( final Text text )
-    {
-        ISelectionStatusValidator validator = getContainerDialogSelectionValidator();
-
-        ViewerFilter filter = getContainerDialogViewerFilter();
-
-        ITreeContentProvider contentProvider = new WorkbenchContentProvider();
-
-        ILabelProvider labelProvider =
-            new DecoratingLabelProvider(
-                new WorkbenchLabelProvider(), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator() );
-
-        ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog( getShell(), labelProvider, contentProvider );
-        dialog.setValidator( validator );
-        dialog.setTitle( J2EEUIMessages.CONTAINER_SELECTION_DIALOG_TITLE );
-        dialog.setMessage( J2EEUIMessages.CONTAINER_SELECTION_DIALOG_DESC );
-        dialog.addFilter( filter );
-        dialog.setInput( CoreUtil.getWorkspaceRoot() );
-
-        if( dialog.open() == Window.OK )
-        {
-            Object element = dialog.getFirstResult();
-
-            try
-            {
-                if( element instanceof IFolder )
-                {
-                    IFolder folder = (IFolder) element;
-
-                    IProject project = CoreUtil.getProject( getDataModel().getStringProperty( PROJECT_NAME ) );
-
-                    final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
-
-                    if( webproject != null )
-                    {
-                        IFolder defaultWebappRootFolder = webproject.getDefaultDocrootFolder();
-
-                        if( folder.equals( defaultWebappRootFolder ) )
-                        {
-                            folder = folder.getFolder( "custom_jsps" );
-                        }
-
-                        String defaultWebappRootFolderFullPath =
-                            defaultWebappRootFolder.getFullPath().toPortableString();
-                        String folderFullPath = folder.getFullPath().toPortableString();
-
-                        int index = folderFullPath.indexOf( defaultWebappRootFolderFullPath );
-
-                        if( index != -1 )
-                        {
-                            folderFullPath =
-                                folderFullPath.substring( index + defaultWebappRootFolderFullPath.length() );
-                        }
-
-                        text.setText( folderFullPath );
-                    }
-                }
-            }
-            catch( Exception ex )
-            {
-                // Do nothing
-            }
-        }
-    }
-
-    private static class Msgs extends NLS
-    {
-
-        public static String add;
-        public static String browse;
-        public static String chooseValidFolder;
-        public static String createCustomJSPs;
-        public static String createCustomsJSPFolderSelectJSPs;
-        public static String customJSPFolder;
-        public static String disableJSPSyntaxValidation;
-        public static String edit;
-        public static String jspFilePath;
-        public static String jspFilesOverride;
-        public static String remove;
-        public static String selectedProject;
-        public static String webRootFolder;
-
-        static
-        {
-            initializeMessages( NewCustomJSPsHookWizardPage.class.getName(), Msgs.class );
-        }
-    }
+	@Override
+	protected void enter() {
+		super.enter();
+
+		this.synchHelper.synchAllUIWithModel();
+	}
+
+	protected ISelectionStatusValidator getContainerDialogSelectionValidator() {
+		return new ISelectionStatusValidator() {
+
+			public IStatus validate(Object[] selection) {
+				if ((selection != null) && (selection.length > 0) && (selection[0] != null) &&
+					!(selection[0] instanceof IProject) && !(selection[0] instanceof IFile)) {
+
+					return Status.OK_STATUS;
+				}
+
+				return HookUI.createErrorStatus(Msgs.chooseValidFolder);
+			}
+
+		};
+	}
+
+	protected ViewerFilter getContainerDialogViewerFilter() {
+		return new ViewerFilter() {
+
+			public boolean select(Viewer viewer, Object parent, Object element) {
+				if (element instanceof IProject) {
+					IProject project = (IProject)element;
+
+					Object projectName = model.getProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
+
+					return project.getName().equals(projectName);
+				}
+				else if (element instanceof IFolder) {
+					IFolder folder = (IFolder)element;
+
+					IWebProject webproject = LiferayCore.create(IWebProject.class, folder.getProject());
+
+					if (((webproject != null) && webproject.getDefaultDocrootFolder().contains(folder)) ||
+						folder.contains(webproject.getDefaultDocrootFolder())) {
+
+						return true;
+					}
+				}
+
+				return false;
+			}
+
+		};
+	}
+
+	@Override
+	protected String[] getValidationPropertyNames() {
+		return new String[] {CUSTOM_JSPS_FOLDER, CUSTOM_JSPS_ITEMS};
+	}
+
+	protected void handleFileBrowseButton(Text text) {
+		ISelectionStatusValidator validator = getContainerDialogSelectionValidator();
+
+		ViewerFilter filter = getContainerDialogViewerFilter();
+
+		ITreeContentProvider contentProvider = new WorkbenchContentProvider();
+
+		IDecoratorManager decoratorManager = PlatformUI.getWorkbench().getDecoratorManager();
+
+		ILabelProvider labelProvider = new DecoratingLabelProvider(
+			new WorkbenchLabelProvider(), decoratorManager.getLabelDecorator());
+
+		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(), labelProvider, contentProvider);
+
+		dialog.setValidator(validator);
+		dialog.setTitle(J2EEUIMessages.CONTAINER_SELECTION_DIALOG_TITLE);
+		dialog.setMessage(J2EEUIMessages.CONTAINER_SELECTION_DIALOG_DESC);
+		dialog.addFilter(filter);
+		dialog.setInput(CoreUtil.getWorkspaceRoot());
+
+		if (dialog.open() == Window.OK) {
+			Object element = dialog.getFirstResult();
+
+			try {
+				if (element instanceof IFolder) {
+					IFolder folder = (IFolder)element;
+
+					IProject project = CoreUtil.getProject(getDataModel().getStringProperty(PROJECT_NAME));
+
+					IWebProject webproject = LiferayCore.create(IWebProject.class, project);
+
+					if (webproject != null) {
+						IFolder defaultWebappRootFolder = webproject.getDefaultDocrootFolder();
+
+						if (folder.equals(defaultWebappRootFolder)) {
+							folder = folder.getFolder("custom_jsps");
+						}
+
+						String defaultWebappRootFolderFullPath =
+							defaultWebappRootFolder.getFullPath().toPortableString();
+
+						String folderFullPath = folder.getFullPath().toPortableString();
+
+						int index = folderFullPath.indexOf(defaultWebappRootFolderFullPath);
+
+						if (index != -1) {
+							folderFullPath = folderFullPath.substring(index + defaultWebappRootFolderFullPath.length());
+						}
+
+						text.setText(folderFullPath);
+					}
+				}
+			}
+			catch (Exception ex) {
+
+				// Do nothing
+
+			}
+		}
+	}
+
+	protected Text customJSPsFolder;
+	protected Button disableJSPFolderValidation;
+	protected CustomJSPsTableWizardSection jspItemsSection;
+	protected Text selectedProject;
+	protected Text webRootFolder;
+
+	private static class Msgs extends NLS {
+
+		public static String add;
+		public static String browse;
+		public static String chooseValidFolder;
+		public static String createCustomJSPs;
+		public static String createCustomsJSPFolderSelectJSPs;
+		public static String customJSPFolder;
+		public static String disableJSPSyntaxValidation;
+		public static String edit;
+		public static String jspFilePath;
+		public static String jspFilesOverride;
+		public static String remove;
+		public static String selectedProject;
+		public static String webRootFolder;
+
+		static {
+			initializeMessages(NewCustomJSPsHookWizardPage.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

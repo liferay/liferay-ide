@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.gradle.core;
 
@@ -21,12 +20,17 @@ import com.liferay.ide.core.util.FileUtil;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+
+import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 
 import org.eclipse.core.runtime.FileLocator;
+
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ModelBuilder;
 import org.gradle.tooling.ProjectConnection;
+
+import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 
 /**
@@ -34,138 +38,124 @@ import org.osgi.framework.Version;
  * @author Terry Jia
  * @author Andy Wu
  */
-public class GradleTooling
-{
+public class GradleTooling {
 
-    private static void extractJar( File depsDir, String jarName ) throws IOException
-    {
-        String fullFileName = jarName + ".jar";
+	public static <T> T getModel(Class<T> modelClass, File cacheDir, File projectDir) throws Exception {
+		T retval = null;
 
-        File[] files = depsDir.listFiles();
+		GradleConnector connector = GradleConnector.newConnector().forProjectDirectory(projectDir);
 
-        // clear legacy dependency files
-        for( File file : files )
-        {
-            if( file.isFile() && file.getName().startsWith( jarName ) && !file.getName().equals( fullFileName ) )
-            {
-                if( !file.delete() )
-                {
-                    GradleCore.logError( "Error: delete file " + file.getAbsolutePath() + " fail" );
-                }
-            }
-        }
+		ProjectConnection connection = null;
 
-        String embeddedJarVersion = null;
+		try {
+			connection = connector.connect();
 
-        File embeddedJarFile = new File(
-            FileLocator.toFileURL( GradleCore.getDefault().getBundle().getEntry( "lib/" + fullFileName ) ).getFile() );
+			ModelBuilder<T> modelBuilder = (ModelBuilder<T>)connection.model(modelClass);
 
-        try(JarFile embededJarFile = new JarFile( embeddedJarFile ))
-        {
-            embeddedJarVersion = embededJarFile.getManifest().getMainAttributes().getValue( "Bundle-Version" );
-        }
-        catch( IOException e )
-        {
-        }
+			File depsDir = new File(cacheDir, "deps");
 
-        File jarFile = new File( depsDir, fullFileName );
+			depsDir.mkdirs();
 
-        if( jarFile.exists() )
-        {
-            boolean shouldDelete = false;
+			String path = depsDir.getAbsolutePath();
 
-            try(JarFile jar = new JarFile( jarFile ))
-            {
-                String bundleVersion = jar.getManifest().getMainAttributes().getValue( "Bundle-Version" );
+			path = path.replaceAll("\\\\", "/");
 
-                if( !CoreUtil.empty( bundleVersion ) )
-                {
-                    Version rightVersion = new Version( embeddedJarVersion );
-                    Version version = new Version( bundleVersion );
+			_extractJar(depsDir, "com.liferay.blade.gradle.model");
+			_extractJar(depsDir, "com.liferay.blade.gradle.plugin");
 
-                    if( version.compareTo( rightVersion ) != 0 )
-                    {
-                        shouldDelete = true;
-                    }
-                }
-                else
-                {
-                    shouldDelete = true;
-                }
-            }
-            catch( Exception e )
-            {
-            }
+			String initScriptTemplate = CoreUtil.readStreamToString(
+				GradleTooling.class.getResourceAsStream("init.gradle"));
 
-            if( shouldDelete )
-            {
-                if( !jarFile.delete() )
-                {
-                    GradleCore.logError( "Error: delete file " + jarFile.getAbsolutePath() + " fail" );
-                }
-            }
-        }
+			String initScriptContents = initScriptTemplate.replaceFirst("%deps%", path);
 
-        if( !jarFile.exists() )
-        {
-            FileUtil.copyFile( embeddedJarFile, jarFile );
-        }
-    }
+			File scriptFile = new File(cacheDir, "init.gradle");
 
-    public static <T> T getModel( Class<T> modelClass, File cacheDir, File projectDir ) throws Exception
-    {
-        T retval = null;
+			if (!scriptFile.exists()) {
+				scriptFile.createNewFile();
+			}
 
-        final GradleConnector connector = GradleConnector.newConnector().forProjectDirectory( projectDir );
+			FileUtil.writeFileFromStream(scriptFile, new ByteArrayInputStream(initScriptContents.getBytes()));
 
-        ProjectConnection connection = null;
+			ModelBuilder<T> builder = modelBuilder.withArguments("--init-script", scriptFile.getAbsolutePath());
 
-        try
-        {
-            connection = connector.connect();
+			retval = builder.get();
+		}
+		catch (Exception e) {
+			GradleCore.logError("get gradle custom model error", e);
+		}
+		finally {
+			if (connection != null) {
+				connection.close();
+			}
+		}
 
-            final ModelBuilder<T> modelBuilder = (ModelBuilder<T>) connection.model( modelClass );
+		return retval;
+	}
 
-            final File depsDir = new File(cacheDir, "deps");
+	private static void _extractJar(File depsDir, String jarName) throws IOException {
+		String fullFileName = jarName + ".jar";
 
-            depsDir.mkdirs();
+		File[] files = depsDir.listFiles();
 
-            String path = depsDir.getAbsolutePath();
+		// clear legacy dependency files
 
-            path = path.replaceAll("\\\\", "/");
+		for (File file : files) {
+			if (file.isFile() && file.getName().startsWith(jarName) && !file.getName().equals(fullFileName)) {
+				if (!file.delete()) {
+					GradleCore.logError("Error: delete file " + file.getAbsolutePath() + " fail");
+				}
+			}
+		}
 
-            extractJar( depsDir, "com.liferay.blade.gradle.model" );
-            extractJar( depsDir, "com.liferay.blade.gradle.plugin" );
+		String embeddedJarVersion = null;
 
-            final String initScriptTemplate =
-                CoreUtil.readStreamToString( GradleTooling.class.getResourceAsStream( "init.gradle" ) );
+		Bundle bundle = GradleCore.getDefault().getBundle();
 
-            final String initScriptContents = initScriptTemplate.replaceFirst( "%deps%", path );
+		File embeddedJarFile = new File(FileLocator.toFileURL(bundle.getEntry("lib/" + fullFileName)).getFile());
 
-            final File scriptFile = new File( cacheDir, "init.gradle" );
+		try (JarFile embededJarFile = new JarFile(embeddedJarFile)) {
+			Attributes attributes = embededJarFile.getManifest().getMainAttributes();
 
-            if( !scriptFile.exists() )
-            {
-                scriptFile.createNewFile();
-            }
+			embeddedJarVersion = attributes.getValue("Bundle-Version");
+		}
+		catch (IOException ioe) {
+		}
 
-            FileUtil.writeFileFromStream( scriptFile, new ByteArrayInputStream( initScriptContents.getBytes() ) );
+		File jarFile = new File(depsDir, fullFileName);
 
-            retval = modelBuilder.withArguments( "--init-script", scriptFile.getAbsolutePath() ).get();
-        }
-        catch(Exception e)
-        {
-            GradleCore.logError( "get gradle custom model error", e );
-        }
-        finally
-        {
-            if( connection != null )
-            {
-                connection.close();
-            }
-        }
+		if (jarFile.exists()) {
+			boolean shouldDelete = false;
 
-        return retval;
-    }
+			try (JarFile jar = new JarFile(jarFile)) {
+				Attributes attributes = jar.getManifest().getMainAttributes();
+
+				String bundleVersion = attributes.getValue("Bundle-Version");
+
+				if (!CoreUtil.empty(bundleVersion)) {
+					Version rightVersion = new Version(embeddedJarVersion);
+					Version version = new Version(bundleVersion);
+
+					if (version.compareTo(rightVersion) != 0) {
+						shouldDelete = true;
+					}
+				}
+				else {
+					shouldDelete = true;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			if (shouldDelete) {
+				if (!jarFile.delete()) {
+					GradleCore.logError("Error: delete file " + jarFile.getAbsolutePath() + " fail");
+				}
+			}
+		}
+
+		if (!jarFile.exists()) {
+			FileUtil.copyFile(embeddedJarFile, jarFile);
+		}
+	}
 
 }

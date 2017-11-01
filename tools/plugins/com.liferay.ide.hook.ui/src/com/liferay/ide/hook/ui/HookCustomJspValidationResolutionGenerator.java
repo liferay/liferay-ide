@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.hook.ui;
 
@@ -27,56 +26,47 @@ import org.eclipse.ui.IMarkerResolutionGenerator2;
 /**
  * @author Simon Jiang
  */
-public class HookCustomJspValidationResolutionGenerator implements IMarkerResolutionGenerator2
-{
+public class HookCustomJspValidationResolutionGenerator implements IMarkerResolutionGenerator2 {
 
-    public IMarkerResolution[] getResolutions( IMarker marker )
-    {
-        if ( hasResolutions( marker ) )
-        {
-            return new IMarkerResolution[] { new HookCustomJspValidationResolution() };
-        }
-        else
-        {
-            return new IMarkerResolution[0];
-        }
-    }
+	public IMarkerResolution[] getResolutions(IMarker marker) {
+		if (hasResolutions(marker)) {
+			return new IMarkerResolution[] {new HookCustomJspValidationResolution()};
+		}
+		else {
+			return new IMarkerResolution[0];
+		}
+	}
 
-    public boolean hasResolutions( IMarker marker )
-    {
-        boolean hasResolution = false;
+	public boolean hasResolutions(IMarker marker) {
+		boolean hasResolution = false;
 
-        try
-        {
-            if( marker.getAttribute( IMarker.SEVERITY ) != null &&
-                marker.getAttribute( IMarker.SEVERITY ).equals( IMarker.SEVERITY_ERROR ) )
-            {
-                final String validationId = (String) marker.getAttribute( "ValidationId" );
+		try {
+			if ((marker.getAttribute(IMarker.SEVERITY) != null) &&
+				marker.getAttribute(IMarker.SEVERITY).equals(IMarker.SEVERITY_ERROR)) {
 
-                if( validationId.equalsIgnoreCase( HookCore.VALIDATOR_ID ) )
-                {
-                    final IProject project = marker.getResource().getProject();
+				String validationId = (String)marker.getAttribute("ValidationId");
 
-                    final IPath customJspPath = HookUtil.getCustomJspPath( project );
+				if (validationId.equalsIgnoreCase(HookCore.VALIDATOR_ID)) {
+					IProject project = marker.getResource().getProject();
 
-                    if( customJspPath != null )
-                    {
-                        final IPath jspPath = marker.getResource().getProjectRelativePath();
-                        final IPath relativeCustomJspPath = customJspPath.makeRelativeTo( project.getFullPath() );
+					IPath customJspPath = HookUtil.getCustomJspPath(project);
 
-                        if( relativeCustomJspPath.isPrefixOf( jspPath ) )
-                        {
-                            hasResolution = true;
-                        }
-                    }
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            HookCore.logError( "Get marker attribute error. ", e );
-        }
+					if (customJspPath != null) {
+						IPath jspPath = marker.getResource().getProjectRelativePath();
+						IPath relativeCustomJspPath = customJspPath.makeRelativeTo(project.getFullPath());
 
-        return hasResolution;
-    }
+						if (relativeCustomJspPath.isPrefixOf(jspPath)) {
+							hasResolution = true;
+						}
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			HookCore.logError("Get marker attribute error. ", e);
+		}
+
+		return hasResolution;
+	}
+
 }

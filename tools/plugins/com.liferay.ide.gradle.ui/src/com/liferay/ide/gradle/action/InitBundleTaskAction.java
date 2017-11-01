@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.gradle.action;
 
@@ -30,46 +29,40 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 /**
  * @author Terry Jia
  */
-public class InitBundleTaskAction extends GradleTaskAction
-{
+public class InitBundleTaskAction extends GradleTaskAction {
 
-    protected void afterTask()
-    {
-        IProject project = LiferayWorkspaceUtil.getWorkspaceProject();
+	protected void afterTask() {
+		IProject project = LiferayWorkspaceUtil.getWorkspaceProject();
 
-        IPath bundlesLocation = LiferayWorkspaceUtil.getHomeLocation( project );
+		IPath bundlesLocation = LiferayWorkspaceUtil.getHomeLocation(project);
 
-        try
-        {
-            if( bundlesLocation != null && bundlesLocation.toFile().exists() )
-            {
-                String serverName = bundlesLocation.lastSegment();
-                ServerUtil.addPortalRuntimeAndServer( serverName, bundlesLocation, new NullProgressMonitor() );
+		try {
+			if (bundlesLocation.toFile().exists()) {
+				String serverName = bundlesLocation.lastSegment();
 
-                IProject pluginsSDK = CoreUtil.getProject(
-                    LiferayWorkspaceUtil.getPluginsSDKDir( project.getLocation().toPortableString() ) );
+				ServerUtil.addPortalRuntimeAndServer(serverName, bundlesLocation, new NullProgressMonitor());
 
-                if( pluginsSDK != null && pluginsSDK.exists() )
-                {
-                    SDK sdk = SDKUtil.createSDKFromLocation( pluginsSDK.getLocation() );
+				IProject pluginsSDK = CoreUtil.getProject(
+					LiferayWorkspaceUtil.getPluginsSDKDir(project.getLocation().toPortableString()));
 
-                    sdk.addOrUpdateServerProperties(
-                        ServerUtil.getLiferayRuntime( ServerUtil.getServer( serverName ) ).getLiferayHome() );
+				if ((pluginsSDK != null) && pluginsSDK.exists()) {
+					SDK sdk = SDKUtil.createSDKFromLocation(pluginsSDK.getLocation());
 
-                    pluginsSDK.refreshLocal( IResource.DEPTH_INFINITE, null );
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            GradleCore.logError( "Adding server failed", e );
-        }
-    }
+					sdk.addOrUpdateServerProperties(
+						ServerUtil.getLiferayRuntime(ServerUtil.getServer(serverName)).getLiferayHome());
 
-    @Override
-    protected String getGradleTask()
-    {
-        return "initBundle";
-    }
+					pluginsSDK.refreshLocal(IResource.DEPTH_INFINITE, null);
+				}
+			}
+		}
+		catch (Exception e) {
+			GradleCore.logError("Adding server failed", e);
+		}
+	}
+
+	@Override
+	protected String getGradleTask() {
+		return "initBundle";
+	}
 
 }

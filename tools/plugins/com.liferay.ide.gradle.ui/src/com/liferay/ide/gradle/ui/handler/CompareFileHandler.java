@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.gradle.ui.handler;
 
 import com.liferay.ide.gradle.core.GradleCore;
@@ -15,43 +29,41 @@ import org.eclipse.core.runtime.IPath;
 /**
  * @author Lovett Li
  */
-public class CompareFileHandler extends AbstractCompareFileHandler
-{
+public class CompareFileHandler extends AbstractCompareFileHandler {
 
-    protected File getTemplateFile( IFile currentFile ) throws Exception
-    {
-        final IProject currentProject = currentFile.getProject();
-        final IFile bndfile = currentProject.getFile( "bnd.bnd" );
+	protected File getTemplateFile(IFile currentFile) throws Exception {
+		IProject currentProject = currentFile.getProject();
 
-        File templateFile = null;
+		IFile bndfile = currentProject.getFile("bnd.bnd");
 
-        try( final BufferedReader reader = new BufferedReader( new InputStreamReader( bndfile.getContents() ) ) )
-        {
-            String fragment;
+		File templateFile = null;
 
-            while( ( fragment = reader.readLine() ) != null )
-            {
-                if( fragment.startsWith( "Fragment-Host:" ) )
-                {
-                    fragment = fragment.substring( fragment.indexOf( ":" ) + 1, fragment.indexOf( ";" ) ).trim();
-                    break;
-                }
-            }
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(bndfile.getContents()))) {
+			String fragment;
 
-            final String hookfolder = currentFile.getFullPath().toOSString().substring(
-                currentFile.getFullPath().toOSString().lastIndexOf( "META-INF" ) );
-            final IPath templateLocation =
-                GradleCore.getDefault().getStateLocation().append( fragment ).append( hookfolder );
+			while ((fragment = reader.readLine()) != null) {
+				if (fragment.startsWith("Fragment-Host:")) {
+					fragment = fragment.substring(fragment.indexOf(":") + 1, fragment.indexOf(";")).trim();
+					break;
+				}
+			}
 
-            templateFile = new File( templateLocation.toOSString() );
+			String currentLocation = currentFile.getFullPath().toOSString();
 
-            if( !templateFile.exists() )
-            {
-                throw new FileNotFoundException( "Template not found." );
-            }
-        }
+			String hookFolder = currentLocation.substring(currentLocation.lastIndexOf("META-INF"));
 
-        return templateFile;
-    }
+			IPath stateLocation = GradleCore.getDefault().getStateLocation();
+
+			IPath templateLocation = stateLocation.append(fragment).append(hookFolder);
+
+			templateFile = new File(templateLocation.toOSString());
+
+			if (!templateFile.exists()) {
+				throw new FileNotFoundException("Template not found.");
+			}
+		}
+
+		return templateFile;
+	}
 
 }
