@@ -31,7 +31,7 @@
     <name>Liferay IDE Workspace Installer</name>
 
     <properties>
-        <workspace-installer-version>1.5.0.1</workspace-installer-version>
+        <workspace-installer-version>1.7.1</workspace-installer-version>
     </properties>
 
     <build>
