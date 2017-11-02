@@ -168,6 +168,8 @@ public class ViewAction extends UIAction {
 		TreeItem item = _serversView.getServers().getTreeItem(serverLabel);
 
 		item.contextMenu(OPEN_LIFERAY_PORTAL_HOME);
+
+		ide.sleep(10000);
 	}
 
 	public void openProjectFile(String... files) {

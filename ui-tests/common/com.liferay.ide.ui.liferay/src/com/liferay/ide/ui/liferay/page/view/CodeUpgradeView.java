@@ -65,8 +65,6 @@ public class CodeUpgradeView extends View {
 
 		public void clickGear(int i) {
 			click(_x + _step * i, _y);
-
-			sleep();
 		}
 
 		private int _step = 64;

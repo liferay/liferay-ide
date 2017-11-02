@@ -31,8 +31,11 @@ mvn clean verify -P ui-tests-mac -D liferay.bundles.dir="/Users/terry/work/githu
 
 you also can to append *-D liferay-ide-site="${your.ide.site}"* to point which ide you want to tests, if you don't set it will use the remote site.
 
+Or you can go into the /ui-tests/scripts/ and run the shell and bat scripts.
+
 ## Notes
 1. please make sure you have blade cli jar before you run any tests about blade (liferay workspace, gradle module prooject), here is the steps how to get this file:
 download the blade cli jar file from **${blade-latest-download-url}** in **/build/parent/pom.xml** and put it into **/tools/plugins/com.liferay.ide.project.core/lib** and rename it to **com.liferay.blade.cli.jar**.
 And if this file updated you also need to redownload it.
-2. please make sure you have run *mvc source-formatter:format* under *ui-tests* folder.
+2. please make sure you have run *mvc source-formatter:format* in /build/com.liferay.ide.build.source.formatter folder for *ui-tests*.
+3. if you have to add *sleep* for some reasons, remember you should also add **ide.sleep()** or **ide.sleep(millis)** into action class(e.g. WizardAction or DialogAction), or not add them into any testcase files or page object.

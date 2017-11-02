@@ -45,6 +45,10 @@ public class DialogAction extends UIAction {
 		_addAndRemoveDialog.getAddBtn().click();
 	}
 
+	public void cancel() {
+		_dialog.cancel();
+	}
+
 	public void confirm() {
 		_dialog.confirm();
 	}
@@ -89,6 +93,8 @@ public class DialogAction extends UIAction {
 	}
 
 	public void openPreferencesRecorderDialog() {
+		ide.sleep();
+
 		_preferencesDialog.getSearch().setText(PREFERENCE_RECORDER);
 
 		_preferencesDialog.getPreferencesTypes().selectTreeItem(OOMPH, SETUP_TASKS, PREFERENCE_RECORDER);

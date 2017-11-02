@@ -26,12 +26,6 @@ import org.eclipse.swtbot.swt.finder.keyboard.KeyboardFactory;
  */
 public interface Keys {
 
-	public final KeyStroke M = KeyStroke.getInstance('M');
-
-	public final KeyStroke N = KeyStroke.getInstance('N');
-
-	public final KeyStroke S = KeyStroke.getInstance('S');
-
 	public final KeyStroke alt = KeyStroke.getInstance(SWT.ALT, 0);
 	public final KeyStroke ctrl = KeyStroke.getInstance(SWT.CTRL, 0);
 	public final KeyStroke enter = KeyStroke.getInstance(KeyEvent.VK_ENTER);

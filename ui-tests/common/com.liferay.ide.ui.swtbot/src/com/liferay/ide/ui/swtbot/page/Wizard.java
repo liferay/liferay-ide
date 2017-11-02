@@ -80,11 +80,7 @@ public class Wizard extends CancelableShell {
 	}
 
 	public void finish() {
-		sleep();
-
 		clickBtn(finishBtn());
-
-		sleep();
 	}
 
 	public Button finishBtn() {
@@ -101,8 +97,6 @@ public class Wizard extends CancelableShell {
 
 			return null;
 		}
-
-		sleep();
 
 		SWTBotText text = bot.text(validationMsgIndex);
 

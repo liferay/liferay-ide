@@ -14,9 +14,7 @@
 
 package com.liferay.ide.ui.swtbot;
 
-import com.liferay.ide.ui.swtbot.eclipse.page.ErrorLogView;
 import com.liferay.ide.ui.swtbot.eclipse.page.PackageExplorerView;
-import com.liferay.ide.ui.swtbot.eclipse.page.ProgressView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ProjectExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ServersView;
 import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
@@ -42,7 +40,6 @@ public class Eclipse extends BasePageObject {
 
 		_packageExporerView = new PackageExplorerView(bot);
 		_welcomeView = new View(bot, WELCOME);
-		_progressView = new ProgressView(bot);
 		_projectTree = new Tree(bot);
 		_fileMenu = new Menu(bot, FILE);
 
@@ -54,7 +51,6 @@ public class Eclipse extends BasePageObject {
 		_otherMenu = new Menu(bot, otherLabel);
 
 		_showViewDialog = new TextDialog(bot);
-		_errorLogView = new ErrorLogView(bot);
 		_projectExplorerView = new ProjectExplorerView(bot);
 		_serversView = new ServersView(bot);
 		_browser = new Browser(bot);
@@ -122,25 +118,6 @@ public class Eclipse extends BasePageObject {
 		return false;
 	}
 
-	public ErrorLogView showErrorLogView() {
-		try {
-			_errorLogView.show();
-		}
-		catch (Exception e) {
-			_otherMenu.click();
-
-			_showViewDialog.getText().setText(ERROR_LOG);
-
-			sleep(100);
-
-			_showViewDialog.confirm();
-
-			_errorLogView.show();
-		}
-
-		return _errorLogView;
-	}
-
 	public PackageExplorerView showPackageExporerView() {
 		try {
 			_packageExporerView.show();
@@ -157,25 +134,6 @@ public class Eclipse extends BasePageObject {
 		return _packageExporerView;
 	}
 
-	public ProgressView showProgressView() {
-		try {
-			_progressView.show();
-		}
-		catch (Exception e) {
-			_otherMenu.click();
-
-			_showViewDialog.getText().setText(PROGRESS);
-
-			sleep(100);
-
-			_showViewDialog.confirm();
-
-			_progressView.show();
-		}
-
-		return _progressView;
-	}
-
 	public ServersView showServersView() {
 		try {
 			_serversView.show();
@@ -184,8 +142,6 @@ public class Eclipse extends BasePageObject {
 			_otherMenu.click();
 
 			_showViewDialog.getText().setText(SERVERS);
-
-			sleep(100);
 
 			_showViewDialog.confirm();
 
@@ -196,12 +152,10 @@ public class Eclipse extends BasePageObject {
 	}
 
 	private Browser _browser;
-	private ErrorLogView _errorLogView;
 	private Menu _fileMenu;
 	private Menu _otherMenu;
 	private PackageExplorerView _packageExporerView;
 	private Menu _preferencesMenu;
-	private ProgressView _progressView;
 	private ProjectExplorerView _projectExplorerView;
 	private Tree _projectTree;
 	private ServersView _serversView;

@@ -77,8 +77,6 @@ public class ServerTomcat62Tests extends SwtbotBase {
 
 		viewAction.openLiferayPortalHome(serverStartedLabel);
 
-		sleep(10000);
-
 		viewAction.serverStop(serverStartedLabel);
 
 		viewAction.serverStopWait62();
