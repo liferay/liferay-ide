@@ -47,11 +47,13 @@ import java.util.stream.Stream;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -359,10 +361,12 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
     private void createColumns( final TableViewer _problemsViewer )
     {
         final String[] titles = { "Resolved", "Line", "Problem" };
-        final int[] bounds = { 65, 55, 200 };
 
-        TableViewerColumn col = createTableViewerColumn( titles[0], bounds[0], _problemsViewer );
-        col.setEditingSupport( new EditingSupport( _problemsViewer )
+        TableViewerColumn col0 = createTableViewerColumn( titles[0], _problemsViewer );
+
+        col0.getColumn().pack();
+
+        col0.setEditingSupport( new EditingSupport( _problemsViewer )
         {
 
             @Override
@@ -397,7 +401,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
             }
         } );
 
-        col.setLabelProvider( new ColumnLabelProvider()
+        col0.setLabelProvider( new ColumnLabelProvider()
         {
 
             @Override
@@ -422,8 +426,11 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
             }
         } );
 
-        col = createTableViewerColumn( titles[1], bounds[1], _problemsViewer );
-        col.setLabelProvider( new ColumnLabelProvider()
+        TableViewerColumn col1 = createTableViewerColumn(titles[1], _problemsViewer);
+
+        col1.getColumn().pack();
+
+        col1.setLabelProvider( new ColumnLabelProvider()
         {
 
             @Override
@@ -435,8 +442,11 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
             }
         } );
 
-        col = createTableViewerColumn( titles[2], bounds[2], _problemsViewer );
-        col.setLabelProvider( new ColumnLabelProvider()
+        TableViewerColumn col2 = createTableViewerColumn(titles[2], _problemsViewer);
+
+        col2.getColumn().pack();
+
+        col2.setLabelProvider( new ColumnLabelProvider()
         {
 
             @Override
@@ -457,6 +467,18 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
                 table.getColumn( 2 ).pack();
             }
         } );
+
+        TableColumnLayout tableLayout = new TableColumnLayout();
+
+        TableColumn column0 = col0.getColumn();
+        TableColumn column1 = col1.getColumn();
+        TableColumn column2 = col2.getColumn();
+
+        tableLayout.setColumnData(column0, new ColumnWeightData(0, column0.getWidth()));
+        tableLayout.setColumnData(column1, new ColumnWeightData(0, column1.getWidth()));
+        tableLayout.setColumnData(column2, new ColumnWeightData(100, column2.getWidth()));
+
+        _problemsViewer.getTable().getParent().setLayout(tableLayout);
     }
 
     public void createTableView( Composite container )
@@ -465,8 +487,10 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         gridData.minimumWidth = 200;
         gridData.minimumHeight = 200;
 
-        _problemsViewer =
-            new TableViewer( container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER | SWT.VIRTUAL );
+        Composite tableComposite = new Composite(container, SWT.NONE);
+
+		_problemsViewer = new TableViewer(tableComposite,
+				SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER | SWT.VIRTUAL);
 
         _problemsViewer.getTable().setLayoutData( gridData );
 
@@ -496,14 +520,14 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         table.setMenu( menu );
 
         _problemsViewer.addDoubleClickListener( this );
+
     }
 
-    private TableViewerColumn createTableViewerColumn( String title, int bound, TableViewer viewer )
+	private TableViewerColumn createTableViewerColumn(String title, TableViewer viewer)
     {
         final TableViewerColumn viewerColumn = new TableViewerColumn( viewer, SWT.NONE );
         final TableColumn column = viewerColumn.getColumn();
         column.setText( title );
-        column.setWidth( bound );
         column.setResizable( true );
         column.setMoveable( true );
         column.addSelectionListener( getSelectionAdapter( column, viewer.getTable().indexOf( column ) ) );
