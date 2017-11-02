@@ -23,6 +23,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Shell;
 
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.upgrade.animated.FindBreakingChangesPage;
+import com.liferay.ide.project.ui.upgrade.animated.Page;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
 import com.liferay.ide.ui.util.UIUtil;
 
 /**
@@ -42,6 +45,8 @@ public class RunMigrationToolAction extends OpenJavaProjectSelectionDialogAction
     public void run()
     {
         final ISelection selection = getSelectionProjects();
+        final FindBreakingChangesPage page =
+            UpgradeView.getPage( Page.FINDBREACKINGCHANGES_PAGE_ID, FindBreakingChangesPage.class );
 
         if( selection != null )
         {
@@ -51,9 +56,13 @@ public class RunMigrationToolAction extends OpenJavaProjectSelectionDialogAction
             }
             catch( ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e )
             {
+                page.setButtonState( true );
                 ProjectUI.createErrorStatus( "Error in migrate command", e );
             }
         }
+        else
+        {
+            page.setButtonState( true );
+        }
     }
-
 }
