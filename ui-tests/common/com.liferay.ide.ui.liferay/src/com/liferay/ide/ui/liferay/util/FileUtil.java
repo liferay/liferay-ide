@@ -27,7 +27,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
 import java.nio.file.Files;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +90,9 @@ public class FileUtil {
 
 		byte[] buf = new byte[4096];
 
-		try (InputStream in = Files.newInputStream(src.toPath()); OutputStream out = Files.newOutputStream(dest.toPath())) {
+		try (InputStream in = Files.newInputStream(src.toPath());
+			OutputStream out = Files.newOutputStream(dest.toPath())) {
+
 			int avail = in.read(buf);
 
 			while (avail > 0) {

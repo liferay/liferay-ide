@@ -22,7 +22,9 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
 import java.nio.file.Files;
+
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -143,13 +145,13 @@ public class ZipUtil {
 					String msg = "Could not create dir: " + dir.getPath();
 
 					throw new IOException(msg);
-                }
+				}
 
-                try(InputStream in = zip.getInputStream( entry );
-                                OutputStream out = Files.newOutputStream( f.toPath() );)
-                {
+				try (InputStream in = zip.getInputStream(entry);
+					OutputStream out = Files.newOutputStream(f.toPath());)
+				{
 
-                    byte[] bytes = new byte[1024];
+					byte[] bytes = new byte[1024];
 
 					int count = in.read(bytes);
 
@@ -223,8 +225,7 @@ public class ZipUtil {
 
 			zip.putNextEntry(ze);
 
-            try(InputStream in = Files.newInputStream( file.toPath() ))
-            {
+			try (InputStream in = Files.newInputStream(file.toPath())) {
 				int bufsize = 8 * 1024;
 				long flength = file.length();
 
