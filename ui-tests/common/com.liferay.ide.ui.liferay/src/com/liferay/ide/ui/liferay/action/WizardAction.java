@@ -53,11 +53,19 @@ public class WizardAction extends UIAction {
 	}
 
 	public void finish() {
+		ide.sleep();
+
 		_wizard.finish();
+
+		ide.sleep();
 	}
 
 	public void finishToWait() {
+		ide.sleep();
+
 		_wizard.finish();
+
+		ide.sleep();
 
 		long origin = SWTBotPreferences.TIMEOUT;
 
@@ -71,10 +79,14 @@ public class WizardAction extends UIAction {
 	}
 
 	public String getValidationMsg(int validationMsgIndex) {
+		ide.sleep();
+
 		return _wizard.getValidationMsg(validationMsgIndex);
 	}
 
 	public void next() {
+		ide.sleep();
+
 		_wizard.next();
 	}
 
@@ -187,9 +199,13 @@ public class WizardAction extends UIAction {
 	public void prepareImportLiferayWorkspace(String location, boolean downloadLiferayBundle, String serverName) {
 		_importLiferayWorkspaceProjectWizard.getWorkspaceLocation().setText(location);
 
-		if (downloadLiferayBundle) {
-			_importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle().select();
+		if (!downloadLiferayBundle) {
+			return;
+		}
 
+		_importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle().select();
+
+		if (!serverName.equals(StringPool.EMPTY)) {
 			_importLiferayWorkspaceProjectWizard.getServerName().setText(serverName);
 		}
 	}

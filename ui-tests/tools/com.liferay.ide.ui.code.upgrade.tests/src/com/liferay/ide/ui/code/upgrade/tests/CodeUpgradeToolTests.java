@@ -38,9 +38,8 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 
 		codeUpgrade.getGear().clickGear(1);
 
-		sleep(1000);
 		codeUpgrade.getGear().clickGear(0);
-		sleep(1000);
+
 		codeUpgrade.showAllPagesWithConfirm();
 		codeUpgrade.getGear().clickGear(0);
 		codeUpgrade.getGear().clickGear(1);

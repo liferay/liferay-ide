@@ -87,37 +87,30 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
 
-		dialogAction.openPreferencesDialog();
-
 		try {
+			dialogAction.openPreferencesDialog();
+
 			long origin = SWTBotPreferences.TIMEOUT;
 
 			SWTBotPreferences.TIMEOUT = 1000;
-			
+
 			dialogAction.openPreferencesRecorderDialog();
 
 			dialogAction.preparePreferencesRecorder();
 
 			SWTBotPreferences.TIMEOUT = origin;
+
+			dialogAction.confirmPreferences();
 		}
 		catch (Exception e) {
+			dialogAction.cancel();
 		}
-
-		dialogAction.confirmPreferences();
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.prepareLiferayModuleGradle("init-project");
 
 		wizardAction.finishToWait();
-	}
-
-	protected static void sleep(long millis) {
-		bot.sleep(millis);
-	}
-
-	protected void sleep() {
-		sleep(1000);
 	}
 
 }
