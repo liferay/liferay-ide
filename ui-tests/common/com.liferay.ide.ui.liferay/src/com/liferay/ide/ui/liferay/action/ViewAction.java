@@ -14,7 +14,6 @@
 
 package com.liferay.ide.ui.liferay.action;
 
-import com.liferay.ide.ui.liferay.Actions;
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.swtbot.eclipse.page.ConsoleView;
 import com.liferay.ide.ui.swtbot.eclipse.page.DeleteResourcesContinueDialog;
@@ -24,9 +23,6 @@ import com.liferay.ide.ui.swtbot.eclipse.page.ProjectExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ServersView;
 import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.Tree;
-import com.liferay.ide.ui.swtbot.page.TreeItem;
-
-import java.util.List;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
@@ -41,10 +37,8 @@ public class ViewAction extends UIAction {
 		super(bot);
 	}
 
-	public void deleteProject(String name) {
-		TreeItem item = getProjects().getTreeItem(name);
-
-		item.doAction(Actions.getDelete());
+	public void deleteProject(String... items) {
+		getProjects().contextMenu(DELETE, items);
 
 		_deleteResourcesDialog.getDeleteFromDisk().select();
 
@@ -67,86 +61,6 @@ public class ViewAction extends UIAction {
 		}
 
 		SWTBotPreferences.TIMEOUT = origin;
-	}
-
-	public void deleteProject(String... nodes) {
-		TreeItem nodesItem = getProjects().expandNode(nodes);
-
-		nodesItem.doAction(Actions.getDelete());
-
-		_deleteResourcesDialog.getDeleteFromDisk().select();
-
-		_deleteResourcesDialog.confirm();
-
-		long origin = SWTBotPreferences.TIMEOUT;
-
-		SWTBotPreferences.TIMEOUT = 2000;
-
-		try {
-			_continueDeleteResourcesDialog.confirm();
-		}
-		catch (Exception e) {
-		}
-
-		try {
-			_dialog.confirm();
-		}
-		catch (Exception e) {
-		}
-
-		SWTBotPreferences.TIMEOUT = origin;
-	}
-
-	public void deleteProjects() {
-		Tree projects = getProjects();
-
-		String[] names = projects.getAllItems();
-
-		for (String name : names) {
-			deleteProject(name);
-		}
-	}
-
-	public void deleteProjects(String[] names) {
-		for (String name : names) {
-			deleteProject(name);
-		}
-	}
-
-	public void deleteProjectsExcludeNames(String... names) {
-		String[] projectNames = getProjects().getAllItems();
-
-		for (String projectName : projectNames) {
-			boolean include = false;
-
-			for (String name : names) {
-				if (name.equals(projectName)) {
-					include = true;
-
-					break;
-				}
-
-				TreeItem projectItem = getProjects().getTreeItem(projectName);
-
-				projectItem.collapse();
-			}
-
-			if (!include) {
-				deleteProject(projectName);
-			}
-		}
-	}
-
-	public void doActionOnProjectFile(List<String> actions, String... files) {
-		fetchProjectFile(files).doAction(actions.toArray(new String[0]));
-	}
-
-	public TreeItem fetchProjectFile(String... files) {
-		return getProjects().expandNode(files);
-	}
-
-	public TreeItem getProject(String name) {
-		return getProjects().getTreeItem(name);
 	}
 
 	public Tree getProjects() {
@@ -159,33 +73,25 @@ public class ViewAction extends UIAction {
 	}
 
 	public void openAddAndRemoveDialog(String serverLabel) {
-		TreeItem item = _serversView.getServers().getTreeItem(serverLabel);
-
-		item.contextMenu(ADD_AND_REMOVE);
+		_serversView.getServers().contextMenu(ADD_AND_REMOVE, serverLabel);
 	}
 
 	public void openLiferayPortalHome(String serverLabel) {
-		TreeItem item = _serversView.getServers().getTreeItem(serverLabel);
-
-		item.contextMenu(OPEN_LIFERAY_PORTAL_HOME);
+		_serversView.getServers().contextMenu(OPEN_LIFERAY_PORTAL_HOME, serverLabel);
 
 		ide.sleep(10000);
 	}
 
 	public void openProjectFile(String... files) {
-		fetchProjectFile(files).doubleClick();
+		getProjects().doubleClick(files);
 	}
 
 	public void openServerEditor(String serverLabel) {
-		TreeItem item = _serversView.getServers().getTreeItem(serverLabel);
-
-		item.doubleClick();
+		_serversView.getServers().doubleClick(serverLabel);
 	}
 
 	public void serverDebug(String serverLabel) {
-		TreeItem item = _serversView.getServers().getTreeItem(serverLabel);
-
-		item.select();
+		_serversView.getServers().select(serverLabel);
 
 		_serversView.clickDebugBtn();
 	}
@@ -195,9 +101,7 @@ public class ViewAction extends UIAction {
 	}
 
 	public void serverStart(String serverLabel) {
-		TreeItem item = _serversView.getServers().getTreeItem(serverLabel);
-
-		item.select();
+		_serversView.getServers().select(serverLabel);
 
 		_serversView.clickStartBtn();
 	}
@@ -207,9 +111,7 @@ public class ViewAction extends UIAction {
 	}
 
 	public void serverStop(String serverLabel) {
-		TreeItem item = _serversView.getServers().getTreeItem(serverLabel);
-
-		item.select();
+		_serversView.getServers().select(serverLabel);
 
 		_serversView.clickStopBtn();
 	}
@@ -255,12 +157,12 @@ public class ViewAction extends UIAction {
 		}
 	}
 
-	private ConsoleView _consoleView = new ConsoleView(bot);
-	private DeleteResourcesContinueDialog _continueDeleteResourcesDialog = new DeleteResourcesContinueDialog(bot);
-	private DeleteResourcesDialog _deleteResourcesDialog = new DeleteResourcesDialog(bot);
-	private Dialog _dialog = new Dialog(bot);
-	private PackageExplorerView _packageExplorerView = new PackageExplorerView(bot);
-	private ProjectExplorerView _projectExplorerView = new ProjectExplorerView(bot);
-	private ServersView _serversView = new ServersView(bot);
+	private final ConsoleView _consoleView = new ConsoleView(bot);
+	private final DeleteResourcesContinueDialog _continueDeleteResourcesDialog = new DeleteResourcesContinueDialog(bot);
+	private final DeleteResourcesDialog _deleteResourcesDialog = new DeleteResourcesDialog(bot);
+	private final Dialog _dialog = new Dialog(bot);
+	private final PackageExplorerView _packageExplorerView = new PackageExplorerView(bot);
+	private final ProjectExplorerView _projectExplorerView = new ProjectExplorerView(bot);
+	private final ServersView _serversView = new ServersView(bot);
 
 }

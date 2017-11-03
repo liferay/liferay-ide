@@ -43,13 +43,13 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		wizardAction.next();
 
 		Assert.assertTrue(_newModuleInfoWizard.finishBtn().isEnabled());
-		Assert.assertEquals(CONFIGURE_COMPONENT_CLASS, _newModuleInfoWizard.getValidationMsg());
+		Assert.assertEquals(CONFIGURE_COMPONENT_CLASS, wizardAction.getValidationMsg());
 
 		wizardAction.prepareLiferayModuleInfo(projectName, StringPool.BLANK);
-		Assert.assertEquals(INVALID_CLASS_NAME, _newModuleInfoWizard.getValidationMsg());
+		Assert.assertEquals(INVALID_CLASS_NAME, wizardAction.getValidationMsg());
 
 		wizardAction.prepareLiferayModuleInfo(StringPool.BLANK, "!!");
-		Assert.assertEquals(INVALID_PACKAGE_NAME, _newModuleInfoWizard.getValidationMsg());
+		Assert.assertEquals(INVALID_PACKAGE_NAME, wizardAction.getValidationMsg());
 
 		_newModuleProjectWizard.cancel();
 	}
@@ -82,19 +82,19 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		wizardAction.next();
 
 		wizardAction.prepareLiferayModuleInfoProperties(StringPool.BLANK, StringPool.BLANK);
-		Assert.assertEquals(NAME_MUST_BE_SPECIFIED, _newModuleInfoWizard.getValidationMsg());
+		Assert.assertEquals(NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg());
 		_newModuleInfoWizard.getDeleteBtn().click();
 
 		wizardAction.prepareLiferayModuleInfoProperties(StringPool.BLANK, projectName);
-		Assert.assertEquals(NAME_MUST_BE_SPECIFIED, _newModuleInfoWizard.getValidationMsg());
+		Assert.assertEquals(NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg());
 		_newModuleInfoWizard.getDeleteBtn().click();
 
 		wizardAction.prepareLiferayModuleInfoProperties(projectName, StringPool.BLANK);
-		Assert.assertEquals(VALUE_MUST_BE_SPECIFIED, _newModuleInfoWizard.getValidationMsg());
+		Assert.assertEquals(VALUE_MUST_BE_SPECIFIED, wizardAction.getValidationMsg());
 		_newModuleInfoWizard.getDeleteBtn().click();
 
 		wizardAction.prepareLiferayModuleInfoProperties(projectName, projectName);
-		Assert.assertEquals(CONFIGURE_COMPONENT_CLASS, _newModuleInfoWizard.getValidationMsg());
+		Assert.assertEquals(CONFIGURE_COMPONENT_CLASS, wizardAction.getValidationMsg());
 
 		wizardAction.cancel();
 	}

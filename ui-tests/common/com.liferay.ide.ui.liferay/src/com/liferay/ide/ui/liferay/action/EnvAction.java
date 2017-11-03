@@ -477,7 +477,7 @@ public class EnvAction extends UIAction {
 	private static final String _PLUGINS_SDK_ZIP =
 		"com.liferay.portal.plugins.sdk-1.0.11-withdependencies-20170613175008905.zip";
 
-	private BundleInfo[] _bundleInfos;
+	private final BundleInfo[] _bundleInfos;
 	private String _liferayBundlesDir = System.getProperty("liferay.bundles.dir");
 	private IPath _liferayBundlesPath;
 

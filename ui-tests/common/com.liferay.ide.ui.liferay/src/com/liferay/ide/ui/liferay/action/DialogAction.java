@@ -22,7 +22,6 @@ import com.liferay.ide.ui.swtbot.eclipse.page.ServerRuntimeEnvironmentsPreferenc
 import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TreeDialog;
 import com.liferay.ide.ui.swtbot.page.Dialog;
-import com.liferay.ide.ui.swtbot.page.TreeItem;
 import com.liferay.ide.ui.swtbot.util.CoreUtil;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -38,9 +37,7 @@ public class DialogAction extends UIAction {
 	}
 
 	public void addModule(String projectName) {
-		TreeItem projectTree = _addAndRemoveDialog.getAvailables().getTreeItem(projectName);
-
-		projectTree.select();
+		_addAndRemoveDialog.getAvailables().select(projectName);
 
 		_addAndRemoveDialog.getAddBtn().click();
 	}
@@ -101,11 +98,7 @@ public class DialogAction extends UIAction {
 	}
 
 	public void openPreferenceTypeDialog(String categroy, String type) {
-		TreeItem categroyItem = _preferencesDialog.getPreferencesTypes().getTreeItem(categroy);
-
-		TreeItem typeItem = categroyItem.getTreeItem(type);
-
-		typeItem.select();
+		_preferencesDialog.getPreferencesTypes().selectTreeItem(categroy, type);
 	}
 
 	public void openServerRuntimeEnvironmentsDialogTry() {
@@ -130,22 +123,18 @@ public class DialogAction extends UIAction {
 		_textDialog.getText().setText(text);
 	}
 
-	public void selectItem(String item) {
-		_treeDialog.getItems().select(item);
-	}
-
 	public void selectItems(String... items) {
 		_treeDialog.getItems().select(items);
 	}
 
-	private AddAndRemoveDialog _addAndRemoveDialog = new AddAndRemoveDialog(bot);
-	private Dialog _dialog = new Dialog(bot);
-	private KeyboardAction _keyboradAction = new KeyboardAction(bot);
-	private PreferenceRecorderDialog _preferenceRecorderDialog = new PreferenceRecorderDialog(bot);
-	private PreferencesDialog _preferencesDialog = new PreferencesDialog(bot);
-	private ServerRuntimeEnvironmentsPreferencesDialog _serverRuntimeEnvironmentsDialog =
+	private final AddAndRemoveDialog _addAndRemoveDialog = new AddAndRemoveDialog(bot);
+	private final Dialog _dialog = new Dialog(bot);
+	private final KeyboardAction _keyboradAction = new KeyboardAction(bot);
+	private final PreferenceRecorderDialog _preferenceRecorderDialog = new PreferenceRecorderDialog(bot);
+	private final PreferencesDialog _preferencesDialog = new PreferencesDialog(bot);
+	private final ServerRuntimeEnvironmentsPreferencesDialog _serverRuntimeEnvironmentsDialog =
 		new ServerRuntimeEnvironmentsPreferencesDialog(bot);
-	private TextDialog _textDialog = new TextDialog(bot);
-	private TreeDialog _treeDialog = new TreeDialog(bot);
+	private final TextDialog _textDialog = new TextDialog(bot);
+	private final TreeDialog _treeDialog = new TreeDialog(bot);
 
 }
