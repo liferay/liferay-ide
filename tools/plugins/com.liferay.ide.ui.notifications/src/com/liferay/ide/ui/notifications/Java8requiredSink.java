@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.ui.notifications;
 
 import java.util.ArrayList;
@@ -31,102 +31,98 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
+
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * @author Andy Wu
  */
-@SuppressWarnings( "restriction" )
-public class Java8requiredSink extends PopupNotificationSink
-{
-    private NotificationPopup popup;
+@SuppressWarnings("restriction")
+public class Java8requiredSink extends PopupNotificationSink {
 
-    public Java8requiredSink()
-    {
-        super();
-    }
+	public Java8requiredSink() {
+	}
 
-    @Override
-    public void showPopup()
-    {
-        if( popup != null )
-        {
-            popup.close();
-        }
+	@Override
+	public void showPopup() {
+		if (_popup != null) {
+			_popup.close();
+		}
 
-        Shell shell = new Shell( PlatformUI.getWorkbench().getDisplay() );
+		Shell shell = new Shell(PlatformUI.getWorkbench().getDisplay());
 
-        popup = new NotificationPopup( shell )
-        {
-            @Override
-            protected String getPopupShellTitle()
-            {
-                return "Liferay IDE Notification";
-            }
+		_popup = new NotificationPopup(shell) {
 
-            @Override
-            protected void createContentArea( Composite parent )
-            {
-                super.createContentArea( parent );
+			@Override
+			protected void createContentArea(Composite parent) {
+				super.createContentArea(parent);
 
-                Composite composite = (Composite)parent;
+				Composite composite = (Composite)parent;
 
-                ScalingHyperlink hyperlink = new ScalingHyperlink( composite, SWT.NONE );
+				ScalingHyperlink hyperlink = new ScalingHyperlink(composite, SWT.NONE);
 
-                hyperlink.setText( "Got it, please don't show this alert again." );
+				hyperlink.setText("Got it, please don't show this alert again.");
 
-                hyperlink.setForeground(new Color(null, 12, 81, 172));
+				hyperlink.setForeground(new Color(null, 12, 81, 172));
 
-                hyperlink.registerMouseTrackListener();
+				hyperlink.registerMouseTrackListener();
 
-                hyperlink.addHyperlinkListener( new IHyperlinkListener()
-                {
-                    @Override
-                    public void linkExited( HyperlinkEvent e )
-                    {
-                    }
+				hyperlink.addHyperlinkListener(
+					new IHyperlinkListener() {
 
-                    @Override
-                    public void linkEntered( HyperlinkEvent e )
-                    {
-                    }
+						@Override
+						public void linkActivated(HyperlinkEvent e) {
+							_preventShowNotifications();
 
-                    @Override
-                    public void linkActivated( HyperlinkEvent e )
-                    {
-                        preventShowNotifications();
+							if (_popup != null) {
+								_popup.close();
+							}
+						}
 
-                        if( popup != null )
-                        {
-                            popup.close();
-                        }
-                    }
+						@Override
+						public void linkEntered(HyperlinkEvent e) {
+						}
 
-                    private void preventShowNotifications()
-                    {
-                        try
-                        {
-                            IEclipsePreferences prefs = ConfigurationScope.INSTANCE.getNode( NotificationsCore.PLUGIN_ID );
-                            prefs.putBoolean( NotificationsCore.SHOULD_SHOW_NOTIFICATIONS, false );
-                            prefs.flush();
-                        }
-                        catch( BackingStoreException e )
-                        {
-                            NotificationsCore.logError( e );
-                        }
-                    }
-                } );
-            }
-        };
+						@Override
+						public void linkExited(HyperlinkEvent e) {
+						}
 
-        popup.setFadingEnabled( isAnimationsEnabled() );
-        List<AbstractNotification> toDisplay = new ArrayList<AbstractNotification>( getNotifications() );
-        Collections.sort( toDisplay );
-        popup.setContents( toDisplay );
-        getNotifications().clear();
-        popup.setBlockOnOpen( false );
-        popup.setDelayClose( 60 * 1000 );
-        popup.open();
-    }
+						private void _preventShowNotifications() {
+							try {
+								IEclipsePreferences prefs = ConfigurationScope.INSTANCE.getNode(
+									NotificationsCore.PLUGIN_ID);
+
+								prefs.putBoolean(NotificationsCore.SHOULD_SHOW_NOTIFICATIONS, false);
+								prefs.flush();
+							}
+							catch (BackingStoreException bse) {
+								NotificationsCore.logError(bse);
+							}
+						}
+
+					});
+			}
+
+			@Override
+			protected String getPopupShellTitle() {
+				return "Liferay IDE Notification";
+			}
+
+		};
+
+		_popup.setFadingEnabled(isAnimationsEnabled());
+
+		List<AbstractNotification> toDisplay = new ArrayList<>(getNotifications());
+
+		Collections.sort(toDisplay);
+		_popup.setContents(toDisplay);
+
+		getNotifications().clear();
+		_popup.setBlockOnOpen(false);
+		_popup.setDelayClose(60 * 1000);
+		_popup.open();
+	}
+
+	private NotificationPopup _popup;
 
 }

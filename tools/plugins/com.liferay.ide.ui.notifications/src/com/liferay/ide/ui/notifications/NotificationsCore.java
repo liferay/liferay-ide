@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.notifications;
 
@@ -30,130 +29,117 @@ import org.eclipse.mylyn.commons.notifications.ui.NotificationsUi;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Version;
 
 /**
  * @author Andy Wu
  */
-@SuppressWarnings( "restriction" )
-public class NotificationsCore extends AbstractUIPlugin implements IStartup
-{
+@SuppressWarnings("restriction")
+public class NotificationsCore extends AbstractUIPlugin implements IStartup {
 
-    public static final String PLUGIN_ID = "com.liferay.ide.ui.notifications";
+	public static final String PLUGIN_ID = "com.liferay.ide.ui.notifications";
 
-    public static final String SHOULD_SHOW_NOTIFICATIONS = "SHOULD_SHOW_NOTIFICATIONS";
+	public static final String SHOULD_SHOW_NOTIFICATIONS = "SHOULD_SHOW_NOTIFICATIONS";
 
-    private static NotificationsCore plugin;
+	public static NotificationsCore getDefault() {
+		return _plugin;
+	}
 
-    private AbstractNotification createJava8RequiredNotification()
-    {
-        final Date date = new Date();
+	public static void logError(Exception e) {
+		NotificationsCore plugin = getDefault();
 
-        return new AbstractUiNotification( "com.liferay.ide.ui.notifications.java8required")
-        {
+		plugin.getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e));
+	}
 
-            @SuppressWarnings( { "rawtypes", "unchecked" } )
-            public Object getAdapter( Class adapter )
-            {
-                return null;
-            }
+	@Override
+	public void earlyStartup() {
+		if (_shouldShowNotifications() && !_matchRequiredJavaVersion()) {
+			NotificationsUi.getService().notify(Collections.singletonList(_createJava8RequiredNotification()));
+		}
+	}
 
-            @Override
-            public Date getDate()
-            {
-                return date;
-            }
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		_plugin = this;
+	}
 
-            @Override
-            public String getDescription()
-            {
-                return "This Eclipse instance is running on java " + getCurrentJavaVersion() + "\n" +
-                    "Liferay IDE needs at least Java 1.8 to run, please launch Eclipse with 1.8 and try again.";
-            }
+	public void stop(BundleContext context) throws Exception {
+		_plugin = null;
+		super.stop(context);
+	}
 
-            @Override
-            public String getLabel()
-            {
-                return "Java 8 Required";
-            }
+	private AbstractNotification _createJava8RequiredNotification() {
+		Date date = new Date();
 
-            @Override
-            public Image getNotificationImage()
-            {
-                return null;
-            }
+		return new AbstractUiNotification("com.liferay.ide.ui.notifications.java8required") {
 
-            @Override
-            public Image getNotificationKindImage()
-            {
-                return null;
-            }
+			@SuppressWarnings( {
+				"rawtypes", "unchecked"
+			})
+			public Object getAdapter(Class adapter) {
+				return null;
+			}
 
-            @Override
-            public void open( )
-            {
-            }
-        };
-    }
+			@Override
+			public Date getDate() {
+				return date;
+			}
 
-    @Override
-    public void earlyStartup()
-    {
-        if( shouldShowNotifications() && !matchRequiredJavaVersion() )
-        {
-            NotificationsUi.getService().notify( Collections.singletonList( createJava8RequiredNotification() ) );
-        }
-    }
+			@Override
+			public String getDescription() {
+				return "This Eclipse instance is running on java " + _getCurrentJavaVersion() + "\n" +
+					"Liferay IDE needs at least Java 1.8 to run, please launch Eclipse with 1.8 and try again.";
+			}
 
-    private String getCurrentJavaVersion()
-    {
-        return System.getProperty( "java.specification.version" );
-    }
+			@Override
+			public String getLabel() {
+				return "Java 8 Required";
+			}
 
-    public static NotificationsCore getDefault()
-    {
-        return plugin;
-    }
+			@Override
+			public Image getNotificationImage() {
+				return null;
+			}
 
-    public static void logError( Exception e )
-    {
-        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e ) );
-    }
+			@Override
+			public Image getNotificationKindImage() {
+				return null;
+			}
 
-    private boolean matchRequiredJavaVersion()
-    {
-        String javaVersion = getCurrentJavaVersion();
+			@Override
+			public void open() {
+			}
 
-        Version currentVersion = new Version( javaVersion );
-        Version requiredVersion = new Version( "1.8" );
+		};
+	}
 
-        if( currentVersion.compareTo( requiredVersion ) < 0 )
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
+	private String _getCurrentJavaVersion() {
+		return System.getProperty("java.specification.version");
+	}
 
-    private boolean shouldShowNotifications()
-    {
-        IScopeContext[] scopes = new IScopeContext[] { ConfigurationScope.INSTANCE, InstanceScope.INSTANCE };
+	private boolean _matchRequiredJavaVersion() {
+		String javaVersion = _getCurrentJavaVersion();
 
-        return Platform.getPreferencesService().getBoolean( PLUGIN_ID, SHOULD_SHOW_NOTIFICATIONS, true, scopes );
-    }
+		Version currentVersion = new Version(javaVersion);
 
-    public void start( BundleContext context ) throws Exception
-    {
-        super.start( context );
-        plugin = this;
-    }
+		Version requiredVersion = new Version("1.8");
 
-    public void stop( BundleContext context ) throws Exception
-    {
-        plugin = null;
-        super.stop( context );
-    }
+		if (currentVersion.compareTo(requiredVersion) < 0) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	private boolean _shouldShowNotifications() {
+		IScopeContext[] scopes = {ConfigurationScope.INSTANCE, InstanceScope.INSTANCE};
+
+		return Platform.getPreferencesService().getBoolean(PLUGIN_ID, SHOULD_SHOW_NOTIFICATIONS, true, scopes);
+	}
+
+	private static NotificationsCore _plugin;
+
 }

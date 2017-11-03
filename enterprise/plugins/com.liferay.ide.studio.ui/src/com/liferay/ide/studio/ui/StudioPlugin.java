@@ -1,12 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.studio.ui;
@@ -16,6 +19,7 @@ import com.liferay.ide.ui.snippets.util.SnippetsUtil;
 
 import java.io.File;
 import java.io.FilenameFilter;
+
 import java.net.URL;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -29,277 +33,252 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+
 import org.osgi.framework.BundleContext;
 
 /**
  * @author Gregory Amerson
  * @author Lovett Li
  */
-public class StudioPlugin extends AbstractUIPlugin implements IStartup
-{
+public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 
-    public static final String ACCEPTED_EULA = "ACCEPTED_EULA";
+	public static final String ACCEPTED_EULA = "ACCEPTED_EULA";
 
-    public static final String FIRST_LAUNCH_COMPLETE = "FIRST_LAUNCH_COMPLETE";
+	public static final String FIRST_LAUNCH_COMPLETE = "FIRST_LAUNCH_COMPLETE";
 
-    public static final String IMPORTED_SNIPPET_FILES = "IMPORTED_SNIPPET_FILES";
+	public static final String IMPORTED_SNIPPET_FILES = "IMPORTED_SNIPPET_FILES";
 
-    // The shared instance
-    private static StudioPlugin plugin;
+	// The shared instance
 
-    // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.studio.ui"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.liferay.ide.studio.ui";
 
-    public static final String PRODUCT_ID = PLUGIN_ID + ".product";
+	public static final String PRODUCT_ID = PLUGIN_ID + ".product";
 
-    public static boolean canInitLiferayWorkspace()
-    {
-        boolean retVal = false;
-        try
-        {
-            File bundledPortalFile =
-                new File( FileLocator.toFileURL( new URL( IProductPreferences.BUNDLED_PORTAL_PATH_ZIP ) ).getFile() );
+	// The plugin ID
 
-            retVal = bundledPortalFile.exists();
-        }
-        catch( Exception e )
-        {
-            e.printStackTrace();
-        }
+	public static boolean canInitLiferayWorkspace() {
+		boolean retVal = false;
 
-        return retVal;
-    }
+		try {
+			File bundledPortalFile = new File(
+				FileLocator.toFileURL(new URL(IProductPreferences.BUNDLED_PORTAL_PATH_ZIP)).getFile());
 
-    public static IStatus createErrorStatus( Exception e )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e );
-    }
+			retVal = bundledPortalFile.exists();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 
-    public static IStatus createErrorStatus( String msg )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, msg );
-    }
+		return retVal;
+	}
 
-    public static IStatus createErrorStatus( String msg, Exception e )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
-    }
+	public static IStatus createErrorStatus(Exception e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e);
+	}
 
-    public static IStatus createInfoStatus( String msg )
-    {
-        return new Status( IStatus.INFO, PLUGIN_ID, msg );
-    }
+	public static IStatus createErrorStatus(String msg) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg);
+	}
 
-    /**
-     * Returns the shared instance
-     *
-     * @return the shared instance
-     */
-    public static StudioPlugin getDefault()
-    {
-        return plugin;
-    }
+	public static IStatus createErrorStatus(String msg, Exception e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
+	}
 
-    public static boolean isProductRunning()
-    {
-        boolean productRunning = false;
+	public static IStatus createInfoStatus(String msg) {
+		return new Status(IStatus.INFO, PLUGIN_ID, msg);
+	}
 
-        IProduct product = Platform.getProduct();
+	/**
+	 * Returns the shared instance
+	 *
+	 * @return the shared instance
+	 */
+	public static StudioPlugin getDefault() {
+		return _plugin;
+	}
 
-        if( product != null )
-        {
-            String id = product.getId();
-            productRunning = ( PRODUCT_ID ).equals( id );
-        }
+	public static boolean isFirstLaunch() {
+		IScopeContext[] scopes = {ConfigurationScope.INSTANCE, InstanceScope.INSTANCE};
 
-        return productRunning;
-    }
+		return !(Platform.getPreferencesService().getBoolean(PLUGIN_ID, FIRST_LAUNCH_COMPLETE, false, scopes));
+	}
 
-    public static void logError( Exception e )
-    {
-        logError( e.getMessage(), e );
-    }
+	public static boolean isProductRunning() {
+		boolean productRunning = false;
 
-    public static void logError( IStatus status )
-    {
-        getDefault().getLog().log( status );
-    }
+		IProduct product = Platform.getProduct();
 
-    public static void logError( String msg, Exception ex )
-    {
-        logError( createErrorStatus( msg, ex ) );
-    }
+		if (product != null) {
+			String id = product.getId();
 
-    public static void logInfo( String msg )
-    {
-        getDefault().getLog().log( createInfoStatus( msg ) );
-    }
+			productRunning = PRODUCT_ID.equals(id);
+		}
 
-    /**
-     * The constructor
-     */
-    public StudioPlugin()
-    {
-    }
+		return productRunning;
+	}
 
-	public void earlyStartup()
-    {
-        if( !isProductRunning() )
-        {
-            return;
-        }
-//        try
-//        {
-//            if( isFirstLaunch() )
-//            {
-//                new InitLiferayWorkspaceHandler().execute( null );
-//            }
-//        }
-//        catch( ExecutionException e )
-//        {
-//            e.printStackTrace();
-//        }
+	public static void logError(Exception e) {
+		logError(e.getMessage(), e);
+	}
 
-        importSnippets();
-    }
+	public static void logError(IStatus status) {
+		StudioPlugin plugin = getDefault();
 
-    public IEclipsePreferences getPreferences()
-    {
-        return InstanceScope.INSTANCE.getNode( PLUGIN_ID );
-    }
+		plugin.getLog().log(status);
+	}
 
-    private void importSnippets()
-    {
-        try
-        {
-            URL snippetsImportPath = FileLocator.resolve( new URL( IProductPreferences.SNIPPETS_IMPORT_PATH ) );
+	public static void logError(String msg, Exception ex) {
+		logError(createErrorStatus(msg, ex));
+	}
 
-            if( snippetsImportPath != null )
-            {
-                File snippetsImportDir = new File( snippetsImportPath.getFile() );
+	public static void logInfo(String msg) {
+		StudioPlugin plugin = getDefault();
 
-                if( snippetsImportDir.exists() && snippetsImportDir.isDirectory() )
-                {
-                    File[] snippetFiles = snippetsImportDir.listFiles( new FilenameFilter()
-                    {
+		plugin.getLog().log(createInfoStatus(msg));
+	}
 
-                        public boolean accept( File dir, String name )
-                        {
-                            return name != null && name.endsWith( ".xml" );
-                        }
+	/**
+	 * The constructor
+	 */
+	public StudioPlugin() {
+	}
 
-                    } );
+	public void earlyStartup() {
+		if (!isProductRunning()) {
+			return;
+		}
 
-                    if( !CoreUtil.isNullOrEmpty( snippetFiles ) )
-                    {
-                        for( File snippetFile : snippetFiles )
-                        {
-                            if( shouldImportFile( snippetFile ) )
-                            {
-                                try
-                                {
-                                    SnippetsUtil.importSnippetsFromFile( snippetFile );
-                                }
-                                catch( Exception ex )
-                                {
-                                    StudioPlugin.logError(
-                                        "Failed to import snippet file: " + snippetFile.getName(), ex );
-                                }
+		// try
+		// {
+		// if( isFirstLaunch() )
+		// {
+		// new InitLiferayWorkspaceHandler().execute( null );
+		// }
+		// }
+		// catch( ExecutionException e )
+		// {
+		// e.printStackTrace();
+		// }
 
-                                storeFileImported( snippetFile );
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch( Exception e )
-        {
-        }
+		_importSnippets();
+	}
 
-    }
+	public IEclipsePreferences getPreferences() {
+		return InstanceScope.INSTANCE.getNode(PLUGIN_ID);
+	}
 
-    public static boolean isFirstLaunch()
-    {
-        IScopeContext[] scopes = new IScopeContext[] { ConfigurationScope.INSTANCE, InstanceScope.INSTANCE };
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see AbstractUIPlugin#start(org.osgi.framework. BundleContext)
+	 */
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		_plugin = this;
+	}
 
-        return !( Platform.getPreferencesService().getBoolean( PLUGIN_ID, FIRST_LAUNCH_COMPLETE, false, scopes ) );
-    }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see AbstractUIPlugin#stop(org.osgi.framework. BundleContext)
+	 */
+	public void stop(BundleContext context) throws Exception {
+		_plugin = null;
+		super.stop(context);
+	}
 
-    private boolean shouldImportFile( File importFile )
-    {
-        if( importFile == null || ( !importFile.exists() ) || ( !importFile.isFile() ) )
-        {
-            return false;
-        }
+	private void _importSnippets() {
+		try {
+			URL snippetsImportPath = FileLocator.resolve(new URL(IProductPreferences.SNIPPETS_IMPORT_PATH));
 
-        IScopeContext[] scopes = new IScopeContext[] { InstanceScope.INSTANCE };
+			if (snippetsImportPath != null) {
+				File snippetsImportDir = new File(snippetsImportPath.getFile());
 
-        String importedSnippetFiles =
-            Platform.getPreferencesService().getString( PLUGIN_ID, IMPORTED_SNIPPET_FILES, null, scopes );
+				if (snippetsImportDir.exists() && snippetsImportDir.isDirectory()) {
+					File[] snippetFiles = snippetsImportDir.listFiles(
+						new FilenameFilter() {
 
-        if( !CoreUtil.isNullOrEmpty( importedSnippetFiles ) )
-        {
-            String[] fileNames = importedSnippetFiles.split( "," );
+							public boolean accept(File dir, String name) {
+								if ((name != null) && name.endsWith(".xml")) {
+									return true;
+								}
 
-            if( !CoreUtil.isNullOrEmpty( fileNames ) )
-            {
-                for( String fileName : fileNames )
-                {
-                    if( fileName.equals( importFile.getName() ) )
-                    {
-                        return false;
-                    }
-                }
-            }
-        }
+								return false;
+							}
 
-        return true;
-    }
+						});
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-     */
-    public void start( BundleContext context ) throws Exception
-    {
-        super.start( context );
-        plugin = this;
-    }
+					if (!CoreUtil.isNullOrEmpty(snippetFiles)) {
+						for (File snippetFile : snippetFiles) {
+							if (_shouldImportFile(snippetFile)) {
+								try {
+									SnippetsUtil.importSnippetsFromFile(snippetFile);
+								}
+								catch (Exception ex) {
+									logError(
+										"Failed to import snippet file: " +
+											snippetFile.getName(),
+										ex);
+								}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-     */
-    public void stop( BundleContext context ) throws Exception
-    {
-        plugin = null;
-        super.stop( context );
-    }
+								_storeFileImported(snippetFile);
+							}
+						}
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+		}
+	}
 
-    private void storeFileImported( File importedFile )
-    {
-        if( importedFile == null )
-        {
-            return;
-        }
+	private boolean _shouldImportFile(File importFile) {
+		if ((importFile == null) || !importFile.exists() || !importFile.isFile()) {
+			return false;
+		}
 
-        IScopeContext[] scopes = new IScopeContext[] { InstanceScope.INSTANCE };
+		IScopeContext[] scopes = {InstanceScope.INSTANCE};
 
-        String importedSnippetFiles =
-            Platform.getPreferencesService().getString( PLUGIN_ID, IMPORTED_SNIPPET_FILES, null, scopes );
-        String newImportedSnippetFiles = importedSnippetFiles;
+		String importedSnippetFiles = Platform.getPreferencesService().getString(
+			PLUGIN_ID, IMPORTED_SNIPPET_FILES, null, scopes);
 
-        if( CoreUtil.isNullOrEmpty( importedSnippetFiles ) )
-        {
-            newImportedSnippetFiles = importedFile.getName();
-        }
-        else
-        {
-            newImportedSnippetFiles = importedSnippetFiles + "," + importedFile.getName();
-        }
+		if (!CoreUtil.isNullOrEmpty(importedSnippetFiles)) {
+			String[] fileNames = importedSnippetFiles.split(",");
 
-        getPreferences().put( IMPORTED_SNIPPET_FILES, newImportedSnippetFiles );
-    }
+			if (!CoreUtil.isNullOrEmpty(fileNames)) {
+				for (String fileName : fileNames) {
+					if (fileName.equals(importFile.getName())) {
+						return false;
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
+	private void _storeFileImported(File importedFile) {
+		if (importedFile == null) {
+			return;
+		}
+
+		IScopeContext[] scopes = {InstanceScope.INSTANCE};
+
+		String importedSnippetFiles = Platform.getPreferencesService().getString(
+			PLUGIN_ID, IMPORTED_SNIPPET_FILES, null, scopes);
+
+		String newImportedSnippetFiles = importedSnippetFiles;
+
+		if (CoreUtil.isNullOrEmpty(importedSnippetFiles)) {
+			newImportedSnippetFiles = importedFile.getName();
+		}
+		else {
+			newImportedSnippetFiles = importedSnippetFiles + "," + importedFile.getName();
+		}
+
+		getPreferences().put(IMPORTED_SNIPPET_FILES, newImportedSnippetFiles);
+	}
+
+	private static StudioPlugin _plugin;
 
 }
