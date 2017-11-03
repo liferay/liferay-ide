@@ -1,12 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.studio.ui;
@@ -15,6 +18,7 @@ import com.liferay.ide.project.core.workspace.ImportLiferayWorkspaceOp;
 import com.liferay.ide.project.ui.workspace.ImportLiferayWorkspaceWizard;
 
 import java.io.File;
+
 import java.util.Properties;
 
 import org.eclipse.core.resources.WorkspaceJob;
@@ -27,6 +31,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.ui.internal.intro.impl.IntroPlugin;
@@ -36,61 +41,57 @@ import org.eclipse.ui.intro.config.IIntroAction;
 /**
  * @author Andy Wu
  */
-@SuppressWarnings( "restriction" )
-public class ImportLiferayWorkspaceFromInstallerAction implements IIntroAction
-{
+@SuppressWarnings("restriction")
+public class ImportLiferayWorkspaceFromInstallerAction implements IIntroAction {
 
-    @Override
-    public void run( IIntroSite site, Properties params )
-    {
-        File location = new File( Platform.getInstallLocation().getURL().getFile() );
+	@Override
+	public void run(IIntroSite site, Properties params) {
+		Location platformLocation = Platform.getInstallLocation();
 
-        if( Platform.getOS().equals( Platform.OS_MACOSX ) )
-        {
-            location = location.getParentFile().getParentFile();
-        }
+		File location = new File(platformLocation.getURL().getFile());
 
-        IPath path = new Path( location.getAbsolutePath() );
+		if (Platform.getOS().equals(Platform.OS_MACOSX)) {
+			location = location.getParentFile().getParentFile();
+		}
 
-        File workspaceDir = path.append( "../liferay-workspace" ).toFile();
+		IPath path = new Path(location.getAbsolutePath());
 
-        if( !workspaceDir.exists() )
-        {
-            MessageDialog.openInformation(
-                site.getShell(), "Liferay",
-                "Can't import liferay workspace.\nFile \"" + workspaceDir.getAbsolutePath() + "\" doesn't exist." );
-            return;
-        }
+		File workspaceDir = path.append("../liferay-workspace").toFile();
 
-        Job job = new WorkspaceJob( "Importing Liferay Workspace..." )
-        {
+		if (!workspaceDir.exists()) {
+			MessageDialog.openInformation(
+				site.getShell(), "Liferay",
+				"Can't import liferay workspace.\nFile \"" + workspaceDir.getAbsolutePath() + "\" doesn't exist.");
+			return;
+		}
 
-            @Override
-            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-            {
-                ImportLiferayWorkspaceWizard wizard = new ImportLiferayWorkspaceWizard();
+		Job job = new WorkspaceJob("Importing Liferay Workspace...") {
 
-                ImportLiferayWorkspaceOp op = wizard.element().nearest( ImportLiferayWorkspaceOp.class );
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+				ImportLiferayWorkspaceWizard wizard = new ImportLiferayWorkspaceWizard();
 
-                op.setWorkspaceLocation( workspaceDir.getAbsolutePath() );
+				ImportLiferayWorkspaceOp op = wizard.element().nearest(ImportLiferayWorkspaceOp.class);
 
-                op.setProvisionLiferayBundle( true );
+				op.setWorkspaceLocation(workspaceDir.getAbsolutePath());
 
-                if( op.validation().ok() )
-                {
-                    op.execute( ProgressMonitorBridge.create( monitor ) );
+				op.setProvisionLiferayBundle(true);
 
-                    return Status.OK_STATUS;
-                }
-                else
-                {
-                    return StatusBridge.create( op.validation() );
-                }
-            }
-        };
+				if (op.validation().ok()) {
+					op.execute(ProgressMonitorBridge.create(monitor));
 
-        job.schedule();
+					return Status.OK_STATUS;
+				}
+				else {
+					return StatusBridge.create(op.validation());
+				}
+			}
 
-        IntroPlugin.closeIntro();
-    }
+		};
+
+		job.schedule();
+
+		IntroPlugin.closeIntro();
+	}
+
 }

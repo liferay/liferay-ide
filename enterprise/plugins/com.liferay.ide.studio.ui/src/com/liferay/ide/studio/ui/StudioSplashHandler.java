@@ -1,13 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2007, 2012 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.studio.ui;
 
@@ -31,98 +34,95 @@ import org.eclipse.ui.splash.BasicSplashHandler;
 /**
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class StudioSplashHandler extends BasicSplashHandler
-{
+@SuppressWarnings("restriction")
+public class StudioSplashHandler extends BasicSplashHandler {
 
-    private Font newFont;
+	@Override
+	public void dispose() {
+		super.dispose();
 
-    public void init( Shell splash )
-    {
-        super.init( splash );
+		if ((_newFont != null) && !_newFont.isDisposed()) {
+			_newFont.dispose();
+		}
+	}
 
-        String progressRectString = null;
-        String foregroundColorString = null;
+	public void init(Shell splash) {
+		super.init(splash);
 
-        final IProduct product = Platform.getProduct();
+		String progressRectString = null;
+		String foregroundColorString = null;
 
-        if( product != null )
-        {
-            progressRectString = product.getProperty( IProductConstants.STARTUP_PROGRESS_RECT );
-            foregroundColorString = product.getProperty( IProductConstants.STARTUP_FOREGROUND_COLOR );
-        }
+		IProduct product = Platform.getProduct();
 
-        final Rectangle progressRect =
-            StringConverter.asRectangle( progressRectString, new Rectangle( 10, 10, 300, 15 ) );
-        setProgressRect( progressRect );
+		if (product != null) {
+			progressRectString = product.getProperty(IProductConstants.STARTUP_PROGRESS_RECT);
+			foregroundColorString = product.getProperty(IProductConstants.STARTUP_FOREGROUND_COLOR);
+		}
 
-        int foregroundColorInteger;
+		Rectangle progressRect = StringConverter.asRectangle(progressRectString, new Rectangle(10, 10, 300, 15));
 
-        try
-        {
-            foregroundColorInteger = Integer.parseInt( foregroundColorString, 16 );
-        }
-        catch( Exception ex )
-        {
-            foregroundColorInteger = 0xD2D7FF; // off white
-        }
+		setProgressRect(progressRect);
 
-        setForeground( new RGB(
-            ( foregroundColorInteger & 0xFF0000 ) >> 16, ( foregroundColorInteger & 0xFF00 ) >> 8,
-            foregroundColorInteger & 0xFF ) );
+		int foregroundColorInteger;
 
-        // the following code will be removed for release time
-        if( PrefUtil.getInternalPreferenceStore().getBoolean( "SHOW_BUILDID_ON_STARTUP" ) )
-        {
-            final String buildId = System.getProperty( "eclipse.buildId", "Unknown Build" );
-            final String buildIdRect = product.getProperty( "buildIdRect" );
+		try {
+			foregroundColorInteger = Integer.parseInt(foregroundColorString, 16);
+		}
+		catch (Exception ex) {
+			foregroundColorInteger = 0xD2D7FF; // off white
+		}
 
-            final Rectangle buildIdRectangle =
-                StringConverter.asRectangle( buildIdRect, new Rectangle( 322, 190, 100, 40 ) );
+		setForeground(
+			new RGB(
+				(foregroundColorInteger & 0xFF0000) >> 16, (foregroundColorInteger & 0xFF00) >> 8,
+				foregroundColorInteger & 0xFF));
 
-            final GridLayout layout = new GridLayout( 1, false );
-            layout.marginRight = 0;
-            layout.horizontalSpacing = 0;
-            layout.marginWidth = 0;
+		// the following code will be removed for release time
 
-            final Composite versionComposite = new Composite( getContent(), SWT.NONE );
-            versionComposite.setBounds( buildIdRectangle );
-            versionComposite.setLayout( layout );
+		if (PrefUtil.getInternalPreferenceStore().getBoolean("SHOW_BUILDID_ON_STARTUP")) {
+			String buildId = System.getProperty("eclipse.buildId", "Unknown Build");
+			String buildIdRect = product.getProperty("buildIdRect");
 
-            final Label idLabel = new Label( versionComposite, SWT.NONE );
-            idLabel.setLayoutData( new GridData( SWT.TRAIL, SWT.CENTER, true, true, 1, 1 ) );
-            idLabel.setForeground( getForeground() );
+			Rectangle buildIdRectangle = StringConverter.asRectangle(buildIdRect, new Rectangle(322, 190, 100, 40));
 
-            final Font initialFont = idLabel.getFont();
-            final FontData[] fontData = initialFont.getFontData();
+			GridLayout layout = new GridLayout(1, false);
 
-            for( int i = 0; i < fontData.length; i++ )
-            {
-                fontData[i].setHeight( 14 );
-                fontData[i].setStyle( SWT.BOLD );
-            }
+			layout.marginRight = 0;
+			layout.horizontalSpacing = 0;
+			layout.marginWidth = 0;
 
-            this.newFont = new Font( idLabel.getDisplay(), fontData );
-            idLabel.setFont( this.newFont );
-            idLabel.setText( buildId );
+			Composite versionComposite = new Composite(getContent(), SWT.NONE);
 
-            versionComposite.layout( true );
-        }
-        else
-        {
-            getContent(); // ensure creation of the progress
-        }
-    }
+			versionComposite.setBounds(buildIdRectangle);
+			versionComposite.setLayout(layout);
 
-    @Override
-    public void dispose()
-    {
-        super.dispose();
+			Label idLabel = new Label(versionComposite, SWT.NONE);
 
-        if( this.newFont != null && ! this.newFont.isDisposed() )
-        {
-            this.newFont.dispose();
-        }
-    }
+			idLabel.setLayoutData(new GridData(SWT.TRAIL, SWT.CENTER, true, true, 1, 1));
+			idLabel.setForeground(getForeground());
+
+			Font initialFont = idLabel.getFont();
+
+			FontData[] fontData = initialFont.getFontData();
+
+			for (int i = 0; i < fontData.length; i++) {
+				fontData[i].setHeight(14);
+				fontData[i].setStyle(SWT.BOLD);
+			}
+
+			_newFont = new Font(idLabel.getDisplay(), fontData);
+
+			idLabel.setFont(_newFont);
+
+			idLabel.setText(buildId);
+
+			versionComposite.layout(true);
+		}
+		else {
+			getContent(); // ensure creation of the progress
+		}
+	}
+
+	private Font _newFont;
 
 }
