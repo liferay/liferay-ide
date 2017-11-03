@@ -176,8 +176,27 @@ public class LaunchHelper implements IDebugEventSetListener
 
     public boolean isLaunchRunning()
     {
-        return this.runningLaunch != null && !this.runningLaunch.isTerminated() &&
-           ( !( this.runningLaunch.getProcesses().length > 0 && this.runningLaunch.getProcesses()[0].isTerminated() ) );
+        if (this.runningLaunch == null) {
+            return false;
+        }
+
+        if (this.runningLaunch.isTerminated()) {
+            return false;
+        }
+
+        IProcess[] processes = this.runningLaunch.getProcesses();
+
+        if (processes == null || processes.length == 0) {
+            return false;
+        }
+
+        IProcess process = processes[0];
+
+        if (process == null || process.isTerminated()) {
+            return false;
+        }
+
+        return true;
     }
 
     public boolean isLaunchSync()
