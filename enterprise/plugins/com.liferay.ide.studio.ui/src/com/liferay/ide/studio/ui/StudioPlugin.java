@@ -169,8 +169,8 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 
 	/**
 	 * (non-Javadoc)
-	 * @see AbstractUIPlugin#start(org.osgi.framework.
-	 * BundleContext)
+	 *
+	 * @see AbstractUIPlugin#start(org.osgi.framework. BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -179,8 +179,8 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 
 	/**
 	 * (non-Javadoc)
-	 * @see AbstractUIPlugin#stop(org.osgi.framework.
-	 * BundleContext)
+	 *
+	 * @see AbstractUIPlugin#stop(org.osgi.framework. BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
