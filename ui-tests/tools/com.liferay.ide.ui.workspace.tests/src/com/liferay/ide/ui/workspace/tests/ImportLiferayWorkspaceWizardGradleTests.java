@@ -23,7 +23,6 @@ import java.io.IOException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.swtbot.swt.finder.SWTBotAssert;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -34,11 +33,6 @@ import org.junit.Test;
  * @author Ashley Yuan
  */
 public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
-
-	@After
-	public void after() {
-		viewAction.deleteProjectsExcludeNames("init-project");
-	}
 
 	@Test
 	public void importLiferayWorkspace() throws IOException {
@@ -54,8 +48,8 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
-		Assert.assertTrue(viewAction.fetchProjectFile(liferayWorkspaceName, "configs").isVisible());
-		Assert.assertTrue(viewAction.fetchProjectFile(liferayWorkspaceName, "gradle").isVisible());
+		Assert.assertTrue(viewAction.getProjects().isVisible(liferayWorkspaceName, "configs"));
+		Assert.assertTrue(viewAction.getProjects().isVisible(liferayWorkspaceName, "gradle"));
 
 		viewAction.openProjectFile(liferayWorkspaceName, GRADLE_PROPERTIES);
 
@@ -70,6 +64,8 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		SWTBotAssert.assertContains("repositories", editorAction.getContent());
 
 		editorAction.close();
+
+		viewAction.deleteProject(liferayWorkspaceName);
 	}
 
 	@Ignore("Failed on mac, need to fix")
@@ -87,10 +83,11 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
-		Assert.assertTrue(viewAction.fetchProjectFile(liferayWorkspaceName, "bundles").isVisible());
+		Assert.assertTrue(viewAction.getProjects().isVisible(liferayWorkspaceName, "bundles"));
+		Assert.assertTrue(viewAction.getProjects().isVisible(liferayWorkspaceName, "configs"));
+		Assert.assertTrue(viewAction.getProjects().isVisible(liferayWorkspaceName, "gradle"));
 
-		Assert.assertTrue(viewAction.fetchProjectFile(liferayWorkspaceName, "configs").isVisible());
-		Assert.assertTrue(viewAction.fetchProjectFile(liferayWorkspaceName, "gradle").isVisible());
+		viewAction.deleteProject(liferayWorkspaceName);
 	}
 
 	@Test

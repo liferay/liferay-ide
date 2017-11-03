@@ -22,18 +22,12 @@ import java.io.IOException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.swtbot.swt.finder.SWTBotAssert;
 
-import org.junit.After;
 import org.junit.Test;
 
 /**
  * @author Ashley Yuan
  */
 public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
-
-	@After
-	public void after() {
-		viewAction.deleteProjectsExcludeNames("init-project");
-	}
 
 	//init code is commented out in pom file now
 	@Test
@@ -69,6 +63,8 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		SWTBotAssert.assertContains("wars", editorAction.getContent());
 
 		editorAction.close();
+
+		viewAction.deleteProject(liferayWorkspaceName);
 	}
 
 }

@@ -62,7 +62,7 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openAddOverrideFilesDialog();
 
-		dialogAction.selectItem("META-INF/resources/configuration.jsp");
+		dialogAction.selectItems("META-INF/resources/configuration.jsp");
 
 		dialogAction.confirm();
 

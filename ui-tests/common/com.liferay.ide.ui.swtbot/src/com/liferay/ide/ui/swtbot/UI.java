@@ -109,6 +109,8 @@ public interface UI {
 
 	public final String CLEAR_LOG_VIEWER = "Clear Log Viewer";
 
+	public final String CLOSE_PROJECT = "Close Project";
+
 	public final String COMPONENT_CLASS_NAME = "Component Class Name:";
 
 	public final String COMPONENT_CLASS_TEMPLATE = "Component Class Template:";

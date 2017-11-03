@@ -30,7 +30,6 @@ import com.liferay.ide.ui.swtbot.eclipse.page.NewRuntimeWizard;
 import com.liferay.ide.ui.swtbot.eclipse.page.NewServerWizard;
 import com.liferay.ide.ui.swtbot.page.MenuItem;
 import com.liferay.ide.ui.swtbot.page.Text;
-import com.liferay.ide.ui.swtbot.page.TreeItem;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
@@ -76,6 +75,12 @@ public class WizardAction extends UIAction {
 		cancel();
 
 		SWTBotPreferences.TIMEOUT = origin;
+	}
+
+	public String getValidationMsg() {
+		ide.sleep();
+
+		return _wizard.getValidationMsg();
 	}
 
 	public String getValidationMsg(int validationMsgIndex) {
@@ -211,7 +216,7 @@ public class WizardAction extends UIAction {
 	}
 
 	public void prepareImportType(String category, String type) {
-		prepareImportType(StringPool.BLANK, category, type);
+		_importProjectWizard.getTypes().selectTreeItem(category, type);
 	}
 
 	public void prepareImportType(String filterText, String category, String type) {
@@ -219,9 +224,7 @@ public class WizardAction extends UIAction {
 
 		filter.setText(filterText);
 
-		TreeItem categoryTypeTreeItem = _importProjectWizard.getTypes().expandNode(category, type);
-
-		categoryTypeTreeItem.select();
+		_importProjectWizard.getTypes().selectTreeItem(category, type);
 	}
 
 	public void prepareJsfProject(String projectName, String buildType, String componentSuite) {
@@ -365,35 +368,27 @@ public class WizardAction extends UIAction {
 	public void prepareNewServer62(String serverName) {
 		_newServerWizard.getServerName().setText(serverName);
 
-		TreeItem categoryTreeItem = _newServerWizard.getServerTypes().getTreeItem(LIFERAY_INC);
-
-		TreeItem treeTreeItem = categoryTreeItem.getTreeItem(LIFERAY_V_62_SERVER_TOMCAT_7);
-
-		treeTreeItem.select();
+		_newServerWizard.getServerTypes().selectTreeItem(LIFERAY_INC, LIFERAY_V_62_SERVER_TOMCAT_7);
 	}
 
 	public void prepareRuntimeType(String category, String type) {
-		TreeItem categoryTreeItem = _newRuntimeWizard.getServerTypes().getTreeItem(category);
-
-		TreeItem treeTreeItem = categoryTreeItem.getTreeItem(type);
-
-		treeTreeItem.select();
+		_newRuntimeWizard.getServerTypes().selectTreeItem(category, type);
 	}
 
-	private ImportLiferayWorkspaceProjectWizard _importLiferayWorkspaceProjectWizard =
+	private final ImportLiferayWorkspaceProjectWizard _importLiferayWorkspaceProjectWizard =
 		new ImportLiferayWorkspaceProjectWizard(bot);
-	private ImportProjectWizard _importProjectWizard = new ImportProjectWizard(bot);
-	private NewModuleFragmentInfoWizard _newFragmentInfoWizard = new NewModuleFragmentInfoWizard(bot);
-	private NewFragmentWizard _newFragmentWizard = new NewFragmentWizard(bot);
-	private NewLiferayJsfProjectWizard _newJsfProjectWizard = new NewLiferayJsfProjectWizard(bot);
-	private NewLiferay7RuntimeWizard _newLiferay7RuntimeWizard = new NewLiferay7RuntimeWizard(bot);
-	private NewLiferay62RuntimeWizard _newLiferay62RuntimeWizard = new NewLiferay62RuntimeWizard(bot);
-	private NewLiferayComponentWizard _newLiferayComponentWizard = new NewLiferayComponentWizard(bot);
-	private NewLiferayModuleInfoWizard _newModuleInfoWizard = new NewLiferayModuleInfoWizard(bot);
-	private NewLiferayModuleWizard _newModuleWizard = new NewLiferayModuleWizard(bot);
-	private NewRuntimeWizard _newRuntimeWizard = new NewRuntimeWizard(bot);
-	private NewServerWizard _newServerWizard = new NewServerWizard(bot);
-	private NewLiferayWorkspaceWizard _newWorkspaceWizard = new NewLiferayWorkspaceWizard(bot);
-	private Wizard _wizard = new Wizard(bot);
+	private final ImportProjectWizard _importProjectWizard = new ImportProjectWizard(bot);
+	private final NewModuleFragmentInfoWizard _newFragmentInfoWizard = new NewModuleFragmentInfoWizard(bot);
+	private final NewFragmentWizard _newFragmentWizard = new NewFragmentWizard(bot);
+	private final NewLiferayJsfProjectWizard _newJsfProjectWizard = new NewLiferayJsfProjectWizard(bot);
+	private final NewLiferay7RuntimeWizard _newLiferay7RuntimeWizard = new NewLiferay7RuntimeWizard(bot);
+	private final NewLiferay62RuntimeWizard _newLiferay62RuntimeWizard = new NewLiferay62RuntimeWizard(bot);
+	private final NewLiferayComponentWizard _newLiferayComponentWizard = new NewLiferayComponentWizard(bot);
+	private final NewLiferayModuleInfoWizard _newModuleInfoWizard = new NewLiferayModuleInfoWizard(bot);
+	private final NewLiferayModuleWizard _newModuleWizard = new NewLiferayModuleWizard(bot);
+	private final NewRuntimeWizard _newRuntimeWizard = new NewRuntimeWizard(bot);
+	private final NewServerWizard _newServerWizard = new NewServerWizard(bot);
+	private final NewLiferayWorkspaceWizard _newWorkspaceWizard = new NewLiferayWorkspaceWizard(bot);
+	private final Wizard _wizard = new Wizard(bot);
 
 }

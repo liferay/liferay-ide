@@ -106,18 +106,6 @@ public class Eclipse extends BasePageObject {
 		return _welcomeView;
 	}
 
-	public boolean hasProjects() {
-		_packageExporerView.show();
-
-		try {
-			return _projectTree.hasItems();
-		}
-		catch (Exception e) {
-		}
-
-		return false;
-	}
-
 	public PackageExplorerView showPackageExporerView() {
 		try {
 			_packageExporerView.show();

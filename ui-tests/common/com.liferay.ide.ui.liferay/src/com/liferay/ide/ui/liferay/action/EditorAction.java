@@ -49,7 +49,7 @@ public class EditorAction extends UIAction {
 		_pomXmlEditor.getPomXml().click();
 	}
 
-	private Editor _editor = new Editor(bot);
-	private PomXmlEditor _pomXmlEditor = new PomXmlEditor(bot);
+	private final Editor _editor = new Editor(bot);
+	private final PomXmlEditor _pomXmlEditor = new PomXmlEditor(bot);
 
 }

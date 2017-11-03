@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.swtbot.page;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
@@ -32,54 +33,31 @@ public class Tree extends AbstractWidget {
 		super(bot, index);
 	}
 
-	public TreeItem expandNode(String... nodes) {
-		sleep(500);
+	public void contextMenu(String menu, String... items) {
+		SWTBotTreeItem item = null;
 
-		getWidget().expandNode(nodes);
-
-		return new TreeItem(bot, this, nodes);
-	}
-
-	public String[] getAllItems() {
-		SWTBotTreeItem[] items = getWidget().getAllItems();
-
-		String[] nodes = new String[items.length];
-
-		for (int i = 0; i < items.length; i++) {
-			nodes[i] = items[i].getText();
+		if (items.length > 1) {
+			item = getWidget().expandNode(items);
+		}
+		else {
+			item = getWidget().getTreeItem(items[0]);
 		}
 
-		return nodes;
+		SWTBotMenu botMenu = item.contextMenu(menu);
+
+		botMenu.click();
 	}
 
-	public SWTBotTreeItem[] getAllTreeItems() {
-		SWTBotTreeItem[] items = getWidget().getAllItems();
+	public void doubleClick(String... items) {
+		SWTBotTreeItem item = getWidget().expandNode(items);
 
-		return items;
+		item.doubleClick();
 	}
 
-	public TreeItem getTreeItem(String nodeText) {
-		return new TreeItem(bot, this, nodeText);
-	}
+	public boolean isVisible(String... items) {
+		SWTBotTreeItem item = getWidget().expandNode(items);
 
-	public boolean hasItems() {
-		return getWidget().hasItems();
-	}
-
-	public boolean hasTreeItem(String... items) {
-		try {
-			SWTBotTreeItem treeItem = getWidget().getTreeItem(items[0]);
-
-			for (int i = 1; i < items.length; i++) {
-				treeItem.expand();
-				treeItem = treeItem.getNode(items[i]).expand();
-			}
-
-			return true;
-		}
-		catch (Exception e) {
-			return false;
-		}
+		return item.isVisible();
 	}
 
 	public void select(String... items) {
@@ -87,18 +65,15 @@ public class Tree extends AbstractWidget {
 	}
 
 	public void selectTreeItem(String... items) {
-		SWTBotTreeItem treeItem = getWidget().getTreeItem(items[0]);
+		SWTBotTreeItem item = getWidget().getTreeItem(items[0]);
 
 		for (int i = 1; i < items.length; i++) {
-			treeItem.expand();
-			treeItem = treeItem.getNode(items[i]).expand();
+			item.expand();
+
+			item = item.getNode(items[i]).expand();
 		}
 
-		treeItem.select();
-	}
-
-	public void unselect() {
-		getWidget().unselect();
+		item.select();
 	}
 
 	protected SWTBotTree getWidget() {
