@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.action;
 
@@ -31,72 +30,62 @@ import org.eclipse.ui.IWorkbenchPart;
  * @author Greg Amerson
  * @author Simon Jiang
  */
-public class SDKProjectsImportAction implements IObjectActionDelegate
-{
-    private ISelection fSelection;
+public class SDKProjectsImportAction implements IObjectActionDelegate {
 
-    public SDKProjectsImportAction()
-    {
-    }
+	public SDKProjectsImportAction() {
+	}
 
-    public Display getDisplay()
-    {
-        Display display = Display.getCurrent();
+	public Display getDisplay() {
+		Display display = Display.getCurrent();
 
-        if( display == null )
-            display = Display.getDefault();
+		if (display == null) {
+			display = Display.getDefault();
+		}
 
-        return display;
-    }
+		return display;
+	}
 
-    @Override
-    public void run( IAction action )
-    {
-        if( fSelection instanceof IStructuredSelection )
-        {
-            Object[] elems = ( (IStructuredSelection) fSelection ).toArray();
+	@Override
+	public void run(IAction action) {
+		if (_fSelection instanceof IStructuredSelection) {
+			Object[] elems = ((IStructuredSelection)_fSelection).toArray();
 
-            IProject project = null;
+			IProject project = null;
 
-            Object elem = elems[0];
+			Object elem = elems[0];
 
-            if( elem instanceof IProject )
-            {
-                project = (IProject) elem;
-            }
+			if (elem instanceof IProject) {
+				project = (IProject)elem;
+			}
 
-            ImportSDKProjectsWizard wizard =
-                new ImportSDKProjectsWizard( project.getLocation() );
+			ImportSDKProjectsWizard wizard = new ImportSDKProjectsWizard(project.getLocation());
 
-            final Display display = getDisplay();
+			final Display display = getDisplay();
 
-            final WizardDialog dialog = new WizardDialog( display.getActiveShell(), wizard );
+			final WizardDialog dialog = new WizardDialog(display.getActiveShell(), wizard);
 
-            BusyIndicator.showWhile
-            (
-                display,
-                new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        dialog.open();
-                    }
-                }
-            );
-        }
+			BusyIndicator.showWhile(
+				display,
+				new Runnable() {
 
-    }
+					@Override
+					public void run() {
+						dialog.open();
+					}
 
-    @Override
-    public void selectionChanged( IAction action, ISelection selection )
-    {
-        fSelection = selection;
-    }
+				});
+		}
+	}
 
-    @Override
-    public void setActivePart( IAction action, IWorkbenchPart targetPart )
-    {
-    }
+	@Override
+	public void selectionChanged(IAction action, ISelection selection) {
+		_fSelection = selection;
+	}
+
+	@Override
+	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+	}
+
+	private ISelection _fSelection;
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.wizard;
 
@@ -27,38 +26,33 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public abstract class LiferayDataModelOperation extends AbstractDataModelOperation
-    implements IArtifactEditOperationDataModelProperties
-{
+@SuppressWarnings("restriction")
+public abstract class LiferayDataModelOperation
+	extends AbstractDataModelOperation implements IArtifactEditOperationDataModelProperties {
 
-    protected TemplateContextType contextType;
+	public LiferayDataModelOperation(IDataModel model, TemplateStore templateStore, TemplateContextType contextType) {
+		super(model);
 
-    protected TemplateStore templateStore;
+		this.templateStore = templateStore;
 
-    public LiferayDataModelOperation( IDataModel model, TemplateStore templateStore, TemplateContextType contextType )
-    {
-        super( model );
+		this.contextType = contextType;
+	}
 
-        this.templateStore = templateStore;
+	protected TemplateContextType getContextType() {
+		return contextType;
+	}
 
-        this.contextType = contextType;
-    }
+	protected IProject getTargetProject() {
+		String projectName = model.getStringProperty(PROJECT_NAME);
 
-    protected TemplateContextType getContextType()
-    {
-        return contextType;
-    }
+		return ProjectUtil.getProject(projectName);
+	}
 
-    protected IProject getTargetProject()
-    {
-        String projectName = model.getStringProperty( PROJECT_NAME );
+	protected TemplateStore getTemplateStore() {
+		return templateStore;
+	}
 
-        return ProjectUtil.getProject( projectName );
-    }
+	protected TemplateContextType contextType;
+	protected TemplateStore templateStore;
 
-    protected TemplateStore getTemplateStore()
-    {
-        return templateStore;
-    }
 }

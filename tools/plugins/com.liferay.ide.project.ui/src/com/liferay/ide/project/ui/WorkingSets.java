@@ -1,13 +1,17 @@
-/*******************************************************************************
- * Copyright (c) 2013 Igor Fedorenko
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *      Igor Fedorenko - initial API and implementation
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.project.ui;
 
 import java.util.ArrayList;
@@ -19,59 +23,64 @@ import org.eclipse.ui.IWorkingSet;
 import org.eclipse.ui.IWorkingSetManager;
 import org.eclipse.ui.PlatformUI;
 
-
 /**
- * Copied from org.eclipse.m2e.core.ui.internal.WorkingSets
+ * @author Gregory Amerson
  */
-public class WorkingSets
-{
+public class WorkingSets {
 
-    public static String[] getWorkingSets() {
-        List<String> workingSets = new ArrayList<String>();
-        IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
-        for(IWorkingSet workingSet : workingSetManager.getWorkingSets()) {
-          if(workingSet.isVisible()) {
-            workingSets.add(workingSet.getName());
-          }
-        }
-        return workingSets.toArray(new String[workingSets.size()]);
-    }
+	/**
+	 * Returns one of the working sets the element directly belongs to. Returns
+	 * {@code null} if the element does not belong to any working set.
+	 *
+	 * @since 1.5
+	 */
+	public static IWorkingSet getAssignedWorkingSet(IResource element) {
+		IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
 
-    /**
-     * Returns one of the working sets the element directly belongs to. Returns {@code null} if the element does not
-     * belong to any working set.
-     *
-     * @since 1.5
-     */
-    public static IWorkingSet getAssignedWorkingSet(IResource element) {
-      IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
-      for(IWorkingSet workingSet : workingSetManager.getWorkingSets()) {
-        for(IAdaptable adaptable : workingSet.getElements()) {
-          if(adaptable.getAdapter(IResource.class) == element) {
-            return workingSet;
-          }
-        }
-      }
-      return null;
-    }
+		for (IWorkingSet workingSet : workingSetManager.getWorkingSets()) {
+			for (IAdaptable adaptable : workingSet.getElements()) {
+				if (adaptable.getAdapter(IResource.class) == element) {
+					return workingSet;
+				}
+			}
+		}
 
-    /**
-     * Returns all working sets the element directly belongs to. Returns empty collection if the element does not belong
-     * to any working set. The order of returned working sets is not specified.
-     *
-     * @since 1.5
-     */
-    public static List<IWorkingSet> getAssignedWorkingSets(IResource element) {
-      List<IWorkingSet> list = new ArrayList<IWorkingSet>();
-      IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
-      for(IWorkingSet workingSet : workingSetManager.getWorkingSets()) {
-        for(IAdaptable adaptable : workingSet.getElements()) {
-          if(adaptable.getAdapter(IResource.class) == element) {
-            list.add(workingSet);
-          }
-        }
-      }
-      return list;
-    }
+		return null;
+	}
+
+	/**
+	 * Returns all working sets the element directly belongs to. Returns empty
+	 * collection if the element does not belong to any working set. The order of
+	 * returned working sets is not specified.
+	 *
+	 * @since 1.5
+	 */
+	public static List<IWorkingSet> getAssignedWorkingSets(IResource element) {
+		List<IWorkingSet> list = new ArrayList<>();
+		IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
+
+		for (IWorkingSet workingSet : workingSetManager.getWorkingSets()) {
+			for (IAdaptable adaptable : workingSet.getElements()) {
+				if (adaptable.getAdapter(IResource.class) == element) {
+					list.add(workingSet);
+				}
+			}
+		}
+
+		return list;
+	}
+
+	public static String[] getWorkingSets() {
+		List<String> workingSets = new ArrayList<>();
+		IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
+
+		for (IWorkingSet workingSet : workingSetManager.getWorkingSets()) {
+			if (workingSet.isVisible()) {
+				workingSets.add(workingSet.getName());
+			}
+		}
+
+		return workingSets.toArray(new String[workingSets.size()]);
+	}
 
 }

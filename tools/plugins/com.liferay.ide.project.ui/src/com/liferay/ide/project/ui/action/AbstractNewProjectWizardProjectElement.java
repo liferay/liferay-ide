@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.action;
 
@@ -27,95 +26,86 @@ import org.eclipse.osgi.util.NLS;
 /**
  * @author Greg Amerson
  */
-public abstract class AbstractNewProjectWizardProjectElement extends AbstractConfigurationElement
-{
+public abstract class AbstractNewProjectWizardProjectElement extends AbstractConfigurationElement {
 
-    protected class ProjectClassElement extends AbstractConfigurationElement
-    {
-        @Override
-        public IConfigurationElement[] getChildren( String name ) throws InvalidRegistryObjectException
-        {
-            if( NewWizardAction.TAG_PARAMETER.equals( name ) )
-            {
-                return new IConfigurationElement[] { new ProjectParameterElement() };
-            }
+	@Override
+	public Object createExecutableExtension(String propertyName) throws CoreException {
+		if (NewWizardAction.ATT_CLASS.equals(propertyName)) {
+			return createNewWizard();
+		}
 
-            return null;
-        }
+		return null;
+	}
 
-    }
+	@Override
+	public String getAttribute(String attr) throws InvalidRegistryObjectException {
+		return getProjectElementAttribute(attr);
+	}
 
-    protected class ProjectDescriptionElement extends AbstractConfigurationElement
-    {
-        @Override
-        public String getValue() throws InvalidRegistryObjectException
-        {
-            return Msgs.importDescription;
-        }
-    }
+	@Override
+	public IConfigurationElement[] getChildren(String name) throws InvalidRegistryObjectException {
+		if (NewWizardAction.TAG_DESCRIPTION.equals(name)) {
+			return new IConfigurationElement[] {new ProjectDescriptionElement()};
+		}
+		else if (NewWizardAction.TAG_CLASS.equals(name)) {
+			return new IConfigurationElement[] {new ProjectClassElement()};
+		}
 
-    protected class ProjectParameterElement extends AbstractConfigurationElement
-    {
-        @Override
-        public String getAttribute( String name ) throws InvalidRegistryObjectException
-        {
-            return getProjectParameterElementAttribute( name );
-        }
-    }
+		return null;
+	}
 
-    @Override
-    public Object createExecutableExtension( String propertyName ) throws CoreException
-    {
-        if( NewWizardAction.ATT_CLASS.equals( propertyName ) )
-        {
-            return createNewWizard();
-        }
+	@Override
+	public IContributor getContributor() throws InvalidRegistryObjectException {
+		return new RegistryContributor(null, getContributorID(), null, null);
+	}
 
-        return null;
-    }
+	protected abstract Object createNewWizard();
 
-    @Override
-    public String getAttribute( String attr ) throws InvalidRegistryObjectException
-    {
-        return getProjectElementAttribute( attr );
-    }
+	protected abstract String getContributorID();
 
-    @Override
-    public IConfigurationElement[] getChildren( String name ) throws InvalidRegistryObjectException
-    {
-        if( NewWizardAction.TAG_DESCRIPTION.equals( name ) )
-        {
-            return new IConfigurationElement[] { new ProjectDescriptionElement() };
-        }
-        else if( NewWizardAction.TAG_CLASS.equals( name ) )
-        {
-            return new IConfigurationElement[] { new ProjectClassElement() };
-        }
+	protected abstract String getProjectElementAttribute(String attr);
 
-        return null;
-    }
+	protected abstract String getProjectParameterElementAttribute(String name);
 
-    @Override
-    public IContributor getContributor() throws InvalidRegistryObjectException
-    {
-        return new RegistryContributor( null, getContributorID(), null, null );
-    }
+	protected class ProjectClassElement extends AbstractConfigurationElement {
 
-    protected abstract Object createNewWizard();
+		@Override
+		public IConfigurationElement[] getChildren(String name) throws InvalidRegistryObjectException {
+			if (NewWizardAction.TAG_PARAMETER.equals(name)) {
+				return new IConfigurationElement[] {new ProjectParameterElement()};
+			}
 
-    protected abstract String getContributorID();
+			return null;
+		}
 
-    protected abstract String getProjectElementAttribute( String attr );
+	}
 
-    protected abstract String getProjectParameterElementAttribute( String name );
+	protected class ProjectDescriptionElement extends AbstractConfigurationElement {
 
-    private static class Msgs extends NLS
-    {
-        public static String importDescription;
+		@Override
+		public String getValue() throws InvalidRegistryObjectException {
+			return Msgs.importDescription;
+		}
 
-        static
-        {
-            initializeMessages( AbstractNewProjectWizardProjectElement.class.getName(), Msgs.class );
-        }
-    }
+	}
+
+	protected class ProjectParameterElement extends AbstractConfigurationElement {
+
+		@Override
+		public String getAttribute(String name) throws InvalidRegistryObjectException {
+			return getProjectParameterElementAttribute(name);
+		}
+
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String importDescription;
+
+		static {
+			initializeMessages(AbstractNewProjectWizardProjectElement.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

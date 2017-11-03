@@ -17,6 +17,7 @@
 				<configuration>
 					<maxLineLength>120</maxLineLength>
 					<baseDir>${baseDir}</baseDir>
+					<processorThreadCount>1</processorThreadCount>
 				</configuration>
 			</plugin>
 		</plugins>

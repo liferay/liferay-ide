@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui;
 
@@ -24,23 +23,20 @@ import org.eclipse.core.runtime.IPath;
 /**
  * @author Andy Wu
  */
-public class NotLiferayProjectInSDKPropertyTester extends PropertyTester
-{
+public class NotLiferayProjectInSDKPropertyTester extends PropertyTester {
 
-    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
-    {
-        if( receiver instanceof IProject )
-        {
-            final IProject project = (IProject) receiver;
-            final IPath location = project.getLocation();
+	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
+		if (receiver instanceof IProject) {
+			final IProject project = (IProject)receiver;
 
-            if( location != null )
-            {
-                return SDKUtil.isSDKProject( project );
-            }
-        }
+			final IPath location = project.getLocation();
 
-        return false;
-    }
+			if (location != null) {
+				return SDKUtil.isSDKProject(project);
+			}
+		}
+
+		return false;
+	}
 
 }

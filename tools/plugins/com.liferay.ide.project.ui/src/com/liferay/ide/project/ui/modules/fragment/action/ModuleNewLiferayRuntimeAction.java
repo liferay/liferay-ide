@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,13 +10,13 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.modules.fragment.action;
 
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
@@ -26,24 +26,22 @@ import org.eclipse.wst.server.ui.ServerUIUtil;
 /**
  * @author Terry Jia
  */
-public class ModuleNewLiferayRuntimeAction extends SapphireActionHandler
-{
+public class ModuleNewLiferayRuntimeAction extends SapphireActionHandler {
 
-    @Override
-    protected Object run( Presentation context )
-    {
-        NewModuleFragmentOp op = context.part().getModelElement().nearest( NewModuleFragmentOp.class );
+	@Override
+	protected Object run(Presentation context) {
+		Element element = context.part().getModelElement();
 
-        boolean isOK =
-            ServerUIUtil.showNewRuntimeWizard(
-                ( (SwtPresentation) context ).shell(), "liferay.bundle", null, "com.liferay." );
+		NewModuleFragmentOp op = element.nearest(NewModuleFragmentOp.class);
 
-        if( isOK )
-        {
-            op.property( NewModuleFragmentOp.PROP_LIFERAY_RUNTIME_NAME ).refresh();
-        }
+		boolean oK = ServerUIUtil.showNewRuntimeWizard(
+			((SwtPresentation)context).shell(), "liferay.bundle", null, "com.liferay.");
 
-        return Status.createOkStatus();
-    }
+		if (oK) {
+			op.property(NewModuleFragmentOp.PROP_LIFERAY_RUNTIME_NAME).refresh();
+		}
+
+		return Status.createOkStatus();
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.handlers;
 
@@ -19,7 +18,9 @@ import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
 import java.io.InputStream;
+
 import java.lang.reflect.InvocationTargetException;
+
 import java.nio.file.Files;
 
 import org.eclipse.compare.CompareConfiguration;
@@ -43,7 +44,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -51,157 +51,138 @@ import org.eclipse.ui.handlers.HandlerUtil;
  * @author Lovett Li
  * @author Terry Jia
  */
-public abstract class AbstractCompareFileHandler extends AbstractHandler
-{
+public abstract class AbstractCompareFileHandler extends AbstractHandler {
 
-    @Override
-    public Object execute( ExecutionEvent event ) throws ExecutionException
-    {
-        final IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked( event );
-        final ISelection selection = HandlerUtil.getActiveMenuSelection( event );
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		final IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
+		final ISelection selection = HandlerUtil.getActiveMenuSelection(event);
 
-        IStatus retval = Status.OK_STATUS;
-        IFile currentFile = null;
+		IStatus retval = Status.OK_STATUS;
+		IFile currentFile = null;
 
-        if( selection instanceof ITreeSelection )
-        {
-            Object firstElement = ( (ITreeSelection) selection ).getFirstElement();
+		if (selection instanceof ITreeSelection) {
+			Object firstElement = ((ITreeSelection)selection).getFirstElement();
 
-            if( firstElement instanceof IFile )
-            {
-                currentFile = (IFile) firstElement;
-            }
-        }
-        else if( selection instanceof TextSelection )
-        {
-            IEditorPart editor = window.getActivePage().getActiveEditor();
-            currentFile = editor.getEditorInput().getAdapter( IFile.class );
-        }
+			if (firstElement instanceof IFile) {
+				currentFile = (IFile)firstElement;
+			}
+		}
+		else if (selection instanceof TextSelection) {
+			IEditorPart editor = window.getActivePage().getActiveEditor();
 
-        retval = openCompareEditor( window, currentFile );
+			currentFile = editor.getEditorInput().getAdapter(IFile.class);
+		}
 
-        return retval;
-    }
+		retval = _openCompareEditor(currentFile);
 
-    private IStatus openCompareEditor( IWorkbenchWindow window, IFile currentFile )
-    {
-        final IWorkbenchPage workBenchPage = window.getActivePage();
+		return retval;
+	}
 
-        ITypedElement left = null;
-        ITypedElement right = null;
-        IStatus retval = Status.OK_STATUS;
+	protected abstract File getTemplateFile(IFile currentFile) throws Exception;
 
-        try
-        {
-            File tempFile = getTemplateFile( currentFile );
+	private IStatus _openCompareEditor(IFile currentFile) {
+		ITypedElement left = null;
+		ITypedElement right = null;
+		IStatus retval = Status.OK_STATUS;
 
-            if( tempFile == null )
-            {
-                return ProjectCore.createErrorStatus( "Can't find the original file." );
-            }
+		try {
+			File tempFile = getTemplateFile(currentFile);
 
-            left = new CompareItem( tempFile );
-            right = new CompareItem( currentFile.getLocation().toFile() );
+			if (tempFile == null) {
+				return ProjectCore.createErrorStatus("Can't find the original file.");
+			}
 
-            openInCompare( left, right, workBenchPage );
-        }
-        catch( Exception e )
-        {
-            retval = ProjectCore.createErrorStatus( e );
-        }
+			left = new CompareItem(tempFile);
+			right = new CompareItem(currentFile.getLocation().toFile());
 
-        return retval;
-    }
+			_openInCompare(left, right);
+		}
+		catch (Exception e) {
+			retval = ProjectCore.createErrorStatus(e);
+		}
 
-    private void openInCompare( final ITypedElement left, final ITypedElement right, IWorkbenchPage workBenchPage )
-    {
-        final CompareConfiguration configuration = new CompareConfiguration();
-        configuration.setLeftLabel( "Template" );
-        configuration.setRightLabel( ( (CompareItem) right ).getFile().getAbsolutePath() );
+		return retval;
+	}
 
-        CompareUI.openCompareEditor( new CompareEditorInput( configuration )
-        {
+	private void _openInCompare(final ITypedElement left, final ITypedElement right) {
+		final CompareConfiguration configuration = new CompareConfiguration();
 
-            @Override
-            protected Object prepareInput( final IProgressMonitor monitor )
-                throws InvocationTargetException, InterruptedException
-            {
-                DiffNode diffNode = new DiffNode( left, right );
-                return diffNode;
-            }
-        } );
-    }
+		configuration.setLeftLabel("Template");
+		configuration.setRightLabel(((CompareItem)right).getFile().getAbsolutePath());
 
-    protected abstract File getTemplateFile( IFile currentFile ) throws Exception;
+		CompareUI.openCompareEditor(
+			new CompareEditorInput(configuration) {
 
-    private class CompareItem implements ITypedElement, IStreamContentAccessor, IModificationDate, IEditableContent
-    {
+				@Override
+				protected Object prepareInput(final IProgressMonitor monitor)
+					throws InterruptedException, InvocationTargetException {
 
-        private File file;
+					DiffNode diffNode = new DiffNode(left, right);
 
-        public CompareItem( File file )
-        {
-            this.file = file;
-        }
+					return diffNode;
+				}
 
-        public File getFile()
-        {
-            return file;
-        }
+			});
+	}
 
-        @Override
-        public String getName()
-        {
-            return null;
-        }
+	private class CompareItem implements ITypedElement, IStreamContentAccessor, IModificationDate, IEditableContent {
 
-        @Override
-        public Image getImage()
-        {
-            return null;
-        }
+		public CompareItem(File file) {
+			_file = file;
+		}
 
-        @Override
-        public String getType()
-        {
-            return null;
-        }
+		@Override
+		public InputStream getContents() throws CoreException {
+			try {
+				return Files.newInputStream(_file.toPath());
+			}
+			catch (Exception e) {
+			}
 
-        @Override
-        public long getModificationDate()
-        {
-            return 0;
-        }
+			return null;
+		}
 
-        @Override
-        public InputStream getContents() throws CoreException
-        {
-            try
-            {
-                return Files.newInputStream( file.toPath() );
-            }
-            catch( Exception e )
-            {
-            }
-            return null;
-        }
+		public File getFile() {
+			return _file;
+		}
 
-        @Override
-        public boolean isEditable()
-        {
-            return false;
-        }
+		@Override
+		public Image getImage() {
+			return null;
+		}
 
-        @Override
-        public void setContent( byte[] newContent )
-        {
-        }
+		@Override
+		public long getModificationDate() {
+			return 0;
+		}
 
-        @Override
-        public ITypedElement replace( ITypedElement dest, ITypedElement src )
-        {
-            return null;
-        }
-    }
+		@Override
+		public String getName() {
+			return null;
+		}
+
+		@Override
+		public String getType() {
+			return null;
+		}
+
+		@Override
+		public boolean isEditable() {
+			return false;
+		}
+
+		@Override
+		public ITypedElement replace(ITypedElement dest, ITypedElement src) {
+			return null;
+		}
+
+		@Override
+		public void setContent(byte[] newContent) {
+		}
+
+		private File _file;
+
+	}
 
 }

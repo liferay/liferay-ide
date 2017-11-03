@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,21 +10,18 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.handlers;
 
 /**
  * @author Terry Jia
  */
-public class CommunityForums extends OpenLinkHandler
-{
+public class CommunityForums extends OpenLinkHandler {
 
-    @Override
-    protected String getLink()
-    {
-        return "https://web.liferay.com/community/forums";
-    }
+	@Override
+	protected String getLink() {
+		return "https://web.liferay.com/community/forums";
+	}
 
 }

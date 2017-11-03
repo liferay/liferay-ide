@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.project.core.ProjectRecord;
@@ -22,6 +22,7 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,276 +34,248 @@ import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelP
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.PropertyDef;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
 
-
 /**
  * @author Simon Jiang
  */
-public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomPart
-{
-    private FilteredListener<PropertyContentEvent> listener;
+public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomPart {
 
-    protected Object[] selectedProjects = new ProjectRecord[0];
+	@Override
+	public void dispose() {
+		if (_listener != null) {
+			Value<Object> sdkProperty = _op().property(SDKProjectsImportOp.PROP_SDK_LOCATION);
 
-    protected long lastModified;
+			sdkProperty.detach(_listener);
+		}
 
-    protected IProject[] wsProjects;
+		super.dispose();
+	}
 
-    @Override
-    public void dispose()
-    {
-        if ( this.listener != null)
-        {
-            op().property( SDKProjectsImportOp.PROP_SDK_LOCATION ).detach( this.listener );
-        }
-        super.dispose();
-    }
+	@Override
+	protected ElementList<ProjectNamedItem> getCheckboxList() {
+		return _op().getSelectedProjects();
+	}
 
-    @Override
-    protected ElementList<ProjectNamedItem> getCheckboxList()
-    {
-        return op().getSelectedProjects();
-    }
+	@Override
+	protected List<ProjectCheckboxElement> getInitItemsList() {
+		List<ProjectCheckboxElement> checkboxElementList = new ArrayList<>();
+		Value<Path> sdkLocationPath = _op().getSdkLocation();
 
-    @Override
-    protected List<ProjectCheckboxElement> getInitItemsList()
-    {
-        List<ProjectCheckboxElement> checkboxElementList = new ArrayList<ProjectCheckboxElement>();
+		Path sdkLocation = sdkLocationPath.content();
 
-        Path sdkLocation = op().getSdkLocation().content();
+		if ((sdkLocation == null) || !sdkLocation.toFile().exists()) {
+			return checkboxElementList;
+		}
 
-        if ( sdkLocation == null || !sdkLocation.toFile().exists() )
-        {
-            return checkboxElementList;
-        }
+		final ProjectRecord[] projectRecords = _updateProjectsList(PathBridge.create(sdkLocation).toPortableString());
 
-        final ProjectRecord[] projectRecords = updateProjectsList( PathBridge.create( sdkLocation ).toPortableString());
+		if (projectRecords == null) {
+			return checkboxElementList;
+		}
 
-        if ( projectRecords == null )
-        {
-            return checkboxElementList;
-        }
+		String context = null;
 
-        String  context = null;
+		for (ProjectRecord projectRecord : projectRecords) {
+			final String projectLocation = projectRecord.getProjectLocation().toPortableString();
 
-        for( ProjectRecord projectRecord : projectRecords )
-        {
-            final String projectLocation = projectRecord.getProjectLocation().toPortableString();
-            context =  projectRecord.getProjectName() + " (" + projectLocation + ")";
-            ProjectCheckboxElement checkboxElement =
-                new ProjectCheckboxElement(
-                    projectRecord.getProjectName(), context, projectRecord.getProjectLocation().toPortableString() );
+			context = projectRecord.getProjectName() + " (" + projectLocation + ")";
 
-            if ( !projectRecord.hasConflicts() )
-            {
-                checkboxElementList.add( checkboxElement );
-            }
-        }
+			ProjectCheckboxElement checkboxElement = new ProjectCheckboxElement(
+				projectRecord.getProjectName(), context, projectRecord.getProjectLocation().toPortableString());
 
-        return checkboxElementList;
-    }
+			if (!projectRecord.hasConflicts()) {
+				checkboxElementList.add(checkboxElement);
+			}
+		}
 
-    @Override
-    protected IStyledLabelProvider getLableProvider()
-    {
-        return new SDKImportProjectsLabelProvider();
-    }
+		return checkboxElementList;
+	}
 
-    @SuppressWarnings( { "rawtypes", "unchecked" } )
-    private Object[] getProjectRecords()
-    {
-        List projectRecords = new ArrayList();
+	@Override
+	protected IStyledLabelProvider getLableProvider() {
+		return new SDKImportProjectsLabelProvider();
+	}
 
-        for( int i = 0; i < selectedProjects.length; i++ )
-        {
-            ProjectRecord projectRecord = (ProjectRecord) selectedProjects[i];
-            if( isProjectInWorkspace( projectRecord.getProjectName() ) )
-            {
-                projectRecord.setHasConflicts( true );
-            }
+	@Override
+	protected ElementList<ProjectNamedItem> getSelectedElements() {
+		return _op().getSelectedProjects();
+	}
 
-            projectRecords.add( selectedProjects[i] );
-        }
+	@Override
+	protected void init() {
+		_listener = new FilteredListener<PropertyContentEvent>() {
 
-        return projectRecords.toArray( new ProjectRecord[projectRecords.size()] );
-    }
+			@Override
+			protected void handleTypedEvent(final PropertyContentEvent event) {
+				PropertyDef eventDef = event.property().definition();
 
-    private IProject[] getProjectsInWorkspace()
-    {
-        if( wsProjects == null )
-        {
-            wsProjects = ProjectUtil.getAllPluginsSDKProjects();
-        }
+				if (eventDef.equals(SDKProjectsImportOp.PROP_SDK_LOCATION)) {
+					Value<Path> sdkLocationPath = _op().getSdkLocation();
 
-        return wsProjects;
-    }
+					Path sdkLocation = sdkLocationPath.content();
 
-    @Override
-    protected ElementList<ProjectNamedItem> getSelectedElements()
-    {
-        return op().getSelectedProjects();
-    }
+					if (sdkLocation != null) {
+						IStatus status = ProjectImportUtil.validateSDKPath(sdkLocation.toPortableString());
 
-    @Override
-    protected void init()
-    {
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( final PropertyContentEvent event )
-            {
-                if( event.property().definition().equals( SDKProjectsImportOp.PROP_SDK_LOCATION ) )
-                {
-                    Path sdkLocation = op().getSdkLocation().content();
+						if (status.isOK()) {
+							if (sdkLocation.toFile().exists()) {
+								checkAndUpdateCheckboxElement();
+							}
+						}
+						else {
+							checkBoxViewer.remove(checkboxElements);
+							updateValidation();
+						}
+					}
+				}
+			}
 
-                    if ( sdkLocation != null )
-                    {
-                        IStatus status = ProjectImportUtil.validateSDKPath( sdkLocation.toPortableString() );
+		};
 
-                        if ( status.isOK() )
-                        {
-                            if ( sdkLocation.toFile().exists() )
-                            {
-                                checkAndUpdateCheckboxElement();
-                            }
-                        }
-                        else
-                        {
-                            checkBoxViewer.remove( checkboxElements );
-                            updateValidation();
-                        }
-                    }
-                }
-            }
-        };
+		Value<Object> sdkLocation = _op().property(SDKProjectsImportOp.PROP_SDK_LOCATION);
 
-        op().property( SDKProjectsImportOp.PROP_SDK_LOCATION ).attach( this.listener );
-    }
+		sdkLocation.attach(_listener);
+	}
 
-    private boolean isProjectInWorkspace( String projectName )
-    {
-        if( projectName == null )
-        {
-            return false;
-        }
+	@Override
+	protected void updateValidation() {
+		retval = Status.createOkStatus();
 
-        IProject[] workspaceProjects = getProjectsInWorkspace();
+		Value<Path> sdkLocationPath = _op().getSdkLocation();
 
-        for( int i = 0; i < workspaceProjects.length; i++ )
-        {
-            if( projectName.equals( workspaceProjects[i].getName() ) )
-            {
-                return true;
-            }
-        }
+		Path sdkLocation = sdkLocationPath.content();
 
-        return false;
-    }
+		if (sdkLocation != null) {
+			IStatus status = ProjectImportUtil.validateSDKPath(sdkLocation.toPortableString());
 
+			if (status.isOK()) {
+				final int projectsCount = checkBoxViewer.getTable().getItemCount();
+				final int selectedProjectsCount = checkBoxViewer.getCheckedElements().length;
 
-    private SDKProjectsImportOp op()
-    {
-        return getLocalModelElement().nearest( SDKProjectsImportOp.class );
-    }
+				if (projectsCount == 0) {
+					retval = Status.createErrorStatus("No available projects can be imported.");
+				}
 
-    private ProjectRecord[] updateProjectsList( final String path )
-    {
-        // on an empty path empty selectedProjects
-        if( path == null || path.length() == 0 )
-        {
+				if ((projectsCount > 0) && (selectedProjectsCount == 0)) {
+					retval = Status.createErrorStatus("At least one project must be specified.");
+				}
+			}
+		}
+		else {
+			retval = Status.createErrorStatus("SDK path cannot be empty");
+		}
 
-            selectedProjects = new ProjectRecord[0];
+		refreshValidation();
+	}
 
-            return null;
-        }
+	protected long lastModified;
+	protected Object[] selectedProjects = new ProjectRecord[0];
+	protected IProject[] wsProjects;
 
-        final File directory = new File( path );
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	private Object[] _getProjectRecords() {
+		List projectRecords = new ArrayList();
 
-        long modified = directory.lastModified();
+		for (int i = 0; i < selectedProjects.length; i++) {
+			ProjectRecord projectRecord = (ProjectRecord)selectedProjects[i];
 
-        lastModified = modified;
+			if (_isProjectInWorkspace(projectRecord.getProjectName())) {
+				projectRecord.setHasConflicts(true);
+			}
 
-        final boolean dirSelected = true;
+			projectRecords.add(selectedProjects[i]);
+		}
 
-        try
-        {
-            selectedProjects = new ProjectRecord[0];
+		return projectRecords.toArray(new ProjectRecord[projectRecords.size()]);
+	}
 
-            Collection<File> eclipseProjectFiles = new ArrayList<File>();
+	private IProject[] _getProjectsInWorkspace() {
+		if (wsProjects == null) {
+			wsProjects = ProjectUtil.getAllPluginsSDKProjects();
+		}
 
-            Collection<File> liferayProjectDirs = new ArrayList<File>();
+		return wsProjects;
+	}
 
+	private boolean _isProjectInWorkspace(String projectName) {
+		if (projectName == null) {
+			return false;
+		}
 
-            if( dirSelected && directory.isDirectory() )
-            {
-                if( !ProjectUtil.collectSDKProjectsFromDirectory(
-                    eclipseProjectFiles, liferayProjectDirs, directory, null, true, new NullProgressMonitor() ) )
-                {
-                    return null;
-                }
+		IProject[] workspaceProjects = _getProjectsInWorkspace();
 
-                selectedProjects = new ProjectRecord[eclipseProjectFiles.size() + liferayProjectDirs.size()];
+		for (int i = 0; i < workspaceProjects.length; i++) {
+			if (projectName.equals(workspaceProjects[i].getName())) {
+				return true;
+			}
+		}
 
-                int index = 0;
+		return false;
+	}
 
+	private SDKProjectsImportOp _op() {
+		return getLocalModelElement().nearest(SDKProjectsImportOp.class);
+	}
 
-                for( File eclipseProjectFile : eclipseProjectFiles )
-                {
-                    selectedProjects[index++] = new ProjectRecord( eclipseProjectFile );
-                }
+	private ProjectRecord[] _updateProjectsList(final String path) {
 
-                for( File liferayProjectDir : liferayProjectDirs )
-                {
-                    selectedProjects[index++] = new ProjectRecord( liferayProjectDir );
-                }
-            }
+		// on an empty path empty selectedProjects
 
+		if ((path == null) || (path.length() == 0)) {
+			selectedProjects = new ProjectRecord[0];
 
-        }
-        catch( Exception e )
-        {
-            ProjectUI.logError( e );
-        }
+			return null;
+		}
 
-        Object[] projects = getProjectRecords();
+		final File directory = new File(path);
 
-        return (ProjectRecord[])projects;
-    }
+		long modified = directory.lastModified();
 
-    @Override
-    protected void updateValidation()
-    {
-        retval = Status.createOkStatus();
+		lastModified = modified;
 
-        Path sdkLocation = op().getSdkLocation().content();
+		final boolean dirSelected = true;
 
-        if( sdkLocation != null )
-        {
-            IStatus status = ProjectImportUtil.validateSDKPath( sdkLocation.toPortableString() );
+		try {
+			selectedProjects = new ProjectRecord[0];
 
-            if( status.isOK() )
-            {
-                final int projectsCount = checkBoxViewer.getTable().getItemCount();
-                final int selectedProjectsCount = checkBoxViewer.getCheckedElements().length;
+			Collection<File> eclipseProjectFiles = new ArrayList<>();
 
-                if( projectsCount == 0 )
-                {
-                    retval = Status.createErrorStatus( "No available projects can be imported." );
-                }
-                if( projectsCount > 0 && selectedProjectsCount == 0 )
-                {
-                    retval = Status.createErrorStatus( "At least one project must be specified." );
-                }
-            }
-        }
-        else
-        {
-            retval = Status.createErrorStatus( "SDK path cannot be empty" );
-        }
+			Collection<File> liferayProjectDirs = new ArrayList<>();
 
-        refreshValidation();
-    }
+			if (dirSelected && directory.isDirectory()) {
+				if (!ProjectUtil.collectSDKProjectsFromDirectory(
+						eclipseProjectFiles, liferayProjectDirs, directory, null, true, new NullProgressMonitor())) {
+
+					return null;
+				}
+
+				selectedProjects = new ProjectRecord[eclipseProjectFiles.size() + liferayProjectDirs.size()];
+
+				int index = 0;
+
+				for (File eclipseProjectFile : eclipseProjectFiles) {
+					selectedProjects[index++] = new ProjectRecord(eclipseProjectFile);
+				}
+
+				for (File liferayProjectDir : liferayProjectDirs) {
+					selectedProjects[index++] = new ProjectRecord(liferayProjectDir);
+				}
+			}
+		}
+		catch (Exception e) {
+			ProjectUI.logError(e);
+		}
+
+		Object[] projects = _getProjectRecords();
+
+		return (ProjectRecord[])projects;
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+
 }

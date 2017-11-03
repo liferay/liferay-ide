@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.modules;
 
@@ -31,47 +30,41 @@ import org.eclipse.ui.IWorkbenchWizard;
 /**
  * @author Andy Wu
  */
-public class ImportLiferayModuleProjectWizard extends SapphireWizard<ImportLiferayModuleProjectOp>
-    implements IWorkbenchWizard, INewWizard
-{
+public class ImportLiferayModuleProjectWizard
+	extends SapphireWizard<ImportLiferayModuleProjectOp> implements IWorkbenchWizard, INewWizard {
 
-    private boolean firstErrorMessageRemoved = false;
+	public ImportLiferayModuleProjectWizard() {
+		super(_createDefaultOp(), DefinitionLoader.sdef(ImportLiferayModuleProjectWizard.class).wizard());
+	}
 
-    public ImportLiferayModuleProjectWizard()
-    {
-        super( createDefaultOp(), DefinitionLoader.sdef( ImportLiferayModuleProjectWizard.class ).wizard() );
-    }
+	@Override
+	public IWizardPage[] getPages() {
+		final IWizardPage[] wizardPages = super.getPages();
 
-    @Override
-    public IWizardPage[] getPages()
-    {
-        final IWizardPage[] wizardPages = super.getPages();
+		if (!_firstErrorMessageRemoved && (wizardPages != null)) {
+			final SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
 
-        if( !firstErrorMessageRemoved && wizardPages != null )
-        {
-            final SapphireWizardPage wizardPage = (SapphireWizardPage) wizardPages[0];
+			final String message = wizardPage.getMessage();
+			final int messageType = wizardPage.getMessageType();
 
-            final String message = wizardPage.getMessage();
-            final int messageType = wizardPage.getMessageType();
+			if ((messageType == IMessageProvider.ERROR) && !CoreUtil.isNullOrEmpty(message)) {
+				wizardPage.setMessage(null, SapphireWizardPage.NONE);
 
-            if( messageType == IMessageProvider.ERROR && !CoreUtil.isNullOrEmpty( message ) )
-            {
-                wizardPage.setMessage( null, SapphireWizardPage.NONE );
+				_firstErrorMessageRemoved = true;
+			}
+		}
 
-                firstErrorMessageRemoved = true;
-            }
-        }
+		return wizardPages;
+	}
 
-        return wizardPages;
-    }
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	}
 
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-    }
+	private static ImportLiferayModuleProjectOp _createDefaultOp() {
+		return ImportLiferayModuleProjectOp.TYPE.instantiate();
+	}
 
-    private static ImportLiferayModuleProjectOp createDefaultOp()
-    {
-        return ImportLiferayModuleProjectOp.TYPE.instantiate();
-    }
+	private boolean _firstErrorMessageRemoved = false;
+
 }

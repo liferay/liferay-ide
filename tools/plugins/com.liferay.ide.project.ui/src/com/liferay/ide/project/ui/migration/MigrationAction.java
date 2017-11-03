@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.migration;
 
@@ -20,13 +19,11 @@ import com.liferay.ide.ui.action.AbstractCommandAction;
 /**
  * @author Andy Wu
  */
-public class MigrationAction extends AbstractCommandAction
-{
+public class MigrationAction extends AbstractCommandAction {
 
-    @Override
-    protected String getCommandId()
-    {
-        return "com.liferay.ide.project.ui.migrateProject";
-    }
+	@Override
+	protected String getCommandId() {
+		return "com.liferay.ide.project.ui.migrateProject";
+	}
 
 }

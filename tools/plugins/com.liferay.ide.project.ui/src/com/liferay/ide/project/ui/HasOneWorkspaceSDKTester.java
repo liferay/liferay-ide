@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui;
 
@@ -23,29 +22,24 @@ import org.eclipse.core.expressions.PropertyTester;
 /**
  * @author Simon Jiang
  */
+public class HasOneWorkspaceSDKTester extends PropertyTester {
 
-public class HasOneWorkspaceSDKTester extends PropertyTester
-{
+	@Override
+	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
+		boolean retVal = false;
 
-    @Override
-    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
-    {
-        boolean retVal = false;
-        try
-        {
-            SDK workspaceSDK = SDKUtil.getWorkspaceSDK();
+		try {
+			SDK workspaceSDK = SDKUtil.getWorkspaceSDK();
 
-            if( workspaceSDK != null )
-            {
-                retVal = true;
-            }
+			if (workspaceSDK != null) {
+				retVal = true;
+			}
+		}
+		catch (Exception e) {
+			ProjectUI.logError(e);
+		}
 
-        }
-        catch( Exception e )
-        {
-            ProjectUI.logError( e );
-        }
+		return retVal;
+	}
 
-        return retVal;
-    }
 }

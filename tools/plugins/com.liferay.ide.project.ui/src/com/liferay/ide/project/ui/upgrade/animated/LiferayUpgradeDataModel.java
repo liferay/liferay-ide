@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
@@ -28,203 +27,236 @@ import org.eclipse.sapphire.modeling.annotations.Service;
  * @author Simon Jiang
  * @author Andy Wu
  */
-public interface LiferayUpgradeDataModel extends Element
-{
+public interface LiferayUpgradeDataModel extends Element {
 
-    String DEFAULT_BUNDLE_URL = "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.3-ga4/liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip";
+	public Value<Path> getBackupLocation();
 
-    ElementType TYPE = new ElementType( LiferayUpgradeDataModel.class );
+	public ElementType TYPE = new ElementType(LiferayUpgradeDataModel.class);
 
-    // *** SdkLocation ***
+	// *** SdkLocation ***
 
-    @Type( base = Path.class )
-    @Service( impl = ProjectLocationValidationService.class )
-    ValueProperty PROP_SDK_LOCATION = new ValueProperty( TYPE, "SdkLocation" );
+	public Value<Boolean> getBackupSdk();
 
-    Value<Path> getSdkLocation();
-    void setSdkLocation( String sdkLocation );
-    void setSdkLocation( Path sdkLocation );
+	public Value<String> getBundleName();
 
-    // *** Layout ***
+	public Value<String> getBundleUrl();
 
-    ValueProperty PROP_LAYOUT = new ValueProperty( TYPE, "Layout" );
+	public Value<Path> getConvertedProjectLocation();
 
-    Value<String> getLayout();
-    void setLayout( String Layout );
+	// *** Layout ***
 
-    // *** Liferay70ServerName ***
+	public Value<Boolean> getConvertLiferayWorkspace();
 
-    ValueProperty PROP_LIFERAY_70_SERVER_NAME = new ValueProperty( TYPE, "Liferay70ServerName" );
+	public Value<Boolean> getDownloadBundle();
 
-    Value<String> getLiferay70ServerName();
-    void setLiferay70ServerName( String value );
+	public Value<Boolean> getHasExt();
 
-    // *** Liferay62ServerLocation ***
+	// *** Liferay70ServerName ***
 
-    ValueProperty PROP_LIFERAY_62_SERVER_LOCATION = new ValueProperty( TYPE, "Liferay62ServerLocation" );
+	public Value<Boolean> getHasHook();
 
-    Value<String> getLiferay62ServerLocation();
-    void setLiferay62ServerLocation( String value );
+	public Value<Boolean> getHasLayout();
 
-    // *** BundleName ***
+	public Value<Boolean> getHasMavenProject();
 
-    @Service( impl = BundleNameValidationService.class )
-    @DefaultValue( text = "Liferay 7.x" )
-    ValueProperty PROP_BUNDLE_NAME = new ValueProperty( TYPE, "BundleName" );
+	// *** Liferay62ServerLocation ***
 
-    Value<String> getBundleName();
-    void setBundleName( String BundleName );
+	public Value<Boolean> getHasPortlet();
 
-    // *** BundleUrl ***
+	public Value<Boolean> getHasServiceBuilder();
 
-    @Service( impl = BundleUrlValidationService.class )
-    @DefaultValue( text = DEFAULT_BUNDLE_URL )
-    ValueProperty PROP_BUNDLE_URL = new ValueProperty( TYPE, "BundleUrl" );
+	public Value<Boolean> getHasTheme();
 
-    Value<String> getBundleUrl();
-    void setBundleUrl( String BundleUrl );
+	// *** BundleName ***
 
-    // *** HasMavenProject ***
+	public Value<Boolean> getHasWeb();
 
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_HAS_MAVEN_PROJECT = new ValueProperty( TYPE, "HasMavenProject" );
+	public Value<Boolean> getImportFinished();
 
-    Value<Boolean> getHasMavenProject();
-    void setHasMavenProject( String HasMavenProject );
-    void setHasMavenProject( Boolean HasMavenProject );
+	public Value<String> getLayout();
 
-    // *** HasHook ***
+	// *** BundleUrl ***
 
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_HAS_HOOK = new ValueProperty( TYPE, "HasHook" );
+	public Value<String> getLiferay62ServerLocation();
 
-    Value<Boolean> getHasHook();
-    void setHasHook( String hasHook );
-    void setHasHook( Boolean hasHook );
+	public Value<String> getLiferay70ServerName();
 
-    // *** HasPortlet ***
+	public Value<Path> getSdkLocation();
 
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_HAS_PORTLET = new ValueProperty( TYPE, "HasPortlet" );
+	// *** HasMavenProject ***
 
-    Value<Boolean> getHasPortlet();
-    void setHasPortlet( String hasPortlet );
-    void setHasPortlet( Boolean hasPortlet );
+	public void setBackupLocation(Path backupLocation);
 
-    // *** HasTheme ***
+	public void setBackupLocation(String backupLocation);
 
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_HAS_THEME = new ValueProperty( TYPE, "HasTheme" );
+	public void setBackupSdk(Boolean backupSdk);
 
-    Value<Boolean> getHasTheme();
-    void setHasTheme( String hasTheme );
-    void setHasTheme( Boolean hasTheme );
+	public void setBackupSdk(String backupSdk);
 
-    // *** HasExt ***
+	// *** HasHook ***
 
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_HAS_EXT = new ValueProperty( TYPE, "HasExt" );
+	public void setBundleName(String bundleName);
 
-    Value<Boolean> getHasExt();
-    void setHasExt( String hasExt );
-    void setHasExt( Boolean hasExt );
+	public void setBundleUrl(String bundleUrl);
 
-    // *** HasServiceBuilder ***
+	public void setConvertedProjectLocation(Path convertedProjectLocation);
 
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_HAS_SERVICE_BUILDER = new ValueProperty( TYPE, "HasServiceBuilder" );
+	public void setConvertedProjectLocation(String convertedProjectLocation);
 
-    Value<Boolean> getHasServiceBuilder();
-    void setHasServiceBuilder( String hasServiceBuilder );
-    void setHasServiceBuilder( Boolean hasServiceBuilder );
+	// *** HasPortlet ***
 
-    // *** HasLayout ***
+	public void setConvertLiferayWorkspace(Boolean convertLiferayWorkspace);
 
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_HAS_LAYOUT = new ValueProperty( TYPE, "HasLayout" );
+	public void setConvertLiferayWorkspace(String convertLiferayWorkspace);
 
-    Value<Boolean> getHasLayout();
-    void setHasLayout( String hasLayout );
-    void setHasLayout( Boolean hasLayout );
+	public void setDownloadBundle(Boolean downloadBundle);
 
-    // *** HasWeb ***
+	public void setDownloadBundle(String downloadBundle);
 
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_HAS_WEB = new ValueProperty( TYPE, "HasWeb" );
+	// *** HasTheme ***
 
-    Value<Boolean> getHasWeb();
-    void setHasWeb( String hasWeb );
-    void setHasWeb( Boolean hasWeb );
+	public void setHasExt(Boolean hasExt);
 
-    // *** ConvertedProjectLocation ***
+	public void setHasExt(String hasExt);
 
-    @Type( base = Path.class )
-    @Service( impl = ConvertedProjectLocationValidationService.class )
-    ValueProperty PROP_CONVERTED_PROJECT_LOCATION = new ValueProperty( TYPE, "ConvertedProjectLocation" );
+	public void setHasHook(Boolean hasHook);
 
-    Value<Path> getConvertedProjectLocation();
+	public void setHasHook(String hasHook);
 
-    void setConvertedProjectLocation( String convertedProjectLocation );
-    void setConvertedProjectLocation( Path convertedProjectLocation );
+	// *** HasExt ***
 
-    // *** ConvertLiferayWorkspace ***
+	public void setHasLayout(Boolean hasLayout);
 
-    @Type(base = Boolean.class)
-    @DefaultValue(text = "false")
-    ValueProperty PROP_CONVERT_LIFERAY_WORKSPACE = new ValueProperty( TYPE, "ConvertLiferayWorkspace" );
+	public void setHasLayout(String hasLayout);
 
-    Value<Boolean> getConvertLiferayWorkspace();
+	public void setHasMavenProject(Boolean hasMavenProject);
 
-    void setConvertLiferayWorkspace(String convertLiferayWorkspace);
-    void setConvertLiferayWorkspace(Boolean convertLiferayWorkspace);
+	public void setHasMavenProject(String hasMavenProject);
 
-    // *** DownloadBundle ***
+	// *** HasServiceBuilder ***
 
-    @Type( base = Boolean.class )
-    @DefaultValue(text = "true")
-    ValueProperty PROP_DOWNLOAD_BUNDLE = new ValueProperty( TYPE, "downloadBundle" );
+	public void setHasPortlet(Boolean hasPortlet);
 
-    Value<Boolean> getDownloadBundle();
+	public void setHasPortlet(String hasPortlet);
 
-    void setDownloadBundle( String downloadBundle );
+	public void setHasServiceBuilder(Boolean hasServiceBuilder);
 
-    void setDownloadBundle( Boolean downloadBundle );
+	public void setHasServiceBuilder(String hasServiceBuilder);
 
-    // *** BackupSdk ***
+	// *** HasLayout ***
 
-    @Type( base = Boolean.class )
-    @DefaultValue(text = "false")
-    ValueProperty PROP_BACKUP_SDK = new ValueProperty( TYPE, "BackupSdk" );
-    Value<Boolean> getBackupSdk();
+	public void setHasTheme(Boolean hasTheme);
 
-    void setBackupSdk( String backupSdk );
-    void setBackupSdk( Boolean backupSdk );
+	public void setHasTheme(String hasTheme);
 
-    // *** BackupLocation ***
+	public void setHasWeb(Boolean hasWeb);
 
-    @Type( base = Path.class )
-    @Service( impl = BackupLocationValidationService.class )
-    ValueProperty PROP_BACKUP_LOCATION = new ValueProperty( TYPE, "BackupLocation" );
-    Value<Path> getBackupLocation();
+	public void setHasWeb(String hasWeb);
 
-    void setBackupLocation( String backupLocation );
-    void setBackupLocation( Path backupLocation );
+	// *** HasWeb ***
 
-    // *** ImportFinished ***
+	public void setImportFinished(Boolean importFinished);
 
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_IMPORT_FINISHED = new ValueProperty( TYPE, "ImportFinished" );
-    Value<Boolean> getImportFinished();
+	public void setImportFinished(String importFinished);
 
-    void setImportFinished( String ImportFinished );
-    void setImportFinished( Boolean ImportFinished );
+	public void setLayout(String layout);
+
+	public void setLiferay62ServerLocation(String value);
+
+	// *** ConvertedProjectLocation ***
+
+	public void setLiferay70ServerName(String value);
+
+	public void setSdkLocation(Path sdkLocation);
+
+	public void setSdkLocation(String sdkLocation);
+
+	public String DEFAULT_BUNDLE_URL =
+		"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.3-ga4/liferay-ce-portal-tom" +
+			"cat-7.0-ga4-20170613175008905.zip";
+
+	// *** ConvertLiferayWorkspace ***
+
+	@Service(impl = BackupLocationValidationService.class)
+	@Type(base = Path.class)
+	public ValueProperty PROP_BACKUP_LOCATION = new ValueProperty(TYPE, "BackupLocation");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_BACKUP_SDK = new ValueProperty(TYPE, "BackupSdk");
+
+	@DefaultValue(text = "Liferay 7.x")
+	@Service(impl = BundleNameValidationService.class)
+	public ValueProperty PROP_BUNDLE_NAME = new ValueProperty(TYPE, "BundleName");
+
+	@DefaultValue(text = DEFAULT_BUNDLE_URL)
+	@Service(impl = BundleUrlValidationService.class)
+	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, "BundleUrl");
+
+	// *** DownloadBundle ***
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_CONVERT_LIFERAY_WORKSPACE = new ValueProperty(TYPE, "ConvertLiferayWorkspace");
+
+	@Service(impl = ConvertedProjectLocationValidationService.class)
+	@Type(base = Path.class)
+	public ValueProperty PROP_CONVERTED_PROJECT_LOCATION = new ValueProperty(TYPE, "ConvertedProjectLocation");
+
+	@DefaultValue(text = "true")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_DOWNLOAD_BUNDLE = new ValueProperty(TYPE, "downloadBundle");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_HAS_EXT = new ValueProperty(TYPE, "HasExt");
+
+	// *** BackupSdk ***
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_HAS_HOOK = new ValueProperty(TYPE, "HasHook");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_HAS_LAYOUT = new ValueProperty(TYPE, "HasLayout");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_HAS_MAVEN_PROJECT = new ValueProperty(TYPE, "HasMavenProject");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_HAS_PORTLET = new ValueProperty(TYPE, "HasPortlet");
+
+	// *** BackupLocation ***
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_HAS_SERVICE_BUILDER = new ValueProperty(TYPE, "HasServiceBuilder");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_HAS_THEME = new ValueProperty(TYPE, "HasTheme");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_HAS_WEB = new ValueProperty(TYPE, "HasWeb");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_IMPORT_FINISHED = new ValueProperty(TYPE, "ImportFinished");
+
+	// *** ImportFinished ***
+
+	public ValueProperty PROP_LAYOUT = new ValueProperty(TYPE, "Layout");
+
+	public ValueProperty PROP_LIFERAY_62_SERVER_LOCATION = new ValueProperty(TYPE, "Liferay62ServerLocation");
+
+	public ValueProperty PROP_LIFERAY_70_SERVER_NAME = new ValueProperty(TYPE, "Liferay70ServerName");
+
+	@Service(impl = ProjectLocationValidationService.class)
+	@Type(base = Path.class)
+	public ValueProperty PROP_SDK_LOCATION = new ValueProperty(TYPE, "SdkLocation");
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
@@ -22,6 +21,7 @@ import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageValidationLis
 import com.liferay.ide.ui.util.SWTUtil;
 
 import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,266 +38,241 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Simon Jiang
  * @author Terry Jia
  */
-public abstract class Page extends Composite implements PageActionListener, SelectionChangedListener
-{
+public abstract class Page extends Composite implements PageActionListener, SelectionChangedListener {
 
-    public static final int DEFAULT_PAGE_WIDTH = 500;
-    public static String WELCOME_PAGE_ID = "welcome";
-    public static String INIT_CONFIGURE_PROJECT_PAGE_ID = "initconfigureproject";
-    public static String UPGRADE_POM_PAGE_ID = "upgradepom";
-    public static String DESCRIPTORS_PAGE_ID = "descriptors";
-    public static String FINDBREACKINGCHANGES_PAGE_ID = "findbreackingchanges";
-    public static String BUILDSERVICE_PAGE_ID = "buildservice";
-    public static String LAYOUTTEMPLATE_PAGE_ID = "layouttemplate";
-    public static String CUSTOMJSP_PAGE_ID = "customjsp";
-    public static String EXTANDTHEME_PAGE_ID = "extandtheme";
-    public static String COMPILE_PAGE_ID = "compile";
-    public static String BUILD_PAGE_ID = "build";
-    public static String SUMMARY_PAGE_ID = "summary";
+	public static final int DEFAULT_PAGE_WIDTH = 500;
 
-    public static Control createHorizontalSpacer( Composite comp, int hSpan )
-    {
-        Label l = new Label( comp, SWT.NONE );
-        GridData gd = new GridData( GridData.FILL_HORIZONTAL );
-        gd.horizontalSpan = hSpan;
-        l.setLayoutData( gd );
-        return l;
-    }
+	public static String buildPageId = "build";
+	public static String buildservicePageId = "buildservice";
+	public static String compilePageId = "compile";
+	public static String customjspPageId = "customjsp";
+	public static String descriptorsPageId = "descriptors";
+	public static String extandthemePageId = "extandtheme";
+	public static String findbreackingchangesPageId = "findbreackingchanges";
+	public static String initConfigureProjectPageId = "initconfigureproject";
+	public static String layouttemplatePageId = "layouttemplate";
+	public static String summaryPageId = "summary";
+	public static String upgradePomPageId = "upgradepom";
+	public static String welcomePageId = "welcome";
 
-    public static Control createSeparator( Composite parent, int hspan )
-    {
-        Label label = new Label( parent, SWT.SEPARATOR | SWT.HORIZONTAL );
-        GridData gd = new GridData( SWT.FILL, SWT.CENTER, true, false, hspan, 1 );
-        label.setLayoutData( gd );
-        return label;
-    }
-    protected boolean canBack = true;
-    protected boolean canNext = true;
+	public static Control createHorizontalSpacer(Composite comp, int hSpan) {
+		Label l = new Label(comp, SWT.NONE);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 
-    protected LiferayUpgradeDataModel dataModel;
+		gd.horizontalSpan = hSpan;
 
-    protected final List<PageNavigatorListener> naviListeners =
-        Collections.synchronizedList( new ArrayList<PageNavigatorListener>() );
+		l.setLayoutData(gd);
 
-    private String pageId;
+		return l;
+	}
 
-    private int index;
+	public static Control createSeparator(Composite parent, int hspan) {
+		Label label = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, false, hspan, 1);
 
-    private String title = "title";
+		label.setLayoutData(gd);
 
-    protected PageAction[] actions;
+		return label;
+	}
 
-    private PageAction selectedAction;
+	public Page(
+		Composite parent, int style, LiferayUpgradeDataModel dataModel, String pageId, boolean hasFinishAndSkipAction) {
 
-    private PageAction pageFinishAction = new PageFinishAction();
+		super(parent, style);
 
-    private PageAction pageSkipAction = new PageSkipAction();
+		this.dataModel = dataModel;
 
-    protected final List<PageValidationListener> pageValidationListeners =
-        Collections.synchronizedList( new ArrayList<PageValidationListener>() );
+		setLayout(new GridLayout(getGridLayoutCount(), getGridLayoutEqualWidth()));
 
-    public Page(
-        Composite parent, int style, LiferayUpgradeDataModel dataModel, String pageId, boolean hasFinishAndSkipAction )
-    {
-        super( parent, style );
+		Label title = SWTUtil.createLabel(this, getPageTitle(), getGridLayoutCount());
 
-        this.dataModel = dataModel;
+		title.setFont(new Font(null, "Times New Roman", 14, SWT.NORMAL));
 
-        setLayout( new GridLayout( getGridLayoutCount(), getGridLayoutEqualWidth() ) );
+		createSpecialDescriptor(this, style);
 
-        Label title = SWTUtil.createLabel( this, getPageTitle(), getGridLayoutCount() );
-        title.setFont( new Font( null, "Times New Roman", 14, SWT.NORMAL ) );
+		setPageId(pageId);
 
-        createSpecialDescriptor( this, style );
+		if (hasFinishAndSkipAction) {
+			setActions(new PageAction[] {_pageFinishAction, _pageSkipAction});
+		}
+	}
 
-        setPageId( pageId );
+	public void addPageNavigateListener(PageNavigatorListener listener) {
+		this.naviListeners.add(listener);
+	}
 
-        if( hasFinishAndSkipAction )
-        {
-            setActions( new PageAction[] { pageFinishAction, pageSkipAction } );
-        }
-    }
+	public void addPageValidationListener(PageValidationListener listener) {
+		this.pageValidationListeners.add(listener);
+	}
 
-    public void addPageNavigateListener( PageNavigatorListener listener )
-    {
-        this.naviListeners.add( listener );
-    }
+	public void createSpecialDescriptor(Composite parent, int style) {
+	}
 
-    public void addPageValidationListener( PageValidationListener listener )
-    {
-        this.pageValidationListeners.add( listener );
-    }
+	@Override
+	public boolean equals(Object obj) {
+		Page comp = (Page)obj;
 
-    protected Label createLabel( Composite composite, String text )
-    {
-        Label label = new Label( composite, SWT.NONE );
-        label.setText( text );
+		if (_pageId == comp._pageId) {
+			return true;
+		}
 
-        GridDataFactory.generate( label, 2, 1 );
+		return false;
+	}
 
-        return label;
-    }
+	public PageAction[] getActions() {
+		return actions;
+	}
 
-    public void createSpecialDescriptor( Composite parent, int style )
-    {
-    }
+	public int getGridLayoutCount() {
+		return 1;
+	}
 
-    protected Text createTextField( Composite composite, int style )
-    {
-        Text text = new Text( composite, SWT.BORDER | style );
-        text.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+	public boolean getGridLayoutEqualWidth() {
+		return true;
+	}
 
-        return text;
-    }
+	public final int getIndex() {
+		return _index;
+	}
 
-    protected boolean doNextOperation()
-    {
-        return true;
-    }
+	public String getPageId() {
+		return _pageId;
+	}
 
-    @Override
-    public boolean equals( Object obj )
-    {
-        Page comp = (Page) obj;
+	public abstract String getPageTitle();
 
-        return this.pageId == comp.pageId;
-    }
+	public PageAction getSelectedAction() {
+		return _selectedAction;
+	}
 
-    public PageAction[] getActions()
-    {
-        return this.actions;
-    }
+	public PageAction getSelectedAction(String actionName) {
+		if (actionName.equals("PageFinishAction")) {
+			return _pageFinishAction;
+		}
 
-    public int getGridLayoutCount()
-    {
-        return 1;
-    }
+		if (actionName.equals("PageSkipAction")) {
+			return _pageSkipAction;
+		}
 
-    public boolean getGridLayoutEqualWidth()
-    {
-        return true;
-    }
+		return _selectedAction;
+	}
 
-    public final int getIndex()
-    {
-        return index;
-    }
+	public String getTitle() {
+		return _title;
+	}
 
-    public String getPageId()
-    {
-        return pageId;
-    }
+	@Override
+	public void onPageAction(PageActionEvent event) {
+	}
 
-    public abstract String getPageTitle();
+	@Override
+	public void onSelectionChanged(int targetSelection) {
+	}
 
-    public PageAction getSelectedAction()
-    {
-        return selectedAction;
-    }
+	public final void setActions(PageAction[] actions) {
+		this.actions = actions;
+	}
 
-    public PageAction getSelectedAction( String actionName )
-    {
-        if( actionName.equals( "PageFinishAction" ) )
-        {
-            return pageFinishAction;
-        }
-        if( actionName.equals( "PageSkipAction" ) )
-        {
-            return pageSkipAction;
-        }
-        return selectedAction;
-    }
+	public void setIndex(int index) {
+		_index = index;
+	}
 
-    protected final Image loadImage( String name )
-    {
-        URL url = null;
+	public void setPageId(String pageId) {
+		_pageId = pageId;
+	}
 
-        try
-        {
-            url = ProjectUI.getDefault().getBundle().getEntry( "images/" + name );
-        }
-        catch( Exception e )
-        {
-        }
+	public void setSelectedAction(PageAction selectedAction) {
+		_selectedAction = selectedAction;
+	}
 
-        ImageDescriptor imagedesc = ImageDescriptor.createFromURL( url );
+	public void setTitle(String title) {
+		_title = title;
+	}
 
-        Image image = imagedesc.createImage();
+	protected Label createLabel(Composite composite, String text) {
+		Label label = new Label(composite, SWT.NONE);
 
-        return image;
-    }
+		label.setText(text);
 
-    public String getTitle()
-    {
-        return this.title;
-    }
+		GridDataFactory.generate(label, 2, 1);
 
-    public final void setActions( PageAction[] actions )
-    {
-        this.actions = actions;
-    }
+		return label;
+	}
 
-    protected void setBackPage( boolean canBack )
-    {
-        this.canBack = canBack;
-    }
+	protected Text createTextField(Composite composite, int style) {
+		Text text = new Text(composite, SWT.BORDER | style);
 
-    public void setIndex( int index )
-    {
-        this.index = index;
-    }
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-    protected void setNextPage( boolean canBack )
-    {
-        this.canNext = canBack;
-    }
+		return text;
+	}
 
-    public void setPageId( String pageId )
-    {
-        this.pageId = pageId;
-    }
+	protected boolean doNextOperation() {
+		return true;
+	}
 
-    public void setSelectedAction( PageAction selectedAction )
-    {
-        this.selectedAction = selectedAction;
-    }
+	protected final Image loadImage(String name) {
+		URL url = null;
 
-    public void setTitle( String title )
-    {
-        this.title = title;
-    }
+		try {
+			url = bundle.getEntry("images/" + name);
+		}
+		catch (Exception e) {
+		}
 
-    protected boolean showBackPage()
-    {
-        return canBack;
-    }
+		ImageDescriptor imagedesc = ImageDescriptor.createFromURL(url);
 
-    protected boolean showNextPage()
-    {
-        return canNext;
-    }
+		Image image = imagedesc.createImage();
 
-    protected void triggerValidationEvent( PageValidateEvent pageValidationEvent )
-    {
-        pageValidationEvent.setPageId( getPageId() );
+		return image;
+	}
 
-        for( PageValidationListener listener : pageValidationListeners )
-        {
-            listener.onValidation( pageValidationEvent );
-        }
-    }
+	protected void setBackPage(boolean canBack) {
+		this.canBack = canBack;
+	}
 
-    @Override
-    public void onSelectionChanged( int targetSelection )
-    {
-    }
+	protected void setNextPage(boolean canNext) {
+		this.canNext = canBack;
+	}
 
-    @Override
-    public void onPageAction(PageActionEvent event)
-    {
-    }
+	protected boolean showBackPage() {
+		return canBack;
+	}
+
+	protected boolean showNextPage() {
+		return canNext;
+	}
+
+	protected void triggerValidationEvent(PageValidateEvent pageValidationEvent) {
+		pageValidationEvent.setPageId(getPageId());
+
+		for (PageValidationListener listener : pageValidationListeners) {
+			listener.onValidation(pageValidationEvent);
+		}
+	}
+
+	protected PageAction[] actions;
+	protected Bundle bundle = ProjectUI.getDefault().getBundle();
+	protected boolean canBack = true;
+	protected boolean canNext = true;
+	protected LiferayUpgradeDataModel dataModel;
+	protected final List<PageNavigatorListener> naviListeners = Collections.synchronizedList(
+		new ArrayList<PageNavigatorListener>());
+	protected final List<PageValidationListener> pageValidationListeners = Collections.synchronizedList(
+		new ArrayList<PageValidationListener>());
+	protected ProjectUI projectUI = ProjectUI.getDefault();
+
+	private int _index;
+	private PageAction _pageFinishAction = new PageFinishAction();
+	private String _pageId;
+	private PageAction _pageSkipAction = new PageSkipAction();
+	private PageAction _selectedAction;
+	private String _title = "title";
+
 }

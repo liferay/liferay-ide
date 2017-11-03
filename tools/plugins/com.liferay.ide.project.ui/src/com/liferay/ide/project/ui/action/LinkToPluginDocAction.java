@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.action;
 
@@ -26,38 +25,32 @@ import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
-
 /**
  * @author Kuo Zhang
  */
-public class LinkToPluginDocAction extends SapphireActionHandler
-{
-    private String url;
+public class LinkToPluginDocAction extends SapphireActionHandler {
 
-    @Override
-    public void init( SapphireAction action, ActionHandlerDef def )
-    {
-        super.init( action, def );
+	@Override
+	public void init(SapphireAction action, ActionHandlerDef def) {
+		super.init(action, def);
 
-        url = def.getParam( "url" );
-    }
+		_url = def.getParam("url");
+	}
 
-    @Override
-    protected Object run( Presentation context )
-    {
-        final IWorkbenchBrowserSupport support = PlatformUI.getWorkbench().getBrowserSupport();
+	@Override
+	protected Object run(Presentation context) {
+		final IWorkbenchBrowserSupport support = PlatformUI.getWorkbench().getBrowserSupport();
 
-        try
-        {
-            support.getExternalBrowser().openURL( new URL( url ) );
+		try {
+			support.getExternalBrowser().openURL(new URL(_url));
+		}
+		catch (Exception ex) {
+			ProjectUI.logError("Could not open external browser.", ex);
+		}
 
-        }
-        catch( Exception ex )
-        {
-            ProjectUI.logError( "Could not open external browser.", ex );
-        }
+		return null;
+	}
 
-        return null;
-    }
+	private String _url;
 
 }

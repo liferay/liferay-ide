@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.wizard;
 
@@ -36,81 +35,83 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizardPa
 import org.eclipse.wst.common.project.facet.ui.IFacetWizardPage;
 import org.eclipse.wst.common.project.facet.ui.IWizardContext;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class PortletPluginFacetInstallPage extends DataModelWizardPage
-    implements IFacetWizardPage, IPluginProjectDataModelProperties
-{
+@SuppressWarnings("restriction")
+public class PortletPluginFacetInstallPage
+	extends DataModelWizardPage implements IFacetWizardPage, IPluginProjectDataModelProperties {
 
-    public PortletPluginFacetInstallPage()
-    {
-        super( DataModelFactory.createDataModel( new PortletPluginFacetInstallDataModelProvider() ), "portlet.plugin.facet.install.page" ); //$NON-NLS-1$
+	public PortletPluginFacetInstallPage() {
+		super(
+			DataModelFactory.createDataModel(new PortletPluginFacetInstallDataModelProvider()),
+			"portlet.plugin.facet.install.page");
 
-        setImageDescriptor( ImageDescriptor.createFromURL( ProjectUI.getDefault().getBundle().getEntry(
-            "/icons/wizban/plugin_project.png" ) ) ); //$NON-NLS-1$
+		Bundle bundle = ProjectUI.getDefault().getBundle();
 
-        setTitle( Msgs.modifyLiferayPluginProject );
+		setImageDescriptor(ImageDescriptor.createFromURL(bundle.getEntry("/icons/wizban/plugin_project.png")));
 
-        setMessage(
-            Msgs.convertingProjectsNotAvailable, IMessageProvider.WARNING );
-    }
+		setTitle(Msgs.modifyLiferayPluginProject);
 
-    public void setConfig( Object config )
-    {
-        model.removeListener( this );
+		setMessage(Msgs.convertingProjectsNotAvailable, IMessageProvider.WARNING);
+	}
 
-        synchHelper.dispose();
+	public void setConfig(Object config) {
+		model.removeListener(this);
 
-        model = (IDataModel) config;
+		synchHelper.dispose();
 
-        model.addListener( this );
+		model = (IDataModel)config;
 
-        synchHelper = initializeSynchHelper( model );
-    }
+		model.addListener(this);
 
-    public void setWizardContext( IWizardContext context )
-    {
-    }
+		synchHelper = initializeSynchHelper(model);
+	}
 
-    public void transferStateToConfig()
-    {
-    }
+	public void setWizardContext(IWizardContext context) {
+	}
 
-    @Override
-    protected Composite createTopLevelComposite( Composite parent )
-    {
-        Composite topComposite = SWTUtil.createTopComposite( parent, 2 );
+	public void transferStateToConfig() {
+	}
 
-        Label label = SWTUtil.createLabel( topComposite, StringPool.EMPTY, 1 );
+	@Override
+	protected Composite createTopLevelComposite(Composite parent) {
+		Composite topComposite = SWTUtil.createTopComposite(parent, 2);
 
-        label.setImage( PlatformUI.getWorkbench().getSharedImages().getImage( ISharedImages.IMG_OBJS_INFO_TSK ) );
+		Label label = SWTUtil.createLabel(topComposite, StringPool.EMPTY, 1);
 
-        label = SWTUtil.createLabel( topComposite, SWT.WRAP, Msgs.bestWayConvertProject, 1 );
-        GridData gd = new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 );
-        gd.widthHint = 400;
+		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 
-        label.setLayoutData( gd );
+		label.setImage(sharedImages.getImage(ISharedImages.IMG_OBJS_INFO_TSK));
 
-        return topComposite;
-    }
+		label = SWTUtil.createLabel(topComposite, SWT.WRAP, Msgs.bestWayConvertProject, 1);
 
-    @Override
-    protected String[] getValidationPropertyNames()
-    {
-        return new String[] { LIFERAY_SDK_NAME };
-    }
+		GridData gd = new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1);
 
-    private static class Msgs extends NLS
-    {
-        public static String bestWayConvertProject;
-        public static String convertingProjectsNotAvailable;
-        public static String modifyLiferayPluginProject;
+		gd.widthHint = 400;
 
-        static
-        {
-            initializeMessages( PortletPluginFacetInstallPage.class.getName(), Msgs.class );
-        }
-    }
+		label.setLayoutData(gd);
+
+		return topComposite;
+	}
+
+	@Override
+	protected String[] getValidationPropertyNames() {
+		return new String[] {LIFERAY_SDK_NAME};
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String bestWayConvertProject;
+		public static String convertingProjectsNotAvailable;
+		public static String modifyLiferayPluginProject;
+
+		static {
+			initializeMessages(PortletPluginFacetInstallPage.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

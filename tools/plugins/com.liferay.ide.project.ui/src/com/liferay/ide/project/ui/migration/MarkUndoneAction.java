@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.ui.migration;
 
 import com.liferay.blade.api.Problem;
@@ -26,49 +26,41 @@ import org.eclipse.jface.viewers.ISelectionProvider;
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public class MarkUndoneAction extends ProblemAction
-{
+public class MarkUndoneAction extends ProblemAction {
 
-    public MarkUndoneAction()
-    {
-        this( new DummySelectionProvider() );
-    }
+	public MarkUndoneAction() {
+		this(new DummySelectionProvider());
+	}
 
-    public MarkUndoneAction( ISelectionProvider provider )
-    {
-        super( provider, "Mark undone" );
-    }
+	public MarkUndoneAction(ISelectionProvider provider) {
+		super(provider, "Mark undone");
+	}
 
-    public void run( final Problem problem, final ISelectionProvider provider )
-    {
-        super.run( problem, provider );
+	public void run(final Problem problem, final ISelectionProvider provider) {
+		super.run(problem, provider);
 
-        problem.setStatus( Problem.STATUS_NOT_RESOLVED );
+		problem.setStatus(Problem.STATUS_NOT_RESOLVED);
 
-        MigrationUtil.updateMigrationProblemToStore( problem );
-    }
+		MigrationUtil.updateMigrationProblemToStore(problem);
+	}
 
-    @Override
-    protected IStatus runWithMarker( Problem problem, IMarker marker )
-    {
-        IStatus retval = Status.OK_STATUS;
+	@Override
+	protected IStatus runWithMarker(Problem problem, IMarker marker) {
+		IStatus retval = Status.OK_STATUS;
 
-        try
-        {
-            if( marker.exists() )
-            {
-                marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_ERROR );
-                marker.setAttribute( "migrationProblem.resolved", false );
-            }
+		try {
+			if (marker.exists()) {
+				marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+				marker.setAttribute("migrationProblem.resolved", Boolean.FALSE);
+			}
 
-            problem.setStatus( Problem.STATUS_NOT_RESOLVED );
-        }
-        catch( CoreException e )
-        {
-            retval = e.getStatus();
-        }
+			problem.setStatus(Problem.STATUS_NOT_RESOLVED);
+		}
+		catch (CoreException ce) {
+			retval = ce.getStatus();
+		}
 
-        return retval;
-    }
+		return retval;
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.wizard;
 
@@ -38,168 +37,140 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
  * @author Cindy Li
  * @author Kuo Zhang
  */
-public class ValidProjectChecker
-{
+public class ValidProjectChecker {
 
-    private static final String ATT_ID = "id"; //$NON-NLS-1$
+	public ValidProjectChecker(String wizardId) {
+		this.wizardId = wizardId;
+		init();
+	}
 
-    private static final String ATT_NAME = "name"; //$NON-NLS-1$
+	public void checkValidProjectTypes() {
+		IProject[] projects = CoreUtil.getAllProjects();
+		boolean hasValidProjectTypes = false;
 
-    private static final String ATT_VALID_PROJECT_TYPES = "validProjectTypes"; //$NON-NLS-1$
+		boolean hasJsfFacet = false;
 
-    private static final String TAG_NEW_WIZARDS = "newWizards"; //$NON-NLS-1$
+		for (IProject project : projects) {
+			if (ProjectUtil.isLiferayFacetedProject(project)) {
+				Set<IProjectFacetVersion> facets = ProjectUtil.getFacetedProject(project).getProjectFacets();
 
-    private static final String TAG_PARAMETER = "parameter"; //$NON-NLS-1$
+				if ((validProjectTypes != null) && (facets != null)) {
+					String[] validTypes = validProjectTypes.split(StringPool.COMMA);
 
-    private static final String TAG_VALUE = "value"; //$NON-NLS-1$
+					for (String validProjectType : validTypes) {
+						for (IProjectFacetVersion facet : facets) {
+							String id = facet.getProjectFacet().getId();
 
-    private static final String TAG_WIZARD = "wizard"; //$NON-NLS-1$
+							if (jsfPortlet && id.equals("jst.jsf")) {
+								hasJsfFacet = true;
+							}
 
-    protected boolean isJsfPortlet = false;
-    protected String validProjectTypes = null;
-    protected String wizardId = null;
-    protected String wizardName = null;
+							if (id.startsWith("liferay.") && id.equals("liferay." + validProjectType)) {
+								hasValidProjectTypes = true;
+							}
+						}
+					}
+				}
+			}
+		}
 
-    public ValidProjectChecker( String wizardId )
-    {
-        this.wizardId = wizardId;
-        init();
-    }
+		if (jsfPortlet) {
+			hasValidProjectTypes = hasJsfFacet && hasValidProjectTypes;
+		}
 
-    public void checkValidProjectTypes()
-    {
-        IProject[] projects = CoreUtil.getAllProjects();
-        boolean hasValidProjectTypes = false;
+		if (!hasValidProjectTypes) {
+			final Shell activeShell = Display.getDefault().getActiveShell();
 
-        boolean hasJsfFacet = false;
+			Boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
+				activeShell, NLS.bind(Msgs.newElement, wizardName),
+				NLS.bind(Msgs.noSuitableLiferayProjects, wizardName));
 
-        for( IProject project : projects )
-        {
-            if( ProjectUtil.isLiferayFacetedProject( project ) )
-            {
-                Set<IProjectFacetVersion> facets = ProjectUtil.getFacetedProject( project ).getProjectFacets();
+			if (openNewLiferayProjectWizard) {
+				final Action defaultAction = NewPluginProjectDropDownAction.getPluginProjectAction();
 
-                if( validProjectTypes != null && facets != null )
-                {
-                    String[] validTypes = validProjectTypes.split( StringPool.COMMA );
+				if (defaultAction != null) {
+					defaultAction.run();
 
-                    for( String validProjectType : validTypes )
-                    {
-                        for( IProjectFacetVersion facet : facets )
-                        {
-                            String id = facet.getProjectFacet().getId();
+					checkValidProjectTypes();
+				}
+			}
+		}
+	}
 
-                            if( isJsfPortlet && id.equals( "jst.jsf" ) ) //$NON-NLS-1$
-                            {
-                                hasJsfFacet = true;
-                            }
+	public void setJsfPortlet(boolean jsfPortlet) {
+		this.jsfPortlet = jsfPortlet;
+	}
 
-                            if( id.startsWith( "liferay." ) && id.equals( "liferay." + validProjectType ) ) //$NON-NLS-1$ //$NON-NLS-2$
-                            {
-                                hasValidProjectTypes = true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+	public void setValidProjectTypes(String validProjectTypes) {
+		this.validProjectTypes = validProjectTypes;
+	}
 
-        if( isJsfPortlet )
-        {
-            hasValidProjectTypes = hasJsfFacet && hasValidProjectTypes;
-        }
+	protected void init() {
+		if ((wizardId != null) && wizardId.equals("com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet")) {
+			setJsfPortlet(true);
+		}
 
-        if( ! hasValidProjectTypes )
-        {
-            final Shell activeShell = Display.getDefault().getActiveShell();
+		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(
+			PlatformUI.PLUGIN_ID, _tag_new_wizards);
 
-            Boolean openNewLiferayProjectWizard = 
-                MessageDialog.openQuestion( activeShell, NLS.bind( Msgs.newElement, wizardName ),
-                    NLS.bind( Msgs.noSuitableLiferayProjects, wizardName ) );
+		if (extensionPoint != null) {
+			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
 
-            if( openNewLiferayProjectWizard )
-            {
-                final Action defaultAction = NewPluginProjectDropDownAction.getPluginProjectAction();
+			for (IConfigurationElement element : elements) {
+				if (element.getName().equals(_tag_wizard) && element.getAttribute(_att_id).equals(wizardId)) {
 
-                if( defaultAction != null )
-                {
-                    defaultAction.run();
+					// getValidProjectTypesFromConfig( element )!=null &&
+					// isLiferayArtifactWizard(element,
+					// "liferay_artifact")
 
-                    this.checkValidProjectTypes();
-                }
-            }
-        }
-    }
+					setValidProjectTypes(_getValidProjectTypesFromConfig(element));
+					wizardName = element.getAttribute(_att_name);
+					break;
+				}
+			}
+		}
+	}
 
-    private String getValidProjectTypesFromConfig( IConfigurationElement config )
-    {
-        IConfigurationElement[] classElements = config.getChildren();
+	protected boolean jsfPortlet = false;
+	protected String validProjectTypes = null;
+	protected String wizardId = null;
+	protected String wizardName = null;
 
-        if( classElements.length > 0 )
-        {
-            for( IConfigurationElement classElement : classElements )
-            {
-                IConfigurationElement[] paramElements = classElement.getChildren( TAG_PARAMETER );
+	private String _getValidProjectTypesFromConfig(IConfigurationElement config) {
+		IConfigurationElement[] classElements = config.getChildren();
 
-                for( IConfigurationElement paramElement : paramElements )
-                {
-                    if( ATT_VALID_PROJECT_TYPES.equals( paramElement.getAttribute( ATT_NAME ) ) )
-                    {
-                        return paramElement.getAttribute( TAG_VALUE );
-                    }
-                }
-            }
-        }
+		if (classElements.length > 0) {
+			for (IConfigurationElement classElement : classElements) {
+				IConfigurationElement[] paramElements = classElement.getChildren(_tag_parameter);
 
-        return null;
-    }
+				for (IConfigurationElement paramElement : paramElements) {
+					if (_att_valid_project_types.equals(paramElement.getAttribute(_att_name))) {
+						return paramElement.getAttribute(_tag_value);
+					}
+				}
+			}
+		}
 
-    protected void init()
-    {
-        if( wizardId != null && wizardId.equals( "com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet" ) ) //$NON-NLS-1$
-        {
-            setJsfPortlet( true );
-        }
+		return null;
+	}
 
-        IExtensionPoint extensionPoint =
-            Platform.getExtensionRegistry().getExtensionPoint( PlatformUI.PLUGIN_ID, TAG_NEW_WIZARDS );
+	private static final String _att_id = "id";
+	private static final String _att_name = "name";
+	private static final String _att_valid_project_types = "validProjectTypes";
+	private static final String _tag_new_wizards = "newWizards";
+	private static final String _tag_parameter = "parameter";
+	private static final String _tag_value = "value";
+	private static final String _tag_wizard = "wizard";
 
-        if( extensionPoint != null )
-        {
-            IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
+	private static class Msgs extends NLS {
 
-            for( IConfigurationElement element : elements )
-            {
-                if( element.getName().equals( TAG_WIZARD ) && element.getAttribute( ATT_ID ).equals( wizardId ) )
-                {
-                    // getValidProjectTypesFromConfig( element )!=null && isLiferayArtifactWizard(element,
-                    // "liferay_artifact")
-                    setValidProjectTypes( getValidProjectTypesFromConfig( element ) );
-                    wizardName = element.getAttribute( ATT_NAME );
-                    break;
-                }
-            }
-        }
-    }
+		public static String newElement;
+		public static String noSuitableLiferayProjects;
 
-    public void setJsfPortlet( boolean isJsfPortlet )
-    {
-        this.isJsfPortlet = isJsfPortlet;
-    }
+		static {
+			initializeMessages(ValidProjectChecker.class.getName(), Msgs.class);
+		}
 
-    public void setValidProjectTypes( String validProjectTypes )
-    {
-        this.validProjectTypes = validProjectTypes;
-    }
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String newElement;
-        public static String noSuitableLiferayProjects;
-
-        static
-        {
-            initializeMessages( ValidProjectChecker.class.getName(), Msgs.class );
-        }
-    }
 }

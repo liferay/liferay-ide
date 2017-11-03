@@ -1,11 +1,16 @@
-/******************************************************************************
- * Copyright (c) 2006 BEA Systems, Inc.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.project.ui.wizard;
 
@@ -33,150 +38,132 @@ import org.eclipse.swt.widgets.Label;
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public class PluginClasspathContainerPage extends NewElementWizardPage
-    implements IClasspathContainerPage, IClasspathContainerPageExtension
-{
+public class PluginClasspathContainerPage
+	extends NewElementWizardPage implements IClasspathContainerPage, IClasspathContainerPageExtension {
 
-    private IProject ownerProject;
-    private String type;
+	public PluginClasspathContainerPage() {
+		super("PluginClasspathContainerPage");
+		setTitle(Msgs.liferayPluginAPILibrary);
+		setDescription(Msgs.containerManagesClasspathEntries);
+	}
 
-    private Combo typeCombo;
+	public void createControl(Composite parent) {
+		final Composite composite = new Composite(parent, SWT.NONE);
 
-    public PluginClasspathContainerPage()
-    {
-        super( "PluginClasspathContainerPage" ); //$NON-NLS-1$
-        setTitle( Msgs.liferayPluginAPILibrary );
-        setDescription( Msgs.containerManagesClasspathEntries );
-    }
+		composite.setLayout(new GridLayout(2, false));
 
-    public void createControl( Composite parent )
-    {
-        final Composite composite = new Composite( parent, SWT.NONE );
-        composite.setLayout( new GridLayout( 2, false ) );
+		final Label label = new Label(composite, SWT.NONE);
 
-        final Label label = new Label( composite, SWT.NONE );
-        label.setText( Msgs.liferayPluginTypeLabel );
+		label.setText(Msgs.liferayPluginTypeLabel);
 
-        final String[] types = new String[] { "portlet", "hook", "ext", "theme", "web" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		final String[] types = {"portlet", "hook", "ext", "theme", "web"};
 
-        this.typeCombo = new Combo( composite, SWT.READ_ONLY );
-        this.typeCombo.setItems( types );
+		_typeCombo = new Combo(composite, SWT.READ_ONLY);
 
-        final int index;
+		_typeCombo.setItems(types);
 
-        if( this.type != null )
-        {
-            index = indexOf( types, this.type );
-        }
-        else
-        {
-            if( ProjectUtil.isPortletProject( this.ownerProject ) )
-            {
-                index = 0;
-            }
-            else if( ProjectUtil.isHookProject( this.ownerProject ) )
-            {
-                index = 1;
-            }
-            else if( ProjectUtil.isExtProject( this.ownerProject ) )
-            {
-                index = 2;
-            }
-            else if( ProjectUtil.isThemeProject( this.ownerProject ) )
-            {
-                index = 3;
-            }
-            else if( ProjectUtil.isWebProject( this.ownerProject ) )
-            {
-                index = 4;
-            }
-            else
-            {
-                index = -1;
-            }
-        }
+		final int index;
 
-        if( index != -1 )
-        {
-            this.typeCombo.select( index );
-        }
+		if (_type != null) {
+			index = _indexOf(types, _type);
+		}
+		else {
+			if (ProjectUtil.isPortletProject(_ownerProject)) {
+				index = 0;
+			}
+			else if (ProjectUtil.isHookProject(_ownerProject)) {
+				index = 1;
+			}
+			else if (ProjectUtil.isExtProject(_ownerProject)) {
+				index = 2;
+			}
+			else if (ProjectUtil.isThemeProject(_ownerProject)) {
+				index = 3;
+			}
+			else if (ProjectUtil.isWebProject(_ownerProject)) {
+				index = 4;
+			}
+			else {
+				index = -1;
+			}
+		}
 
-        final GridData gd = new GridData();
-        gd.grabExcessHorizontalSpace = true;
-        gd.minimumWidth = 100;
+		if (index != -1) {
+			_typeCombo.select(index);
+		}
 
-        this.typeCombo.setLayoutData( gd );
+		final GridData gd = new GridData();
 
-        setControl( composite );
-    }
+		gd.grabExcessHorizontalSpace = true;
+		gd.minimumWidth = 100;
 
-    public boolean finish()
-    {
-        if( this.ownerProject != null && ProjectUtil.isLiferayFacetedProject( this.ownerProject ) )
-        {
-            return true;
-        }
-        else
-        {
-            setErrorMessage( Msgs.selectedProjectNotLiferayProject );
-            return false;
-        }
-    }
+		_typeCombo.setLayoutData(gd);
 
-    public IClasspathEntry getSelection()
-    {
-        IPath path = new Path( PluginClasspathContainerInitializer.ID + "/" ); //$NON-NLS-1$
+		setControl(composite);
+	}
 
-        final int index = this.typeCombo.getSelectionIndex();
+	public boolean finish() {
+		if ((_ownerProject != null) && ProjectUtil.isLiferayFacetedProject(_ownerProject)) {
+			return true;
+		}
+		else {
+			setErrorMessage(Msgs.selectedProjectNotLiferayProject);
 
-        if( index != -1 )
-        {
-            final String type = this.typeCombo.getItem( index );
-            path = path.append( type );
-        }
+			return false;
+		}
+	}
 
-        return JavaCore.newContainerEntry( path );
-    }
+	public IClasspathEntry getSelection() {
+		IPath path = new Path(PluginClasspathContainerInitializer.ID + "/");
 
-    public void initialize( IJavaProject project, IClasspathEntry[] currentEntries )
-    {
-        this.ownerProject = ( project == null ? null : project.getProject() );
-    }
+		final int index = _typeCombo.getSelectionIndex();
 
-    public void setSelection( IClasspathEntry entry )
-    {
-        final IPath path = entry == null ? null : entry.getPath();
+		if (index != -1) {
+			final String type = _typeCombo.getItem(index);
 
-        if( path != null && path.segmentCount() == 2 )
-        {
-            this.type = path.segment( 1 );
-        }
+			path = path.append(type);
+		}
 
-    }
+		return JavaCore.newContainerEntry(path);
+	}
 
-    private static int indexOf( final String[] array, final String str )
-    {
-        for( int i = 0; i < array.length; i++ )
-        {
-            if( array[i].equals( str ) )
-            {
-                return i;
-            }
-        }
+	public void initialize(IJavaProject project, IClasspathEntry[] currentEntries) {
+		_ownerProject = project == null ? null : project.getProject();
+	}
 
-        return -1;
-    }
+	public void setSelection(IClasspathEntry entry) {
+		final IPath path = entry == null ? null : entry.getPath();
 
-    private static class Msgs extends NLS
-    {
-        public static String containerManagesClasspathEntries;
-        public static String liferayPluginAPILibrary;
-        public static String liferayPluginTypeLabel;
-        public static String selectedProjectNotLiferayProject;
+		if ((path != null) && (path.segmentCount() == 2)) {
+			_type = path.segment(1);
+		}
+	}
 
-        static
-        {
-            initializeMessages( PluginClasspathContainerPage.class.getName(), Msgs.class );
-        }
-    }
+	private static int _indexOf(final String[] array, final String str) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i].equals(str)) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
+	private IProject _ownerProject;
+	private String _type;
+	private Combo _typeCombo;
+
+	private static class Msgs extends NLS {
+
+		public static String containerManagesClasspathEntries;
+		public static String liferayPluginAPILibrary;
+		public static String liferayPluginTypeLabel;
+		public static String selectedProjectNotLiferayProject;
+
+		static {
+			initializeMessages(PluginClasspathContainerPage.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

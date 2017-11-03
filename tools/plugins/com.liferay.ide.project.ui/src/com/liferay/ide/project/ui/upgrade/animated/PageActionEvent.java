@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
@@ -19,30 +18,25 @@ package com.liferay.ide.project.ui.upgrade.animated;
  * @author Simon Jiang
  * @author Andy Wu
  */
-public class PageActionEvent
-{
+public class PageActionEvent {
 
-    private int targetPageIndex;
+	public PageAction getAction() {
+		return _action;
+	}
 
-    private PageAction action;
+	public int getTargetPageIndex() {
+		return _targetPageIndex;
+	}
 
-    public PageAction getAction()
-    {
-        return this.action;
-    }
+	public void setAction(PageAction action) {
+		_action = action;
+	}
 
-    public int getTargetPageIndex()
-    {
-        return targetPageIndex;
-    }
+	public void setTargetPageIndex(int targetPageIndex) {
+		_targetPageIndex = targetPageIndex;
+	}
 
-    public void setAction( PageAction action )
-    {
-        this.action = action;
-    }
+	private PageAction _action;
+	private int _targetPageIndex;
 
-    public void setTargetPageIndex( int targetPageIndex )
-    {
-        this.targetPageIndex = targetPageIndex;
-    }
 }

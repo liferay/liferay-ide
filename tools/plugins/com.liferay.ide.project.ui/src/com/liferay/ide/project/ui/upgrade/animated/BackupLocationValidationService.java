@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,11 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
@@ -22,33 +22,31 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Andy Wu
  */
-public class BackupLocationValidationService extends ValidationService
-{
+public class BackupLocationValidationService extends ValidationService {
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-        Path location = op().getBackupLocation().content();
+		Value<Path> backupLocation = _op().getBackupLocation();
 
-        if( location != null )
-        {
-            if( !location.isAbsolute() )
-            {
-                return Status.createErrorStatus( "\"" + location.toPortableString() + "\" is not an absolute path." );
-            }
-            if( location.toFile().isFile() )
-            {
-                return Status.createErrorStatus( "\"" + location.toPortableString() + "\" is not a folder." );
-            }
-        }
+		Path location = backupLocation.content();
 
-        return retval;
-    }
+		if (location != null) {
+			if (!location.isAbsolute()) {
+				return Status.createErrorStatus("\"" + location.toPortableString() + "\" is not an absolute path.");
+			}
 
-    private LiferayUpgradeDataModel op()
-    {
-        return context( LiferayUpgradeDataModel.class );
-    }
+			if (location.toFile().isFile()) {
+				return Status.createErrorStatus("\"" + location.toPortableString() + "\" is not a folder.");
+			}
+		}
+
+		return retval;
+	}
+
+	private LiferayUpgradeDataModel _op() {
+		return context(LiferayUpgradeDataModel.class);
+	}
+
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component name="com.liferay.ide.project.ui.migration.IDEReporter" immediate="false">
-  <implementation class="com.liferay.ide.project.ui.migration.IDEReporter"/>
-  <service>
-    <provide interface="com.liferay.blade.api.Reporter"/>
-  </service>
-  <property name="service.ranking" type="Integer" value="100"/>
-  <property name="format" type="String" value="ide"/>
+<component immediate="false" name="com.liferay.ide.project.ui.migration.IDEReporter">
+	<implementation class="com.liferay.ide.project.ui.migration.IDEReporter" />
+	<service>
+		<provide interface="com.liferay.blade.api.Reporter" />
+	</service>
+	<property name="service.ranking" type="Integer" value="100" />
+	<property name="format" type="String" value="ide" />
 </component>

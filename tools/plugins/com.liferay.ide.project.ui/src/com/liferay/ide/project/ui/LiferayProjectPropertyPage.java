@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui;
 
@@ -66,288 +65,255 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.runtime.RuntimeManager;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.ServerCore;
+
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * @author Greg Amerson
  * @author Simon Jiang
  */
-public class LiferayProjectPropertyPage extends PropertyPage
-    implements IWorkbenchPropertyPage, IPluginProjectDataModelProperties
-{
+public class LiferayProjectPropertyPage
+	extends PropertyPage implements IWorkbenchPropertyPage, IPluginProjectDataModelProperties {
 
-    private Combo runtimeCombo;
-    private Text sdkLabel;
+	public LiferayProjectPropertyPage() {
+		setImageDescriptor(ProjectUI.imageDescriptorFromPlugin(ProjectUI.PLUGIN_ID, "/icons/liferay_logo_16.png"));
 
-    public LiferayProjectPropertyPage()
-    {
-        super();
+		noDefaultAndApplyButton();
+	}
 
-        setImageDescriptor( ProjectUI.imageDescriptorFromPlugin(
-            ProjectUI.PLUGIN_ID, "/icons/liferay_logo_16.png" ) ); //$NON-NLS-1$
+	@Override
+	public boolean performOk() {
+		final IProject proj = getProject();
 
-        noDefaultAndApplyButton();
-    }
+		if (SDKUtil.isSDKProject(proj)) {
+			if (_runtimeCombo != null) {
+				final String selectedRuntimeName = this._runtimeCombo.getText();
 
+				if (!CoreUtil.isNullOrEmpty(selectedRuntimeName)) {
+					final org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime =
+						RuntimeManager.getRuntime(selectedRuntimeName);
 
-    @Override
-    protected Control createContents( Composite parent )
-    {
-        Composite top = SWTUtil.createTopComposite( parent, 3 );
+					if (runtime != null) {
+						final IFacetedProject fProject = ProjectUtil.getFacetedProject(getProject());
 
-        createInfoGroup( top );
+						final org.eclipse.wst.common.project.facet.core.runtime.IRuntime primaryRuntime =
+							fProject.getPrimaryRuntime();
 
-        return top;
-    }
+						if (!runtime.equals(primaryRuntime)) {
+							Job job = new WorkspaceJob("Setting targeted runtime for project.") {
 
-    protected Group createDefaultGroup( Composite parent, String text, int columns )
-    {
-        GridLayout gl = new GridLayout( columns, false );
+								@Override
+								public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+									IStatus retval = Status.OK_STATUS;
 
-        Group group = new Group( parent, SWT.NONE );
-        group.setText( text );
-        group.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
-        group.setLayout( gl );
+									try {
+										fProject.setTargetedRuntimes(Collections.singleton(runtime), monitor);
+										fProject.setPrimaryRuntime(runtime, monitor);
+									}
+									catch (Exception e) {
+										retval = ProjectUI.createErrorStatus("Could not set targeted runtime", e);
+									}
 
-        return group;
-    }
+									return retval;
+								}
 
-    @Override
-    public boolean performOk()
-    {
-        final IProject proj = getProject();
+							};
 
-        if ( SDKUtil.isSDKProject( proj ) )
-        {
-            if ( runtimeCombo != null )
-            {
-                final String selectedRuntimeName = this.runtimeCombo.getText();
+							job.schedule();
+						}
+					}
+					else {
+						return false;
+					}
+				}
+			}
 
-                if( !CoreUtil.isNullOrEmpty( selectedRuntimeName ) )
-                {
-                    final org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime =
-                        RuntimeManager.getRuntime( selectedRuntimeName );
+			final String sdkName = this._sdkLabel.getText();
 
-                    if( runtime != null )
-                    {
-                        final IFacetedProject fProject = ProjectUtil.getFacetedProject( getProject() );
+			if (!CoreUtil.isNullOrEmpty(sdkName)) {
+				try {
+					final IEclipsePreferences prefs = new ProjectScope(getProject()).getNode(SDKCorePlugin.PLUGIN_ID);
 
-                        final org.eclipse.wst.common.project.facet.core.runtime.IRuntime primaryRuntime =
-                            fProject.getPrimaryRuntime();
+					prefs.put(SDKCorePlugin.PREF_KEY_SDK_NAME, sdkName);
+					prefs.flush();
+				}
+				catch (BackingStoreException bse) {
+					ProjectCore.logError("Unable to persist sdk name to project " + getProject(), bse);
+				}
+			}
+		}
 
-                        if( !runtime.equals( primaryRuntime ) )
-                        {
-                            Job job = new WorkspaceJob("Setting targeted runtime for project.") //$NON-NLS-1$
-                            {
-                                @Override
-                                public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-                                {
-                                    IStatus retval = Status.OK_STATUS;
+		return true;
+	}
 
-                                    try
-                                    {
-                                        fProject.setTargetedRuntimes( Collections.singleton( runtime ), monitor );
-                                        fProject.setPrimaryRuntime( runtime, monitor );
-                                    }
-                                    catch( Exception e )
-                                    {
-                                        retval = ProjectUI.createErrorStatus( "Could not set targeted runtime", e ); //$NON-NLS-1$
-                                    }
+	@Override
+	protected Control createContents(Composite parent) {
+		Composite top = SWTUtil.createTopComposite(parent, 3);
 
-                                    return retval;
-                                }
-                            };
+		createInfoGroup(top);
 
-                            job.schedule();
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
+		return top;
+	}
 
-            final String sdkName = this.sdkLabel.getText();
+	protected Group createDefaultGroup(Composite parent, String text, int columns) {
+		GridLayout gl = new GridLayout(columns, false);
 
-            if ( !CoreUtil.isNullOrEmpty( sdkName ) )
-            {
-                try
-                {
-                    final IEclipsePreferences prefs = new ProjectScope( getProject() ).getNode( SDKCorePlugin.PLUGIN_ID );
-                    prefs.put( SDKCorePlugin.PREF_KEY_SDK_NAME, sdkName );
-                    prefs.flush();
-                }
-                catch( BackingStoreException be )
-                {
-                    ProjectCore.logError( "Unable to persist sdk name to project " + getProject(), be );
-                }
-            }
-        }
+		Group group = new Group(parent, SWT.NONE);
 
-        return true;
-    }
+		group.setText(text);
+		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		group.setLayout(gl);
 
+		return group;
+	}
 
-    protected void createInfoGroup( final Composite parent )
-    {
-        new Label( parent, SWT.LEFT ).setText( Msgs.liferayPluginTypeLabel );
+	protected void createInfoGroup(final Composite parent) {
+		new Label(parent, SWT.LEFT).setText(Msgs.liferayPluginTypeLabel);
 
-        final Text pluginTypeLabel = new Text( parent, SWT.READ_ONLY | SWT.BORDER );
-        pluginTypeLabel.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 2, 1 ) );
+		final Text pluginTypeLabel = new Text(parent, SWT.READ_ONLY | SWT.BORDER);
 
-        final IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet( getFacetedProject() );
+		pluginTypeLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
 
-        if( liferayFacet != null )
-        {
-            pluginTypeLabel.setText( liferayFacet.getLabel() );
-        }
+		final IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(getFacetedProject());
 
-        final IProject proj = getProject();
+		if (liferayFacet != null) {
+			pluginTypeLabel.setText(liferayFacet.getLabel());
+		}
 
-        if ( proj != null && ProjectUtil.isLiferayFacetedProject( proj ) )
-        {
-            try
-            {
-                if ( ! ProjectUtil.isMavenProject( proj ) )
-                {
-                    final SDK projectSdk = SDKUtil.getSDK( getProject() );
-                    new Label( parent, SWT.LEFT ).setText( Msgs.liferaySdkLabel );
+		final IProject proj = getProject();
 
-                    sdkLabel = new Text( parent, SWT.READ_ONLY | SWT.BORDER );
+		if ((proj != null) && ProjectUtil.isLiferayFacetedProject(proj)) {
+			try {
+				if (!ProjectUtil.isMavenProject(proj)) {
+					final SDK projectSdk = SDKUtil.getSDK(getProject());
+					new Label(parent, SWT.LEFT).setText(Msgs.liferaySdkLabel);
 
-                    if( projectSdk != null )
-                    {
-                        sdkLabel.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 2, 1 ) );
-                        sdkLabel.setText( projectSdk.getName() );
-                    }
-                    else
-                    {
-                        sdkLabel.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
-                        sdkLabel.setText( "" );
+					_sdkLabel = new Text(parent, SWT.READ_ONLY | SWT.BORDER);
 
-                        final Hyperlink link = new Hyperlink( parent, SWT.NULL );
-                        link.setLayoutData( new GridData( SWT.RIGHT, SWT.TOP, false, false, 1, 1 ) );
-                        link.setForeground( parent.getDisplay().getSystemColor( SWT.COLOR_BLUE ) );
-                        link.setUnderlined( true );
-                        link.setText( Msgs.changeliferaySdk );
-                        link.addHyperlinkListener
-                        (
-                            new HyperlinkAdapter()
-                            {
-                                public void linkActivated( HyperlinkEvent e )
-                                {
-                                    final LiferayPluginSDKOp op =
-                                        ( (LiferayPluginSDKOp) ( LiferayPluginSDKOp.TYPE.instantiate().initialize() ) );
-                                    final Reference<DialogDef> dialogRef =
-                                            DefinitionLoader.context( this.getClass().getClassLoader() ).sdef(
-                                                "com.liferay.ide.project.ui.dialog.SelectPluginsSDKDialog" ).dialog( "ConfigureLiferaySDK" );
-                                    final SapphireDialog dialog =
-                                        new SapphireDialog( UIUtil.getActiveShell(), op, dialogRef );
+					if (projectSdk != null) {
+						_sdkLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
+						_sdkLabel.setText(projectSdk.getName());
+					}
+					else {
+						_sdkLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
+						_sdkLabel.setText("");
 
-                                    dialog.setBlockOnOpen( true );
+						final Hyperlink link = new Hyperlink(parent, SWT.NULL);
 
-                                    final int result = dialog.open();
+						link.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false, 1, 1));
+						link.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_BLUE));
+						link.setUnderlined(true);
+						link.setText(Msgs.changeliferaySdk);
+						link.addHyperlinkListener(
+							new HyperlinkAdapter() {
 
-                                    if( result != SapphireDialog.CANCEL )
-                                    {
-                                        sdkLabel.setText( op.getPluginsSDKName().content() );
-                                    }
-                                }
-                            }
-                        );
-                    }
+								public void linkActivated(HyperlinkEvent e) {
+									String dialogId = new String(
+										"com.liferay.ide.project.ui.dialog.SelectPluginsSDKDialog");
+									final LiferayPluginSDKOp op =
+										(LiferayPluginSDKOp)(LiferayPluginSDKOp.TYPE.instantiate().initialize());
+									DefinitionLoader sdefLoader = DefinitionLoader.context(getClass()).sdef(dialogId);
 
-                    new Label( parent, SWT.LEFT ).setText( Msgs.liferayRuntimeLabel );
+									final Reference<DialogDef> dialogRef = sdefLoader.dialog("ConfigureLiferaySDK");
 
-                    this.runtimeCombo = new Combo( parent, SWT.DROP_DOWN | SWT.READ_ONLY );
-                    this.runtimeCombo.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 2, 1 ) );
+									final SapphireDialog dialog = new SapphireDialog(
+										UIUtil.getActiveShell(), op, dialogRef);
 
-                    String currentRuntimeName = null;
+									dialog.setBlockOnOpen(true);
 
-                    try
-                    {
-                        ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getProject() );
+									final int result = dialog.open();
 
-                        if ( liferayRuntime != null)
-                        {
-                            currentRuntimeName = liferayRuntime.getRuntime().getName();
-                        }
-                    }
-                    catch( Exception e )
-                    {
-                        ProjectUI.logError( "Could not determine liferay runtime", e ); //$NON-NLS-1$
-                    }
+									if (result != SapphireDialog.CANCEL) {
+										_sdkLabel.setText(op.getPluginsSDKName().content());
+									}
+								}
 
-                    final List<String> runtimeNames = new ArrayList<String>();
-                    int selectionIndex = -1;
+							});
+					}
 
-                    for( IRuntime runtime : ServerCore.getRuntimes() )
-                    {
-                        if( ServerUtil.isLiferayRuntime( runtime ) )
-                        {
-                            runtimeNames.add( runtime.getName() );
+					new Label(parent, SWT.LEFT).setText(Msgs.liferayRuntimeLabel);
 
-                            if( runtime.getName().equals( currentRuntimeName ) )
-                            {
-                                selectionIndex = runtimeNames.size() - 1;
-                            }
-                        }
-                    }
+					_runtimeCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
 
-                    if( runtimeNames.size() == 0 )
-                    {
-                        runtimeNames.add( "No Liferay runtimes available." ); //$NON-NLS-1$
-                    }
+					_runtimeCombo.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
 
-                    this.runtimeCombo.setItems( runtimeNames.toArray( new String[0] ) );
+					String currentRuntimeName = null;
 
-                    if( selectionIndex > -1 )
-                    {
-                        this.runtimeCombo.select( selectionIndex );
-                    }
-                }
-            }
-            catch(Exception e)
-            {
-                ProjectUI.logError( "Could not determine whether its a maven project ", e ); //$NON-NLS-1$
-            }
-        }
+					try {
+						ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(getProject());
 
-    }
+						if (liferayRuntime != null) {
+							currentRuntimeName = liferayRuntime.getRuntime().getName();
+						}
+					}
+					catch (Exception e) {
+						ProjectUI.logError("Could not determine liferay runtime", e);
+					}
 
-    protected IFacetedProject getFacetedProject()
-    {
-        IFacetedProject retval = null;
+					final List<String> runtimeNames = new ArrayList<>();
+					int selectionIndex = -1;
 
-        IProject project = getProject();
+					for (IRuntime runtime : ServerCore.getRuntimes()) {
+						if (ServerUtil.isLiferayRuntime(runtime)) {
+							runtimeNames.add(runtime.getName());
 
-        if( project != null )
-        {
-            retval = ProjectUtil.getFacetedProject( project );
-        }
+							if (runtime.getName().equals(currentRuntimeName)) {
+								selectionIndex = runtimeNames.size() - 1;
+							}
+						}
+					}
 
-        return retval;
-    }
+					if (runtimeNames.isEmpty()) {
+						runtimeNames.add("No Liferay runtimes available.");
+					}
 
-    protected IProject getProject()
-    {
-        IAdaptable adaptable = getElement();
+					this._runtimeCombo.setItems(runtimeNames.toArray(new String[0]));
 
-        IProject project = (IProject) adaptable.getAdapter( IProject.class );
-        return project;
-    }
+					if (selectionIndex > -1) {
+						this._runtimeCombo.select(selectionIndex);
+					}
+				}
+			}
+			catch (Exception e) {
+				ProjectUI.logError("Could not determine whether its a maven project ", e);
+			}
+		}
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String liferayPluginTypeLabel;
-        public static String liferayRuntimeLabel;
-        public static String liferaySdkLabel;
-        public static String changeliferaySdk;
+	protected IFacetedProject getFacetedProject() {
+		IFacetedProject retval = null;
 
-        static
-        {
-            initializeMessages( LiferayProjectPropertyPage.class.getName(), Msgs.class );
-        }
-    }
+		IProject project = getProject();
+
+		if (project != null) {
+			retval = ProjectUtil.getFacetedProject(project);
+		}
+
+		return retval;
+	}
+
+	protected IProject getProject() {
+		IAdaptable adaptable = getElement();
+
+		IProject project = (IProject)adaptable.getAdapter(IProject.class);
+
+		return project;
+	}
+
+	private Combo _runtimeCombo;
+	private Text _sdkLabel;
+
+	private static class Msgs extends NLS {
+
+		public static String changeliferaySdk;
+		public static String liferayPluginTypeLabel;
+		public static String liferayRuntimeLabel;
+		public static String liferaySdkLabel;
+
+		static {
+			initializeMessages(LiferayProjectPropertyPage.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

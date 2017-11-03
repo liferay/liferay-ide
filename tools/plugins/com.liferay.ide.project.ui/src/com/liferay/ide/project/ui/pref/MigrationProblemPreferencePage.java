@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.ui.pref;
 
 import com.liferay.blade.api.Problem;
@@ -23,6 +23,8 @@ import com.liferay.ide.project.ui.migration.MigrationUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.IOException;
+
+import java.util.Map;
 
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -52,320 +54,325 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 /**
  * @author Lovett Li
  */
-public class MigrationProblemPreferencePage extends PreferencePage implements IWorkbenchPreferencePage
-{
+public class MigrationProblemPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
-    public final static String ID = "com.liferay.ide.project.ui.migrationProblemPreferencePage";
-    private TableViewer _ignoredProblemTable;
+	public static final String ID = "com.liferay.ide.project.ui.migrationProblemPreferencePage";
 
-    private Button _removeButton;
+	@Override
+	public Control createContents(Composite parent) {
+		Composite pageComponent = new Composite(parent, SWT.NULL);
+		GridLayout layout = new GridLayout();
 
-    private Label _detailInfoLabel;
+		layout.numColumns = 2;
+		layout.marginWidth = 0;
+		layout.marginHeight = 0;
+		pageComponent.setLayout(layout);
 
-    private Browser _browser;
+		GridData data = new GridData();
 
-    private IgnoredProblemsContainer mpContainer;
+		data.verticalAlignment = GridData.FILL;
+		data.horizontalAlignment = GridData.FILL;
+		pageComponent.setLayoutData(data);
 
-    @Override
-    public Control createContents( Composite parent )
-    {
-        Composite pageComponent = new Composite( parent, SWT.NULL );
-        GridLayout layout = new GridLayout();
-        layout.numColumns = 2;
-        layout.marginWidth = 0;
-        layout.marginHeight = 0;
-        pageComponent.setLayout( layout );
-        GridData data = new GridData();
-        data.verticalAlignment = GridData.FILL;
-        data.horizontalAlignment = GridData.FILL;
-        pageComponent.setLayoutData( data );
+		data = new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
 
-        data = new GridData( GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL );
+		Label label = new Label(pageComponent, SWT.LEFT);
 
-        Label label = new Label( pageComponent, SWT.LEFT );
-        label.setText(
-            "These are ignored breaking change problems.\n " +
-            "You can remove them if you want to show this type of problem next time." );
-        data = new GridData();
-        data.horizontalAlignment = GridData.FILL;
-        data.horizontalSpan = 2;
-        label.setLayoutData( data );
+		label.setText(
+			"These are ignored breaking change problems.\n You can remove them if you want to show this type of " +
+				"problem next time.");
 
-        _ignoredProblemTable = new TableViewer( pageComponent, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION );
-        data = new GridData( GridData.FILL_HORIZONTAL );
+		data = new GridData();
 
-        createColumns( _ignoredProblemTable );
+		data.horizontalAlignment = GridData.FILL;
+		data.horizontalSpan = 2;
+		label.setLayoutData(data);
 
-        final Table table = _ignoredProblemTable.getTable();
-        table.setHeaderVisible( true );
+		_ignoredProblemTable = new TableViewer(pageComponent, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		data = new GridData(GridData.FILL_HORIZONTAL);
 
-        data.heightHint = 200;
-        _ignoredProblemTable.getTable().setLayoutData( data );
-        _ignoredProblemTable.setContentProvider( ArrayContentProvider.getInstance() );
+		_createColumns(_ignoredProblemTable);
 
-        Composite groupComponent = new Composite( pageComponent, SWT.NULL );
-        GridLayout groupLayout = new GridLayout();
-        groupLayout.marginWidth = 0;
-        groupLayout.marginHeight = 0;
-        groupComponent.setLayout( groupLayout );
-        data = new GridData();
-        data.verticalAlignment = GridData.FILL;
-        data.horizontalAlignment = GridData.FILL;
-        groupComponent.setLayoutData( data );
+		final Table table = _ignoredProblemTable.getTable();
 
-        _removeButton = new Button( groupComponent, SWT.PUSH );
-        _removeButton.setText( "Remove" );
-        _removeButton.addSelectionListener( new SelectionListener()
-        {
+		table.setHeaderVisible(true);
 
-            @Override
-            public void widgetSelected( SelectionEvent arg0 )
-            {
-                StructuredSelection selection = (StructuredSelection) _ignoredProblemTable.getSelection();
+		data.heightHint = 200;
+		_ignoredProblemTable.getTable().setLayoutData(data);
+		_ignoredProblemTable.setContentProvider(ArrayContentProvider.getInstance());
 
-                if( selection != null && selection.getFirstElement() instanceof Problem )
-                {
-                    try
-                    {
-                        Problem problem = (Problem) selection.getFirstElement();
-                        mpContainer.remove( problem );
-                        _ignoredProblemTable.setInput( mpContainer.getProblemMap().values().toArray( new Problem[0] ) );
-                    }
-                    catch( Exception e )
-                    {
-                        ProjectUI.logError( e );
-                    }
-                }
+		Composite groupComponent = new Composite(pageComponent, SWT.NULL);
+		GridLayout groupLayout = new GridLayout();
 
-            }
+		groupLayout.marginWidth = 0;
+		groupLayout.marginHeight = 0;
+		groupComponent.setLayout(groupLayout);
 
-            @Override
-            public void widgetDefaultSelected( SelectionEvent arg0 )
-            {
-            }
-        } );
+		data = new GridData();
 
-        setButtonLayoutData( _removeButton );
+		data.verticalAlignment = GridData.FILL;
+		data.horizontalAlignment = GridData.FILL;
+		groupComponent.setLayoutData(data);
 
-        label = new Label( pageComponent, SWT.LEFT );
-        data = new GridData();
-        data.horizontalAlignment = GridData.FILL;
-        data.horizontalSpan = 2;
-        label.setLayoutData( data );
+		_removeButton = new Button(groupComponent, SWT.PUSH);
 
-        _detailInfoLabel = new Label( pageComponent, SWT.LEFT );
-        _detailInfoLabel.setText( "Detail Information" );
-        data = new GridData();
-        data.horizontalAlignment = GridData.FILL;
-        data.horizontalSpan = 2;
-        _detailInfoLabel.setLayoutData( data );
+		_removeButton.setText("Remove");
+		_removeButton.addSelectionListener(
+			new SelectionListener() {
 
-        _browser = new Browser( pageComponent, SWT.BORDER );
-        data = new GridData( GridData.FILL_BOTH );
-        _browser.setLayoutData( data );
+				@Override
+				public void widgetDefaultSelected(SelectionEvent arg0) {
+				}
 
-        groupComponent = new Composite( pageComponent, SWT.NULL );
-        groupLayout = new GridLayout();
-        groupLayout.marginWidth = 0;
-        groupLayout.marginHeight = 0;
-        groupComponent.setLayout( groupLayout );
-        data = new GridData();
-        data.verticalAlignment = GridData.FILL;
-        data.horizontalAlignment = GridData.FILL;
-        groupComponent.setLayoutData( data );
+				@Override
+				public void widgetSelected(SelectionEvent arg0) {
+					StructuredSelection selection = (StructuredSelection)_ignoredProblemTable.getSelection();
 
-        fillIgnoredProblemTable();
+					if ((selection != null) && (selection.getFirstElement() instanceof Problem)) {
+						try {
+							Problem problem = (Problem)selection.getFirstElement();
 
-        _ignoredProblemTable.addSelectionChangedListener( new ISelectionChangedListener()
-        {
+							_mpContainer.remove(problem);
 
-            public void selectionChanged( final SelectionChangedEvent event )
-            {
-                UIUtil.async( new Runnable()
-                {
+							Map<String, Problem> problemMap = _mpContainer.getProblemMap();
 
-                    public void run()
-                    {
-                        updateForm( event );
-                    }
-                }, 50 );
-            }
-        } );
+							_ignoredProblemTable.setInput(problemMap.values().toArray(new Problem[0]));
+						}
+						catch (Exception e) {
+							ProjectUI.logError(e);
+						}
+					}
+				}
 
-        return pageComponent;
-    }
+			});
 
-    @Override
-    public void init( IWorkbench arg0 )
-    {
-        mpContainer = MigrationUtil.getIgnoredProblemsContainer();
-    }
+		setButtonLayoutData(_removeButton);
 
-    @Override
-    public boolean performOk()
-    {
-        try
-        {
-            UpgradeAssistantSettingsUtil.setObjectToStore( IgnoredProblemsContainer.class, mpContainer );
-        }
-        catch( IOException e )
-        {
-           ProjectUI.logError( e );
-        }
+		label = new Label(pageComponent, SWT.LEFT);
+		data = new GridData();
 
-        return super.performOk();
-    }
+		data.horizontalAlignment = GridData.FILL;
+		data.horizontalSpan = 2;
+		label.setLayoutData(data);
 
-    private void fillIgnoredProblemTable()
-    {
-        try
-        {
-            IgnoredProblemsContainer mpContainer =
-                UpgradeAssistantSettingsUtil.getObjectFromStore( IgnoredProblemsContainer.class );
+		_detailInfoLabel = new Label(pageComponent, SWT.LEFT);
 
-            if( mpContainer != null )
-            {
-                Problem[] problems = mpContainer.getProblemMap().values().toArray( new Problem[0] );
-                _ignoredProblemTable.setInput( problems );
-            }
-        }
-        catch( IOException e )
-        {
-            e.printStackTrace();
-        }
-    }
+		_detailInfoLabel.setText("Detail Information");
 
-    private void createColumns( final TableViewer _problemsViewer )
-    {
-        final String[] titles = { "Tickets", "Problem" };
-        final int[] bounds = { 65, 55 };
+		data = new GridData();
 
-        TableViewerColumn col = createTableViewerColumn( titles[0], bounds[0], _problemsViewer );
+		data.horizontalAlignment = GridData.FILL;
+		data.horizontalSpan = 2;
+		_detailInfoLabel.setLayoutData(data);
 
-        col.setLabelProvider( new ColumnLabelProvider()
-        {
+		_browser = new Browser(pageComponent, SWT.BORDER);
 
-            @Override
-            public String getText( Object element )
-            {
-                Problem p = (Problem) element;
+		data = new GridData(GridData.FILL_BOTH);
 
-                return p.getTicket();
-            }
-        } );
+		_browser.setLayoutData(data);
 
-        col = createTableViewerColumn( titles[1], bounds[1], _problemsViewer );
-        col.setLabelProvider( new ColumnLabelProvider()
-        {
+		groupComponent = new Composite(pageComponent, SWT.NULL);
 
-            @Override
-            public String getText( Object element )
-            {
-                Problem p = (Problem) element;
+		groupLayout = new GridLayout();
 
-                return p.getTitle();
-            }
+		groupLayout.marginWidth = 0;
+		groupLayout.marginHeight = 0;
+		groupComponent.setLayout(groupLayout);
 
-            @Override
-            public void update( ViewerCell cell )
-            {
-                super.update( cell );
+		data = new GridData();
 
-                Table table = _problemsViewer.getTable();
+		data.verticalAlignment = GridData.FILL;
+		data.horizontalAlignment = GridData.FILL;
+		groupComponent.setLayoutData(data);
 
-                table.getColumn( 1 ).pack();
-            }
-        } );
-    }
+		_fillIgnoredProblemTable();
 
-    private TableViewerColumn createTableViewerColumn( String title, int bound, TableViewer viewer )
-    {
-        final TableViewerColumn viewerColumn = new TableViewerColumn( viewer, SWT.NONE );
-        final TableColumn column = viewerColumn.getColumn();
-        column.setText( title );
-        column.setWidth( bound );
-        column.setResizable( true );
-        column.setMoveable( true );
+		_ignoredProblemTable.addSelectionChangedListener(
+			new ISelectionChangedListener() {
 
-        return viewerColumn;
-    }
+				public void selectionChanged(final SelectionChangedEvent event) {
+					UIUtil.async(
+						new Runnable() {
 
-    private void updateForm( SelectionChangedEvent event )
-    {
-        final ISelection selection = event.getSelection();
+							public void run() {
+								_updateForm(event);
+							}
 
-        final Problem problem = MigrationUtil.getProblemFromSelection( selection );
+						},
+						50);
+				}
 
-        if( problem != null )
-        {
-            if( CoreUtil.isNullOrEmpty( problem.html ) )
-            {
-                _browser.setText( generateFormText( problem ) );
-            }
-            else
-            {
-                _browser.setText( problem.html );
-            }
-        }
-        else
-        {
-            _browser.setUrl( "about:blank" );
-        }
-    };
+			});
 
-    private String generateFormText( Problem problem )
-    {
-        StringBuilder sb = new StringBuilder();
+		return pageComponent;
+	}
 
-        sb.append( "<form><p>" );
+	@Override
+	public void init(IWorkbench arg0) {
+		_mpContainer = MigrationUtil.getIgnoredProblemsContainer();
+	}
 
-        sb.append( "<b>Problem:</b> " + problem.title + "<br/><br/>" );
+	@Override
+	public boolean performOk() {
+		try {
+			UpgradeAssistantSettingsUtil.setObjectToStore(IgnoredProblemsContainer.class, _mpContainer);
+		}
+		catch (IOException ioe) {
+			ProjectUI.logError(ioe);
+		}
 
-        sb.append( "<b>Description:</b><br/>" );
-        sb.append( "\t" + problem.summary + "<br/><br/>" );
+		return super.performOk();
+	}
 
-        if( problem.getAutoCorrectContext() != null && problem.autoCorrectContext.length() > 0 )
-        {
-            sb.append( "<a href='autoCorrect'>Correct this problem automatically</a><br/><br/>" );
-        }
+	private void _createColumns(final TableViewer problemsViewer) {
+		final String[] titles = {"Tickets", "Problem"};
+		final int[] bounds = {65, 55};
 
-        if( problem.html != null && problem.html.length() > 0 )
-        {
-            sb.append( "<a href='html'>See documentation for how to correct this problem.</a><br/><br/>" );
-        }
+		TableViewerColumn col = _createTableViewerColumn(titles[0], bounds[0], problemsViewer);
 
-        if( problem.ticket != null && problem.ticket.length() > 0 )
-        {
-            sb.append( "<b>Tickets:</b> " + getLinkTags( problem.ticket ) + "<br/><br/>" );
-        }
+		col.setLabelProvider(
+			new ColumnLabelProvider() {
 
-        sb.append( "</p></form>" );
+				@Override
+				public String getText(Object element) {
+					Problem p = (Problem)element;
 
-        return sb.toString();
-    }
+					return p.getTicket();
+				}
 
-    private String getLinkTags( String ticketNumbers )
-    {
-        String[] ticketNumberArray = ticketNumbers.split( "," );
+			});
 
-        StringBuilder sb = new StringBuilder();
+		col = _createTableViewerColumn(titles[1], bounds[1], problemsViewer);
 
-        for( int i = 0; i < ticketNumberArray.length; i++ )
-        {
-            String ticketNumber = ticketNumberArray[i];
-            sb.append( "<a href='https://issues.liferay.com/browse/" );
-            sb.append( ticketNumber );
-            sb.append( "'>" );
-            sb.append( ticketNumber );
-            sb.append( "</a>" );
+		col.setLabelProvider(
+			new ColumnLabelProvider() {
 
-            if( ticketNumberArray.length > 1 && i != ticketNumberArray.length - 1 )
-            {
-                sb.append( "," );
-            }
-        }
+				@Override
+				public String getText(Object element) {
+					Problem p = (Problem)element;
 
-        return sb.toString();
-    }
+					return p.getTitle();
+				}
+
+				@Override
+				public void update(ViewerCell cell) {
+					super.update(cell);
+
+					Table table = problemsViewer.getTable();
+
+					table.getColumn(1).pack();
+				}
+
+			});
+	}
+
+	private TableViewerColumn _createTableViewerColumn(String title, int bound, TableViewer viewer) {
+		final TableViewerColumn viewerColumn = new TableViewerColumn(viewer, SWT.NONE);
+
+		final TableColumn column = viewerColumn.getColumn();
+
+		column.setText(title);
+		column.setWidth(bound);
+		column.setResizable(true);
+		column.setMoveable(true);
+
+		return viewerColumn;
+	}
+
+	private void _fillIgnoredProblemTable() {
+		try {
+			IgnoredProblemsContainer mpContainer = UpgradeAssistantSettingsUtil.getObjectFromStore(
+				IgnoredProblemsContainer.class);
+
+			if (mpContainer != null) {
+				Map<String, Problem> problemMap = mpContainer.getProblemMap();
+
+				Problem[] problems = problemMap.values().toArray(new Problem[0]);
+
+				_ignoredProblemTable.setInput(problems);
+			}
+		}
+		catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+	}
+
+	private String _generateFormText(Problem problem) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("<form><p>");
+
+		sb.append("<b>Problem:</b> ");
+		sb.append(problem.title);
+		sb.append("<br/><br/>");
+
+		sb.append("<b>Description:</b><br/>");
+		sb.append("\t");
+		sb.append(problem.summary);
+		sb.append("<br/><br/>");
+
+		if ((problem.getAutoCorrectContext() != null) && (problem.autoCorrectContext.length() > 0)) {
+			sb.append("<a href='autoCorrect'>Correct this problem automatically</a><br/><br/>");
+		}
+
+		if ((problem.html != null) && (problem.html.length() > 0)) {
+			sb.append("<a href='html'>See documentation for how to correct this problem.</a><br/><br/>");
+		}
+
+		if ((problem.ticket != null) && (problem.ticket.length() > 0)) {
+			sb.append("<b>Tickets:</b> ");
+			sb.append(_getLinkTags(problem.ticket));
+			sb.append("<br/><br/>");
+		}
+
+		sb.append("</p></form>");
+
+		return sb.toString();
+	}
+
+	private String _getLinkTags(String ticketNumbers) {
+		String[] ticketNumberArray = ticketNumbers.split(",");
+
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < ticketNumberArray.length; i++) {
+			String ticketNumber = ticketNumberArray[i];
+			sb.append("<a href='https://issues.liferay.com/browse/");
+			sb.append(ticketNumber);
+			sb.append("'>");
+			sb.append(ticketNumber);
+			sb.append("</a>");
+
+			if ((ticketNumberArray.length > 1) && (i != (ticketNumberArray.length - 1))) {
+				sb.append(",");
+			}
+		}
+
+		return sb.toString();
+	}
+
+	private void _updateForm(SelectionChangedEvent event) {
+		final ISelection selection = event.getSelection();
+
+		final Problem problem = MigrationUtil.getProblemFromSelection(selection);
+
+		if (problem != null) {
+			if (CoreUtil.isNullOrEmpty(problem.html)) {
+				_browser.setText(_generateFormText(problem));
+			}
+			else {
+				_browser.setText(problem.html);
+			}
+		}
+		else {
+			_browser.setUrl("about:blank");
+		}
+	};
+
+	private Browser _browser;
+	private Label _detailInfoLabel;
+	private TableViewer _ignoredProblemTable;
+	private IgnoredProblemsContainer _mpContainer;
+	private Button _removeButton;
 
 }

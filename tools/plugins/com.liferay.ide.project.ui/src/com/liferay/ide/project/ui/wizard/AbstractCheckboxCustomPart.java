@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.ui.util.SWTUtil;
@@ -38,169 +38,155 @@ import org.eclipse.swt.widgets.Table;
 /**
  * @author Simon Jiang
  */
-public abstract class AbstractCheckboxCustomPart extends FormComponentPart
-{
-    class CheckboxContentProvider implements IStructuredContentProvider
-    {
+public abstract class AbstractCheckboxCustomPart extends FormComponentPart {
 
-        @Override
-        public void dispose()
-        {
+	@Override
+	public FormComponentPresentation createPresentation(SwtPresentation parent, Composite composite) {
+		return new FormComponentPresentation(this, parent, composite) {
 
-        }
+			@Override
+			public void render() {
+				final Composite parent = SWTUtil.createComposite(composite(), 2, 2, GridData.FILL_BOTH);
 
-        @Override
-        public Object[] getElements( Object inputElement )
-        {
-            if( inputElement instanceof CheckboxElement[] )
-            {
-                return (CheckboxElement[]) inputElement;
-            }
+				checkBoxViewer = CheckboxTableViewer.newCheckList(parent, SWT.BORDER);
 
-            return new Object[] { inputElement };
-        }
+				checkBoxViewer.addCheckStateListener(
+					new ICheckStateListener() {
 
-        @Override
-        public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
-        {
+						@Override
+						public void checkStateChanged(CheckStateChangedEvent event) {
+							handleCheckStateChangedEvent(event);
+						}
 
-        }
+					});
 
-    }
+				checkBoxViewer.setContentProvider(new CheckboxContentProvider());
 
-    protected class CheckboxElement
-    {
-        public String name;
-        public String context;
+				checkBoxViewer.setLabelProvider(new DelegatingStyledCellLabelProvider(getLableProvider()));
 
-        public CheckboxElement( final String name, final String context )
-        {
-            this.context = context;
-            this.name = name;
-        }
-    }
-    protected Status retval = Status.createOkStatus();
+				final Table table = checkBoxViewer.getTable();
 
-    protected CheckboxTableViewer checkBoxViewer;
+				final GridData tableData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 4);
 
-    protected abstract void checkAndUpdateCheckboxElement();
+				tableData.heightHint = 225;
+				tableData.widthHint = 400;
+				table.setLayoutData(tableData);
 
-    @Override
-    protected Status computeValidation()
-    {
-        return retval;
-    }
+				final Button selectAllButton = new Button(parent, SWT.NONE);
 
-    @Override
-    public FormComponentPresentation createPresentation( SwtPresentation parent, Composite composite )
-    {
-        return new FormComponentPresentation( this, parent, composite )
-        {
-            @Override
-            public void render()
-            {
-                final Composite parent = SWTUtil.createComposite( composite(), 2, 2, GridData.FILL_BOTH );
+				selectAllButton.setText("Select All");
+				selectAllButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+				selectAllButton.addListener(
+					SWT.Selection,
+					new Listener() {
 
-                checkBoxViewer = CheckboxTableViewer.newCheckList( parent, SWT.BORDER );
+						@Override
+						public void handleEvent(Event event) {
+							handleSelectAllEvent();
+						}
 
-                checkBoxViewer.addCheckStateListener
-                (
-                    new ICheckStateListener()
-                    {
-                        @Override
-                        public void checkStateChanged( CheckStateChangedEvent event )
-                        {
-                            handleCheckStateChangedEvent( event );
-                        }
-                    }
-                );
+					});
 
-                checkBoxViewer.setContentProvider( new CheckboxContentProvider() );
+				final Button deselectAllButton = new Button(parent, SWT.NONE);
 
-                checkBoxViewer.setLabelProvider( new DelegatingStyledCellLabelProvider( getLableProvider() ) );
+				deselectAllButton.setText("Deselect All");
+				deselectAllButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+				deselectAllButton.addListener(
+					SWT.Selection,
+					new Listener() {
 
+						@Override
+						public void handleEvent(Event event) {
+							handleDeSelectAllEvent();
+						}
 
-                final Table table = checkBoxViewer.getTable();
-                final GridData tableData = new GridData( SWT.FILL, SWT.FILL, true,  true, 1, 4 );
-                tableData.heightHint = 225;
-                tableData.widthHint = 400;
-                table.setLayoutData( tableData );
+					});
 
-                final Button selectAllButton = new Button( parent, SWT.NONE );
-                selectAllButton.setText( "Select All" );
-                selectAllButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
-                selectAllButton.addListener
-                (
-                    SWT.Selection,
-                    new Listener()
-                    {
-                        @Override
-                        public void handleEvent( Event event )
-                        {
-                            handleSelectAllEvent();
-                        }
-                    }
-                );
+				final Button refreshButton = new Button(parent, SWT.NONE);
 
-                final Button deselectAllButton = new Button( parent, SWT.NONE );
-                deselectAllButton.setText( "Deselect All" );
-                deselectAllButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
-                deselectAllButton.addListener
-                (
-                    SWT.Selection,
-                    new Listener()
-                    {
-                        @Override
-                        public void handleEvent( Event event )
-                        {
-                            handleDeSelectAllEvent();
-                        }
-                    }
-                );
+				refreshButton.setText("Refresh");
+				refreshButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+				refreshButton.addListener(
+					SWT.Selection,
+					new Listener() {
 
-                final Button refreshButton = new Button( parent, SWT.NONE );
-                refreshButton.setText( "Refresh" );
-                refreshButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
-                refreshButton.addListener
-                (
-                    SWT.Selection,
-                    new Listener()
-                    {
-                        @Override
-                        public void handleEvent( Event event )
-                        {
-                            checkAndUpdateCheckboxElement();
-                        }
-                    }
-                );
+						@Override
+						public void handleEvent(Event event) {
+							checkAndUpdateCheckboxElement();
+						}
 
-                startCheckThread();
-            }
+					});
 
-            private void startCheckThread()
-            {
-                final Thread t = new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        checkAndUpdateCheckboxElement();
-                    }
-                };
+				_startCheckThread();
+			}
 
-                t.start();
-            }
-        };
-    }
+			private void _startCheckThread() {
+				final Thread t = new Thread() {
 
-    protected abstract IStyledLabelProvider getLableProvider();
+					@Override
+					public void run() {
+						checkAndUpdateCheckboxElement();
+					}
 
-    protected abstract void handleCheckStateChangedEvent( CheckStateChangedEvent event );
+				};
 
-    protected abstract void handleDeSelectAllEvent();
+				t.start();
+			}
 
-    protected abstract void handleSelectAllEvent();
+		};
+	}
 
-    protected abstract void updateValidation();
+	protected abstract void checkAndUpdateCheckboxElement();
+
+	@Override
+	protected Status computeValidation() {
+		return retval;
+	}
+
+	protected abstract IStyledLabelProvider getLableProvider();
+
+	protected abstract void handleCheckStateChangedEvent(CheckStateChangedEvent event);
+
+	protected abstract void handleDeSelectAllEvent();
+
+	protected abstract void handleSelectAllEvent();
+
+	protected abstract void updateValidation();
+
+	protected CheckboxTableViewer checkBoxViewer;
+	protected Status retval = Status.createOkStatus();
+
+	protected class CheckboxElement {
+
+		public CheckboxElement(final String name, final String context) {
+			this.context = context;
+			this.name = name;
+		}
+
+		public String context;
+		public String name;
+
+	}
+
+	private class CheckboxContentProvider implements IStructuredContentProvider {
+
+		@Override
+		public void dispose() {
+		}
+
+		@Override
+		public Object[] getElements(Object inputElement) {
+			if (inputElement instanceof CheckboxElement[]) {
+				return (CheckboxElement[])inputElement;
+			}
+
+			return new Object[] {inputElement};
+		}
+
+		@Override
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		}
+
+	}
 
 }

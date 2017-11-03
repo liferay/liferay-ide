@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.action.sdk;
 
@@ -35,68 +34,61 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 /**
  * @author Gregory Amerson
  */
-public abstract class SDKCommandAction extends AbstractObjectAction
-{
-    public SDKCommandAction()
-    {
-        super();
-    }
+public abstract class SDKCommandAction extends AbstractObjectAction {
 
-    protected abstract String getSDKCommand();
+	public SDKCommandAction() {
+	}
 
-    @Override
-    public void run( IAction action )
-    {
-        if( fSelection instanceof IStructuredSelection )
-        {
-            Object[] elems = ( (IStructuredSelection) fSelection ).toArray();
+	@Override
+	public void run(IAction action) {
+		if (fSelection instanceof IStructuredSelection) {
+			Object[] elems = ((IStructuredSelection)fSelection).toArray();
 
-            IFile buildXmlFile = null;
-            IProject project = null;
+			IFile buildXmlFile = null;
+			IProject project = null;
 
-            Object elem = elems[0];
+			Object elem = elems[0];
 
-            if( elem instanceof IFile )
-            {
-                buildXmlFile = (IFile) elem;
-                project = buildXmlFile.getProject();
-            }
-            else if( elem instanceof IProject )
-            {
-                project = (IProject) elem;
-                buildXmlFile = project.getFile( "build.xml" ); //$NON-NLS-1$
-            }
+			if (elem instanceof IFile) {
+				buildXmlFile = (IFile)elem;
 
-            if( buildXmlFile.exists() )
-            {
-                final IProject p = project;
-                final IFile buildFile = buildXmlFile;
+				project = buildXmlFile.getProject();
+			}
+			else if (elem instanceof IProject) {
+				project = (IProject)elem;
 
-                new Job( p.getName() + " : " + getSDKCommand() ) //$NON-NLS-1$
-                {
-                    @Override
-                    protected IStatus run( IProgressMonitor monitor )
-                    {
-                        try
-                        {
-                            SDK sdk = SDKUtil.getSDK( p );
-                            ILiferayProject liferayProject = LiferayCore.create( p );
+				buildXmlFile = project.getFile("build.xml");
+			}
 
-                            if ( liferayProject != null)
-                            {
-                                sdk.runCommand( p, buildFile, getSDKCommand(), null,monitor );
-                                p.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-                            }
-                        }
-                        catch( Exception e )
-                        {
-                            return ProjectUI.createErrorStatus( "Error running SDK command " + getSDKCommand(), e ); //$NON-NLS-1$
-                        }
+			if (buildXmlFile.exists()) {
+				final IProject p = project;
+				final IFile buildFile = buildXmlFile;
 
-                        return Status.OK_STATUS;
-                    }
-                }.schedule();
-            }
-        }
-    }
+				new Job(p.getName() + " : " + getSDKCommand()) {
+
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						try {
+							SDK sdk = SDKUtil.getSDK(p);
+							ILiferayProject liferayProject = LiferayCore.create(p);
+
+							if (liferayProject != null) {
+								sdk.runCommand(p, buildFile, getSDKCommand(), null, monitor);
+								p.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+							}
+						}
+						catch (Exception e) {
+							return ProjectUI.createErrorStatus("Error running SDK command " + getSDKCommand(), e);
+						}
+
+						return Status.OK_STATUS;
+					}
+
+				}.schedule();
+			}
+		}
+	}
+
+	protected abstract String getSDKCommand();
+
 }

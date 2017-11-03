@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.migration;
 
@@ -42,133 +41,119 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.actions.SelectionProviderAction;
 
-
 /**
  * @author Gregory Amerson
  * @author Lovett Li
  */
-public abstract class ProblemAction extends SelectionProviderAction implements IAction
-{
+public abstract class ProblemAction extends SelectionProviderAction implements IAction {
 
-    public ProblemAction( ISelectionProvider provider, String text )
-    {
-        super( provider, text );
-    }
+	public ProblemAction(ISelectionProvider provider, String text) {
+		super(provider, text);
+	}
 
-    protected void refreshTableViewer()
-    {
-        FindBreakingChangesPage page = UpgradeView.getPage(Page.FINDBREACKINGCHANGES_PAGE_ID,FindBreakingChangesPage.class);
-        TableViewer problemsViewer = page.getProblemsViewer();
+	@Override
+	public void run() {
+		final List<Problem> problems = MigrationUtil.getProblemsFromSelection(getSelection());
 
-        UIUtil.async( new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                final Object selection = problemsViewer.getStructuredSelection().getFirstElement();
-                List<Problem> problems = null;
+		for (Problem problem : problems) {
+			run(problem, getSelectionProvider());
+		}
+	}
 
-                if( selection instanceof IFile )
-                {
-                    IFile file = (IFile) selection;
-                    problems = MigrationUtil.getProblemsFromResource( file );
-                }
-                else if( selection instanceof Problem )
-                {
-                    ISelection se = page.getTreeViewer().getSelection();
+	public void run(final Problem problem, final ISelectionProvider provider) {
+		final IResource resource = MigrationUtil.getIResourceFromProblem(problem);
 
-                    if( se instanceof TreeSelection )
-                    {
-                        problems = MigrationUtil.getCurrentProblemsFromTreeNode( ( (TreeSelection) se ) );
-                    }
-                }
+		WorkspaceJob migrationJob = new WorkspaceJob("Marking migration problem as done") {
 
-                if( problems != null && problems.size() > 0 )
-                {
-                    problemsViewer.setInput( problems.toArray() );
-                    problemsViewer.setSelection( new StructuredSelection( problems.get( 0 ) ) );
-                }
-                else
-                {
-                    problemsViewer.setInput( null );
-                }
-            }
-        } );
-    }
+			public IStatus runInWorkspace(IProgressMonitor monitor) {
+				IStatus retval = Status.OK_STATUS;
 
-    @Override
-    public void run()
-    {
-        final List<Problem> Problems = MigrationUtil.getProblemsFromSelection( getSelection() );
+				if ((resource != null) && resource.exists()) {
+					final IMarker marker = resource.getMarker(problem.getMarkerId());
 
-        for( Problem problem : Problems )
-        {
-            run( problem, getSelectionProvider() );
-        }
-    }
+					if (marker != null) {
+						retval = runWithMarker(problem, marker);
 
-    public void run( final Problem problem, final ISelectionProvider provider )
-    {
-        final IResource resource = MigrationUtil.getIResourceFromProblem( problem );
+						if (provider instanceof Viewer) {
+							final Viewer viewer = (Viewer)provider;
+							FindBreakingChangesPage page = UpgradeView.getPage(
+								Page.findbreackingchangesPageId, FindBreakingChangesPage.class);
 
-        WorkspaceJob migrationJob = new WorkspaceJob( "Marking migration problem as done" )
-        {
+							TreeViewer treeViewer = page.getTreeViewer();
 
-            public IStatus runInWorkspace( IProgressMonitor monitor )
-            {
-                IStatus retval = Status.OK_STATUS;
+							UIUtil.async(
+								new Runnable() {
 
-                if( resource != null && resource.exists() )
-                {
-                    final IMarker marker = resource.getMarker( problem.getMarkerId() );
+									public void run() {
+										viewer.refresh();
+										treeViewer.refresh();
+									}
 
-                    if( marker != null )
-                    {
-                        retval = runWithMarker( problem, marker );
+								});
+						}
+					}
+					else {
+						retval = ProjectUI.createErrorStatus("Unable to get marker from file");
+					}
+				}
+				else {
+					retval = ProjectUI.createErrorStatus("Unable to get file from problem");
+				}
 
-                        if( provider instanceof Viewer )
-                        {
-                            final Viewer viewer = (Viewer) provider;
-                            FindBreakingChangesPage page =
-                                UpgradeView.getPage( Page.FINDBREACKINGCHANGES_PAGE_ID, FindBreakingChangesPage.class );
-                            TreeViewer treeViewer = page.getTreeViewer();
+				return retval;
+			}
 
-                            UIUtil.async( new Runnable()
-                            {
-                                public void run()
-                                {
-                                    viewer.refresh();
-                                    treeViewer.refresh();
-                                }
-                            });
-                        }
-                    }
-                    else
-                    {
-                        retval = ProjectUI.createErrorStatus( "Unable to get marker from file" );
-                    }
-                }
-                else
-                {
-                    retval = ProjectUI.createErrorStatus( "Unable to get file from problem" );
-                }
+		};
 
-                return retval;
-            }
+		migrationJob.schedule();
+	}
 
-        };
+	@Override
+	public void selectionChanged(IStructuredSelection selection) {
+		Object element = selection.getFirstElement();
 
-        migrationJob.schedule();
+		setEnabled(element instanceof Problem);
+	}
 
-    }
+	protected void refreshTableViewer() {
+		FindBreakingChangesPage page = UpgradeView.getPage(
+			Page.findbreackingchangesPageId, FindBreakingChangesPage.class);
 
-    protected abstract IStatus runWithMarker( Problem problem, IMarker marker );
+		TableViewer problemsViewer = page.getProblemsViewer();
 
-    @Override
-    public void selectionChanged( IStructuredSelection selection )
-    {
-        Object element = selection.getFirstElement();
+		UIUtil.async(
+			new Runnable() {
 
-        setEnabled( element instanceof Problem );
-    }
+				@Override
+				public void run() {
+					final Object selection = problemsViewer.getStructuredSelection().getFirstElement();
+					List<Problem> problems = null;
+
+					if (selection instanceof IFile) {
+						IFile file = (IFile)selection;
+
+						problems = MigrationUtil.getProblemsFromResource(file);
+					}
+					else if (selection instanceof Problem) {
+						ISelection se = page.getTreeViewer().getSelection();
+
+						if (se instanceof TreeSelection) {
+							problems = MigrationUtil.getCurrentProblemsFromTreeNode((TreeSelection)se);
+						}
+					}
+
+					if ((problems != null) && !problems.isEmpty()) {
+						problemsViewer.setInput(problems.toArray());
+						problemsViewer.setSelection(new StructuredSelection(problems.get(0)));
+					}
+					else {
+						problemsViewer.setInput(null);
+					}
+				}
+
+			});
+	}
+
+	protected abstract IStatus runWithMarker(Problem problem, IMarker marker);
+
 }

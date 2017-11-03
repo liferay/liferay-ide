@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.wizard;
 
@@ -36,71 +35,65 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
  * @author Kamesh Sampath
  * @author Cindy Li
  */
-@SuppressWarnings( "restriction" )
-public class BinaryProjectImportWizard extends DataModelWizard implements IWorkbenchWizard
-{
-    protected BinaryProjectImportWizardPage pluginBinaryProjectImportWizardPage;
-    protected SDK sdk;
+@SuppressWarnings("restriction")
+public class BinaryProjectImportWizard extends DataModelWizard implements IWorkbenchWizard {
 
-    public BinaryProjectImportWizard()
-    {
-        this( (IDataModel) null );
-    }
+	public BinaryProjectImportWizard() {
+		this((IDataModel)null);
+	}
 
-    public BinaryProjectImportWizard( IDataModel dataModel )
-    {
-        super( dataModel );
+	public BinaryProjectImportWizard(IDataModel dataModel) {
+		super(dataModel);
 
-        setWindowTitle( Msgs.importProject );
-        setDefaultPageImageDescriptor( ProjectUI.imageDescriptorFromPlugin(
-            ProjectUI.PLUGIN_ID, "/icons/wizban/import_wiz.png" ) ); //$NON-NLS-1$
-    }
+		setWindowTitle(Msgs.importProject);
+		setDefaultPageImageDescriptor(
+			ProjectUI.imageDescriptorFromPlugin(ProjectUI.PLUGIN_ID, "/icons/wizban/import_wiz.png"));
+	}
 
-    public BinaryProjectImportWizard( SDK sdk )
-    {
-        this( (IDataModel) null );
-        this.sdk = sdk;
-    }
+	public BinaryProjectImportWizard(SDK sdk) {
+		this((IDataModel)null);
+		this.sdk = sdk;
+	}
 
-    @Override
-    protected void doAddPages()
-    {
-        if( sdk != null )
-        {
-            IDataModel model = getDataModel();
-            model.setStringProperty( SDKProjectsImportDataModelProvider.LIFERAY_SDK_NAME, sdk.getName() );
-        }
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	}
 
-        pluginBinaryProjectImportWizardPage = new BinaryProjectImportWizardPage( getDataModel(), "pageOne" ); //$NON-NLS-1$
+	@Override
+	protected void doAddPages() {
+		if (sdk != null) {
+			IDataModel model = getDataModel();
 
-        addPage( pluginBinaryProjectImportWizardPage );
-    }
+			model.setStringProperty(SDKProjectsImportDataModelProvider.LIFERAY_SDK_NAME, sdk.getName());
+		}
 
-    @Override
-    protected IDataModelProvider getDefaultProvider()
-    {
-        return new BinaryProjectImportDataModelProvider();
-    }
+		pluginBinaryProjectImportWizardPage = new BinaryProjectImportWizardPage(getDataModel(), "pageOne");
 
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-    }
+		addPage(pluginBinaryProjectImportWizardPage);
+	}
 
-    @Override
-    protected void postPerformFinish() throws InvocationTargetException
-    {
-        UIUtil.switchToLiferayPerspective( LiferayPerspectiveFactory.ID, true );
+	@Override
+	protected IDataModelProvider getDefaultProvider() {
+		return new BinaryProjectImportDataModelProvider();
+	}
 
-        super.postPerformFinish();
-    }
+	@Override
+	protected void postPerformFinish() throws InvocationTargetException {
+		UIUtil.switchToLiferayPerspective(LiferayPerspectiveFactory.ID, true);
 
-    private static class Msgs extends NLS
-    {
-        public static String importProject;
+		super.postPerformFinish();
+	}
 
-        static
-        {
-            initializeMessages( BinaryProjectImportWizard.class.getName(), Msgs.class );
-        }
-    }
+	protected BinaryProjectImportWizardPage pluginBinaryProjectImportWizardPage;
+	protected SDK sdk;
+
+	private static class Msgs extends NLS {
+
+		public static String importProject;
+
+		static {
+			initializeMessages(BinaryProjectImportWizard.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

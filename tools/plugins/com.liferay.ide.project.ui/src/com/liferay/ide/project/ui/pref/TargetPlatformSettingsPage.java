@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,9 +10,13 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.ui.pref;
+
+import com.liferay.ide.project.core.ITargetPlatformConstant;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.util.TargetPlatformUtil;
 
 import java.io.IOException;
 
@@ -33,118 +37,103 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
-import com.liferay.ide.project.core.ITargetPlatformConstant;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.util.TargetPlatformUtil;
-
 /**
  * @author Lovett Li
  */
-public class TargetPlatformSettingsPage extends PreferencePage implements IWorkbenchPreferencePage
-{
+public class TargetPlatformSettingsPage extends PreferencePage implements IWorkbenchPreferencePage {
 
-    public static final String PROJECT_UI_TARGETPLATFORM_PAGE_ID =
-        "com.liferay.ide.project.ui.targetPlatformSettingsPage";
-    private ComboViewer targetPlatFormVersion;
-    private ScopedPreferenceStore preferenceStore;
+	public static final String PROJECT_UI_TARGETPLATFORM_PAGE_ID =
+		"com.liferay.ide.project.ui.targetPlatformSettingsPage";
 
-    public TargetPlatformSettingsPage()
-    {
-        super();
-        preferenceStore = new ScopedPreferenceStore( InstanceScope.INSTANCE, ProjectCore.PLUGIN_ID );
-    }
+	public TargetPlatformSettingsPage() {
+		_preferenceStore = new ScopedPreferenceStore(InstanceScope.INSTANCE, ProjectCore.PLUGIN_ID);
+	}
 
-    @Override
-    public void init( IWorkbench workbench )
-    {
-    }
+	@Override
+	public void init(IWorkbench workbench) {
+	}
 
-    private void initvaules()
-    {
-        IPreferenceStore store = getPreStore();
-        String version;
+	@Override
+	public boolean performOk() {
+		boolean result = super.performOk();
+		_storeValues();
 
-        if( store != null )
-        {
-            version = store.getString( ITargetPlatformConstant.CURRENT_TARGETFORM_VERSION ).replace( "[", "" ).replace(
-                "]", "" );
+		return result;
+	}
 
-            if( version == null || version.equals( "" ) )
-            {
-                version = ITargetPlatformConstant.DEFAULT_TARGETFORM_VERSION;
-            }
-        }
-        else
-        {
-            version = ITargetPlatformConstant.DEFAULT_TARGETFORM_VERSION;
-        }
+	@Override
+	protected Control createContents(Composite parent) {
+		Composite comp = new Composite(parent, SWT.NONE);
 
-        final ISelection selection = new StructuredSelection( version );
-        targetPlatFormVersion.setSelection( selection );
-    }
+		GridLayout layout = new GridLayout(2, false);
 
-    @Override
-    protected Control createContents( Composite parent )
-    {
-        Composite comp = new Composite( parent, SWT.NONE );
+		layout.horizontalSpacing = 10;
+		comp.setLayout(layout);
 
-        GridLayout layout = new GridLayout( 2, false );
-        layout.horizontalSpacing = 10;
-        comp.setLayout( layout );
+		new Label(comp, SWT.NONE).setText("Liferay Target Platform Version:");
 
-        new Label( comp, SWT.NONE ).setText( "Liferay Target Platform Version:" );
+		_targetPlatFormVersion = new ComboViewer(comp, SWT.READ_ONLY);
 
-        targetPlatFormVersion = new ComboViewer( comp, SWT.READ_ONLY );
-        targetPlatFormVersion.setLabelProvider( new LabelProvider()
-        {
+		_targetPlatFormVersion.setLabelProvider(
+			new LabelProvider() {
 
-            @Override
-            public String getText( Object element )
-            {
-                return element.toString();
-            }
-        } );
-        targetPlatFormVersion.setContentProvider( new ArrayContentProvider() );
+				@Override
+				public String getText(Object element) {
+					return element.toString();
+				}
 
-        try
-        {
-            targetPlatFormVersion.setInput( TargetPlatformUtil.getAllTargetPlatfromVersions() );
-        }
-        catch( IOException e )
-        {
-        }
+			});
+		_targetPlatFormVersion.setContentProvider(new ArrayContentProvider());
 
-        initvaules();
+		try {
+			_targetPlatFormVersion.setInput(TargetPlatformUtil.getAllTargetPlatfromVersions());
+		}
+		catch (IOException ioe) {
+		}
 
-        return comp;
-    }
+		_initvaules();
 
-    @Override
-    public boolean performOk()
-    {
-        boolean result = super.performOk();
-        storeValues();
+		return comp;
+	}
 
-        return result;
-    }
+	private IPreferenceStore _getPreStore() {
+		return _preferenceStore;
+	}
 
-    private void storeValues()
-    {
-        preferenceStore.setValue(
-            ITargetPlatformConstant.CURRENT_TARGETFORM_VERSION, targetPlatFormVersion.getSelection().toString() );
-        try
-        {
-            preferenceStore.save();
-        }
-        catch( IOException e )
-        {
-            ProjectCore.logError( "Can not save target platform preference", e );
-        }
-    }
+	private void _initvaules() {
+		IPreferenceStore store = _getPreStore();
+		String version;
 
-    private IPreferenceStore getPreStore()
-    {
-        return preferenceStore;
-    }
+		if (store != null) {
+			String targetVersion = store.getString(ITargetPlatformConstant.CURRENT_TARGETFORM_VERSION);
+
+			version = targetVersion.replace("[", "").replace("]", "");
+
+			if ((version == null) || version.equals("")) {
+				version = ITargetPlatformConstant.DEFAULT_TARGETFORM_VERSION;
+			}
+		}
+		else {
+			version = ITargetPlatformConstant.DEFAULT_TARGETFORM_VERSION;
+		}
+
+		final ISelection selection = new StructuredSelection(version);
+
+		_targetPlatFormVersion.setSelection(selection);
+	}
+
+	private void _storeValues() {
+		_preferenceStore.setValue(
+			ITargetPlatformConstant.CURRENT_TARGETFORM_VERSION, _targetPlatFormVersion.getSelection().toString());
+		try {
+			_preferenceStore.save();
+		}
+		catch (IOException ioe) {
+			ProjectCore.logError("Can not save target platform preference", ioe);
+		}
+	}
+
+	private ScopedPreferenceStore _preferenceStore;
+	private ComboViewer _targetPlatFormVersion;
 
 }

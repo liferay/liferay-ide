@@ -22,31 +22,26 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Terry Jia
  */
-public class BundleUrlValidationService extends ValidationService
-{
+public class BundleUrlValidationService extends ValidationService {
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-        String bundleUrl = op().getBundleUrl().content();
+		String bundleUrl = _op().getBundleUrl().content();
 
-        try
-        {
-            new URI( bundleUrl );
-        }
-        catch( Exception e )
-        {
-            retval = Status.createErrorStatus( "The bundle URL should be a vaild URL." );
-        }
+		try {
+			new URI(bundleUrl);
+		}
+		catch (Exception e) {
+			retval = Status.createErrorStatus("The bundle URL should be a vaild URL.");
+		}
 
-        return retval;
-    }
+		return retval;
+	}
 
-    private BaseLiferayWorkspaceOp op()
-    {
-        return context( BaseLiferayWorkspaceOp.class );
-    }
+	private BaseLiferayWorkspaceOp _op() {
+		return context(BaseLiferayWorkspaceOp.class);
+	}
 
 }

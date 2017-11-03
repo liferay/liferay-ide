@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.ui.handlers;
 
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -31,52 +31,46 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-
 /**
  * @author Simon Jiang
  */
-public class UpgradeLiferayProjectsHandler extends AbstractHandler
-{
-    public Object execute( ExecutionEvent event ) throws ExecutionException
-    {
-        final ISelection selection = HandlerUtil.getCurrentSelection( event );
-        final ArrayList<IProject> projectList = new ArrayList<IProject>();
+public class UpgradeLiferayProjectsHandler extends AbstractHandler {
 
-        if( selection instanceof IStructuredSelection )
-        {
-            Iterator<?> it = ( (IStructuredSelection) selection ).iterator();
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
+		final ArrayList<IProject> projectList = new ArrayList<>();
 
-            while( it.hasNext() )
-            {
-                Object o = it.next();
+		if (selection instanceof IStructuredSelection) {
+			Iterator<?> it = ((IStructuredSelection)selection).iterator();
 
-                if( o instanceof IJavaProject )
-                {
-                    final IProject project = ( (IJavaProject) o ).getProject();
+			while (it.hasNext()) {
+				Object o = it.next();
 
-                    if( !projectList.contains( project ) && SDKUtil.isSDKProject( project ) )
-                    {
-                        projectList.add( project );
-                    }
-                }
-            }
-        }
+				if (o instanceof IJavaProject) {
+					final IProject project = ((IJavaProject)o).getProject();
 
-        final UpgradeLiferayProjectsWizard wizard =
-            new UpgradeLiferayProjectsWizard( projectList.toArray( new IProject[projectList.size()] ) );
-        new WizardDialog( HandlerUtil.getActiveShellChecked( event ), wizard ).open();
+					if (!projectList.contains(project) && SDKUtil.isSDKProject(project)) {
+						projectList.add(project);
+					}
+				}
+			}
+		}
 
-        return null;
-    }
+		final UpgradeLiferayProjectsWizard wizard = new UpgradeLiferayProjectsWizard(
+			projectList.toArray(new IProject[projectList.size()]));
 
-    @Override
-    public boolean isEnabled()
-    {
-        if( ProjectUtil.getAllPluginsSDKProjects().length > 0 )
-        {
-            return true;
-        }
+		new WizardDialog(HandlerUtil.getActiveShellChecked(event), wizard).open();
 
-        return false;
-    }
+		return null;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		if (ProjectUtil.getAllPluginsSDKProjects().length > 0) {
+			return true;
+		}
+
+		return false;
+	}
+
 }

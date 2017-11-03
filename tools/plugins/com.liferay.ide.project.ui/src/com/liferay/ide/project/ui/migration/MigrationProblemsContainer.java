@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.migration;
 
@@ -20,27 +19,22 @@ import com.liferay.ide.project.core.upgrade.MigrationProblems;
 /**
  * @author Terry Jia
  */
-public class MigrationProblemsContainer implements ProblemsContainer
-{
+public class MigrationProblemsContainer implements ProblemsContainer {
 
-    private MigrationProblems[] problemsArray;
+	public MigrationProblems[] getProblemsArray() {
+		return _problemsArray;
+	}
 
-    private String type;
+	public String getType() {
+		return _type;
+	}
 
-    public MigrationProblems[] getProblemsArray()
-    {
-        return problemsArray;
-    }
+	public void setProblemsArray(MigrationProblems[] problemsArray) {
+		_problemsArray = problemsArray;
+		_type = problemsArray[0].getType();
+	}
 
-    public String getType()
-    {
-        return type;
-    }
-
-    public void setProblemsArray( MigrationProblems[] problemsArray )
-    {
-        this.problemsArray = problemsArray;
-        this.type = problemsArray[0].getType();
-    }
+	private MigrationProblems[] _problemsArray;
+	private String _type;
 
 }

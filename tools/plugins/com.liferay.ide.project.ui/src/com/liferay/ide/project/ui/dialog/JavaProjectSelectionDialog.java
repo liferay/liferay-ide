@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.dialog;
 
@@ -24,49 +23,44 @@ import org.eclipse.swt.widgets.Shell;
 /**
  * @author Andy Wu
  */
-public class JavaProjectSelectionDialog extends ProjectSelectionDialog
-{
-    static final ViewerFilter defaultFilter = new ViewerFilter()
-    {
-        @Override
-        public boolean select( Viewer viewer, Object parentElement, Object element )
-        {
-            if( element instanceof IJavaProject )
-            {
-                IProject project = ( (IJavaProject) element ).getProject();
+public class JavaProjectSelectionDialog extends ProjectSelectionDialog {
 
-                if( project.getName().equals( "External Plug-in Libraries" ) )
-                {
-                    return false;
-                }
+	public JavaProjectSelectionDialog(Shell parentShell) {
+		super(parentShell, _defaultFilter);
 
-                return true;
-            }
+		setTitle("Project Selection");
+		setMessage("Select project");
+	}
 
-            return false;
-        }
-    };
+	public JavaProjectSelectionDialog(Shell parentShell, ViewerFilter filter) {
+		super(parentShell, filter);
 
-    public JavaProjectSelectionDialog( Shell parentShell )
-    {
-        super( parentShell, defaultFilter );
+		setTitle("Project Selection");
+		setMessage("Select project");
+	}
 
-        setTitle( "Project Selection" );
-        setMessage( "Select project" );
-    }
+	@Override
+	protected boolean checkProject(IJavaProject project) {
+		return true;
+	}
 
-    public JavaProjectSelectionDialog( Shell parentShell, ViewerFilter filter )
-    {
-        super( parentShell , filter );
+	private static final ViewerFilter _defaultFilter = new ViewerFilter() {
 
-        setTitle( "Project Selection" );
-        setMessage( "Select project" );
-    }
+		@Override
+		public boolean select(Viewer viewer, Object parentElement, Object element) {
+			if (element instanceof IJavaProject) {
+				IProject project = ((IJavaProject)element).getProject();
 
-    @Override
-    protected boolean checkProject( IJavaProject project )
-    {
-        return true;
-    }
+				if (project.getName().equals("External Plug-in Libraries")) {
+					return false;
+				}
+
+				return true;
+			}
+
+			return false;
+		}
+
+	};
 
 }

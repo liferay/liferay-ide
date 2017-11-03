@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,12 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.LiferayUIPlugin;
 
 import org.eclipse.core.runtime.CoreException;
@@ -41,237 +41,183 @@ import org.eclipse.ui.PlatformUI;
  * @author Cindy Li
  * @author Kuo Zhang
  */
-@SuppressWarnings( "restriction" )
-public class NewWizardAction extends Action implements Comparable
-{
+@SuppressWarnings({"restriction", "rawtypes"})
+public class NewWizardAction extends Action implements Comparable {
 
-    public final static String ATT_CLASS = "class";//$NON-NLS-1$
+	public static final String ATT_CLASS = "class";
 
-    public final static String ATT_ICON = "icon";//$NON-NLS-1$
+	public static final String ATT_ICON = "icon";
 
-    public final static String ATT_MENUINDEX = "menuIndex";//$NON-NLS-1$
+	public static final String ATT_ID = "id";
 
-    public final static String ATT_ID = "id";//$NON-NLS-1$
+	public static final String ATT_MENUINDEX = "menuIndex";
 
-    public final static String ATT_NAME = "name";//$NON-NLS-1$
+	public static final String ATT_NAME = "name";
 
-    public final static String ATT_PROJECTTYPE = "project_type"; //$NON-NLS-1$
+	public static final String ATT_PROJECTTYPE = "project_type";
 
-    public final static String TAG_CLASS = "class"; //$NON-NLS-1$
+	public static final String ATT_VALID_PROJECT_TYPES = "validProjectTypes";
 
-    public final static String TAG_DESCRIPTION = "description"; //$NON-NLS-1$
+	public static final String TAG_CLASS = "class";
 
-    public final static String TAG_NAME = "name";//$NON-NLS-1$
+	public static final String TAG_DESCRIPTION = "description";
 
-    public final static String TAG_PARAMETER = "parameter";//$NON-NLS-1$
+	public static final String TAG_NAME = "name";
 
-    public final static String TAG_VALUE = "value";//$NON-NLS-1$
+	public static final String TAG_PARAMETER = "parameter";
 
-	public final static String ATT_VALID_PROJECT_TYPES = "validProjectTypes"; //$NON-NLS-1$
+	public static final String TAG_VALUE = "value";
 
-    protected IConfigurationElement fConfigurationElement;
+	public NewWizardAction(IConfigurationElement element) {
+		fConfigurationElement = element;
 
-    protected IStructuredSelection fSelection;
+		String description = _getDescriptionFromConfig(fConfigurationElement);
 
-    protected Shell fShell;
+		setText(NLS.bind(Msgs.newAction, element.getAttribute(ATT_NAME)));
+		setDescription(description);
+		setToolTipText(description);
+		setImageDescriptor(_getIconFromConfig(fConfigurationElement));
+		setMenuIndex(_getMenuIndexFromConfig(fConfigurationElement));
+		setId(element.getAttribute(ATT_ID));
+	}
 
-    protected int menuIndex;
+	public int compareTo(Object o) {
+		NewWizardAction action = (NewWizardAction)o;
 
-    protected String projectType = null;
+		return getMenuIndex() - action.getMenuIndex();
+	}
 
-    public NewWizardAction( IConfigurationElement element )
-    {
-        fConfigurationElement = element;
+	public int getMenuIndex() {
+		return menuIndex;
+	}
 
-        String description = getDescriptionFromConfig( fConfigurationElement );
+	public String getProjectType() {
+		return projectType;
+	}
 
-        setText( NLS.bind( Msgs.newAction, element.getAttribute( ATT_NAME ) ) );
-        setDescription( description );
-        setToolTipText( description );
-        setImageDescriptor( getIconFromConfig( fConfigurationElement ) );
-        setMenuIndex( getMenuIndexFromConfig( fConfigurationElement ) );
-        setId( element.getAttribute( ATT_ID ) );
-    }
+	public void run() {
+		Shell shell = getShell();
 
-    public int compareTo( Object o )
-    {
-        NewWizardAction action = (NewWizardAction) o;
+		try {
+			INewWizard wizard = createWizard();
 
-        return getMenuIndex() - action.getMenuIndex();
-    }
+			wizard.init(PlatformUI.getWorkbench(), getSelection());
 
-    public int getMenuIndex()
-    {
-        return menuIndex;
-    }
+			WizardDialog dialog = new WizardDialog(shell, wizard);
 
-    public String getProjectType()
-    {
-        return projectType;
-    }
+			PixelConverter converter = new PixelConverter(JFaceResources.getDialogFont());
 
-    public void run()
-    {
-        Shell shell = getShell();
-        try
-        {
-            INewWizard wizard = createWizard();
+			dialog.setMinimumPageSize(
+				converter.convertWidthInCharsToPixels(70), converter.convertHeightInCharsToPixels(20));
 
-            wizard.init( PlatformUI.getWorkbench(), getSelection() );
+			dialog.create();
 
-            WizardDialog dialog = new WizardDialog( shell, wizard );
+			int res = dialog.open();
 
-            PixelConverter converter = new PixelConverter( JFaceResources.getDialogFont() );
+			notifyResult(res == Window.OK);
+		}
+		catch (CoreException ce) {
+		}
+	}
 
-            dialog.setMinimumPageSize(
-                converter.convertWidthInCharsToPixels( 70 ), converter.convertHeightInCharsToPixels( 20 ) );
+	public void setMenuIndex(int menuIndex) {
+		this.menuIndex = menuIndex;
+	}
 
-            dialog.create();
+	public void setProjectType(String projectType) {
+		this.projectType = projectType;
+	}
 
-            int res = dialog.open();
+	public void setShell(Shell shell) {
+		fShell = shell;
+	}
 
-            notifyResult( res == Window.OK );
-        }
-        catch( CoreException e )
-        {
-        }
-    }
+	protected INewWizard createWizard() throws CoreException {
+		return (INewWizard)CoreUtility.createExtension(fConfigurationElement, ATT_CLASS);
+	}
 
-    public void setMenuIndex( int menuIndex )
-    {
-        this.menuIndex = menuIndex;
-    }
+	protected IStructuredSelection getSelection() {
+		if (fSelection == null) {
+			return _evaluateCurrentSelection();
+		}
 
-    public void setProjectType( String projectType )
-    {
-        this.projectType = projectType;
-    }
+		return fSelection;
+	}
 
-    public void setShell( Shell shell )
-    {
-        fShell = shell;
-    }
+	protected Shell getShell() {
+		if (fShell == null) {
+			return ProjectUI.getActiveWindow().getShell();
+		}
 
-    private IStructuredSelection evaluateCurrentSelection()
-    {
-        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		return fShell;
+	}
 
-        if( window != null )
-        {
-            ISelection selection = window.getSelectionService().getSelection();
+	protected IConfigurationElement fConfigurationElement;
+	protected IStructuredSelection fSelection;
+	protected Shell fShell;
+	protected int menuIndex;
+	protected String projectType = null;
 
-            if( selection instanceof IStructuredSelection )
-            {
-                return (IStructuredSelection) selection;
-            }
-        }
+	private IStructuredSelection _evaluateCurrentSelection() {
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
-        return StructuredSelection.EMPTY;
-    }
+		if (window != null) {
+			ISelection selection = window.getSelectionService().getSelection();
 
-    private String getDescriptionFromConfig( IConfigurationElement config )
-    {
-        IConfigurationElement[] children = config.getChildren( TAG_DESCRIPTION );
+			if (selection instanceof IStructuredSelection) {
+				return (IStructuredSelection)selection;
+			}
+		}
 
-        if( children.length >= 1 )
-        {
-            return children[0].getValue();
-        }
+		return StructuredSelection.EMPTY;
+	}
 
-        return StringPool.EMPTY;
-    }
+	private String _getDescriptionFromConfig(IConfigurationElement config) {
+		IConfigurationElement[] children = config.getChildren(TAG_DESCRIPTION);
 
-    private ImageDescriptor getIconFromConfig( IConfigurationElement config )
-    {
-        String iconName = config.getAttribute( ATT_ICON );
+		if (children.length >= 1) {
+			return children[0].getValue();
+		}
 
-        if( iconName != null )
-        {
-            return LiferayUIPlugin.imageDescriptorFromPlugin( config.getContributor().getName(), iconName );
-        }
+		return StringPool.EMPTY;
+	}
 
-        return null;
-    }
+	private ImageDescriptor _getIconFromConfig(IConfigurationElement config) {
+		String iconName = config.getAttribute(ATT_ICON);
 
-    private int getMenuIndexFromConfig( IConfigurationElement config )
-    {
-        IConfigurationElement[] classElements = config.getChildren( TAG_CLASS );
+		if (iconName != null) {
+			return LiferayUIPlugin.imageDescriptorFromPlugin(config.getContributor().getName(), iconName);
+		}
 
-        if( classElements.length > 0 )
-        {
-            for( IConfigurationElement classElement : classElements )
-            {
-                IConfigurationElement[] paramElements = classElement.getChildren( TAG_PARAMETER );
+		return null;
+	}
 
-                for( IConfigurationElement paramElement : paramElements )
-                {
-                    if( ATT_MENUINDEX.equals( paramElement.getAttribute( TAG_NAME ) ) )
-                    {
-                        return Integer.parseInt( paramElement.getAttribute( TAG_VALUE ) );
-                    }
-                }
-            }
-        }
+	private int _getMenuIndexFromConfig(IConfigurationElement config) {
+		IConfigurationElement[] classElements = config.getChildren(TAG_CLASS);
 
-        return Integer.MAX_VALUE;
-    }
+		if (classElements.length > 0) {
+			for (IConfigurationElement classElement : classElements) {
+				IConfigurationElement[] paramElements = classElement.getChildren(TAG_PARAMETER);
 
-    private String getProjectTypeFromConfig( IConfigurationElement config )
-    {
-        IConfigurationElement[] classElements = config.getChildren( TAG_CLASS );
+				for (IConfigurationElement paramElement : paramElements) {
+					if (ATT_MENUINDEX.equals(paramElement.getAttribute(TAG_NAME))) {
+						return Integer.parseInt(paramElement.getAttribute(TAG_VALUE));
+					}
+				}
+			}
+		}
 
-        if( classElements.length > 0 )
-        {
-            for( IConfigurationElement classElement : classElements )
-            {
-                IConfigurationElement[] paramElements = classElement.getChildren( TAG_PARAMETER );
+		return Integer.MAX_VALUE;
+	}
 
-                for( IConfigurationElement paramElement : paramElements )
-                {
-                    if( ATT_PROJECTTYPE.equals( paramElement.getAttribute( TAG_NAME ) ) )
-                    {
-                        return paramElement.getAttribute( TAG_VALUE );
-                    }
-                }
-            }
-        }
+	private static class Msgs extends NLS {
 
-        return null;
-    }
+		public static String newAction;
 
-    protected INewWizard createWizard() throws CoreException
-    {
+		static {
+			initializeMessages(NewWizardAction.class.getName(), Msgs.class);
+		}
 
-        return (INewWizard) CoreUtility.createExtension( fConfigurationElement, ATT_CLASS );
-    }
+	}
 
-    protected IStructuredSelection getSelection()
-    {
-        if( fSelection == null )
-        {
-            return evaluateCurrentSelection();
-        }
-
-        return fSelection;
-    }
-
-    protected Shell getShell()
-    {
-        if( fShell == null )
-        {
-            return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-        }
-
-        return fShell;
-    }
-
-    private static class Msgs extends NLS
-    {
-        public static String newAction;
-
-        static
-        {
-            initializeMessages( NewWizardAction.class.getName(), Msgs.class );
-        }
-    }
 }

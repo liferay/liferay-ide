@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
@@ -23,11 +22,14 @@ import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import java.io.File;
+
 import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -51,225 +53,196 @@ import org.eclipse.swt.widgets.Link;
  * @author Simon Jiang
  * @author Joye Luo
  */
-public class LayoutTemplatePage extends AbstractLiferayTableViewCustomPart
-{
+public class LayoutTemplatePage extends AbstractLiferayTableViewCustomPart {
 
-    public LayoutTemplatePage( Composite parent, int style, LiferayUpgradeDataModel dataModel )
-    {
-        super( parent, style, dataModel, LAYOUTTEMPLATE_PAGE_ID, true );
-    }
+	public LayoutTemplatePage(Composite parent, int style, LiferayUpgradeDataModel dataModel) {
+		super(parent, style, dataModel, layouttemplatePageId, true);
+	}
 
-    @Override
-    public String getPageTitle()
-    {
-        return "Upgrade Layout Templates";
-    }
+	public void createSpecialDescriptor(Composite parent, int style) {
+		final String descriptor =
+			"This step will upgrade layout template files from 6.2 to 7.0.\n" +
+				"The layout template's rows and columns are affected by the new grid system syntax of Bootstrap.\n" +
+					"For more details, please see <a>Upgrading Layout Templates</a>.";
 
-    public void createSpecialDescriptor( Composite parent, int style )
-    {
-        final String descriptor = "This step will upgrade layout template files from 6.2 to 7.0.\n" +
-            "The layout template's rows and columns are affected by the new grid system syntax of Bootstrap.\n" +
-            "For more details, please see <a>Upgrading Layout Templates</a>.";
+		String url = "https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/upgrading-layout-templates";
 
-        String url = "https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/upgrading-layout-templates";
+		Link link = SWTUtil.createHyperLink(this, style, descriptor, 1, url);
 
-        Link  link = SWTUtil.createHyperLink( this, style, descriptor, 1, url );
-        link.setLayoutData( new GridData( SWT.FILL, SWT.BEGINNING, true, false, 2, 1 ) );
-    }
+		link.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, false, 2, 1));
+	}
 
-    @Override
-    public int getGridLayoutCount()
-    {
-        return 2;
-    }
+	@Override
+	public int getGridLayoutCount() {
+		return 2;
+	}
 
-    @Override
-    public boolean getGridLayoutEqualWidth()
-    {
-        return false;
-    }
+	@Override
+	public boolean getGridLayoutEqualWidth() {
+		return false;
+	}
 
-    private class LayoutProjectViewerFilter extends ViewerFilter
-    {
+	@Override
+	public String getPageTitle() {
+		return "Upgrade Layout Templates";
+	}
 
-        @Override
-        public boolean select( Viewer viewer, Object parentElement, Object element )
-        {
-            if( element instanceof IJavaProject )
-            {
-                IProject project = ( (IJavaProject) element ).getProject();
+	@Override
+	protected void createTempFile(final IFile srcFile, final File templateFile, final String projectName) {
+		try {
+			String content = _upgradeLayouttplContent(FileUtil.readContents(srcFile.getLocation().toFile(), true));
 
-                if( project.getName().equals( "External Plug-in Libraries" ) )
-                {
-                    return false;
-                }
+			if (templateFile.exists()) {
+				templateFile.delete();
+			}
 
-                if( ProjectUtil.isLayoutTplProject( project ) )
-                {
-                    return true;
-                }
+			templateFile.createNewFile();
+			FileUtil.writeFile(templateFile, content, projectName);
+		}
+		catch (Exception e) {
+			ProjectUI.logError(e);
+		}
+	}
 
-                return false;
-            }
+	@Override
+	protected void doUpgrade(IFile srcFile, IProject project) {
+		try {
+			String content = _upgradeLayouttplContent(FileUtil.readContents(srcFile.getLocation().toFile(), true));
 
-            return false;
-        }
+			FileUtils.writeStringToFile(srcFile.getLocation().toFile(), content, "UTF-8");
+		}
+		catch (Exception e) {
+			ProjectUI.logError(e);
+		}
+	}
 
-    }
+	@Override
+	protected IFile[] getAvaiableUpgradeFiles(IProject project) {
+		List<IFile> files = new ArrayList<>();
 
-    private class LayoutSearchFilesVistor extends SearchFilesVisitor
-    {
+		List<IFile> searchFiles = new LayoutSearchFilesVistor().searchFiles(project, ".tpl");
 
-        @Override
-        public boolean visit( IResourceProxy resourceProxy )
-        {
-            if( resourceProxy.getType() == IResource.FILE && resourceProxy.getName().endsWith( searchFileName ) )
-            {
-                IResource resource = resourceProxy.requestResource();
+		files.addAll(searchFiles);
 
-                if( resource.exists() )
-                {
-                    resources.add( (IFile) resource );
-                }
-            }
+		return files.toArray(new IFile[files.size()]);
+	}
 
-            return true;
-        }
-    }
+	@Override
+	protected CellLabelProvider getLableProvider() {
+		return new LiferayUpgradeTabeViewLabelProvider("Upgrade Layouttpl") {
 
-    @Override
-    protected void createTempFile( final IFile srcFile, final File templateFile, final String projectName )
-    {
-        try
-        {
-            String content = upgradeLayouttplContent( FileUtil.readContents( srcFile.getLocation().toFile(), true ) );
+			@Override
+			public Image getImage(Object element) {
+				return getImageRegistry().get("layout");
+			}
 
-            if( templateFile.exists() )
-            {
-                templateFile.delete();
-            }
+			@Override
+			protected void initalizeImageRegistry(ImageRegistry imageRegistry) {
+				imageRegistry.put(
+					"layout", ProjectUI.imageDescriptorFromPlugin(ProjectUI.PLUGIN_ID, "/icons/e16/layout.png"));
+			}
 
-            templateFile.createNewFile();
-            FileUtil.writeFile( templateFile, content, projectName );
-        }
-        catch( Exception e )
-        {
-            ProjectUI.logError( e );
-        }
-    }
+		};
+	}
 
-    @Override
-    protected void doUpgrade( IFile srcFile, IProject project )
-    {
-        try
-        {
-            String content = upgradeLayouttplContent( FileUtil.readContents( srcFile.getLocation().toFile(), true ) );
-            FileUtils.writeStringToFile( srcFile.getLocation().toFile(), content, "UTF-8" );
-        }
-        catch( Exception e )
-        {
-            ProjectUI.logError( e );
-        }
-    }
+	@Override
+	protected List<IProject> getSelectedProjects() {
+		List<IProject> projects = new ArrayList<>();
 
-    @Override
-    protected IFile[] getAvaiableUpgradeFiles( IProject project )
-    {
-        List<IFile> files = new ArrayList<IFile>();
+		final JavaProjectSelectionDialog dialog = new JavaProjectSelectionDialog(
+			Display.getCurrent().getActiveShell(), new LayoutProjectViewerFilter());
 
-        List<IFile> searchFiles = new LayoutSearchFilesVistor().searchFiles( project, ".tpl" );
-        files.addAll( searchFiles );
+		URL imageUrl = bundle.getEntry("/icons/e16/layout.png");
 
-        return files.toArray( new IFile[files.size()] );
-    }
+		Image layouttplImage = ImageDescriptor.createFromURL(imageUrl).createImage();
 
-    @Override
-    protected CellLabelProvider getLableProvider()
-    {
-        return new LiferayUpgradeTabeViewLabelProvider( "Upgrade Layouttpl")
-        {
+		dialog.setImage(layouttplImage);
 
-            @Override
-            public Image getImage( Object element )
-            {
-                return this.getImageRegistry().get( "layout" );
-            }
+		dialog.setTitle("Layout Template Project");
+		dialog.setMessage("Select Layout Template Project");
 
-            @Override
-            protected void initalizeImageRegistry( ImageRegistry imageRegistry )
-            {
-                imageRegistry.put(
-                    "layout", ProjectUI.imageDescriptorFromPlugin( ProjectUI.PLUGIN_ID, "/icons/e16/layout.png" ) );
-            }
-        };
-    }
+		if (dialog.open() == Window.OK) {
+			final Object[] selectedProjects = dialog.getResult();
 
-    @Override
-    protected List<IProject> getSelectedProjects()
-    {
-        List<IProject> projects = new ArrayList<>();
+			if (selectedProjects != null) {
+				for (Object project : selectedProjects) {
+					if (project instanceof IJavaProject) {
+						IJavaProject p = (IJavaProject)project;
 
-        final JavaProjectSelectionDialog dialog =
-            new JavaProjectSelectionDialog( Display.getCurrent().getActiveShell(), new LayoutProjectViewerFilter() );
+						projects.add(p.getProject());
+					}
+				}
+			}
+		}
 
-            URL imageUrl = ProjectUI.getDefault().getBundle().getEntry( "/icons/e16/layout.png");
-            Image layouttplImage = ImageDescriptor.createFromURL( imageUrl ).createImage();
-            
-            dialog.setImage( layouttplImage );
-            dialog.setTitle( "Layout Template Project" );
-            dialog.setMessage( "Select Layout Template Project" );
-      
-        if( dialog.open() == Window.OK )
-        {
-            final Object[] selectedProjects = dialog.getResult();
+		return projects;
+	}
 
-            if( selectedProjects != null )
-            {
-                for( Object project : selectedProjects )
-                {
-                    if( project instanceof IJavaProject )
-                    {
-                        IJavaProject p = (IJavaProject) project;
-                        projects.add( p.getProject() );
-                    }
-                }
-            }
-        }
+	@Override
+	protected boolean isNeedUpgrade(IFile srcFile) {
+		final String content = FileUtil.readContents(srcFile.getLocation().toFile());
 
-        return projects;
-    }
+		if ((content != null) && !content.equals("")) {
+			if (content.contains("row-fluid") || content.contains("span")) {
+				return true;
+			}
+		}
 
-    @Override
-    protected boolean isNeedUpgrade( IFile srcFile )
-    {
-        final String content = FileUtil.readContents( srcFile.getLocation().toFile() );
+		return false;
+	}
 
-        if( content != null && !content.equals( "" ) )
-        {
-            if( content.contains( "row-fluid" ) || content.contains( "span" ) )
-            {
-                return true;
-            }
-        }
+	private String _upgradeLayouttplContent(String content) {
+		if ((content != null) && !content.equals("")) {
+			if (content.contains("row-fluid")) {
+				content = content.replaceAll("row-fluid", "row");
+			}
 
-        return false;
-    }
+			if (content.contains("span")) {
+				content = content.replaceAll("span", "col-md-");
+			}
+		}
 
-    private String upgradeLayouttplContent( String content )
-    {
-        if( content != null && !content.equals( "" ) )
-        {
-            if( content.contains( "row-fluid" ) )
-            {
-                content = content.replaceAll( "row-fluid", "row" );
-            }
+		return content;
+	}
 
-            if( content.contains( "span" ) )
-            {
-                content = content.replaceAll( "span", "col-md-" );
-            }
-        }
+	private class LayoutProjectViewerFilter extends ViewerFilter {
 
-        return content;
-    }
+		@Override
+		public boolean select(Viewer viewer, Object parentElement, Object element) {
+			if (element instanceof IJavaProject) {
+				IProject project = ((IJavaProject)element).getProject();
+
+				if (project.getName().equals("External Plug-in Libraries")) {
+					return false;
+				}
+
+				if (ProjectUtil.isLayoutTplProject(project)) {
+					return true;
+				}
+
+				return false;
+			}
+
+			return false;
+		}
+
+	}
+
+	private class LayoutSearchFilesVistor extends SearchFilesVisitor {
+
+		@Override
+		public boolean visit(IResourceProxy resourceProxy) {
+			if ((resourceProxy.getType() == IResource.FILE) && resourceProxy.getName().endsWith(searchFileName)) {
+				IResource resource = resourceProxy.requestResource();
+
+				if (resource.exists()) {
+					resources.add((IFile)resource);
+				}
+			}
+
+			return true;
+		}
+
+	}
+
 }

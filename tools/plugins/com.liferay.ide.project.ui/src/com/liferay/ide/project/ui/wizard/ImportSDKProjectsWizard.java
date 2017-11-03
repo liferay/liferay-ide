@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -25,88 +25,78 @@ import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 
-
 /**
  * @author Simon Jiang
  */
-public class ImportSDKProjectsWizard extends SapphireWizard<SDKProjectsImportOp>
-    implements IWorkbenchWizard, INewWizard
-{
-    private static final String INITIAL_MESSAGE = "Please select at least one project to import.";
+public class ImportSDKProjectsWizard
+	extends SapphireWizard<SDKProjectsImportOp> implements IWorkbenchWizard, INewWizard {
 
-    private String title;
-    private boolean supressedFirstErrorMessage = false;
+	public ImportSDKProjectsWizard() {
+		super(_createDefaultOp(), DefinitionLoader.sdef(ImportSDKProjectsWizard.class).wizard());
+	}
 
-    public ImportSDKProjectsWizard( final IPath sdkPath )
-    {
-        super( createDefaultOp( sdkPath ), DefinitionLoader.sdef( ImportSDKProjectsWizard.class ).wizard() );
-    }
+	public ImportSDKProjectsWizard(final IPath sdkPath) {
+		super(_createDefaultOp(sdkPath), DefinitionLoader.sdef(ImportSDKProjectsWizard.class).wizard());
+	}
 
-    public ImportSDKProjectsWizard()
-    {
-        super( createDefaultOp(), DefinitionLoader.sdef( ImportSDKProjectsWizard.class ).wizard() );
-    }
+	public ImportSDKProjectsWizard(final String newTitle) {
+		super(_createDefaultOp(), DefinitionLoader.sdef(ImportSDKProjectsWizard.class).wizard());
+		_title = newTitle;
+	}
 
-    public ImportSDKProjectsWizard( final String newTitle )
-    {
-        super( createDefaultOp(), DefinitionLoader.sdef( ImportSDKProjectsWizard.class ).wizard() );
-        this.title = newTitle;
-    }
+	@Override
+	public IWizardPage[] getPages() {
+		final IWizardPage[] wizardPages = super.getPages();
 
-    private static SDKProjectsImportOp createDefaultOp()
-    {
-        return SDKProjectsImportOp.TYPE.instantiate();
-    }
+		if (wizardPages != null) {
+			final SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
 
-    private static SDKProjectsImportOp createDefaultOp( final IPath sdkPath)
-    {
-        SDKProjectsImportOp importOp = SDKProjectsImportOp.TYPE.instantiate();
+			final String message = wizardPage.getMessage();
 
-        importOp.setSdkLocation( PathBridge.create( sdkPath ) );
+			if (CoreUtil.isNullOrEmpty(message)) {
+				wizardPage.setMessage(_initialMessage);
+			}
 
-        return importOp;
-    }
+			if ((wizardPage.getMessageType() == IMessageProvider.ERROR) && !_supressedFirstErrorMessage) {
+				_supressedFirstErrorMessage = true;
 
-    @Override
-    public IWizardPage[] getPages()
-    {
-        final IWizardPage[] wizardPages = super.getPages();
+				wizardPage.setMessage(_initialMessage);
+			}
+		}
 
-        if( wizardPages != null )
-        {
-            final SapphireWizardPage wizardPage = (SapphireWizardPage) wizardPages[0];
+		if (_title != null) {
+			Shell shell = getContainer().getShell();
 
-            final String message = wizardPage.getMessage();
+			shell.setText(_title);
+		}
 
-            if( CoreUtil.isNullOrEmpty( message ) )
-            {
-                wizardPage.setMessage( INITIAL_MESSAGE );
-            }
+		return wizardPages;
+	}
 
-            if( wizardPage.getMessageType() == IMessageProvider.ERROR && !supressedFirstErrorMessage )
-            {
-                supressedFirstErrorMessage = true;
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	}
 
-                wizardPage.setMessage( INITIAL_MESSAGE );
-            }
-        }
-        if ( title != null)
-        {
-            this.getContainer().getShell().setText( title );
-        }
+	private static SDKProjectsImportOp _createDefaultOp() {
+		return SDKProjectsImportOp.TYPE.instantiate();
+	}
 
-        return wizardPages;
-    }
+	private static SDKProjectsImportOp _createDefaultOp(final IPath sdkPath) {
+		SDKProjectsImportOp importOp = SDKProjectsImportOp.TYPE.instantiate();
 
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-    }
+		importOp.setSdkLocation(PathBridge.create(sdkPath));
 
+		return importOp;
+	}
 
+	private static final String _initialMessage = "Please select at least one project to import.";
+
+	private boolean _supressedFirstErrorMessage = false;
+	private String _title;
 
 }

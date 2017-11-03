@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,14 +10,16 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.ui.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
 import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
 import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
+
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -31,130 +33,123 @@ import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
 import org.eclipse.sapphire.ui.forms.FormComponentPart;
 import org.eclipse.sapphire.ui.forms.WizardDef;
+import org.eclipse.sapphire.ui.forms.WizardPagePart;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.IWorkingSet;
+import org.eclipse.ui.IWorkingSetManager;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 import org.eclipse.wst.web.internal.DelegateConfigurationElement;
 
-
 /**
  * @author Terry Jia
  * @author Simon Jiang
  */
+@SuppressWarnings("restriction")
+public class BaseProjectWizard<T extends Element> extends SapphireWizard<T> implements IWorkbenchWizard, INewWizard {
 
-@SuppressWarnings( "restriction" )
-public class BaseProjectWizard<T extends Element> extends SapphireWizard<T> implements IWorkbenchWizard, INewWizard
-{
-    private boolean firstErrorMessageRemoved = false;
+	public BaseProjectWizard(T t, Reference<WizardDef> wizard) {
+		super(t, wizard);
+	}
 
-    public BaseProjectWizard( T t, Reference<WizardDef> wizard )
-    {
-        super(t, wizard);
-    }
+	@Override
+	public IWizardPage[] getPages() {
+		final IWizardPage[] wizardPages = super.getPages();
 
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-        if( selection != null )
-        {
-            Object element = selection.getFirstElement();
+		if (!_firstErrorMessageRemoved && (wizardPages != null)) {
+			final SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
 
-            if( element instanceof IResource )
-            {
-                IResource resource = (IResource) element;
+			final String message = wizardPage.getMessage();
+			final int messageType = wizardPage.getMessageType();
 
-                final IPath location = resource.getProject().getLocation();
+			if ((messageType == IMessageProvider.ERROR) && !CoreUtil.isNullOrEmpty(message)) {
+				wizardPage.setMessage("Please enter a project name.", SapphireWizardPage.NONE);
+				_firstErrorMessageRemoved = true;
+			}
+		}
 
-                if( location != null )
-                {
-                    ( (BaseModuleOp) element() )
-                        .setInitialSelectionPath( PathBridge.create( location ) );
-                }
-            }
-        }
-    }
+		return wizardPages;
+	}
 
-    protected void addToWorkingSets( IProject newProject ) throws Exception
-    {
-        if( newProject != null )
-        {
-            for( final FormComponentPart formPart : part()
-                .getPages().get( 0 ).children().all() )
-            {
-                if( formPart instanceof WorkingSetCustomPart )
-                {
-                    final WorkingSetCustomPart workingSetPart = (WorkingSetCustomPart) formPart;
-                    final IWorkingSet[] workingSets = workingSetPart.getWorkingSets();
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		if (selection != null) {
+			Object element = selection.getFirstElement();
 
-                    if( !CoreUtil.isNullOrEmpty( workingSets ) )
-                    {
-                        PlatformUI.getWorkbench().getWorkingSetManager().addToWorkingSets( newProject, workingSets );
-                    }
-                }
-            }
-        }
-    }
+			if (element instanceof IResource) {
+				IResource resource = (IResource)element;
 
-    @Override
-    public IWizardPage[] getPages()
-    {
-        final IWizardPage[] wizardPages = super.getPages();
+				final IPath location = resource.getProject().getLocation();
 
-        if( !firstErrorMessageRemoved && wizardPages != null )
-        {
-            final SapphireWizardPage wizardPage = (SapphireWizardPage) wizardPages[0];
+				if (location != null) {
+					((BaseModuleOp)element()).setInitialSelectionPath(PathBridge.create(location));
+				}
+			}
+		}
+	}
 
-            final String message = wizardPage.getMessage();
-            final int messageType = wizardPage.getMessageType();
+	protected void addToWorkingSets(IProject newProject) throws Exception {
+		if (newProject != null) {
+			List<WizardPagePart> wizardPages = part().getPages();
 
-            if( messageType == IMessageProvider.ERROR && ! CoreUtil.isNullOrEmpty( message ) )
-            {
-                wizardPage.setMessage( "Please enter a project name.", SapphireWizardPage.NONE ); //$NON-NLS-1$
-                firstErrorMessageRemoved = true;
-            }
-        }
+			WizardPagePart wizardPagePart = wizardPages.get(0);
 
-        return wizardPages;
-    }
-    
-    
-    protected void openLiferayPerspective( IProject newProject )
-    {
-        final IWorkbench workbench = PlatformUI.getWorkbench();
+			for (final FormComponentPart formPart : wizardPagePart.children().all()) {
+				if (formPart instanceof WorkingSetCustomPart) {
+					final WorkingSetCustomPart workingSetPart = (WorkingSetCustomPart)formPart;
 
-        IPerspectiveDescriptor perspective = workbench.getActiveWorkbenchWindow().getActivePage().getPerspective();
+					final IWorkingSet[] workingSets = workingSetPart.getWorkingSets();
 
-        if( perspective.getId().equals( LiferayWorkspacePerspectiveFactory.ID ) )
-        {
-            return;
-        }
+					if (!CoreUtil.isNullOrEmpty(workingSets)) {
+						IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
 
-        // open the "final" perspective
-        final IConfigurationElement element = new DelegateConfigurationElement( null )
-        {
-            @Override
-            public String getAttribute( String aName )
-            {
-                if( aName.equals( "finalPerspective" ) )
-                {
-                    return LiferayWorkspacePerspectiveFactory.ID;
-                }
+						workingSetManager.addToWorkingSets(newProject, workingSets);
+					}
+				}
+			}
+		}
+	}
 
-                return super.getAttribute( aName );
-            }
-        };
+	protected void openLiferayPerspective(IProject newProject) {
+		final IWorkbench workbench = PlatformUI.getWorkbench();
 
-        BasicNewProjectResourceWizard.updatePerspective( element );
+		IWorkbenchPage activePage = workbench.getActiveWorkbenchWindow().getActivePage();
 
-        // select and reveal
-        BasicNewResourceWizard.selectAndReveal( newProject, workbench.getActiveWorkbenchWindow() );
-    }
+		IPerspectiveDescriptor perspective = activePage.getPerspective();
+
+		if (perspective.getId().equals(LiferayWorkspacePerspectiveFactory.ID)) {
+			return;
+		}
+
+		// open the "final" perspective
+
+		final IConfigurationElement element = new DelegateConfigurationElement(null) {
+
+			@Override
+			public String getAttribute(String aName) {
+				if (aName.equals("finalPerspective")) {
+					return LiferayWorkspacePerspectiveFactory.ID;
+				}
+
+				return super.getAttribute(aName);
+			}
+
+		};
+
+		BasicNewProjectResourceWizard.updatePerspective(element);
+
+		// select and reveal
+
+		BasicNewResourceWizard.selectAndReveal(newProject, workbench.getActiveWorkbenchWindow());
+	}
+
+	private boolean _firstErrorMessageRemoved = false;
 
 }

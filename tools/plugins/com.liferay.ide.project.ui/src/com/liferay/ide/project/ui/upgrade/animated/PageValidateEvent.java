@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
@@ -19,42 +18,37 @@ package com.liferay.ide.project.ui.upgrade.animated;
  * @author Simon Jiang
  * @author Andy Wu
  */
-public class PageValidateEvent
-{
-    public static String ERROR = "error";
-    public static String WARNING = "warning";
+public class PageValidateEvent {
 
-    private String pageId;
-    private String message;
-    private String type = ERROR;
+	public static String error = "error";
+	public static String warning = "warning";
 
-    public String getPageId()
-    {
-        return pageId;
-    }
+	public String getMessage() {
+		return _message;
+	}
 
-    public void setPageId( String pageId )
-    {
-        this.pageId = pageId;
-    }
+	public String getPageId() {
+		return _pageId;
+	}
 
-    public String getMessage()
-    {
-        return message;
-    }
+	public String getType() {
+		return _type;
+	}
 
-    public void setMessage( String message )
-    {
-        this.message = message;
-    }
+	public void setMessage(String message) {
+		_message = message;
+	}
 
-    public String getType()
-    {
-        return type;
-    }
+	public void setPageId(String pageId) {
+		_pageId = pageId;
+	}
 
-    public void setType( String type )
-    {
-        this.type = type;
-    }
+	public void setType(String type) {
+		_type = type;
+	}
+
+	private String _message;
+	private String _pageId;
+	private String _type = error;
+
 }

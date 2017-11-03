@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,108 +10,96 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.migration;
 
-import com.liferay.ide.project.core.upgrade.MigrationProblems;
 import com.liferay.ide.project.core.upgrade.FileProblems;
+import com.liferay.ide.project.core.upgrade.MigrationProblems;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
+import com.liferay.ide.project.ui.ProjectUI;
 
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.model.IWorkbenchAdapter;
 
 /**
  * @author Gregory Amerson
  * @author Terry Jia
  */
-@SuppressWarnings( { "rawtypes", "unchecked" } )
-public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapter
-{
+@SuppressWarnings({"rawtypes", "unchecked"})
+public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapter {
 
-    private static final Object instance = new MigrationAdapterFactory();
+	@Override
+	public Object getAdapter(Object adaptableObject, Class adapterType) {
+		return _instance;
+	}
 
-    @Override
-    public Object getAdapter( Object adaptableObject, Class adapterType )
-    {
-        return instance;
-    }
+	@Override
+	public Class[] getAdapterList() {
+		return new Class<?>[] {FileProblems.class, UpgradeProblems.class, ProblemsContainer.class};
+	}
 
-    @Override
-    public Class[] getAdapterList()
-    {
-        return new Class[] { FileProblems.class, UpgradeProblems.class, ProblemsContainer.class };
-    }
+	@Override
+	public Object[] getChildren(Object o) {
+		return null;
+	}
 
-    @Override
-    public Object[] getChildren( Object o )
-    {
-        return null;
-    }
+	@Override
+	public ImageDescriptor getImageDescriptor(Object element) {
+		if (element instanceof FileProblems) {
+			Image fileImage = ProjectUI.getPluginSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
 
-    @Override
-    public ImageDescriptor getImageDescriptor( Object element )
-    {
-        if( element instanceof FileProblems )
-        {
-            return ImageDescriptor.createFromImage( PlatformUI.getWorkbench().getSharedImages().getImage(
-                ISharedImages.IMG_OBJ_FILE ) );
-        }
-        else if( element instanceof ProblemsContainer )
-        {
-            return ImageDescriptor.createFromImage(
-                PlatformUI.getWorkbench().getSharedImages().getImage( ISharedImages.IMG_OBJ_FOLDER ) );
-        }
-        else if( element instanceof UpgradeProblems )
-        {
-            return ImageDescriptor.createFromImage(
-                PlatformUI.getWorkbench().getSharedImages().getImage(
-                    org.eclipse.ui.ide.IDE.SharedImages.IMG_OBJ_PROJECT ) );
-        }
+			return ImageDescriptor.createFromImage(fileImage);
+		}
+		else if (element instanceof ProblemsContainer) {
+			Image folderImage = ProjectUI.getPluginSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER);
 
-        return null;
-    }
+			return ImageDescriptor.createFromImage(folderImage);
+		}
+		else if (element instanceof UpgradeProblems) {
+			Image projectImage = ProjectUI.getPluginSharedImages().getImage(
+				org.eclipse.ui.ide.IDE.SharedImages.IMG_OBJ_PROJECT);
 
-    @Override
-    public String getLabel( Object element )
-    {
-        if( element instanceof FileProblems )
-        {
-            FileProblems fp = (FileProblems) element;
+			return ImageDescriptor.createFromImage(projectImage);
+		}
 
-            return fp.getFile().getName();
-        }
-        else if( element instanceof UpgradeProblems )
-        {
-            if( element instanceof MigrationProblems )
-            {
-                MigrationProblems cp = (MigrationProblems) element;
+		return null;
+	}
 
-                return cp.getSuffix();
-            }
-            else
-            {
-                UpgradeProblems lp = (UpgradeProblems) element;
+	@Override
+	public String getLabel(Object element) {
+		if (element instanceof FileProblems) {
+			FileProblems fp = (FileProblems)element;
 
-                return lp.getType();
-            }
-        }
-        else if( element instanceof ProblemsContainer )
-        {
-            return ( (ProblemsContainer) element ).getType();
-        }
+			return fp.getFile().getName();
+		}
+		else if (element instanceof UpgradeProblems) {
+			if (element instanceof MigrationProblems) {
+				MigrationProblems cp = (MigrationProblems)element;
 
-        return null;
-    }
+				return cp.getSuffix();
+			}
+			else {
+				UpgradeProblems lp = (UpgradeProblems)element;
 
-    @Override
-    public Object getParent( Object o )
-    {
-        return null;
-    }
+				return lp.getType();
+			}
+		}
+		else if (element instanceof ProblemsContainer) {
+			return ((ProblemsContainer)element).getType();
+		}
+
+		return null;
+	}
+
+	@Override
+	public Object getParent(Object o) {
+		return null;
+	}
+
+	private static final Object _instance = new MigrationAdapterFactory();
 
 }

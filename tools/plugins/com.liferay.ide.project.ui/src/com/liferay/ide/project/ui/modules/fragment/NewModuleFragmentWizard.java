@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.modules.fragment;
 
@@ -28,44 +27,36 @@ import org.eclipse.ui.IWorkbench;
 /**
  * @author Terry Jia
  */
-@SuppressWarnings( "restriction" )
-public class NewModuleFragmentWizard extends BaseProjectWizard<NewModuleFragmentOp>
-{
-    public NewModuleFragmentWizard()
-    {
-        super( createDefaultOp(), DefinitionLoader.sdef( NewModuleFragmentWizard.class ).wizard() );
-    }
+public class NewModuleFragmentWizard extends BaseProjectWizard<NewModuleFragmentOp> {
 
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-    }
+	public NewModuleFragmentWizard() {
+		super(_createDefaultOp(), DefinitionLoader.sdef(NewModuleFragmentWizard.class).wizard());
+	}
 
-    @Override
-    protected void performPostFinish()
-    {
-        super.performPostFinish();
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	}
 
-        final NewModuleFragmentOp op = element().nearest( NewModuleFragmentOp.class );
+	@Override
+	protected void performPostFinish() {
+		super.performPostFinish();
 
-        final IProject project = CoreUtil.getProject( op.getProjectName().content() );
+		final NewModuleFragmentOp op = element().nearest(NewModuleFragmentOp.class);
 
-        try
-        {
-            addToWorkingSets( project );
+		final IProject project = CoreUtil.getProject(op.getProjectName().content());
 
-        }
-        catch( Exception ex )
-        {
-            ProjectUI.logError( "Unable to add project to working set", ex );
-        }
+		try {
+			addToWorkingSets(project);
+		}
+		catch (Exception ex) {
+			ProjectUI.logError("Unable to add project to working set", ex);
+		}
 
-        openLiferayPerspective( project );
-    }
+		openLiferayPerspective(project);
+	}
 
-    private static NewModuleFragmentOp createDefaultOp()
-    {
-        return NewModuleFragmentOp.TYPE.instantiate();
-    }
+	private static NewModuleFragmentOp _createDefaultOp() {
+		return NewModuleFragmentOp.TYPE.instantiate();
+	}
 
 }

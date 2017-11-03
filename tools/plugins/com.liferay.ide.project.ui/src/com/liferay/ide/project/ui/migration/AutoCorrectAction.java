@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.migration;
 
@@ -39,6 +38,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -49,224 +49,195 @@ import org.osgi.framework.ServiceReference;
  * @author Terry Jia
  * @author Lovett Li
  */
-public class AutoCorrectAction extends ProblemAction
-{
-    private ISelectionProvider _provider;
+public class AutoCorrectAction extends ProblemAction {
 
-    public AutoCorrectAction( ISelectionProvider provider )
-    {
-        super( provider, "Correct automatically" );
-        _provider = provider;
-    }
+	public AutoCorrectAction(ISelectionProvider provider) {
+		super(provider, "Correct automatically");
+		_provider = provider;
+	}
 
-    @Override
-    public void run()
-    {
-        final List<Problem> problems = MigrationUtil.getProblemsFromSelection( getSelection() );
+	@Override
+	public void run() {
+		final List<Problem> problems = MigrationUtil.getProblemsFromSelection(getSelection());
 
-        runWithAutoCorrect( problems );
-    }
+		runWithAutoCorrect(problems);
+	}
 
-    public IStatus runWithAutoCorrect( final List<Problem> problems)
-    {
-        final IResource file = MigrationUtil.getIResourceFromProblem( problems.get( 0 ) );
-        final BundleContext context = FrameworkUtil.getBundle( AutoCorrectAction.class ).getBundleContext();
+	public IStatus runWithAutoCorrect(final List<Problem> problems) {
+		final IResource file = MigrationUtil.getIResourceFromProblem(problems.get(0));
+		final BundleContext context = FrameworkUtil.getBundle(AutoCorrectAction.class).getBundleContext();
 
-        WorkspaceJob job = new WorkspaceJob( "Auto correcting migration problem." )
-        {
-            @Override
-            public IStatus runInWorkspace( IProgressMonitor monitor )
-            {
-                IStatus retval = Status.OK_STATUS;
+		WorkspaceJob job = new WorkspaceJob("Auto correcting migration problem.") {
 
-                try
-                {
-                    final Problem problem = problems.get( 0 );
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor monitor) {
+				IStatus retval = Status.OK_STATUS;
 
-                    String autoCorrectKey = null;
+				try {
+					final Problem problem = problems.get(0);
 
-                    final int filterKeyIndex = problem.autoCorrectContext.indexOf( ":" );
+					String autoCorrectKey = null;
 
-                    if( filterKeyIndex > -1 )
-                    {
-                        autoCorrectKey = problem.autoCorrectContext.substring( 0, filterKeyIndex );
-                    }
-                    else
-                    {
-                        autoCorrectKey = problem.autoCorrectContext;
-                    }
+					final int filterKeyIndex = problem.autoCorrectContext.indexOf(":");
 
-                    final Collection<ServiceReference<AutoMigrator>> refs =
-                        context.getServiceReferences( AutoMigrator.class, "(auto.correct=" + autoCorrectKey + ")" );
+					if (filterKeyIndex > -1) {
+						autoCorrectKey = problem.autoCorrectContext.substring(0, filterKeyIndex);
+					}
+					else {
+						autoCorrectKey = problem.autoCorrectContext;
+					}
 
-                    for( ServiceReference<AutoMigrator> ref : refs )
-                    {
-                        final AutoMigrator autoMigrator = context.getService( ref );
-                        int problemsCorrected = autoMigrator.correctProblems( problem.file, Collections.singletonList( problem ) );
+					final Collection<ServiceReference<AutoMigrator>> refs = context.getServiceReferences(
+						AutoMigrator.class, "(auto.correct=" + autoCorrectKey + ")");
 
-                        if( problemsCorrected > 0 )
-                        {
-                            IResource resource = MigrationUtil.getIResourceFromProblem( problem );
+					for (ServiceReference<AutoMigrator> ref : refs) {
+						final AutoMigrator autoMigrator = context.getService(ref);
 
-                            if( resource != null )
-                            {
-                                IMarker problemMarker = resource.findMarker( problem.markerId );
+						int problemsCorrected = autoMigrator.correctProblems(
+							problem.file, Collections.singletonList(problem));
 
-                                if( problemMarker != null && problemMarker.exists() )
-                                {
-                                    problemMarker.delete();
-                                }
-                            }
-                        }
-                    }
+						if (problemsCorrected > 0) {
+							IResource resource = MigrationUtil.getIResourceFromProblem(problem);
 
-                    file.refreshLocal( IResource.DEPTH_ONE, monitor );
+							if (resource != null) {
+								IMarker problemMarker = resource.findMarker(problem.markerId);
 
-                    MigrateProjectHandler migrateHandler = new MigrateProjectHandler();
+								if ((problemMarker != null) && problemMarker.exists()) {
+									problemMarker.delete();
+								}
+							}
+						}
+					}
 
-                    Path path = new Path( problem.getFile().getPath() );
-                    String projectName = "";
-                    IProject project = CoreUtil.getProject( problem.getFile() );
+					file.refreshLocal(IResource.DEPTH_ONE, monitor);
 
-                    if( project.exists() && project != null )
-                    {
-                        projectName = project.getName();
-                    }
+					MigrateProjectHandler migrateHandler = new MigrateProjectHandler();
 
-                    for(Problem p : problems)
-                    {
-                        new MarkDoneAction().run( p, _provider );
-                    }
+					Path path = new Path(problem.getFile().getPath());
+					String projectName = "";
+					IProject project = CoreUtil.getProject(problem.getFile());
 
-                    if( !projectName.equals( "" ) )
-                    {
-                        migrateHandler.findMigrationProblems( new Path[] { path }, new String[] { projectName } );
-                    }
+					if (project.exists() && (project != null)) {
+						projectName = project.getName();
+					}
 
-                }
-                catch( InvalidSyntaxException e )
-                {
-                }
-                catch( AutoMigrateException | CoreException e )
-                {
-                    return retval = ProjectUI.createErrorStatus( "Unable to auto correct problem", e );
-                }
+					for (Problem p : problems) {
+						new MarkDoneAction().run(p, _provider);
+					}
 
-                return retval;
-            }
-        };
-        job.schedule();
+					if (!projectName.equals("")) {
+						migrateHandler.findMigrationProblems(new Path[] {path}, new String[] {projectName});
+					}
+				}
+				catch (AutoMigrateException | CoreException | InvalidSyntaxException e) {
+					return retval = ProjectUI.createErrorStatus("Unable to auto correct problem", e);
+				}
 
-        return Status.OK_STATUS;
-    }
+				return retval;
+			}
 
-    @Override
-    public void selectionChanged( IStructuredSelection selection )
-    {
-        if (selection.isEmpty())
-        {
-            setEnabled( false );
-        }
-        else
-        {
-            boolean selectionCompatible = true;
+		};
 
-            Iterator<?> items = selection.iterator();
-            Object lastItem = null;
+		job.schedule();
 
-            while( items.hasNext() )
-            {
-                Object item = items.next();
+		return Status.OK_STATUS;
+	}
 
-                if( !( item instanceof Problem ) )
-                {
-                    selectionCompatible = false;
-                    break;
-                }
+	@Override
+	public void selectionChanged(IStructuredSelection selection) {
+		if (selection.isEmpty()) {
+			setEnabled(false);
+		}
+		else {
+			boolean selectionCompatible = true;
 
-                Problem problem = (Problem) item;
+			Iterator<?> items = selection.iterator();
+			Object lastItem = null;
 
-                if( problem.autoCorrectContext == null )
-                {
-                    selectionCompatible = false;
-                    break;
-                }
-                if( lastItem != null )
-                {
-                    String prCurrentKey = ((Problem) item).autoCorrectContext.substring( 0, problem.autoCorrectContext.indexOf( ":" ) );;
-                    String prLastKey = ((Problem) lastItem).autoCorrectContext.substring( 0, problem.autoCorrectContext.indexOf( ":" ) );
+			while (items.hasNext()) {
+				Object item = items.next();
 
-                    if( !(prCurrentKey.equals( prLastKey)) )
-                    {
-                        selectionCompatible = false;
-                        break;
-                    }
-                }
+				if (!(item instanceof Problem)) {
+					selectionCompatible = false;
+					break;
+				}
 
-                lastItem = item;
-            }
+				Problem problem = (Problem)item;
 
-            Iterator<?> items2 = selection.iterator();
+				if (problem.autoCorrectContext == null) {
+					selectionCompatible = false;
+					break;
+				}
 
-            List<String> autoCorrectContexts = new ArrayList<>();
+				if (lastItem != null) {
+					String prCurrentKey =
+						((Problem)item).autoCorrectContext.substring(0, problem.autoCorrectContext.indexOf(":"));
+					String prLastKey =
+						((Problem)lastItem).autoCorrectContext.substring(0, problem.autoCorrectContext.indexOf(":"));
 
-            while( items2.hasNext() )
-            {
-                Object item = items2.next();
+					if (!(prCurrentKey.equals(prLastKey))) {
+						selectionCompatible = false;
+						break;
+					}
+				}
 
-                if( item instanceof Problem && ( (Problem) item ).autoCorrectContext != null )
-                {
-                    autoCorrectContexts.add( ( (Problem) item ).autoCorrectContext );
-                }
-            }
+				lastItem = item;
+			}
 
-            setEnabled( selectionCompatible );
+			Iterator<?> items2 = selection.iterator();
 
-            List<String> allAutoCorrectContexts = new ArrayList<>();
+			List<String> autoCorrectContexts = new ArrayList<>();
 
-            if( _provider instanceof TableViewer )
-            {
-                TableViewer viewer = (TableViewer) _provider;
-                Object obj = viewer.getInput();
-                if( obj instanceof Object[] )
-                {
-                    Object[] problems = (Object[]) obj;
+			while (items2.hasNext()) {
+				Object item = items2.next();
 
-                    for( Object o : problems )
-                    {
-                        if( o instanceof Problem && ( (Problem) o ).autoCorrectContext != null )
-                        {
-                            allAutoCorrectContexts.add( ( (Problem) o ).autoCorrectContext );
-                        }
-                    }
-                }
-                else if( obj instanceof List<?> )
-                {
-                    List<?> list = (List<?>) obj;
+				if (item instanceof Problem && ((Problem)item).autoCorrectContext != null) {
+					autoCorrectContexts.add(((Problem)item).autoCorrectContext);
+				}
+			}
 
-                    for( Object p : list )
-                    {
-                        if( p instanceof Problem )
-                        {
-                            Problem problem = (Problem) p;
+			setEnabled(selectionCompatible);
 
-                            if( problem.autoCorrectContext != null )
-                            {
-                                allAutoCorrectContexts.add( problem.autoCorrectContext );
-                            }
-                        }
-                    }
-                }
-            }
+			List<String> allAutoCorrectContexts = new ArrayList<>();
 
-            setText( "Correct automatically" );
-        }
-    }
+			if (_provider instanceof TableViewer) {
+				TableViewer viewer = (TableViewer)_provider;
 
-    @Override
-    protected IStatus runWithMarker( Problem problem, IMarker marker )
-    {
-        return null;
-    }
+				Object obj = viewer.getInput();
+
+				if (obj instanceof Object[]) {
+					Object[] problems = (Object[])obj;
+
+					for (Object o : problems) {
+						if (o instanceof Problem && ((Problem)o).autoCorrectContext != null) {
+							allAutoCorrectContexts.add(((Problem)o).autoCorrectContext);
+						}
+					}
+				}
+				else if (obj instanceof List<?>) {
+					List<?> list = (List<?>)obj;
+
+					for (Object p : list) {
+						if (p instanceof Problem) {
+							Problem problem = (Problem)p;
+
+							if (problem.autoCorrectContext != null) {
+								allAutoCorrectContexts.add(problem.autoCorrectContext);
+							}
+						}
+					}
+				}
+			}
+
+			setText("Correct automatically");
+		}
+	}
+
+	@Override
+	protected IStatus runWithMarker(Problem problem, IMarker marker) {
+		return null;
+	}
+
+	private ISelectionProvider _provider;
 
 }

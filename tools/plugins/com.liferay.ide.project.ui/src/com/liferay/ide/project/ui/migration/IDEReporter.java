@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,14 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.migration;
 
 import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.Reporter;
-
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.ui.upgrade.animated.FindBreakingChangesPage;
 import com.liferay.ide.project.ui.upgrade.animated.Page;
@@ -29,37 +27,34 @@ import java.io.OutputStream;
 /**
  * @author Gregory Amerson
  * @author Lovett Li
+ * @author Simon Jiang
  */
-public class IDEReporter implements Reporter
-{
+public class IDEReporter implements Reporter {
 
-    @Override
-    public void beginReporting( int format, OutputStream output )
-    {
-    }
+	@Override
+	public void beginReporting(int format, OutputStream output) {
+	}
 
-    @Override
-    public void endReporting()
-    {
-        UIUtil.async( new Runnable()
-        {
+	@Override
+	public void endReporting() {
+		UIUtil.async(
+			new Runnable() {
 
-            @Override
-            public void run()
-            {
-                FindBreakingChangesPage page =
-                    UpgradeView.getPage( Page.FINDBREACKINGCHANGES_PAGE_ID, FindBreakingChangesPage.class );
+				@Override
+				public void run() {
+					FindBreakingChangesPage page = UpgradeView.getPage(
+						Page.findbreackingchangesPageId, FindBreakingChangesPage.class);
 
-                page.getTreeViewer().setInput( CoreUtil.getWorkspaceRoot() );
+					page.getTreeViewer().setInput(CoreUtil.getWorkspaceRoot());
 
-                page.setButtonState( true );
-            }
-        } );
-    }
+					page.setButtonState(true);
+				}
 
-    @Override
-    public void report( Problem problem )
-    {
-    }
+			});
+	}
+
+	@Override
+	public void report(Problem problem) {
+	}
 
 }

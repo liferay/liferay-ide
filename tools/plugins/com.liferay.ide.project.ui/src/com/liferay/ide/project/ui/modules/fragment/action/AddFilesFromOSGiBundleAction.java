@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,14 +10,13 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.modules.fragment.action;
 
-import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
@@ -44,123 +43,111 @@ import org.eclipse.wst.server.core.IRuntime;
  * @author Terry Jia
  * @author Joye Luo
  */
-public class AddFilesFromOSGiBundleAction extends PropertyEditorActionHandler
-{
+public class AddFilesFromOSGiBundleAction extends PropertyEditorActionHandler {
 
-    @Override
-    protected boolean computeEnablementState()
-    {
-        boolean enabled = false;
+	public AddFilesFromOSGiBundleAction() {
+	}
 
-        NewModuleFragmentOp op = getModelElement().nearest( NewModuleFragmentOp.class );
+	@Override
+	public void init(SapphireAction action, ActionHandlerDef def) {
+		super.init(action, def);
 
-        String hostOsgiBundle = op.getHostOsgiBundle().content();
+		final Element element = getModelElement();
 
-        if( hostOsgiBundle != null )
-        {
-            enabled = true;
-        }
+		final Listener listener = new FilteredListener<PropertyContentEvent>() {
 
-        return enabled;
-    }
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refreshEnablementState();
+			}
 
-    @Override
-    public void init( SapphireAction action, ActionHandlerDef def )
-    {
-        super.init( action, def );
+		};
 
-        final Element element = getModelElement();
+		element.attach(listener, NewModuleFragmentOp.PROP_HOST_OSGI_BUNDLE.name());
+		attach(
+			new Listener() {
 
-        final Listener listener = new FilteredListener<PropertyContentEvent>()
-        {
+				@Override
+				public void handle(final Event event) {
+					if (event instanceof DisposeEvent) {
+						element.detach(listener, NewModuleFragmentOp.PROP_HOST_OSGI_BUNDLE.name());
+					}
+				}
 
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refreshEnablementState();
-            }
+			});
+	}
 
-        };
+	@Override
+	protected boolean computeEnablementState() {
+		boolean enabled = false;
 
-        element.attach( listener, NewModuleFragmentOp.PROP_HOST_OSGI_BUNDLE.name() );
-        attach( new Listener()
-        {
+		NewModuleFragmentOp op = getModelElement().nearest(NewModuleFragmentOp.class);
 
-            @Override
-            public void handle( final Event event )
-            {
-                if( event instanceof DisposeEvent )
-                {
-                    element.detach( listener, NewModuleFragmentOp.PROP_HOST_OSGI_BUNDLE.name() );
-                }
-            }
-        } );
-    }
+		String hostOsgiBundle = op.getHostOsgiBundle().content();
 
-    @Override
-    protected Object run( Presentation context )
-    {
-        final NewModuleFragmentOp op = context.part().getModelElement().nearest( NewModuleFragmentOp.class );
+		if (hostOsgiBundle != null) {
+			enabled = true;
+		}
 
-        final ElementList<OverrideFilePath> currentFiles = op.getOverrideFiles();
+		return enabled;
+	}
 
-        final String projectName = op.getProjectName().content();
+	@Override
+	protected Object run(Presentation context) {
+		Element modelElement = context.part().getModelElement();
 
-        final OSGiBundleFileSelectionDialog dialog =
-            new OSGiBundleFileSelectionDialog( null, currentFiles, projectName );
+		final NewModuleFragmentOp op = modelElement.nearest(NewModuleFragmentOp.class);
 
-        final String runtimeName = op.getLiferayRuntimeName().content();
+		final ElementList<OverrideFilePath> currentFiles = op.getOverrideFiles();
 
-        final IRuntime runtime = ServerUtil.getRuntime( runtimeName );
+		final String projectName = op.getProjectName().content();
 
-        final IPath temp = ProjectCore.getDefault().getStateLocation();
+		final OSGiBundleFileSelectionDialog dialog = new OSGiBundleFileSelectionDialog(null, currentFiles, projectName);
 
-        dialog.setTitle( "Add files from OSGi bundle to override" );
+		final String runtimeName = op.getLiferayRuntimeName().content();
 
-        final PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
-        String currentOSGiBundle = op.getHostOsgiBundle().content();
+		final IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
-        if( !currentOSGiBundle.endsWith( "jar" ) )
-        {
-            currentOSGiBundle = currentOSGiBundle + ".jar";
-        }
+		final IPath tempLocation = ProjectUI.getPluginStateLocation();
 
-        ServerUtil.getModuleFileFrom70Server( runtime, currentOSGiBundle, temp );
+		dialog.setTitle("Add files from OSGi bundle to override");
 
-        if( portalBundle != null )
-        {
-            try
-            {
-                File module = portalBundle.getOSGiBundlesDir().append( "modules" ).append( currentOSGiBundle ).toFile();
+		final PortalBundle portalBundle = LiferayServerCore.newPortalBundle(runtime.getLocation());
+		String currentOSGiBundle = op.getHostOsgiBundle().content();
 
-                if( !module.exists() )
-                {
-                    module = ProjectCore.getDefault().getStateLocation().append( currentOSGiBundle ).toFile();
-                }
+		if (!currentOSGiBundle.endsWith("jar")) {
+			currentOSGiBundle = currentOSGiBundle + ".jar";
+		}
 
-                dialog.setInput( module );
-            }
-            catch( Exception e )
-            {
-            }
-        }
+		ServerUtil.getModuleFileFrom70Server(runtime, currentOSGiBundle, tempLocation);
 
-        if( dialog.open() == Window.OK )
-        {
-            Object[] selected = dialog.getResult();
+		if (portalBundle != null) {
+			try {
+				IPath osGiBundlesDir = portalBundle.getOSGiBundlesDir().append("modules");
 
-            for( int i = 0; i < selected.length; i++ )
-            {
-                OverrideFilePath file = op.getOverrideFiles().insert();
-                file.setValue( selected[i].toString() );
-            }
-        }
+				File module = osGiBundlesDir.append(currentOSGiBundle).toFile();
 
-        return Status.createOkStatus();
-    }
+				if (!module.exists()) {
+					module = tempLocation.append(currentOSGiBundle).toFile();
+				}
 
-    public AddFilesFromOSGiBundleAction()
-    {
-        super();
-    }
+				dialog.setInput(module);
+			}
+			catch (Exception e) {
+			}
+		}
+
+		if (dialog.open() == Window.OK) {
+			Object[] selected = dialog.getResult();
+
+			for (int i = 0; i < selected.length; i++) {
+				OverrideFilePath file = op.getOverrideFiles().insert();
+
+				file.setValue(selected[i].toString());
+			}
+		}
+
+		return Status.createOkStatus();
+	}
+
 }

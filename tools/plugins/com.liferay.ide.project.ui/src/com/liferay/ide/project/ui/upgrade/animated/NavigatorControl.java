@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
@@ -33,353 +32,309 @@ import org.eclipse.swt.widgets.Composite;
  * @author Simon Jiang
  * @author Andy Wu
  */
-public class NavigatorControl extends AbstractCanvas implements SelectionChangedListener
-{
+public class NavigatorControl extends AbstractCanvas implements SelectionChangedListener {
 
-    public static final int BORDER = 30;
+	public static final int BORDER = 30;
 
-    private static final int BACK = NONE - 1;
-    private static final int NEXT = BACK - 1;
-    private static final int CHOICES = NEXT - 1;
+	public NavigatorControl(Composite parent, int style) {
+		super(parent, style | SWT.DOUBLE_BUFFERED);
 
-    private int hover = NONE;
+		init();
 
-    private int oldHover = NONE;
+		scheduleRun();
+	}
 
-    private final Image[] backImages = new Image[2];
-    private final Image[] nextImages = new Image[2];
+	public void addPageActionListener(PageActionListener listener) {
+		this._actionListeners.add(listener);
+	}
 
-    private int buttonR;
-    private int answerY;
+	public void addPageNavigateListener(PageNavigatorListener listener) {
+		this._naviListeners.add(listener);
+	}
 
-    private Rectangle backBox;
-    private Rectangle nextBox;
+	public final int getAction(int x, int y) {
+		PageAction[] actions = _getSelectedPage().getActions();
 
-    private int pageY;
+		if ((actions == null) || (actions.length < 1)) {
+			return NONE;
+		}
 
-    private Rectangle[] actionBoxes;
+		for (int i = 0; i < actions.length; i++) {
+			Rectangle box = _actionBoxes[i];
 
-    private int select = 0;
+			if ((box != null) && box.contains(x, y)) {
+				return i;
+			}
+		}
 
-    private boolean needRedraw = false;
+		return NONE;
+	}
 
-    private final List<PageNavigatorListener> naviListeners =
-        Collections.synchronizedList( new ArrayList<PageNavigatorListener>() );
+	@Override
+	public void onSelectionChanged(int targetSelection) {
+		_select = targetSelection;
 
-    private final List<PageActionListener> actionListeners =
-        Collections.synchronizedList( new ArrayList<PageActionListener>() );
+		_needRedraw = true;
+	}
 
-    public NavigatorControl( Composite parent, int style )
-    {
-        super( parent, style | SWT.DOUBLE_BUFFERED );
+	public Rectangle paintAction(GC gc, int index, int x, int y, boolean hovered, boolean selected, PageAction action) {
+		Image[] images = action.getImages();
 
-        init();
+		Image image = images[0];
 
-        scheduleRun();
-    }
+		if (hovered) {
+			image = images[2];
+		}
+		else if (selected) {
+			image = images[1];
+		}
 
-    protected boolean actionOnMouseDown( int x, int y )
-    {
-        int i = getAction( x, y );
+		return drawImage(gc, image, x, y);
+	}
 
-        if( i != NONE )
-        {
-            doAction( i );
+	protected boolean actionOnMouseDown(int x, int y) {
+		int i = getAction(x, y);
 
-            return true;
-        }
+		if (i != NONE) {
+			_action(i);
 
-        return false;
-    }
+			return true;
+		}
 
-    protected int actionOnMouseMove( int x, int y )
-    {
-        int i = getAction( x, y );
+		return false;
+	}
 
-        if( i != NONE )
-        {
-            // pageBufferUpdated = false;
-            return CHOICES - i;
-        }
+	protected int actionOnMouseMove(int x, int y) {
+		int i = getAction(x, y);
 
-        return NONE;
-    }
+		if (i != NONE) {
 
-    public void addPageActionListener( PageActionListener listener )
-    {
-        this.actionListeners.add( listener );
-    }
+			// pageBufferUpdated = false;
 
-    public void addPageNavigateListener( PageNavigatorListener listener )
-    {
-        this.naviListeners.add( listener );
-    }
+			return _CHOICES - i;
+		}
 
-    private void doAction( int i )
-    {
-        Page page = getSelectedPage();
-        PageAction oldSelection = page.getSelectedAction();
-        PageAction[] pageActions = page.getActions();
+		return NONE;
+	}
 
-        PageAction targetAction = pageActions[i];
+	protected void init() {
+		super.init();
 
-        if( targetAction.equals( oldSelection ) )
-        {
-            targetAction = null;
-        }
+		_backImages[0] = loadImage("back.png");
+		_backImages[1] = loadImage("back_hover.png");
 
-        page.setSelectedAction( targetAction );
+		_nextImages[0] = loadImage("next.png");
+		_nextImages[1] = loadImage("next_hover.png");
 
-        PageActionEvent event = new PageActionEvent();
+		_buttonR = _nextImages[0].getBounds().height / 2;
 
-        event.setAction(targetAction);
-        event.setTargetPageIndex( NONE );
+		_answerY = 5 + _buttonR;
 
-        if( page.showNextPage() && targetAction != null )
-        {
-            event.setTargetPageIndex( select + 1 );
-        }
+		_actionBoxes = new Rectangle[2];
+	}
 
-        for( PageActionListener listener : actionListeners )
-        {
-            listener.onPageAction( event );
-        }
+	@Override
+	protected boolean needRedraw() {
+		boolean retVal = false;
 
-        needRedraw = true;
-    }
+		if (_needRedraw) {
+			_needRedraw = false;
+			retVal = true;
+		}
 
-    public final int getAction( int x, int y )
-    {
-        PageAction[] actions = getSelectedPage().getActions();
-
-        if( actions == null || actions.length < 1 )
-        {
-            return NONE;
-        }
-
-        for( int i = 0; i < actions.length; i++ )
-        {
-            Rectangle box = actionBoxes[i];
-
-            if( box != null && box.contains( x, y ) )
-            {
-                return i;
-            }
-        }
-
-        return NONE;
-    }
-
-    private Page getSelectedPage()
-    {
-        return UpgradeView.getPage( select );
-    }
-
-    protected void init()
-    {
-        super.init();
-
-        backImages[0] = loadImage( "back.png" );
-        backImages[1] = loadImage( "back_hover.png" );
-
-        nextImages[0] = loadImage( "next.png" );
-        nextImages[1] = loadImage( "next_hover.png" );
-
-        buttonR = nextImages[0].getBounds().height / 2;
-
-        answerY = 5 + buttonR;
-
-        actionBoxes = new Rectangle[2];
-
-    }
-
-    @Override
-    protected boolean needRedraw()
-    {
-        boolean retVal = false;
-
-        if( needRedraw )
-        {
-            needRedraw = false;
-            retVal = true;
-        }
-
-        if( hover != oldHover )
-        {
-            retVal = true;
-        }
-
-        return retVal;
-    }
-
-    @Override
-    protected void onMouseDown( int x, int y )
-    {
-        boolean isNavigate = false;
-
-        if( x != Integer.MIN_VALUE && y != Integer.MIN_VALUE )
-        {
-            Page page = getSelectedPage();
-
-            if( page != null )
-            {
-                PageNavigateEvent event = new PageNavigateEvent();
-
-                if( page.showBackPage() && backBox != null && backBox.contains( x, y ) )
-                {
-                    event.setTargetPage( select - 1 );
-
-                    isNavigate = true;
-                }
-
-                if( page.showNextPage() && nextBox != null && nextBox.contains( x, y ) )
-                {
-                    event.setTargetPage( select + 1 );
-
-                    isNavigate = true;
-                }
-
-                if( isNavigate )
-                {
-                    for( PageNavigatorListener listener : naviListeners )
-                    {
-                        listener.onPageNavigate( event );
-                    }
-                }
-
-                actionOnMouseDown( x, y );
-            }
-        }
-    }
-
-    @Override
-    protected void onMouseMove( int x, int y )
-    {
-        if( x != Integer.MIN_VALUE && y != Integer.MIN_VALUE )
-        {
-            Page page = getSelectedPage();
-
-            if( page != null )
-            {
-                if( page.showBackPage() && backBox != null && backBox.contains( x, y ) )
-                {
-                    hover = BACK;
-                    return;
-                }
-
-                if( page.showNextPage() && nextBox != null && nextBox.contains( x, y ) )
-                {
-                    hover = NEXT;
-                    return;
-                }
-
-                hover = actionOnMouseMove( x, y );
-                return;
-            }
-        }
-        else
-        {
-            hover = NONE;
-        }
-    }
-
-    @Override
-    public void onSelectionChanged( int targetSelection )
-    {
-        select = targetSelection;
-
-        needRedraw = true;
-    }
-
-    @Override
-    protected void paint( GC gc )
-    {
-        gc.setFont( getBaseFont() );
-        gc.setLineWidth( 3 );
-        gc.setAntialias( SWT.ON );
-
-        Page page = getSelectedPage();
-
-        backBox = null;
-        nextBox = null;
-
-        if( page.showBackPage() )
-        {
-            backBox = drawImage( gc, backImages[hover == BACK ? 1 : 0], getBounds().width / 2 - 200, answerY );
-        }
-
-        if( page.showNextPage() )
-        {
-            nextBox = drawImage( gc, nextImages[hover == NEXT ? 1 : 0], getBounds().width / 2 + 200, answerY );
-        }
-
-        paintActions( gc, page );
-
-        oldHover = hover;
-    }
-
-    public Rectangle paintAction( GC gc, int index, int x, int y, boolean hovered, boolean selected, PageAction action )
-    {
-        Image[] images = action.getImages();
-
-        Image image = images[0];
-
-        if( hovered )
-        {
-            image = images[2];
-        }
-        else if( selected )
-        {
-            image = images[1];
-        }
-
-        return drawImage( gc, image, x, y );
-    }
-
-    private void paintActions( GC gc, Page page )
-    {
-        PageAction[] actions = page.getActions();
-        PageAction selectedAction = page.getSelectedAction();
-
-        if( actions == null )
-        {
-            return;
-        }
-
-        boolean selecteds[] = new boolean[actions.length];
-        boolean hovereds[] = new boolean[actions.length];
-
-        Point sizes[] = new Point[actions.length];
-
-        // int width = ( actions.length - 1 ) * BORDER;
-        int height = 0;
-
-        for( int i = 0; i < actions.length; i++ )
-        {
-            selecteds[i] = actions[i].equals( selectedAction );
-
-            if( CHOICES - i == hover )
-            {
-                // oldHover = hover;
-                hovereds[i] = true;
-            }
-
-            sizes[i] = actions[i].getSize();
-            // width += sizes[i].x;
-            height = Math.max( height, sizes[i].y );
-        }
-
-        int x = getBounds().width / 2 - 40;
-
-        int y = answerY - pageY;
-
-        for( int i = 0; i < actions.length; i++ )
-        {
-            PageAction action = actions[i];
-
-            actionBoxes[i] = paintAction( gc, i, x, y, hovereds[i], selecteds[i], action );
-
-            x = getBounds().width / 2 + 40;
-        }
-    }
+		if (_hover != _oldHover) {
+			retVal = true;
+		}
+
+		return retVal;
+	}
+
+	@Override
+	protected void onMouseDown(int x, int y) {
+		boolean navigate = false;
+
+		if ((x != Integer.MIN_VALUE) && (y != Integer.MIN_VALUE)) {
+			Page page = _getSelectedPage();
+
+			if (page != null) {
+				PageNavigateEvent event = new PageNavigateEvent();
+
+				if (page.showBackPage() && (_backBox != null) && _backBox.contains(x, y)) {
+					event.setTargetPage(_select - 1);
+
+					navigate = true;
+				}
+
+				if (page.showNextPage() && (_nextBox != null) && _nextBox.contains(x, y)) {
+					event.setTargetPage(_select + 1);
+
+					navigate = true;
+				}
+
+				if (navigate) {
+					for (PageNavigatorListener listener : _naviListeners) {
+						listener.onPageNavigate(event);
+					}
+				}
+
+				actionOnMouseDown(x, y);
+			}
+		}
+	}
+
+	@Override
+	protected void onMouseMove(int x, int y) {
+		if ((x != Integer.MIN_VALUE) && (y != Integer.MIN_VALUE)) {
+			Page page = _getSelectedPage();
+
+			if (page != null) {
+				if (page.showBackPage() && (_backBox != null) && _backBox.contains(x, y)) {
+					_hover = _BUTTON_BACK;
+					return;
+				}
+
+				if (page.showNextPage() && (_nextBox != null) && _nextBox.contains(x, y)) {
+					_hover = _BUTTON_NEXT;
+					return;
+				}
+
+				_hover = actionOnMouseMove(x, y);
+				return;
+			}
+		}
+		else {
+			_hover = NONE;
+		}
+	}
+
+	@Override
+	protected void paint(GC gc) {
+		gc.setFont(getBaseFont());
+		gc.setLineWidth(3);
+		gc.setAntialias(SWT.ON);
+
+		Page page = _getSelectedPage();
+
+		_backBox = null;
+		_nextBox = null;
+
+		if (page.showBackPage()) {
+			_backBox = drawImage(
+				gc, _backImages[_hover == _BUTTON_BACK ? 1 : 0], getBounds().width / 2 - 200, _answerY);
+		}
+
+		if (page.showNextPage()) {
+			_nextBox = drawImage(
+				gc, _nextImages[_hover == _BUTTON_NEXT ? 1 : 0], getBounds().width / 2 + 200, _answerY);
+		}
+
+		_paintActions(gc, page);
+
+		_oldHover = _hover;
+	}
+
+	private void _action(int i) {
+		Page page = _getSelectedPage();
+
+		PageAction oldSelection = page.getSelectedAction();
+		PageAction[] pageActions = page.getActions();
+
+		PageAction targetAction = pageActions[i];
+
+		if (targetAction.equals(oldSelection)) {
+			targetAction = null;
+		}
+
+		page.setSelectedAction(targetAction);
+
+		PageActionEvent event = new PageActionEvent();
+
+		event.setAction(targetAction);
+		event.setTargetPageIndex(NONE);
+
+		if (page.showNextPage() && (targetAction != null)) {
+			event.setTargetPageIndex(_select + 1);
+		}
+
+		for (PageActionListener listener : _actionListeners) {
+			listener.onPageAction(event);
+		}
+
+		_needRedraw = true;
+	}
+
+	private Page _getSelectedPage() {
+		return UpgradeView.getPage(_select);
+	}
+
+	private void _paintActions(GC gc, Page page) {
+		PageAction[] actions = page.getActions();
+		PageAction selectedAction = page.getSelectedAction();
+
+		if (actions == null) {
+			return;
+		}
+
+		boolean[] selecteds = new boolean[actions.length];
+		boolean[] hovereds = new boolean[actions.length];
+
+		Point[] sizes = new Point[actions.length];
+
+		// int width = ( actions.length - 1 ) * BORDER;
+
+		int height = 0;
+
+		for (int i = 0; i < actions.length; i++) {
+			selecteds[i] = actions[i].equals(selectedAction);
+
+			if ((_CHOICES - i) == _hover) {
+
+				// oldHover = hover;
+
+				hovereds[i] = true;
+			}
+
+			sizes[i] = actions[i].getSize();
+
+			// width += sizes[i].x;
+
+			height = Math.max(height, sizes[i].y);
+		}
+
+		int x = getBounds().width / 2 - 40;
+
+		int y = _answerY - _pageY;
+
+		for (int i = 0; i < actions.length; i++) {
+			PageAction action = actions[i];
+
+			_actionBoxes[i] = paintAction(gc, i, x, y, hovereds[i], selecteds[i], action);
+
+			x = getBounds().width / 2 + 40;
+		}
+	}
+
+	private static final int _BUTTON_BACK = NONE - 1;
+
+	private static final int _BUTTON_NEXT = _BUTTON_BACK - 1;
+
+	private static final int _CHOICES = _BUTTON_NEXT - 1;
+
+	private Rectangle[] _actionBoxes;
+	private final List<PageActionListener> _actionListeners = Collections.synchronizedList(
+		new ArrayList<PageActionListener>());
+	private int _answerY;
+	private Rectangle _backBox;
+	private final Image[] _backImages = new Image[2];
+	private int _buttonR;
+	private int _hover = NONE;
+	private final List<PageNavigatorListener> _naviListeners = Collections.synchronizedList(
+		new ArrayList<PageNavigatorListener>());
+	private boolean _needRedraw = false;
+	private Rectangle _nextBox;
+	private final Image[] _nextImages = new Image[2];
+	private int _oldHover = NONE;
+	private int _pageY;
+	private int _select = 0;
+
 }

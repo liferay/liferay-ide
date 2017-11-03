@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.upgrade.animated;
+
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
+import com.liferay.ide.ui.util.SWTUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,203 +36,194 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Table;
 
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
-import com.liferay.ide.ui.util.SWTUtil;
-
 /**
  * @author Joye Luo
  */
-public class SummaryPage extends Page implements SelectionChangedListener
-{
+public class SummaryPage extends Page implements SelectionChangedListener {
 
-    public SummaryPage( Composite parent, int style, LiferayUpgradeDataModel dataModel )
-    {
-        super( parent, style, dataModel, SUMMARY_PAGE_ID, false );
+	public SummaryPage(Composite parent, int style, LiferayUpgradeDataModel dataModel) {
+		super(parent, style, dataModel, summaryPageId, false);
 
-        Composite container = new Composite( this, SWT.NONE );
-        container.setLayout( new GridLayout( 2, false ) );
-        container.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
+		Composite container = new Composite(this, SWT.NONE);
 
-        tableViewer = new TableViewer( container );
-        tableViewer.setContentProvider( new TableViewContentProvider() );
-        tableViewer.setLabelProvider( new TableViewLabelProvider() );
-        tableViewer.getControl().setBackground( this.getDisplay().getSystemColor( SWT.COLOR_WIDGET_BACKGROUND ) );
+		container.setLayout(new GridLayout(2, false));
+		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-        tableViewer.addSelectionChangedListener( new ISelectionChangedListener()
-        {
+		_tableViewer = new TableViewer(container);
 
-            @Override
-            public void selectionChanged( SelectionChangedEvent event )
-            {
-                final IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-                if( !selection.isEmpty() )
-                {
-                    if( selection.getFirstElement() instanceof TableViewElement )
-                    {
-                        final TableViewElement tableViewElement = (TableViewElement) selection.getFirstElement();
-                        final int pageIndex = tableViewElement.pageIndex;
+		_tableViewer.setContentProvider(new TableViewContentProvider());
+		_tableViewer.setLabelProvider(new TableViewLabelProvider());
+		_tableViewer.getControl().setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 
-                        PageNavigateEvent navEvent = new PageNavigateEvent();
-                        navEvent.setTargetPage( pageIndex );
+		_tableViewer.addSelectionChangedListener(
+			new ISelectionChangedListener() {
 
-                        for( PageNavigatorListener listener : naviListeners )
-                        {
-                            listener.onPageNavigate( navEvent );
-                        }
-                    }
-                }
-            }
-        } );
+				@Override
+				public void selectionChanged(SelectionChangedEvent event) {
+					final IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 
-        final Table table = tableViewer.getTable();
-        final GridData tableData = new GridData( SWT.FILL, SWT.FILL, true, false, 1, 1 );
-        tableData.heightHint = 175;
-        table.setLayoutData( tableData );
-        table.setLinesVisible( false );
+					if (!selection.isEmpty()) {
+						if (selection.getFirstElement() instanceof TableViewElement) {
+							final TableViewElement tableViewElement = (TableViewElement)selection.getFirstElement();
 
-        createImages();
-    }
+							final int pageIndex = tableViewElement._pageIndex;
 
-    private TableViewer tableViewer;
-    private Image imageQuestion;
+							PageNavigateEvent navEvent = new PageNavigateEvent();
 
-    private class TableViewElement
-    {
+							navEvent.setTargetPage(pageIndex);
 
-        private int pageIndex;
-        private String pageTitle;
-        private Image image;
+							for (PageNavigatorListener listener : naviListeners) {
+								listener.onPageNavigate(navEvent);
+							}
+						}
+					}
+				}
 
-        public TableViewElement( String pageTitle, Image image, int pageIndex )
-        {
-            this.pageTitle = pageTitle;
-            this.image = image;
-            this.pageIndex = pageIndex;
-        }
-    }
+			});
 
-    private class TableViewContentProvider implements IStructuredContentProvider
-    {
+		final Table table = _tableViewer.getTable();
 
-        @Override
-        public void dispose()
-        {
-        }
+		final GridData tableData = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
 
-        @Override
-        public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
-        {
-        }
+		tableData.heightHint = 175;
 
-        @Override
-        public Object[] getElements( Object inputElement )
-        {
-            if( inputElement instanceof TableViewElement[] )
-            {
-                return (TableViewElement[]) inputElement;
-            }
+		table.setLayoutData(tableData);
 
-            return new Object[] { inputElement };
-        }
+		table.setLinesVisible(false);
 
-    }
+		_createImages();
+	}
 
-    class TableViewLabelProvider extends LabelProvider
-    {
+	public void createSpecialDescriptor(Composite parent, int style) {
+		final StringBuilder descriptors = new StringBuilder("Upgrade results are summarized in the following table.\n");
 
-        @Override
-        public Image getImage( Object element )
-        {
-            TableViewElement tableViewElement = (TableViewElement) element;
-            return tableViewElement.image;
-        }
+		descriptors.append("If there are still some failed or incomplete steps, you can go back to finish them.\n");
+		descriptors.append(
+			"If all the steps are well-done, congratulations! You have finished the whole upgrade process.\n");
+		descriptors.append("Now you can try to deploy your projects to the Liferay Portal instance. ");
+		descriptors.append("For more upgrade information, please see <a>From Liferay 6 to Liferay 7</a>.");
 
-        @Override
-        public String getText( Object element )
-        {
-            TableViewElement tableViewElement = (TableViewElement) element;
-            return tableViewElement.pageTitle;
-        }
-    }
+		String url = "https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/from-liferay-6-to-liferay-7";
 
-    private void createImages()
-    {
-        imageQuestion = ImageDescriptor.createFromURL(
-            ProjectUI.getDefault().getBundle().getEntry( "/images/question.png" ) ).createImage();
-    }
+		Link link = SWTUtil.createHyperLink(this, style, descriptors.toString(), 1, url);
 
-    public void createSpecialDescriptor( Composite parent, int style )
-    {
-        final String descriptor = "Upgrade results are summarized in the following table.\n" +
-            "If there are still some failed or incomplete steps, you can go back to finish them.\n" +
-            "If all the steps are well-done, congratulations! You have finished the whole upgrade process.\n" +
-            "Now you can try to deploy your projects to the Liferay Portal instance. " +
-            "For more upgrade information, please see <a>From Liferay 6 to Liferay 7</a>.";
-        String url = "https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/from-liferay-6-to-liferay-7";
+		link.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, false, 2, 1));
+	}
 
-        Link link = SWTUtil.createHyperLink( this, style, descriptor, 1, url );
-        link.setLayoutData( new GridData( SWT.FILL, SWT.BEGINNING, true, false, 2, 1 ) );
-    }
+	@Override
+	public int getGridLayoutCount() {
+		return 2;
+	}
 
-    @Override
-    public String getPageTitle()
-    {
-        return "Summary";
-    }
+	@Override
+	public boolean getGridLayoutEqualWidth() {
+		return false;
+	}
 
-    @Override
-    public int getGridLayoutCount()
-    {
-        return 2;
-    }
+	@Override
+	public String getPageTitle() {
+		return "Summary";
+	}
 
-    @Override
-    public boolean getGridLayoutEqualWidth()
-    {
-        return false;
-    }
+	@Override
+	public void onSelectionChanged(int targetSelection) {
+		_setInput();
+	}
 
-    @Override
-    public void onSelectionChanged( int targetSelection )
-    {
-        setInput();
-    }
+	private void _createImages() {
+		_imageQuestion = ImageDescriptor.createFromURL(bundle.getEntry("/images/question.png")).createImage();
+	}
 
-    private void setInput()
-    {
-        List<TableViewElement> TableViewElementList = new ArrayList<TableViewElement>();
-        TableViewElement[] tableViewElements;
-        int pageNum = UpgradeView.getPageNumber();
+	private void _setInput() {
+		List<TableViewElement> tableViewElementList = new ArrayList<>();
+		TableViewElement[] tableViewElements;
+		int pageNum = UpgradeView.getPageNumber();
 
-        for( int i = 1; i < pageNum - 1; i++ )
-        {
-            Page page = UpgradeView.getPage( i );
-            String pageTitle = page.getPageTitle();
-            int pageIndex = i;
-            PageAction pageAction = page.getSelectedAction();
-            Image statusImage;
+		for (int i = 1; i < pageNum - 1; i++) {
+			Page page = UpgradeView.getPage(i);
 
-            if( pageTitle.equals( "Ext and Theme Project" ) )
-            {
-                continue;
-            }
+			String pageTitle = page.getPageTitle();
 
-            if( pageAction == null )
-            {
-                statusImage = imageQuestion;
-            }
-            else
-            {
-                statusImage = page.getSelectedAction().getBageImage();
-            }
+			int pageIndex = i;
 
-            TableViewElement tableViewElement = new TableViewElement( pageTitle, statusImage, pageIndex );
-            TableViewElementList.add( tableViewElement );
-        }
+			PageAction pageAction = page.getSelectedAction();
+			Image statusImage;
 
-        tableViewElements = TableViewElementList.toArray( new TableViewElement[TableViewElementList.size()] );
-        tableViewer.setInput( tableViewElements );
-    }
+			if (pageTitle.equals("Ext and Theme Project")) {
+				continue;
+			}
+
+			if (pageAction == null) {
+				statusImage = _imageQuestion;
+			}
+			else {
+				statusImage = page.getSelectedAction().getBageImage();
+			}
+
+			TableViewElement tableViewElement = new TableViewElement(pageTitle, statusImage, pageIndex);
+
+			tableViewElementList.add(tableViewElement);
+		}
+
+		tableViewElements = tableViewElementList.toArray(new TableViewElement[tableViewElementList.size()]);
+
+		_tableViewer.setInput(tableViewElements);
+	}
+
+	private Image _imageQuestion;
+	private TableViewer _tableViewer;
+
+	private class TableViewContentProvider implements IStructuredContentProvider {
+
+		@Override
+		public void dispose() {
+		}
+
+		@Override
+		public Object[] getElements(Object inputElement) {
+			if (inputElement instanceof TableViewElement[]) {
+				return (TableViewElement[])inputElement;
+			}
+
+			return new Object[] {inputElement};
+		}
+
+		@Override
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		}
+
+	}
+
+	private class TableViewElement {
+
+		public TableViewElement(String pageTitle, Image image, int pageIndex) {
+			_pageTitle = pageTitle;
+			_image = image;
+			_pageIndex = pageIndex;
+		}
+
+		private Image _image;
+		private int _pageIndex;
+		private String _pageTitle;
+
+	}
+
+	private class TableViewLabelProvider extends LabelProvider {
+
+		@Override
+		public Image getImage(Object element) {
+			TableViewElement tableViewElement = (TableViewElement)element;
+
+			return tableViewElement._image;
+		}
+
+		@Override
+		public String getText(Object element) {
+			TableViewElement tableViewElement = (TableViewElement)element;
+
+			return tableViewElement._pageTitle;
+		}
+
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
@@ -43,538 +42,468 @@ import org.eclipse.swt.widgets.Display;
  * @author Andy Wu
  * @author Simon Jiang
  */
-public class GearControl extends AbstractCanvas
-    implements PageNavigatorListener, PageActionListener, PageValidationListener
-{
+public class GearControl
+	extends AbstractCanvas implements PageNavigatorListener, PageActionListener, PageValidationListener {
 
-    private float angle;
+	public GearControl(Composite parent, int style) {
+		super(parent, style | SWT.DOUBLE_BUFFERED);
 
-    private final int BORDER = 20;
+		init();
 
-    private Display display;
+		scheduleRun();
+	}
 
-    private Image errorImage;
-    private Image warningImage;
-    private Map<String, PageValidateEvent> validationMessageMap = new HashMap<String, PageValidateEvent>();
+	public void addSelectionChangedListener(SelectionChangedListener listener) {
+		_selectionChangedListeners.add(listener);
+	}
 
-    private final Color[] gearBackground = new Color[2];
-    private final Color[] gearForeground = new Color[2];
+	public final int getSelection() {
+		return _selection;
+	}
 
-    private int gearMaxNumber = 10;
+	@Override
+	public void onPageAction(PageActionEvent event) {
+		int targetPageIndex = event.getTargetPageIndex();
 
-    private final Path[] gearPaths = new Path[gearMaxNumber];
-    private final Point[] tooltipPoints = new Point[gearMaxNumber];
+		_needRedraw = true;
 
-    private Color DARK_GRAY;
-    private Color GRAY;
-    private Color WHITE;
-    private Color tooltipColor;
+		if (targetPageIndex != NONE) {
+			setSelection(targetPageIndex);
+		}
+	}
 
-    private int hover = NONE;
+	@Override
+	public void onPageNavigate(PageNavigateEvent event) {
+		setSelection(event.getTargetPage());
+	}
 
-    private boolean needRedraw = false;
+	@Override
+	public void onValidation(PageValidateEvent event) {
+		String pageId = event.getPageId();
 
-    private Font numberFont;
+		_validationMessageMap.put(pageId, event);
 
-    private int oldHover = NONE;
+		Page page = UpgradeView.getPage(_selection);
 
-    private int oldSelection = NONE;
+		if (page.getPageId().equals(pageId)) {
+			_needRedraw = true;
+		}
+	}
 
-    private boolean overflow;
+	public void restart() {
+		_angle = 0;
+		_speed = 0;
+	}
 
-    private final double RADIAN = 2 * Math.PI / 360;
+	public final void setSelection(int selection) {
+		_hover = NONE;
+		_oldHover = NONE;
 
-    private float radius;
+		if (selection < 0) {
+			selection = 0;
+			_overflow = true;
+		}
+		else if (selection > (_gearMaxNumber - 1)) {
+			selection = _gearMaxNumber - 1;
+			_overflow = true;
+		}
 
-    private int selection;
+		if (_overflow) {
+			_overflow = false;
 
-    private final List<SelectionChangedListener> selectionChangedListeners =
-        Collections.synchronizedList( new ArrayList<SelectionChangedListener>() );
+			while (needRedraw()) {
+			}
 
-    private float speed;
+			_overflow = true;
 
-    private long startAnimation;
+			return;
+		}
 
-    private final int TEETH = 8;
+		_oldSelection = _selection;
 
-    private final float ANGLE = 360 / TEETH;
+		_selection = selection;
 
-    private Font tooltipFont;
+		for (SelectionChangedListener listener : _selectionChangedListeners) {
+			listener.onSelectionChanged(selection);
+		}
 
-    public GearControl( Composite parent, int style )
-    {
-        super( parent, style | SWT.DOUBLE_BUFFERED );
+		restart();
+	}
 
-        init();
+	protected void init() {
+		super.init();
 
-        scheduleRun();
-    }
+		_display = getDisplay();
 
-    public void addSelectionChangedListener( SelectionChangedListener listener )
-    {
-        selectionChangedListeners.add( listener );
-    }
+		_errorImage = JFaceResources.getImage(Dialog.DLG_IMG_MESSAGE_ERROR);
+		_warningImage = JFaceResources.getImage(Dialog.DLG_IMG_MESSAGE_WARNING);
 
-    private Path drawGear(
-        GC gc, Display display, double cx, double cy, double outerR, double innerR, float angleOffset )
-    {
-        double radian2 = ANGLE / 2 * RADIAN;
-        double radian3 = .06;
+		_white = _display.getSystemColor(SWT.COLOR_WHITE);
+		_gray = _display.getSystemColor(SWT.COLOR_GRAY);
+		_darkGray = _display.getSystemColor(SWT.COLOR_DARK_GRAY);
 
-        Path path = new Path( display );
+		Font initialFont = getFont();
 
-        for( int i = 0; i < TEETH; i++ )
-        {
-            double radian = ( i * ANGLE + angleOffset ) * RADIAN;
-            double x = cx + outerR * Math.cos( radian );
-            double y = cy - outerR * Math.sin( radian );
+		FontData[] fontData = initialFont.getFontData();
 
-            if( i == 0 )
-            {
-                path.moveTo( (int) x, (int) y );
-            }
+		for (int i = 0; i < fontData.length; i++) {
+			fontData[i].setHeight(16);
+			fontData[i].setStyle(SWT.BOLD);
+		}
 
-            double r1 = radian + radian3;
-            double r3 = radian + radian2;
-            double r2 = r3 - radian3;
-            double r4 = r3 + radian2;
+		baseFont = new Font(_display, fontData);
 
-            x = cx + innerR * Math.cos( r1 );
-            y = cy - innerR * Math.sin( r1 );
-            path.lineTo( (int) x, (int) y );
+		_numberFont = createFont(24);
+		_tooltipFont = createFont(24);
 
-            x = cx + innerR * Math.cos( r2 );
-            y = cy - innerR * Math.sin( r2 );
-            path.lineTo( (int) x, (int) y );
+		_radius = 32;
 
-            x = cx + outerR * Math.cos( r3 );
-            y = cy - outerR * Math.sin( r3 );
-            path.lineTo( (int) x, (int) y );
+		setSize((int)(_gearMaxNumber * 2 * _radius), (int)(2 * _radius));
 
-            x = cx + outerR * Math.cos( r4 );
-            y = cy - outerR * Math.sin( r4 );
-            path.lineTo( (int) x, (int) y );
-        }
+		// Not selected.
 
-        path.close();
-        gc.fillPath( path );
-        gc.drawPath( path );
+		_gearBackground[0] = createColor(169, 171, 202);
+		_gearForeground[0] = createColor(140, 132, 171);
 
-        return path;
-    }
+		// Selected.
 
-    public final int getSelection()
-    {
-        return selection;
-    }
+		_gearBackground[1] = createColor(247, 148, 30);
+		_gearForeground[1] = createColor(207, 108, 0);
 
-    protected void init()
-    {
-        super.init();
-
-        display = getDisplay();
-
-        errorImage = JFaceResources.getImage( Dialog.DLG_IMG_MESSAGE_ERROR );
-        warningImage = JFaceResources.getImage( Dialog.DLG_IMG_MESSAGE_WARNING );
-
-        WHITE = display.getSystemColor( SWT.COLOR_WHITE );
-        GRAY = display.getSystemColor( SWT.COLOR_GRAY );
-        DARK_GRAY = display.getSystemColor( SWT.COLOR_DARK_GRAY );
-
-        Font initialFont = getFont();
-        FontData[] fontData = initialFont.getFontData();
-
-        for( int i = 0; i < fontData.length; i++ )
-        {
-            fontData[i].setHeight( 16 );
-            fontData[i].setStyle( SWT.BOLD );
-        }
-
-        baseFont = new Font( display, fontData );
-
-        numberFont = createFont( 24 );
-        tooltipFont = createFont( 24 );
-
-        radius = 32;
-        setSize( (int) ( gearMaxNumber * 2 * radius ), (int) ( 2 * radius ) );
-
-        // Not selected.
-        gearBackground[0] = createColor( 169, 171, 202 );
-        gearForeground[0] = createColor( 140, 132, 171 );
-
-        // Selected.
-        gearBackground[1] = createColor( 247, 148, 30 );
-        gearForeground[1] = createColor( 207, 108, 0 );
-
-        tooltipColor = createColor( 253, 232, 206 );
-    }
-
-    @Override
-    protected boolean needRedraw()
-    {
-        boolean retVal = false;
-
-        if( needRedraw )
-        {
-            needRedraw = false;
-            retVal = true;
-        }
-
-        if( overflow )
-        {
-            overflow = false;
-            retVal = true;
-        }
-
-        if( hover != oldHover )
-        {
-            retVal = true;
-        }
-
-        if( speed >= ANGLE )
-        {
-            startAnimation = 0;
-
-            return retVal;
-        }
-
-        long now = currentTime;
-
-        if( startAnimation == 0 )
-        {
-            startAnimation = now;
-        }
-
-        long timeSinceStart = now - startAnimation;
-
-        speed = timeSinceStart * ANGLE / 400;
-        angle += speed;
-
-        return true;
-    }
-
-    @Override
-    protected void onMouseDown( int x, int y )
-    {
-        if( x != Integer.MIN_VALUE && y != Integer.MIN_VALUE )
-        {
-            GC gc = new GC( this );
-
-            for( int i = 0; i < gearPaths.length; i++ )
-            {
-                Path path = gearPaths[i];
-
-                if( path != null && path.contains( x, y, gc, false ) )
-                {
-                    if( i != getSelection() )
-                    {
-                        setSelection( i );
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    protected void onMouseMove( int x, int y )
-    {
-        if( x != Integer.MIN_VALUE && y != Integer.MIN_VALUE )
-        {
-            GC gc = new GC( this );
+		_tooltipColor = createColor(253, 232, 206);
+	}
 
-            int number = UpgradeView.getPageNumber();
+	@Override
+	protected boolean needRedraw() {
+		boolean retVal = false;
 
-            for( int i = 0; i < number; i++ )
-            {
-                Path path = gearPaths[i];
+		if (_needRedraw) {
+			_needRedraw = false;
+			retVal = true;
+		}
 
-                if( path != null && path.contains( x, y, gc, false ) )
-                {
-                    if( i != hover )
-                    {
-                        hover = i;
-                    }
+		if (_overflow) {
+			_overflow = false;
+			retVal = true;
+		}
 
-                    return;
-                }
-            }
-        }
-
-        hover = NONE;
-    }
-
-    @Override
-    public void onPageAction( PageActionEvent event )
-    {
-        int targetPageIndex = event.getTargetPageIndex();
+		if (_hover != _oldHover) {
+			retVal = true;
+		}
 
-        needRedraw = true;
-
-        if( targetPageIndex != NONE )
-        {
-            setSelection( targetPageIndex );
-        }
-
-    }
-
-    @Override
-    public void onPageNavigate( PageNavigateEvent event )
-    {
-        setSelection( event.getTargetPage() );
-    }
-
-    @Override
-    public void onValidation( PageValidateEvent event )
-    {
-        String pageId = event.getPageId();
-
-        validationMessageMap.put( pageId, event );
-
-        Page page = UpgradeView.getPage( selection );
-
-        if( page.getPageId().equals( pageId ) )
-        {
-            needRedraw = true;
-        }
-    }
-
-    @Override
-    protected void paint( GC gc )
-    {
-        gc.setFont( getBaseFont() );
-        gc.setLineWidth( 3 );
-        gc.setAntialias( SWT.ON );
-
-        int alpha = Math.min( (int) ( 255 * speed / ANGLE ), 255 );
-
-        int number = UpgradeView.getPageNumber();
-
-        for( int i = 0; i < number; i++ )
-        {
-            tooltipPoints[i] = paintGear( gc, i, alpha );
-        }
-
-        if( hover >= 0 && hover < tooltipPoints.length )
-        {
-            Point point = tooltipPoints[hover];
-
-            String title = UpgradeView.getPage( hover ).getTitle();
-
-            gc.setFont( tooltipFont );
-            gc.setForeground( DARK_GRAY );
-            gc.setBackground( tooltipColor );
-
-            Rectangle rectangle = drawText( gc, point.x, point.y + 14, title, 2 );
-
-            gc.setForeground( GRAY );
-            gc.setLineWidth( 1 );
-            gc.drawRectangle( rectangle );
-        }
-
-        paintValidationMessage( gc );
-
-        oldHover = hover;
-
-    }
-
-    private void paintValidationMessage( GC gc )
-    {
-        Page page = UpgradeView.getPage( selection );
-
-        String pageId = page.getPageId();
-
-        PageValidateEvent event = validationMessageMap.get( pageId );
-
-        if( event != null )
-        {
-            String message = event.getMessage();
-
-            if( message != null && !message.equals( "ok" ) )
-            {
-                if( event.getType().equals( PageValidateEvent.ERROR ) )
-                {
-                    drawImage( gc, errorImage, 30, 130 );
-                }
-                else
-                {
-                    drawImage( gc, warningImage, 30, 130 );
-                }
-
-                gc.setBackground( tooltipColor );
-                gc.setForeground( DARK_GRAY );
-                gc.setLineWidth( 1 );
-
-                Rectangle rectangle = drawTextNotCenter( gc, 40, 120, message, 2 );
-
-                gc.drawRectangle( rectangle );
-            }
-        }
-    }
-
-    private Point paintBadge( GC gc, double x, double y, double outerR, int i, int alpha )
-    {
-        if( selection >= gearMaxNumber )
-        {
-            gc.setAlpha( 255 - alpha );
-        }
-        else if( oldSelection >= gearMaxNumber )
-        {
-            gc.setAlpha( alpha );
-        }
-
-        Image badgeImage = null;
-
-        Page page = UpgradeView.getPage( i );
-
-        PageAction pageAction = page.getSelectedAction();
-
-        if( pageAction != null )
-        {
-            badgeImage = pageAction.getBageImage();
-        }
-
-        if( badgeImage != null )
-        {
-            gc.drawImage( badgeImage, (int) ( x - badgeImage.getBounds().width / 2 ), (int) ( y - outerR - 12 ) );
-            gc.setAlpha( 255 );
-        }
-
-        return new Point( (int) x, (int) ( y + outerR ) );
-    }
-
-    private Point paintGear( GC gc, int i, int alpha )
-    {
-        double offset = 2 * i * radius;
-        double x = BORDER + radius + offset;
-        double y = BORDER + radius;
-        double r2 = (double) radius * .8f;
-        double r3 = (double) radius * .5f;
-
-        int selected = 0;
-        double factor = 1;
-
-        if( i == oldSelection )
-        {
-            if( speed < ANGLE / 2 )
-            {
-                selected = 1;
-            }
-        }
-        else if( i == selection )
-        {
-            if( speed >= ANGLE / 2 )
-            {
-                selected = 1;
-                factor += ( ANGLE - speed ) * .02;
-            }
-            else
-            {
-                factor += speed * .02;
-            }
-        }
-
-        boolean hovered = false;
-
-        if( i == hover )
-        {
-            factor += .1;
-            oldHover = hover;
-            if( selected == 0 )
-            {
-                hovered = true;
-            }
-        }
-
-        double outerR = factor * radius;
-        double innerR = factor * r2;
-        float angleOffset = ( angle + i * ANGLE ) * ( i % 2 == 1 ? -1 : 1 ) / 7;
-
-        gc.setForeground( hovered ? DARK_GRAY : gearForeground[selected] );
-        gc.setBackground( hovered ? GRAY : gearBackground[selected] );
-
-        if( outerR < 32.0 )
-        {
-            outerR = 32.0D;
-        }
-
-        if( innerR < 25.0 )
-        {
-            innerR = 25.600000381469727D;
-        }
-
-        Path path = drawGear( gc, display, x, y, outerR, innerR, angleOffset );
-
-        if( gearPaths[i] != null )
-        {
-            gearPaths[i].dispose();
-        }
-
-        gearPaths[i] = path;
-
-        int ovalX = (int) ( x - factor * r3 );
-        int ovalY = (int) ( y - factor * r3 );
-        int ovalR = (int) ( 2 * factor * r3 );
-        gc.setBackground( WHITE );
-        gc.fillOval( ovalX, ovalY, ovalR, ovalR );
-        gc.drawOval( ovalX, ovalY, ovalR, ovalR );
-
-        if( i < gearMaxNumber )
-        {
-            String number = Integer.toString( i + 1 );
-
-            gc.setForeground( selected == 1 ? gearForeground[1] : GRAY );
-            gc.setFont( numberFont );
-
-            drawText( gc, x, y - 1, number );
-        }
-
-        return paintBadge( gc, x, y, outerR, i, alpha );
-    }
-
-    public void restart()
-    {
-        angle = 0;
-        speed = 0;
-    }
-
-    public final void setSelection( int selection )
-    {
-        hover = NONE;
-        oldHover = NONE;
-
-        if( selection < 0 )
-        {
-            selection = 0;
-            overflow = true;
-        }
-        else if( selection > gearMaxNumber - 1 )
-        {
-            selection = gearMaxNumber - 1;
-            overflow = true;
-        }
-
-        if( overflow )
-        {
-            overflow = false;
-
-            while( needRedraw() )
-            {
-            }
-
-            overflow = true;
-
-            return;
-        }
-
-        oldSelection = this.selection;
-
-        this.selection = selection;
-
-        for( SelectionChangedListener listener : selectionChangedListeners )
-        {
-            listener.onSelectionChanged( selection );
-        }
-
-        restart();
-    }
+		if (_speed >= _constAngle) {
+			_startAnimation = 0;
+
+			return retVal;
+		}
+
+		long now = currentTime;
+
+		if (_startAnimation == 0) {
+			_startAnimation = now;
+		}
+
+		long timeSinceStart = now - _startAnimation;
+
+		_speed = timeSinceStart * _constAngle / 400;
+
+		_angle += _speed;
+
+		return true;
+	}
+
+	@Override
+	protected void onMouseDown(int x, int y) {
+		if ((x != Integer.MIN_VALUE) && (y != Integer.MIN_VALUE)) {
+			GC gc = new GC(this);
+
+			for (int i = 0; i < _gearPaths.length; i++) {
+				Path path = _gearPaths[i];
+
+				if ((path != null) && path.contains(x, y, gc, false)) {
+					if (i != getSelection()) {
+						setSelection(i);
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	protected void onMouseMove(int x, int y) {
+		if ((x != Integer.MIN_VALUE) && (y != Integer.MIN_VALUE)) {
+			GC gc = new GC(this);
+
+			int number = UpgradeView.getPageNumber();
+
+			for (int i = 0; i < number; i++) {
+				Path path = _gearPaths[i];
+
+				if ((path != null) && path.contains(x, y, gc, false)) {
+					if (i != _hover) {
+						_hover = i;
+					}
+
+					return;
+				}
+			}
+		}
+
+		_hover = NONE;
+	}
+
+	@Override
+	protected void paint(GC gc) {
+		gc.setFont(getBaseFont());
+		gc.setLineWidth(3);
+		gc.setAntialias(SWT.ON);
+
+		int alpha = Math.min((int)(255 * _speed / _constAngle), 255);
+
+		int number = UpgradeView.getPageNumber();
+
+		for (int i = 0; i < number; i++) {
+			_tooltipPoints[i] = _paintGear(gc, i, alpha);
+		}
+
+		if ((_hover >= 0) && (_hover < _tooltipPoints.length)) {
+			Point point = _tooltipPoints[_hover];
+
+			String title = UpgradeView.getPage(_hover).getTitle();
+
+			gc.setFont(_tooltipFont);
+			gc.setForeground(_darkGray);
+			gc.setBackground(_tooltipColor);
+
+			Rectangle rectangle = drawText(gc, point.x, point.y + 14, title, 2);
+
+			gc.setForeground(_gray);
+			gc.setLineWidth(1);
+			gc.drawRectangle(rectangle);
+		}
+
+		_paintValidationMessage(gc);
+
+		_oldHover = _hover;
+	}
+
+	private Path _drawGear(
+		GC gc, Display display, double cx, double cy, double outerR, double innerR, float angleOffset) {
+
+		double radian2 = _constAngle / 2 * _radian;
+		double radian3 = .06;
+
+		Path path = new Path(display);
+
+		for (int i = 0; i < _teeth; i++) {
+			double radian = (i * _constAngle + angleOffset) * _radian;
+
+			double x = cx + outerR * Math.cos(radian);
+			double y = cy - outerR * Math.sin(radian);
+
+			if (i == 0) {
+				path.moveTo((int)x, (int)y);
+			}
+
+			double r1 = radian + radian3;
+			double r3 = radian + radian2;
+
+			double r2 = r3 - radian3;
+			double r4 = r3 + radian2;
+
+			x = cx + innerR * Math.cos(r1);
+			y = cy - innerR * Math.sin(r1);
+
+			path.lineTo((int)x, (int)y);
+
+			x = cx + innerR * Math.cos(r2);
+			y = cy - innerR * Math.sin(r2);
+
+			path.lineTo((int)x, (int)y);
+
+			x = cx + outerR * Math.cos(r3);
+			y = cy - outerR * Math.sin(r3);
+
+			path.lineTo((int)x, (int)y);
+
+			x = cx + outerR * Math.cos(r4);
+			y = cy - outerR * Math.sin(r4);
+
+			path.lineTo((int)x, (int)y);
+		}
+
+		path.close();
+		gc.fillPath(path);
+		gc.drawPath(path);
+
+		return path;
+	}
+
+	private Point _paintBadge(GC gc, double x, double y, double outerR, int i, int alpha) {
+		if (_selection >= _gearMaxNumber) {
+			gc.setAlpha(255 - alpha);
+		}
+		else if (_oldSelection >= _gearMaxNumber) {
+			gc.setAlpha(alpha);
+		}
+
+		Image badgeImage = null;
+
+		Page page = UpgradeView.getPage(i);
+
+		PageAction pageAction = page.getSelectedAction();
+
+		if (pageAction != null) {
+			badgeImage = pageAction.getBageImage();
+		}
+
+		if (badgeImage != null) {
+			gc.drawImage(badgeImage, (int)(x - badgeImage.getBounds().width / 2), (int)(y - outerR - 12));
+			gc.setAlpha(255);
+		}
+
+		return new Point((int)x, (int)(y + outerR));
+	}
+
+	private Point _paintGear(GC gc, int i, int alpha) {
+		double offset = 2 * i * _radius;
+
+		double x = _border + _radius + offset;
+
+		double y = _border + _radius;
+		double r2 = (double)_radius * .8F;
+		double r3 = (double)_radius * .5F;
+
+		int selected = 0;
+		double factor = 1;
+
+		if (i == _oldSelection) {
+			if (_speed < (_constAngle / 2)) {
+				selected = 1;
+			}
+		}
+		else if (i == _selection) {
+			if (_speed >= (_constAngle / 2)) {
+				selected = 1;
+				factor += (_constAngle - _speed) * .02;
+			}
+			else {
+				factor += _speed * .02;
+			}
+		}
+
+		boolean hovered = false;
+
+		if (i == _hover) {
+			factor += .1;
+			_oldHover = _hover;
+
+			if (selected == 0) {
+				hovered = true;
+			}
+		}
+
+		double outerR = factor * _radius;
+		double innerR = factor * r2;
+		float angleOffset = (_angle + i * _constAngle) * (i % 2 == 1 ? -1 : 1) / 7;
+
+		gc.setForeground(hovered ? _darkGray : _gearForeground[selected]);
+		gc.setBackground(hovered ? _gray : _gearBackground[selected]);
+
+		if (outerR < 32.0) {
+			outerR = 32.0D;
+		}
+
+		if (innerR < 25.0) {
+			innerR = 25.600000381469727D;
+		}
+
+		Path path = _drawGear(gc, _display, x, y, outerR, innerR, angleOffset);
+
+		if (_gearPaths[i] != null) {
+			_gearPaths[i].dispose();
+		}
+
+		_gearPaths[i] = path;
+
+		int ovalX = (int)(x - factor * r3);
+		int ovalY = (int)(y - factor * r3);
+		int ovalR = (int)(2 * factor * r3);
+		gc.setBackground(_white);
+		gc.fillOval(ovalX, ovalY, ovalR, ovalR);
+		gc.drawOval(ovalX, ovalY, ovalR, ovalR);
+
+		if (i < _gearMaxNumber) {
+			String number = Integer.toString(i + 1);
+
+			gc.setForeground(selected == 1 ? _gearForeground[1] : _gray);
+			gc.setFont(_numberFont);
+
+			drawText(gc, x, y - 1, number);
+		}
+
+		return _paintBadge(gc, x, y, outerR, i, alpha);
+	}
+
+	private void _paintValidationMessage(GC gc) {
+		Page page = UpgradeView.getPage(_selection);
+
+		String pageId = page.getPageId();
+
+		PageValidateEvent event = _validationMessageMap.get(pageId);
+
+		if (event != null) {
+			String message = event.getMessage();
+
+			if ((message != null) && !message.equals("ok")) {
+				if (event.getType().equals(PageValidateEvent.error)) {
+					drawImage(gc, _errorImage, 30, 130);
+				}
+				else {
+					drawImage(gc, _warningImage, 30, 130);
+				}
+
+				gc.setBackground(_tooltipColor);
+				gc.setForeground(_darkGray);
+				gc.setLineWidth(1);
+
+				Rectangle rectangle = drawTextNotCenter(gc, 40, 120, message, 2);
+
+				gc.drawRectangle(rectangle);
+			}
+		}
+	}
+
+	private float _angle;
+	private final int _border = 20;
+	private final float _constAngle = 360;
+	private Color _darkGray;
+	private Display _display;
+	private Image _errorImage;
+	private final Color[] _gearBackground = new Color[2];
+	private final Color[] _gearForeground = new Color[2];
+	private int _gearMaxNumber = 10;
+	private final Path[] _gearPaths = new Path[_gearMaxNumber];
+	private Color _gray;
+	private int _hover = NONE;
+	private boolean _needRedraw = false;
+	private Font _numberFont;
+	private int _oldHover = NONE;
+	private int _oldSelection = NONE;
+	private boolean _overflow;
+	private final double _radian = 2 * Math.PI / 360;
+	private float _radius;
+	private int _selection;
+	private final List<SelectionChangedListener> _selectionChangedListeners = Collections.synchronizedList(
+		new ArrayList<SelectionChangedListener>());
+	private float _speed;
+	private long _startAnimation;
+	private final int _teeth = 8;
+	private Color _tooltipColor;
+	private Font _tooltipFont;
+	private final Point[] _tooltipPoints = new Point[_gearMaxNumber];
+	private Map<String, PageValidateEvent> _validationMessageMap = new HashMap<>();
+	private Image _warningImage;
+	private Color _white;
+
 }

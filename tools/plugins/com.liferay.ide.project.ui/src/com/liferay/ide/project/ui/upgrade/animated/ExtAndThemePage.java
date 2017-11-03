@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
@@ -27,43 +26,41 @@ import org.eclipse.swt.widgets.Link;
  * @author Simon Jiang
  * @author Joye Luo
  */
-public class ExtAndThemePage extends Page
-{
+public class ExtAndThemePage extends Page {
 
-    public ExtAndThemePage( Composite parent, int style, LiferayUpgradeDataModel dataModel )
-    {
-        super( parent, style, dataModel, EXTANDTHEME_PAGE_ID, false );
-    }
+	public ExtAndThemePage(Composite parent, int style, LiferayUpgradeDataModel dataModel) {
+		super(parent, style, dataModel, extandthemePageId, false);
+	}
 
-    @Override
-    public String getPageTitle()
-    {
-        return "Ext and Theme Project";
-    }
+	public void createSpecialDescriptor(Composite parent, int style) {
+		final StringBuilder descriptorBuilder = new StringBuilder(
+			"Theme and Ext projects are not supported to upgrade in this tool currently.\n");
 
-    public void createSpecialDescriptor( Composite parent, int style )
-    {
-        final String descriptor = "Theme and Ext projects are not supported to upgrade in this tool currently.\n" +
-            "For Theme Projects, you can upgrade them manually.\n" +
-            "For Ext Projects, we don't provide support for them in Liferay 7.0.\n" +
-            "If you have ext projects, you can change them into modules.\n" +
-            "For more details, please see <a>Liferay Blade Samples</a>.\n";
-        String url = "https://github.com/liferay/liferay-blade-samples";
+		descriptorBuilder.append("For Theme Projects, you can upgrade them manually.\n");
+		descriptorBuilder.append("For Ext Projects, we don't provide support for them in Liferay 7.0.\n");
+		descriptorBuilder.append("If you have ext projects, you can change them into modules.\n");
+		descriptorBuilder.append("For more details, please see <a>Liferay Blade Samples</a>.\n");
 
-        Link  link = SWTUtil.createHyperLink( this, style, descriptor, 1, url );
-        link.setLayoutData( new GridData( SWT.FILL, SWT.BEGINNING, true, false, 2, 1 ) );
-    }
+		String url = "https://github.com/liferay/liferay-blade-samples";
 
-    @Override
-    public int getGridLayoutCount()
-    {
-        return 2;
-    }
+		Link link = SWTUtil.createHyperLink(this, style, descriptorBuilder.toString(), 1, url);
 
-    @Override
-    public boolean getGridLayoutEqualWidth()
-    {
-        return false;
-    }
+		link.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, false, 2, 1));
+	}
+
+	@Override
+	public int getGridLayoutCount() {
+		return 2;
+	}
+
+	@Override
+	public boolean getGridLayoutEqualWidth() {
+		return false;
+	}
+
+	@Override
+	public String getPageTitle() {
+		return "Ext and Theme Project";
+	}
 
 }

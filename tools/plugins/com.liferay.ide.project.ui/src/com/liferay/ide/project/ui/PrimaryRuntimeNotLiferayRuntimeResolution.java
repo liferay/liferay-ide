@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,38 +10,34 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui;
+
+import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 
-import com.liferay.ide.project.core.util.ProjectUtil;
-
 /**
  * @author Kuo Zhang
  */
-public final class PrimaryRuntimeNotLiferayRuntimeResolution extends PrimaryRuntimeNotSetResolution
-{
+public final class PrimaryRuntimeNotLiferayRuntimeResolution extends PrimaryRuntimeNotSetResolution {
 
-    public void run( IMarker marker )
-    {
-        IFacetedProject fproj = ProjectUtil.getFacetedProject( ( (IProject) marker.getResource() ) );
+	public void run(IMarker marker) {
+		IFacetedProject fproj = ProjectUtil.getFacetedProject((IProject)marker.getResource());
 
-        try
-        {
-            fproj.setPrimaryRuntime( null, null );
-            fproj.setTargetedRuntimes( null, null );
-        }
-        catch( CoreException e )
-        {
-            ProjectUI.logError( e );
-        }
+		try {
+			fproj.setPrimaryRuntime(null, null);
+			fproj.setTargetedRuntimes(null, null);
+		}
+		catch (CoreException ce) {
+			ProjectUI.logError(ce);
+		}
 
-        super.run( marker );
-    }
+		super.run(marker);
+	}
+
 }

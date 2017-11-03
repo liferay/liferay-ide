@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.modules;
 
@@ -40,6 +39,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -47,150 +47,133 @@ import org.eclipse.ui.ide.IDE;
 /**
  * @author Simon Jiang
  */
-public class NewLiferayComponentWizard extends SapphireWizard<NewLiferayComponentOp>
-    implements IWorkbenchWizard, INewWizard
-{
+public class NewLiferayComponentWizard
+	extends SapphireWizard<NewLiferayComponentOp> implements IWorkbenchWizard, INewWizard {
 
-    private boolean firstErrorMessageRemoved = false;
-    private IProject initialProject;
-    private IPackageFragment initialPackage;
-    private IPackageFragmentRoot initialPackageRoot;
+	public NewLiferayComponentWizard() {
+		super(_createDefaultOp(), DefinitionLoader.sdef(NewLiferayComponentWizard.class).wizard());
+	}
 
-    public NewLiferayComponentWizard()
-    {
-        super( createDefaultOp(), DefinitionLoader.sdef( NewLiferayComponentWizard.class ).wizard() );
-    }
+	@Override
+	public IWizardPage[] getPages() {
+		final IWizardPage[] wizardPages = super.getPages();
 
-    @Override
-    public IWizardPage[] getPages()
-    {
-        final IWizardPage[] wizardPages = super.getPages();
+		if (!_firstErrorMessageRemoved && (wizardPages != null)) {
+			final SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
 
-        if( !firstErrorMessageRemoved && wizardPages != null )
-        {
-            final SapphireWizardPage wizardPage = (SapphireWizardPage) wizardPages[0];
+			final String message = wizardPage.getMessage();
+			final int messageType = wizardPage.getMessageType();
 
-            final String message = wizardPage.getMessage();
-            final int messageType = wizardPage.getMessageType();
+			if ((messageType == IMessageProvider.ERROR) && !CoreUtil.isNullOrEmpty(message)) {
+				wizardPage.setMessage("Please enter a project name.", SapphireWizardPage.NONE);
+				_firstErrorMessageRemoved = true;
+			}
+		}
 
-            if( messageType == IMessageProvider.ERROR && !CoreUtil.isNullOrEmpty( message ) )
-            {
-                wizardPage.setMessage( "Please enter a project name.", SapphireWizardPage.NONE ); //$NON-NLS-1$
-                firstErrorMessageRemoved = true;
-            }
-        }
+		return wizardPages;
+	}
 
-        return wizardPages;
-    }
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		if ((selection != null) && !selection.isEmpty()) {
+			final Object element = selection.getFirstElement();
 
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-        if( selection != null && !selection.isEmpty() )
-        {
-            final Object element = selection.getFirstElement();
+			if (element instanceof IResource) {
+				_initialProject = ((IResource)element).getProject();
+			}
+			else if (element instanceof IJavaProject) {
+				_initialProject = ((IJavaProject)element).getProject();
+			}
+			else if (element instanceof IPackageFragment) {
+				_initialPackage = (IPackageFragment)element;
+				_initialProject = ((IJavaElement)element).getResource().getProject();
+			}
+			else if (element instanceof IPackageFragmentRoot) {
+				_initialPackageRoot = (IPackageFragmentRoot)element;
 
-            if( element instanceof IResource )
-            {
-                initialProject = ( (IResource) element ).getProject();
-            }
-            else if( element instanceof IJavaProject )
-            {
-                initialProject = ( (IJavaProject) element ).getProject();
-            }
-            else if( element instanceof IPackageFragment )
-            {
-                initialPackage = ( (IPackageFragment) element );
-                initialProject = ( (IJavaElement) element ).getResource().getProject();
-            }
-            else if( element instanceof IPackageFragmentRoot )
-            {
-                initialPackageRoot = (IPackageFragmentRoot) element;
-                initialProject = initialPackageRoot.getJavaProject().getProject();
-            }
-            else if( element instanceof IJavaElement )
-            {
-                initialProject = ( (IJavaElement) element ).getResource().getProject();
-            }
+				_initialProject = _initialPackageRoot.getJavaProject().getProject();
+			}
+			else if (element instanceof IJavaElement) {
+				_initialProject = ((IJavaElement)element).getResource().getProject();
+			}
 
-            if( initialProject != null )
-            {
-                final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, initialProject );
+			if (_initialProject != null) {
+				final IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, _initialProject);
 
-                if( bundleProject != null && "jar".equals( bundleProject.getBundleShape() ) &&
-                    !bundleProject.isFragmentBundle() )
-                {
-                    element().setProjectName( initialProject.getName() );
+				if ((bundleProject != null) && "jar".equals(bundleProject.getBundleShape()) &&
+					!bundleProject.isFragmentBundle()) {
 
-                    if( initialPackage != null )
-                    {
-                        element().setPackageName( initialPackage.getElementName() );
-                    }
-                }
-            }
-        }
-    }
+					element().setProjectName(_initialProject.getName());
 
-    private static NewLiferayComponentOp createDefaultOp()
-    {
-        return NewLiferayComponentOp.TYPE.instantiate();
-    }
+					if (_initialPackage != null) {
+						element().setPackageName(_initialPackage.getElementName());
+					}
+				}
+			}
+		}
+	}
 
-    @Override
-    public void performPostFinish()
-    {
-        final NewLiferayComponentOp op = element().nearest( NewLiferayComponentOp.class );
-        IProject currentProject = CoreUtil.getProject( op.getProjectName().content() );
+	@Override
+	public void performPostFinish() {
+		final NewLiferayComponentOp op = element().nearest(NewLiferayComponentOp.class);
 
-        if( currentProject == null )
-        {
-            return;
-        }
+		IProject currentProject = CoreUtil.getProject(op.getProjectName().content());
 
-        IJavaProject javaProject = JavaCore.create( currentProject );
+		if (currentProject == null) {
+			return;
+		}
 
-        if( javaProject == null )
-        {
-            return;
-        }
+		IJavaProject javaProject = JavaCore.create(currentProject);
 
-        try
-        {
-            String componentClass = op.getComponentClassName().content();
-            String packageName = op.getPackageName().text();
+		if (javaProject == null) {
+			return;
+		}
 
-            final IType type = javaProject.findType( packageName, componentClass );
+		try {
+			String componentClass = op.getComponentClassName().content();
+			String packageName = op.getPackageName().text();
 
-            if( type == null )
-            {
-                return;
-            }
+			final IType type = javaProject.findType(packageName, componentClass);
 
-            final IFile classFile = (IFile) type.getResource();
+			if (type == null) {
+				return;
+			}
 
-            if( classFile != null )
-            {
-                Display.getCurrent().asyncExec( new Runnable()
-                {
+			final IFile classFile = (IFile)type.getResource();
 
-                    public void run()
-                    {
-                        try
-                        {
-                            IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-                            IDE.openEditor( page, classFile, true );
-                        }
-                        catch( Exception e )
-                        {
-                            ProjectUI.logError( e );
-                        }
-                    }
-                } );
-            }
-        }
-        catch( Exception e )
-        {
-            ProjectUI.logError( e );
-        }
-    }
+			if (classFile != null) {
+				Display.getCurrent().asyncExec(
+					new Runnable() {
+
+						public void run() {
+							try {
+								IWorkbenchWindow activeWorkbenchWindow =
+									PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+
+								IWorkbenchPage page = activeWorkbenchWindow.getActivePage();
+
+								IDE.openEditor(page, classFile, true);
+							}
+							catch (Exception e) {
+								ProjectUI.logError(e);
+							}
+						}
+
+					});
+			}
+		}
+		catch (Exception e) {
+			ProjectUI.logError(e);
+		}
+	}
+
+	private static NewLiferayComponentOp _createDefaultOp() {
+		return NewLiferayComponentOp.TYPE.instantiate();
+	}
+
+	private boolean _firstErrorMessageRemoved = false;
+	private IPackageFragment _initialPackage;
+	private IPackageFragmentRoot _initialPackageRoot;
+	private IProject _initialProject;
+
 }

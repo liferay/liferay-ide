@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui;
 
@@ -22,39 +21,32 @@ import org.eclipse.core.resources.IProjectDescription;
 /**
  * @author Greg Amerson
  */
-public class ProjectNaturePropertyTester extends PropertyTester
-{
+public class ProjectNaturePropertyTester extends PropertyTester {
 
-    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
-    {
-        if( receiver instanceof IProject )
-        {
-            IProject project = (IProject) receiver;
+	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
+		if (receiver instanceof IProject) {
+			IProject project = (IProject)receiver;
 
-            try
-            {
-                IProjectDescription desc = project.getDescription();
+			try {
+				IProjectDescription desc = project.getDescription();
 
-                if( desc != null )
-                {
+				if (desc != null) {
+					for (String natureId : desc.getNatureIds()) {
+						if (natureId.equals(expectedValue)) {
+							return true;
+						}
+					}
+				}
+			}
+			catch (Throwable t) {
 
-                    for( String natureId : desc.getNatureIds() )
-                    {
-                        if( natureId.equals( expectedValue ) )
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            catch( Throwable t )
-            {
-                // ignore
-            }
+				// ignore
 
-        }
+			}
 
-        return false;
-    }
+		}
+
+		return false;
+	}
 
 }

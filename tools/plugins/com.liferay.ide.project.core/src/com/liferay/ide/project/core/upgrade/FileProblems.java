@@ -40,6 +40,10 @@ public class FileProblems
         return _file;
     }
 
+    public String getFileAbsolutePath() {
+    	return _file.getAbsolutePath();
+    }
+    
     public List<Problem> getProblems()
     {
         return _problems;

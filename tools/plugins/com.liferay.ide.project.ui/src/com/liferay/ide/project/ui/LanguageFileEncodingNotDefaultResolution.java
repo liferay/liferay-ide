@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui;
 
@@ -25,47 +24,44 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.progress.IProgressService;
 
 /**
  * @author Kuo Zhang
  */
-public class LanguageFileEncodingNotDefaultResolution implements IMarkerResolution
-{
+public class LanguageFileEncodingNotDefaultResolution implements IMarkerResolution {
 
-    public void run( IMarker marker )
-    {
-        if( marker.getResource() instanceof IProject )
-        {
-            final IProject proj = (IProject) marker.getResource();
+	public String getLabel() {
+		return "Encode Language Files to Default (UTF-8).";
+	}
 
-            try
-            {
-                PlatformUI.getWorkbench().getProgressService().run
-                (
-                    true, true,
-                    new IRunnableWithProgress()
-                    {
-                        public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
-                        {
-                            monitor.beginTask( "Encoding Liferay Language File to Default (UTF-8)... ", 10 );
+	public void run(IMarker marker) {
+		if (marker.getResource() instanceof IProject) {
+			final IProject proj = (IProject)marker.getResource();
 
-                            PropertiesUtil.encodeLanguagePropertiesFilesToDefault( proj, monitor );
+			try {
+				IProgressService serivce = PlatformUI.getWorkbench().getProgressService();
 
-                            monitor.done();
-                        }
-                    }
-                );
-            }
-            catch( Exception e )
-            {
-                ProjectUI.logError( e );
-            }
-        }
-    }
+				serivce.run(
+					true, true,
+					new IRunnableWithProgress() {
 
-    public String getLabel()
-    {
-        return "Encode Language Files to Default (UTF-8).";
-    }
+						public void run(IProgressMonitor monitor)
+							throws InterruptedException, InvocationTargetException {
+
+							monitor.beginTask("Encoding Liferay Language File to Default (UTF-8)... ", 10);
+
+							PropertiesUtil.encodeLanguagePropertiesFilesToDefault(proj, monitor);
+
+							monitor.done();
+						}
+
+					});
+			}
+			catch (Exception e) {
+				ProjectUI.logError(e);
+			}
+		}
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,74 +10,71 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.pref;
 
 /**
  * @author Greg Amerson
  */
-public class ComboData
-{
+public class ComboData {
 
-    private int fIndex;
+	public ComboData(String key, int[] severities, int index) {
+		_fKey = key;
+		_fSeverities = severities;
+		_fIndex = index;
+	}
 
-    private String fKey;
+	public int getIndex() {
+		return _fIndex;
+	}
 
-    private int[] fSeverities;
+	public String getKey() {
+		return _fKey;
+	}
 
-    int originalSeverity = -2;
+	public int getSeverity() {
+		if ((_fIndex >= 0) && (_fSeverities != null) && (_fIndex < _fSeverities.length)) {
+			return _fSeverities[_fIndex];
+		}
 
-    public ComboData( String key, int[] severities, int index )
-    {
-        fKey = key;
-        fSeverities = severities;
-        fIndex = index;
-    }
+		return -1;
+	}
 
-    public int getIndex()
-    {
-        return fIndex;
-    }
+	public boolean isChanged() {
+		if (_fSeverities[_fIndex] != originalSeverity) {
+			return true;
+		}
 
-    public String getKey()
-    {
-        return fKey;
-    }
+		return false;
+	}
 
-    public int getSeverity()
-    {
-        return ( fIndex >= 0 && fSeverities != null && fIndex < fSeverities.length ) ? fSeverities[fIndex] : -1;
-    }
+	public void setIndex(int index) {
+		_fIndex = index;
+	}
 
-    public void setIndex( int index )
-    {
-        fIndex = index;
-    }
+	/**
+	 * Sets the severity index based on <code>severity</code>. If the severity
+	 * doesn't exist, the index is set to -1.
+	 *
+	 * @param severity
+	 *            the severity level
+	 */
+	public void setSeverity(int severity) {
+		for (int i = 0; _fSeverities != null && i < _fSeverities.length; i++) {
+			if (_fSeverities[i] == severity) {
+				_fIndex = i;
+				return;
+			}
+		}
 
-    /**
-     * Sets the severity index based on <code>severity</code>. If the severity doesn't exist, the index is set to -1.
-     * 
-     * @param severity
-     *            the severity level
-     */
-    public void setSeverity( int severity )
-    {
-        for( int i = 0; fSeverities != null && i < fSeverities.length; i++ )
-        {
-            if( fSeverities[i] == severity )
-            {
-                fIndex = i;
-                return;
-            }
-        }
+		_fIndex = -1;
+	}
 
-        fIndex = -1;
-    }
+	public int originalSeverity = -2;
 
-    boolean isChanged()
-    {
-        return fSeverities[fIndex] != originalSeverity;
-    }
+	private int _fIndex;
+	private String _fKey;
+	private int[] _fSeverities;
+
 }

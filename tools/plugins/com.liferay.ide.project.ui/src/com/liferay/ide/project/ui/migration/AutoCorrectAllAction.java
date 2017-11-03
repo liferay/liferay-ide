@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.migration;
 
@@ -38,6 +37,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IViewPart;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -46,124 +46,105 @@ import org.osgi.framework.ServiceReference;
 /**
  * @author Terry Jia
  */
-public class AutoCorrectAllAction extends Action
-{
+public class AutoCorrectAllAction extends Action {
 
-    List<ProblemsContainer> _problemsContainerList;
+	public AutoCorrectAllAction(List<ProblemsContainer> problemsContainerList) {
+		_problemsContainerList = problemsContainerList;
+	}
 
-    public AutoCorrectAllAction( List<ProblemsContainer> problemsContainerList )
-    {
-        _problemsContainerList = problemsContainerList;
-    }
+	public void run() {
+		final BundleContext context = FrameworkUtil.getBundle(AutoCorrectAction.class).getBundleContext();
 
-    public void run()
-    {
-        final BundleContext context = FrameworkUtil.getBundle( AutoCorrectAction.class ).getBundleContext();
+		WorkspaceJob job = new WorkspaceJob("Auto correcting all of migration problem.") {
 
-        WorkspaceJob job = new WorkspaceJob( "Auto correcting all of migration problem." )
-        {
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor monitor) {
+				IStatus retval = Status.OK_STATUS;
 
-            @Override
-            public IStatus runInWorkspace( IProgressMonitor monitor )
-            {
-                IStatus retval = Status.OK_STATUS;
+				try {
+					if ((_problemsContainerList != null) && (_problemsContainerList.size() > 0)) {
+						for (ProblemsContainer problemsContainer : _problemsContainerList) {
+							for (UpgradeProblems upgradeProblems : problemsContainer.getProblemsArray()) {
+								FileProblems[] fileProblemsArray = upgradeProblems.getProblems();
 
-                try
-                {
-                    if( _problemsContainerList != null && _problemsContainerList.size() > 0 )
-                    {
-                        for( ProblemsContainer problemsContainer : _problemsContainerList )
-                        {
-                            for( UpgradeProblems upgradeProblems : problemsContainer.getProblemsArray() )
-                            {
-                                FileProblems[] FileProblemsArray = upgradeProblems.getProblems();
+								for (FileProblems fileProblems : fileProblemsArray) {
+									List<Problem> problems = fileProblems.getProblems();
 
-                                for( FileProblems fileProblems : FileProblemsArray )
-                                {
-                                    List<Problem> problems = fileProblems.getProblems();
+									Set<String> fixed = new HashSet<>();
 
-                                    Set<String> fixed = new HashSet<>();
+									for (Problem problem : problems) {
+										final IResource file = MigrationUtil.getIResourceFromProblem(problem);
 
-                                    for( Problem problem : problems )
-                                    {
-                                        final IResource file = MigrationUtil.getIResourceFromProblem( problem );
+										String fixedKey =
+											file.getLocation().toString() + "," + problem.autoCorrectContext;
 
-                                        String fixedKey =
-                                            file.getLocation().toString() + "," + problem.autoCorrectContext;
+										if ((problem.autoCorrectContext == null) || fixed.contains(fixedKey)) {
+											continue;
+										}
 
-                                        if( problem.autoCorrectContext == null || fixed.contains(fixedKey))
-                                        {
-                                            continue;
-                                        }
+										String autoCorrectKey = null;
 
-                                        String autoCorrectKey = null;
+										final int filterKeyIndex = problem.autoCorrectContext.indexOf(":");
 
-                                        final int filterKeyIndex = problem.autoCorrectContext.indexOf( ":" );
+										if (filterKeyIndex > -1) {
+											autoCorrectKey = problem.autoCorrectContext.substring(0, filterKeyIndex);
+										}
+										else {
+											autoCorrectKey = problem.autoCorrectContext;
+										}
 
-                                        if( filterKeyIndex > -1 )
-                                        {
-                                            autoCorrectKey =
-                                                problem.autoCorrectContext.substring( 0, filterKeyIndex );
-                                        }
-                                        else
-                                        {
-                                            autoCorrectKey = problem.autoCorrectContext;
-                                        }
+										final Collection<ServiceReference<AutoMigrator>> refs =
+											context.getServiceReferences(
+												AutoMigrator.class, "(auto.correct=" + autoCorrectKey + ")");
 
-                                        final Collection<ServiceReference<AutoMigrator>> refs =
-                                            context.getServiceReferences(
-                                                AutoMigrator.class, "(auto.correct=" + autoCorrectKey + ")" );
+										for (ServiceReference<AutoMigrator> ref : refs) {
+											final AutoMigrator autoMigrator = context.getService(ref);
 
-                                        for( ServiceReference<AutoMigrator> ref : refs )
-                                        {
-                                            final AutoMigrator autoMigrator = context.getService( ref );
+											int problemsCorrected = autoMigrator.correctProblems(
+												problem.file, problems);
 
-                                            int problemsCorrected =
-                                                autoMigrator.correctProblems( problem.file, problems );
+											fixed.add(fixedKey);
 
-                                            fixed.add(fixedKey);
+											if ((problemsCorrected > 0) && (file != null)) {
+												IMarker problemMarker = file.findMarker(problem.markerId);
 
-                                            if( problemsCorrected > 0 && file != null )
-                                            {
-                                                IMarker problemMarker = file.findMarker( problem.markerId );
+												if ((problemMarker != null) && problemMarker.exists()) {
+													problemMarker.delete();
+												}
+											}
+										}
 
-                                                if( problemMarker != null && problemMarker.exists() )
-                                                {
-                                                    problemMarker.delete();
-                                                }
-                                            }
-                                        }
+										file.refreshLocal(IResource.DEPTH_ONE, monitor);
+									}
+								}
+							}
+						}
+					}
 
-                                        file.refreshLocal( IResource.DEPTH_ONE, monitor );
-                                    }
-                                }
-                            }
-                        }
-                    }
+					UIUtil.sync(
+						new Runnable() {
 
-                    UIUtil.sync( new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            IViewPart view = UIUtil.findView( UpgradeView.ID );
-                            new RunMigrationToolAction( "Run Migration Tool", view.getViewSite().getShell() ).run();
-                        }
-                    } );
-                }
-                catch( InvalidSyntaxException e )
-                {
-                }
-                catch( AutoMigrateException | CoreException e )
-                {
-                    return retval = ProjectUI.createErrorStatus( "Unable to auto correct problem", e );
-                }
+							@Override
+							public void run() {
+								IViewPart view = UIUtil.findView(UpgradeView.ID);
 
-                return retval;
-            }
-        };
+								new RunMigrationToolAction("Run Migration Tool", view.getViewSite().getShell()).run();
+							}
 
-        job.schedule();
-    }
+						});
+				}
+				catch (AutoMigrateException | CoreException | InvalidSyntaxException e) {
+					return retval = ProjectUI.createErrorStatus("Unable to auto correct problem", e);
+				}
+
+				return retval;
+			}
+
+		};
+
+		job.schedule();
+	}
+
+	private List<ProblemsContainer> _problemsContainerList;
 
 }
