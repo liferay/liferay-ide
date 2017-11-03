@@ -157,7 +157,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
             if( isAlreadyImported( PathBridge.create(path) ) )
             {
-            		disposeBundleCheckboxElement();
+                disposeBundleCheckboxElement();
                 disposeBundleElement();
                 disposeServerEelment();
                 disposeMigrateLayoutElement();
@@ -644,6 +644,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 }
                 else
                 {
+                    dataModel.setDownloadBundle( true );
                     createBundleControl();
                 }
 
