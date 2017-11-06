@@ -51,8 +51,8 @@
                 <property name="output.win64.zip.name" value="liferay-ide-eclipse-windows-x64-QUALIFIED_VERSION.zip" />
                 <property name="output.linux64.tar.name" value="liferay-ide-eclipse-linux-x64-QUALIFIED_VERSION.tar" />
                 <property name="output.linux64.gz.name" value="liferay-ide-eclipse-linux-x64-QUALIFIED_VERSION.tar.gz" />
-                <property name="output.macosx64.tar.name" value="liferay-ide-eclipse-macosx-x64-QUALIFIED_VERSION.tar" />
-                <property name="output.macosx64.gz.name" value="liferay-ide-eclipse-macosx-x64-QUALIFIED_VERSION.tar.gz" />
+                <!--property name="output.macosx64.tar.name" value="liferay-ide-eclipse-macosx-x64-QUALIFIED_VERSION.tar" />
+                <property name="output.macosx64.gz.name" value="liferay-ide-eclipse-macosx-x64-QUALIFIED_VERSION.tar.gz" /-->
             </then>
         </if>
 
@@ -75,7 +75,7 @@
                     <isset property="isLinux" />
                     <then>
                         <antcall target="linux64" />
-                        <antcall target="macosx64" />
+                        <!--antcall target="macosx64" /-->
                     </then>
                 </if>
             </then>
