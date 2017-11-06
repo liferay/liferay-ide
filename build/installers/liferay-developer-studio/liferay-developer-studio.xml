@@ -30,7 +30,7 @@
                             <origin>../shared/download/com.liferay.portal.tools.bundle.support.jar</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../shared/download/liferay-dxp-digital-enterprise-tomcat-7.0-sp4-20170705142422877.zip</origin>
+                            <origin>../shared/download/liferay-dxp-digital-enterprise-tomcat-7.0-sp6-20171010144253003.zip</origin>
                         </distributionFile>
                         <distributionFile>
                             <origin>../shared/download/com.liferay.portal.plugins.sdk-1.0.11-withdependencies.zip</origin>
@@ -257,8 +257,8 @@
             <progressText>Creating directory...</progressText>
         </createDirectory>
         <copyFile>
-            <destination>${liferayBundlesPath}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp4-20170705142422877.zip</destination>
-            <origin>${installdir}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp4-20170705142422877.zip</origin>
+            <destination>${liferayBundlesPath}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp6-20171010144253003.zip</destination>
+            <origin>${installdir}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp6-20171010144253003.zip</origin>
             <ruleList>
                 <compareValues>
                     <logic>equals</logic>
@@ -420,7 +420,7 @@
         <propertiesFileSet>
             <file>${lrws}${platform_path_separator}gradle.properties</file>
             <key>liferay.workspace.bundle.url</key>
-            <value>https://api.liferay.com/downloads/portal/7.0.10.4/liferay-dxp-digital-enterprise-tomcat-7.0-sp4-20170705142422877.zip</value>
+            <value>https://api.liferay.com/downloads/portal/7.0.10.6/liferay-dxp-digital-enterprise-tomcat-7.0-sp6-20171010144253003.zip</value>
             <ruleList>
                 <compareValues>
                     <logic>equals</logic>
@@ -467,7 +467,7 @@
             </ruleList>
         </runProgram>
         <deleteFile>
-            <path>${installdir}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp4-20170705142422877.zip</path>
+            <path>${installdir}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp6-20171010144253003.zip</path>
         </deleteFile>
         <deleteFile>
             <path>${installdir}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.11-withdependencies.zip</path>

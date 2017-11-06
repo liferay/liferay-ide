@@ -35,14 +35,14 @@
     <properties>
         <install-builder-executable>${install-builder-home}/bin/builder</install-builder-executable>
         <bundle-support-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/com.liferay.portal.tools.bundle.support</bundle-support-download-base>
-        <bundle-support-name>com.liferay.portal.tools.bundle.support-3.1.0.jar</bundle-support-name>
-        <bundle-support-version>3.1.0</bundle-support-version>
-        <bundle-support-md5>262ed4d82708682f789be16ac3c20d95</bundle-support-md5>
+        <bundle-support-name>com.liferay.portal.tools.bundle.support-3.2.1.jar</bundle-support-name>
+        <bundle-support-version>3.2.1</bundle-support-version>
+        <bundle-support-md5>58deec5190ba130289521d4fbe615ed0</bundle-support-md5>
         <gw-latest-download-url>https://github.com/david-truong/gw/releases/download/v1.0.1/gw.jar</gw-latest-download-url>
         <gw-latest-md5>488ddaed413c0f7ea67df049175380eb</gw-latest-md5>
         <portal-download-base>http://mirrors/files.liferay.com/private/ee/portal</portal-download-base>
-        <portal-version>7.0.10.4</portal-version>
-        <portal-zip-name>liferay-dxp-digital-enterprise-tomcat-7.0-sp4-20170705142422877.zip</portal-zip-name>
+        <portal-version>7.0.10.6</portal-version>
+        <portal-zip-name>liferay-dxp-digital-enterprise-tomcat-7.0-sp6-20171010144253003.zip</portal-zip-name>
         <plugin-sdk-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk</plugin-sdk-download-base>
         <plugin-sdk-zip-name>com.liferay.portal.plugins.sdk-1.0.11-withdependencies.zip</plugin-sdk-zip-name>
         <plugin-sdk-version>1.0.11</plugin-sdk-version>

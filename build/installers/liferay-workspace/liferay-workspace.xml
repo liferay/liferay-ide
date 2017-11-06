@@ -1,7 +1,7 @@
 <project>
     <shortName>LiferayWorkspace</shortName>
     <fullName>Liferay Workspace</fullName>
-    <version>1.5.0.1</version>
+    <version>1.7.1</version>
     <logoImage>../shared/images/liferay_logo_large.png</logoImage>
     <componentList>
         <component>
@@ -197,7 +197,7 @@
                 <propertiesFileSet>
                     <file>${lrws}${platform_path_separator}gradle.properties</file>
                     <key>liferay.workspace.bundle.url</key>
-                    <value>https://api.liferay.com/downloads/portal/7.0.10.4/liferay-dxp-digital-enterprise-tomcat-7.0-sp4-20170705142422877.zip</value>
+                    <value>https://api.liferay.com/downloads/portal/7.0.10.6/liferay-dxp-digital-enterprise-tomcat-7.0-sp6-20171010144253003.zip</value>
                     <ruleList>
                         <compareValues>
                             <logic>equals</logic>
