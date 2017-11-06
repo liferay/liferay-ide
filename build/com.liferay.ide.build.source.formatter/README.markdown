@@ -56,3 +56,22 @@ So add it into source-formatter.perperties to exclude if the class have it, see 
       //here is my comment
     ```
     You can reference this [***link***](https://github.com/liferay/liferay-portal/blob/master/portal-kernel/src/com/liferay/portal/kernel/cal/Recurrence.java) 
+    
+#### Please note which situation can be used with *final*:
+1. Static inner class, like this( please refer to link [Potal Code](https://github.com/liferay/liferay-portal/search?utf8=%E2%9C%93&q=amnotfound&type=) ):
+```java
+public class AMException extends PortalException{
+  ...
+  public static final class AMNotFound extends AMException{
+    ...
+  }
+}
+```
+2. Static porperty and conform to the constant naming conventions, like this( please refer to link [Potal Code](https://github.com/liferay/liferay-portal/search?utf8=%E2%9C%93&q=public+static+final+&type=) ):
+```java
+public static final String ACTION = "action";
+```
+3. Private static property, like this( please refer to link [Poratl Code](https://github.com/liferay/liferay-portal/search?utf8=%E2%9C%93&q=private+static+final&type=)  ):
+```java
+private static final String _CODE_NAME = "Judson";
+```
