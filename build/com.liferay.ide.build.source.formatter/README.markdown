@@ -17,6 +17,8 @@ The following folders are already applied to portal code style:
 4. /tools/plugins/com.liferay.ide.gradle.ui
 5. /tools/plugins/com.liferay.ide.hook.core
 6. /tools/plugins/com.liferay.ide.hook.ui
+6. /tools/plugins/com.liferay.ide.ui.notifications
+6. /enterprise/plugins/com.liferay.ide.studio.ui
 
 ## Something you had better to do firstly by yourself before you run source-formatter:
 1. remove all of *//$NON-NLS-1$* *//$NON-NLS-2$* ...
@@ -38,25 +40,25 @@ So add it into source-formatter.perperties to exclude if the class have it, see 
     ```java
     /* here is my comment */
     ```
-    
+
     #### Correct:
     ```
     /**
 	 * here is my comment
 	 */
     ```
-    and this 
+    and this
     ```
     /*
 	 * here is my comment
 	 */
     ```
-    If you have only one line comment,it's better to use // comment delimiter 
+    If you have only one line comment,it's better to use // comment delimiter
     ```
       //here is my comment
     ```
-    You can reference this [***link***](https://github.com/liferay/liferay-portal/blob/master/portal-kernel/src/com/liferay/portal/kernel/cal/Recurrence.java) 
-    
+    You can reference this [***link***](https://github.com/liferay/liferay-portal/blob/master/portal-kernel/src/com/liferay/portal/kernel/cal/Recurrence.java)
+
 #### Please note which situation can be used with *final*:
 1. Static inner class, like this( please refer to link [Potal Code](https://github.com/liferay/liferay-portal/search?utf8=%E2%9C%93&q=amnotfound&type=) ):
 ```java
