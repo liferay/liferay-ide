@@ -25,13 +25,9 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plugin life cycle
- *
  * @author Gregory Amerson
  */
 public class ScriptingCore extends Plugin {
-
-	// The plugin ID
 
 	public static final String PLUGIN_ID = "com.liferay.ide.scripting.core";
 
@@ -39,13 +35,6 @@ public class ScriptingCore extends Plugin {
 		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
 	}
 
-	// The shared instance
-
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
 	public static ScriptingCore getDefault() {
 		return _plugin;
 	}
@@ -72,31 +61,18 @@ public class ScriptingCore extends Plugin {
 		log.log(createErrorStatus(msg, e));
 	}
 
-	/**
-	 * The constructor
-	 */
 	public ScriptingCore() {
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.
-	 *      BundleContext)
-	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+
 		_plugin = this;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.
-	 *      BundleContext)
-	 */
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
+
 		super.stop(context);
 	}
 

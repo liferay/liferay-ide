@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.FileLocator;
 /**
  * @author Gregory Amerson
  */
+@SuppressWarnings("resource")
 public class GroovyScriptingSupport {
 
 	public URL getGroovyLibURL() {
@@ -42,8 +43,7 @@ public class GroovyScriptingSupport {
 	}
 
 	public Object newInstanceFromFile(File scriptFile) {
-		@SuppressWarnings("resource")
-		final GroovyClassLoader gcl = new GroovyClassLoader();
+		GroovyClassLoader gcl = new GroovyClassLoader();
 
 		try {
 			return gcl.parseClass(scriptFile).newInstance();
