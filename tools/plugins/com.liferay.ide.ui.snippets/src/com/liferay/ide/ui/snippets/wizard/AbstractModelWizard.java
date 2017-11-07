@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.snippets.wizard;
 
@@ -22,55 +21,50 @@ import org.eclipse.ui.IEditorPart;
 /**
  * @author Greg Amerson
  */
-public abstract class AbstractModelWizard extends Wizard
-{
-    protected IEditorPart editorPart;
-    protected AbstractModelWizardPage wizardPage;
+public abstract class AbstractModelWizard extends Wizard {
 
-    public AbstractModelWizard( IEditorPart fEditorPart )
-    {
-        super();
-        setWindowTitle( Msgs.model );
-        editorPart = fEditorPart;
-    }
+	public AbstractModelWizard(IEditorPart fEditorPart) {
+		setWindowTitle(Msgs.model);
+		editorPart = fEditorPart;
+	}
 
-    @Override
-    public void addPages()
-    {
-        wizardPage = createModelWizardPage( editorPart );
-        addPage( wizardPage );
-    }
+	@Override
+	public void addPages() {
+		wizardPage = createModelWizardPage(editorPart);
 
-    public String getModel()
-    {
-        return wizardPage.getModel();
-    }
+		addPage(wizardPage);
+	}
 
-    public String[] getPropertyColumns()
-    {
-        return wizardPage.getPropertyColumns();
-    }
+	public String getModel() {
+		return wizardPage.getModel();
+	}
 
-    public String getVarName()
-    {
-        return wizardPage.getVarName();
-    }
+	public String[] getPropertyColumns() {
+		return wizardPage.getPropertyColumns();
+	}
 
-    @Override
-    public boolean performFinish()
-    {
-        return true;
-    }
+	public String getVarName() {
+		return wizardPage.getVarName();
+	}
 
-    protected abstract AbstractModelWizardPage createModelWizardPage( IEditorPart editorPart );
+	@Override
+	public boolean performFinish() {
+		return true;
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String model;
+	protected abstract AbstractModelWizardPage createModelWizardPage(IEditorPart editorPart);
 
-        static
-        {
-            initializeMessages( AbstractModelWizard.class.getName(), Msgs.class );
-        }
-    }
+	protected IEditorPart editorPart;
+	protected AbstractModelWizardPage wizardPage;
+
+	private static class Msgs extends NLS {
+
+		public static String model;
+
+		static {
+			initializeMessages(AbstractModelWizard.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

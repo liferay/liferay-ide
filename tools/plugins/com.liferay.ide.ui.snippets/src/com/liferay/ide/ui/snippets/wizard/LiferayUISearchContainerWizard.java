@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.snippets.wizard;
 
@@ -21,33 +20,30 @@ import org.eclipse.ui.IEditorPart;
 /**
  * @author Greg Amerson
  */
-public class LiferayUISearchContainerWizard extends AbstractModelWizard
-{
+public class LiferayUISearchContainerWizard extends AbstractModelWizard {
 
-    public LiferayUISearchContainerWizard( IEditorPart fEditorPart )
-    {
-        super( fEditorPart );
-        setWindowTitle( Msgs.insertSearchContainer );
-    }
+	public LiferayUISearchContainerWizard(IEditorPart fEditorPart) {
+		super(fEditorPart);
+		setWindowTitle(Msgs.insertSearchContainer);
+	}
 
-    @Override
-    protected AbstractModelWizardPage createModelWizardPage( IEditorPart editorPart )
-    {
-        return new LiferayUISearchContainerWizardPage( "liferayUISearchContainerWizardPage", editorPart ); //$NON-NLS-1$
-    }
+	public String getModelClass() {
+		return wizardPage.getModelClass();
+	}
 
-    public String getModelClass()
-    {
-        return wizardPage.getModelClass();
-    }
+	@Override
+	protected AbstractModelWizardPage createModelWizardPage(IEditorPart editorPart) {
+		return new LiferayUISearchContainerWizardPage("liferayUISearchContainerWizardPage", editorPart);
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String insertSearchContainer;
+	private static class Msgs extends NLS {
 
-        static
-        {
-            initializeMessages( LiferayUISearchContainerWizard.class.getName(), Msgs.class );
-        }
-    }
+		public static String insertSearchContainer;
+
+		static {
+			initializeMessages(LiferayUISearchContainerWizard.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

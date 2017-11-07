@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.snippets;
 
@@ -26,44 +25,39 @@ import org.eclipse.wst.common.snippets.internal.util.StringUtils;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class SearchContainerSnippetInsertion extends ModelSnippetInsertion
-{
+@SuppressWarnings("restriction")
+public class SearchContainerSnippetInsertion extends ModelSnippetInsertion {
 
-    public SearchContainerSnippetInsertion()
-    {
-        super();
-    }
+	public SearchContainerSnippetInsertion() {
+	}
 
-    protected String getPreparedText( AbstractModelWizard wizard )
-    {
-        String text = super.getPreparedText( wizard );
+	@Override
+	protected AbstractModelWizard createModelWizard(IEditorPart fEditorPart) {
+		return new LiferayUISearchContainerWizard(this.fEditorPart);
+	}
 
-        text = StringUtils.replace( text, "${modelClass}", ( (LiferayUISearchContainerWizard) wizard ).getModelClass() ); //$NON-NLS-1$
+	protected String getPreparedText(AbstractModelWizard wizard) {
+		String text = super.getPreparedText(wizard);
 
-        StringBuffer columns = new StringBuffer();
-        String[] propColumns = wizard.getPropertyColumns();
+		text = StringUtils.replace(text, "${modelClass}", ((LiferayUISearchContainerWizard)wizard).getModelClass());
 
-        if( !CoreUtil.isNullOrEmpty( propColumns ) )
-        {
-            for( String prop : propColumns )
-            {
-                columns.append( "<liferay-ui:search-container-column-text property=\"" ); //$NON-NLS-1$
-                columns.append( prop );
-                columns.append( "\" />\n\n\t\t" ); //$NON-NLS-1$
-            }
-        }
+		StringBuffer columns = new StringBuffer();
+		String[] propColumns = wizard.getPropertyColumns();
 
-        String columnsVal = columns.toString();
-        text = StringUtils.replace( text, "${columns}", CoreUtil.isNullOrEmpty( columnsVal ) ? StringPool.EMPTY : columnsVal ); //$NON-NLS-1$
+		if (!CoreUtil.isNullOrEmpty(propColumns)) {
+			for (String prop : propColumns) {
+				columns.append("<liferay-ui:search-container-column-text property=\"");
+				columns.append(prop);
+				columns.append("\" />\n\n\t\t");
+			}
+		}
 
-        return text;
-    }
+		String columnsVal = columns.toString();
 
-    @Override
-    protected AbstractModelWizard createModelWizard( IEditorPart fEditorPart )
-    {
-        return new LiferayUISearchContainerWizard( this.fEditorPart );
-    }
+		text = StringUtils.replace(
+			text, "${columns}", CoreUtil.isNullOrEmpty(columnsVal) ? StringPool.EMPTY : columnsVal);
+
+		return text;
+	}
 
 }

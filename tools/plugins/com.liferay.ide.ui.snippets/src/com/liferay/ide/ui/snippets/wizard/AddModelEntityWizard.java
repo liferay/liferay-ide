@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.snippets.wizard;
 
@@ -21,28 +20,26 @@ import org.eclipse.ui.IEditorPart;
 /**
  * @author Greg Amerson
  */
-public class AddModelEntityWizard extends AbstractModelWizard
-{
+public class AddModelEntityWizard extends AbstractModelWizard {
 
-    public AddModelEntityWizard( IEditorPart fEditorPart )
-    {
-        super( fEditorPart );
-        setWindowTitle( Msgs.addModelEntity );
-    }
+	public AddModelEntityWizard(IEditorPart fEditorPart) {
+		super(fEditorPart);
+		setWindowTitle(Msgs.addModelEntity);
+	}
 
-    @Override
-    protected AbstractModelWizardPage createModelWizardPage( IEditorPart editorPart )
-    {
-        return new AddModelEntityWizardPage( "addModelEntityWizardPage", editorPart ); //$NON-NLS-1$
-    }
+	@Override
+	protected AbstractModelWizardPage createModelWizardPage(IEditorPart editorPart) {
+		return new AddModelEntityWizardPage("addModelEntityWizardPage", editorPart);
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String addModelEntity;
+	private static class Msgs extends NLS {
 
-        static
-        {
-            initializeMessages( AddModelEntityWizard.class.getName(), Msgs.class );
-        }
-    }
+		public static String addModelEntity;
+
+		static {
+			initializeMessages(AddModelEntityWizard.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

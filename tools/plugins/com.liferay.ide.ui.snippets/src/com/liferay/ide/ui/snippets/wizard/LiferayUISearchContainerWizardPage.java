@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.snippets.wizard;
 
@@ -21,24 +20,23 @@ import org.eclipse.ui.IEditorPart;
 /**
  * @author Greg Amerson
  */
-public class LiferayUISearchContainerWizardPage extends AbstractModelWizardPage
-{
+public class LiferayUISearchContainerWizardPage extends AbstractModelWizardPage {
 
-    public LiferayUISearchContainerWizardPage( String pageName, IEditorPart editor )
-    {
-        super( pageName, editor );
-        setTitle( Msgs.liferayUISearchContainer );
-        setDescription( Msgs.insertLiferayUISearchContainerJSPTag );
-    }
+	public LiferayUISearchContainerWizardPage(String pageName, IEditorPart editor) {
+		super(pageName, editor);
+		setTitle(Msgs.liferayUISearchContainer);
+		setDescription(Msgs.insertLiferayUISearchContainerJSPTag);
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String insertLiferayUISearchContainerJSPTag;
-        public static String liferayUISearchContainer;
+	private static class Msgs extends NLS {
 
-        static
-        {
-            initializeMessages( LiferayUISearchContainerWizardPage.class.getName(), Msgs.class );
-        }
-    }
+		public static String insertLiferayUISearchContainerJSPTag;
+		public static String liferayUISearchContainer;
+
+		static {
+			initializeMessages(LiferayUISearchContainerWizardPage.class.getName(), Msgs.class);
+		}
+
+	}
+
 }
