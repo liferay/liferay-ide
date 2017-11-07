@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.alloy.core.jsp;
 
@@ -23,162 +22,135 @@ import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitionerForJSP
-{
+@SuppressWarnings("restriction")
+public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitionerForJSP {
 
-    private final String[] RESOURCE_BUNDLE_ATTRS = new String[]
-    {
-        "key",
-        "message",
-        "label",
-        "helpMessage",
-        "suffix",
-        "title",
-        "value",
-        "placeholder",
-        "errorMessage",
-        "statusMessage",
-        "confirmation"
-    };
+	@Override
+	public String getPartitionType(ITextRegion region, int offset) {
+		String retval = super.getPartitionType(region, offset);
 
-    @Override
-    public String getPartitionType( ITextRegion region, int offset )
-    {
-        String retval = super.getPartitionType( region, offset );
+		IStructuredDocumentRegion sdRegion = this.fStructuredDocument.getRegionAtCharacterOffset(offset);
 
-        final IStructuredDocumentRegion sdRegion = this.fStructuredDocument.getRegionAtCharacterOffset( offset );
+		if (_isAUIScriptRegion(sdRegion)) {
+			retval = IHTMLPartitions.SCRIPT;
+		}
+		else if (_isAUIEventHandlerAttrValue(sdRegion, sdRegion.getRegionAtCharacterOffset(offset))) {
+			retval = IHTMLPartitions.SCRIPT_EVENTHANDLER;
+		}
 
-        if( isAUIScriptRegion( sdRegion ) )
-        {
-            retval = IHTMLPartitions.SCRIPT;
-        }
-        else if( isAUIEventHandlerAttrValue( sdRegion, sdRegion.getRegionAtCharacterOffset( offset ), offset ) )
-        {
-            retval = IHTMLPartitions.SCRIPT_EVENTHANDLER;
-        }
+		return retval;
+	}
 
-        return retval;
-    }
+	@Override
+	public String getPartitionTypeBetween(IStructuredDocumentRegion previousNode, IStructuredDocumentRegion nextNode) {
+		String retval = super.getPartitionTypeBetween(previousNode, nextNode);
 
-    @Override
-    public String getPartitionTypeBetween(
-        IStructuredDocumentRegion previousNode, IStructuredDocumentRegion nextNode )
-    {
-        String retval = super.getPartitionTypeBetween( previousNode, nextNode );
+		if (_isAUIScriptBetween(previousNode)) {
+			retval = "org.eclipse.wst.html.SCRIPT";
+		}
 
-        if( isAUIScriptBetween(previousNode, nextNode ) )
-        {
-            retval = "org.eclipse.wst.html.SCRIPT";
-        }
+		return retval;
+	}
 
-        return retval;
-    }
+	@Override
+	protected boolean isDocumentRegionBasedPartition(
+		IStructuredDocumentRegion sdRegion, ITextRegion containedChildRegion, int offset) {
 
-    private boolean isAUIEventHandlerAttrValue(
-        IStructuredDocumentRegion region, ITextRegion childRegion, int offset )
-    {
-        if( region != null && childRegion != null &&
-            "XML_TAG_NAME".equals( region.getType() ) &&
-            "XML_TAG_ATTRIBUTE_VALUE".equals( childRegion.getType() ) &&
-            region.getText().toLowerCase().startsWith( "<aui:" ) )
-        {
-            // we have found an attribute value in a AUI tag but now we need to check if the attribteName is a
-            // javascript type attribute
-            final ITextRegion[] regions = region.getRegions().toArray();
+		if (_isAUIEventHandlerAttrValue(sdRegion, containedChildRegion)) {
+			return false;
+		}
 
-            for( int i = 0; i < regions.length; i++ )
-            {
-                if( regions[i].equals( childRegion ) )
-                {
-                    if( i >=2 && regions[i-2].getType().equals( "XML_TAG_ATTRIBUTE_NAME" ) )
-                    {
-                        final ITextRegion attrNameRegion = regions[i-2];
-                        final String attrName = region.getFullText( attrNameRegion );
+		return super.isDocumentRegionBasedPartition(sdRegion, containedChildRegion, offset);
+	}
 
-                        for( String attrEvent : AlloyJsTranslator.ALLOYATTREVENTS )
-                        {
-                            if( attrName.equals( attrEvent ) )
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+	protected boolean isResourceBundleAttrValue(IStructuredDocumentRegion region, ITextRegion childRegion, int offset) {
+		String text = region.getText();
 
-        return false;
-    }
+		String lowerCaseText = text.toLowerCase();
 
-    protected boolean isResourceBundleAttrValue(
-        IStructuredDocumentRegion region, ITextRegion childRegion, int offset )
-    {
-        if( region != null &&
-            childRegion != null &&
-            "XML_TAG_NAME".equals( region.getType() ) &&
-            "XML_TAG_ATTRIBUTE_VALUE".equals( childRegion.getType() ) &&
-            ( region.getText().toLowerCase().startsWith( "<aui:" ) ||
-              region.getText().toLowerCase().startsWith( "<liferay-ui:" ) ) )
-        {
-            // we have found an attribute value in a liferay tag but now we need to check if the attribteName is a
-            // resource bundle attribute
-            final ITextRegion[] regions = region.getRegions().toArray();
+		if ((region != null) && (childRegion != null) && "XML_TAG_NAME".equals(region.getType()) &&
+			"XML_TAG_ATTRIBUTE_VALUE".equals(childRegion.getType()) &&
+			(lowerCaseText.startsWith("<aui:") || lowerCaseText.startsWith("<liferay-ui:"))) {
 
-            for( int i = 0; i < regions.length; i++ )
-            {
-                if( regions[i].equals( childRegion ) )
-                {
-                    if( i >=2 && regions[i-2].getType().equals( "XML_TAG_ATTRIBUTE_NAME" ) )
-                    {
-                        final ITextRegion attrNameRegion = regions[i-2];
-                        final String attrName = region.getFullText( attrNameRegion );
+			ITextRegion[] regions = region.getRegions().toArray();
 
-                        for( String attr : RESOURCE_BUNDLE_ATTRS )
-                        {
-                            if( attrName.equals( attr ) )
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+			for (int i = 0; i < regions.length; i++) {
+				if (regions[i].equals(childRegion)) {
+					if ((i >= 2) && regions[i - 2].getType().equals("XML_TAG_ATTRIBUTE_NAME")) {
+						ITextRegion attrNameRegion = regions[i - 2];
 
-        return false;
-    }
+						String attrName = region.getFullText(attrNameRegion);
 
-    private boolean isAUIScriptBetween(
-        IStructuredDocumentRegion previousNode, IStructuredDocumentRegion nextNode )
-    {
-        return previousNode.toString().contains( "aui:script" );
-    }
+						for (String attr : _resourceBundleAttrs) {
+							if (attrName.equals(attr)) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
 
-    private boolean isAUIScriptRegion( IStructuredDocumentRegion sdRegion )
-    {
-        // TODO can this handle content with other regions like
-        // <aui:script> function foo() {}; <portletTag/> function bar(){}</aui:script>
-        return sdRegion != null && sdRegion.getPrevious() != null &&
-            sdRegion.getPrevious().toString().contains( "aui:script" );
-    }
+		return false;
+	}
 
-    @Override
-    protected boolean isDocumentRegionBasedPartition(
-        IStructuredDocumentRegion sdRegion, ITextRegion containedChildRegion, int offset )
-    {
-        if( isAUIEventHandlerAttrValue( sdRegion, containedChildRegion, offset ) )
-        {
-            return false;
-        }
+	private boolean _isAUIEventHandlerAttrValue(IStructuredDocumentRegion region, ITextRegion childRegion) {
+		String text = region.getText();
 
-// only used if we need partitioner to not skip over liferay taglib message keys
-//        if( isResourceBundleAttrValue( sdRegion, containedChildRegion, offset ) )
-//        {
-//            return true;
-//        }
+		String lowerCaseText = text.toLowerCase();
 
-        return super.isDocumentRegionBasedPartition( sdRegion, containedChildRegion, offset );
-    }
+		if ((region != null) && (childRegion != null) && "XML_TAG_NAME".equals(region.getType()) &&
+			"XML_TAG_ATTRIBUTE_VALUE".equals(childRegion.getType()) && lowerCaseText.startsWith("<aui:")) {
+
+			// we have found an attribute value in a AUI tag but now we need to check if the
+			// attribteName is a
+			// javascript type attribute
+
+			ITextRegion[] regions = region.getRegions().toArray();
+
+			for (int i = 0; i < regions.length; i++) {
+				if (regions[i].equals(childRegion)) {
+					if ((i >= 2) && regions[i - 2].getType().equals("XML_TAG_ATTRIBUTE_NAME")) {
+						ITextRegion attrNameRegion = regions[i - 2];
+
+						String attrName = region.getFullText(attrNameRegion);
+
+						for (String attrEvent : AlloyJsTranslator.ALLOYATTREVENTS) {
+							if (attrName.equals(attrEvent)) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	private boolean _isAUIScriptBetween(IStructuredDocumentRegion previousNode) {
+		return previousNode.toString().contains("aui:script");
+	}
+
+	private boolean _isAUIScriptRegion(IStructuredDocumentRegion sdRegion) {
+
+		// TODO can this handle content with other regions like
+		// <aui:script> function foo() {}; <portletTag/> function bar(){}</aui:script>
+
+		IStructuredDocumentRegion previousRegion = sdRegion.getPrevious();
+
+		String info = previousRegion.toString();
+
+		if ((sdRegion != null) && (sdRegion.getPrevious() != null) && info.contains("aui:script")) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private final String[] _resourceBundleAttrs = {
+		"key", "message", "label", "helpMessage", "suffix", "title", "value", "placeholder", "errorMessage",
+		"statusMessage", "confirmation"
+	};
 
 }
