@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.jsf;
 
@@ -33,56 +32,45 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 /**
  * @author Simon Jiang
  */
-public interface NewLiferayJSFModuleProjectOp extends BaseModuleOp
-{
+public interface NewLiferayJSFModuleProjectOp extends BaseModuleOp {
 
-    ElementType TYPE = new ElementType( NewLiferayJSFModuleProjectOp.class );
+	public ElementType TYPE = new ElementType(NewLiferayJSFModuleProjectOp.class);
 
-    // *** ProjectName ***
+	@DelegateImplementation(NewLiferayJSFModuleProjectOpMethods.class)
+	@Override
+	public Status execute(ProgressMonitor monitor);
 
-    @Listeners( JSFModuleProjectNameListener.class )
-    @Service( impl = ModuleProjectNameValidationService.class )
-    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, BaseModuleOp.PROP_PROJECT_NAME );
+	public Value<String> getArchetype();
 
-    // *** ProjectLocation ***
+	public Value<String> getTemplateName();
 
-    @Service( impl = JSFModuleProjectLocationValidationService.class )
-    ValueProperty PROP_LOCATION = new ValueProperty( TYPE, BaseModuleOp.PROP_LOCATION);
+	public void setArchetype(String value);
 
-    // *** UseDefaultLocation ***
+	public void setTemplateName(String value);
 
-    @Listeners( JSFModuleProjectUseDefaultLocationListener.class )
-    ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty( TYPE, BaseModuleOp.PROP_USE_DEFAULT_LOCATION );
+	@Service(impl = JSFModuleProjectArchetypeDefaultValueService.class)
+	public ValueProperty PROP_ARCHETYPE = new ValueProperty(TYPE, "Archetype");
 
-    @Service( impl = JSFModuleProjectArchetypeDefaultValueService.class )
-    ValueProperty PROP_ARCHETYPE = new ValueProperty( TYPE, "Archetype" );
+	@Service(impl = JSFModuleProjectLocationValidationService.class)
+	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, BaseModuleOp.PROP_LOCATION);
 
-    Value<String> getArchetype();
+	@Listeners(JSFModuleProjectNameListener.class)
+	@Service(impl = ModuleProjectNameValidationService.class)
+	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_NAME);
 
-    void setArchetype( String value );
+	@Label(standard = "Build type")
+	@Listeners(JSFModuleProjectNameListener.class)
+	@Service(impl = JSFModuleProjectProviderDefaultValueService.class)
+	@Service(impl = JSFModuleProjectProviderPossibleValuesService.class)
+	public ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_PROVIDER);
 
-    // *** JSF Project Template ***
+	@DefaultValue(text = "jsf")
+	@Label(standard = "Component Suite")
+	@Listeners(JSFModuleProjectNameListener.class)
+	@PossibleValues(values = {"jsf", "alloy", "icefaces", "primefaces", "richfaces"})
+	public ValueProperty PROP_TEMPLATE_NAME = new ValueProperty(TYPE, "TemplateName");
 
-    @DefaultValue( text = "jsf" )
-    @Label( standard = "Component Suite" )
-    @PossibleValues( values= {"jsf", "alloy", "icefaces", "primefaces", "richfaces"})
-    @Listeners( JSFModuleProjectNameListener.class )
-    ValueProperty PROP_TEMPLATE_NAME = new ValueProperty( TYPE, "TemplateName" );
+	@Listeners(JSFModuleProjectUseDefaultLocationListener.class)
+	public ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty(TYPE, BaseModuleOp.PROP_USE_DEFAULT_LOCATION);
 
-    Value<String> getTemplateName();
-
-    void setTemplateName( String value );
-    // *** ProjectProvider ***
-
-    @Label( standard = "Build type" )
-    @Listeners( JSFModuleProjectNameListener.class )
-    @Service( impl = JSFModuleProjectProviderPossibleValuesService.class )
-    @Service( impl = JSFModuleProjectProviderDefaultValueService.class )
-    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, BaseModuleOp.PROP_PROJECT_PROVIDER );
-
-    // *** Method: execute ***
-
-    @Override
-    @DelegateImplementation( NewLiferayJSFModuleProjectOpMethods.class )
-    Status execute( ProgressMonitor monitor );
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -31,68 +31,68 @@ import org.eclipse.sapphire.modeling.Path;
 /**
  * @author Simon Jiang
  */
-public class ModuleProjectGroupIdDefaultValueService extends DefaultValueService
-{
-    @Override
-    protected String compute()
-    {
-        String groupId = null;
+public class ModuleProjectGroupIdDefaultValueService extends DefaultValueService {
 
-        final Path location = op().getLocation().content();
-        final NewLiferayModuleProjectOp op = op();
+	@Override
+	protected String compute() {
+		NewLiferayModuleProjectOp op = _op();
 
-        if( location != null )
-        {
-            final String parentProjectLocation = location.toOSString();
-            final IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString( parentProjectLocation );
-            final String projectName = op().getProjectName().content();
+		String groupId = null;
 
-            groupId = NewLiferayModuleProjectOpMethods.getMavenParentPomGroupId( op, projectName, parentProjectOsPath );
-        }
+		Path location = op.getLocation().content();
 
-        if( groupId == null )
-        {
-            groupId = getDefaultMavenGroupId();
+		if (location != null) {
+			String parentProjectLocation = location.toOSString();
 
-            if( CoreUtil.isNullOrEmpty( groupId ) )
-            {
-                groupId = op.getPackageName().content();
-            }
-        }
+			IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString(parentProjectLocation);
 
-        return groupId;
-    }
+			String projectName = op.getProjectName().content();
 
-    private String getDefaultMavenGroupId()
-    {
-        final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
-        final String defaultMavenGroupId =
-            Platform.getPreferencesService().getString(
-                ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_MODULE_PROJECT_MAVEN_GROUPID, null, prefContexts );
-        return defaultMavenGroupId;
-    }
+			groupId = NewLiferayModuleProjectOpMethods.getMavenParentPomGroupId(op, projectName, parentProjectOsPath);
+		}
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+		if (groupId == null) {
+			groupId = _getDefaultMavenGroupId();
 
-        final Listener listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+			if (CoreUtil.isNullOrEmpty(groupId)) {
+				groupId = op.getPackageName().content();
+			}
+		}
 
-        op().getLocation().attach( listener );
-        op().getProjectName().attach( listener );
-        op().getPackageName().attach( listener );
-    }
+		return groupId;
+	}
 
-    private NewLiferayModuleProjectOp op()
-    {
-        return context( NewLiferayModuleProjectOp.class );
-    }
- }
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
+
+		Listener listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		NewLiferayModuleProjectOp op = _op();
+
+		op.getLocation().attach(listener);
+		op.getProjectName().attach(listener);
+		op.getPackageName().attach(listener);
+	}
+
+	private String _getDefaultMavenGroupId() {
+		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
+
+		String defaultMavenGroupId = Platform.getPreferencesService().getString(
+			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_MODULE_PROJECT_MAVEN_GROUPID, null, prefContexts);
+
+		return defaultMavenGroupId;
+	}
+
+	private NewLiferayModuleProjectOp _op() {
+		return context(NewLiferayModuleProjectOp.class);
+	}
+
+}

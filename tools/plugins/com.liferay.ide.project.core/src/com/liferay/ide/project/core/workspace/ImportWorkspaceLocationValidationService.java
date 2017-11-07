@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.workspace;
 
@@ -21,6 +20,7 @@ import com.liferay.ide.project.core.util.ProjectImportUtil;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
@@ -28,58 +28,50 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Andy Wu
  */
-public class ImportWorkspaceLocationValidationService extends ValidationService
-{
+public class ImportWorkspaceLocationValidationService extends ValidationService {
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-        try
-        {
-            if( LiferayWorkspaceUtil.hasWorkspace() )
-            {
-                return Status.createErrorStatus( LiferayWorkspaceUtil.hasLiferayWorkspaceMsg );
-            }
-        }
-        catch( CoreException e )
-        {
-            return Status.createErrorStatus( LiferayWorkspaceUtil.multiWorkspaceErrorMsg );
-        }
+		try {
+			if (LiferayWorkspaceUtil.hasWorkspace()) {
+				return Status.createErrorStatus(LiferayWorkspaceUtil.hasLiferayWorkspaceMsg);
+			}
+		}
+		catch (CoreException ce) {
+			return Status.createErrorStatus(LiferayWorkspaceUtil.multiWorkspaceErrorMsg);
+		}
 
-        final Path currentProjectLocation = op().getWorkspaceLocation().content( true );
+		Value<Path> workspaceLocation = _op().getWorkspaceLocation();
 
-        if( currentProjectLocation != null && !currentProjectLocation.isEmpty() )
-        {
-            final String currentPath = currentProjectLocation.toOSString();
+		Path currentProjectLocation = workspaceLocation.content(true);
 
-            IStatus validPathStatus = ProjectImportUtil.validatePath( currentPath );
+		if ((currentProjectLocation != null) && !currentProjectLocation.isEmpty()) {
+			String currentPath = currentProjectLocation.toOSString();
 
-            if( !validPathStatus.isOK() )
-            {
-                return Status.createErrorStatus( validPathStatus.getMessage() );
-            }
+			IStatus validPathStatus = ProjectImportUtil.validatePath(currentPath);
 
-            if( LiferayWorkspaceUtil.getWorkspaceType( currentPath ) == null )
-            {
-                return Status.createErrorStatus( "Invalid Liferay Workspace" );
-            }
+			if (!validPathStatus.isOK()) {
+				return Status.createErrorStatus(validPathStatus.getMessage());
+			}
 
-            String projectName = currentProjectLocation.lastSegment();
+			if (LiferayWorkspaceUtil.getWorkspaceType(currentPath) == null) {
+				return Status.createErrorStatus("Invalid Liferay Workspace");
+			}
 
-            if( CoreUtil.getProject( projectName ).exists() )
-            {
-                return Status.createErrorStatus( "A project with that name already exists." );
-            }
-        }
+			String projectName = currentProjectLocation.lastSegment();
 
-        return retval;
-    }
+			if (CoreUtil.getProject(projectName).exists()) {
+				return Status.createErrorStatus("A project with that name already exists.");
+			}
+		}
 
-    private ImportLiferayWorkspaceOp op()
-    {
-        return context( ImportLiferayWorkspaceOp.class );
-    }
+		return retval;
+	}
+
+	private ImportLiferayWorkspaceOp _op() {
+		return context(ImportLiferayWorkspaceOp.class);
+	}
 
 }

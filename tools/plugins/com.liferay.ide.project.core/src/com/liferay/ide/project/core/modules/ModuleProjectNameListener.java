@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -22,6 +21,7 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
@@ -32,134 +32,112 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Andy Wu
  * @author Joye Luo
  */
-public class ModuleProjectNameListener extends FilteredListener<PropertyContentEvent>
-{
+public class ModuleProjectNameListener extends FilteredListener<PropertyContentEvent> {
 
-    private static String[] WAR_TYPE_PROJECT = new String[] { "layout-template", "spring-mvc-portlet", "theme" };
+	public static void updateLocation(NewLiferayModuleProjectOp op) {
+		String currentProjectName = op.getProjectName().content(true);
 
-    @Override
-    protected void handleTypedEvent( PropertyContentEvent event )
-    {
-        updateLocation( op( event ) );
-    }
+		if ((currentProjectName == null) || CoreUtil.isNullOrEmpty(currentProjectName.trim())) {
+			return;
+		}
 
-    protected NewLiferayModuleProjectOp op( PropertyContentEvent event )
-    {
-        return event.property().element().nearest( NewLiferayModuleProjectOp.class );
-    }
+		boolean useDefaultLocation = op.getUseDefaultLocation().content(true);
 
-    public static void updateLocation( final NewLiferayModuleProjectOp op )
-    {
-        final String currentProjectName = op.getProjectName().content( true );
+		if (useDefaultLocation) {
+			Path newLocationBase = null;
 
-        if( currentProjectName == null || CoreUtil.isNullOrEmpty( currentProjectName.trim() ) )
-        {
-            return;
-        }
+			boolean hasLiferayWorkspace = false;
+			boolean hasGradleWorkspace = false;
+			boolean hasMavenWorkspace = false;
 
-        final boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
+			try {
+				hasLiferayWorkspace = LiferayWorkspaceUtil.hasWorkspace();
+				hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
+				hasMavenWorkspace = LiferayWorkspaceUtil.hasMavenWorkspace();
+			}
+			catch (Exception e) {
+				ProjectCore.logError("Failed to check LiferayWorkspace project.");
+			}
 
-        if( useDefaultLocation )
-        {
-            Path newLocationBase = null;
-            boolean hasLiferayWorkspace = false;
-            boolean hasGradleWorkspace = false;
-            boolean hasMavenWorkspace = false;
+			if (!hasLiferayWorkspace) {
+				newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRootLocation());
+			}
+			else {
+				boolean gradleModule = false;
+				boolean mavenModule = false;
 
-            try
-            {
-                hasLiferayWorkspace = LiferayWorkspaceUtil.hasWorkspace();
-                hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
-                hasMavenWorkspace = LiferayWorkspaceUtil.hasMavenWorkspace();
+				ILiferayProjectProvider provider = op.getProjectProvider().content();
 
-            }
-            catch( Exception e )
-            {
-                ProjectCore.logError( "Failed to check LiferayWorkspace project." );
-            }
+				if (provider != null) {
+					String shortName = provider.getShortName();
 
-            if( !hasLiferayWorkspace )
-            {
-                newLocationBase = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
-            }
-            else
-            {
-                boolean isGradleModule = false;
-                boolean isMavenModule = false;
+					if (!CoreUtil.empty(shortName) && shortName.startsWith("gradle")) {
+						gradleModule = true;
+					}
+					else {
+						mavenModule = true;
+					}
+				}
 
-                ILiferayProjectProvider iProvider = op.getProjectProvider().content();
+				boolean themeProject = false;
 
-                if( iProvider != null )
-                {
-                    String shortName = iProvider.getShortName();
+				if (op instanceof NewLiferayModuleProjectOp) {
+					NewLiferayModuleProjectOp moduleProjectOp = (NewLiferayModuleProjectOp)op;
 
-                    if( !CoreUtil.empty( shortName ) && shortName.startsWith( "gradle" ) )
-                    {
-                        isGradleModule = true;
-                    }
-                    else
-                    {
-                        isMavenModule = true;
-                    }
-                }
+					String projectTemplateName = moduleProjectOp.getProjectTemplateName().content();
 
-                boolean isThemeProject = false;
+					for (String projectType : _WAR_TYPE_PROJECT) {
+						if (projectType.equals(projectTemplateName)) {
+							themeProject = true;
+						}
+					}
+				}
 
-                if( op instanceof NewLiferayModuleProjectOp )
-                {
-                    NewLiferayModuleProjectOp moduleProjectOp = (NewLiferayModuleProjectOp) op;
+				if ((gradleModule && hasGradleWorkspace) || (mavenModule && hasMavenWorkspace)) {
+					IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-                    String projectTemplateName = moduleProjectOp.getProjectTemplateName().content();
+					if ((liferayWorkspaceProject != null) && liferayWorkspaceProject.exists()) {
+						if (themeProject) {
+							String[] warsNames = LiferayWorkspaceUtil.getWarsDirs(liferayWorkspaceProject);
 
-                    for( String projectType : WAR_TYPE_PROJECT )
-                    {
-                        if( projectType.equals( projectTemplateName ) )
-                        {
-                            isThemeProject = true;
-                        }
-                    }
-                }
+							// use the first configured wars fodle name
 
-                if( ( isGradleModule && hasGradleWorkspace ) || ( isMavenModule && hasMavenWorkspace ) )
-                {
-                    IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+							newLocationBase = PathBridge.create(
+								liferayWorkspaceProject.getLocation().append(warsNames[0]));
+						}
+						else {
+							String folder = LiferayWorkspaceUtil.getModulesDir(liferayWorkspaceProject);
 
-                    if( liferayWorkspaceProject != null && liferayWorkspaceProject.exists() )
-                    {
-                        if( isThemeProject )
-                        {
-                            String[] warsNames =
-                                LiferayWorkspaceUtil.getWarsDirs( liferayWorkspaceProject );
+							if (folder != null) {
+								IPath appendPath = liferayWorkspaceProject.getLocation().append(folder);
 
-                            // use the first configured wars fodle name
-                            newLocationBase =
-                                PathBridge.create( liferayWorkspaceProject.getLocation().append( warsNames[0] ) );
-                        }
-                        else
-                        {
-                            String folder =
-                                LiferayWorkspaceUtil.getModulesDir( liferayWorkspaceProject );
+								newLocationBase = PathBridge.create(appendPath);
+							}
+						}
+					}
+				}
+				else {
+					newLocationBase = PathBridge.create(CoreUtil.getWorkspaceRoot().getLocation());
+				}
+			}
 
-                            if( folder != null )
-                            {
-                                IPath appendPath = liferayWorkspaceProject.getLocation().append( folder );
+			if (newLocationBase != null) {
+				op.setLocation(newLocationBase);
+			}
+		}
+	}
 
-                                newLocationBase = PathBridge.create( appendPath );
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    newLocationBase = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
-                }
-            }
+	@Override
+	protected void handleTypedEvent(PropertyContentEvent event) {
+		updateLocation(op(event));
+	}
 
-            if( newLocationBase != null )
-            {
-                op.setLocation( newLocationBase );
-            }
-        }
-    }
+	protected NewLiferayModuleProjectOp op(PropertyContentEvent event) {
+		Element element = event.property().element();
+
+		return element.nearest(NewLiferayModuleProjectOp.class);
+	}
+
+	private static final String[] _WAR_TYPE_PROJECT = {"layout-template", "spring-mvc-portlet", "theme"};
 
 }

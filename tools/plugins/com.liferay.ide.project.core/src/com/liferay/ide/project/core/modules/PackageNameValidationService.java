@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -26,34 +25,35 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class PackageNameValidationService extends ValidationService
-{
+@SuppressWarnings("restriction")
+public class PackageNameValidationService extends ValidationService {
 
-    @Override
-    protected Status compute()
-    {
-        final String packageName = op().getPackageName().content( true );
-        Status retval = Status.createOkStatus();
+	@Override
+	protected Status compute() {
+		NewLiferayModuleProjectOp op = _op();
 
-        int packageNameStatus = IStatus.OK;
+		String packageName = op.getPackageName().content(true);
 
-        if( !CoreUtil.isNullOrEmpty( packageName ) )
-        {
-            packageNameStatus = JavaConventions.validatePackageName(
-                packageName, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 ).getSeverity();
+		Status retval = Status.createOkStatus();
 
-            if( packageNameStatus == IStatus.ERROR )
-            {
-                retval = Status.createErrorStatus( "Invalid package name" );
-            }
-        }
+		int packageNameStatus = IStatus.OK;
 
-        return retval;
-    }
+		if (!CoreUtil.isNullOrEmpty(packageName)) {
+			IStatus status = JavaConventions.validatePackageName(
+				packageName, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7);
 
-    private NewLiferayModuleProjectOp op()
-    {
-        return context( NewLiferayModuleProjectOp.class );
-    }
+			packageNameStatus = status.getSeverity();
+
+			if (packageNameStatus == IStatus.ERROR) {
+				retval = Status.createErrorStatus("Invalid package name");
+			}
+		}
+
+		return retval;
+	}
+
+	private NewLiferayModuleProjectOp _op() {
+		return context(NewLiferayModuleProjectOp.class);
+	}
+
 }

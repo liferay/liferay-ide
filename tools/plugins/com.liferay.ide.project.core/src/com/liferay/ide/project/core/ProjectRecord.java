@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
-/**
- *
  */
 
 package com.liferay.ide.project.core;
@@ -34,211 +30,156 @@ import org.eclipse.osgi.util.NLS;
 /**
  * @author Greg Amerson
  */
-public class ProjectRecord
-{
+public class ProjectRecord {
 
-    public IProjectDescription description;
+	public ProjectRecord(File file) {
+		if (file.isDirectory()) {
+			liferayProjectDir = file;
+		}
+		else {
+			projectSystemFile = file;
+		}
 
-    public File liferayProjectDir;
+		_setProjectName();
+	}
 
-    public File projectSystemFile;
+	public ProjectRecord(IProject preSelectedProject) {
+		project = preSelectedProject;
 
-    boolean hasConflicts;
+		_setProjectName();
+	}
 
-    int level;
+	public ProjectRecord(Object file, Object parent, int level) {
+		this.parent = parent;
 
-    Object parent;
+		this.level = level;
 
-    IProject project;
+		_setProjectName();
+	}
 
-    String projectName;
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof ProjectRecord && (project != null)) {
+			return project.equals(((ProjectRecord)obj).project);
+		}
 
-    /**
-     * Create a record for a project based on the info in the file.
-     *
-     * @param file
-     */
-    public ProjectRecord( File file )
-    {
-        if( file.isDirectory() )
-        {
-            liferayProjectDir = file;
-        }
-        else
-        {
-            projectSystemFile = file;
-        }
+		return super.equals(obj);
+	}
 
-        setProjectName();
-    }
+	public String getProjectLabel() {
+		if (description == null) {
+			return projectName;
+		}
 
-    public ProjectRecord( IProject preSelectedProject )
-    {
-        this.project = preSelectedProject;
+		String projectLocation = project.getLocationURI().getPath();
 
-        setProjectName();
-    }
+		String path = StringPool.EMPTY;
 
-    /**
-     * @param file
-     *            The Object representing the .project file
-     * @param parent
-     *            The parent folder of the .project file
-     * @param level
-     *            The number of levels deep in the provider the file is
-     */
-    ProjectRecord( Object file, Object parent, int level )
-    {
-        this.parent = parent;
+		if (projectSystemFile != null) {
+			path = projectSystemFile.getParent();
+		}
+		else if (liferayProjectDir != null) {
+			path = liferayProjectDir.getPath();
+		}
+		else if (project != null) {
+			path = new Path(projectLocation).toOSString();
+		}
 
-        this.level = level;
+		return NLS.bind("{0} ({1})", projectName, path);
+	}
 
-        setProjectName();
-    }
+	public IPath getProjectLocation() {
+		if (projectSystemFile != null) {
+			return new Path(projectSystemFile.getParent());
+		}
+		else if (liferayProjectDir != null) {
+			return new Path(liferayProjectDir.getPath());
+		}
+		else if (project != null) {
+			return project.getRawLocation();
+		}
 
-    @Override
-    public boolean equals( Object obj )
-    {
-        if( obj instanceof ProjectRecord )
-        {
-            if( this.project != null )
-            {
-                return this.project.equals( ( (ProjectRecord) obj ).project );
-            }
-        }
+		return null;
+	}
 
-        return super.equals( obj );
-    }
+	public String getProjectName() {
+		return projectName;
+	}
 
-    /**
-     * Gets the label to be used when rendering this project record in the UI.
-     *
-     * @return String the label
-     * @since 3.4
-     */
-    public String getProjectLabel()
-    {
-        if( description == null )
-            return projectName;
+	public boolean hasConflicts() {
+		return hasConflicts;
+	}
 
-        String path =
-            projectSystemFile != null ? projectSystemFile.getParent() : ( liferayProjectDir != null
-                ? liferayProjectDir.getPath() : ( project != null
-                    ? new Path( project.getLocationURI().getPath() ).toOSString() : StringPool.EMPTY ) );
+	public void setHasConflicts(boolean b) {
+		hasConflicts = b;
+	}
 
-        return NLS.bind( "{0} ({1})", projectName, path ); //$NON-NLS-1$
-    }
+	public IProjectDescription description;
+	public File liferayProjectDir;
+	public File projectSystemFile;
 
-    public IPath getProjectLocation()
-    {
-        if( this.projectSystemFile != null )
-        {
-            return new Path( this.projectSystemFile.getParent() );
-        }
-        else if( this.liferayProjectDir != null )
-        {
-            return new Path( this.liferayProjectDir.getPath() );
-        }
-        else if( this.project != null )
-        {
-            return this.project.getRawLocation();
-        }
+	protected boolean hasConflicts;
+	protected int level;
+	protected Object parent;
+	protected IProject project;
+	protected String projectName;
 
-        return null;
-    }
+	private boolean _isDefaultLocation(IPath path) {
 
-    /**
-     * Get the name of the project
-     *
-     * @return String
-     */
-    public String getProjectName()
-    {
-        return projectName;
-    }
+		// The project description file must at least be within the project, which is within the workspace location
 
-    /**
-     * @return Returns the hasConflicts.
-     */
-    public boolean hasConflicts()
-    {
-        return hasConflicts;
-    }
+		if (path.segmentCount() < 2) {
+			return false;
+		}
 
-    public void setHasConflicts( boolean b )
-    {
-        this.hasConflicts = b;
-    }
+		File file = path.removeLastSegments(2).toFile();
 
-    /**
-     * Returns whether the given project description file path is in the default location for a project
-     *
-     * @param path
-     *            The path to examine
-     * @return Whether the given path is the default location for a project
-     */
-    private boolean isDefaultLocation( IPath path )
-    {
-        // The project description file must at least be within the project,
-        // which is within the workspace location
-        if( path.segmentCount() < 2 )
-        {
-            return false;
-        }
+		return file.equals(Platform.getLocation().toFile());
+	}
 
-        return path.removeLastSegments( 2 ).toFile().equals( Platform.getLocation().toFile() );
-    }
+	private void _setProjectName() {
+		if (projectName != null) {
+			return;
+		}
 
-    /**
-     * Set the name of the project based on the projectFile.
-     */
-    private void setProjectName()
-    {
-        try
-        {
-            // If we don't have the project name try again
-            if( projectName == null )
-            {
-                if( projectSystemFile != null )
-                {
-                    IPath path = new Path( projectSystemFile.getPath() );
+		try {
 
-                    // if the file is in the default location, use the directory
-                    // name as the project name
-                    if( isDefaultLocation( path ) )
-                    {
-                        projectName = path.segment( path.segmentCount() - 2 );
+			// If we don't have the project name try again
 
-                        description = ResourcesPlugin.getWorkspace().newProjectDescription( projectName );
-                    }
-                    else
-                    {
-                        description = ResourcesPlugin.getWorkspace().loadProjectDescription( path );
+			if (projectSystemFile != null) {
+				IPath path = new Path(projectSystemFile.getPath());
 
-                        projectName = description.getName();
-                    }
-                }
-                else if( liferayProjectDir != null )
-                {
-                    IPath path = new Path( liferayProjectDir.getPath() );
+				// if the file is in the default location, use the directory name as the project name
 
-                    projectName = path.lastSegment();
+				if (_isDefaultLocation(path)) {
+					projectName = path.segment(path.segmentCount() - 2);
 
-                    description = ResourcesPlugin.getWorkspace().newProjectDescription( projectName );
-                }
-                else if( project != null )
-                {
-                    projectName = project.getName();
+					description = ResourcesPlugin.getWorkspace().newProjectDescription(projectName);
+				}
+				else {
+					description = ResourcesPlugin.getWorkspace().loadProjectDescription(path);
 
-                    description = project.getDescription();
-                }
+					projectName = description.getName();
+				}
+			}
+			else if (liferayProjectDir != null) {
+				IPath path = new Path(liferayProjectDir.getPath());
 
-            }
-        }
-        catch( CoreException e )
-        {
-            // no good couldn't get the name
-        }
-    }
+				projectName = path.lastSegment();
+
+				description = ResourcesPlugin.getWorkspace().newProjectDescription(projectName);
+			}
+			else if (project != null) {
+				projectName = project.getName();
+
+				description = project.getDescription();
+			}
+		}
+		catch (CoreException ce) {
+
+			// no good couldn't get the name
+
+		}
+	}
 
 }

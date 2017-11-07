@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -24,74 +23,72 @@ import org.eclipse.sapphire.modeling.Path;
 /**
  * @author Andy Wu
  */
-public class ImportModuleProjectBuildTypeDerivedValueService extends DerivedValueService
-{
+public class ImportModuleProjectBuildTypeDerivedValueService extends DerivedValueService {
 
-    private FilteredListener<PropertyContentEvent> listener;
+	@Override
+	public void dispose() {
+		ImportLiferayModuleProjectOp op = _op();
 
-    @Override
-    protected String compute()
-    {
-        String retVal = null;
+		if (op != null) {
+			op.property(ImportLiferayModuleProjectOp.PROP_LOCATION).detach(_listener);
+		}
 
-        if( op().getLocation() != null )
-        {
-            Path path = op().getLocation().content();
+		super.dispose();
+	}
 
-            if( path != null && !path.isEmpty() )
-            {
-                String location = path.toOSString();
+	@Override
+	protected String compute() {
+		String retVal = null;
 
-                IStatus status = ImportLiferayModuleProjectOpMethods.getBuildType( location );
+		ImportLiferayModuleProjectOp op = _op();
 
-                if( status.isOK() )
-                {
-                    retVal = status.getMessage();
-                }
-                else if( status.getSeverity() == IStatus.WARNING )
-                {
-                    retVal = "gradle";
-                }
-                else
-                {
-                    retVal = "";
-                }
-            }
-        }
+		if (op.getLocation() == null) {
+			return retVal;
+		}
 
-        return retVal;
-    }
+		Path path = op.getLocation().content();
 
-    @Override
-    public void dispose()
-    {
-        if( op() != null )
-        {
-            op().property( ImportLiferayModuleProjectOp.PROP_LOCATION ).detach( this.listener );
-        }
+		if ((path != null) && !path.isEmpty()) {
+			String location = path.toOSString();
 
-        super.dispose();
-    }
+			IStatus status = ImportLiferayModuleProjectOpMethods.getBuildType(location);
 
-    @Override
-    protected void initDerivedValueService()
-    {
-        super.initDerivedValueService();
+			if (status.isOK()) {
+				retVal = status.getMessage();
+			}
+			else if (status.getSeverity() == IStatus.WARNING) {
+				retVal = "gradle";
+			}
+			else {
+				retVal = "";
+			}
+		}
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		return retVal;
+	}
 
-        op().property( ImportLiferayModuleProjectOp.PROP_LOCATION ).attach( this.listener );
-    }
+	@Override
+	protected void initDerivedValueService() {
+		super.initDerivedValueService();
 
-    private ImportLiferayModuleProjectOp op()
-    {
-        return context( ImportLiferayModuleProjectOp.class );
-    }
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		ImportLiferayModuleProjectOp op = _op();
+
+		op.property(ImportLiferayModuleProjectOp.PROP_LOCATION).attach(_listener);
+	}
+
+	private ImportLiferayModuleProjectOp _op() {
+		return context(ImportLiferayModuleProjectOp.class);
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+
 }

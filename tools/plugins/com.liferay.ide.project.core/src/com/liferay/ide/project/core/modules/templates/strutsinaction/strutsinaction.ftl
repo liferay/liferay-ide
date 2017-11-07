@@ -30,7 +30,4 @@ public class ${classname} extends ${supperclass} {
 
 	private ServletContext _servletContext;
 
-
-
-
 }

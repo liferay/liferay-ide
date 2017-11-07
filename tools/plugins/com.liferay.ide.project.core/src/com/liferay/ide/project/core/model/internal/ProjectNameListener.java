@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,16 +10,16 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
-
 
 /**
  * @author Gregory Amerson
@@ -27,21 +27,21 @@ import org.eclipse.sapphire.PropertyContentEvent;
  * @author Kuo Zhang
  * @author Simon Jiang
  */
-public class ProjectNameListener extends FilteredListener<PropertyContentEvent>
-{
+public class ProjectNameListener extends FilteredListener<PropertyContentEvent> {
 
-    @Override
-    protected void handleTypedEvent( PropertyContentEvent event )
-    {
-        final NewLiferayPluginProjectOp op = op( event );
-        op.setImportProjectStatus( false );
-        NewLiferayPluginProjectOpMethods.updateLocation( op );
-    }
+	@Override
+	protected void handleTypedEvent(PropertyContentEvent event) {
+		NewLiferayPluginProjectOp op = op(event);
 
-    protected NewLiferayPluginProjectOp op( PropertyContentEvent event )
-    {
-        return event.property().element().nearest( NewLiferayPluginProjectOp.class );
-    }
+		op.setImportProjectStatus(false);
 
+		NewLiferayPluginProjectOpMethods.updateLocation(op);
+	}
+
+	protected NewLiferayPluginProjectOp op(PropertyContentEvent event) {
+		Element element = event.property().element();
+
+		return element.nearest(NewLiferayPluginProjectOp.class);
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,26 +10,32 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.templates.portletinactioncommand;
 
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
 import com.liferay.ide.project.core.modules.templates.BndProperties;
 import com.liferay.ide.project.core.modules.templates.BndPropertiesValue;
 
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+
 import java.nio.file.Files;
+
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,257 +48,249 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-
 /**
  * @author Simon Jiang
  */
+public class NewLiferayComponentPortletActionCommandOperation extends AbstractLiferayComponentTemplate {
 
-public class NewLiferayComponentPortletActionCommandOperation extends AbstractLiferayComponentTemplate
-{
-	private static final String PORTLET_ACTION_COMMAND_TEMPLATE_FILE = "portletinactioncommand/portletactioncommand.ftl";
+	public NewLiferayComponentPortletActionCommandOperation() {
+	}
 
-    private final static String PORTLET_SUPER_CLASSES = "FreeMarkerPortlet";
-    private final static String PORTLET_ACTION_COMMAND_SUPER_CLASSES = "MVCActionCommand";
+	@Override
+	public void doExecute(NewLiferayComponentOp op, IProgressMonitor monitor) throws CoreException {
+		try {
+			initializeOperation(op);
 
-    private final static String PORTLET_EXTENSION_CLASSES = "Portlet.class";
-    private final static String PORTLET_ACTION_COMMAND_EXTENSION_CLASSES = "MVCActionCommand.class";
+			project = CoreUtil.getProject(projectName);
 
-    private final static String[] PORTLET_PROPERTIES_LIST =
-        {
-            "com.liferay.portlet.display-category=category.sample",
-            "com.liferay.portlet.instanceable=true",
-            "javax.portlet.init-param.template-path=/",
-            "javax.portlet.security-role-ref=power-user,user"
-        };
+			if (project != null) {
+				liferayProject = LiferayCore.create(project);
 
-    public NewLiferayComponentPortletActionCommandOperation()
-    {
-        super();
-    }
+				if (liferayProject != null) {
+					initFreeMarker();
 
-    private List<String> getPortletImports()
-    {
-        List<String> imports = new ArrayList<String>();
+					IFile pollerClassFile = prepareClassFile(componentNameWithoutTemplateName + "Portlet");
 
-        imports.addAll( super.getImports() );
-        imports.add( "javax.portlet.Portlet" );
-        imports.add( "com.liferay.util.bridges.freemarker.FreeMarkerPortlet" );
+					_sourceCodeOperation(pollerClassFile, "portlet");
 
-        return imports;
-    }
+					IFile pollerPortletClassFile = prepareClassFile(componentNameWithoutTemplateName + "ActionCommand");
 
-    private List<String> getPortletActionCommandImports()
-    {
-        List<String> imports = new ArrayList<String>();
+					_sourceCodeOperation(pollerPortletClassFile, "actionCommand");
 
-        imports.add( "com.liferay.portal.kernel.log.Log" );
-        imports.add( "com.liferay.portal.kernel.log.LogFactoryUtil" );
-        imports.add( "com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand" );
-        imports.add( "com.liferay.portal.kernel.servlet.SessionMessages" );
-        imports.add( "com.liferay.portal.kernel.util.ParamUtil" );
-        imports.add( "com.liferay.portal.kernel.util.StringPool" );
-        imports.add( "javax.portlet.ActionRequest" );
-        imports.add( "javax.portlet.ActionResponse" );
-        imports.add( "javax.portlet.PortletException" );
-        imports.addAll( super.getImports() );
+					op.setComponentClassName(componentNameWithoutTemplateName + "ActionCommand");
 
-        return imports;
-    }
+					doMergeResourcesOperation();
 
-    private List<String> getPortletProperties()
-    {
-        List<String> properties = new ArrayList<String>();
-        properties.addAll( Arrays.asList( PORTLET_PROPERTIES_LIST ) );
-        for( String property : super.getProperties() )
-        {
-            properties.add( property );
-        }
-        properties.add( "javax.portlet.display-name=" + this.componentNameWithoutTemplateName + " Portlet" );
-        properties.add( "javax.portlet.init-param.view-template=/" + this.componentClassName.toLowerCase().toLowerCase() + "/view.ftl" );
-        properties.add( "com.liferay.portlet.css-class-wrapper=portlet-" + this.componentNameWithoutTemplateName.toLowerCase() );
+					doMergeBndOperation();
 
-        return properties;
-    }
+					doMergeDependencyOperation();
 
-    private List<String> getPortletActionCommandProperties()
-    {
-        List<String> properties = new ArrayList<String>();
+					project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+				}
+			}
+		}
+		catch (Exception e) {
+			throw new CoreException(ProjectCore.createErrorStatus(e));
+		}
+	}
 
-        properties.add( "javax.portlet.name=" + "blade_portlet_" +  this.componentNameWithoutTemplateName + "Portlet" );
-        properties.add( "mvc.command.name=" + this.componentNameWithoutTemplateName.toLowerCase() );
+	@Override
+	protected void doMergeResourcesOperation() throws CoreException {
+		try {
+			IFolder resourceFolder = liferayProject.getSourceFolder("resources");
 
-        return properties;
-    }
+			IFolder metaFolder = resourceFolder.getFolder("META-INF/resources");
 
-    private String getPortletExtensionClass()
-    {
-        return PORTLET_EXTENSION_CLASSES;
-    }
+			IFile initFtl = metaFolder.getFile(new Path(componentClassName.toLowerCase().toLowerCase() + "/init.ftl"));
 
-    private String getPortletActionCommandExtensionClass()
-    {
-        return PORTLET_ACTION_COMMAND_EXTENSION_CLASSES;
-    }
+			if (FileUtil.notExists(initFtl)) {
+				createSampleFile(initFtl, "portletinactioncommand/portletactioncommand-init.ftl");
+			}
 
-    private String getPortletSuperClass()
-    {
-        return PORTLET_SUPER_CLASSES;
-    }
+			IFile viewFtl = metaFolder.getFile(new Path(componentClassName.toLowerCase().toLowerCase() + "/view.ftl"));
 
-    private String getPortletActionCommandSuperClass()
-    {
-        return PORTLET_ACTION_COMMAND_SUPER_CLASSES;
-    }
+			if (FileUtil.notExists(viewFtl)) {
+				createSampleFile(viewFtl, "portletinactioncommand/portletactionconmmand-view.ftl");
+			}
+		}
+		catch (Exception e) {
+			throw new CoreException(ProjectCore.createErrorStatus(e));
+		}
+	}
 
-    @Override
-    public void doExecute( NewLiferayComponentOp op, IProgressMonitor monitor ) throws CoreException
-    {
-        try
-        {
-            initializeOperation( op );
+	@Override
+	protected List<String[]> getComponentDependency() throws CoreException {
+		List<String[]> componentDependency = super.getComponentDependency();
 
-            this.project = CoreUtil.getProject( projectName );
+		componentDependency.add(new String[] {"com.liferay.portal", "com.liferay.util.bridges", "2.0.0"});
+		componentDependency.add(new String[] {"com.liferay.portal", "com.liferay.util.taglib", "2.0.0"});
+		componentDependency.add(new String[] {"javax.portlet", "portlet-api", "2.0"});
+		componentDependency.add(new String[] {"javax.servlet", "javax.servlet-api", "3.0.1"});
 
-            if( project != null )
-            {
-                liferayProject = LiferayCore.create( project );
+		return componentDependency;
+	}
 
-                if( liferayProject != null )
-                {
-                    initFreeMarker();
+	@Override
+	protected String getTemplateFile() {
+		return _PORTLET_ACTION_COMMAND_TEMPLATE_FILE;
+	}
 
-                    IFile pollerClassFile = prepareClassFile( componentNameWithoutTemplateName + "Portlet" );
-                    doSourceCodeOperation( pollerClassFile, "portlet" );
+	@Override
+	protected void setBndProperties(BndProperties bndProperty) {
+		StringBuilder formatedValueSb = new StringBuilder();
 
-                    IFile pollerPortletClassFile =
-                        prepareClassFile( componentNameWithoutTemplateName + "ActionCommand" );
-                    doSourceCodeOperation( pollerPortletClassFile, "actionCommand" );
+		formatedValueSb.append("\\");
+		formatedValueSb.append(System.getProperty("line.separator"));
+		formatedValueSb.append("\t");
+		formatedValueSb.append(
+			"@com.liferay.util.bridges-2.0.0.jar!/com/liferay/util/bridges/freemarker/FreeMarkerPortlet.class");
+		formatedValueSb.append(",");
+		formatedValueSb.append("\\");
+		formatedValueSb.append(System.getProperty("line.separator"));
+		formatedValueSb.append("\t");
+		formatedValueSb.append("@com.liferay.util.taglib-2.0.0.jar!/META-INF/*.tld");
 
-                    op.setComponentClassName( componentNameWithoutTemplateName + "ActionCommand" );
+		StringBuilder originalValueSb = new StringBuilder();
 
-                    doMergeResourcesOperation();
-                    
-                    doMergeBndOperation();
+		originalValueSb.append(
+			"@com.liferay.util.bridges-2.0.0.jar!/com/liferay/util/bridges/freemarker/FreeMarkerPortlet.class");
+		originalValueSb.append(",");
+		originalValueSb.append("@com.liferay.util.taglib-2.0.0.jar!/META-INF/*.tld");
 
-                    doMergeDependencyOperation();
+		bndProperty.addValue(
+			"-includeresource", new BndPropertiesValue(formatedValueSb.toString(), originalValueSb.toString()));
 
-                    project.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            throw new CoreException( ProjectCore.createErrorStatus( e ) );
-        }
-    }
+		bndProperty.addValue("-sources", new BndPropertiesValue("true"));
+	}
 
-    private Map<String, Object> getTemplateMap( String type )
-    {
-        Map<String, Object> root = new HashMap<String, Object>();
+	private String _getPortletActionCommandExtensionClass() {
+		return _PORTLET_ACTION_COMMAND_EXTENSION_CLASSES;
+	}
 
-        if( type.equals( "portlet" ) )
-        {
-            root.put( "importlibs", getPortletImports() );
-            root.put( "properties", getPortletProperties() );
-            root.put( "classname", componentNameWithoutTemplateName + "Portlet" );
-            root.put( "supperclass", getPortletSuperClass() );
-            root.put( "extensionclass", getPortletExtensionClass() );
-        }
-        else
-        {
-            root.put( "importlibs", getPortletActionCommandImports() );
-            root.put( "properties", getPortletActionCommandProperties() );
-            root.put( "classname", componentNameWithoutTemplateName + "ActionCommand" );
-            root.put( "supperclass", getPortletActionCommandSuperClass() );
-            root.put( "extensionclass", getPortletActionCommandExtensionClass() );
-        }
+	private List<String> _getPortletActionCommandImports() {
+		List<String> imports = new ArrayList<>();
 
-        root.put( "packagename", packageName );
-        root.put( "projectname", projectName );
-        root.put( "componenttype", templateName );
+		imports.add("com.liferay.portal.kernel.log.Log");
+		imports.add("com.liferay.portal.kernel.log.LogFactoryUtil");
+		imports.add("com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand");
+		imports.add("com.liferay.portal.kernel.servlet.SessionMessages");
+		imports.add("com.liferay.portal.kernel.util.ParamUtil");
+		imports.add("com.liferay.portal.kernel.util.StringPool");
+		imports.add("javax.portlet.ActionRequest");
+		imports.add("javax.portlet.ActionResponse");
+		imports.add("javax.portlet.PortletException");
+		imports.addAll(super.getImports());
 
-        return root;
-    }
+		return imports;
+	}
 
-    @Override
-    protected String getTemplateFile()
-    {
-        return PORTLET_ACTION_COMMAND_TEMPLATE_FILE;
-    }
+	private List<String> _getPortletActionCommandProperties() {
+		List<String> properties = new ArrayList<>();
 
-    private void doSourceCodeOperation( IFile srcFile, String type ) throws CoreException
-    {
-        try(OutputStream fos = Files.newOutputStream( srcFile.getLocation().toFile().toPath() ))
-        {
+		properties.add("javax.portlet.name=blade_portlet_" + componentNameWithoutTemplateName + "Portlet");
+		properties.add("mvc.command.name=" + componentNameWithoutTemplateName.toLowerCase());
 
-            Template temp = cfg.getTemplate( getTemplateFile() );
+		return properties;
+	}
 
-            Map<String, Object> root = getTemplateMap( type );
+	private String _getPortletActionCommandSuperClass() {
+		return _PORTLET_ACTION_COMMAND_SUPER_CLASSES;
+	}
 
-            Writer out = new OutputStreamWriter( fos );
-            temp.process( root, out );
-            fos.flush();
-        }
-        catch( IOException | TemplateException e )
-        {
-            throw new CoreException( ProjectCore.createErrorStatus( e ) );
-        }
-    }
+	private String _getPortletExtensionClass() {
+		return _PORTLET_EXTENSION_CLASSES;
+	}
 
-    @Override
-    protected void doMergeResourcesOperation() throws CoreException
-    {
-        try
-        {
-            IFolder resourceFolder = liferayProject.getSourceFolder( "resources" );
+	private List<String> _getPortletImports() {
+		List<String> imports = new ArrayList<>();
 
-            IFolder metaFolder = resourceFolder.getFolder( "META-INF/resources" );
+		imports.addAll(super.getImports());
 
-            final IFile initFtl = metaFolder.getFile( new Path( this.componentClassName.toLowerCase().toLowerCase() + "/init.ftl" ) );
+		imports.add("javax.portlet.Portlet");
+		imports.add("com.liferay.util.bridges.freemarker.FreeMarkerPortlet");
 
-            if( !initFtl.getLocation().toFile().exists() )
-            {
-                createSampleFile( initFtl, "portletinactioncommand/portletactioncommand-init.ftl" );
-            }
+		return imports;
+	}
 
-            final IFile viewFtl = metaFolder.getFile( new Path( this.componentClassName.toLowerCase().toLowerCase() + "/view.ftl" ) );
+	private List<String> _getPortletProperties() {
+		List<String> properties = new ArrayList<>();
 
-            if( !viewFtl.getLocation().toFile().exists() )
-            {
-                createSampleFile( viewFtl, "portletinactioncommand/portletactionconmmand-view.ftl" );
-            }
+		Collections.addAll(properties, _PORTLET_PROPERTIES_LIST);
 
-        }
-        catch( Exception e )
-        {
-            throw new CoreException( ProjectCore.createErrorStatus( e ) );
-        }
-    }
+		for (String property : super.getProperties()) {
+			properties.add(property);
+		}
 
-    @Override
-    protected List<String[]> getComponentDependency() throws CoreException
-    {
-        List<String[]> componentDependency = super.getComponentDependency();
-        componentDependency.add( new String[]{ "com.liferay.portal", "com.liferay.util.bridges", "2.0.0"} );
-        componentDependency.add( new String[]{ "com.liferay.portal", "com.liferay.util.taglib", "2.0.0"} );
-        componentDependency.add( new String[]{ "javax.portlet", "portlet-api", "2.0"} );
-        componentDependency.add( new String[]{ "javax.servlet", "javax.servlet-api", "3.0.1"} );
-        return componentDependency;
-    }
+		properties.add("javax.portlet.display-name=" + componentNameWithoutTemplateName + " Portlet");
+		properties.add("javax.portlet.init-param.view-template=/" + componentClassName.toLowerCase() + "/view.ftl");
+		properties.add(
+			"com.liferay.portlet.css-class-wrapper=portlet-" + componentNameWithoutTemplateName.toLowerCase());
 
-    @Override
-    protected void setBndProperties( BndProperties bndProperty )
-    {
-        final String formatedValue = "\\" + System.getProperty( "line.separator" ) +
-            "\t" + "@com.liferay.util.bridges-2.0.0.jar!/com/liferay/util/bridges/freemarker/FreeMarkerPortlet.class," + "\\" +  System.getProperty( "line.separator" ) +
-            "\t" + "@com.liferay.util.taglib-2.0.0.jar!/META-INF/*.tld";
-        final String originalValue = "@com.liferay.util.bridges-2.0.0.jar!/com/liferay/util/bridges/freemarker/FreeMarkerPortlet.class," + 
-            "@com.liferay.util.taglib-2.0.0.jar!/META-INF/*.tld";
+		return properties;
+	}
 
-        bndProperty.addValue( "-includeresource", new BndPropertiesValue( formatedValue, originalValue ) );
-        bndProperty.addValue( "-sources", new BndPropertiesValue( "true" ) );
-    }
+	private String _getPortletSuperClass() {
+		return _PORTLET_SUPER_CLASSES;
+	}
+
+	private Map<String, Object> _getTemplateMap(String type) {
+		Map<String, Object> root = new HashMap<>();
+
+		if (type.equals("portlet")) {
+			root.put("classname", componentNameWithoutTemplateName + "Portlet");
+			root.put("extensionclass", _getPortletExtensionClass());
+			root.put("importlibs", _getPortletImports());
+			root.put("properties", _getPortletProperties());
+			root.put("supperclass", _getPortletSuperClass());
+		}
+		else {
+			root.put("classname", componentNameWithoutTemplateName + "ActionCommand");
+			root.put("extensionclass", _getPortletActionCommandExtensionClass());
+			root.put("importlibs", _getPortletActionCommandImports());
+			root.put("properties", _getPortletActionCommandProperties());
+			root.put("supperclass", _getPortletActionCommandSuperClass());
+		}
+
+		root.put("componenttype", templateName);
+		root.put("packagename", packageName);
+		root.put("projectname", projectName);
+
+		return root;
+	}
+
+	private void _sourceCodeOperation(IFile srcFile, String type) throws CoreException {
+		File file = srcFile.getLocation().toFile();
+
+		try (OutputStream fos = Files.newOutputStream(file.toPath())) {
+			Template temp = cfg.getTemplate(getTemplateFile());
+
+			Map<String, Object> root = _getTemplateMap(type);
+
+			Writer out = new OutputStreamWriter(fos);
+
+			temp.process(root, out);
+
+			fos.flush();
+		}
+		catch (IOException | TemplateException e) {
+			throw new CoreException(ProjectCore.createErrorStatus(e));
+		}
+	}
+
+	private static final String _PORTLET_ACTION_COMMAND_EXTENSION_CLASSES = "MVCActionCommand.class";
+
+	private static final String _PORTLET_ACTION_COMMAND_SUPER_CLASSES = "MVCActionCommand";
+
+	private static final String _PORTLET_ACTION_COMMAND_TEMPLATE_FILE =
+		"portletinactioncommand/portletactioncommand.ftl";
+
+	private static final String _PORTLET_EXTENSION_CLASSES = "Portlet.class";
+
+	private static final String[] _PORTLET_PROPERTIES_LIST = {
+		"com.liferay.portlet.display-category=category.sample", "com.liferay.portlet.instanceable=true",
+		"javax.portlet.init-param.template-path=/", "javax.portlet.security-role-ref=power-user,user"
+	};
+
+	private static final String _PORTLET_SUPER_CLASSES = "FreeMarkerPortlet";
 
 }

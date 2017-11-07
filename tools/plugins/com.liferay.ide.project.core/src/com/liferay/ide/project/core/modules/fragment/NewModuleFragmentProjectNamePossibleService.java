@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.fragment;
 
@@ -30,36 +29,29 @@ import org.eclipse.sapphire.modeling.Status;
 /**
  * @author Terry Jia
  */
+public class NewModuleFragmentProjectNamePossibleService extends PossibleValuesService {
 
-public class NewModuleFragmentProjectNamePossibleService extends PossibleValuesService
-{
+	@Override
+	public Status problem(final Value<?> value) {
+		return Status.createOkStatus();
+	}
 
-    @Override
-    public Status problem( final Value<?> value )
-    {
-        return Status.createOkStatus();
-    }
+	@Override
+	protected void compute(final Set<String> values) {
+		try {
+			IProject[] allProjects = CoreUtil.getAllProjects();
 
-    @Override
-    protected void compute( final Set<String> values )
-    {
-        try
-        {
-            IProject[] allProjects = CoreUtil.getAllProjects();
+			for (IProject project : allProjects) {
+				IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
 
-            for( IProject project : allProjects )
-            {
-                final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+				if ((bundleProject != null) && bundleProject.isFragmentBundle()) {
+					values.add(project.getName());
+				}
+			}
+		}
+		catch (Exception e) {
+			ProjectCore.logError("Get project list error. ", e);
+		}
+	}
 
-                if( bundleProject != null && bundleProject.isFragmentBundle() )
-                {
-                    values.add( project.getName() );
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            ProjectCore.logError( "Get project list error. ", e );
-        }
-    }
 }

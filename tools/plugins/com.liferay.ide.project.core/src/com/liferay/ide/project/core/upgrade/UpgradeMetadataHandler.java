@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.upgrade;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -21,12 +21,14 @@ import com.liferay.ide.project.core.util.SearchFilesVisitor;
 
 import java.io.File;
 import java.io.FileWriter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -44,139 +46,134 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 /**
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class UpgradeMetadataHandler extends AbstractUpgradeProjectHandler
-{
-    private final static String publicid_regrex =
-                    "-\\//(?:[a-z][a-z]+)\\//(?:[a-z][a-z]+)[\\s+(?:[a-z][a-z0-9_]*)]*\\s+(\\d\\.\\d\\.\\d)\\//(?:[a-z][a-z]+)";
+@SuppressWarnings("restriction")
+public class UpgradeMetadataHandler extends AbstractUpgradeProjectHandler {
 
-    private final static String systemid_regrex =
-        "^http://www.liferay.com/dtd/[-A-Za-z0-9+&@#/%?=~_()]*(\\d_\\d_\\d).dtd";
+	@Override
+	public Status execute(IProject project, String runtimeName, IProgressMonitor monitor, int perUnit) {
+		Status retval = Status.createOkStatus();
 
-    private final static String[] fileNames = { "liferay-portlet.xml", "liferay-display.xml", "service.xml",
-        "liferay-hook.xml", "liferay-layout-templates.xml", "liferay-look-and-feel.xml", "liferay-portlet-ext.xml",
-        "liferay-plugin-package.properties" };
+		try {
+			int worked = 0;
 
-    @Override
-    public Status execute( IProject project, String runtimeName, IProgressMonitor monitor, int perUnit )
-    {
-        Status retval = Status.createOkStatus();
+			IProgressMonitor submon = CoreUtil.newSubMonitor(monitor, 25);
 
-        try
-        {
-            int worked = 0;
-            final IProgressMonitor submon = CoreUtil.newSubMonitor( monitor, 25 );
-            submon.subTask( "Prograde Upgrade Update DTD Header" );
+			submon.subTask("Prograde Upgrade Update DTD Header");
 
-            final IFile[] metaFiles = getUpgradeDTDFiles( project );
+			IFile[] metaFiles = _getUpgradeDTDFiles(project);
 
-            for( IFile file : metaFiles )
-            {
-                final IStructuredModel editModel = StructuredModelManager.getModelManager().getModelForEdit( file );
+			for (IFile file : metaFiles) {
+				IStructuredModel editModel = StructuredModelManager.getModelManager().getModelForEdit(file);
 
-                try
-                {
-                    if( editModel != null && editModel instanceof IDOMModel )
-                    {
-                        worked = worked + perUnit;
-                        submon.worked( worked );
+				try {
+					if ((editModel != null) && (editModel instanceof IDOMModel)) {
+						worked = worked + perUnit;
 
-                        final IDOMDocument xmlDocument = ( (IDOMModel) editModel ).getDocument();
-                        final DocumentTypeImpl docType = (DocumentTypeImpl) xmlDocument.getDoctype();
+						submon.worked(worked);
 
-                        final String publicId = docType.getPublicId();
-                        final String newPublicId = getNewDoctTypeSetting( publicId, "6.2.0", publicid_regrex );
+						IDOMDocument xmlDocument = ((IDOMModel)editModel).getDocument();
 
-                        if( newPublicId != null )
-                        {
-                            docType.setPublicId( newPublicId );
-                        }
+						DocumentTypeImpl docType = (DocumentTypeImpl)xmlDocument.getDoctype();
 
-                        worked = worked + perUnit;
-                        submon.worked( worked );
+						String publicId = docType.getPublicId();
 
-                        final String systemId = docType.getSystemId();
-                        final String newSystemId = getNewDoctTypeSetting( systemId, "6_2_0", systemid_regrex );
+						String newPublicId = _getNewDoctTypeSetting(publicId, "6.2.0", _publicid_regrex);
 
-                        if( newSystemId != null )
-                        {
-                            docType.setSystemId( newSystemId );
-                        }
+						if (newPublicId != null) {
+							docType.setPublicId(newPublicId);
+						}
 
-                        editModel.save();
+						worked = worked + perUnit;
 
-                        worked = worked + perUnit;
-                        submon.worked( worked );
-                    }
-                    else
-                    {
-                        updateProperties( file, "liferay-versions", "6.2.0+" );
-                    }
-                }
-                finally
-                {
-                    editModel.releaseFromEdit();
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            final IStatus error =
-                ProjectCore.createErrorStatus(
-                    "Unable to upgrade deployment meta file for " + project.getName(), e );
-            ProjectCore.logError( error );
+						submon.worked(worked);
 
-            retval = StatusBridge.create( error );
-        }
+						String systemId = docType.getSystemId();
 
-        return retval;
-    }
+						String newSystemId = _getNewDoctTypeSetting(systemId, "6_2_0", _systemid_regrex);
 
-    private String getNewDoctTypeSetting( String doctypeSetting, String newValue, String regrex )
-    {
-        String newDoctTypeSetting = null;
-        Pattern p = Pattern.compile( regrex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL );
-        Matcher m = p.matcher( doctypeSetting );
+						if (newSystemId != null) {
+							docType.setSystemId(newSystemId);
+						}
 
-        if( m.find() )
-        {
-            String oldVersionString = m.group( m.groupCount() );
-            newDoctTypeSetting = doctypeSetting.replace( oldVersionString, newValue );
-        }
+						editModel.save();
 
-        return newDoctTypeSetting;
-    }
+						worked = worked + perUnit;
 
-    private IFile[] getUpgradeDTDFiles( IProject project )
-    {
-        List<IFile> files = new ArrayList<IFile>();
+						submon.worked(worked);
+					}
+					else {
+						_updateProperties(file, "liferay-versions", "6.2.0+");
+					}
+				}
+				finally {
+					editModel.releaseFromEdit();
+				}
+			}
+		}
+		catch (Exception e) {
+			IStatus error = ProjectCore.createErrorStatus(
+				"Unable to upgrade deployment meta file for " + project.getName(), e);
 
-        for( String name : fileNames )
-        {
-            files.addAll( new SearchFilesVisitor().searchFiles( project, name ) );
-        }
+			ProjectCore.logError(error);
 
-        return files.toArray( new IFile[files.size()] );
-    }
+			retval = StatusBridge.create(error);
+		}
 
-    private void updateProperties( IFile file, String propertyName, String propertiesValue ) throws Exception
-    {
-        File osfile = new File( file.getLocation().toOSString() );
-        PropertiesConfiguration pluginPackageProperties = new PropertiesConfiguration();
-        pluginPackageProperties.load( osfile );
-        pluginPackageProperties.setProperty( propertyName, propertiesValue );
+		return retval;
+	}
 
-        FileWriter output = new FileWriter( osfile );
+	private String _getNewDoctTypeSetting(String doctypeSetting, String newValue, String regrex) {
+		String newDoctTypeSetting = null;
 
-        try
-        {
-            pluginPackageProperties.save( output );
-        }
-        finally
-        {
-            output.close();
-        }
+		Pattern p = Pattern.compile(regrex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
-        file.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
-    }
+		Matcher m = p.matcher(doctypeSetting);
+
+		if (m.find()) {
+			String oldVersionString = m.group(m.groupCount());
+
+			newDoctTypeSetting = doctypeSetting.replace(oldVersionString, newValue);
+		}
+
+		return newDoctTypeSetting;
+	}
+
+	private IFile[] _getUpgradeDTDFiles(IProject project) {
+		List<IFile> files = new ArrayList<>();
+
+		for (String name : _fileNames) {
+			files.addAll(new SearchFilesVisitor().searchFiles(project, name));
+		}
+
+		return files.toArray(new IFile[files.size()]);
+	}
+
+	private void _updateProperties(IFile file, String propertyName, String propertiesValue) throws Exception {
+		File osfile = new File(file.getLocation().toOSString());
+		PropertiesConfiguration pluginPackageProperties = new PropertiesConfiguration();
+
+		pluginPackageProperties.load(osfile);
+		pluginPackageProperties.setProperty(propertyName, propertiesValue);
+
+		FileWriter output = new FileWriter(osfile);
+
+		try {
+			pluginPackageProperties.save(output);
+		}
+		finally {
+			output.close();
+		}
+
+		file.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
+	}
+
+	private static final String[] _fileNames = {
+		"liferay-portlet.xml", "liferay-display.xml", "service.xml", "liferay-hook.xml", "liferay-layout-templates.xml",
+		"liferay-look-and-feel.xml", "liferay-portlet-ext.xml", "liferay-plugin-package.properties"
+	};
+	private static final String _publicid_regrex =
+		"-\\//(?:[a-z][a-z]+)\\//(?:[a-z][a-z]+)[\\s+(?:[a-z][a-z0-9_]*)]*\\s+(\\d\\.\\d\\.\\d)\\//(?:[a-z][a-z]+)";
+	private static final String _systemid_regrex =
+		"^http://www.liferay.com/dtd/[-A-Za-z0-9+&@#/%?=~_()]*(\\d_\\d_\\d).dtd";
+
 }

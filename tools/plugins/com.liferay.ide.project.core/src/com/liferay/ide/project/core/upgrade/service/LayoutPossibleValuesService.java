@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.upgrade.service;
 
@@ -24,23 +23,21 @@ import org.eclipse.sapphire.PossibleValuesService;
 /**
  * @author Terry Jia
  */
-public class LayoutPossibleValuesService extends PossibleValuesService
-{
-    private List<String> possibleValues;
+public class LayoutPossibleValuesService extends PossibleValuesService {
 
-    @Override
-    protected void initPossibleValuesService()
-    {
-        possibleValues = new ArrayList<String>();
+	@Override
+	protected void compute(Set<String> values) {
+		values.addAll(_possibleValues);
+	}
 
-        possibleValues.add( "Use plugin sdk in liferay workspace" );
-        possibleValues.add( "Upgrade to liferay plugin sdk 7" );
-    }
+	@Override
+	protected void initPossibleValuesService() {
+		_possibleValues = new ArrayList<>();
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        values.addAll( possibleValues );
-    }
+		_possibleValues.add("Use plugin sdk in liferay workspace");
+		_possibleValues.add("Upgrade to liferay plugin sdk 7");
+	}
+
+	private List<String> _possibleValues;
 
 }

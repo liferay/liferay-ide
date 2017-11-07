@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -21,12 +20,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * @author Simon Jiang
  */
-@SuppressWarnings( "hiding" )
-public interface IComponentTemplate<NewLiferayComponentOp> 
-{
-    String getDisplayName();
+@SuppressWarnings("hiding")
+public interface IComponentTemplate<NewLiferayComponentOp> {
 
-    String getShortName();
-    
-    void doExecute( NewLiferayComponentOp op, IProgressMonitor monitor ) throws CoreException;  
+	public void doExecute(NewLiferayComponentOp op, IProgressMonitor monitor) throws CoreException;
+
+	public String getDisplayName();
+
+	public String getShortName();
+
 }

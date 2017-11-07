@@ -1,5 +1,4 @@
-
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -11,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.workspace;
 
@@ -35,87 +33,80 @@ import org.eclipse.sapphire.platform.StatusBridge;
 /**
  * @author Andy Wu
  */
-public class NewLiferayWorkspaceOpMethods
-{
+public class NewLiferayWorkspaceOpMethods {
 
-    public static final Status execute( final NewLiferayWorkspaceOp op, final ProgressMonitor pm )
-    {
-        final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
+	public static Status execute(NewLiferayWorkspaceOp op, ProgressMonitor pm) {
+		IProgressMonitor monitor = ProgressMonitorBridge.create(pm);
 
-        monitor.beginTask( "Creating Liferay Workspace project...", 100 ); //$NON-NLS-1$
+		monitor.beginTask("Creating Liferay Workspace project...", 100);
 
-        Status retval = null;
+		Status retval = null;
 
-        try
-        {
-            final String wsName = op.getWorkspaceName().content();
+		try {
+			String wsName = op.getWorkspaceName().content();
 
-            final NewLiferayProjectProvider<NewLiferayWorkspaceOp> provider = op.getProjectProvider().content( true );
+			NewLiferayProjectProvider<NewLiferayWorkspaceOp> provider = op.getProjectProvider().content(true);
 
-            final IStatus status = provider.createNewProject( op, monitor );
+			IStatus status = provider.createNewProject(op, monitor);
 
-            retval = StatusBridge.create( status );
+			retval = StatusBridge.create(status);
 
-            if( !retval.ok() )
-            {
-                return retval;
-            }
+			if (!retval.ok()) {
+				return retval;
+			}
 
-            String location = op.getLocation().content().append( wsName ).toPortableString();
+			org.eclipse.sapphire.modeling.Path parent = op.getLocation().content();
 
-            boolean isInitBundle = op.getProvisionLiferayBundle().content();
+			String location = parent.append(wsName).toPortableString();
 
-            if( isInitBundle )
-            {
-                String serverRuntimeName = op.getServerName().content();
-                IPath bundlesLocation = null;
+			boolean initBundle = op.getProvisionLiferayBundle().content();
 
-                if( op.getProjectProvider().text().equals( "gradle-liferay-workspace" ) )
-                {
-                    bundlesLocation = LiferayWorkspaceUtil.getHomeLocation( location );
-                }
-                else
-                {
-                    bundlesLocation =  new Path( location ).append( "bundles" );
-                }
+			if (initBundle) {
+				String serverRuntimeName = op.getServerName().content();
+				IPath bundlesLocation = null;
 
-                if( bundlesLocation.toFile().exists() )
-                {
-                    ServerUtil.addPortalRuntimeAndServer( serverRuntimeName, bundlesLocation, monitor );
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            final String msg = "Error creating Liferay Workspace project."; //$NON-NLS-1$
+				String projectProvider = op.getProjectProvider().text();
 
-            ProjectCore.logError( msg, e );
+				if (projectProvider.equals("gradle-liferay-workspace")) {
+					bundlesLocation = LiferayWorkspaceUtil.getHomeLocation(location);
+				}
+				else {
+					bundlesLocation = new Path(location).append("bundles");
+				}
 
-            return Status.createErrorStatus( msg, e );
-        }
+				if (bundlesLocation.toFile().exists()) {
+					ServerUtil.addPortalRuntimeAndServer(serverRuntimeName, bundlesLocation, monitor);
+				}
+			}
+		}
+		catch (Exception e) {
+			String msg = "Error creating Liferay Workspace project.";
 
-        if( retval.ok() )
-        {
-            updateBuildPrefs( op );
-        }
+			ProjectCore.logError(msg, e);
 
-        return retval;
-    }
+			return Status.createErrorStatus(msg, e);
+		}
 
-    private static void updateBuildPrefs( final NewLiferayWorkspaceOp op )
-    {
-        try
-        {
-            final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+		if (retval.ok()) {
+			_updateBuildPrefs(op);
+		}
 
-            prefs.put( ProjectCore.PREF_DEFAULT_WORKSPACE_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
+		return retval;
+	}
 
-            prefs.flush();
-        }
-        catch( Exception e )
-        {
-            final String msg = "Error updating default workspace build type."; //$NON-NLS-1$
-            ProjectCore.logError( msg, e );
-        }
-    }
+	private static void _updateBuildPrefs(NewLiferayWorkspaceOp op) {
+		try {
+			IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
+
+			prefs.put(ProjectCore.PREF_DEFAULT_WORKSPACE_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text());
+
+			prefs.flush();
+		}
+		catch (Exception e) {
+			String msg = "Error updating default workspace build type.";
+
+			ProjectCore.logError(msg, e);
+		}
+	}
+
 }

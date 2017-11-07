@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.modules;
 
 import java.util.List;
@@ -19,64 +19,53 @@ import java.util.List;
 /**
  * @author Lovett Li
  */
-public class ServiceContainer
-{
+public class ServiceContainer {
 
-    private List<String> serviceList;
-    private String bundleGroup;
-    private String bundleName;
-    private String bundleVersion;
+	public ServiceContainer(List<String> serviceList) {
+		_serviceList = serviceList;
+	}
 
-    public ServiceContainer( List<String> serviceList )
-    {
-        this.serviceList = serviceList;
-    }
+	public ServiceContainer(String bundleGroup, String bundleName, String bundleVersion) {
+		_bundleGroup = bundleGroup;
+		_bundleName = bundleName;
+		_bundleVersion = bundleVersion;
+	}
 
-    public ServiceContainer( String bundleGroup, String bundleName, String bundleVersion )
-    {
-        this.bundleGroup = bundleGroup;
-        this.bundleName = bundleName;
-        this.bundleVersion = bundleVersion;
-    }
+	public String getBundleGroup() {
+		return _bundleGroup;
+	}
 
-    public List<String> getServiceList()
-    {
-        return serviceList;
-    }
+	public String getBundleName() {
+		return _bundleName;
+	}
 
-    public void setServiceList( List<String> serviceList )
-    {
-        this.serviceList = serviceList;
-    }
+	public String getBundleVersion() {
+		return _bundleVersion;
+	}
 
-    public String getBundleName()
-    {
-        return bundleName;
-    }
+	public List<String> getServiceList() {
+		return _serviceList;
+	}
 
-    public void setBundleName( String bundleName )
-    {
-        this.bundleName = bundleName;
-    }
+	public void setBundleGroup(String bundleGroup) {
+		_bundleGroup = bundleGroup;
+	}
 
-    public String getBundleVersion()
-    {
-        return bundleVersion;
-    }
+	public void setBundleName(String bundleName) {
+		_bundleName = bundleName;
+	}
 
-    public void setBundleVersion( String bundleVersion )
-    {
-        this.bundleVersion = bundleVersion;
-    }
+	public void setBundleVersion(String bundleVersion) {
+		_bundleVersion = bundleVersion;
+	}
 
-    public String getBundleGroup()
-    {
-        return bundleGroup;
-    }
+	public void setServiceList(List<String> serviceList) {
+		_serviceList = serviceList;
+	}
 
-    public void setBundleGroup( String bundleGroup )
-    {
-        this.bundleGroup = bundleGroup;
-    }
+	private String _bundleGroup;
+	private String _bundleName;
+	private String _bundleVersion;
+	private List<String> _serviceList;
 
 }

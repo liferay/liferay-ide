@@ -4,7 +4,7 @@
 
 public class ${classname} implements ${supperclass} {
 
-    @Override
+	@Override
 	public void processLifecycleEvent(LifecycleEvent lifecycleEvent)
 		throws ActionException {
 

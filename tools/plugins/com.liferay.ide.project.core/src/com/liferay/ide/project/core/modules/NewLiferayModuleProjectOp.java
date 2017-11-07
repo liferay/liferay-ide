@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
@@ -34,118 +34,127 @@ import org.eclipse.sapphire.modeling.annotations.Whitespace;
 /**
  * @author Simon Jiang
  */
-public interface NewLiferayModuleProjectOp extends BaseModuleOp
-{
-    ElementType TYPE = new ElementType( NewLiferayModuleProjectOp.class );
+public interface NewLiferayModuleProjectOp extends BaseModuleOp {
 
-    // *** ProjectName ***
+	public ElementType TYPE = new ElementType(NewLiferayModuleProjectOp.class);
 
-    @Listeners( ModuleProjectNameListener.class )
-    @Service( impl = ModuleProjectNameValidationService.class )
-    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, BaseModuleOp.PROP_PROJECT_NAME );
+	// *** ProjectName ***
 
-    // *** ProjectLocation ***
+	@DelegateImplementation(NewLiferayModuleProjectOpMethods.class)
+	@Override
+	public Status execute(ProgressMonitor monitor);
 
-    @Service( impl = ModuleProjectLocationValidationService.class )
-    @Service( impl = CommonProjectLocationInitialValueService.class )
-    ValueProperty PROP_LOCATION = new ValueProperty( TYPE, BaseModuleOp.PROP_LOCATION );
+	// *** ProjectLocation ***
 
-    // *** UseDefaultLocation ***
+	public Value<String> getArchetype();
 
-    @Listeners( ModuleProjectUseDefaultLocationListener.class )
-    ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty( TYPE, BaseModuleOp.PROP_USE_DEFAULT_LOCATION );
+	// *** UseDefaultLocation ***
 
-    // *** Archetype ***
+	public Value<String> getArtifactVersion();
 
-    @Service( impl = ModuleArchetypeDefaultValueService.class )
-    ValueProperty PROP_ARCHETYPE = new ValueProperty( TYPE, "Archetype" );
+	// *** Archetype ***
 
-    Value<String> getArchetype();
-    void setArchetype( String value );
+	public Value<String> getComponentName();
 
+	public Value<String> getGroupId();
 
-    // *** Project Template ***
+	public Value<String> getPackageName();
 
-    @DefaultValue( text = "mvc-portlet" )
-    @Label( standard = "Project Template Name" )
-    @Listeners( ModuleProjectNameListener.class )
-    @Service( impl = ProjectTemplateNamePossibleValuesService.class )
-    ValueProperty PROP_PROJECT_TEMPLATE_NAME = new ValueProperty( TYPE, "ProjectTemplateName" );
+	// *** Project Template ***
 
-    Value<String> getProjectTemplateName();
-    void setProjectTemplateName( String value );
+	public Value<String> getProjectTemplateName();
 
-    // *** Maven settings ***
-    // *** ArtifactVersion ***
+	public ElementList<PropertyKey> getPropertyKeys();
 
-    @Label( standard = "artifact version" )
-    @Service( impl = ModuleProjectArtifactVersionDefaultValueService.class )
-    ValueProperty PROP_ARTIFACT_VERSION = new ValueProperty( TYPE, "ArtifactVersion" );
+	public Value<String> getServiceName();
 
-    Value<String> getArtifactVersion();
-    void setArtifactVersion( String value );
+	// *** Maven settings ***
+	// *** ArtifactVersion ***
 
+	public void setArchetype(String value);
 
-    // *** GroupId ***
+	public void setArtifactVersion(String value);
 
-    @Label( standard = "group id" )
-    @Service( impl = ModuleProjectGroupIdValidationService.class )
-    @Service( impl = ModuleProjectGroupIdDefaultValueService.class )
-    @Whitespace( trim = false )
-    ValueProperty PROP_GROUP_ID = new ValueProperty( TYPE, "GroupId" );
+	public void setComponentName(String value);
 
-    Value<String> getGroupId();
-    void setGroupId( String value );
+	// *** GroupId ***
 
-    // *** FinalProjectName ***
+	public void setGroupId(String value);
 
-    // *** ComponentName ***
-    @Label( standard = "Component Class Name" )
-    @Service( impl = ComponentNameValidationService.class )
-    @Service( impl = ComponentNameDefaultValueService.class )
-    ValueProperty PROP_COMPONENT_NAME = new ValueProperty( TYPE, "ComponentName" );
+	public void setPackageName(String value);
 
-    Value<String> getComponentName();
-    void setComponentName( String value );
+	public void setProjectTemplateName(String value);
 
-    // *** ServiceName ***
-    @Label( standard = "Service Name" )
-    @Service( impl = ServicePossibleValuesService.class )
-    @Service( impl = ServiceDefaultValuesService.class )
-    @Service( impl = ServiceNameValidataionService.class )
-    ValueProperty PROP_SERVICE_NAME = new ValueProperty( TYPE, "ServiceName" );
+	// *** FinalProjectName ***
 
-    Value<String> getServiceName();
-    void setServiceName( String value );
+	// *** ComponentName ***
 
-    // *** PackageeName ***
+	public void setServiceName(String value);
 
-    @Label( standard = "Package name" )
-    @Service( impl = PackageNameValidationService.class )
-    @Service( impl = PackageNameDefaultValueService.class )
-    ValueProperty PROP_PACKAGE_NAME = new ValueProperty( TYPE, "PackageName" );
+	@Service(impl = ModuleArchetypeDefaultValueService.class)
+	public ValueProperty PROP_ARCHETYPE = new ValueProperty(TYPE, "Archetype");
 
-    Value<String> getPackageName();
-    void setPackageName( String value );
+	@Label(standard = "artifact version")
+	@Service(impl = ModuleProjectArtifactVersionDefaultValueService.class)
+	public ValueProperty PROP_ARTIFACT_VERSION = new ValueProperty(TYPE, "ArtifactVersion");
 
-    // *** PropertyKeys ***
-    @Type( base = PropertyKey.class )
-    @Label( standard = "Properties" )
-    ListProperty PROP_PROPERTYKEYS = new ListProperty( TYPE, "PropertyKeys" );
-    ElementList<PropertyKey> getPropertyKeys();
+	// *** ServiceName ***
 
+	@Label(standard = "Component Class Name")
+	@Service(impl = ComponentNameDefaultValueService.class)
+	@Service(impl = ComponentNameValidationService.class)
+	public ValueProperty PROP_COMPONENT_NAME = new ValueProperty(TYPE, "ComponentName");
 
-    // *** ProjectProvider ***
+	@Label(standard = "group id")
+	@Service(impl = ModuleProjectGroupIdDefaultValueService.class)
+	@Service(impl = ModuleProjectGroupIdValidationService.class)
+	@Whitespace(trim = false)
+	public ValueProperty PROP_GROUP_ID = new ValueProperty(TYPE, "GroupId");
 
-    @Label( standard = "build type" )
-    @Listeners( ModuleProjectNameListener.class )
-    @Service( impl = ModuleProjectProviderPossibleValuesService.class )
-    @Service( impl = ModuleProjectProviderDefaultValueService.class )
-    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, BaseModuleOp.PROP_PROJECT_PROVIDER );
+	@Service(impl = CommonProjectLocationInitialValueService.class)
+	@Service(impl = ModuleProjectLocationValidationService.class)
+	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, BaseModuleOp.PROP_LOCATION);
 
-    // *** Method: execute ***
+	// *** PackageeName ***
 
-    @Override
-    @DelegateImplementation( NewLiferayModuleProjectOpMethods.class )
-    Status execute( ProgressMonitor monitor );
+	@Label(standard = "Package name")
+	@Service(impl = PackageNameDefaultValueService.class)
+	@Service(impl = PackageNameValidationService.class)
+	public ValueProperty PROP_PACKAGE_NAME = new ValueProperty(TYPE, "PackageName");
+
+	@Listeners(ModuleProjectNameListener.class)
+	@Service(impl = ModuleProjectNameValidationService.class)
+	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_NAME);
+
+	@Label(standard = "build type")
+	@Listeners(ModuleProjectNameListener.class)
+	@Service(impl = ModuleProjectProviderDefaultValueService.class)
+	@Service(impl = ModuleProjectProviderPossibleValuesService.class)
+	public ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_PROVIDER);
+
+	// *** PropertyKeys ***
+
+	@DefaultValue(text = "mvc-portlet")
+	@Label(standard = "Project Template Name")
+	@Listeners(ModuleProjectNameListener.class)
+	@Service(impl = ProjectTemplateNamePossibleValuesService.class)
+	public ValueProperty PROP_PROJECT_TEMPLATE_NAME = new ValueProperty(TYPE, "ProjectTemplateName");
+
+	@Label(standard = "Properties")
+	@Type(base = PropertyKey.class)
+	public ListProperty PROP_PROPERTYKEYS = new ListProperty(TYPE, "PropertyKeys");
+
+	// *** ProjectProvider ***
+
+	@Label(standard = "Service Name")
+	@Service(impl = ServiceDefaultValuesService.class)
+	@Service(impl = ServiceNameValidataionService.class)
+	@Service(impl = ServicePossibleValuesService.class)
+	public ValueProperty PROP_SERVICE_NAME = new ValueProperty(TYPE, "ServiceName");
+
+	// *** Method: execute ***
+
+	@Listeners(ModuleProjectUseDefaultLocationListener.class)
+	public ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty(TYPE, BaseModuleOp.PROP_USE_DEFAULT_LOCATION);
+
 }

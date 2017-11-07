@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,12 +10,11 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.FileListing;
-import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 
@@ -23,8 +22,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+
 import java.nio.file.Files;
+
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
@@ -36,263 +36,186 @@ import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.core.runtime.FileLocator;
+
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.wst.server.core.IServer;
 
 /**
  * @author Lovett Li
  */
-public class ServiceWrapperCommand
-{
+public class ServiceWrapperCommand {
 
-    private final IServer _server;
-    private String _serviceWrapperName;
+	public ServiceWrapperCommand(IServer server) {
+		_server = server;
+	}
 
-    public ServiceWrapperCommand( IServer server )
-    {
-        _server = server;
-    }
+	public ServiceWrapperCommand(IServer server, String serviceWrapperName) {
+		_server = server;
+		_serviceWrapperName = serviceWrapperName;
+	}
 
-    public ServiceWrapperCommand( IServer _server, String _serviceWrapperName )
-    {
-        this._server = _server;
-        this._serviceWrapperName = _serviceWrapperName;
-    }
+	public ServiceContainer execute() throws Exception {
+		if (_server == null) {
+			return _getServiceWrapperFromTargetPlatform();
+		}
 
-    public ServiceContainer execute() throws Exception
-    {
+		Map<String, String[]> dynamicServiceWrappers = _getDynamicServiceWrapper();
+		ServiceContainer result;
 
-        if( _server == null )
-        {
-            return getServiceWrapperFromTargetPlatform();
-        }
-        else
-        {
-            Map<String, String[]> dynamicServiceWrappers = getDynamicServiceWrapper();
-            ServiceContainer result;
+		if (_serviceWrapperName == null) {
+			result = new ServiceContainer(Arrays.asList(dynamicServiceWrappers.keySet().toArray(new String[0])));
+		}
+		else {
+			String[] wrapperBundle = dynamicServiceWrappers.get(_serviceWrapperName);
 
-            if( _serviceWrapperName == null )
-            {
-                result =
-                    new ServiceContainer( Arrays.asList( dynamicServiceWrappers.keySet().toArray( new String[0] ) ) );
-            }
-            else
-            {
-                String[] wrapperBundle = dynamicServiceWrappers.get( _serviceWrapperName );
-                result = new ServiceContainer( wrapperBundle[0], wrapperBundle[1] ,wrapperBundle[2] );
-            }
+			result = new ServiceContainer(wrapperBundle[0], wrapperBundle[1], wrapperBundle[2]);
+		}
 
-            return result;
-        }
-    }
+		return result;
+	}
 
-    private File checkStaticWrapperFile() throws IOException
-    {
-        final URL url =
-            FileLocator.toFileURL( ProjectCore.getDefault().getBundle().getEntry( "OSGI-INF/wrappers-static.json" ) );
-        final File servicesFile = new File( url.getFile() );
+	private Map<String, String[]> _getDynamicServiceWrapper() throws IOException {
+		PortalRuntime portalRuntime = (PortalRuntime)_server.getRuntime().loadAdapter(PortalRuntime.class, null);
 
-        if( servicesFile.exists() )
-        {
-            return servicesFile;
-        }
+		IPath bundleLibPath = portalRuntime.getAppServerLibGlobalDir();
+		IPath bundleServerPath = portalRuntime.getAppServerDir();
 
-        throw new FileNotFoundException( "can't find static services file wrappers-static.json" );
-    }
+		Map<String, String[]> map = new LinkedHashMap<>();
 
-    private  Map<String,String[]> getDynamicServiceWrapper() throws IOException
-    {
-        final IPath bundleLibPath =
-            ( (PortalRuntime) _server.getRuntime().loadAdapter( PortalRuntime.class, null ) ).getAppServerLibGlobalDir();
-        final IPath bundleServerPath =
-            ( (PortalRuntime) _server.getRuntime().loadAdapter( PortalRuntime.class, null ) ).getAppServerDir();
-        final Map<String, String[]> map = new LinkedHashMap<>();
-        List<File> libFiles;
-        File portalkernelJar = null;
+		List<File> libFiles;
 
-        try
-        {
-            libFiles = FileListing.getFileListing( new File( bundleLibPath.toOSString() ) );
+		File portalkernelJar = null;
 
-            for( File lib : libFiles )
-            {
-                if( lib.exists() && lib.getName().endsWith( "portal-kernel.jar" ) )
-                {
-                    portalkernelJar = lib;
-                    break;
-                }
-            }
+		try {
+			libFiles = FileListing.getFileListing(new File(bundleLibPath.toOSString()));
 
-            libFiles = FileListing.getFileListing( new File( bundleServerPath.append( "../osgi" ).toOSString() ) );
-            libFiles.add( portalkernelJar );
+			for (File lib : libFiles) {
+				if (lib.exists() && lib.getName().endsWith("portal-kernel.jar")) {
+					portalkernelJar = lib;
 
-            if( !libFiles.isEmpty() )
-            {
-                for( File lib : libFiles )
-                {
-                    if( lib.getName().endsWith( ".lpkg" ) )
-                    {
-                        try(JarFile jar = new JarFile( lib ))
-                        {
-                            Enumeration<JarEntry> enu = jar.entries();
+					break;
+				}
+			}
 
-                            while( enu.hasMoreElements() )
-                            {
-                                JarInputStream jarInputStream = null;
+			libFiles = FileListing.getFileListing(new File(bundleServerPath.append("../osgi").toOSString()));
 
-                                try
-                                {
-                                    JarEntry entry = enu.nextElement();
+			libFiles.add(portalkernelJar);
 
-                                    String name = entry.getName();
+			if (!libFiles.isEmpty()) {
+				for (File lib : libFiles) {
+					if (lib.getName().endsWith(".lpkg")) {
+						try (JarFile jar = new JarFile(lib)) {
+							Enumeration<JarEntry> enu = jar.entries();
 
-                                    if( name.contains( ".api-" ) )
-                                    {
-                                        JarEntry jarentry = jar.getJarEntry( name );
-                                        InputStream inputStream = jar.getInputStream( jarentry );
+							while (enu.hasMoreElements()) {
+								JarInputStream jarInputStream = null;
 
-                                        jarInputStream = new JarInputStream( inputStream );
-                                        JarEntry nextJarEntry;
+								try {
+									JarEntry entry = enu.nextElement();
 
-                                        while( ( nextJarEntry = jarInputStream.getNextJarEntry() ) != null )
-                                        {
-                                            String entryName = nextJarEntry.getName();
+									String name = entry.getName();
 
-                                            getServiceWrapperList( map, entryName, jarInputStream );
-                                        }
+									if (name.contains(".api-")) {
+										JarEntry jarentry = jar.getJarEntry(name);
 
-                                    }
-                                }
-                                catch( Exception e )
-                                {
-                                }
-                                finally
-                                {
-                                    if( jarInputStream != null )
-                                    {
-                                        jarInputStream.close();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else if( lib.getName().endsWith( "api.jar" ) || lib.getName().equals( "portal-kernel.jar" ) )
-                    {
-                        JarInputStream jarinput = null;
+										InputStream inputStream = jar.getInputStream(jarentry);
 
-                        try(JarFile jar = new JarFile( lib ))
-                        {
-                            jarinput = new JarInputStream( Files.newInputStream( lib.toPath() ) );
+										jarInputStream = new JarInputStream(inputStream);
 
-                            Enumeration<JarEntry> enu = jar.entries();
+										JarEntry nextJarEntry;
 
-                            while( enu.hasMoreElements() )
-                            {
-                                JarEntry entry = enu.nextElement();
-                                String name = entry.getName();
+										while ((nextJarEntry = jarInputStream.getNextJarEntry()) != null) {
+											String entryName = nextJarEntry.getName();
 
-                                getServiceWrapperList( map, name, jarinput );
-                            }
-                        }
-                        catch( IOException e )
-                        {
-                        }
-                        finally
-                        {
+											_getServiceWrapperList(map, entryName, jarInputStream);
+										}
+									}
+								}
+								catch (Exception e) {
+								}
+								finally {
+									if (jarInputStream != null) {
+										jarInputStream.close();
+									}
+								}
+							}
+						}
+					}
+					else if (lib.getName().endsWith("api.jar") || lib.getName().equals("portal-kernel.jar")) {
+						JarInputStream jarinput = null;
 
-                            if( jarinput != null )
-                            {
-                                    jarinput.close();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch( FileNotFoundException e )
-        {
-        }
+						try (JarFile jar = new JarFile(lib)) {
+							jarinput = new JarInputStream(Files.newInputStream(lib.toPath()));
 
-        return map;
-    }
+							Enumeration<JarEntry> enu = jar.entries();
 
-    private void getServiceWrapperList( final Map<String,String[]> wrapperMap, String name, JarInputStream jarInputStream  )
-    {
-        if( name.endsWith( "ServiceWrapper.class" ) && !( name.contains( "$" ) ) )
-        {
-            name = name.replaceAll( "\\\\", "." ).replaceAll( "/", "." );
-            name = name.substring( 0, name.lastIndexOf( "." ) );
-            Attributes mainAttributes = jarInputStream.getManifest().getMainAttributes();
-            String bundleName = mainAttributes.getValue( "Bundle-SymbolicName" );
-            String version = mainAttributes.getValue( "Bundle-Version" );
-            String group = "";
+							while (enu.hasMoreElements()) {
+								JarEntry entry = enu.nextElement();
 
-            if( bundleName.equals( "com.liferay.portal.kernel" ) )
-            {
-                group = "com.liferay.portal";
-            }
-            else
-            {
-                int ordinalIndexOf = StringUtils.ordinalIndexOf( bundleName, ".", 2 );
+								String name = entry.getName();
 
-                if( ordinalIndexOf != -1 )
-                {
-                    group = bundleName.substring( 0, ordinalIndexOf );
-                }
-            }
+								_getServiceWrapperList(map, name, jarinput);
+							}
+						}
+						catch (IOException ioe) {
+						}
+						finally {
+							if (jarinput != null) {
+								jarinput.close();
+							}
+						}
+					}
+				}
+			}
+		}
+		catch (FileNotFoundException fnfe) {
+		}
 
-            wrapperMap.put( name, new String[] { group, bundleName, version } );
-        }
-    }
+		return map;
+	}
 
-    private ServiceContainer getServiceWrapperFromTargetPlatform() throws Exception
-    {
-        ServiceContainer result;
+	private ServiceContainer _getServiceWrapperFromTargetPlatform() throws Exception {
+		ServiceContainer result;
 
-        if( _serviceWrapperName == null )
-        {
-            result = TargetPlatformUtil.getServiceWrapperList();
-        }
-        else
-        {
-            result = TargetPlatformUtil.getServiceWrapperBundle( _serviceWrapperName );
-        }
+		if (_serviceWrapperName == null) {
+			result = TargetPlatformUtil.getServiceWrapperList();
+		}
+		else {
+			result = TargetPlatformUtil.getServiceWrapperBundle(_serviceWrapperName);
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    private void updateServiceWrapperStaticFile( final Map<String, String[]> wrappers ) throws Exception
-    {
-        final File wrappersFile = checkStaticWrapperFile();
-        final ObjectMapper mapper = new ObjectMapper();
+	private void _getServiceWrapperList(Map<String, String[]> wrapperMap, String name, JarInputStream jarInputStream) {
+		if (name.endsWith("ServiceWrapper.class") && !(name.contains("$"))) {
+			name = name.replaceAll("\\\\", ".").replaceAll("/", ".");
 
-        final Job job = new WorkspaceJob( "Update ServiceWrapper static file...")
-        {
+			name = name.substring(0, name.lastIndexOf("."));
 
-            @Override
-            public IStatus runInWorkspace( IProgressMonitor monitor )
-            {
-                try
-                {
-                    mapper.writeValue( wrappersFile, wrappers );
-                }
-                catch( IOException e )
-                {
-                    return Status.CANCEL_STATUS;
-                }
+			Attributes mainAttributes = jarInputStream.getManifest().getMainAttributes();
 
-                return Status.OK_STATUS;
-            }
-        };
+			String bundleName = mainAttributes.getValue("Bundle-SymbolicName");
+			String version = mainAttributes.getValue("Bundle-Version");
 
-        job.schedule();
+			String group = "";
 
-    }
+			if (bundleName.equals("com.liferay.portal.kernel")) {
+				group = "com.liferay.portal";
+			}
+			else {
+				int ordinalIndexOf = StringUtils.ordinalIndexOf(bundleName, ".", 2);
+
+				if (ordinalIndexOf != -1) {
+					group = bundleName.substring(0, ordinalIndexOf);
+				}
+			}
+
+			wrapperMap.put(name, new String[] {group, bundleName, version});
+		}
+	}
+
+	private final IServer _server;
+	private String _serviceWrapperName;
+
 }

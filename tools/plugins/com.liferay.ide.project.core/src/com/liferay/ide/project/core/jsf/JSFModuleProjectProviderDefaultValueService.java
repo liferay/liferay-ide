@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,13 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.jsf;
+
+import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
@@ -21,36 +24,31 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.DefaultValueService;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.ProjectCore;
-
 /**
  * @author Simon Jiang
  */
-public class JSFModuleProjectProviderDefaultValueService extends DefaultValueService
-{
+public class JSFModuleProjectProviderDefaultValueService extends DefaultValueService {
 
-    @Override
-    protected String compute()
-    {
-        String defaultProjectBuildType = "maven-jsf";
+	@Override
+	protected String compute() {
+		String defaultProjectBuildType = "maven-jsf";
 
-        final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
+		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
-        final String buildType = Platform.getPreferencesService().getString(
-            ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_JSF_MODULE_PROJECT_BUILD_TYPE_OPTION, null, prefContexts );
+		String buildType = Platform.getPreferencesService().getString(
+			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_JSF_MODULE_PROJECT_BUILD_TYPE_OPTION, null, prefContexts);
 
-        if( buildType != null )
-        {
-            final ILiferayProjectProvider provider = LiferayCore.getProvider( buildType );
+		if (buildType == null) {
+			return "maven-jsf";
+		}
 
-            if( provider != null )
-            {
-                return provider.getShortName();
-            }
-        }
+		ILiferayProjectProvider provider = LiferayCore.getProvider(buildType);
 
-        return defaultProjectBuildType;
-    }
+		if (provider != null) {
+			return provider.getShortName();
+		}
+
+		return defaultProjectBuildType;
+	}
+
 }

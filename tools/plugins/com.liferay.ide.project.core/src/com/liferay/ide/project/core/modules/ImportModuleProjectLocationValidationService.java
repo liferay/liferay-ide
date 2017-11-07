@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,12 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 
@@ -27,58 +27,48 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Andy Wu
  */
-public class ImportModuleProjectLocationValidationService extends ValidationService
-{
+public class ImportModuleProjectLocationValidationService extends ValidationService {
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+	@Override
+	protected Status compute() {
+		ImportLiferayModuleProjectOp op = _op();
 
-        Path path = op().getLocation().content();
+		Path path = op.getLocation().content();
 
-        if( path != null && !path.isEmpty() )
-        {
-            String location = path.toOSString();
+		if ((path == null) || path.isEmpty()) {
+			return Status.createOkStatus();
+		}
 
-            retval = StatusBridge.create( ProjectImportUtil.validatePath( location ) );
+		String location = path.toOSString();
 
-            if( !retval.ok() )
-            {
-                return retval;
-            }
+		Status retval = StatusBridge.create(ProjectImportUtil.validatePath(location));
 
-            if( LiferayWorkspaceUtil.isValidWorkspaceLocation( location ) )
-            {
-                retval = Status.createErrorStatus(
-                    "Can't import Liferay Workspace, please use Import Liferay Workspace Project wizard." );
+		if (!retval.ok()) {
+			return retval;
+		}
 
-                return retval;
-            }
+		if (LiferayWorkspaceUtil.isValidWorkspaceLocation(location)) {
+			return Status.createErrorStatus(
+				"Can't import Liferay Workspace, please use Import Liferay Workspace Project wizard.");
+		}
 
-            retval = StatusBridge.create( ImportLiferayModuleProjectOpMethods.getBuildType( location ) );
+		retval = StatusBridge.create(ImportLiferayModuleProjectOpMethods.getBuildType(location));
 
-            if( retval.severity() == Status.Severity.ERROR )
-            {
-                return retval;
-            }
+		if (retval.severity() == Status.Severity.ERROR) {
+			return retval;
+		}
 
-            String projectName = path.lastSegment();
+		String projectName = path.lastSegment();
 
-            if( CoreUtil.getProject( projectName ).exists() )
-            {
-                retval = Status.createErrorStatus( "A project with that name already exists." );
+		if (FileUtil.exists(CoreUtil.getProject(projectName))) {
+			return Status.createErrorStatus("A project with that name already exists.");
+		}
 
-                return retval;
-            }
-        }
+		return retval;
+	}
 
-        return retval;
-    }
-
-    private ImportLiferayModuleProjectOp op()
-    {
-        return context( ImportLiferayModuleProjectOp.class );
-    }
+	private ImportLiferayModuleProjectOp _op() {
+		return context(ImportLiferayModuleProjectOp.class);
+	}
 
 }

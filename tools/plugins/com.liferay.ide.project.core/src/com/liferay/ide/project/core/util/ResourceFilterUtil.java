@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.util;
 
@@ -31,94 +30,82 @@ import org.eclipse.core.runtime.jobs.Job;
 /**
  * @author Andy Wu
  */
-public class ResourceFilterUtil
-{
+public class ResourceFilterUtil {
 
-    public static void addResourceFilter( IFolder folder, String filteredSubFolderName, IProgressMonitor monitor )
-    {
-        String pre = "1.0-name-matches-true-false-";
+	public static void addResourceFilter(IFolder folder, String filteredSubFolderName, IProgressMonitor monitor) {
+		String pre = "1.0-name-matches-true-false-";
 
-        boolean shouldAdd = true;
+		boolean shouldAdd = true;
 
-        IResourceFilterDescription[] resourceFilterDescriptions = null;
+		IResourceFilterDescription[] resourceFilterDescriptions = null;
 
-        try
-        {
-            resourceFilterDescriptions = folder.getFilters();
-        }
-        catch( CoreException e )
-        {
-        }
+		try {
+			resourceFilterDescriptions = folder.getFilters();
+		}
+		catch (CoreException ce) {
+		}
 
-        if( resourceFilterDescriptions != null )
-        {
-            for( IResourceFilterDescription resourceFilterDescription : resourceFilterDescriptions )
-            {
-                String argument = resourceFilterDescription.getFileInfoMatcherDescription().getArguments().toString();
-                String projectName = argument.substring( argument.indexOf( pre ) + pre.length(), argument.length() );
+		if (resourceFilterDescriptions != null) {
+			for (IResourceFilterDescription resourceFilterDescription : resourceFilterDescriptions) {
+				FileInfoMatcherDescription description = resourceFilterDescription.getFileInfoMatcherDescription();
 
-                if( projectName.equals( filteredSubFolderName ) )
-                {
-                    shouldAdd = false;
-                    break;
-                }
-            }
-        }
+				String argument = description.getArguments().toString();
 
-        if( shouldAdd )
-        {
-            try
-            {
-                FileInfoMatcherDescription fmd =
-                    new FileInfoMatcherDescription( "org.eclipse.ui.ide.multiFilter", pre + filteredSubFolderName );
+				String projectName = argument.substring(argument.indexOf(pre) + pre.length(), argument.length());
 
-                folder.createFilter( 10, fmd, IResource.BACKGROUND_REFRESH, monitor );
-            }
-            catch( CoreException e )
-            {
-                ProjectCore.logError( "add " + filteredSubFolderName + " filter error", e );
-            }
-        }
-    }
+				if (projectName.equals(filteredSubFolderName)) {
+					shouldAdd = false;
+					break;
+				}
+			}
+		}
 
-    public static void deleteResourceFilter( IFolder parentFolder, String filteredSubFolderName )
-    {
-        try
-        {
-            IResourceFilterDescription[] resourceFilterDescriptions = parentFolder.getFilters();
+		if (shouldAdd) {
+			try {
+				FileInfoMatcherDescription fmd = new FileInfoMatcherDescription(
+					"org.eclipse.ui.ide.multiFilter", pre + filteredSubFolderName);
 
-            for( IResourceFilterDescription resourceFilterDescription : resourceFilterDescriptions )
-            {
-                Object argument = resourceFilterDescription.getFileInfoMatcherDescription().getArguments();
+				folder.createFilter(10, fmd, IResource.BACKGROUND_REFRESH, monitor);
+			}
+			catch (CoreException ce) {
+				ProjectCore.logError("add " + filteredSubFolderName + " filter error", ce);
+			}
+		}
+	}
 
-                if( argument.toString().contains( filteredSubFolderName ) )
-                {
-                    //need to make deleting in a job to avoid Resource Lock Exception
-                    Job job = new WorkspaceJob( "delete project resource filter" )
-                    {
+	public static void deleteResourceFilter(IFolder parentFolder, String filteredSubFolderName) {
+		try {
+			IResourceFilterDescription[] resourceFilterDescriptions = parentFolder.getFilters();
 
-                        @Override
-                        public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-                        {
-                            try
-                            {
-                                resourceFilterDescription.delete( IResource.BACKGROUND_REFRESH, monitor );
-                            }
-                            catch(Exception e)
-                            {
-                            }
+			for (IResourceFilterDescription resourceFilterDescription : resourceFilterDescriptions) {
+				Object argument = resourceFilterDescription.getFileInfoMatcherDescription().getArguments();
 
-                            return Status.OK_STATUS;
-                        }
-                    };
+				if (argument.toString().contains(filteredSubFolderName)) {
 
-                    job.schedule();
-                }
-            }
-        }
-        catch( CoreException e )
-        {
-            ProjectCore.logError( "delete filter error", e );
-        }
-    }
+					// need to make deleting in a job to avoid Resource Lock Exception
+
+					Job job = new WorkspaceJob("delete project resource filter") {
+
+						@Override
+						public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+							try {
+								resourceFilterDescription.delete(IResource.BACKGROUND_REFRESH, monitor);
+							}
+							catch (Exception e) {
+							}
+
+							return Status.OK_STATUS;
+						}
+
+					};
+
+					job.schedule();
+				}
+			}
+		}
+		catch (CoreException ce) {
+			ProjectCore.logError("delete filter error", ce);
+		}
+	}
+
 }

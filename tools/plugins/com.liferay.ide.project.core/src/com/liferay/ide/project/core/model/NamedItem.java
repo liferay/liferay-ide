@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model;
 
 import org.eclipse.sapphire.Element;
@@ -19,25 +19,23 @@ import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 
-
 /**
  * @author Simon Jiang
  */
-public interface NamedItem extends Element
-{
-    ElementType TYPE = new ElementType( NamedItem.class );
+public interface NamedItem extends Element {
 
-    // *** Name ***
+	public ElementType TYPE = new ElementType(NamedItem.class);
 
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+	public Value<String> getExtDesc();
 
-    Value<String> getName();
+	public Value<String> getName();
 
-    void setName( String value );
+	public void setExtDesc(String value);
 
-    ValueProperty PROP_EXT_DESC = new ValueProperty( TYPE, "ExtDesc" );
+	public void setName(String value);
 
-    Value<String> getExtDesc();
+	public ValueProperty PROP_EXT_DESC = new ValueProperty(TYPE, "ExtDesc");
 
-    void setExtDesc( String value );
+	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
+
 }

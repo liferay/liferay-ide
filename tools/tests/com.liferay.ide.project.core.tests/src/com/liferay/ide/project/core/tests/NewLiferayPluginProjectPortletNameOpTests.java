@@ -24,6 +24,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
+import org.eclipse.core.internal.resources.ResourceException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -36,6 +37,7 @@ import org.junit.Test;
 /**
  * @author Simon Jiang
  */
+@SuppressWarnings("restriction")
 public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
 {
 
@@ -59,20 +61,23 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
         return "com.liferay.portal.plugins.sdk-1.0.11-withdependencies/";
     }
 
-    @AfterClass
-    public static void removePluginsSDK() throws CoreException
-    {
-        IProject[] projects = CoreUtil.getAllProjects();
+	@AfterClass
+	public static void removePluginsSDK() throws CoreException {
+		IProject[] projects = CoreUtil.getAllProjects();
 
-        for( IProject project : projects )
-        {
-            if( project != null && project.isAccessible() && project.exists() )
-            {
-                project.close( new NullProgressMonitor() );
-                project.delete( true, true, new NullProgressMonitor() );
-            }
-        }
-    }
+		for (IProject project : projects) {
+			if (project != null && project.isAccessible() && project.exists()) {
+				try {
+					project.close(new NullProgressMonitor());
+					project.delete(true, true, new NullProgressMonitor());
+				}
+				catch (ResourceException re) {
+					project.close(new NullProgressMonitor());
+					project.delete(true, true, new NullProgressMonitor());
+				}
+			}
+		}
+	}
 
     protected IProject createNewJSFPortletProjectCustomPortletName(
         final String jsfSuite, String suffix, String customPortletName ) throws Exception

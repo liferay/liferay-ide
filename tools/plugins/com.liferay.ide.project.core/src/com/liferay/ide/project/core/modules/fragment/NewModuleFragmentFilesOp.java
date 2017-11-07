@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.modules.fragment;
 
 import org.eclipse.sapphire.ElementType;
@@ -27,32 +27,31 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 /**
  * @author Terry Jia
  */
-public interface NewModuleFragmentFilesOp extends NewModuleFragmentOp
-{
-    ElementType TYPE = new ElementType( NewModuleFragmentFilesOp.class );
+public interface NewModuleFragmentFilesOp extends NewModuleFragmentOp {
 
-    @Label( standard = "project name" )
-    @Required
-    @Service( impl = NewModuleFragmentProjectNameDefaultValueService.class )
-    @Service( impl = NewModuleFragmentProjectNamePossibleService.class )
-    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" );
+	public ElementType TYPE = new ElementType(NewModuleFragmentFilesOp.class);
 
-    Value<String> getProjectName();
-    void setProjectName( String value );
+	@DelegateImplementation(NewModuleFragmentFilesOpMethods.class)
+	@Override
+	public Status execute(ProgressMonitor monitor);
 
-    // *** HostOSGiBundle ***
+	public Value<String> getHostOsgiBundle();
 
-    @Label( standard = "Host OSGi Bundle" )
-    @Service( impl = HostOSGiBundleDefaultValueService.class )
-    @Required
-    ValueProperty PROP_HOST_OSGI_BUNDLE = new ValueProperty( TYPE, "HostOsgiBundle" );
+	public Value<String> getProjectName();
 
-    Value<String> getHostOsgiBundle();
-    void setHostOsgiBundle(String value);
+	public void setHostOsgiBundle(String value);
 
-    // *** Method: execute ***
+	public void setProjectName(String value);
 
-    @Override
-    @DelegateImplementation( NewModuleFragmentFilesOpMethods.class )
-    Status execute( ProgressMonitor monitor );
+	@Label(standard = "Host OSGi Bundle")
+	@Required
+	@Service(impl = HostOSGiBundleDefaultValueService.class)
+	public ValueProperty PROP_HOST_OSGI_BUNDLE = new ValueProperty(TYPE, "HostOsgiBundle");
+
+	@Label(standard = "project name")
+	@Required
+	@Service(impl = NewModuleFragmentProjectNameDefaultValueService.class)
+	@Service(impl = NewModuleFragmentProjectNamePossibleService.class)
+	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, "ProjectName");
+
 }

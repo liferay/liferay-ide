@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.model.internal;
 
@@ -23,31 +22,26 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.DefaultValueService;
 
-
 /**
  * @author Kuo Zhang
  */
-public class CreateNewPortletDefaultValueService extends DefaultValueService
-{
-    boolean createNewPortlet;
+public class CreateNewPortletDefaultValueService extends DefaultValueService {
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+	@Override
+	protected String compute() {
+		return Boolean.toString(_createNewPortlet);
+	}
 
-        final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
 
-        createNewPortlet =
-            Platform.getPreferencesService().getBoolean(
-                ProjectCore.PLUGIN_ID, ProjectCore.PREF_CREATE_NEW_PORLET, false, prefContexts );
+		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
-    }
+		_createNewPortlet = Platform.getPreferencesService().getBoolean(
+			ProjectCore.PLUGIN_ID, ProjectCore.PREF_CREATE_NEW_PORLET, false, prefContexts);
+	}
 
-    @Override
-    protected String compute()
-    {
-        return Boolean.toString( createNewPortlet );
-    }
+	private boolean _createNewPortlet;
 
 }

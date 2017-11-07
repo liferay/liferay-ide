@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.upgrade;
 
 import com.liferay.blade.api.Problem;
@@ -22,35 +22,30 @@ import java.util.Map;
 /**
  * @author Lovett Li
  */
-public class IgnoredProblemsContainer
-{
+public class IgnoredProblemsContainer {
 
-    private Map<String, Problem> problemMap;
+	public IgnoredProblemsContainer() {
+		_problemMap = new HashMap<>();
+	}
 
-    public IgnoredProblemsContainer()
-    {
-        problemMap = new HashMap<>();
-    }
+	public void add(Problem problem) {
+		String ticketNum = problem.getTicket();
 
-    public void add( Problem problem )
-    {
-        String ticketNum = problem.getTicket();
-        problemMap.put( ticketNum, problem );
-    }
+		_problemMap.put(ticketNum, problem);
+	}
 
-    public void remove( Problem problem )
-    {
-        problemMap.remove( problem.getTicket() );
-    }
+	public Map<String, Problem> getProblemMap() {
+		return _problemMap;
+	}
 
-    public Map<String, Problem> getProblemMap()
-    {
-        return problemMap;
-    }
+	public void remove(Problem problem) {
+		_problemMap.remove(problem.getTicket());
+	}
 
-    public void setProblemMap( Map<String, Problem> problemMap )
-    {
-        this.problemMap = problemMap;
-    }
+	public void setProblemMap(Map<String, Problem> problemMap) {
+		_problemMap = problemMap;
+	}
+
+	private Map<String, Problem> _problemMap;
 
 }

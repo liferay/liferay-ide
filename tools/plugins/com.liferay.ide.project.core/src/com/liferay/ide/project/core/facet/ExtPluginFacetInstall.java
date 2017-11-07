@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.facet;
 
@@ -45,190 +44,158 @@ import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
+
 import org.w3c.dom.Element;
 
 /**
  * @author Greg Amerson
  * @author Kamesh Sampath
  */
-@SuppressWarnings( "restriction" )
-public class ExtPluginFacetInstall extends PluginFacetInstall
-{
+@SuppressWarnings("restriction")
+public class ExtPluginFacetInstall extends PluginFacetInstall {
 
-    @Override
-    public void execute( IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor )
-        throws CoreException
-    {
-        super.execute( project, fv, config, monitor );
+	@Override
+	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor)
+		throws CoreException {
 
-        IDataModel model = (IDataModel) config;
-        IDataModel masterModel = (IDataModel) model.getProperty( FacetInstallDataModelProvider.MASTER_PROJECT_DM );
+		super.execute(project, fv, config, monitor);
 
-        if( masterModel != null && masterModel.getBooleanProperty( CREATE_PROJECT_OPERATION ) )
-        {
-            /*
-            // get the template zip for portlets and extract into the project
-            SDK sdk = getSDK();
+		IDataModel model = (IDataModel)config;
 
-            String extName = this.masterModel.getStringProperty( EXT_NAME );
+		IDataModel masterModel = (IDataModel)model.getProperty(FacetInstallDataModelProvider.MASTER_PROJECT_DM);
 
-            // FIX IDE-450
-            if( extName.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
-            {
-                extName = extName.substring( 0, extName.indexOf( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) );
-            }
-            // END FIX IDE-450
+		if ((masterModel != null) && masterModel.getBooleanProperty(CREATE_PROJECT_OPERATION)) {
 
-            String displayName = this.masterModel.getStringProperty( DISPLAY_NAME );
+			// IDE-1122 SDK creating project has been moved to Class NewPluginProjectWizard
 
-            Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
+			String extName = this.masterModel.getStringProperty(EXT_NAME);
 
-            IPath newExtPath = sdk.createNewExtProject( extName, displayName, appServerProperties );
+			IPath projectTempPath = (IPath)masterModel.getProperty(PROJECT_TEMP_PATH);
 
-            IPath tempInstallPath = newExtPath.append( extName + ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX );
+			processNewFiles(projectTempPath.append(extName + ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX));
 
-            processNewFiles( tempInstallPath );
-            // cleanup ext temp files
-            FileUtil.deleteDir( installPath.toFile(), true );
-            */
+			FileUtil.deleteDir(projectTempPath.toFile(), true);
 
-            // IDE-1122 SDK creating project has been moved to Class NewPluginProjectWizard
-            String extName = this.masterModel.getStringProperty( EXT_NAME );
+			// End IDE-1122
 
-            IPath projectTempPath = (IPath) masterModel.getProperty( PROJECT_TEMP_PATH );
+			try {
+				project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+			}
+			catch (Exception e) {
+				ProjectCore.logError(e);
+			}
 
-            processNewFiles( projectTempPath.append( extName + ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) );
+			IFolder webappRoot = this.project.getFolder(ISDKConstants.DEFAULT_DOCROOT_FOLDER);
 
-            FileUtil.deleteDir( projectTempPath.toFile(), true );
-            // End IDE-1122
+			deleteFolder(webappRoot.getFolder("WEB-INF/src"));
+			deleteFolder(webappRoot.getFolder("WEB-INF/classes"));
+		}
 
-            try
-            {
-                this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-            }
-            catch( Exception e )
-            {
-                ProjectCore.logError( e );
-            }
+		if (shouldSetupExtClasspath()) {
+			IJavaProject javaProject = JavaCore.create(project);
 
-            IFolder webappRoot = this.project.getFolder( ISDKConstants.DEFAULT_DOCROOT_FOLDER );
+			List<IClasspathEntry> existingRawClasspath = Arrays.asList(javaProject.getRawClasspath());
 
-            deleteFolder( webappRoot.getFolder( "WEB-INF/src" ) ); //$NON-NLS-1$
-            deleteFolder( webappRoot.getFolder( "WEB-INF/classes" ) ); //$NON-NLS-1$
-        }
+			List<IClasspathEntry> newRawClasspath = new ArrayList<>();
 
-        if( shouldSetupExtClasspath() )
-        {
-            IJavaProject javaProject = JavaCore.create( project );
+			// first lets add all new source folders
 
-            List<IClasspathEntry> existingRawClasspath = Arrays.asList( javaProject.getRawClasspath() );
+			for (int i = 0; i < IPluginFacetConstants.EXT_PLUGIN_SDK_SOURCE_FOLDERS.length; i++) {
+				IPath sourcePath = this.project.getFolder(
+					IPluginFacetConstants.EXT_PLUGIN_SDK_SOURCE_FOLDERS[i]).getFullPath();
 
-            List<IClasspathEntry> newRawClasspath = new ArrayList<IClasspathEntry>();
+				IPath outputPath = this.project.getFolder(
+					IPluginFacetConstants.EXT_PLUGIN_SDK_OUTPUT_FOLDERS[i]).getFullPath();
 
-            // first lets add all new source folders
-            for( int i = 0; i < IPluginFacetConstants.EXT_PLUGIN_SDK_SOURCE_FOLDERS.length; i++ )
-            {
-                IPath sourcePath =
-                    this.project.getFolder( IPluginFacetConstants.EXT_PLUGIN_SDK_SOURCE_FOLDERS[i] ).getFullPath();
+				IClasspathAttribute[] attributes =
+					{JavaCore.newClasspathAttribute("owner.project.facets", "liferay.ext")};
 
-                IPath outputPath =
-                    this.project.getFolder( IPluginFacetConstants.EXT_PLUGIN_SDK_OUTPUT_FOLDERS[i] ).getFullPath();
+				IClasspathEntry sourceEntry = JavaCore.newSourceEntry(
+					sourcePath, new IPath[0], new IPath[0], outputPath, attributes);
 
-                IClasspathAttribute[] attributes =
-                    new IClasspathAttribute[] { JavaCore.newClasspathAttribute( "owner.project.facets", "liferay.ext" ) }; //$NON-NLS-1$ //$NON-NLS-2$
+				newRawClasspath.add(sourceEntry);
+			}
 
-                IClasspathEntry sourceEntry =
-                    JavaCore.newSourceEntry( sourcePath, new IPath[0], new IPath[0], outputPath, attributes );
+			// next add all previous classpath entries except for source folders
 
-                newRawClasspath.add( sourceEntry );
-            }
+			for (IClasspathEntry entry : existingRawClasspath) {
+				if (entry.getEntryKind() != IClasspathEntry.CPE_SOURCE) {
+					newRawClasspath.add(entry);
+				}
+			}
 
-            // next add all previous classpath entries except for source folders
-            for( IClasspathEntry entry : existingRawClasspath )
-            {
-                if( entry.getEntryKind() != IClasspathEntry.CPE_SOURCE )
-                {
-                    newRawClasspath.add( entry );
-                }
-            }
+			javaProject.setRawClasspath(
+				newRawClasspath.toArray(new IClasspathEntry[0]),
+				this.project.getFolder(IPluginFacetConstants.EXT_PLUGIN_DEFAULT_OUTPUT_FOLDER).getFullPath(), null);
 
-            javaProject.setRawClasspath(
-                newRawClasspath.toArray( new IClasspathEntry[0] ),
-                this.project.getFolder( IPluginFacetConstants.EXT_PLUGIN_DEFAULT_OUTPUT_FOLDER ).getFullPath(), null );
+			ProjectUtil.fixExtProjectSrcFolderLinks(this.project);
+		}
 
-            ProjectUtil.fixExtProjectSrcFolderLinks( this.project );
-            // fixTilesDefExtFile();
-        }
+		// IDE-1239 need to make sure and delete docroot/WEB-INF/ext-web/docroot/WEB-INF/lib
 
-        //IDE-1239 need to make sure and delete docroot/WEB-INF/ext-web/docroot/WEB-INF/lib
-        removeUnneededFolders( this.project );
-    }
+		_removeUnneededFolders(this.project);
+	}
 
-    private void removeUnneededFolders( IProject project ) throws CoreException
-    {
-        final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
+	protected void deleteFolder(IFolder folder) throws CoreException {
+		if (FileUtil.exists(folder)) {
+			folder.delete(true, null);
+		}
+	}
 
-        if( webproject != null && webproject.getDefaultDocrootFolder() != null )
-        {
-            final IFolder webappRoot = webproject.getDefaultDocrootFolder();
-            deleteFolder( webappRoot.getFolder( "WEB-INF/lib" ) ); //$NON-NLS-1$
-        }
-    }
+	protected void fixTilesDefExtFile() {
+		IWebProject webproject = LiferayCore.create(IWebProject.class, project);
 
-    protected void deleteFolder( IFolder folder ) throws CoreException
-    {
-        if( folder != null && folder.exists() )
-        {
-            folder.delete( true, null );
-        }
-    }
+		IFolder webappRoot = webproject.getDefaultDocrootFolder();
 
-    protected void fixTilesDefExtFile()
-    {
-        final IWebProject webproject = LiferayCore.create( IWebProject.class, this.project );
-        final IFolder webappRoot = webproject.getDefaultDocrootFolder();
+		IFile tilesDefExtFile = webappRoot.getFile("WEB-INF/ext-web/docroot/WEB-INF/tiles-defs-ext.xml");
 
-        IFile tilesDefExtFile = webappRoot.getFile( "WEB-INF/ext-web/docroot/WEB-INF/tiles-defs-ext.xml" ); //$NON-NLS-1$
+		if (FileUtil.notExists(tilesDefExtFile)) {
+			return;
+		}
 
-        if( tilesDefExtFile.exists() )
-        {
-            try
-            {
-                IDOMModel domModel =
-                    (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( tilesDefExtFile );
+		try {
+			IDOMModel domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit(tilesDefExtFile);
 
-                domModel.aboutToChangeModel();
+			domModel.aboutToChangeModel();
 
-                IDOMDocument document = domModel.getDocument();
+			IDOMDocument document = domModel.getDocument();
 
-                Element root = document.getDocumentElement();
+			Element root = document.getDocumentElement();
 
-                Element def = document.createElement( "definition" ); //$NON-NLS-1$
+			Element def = document.createElement("definition");
 
-                def.setAttribute( "name", StringPool.EMPTY ); //$NON-NLS-1$
+			def.setAttribute("name", StringPool.EMPTY);
 
-                root.appendChild( def );
-                root.appendChild( document.createTextNode( "\n" ) ); //$NON-NLS-1$
+			root.appendChild(def);
 
-                new FormatProcessorXML().formatNode( def );
+			root.appendChild(document.createTextNode("\n"));
 
-                domModel.changedModel();
-                domModel.save();
-                domModel.releaseFromEdit();
+			new FormatProcessorXML().formatNode(def);
 
-                tilesDefExtFile.refreshLocal( IResource.DEPTH_INFINITE, null );
-            }
-            catch( Exception e )
-            {
-                ProjectCore.logError( e );
-            }
-        }
-    }
+			domModel.changedModel();
+			domModel.save();
+			domModel.releaseFromEdit();
 
-    @Override
-    protected String getDefaultOutputLocation()
-    {
-        return IPluginFacetConstants.EXT_PLUGIN_DEFAULT_OUTPUT_FOLDER;
-    }
+			tilesDefExtFile.refreshLocal(IResource.DEPTH_INFINITE, null);
+		}
+		catch (Exception e) {
+			ProjectCore.logError(e);
+		}
+	}
+
+	@Override
+	protected String getDefaultOutputLocation() {
+		return IPluginFacetConstants.EXT_PLUGIN_DEFAULT_OUTPUT_FOLDER;
+	}
+
+	private void _removeUnneededFolders(IProject project) throws CoreException {
+		IWebProject webproject = LiferayCore.create(IWebProject.class, project);
+
+		if ((webproject != null) && (webproject.getDefaultDocrootFolder() != null)) {
+			IFolder webappRoot = webproject.getDefaultDocrootFolder();
+
+			deleteFolder(webappRoot.getFolder("WEB-INF/lib"));
+		}
+	}
 
 }

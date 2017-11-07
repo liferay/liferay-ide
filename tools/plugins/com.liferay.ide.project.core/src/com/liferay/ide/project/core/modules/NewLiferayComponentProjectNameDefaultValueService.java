@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -26,24 +25,23 @@ import org.eclipse.sapphire.DefaultValueService;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class NewLiferayComponentProjectNameDefaultValueService extends DefaultValueService
-{
+public class NewLiferayComponentProjectNameDefaultValueService extends DefaultValueService {
 
-    @Override
-    protected String compute()
-    {
-        IProject[] allProjects = CoreUtil.getAllProjects();
+	@Override
+	protected String compute() {
+		IProject[] allProjects = CoreUtil.getAllProjects();
 
-        for( IProject project : allProjects )
-        {
-            final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+		for (IProject project : allProjects) {
+			IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
 
-            if( bundleProject != null && "jar".equals( bundleProject.getBundleShape() ) && !bundleProject.isFragmentBundle() )
-            {
-                return project.getName();
-            }
-        }
-        return null;
-    }
+			if ((bundleProject != null) && "jar".equals(bundleProject.getBundleShape()) &&
+				!bundleProject.isFragmentBundle()) {
+
+				return project.getName();
+			}
+		}
+
+		return null;
+	}
 
 }

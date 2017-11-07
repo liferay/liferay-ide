@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -25,72 +24,68 @@ import org.eclipse.wst.server.core.ServerCore;
 /**
  * @author Terry Jia
  */
-public class ServiceDefaultValuesService extends DefaultValueService
-{
+public class ServiceDefaultValuesService extends DefaultValueService {
 
-    @Override
-    protected String compute()
-    {
-        final NewLiferayModuleProjectOp op = op();
-        final String template = op.getProjectTemplateName().content( true );
-        IServer runningServer = null;
-        final IServer[] servers = ServerCore.getServers();
+	@Override
+	protected String compute() {
+		NewLiferayModuleProjectOp op = _op();
 
-        String retVal = "";
-        
-        if( template.equals( "service-wrapper" ) )
-        {
-            for( IServer server : servers )
-            {
-                if( server.getServerType().getId().equals( PortalServer.ID ) )
-                {
-                    runningServer = server;
-                    break;
-                }
-            }
+		String template = op.getProjectTemplateName().content(true);
 
-            try
-            {
-                ServiceContainer serviceWrapperList = new ServiceWrapperCommand( runningServer ).execute();
-                retVal = serviceWrapperList.getServiceList().get( 0 );
-            }
-            catch( Exception e )
-            {
-                ProjectCore.logError( "Get service wrapper list error.", e );
-            }
-        }
-        else if( template.equals( "service" ) )
-        {
-            for( IServer server : servers )
-            {
-                if( server.getServerState() == IServer.STATE_STARTED &&
-                    server.getServerType().getId().equals( PortalServer.ID ) )
-                {
-                    runningServer = server;
-                    break;
-                }
-            }
+		IServer runningServer = null;
 
-            try
-            {
-                ServiceCommand serviceCommand = new ServiceCommand( runningServer );
+		IServer[] servers = ServerCore.getServers();
 
-                ServiceContainer allServices = serviceCommand.execute();
+		String retVal = "";
 
-                retVal =  allServices.getServiceList().get( 0 );
-            }
-            catch( Exception e )
-            {
-                ProjectCore.logError( "Get services list error. ", e );
-            }
-        }
+		if (template.equals("service-wrapper")) {
+			for (IServer server : servers) {
+				String serverId = server.getServerType().getId();
 
-        return retVal;
-    }
+				if (serverId.equals(PortalServer.ID)) {
+					runningServer = server;
 
-    private NewLiferayModuleProjectOp op()
-    {
-        return context( NewLiferayModuleProjectOp.class );
-    }
+					break;
+				}
+			}
+
+			try {
+				ServiceContainer serviceWrapperList = new ServiceWrapperCommand(runningServer).execute();
+
+				retVal = serviceWrapperList.getServiceList().get(0);
+			}
+			catch (Exception e) {
+				ProjectCore.logError("Get service wrapper list error.", e);
+			}
+		}
+		else if (template.equals("service")) {
+			for (IServer server : servers) {
+				String serverId = server.getServerType().getId();
+
+				if ((server.getServerState() == IServer.STATE_STARTED) && serverId.equals(PortalServer.ID)) {
+					runningServer = server;
+
+					break;
+				}
+			}
+
+			try {
+				ServiceCommand serviceCommand = new ServiceCommand(runningServer);
+
+				ServiceContainer allServices = serviceCommand.execute();
+
+				retVal = allServices.getServiceList().get(0);
+			}
+			catch (Exception e) {
+				ProjectCore.logError("Get services list error. ", e);
+			}
+		}
+
+		return retVal;
+	}
+
+	private NewLiferayModuleProjectOp _op() {
+		return context(NewLiferayModuleProjectOp.class);
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -27,37 +26,32 @@ import org.eclipse.sapphire.PossibleValuesService;
 /**
  * @author Simon Jiang
  */
-@SuppressWarnings( "rawtypes" )
-public class NewLiferayComponentTemplatePossibleValuesService extends PossibleValuesService
-{
+@SuppressWarnings("rawtypes")
+public class NewLiferayComponentTemplatePossibleValuesService extends PossibleValuesService {
 
-    private List<String> possibleValues;
+	@Override
+	public boolean ordered() {
+		return true;
+	}
 
-    @Override
-    protected void initPossibleValuesService()
-    {
-        super.initPossibleValuesService();
+	@Override
+	protected void compute(Set<String> values) {
+		values.addAll(_possibleValues);
+	}
 
-        possibleValues = new ArrayList<String>();
+	@Override
+	protected void initPossibleValuesService() {
+		super.initPossibleValuesService();
 
-        for( final IComponentTemplate componentTemplate : ProjectCore.getComponentTemplates() )
-        {
-            possibleValues.add( componentTemplate.getShortName() );
-        }
+		_possibleValues = new ArrayList<>();
 
-        Collections.sort( possibleValues );
-    }
+		for (IComponentTemplate componentTemplate : ProjectCore.getComponentTemplates()) {
+			_possibleValues.add(componentTemplate.getShortName());
+		}
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        values.addAll( this.possibleValues );
-    }
+		Collections.sort(_possibleValues);
+	}
 
-    @Override
-    public boolean ordered()
-    {
-        return true;
-    }
+	private List<String> _possibleValues;
 
 }

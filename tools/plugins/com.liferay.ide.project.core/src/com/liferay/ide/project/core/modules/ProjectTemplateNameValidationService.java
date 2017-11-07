@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -25,40 +24,43 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Gregory Amerson
  */
-public class ProjectTemplateNameValidationService extends ValidationService
-{
+public class ProjectTemplateNameValidationService extends ValidationService {
 
-    private Status templateNameStatus = Status.createErrorStatus( "Downloading templates, please wait..." );
+	@Override
+	protected Status compute() {
+		return _templateNameStatus;
+	}
 
-    @Override
-    protected void initValidationService()
-    {
-        super.initValidationService();
+	@Override
+	protected void initValidationService() {
+		super.initValidationService();
 
-        ProjectTemplateNamePossibleValuesService pvs = context( NewLiferayModuleProjectOp.class ).property( NewLiferayModuleProjectOp.PROP_PROJECT_TEMPLATE_NAME ).service( ProjectTemplateNamePossibleValuesService.class );
+		NewLiferayModuleProjectOp op = context(NewLiferayModuleProjectOp.class);
 
-        Set<String> templateNames = pvs.values();
+		ProjectTemplateNamePossibleValuesService pvs =
+			op.property(NewLiferayModuleProjectOp.PROP_PROJECT_TEMPLATE_NAME).service(
+				ProjectTemplateNamePossibleValuesService.class);
 
-        if (templateNames.size() > 0) {
-            templateNameStatus = Status.createOkStatus();
-        }
-        else {
-            pvs.attach( new Listener(){
-                @Override
-                public void handle( Event event )
-                {
-                    templateNameStatus = Status.createOkStatus();
+		Set<String> templateNames = pvs.values();
 
-                    refresh();
-                }}
-            );
-        }
-    }
+		if (!templateNames.isEmpty()) {
+			_templateNameStatus = Status.createOkStatus();
+		}
+		else {
+			pvs.attach(
+				new Listener() {
 
-    @Override
-    protected Status compute()
-    {
-        return templateNameStatus;
-    }
+					@Override
+					public void handle(Event event) {
+						_templateNameStatus = Status.createOkStatus();
+
+						refresh();
+					}
+
+				});
+		}
+	}
+
+	private Status _templateNameStatus = Status.createErrorStatus("Downloading templates, please wait...");
 
 }

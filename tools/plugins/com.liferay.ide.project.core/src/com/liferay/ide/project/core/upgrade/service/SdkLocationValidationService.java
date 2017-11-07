@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.upgrade.service;
 
@@ -21,6 +20,7 @@ import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -30,49 +30,44 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Andy Wu
  */
-public class SdkLocationValidationService extends ValidationService
-{
+public class SdkLocationValidationService extends ValidationService {
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-        int countPossibleWorkspaceSDKProjects = SDKUtil.countPossibleWorkspaceSDKProjects();
+		int countPossibleWorkspaceSDKProjects = SDKUtil.countPossibleWorkspaceSDKProjects();
 
-        if( countPossibleWorkspaceSDKProjects > 1 )
-        {
-            return StatusBridge.create( ProjectCore.createErrorStatus( "This workspace has more than one SDK. " ) );
-        }
+		if (countPossibleWorkspaceSDKProjects > 1) {
+			return StatusBridge.create(ProjectCore.createErrorStatus("This workspace has more than one SDK. "));
+		}
 
-        final Path sdkLocation = op().getSdkLocation().content( true );
+		Value<Path> sdkLocationValue = _op().getSdkLocation();
 
-        if( sdkLocation == null || sdkLocation.isEmpty() )
-        {
-            return StatusBridge.create( ProjectCore.createErrorStatus( "This sdk location is empty " ) );
-        }
+		Path sdkLocation = sdkLocationValue.content(true);
 
-        SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkLocation ) );
+		if ((sdkLocation == null) || sdkLocation.isEmpty()) {
+			return StatusBridge.create(ProjectCore.createErrorStatus("This sdk location is empty "));
+		}
 
-        if( sdk != null )
-        {
-            IStatus status = sdk.validate( true );
+		SDK sdk = SDKUtil.createSDKFromLocation(PathBridge.create(sdkLocation));
 
-            if( !status.isOK() )
-            {
-                return StatusBridge.create( status );
-            }
-        }
-        else
-        {
-            return StatusBridge.create( ProjectCore.createErrorStatus( "This sdk location is not correct" ) );
-        }
+		if (sdk != null) {
+			IStatus status = sdk.validate(true);
 
-        return retval;
-    }
+			if (!status.isOK()) {
+				return StatusBridge.create(status);
+			}
+		}
+		else {
+			return StatusBridge.create(ProjectCore.createErrorStatus("This sdk location is not correct"));
+		}
 
-    private CodeUpgradeOp op()
-    {
-        return context( CodeUpgradeOp.class );
-    }
+		return retval;
+	}
+
+	private CodeUpgradeOp _op() {
+		return context(CodeUpgradeOp.class);
+	}
+
 }

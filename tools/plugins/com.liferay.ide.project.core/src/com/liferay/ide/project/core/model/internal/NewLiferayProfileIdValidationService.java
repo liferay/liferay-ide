@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.util.StringPool;
@@ -24,58 +24,52 @@ import java.util.Set;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 
-
 /**
  * @author Gregory Amerson
  */
-public class NewLiferayProfileIdValidationService extends ValidationService
-{
+public class NewLiferayProfileIdValidationService extends ValidationService {
 
-    private Set<String> existingValues;
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-    @Override
-    protected void initValidationService()
-    {
-        super.initValidationService();
+		NewLiferayProfile newLiferayProfile = _profile();
 
-        this.existingValues =
-            NewLiferayPluginProjectOpMethods.getPossibleProfileIds( context( NewLiferayPluginProjectOp.class ), false );
-    }
+		String profileId = newLiferayProfile.getId().content(true);
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+		if ((profileId == null) || profileId.isEmpty()) {
+			retval = Status.createErrorStatus("Profile id can not be empty.");
+		}
+		else if (profileId.contains(StringPool.SPACE)) {
+			retval = Status.createErrorStatus("No spaces are allowed in profile id.");
+		}
 
-        final NewLiferayProfile newLiferayProfile = profile();
-        final String profileId = newLiferayProfile.getId().content( true );
+		if (_existingValues.isEmpty()) {
+			return retval;
+		}
 
-        if( profileId == null || profileId.isEmpty() )
-        {
-            retval = Status.createErrorStatus( "Profile id can not be empty." );
-        }
-        else if( profileId.contains( StringPool.SPACE ) )
-        {
-            retval = Status.createErrorStatus( "No spaces are allowed in profile id." );
-        }
+		for (String val : _existingValues) {
+			if ((val != null) && val.equals(profileId)) {
+				return Status.createErrorStatus("Profile already exists.");
+			}
+		}
 
-        if( ! existingValues.isEmpty() )
-        {
-            for( String val : this.existingValues )
-            {
-                if( val != null && val.equals( profileId ) )
-                {
-                    retval = Status.createErrorStatus( "Profile already exists." );
-                    break;
-                }
-            }
-        }
+		return retval;
+	}
 
-        return retval;
-    }
+	@Override
+	protected void initValidationService() {
+		super.initValidationService();
 
-    private NewLiferayProfile profile()
-    {
-        return context( NewLiferayProfile.class );
-    }
+		NewLiferayPluginProjectOp op = context(NewLiferayPluginProjectOp.class);
+
+		_existingValues = NewLiferayPluginProjectOpMethods.getPossibleProfileIds(op, false);
+	}
+
+	private NewLiferayProfile _profile() {
+		return context(NewLiferayProfile.class);
+	}
+
+	private Set<String> _existingValues;
+
 }

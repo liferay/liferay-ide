@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,170 +10,170 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.util;
+
+import com.liferay.ide.project.core.ITargetPlatformConstant;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.ServiceContainer;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+
 import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
+
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 
-import com.liferay.ide.project.core.ITargetPlatformConstant;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.modules.ServiceContainer;
+import org.osgi.framework.Bundle;
 
 /**
  * @author Lovett Li
  */
-public class TargetPlatformUtil
-{
+public class TargetPlatformUtil {
 
-    public static ServiceContainer getServicesList() throws Exception
-    {
-        File tpIndexFile = checkCurrentTargetPlatform( "service" );
+	public static List<String> getAllTargetPlatfromVersions() throws IOException {
+		Bundle bundle = ProjectCore.getDefault().getBundle();
 
-        return getServicesNameList( tpIndexFile );
-    }
+		URL url = FileLocator.toFileURL(bundle.getEntry("OSGI-INF/target-platform"));
 
-    public static ServiceContainer getServiceBundle( String serviceName ) throws Exception
-    {
-        File tpIndexFile = checkCurrentTargetPlatform( "service" );
+		File targetPlatfolder = new File(url.getFile());
 
-        return getBundleAndVersion( tpIndexFile , serviceName);
-    }
+		List<String> tpVersionList = new ArrayList<>();
 
-    public static ServiceContainer getServiceWrapperList() throws Exception
-    {
-        File tpIndexFile = checkCurrentTargetPlatform( "servicewrapper" );
+		if (targetPlatfolder.isDirectory()) {
+			File[] tpVersionFolder = targetPlatfolder.listFiles();
 
-        return getServicesNameList( tpIndexFile );
-    }
+			if (tpVersionFolder != null) {
+				for (File tp : tpVersionFolder) {
+					String tpVersion = tp.getName().split("-", 2)[1].toUpperCase();
 
-    public static ServiceContainer getServiceWrapperBundle( String servicewrapperName ) throws Exception
-    {
-        File tpIndexFile = checkCurrentTargetPlatform( "servicewrapper" );
+					tpVersionList.add(tpVersion);
+				}
+			}
+		}
 
-        return getBundleAndVersion( tpIndexFile, servicewrapperName );
-    }
+		return tpVersionList;
+	}
 
-    private static File checkCurrentTargetPlatform( String type ) throws IOException
-    {
-        String currentVersion = Platform.getPreferencesService().getString(
-            ProjectCore.PLUGIN_ID, ITargetPlatformConstant.CURRENT_TARGETFORM_VERSION,
-            ITargetPlatformConstant.DEFAULT_TARGETFORM_VERSION, null );
+	public static ServiceContainer getServiceBundle(String serviceName) throws Exception {
+		File tpIndexFile = _checkCurrentTargetPlatform("service");
 
-        currentVersion = currentVersion.replace( "[", "" ).replace( "]", "" ).toLowerCase();
+		return _getBundleAndVersion(tpIndexFile, serviceName);
+	}
 
-        return useSpecificTargetPlatform( currentVersion, type );
-    }
+	public static ServiceContainer getServicesList() throws Exception {
+		File tpIndexFile = _checkCurrentTargetPlatform("service");
 
-    private static File useSpecificTargetPlatform( String currentVersion, String type ) throws IOException
-    {
-        URL url;
-        url = FileLocator.toFileURL(
-            ProjectCore.getDefault().getBundle().getEntry( "OSGI-INF/target-platform/liferay-" + currentVersion ) );
-        final File tpFolder = new File( url.getFile() );
+		return _getServicesNameList(tpIndexFile);
+	}
 
-        File[] listFiles = tpFolder.listFiles( new FilenameFilter()
-        {
+	public static ServiceContainer getServiceWrapperBundle(String servicewrapperName) throws Exception {
+		File tpIndexFile = _checkCurrentTargetPlatform("servicewrapper");
 
-            @Override
-            public boolean accept( File dir, String name )
-            {
-                if( type.equals( "service" ) && name.endsWith( "services.json" ) )
-                {
-                    return true;
-                }
-                if( type.equals( "servicewrapper" ) && name.endsWith( "servicewrappers.json" ) )
-                {
-                    return true;
-                }
-                return false;
-            }
-        } );
+		return _getBundleAndVersion(tpIndexFile, servicewrapperName);
+	}
 
-        return listFiles[0];
+	public static ServiceContainer getServiceWrapperList() throws Exception {
+		File tpIndexFile = _checkCurrentTargetPlatform("servicewrapper");
 
-    }
+		return _getServicesNameList(tpIndexFile);
+	}
 
-    public static List<String> getAllTargetPlatfromVersions() throws IOException
-    {
-        final URL url =
-            FileLocator.toFileURL( ProjectCore.getDefault().getBundle().getEntry( "OSGI-INF/target-platform" ) );
-        final File targetPlatfolder = new File( url.getFile() );
-        final List<String> tpVersionList = new ArrayList<>();
+	@SuppressWarnings("unchecked")
+	public static ServiceContainer getThirdPartyBundleList(String serviceName) throws Exception {
+		Bundle bundle = ProjectCore.getDefault().getBundle();
 
-        if( targetPlatfolder.isDirectory() )
-        {
-            File[] tpVersionFolder = targetPlatfolder.listFiles();
+		URL url = FileLocator.toFileURL(bundle.getEntry("OSGI-INF/liferay-thirdparty-bundles.json"));
 
-            if( tpVersionFolder != null )
-            {
-                for( File tp : tpVersionFolder )
-                {
-                    String tpVersion = tp.getName().split( "-" ,2)[1].toUpperCase();
-                    tpVersionList.add( tpVersion );
-                }
-            }
-        }
+		File tpFile = new File(url.getFile());
 
-        return tpVersionList;
-    }
+		ObjectMapper mapper = new ObjectMapper();
 
-    @SuppressWarnings( "unchecked" )
-    private static ServiceContainer getServicesNameList( File tpFile ) throws Exception
-    {
-        final ObjectMapper mapper = new ObjectMapper();
+		Map<String, List<String>> map = mapper.readValue(tpFile, Map.class);
 
-        Map<String, String[]> map = mapper.readValue( tpFile, Map.class );
-        String[] services = map.keySet().toArray( new String[0] );
+		List<String> serviceBundle = map.get(serviceName);
 
-        return new ServiceContainer( Arrays.asList( services ) );
-    }
+		if ((serviceBundle != null) && !serviceBundle.isEmpty()) {
+			return new ServiceContainer(serviceBundle.get(0), serviceBundle.get(1), serviceBundle.get(2));
+		}
 
-    @SuppressWarnings( "unchecked" )
-    private static ServiceContainer getBundleAndVersion( File tpFile, String _serviceName ) throws Exception
-    {
-        final ObjectMapper mapper = new ObjectMapper();
+		return null;
+	}
 
-        Map<String, List<String>> map = mapper.readValue( tpFile, Map.class );
-        List<String> serviceBundle = map.get( _serviceName );
+	private static File _checkCurrentTargetPlatform(String type) throws IOException {
+		String currentVersion = Platform.getPreferencesService().getString(
+			ProjectCore.PLUGIN_ID, ITargetPlatformConstant.CURRENT_TARGETFORM_VERSION,
+			ITargetPlatformConstant.DEFAULT_TARGETFORM_VERSION, null);
 
-        if( serviceBundle != null && serviceBundle.size() != 0 )
-        {
-            return new ServiceContainer( serviceBundle.get( 0 ), serviceBundle.get( 1 ) ,serviceBundle.get( 2 ));
-        }
+		currentVersion = currentVersion.replace("[", "");
+		currentVersion = currentVersion.replace("]", "");
+		currentVersion = currentVersion.toLowerCase();
 
-        return null;
-    }
+		return _useSpecificTargetPlatform(currentVersion, type);
+	}
 
-    @SuppressWarnings( "unchecked" )
-    public static ServiceContainer getThirdPartyBundleList( String _serviceName ) throws Exception
-    {
-        final URL url = FileLocator.toFileURL(
-            ProjectCore.getDefault().getBundle().getEntry(
-                "OSGI-INF/liferay-thirdparty-bundles.json" ) );
-        final File tpFile = new File( url.getFile() );
-        final ObjectMapper mapper = new ObjectMapper();
+	@SuppressWarnings("unchecked")
+	private static ServiceContainer _getBundleAndVersion(File tpFile, String serviceName) throws Exception {
+		ObjectMapper mapper = new ObjectMapper();
 
-        Map<String, List<String>> map = mapper.readValue( tpFile, Map.class );
-        List<String> serviceBundle = map.get( _serviceName );
+		Map<String, List<String>> map = mapper.readValue(tpFile, Map.class);
 
-        if( serviceBundle != null && serviceBundle.size() != 0 )
-        {
-            return new ServiceContainer( serviceBundle.get( 0 ), serviceBundle.get( 1 ), serviceBundle.get( 2 ) );
-        }
+		List<String> serviceBundle = map.get(serviceName);
 
-        return null;
-    }
+		if ((serviceBundle != null) && !serviceBundle.isEmpty()) {
+			return new ServiceContainer(serviceBundle.get(0), serviceBundle.get(1), serviceBundle.get(2));
+		}
+
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static ServiceContainer _getServicesNameList(File tpFile) throws Exception {
+		ObjectMapper mapper = new ObjectMapper();
+
+		Map<String, String[]> map = mapper.readValue(tpFile, Map.class);
+
+		String[] services = map.keySet().toArray(new String[0]);
+
+		return new ServiceContainer(Arrays.asList(services));
+	}
+
+	private static File _useSpecificTargetPlatform(String currentVersion, String type) throws IOException {
+		Bundle bundle = ProjectCore.getDefault().getBundle();
+
+		URL url = FileLocator.toFileURL(bundle.getEntry("OSGI-INF/target-platform/liferay-" + currentVersion));
+
+		File tpFolder = new File(url.getFile());
+
+		File[] listFiles = tpFolder.listFiles(
+			new FilenameFilter() {
+
+				@Override
+				public boolean accept(File dir, String name) {
+					if (type.equals("service") && name.endsWith("services.json")) {
+						return true;
+					}
+
+					if (type.equals("servicewrapper") && name.endsWith("servicewrappers.json")) {
+						return true;
+					}
+
+					return false;
+				}
+
+			});
+
+		return listFiles[0];
+	}
 
 }

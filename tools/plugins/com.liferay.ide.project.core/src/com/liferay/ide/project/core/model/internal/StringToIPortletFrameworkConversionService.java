@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.IPortletFramework;
@@ -20,21 +20,18 @@ import com.liferay.ide.project.core.ProjectCore;
 import org.eclipse.sapphire.ConversionException;
 import org.eclipse.sapphire.ConversionService;
 
-
 /**
  * @author Gregory Amerson
  */
-public class StringToIPortletFrameworkConversionService extends ConversionService<String, IPortletFramework>
-{
+public class StringToIPortletFrameworkConversionService extends ConversionService<String, IPortletFramework> {
 
-    public StringToIPortletFrameworkConversionService()
-    {
-        super( String.class, IPortletFramework.class );
-    }
+	public StringToIPortletFrameworkConversionService() {
+		super(String.class, IPortletFramework.class);
+	}
 
-    @Override
-    public IPortletFramework convert( String object ) throws ConversionException
-    {
-        return ProjectCore.getPortletFramework( object );
-    }
+	@Override
+	public IPortletFramework convert(String object) throws ConversionException {
+		return ProjectCore.getPortletFramework(object);
+	}
+
 }

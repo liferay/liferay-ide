@@ -1,114 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <extension xmlns="http://www.eclipse.org/sapphire/xmlns/extension">
-    <service>
-        <id>Sapphire.ValueLabelService.PortletFramework</id>
-        <context>Sapphire.Property.MetaModel</context>
-        <implementation>com.liferay.ide.project.core.model.internal.PortletFrameworkValueLabelService</implementation>
-        <condition>com.liferay.ide.project.core.model.internal.PortletFrameworkValueLabelService$Condition</condition>
-        <overrides>Sapphire.ValueLabelService.Default</overrides>
-    </service>
+	<service>
+		<id>Sapphire.ValueLabelService.PortletFramework</id>
+		<context>Sapphire.Property.MetaModel</context>
+		<implementation>com.liferay.ide.project.core.model.internal.PortletFrameworkValueLabelService</implementation>
+		<condition>com.liferay.ide.project.core.model.internal.PortletFrameworkValueLabelService$Condition</condition>
+		<overrides>Sapphire.ValueLabelService.Default</overrides>
+	</service>
 
-    <service>
-        <id>Sapphire.ValueLabelService.jsf.ProjectProvider</id>
-        <context>Sapphire.Property.MetaModel</context>
-        <implementation>com.liferay.ide.project.core.model.internal.ProjectProviderValueLabelService</implementation>
-        <condition>com.liferay.ide.project.core.model.internal.ProviderValueServiceConditon</condition>
-        <overrides>Sapphire.ValueLabelService.Default</overrides>
-    </service>
+	<service>
+		<id>Sapphire.ValueLabelService.jsf.ProjectProvider</id>
+		<context>Sapphire.Property.MetaModel</context>
+		<implementation>com.liferay.ide.project.core.model.internal.ProjectProviderValueLabelService</implementation>
+		<condition>com.liferay.ide.project.core.model.internal.ProviderValueServiceConditon</condition>
+		<overrides>Sapphire.ValueLabelService.Default</overrides>
+	</service>
 
-    <service>
-        <id>Sapphire.ValueLabelService.module.ProjectProvider</id>
-        <context>Sapphire.Property.MetaModel</context>
-        <implementation>com.liferay.ide.project.core.model.internal.ProjectProviderValueLabelService</implementation>
-        <condition>com.liferay.ide.project.core.model.internal.ProviderValueServiceConditon</condition>
-        <overrides>Sapphire.ValueLabelService.Default</overrides>
-    </service>
+	<service>
+		<id>Sapphire.ValueLabelService.module.ProjectProvider</id>
+		<context>Sapphire.Property.MetaModel</context>
+		<implementation>com.liferay.ide.project.core.model.internal.ProjectProviderValueLabelService</implementation>
+		<condition>com.liferay.ide.project.core.model.internal.ProviderValueServiceConditon</condition>
+		<overrides>Sapphire.ValueLabelService.Default</overrides>
+	</service>
 
-    <service>
-        <id>Sapphire.ValueLabelService.fragment.ProjectProvider</id>
-        <context>Sapphire.Property.MetaModel</context>
-        <implementation>com.liferay.ide.project.core.model.internal.ProjectProviderValueLabelService</implementation>
-        <condition>com.liferay.ide.project.core.model.internal.ProviderValueServiceConditon</condition>
-        <overrides>Sapphire.ValueLabelService.Default</overrides>
-    </service>
+	<service>
+		<id>Sapphire.ValueLabelService.fragment.ProjectProvider</id>
+		<context>Sapphire.Property.MetaModel</context>
+		<implementation>com.liferay.ide.project.core.model.internal.ProjectProviderValueLabelService</implementation>
+		<condition>com.liferay.ide.project.core.model.internal.ProviderValueServiceConditon</condition>
+		<overrides>Sapphire.ValueLabelService.Default</overrides>
+	</service>
 
-    <service>
-        <id>Sapphire.ValueLabelService.workspace.ProjectProvider</id>
-        <context>Sapphire.Property.MetaModel</context>
-        <implementation>com.liferay.ide.project.core.model.internal.ProjectProviderValueLabelService</implementation>
-        <condition>com.liferay.ide.project.core.model.internal.ProviderValueServiceConditon</condition>
-        <overrides>Sapphire.ValueLabelService.Default</overrides>
-    </service>
+	<service>
+		<id>Sapphire.ValueLabelService.workspace.ProjectProvider</id>
+		<context>Sapphire.Property.MetaModel</context>
+		<implementation>com.liferay.ide.project.core.model.internal.ProjectProviderValueLabelService</implementation>
+		<condition>com.liferay.ide.project.core.model.internal.ProviderValueServiceConditon</condition>
+		<overrides>Sapphire.ValueLabelService.Default</overrides>
+	</service>
 
-    <service>
-        <id>Sapphire.ValueLabelService.PluginProjectProvider</id>
-        <context>Sapphire.Property.MetaModel</context>
-        <implementation>com.liferay.ide.project.core.model.internal.ProjectProviderValueLabelService</implementation>
-        <condition>com.liferay.ide.project.core.model.internal.PluginProjectProviderValueServiceConditon</condition>
-        <overrides>Sapphire.ValueLabelService.Default</overrides>
-    </service>
+	<service>
+		<id>Sapphire.ValueLabelService.PluginProjectProvider</id>
+		<context>Sapphire.Property.MetaModel</context>
+		<implementation>com.liferay.ide.project.core.model.internal.ProjectProviderValueLabelService</implementation>
+		<condition>com.liferay.ide.project.core.model.internal.PluginProjectProviderValueServiceConditon</condition>
+		<overrides>Sapphire.ValueLabelService.Default</overrides>
+	</service>
 
-    <service>
-        <id>Sapphire.ValueImageService.PortletFramework</id>
-        <overrides>Sapphire.ValueImageService.Default</overrides>
-        <context>Sapphire.Property.MetaModel</context>
-        <implementation>com.liferay.ide.project.core.model.internal.PortletFrameworkValueImageService</implementation>
-        <condition>com.liferay.ide.project.core.model.internal.PortletFrameworkValueImageService$Condition</condition>
-    </service>
-    <service>
-        <context>Sapphire</context>
-        <description>ConversionService implementation for IPortletFramework to String conversions.</description>
-        <id>Sapphire.ConversionService.IPortletFrameworkToString</id>
-        <implementation>com.liferay.ide.project.core.model.internal.IPortletFrameworkToStringConversionService</implementation>
-        <overrides>Sapphire.ConversionService.ObjectToString</overrides>
-    </service>
-    <service>
-        <id>Sapphire.ConversionService.StringToIPortletFramework</id>
-        <implementation>com.liferay.ide.project.core.model.internal.StringToIPortletFrameworkConversionService</implementation>
-        <context>Sapphire</context>
-        <description>ConversionService implementation for String to IPortletFramework conversions.</description>
-    </service>
-    <service>
-        <context>Sapphire</context>
-        <description>ConversionService implementation for ILiferyProjectProvider to String conversions.</description>
-        <id>Sapphire.ConversionService.ILiferyProjectProviderToString</id>
-        <implementation>com.liferay.ide.project.core.model.internal.ILiferayProjectProviderToStringConversionService</implementation>
-        <overrides>Sapphire.ConversionService.ObjectToString</overrides>
-    </service>
-    <service>
-        <id>Sapphire.ConversionService.StringToILiferyProjectProvider</id>
-        <implementation>com.liferay.ide.project.core.model.internal.StringToILiferayProjectProviderConversionService</implementation>
-        <context>Sapphire</context>
-        <description>ConversionService implementation for String to ILiferyProjectProvider conversions.</description>
-    </service>
+	<service>
+		<id>Sapphire.ValueImageService.PortletFramework</id>
+		<overrides>Sapphire.ValueImageService.Default</overrides>
+		<context>Sapphire.Property.MetaModel</context>
+		<implementation>com.liferay.ide.project.core.model.internal.PortletFrameworkValueImageService</implementation>
+		<condition>com.liferay.ide.project.core.model.internal.PortletFrameworkValueImageService$Condition</condition>
+	</service>
+	<service>
+		<context>Sapphire</context>
+		<description>ConversionService implementation for IPortletFramework to String conversions.</description>
+		<id>Sapphire.ConversionService.IPortletFrameworkToString</id>
+		<implementation>com.liferay.ide.project.core.model.internal.IPortletFrameworkToStringConversionService</implementation>
+		<overrides>Sapphire.ConversionService.ObjectToString</overrides>
+	</service>
+	<service>
+		<id>Sapphire.ConversionService.StringToIPortletFramework</id>
+		<implementation>com.liferay.ide.project.core.model.internal.StringToIPortletFrameworkConversionService</implementation>
+		<context>Sapphire</context>
+		<description>ConversionService implementation for String to IPortletFramework conversions.</description>
+	</service>
+	<service>
+		<context>Sapphire</context>
+		<description>ConversionService implementation for ILiferyProjectProvider to String conversions.</description>
+		<id>Sapphire.ConversionService.ILiferyProjectProviderToString</id>
+		<implementation>com.liferay.ide.project.core.model.internal.ILiferayProjectProviderToStringConversionService</implementation>
+		<overrides>Sapphire.ConversionService.ObjectToString</overrides>
+	</service>
+	<service>
+		<id>Sapphire.ConversionService.StringToILiferyProjectProvider</id>
+		<implementation>com.liferay.ide.project.core.model.internal.StringToILiferayProjectProviderConversionService</implementation>
+		<context>Sapphire</context>
+		<description>ConversionService implementation for String to ILiferyProjectProvider conversions.</description>
+	</service>
 
-    <service>
-        <id>Sapphire.ValueLabelService.ComponentTemplate</id>
-        <context>Sapphire.Property.MetaModel</context>
-        <implementation>com.liferay.ide.project.core.modules.LiferayComponentTemplateValueLabelService</implementation>
-        <condition>com.liferay.ide.project.core.modules.LiferayComponentTemplateValueLabelService$Condition</condition>
-        <overrides>Sapphire.ValueLabelService.Default</overrides>
-    </service>
-    <service>
-        <context>Sapphire</context>
-        <description>ConversionService implementation for IComponentTemplate to String conversions.</description>
-        <id>Sapphire.ConversionService.IComponentTemplateToString</id>
-        <implementation>com.liferay.ide.project.core.modules.ILiferayComponentTemplateToStringConversionService</implementation>
-        <overrides>Sapphire.ConversionService.ObjectToString</overrides>
-    </service>
-    <service>
-        <id>Sapphire.ConversionService.StringToIComponentTemplate</id>
-        <implementation>com.liferay.ide.project.core.modules.StringToILiferayComponentTemplateConversionService</implementation>
-        <context>Sapphire</context>
-        <description>ConversionService implementation for String to IComponentTemplate conversions.</description>
-    </service>
+	<service>
+		<id>Sapphire.ValueLabelService.ComponentTemplate</id>
+		<context>Sapphire.Property.MetaModel</context>
+		<implementation>com.liferay.ide.project.core.modules.LiferayComponentTemplateValueLabelService</implementation>
+		<condition>com.liferay.ide.project.core.modules.LiferayComponentTemplateValueLabelService$Condition</condition>
+		<overrides>Sapphire.ValueLabelService.Default</overrides>
+	</service>
+	<service>
+		<context>Sapphire</context>
+		<description>ConversionService implementation for IComponentTemplate to String conversions.</description>
+		<id>Sapphire.ConversionService.IComponentTemplateToString</id>
+		<implementation>com.liferay.ide.project.core.modules.ILiferayComponentTemplateToStringConversionService</implementation>
+		<overrides>Sapphire.ConversionService.ObjectToString</overrides>
+	</service>
+	<service>
+		<id>Sapphire.ConversionService.StringToIComponentTemplate</id>
+		<implementation>com.liferay.ide.project.core.modules.StringToILiferayComponentTemplateConversionService</implementation>
+		<context>Sapphire</context>
+		<description>ConversionService implementation for String to IComponentTemplate conversions.</description>
+	</service>
 
-    <service>
-        <id>Sapphire.ValueLabelService.jsf.templateNmae</id>
-        <context>Sapphire.Property.MetaModel</context>
-        <implementation>com.liferay.ide.project.core.modules.JsfFrameworkValueLabelService</implementation>
-        <condition>com.liferay.ide.project.core.modules.JsfFrameworkValueLabelService$Condition</condition>
-        <overrides>Sapphire.ValueLabelService.Default</overrides>
-    </service>
+	<service>
+		<id>Sapphire.ValueLabelService.jsf.templateNmae</id>
+		<context>Sapphire.Property.MetaModel</context>
+		<implementation>com.liferay.ide.project.core.modules.JsfFrameworkValueLabelService</implementation>
+		<condition>com.liferay.ide.project.core.modules.JsfFrameworkValueLabelService$Condition</condition>
+		<overrides>Sapphire.ValueLabelService.Default</overrides>
+	</service>
 </extension>

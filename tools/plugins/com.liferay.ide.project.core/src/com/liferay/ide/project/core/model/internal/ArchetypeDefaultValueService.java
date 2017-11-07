@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.IPortletFramework;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 
@@ -22,72 +23,73 @@ import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 
-
 /**
  * @author Simon Jiang
  */
-public class ArchetypeDefaultValueService extends DefaultValueService
-{
+public class ArchetypeDefaultValueService extends DefaultValueService {
 
-    private FilteredListener<PropertyContentEvent> listener;
+	@Override
+	public void dispose() {
+		NewLiferayPluginProjectOp op = _op();
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( final PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		op.property(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK).detach(_listener);
+		op.property(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK_ADVANCED).detach(_listener);
 
-        op().property( NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK ).attach( this.listener );
-        op().property( NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK_ADVANCED ).attach( this.listener );
-    }
+		super.dispose();
+	}
 
-    @Override
-    protected String compute()
-    {
-        final PluginType pluginType = op().getPluginType().content();
+	@Override
+	protected String compute() {
+		NewLiferayPluginProjectOp op = _op();
 
-        String frameworkType = null;
+		PluginType pluginType = op.getPluginType().content();
 
-        if( pluginType.equals( PluginType.portlet ) )
-        {
-            final IPortletFramework portletFramework = op().getPortletFramework().content();
+		String frameworkType = null;
 
-            if( portletFramework.isRequiresAdvanced() )
-            {
-                frameworkType = op().getPortletFrameworkAdvanced().content().getShortName();
-            }
-            else
-            {
-                frameworkType = portletFramework.getShortName();
-            }
-        }
-        else
-        {
-            frameworkType = pluginType.name();
-        }
+		if (pluginType.equals(PluginType.portlet)) {
+			IPortletFramework portletFramework = op.getPortletFramework().content();
 
-        frameworkType = frameworkType.replaceAll( "_", "-" );
+			if (portletFramework.isRequiresAdvanced()) {
+				IPortletFramework framework = op.getPortletFrameworkAdvanced().content();
 
-        return op().getProjectProvider().content().getData( "archetypeGAV", String.class, frameworkType ).get( 0 );
-    }
+				frameworkType = framework.getShortName();
+			}
+			else {
+				frameworkType = portletFramework.getShortName();
+			}
+		}
+		else {
+			frameworkType = pluginType.name();
+		}
 
+		frameworkType = frameworkType.replaceAll("_", "-");
 
-    @Override
-    public void dispose()
-    {
-        op().property( NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK ).detach( this.listener );
-        op().property( NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK_ADVANCED ).detach( this.listener );
-        super.dispose();
-    }
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = op.getProjectProvider().content();
 
-    private NewLiferayPluginProjectOp op()
-    {
-        return context( NewLiferayPluginProjectOp.class );
-    }
+		return provider.getData("archetypeGAV", String.class, frameworkType).get(0);
+	}
+
+	@Override
+	protected void initDefaultValueService() {
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		NewLiferayPluginProjectOp op = _op();
+
+		op.property(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK).attach(_listener);
+		op.property(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK_ADVANCED).attach(_listener);
+	}
+
+	private NewLiferayPluginProjectOp _op() {
+		return context(NewLiferayPluginProjectOp.class);
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+
 }

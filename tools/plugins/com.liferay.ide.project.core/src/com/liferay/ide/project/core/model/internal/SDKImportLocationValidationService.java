@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.model.internal;
 
@@ -26,28 +25,27 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
-public class SDKImportLocationValidationService extends ValidationService
-{
+public class SDKImportLocationValidationService extends ValidationService {
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-        final Path currentProjectLocation = op().getSdkLocation().content( true );
+		SDKProjectsImportOp op = _op();
 
-        if( currentProjectLocation != null && !currentProjectLocation.isEmpty() )
-        {
-            final String currentPath = currentProjectLocation.toOSString();
+		Path currentProjectLocation = op.getSdkLocation().content(true);
 
-            retval = StatusBridge.create( ProjectImportUtil.validateSDKPath( currentPath ) );
-        }
+		if ((currentProjectLocation != null) && !currentProjectLocation.isEmpty()) {
+			String currentPath = currentProjectLocation.toOSString();
 
-        return retval;
-    }
+			retval = StatusBridge.create(ProjectImportUtil.validateSDKPath(currentPath));
+		}
 
-    private SDKProjectsImportOp op()
-    {
-        return context( SDKProjectsImportOp.class );
-    }
+		return retval;
+	}
+
+	private SDKProjectsImportOp _op() {
+		return context(SDKProjectsImportOp.class);
+	}
+
 }

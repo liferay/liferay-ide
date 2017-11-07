@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core;
 
@@ -22,45 +21,38 @@ import org.eclipse.osgi.util.NLS;
 /**
  * @author Greg Amerson
  */
-public class ExtClasspathContainer extends PluginClasspathContainer 
-{
-	public static final String SEGMENT_PATH = "ext"; //$NON-NLS-1$
+public class ExtClasspathContainer extends PluginClasspathContainer {
 
-	protected static final String[] portalJars =
-	{
-		"commons-logging.jar", //$NON-NLS-1$
-		"log4j.jar",  //$NON-NLS-1$
-		"util-bridges.jar",  //$NON-NLS-1$
-		"util-java.jar",  //$NON-NLS-1$
-		"util-taglib.jar", //$NON-NLS-1$
-		"portal-impl.jar",  //$NON-NLS-1$
-		"struts.jar",  //$NON-NLS-1$
-		"struts-el.jar" //$NON-NLS-1$
-	};
-    
-	public ExtClasspathContainer( IPath containerPath, IJavaProject project, IPath portalDir, String javadoc, IPath sourceURL )
-	{
-		super( containerPath, project, portalDir, javadoc, sourceURL );
+	public static final String SEGMENT_PATH = "ext";
+
+	public ExtClasspathContainer(
+		IPath containerPath, IJavaProject project, IPath portalDir, String javadoc, IPath sourceURL) {
+
+		super(containerPath, project, portalDir, javadoc, sourceURL);
 	}
 
-    public String getDescription()
-    {
-        return Msgs.liferayExtPluginAPI;
-    }
+	public String getDescription() {
+		return Msgs.liferayExtPluginAPI;
+	}
 
-    @Override
-    protected String[] getPortalJars()
-    {
-        return portalJars;
-    }
+	@Override
+	protected String[] getPortalJars() {
+		return portalJars;
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String liferayExtPluginAPI;
+	protected static final String[] portalJars = {
+		"commons-logging.jar", "log4j.jar", "util-bridges.jar", "util-java.jar", "util-taglib.jar", "portal-impl.jar",
+		"struts.jar", "struts-el.jar"
+	};
 
-        static
-        {
-            initializeMessages( ExtClasspathContainer.class.getName(), Msgs.class );
-        }
-    }
+	private static class Msgs extends NLS {
+
+		public static String liferayExtPluginAPI;
+
+		static {
+			initializeMessages(ExtClasspathContainer.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

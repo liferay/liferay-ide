@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,12 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.workspace;
 
 import org.apache.xerces.util.URI;
+
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 
@@ -28,7 +28,9 @@ public class BundleUrlValidationService extends ValidationService {
 	protected Status compute() {
 		Status retval = Status.createOkStatus();
 
-		String bundleUrl = _op().getBundleUrl().content();
+		BaseLiferayWorkspaceOp op = _op();
+
+		String bundleUrl = op.getBundleUrl().content();
 
 		try {
 			new URI(bundleUrl);

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,12 +10,13 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
 
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -23,21 +24,21 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Andy Wu
  */
-public class WorkspaceUseDefaultLocationListener extends FilteredListener<PropertyContentEvent>
-{
-    @Override
-    protected void handleTypedEvent( PropertyContentEvent event )
-    {
-        final NewLiferayWorkspaceOp op = op( event );
+public class WorkspaceUseDefaultLocationListener extends FilteredListener<PropertyContentEvent> {
 
-        if( op.getUseDefaultLocation().content( true ) )
-        {
-            op.setLocation( PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() ) );
-        }
-    }
+	@Override
+	protected void handleTypedEvent(PropertyContentEvent event) {
+		NewLiferayWorkspaceOp op = op(event);
 
-    protected NewLiferayWorkspaceOp op( PropertyContentEvent event )
-    {
-        return event.property().element().nearest( NewLiferayWorkspaceOp.class );
-    }
+		if (op.getUseDefaultLocation().content(true)) {
+			op.setLocation(PathBridge.create(CoreUtil.getWorkspaceRoot().getLocation()));
+		}
+	}
+
+	protected NewLiferayWorkspaceOp op(PropertyContentEvent event) {
+		Element element = event.property().element();
+
+		return element.nearest(NewLiferayWorkspaceOp.class);
+	}
+
 }

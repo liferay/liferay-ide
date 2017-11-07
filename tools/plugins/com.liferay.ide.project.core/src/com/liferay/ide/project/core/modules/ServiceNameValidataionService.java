@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -25,60 +25,60 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
+public class ServiceNameValidataionService extends ValidationService {
 
-public class ServiceNameValidataionService extends ValidationService
-{
-    private Listener listener;
+	@Override
+	public void dispose() {
+		NewLiferayModuleProjectOp op = _op();
 
-    @Override
-    protected Status compute()
-    {
-        Status retVal = Status.createOkStatus();
+		if (_listener != null) {
+			op.getProjectTemplateName().detach(_listener);
 
-        final String projectTemplate = op().getProjectTemplateName().content();
+			_listener = null;
+		}
 
-        if( "service".equals( projectTemplate ) || "service-wrapper".equals( projectTemplate.equals( "service-wrapper" ) ) )
-        {
-            final String serviceName = op().getServiceName().content( true );
+		super.dispose();
+	}
 
-            if ( CoreUtil.isNullOrEmpty( serviceName ))
-            {
-                retVal = Status.createErrorStatus( "The service name must be specified." );
-            }
-        }
+	@Override
+	protected Status compute() {
+		Status retVal = Status.createOkStatus();
 
-        return retVal;
-    }
+		NewLiferayModuleProjectOp op = _op();
 
-    @Override
-    public void dispose()
-    {
-        if( this.listener != null )
-        {
-            op().getProjectTemplateName().detach( this.listener );
+		String projectTemplate = op.getProjectTemplateName().content();
 
-            this.listener = null;
-        }
-        super.dispose();
-    }
+		if ("service".equals(projectTemplate) || "service-wrapper".equals(projectTemplate)) {
+			String serviceName = op.getServiceName().content(true);
 
-    @Override
-    protected void initValidationService()
-    {
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( final PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+			if (CoreUtil.isNullOrEmpty(serviceName)) {
+				retVal = Status.createErrorStatus("The service name must be specified.");
+			}
+		}
 
-        op().getProjectTemplateName().attach( this.listener );
-    }
+		return retVal;
+	}
 
-    private NewLiferayModuleProjectOp op()
-    {
-        return context( NewLiferayModuleProjectOp.class );
-    }
+	@Override
+	protected void initValidationService() {
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		NewLiferayModuleProjectOp op = _op();
+
+		op.getProjectTemplateName().attach(_listener);
+	}
+
+	private NewLiferayModuleProjectOp _op() {
+		return context(NewLiferayModuleProjectOp.class);
+	}
+
+	private Listener _listener;
+
 }

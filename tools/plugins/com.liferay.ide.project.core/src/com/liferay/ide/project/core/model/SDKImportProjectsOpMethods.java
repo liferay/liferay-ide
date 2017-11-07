@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model;
 
 import com.liferay.ide.core.util.MultiStatusBuilder;
@@ -32,61 +32,55 @@ import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 
-
 /**
  * @author Simon Jiang
  */
-public class SDKImportProjectsOpMethods
-{
-    public static final Status execute( final SDKProjectsImportOp op, final ProgressMonitor pm )
-    {
-        final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
+public class SDKImportProjectsOpMethods {
 
-        monitor.beginTask( "Importing Liferay plugin projects...", 100 );
+	public static final Status execute(SDKProjectsImportOp op, ProgressMonitor pm) {
+		IProgressMonitor monitor = ProgressMonitorBridge.create(pm);
 
-        Status retval = Status.createOkStatus();
+		monitor.beginTask("Importing Liferay plugin projects...", 100);
 
-        final Path projectLocation = op.getSdkLocation().content();
+		Status retval = Status.createOkStatus();
 
-        if( projectLocation == null || projectLocation.isEmpty() )
-        {
-            return Status.createErrorStatus( "Project cannot be empty" );
-        }
+		Path projectLocation = op.getSdkLocation().content();
 
-        final Job job = new WorkspaceJob( "Importing Liferay projects..." )
-        {
-            @Override
-            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-            {
-                final MultiStatusBuilder statusBuilder = new MultiStatusBuilder( ProjectCore.PLUGIN_ID );
-                final ElementList<ProjectNamedItem>  projectItems = op.getSelectedProjects();
+		if ((projectLocation == null) || projectLocation.isEmpty()) {
+			return Status.createErrorStatus("Project cannot be empty");
+		}
 
-                for( NamedItem projectNamedItem : projectItems )
-                {
-                    try
-                    {
-                        if ( projectNamedItem instanceof ProjectNamedItem)
-                        {
-                            final String projectPath = ( ( ProjectNamedItem )projectNamedItem ).getLocation().content();
-                            final String projectLocation = new Path(projectPath).toPortableString();
+		Job job = new WorkspaceJob("Importing Liferay projects...") {
 
-                            ProjectImportUtil.importProject(
-                                PathBridge.create( new Path( projectLocation ) ), new NullProgressMonitor(), null );
-                        }
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+				MultiStatusBuilder statusBuilder = new MultiStatusBuilder(ProjectCore.PLUGIN_ID);
+				ElementList<ProjectNamedItem> projectItems = op.getSelectedProjects();
 
-                    }
-                    catch(Exception e)
-                    {
-                        statusBuilder.add( StatusBridge.create( Status.createErrorStatus( e.getMessage() ) ) );
-                    }
-                }
+				for (NamedItem projectNamedItem : projectItems) {
+					try {
+						if (projectNamedItem instanceof ProjectNamedItem) {
+							String projectPath = ((ProjectNamedItem)projectNamedItem).getLocation().content();
 
-                return statusBuilder.retval();
-            }
-        };
+							String projectLocation = new Path(projectPath).toPortableString();
 
-        job.schedule();
+							ProjectImportUtil.importProject(
+								PathBridge.create(new Path(projectLocation)), new NullProgressMonitor(), null);
+						}
+					}
+					catch (Exception e) {
+						statusBuilder.add(StatusBridge.create(Status.createErrorStatus(e.getMessage())));
+					}
+				}
 
-        return retval;
-    }
+				return statusBuilder.retval();
+			}
+
+		};
+
+		job.schedule();
+
+		return retval;
+	}
+
 }

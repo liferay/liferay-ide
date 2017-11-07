@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,12 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;
@@ -27,51 +27,51 @@ import org.eclipse.sapphire.UniversalConversionService;
 /**
  * @author Gregory Amerson
  */
-public class IJavaProjectConversionService extends UniversalConversionService
-{
+public class IJavaProjectConversionService extends UniversalConversionService {
 
-    @Override
-    public <T> T convert( Object object, Class<T> type )
-    {
-        if( object instanceof NewLiferayComponentOp && IJavaProject.class.equals( type ) )
-        {
-            final NewLiferayComponentOp op = (NewLiferayComponentOp) object;
+	@Override
+	public <T> T convert(Object object, Class<T> type) {
+		if (!(object instanceof NewLiferayComponentOp) || !IJavaProject.class.equals(type)) {
+			return null;
+		}
 
-            final String projectName = op.getProjectName().content( true );
+		NewLiferayComponentOp op = (NewLiferayComponentOp) object;
 
-            if( projectName != null )
-            {
-                final IProject project = CoreUtil.getProject( projectName );
+		String projectName = op.getProjectName().content(true);
 
-                if( project != null && project.exists() )
-                {
-                    final IJavaProject javaProject = JavaCore.create( project );
+		if (projectName == null) {
+			return null;
+		}
 
-                    if( javaProject != null )
-                    {
-                        return type.cast( javaProject );
-                    }
-                }
-            }
-        }
+		IProject project = CoreUtil.getProject(projectName);
 
-        return null;
-    }
+		if (FileUtil.notExists(project)) {
+			return null;
+		}
 
-    @Override
-    protected void init()
-    {
-        super.init();
+		IJavaProject javaProject = JavaCore.create(project);
 
-        FilteredListener<PropertyContentEvent> listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                broadcast();
-            }
-        };
+		if (javaProject != null) {
+			return type.cast(javaProject);
+		}
 
-        context( NewLiferayComponentOp.class ).attach( listener, NewLiferayComponentOp.PROP_PROJECT_NAME.name() );
-    }
+		return null;
+	}
+
+	@Override
+	protected void init() {
+		super.init();
+
+		FilteredListener<PropertyContentEvent> listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				broadcast();
+			}
+
+		};
+
+		context(NewLiferayComponentOp.class).attach(listener, NewLiferayComponentOp.PROP_PROJECT_NAME.name());
+	}
+
 }

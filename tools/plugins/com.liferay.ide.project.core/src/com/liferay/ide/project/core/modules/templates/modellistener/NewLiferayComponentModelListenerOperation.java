@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.templates.modellistener;
 
@@ -20,95 +19,91 @@ import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTe
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+
 import org.osgi.framework.Version;
 
 /**
  * @author Simon Jiang
  */
+public class NewLiferayComponentModelListenerOperation extends AbstractLiferayComponentTemplate {
 
-public class NewLiferayComponentModelListenerOperation extends AbstractLiferayComponentTemplate
-{
+	public NewLiferayComponentModelListenerOperation() {
+	}
 
-    private static final String TEMPLATE_FILE = "modellistener/modellistener.ftl";
+	@Override
+	protected List<String[]> getComponentDependency() throws CoreException {
+		List<String[]> componentDependency = super.getComponentDependency();
 
-    private final static String SUPER_CLASS = "BaseModelListener";
-    private final static String EXTENSION_CLASS = "ModelListener.class";
+		try {
+			ServiceContainer serviceBundle = TargetPlatformUtil.getServiceBundle(serviceName);
 
-    private final static String[] PROPERTIES_LIST = new String[] {};
+			if (serviceBundle != null) {
+				Version retriveVersion = new Version(serviceBundle.getBundleVersion());
 
-    public NewLiferayComponentModelListenerOperation()
-    {
-        super();
-    }
+				componentDependency.add(new String[] {
+					serviceBundle.getBundleGroup(), serviceBundle.getBundleName(),
+					retriveVersion.getMajor() + "." + retriveVersion.getMinor() + ".0"
+				});
+			}
+		}
+		catch (Exception e) {
+		}
 
-    @Override
-    protected List<String> getImports()
-    {
-        List<String> imports = new ArrayList<String>();
-        
-        imports.add( "com.liferay.portal.kernel.exception.ModelListenerException" );
-        imports.add( "com.liferay.portal.kernel.model.BaseModelListener" );
-        imports.add( modelClass );
-        imports.add( "com.liferay.portal.kernel.model.ModelListener" );
-        
-        imports.addAll( super.getImports() );
+		return componentDependency;
+	}
 
-        return imports;
-    }
+	@Override
+	protected String getExtensionClass() {
+		return _EXTENSION_CLASS;
+	}
 
-    @Override
-    protected List<String> getProperties()
-    {
-        List<String> properties = new ArrayList<String>();
-        properties.addAll( Arrays.asList( PROPERTIES_LIST ) );
+	@Override
+	protected List<String> getImports() {
+		List<String> imports = new ArrayList<>();
 
-        for( String property : super.getProperties() )
-        {
-            properties.add( property );
-        }
-        return properties;
-    }
+		imports.add("com.liferay.portal.kernel.exception.ModelListenerException");
+		imports.add("com.liferay.portal.kernel.model.BaseModelListener");
+		imports.add(modelClass);
+		imports.add("com.liferay.portal.kernel.model.ModelListener");
 
-    @Override
-    protected String getExtensionClass()
-    {
-        return EXTENSION_CLASS;
-    }
+		imports.addAll(super.getImports());
 
-    @Override
-    protected String getSuperClass()
-    {
-        return SUPER_CLASS;
-    }
+		return imports;
+	}
 
-    @Override
-    protected String getTemplateFile()
-    {
-        return TEMPLATE_FILE;
-    }
+	@Override
+	protected List<String> getProperties() {
+		List<String> properties = new ArrayList<>();
 
-    @Override
-    protected List<String[]> getComponentDependency() throws CoreException
-    {
-        List<String[]> componentDependency = super.getComponentDependency();
-        try
-        {
-            ServiceContainer serviceBundle = TargetPlatformUtil.getServiceBundle( serviceName );
+		Collections.addAll(properties, _PROPERTIES_LIST);
 
-            if ( serviceBundle != null )
-            {
-                Version retriveVersion = new Version( serviceBundle.getBundleVersion() );
-                componentDependency.add( new String[]{ serviceBundle.getBundleGroup(), serviceBundle.getBundleName(), retriveVersion.getMajor() + "." + retriveVersion.getMinor() + ".0" } );
-            }
-        }
-        catch( Exception e )
-        {
-        }
+		for (String property : super.getProperties()) {
+			properties.add(property);
+		}
 
-        return componentDependency;
-    }
+		return properties;
+	}
+
+	@Override
+	protected String getSuperClass() {
+		return _SUPER_CLASS;
+	}
+
+	@Override
+	protected String getTemplateFile() {
+		return _TEMPLATE_FILE;
+	}
+
+	private static final String _EXTENSION_CLASS = "ModelListener.class";
+
+	private static final String[] _PROPERTIES_LIST = {};
+
+	private static final String _SUPER_CLASS = "BaseModelListener";
+
+	private static final String _TEMPLATE_FILE = "modellistener/modellistener.ftl";
+
 }

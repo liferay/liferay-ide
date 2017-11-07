@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core;
 
@@ -20,15 +19,14 @@ import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCr
 /**
  * @author Greg Amerson
  */
-public interface ISDKProjectsImportDataModelProperties extends IFacetProjectCreationDataModelProperties
-{
+public interface ISDKProjectsImportDataModelProperties extends IFacetProjectCreationDataModelProperties {
 
-    public static final String LIFERAY_SDK_NAME = "ISDKProjectsImportDataModelProperties.LIFERAY_SDK_NAME"; //$NON-NLS-1$
+	public static final String LIFERAY_SDK_NAME = "ISDKProjectsImportDataModelProperties.LIFERAY_SDK_NAME";
 
-    public static final String SDK_LOCATION = "ISDKProjectsImportDataModelProperties.SDK_LOCATION"; //$NON-NLS-1$
+	public static final String SDK_LOCATION = "ISDKProjectsImportDataModelProperties.SDK_LOCATION";
 
-    public static final String SDK_VERSION = "ISDKProjectsImportDataModelProperties.SDK_VERSION"; //$NON-NLS-1$
+	public static final String SDK_VERSION = "ISDKProjectsImportDataModelProperties.SDK_VERSION";
 
-    public static final String SELECTED_PROJECTS = "ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS"; //$NON-NLS-1$
+	public static final String SELECTED_PROJECTS = "ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS";
 
 }

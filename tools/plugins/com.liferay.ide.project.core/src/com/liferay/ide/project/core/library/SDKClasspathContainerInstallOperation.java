@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.library;
 
@@ -36,57 +35,51 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectBase;
 /**
  * @author Greg Amerson
  */
-public class SDKClasspathContainerInstallOperation extends LibraryProviderOperation
-{
+public class SDKClasspathContainerInstallOperation extends LibraryProviderOperation {
 
-    public SDKClasspathContainerInstallOperation()
-    {
-        super();
-    }
+	public SDKClasspathContainerInstallOperation() {
+	}
 
-    @Override
-    public void execute( LibraryProviderOperationConfig config, IProgressMonitor monitor ) throws CoreException
-    {
-        IFacetedProjectBase facetedProject = config.getFacetedProject();
+	@Override
+	public void execute(LibraryProviderOperationConfig config, IProgressMonitor monitor) throws CoreException {
+		IFacetedProjectBase facetedProject = config.getFacetedProject();
 
-        IProject project = facetedProject.getProject();
+		IProject project = facetedProject.getProject();
 
-        IJavaProject javaProject = JavaCore.create( project );
+		IJavaProject javaProject = JavaCore.create(project);
 
-        IPath containerPath = getClasspathContainerPath();
+		IPath containerPath = getClasspathContainerPath();
 
-        // IDE-413 check to make sure that the containerPath doesn't already existing.
+		// IDE-413 check to make sure that the containerPath doesn't already existing.
 
-        IClasspathEntry[] entries = javaProject.getRawClasspath();
+		IClasspathEntry[] entries = javaProject.getRawClasspath();
 
-        for( IClasspathEntry entry : entries )
-        {
-            if( entry.getPath().equals( containerPath ) )
-            {
-                return;
-            }
-        }
+		for (IClasspathEntry entry : entries) {
+			if (entry.getPath().equals(containerPath)) {
+				return;
+			}
+		}
 
-        IAccessRule[] accessRules = new IAccessRule[] {};
+		IAccessRule[] accessRules = {};
 
-        IClasspathAttribute[] attributes =
-            new IClasspathAttribute[] { JavaCore.newClasspathAttribute(
-                IClasspathDependencyConstants.CLASSPATH_COMPONENT_NON_DEPENDENCY, StringPool.EMPTY ) };
+		IClasspathAttribute[] attributes = {
+			JavaCore.newClasspathAttribute(
+				IClasspathDependencyConstants.CLASSPATH_COMPONENT_NON_DEPENDENCY, StringPool.EMPTY)
+		};
 
-        IClasspathEntry newEntry = JavaCore.newContainerEntry( containerPath, accessRules, attributes, false );
+		IClasspathEntry newEntry = JavaCore.newContainerEntry(containerPath, accessRules, attributes, false);
 
-        IClasspathEntry[] newEntries = new IClasspathEntry[entries.length + 1];
+		IClasspathEntry[] newEntries = new IClasspathEntry[entries.length + 1];
 
-        System.arraycopy( entries, 0, newEntries, 0, entries.length );
+		System.arraycopy(entries, 0, newEntries, 0, entries.length);
 
-        newEntries[entries.length] = newEntry;
+		newEntries[entries.length] = newEntry;
 
-        javaProject.setRawClasspath( newEntries, monitor );
-    }
+		javaProject.setRawClasspath(newEntries, monitor);
+	}
 
-    public  IPath getClasspathContainerPath()
-    {
-        return new Path(SDKClasspathContainer.ID);
-    }
+	public IPath getClasspathContainerPath() {
+		return new Path(SDKClasspathContainer.ID);
+	}
 
 }

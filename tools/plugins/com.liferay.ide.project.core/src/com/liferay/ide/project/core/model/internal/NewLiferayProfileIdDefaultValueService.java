@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.util.StringPool;
@@ -28,85 +28,81 @@ import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
 
-
 /**
  * @author Gregory Amerson
  */
-public class NewLiferayProfileIdDefaultValueService extends DefaultValueService
-{
+public class NewLiferayProfileIdDefaultValueService extends DefaultValueService {
 
-    private static final Pattern DUP = Pattern.compile( "(.*)\\(([0-9]+)\\)$" );
+	@Override
+	protected String compute() {
+		NewLiferayProfile profile = _newLiferayProfile();
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+		String defaultRuntimeName = profile.getRuntimeName().content();
 
-        final Listener listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		/*
+		 * First try to use this as a runtimeName, but need to check it against existing possible values.
+		 * If no existing profiles with this name exist, use it, if not, append a (1)
+		 */
+		String data = defaultRuntimeName;
 
-        newLiferayProfile().getRuntimeName().attach( listener );
-    }
+		if (data.equals("<None>")) {
+			return StringPool.EMPTY;
+		}
 
-    @Override
-    protected String compute()
-    {
-        final NewLiferayProfile newLiferayProfile = newLiferayProfile();
+		data = data.replaceAll(StringPool.SPACE, StringPool.DASH);
 
-        final String defaultRuntimeName = newLiferayProfile.getRuntimeName().content();
+		NewLiferayPluginProjectOp op = profile.nearest(NewLiferayPluginProjectOp.class);
 
-        // first try to use this as a runtimeName, but need to check it against existing possible values.
-        // if no existing profiles with this name exist, use it, if not, append a (1)
+		Set<String> possibleValues = NewLiferayPluginProjectOpMethods.getPossibleProfileIds(op, false);
 
-        String data = defaultRuntimeName;
+		while (possibleValues.contains(data)) {
+			try {
+				data = _nextSuffix(data);
+			}
+			catch (Exception e) {
+			}
+		}
 
-        if( data.equals( "<None>" ) )
-        {
-            return StringPool.EMPTY;
-        }
+		return data;
+	}
 
-        data = data.replaceAll( StringPool.SPACE, StringPool.DASH );
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
 
-        final Set<String> possibleValues =
-            NewLiferayPluginProjectOpMethods.getPossibleProfileIds(
-                newLiferayProfile.nearest( NewLiferayPluginProjectOp.class ), false );
+		Listener listener = new FilteredListener<PropertyContentEvent>() {
 
-        while( possibleValues.contains( data ) )
-        {
-            try
-            {
-                data = nextSuffix( data );
-            }
-            catch( Exception e )
-            {
-            }
-        }
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
 
-        return data;
-    }
+		};
 
-    private String nextSuffix( String val )
-    {
-        // look for an existing ([0-9])
-        final Matcher matcher = DUP.matcher( val );
+		NewLiferayProfile profile = _newLiferayProfile();
 
-        if( matcher.matches() )
-        {
-            final int num = Integer.parseInt( matcher.group( 2 ) );
-            return matcher.group( 1 ) + "(" + ( num + 1 ) + ")";
-        }
+		profile.getRuntimeName().attach(listener);
+	}
 
-        return val + "(1)";
-    }
+	private NewLiferayProfile _newLiferayProfile() {
+		return context(NewLiferayProfile.class);
+	}
 
-    private NewLiferayProfile newLiferayProfile()
-    {
-        return context( NewLiferayProfile.class );
-    }
+	private String _nextSuffix(String val) {
+
+		// look for an existing ([0-9])
+
+		Matcher matcher = _DUP.matcher(val);
+
+		if (matcher.matches()) {
+			int num = Integer.parseInt(matcher.group(2));
+
+			return matcher.group(1) + "(" + (num + 1) + ")";
+		}
+
+		return val + "(1)";
+	}
+
+	private static final Pattern _DUP = Pattern.compile("(.*)\\(([0-9]+)\\)$");
+
 }

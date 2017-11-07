@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.model.HasLiferayRuntime;
@@ -25,96 +25,83 @@ import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
 import org.eclipse.wst.server.core.ServerCore;
 
-
 /**
  * @author Gregory Amerson
  */
-public class RuntimeNameDefaultValueService extends DefaultValueService implements IRuntimeLifecycleListener
-{
+public class RuntimeNameDefaultValueService extends DefaultValueService implements IRuntimeLifecycleListener {
 
-    static final String NONE = "<None>";
+	@Override
+	public void dispose() {
+		ServerCore.removeRuntimeLifecycleListener(this);
 
-    private static IRuntime newRuntime = null;
+		super.dispose();
+	}
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+	public void runtimeAdded(IRuntime runtime) {
+		_newRuntime = runtime;
 
-        ServerCore.addRuntimeLifecycleListener( this );
-    }
+		refresh();
 
-    @Override
-    public void dispose()
-    {
-        ServerCore.removeRuntimeLifecycleListener( this );
+		_newRuntime = null;
+	}
 
-        super.dispose();
-    }
+	public void runtimeChanged(IRuntime runtime) {
+		refresh();
+	}
 
-    @Override
-    protected String compute()
-    {
-        String value = null;
+	public void runtimeRemoved(IRuntime runtime) {
+		refresh();
+	}
 
-        final RuntimeNamePossibleValuesService service =
-            context( HasLiferayRuntime.class ).property( HasLiferayRuntime.PROP_RUNTIME_NAME ).service(
-                RuntimeNamePossibleValuesService.class );
+	@Override
+	protected String compute() {
+		String value = null;
 
-        final Set<String> values = new HashSet<String>();
+		HasLiferayRuntime op = context(HasLiferayRuntime.class);
 
-        service.compute( values );
+		RuntimeNamePossibleValuesService service = op.property(
+			HasLiferayRuntime.PROP_RUNTIME_NAME).service(RuntimeNamePossibleValuesService.class);
 
-        if( values.size() > 0 )
-        {
-            final String[] vals = values.toArray( new String[0] );
+		Set<String> values = new HashSet<>();
 
-            Arrays.sort( vals );
+		service.compute(values);
 
-            if( newRuntime != null )
-            {
-                for( String runtimeName : values )
-                {
-                    if (runtimeName.equals( newRuntime.getName() )) {
-                        value = newRuntime.getName();
+		if (values.isEmpty()) {
+			return NONE;
+		}
 
-                        break;
-                    }
-                }
+		String[] vals = values.toArray(new String[0]);
 
-                if( value == null )
-                {
-                    value = vals[vals.length - 1];
-                }
-            }
-            else
-            {
-                value = vals[vals.length - 1];
-            }
-        }
-        else
-        {
-            value = NONE; //$NON-NLS-1$
-        }
+		Arrays.sort(vals);
 
-        return value;
-    }
+		if (_newRuntime == null) {
+			return vals[vals.length - 1];
+		}
 
-    public void runtimeAdded( IRuntime runtime )
-    {
-        newRuntime = runtime;
-        refresh();
-        newRuntime = null;
-    }
+		for (String runtimeName : values) {
+			if (runtimeName.equals(_newRuntime.getName())) {
+				value = _newRuntime.getName();
 
-    public void runtimeChanged( IRuntime runtime )
-    {
-        refresh();
-    }
+				break;
+			}
+		}
 
-    public void runtimeRemoved( IRuntime runtime )
-    {
-        refresh();
-    }
+		if (value == null) {
+			value = vals[vals.length - 1];
+		}
+
+		return value;
+	}
+
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
+
+		ServerCore.addRuntimeLifecycleListener(this);
+	}
+
+	protected static final String NONE = "<None>";
+
+	private static IRuntime _newRuntime = null;
 
 }

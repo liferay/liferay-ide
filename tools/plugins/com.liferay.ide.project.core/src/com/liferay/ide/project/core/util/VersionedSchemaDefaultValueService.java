@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.StringPool;
@@ -21,54 +21,52 @@ import java.util.regex.Pattern;
 
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.Resource;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-
 
 /**
  * @author Gregory Amerson
  */
-public class VersionedSchemaDefaultValueService extends DefaultValueService
-{
-    private final Pattern namespacePattern;
-    private final String defaultVersion;
+public class VersionedSchemaDefaultValueService extends DefaultValueService {
 
-    public VersionedSchemaDefaultValueService( Pattern namespacePattern, String defaultVersion )
-    {
-        this.namespacePattern = namespacePattern;
-        this.defaultVersion = defaultVersion;
-    }
+	public VersionedSchemaDefaultValueService(Pattern namespacePattern, String defaultVersion) {
+		_namespacePattern = namespacePattern;
+		_defaultVersion = defaultVersion;
+	}
 
-    @Override
-    protected String compute()
-    {
-        String version = defaultVersion;
+	@Override
+	protected String compute() {
+		String version = _defaultVersion;
 
-        final RootXmlResource resource = context( Element.class ).resource().adapt( RootXmlResource.class );
+		Resource elementResource = context(Element.class).resource();
 
-        if( resource != null )
-        {
-            final Document document = resource.getDomDocument();
+		RootXmlResource resource = elementResource.adapt(RootXmlResource.class);
 
-            if( document != null )
-            {
-                final Node node = document.getDocumentElement();
+		if (resource != null) {
+			Document document = resource.getDomDocument();
 
-                if( node != null )
-                {
-                    final String namespace = node.getNamespaceURI();
-                    final Matcher matcher = this.namespacePattern.matcher( namespace );
+			if (document != null) {
+				Node node = document.getDocumentElement();
 
-                    if( matcher.matches() )
-                    {
-                        version = matcher.group( 1 );
-                    }
-                }
-            }
-        }
+				if (node != null) {
+					String namespace = node.getNamespaceURI();
 
-        return version.replaceAll( StringPool.UNDERSCORE, "." );
-    }
+					Matcher matcher = _namespacePattern.matcher(namespace);
+
+					if (matcher.matches()) {
+						version = matcher.group(1);
+					}
+				}
+			}
+		}
+
+		return version.replaceAll(StringPool.UNDERSCORE, ".");
+	}
+
+	private final String _defaultVersion;
+	private final Pattern _namespacePattern;
 
 }

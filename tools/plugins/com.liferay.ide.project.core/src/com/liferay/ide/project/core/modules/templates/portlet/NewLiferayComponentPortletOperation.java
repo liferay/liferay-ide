@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,15 +10,14 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.templates.portlet;
 
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -26,81 +25,76 @@ import org.eclipse.core.runtime.CoreException;
 /**
  * @author Simon Jiang
  */
+public class NewLiferayComponentPortletOperation extends AbstractLiferayComponentTemplate {
 
-public class NewLiferayComponentPortletOperation extends AbstractLiferayComponentTemplate
-{
-	private static final String TEMPLATE_FILE = "portlet/portlet.ftl";
-    private final static String SUPER_CLASS = "GenericPortlet";
-    private final static String EXTENSION_CLASS = "Portlet.class";
+	public NewLiferayComponentPortletOperation() {
+	}
 
-    private final static String[] PROPERTIES_LIST =
-        new String[] {
-            "com.liferay.portlet.display-category=category.sample", 
-            "com.liferay.portlet.instanceable=true",
-            "javax.portlet.security-role-ref=power-user,user" 
-        };
-    
-    public NewLiferayComponentPortletOperation()
-    {
-        super();
-    }
+	@Override
+	protected List<String[]> getComponentDependency() throws CoreException {
+		List<String[]> componentDependency = super.getComponentDependency();
 
-    @Override
-    protected String getTemplateFile()
-    {
-        return TEMPLATE_FILE;
-    }
+		componentDependency.add(new String[] {"javax.portlet", "portlet-api", "2.0"});
 
-    @Override
-    protected List<String> getImports()
-    {
-        List<String> imports = new ArrayList<String>();
+		return componentDependency;
+	}
 
-        imports.add( "javax.portlet.Portlet" );
-        imports.add( "java.io.IOException" );
-        imports.add( "java.io.PrintWriter" );
-        imports.add( "javax.portlet.GenericPortlet" );
-        imports.add( "javax.portlet.PortletException" );
-        imports.add( "javax.portlet.RenderRequest" );
-        imports.add( "javax.portlet.RenderResponse" );
+	@Override
+	protected String getExtensionClass() {
+		return _EXTENSION_CLASS;
+	}
 
-        imports.addAll( super.getImports() );
-        
-        return imports;
-    }
+	@Override
+	protected List<String> getImports() {
+		List<String> imports = new ArrayList<>();
 
-    @Override
-    protected List<String> getProperties()
-    {
-        List<String> properties = new ArrayList<String>();
-        properties.addAll( Arrays.asList( PROPERTIES_LIST ) );
+		imports.add("javax.portlet.Portlet");
+		imports.add("java.io.IOException");
+		imports.add("java.io.PrintWriter");
+		imports.add("javax.portlet.GenericPortlet");
+		imports.add("javax.portlet.PortletException");
+		imports.add("javax.portlet.RenderRequest");
+		imports.add("javax.portlet.RenderResponse");
 
-        for( String property : super.getProperties() )
-        {
-            properties.add( property );
-        }
+		imports.addAll(super.getImports());
 
-        properties.add( "javax.portlet.display-name=" + componentNameWithoutTemplateName + " Portlet" );
-        return properties;
-    }
+		return imports;
+	}
 
-    @Override
-    protected String getExtensionClass()
-    {
-        return EXTENSION_CLASS;
-    }
+	@Override
+	protected List<String> getProperties() {
+		List<String> properties = new ArrayList<>();
 
-    @Override
-    protected String getSuperClass()
-    {
-        return SUPER_CLASS;
-    }
+		Collections.addAll(properties, _PROPERTIES_LIST);
 
-    @Override
-    protected List<String[]> getComponentDependency() throws CoreException
-    {
-        List<String[]> componentDependency = super.getComponentDependency();
-        componentDependency.add( new String[]{ "javax.portlet", "portlet-api", "2.0"} );
-        return componentDependency;
-    }
+		for (String property : super.getProperties()) {
+			properties.add(property);
+		}
+
+		properties.add("javax.portlet.display-name=" + componentNameWithoutTemplateName + " Portlet");
+
+		return properties;
+	}
+
+	@Override
+	protected String getSuperClass() {
+		return _SUPER_CLASS;
+	}
+
+	@Override
+	protected String getTemplateFile() {
+		return _TEMPLATE_FILE;
+	}
+
+	private static final String _EXTENSION_CLASS = "Portlet.class";
+
+	private static final String[] _PROPERTIES_LIST = {
+		"com.liferay.portlet.display-category=category.sample", "com.liferay.portlet.instanceable=true",
+		"javax.portlet.security-role-ref=power-user,user"
+	};
+
+	private static final String _SUPER_CLASS = "GenericPortlet";
+
+	private static final String _TEMPLATE_FILE = "portlet/portlet.ftl";
+
 }

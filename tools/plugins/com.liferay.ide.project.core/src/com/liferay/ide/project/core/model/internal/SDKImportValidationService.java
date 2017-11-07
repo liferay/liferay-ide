@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.model.internal;
 
@@ -31,58 +30,48 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
-public class SDKImportValidationService extends ValidationService
-{
+public class SDKImportValidationService extends ValidationService {
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-        try
-        {
-            SDK sdk = SDKUtil.getWorkspaceSDK();
+		ParentSDKProjectImportOp op = _op();
 
-            if( sdk != null )
-            {
-                retval = StatusBridge.create(
-                    ProjectCore.createErrorStatus( " This workspace already has another sdk." ) );
-            }
-            else
-            {
-                final Path currentProjectLocation = op().getSdkLocation().content( true );
+		try {
+			SDK sdk = SDKUtil.getWorkspaceSDK();
 
-                if( currentProjectLocation != null && !currentProjectLocation.isEmpty() )
-                {
-                    sdk = SDKUtil.createSDKFromLocation( PathBridge.create( currentProjectLocation ) );
+			if (sdk != null) {
+				return StatusBridge.create(ProjectCore.createErrorStatus(" This workspace already has another sdk."));
+			}
 
-                    if( sdk != null )
-                    {
-                        IStatus sdkStatus = sdk.validate(true);
+			Path currentProjectLocation = op.getSdkLocation().content(true);
 
-                        if( !sdkStatus.isOK() )
-                        {
-                            retval = StatusBridge.create(
-                                ProjectCore.createWarningStatus( sdkStatus.getChildren()[0].getMessage() ) );
-                        }
-                    }
-                    else
-                    {
-                        retval = StatusBridge.create(
-                            ProjectCore.createErrorStatus( "This parent sdk project path is invalid." ) );
-                    }
-                }
-            }
-        }
-        catch( CoreException e )
-        {
-        }
+			if ((currentProjectLocation != null) && !currentProjectLocation.isEmpty()) {
+				sdk = SDKUtil.createSDKFromLocation(PathBridge.create(currentProjectLocation));
 
-        return retval;
-    }
+				if (sdk != null) {
+					IStatus sdkStatus = sdk.validate(true);
 
-    private ParentSDKProjectImportOp op()
-    {
-        return context( ParentSDKProjectImportOp.class );
-    }
+					if (!sdkStatus.isOK()) {
+						retval = StatusBridge.create(
+							ProjectCore.createWarningStatus(sdkStatus.getChildren()[0].getMessage()));
+					}
+				}
+				else {
+					retval = StatusBridge.create(
+						ProjectCore.createErrorStatus("This parent sdk project path is invalid."));
+				}
+			}
+		}
+		catch (CoreException ce) {
+		}
+
+		return retval;
+	}
+
+	private ParentSDKProjectImportOp _op() {
+		return context(ParentSDKProjectImportOp.class);
+	}
+
 }

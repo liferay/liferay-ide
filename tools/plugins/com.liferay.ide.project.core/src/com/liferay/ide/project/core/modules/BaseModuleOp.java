@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -38,76 +37,72 @@ import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 /**
  * @author Terry Jia
  */
-public interface BaseModuleOp extends ExecutableElement
-{
+public interface BaseModuleOp extends ExecutableElement {
 
-    ElementType TYPE = new ElementType( BaseModuleOp.class );
+	public ElementType TYPE = new ElementType(BaseModuleOp.class);
 
-    // *** InitialSelectionPath ***
+	public Value<String> getFinalProjectName();
 
-    @Type( base = Path.class )
-    @AbsolutePath
-    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    ValueProperty PROP_INITIAL_SELECTION_PATH = new ValueProperty( TYPE, "InitialSelectionPath" );
+	public Value<Path> getInitialSelectionPath();
 
-    Value<Path> getInitialSelectionPath();
-    void setInitialSelectionPath( String value );
-    void setInitialSelectionPath( Path value );
+	public Value<Path> getLocation();
 
-    @Label( standard = "project name" )
-    @Required
-    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" );
+	public Value<String> getProjectName();
 
-    Value<String> getProjectName();
+	public ElementList<ProjectName> getProjectNames();
 
-    void setProjectName( String value );
+	public Value<NewLiferayProjectProvider<BaseModuleOp>> getProjectProvider();
 
-    @Type( base = Path.class )
-    @AbsolutePath
-    @Enablement( expr = "${ UseDefaultLocation == 'false' }" )
-    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    @Label( standard = "location" )
-    ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
+	public Value<Boolean> getUseDefaultLocation();
 
-    Value<Path> getLocation();
+	public void setFinalProjectName(String value);
 
-    void setLocation( String value );
+	public void setInitialSelectionPath(Path value);
 
-    void setLocation( Path value );
+	public void setInitialSelectionPath(String value);
 
+	public void setLocation(Path value);
 
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "true" )
-    @Label( standard = "use default location" )
-    ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty( TYPE, "UseDefaultLocation" );
+	public void setLocation(String value);
 
-    Value<Boolean> getUseDefaultLocation();
+	public void setProjectName(String value);
 
-    void setUseDefaultLocation( String value );
+	public void setProjectProvider(NewLiferayProjectProvider<BaseModuleOp> value);
 
-    void setUseDefaultLocation( Boolean value );
+	public void setProjectProvider(String value);
 
-    // *** FinalProjectName ***
+	public void setUseDefaultLocation(Boolean value);
 
-    @DefaultValue( text = "${ProjectName}" )
-    ValueProperty PROP_FINAL_PROJECT_NAME = new ValueProperty( TYPE, "FinalProjectName" );
+	public void setUseDefaultLocation(String value);
 
-    Value<String> getFinalProjectName();
-    void setFinalProjectName( String value );
+	@DefaultValue(text = "${ProjectName}")
+	public ValueProperty PROP_FINAL_PROJECT_NAME = new ValueProperty(TYPE, "FinalProjectName");
 
-    // *** ProjectNames ***
+	@AbsolutePath
+	@Type(base = Path.class)
+	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
+	public ValueProperty PROP_INITIAL_SELECTION_PATH = new ValueProperty(TYPE, "InitialSelectionPath");
 
-    @Type( base = ProjectName.class )
-    ListProperty PROP_PROJECT_NAMES = new ListProperty( TYPE, "ProjectNames" );
+	@AbsolutePath
+	@Enablement(expr = "${ UseDefaultLocation == 'false' }")
+	@Label(standard = "location")
+	@Type(base = Path.class)
+	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
+	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
 
-    ElementList<ProjectName> getProjectNames();
+	@Label(standard = "project name")
+	@Required
+	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, "ProjectName");
 
-    @Type( base = ILiferayProjectProvider.class )
-    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" );
+	@Type(base = ProjectName.class)
+	public ListProperty PROP_PROJECT_NAMES = new ListProperty(TYPE, "ProjectNames");
 
-    Value<NewLiferayProjectProvider<BaseModuleOp>> getProjectProvider();
+	@Type(base = ILiferayProjectProvider.class)
+	public ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty(TYPE, "ProjectProvider");
 
-    void setProjectProvider( String value );
-    void setProjectProvider( NewLiferayProjectProvider<BaseModuleOp> value );
+	@DefaultValue(text = "true")
+	@Label(standard = "use default location")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty(TYPE, "UseDefaultLocation");
 
 }

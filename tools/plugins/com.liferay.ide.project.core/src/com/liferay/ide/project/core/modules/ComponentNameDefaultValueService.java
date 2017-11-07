@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,137 +10,137 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.modules;
 
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 
-
 /**
  * @author Simon Jiang
  */
-public class ComponentNameDefaultValueService extends DefaultValueService
-{
-    private FilteredListener<PropertyContentEvent> listener;
+public class ComponentNameDefaultValueService extends DefaultValueService {
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+	@Override
+	public void dispose() {
+		NewLiferayModuleProjectOp op = _op();
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		if (op != null) {
+			op.property(NewLiferayModuleProjectOp.PROP_PROJECT_TEMPLATE_NAME).detach(_listener);
+			op.property(NewLiferayModuleProjectOp.PROP_PROJECT_NAME).detach(_listener);
+		}
 
-        op().property( NewLiferayModuleProjectOp.PROP_PROJECT_NAME ).attach( this.listener );
-        op().property( NewLiferayModuleProjectOp.PROP_PROJECT_TEMPLATE_NAME ).attach( this.listener );
-    }
+		super.dispose();
+	}
 
-    @Override
-    protected String compute()
-    {
-        String retVal = "";
+	@Override
+	protected String compute() {
+		String retVal = "";
 
-        final String projectName = op().getProjectName().content( true );
+		NewLiferayModuleProjectOp op = _op();
 
-        if( projectName != null )
-        {
-            final String projectTemplate = op().getProjectTemplateName().content();
+		String projectName = op.getProjectName().content(true);
 
-            String className = getClassName(projectName);
+		if (projectName != null) {
+			String projectTemplate = op.getProjectTemplateName().content();
 
-            if (projectTemplate.equals("activator") && !className.endsWith("Activator")) {
-                className += "Activator";
-            }
-            else if ((projectTemplate.equals("mvc-portlet") ||
-                      projectTemplate.equals("portlet")) &&
-                     (className.length() > 7) && className.endsWith("Portlet")) {
+			String className = _getClassName(projectName);
 
-                className = className.substring(0, className.length() - 7);
-            }
+			if (projectTemplate.equals("activator") && !className.endsWith("Activator")) {
+				className += "Activator";
+			}
+			else if ((projectTemplate.equals("mvc-portlet") || projectTemplate.equals("portlet")) &&
+					 (className.length() > 7) && className.endsWith("Portlet")) {
 
-            retVal = className;
-        }
+				className = className.substring(0, className.length() - 7);
+			}
 
-        return retVal;
-    }
+			retVal = className;
+		}
 
-    private NewLiferayModuleProjectOp op()
-    {
-        return context( NewLiferayModuleProjectOp.class );
-    }
+		return retVal;
+	}
 
-    private String getClassName(String name) {
-        name = getCapitalizedName(name);
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
 
-        return removeChar(name, ' ');
-    }
+		_listener = new FilteredListener<PropertyContentEvent>() {
 
-    private String getCapitalizedName(String name) {
-        name = name.replace('-', ' ');
-        name = name.replace('.', ' ');
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
 
-        return capitalize(name, ' ');
-    }
+		};
 
-    static String removeChar(String s, char c) {
-        int y = s.indexOf(c);
+		NewLiferayModuleProjectOp op = _op();
 
-        if (y == -1) {
-            return s;
-        }
+		op.property(NewLiferayModuleProjectOp.PROP_PROJECT_NAME).attach(_listener);
+		op.property(NewLiferayModuleProjectOp.PROP_PROJECT_TEMPLATE_NAME).attach(_listener);
+	}
 
-        StringBuilder sb = new StringBuilder(s.length());
+	private static String _capitalize(String s, char separator) {
+		StringBuilder sb = new StringBuilder(s.length());
 
-        int x = 0;
+		sb.append(s);
 
-        while (x <= y) {
-            sb.append(s.substring(x, y));
+		for (int i = 0; i < sb.length(); i++) {
+			char c = sb.charAt(i);
 
-            x = y + 1;
+			if ((i == 0) || (sb.charAt(i - 1) == separator)) {
+				c = Character.toUpperCase(c);
+			}
 
-            y = s.indexOf(c, x);
-        }
+			sb.setCharAt(i, c);
+		}
 
-        sb.append(s.substring(x));
+		return sb.toString();
+	}
 
-        return sb.toString();
-    }
+	private String _getCapitalizedName(String name) {
+		name = name.replace('-', ' ');
+		name = name.replace('.', ' ');
 
-    private static String capitalize(String s, char separator) {
-        StringBuilder sb = new StringBuilder(s.length());
+		return _capitalize(name, ' ');
+	}
 
-        sb.append(s);
+	private String _getClassName(String name) {
+		name = _getCapitalizedName(name);
 
-        for (int i = 0; i < sb.length(); i++) {
-            char c = sb.charAt(i);
+		return _removeChar(name, ' ');
+	}
 
-            if ((i == 0) || (sb.charAt(i - 1) == separator)) {
-                c = Character.toUpperCase(c);
-            }
+	private NewLiferayModuleProjectOp _op() {
+		return context(NewLiferayModuleProjectOp.class);
+	}
 
-            sb.setCharAt(i, c);
-        }
+	private String _removeChar(String s, char c) {
+		int y = s.indexOf(c);
 
-        return sb.toString();
-    }
-    @Override
-    public void dispose()
-    {
-        if ( op() != null)
-        {
-            op().property( NewLiferayModuleProjectOp.PROP_PROJECT_TEMPLATE_NAME ).detach( this.listener );
-            op().property( NewLiferayModuleProjectOp.PROP_PROJECT_NAME ).detach( this.listener );
-        }
+		if (y == -1) {
+			return s;
+		}
 
-        super.dispose();
-    }
+		StringBuilder sb = new StringBuilder(s.length());
+
+		int x = 0;
+
+		while (x <= y) {
+			sb.append(s.substring(x, y));
+
+			x = y + 1;
+
+			y = s.indexOf(c, x);
+		}
+
+		sb.append(s.substring(x));
+
+		return sb.toString();
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+
 }

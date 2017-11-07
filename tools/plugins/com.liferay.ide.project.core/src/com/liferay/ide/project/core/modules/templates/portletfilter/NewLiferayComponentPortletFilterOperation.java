@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.templates.portletfilter;
 
@@ -21,13 +20,19 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
 
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+
 import java.nio.file.Files;
+
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,211 +43,193 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-
 /**
  * @author Simon Jiang
  */
+public class NewLiferayComponentPortletFilterOperation extends AbstractLiferayComponentTemplate {
 
-public class NewLiferayComponentPortletFilterOperation extends AbstractLiferayComponentTemplate
-{
-	private static final String PORTLET_FILTER_TEMPLATE_FILE = "portletfilter/portletfilter.ftl";
+	public NewLiferayComponentPortletFilterOperation() {
+	}
 
-    private final static String PORTLET_SUPER_CLASSES = "GenericPortlet";
-    private final static String PORTLET_FILTER_SUPER_CLASSES = "RenderFilter";
+	@Override
+	public void doExecute(NewLiferayComponentOp op, IProgressMonitor monitor) throws CoreException {
+		try {
+			initializeOperation(op);
 
-    private final static String PORTLET_EXTENSION_CLASSES = "Portlet.class";
-    private final static String PORTLET_FILTER_EXTENSION_CLASSES = "PortletFilter.class";
+			project = CoreUtil.getProject(projectName);
 
-    private final static String[] PORTLET_PROPERTIES_LIST =
-    	{
-    			"com.liferay.portlet.display-category=category.sample",
-    			"com.liferay.portlet.instanceable=true",
-    			"javax.portlet.security-role-ref=power-user,user"
-    	};
+			if (project != null) {
+				liferayProject = LiferayCore.create(project);
 
-    public NewLiferayComponentPortletFilterOperation( )
-    {
-        super();
-    }
+				if (liferayProject != null) {
+					initFreeMarker();
 
-    private List<String> getPortletImports()
-    {
-        List<String> imports = new ArrayList<String>();
-        
-        imports.add( "java.io.IOException" );
-        imports.add( "java.io.PrintWriter" );
-        imports.add( "javax.portlet.GenericPortlet" );
-        imports.add( "javax.portlet.Portlet" );
-        imports.add( "javax.portlet.PortletException" );
-        imports.add( "javax.portlet.RenderRequest" );
-        imports.add( "javax.portlet.RenderResponse" );
+					IFile pollerClassFile = prepareClassFile(componentNameWithoutTemplateName + "Portlet");
 
-        imports.addAll( super.getImports() );
+					_sourceCodeOperation(pollerClassFile, "portlet");
 
-        return imports;
-    }
+					IFile pollerPortletClassFile = prepareClassFile(componentNameWithoutTemplateName + "RenderFilter");
 
-    private List<String> getPortletFilterImports()
-    {
-        List<String> imports = new ArrayList<String>();
-        
-        imports.add( "java.io.IOException" );
-        imports.add( "javax.portlet.filter.FilterChain" );
-        imports.add( "javax.portlet.filter.FilterConfig" );
-        imports.add( "javax.portlet.filter.PortletFilter" );
-        imports.add( "javax.portlet.filter.RenderFilter" );
-        imports.add( "javax.portlet.RenderRequest" );
-        imports.add( "javax.portlet.RenderResponse" );
-        imports.add( "javax.portlet.PortletException" );
-        imports.addAll( super.getImports() );
+					_sourceCodeOperation(pollerPortletClassFile, "renderFilter");
 
-        return imports;
-    }
+					op.setComponentClassName(componentNameWithoutTemplateName + "RenderFilter");
 
-    private List<String> getPortletProperties()
-    {
-        List<String> properties = new ArrayList<String>();
-        properties.addAll( Arrays.asList( PORTLET_PROPERTIES_LIST ) );
-        for( String property : super.getProperties() )
-        {
-            properties.add( property );
-        }
-        properties.add( "javax.portlet.display-name=" + this.componentNameWithoutTemplateName + " Filter Portlet" );
-        properties.add( "javax.portlet.name=blade_portlet_filter_" + this.componentNameWithoutTemplateName + "Portlet" );
+					project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+				}
+			}
+		}
+		catch (Exception e) {
+			throw new CoreException(ProjectCore.createErrorStatus(e));
+		}
+	}
 
-        return properties;
-    }
+	@Override
+	protected List<String[]> getComponentDependency() throws CoreException {
+		List<String[]> componentDependency = super.getComponentDependency();
 
-    private List<String> getPortletFilterProperties()
-    {
-        List<String> properties = new ArrayList<String>();
+		componentDependency.add(new String[] {"javax.portlet", "portlet-api", "2.0"});
 
-        for( String property : super.getProperties() )
-        {
-            properties.add( property );
-        }
+		return componentDependency;
+	}
 
-        properties.add( "javax.portlet.name=blade_portlet_filter_" + this.componentNameWithoutTemplateName + "Portlet" );
+	@Override
+	protected String getTemplateFile() {
+		return _PORTLET_FILTER_TEMPLATE_FILE;
+	}
 
-        return properties;
-    }
+	private String _getPortletExtensionClass() {
+		return _PORTLET_EXTENSION_CLASSES;
+	}
 
-    private String getPortletExtensionClass()
-    {
-        return PORTLET_EXTENSION_CLASSES;
-    }
+	private String _getPortletFilterExtensionClass() {
+		return _PORTLET_FILTER_EXTENSION_CLASSES;
+	}
 
-    private String getPortletFilterExtensionClass()
-    {
-        return PORTLET_FILTER_EXTENSION_CLASSES;
-    }
+	private List<String> _getPortletFilterImports() {
+		List<String> imports = new ArrayList<>();
 
-    private String getPortletSuperClass()
-    {
-        return PORTLET_SUPER_CLASSES;
-    }
+		imports.add("java.io.IOException");
+		imports.add("javax.portlet.filter.FilterChain");
+		imports.add("javax.portlet.filter.FilterConfig");
+		imports.add("javax.portlet.filter.PortletFilter");
+		imports.add("javax.portlet.filter.RenderFilter");
+		imports.add("javax.portlet.RenderRequest");
+		imports.add("javax.portlet.RenderResponse");
+		imports.add("javax.portlet.PortletException");
 
-    private String getPortletFilterSuperClass()
-    {
-        return PORTLET_FILTER_SUPER_CLASSES;
-    }
+		imports.addAll(super.getImports());
 
-    @Override
-    public void doExecute( NewLiferayComponentOp op, IProgressMonitor monitor ) throws CoreException
-    {
-        try
-        {
-            initializeOperation( op );
+		return imports;
+	}
 
-            this.project = CoreUtil.getProject( projectName );
+	private List<String> _getPortletFilterProperties() {
+		List<String> properties = new ArrayList<>();
 
-            if( project != null )
-            {
-                liferayProject = LiferayCore.create( project );
+		for (String property : super.getProperties()) {
+			properties.add(property);
+		}
 
-                if( liferayProject != null )
-                {
-                    initFreeMarker();
+		properties.add("javax.portlet.name=blade_portlet_filter_" + componentNameWithoutTemplateName + "Portlet");
 
-                    IFile pollerClassFile = prepareClassFile( this.componentNameWithoutTemplateName + "Portlet" );
-                    doSourceCodeOperation( pollerClassFile, "portlet" );
+		return properties;
+	}
 
-                    IFile pollerPortletClassFile =
-                        prepareClassFile( this.componentNameWithoutTemplateName + "RenderFilter" );
-                    doSourceCodeOperation( pollerPortletClassFile, "renderFilter" );
+	private String _getPortletFilterSuperClass() {
+		return _PORTLET_FILTER_SUPER_CLASSES;
+	}
 
-                    op.setComponentClassName( this.componentNameWithoutTemplateName + "RenderFilter" );
+	private List<String> _getPortletImports() {
+		List<String> imports = new ArrayList<>();
 
-                    project.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            throw new CoreException( ProjectCore.createErrorStatus( e ) );
-        }
-    }
+		imports.add("java.io.IOException");
+		imports.add("java.io.PrintWriter");
+		imports.add("javax.portlet.GenericPortlet");
+		imports.add("javax.portlet.Portlet");
+		imports.add("javax.portlet.PortletException");
+		imports.add("javax.portlet.RenderRequest");
+		imports.add("javax.portlet.RenderResponse");
 
-    private Map<String, Object> getTemplateMap( String type )
-    {
-        Map<String, Object> root = new HashMap<String, Object>();
+		imports.addAll(super.getImports());
 
-        if( type.equals( "portlet" ) )
-        {
-            root.put( "importlibs", getPortletImports() );
-            root.put( "properties", getPortletProperties() );
-            root.put( "classname", componentNameWithoutTemplateName + "Portlet" );
-            root.put( "supperclass", getPortletSuperClass() );
-            root.put( "extensionclass", getPortletExtensionClass() );
-        }
-        else
-        {
-            root.put( "importlibs", getPortletFilterImports() );
-            root.put( "properties", getPortletFilterProperties() );
-            root.put( "classname", componentNameWithoutTemplateName + "RenderFilter" );
-            root.put( "supperclass", getPortletFilterSuperClass() );
-            root.put( "extensionclass", getPortletFilterExtensionClass() );
-        }
+		return imports;
+	}
 
-        root.put( "packagename", packageName );
-        root.put( "projectname", projectName );
-        root.put( "componenttype", templateName );
+	private List<String> _getPortletProperties() {
+		List<String> properties = new ArrayList<>();
 
-        return root;
-    }
+		Collections.addAll(properties, _PORTLET_PROPERTIES_LIST);
 
-    @Override
-    protected String getTemplateFile()
-    {
-        return PORTLET_FILTER_TEMPLATE_FILE;
-    }
+		for (String property : super.getProperties()) {
+			properties.add(property);
+		}
 
-    private void doSourceCodeOperation( IFile srcFile, String type ) throws CoreException
-    {
-        try(OutputStream fos = Files.newOutputStream( srcFile.getLocation().toFile().toPath() ))
-        {
+		properties.add("javax.portlet.display-name=" + componentNameWithoutTemplateName + " Filter Portlet");
+		properties.add("javax.portlet.name=blade_portlet_filter_" + componentNameWithoutTemplateName + "Portlet");
 
-            Template temp = cfg.getTemplate( getTemplateFile() );
+		return properties;
+	}
 
-            Map<String, Object> root = getTemplateMap( type );
+	private String _getPortletSuperClass() {
+		return _PORTLET_SUPER_CLASSES;
+	}
 
-            Writer out = new OutputStreamWriter( fos );
-            temp.process( root, out );
-            fos.flush();
-        }
-        catch( IOException | TemplateException e )
-        {
-            throw new CoreException( ProjectCore.createErrorStatus( e ) );
-        }
-    }
+	private Map<String, Object> _getTemplateMap(String type) {
+		Map<String, Object> root = new HashMap<>();
 
-    @Override
-    protected List<String[]> getComponentDependency() throws CoreException
-    {
-        List<String[]> componentDependency = super.getComponentDependency();
-        componentDependency.add( new String[]{ "javax.portlet", "portlet-api", "2.0"} );
-        return componentDependency;
-    }
+		if (type.equals("portlet")) {
+			root.put("classname", componentNameWithoutTemplateName + "Portlet");
+			root.put("extensionclass", _getPortletExtensionClass());
+			root.put("importlibs", _getPortletImports());
+			root.put("properties", _getPortletProperties());
+			root.put("supperclass", _getPortletSuperClass());
+		}
+		else {
+			root.put("classname", componentNameWithoutTemplateName + "RenderFilter");
+			root.put("extensionclass", _getPortletFilterExtensionClass());
+			root.put("importlibs", _getPortletFilterImports());
+			root.put("properties", _getPortletFilterProperties());
+			root.put("supperclass", _getPortletFilterSuperClass());
+		}
+
+		root.put("componenttype", templateName);
+		root.put("packagename", packageName);
+		root.put("projectname", projectName);
+
+		return root;
+	}
+
+	private void _sourceCodeOperation(IFile srcFile, String type) throws CoreException {
+		File file = srcFile.getLocation().toFile();
+
+		try (OutputStream fos = Files.newOutputStream(file.toPath())) {
+			Template temp = cfg.getTemplate(getTemplateFile());
+
+			Map<String, Object> root = _getTemplateMap(type);
+
+			Writer out = new OutputStreamWriter(fos);
+
+			temp.process(root, out);
+
+			fos.flush();
+		}
+		catch (IOException | TemplateException e) {
+			throw new CoreException(ProjectCore.createErrorStatus(e));
+		}
+	}
+
+	private static final String _PORTLET_EXTENSION_CLASSES = "Portlet.class";
+
+	private static final String _PORTLET_FILTER_EXTENSION_CLASSES = "PortletFilter.class";
+
+	private static final String _PORTLET_FILTER_SUPER_CLASSES = "RenderFilter";
+
+	private static final String _PORTLET_FILTER_TEMPLATE_FILE = "portletfilter/portletfilter.ftl";
+
+	private static final String[] _PORTLET_PROPERTIES_LIST = {
+		"com.liferay.portlet.display-category=category.sample", "com.liferay.portlet.instanceable=true",
+		"javax.portlet.security-role-ref=power-user,user"
+	};
+
+	private static final String _PORTLET_SUPER_CLASSES = "GenericPortlet";
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.model.internal;
 
@@ -28,31 +27,28 @@ import org.eclipse.sapphire.DefaultValueService;
 /**
  * @author Simon Jiang
  */
-public class ProjectProviderDefaultValueService extends DefaultValueService
-{
+public class ProjectProviderDefaultValueService extends DefaultValueService {
 
-    @Override
-    protected String compute()
-    {
-        String retval = "ant";
+	@Override
+	protected String compute() {
+		String retval = "ant";
 
-        final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
-        final String defaultProjectBuildType =
-            Platform.getPreferencesService().getString(
-                ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_BUILD_TYPE_OPTION, null,
-                    prefContexts );
+		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
-        if( defaultProjectBuildType != null )
-        {
-            final ILiferayProjectProvider provider = LiferayCore.getProvider( defaultProjectBuildType );
+		String defaultProjectBuildType = Platform.getPreferencesService().getString(
+			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_BUILD_TYPE_OPTION, null, prefContexts);
 
-            if (provider != null)
-            {
-                retval = defaultProjectBuildType;
-            }
-        }
+		if (defaultProjectBuildType == null) {
+			return retval;
+		}
 
-        return retval;
-    }
+		ILiferayProjectProvider provider = LiferayCore.getProvider(defaultProjectBuildType);
+
+		if (provider != null) {
+			retval = defaultProjectBuildType;
+		}
+
+		return retval;
+	}
 
 }

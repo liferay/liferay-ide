@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model;
 
 import com.liferay.ide.project.core.model.internal.ProfileIdListener;
@@ -26,22 +26,21 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Service;
 
-
 /**
  * @author Gregory Amerson
  */
-public interface Profile extends Element
-{
-    ElementType TYPE = new ElementType( Profile.class );
+public interface Profile extends Element {
 
-    // *** Id ***
+	public ElementType TYPE = new ElementType(Profile.class);
 
-    @Label( standard = "profile id" )
-    @Unique
-    @Service( impl = ProfileIdPossibleValuesService.class )
-    @Listeners( value = ProfileIdListener.class )
-    ValueProperty PROP_ID = new ValueProperty( TYPE, "Id" );
+	public Value<String> getId();
 
-    Value<String> getId();
-    void setId( String value );
+	public void setId(String value);
+
+	@Label(standard = "profile id")
+	@Listeners(value = ProfileIdListener.class)
+	@Service(impl = ProfileIdPossibleValuesService.class)
+	@Unique
+	public ValueProperty PROP_ID = new ValueProperty(TYPE, "Id");
+
 }

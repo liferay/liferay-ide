@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
@@ -37,56 +37,60 @@ import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 /**
  * @author Andy Wu
  */
-public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp
-{
-    ElementType TYPE = new ElementType( NewLiferayWorkspaceOp.class );
+public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
-    // *** WorkspaceName ***
+	public ElementType TYPE = new ElementType(NewLiferayWorkspaceOp.class);
 
-    @Required
-    @Label( standard = "Project name" )
-    @Service( impl = WorkspaceNameValidationService.class )
-    ValueProperty PROP_WORKSPACE_NAME = new ValueProperty( TYPE, "WorkspaceName" );
+	@DelegateImplementation(NewLiferayWorkspaceOpMethods.class)
+	@Override
+	public Status execute(ProgressMonitor monitor);
 
-    Value<String> getWorkspaceName();
-    void setWorkspaceName( String value );
+	public Value<Path> getLocation();
 
-    // *** UseDefaultLocation ***
+	public Value<Boolean> getUseDefaultLocation();
 
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "true" )
-    @Label( standard = "use default location" )
-    @Listeners( WorkspaceUseDefaultLocationListener.class )
-    ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty( TYPE, "UseDefaultLocation" );
+	public Value<String> getWorkspaceName();
 
-    Value<Boolean> getUseDefaultLocation();
-    void setUseDefaultLocation( String value );
-    void setUseDefaultLocation( Boolean value );
+	public void setLocation(Path value);
 
-    // *** ProjectLocation ***
+	public void setLocation(String value);
 
-    @Required
-    @Type( base = Path.class )
-    @AbsolutePath
-    @Enablement( expr = "${ UseDefaultLocation == 'false' }" )
-    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    @Label( standard = "location" )
-    @Service( impl = WorkspaceLocationValidationService.class )
-    @Service( impl = CommonProjectLocationInitialValueService.class )
-    ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
+	public void setUseDefaultLocation(Boolean value);
 
-    Value<Path> getLocation();
-    void setLocation( String value );
-    void setLocation( Path value );
+	public void setUseDefaultLocation(String value);
 
-    // *** serverName ***
+	public void setWorkspaceName(String value);
 
-    @Service( impl = NewLiferayWorkspaceServerNameService.class )
-    ValueProperty PROP_SERVER_NAME = new ValueProperty( TYPE, BaseLiferayWorkspaceOp.PROP_SERVER_NAME );
+	// ProjectLocation
 
-    // *** Method: execute ***
+	@AbsolutePath
+	@Enablement(expr = "${ UseDefaultLocation == 'false' }")
+	@Label(standard = "location")
+	@Required
+	@Service(impl = CommonProjectLocationInitialValueService.class)
+	@Service(impl = WorkspaceLocationValidationService.class)
+	@Type(base = Path.class)
+	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
+	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
 
-    @Override
-    @DelegateImplementation( NewLiferayWorkspaceOpMethods.class )
-    Status execute( ProgressMonitor monitor );
+	// ServerName
+
+	@Service(impl = NewLiferayWorkspaceServerNameService.class)
+	public ValueProperty PROP_SERVER_NAME = new ValueProperty(TYPE, BaseLiferayWorkspaceOp.PROP_SERVER_NAME);
+
+	// UseDefaultLocation
+
+	@DefaultValue(text = "true")
+	@Label(standard = "use default location")
+	@Listeners(WorkspaceUseDefaultLocationListener.class)
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty(TYPE, "UseDefaultLocation");
+
+	// WorkspaceName
+
+	@Label(standard = "Project name")
+	@Required
+	@Service(impl = WorkspaceNameValidationService.class)
+	public ValueProperty PROP_WORKSPACE_NAME = new ValueProperty(TYPE, "WorkspaceName");
+
 }

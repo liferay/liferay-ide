@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.project.core.SDKClasspathContainer;
@@ -28,62 +28,63 @@ import org.eclipse.jdt.core.JavaCore;
 /**
  * @author Simon Jiang
  */
+public class ClasspathUtil {
 
-public class ClasspathUtil
-{
+	public static boolean hasNewLiferaySDKContainer(IClasspathEntry[] entries) {
+		boolean retVal = false;
 
-    public static boolean isPluginContainerEntry( final IClasspathEntry e )
-    {
-        return e != null && e.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
-            e.getPath().segment( 0 ).equals( SDKClasspathContainer.ID );
-    }
+		for (IClasspathEntry entry : entries) {
+			String segment = entry.getPath().segment(0);
 
-    public static boolean hasNewLiferaySDKContainer( final IClasspathEntry[] entries )
-    {
-        boolean retVal = false;
-        for( IClasspathEntry entry : entries )
-        {
-            if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
-                entry.getPath().segment( 0 ).equals( SDKClasspathContainer.ID ) )
-            {
-                retVal = true;
-                break;
-            }
-        }
+			if ((entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) && segment.equals(SDKClasspathContainer.ID)) {
+				retVal = true;
+				break;
+			}
+		}
 
-        return retVal;
-    }
+		return retVal;
+	}
 
-    public static void updateRequestContainer(IProject project) throws CoreException
-    {
-        final IJavaProject javaProject = JavaCore.create( project );
-        IPath containerPath = null;
+	public static boolean isPluginContainerEntry(IClasspathEntry e) {
+		String segment = e.getPath().segment(0);
 
-        final IClasspathEntry[] entries = javaProject.getRawClasspath();
+		if ((e != null) && (e.getEntryKind() == IClasspathEntry.CPE_CONTAINER) &&
+			segment.equals(SDKClasspathContainer.ID)) {
 
-        for( final IClasspathEntry entry : entries )
-        {
-            if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER )
-            {
-                if( entry.getPath().segment( 0 ).equals( SDKClasspathContainer.ID ) )
-                {
-                    containerPath = entry.getPath();
-                    break;
-                }
-            }
-        }
+			return true;
+		}
 
-        if( containerPath != null )
-        {
-            final IClasspathContainer classpathContainer = JavaCore.getClasspathContainer( containerPath, javaProject );
+		return false;
+	}
 
-            final String id = containerPath.segment( 0 );
+	public static void updateRequestContainer(IProject project) throws CoreException {
+		IJavaProject javaProject = JavaCore.create(project);
+		IPath containerPath = null;
 
-            if ( id.equals( SDKClasspathContainer.ID ) )
-            {
-                ClasspathContainerInitializer initializer = JavaCore.getClasspathContainerInitializer( id );
-                initializer.requestClasspathContainerUpdate( containerPath, javaProject, classpathContainer );
-            }
-        }
-    }
+		IClasspathEntry[] entries = javaProject.getRawClasspath();
+
+		for (IClasspathEntry entry : entries) {
+			if (entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) {
+				String segment = entry.getPath().segment(0);
+
+				if (segment.equals(SDKClasspathContainer.ID)) {
+					containerPath = entry.getPath();
+					break;
+				}
+			}
+		}
+
+		if (containerPath != null) {
+			IClasspathContainer classpathContainer = JavaCore.getClasspathContainer(containerPath, javaProject);
+
+			String id = containerPath.segment(0);
+
+			if (id.equals(SDKClasspathContainer.ID)) {
+				ClasspathContainerInitializer initializer = JavaCore.getClasspathContainerInitializer(id);
+
+				initializer.requestClasspathContainerUpdate(containerPath, javaProject, classpathContainer);
+			}
+		}
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,25 +10,25 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 
-
 /**
  * @author Simon Jiang
  */
-public interface ProjectNamedItem extends NamedItem
-{
-    ElementType TYPE = new ElementType( ProjectNamedItem.class );
+public interface ProjectNamedItem extends NamedItem {
 
-    ValueProperty PROP_LOCATION= new ValueProperty( TYPE, "Location" );
+	public ElementType TYPE = new ElementType(ProjectNamedItem.class);
 
-    Value<String> getLocation();
+	public Value<String> getLocation();
 
-    void setLocation( String value );
+	public void setLocation(String value);
+
+	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -33,102 +32,101 @@ import org.eclipse.wst.server.core.ServerCore;
  * @author Simon Jiang
  * @author Lovett Li
  */
-public class NewLiferayComponentServicePossibleValuesService extends PossibleValuesService
-{
+public class NewLiferayComponentServicePossibleValuesService extends PossibleValuesService {
 
-    private Listener listener;
+	@Override
+	public void dispose() {
+		NewLiferayComponentOp op = _op();
 
-    protected void initPossibleValuesService()
-    {
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
+		if (_listener != null) {
+			op.property(NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME).detach(_listener);
 
-            @Override
-            protected void handleTypedEvent( final PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+			_listener = null;
+		}
 
-        op().property( NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME ).attach( this.listener );
-    }
+		super.dispose();
+	}
 
-    @Override
-    protected void compute( final Set<String> values )
-    {
-        final NewLiferayComponentOp op = op();
-        final String template = op.getComponentClassTemplateName().content( true ).getShortName();
-        IServer runningServer = null;
-        final IServer[] servers = ServerCore.getServers();
+	@Override
+	public Status problem(Value<?> value) {
+		return Status.createOkStatus();
+	}
 
-        if( template.equals( "ServiceHook" ) )
-        {
-            for( IServer server : servers )
-            {
-                if( server.getServerType().getId().equals( PortalServer.ID ) )
-                {
-                    runningServer = server;
-                    break;
-                }
-            }
+	@Override
+	protected void compute(Set<String> values) {
+		NewLiferayComponentOp op = _op();
 
-            try
-            {
-                ServiceContainer serviceWrapperList = new ServiceWrapperCommand( runningServer ).execute();
-                values.addAll( serviceWrapperList.getServiceList() );
-            }
-            catch( Exception e )
-            {
-                ProjectCore.logError( "Get service wrapper list error.",e );
-            }
-        }
-        else if( template.equals( "service" ) )
-        {
-            for( IServer server : servers )
-            {
-                if( server.getServerState() == IServer.STATE_STARTED &&
-                    server.getServerType().getId().equals( PortalServer.ID ) )
-                {
-                    runningServer = server;
-                    break;
-                }
-            }
+		IComponentTemplate<NewLiferayComponentOp> componentTemplate = op.getComponentClassTemplateName().content(true);
 
-            try
-            {
-                ServiceCommand serviceCommand = new ServiceCommand( runningServer );
+		String template = componentTemplate.getShortName();
 
-                ServiceContainer allServices = serviceCommand.execute();
+		IServer runningServer = null;
 
-                values.addAll( allServices.getServiceList() );
-            }
-            catch( Exception e )
-            {
-                ProjectCore.logError( "Get services list error. ", e );
-            }
-        }
-    }
+		IServer[] servers = ServerCore.getServers();
 
-    @Override
-    public void dispose()
-    {
-        if( this.listener != null )
-        {
-            op().property( NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME ).detach( this.listener );
+		if (template.equals("ServiceHook")) {
+			for (IServer server : servers) {
+				String serverId = server.getServerType().getId();
 
-            this.listener = null;
-        }
-        super.dispose();
-    }
+				if (serverId.equals(PortalServer.ID)) {
+					runningServer = server;
 
-    private NewLiferayComponentOp op()
-    {
-        return context( NewLiferayComponentOp.class );
-    }
+					break;
+				}
+			}
 
-    @Override
-    public Status problem( final Value<?> value )
-    {
-        return Status.createOkStatus();
-    }
+			try {
+				ServiceContainer serviceWrapperList = new ServiceWrapperCommand(runningServer).execute();
+
+				values.addAll(serviceWrapperList.getServiceList());
+			}
+			catch (Exception e) {
+				ProjectCore.logError("Get service wrapper list error.", e);
+			}
+		}
+		else if (template.equals("service")) {
+			for (IServer server : servers) {
+				String serverId = server.getServerType().getId();
+
+				if ((server.getServerState() == IServer.STATE_STARTED) && serverId.equals(PortalServer.ID)) {
+					runningServer = server;
+
+					break;
+				}
+			}
+
+			try {
+				ServiceCommand serviceCommand = new ServiceCommand(runningServer);
+
+				ServiceContainer allServices = serviceCommand.execute();
+
+				values.addAll(allServices.getServiceList());
+			}
+			catch (Exception e) {
+				ProjectCore.logError("Get services list error. ", e);
+			}
+		}
+	}
+
+	protected void initPossibleValuesService() {
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		NewLiferayComponentOp op = _op();
+
+		op.property(NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME).attach(_listener);
+	}
+
+	private NewLiferayComponentOp _op() {
+		return context(NewLiferayComponentOp.class);
+	}
+
+	private Listener _listener;
+
 }

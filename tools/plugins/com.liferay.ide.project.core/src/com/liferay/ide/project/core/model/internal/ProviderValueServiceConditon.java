@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.model.internal;
 
@@ -24,29 +23,23 @@ import org.eclipse.sapphire.services.ServiceContext;
 /**
  * @author Simon Jiang
  */
+public class ProviderValueServiceConditon extends ServiceCondition {
 
-public class ProviderValueServiceConditon extends ServiceCondition
-{
+	@Override
+	public boolean applicable(final ServiceContext context) {
+		ValueProperty prop = context.find(ValueProperty.class);
 
-    @Override
-    public boolean applicable( final ServiceContext context )
-    {
-        boolean retval = false;
+		ValueProperty property = BaseModuleOp.PROP_PROJECT_PROVIDER;
 
-        final ValueProperty prop = context.find( ValueProperty.class );
+		if ((prop != null) && prop.name().equals(property.name())) {
+			return true;
+		}
 
-        ValueProperty property = getProjectProvider();
+		return false;
+	}
 
-        if( prop != null && ( prop.name().equals( property.name() ) ) )
-        {
-            retval = true;
-        }
+	public ValueProperty getProjectProvider() {
+		return BaseModuleOp.PROP_PROJECT_PROVIDER;
+	}
 
-        return retval;
-    }
-
-    public ValueProperty getProjectProvider()
-    {
-        return BaseModuleOp.PROP_PROJECT_PROVIDER;
-    }
 }

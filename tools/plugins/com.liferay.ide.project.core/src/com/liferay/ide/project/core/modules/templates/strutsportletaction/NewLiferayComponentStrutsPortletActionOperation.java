@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.templates.strutsportletaction;
 
@@ -22,7 +21,7 @@ import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -35,125 +34,117 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 /**
  * @author Simon Jiang
  */
+public class NewLiferayComponentStrutsPortletActionOperation extends AbstractLiferayComponentTemplate {
 
-public class NewLiferayComponentStrutsPortletActionOperation extends AbstractLiferayComponentTemplate
-{
+	public NewLiferayComponentStrutsPortletActionOperation() {
+	}
 
-    private static final String TEMPLATE_FILE = "strutsportletaction/strutsportletaction.ftl";
+	@Override
+	public void doExecute(NewLiferayComponentOp op, IProgressMonitor monitor) throws CoreException {
+		try {
+			initializeOperation(op);
 
-    private final static String SUPER_CLASS = "BaseStrutsPortletAction";
-    private final static String EXTENSION_CLASS = "StrutsPortletAction.class";
+			project = CoreUtil.getProject(projectName);
 
-    private final static String[] PROPERTIES_LIST = new String[] { "path=/login/login" };
+			if (project != null) {
+				liferayProject = LiferayCore.create(project);
 
-    public NewLiferayComponentStrutsPortletActionOperation()
-    {
-        super();
-    }
+				if (liferayProject != null) {
+					initFreeMarker();
 
-    @Override
-    public void doExecute( NewLiferayComponentOp op, IProgressMonitor monitor ) throws CoreException
-    {
-        try
-        {
-            initializeOperation( op );
-            this.project = CoreUtil.getProject( projectName );
+					IFile srcFile = prepareClassFile(componentNameWithoutTemplateName + "PortletAction");
 
-            if( project != null )
-            {
-                liferayProject = LiferayCore.create( project );
+					doSourceCodeOperation(srcFile);
 
-                if( liferayProject != null )
-                {
-                    initFreeMarker();
+					op.setComponentClassName(componentNameWithoutTemplateName + "PortletAction");
 
-                    IFile srcFile = prepareClassFile( this.componentNameWithoutTemplateName + "PortletAction" );
-                    doSourceCodeOperation( srcFile );
+					project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+				}
+			}
+		}
+		catch (Exception e) {
+			throw new CoreException(ProjectCore.createErrorStatus(e));
+		}
+	}
 
-                    op.setComponentClassName( this.componentNameWithoutTemplateName + "PortletAction" );
+	@Override
+	protected List<String[]> getComponentDependency() throws CoreException {
+		List<String[]> componentDependency = super.getComponentDependency();
 
-                    project.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            throw new CoreException( ProjectCore.createErrorStatus( e ) );
-        }
-    }
+		componentDependency.add(new String[] {"javax.portlet", "portlet-api", "2.0"});
 
-    @Override
-    protected List<String> getImports()
-    {
-        List<String> imports = new ArrayList<String>();
+		return componentDependency;
+	}
 
-        imports.add( "com.liferay.portal.kernel.log.Log" );
-        imports.add( "com.liferay.portal.kernel.log.LogFactoryUtil" );
-        imports.add( "com.liferay.portal.kernel.struts.BaseStrutsPortletAction" );
-        imports.add( "com.liferay.portal.kernel.struts.StrutsPortletAction" );
-        imports.add( "com.liferay.portal.kernel.util.WebKeys" );
-        imports.add( "com.liferay.portal.kernel.model.User" );
-        imports.add( "com.liferay.portal.kernel.service.UserLocalService" );
-        imports.add( "com.liferay.portal.kernel.theme.ThemeDisplay" );
-        imports.add( "javax.portlet.ActionRequest" );
-        imports.add( "javax.portlet.ActionResponse" );
-        imports.add( "javax.portlet.PortletConfig" );
-        imports.add( "javax.portlet.RenderRequest" );
-        imports.add( "javax.portlet.RenderResponse" );
-        imports.add( "javax.portlet.ResourceRequest" );
-        imports.add( "javax.portlet.ResourceResponse" );
-        imports.add( "org.osgi.service.component.annotations.Reference" );
-        imports.addAll( super.getImports() );
-        
-        return imports;
-    }
+	@Override
+	protected String getExtensionClass() {
+		return _EXTENSION_CLASS;
+	}
 
-    @Override
-    protected Map<String, Object> getTemplateMap()
-    {
-        Map<String, Object> root = super.getTemplateMap();
-        
-        root.put( "classname", componentNameWithoutTemplateName + "PortletAction" );
+	@Override
+	protected List<String> getImports() {
+		List<String> imports = new ArrayList<>();
 
-        return root;
-    }
-    
-    @Override
-    protected List<String> getProperties()
-    {
-        List<String> properties = new ArrayList<String>();
-        properties.addAll( Arrays.asList( PROPERTIES_LIST ) );
+		imports.add("com.liferay.portal.kernel.log.Log");
+		imports.add("com.liferay.portal.kernel.log.LogFactoryUtil");
+		imports.add("com.liferay.portal.kernel.struts.BaseStrutsPortletAction");
+		imports.add("com.liferay.portal.kernel.struts.StrutsPortletAction");
+		imports.add("com.liferay.portal.kernel.util.WebKeys");
+		imports.add("com.liferay.portal.kernel.model.User");
+		imports.add("com.liferay.portal.kernel.service.UserLocalService");
+		imports.add("com.liferay.portal.kernel.theme.ThemeDisplay");
+		imports.add("javax.portlet.ActionRequest");
+		imports.add("javax.portlet.ActionResponse");
+		imports.add("javax.portlet.PortletConfig");
+		imports.add("javax.portlet.RenderRequest");
+		imports.add("javax.portlet.RenderResponse");
+		imports.add("javax.portlet.ResourceRequest");
+		imports.add("javax.portlet.ResourceResponse");
+		imports.add("org.osgi.service.component.annotations.Reference");
 
-        for( String property : super.getProperties() )
-        {
-            properties.add( property );
-        }
-        return properties;
-    }
+		imports.addAll(super.getImports());
 
-    @Override
-    protected String getExtensionClass()
-    {
-        return EXTENSION_CLASS;
-    }
+		return imports;
+	}
 
-    @Override
-    protected String getSuperClass()
-    {
-        return SUPER_CLASS;
-    }
+	@Override
+	protected List<String> getProperties() {
+		List<String> properties = new ArrayList<>();
 
-    @Override
-    protected String getTemplateFile()
-    {
-        return TEMPLATE_FILE;
-    }
+		Collections.addAll(properties, _PROPERTIES_LIST);
 
-    @Override
-    protected List<String[]> getComponentDependency() throws CoreException
-    {
-        List<String[]> componentDependency = super.getComponentDependency();
-        componentDependency.add( new String[]{ "javax.portlet", "portlet-api", "2.0"} );
-        return componentDependency;
-    }
+		for (String property : super.getProperties()) {
+			properties.add(property);
+		}
+
+		return properties;
+	}
+
+	@Override
+	protected String getSuperClass() {
+		return _SUPER_CLASS;
+	}
+
+	@Override
+	protected String getTemplateFile() {
+		return _TEMPLATE_FILE;
+	}
+
+	@Override
+	protected Map<String, Object> getTemplateMap() {
+		Map<String, Object> root = super.getTemplateMap();
+
+		root.put("classname", componentNameWithoutTemplateName + "PortletAction");
+
+		return root;
+	}
+
+	private static final String _EXTENSION_CLASS = "StrutsPortletAction.class";
+
+	private static final String[] _PROPERTIES_LIST = {"path=/login/login"};
+
+	private static final String _SUPER_CLASS = "BaseStrutsPortletAction";
+
+	private static final String _TEMPLATE_FILE = "strutsportletaction/strutsportletaction.ftl";
+
 }

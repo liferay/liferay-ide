@@ -43,6 +43,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -182,6 +183,41 @@ public class FileUtil
 
     }
 
+    public static boolean exists(File file)
+    {
+        	return file != null && file.exists();
+    }
+
+    public static boolean exists(IFile file)
+    {
+        	return file != null && file.exists();
+    }
+
+    public static boolean exists(IFolder folder)
+    {
+        	return folder != null && folder.exists();
+    }
+
+    public static boolean exists(IPath path)
+    {
+        	return path != null && path.toFile().exists();
+    }
+
+    public static boolean exists(IProject project)
+    {
+        	return project != null && project.exists();
+    }
+
+    public static boolean exists(IResource resource)
+    {
+        	return resource != null && resource.exists();
+    }
+
+    public static boolean exists(IContainer container)
+    {
+        	return container != null && container.exists();
+    }
+
     public static File[] getDirectories( File directory )
     {
         return directory.listFiles
@@ -196,6 +232,22 @@ public class FileUtil
             }
         );
     }
+
+	public static File getFile(IFile file) {
+		if (exists(file)) {
+			return file.getLocation().toFile();
+		}
+
+		return null;
+	}
+
+	public static File getFile(IPath path) {
+		if (exists(path)) {
+			return path.toFile();
+		}
+
+		return null;
+	}
 
     public static IContainer getWorkspaceContainer( final File f )
     {
@@ -271,6 +323,34 @@ public class FileUtil
                 }
             }
         }
+    }
+
+	public static boolean notExists(File file){
+		return file == null || !file.exists();
+	}
+
+	public static boolean notExists(IPath path){
+		return path == null || !path.toFile().exists();
+	}
+
+    public static boolean notExists(IFile file)
+    {
+        	return file == null || !file.exists();
+    }
+
+    public static boolean notExists(IFolder folder)
+    {
+        	return folder == null || !folder.exists();
+    }
+
+    public static boolean notExists(IProject project)
+    {
+        	return project == null || !project.exists();
+    }
+
+    public static boolean notExists(IResource resource)
+    {
+        	return resource == null || !resource.exists();
     }
 
     public static String readContents( File file )

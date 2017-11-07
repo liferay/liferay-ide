@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.fragment;
 
@@ -26,63 +25,55 @@ import org.eclipse.wst.server.core.ServerCore;
 /**
  * @author Terry Jia
  */
-public class LiferayRuntimeNameDefaultValueService extends DefaultValueService implements IRuntimeLifecycleListener
-{
+public class LiferayRuntimeNameDefaultValueService extends DefaultValueService implements IRuntimeLifecycleListener {
 
-    static final String NONE = "<None>";
+	@Override
+	public void dispose() {
+		ServerCore.removeRuntimeLifecycleListener(this);
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+		super.dispose();
+	}
 
-        ServerCore.addRuntimeLifecycleListener( this );
-    }
+	public void runtimeAdded(IRuntime runtime) {
+		refresh();
+	}
 
-    @Override
-    public void dispose()
-    {
-        ServerCore.removeRuntimeLifecycleListener( this );
+	public void runtimeChanged(IRuntime runtime) {
+		refresh();
+	}
 
-        super.dispose();
-    }
+	public void runtimeRemoved(IRuntime runtime) {
+		refresh();
+	}
 
-    @Override
-    protected String compute()
-    {
-        IRuntime[] runtimes = ServerCore.getRuntimes();
+	@Override
+	protected String compute() {
+		IRuntime[] runtimes = ServerCore.getRuntimes();
 
-        String value = NONE;
+		if (CoreUtil.isNullOrEmpty(runtimes)) {
+			return _NONE;
+		}
 
-        if( !CoreUtil.isNullOrEmpty( runtimes ) )
-        {
-            for( IRuntime runtime : runtimes )
-            {
-                if( LiferayServerCore.newPortalBundle( runtime.getLocation() ) != null )
-                {
-                    value = runtime.getName();
+		String value = _NONE;
 
-                    break;
-                }
-            }
-        }
+		for (IRuntime runtime : runtimes) {
+			if (LiferayServerCore.newPortalBundle(runtime.getLocation()) != null) {
+				value = runtime.getName();
 
-        return value;
-    }
+				break;
+			}
+		}
 
-    public void runtimeAdded( IRuntime runtime )
-    {
-        refresh();
-    }
+		return value;
+	}
 
-    public void runtimeChanged( IRuntime runtime )
-    {
-        refresh();
-    }
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
 
-    public void runtimeRemoved( IRuntime runtime )
-    {
-        refresh();
-    }
+		ServerCore.addRuntimeLifecycleListener(this);
+	}
+
+	private static final String _NONE = "<None>";
 
 }

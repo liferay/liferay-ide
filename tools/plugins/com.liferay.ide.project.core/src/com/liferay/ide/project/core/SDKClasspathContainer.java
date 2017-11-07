@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core;
 
@@ -26,110 +25,89 @@ import org.eclipse.jdt.core.IJavaProject;
 /**
  * @author Simon.Jiang
  */
-public class SDKClasspathContainer extends PluginClasspathContainer implements IClasspathContainer
-{
-    private final static String[] commonJars =
-    {
-        "commons-logging.jar",
-        "log4j.jar",
-        "util-bridges.jar",
-        "util-java.jar",
-        "util-taglib.jar",
-    };
+public class SDKClasspathContainer extends PluginClasspathContainer implements IClasspathContainer {
 
-    public final static String ID = "com.liferay.ide.sdk.container";
+	public static final String ID = "com.liferay.ide.sdk.container";
 
-    private final IPath bundleDir;
+	public SDKClasspathContainer(
+		IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL, IPath sourceURL,
+		IPath portalGlobalDir, IPath bundleDir, IPath[] bundleLibDependencyPaths, IPath[] sdkDependencyPaths) {
 
-    private final IPath[] bundleLibDependencyPaths;
+		super(containerPath, project, portalDir, javadocURL, sourceURL);
 
-    private final IPath portalGlobalDir;
+		_portalGlobalDir = portalGlobalDir;
+		_bundleDir = bundleDir;
+		_bundleLibDependencyPaths = bundleLibDependencyPaths;
+		_sdkDependencyPaths = sdkDependencyPaths;
+	}
 
-    private final IPath[] sdkDependencyPaths;
+	public IPath getBundleDir() {
+		return _bundleDir;
+	}
 
-    public SDKClasspathContainer(
-        IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL, IPath sourceURL,
-        IPath portalGlobalDir, IPath bundleDir, IPath[] bundleLibDependencyPaths, IPath[] sdkDependencyPaths )
-    {
-        super( containerPath, project, portalDir, javadocURL, sourceURL );
+	public IPath[] getBundleLibDependencyPath() {
+		return _bundleLibDependencyPaths;
+	}
 
-        this.portalGlobalDir = portalGlobalDir;
-        this.bundleDir = bundleDir;
-        this.bundleLibDependencyPaths = bundleLibDependencyPaths;
-        this.sdkDependencyPaths = sdkDependencyPaths;
-    }
+	@Override
+	public IClasspathEntry[] getClasspathEntries() {
+		if (classpathEntries != null) {
+			return classpathEntries;
+		}
 
-    public IPath getBundleDir()
-    {
-        return bundleDir;
-    }
+		List<IClasspathEntry> entries = new ArrayList<>();
 
-    public IPath[] getBundleLibDependencyPath()
-    {
-        return this.bundleLibDependencyPaths;
-    }
+		for (IPath pluginJarPath : _bundleLibDependencyPaths) {
+			IPath sourcePath = null;
 
-    @Override
-    public IClasspathEntry[] getClasspathEntries()
-    {
-        if( this.classpathEntries == null )
-        {
-            List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
+			if (portalSourceJars.contains(pluginJarPath.lastSegment())) {
+				sourcePath = getSourceLocation();
+			}
 
-            for( IPath pluginJarPath : bundleLibDependencyPaths )
-            {
-                IPath sourcePath = null;
+			entries.add(createClasspathEntry(pluginJarPath, sourcePath, javadocURL));
+		}
 
-                if( portalSourceJars.contains( pluginJarPath.lastSegment() ) )
-                {
-                    sourcePath = getSourceLocation();
-                }
+		if (portalDir != null) {
+			for (String pluginJar : getPortalJars()) {
+				entries.add(createPortalJarClasspathEntry(pluginJar));
+			}
 
-                entries.add( createClasspathEntry( pluginJarPath, sourcePath, this.javadocURL ) );
-            }
+			for (String pluginPackageJar : getPortalDependencyJars()) {
+				entries.add(createPortalJarClasspathEntry(pluginPackageJar));
+			}
+		}
 
-            if( this.portalDir != null )
-            {
-                for( String pluginJar : getPortalJars() )
-                {
-                    entries.add( createPortalJarClasspathEntry( pluginJar ) );
-                }
+		if (_sdkDependencyPaths != null) {
+			for (IPath sdkDependencyJarPath : _sdkDependencyPaths) {
+				entries.add(createClasspathEntry(sdkDependencyJarPath, null, null));
+			}
+		}
 
-                for( String pluginPackageJar : getPortalDependencyJars() )
-                {
-                    entries.add( createPortalJarClasspathEntry( pluginPackageJar ) );
-                }
-            }
+		classpathEntries = entries.toArray(new IClasspathEntry[entries.size()]);
 
-            if ( sdkDependencyPaths != null )
-            {
-                for( IPath sdkDependencyJarPath : sdkDependencyPaths )
-                {
-                    entries.add( createClasspathEntry( sdkDependencyJarPath, null, null ) );
-                }
-            }
+		return classpathEntries;
+	}
 
-            this.classpathEntries = entries.toArray( new IClasspathEntry[entries.size()] );
-        }
+	@Override
+	public String getDescription() {
+		return "Plugins SDK Dependencies";
+	}
 
-        return this.classpathEntries;
-    }
+	public IPath getPortalGlobalDir() {
+		return _portalGlobalDir;
+	}
 
-    @Override
-    public String getDescription()
-    {
-        return "Plugins SDK Dependencies";
-    }
+	@Override
+	protected String[] getPortalJars() {
+		return _commonJars;
+	}
 
-    public IPath getPortalGlobalDir()
-    {
-        return portalGlobalDir;
-    }
+	private static final String[] _commonJars =
+		{"commons-logging.jar", "log4j.jar", "util-bridges.jar", "util-java.jar", "util-taglib.jar"};
 
-    @Override
-    protected String[] getPortalJars()
-    {
-        return commonJars;
-    }
+	private final IPath _bundleDir;
+	private final IPath[] _bundleLibDependencyPaths;
+	private final IPath _portalGlobalDir;
+	private final IPath[] _sdkDependencyPaths;
 
 }

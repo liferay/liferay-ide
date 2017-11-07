@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.fragment;
 
@@ -40,136 +39,134 @@ import org.eclipse.wst.server.core.IRuntime;
 /**
  * @author Terry Jia
  */
-public class NewModuleFragmentFilesOpMethods
-{
+public class NewModuleFragmentFilesOpMethods {
 
-    public static final Status execute( final NewModuleFragmentFilesOp op, final ProgressMonitor pm )
-    {
-        final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
+	public static final Status execute(NewModuleFragmentFilesOp op, ProgressMonitor pm) {
+		IProgressMonitor monitor = ProgressMonitorBridge.create(pm);
 
-        monitor.beginTask( "Copy files (this process may take several minutes)", 100 );
+		monitor.beginTask("Copy files (this process may take several minutes)", 100);
 
-        final String projectName = op.getProjectName().content();
+		String projectName = op.getProjectName().content();
 
-        final IProject project = CoreUtil.getProject( projectName );
+		IProject project = CoreUtil.getProject(projectName);
 
-        Status retval = null;
+		Status retval = null;
 
-        try
-        {
-            final String hostBundleName = op.getHostOsgiBundle().content();
+		try {
+			String hostBundleName = op.getHostOsgiBundle().content();
 
-            final IPath temp = ProjectCore.getDefault().getStateLocation().append( hostBundleName );
+			IPath projectCoreLocation = ProjectCore.getDefault().getStateLocation();
 
-            if( !temp.toFile().exists() )
-            {
-                final IRuntime runtime = ServerUtil.getRuntime( op.getLiferayRuntimeName().content() );
+			IPath temp = projectCoreLocation.append(hostBundleName);
 
-                final PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
+			if (FileUtil.notExists(temp)) {
+				IRuntime runtime = ServerUtil.getRuntime(op.getLiferayRuntimeName().content());
 
-                File hostBundle =
-                    portalBundle.getOSGiBundlesDir().append( "modules" ).append( hostBundleName + ".jar" ).toFile();
+				PortalBundle portalBundle = LiferayServerCore.newPortalBundle(runtime.getLocation());
 
-                if( !hostBundle.exists() )
-                {
-                    hostBundle = ProjectCore.getDefault().getStateLocation().append( hostBundleName + ".jar" ).toFile();
-                }
+				IPath modulesPath = portalBundle.getOSGiBundlesDir().append("modules");
 
-                try
-                {
-                    ZipUtil.unzip( hostBundle, temp.toFile() );
-                }
-                catch( IOException e )
-                {
-                    throw new CoreException( ProjectCore.createErrorStatus( e ) );
-                }
-            }
+				File hostBundle = modulesPath.append(hostBundleName + ".jar").toFile();
 
-            final ElementList<OverrideFilePath> files = op.getOverrideFiles();
+				if (FileUtil.notExists(hostBundle)) {
+					hostBundle = projectCoreLocation.append(hostBundleName + ".jar").toFile();
+				}
 
-            for( OverrideFilePath file : files )
-            {
-                File fragmentFile = temp.append( file.getValue().content() ).toFile();
+				try {
+					ZipUtil.unzip(hostBundle, temp.toFile());
+				}
+				catch (IOException ioe) {
+					throw new CoreException(ProjectCore.createErrorStatus(ioe));
+				}
+			}
 
-                if( fragmentFile.exists() )
-                {
-                    File folder = null;
+			ElementList<OverrideFilePath> files = op.getOverrideFiles();
 
-                    if( fragmentFile.getName().equals( "portlet.properties" ) )
-                    {
-                        folder = project.getLocation().append( "src/main/java" ).toFile();
+			for (OverrideFilePath file : files) {
+				File fragmentFile = temp.append(file.getValue().content()).toFile();
 
-                        FileUtil.copyFileToDir( fragmentFile, "portlet-ext.properties", folder );
-                    }
-                    else if( fragmentFile.getName().contains( "default.xml" ) )
-                    {
-                        String parent = fragmentFile.getPath();
-                        parent = parent.replaceAll( "\\\\", "/" );
-                        String metaInfResources = "resource-actions";
+				if (FileUtil.exists(fragmentFile)) {
+					File folder = null;
 
-                        parent = parent.substring( parent.indexOf( metaInfResources ) + metaInfResources.length() );
+					if (fragmentFile.getName().equals("portlet.properties")) {
+						IPath path = project.getLocation().append("src/main/java");
 
-                        IPath resources = project.getLocation().append( "src/main/resources/resource-actions" );
+						folder = path.toFile();
 
-                        folder = resources.toFile();
-                        folder.mkdirs();
+						FileUtil.copyFileToDir(fragmentFile, "portlet-ext.properties", folder);
+					}
+					else if (fragmentFile.getName().contains("default.xml")) {
+						String parent = fragmentFile.getPath();
 
-                        FileUtil.copyFileToDir( fragmentFile, "default-ext.xml", folder );
+						parent = parent.replaceAll("\\\\", "/");
 
-                        try
-                        {
-                            File ext = new File(
-                                project.getLocation().append( "src/main/resources" ) + "/portlet-ext.properties" );
+						String metaInfResources = "resource-actions";
 
-                            ext.createNewFile();
+						parent = parent.substring(parent.indexOf(metaInfResources) + metaInfResources.length());
 
-                            String extFileContent =
-                                "resource.actions.configs=resource-actions/default.xml,resource-actions/default-ext.xml";
+						IPath resources = project.getLocation().append("src/main/resources/resource-actions");
 
-                            FileUtil.writeFile( ext, extFileContent, null );
-                        }
-                        catch( Exception e )
-                        {
-                            throw new CoreException( ProjectCore.createErrorStatus( e ) );
-                        }
-                    }
-                    else
-                    {
-                        String parent = fragmentFile.getParentFile().getPath();
-                        parent = parent.replaceAll( "\\\\", "/" );
-                        String metaInfResources = "META-INF/resources";
+						folder = resources.toFile();
 
-                        parent = parent.substring( parent.indexOf( metaInfResources ) + metaInfResources.length() );
+						folder.mkdirs();
 
-                        IPath resources = project.getLocation().append( "src/main/resources/META-INF/resources" );
+						FileUtil.copyFileToDir(fragmentFile, "default-ext.xml", folder);
 
-                        folder = resources.toFile();
-                        folder.mkdirs();
+						try {
+							File ext = new File(
+								project.getLocation().append("src/main/resources") + "/portlet-ext.properties");
 
-                        if( !parent.equals( "resources" ) && !parent.equals( "" ) )
-                        {
-                            folder = resources.append( parent ).toFile();
-                            folder.mkdirs();
-                        }
+							ext.createNewFile();
 
-                        FileUtil.copyFileToDir( fragmentFile, folder );
-                    }
-                }
-            }
+							String extFileContent =
+								"resource.actions.configs=resource-actions/default.xml," +
+									"resource-actions/default-ext.xml";
 
-            project.refreshLocal( IResource.DEPTH_INFINITE, null );
+							FileUtil.writeFile(ext, extFileContent, null);
+						}
+						catch (Exception e) {
+							throw new CoreException(ProjectCore.createErrorStatus(e));
+						}
+					}
+					else {
+						String parent = fragmentFile.getParentFile().getPath();
 
-            retval = Status.createOkStatus();
-        }
-        catch( Exception e )
-        {
-            final String msg = "Error copy files.";
-            ProjectCore.logError( msg, e );
+						parent = parent.replaceAll("\\\\", "/");
 
-            return Status.createErrorStatus( msg + " Please see Eclipse error log for more details.", e );
-        }
+						String metaInfResources = "META-INF/resources";
 
-        return retval;
-    }
+						parent = parent.substring(parent.indexOf(metaInfResources) + metaInfResources.length());
+
+						IPath resources = project.getLocation().append("src/main/resources/META-INF/resources");
+
+						folder = resources.toFile();
+
+						folder.mkdirs();
+
+						if (!parent.equals("resources") && !parent.equals("")) {
+							folder = resources.append(parent).toFile();
+
+							folder.mkdirs();
+						}
+
+						FileUtil.copyFileToDir(fragmentFile, folder);
+					}
+				}
+			}
+
+			project.refreshLocal(IResource.DEPTH_INFINITE, null);
+
+			retval = Status.createOkStatus();
+		}
+		catch (Exception e) {
+			String msg = "Error copy files.";
+
+			ProjectCore.logError(msg, e);
+
+			return Status.createErrorStatus(msg + " Please see Eclipse error log for more details.", e);
+		}
+
+		return retval;
+	}
 
 }

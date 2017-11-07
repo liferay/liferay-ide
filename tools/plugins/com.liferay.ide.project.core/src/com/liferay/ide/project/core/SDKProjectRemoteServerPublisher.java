@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.IWebProject;
@@ -26,10 +26,12 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.InputStream;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -42,95 +44,98 @@ import org.eclipse.core.runtime.Path;
 /**
  * @author Simon Jiang
  */
-public class SDKProjectRemoteServerPublisher extends AbstractRemoteServerPublisher
-{
-    private SDK sdk;
+public class SDKProjectRemoteServerPublisher extends AbstractRemoteServerPublisher {
 
-    public SDKProjectRemoteServerPublisher( IProject project, SDK sdk )
-    {
-        super( project );
-        this.sdk = sdk;
-    }
+	public SDKProjectRemoteServerPublisher(IProject project, SDK sdk) {
+		super(project);
 
-    @Override
-    public IPath publishModuleFull( IProgressMonitor monitor ) throws CoreException
-    {
-        final IPath deployPath = LiferayServerCore.getTempLocation( "direct-deploy", StringPool.EMPTY ); //$NON-NLS-1$
-        File warFile = deployPath.append( getProject().getName() + ".war" ).toFile(); //$NON-NLS-1$
-        warFile.getParentFile().mkdirs();
+		_sdk = sdk;
+	}
 
-        final Map<String, String> properties = new HashMap<String, String>();
-        properties.put( ISDKConstants.PROPERTY_AUTO_DEPLOY_UNPACK_WAR, "false" ); //$NON-NLS-1$
+	@Override
+	public IPath publishModuleFull(IProgressMonitor monitor) throws CoreException {
+		IPath deployPath = LiferayServerCore.getTempLocation("direct-deploy", StringPool.EMPTY);
 
-        final ILiferayRuntime runtime = ServerUtil.getLiferayRuntime( getProject() );
+		File warFile = deployPath.append(getProject().getName() + ".war").toFile();
 
-        final String appServerDeployDirProp =
-            ServerUtil.getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, runtime );
+		warFile.getParentFile().mkdirs();
 
-        properties.put( appServerDeployDirProp, deployPath.toOSString() );
+		Map<String, String> properties = new HashMap<>();
 
-        // IDE-1073 LPS-37923
-        properties.put( ISDKConstants.PROPERTY_PLUGIN_FILE_DEFAULT, warFile.getAbsolutePath() );
+		properties.put(ISDKConstants.PROPERTY_AUTO_DEPLOY_UNPACK_WAR, "false");
 
-        properties.put( ISDKConstants.PROPERTY_PLUGIN_FILE, warFile.getAbsolutePath() );
+		ILiferayRuntime runtime = ServerUtil.getLiferayRuntime(getProject());
 
-        final String fileTimeStamp = System.currentTimeMillis() + "";
+		String appServerDeployDirProp = ServerUtil.getAppServerPropertyKey(
+			ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, runtime);
 
-        // IDE-1491
-        properties.put( ISDKConstants.PROPERTY_LP_VERSION, fileTimeStamp );
+		properties.put(appServerDeployDirProp, deployPath.toOSString());
 
-        properties.put( ISDKConstants.PROPERTY_LP_VERSION_SUFFIX, ".0" );
+		// IDE-1073 LPS-37923
 
-        IStatus status = sdk.validate();
+		properties.put(ISDKConstants.PROPERTY_PLUGIN_FILE_DEFAULT, warFile.getAbsolutePath());
 
-        if ( !status.isOK() )
-        {
-            throw new CoreException( status );
-        }
+		properties.put(ISDKConstants.PROPERTY_PLUGIN_FILE, warFile.getAbsolutePath());
 
-        final IStatus directDeployStatus =
-            sdk.war(
-                getProject(), properties, true, new String[] { "-Duser.timezone=GMT" }, monitor );
+		String fileTimeStamp = System.currentTimeMillis() + "";
 
-        if( !directDeployStatus.isOK() || ( !warFile.exists() ) )
-        {
-            String pluginVersion = "1";
+		// IDE-1491
 
-            final IPath pluginPropertiesPath = new Path( "WEB-INF/liferay-plugin-package.properties" );
-            final IWebProject webproject = LiferayCore.create( IWebProject.class, getProject() );
+		properties.put(ISDKConstants.PROPERTY_LP_VERSION, fileTimeStamp);
 
-            if( webproject != null )
-            {
-                final IResource propsRes = webproject.findDocrootResource( pluginPropertiesPath );
+		properties.put(ISDKConstants.PROPERTY_LP_VERSION_SUFFIX, ".0");
 
-                if( propsRes instanceof IFile && propsRes.exists() )
-                {
-                    try
-                    {
-                        final PropertiesConfiguration pluginPackageProperties = new PropertiesConfiguration();
-                        final InputStream is = ( (IFile) propsRes ).getContents();
-                        pluginPackageProperties.load( is );
-                        pluginVersion = pluginPackageProperties.getString( "module-incremental-version" );
-                        is.close();
-                    }
-                    catch( Exception e )
-                    {
-                        LiferayCore.logError( "error reading module-incremtnal-version. ", e );
-                    }
-                }
+		IStatus status = _sdk.validate();
 
-                warFile =
-                    sdk.getLocation().append( "dist" ).append(
-                        getProject().getName() + "-" + fileTimeStamp + "." + pluginVersion + ".0" + ".war" ).toFile();
+		if (!status.isOK()) {
+			throw new CoreException(status);
+		}
 
-                if( !warFile.exists() )
-                {
-                    throw new CoreException( directDeployStatus );
-                }
-            }
-        }
+		IStatus directDeployStatus = _sdk.war(
+			getProject(), properties, true, new String[] {"-Duser.timezone=GMT"}, monitor);
 
-        return new Path( warFile.getAbsolutePath() );
-    }
+		if (!directDeployStatus.isOK() || !warFile.exists()) {
+			String pluginVersion = "1";
+
+			IPath pluginPropertiesPath = new Path("WEB-INF/liferay-plugin-package.properties");
+
+			IWebProject webproject = LiferayCore.create(IWebProject.class, getProject());
+
+			if (webproject != null) {
+				IResource propsRes = webproject.findDocrootResource(pluginPropertiesPath);
+
+				if (propsRes instanceof IFile && propsRes.exists()) {
+					try {
+						PropertiesConfiguration pluginPackageProperties = new PropertiesConfiguration();
+
+						InputStream is = ((IFile)propsRes).getContents();
+
+						pluginPackageProperties.load(is);
+
+						pluginVersion = pluginPackageProperties.getString("module-incremental-version");
+
+						is.close();
+					}
+					catch (Exception e) {
+						LiferayCore.logError("error reading module-incremtnal-version. ", e);
+					}
+				}
+
+				IPath distPath = _sdk.getLocation().append("dist");
+
+				String fullName = getProject().getName() + "-" + fileTimeStamp + "." + pluginVersion + ".0.war";
+
+				warFile = distPath.append(fullName).toFile();
+
+				if (!warFile.exists()) {
+					throw new CoreException(directDeployStatus);
+				}
+			}
+		}
+
+		return new Path(warFile.getAbsolutePath());
+	}
+
+	private SDK _sdk;
 
 }

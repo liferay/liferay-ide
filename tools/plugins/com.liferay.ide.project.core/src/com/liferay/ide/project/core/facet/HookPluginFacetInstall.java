@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.facet;
 
@@ -32,83 +31,56 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
  * @author Greg Amerson
  * @author Kamesh Sampath
  */
-public class HookPluginFacetInstall extends PluginFacetInstall
-{
+public class HookPluginFacetInstall extends PluginFacetInstall {
 
-    @Override
-    public void execute( IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor )
-        throws CoreException
-    {
-        super.execute( project, fv, config, monitor );
+	@Override
+	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor)
+		throws CoreException {
 
-        IDataModel model = (IDataModel) config;
+		super.execute(project, fv, config, monitor);
 
-        IDataModel masterModel = (IDataModel) model.getProperty( FacetInstallDataModelProvider.MASTER_PROJECT_DM );
+		IDataModel model = (IDataModel)config;
 
-        if( masterModel != null && masterModel.getBooleanProperty( CREATE_PROJECT_OPERATION ) )
-        {
-            /*
-            SDK sdk = getSDK();
+		IDataModel masterModel = (IDataModel)model.getProperty(FacetInstallDataModelProvider.MASTER_PROJECT_DM);
 
-            String hookName = this.masterModel.getStringProperty( HOOK_NAME );
+		if ((masterModel != null) && masterModel.getBooleanProperty(CREATE_PROJECT_OPERATION)) {
 
-            // FIX IDE-450
-            if( hookName.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
-            {
-                hookName = hookName.substring( 0, hookName.indexOf( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) );
-            }
-            // END FIX IDE-450
+			// IDE-1122 SDK creating project has been moved to Class NewPluginProjectWizard
 
-            String displayName = this.masterModel.getStringProperty( DISPLAY_NAME );
+			String hookName = this.masterModel.getStringProperty(HOOK_NAME);
 
-            IPath installPath = sdk.createNewHookProject( hookName, displayName );
+			IPath projectTempPath = (IPath)masterModel.getProperty(PROJECT_TEMP_PATH);
 
-            IPath tempInstallPath = installPath.append( hookName + ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX );
+			processNewFiles(projectTempPath.append(hookName + ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX));
 
-            processNewFiles( tempInstallPath );
+			FileUtil.deleteDir(projectTempPath.toFile(), true);
 
-            // cleanup hook files
-            FileUtil.deleteDir( installPath.toFile(), true );
-            */
+			// End IDE-1122
 
-            // IDE-1122 SDK creating project has been moved to Class NewPluginProjectWizard
-            String hookName = this.masterModel.getStringProperty( HOOK_NAME );
+			try {
+				this.project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+			}
+			catch (Exception e) {
+				ProjectCore.logError(e);
+			}
+		}
+		else if (shouldSetupDefaultOutputLocation()) {
+			setupDefaultOutputLocation();
+		}
 
-            IPath projectTempPath = (IPath) masterModel.getProperty( PROJECT_TEMP_PATH );
+		// IDE-491 don't add this in the webxml by default
 
-            processNewFiles( projectTempPath.append( hookName + ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) );
+		if (shouldConfigureDeploymentAssembly()) {
 
-            FileUtil.deleteDir( projectTempPath.toFile(), true );
-            // End IDE-1122
+			// IDE-565
 
-            try
-            {
-                this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-            }
-            catch( Exception e )
-            {
-                ProjectCore.logError( e );
-            }
-        }
-        else if( shouldSetupDefaultOutputLocation() )
-        {
-            setupDefaultOutputLocation();
-        }
+			configureDeploymentAssembly(IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER, DEFAULT_DEPLOY_PATH);
+		}
+	}
 
-        // IDE-491 don't add this in the webxml by default
-        // ProjectUtil.addLiferayPortletTldToWebXML( this.project );
-
-        if( shouldConfigureDeploymentAssembly() )
-        {
-            // IDE-565
-            configureDeploymentAssembly( IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER, DEFAULT_DEPLOY_PATH );
-        }
-    }
-
-    @Override
-    protected String getDefaultOutputLocation()
-    {
-        return IPluginFacetConstants.HOOK_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER;
-    }
+	@Override
+	protected String getDefaultOutputLocation() {
+		return IPluginFacetConstants.HOOK_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER;
+	}
 
 }

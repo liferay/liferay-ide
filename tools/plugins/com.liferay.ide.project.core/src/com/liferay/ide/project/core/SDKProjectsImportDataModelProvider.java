@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core;
 
@@ -40,320 +39,263 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
+
 import org.osgi.framework.Version;
 
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( { "unchecked", "restriction", "rawtypes" } )
-public class SDKProjectsImportDataModelProvider extends FacetProjectCreationDataModelProvider
-    implements ISDKProjectsImportDataModelProperties
-{
+@SuppressWarnings({"unchecked", "restriction", "rawtypes"})
+public class SDKProjectsImportDataModelProvider
+	extends FacetProjectCreationDataModelProvider implements ISDKProjectsImportDataModelProperties {
 
-    public SDKProjectsImportDataModelProvider()
-    {
-        super();
-    }
+	public SDKProjectsImportDataModelProvider() {
+	}
 
-    @Override
-    public IDataModelOperation getDefaultOperation()
-    {
-        return new SDKProjectsImportOperation( this.model );
-    }
+	public IStatus createSelectedProjectsErrorStatus() {
+		return ProjectCore.createErrorStatus(Msgs.selectOneLiferayProject);
+	}
 
-    @Override
-    public Object getDefaultProperty( String propertyName )
-    {
-        /*
-         * if (SDK_LOCATION.equals(propertyName)) { return ProjectCorePlugin.getDefault
-         * ().getPreferenceStore().getString(ProjectCorePlugin .LAST_SDK_IMPORT_LOCATION_PREF); } else
-         */
-        if( SDK_LOCATION.equals( propertyName ) )
-        {
-            String sdkName = getStringProperty( LIFERAY_SDK_NAME );
-            SDK sdk = SDKManager.getInstance().getSDK( sdkName );
+	@Override
+	public IDataModelOperation getDefaultOperation() {
+		return new SDKProjectsImportOperation(model);
+	}
 
-            if( sdk != null )
-            {
-                return sdk.getLocation().toOSString();
-            }
-        }
-        else if( SDK_VERSION.equals( propertyName ) )
-        {
-            // see if we have a sdk location and extract the version
-            String sdkLoc = getStringProperty( SDK_LOCATION );
+	@Override
+	public Object getDefaultProperty(String propertyName) {
+		if (SDK_LOCATION.equals(propertyName)) {
+			String sdkName = getStringProperty(LIFERAY_SDK_NAME);
 
-            try
-            {
-                SDK sdk = SDKUtil.createSDKFromLocation( new Path( sdkLoc ) );
+			SDK sdk = SDKManager.getInstance().getSDK(sdkName);
 
-                if( sdk != null )
-                {
-                    Version v = new Version( sdk.getVersion() );
+			if (sdk != null) {
+				return sdk.getLocation().toOSString();
+			}
+		}
+		else if (SDK_VERSION.equals(propertyName)) {
 
-                    return v.toString();
-                }
-            }
-            catch( Exception e )
-            {
-            }
-        }
+			// see if we have a sdk location and extract the version
 
-        return super.getDefaultProperty( propertyName );
-    }
+			String sdkLoc = getStringProperty(SDK_LOCATION);
 
-    @Override
-    public Set getPropertyNames()
-    {
-        Set propertyNames = super.getPropertyNames();
-        propertyNames.add( LIFERAY_SDK_NAME );
-        propertyNames.add( SDK_LOCATION );
-        propertyNames.add( SDK_VERSION );
-        propertyNames.add( SELECTED_PROJECTS );
-        return propertyNames;
-    }
+			try {
+				SDK sdk = SDKUtil.createSDKFromLocation(new Path(sdkLoc));
 
-    @Override
-    public DataModelPropertyDescriptor[] getValidPropertyDescriptors( String propertyName )
-    {
-        if( LIFERAY_SDK_NAME.equals( propertyName ) )
-        {
-            SDK[] validSDKs = SDKManager.getInstance().getSDKs();
-            String[] values = null;
-            String[] descriptions = null;
+				if (sdk != null) {
+					Version v = new Version(sdk.getVersion());
 
-            if( validSDKs.length == 0 )
-            {
-                values = new String[] { IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE };
-                descriptions = new String[] { IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE_DESCRIPTION };
-            }
-            else
-            {
-                values = new String[validSDKs.length];
-                descriptions = new String[validSDKs.length];
+					return v.toString();
+				}
+			}
+			catch (Exception e) {
+			}
+		}
 
-                for( int i = 0; i < validSDKs.length; i++ )
-                {
-                    values[i] = validSDKs[i].getName();
-                    descriptions[i] = validSDKs[i].getName();
-                }
-            }
+		return super.getDefaultProperty(propertyName);
+	}
 
-            return DataModelPropertyDescriptor.createDescriptors( values, descriptions );
-        }
+	@Override
+	public Set getPropertyNames() {
+		Set propertyNames = super.getPropertyNames();
 
-        return super.getValidPropertyDescriptors( propertyName );
-    }
+		propertyNames.add(LIFERAY_SDK_NAME);
+		propertyNames.add(SDK_LOCATION);
+		propertyNames.add(SDK_VERSION);
+		propertyNames.add(SELECTED_PROJECTS);
 
-    @Override
-    public void init()
-    {
-        super.init();
+		return propertyNames;
+	}
 
-        // set the project facets to get the runtime target dropdown to only
-        // show liferay runtimes
-        IFacetedProjectWorkingCopy facetedProject = getFacetedProjectWorkingCopy();
+	@Override
+	public DataModelPropertyDescriptor[] getValidPropertyDescriptors(String propertyName) {
+		if (LIFERAY_SDK_NAME.equals(propertyName)) {
+			SDK[] validSDKs = SDKManager.getInstance().getSDKs();
 
-        facetedProject.setSelectedPreset( IPluginFacetConstants.LIFERAY_PORTLET_PRESET );
-        Set<IProjectFacet> fixedFacets = new HashSet<IProjectFacet>();
-        fixedFacets.add( ProjectFacetsManager.getProjectFacet( IPluginFacetConstants.LIFERAY_EXT_FACET_ID ) );
-        facetedProject.setFixedProjectFacets( Collections.unmodifiableSet( fixedFacets ) );
-        // Set<IProjectFacetVersion> facets =
-        // ProjectUtil.getFacetsForPreset(IPluginFacetConstants.LIFERAY_PORTLET_PRESET);
+			String[] values = null;
 
-        // Set<IProjectFacet> fixedFacets = new HashSet<IProjectFacet>();
+			String[] descriptions = null;
 
-        // for (IProjectFacetVersion pfv : facets) {
-        // fixedFacets.add(pfv.getProjectFacet());
-        // }
+			if (validSDKs.length == 0) {
+				values = new String[] {IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE};
+				descriptions = new String[] {IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE_DESCRIPTION};
+			}
+			else {
+				values = new String[validSDKs.length];
 
-        // facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(fixedFacets));
+				descriptions = new String[validSDKs.length];
 
-        ProjectUtil.setDefaultRuntime(getDataModel());
-    }
+				for (int i = 0; i < validSDKs.length; i++) {
+					values[i] = validSDKs[i].getName();
 
-    @Override
-    public boolean isPropertyEnabled( String propertyName )
-    {
-        if( SDK_VERSION.equals( propertyName ) )
-        {
-            return false;
-        }
-        else if( SDK_LOCATION.equals( propertyName ) )
-        {
-            return false;
-        }
+					descriptions[i] = validSDKs[i].getName();
+				}
+			}
 
-        return super.isPropertyEnabled( propertyName );
-    }
+			return DataModelPropertyDescriptor.createDescriptors(values, descriptions);
+		}
 
-    @Override
-    public IStatus validate( String name )
-    {
-        if( SDK_LOCATION.equals( name ) )
-        {
-            String sdkLocation = getStringProperty( SDK_LOCATION );
+		return super.getValidPropertyDescriptors(propertyName);
+	}
 
-            if( SDKUtil.isValidSDKLocation( sdkLocation ) )
-            {
-                return Status.OK_STATUS;
-            }
-            else
-            {
-                return ProjectCore.createErrorStatus( Msgs.invalidPluginSDKLocation );
-            }
-        }
-        else if( SDK_VERSION.equals( name ) )
-        {
-            String sdkVersion = getStringProperty( SDK_VERSION );
+	@Override
+	public void init() {
+		super.init();
 
-            if( SDKUtil.isValidSDKVersion( sdkVersion, SDKManager.getLeastValidVersion() ) )
-            {
-                Object runtime = getProperty( FACET_RUNTIME );
+		// set the project facets to get the runtime target dropdown to only show liferay runtimes
 
-                if( compareSDKRuntimeVersion( sdkVersion, runtime ) )
-                {
-                    return Status.OK_STATUS;
-                }
-                else
-                {
-                    return ProjectCore.createWarningStatus( Msgs.versionUnequal );
-                }
-            }
-            else
-            {
-                return ProjectCore.createErrorStatus( Msgs.invalidPluginSDKVersion +
-                    SDKManager.getLeastValidVersion() );
-            }
-        }
-        else if( SELECTED_PROJECTS.equals( name ) )
-        {
-            Object val = getProperty( SELECTED_PROJECTS );
+		IFacetedProjectWorkingCopy facetedProject = getFacetedProjectWorkingCopy();
 
-            if( val instanceof Object[] )
-            {
-                Object[] selectedProjects = (Object[]) val;
+		facetedProject.setSelectedPreset(IPluginFacetConstants.LIFERAY_PORTLET_PRESET);
 
-                if( selectedProjects.length >= 1 )
-                {
-                    for( Object project : selectedProjects )
-                    {
-                        if( project instanceof BinaryProjectRecord )
-                        {
-                            BinaryProjectRecord binaryProject = (BinaryProjectRecord) project;
-                            Version sdkVersion = new Version( getStringProperty( SDK_VERSION ) );
+		Set<IProjectFacet> fixedFacets = new HashSet<>();
 
-                            if( binaryProject.isWeb() &&
-                                CoreUtil.compareVersions( sdkVersion, ILiferayConstants.V700 ) < 0 )
-                            {
-                                return ProjectCore.createErrorStatus( Msgs.unableSupportWebPluginType );
-                            }
-                        }
-                    }
+		fixedFacets.add(ProjectFacetsManager.getProjectFacet(IPluginFacetConstants.LIFERAY_EXT_FACET_ID));
 
-                    return Status.OK_STATUS;
-                }
-            }
+		facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(fixedFacets));
 
-            return createSelectedProjectsErrorStatus();
-        }
-        else if( FACET_RUNTIME.equals( name ) )
-        {
-            Object runtime = getProperty( FACET_RUNTIME );
+		ProjectUtil.setDefaultRuntime(getDataModel());
+	}
 
-            if( !( runtime instanceof BridgedRuntime ) )
-            {
-                return ProjectCore.createErrorStatus( Msgs.selectValidLiferayRuntime );
-            }
-            else
-            {
-                String sdkVersion = getStringProperty( SDK_VERSION );
+	@Override
+	public boolean isPropertyEnabled(String propertyName) {
+		if (SDK_VERSION.equals(propertyName) || SDK_LOCATION.equals(propertyName)) {
+			return false;
+		}
 
-                if( compareSDKRuntimeVersion( sdkVersion, runtime ) )
-                {
-                    return Status.OK_STATUS;
-                }
-                else
-                {
-                    return ProjectCore.createWarningStatus( Msgs.versionUnequal );
-                }
-            }
-        }
-        else if( FACET_PROJECT_NAME.equals( name ) )
-        {// no need to check this one
-            return Status.OK_STATUS;
-        }
+		return super.isPropertyEnabled(propertyName);
+	}
 
-        return super.validate( name );
-    }
+	@Override
+	public IStatus validate(String name) {
+		if (SDK_LOCATION.equals(name)) {
+			String sdkLocation = getStringProperty(SDK_LOCATION);
 
-    private boolean compareSDKRuntimeVersion( String sdkVersion, Object runtime )
-    {
-        if( sdkVersion != null && runtime instanceof BridgedRuntime )
-        {
-            try
-            {
-                final Version liferaySdkVersion = new Version( sdkVersion );
+			if (SDKUtil.isValidSDKLocation(sdkLocation)) {
+				return Status.OK_STATUS;
+			}
+			else {
+				return ProjectCore.createErrorStatus(Msgs.invalidPluginSDKLocation);
+			}
+		}
+		else if (SDK_VERSION.equals(name)) {
+			String sdkVersion = getStringProperty(SDK_VERSION);
 
-                final String runtimeVersion =
-                    ServerUtil.getLiferayRuntime( (BridgedRuntime) runtime ).getPortalVersion();
+			if (SDKUtil.isValidSDKVersion(sdkVersion, SDKManager.getLeastValidVersion())) {
+				Object runtime = getProperty(FACET_RUNTIME);
 
-                final Version liferayRuntimeVersion = new Version( runtimeVersion );
+				if (_compareSDKRuntimeVersion(sdkVersion, runtime)) {
+					return Status.OK_STATUS;
+				}
+				else {
+					return ProjectCore.createWarningStatus(Msgs.versionUnequal);
+				}
+			}
+			else {
+				return ProjectCore.createErrorStatus(Msgs.invalidPluginSDKVersion + SDKManager.getLeastValidVersion());
+			}
+		}
+		else if (SELECTED_PROJECTS.equals(name)) {
+			Object val = getProperty(SELECTED_PROJECTS);
 
-                if( liferaySdkVersion.getMajor() == liferayRuntimeVersion.getMajor() &&
-                    liferaySdkVersion.getMinor() == liferayRuntimeVersion.getMinor() )
-                {
-                    return true;
-                }
-            }
-            catch( Exception e )
-            {
-                LiferayCore.logError( "invalid sdk or runtime version ", e );
-                return false;
-            }
-        }
+			if (val instanceof Object[]) {
+				Object[] selectedProjects = (Object[])val;
 
-        return false;
-    }
+				if (selectedProjects.length >= 1) {
+					for (Object project : selectedProjects) {
+						if (project instanceof BinaryProjectRecord) {
+							BinaryProjectRecord binaryProject = (BinaryProjectRecord)project;
 
-    /**
-     * this method needs to be overriden by the subclasses to support custom messages
-     *
-     * @return an error {@link IStatus}
-     */
-    public IStatus createSelectedProjectsErrorStatus()
-    {
-        return ProjectCore.createErrorStatus( Msgs.selectOneLiferayProject );
-    }
+							Version sdkVersion = new Version(getStringProperty(SDK_VERSION));
 
-    protected IFacetedProjectWorkingCopy getFacetedProjectWorkingCopy()
-    {
-        return (IFacetedProjectWorkingCopy) this.model.getProperty( FACETED_PROJECT_WORKING_COPY );
-    }
+							if (binaryProject.isWeb() &&
+								(CoreUtil.compareVersions(sdkVersion, ILiferayConstants.V700) < 0)) {
 
-    /**
-     * A small delegation to call super.validate, by passing this class
-     *
-     * @param name
-     * @return
-     */
-    public IStatus validateSuper( String name )
-    {
-        return super.validate( name );
-    }
+								return ProjectCore.createErrorStatus(Msgs.unableSupportWebPluginType);
+							}
+						}
+					}
 
-    private static class Msgs extends NLS
-    {
-        public static String invalidPluginSDKLocation;
-        public static String invalidPluginSDKVersion;
-        public static String selectOneLiferayProject;
-        public static String selectValidLiferayRuntime;
-        public static String unableSupportWebPluginType;
-        public static String versionUnequal;
+					return Status.OK_STATUS;
+				}
+			}
 
-        static
-        {
-            initializeMessages( SDKProjectsImportDataModelProvider.class.getName(), Msgs.class );
-        }
-    }
+			return createSelectedProjectsErrorStatus();
+		}
+		else if (FACET_RUNTIME.equals(name)) {
+			Object runtime = getProperty(FACET_RUNTIME);
+
+			if (!(runtime instanceof BridgedRuntime)) {
+				return ProjectCore.createErrorStatus(Msgs.selectValidLiferayRuntime);
+			}
+			else {
+				String sdkVersion = getStringProperty(SDK_VERSION);
+
+				if (_compareSDKRuntimeVersion(sdkVersion, runtime)) {
+					return Status.OK_STATUS;
+				}
+				else {
+					return ProjectCore.createWarningStatus(Msgs.versionUnequal);
+				}
+			}
+		}
+		else if (FACET_PROJECT_NAME.equals(name)) {
+
+			// no need to check this one
+
+			return Status.OK_STATUS;
+		}
+
+		return super.validate(name);
+	}
+
+	public IStatus validateSuper(String name) {
+		return super.validate(name);
+	}
+
+	protected IFacetedProjectWorkingCopy getFacetedProjectWorkingCopy() {
+		return (IFacetedProjectWorkingCopy)model.getProperty(FACETED_PROJECT_WORKING_COPY);
+	}
+
+	private boolean _compareSDKRuntimeVersion(String sdkVersion, Object runtime) {
+		if ((sdkVersion == null) && !(runtime instanceof BridgedRuntime)) {
+			return false;
+		}
+
+		try {
+			Version liferaySdkVersion = new Version(sdkVersion);
+
+			String runtimeVersion = ServerUtil.getLiferayRuntime((BridgedRuntime)runtime).getPortalVersion();
+
+			Version liferayRuntimeVersion = new Version(runtimeVersion);
+
+			if ((liferaySdkVersion.getMajor() == liferayRuntimeVersion.getMajor()) &&
+				(liferaySdkVersion.getMinor() == liferayRuntimeVersion.getMinor())) {
+
+				return true;
+			}
+
+			return false;
+		}
+		catch (Exception e) {
+			LiferayCore.logError("invalid sdk or runtime version ", e);
+
+			return false;
+		}
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String invalidPluginSDKLocation;
+		public static String invalidPluginSDKVersion;
+		public static String selectOneLiferayProject;
+		public static String selectValidLiferayRuntime;
+		public static String unableSupportWebPluginType;
+		public static String versionUnequal;
+
+		static {
+			initializeMessages(SDKProjectsImportDataModelProvider.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

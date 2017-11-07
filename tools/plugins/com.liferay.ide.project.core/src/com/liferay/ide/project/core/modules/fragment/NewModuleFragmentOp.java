@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.fragment;
 
@@ -39,104 +38,84 @@ import org.eclipse.sapphire.modeling.annotations.Whitespace;
 /**
  * @author Terry Jia
  */
-public interface NewModuleFragmentOp extends BaseModuleOp
-{
+public interface NewModuleFragmentOp extends BaseModuleOp {
 
-    ElementType TYPE = new ElementType( NewModuleFragmentOp.class );
+	public ElementType TYPE = new ElementType(NewModuleFragmentOp.class);
 
-    // *** ProjectName ***
+	@DelegateImplementation(NewModuleFragmentOpMethods.class)
+	@Override
+	public Status execute(ProgressMonitor monitor);
 
-    @Listeners( FragmentProjectNameListener.class )
-    @Service( impl = ModuleProjectNameValidationService.class )
-    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, BaseModuleOp.PROP_PROJECT_NAME );
+	public Value<String> getArtifactVersion();
 
-    // *** ProjectLocation ***
+	public Value<String> getGroupId();
 
-    @Service( impl = FragmentProjectLocationValidationService.class )
-    @Service( impl = CommonProjectLocationInitialValueService.class )
-    ValueProperty PROP_LOCATION = new ValueProperty( TYPE, BaseModuleOp.PROP_LOCATION );
+	public Value<String> getHostOsgiBundle();
 
-    // *** UseDefaultLocation ***
+	public Value<String> getLiferayRuntimeName();
 
-    @Listeners( ModuleFragmentProjectUseDefaultLocationListener.class )
-    ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty( TYPE, BaseModuleOp.PROP_USE_DEFAULT_LOCATION );
+	public Value<String> getLpkgName();
 
-    // *** Liferay Runtime ***
+	public ElementList<OverrideFilePath> getOverrideFiles();
 
-    @Services(
-        value = {
-            @Service( impl = LiferayRuntimeNamePossibleValuesService.class ),
-            @Service( impl = LiferayRuntimeNameDefaultValueService.class ),
-            @Service( impl = LiferayRuntimeNameValidationService.class )
-            }
-        )
-    @Required
-    ValueProperty PROP_LIFERAY_RUNTIME_NAME = new ValueProperty( TYPE, "LiferayRuntimeName" );
+	public void setArtifactVersion(String value);
 
-    Value<String> getLiferayRuntimeName();
+	public void setGroupId(String value);
 
-    void setLiferayRuntimeName( String value );
+	public void setHostOsgiBundle(String value);
 
-    // *** HostOSGiBundle ***
+	public void setLiferayRuntimeName(String value);
 
-    @DefaultValue( text = "" )
-    @Label( standard = "Host OSGi Bundle" )
-    @Service( impl = HostOSGiBundlePossibleValuesService.class )
-    @Listeners( OSGiBundleListener.class )
-    @Required
-    ValueProperty PROP_HOST_OSGI_BUNDLE = new ValueProperty( TYPE, "HostOsgiBundle" );
+	public void setLpkgName(String value);
 
-    Value<String> getHostOsgiBundle();
-    void setHostOsgiBundle( String value );
+	@Label(standard = "artifact version")
+	@Service(impl = ModuleFragmentProjectArtifactVersionDefaultValueService.class)
+	public ValueProperty PROP_ARTIFACT_VERSION = new ValueProperty(TYPE, "ArtifactVersion");
 
-    // *** HostOSGiBundle ***
+	@Label(standard = "group id")
+	@Service(impl = ModuleFragmentProjectGroupIdDefaultValueService.class)
+	@Service(impl = ModuleFragmentProjectGroupIdValidationService.class)
+	@Whitespace(trim = false)
+	public ValueProperty PROP_GROUP_ID = new ValueProperty(TYPE, "GroupId");
 
-    ValueProperty PROP_LPKG_NAME = new ValueProperty( TYPE, "LpkgName" );
+	@DefaultValue(text = "")
+	@Label(standard = "Host OSGi Bundle")
+	@Listeners(OSGiBundleListener.class)
+	@Required
+	@Service(impl = HostOSGiBundlePossibleValuesService.class)
+	public ValueProperty PROP_HOST_OSGI_BUNDLE = new ValueProperty(TYPE, "HostOsgiBundle");
 
-    Value<String> getLpkgName();
-    void setLpkgName( String value );
+	@Required
+	@Services(
+		value = {
+			@Service(impl = LiferayRuntimeNamePossibleValuesService.class),
+			@Service(impl = LiferayRuntimeNameDefaultValueService.class),
+			@Service(impl = LiferayRuntimeNameValidationService.class)
+		}
+	)
+	public ValueProperty PROP_LIFERAY_RUNTIME_NAME = new ValueProperty(TYPE, "LiferayRuntimeName");
 
-    // *** OverrideFiles ***
+	@Service(impl = CommonProjectLocationInitialValueService.class)
+	@Service(impl = FragmentProjectLocationValidationService.class)
+	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, BaseModuleOp.PROP_LOCATION);
 
-    @Type( base = OverrideFilePath.class )
-    @Label( standard = "Overridden files" )
-    ListProperty PROP_OVERRIDE_FILES = new ListProperty( TYPE, "OverrideFiles" );
+	public ValueProperty PROP_LPKG_NAME = new ValueProperty(TYPE, "LpkgName");
 
-    ElementList<OverrideFilePath> getOverrideFiles();
+	@Label(standard = "Overridden files")
+	@Type(base = OverrideFilePath.class)
+	public ListProperty PROP_OVERRIDE_FILES = new ListProperty(TYPE, "OverrideFiles");
 
-    // *** ProjectProvider ***
+	@Listeners(FragmentProjectNameListener.class)
+	@Service(impl = ModuleProjectNameValidationService.class)
+	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_NAME);
 
-    @Label( standard = "build type" )
-    @Listeners( FragmentProjectNameListener.class )
-    @Service( impl = FragmentProjectProviderPossibleValuesService.class )
-    @Service( impl = FragmentProjectProviderDefaultValueService.class )
-    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, BaseModuleOp.PROP_PROJECT_PROVIDER );
+	@Label(standard = "build type")
+	@Listeners(FragmentProjectNameListener.class)
+	@Service(impl = FragmentProjectProviderDefaultValueService.class)
+	@Service(impl = FragmentProjectProviderPossibleValuesService.class)
+	public ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_PROVIDER);
 
-    // *** Maven settings ***
-    // *** ArtifactVersion ***
+	@Listeners(ModuleFragmentProjectUseDefaultLocationListener.class)
+	public ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty(TYPE, BaseModuleOp.PROP_USE_DEFAULT_LOCATION);
 
-    @Label( standard = "artifact version" )
-    @Service( impl = ModuleFragmentProjectArtifactVersionDefaultValueService.class )
-    ValueProperty PROP_ARTIFACT_VERSION = new ValueProperty( TYPE, "ArtifactVersion" );
-
-    Value<String> getArtifactVersion();
-    void setArtifactVersion( String value );
-
-
-    // *** GroupId ***
-
-    @Label( standard = "group id" )
-    @Service( impl = ModuleFragmentProjectGroupIdValidationService.class )
-    @Service( impl = ModuleFragmentProjectGroupIdDefaultValueService.class )
-    @Whitespace( trim = false )
-    ValueProperty PROP_GROUP_ID = new ValueProperty( TYPE, "GroupId" );
-
-    Value<String> getGroupId();
-    void setGroupId( String value );
-
-    // *** Method: execute ***
-
-    @Override
-    @DelegateImplementation( NewModuleFragmentOpMethods.class )
-    Status execute( ProgressMonitor monitor );
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.upgrade.service;
 
@@ -21,21 +20,22 @@ import com.liferay.ide.server.util.ServerUtil;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 
-
 /**
  * @author Terry Jia
  */
-public class LiferayServerNameValidationService extends ValidationService
-{
+public class LiferayServerNameValidationService extends ValidationService {
 
-    @Override
-    protected Status compute()
-    {
-        final CodeUpgradeOp op = context( CodeUpgradeOp.class );
+	@Override
+	protected Status compute() {
+		CodeUpgradeOp op = context(CodeUpgradeOp.class);
 
-        final String serverName = op.getLiferayServerName().content( true );
+		String serverName = op.getLiferayServerName().content(true);
 
-        return ( ServerUtil.getServer( serverName ) != null )
-            ? Status.createOkStatus() : Status.createErrorStatus( "Liferay runtime must be configured." );
-    }
+		if (ServerUtil.getServer(serverName) != null) {
+			return Status.createOkStatus();
+		}
+
+		return Status.createErrorStatus("Liferay runtime must be configured.");
+	}
+
 }

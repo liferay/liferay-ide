@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.upgrade.service;
 
@@ -26,67 +25,56 @@ import org.eclipse.wst.server.core.ServerCore;
 /**
  * @author Terry Jia
  */
+public class LiferayServerNameDefaultValueService extends DefaultValueService implements IServerLifecycleListener {
 
-public class LiferayServerNameDefaultValueService extends DefaultValueService implements IServerLifecycleListener
-{
+	@Override
+	public void dispose() {
+		ServerCore.removeServerLifecycleListener(this);
 
-    static final String NONE = "<None>";
+		super.dispose();
+	}
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+	@Override
+	public void serverAdded(IServer server) {
+		refresh();
+	}
 
-        ServerCore.addServerLifecycleListener( this );
-    }
+	@Override
+	public void serverChanged(IServer server) {
+		refresh();
+	}
 
-    @Override
-    public void dispose()
-    {
-        ServerCore.removeServerLifecycleListener( this );
+	@Override
+	public void serverRemoved(IServer server) {
+		refresh();
+	}
 
-        super.dispose();
-    }
+	@Override
+	protected String compute() {
+		IServer[] servers = ServerCore.getServers();
 
-    @Override
-    protected String compute()
-    {
-        IServer[] servers = ServerCore.getServers();
+		String value = _NONE;
 
-        String value = NONE;
+		if (!CoreUtil.isNullOrEmpty(servers)) {
+			for (IServer server : servers) {
+				if (LiferayServerCore.newPortalBundle(server.getRuntime().getLocation()) != null) {
+					value = server.getName();
 
-        if( !CoreUtil.isNullOrEmpty( servers ) )
-        {
-            for( IServer server : servers )
-            {
-                if( LiferayServerCore.newPortalBundle( server.getRuntime().getLocation() ) != null )
-                {
-                    value = server.getName();
+					break;
+				}
+			}
+		}
 
-                    break;
-                }
-            }
-        }
+		return value;
+	}
 
-        return value;
-    }
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
 
-    @Override
-    public void serverAdded( IServer server )
-    {
-        refresh();
-    }
+		ServerCore.addServerLifecycleListener(this);
+	}
 
-    @Override
-    public void serverChanged( IServer server )
-    {
-        refresh();
-    }
-
-    @Override
-    public void serverRemoved( IServer server )
-    {
-        refresh();
-    }
+	private static final String _NONE = "<None>";
 
 }

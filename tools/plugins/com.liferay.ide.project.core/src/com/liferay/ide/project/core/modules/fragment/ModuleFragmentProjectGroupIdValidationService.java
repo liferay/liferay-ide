@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.fragment;
+
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
+import com.liferay.ide.project.core.modules.BaseModuleOp;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.JavaConventions;
@@ -21,6 +23,8 @@ import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.sapphire.services.ValidationService;
@@ -28,67 +32,74 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Joye Luo
  */
-@SuppressWarnings( "restriction" )
-public class ModuleFragmentProjectGroupIdValidationService extends ValidationService
-{
+@SuppressWarnings("restriction")
+public class ModuleFragmentProjectGroupIdValidationService extends ValidationService {
 
-    private Listener listener;
+	@Override
+	public void dispose() {
+		if ((_listener != null) && (_op() != null) && !_op().disposed()) {
+			Value<String> projectName = _op().getProjectName();
 
-    @Override
-    protected Status compute()
-    {
-        if( "maven-module-fragment".equals( op().getProjectProvider().content( true ).getShortName() ) )
-        {
-            final String groupId = op().getGroupId().content( true );
+			projectName.detach(_listener);
 
-            final IStatus javaStatus = JavaConventions.validatePackageName(
-                groupId, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 );
+			Value<Path> location = _op().getLocation();
 
-            if( !javaStatus.isOK() )
-            {
-                return StatusBridge.create( javaStatus );
-            }
-        }
+			location.detach(_listener);
 
-        return Status.createOkStatus();
-    }
+			_listener = null;
+		}
 
-    @Override
-    public void dispose()
-    {
-        if( this.listener != null && op() != null && !op().disposed() )
-        {
-            op().getProjectName().detach( this.listener );
-            op().getLocation().attach( this.listener );
+		super.dispose();
+	}
 
-            this.listener = null;
-        }
+	@Override
+	protected Status compute() {
+		NewModuleFragmentOp op = _op();
 
-        super.dispose();
-    }
+		NewLiferayProjectProvider<BaseModuleOp> provider = op.getProjectProvider().content(true);
 
-    @Override
-    protected void initValidationService()
-    {
-        super.initValidationService();
+		if ("maven-module-fragment".equals(provider.getShortName())) {
+			Value<String> groupIdValue = _op().getGroupId();
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
+			String groupId = groupIdValue.content(true);
 
-            @Override
-            protected void handleTypedEvent( final PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+			IStatus javaStatus = JavaConventions.validatePackageName(
+				groupId, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7);
 
-        op().getProjectProvider().attach( this.listener );
-        op().getLocation().attach( this.listener );
-    }
+			if (!javaStatus.isOK()) {
+				return StatusBridge.create(javaStatus);
+			}
+		}
 
-    private NewModuleFragmentOp op()
-    {
-        return context( NewModuleFragmentOp.class );
-    }
+		return Status.createOkStatus();
+	}
+
+	@Override
+	protected void initValidationService() {
+		super.initValidationService();
+
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		Value<NewLiferayProjectProvider<BaseModuleOp>> provider = _op().getProjectProvider();
+
+		provider.attach(_listener);
+
+		Value<Path> location = _op().getLocation();
+
+		location.attach(_listener);
+	}
+
+	private NewModuleFragmentOp _op() {
+		return context(NewModuleFragmentOp.class);
+	}
+
+	private Listener _listener;
 
 }

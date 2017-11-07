@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.workspace;
 
@@ -28,35 +27,30 @@ import org.eclipse.sapphire.PossibleValuesService;
 /**
  * @author Joye Luo
  */
-public class WorkspaceProjectProviderPossibleValuesService extends PossibleValuesService
-{
+public class WorkspaceProjectProviderPossibleValuesService extends PossibleValuesService {
 
-    private List<String> possibleValues;
+	@Override
+	public boolean ordered() {
+		return true;
+	}
 
-    protected void initPossibleValuesService()
-    {
-        possibleValues = new ArrayList<String>();
+	@Override
+	protected void compute(Set<String> values) {
+		values.addAll(_possibleValues);
+	}
 
-        for( final ILiferayProjectProvider provider : LiferayCore.getProviders( "workspace" ) )
-        {
-            if( provider instanceof NewLiferayWorkspaceProjectProvider<?> )
-            {
-                possibleValues.add( provider.getShortName() );
-            }
-        }
+	protected void initPossibleValuesService() {
+		_possibleValues = new ArrayList<>();
 
-        Collections.sort( possibleValues );
-    }
+		for (ILiferayProjectProvider provider : LiferayCore.getProviders("workspace")) {
+			if (provider instanceof NewLiferayWorkspaceProjectProvider<?>) {
+				_possibleValues.add(provider.getShortName());
+			}
+		}
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        values.addAll( this.possibleValues );
-    }
+		Collections.sort(_possibleValues);
+	}
 
-    @Override
-    public boolean ordered()
-    {
-        return true;
-    }
+	private List<String> _possibleValues;
+
 }

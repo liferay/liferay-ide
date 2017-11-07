@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core;
 
@@ -22,36 +21,30 @@ import org.eclipse.sapphire.modeling.Status;
 /**
  * @author Simon Jiang
  */
-public abstract class AbstractUpgradeProjectHandler
-{
-    protected String name;
+public abstract class AbstractUpgradeProjectHandler {
 
-    protected String description;
+	public AbstractUpgradeProjectHandler() {
+	}
 
-    public AbstractUpgradeProjectHandler()
-    {
-        super();
-    }
+	public abstract Status execute(IProject project, String runtimeName, IProgressMonitor monitor, int perUnit);
 
-    public abstract Status execute( IProject project, String runtimeName, IProgressMonitor monitor, int perUnit );
+	public String getDescription() {
+		return description;
+	}
 
-    public String getDescription()
-    {
-        return description;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getName()
-    {
-        return name;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setDescription( String description )
-    {
-        this.description = description;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setName( String name )
-    {
-        this.name = name;
-    }
+	protected String description;
+	protected String name;
+
 }

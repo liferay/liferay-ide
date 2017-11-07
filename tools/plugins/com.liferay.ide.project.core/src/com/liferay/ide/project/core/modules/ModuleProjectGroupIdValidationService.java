@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,11 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
+
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.JavaConventions;
@@ -28,51 +29,53 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class ModuleProjectGroupIdValidationService extends ValidationService
-{
-    private Listener listener;
+@SuppressWarnings("restriction")
+public class ModuleProjectGroupIdValidationService extends ValidationService {
 
-    @Override
-    protected Status compute()
-    {
-        if( "maven-module".equals( op().getProjectProvider().content( true ).getShortName() ) )
-        {
-            final String groupId = op().getGroupId().content( true );
+	@Override
+	protected Status compute() {
+		NewLiferayModuleProjectOp op = _op();
 
-            final IStatus javaStatus =
-                JavaConventions.validatePackageName( groupId, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 );
+		NewLiferayProjectProvider<BaseModuleOp> provider = op.getProjectProvider().content(true);
 
-            if( !javaStatus.isOK() )
-            {
-                return StatusBridge.create( javaStatus );
-            }
-        }
+		if ("maven-module".equals(provider.getShortName())) {
+			String groupId = op.getGroupId().content(true);
 
-        return Status.createOkStatus();
-    }
+			IStatus javaStatus = JavaConventions.validatePackageName(
+				groupId, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7);
 
-    @Override
-    protected void initValidationService()
-    {
-        super.initValidationService();
+			if (!javaStatus.isOK()) {
+				return StatusBridge.create(javaStatus);
+			}
+		}
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( final PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		return Status.createOkStatus();
+	}
 
-        op().getProjectProvider().attach( this.listener );
-        op().getPackageName().attach( this.listener );
-        op().getLocation().attach( this.listener );
-    }
+	@Override
+	protected void initValidationService() {
+		super.initValidationService();
 
-    private NewLiferayModuleProjectOp op()
-    {
-        return context( NewLiferayModuleProjectOp.class );
-    }
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		NewLiferayModuleProjectOp op = _op();
+
+		op.getProjectProvider().attach(_listener);
+		op.getPackageName().attach(_listener);
+		op.getLocation().attach(_listener);
+	}
+
+	private NewLiferayModuleProjectOp _op() {
+		return context(NewLiferayModuleProjectOp.class);
+	}
+
+	private Listener _listener;
+
 }

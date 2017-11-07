@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.upgrade.service;
 
@@ -30,67 +29,55 @@ import org.eclipse.wst.server.core.ServerCore;
 /**
  * @author Terry Jia
  */
-public class LiferayServerNamePossibleValuesService extends PossibleValuesService implements IServerLifecycleListener
-{
+public class LiferayServerNamePossibleValuesService extends PossibleValuesService implements IServerLifecycleListener {
 
-    @Override
-    protected void initPossibleValuesService()
-    {
-        super.initPossibleValuesService();
+	@Override
+	public boolean ordered() {
+		return true;
+	}
 
-        ServerCore.addServerLifecycleListener( this );
-    }
+	@Override
+	public Status problem(Value<?> value) {
+		if (value.content().equals("<None>")) {
+			return Status.createOkStatus();
+		}
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        IServer[] servers = ServerCore.getServers();
+		return super.problem(value);
+	}
 
-        if( !CoreUtil.isNullOrEmpty( servers ) )
-        {
-            for( IServer server : servers )
-            {
-                if( LiferayServerCore.newPortalBundle( server.getRuntime().getLocation() ) != null )
-                {
-                    values.add( server.getName() );
-                }
-            }
-        }
-    }
+	@Override
+	public void serverAdded(IServer server) {
+		refresh();
+	}
 
-    @Override
-    public boolean ordered()
-    {
-        return true;
-    }
+	@Override
+	public void serverChanged(IServer server) {
+		refresh();
+	}
 
-    @Override
-    public Status problem( Value<?> value )
-    {
-        if( value.content().equals( "<None>" ) )
-        {
-            return Status.createOkStatus();
-        }
+	@Override
+	public void serverRemoved(IServer arg0) {
+		refresh();
+	}
 
-        return super.problem( value );
-    }
+	@Override
+	protected void compute(Set<String> values) {
+		IServer[] servers = ServerCore.getServers();
 
-    @Override
-    public void serverAdded( IServer server )
-    {
-        refresh();
-    }
+		if (!CoreUtil.isNullOrEmpty(servers)) {
+			for (IServer server : servers) {
+				if (LiferayServerCore.newPortalBundle(server.getRuntime().getLocation()) != null) {
+					values.add(server.getName());
+				}
+			}
+		}
+	}
 
-    @Override
-    public void serverChanged( IServer server )
-    {
-        refresh();
-    }
+	@Override
+	protected void initPossibleValuesService() {
+		super.initPossibleValuesService();
 
-    @Override
-    public void serverRemoved( IServer arg0 )
-    {
-        refresh();
-    }
+		ServerCore.addServerLifecycleListener(this);
+	}
 
 }

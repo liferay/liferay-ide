@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,67 +10,59 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.upgrade;
 
 import com.liferay.blade.api.Problem;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Terry Jia
  */
-public class FileProblems
-{
+public class FileProblems {
 
-    private File _file;
-    private List<Problem> _problems = new ArrayList<Problem>();
+	public void addProblem(Problem problem) {
+		_problems.add(problem);
+	}
 
-    public void addProblem( Problem problem )
-    {
-        _problems.add( problem );
-    }
+	public File getFile() {
+		return _file;
+	}
 
-    public File getFile()
-    {
-        return _file;
-    }
+	public String getFileAbsolutePath() {
+		return _file.getAbsolutePath();
+	}
 
-    public String getFileAbsolutePath() {
-    	return _file.getAbsolutePath();
-    }
-    
-    public List<Problem> getProblems()
-    {
-        return _problems;
-    }
+	public List<Problem> getProblems() {
+		return _problems;
+	}
 
-    public List<Problem> getProblems( int status )
-    {
-        List<Problem> problems = new ArrayList<Problem>();
+	public List<Problem> getProblems(int status) {
+		List<Problem> problems = new ArrayList<>();
 
-        for( Problem problem : _problems )
-        {
-            if( problem.getStatus() == status )
-            {
-                problems.add( problem );
-            }
-        }
+		for (Problem problem : _problems) {
+			if (problem.getStatus() == status) {
+				problems.add(problem);
+			}
+		}
 
-        return problems;
-    }
+		return problems;
+	}
 
-    public void setFile( File file )
-    {
-        _file = file;
-    }
+	public void setFile(File file) {
+		_file = file;
+	}
 
-    public void setProblems( List<Problem> problems )
-    {
-        _problems = problems;
-    }
+	public void setProblems(List<Problem> problems) {
+		_problems = problems;
+	}
+
+	private File _file;
+	private List<Problem> _problems = new ArrayList<>();
+
 }

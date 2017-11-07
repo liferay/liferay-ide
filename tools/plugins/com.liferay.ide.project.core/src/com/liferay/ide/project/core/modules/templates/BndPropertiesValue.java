@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,78 +10,63 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.templates;
 
 /**
  * @author Simon Jiang
  */
+public class BndPropertiesValue {
 
-public class BndPropertiesValue
-{
+	public BndPropertiesValue() {
+	}
 
-    private String originalValue;
-    private String formatedValue;
-    private boolean isMultiLine;
+	public BndPropertiesValue(String value) {
+		_formatedValue = value;
+		_originalValue = value;
+	}
 
-    public BndPropertiesValue()
-    {
-    }
+	public BndPropertiesValue(String formatedValue, String originalValue) {
+		_formatedValue = formatedValue;
+		_originalValue = originalValue;
+	}
 
-    public BndPropertiesValue( String value )
-    {
-        this.formatedValue = value;
-        this.originalValue = value;
-    }
+	public String getFormatedValue() {
+		return _formatedValue;
+	}
 
-    public BndPropertiesValue( String formatedValue, String originalValue )
-    {
-        this.formatedValue = formatedValue;
-        this.originalValue = originalValue;
-    }
+	public int getKeyIndex() {
+		return _keyIndex;
+	}
 
-    public boolean isMultiLine()
-    {
-        return isMultiLine;
-    }
+	public String getOriginalValue() {
+		return _originalValue;
+	}
 
-    public void setMultiLine( boolean isMultiLine )
-    {
-        this.isMultiLine = isMultiLine;
-    }
+	public boolean isMultiLine() {
+		return _multiLine;
+	}
 
-    private int keyIndex;
+	public void setFormatedValue(String formatedValue) {
+		_formatedValue = formatedValue;
+	}
 
-    public int getKeyIndex()
-    {
-        return keyIndex;
-    }
+	public void setKeyIndex(int keyIndex) {
+		_keyIndex = keyIndex;
+	}
 
-    public void setKeyIndex( int keyIndex )
-    {
-        this.keyIndex = keyIndex;
-    }
+	public void setMultiLine(boolean multiLine) {
+		_multiLine = multiLine;
+	}
 
-    public String getOriginalValue()
-    {
-        return originalValue;
-    }
+	public void setOriginalValue(String originalValue) {
+		_originalValue = originalValue;
+	}
 
-    public void setOriginalValue( String originalValue )
-    {
-        this.originalValue = originalValue;
-    }
-
-    public String getFormatedValue()
-    {
-        return formatedValue;
-    }
-
-    public void setFormatedValue( String formatedValue )
-    {
-        this.formatedValue = formatedValue;
-    }
+	private String _formatedValue;
+	private int _keyIndex;
+	private boolean _multiLine;
+	private String _originalValue;
 
 }

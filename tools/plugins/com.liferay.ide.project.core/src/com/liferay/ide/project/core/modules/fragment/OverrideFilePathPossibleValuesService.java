@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,18 +10,19 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
+
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -41,165 +42,147 @@ import org.eclipse.wst.server.core.IRuntime;
 /**
  * @author Terry Jia
  */
-public class OverrideFilePathPossibleValuesService extends PossibleValuesService
-{
+public class OverrideFilePathPossibleValuesService extends PossibleValuesService {
 
-    private static Set<String> possibleValues;
-    private String osgiBundleName;
+	@Override
+	public Status problem(Value<?> value) {
+		ElementList<OverrideFilePath> currentFiles = _op().getOverrideFiles();
 
-    @Override
-    protected void compute( final Set<String> values )
-    {
-        final NewModuleFragmentOp op = op();
+		int count = 0;
 
-        String hostOSGiBundle = op.getHostOsgiBundle().content();
+		for (OverrideFilePath currentFile : currentFiles) {
+			String content = currentFile.getValue().content();
 
-        if( hostOSGiBundle == null )
-        {
-            return;
-        }
+			if (content != null) {
+				String v = value.content().toString();
 
-        if( osgiBundleName == null || !osgiBundleName.equals( hostOSGiBundle ) || possibleValues == null )
-        {
-            osgiBundleName = hostOSGiBundle;
+				if (v.equals(content)) {
+					count++;
+				}
+			}
+		}
 
-            possibleValues = new HashSet<String>();
+		if ((count >= 0) &&
+			(_possibleValues.contains(value.content().toString()) ||
+			 _possibleValues.contains("resource-actions/default.xml"))) {
 
-            final String runtimeName = op.getLiferayRuntimeName().content();
+			return Status.createOkStatus();
+		}
+		else {
+			return super.problem(value);
+		}
+	}
 
-            IRuntime runtime = ServerUtil.getRuntime( runtimeName );
+	@Override
+	protected void compute(Set<String> values) {
+		NewModuleFragmentOp op = _op();
 
-            PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
+		String hostOSGiBundle = op.getHostOsgiBundle().content();
 
-            if( portalBundle != null )
-            {
-                if( !hostOSGiBundle.endsWith( "jar" ) )
-                {
-                    hostOSGiBundle = hostOSGiBundle + ".jar";
-                }
+		if (hostOSGiBundle == null) {
+			return;
+		}
 
-                File module = portalBundle.getOSGiBundlesDir().append( "modules" ).append( hostOSGiBundle ).toFile();
+		if ((_osgiBundleName == null) || !_osgiBundleName.equals(hostOSGiBundle) || (_possibleValues == null)) {
+			_osgiBundleName = hostOSGiBundle;
 
-                if( !module.exists() )
-                {
-                    final IPath temp = ProjectCore.getDefault().getStateLocation();
+			_possibleValues = new HashSet<>();
 
-                    module = new File( temp.toFile(), hostOSGiBundle );
-                }
+			String runtimeName = op.getLiferayRuntimeName().content();
 
-                if( module.exists() )
-                {
-                    try(JarFile jar = new JarFile( module ))
-                    {
-                        Enumeration<JarEntry> enu = jar.entries();
+			IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
-                        while( enu.hasMoreElements() )
-                        {
-                            JarEntry entry = enu.nextElement();
-                            String name = entry.getName();
+			PortalBundle portalBundle = LiferayServerCore.newPortalBundle(runtime.getLocation());
 
-                            if( ( name.startsWith( "META-INF/resources/" ) &&
-                                ( name.endsWith( ".jsp" ) || name.endsWith( ".jspf" ) ) ) ||
-                                name.equals( "portlet.properties" ) || name.equals( "resource-actions/default.xml" ) )
-                            {
-                                possibleValues.add( name );
-                            }
-                        }
-                    }
-                    catch( Exception e )
-                    {
-                    }
-                }
-            }
-        }
+			if (portalBundle != null) {
+				if (!hostOSGiBundle.endsWith("jar")) {
+					hostOSGiBundle = hostOSGiBundle + ".jar";
+				}
 
-        if( possibleValues != null )
-        {
-            Set<String> possibleValuesSet = new HashSet<String>();
+				IPath modulesPath = portalBundle.getOSGiBundlesDir().append("modules");
 
-            possibleValuesSet.addAll( possibleValues );
+				File module = modulesPath.append(hostOSGiBundle).toFile();
 
-            ElementList<OverrideFilePath> currentFiles = op.getOverrideFiles();
+				if (FileUtil.notExists(module)) {
+					IPath temp = ProjectCore.getDefault().getStateLocation();
 
-            if( currentFiles != null )
-            {
-                for( OverrideFilePath cj : currentFiles )
-                {
-                    String value = cj.getValue().content();
+					module = new File(temp.toFile(), hostOSGiBundle);
+				}
 
-                    if( value != null )
-                    {
-                        possibleValuesSet.remove( value );
-                    }
-                }
-            }
+				if (FileUtil.exists(module)) {
+					try (JarFile jar = new JarFile(module)) {
+						Enumeration<JarEntry> enu = jar.entries();
 
-            final String projectName = op().getProjectName().content();
+						while (enu.hasMoreElements()) {
+							JarEntry entry = enu.nextElement();
 
-            if( projectName != null )
-            {
-                IProject project = CoreUtil.getProject( projectName );
-                IFolder javaFolder = project.getFolder( "src/main/java" );
-                IFolder resourceFolder = project.getFolder( "src/main/resources" );
-                Iterator<String> it = possibleValuesSet.iterator();
+							String name = entry.getName();
 
-                while( it.hasNext() )
-                {
-                    String v = it.next();
+							if ((name.startsWith("META-INF/resources/") &&
+								 (name.endsWith(".jsp") || name.endsWith(".jspf"))) ||
+								name.equals("portlet.properties") || name.equals("resource-actions/default.xml")) {
 
-                    if( resourceFolder.getFile( v ).exists() )
-                    {
-                        it.remove();
-                    }
+								_possibleValues.add(name);
+							}
+						}
+					}
+					catch (Exception e) {
+					}
+				}
+			}
+		}
 
-                    if( javaFolder.getFile( "portlet-ext.properties" ).exists() && v.equals( "portlet.properties" ) )
-                    {
-                        it.remove();
-                    }
+		if (_possibleValues != null) {
+			Set<String> possibleValuesSet = new HashSet<>();
 
-                }
-            }
+			possibleValuesSet.addAll(_possibleValues);
 
-            values.addAll( possibleValuesSet );
-        }
+			ElementList<OverrideFilePath> currentFiles = op.getOverrideFiles();
 
-    }
+			if (currentFiles != null) {
+				for (OverrideFilePath cj : currentFiles) {
+					String value = cj.getValue().content();
 
-    @Override
-    public Status problem( Value<?> value )
-    {
-        ElementList<OverrideFilePath> currentFiles = op().getOverrideFiles();
+					if (value != null) {
+						possibleValuesSet.remove(value);
+					}
+				}
+			}
 
-        int count = 0;
+			String projectName = op.getProjectName().content();
 
-        for( OverrideFilePath currentFile : currentFiles )
-        {
-            String content = currentFile.getValue().content();
+			if (projectName != null) {
+				IProject project = CoreUtil.getProject(projectName);
 
-            if( content != null )
-            {
-                if( value.content().toString().equals( content ) )
-                {
-                    count++;
-                }
-            }
-        }
+				IFolder javaFolder = project.getFolder("src/main/java");
 
-        if( count >= 0 && ( possibleValues.contains( value.content().toString() ) ||
-            possibleValues.contains( "resource-actions/default.xml" ) ) )
-        {
-            return Status.createOkStatus();
-        }
-        else
-        {
-            return super.problem( value );
-        }
+				IFolder resourceFolder = project.getFolder("src/main/resources");
 
-    }
+				Iterator<String> it = possibleValuesSet.iterator();
 
-    private NewModuleFragmentOp op()
-    {
-        return context( NewModuleFragmentOp.class );
-    }
+				while (it.hasNext()) {
+					String v = it.next();
+
+					if (FileUtil.exists(resourceFolder.getFile(v))) {
+						it.remove();
+					}
+
+					if (FileUtil.exists(javaFolder.getFile("portlet-ext.properties")) && v.equals("portlet.properties")) {
+						it.remove();
+					}
+				}
+			}
+
+			values.addAll(possibleValuesSet);
+		}
+	}
+
+	private NewModuleFragmentOp _op() {
+		return context(NewModuleFragmentOp.class);
+	}
+
+	private static Set<String> _possibleValues;
+
+	private String _osgiBundleName;
 
 }

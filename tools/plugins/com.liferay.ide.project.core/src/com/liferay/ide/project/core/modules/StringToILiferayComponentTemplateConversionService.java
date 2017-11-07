@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,31 +10,28 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.modules;
+
+import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.sapphire.ConversionException;
 import org.eclipse.sapphire.ConversionService;
 
-import com.liferay.ide.project.core.ProjectCore;
-
-
 /**
  * @author Simon Jiang
  */
-@SuppressWarnings( "rawtypes" )
-public class StringToILiferayComponentTemplateConversionService extends ConversionService<String, IComponentTemplate>
-{
+@SuppressWarnings("rawtypes")
+public class StringToILiferayComponentTemplateConversionService extends ConversionService<String, IComponentTemplate> {
 
-    public StringToILiferayComponentTemplateConversionService()
-    {
-        super( String.class, IComponentTemplate.class );
-    }
+	public StringToILiferayComponentTemplateConversionService() {
+		super(String.class, IComponentTemplate.class);
+	}
 
-    @Override
-    public IComponentTemplate convert( String object ) throws ConversionException
-    {
-        return ProjectCore.getComponentTemplate( object );
-    }
+	@Override
+	public IComponentTemplate convert(String object) throws ConversionException {
+		return ProjectCore.getComponentTemplate(object);
+	}
+
 }

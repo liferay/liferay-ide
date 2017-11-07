@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.workspace;
 
@@ -20,78 +19,84 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 
 /**
  * @author Andy Wu
  */
-public class BundleUrlDefaultValueService extends DefaultValueService
-{
+public class BundleUrlDefaultValueService extends DefaultValueService {
 
-    private FilteredListener<PropertyContentEvent> listener;
+	@Override
+	public void dispose() {
+		ImportLiferayWorkspaceOp op = _op();
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+		Value<Object> workspaceLocation = op.property(ImportLiferayWorkspaceOp.PROP_WORKSPACE_LOCATION);
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
+		workspaceLocation.detach(_listener);
 
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		super.dispose();
+	}
 
-        op().property( ImportLiferayWorkspaceOp.PROP_WORKSPACE_LOCATION ).attach( this.listener );
-    }
+	@Override
+	protected String compute() {
+		String bundleURL = null;
 
-    @Override
-    protected String compute()
-    {
-        String bundleURL = null;
+		ImportLiferayWorkspaceOp op = _op();
 
-        Path path = op().getWorkspaceLocation().content();
+		Value<Path> workspaceLocationValue = op.getWorkspaceLocation();
 
-        if( path == null )
-        {
-            return null;
-        }
+		Path path = workspaceLocationValue.content();
 
-        String workspaceLocation = op().getWorkspaceLocation().content().toPortableString();
+		if (path == null) {
+			return null;
+		}
 
-        String buildType = LiferayWorkspaceUtil.getWorkspaceType( workspaceLocation );
+		String workspaceLocation = path.toPortableString();
 
-        if( buildType != null )
-        {
-            if( buildType.startsWith( "gradle" ) )
-            {
-                bundleURL = LiferayWorkspaceUtil.getGradleProperty(
-                    workspaceLocation, LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL,
-                    BaseLiferayWorkspaceOp.DEFAULT_BUNDLE_URL );
-            }
-            // for maven type liferay workspace
-            else
-            {
-                bundleURL = BaseLiferayWorkspaceOp.DEFAULT_BUNDLE_URL;
-            }
-        }
+		String buildType = LiferayWorkspaceUtil.getWorkspaceType(workspaceLocation);
 
-        return bundleURL;
-    }
+		if (buildType == null) {
+			return bundleURL;
+		}
 
-    private ImportLiferayWorkspaceOp op()
-    {
-        return context( ImportLiferayWorkspaceOp.class );
-    }
+		if (buildType.startsWith("gradle")) {
+			return LiferayWorkspaceUtil.getGradleProperty(
+				workspaceLocation, LiferayWorkspaceUtil.LIFERAY_WORKSPACE_BUNDLE_URL,
+				BaseLiferayWorkspaceOp.DEFAULT_BUNDLE_URL);
+		}
+		else {
 
-    @Override
-    public void dispose()
-    {
-        op().property( ImportLiferayWorkspaceOp.PROP_WORKSPACE_LOCATION ).detach( this.listener );
+			// for maven type liferay workspace
 
-        super.dispose();
-    }
+			return bundleURL = BaseLiferayWorkspaceOp.DEFAULT_BUNDLE_URL;
+		}
+	}
+
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
+
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		ImportLiferayWorkspaceOp op = _op();
+
+		Value<Object> workspaceLocation = op.property(ImportLiferayWorkspaceOp.PROP_WORKSPACE_LOCATION);
+
+		workspaceLocation.attach(_listener);
+	}
+
+	private ImportLiferayWorkspaceOp _op() {
+		return context(ImportLiferayWorkspaceOp.class);
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+
 }

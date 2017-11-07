@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model;
 
 import com.liferay.ide.project.core.model.internal.PluginsSDKNameDefaultValueService;
@@ -28,25 +28,21 @@ import org.eclipse.sapphire.modeling.annotations.Services;
 /**
  * @author Simon Jiang
  */
-public interface LiferayPluginSDKOp extends Element
-{
-    ElementType TYPE = new ElementType( LiferayPluginSDKOp.class );
+public interface LiferayPluginSDKOp extends Element {
 
-    // *** PluginsSDKName ***
+	public ElementType TYPE = new ElementType(LiferayPluginSDKOp.class);
 
-    @Label( standard = "Plugins SDK" )
-    @Services
-    (
-        value =
-        {
-            @Service( impl = PluginsSDKNamePossibleValuesService.class ),
-            @Service( impl = PluginsSDKNameDefaultValueService.class ),
-        }
-    )
+	public Value<String> getPluginsSDKName();
 
-    ValueProperty PROP_PLUGINS_SDK_NAME = new ValueProperty( TYPE, "PluginsSDKName" ); //$NON-NLS-1$
+	public void setPluginsSDKName(String value);
 
-    Value<String> getPluginsSDKName();
-    void setPluginsSDKName( String value );
+	@Label(standard = "Plugins SDK")
+	@Services(
+		value = {
+			@Service(impl = PluginsSDKNamePossibleValuesService.class),
+			@Service(impl = PluginsSDKNameDefaultValueService.class)
+		}
+	)
+	public ValueProperty PROP_PLUGINS_SDK_NAME = new ValueProperty(TYPE, "PluginsSDKName");
 
 }

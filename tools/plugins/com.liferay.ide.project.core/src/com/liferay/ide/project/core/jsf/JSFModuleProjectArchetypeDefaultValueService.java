@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,53 +10,62 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.jsf;
+
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
+import com.liferay.ide.project.core.modules.BaseModuleOp;
 
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 
-public class JSFModuleProjectArchetypeDefaultValueService extends DefaultValueService
-{
-    private FilteredListener<PropertyContentEvent> listener;
+/**
+ * @author Simon Jiang
+ */
+public class JSFModuleProjectArchetypeDefaultValueService extends DefaultValueService {
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
+	@Override
+	public void dispose() {
+		NewLiferayJSFModuleProjectOp op = _op();
 
-            @Override
-            protected void handleTypedEvent( final PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		op.property(NewLiferayJSFModuleProjectOp.PROP_TEMPLATE_NAME).detach(_listener);
 
-        op().property( NewLiferayJSFModuleProjectOp.PROP_TEMPLATE_NAME ).attach( this.listener );
-    }
+		super.dispose();
+	}
 
-    @Override
-    protected String compute()
-    {
-        String templateName = op().getTemplateName().content();
+	@Override
+	protected String compute() {
+		NewLiferayJSFModuleProjectOp op = _op();
 
-        return op().getProjectProvider().content().getData( "archetypeGAV", String.class, templateName ).get( 0 );
-    }
+		String templateName = op.getTemplateName().content();
 
-    @Override
-    public void dispose()
-    {
-        op().property( NewLiferayJSFModuleProjectOp.PROP_TEMPLATE_NAME ).detach( this.listener );
+		NewLiferayProjectProvider<BaseModuleOp> provider = op.getProjectProvider().content();
 
-        super.dispose();
-    }
+		return provider.getData("archetypeGAV", String.class, templateName).get(0);
+	}
 
-    private NewLiferayJSFModuleProjectOp op()
-    {
-        return context( NewLiferayJSFModuleProjectOp.class );
-    }
+	@Override
+	protected void initDefaultValueService() {
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(final PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		NewLiferayJSFModuleProjectOp op = _op();
+
+		op.property(NewLiferayJSFModuleProjectOp.PROP_TEMPLATE_NAME).attach(_listener);
+	}
+
+	private NewLiferayJSFModuleProjectOp _op() {
+		return context(NewLiferayJSFModuleProjectOp.class);
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+
 }

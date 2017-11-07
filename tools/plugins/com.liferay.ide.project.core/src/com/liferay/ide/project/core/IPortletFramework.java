@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
@@ -25,58 +25,59 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 
-
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public interface IPortletFramework
-{
-    String ADVANCED = "advanced"; //$NON-NLS-1$
+public interface IPortletFramework {
 
-    String DEFAULT = "default"; //$NON-NLS-1$
+	public IStatus configureNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject);
 
-    String DESCRIPTION = "description"; //$NON-NLS-1$
+	public String getBundleId();
 
-    String DISPLAY_NAME = "displayName"; //$NON-NLS-1$
+	public String getDescription();
 
-    String EXTENSION_ID = "com.liferay.ide.project.core.portletFrameworks"; //$NON-NLS-1$
+	public String getDisplayName();
 
-    String HELP_URL = "helpUrl"; //$NON-NLS-1$
+	public IProjectFacet[] getFacets();
 
-    String ID = "id"; //$NON-NLS-1$
+	public URL getHelpUrl();
 
-    String REQUIRED_SDK_VERSION = "requiredSDKVersion"; //$NON-NLS-1$
+	public String getId();
 
-    String REQUIRES_ADVANCED = "requiresAdvanced";  //$NON-NLS-1$
+	public String getRequiredSDKVersion();
 
-    String SHORT_NAME = "shortName"; //$NON-NLS-1$
+	public String getShortName();
 
-    IStatus configureNewProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject );
+	public boolean isAdvanced();
 
-    String getBundleId();
+	public boolean isDefault();
 
-    String getDescription();
+	public boolean isRequiresAdvanced();
 
-    String getDisplayName();
+	public IStatus postProjectCreated(
+		IProject project, String frameworkName, String portletName, IProgressMonitor monitor);
 
-    IProjectFacet[] getFacets();
+	public boolean supports(ILiferayProjectProvider provider);
 
-    URL getHelpUrl();
+	public String ADVANCED = "advanced";
 
-    String getId();
+	public String DEFAULT = "default";
 
-    String getRequiredSDKVersion();
+	public String DESCRIPTION = "description";
 
-    String getShortName();
+	public String DISPLAY_NAME = "displayName";
 
-    boolean isAdvanced();
+	public String EXTENSION_ID = "com.liferay.ide.project.core.portletFrameworks";
 
-    boolean isDefault();
+	public String HELP_URL = "helpUrl";
 
-    boolean isRequiresAdvanced();
+	public String ID = "id";
 
-    IStatus postProjectCreated( IProject project, String frameworkName, String portletName, IProgressMonitor monitor );
+	public String REQUIRED_SDK_VERSION = "requiredSDKVersion";
 
-    boolean supports( ILiferayProjectProvider provider );
+	public String REQUIRES_ADVANCED = "requiresAdvanced";
+
+	public String SHORT_NAME = "shortName";
+
 }

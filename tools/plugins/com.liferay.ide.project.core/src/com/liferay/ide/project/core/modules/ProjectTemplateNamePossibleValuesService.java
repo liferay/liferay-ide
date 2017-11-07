@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -24,38 +23,31 @@ import org.eclipse.sapphire.Value;
  * @author Simon Jiang
  * @author Gregory Amerson
  */
-public class ProjectTemplateNamePossibleValuesService extends PossibleValuesService
-{
+public class ProjectTemplateNamePossibleValuesService extends PossibleValuesService {
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        try
-        {
-            String[] projectTemplates = BladeCLI.getProjectTemplates();
+	@Override
+	public boolean ordered() {
+		return true;
+	}
 
-            for( String projectTemplate : projectTemplates )
-            {
-                if ( !projectTemplate.contains( "fragment" ))
-                {
-                    values.add( projectTemplate );
-                }
-            }
-        }
-        catch( BladeCLIException e )
-        {
-        }
-    }
+	@Override
+	public org.eclipse.sapphire.modeling.Status problem(Value<?> value) {
+		return org.eclipse.sapphire.modeling.Status.createOkStatus();
+	}
 
-    @Override
-    public org.eclipse.sapphire.modeling.Status problem( Value<?> value )
-    {
-        return org.eclipse.sapphire.modeling.Status.createOkStatus();
-    }
+	@Override
+	protected void compute(Set<String> values) {
+		try {
+			String[] projectTemplates = BladeCLI.getProjectTemplates();
 
-    @Override
-    public boolean ordered()
-    {
-        return true;
-    }
+			for (String projectTemplate : projectTemplates) {
+				if (!projectTemplate.contains("fragment")) {
+					values.add(projectTemplate);
+				}
+			}
+		}
+		catch (BladeCLIException bclie) {
+		}
+	}
+
 }

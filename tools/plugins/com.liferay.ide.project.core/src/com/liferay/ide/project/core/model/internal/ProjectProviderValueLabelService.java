@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
@@ -19,19 +19,21 @@ import com.liferay.ide.core.LiferayCore;
 
 import org.eclipse.sapphire.services.ValueLabelService;
 
-
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class ProjectProviderValueLabelService extends ValueLabelService
-{
+public class ProjectProviderValueLabelService extends ValueLabelService {
 
-    @Override
-    public String provide( String value )
-    {
-        ILiferayProjectProvider provider = LiferayCore.getProvider( value );
+	@Override
+	public String provide(String value) {
+		ILiferayProjectProvider provider = LiferayCore.getProvider(value);
 
-        return provider != null ? provider.getDisplayName() : value;
-    }
+		if (provider != null) {
+			return provider.getDisplayName();
+		}
+
+		return value;
+	}
+
 }

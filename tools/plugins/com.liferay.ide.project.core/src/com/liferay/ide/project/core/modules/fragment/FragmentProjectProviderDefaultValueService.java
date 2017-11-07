@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.fragment;
 
@@ -28,31 +27,27 @@ import org.eclipse.sapphire.DefaultValueService;
 /**
  * @author Terry Jia
  */
-public class FragmentProjectProviderDefaultValueService extends DefaultValueService
-{
+public class FragmentProjectProviderDefaultValueService extends DefaultValueService {
 
-    @Override
-    protected String compute()
-    {
-        String retval = "gradle-module-fragment";
+	@Override
+	protected String compute() {
+		String retval = "gradle-module-fragment";
 
-        final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
+		final IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
-        final String defaultProjectBuildType = Platform.getPreferencesService().getString(
-            ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_MODULE_FRAGMENT_PROJECT_BUILD_TYPE_OPTION, null,
-            prefContexts );
+		final String defaultProjectBuildType = Platform.getPreferencesService().getString(
+			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_MODULE_FRAGMENT_PROJECT_BUILD_TYPE_OPTION, null,
+			prefContexts);
 
-        if( defaultProjectBuildType != null )
-        {
-            final ILiferayProjectProvider provider = LiferayCore.getProvider( defaultProjectBuildType );
+		if (defaultProjectBuildType != null) {
+			final ILiferayProjectProvider provider = LiferayCore.getProvider(defaultProjectBuildType);
 
-            if( provider != null )
-            {
-                retval = defaultProjectBuildType;
-            }
-        }
+			if (provider != null) {
+				retval = defaultProjectBuildType;
+			}
+		}
 
-        return retval;
-    }
+		return retval;
+	}
 
 }

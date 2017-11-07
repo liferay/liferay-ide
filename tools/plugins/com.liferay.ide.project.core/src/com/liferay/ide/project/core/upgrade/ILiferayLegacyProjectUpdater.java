@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.upgrade;
 
@@ -23,12 +22,12 @@ import org.eclipse.core.resources.IProject;
 /**
  * @author Andy Wu
  */
-public interface ILiferayLegacyProjectUpdater
-{
-    public boolean isNeedUpgrade( IFile file );
+public interface ILiferayLegacyProjectUpdater {
 
-    public boolean isNeedUpgrade( IProject project );
+	public boolean isNeedUpgrade(IFile file);
 
-    public void upgradePomFile( IProject project, File outputFile );
+	public boolean isNeedUpgrade(IProject project);
+
+	public void upgradePomFile(IProject project, File outputFile);
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,11 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 
@@ -23,67 +23,62 @@ import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
+
 /**
  * @author Kuo Zhang
  */
-public class UseDefaultLocationValidationService extends ValidationService
-{
-    private Listener listener = null;
+public class UseDefaultLocationValidationService extends ValidationService {
 
-    @Override
-    protected void initValidationService()
-    {
-        super.initValidationService();
+	@Override
+	public void dispose() {
+		NewLiferayPluginProjectOp op = _op();
 
-        this.listener = new FilteredListener<Event>()
-        {
-            @Override
-            protected void handleTypedEvent( Event event )
-            {
-                refresh();
-            }
-        };
+		if ((op != null) && !op.disposed()) {
+			op.getProjectProvider().detach(_listener);
+			op.getProjectName().detach(_listener);
+		}
+	}
 
-        final NewLiferayPluginProjectOp op = op();
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-        op.getProjectProvider().attach( this.listener );
-        op.getProjectName().attach( this.listener );
-    }
+		NewLiferayPluginProjectOp op = _op();
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+		NewLiferayProjectProvider<NewLiferayPluginProjectOp> provider = op.getProjectProvider().content();
 
-        final NewLiferayPluginProjectOp op = op();
+		if ((op.getProjectName().content() != null) && "ant".equals(provider.getShortName()) &&
+			!op.getUseDefaultLocation().content() && !NewLiferayPluginProjectOpMethods.canUseCustomLocation(op)) {
 
-        if( op.getProjectName().content() != null &&
-            "ant".equals( op.getProjectProvider().content().getShortName() ) &&
-            ! op.getUseDefaultLocation().content() )
-        {
-            if( ! NewLiferayPluginProjectOpMethods.canUseCustomLocation( op ) )
-            {
-                retval = Status.createErrorStatus( "The specified SDK version is not allowed to use custom location." );
-            }
-        }
+			retval = Status.createErrorStatus("The specified SDK version is not allowed to use custom location.");
+		}
 
-        return retval;
-    }
+		return retval;
+	}
 
-    @Override
-    public void dispose()
-    {
-        final NewLiferayPluginProjectOp op = op();
+	@Override
+	protected void initValidationService() {
+		super.initValidationService();
 
-        if ( op() != null && !op().disposed() )
-        {
-            op.getProjectProvider().detach( this.listener );
-            op.getProjectName().detach( this.listener );
-        }
-    }
+		_listener = new FilteredListener<Event>() {
 
-    private NewLiferayPluginProjectOp op()
-    {
-        return context( NewLiferayPluginProjectOp.class );
-    }
+			@Override
+			protected void handleTypedEvent(Event event) {
+				refresh();
+			}
+
+		};
+
+		final NewLiferayPluginProjectOp op = _op();
+
+		op.getProjectProvider().attach(_listener);
+		op.getProjectName().attach(_listener);
+	}
+
+	private NewLiferayPluginProjectOp _op() {
+		return context(NewLiferayPluginProjectOp.class);
+	}
+
+	private Listener _listener = null;
+
 }

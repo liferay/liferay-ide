@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.workspace;
 
@@ -29,51 +28,58 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 /**
  * @author Gregory Amerson
  */
-public interface BaseLiferayWorkspaceOp extends ExecutableElement
-{
-    public static final String DEFAULT_BUNDLE_URL =
-        "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.3-ga4/liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip";
+public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 
-    ElementType TYPE = new ElementType( BaseLiferayWorkspaceOp.class );
+	public ElementType TYPE = new ElementType(BaseLiferayWorkspaceOp.class);
 
-    // *** provision liferay bundle ***
+	public static final String DEFAULT_BUNDLE_URL =
+		"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.3-ga4" +
+			"/liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip";
 
-    @DefaultValue( text = "false" )
-    @Label( standard = "Download Liferay bundle" )
-    @Type( base = Boolean.class )
-    ValueProperty PROP_PROVISION_LIFERAY_BUNDLE = new ValueProperty( TYPE, "provisionLiferayBundle" );
+	public Value<String> getBundleUrl();
 
-    Value<Boolean> getProvisionLiferayBundle();
-    void setProvisionLiferayBundle( String value );
-    void setProvisionLiferayBundle( Boolean value );
+	public Value<NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp>> getProjectProvider();
 
-    // *** serverName ***
+	public Value<Boolean> getProvisionLiferayBundle();
 
-    @Service( impl = ServerNameValidationService.class )
-    ValueProperty PROP_SERVER_NAME = new ValueProperty( TYPE, "serverName" );
+	public Value<String> getServerName();
 
-    Value<String> getServerName();
-    void setServerName( String value );
+	public void setBundleUrl(String value);
 
-    // *** bundleUrl ***
+	public void setProjectProvider(NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> value);
 
-    @DefaultValue( text = DEFAULT_BUNDLE_URL )
-    @Service( impl = BundleUrlValidationService.class )
-    ValueProperty PROP_BUNDLE_URL = new ValueProperty( TYPE, "bundleUrl" );
+	public void setProjectProvider(String value);
 
-    Value<String> getBundleUrl();
-    void setBundleUrl( String value );
+	public void setProvisionLiferayBundle(Boolean value);
 
-    // *** ProjectProvider ***
+	public void setProvisionLiferayBundle(String value);
 
-    @Type( base = ILiferayProjectProvider.class )
-    @Label( standard = "build type" )
-    @Service( impl = WorkspaceProjectProviderPossibleValuesService.class )
-    @Service( impl = WorkspaceProjectProviderDefaultValueService.class )
-    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" );
+	public void setServerName(String value);
 
-    Value<NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp>> getProjectProvider();
-    void setProjectProvider( String value );
-    void setProjectProvider( NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> value );
+	// BundleUrl
+
+	@DefaultValue(text = DEFAULT_BUNDLE_URL)
+	@Service(impl = BundleUrlValidationService.class)
+	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, "bundleUrl");
+
+	// ProjectProvider
+
+	@Label(standard = "build type")
+	@Service(impl = WorkspaceProjectProviderDefaultValueService.class)
+	@Service(impl = WorkspaceProjectProviderPossibleValuesService.class)
+	@Type(base = ILiferayProjectProvider.class)
+	public ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty(TYPE, "ProjectProvider");
+
+	// ProvisionLiferayBundle
+
+	@DefaultValue(text = "false")
+	@Label(standard = "Download Liferay bundle")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_PROVISION_LIFERAY_BUNDLE = new ValueProperty(TYPE, "provisionLiferayBundle");
+
+	// ServerName
+
+	@Service(impl = ServerNameValidationService.class)
+	public ValueProperty PROP_SERVER_NAME = new ValueProperty(TYPE, "serverName");
 
 }

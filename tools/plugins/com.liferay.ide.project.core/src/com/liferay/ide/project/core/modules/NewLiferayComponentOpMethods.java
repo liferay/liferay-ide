@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -28,49 +27,44 @@ import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 /**
  * @author Simon Jiang
  */
-public class NewLiferayComponentOpMethods
-{
-    public static void createNewComponent( NewLiferayComponentOp op, IProgressMonitor monitor ) throws CoreException
-    {
-        IComponentTemplate<NewLiferayComponentOp> componentOp =
-            op.getComponentClassTemplateName().content( true );
+public class NewLiferayComponentOpMethods {
 
-        if( componentOp != null )
-        {
-            componentOp.doExecute( op, monitor );
-        }
-    }
+	public static void createNewComponent(NewLiferayComponentOp op, IProgressMonitor monitor) throws CoreException {
+		IComponentTemplate<NewLiferayComponentOp> componentOp = op.getComponentClassTemplateName().content(true);
 
-    public static final Status execute( final NewLiferayComponentOp op, final ProgressMonitor pm )
-    {
-        final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
+		if (componentOp != null) {
+			componentOp.doExecute(op, monitor);
+		}
+	}
 
-        monitor.beginTask( "Creating new Liferay component", 100 );
+	public static final Status execute(NewLiferayComponentOp op, ProgressMonitor pm) {
+		IProgressMonitor monitor = ProgressMonitorBridge.create(pm);
 
-        Status retval = Status.createOkStatus();
+		monitor.beginTask("Creating new Liferay component", 100);
 
-        try
-        {
-            String projectName = op.getProjectName().content( true );
-            IProject project = CoreUtil.getProject( projectName );
+		Status retval = Status.createOkStatus();
 
-            if( project != null )
-            {
-                createNewComponent( op, monitor );
-            }
-            else
-            {
-                return Status.createErrorStatus( " Can't find valid project." );
-            }
-        }
-        catch( Exception e )
-        {
-            final String msg = "Error creating Liferay component.";
-            ProjectCore.logError( msg, e );
+		try {
+			String projectName = op.getProjectName().content(true);
 
-            return Status.createErrorStatus( msg + " Please see Eclipse error log for more details.", e );
-        }
+			IProject project = CoreUtil.getProject(projectName);
 
-        return retval;
-    }
+			if (project != null) {
+				createNewComponent(op, monitor);
+			}
+			else {
+				return Status.createErrorStatus(" Can't find valid project.");
+			}
+		}
+		catch (Exception e) {
+			String msg = "Error creating Liferay component.";
+
+			ProjectCore.logError(msg, e);
+
+			return Status.createErrorStatus(msg + " Please see Eclipse error log for more details.", e);
+		}
+
+		return retval;
+	}
+
 }
