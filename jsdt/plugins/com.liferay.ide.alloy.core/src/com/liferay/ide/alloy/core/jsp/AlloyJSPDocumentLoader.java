@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.alloy.core.jsp;
 
 import org.eclipse.jface.text.IDocumentPartitioner;
@@ -23,37 +23,35 @@ import org.eclipse.wst.sse.core.internal.provisional.document.IEncodedDocument;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 
-
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class AlloyJSPDocumentLoader extends JSPDocumentLoader
-{
-    @Override
-    public IDocumentPartitioner getDefaultDocumentPartitioner()
-    {
-        return new AlloyStructuredTextPartitionerForJSP();
-    }
+@SuppressWarnings("restriction")
+public class AlloyJSPDocumentLoader extends JSPDocumentLoader {
 
-    @Override
-    protected IEncodedDocument newEncodedDocument()
-    {
-        final IEncodedDocument retval = super.newEncodedDocument();
+	@Override
+	public IDocumentPartitioner getDefaultDocumentPartitioner() {
+		return new AlloyStructuredTextPartitionerForJSP();
+	}
 
-        if( retval instanceof IStructuredDocument )
-        {
-            final IStructuredDocument doc = (IStructuredDocument) retval;
-            final RegionParser parser = doc.getParser();
+	@Override
+	protected IEncodedDocument newEncodedDocument() {
+		IEncodedDocument retval = super.newEncodedDocument();
 
-            if( parser instanceof BlockTagParser )
-            {
-                final BlockTagParser blockParser = (BlockTagParser) parser;
-                final BlockMarker bm = new BlockMarker( "aui:script", null, DOMRegionContext.BLOCK_TEXT, false );
-                blockParser.addBlockMarker( bm );
-            }
-        }
+		if (retval instanceof IStructuredDocument) {
+			IStructuredDocument doc = (IStructuredDocument)retval;
 
-        return retval;
-    }
+			RegionParser parser = doc.getParser();
+
+			if (parser instanceof BlockTagParser) {
+				BlockTagParser blockParser = (BlockTagParser)parser;
+				BlockMarker bm = new BlockMarker("aui:script", null, DOMRegionContext.BLOCK_TEXT, false);
+
+				blockParser.addBlockMarker(bm);
+			}
+		}
+
+		return retval;
+	}
+
 }

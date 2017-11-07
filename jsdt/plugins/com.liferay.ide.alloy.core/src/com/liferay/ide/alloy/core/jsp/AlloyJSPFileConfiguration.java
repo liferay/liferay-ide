@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.alloy.core.jsp;
 
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -19,31 +19,29 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import org.eclipse.core.resources.IFile;
 
 import tern.ITernFile;
-import tern.eclipse.ide.core.ITernFileConfiguration;
-import tern.server.protocol.html.ScriptTagRegion;
 
+import tern.eclipse.ide.core.ITernFileConfiguration;
+
+import tern.server.protocol.html.ScriptTagRegion;
 
 /**
  * @author Gregory Amerson
  */
-public class AlloyJSPFileConfiguration implements ITernFileConfiguration
-{
-    private static final ScriptTagRegion[] tags = new ScriptTagRegion[] { ScriptTagRegion.SCRIPT_TAG, new ScriptTagRegion( "aui:script" ) };
+public class AlloyJSPFileConfiguration implements ITernFileConfiguration {
 
-    @Override
-    public ScriptTagRegion[] getScriptTags( ITernFile ternFile )
-    {
-        if( ternFile != null )
-        {
-            Object file = ternFile.getAdapter( IFile.class );
+	@Override
+	public ScriptTagRegion[] getScriptTags(ITernFile ternFile) {
+		if (ternFile != null) {
+			Object file = ternFile.getAdapter(IFile.class);
 
-            if( file instanceof IFile && ProjectUtil.isPortletProject( ( (IFile) file ).getProject() ) )
-            {
-                return tags;
-            }
-        }
+			if (file instanceof IFile && ProjectUtil.isPortletProject(((IFile)file).getProject())) {
+				return _tags;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
+
+	private static final ScriptTagRegion[] _tags = {ScriptTagRegion.SCRIPT_TAG, new ScriptTagRegion("aui:script")};
 
 }

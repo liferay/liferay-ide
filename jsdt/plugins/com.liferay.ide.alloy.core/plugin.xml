@@ -1,110 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <!--
-   <extension point="com.liferay.ide.project.core.upgradeProjectHandlers">
-      <upgradeProjectHandler
-            class="com.liferay.ide.alloy.core.UpgradeLAUTHandler"
-            name="AlloyUIExecute"
-            description="Run Liferay AlloyUI Upgrade tool"
-            id="com.liferay.ide.alloy.core.upgradeLAUTHandler">
-      </upgradeProjectHandler>
-   </extension>
-   -->
-   <extension
-         point="tern.eclipse.ide.core.ternNatureAdapters">
-      <ternAdaptToNature
-            class="com.liferay.ide.alloy.core.LiferayProjectTernAdapter"
-            id="com.liferay.ide.alloy.core.ternAdapter"
-            name="Liferay Project Tern Adapter">
-         <defaultModules>
-            <module
-                  name="liferay"
-                  withDependencies="true">
-            </module>
-         </defaultModules>
-      </ternAdaptToNature>
-   </extension>
+	<!--
+	<extension point="com.liferay.ide.project.core.upgradeProjectHandlers">
+		<upgradeProjectHandler
+			class="com.liferay.ide.alloy.core.UpgradeLAUTHandler"
+			description="Run Liferay AlloyUI Upgrade tool"
+			id="com.liferay.ide.alloy.core.upgradeLAUTHandler"
+			name="AlloyUIExecute"
+		>
+		</upgradeProjectHandler>
+	</extension>
+	-->
+	<extension
+		point="tern.eclipse.ide.core.ternNatureAdapters"
+	>
+		<ternAdaptToNature
+			class="com.liferay.ide.alloy.core.LiferayProjectTernAdapter"
+			id="com.liferay.ide.alloy.core.ternAdapter"
+			name="Liferay Project Tern Adapter"
+		>
+			<defaultModules>
+				<module
+					name="liferay"
+					withDependencies="true"
+				>
+				</module>
+			</defaultModules>
+		</ternAdaptToNature>
+	</extension>
 
-   <extension
-         point="org.eclipse.wst.sse.core.modelHandler">
-      <modelHandler
-            associatedContentTypeId="com.liferay.ide.alloy.core.alloyjspsource"
-            class="com.liferay.ide.alloy.core.jsp.AlloyModelHandlerForJSP"
-            id="com.liferay.ide.alloy.core.alloyJsp">
-      </modelHandler>
-   </extension>
+	<extension
+		point="org.eclipse.wst.sse.core.modelHandler"
+	>
+		<modelHandler
+			associatedContentTypeId="com.liferay.ide.alloy.core.alloyjspsource"
+			class="com.liferay.ide.alloy.core.jsp.AlloyModelHandlerForJSP"
+			id="com.liferay.ide.alloy.core.alloyJsp"
+		>
+		</modelHandler>
+	</extension>
 
-   <extension
-         point="org.eclipse.core.contenttype.contentTypes">
-      <content-type
-            base-type="org.eclipse.jst.jsp.core.jspsource"
-            default-charset="ISO-8859-1"
-            file-extensions="jsp,jsv,jtpl,jspx,ljsp"
-            id="com.liferay.ide.alloy.core.alloyjspsource"
-            name="Alloy JSP Source"
-            priority="high">
-         <describer
-               class="com.liferay.ide.alloy.core.jsp.AlloyContentDescriberForJSP">
-         </describer>
+	<extension
+		point="org.eclipse.core.contenttype.contentTypes"
+	>
+		<content-type
+			base-type="org.eclipse.jst.jsp.core.jspsource"
+			default-charset="ISO-8859-1"
+			file-extensions="jsp,jsv,jtpl,jspx,ljsp"
+			id="com.liferay.ide.alloy.core.alloyjspsource"
+			name="Alloy JSP Source"
+			priority="high"
+		>
+			<describer
+				class="com.liferay.ide.alloy.core.jsp.AlloyContentDescriberForJSP"
+			>
+			</describer>
 
-      </content-type>
-   </extension>
+		</content-type>
+	</extension>
 
-   <extension point="org.eclipse.wst.xml.core.modelQueryExtensions">
-        <modelQueryExtension
-            class="org.eclipse.jst.jsp.core.internal.modelquery.JSPModelQueryExtension"
-            contentType="com.liferay.ide.alloy.core.alloyjspsource">
-        </modelQueryExtension>
-    </extension>
-    <extension point="org.eclipse.wst.xml.core.modelQueryExtensions">
-        <modelQueryExtension
-            class="org.eclipse.jst.jsp.core.internal.modelquery.TaglibModelQueryExtension"
-            contentType="com.liferay.ide.alloy.core.alloyjspsource">
-        </modelQueryExtension>
-    </extension>
+	<extension point="org.eclipse.wst.xml.core.modelQueryExtensions">
+		<modelQueryExtension
+			class="org.eclipse.jst.jsp.core.internal.modelquery.JSPModelQueryExtension"
+			contentType="com.liferay.ide.alloy.core.alloyjspsource"
+		>
+		</modelQueryExtension>
+	</extension>
+	<extension point="org.eclipse.wst.xml.core.modelQueryExtensions">
+		<modelQueryExtension
+			class="org.eclipse.jst.jsp.core.internal.modelquery.TaglibModelQueryExtension"
+			contentType="com.liferay.ide.alloy.core.alloyjspsource"
+		>
+		</modelQueryExtension>
+	</extension>
 
-   <extension
-        point="org.eclipse.core.filebuffers.documentCreation"
-        id="com.liferay.ide.alloy.core.documentfactories">
-        <factory
-            contentTypeId="com.liferay.ide.alloy.core.alloyjspsource"
-            class="com.liferay.ide.alloy.core.jsp.AlloyJSPDocumentFactory" />
-    </extension>
-    <extension point="org.eclipse.wst.jsdt.web.core.javascriptPreProcessor">
-        <javascriptPreProcessor
-            class="com.liferay.ide.alloy.core.jsp.AlloyJsTranslation"
-            priority="10" />
-    </extension>
-    <extension
-          point="org.eclipse.core.contenttype.contentTypes">
-       <file-association
-             content-type="org.eclipse.wst.css.core.csssource"
-             file-extensions="scss">
-       </file-association>
-    </extension>
-    <extension
-          point="tern.eclipse.ide.core.ternFileConfigurations">
-       <configuration
-             class="com.liferay.ide.alloy.core.jsp.AlloyJSPFileConfiguration">
-       </configuration>
-    </extension>
-    <!--
-    <extension
-          point="org.eclipse.a.wst.html.webresources.core.webResourcesFinderTypeProviders">
-       <provider
-             class="com.liferay.ide.alloy.core.webresources.AlloyFinderTypeProvider">
-       </provider>
-    </extension>
-    <extension
-          point="org.eclipse.a.wst.html.webresources.core.webResourcesProviders">
-       <provider
-             class="com.liferay.ide.alloy.core.webresources.PortalResourcesProvider"
-             types="css,scss">
-       </provider>
-       <provider
-             class="com.liferay.ide.alloy.core.webresources.ProjectResourcesProvider"
-             types="css,scss">
-       </provider>
-    </extension>-->
+	<extension
+		id="com.liferay.ide.alloy.core.documentfactories"
+		point="org.eclipse.core.filebuffers.documentCreation"
+	>
+		<factory
+			class="com.liferay.ide.alloy.core.jsp.AlloyJSPDocumentFactory"
+			contentTypeId="com.liferay.ide.alloy.core.alloyjspsource"
+		/>
+	</extension>
+	<extension point="org.eclipse.wst.jsdt.web.core.javascriptPreProcessor">
+		<javascriptPreProcessor
+			class="com.liferay.ide.alloy.core.jsp.AlloyJsTranslation"
+			priority="10"
+		/>
+	</extension>
+	<extension
+		point="org.eclipse.core.contenttype.contentTypes"
+	>
+		<file-association
+			content-type="org.eclipse.wst.css.core.csssource"
+			file-extensions="scss"
+		>
+		</file-association>
+	</extension>
+	<extension
+		point="tern.eclipse.ide.core.ternFileConfigurations"
+	>
+		<configuration
+			class="com.liferay.ide.alloy.core.jsp.AlloyJSPFileConfiguration"
+		>
+		</configuration>
+	</extension>
+	<!--
+	<extension
+		point="org.eclipse.a.wst.html.webresources.core.webResourcesFinderTypeProviders"
+	>
+		<provider
+			class="com.liferay.ide.alloy.core.webresources_src.AlloyFinderTypeProvider"
+		>
+		</provider>
+	</extension>
+	<extension
+		point="org.eclipse.a.wst.html.webresources.core.webResourcesProviders"
+	>
+		<provider
+			class="com.liferay.ide.alloy.core.webresources_src.PortalResourcesProvider"
+			types="css,scss"
+		>
+		</provider>
+		<provider
+			class="com.liferay.ide.alloy.core.webresources_src.ProjectResourcesProvider"
+			types="css,scss"
+		>
+		</provider>
+	</extension>-->
 </plugin>
