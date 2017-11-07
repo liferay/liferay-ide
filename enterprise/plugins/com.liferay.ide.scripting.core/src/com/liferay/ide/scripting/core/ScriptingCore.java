@@ -1,98 +1,82 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.scripting.core;
 
 import java.net.URL;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plugin life cycle
- *
  * @author Gregory Amerson
  */
-public class ScriptingCore extends Plugin
-{
+public class ScriptingCore extends Plugin {
 
-    // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.scripting.core"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.liferay.ide.scripting.core";
 
-    private static GroovyScriptingSupport groovyScriptingSupport;
+	public static IStatus createErrorStatus(String msg, Throwable e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
+	}
 
-    // The shared instance
-    private static ScriptingCore plugin;
+	public static ScriptingCore getDefault() {
+		return _plugin;
+	}
 
-    public static IStatus createErrorStatus( String msg, Throwable e )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
-    }
+	public static GroovyScriptingSupport getGroovyScriptingSupport() {
+		if (_groovyScriptingSupport == null) {
+			_groovyScriptingSupport = new GroovyScriptingSupport();
+		}
 
-    /**
-     * Returns the shared instance
-     *
-     * @return the shared instance
-     */
-    public static ScriptingCore getDefault()
-    {
-        return plugin;
-    }
+		return _groovyScriptingSupport;
+	}
 
-    public static GroovyScriptingSupport getGroovyScriptingSupport()
-    {
-        if( groovyScriptingSupport == null )
-        {
-            groovyScriptingSupport = new GroovyScriptingSupport();
-        }
+	public static URL getPluginEntry(String path) {
+		Bundle bundle = getDefault().getBundle();
 
-        return groovyScriptingSupport;
-    }
+		URL pluginEntry = bundle.getEntry(path);
 
-    public static URL getPluginEntry( String path )
-    {
-        return getDefault().getBundle().getEntry( path );
-    }
+		return pluginEntry;
+	}
 
-    public static void logError( String msg, Throwable e )
-    {
-        getDefault().getLog().log( createErrorStatus( msg, e ) );
-    }
+	public static void logError(String msg, Throwable e) {
+		ILog log = getDefault().getLog();
 
-    /**
-     * The constructor
-     */
-    public ScriptingCore()
-    {
-    }
+		log.log(createErrorStatus(msg, e));
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-     */
-    public void start( BundleContext context ) throws Exception
-    {
-        super.start( context );
-        plugin = this;
-    }
+	public ScriptingCore() {
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-     */
-    public void stop( BundleContext context ) throws Exception
-    {
-        plugin = null;
-        super.stop( context );
-    }
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+
+		_plugin = this;
+	}
+
+	public void stop(BundleContext context) throws Exception {
+		_plugin = null;
+
+		super.stop(context);
+	}
+
+	private static GroovyScriptingSupport _groovyScriptingSupport;
+	private static ScriptingCore _plugin;
+
 }

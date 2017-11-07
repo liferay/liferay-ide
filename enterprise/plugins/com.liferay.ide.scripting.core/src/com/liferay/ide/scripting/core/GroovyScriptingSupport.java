@@ -1,13 +1,17 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
+
 package com.liferay.ide.scripting.core;
 
 import groovy.lang.GroovyClassLoader;
@@ -15,7 +19,9 @@ import groovy.lang.GroovyShell;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.net.URL;
+
 import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -23,63 +29,42 @@ import org.eclipse.core.runtime.FileLocator;
 /**
  * @author Gregory Amerson
  */
-public class GroovyScriptingSupport
-{
+@SuppressWarnings("resource")
+public class GroovyScriptingSupport {
 
-    public Object newInstanceFromFile( File scriptFile )
-    {
-        @SuppressWarnings( "resource" ) final GroovyClassLoader gcl = new GroovyClassLoader();
+	public URL getGroovyLibURL() {
+		try {
+			return FileLocator.toFileURL(ScriptingCore.getPluginEntry("/lib/groovy-all-1.7.5.jar"));
+		}
+		catch (IOException ioe) {
+		}
 
-        try
-        {
-            return gcl.parseClass( scriptFile ).newInstance();
-        }
-        catch( Exception e )
-        {
-            ScriptingCore.logError( "Could not create script file.", e );
-        }
-        finally
-        {
-            // only available in jdk 1.7
-//            try
-//            {
-//                gcl.close();
-//            }
-//            catch( IOException e )
-//            {
-//                ScriptingCore.logError( "Could not close classloader.", e );
-//            }
-        }
+		return null;
+	}
 
-        return null;
-    }
+	public Object newInstanceFromFile(File scriptFile) {
+		GroovyClassLoader gcl = new GroovyClassLoader();
 
-    protected GroovyShell createGroovyShell( Map<String, Object> variableMap )
-    {
-        GroovyShell groovyShell = new GroovyShell( new GroovyClassLoader() );
+		try {
+			return gcl.parseClass(scriptFile).newInstance();
+		}
+		catch (Exception e) {
+			ScriptingCore.logError("Could not create script file.", e);
+		}
 
-        if( variableMap != null && variableMap.keySet() != null && variableMap.keySet().size() > 0 )
-        {
-            for( String key : variableMap.keySet() )
-            {
-                groovyShell.setVariable( key, variableMap.get( key ) );
-            }
-        }
+		return null;
+	}
 
-        return groovyShell;
-    }
+	protected GroovyShell createGroovyShell(Map<String, Object> variableMap) {
+		GroovyShell groovyShell = new GroovyShell(new GroovyClassLoader());
 
-    public URL getGroovyLibURL()
-    {
-        try
-        {
-            return FileLocator.toFileURL( ScriptingCore.getPluginEntry( "/lib/groovy-all-1.7.5.jar" ) );
-        }
-        catch( IOException e )
-        {
-        }
+		if ((variableMap != null) && (variableMap.keySet() != null) && (variableMap.keySet().size() > 0)) {
+			for (String key : variableMap.keySet()) {
+				groovyShell.setVariable(key, variableMap.get(key));
+			}
+		}
 
-        return null;
-    }
+		return groovyShell;
+	}
 
 }
