@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.snippets.wizard;
 
@@ -22,37 +21,34 @@ import org.eclipse.ui.IEditorPart;
 /**
  * @author Greg Amerson
  */
-public class AddModelEntityWizardPage extends AbstractModelWizardPage
-{
+public class AddModelEntityWizardPage extends AbstractModelWizardPage {
 
-    public AddModelEntityWizardPage( String pageName, IEditorPart editor )
-    {
-        super( pageName, editor );
-        setTitle( Msgs.addModelEntity );
-        setDescription( Msgs.insertCode );
-    }
+	public AddModelEntityWizardPage(String pageName, IEditorPart editor) {
+		super(pageName, editor);
+		setTitle(Msgs.addModelEntity);
+		setDescription(Msgs.insertCode);
+	}
 
-    public void createControl( Composite parent )
-    {
-        super.createControl( parent );
+	public void createControl(Composite parent) {
+		super.createControl(parent);
 
-        varNameLabel.setVisible( false );
-        varNameText.setVisible( false );
-    }
+		varNameLabel.setVisible(false);
+		varNameText.setVisible(false);
+	}
 
-    public String getVarName()
-    {
-        return getModel().toLowerCase();
-    }
+	public String getVarName() {
+		return getModel().toLowerCase();
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String addModelEntity;
-        public static String insertCode;
+	private static class Msgs extends NLS {
 
-        static
-        {
-            initializeMessages( AddModelEntityWizardPage.class.getName(), Msgs.class );
-        }
-    }
+		public static String addModelEntity;
+		public static String insertCode;
+
+		static {
+			initializeMessages(AddModelEntityWizardPage.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

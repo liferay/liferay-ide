@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.snippets;
 
@@ -27,60 +26,56 @@ import org.eclipse.wst.common.snippets.internal.util.StringUtils;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public abstract class ModelSnippetInsertion extends AbstractSnippetInsertion
-{
+@SuppressWarnings("restriction")
+public abstract class ModelSnippetInsertion extends AbstractSnippetInsertion {
 
-    public ModelSnippetInsertion()
-    {
-        super();
-    }
+	public ModelSnippetInsertion() {
+	}
 
-    @Override
-    public void insert( IEditorPart editorPart )
-    {
-        if( this.fEditorPart == null )
-        {
-            this.fEditorPart = editorPart;
-        }
+	@Override
+	public void insert(IEditorPart editorPart) {
+		if (fEditorPart == null) {
+			fEditorPart = editorPart;
+		}
 
-        super.insert( editorPart );
-    }
+		super.insert(editorPart);
+	}
 
-    protected abstract AbstractModelWizard createModelWizard( IEditorPart fEditorPart );
+	protected abstract AbstractModelWizard createModelWizard(IEditorPart fEditorPart);
 
-    protected String getPreparedText( AbstractModelWizard wizard )
-    {
-        String text = fItem.getContentString();
+	protected String getPreparedText(AbstractModelWizard wizard) {
+		String text = fItem.getContentString();
 
-        text = StringUtils.replace( text, "${model}", wizard.getModel() ); //$NON-NLS-1$
-        text = StringUtils.replace( text, "${varName}", wizard.getVarName() ); //$NON-NLS-1$
+		text = StringUtils.replace(text, "${model}", wizard.getModel());
+		text = StringUtils.replace(text, "${varName}", wizard.getVarName());
 
-        // Update EOLs (bug 80231)
-        String systemEOL = System.getProperty( "line.separator" ); //$NON-NLS-1$
-        text = StringUtils.replace( text, "\r\n", "\n" ); //$NON-NLS-1$ //$NON-NLS-2$
-        text = StringUtils.replace( text, "\r", "\n" ); //$NON-NLS-1$ //$NON-NLS-2$
-        if( !"\n".equals( systemEOL ) && systemEOL != null ) { //$NON-NLS-1$
-            text = StringUtils.replace( text, "\n", systemEOL ); //$NON-NLS-1$
-        }
+		// Update EOLs (bug 80231)
 
-        return text;
-    }
+		String systemEOL = System.getProperty("line.separator");
+		text = StringUtils.replace(text, "\r\n", "\n");
+		text = StringUtils.replace(text, "\r", "\n");
 
-    @Override
-    protected String getResolvedString( Shell host )
-    {
-        AbstractModelWizard wizard = createModelWizard( this.fEditorPart );
-        WizardDialog dialog = new WizardDialog( host, wizard );
-        dialog.setBlockOnOpen( true );
-        int retval = dialog.open();
+		if (!"\n".equals(systemEOL) && (systemEOL != null)) {
+			text = StringUtils.replace(text, "\n", systemEOL);
+		}
 
-        if( retval == Window.OK )
-        {
-            return getPreparedText( wizard );
-        }
+		return text;
+	}
 
-        return StringPool.EMPTY;
-    }
+	@Override
+	protected String getResolvedString(Shell host) {
+		AbstractModelWizard wizard = createModelWizard(fEditorPart);
+
+		WizardDialog dialog = new WizardDialog(host, wizard);
+
+		dialog.setBlockOnOpen(true);
+		int retval = dialog.open();
+
+		if (retval == Window.OK) {
+			return getPreparedText(wizard);
+		}
+
+		return StringPool.EMPTY;
+	}
 
 }

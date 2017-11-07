@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.snippets.util;
 
@@ -19,6 +18,7 @@ import com.liferay.ide.ui.LiferayPerspectiveFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+
 import java.util.List;
 
 import org.eclipse.gef.palette.PaletteEntry;
@@ -34,73 +34,72 @@ import org.eclipse.wst.common.snippets.internal.palette.ModelFactoryForUser;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class SnippetsUtil
-{
+@SuppressWarnings("restriction")
+public class SnippetsUtil {
 
-    public static IViewPart findSnippetsView()
-    {
-        for( IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows() )
-        {
-            for( IWorkbenchPage page : window.getPages() )
-            {
-                IViewPart snippetsView = page.findView( LiferayPerspectiveFactory.ID_WST_SNIPPETS_VIEW );
-                if( snippetsView != null )
-                {
-                    return snippetsView;
-                }
-            }
-        }
+	public static IViewPart findSnippetsView() {
+		for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows()) {
+			for (IWorkbenchPage page : window.getPages()) {
+				IViewPart snippetsView = page.findView(LiferayPerspectiveFactory.ID_WST_SNIPPETS_VIEW);
 
-        return null;
-    }
+				if (snippetsView != null) {
+					return snippetsView;
+				}
+			}
+		}
 
-    @SuppressWarnings( "rawtypes" )
-    public static void importSnippetsFromFile( File snippetFile ) throws FileNotFoundException
-    {
+		return null;
+	}
 
-        if( snippetFile == null || ( !snippetFile.exists() ) || ( !snippetFile.isFile() ) )
-        {
-            return;
-        }
+	@SuppressWarnings("rawtypes")
+	public static void importSnippetsFromFile(File snippetFile) throws FileNotFoundException {
+		if ((snippetFile == null) || !snippetFile.exists() || !snippetFile.isFile()) {
+			return;
+		}
 
-        // InputStream stream = Files.newInputStream(snippetFile.toPath());
-        SnippetDefinitions definitions = ModelFactoryForUser.getInstance().load( snippetFile.getAbsolutePath() );
+		// InputStream stream = Files.newInputStream(snippetFile.toPath());
 
-        final List importCategories = definitions.getCategories();
-        final List currentCategories = SnippetManager.getInstance().getDefinitions().getCategories();
+		SnippetDefinitions definitions = ModelFactoryForUser.getInstance().load(snippetFile.getAbsolutePath());
 
-        Display.getDefault().asyncExec( new Runnable()
-        {
+		List importCategories = definitions.getCategories();
 
-            public void run()
-            {
-                for( int i = 0; i < importCategories.size(); i++ )
-                {
-                    boolean found = false;
-                    for( int j = 0; j < currentCategories.size(); j++ )
-                    {
-                        if( ( (PaletteEntry) currentCategories.get( j ) ).getId().compareToIgnoreCase(
-                            ( ( (PaletteEntry) importCategories.get( i ) ) ).getId() ) == 0 )
-                        {
+		SnippetManager manager = SnippetManager.getInstance();
 
-                            found = true;
-                            break;
-                        }
-                    }
-                    if( !found )
-                    {
-                        SnippetManager.getInstance().getPaletteRoot().add( (PaletteEntry) importCategories.get( i ) );
-                    }
-                }
-            }
-        } );
+		List currentCategories = manager.getDefinitions().getCategories();
 
-        // IViewPart view = findSnippetsView();
+		Display.getDefault().asyncExec(
+			new Runnable() {
 
-        // if (view != null) {
-        // SnippetsView snippetsView = (SnippetsView) view;
-        // snippetsView.getViewer().getContents().refresh();
-        // }
-    }
+				public void run() {
+					for (int i = 0; i < importCategories.size(); i++) {
+						boolean found = false;
+
+						for (int j = 0; j < currentCategories.size(); j++) {
+							if (((PaletteEntry)currentCategories.get(j)).getId().compareToIgnoreCase(
+									((PaletteEntry)importCategories.get(i)).getId()) == 0) {
+
+								found = true;
+								break;
+							}
+						}
+
+						if (!found) {
+							SnippetManager manager = SnippetManager.getInstance();
+
+							manager.getPaletteRoot().add((PaletteEntry)importCategories.get(i));
+						}
+					}
+				}
+
+			});
+
+		// IViewPart view = findSnippetsView();
+
+		// if (view != null) {
+		// SnippetsView snippetsView = (SnippetsView) view;
+		// snippetsView.getViewer().getContents().refresh();
+		// }
+
+	}
+
 }
