@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.ui.action;
 
@@ -30,36 +29,30 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public class BuildServiceGoalAction extends MavenGoalAction
-{
+public class BuildServiceGoalAction extends MavenGoalAction {
 
-    @Override
-    protected String getMavenGoals()
-    {
-        return MavenGoalUtil.getMavenBuildServiceGoal( plugin );
-    }
+	@Override
+	protected String getMavenGoals() {
+		return MavenGoalUtil.getMavenBuildServiceGoal(plugin);
+	}
 
-    @Override
-    protected void updateProject( IProject p, IProgressMonitor monitor )
-    {
-        final MavenProjectBuilder builder = new MavenProjectBuilder( p );
+	@Override
+	protected String getPluginKey() {
+		return ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_SERVICE_BUILDER_KEY;
+	}
 
-        try
-        {
-            final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( p, monitor );
+	@Override
+	protected void updateProject(IProject p, IProgressMonitor monitor) {
+		MavenProjectBuilder builder = new MavenProjectBuilder(p);
 
-            builder.refreshSiblingProject( projectFacade, monitor );
-        }
-        catch( CoreException e )
-        {
-            LiferayMavenUI.logError( "Unable to refresh sibling project", e );
-        }
-    }
+		try {
+			IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade(p, monitor);
 
-    @Override
-    protected String getPluginKey()
-    {
-        return ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_SERVICE_BUILDER_KEY;
-    }
+			builder.refreshSiblingProject(projectFacade, monitor);
+		}
+		catch (CoreException ce) {
+			LiferayMavenUI.logError("Unable to refresh sibling project", ce);
+		}
+	}
 
 }

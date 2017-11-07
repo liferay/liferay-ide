@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.maven.ui;
 
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
@@ -21,45 +21,35 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolutionGenerator2;
 
-
 /**
  * @author Gregory Amerson
  */
-public class ConfigProblemMarkerResolutionGenerator implements IMarkerResolutionGenerator2
-{
+public class ConfigProblemMarkerResolutionGenerator implements IMarkerResolutionGenerator2 {
 
-    public IMarkerResolution[] getResolutions( IMarker marker )
-    {
-        IMarkerResolution[] retval = null;
+	public IMarkerResolution[] getResolutions(IMarker marker) {
+		IMarkerResolution[] retval = null;
 
-        if( correctMarker( marker ) )
-        {
-            retval = new IMarkerResolution[]
-            {
-                new SelectActiveProfilesMarkerResolution(),
-                new NewLiferayProfileMarkerResolution()
-            };
-        }
+		if (correctMarker(marker)) {
+			retval = new IMarkerResolution[] {
+				new SelectActiveProfilesMarkerResolution(), new NewLiferayProfileMarkerResolution()
+			};
+		}
 
-        return retval;
-    }
+		return retval;
+	}
 
-    public boolean hasResolutions( IMarker marker )
-    {
-        return correctMarker( marker );
-    }
+	public boolean hasResolutions(IMarker marker) {
+		return correctMarker(marker);
+	}
 
-    protected boolean correctMarker( IMarker marker )
-    {
-        try
-        {
-            return ILiferayMavenConstants.LIFERAY_MAVEN_MARKER_CONFIGURATION_WARNING_ID.equals( marker.getType() );
-        }
-        catch( CoreException e )
-        {
-        }
+	protected boolean correctMarker(IMarker marker) {
+		try {
+			return ILiferayMavenConstants.LIFERAY_MAVEN_MARKER_CONFIGURATION_WARNING_ID.equals(marker.getType());
+		}
+		catch (CoreException ce) {
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 }

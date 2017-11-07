@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.maven.ui;
 
 import com.liferay.ide.maven.core.MavenUtil;
@@ -19,20 +19,17 @@ import com.liferay.ide.maven.core.MavenUtil;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IFile;
 
-
 /**
  * @author Gregory Amerson
  */
-public class PomFilePropertyTester extends PropertyTester
-{
+public class PomFilePropertyTester extends PropertyTester {
 
-    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
-    {
-        if( receiver instanceof IFile )
-        {
-            return MavenUtil.isPomFile( (IFile) receiver );
-        }
+	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
+		if (receiver instanceof IFile) {
+			return MavenUtil.isPomFile((IFile)receiver);
+		}
 
-        return false;
-    }
+		return false;
+	}
+
 }

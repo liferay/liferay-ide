@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.ui.action;
 
@@ -20,42 +19,36 @@ import com.liferay.ide.maven.core.ILiferayMavenConstants;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
+
 import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public class DistGoalAction extends MavenGoalAction
-{
+public class DistGoalAction extends MavenGoalAction {
 
-    @Override
-    protected String getMavenGoals()
-    {
-        if( plugin == null )
-        {
-            return "dist";
-        }
+	@Override
+	protected String getMavenGoals() {
+		if (plugin == null) {
+			return "dist";
+		}
 
-        if( CoreUtil.compareVersions( new Version( plugin.getVersion() ), new Version( "2.0.2" ) ) >= 0 )
-        {
-            return "bundle-support:dist";
-        }
-        else
-        {
-            return "liferay:dist-bundle";
-        }
-    }
+		if (CoreUtil.compareVersions(new Version(plugin.getVersion()), new Version("2.0.2")) >= 0) {
+			return "bundle-support:dist";
+		}
+		else {
+			return "liferay:dist-bundle";
+		}
+	}
 
-    @Override
-    protected void updateProject( IProject p, IProgressMonitor monitor )
-    {
-    }
+	@Override
+	protected String getPluginKey() {
+		return ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_BUNDLE_SUPPORT_KEY;
+	}
 
-    @Override
-    protected String getPluginKey()
-    {
-        return ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_BUNDLE_SUPPORT_KEY;
-    }
+	@Override
+	protected void updateProject(IProject p, IProgressMonitor monitor) {
+	}
 
 }

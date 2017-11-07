@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,46 +10,40 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.ui.action;
 
-import org.osgi.framework.Version;
-
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
+
+import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public class BuildLangGoalAction extends MavenGoalAction
-{
+public class BuildLangGoalAction extends MavenGoalAction {
 
-    @Override
-    protected String getMavenGoals()
-    {
-        if( plugin == null )
-        {
-            return "build-lang";
-        }
+	@Override
+	protected String getMavenGoals() {
+		if (plugin == null) {
+			return "build-lang";
+		}
 
-        if( CoreUtil.compareVersions( new Version( plugin.getVersion() ), new Version( "1.0.11" ) ) >= 0 &&
-            plugin.getArtifactId().equals( getPluginKey() ) )
-        {
-            return "lang-builder:build";
-        }
-        else
-        {
-            return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_LANG;
-        }
-    }
+		if ((CoreUtil.compareVersions(new Version(plugin.getVersion()), new Version("1.0.11")) >= 0) &&
+			plugin.getArtifactId().equals(getPluginKey())) {
 
-    @Override
-    protected String getPluginKey()
-    {
-        return ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_LANG_BUILDER_KEY;
-    }
+			return "lang-builder:build";
+		}
+		else {
+			return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_LANG;
+		}
+	}
+
+	@Override
+	protected String getPluginKey() {
+		return ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_LANG_BUILDER_KEY;
+	}
 
 }
