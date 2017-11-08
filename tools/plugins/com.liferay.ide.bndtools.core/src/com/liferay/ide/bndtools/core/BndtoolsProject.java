@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.bndtools.core;
 
 import aQute.bnd.build.Project;
@@ -22,6 +22,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
+
 import java.util.Collection;
 
 import org.eclipse.core.resources.IFile;
@@ -34,155 +35,128 @@ import org.eclipse.core.runtime.Path;
 /**
  * @author Gregory Amerson
  */
-public class BndtoolsProject extends BaseLiferayProject implements IBundleProject
-{
-    private static final String[] ignorePaths = new String[] { "generated" };
+public class BndtoolsProject extends BaseLiferayProject implements IBundleProject {
 
-    private final Project bndProject;
+	public BndtoolsProject(IProject project, Project bndProject) {
+		super(project);
+		_bndProject = bndProject;
+	}
 
-    public BndtoolsProject( IProject project, Project bndProject  )
-    {
-        super( project );
-        this.bndProject = bndProject;
-    }
+	@Override
+	public boolean filterResource(IPath resourcePath) {
+		if (filterResource(resourcePath, _ignorePaths)) {
+			return true;
+		}
 
-    @Override
-    public String getBundleShape()
-    {
-        return "jar";
-    }
+		return false;
+	}
 
-    @Override
-    public IFile getDescriptorFile( String name )
-    {
-        return null;
-    }
+	@Override
+	public String getBundleShape() {
+		return "jar";
+	}
 
-    @Override
-    public IPath getLibraryPath( String filename )
-    {
-        return null;
-    }
+	@Override
+	public IFile getDescriptorFile(String name) {
+		return null;
+	}
 
-    @Override
-    public String getProperty( String key, String defaultValue )
-    {
-        return null;
-    }
+	@Override
+	public IPath getLibraryPath(String filename) {
+		return null;
+	}
 
-    @Override
-    public IPath getOutputBundle( boolean cleanBuild, IProgressMonitor monitor ) throws CoreException
-    {
-        IPath retval = null;
+	@Override
+	public IPath getOutputBundle(boolean cleanBuild, IProgressMonitor monitor) throws CoreException {
+		IPath retval = null;
 
-        try
-        {
-            if( cleanBuild )
-            {
-                this.bndProject.clean();
-            }
+		try {
+			if (cleanBuild) {
+				this._bndProject.clean();
+			}
 
-            final File[] buildFiles = this.bndProject.getBuildFiles( true );
+			File[] buildFiles = this._bndProject.getBuildFiles(true);
 
-            if( !CoreUtil.isNullOrEmpty( buildFiles ) )
-            {
-                final File buildFile = buildFiles[0];
+			if (!CoreUtil.isNullOrEmpty(buildFiles)) {
+				File buildFile = buildFiles[0];
 
-                if( buildFile.exists() )
-                {
-                    retval = new Path( buildFile.getCanonicalPath() );
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            BndtoolsCore.logError( "Unable to get output jar for " + this.getProject().getName(), e );
-        }
+				if (buildFile.exists()) {
+					retval = new Path(buildFile.getCanonicalPath());
+				}
+			}
+		}
+		catch (Exception e) {
+			BndtoolsCore.logError("Unable to get output jar for " + getProject().getName(), e);
+		}
 
-        return retval;
-    }
+		return retval;
+	}
 
-    @Override
-    public IPath getOutputBundlePath()
-    {
-        IPath retval = null;
+	@Override
+	public IPath getOutputBundlePath() {
+		IPath retval = null;
 
-        try
-        {
-            final File[] buildFiles = this.bndProject.getBuildFiles( false );
+		try {
+			File[] buildFiles = this._bndProject.getBuildFiles(false);
 
-            if( !CoreUtil.isNullOrEmpty( buildFiles ) )
-            {
-                final File buildFile = buildFiles[0];
+			if (!CoreUtil.isNullOrEmpty(buildFiles)) {
+				File buildFile = buildFiles[0];
 
-                if( buildFile.exists() )
-                {
-                    retval = new Path( buildFile.getCanonicalPath() );
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            BndtoolsCore.logError( "Unable to get output jar for " + this.getProject().getName(), e );
-        }
+				if (buildFile.exists()) {
+					retval = new Path(buildFile.getCanonicalPath());
+				}
+			}
+		}
+		catch (Exception e) {
+			BndtoolsCore.logError("Unable to get output jar for " + getProject().getName(), e);
+		}
 
-        return retval;
-    }
+		return retval;
+	}
 
-    @Override
-    public String getSymbolicName() throws CoreException
-    {
-        String retval = this.bndProject.getName();
-        try
-        {
-            final Collection<String> names = this.bndProject.getBsns();
+	@Override
+	public String getProperty(String key, String defaultValue) {
+		return null;
+	}
 
-            if( names != null && names.size() > 0 )
-            {
-                retval = names.iterator().next();
-            }
-        }
-        catch( Exception e )
-        {
-        }
+	@Override
+	public String getSymbolicName() throws CoreException {
+		String retval = this._bndProject.getName();
 
-        return retval;
-    }
+		try {
+			Collection<String> names = this._bndProject.getBsns();
 
-    @Override
-    public boolean filterResource( IPath resourcePath )
-    {
-        if( filterResource( resourcePath, ignorePaths ) )
-        {
-            return true;
-        }
+			if ((names != null) && !names.isEmpty()) {
+				retval = names.iterator().next();
+			}
+		}
+		catch (Exception e) {
+		}
 
-        return false;
-    }
+		return retval;
+	}
 
-    @Override
-    public boolean isFragmentBundle()
-    {
-        final IFile bndFile = getProject().getFile( "bnd.bnd" );
+	@Override
+	public boolean isFragmentBundle() {
+		IFile bndFile = getProject().getFile("bnd.bnd");
 
-        if( bndFile.exists() )
-        {
-            try
-            {
-                String content = FileUtil.readContents( bndFile.getContents() );
+		if (bndFile.exists()) {
+			try {
+				String content = FileUtil.readContents(bndFile.getContents());
 
-                if( content.contains( "Fragment-Host" ) )
-                {
-                    return true;
-                }
-            }
-            catch( Exception e )
-            {
-            }
-        }
+				if (content.contains("Fragment-Host")) {
+					return true;
+				}
+			}
+			catch (Exception e) {
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
+	private static final String[] _ignorePaths = {"generated"};
+
+	private final Project _bndProject;
 
 }
