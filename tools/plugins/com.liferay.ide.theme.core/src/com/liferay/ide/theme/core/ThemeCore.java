@@ -88,7 +88,7 @@ public class ThemeCore extends Plugin {
 
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.
 	 * BundleContext)
@@ -98,7 +98,7 @@ public class ThemeCore extends Plugin {
 		_plugin = this;
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.
 	 * BundleContext)
