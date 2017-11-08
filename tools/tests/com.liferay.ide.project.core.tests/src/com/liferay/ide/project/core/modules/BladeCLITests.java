@@ -22,6 +22,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import aQute.bnd.osgi.Domain;
+
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
@@ -33,11 +35,10 @@ import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.osgi.framework.Version;
 import org.osgi.service.prefs.BackingStoreException;
-
-import aQute.bnd.osgi.Domain;
 
 /**
  * @author Gregory Amerson
@@ -115,6 +116,7 @@ public class BladeCLITests
     }
 
     @Test
+    @Ignore
     public void testUpdateBladeFromCloudbees() throws Exception
     {
         IPath originalPath = BladeCLI.getBladeCLIPath();
