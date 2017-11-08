@@ -1,13 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2011 Angelo ZERR.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *     Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.xml.search.ui.resources;
 
@@ -17,53 +20,58 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.wst.xml.search.core.resource.ResourceBaseURIResolver;
 
 /**
- * Extension of WTP/XML Search resources uri resolver for Liferay to manage css, js, icons used in the descriptor of
- * liferay which starts with "/". Ex : <pre>
- * <header-portlet-css>/html/portlet/directory/css/main.css</header-portlet-css> </pre>
+ * Extension of WTP/XML Search resources uri resolver for Liferay to manage css,
+ * js, icons used in the descriptor of liferay which starts with "/". Ex :
+ *
+ * <pre>
+ * &lt;header-portlet-css&gt;/html/portlet/directory/css/main.css&lt;/header-portlet-css&gt;
+ * </pre>
+ * @author Gregory Amerson
  */
-public abstract class AbstractWebResourceURIResolver extends ResourceBaseURIResolver
-{
+public abstract class AbstractWebResourceURIResolver extends ResourceBaseURIResolver {
 
-    private final boolean canStartsWithoutSlash;
+	public AbstractWebResourceURIResolver(boolean canStartsWithoutSlash) {
+		_canStartsWithoutSlash = canStartsWithoutSlash;
+	}
 
-    public AbstractWebResourceURIResolver( boolean canStartsWithoutSlash )
-    {
-        this.canStartsWithoutSlash = canStartsWithoutSlash;
-    }
+	@Override
+	public boolean accept(
+		Object selectedNode, IResource rootContainer, IResource file, String matching, boolean fullMatch) {
 
-    @Override
-    public boolean accept(
-        Object selectedNode, IResource rootContainer, IResource file, String matching, boolean fullMatch )
-    {
-        final String extension = file.getFileExtension();
+		String extension = file.getFileExtension();
 
-        if( extension == null || ( ! getExtensions().contains( extension.toLowerCase() ) ) )
-        {
-            return false;
-        }
+		if ((extension == null) || !getExtensions().contains(extension.toLowerCase())) {
+			return false;
+		}
 
-        matching = ( matching == null ? matching : matching.toLowerCase() );
+		if (matching != null) {
+			matching = matching.toLowerCase();
+		}
 
-        if( fullMatch )
-        {
-            if( canStartsWithoutSlash )
-            {
-                final String uri = resolve( selectedNode, rootContainer, file ).toLowerCase();
+		if (fullMatch) {
+			if (_canStartsWithoutSlash) {
+				String uri = resolve(selectedNode, rootContainer, file).toLowerCase();
 
-                return( uri.equals( matching ) || uri.equals( "/" + matching ) );
-            }
+				if (uri.equals(matching) || uri.equals("/" + matching)) {
+					return true;
+				}
 
-            return resolve( selectedNode, rootContainer, file ).equals( matching );
-        }
+				return false;
+			}
 
-        return super.accept( selectedNode, rootContainer, file, matching, fullMatch );
-    }
+			return resolve(selectedNode, rootContainer, file).equals(matching);
+		}
 
-    protected abstract Set<String> getExtensions();
+		return super.accept(selectedNode, rootContainer, file, matching, fullMatch);
+	}
 
-    @Override
-    public String resolve( Object selectedNode, IResource rootContainer, IResource file )
-    {
-        return "/" + super.resolve( selectedNode, rootContainer, file );
-    }
+	@Override
+	public String resolve(Object selectedNode, IResource rootContainer, IResource file) {
+		return "/" + super.resolve(selectedNode, rootContainer, file);
+	}
+
+	protected abstract Set<String> getExtensions();
+
+	private final boolean _canStartsWithoutSlash;
+
 }

@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.xml.search.ui.quickassist;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -22,83 +36,73 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.ide.IDE;
 
-
 /**
  * @author Kuo Zhang
  */
-public abstract class AbstractQuickAssistProcessorFromMarkerResolution implements IQuickAssistProcessor
-{
+public abstract class AbstractQuickAssistProcessorFromMarkerResolution implements IQuickAssistProcessor {
 
-    @Override
-    @SuppressWarnings( "unchecked" )
-    public ICompletionProposal[] computeQuickAssistProposals( IQuickAssistInvocationContext context )
-    {
-        ICompletionProposal[] retval = null;
+	@Override
+	@SuppressWarnings("unchecked")
+	public ICompletionProposal[] computeQuickAssistProposals(IQuickAssistInvocationContext context) {
+		ICompletionProposal[] retval = null;
 
-        final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
-        final ISourceViewer sourceViewer = context.getSourceViewer();
-        final IAnnotationModel annotationModel = sourceViewer.getAnnotationModel();
-        final Iterator<Annotation> annotations = annotationModel.getAnnotationIterator();
+		List<ICompletionProposal> proposals = new ArrayList<>();
+		ISourceViewer sourceViewer = context.getSourceViewer();
 
-        while( annotations.hasNext() )
-        {
-            final Annotation annotation = annotations.next();
+		IAnnotationModel annotationModel = sourceViewer.getAnnotationModel();
 
-            Position position = annotationModel.getPosition( annotation );
+		Iterator<Annotation> annotations = annotationModel.getAnnotationIterator();
 
-            try
-            {
-                final IMarker marker = getMarkerFromAnnotation( annotation );
-                final int lineNum = sourceViewer.getDocument().getLineOfOffset( position.getOffset() ) + 1;
-                final int currentLineNum = sourceViewer.getDocument().getLineOfOffset( context.getOffset() ) + 1;
+		while (annotations.hasNext()) {
+			Annotation annotation = annotations.next();
 
-                if( marker != null && currentLineNum == lineNum )
-                {
-                    final ICompletionProposal[] resolutions = createFromMarkerResolutions( marker );
+			Position position = annotationModel.getPosition(annotation);
 
-                    if( !CoreUtil.isNullOrEmpty( resolutions ) )
-                    {
-                        Collections.addAll( proposals, resolutions );
+			try {
+				IMarker marker = getMarkerFromAnnotation(annotation);
+				int lineNum = sourceViewer.getDocument().getLineOfOffset(position.getOffset()) + 1;
+				int currentLineNum = sourceViewer.getDocument().getLineOfOffset(context.getOffset()) + 1;
 
-                        if( annotation instanceof IQuickFixableAnnotation )
-                        {
-                            final IQuickFixableAnnotation quick = (IQuickFixableAnnotation) annotation;
-                            quick.setQuickFixable( true );
-                        }
-                    }
-                }
-            }
-            catch( BadLocationException e )
-            {
-                LiferayXMLSearchUI.logError( "Error finding quick assists", e );
-            }
-        }
+				if ((marker != null) && (currentLineNum == lineNum)) {
+					ICompletionProposal[] resolutions = createFromMarkerResolutions(marker);
 
-        if( proposals.size() > 0 )
-        {
-            retval = proposals.toArray( new ICompletionProposal[0] );
-        }
+					if (!CoreUtil.isNullOrEmpty(resolutions)) {
+						Collections.addAll(proposals, resolutions);
 
-        return retval;
-    }
+						if (annotation instanceof IQuickFixableAnnotation) {
+							IQuickFixableAnnotation quick = (IQuickFixableAnnotation)annotation;
 
-    protected ICompletionProposal[] createFromMarkerResolutions( IMarker marker )
-    {
-        final List<ICompletionProposal> retval = new ArrayList<ICompletionProposal>();
+							quick.setQuickFixable(true);
+						}
+					}
+				}
+			}
+			catch (BadLocationException ble) {
+				LiferayXMLSearchUI.logError("Error finding quick assists", ble);
+			}
+		}
 
-        if( IDE.getMarkerHelpRegistry().hasResolutions( marker ) )
-        {
-            final IMarkerResolution[] resolutions = IDE.getMarkerHelpRegistry().getResolutions( marker );
+		if (!proposals.isEmpty()) {
+			retval = proposals.toArray(new ICompletionProposal[0]);
+		}
 
-            for( IMarkerResolution resolution : resolutions )
-            {
-                retval.add( new MarkerResolutionProposal( resolution, marker ) );
-            }
-        }
+		return retval;
+	}
 
-        return retval.toArray( new ICompletionProposal[0] );
-    }
+	protected ICompletionProposal[] createFromMarkerResolutions(IMarker marker) {
+		List<ICompletionProposal> retval = new ArrayList<>();
 
+		if (IDE.getMarkerHelpRegistry().hasResolutions(marker)) {
+			IMarkerResolution[] resolutions = IDE.getMarkerHelpRegistry().getResolutions(marker);
 
-    protected abstract IMarker getMarkerFromAnnotation( Annotation annotation );
+			for (IMarkerResolution resolution : resolutions) {
+				retval.add(new MarkerResolutionProposal(resolution, marker));
+			}
+		}
+
+		return retval.toArray(new ICompletionProposal[0]);
+	}
+
+	protected abstract IMarker getMarkerFromAnnotation(Annotation annotation);
+
 }

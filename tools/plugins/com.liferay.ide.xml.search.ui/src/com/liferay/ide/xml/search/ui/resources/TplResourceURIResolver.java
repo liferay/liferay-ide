@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui.resources;
 
@@ -21,28 +20,25 @@ import java.util.Set;
 /**
  * @author Kuo Zhang
  */
-public class TplResourceURIResolver extends AbstractWebResourceURIResolver
-{
+public class TplResourceURIResolver extends AbstractWebResourceURIResolver {
 
-    public static final TplResourceURIResolver INSTANCE = new TplResourceURIResolver();
+	public static final TplResourceURIResolver INSTANCE = new TplResourceURIResolver();
 
-    private static final Set<String> EXTENSIONS;
+	public TplResourceURIResolver() {
+		super(true);
+	}
 
-    static
-    {
-        EXTENSIONS = new HashSet<String>();
-        EXTENSIONS.add( "tpl" );
-    }
+	@Override
+	protected Set<String> getExtensions() {
+		return _extensions;
+	}
 
-    public TplResourceURIResolver()
-    {
-        super( true );
-    }
+	private static final Set<String> _extensions;
 
-    @Override
-    protected Set<String> getExtensions()
-    {
-        return EXTENSIONS;
-    }
+	static {
+		_extensions = new HashSet<>();
+
+		_extensions.add("tpl");
+	}
 
 }

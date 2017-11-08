@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui.resources;
 
@@ -28,28 +27,24 @@ import org.eclipse.wst.xml.search.editor.util.JdtUtils;
 /**
  * @author Kuo Zhang
  */
-public class ResourceBundleQuerySpecification implements IResourceRequestorProvider,
-                                                         IURIResolverProvider,
-                                                         IMultiResourceProvider
-{
-    public final static String ID = "liferay.webresources.resourcebundle.querySpecification";
+public class ResourceBundleQuerySpecification
+	implements IResourceRequestorProvider, IURIResolverProvider, IMultiResourceProvider {
 
-    @Override
-    public IResourceRequestor getRequestor()
-    {
-        return DefaultResourceRequestor.INSTANCE;
-    }
+	public static final String ID = "liferay.webresources.resourcebundle.querySpecification";
 
-    @Override
-    public IURIResolver getURIResolver( IFile file, Object selectedNode )
-    {
-        return ResourceBundleURIResolver.INSTANCE;
-    }
+	@Override
+	public IResourceRequestor getRequestor() {
+		return DefaultResourceRequestor.INSTANCE;
+	}
 
-    @Override
-    public IResource[] getResources( Object selectedNode, IResource resource )
-    {
-        return JdtUtils.getJavaProjectSrcFolders( resource.getProject() );
-    }
+	@Override
+	public IResource[] getResources(Object selectedNode, IResource resource) {
+		return JdtUtils.getJavaProjectSrcFolders(resource.getProject());
+	}
+
+	@Override
+	public IURIResolver getURIResolver(IFile file, Object selectedNode) {
+		return ResourceBundleURIResolver.INSTANCE;
+	}
 
 }

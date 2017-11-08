@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui.editor;
 
@@ -31,53 +31,53 @@ import org.eclipse.swt.graphics.Image;
 /**
  * @author Kuo Zhang
  */
-public class ServiceXmlTemplateCompletinoProcessor extends TemplateCompletionProcessor
-{
+public class ServiceXmlTemplateCompletinoProcessor extends TemplateCompletionProcessor {
 
-    @Override
-    protected Template[] getTemplates( String contextTypeId )
-    {
-        Template templates[] = null;
+	@Override
+	protected TemplateContextType getContextType(ITextViewer viewer, IRegion region) {
+		TemplateContextType type = null;
 
-        TemplateStore store = getTemplateStore();
+		ContextTypeRegistry registry = getTemplateContextRegistry();
 
-        if( store != null )
-        {
-            templates = store.getTemplates( contextTypeId );
-        }
+		if (registry != null) {
+			type = registry.getContextType(ServiceXmlContextType.ID_SERVICE_XML_TAG);
+		}
 
-        return templates;
-    }
+		return type;
+	}
 
-    @Override
-    protected TemplateContextType getContextType( ITextViewer viewer, IRegion region )
-    {
-        TemplateContextType type = null;
+	@Override
+	protected Image getImage(Template template) {
+		LiferayXMLSearchUI plugin = LiferayXMLSearchUI.getDefault();
 
-        ContextTypeRegistry registry = getTemplateContextRegistry();
+		URL url = plugin.getBundle().getEntry("/icons/service_template.gif");
 
-        if( registry != null )
-        {
-            type = registry.getContextType( ServiceXmlContextType.ID_SERVICE_XML_TAG );
-        }
+		return ImageDescriptor.createFromURL(url).createImage();
+	}
 
-        return type;
-    }
+	protected ContextTypeRegistry getTemplateContextRegistry() {
+		LiferayXMLSearchUI plugin = LiferayXMLSearchUI.getDefault();
 
-    @Override
-    protected Image getImage( Template template )
-    {
-        final URL url = LiferayXMLSearchUI.getDefault().getBundle().getEntry( "/icons/service_template.gif" );
-        return ImageDescriptor.createFromURL( url ).createImage();
-    }
+		return plugin.getContextTypeRegistry();
+	}
 
-    protected ContextTypeRegistry getTemplateContextRegistry()
-    {
-        return LiferayXMLSearchUI.getDefault().getContextTypeRegistry();
-    }
+	@Override
+	protected Template[] getTemplates(String contextTypeId) {
+		Template[] templates = null;
 
-    protected TemplateStore getTemplateStore()
-    {
-        return LiferayXMLSearchUI.getDefault().getServiceXmlTemplateStore();
-    }
+		TemplateStore store = getTemplateStore();
+
+		if (store != null) {
+			templates = store.getTemplates(contextTypeId);
+		}
+
+		return templates;
+	}
+
+	protected TemplateStore getTemplateStore() {
+		LiferayXMLSearchUI plugin = LiferayXMLSearchUI.getDefault();
+
+		return plugin.getServiceXmlTemplateStore();
+	}
+
 }

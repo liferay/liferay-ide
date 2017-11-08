@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui.resources;
 
@@ -21,13 +20,11 @@ import org.eclipse.wst.xml.search.core.resource.IURIResolver;
 /**
  * @author Kuo Zhang
  */
-public class TplResourcesQuerySpecification extends AbstractWebResourcesQuerySpecification
-{
+public class TplResourcesQuerySpecification extends AbstractWebResourcesQuerySpecification {
 
-    @Override
-    public IURIResolver getURIResolver( IFile file, Object selectedNode )
-    {
-        return TplResourceURIResolver.INSTANCE;
-    }
+	@Override
+	public IURIResolver getURIResolver(IFile file, Object selectedNode) {
+		return TplResourceURIResolver.INSTANCE;
+	}
 
 }

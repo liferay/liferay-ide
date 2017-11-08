@@ -121,7 +121,7 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
         elementValue = "PortalPropertiesNotEndProperties";
         markerMessage =
             MessageFormat.format(
-                LiferayHookDescriptorValidator.MESSAGE_PROPERTIES_NOT_END_WITH_PROPERTIES,
+                LiferayHookDescriptorValidator.messagePropertiesNotEndWithProperties,
                 new Object[] { elementValue } );
 
         validateElementsIncorrectValue( elementName, elementValue, markerMessage );
@@ -157,7 +157,7 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
         elementValue = "LanguagePropertiesNotEndProperties";
         markerMessage =
             MessageFormat.format(
-                LiferayHookDescriptorValidator.MESSAGE_PROPERTIES_NOT_END_WITH_PROPERTIES,
+                LiferayHookDescriptorValidator.messagePropertiesNotEndWithProperties,
                 new Object[] { elementValue } );
         validateElementsIncorrectValue( elementName, elementValue, markerMessage );
 
@@ -245,12 +245,12 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
         elementValue = "com.liferay.ide.tests.Orphan";
         markerMessage =
             MessageFormat.format(
-                LiferayHookDescriptorValidator.MESSAGE_SERVICE_TYPE_NOT_INTERFACE, new Object[] { elementValue } );
+                LiferayHookDescriptorValidator.messageServiceTypeNotInterface, new Object[] { elementValue } );
         validateElementsIncorrectValue( elementName, elementValue, markerMessage );
 
         // validate type hierarchy
         elementValue = "com.liferay.ide.tests.InterfaceTest";
-        markerMessage = LiferayHookDescriptorValidator.MESSAGE_SERVICE_TYPE_INVALID;
+        markerMessage = LiferayHookDescriptorValidator.messageServiceTypeInvalid;
         validateElementsIncorrectValue( elementName, elementValue, markerMessage );
 
         // set to ""
@@ -272,7 +272,7 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
 
         elementValue = "com.liferay.ide.tests.Orphan";
         markerMessage =
-            MessageFormat.format( LiferayHookDescriptorValidator.MESSAGE_SERVICE_IMPL_TYPE_INCORRECT, new Object[] {
+            MessageFormat.format( LiferayHookDescriptorValidator.messageServiceImplTypeIncorrect, new Object[] {
                 elementValue, "com.liferay.portal.service.AccountServiceWrapper" } );
         validateElementsIncorrectValue( elementName, elementValue, markerMessage );
 

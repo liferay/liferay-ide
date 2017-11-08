@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.xml.search.ui.java;
 
 import org.eclipse.core.resources.IFile;
@@ -20,30 +20,25 @@ import org.eclipse.wst.xml.search.editor.searchers.javamethod.classnameprovider.
 import org.eclipse.wst.xml.search.editor.searchers.javamethod.requestor.IJavaMethodRequestor;
 import org.eclipse.wst.xml.search.editor.searchers.javamethod.requestor.IJavaMethodRequestorProvider;
 
-
 /**
  * @author Gregory Amerson
  */
-public class PortletActionMethodQuery implements IJavaMethodRequestorProvider, IClassNameExtractorProvider
-{
-    private static final IClassNameExtractor EXTRACTOR_INSTANCE =
-                    new HierarchyTypeClassNameExtractor( "javax.portlet.Portlet" );
+public class PortletActionMethodQuery implements IJavaMethodRequestorProvider, IClassNameExtractorProvider {
 
-    public PortletActionMethodQuery()
-    {
-        super();
-    }
+	public PortletActionMethodQuery() {
+	}
 
-    @Override
-    public IClassNameExtractor getClassNameExtractor( Object selectedNode, IFile file )
-    {
-        return EXTRACTOR_INSTANCE;
-    }
+	@Override
+	public IClassNameExtractor getClassNameExtractor(Object selectedNode, IFile file) {
+		return _extractorInstance;
+	}
 
-    @Override
-    public IJavaMethodRequestor getRequestor( Object selectedNode, IFile file )
-    {
-        return PortletActionMethodRequestor.INSTANCE;
-    }
+	@Override
+	public IJavaMethodRequestor getRequestor(Object selectedNode, IFile file) {
+		return PortletActionMethodRequestor.INSTANCE;
+	}
+
+	private static final IClassNameExtractor _extractorInstance = new HierarchyTypeClassNameExtractor(
+		"javax.portlet.Portlet");
 
 }

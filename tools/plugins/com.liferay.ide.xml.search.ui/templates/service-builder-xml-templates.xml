@@ -2,18 +2,18 @@
 
 <templates>
 
-<template name="sb-column" autoinsert="true" context="servicexml_tag" id="servicebuilder.column" deleted="false" description="a column for an entity" enabled="true" >&lt;column name="${name}" type="${String}" /&gt;</template>
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="a column for an entity" enabled="true" id="servicebuilder.column" name="sb-column" >&lt;column name="${name}" type="${String}" /&gt;</template>
 
-<template name="sb-columnp-primary" autoinsert="true" context="servicexml_tag" id="servicebuilder.columnprimary" deleted="false" description="a primary column for an entity" enabled="true" >&lt;column name="${name}" type="Long" primary="true" /&gt;</template>
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="a primary column for an entity" enabled="true" id="servicebuilder.columnprimary" name="sb-columnp-primary" >&lt;column name="${name}" type="Long" primary="true" /&gt;</template>
 
-<template name="sb-entity" autoinsert="true" context="servicexml_tag" id="servicebuilder.entity" deleted="false" description="an entity element" enabled="true" >
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="an entity element" enabled="true" id="servicebuilder.entity" name="sb-entity" >
 &lt;entity name="${name}" local-service="${true}" remote-service="${false}"&gt;
 
 	${cursor}
 &lt;/entity&gt;
-</template>
+	</template>
 
-<template name="sb-entity-sample" autoinsert="true" context="servicexml_tag" id="servicebuilder.entitysample" deleted="false" description="a simple entity element" enabled="true" >
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="a simple entity element" enabled="true" id="servicebuilder.entitysample" name="sb-entity-sample" >
 &lt;entity name="${Foo}" local-service="true" remote-service="true"&gt;
 
 	&lt;!-- PK fields --&gt;
@@ -51,84 +51,84 @@
 		&lt;finder-column name="field2" /&gt;
 	&lt;/finder&gt;
 &lt;/entity&gt;
-</template>
+	</template>
 
-<template name="sb-exceptions" autoinsert="true" context="servicexml_tag" id="servicebuilder.exceptions" deleted="false" description="an exceptions element" enabled="true" >
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="an exceptions element" enabled="true" id="servicebuilder.exceptions" name="sb-exceptions" >
 &lt;exceptions&gt;
 	&lt;exception&gt;${cursor}&lt;/exception&gt;
 &lt;/exceptions&gt;
-</template>
+	</template>
 
-<template name="sb-finder" autoinsert="true" context="servicexml_tag" id="servicebuilder.finder" deleted="false" description="a finder element" enabled="true" >
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="a finder element" enabled="true" id="servicebuilder.finder" name="sb-finder" >
 &lt;finder name="${name}" return-type="${Collection}"&gt;
 	&lt;finder-column name="${name}" /&gt;
 &lt;/finder&gt;
-</template>
+	</template>
 
-<template name="sb-finder-column" autoinsert="true" context="servicexml_tag" id="servicebuilder.findercolumn" deleted="false" description="a finder column for a finder" enabled="true" >&lt;finder-column name="${name}" /&gt;</template>
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="a finder column for a finder" enabled="true" id="servicebuilder.findercolumn" name="sb-finder-column" >&lt;finder-column name="${name}" /&gt;</template>
 
-<template name="sb-order" autoinsert="true" context="servicexml_tag" id="servicebuilder.order" deleted="false" description="an order element" enabled="true" >
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="an order element" enabled="true" id="servicebuilder.order" name="sb-order" >
 &lt;order by="${asc}"&gt;
 	&lt;order-column name="${name}" /&gt;
 &lt;/order&gt;
-</template>
+	</template>
 
-<template name="sb-order-column" autoinsert="true" context="servicexml_tag" id="servicebuilder.ordercolumn" deleted="false" description="an order column for an order" enabled="true" >&lt;order-column name="${name}" /&gt;</template>
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="an order column for an order" enabled="true" id="servicebuilder.ordercolumn" name="sb-order-column" >&lt;order-column name="${name}" /&gt;</template>
 
-<template name="sb-status-column" autoinsert="true" context="servicexml_tag" id="servicebuilder.statuscolumn" deleted="false" description="a set of status columns" enabled="true" >
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="a set of status columns" enabled="true" id="servicebuilder.statuscolumn" name="sb-status-column" >
 &lt;column name="status" type="int" /&gt;
 &lt;column name="statusByUserId" type="long" /&gt;
 &lt;column name="statusByUserName" type="String" /&gt;
 &lt;column name="statusDate" type="Date" /&gt;
-</template>
+	</template>
 
-<template name="sb-asset-support" autoinsert="true" context="servicexml_tag" id="servicebuilder.assetsupport" deleted="false" description="Asset Support" enabled="true" >
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="Asset Support" enabled="true" id="servicebuilder.assetsupport" name="sb-asset-support" >
 &lt;reference package-path="com.liferay.portlet.asset" entity="AssetEntry" /&gt;
 &lt;reference package-path="com.liferay.portlet.asset" entity="AssetLink" /&gt;
 &lt;reference package-path="com.liferay.portlet.asset" entity="AssetTag" /&gt;
 &lt;reference package-path="com.liferay.portlet.asset" entity="AssetCategory" /&gt;
 &lt;reference package-path="com.liferay.portlet.asset" entity="AssetVocabulary" /&gt;
-</template>
+	</template>
 
-<template name="sb-journal-support" autoinsert="true" context="servicexml_tag" id="servicebuilder.journalsupport" deleted="false" description="Journal Support" enabled="true" >
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="Journal Support" enabled="true" id="servicebuilder.journalsupport" name="sb-journal-support" >
 &lt;reference package-path="com.liferay.portlet.journal" entity="JournalArticle" /&gt;
 &lt;reference package-path="com.liferay.portlet.journal" entity="JournalStructure" /&gt;
 &lt;reference package-path="com.liferay.portlet.journal" entity="JournalTemplate" /&gt;
-</template>
+	</template>
 
-<template name="sb-trash-bin-support" autoinsert="true" context="servicexml_tag" id="servicebuilder.trashbinsupport" deleted="false" description="Trash Bin Support" enabled="true" >
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="Trash Bin Support" enabled="true" id="servicebuilder.trashbinsupport" name="sb-trash-bin-support" >
 &lt;reference package-path="com.liferay.portlet.trash" entity="TrashEntry" /&gt;
 &lt;reference package-path="com.liferay.portlet.trash" entity="TrashVersion" /&gt;
-</template>
+	</template>
 
-<template name="sb-social-activity-support" autoinsert="true" context="servicexml_tag" id="servicebuilder.socialactivitysupport" deleted="false" description="Social Activity Support" enabled="true" >
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="Social Activity Support" enabled="true" id="servicebuilder.socialactivitysupport" name="sb-social-activity-support" >
 &lt;reference package-path="com.liferay.portlet.social" entity="SocialActivity" /&gt;
 &lt;reference package-path="com.liferay.portlet.social" entity="SocialRequest" /&gt;
 &lt;reference package-path="com.liferay.portlet.social" entity="SocialActivityCounter" /&gt;
-</template>
+	</template>
 
-<template name="sb-ratings-stats-support" autoinsert="true" context="servicexml_tag" id="servicebuilder.ratingsstatssupport" deleted="false" description="Ratings Stats Support" enabled="true" >
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="Ratings Stats Support" enabled="true" id="servicebuilder.ratingsstatssupport" name="sb-ratings-stats-support" >
 &lt;reference package-path="com.liferay.portlet.ratings" entity="RatingsStats" /&gt;
 &lt;reference package-path="com.liferay.portlet.ratings" entity="RatingsEntry" /&gt;
-</template>
+	</template>
 
-<template name="sb-mail-support" autoinsert="true" context="servicexml_tag" id="servicebuilder.mailsupport" deleted="false" description="Mail Support" enabled="true" >&lt;reference package-path="com.liferay.mail" entity="Mail" /&gt;</template>
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="Mail Support" enabled="true" id="servicebuilder.mailsupport" name="sb-mail-support" >&lt;reference package-path="com.liferay.mail" entity="Mail" /&gt;</template>
 
-<template name="sb-image-support" autoinsert="true" context="servicexml_tag" id="servicebuilder.imagesupport" deleted="false" description="Image Support" enabled="true" >&lt;reference package-path="com.liferay.portal" entity="Image" /&gt;</template>
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="Image Support" enabled="true" id="servicebuilder.imagesupport" name="sb-image-support" >&lt;reference package-path="com.liferay.portal" entity="Image" /&gt;</template>
 
-<template name="sb-portal-support" autoinsert="true" context="servicexml_tag" id="servicebuilder.portalsupport" deleted="false" description="Portal Support" enabled="true" >
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="Portal Support" enabled="true" id="servicebuilder.portalsupport" name="sb-portal-support" >
 &lt;reference package-path="com.liferay.portal" entity="Company" /&gt;
 &lt;reference package-path="com.liferay.portal" entity="Group" /&gt;
 &lt;reference package-path="com.liferay.portal" entity="Organization" /&gt;
 &lt;reference package-path="com.liferay.portal" entity="Role" /&gt;
 &lt;reference package-path="com.liferay.portal" entity="Team" /&gt;
 &lt;reference package-path="com.liferay.portal" entity="UserGroup" /&gt;
-</template>
+	</template>
 
-<template name="sb-ddm-support" autoinsert="true" context="servicexml_tag" id="servicebuilder.ddmsupport" deleted="false" description="DDM Support" enabled="true" >
+	<template autoinsert="true" context="servicexml_tag" deleted="false" description="DDM Support" enabled="true" id="servicebuilder.ddmsupport" name="sb-ddm-support" >
 &lt;reference package-path="com.liferay.portlet.dynamicdatamapping" entity="DDMStructure" /&gt;
 &lt;reference package-path="com.liferay.portlet.dynamicdatamapping" entity="DDMStructureLink" /&gt;
 &lt;reference package-path="com.liferay.portlet.dynamicdatamapping" entity="DDMTemplate" /&gt;
-</template>
+	</template>
 
 </templates>

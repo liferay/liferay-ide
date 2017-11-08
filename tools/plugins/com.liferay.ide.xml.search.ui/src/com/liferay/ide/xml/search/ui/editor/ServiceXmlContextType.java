@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui.editor;
 
@@ -20,23 +20,19 @@ import org.eclipse.jface.text.templates.TemplateContextType;
 /**
  * @author Kuo Zhang
  */
-public class ServiceXmlContextType extends TemplateContextType
-{
+public class ServiceXmlContextType extends TemplateContextType {
 
-    public static final String ID_SERVICE_XML_TAG = "servicexml_tag";
+	public static final String ID_SERVICE_XML_TAG = "servicexml_tag";
 
-    public ServiceXmlContextType()
-    {
-        super();
-
-        addResolver( new GlobalTemplateVariables.Cursor() );
-        addResolver( new GlobalTemplateVariables.Date() );
-        addResolver( new GlobalTemplateVariables.Dollar() );
-        addResolver( new GlobalTemplateVariables.LineSelection() );
-        addResolver( new GlobalTemplateVariables.Time() );
-        addResolver( new GlobalTemplateVariables.User() );
-        addResolver( new GlobalTemplateVariables.WordSelection() );
-        addResolver( new GlobalTemplateVariables.Year() );
-    }
+	public ServiceXmlContextType() {
+		addResolver(new GlobalTemplateVariables.Cursor());
+		addResolver(new GlobalTemplateVariables.Date());
+		addResolver(new GlobalTemplateVariables.Dollar());
+		addResolver(new GlobalTemplateVariables.LineSelection());
+		addResolver(new GlobalTemplateVariables.Time());
+		addResolver(new GlobalTemplateVariables.User());
+		addResolver(new GlobalTemplateVariables.WordSelection());
+		addResolver(new GlobalTemplateVariables.Year());
+	}
 
 }

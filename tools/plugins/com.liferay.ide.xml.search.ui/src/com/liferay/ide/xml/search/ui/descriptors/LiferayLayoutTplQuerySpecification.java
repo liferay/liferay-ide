@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,25 +10,20 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
-
+ */
 
 package com.liferay.ide.xml.search.ui.descriptors;
 
 import org.eclipse.wst.xml.search.core.queryspecifications.requestor.IXMLSearchRequestor;
 
-
 /**
  * @author Kuo Zhang
  */
-public class LiferayLayoutTplQuerySpecification extends AbstractWebInfQuerySpecification
-{
+public class LiferayLayoutTplQuerySpecification extends AbstractWebInfQuerySpecification {
 
-    @Override
-    public IXMLSearchRequestor getRequestor()
-    {
-        return LiferayLayoutTplSearchRequestor.INSTANCE;
-    }
+	@Override
+	public IXMLSearchRequestor getRequestor() {
+		return LiferayLayoutTplSearchRequestor.instance;
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,48 +10,38 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.xml.search.ui;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jdt.core.IType;
 
-
 /**
  * @author Gregory Amerson
  */
-public class AddMVCPortletActionMethodMarkerResolution extends AddJSRPortletActionMethodMarkerResolution
-{
+public class AddMVCPortletActionMethodMarkerResolution extends AddJSRPortletActionMethodMarkerResolution {
 
-    private final String CODE = "public void {0}(ActionRequest actionRequest, ActionResponse actionResponse) '{\n}'";
-    private final String[] IMPORTS = new String[]
-    {
-        "javax.portlet.ActionRequest",
-        "javax.portlet.ActionResponse"
-    };
+	public AddMVCPortletActionMethodMarkerResolution(IMarker marker, IType type) {
+		super(marker, type);
+	}
 
-    public AddMVCPortletActionMethodMarkerResolution( IMarker marker, IType type  )
-    {
-        super( marker, type );
-    }
+	@Override
+	public String getLabel() {
+		return "add new Liferay MVC process action method \"" + getTextContent(marker) + "\"to " +
+			this.type.getElementName();
+	}
 
-    @Override
-    protected String getCode()
-    {
-        return CODE;
-    }
+	@Override
+	protected String getCode() {
+		return _code;
+	}
 
-    protected String[] getImports()
-    {
-        return IMPORTS;
-    }
+	protected String[] getImports() {
+		return _imports;
+	}
 
-    @Override
-    public String getLabel()
-    {
-        return "add new Liferay MVC process action method \"" + getTextContent( marker ) + "\"to " +
-            this.type.getElementName();
-    }
+	private final String _code = "public void {0}(ActionRequest actionRequest, ActionResponse actionResponse) '{\n}'";
+	private String[] _imports = {"javax.portlet.ActionRequest", "javax.portlet.ActionResponse"};
 
 }

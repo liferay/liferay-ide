@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.xml.search.ui.validators;
 
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
@@ -25,63 +25,64 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.search.core.util.DOMUtils;
 import org.eclipse.wst.xml.search.editor.references.IXMLReference;
 
+import org.w3c.dom.Node;
+
 /**
  * @author Kuo Zhang
  */
-@SuppressWarnings( "restriction" )
-public class LiferayPortletDescriptorValidator extends LiferayBaseValidator
-{
-    public static final String MESSAGE_ENTRY_WEIGHT_SYNTAX_INVALID = Msgs.entryWeightSyntaxInvalid;
+@SuppressWarnings("restriction")
+public class LiferayPortletDescriptorValidator extends LiferayBaseValidator {
 
-    @Override
-    protected boolean validateSyntax( IXMLReference reference, IDOMNode node, IFile file,
-                                      IValidator validator, IReporter reporter, boolean batchMode )
-    {
-        int severity = getServerity( ValidationType.SYNTAX_INVALID, file );
+	public static final String MESSAGE_ENTRY_WEIGHT_SYNTAX_INVALID = Msgs.entryWeightSyntaxInvalid;
 
-        if( severity != ValidationMessage.IGNORE )
-        {
-            if( node.getParentNode().getNodeName().equals( "control-panel-entry-weight" ) )
-            {
-                String validationMsg = null;
+	@Override
+	protected boolean validateSyntax(
+		IXMLReference reference, IDOMNode node, IFile file, IValidator validator, IReporter reporter,
+		boolean batchMode) {
 
-                final String nodeValue = DOMUtils.getNodeValue( node );
+		int severity = getServerity(ValidationType.SYNTAX_INVALID, file);
 
-                if( nodeValue != null )
-                {
-                    try
-                    {
-                        Double.parseDouble( nodeValue );
-                    }
-                    catch( NumberFormatException nfe )
-                    {
-                        validationMsg = NLS.bind( MESSAGE_ENTRY_WEIGHT_SYNTAX_INVALID, nodeValue );;
-                    }
-                }
+		if (severity != ValidationMessage.IGNORE) {
+			Node parentNode = node.getParentNode();
 
-                if( validationMsg != null )
-                {
-                    final String liferayPluginValidationType =
-                        getLiferayPluginValidationType( ValidationType.SYNTAX_INVALID, file );
+			if (parentNode.getNodeName().equals("control-panel-entry-weight")) {
+				String validationMsg = null;
 
-                    addMessage(
-                        node, file, validator, reporter, batchMode, validationMsg, severity,
-                        liferayPluginValidationType );
-                    return false;
-                }
-            }
-        }
+				String nodeValue = DOMUtils.getNodeValue(node);
 
-        return true;
-    }
+				if (nodeValue != null) {
+					try {
+						Double.parseDouble(nodeValue);
+					}
+					catch (NumberFormatException nfe) {
+						validationMsg = NLS.bind(MESSAGE_ENTRY_WEIGHT_SYNTAX_INVALID, nodeValue);
+					}
+				}
 
-    private static class Msgs extends NLS
-    {
-        public static String entryWeightSyntaxInvalid;
+				if (validationMsg != null) {
+					String liferayPluginValidationType = getLiferayPluginValidationType(
+						ValidationType.SYNTAX_INVALID, file);
 
-        static
-        {
-            initializeMessages( LiferayPortletDescriptorValidator.class.getName(), Msgs.class );
-        }
-    }
+					addMessage(
+						node, file, validator, reporter, batchMode, validationMsg, severity,
+						liferayPluginValidationType);
+
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String entryWeightSyntaxInvalid;
+
+		static {
+			initializeMessages(LiferayPortletDescriptorValidator.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

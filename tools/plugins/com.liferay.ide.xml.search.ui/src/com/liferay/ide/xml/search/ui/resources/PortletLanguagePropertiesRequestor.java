@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui.resources;
 
@@ -28,27 +27,23 @@ import org.eclipse.wst.xml.search.core.properties.IPropertiesRequestor;
 /**
  * @author Terry Jia
  */
-public class PortletLanguagePropertiesRequestor extends DefaultPropertiesRequestor
-{
+public class PortletLanguagePropertiesRequestor extends DefaultPropertiesRequestor {
 
-    public static IPropertiesRequestor INSTANCE = new PortletLanguagePropertiesRequestor();
+	public static IPropertiesRequestor instance = new PortletLanguagePropertiesRequestor();
 
-    protected boolean accept( IFile file, IResource rootResource )
-    {
-        final IProject project = rootResource.getProject();
+	protected boolean accept(IFile file, IResource rootResource) {
+		IProject project = rootResource.getProject();
 
-        final List<IFile> defaultPortletLanguagePropertiesFiles =
-            PropertiesUtil.getDefaultLanguagePropertiesFromProject( project );
+		List<IFile> defaultPortletLanguagePropertiesFiles = PropertiesUtil.getDefaultLanguagePropertiesFromProject(
+			project);
 
-        for( IFile defaultPortletLanguagePropertiesFile : defaultPortletLanguagePropertiesFiles )
-        {
-            if( defaultPortletLanguagePropertiesFile.equals( file ) )
-            {
-                return true;
-            }
-        }
+		for (IFile defaultPortletLanguagePropertiesFile : defaultPortletLanguagePropertiesFiles) {
+			if (defaultPortletLanguagePropertiesFile.equals(file)) {
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 }

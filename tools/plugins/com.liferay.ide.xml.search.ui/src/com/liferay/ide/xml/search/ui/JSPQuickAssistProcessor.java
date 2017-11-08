@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.xml.search.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -36,134 +36,113 @@ import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
 
-
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class JSPQuickAssistProcessor implements IQuickAssistProcessor
-{
+@SuppressWarnings("restriction")
+public class JSPQuickAssistProcessor implements IQuickAssistProcessor {
 
-    @Override
-    public boolean canAssist( IQuickAssistInvocationContext invocationContext )
-    {
-        return true;
-    }
+	@Override
+	public boolean canAssist(IQuickAssistInvocationContext invocationContext) {
+		return true;
+	}
 
-    @Override
-    public boolean canFix( Annotation annotation )
-    {
-        if( annotation instanceof TemporaryAnnotation )
-        {
-            TemporaryAnnotation temp = (TemporaryAnnotation) annotation;
+	@Override
+	public boolean canFix(Annotation annotation) {
+		if (annotation instanceof TemporaryAnnotation) {
+			TemporaryAnnotation temp = (TemporaryAnnotation)annotation;
 
-            if( temp.getAttributes() != null )
-            {
-                if( temp.getAttributes().get( LiferayBaseValidator.MARKER_QUERY_ID ) != null )
-                {
-                    return true;
-                }
-            }
-        }
+			if (temp.getAttributes() != null) {
+				if (temp.getAttributes().get(LiferayBaseValidator.MARKER_QUERY_ID) != null) {
+					return true;
+				}
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    @SuppressWarnings( "unchecked" )
-    @Override
-    public ICompletionProposal[] computeQuickAssistProposals( IQuickAssistInvocationContext context )
-    {
-        ICompletionProposal[] retval = null;
+	@Override
+	@SuppressWarnings("unchecked")
+	public ICompletionProposal[] computeQuickAssistProposals(IQuickAssistInvocationContext context) {
+		ICompletionProposal[] retval = null;
 
-        final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
-        final ISourceViewer sourceViewer = context.getSourceViewer();
-        final IAnnotationModel annotationModel = sourceViewer.getAnnotationModel();
-        final Iterator<Annotation> annotations = annotationModel.getAnnotationIterator();
+		List<ICompletionProposal> proposals = new ArrayList<>();
+		ISourceViewer sourceViewer = context.getSourceViewer();
 
-        while( annotations.hasNext() )
-        {
-            final Annotation annotation = annotations.next();
+		IAnnotationModel annotationModel = sourceViewer.getAnnotationModel();
 
-            final Position position =  annotationModel.getPosition( annotation );
+		Iterator<Annotation> annotations = annotationModel.getAnnotationIterator();
 
-            try
-            {
-                final IMarker marker = createTempMarker( annotation );
-                final int lineNum = sourceViewer.getDocument().getLineOfOffset( position.getOffset() ) + 1;
-                final int currentLineNum = sourceViewer.getDocument().getLineOfOffset( context.getOffset() ) + 1;
+		while (annotations.hasNext()) {
+			Annotation annotation = annotations.next();
 
-                if( marker != null && currentLineNum == lineNum )
-                {
-                    if( marker.getAttribute( LiferayBaseValidator.MARKER_QUERY_ID, null ) != null )
-                    {
-                        final ICompletionProposal[] resolutions = createFromMarkerResolutions( marker );
+			Position position = annotationModel.getPosition(annotation);
 
-                        if( ! CoreUtil.isNullOrEmpty( resolutions ) )
-                        {
-                            Collections.addAll( proposals, resolutions );
+			try {
+				IMarker marker = _createTempMarker(annotation);
+				int lineNum = sourceViewer.getDocument().getLineOfOffset(position.getOffset()) + 1;
+				int currentLineNum = sourceViewer.getDocument().getLineOfOffset(context.getOffset()) + 1;
 
-                            if( annotation instanceof IQuickFixableAnnotation )
-                            {
-                                final IQuickFixableAnnotation quick = (IQuickFixableAnnotation) annotation;
-                                quick.setQuickFixable( true );
-                            }
-                        }
-                    }
-                }
-            }
-            catch( BadLocationException e )
-            {
-                LiferayXMLSearchUI.logError( "Error finding quick assists", e );
-            }
-        }
+				if ((marker != null) && (currentLineNum == lineNum)) {
+					if (marker.getAttribute(LiferayBaseValidator.MARKER_QUERY_ID, null) != null) {
+						ICompletionProposal[] resolutions = _createFromMarkerResolutions(marker);
 
-        if( proposals.size() > 0 )
-        {
-            retval = proposals.toArray( new ICompletionProposal[0] );
-        }
+						if (!CoreUtil.isNullOrEmpty(resolutions)) {
+							Collections.addAll(proposals, resolutions);
 
-        return retval;
-    }
+							if (annotation instanceof IQuickFixableAnnotation) {
+								IQuickFixableAnnotation quick = (IQuickFixableAnnotation)annotation;
 
-    private ICompletionProposal[] createFromMarkerResolutions( IMarker marker )
-    {
-        final List<ICompletionProposal> retval = new ArrayList<ICompletionProposal>();
+								quick.setQuickFixable(true);
+							}
+						}
+					}
+				}
+			}
+			catch (BadLocationException ble) {
+				LiferayXMLSearchUI.logError("Error finding quick assists", ble);
+			}
+		}
 
-        if( IDE.getMarkerHelpRegistry().hasResolutions( marker ) )
-        {
-            final IMarkerResolution[] resolutions = IDE.getMarkerHelpRegistry().getResolutions( marker );
+		if (!proposals.isEmpty()) {
+			retval = proposals.toArray(new ICompletionProposal[0]);
+		}
 
-            for( IMarkerResolution resolution : resolutions )
-            {
-                if( resolution instanceof CommonWorkbenchMarkerResolution )
-                {
-                    retval.add( new MarkerResolutionProposal( resolution, marker ) );
-                }
-            }
-        }
+		return retval;
+	}
 
-        return retval.toArray( new ICompletionProposal[0] );
-    }
+	@Override
+	public String getErrorMessage() {
+		return null;
+	}
 
-    private IMarker createTempMarker( Annotation annotation )
-    {
-        if( annotation instanceof TemporaryAnnotation )
-        {
-            TemporaryAnnotation temp = (TemporaryAnnotation) annotation;
+	private ICompletionProposal[] _createFromMarkerResolutions(IMarker marker) {
+		List<ICompletionProposal> retval = new ArrayList<>();
 
-            if( temp.getAttributes() != null )
-            {
-                return new TempMarker( (TemporaryAnnotation) annotation );
-            }
-        }
+		if (IDE.getMarkerHelpRegistry().hasResolutions(marker)) {
+			IMarkerResolution[] resolutions = IDE.getMarkerHelpRegistry().getResolutions(marker);
 
-        return null;
-    }
+			for (IMarkerResolution resolution : resolutions) {
+				if (resolution instanceof CommonWorkbenchMarkerResolution) {
+					retval.add(new MarkerResolutionProposal(resolution, marker));
+				}
+			}
+		}
 
-    @Override
-    public String getErrorMessage()
-    {
-        return null;
-    }
+		return retval.toArray(new ICompletionProposal[0]);
+	}
+
+	private IMarker _createTempMarker(Annotation annotation) {
+		if (annotation instanceof TemporaryAnnotation) {
+			TemporaryAnnotation temp = (TemporaryAnnotation)annotation;
+
+			if (temp.getAttributes() != null) {
+				return new TempMarker((TemporaryAnnotation)annotation);
+			}
+		}
+
+		return null;
+	}
 
 }

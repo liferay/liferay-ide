@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.xml.search.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -28,160 +28,147 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
 
-
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class TempMarker implements IMarker
-{
-    private final TemporaryAnnotation annotation;
-    private final Map<String, Object> attributes;
-    private final long creationTime;
-    private final IFile file;
-    private final String type;
+@SuppressWarnings("restriction")
+public class TempMarker implements IMarker {
 
-    public TempMarker( TemporaryAnnotation temp )
-    {
-        this.annotation = temp;
-        this.attributes = new HashMap<String, Object>();
-        this.creationTime = System.currentTimeMillis();
+	public TempMarker(TemporaryAnnotation temp) {
+		_annotation = temp;
+		_attributes = new HashMap<>();
+		_creationTime = System.currentTimeMillis();
 
-        for( Object key : this.annotation.getAttributes().keySet() )
-        {
-            this.attributes.put( key.toString(), this.annotation.getAttributes().get( key ) );
-        }
+		for (Object key : _annotation.getAttributes().keySet()) {
+			_attributes.put(key.toString(), _annotation.getAttributes().get(key));
+		}
 
-        this.file =
-            CoreUtil.getWorkspaceRoot().getFile(
-                Path.fromPortableString( (String) this.attributes.get( XMLSearchConstants.FULL_PATH ) ) );
+		_file = CoreUtil.getWorkspaceRoot().getFile(
+			Path.fromPortableString((String)_attributes.get(XMLSearchConstants.FULL_PATH)));
 
-        this.type = (String) this.attributes.get( XMLSearchConstants.MARKER_TYPE );
-    }
+		_type = (String)_attributes.get(XMLSearchConstants.MARKER_TYPE);
+	}
 
-    @Override
-    public void delete() throws CoreException
-    {
-    }
+	@Override
+	public void delete() throws CoreException {
+	}
 
-    @Override
-    public boolean exists()
-    {
-        return false;
-    }
+	@Override
+	public boolean exists() {
+		return false;
+	}
 
-    @SuppressWarnings( "rawtypes" )
-    @Override
-    public Object getAdapter( Class adapter )
-    {
-        return null;
-    }
+	@Override
+	@SuppressWarnings("rawtypes")
+	public Object getAdapter(Class adapter) {
+		return null;
+	}
 
-    @Override
-    public Object getAttribute( String attributeName ) throws CoreException
-    {
-        return annotation.getAttributes().get( attributeName );
-    }
+	@Override
+	public Object getAttribute(String attributeName) throws CoreException {
+		return _annotation.getAttributes().get(attributeName);
+	}
 
-    @Override
-    public boolean getAttribute( String attributeName, boolean defaultValue )
-    {
-        final Object value = annotation.getAttributes().get( attributeName );
+	@Override
+	public boolean getAttribute(String attributeName, boolean defaultValue) {
+		Object value = _annotation.getAttributes().get(attributeName);
 
-        return value instanceof Boolean ? Boolean.parseBoolean( value.toString() ) : defaultValue;
-    }
+		if (value instanceof Boolean) {
+			return Boolean.parseBoolean(value.toString());
+		}
 
-    @Override
-    public int getAttribute( String attributeName, int defaultValue )
-    {
-        final Object value = annotation.getAttributes().get( attributeName );
+		return defaultValue;
+	}
 
-        return value instanceof Integer ? Integer.parseInt( value.toString() ) : defaultValue;
-    }
+	@Override
+	public int getAttribute(String attributeName, int defaultValue) {
+		Object value = _annotation.getAttributes().get(attributeName);
 
-    @Override
-    public String getAttribute( String attributeName, String defaultValue )
-    {
-        final Object value = annotation.getAttributes().get( attributeName );
+		if (value instanceof Integer) {
+			return Integer.parseInt(value.toString());
+		}
 
-        return value != null ? value.toString() : defaultValue;
-    }
+		return defaultValue;
+	}
 
-    @Override
-    public Map<String, Object> getAttributes() throws CoreException
-    {
-        return this.attributes;
-    }
+	@Override
+	public String getAttribute(String attributeName, String defaultValue) {
+		Object value = _annotation.getAttributes().get(attributeName);
 
-    @Override
-    public Object[] getAttributes( String[] attributeNames ) throws CoreException
-    {
-        final List<Object> retval = new ArrayList<Object>();
+		if (value != null) {
+			return value.toString();
+		}
 
-        for( String attributeName : attributeNames )
-        {
-            if( this.attributes.get( attributeName ) != null )
-            {
-                retval.add( this.attributes.get( attributeName ) );
-            }
-        }
+		return defaultValue;
+	}
 
-        return retval.toArray( new Object[0] );
-    }
+	@Override
+	public Map<String, Object> getAttributes() throws CoreException {
+		return _attributes;
+	}
 
-    @Override
-    public long getCreationTime() throws CoreException
-    {
-        return this.creationTime;
-    }
+	@Override
+	public Object[] getAttributes(String[] attributeNames) throws CoreException {
+		List<Object> retval = new ArrayList<>();
 
-    @Override
-    public long getId()
-    {
-        return -1;
-    }
+		for (String attributeName : attributeNames) {
+			if (_attributes.get(attributeName) != null) {
+				retval.add(_attributes.get(attributeName));
+			}
+		}
 
-    @Override
-    public IResource getResource()
-    {
-        return this.file;
-    }
+		return retval.toArray(new Object[0]);
+	}
 
-    @Override
-    public String getType() throws CoreException
-    {
-        return this.type;
-    }
+	@Override
+	public long getCreationTime() throws CoreException {
+		return _creationTime;
+	}
 
-    @Override
-    public boolean isSubtypeOf( String superType ) throws CoreException
-    {
-        return false;
-    }
+	@Override
+	public long getId() {
+		return -1;
+	}
 
-    @Override
-    public void setAttribute( String attributeName, boolean value ) throws CoreException
-    {
-    }
+	@Override
+	public IResource getResource() {
+		return _file;
+	}
 
-    @Override
-    public void setAttribute( String attributeName, int value ) throws CoreException
-    {
-    }
+	@Override
+	public String getType() throws CoreException {
+		return _type;
+	}
 
-    @Override
-    public void setAttribute( String attributeName, Object value ) throws CoreException
-    {
-    }
+	@Override
+	public boolean isSubtypeOf(String superType) throws CoreException {
+		return false;
+	}
 
-    @Override
-    public void setAttributes( Map<String, ? extends Object> attributes ) throws CoreException
-    {
-    }
+	@Override
+	public void setAttribute(String attributeName, boolean value) throws CoreException {
+	}
 
-    @Override
-    public void setAttributes( String[] attributeNames, Object[] values ) throws CoreException
-    {
-    }
+	@Override
+	public void setAttribute(String attributeName, int value) throws CoreException {
+	}
+
+	@Override
+	public void setAttribute(String attributeName, Object value) throws CoreException {
+	}
+
+	@Override
+	public void setAttributes(Map<String, ? extends Object> attributes) throws CoreException {
+	}
+
+	@Override
+	public void setAttributes(String[] attributeNames, Object[] values) throws CoreException {
+	}
+
+	private final TemporaryAnnotation _annotation;
+	private final Map<String, Object> _attributes;
+	private final long _creationTime;
+	private final IFile _file;
+	private final String _type;
 
 }

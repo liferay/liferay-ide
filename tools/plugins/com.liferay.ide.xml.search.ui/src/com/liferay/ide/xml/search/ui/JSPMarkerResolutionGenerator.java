@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui;
 
@@ -49,193 +48,164 @@ import org.eclipse.ui.IMarkerResolutionGenerator2;
  * @author Terry Jia
  * @author Gregory Amerson
  */
-public class JSPMarkerResolutionGenerator implements IMarkerResolutionGenerator2
-{
+public class JSPMarkerResolutionGenerator implements IMarkerResolutionGenerator2 {
 
-    public class TypeInProjectRequestor extends SearchRequestor
-    {
-        private final List<IType> results = new ArrayList<IType>();
+	public IMarkerResolution[] getResolutions(IMarker marker) {
+		IMarkerResolution[] retval = new IMarkerResolution[0];
 
-        @Override
-        public void acceptSearchMatch( SearchMatch match ) throws CoreException
-        {
-            final Object element = match.getElement();
+		if (hasResolutions(marker)) {
+			List<IMarkerResolution> resolutions = new ArrayList<>();
+			IProject project = marker.getResource().getProject();
 
-            if( element instanceof IType )
-            {
-                final IType type = (IType) element;
+			if (_isResourceBundleQuery(marker)) {
+				_collectResourceBundleResolutions(marker, resolutions, project);
+			}
+			else if (_isPortletActionMethodQuery(marker)) {
+				_collectPortletActionMethodResolutions(marker, resolutions, project);
+			}
 
-                if( type.getCompilationUnit() != null )
-                {
-                    this.results.add( type );
-                }
-            }
-        }
+			_collectDecreaseValidationLevelResolutions(resolutions);
 
-        public List<IType> getResults()
-        {
-            return this.results;
-        }
-    }
+			retval = resolutions.toArray(new IMarkerResolution[0]);
+		}
 
-    private void collectPortletActionMethodResolutions(
-        IMarker marker, List<IMarkerResolution> resolutions, IProject project )
-    {
-        final IJavaProject javaProject = JavaCore.create( project );
+		return retval;
+	}
 
-        final List<IType> mvcPortlets = findTypes( javaProject, "com.liferay.util.bridges.mvc.MVCPortlet" );
+	public boolean hasResolutions(IMarker marker) {
+		try {
+			if (_isJSPMarker(marker) && _isSupportedQuery(marker)) {
+				return true;
+			}
 
-        for( IType mvcPortlet : mvcPortlets )
-        {
-            resolutions.add( new AddMVCPortletActionMethodMarkerResolution( marker, mvcPortlet ) );
-        }
+			String valKey = marker.getAttribute(XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE, null);
 
-        final List<IType> jsrPortlets = findTypes( javaProject, "javax.portlet.GenericPortlet" );
+			if ((valKey != null) && ValidationPreferences.containsKey(valKey)) {
+				return true;
+			}
+		}
+		catch (CoreException ce) {
+		}
 
-        for( IType jsrPortlet : jsrPortlets )
-        {
-            if( ! mvcPortlets.contains( jsrPortlet ) )
-            {
-                resolutions.add( new AddJSRPortletActionMethodMarkerResolution( marker, jsrPortlet ) );
-            }
-        }
-    }
+		return false;
+	}
 
-    private void collectResourceBundleResolutions(
-        IMarker marker, final List<IMarkerResolution> resolutions, final IProject project )
-    {
-        final List<IFile> files = PropertiesUtil.getDefaultLanguagePropertiesFromProject( project );
+	public class TypeInProjectRequestor extends SearchRequestor {
 
-        if( CoreUtil.isNullOrEmpty( files ) )
-        {
-            String[] portletNames = new PortletDescriptorHelper( project ).getAllPortletNames();
+		@Override
+		public void acceptSearchMatch(SearchMatch match) throws CoreException {
+			Object element = match.getElement();
 
-            if( !CoreUtil.isNullOrEmpty( portletNames ) )
-            {
-                for( String portletName : portletNames )
-                {
-                    resolutions.add( new AddResourceBundleFileMarkerResolution( marker, portletName ) );
-                }
-            }
-        }
-        else
-        {
-            for( IFile file : files )
-            {
-                resolutions.add( new AddResourceKeyMarkerResolution( marker, file ) );
-            }
-        }
-    }
+			if (element instanceof IType) {
+				IType type = (IType)element;
 
-    private void collectDecreaseValidationLevelResolutions(
-        IMarker marker, final List<IMarkerResolution> resolutions, final IProject project )
-    {
-        resolutions.add( new DecreaseProjectScopeXmlValidationLevel() );
-        resolutions.add( new DecreaseInstanceScopeXmlValidationLevel() );
-    }
+				if (type.getCompilationUnit() != null) {
+					_results.add(type);
+				}
+			}
+		}
 
-    private List<IType> findTypes( IJavaProject javaProject, String typeName )
-    {
-        List<IType> retval = Collections.emptyList();
+		public List<IType> getResults() {
+			return _results;
+		}
 
-        try
-        {
-            final IType type = javaProject.findType( typeName );
+		private List<IType> _results = new ArrayList<>();
 
-            if( type != null )
-            {
-                final TypeInProjectRequestor requestor = new TypeInProjectRequestor();
+	}
 
-                final IJavaSearchScope scope =
-                    SearchEngine.createStrictHierarchyScope( javaProject, type, true, false, null );
+	private void _collectDecreaseValidationLevelResolutions(List<IMarkerResolution> resolutions) {
+		resolutions.add(new DecreaseProjectScopeXmlValidationLevel());
+		resolutions.add(new DecreaseInstanceScopeXmlValidationLevel());
+	}
 
-                final SearchPattern search =
-                    SearchPattern.createPattern(
-                        "*", IJavaSearchConstants.CLASS, IJavaSearchConstants.DECLARATIONS, 0 );
+	private void _collectPortletActionMethodResolutions(
+		IMarker marker, List<IMarkerResolution> resolutions, IProject project) {
 
-                new SearchEngine().search(
-                    search, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, scope,
-                    requestor, new NullProgressMonitor() );
+		IJavaProject javaProject = JavaCore.create(project);
 
-                retval = requestor.getResults();
-            }
-        }
-        catch( Exception e )
-        {
-        }
+		List<IType> mvcPortlets = _findTypes(javaProject, "com.liferay.util.bridges.mvc.MVCPortlet");
 
-        return retval;
-    }
+		for (IType mvcPortlet : mvcPortlets) {
+			resolutions.add(new AddMVCPortletActionMethodMarkerResolution(marker, mvcPortlet));
+		}
 
-    public IMarkerResolution[] getResolutions( IMarker marker )
-    {
-        IMarkerResolution[] retval = new IMarkerResolution[0];
+		List<IType> jsrPortlets = _findTypes(javaProject, "javax.portlet.GenericPortlet");
 
-        if( hasResolutions( marker ) )
-        {
-            final List<IMarkerResolution> resolutions = new ArrayList<IMarkerResolution>();
-            final IProject project = marker.getResource().getProject();
+		for (IType jsrPortlet : jsrPortlets) {
+			if (!mvcPortlets.contains(jsrPortlet)) {
+				resolutions.add(new AddJSRPortletActionMethodMarkerResolution(marker, jsrPortlet));
+			}
+		}
+	}
 
-            if( isResourceBundleQuery( marker ) )
-            {
-                collectResourceBundleResolutions( marker, resolutions, project );
-            }
-            else if( isPortletActionMethodQuery( marker ) )
-            {
-                collectPortletActionMethodResolutions( marker, resolutions, project );
-            }
+	private void _collectResourceBundleResolutions(
+		IMarker marker, List<IMarkerResolution> resolutions, IProject project) {
 
-            collectDecreaseValidationLevelResolutions( marker, resolutions, project );
+		List<IFile> files = PropertiesUtil.getDefaultLanguagePropertiesFromProject(project);
 
-            retval = resolutions.toArray( new IMarkerResolution[0] );
-        }
+		if (CoreUtil.isNullOrEmpty(files)) {
+			String[] portletNames = new PortletDescriptorHelper(project).getAllPortletNames();
 
-        return retval;
-    }
+			if (!CoreUtil.isNullOrEmpty(portletNames)) {
+				for (String portletName : portletNames) {
+					resolutions.add(new AddResourceBundleFileMarkerResolution(marker, portletName));
+				}
+			}
+		}
+		else {
+			for (IFile file : files) {
+				resolutions.add(new AddResourceKeyMarkerResolution(marker, file));
+			}
+		}
+	}
 
-    public boolean hasResolutions( IMarker marker )
-    {
-        try
-        {
-            if( isJSPMarker( marker ) && isSupportedQuery( marker ) )
-            {
-                return true;
-            }
+	private List<IType> _findTypes(IJavaProject javaProject, String typeName) {
+		List<IType> retval = Collections.emptyList();
 
-            final String valKey = marker.getAttribute( XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE, null );
+		try {
+			IType type = javaProject.findType(typeName);
 
-            if( valKey != null && ValidationPreferences.containsKey( valKey ) )
-            {
-                return true;
-            }
-        }
-        catch( CoreException e )
-        {
-        }
+			if (type != null) {
+				TypeInProjectRequestor requestor = new TypeInProjectRequestor();
 
-        return false;
-    }
+				IJavaSearchScope scope = SearchEngine.createStrictHierarchyScope(javaProject, type, true, false, null);
 
-    private boolean isJSPMarker( IMarker marker ) throws CoreException
-    {
-        return XMLSearchConstants.LIFERAY_JSP_MARKER_ID.equals( marker.getType() );
-    }
+				SearchPattern search = SearchPattern.createPattern(
+					"*", IJavaSearchConstants.CLASS, IJavaSearchConstants.DECLARATIONS, 0);
 
-    private boolean isPortletActionMethodQuery( IMarker marker )
-    {
-        return XMLSearchConstants.PORTLET_ACTION_METHOD_QUERY_ID.equals(
-                   marker.getAttribute( LiferayBaseValidator.MARKER_QUERY_ID, "" ) );
-    }
+				new SearchEngine().search(
+					search, new SearchParticipant[] {SearchEngine.getDefaultSearchParticipant()}, scope, requestor,
+					new NullProgressMonitor());
 
-    private boolean isResourceBundleQuery( IMarker marker )
-    {
-        return XMLSearchConstants.RESOURCE_BUNDLE_QUERY_ID.equals(
-                   marker.getAttribute( LiferayBaseValidator.MARKER_QUERY_ID, "" ) );
-    }
+				retval = requestor.getResults();
+			}
+		}
+		catch (Exception e) {
+		}
 
-    private boolean isSupportedQuery( IMarker marker )
-    {
-        return isResourceBundleQuery( marker ) || isPortletActionMethodQuery( marker );
-    }
+		return retval;
+	}
+
+	private boolean _isJSPMarker(IMarker marker) throws CoreException {
+		return XMLSearchConstants.LIFERAY_JSP_MARKER_ID.equals(marker.getType());
+	}
+
+	private boolean _isPortletActionMethodQuery(IMarker marker) {
+		return XMLSearchConstants.PORTLET_ACTION_METHOD_QUERY_ID.equals(
+			marker.getAttribute(LiferayBaseValidator.MARKER_QUERY_ID, ""));
+	}
+
+	private boolean _isResourceBundleQuery(IMarker marker) {
+		return XMLSearchConstants.RESOURCE_BUNDLE_QUERY_ID.equals(
+			marker.getAttribute(LiferayBaseValidator.MARKER_QUERY_ID, ""));
+	}
+
+	private boolean _isSupportedQuery(IMarker marker) {
+		if (_isResourceBundleQuery(marker) || _isPortletActionMethodQuery(marker)) {
+			return true;
+		}
+
+		return false;
+	}
 
 }

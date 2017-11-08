@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,14 +10,14 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui;
 
 import com.liferay.ide.xml.search.ui.editor.ServiceXmlContextType;
 
 import java.io.IOException;
+
 import java.net.URL;
 
 import org.eclipse.core.runtime.IStatus;
@@ -30,6 +30,7 @@ import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.ui.editors.text.templates.ContributionContextTypeRegistry;
 import org.eclipse.ui.editors.text.templates.ContributionTemplateStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+
 import org.osgi.framework.BundleContext;
 
 /**
@@ -38,134 +39,126 @@ import org.osgi.framework.BundleContext;
  * @author Gregory Amerson
  * @author Kuo Zhang
  */
-public class LiferayXMLSearchUI extends AbstractUIPlugin
-{
+public class LiferayXMLSearchUI extends AbstractUIPlugin {
 
-    // The shared instance
-    private static LiferayXMLSearchUI plugin;
+	// The shared instance
 
-    private ContextTypeRegistry contextTypeRegistry;
-    private TemplateStore templateStore;
+	public static final String PLUGIN_ID = "com.liferay.ide.xml.search.ui";
 
-    public static String PORTLET_IMG = "portlet";
+	public static final String PREF_KEY_IGNORE_PROJECTS_LIST = "ignore-projects-list";
 
-    // The plug-in ID
-    public static final String PLUGIN_ID = "com.liferay.ide.xml.search.ui";
+	public static final String SERVICE_XML_TEMPLATES_KEY = PLUGIN_ID + ".service_xml_templates";
 
-    public static final String SERVICE_XML_TEMPLATES_KEY = PLUGIN_ID + ".service_xml_templates";
+	public static String portletImg = "portlet";
 
-    public static final String PREF_KEY_IGNORE_PROJECTS_LIST = "ignore-projects-list";
+	// The plug-in ID
 
-    public static IStatus createErrorStatus( Exception e )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e );
-    }
+	public static IStatus createErrorStatus(Exception e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e);
+	}
 
-    public static IStatus createErrorStatus( String msg )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, msg );
-    }
+	public static IStatus createErrorStatus(String msg) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg);
+	}
 
-    public static IStatus createErrorStatus( String msg, Exception e )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
-    }
+	public static IStatus createErrorStatus(String msg, Exception e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
+	}
 
-    public static IStatus createWarningStatus( String msg )
-    {
-        return new Status( IStatus.WARNING, PLUGIN_ID, msg );
-    }
+	public static IStatus createWarningStatus(String msg) {
+		return new Status(IStatus.WARNING, PLUGIN_ID, msg);
+	}
 
-    /**
-     * Returns the shared instance
-     *
-     * @return the shared instance
-     */
-    public static LiferayXMLSearchUI getDefault()
-    {
-        return plugin;
-    }
+	/**
+	 * Returns the shared instance
+	 *
+	 * @return the shared instance
+	 */
+	public static LiferayXMLSearchUI getDefault() {
+		return _plugin;
+	}
 
-    public static IEclipsePreferences getInstancePrefs()
-    {
-        return InstanceScope.INSTANCE.getNode( PLUGIN_ID );
-    }
+	public static IEclipsePreferences getInstancePrefs() {
+		return InstanceScope.INSTANCE.getNode(PLUGIN_ID);
+	}
 
-    // add context type for templates of service.xml
-    public ContextTypeRegistry getContextTypeRegistry()
-    {
-        if( contextTypeRegistry == null )
-        {
-            ContributionContextTypeRegistry registry = new ContributionContextTypeRegistry();
-            registry.addContextType( ServiceXmlContextType.ID_SERVICE_XML_TAG );
+	public static void logError(String msg, Exception e) {
+		LiferayXMLSearchUI plugin = getDefault();
 
-            contextTypeRegistry = registry;
-        }
+		plugin.getLog().log(createErrorStatus(msg, e));
+	}
 
-        return contextTypeRegistry;
-    }
+	public static void logError(Throwable t) {
+		LiferayXMLSearchUI plugin = getDefault();
 
-    public TemplateStore getServiceXmlTemplateStore()
-    {
-        if( templateStore == null )
-        {
-            templateStore =
-                new ContributionTemplateStore(
-                    getContextTypeRegistry(), getPreferenceStore(), SERVICE_XML_TEMPLATES_KEY );
+		plugin.getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, t.getMessage(), t));
+	}
 
-            try
-            {
-                templateStore.load();
-            }
-            catch( IOException e )
-            {
-                logError( "Error loading template store.", e );
-            }
-        }
+	/**
+	 * The constructor
+	 */
+	public LiferayXMLSearchUI() {
+	}
 
-        return templateStore;
-    }
+	// add context type for templates of service.xml
 
-    public static void logError( String msg, Exception e )
-    {
-        getDefault().getLog().log( createErrorStatus( msg, e ) );
-    }
+	public ContextTypeRegistry getContextTypeRegistry() {
+		if (_contextTypeRegistry == null) {
+			ContributionContextTypeRegistry registry = new ContributionContextTypeRegistry();
 
-    public static void logError( Throwable t )
-    {
-        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, t.getMessage(), t ) );
-    }
+			registry.addContextType(ServiceXmlContextType.ID_SERVICE_XML_TAG);
 
-    /**
-     * The constructor
-     */
-    public LiferayXMLSearchUI()
-    {
-    }
+			_contextTypeRegistry = registry;
+		}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-     */
-    public void start( BundleContext context ) throws Exception
-    {
-        super.start( context );
-        plugin = this;
+		return _contextTypeRegistry;
+	}
 
-        final URL baseIconsURL = getBundle().getEntry( "icons/" );
-        final ImageDescriptor portletImage = ImageDescriptor.createFromURL( new URL( baseIconsURL, "portlet.png" ) );
+	public TemplateStore getServiceXmlTemplateStore() {
+		if (_templateStore == null) {
+			_templateStore = new ContributionTemplateStore(
+				getContextTypeRegistry(), getPreferenceStore(), SERVICE_XML_TEMPLATES_KEY);
 
-        getImageRegistry().put( PORTLET_IMG, portletImage );
-    }
+			try {
+				_templateStore.load();
+			}
+			catch (IOException ioe) {
+				logError("Error loading template store.", ioe);
+			}
+		}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-     */
-    public void stop( BundleContext context ) throws Exception
-    {
-        plugin = null;
-        super.stop( context );
-    }
+		return _templateStore;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * @see AbstractUIPlugin#start(org.osgi.framework.
+	 * BundleContext)
+	 */
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		_plugin = this;
+
+		URL baseIconsURL = getBundle().getEntry("icons/");
+
+		ImageDescriptor portletImage = ImageDescriptor.createFromURL(new URL(baseIconsURL, "portlet.png"));
+
+		getImageRegistry().put(portletImg, portletImage);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * @see AbstractUIPlugin#stop(org.osgi.framework.
+	 * BundleContext)
+	 */
+	public void stop(BundleContext context) throws Exception {
+		_plugin = null;
+		super.stop(context);
+	}
+
+	private static LiferayXMLSearchUI _plugin;
+
+	private ContextTypeRegistry _contextTypeRegistry;
+	private TemplateStore _templateStore;
 
 }

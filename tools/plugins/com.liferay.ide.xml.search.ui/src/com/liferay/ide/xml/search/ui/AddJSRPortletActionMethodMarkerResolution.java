@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.xml.search.ui;
 
 import com.liferay.ide.server.util.ComponentUtil;
@@ -30,103 +30,86 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.PartInitException;
 
-
 /**
  * @author Gregory Amerson
  */
-public class AddJSRPortletActionMethodMarkerResolution extends CommonWorkbenchMarkerResolution
-{
+public class AddJSRPortletActionMethodMarkerResolution extends CommonWorkbenchMarkerResolution {
 
-    private final String CODE = "@ProcessAction(name = \"{0}\")\npublic void {0}(ActionRequest actionRequest, ActionResponse actionResponse) '{\n}'";
-    private final String[] IMPORTS = new String[]
-    {
-        "javax.portlet.ActionRequest",
-        "javax.portlet.ActionResponse",
-        "javax.portlet.ProcessAction"
-    };
+	public AddJSRPortletActionMethodMarkerResolution(IMarker marker, IType type) {
+		super(marker);
+		this.type = type;
+	}
 
-    protected final IType type;
+	@Override
+	public IMarker[] findOtherMarkers(IMarker[] markers) {
+		return new IMarker[0];
+	}
 
-    public AddJSRPortletActionMethodMarkerResolution( IMarker marker, IType type  )
-    {
-        super( marker );
-        this.type = type;
-    }
+	@Override
+	public String getDescription() {
+		return getLabel();
+	}
 
-    @Override
-    public IMarker[] findOtherMarkers( IMarker[] markers )
-    {
-        return new IMarker[0];
-    }
+	@Override
+	public Image getImage() {
+		LiferayXMLSearchUI plugin = LiferayXMLSearchUI.getDefault();
 
-    protected String getCode()
-    {
-        return CODE;
-    }
+		return plugin.getImageRegistry().get(LiferayXMLSearchUI.portletImg);
+	}
 
-    @Override
-    public String getDescription()
-    {
-        return getLabel();
-    }
+	@Override
+	public String getLabel() {
+		return "add new @ProcessAction method \"" + getTextContent(marker) + "\" to " + type.getElementName();
+	}
 
-    @Override
-    public Image getImage()
-    {
-        return LiferayXMLSearchUI.getDefault().getImageRegistry().get( LiferayXMLSearchUI.PORTLET_IMG );
-    }
+	protected String getCode() {
+		return _code;
+	}
 
-    protected String[] getImports()
-    {
-        return IMPORTS;
-    }
+	protected String[] getImports() {
+		return _imports;
+	}
 
-    @Override
-    public String getLabel()
-    {
-        return "add new @ProcessAction method \"" + getTextContent( marker ) + "\" to " + type.getElementName();
-    }
+	protected String getTextContent(IMarker marker) {
+		return marker.getAttribute(XMLSearchConstants.TEXT_CONTENT, "");
+	}
 
-    protected String getTextContent( IMarker marker )
-    {
-        return marker.getAttribute( XMLSearchConstants.TEXT_CONTENT, "" );
-    }
+	@Override
+	protected void resolve(IMarker marker) {
+		try {
+			IProgressMonitor npm = new NullProgressMonitor();
 
-    @Override
-    protected void resolve( IMarker marker )
-    {
-        try
-        {
-            final IProgressMonitor npm = new NullProgressMonitor();
+			IMethod newMethod = this.type.createMethod(
+				MessageFormat.format(getCode(), getTextContent(marker)), null, true, npm);
 
-            final IMethod newMethod = this.type.createMethod(
-                MessageFormat.format( getCode(), getTextContent( marker ) ), null, true, npm );
+			for (String importName : getImports()) {
+				type.getCompilationUnit().createImport(importName, null, npm);
+			}
 
-            for( String importName : getImports() )
-            {
-                type.getCompilationUnit().createImport( importName, null, npm );
-            }
+			type.getCompilationUnit().save(npm, false);
 
-            type.getCompilationUnit().save( npm, false );
+			try {
+				JavaUI.revealInEditor(JavaUI.openInEditor(newMethod), (IJavaElement)newMethod);
+			}
+			catch (PartInitException pie) {
+				LiferayXMLSearchUI.logError("Unable to open java editor on action method", pie);
+			}
 
-            try
-            {
-                JavaUI.revealInEditor( JavaUI.openInEditor( newMethod ), (IJavaElement) newMethod );
-            }
-            catch( PartInitException e )
-            {
-                LiferayXMLSearchUI.logError( "Unable to open java editor on action method", e );
-            }
+			if (marker.getResource() instanceof IFile) {
+				ComponentUtil.validateFile((IFile)marker.getResource(), npm);
+			}
+		}
+		catch (JavaModelException jme) {
+			LiferayXMLSearchUI.logError("Unable to add JSR process action method", jme);
+		}
+	}
 
-            if( marker.getResource() instanceof IFile )
-            {
-                ComponentUtil.validateFile( (IFile) marker.getResource(), npm );
-            }
-        }
-        catch( JavaModelException e )
-        {
-            LiferayXMLSearchUI.logError( "Unable to add JSR process action method", e );
-        }
-    }
+	protected final IType type;
+
+	private final String _code =
+		"@ProcessAction(name = \"{0}\")\npublic void {0}" +
+			"(ActionRequest actionRequest, ActionResponse actionResponse) '{\n}'";
+	private String[] _imports =
+		{"javax.portlet.ActionRequest", "javax.portlet.ActionResponse", "javax.portlet.ProcessAction"};
 
 }
