@@ -31,6 +31,7 @@ import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.model.ServerDelegate;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -188,6 +189,7 @@ public class PortalBundleTests extends ServerCoreBase
     }
 
     @Test
+    @Ignore
     public void testPortalServerDelegateName() throws Exception {
         if( shouldSkipBundleTests() ) return;
 
@@ -201,7 +203,7 @@ public class PortalBundleTests extends ServerCoreBase
 
         assertNotNull( newServer );
 
-        assertEquals( "Liferay CE GA4 Tomcat at localhost", newServer.getName() );
+        assertEquals( "Liferay 7.x at localhost", newServer.getName() );
 
         newServer.setHost( "127.0.0.1" );
 
@@ -209,7 +211,7 @@ public class PortalBundleTests extends ServerCoreBase
 
         delegate.newServerDetailsChanged( monitor );
 
-        assertEquals( "Liferay CE GA4 Tomcat at 127.0.0.1", newServer.getName() );
+        assertEquals( "Liferay 7.x at 127.0.0.1", newServer.getName() );
     }
 }
 
