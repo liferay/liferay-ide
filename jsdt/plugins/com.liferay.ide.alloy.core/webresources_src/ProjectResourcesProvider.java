@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,9 +10,9 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
-package com.liferay.ide.alloy.core.webresources;
+ */
+
+package com.liferay.ide.alloy.core.webresources_src;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -23,26 +23,22 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
 
-
 /**
  * @author Gregory Amerson
  */
-public class ProjectResourcesProvider implements IWebResourcesProvider
-{
+public class ProjectResourcesProvider implements IWebResourcesProvider {
 
-    @Override
-    public IResource[] getResources( IWebResourcesContext context, IProgressMonitor monitor )
-    {
-        IResource[] retval = null;
+	@Override
+	public IResource[] getResources(IWebResourcesContext context, IProgressMonitor monitor) {
+		IResource[] retval = null;
 
-        final IFile htmlFile = context.getHtmlFile();
+		IFile htmlFile = context.getHtmlFile();
 
-        if( htmlFile != null && ProjectUtil.isPortletProject( htmlFile.getProject() ) )
-        {
-            retval = new IResource[] { CoreUtil.getDefaultDocrootFolder( htmlFile.getProject() ) };
-        }
+		if ((htmlFile != null) && ProjectUtil.isPortletProject(htmlFile.getProject())) {
+			retval = new IResource[] {CoreUtil.getDefaultDocrootFolder(htmlFile.getProject())};
+		}
 
-        return retval;
-    }
+		return retval;
+	}
 
 }

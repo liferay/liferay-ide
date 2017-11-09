@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.alloy.core.jsp;
 
@@ -27,34 +26,27 @@ import org.eclipse.wst.sse.core.internal.text.JobSafeStructuredDocument;
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class AlloyJSPDocumentFactory extends BasicStructuredDocumentFactory
-{
+@SuppressWarnings("restriction")
+public class AlloyJSPDocumentFactory extends BasicStructuredDocumentFactory {
 
-    @Override
-    public IDocument createDocument()
-    {
-        IDocument document = null;
-        IModelHandler handler = null;
-        IContentType contentType =
-            Platform.getContentTypeManager().getContentType( "com.liferay.ide.alloy.core.alloyjspsource" );
+	@Override
+	public IDocument createDocument() {
+		IModelHandler handler = null;
 
-        while( handler == null && !IContentTypeManager.CT_TEXT.equals( contentType.getId() ) )
-        {
-            handler = ModelHandlerRegistry.getInstance().getHandlerForContentTypeId( contentType.getId() );
-            contentType = contentType.getBaseType();
-        }
+		IContentType contentType =
+			Platform.getContentTypeManager().getContentType("com.liferay.ide.alloy.core.alloyjspsource");
 
-        if( handler != null )
-        {
-            document = handler.getDocumentLoader().createNewStructuredDocument();
-        }
-        else
-        {
-            document = new JobSafeStructuredDocument();
-        }
+		while ((handler == null) && !IContentTypeManager.CT_TEXT.equals(contentType.getId())) {
+			handler = ModelHandlerRegistry.getInstance().getHandlerForContentTypeId(contentType.getId());
+			contentType = contentType.getBaseType();
+		}
 
-        return document;
-    }
+		if (handler != null) {
+			return handler.getDocumentLoader().createNewStructuredDocument();
+		}
+		else {
+			return new JobSafeStructuredDocument();
+		}
+	}
 
 }

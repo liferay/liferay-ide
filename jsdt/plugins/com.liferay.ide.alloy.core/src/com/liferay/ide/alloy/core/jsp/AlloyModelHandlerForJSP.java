@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,23 +10,22 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.alloy.core.jsp;
 
 import org.eclipse.jst.jsp.core.internal.modelhandler.ModelHandlerForJSP;
 import org.eclipse.wst.sse.core.internal.document.IDocumentLoader;
 
-
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class AlloyModelHandlerForJSP extends ModelHandlerForJSP
-{
-    @Override
-    public IDocumentLoader getDocumentLoader()
-    {
-        return new AlloyJSPDocumentLoader();
-    }
+@SuppressWarnings("restriction")
+public class AlloyModelHandlerForJSP extends ModelHandlerForJSP {
+
+	@Override
+	public IDocumentLoader getDocumentLoader() {
+		return new AlloyJSPDocumentLoader();
+	}
+
 }

@@ -623,6 +623,8 @@ public class ProjectCoreBase extends ServerCoreBase
 
             Stream.of(validationStatus.getChildren()).map(IStatus::getMessage).forEach(sb::append);
 
+            PrintDirectoryTree.print(sdk.getLocation().toFile(), sb);
+
             assertTrue(sb.toString(), validationStatus.isOK());
 
             SDKUtil.openAsProject( sdk );
