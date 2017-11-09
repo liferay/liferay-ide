@@ -201,7 +201,7 @@ public class PortalBundleTests extends ServerCoreBase
 
         assertNotNull( newServer );
 
-        assertEquals( "Liferay CE GA4 Tomcat at localhost", newServer.getName() );
+        assertEquals( "Liferay 7.x at localhost", newServer.getName() );
 
         newServer.setHost( "127.0.0.1" );
 
@@ -209,7 +209,7 @@ public class PortalBundleTests extends ServerCoreBase
 
         delegate.newServerDetailsChanged( monitor );
 
-        assertEquals( "Liferay CE GA4 Tomcat at 127.0.0.1", newServer.getName() );
+        assertEquals( "Liferay 7.x at 127.0.0.1", newServer.getName() );
     }
 }
 
