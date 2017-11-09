@@ -72,10 +72,10 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
 
 		try {
 			if (cleanBuild) {
-				this._bndProject.clean();
+				_bndProject.clean();
 			}
 
-			File[] buildFiles = this._bndProject.getBuildFiles(true);
+			File[] buildFiles = _bndProject.getBuildFiles(true);
 
 			if (!CoreUtil.isNullOrEmpty(buildFiles)) {
 				File buildFile = buildFiles[0];
@@ -97,7 +97,7 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
 		IPath retval = null;
 
 		try {
-			File[] buildFiles = this._bndProject.getBuildFiles(false);
+			File[] buildFiles = _bndProject.getBuildFiles(false);
 
 			if (!CoreUtil.isNullOrEmpty(buildFiles)) {
 				File buildFile = buildFiles[0];
@@ -121,10 +121,10 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
 
 	@Override
 	public String getSymbolicName() throws CoreException {
-		String retval = this._bndProject.getName();
+		String retval = _bndProject.getName();
 
 		try {
-			Collection<String> names = this._bndProject.getBsns();
+			Collection<String> names = _bndProject.getBsns();
 
 			if ((names != null) && !names.isEmpty()) {
 				retval = names.iterator().next();
