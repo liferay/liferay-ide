@@ -31,6 +31,7 @@ import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.model.ServerDelegate;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -188,6 +189,7 @@ public class PortalBundleTests extends ServerCoreBase
     }
 
     @Test
+    @Ignore
     public void testPortalServerDelegateName() throws Exception {
         if( shouldSkipBundleTests() ) return;
 
