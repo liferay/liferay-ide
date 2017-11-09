@@ -102,10 +102,10 @@ public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitio
 		if ((region != null) && (childRegion != null) && "XML_TAG_NAME".equals(region.getType()) &&
 			"XML_TAG_ATTRIBUTE_VALUE".equals(childRegion.getType()) && lowerCaseText.startsWith("<aui:")) {
 
-			// we have found an attribute value in a AUI tag but now we need to check if the
-			// attribteName is a
-			// javascript type attribute
-
+			/*
+			 *  we have found an attribute value in a AUI tag
+			 *  but now we need to check if the attribteName is a javascript type attribute
+			 */
 			ITextRegion[] regions = region.getRegions().toArray();
 
 			for (int i = 0; i < regions.length; i++) {
@@ -134,9 +134,10 @@ public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitio
 
 	private boolean _isAUIScriptRegion(IStructuredDocumentRegion sdRegion) {
 
-		// TODO can this handle content with other regions like
-		// <aui:script> function foo() {}; <portletTag/> function bar(){}</aui:script>
-
+		/*
+		 *  TODO can this handle content with other regions like
+		 *  <aui:script> function foo() {}; <portletTag/> function bar(){}</aui:script>
+		 */
 		IStructuredDocumentRegion previousRegion = sdRegion.getPrevious();
 
 		String info = previousRegion.toString();

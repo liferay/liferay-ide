@@ -17,6 +17,7 @@ package com.liferay.ide.alloy.core.jsp;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 
 import tern.ITernFile;
 
@@ -31,12 +32,16 @@ public class AlloyJSPFileConfiguration implements ITernFileConfiguration {
 
 	@Override
 	public ScriptTagRegion[] getScriptTags(ITernFile ternFile) {
-		if (ternFile != null) {
-			Object file = ternFile.getAdapter(IFile.class);
+		if (ternFile == null) {
+			return null;
+		}
 
-			if (file instanceof IFile && ProjectUtil.isPortletProject(((IFile)file).getProject())) {
-				return _tags;
-			}
+		Object file = ternFile.getAdapter(IFile.class);
+
+		IProject project = ((IFile)file).getProject();
+
+		if (file instanceof IFile && ProjectUtil.isPortletProject(project)) {
+			return _tags;
 		}
 
 		return null;

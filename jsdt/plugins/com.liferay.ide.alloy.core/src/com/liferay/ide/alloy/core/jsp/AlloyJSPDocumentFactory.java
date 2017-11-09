@@ -31,8 +31,8 @@ public class AlloyJSPDocumentFactory extends BasicStructuredDocumentFactory {
 
 	@Override
 	public IDocument createDocument() {
-		IDocument document = null;
 		IModelHandler handler = null;
+
 		IContentType contentType =
 			Platform.getContentTypeManager().getContentType("com.liferay.ide.alloy.core.alloyjspsource");
 
@@ -42,13 +42,11 @@ public class AlloyJSPDocumentFactory extends BasicStructuredDocumentFactory {
 		}
 
 		if (handler != null) {
-			document = handler.getDocumentLoader().createNewStructuredDocument();
+			return handler.getDocumentLoader().createNewStructuredDocument();
 		}
 		else {
-			document = new JobSafeStructuredDocument();
+			return new JobSafeStructuredDocument();
 		}
-
-		return document;
 	}
 
 }
