@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension
-         point="com.liferay.ide.core.liferayProjectProviders">
-      <liferayProjectProvider
-            class="com.liferay.ide.bndtools.core.BndtoolsProvider"
-            displayName="Bndtools Project Provider"
-            id="com.liferay.ide.bndtools.core.bndtoolsProjectProvider"
-            projectType="module"
-            shortName="bndtools">
-      </liferayProjectProvider>
-   </extension>
-   <!--extension
-         point="bndtools.core.projectTemplates">
-      <template
-            class="com.liferay.ide.bndtools.core.templates.PortletTemplate"
-            doc="html/portletTemplate.xml"
-            name="Portlet"
-            priority="510"
-            icon="html/portlet.png"
-            category="Liferay">
-      </template>
-   </extension-->
+	<extension
+		point="com.liferay.ide.core.liferayProjectProviders"
+	>
+		<liferayProjectProvider
+			class="com.liferay.ide.bndtools.core.BndtoolsProvider"
+			displayName="Bndtools Project Provider"
+			id="com.liferay.ide.bndtools.core.bndtoolsProjectProvider"
+			projectType="module"
+			shortName="bndtools"
+		>
+		</liferayProjectProvider>
+	</extension>
+	<!--extension
+			point="bndtools.core.projectTemplates">
+		<template
+				category="Liferay"
+				class="com.liferay.ide.bndtools.core.templates.PortletTemplate"
+				doc="html/portletTemplate.xml"
+				icon="html/portlet.png"
+				name="Portlet"
+				priority="510"
+		>
+		</template>
+	</extension-->
 </plugin>

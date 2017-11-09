@@ -1,4 +1,4 @@
 <form>
-    <p>Creates a project for extending Liferay using a OSGi module. The name of the project must be
-    a Bundle Symbolic Name (e.g. <span font="fixed">helloworld.portlet</span>). </p>
+	<p>Creates a project for extending Liferay using a OSGi module. The name of the project must be
+	a Bundle Symbolic Name (e.g. <span font="fixed">helloworld.portlet</span>). </p>
 </form>
