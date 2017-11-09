@@ -19,7 +19,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
-
 import org.osgi.framework.BundleContext;
 
 /**
@@ -88,21 +87,13 @@ public class ThemeCore extends Plugin {
 
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.
-	 * BundleContext)
-	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		_plugin = this;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.
-	 * BundleContext)
-	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 		super.stop(context);
