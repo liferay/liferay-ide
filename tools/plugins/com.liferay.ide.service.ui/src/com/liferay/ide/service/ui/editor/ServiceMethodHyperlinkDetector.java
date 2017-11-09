@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.ui.editor;
 
@@ -57,394 +56,354 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * @author Gregory Amerson
- *
  */
-@SuppressWarnings( "restriction" )
-public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector
-{
+@SuppressWarnings("restriction")
+public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 
-    private static class IMethodWrapper
-    {
-        private final boolean base;
-        private final IMethod method;
+	public IHyperlink[] detectHyperlinks(ITextViewer textViewer, IRegion region, boolean canShowMultipleHyperlinks) {
+		IHyperlink[] retval = null;
 
-        public IMethodWrapper( IMethod method, boolean base )
-        {
-            this.method = method;
-            this.base = base;
-        }
-    }
+		ITextEditor textEditor = (ITextEditor)getAdapter(ITextEditor.class);
 
-    private static class WrapperMethodCollector extends SearchRequestor
-    {
-        private final List<IMethod> results;
-        private final IMethod method;
+		if (textEditor == null) {
+			return retval;
+		}
 
-        public WrapperMethodCollector( List<IMethod> results, IMethod method  )
-        {
-            super();
-            this.results = results;
-            this.method = method;
-        }
+		ITypeRoot input = EditorUtility.getEditorInputJavaElement(textEditor, false);
+		IAction openAction = textEditor.getAction("OpenEditor");
 
-        @Override
-        public void acceptSearchMatch( SearchMatch match ) throws CoreException
-        {
-            final Object element = match.getElement();
+		if (_shouldDetectHyperlinks(textEditor, input, openAction, region)) {
+			IDocumentProvider documentProvider = textEditor.getDocumentProvider();
+			IEditorInput editorInput = textEditor.getEditorInput();
 
-            if( element instanceof IMethod && matches( (IMethod) element ) )
-            {
-                this.results.add( (IMethod) element );
-            }
-        }
+			IDocument document = documentProvider.getDocument(editorInput);
 
-        private boolean matches( IMethod element ) throws JavaModelException
-        {
-            boolean matches = false;
+			int offset = region.getOffset();
 
-            if( this.method.getNumberOfParameters() == element.getNumberOfParameters() )
-            {
-                matches = true;
+			IRegion wordRegion = JavaWordFinder.findWord(document, offset);
 
-                for( int i = 0; i < this.method.getTypeParameters().length; i++ )
-                {
-                    if( ! this.method.getParameterTypes()[i].equals( element.getParameterTypes()[i] ) )
-                    {
-                        matches = false;
-                        break;
-                    }
-                }
-            }
+			if (_isRegionValid(document, wordRegion)) {
+				IJavaElement[] elements = new IJavaElement[0];
+				long modStamp = documentProvider.getModificationStamp(editorInput);
 
-            return matches;
-        }
-    }
+				if (input.equals(_lastInput) && (modStamp == _lastModStamp) && wordRegion.equals(_lastWordRegion)) {
+					elements = _lastElements;
+				}
+				else {
+					try {
+						elements = ((ICodeAssist)input).codeSelect(wordRegion.getOffset(), wordRegion.getLength());
 
-    private IJavaElement[] lastElements;
-    private ITypeRoot lastInput;
-    private long lastModStamp;
-    private IRegion lastWordRegion;
+						elements = _selectOpenableElements(elements);
 
-    private void addHyperlinks(
-        final List<IHyperlink> links, final IRegion word, final SelectionDispatchAction openAction,
-        final IMethod method, final boolean qualify, final JavaEditor editor )
-    {
-        if( shouldAddServiceHyperlink( editor ) )
-        {
-            final IMethod implMethod = getServiceImplMethod( method );
+						_lastInput = input;
+						_lastModStamp = modStamp;
+						_lastWordRegion = wordRegion;
+						_lastElements = elements;
+					}
+					catch (JavaModelException jme) {
+					}
+				}
 
-            if( implMethod != null )
-            {
-                links.add( new ServiceMethodImplementationHyperlink( word, openAction, implMethod, qualify ) );
-            }
+				if (elements.length != 0) {
+					List<IHyperlink> links = new ArrayList<>(elements.length);
 
-            final IMethodWrapper wrapperMethod = getServiceWrapperMethod( method );
+					for (IJavaElement element : elements) {
+						if (element instanceof IMethod) {
+							_addHyperlinks(
+								links, wordRegion, (SelectionDispatchAction)openAction, (IMethod)element,
+								elements.length > 1, (JavaEditor)textEditor);
+						}
+					}
 
-            if( wrapperMethod != null )
-            {
-                if( wrapperMethod.base )
-                {
-                    links.add( new ServiceMethodWrapperLookupHyperlink(
-                        editor, word, openAction, wrapperMethod.method, qualify ) );
-                }
-                else
-                {
-                    links.add( new ServiceMethodWrapperHyperlink( word, openAction, wrapperMethod.method, qualify ) );
-                }
-            }
-        }
-    }
+					if (!links.isEmpty()) {
+						if (canShowMultipleHyperlinks) {
+							retval = links.toArray(new IHyperlink[0]);
+						}
+						else {
+							retval = new IHyperlink[] {links.get(0)};
+						}
+					}
+				}
+			}
+		}
 
-    public IHyperlink[] detectHyperlinks( ITextViewer textViewer, IRegion region, boolean canShowMultipleHyperlinks )
-    {
-        IHyperlink[] retval = null;
+		return retval;
+	}
 
-        final ITextEditor textEditor = (ITextEditor) getAdapter( ITextEditor.class );
+	@Override
+	public void dispose() {
+		super.dispose();
+		_lastElements = null;
+		_lastInput = null;
+		_lastWordRegion = null;
+	}
 
-        if( textEditor == null )
-        {
-            return retval;
-        }
+	private void _addHyperlinks(
+		List<IHyperlink> links, IRegion word, SelectionDispatchAction openAction, IMethod method, boolean qualify,
+		JavaEditor editor) {
 
-        final ITypeRoot input = EditorUtility.getEditorInputJavaElement( textEditor, false );
-        final IAction openAction = textEditor.getAction( "OpenEditor" );
+		if (_shouldAddServiceHyperlink(editor)) {
+			IMethod implMethod = _getServiceImplMethod(method);
 
-        if( shouldDetectHyperlinks( textEditor, input, openAction, region ) )
-        {
-            final IDocumentProvider documentProvider = textEditor.getDocumentProvider();
-            final IEditorInput editorInput = textEditor.getEditorInput();
-            final IDocument document = documentProvider.getDocument( editorInput );
-            final int offset = region.getOffset();
-            final IRegion wordRegion = JavaWordFinder.findWord( document, offset );
+			if (implMethod != null) {
+				links.add(new ServiceMethodImplementationHyperlink(word, openAction, implMethod, qualify));
+			}
 
-            if( isRegionValid( document, wordRegion ) )
-            {
-                IJavaElement[] elements = new IJavaElement[0];
-                final long modStamp = documentProvider.getModificationStamp( editorInput );
+			IMethodWrapper wrapperMethod = _getServiceWrapperMethod(method);
 
-                if( input.equals( this.lastInput ) && modStamp == this.lastModStamp &&
-                    wordRegion.equals( this.lastWordRegion ) )
-                {
-                    elements = this.lastElements;
-                }
-                else
-                {
-                    try
-                    {
-                        elements = ( (ICodeAssist) input ).codeSelect( wordRegion.getOffset(), wordRegion.getLength() );
-                        elements = selectOpenableElements( elements );
-                        this.lastInput = input;
-                        this.lastModStamp = modStamp;
-                        this.lastWordRegion = wordRegion;
-                        this.lastElements = elements;
-                    }
-                    catch( JavaModelException e )
-                    {
-                    }
-                }
+			if (wrapperMethod != null) {
+				if (wrapperMethod._base) {
+					links.add(
+						new ServiceMethodWrapperLookupHyperlink(
+							editor, word, openAction, wrapperMethod._method, qualify));
+				}
+				else {
+					links.add(new ServiceMethodWrapperHyperlink(word, openAction, wrapperMethod._method, qualify));
+				}
+			}
+		}
+	}
 
-                if( elements.length != 0 )
-                {
-                    final List<IHyperlink> links = new ArrayList<IHyperlink>( elements.length );
+	private IType _findType(IJavaElement parent, String fullyQualifiedName) throws JavaModelException {
+		IType retval = parent.getJavaProject().findType(fullyQualifiedName);
 
-                    for( IJavaElement element : elements )
-                    {
-                        if( element instanceof IMethod )
-                        {
-                            addHyperlinks(
-                                links, wordRegion, (SelectionDispatchAction) openAction, (IMethod) element,
-                                elements.length > 1, (JavaEditor) textEditor );
-                        }
-                    }
+		if (retval == null) {
+			IJavaProject[] serviceProjects = ServiceUtil.getAllServiceProjects();
 
-                    if( links.size() != 0 )
-                    {
-                        if( canShowMultipleHyperlinks )
-                        {
-                            retval = links.toArray( new IHyperlink[0] );
-                        }
-                        else
-                        {
-                            retval = new IHyperlink[] { links.get( 0 ) };
-                        }
-                    }
-                }
-            }
-        }
+			for (IJavaProject sp : serviceProjects) {
+				try {
+					retval = sp.findType(fullyQualifiedName);
+				}
+				catch (Exception e) {
+				}
 
-        return retval;
-    }
+				if (retval != null) {
+					break;
+				}
+			}
+		}
 
-    @Override
-    public void dispose()
-    {
-        super.dispose();
-        this.lastElements = null;
-        this.lastInput = null;
-        this.lastWordRegion = null;
-    }
+		return retval;
+	}
 
-    private IType findType( IJavaElement parent, String fullyQualifiedName ) throws JavaModelException
-    {
-        IType retval = parent.getJavaProject().findType( fullyQualifiedName );
+	private IMethod _getServiceImplMethod(IMethod method) {
+		IMethod retval = null;
 
-        if( retval == null )
-        {
-            final IJavaProject[] serviceProjects = ServiceUtil.getAllServiceProjects();
+		try {
+			IJavaElement methodClass = method.getParent();
+			IType methodClassType = method.getDeclaringType();
+			String methodClassName = methodClass.getElementName();
 
-            for( final IJavaProject sp : serviceProjects )
-            {
-                try
-                {
-                    retval = sp.findType( fullyQualifiedName );
-                }
-                catch( Exception e )
-                {
-                }
+			if (methodClassName.endsWith("Util") && JdtFlags.isPublic(method) && JdtFlags.isStatic(method)) {
+				String packageName = methodClassType.getPackageFragment().getElementName();
+				String baseServiceName = methodClassName.substring(0, methodClassName.length() - 4);
 
-                if( retval != null )
-                {
-                    break;
-                }
-            }
-        }
+				/*
+				 * as per liferay standard real implementation will be in impl package and Impl suffix
+				 * e.g. com.example.service.FooUtil.getBar() --> com.example.service.impl.FooImpl.getBar()
+				 */
+				String fullyQualifiedName = packageName + ".impl." + baseServiceName + "Impl";
 
-        return retval;
-    }
+				IType implType = _findType(methodClass, fullyQualifiedName);
 
-    private IMethod getServiceImplMethod( final IMethod method )
-    {
-        IMethod retval = null;
+				if (implType != null) {
+					IMethod[] methods = implType.findMethods(method);
 
-        try
-        {
-            final IJavaElement methodClass = method.getParent();
-            final IType methodClassType = method.getDeclaringType();
-            final String methodClassName = methodClass.getElementName();
+					if (CoreUtil.isNullOrEmpty(methods)) {
+						ITypeHierarchy hierarchy = implType.newSupertypeHierarchy(new NullProgressMonitor());
+						IType currentType = implType;
 
-            if( methodClassName.endsWith( "Util" ) && JdtFlags.isPublic( method ) && JdtFlags.isStatic( method ) )
-            {
-                final String packageName = methodClassType.getPackageFragment().getElementName();
-                final String baseServiceName = methodClassName.substring( 0, methodClassName.length() - 4 );
-                // as per liferay standard real implementation will be in impl package and Impl suffix
-                // e.g. com.example.service.FooUtil.getBar() --> com.example.service.impl.FooImpl.getBar()
-                final String fullyQualifiedName = packageName + ".impl." + baseServiceName + "Impl";
-                final IType implType = findType( methodClass, fullyQualifiedName );
+						while ((retval == null) && (currentType != null)) {
+							methods = currentType.findMethods(method);
 
-                if( implType != null )
-                {
-                    IMethod[] methods = implType.findMethods( method );
+							if (!CoreUtil.isNullOrEmpty(methods)) {
+								retval = methods[0];
+							}
+							else {
+								currentType = hierarchy.getSuperclass(currentType);
+							}
+						}
+					}
+					else {
+						retval = methods[0];
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+		}
 
-                    if( CoreUtil.isNullOrEmpty( methods ) )
-                    {
-                        final ITypeHierarchy hierarchy = implType.newSupertypeHierarchy( new NullProgressMonitor() );
-                        IType currentType = implType;
+		return retval;
+	}
 
-                        while( retval == null && currentType != null )
-                        {
-                            methods = currentType.findMethods( method );// match name and arguments
+	private IMethodWrapper _getServiceWrapperMethod(IMethod method) {
+		IMethodWrapper retval = null;
 
-                            if( ! CoreUtil.isNullOrEmpty( methods ) )
-                            {
-                                retval = methods[0];
-                            }
-                            else
-                            {
-                                currentType = hierarchy.getSuperclass( currentType );
-                            }
-                        }
-                    }
-                    else
-                    {
-                        retval = methods[0];
-                    }
-                }
-            }
-        }
-        catch( Exception e )
-        {
-        }
+		try {
+			IJavaElement methodClass = method.getParent();
+			IType methodClassType = method.getDeclaringType();
+			String methodClassName = methodClass.getElementName();
 
-        return retval;
-    }
+			if (methodClassName.endsWith("Util") && JdtFlags.isPublic(method) && JdtFlags.isStatic(method)) {
+				String packageName = methodClassType.getPackageFragment().getElementName();
+				String baseServiceName = methodClassName.substring(0, methodClassName.length() - 4);
 
-    private IMethodWrapper getServiceWrapperMethod( final IMethod method )
-    {
-        IMethodWrapper retval = null;
+				/*
+				 * as per liferay standard wrapper type will be in service package with Wrapper suffix
+				 * e.g com.example.service.FooUtil.getBar() --> com.example.service.FooWrapper.getBar()
+				 */
+				String fullyQualifiedName = packageName + "." + baseServiceName + "Wrapper";
 
-        try
-        {
-            final IJavaElement methodClass = method.getParent();
-            final IType methodClassType = method.getDeclaringType();
-            final String methodClassName = methodClass.getElementName();
+				IType wrapperType = _findType(methodClass, fullyQualifiedName);
 
-            if( methodClassName.endsWith( "Util" ) && JdtFlags.isPublic( method ) && JdtFlags.isStatic( method ) )
-            {
-                final String packageName = methodClassType.getPackageFragment().getElementName();
-                final String baseServiceName = methodClassName.substring( 0, methodClassName.length() - 4 );
-                // as per liferay standard wrapper type will be in service package with Wrapper suffix
-                // e.g. com.example.service.FooUtil.getBar() --> com.example.service.FooWrapper.getBar()
-                final String fullyQualifiedName = packageName + "." + baseServiceName + "Wrapper";
-                final IType wrapperType = findType( methodClass, fullyQualifiedName );
+				if (wrapperType != null) {
+					IMethod[] wrapperBaseMethods = wrapperType.findMethods(method);
 
-                if( wrapperType != null )
-                {
-                    IMethod[] wrapperBaseMethods = wrapperType.findMethods( method );
+					if (!CoreUtil.isNullOrEmpty(wrapperBaseMethods)) {
 
-                    if( ! CoreUtil.isNullOrEmpty( wrapperBaseMethods ) )
-                    {
-                     // look for classes that implement this wrapper
-                        final List<IMethod> overrides = new ArrayList<IMethod>();
-                        final SearchRequestor requestor = new WrapperMethodCollector( overrides, method );
+						// look for classes that implement this wrapper
 
-                        final IJavaSearchScope scope =
-                            SearchEngine.createStrictHierarchyScope( null, wrapperType, true, false, null );
+						List<IMethod> overrides = new ArrayList<>();
 
-                        final SearchPattern search =
-                            SearchPattern.createPattern(
-                                method.getElementName(), IJavaSearchConstants.METHOD, IJavaSearchConstants.DECLARATIONS,
-                                SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE );
+						SearchRequestor requestor = new WrapperMethodCollector(overrides, method);
 
-                        new SearchEngine().search(
-                            search, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, scope,
-                            requestor, new NullProgressMonitor() );
+						IJavaSearchScope scope = SearchEngine.createStrictHierarchyScope(
+							null, wrapperType, true, false, null);
 
-                        if( overrides.size() > 1 )
-                        {
-                            retval = new IMethodWrapper( wrapperBaseMethods[0], true );
-                        }
-                        else if( overrides.size() == 1 )
-                        {
-                            retval = new IMethodWrapper( overrides.get( 0 ), false );
-                        }
-                    }
-                }
-            }
-        }
-        catch( Exception e )
-        {
-        }
+						SearchPattern search = SearchPattern.createPattern(
+							method.getElementName(), IJavaSearchConstants.METHOD, IJavaSearchConstants.DECLARATIONS,
+							SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
 
-        return retval;
-    }
+						new SearchEngine().search(
+							search, new SearchParticipant[] {SearchEngine.getDefaultSearchParticipant()}, scope,
+							requestor, new NullProgressMonitor());
 
-    private boolean isInheritDoc( IDocument document, IRegion wordRegion )
-    {
-        try
-        {
-            String word = document.get( wordRegion.getOffset(), wordRegion.getLength() );
-            return "inheritDoc".equals( word );
-        }
-        catch( BadLocationException e )
-        {
-            return false;
-        }
-    }
+						if (overrides.size() > 1) {
+							retval = new IMethodWrapper(wrapperBaseMethods[0], true);
+						}
+						else if (overrides.size() == 1) {
+							retval = new IMethodWrapper(overrides.get(0), false);
+						}
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+		}
 
-    private boolean isRegionValid( IDocument document, IRegion wordRegion )
-    {
-        if( wordRegion != null && wordRegion.getLength() != 0 && ( !isInheritDoc( document, wordRegion ) ) )
-        {
-            return true;
-        }
+		return retval;
+	}
 
-        return false;
-    }
+	private boolean _isInheritDoc(IDocument document, IRegion wordRegion) {
+		try {
+			String word = document.get(wordRegion.getOffset(), wordRegion.getLength());
 
-    private IJavaElement[] selectOpenableElements( IJavaElement[] elements )
-    {
-        final List<IJavaElement> result = new ArrayList<IJavaElement>( elements.length );
+			return "inheritDoc".equals(word);
+		}
+		catch (BadLocationException ble) {
+			return false;
+		}
+	}
 
-        for( int i = 0; i < elements.length; i++ )
-        {
-            final IJavaElement element = elements[i];
-            switch( element.getElementType() )
-            {
-            case IJavaElement.PACKAGE_DECLARATION:
-            case IJavaElement.PACKAGE_FRAGMENT:
-            case IJavaElement.PACKAGE_FRAGMENT_ROOT:
-            case IJavaElement.JAVA_PROJECT:
-            case IJavaElement.JAVA_MODEL:
-                break;
-            default:
-                result.add( element );
-                break;
-            }
-        }
+	private boolean _isRegionValid(IDocument document, IRegion wordRegion) {
+		if ((wordRegion != null) && (wordRegion.getLength() != 0) && !_isInheritDoc(document, wordRegion)) {
+			return true;
+		}
 
-        return result.toArray( new IJavaElement[result.size()] );
-    }
+		return false;
+	}
 
-    private boolean shouldAddServiceHyperlink( final JavaEditor editor  )
-    {
-        return SelectionConverter.canOperateOn( editor );
-    }
+	private IJavaElement[] _selectOpenableElements(IJavaElement[] elements) {
+		List<IJavaElement> result = new ArrayList<>(elements.length);
 
-    private boolean shouldDetectHyperlinks(
-        final ITextEditor textEditor, final ITypeRoot input, final IAction openAction, final IRegion region )
-    {
-        return region != null && textEditor instanceof JavaEditor && openAction instanceof SelectionDispatchAction &&
-            input != null;
-    }
+		for (int i = 0; i < elements.length; i++) {
+			IJavaElement element = elements[i];
+
+			switch (element.getElementType()) {
+				case IJavaElement.PACKAGE_DECLARATION:
+				case IJavaElement.PACKAGE_FRAGMENT:
+				case IJavaElement.PACKAGE_FRAGMENT_ROOT:
+				case IJavaElement.JAVA_PROJECT:
+				case IJavaElement.JAVA_MODEL:
+					break;
+				default:
+					result.add(element);
+					break;
+			}
+		}
+
+		return result.toArray(new IJavaElement[result.size()]);
+	}
+
+	private boolean _shouldAddServiceHyperlink(JavaEditor editor) {
+		return SelectionConverter.canOperateOn(editor);
+	}
+
+	private boolean _shouldDetectHyperlinks(
+		ITextEditor textEditor, ITypeRoot input, IAction openAction, IRegion region) {
+
+		if ((region != null) && (textEditor instanceof JavaEditor) && (openAction instanceof SelectionDispatchAction) &&
+			(input != null)) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	private IJavaElement[] _lastElements;
+	private ITypeRoot _lastInput;
+	private long _lastModStamp;
+	private IRegion _lastWordRegion;
+
+	private static class IMethodWrapper {
+
+		public IMethodWrapper(IMethod method, boolean base) {
+			_method = method;
+			_base = base;
+		}
+
+		private boolean _base;
+		private IMethod _method;
+
+	}
+
+	private static class WrapperMethodCollector extends SearchRequestor {
+
+		public WrapperMethodCollector(List<IMethod> results, IMethod method) {
+			_results = results;
+			_method = method;
+		}
+
+		@Override
+		public void acceptSearchMatch(SearchMatch match) throws CoreException {
+			Object element = match.getElement();
+
+			if (element instanceof IMethod && _matches((IMethod)element)) {
+				_results.add((IMethod)element);
+			}
+		}
+
+		private boolean _matches(IMethod element) throws JavaModelException {
+			boolean matches = false;
+
+			if (this._method.getNumberOfParameters() == element.getNumberOfParameters()) {
+				matches = true;
+
+				for (int i = 0; i < this._method.getTypeParameters().length; i++) {
+					if (!this._method.getParameterTypes()[i].equals(element.getParameterTypes()[i])) {
+						matches = false;
+						break;
+					}
+				}
+			}
+
+			return matches;
+		}
+
+		private IMethod _method;
+		private List<IMethod> _results;
+
+	}
 
 }

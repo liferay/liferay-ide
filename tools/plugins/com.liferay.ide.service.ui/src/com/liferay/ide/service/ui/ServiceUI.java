@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,75 +10,55 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.ui;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plug-in life cycle
- *
  * @author Gregory Amerson
  */
-public class ServiceUI extends AbstractUIPlugin
-{
+public class ServiceUI extends AbstractUIPlugin {
 
-    // The shared instance
-    private static ServiceUI plugin;
+	// The shared instance
 
-    // The plug-in ID
-    public static final String PLUGIN_ID = "com.liferay.ide.service.ui"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.liferay.ide.service.ui";
 
-    /**
-     * Returns the shared instance
-     *
-     * @return the shared instance
-     */
-    public static ServiceUI getDefault()
-    {
-        return plugin;
-    }
+	public static ServiceUI getDefault() {
+		return _plugin;
+	}
 
-    public static void logError( Exception e )
-    {
-        logError( e.getMessage(), e );
-    }
+	// The plug-in ID
 
-    public static void logError( String msg, Exception e )
-    {
-        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, msg, e ) );
-    }
+	public static void logError(Exception e) {
+		logError(e.getMessage(), e);
+	}
 
-    /**
-     * The constructor
-     */
-    public ServiceUI()
-    {
-    }
+	public static void logError(String msg, Exception e) {
+		ILog log = getDefault().getLog();
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-     */
-    public void start( BundleContext context ) throws Exception
-    {
-        super.start( context );
-        plugin = this;
-    }
+		log.log(new Status(IStatus.ERROR, PLUGIN_ID, msg, e));
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-     */
-    public void stop( BundleContext context ) throws Exception
-    {
-        plugin = null;
-        super.stop( context );
-    }
+	public ServiceUI() {
+	}
+
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		_plugin = this;
+	}
+
+	public void stop(BundleContext context) throws Exception {
+		_plugin = null;
+		super.stop(context);
+	}
+
+	private static ServiceUI _plugin;
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.ui.actions;
 
@@ -21,6 +20,7 @@ import com.liferay.ide.service.ui.ServiceUIUtil;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
@@ -29,38 +29,36 @@ import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class BuildServicesActionHandler extends SapphireActionHandler
-{
+public class BuildServicesActionHandler extends SapphireActionHandler {
 
-    @Override
-    protected Object run( Presentation context )
-    {
-        IFile file = context.part().getModelElement().adapt( IFile.class );
+	@Override
+	protected Object run(Presentation context) {
+		Element modelElement = context.part().getModelElement();
 
-        if( file != null && file.exists() )
-        {
-            if( ServiceUIUtil.shouldCreateServiceBuilderJob( file ) )
-            {
-                new BuildServiceJob( file.getProject() ).schedule();
-            }
-        }
-        else
-        {
-            MessageDialog.openWarning(
-                ( (SwtPresentation) context ).shell(), Msgs.buildServices, Msgs.ActionUnavailableImportProject );
-        }
+		IFile file = modelElement.adapt(IFile.class);
 
-        return null;
-    }
+		if ((file != null) && file.exists()) {
+			if (ServiceUIUtil.shouldCreateServiceBuilderJob(file)) {
+				new BuildServiceJob(file.getProject()).schedule();
+			}
+		}
+		else {
+			MessageDialog.openWarning(
+				((SwtPresentation)context).shell(), Msgs.buildServices, Msgs.actionUnavailableImportProject);
+		}
 
-    private static class Msgs extends NLS
-    {
-        public static String ActionUnavailableImportProject;
-        public static String buildServices;
+		return null;
+	}
 
-        static
-        {
-            initializeMessages( BuildServicesActionHandler.class.getName(), Msgs.class );
-        }
-    }
+	private static class Msgs extends NLS {
+
+		public static String actionUnavailableImportProject;
+		public static String buildServices;
+
+		static {
+			initializeMessages(BuildServicesActionHandler.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

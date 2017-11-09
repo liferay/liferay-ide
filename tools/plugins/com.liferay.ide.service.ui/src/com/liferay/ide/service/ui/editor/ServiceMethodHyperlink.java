@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.ui.editor;
 
@@ -27,65 +26,58 @@ import org.eclipse.swt.widgets.Display;
 /**
  * @author Gregory Amerson
  */
-public class ServiceMethodHyperlink implements IHyperlink
-{
-    private final IMethod serviceMethod;
-    private final SelectionDispatchAction openAction;
-    private final boolean qualify;
-    private final IRegion word;
+public class ServiceMethodHyperlink implements IHyperlink {
 
-    public ServiceMethodHyperlink(
-        final IRegion word, final SelectionDispatchAction openAction, final IMethod serviceMethod, final boolean qualify )
-    {
-        this.word = word;
-        this.openAction = openAction;
-        this.serviceMethod = serviceMethod;
-        this.qualify = qualify;
-    }
+	public ServiceMethodHyperlink(
+		IRegion word, SelectionDispatchAction openAction, IMethod serviceMethod, boolean qualify) {
 
-    public IRegion getHyperlinkRegion()
-    {
-        return word;
-    }
+		_word = word;
+		_openAction = openAction;
+		_serviceMethod = serviceMethod;
+		_qualify = qualify;
+	}
 
-    public String getHyperlinkText()
-    {
-        final String methodLabel =
-            JavaElementLabels.getElementLabel( serviceMethod, JavaElementLabels.ALL_FULLY_QUALIFIED );
+	public IRegion getHyperlinkRegion() {
+		return _word;
+	}
 
-        return getStaticText() + ( qualify ? ( " " + methodLabel ) : "" );
-    }
+	public String getHyperlinkText() {
+		String methodLabel = JavaElementLabels.getElementLabel(_serviceMethod, JavaElementLabels.ALL_FULLY_QUALIFIED);
 
-    protected String getStaticText()
-    {
-        return "Open Service";
-    }
+		return getStaticText() + (_qualify ? (" " + methodLabel) : "");
+	}
 
-    public String getTypeLabel()
-    {
-        return null;
-    }
+	public String getTypeLabel() {
+		return null;
+	}
 
-    public IMethod method()
-    {
-        return this.serviceMethod;
-    }
+	public IMethod method() {
+		return _serviceMethod;
+	}
 
-    public void open()
-    {
-        Runnable runnable = new Runnable()
-        {
-            public void run()
-            {
-                ServiceMethodHyperlink.this.openAction.run( new StructuredSelection( serviceMethod ) );
-            }
-        };
+	public void open() {
+		Runnable runnable = new Runnable() {
 
-        BusyIndicator.showWhile( Display.getDefault(), runnable );
-    }
+			public void run() {
+				ServiceMethodHyperlink.this._openAction.run(new StructuredSelection(_serviceMethod));
+			}
 
-    public IRegion wordRegion()
-    {
-        return this.word;
-    }
+		};
+
+		BusyIndicator.showWhile(Display.getDefault(), runnable);
+	}
+
+	public IRegion wordRegion() {
+		return _word;
+	}
+
+	protected String getStaticText() {
+		return "Open Service";
+	}
+
+	private SelectionDispatchAction _openAction;
+	private boolean _qualify;
+	private IMethod _serviceMethod;
+	private IRegion _word;
+
 }
