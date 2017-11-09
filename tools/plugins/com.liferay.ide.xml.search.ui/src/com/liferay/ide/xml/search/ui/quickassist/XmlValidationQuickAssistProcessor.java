@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui.quickassist;
 
@@ -22,56 +22,44 @@ import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.wst.sse.ui.internal.StructuredMarkerAnnotation;
 import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
 
-
 /**
  * @author Kuo Zhang
  */
-@SuppressWarnings( "restriction" )
-public class XmlValidationQuickAssistProcessor extends AbstractQuickAssistProcessorFromMarkerResolution
-{
+@SuppressWarnings("restriction")
+public class XmlValidationQuickAssistProcessor extends AbstractQuickAssistProcessorFromMarkerResolution {
 
-    public XmlValidationQuickAssistProcessor()
-    {
-        super();
-    }
+	public XmlValidationQuickAssistProcessor() {
+	}
 
-    @Override
-    public String getErrorMessage()
-    {
-        return null;
-    }
+	@Override
+	public boolean canAssist(IQuickAssistInvocationContext invocationContext) {
+		return true;
+	}
 
-    @Override
-    public boolean canFix( Annotation annotation )
-    {
-        return true;
-    }
+	@Override
+	public boolean canFix(Annotation annotation) {
+		return true;
+	}
 
-    @Override
-    public boolean canAssist( IQuickAssistInvocationContext invocationContext )
-    {
-        return true;
-    }
+	@Override
+	public String getErrorMessage() {
+		return null;
+	}
 
+	@Override
+	protected IMarker getMarkerFromAnnotation(Annotation annotation) {
+		if (annotation instanceof StructuredMarkerAnnotation) {
+			return ((StructuredMarkerAnnotation)annotation).getMarker();
+		}
+		else if (annotation instanceof TemporaryAnnotation) {
+			TemporaryAnnotation temp = (TemporaryAnnotation)annotation;
 
-    @Override
-    protected IMarker getMarkerFromAnnotation( Annotation annotation )
-    {
-        if( annotation instanceof StructuredMarkerAnnotation )
-        {
-            return ( (StructuredMarkerAnnotation) annotation ).getMarker();
-        }
-        else if( annotation instanceof TemporaryAnnotation )
-        {
-            TemporaryAnnotation temp = (TemporaryAnnotation) annotation;
+			if (temp.getAttributes() != null) {
+				return new TempMarker((TemporaryAnnotation)annotation);
+			}
+		}
 
-            if( temp.getAttributes() != null )
-            {
-                return new TempMarker( (TemporaryAnnotation) annotation );
-            }
-        }
-
-        return null;
-    }
+		return null;
+	}
 
 }

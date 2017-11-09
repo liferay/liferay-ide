@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui.descriptors;
 
@@ -22,23 +21,19 @@ import java.util.Collections;
 
 import org.eclipse.wst.xml.search.core.queryspecifications.requestor.IXMLSearchRequestor;
 
-
-
 /**
  * @author Kuo Zhang
  */
-public class LiferayHookSearchRequestor extends LiferayContentTypeXMLSearchRequestor
-{
+public class LiferayHookSearchRequestor extends LiferayContentTypeXMLSearchRequestor {
 
-    public static IXMLSearchRequestor INSTANCE = new LiferayHookSearchRequestor();
+	public static IXMLSearchRequestor instance = new LiferayHookSearchRequestor();
 
-    private static final Collection<String> contentTypeIds =
-        Collections.singleton( XMLSearchConstants.LIFERAY_HOOK_XML_CONTENT_TYPE );
+	@Override
+	protected Collection<String> getSupportedContentTypeIds() {
+		return _contentTypeIds;
+	}
 
-    @Override
-    protected Collection<String> getSupportedContentTypeIds()
-    {
-        return contentTypeIds;
-    }
+	private static final Collection<String> _contentTypeIds = Collections.singleton(
+		XMLSearchConstants.LIFERAY_HOOK_XML_CONTENT_TYPE);
 
 }

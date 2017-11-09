@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui.editor;
 
@@ -36,112 +36,102 @@ import org.eclipse.wst.xml.search.editor.hover.XMLReferencesInfoHoverProcessor;
 /**
  * @author Kuo Zhang
  */
-@SuppressWarnings( {"unchecked", "restriction"} )
-public class LiferayCustomXmlHover extends XMLReferencesInfoHoverProcessor implements ITextHoverExtension2
-{
+@SuppressWarnings({"unchecked", "restriction"})
+public class LiferayCustomXmlHover extends XMLReferencesInfoHoverProcessor implements ITextHoverExtension2 {
 
-    public LiferayCustomXmlHover()
-    {
-    }
+	public LiferayCustomXmlHover() {
+	}
 
-    public LiferayCustomXmlHover( ISourceViewer sourceViewer, String contentType, int stateMask )
-    {
-    }
+	public LiferayCustomXmlHover(ISourceViewer sourceViewer, String contentType, int stateMask) {
+	}
 
-    @Override
-    public IInformationControlCreator getHoverControlCreator()
-    {
-        return new IInformationControlCreator()
-        {
-            public IInformationControl createInformationControl( Shell parent )
-            {
-                return new LiferayCustomXmlHoverControl( parent );
-            }
-        };
-    }
+	@Override
+	public IInformationControlCreator getHoverControlCreator() {
+		return new IInformationControlCreator() {
 
-    @Override
-    public Object getHoverInfo2( ITextViewer textViewer, IRegion hoverRegion )
-    {
-        return hoverRegion;
-    }
+			public IInformationControl createInformationControl(Shell parent) {
+				return new LiferayCustomXmlHoverControl(parent);
+			}
 
-    @Override
-    public IRegion getHoverRegion( final ITextViewer textViewer, final int offset )
-    {
-        IDocument document = textViewer.getDocument();
+		};
+	}
 
-        if( document == null )
-        {
-            return null;
-        }
+	@Override
+	public Object getHoverInfo2(ITextViewer textViewer, IRegion hoverRegion) {
+		return hoverRegion;
+	}
 
-        CompoundRegion compoundRegion = new CompoundRegion( textViewer, offset );
+	@Override
+	public IRegion getHoverRegion(ITextViewer textViewer, int offset) {
+		IDocument document = textViewer.getDocument();
 
-        // if there are MarkerRegion or TemporaryRegion, then don't add InfoRegion
-        boolean addInfoRegion = true;
+		if (document == null) {
+			return null;
+		}
 
-        if( textViewer instanceof ISourceViewer )
-        {
-            ISourceViewer sourceViewer = (ISourceViewer) textViewer;
-            IAnnotationModel model = sourceViewer.getAnnotationModel();
-            if( model != null )
-            {
-                Iterator<Annotation> it = model.getAnnotationIterator();
+		CompoundRegion compoundRegion = new CompoundRegion(textViewer, offset);
 
-                while( it.hasNext() )
-                {
-                    Annotation annotation = it.next();
+		// if there are MarkerRegion or TemporaryRegion, then don't add
+		// InfoRegion
 
-                    if( annotation instanceof MarkerAnnotation )
-                    {
-                        Position pos = sourceViewer.getAnnotationModel().getPosition( annotation );
+		boolean addInfoRegion = true;
 
-                        if( pos.includes( offset ) )
-                        {
-                            compoundRegion.addRegion( new MarkerRegion(
-                                pos.getOffset(), pos.getLength(), (MarkerAnnotation) annotation ) );
-                            addInfoRegion = false;
-                        }
-                    }
-                    else if( annotation instanceof TemporaryAnnotation )
-                    {
-                        TemporaryAnnotation temp = (TemporaryAnnotation) annotation;
+		if (textViewer instanceof ISourceViewer) {
+			ISourceViewer sourceViewer = (ISourceViewer)textViewer;
 
-                        if( temp.getAttributes() != null &&
-                            temp.getAttributes().get( LiferayBaseValidator.MARKER_QUERY_ID ) != null )
-                        {
-                            Position pos = sourceViewer.getAnnotationModel().getPosition( annotation );
+			IAnnotationModel model = sourceViewer.getAnnotationModel();
 
-                            if( pos.includes( offset ) )
-                            {
-                                compoundRegion.addRegion( new TemporaryRegion(
-                                    pos.getOffset(), pos.getLength(), (TemporaryAnnotation) annotation ) );
-                                addInfoRegion = false;
-                            }
-                        }
-                    }
-                }
-            }
+			if (model != null) {
+				Iterator<Annotation> it = model.getAnnotationIterator();
 
-            if( addInfoRegion )
-            {
-                final IRegion normalRegion = super.getHoverRegion( textViewer, offset );
+				while (it.hasNext()) {
+					Annotation annotation = it.next();
 
-                if( normalRegion != null )
-                {
-                    String content = getHoverInfo( textViewer, normalRegion );
+					if (annotation instanceof MarkerAnnotation) {
+						Position pos = sourceViewer.getAnnotationModel().getPosition(annotation);
 
-                    if( content != null )
-                    {
-                        compoundRegion.addRegion( new InfoRegion(
-                            normalRegion.getOffset(), normalRegion.getLength(), getHoverInfo( textViewer, normalRegion ) ) );
-                    }
-                }
+						if (pos.includes(offset)) {
+							compoundRegion.addRegion(
+								new MarkerRegion(pos.getOffset(), pos.getLength(), (MarkerAnnotation)annotation));
+							addInfoRegion = false;
+						}
+					}
+					else if (annotation instanceof TemporaryAnnotation) {
+						TemporaryAnnotation temp = (TemporaryAnnotation)annotation;
 
-            }
-        }
+						if ((temp.getAttributes() != null) &&
+							(temp.getAttributes().get(LiferayBaseValidator.MARKER_QUERY_ID) != null)) {
 
-        return compoundRegion.getRegions().size() > 0 ? compoundRegion : null;
-    }
+							Position pos = sourceViewer.getAnnotationModel().getPosition(annotation);
+
+							if (pos.includes(offset)) {
+								compoundRegion.addRegion(
+									new TemporaryRegion(
+										pos.getOffset(), pos.getLength(), (TemporaryAnnotation)annotation));
+								addInfoRegion = false;
+							}
+						}
+					}
+				}
+			}
+
+			if (addInfoRegion) {
+				IRegion normalRegion = super.getHoverRegion(textViewer, offset);
+
+				if (normalRegion != null) {
+					String content = getHoverInfo(textViewer, normalRegion);
+
+					if (content != null) {
+						compoundRegion.addRegion(
+							new InfoRegion(
+								normalRegion.getOffset(), normalRegion.getLength(),
+								getHoverInfo(textViewer, normalRegion)));
+					}
+				}
+			}
+		}
+
+		return compoundRegion.getRegions().size() > 0 ? compoundRegion : null;
+	}
+
 }

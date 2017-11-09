@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.xml.search.ui.java;
 
 import org.eclipse.core.resources.IFile;
@@ -20,110 +20,98 @@ import org.eclipse.wst.xml.search.editor.contentassist.IContentAssistProposalRec
 import org.eclipse.wst.xml.search.editor.references.IXMLReferenceTo;
 import org.eclipse.wst.xml.search.editor.searchers.java.XMLSearcherForJava;
 
-
 /**
  * @author Gregory Amerson
  */
-public class PortletActionCommandSearcher extends XMLSearcherForJava
-{
+public class PortletActionCommandSearcher extends XMLSearcherForJava {
 
-    private String filterDisplayText( String displayText )
-    {
-        final String[] parts = displayText.split( " - " );
+	@Override
+	public void searchForCompletion(
+		Object selectedNode, String mathingString, String forceBeforeText, String forceEndText, IFile file,
+		IXMLReferenceTo referenceTo, IContentAssistProposalRecorder recorder) {
 
-        if( parts.length == 2 )
-        {
-            parts[1] = parts[1] + "." + parts[0];
-            parts[0] = parts[0].substring( 0, parts[0].indexOf( "ActionCommand" ) );
+		IContentAssistProposalRecorder filteringRecorder = new IContentAssistProposalRecorder() {
 
-            displayText = parts[0] + " - " + parts[1];
-        }
+			@Override
+			public void recordProposal(Image image, int relevance, String displayText, String replaceText) {
+				if (_shouldAddProposal(displayText)) {
+					recorder.recordProposal(
+						image, relevance, _filterDisplayText(displayText), filterReplaceText(replaceText));
+				}
+			}
 
-        return displayText;
-    }
+			@Override
+			public void recordProposal(
+				Image image, int relevance, String displayText, String replaceText, int cursorPosition,
+				Object proposedObject) {
 
-    protected String filterReplaceText( final String replaceText )
-    {
-        String retval = replaceText;
+				if (_shouldAddProposal(displayText)) {
+					recorder.recordProposal(
+						image, relevance, _filterDisplayText(displayText), filterReplaceText(replaceText),
+						cursorPosition, proposedObject);
+				}
+			}
 
-        int lastDot = replaceText.lastIndexOf( '.' );
+			@Override
+			public void recordProposal(
+				Image image, int relevance, String displayText, String replaceText, Object proposedObject) {
 
-        if( lastDot == -1 )
-        {
-            lastDot = 0;
-        }
+				if (_shouldAddProposal(displayText)) {
+					recorder.recordProposal(
+						image, relevance, _filterDisplayText(displayText), filterReplaceText(replaceText),
+						proposedObject);
+				}
+			}
 
-        final String className = replaceText.substring( lastDot );
+		};
 
-        if( className.lastIndexOf( "ActionCommand" ) > -1 )
-        {
-            final String prefixOnly = className.substring( 0, className.lastIndexOf( "ActionCommand" ) );
+		super.searchForCompletion(
+			selectedNode, mathingString, forceBeforeText, forceEndText, file, referenceTo, filteringRecorder);
+	}
 
-            if( prefixOnly.charAt( 0 ) == '.' && prefixOnly.length() > 1 )
-            {
-                retval = prefixOnly.substring( 1 );
-            }
-        }
+	protected String filterReplaceText(String replaceText) {
+		String retval = replaceText;
 
-        return retval;
-    }
+		int lastDot = replaceText.lastIndexOf('.');
 
-    @Override
-    public void searchForCompletion(
-        Object selectedNode, String mathingString, String forceBeforeText, String forceEndText, IFile file,
-        IXMLReferenceTo referenceTo, final IContentAssistProposalRecorder recorder )
-    {
-        final IContentAssistProposalRecorder filteringRecorder = new IContentAssistProposalRecorder()
-        {
-            @Override
-            public void recordProposal( Image image, int relevance, String displayText, String replaceText )
-            {
-                if( shouldAddProposal( displayText, replaceText ) )
-                {
-                    recorder.recordProposal(
-                        image, relevance, filterDisplayText( displayText ), filterReplaceText( replaceText ) );
-                }
-            }
+		if (lastDot == -1) {
+			lastDot = 0;
+		}
 
-            @Override
-            public void recordProposal(
-                Image image, int relevance, String displayText, String replaceText, int cursorPosition,
-                Object proposedObject )
-            {
-                if( shouldAddProposal( displayText, replaceText ) )
-                {
-                    recorder.recordProposal(
-                        image, relevance, filterDisplayText( displayText ), filterReplaceText( replaceText ),
-                        cursorPosition, proposedObject );
-                }
-            }
+		String className = replaceText.substring(lastDot);
 
-            @Override
-            public void recordProposal(
-                Image image, int relevance, String displayText, String replaceText, Object proposedObject )
-            {
-                if( shouldAddProposal( displayText, replaceText ) )
-                {
-                    recorder.recordProposal(
-                        image, relevance, filterDisplayText( displayText ), filterReplaceText( replaceText ),
-                        proposedObject );
-                }
-            }
-        };
+		if (className.lastIndexOf("ActionCommand") > -1) {
+			String prefixOnly = className.substring(0, className.lastIndexOf("ActionCommand"));
 
-        super.searchForCompletion(
-            selectedNode, mathingString, forceBeforeText, forceEndText, file, referenceTo, filteringRecorder );
-    }
+			if ((prefixOnly.charAt(0) == '.') && (prefixOnly.length() > 1)) {
+				retval = prefixOnly.substring(1);
+			}
+		}
 
-    private boolean shouldAddProposal( String displayText, String replaceText )
-    {
-        final String[] parts = displayText.split( " - " );
+		return retval;
+	}
 
-        if( parts.length == 2 && parts[0].endsWith( "ActionCommand" ) )
-        {
-            return true;
-        }
+	private String _filterDisplayText(String displayText) {
+		String[] parts = displayText.split(" - ");
 
-        return false;
-    }
+		if (parts.length == 2) {
+			parts[1] = parts[1] + "." + parts[0];
+			parts[0] = parts[0].substring(0, parts[0].indexOf("ActionCommand"));
+
+			displayText = parts[0] + " - " + parts[1];
+		}
+
+		return displayText;
+	}
+
+	private boolean _shouldAddProposal(String displayText) {
+		String[] parts = displayText.split(" - ");
+
+		if ((parts.length == 2) && parts[0].endsWith("ActionCommand")) {
+			return true;
+		}
+
+		return false;
+	}
+
 }

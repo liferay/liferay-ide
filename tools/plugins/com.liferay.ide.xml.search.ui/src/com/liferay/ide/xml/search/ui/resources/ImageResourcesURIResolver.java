@@ -1,13 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2011 Angelo ZERR.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *     Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.xml.search.ui.resources;
 
@@ -15,35 +18,37 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Extension of WTP/XML Search resources uri resolver for Liferay to manage css, js, icons used in the descriptor of
- * lifreay which starts with "/". Ex : <pre>
- * <header-portlet-css>/html/portlet/directory/css/main.css</header-portlet-css> </pre>
+ * Extension of WTP/XML Search resources uri resolver for Liferay to manage css,
+ * js, icons used in the descriptor of lifreay which starts with "/". Ex :
+ *
+ * <pre>
+ * &lt;header-portlet-css&gt;/html/portlet/directory/css/main.css&lt;/header-portlet-css&gt;
+ * </pre>
+ * @author Gregory Amerson
  */
-public class ImageResourcesURIResolver extends AbstractWebResourceURIResolver
-{
+public class ImageResourcesURIResolver extends AbstractWebResourceURIResolver {
 
-    public static final ImageResourcesURIResolver INSTANCE = new ImageResourcesURIResolver();
+	public static final ImageResourcesURIResolver INSTANCE = new ImageResourcesURIResolver();
 
-    private static final Set<String> EXTENSIONS;
+	public ImageResourcesURIResolver() {
+		super(true);
+	}
 
-    static
-    {
-        EXTENSIONS = new HashSet<String>();
-        EXTENSIONS.add( "png" );
-        EXTENSIONS.add( "jpg" );
-        EXTENSIONS.add( "jpeg" );
-        EXTENSIONS.add( "bmp" );
-        EXTENSIONS.add( "gif" );
-    }
+	@Override
+	protected Set<String> getExtensions() {
+		return _extensions;
+	}
 
-    public ImageResourcesURIResolver()
-    {
-        super( true );
-    }
+	private static final Set<String> _extensions;
 
-    @Override
-    protected Set<String> getExtensions()
-    {
-        return EXTENSIONS;
-    }
+	static {
+		_extensions = new HashSet<>();
+
+		_extensions.add("bmp");
+		_extensions.add("gif");
+		_extensions.add("jpeg");
+		_extensions.add("jpg");
+		_extensions.add("png");
+	}
+
 }

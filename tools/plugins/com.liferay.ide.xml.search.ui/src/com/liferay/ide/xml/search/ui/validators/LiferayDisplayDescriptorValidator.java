@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.xml.search.ui.validators;
 
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
@@ -23,55 +23,54 @@ import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.search.editor.references.IXMLReference;
+
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
-
 
 /**
  * @author Kuo Zhang
  */
-@SuppressWarnings( "restriction" )
-public class LiferayDisplayDescriptorValidator extends LiferayBaseValidator
-{
+@SuppressWarnings("restriction")
+public class LiferayDisplayDescriptorValidator extends LiferayBaseValidator {
 
-    public static final String MESSAGE_CATEGORY_NAME_CANNOT_BE_EMPTY = Msgs.categoryNameCannotBeEmpty;
+	public static final String MESSAGE_CATEGORY_NAME_CANNOT_BE_EMPTY = Msgs.categoryNameCannotBeEmpty;
 
-    @Override
-    protected boolean validateSyntax( IXMLReference reference, IDOMNode node, IFile file,
-                                      IValidator validator, IReporter reporter, boolean batchMode )
-    {
-        int severity = getServerity( ValidationType.SYNTAX_INVALID, file );
+	@Override
+	protected boolean validateSyntax(
+		IXMLReference reference, IDOMNode node, IFile file, IValidator validator, IReporter reporter,
+		boolean batchMode) {
 
-        if( severity != ValidationMessage.IGNORE )
-        {
-            if( node.getNodeType() == Node.ATTRIBUTE_NODE && "name".equals( node.getNodeName() ) &&
-                "category".equals( ( (Attr) node ).getOwnerElement().getNodeName() ) )
-            {
-                if( node.getNodeValue().matches( "\\s*" ) )
-                {
-                    final String liferayPluginValidationType =
-                        getLiferayPluginValidationType( ValidationType.SYNTAX_INVALID, file );
-                    String validationMsg = MESSAGE_CATEGORY_NAME_CANNOT_BE_EMPTY;
+		int severity = getServerity(ValidationType.SYNTAX_INVALID, file);
 
-                    addMessage(
-                        node, file, validator, reporter, batchMode, validationMsg, severity,
-                        liferayPluginValidationType );
+		if (severity != ValidationMessage.IGNORE) {
+			if ((node.getNodeType() == Node.ATTRIBUTE_NODE) &&
+				"name".equals(node.getNodeName()) && "category".equals(((Attr)node).getOwnerElement().getNodeName())) {
 
-                    return false;
-                }
-            }
-        }
+				if (node.getNodeValue().matches("\\s*")) {
+					String liferayPluginValidationType = getLiferayPluginValidationType(
+						ValidationType.SYNTAX_INVALID, file);
+					String validationMsg = MESSAGE_CATEGORY_NAME_CANNOT_BE_EMPTY;
 
-        return true;
-    }
+					addMessage(
+						node, file, validator, reporter, batchMode, validationMsg, severity,
+						liferayPluginValidationType);
 
-    private static class Msgs extends NLS
-    {
-        public static String categoryNameCannotBeEmpty;
+					return false;
+				}
+			}
+		}
 
-        static
-        {
-            initializeMessages( LiferayDisplayDescriptorValidator.class.getName(), Msgs.class );
-        }
-    }
+		return true;
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String categoryNameCannotBeEmpty;
+
+		static {
+			initializeMessages(LiferayDisplayDescriptorValidator.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

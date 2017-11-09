@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui.markerResolutions;
 
@@ -26,43 +26,40 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolutionGenerator;
 
-
 /**
  * @author Kuo Zhang
  */
-public class XmlValidationMarkerResolutionGenerator implements IMarkerResolutionGenerator
-{
+public class XmlValidationMarkerResolutionGenerator implements IMarkerResolutionGenerator {
 
-    @Override
-    public IMarkerResolution[] getResolutions( IMarker marker )
-    {
-        // for future usage, add resolution of creating properties file( portal.properties, Langauge.properties )
-        final List<IMarkerResolution> retval = new ArrayList<IMarkerResolution>();
+	@Override
+	public IMarkerResolution[] getResolutions(IMarker marker) {
 
-        try
-        {
-            String liferayPluginValidationType =
-                marker.getAttribute( XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE ).toString();
+		// for future usage, add resolution of creating properties file(
+		// portal.properties, Langauge.properties )
 
-            if( liferayPluginValidationType == null )
-            {
-                liferayPluginValidationType =
-                    marker.getAttribute( XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE_OLD ).toString();
-            }
+		List<IMarkerResolution> retval = new ArrayList<>();
 
-            if( liferayPluginValidationType != null &&
-                ValidationPreferences.containsKey( liferayPluginValidationType ) )
-            {
-                retval.add( new DecreaseProjectScopeXmlValidationLevel() );
-                retval.add( new DecreaseInstanceScopeXmlValidationLevel() );
-            }
-        }
-        catch( CoreException e )
-        {
-            LiferayXMLSearchUI.logError( "Error getting marker type", e );
-        }
+		try {
+			String liferayPluginValidationType = marker.getAttribute(
+				XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE).toString();
 
-        return retval.toArray( new IMarkerResolution[0] );
-    }
+			if (liferayPluginValidationType == null) {
+				liferayPluginValidationType = marker.getAttribute(
+					XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE_OLD).toString();
+			}
+
+			if ((liferayPluginValidationType != null) &&
+				ValidationPreferences.containsKey(liferayPluginValidationType)) {
+
+				retval.add(new DecreaseProjectScopeXmlValidationLevel());
+				retval.add(new DecreaseInstanceScopeXmlValidationLevel());
+			}
+		}
+		catch (CoreException ce) {
+			LiferayXMLSearchUI.logError("Error getting marker type", ce);
+		}
+
+		return retval.toArray(new IMarkerResolution[0]);
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui.resources;
 
@@ -23,18 +22,15 @@ import org.eclipse.wst.xml.search.core.queryspecifications.container.IResourcePr
 /**
  * @author Terry Jia
  */
-public class PortletLanguagePropertiesQuerySpecification implements IPropertiesRequestorProvider, IResourceProvider
-{
+public class PortletLanguagePropertiesQuerySpecification implements IPropertiesRequestorProvider, IResourceProvider {
 
-    @Override
-    public IPropertiesRequestor getRequestor()
-    {
-        return PortletLanguagePropertiesRequestor.INSTANCE;
-    }
+	@Override
+	public IPropertiesRequestor getRequestor() {
+		return PortletLanguagePropertiesRequestor.instance;
+	}
 
-    public IResource getResource( Object selectedNode, IResource resource )
-    {
-        return resource.getProject();
-    }
+	public IResource getResource(Object selectedNode, IResource resource) {
+		return resource.getProject();
+	}
 
 }

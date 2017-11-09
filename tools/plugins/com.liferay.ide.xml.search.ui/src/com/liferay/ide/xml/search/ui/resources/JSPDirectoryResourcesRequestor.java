@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui.resources;
 
@@ -21,14 +20,13 @@ import org.eclipse.wst.xml.search.core.resource.IResourceRequestor;
 /**
  * @author Kuo Zhang
  */
-public class JSPDirectoryResourcesRequestor extends DefaultResourceRequestor
-{
-    public static final IResourceRequestor INSTANCE = new JSPDirectoryResourcesRequestor();
+public class JSPDirectoryResourcesRequestor extends DefaultResourceRequestor {
 
-    @Override
-    public boolean acceptContainer()
-    {
-        return true;
-    }
+	public static final IResourceRequestor INSTANCE = new JSPDirectoryResourcesRequestor();
+
+	@Override
+	public boolean acceptContainer() {
+		return true;
+	}
 
 }

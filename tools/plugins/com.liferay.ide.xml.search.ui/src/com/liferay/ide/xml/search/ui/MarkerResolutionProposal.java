@@ -1,13 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2008-2010 Sonatype, Inc.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *      Sonatype, Inc. - initial API and implementation
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.xml.search.ui;
 
@@ -20,88 +23,92 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolution2;
 
-public class MarkerResolutionProposal implements ICompletionProposal
-{
+/**
+ * @author Gregory Amerson
+ */
+public class MarkerResolutionProposal implements ICompletionProposal {
 
-    private final IMarker marker;
-    private final IMarkerResolution resolution;
+	public MarkerResolutionProposal(IMarkerResolution resolution, IMarker marker) {
+		_resolution = resolution;
+		_marker = marker;
+	}
 
-    public MarkerResolutionProposal( IMarkerResolution resolution, IMarker marker )
-    {
-        this.resolution = resolution;
-        this.marker = marker;
-    }
+	public void apply(IDocument document) {
+		_resolution.run(_marker);
+	}
 
-    public void apply( IDocument document )
-    {
-        resolution.run( marker );
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
 
-    @Override
-    public boolean equals( Object obj )
-    {
-        if( this == obj )
-            return true;
-        if( obj == null )
-            return false;
-        if( !( obj instanceof MarkerResolutionProposal ) )
-            return false;
-        MarkerResolutionProposal other = (MarkerResolutionProposal) obj;
-        if( resolution == null )
-        {
-            if( other.resolution != null )
-                return false;
-        }
-        else if( !resolution.equals( other.resolution ) )
-            return false;
-        return true;
-    }
+		if (obj == null) {
+			return false;
+		}
 
-    public String getAdditionalProposalInfo()
-    {
-        if( resolution instanceof IMarkerResolution2 )
-        {
-            return ( (IMarkerResolution2) resolution ).getDescription();
-        }
-        String problemDesc = marker.getAttribute( IMarker.MESSAGE, null );
-        if( problemDesc != null )
-        {
-            return problemDesc;
-        }
-        return null;
-    }
+		if (!(obj instanceof MarkerResolutionProposal)) {
+			return false;
+		}
 
-    public IContextInformation getContextInformation()
-    {
-        return null;
-    }
+		MarkerResolutionProposal other = (MarkerResolutionProposal)obj;
 
-    public String getDisplayString()
-    {
-        return resolution.getLabel();
-    }
+		if (_resolution == null) {
+			if (other._resolution != null) {
+				return false;
+			}
+		}
+		else if (!_resolution.equals(other._resolution)) {
+			return false;
+		}
 
-    public Image getImage()
-    {
-        if( resolution instanceof IMarkerResolution2 )
-        {
-            return ( (IMarkerResolution2) resolution ).getImage();
-        }
+		return true;
+	}
 
-        return null;
-    }
+	public String getAdditionalProposalInfo() {
+		if (_resolution instanceof IMarkerResolution2) {
+			return ((IMarkerResolution2)_resolution).getDescription();
+		}
 
-    public Point getSelection( IDocument document )
-    {
-        return null;
-    }
+		String problemDesc = _marker.getAttribute(IMarker.MESSAGE, null);
 
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ( ( resolution == null ) ? 0 : resolution.hashCode() );
-        return result;
-    }
+		if (problemDesc != null) {
+			return problemDesc;
+		}
+
+		return null;
+	}
+
+	public IContextInformation getContextInformation() {
+		return null;
+	}
+
+	public String getDisplayString() {
+		return _resolution.getLabel();
+	}
+
+	public Image getImage() {
+		if (_resolution instanceof IMarkerResolution2) {
+			return ((IMarkerResolution2)_resolution).getImage();
+		}
+
+		return null;
+	}
+
+	public Point getSelection(IDocument document) {
+		return null;
+	}
+
+	@Override
+	public int hashCode() {
+		int prime = 31;
+		int result = 1;
+		result = prime * result + ((_resolution == null) ? 0 : _resolution.hashCode());
+
+		return result;
+	}
+
+	private final IMarker _marker;
+	private final IMarkerResolution _resolution;
+
 }

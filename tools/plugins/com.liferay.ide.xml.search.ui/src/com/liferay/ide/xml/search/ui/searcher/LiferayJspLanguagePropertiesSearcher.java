@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui.searcher;
 
@@ -22,6 +21,7 @@ import com.liferay.ide.xml.search.ui.PortalLanguagePropertiesCacheUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.util.List;
 import java.util.Properties;
 
@@ -35,81 +35,68 @@ import org.eclipse.wst.xml.search.editor.searchers.properties.XMLSearcherForProp
 /**
  * @author Terry Jia
  */
-public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperties
-{
+public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperties {
 
-    private static final String HOVER = "\"{0}\" in {1}";
+	public String searchForTextHover(
+		Object selectedNode, int offset, String mathingString, int startIndex, int endIndex, IFile file,
+		IXMLReferenceTo referenceTo) {
 
-    public String searchForTextHover(
-        Object selectedNode, int offset, String mathingString, int startIndex, int endIndex, IFile file,
-        IXMLReferenceTo referenceTo )
-    {
-        StringBuffer sb = new StringBuffer();
+		StringBuffer sb = new StringBuffer();
 
-        if( referenceTo instanceof IXMLReferenceToProperty )
-        {
-            final IProject project = file.getProject();
-            final List<IFile> languageFiles = PropertiesUtil.getDefaultLanguagePropertiesFromProject( project );
+		if (referenceTo instanceof IXMLReferenceToProperty) {
+			IProject project = file.getProject();
 
-            for( IFile languageFile : languageFiles )
-            {
-                final Properties properties = new Properties();
+			List<IFile> languageFiles = PropertiesUtil.getDefaultLanguagePropertiesFromProject(project);
 
-                InputStream contents = null;
+			for (IFile languageFile : languageFiles) {
+				Properties properties = new Properties();
 
-                try
-                {
-                    contents = languageFile.getContents();
+				InputStream contents = null;
 
-                    properties.load( contents );
+				try {
+					contents = languageFile.getContents();
 
-                    Object key = properties.get( mathingString );
+					properties.load(contents);
 
-                    if( key != null )
-                    {
-                        sb.append( NLS.bind( HOVER, key, languageFile.getFullPath().toString() ) ).append( "<br/>" );
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-                catch( Exception e )
-                {
-                }
-                finally
-                {
-                    if( contents != null )
-                    {
-                        try
-                        {
-                            contents.close();
-                        }
-                        catch( IOException e )
-                        {
-                        }
-                    }
-                }
-            }
+					Object key = properties.get(mathingString);
 
-            if( CoreUtil.isNullOrEmpty( sb.toString() ) )
-            {
-                final Properties portalProperties =
-                    PortalLanguagePropertiesCacheUtil.getPortalLanguageProperties( LiferayCore.create( project ) );
+					if (key != null) {
+						sb.append(NLS.bind(_hover, key, languageFile.getFullPath().toString())).append("<br/>");
+					}
+					else {
+						continue;
+					}
+				}
+				catch (Exception e) {
+				}
+				finally {
+					if (contents != null) {
+						try {
+							contents.close();
+						}
+						catch (IOException ioe) {
+						}
+					}
+				}
+			}
 
-                if( portalProperties != null )
-                {
-                    Object key = portalProperties.get( mathingString );
+			if (CoreUtil.isNullOrEmpty(sb.toString())) {
+				Properties portalProperties = PortalLanguagePropertiesCacheUtil.getPortalLanguageProperties(
+					LiferayCore.create(project));
 
-                    if( key != null )
-                    {
-                        sb.append( NLS.bind( HOVER, key, "Liferay Portal Language.properties" ) );
-                    }
-                }
-            }
-        }
+				if (portalProperties != null) {
+					Object key = portalProperties.get(mathingString);
 
-        return sb.toString();
-    }
+					if (key != null) {
+						sb.append(NLS.bind(_hover, key, "Liferay Portal Language.properties"));
+					}
+				}
+			}
+		}
+
+		return sb.toString();
+	}
+
+	private static final String _hover = "\"{0}\" in {1}";
 
 }

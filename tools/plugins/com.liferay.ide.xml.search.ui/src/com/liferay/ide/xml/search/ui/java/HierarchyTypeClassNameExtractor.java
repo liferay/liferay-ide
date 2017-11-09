@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.xml.search.ui.java;
 
 import java.util.ArrayList;
@@ -34,81 +34,73 @@ import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.core.search.SearchRequestor;
 import org.eclipse.wst.xml.search.core.xpath.NamespaceInfos;
 import org.eclipse.wst.xml.search.editor.searchers.javamethod.classnameprovider.AbstractClassNameExtractor;
-import org.w3c.dom.Node;
 
+import org.w3c.dom.Node;
 
 /**
  * @author Gregory Amerson
  */
-public class HierarchyTypeClassNameExtractor extends AbstractClassNameExtractor
-{
-    private static class TypeNameRequestor extends SearchRequestor
-    {
-        private final List<String> results = new ArrayList<String>();
+public class HierarchyTypeClassNameExtractor extends AbstractClassNameExtractor {
 
-        @Override
-        public void acceptSearchMatch( SearchMatch match ) throws CoreException
-        {
-            final Object element = match.getElement();
+	public HierarchyTypeClassNameExtractor(String typeName) {
+		_typeName = typeName;
+	}
 
-            if( element instanceof IType )
-            {
-                final IType type = (IType) element;
+	@Override
+	protected String[] doExtractClassNames(
+			Node node, IFile file, String pathForClass, String findByAttrName, boolean findByParentNode,
+			String xpathFactoryProviderId, NamespaceInfos namespaceInfo)
+		throws XPathExpressionException {
 
-                this.results.add( type.getFullyQualifiedName() );
-            }
-        }
+		String[] retval = null;
 
-        List<String> getResults()
-        {
-            return this.results;
-        }
-    }
+		IJavaProject project = JavaCore.create(file.getProject());
 
-    private final String typeName;
+		try {
+			IType type = project.findType(_typeName);
 
-    public HierarchyTypeClassNameExtractor( String typeName )
-    {
-        super();
+			if (type != null) {
+				TypeNameRequestor requestor = new TypeNameRequestor();
 
-        this.typeName = typeName;
-    }
+				IJavaSearchScope scope = SearchEngine.createStrictHierarchyScope(project, type, true, false, null);
 
-    @Override
-    protected String[] doExtractClassNames(
-        Node node, IFile file, String pathForClass, String findByAttrName, boolean findByParentNode,
-        String xpathFactoryProviderId, NamespaceInfos namespaceInfo ) throws XPathExpressionException
-    {
-        String[] retval = null;
+				SearchPattern search = SearchPattern.createPattern(
+					"*", IJavaSearchConstants.CLASS, IJavaSearchConstants.DECLARATIONS, 0);
 
-        final IJavaProject project = JavaCore.create( file.getProject() );
+				new SearchEngine().search(
+					search, new SearchParticipant[] {SearchEngine.getDefaultSearchParticipant()}, scope, requestor,
+					new NullProgressMonitor());
 
-        try
-        {
-            final IType type = project.findType( this.typeName );
+				retval = requestor.getResults().toArray(new String[0]);
+			}
+		}
+		catch (Exception e) {
+		}
 
-            if( type != null )
-            {
-                final TypeNameRequestor requestor = new TypeNameRequestor();
+		return retval;
+	}
 
-                final IJavaSearchScope scope =
-                    SearchEngine.createStrictHierarchyScope( project, type, true, false, null );
+	private final String _typeName;
 
-                final SearchPattern search =
-                    SearchPattern.createPattern(
-                        "*", IJavaSearchConstants.CLASS, IJavaSearchConstants.DECLARATIONS, 0 );
+	private static class TypeNameRequestor extends SearchRequestor {
 
-                new SearchEngine().search(
-                    search, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, scope,
-                    requestor, new NullProgressMonitor() );
+		@Override
+		public void acceptSearchMatch(SearchMatch match) throws CoreException {
+			Object element = match.getElement();
 
-                retval = requestor.getResults().toArray( new String[0] );
-            }
-        }
-        catch( Exception e )
-        {
-        }
+			if (element instanceof IType) {
+				IType type = (IType)element;
 
-        return retval;
-    }
+				this._results.add(type.getFullyQualifiedName());
+			}
+		}
+
+		public List<String> getResults() {
+			return _results;
+		}
+
+		private List<String> _results = new ArrayList<>();
+
+	}
+
 }

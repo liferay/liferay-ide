@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui.descriptors;
 
@@ -24,20 +23,18 @@ import org.eclipse.wst.xml.search.editor.references.filters.IXMLReferenceFilter;
 /**
  * @author Terry Jia
  */
-public class LiferayJspTaglibReferenceFilter extends AbstractTaglibReferenceFilter
-{
+public class LiferayJspTaglibReferenceFilter extends AbstractTaglibReferenceFilter {
 
-    public static final IXMLReferenceFilter INSTANCE = new LiferayJspTaglibReferenceFilter();
+	public static final IXMLReferenceFilter INSTANCE = new LiferayJspTaglibReferenceFilter();
 
-    @Override
-    protected Collection<String> getTaglibURIs()
-    {
-        Collection<String> uris = new ArrayList<String>();
+	@Override
+	protected Collection<String> getTaglibURIs() {
+		Collection<String> uris = new ArrayList<>();
 
-        uris.add( "http://liferay.com/tld/ui" );
-        uris.add( "http://liferay.com/tld/aui" );
+		uris.add("http://liferay.com/tld/ui");
+		uris.add("http://liferay.com/tld/aui");
 
-        return uris;
-    }
+		return uris;
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.xml.search.ui.validators;
 
@@ -29,245 +28,233 @@ import org.eclipse.wst.xml.search.core.util.DOMUtils;
 import org.eclipse.wst.xml.search.editor.references.IXMLReference;
 import org.eclipse.wst.xml.search.editor.references.IXMLReferenceTo;
 import org.eclipse.wst.xml.search.editor.util.JdtUtils;
+
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 
 /**
  * @author Kuo Zhang
  */
-@SuppressWarnings( "restriction" )
-public class LiferayHookDescriptorValidator extends LiferayBaseValidator
-{
-    public static final String MESSAGE_PROPERTIES_NOT_END_WITH_PROPERTIES = Msgs.propertiesNotEndWithProperties;
-    public static final String MESSAGE_SERVICE_IMPL_TYPE_INCORRECT = Msgs.serviceImplTypeIncorrect;
-    public static final String MESSAGE_SERVICE_TYPE_INVALID = Msgs.serviceTypeInvalid;
-    public static final String MESSAGE_SERVICE_TYPE_NOT_INTERFACE = Msgs.serviceTypeNotInterface;
+@SuppressWarnings("restriction")
+public class LiferayHookDescriptorValidator extends LiferayBaseValidator {
 
+	public static final String messagePropertiesNotEndWithProperties = Msgs.propertiesNotEndWithProperties;
+	public static final String messageServiceImplTypeIncorrect = Msgs.serviceImplTypeIncorrect;
+	public static final String messageServiceTypeInvalid = Msgs.serviceTypeInvalid;
+	public static final String messageServiceTypeNotInterface = Msgs.serviceTypeNotInterface;
 
-    @Override
-    protected boolean validateSyntax( IXMLReference reference, IDOMNode node, IFile file,
-                                      IValidator validator, IReporter reporter, boolean batchMode )
-    {
-        // validate syntax of value of elements <portal-properties> and <language-properties>
-        int severity = getServerity( ValidationType.SYNTAX_INVALID, file );
+	@Override
+	protected void validateReferenceToJava(
+		IXMLReferenceTo referenceTo, IDOMNode node, IFile file, IValidator validator, IReporter reporter,
+		boolean batchMode) {
 
-        if( severity != ValidationMessage.IGNORE )
-        {
-            if( node.getNodeType() == Node.TEXT_NODE )
-            {
-                String validationMsg = null;
+		if (node.getNodeType() == Node.TEXT_NODE) {
+			if ("service-type".equals(node.getParentNode().getNodeName())) {
+				ValidationInfo valInfo = _validateServiceType(node, file);
 
-                final String nodeValue = DOMUtils.getNodeValue( node );
+				if (valInfo != null) {
+					addMessage(
+						node, file, validator, reporter, batchMode, valInfo.getValidationMessge(),
+						getServerity(valInfo.getValidationType(), file),
+						getLiferayPluginValidationType(valInfo.getValidationType(), file));
+				}
 
-                if( nodeValue != null && nodeValue.length() > 0 )
-                {
-                    if( "portal-properties".equals( node.getParentNode().getNodeName() ) ||
-                        "language-properties".equals( node.getParentNode().getNodeName() ) )
-                    {
-                        if( ! nodeValue.endsWith( ".properties" ) )
-                        {
-                            validationMsg = NLS.bind( MESSAGE_PROPERTIES_NOT_END_WITH_PROPERTIES, nodeValue );
-                        }
-                    }
+				return;
+			}
+			else if ("service-impl".equals(node.getParentNode().getNodeName())) {
+				ValidationInfo valInfo = _validateServiceImpl(node, file);
 
-                    if( validationMsg != null )
-                    {
-                        final String liferayPluginValidationType =
-                            getLiferayPluginValidationType( ValidationType.SYNTAX_INVALID, file );
-                        addMessage(
-                            node, file, validator, reporter, batchMode, validationMsg, severity,
-                            liferayPluginValidationType );
+				if (valInfo != null) {
+					addMessage(
+						node, file, validator, reporter, batchMode, valInfo.getValidationMessge(),
+						getServerity(valInfo.getValidationType(), file),
+						getLiferayPluginValidationType(valInfo.getValidationType(), file));
+				}
 
-                        return false;
-                    }
-                }
-            }
-        }
+				return;
+			}
+		}
 
-        return true;
-    }
+		super.validateReferenceToJava(referenceTo, node, file, validator, reporter, batchMode);
+	}
 
-    @Override
-    protected void validateReferenceToJava( IXMLReferenceTo referenceTo, IDOMNode node, IFile file,
-                                            IValidator validator, IReporter reporter, boolean batchMode )
-    {
-        if( node.getNodeType() == Node.TEXT_NODE )
-        {
-            if( "service-type".equals( node.getParentNode().getNodeName() ) )
-            {
-                ValidationInfo valInfo = validateServiceType( node, file );
+	@Override
+	protected boolean validateSyntax(
+		IXMLReference reference, IDOMNode node, IFile file, IValidator validator, IReporter reporter,
+		boolean batchMode) {
 
-                if( valInfo != null )
-                {
-                    addMessage(
-                        node, file, validator, reporter, batchMode, valInfo.getValidationMessge(),
-                        getServerity( valInfo.getValidationType(), file ),
-                        getLiferayPluginValidationType( valInfo.getValidationType(), file ) );
-                }
+		// validate syntax of value of elements <portal-properties> and
+		// <language-properties>
 
-                return;
+		int severity = getServerity(ValidationType.SYNTAX_INVALID, file);
 
-            }
-            else if( "service-impl".equals( node.getParentNode().getNodeName() ) )
-            {
-                ValidationInfo valInfo = validateServiceImpl( node, file );
+		if (severity != ValidationMessage.IGNORE) {
+			if (node.getNodeType() == Node.TEXT_NODE) {
+				String validationMsg = null;
 
-                if( valInfo != null )
-                {
-                    addMessage(
-                        node, file, validator, reporter, batchMode, valInfo.getValidationMessge(),
-                        getServerity( valInfo.getValidationType(), file ),
-                        getLiferayPluginValidationType( valInfo.getValidationType(), file ) );
-                }
+				String nodeValue = DOMUtils.getNodeValue(node);
 
-                return;
-            }
-        }
+				if ((nodeValue != null) && (nodeValue.length() > 0)) {
+					if ("portal-properties".equals(node.getParentNode().getNodeName()) ||
+						"language-properties".equals(node.getParentNode().getNodeName())) {
 
-        super.validateReferenceToJava( referenceTo, node, file, validator, reporter, batchMode );
-    }
+						if (!nodeValue.endsWith(".properties")) {
+							validationMsg = NLS.bind(messagePropertiesNotEndWithProperties, nodeValue);
+						}
+					}
 
-    private ValidationInfo validateServiceImpl( IDOMNode node, IFile file )
-    {
-        final String serviceImplContent= DOMUtils.getNodeValue( node );
+					if (validationMsg != null) {
+						String liferayPluginValidationType = getLiferayPluginValidationType(
+							ValidationType.SYNTAX_INVALID, file);
 
-        IType type = JdtUtils.getJavaType(file.getProject(), serviceImplContent );
+						addMessage(
+							node, file, validator, reporter, batchMode, validationMsg, severity,
+							liferayPluginValidationType);
 
-        String msg = null;
+						return false;
+					}
+				}
+			}
+		}
 
-        // validate type existence
-        if( type == null )
-        {
-            msg = getMessageText( ValidationType.TYPE_NOT_FOUND, node );
-            return new ValidationInfo( msg, ValidationType.TYPE_NOT_FOUND );
-        }
+		return true;
+	}
 
-        NodeList siblingNodes = node.getParentNode().getParentNode().getChildNodes();
-        IDOMNode serviceTypeNode = null;
+	private ValidationInfo _validateServiceImpl(IDOMNode node, IFile file) {
+		String serviceImplContent = DOMUtils.getNodeValue(node);
 
-        for( int i = 0; i < siblingNodes.getLength(); i++ )
-        {
-            if( "service-type".equals( siblingNodes.item( i ).getNodeName() ) )
-            {
-                serviceTypeNode = (IDOMNode) siblingNodes.item( i );
-                break;
-            }
-        }
+		IType type = JdtUtils.getJavaType(file.getProject(), serviceImplContent);
 
-        try
-        {
-            if( serviceTypeNode != null &&
-                validateServiceType( (IDOMNode) serviceTypeNode.getFirstChild(), file ) == null )
-            {
-                // validate type hierarchy
-                final String serviceTypeContent = serviceTypeNode.getFirstChild().getNodeValue().trim();
+		String msg = null;
 
-                final String superTypeName = serviceTypeContent + "Wrapper";
-                final IType superType = JdtUtils.getJavaType( file.getProject(), superTypeName );
+		// validate type existence
 
-                boolean typeCorrect = false;
+		if (type == null) {
+			msg = getMessageText(ValidationType.TYPE_NOT_FOUND, node);
 
-                if( superType != null &&
-                    JdtUtils.hierarchyContainsComponent( type, superType.getFullyQualifiedName() ) )
-                {
-                    typeCorrect = true;
-                }
+			return new ValidationInfo(msg, ValidationType.TYPE_NOT_FOUND);
+		}
 
-                if( !typeCorrect )
-                {
-                    msg = NLS.bind( MESSAGE_SERVICE_IMPL_TYPE_INCORRECT, serviceImplContent, superTypeName );
-                    return new ValidationInfo( msg, ValidationType.TYPE_HIERARCHY_INCORRECT );
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            LiferayXMLSearchUI.logError( e );
-        }
+		Node parentNode = node.getParentNode();
 
-        return null;
-    }
+		NodeList siblingNodes = parentNode.getParentNode().getChildNodes();
 
-    private ValidationInfo validateServiceType( IDOMNode node, IFile file )
-    {
-        try
-        {
-            final String serviceTypeContent= DOMUtils.getNodeValue( node );
+		IDOMNode serviceTypeNode = null;
 
-            final IType type = JdtUtils.getJavaType(file.getProject(), serviceTypeContent );
+		for (int i = 0; i < siblingNodes.getLength(); i++) {
+			if ("service-type".equals(siblingNodes.item(i).getNodeName())) {
+				serviceTypeNode = (IDOMNode)siblingNodes.item(i);
+				break;
+			}
+		}
 
-            String msg = null;
+		try {
+			Node firstChild = serviceTypeNode.getFirstChild();
 
-            // validate type existence
-            if( type == null )
-            {
-                msg = getMessageText( ValidationType.TYPE_NOT_FOUND, node );
-                return new ValidationInfo( msg, ValidationType.TYPE_NOT_FOUND );
-            }
+			if ((serviceTypeNode != null) && (_validateServiceType((IDOMNode)firstChild, file) == null)) {
 
-            // validate if it is an interface
-            if( ! type.isInterface() )
-            {
-                msg = NLS.bind( MESSAGE_SERVICE_TYPE_NOT_INTERFACE, serviceTypeContent );
-                return new ValidationInfo( msg, ValidationType.TYPE_HIERARCHY_INCORRECT );
-            }
+				// validate type hierarchy
 
-            // validate type hierarchy
-            if( ! serviceTypeContent.matches( "com.liferay.*Service" ) )
-            {
-                msg = MESSAGE_SERVICE_TYPE_INVALID;
-                return new ValidationInfo( msg, ValidationType.TYPE_HIERARCHY_INCORRECT );
-            }
-        }
-        catch( Exception e )
-        {
-            LiferayXMLSearchUI.logError( e );
-        }
+				String serviceTypeContent = firstChild.getNodeValue().trim();
 
-        return null;
-    }
+				String superTypeName = serviceTypeContent + "Wrapper";
 
-    private static class Msgs extends NLS
-    {
-        public static String propertiesNotEndWithProperties;
+				IType superType = JdtUtils.getJavaType(file.getProject(), superTypeName);
 
-        public static String serviceTypeInvalid;
-        public static String serviceTypeNotInterface;
+				boolean typeCorrect = false;
 
-        public static String serviceImplTypeIncorrect;
+				if ((superType != null) &&
+					JdtUtils.hierarchyContainsComponent(type, superType.getFullyQualifiedName())) {
 
-        static
-        {
-            initializeMessages( LiferayHookDescriptorValidator.class.getName(), Msgs.class );
-        }
+					typeCorrect = true;
+				}
 
-        static
-        {
-            initializeMessages( LiferayHookDescriptorValidator.class.getName(), Msgs.class );
-        }
-    }
+				if (!typeCorrect) {
+					msg = NLS.bind(messageServiceImplTypeIncorrect, serviceImplContent, superTypeName);
 
-    private class ValidationInfo
-    {
-        private String validationMessage;
-        private ValidationType validationType;
+					return new ValidationInfo(msg, ValidationType.TYPE_HIERARCHY_INCORRECT);
+				}
+			}
+		}
+		catch (Exception e) {
+			LiferayXMLSearchUI.logError(e);
+		}
 
-        public ValidationInfo( String msg, ValidationType type )
-        {
-            this.validationMessage = msg;
-            this.validationType= type;
-        }
+		return null;
+	}
 
-        public String getValidationMessge()
-        {
-            return validationMessage;
-        }
+	private ValidationInfo _validateServiceType(IDOMNode node, IFile file) {
+		try {
+			String serviceTypeContent = DOMUtils.getNodeValue(node);
 
-        public ValidationType getValidationType()
-        {
-            return validationType;
-        }
-    }
+			IType type = JdtUtils.getJavaType(file.getProject(), serviceTypeContent);
+
+			String msg = null;
+
+			// validate type existence
+
+			if (type == null) {
+				msg = getMessageText(ValidationType.TYPE_NOT_FOUND, node);
+
+				return new ValidationInfo(msg, ValidationType.TYPE_NOT_FOUND);
+			}
+
+			// validate if it is an interface
+
+			if (!type.isInterface()) {
+				msg = NLS.bind(messageServiceTypeNotInterface, serviceTypeContent);
+
+				return new ValidationInfo(msg, ValidationType.TYPE_HIERARCHY_INCORRECT);
+			}
+
+			// validate type hierarchy
+
+			if (!serviceTypeContent.matches("com.liferay.*Service")) {
+				msg = messageServiceTypeInvalid;
+
+				return new ValidationInfo(msg, ValidationType.TYPE_HIERARCHY_INCORRECT);
+			}
+		}
+		catch (Exception e) {
+			LiferayXMLSearchUI.logError(e);
+		}
+
+		return null;
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String propertiesNotEndWithProperties;
+		public static String serviceImplTypeIncorrect;
+		public static String serviceTypeInvalid;
+		public static String serviceTypeNotInterface;
+
+		static {
+			initializeMessages(LiferayHookDescriptorValidator.class.getName(), Msgs.class);
+
+			initializeMessages(LiferayHookDescriptorValidator.class.getName(), Msgs.class);
+		}
+
+	}
+
+	private class ValidationInfo {
+
+		public ValidationInfo(String msg, ValidationType type) {
+			_validationMessage = msg;
+			_validationType = type;
+		}
+
+		public String getValidationMessge() {
+			return _validationMessage;
+		}
+
+		public ValidationType getValidationType() {
+			return _validationType;
+		}
+
+		private String _validationMessage;
+		private ValidationType _validationType;
+
+	}
 
 }

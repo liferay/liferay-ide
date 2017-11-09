@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.xml.search.ui.resources;
 
 import java.util.HashSet;
@@ -20,27 +20,25 @@ import java.util.Set;
 /**
  * @author Kuo Zhang
  */
-public class JSPResourceURIResolver extends AbstractWebResourceURIResolver
-{
+public class JSPResourceURIResolver extends AbstractWebResourceURIResolver {
 
-    public static final JSPResourceURIResolver INSTANCE = new JSPResourceURIResolver();
+	public static final JSPResourceURIResolver INSTANCE = new JSPResourceURIResolver();
 
-    private static final Set<String> EXTENSIONS;
+	public JSPResourceURIResolver() {
+		super(true);
+	}
 
-    static
-    {
-        EXTENSIONS = new HashSet<String>();
-        EXTENSIONS.add( "jsp" );
-    }
+	@Override
+	protected Set<String> getExtensions() {
+		return _extensions;
+	}
 
-    public JSPResourceURIResolver()
-    {
-        super( true );
-    }
+	private static final Set<String> _extensions;
 
-    @Override
-    protected Set<String> getExtensions()
-    {
-        return EXTENSIONS;
-    }
+	static {
+		_extensions = new HashSet<>();
+
+		_extensions.add("jsp");
+	}
+
 }
