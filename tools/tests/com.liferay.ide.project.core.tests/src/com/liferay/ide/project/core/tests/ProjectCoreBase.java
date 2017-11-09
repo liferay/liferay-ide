@@ -45,6 +45,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -618,7 +619,11 @@ public class ProjectCoreBase extends ServerCoreBase
 
             IStatus validationStatus = sdk.validate( true );
 
-            assertTrue( validationStatus.getMessage().trim(), validationStatus.isOK() );
+            StringBuilder sb = new StringBuilder();
+
+            Stream.of(validationStatus.getChildren()).map(IStatus::getMessage).forEach(sb::append);
+
+            assertTrue(sb.toString(), validationStatus.isOK());
 
             SDKUtil.openAsProject( sdk );
         }
