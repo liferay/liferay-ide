@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.theme.core.facet;
 
@@ -29,6 +28,7 @@ import com.liferay.ide.theme.core.util.ThemeUtil;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,227 +55,209 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
  * @author Kamesh Sampath [IDE-450]
  * @author Cindy Li
  */
-public class ThemePluginFacetInstall extends PluginFacetInstall
-{
+public class ThemePluginFacetInstall extends PluginFacetInstall {
 
-    @Override
-    public void execute( IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor )
-        throws CoreException
-    {
-        super.execute( project, fv, config, monitor );
+	@Override
+	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor)
+		throws CoreException {
 
-        IDataModel model = (IDataModel) config;
+		super.execute(project, fv, config, monitor);
 
-        IDataModel masterModel = (IDataModel) model.getProperty( FacetInstallDataModelProvider.MASTER_PROJECT_DM );
+		IDataModel model = (IDataModel)config;
 
-        if( masterModel != null && masterModel.getBooleanProperty( CREATE_PROJECT_OPERATION ) )
-        {
-            /*
-            // get the template zip for theme and extract into the project
-            SDK sdk = getSDK();
+		IDataModel masterModel = (IDataModel)model.getProperty(FacetInstallDataModelProvider.MASTER_PROJECT_DM);
 
-            String themeName = this.masterModel.getStringProperty( THEME_NAME );
+		if ((masterModel != null) && masterModel.getBooleanProperty(CREATE_PROJECT_OPERATION)) {
+			/*
+			 * // get the template zip for theme and extract into the project
+			 * SDK sdk = getSDK(); String themeName =
+			 * this.masterModel.getStringProperty( THEME_NAME ); // FIX IDE-450
+			 * if( themeName.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX
+			 * ) ) { themeName = themeName.substring( 0, themeName.indexOf(
+			 * ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) ); } // END FIX
+			 * IDE-450 String displayName = this.masterModel.getStringProperty(
+			 * DISPLAY_NAME ); IPath newThemePath = sdk.createNewThemeProject(
+			 * themeName, displayName ); processNewFiles( newThemePath.append(
+			 * themeName + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) ); //
+			 * cleanup files FileUtil.deleteDir( newThemePath.toFile(), true );
+			 */
+			// IDE-1122 SDK creating project has been moved to Class
+			// NewPluginProjectWizard
 
-            // FIX IDE-450
-            if( themeName.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) )
-            {
-                themeName = themeName.substring( 0, themeName.indexOf( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) );
-            }
-            // END FIX IDE-450
+			String themeName = this.masterModel.getStringProperty(THEME_NAME);
 
-            String displayName = this.masterModel.getStringProperty( DISPLAY_NAME );
+			IPath projectTempPath = (IPath)masterModel.getProperty(PROJECT_TEMP_PATH);
 
-            IPath newThemePath = sdk.createNewThemeProject( themeName, displayName );
+			processNewFiles(projectTempPath.append(themeName + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX));
 
-            processNewFiles( newThemePath.append( themeName + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) );
+			FileUtil.deleteDir(projectTempPath.toFile(), true);
 
-            // cleanup files
-            FileUtil.deleteDir( newThemePath.toFile(), true );
-            */
+			// End IDE-1122
 
-            // IDE-1122 SDK creating project has been moved to Class NewPluginProjectWizard
-            String themeName = this.masterModel.getStringProperty( THEME_NAME );
+			// delete META-INF
 
-            IPath projectTempPath = (IPath) masterModel.getProperty( PROJECT_TEMP_PATH );
+			CoreUtil.deleteResource(project.findMember(ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/META-INF"));
+		}
+		else if (shouldSetupDefaultOutputLocation()) {
+			setupDefaultOutputLocation();
+		}
 
-            processNewFiles( projectTempPath.append( themeName + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) );
+		// IDE-925 commented method out below to allow for
+		// src/resources-importer
+		// removeUnneededClasspathEntries();
+		// IDE-925 also added configuration of deployment assembly to map
+		// WEB-INF/src to WEB-INF/classes
 
-            FileUtil.deleteDir( projectTempPath.toFile(), true );
-            // End IDE-1122
+		if (shouldConfigureDeploymentAssembly()) {
 
-            // delete META-INF
-            CoreUtil.deleteResource( project.findMember( ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/META-INF" ) ); //$NON-NLS-1$
-        }
-        else if( shouldSetupDefaultOutputLocation() )
-        {
-            setupDefaultOutputLocation();
-        }
+			// IDE-565
 
-        // IDE-925 commented method out below to allow for src/resources-importer
-        // removeUnneededClasspathEntries();
-        // IDE-925 also added configuration of deployment assembly to map WEB-INF/src to WEB-INF/classes
-        if( shouldConfigureDeploymentAssembly() )
-        {
-            // IDE-565
-            configureDeploymentAssembly( IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER, DEFAULT_DEPLOY_PATH );
-        }
+			configureDeploymentAssembly(IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER, DEFAULT_DEPLOY_PATH);
+		}
 
-        final IWebProject lrproject = new PluginsSDKBundleProject( project, null );
-        final IResource libRes = lrproject.findDocrootResource( new Path( "WEB-INF/lib" ) );
+		IWebProject lrproject = new PluginsSDKBundleProject(project, null);
 
-        if( libRes != null && libRes.exists() )
-        {
-            IFolder libFolder = (IFolder) libRes;
-            IResource[] libFiles = libFolder.members( true );
+		IResource libRes = lrproject.findDocrootResource(new Path("WEB-INF/lib"));
 
-            if( CoreUtil.isNullOrEmpty( libFiles ) )
-            {
-                libRes.delete( true, monitor );
-            }
-        }
+		if ((libRes != null) && libRes.exists()) {
+			IFolder libFolder = (IFolder)libRes;
 
-        if( shouldUpdateBuildXml() )
-        {
-            updateBuildXml( project );
-        }
+			IResource[] libFiles = libFolder.members(true);
 
-        if( shouldInstallThemeBuilder() )
-        {
-            installThemeBuilder( this.project );
-        }
+			if (CoreUtil.isNullOrEmpty(libFiles)) {
+				libRes.delete(true, monitor);
+			}
+		}
 
-        try
-        {
-            this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-        }
-        catch( Exception e )
-        {
-            ThemeCore.logError( e );
-        }
-    }
+		if (shouldUpdateBuildXml()) {
+			updateBuildXml(project);
+		}
 
-    @Override
-    protected String getDefaultOutputLocation()
-    {
-        return IPluginFacetConstants.THEME_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER;
-    }
+		if (shouldInstallThemeBuilder()) {
+			installThemeBuilder(this.project);
+		}
 
-    protected void installThemeBuilder( IProject project ) throws CoreException
-    {
-        if( project == null )
-        {
-            return;
-        }
+		try {
+			this.project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+		}
+		catch (Exception e) {
+			ThemeCore.logError(e);
+		}
+	}
 
-        IProjectDescription desc = project.getDescription();
-        ICommand[] commands = desc.getBuildSpec();
+	public void updateBuildXml(IProject project) throws CoreException {
+		String themeParent = this.masterModel.getStringProperty(THEME_PARENT);
+		String tplFramework = this.masterModel.getStringProperty(THEME_TEMPLATE_FRAMEWORK);
 
-        for( ICommand command : commands )
-        {
-            if( ThemeCSSBuilder.ID.equals( command.getBuilderName() ) )
-            {
-                return;
-            }
-        }
+		IFile buildXml = project.getFile("build.xml");
 
-        // add builder to project
-        ICommand command = desc.newCommand();
-        command.setBuilderName( ThemeCSSBuilder.ID );
-        ICommand[] nc = new ICommand[commands.length + 1];
+		InputStream inputStream = buildXml.getContents();
 
-        // Add it before other builders.
-        System.arraycopy( commands, 0, nc, 1, commands.length );
-        nc[0] = command;
-        desc.setBuildSpec( nc );
+		try {
+			String strCon = CoreUtil.readStreamToString(inputStream);
+			inputStream.close();
 
-        project.setDescription( desc, null );
-    }
+			if (!themeParent.equals(this.masterModel.getDefaultProperty(THEME_PARENT))) {
+				strCon = strCon.replace(
+					"<property name=\"theme.parent\" value=\"_styled\" />",
+					"<property name=\"theme.parent\" value=\"" + themeParent + "\" />");
+			}
 
-    protected void removeUnneededClasspathEntries()
-    {
-        IFacetedProjectWorkingCopy facetedProject = getFacetedProject();
-        IJavaProject javaProject = JavaCore.create( facetedProject.getProject() );
+			String tplExtension = ThemeUtil.getTemplateExtension(tplFramework);
 
-        try
-        {
-            IClasspathEntry[] existingClasspath = javaProject.getRawClasspath();
-            List<IClasspathEntry> newClasspath = new ArrayList<IClasspathEntry>();
+			strCon = strCon.replace(
+				"</project>", "\t<property name=\"theme.type\" value=\"" + tplExtension + "\" />\n</project>");
 
-            for( IClasspathEntry entry : existingClasspath )
-            {
-                if( entry.getEntryKind() == IClasspathEntry.CPE_SOURCE )
-                {
-                    continue;
-                }
-                else if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER )
-                {
-                    String path = entry.getPath().toPortableString();
-                    if( path.contains( "org.eclipse.jdt.launching.JRE_CONTAINER" ) || //$NON-NLS-1$
-                        path.contains( "org.eclipse.jst.j2ee.internal.web.container" ) || //$NON-NLS-1$
-                        path.contains( "org.eclipse.jst.j2ee.internal.module.container" ) ) //$NON-NLS-1$
-                    {
-                        continue;
-                    }
-                }
+			buildXml.setContents(new ByteArrayInputStream(strCon.getBytes()), IResource.FORCE, null);
+		}
+		catch (IOException ioe) {
+			ThemeCore.logError(ioe);
+		}
+	}
 
-                newClasspath.add( entry );
-            }
+	@Override
+	protected String getDefaultOutputLocation() {
+		return IPluginFacetConstants.THEME_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER;
+	}
 
-            javaProject.setRawClasspath( newClasspath.toArray( new IClasspathEntry[0] ), null );
+	protected void installThemeBuilder(IProject project) throws CoreException {
+		if (project == null) {
+			return;
+		}
 
-            IResource sourceFolder =
-                javaProject.getProject().findMember( IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER );
+		IProjectDescription desc = project.getDescription();
 
-            if( sourceFolder.exists() )
-            {
-                sourceFolder.delete( true, null );
-            }
-        }
-        catch( Exception e )
-        {
+		ICommand[] commands = desc.getBuildSpec();
 
-        }
-    }
+		for (ICommand command : commands) {
+			if (ThemeCSSBuilder.ID.equals(command.getBuilderName())) {
+				return;
+			}
+		}
 
-    protected boolean shouldInstallThemeBuilder()
-    {
-        return this.model.getBooleanProperty( INSTALL_THEME_CSS_BUILDER );
-    }
+		// add builder to project
 
-    protected boolean shouldUpdateBuildXml()
-    {
-        return this.model.getBooleanProperty( UPDATE_BUILD_XML );
-    }
+		ICommand command = desc.newCommand();
 
-    public void updateBuildXml( IProject project ) throws CoreException
-    {
-        String themeParent = this.masterModel.getStringProperty( THEME_PARENT );
-        String tplFramework = this.masterModel.getStringProperty( THEME_TEMPLATE_FRAMEWORK );
+		command.setBuilderName(ThemeCSSBuilder.ID);
 
-        IFile buildXml = project.getFile( "build.xml" ); //$NON-NLS-1$
-        InputStream inputStream = buildXml.getContents();
+		ICommand[] nc = new ICommand[commands.length + 1];
 
-        try
-        {
-            String strCon = CoreUtil.readStreamToString( inputStream );
-            inputStream.close();
+		// Add it before other builders.
 
-            if( !themeParent.equals( this.masterModel.getDefaultProperty( THEME_PARENT ) ) )
-            {
-                strCon = strCon.replace( "<property name=\"theme.parent\" value=\"_styled\" />", //$NON-NLS-1$
-                    "<property name=\"theme.parent\" value=\"" + themeParent + "\" />" ); //$NON-NLS-1$ //$NON-NLS-2$
-            }
+		System.arraycopy(commands, 0, nc, 1, commands.length);
+		nc[0] = command;
+		desc.setBuildSpec(nc);
 
-            String tplExtension = ThemeUtil.getTemplateExtension( tplFramework );
-            strCon = strCon.replace(
-                "</project>", "\t<property name=\"theme.type\" value=\"" + tplExtension + "\" />\n</project>" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		project.setDescription(desc, null);
+	}
 
-            buildXml.setContents( new ByteArrayInputStream( strCon.getBytes() ), IResource.FORCE, null );
-        }
-        catch( IOException e )
-        {
-            ThemeCore.logError( e );
-        }
-    }
+	protected void removeUnneededClasspathEntries() {
+		IFacetedProjectWorkingCopy facetedProject = getFacetedProject();
+
+		IJavaProject javaProject = JavaCore.create(facetedProject.getProject());
+
+		try {
+			IClasspathEntry[] existingClasspath = javaProject.getRawClasspath();
+			List<IClasspathEntry> newClasspath = new ArrayList<>();
+
+			for (IClasspathEntry entry : existingClasspath) {
+				if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
+					continue;
+				}
+				else if (entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) {
+					String path = entry.getPath().toPortableString();
+
+					if (path.contains("org.eclipse.jdt.launching.JRE_CONTAINER") ||
+						path.contains("org.eclipse.jst.j2ee.internal.web.container") ||
+						path.contains("org.eclipse.jst.j2ee.internal.module.container")) {
+
+						continue;
+					}
+				}
+
+				newClasspath.add(entry);
+			}
+
+			javaProject.setRawClasspath(newClasspath.toArray(new IClasspathEntry[0]), null);
+
+			IResource sourceFolder = javaProject.getProject().findMember(
+				IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER);
+
+			if (sourceFolder.exists()) {
+				sourceFolder.delete(true, null);
+			}
+		}
+		catch (Exception e) {
+		}
+	}
+
+	protected boolean shouldInstallThemeBuilder() {
+		return this.model.getBooleanProperty(INSTALL_THEME_CSS_BUILDER);
+	}
+
+	protected boolean shouldUpdateBuildXml() {
+		return this.model.getBooleanProperty(UPDATE_BUILD_XML);
+	}
 
 }

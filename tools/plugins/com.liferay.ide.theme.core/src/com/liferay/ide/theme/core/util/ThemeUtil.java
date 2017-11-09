@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.theme.core.util;
 
@@ -21,17 +20,16 @@ import java.util.Map;
 /**
  * @author Terry Jia
  */
-public class ThemeUtil
-{
+public class ThemeUtil {
 
-    public static String getTemplateExtension( String tplFramework )
-    {
-        Map<String, String> tplMap = new HashMap<String, String>();
+	public static String getTemplateExtension(String tplFramework) {
+		Map<String, String> tplMap = new HashMap<>();
 
-        tplMap.put( "Velocity", "vm" );
-        tplMap.put( "Freemarker", "ftl" );
-        tplMap.put( "JSP", "jsp" );
+		tplMap.put("Freemarker", "ftl");
+		tplMap.put("JSP", "jsp");
+		tplMap.put("Velocity", "vm");
 
-        return tplMap.get( tplFramework );
-    }
+		return tplMap.get(tplFramework);
+	}
+
 }

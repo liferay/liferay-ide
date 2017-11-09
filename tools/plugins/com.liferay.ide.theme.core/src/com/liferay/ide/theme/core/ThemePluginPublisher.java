@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.theme.core;
 
@@ -36,71 +35,67 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 /**
  * @author Greg Amerson
  */
-public class ThemePluginPublisher extends AbstractPluginPublisher
-{
+public class ThemePluginPublisher extends AbstractPluginPublisher {
 
-    public ThemePluginPublisher()
-    {
-        super();
-    }
+	public ThemePluginPublisher() {
+	}
 
-    public IStatus canPublishModule( IServer server, IModule module )
-    {
-        return Status.OK_STATUS;
-    }
+	public IStatus canPublishModule(IServer server, IModule module) {
+		return Status.OK_STATUS;
+	}
 
-    public boolean prePublishModule(
-        ServerBehaviourDelegate delegate, int kind, int deltaKind, IModule[] moduleTree, IModuleResourceDelta[] delta,
-        IProgressMonitor monitor )
-    {
-        boolean publish = true;
+	public boolean prePublishModule(
+		ServerBehaviourDelegate delegate, int kind, int deltaKind, IModule[] moduleTree, IModuleResourceDelta[] delta,
+		IProgressMonitor monitor) {
 
-        if( ( kind != IServer.PUBLISH_FULL && kind != IServer.PUBLISH_INCREMENTAL && kind != IServer.PUBLISH_AUTO ) ||
-            moduleTree == null )
-        {
-            return publish;
-        }
+		boolean publish = true;
 
-        if( deltaKind != ServerBehaviourDelegate.REMOVED )
-        {
-            try
-            {
-                addThemeModule( delegate, moduleTree[0] );
-            }
-            catch( Exception e )
-            {
-                ThemeCore.logError( "Unable to pre-publish module.", e ); //$NON-NLS-1$
-            }
-        }
+		if (((kind != IServer.PUBLISH_FULL) && (kind != IServer.PUBLISH_INCREMENTAL) &&
+			 (kind != IServer.PUBLISH_AUTO)) ||
+			(moduleTree == null)) {
 
-        return publish;
-    }
+			return publish;
+		}
 
-    protected void addThemeModule( ServerBehaviourDelegate delegate, IModule module ) throws CoreException
-    {
-        IProject project = module.getProject();
+		if (deltaKind != ServerBehaviourDelegate.REMOVED) {
+			try {
+				addThemeModule(delegate, moduleTree[0]);
+			}
+			catch (Exception e) {
+				ThemeCore.logError("Unable to pre-publish module.", e);
+			}
+		}
 
-        // check to make sure they have a look-and-feel.xml file
-        // IDE-110 IDE-648
-        final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
+		return publish;
+	}
 
-        if( webproject != null && webproject.getDefaultDocrootFolder() != null )
-        {
-            IFolder webappRoot = webproject.getDefaultDocrootFolder();
+	protected void addThemeModule(ServerBehaviourDelegate delegate, IModule module) throws CoreException {
+		IProject project = module.getProject();
 
-            if( webappRoot != null && webappRoot.exists() )
-            {
-                if( !( webappRoot.exists( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) ) ) ||
-                    !( webappRoot.exists( new Path( "css" ) ) ) )
-                {
-                    ThemeCSSBuilder.compileTheme( project );
-                    ( (ILiferayServerBehavior) delegate ).redeployModule( new IModule[] { module } );
-                }
-            }
-            else
-            {
-                ThemeCore.logError( "Could not add theme module: webappRoot not found" );
-            }
-        }
-    }
+		// check to make sure they have a look-and-feel.xml file
+		// IDE-110 IDE-648
+
+		IWebProject webproject = LiferayCore.create(IWebProject.class, project);
+
+		if ((webproject != null) && (webproject.getDefaultDocrootFolder() != null)) {
+			IFolder webappRoot = webproject.getDefaultDocrootFolder();
+
+			if ((webappRoot != null) && webappRoot.exists()) {
+				if (!(
+					webappRoot.exists(
+					new Path(
+						"WEB-INF/" +
+							ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE))) ||
+					!(webappRoot.exists(new Path("css")))) {
+
+					ThemeCSSBuilder.compileTheme(project);
+					((ILiferayServerBehavior)delegate).redeployModule(new IModule[] {module});
+				}
+			}
+			else {
+				ThemeCore.logError("Could not add theme module: webappRoot not found");
+			}
+		}
+	}
+
 }
