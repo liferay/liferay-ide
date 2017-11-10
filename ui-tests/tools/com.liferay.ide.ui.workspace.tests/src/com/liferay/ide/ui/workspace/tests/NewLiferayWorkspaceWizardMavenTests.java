@@ -111,15 +111,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		String projectName = "test-maven-theme-in-lr-ws";
-
-		wizardAction.prepareLiferayModuleMaven(projectName, THEME);
-
-		wizardAction.finishToWait();
-
-		wizardAction.openNewLiferayModuleWizard();
-
-		projectName = "test-maven-mvc-portlet-in-lr-ws";
+		String projectName = "test-maven-mvc-portlet-in-lr-ws";
 
 		wizardAction.prepareLiferayModuleMaven(projectName, MVC_PORTLET);
 
