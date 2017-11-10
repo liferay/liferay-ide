@@ -70,8 +70,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ltk.core.refactoring,
  biz.aQute.bndlib;bundle-version="[3.4,4.0)",
  org.eclipse.wst.xml.core,
- org.eclipse.wst.ws,
- org.apache.commons.beanutils;bundle-version="1.8.0"
+ org.eclipse.wst.ws
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.ui,
