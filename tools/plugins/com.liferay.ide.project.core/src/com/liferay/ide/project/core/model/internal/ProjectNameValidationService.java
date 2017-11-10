@@ -202,11 +202,11 @@ public class ProjectNameValidationService extends ValidationService
             {
             case servicebuilder:
             case portlet:
-                pluginTypeValue = ISDKConstants._PORTLET_PLUGIN_PROJECT_SUFFIX;
+                pluginTypeValue = ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
                 break;
 
             case hook:
-                pluginTypeValue = ISDKConstants._HOOK_PLUGIN_PROJECT_SUFFIX;
+                pluginTypeValue = ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
                 break;
 
             case ext:
@@ -214,19 +214,19 @@ public class ProjectNameValidationService extends ValidationService
                 break;
 
             case layouttpl:
-                pluginTypeValue = ISDKConstants._LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
+                pluginTypeValue = ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
                 break;
 
             case theme:
-                pluginTypeValue = ISDKConstants._THEME_PLUGIN_PROJECT_SUFFIX;
+                pluginTypeValue = ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
                 break;
 
             case web:
-                pluginTypeValue = ISDKConstants._WEB_PLUGIN_PROJECT_SUFFIX;
+                pluginTypeValue = ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX;
                 break;
 
             default:
-                pluginTypeValue = ISDKConstants._PORTLET_PLUGIN_PROJECT_SUFFIX;
+                pluginTypeValue = ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
             }
 
             if( !projectName.endsWith( pluginTypeValue ) )

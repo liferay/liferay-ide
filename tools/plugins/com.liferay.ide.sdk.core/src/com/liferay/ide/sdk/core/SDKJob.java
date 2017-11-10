@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,9 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.sdk.core;
-
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
@@ -25,55 +23,48 @@ import org.eclipse.core.runtime.jobs.Job;
 /**
  * @author Greg Amerson
  */
-public abstract class SDKJob extends Job
-{
+public abstract class SDKJob extends Job {
 
-    protected IProject project;
+	public SDKJob(String name) {
+		super(name);
+	}
 
-    public SDKJob( String name )
-    {
-        super( name );
-    }
+	protected IProject getProject() {
+		return project;
+	}
 
-    protected IProject getProject()
-    {
-        return this.project;
-    }
+	protected SDK getSDK() {
+		if (project == null) {
+			return null;
+		}
 
-    protected SDK getSDK()
-    {
-        if( project == null )
-        {
-            return null;
-        }
+		SDK retval = null;
 
-        SDK retval = null;
+		// try to determine SDK based on project location
 
-        // try to determine SDK based on project location
-        IPath sdkLocation = this.project.getRawLocation().removeLastSegments( 2 );
+		IPath sdkLocation = this.project.getRawLocation().removeLastSegments(2);
 
-        retval = SDKManager.getInstance().getSDK( sdkLocation );
+		retval = SDKManager.getInstance().getSDK(sdkLocation);
 
-        if( retval == null )
-        {
-            retval = SDKUtil.createSDKFromLocation( sdkLocation );
+		if (retval == null) {
+			retval = SDKUtil.createSDKFromLocation(sdkLocation);
 
-            if( retval != null && retval.isValid() )
-            {
-                SDKManager.getInstance().addSDK( retval );
-            }
-        }
+			if ((retval != null) && retval.isValid()) {
+				SDKManager.getInstance().addSDK(retval);
+			}
+		}
 
-        return retval;
-    }
+		return retval;
+	}
 
-    protected IWorkspace getWorkspace()
-    {
-        return ResourcesPlugin.getWorkspace();
-    }
+	protected IWorkspace getWorkspace() {
+		return ResourcesPlugin.getWorkspace();
+	}
 
-    protected void setProject( IProject project )
-    {
-        this.project = project;
-    }
+	protected void setProject(IProject project) {
+		this.project = project;
+	}
+
+	protected IProject project;
+
 }

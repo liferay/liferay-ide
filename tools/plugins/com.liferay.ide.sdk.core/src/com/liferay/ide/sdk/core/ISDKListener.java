@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,19 +10,19 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
-package com.liferay.ide.sdk.core;
+ */
 
+package com.liferay.ide.sdk.core;
 
 /**
  * @author Gregory Amerson
  */
-public interface ISDKListener
-{
-    void sdksAdded( SDK[] sdks );
+public interface ISDKListener {
 
-    void sdksChanged( SDK[] sdks );
+	public void sdksAdded(SDK[] sdks);
 
-    void sdksRemoved( SDK[] sdks );
+	public void sdksChanged(SDK[] sdks);
+
+	public void sdksRemoved(SDK[] sdks);
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.sdk.core;
 
@@ -29,50 +28,47 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
 
-@SuppressWarnings( "restriction" )
-public class SDKClasspathProvider extends AntClasspathProvider
-{
+/**
+ * @author Greg Amerson
+ */
+@SuppressWarnings("restriction")
+public class SDKClasspathProvider extends AntClasspathProvider {
 
-    public static final String ID = "com.liferay.ide.sdk.core.SDKClasspathProvider"; //$NON-NLS-1$
+	public static final String ID = "com.liferay.ide.sdk.core.SDKClasspathProvider";
 
-    public SDKClasspathProvider()
-    {
-        super();
-    }
+	public SDKClasspathProvider() {
+	}
 
-    @Override
-    public IRuntimeClasspathEntry[] computeUnresolvedClasspath( ILaunchConfiguration configuration )
-        throws CoreException
-    {
-        IRuntimeClasspathEntry[] retval = null;
+	@Override
+	public IRuntimeClasspathEntry[] computeUnresolvedClasspath(ILaunchConfiguration configuration)
+		throws CoreException {
 
-        IRuntimeClasspathEntry[] superEntries = super.computeUnresolvedClasspath( configuration );
+		IRuntimeClasspathEntry[] retval = null;
 
-        boolean separateVM = AntLaunchingUtil.isSeparateJREAntBuild( configuration );
+		IRuntimeClasspathEntry[] superEntries = super.computeUnresolvedClasspath(configuration);
 
-        if( separateVM )
-        {
-            List<IRuntimeClasspathEntry> newEntries = new ArrayList<IRuntimeClasspathEntry>();
+		boolean separateVM = AntLaunchingUtil.isSeparateJREAntBuild(configuration);
 
-            Collections.addAll( newEntries, superEntries );
+		if (separateVM) {
+			List<IRuntimeClasspathEntry> newEntries = new ArrayList<>();
 
-            AntCorePreferences prefs = AntCorePlugin.getPlugin().getPreferences();
+			Collections.addAll(newEntries, superEntries);
 
-            IAntClasspathEntry[] antClasspathEntries = prefs.getContributedClasspathEntries();
+			AntCorePreferences prefs = AntCorePlugin.getPlugin().getPreferences();
 
-            for( int i = 0; i < antClasspathEntries.length; i++ )
-            {
-                newEntries.add( JavaRuntime.newStringVariableClasspathEntry( antClasspathEntries[i].getLabel() ) );
-            }
+			IAntClasspathEntry[] antClasspathEntries = prefs.getContributedClasspathEntries();
 
-            retval = newEntries.toArray( new IRuntimeClasspathEntry[0] );
-        }
-        else
-        {
-            retval = superEntries;
-        }
+			for (int i = 0; i < antClasspathEntries.length; i++) {
+				newEntries.add(JavaRuntime.newStringVariableClasspathEntry(antClasspathEntries[i].getLabel()));
+			}
 
-        return retval;
-    }
+			retval = newEntries.toArray(new IRuntimeClasspathEntry[0]);
+		}
+		else {
+			retval = superEntries;
+		}
+
+		return retval;
+	}
 
 }

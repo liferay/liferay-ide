@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.sdk.core;
 
@@ -31,83 +30,79 @@ import org.eclipse.debug.core.ILaunchManager;
 /**
  * @author Terry Jia
  */
-@SuppressWarnings( "restriction" )
-public class CreateHelper extends LaunchHelper
-{
+@SuppressWarnings("restriction")
+public class CreateHelper extends LaunchHelper {
 
-    public static final String PROGRAM_CONFIG_TYPE_ID =
-        IExternalToolConstants.ID_PROGRAM_LAUNCH_CONFIGURATION_TYPE;
+	public static final String PROGRAM_CONFIG_TYPE_ID = IExternalToolConstants.ID_PROGRAM_LAUNCH_CONFIGURATION_TYPE;
 
-    protected IPath currentCreateFile;
+	public CreateHelper(SDK sdk) {
+		super(PROGRAM_CONFIG_TYPE_ID);
 
-    protected SDK sdk;
+		this.sdk = sdk;
 
-    private IProgressMonitor monitor;
+		setLaunchSync(true);
+		setLaunchInBackground(true);
+		setLaunchCaptureInConsole(true);
+		setLaunchIsPrivate(true);
+	}
 
-    public CreateHelper( SDK sdk )
-    {
-        super( PROGRAM_CONFIG_TYPE_ID );
+	public CreateHelper(SDK sdk, IProgressMonitor monitor) {
+		this(sdk);
 
-        this.sdk = sdk;
+		_monitor = monitor;
+	}
 
-        setLaunchSync( true );
-        setLaunchInBackground( true );
-        setLaunchCaptureInConsole( true );
-        setLaunchIsPrivate( true );
-    }
+	public ILaunchConfiguration createLaunchConfiguration(
+			IPath buildFile, ArrayList<String> arguments, String workingDir)
+		throws CoreException {
 
-    public CreateHelper( SDK sdk, IProgressMonitor monitor )
-    {
-        this( sdk );
+		StringBuffer sb = new StringBuffer();
 
-        this.monitor = monitor;
-    }
+		for (String argument : arguments) {
+			sb.append("\"");
+			sb.append(argument);
+			sb.append("\" ");
+			sb.append("");
+		}
 
-    public ILaunchConfiguration createLaunchConfiguration(
-        IPath buildFile, ArrayList<String> arguments, String workingDir ) throws CoreException
-    {
-        StringBuffer sb = new StringBuffer();
+		ILaunchConfigurationWorkingCopy launchConfig = super.createLaunchConfiguration();
 
-        for( String argument : arguments )
-        {
-            sb.append( "\"" );
-            sb.append( argument );
-            sb.append( "\"" );
-            sb.append( " " );
-        }
+		IPath sdkPluginLocation = SDKCorePlugin.getDefault().getStateLocation();
 
-        ILaunchConfigurationWorkingCopy launchConfig = super.createLaunchConfiguration();
-        launchConfig.setAttribute( IExternalToolConstants.ATTR_LOCATION, buildFile.toOSString() );
-        launchConfig.setAttribute( IExternalToolConstants.ATTR_WORKING_DIRECTORY, workingDir );
-        launchConfig.setAttribute( IExternalToolConstants.ATTR_TOOL_ARGUMENTS, sb.toString().trim() );
-        launchConfig.setAttribute( DebugPlugin.ATTR_CAPTURE_OUTPUT, true);
-        launchConfig.setAttribute( "org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE",
-            SDKCorePlugin.getDefault().getStateLocation().append( "sdk.log" ).toOSString() );
+		launchConfig.setAttribute(IExternalToolConstants.ATTR_LOCATION, buildFile.toOSString());
+		launchConfig.setAttribute(IExternalToolConstants.ATTR_WORKING_DIRECTORY, workingDir);
+		launchConfig.setAttribute(IExternalToolConstants.ATTR_TOOL_ARGUMENTS, sb.toString().trim());
+		launchConfig.setAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT, Boolean.TRUE);
+		launchConfig.setAttribute(
+			"org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE", sdkPluginLocation.append("sdk.log").toOSString());
 
-        return launchConfig;
-    }
+		return launchConfig;
+	}
 
-    public void runTarget( IPath createFile, ArrayList<String> arguments, String workingDir ) throws CoreException
-    {
-        if( isLaunchRunning() )
-        {
-            throw new IllegalStateException( "Existing launch in progress" );
-        }
+	public void runTarget(IPath createFile, ArrayList<String> arguments, String workingDir) throws CoreException {
+		if (isLaunchRunning()) {
+			throw new IllegalStateException("Existing launch in progress");
+		}
 
-        this.currentCreateFile = createFile;
+		currentCreateFile = createFile;
 
-        this.currentCreateFile.toFile().setExecutable( true );
+		currentCreateFile.toFile().setExecutable(true);
 
-        ILaunchConfiguration launchConfig = createLaunchConfiguration( createFile, arguments, workingDir );
+		ILaunchConfiguration launchConfig = createLaunchConfiguration(createFile, arguments, workingDir);
 
-        int exitValue = launch( launchConfig, ILaunchManager.RUN_MODE, monitor );
+		int exitValue = launch(launchConfig, ILaunchManager.RUN_MODE, _monitor);
 
-        if( exitValue > 0 )
-        {
-            throw new CoreException( SDKCorePlugin.createErrorStatus( "create script failed with error code " + exitValue ) );
-        }
+		if (exitValue > 0) {
+			throw new CoreException(
+				SDKCorePlugin.createErrorStatus("create script failed with error code " + exitValue));
+		}
 
-        this.currentCreateFile = null;
-    }
+		currentCreateFile = null;
+	}
+
+	protected IPath currentCreateFile;
+	protected SDK sdk;
+
+	private IProgressMonitor _monitor;
 
 }
