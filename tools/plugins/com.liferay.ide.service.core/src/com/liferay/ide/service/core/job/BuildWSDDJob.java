@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.core.job;
 
@@ -28,47 +27,43 @@ import org.eclipse.osgi.util.NLS;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class BuildWSDDJob extends BuildServiceJob
-{
+public class BuildWSDDJob extends BuildServiceJob {
 
-    public BuildWSDDJob( IProject project )
-    {
-        super( project );
+	public BuildWSDDJob(IProject project) {
+		super(project);
 
-        setName( Msgs.buildWSDD );
-        setUser( true );
-    }
+		setName(Msgs.buildWSDD);
+		setUser(true);
+	}
 
-    @Override
-    protected void runBuild( final IProgressMonitor monitor ) throws CoreException
-    {
-        final IProjectBuilder builder = getProjectBuilder();
+	@Override
+	protected void runBuild(IProgressMonitor monitor) throws CoreException {
+		IProjectBuilder builder = getProjectBuilder();
 
-        monitor.worked( 50 );
+		monitor.worked(50);
 
-        IStatus retval = builder.buildWSDD( monitor );
+		IStatus retval = builder.buildWSDD(monitor);
 
-        if( retval == null )
-        {
-            retval = ServiceCore.createErrorStatus( NLS.bind( Msgs.errorRunningBuildWSDD, getProject() ) );
-        }
+		if (retval == null) {
+			retval = ServiceCore.createErrorStatus(NLS.bind(Msgs.errorRunningBuildWSDD, getProject()));
+		}
 
-        if( retval == null || ! retval.isOK() )
-        {
-            throw new CoreException( retval );
-        }
+		if ((retval == null) || !retval.isOK()) {
+			throw new CoreException(retval);
+		}
 
-        monitor.worked( 90 );
-    }
+		monitor.worked(90);
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String buildWSDD;
-        public static String errorRunningBuildWSDD;
+	private static class Msgs extends NLS {
 
-        static
-        {
-            initializeMessages( BuildWSDDJob.class.getName(), Msgs.class );
-        }
-    }
+		public static String buildWSDD;
+		public static String errorRunningBuildWSDD;
+
+		static {
+			initializeMessages(BuildWSDDJob.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

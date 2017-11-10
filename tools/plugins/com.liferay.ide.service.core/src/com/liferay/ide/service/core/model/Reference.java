@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.core.model;
 
@@ -26,29 +25,29 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@Image( path = "images/references_16x16.png" )
-public interface Reference extends Element
-{
+@Image(path = "images/references_16x16.png")
+public interface Reference extends Element {
 
-    ElementType TYPE = new ElementType( Reference.class );
+	public ElementType TYPE = new ElementType(Reference.class);
 
-    // *** Package-path ***
+	// *** Package-path ***
 
-    @XmlBinding( path = "@package-path" )
-    @Label( standard = "&Package path" )
-    ValueProperty PROP_PACKAGE_PATH = new ValueProperty( TYPE, "PackagePath" ); //$NON-NLS-1$
+	public Value<String> getEntity();
 
-    Value<String> getPackagePath();
+	public Value<String> getPackagePath();
 
-    void setPackagePath( String value );
+	public void setEntity(String value);
 
-    // *** Entity ***
+	// *** Entity ***
 
-    @XmlBinding( path = "@entity" )
-    @Label( standard = "&entity" )
-    ValueProperty PROP_ENTITY = new ValueProperty( TYPE, "Entity" ); //$NON-NLS-1$
+	public void setPackagePath(String value);
 
-    Value<String> getEntity();
+	@Label(standard = "&entity")
+	@XmlBinding(path = "@entity")
+	public ValueProperty PROP_ENTITY = new ValueProperty(TYPE, "Entity");
 
-    void setEntity( String value );
+	@Label(standard = "&Package path")
+	@XmlBinding(path = "@package-path")
+	public ValueProperty PROP_PACKAGE_PATH = new ValueProperty(TYPE, "PackagePath");
+
 }

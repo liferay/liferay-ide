@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.service.core.model;
 
 import org.eclipse.sapphire.Element;
@@ -21,10 +21,10 @@ import org.eclipse.sapphire.ElementProperty;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.Since;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Unique;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
-import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Documentation;
 import org.eclipse.sapphire.modeling.annotations.Image;
@@ -34,243 +34,246 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlElementBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
+/**
+ * @author Gregory Amerson
+ */
 @Image(path = "images/Entity_16x16.gif")
-public interface Entity extends Element
-{
-    ElementType TYPE = new ElementType( Entity.class );
+public interface Entity extends Element {
 
-    // *** Name ***
+	public ElementType TYPE = new ElementType(Entity.class);
 
-    @XmlBinding( path = "@name" )
-    @Label( standard = "&name" )
-    @Required
-    @Unique
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
+	// *** Name ***
 
-    Value<String> getName();
+	public ElementList<Column> getColumns();
 
-    void setName( String value );
+	public Value<String> getDataSource();
 
-    // *** Human Name ***
+	public Value<Boolean> getDeprecated();
 
-    @XmlBinding( path = "@human-name" )
-    @Label( standard = "&human name" )
-    ValueProperty PROP_HUMAN_NAME = new ValueProperty( TYPE, "HumanName" ); //$NON-NLS-1$
+	// *** Human Name ***
 
-    Value<String> getHumanName();
+	public ElementList<Finder> getFinders();
 
-    void setHumanName( String value );
+	public Value<String> getHumanName();
 
-    // *** Table ***
+	public Value<String> getName();
 
-    @XmlBinding( path = "@table" )
-    @Label( standard = "&table" )
-    ValueProperty PROP_TABLE = new ValueProperty( TYPE, "Table" ); //$NON-NLS-1$
+	// *** Table ***
 
-    Value<String> getTable();
+	public ElementHandle<Order> getOrder();
 
-    void setTable( String value );
+	public Value<String> getPersistenceClass();
 
-    // *** UUID ***
+	public ElementList<Reference> getReferences();
 
-    @Type( base = Boolean.class )
-    @XmlBinding( path = "@uuid" )
-    @Label( standard = "&uuid" )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_UUID = new ValueProperty( TYPE, "Uuid" ); //$NON-NLS-1$
+	// *** UUID ***
 
-    Value<Boolean> getUuid();
+	public Value<String> getSessionFactory();
 
-    void setUuid( String value );
+	public Value<String> getTable();
 
-    void setUuid( Boolean value );
+	public Value<Boolean> getTrashEnabled();
 
-    // *** UUID Accessor ***
+	public Value<String> getTxManager();
 
-    @Type( base = Boolean.class )
-    @XmlBinding( path = "@uuid-accessor" )
-    @Label( standard = "&uuid accessor" )
-    @DefaultValue( text = "false" )
-    @Documentation( content = "If the [b]uuid-accessor[/b] value is true, then the service will generate a UUID column accessor for the service. This accessor will provide a fast and type-safe way to access entity's UUID." )
-    @Since( "6.1" )
-    ValueProperty PROP_UUID_ACCESSOR = new ValueProperty( TYPE, "UuidAccessor" ); //$NON-NLS-1$
+	// *** UUID Accessor ***
 
-    Value<Boolean> getUuidAccessor();
+	public ElementList<TxRequired> getTxRequireds();
 
-    void setUuidAccessor( String value );
+	public Value<Boolean> getUuid();
 
-    void setUuidAccessor( Boolean value );
+	public Value<Boolean> getUuidAccessor();
 
-    // *** LocalService ***
+	public Value<Boolean> isCacheEnabled();
 
-    @Type( base = Boolean.class )
-    @Label( standard = "&local service" )
-    @DefaultValue( text = "false" )
-    @XmlBinding( path = "@local-service" )
-    ValueProperty PROP_LOCAL_SERVICE = new ValueProperty( TYPE, "LocalService" ); //$NON-NLS-1$
+	// *** LocalService ***
 
-    Value<Boolean> isLocalService();
+	public Value<Boolean> isJsonEnabled();
 
-    void setLocalService( String value );
+	public Value<Boolean> isLocalService();
 
-    void setLocalService( Boolean value );
+	public Value<Boolean> isRemoteService();
 
-    // *** RemoteService ***
+	public void setCacheEnabled(Boolean value);
 
-    @Type( base = Boolean.class )
-    @Label( standard = "&remote service" )
-    @DefaultValue( text = "true" )
-    @XmlBinding( path = "@remote-service" )
-    ValueProperty PROP_REMOTE_SERVICE = new ValueProperty( TYPE, "RemoteService" ); //$NON-NLS-1$
+	// *** RemoteService ***
 
-    Value<Boolean> isRemoteService();
+	public void setCacheEnabled(String value);
 
-    void setRemoteService( String value );
+	public void setDataSource(String value);
 
-    void setRemoteService( Boolean value );
+	public void setDeprecated(Boolean value);
 
-    // *** Persistence Class ***
+	public void setDeprecated(String value);
 
-    @XmlBinding( path = "@persistence-class" )
-    @Label( standard = "&persistence class" )
-    ValueProperty PROP_PERSISTENCE_CLASS = new ValueProperty( TYPE, "PersistenceClass" ); //$NON-NLS-1$
+	// *** Persistence Class ***
 
-    Value<String> getPersistenceClass();
+	public void setHumanName(String value);
 
-    void setPersistenceClass( String value );
+	public void setJsonEnabled(Boolean value);
 
-    // *** Data Source ***
+	public void setJsonEnabled(String value);
 
-    @XmlBinding( path = "@data-source" )
-    @Label( standard = "&data source" )
-    ValueProperty PROP_DATA_SOURCE = new ValueProperty( TYPE, "DataSource" ); //$NON-NLS-1$
+	// *** Data Source ***
 
-    Value<String> getDataSource();
+	public void setLocalService(Boolean value);
 
-    void setDataSource( String value );
+	public void setLocalService(String value);
 
-    // *** Session Factory ***
+	public void setName(String value);
 
-    @XmlBinding( path = "@session-factory" )
-    @Label( standard = "&session factory" )
-    ValueProperty PROP_SESSION_FACTORY = new ValueProperty( TYPE, "SessionFactory" ); //$NON-NLS-1$
+	// *** Session Factory ***
 
-    Value<String> getSessionFactory();
+	public void setPersistenceClass(String value);
 
-    void setSessionFactory( String value );
+	public void setRemoteService(Boolean value);
 
-    // *** Tx manager ***
+	public void setRemoteService(String value);
 
-    @XmlBinding( path = "@tx-manager" )
-    @Label( standard = "tx &manager" )
-    ValueProperty PROP_TX_MANAGER = new ValueProperty( TYPE, "TxManager" ); //$NON-NLS-1$
+	// *** Tx manager ***
 
-    Value<String> getTxManager();
+	public void setSessionFactory(String value);
 
-    void setTxManager( String value );
+	public void setTable(String value);
 
-    // *** Cache Enabled ***
+	public void setTrashEnabled(Boolean value);
 
-    @Type( base = Boolean.class )
-    @Label( standard = "&cache enabled" )
-    @XmlBinding( path = "@cache-enabled" )
-    @DefaultValue( text = "true" )
-    ValueProperty PROP_CACHE_ENABLED = new ValueProperty( TYPE, "CacheEnabled" ); //$NON-NLS-1$
+	// *** Cache Enabled ***
 
-    Value<Boolean> isCacheEnabled();
+	public void setTrashEnabled(String value);
 
-    void setCacheEnabled( String value );
+	public void setTxManager(String value);
 
-    void setCacheEnabled( Boolean value );
+	public void setUuid(Boolean value);
 
-    // *** Json Enabled ***
+	public void setUuid(String value);
 
-    @Type( base = Boolean.class )
-    @Label( standard = "&JSON enabled" )
-    @XmlBinding( path = "@json-enabled" )
-    @DefaultValue( text = "true" )
-    ValueProperty PROP_JSON_ENABLED = new ValueProperty( TYPE, "JsonEnabled" ); //$NON-NLS-1$
+	// *** Json Enabled ***
 
-    Value<Boolean> isJsonEnabled();
+	public void setUuidAccessor(Boolean value);
 
-    void setJsonEnabled( String value );
+	public void setUuidAccessor(String value);
 
-    void setJsonEnabled( Boolean value );
+	@DefaultValue(text = "true")
+	@Label(standard = "&cache enabled")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "@cache-enabled")
+	public ValueProperty PROP_CACHE_ENABLED = new ValueProperty(TYPE, "CacheEnabled");
 
-    // *** Trash Enabled ***
+	@Label(standard = "column")
+	@Type(base = Column.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "column", type = Column.class))
+	public ListProperty PROP_COLUMNS = new ListProperty(TYPE, "Columns");
 
-    @Type( base = Boolean.class )
-    @Label( standard = "&Trash Enabled" )
-    @XmlBinding( path = "@trash-enabled" )
-    @DefaultValue( text = "false" )
-    @Since( "6.2" )
-    ValueProperty PROP_TRASH_ENABLED= new ValueProperty( TYPE, "TrashEnabled" ); //$NON-NLS-1$
+	// *** Trash Enabled ***
 
-    Value<Boolean> getTrashEnabled();
+	@Label(standard = "&data source")
+	@XmlBinding(path = "@data-source")
+	public ValueProperty PROP_DATA_SOURCE = new ValueProperty(TYPE, "DataSource");
 
-    void setTrashEnabled( String value );
-
-    void setTrashEnabled( Boolean value );
-
-    // *** Deprecated ***
-
-    @Type( base = Boolean.class )
-    @XmlBinding( path = "@deprecated" )
-    @Label( standard = "&deprecated" )
-    @DefaultValue( text = "false" )
-    @Since( "6.2" )
-    ValueProperty PROP_DEPRECATED = new ValueProperty( TYPE, "Deprecated" ); //$NON-NLS-1$
-
-    Value<Boolean> getDeprecated();
-
-    void setDeprecated( String value );
-
-    void setDeprecated( Boolean value );
-
-    // *** Columns ***
-
-    @Type( base = Column.class )
-    @Label( standard = "column" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "column", type = Column.class ) )
-    ListProperty PROP_COLUMNS = new ListProperty( TYPE, "Columns" ); //$NON-NLS-1$
-
-    ElementList<Column> getColumns();
-
-    @Type( base = Order.class )
-    @Label( standard = "order" )
-    @XmlElementBinding( mappings = @XmlElementBinding.Mapping( element = "order", type = Order.class ) )
-    ElementProperty PROP_ORDER = new ElementProperty( TYPE, "Order" ); //$NON-NLS-1$
-
-    ElementHandle<Order> getOrder();
-
-    // @XmlElementBinding(path = "order")
-    // ImpliedElementProperty PROP_ORDER = new ImpliedElementProperty(TYPE, "Order");
-
-    // IOrder getOrder();
-
-    @Type( base = Finder.class )
-    @Label( standard = "finder" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "finder", type = Finder.class ) )
-    ListProperty PROP_FINDERS = new ListProperty( TYPE, "Finders" ); //$NON-NLS-1$
-
-    ElementList<Finder> getFinders();
-
-    // *** References ***
-
-    @Type( base = Reference.class )
-    @Label( standard = "references" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "reference", type = Reference.class ) )
-    ListProperty PROP_REFERENCES = new ListProperty( TYPE, "References" ); //$NON-NLS-1$
-
-    ElementList<Reference> getReferences();
-
-    // *** TxRequireds ***
-
-    @Type( base = TxRequired.class )
-    @Label( standard = "tx requireds" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "tx-required", type = TxRequired.class ) )
-    ListProperty PROP_TX_REQUIREDS = new ListProperty( TYPE, "TxRequireds" ); //$NON-NLS-1$
-
-    ElementList<TxRequired> getTxRequireds();
+	@DefaultValue(text = "false")
+	@Label(standard = "&deprecated")
+	@Since("6.2")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "@deprecated")
+	public ValueProperty PROP_DEPRECATED = new ValueProperty(TYPE, "Deprecated");
+
+	@Label(standard = "finder")
+	@Type(base = Finder.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "finder", type = Finder.class))
+	public ListProperty PROP_FINDERS = new ListProperty(TYPE, "Finders");
+
+	@Label(standard = "&human name")
+	@XmlBinding(path = "@human-name")
+	public ValueProperty PROP_HUMAN_NAME = new ValueProperty(TYPE, "HumanName");
+
+	// *** Deprecated ***
+
+	@DefaultValue(text = "true")
+	@Label(standard = "&JSON enabled")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "@json-enabled")
+	public ValueProperty PROP_JSON_ENABLED = new ValueProperty(TYPE, "JsonEnabled");
+
+	@DefaultValue(text = "false")
+	@Label(standard = "&local service")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "@local-service")
+	public ValueProperty PROP_LOCAL_SERVICE = new ValueProperty(TYPE, "LocalService");
+
+	@Label(standard = "&name")
+	@Required
+	@Unique
+	@XmlBinding(path = "@name")
+	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
+
+	@Label(standard = "order")
+	@Type(base = Order.class)
+	@XmlElementBinding(mappings = @XmlElementBinding.Mapping(element = "order", type = Order.class))
+	public ElementProperty PROP_ORDER = new ElementProperty(TYPE, "Order");
+
+	// *** Columns ***
+
+	@Label(standard = "&persistence class")
+	@XmlBinding(path = "@persistence-class")
+	public ValueProperty PROP_PERSISTENCE_CLASS = new ValueProperty(TYPE, "PersistenceClass");
+
+	@Label(standard = "references")
+	@Type(base = Reference.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "reference", type = Reference.class))
+	public ListProperty PROP_REFERENCES = new ListProperty(TYPE, "References");
+
+	@DefaultValue(text = "true")
+	@Label(standard = "&remote service")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "@remote-service")
+	public ValueProperty PROP_REMOTE_SERVICE = new ValueProperty(TYPE, "RemoteService");
+
+	@Label(standard = "&session factory")
+	@XmlBinding(path = "@session-factory")
+	public ValueProperty PROP_SESSION_FACTORY = new ValueProperty(TYPE, "SessionFactory");
+
+	// IOrder getOrder();
+
+	@Label(standard = "&table")
+	@XmlBinding(path = "@table")
+	public ValueProperty PROP_TABLE = new ValueProperty(TYPE, "Table");
+
+	@DefaultValue(text = "false")
+	@Label(standard = "&Trash Enabled")
+	@Since("6.2")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "@trash-enabled")
+	public ValueProperty PROP_TRASH_ENABLED = new ValueProperty(TYPE, "TrashEnabled");
+
+	// *** References ***
+
+	@Label(standard = "tx &manager")
+	@XmlBinding(path = "@tx-manager")
+	public ValueProperty PROP_TX_MANAGER = new ValueProperty(TYPE, "TxManager");
+
+	@Label(standard = "tx requireds")
+	@Type(base = TxRequired.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "tx-required", type = TxRequired.class))
+	public ListProperty PROP_TX_REQUIREDS = new ListProperty(TYPE, "TxRequireds");
+
+	// *** TxRequireds ***
+
+	@DefaultValue(text = "false")
+	@Label(standard = "&uuid")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "@uuid")
+	public ValueProperty PROP_UUID = new ValueProperty(TYPE, "Uuid");
+
+	@DefaultValue(text = "false")
+	@Documentation(
+		content = "If the [b]uuid-accessor[/b] value is true, then the service will generate a UUID column accessor for the service." +
+			"This accessor will provide a fast and type-safe way to access entity's UUID."
+	)
+	@Label(standard = "&uuid accessor")
+	@Since("6.1")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "@uuid-accessor")
+	public ValueProperty PROP_UUID_ACCESSOR = new ValueProperty(TYPE, "UuidAccessor");
 
 }

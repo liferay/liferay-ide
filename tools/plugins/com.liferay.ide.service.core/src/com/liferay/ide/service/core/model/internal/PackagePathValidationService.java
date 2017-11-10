@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.core.model.internal;
 
@@ -29,44 +28,46 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Cindy Li
  */
-@SuppressWarnings( "restriction" )
-public class PackagePathValidationService extends ValidationService
-{
-    @Override
-    public Status compute()
-    {
-        final Value<String> packagePath = context().find( ServiceBuilder.class ).getPackagePath();
-        String packPathVal = packagePath.content();
+@SuppressWarnings("restriction")
+public class PackagePathValidationService extends ValidationService {
 
-        if( packPathVal == null )
-        {
-            return Status.createErrorStatus( Msgs.packagePathNotEmpty );
-        }
+	@Override
+	public Status compute() {
+		ServiceBuilder serviceBuilderClass = context().find(ServiceBuilder.class);
 
-        // Use standard java conventions to validate the package name
-        IStatus javaStatus =
-            JavaConventions.validatePackageName( packPathVal, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 );
+		Value<String> packagePath = serviceBuilderClass.getPackagePath();
 
-        if( javaStatus.getSeverity() == IStatus.ERROR )
-        {
-            return Status.createErrorStatus( J2EECommonMessages.ERR_JAVA_PACAKGE_NAME_INVALID + javaStatus.getMessage() );
-        }
+		String packPathVal = packagePath.content();
 
-        if( javaStatus.getSeverity() == IStatus.WARNING )
-        {
-            return Status.createWarningStatus( J2EECommonMessages.ERR_JAVA_PACKAGE_NAME_WARNING + javaStatus.getMessage() );
-        }
+		if (packPathVal == null) {
+			return Status.createErrorStatus(Msgs.packagePathNotEmpty);
+		}
 
-        return Status.createOkStatus();
-    }
+		// Use standard java conventions to validate the package name
 
-    private static class Msgs extends NLS
-    {
-        public static String packagePathNotEmpty;
+		IStatus javaStatus = JavaConventions.validatePackageName(
+			packPathVal, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7);
 
-        static
-        {
-            initializeMessages( PackagePathValidationService.class.getName(), Msgs.class );
-        }
-    }
+		if (javaStatus.getSeverity() == IStatus.ERROR) {
+			return Status.createErrorStatus(J2EECommonMessages.ERR_JAVA_PACAKGE_NAME_INVALID + javaStatus.getMessage());
+		}
+
+		if (javaStatus.getSeverity() == IStatus.WARNING) {
+			return Status.createWarningStatus(
+				J2EECommonMessages.ERR_JAVA_PACKAGE_NAME_WARNING + javaStatus.getMessage());
+		}
+
+		return Status.createOkStatus();
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String packagePathNotEmpty;
+
+		static {
+			initializeMessages(PackagePathValidationService.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.core.model;
 
@@ -29,28 +28,27 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 /**
  * @author Gregory Amerson
  */
-@Image( path = "images/references_16x16.png" )
-public interface Relationship extends Element
-{
+@Image(path = "images/references_16x16.png")
+public interface Relationship extends Element {
 
-    ElementType TYPE = new ElementType( Relationship.class );
+	public ElementType TYPE = new ElementType(Relationship.class);
 
-    @Reference( target = Entity.class )
-    @Service( impl = EntityRelationshipService.class )
-    @Required
-    ValueProperty PROP_FROM_ENTITY = new ValueProperty( TYPE, "FromEntity" ); //$NON-NLS-1$
+	public ReferenceValue<String, Entity> getFromEntity();
 
-    ReferenceValue<String, Entity> getFromEntity();
+	public ReferenceValue<String, Entity> getToEntity();
 
-    void setFromEntity( String value );
+	public void setFromEntity(String value);
 
-    @Reference( target = Entity.class )
-    @Service( impl = EntityRelationshipService.class )
-    @Required
-    ValueProperty PROP_TO_ENTITY = new ValueProperty( TYPE, "ToEntity" ); //$NON-NLS-1$
+	public void setToEntity(String value);
 
-    ReferenceValue<String, Entity> getToEntity();
+	@Reference(target = Entity.class)
+	@Required
+	@Service(impl = EntityRelationshipService.class)
+	public ValueProperty PROP_FROM_ENTITY = new ValueProperty(TYPE, "FromEntity");
 
-    void setToEntity( String value );
+	@Reference(target = Entity.class)
+	@Required
+	@Service(impl = EntityRelationshipService.class)
+	public ValueProperty PROP_TO_ENTITY = new ValueProperty(TYPE, "ToEntity");
 
 }

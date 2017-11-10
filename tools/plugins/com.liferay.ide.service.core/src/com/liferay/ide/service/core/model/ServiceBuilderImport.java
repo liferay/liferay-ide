@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.core.model;
 
@@ -36,24 +35,25 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@Image( path = "images/file_16x16.gif" )
-public interface ServiceBuilderImport extends Element
-{
-	ElementType TYPE = new ElementType( ServiceBuilderImport.class );
+@Image(path = "images/file_16x16.gif")
+public interface ServiceBuilderImport extends Element {
 
-	@Type( base = Path.class )
-	@XmlBinding( path = "@file" )
-	@Label( standard = "file" )
-	@Service( impl = ImportPathService.class )
-	@ValidFileSystemResourceType( FileSystemResourceType.FILE )
-	@FileExtensions( expr = "xml" )
+	public ElementType TYPE = new ElementType(ServiceBuilderImport.class);
+
+	public Value<Path> getFile();
+
+	public void setFile(Path value);
+
+	public void setFile(String value);
+
+	@FileExtensions(expr = "xml")
+	@Label(standard = "file")
 	@MustExist
 	@Required
-	ValueProperty PROP_FILE = new ValueProperty( TYPE, "File" ); //$NON-NLS-1$
+	@Service(impl = ImportPathService.class)
+	@Type(base = Path.class)
+	@ValidFileSystemResourceType(FileSystemResourceType.FILE)
+	@XmlBinding(path = "@file")
+	public ValueProperty PROP_FILE = new ValueProperty(TYPE, "File");
 
-	Value<Path> getFile();
-
-	void setFile( String value );
-
-	void setFile( Path value );
 }

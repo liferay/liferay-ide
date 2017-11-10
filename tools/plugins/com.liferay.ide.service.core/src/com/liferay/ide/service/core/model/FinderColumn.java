@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.core.model;
 
@@ -26,60 +25,60 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
-
 /**
  * @author Gregory Amerson
  */
 @Image(path = "images/finder_column_16x16.png")
-public interface FinderColumn extends Element
-{
+public interface FinderColumn extends Element {
 
-    ElementType TYPE = new ElementType( FinderColumn.class );
+	public ElementType TYPE = new ElementType(FinderColumn.class);
 
-    // *** Name ***
+	// *** Name ***
 
-    @XmlBinding( path = "@name" )
-    @Label( standard = "&name" )
-    @Required
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
+	public Value<String> getArrayableOperator();
 
-    Value<String> getName();
+	public Value<String> getComparator();
 
-    void setName( String value );
+	public Value<String> getName();
 
-    // *** CaseSensitive ***
+	// *** CaseSensitive ***
 
-    @Type( base = Boolean.class )
-    @Label( standard = "&case sensitive" )
-    @XmlBinding( path = "@case-sensitive" )
-    ValueProperty PROP_CASE_SENSITIVE = new ValueProperty( TYPE, "CaseSensitive" ); //$NON-NLS-1$
+	public Value<Boolean> isCaseSensitive();
 
-    Value<Boolean> isCaseSensitive();
+	public void setArrayableOperator(String value);
 
-    void setCaseSensitive( String value );
+	public void setCaseSensitive(Boolean value);
 
-    void setCaseSensitive( Boolean value );
+	public void setCaseSensitive(String value);
 
-    // ** Comparator ***
+	// ** Comparator ***
 
-    @Label( standard = "comparator" )
-    @XmlBinding( path = "@comparator" )
-    @PossibleValues( values = { "=", "!=", "<", "<=", ">", ">=", "LIKE" }, invalidValueMessage = "{0} is not a valid comparator." )
-    ValueProperty PROP_COMPARATOR = new ValueProperty( TYPE, "Comparator" ); //$NON-NLS-1$
+	public void setComparator(String value);
 
-    Value<String> getComparator();
+	public void setName(String value);
 
-    void setComparator( String value );
+	@Label(standard = "arrayable operator")
+	@PossibleValues(invalidValueMessage = "{0} is not a valid arryable operator.", values = {"AND", "OR"})
+	@XmlBinding(path = "@arrayable-operator")
+	public ValueProperty PROP_ARRAYABLE_OPERATOR = new ValueProperty(TYPE, "ArrayableOperator");
 
-    // ** Arrayable Operator ***
+	// ** Arrayable Operator ***
 
-    @Label( standard = "arrayable operator" )
-    @XmlBinding( path = "@arrayable-operator" )
-    @PossibleValues( values = { "AND", "OR" }, invalidValueMessage = "{0} is not a valid arryable operator." )
-    ValueProperty PROP_ARRAYABLE_OPERATOR = new ValueProperty( TYPE, "ArrayableOperator" ); //$NON-NLS-1$
+	@Label(standard = "&case sensitive")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "@case-sensitive")
+	public ValueProperty PROP_CASE_SENSITIVE = new ValueProperty(TYPE, "CaseSensitive");
 
-    Value<String> getArrayableOperator();
+	@Label(standard = "comparator")
+	@PossibleValues(
+		invalidValueMessage = "{0} is not a valid comparator.", values = {"=", "!=", "<", "<=", ">", ">=", "LIKE"}
+	)
+	@XmlBinding(path = "@comparator")
+	public ValueProperty PROP_COMPARATOR = new ValueProperty(TYPE, "Comparator");
 
-    void setArrayableOperator( String value );
+	@Label(standard = "&name")
+	@Required
+	@XmlBinding(path = "@name")
+	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
-}
+}

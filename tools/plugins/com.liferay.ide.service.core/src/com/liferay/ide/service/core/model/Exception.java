@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.core.model;
 
@@ -26,20 +25,19 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@Image( path = "images/jrtexception_obj_16x16.gif" )
-public interface Exception extends Element
-{
+@Image(path = "images/jrtexception_obj_16x16.gif")
+public interface Exception extends Element {
 
-    ElementType TYPE = new ElementType( Exception.class );
+	public ElementType TYPE = new ElementType(Exception.class);
 
-    // *** Exception ***
+	// *** Exception ***
 
-    @XmlBinding( path = "" )
-    @Label( standard = "&exception" )
-    ValueProperty PROP_EXCEPTION = new ValueProperty( TYPE, "Exception" ); //$NON-NLS-1$
+	public Value<String> getException();
 
-    Value<String> getException();
+	public void setException(String value);
 
-    void setException( String value );
+	@Label(standard = "&exception")
+	@XmlBinding(path = "")
+	public ValueProperty PROP_EXCEPTION = new ValueProperty(TYPE, "Exception");
 
 }

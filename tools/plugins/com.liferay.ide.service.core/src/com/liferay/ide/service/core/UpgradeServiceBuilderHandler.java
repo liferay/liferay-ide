@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.service.core;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -28,46 +28,47 @@ import org.eclipse.sapphire.platform.StatusBridge;
 /**
  * @author Simon Jiang
  */
-public class UpgradeServiceBuilderHandler extends AbstractUpgradeProjectHandler
-{
+public class UpgradeServiceBuilderHandler extends AbstractUpgradeProjectHandler {
 
-    @Override
-    public Status execute( IProject project, String runtimeName, IProgressMonitor monitor, int perUnit )
-    {
-        Status retval = Status.createOkStatus();
-        try
-        {
-            int worked = 0;
+	@Override
+	public Status execute(IProject project, String runtimeName, IProgressMonitor monitor, int perUnit) {
+		Status retval = Status.createOkStatus();
 
-            final IProgressMonitor submon = CoreUtil.newSubMonitor( monitor, 25 );
-            submon.subTask( "Executing build-service for " + project.getName() );
+		try {
+			int worked = 0;
 
-            worked = worked + perUnit;
-            submon.worked( worked );
+			IProgressMonitor submon = CoreUtil.newSubMonitor(monitor, 25);
 
-            final BuildServiceJob job = new BuildServiceJob( project );
-            job.schedule();
-            job.join();
+			submon.subTask("Executing build-service for " + project.getName());
 
-            final IStatus result = job.getResult();
+			worked = worked + perUnit;
 
-            if( !result.isOK() )
-            {
-                throw new CoreException( result );
-            }
+			submon.worked(worked);
 
-            worked = worked + perUnit;
-            submon.worked( worked );
-        }
-        catch( Exception e )
-        {
-            final IStatus error =
-                ServiceCore.createErrorStatus( "Unable to run service build task for " + project.getName(), e );
-            ServiceCore.logError( "Unable to run service build task for " + project.getName(), e );
+			BuildServiceJob job = new BuildServiceJob(project);
 
-            retval = StatusBridge.create( error );
-        }
+			job.schedule();
+			job.join();
 
-        return retval;
-    }
+			IStatus result = job.getResult();
+
+			if (!result.isOK()) {
+				throw new CoreException(result);
+			}
+
+			worked = worked + perUnit;
+
+			submon.worked(worked);
+		}
+		catch (Exception e) {
+			IStatus error = ServiceCore.createErrorStatus(
+				"Unable to run service build task for " + project.getName(), e);
+			ServiceCore.logError("Unable to run service build task for " + project.getName(), e);
+
+			retval = StatusBridge.create(error);
+		}
+
+		return retval;
+	}
+
 }

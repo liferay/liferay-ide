@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.core.model;
 
@@ -26,20 +25,19 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@Image( path = "images/tx_requireds_16x16.gif" )
-public interface TxRequired extends Element
-{
+@Image(path = "images/tx_requireds_16x16.gif")
+public interface TxRequired extends Element {
 
-    ElementType TYPE = new ElementType( TxRequired.class );
+	public ElementType TYPE = new ElementType(TxRequired.class);
 
-    // *** TxRequired ***
+	// *** TxRequired ***
 
-    @XmlBinding( path = "" )
-    @Label( standard = "&tx required" )
-    ValueProperty PROP_TX_REQUIRED = new ValueProperty( TYPE, "TxRequired" ); //$NON-NLS-1$
+	public Value<String> getTxRequired();
 
-    Value<String> getTxRequired();
+	public void setTxRequired(String value);
 
-    void setTxRequired( String value );
+	@Label(standard = "&tx required")
+	@XmlBinding(path = "")
+	public ValueProperty PROP_TX_REQUIRED = new ValueProperty(TYPE, "TxRequired");
 
 }

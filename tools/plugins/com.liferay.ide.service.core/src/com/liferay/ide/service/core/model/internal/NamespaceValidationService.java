@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.core.model.internal;
 
@@ -26,29 +25,31 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Cindy Li
  */
-public class NamespaceValidationService extends ValidationService
-{
-    @Override
-    public Status compute()
-    {
-        final Value<String> namespace = context().find( ServiceBuilder.class ).getNamespace();
-        String content = namespace.content();
+public class NamespaceValidationService extends ValidationService {
 
-        if( content != null && ! ServiceUtil.isValidNamespace( content.toString() ) )
-        {
-            return Status.createErrorStatus( Msgs.namespaceElementValidKeyword );
-        }
+	@Override
+	public Status compute() {
+		ServiceBuilder namespaceClass = context().find(ServiceBuilder.class);
 
-        return Status.createOkStatus();
-    }
+		Value<String> namespace = namespaceClass.getNamespace();
 
-    private static class Msgs extends NLS
-    {
-        public static String namespaceElementValidKeyword;
+		String content = namespace.content();
 
-        static
-        {
-            initializeMessages( NamespaceValidationService.class.getName(), Msgs.class );
-        }
-    }
+		if ((content != null) && !ServiceUtil.isValidNamespace(content.toString())) {
+			return Status.createErrorStatus(Msgs.namespaceElementValidKeyword);
+		}
+
+		return Status.createOkStatus();
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String namespaceElementValidKeyword;
+
+		static {
+			initializeMessages(NamespaceValidationService.class.getName(), Msgs.class);
+		}
+
+	}
+
 }
