@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.wizard;
 
@@ -36,91 +35,85 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
  * @author Kamesh Sampath
  * @author Cindy Li
  */
-@SuppressWarnings( "restriction" )
-public class BinaryProjectsImportWizard extends DataModelWizard implements IWorkbenchWizard
-{
-    protected BinaryProjectsImportDataModelProvider dataModelProvider;
-    protected BinaryProjectsImportWizardPage pluginBinaryProjectsImportWizardPage;
-    protected SDK sdk;
+@SuppressWarnings("restriction")
+public class BinaryProjectsImportWizard extends DataModelWizard implements IWorkbenchWizard {
 
-    public BinaryProjectsImportWizard()
-    {
-        this( (IDataModel) null );
-        dataModelProvider = new BinaryProjectsImportDataModelProvider();
-    }
+	public BinaryProjectsImportWizard() {
+		this((IDataModel)null);
+		dataModelProvider = new BinaryProjectsImportDataModelProvider();
+	}
 
-    public BinaryProjectsImportWizard( IDataModel dataModel )
-    {
-        super( dataModel );
+	public BinaryProjectsImportWizard(IDataModel dataModel) {
+		super(dataModel);
 
-        setWindowTitle( Msgs.importProjects );
+		setWindowTitle(Msgs.importProjects);
 
-        setDefaultPageImageDescriptor( ProjectUI.imageDescriptorFromPlugin(
-            ProjectUI.PLUGIN_ID, "/icons/wizban/import_wiz.png" ) ); //$NON-NLS-1$
-    }
+		setDefaultPageImageDescriptor(
+			ProjectUI.imageDescriptorFromPlugin(ProjectUI.PLUGIN_ID, "/icons/wizban/import_wiz.png"));
+	}
 
-    public BinaryProjectsImportWizard( SDK sdk )
-    {
-        this( (IDataModel) null );
+	public BinaryProjectsImportWizard(SDK sdk) {
+		this((IDataModel)null);
 
-        this.sdk = sdk;
-    }
+		this.sdk = sdk;
+	}
 
-    @Override
-    public boolean canFinish()
-    {
-        return getDataModel().isValid();
-    }
+	@Override
+	public boolean canFinish() {
+		return getDataModel().isValid();
+	}
 
-    @Override
-    protected void doAddPages()
-    {
-        if( sdk != null )
-        {
-            IDataModel model = getDataModel();
-            model.setStringProperty( SDKProjectsImportDataModelProvider.LIFERAY_SDK_NAME, sdk.getName() );
-        }
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	}
 
-        pluginBinaryProjectsImportWizardPage = new BinaryProjectsImportWizardPage( getDataModel(), "pageOne" ); //$NON-NLS-1$
+	@Override
+	protected void doAddPages() {
+		if (sdk != null) {
+			IDataModel model = getDataModel();
 
-        addPage( pluginBinaryProjectsImportWizardPage );
-    }
+			model.setStringProperty(SDKProjectsImportDataModelProvider.LIFERAY_SDK_NAME, sdk.getName());
+		}
 
-    @Override
-    protected IDataModelProvider getDefaultProvider()
-    {
-        return dataModelProvider;
-    }
+		pluginBinaryProjectsImportWizardPage = new BinaryProjectsImportWizardPage(getDataModel(), "pageOne");
 
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-    }
+		addPage(pluginBinaryProjectsImportWizardPage);
+	}
 
-    @Override
-    protected void postPerformFinish() throws InvocationTargetException
-    {
-        UIUtil.switchToLiferayPerspective( LiferayPerspectiveFactory.ID, true );
+	@Override
+	protected IDataModelProvider getDefaultProvider() {
+		return dataModelProvider;
+	}
 
-        super.postPerformFinish();
-    }
+	@Override
+	protected void postPerformFinish() throws InvocationTargetException {
+		UIUtil.switchToLiferayPerspective(LiferayPerspectiveFactory.ID, true);
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard#runForked()
-     */
-    @Override
-    protected boolean runForked()
-    {
-        return false;
-    }
+		super.postPerformFinish();
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String importProjects;
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see DataModelWizard#
+	 * runForked()
+	 */
+	@Override
+	protected boolean runForked() {
+		return false;
+	}
 
-        static
-        {
-            initializeMessages( BinaryProjectsImportWizard.class.getName(), Msgs.class );
-        }
-    }
+	protected BinaryProjectsImportDataModelProvider dataModelProvider;
+	protected BinaryProjectsImportWizardPage pluginBinaryProjectsImportWizardPage;
+	protected SDK sdk;
+
+	private static class Msgs extends NLS {
+
+		public static String importProjects;
+
+		static {
+			initializeMessages(BinaryProjectsImportWizard.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

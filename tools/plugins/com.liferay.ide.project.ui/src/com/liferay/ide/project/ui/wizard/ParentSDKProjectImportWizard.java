@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.wizard;
 
@@ -24,6 +23,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
@@ -31,63 +31,58 @@ import org.eclipse.ui.IWorkbenchWizard;
 /**
  * @author Simon Jiang
  */
-public class ParentSDKProjectImportWizard extends SapphireWizard<ParentSDKProjectImportOp>implements IWorkbenchWizard, INewWizard
-{
+public class ParentSDKProjectImportWizard
+	extends SapphireWizard<ParentSDKProjectImportOp> implements IWorkbenchWizard, INewWizard {
 
-    private static final String INITIAL_MESSAGE = "Please select Liferay Plugins SDK directory to import as a project.";
+	public ParentSDKProjectImportWizard() {
+		super(_createDefaultOp(), DefinitionLoader.sdef(ParentSDKProjectImportWizard.class).wizard());
+	}
 
-    private String title;
-    private boolean supressedFirstErrorMessage = false;
+	public ParentSDKProjectImportWizard(final String newTitle) {
+		super(_createDefaultOp(), DefinitionLoader.sdef(ParentSDKProjectImportWizard.class).wizard());
+	}
 
-    public ParentSDKProjectImportWizard()
-    {
-        super( createDefaultOp(), DefinitionLoader.sdef( ParentSDKProjectImportWizard.class ).wizard() );
-    }
+	@Override
+	public IWizardPage[] getPages() {
+		final IWizardPage[] wizardPages = super.getPages();
 
-    public ParentSDKProjectImportWizard( final String newTitle )
-    {
-        super( createDefaultOp(), DefinitionLoader.sdef( ParentSDKProjectImportWizard.class ).wizard() );
-    }
+		if (wizardPages != null) {
+			final SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
 
-    private static ParentSDKProjectImportOp createDefaultOp()
-    {
-        return ParentSDKProjectImportOp.TYPE.instantiate();
-    }
+			final String message = wizardPage.getMessage();
 
-    @Override
-    public IWizardPage[] getPages()
-    {
-        final IWizardPage[] wizardPages = super.getPages();
+			if (CoreUtil.isNullOrEmpty(message)) {
+				wizardPage.setMessage(_initial_message);
+			}
 
-        if( wizardPages != null )
-        {
-            final SapphireWizardPage wizardPage = (SapphireWizardPage) wizardPages[0];
+			if ((wizardPage.getMessageType() == IMessageProvider.ERROR) && !_supressedFirstErrorMessage) {
+				_supressedFirstErrorMessage = true;
 
-            final String message = wizardPage.getMessage();
+				wizardPage.setMessage(_initial_message);
+			}
+		}
 
-            if( CoreUtil.isNullOrEmpty( message ) )
-            {
-                wizardPage.setMessage( INITIAL_MESSAGE );
-            }
+		if (_title != null) {
+			Shell shell = getContainer().getShell();
 
-            if( wizardPage.getMessageType() == IMessageProvider.ERROR && !supressedFirstErrorMessage )
-            {
-                supressedFirstErrorMessage = true;
+			shell.setText(_title);
+		}
 
-                wizardPage.setMessage( INITIAL_MESSAGE );
-            }
-        }
-        if( title != null )
-        {
-            this.getContainer().getShell().setText( title );
-        }
+		return wizardPages;
+	}
 
-        return wizardPages;
-    }
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	}
 
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-    }
+	private static ParentSDKProjectImportOp _createDefaultOp() {
+		return ParentSDKProjectImportOp.TYPE.instantiate();
+	}
+
+	private static final String _initial_message =
+		"Please select Liferay Plugins SDK directory to import as a project.";
+
+	private boolean _supressedFirstErrorMessage = false;
+	private String _title;
 
 }

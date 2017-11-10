@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.workspace;
 
@@ -26,6 +25,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
 import org.eclipse.ui.IWorkbench;
@@ -33,78 +33,67 @@ import org.eclipse.ui.IWorkbench;
 /**
  * @author Andy Wu
  */
-public class ImportLiferayWorkspaceWizard extends BaseProjectWizard<ImportLiferayWorkspaceOp>
-{
+public class ImportLiferayWorkspaceWizard extends BaseProjectWizard<ImportLiferayWorkspaceOp> {
 
-    private boolean firstErrorMessageRemoved = false;
+	public ImportLiferayWorkspaceWizard() {
+		super(_createDefaultOp(), DefinitionLoader.sdef(ImportLiferayWorkspaceWizard.class).wizard());
+	}
 
-    public ImportLiferayWorkspaceWizard()
-    {
-        super( createDefaultOp(), DefinitionLoader.sdef( ImportLiferayWorkspaceWizard.class ).wizard() );
-    }
+	@Override
+	public IWizardPage[] getPages() {
+		final IWizardPage[] wizardPages = super.getPages();
 
-    @Override
-    public IWizardPage[] getPages()
-    {
-        final IWizardPage[] wizardPages = super.getPages();
+		if (!_firstErrorMessageRemoved && (wizardPages != null)) {
+			final SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
 
-        if( !firstErrorMessageRemoved && wizardPages != null )
-        {
-            final SapphireWizardPage wizardPage = (SapphireWizardPage) wizardPages[0];
+			try {
+				if (LiferayWorkspaceUtil.hasWorkspace()) {
+					wizardPage.setMessage(LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR);
+				}
+				else {
+					wizardPage.setMessage("Please select the workspace location.", SapphireWizardPage.NONE);
+				}
+			}
+			catch (CoreException ce) {
+				wizardPage.setMessage(LiferayWorkspaceUtil.multiWorkspaceErrorMsg, SapphireWizardPage.ERROR);
+			}
 
-            try
-            {
-                if( LiferayWorkspaceUtil.hasWorkspace() )
-                {
-                    wizardPage.setMessage( LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR );
-                }
-                else
-                {
-                    wizardPage.setMessage( "Please select the workspace location.", SapphireWizardPage.NONE );
-                }
-            }
-            catch( CoreException e )
-            {
-                wizardPage.setMessage( LiferayWorkspaceUtil.multiWorkspaceErrorMsg, SapphireWizardPage.ERROR );
-            }
+			_firstErrorMessageRemoved = true;
+		}
 
-            firstErrorMessageRemoved = true;
-        }
+		return wizardPages;
+	}
 
-        return wizardPages;
-    }
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	}
 
-    @Override
-    protected void performPostFinish()
-    {
-        super.performPostFinish();
+	@Override
+	protected void performPostFinish() {
+		super.performPostFinish();
 
-        final ImportLiferayWorkspaceOp op = element().nearest( ImportLiferayWorkspaceOp.class );
+		final ImportLiferayWorkspaceOp op = element().nearest(ImportLiferayWorkspaceOp.class);
 
-        final IProject newProject = CoreUtil.getProject( op.getWorkspaceLocation().content().lastSegment() );
+		Path projectPath = op.getWorkspaceLocation().content();
 
-        try
-        {
-            addToWorkingSets( newProject );
-        }
-        catch( Exception ex )
-        {
-            ProjectUI.logError( "Unable to add project to working set", ex );
-        }
+		final IProject newProject = CoreUtil.getProject(projectPath.lastSegment());
 
-        openLiferayPerspective( newProject );
+		try {
+			addToWorkingSets(newProject);
+		}
+		catch (Exception ex) {
+			ProjectUI.logError("Unable to add project to working set", ex);
+		}
 
-        ProjectExplorerLayoutUtil.setNested( true );
+		openLiferayPerspective(newProject);
 
-    }
+		ProjectExplorerLayoutUtil.setNested(true);
+	}
 
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-    }
+	private static ImportLiferayWorkspaceOp _createDefaultOp() {
+		return ImportLiferayWorkspaceOp.TYPE.instantiate();
+	}
 
-    private static ImportLiferayWorkspaceOp createDefaultOp()
-    {
-        return ImportLiferayWorkspaceOp.TYPE.instantiate();
-    }
+	private boolean _firstErrorMessageRemoved = false;
+
 }

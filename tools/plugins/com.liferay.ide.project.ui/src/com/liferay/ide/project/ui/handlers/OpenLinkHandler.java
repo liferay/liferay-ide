@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.handlers;
 
@@ -23,17 +22,15 @@ import org.eclipse.swt.program.Program;
 /**
  * @author Terry Jia
  */
-public abstract class OpenLinkHandler extends AbstractHandler
-{
+public abstract class OpenLinkHandler extends AbstractHandler {
 
-    @Override
-    public Object execute( ExecutionEvent event ) throws ExecutionException
-    {
-        Program.launch( getLink() );
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		Program.launch(getLink());
 
-        return null;
-    }
+		return null;
+	}
 
-    protected abstract String getLink();
+	protected abstract String getLink();
 
 }

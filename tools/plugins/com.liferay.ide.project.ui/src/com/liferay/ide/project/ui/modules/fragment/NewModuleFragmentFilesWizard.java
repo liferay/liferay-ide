@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.modules.fragment;
 
@@ -34,54 +33,45 @@ import org.eclipse.ui.IWorkbenchWizard;
 /**
  * @author Terry Jia
  */
-public class NewModuleFragmentFilesWizard extends SapphireWizard<NewModuleFragmentFilesOp> implements IWorkbenchWizard, INewWizard
-{
+public class NewModuleFragmentFilesWizard
+	extends SapphireWizard<NewModuleFragmentFilesOp> implements IWorkbenchWizard, INewWizard {
 
-    private IProject initialProject;
+	public NewModuleFragmentFilesWizard() {
+		super(_createDefaultOp(), DefinitionLoader.sdef(NewModuleFragmentFilesWizard.class).wizard());
+	}
 
-    public NewModuleFragmentFilesWizard()
-    {
-        super( createDefaultOp(), DefinitionLoader.sdef( NewModuleFragmentFilesWizard.class ).wizard() );
-    }
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		if ((selection != null) && !selection.isEmpty()) {
+			final Object element = selection.getFirstElement();
 
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-        if( selection != null && !selection.isEmpty() )
-        {
-            final Object element = selection.getFirstElement();
+			if (element instanceof IResource) {
+				_initialProject = ((IResource)element).getProject();
+			}
+			else if (element instanceof IJavaProject) {
+				_initialProject = ((IJavaProject)element).getProject();
+			}
+			else if (element instanceof IPackageFragment) {
+				_initialProject = ((IJavaElement)element).getResource().getProject();
+			}
+			else if (element instanceof IJavaElement) {
+				_initialProject = ((IJavaElement)element).getResource().getProject();
+			}
 
-            if( element instanceof IResource )
-            {
-                initialProject = ( (IResource) element ).getProject();
-            }
-            else if( element instanceof IJavaProject )
-            {
-                initialProject = ( (IJavaProject) element ).getProject();
-            }
-            else if( element instanceof IPackageFragment )
-            {
-                initialProject = ( (IJavaElement) element ).getResource().getProject();
-            }
-            else if( element instanceof IJavaElement )
-            {
-                initialProject = ( (IJavaElement) element ).getResource().getProject();
-            }
+			if (_initialProject != null) {
+				final IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, _initialProject);
 
-            if( initialProject != null )
-            {
-                final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, initialProject );
+				if ((bundleProject != null) && bundleProject.isFragmentBundle()) {
+					element().setProjectName(_initialProject.getName());
+				}
+			}
+		}
+	}
 
-                if( bundleProject != null && bundleProject.isFragmentBundle() )
-                {
-                    element().setProjectName( initialProject.getName() );
-                }
-            }
-        }
-    }
-    private static NewModuleFragmentFilesOp createDefaultOp()
-    {
-        return NewModuleFragmentFilesOp.TYPE.instantiate();
-    }
+	private static NewModuleFragmentFilesOp _createDefaultOp() {
+		return NewModuleFragmentFilesOp.TYPE.instantiate();
+	}
+
+	private IProject _initialProject;
 
 }

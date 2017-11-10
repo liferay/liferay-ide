@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.action;
 
@@ -30,65 +29,58 @@ import org.eclipse.ui.IWorkbenchPart;
 /**
  * @author Greg Amerson
  */
-public class ConvertProjectAction implements IObjectActionDelegate
-{
+public class ConvertProjectAction implements IObjectActionDelegate {
 
-    private ISelection fSelection;
+	public ConvertProjectAction() {
+	}
 
-    public ConvertProjectAction()
-    {
-    }
+	public Display getDisplay() {
+		Display display = Display.getCurrent();
 
-    public Display getDisplay()
-    {
-        Display display = Display.getCurrent();
+		if (display == null) {
+			display = Display.getDefault();
+		}
 
-        if( display == null )
-            display = Display.getDefault();
+		return display;
+	}
 
-        return display;
-    }
+	public void run(IAction action) {
+		if (_fSelection instanceof IStructuredSelection) {
+			Object[] elems = ((IStructuredSelection)_fSelection).toArray();
 
-    public void run( IAction action )
-    {
-        if( fSelection instanceof IStructuredSelection )
-        {
-            Object[] elems = ( (IStructuredSelection) fSelection ).toArray();
+			IProject project = null;
 
-            IProject project = null;
+			Object elem = elems[0];
 
-            Object elem = elems[0];
+			if (elem instanceof IProject) {
+				project = (IProject)elem;
+			}
 
-            if( elem instanceof IProject )
-            {
-                project = (IProject) elem;
-            }
+			SDKProjectConvertWizard wizard = new SDKProjectConvertWizard(project);
 
-            SDKProjectConvertWizard wizard = new SDKProjectConvertWizard( project );
+			final Display display = getDisplay();
 
-            final Display display = getDisplay();
+			final WizardDialog dialog = new WizardDialog(display.getActiveShell(), wizard);
 
-            final WizardDialog dialog = new WizardDialog( display.getActiveShell(), wizard );
+			BusyIndicator.showWhile(
+				display,
+				new Runnable() {
 
-            BusyIndicator.showWhile( display, new Runnable()
-            {
+					public void run() {
+						dialog.open();
+					}
 
-                public void run()
-                {
-                    dialog.open();
-                }
-            } );
-        }
+				});
+		}
+	}
 
-    }
+	public void selectionChanged(IAction action, ISelection selection) {
+		_fSelection = selection;
+	}
 
-    public void selectionChanged( IAction action, ISelection selection )
-    {
-        fSelection = selection;
-    }
+	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+	}
 
-    public void setActivePart( IAction action, IWorkbenchPart targetPart )
-    {
-    }
+	private ISelection _fSelection;
 
 }

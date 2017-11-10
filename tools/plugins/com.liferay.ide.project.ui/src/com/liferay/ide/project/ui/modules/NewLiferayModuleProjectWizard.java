@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.ui.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -29,57 +29,48 @@ import org.eclipse.sapphire.ui.def.DefinitionLoader;
 /**
  * @author Simon Jiang
  */
-public class NewLiferayModuleProjectWizard extends BaseProjectWizard<NewLiferayModuleProjectOp>
-{
-    public NewLiferayModuleProjectWizard()
-    {
-        super( createDefaultOp(), DefinitionLoader.sdef( NewLiferayModuleProjectWizard.class ).wizard() );
-    }
+public class NewLiferayModuleProjectWizard extends BaseProjectWizard<NewLiferayModuleProjectOp> {
 
-    @Override
-    protected void performPostFinish()
-    {
-        super.performPostFinish();
+	public NewLiferayModuleProjectWizard() {
+		super(_createDefaultOp(), DefinitionLoader.sdef(NewLiferayModuleProjectWizard.class).wizard());
+	}
 
-        final List<IProject> projects = new ArrayList<IProject>();
+	@Override
+	protected void performPostFinish() {
+		super.performPostFinish();
 
-        final NewLiferayModuleProjectOp op = element().nearest( NewLiferayModuleProjectOp.class );
+		final List<IProject> projects = new ArrayList<>();
 
-        ElementList<ProjectName> projectNames = op.getProjectNames();
+		final NewLiferayModuleProjectOp op = element().nearest(NewLiferayModuleProjectOp.class);
 
-        for( ProjectName projectName : projectNames )
-        {
-            final IProject newProject = CoreUtil.getProject( projectName.getName().content() );
+		ElementList<ProjectName> projectNames = op.getProjectNames();
 
-            if( newProject != null )
-            {
-                projects.add( newProject );
-            }
-        }
+		for (ProjectName projectName : projectNames) {
+			final IProject newProject = CoreUtil.getProject(projectName.getName().content());
 
-        for( final IProject project : projects )
-        {
-            try
-            {
-                addToWorkingSets( project );
-            }
-            catch( Exception ex )
-            {
-                ProjectUI.logError( "Unable to add project to working set", ex );
-            }
-        }
+			if (newProject != null) {
+				projects.add(newProject);
+			}
+		}
 
-        if ( projects.size() > 0 )
-        {
-            final IProject finalProject = projects.get(0);
+		for (final IProject project : projects) {
+			try {
+				addToWorkingSets(project);
+			}
+			catch (Exception ex) {
+				ProjectUI.logError("Unable to add project to working set", ex);
+			}
+		}
 
-            openLiferayPerspective( finalProject );
-        }
-     }
+		if (!projects.isEmpty()) {
+			final IProject finalProject = projects.get(0);
 
-    private static NewLiferayModuleProjectOp createDefaultOp()
-    {
-        return NewLiferayModuleProjectOp.TYPE.instantiate();
-    }
+			openLiferayPerspective(finalProject);
+		}
+	}
+
+	private static NewLiferayModuleProjectOp _createDefaultOp() {
+		return NewLiferayModuleProjectOp.TYPE.instantiate();
+	}
 
 }

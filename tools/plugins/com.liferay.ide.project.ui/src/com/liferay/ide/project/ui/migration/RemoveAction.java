@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.migration;
 
@@ -33,56 +32,51 @@ import org.eclipse.ui.actions.SelectionProviderAction;
 /**
  * @author Lovett Li
  */
-public class RemoveAction extends SelectionProviderAction implements IAction
-{
+public class RemoveAction extends SelectionProviderAction implements IAction {
 
-    public RemoveAction( ISelectionProvider provider )
-    {
-        super( provider, "Remove" );
-    }
+	public RemoveAction(ISelectionProvider provider) {
+		super(provider, "Remove");
+	}
 
-    @Override
-    public void run()
-    {
-//        final MigrationView mv = (MigrationView) UIUtil.showView( MigrationView.ID );
-//        final CommonViewer commonViewer = mv.getCommonViewer();
-        final FindBreakingChangesPage page =
-            UpgradeView.getPage( Page.FINDBREACKINGCHANGES_PAGE_ID, FindBreakingChangesPage.class );
-        final TreeViewer treeViewer = page.getTreeViewer();
+	@Override
+	public void run() {
 
-        Object selection = treeViewer.getStructuredSelection().getFirstElement();
+		// final MigrationView mv = (MigrationView) UIUtil.showView( MigrationView.ID );
+		// final CommonViewer commonViewer = mv.getCommonViewer();
 
-        if( selection instanceof MigrationProblems )
-        {
-            MigrationProblems migrationProblem = (MigrationProblems) selection;
+		final FindBreakingChangesPage page = UpgradeView.getPage(
+			Page.findbreackingchangesPageId, FindBreakingChangesPage.class);
 
-            MigrationUtil.removeMigrationProblems( migrationProblem );
-            IResource project = MigrationUtil.getResourceFromMigrationProblems( migrationProblem );
+		final TreeViewer treeViewer = page.getTreeViewer();
 
-            if( project != null )
-            {
-                MarkerUtil.clearMarkers( project, MigrationConstants.MARKER_TYPE, null );
-            }
-        }
+		Object selection = treeViewer.getStructuredSelection().getFirstElement();
 
-        treeViewer.setInput( CoreUtil.getWorkspaceRoot() );
-        treeViewer.expandToLevel( 2 );
+		if (selection instanceof MigrationProblems) {
+			MigrationProblems migrationProblem = (MigrationProblems)selection;
 
-    }
+			MigrationUtil.removeMigrationProblems(migrationProblem);
+			IResource project = MigrationUtil.getResourceFromMigrationProblems(migrationProblem);
 
-    @Override
-    public void selectionChanged( IStructuredSelection selection )
-    {
-        Object element = selection.getFirstElement();
+			if (project != null) {
+				MarkerUtil.clearMarkers(project, MigrationConstants.MARKER_TYPE, null);
+			}
+		}
 
-        if( element instanceof MigrationProblems )
-        {
-            setEnabled( true );
+		treeViewer.setInput(CoreUtil.getWorkspaceRoot());
+		treeViewer.expandToLevel(2);
+	}
 
-            return;
-        }
+	@Override
+	public void selectionChanged(IStructuredSelection selection) {
+		Object element = selection.getFirstElement();
 
-        setEnabled( false );
-    }
+		if (element instanceof MigrationProblems) {
+			setEnabled(true);
+
+			return;
+		}
+
+		setEnabled(false);
+	}
 
 }

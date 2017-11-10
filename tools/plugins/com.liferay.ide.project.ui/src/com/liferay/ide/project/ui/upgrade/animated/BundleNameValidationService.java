@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,13 +10,13 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
 import com.liferay.ide.core.util.CoreUtil;
 
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 import org.eclipse.wst.server.core.internal.ServerPlugin;
@@ -24,38 +24,35 @@ import org.eclipse.wst.server.core.internal.ServerPlugin;
 /**
  * @author Andy Wu
  */
-@SuppressWarnings( "restriction" )
-public class BundleNameValidationService extends ValidationService
-{
+@SuppressWarnings("restriction")
+public class BundleNameValidationService extends ValidationService {
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-        String serverName = op().getBundleName().content();
+		Value<String> bundleName = _op().getBundleName();
 
-        if( CoreUtil.empty( serverName ) )
-        {
-            retval = Status.createErrorStatus( "The Server Name is empty. Please input one." );
+		String serverName = bundleName.content();
 
-            return retval;
-        }
+		if (CoreUtil.empty(serverName)) {
+			retval = Status.createErrorStatus("The Server Name is empty. Please input one.");
 
-        if( ServerPlugin.isNameInUse( null, serverName ) )
-        {
-            retval = Status.createErrorStatus(
-                "The Server Name \"" + serverName + "\"+ is already in use. Specify a different name." );
+			return retval;
+		}
 
-            return retval;
-        }
+		if (ServerPlugin.isNameInUse(null, serverName)) {
+			retval = Status.createErrorStatus(
+				"The Server Name \"" + serverName + "\"+ is already in use. Specify a different name.");
 
-        return retval;
-    }
+			return retval;
+		}
 
-    private LiferayUpgradeDataModel op()
-    {
-        return context( LiferayUpgradeDataModel.class );
-    }
+		return retval;
+	}
+
+	private LiferayUpgradeDataModel _op() {
+		return context(LiferayUpgradeDataModel.class);
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,33 +10,29 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.action;
+
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 import org.eclipse.wst.server.ui.ServerUIUtil;
 
-
 /**
  * @author Gregory Amerson
  */
-public class NewLiferayRuntimeAction extends SapphireActionHandler
-{
+public class NewLiferayRuntimeAction extends SapphireActionHandler {
 
-    @Override
-    protected Object run( Presentation context )
-    {
-        ServerUIUtil.showNewRuntimeWizard( ( (SwtPresentation) context ).shell(), "jst.web", null, "com.liferay." );
+	public NewLiferayRuntimeAction() {
+	}
 
-        return Status.createOkStatus();
-    }
+	@Override
+	protected Object run(Presentation context) {
+		ServerUIUtil.showNewRuntimeWizard(((SwtPresentation)context).shell(), "jst.web", null, "com.liferay.");
 
-    public NewLiferayRuntimeAction()
-    {
-        super();
-    }
+		return Status.createOkStatus();
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.action;
 
@@ -28,30 +25,30 @@ import org.eclipse.wst.server.ui.ServerUIUtil;
 /**
  * @author Gregory Amerson
  */
-public class NewServerAction extends Action
-{
-    private Shell shell;
+public class NewServerAction extends Action {
 
-    public NewServerAction( Shell shell )
-    {
-        super( Msgs.newLiferayServer, ImageDescriptor.createFromURL( ProjectUI.getDefault().getBundle().getEntry(
-            "/icons/n16/server_new.png" ) ) ); //$NON-NLS-1$
-        this.shell = shell;
-    }
+	public NewServerAction(Shell shell) {
+		super(
+			Msgs.newLiferayServer,
+			ImageDescriptor.createFromURL(ProjectUI.getPluginBundle().getEntry("/icons/n16/server_new.png")));
+		_shell = shell;
+	}
 
-    @Override
-    public void run()
-    {
-        ServerUIUtil.showNewServerWizard( shell, null, null, "com.liferay." ); //$NON-NLS-1$
-    }
+	@Override
+	public void run() {
+		ServerUIUtil.showNewServerWizard(_shell, null, null, "com.liferay.");
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String newLiferayServer;
+	private Shell _shell;
 
-        static
-        {
-            initializeMessages( NewServerAction.class.getName(), Msgs.class );
-        }
-    }
+	private static class Msgs extends NLS {
+
+		public static String newLiferayServer;
+
+		static {
+			initializeMessages(NewServerAction.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

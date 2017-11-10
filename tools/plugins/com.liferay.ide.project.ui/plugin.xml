@@ -1353,19 +1353,11 @@
          commandId="com.liferay.ide.project.ui.communityForums"
          icon="icons/e16/liferay_logo_16.png"
       />
-      <image
-         commandId="com.liferay.ide.project.ui.upgrade.openLiferay7UpgradeAssistant"
-         icon="icons/e16/liferay_logo_16.png"
-      />
    </extension>
    <extension point="org.eclipse.ui.handlers">
       <handler
          commandId="com.liferay.ide.project.ui.migrateProject"
          class="com.liferay.ide.project.ui.migration.MigrateProjectHandler">
-       </handler>
-       <handler
-         commandId="com.liferay.ide.project.ui.codeUpgrade"
-         class="com.liferay.ide.project.ui.upgrade.CodeUpgradeHandler">
        </handler>
        <handler
          commandId="com.liferay.ide.project.ui.developerNetwork"
@@ -1374,34 +1366,6 @@
        <handler
          commandId="com.liferay.ide.project.ui.communityForums"
          class="com.liferay.ide.project.ui.handlers.CommunityForums">
-       </handler>
-       <handler
-         commandId="com.liferay.ide.project.ui.upgrade.openLiferay7UpgradeAssistant"
-         class="com.liferay.ide.project.ui.upgrade.OpenUpgradeAssistantHandler">
-       </handler>
-       <handler
-         commandId="com.liferay.ide.project.ui.upgrade.copyPortalSettings"
-         class="com.liferay.ide.project.ui.upgrade.CopyPortalSettingsHandler">
-       </handler>
-       <handler
-         commandId="com.liferay.ide.project.ui.upgrade.runVerifyProperties"
-         class="com.liferay.ide.project.ui.upgrade.RunVerifyPropertiesHandler">
-       </handler>
-       <handler
-         commandId="com.liferay.ide.project.ui.upgrade.setupPortalServer"
-         class="com.liferay.ide.project.ui.upgrade.SetupPortalServerHandler">
-       </handler>
-       <handler
-         commandId="com.liferay.ide.project.ui.upgrade.runPortalServer"
-         class="com.liferay.ide.project.ui.upgrade.RunPortalServerHandler">
-       </handler>
-       <handler
-         commandId="com.liferay.ide.project.ui.upgrade.selectJavaProjects"
-         class="com.liferay.ide.project.ui.upgrade.SelectJavaProjectsHandler">
-       </handler>
-       <handler
-         commandId="com.liferay.ide.project.ui.upgrade.findJavaProblems"
-         class="com.liferay.ide.project.ui.upgrade.FindJavaProblemsHandler">
        </handler>
    </extension>
 
@@ -1729,22 +1693,7 @@
         </iterate>
     </definition>
   </extension>
-   <extension
-        point="org.eclipse.ui.editors">
-        <editor
-            id="com.liferay.ide.upgrade.ui.CodeUpgradeTool"
-            name="CodeUpgradeTool"
-            filenames="liferay-code-upgrade.xml"
-            default="true">
-            <class
-                class="com.liferay.ide.project.ui.upgrade.CodeUpgradeToolEditor">
-                <parameter name="sdef" value="com.liferay.ide.project.ui.upgrade.CodeUpgradeTool"/>
-                <parameter name="pageName" value="Overview"/>
-            </class>
-        </editor>
-    </extension>
-
-   <extension
+  <extension
          id="component.properties.proposal"
          name="OSGI Component Properties Proposal Computer"
          point="org.eclipse.jdt.ui.javaCompletionProposalComputer">

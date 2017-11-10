@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
@@ -24,6 +23,7 @@ import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,392 +61,385 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE.SharedImages;
 
 /**
  * @author Joye Luo
  */
-public class BuildPage extends Page
-{
-
-    public BuildPage( Composite parent, int style, LiferayUpgradeDataModel dataModel )
-    {
-        super( parent, style, dataModel, BUILD_PAGE_ID, true );
-
-        Composite container = new Composite( this, SWT.NONE );
-        container.setLayout( new GridLayout( 2, false ) );
-        container.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
-
-        tableViewer = new TableViewer( container );
-        tableViewer.setContentProvider( new TableViewContentProvider() );
-        tableViewer.addDoubleClickListener( new IDoubleClickListener()
-        {
-
-            @Override
-            public void doubleClick( DoubleClickEvent event )
-            {
-                final IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-                final TableViewElement tableViewElement = (TableViewElement) selection.getFirstElement();
-                final String projectName = tableViewElement.projectName;
-                final IProject project = ProjectUtil.getProject( projectName );
-
-                Boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
-                    UIUtil.getActiveShell(), "Build Project", "Do you want to build this project again?" );
-
-                if( openNewLiferayProjectWizard )
-                {
-                    final WorkspaceJob workspaceJob = new WorkspaceJob( "Build Project......" )
-                    {
-
-                        @Override
-                        public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-                        {
-                            monitor.beginTask( "Start to build project......", 100 );
-                            monitor.setTaskName( "Build " + projectName + " Project..." );
-                            monitor.worked( 100 );
-
-                            if( monitor.isCanceled() )
-                            {
-                                return StatusBridge.create( Status.createOkStatus() );
-                            }
-
-                            boolean buildFlag = getBuildStatus( monitor, project );
-
-                            for( int i = 0; i < tableViewElements.length; i++ )
-                            {
-                                if( tableViewElements[i].projectName == projectName )
-                                {
-                                    if( buildFlag )
-                                    {
-                                        tableViewElements[i].buildStatus = "Build Successful";
-                                    }
-                                    else
-                                    {
-                                        tableViewElements[i].buildStatus = "Build Failed";
-                                    }
-                                }
-                            }
-
-                            UIUtil.async( new Runnable()
-                            {
-
-                                @Override
-                                public void run()
-                                {
-                                    tableViewer.setInput( tableViewElements );
-                                    tableViewer.refresh();
-                                }
-                            } );
-                            return StatusBridge.create( Status.createOkStatus() );
-                        }
-                    };
-
-                    workspaceJob.setUser( true );
-                    workspaceJob.schedule();
-
-                }
-            }
-        } );
-
-        TableViewerColumn colFirstName = new TableViewerColumn( tableViewer, SWT.NONE );
-        colFirstName.getColumn().setWidth( 400 );
-        colFirstName.getColumn().setText( "projectName" );
-        colFirstName.setLabelProvider( new ColumnLabelProvider()
-        {
-
-            @Override
-            public Image getImage( Object element )
-            {
-                return imageProject;
-            }
-
-            @Override
-            public String getText( Object element )
-            {
-                TableViewElement tableViewElement = (TableViewElement) element;
-                return tableViewElement.projectName;
-            }
-        } );
-
-        TableViewerColumn colSecondName = new TableViewerColumn( tableViewer, SWT.NONE );
-        colSecondName.getColumn().setWidth( 200 );
-        colSecondName.getColumn().setText( "Build Status" );
-        colSecondName.setLabelProvider( new ColumnLabelProvider()
-        {
-
-            @Override
-            public Image getImage( Object element )
-            {
-                TableViewElement tableViewElement = (TableViewElement) element;
-                if( tableViewElement.buildStatus.equals( "Build Successful" ) )
-                {
-                    return imageSuccess;
-                }
-                else if( tableViewElement.buildStatus.equals( "Build Failed" ) )
-                {
-                    return imageFail;
-                }
-                return null;
-            }
-
-            @Override
-            public String getText( Object element )
-            {
-                TableViewElement tableViewElement = (TableViewElement) element;
-                return tableViewElement.buildStatus;
-            }
-        } );
-
-        final Table table = tableViewer.getTable();
-        final GridData tableData = new GridData( SWT.FILL, SWT.FILL, true, true, 1, 1 );
-        table.setLayoutData( tableData );
-        table.setLinesVisible( false );
-
-        Button buildButton = new Button( container, SWT.PUSH );
-        buildButton.setText( "Build..." );
-        buildButton.setLayoutData( new GridData( SWT.LEFT, SWT.TOP, false, false, 1, 1 ) );
-
-        buildButton.addSelectionListener( new SelectionAdapter()
-        {
-
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                buildProjects();
-            }
-        } );
-    }
-
-    private TableViewer tableViewer;
-    private Image imageProject;
-    private Image imageSuccess;
-    private Image imageFail;
-    private TableViewElement[] tableViewElements;
-
-    class TableViewElement
-    {
-
-        public String projectName;
-        public String buildStatus;
-
-        public TableViewElement( String projectName, String buildStatus )
-        {
-            this.projectName = projectName;
-            this.buildStatus = buildStatus;
-        }
-    }
-
-    class TableViewContentProvider implements IStructuredContentProvider
-    {
-
-        @Override
-        public void dispose()
-        {
-        }
-
-        @Override
-        public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
-        {
-        }
-
-        @Override
-        public Object[] getElements( Object inputElement )
-        {
-            if( inputElement instanceof TableViewElement[] )
-            {
-                return (TableViewElement[]) inputElement;
-            }
-
-            return new Object[] { inputElement };
-        }
-    }
-
-    private void buildProjects()
-    {
-        final List<IProject> selectProjectList = getSelectedProjects();
-        final IProject[] selectProjects = selectProjectList.toArray( new IProject[selectProjectList.size()] );
-        createImages();
-
-        try
-        {
-            final WorkspaceJob workspaceJob = new WorkspaceJob( "Build Project......" )
-            {
-
-                @Override
-                public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-                {
-                    final List<TableViewElement> tableViewElementList = new ArrayList<TableViewElement>();
-                    int count = selectProjects.length;
-
-                    if( count <= 0 )
-                    {
-                        return StatusBridge.create( Status.createOkStatus() );
-                    }
-
-                    int unit = 100 / count;
-
-                    monitor.beginTask( "Start to build project......", 100 );
-
-                    for( int i = 0; i < count; i++ )
-                    {
-                        final IProject project = selectProjects[i];
-                        final String projectName = project.getName();
-                        TableViewElement tableViewElement = new TableViewElement( projectName, "Not Build" );
-                        tableViewElementList.add( tableViewElement );
-                    }
-
-                    UIUtil.async( new Runnable()
-                    {
-
-                        @Override
-                        public void run()
-                        {
-                            tableViewElements =
-                                tableViewElementList.toArray( new TableViewElement[tableViewElementList.size()] );
-                            tableViewer.setInput( tableViewElements );
-                            tableViewer.refresh();
-                        }
-                    } );
-
-                    for( int i = 0; i < count; i++ )
-                    {
-                        monitor.worked( i + 1 * unit );
-
-                        if( monitor.isCanceled() )
-                        {
-                            break;
-                        }
-                        if( i == count - 1 )
-                        {
-                            monitor.worked( 100 );
-                        }
-
-                        TableViewElement viewElement = tableViewElementList.get( i );
-                        final String projectName = viewElement.projectName;
-
-                        final IProject project = ProjectUtil.getProject( projectName );
-
-                        monitor.setTaskName( "Build " + projectName + " Project..." );
-
-                        boolean buildFlag = getBuildStatus( monitor, project );
-
-                        if( buildFlag )
-                        {
-                            viewElement.buildStatus = "Build Successful";
-                        }
-                        else
-                        {
-                            viewElement.buildStatus = "Build Failed";
-                        }
-
-                        UIUtil.async( new Runnable()
-                        {
-
-                            @Override
-                            public void run()
-                            {
-                                tableViewElements =
-                                    tableViewElementList.toArray( new TableViewElement[tableViewElementList.size()] );
-                                tableViewer.setInput( tableViewElements );
-                                tableViewer.refresh();
-                            }
-                        } );
-                    }
-                    return StatusBridge.create( Status.createOkStatus() );
-                }
-            };
-
-            workspaceJob.setUser( true );
-            workspaceJob.schedule();
-        }
-        catch( Exception e )
-        {
-            ProjectUI.logError( e );
-        }
-    }
-
-    private void createImages()
-    {
-        imageProject = PlatformUI.getWorkbench().getSharedImages().getImage( SharedImages.IMG_OBJ_PROJECT );
-
-        if( imageProject.isDisposed() )
-        {
-            imageProject = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(
-                SharedImages.IMG_OBJ_PROJECT ).createImage();
-        }
-
-        URL greenTickUrl = ProjectUI.getDefault().getBundle().getEntry( "/images/yes_badge.png" );
-        imageSuccess = ImageDescriptor.createFromURL( greenTickUrl ).createImage();
-        imageSuccess.getImageData().scaledTo( 16, 16 );
-
-        imageFail = JFaceResources.getImage( Dialog.DLG_IMG_MESSAGE_ERROR );
-
-    }
-
-    private boolean getBuildStatus( IProgressMonitor monitor, IProject project ) throws CoreException
-    {
-        IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
-        IPath outputBundlepath = null;
-
-        try
-        {
-            outputBundlepath = bundleProject.getOutputBundle( true, monitor );
-        }
-        catch( Exception e )
-        {
-        }
-        if( outputBundlepath != null && !outputBundlepath.isEmpty() )
-        {
-            project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private List<IProject> getSelectedProjects()
-    {
-        List<IProject> projects = new ArrayList<>();
-
-        final JavaProjectSelectionDialog dialog =
-            new JavaProjectSelectionDialog( Display.getCurrent().getActiveShell() );
-
-        if( dialog.open() == Window.OK )
-        {
-            Object[] selectedProjects = dialog.getResult();
-
-            if( selectedProjects != null )
-            {
-                for( Object project : selectedProjects )
-                {
-                    if( project instanceof IJavaProject )
-                    {
-                        IJavaProject p = (IJavaProject) project;
-                        projects.add( p.getProject() );
-                    }
-                }
-            }
-        }
-
-        return projects;
-    }
-
-    public void createSpecialDescriptor( Composite parent, int style )
-    {
-        final String descriptor = "This step will help you to build all your projects.\n" +
-            "You can rebuild the project by double-clicking it.";
-        String url = "";
-
-        Link link = SWTUtil.createHyperLink( this, style, descriptor, 1, url );
-        link.setLayoutData( new GridData( SWT.FILL, SWT.BEGINNING, true, false, 2, 1 ) );
-    }
-
-    @Override
-    public String getPageTitle()
-    {
-        return "Build";
-    }
+public class BuildPage extends Page {
+
+	public BuildPage(Composite parent, int style, LiferayUpgradeDataModel dataModel) {
+		super(parent, style, dataModel, buildPageId, true);
+
+		_createImages();
+
+		Composite container = new Composite(this, SWT.NONE);
+
+		container.setLayout(new GridLayout(2, false));
+		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		_tableViewer = new TableViewer(container);
+
+		_tableViewer.setContentProvider(new TableViewContentProvider());
+		_tableViewer.addDoubleClickListener(
+			new IDoubleClickListener() {
+
+				@Override
+				public void doubleClick(DoubleClickEvent event) {
+					final IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+
+					final TableViewElement tableViewElement = (TableViewElement)selection.getFirstElement();
+
+					final String projectName = tableViewElement.projectName;
+
+					final IProject project = ProjectUtil.getProject(projectName);
+
+					Boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
+						UIUtil.getActiveShell(), "Build Project", "Do you want to build this project again?");
+
+					if (openNewLiferayProjectWizard) {
+						final WorkspaceJob workspaceJob = new WorkspaceJob("Build Project......") {
+
+							@Override
+							public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+								monitor.beginTask("Start to build project......", 100);
+								monitor.setTaskName("Build " + projectName + " Project...");
+								monitor.worked(100);
+
+								if (monitor.isCanceled()) {
+									return StatusBridge.create(Status.createOkStatus());
+								}
+
+								boolean buildFlag = _getBuildStatus(monitor, project);
+
+								for (int i = 0; i < _tableViewElements.length; i++) {
+									if (_tableViewElements[i].projectName == projectName) {
+										if (buildFlag) {
+											_tableViewElements[i].buildStatus = "Build Successful";
+										}
+										else {
+											_tableViewElements[i].buildStatus = "Build Failed";
+										}
+									}
+								}
+
+								UIUtil.async(
+									new Runnable() {
+
+										@Override
+										public void run() {
+											_tableViewer.setInput(_tableViewElements);
+											_tableViewer.refresh();
+										}
+
+									});
+
+								return StatusBridge.create(Status.createOkStatus());
+							}
+
+						};
+
+						workspaceJob.setUser(true);
+						workspaceJob.schedule();
+					}
+				}
+
+			});
+
+		TableViewerColumn colFirstName = new TableViewerColumn(_tableViewer, SWT.NONE);
+
+		colFirstName.getColumn().setWidth(400);
+		colFirstName.getColumn().setText("projectName");
+		colFirstName.setLabelProvider(
+			new ColumnLabelProvider() {
+
+				@Override
+				public Image getImage(Object element) {
+					return _imageProject;
+				}
+
+				@Override
+				public String getText(Object element) {
+					TableViewElement tableViewElement = (TableViewElement)element;
+
+					return tableViewElement.projectName;
+				}
+
+			});
+
+		TableViewerColumn colSecondName = new TableViewerColumn(_tableViewer, SWT.NONE);
+
+		colSecondName.getColumn().setWidth(200);
+		colSecondName.getColumn().setText("Build Status");
+		colSecondName.setLabelProvider(
+			new ColumnLabelProvider() {
+
+				@Override
+				public Image getImage(Object element) {
+					TableViewElement tableViewElement = (TableViewElement)element;
+
+					if (tableViewElement.buildStatus.equals("Build Successful")) {
+						return _imageSuccess;
+					}
+					else if (tableViewElement.buildStatus.equals("Build Failed")) {
+						return _imageFail;
+					}
+
+					return null;
+				}
+
+				@Override
+				public String getText(Object element) {
+					TableViewElement tableViewElement = (TableViewElement)element;
+
+					return tableViewElement.buildStatus;
+				}
+
+			});
+
+		final Table table = _tableViewer.getTable();
+
+		final GridData tableData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+
+		table.setLayoutData(tableData);
+
+		table.setLinesVisible(false);
+
+		Button buildButton = new Button(container, SWT.PUSH);
+
+		buildButton.setText("Build...");
+		buildButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
+
+		buildButton.addSelectionListener(
+			new SelectionAdapter() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					_buildProjects();
+				}
+
+			});
+	}
+
+	public void createSpecialDescriptor(Composite parent, int style) {
+		final StringBuilder descriptorBuilder = new StringBuilder(
+			"This step will help you to build all your projects.\n");
+
+		descriptorBuilder.append("You can rebuild the project by double-clicking it.");
+
+		String url = "";
+
+		Link link = SWTUtil.createHyperLink(this, style, descriptorBuilder.toString(), 1, url);
+
+		link.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, false, 2, 1));
+	}
+
+	@Override
+	public String getPageTitle() {
+		return "Build";
+	}
+
+	private void _buildProjects() {
+		final List<IProject> selectProjectList = _getSelectedProjects();
+
+		final IProject[] selectProjects = selectProjectList.toArray(new IProject[selectProjectList.size()]);
+
+		try {
+			final WorkspaceJob workspaceJob = new WorkspaceJob("Build Project......") {
+
+				@Override
+				public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+					final List<TableViewElement> tableViewElementList = new ArrayList<>();
+					int count = selectProjects.length;
+
+					if (count <= 0) {
+						return StatusBridge.create(Status.createOkStatus());
+					}
+
+					int unit = 100 / count;
+
+					monitor.beginTask("Start to build project......", 100);
+
+					for (int i = 0; i < count; i++) {
+						final IProject project = selectProjects[i];
+
+						final String projectName = project.getName();
+
+						TableViewElement tableViewElement = new TableViewElement(projectName, "Not Build");
+
+						tableViewElementList.add(tableViewElement);
+					}
+
+					UIUtil.async(
+						new Runnable() {
+
+							@Override
+							public void run() {
+								_tableViewElements = tableViewElementList.toArray(
+									new TableViewElement[tableViewElementList.size()]);
+
+								_tableViewer.setInput(_tableViewElements);
+
+								_tableViewer.refresh();
+							}
+
+						});
+
+					for (int i = 0; i < count; i++) {
+						monitor.worked(i + 1 * unit);
+
+						if (monitor.isCanceled()) {
+							break;
+						}
+
+						if (i == (count - 1)) {
+							monitor.worked(100);
+						}
+
+						TableViewElement viewElement = tableViewElementList.get(i);
+
+						final String projectName = viewElement.projectName;
+
+						final IProject project = ProjectUtil.getProject(projectName);
+
+						monitor.setTaskName("Build " + projectName + " Project...");
+
+						boolean buildFlag = _getBuildStatus(monitor, project);
+
+						if (buildFlag) {
+							viewElement.buildStatus = "Build Successful";
+						}
+						else {
+							viewElement.buildStatus = "Build Failed";
+						}
+
+						UIUtil.async(
+							new Runnable() {
+
+								@Override
+								public void run() {
+									_tableViewElements = tableViewElementList.toArray(
+										new TableViewElement[tableViewElementList.size()]);
+
+									_tableViewer.setInput(_tableViewElements);
+
+									_tableViewer.refresh();
+								}
+
+							});
+					}
+
+					return StatusBridge.create(Status.createOkStatus());
+				}
+
+			};
+
+			workspaceJob.setUser(true);
+			workspaceJob.schedule();
+		}
+		catch (Exception e) {
+			ProjectUI.logError(e);
+		}
+	}
+
+	private void _createImages() {
+		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+
+		_imageProject = sharedImages.getImage(SharedImages.IMG_OBJ_PROJECT);
+
+		if (_imageProject.isDisposed()) {
+			_imageProject = sharedImages.getImageDescriptor(SharedImages.IMG_OBJ_PROJECT) .createImage();
+		}
+
+		URL greenTickUrl = bundle.getEntry("/images/yes_badge.png");
+
+		_imageSuccess = ImageDescriptor.createFromURL(greenTickUrl).createImage();
+
+		_imageSuccess.getImageData().scaledTo(16, 16);
+
+		_imageFail = JFaceResources.getImage(Dialog.DLG_IMG_MESSAGE_ERROR);
+	}
+
+	private boolean _getBuildStatus(IProgressMonitor monitor, IProject project) throws CoreException {
+		IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
+		IPath outputBundlepath = null;
+
+		try {
+			outputBundlepath = bundleProject.getOutputBundle(true, monitor);
+		}
+		catch (Exception e) {
+		}
+
+		if ((outputBundlepath != null) && !outputBundlepath.isEmpty()) {
+			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	private List<IProject> _getSelectedProjects() {
+		List<IProject> projects = new ArrayList<>();
+
+		final JavaProjectSelectionDialog dialog = new JavaProjectSelectionDialog(Display.getCurrent().getActiveShell());
+
+		if (dialog.open() == Window.OK) {
+			Object[] selectedProjects = dialog.getResult();
+
+			if (selectedProjects != null) {
+				for (Object project : selectedProjects) {
+					if (project instanceof IJavaProject) {
+						IJavaProject p = (IJavaProject)project;
+
+						projects.add(p.getProject());
+					}
+				}
+			}
+		}
+
+		return projects;
+	}
+
+	private Image _imageFail;
+	private Image _imageProject;
+	private Image _imageSuccess;
+	private TableViewElement[] _tableViewElements;
+	private TableViewer _tableViewer;
+
+	private class TableViewContentProvider implements IStructuredContentProvider {
+
+		@Override
+		public void dispose() {
+		}
+
+		@Override
+		public Object[] getElements(Object inputElement) {
+			if (inputElement instanceof TableViewElement[]) {
+				return (TableViewElement[])inputElement;
+			}
+
+			return new Object[] {inputElement};
+		}
+
+		@Override
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		}
+
+	}
+
+	private class TableViewElement {
+
+		public TableViewElement(String projectName, String buildStatus) {
+			this.projectName = projectName;
+			this.buildStatus = buildStatus;
+		}
+
+		public String buildStatus;
+		public String projectName;
+
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.wizard;
 
@@ -35,83 +34,75 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
  * @author Greg Amerson
  * @author Cindy Li
  */
-@SuppressWarnings( "restriction" )
-public class SDKProjectsImportWizard extends DataModelWizard implements IWorkbenchWizard
-{
-    protected SDKProjectsImportWizardPage sdkProjectsImportWizardPage;
-    protected SDK sdk;
+@SuppressWarnings("restriction")
+public class SDKProjectsImportWizard extends DataModelWizard implements IWorkbenchWizard {
 
-    public SDKProjectsImportWizard()
-    {
-        this( (IDataModel) null );
-    }
+	public SDKProjectsImportWizard() {
+		this((IDataModel)null);
+	}
 
-    public SDKProjectsImportWizard( IDataModel dataModel )
-    {
-        super( dataModel );
+	public SDKProjectsImportWizard(IDataModel dataModel) {
+		super(dataModel);
 
-        setWindowTitle( Msgs.importProjects );
-        setDefaultPageImageDescriptor( ProjectUI.imageDescriptorFromPlugin(
-            ProjectUI.PLUGIN_ID, "/icons/wizban/import_wiz.png" ) ); //$NON-NLS-1$
-    }
+		setWindowTitle(Msgs.importProjects);
+		setDefaultPageImageDescriptor(
+			ProjectUI.imageDescriptorFromPlugin(ProjectUI.PLUGIN_ID, "/icons/wizban/import_wiz.png"));
+	}
 
-    public SDKProjectsImportWizard( SDK sdk )
-    {
-        this( (IDataModel) null );
-        this.sdk = sdk;
-    }
+	public SDKProjectsImportWizard(SDK sdk) {
+		this((IDataModel)null);
+		this.sdk = sdk;
+	}
 
-    @Override
-    public boolean canFinish()
-    {
-        return getDataModel().isValid();
-    }
+	@Override
+	public boolean canFinish() {
+		return getDataModel().isValid();
+	}
 
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-    }
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	}
 
-    @Override
-    protected void doAddPages()
-    {
-        if( sdk != null )
-        {
-            IDataModel model = getDataModel();
-            model.setStringProperty( SDKProjectsImportDataModelProvider.LIFERAY_SDK_NAME, sdk.getName() );
-        }
+	@Override
+	protected void doAddPages() {
+		if (sdk != null) {
+			IDataModel model = getDataModel();
 
-        sdkProjectsImportWizardPage = new SDKProjectsImportWizardPage( getDataModel(), "pageOne" ); //$NON-NLS-1$
+			model.setStringProperty(SDKProjectsImportDataModelProvider.LIFERAY_SDK_NAME, sdk.getName());
+		}
 
-        addPage( sdkProjectsImportWizardPage );
-    }
+		sdkProjectsImportWizardPage = new SDKProjectsImportWizardPage(getDataModel(), "pageOne");
 
-    @Override
-    protected IDataModelProvider getDefaultProvider()
-    {
-        return new SDKProjectsImportDataModelProvider();
-    }
+		addPage(sdkProjectsImportWizardPage);
+	}
 
-    @Override
-    protected boolean runForked()
-    {
-        return false;
-    }
+	@Override
+	protected IDataModelProvider getDefaultProvider() {
+		return new SDKProjectsImportDataModelProvider();
+	}
 
-    @Override
-    protected void postPerformFinish() throws InvocationTargetException
-    {
-        UIUtil.switchToLiferayPerspective( LiferayPerspectiveFactory.ID, true );
+	@Override
+	protected void postPerformFinish() throws InvocationTargetException {
+		UIUtil.switchToLiferayPerspective(LiferayPerspectiveFactory.ID, true);
 
-        super.postPerformFinish();
-    }
+		super.postPerformFinish();
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String importProjects;
+	@Override
+	protected boolean runForked() {
+		return false;
+	}
 
-        static
-        {
-            initializeMessages( SDKProjectsImportWizard.class.getName(), Msgs.class );
-        }
-    }
+	protected SDK sdk;
+	protected SDKProjectsImportWizardPage sdkProjectsImportWizardPage;
+
+	private static class Msgs extends NLS {
+
+		public static String importProjects;
+
+		static {
+			initializeMessages(SDKProjectsImportWizard.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.dialog;
 
@@ -28,60 +27,56 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
-
 /**
  * @author Kuo Zhang
  */
-public class PluginTypeDescriptionDialog extends SapphireDialog
-{
+public class PluginTypeDescriptionDialog extends SapphireDialog {
 
-    public PluginTypeDescriptionDialog( final Shell shell,
-                                        final Element element,
-                                        final DefinitionLoader.Reference<DialogDef> definition )
-    {
-        super( shell, element, definition );
+	public PluginTypeDescriptionDialog(
+		final Shell shell, final Element element, final DefinitionLoader.Reference<DialogDef> definition) {
 
-        setShellStyle( SWT.NO_TRIM );
-    }
+		super(shell, element, definition);
 
+		setShellStyle(SWT.NO_TRIM);
+	}
 
-    @Override
-    protected Control createButtonBar( Composite parent )
-    {
-        return new Composite( parent , SWT.NONE );
-    }
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
 
-    @Override
-    protected void configureShell( Shell newShell )
-    {
-        super.configureShell( newShell );
+		Display.getDefault().addFilter(
+			SWT.MouseUp,
+			new Listener() {
 
-        Display.getDefault().addFilter( SWT.MouseUp, new Listener()
-        {
-            @Override
-            public void handleEvent( Event event )
-            {
-                Display.getDefault().removeFilter( SWT.MouseUp, this );
+				@Override
+				public void handleEvent(Event event) {
+					Display.getDefault().removeFilter(SWT.MouseUp, this);
 
-                Display.getDefault().asyncExec( new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        close();
-                    }
-                } );
-            }
-        } );
-    }
+					Display.getDefault().asyncExec(
+						new Runnable() {
 
-    @Override
-    protected Point getInitialLocation( Point initialSize )
-    {
-        final Point parentLocation = getParentShell().getLocation();
-        final Point parentSize = getParentShell().getSize();
+							@Override
+							public void run() {
+								close();
+							}
 
-        return new Point( parentLocation.x + parentSize.x, parentLocation.y );
-    }
+						});
+				}
+
+			});
+	}
+
+	@Override
+	protected Control createButtonBar(Composite parent) {
+		return new Composite(parent, SWT.NONE);
+	}
+
+	@Override
+	protected Point getInitialLocation(Point initialSize) {
+		final Point parentLocation = getParentShell().getLocation();
+		final Point parentSize = getParentShell().getSize();
+
+		return new Point(parentLocation.x + parentSize.x, parentLocation.y);
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.modules.fragment.action;
 
@@ -20,6 +19,7 @@ import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -43,133 +43,116 @@ import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 /**
  * @author Terry Jia
  */
-public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog
-{
+public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog {
 
-    private static ElementList<OverrideFilePath> files;
+	public OSGiBundleFileSelectionDialog(Shell parent, ElementList<OverrideFilePath> currentFiles, String projectName) {
+		super(parent, new FileLabelProvider(), new FileContentProvider());
 
-    protected static String projectName = "";
+		_files = currentFiles;
+		this.projectName = projectName;
 
-    protected static class FileContentProvider implements ITreeContentProvider
-    {
+		setComparator(new ViewerComparator());
+	}
 
-        private final Object[] EMPTY = new Object[0];
+	protected static String projectName = "";
 
-        public void dispose()
-        {
-        }
+	protected static class FileContentProvider implements ITreeContentProvider {
 
-        public Object[] getChildren( Object parentElement )
-        {
-            return EMPTY;
-        }
+		public void dispose() {
+		}
 
-        public Object[] getElements( Object element )
-        {
-            Set<String> possibleValues = new HashSet<String>();
+		public Object[] getChildren(Object parentElement) {
+			return _empty;
+		}
 
-            if( element instanceof File )
-            {
-                File file = (File) element;
+		public Object[] getElements(Object element) {
+			Set<String> possibleValues = new HashSet<>();
 
-                if( file.exists() )
-                {
-                    try( JarFile jar = new JarFile( file ) )
-                    {
-                        Enumeration<JarEntry> enu = jar.entries();
+			if (element instanceof File) {
+				File file = (File)element;
 
-                        while( enu.hasMoreElements() )
-                        {
-                            JarEntry entry = enu.nextElement();
-                            String name = entry.getName();
+				if (file.exists()) {
+					try (JarFile jar = new JarFile(file)) {
+						Enumeration<JarEntry> enu = jar.entries();
 
-                            if( ( name.startsWith( "META-INF/resources/" ) &&
-                                ( name.endsWith( ".jsp" ) || name.endsWith( ".jspf" ) ) ) ||
-                                name.equals( "portlet.properties" ) || name.equals( "resource-actions/default.xml" ) )
-                            {
-                                possibleValues.add( name );
-                            }
-                        }
-                    }
-                    catch( IOException e )
-                    {
-                    }
-                }
-            }
+						while (enu.hasMoreElements()) {
+							JarEntry entry = enu.nextElement();
 
-            for( OverrideFilePath file : files )
-            {
-                String currentFile = file.getValue().content();
+							String name = entry.getName();
 
-                possibleValues.remove( currentFile );
-            }
+							if ((name.startsWith("META-INF/resources/") &&
+								 (name.endsWith(".jsp") || name.endsWith(".jspf"))) ||
+								name.equals("portlet.properties") || name.equals("resource-actions/default.xml")) {
 
-            if( projectName != null )
-            {
-                IProject project = CoreUtil.getProject( projectName );
-                IFolder javaFolder = project.getFolder( "src/main/java" );
-                IFolder resourceFolder = project.getFolder( "src/main/resources" );
-                Iterator<String> it = possibleValues.iterator();
+								possibleValues.add(name);
+							}
+						}
+					}
+					catch (IOException ioe) {
+					}
+				}
+			}
 
-                while( it.hasNext() )
-                {
-                    String v = it.next();
+			for (OverrideFilePath file : _files) {
+				String currentFile = file.getValue().content();
 
-                    if( resourceFolder.getFile( v ).exists() )
-                    {
-                        it.remove();
-                    }
+				possibleValues.remove(currentFile);
+			}
 
-                    if( javaFolder.getFile( "portlet-ext.properties" ).exists() && v.equals( "portlet.properties" ) )
-                    {
-                        it.remove();
-                    }
+			if (projectName != null) {
+				IProject project = CoreUtil.getProject(projectName);
 
-                }
-            }
+				IFolder javaFolder = project.getFolder("src/main/java");
 
-            return possibleValues.toArray();
-        }
+				IFolder resourceFolder = project.getFolder("src/main/resources");
 
-        public Object getParent( Object element )
-        {
-            return null;
-        }
+				Iterator<String> it = possibleValues.iterator();
 
-        public boolean hasChildren( Object element )
-        {
-            return false;
-        }
+				while (it.hasNext()) {
+					String v = it.next();
 
-        public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
-        {
-        }
-    }
+					if (resourceFolder.getFile(v).exists()) {
+						it.remove();
+					}
 
-    protected static class FileLabelProvider extends LabelProvider
-    {
-        private final Image IMG_FILE =
-            PlatformUI.getWorkbench().getSharedImages().getImage( ISharedImages.IMG_OBJ_FILE );
+					if (javaFolder.getFile("portlet-ext.properties").exists() && v.equals("portlet.properties")) {
+						it.remove();
+					}
+				}
+			}
 
-        public Image getImage( Object element )
-        {
-            return IMG_FILE;
-        }
+			return possibleValues.toArray();
+		}
 
-        public String getText( Object element )
-        {
-            return element.toString();
-        }
-    }
+		public Object getParent(Object element) {
+			return null;
+		}
 
-    public OSGiBundleFileSelectionDialog( Shell parent, ElementList<OverrideFilePath> currentFiles, String projectName )
-    {
-        super( parent, new FileLabelProvider(), new FileContentProvider() );
+		public boolean hasChildren(Object element) {
+			return false;
+		}
 
-        files = currentFiles;
-        this.projectName = projectName;
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		}
 
-        setComparator( new ViewerComparator() );
-    }
+		private final Object[] _empty = new Object[0];
+
+	}
+
+	protected static class FileLabelProvider extends LabelProvider {
+
+		public Image getImage(Object element) {
+			return _imgFile;
+		}
+
+		public String getText(Object element) {
+			return element.toString();
+		}
+
+		private final Image _imgFile = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
+
+	}
+
+	private static ElementList<OverrideFilePath> _files;
 
 }

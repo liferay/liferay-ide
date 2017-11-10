@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -23,31 +23,28 @@ import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 
-
 /**
  * @author Kuo Zhang
  */
-public class OpenPluginTypeDescriptionDialogAction extends SapphireActionHandler
-{
+public class OpenPluginTypeDescriptionDialogAction extends SapphireActionHandler {
 
-    @Override
-    protected Object run( Presentation context )
-    {
-        if( context instanceof SwtPresentation )
-        {
-            final SwtPresentation swt = (SwtPresentation) context;
+	@Override
+	protected Object run(Presentation context) {
+		if (context instanceof SwtPresentation) {
+			final SwtPresentation swt = (SwtPresentation)context;
 
-            final NewLiferayPluginProjectOp op = getModelElement().nearest( NewLiferayPluginProjectOp.class );
+			final NewLiferayPluginProjectOp op = getModelElement().nearest(NewLiferayPluginProjectOp.class);
 
-            final PluginTypeDescriptionDialog dialog =
-                new PluginTypeDescriptionDialog( swt.shell(), op,
-                    DefinitionLoader.sdef( NewLiferayPluginProjectWizard.class ).dialog( "PluginTypeDescription" ) );
+			final PluginTypeDescriptionDialog dialog = new PluginTypeDescriptionDialog(
+				swt.shell(), op,
+				DefinitionLoader.sdef(NewLiferayPluginProjectWizard.class).dialog("PluginTypeDescription"));
 
-            dialog.setBlockOnOpen( false );
+			dialog.setBlockOnOpen(false);
 
-            dialog.open();
-        }
+			dialog.open();
+		}
 
-        return null;
-    }
+		return null;
+	}
+
 }

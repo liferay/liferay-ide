@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.pref;
 
@@ -36,200 +35,196 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.wst.sse.ui.internal.preferences.ui.ScrolledPageContent;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class ProjectValidationSettingsPage extends AbstractValidationSettingsPage
-{
+@SuppressWarnings("restriction")
+public class ProjectValidationSettingsPage extends AbstractValidationSettingsPage {
 
-    public static final Map<Integer, Integer> ERROR_MAP = new HashMap<Integer, Integer>();
+	public static final int[] ERROR_VALUES = {1, 2, -1};
 
-    public static final int[] ERROR_VALUES = new int[] { 1, 2, -1 };
-    public static final String[] ERRORS = new String[] { Msgs.error, Msgs.warning, Msgs.ignore };
+	public static final String[] ERRORS = {Msgs.error, Msgs.warning, Msgs.ignore};
 
-    public static final String PORTLET_UI_PROPERTY_PAGE_PROJECT_VALIDATION_ID =
-        "com.liferay.ide.portlet.ui.propertyPage.project.validation"; //$NON-NLS-1$
+	public static final String PORTLET_UI_PROPERTY_PAGE_PROJECT_VALIDATION_ID =
+		"com.liferay.ide.portlet.ui.propertyPage.project.validation";
 
-    public static final String SETTINGS_SECTION_NAME = "PortletValidationSeverities"; //$NON-NLS-1$
+	public static final String SETTINGS_SECTION_NAME = "PortletValidationSeverities";
 
-    public static final String VALIDATION_ID = "com.liferay.ide.portlet.ui.validation"; //$NON-NLS-1$
+	public static final String VALIDATION_ID = "com.liferay.ide.portlet.ui.validation";
 
-    static
-    {
-        ERROR_MAP.put( IMarker.SEVERITY_ERROR, 0 );
-        ERROR_MAP.put( IMarker.SEVERITY_WARNING, 1 );
-        ERROR_MAP.put( IMarker.SEVERITY_INFO, 2 );
-    }
+	public static final Map<Integer, Integer> errormap = new HashMap<>();
 
-    private PixelConverter pixelConverter;
+	static {
+		errormap.put(IMarker.SEVERITY_ERROR, 0);
+		errormap.put(IMarker.SEVERITY_WARNING, 1);
+		errormap.put(IMarker.SEVERITY_INFO, 2);
+	}
 
-    @Override
-    public void dispose()
-    {
-        storeSectionExpansionStates( getDialogSettings().addNewSection( SETTINGS_SECTION_NAME ) );
-        super.dispose();
-    }
+	@Override
+	public void dispose() {
+		storeSectionExpansionStates(getDialogSettings().addNewSection(SETTINGS_SECTION_NAME));
+		super.dispose();
+	}
 
-    public void init( IWorkbench workbench )
-    {
-    }
+	public void init(IWorkbench workbench) {
+	}
 
-    @Override
-    public boolean performOk()
-    {
-        boolean result = super.performOk();
-        storeValues();
-        return result;
-    }
+	@Override
+	public boolean performOk() {
+		boolean result = super.performOk();
+		storeValues();
 
-    protected Combo createCombo( Composite parent, String label, String key )
-    {
-        return addComboBox( parent, label, key, ERROR_VALUES, ERRORS, 0 );
-    }
+		return result;
+	}
 
-    @Override
-    protected Control createCommonContents( Composite composite )
-    {
-        final Composite page = new Composite( composite, SWT.NULL );
+	protected Combo createCombo(Composite parent, String label, String key) {
+		return addComboBox(parent, label, key, ERROR_VALUES, ERRORS, 0);
+	}
 
-        GridLayout layout = new GridLayout();
-        layout.numColumns = 1;
-        page.setLayout( layout );
+	@Override
+	protected Control createCommonContents(Composite composite) {
+		final Composite page = new Composite(composite, SWT.NULL);
 
-        this.pixelConverter = new PixelConverter( composite );
+		GridLayout layout = new GridLayout();
 
-        final Composite content = createValidationSection( page );
+		layout.numColumns = 1;
+		page.setLayout(layout);
 
-        loadPreferences();
-        restoreSectionExpansionStates( getDialogSettings().getSection( SETTINGS_SECTION_NAME ) );
+		_pixelConverter = new PixelConverter(composite);
 
-        GridData gridData = new GridData( GridData.FILL, GridData.FILL, true, true );
-        gridData.heightHint = pixelConverter.convertHeightInCharsToPixels( 20 );
-        content.setLayoutData( gridData );
+		final Composite content = createValidationSection(page);
 
-        return page;
-    }
+		loadPreferences();
+		restoreSectionExpansionStates(getDialogSettings().getSection(SETTINGS_SECTION_NAME));
 
-    protected Composite createValidationSection( Composite parent )
-    {
-        GridLayout layout = new GridLayout();
-        layout.numColumns = 2;
-        layout.marginHeight = 0;
-        layout.marginWidth = 0;
+		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 
-        final ScrolledPageContent pageContent = new ScrolledPageContent( parent );
-        pageContent.setLayoutData( new GridData( GridData.FILL_BOTH ) );
-        pageContent.setExpandHorizontal( true );
-        pageContent.setExpandVertical( true );
+		gridData.heightHint = _pixelConverter.convertHeightInCharsToPixels(20);
+		content.setLayoutData(gridData);
 
-        Composite body = pageContent.getBody();
-        body.setLayout( layout );
+		return page;
+	}
 
-        GridData gd = new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 );
-        gd.horizontalIndent = 0;
+	protected Composite createValidationSection(Composite parent) {
+		GridLayout layout = new GridLayout();
 
-        Label description = new Label( body, SWT.NONE );
-        description.setText( Msgs.selectSeverityLevelLabel );
-        description.setFont( pageContent.getFont() );
-        description.setLayoutData( gd );
+		layout.numColumns = 2;
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
 
-//        ExpandableComposite twistie;
+		final ScrolledPageContent pageContent = new ScrolledPageContent(parent);
 
-//        int columns = 3;
-//        twistie = createTwistie( body, "Liferay Plugin SDK", columns );
-//        Composite inner = createInnerComposite( parent, twistie, columns );
+		pageContent.setLayoutData(new GridData(GridData.FILL_BOTH));
+		pageContent.setExpandHorizontal(true);
+		pageContent.setExpandVertical(true);
 
-//        inner = createInnerComposite( parent, twistie, columns );
-//        createCombo( inner, "Liferay Plugin SDK is not valid", ValidationPreferences.SDK_NOT_VALID );
+		Composite body = pageContent.getBody();
 
-        return parent;
-    }
+		body.setLayout(layout);
 
-    protected void enableValues()
-    {
-    }
+		GridData gd = new GridData(GridData.FILL, GridData.CENTER, true, false, 2, 1);
 
-    protected IDialogSettings getDialogSettings()
-    {
-        return ProjectUI.getDefault().getDialogSettings();
-    }
+		gd.horizontalIndent = 0;
 
-    @Override
-    protected String getPreferenceNodeQualifier()
-    {
-        return ProjectCore.PLUGIN_ID;
-    }
+		Label description = new Label(body, SWT.NONE);
 
-    @Override
-    protected String getPreferencePageID()
-    {
-        return VALIDATION_ID;
-    }
+		description.setText(Msgs.selectSeverityLevelLabel);
+		description.setFont(pageContent.getFont());
+		description.setLayoutData(gd);
 
-    @Override
-    protected String getProjectSettingsKey()
-    {
-        return ProjectCore.USE_PROJECT_SETTINGS;
-    }
+		// ExpandableComposite twistie;
 
-    @Override
-    protected String getPropertyPageID()
-    {
-        return PORTLET_UI_PROPERTY_PAGE_PROJECT_VALIDATION_ID;
-    }
+		// int columns = 3;
+		// twistie = createTwistie( body, "Liferay Plugin SDK", columns );
+		// Composite inner = createInnerComposite( parent, twistie, columns );
 
-    protected String getQualifier()
-    {
-        return ProjectCore.getDefault().getBundle().getSymbolicName();
-    }
+		// inner = createInnerComposite( parent, twistie, columns );
+		// createCombo( inner, "Liferay Plugin SDK is not valid",
+		// ValidationPreferences.SDK_NOT_VALID );
 
-    protected void initializeValues()
-    {
-        // for (Map.Entry<String, Combo> entry : combos.entrySet()) {
-        // int val = getPortletCorePreferences().getInt(entry.getKey(), -1);
-        // entry.getValue().select(ERROR_MAP.get(val));
-        // }
-    }
+		return parent;
+	}
 
-    protected boolean loadPreferences()
-    {
-        BusyIndicator.showWhile( getControl().getDisplay(), new Runnable()
-        {
-            public void run()
-            {
-                initializeValues();
-                validateValues();
-                enableValues();
-            }
-        } );
-        return true;
-    }
+	protected void enableValues() {
+	}
 
-    @Override
-    protected void performDefaults()
-    {
-        resetSeverities();
-        super.performDefaults();
-    }
+	protected IDialogSettings getDialogSettings() {
+		return ProjectUI.getDefault().getDialogSettings();
+	}
 
-    protected void validateValues()
-    {
-        String errorMessage = null;
-        setErrorMessage( errorMessage );
-        setValid( errorMessage == null );
-    }
+	@Override
+	protected String getPreferenceNodeQualifier() {
+		return ProjectCore.PLUGIN_ID;
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String error;
-        public static String ignore;
-        public static String selectSeverityLevelLabel;
-        public static String warning;
+	@Override
+	protected String getPreferencePageID() {
+		return VALIDATION_ID;
+	}
 
-        static
-        {
-            initializeMessages( ProjectValidationSettingsPage.class.getName(), Msgs.class );
-        }
-    }
+	@Override
+	protected String getProjectSettingsKey() {
+		return ProjectCore.USE_PROJECT_SETTINGS;
+	}
+
+	@Override
+	protected String getPropertyPageID() {
+		return PORTLET_UI_PROPERTY_PAGE_PROJECT_VALIDATION_ID;
+	}
+
+	protected String getQualifier() {
+		Bundle bundle = ProjectUI.getDefault().getBundle();
+
+		return bundle.getSymbolicName();
+	}
+
+	protected void initializeValues() {
+	}
+
+	protected boolean loadPreferences() {
+		BusyIndicator.showWhile(
+			getControl().getDisplay(),
+			new Runnable() {
+
+				public void run() {
+					initializeValues();
+					validateValues();
+					enableValues();
+				}
+
+			});
+
+		return true;
+	}
+
+	@Override
+	protected void performDefaults() {
+		resetSeverities();
+		super.performDefaults();
+	}
+
+	protected void validateValues() {
+		String errorMessage = null;
+
+		setErrorMessage(errorMessage);
+		setValid(errorMessage == null);
+	}
+
+	private PixelConverter _pixelConverter;
+
+	private static class Msgs extends NLS {
+
+		public static String error;
+		public static String ignore;
+		public static String selectSeverityLevelLabel;
+		public static String warning;
+
+		static {
+			initializeMessages(ProjectValidationSettingsPage.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.ui.migration;
 
 import com.liferay.blade.api.MigrationConstants;
@@ -21,40 +21,34 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
+/**
+ * @author Terry Jia
+ */
+public class MigrationHelperProjectFilter extends ViewerFilter {
 
-public class MigrationHelperProjectFilter extends ViewerFilter
-{
+	public MigrationHelperProjectFilter() {
+	}
 
-    public MigrationHelperProjectFilter()
-    {
-        super();
-    }
+	@Override
+	public boolean select(Viewer viewer, Object parentElement, Object element) {
+		IProject project = null;
 
-    @Override
-    public boolean select( Viewer viewer, Object parentElement, Object element )
-    {
-        IProject project = null;
+		if (element instanceof IJavaProject) {
+			project = ((IJavaProject)element).getProject();
+		}
+		else if (element instanceof IProject) {
+			project = (IProject)element;
+		}
 
-        if( element instanceof IJavaProject )
-        {
-            project = ( (IJavaProject) element ).getProject();
-        }
-        else if( element instanceof IProject )
-        {
-            project = (IProject) element;
-        }
+		if (project != null) {
+			String projectName = project.getName();
 
-        if( project != null )
-        {
-            String projectName = project.getName();
+			if (projectName.equals(MigrationConstants.HELPER_PROJECT_NAME)) {
+				return false;
+			}
+		}
 
-            if( projectName.equals( MigrationConstants.HELPER_PROJECT_NAME ) )
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
+		return true;
+	}
 
 }

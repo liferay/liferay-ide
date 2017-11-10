@@ -1,11 +1,16 @@
-/******************************************************************************
- * Copyright (c) 2013 Oracle
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- ******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.project.ui.wizard;
 
@@ -36,123 +41,115 @@ import org.eclipse.swt.widgets.Label;
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public final class PossibleValuesRadioPropertyEditorPresentation<T> extends ValuePropertyEditorPresentation
-{
-    private RadioButtonsGroup control;
+@SuppressWarnings("restriction")
+public final class PossibleValuesRadioPropertyEditorPresentation<T> extends ValuePropertyEditorPresentation {
 
-    public PossibleValuesRadioPropertyEditorPresentation(
-        FormComponentPart part, SwtPresentation parent, Composite composite )
-    {
-        super( part, parent, composite );
-    }
+	public PossibleValuesRadioPropertyEditorPresentation(
+		FormComponentPart part, SwtPresentation parent, Composite composite) {
 
-    @Override
-    protected void createContents( final Composite parent )
-    {
-        final PropertyEditorPart part = part();
+		super(part, parent, composite);
+	}
 
-        final boolean showLabel = part.label() != null;
-        final int leftMargin = part.getMarginLeft();
+	@Override
+	protected void createContents(final Composite parent) {
+		final PropertyEditorPart part = part();
 
-        PropertyEditorAssistDecorator decorator = null;
+		final boolean showLabel = part.label() != null;
+		final int leftMargin = part.getMarginLeft();
 
-        final Composite composite = createMainComposite
-        (
-            parent,
-            new CreateMainCompositeDelegate( part )
-            {
-                @Override
-                public boolean getShowLabel()
-                {
-                    return false;
-                }
+		PropertyEditorAssistDecorator decorator = null;
 
-                @Override
-                public boolean getSpanBothColumns()
-                {
-                    return true;
-                }
-            }
-        );
+		final Composite composite = createMainComposite(
+			parent,
+			new CreateMainCompositeDelegate(part) {
 
-        composite.setLayout( glspacing( glayout( 2, 0, 0 ), 2, 5 ) );
+				@Override
+				public boolean getShowLabel() {
+					return false;
+				}
 
-        decorator = createDecorator( composite );
-        decorator.addEditorControl( composite );
+				@Override
+				public boolean getSpanBothColumns() {
+					return true;
+				}
 
-        if( showLabel )
-        {
-            decorator.control().setLayoutData( gdvalign( gd(), SWT.CENTER ) );
+			});
 
-            final Label label = new Label( composite, SWT.WRAP );
-            label.setLayoutData( gd() );
+		composite.setLayout(glspacing(glayout(2, 0, 0), 2, 5));
 
-            final Runnable updateLabelOp = new Runnable()
-            {
-                public void run()
-                {
-                    label.setText( part.label( CapitalizationType.FIRST_WORD_ONLY, true ) );
-                }
-            };
+		decorator = createDecorator(composite);
 
-            final org.eclipse.sapphire.Listener listener = new org.eclipse.sapphire.Listener()
-            {
-                @Override
-                public void handle( final org.eclipse.sapphire.Event event )
-                {
-                    if( event instanceof LabelChangedEvent )
-                    {
-                        updateLabelOp.run();
-                        PossibleValuesRadioPropertyEditorPresentation.this.layout();
-                    }
-                }
-            };
+		decorator.addEditorControl(composite);
 
-            part.attach( listener );
-            updateLabelOp.run();
+		if (showLabel) {
+			decorator.control().setLayoutData(gdvalign(gd(), SWT.CENTER));
 
-            label.addDisposeListener
-            (
-                new DisposeListener()
-                {
-                    public void widgetDisposed( final DisposeEvent event )
-                    {
-                        part.detach( listener );
-                    }
-                }
-            );
+			final Label label = new Label(composite, SWT.WRAP);
 
-            decorator.addEditorControl( label );
-        }
-        else
-        {
-            decorator.control().setLayoutData( gdvindent( gdvalign( gd(), SWT.TOP ), 4 ) );
-        }
+			label.setLayoutData(gd());
 
-        this.control = new RadioButtonsGroup( composite, true );
+			final Runnable updateLabelOp = new Runnable() {
 
-        if( showLabel )
-        {
-            this.control.setLayoutData( gdhindent( gdhspan( gdhfill(), 2 ), leftMargin + 20 ) );
-        }
-        else
-        {
-            this.control.setLayoutData( gdhfill() );
-        }
+				public void run() {
+					label.setText(part.label(CapitalizationType.FIRST_WORD_ONLY, true));
+				}
 
-        this.binding = new PossibleValuesRadioButtonsGroupBinding<T>( this, (RadioButtonsGroup) this.control );
+			};
 
-        this.control.setData( DATA_BINDING, this.binding );
-        decorator.addEditorControl( this.control, true );
+			final org.eclipse.sapphire.Listener listener = new org.eclipse.sapphire.Listener() {
 
-        addControl( this.control );
-    }
+				@Override
+				public void handle(final org.eclipse.sapphire.Event event) {
+					if (event instanceof LabelChangedEvent) {
+						updateLabelOp.run();
+						PossibleValuesRadioPropertyEditorPresentation.this.layout();
+					}
+				}
 
-    @Override
-    protected void handleFocusReceivedEvent()
-    {
-        this.control.setFocus();
-    }
+			};
+
+			part.attach(listener);
+
+			updateLabelOp.run();
+
+			label.addDisposeListener(
+				new DisposeListener() {
+
+					public void widgetDisposed(final DisposeEvent event) {
+						part.detach(listener);
+					}
+
+				});
+
+			decorator.addEditorControl(label);
+		}
+		else {
+			decorator.control().setLayoutData(gdvindent(gdvalign(gd(), SWT.TOP), 4));
+		}
+
+		_control = new RadioButtonsGroup(composite, true);
+
+		if (showLabel) {
+			_control.setLayoutData(gdhindent(gdhspan(gdhfill(), 2), leftMargin + 20));
+		}
+		else {
+			_control.setLayoutData(gdhfill());
+		}
+
+		binding = new PossibleValuesRadioButtonsGroupBinding<>(this, (RadioButtonsGroup)_control);
+
+		_control.setData(DATA_BINDING, binding);
+
+		decorator.addEditorControl(_control, true);
+
+		addControl(_control);
+	}
+
+	@Override
+	protected void handleFocusReceivedEvent() {
+		this._control.setFocus();
+	}
+
+	private RadioButtonsGroup _control;
 
 }

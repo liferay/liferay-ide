@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.action;
 
@@ -34,54 +33,48 @@ import org.eclipse.ui.IWorkbenchPart;
 /**
  * @author Kuo Zhang
  */
-public class EncodeLanguagePropertiesFilesToDefaultAction implements IObjectActionDelegate
-{
+public class EncodeLanguagePropertiesFilesToDefaultAction implements IObjectActionDelegate {
 
-    private ISelection selection;
+	public EncodeLanguagePropertiesFilesToDefaultAction() {
+	}
 
-    public EncodeLanguagePropertiesFilesToDefaultAction()
-    {
-        super();
-    }
+	public void run(IAction action) {
+		if (_selection instanceof IStructuredSelection) {
+			final Object elem = ((IStructuredSelection)_selection).toArray()[0];
 
-    public void run( IAction action )
-    {
-        if( selection instanceof IStructuredSelection )
-        {
-            final Object elem = ( (IStructuredSelection) selection ).toArray()[0];
+			try {
+				if (elem instanceof IResource) {
+					new ProgressMonitorDialog(UIUtil.getActiveShell()).run(
+						true, false,
+						new IRunnableWithProgress() {
 
-            try
-            {
-                if( elem instanceof IResource )
-                {
-                    new ProgressMonitorDialog( UIUtil.getActiveShell() ).run( true, false, new IRunnableWithProgress()
-                    {
-                        public void run( IProgressMonitor monitor ) throws InvocationTargetException,
-                            InterruptedException
-                        {
-                            monitor.beginTask( "Encoding Liferay language properties files to default (UTF-8)... ", 10 );
+							public void run(IProgressMonitor monitor)
+								throws InterruptedException, InvocationTargetException {
 
-                            PropertiesUtil.encodeLanguagePropertiesFilesToDefault( (IResource) elem, monitor );
+								monitor.beginTask(
+									"Encoding Liferay language properties files to default (UTF-8)... ", 10);
 
-                            monitor.done();
-                        }
-                    } );
-                }
-            }
-            catch( Exception e )
-            {
-                ProjectUI.logError( e );
-            }
-        }
-    }
+								PropertiesUtil.encodeLanguagePropertiesFilesToDefault((IResource)elem, monitor);
 
-    public void selectionChanged( IAction action, ISelection selection )
-    {
-        this.selection = selection;
-    }
+								monitor.done();
+							}
 
-    public void setActivePart( IAction action, IWorkbenchPart targetPart )
-    {
-    }
+						});
+				}
+			}
+			catch (Exception e) {
+				ProjectUI.logError(e);
+			}
+		}
+	}
+
+	public void selectionChanged(IAction action, ISelection selection) {
+		_selection = selection;
+	}
+
+	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+	}
+
+	private ISelection _selection;
 
 }

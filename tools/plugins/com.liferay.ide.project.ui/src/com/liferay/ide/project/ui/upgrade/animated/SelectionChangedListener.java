@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,15 +10,15 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
 /**
  * @author Simon Jiang
  */
-public interface SelectionChangedListener
-{
-    public void onSelectionChanged( int targetSelection );
+public interface SelectionChangedListener {
+
+	public void onSelectionChanged(int targetSelection);
+
 }

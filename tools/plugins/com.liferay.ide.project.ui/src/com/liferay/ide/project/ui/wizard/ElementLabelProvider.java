@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.wizard;
 
@@ -28,40 +27,35 @@ import org.eclipse.swt.graphics.Image;
 /**
  * @author Simon Jiang
  */
+public abstract class ElementLabelProvider
+	extends AbstractLabelProvider implements IColorProvider, IStyledLabelProvider {
 
-public abstract class ElementLabelProvider extends AbstractLabelProvider
-    implements IColorProvider, IStyledLabelProvider
-{
+	@Override
+	public Color getBackground(Object element) {
+		return null;
+	}
 
-    @Override
-    public Color getBackground( Object element )
-    {
-        return null;
-    }
+	@Override
+	public Color getForeground(Object element) {
+		return null;
+	}
 
-    @Override
-    public Color getForeground( Object element )
-    {
-        return null;
-    }
+	@Override
+	public abstract Image getImage(Object element);
 
-    @Override
-    public abstract Image getImage( Object element );
+	@Override
+	public abstract StyledString getStyledText(Object element);
 
-    @Override
-    public abstract StyledString getStyledText( Object element );
+	@Override
+	public String getText(Object element) {
+		if (element instanceof CheckboxElement) {
+			return ((CheckboxElement)element).context;
+		}
 
-    @Override
-    public String getText( Object element )
-    {
-        if( element instanceof CheckboxElement )
-        {
-            return ( (CheckboxElement) element ).context;
-        }
+		return super.getText(element);
+	}
 
-        return super.getText( element );
-    }
+	@Override
+	protected abstract void initalizeImageRegistry(ImageRegistry imageRegistry);
 
-    @Override
-    protected abstract void initalizeImageRegistry( ImageRegistry imageRegistry );
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.wizard;
 
@@ -25,59 +24,53 @@ import org.eclipse.sapphire.ui.forms.swt.FormComponentPresentation;
 import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkingSet;
 import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Gregory Amerson
  */
-public class WorkingSetCustomPart extends FormComponentPart
-{
-    private List<IWorkingSet> workingSets = new ArrayList<IWorkingSet>();
-    private WorkingSetPresentation presentation;
+public class WorkingSetCustomPart extends FormComponentPart {
 
-    public WorkingSetCustomPart()
-    {
-        super();
-    }
+	public WorkingSetCustomPart() {
+	}
 
-    @Override
-    protected void init()
-    {
-        super.init();
+	@Override
+	public FormComponentPresentation createPresentation(SwtPresentation parent, Composite composite) {
+		_presentation = new WorkingSetPresentation(this, parent, composite, _workingSets);
 
-        ISelectionService service = (ISelectionService) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
-        ISelection selection = service.getSelection();
+		return _presentation;
+	}
 
-        if( selection instanceof IStructuredSelection )
-        {
-            final IWorkingSet workingSet = SelectionUtil.getSelectedWorkingSet( (IStructuredSelection)selection);
+	public IWorkingSet[] getWorkingSets() {
+		if (_presentation.isAddToWorkingSetsEnabled()) {
+			return _workingSets.toArray(new IWorkingSet[0]);
+		}
+		else {
+			return new IWorkingSet[0];
+		}
+	}
 
-            if(workingSet != null)
-            {
-              this.workingSets.add(workingSet);
-            }
-        }
-    }
+	@Override
+	protected void init() {
+		super.init();
+		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
-    @Override
-    public FormComponentPresentation createPresentation( SwtPresentation parent, Composite composite )
-    {
-        this.presentation = new WorkingSetPresentation( this, parent, composite, this.workingSets );
-        return this.presentation;
-    }
+		ISelectionService service = (ISelectionService)activeWorkbenchWindow.getSelectionService();
 
-    public IWorkingSet[] getWorkingSets()
-    {
-        if( this.presentation.isAddToWorkingSetsEnabled() )
-        {
-            return this.workingSets.toArray( new IWorkingSet[0] );
-        }
-        else
-        {
-            return new IWorkingSet[0];
-        }
+		ISelection selection = service.getSelection();
 
-    }
+		if (selection instanceof IStructuredSelection) {
+			final IWorkingSet workingSet = SelectionUtil.getSelectedWorkingSet((IStructuredSelection)selection);
+
+			if (workingSet != null) {
+				_workingSets.add(workingSet);
+			}
+		}
+	}
+
+	private WorkingSetPresentation _presentation;
+	private List<IWorkingSet> _workingSets = new ArrayList<>();
 
 }

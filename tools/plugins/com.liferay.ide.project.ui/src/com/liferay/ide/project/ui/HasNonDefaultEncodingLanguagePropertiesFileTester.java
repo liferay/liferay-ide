@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui;
 
@@ -27,38 +26,32 @@ import org.eclipse.core.runtime.CoreException;
 /**
  * @author Kuo Zhang
  */
-public class HasNonDefaultEncodingLanguagePropertiesFileTester extends PropertyTester
-{
+public class HasNonDefaultEncodingLanguagePropertiesFileTester extends PropertyTester {
 
-    public HasNonDefaultEncodingLanguagePropertiesFileTester()
-    {
-        super();
-    }
+	public HasNonDefaultEncodingLanguagePropertiesFileTester() {
+	}
 
-    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
-    {
-        boolean retval = false;
+	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
+		boolean retval = false;
 
-        if( receiver instanceof IProject )
-        {
-            retval = PropertiesUtil.hasNonDefaultEncodingLanguagePropertiesFile( (IProject) receiver );
-        }
-        else if( receiver instanceof IFile )
-        {
-            try
-            {
-                if( ! ILiferayConstants.LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET.equals( ( (IFile) receiver ).getCharset() ) &&
-                    PropertiesUtil.isLanguagePropertiesFile( (IFile) receiver ) )
-                {
-                    retval = true;
-                }
-            }
-            catch( CoreException e )
-            {
-                LiferayCore.logError( e );
-            }
-        }
+		if (receiver instanceof IProject) {
+			retval = PropertiesUtil.hasNonDefaultEncodingLanguagePropertiesFile((IProject)receiver);
+		}
+		else if (receiver instanceof IFile) {
+			try {
+				if (!ILiferayConstants.LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET.equals(
+						((IFile)receiver).getCharset()) &&
+					PropertiesUtil.isLanguagePropertiesFile((IFile)receiver)) {
 
-        return retval;
-    }
+					retval = true;
+				}
+			}
+			catch (CoreException ce) {
+				LiferayCore.logError(ce);
+			}
+		}
+
+		return retval;
+	}
+
 }

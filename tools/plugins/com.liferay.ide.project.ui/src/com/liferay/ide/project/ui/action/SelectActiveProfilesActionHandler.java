@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -31,93 +31,86 @@ import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
 import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 import org.eclipse.swt.widgets.Shell;
 
-
 /**
  * @author Gregory Amerson
  */
-public class SelectActiveProfilesActionHandler extends PropertyEditorActionHandler
-{
+public class SelectActiveProfilesActionHandler extends PropertyEditorActionHandler {
 
-    @Override
-    protected Object run( Presentation context )
-    {
-        if( context instanceof SwtPresentation )
-        {
-            final SwtPresentation swt = (SwtPresentation) context;
+	@Override
+	protected Object run(Presentation context) {
+		if (context instanceof SwtPresentation) {
+			final SwtPresentation swt = (SwtPresentation)context;
 
-            final NewLiferayPluginProjectOp op = getModelElement().nearest( NewLiferayPluginProjectOp.class );
-            final String previousActiveProfilesValue = op.getActiveProfilesValue().content();
+			final NewLiferayPluginProjectOp op = getModelElement().nearest(NewLiferayPluginProjectOp.class);
 
-            // we need to rebuild the 'selected' list from what is specified in the 'activeProfiles' property
-            op.getSelectedProfiles().clear();
+			final String previousActiveProfilesValue = op.getActiveProfilesValue().content();
 
-            final String activeProfiles = op.getActiveProfilesValue().content();
+			// we need to rebuild the 'selected' list from what is specified in the
+			// 'activeProfiles' property
 
-            if( ! CoreUtil.isNullOrEmpty( activeProfiles ) )
-            {
-                final String[] profileIds = activeProfiles.split( "," );
+			op.getSelectedProfiles().clear();
 
-                if( ! CoreUtil.isNullOrEmpty( profileIds ) )
-                {
-                    for( String profileId : profileIds )
-                    {
-                        if( ! CoreUtil.isNullOrEmpty( profileId ) )
-                        {
-                            boolean foundExistingProfile = false;
+			final String activeProfiles = op.getActiveProfilesValue().content();
 
-                            for( Profile profile : op.getSelectedProfiles() )
-                            {
-                                if( profileId.equals( profile.getId().content() ) )
-                                {
-                                    foundExistingProfile = true;
-                                    break;
-                                }
-                            }
+			if (!CoreUtil.isNullOrEmpty(activeProfiles)) {
+				final String[] profileIds = activeProfiles.split(",");
 
-                            if( ! foundExistingProfile )
-                            {
-                                Profile newlySelectedProfile = op.getSelectedProfiles().insert();
-                                newlySelectedProfile.setId( profileId );
-                            }
-                        }
-                    }
-                }
-            }
+				if (!CoreUtil.isNullOrEmpty(profileIds)) {
+					for (String profileId : profileIds) {
+						if (!CoreUtil.isNullOrEmpty(profileId)) {
+							boolean foundExistingProfile = false;
 
-            final CustomSapphireDialog dialog =
-                new CustomSapphireDialog( swt.shell(), op, DefinitionLoader.sdef(
-                    NewLiferayPluginProjectWizard.class ).dialog( "SelectActiveProfiles" ) );
+							for (Profile profile : op.getSelectedProfiles()) {
+								if (profileId.equals(profile.getId().content())) {
+									foundExistingProfile = true;
+									break;
+								}
+							}
 
-            dialog.setBlockOnOpen( true );
-            final int result = dialog.open();
+							if (!foundExistingProfile) {
+								Profile newlySelectedProfile = op.getSelectedProfiles().insert();
 
-            if( result == SapphireDialog.CANCEL )
-            {
-                // restore previous value
-                op.setActiveProfilesValue( previousActiveProfilesValue );
-            }
-            else
-            {
-                final ElementList<Profile> selectedProfiles = op.getSelectedProfiles();
+								newlySelectedProfile.setId(profileId);
+							}
+						}
+					}
+				}
+			}
 
-                NewLiferayPluginProjectOpMethods.updateActiveProfilesValue( op, selectedProfiles );
-            }
-        }
+			final CustomSapphireDialog dialog = new CustomSapphireDialog(
+				swt.shell(), op,
+				DefinitionLoader.sdef(NewLiferayPluginProjectWizard.class).dialog("SelectActiveProfiles"));
 
-        return null;
-    }
+			dialog.setBlockOnOpen(true);
+			final int result = dialog.open();
 
-    static class CustomSapphireDialog extends SapphireDialog
-    {
-        public CustomSapphireDialog( Shell shell, Element element, Reference<DialogDef> definition )
-        {
-            super( shell, element, definition );
-        }
+			if (result == SapphireDialog.CANCEL) {
 
-        @Override
-        protected boolean performOkOperation()
-        {
-            return true;
-        }
-    }
+				// restore previous value
+
+				op.setActiveProfilesValue(previousActiveProfilesValue);
+			}
+			else {
+				final ElementList<Profile> selectedProfiles = op.getSelectedProfiles();
+
+				NewLiferayPluginProjectOpMethods.updateActiveProfilesValue(op, selectedProfiles);
+			}
+		}
+
+		return null;
+	}
+
+	private static class CustomSapphireDialog extends SapphireDialog {
+
+		public CustomSapphireDialog(Shell shell, Element element, Reference<DialogDef> definition) {
+			super(shell, element, definition);
+		}
+
+		@Override
+		protected boolean performOkOperation() {
+			return true;
+		}
+
+	}
+
 }

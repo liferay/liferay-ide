@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.migration;
 
@@ -20,10 +19,10 @@ import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 /**
  * @author Terry Jia
  */
-public interface ProblemsContainer
-{
-    public String getType();
+public interface ProblemsContainer {
 
-    public UpgradeProblems[] getProblemsArray();
+	public UpgradeProblems[] getProblemsArray();
+
+	public String getType();
 
 }

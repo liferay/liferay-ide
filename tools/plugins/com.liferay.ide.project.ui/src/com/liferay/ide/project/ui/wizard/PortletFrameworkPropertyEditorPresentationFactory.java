@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,9 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
-package com.liferay.ide.project.ui.wizard;
+ */
 
-import com.liferay.ide.project.core.IPortletFramework;
+package com.liferay.ide.project.ui.wizard;
 
 import org.eclipse.sapphire.ui.forms.PropertyEditorPart;
 import org.eclipse.sapphire.ui.forms.swt.PropertyEditorPresentation;
@@ -25,11 +23,10 @@ import org.eclipse.swt.widgets.Composite;
 /**
  * @author Gregory Amerson
  */
-public final class PortletFrameworkPropertyEditorPresentationFactory extends PropertyEditorPresentationFactory
-{
-    @Override
-    public PropertyEditorPresentation create( PropertyEditorPart part, SwtPresentation parent, Composite composite )
-    {
-        return new PossibleValuesRadioPropertyEditorPresentation<IPortletFramework>( part, parent, composite );
-    }
+public final class PortletFrameworkPropertyEditorPresentationFactory extends PropertyEditorPresentationFactory {
+	@Override
+	public PropertyEditorPresentation create(PropertyEditorPart part, SwtPresentation parent, Composite composite) {
+		return new PossibleValuesRadioPropertyEditorPresentation<>(part, parent, composite);
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,43 +10,41 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
 import org.apache.xerces.util.URI;
+
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 
 /**
  * @author Terry Jia
  */
-public class BundleUrlValidationService extends ValidationService
-{
+public class BundleUrlValidationService extends ValidationService {
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-        String bundleUrl = op().getBundleUrl().content();
+		Value<String> bundleUrlValue = _op().getBundleUrl();
 
-        try
-        {
-            new URI( bundleUrl );
-        }
-        catch( Exception e )
-        {
-            retval = Status.createErrorStatus( "The bundle URL should be a vaild URL." );
-        }
+		String bundleUrl = bundleUrlValue.content();
 
-        return retval;
-    }
+		try {
+			new URI(bundleUrl);
+		}
+		catch (Exception e) {
+			retval = Status.createErrorStatus("The bundle URL should be a vaild URL.");
+		}
 
-    private LiferayUpgradeDataModel op()
-    {
-        return context( LiferayUpgradeDataModel.class );
-    }
+		return retval;
+	}
+
+	private LiferayUpgradeDataModel _op() {
+		return context(LiferayUpgradeDataModel.class);
+	}
 
 }

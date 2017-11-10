@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.wizard;
 
@@ -29,66 +28,60 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class SDKProjectConvertWizard extends DataModelWizard implements IWorkbenchWizard
-{
-    protected IProject project;
-    protected SDKProjectConvertWizardPage sdkProjectConvertWizardPage;
+@SuppressWarnings("restriction")
+public class SDKProjectConvertWizard extends DataModelWizard implements IWorkbenchWizard {
 
-    public SDKProjectConvertWizard()
-    {
-        this( null );
-    }
+	public SDKProjectConvertWizard() {
+		this(null);
+	}
 
-    public SDKProjectConvertWizard( IProject project )
-    {
-        super( null );
+	public SDKProjectConvertWizard(IProject project) {
+		super(null);
 
-        this.project = project;
+		this.project = project;
 
-        setWindowTitle( Msgs.convertProject );
+		setWindowTitle(Msgs.convertProject);
 
-        setDefaultPageImageDescriptor( ProjectUI.imageDescriptorFromPlugin(
-            ProjectUI.PLUGIN_ID, "/icons/wizban/convert_wiz.png" ) ); //$NON-NLS-1$
-    }
+		setDefaultPageImageDescriptor(
+			ProjectUI.imageDescriptorFromPlugin(ProjectUI.PLUGIN_ID, "/icons/wizban/convert_wiz.png"));
+	}
 
-    @Override
-    public boolean canFinish()
-    {
-        return getDataModel().isValid();
-    }
+	@Override
+	public boolean canFinish() {
+		return getDataModel().isValid();
+	}
 
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-    }
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	}
 
-    @Override
-    protected void doAddPages()
-    {
-        sdkProjectConvertWizardPage = new SDKProjectConvertWizardPage( getDataModel(), "pageOne" ); //$NON-NLS-1$
+	@Override
+	protected void doAddPages() {
+		sdkProjectConvertWizardPage = new SDKProjectConvertWizardPage(getDataModel(), "pageOne");
 
-        addPage( sdkProjectConvertWizardPage );
-    }
+		addPage(sdkProjectConvertWizardPage);
+	}
 
-    @Override
-    protected IDataModelProvider getDefaultProvider()
-    {
-        return new SDKProjectConvertDataModelProvider( project );
-    }
+	@Override
+	protected IDataModelProvider getDefaultProvider() {
+		return new SDKProjectConvertDataModelProvider(project);
+	}
 
-    @Override
-    protected boolean runForked()
-    {
-        return false;
-    }
+	@Override
+	protected boolean runForked() {
+		return false;
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String convertProject;
+	protected IProject project;
+	protected SDKProjectConvertWizardPage sdkProjectConvertWizardPage;
 
-        static
-        {
-            initializeMessages( SDKProjectConvertWizard.class.getName(), Msgs.class );
-        }
-    }
+	private static class Msgs extends NLS {
+
+		public static String convertProject;
+
+		static {
+			initializeMessages(SDKProjectConvertWizard.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

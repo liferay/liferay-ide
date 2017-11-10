@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.project.core.IPortletFramework;
@@ -20,23 +20,24 @@ import com.liferay.ide.project.core.ProjectCore;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.PropertyDef;
 
-
 /**
  * @author Gregory Amerson
  */
-public class PortletFrameworkPropertyAuxTextProvider extends PossibleValuesAuxTextProvider
-{
+public class PortletFrameworkPropertyAuxTextProvider extends PossibleValuesAuxTextProvider {
 
-    @Override
-    public String getAuxText( Element modelElement, PropertyDef property, String possibleValue )
-    {
-        final IPortletFramework framework = ProjectCore.getPortletFramework( possibleValue );
-        return framework != null ? getAuxText( framework ) : null;
-    }
+	@Override
+	public String getAuxText(Element modelElement, PropertyDef property, String possibleValue) {
+		final IPortletFramework framework = ProjectCore.getPortletFramework(possibleValue);
 
-    private String getAuxText( IPortletFramework framework )
-    {
-        return framework.getDescription();
-    }
+		if (framework != null) {
+			return _getAuxText(framework);
+		}
+
+		return null;
+	}
+
+	private String _getAuxText(IPortletFramework framework) {
+		return framework.getDescription();
+	}
 
 }

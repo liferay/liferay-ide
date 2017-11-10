@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.model.NamedItem;
 import com.liferay.ide.project.core.upgrade.UpgradeLiferayProjectsOp;
 
 import org.eclipse.core.resources.IProject;
@@ -30,50 +31,46 @@ import org.eclipse.ui.IWorkbenchWizard;
 /**
  * @author Simon Jiang
  */
-public class UpgradeLiferayProjectsWizard extends SapphireWizard<UpgradeLiferayProjectsOp> implements IWorkbenchWizard
-{
-    private boolean firstErrorMessageRemoved = false;
+public class UpgradeLiferayProjectsWizard extends SapphireWizard<UpgradeLiferayProjectsOp> implements IWorkbenchWizard {
 
-    public UpgradeLiferayProjectsWizard(IProject[] projects)
-    {
-        super( op(projects), DefinitionLoader.sdef( UpgradeLiferayProjectsWizard.class ).wizard() );
-    }
+	public UpgradeLiferayProjectsWizard(IProject[] projects) {
+		super(_op(projects), DefinitionLoader.sdef(UpgradeLiferayProjectsWizard.class).wizard());
+	}
 
-    @Override
-    public IWizardPage[] getPages()
-    {
-        final IWizardPage[] wizardPages = super.getPages();
+	@Override
+	public IWizardPage[] getPages() {
+		final IWizardPage[] wizardPages = super.getPages();
 
-        if( !firstErrorMessageRemoved && wizardPages != null )
-        {
-            final SapphireWizardPage wizardPage = (SapphireWizardPage) wizardPages[0];
+		if (!_firstErrorMessageRemoved && (wizardPages != null)) {
+			final SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
 
-            final String message = wizardPage.getMessage();
-            final int messageType = wizardPage.getMessageType();
+			final String message = wizardPage.getMessage();
+			final int messageType = wizardPage.getMessageType();
 
-            if( messageType == IMessageProvider.ERROR && ! CoreUtil.isNullOrEmpty( message ) )
-            {
-                wizardPage.setMessage( message, SapphireWizardPage.ERROR ); //$NON-NLS-1$
-                firstErrorMessageRemoved = true;
-            }
-        }
+			if ((messageType == IMessageProvider.ERROR) && !CoreUtil.isNullOrEmpty(message)) {
+				wizardPage.setMessage(message, SapphireWizardPage.ERROR);
+				_firstErrorMessageRemoved = true;
+			}
+		}
 
-        return wizardPages;
-    }
+		return wizardPages;
+	}
 
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-    }
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	}
 
-    private static UpgradeLiferayProjectsOp op( IProject[] projects )
-    {
-        final UpgradeLiferayProjectsOp projectUpgradeOp = UpgradeLiferayProjectsOp.TYPE.instantiate();
+	private static UpgradeLiferayProjectsOp _op(IProject[] projects) {
+		final UpgradeLiferayProjectsOp projectUpgradeOp = UpgradeLiferayProjectsOp.TYPE.instantiate();
 
-        for( IProject project : projects )
-        {
-            projectUpgradeOp.getSelectedProjects().insert().setName( project.getName() );
-        }
+		for (IProject project : projects) {
+			NamedItem selectedProjects = projectUpgradeOp.getSelectedProjects().insert();
 
-        return projectUpgradeOp;
-    }
+			selectedProjects.setName(project.getName());
+		}
+
+		return projectUpgradeOp;
+	}
+
+	private boolean _firstErrorMessageRemoved = false;
+
 }

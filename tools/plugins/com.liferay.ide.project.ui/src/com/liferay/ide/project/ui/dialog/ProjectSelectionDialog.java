@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.dialog;
+
+import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.ui.LiferayUIPlugin;
 
 import java.util.EventObject;
 import java.util.HashSet;
@@ -49,236 +51,227 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.SelectionStatusDialog;
 
-import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.ui.LiferayUIPlugin;
-
 /**
  * @author Andy Wu
  * @author Lovett Li
  */
-public abstract class ProjectSelectionDialog extends SelectionStatusDialog
-{
-    class JavaProjectProvider extends StandardJavaElementContentProvider
-    {
-        public Object[] getChildren( Object element )
-        {
-            if( element instanceof IJavaModel )
-            {
-                final IJavaModel model = (IJavaModel) element;
-                final Set<IJavaProject> set = new HashSet<IJavaProject>();
+public abstract class ProjectSelectionDialog extends SelectionStatusDialog {
 
-                try
-                {
-                    final IJavaProject[] projects = model.getJavaProjects();
+	/**
+	 * Constructor
+	 *
+	 * @param parentShell
+	 * @param projectsWithSpecifics
+	 */
+	public ProjectSelectionDialog(Shell parentShell, ViewerFilter filter) {
+		super(parentShell);
 
-                    for( int i = 0; i < projects.length; i++ )
-                    {
-                        if( checkProject(projects[i]) )
-                        {
-                            set.add( projects[i] );
-                        }
-                    }
-                }
-                catch( JavaModelException jme )
-                {
-                    // ignore
-                }
+		_fFilter = filter;
+	}
 
-                return set.toArray();
-            }
+	// sizing constants
 
-            return super.getChildren( element );
-        }
-    }
+	protected abstract boolean checkProject(IJavaProject project);
 
-    // sizing constants
-    private final static int SIZING_SELECTION_WIDGET_HEIGHT = 250;
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see SelectionStatusDialog#computeResult()
+	 */
+	protected void computeResult() {
+	}
 
-    private final static int SIZING_SELECTION_WIDGET_WIDTH = 300;
-    /**
-     * The filter for the viewer
-     */
-    private ViewerFilter fFilter;
+	/**
+	 * (non-Javadoc) Method declared on Dialog.
+	 */
+	protected Control createDialogArea(Composite parent) {
 
-    // the visual selection widget group
-    private CheckboxTableViewer fTableViewer;
+		// page group
 
-    /**
-     * Constructor
-     *
-     * @param parentShell
-     * @param projectsWithSpecifics
-     */
-    public ProjectSelectionDialog( Shell parentShell, ViewerFilter filter )
-    {
-        super( parentShell );
+		Composite composite = (Composite)super.createDialogArea(parent);
 
-        fFilter = filter;
-    }
+		Font font = parent.getFont();
 
-    protected abstract boolean checkProject(IJavaProject project);
+		composite.setFont(font);
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.dialogs.SelectionStatusDialog#computeResult()
-     */
-    protected void computeResult()
-    {
-    }
+		createMessageArea(composite);
 
-    /*
-     * (non-Javadoc) Method declared on Dialog.
-     */
-    protected Control createDialogArea( Composite parent )
-    {
-        // page group
-        Composite composite = (Composite) super.createDialogArea( parent );
+		_fTableViewer = CheckboxTableViewer.newCheckList(composite, SWT.BORDER);
 
-        Font font = parent.getFont();
-        composite.setFont( font );
+		_fTableViewer.addPostSelectionChangedListener(
+			new ISelectionChangedListener() {
 
-        createMessageArea( composite );
+				@Override
+				public void selectionChanged(SelectionChangedEvent event) {
+					_updateOKButtonState(event);
+				}
 
-        fTableViewer = CheckboxTableViewer.newCheckList( composite, SWT.BORDER );
+			});
 
-        fTableViewer.addPostSelectionChangedListener( new ISelectionChangedListener()
-        {
+		_addSelectionButtons(composite);
 
-            @Override
-            public void selectionChanged( SelectionChangedEvent event )
-            {
-                updateOKButtonState( event );
-            }
-        } );
+		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
 
-        addSelectionButtons( composite );
+		data.heightHint = _sizingSelectionWidgetHeight;
+		data.widthHint = _sizingSelectionWidgetWidth;
+		_fTableViewer.getTable().setLayoutData(data);
 
-        GridData data = new GridData( SWT.FILL, SWT.FILL, true, true );
-        data.heightHint = SIZING_SELECTION_WIDGET_HEIGHT;
-        data.widthHint = SIZING_SELECTION_WIDGET_WIDTH;
-        fTableViewer.getTable().setLayoutData( data );
+		_fTableViewer.setLabelProvider(new JavaElementLabelProvider());
+		_fTableViewer.setContentProvider(getContentProvider());
+		_fTableViewer.setComparator(new JavaElementComparator());
+		_fTableViewer.getControl().setFont(font);
 
-        fTableViewer.setLabelProvider( new JavaElementLabelProvider() );
-        fTableViewer.setContentProvider( getContentProvider() );
-        fTableViewer.setComparator( new JavaElementComparator() );
-        fTableViewer.getControl().setFont( font );
+		updateFilter(true);
 
-        updateFilter( true );
+		IJavaModel input = JavaCore.create(ResourcesPlugin.getWorkspace().getRoot());
 
-        IJavaModel input = JavaCore.create( ResourcesPlugin.getWorkspace().getRoot() );
-        fTableViewer.setInput( input );
-        fTableViewer.setAllChecked( true );
+		_fTableViewer.setInput(input);
 
-        doSelectionChanged( new Object[0] );
-        Dialog.applyDialogFont( composite );
+		_fTableViewer.setAllChecked(true);
 
-        return composite;
-    }
+		_selectionChanged(new Object[0]);
+		Dialog.applyDialogFont(composite);
 
-    /**
-     * Handles the change in selection of the viewer and updates the status of the dialog at the same time
-     *
-     * @param objects
-     */
-    private void doSelectionChanged( Object[] objects )
-    {
-        updateStatus( new Status( IStatus.OK, LiferayUIPlugin.PLUGIN_ID, StringPool.EMPTY ) );
-        setSelectionResult( objects );
-    }
+		return composite;
+	}
 
-    protected IContentProvider getContentProvider()
-    {
-        return new JavaProjectProvider();
-    }
+	// the visual selection widget group
 
-    /**
-     * Updates the viewer filter based on the selection of the 'show project with...' button
-     *
-     * @param selected
-     */
-    protected void updateFilter( boolean selected )
-    {
-        if( fFilter == null )
-        {
-            return;
-        }
+	protected IContentProvider getContentProvider() {
+		return new JavaProjectProvider();
+	}
 
-        if( selected )
-        {
-            fTableViewer.addFilter( fFilter );
-        }
-        else
-        {
-            fTableViewer.removeFilter( fFilter );
-        }
-    }
+	@Override
+	protected void okPressed() {
+		Object[] checkedElements = _fTableViewer.getCheckedElements();
 
-    private void addSelectionButtons( Composite composite )
-    {
-        Composite buttonComposite = new Composite( composite, SWT.NONE );
-        GridLayout layout = new GridLayout();
-        layout.numColumns = 0;
-        layout.marginWidth = 0;
-        layout.horizontalSpacing = convertHorizontalDLUsToPixels( IDialogConstants.HORIZONTAL_SPACING );
-        buttonComposite.setLayout( layout );
-        buttonComposite.setLayoutData( new GridData( SWT.END, SWT.TOP, true, false ) );
-        Button selectButton = createButton( buttonComposite, IDialogConstants.SELECT_ALL_ID, "Select All", false );
+		setSelectionResult(checkedElements);
 
-        SelectionListener listener = new SelectionAdapter()
-        {
+		super.okPressed();
+	}
 
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                fTableViewer.setAllChecked( true );
-                getOkButton().setEnabled( true );
+	/**
+	 * Updates the viewer filter based on the selection of the 'show project
+	 * with...' button
+	 *
+	 * @param selected
+	 */
+	protected void updateFilter(boolean selected) {
+		if (_fFilter == null) {
+			return;
+		}
 
-            }
-        };
+		if (selected) {
+			_fTableViewer.addFilter(_fFilter);
+		}
+		else {
+			_fTableViewer.removeFilter(_fFilter);
+		}
+	}
 
-        selectButton.addSelectionListener( listener );
-        Button deselectButton =
-            createButton( buttonComposite, IDialogConstants.DESELECT_ALL_ID, "Deselect All", false );
+	private void _addSelectionButtons(Composite composite) {
+		Composite buttonComposite = new Composite(composite, SWT.NONE);
+		GridLayout layout = new GridLayout();
 
-        listener = new SelectionAdapter()
-        {
+		layout.numColumns = 0;
+		layout.marginWidth = 0;
+		layout.horizontalSpacing = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_SPACING);
+		buttonComposite.setLayout(layout);
 
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                fTableViewer.setAllChecked( false );
-                getOkButton().setEnabled( false );
-            }
-        };
+		buttonComposite.setLayoutData(new GridData(SWT.END, SWT.TOP, true, false));
+		Button selectButton = createButton(buttonComposite, IDialogConstants.SELECT_ALL_ID, "Select All", false);
 
-        deselectButton.addSelectionListener( listener );
-    }
+		SelectionListener listener = new SelectionAdapter() {
 
-    private void updateOKButtonState( EventObject event )
-    {
-        Object element = event.getSource();
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				_fTableViewer.setAllChecked(true);
+				getOkButton().setEnabled(true);
+			}
 
-        if( element instanceof CheckboxTableViewer )
-        {
-            Object[] checkedElements = ( (CheckboxTableViewer) element ).getCheckedElements();
+		};
 
-            if( checkedElements.length == 0 )
-            {
-                getOkButton().setEnabled( false );
-            }
-            else
-            {
-                getOkButton().setEnabled( true );
-            }
-        }
-    }
+		selectButton.addSelectionListener(listener);
 
-    @Override
-    protected void okPressed()
-    {
-        Object[] checkedElements = fTableViewer.getCheckedElements();
-        setSelectionResult( checkedElements );
-        super.okPressed();
-    }
+		Button deselectButton = createButton(buttonComposite, IDialogConstants.DESELECT_ALL_ID, "Deselect All", false);
+
+		listener = new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				_fTableViewer.setAllChecked(false);
+				getOkButton().setEnabled(false);
+			}
+
+		};
+
+		deselectButton.addSelectionListener(listener);
+	}
+
+	/**
+	 * Handles the change in selection of the viewer and updates the status of the
+	 * dialog at the same time
+	 *
+	 * @param objects
+	 */
+	private void _selectionChanged(Object[] objects) {
+		updateStatus(new Status(IStatus.OK, LiferayUIPlugin.PLUGIN_ID, StringPool.EMPTY));
+		setSelectionResult(objects);
+	}
+
+	private void _updateOKButtonState(EventObject event) {
+		Object element = event.getSource();
+
+		if (element instanceof CheckboxTableViewer) {
+			Object[] checkedElements = ((CheckboxTableViewer)element).getCheckedElements();
+
+			if (checkedElements.length == 0) {
+				getOkButton().setEnabled(false);
+			}
+			else {
+				getOkButton().setEnabled(true);
+			}
+		}
+	}
+
+	private static final int _sizingSelectionWidgetHeight = 250;
+	private static final int _sizingSelectionWidgetWidth = 300;
+
+	/**
+	 * The filter for the viewer
+	 */
+	private ViewerFilter _fFilter;
+
+	private CheckboxTableViewer _fTableViewer;
+
+	private class JavaProjectProvider extends StandardJavaElementContentProvider {
+
+		public Object[] getChildren(Object element) {
+			if (element instanceof IJavaModel) {
+				final IJavaModel model = (IJavaModel)element;
+				final Set<IJavaProject> set = new HashSet<>();
+
+				try {
+					final IJavaProject[] projects = model.getJavaProjects();
+
+					for (int i = 0; i < projects.length; i++) {
+						if (checkProject(projects[i])) {
+							set.add(projects[i]);
+						}
+					}
+				}
+				catch (JavaModelException jme) {
+
+					// ignore
+
+				}
+
+				return set.toArray();
+			}
+
+			return super.getChildren(element);
+		}
+
+	}
 
 }

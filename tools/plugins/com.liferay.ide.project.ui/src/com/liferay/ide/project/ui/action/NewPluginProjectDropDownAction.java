@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.action;
 
@@ -41,349 +40,326 @@ import org.eclipse.ui.PlatformUI;
  * @author Kuo Zhang
  * @author Simon Jiang
  */
-public class NewPluginProjectDropDownAction extends Action implements IMenuCreator, IWorkbenchWindowPulldownDelegate2
-{
-    protected final static String DEFAULT_WIZARD_ID= "com.liferay.ide.project.ui.newModuleProjectWizard";//$NON-NLS-1$
-    protected final static String DEFAULT_PLUGIN_WIZARD_ID= "com.liferay.ide.project.ui.newPluginProjectWizard";
-    protected final static String PL_NEW = "newWizards"; //$NON-NLS-1$
-    protected final static String TAG_CLASS = "class"; //$NON-NLS-1$
-    protected final static String TAG_NAME = "name";//$NON-NLS-1$
-    protected final static String TAG_PARAMETER = "parameter";//$NON-NLS-1$
-    protected final static String TAG_VALUE = "value";//$NON-NLS-1$
-    protected final static String TAG_WIZARD = "wizard";//$NON-NLS-1$
-
-    protected Menu fMenu;
-
-    protected Shell fWizardShell;
-
-    public NewPluginProjectDropDownAction()
-    {
-        fMenu = null;
-        setMenuCreator( this );
-    }
-
-    public void dispose()
-    {
-    }
-
-    public NewWizardAction[] getActionFromDescriptors( String typeAttribute )
-    {
-        ArrayList<NewWizardAction> containers = new ArrayList<NewWizardAction>();
-
-        IExtensionPoint extensionPoint =
-            Platform.getExtensionRegistry().getExtensionPoint( PlatformUI.PLUGIN_ID, PL_NEW );
-
-        if( extensionPoint != null )
-        {
-            IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
-
-            for( IConfigurationElement element : elements )
-            {
-                if( element.getName().equals( TAG_WIZARD ) && isLiferayArtifactWizard( element, typeAttribute ) )
-                {
-                    containers.add( new NewWizardAction( element ) );
-                }
-            }
-        }
-
-        NewWizardAction[] actions = (NewWizardAction[]) containers.toArray( new NewWizardAction[containers.size()] );
-
-        Arrays.sort( actions );
-
-        return actions;
-    }
-
-    public static Action getWizardAction( final String wizardId )
-    {
-        Action[] actions = getNewProjectActions();
-
-        if( actions.length > 0 )
-        {
-            for( Action action : actions )
-            {
-                if( action instanceof NewWizardAction && action.getId().equals( wizardId ) )
-                {
-                    return action;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public static Action getDefaultAction()
-    {
-        return getWizardAction( DEFAULT_WIZARD_ID );
-    }
-
-    public static Action getPluginProjectAction()
-    {
-        return getWizardAction( DEFAULT_PLUGIN_WIZARD_ID );
-    }
-
-    public NewWizardAction[] getExtraProjectActions()
-    {
-        ArrayList<NewWizardAction> containers = new ArrayList<NewWizardAction>();
-
-        IExtensionPoint extensionPoint =
-            Platform.getExtensionRegistry().getExtensionPoint( PlatformUI.PLUGIN_ID, PL_NEW );
-
-        if( extensionPoint != null )
-        {
-            IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
-
-            for( IConfigurationElement element : elements )
-            {
-                if( element.getName().equals( TAG_WIZARD ) && isProjectWizard( element, getExtraTypeAttribute() ) )
-                {
-                    containers.add( new NewWizardAction( element ) );
-                }
-            }
-        }
-
-        NewWizardAction[] actions = (NewWizardAction[]) containers.toArray( new NewWizardAction[containers.size()] );
-
-        Arrays.sort( actions );
+public class NewPluginProjectDropDownAction extends Action implements IMenuCreator, IWorkbenchWindowPulldownDelegate2 {
 
-        return actions;
-    }
+	public static Action getDefaultAction() {
+		return getWizardAction(DEFAULT_WIZARD_ID);
+	}
 
-    protected static String getExtraTypeAttribute()
-    {
-        return "liferay_extra_project"; //$NON-NLS-1$
-    }
+	public static NewWizardAction[] getNewProjectActions() {
+		ArrayList<NewWizardAction> containers = new ArrayList<>();
 
-    public Menu getMenu( Control parent )
-    {
-        if( fMenu == null )
-        {
-            fMenu = new Menu( parent );
+		IExtensionPoint extensionPoint =
+			Platform.getExtensionRegistry().getExtensionPoint(PlatformUI.PLUGIN_ID, PL_NEW);
 
-            NewWizardAction[] actions = getNewProjectActions();
+		if (extensionPoint != null) {
+			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
 
-            // Separator separator = null;
-            //
-            // for (NewWizardAction action : actions) {
-            // action.setShell(fWizardShell);
-            //
-            // ActionContributionItem item = new ActionContributionItem(action);
-            // item.fill(fMenu, -1);
-            //
-            // if (separator == null) {
-            // separator = new Separator();
-            // separator.fill(fMenu, -1);
-            // }
-            // }
+			for (IConfigurationElement element : elements) {
+				if (element.getName().equals(TAG_WIZARD) && _isProjectWizard(element, getTypeAttribute())) {
+					containers.add(new NewWizardAction(element));
+				}
+			}
+		}
 
-            // only do the first project action (not the 5 separate ones)
+		NewWizardAction[] actions = (NewWizardAction[])containers.toArray(new NewWizardAction[containers.size()]);
 
-            for( NewWizardAction action : actions )
-            {
-                action.setShell( fWizardShell );
-                ActionContributionItem projectItem = new ActionContributionItem( action );
-                projectItem.fill( fMenu, -1 );
-            }
+		Arrays.sort(actions);
 
-            NewWizardAction importAction = new ImportLiferayProjectsWizardAction();
-            importAction.setShell( fWizardShell );
-            ActionContributionItem item = new ActionContributionItem( importAction );
-            item.fill( fMenu, -1 );
+		return actions;
+	}
 
-            NewWizardAction[] projectExtraActions = getExtraProjectActions();
+	public static Action getPluginProjectAction() {
+		return getWizardAction(DEFAULT_PLUGIN_WIZARD_ID);
+	}
 
-            for( NewWizardAction extraAction : projectExtraActions )
-            {
-                extraAction.setShell( fWizardShell );
+	public static Action getWizardAction(final String wizardId) {
+		Action[] actions = getNewProjectActions();
 
-                ActionContributionItem extraItem = new ActionContributionItem( extraAction );
-                extraItem.fill( fMenu, -1 );
-            }
+		if (actions.length > 0) {
+			for (Action action : actions) {
+				if (action instanceof NewWizardAction && action.getId().equals(wizardId)) {
+					return action;
+				}
+			}
+		}
 
-            new Separator().fill( fMenu, -1 );
+		return null;
+	}
 
-            // add non project items
-            NewWizardAction[] nonProjectActions = getActionFromDescriptors( getNonProjectTypeAttribute() );
+	public NewPluginProjectDropDownAction() {
+		fMenu = null;
+		setMenuCreator(this);
+	}
 
-            for( NewWizardAction action : nonProjectActions )
-            {
-                action.setShell( fWizardShell );
+	public void dispose() {
+	}
 
-                ActionContributionItem noProjectitem = new ActionContributionItem( action );
-                noProjectitem.fill( fMenu, -1 );
-            }
-
-            new Separator().fill( fMenu, -1 );
-
-            NewWizardAction[] noProjectExtraActions = getActionFromDescriptors( getNonProjectExtraTypeAttribute() );
-
-            for( NewWizardAction action : noProjectExtraActions )
-            {
-                action.setShell( fWizardShell );
-
-                ActionContributionItem noProjectExtraitem = new ActionContributionItem( action );
-                noProjectExtraitem.fill( fMenu, -1 );
-            }
-
-            new Separator().fill( fMenu, -1 );
-
-            Action[] sdkActions = getServerActions( parent.getShell() );
-
-            for( Action action : sdkActions )
-            {
-                ActionContributionItem sdkItem = new ActionContributionItem( action );
-                sdkItem.fill( fMenu, -1 );
-            }
-        }
-
-        return fMenu;
-    }
-
-    public Menu getMenu( Menu parent )
-    {
-        return null;
-    }
-
-
-
-    public static NewWizardAction[] getNewProjectActions()
-    {
-        ArrayList<NewWizardAction> containers = new ArrayList<NewWizardAction>();
-
-        IExtensionPoint extensionPoint =
-            Platform.getExtensionRegistry().getExtensionPoint( PlatformUI.PLUGIN_ID, PL_NEW );
-
-        if( extensionPoint != null )
-        {
-            IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
-
-            for( IConfigurationElement element : elements )
-            {
-                if( element.getName().equals( TAG_WIZARD ) && isProjectWizard( element, getTypeAttribute() ) )
-                {
-                    containers.add( new NewWizardAction( element ) );
-                }
-            }
-        }
-
-        NewWizardAction[] actions = (NewWizardAction[]) containers.toArray( new NewWizardAction[containers.size()] );
-
-        Arrays.sort( actions );
-
-        return actions;
-    }
-
-    protected String getNonProjectExtraTypeAttribute()
-    {
-        return "liferay_extra_artifact"; //$NON-NLS-1$
-    }
-
-    protected String getNonProjectTypeAttribute()
-    {
-        return "liferay_artifact"; //$NON-NLS-1$
-    }
-
-    protected Action[] getServerActions( Shell shell )
-    {
-        return new Action[] { new NewServerAction( shell ) };
-    }
-
-    protected static String getTypeAttribute()
-    {
-        return "liferay_project"; //$NON-NLS-1$
-    }
-
-    public void init( IWorkbenchWindow window )
-    {
-        fWizardShell = window.getShell();
-    }
-
-    private boolean isLiferayArtifactWizard( IConfigurationElement element, String typeAttribute )
-    {
-        IConfigurationElement[] classElements = element.getChildren( TAG_CLASS );
-
-        if( classElements.length > 0 )
-        {
-            for( IConfigurationElement classElement : classElements )
-            {
-                IConfigurationElement[] paramElements = classElement.getChildren( TAG_PARAMETER );
-
-                for( IConfigurationElement paramElement : paramElements )
-                {
-                    String tagName = paramElement.getAttribute( TAG_NAME );
-                    if( tagName != null && tagName.equals( typeAttribute ) )
-                    {
-                        return Boolean.valueOf( paramElement.getAttribute( TAG_VALUE ) ).booleanValue();
-                    }
-                }
-            }
-        }
-
-        // old way, deprecated
-        if( Boolean.valueOf( element.getAttribute( getTypeAttribute() ) ).booleanValue() )
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-
-    private static boolean isProjectWizard( IConfigurationElement element, String typeAttribute )
-    {
-        IConfigurationElement[] classElements = element.getChildren( TAG_CLASS );
-
-        if( ( !CoreUtil.isNullOrEmpty( typeAttribute ) ) && classElements.length > 0 )
-        {
-            for( IConfigurationElement classElement : classElements )
-            {
-                IConfigurationElement[] paramElements = classElement.getChildren( TAG_PARAMETER );
-
-                for( IConfigurationElement paramElement : paramElements )
-                {
-                    if( typeAttribute.equals( paramElement.getAttribute( TAG_NAME ) ) )
-                    {
-                        return Boolean.valueOf( paramElement.getAttribute( TAG_VALUE ) ).booleanValue();
-                    }
-                }
-            }
-        }
-
-        // old way, deprecated
-        if( Boolean.valueOf( element.getAttribute( getTypeAttribute() ) ).booleanValue() )
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public void run( IAction action )
-    {
-        getDefaultAction().run();
-    }
-
-    public void selectionChanged( IAction action, ISelection selection )
-    {
-    }
-
-    // private String[] getTypes(IConfigurationElement element) {
-    // IConfigurationElement[] classElements = element.getChildren(TAG_CLASS);
-    //
-    // if (classElements.length > 0) {
-    // for (IConfigurationElement classElement : classElements) {
-    // IConfigurationElement[] paramElements =
-    // classElement.getChildren(TAG_PARAMETER);
-    //
-    // for (IConfigurationElement paramElement : paramElements) {
-    // if ("types".equals(paramElement.getAttribute(TAG_NAME))) {
-    // return paramElement.getAttribute(TAG_VALUE).split(",");
-    // }
-    // }
-    // }
-    // }
-    //
-    // return new String[0];
-    // }
+	public NewWizardAction[] getActionFromDescriptors(String typeAttribute) {
+		ArrayList<NewWizardAction> containers = new ArrayList<>();
 
+		IExtensionPoint extensionPoint =
+			Platform.getExtensionRegistry().getExtensionPoint(PlatformUI.PLUGIN_ID, PL_NEW);
+
+		if (extensionPoint != null) {
+			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
+
+			for (IConfigurationElement element : elements) {
+				if (element.getName().equals(TAG_WIZARD) && _isLiferayArtifactWizard(element, typeAttribute)) {
+					containers.add(new NewWizardAction(element));
+				}
+			}
+		}
+
+		NewWizardAction[] actions = (NewWizardAction[])containers.toArray(new NewWizardAction[containers.size()]);
+
+		Arrays.sort(actions);
+
+		return actions;
+	}
+
+	public NewWizardAction[] getExtraProjectActions() {
+		ArrayList<NewWizardAction> containers = new ArrayList<>();
+
+		IExtensionPoint extensionPoint =
+			Platform.getExtensionRegistry().getExtensionPoint(PlatformUI.PLUGIN_ID, PL_NEW);
+
+		if (extensionPoint != null) {
+			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
+
+			for (IConfigurationElement element : elements) {
+				if (element.getName().equals(TAG_WIZARD) && _isProjectWizard(element, getExtraTypeAttribute())) {
+					containers.add(new NewWizardAction(element));
+				}
+			}
+		}
+
+		NewWizardAction[] actions = (NewWizardAction[])containers.toArray(new NewWizardAction[containers.size()]);
+
+		Arrays.sort(actions);
+
+		return actions;
+	}
+
+	public Menu getMenu(Control parent) {
+		if (fMenu == null) {
+			fMenu = new Menu(parent);
+
+			NewWizardAction[] actions = getNewProjectActions();
+
+			// Separator separator = null;
+
+			//
+
+			// for (NewWizardAction action : actions) {
+			// action.setShell(fWizardShell);
+
+			//
+
+			// ActionContributionItem item = new ActionContributionItem(action);
+			// item.fill(fMenu, -1);
+
+			//
+
+			// if (separator == null) {
+			// separator = new Separator();
+			// separator.fill(fMenu, -1);
+			// }
+			// }
+
+			// only do the first project action (not the 5 separate ones)
+
+			for (NewWizardAction action : actions) {
+				action.setShell(fWizardShell);
+				ActionContributionItem projectItem = new ActionContributionItem(action);
+
+				projectItem.fill(fMenu, -1);
+			}
+
+			NewWizardAction importAction = new ImportLiferayProjectsWizardAction();
+
+			importAction.setShell(fWizardShell);
+			ActionContributionItem item = new ActionContributionItem(importAction);
+
+			item.fill(fMenu, -1);
+
+			NewWizardAction[] projectExtraActions = getExtraProjectActions();
+
+			for (NewWizardAction extraAction : projectExtraActions) {
+				extraAction.setShell(fWizardShell);
+
+				ActionContributionItem extraItem = new ActionContributionItem(extraAction);
+
+				extraItem.fill(fMenu, -1);
+			}
+
+			new Separator().fill(fMenu, -1);
+
+			// add non project items
+
+			NewWizardAction[] nonProjectActions = getActionFromDescriptors(getNonProjectTypeAttribute());
+
+			for (NewWizardAction action : nonProjectActions) {
+				action.setShell(fWizardShell);
+
+				ActionContributionItem noProjectitem = new ActionContributionItem(action);
+
+				noProjectitem.fill(fMenu, -1);
+			}
+
+			new Separator().fill(fMenu, -1);
+
+			NewWizardAction[] noProjectExtraActions = getActionFromDescriptors(getNonProjectExtraTypeAttribute());
+
+			for (NewWizardAction action : noProjectExtraActions) {
+				action.setShell(fWizardShell);
+
+				ActionContributionItem noProjectExtraitem = new ActionContributionItem(action);
+
+				noProjectExtraitem.fill(fMenu, -1);
+			}
+
+			new Separator().fill(fMenu, -1);
+
+			Action[] sdkActions = getServerActions(parent.getShell());
+
+			for (Action action : sdkActions) {
+				ActionContributionItem sdkItem = new ActionContributionItem(action);
+
+				sdkItem.fill(fMenu, -1);
+			}
+		}
+
+		return fMenu;
+	}
+
+	public Menu getMenu(Menu parent) {
+		return null;
+	}
+
+	public void init(IWorkbenchWindow window) {
+		fWizardShell = window.getShell();
+	}
+
+	public void run(IAction action) {
+		getDefaultAction().run();
+	}
+
+	public void selectionChanged(IAction action, ISelection selection) {
+	}
+
+	protected static String getExtraTypeAttribute() {
+		return "liferay_extra_project";
+	}
+
+	protected static String getTypeAttribute() {
+		return "liferay_project";
+	}
+
+	protected String getNonProjectExtraTypeAttribute() {
+		return "liferay_extra_artifact";
+	}
+
+	protected String getNonProjectTypeAttribute() {
+		return "liferay_artifact";
+	}
+
+	protected Action[] getServerActions(Shell shell) {
+		return new Action[] {new NewServerAction(shell)};
+	}
+
+	protected static final String DEFAULT_PLUGIN_WIZARD_ID = "com.liferay.ide.project.ui.newPluginProjectWizard";
+
+	protected static final String DEFAULT_WIZARD_ID = "com.liferay.ide.project.ui.newModuleProjectWizard";
+
+	protected static final String PL_NEW = "newWizards";
+
+	protected static final String TAG_CLASS = "class";
+
+	protected static final String TAG_NAME = "name";
+
+	protected static final String TAG_PARAMETER = "parameter";
+
+	protected static final String TAG_VALUE = "value";
+
+	protected static final String TAG_WIZARD = "wizard";
+
+	protected Menu fMenu;
+	protected Shell fWizardShell;
+
+	private static boolean _isProjectWizard(IConfigurationElement element, String typeAttribute) {
+		IConfigurationElement[] classElements = element.getChildren(TAG_CLASS);
+
+		if (!CoreUtil.isNullOrEmpty(typeAttribute) && (classElements.length > 0)) {
+			for (IConfigurationElement classElement : classElements) {
+				IConfigurationElement[] paramElements = classElement.getChildren(TAG_PARAMETER);
+
+				for (IConfigurationElement paramElement : paramElements) {
+					if (typeAttribute.equals(paramElement.getAttribute(TAG_NAME))) {
+						return Boolean.valueOf(paramElement.getAttribute(TAG_VALUE)).booleanValue();
+					}
+				}
+			}
+		}
+
+		// old way, deprecated
+
+		if (Boolean.valueOf(element.getAttribute(getTypeAttribute())).booleanValue()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean _isLiferayArtifactWizard(IConfigurationElement element, String typeAttribute) {
+		IConfigurationElement[] classElements = element.getChildren(TAG_CLASS);
+
+		if (classElements.length > 0) {
+			for (IConfigurationElement classElement : classElements) {
+				IConfigurationElement[] paramElements = classElement.getChildren(TAG_PARAMETER);
+
+				for (IConfigurationElement paramElement : paramElements) {
+					String tagName = paramElement.getAttribute(TAG_NAME);
+
+					if ((tagName != null) && tagName.equals(typeAttribute)) {
+						return Boolean.valueOf(paramElement.getAttribute(TAG_VALUE)).booleanValue();
+					}
+				}
+			}
+		}
+
+		// old way, deprecated
+
+		if (Boolean.valueOf(element.getAttribute(getTypeAttribute())).booleanValue()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	// private String[] getTypes(IConfigurationElement element) {
+	// IConfigurationElement[] classElements = element.getChildren(TAG_CLASS);
+
+	//
+
+	// if (classElements.length > 0) {
+	// for (IConfigurationElement classElement : classElements) {
+	// IConfigurationElement[] paramElements =
+	// classElement.getChildren(TAG_PARAMETER);
+
+	//
+
+	// for (IConfigurationElement paramElement : paramElements) {
+	// if ("types".equals(paramElement.getAttribute(TAG_NAME))) {
+	// return paramElement.getAttribute(TAG_VALUE).split(",");
+	// }
+	// }
+	// }
+	// }
+
+	//
+
+	// return new String[0];
+	// }
 
 }

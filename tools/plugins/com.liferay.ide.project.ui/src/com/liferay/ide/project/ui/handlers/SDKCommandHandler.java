@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.project.ui.handlers;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -27,105 +41,89 @@ import org.eclipse.ui.handlers.HandlerUtil;
  * @author Simon Jiang
  * @author Kuo Zhang
  */
-@SuppressWarnings( "restriction" )
-public abstract class SDKCommandHandler extends AbstractHandler
-{
+@SuppressWarnings("restriction")
+public abstract class SDKCommandHandler extends AbstractHandler {
 
-    @Override
-    public Object execute( ExecutionEvent event ) throws ExecutionException
-    {
-        IStatus retval = null;
-        IProject project = null;
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		IStatus retval = null;
+		IProject project = null;
 
-        final ISelection selection = HandlerUtil.getCurrentSelection( event );
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 
-        if( selection instanceof IStructuredSelection )
-        {
-            final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+		if (selection instanceof IStructuredSelection) {
+			final IStructuredSelection structuredSelection = (IStructuredSelection)selection;
 
-            final Object selected = structuredSelection.getFirstElement();
+			final Object selected = structuredSelection.getFirstElement();
 
-            if( selected instanceof IResource )
-            {
-                project = ( (IResource) selected ).getProject();
-            }
-            else if( selected instanceof IJavaElement )
-            {
-                project = ( (IJavaElement) selected ).getJavaProject().getProject();
-            }
-            else if( selected instanceof PackageFragmentRootContainer )
-            {
-                project = ( (PackageFragmentRootContainer) selected ).getJavaProject().getProject();
-            }
-        }
+			if (selected instanceof IResource) {
+				project = ((IResource)selected).getProject();
+			}
+			else if (selected instanceof IJavaElement) {
+				project = ((IJavaElement)selected).getJavaProject().getProject();
+			}
+			else if (selected instanceof PackageFragmentRootContainer) {
+				project = ((PackageFragmentRootContainer)selected).getJavaProject().getProject();
+			}
+		}
 
-        if( project == null )
-        {
-            final IEditorInput editorInput = HandlerUtil.getActiveEditorInput( event );
+		if (project == null) {
+			final IEditorInput editorInput = HandlerUtil.getActiveEditorInput(event);
 
-            if( editorInput != null && editorInput.getAdapter( IResource.class ) != null )
-            {
-                project = ( (IResource) editorInput.getAdapter( IResource.class ) ).getProject();
-            }
-        }
+			if ((editorInput != null) && (editorInput.getAdapter(IResource.class) != null)) {
+				project = ((IResource)editorInput.getAdapter(IResource.class)).getProject();
+			}
+		}
 
-        final boolean isLiferay = CoreUtil.isLiferayProject( project );
+		final boolean liferay = CoreUtil.isLiferayProject(project);
 
-        if( isLiferay )
-        {
-            if( SDKUtil.isSDKProject( project ) )
-            {
-                retval = executeSdkCommand( project );
-            }
-        }
+		if (liferay) {
+			if (SDKUtil.isSDKProject(project)) {
+				retval = executeSdkCommand(project);
+			}
+		}
 
-        return retval;
-    }
+		return retval;
+	}
 
-    protected IStatus executeSdkCommand( final IProject project )
-    {
-        IStatus retval = null;
+	protected IStatus executeSdkCommand(final IProject project) {
+		IStatus retval = null;
 
-        try
-        {
-            final IFile buildXmlFile = project.getFile( "build.xml" );
+		try {
+			final IFile buildXmlFile = project.getFile("build.xml");
 
-            if( buildXmlFile.exists() )
-            {
-                final IProject p = project;
-                final IFile buildFile = buildXmlFile;
+			if (buildXmlFile.exists()) {
+				final IProject p = project;
+				final IFile buildFile = buildXmlFile;
 
-                new Job( p.getName() + " : " + getSDKCommand() )
-                {
-                    @Override
-                    protected IStatus run( IProgressMonitor monitor )
-                    {
-                        try
-                        {
-                            final SDK sdk = SDKUtil.getSDK( p );
+				new Job(p.getName() + " : " + getSDKCommand()) {
 
-                            sdk.runCommand( p, buildFile, getSDKCommand(), null, monitor );
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						try {
+							final SDK sdk = SDKUtil.getSDK(p);
 
-                            p.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-                        }
-                        catch( Exception e )
-                        {
-                            return ProjectUI.createErrorStatus( "Error running SDK command " + getSDKCommand(), e );
-                        }
+							sdk.runCommand(p, buildFile, getSDKCommand(), null, monitor);
 
-                        return Status.OK_STATUS;
-                    }
-                }.schedule();
-            }
-        }
-        catch( Exception e )
-        {
-            retval = ProjectCore.createErrorStatus( "Unable to execute sdk command", e );
-        }
+							p.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+						}
+						catch (Exception e) {
+							return ProjectUI.createErrorStatus("Error running SDK command " + getSDKCommand(), e);
+						}
 
-        return retval;
-    }
+						return Status.OK_STATUS;
+					}
 
-    protected abstract String getSDKCommand();
+				}.schedule();
+			}
+		}
+		catch (Exception e) {
+			retval = ProjectCore.createErrorStatus("Unable to execute sdk command", e);
+		}
+
+		return retval;
+	}
+
+	protected abstract String getSDKCommand();
 
 }

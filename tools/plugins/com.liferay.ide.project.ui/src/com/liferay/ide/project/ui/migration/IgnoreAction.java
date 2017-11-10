@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.ui.migration;
 
 import com.liferay.blade.api.Problem;
@@ -26,49 +26,42 @@ import org.eclipse.jface.viewers.ISelectionProvider;
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public class IgnoreAction extends ProblemAction
-{
+public class IgnoreAction extends ProblemAction {
 
-    public IgnoreAction()
-    {
-        this( new DummySelectionProvider() );
-    }
+	public IgnoreAction() {
+		this(new DummySelectionProvider());
+	}
 
-    public IgnoreAction( ISelectionProvider provider )
-    {
-        super( provider, "Ignore" );
-    }
+	public IgnoreAction(ISelectionProvider provider) {
+		super(provider, "Ignore");
+	}
 
-    public void run( final Problem problem, final ISelectionProvider provider )
-    {
-        super.run( problem, provider );
+	public void run(final Problem problem, final ISelectionProvider provider) {
+		super.run(problem, provider);
 
-        problem.setStatus( Problem.STATUS_IGNORE );
+		problem.setStatus(Problem.STATUS_IGNORE);
 
-        MigrationUtil.updateMigrationProblemToStore( problem );
-    }
+		MigrationUtil.updateMigrationProblemToStore(problem);
+	}
 
-    @Override
-    protected IStatus runWithMarker( Problem problem, IMarker marker )
-    {
-        IStatus retval = Status.OK_STATUS;
+	@Override
+	protected IStatus runWithMarker(Problem problem, IMarker marker) {
+		IStatus retval = Status.OK_STATUS;
 
-        try
-        {
-            if ( marker.exists() )
-            {
-                marker.delete();
-            }
+		try {
+			if (marker.exists()) {
+				marker.delete();
+			}
 
-            problem.setStatus( Problem.STATUS_IGNORE );
-        }
-        catch( CoreException e )
-        {
-            retval = e.getStatus();
-        }
+			problem.setStatus(Problem.STATUS_IGNORE);
+		}
+		catch (CoreException ce) {
+			retval = ce.getStatus();
+		}
 
-        refreshTableViewer();
+		refreshTableViewer();
 
-        return retval;
-    }
+		return retval;
+	}
+
 }

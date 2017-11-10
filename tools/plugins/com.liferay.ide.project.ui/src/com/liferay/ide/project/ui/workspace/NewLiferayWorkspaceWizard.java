@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.workspace;
 
@@ -33,77 +32,65 @@ import org.eclipse.ui.IWorkbench;
 /**
  * @author Andy Wu
  */
-public class NewLiferayWorkspaceWizard extends BaseProjectWizard<NewLiferayWorkspaceOp>
-{
+public class NewLiferayWorkspaceWizard extends BaseProjectWizard<NewLiferayWorkspaceOp> {
 
-    private boolean firstErrorMessageRemoved = false;
+	public NewLiferayWorkspaceWizard() {
+		super(_createDefaultOp(), DefinitionLoader.sdef(NewLiferayWorkspaceWizard.class).wizard());
+	}
 
-    public NewLiferayWorkspaceWizard()
-    {
-        super( createDefaultOp(), DefinitionLoader.sdef( NewLiferayWorkspaceWizard.class ).wizard() );
-    }
+	@Override
+	public IWizardPage[] getPages() {
+		final IWizardPage[] wizardPages = super.getPages();
 
-    @Override
-    public IWizardPage[] getPages()
-    {
-        final IWizardPage[] wizardPages = super.getPages();
+		if (!_firstErrorMessageRemoved && (wizardPages != null)) {
+			final SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
 
-        if( !firstErrorMessageRemoved && wizardPages != null )
-        {
-            final SapphireWizardPage wizardPage = (SapphireWizardPage) wizardPages[0];
+			try {
+				if (LiferayWorkspaceUtil.hasWorkspace()) {
+					wizardPage.setMessage(LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR);
+				}
+				else {
+					wizardPage.setMessage("Please enter the workspace project name.", SapphireWizardPage.NONE);
+				}
+			}
+			catch (CoreException ce) {
+				wizardPage.setMessage(LiferayWorkspaceUtil.multiWorkspaceErrorMsg, SapphireWizardPage.ERROR);
+			}
 
-            try
-            {
-                if( LiferayWorkspaceUtil.hasWorkspace() )
-                {
-                    wizardPage.setMessage( LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR );
-                }
-                else
-                {
-                    wizardPage.setMessage( "Please enter the workspace project name.", SapphireWizardPage.NONE );
-                }
-            }
-            catch( CoreException e )
-            {
-                wizardPage.setMessage( LiferayWorkspaceUtil.multiWorkspaceErrorMsg, SapphireWizardPage.ERROR );
-            }
+			_firstErrorMessageRemoved = true;
+		}
 
-            firstErrorMessageRemoved = true;
-        }
+		return wizardPages;
+	}
 
-        return wizardPages;
-    }
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	}
 
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-    }
+	@Override
+	protected void performPostFinish() {
+		super.performPostFinish();
 
-    @Override
-    protected void performPostFinish()
-    {
-        super.performPostFinish();
+		final NewLiferayWorkspaceOp op = element().nearest(NewLiferayWorkspaceOp.class);
 
-        final NewLiferayWorkspaceOp op = element().nearest( NewLiferayWorkspaceOp.class );
+		final IProject newProject = CoreUtil.getProject(op.getWorkspaceName().content());
 
-        final IProject newProject = CoreUtil.getProject( op.getWorkspaceName().content() );
+		try {
+			addToWorkingSets(newProject);
+		}
+		catch (Exception ex) {
+			ProjectUI.logError("Unable to add project to working set", ex);
+		}
 
-        try
-        {
-            addToWorkingSets( newProject );
-        }
-        catch( Exception ex )
-        {
-            ProjectUI.logError( "Unable to add project to working set", ex );
-        }
+		openLiferayPerspective(newProject);
 
-        openLiferayPerspective( newProject );
+		ProjectExplorerLayoutUtil.setNested(true);
+	}
 
-        ProjectExplorerLayoutUtil.setNested( true );
-    }
+	private static NewLiferayWorkspaceOp _createDefaultOp() {
+		return NewLiferayWorkspaceOp.TYPE.instantiate();
+	}
 
-    private static NewLiferayWorkspaceOp createDefaultOp()
-    {
-        return NewLiferayWorkspaceOp.TYPE.instantiate();
-    }
+	private boolean _firstErrorMessageRemoved = false;
+
 }

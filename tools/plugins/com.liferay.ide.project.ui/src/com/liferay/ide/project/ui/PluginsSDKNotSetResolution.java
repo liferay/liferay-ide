@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui;
 
@@ -31,45 +30,44 @@ import org.eclipse.ui.IMarkerResolution;
 /**
  * @author Simon Jiang
  */
-public class PluginsSDKNotSetResolution implements IMarkerResolution
-{
+public class PluginsSDKNotSetResolution implements IMarkerResolution {
 
-    public String getLabel()
-    {
-        return Msgs.setSDKForProject;
-    }
+	public String getLabel() {
+		return Msgs.setSDKForProject;
+	}
 
-    public void run( IMarker marker )
-    {
-        if( marker.getResource() instanceof IProject )
-        {
-            final IProject proj = (IProject) marker.getResource();
+	public void run(IMarker marker) {
+		if (marker.getResource() instanceof IProject) {
+			final IProject proj = (IProject)marker.getResource();
 
-            final LiferayPluginSDKOp op =
-                ( ( LiferayPluginSDKOp ) ( LiferayPluginSDKOp.TYPE.instantiate().initialize() ) );
-            final Reference<DialogDef> dialogRef =
-                DefinitionLoader.context( this.getClass().getClassLoader() ).sdef(
-                    "com.liferay.ide.project.ui.dialog.SelectPluginsSDKDialog" ).dialog( "ConfigureLiferaySDK" );
-            final SapphireDialog dialog = new SapphireDialog( UIUtil.getActiveShell(), op, dialogRef );
+			final LiferayPluginSDKOp op = (LiferayPluginSDKOp)(LiferayPluginSDKOp.TYPE.instantiate().initialize());
 
-            dialog.setBlockOnOpen( true );
-            final int result = dialog.open();
+			DefinitionLoader loader = DefinitionLoader.context(getClass());
 
-            if( result != SapphireDialog.CANCEL )
-            {
-                String sdkName = op.getPluginsSDKName().content();
-                SDKUtil.saveSDKNameSetting( proj, sdkName );
-            }
-        }
-    }
+			final Reference<DialogDef> dialogRef = loader.sdef(
+				"com.liferay.ide.project.ui.dialog.SelectPluginsSDKDialog").dialog("ConfigureLiferaySDK");
 
-    private static class Msgs extends NLS
-    {
-        public static String setSDKForProject;
+			final SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), op, dialogRef);
 
-        static
-        {
-            initializeMessages( PluginsSDKNotSetResolution.class.getName(), Msgs.class );
-        }
-    }
+			dialog.setBlockOnOpen(true);
+			final int result = dialog.open();
+
+			if (result != SapphireDialog.CANCEL) {
+				String sdkName = op.getPluginsSDKName().content();
+
+				SDKUtil.saveSDKNameSetting(proj, sdkName);
+			}
+		}
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String setSDKForProject;
+
+		static {
+			initializeMessages(PluginsSDKNotSetResolution.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

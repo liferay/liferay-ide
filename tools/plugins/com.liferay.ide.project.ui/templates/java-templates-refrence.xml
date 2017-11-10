@@ -2,24 +2,24 @@
 
 <templates>
 
-<template name="reference_v5" description="Get service from service builder(OSGi v5 style)" id="org.eclipse.jdt.ui.templates.reference.v5" context="java" enabled="true" autoinsert="false">
-${:import(org.osgi.service.component.annotations.Reference)} 
+	<template autoinsert="false" context="java" description="Get service from service builder(OSGi v5 style)" enabled="true" id="org.eclipse.jdt.ui.templates.reference.v5" name="reference_v5">
+${:import(org.osgi.service.component.annotations.Reference)}
 @Reference
 public void set${FooLocal}Service(${FooLocal}Service ${fooLocal}Service) {
-    this._${fooLocal}Service = ${fooLocal}Service;
+	this._${fooLocal}Service = ${fooLocal}Service;
 }
 
 public ${FooLocal}Service get${FooLocal}Service() {
-    return _${fooLocal}Service;
+	return _${fooLocal}Service;
 }
 
 private ${FooLocal}Service _${fooLocal}Service;
-</template>
+	</template>
 
-<template name="reference_v6" description="Get service from service builder(OSGi v6 style)" id="org.eclipse.jdt.ui.templates.reference.v6" context="java" enabled="true" autoinsert="false">
-${:import(org.osgi.service.component.annotations.Reference)} 
+	<template autoinsert="false" context="java" description="Get service from service builder(OSGi v6 style)" enabled="true" id="org.eclipse.jdt.ui.templates.reference.v6" name="reference_v6">
+${:import(org.osgi.service.component.annotations.Reference)}
 @Reference
 private ${FooLocal}Service ${fooLocal}Service;
-</template>
+	</template>
 
 </templates>

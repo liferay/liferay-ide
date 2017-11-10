@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui;
 
@@ -23,17 +22,14 @@ import org.eclipse.core.resources.IProject;
 /**
  * @author Greg Amerson
  */
-public class LiferayProjectPropertyTester extends PropertyTester
-{
+public class LiferayProjectPropertyTester extends PropertyTester {
 
-    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
-    {
-        if( receiver instanceof IProject )
-        {
-            return ProjectUtil.isLiferayFacetedProject( (IProject) receiver );
-        }
+	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
+		if (receiver instanceof IProject) {
+			return ProjectUtil.isLiferayFacetedProject((IProject)receiver);
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 }

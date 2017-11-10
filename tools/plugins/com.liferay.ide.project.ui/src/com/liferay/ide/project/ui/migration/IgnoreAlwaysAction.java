@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.migration;
 
@@ -27,6 +26,7 @@ import com.liferay.ide.project.ui.upgrade.animated.Page;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
 
 import java.io.IOException;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -43,108 +43,94 @@ import org.eclipse.ui.actions.SelectionProviderAction;
 /**
  * @author Lovett Li
  */
-public class IgnoreAlwaysAction extends SelectionProviderAction implements IAction
-{
-    private ISelectionProvider _provider;
+public class IgnoreAlwaysAction extends SelectionProviderAction implements IAction {
 
-    public IgnoreAlwaysAction( ISelectionProvider provider )
-    {
-        super( provider, "Ignore all problems of this type" );
-        _provider = provider;
-    }
+	public IgnoreAlwaysAction(ISelectionProvider provider) {
+		super(provider, "Ignore all problems of this type");
+		_provider = provider;
+	}
 
-    @Override
-    public void run()
-    {
-        final Problem problem = MigrationUtil.getProblemFromSelection( getSelection() );
-        storeIgnoredProblem( problem );
+	@Override
+	public void run() {
+		final Problem problem = MigrationUtil.getProblemFromSelection(getSelection());
 
-        new WorkspaceJob( "Ignore all problems of this type" )
-        {
+		_storeIgnoredProblem(problem);
 
-            public IStatus runInWorkspace( IProgressMonitor monitor )
-            {
-                IStatus retval = Status.OK_STATUS;
+		new WorkspaceJob("Ignore all problems of this type") {
 
-                try
-                {
-                    FindBreakingChangesPage page =
-                        UpgradeView.getPage( Page.FINDBREACKINGCHANGES_PAGE_ID, FindBreakingChangesPage.class );
-                    TreeViewer treeViewer = page.getTreeViewer();
-                    MigrationContentProvider contentProvider =
-                        (MigrationContentProvider) treeViewer.getContentProvider();
+			public IStatus runInWorkspace(IProgressMonitor monitor) {
+				IStatus retval = Status.OK_STATUS;
 
-                    final MigrationProblemsContainer mpContainer =
-                        (MigrationProblemsContainer) contentProvider._problems.get( 0 );
-                    final MigrationProblems[] projectProblem = mpContainer.getProblemsArray();
+				try {
+					FindBreakingChangesPage page = UpgradeView.getPage(
+						Page.findbreackingchangesPageId, FindBreakingChangesPage.class);
 
-                    for( MigrationProblems pProblem : projectProblem )
-                    {
-                        FileProblems[] fProblems = pProblem.getProblems();
+					TreeViewer treeViewer = page.getTreeViewer();
 
-                        for( FileProblems fp : fProblems )
-                        {
-                            List<Problem> problems = fp.getProblems();
-                            Iterator<Problem> iterator = problems.iterator();
+					MigrationContentProvider contentProvider =
+						(MigrationContentProvider)treeViewer.getContentProvider();
 
-                            while( iterator.hasNext() )
-                            {
-                                Problem p = iterator.next();
+					final MigrationProblemsContainer mpContainer =
+						(MigrationProblemsContainer)contentProvider.getProblems().get(0);
 
-                                if( p.getTicket().equals( problem.getTicket() ) )
-                                {
-                                    new IgnoreAction().run( p, _provider );
-                                }
-                            }
-                        }
-                    }
-                }
-                catch( Exception e )
-                {
-                    retval = ProjectUI.createErrorStatus( "Unable to get file from problem" );
-                }
+					final MigrationProblems[] projectProblem = mpContainer.getProblemsArray();
 
-                return retval;
-            }
+					for (MigrationProblems pProblem : projectProblem) {
+						FileProblems[] fProblems = pProblem.getProblems();
 
-        }.schedule();
+						for (FileProblems fp : fProblems) {
+							List<Problem> problems = fp.getProblems();
 
-    }
+							Iterator<Problem> iterator = problems.iterator();
 
-    @Override
-    public void selectionChanged( IStructuredSelection selection )
-    {
-        final Object element = getStructuredSelection().getFirstElement();
+							while (iterator.hasNext()) {
+								Problem p = iterator.next();
 
-        if( element instanceof Problem && !CoreUtil.empty( ( (Problem) element ).getTicket() ) )
-        {
-            setEnabled( true );
-        }
-        else
-        {
-            setEnabled( false );
-        }
+								if (p.getTicket().equals(problem.getTicket())) {
+									new IgnoreAction().run(p, _provider);
+								}
+							}
+						}
+					}
+				}
+				catch (Exception e) {
+					retval = ProjectUI.createErrorStatus("Unable to get file from problem");
+				}
 
-    }
+				return retval;
+			}
 
-    private void storeIgnoredProblem( Problem problem )
-    {
-        try
-        {
-            IgnoredProblemsContainer ipContainer = MigrationUtil.getIgnoredProblemsContainer();
+		}.schedule();
+	}
 
-            if( ipContainer == null )
-            {
-                ipContainer = new IgnoredProblemsContainer();
-            }
+	@Override
+	public void selectionChanged(IStructuredSelection selection) {
+		final Object element = getStructuredSelection().getFirstElement();
 
-            ipContainer.add( problem );
+		if (element instanceof Problem && !CoreUtil.empty(((Problem)element).getTicket())) {
+			setEnabled(true);
+		}
+		else {
+			setEnabled(false);
+		}
+	}
 
-            UpgradeAssistantSettingsUtil.setObjectToStore( IgnoredProblemsContainer.class, ipContainer );
-        }
-        catch( IOException e )
-        {
-        }
-    }
+	private void _storeIgnoredProblem(Problem problem) {
+		try {
+			IgnoredProblemsContainer ipContainer = MigrationUtil.getIgnoredProblemsContainer();
+
+			if (ipContainer == null) {
+				ipContainer = new IgnoredProblemsContainer();
+			}
+
+			ipContainer.add(problem);
+
+			UpgradeAssistantSettingsUtil.setObjectToStore(IgnoredProblemsContainer.class, ipContainer);
+		}
+		catch (IOException ioe) {
+		}
+	}
+
+	private ISelectionProvider _provider;
 
 }

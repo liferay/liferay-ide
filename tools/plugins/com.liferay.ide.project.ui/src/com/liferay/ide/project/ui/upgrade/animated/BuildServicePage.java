@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
@@ -21,12 +20,11 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.CustomProjectSelectionDialog;
-import com.liferay.ide.project.ui.upgrade.action.CompileAction;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +37,7 @@ import org.eclipse.debug.internal.ui.views.console.ProcessConsole;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -50,6 +49,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.IConsole;
+import org.eclipse.ui.progress.IProgressService;
 
 /**
  * @author Andy Wu
@@ -57,176 +57,162 @@ import org.eclipse.ui.console.IConsole;
  * @author Joye Luo
  * @author Terry Jia
  */
-@SuppressWarnings( "restriction" )
-public class BuildServicePage extends Page
-{
+@SuppressWarnings("restriction")
+public class BuildServicePage extends Page {
 
-    public BuildServicePage( Composite parent, int style, LiferayUpgradeDataModel dataModel )
-    {
-        super( parent, style, dataModel, BUILDSERVICE_PAGE_ID, true );
+	public BuildServicePage(Composite parent, int style, LiferayUpgradeDataModel dataModel) {
+		super(parent, style, dataModel, buildservicePageId, true);
 
-        Button buildServiceButton = new Button( this, SWT.PUSH );
+		Button buildServiceButton = new Button(this, SWT.PUSH);
 
-        buildServiceButton.setText( "Build Services" );
+		buildServiceButton.setText("Build Services");
 
-        buildServiceButton.addSelectionListener( new SelectionAdapter()
-        {
+		buildServiceButton.addSelectionListener(
+			new SelectionAdapter() {
 
-            private void deleteLegacyFiles( IProject project, IProgressMonitor monitor )
-            {
-                try
-                {
-                    String relativePath = "/docroot/WEB-INF/src/META-INF";
-                    IFile portletSpringXML = project.getFile( relativePath + "/portlet-spring.xml" );
-                    IFile shardDataSourceSpringXML = project.getFile( relativePath + "/shard-data-source-spring.xml" );
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					List<IProject> projects = _getServiceBuilderProjects();
 
-                    if( portletSpringXML.exists() )
-                    {
-                        portletSpringXML.delete( true, monitor );
-                    }
+					CustomProjectSelectionDialog dialog = new CustomProjectSelectionDialog(UIUtil.getActiveShell());
 
-                    if( shardDataSourceSpringXML.exists() )
-                    {
-                        shardDataSourceSpringXML.delete( true, monitor );
-                    }
+					dialog.setProjects(projects);
 
-                   // for 6.2 maven project
-                   IFolder metaInfFolder = project.getFolder( "/src/main/resources/META-INF/" );
+					URL imageUrl = bundle.getEntry("/icons/e16/service.png");
 
-                   if( metaInfFolder.exists() )
-                   {
-                       metaInfFolder.delete( true, monitor );
-                   }
-                }
-                catch( CoreException e )
-                {
-                    ProjectUI.logError( e );
-                }
-            }
+					Image serviceXmlImage = ImageDescriptor.createFromURL(imageUrl).createImage();
 
-            private List<IProject> getServiceBuilderProjects()
-            {
-                List<IProject> results = new ArrayList<IProject>();
+					dialog.setImage(serviceXmlImage);
 
-                IProject[] projects = CoreUtil.getAllProjects();
+					dialog.setTitle("Liferay Service Project");
+					dialog.setMessage("Select Liferay Service Project");
 
-                for( IProject project : projects )
-                {
-                    IFile serviceFile = project.getFile( "/docroot/WEB-INF/service.xml" );
+					List<IProject> liferayServiceProjects = new ArrayList<>();
 
-                    if( !serviceFile.exists() )
-                    {
-                        serviceFile = project.getFile( "src/main/webapp/WEB-INF/service.xml" );
-                    }
+					if (dialog.open() == Window.OK) {
+						final Object[] selectedProjects = dialog.getResult();
 
-                    if( serviceFile.exists() )
-                    {
-                        results.add( project );
-                    }
-                }
+						if (selectedProjects != null) {
+							for (Object project : selectedProjects) {
+								if (project instanceof IJavaProject) {
+									IJavaProject p = (IJavaProject)project;
 
-                return results;
-            }
+									liferayServiceProjects.add(p.getProject());
+								}
+							}
+						}
+					}
 
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                List<IProject> projects = getServiceBuilderProjects();
+					try {
+						IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
 
-                CustomProjectSelectionDialog dialog = new CustomProjectSelectionDialog( UIUtil.getActiveShell() );
+						progressService.busyCursorWhile(
+							new IRunnableWithProgress() {
 
-                dialog.setProjects( projects );
+								public void run(IProgressMonitor monitor) {
+									try {
+										for (IProject project : liferayServiceProjects) {
+											_deleteLegacyFiles(project, monitor);
 
-                URL imageUrl = ProjectUI.getDefault().getBundle().getEntry( "/icons/e16/service.png");
-                Image serviceXmlImage = ImageDescriptor.createFromURL( imageUrl ).createImage();
+											final ILiferayProject liferayProject = LiferayCore.create(project);
 
-                dialog.setImage( serviceXmlImage );
-                dialog.setTitle( "Liferay Service Project" );
-                dialog.setMessage( "Select Liferay Service Project" );
+											if (liferayProject != null) {
+												IProjectBuilder builder = liferayProject.adapt(IProjectBuilder.class);
 
-                List<IProject> liferayServiceProjects = new ArrayList<>();
+												builder.buildService(monitor);
+											}
 
-                if( dialog.open() == Window.OK )
-                {
-                    final Object[] selectedProjects = dialog.getResult();
+											IConsole console = CompileAction.getConsole("build-service");
 
-                    if( selectedProjects != null )
-                    {
-                        for( Object project : selectedProjects )
-                        {
-                            if( project instanceof IJavaProject )
-                            {
-                                IJavaProject p = (IJavaProject) project;
-                                liferayServiceProjects.add( p.getProject() );
-                            }
-                        }
-                    }
-                }
+											if (console != null) {
+												IDocument document = ((ProcessConsole)console).getDocument();
 
-                try
-                {
-                    PlatformUI.getWorkbench().getProgressService().busyCursorWhile( new IRunnableWithProgress()
-                    {
+												if (document.get().contains("BUILD FAILED")) {
+													return;
+												}
+											}
+										}
+									}
+									catch (CoreException ce) {
+									}
+								}
 
-                        public void run( IProgressMonitor monitor )
-                            throws InvocationTargetException, InterruptedException
-                        {
-                            try
-                            {
-                                for( IProject project : liferayServiceProjects )
-                                {
-                                    deleteLegacyFiles( project, monitor );
+							});
+					}
+					catch (Exception e1) {
+					}
+				}
 
-                                    final ILiferayProject liferayProject = LiferayCore.create( project );
+				private void _deleteLegacyFiles(IProject project, IProgressMonitor monitor) {
+					try {
+						String relativePath = "/docroot/WEB-INF/src/META-INF";
 
-                                    if( liferayProject != null )
-                                    {
-                                        IProjectBuilder builder = liferayProject.adapt( IProjectBuilder.class );
+						IFile portletSpringXML = project.getFile(relativePath + "/portlet-spring.xml");
+						IFile shardDataSourceSpringXML = project.getFile(
+							relativePath + "/shard-data-source-spring.xml");
 
-                                        builder.buildService( monitor );
-                                    }
+						if (portletSpringXML.exists()) {
+							portletSpringXML.delete(true, monitor);
+						}
 
-                                    IConsole console = CompileAction.getConsole( "build-service" );
+						if (shardDataSourceSpringXML.exists()) {
+							shardDataSourceSpringXML.delete(true, monitor);
+						}
 
-                                    if( console != null )
-                                    {
-                                        ProcessConsole pc = (ProcessConsole) console;
+						// for 6.2 maven project
 
-                                        if( pc.getDocument().get().contains( "BUILD FAILED" ) )
-                                        {
-                                            return;
-                                        }
-                                    }
-                                }
-                            }
-                            catch( CoreException e )
-                            {
-                            }
-                        }
-                    } );
-                }
-                catch( Exception e1 )
-                {
-                }
-            }
-        } );
-    }
+						IFolder metaInfFolder = project.getFolder("/src/main/resources/META-INF/");
 
-    public void createSpecialDescriptor( Composite parent, int style )
-    {
-        final String descriptor = "In this step, we will delete some legacy servicebuilder related files" +
-            " and re-run build-service on servicebuilder projects.\n" +
-            "Note: Please make sure the default installed jre is JDK 8 (Preferences-Java-Installed JREs).";
-        String url = "";
+						if (metaInfFolder.exists()) {
+							metaInfFolder.delete(true, monitor);
+						}
+					}
+					catch (CoreException ce) {
+						ProjectUI.logError(ce);
+					}
+				}
 
-        Link link = SWTUtil.createHyperLink( this, style, descriptor, 1, url );
-        link.setLayoutData( new GridData( SWT.FILL, SWT.BEGINNING, true, false, 2, 1 ) );
-    }
+				private List<IProject> _getServiceBuilderProjects() {
+					List<IProject> results = new ArrayList<>();
 
-    @Override
-    public String getPageTitle()
-    {
-        return "Build Services";
-    }
+					IProject[] projects = CoreUtil.getAllProjects();
+
+					for (IProject project : projects) {
+						IFile serviceFile = project.getFile("/docroot/WEB-INF/service.xml");
+
+						if (!serviceFile.exists()) {
+							serviceFile = project.getFile("src/main/webapp/WEB-INF/service.xml");
+						}
+
+						if (serviceFile.exists()) {
+							results.add(project);
+						}
+					}
+
+					return results;
+				}
+
+			});
+	}
+
+	public void createSpecialDescriptor(Composite parent, int style) {
+		final StringBuilder descriptorBuilder = new StringBuilder(
+			"In this step, we will delete some legacy servicebuilder related files");
+
+		descriptorBuilder.append(" and re-run build-service on servicebuilder projects.\n");
+		descriptorBuilder.append(
+			"Note: Please make sure the default installed jre is JDK 8 (Preferences-Java-Installed JREs).");
+
+		String url = "";
+
+		Link link = SWTUtil.createHyperLink(this, style, descriptorBuilder.toString(), 1, url);
+
+		link.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, false, 2, 1));
+	}
+
+	@Override
+	public String getPageTitle() {
+		return "Build Services";
+	}
 
 }
