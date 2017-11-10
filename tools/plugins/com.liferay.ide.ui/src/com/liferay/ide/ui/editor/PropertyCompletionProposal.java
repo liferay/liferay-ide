@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.ui.editor;
 
 import com.liferay.ide.ui.LiferayUIPlugin;
@@ -31,100 +31,87 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
-
 
 /**
  * @author Gregory Amerson
  */
 public class PropertyCompletionProposal
-    implements ICompletionProposal, ICompletionProposalExtension3, ICompletionProposalExtension5
-{
-    private final String info;
-    private final String key;
-    private final int offset;
-    private final int rewindOffset;
+	implements ICompletionProposal, ICompletionProposalExtension3, ICompletionProposalExtension5 {
 
-    public PropertyCompletionProposal( String key, String info, int offset, int rewindOffset )
-    {
-        this.key = key;
-        this.info = info;
-        this.offset = offset;
-        this.rewindOffset = rewindOffset;
-    }
+	public PropertyCompletionProposal(String key, String info, int offset, int rewindOffset) {
+		_key = key;
+		_info = info;
+		_offset = offset;
+		_rewindOffset = rewindOffset;
+	}
 
-    public void apply( IDocument document )
-    {
-        try
-        {
-            document.replace( this.rewindOffset, this.offset - this.rewindOffset, this.key );
-        }
-        catch( BadLocationException e )
-        {
-            LiferayUIPlugin.logError( "Unable to apply proposal", e );
-        }
-    }
+	public void apply(IDocument document) {
+		try {
+			document.replace(_rewindOffset, _offset - _rewindOffset, _key);
+		}
+		catch (BadLocationException ble) {
+			LiferayUIPlugin.logError("Unable to apply proposal", ble);
+		}
+	}
 
-    public String getAdditionalProposalInfo()
-    {
-        return this.info;
-    }
+	public String getAdditionalProposalInfo() {
+		return _info;
+	}
 
-    public Object getAdditionalProposalInfo( IProgressMonitor monitor )
-    {
-        return this.info;
-    }
+	public Object getAdditionalProposalInfo(IProgressMonitor monitor) {
+		return _info;
+	}
 
-    public IContextInformation getContextInformation()
-    {
-        return null;
-    }
+	public IContextInformation getContextInformation() {
+		return null;
+	}
 
-    public String getDisplayString()
-    {
-        return this.key;
-    }
+	public String getDisplayString() {
+		return _key;
+	}
 
-    public Image getImage()
-    {
-        return PlatformUI.getWorkbench().getSharedImages().getImage( ISharedImages.IMG_OBJ_ELEMENT );
-    }
+	public Image getImage() {
+		IWorkbench workbench = PlatformUI.getWorkbench();
 
-    public IInformationControlCreator getInformationControlCreator()
-    {
-        return new AbstractReusableInformationControlCreator()
-        {
-            @Override
-            protected IInformationControl doCreateInformationControl( final Shell parent )
-            {
-                return new DefaultInformationControl( parent, true );
-            }
-        };
-    }
+		return workbench.getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
+	}
 
-    public int getPrefixCompletionStart( IDocument document, int completionOffset )
-    {
-        return this.rewindOffset;
-    }
+	public IInformationControlCreator getInformationControlCreator() {
+		return new AbstractReusableInformationControlCreator() {
 
-    public CharSequence getPrefixCompletionText( IDocument document, int completionOffset )
-    {
-        try
-        {
-            return document.get( this.rewindOffset, completionOffset );
-        }
-        catch( BadLocationException e )
-        {
-        }
+			@Override
+			protected IInformationControl doCreateInformationControl(Shell parent) {
+				return new DefaultInformationControl(parent, true);
+			}
 
-        return null;
-    }
+		};
+	}
 
-    public Point getSelection( IDocument document )
-    {
-        final int point = this.rewindOffset + this.key.length();
+	public int getPrefixCompletionStart(IDocument document, int completionOffset) {
+		return _rewindOffset;
+	}
 
-        return new Point( point, 0 );
-    }
+	public CharSequence getPrefixCompletionText(IDocument document, int completionOffset) {
+		try {
+			return document.get(_rewindOffset, completionOffset);
+		}
+		catch (BadLocationException ble) {
+		}
+
+		return null;
+	}
+
+	public Point getSelection(IDocument document) {
+		int point = _rewindOffset + _key.length();
+
+		return new Point(point, 0);
+	}
+
+	private final String _info;
+	private final String _key;
+	private final int _offset;
+	private final int _rewindOffset;
 
 }

@@ -1,14 +1,17 @@
-/*******************************************************************************
- * Copyright (c) 2003, 2009 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *     Benjamin Cabe <benjamin.cabe@anyware-tech.com> - bug 251339
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.ui.form;
 
 import com.liferay.ide.core.model.IBaseModel;
@@ -59,404 +62,200 @@ import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
+/**
+ * @author Gregory Amerson
+ */
 public abstract class IDEFormPage extends FormPage {
-
-	private Control fLastFocusControl;
 
 	public IDEFormPage(FormEditor editor, String id, String title) {
 		super(editor, id, title);
-		fLastFocusControl = null;
-	}
-
-	public IDEFormEditor getLiferayFormEditor() {
-		return (IDEFormEditor) getEditor();
-	}
-	
-	public void dispose() {
-		Control c = getPartControl();
-		if (c != null && !c.isDisposed()) {
-			Menu menu = c.getMenu();
-			if (menu != null)
-				resetMenu(menu, c);
-		}
-		super.dispose();
-	}
-
-	private void resetMenu(Menu menu, Control c) {
-		if (c instanceof Composite) {
-			Composite comp = (Composite) c;
-			Control[] children = comp.getChildren();
-			for (int i = 0; i < children.length; i++) {
-				resetMenu(menu, children[i]);
-			}
-		}
-		Menu cmenu = c.getMenu();
-		if (cmenu != null && cmenu.equals(menu)) {
-			c.setMenu(null);
-		}
-	}
-
-	protected void createFormContent(IManagedForm managedForm) {
-		final ScrolledForm form = managedForm.getForm();
-		FormToolkit toolkit = managedForm.getToolkit();
-		toolkit.decorateFormHeading(form.getForm());
-
-		IToolBarManager manager = form.getToolBarManager();
-
-		getFormEditor().contributeToToolbar(manager);
-
-//		final String href = getHelpResource();
-//		if (href != null) {
-//			Action helpAction = new Action("help") { //$NON-NLS-1$
-//				public void run() {
-//					BusyIndicator.showWhile(form.getDisplay(), new Runnable() {
-//						public void run() {
-//							PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(href);
-//						}
-//					});
-//				}
-//			};
-//			helpAction.setToolTipText(PDEUIMessages.PDEFormPage_help);
-//			helpAction.setImageDescriptor(PDEPluginImages.DESC_HELP);
-//			manager.add(helpAction);
-//		}
-		//check to see if our form parts are contributing actions
-		IFormPart[] parts = managedForm.getParts();
-		for (int i = 0; i < parts.length; i++) {
-			if (parts[i] instanceof IAdaptable) {
-				IAdaptable adapter = (IAdaptable) parts[i];
-				IAction[] actions = (IAction[]) adapter.getAdapter(IAction[].class);
-				if (actions != null) {
-					for (int j = 0; j < actions.length; j++) {
-						form.getToolBarManager().add(actions[j]);
-					}
-				}
-			}
-		}
-		form.updateToolBar();
-	}
-
-	public IDEFormEditor getFormEditor() {
-		return (IDEFormEditor) getEditor();
-	}
-
-	protected String getHelpResource() {
-		return null;
-	}
-
-
-	public void contextMenuAboutToShow(IMenuManager menu) {
-	}
-
-	protected Control getFocusControl() {
-		IManagedForm form = getManagedForm();
-		if (form == null)
-			return null;
-		Control control = form.getForm();
-		if (control == null || control.isDisposed())
-			return null;
-		Display display = control.getDisplay();
-		Control focusControl = display.getFocusControl();
-		if (focusControl == null || focusControl.isDisposed())
-			return null;
-		return focusControl;
-	}
-
-	public boolean performGlobalAction(String actionId) {
-		Control focusControl = getFocusControl();
-		if (focusControl == null)
-			return false;
-
-		if (canPerformDirectly(actionId, focusControl))
-			return true;
-		AbstractFormPart focusPart = getFocusSection();
-		if (focusPart != null) {
-			if (focusPart instanceof IDESection)
-				return ((IDESection) focusPart).doGlobalAction(actionId);
-			if (focusPart instanceof FormDetails)
-				return ((FormDetails) focusPart).doGlobalAction(actionId);
-		}
-		return false;
-	}
-
-	public boolean canPaste(Clipboard clipboard) {
-		AbstractFormPart focusPart = getFocusSection();
-		if (focusPart != null) {
-			if (focusPart instanceof IDESection) {
-				return ((IDESection) focusPart).canPaste(clipboard);
-			}
-			if (focusPart instanceof FormDetails) {
-				return ((FormDetails) focusPart).canPaste(clipboard);
-			}
-		}
-		return false;
-	}
-
-	public boolean canCopy(ISelection selection) {
-		AbstractFormPart focusPart = getFocusSection();
-		if (focusPart != null) {
-			if (focusPart instanceof IDESection) {
-				return ((IDESection) focusPart).canCopy(selection);
-			}
-			if (focusPart instanceof FormDetails) {
-				return ((FormDetails) focusPart).canCopy(selection);
-			}
-		}
-		return false;
-	}
-
-	public boolean canCut(ISelection selection) {
-		AbstractFormPart focusPart = getFocusSection();
-		if (focusPart != null) {
-			if (focusPart instanceof IDESection) {
-				return ((IDESection) focusPart).canCut(selection);
-			}
-			if (focusPart instanceof FormDetails) {
-				return ((FormDetails) focusPart).canCut(selection);
-			}
-		}
-		return false;
-	}
-
-	private AbstractFormPart getFocusSection() {
-		Control focusControl = getFocusControl();
-		if (focusControl == null)
-			return null;
-		Composite parent = focusControl.getParent();
-		AbstractFormPart targetPart = null;
-		while (parent != null) {
-			Object data = parent.getData("part"); //$NON-NLS-1$
-			if (data != null && data instanceof AbstractFormPart) {
-				targetPart = (AbstractFormPart) data;
-				break;
-			}
-			parent = parent.getParent();
-		}
-		return targetPart;
-	}
-
-	protected boolean canPerformDirectly(String id, Control control) {
-		if (control instanceof Text) {
-			Text text = (Text) control;
-			if (id.equals(ActionFactory.CUT.getId())) {
-				text.cut();
-				return true;
-			}
-			if (id.equals(ActionFactory.COPY.getId())) {
-				text.copy();
-				return true;
-			}
-			if (id.equals(ActionFactory.PASTE.getId())) {
-				text.paste();
-				return true;
-			}
-			if (id.equals(ActionFactory.SELECT_ALL.getId())) {
-				text.selectAll();
-				return true;
-			}
-			if (id.equals(ActionFactory.DELETE.getId())) {
-				int count = text.getSelectionCount();
-				if (count == 0) {
-					int caretPos = text.getCaretPosition();
-					text.setSelection(caretPos, caretPos + 1);
-				}
-				text.insert(""); //$NON-NLS-1$
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public void cancelEdit() {
-		IFormPart[] parts = getManagedForm().getParts();
-		for (int i = 0; i < parts.length; i++) {
-			IFormPart part = parts[i];
-			if (part instanceof IContextPart)
-				((IContextPart) part).cancelEdit();
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.forms.editor.FormPage#createPartControl(org.eclipse.swt.widgets.Composite)
-	 */
-	public void createPartControl(Composite parent) {
-		super.createPartControl(parent);
-		// Dynamically add focus listeners to all the forms children in order
-		// to track the last focus control
-		IManagedForm managedForm = getManagedForm();
-		if (managedForm != null) {
-			addLastFocusListeners(managedForm.getForm());
-		}
+		_fLastFocusControl = null;
 	}
 
 	/**
 	 * Programatically and recursively add focus listeners to the specified
-	 * composite and its children that track the last control to have focus 
+	 * composite and its children that track the last control to have focus
 	 * before a page change or the editor lost focus
-	 * 
+	 *
 	 * @param composite
 	 */
 	public void addLastFocusListeners(Composite composite) {
 		Control[] controls = composite.getChildren();
+
 		for (int i = 0; i < controls.length; i++) {
 			Control control = controls[i];
+
 			// Add a focus listener if the control is any one of the below types
 			// Note that the controls listed below represent all the controls
-			// currently in use by all form pages in PDE.  In the future,
+			// currently in use by all form pages in PDE. In the future,
 			// more controls will have to be added.
-			// Could not add super class categories of controls because it 
+			// Could not add super class categories of controls because it
 			// would include things like tool bars that we don't want to track
 			// focus for.
-			if ((control instanceof Text) || (control instanceof Button) || (control instanceof Combo) || (control instanceof CCombo) || (control instanceof Tree) || (control instanceof Table) || (control instanceof Spinner) || (control instanceof Link) || (control instanceof List) || (control instanceof TabFolder) || (control instanceof CTabFolder) || (control instanceof Hyperlink) || (control instanceof FilteredTree)) {
-				addLastFocusListener(control);
+
+			if (control instanceof Button || control instanceof CCombo || control instanceof Combo ||
+				control instanceof CTabFolder || control instanceof FilteredTree || control instanceof Hyperlink ||
+				control instanceof Link || control instanceof List || control instanceof Spinner ||
+				control instanceof TabFolder || control instanceof Table || control instanceof Text ||
+				control instanceof Tree) {
+
+				_addLastFocusListener(control);
 			}
+
 			if (control instanceof Composite) {
+
 				// Recursively add focus listeners to this composites children
-				addLastFocusListeners((Composite) control);
+
+				addLastFocusListeners((Composite)control);
 			}
 		}
 	}
 
 	/**
-	 * Add a focus listener to the specified control that tracks the last 
-	 * control to have focus on this page.
-	 * When focus is gained by this control, it registers itself as the last
-	 * control to have focus.  The last control to have focus is stored in order
-	 * to be restored after a page change or editor loses focus.
-	 * 
-	 * @param control
-	 */
-	private void addLastFocusListener(final Control control) {
-		control.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {
-				// NO-OP
-			}
-
-			public void focusLost(FocusEvent e) {
-				fLastFocusControl = control;
-			}
-		});
-	}
-
-	/**
-	 * Set the focus on the last control to have focus before a page change
-	 * or the editor lost focus.
-	 */
-	public void updateFormSelection() {
-		if ((fLastFocusControl != null) && (fLastFocusControl.isDisposed() == false)) {
-			Control lastControl = fLastFocusControl;
-			// Set focus on the control
-			lastControl.forceFocus();
-			// If the control is a Text widget, select its contents
-			if (lastControl instanceof Text) {
-				Text text = (Text) lastControl;
-				text.setSelection(0, text.getText().length());
-			}
-		} else {
-			// No focus control set
-			// Fallback on managed form selection mechanism by setting the 
-			// focus on this page itself.
-			// The managed form will set focus on the first managed part.
-			// Most likely this will turn out to be a section.
-			// In order for this to work properly, we must override the 
-			// sections setFocus() method and set focus on a child control
-			// (preferrably first) that can practically take focus.
-			setFocus();
-		}
-	}
-
-	public Control getLastFocusControl() {
-		return fLastFocusControl;
-	}
-
-	/**
-	 * @param control
-	 */
-	public void setLastFocusControl(Control control) {
-		fLastFocusControl = control;
-	}
-
-	protected void createFormErrorContent(IManagedForm managedForm, String errorTitle, String errorMessage, Exception e) {
-
-		ScrolledForm form = managedForm.getForm();
-		FormToolkit toolkit = managedForm.getToolkit();
-		toolkit.decorateFormHeading(form.getForm());
-
-		Composite parent = form.getBody();
-		GridLayout layout = new GridLayout();
-		GridData data2 = new GridData(GridData.FILL_BOTH);
-		layout.marginWidth = 7;
-		layout.marginHeight = 7;
-		parent.setLayout(layout);
-		parent.setLayoutData(data2);
-		// Set the title and image of the form
-		form.setText(errorTitle);
-		form.setImage(JFaceResources.getImage(Dialog.DLG_IMG_MESSAGE_ERROR));
-
-		int sectionStyle = Section.DESCRIPTION | ExpandableComposite.TITLE_BAR;
-		// Create the message section
-		Section messageSection = createUISection(parent, Msgs.message, errorMessage, sectionStyle);
-		Composite messageClient = createUISectionContainer(messageSection, 1);
-		// Bind the widgets
-		toolkit.paintBordersFor(messageClient);
-		messageSection.setClient(messageClient);
-		// Ensure the exception was defined
-		if (e == null) {
-			return;
-		}
-		// Create the details section
-		Section detailsSection = createUISection(parent, Msgs.details, e.getMessage(), sectionStyle);
-		Composite detailsClient = createUISectionContainer(detailsSection, 1);
-		// Create text widget holding the exception trace
-		int style = SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.READ_ONLY;
-		Text text = toolkit.createText(detailsClient, getStackTrace(e), style);
-		GridData data = new GridData(GridData.FILL_HORIZONTAL);
-		data.heightHint = 160;
-		data.widthHint = 200;
-		text.setLayoutData(data);
-		// Bind the widgets
-		toolkit.paintBordersFor(detailsClient);
-		detailsSection.setClient(detailsClient);
-		// Note: The veritical scrollbar fails to appear when text widget is
-		// not entirely shown
-	}
-
-	public Section createUISection(Composite parent, String text, String description, int style) {
-		Section section = getManagedForm().getToolkit().createSection(parent, style);
-		section.clientVerticalSpacing = FormLayoutFactory.SECTION_HEADER_VERTICAL_SPACING;
-		section.setLayout(FormLayoutFactory.createClearGridLayout(false, 1));
-		section.setText(text);
-		section.setDescription(description);
-		GridData data = new GridData(GridData.FILL_HORIZONTAL);
-		section.setLayoutData(data);
-		return section;
-	}
-
-	public Composite createUISectionContainer(Composite parent, int columns) {
-		Composite container = getManagedForm().getToolkit().createComposite(parent);
-		container.setLayout(FormLayoutFactory.createSectionClientGridLayout(false, columns));
-		return container;
-	}
-
-	private String getStackTrace(Throwable throwable) {
-		StringWriter swriter = new StringWriter();
-		PrintWriter pwriter = new PrintWriter(swriter);
-		throwable.printStackTrace(pwriter);
-		pwriter.flush();
-		pwriter.close();
-		return swriter.toString();
-	}
-
-	/**
-	 * Used to align the section client / decriptions of two section headers 
-	 * horizontally adjacent to each other.  The misalignment is caused by one
+	 * Used to align the section client / decriptions of two section headers
+	 * horizontally adjacent to each other. The misalignment is caused by one
 	 * section header containing toolbar icons and the other not.
-	 * 
+	 *
 	 * @param masterSection
 	 * @param detailsSection
 	 */
 	public void alignSectionHeaders(Section masterSection, Section detailsSection) {
 		detailsSection.descriptionVerticalSpacing += masterSection.getTextClientHeightDifference();
+	}
+
+	public void cancelEdit() {
+		IFormPart[] parts = getManagedForm().getParts();
+
+		for (int i = 0; i < parts.length; i++) {
+			IFormPart part = parts[i];
+
+			if (part instanceof IContextPart) {
+				((IContextPart)part).cancelEdit();
+			}
+		}
+	}
+
+	public boolean canCopy(ISelection selection) {
+		AbstractFormPart focusPart = _getFocusSection();
+
+		if (focusPart != null) {
+			if (focusPart instanceof IDESection) {
+				return ((IDESection)focusPart).canCopy(selection);
+			}
+
+			if (focusPart instanceof FormDetails) {
+				return ((FormDetails)focusPart).canCopy(selection);
+			}
+		}
+
+		return false;
+	}
+
+	public boolean canCut(ISelection selection) {
+		AbstractFormPart focusPart = _getFocusSection();
+
+		if (focusPart != null) {
+			if (focusPart instanceof IDESection) {
+				return ((IDESection)focusPart).canCut(selection);
+			}
+
+			if (focusPart instanceof FormDetails) {
+				return ((FormDetails)focusPart).canCut(selection);
+			}
+		}
+
+		return false;
+	}
+
+	public boolean canPaste(Clipboard clipboard) {
+		AbstractFormPart focusPart = _getFocusSection();
+
+		if (focusPart != null) {
+			if (focusPart instanceof IDESection) {
+				return ((IDESection)focusPart).canPaste(clipboard);
+			}
+
+			if (focusPart instanceof FormDetails) {
+				return ((FormDetails)focusPart).canPaste(clipboard);
+			}
+		}
+
+		return false;
+	}
+
+	public void contextMenuAboutToShow(IMenuManager menu) {
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * @see
+	 * FormPage#createPartControl(org.eclipse.swt.
+	 * widgets.Composite)
+	 */
+	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+
+		// Dynamically add focus listeners to all the forms children in order
+		// to track the last focus control
+
+		IManagedForm managedForm = getManagedForm();
+
+		if (managedForm != null) {
+			addLastFocusListeners(managedForm.getForm());
+		}
+	}
+
+	public Section createUISection(Composite parent, String text, String description, int style) {
+		IManagedForm managedForm = getManagedForm();
+
+		Section section = managedForm.getToolkit().createSection(parent, style);
+
+		section.clientVerticalSpacing = FormLayoutFactory.SECTION_HEADER_VERTICAL_SPACING;
+		section.setLayout(FormLayoutFactory.createClearGridLayout(false, 1));
+		section.setText(text);
+		section.setDescription(description);
+
+		GridData data = new GridData(GridData.FILL_HORIZONTAL);
+
+		section.setLayoutData(data);
+
+		return section;
+	}
+
+	public Composite createUISectionContainer(Composite parent, int columns) {
+		IManagedForm managedForm = getManagedForm();
+
+		Composite container = managedForm.getToolkit().createComposite(parent);
+
+		container.setLayout(FormLayoutFactory.createSectionClientGridLayout(false, columns));
+
+		return container;
+	}
+
+	public void dispose() {
+		Control c = getPartControl();
+
+		if ((c != null) && !c.isDisposed()) {
+			Menu menu = c.getMenu();
+
+			if (menu != null) {
+				_resetMenu(menu, c);
+			}
+		}
+
+		super.dispose();
+	}
+
+	public IDEFormEditor getFormEditor() {
+		return (IDEFormEditor)getEditor();
+	}
+
+	public Control getLastFocusControl() {
+		return _fLastFocusControl;
+	}
+
+	public IDEFormEditor getLiferayFormEditor() {
+		return (IDEFormEditor)getEditor();
 	}
 
 	public IBaseModel getModel() {
@@ -467,14 +266,336 @@ public abstract class IDEFormPage extends FormPage {
 		return null;
 	}
 
-    private static class Msgs extends NLS
-    {
-        public static String details;
-        public static String message;
+	public boolean performGlobalAction(String actionId) {
+		Control focusControl = getFocusControl();
 
-        static
-        {
-            initializeMessages( IDEFormPage.class.getName(), Msgs.class );
-        }
-    }
+		if (focusControl == null) {
+			return false;
+		}
+
+		if (canPerformDirectly(actionId, focusControl)) {
+			return true;
+		}
+
+		AbstractFormPart focusPart = _getFocusSection();
+
+		if (focusPart != null) {
+			if (focusPart instanceof IDESection) {
+				return ((IDESection)focusPart).doGlobalAction(actionId);
+			}
+
+			if (focusPart instanceof FormDetails) {
+				return ((FormDetails)focusPart).doGlobalAction(actionId);
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param control
+	 */
+	public void setLastFocusControl(Control control) {
+		_fLastFocusControl = control;
+	}
+
+	/**
+	 * Set the focus on the last control to have focus before a page change or
+	 * the editor lost focus.
+	 */
+	public void updateFormSelection() {
+		if ((_fLastFocusControl != null) && (_fLastFocusControl.isDisposed() == false)) {
+			Control lastControl = _fLastFocusControl;
+
+			// Set focus on the control
+
+			lastControl.forceFocus();
+
+			// If the control is a Text widget, select its contents
+
+			if (lastControl instanceof Text) {
+				Text text = (Text)lastControl;
+
+				text.setSelection(0, text.getText().length());
+			}
+		}
+		else {
+
+			// No focus control set
+			// Fallback on managed form selection mechanism by setting the
+			// focus on this page itself.
+			// The managed form will set focus on the first managed part.
+			// Most likely this will turn out to be a section.
+			// In order for this to work properly, we must override the
+			// sections setFocus() method and set focus on a child control
+			// (preferrably first) that can practically take focus.
+
+			setFocus();
+		}
+	}
+
+	protected boolean canPerformDirectly(String id, Control control) {
+		if (control instanceof Text) {
+			Text text = (Text)control;
+
+			if (id.equals(ActionFactory.CUT.getId())) {
+				text.cut();
+
+				return true;
+			}
+
+			if (id.equals(ActionFactory.COPY.getId())) {
+				text.copy();
+
+				return true;
+			}
+
+			if (id.equals(ActionFactory.PASTE.getId())) {
+				text.paste();
+
+				return true;
+			}
+
+			if (id.equals(ActionFactory.SELECT_ALL.getId())) {
+				text.selectAll();
+
+				return true;
+			}
+
+			if (id.equals(ActionFactory.DELETE.getId())) {
+				int count = text.getSelectionCount();
+
+				if (count == 0) {
+					int caretPos = text.getCaretPosition();
+
+					text.setSelection(caretPos, caretPos + 1);
+				}
+
+				text.insert("");
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	protected void createFormContent(IManagedForm managedForm) {
+		ScrolledForm form = managedForm.getForm();
+		FormToolkit toolkit = managedForm.getToolkit();
+
+		toolkit.decorateFormHeading(form.getForm());
+
+		IToolBarManager manager = form.getToolBarManager();
+
+		getFormEditor().contributeToToolbar(manager);
+
+		IFormPart[] parts = managedForm.getParts();
+
+		for (int i = 0; i < parts.length; i++) {
+			if (parts[i] instanceof IAdaptable) {
+				IAdaptable adapter = (IAdaptable)parts[i];
+
+				IAction[] actions = (IAction[])adapter.getAdapter(IAction[].class);
+
+				if (actions != null) {
+					for (int j = 0; j < actions.length; j++) {
+						form.getToolBarManager().add(actions[j]);
+					}
+				}
+			}
+		}
+
+		form.updateToolBar();
+	}
+
+	protected void createFormErrorContent(
+		IManagedForm managedForm, String errorTitle, String errorMessage, Exception e) {
+
+		ScrolledForm form = managedForm.getForm();
+		FormToolkit toolkit = managedForm.getToolkit();
+
+		toolkit.decorateFormHeading(form.getForm());
+
+		Composite parent = form.getBody();
+		GridLayout layout = new GridLayout();
+		GridData data2 = new GridData(GridData.FILL_BOTH);
+		layout.marginWidth = 7;
+		layout.marginHeight = 7;
+		parent.setLayout(layout);
+		parent.setLayoutData(data2);
+
+		// Set the title and image of the form
+
+		form.setText(errorTitle);
+		form.setImage(JFaceResources.getImage(Dialog.DLG_IMG_MESSAGE_ERROR));
+
+		int sectionStyle = Section.DESCRIPTION | ExpandableComposite.TITLE_BAR;
+
+		// Create the message section
+
+		Section messageSection = createUISection(parent, Msgs.message, errorMessage, sectionStyle);
+
+		Composite messageClient = createUISectionContainer(messageSection, 1);
+
+		// Bind the widgets
+
+		toolkit.paintBordersFor(messageClient);
+		messageSection.setClient(messageClient);
+
+		// Ensure the exception was defined
+
+		if (e == null) {
+			return;
+		}
+
+		// Create the details section
+
+		Section detailsSection = createUISection(parent, Msgs.details, e.getMessage(), sectionStyle);
+
+		Composite detailsClient = createUISectionContainer(detailsSection, 1);
+
+		// Create text widget holding the exception trace
+
+		int style = SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.READ_ONLY;
+
+		Text text = toolkit.createText(detailsClient, _getStackTrace(e), style);
+
+		GridData data = new GridData(GridData.FILL_HORIZONTAL);
+
+		data.heightHint = 160;
+		data.widthHint = 200;
+		text.setLayoutData(data);
+
+		// Bind the widgets
+
+		toolkit.paintBordersFor(detailsClient);
+		detailsSection.setClient(detailsClient);
+
+		// Note: The veritical scrollbar fails to appear when text widget is
+		// not entirely shown
+
+	}
+
+	protected Control getFocusControl() {
+		IManagedForm form = getManagedForm();
+
+		if (form == null) {
+			return null;
+		}
+
+		Control control = form.getForm();
+
+		if ((control == null) || control.isDisposed()) {
+			return null;
+		}
+
+		Display display = control.getDisplay();
+
+		Control focusControl = display.getFocusControl();
+
+		if ((focusControl == null) || focusControl.isDisposed()) {
+			return null;
+		}
+
+		return focusControl;
+	}
+
+	protected String getHelpResource() {
+		return null;
+	}
+
+	/**
+	 * Add a focus listener to the specified control that tracks the last
+	 * control to have focus on this page. When focus is gained by this control,
+	 * it registers itself as the last control to have focus. The last control
+	 * to have focus is stored in order to be restored after a page change or
+	 * editor loses focus.
+	 *
+	 * @param control
+	 */
+	private void _addLastFocusListener(Control control) {
+		control.addFocusListener(
+			new FocusListener() {
+
+				public void focusGained(FocusEvent e) {
+
+					// NO-OP
+
+				}
+
+				public void focusLost(FocusEvent e) {
+					_fLastFocusControl = control;
+				}
+
+			});
+	}
+
+	private AbstractFormPart _getFocusSection() {
+		Control focusControl = getFocusControl();
+
+		if (focusControl == null) {
+			return null;
+		}
+
+		Composite parent = focusControl.getParent();
+		AbstractFormPart targetPart = null;
+
+		while (parent != null) {
+			Object data = parent.getData("part");
+
+			if ((data != null) && data instanceof AbstractFormPart) {
+				targetPart = (AbstractFormPart)data;
+				break;
+			}
+
+			parent = parent.getParent();
+		}
+
+		return targetPart;
+	}
+
+	private String _getStackTrace(Throwable throwable) {
+		StringWriter swriter = new StringWriter();
+
+		PrintWriter pwriter = new PrintWriter(swriter);
+
+		throwable.printStackTrace(pwriter);
+		pwriter.flush();
+		pwriter.close();
+
+		return swriter.toString();
+	}
+
+	private void _resetMenu(Menu menu, Control c) {
+		if (c instanceof Composite) {
+			Composite comp = (Composite)c;
+
+			Control[] children = comp.getChildren();
+
+			for (int i = 0; i < children.length; i++) {
+				_resetMenu(menu, children[i]);
+			}
+		}
+
+		Menu cmenu = c.getMenu();
+
+		if ((cmenu != null) && cmenu.equals(menu)) {
+			c.setMenu(null);
+		}
+	}
+
+	private Control _fLastFocusControl;
+
+	private static class Msgs extends NLS {
+
+		public static String details;
+		public static String message;
+
+		static {
+			initializeMessages(IDEFormPage.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

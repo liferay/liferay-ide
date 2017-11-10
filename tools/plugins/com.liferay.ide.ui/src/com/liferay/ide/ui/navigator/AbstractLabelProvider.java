@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,43 +10,35 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
+
 package com.liferay.ide.ui.navigator;
 
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.LabelProvider;
 
-
 /**
  * @author Gregory Amerson
  */
-public abstract class AbstractLabelProvider extends LabelProvider
-{
+public abstract class AbstractLabelProvider extends LabelProvider {
 
-    private final ImageRegistry imageRegistry;
-    
-    public AbstractLabelProvider()
-    {
-        super();
+	public AbstractLabelProvider() {
+		_imageRegistry = new ImageRegistry();
 
-        this.imageRegistry = new ImageRegistry();
-        
-        initalizeImageRegistry( this.imageRegistry );
-    }
+		initalizeImageRegistry(_imageRegistry);
+	}
 
-    @Override
-    public void dispose()
-    {
-        this.imageRegistry.dispose();
-    }
+	@Override
+	public void dispose() {
+		_imageRegistry.dispose();
+	}
 
-    protected ImageRegistry getImageRegistry()
-    {
-        return this.imageRegistry;
-    }
+	protected ImageRegistry getImageRegistry() {
+		return _imageRegistry;
+	}
 
-    protected abstract void initalizeImageRegistry(ImageRegistry registry);
+	protected abstract void initalizeImageRegistry(ImageRegistry registry);
+
+	private final ImageRegistry _imageRegistry;
+
 }

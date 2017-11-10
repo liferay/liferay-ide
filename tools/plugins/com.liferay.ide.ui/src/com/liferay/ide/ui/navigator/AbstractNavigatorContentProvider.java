@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Kamesh Sampath - initial implementation
- * 		Gregory Amerson - initial implementation review and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.navigator;
 
@@ -31,86 +27,75 @@ import org.eclipse.ui.navigator.PipelinedViewerUpdate;
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  * @author Gregory Amerson
  */
-public abstract class AbstractNavigatorContentProvider implements IPipelinedTreeContentProvider2
-{
-    private ICommonContentExtensionSite config;
+public abstract class AbstractNavigatorContentProvider implements IPipelinedTreeContentProvider2 {
 
-    protected ICommonContentExtensionSite getConfig()
-    {
-        return this.config;
-    }
+	public Object[] getElements(Object inputElement) {
+		return null;
+	}
 
-    public Object[] getElements( Object inputElement )
-    {
-        return null;
-    }
+	public Object getParent(Object element) {
+		return null;
+	}
 
-    public Object getParent( Object element )
-    {
-        return null;
-    }
+	@SuppressWarnings("rawtypes")
+	public void getPipelinedChildren(Object aParent, Set theCurrentChildren) {
+	}
 
-    @SuppressWarnings( "rawtypes" )
-    public void getPipelinedChildren( Object aParent, Set theCurrentChildren )
-    {
-    }
+	@SuppressWarnings("rawtypes")
+	public void getPipelinedElements(Object anInput, Set theCurrentElements) {
+	}
 
-    @SuppressWarnings( "rawtypes" )
-    public void getPipelinedElements( Object anInput, Set theCurrentElements )
-    {
-    }
+	public Object getPipelinedParent(Object anObject, Object aSuggestedParent) {
+		return null;
+	}
 
-    public Object getPipelinedParent( Object anObject, Object aSuggestedParent )
-    {
-        return null;
-    }
+	public boolean hasChildren(Object element) {
+		return false;
+	}
 
-    public boolean hasChildren( Object element )
-    {
-        return false;
-    }
+	public boolean hasPipelinedChildren(Object element, boolean currentHasChildren) {
+		return false;
+	}
 
-    public boolean hasPipelinedChildren( Object element, boolean currentHasChildren )
-    {
-        return false;
-    }
+	public void init(ICommonContentExtensionSite config) {
+		_config = config;
+	}
 
-    public void init( ICommonContentExtensionSite config )
-    {
-        this.config = config;
-    }
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+	}
 
-    public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
-    {
-    }
+	public PipelinedShapeModification interceptAdd(PipelinedShapeModification anAddModification) {
+		return null;
+	}
 
-    public PipelinedShapeModification interceptAdd( PipelinedShapeModification anAddModification )
-    {
-        return null;
-    }
+	public boolean interceptRefresh(PipelinedViewerUpdate aRefreshSynchronization) {
+		return false;
+	}
 
-    public boolean interceptRefresh( PipelinedViewerUpdate aRefreshSynchronization )
-    {
-        return false;
-    }
+	public PipelinedShapeModification interceptRemove(PipelinedShapeModification aRemoveModification) {
+		return null;
+	}
 
-    public PipelinedShapeModification interceptRemove( PipelinedShapeModification aRemoveModification )
-    {
-        return null;
-    }
+	public boolean interceptUpdate(PipelinedViewerUpdate anUpdateSynchronization) {
+		return false;
+	}
 
-    public boolean interceptUpdate( PipelinedViewerUpdate anUpdateSynchronization )
-    {
-        return false;
-    }
+	public void restoreState(IMemento aMemento) {
 
-    public void restoreState( IMemento aMemento )
-    {
-        // do nothing
-    }
+		// do nothing
 
-    public void saveState( IMemento aMemento )
-    {
-        // do nothing
-    }
+	}
+
+	public void saveState(IMemento aMemento) {
+
+		// do nothing
+
+	}
+
+	protected ICommonContentExtensionSite getConfig() {
+		return _config;
+	}
+
+	private ICommonContentExtensionSite _config;
+
 }

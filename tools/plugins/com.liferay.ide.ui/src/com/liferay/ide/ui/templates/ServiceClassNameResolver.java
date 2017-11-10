@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.templates;
 
@@ -26,55 +25,46 @@ import org.eclipse.jface.text.templates.TemplateVariableResolver;
 /**
  * @author Joye Luo
  */
-@SuppressWarnings( "restriction" )
-public class ServiceClassNameResolver extends TemplateVariableResolver
-{
+@SuppressWarnings("restriction")
+public class ServiceClassNameResolver extends TemplateVariableResolver {
 
-    public ServiceClassNameResolver()
-    {
-        super( "service_class_name", "Get the Service class name for the current component class" );
-    }
+	public ServiceClassNameResolver() {
+		super("service_class_name", "Get the Service class name for the current component class");
+	}
 
-    @Override
-    protected String resolve( TemplateContext context )
-    {
-        String serviceClassName = "";
+	@Override
+	protected boolean isUnambiguous(TemplateContext context) {
+		return true;
+	}
 
-        if( context instanceof CompilationUnitContext )
-        {
-            final CompilationUnitContext compilationUnitContext = (CompilationUnitContext) context;
+	@Override
+	protected String resolve(TemplateContext context) {
+		String serviceClassName = "";
 
-            final ICompilationUnit unit = compilationUnitContext.getCompilationUnit();
+		if (context instanceof CompilationUnitContext) {
+			CompilationUnitContext compilationUnitContext = (CompilationUnitContext)context;
 
-            final String typeName = JavaCore.removeJavaLikeExtension( unit.getElementName() );
+			ICompilationUnit unit = compilationUnitContext.getCompilationUnit();
 
-            final IType type = unit.getType( typeName );
+			String typeName = JavaCore.removeJavaLikeExtension(unit.getElementName());
 
-            try
-            {
-                final String[] names = type.getSuperInterfaceNames();
+			IType type = unit.getType(typeName);
 
-                if( names.length != 0 )
-                {
-                    serviceClassName = names[0];
-                }
-                else
-                {
-                    serviceClassName = type.getSuperclassName();
-                }
-            }
-            catch( JavaModelException e )
-            {
-            }
-        }
+			try {
+				String[] names = type.getSuperInterfaceNames();
 
-        return serviceClassName;
-    }
+				if (names.length != 0) {
+					serviceClassName = names[0];
+				}
+				else {
+					serviceClassName = type.getSuperclassName();
+				}
+			}
+			catch (JavaModelException jme) {
+			}
+		}
 
-    @Override
-    protected boolean isUnambiguous( TemplateContext context )
-    {
-        return true;
-    }
+		return serviceClassName;
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.ui;
 
 import com.liferay.ide.core.ILiferayProjectImporter;
@@ -19,6 +19,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
+
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IProject;
@@ -37,161 +38,149 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
-
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class WorkspaceHelper implements WorkspaceHelperMBean
-{
+@SuppressWarnings("restriction")
+public class WorkspaceHelper implements WorkspaceHelperMBean {
 
-    @Override
-    public String openDir( String path )
-    {
-        String retval = null;
+	@Override
+	public String openDir(String path) {
+		String retval = null;
 
-        final File dir = new File( path );
+		File dir = new File(path);
 
-        if( ( !dir.exists() )  || ( !dir.isDirectory() ) )
-        {
-            retval = "Directory doesn't exist or isn't a directory.";
-        }
+		if (!dir.exists() || !dir.isDirectory()) {
+			retval = "Directory doesn't exist or isn't a directory.";
+		}
 
-        final File dotProject = new File( dir, ".project" );
+		File dotProject = new File(dir, ".project");
 
-        if ( dotProject.exists() )
-        {
-            retval = importExistingProject( dir );
-        }
-        else
-        {
-            for( ILiferayProjectImporter importer : LiferayCore.getImporters() )
-            {
-                try
-                {
-                    final IStatus importStatus = importer.canImport( dir.getCanonicalPath() );
+		if (dotProject.exists()) {
+			retval = _importExistingProject(dir);
+		}
+		else {
+			for (ILiferayProjectImporter importer : LiferayCore.getImporters()) {
+				try {
+					IStatus importStatus = importer.canImport(dir.getCanonicalPath());
 
-                    if( importStatus != null && importStatus.isOK() )
-                    {
-                        UIUtil.async( new Runnable()
-                        {
-                            @Override
-                            public void run()
-                            {
-                                try
-                                {
-                                    new ProgressMonitorDialog( UIUtil.getActiveShell() ).run(true, true, new IRunnableWithProgress()
-                                    {
-                                        @Override
-                                        public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
-                                        {
-                                            try
-                                            {
-                                                importer.importProjects( path, monitor );
-                                            }
-                                            catch( CoreException e )
-                                            {
-                                                LiferayUIPlugin.logError( "Error opening project", e );
-                                            }
-                                        }
-                                    });
-                                }
-                                catch( InvocationTargetException | InterruptedException e )
-                                {
-                                }
-                            }
-                        });
+					if ((importStatus != null) && importStatus.isOK()) {
+						UIUtil.async(
+							new Runnable() {
 
-                        return retval;
-                    }
-                }
-                catch( Exception e )
-                {
-                }
-            }
+								@Override
+								public void run() {
+									try {
+										new ProgressMonitorDialog(
+											UIUtil.getActiveShell()).run(true, true,
+											new IRunnableWithProgress() {
 
-            retval = "Directory must have a .project file to open.";
-        }
+												@Override
+												public void run(IProgressMonitor monitor)
+													throws InterruptedException,
+														InvocationTargetException {
 
-        return retval;
-    }
+													try {
+														importer.importProjects(path, monitor);
+													}
+													catch (CoreException ce) {
+														LiferayUIPlugin.logError("Error opening project", ce);
+													}
+												}
 
-    private String importExistingProject( File dir )
-    {
-        String retval = null;
+											});
+									}
+									catch (InterruptedException | InvocationTargetException e) {
+									}
+								}
 
-        try
-        {
-            final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-            final IProjectDescription description =
-                workspace.loadProjectDescription( new Path( dir.getAbsolutePath() ).append( ".project" ) );
+							});
 
-            final String name = description.getName();
+						return retval;
+					}
+				}
+				catch (Exception e) {
+				}
+			}
 
-            final IProject project = workspace.getRoot().getProject( name );
+			retval = "Directory must have a .project file to open.";
+		}
 
-            if( project.exists() )
-            {
-                retval = "Project with name " + name + " already exists";
-            }
-            else
-            {
-                final IRunnableWithProgress runnable = new IRunnableWithProgress()
-                {
-                    @Override
-                    public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
-                    {
-                        try
-                        {
-                            project.create( description, monitor );
-                            project.open( IResource.BACKGROUND_REFRESH, monitor );
+		return retval;
+	}
 
-                            try
-                            {
-                                project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-                            }
-                            catch( CoreException e)
-                            {
-                               // ignore error this is just best effort
-                            }
+	private String _importExistingProject(File dir) {
+		String retval = null;
 
-                            final IWorkbench workbench = PlatformUI.getWorkbench();
-                            final Shell shell = workbench.getActiveWorkbenchWindow().getShell();
-                            shell.forceActive();
-                            shell.forceFocus();
+		try {
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
-                            PackageExplorerPart view = PackageExplorerPart.openInActivePerspective();
-                            view.selectAndReveal( project );
-                        }
-                        catch( CoreException e )
-                        {
-                            LiferayUIPlugin.logError( "Unable to import project " + name, e );
-                        }
-                    }
-                };
+			IProjectDescription description = workspace.loadProjectDescription(
+				new Path(dir.getAbsolutePath()).append(".project"));
 
-                UIUtil.async( new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        try
-                        {
-                            new ProgressMonitorDialog( UIUtil.getActiveShell() ).run( true, true, runnable );
-                        }
-                        catch( InvocationTargetException | InterruptedException e )
-                        {
-                        }
-                    }
-                });
-            }
-        }
-        catch( CoreException e )
-        {
-            retval = e.getMessage();
-        }
+			String name = description.getName();
 
-        return retval;
-    }
+			IProject project = workspace.getRoot().getProject(name);
+
+			if (project.exists()) {
+				retval = "Project with name " + name + " already exists";
+			}
+			else {
+				IRunnableWithProgress runnable = new IRunnableWithProgress() {
+
+					@Override
+					public void run(IProgressMonitor monitor) throws InterruptedException, InvocationTargetException {
+						try {
+							project.create(description, monitor);
+							project.open(IResource.BACKGROUND_REFRESH, monitor);
+
+							try {
+								project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+							}
+							catch (CoreException ce) {
+
+								// ignore error this is just best effort
+
+							}
+
+							IWorkbench workbench = PlatformUI.getWorkbench();
+
+							Shell shell = workbench.getActiveWorkbenchWindow().getShell();
+
+							shell.forceActive();
+							shell.forceFocus();
+
+							PackageExplorerPart view = PackageExplorerPart.openInActivePerspective();
+
+							view.selectAndReveal(project);
+						}
+						catch (CoreException ce) {
+							LiferayUIPlugin.logError("Unable to import project " + name, ce);
+						}
+					}
+
+				};
+
+				UIUtil.async(
+					new Runnable() {
+
+						@Override
+						public void run() {
+							try {
+								new ProgressMonitorDialog(UIUtil.getActiveShell()).run(true, true, runnable);
+							}
+							catch (InterruptedException | InvocationTargetException e) {
+							}
+						}
+
+					});
+			}
+		}
+		catch (CoreException ce) {
+			retval = ce.getMessage();
+		}
+
+		return retval;
+	}
 
 }

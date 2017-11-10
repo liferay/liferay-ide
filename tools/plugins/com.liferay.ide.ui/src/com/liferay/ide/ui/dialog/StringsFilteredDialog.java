@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.dialog;
 
@@ -29,112 +28,100 @@ import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class StringsFilteredDialog extends FilteredElementTreeSelectionDialog
-{
+@SuppressWarnings("restriction")
+public class StringsFilteredDialog extends FilteredElementTreeSelectionDialog {
 
-    public static class StringsContentProvider implements ITreeContentProvider
-    {
-        protected String[] strings;
+	public StringsFilteredDialog(Shell shell) {
+		this(shell, null);
+	}
 
-        public void dispose()
-        {
-        }
+	public StringsFilteredDialog(Shell shell, String fixedPattern) {
+		super(shell, new StringsLabelProvider(), new StringsContentProvider());
 
-        public Object[] getChildren( Object parentElement )
-        {
-            return null;
-        }
+		setAllowMultiple(false);
 
-        public Object[] getElements( Object inputElement )
-        {
-            if( strings == null && inputElement instanceof String[] )
-            {
-                strings = (String[]) inputElement;
-            }
+		setComparator(new StringsViewerComparator());
 
-            return strings;
-        }
+		addFilter(new StringsFilter(fixedPattern));
 
-        public Object getParent( Object element )
-        {
-            return null;
-        }
+		setValidator(new StringsSelectionValidator(false));
 
-        public boolean hasChildren( Object element )
-        {
-            return false;
-        }
+		setHelpAvailable(false);
+	}
 
-        public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
-        {
-            this.strings = null;
-        }
+	public static class StringsContentProvider implements ITreeContentProvider {
 
-    }
+		public void dispose() {
+		}
 
-    public static class StringsLabelProvider extends LabelProvider
-    {
+		public Object[] getChildren(Object parentElement) {
+			return null;
+		}
 
-    }
+		public Object[] getElements(Object inputElement) {
+			if ((strings == null) && inputElement instanceof String[]) {
+				strings = (String[])inputElement;
+			}
 
-    public class StringsFilter extends ViewerFilter
-    {
+			return strings;
+		}
 
-        protected String fixedPattern;
+		public Object getParent(Object element) {
+			return null;
+		}
 
-        public StringsFilter( String fixedPattern )
-        {
-            this.fixedPattern = fixedPattern;
-        }
+		public boolean hasChildren(Object element) {
+			return false;
+		}
 
-        @Override
-        public boolean select( Viewer viewer, Object parentElement, Object element )
-        {
-            return fixedPattern == null ? true : element != null && element.toString().matches( fixedPattern );
-        }
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			strings = null;
+		}
 
-    }
+		protected String[] strings;
 
-    public class StringsSelectionValidator implements ISelectionStatusValidator
-    {
+	}
 
-        public StringsSelectionValidator( boolean multiSelect )
-        {
-        }
+	public static class StringsLabelProvider extends LabelProvider {
+	}
 
-        public IStatus validate( Object[] selection )
-        {
-            return Status.OK_STATUS;
-        }
+	public class StringsFilter extends ViewerFilter {
 
-    }
+		public StringsFilter(String fixedPattern) {
+			this.fixedPattern = fixedPattern;
+		}
 
-    public class StringsViewerComparator extends ViewerComparator
-    {
+		@Override
+		public boolean select(Viewer viewer, Object parentElement, Object element) {
+			if (fixedPattern == null) {
+				return true;
+			}
 
-    }
+			if ((element != null) && element.toString().matches(fixedPattern)) {
+				return true;
+			}
 
-    protected static final String DIALOG_SETTINGS = "com.liferay.ide.server.ui.wizard.StringsFilteredDialog"; //$NON-NLS-1$
+			return false;
+		}
 
-    public StringsFilteredDialog( Shell shell )
-    {
-        this( shell, null );
-    }
+		protected String fixedPattern;
 
-    public StringsFilteredDialog( Shell shell, String fixedPattern )
-    {
-        super( shell, new StringsLabelProvider(), new StringsContentProvider() );
+	}
 
-        setAllowMultiple( false );
+	public class StringsSelectionValidator implements ISelectionStatusValidator {
 
-        setComparator( new StringsViewerComparator() );
+		public StringsSelectionValidator(boolean multiSelect) {
+		}
 
-        addFilter( new StringsFilter( fixedPattern ) );
+		public IStatus validate(Object[] selection) {
+			return Status.OK_STATUS;
+		}
 
-        setValidator( new StringsSelectionValidator( false ) );
+	}
 
-        setHelpAvailable( false );
-    }
+	public class StringsViewerComparator extends ViewerComparator {
+	}
+
+	protected static final String DIALOG_SETTINGS = "com.liferay.ide.server.ui.wizard.StringsFilteredDialog";
 
 }

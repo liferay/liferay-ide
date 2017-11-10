@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<toc topic="help/concepts/remote-servers.html" label="remote-servers">
+<toc label="remote-servers" topic="help/concepts/remote-servers.html">
 	<topic href="help/concepts/remote-servers.html" label="Remote Liferay Servers">
 		<topic href="help/concepts/remote-servers.html#NewRemoteServerWizard" label="New Remote Server Wizard"></topic>
 		<topic href="help/concepts/remote-servers.html#RemoteServerConfigurationEditor" label="Remote Server Configuration Editor"></topic>

@@ -1,13 +1,17 @@
-/*******************************************************************************
- *  Copyright (c) 2000, 2008 IBM Corporation and others.
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Eclipse Public License v1.0
- *  which accompanies this distribution, and is available at
- *  http://www.eclipse.org/legal/epl-v10.html
- * 
- *  Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.ui.form;
 
 import com.liferay.ide.ui.wizard.RenameDialog;
@@ -23,88 +27,107 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+/**
+ * @author Gregory Amerson
+ */
 public class EditableTablePart extends TablePart {
-	private boolean editable;
-	private Action renameAction;
-
-	class RenameAction extends Action {
-		public RenameAction() {
-			super(Msgs.renameAction);
-		}
-
-		public void run() {
-			doRename();
-		}
-	}
-
-	class NameModifier implements ICellModifier {
-		public boolean canModify(Object object, String property) {
-			return true;
-		}
-
-		public void modify(Object object, String property, Object value) {
-			entryModified(object, value.toString());
-		}
-
-		public Object getValue(Object object, String property) {
-			return object.toString();
-		}
-	}
 
 	/**
 	 * Constructor for EditableTablePart.
+	 *
 	 * @param buttonLabels
 	 */
 	public EditableTablePart(String[] buttonLabels) {
 		super(buttonLabels);
 	}
 
+	public IAction getRenameAction() {
+		if (_renameAction == null) {
+			_renameAction = new RenameAction();
+		}
+
+		return _renameAction;
+	}
+
 	public boolean isEditable() {
-		return editable;
+		return _editable;
 	}
 
 	public void setEditable(boolean editable) {
-		this.editable = editable;
+		_editable = editable;
 	}
 
-	public IAction getRenameAction() {
-		if (renameAction == null)
-			renameAction = new RenameAction();
-		return renameAction;
+	public class NameModifier implements ICellModifier {
+
+		public boolean canModify(Object object, String property) {
+			return true;
+		}
+
+		public Object getValue(Object object, String property) {
+			return object.toString();
+		}
+
+		public void modify(Object object, String property, Object value) {
+			entryModified(object, value.toString());
+		}
+
+	}
+
+	public class RenameAction extends Action {
+
+		public RenameAction() {
+			super(Msgs.renameAction);
+		}
+
+		public void run() {
+			_rename();
+		}
+
 	}
 
 	protected StructuredViewer createStructuredViewer(Composite parent, int style, FormToolkit toolkit) {
-		TableViewer tableViewer = (TableViewer) super.createStructuredViewer(parent, style, toolkit);
+		TableViewer tableViewer = (TableViewer)super.createStructuredViewer(parent, style, toolkit);
+
 		return tableViewer;
 	}
 
-	private void doRename() {
+	protected void entryModified(Object entry, String value) {
+	}
+
+	private void _rename() {
 		TableViewer viewer = getTableViewer();
-		IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
-		if (selection.size() == 1 && isEditable()) {
+
+		IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
+
+		if ((selection.size() == 1) && isEditable()) {
 			Object obj = selection.getFirstElement();
+
 			String oldName = obj.toString();
+
 			RenameDialog dialog = new RenameDialog(getControl().getShell(), oldName);
+
 			dialog.create();
 			dialog.getShell().setText(Msgs.renameTitle);
 			dialog.getShell().setSize(300, 150);
+
 			if (dialog.open() == Window.OK) {
 				entryModified(obj, dialog.getNewName());
 			}
 		}
 	}
 
-	protected void entryModified(Object entry, String value) {
+	private boolean _editable;
+	private Action _renameAction;
+
+	private static class Msgs extends NLS {
+
+		public static String renameAction;
+		public static String renameTitle;
+
+		static {
+			initializeMessages(EditableTablePart.class.getName(), Msgs.class);
+		}
+
 	}
 
-    private static class Msgs extends NLS
-    {
-        public static String renameAction;
-        public static String renameTitle;
-
-        static
-        {
-            initializeMessages( EditableTablePart.class.getName(), Msgs.class );
-        }
-    }
 }

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<toc topic="help/tasks/creating-new-projects.html" label="creating-new-projects">
+<toc label="creating-new-projects" topic="help/tasks/creating-new-projects.html">
 	<topic href="help/tasks/creating-new-projects.html" label="Creating New Liferay Plug-in Projects"></topic>
 	<topic href="help/tasks/creating-new-projects.html#CreatingNewPortlets" label="Creating New Portlets"></topic>
 	<topic href="help/tasks/creating-new-projects.html#CreatingNewHooks" label="Creating New Hooks"></topic>

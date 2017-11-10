@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui;
 
@@ -21,7 +20,9 @@ import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.lang.reflect.InvocationTargetException;
+
 import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,124 +43,117 @@ import org.eclipse.ui.IMarkerResolutionGenerator2;
 /**
  * @author Kuo Zhang
  */
-public class LiferayLanguagePropertiesMarkerResolutionGenerator implements IMarkerResolutionGenerator2
-{
+public class LiferayLanguagePropertiesMarkerResolutionGenerator implements IMarkerResolutionGenerator2 {
 
-    public IMarkerResolution[] getResolutions( IMarker marker )
-    {
-        List<IMarkerResolution> resolutions = new ArrayList<IMarkerResolution>();
+	public IMarkerResolution[] getResolutions(IMarker marker) {
+		List<IMarkerResolution> resolutions = new ArrayList<>();
 
-        try
-        {
-            if( LiferayLanguagePropertiesValidator.ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT.equals( marker.getAttribute( IMarker.SOURCE_ID ) ) )
-            {
-                resolutions.add( new EncodeAllFilesToDefaultResolution() );
-                resolutions.add( new EncodeOneFileToDefaultResolution() );
-            }
-        }
-        catch( CoreException e )
-        {
-            LiferayUIPlugin.logError( e );
-        }
+		try {
+			if (LiferayLanguagePropertiesValidator.ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT.equals(
+					marker.getAttribute(IMarker.SOURCE_ID))) {
 
-        return resolutions.toArray( new IMarkerResolution[0] );
-    }
+				resolutions.add(new EncodeAllFilesToDefaultResolution());
+				resolutions.add(new EncodeOneFileToDefaultResolution());
+			}
+		}
+		catch (CoreException ce) {
+			LiferayUIPlugin.logError(ce);
+		}
 
-    public boolean hasResolutions( IMarker marker )
-    {
-        try
-        {
-            if( LiferayLanguagePropertiesValidator.LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE.equals( marker.getType() ) &&
-                LiferayLanguagePropertiesValidator.ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT.equals( marker.getAttribute( IMarker.SOURCE_ID ) ) )
-            {
-                return true;
-            }
-        }
-        catch( CoreException e )
-        {
-            LiferayUIPlugin.logError( e );
-        }
+		return resolutions.toArray(new IMarkerResolution[0]);
+	}
 
-        return false;
-    }
+	public boolean hasResolutions(IMarker marker) {
+		try {
+			if (LiferayLanguagePropertiesValidator.LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE.equals(marker.getType()) &&
+				LiferayLanguagePropertiesValidator.ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT.equals(
+					marker.getAttribute(IMarker.SOURCE_ID))) {
 
-    private class EncodeAllFilesToDefaultResolution extends EncodeOneFileToDefaultResolution
-    {
+				return true;
+			}
+		}
+		catch (CoreException ce) {
+			LiferayUIPlugin.logError(ce);
+		}
 
-        public String getLabel()
-        {
-            return Msgs.encodeAllFilesToDefault;
-        }
+		return false;
+	}
 
-        public void run( IMarker marker )
-        {
-            encode( CoreUtil.getLiferayProject( marker.getResource() ) );
-        }
-    }
+	private static class Msgs extends NLS {
 
-    private class EncodeOneFileToDefaultResolution implements IMarkerResolution2
-    {
+		public static String encodeAllFilesToDefault;
+		public static String encodeThisFileToDefault;
 
-        public String getDescription()
-        {
-            return getLabel();
-        }
+		static {
+			initializeMessages(LiferayLanguagePropertiesMarkerResolutionGenerator.class.getName(), Msgs.class);
+		}
 
-        public Image getImage()
-        {
-            final URL url = LiferayUIPlugin.getDefault().getBundle().getEntry( "/icons/e16/encode.png" );
-            return ImageDescriptor.createFromURL( url ).createImage();
-        }
+	}
 
-        public String getLabel()
-        {
-            return Msgs.encodeThisFileToDefault;
-        }
+	private class EncodeAllFilesToDefaultResolution extends EncodeOneFileToDefaultResolution {
 
-        public void run( IMarker marker )
-        {
-            if( marker.getResource().getType() == IResource.FILE )
-            {
-                encode( (IFile) marker.getResource() );
-            }
-        }
+		public String getLabel() {
+			return Msgs.encodeAllFilesToDefault;
+		}
 
-        protected void encode( final IResource resource )
-        {
-            if( resource != null && resource.exists() )
-            {
-                try
-                {
-                    new ProgressMonitorDialog( UIUtil.getActiveShell() ).run( true, false, new IRunnableWithProgress()
-                    {
+		public void run(IMarker marker) {
+			encode(CoreUtil.getLiferayProject(marker.getResource()));
+		}
 
-                        public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
-                        {
-                            monitor.beginTask( "Encoding Liferay language properties files to default (UTF-8)... ", 10 );
+	}
 
-                            PropertiesUtil.encodeLanguagePropertiesFilesToDefault( resource, monitor );
+	private class EncodeOneFileToDefaultResolution implements IMarkerResolution2 {
 
-                            monitor.done();
-                        }
-                    } );
-                }
-                catch( Exception e )
-                {
-                    LiferayUIPlugin.logError( e );
-                }
-            }
-        }
-    }
+		public String getDescription() {
+			return getLabel();
+		}
 
-    private static class Msgs extends NLS
-    {
+		public Image getImage() {
+			LiferayUIPlugin plugin = LiferayUIPlugin.getDefault();
 
-        public static String encodeThisFileToDefault;
-        public static String encodeAllFilesToDefault;
+			URL url = plugin.getBundle().getEntry("/icons/e16/encode.png");
 
-        static
-        {
-            initializeMessages( LiferayLanguagePropertiesMarkerResolutionGenerator.class.getName(), Msgs.class );
-        }
-    }
+			return ImageDescriptor.createFromURL(url).createImage();
+		}
+
+		public String getLabel() {
+			return Msgs.encodeThisFileToDefault;
+		}
+
+		public void run(IMarker marker) {
+			if (marker.getResource().getType() == IResource.FILE) {
+				encode((IFile)marker.getResource());
+			}
+		}
+
+		protected void encode(IResource resource) {
+			if ((resource != null) && resource.exists()) {
+				try {
+					ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(UIUtil.getActiveShell());
+
+					IRunnableWithProgress runnable = new IRunnableWithProgress() {
+
+						public void run(IProgressMonitor monitor)
+							throws InterruptedException,
+								InvocationTargetException {
+
+							monitor.beginTask("Encoding Liferay language properties files to default (UTF-8)... ", 10);
+
+							PropertiesUtil.encodeLanguagePropertiesFilesToDefault(resource, monitor);
+
+							monitor.done();
+						}
+
+					};
+
+					progressMonitorDialog.run(true, false, runnable);
+				}
+				catch (Exception e) {
+					LiferayUIPlugin.logError(e);
+				}
+			}
+		}
+
+	}
+
 }

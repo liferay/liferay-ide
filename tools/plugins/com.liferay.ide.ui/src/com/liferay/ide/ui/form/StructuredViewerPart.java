@@ -1,13 +1,17 @@
-/*******************************************************************************
- *  Copyright (c) 2000, 2008 IBM Corporation and others.
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Eclipse Public License v1.0
- *  which accompanies this distribution, and is available at
- *  http://www.eclipse.org/legal/epl-v10.html
- * 
- *  Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.ui.form;
 
 import org.eclipse.jface.viewers.StructuredViewer;
@@ -17,51 +21,61 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+/**
+ * @author Gregory Amerson
+ */
 public abstract class StructuredViewerPart extends SharedPartWithButtons {
-
-	private StructuredViewer fViewer;
-
-	private Point fMinSize;
 
 	public StructuredViewerPart(String[] buttonLabels) {
 		super(buttonLabels);
 	}
 
-	public StructuredViewer getViewer() {
-		return fViewer;
-	}
-
 	public Control getControl() {
-		return fViewer.getControl();
+		return _fViewer.getControl();
 	}
 
-	protected void createMainControl(Composite parent, int style, int span, FormToolkit toolkit) {
-		fViewer = createStructuredViewer(parent, style, toolkit);
-		Control control = fViewer.getControl();
-		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.horizontalSpan = span;
-		control.setLayoutData(gd);
-		applyMinimumSize();
+	public StructuredViewer getViewer() {
+		return _fViewer;
 	}
 
 	public void setMinimumSize(int width, int height) {
-		fMinSize = new Point(width, height);
-		if (fViewer != null)
-			applyMinimumSize();
-	}
+		_fMinSize = new Point(width, height);
 
-	private void applyMinimumSize() {
-		if (fMinSize != null) {
-			GridData gd = (GridData) fViewer.getControl().getLayoutData();
-			gd.widthHint = fMinSize.x;
-			gd.heightHint = fMinSize.y;
+		if (_fViewer != null) {
+			_applyMinimumSize();
 		}
 	}
+
+	protected void createMainControl(Composite parent, int style, int span, FormToolkit toolkit) {
+		_fViewer = createStructuredViewer(parent, style, toolkit);
+
+		Control control = _fViewer.getControl();
+
+		GridData gd = new GridData(GridData.FILL_BOTH);
+
+		gd.horizontalSpan = span;
+		control.setLayoutData(gd);
+
+		_applyMinimumSize();
+	}
+
+	protected abstract StructuredViewer createStructuredViewer(Composite parent, int style, FormToolkit toolkit);
 
 	protected void updateEnabledState() {
 		getControl().setEnabled(isEnabled());
 		super.updateEnabledState();
 	}
 
-	protected abstract StructuredViewer createStructuredViewer(Composite parent, int style, FormToolkit toolkit);
+	private void _applyMinimumSize() {
+		if (_fMinSize != null) {
+			GridData gd = (GridData)_fViewer.getControl().getLayoutData();
+
+			gd.widthHint = _fMinSize.x;
+			gd.heightHint = _fMinSize.y;
+		}
+	}
+
+	private Point _fMinSize;
+	private StructuredViewer _fViewer;
+
 }

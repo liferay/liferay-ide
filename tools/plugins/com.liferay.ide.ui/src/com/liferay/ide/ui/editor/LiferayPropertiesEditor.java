@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.ui.editor;
 
 import org.eclipse.jdt.internal.ui.propertiesfileeditor.PropertiesFileEditor;
@@ -19,17 +19,16 @@ import org.eclipse.jdt.internal.ui.propertiesfileeditor.PropertiesFileEditor;
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class LiferayPropertiesEditor extends PropertiesFileEditor
-{
-    public static final String ID = "com.liferay.ide.ui.editor.LiferayPortalPropertiesEditor";
+@SuppressWarnings("restriction")
+public class LiferayPropertiesEditor extends PropertiesFileEditor {
 
-    @Override
-    protected void initializeEditor()
-    {
-        super.initializeEditor();
+	public static final String ID = "com.liferay.ide.ui.editor.LiferayPortalPropertiesEditor";
 
-        setSourceViewerConfiguration( new LiferayPropertiesSourceViewerConfiguration( this ) );
-    }
+	@Override
+	protected void initializeEditor() {
+		super.initializeEditor();
+
+		setSourceViewerConfiguration(new LiferayPropertiesSourceViewerConfiguration(this));
+	}
 
 }

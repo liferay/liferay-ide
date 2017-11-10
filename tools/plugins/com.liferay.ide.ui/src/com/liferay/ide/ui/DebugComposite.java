@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui;
 
@@ -21,19 +20,17 @@ import org.eclipse.swt.widgets.Composite;
 /**
  * @author Greg Amerson
  */
-public class DebugComposite extends Composite
-{
+public class DebugComposite extends Composite {
 
-    public DebugComposite( Composite parent, int style )
-    {
-        super( parent, style );
-    }
+	public DebugComposite(Composite parent, int style) {
+		super(parent, style);
+	}
 
-    @Override
-    public Point computeSize( int wHint, int hHint, boolean changed )
-    {
-        Point p = super.computeSize( wHint, hHint, changed );
-        return p;
-    }
+	@Override
+	public Point computeSize(int wHint, int hHint, boolean changed) {
+		Point p = super.computeSize(wHint, hHint, changed);
+
+		return p;
+	}
 
 }

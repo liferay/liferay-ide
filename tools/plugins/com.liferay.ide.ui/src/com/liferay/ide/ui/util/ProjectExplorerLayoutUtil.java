@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.util;
 
@@ -30,123 +29,121 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.ICommonFilterDescriptor;
+import org.eclipse.ui.navigator.INavigatorContentService;
 import org.eclipse.ui.navigator.INavigatorFilterService;
 
 /**
  * @author Andy Wu
  */
-public class ProjectExplorerLayoutUtil
-{
-    private static String NEST_PARAMETER = "org.eclipse.ui.navigator.resources.nested.enabled";
+public class ProjectExplorerLayoutUtil {
 
-    public static void setNested( boolean nested )
-    {
-        final String commandId = "org.eclipse.ui.navigator.resources.nested.changeProjectPresentation";
+	public static void setNested(boolean nested) {
+		String commandId = "org.eclipse.ui.navigator.resources.nested.changeProjectPresentation";
 
-        try
-        {
-            final ICommandService commandService =
-                (ICommandService) PlatformUI.getWorkbench().getService( ICommandService.class );
+		try {
+			IWorkbench workbench = PlatformUI.getWorkbench();
 
-            final Command command = commandService.getCommand( commandId );
+			ICommandService commandService = (ICommandService)workbench.getService(ICommandService.class);
 
-            final IHandler hanlder = command.getHandler();
+			Command command = commandService.getCommand(commandId);
 
-            final IViewPart projectExplorer =
-                PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
-                    IPageLayout.ID_PROJECT_EXPLORER );
+			IHandler hanlder = command.getHandler();
 
-            if( hanlder != null && projectExplorer != null )
-            {
-                final Map<String, String> map = new HashMap<String, String>();
+			IViewPart projectExplorer = workbench.getWorkbenchWindows()[0].getActivePage().findView(
+				IPageLayout.ID_PROJECT_EXPLORER);
 
-                map.put( NEST_PARAMETER, Boolean.toString( nested ) );
+			if ((hanlder != null) && (projectExplorer != null)) {
+				Map<String, String> map = new HashMap<>();
 
-                IEvaluationContext applicationContext = new EvaluationContext( null, new Object() );
+				map.put(_nestParameter, Boolean.toString(nested));
 
-                applicationContext.addVariable( ISources.ACTIVE_PART_NAME, projectExplorer );
+				IEvaluationContext applicationContext = new EvaluationContext(null, new Object());
 
-                final ExecutionEvent event = new ExecutionEvent( command, map, null, applicationContext );
+				applicationContext.addVariable(ISources.ACTIVE_PART_NAME, projectExplorer);
 
-                execute( event );
-            }
-        }
-        catch( ExecutionException e )
-        {
-            // ignore errors this is best effort.
-        }
-    }
+				ExecutionEvent event = new ExecutionEvent(command, map, null, applicationContext);
 
-    // copy from org.eclipse.ui.internal.navigator.resources.nested.ProjectPresentationHandler (mars)
-    private static void execute( ExecutionEvent event ) throws ExecutionException
-    {
-        IWorkbenchPart part = HandlerUtil.getActivePart( event );
+				_execute(event);
+			}
+		}
+		catch (ExecutionException ee) {
 
-        String nestedProjectsContentProviderExtensionId =
-            "org.eclipse.ui.navigator.resources.nested.nestedProjectContentProvider";
+			// ignore errors this is best effort.
 
-        String hideTopLevelProjectIfNested = "org.eclipse.ui.navigator.resources.nested.HideTopLevelProjectIfNested";
+		}
+	}
 
-        String hideFolderWhenProjectIsShownAsNested =
-            "org.eclipse.ui.navigator.resources.nested.HideFolderWhenProjectIsShownAsNested";
+	private static void _execute(ExecutionEvent event) throws ExecutionException {
+		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 
-        if( part instanceof CommonNavigator )
-        {
-            CommonNavigator navigator = (CommonNavigator) part;
+		String nestedProjectsContentProviderExtensionId =
+			"org.eclipse.ui.navigator.resources.nested.nestedProjectContentProvider";
 
-            boolean previousNest =
-                navigator.getNavigatorContentService().getActivationService().isNavigatorExtensionActive(
-                    nestedProjectsContentProviderExtensionId );
-            String newNestParam = event.getParameter( NEST_PARAMETER );
-            boolean newNest = false;
+		String hideTopLevelProjectIfNested = "org.eclipse.ui.navigator.resources.nested.HideTopLevelProjectIfNested";
 
-            if( newNestParam != null )
-            {
-                newNest = Boolean.parseBoolean( newNestParam );
-            }
+		String hideFolderWhenProjectIsShownAsNested =
+			"org.eclipse.ui.navigator.resources.nested.HideFolderWhenProjectIsShownAsNested";
 
-            if( newNest != previousNest )
-            {
-                ISelection initialSelection = navigator.getCommonViewer().getSelection();
-                INavigatorFilterService filterService = navigator.getNavigatorContentService().getFilterService();
-                Set<String> filters = new HashSet<String>();
+		if (part instanceof CommonNavigator) {
+			CommonNavigator navigator = (CommonNavigator)part;
 
-                for( ICommonFilterDescriptor desc : filterService.getVisibleFilterDescriptors() )
-                {
-                    if( filterService.isActive( desc.getId() ) )
-                    {
-                        filters.add( desc.getId() );
-                    }
-                }
+			INavigatorContentService navigatorContentService = navigator.getNavigatorContentService();
 
-                if( newNest )
-                {
-                    navigator.getNavigatorContentService().getActivationService().activateExtensions(
-                        new String[] { nestedProjectsContentProviderExtensionId }, false );
-                    filters.add( hideTopLevelProjectIfNested );
-                    filters.add( hideFolderWhenProjectIsShownAsNested );
-                }
-                else
-                {
-                    navigator.getNavigatorContentService().getActivationService().deactivateExtensions(
-                        new String[] { nestedProjectsContentProviderExtensionId }, false );
-                    filters.remove( hideTopLevelProjectIfNested );
-                    filters.remove( hideFolderWhenProjectIsShownAsNested );
-                }
+			boolean previousNest = navigatorContentService.getActivationService().isNavigatorExtensionActive(
+				nestedProjectsContentProviderExtensionId);
 
-                filterService.activateFilterIdsAndUpdateViewer( filters.toArray( new String[filters.size()] ) );
-                navigator.getNavigatorContentService().getActivationService().persistExtensionActivations();
-                navigator.getCommonViewer().refresh();
-                navigator.getCommonViewer().setSelection( initialSelection );
-            }
+			String newNestParam = event.getParameter(_nestParameter);
+			boolean newNest = false;
 
-            HandlerUtil.updateRadioState( event.getCommand(), Boolean.toString( newNest ) );
-        }
-    }
+			if (newNestParam != null) {
+				newNest = Boolean.parseBoolean(newNestParam);
+			}
+
+			if (newNest != previousNest) {
+				ISelection initialSelection = navigator.getCommonViewer().getSelection();
+				INavigatorFilterService filterService = navigatorContentService.getFilterService();
+				Set<String> filters = new HashSet<>();
+
+				for (ICommonFilterDescriptor desc : filterService.getVisibleFilterDescriptors()) {
+					if (filterService.isActive(desc.getId())) {
+						filters.add(desc.getId());
+					}
+				}
+
+				if (newNest) {
+					navigatorContentService.getActivationService().activateExtensions(
+						new String[] {nestedProjectsContentProviderExtensionId}, false);
+					filters.add(hideTopLevelProjectIfNested);
+					filters.add(hideFolderWhenProjectIsShownAsNested);
+				}
+				else {
+					navigatorContentService.getActivationService().deactivateExtensions(
+						new String[] {nestedProjectsContentProviderExtensionId}, false);
+					filters.remove(hideTopLevelProjectIfNested);
+					filters.remove(hideFolderWhenProjectIsShownAsNested);
+				}
+
+				filterService.activateFilterIdsAndUpdateViewer(filters.toArray(new String[filters.size()]));
+				navigatorContentService.getActivationService().persistExtensionActivations();
+				navigator.getCommonViewer().refresh();
+				navigator.getCommonViewer().setSelection(initialSelection);
+			}
+
+			HandlerUtil.updateRadioState(event.getCommand(), Boolean.toString(newNest));
+		}
+	}
+
+	// copy from
+	// org.eclipse.ui.internal.navigator.resources.nested.ProjectPresentationHandler
+	// (mars)
+
+	private static String _nestParameter = "org.eclipse.ui.navigator.resources.nested.enabled";
+
 }

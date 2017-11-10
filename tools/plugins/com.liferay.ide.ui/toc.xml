@@ -2,28 +2,28 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Liferay Developer Tools Guide">
-   <topic label="Getting Started">
-      <anchor id="getting-started-begin"/>
-      <link toc="help/gettingstarted/getting-started-toc.xml"/>
-      <anchor id="getting-started-end"/>
-   </topic>
-   <topic label="Concepts">
-      <anchor id="concepts-begin"/>
-      <link toc="help/concepts/liferay-servers-toc.xml"/>
-      <link toc="help/concepts/remote-servers-toc.xml"/>
-      <anchor id="concepts-end"/>
-   </topic>
-   <topic label="Tasks">
-      <anchor id="tasks-begin"/>
-      <link toc="help/tasks/creating-new-liferay-plugin-projects-toc.xml"/>
-      <link toc="help/tasks/importing-existing-projects-toc.xml"/>
-      <link toc="help/tasks/creating-new-portlets-toc.xml"/>
-      <link toc="help/tasks/creating-new-hooks-toc.xml"/>
-      <link toc="help/tasks/creating-new-services-toc.xml"/>
-      <link toc="help/tasks/creating-new-layout-templates-toc.xml"/>
-      <link toc="help/tasks/creating-new-vaadin-portlets-toc.xml"/>
-      <link toc="help/tasks/creating-new-jsf-portlets-toc.xml"/>
-      <link toc="help/tasks/using-remote-servers-toc.xml"/>
-      <anchor id="tasks-end"/>
-   </topic>
+	<topic label="Getting Started">
+		<anchor id="getting-started-begin" />
+		<link toc="help/gettingstarted/getting-started-toc.xml" />
+		<anchor id="getting-started-end" />
+	</topic>
+	<topic label="Concepts">
+		<anchor id="concepts-begin" />
+		<link toc="help/concepts/liferay-servers-toc.xml" />
+		<link toc="help/concepts/remote-servers-toc.xml" />
+		<anchor id="concepts-end" />
+	</topic>
+	<topic label="Tasks">
+		<anchor id="tasks-begin" />
+		<link toc="help/tasks/creating-new-liferay-plugin-projects-toc.xml" />
+		<link toc="help/tasks/importing-existing-projects-toc.xml" />
+		<link toc="help/tasks/creating-new-portlets-toc.xml" />
+		<link toc="help/tasks/creating-new-hooks-toc.xml" />
+		<link toc="help/tasks/creating-new-services-toc.xml" />
+		<link toc="help/tasks/creating-new-layout-templates-toc.xml" />
+		<link toc="help/tasks/creating-new-vaadin-portlets-toc.xml" />
+		<link toc="help/tasks/creating-new-jsf-portlets-toc.xml" />
+		<link toc="help/tasks/using-remote-servers-toc.xml" />
+		<anchor id="tasks-end" />
+	</topic>
 </toc>

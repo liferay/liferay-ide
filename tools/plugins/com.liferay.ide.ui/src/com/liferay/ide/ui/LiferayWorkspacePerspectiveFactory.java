@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui;
 
@@ -26,67 +25,70 @@ import org.eclipse.ui.progress.IProgressConstants;
  * @author Lovett Li
  * @author Terry Jia
  */
-public class LiferayWorkspacePerspectiveFactory extends AbstractPerspectiveFactory
-{
+public class LiferayWorkspacePerspectiveFactory extends AbstractPerspectiveFactory {
 
-    public static final String ID = "com.liferay.ide.eclipse.ui.perspective.liferayworkspace"; //$NON-NLS-1$
+	public static final String ID = "com.liferay.ide.eclipse.ui.perspective.liferayworkspace";
 
-    @Override
-    public void createInitialLayout( IPageLayout layout )
-    {
-        createLayout( layout );
-        addShortcuts( layout );
-        setupActions( layout );
-    }
+	@Override
+	public void createInitialLayout(IPageLayout layout) {
+		createLayout(layout);
+		addShortcuts(layout);
+		setupActions(layout);
+	}
 
-    protected void createLayout( IPageLayout layout )
-    {
-        // Editors are placed for free.
-        String editorArea = layout.getEditorArea();
+	protected void createLayout(IPageLayout layout) {
 
-        // Top left.
-        IFolderLayout topLeft = layout.createFolder( "topLeft", IPageLayout.LEFT, 0.20f, editorArea );//$NON-NLS-1$
-        topLeft.addView( ID_PROJECT_EXPLORER_VIEW );
-        topLeft.addPlaceholder( ID_PACKAGE_EXPLORER_VIEW );
-        topLeft.addPlaceholder( ID_J2EE_HIERARCHY_VIEW );
-        topLeft.addPlaceholder( JavaUI.ID_TYPE_HIERARCHY );
-        topLeft.addPlaceholder( JavaUI.ID_PACKAGES_VIEW );
+		// Editors are placed for free.
 
-        // Top right.
-        IFolderLayout topRight = layout.createFolder( "topRight", IPageLayout.RIGHT, 0.68f, editorArea );//$NON-NLS-1$
+		String editorArea = layout.getEditorArea();
 
-        addViewIfExist( layout, topRight, ID_GRADLE_TASK_VIEW );
+		// Top left.
 
-        topRight.addPlaceholder( IPageLayout.ID_BOOKMARKS );
+		IFolderLayout topLeft = layout.createFolder("topLeft", IPageLayout.LEFT, 0.20F, editorArea);
 
-        try
-        {
-            IFolderLayout upgradeFolder = layout.createFolder( "topRightRight", IPageLayout.RIGHT, 0.5f, "fast" );
+		topLeft.addView(ID_PROJECT_EXPLORER_VIEW);
+		topLeft.addPlaceholder(ID_PACKAGE_EXPLORER_VIEW);
+		topLeft.addPlaceholder(ID_J2EE_HIERARCHY_VIEW);
+		topLeft.addPlaceholder(JavaUI.ID_TYPE_HIERARCHY);
+		topLeft.addPlaceholder(JavaUI.ID_PACKAGES_VIEW);
 
-            upgradeFolder.addPlaceholder( "com.liferay.ide.project.ui.upgradeView" );
-        }
-        catch( Exception e )
-        {
-            topRight.addPlaceholder( "com.liferay.ide.project.ui.upgradeView" );
-        }
+		// Top right.
 
-        IFolderLayout topRightBottom = layout.createFolder( "topRightBottom", IPageLayout.BOTTOM, 0.7f, "topRight" ); //$NON-NLS-1$ //$NON-NLS-2$
-        addViewIfExist( layout, topRightBottom, ID_GRADLE_EXECUTIONS_VIEW );
+		IFolderLayout topRight = layout.createFolder("topRight", IPageLayout.RIGHT, 0.68F, editorArea);
 
-        IFolderLayout bottomTopLeft = layout.createFolder( "bottomTopLeft", IPageLayout.BOTTOM, 0.7f, "topLeft" ); //$NON-NLS-1$ //$NON-NLS-2$
+		addViewIfExist(layout, topRight, ID_GRADLE_TASK_VIEW);
 
-        bottomTopLeft.addView( ID_SERVERS_VIEW );
+		topRight.addPlaceholder(IPageLayout.ID_BOOKMARKS);
 
-        // Bottom
-        IFolderLayout bottom = layout.createFolder( "bottom", IPageLayout.BOTTOM, 0.7f, editorArea );//$NON-NLS-1$
-        bottom.addView( ID_MARKERS_VIEW );
-        bottom.addView( ID_CONSOLE_VIEW );
+		try {
+			IFolderLayout upgradeFolder = layout.createFolder("topRightRight", IPageLayout.RIGHT, 0.5F, "fast");
 
-        bottom.addPlaceholder( IPageLayout.ID_PROBLEM_VIEW );
-        bottom.addPlaceholder( IProgressConstants.PROGRESS_VIEW_ID );
-        bottom.addPlaceholder( ID_SEARCH_VIEW );
+			upgradeFolder.addPlaceholder("com.liferay.ide.project.ui.upgradeView");
+		}
+		catch (Exception e) {
+			topRight.addPlaceholder("com.liferay.ide.project.ui.upgradeView");
+		}
 
-        ProjectExplorerLayoutUtil.setNested( true );
+		IFolderLayout topRightBottom = layout.createFolder("topRightBottom", IPageLayout.BOTTOM, 0.7F, "topRight");
 
-    }
+		addViewIfExist(layout, topRightBottom, ID_GRADLE_EXECUTIONS_VIEW);
+
+		IFolderLayout bottomTopLeft = layout.createFolder("bottomTopLeft", IPageLayout.BOTTOM, 0.7F, "topLeft");
+
+		bottomTopLeft.addView(ID_SERVERS_VIEW);
+
+		// Bottom
+
+		IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.7F, editorArea);
+
+		bottom.addView(ID_MARKERS_VIEW);
+		bottom.addView(ID_CONSOLE_VIEW);
+
+		bottom.addPlaceholder(IPageLayout.ID_PROBLEM_VIEW);
+		bottom.addPlaceholder(IProgressConstants.PROGRESS_VIEW_ID);
+		bottom.addPlaceholder(ID_SEARCH_VIEW);
+
+		ProjectExplorerLayoutUtil.setNested(true);
+	}
+
 }

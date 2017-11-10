@@ -17,10 +17,12 @@ The following folders are already applied to portal code style:
 4. /tools/plugins/com.liferay.ide.gradle.ui
 5. /tools/plugins/com.liferay.ide.hook.core
 6. /tools/plugins/com.liferay.ide.hook.ui
-6. /tools/plugins/com.liferay.ide.ui.notifications
-6. /enterprise/plugins/com.liferay.ide.studio.ui
-6. /tools/plugins/com.liferay.ide.theme.core
-6. /tools/plugins/com.liferay.ide.ui.snippets
+7. /tools/plugins/com.liferay.ide.ui.notifications
+8. /enterprise/plugins/com.liferay.ide.studio.ui
+9. /tools/plugins/com.liferay.ide.theme.core
+10. /tools/plugins/com.liferay.ide.ui.snippets
+11. /tools/plugins/com.liferay.ide.xml.search.ui
+12. /tools/plugins/com.liferay.ide.ui
 
 ## Something you had better to do firstly by yourself before you run source-formatter:
 1. remove all of *//$NON-NLS-1$* *//$NON-NLS-2$* ...
