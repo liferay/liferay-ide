@@ -21,6 +21,7 @@ import com.liferay.ide.ui.swtbot.eclipse.page.PreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.ServerRuntimeEnvironmentsPreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TreeDialog;
+import com.liferay.ide.ui.swtbot.page.Button;
 import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.util.CoreUtil;
 
@@ -29,6 +30,7 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 
 /**
  * @author Terry Jia
+ * @author Ying Xu
  */
 public class DialogAction extends UIAction {
 
@@ -74,6 +76,10 @@ public class DialogAction extends UIAction {
 		}
 
 		SWTBotPreferences.TIMEOUT = origin;
+	}
+
+	public Button getOkBtn() {
+		return _dialog.confirmBtn();
 	}
 
 	public void openNewRuntimeWizard() {

@@ -165,6 +165,10 @@ public class WizardAction extends UIAction {
 		_newModuleInfoWizard.getBrowseBtn().click();
 	}
 
+	public void overriddenFilesDelete() {
+		_newFragmentInfoWizard.getDeleteBtn().click();
+	}
+
 	public void prepareComponentClass(String projectName) {
 		_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
 	}
@@ -373,6 +377,10 @@ public class WizardAction extends UIAction {
 
 	public void prepareRuntimeType(String category, String type) {
 		_newRuntimeWizard.getServerTypes().selectTreeItem(category, type);
+	}
+
+	public void selectOverridenFiles(String item) {
+		_newFragmentInfoWizard.getFiles().click(item);
 	}
 
 	private final ImportLiferayWorkspaceProjectWizard _importLiferayWorkspaceProjectWizard =

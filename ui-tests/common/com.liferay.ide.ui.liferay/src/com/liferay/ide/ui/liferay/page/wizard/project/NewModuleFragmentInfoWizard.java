@@ -32,6 +32,7 @@ public class NewModuleFragmentInfoWizard extends Wizard {
 		_addOverrideFilesBtn = new ToolbarButtonWithTooltip(bot, ADD_FILES_FROM_OSGI_TO_OVERRIDE);
 		_files = new Table(bot, OVERRIDDEN_FILES);
 		_addOverrideFilePathBtn = new ToolbarButtonWithTooltip(bot, ADD_FILE_PATH);
+		_deleteBtn = new ToolbarButtonWithTooltip(bot, DELETE);
 	}
 
 	public ToolbarButtonWithTooltip getAddOverrideFilePathBtn() {
@@ -46,6 +47,10 @@ public class NewModuleFragmentInfoWizard extends Wizard {
 		return _browseOsgiBtn;
 	}
 
+	public ToolbarButtonWithTooltip getDeleteBtn() {
+		return _deleteBtn;
+	}
+
 	public Table getFiles() {
 		return _files;
 	}
@@ -53,6 +58,7 @@ public class NewModuleFragmentInfoWizard extends Wizard {
 	private ToolbarButtonWithTooltip _addOverrideFilePathBtn;
 	private ToolbarButtonWithTooltip _addOverrideFilesBtn;
 	private ToolbarButtonWithTooltip _browseOsgiBtn;
+	private ToolbarButtonWithTooltip _deleteBtn;
 	private Table _files;
 
 }
