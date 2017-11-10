@@ -1,43 +1,55 @@
-/*******************************************************************************
- *  Copyright (c) 2003, 2008 IBM Corporation and others.
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Eclipse Public License v1.0
- *  which accompanies this distribution, and is available at
- *  http://www.eclipse.org/legal/epl-v10.html
- * 
- *  Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.ui.form;
 
 import org.eclipse.ui.forms.events.IHyperlinkListener;
 
+/**
+ * @author Gregory Amerson
+ */
 public interface IFormEntryListener extends IHyperlinkListener {
-	/**
-	 * The user clicked on the text control and focus was
-	 * transfered to it.
-	 * @param entry
-	 */
-	void focusGained(FormEntry entry);
-
-	/**
-	 * The user changed the text in the text control of the entry.
-	 * @param entry
-	 */
-	void textDirty(FormEntry entry);
-
-	/**
-	 * The value of the entry has been changed to be the text
-	 * in the text control (as a result of 'commit' action).
-	 * @param entry
-	 */
-	void textValueChanged(FormEntry entry);
 
 	/**
 	 * The user pressed the 'Browse' button for the entry.
+	 *
 	 * @param entry
 	 */
-	void browseButtonSelected(FormEntry entry);
+	public void browseButtonSelected(FormEntry entry);
 
-	void selectionChanged(FormEntry entry);
+	/**
+	 * The user clicked on the text control and focus was transfered to it.
+	 *
+	 * @param entry
+	 */
+	public void focusGained(FormEntry entry);
+
+	public void selectionChanged(FormEntry entry);
+
+	/**
+	 * The user changed the text in the text control of the entry.
+	 *
+	 * @param entry
+	 */
+	public void textDirty(FormEntry entry);
+
+	/**
+	 * The value of the entry has been changed to be the text in the text
+	 * control (as a result of 'commit' action).
+	 *
+	 * @param entry
+	 */
+	public void textValueChanged(FormEntry entry);
+
 }

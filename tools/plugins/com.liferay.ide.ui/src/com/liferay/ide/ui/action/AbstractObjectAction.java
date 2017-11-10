@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.action;
 
@@ -26,28 +23,25 @@ import org.eclipse.ui.IWorkbenchPart;
 /**
  * @author Gregory Amerson
  */
-public abstract class AbstractObjectAction implements IObjectActionDelegate
-{
+public abstract class AbstractObjectAction implements IObjectActionDelegate {
 
-    protected ISelection fSelection;
+	public Display getDisplay() {
+		Display display = Display.getCurrent();
 
-    public void selectionChanged( IAction action, ISelection selection )
-    {
-        fSelection = selection;
-    }
+		if (display == null) {
+			display = Display.getDefault();
+		}
 
-    public Display getDisplay()
-    {
-        Display display = Display.getCurrent();
+		return display;
+	}
 
-        if( display == null )
-            display = Display.getDefault();
+	public void selectionChanged(IAction action, ISelection selection) {
+		fSelection = selection;
+	}
 
-        return display;
-    }
+	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+	}
 
-    public void setActivePart( IAction action, IWorkbenchPart targetPart )
-    {
-    }
+	protected ISelection fSelection;
 
 }

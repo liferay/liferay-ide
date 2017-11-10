@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.dialog;
 
@@ -25,17 +24,18 @@ import org.eclipse.swt.widgets.Shell;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class FilteredTypesSelectionDialogEx extends FilteredTypesSelectionDialog
-{
-    protected boolean ignoreEvent = false;
-    protected boolean listenerInstalled = false;
+@SuppressWarnings("restriction")
+public class FilteredTypesSelectionDialogEx extends FilteredTypesSelectionDialog {
 
-    public FilteredTypesSelectionDialogEx(
-        Shell shell, boolean multi, IRunnableContext context, IJavaSearchScope scope, int elementKinds )
-    {
-        super( shell, multi, context, scope, elementKinds );
+	public FilteredTypesSelectionDialogEx(
+		Shell shell, boolean multi, IRunnableContext context, IJavaSearchScope scope, int elementKinds) {
 
-        setInitialPattern( StringPool.DOUBLE_ASTERISK );
-    }
+		super(shell, multi, context, scope, elementKinds);
+
+		setInitialPattern(StringPool.DOUBLE_ASTERISK);
+	}
+
+	protected boolean ignoreEvent = false;
+	protected boolean listenerInstalled = false;
+
 }

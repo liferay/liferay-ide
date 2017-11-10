@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.workspace;
 
@@ -30,86 +29,74 @@ import org.eclipse.ui.menus.ExtensionContributionFactory;
 import org.eclipse.ui.menus.IContributionRoot;
 import org.eclipse.ui.services.IServiceLocator;
 
-
 /**
  * @author Kamesh Sampath
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class LaunchWorkspaceMenu extends ExtensionContributionFactory
-{
+@SuppressWarnings("restriction")
+public class LaunchWorkspaceMenu extends ExtensionContributionFactory {
 
-    @Override
-    public void createContributionItems( IServiceLocator serviceLocator, IContributionRoot additions )
-    {
-        final MenuManager menu = new MenuManager( "Launch Workspace" );
+	@Override
+	public void createContributionItems(IServiceLocator serviceLocator, IContributionRoot additions) {
+		MenuManager menu = new MenuManager("Launch Workspace");
 
-        final IContributionItem[] workspaceHistoryItems = buildWorkspaceHistory( serviceLocator );
+		IContributionItem[] workspaceHistoryItems = _buildWorkspaceHistory(serviceLocator);
 
-        for( IContributionItem workspaceHistoryItem : workspaceHistoryItems )
-        {
-            if( workspaceHistoryItem instanceof CommandContributionItem )
-            {
-                final CommandContributionItem commandItem = (CommandContributionItem) workspaceHistoryItem;
+		for (IContributionItem workspaceHistoryItem : workspaceHistoryItems) {
+			if (workspaceHistoryItem instanceof CommandContributionItem) {
+				CommandContributionItem commandItem = (CommandContributionItem)workspaceHistoryItem;
 
-                if( "Other...".equals( commandItem.getData().label ) )
-                {
-                    menu.add( new Separator() );
-                }
-            }
+				if ("Other...".equals(commandItem.getData().label)) {
+					menu.add(new Separator());
+				}
+			}
 
-            menu.add( workspaceHistoryItem );
-        }
+			menu.add(workspaceHistoryItem);
+		}
 
-        additions.addContributionItem( menu, null );
-    }
+		additions.addContributionItem(menu, null);
+	}
 
-    private IContributionItem[] buildWorkspaceHistory( IServiceLocator serviceLocator )
-    {
-        final List<IContributionItem> retval = new ArrayList<>();
+	private IContributionItem[] _buildWorkspaceHistory(IServiceLocator serviceLocator) {
+		List<IContributionItem> retval = new ArrayList<>();
 
-        final ChooseWorkspaceData chooseWorkspaceData =
-            new ChooseWorkspaceData( Platform.getInstanceLocation().getURL() );
+		ChooseWorkspaceData chooseWorkspaceData = new ChooseWorkspaceData(Platform.getInstanceLocation().getURL());
 
-        if( chooseWorkspaceData.readPersistedData() )
-        {
-            final String currentWorkspace = chooseWorkspaceData.getInitialDefault();
-            final String[] recentWorkspaces = chooseWorkspaceData.getRecentWorkspaces();
+		if (chooseWorkspaceData.readPersistedData()) {
+			String currentWorkspace = chooseWorkspaceData.getInitialDefault();
+			String[] recentWorkspaces = chooseWorkspaceData.getRecentWorkspaces();
 
-            for( String recentWorkspace : recentWorkspaces )
-            {
-                if( recentWorkspace != null && !recentWorkspace.equals( currentWorkspace ) )
-                {
-                    retval.add( newLaunchWorkspaceCommand( serviceLocator, recentWorkspace, recentWorkspace ) );
-                }
-            }
+			for (String recentWorkspace : recentWorkspaces) {
+				if ((recentWorkspace != null) && !recentWorkspace.equals(currentWorkspace)) {
+					retval.add(_newLaunchWorkspaceCommand(serviceLocator, recentWorkspace, recentWorkspace));
+				}
+			}
 
-            retval.add( newLaunchWorkspaceCommand( serviceLocator, "New Workspace...", null ) );
-        }
+			retval.add(_newLaunchWorkspaceCommand(serviceLocator, "New Workspace...", null));
+		}
 
-        return retval.toArray( new IContributionItem[0] );
-    }
+		return retval.toArray(new IContributionItem[0]);
+	}
 
-    @SuppressWarnings( "unchecked" )
-    private IContributionItem newLaunchWorkspaceCommand(
-        IServiceLocator serviceLocator, String label, String workspaceLocation )
-    {
-        final CommandContributionItemParameter parameter = new CommandContributionItemParameter(
-            serviceLocator, "", LaunchWorkspaceHandler.COMMAND_ID, CommandContributionItem.STYLE_PUSH );
+	@SuppressWarnings("unchecked")
+	private IContributionItem _newLaunchWorkspaceCommand(
+		IServiceLocator serviceLocator, String label, String workspaceLocation) {
 
-        if( workspaceLocation != null )
-        {
-            parameter.parameters = new HashMap<>();
-            parameter.parameters.put( LaunchWorkspaceHandler.PARAM_WORKSPACE_LOCATION, workspaceLocation );
-        }
+		CommandContributionItemParameter parameter = new CommandContributionItemParameter(
+			serviceLocator, "", LaunchWorkspaceHandler.COMMAND_ID, CommandContributionItem.STYLE_PUSH);
 
-        parameter.label = label;
+		if (workspaceLocation != null) {
+			parameter.parameters = new HashMap<>();
+			parameter.parameters.put(LaunchWorkspaceHandler.PARAM_WORKSPACE_LOCATION, workspaceLocation);
+		}
 
-        final CommandContributionItem launchWorkspaceCommand = new CommandContributionItem( parameter );
+		parameter.label = label;
 
-        launchWorkspaceCommand.setVisible( true );
+		CommandContributionItem launchWorkspaceCommand = new CommandContributionItem(parameter);
 
-        return launchWorkspaceCommand;
-    }
+		launchWorkspaceCommand.setVisible(true);
+
+		return launchWorkspaceCommand;
+	}
 
 }

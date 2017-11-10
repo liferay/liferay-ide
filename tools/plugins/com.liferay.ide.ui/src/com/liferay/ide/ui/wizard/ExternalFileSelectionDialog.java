@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.wizard;
 
@@ -37,173 +36,151 @@ import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class ExternalFileSelectionDialog extends FilteredElementTreeSelectionDialog
-{
+@SuppressWarnings("restriction")
+public class ExternalFileSelectionDialog extends FilteredElementTreeSelectionDialog {
 
-    protected static class FileContentProvider implements ITreeContentProvider
-    {
-        private final Object[] EMPTY = new Object[0];
+	public ExternalFileSelectionDialog(Shell parent, ViewerFilter filter, boolean multiSelect, boolean acceptFolders) {
+		super(parent, new FileLabelProvider(), new FileContentProvider(), true);
 
-        public void dispose()
-        {
-        }
+		setComparator(new FileViewerComparator());
 
-        public Object[] getChildren( Object parentElement )
-        {
-            if( parentElement instanceof File )
-            {
-                File[] children = ( (File) parentElement ).listFiles();
+		addFilter(filter);
 
-                if( children != null )
-                {
-                    return children;
-                }
-            }
+		setValidator(new FileSelectionValidator(multiSelect, acceptFolders));
 
-            return EMPTY;
-        }
+		setHelpAvailable(false);
+	}
 
-        public Object[] getElements( Object element )
-        {
-            return getChildren( element );
-        }
+	@Override
+	protected TreeViewer doCreateTreeViewer(Composite parent, int style) {
+		TreeViewer viewer = super.doCreateTreeViewer(parent, style);
 
-        public Object getParent( Object element )
-        {
-            if( element instanceof File )
-            {
-                return ( (File) element ).getParentFile();
-            }
+		viewer.setAutoExpandLevel(5);
 
-            return null;
-        }
+		return viewer;
+	}
 
-        public boolean hasChildren( Object element )
-        {
-            return getChildren( element ).length > 0;
-        }
+	protected static class FileContentProvider implements ITreeContentProvider {
 
-        public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
-        {
-        }
+		public void dispose() {
+		}
 
-    }
+		public Object[] getChildren(Object parentElement) {
+			if (parentElement instanceof File) {
+				File[] children = ((File)parentElement).listFiles();
 
-    protected static class FileLabelProvider extends LabelProvider
-    {
-        private final Image IMG_FILE =
-            PlatformUI.getWorkbench().getSharedImages().getImage( ISharedImages.IMG_OBJ_FILE );
+				if (children != null) {
+					return children;
+				}
+			}
 
-        private final Image IMG_FOLDER = PlatformUI.getWorkbench().getSharedImages().getImage(
-            ISharedImages.IMG_OBJ_FOLDER );
+			return _empty;
+		}
 
-        public Image getImage( Object element )
-        {
-            if( element instanceof File )
-            {
-                File curr = (File) element;
+		public Object[] getElements(Object element) {
+			return getChildren(element);
+		}
 
-                if( curr.isDirectory() )
-                {
-                    return IMG_FOLDER;
-                }
-                else
-                {
-                    return IMG_FILE;
-                }
-            }
+		public Object getParent(Object element) {
+			if (element instanceof File) {
+				return ((File)element).getParentFile();
+			}
 
-            return null;
-        }
+			return null;
+		}
 
-        public String getText( Object element )
-        {
-            if( element instanceof File )
-            {
-                return TextProcessor.process( ( (File) element ).getName() );
-            }
+		public boolean hasChildren(Object element) {
+			if (getChildren(element).length > 0) {
+				return true;
+			}
 
-            return super.getText( element );
-        }
-    }
+			return false;
+		}
 
-    protected static class FileSelectionValidator implements ISelectionStatusValidator
-    {
-        protected boolean fAcceptFolders;
-        protected boolean fMultiSelect;
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		}
 
-        public FileSelectionValidator( boolean multiSelect, boolean acceptFolders )
-        {
-            fMultiSelect = multiSelect;
-            fAcceptFolders = acceptFolders;
-        }
+		private final Object[] _empty = new Object[0];
 
-        public IStatus validate( Object[] selection )
-        {
-            int nSelected = selection.length;
+	}
 
-            if( nSelected == 0 || ( nSelected > 1 && !fMultiSelect ) )
-            {
-                return new StatusInfo( IStatus.ERROR, "" ); //$NON-NLS-1$
-            }
+	protected static class FileLabelProvider extends LabelProvider {
 
-            for( int i = 0; i < selection.length; i++ )
-            {
-                Object curr = selection[i];
+		public Image getImage(Object element) {
+			if (element instanceof File) {
+				File curr = (File)element;
 
-                if( curr instanceof File )
-                {
-                    File file = (File) curr;
+				if (curr.isDirectory()) {
+					return _imgFolder;
+				}
+				else {
+					return _imgFile;
+				}
+			}
 
-                    if( !fAcceptFolders && !file.isFile() )
-                    {
-                        return new StatusInfo( IStatus.ERROR, "" ); //$NON-NLS-1$
-                    }
-                }
-            }
+			return null;
+		}
 
-            return new StatusInfo();
-        }
-    }
+		public String getText(Object element) {
+			if (element instanceof File) {
+				return TextProcessor.process(((File)element).getName());
+			}
 
-    protected static class FileViewerComparator extends ViewerComparator
-    {
-        public int category( Object element )
-        {
-            if( element instanceof File )
-            {
-                if( ( (File) element ).isFile() )
-                {
-                    return 1;
-                }
-            }
+			return super.getText(element);
+		}
 
-            return 0;
-        }
-    }
+		private final Image _imgFile = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
+		private final Image _imgFolder = PlatformUI.getWorkbench().getSharedImages().getImage(
+			ISharedImages.IMG_OBJ_FOLDER);
 
-    public ExternalFileSelectionDialog( Shell parent, ViewerFilter filter, boolean multiSelect, boolean acceptFolders )
-    {
-        super( parent, new FileLabelProvider(), new FileContentProvider(), true );
+	}
 
-        setComparator( new FileViewerComparator() );
+	protected static class FileSelectionValidator implements ISelectionStatusValidator {
 
-        addFilter( filter );
+		public FileSelectionValidator(boolean multiSelect, boolean acceptFolders) {
+			fMultiSelect = multiSelect;
+			fAcceptFolders = acceptFolders;
+		}
 
-        setValidator( new FileSelectionValidator( multiSelect, acceptFolders ) );
+		public IStatus validate(Object[] selection) {
+			int nSelected = selection.length;
 
-        setHelpAvailable( false );
-    }
+			if ((nSelected == 0) || ((nSelected > 1) && !fMultiSelect)) {
+				return new StatusInfo(IStatus.ERROR, "");
+			}
 
-    @Override
-    protected TreeViewer doCreateTreeViewer( Composite parent, int style )
-    {
-        TreeViewer viewer = super.doCreateTreeViewer( parent, style );
+			for (int i = 0; i < selection.length; i++) {
+				Object curr = selection[i];
 
-        viewer.setAutoExpandLevel( 5 );
+				if (curr instanceof File) {
+					File file = (File)curr;
 
-        return viewer;
-    }
+					if (!fAcceptFolders && !file.isFile()) {
+						return new StatusInfo(IStatus.ERROR, "");
+					}
+				}
+			}
+
+			return new StatusInfo();
+		}
+
+		protected boolean fAcceptFolders;
+		protected boolean fMultiSelect;
+
+	}
+
+	protected static class FileViewerComparator extends ViewerComparator {
+
+		public int category(Object element) {
+			if (element instanceof File) {
+				if (((File)element).isFile()) {
+					return 1;
+				}
+			}
+
+			return 0;
+		}
+
+	}
 
 }

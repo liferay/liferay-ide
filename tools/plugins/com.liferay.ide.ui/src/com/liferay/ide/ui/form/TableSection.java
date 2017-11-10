@@ -1,17 +1,22 @@
-/*******************************************************************************
- *  Copyright (c) 2000, 2008 IBM Corporation and others.
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Eclipse Public License v1.0
- *  which accompanies this distribution, and is available at
- *  http://www.eclipse.org/legal/epl-v10.html
- * 
- *  Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.ui.form;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
@@ -22,18 +27,49 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.IFormColors;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+/**
+ * @author Gregory Amerson
+ */
 public abstract class TableSection extends StructuredViewerSection {
-	protected boolean fHandleDefaultButton = true;
 
-	class PartAdapter extends EditableTablePart {
-		private Label fCount;
+	/**
+	 * Constructor for TableSection.
+	 *
+	 * @param formPage
+	 */
+	public TableSection(IDEFormPage formPage, Composite parent, int style, boolean titleBar, String[] buttonLabels) {
+		super(formPage, parent, style, titleBar, buttonLabels);
+	}
+
+	/**
+	 * Constructor for TableSection.
+	 *
+	 * @param formPage
+	 */
+	public TableSection(IDEFormPage formPage, Composite parent, int style, String[] buttonLabels) {
+		this(formPage, parent, style, true, buttonLabels);
+	}
+
+	public class PartAdapter extends EditableTablePart {
 
 		public PartAdapter(String[] buttonLabels) {
 			super(buttonLabels);
 		}
 
+		public void buttonSelected(Button button, int index) {
+			TableSection.this.buttonSelected(index);
+
+			if (fHandleDefaultButton) {
+				button.getShell().setDefaultButton(null);
+			}
+		}
+
 		public void entryModified(Object entry, String value) {
 			TableSection.this.entryModified(entry, value);
+		}
+
+		public void handleDoubleClick(IStructuredSelection selection) {
+			TableSection.this.handleDoubleClick(selection);
 		}
 
 		public void selectionChanged(IStructuredSelection selection) {
@@ -41,60 +77,59 @@ public abstract class TableSection extends StructuredViewerSection {
 			TableSection.this.selectionChanged(selection);
 		}
 
-		public void handleDoubleClick(IStructuredSelection selection) {
-			TableSection.this.handleDoubleClick(selection);
-		}
-
-		public void buttonSelected(Button button, int index) {
-			TableSection.this.buttonSelected(index);
-			if (fHandleDefaultButton)
-				button.getShell().setDefaultButton(null);
-		}
-
 		protected void createButtons(Composite parent, FormToolkit toolkit) {
 			super.createButtons(parent, toolkit);
 			enableButtons();
+
 			if (createCount()) {
 				Composite comp = toolkit.createComposite(fButtonContainer);
+
 				comp.setLayout(createButtonsLayout());
 				comp.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_END | GridData.FILL_BOTH));
-				fCount = toolkit.createLabel(comp, ""); //$NON-NLS-1$
-				fCount.setForeground(toolkit.getColors().getColor(IFormColors.TITLE));
-				fCount.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-				getTablePart().getTableViewer().getTable().addPaintListener(new PaintListener() {
-					public void paintControl(PaintEvent e) {
-						updateLabel();
-					}
-				});
+				_fCount = toolkit.createLabel(comp, "");
+
+				_fCount.setForeground(toolkit.getColors().getColor(IFormColors.TITLE));
+				_fCount.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+				EditableTablePart tablePart = getTablePart();
+
+				TableViewer tableViewer = tablePart.getTableViewer();
+
+				tableViewer.getTable().addPaintListener(
+					new PaintListener() {
+
+						public void paintControl(PaintEvent e) {
+							updateLabel();
+						}
+
+					});
 			}
 		}
 
 		protected void updateLabel() {
-			if (fCount != null && !fCount.isDisposed())
-				fCount.setText(NLS.bind(Msgs.totalLabel, Integer.toString(getTableViewer().getTable().getItemCount())));
+			if ((_fCount != null) && !_fCount.isDisposed()) {
+				TableViewer tableViewer = getTableViewer();
+
+				_fCount.setText(NLS.bind(Msgs.totalLabel, Integer.toString(tableViewer.getTable().getItemCount())));
+			}
 		}
+
+		private Label _fCount;
+
 	}
 
-	/**
-	 * Constructor for TableSection.
-	 * 
-	 * @param formPage
-	 */
-	public TableSection(IDEFormPage formPage, Composite parent, int style, String[] buttonLabels) {
-		this(formPage, parent, style, true, buttonLabels);
-	}
-
-	/**
-	 * Constructor for TableSection.
-	 * 
-	 * @param formPage
-	 */
-	public TableSection(IDEFormPage formPage, Composite parent, int style, boolean titleBar, String[] buttonLabels) {
-		super(formPage, parent, style, titleBar, buttonLabels);
+	protected boolean createCount() {
+		return false;
 	}
 
 	protected StructuredViewerPart createViewerPart(String[] buttonLabels) {
 		return new PartAdapter(buttonLabels);
+	}
+
+	protected void enableButtons() {
+	}
+
+	protected void entryModified(Object entry, String value) {
 	}
 
 	protected IAction getRenameAction() {
@@ -102,32 +137,25 @@ public abstract class TableSection extends StructuredViewerSection {
 	}
 
 	protected EditableTablePart getTablePart() {
-		return (EditableTablePart) fViewerPart;
-	}
-
-	protected void entryModified(Object entry, String value) {
-	}
-
-	protected void selectionChanged(IStructuredSelection selection) {
+		return (EditableTablePart)fViewerPart;
 	}
 
 	protected void handleDoubleClick(IStructuredSelection selection) {
 	}
 
-	protected void enableButtons() {
+	protected void selectionChanged(IStructuredSelection selection) {
 	}
 
-	protected boolean createCount() {
-		return false;
+	protected boolean fHandleDefaultButton = true;
+
+	private static class Msgs extends NLS {
+
+		public static String totalLabel;
+
+		static {
+			initializeMessages(TableSection.class.getName(), Msgs.class);
+		}
+
 	}
 
-    private static class Msgs extends NLS
-    {
-        public static String totalLabel;
-
-        static
-        {
-            initializeMessages( TableSection.class.getName(), Msgs.class );
-        }
-    }
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.ui.editor;
 
 import com.liferay.ide.core.ILiferayConstants;
@@ -27,6 +27,7 @@ import com.liferay.ide.ui.editor.LiferayPropertiesContentAssistProcessor.PropKey
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,6 +41,7 @@ import java.util.zip.ZipEntry;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
@@ -62,229 +64,214 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.ServerCore;
 
-
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSourceViewerConfiguration
-{
-    private IContentAssistant assitant;
-    private PropKey[] propKeys;
+@SuppressWarnings("restriction")
+public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSourceViewerConfiguration {
 
-    public LiferayPropertiesSourceViewerConfiguration( ITextEditor editor )
-    {
-        super( JavaPlugin.getDefault().getJavaTextTools().getColorManager(),
-            JavaPlugin.getDefault().getCombinedPreferenceStore(), editor,
-            IPropertiesFilePartitions.PROPERTIES_FILE_PARTITIONING );
-    }
+	public LiferayPropertiesSourceViewerConfiguration(ITextEditor editor) {
+		super(
+			JavaPlugin.getDefault().getJavaTextTools().getColorManager(),
+			JavaPlugin.getDefault().getCombinedPreferenceStore(), editor,
+			IPropertiesFilePartitions.PROPERTIES_FILE_PARTITIONING);
+	}
 
-    private IPath getAppServerPortalDir( final IEditorInput input )
-    {
-        IPath retval = null;
+	@Override
+	public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
+		if (_propKeys == null) {
+			IEditorInput input = getEditor().getEditorInput();
 
-        final IFile ifile = (IFile) input.getAdapter( IFile.class );
+			// first fine runtime location to get properties definitions
 
-        if( ifile != null )
-        {
-            final ILiferayProject project = LiferayCore.create( ifile.getProject() );
+			IPath appServerPortalDir = _getAppServerPortalDir(input);
+			String propertiesEntry = _getPropertiesEntry(input);
 
-            if( project != null )
-            {
-                final ILiferayPortal portal = project.adapt( ILiferayPortal.class );
+			PropKey[] keys = null;
 
-                if( portal != null )
-                {
-                    retval = portal.getAppServerPortalDir();
-                }
-            }
-        }
-        else
-        {
-            File file = (File) input.getAdapter( File.class );
+			if ((appServerPortalDir != null) && appServerPortalDir.toFile().exists()) {
+				try {
+					JarFile jar = new JarFile(appServerPortalDir.append("WEB-INF/lib/portal-impl.jar").toFile());
 
-            if( file == null && input instanceof FileStoreEditorInput )
-            {
-                FileStoreEditorInput fInput = (FileStoreEditorInput) input;
+					ZipEntry lang = jar.getEntry(propertiesEntry);
 
-                file = new File( fInput.getURI().getPath() );
-            }
+					keys = _parseKeys(jar.getInputStream(lang));
 
-            if( file != null && file.exists() )
-            {
-                try
-                {
-                    final IPath propsParentPath = new Path( file.getParentFile().getCanonicalPath() );
+					jar.close();
+				}
+				catch (Exception e) {
+					LiferayUIPlugin.logError("Unable to get portal properties file", e);
+				}
+			}
+			else {
+				return _assitant;
+			}
 
-                    for( IRuntime runtime : ServerCore.getRuntimes() )
-                    {
-                        if( propsParentPath.equals( runtime.getLocation() ) ||
-                            propsParentPath.isPrefixOf( runtime.getLocation() ) )
-                        {
-                            final ILiferayRuntime lr = ServerUtil.getLiferayRuntime( runtime );
+			Object adapter = input.getAdapter(IFile.class);
 
-                            retval = lr.getAppServerPortalDir();
+			if (adapter instanceof IFile && _isHookProject(((IFile)adapter).getProject())) {
+				ILiferayProject liferayProject = LiferayCore.create(((IFile)adapter).getProject());
 
-                            break;
-                        }
-                    }
-                }
-                catch( Exception e )
-                {
-                    LiferayUIPlugin.logError( "Unable to get portal language properties file", e );
-                }
-            }
-        }
+				ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
-        return retval;
-    }
+				if (portal != null) {
+					Set<String> hookProps = new HashSet<>();
 
-    @Override
-    public IContentAssistant getContentAssistant( final ISourceViewer sourceViewer )
-    {
-        if( this.propKeys == null )
-        {
-            final IEditorInput input = this.getEditor().getEditorInput();
+					Collections.addAll(hookProps, portal.getHookSupportedProperties());
 
-            // first fine runtime location to get properties definitions
-            final IPath appServerPortalDir = getAppServerPortalDir( input );
-            final String propertiesEntry = getPropertiesEntry( input );
+					List<PropKey> filtered = new ArrayList<>();
 
-            PropKey[] keys = null;
+					for (PropKey pk : keys) {
+						if (hookProps.contains(pk.getKey())) {
+							filtered.add(pk);
+						}
+					}
 
-            if( appServerPortalDir != null && appServerPortalDir.toFile().exists() )
-            {
-                try
-                {
-                    final JarFile jar = new JarFile( appServerPortalDir.append( "WEB-INF/lib/portal-impl.jar" ).toFile() );
-                    final ZipEntry lang = jar.getEntry( propertiesEntry );
+					keys = filtered.toArray(new PropKey[0]);
+				}
+			}
 
-                    keys = parseKeys( jar.getInputStream( lang ) );
+			_propKeys = keys;
+		}
 
-                    jar.close();
-                }
-                catch( Exception e )
-                {
-                    LiferayUIPlugin.logError( "Unable to get portal properties file", e );
-                }
-            }
-            else
-            {
-                return assitant;
-            }
+		if ((_propKeys != null) && (_assitant == null)) {
+			ContentAssistant ca = new ContentAssistant() {
 
-            final Object adapter = input.getAdapter( IFile.class );
+				@Override
+				public IContentAssistProcessor getContentAssistProcessor(String contentType) {
+					return new LiferayPropertiesContentAssistProcessor(_propKeys, contentType);
+				}
 
-            if( adapter instanceof IFile && isHookProject( ( (IFile) adapter ).getProject() ) )
-            {
-                final ILiferayProject liferayProject = LiferayCore.create( ( (IFile) adapter ).getProject() );
-                final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+			};
 
-                if( portal != null )
-                {
-                    final Set<String> hookProps = new HashSet<String>();
-                    Collections.addAll( hookProps, portal.getHookSupportedProperties() );
+			ca.setInformationControlCreator(getInformationControlCreator(sourceViewer));
 
-                    final List<PropKey> filtered = new ArrayList<PropKey>();
+			_assitant = ca;
+		}
 
-                    for( PropKey pk : keys )
-                    {
-                        if( hookProps.contains( pk.getKey() ) )
-                        {
-                            filtered.add( pk );
-                        }
-                    }
+		return _assitant;
+	}
 
-                    keys = filtered.toArray( new PropKey[0] );
-                }
-            }
+	public IInformationControlCreator getInformationControlCreator(ISourceViewer sourceViewer) {
+		return new IInformationControlCreator() {
 
-            propKeys = keys;
-        }
+			public IInformationControl createInformationControl(Shell parent) {
+				return new DefaultInformationControl(parent, new HTMLTextPresenter(true));
+			}
 
-        if( propKeys != null && assitant == null )
-        {
-            final ContentAssistant ca = new ContentAssistant()
-            {
-                @Override
-                public IContentAssistProcessor getContentAssistProcessor( final String contentType )
-                {
-                    return new LiferayPropertiesContentAssistProcessor( propKeys, contentType );
-                }
-            };
+		};
+	}
 
-            ca.setInformationControlCreator( getInformationControlCreator( sourceViewer ) );
+	private IPath _getAppServerPortalDir(IEditorInput input) {
+		IPath retval = null;
 
-            assitant = ca;
-        }
+		IFile ifile = (IFile)input.getAdapter(IFile.class);
 
-        return assitant;
-    }
+		if (ifile != null) {
+			ILiferayProject project = LiferayCore.create(ifile.getProject());
 
-    public IInformationControlCreator getInformationControlCreator( ISourceViewer sourceViewer )
-    {
-        return new IInformationControlCreator()
-        {
-            public IInformationControl createInformationControl( Shell parent )
-            {
-                return new DefaultInformationControl( parent, new HTMLTextPresenter( true ) );
-            }
-        };
-    }
+			if (project != null) {
+				ILiferayPortal portal = project.adapt(ILiferayPortal.class);
 
-    private String getPropertiesEntry( IEditorInput input )
-    {
-        String retval = null;
+				if (portal != null) {
+					retval = portal.getAppServerPortalDir();
+				}
+			}
+		}
+		else {
+			File file = (File)input.getAdapter(File.class);
 
-        if( input.getName().equals( "system-ext.properties" ) )
-        {
-            retval = "system.properties";
-        }
-        else
-        {
-            retval = "portal.properties";
-        }
+			if ((file == null) && input instanceof FileStoreEditorInput) {
+				FileStoreEditorInput fInput = (FileStoreEditorInput)input;
 
-        return retval;
-    }
+				file = new File(fInput.getURI().getPath());
+			}
 
-    private boolean isHookProject( IProject project )
-    {
-        final ILiferayProject lr = LiferayCore.create( project );
+			if ((file != null) && file.exists()) {
+				try {
+					IPath propsParentPath = new Path(file.getParentFile().getCanonicalPath());
 
-        return lr != null && lr.getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE ) != null;
-    }
+					for (IRuntime runtime : ServerCore.getRuntimes()) {
+						if (propsParentPath.equals(runtime.getLocation()) ||
+							propsParentPath.isPrefixOf(runtime.getLocation())) {
 
-    private PropKey[] parseKeys( InputStream inputStream ) throws ConfigurationException, IOException
-    {
-        List<PropKey> parsed = new ArrayList<PropKey>();
+							ILiferayRuntime lr = ServerUtil.getLiferayRuntime(runtime);
 
-        final PortalPropertiesConfiguration config = new PortalPropertiesConfiguration();
-        config.load( inputStream );
-        inputStream.close();
+							retval = lr.getAppServerPortalDir();
 
-        final Iterator<?> keys = config.getKeys();
-        final PropertiesConfigurationLayout layout = config.getLayout();
+							break;
+						}
+					}
+				}
+				catch (Exception e) {
+					LiferayUIPlugin.logError("Unable to get portal language properties file", e);
+				}
+			}
+		}
 
-        while( keys.hasNext() )
-        {
-            final String key = keys.next().toString();
-            final String comment = layout.getComment( key );
+		return retval;
+	}
 
-            parsed.add( new PropKey( key, comment == null ? null : comment.replaceAll( "\n", "\n<br/>" ) ) );
-        }
+	private String _getPropertiesEntry(IEditorInput input) {
+		String retval = null;
 
-        final PropKey[] parsedKeys = parsed.toArray( new PropKey[0] );
+		if (input.getName().equals("system-ext.properties")) {
+			retval = "system.properties";
+		}
+		else {
+			retval = "portal.properties";
+		}
 
-        Arrays.sort( parsedKeys, new Comparator<PropKey>()
-        {
-            public int compare( PropKey o1, PropKey o2 )
-            {
-                return o1.getKey().compareTo( o2.getKey() );
-            }
-        });
+		return retval;
+	}
 
-        return parsedKeys;
-    }
+	private boolean _isHookProject(IProject project) {
+		ILiferayProject lr = LiferayCore.create(project);
+
+		if ((lr != null) && (lr.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE) != null)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private PropKey[] _parseKeys(InputStream inputStream) throws ConfigurationException, IOException {
+		List<PropKey> parsed = new ArrayList<>();
+
+		PortalPropertiesConfiguration config = new PortalPropertiesConfiguration();
+
+		config.load(inputStream);
+
+		inputStream.close();
+
+		Iterator<?> keys = config.getKeys();
+		PropertiesConfigurationLayout layout = config.getLayout();
+
+		while (keys.hasNext()) {
+			String key = keys.next().toString();
+
+			String comment = layout.getComment(key);
+
+			parsed.add(new PropKey(key, comment == null ? null : comment.replaceAll("\n", "\n<br/>")));
+		}
+
+		PropKey[] parsedKeys = parsed.toArray(new PropKey[0]);
+
+		Arrays.sort(
+			parsedKeys,
+			new Comparator<PropKey>() {
+
+				public int compare(PropKey o1, PropKey o2) {
+					return o1.getKey().compareTo(o2.getKey());
+				}
+
+			});
+
+		return parsedKeys;
+	}
+
+	private IContentAssistant _assitant;
+	private PropKey[] _propKeys;
+
 }

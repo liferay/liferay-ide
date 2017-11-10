@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.ui.editor;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -29,175 +29,156 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 
-
 /**
  * @author Gregory Amerson
  */
-public class LiferayPropertiesContentAssistProcessor implements IContentAssistProcessor
-{
-    public static class PropKey
-    {
-        private final String comment;
-        private final String key;
+public class LiferayPropertiesContentAssistProcessor implements IContentAssistProcessor {
 
-        PropKey( String key, String comment )
-        {
-            this.key = key;
-            this.comment = comment;
-        }
+	public LiferayPropertiesContentAssistProcessor(PropKey[] propKeys, String contentType) {
+		_propKeys = propKeys;
 
-        String getComment()
-        {
-            return this.comment;
-        }
+		if (CoreUtil.isNullOrEmpty(propKeys)) {
+			throw new IllegalArgumentException("propKeys can not be empty");
+		}
+	}
 
-        String getKey()
-        {
-            return this.key;
-        }
-    }
+	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
+		ICompletionProposal[] retval = null;
 
-    private final char[] AUTO_CHARS = new char[] { '.' };
-    private final PropKey[] propKeys;
+		String currentPartitionType = null;
 
+		IDocument document = viewer.getDocument();
 
-    public LiferayPropertiesContentAssistProcessor( PropKey[] propKeys, String contentType )
-    {
-        this.propKeys = propKeys;
+		IDocumentPartitioner partitioner = _getPartitioner(document);
 
-        if( CoreUtil.isNullOrEmpty( propKeys ) )
-        {
-            throw new IllegalArgumentException( "propKeys can not be empty" );
-        }
-    }
+		if (partitioner != null) {
+			ITypedRegion p = partitioner.getPartition(offset);
 
-    public ICompletionProposal[] computeCompletionProposals( ITextViewer viewer, int offset )
-    {
-        ICompletionProposal[] retval = null;
+			if (p != null) {
+				currentPartitionType = p.getType();
+			}
+		}
 
-        String currentPartitionType = null;
+		if ((currentPartitionType != null) && currentPartitionType.equals(IDocument.DEFAULT_CONTENT_TYPE)) {
 
-        final IDocument document = viewer.getDocument();
-        final IDocumentPartitioner partitioner = getPartitioner( document );
+			// now we need to check to see if we have a partial key
 
-        if( partitioner != null )
-        {
-            final ITypedRegion p = partitioner.getPartition( offset );
+			int rewindOffset = _rewindOffsetToNearestNonDefaultPartition(partitioner, offset);
 
-            if( p != null )
-            {
-                currentPartitionType = p.getType();
-            }
-        }
+			String partialKey = _getPartialKey(document, rewindOffset, offset);
 
-        if( currentPartitionType != null && currentPartitionType.equals( IDocument.DEFAULT_CONTENT_TYPE ) )
-        {
-            // now we need to check to see if we have a partial key
-            final int rewindOffset = rewindOffsetToNearestNonDefaultPartition( partitioner, offset );
+			List<ICompletionProposal> proposals = new ArrayList<>();
 
-            final String partialKey = getPartialKey( document, rewindOffset, offset );
+			if (_propKeys != null) {
+				for (PropKey key : _propKeys) {
+					if ((partialKey != null) && key.getKey().startsWith(partialKey)) {
+						proposals.add(
+							new PropertyCompletionProposal(key.getKey(), key.getComment(), offset, rewindOffset));
+					}
+				}
+			}
 
-            final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
+			retval = proposals.toArray(new ICompletionProposal[0]);
+		}
 
-            if( this.propKeys != null )
-            {
-                for( PropKey key : this.propKeys )
-                {
-                    if( partialKey != null && key.getKey().startsWith( partialKey ) )
-                    {
-                        proposals.add( new PropertyCompletionProposal(
-                            key.getKey(), key.getComment(), offset, rewindOffset ) );
-                    }
-                }
-            }
+		return retval;
+	}
 
-            retval = proposals.toArray( new ICompletionProposal[0] );
-        }
+	public IContextInformation[] computeContextInformation(ITextViewer viewer, int offset) {
+		return null;
+	}
 
-        return retval;
-    }
+	public char[] getCompletionProposalAutoActivationCharacters() {
+		return _AUTO_CHARS;
+	}
 
-    public IContextInformation[] computeContextInformation( ITextViewer viewer, int offset )
-    {
-        return null;
-    }
+	public char[] getContextInformationAutoActivationCharacters() {
+		return null;
+	}
 
-    public char[] getCompletionProposalAutoActivationCharacters()
-    {
-        return AUTO_CHARS;
-    }
+	public IContextInformationValidator getContextInformationValidator() {
+		return null;
+	}
 
-    public char[] getContextInformationAutoActivationCharacters()
-    {
-        return null;
-    }
+	public String getErrorMessage() {
+		return "Unable to get keys from portal.properties";
+	}
 
-    public IContextInformationValidator getContextInformationValidator()
-    {
-        return null;
-    }
+	public static class PropKey {
 
-    public String getErrorMessage()
-    {
-        return "Unable to get keys from portal.properties";
-    }
+		public PropKey(String key, String comment) {
+			_key = key;
+			_comment = comment;
+		}
 
-    private String getPartialKey( IDocument document , int rewindOffset, int offset )
-    {
-        String retval = null;
+		public String getComment() {
+			return _comment;
+		}
 
-        if( rewindOffset < offset );
-        {
-            try
-            {
-                if( rewindOffset > 0 )
-                {
-                    rewindOffset--;// move rewind back to beginning of partition type
-                }
+		public String getKey() {
+			return _key;
+		}
 
-                retval = document.get( rewindOffset, offset - rewindOffset ).trim();
-            }
-            catch( Exception e )
-            {
-            }
-        }
+		private final String _comment;
+		private String _key;
 
-        return retval;
-    }
+	}
 
-    @SuppressWarnings( "restriction" )
-    private IDocumentPartitioner getPartitioner( IDocument document )
-    {
-        IDocumentPartitioner retval = null;
+	private String _getPartialKey(IDocument document, int rewindOffset, int offset) {
+		String retval = null;
 
-        if( document instanceof IDocumentExtension3 )
-        {
-            final IDocumentExtension3 doc3 = (IDocumentExtension3) document;
-            retval = doc3.getDocumentPartitioner(
-                org.eclipse.jdt.internal.ui.propertiesfileeditor.IPropertiesFilePartitions.PROPERTIES_FILE_PARTITIONING );
-        }
+		if (rewindOffset < offset) {
+			try {
+				if (rewindOffset > 0) {
+					rewindOffset--; // move rewind back to beginning of partition
 
-        return retval;
-    }
+					// type
 
-    private int rewindOffsetToNearestNonDefaultPartition( IDocumentPartitioner partitioner, final int initialOffset )
-    {
-        int offset = initialOffset;
+				}
 
-        ITypedRegion partition = partitioner.getPartition( offset );
+				retval = document.get(rewindOffset, offset - rewindOffset).trim();
+			}
+			catch (Exception e) {
+			}
+		}
 
-        while( offset > 0 && partition != null && IDocument.DEFAULT_CONTENT_TYPE.equals( partition.getType() ) )
-        {
-            offset--;
-            partition = partitioner.getPartition( offset );
-        }
+		return retval;
+	}
 
-        if( offset > 0 && offset < initialOffset )
-        {
-            offset++; // move back up to next partition
-        }
+	@SuppressWarnings("restriction")
+	private IDocumentPartitioner _getPartitioner(IDocument document) {
+		IDocumentPartitioner retval = null;
 
-        return offset;
-    }
+		if (document instanceof IDocumentExtension3) {
+			IDocumentExtension3 doc3 = (IDocumentExtension3)document;
+
+			retval = doc3.getDocumentPartitioner(
+				org.eclipse.jdt.internal.ui.
+					propertiesfileeditor.IPropertiesFilePartitions.PROPERTIES_FILE_PARTITIONING);
+		}
+
+		return retval;
+	}
+
+	private int _rewindOffsetToNearestNonDefaultPartition(IDocumentPartitioner partitioner, final int initialOffset) {
+		int offset = initialOffset;
+
+		ITypedRegion partition = partitioner.getPartition(offset);
+
+		while ((offset > 0) && (partition != null) && IDocument.DEFAULT_CONTENT_TYPE.equals(partition.getType())) {
+			offset--;
+			partition = partitioner.getPartition(offset);
+		}
+
+		if ((offset > 0) && (offset < initialOffset)) {
+			offset++; // move back up to next partition
+		}
+
+		return offset;
+	}
+
+	private static final char[] _AUTO_CHARS = {'.'};
+
+	private final PropKey[] _propKeys;
 
 }

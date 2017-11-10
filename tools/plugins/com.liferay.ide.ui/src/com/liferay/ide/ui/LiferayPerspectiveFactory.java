@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui;
 
@@ -24,64 +23,74 @@ import org.eclipse.ui.progress.IProgressConstants;
  * @author Greg Amerson
  * @author Lovett Li
  */
-@SuppressWarnings( "deprecation" )
-public class LiferayPerspectiveFactory extends AbstractPerspectiveFactory
-{
-    public static final String ID = "com.liferay.ide.eclipse.ui.perspective.liferay"; //$NON-NLS-1$
+@SuppressWarnings("deprecation")
+public class LiferayPerspectiveFactory extends AbstractPerspectiveFactory {
 
-    public void createInitialLayout( IPageLayout layout )
-    {
-        createLayout( layout );
-        setupActions( layout );
-        addShortcuts( layout );
-    }
+	public static final String ID = "com.liferay.ide.eclipse.ui.perspective.liferay";
 
-    protected void createLayout( IPageLayout layout )
-    {
-        // Editors are placed for free.
-        String editorArea = layout.getEditorArea();
+	public void createInitialLayout(IPageLayout layout) {
+		createLayout(layout);
+		setupActions(layout);
+		addShortcuts(layout);
+	}
 
-        // Top left.
-        IFolderLayout topLeft = layout.createFolder( "topLeft", IPageLayout.LEFT, 0.20f, editorArea );//$NON-NLS-1$
-        topLeft.addView( ID_PACKAGE_EXPLORER_VIEW );
-        // topLeft.addView(ID_J2EE_HIERARCHY_VIEW);
-        topLeft.addPlaceholder( ID_J2EE_HIERARCHY_VIEW );
-        topLeft.addPlaceholder( IPageLayout.ID_RES_NAV );
-        topLeft.addPlaceholder( JavaUI.ID_TYPE_HIERARCHY );
-        topLeft.addPlaceholder( JavaUI.ID_PACKAGES_VIEW );
+	protected void createLayout(IPageLayout layout) {
 
-        // Top right.
-        IFolderLayout topRight = layout.createFolder( "topRight", IPageLayout.RIGHT, 0.68f, editorArea );//$NON-NLS-1$
-        topRight.addView( IPageLayout.ID_OUTLINE );
-        topRight.addView( ID_WST_SNIPPETS_VIEW );
+		// Editors are placed for free.
 
-        // IViewDescriptor tlView = PlatformUI.getWorkbench().getViewRegistry().find(ID_TASKLIST_VIEW);
+		String editorArea = layout.getEditorArea();
 
-        // if (tlView != null) {
-        // topRight.addView(ID_TASKLIST_VIEW);
-        // }
+		// Top left.
 
-        topRight.addPlaceholder( IPageLayout.ID_BOOKMARKS );
+		IFolderLayout topLeft = layout.createFolder("topLeft", IPageLayout.LEFT, 0.20F, editorArea);
 
-        IFolderLayout topRightBottom = layout.createFolder( "topRightBottom", IPageLayout.BOTTOM, 0.7f, "topRight" ); //$NON-NLS-1$ //$NON-NLS-2$
-        topRightBottom.addView( ANT_VIEW_ID );
-        topRightBottom.addView( IPageLayout.ID_PROP_SHEET );
+		topLeft.addView(ID_PACKAGE_EXPLORER_VIEW);
 
-        IFolderLayout bottomTopLeft = layout.createFolder( "bottomTopLeft", IPageLayout.BOTTOM, 0.7f, "topLeft" ); //$NON-NLS-1$ //$NON-NLS-2$
+		// topLeft.addView(ID_J2EE_HIERARCHY_VIEW);
 
-        bottomTopLeft.addView( ID_SERVERS_VIEW );
+		topLeft.addPlaceholder(ID_J2EE_HIERARCHY_VIEW);
+		topLeft.addPlaceholder(IPageLayout.ID_RES_NAV);
+		topLeft.addPlaceholder(JavaUI.ID_TYPE_HIERARCHY);
+		topLeft.addPlaceholder(JavaUI.ID_PACKAGES_VIEW);
 
-        // Bottom
-        IFolderLayout bottom = layout.createFolder( "bottom", IPageLayout.BOTTOM, 0.7f, editorArea );//$NON-NLS-1$
-        bottom.addView( ID_MARKERS_VIEW );
-        bottom.addView( ID_CONSOLE_VIEW );
-        bottom.addView( ID_JAVADOC_VIEW );
+		// Top right.
 
-        addViewIfExist(layout, bottom, ID_DATA_VIEW);
+		IFolderLayout topRight = layout.createFolder("topRight", IPageLayout.RIGHT, 0.68F, editorArea);
 
-        bottom.addPlaceholder( IPageLayout.ID_PROBLEM_VIEW );
-        bottom.addPlaceholder( IProgressConstants.PROGRESS_VIEW_ID );
-        bottom.addPlaceholder( ID_SEARCH_VIEW );
+		topRight.addView(IPageLayout.ID_OUTLINE);
+		topRight.addView(ID_WST_SNIPPETS_VIEW);
 
-    }
+		// IViewDescriptor tlView =
+		// PlatformUI.getWorkbench().getViewRegistry().find(ID_TASKLIST_VIEW);
+
+		// if (tlView != null) {
+		// topRight.addView(ID_TASKLIST_VIEW);
+		// }
+
+		topRight.addPlaceholder(IPageLayout.ID_BOOKMARKS);
+
+		IFolderLayout topRightBottom = layout.createFolder("topRightBottom", IPageLayout.BOTTOM, 0.7F, "topRight");
+
+		topRightBottom.addView(ANT_VIEW_ID);
+		topRightBottom.addView(IPageLayout.ID_PROP_SHEET);
+
+		IFolderLayout bottomTopLeft = layout.createFolder("bottomTopLeft", IPageLayout.BOTTOM, 0.7F, "topLeft");
+
+		bottomTopLeft.addView(ID_SERVERS_VIEW);
+
+		// Bottom
+
+		IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.7F, editorArea);
+
+		bottom.addView(ID_MARKERS_VIEW);
+		bottom.addView(ID_CONSOLE_VIEW);
+		bottom.addView(ID_JAVADOC_VIEW);
+
+		addViewIfExist(layout, bottom, ID_DATA_VIEW);
+
+		bottom.addPlaceholder(IPageLayout.ID_PROBLEM_VIEW);
+		bottom.addPlaceholder(IProgressConstants.PROGRESS_VIEW_ID);
+		bottom.addPlaceholder(ID_SEARCH_VIEW);
+	}
+
 }

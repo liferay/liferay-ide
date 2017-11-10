@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<toc topic="help/tasks/using-remote-servers.html" label="using-remote-servers">
+<toc label="using-remote-servers" topic="help/tasks/using-remote-servers.html">
 	<topic href="help/tasks/using-remote-servers.html" label="Using Remote Liferay Servers">
 		<topic href="help/tasks/using-remote-servers.html#Requirements" label="Requirements"></topic>
 		<topic href="help/tasks/using-remote-servers.html#Introduction" label="Introduction"></topic>

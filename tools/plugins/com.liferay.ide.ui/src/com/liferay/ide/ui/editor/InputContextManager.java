@@ -1,13 +1,17 @@
-/*******************************************************************************
- *  Copyright (c) 2003, 2008 IBM Corporation and others.
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Eclipse Public License v1.0
- *  which accompanies this distribution, and is available at
- *  http://www.eclipse.org/legal/epl-v10.html
- * 
- *  Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.ui.editor;
 
 import com.liferay.ide.core.model.IBaseModel;
@@ -33,123 +37,209 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 
+/**
+ * @author Gregory Amerson
+ */
 public abstract class InputContextManager implements IResourceChangeListener {
-	protected IDEFormEditor editor;
-	private Hashtable inputContexts;
-	private ArrayList monitoredFiles;
-	private ArrayList listeners;
-	private IModelUndoManager undoManager;
 
-	/**
-	 *  
-	 */
 	public InputContextManager(IDEFormEditor editor) {
 		this.editor = editor;
-		inputContexts = new Hashtable();
-		listeners = new ArrayList();
+		_inputContexts = new Hashtable();
+		_listeners = new ArrayList();
 		LiferayUIPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
 	}
 
 	public void addInputContextListener(IInputContextListener listener) {
-		if (!listeners.contains(listener))
-			listeners.add(listener);
+		if (!_listeners.contains(listener)) {
+			_listeners.add(listener);
+		}
 	}
 
-	public void removeInputContextListener(IInputContextListener listener) {
-		listeners.remove(listener);
-	}
-
-	/**
-	 * 
-	 *
-	 */
 	public void dispose() {
 		LiferayUIPlugin.getWorkspace().removeResourceChangeListener(this);
+
 		// dispose input contexts
-		for (Enumeration contexts = inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext) contexts.nextElement();
-			unhookUndo(context);
+
+		for (Enumeration contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
+			InputContext context = (InputContext)contexts.nextElement();
+
+			_unhookUndo(context);
 			context.dispose();
 		}
-		inputContexts.clear();
-		undoManager = null;
-	}
 
-	/**
-	 * Saves dirty contexts.
-	 * @param monitor
-	 */
-	public void save(IProgressMonitor monitor) {
-		for (Enumeration contexts = inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext) contexts.nextElement();
-			if (context.mustSave())
-				context.doSave(monitor);
-		}
-	}
-
-	public IProject getCommonProject() {
-		for (Enumeration contexts = inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext) contexts.nextElement();
-			IEditorInput input = context.getInput();
-			if (input instanceof IFileEditorInput)
-				return ((IFileEditorInput) input).getFile().getProject();
-		}
-		return null;
-	}
-
-	public boolean hasContext(String id) {
-		return findContext(id) != null;
-	}
-
-	public InputContext findContext(String id) {
-		for (Enumeration contexts = inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext) contexts.nextElement();
-			if (context.getId().equals(id))
-				return context;
-		}
-		return null;
+		_inputContexts.clear();
+		_undoManager = null;
 	}
 
 	public InputContext findContext(IResource resource) {
-		for (Enumeration contexts = inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext) contexts.nextElement();
-			if (context.matches(resource))
+		for (Enumeration contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
+			InputContext context = (InputContext)contexts.nextElement();
+
+			if (context.matches(resource)) {
 				return context;
+			}
 		}
+
 		return null;
+	}
+
+	public InputContext findContext(String id) {
+		for (Enumeration contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
+			InputContext context = (InputContext)contexts.nextElement();
+
+			if (context.getId().equals(id)) {
+				return context;
+			}
+		}
+
+		return null;
+	}
+
+	public IProject getCommonProject() {
+		for (Enumeration contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
+			InputContext context = (InputContext)contexts.nextElement();
+
+			IEditorInput input = context.getInput();
+
+			if (input instanceof IFileEditorInput) {
+				return ((IFileEditorInput)input).getFile().getProject();
+			}
+		}
+
+		return null;
+	}
+
+	public InputContext getContext(IEditorInput input) {
+		return (InputContext)_inputContexts.get(input);
+	}
+
+	public InputContext[] getInvalidContexts() {
+		ArrayList result = new ArrayList();
+
+		for (Enumeration contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
+			InputContext context = (InputContext)contexts.nextElement();
+
+			if (context.isModelCorrect() == false) {
+				result.add(context);
+			}
+		}
+
+		return (InputContext[])result.toArray(new InputContext[result.size()]);
 	}
 
 	public abstract IBaseModel getModel();
 
-	public InputContext getContext(IEditorInput input) {
-		return (InputContext) inputContexts.get(input);
-	}
+	public InputContext getPrimaryContext() {
+		for (Enumeration contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
+			InputContext context = (InputContext)contexts.nextElement();
 
-	public void putContext(IEditorInput input, InputContext context) {
-		inputContexts.put(input, context);
-		fireContextChange(context, true);
+			if (context.isPrimary()) {
+				return context;
+			}
+		}
+
+		return null;
 	}
 
 	/**
-	 * Update the key (the editor input in this case) associated with the
-	 * input context without firing a context change event.
-	 * Used for save as operations.
-	 * @param newInput
-	 * @param oldInput
-	 * @throws Exception
+	 * @return Returns the undoManager.
 	 */
-	private void updateInputContext(IEditorInput newInput, IEditorInput oldInput) throws Exception {
-		Object value = null;
-		// Retrieve the input context referenced by the old editor input and
-		// remove it from the context manager
-		if (inputContexts.containsKey(oldInput)) {
-			value = inputContexts.remove(oldInput);
-		} else {
-			throw new Exception("Input context not found."); //$NON-NLS-1$
+	public IModelUndoManager getUndoManager() {
+		return _undoManager;
+	}
+
+	public boolean hasContext(String id) {
+		if (findContext(id) != null) {
+			return true;
 		}
-		// Re-insert the input context back into the context manager using the
-		// new editor input as its key
-		inputContexts.put(newInput, value);
+
+		return false;
+	}
+
+	public boolean isDirty() {
+		for (Enumeration contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
+			InputContext context = (InputContext)contexts.nextElement();
+
+			if (context.mustSave()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public void monitorFile(IFile file) {
+		if (_monitoredFiles == null) {
+			_monitoredFiles = new ArrayList();
+		}
+
+		_monitoredFiles.add(file);
+	}
+
+	public void putContext(IEditorInput input, InputContext context) {
+		_inputContexts.put(input, context);
+		fireContextChange(context, true);
+	}
+
+	public void redo() {
+		if ((_undoManager != null) && _undoManager.isRedoable()) {
+			_undoManager.redo();
+		}
+	}
+
+	public void removeInputContextListener(IInputContextListener listener) {
+		_listeners.remove(listener);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * @see IResourceChangeListener#resourceChanged(IResourceChangeEvent)
+	 */
+	public void resourceChanged(IResourceChangeEvent event) {
+		IResourceDelta delta = event.getDelta();
+
+		try {
+			delta.accept(
+				new IResourceDeltaVisitor() {
+
+					public boolean visit(IResourceDelta delta) {
+						int kind = delta.getKind();
+						IResource resource = delta.getResource();
+
+						if (resource instanceof IFile) {
+							if (kind == IResourceDelta.ADDED) {
+								_asyncStructureChanged((IFile)resource, true);
+							}
+							else if (kind == IResourceDelta.REMOVED) {
+								_asyncStructureChanged((IFile)resource, false);
+							}
+
+							return false;
+						}
+
+						return true;
+					}
+
+				});
+		}
+		catch (CoreException ce) {
+			LiferayUIPlugin.logError(ce);
+		}
+	}
+
+	/**
+	 * Saves dirty contexts.
+	 *
+	 * @param monitor
+	 */
+	public void save(IProgressMonitor monitor) {
+		for (Enumeration contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
+			InputContext context = (InputContext)contexts.nextElement();
+
+			if (context.mustSave()) {
+				context.doSave(monitor);
+			}
+		}
 	}
 
 	/**
@@ -158,119 +248,125 @@ public abstract class InputContextManager implements IResourceChangeListener {
 	 * @throws Exception
 	 */
 	public void saveAs(IProgressMonitor monitor, String contextID) throws Exception {
+
 		// Find the existing context
+
 		InputContext inputContext = findContext(contextID);
+
 		if (inputContext != null) {
+
 			// Keep the old editor input
+
 			IEditorInput oldInput = editor.getEditorInput();
+
 			// Perform the save as operation
+
 			inputContext.doSaveAs(monitor);
+
 			// Get the new editor input
+
 			IEditorInput newInput = inputContext.getInput();
+
 			// Update the context manager accordingly
-			updateInputContext(newInput, oldInput);
-		} else {
-			throw new Exception("Input context not found."); //$NON-NLS-1$
+
+			_updateInputContext(newInput, oldInput);
+		}
+		else {
+			throw new Exception("Input context not found.");
 		}
 	}
 
-	public InputContext getPrimaryContext() {
-		for (Enumeration contexts = inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext) contexts.nextElement();
-			if (context.isPrimary())
-				return context;
-		}
-		return null;
-	}
-
-	public InputContext[] getInvalidContexts() {
-		ArrayList result = new ArrayList();
-		for (Enumeration contexts = inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext) contexts.nextElement();
-			if (context.isModelCorrect() == false)
-				result.add(context);
-		}
-		return (InputContext[]) result.toArray(new InputContext[result.size()]);
-	}
-
-	public boolean isDirty() {
-		for (Enumeration contexts = inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext) contexts.nextElement();
-			if (context.mustSave())
-				return true;
-		}
-		return false;
-	}
-
-	public void monitorFile(IFile file) {
-		if (monitoredFiles == null)
-			monitoredFiles = new ArrayList();
-		monitoredFiles.add(file);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.core.resources.IResourceChangeListener#resourceChanged(org.eclipse.core.resources.IResourceChangeEvent)
+	/**
+	 * @param undoManager
+	 *            The undoManager to set.
 	 */
-	public void resourceChanged(IResourceChangeEvent event) {
-		IResourceDelta delta = event.getDelta();
+	public void setUndoManager(IModelUndoManager undoManager) {
+		_undoManager = undoManager;
+	}
 
-		try {
-			delta.accept(new IResourceDeltaVisitor() {
-				public boolean visit(IResourceDelta delta) {
-					int kind = delta.getKind();
-					IResource resource = delta.getResource();
-					if (resource instanceof IFile) {
-						if (kind == IResourceDelta.ADDED)
-							asyncStructureChanged((IFile) resource, true);
-						else if (kind == IResourceDelta.REMOVED)
-							asyncStructureChanged((IFile) resource, false);
-						return false;
-					}
-					return true;
-				}
-			});
-		} catch (CoreException e) {
-			LiferayUIPlugin.logError(e);
+	public void undo() {
+		if ((_undoManager != null) && _undoManager.isUndoable()) {
+			_undoManager.undo();
 		}
 	}
 
-	private void asyncStructureChanged(final IFile file, final boolean added) {
-		if (editor == null || editor.getEditorSite() == null)
+	protected void fireContextChange(InputContext context, boolean added) {
+		for (int i = 0; i < _listeners.size(); i++) {
+			IInputContextListener listener = (IInputContextListener)_listeners.get(i);
+
+			if (added) {
+				listener.contextAdded(context);
+			}
+			else {
+				listener.contextRemoved(context);
+			}
+		}
+
+		if (added) {
+			_hookUndo(context);
+		}
+		else {
+			_unhookUndo(context);
+		}
+	}
+
+	protected void fireStructureChange(IFile file, boolean added) {
+		for (int i = 0; i < _listeners.size(); i++) {
+			IInputContextListener listener = (IInputContextListener)_listeners.get(i);
+
+			if (added) {
+				listener.monitoredFileAdded(file);
+			}
+			else {
+				listener.monitoredFileRemoved(file);
+			}
+		}
+	}
+
+	protected IDEFormEditor editor;
+
+	private void _asyncStructureChanged(IFile file, boolean added) {
+		if ((editor == null) || (editor.getEditorSite() == null)) {
 			return;
+		}
+
 		Shell shell = editor.getEditorSite().getShell();
-		Display display = shell != null ? shell.getDisplay() : Display.getDefault();
 
-		display.asyncExec(new Runnable() {
-			public void run() {
-				structureChanged(file, added);
-			}
-		});
+		Display display = (shell != null) ? shell.getDisplay() : Display.getDefault();
+
+		display.asyncExec(
+			new Runnable() {
+
+				public void run() {
+					_structureChanged(file, added);
+				}
+
+			});
 	}
 
-	private void structureChanged(IFile file, boolean added) {
-		if (monitoredFiles == null)
+	private void _hookUndo(InputContext context) {
+		if (_undoManager == null) {
 			return;
-		for (int i = 0; i < monitoredFiles.size(); i++) {
-			IFile ifile = (IFile) monitoredFiles.get(i);
-			if (ifile.equals(file)) {
-				if (added) {
-					fireStructureChange(file, true);
-				} else {
-					fireStructureChange(file, false);
-					removeContext(file);
-				}
-			}
+		}
+
+		IBaseModel model = context.getModel();
+
+		if (model instanceof IModelChangeProvider) {
+			_undoManager.connect((IModelChangeProvider)model);
 		}
 	}
 
-	private void removeContext(IFile file) {
-		for (Enumeration contexts = inputContexts.elements(); contexts.hasMoreElements();) {
-			InputContext context = (InputContext) contexts.nextElement();
+	private void _removeContext(IFile file) {
+		for (Enumeration contexts = _inputContexts.elements(); contexts.hasMoreElements();) {
+			InputContext context = (InputContext)contexts.nextElement();
+
 			IEditorInput input = context.getInput();
+
 			if (input instanceof IFileEditorInput) {
-				IFileEditorInput fileInput = (IFileEditorInput) input;
+				IFileEditorInput fileInput = (IFileEditorInput)input;
+
 				if (file.equals(fileInput.getFile())) {
-					inputContexts.remove(input);
+					_inputContexts.remove(input);
 					fireContextChange(context, false);
 					return;
 				}
@@ -278,67 +374,69 @@ public abstract class InputContextManager implements IResourceChangeListener {
 		}
 	}
 
-	protected void fireStructureChange(IFile file, boolean added) {
-		for (int i = 0; i < listeners.size(); i++) {
-			IInputContextListener listener = (IInputContextListener) listeners.get(i);
-			if (added)
-				listener.monitoredFileAdded(file);
-			else
-				listener.monitoredFileRemoved(file);
+	private void _structureChanged(IFile file, boolean added) {
+		if (_monitoredFiles == null) {
+			return;
+		}
+
+		for (int i = 0; i < _monitoredFiles.size(); i++) {
+			IFile ifile = (IFile)_monitoredFiles.get(i);
+
+			if (ifile.equals(file)) {
+				if (added) {
+					fireStructureChange(file, true);
+				}
+				else {
+					fireStructureChange(file, false);
+					_removeContext(file);
+				}
+			}
 		}
 	}
 
-	protected void fireContextChange(InputContext context, boolean added) {
-		for (int i = 0; i < listeners.size(); i++) {
-			IInputContextListener listener = (IInputContextListener) listeners.get(i);
-			if (added)
-				listener.contextAdded(context);
-			else
-				listener.contextRemoved(context);
+	private void _unhookUndo(InputContext context) {
+		if (_undoManager == null) {
+			return;
 		}
-		if (added)
-			hookUndo(context);
-		else
-			unhookUndo(context);
-	}
 
-	public void undo() {
-		if (undoManager != null && undoManager.isUndoable())
-			undoManager.undo();
-	}
-
-	public void redo() {
-		if (undoManager != null && undoManager.isRedoable())
-			undoManager.redo();
-	}
-
-	private void hookUndo(InputContext context) {
-		if (undoManager == null)
-			return;
 		IBaseModel model = context.getModel();
-		if (model instanceof IModelChangeProvider)
-			undoManager.connect((IModelChangeProvider) model);
-	}
 
-	private void unhookUndo(InputContext context) {
-		if (undoManager == null)
-			return;
-		IBaseModel model = context.getModel();
-		if (model instanceof IModelChangeProvider)
-			undoManager.disconnect((IModelChangeProvider) model);
+		if (model instanceof IModelChangeProvider) {
+			_undoManager.disconnect((IModelChangeProvider)model);
+		}
 	}
 
 	/**
-	 * @return Returns the undoManager.
+	 * Update the key (the editor input in this case) associated with the input
+	 * context without firing a context change event. Used for save as
+	 * operations.
+	 *
+	 * @param newInput
+	 * @param oldInput
+	 * @throws Exception
 	 */
-	public IModelUndoManager getUndoManager() {
-		return undoManager;
+	private void _updateInputContext(IEditorInput newInput, IEditorInput oldInput) throws Exception {
+		Object value = null;
+
+		// Retrieve the input context referenced by the old editor input and
+		// remove it from the context manager
+
+		if (_inputContexts.containsKey(oldInput)) {
+			value = _inputContexts.remove(oldInput);
+		}
+		else {
+			throw new Exception("Input context not found.");
+		}
+
+		// Re-insert the input context back into the context manager using the
+		// new editor input as its key
+
+		_inputContexts.put(newInput, value);
 	}
 
-	/**
-	 * @param undoManager The undoManager to set.
-	 */
-	public void setUndoManager(IModelUndoManager undoManager) {
-		this.undoManager = undoManager;
-	}
+	private Hashtable _inputContexts;
+	private ArrayList _listeners;
+	private ArrayList _monitoredFiles;
+	private IModelUndoManager _undoManager;
+
 }

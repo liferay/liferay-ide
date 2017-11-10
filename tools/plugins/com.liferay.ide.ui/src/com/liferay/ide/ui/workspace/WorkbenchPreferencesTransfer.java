@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.ui.workspace;
 
@@ -29,53 +28,46 @@ import org.eclipse.ui.internal.preferences.WorkbenchSettingsTransfer;
 /**
  * @author Andy Wu
  */
-@SuppressWarnings( "restriction" )
-public class WorkbenchPreferencesTransfer extends WorkbenchSettingsTransfer
-{
+@SuppressWarnings("restriction")
+public class WorkbenchPreferencesTransfer extends WorkbenchSettingsTransfer {
 
-    public WorkbenchPreferencesTransfer()
-    {
-        super();
-    }
+	public WorkbenchPreferencesTransfer() {
+	}
 
-    @Override
-    public IStatus transferSettings( IPath newWorkspaceRoot )
-    {
-        IPath currentWorkspace = Platform.getLocation();
+	@Override
+	public String getName() {
+		return "Preferences";
+	}
 
-        File srcDir = new File( currentWorkspace.toFile(), ".metadata/.plugins/org.eclipse.core.runtime/.settings" );
-        File destDir = new File( newWorkspaceRoot.toFile(), ".metadata/.plugins/org.eclipse.core.runtime/.settings" );
+	@Override
+	public IStatus transferSettings(IPath newWorkspaceRoot) {
+		IPath currentWorkspace = Platform.getLocation();
 
-        File[] srcSettings = srcDir.listFiles();
+		File srcDir = new File(currentWorkspace.toFile(), ".metadata/.plugins/org.eclipse.core.runtime/.settings");
 
-        if( !destDir.exists() )
-        {
-            if( !destDir.mkdirs() )
-                return new Status( IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, "can't create dirs" );
-        }
+		File destDir = new File(newWorkspaceRoot.toFile(), ".metadata/.plugins/org.eclipse.core.runtime/.settings");
 
-        for( File src : srcSettings )
-        {
-            File destSetting = new File( destDir.getAbsolutePath(), src.getName() );
+		File[] srcSettings = srcDir.listFiles();
 
-            if( destSetting.exists() )
-            {
-                if( !destSetting.delete() )
-                {
-                    return new Status( IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, "can't delete settings file" );
-                }
-            }
+		if (!destDir.exists()) {
+			if (!destDir.mkdirs()) {
+				return new Status(IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, "can't create dirs");
+			}
+		}
 
-            FileUtil.copyFile( src, destSetting );
-        }
+		for (File src : srcSettings) {
+			File destSetting = new File(destDir.getAbsolutePath(), src.getName());
 
-        return Status.OK_STATUS;
-    }
+			if (destSetting.exists()) {
+				if (!destSetting.delete()) {
+					return new Status(IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, "can't delete settings file");
+				}
+			}
 
-    @Override
-    public String getName()
-    {
-        return "Preferences";
-    }
+			FileUtil.copyFile(src, destSetting);
+		}
+
+		return Status.OK_STATUS;
+	}
 
 }
