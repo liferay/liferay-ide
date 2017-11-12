@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.core;
 
 import java.util.Collections;
@@ -21,98 +21,83 @@ import java.util.List;
  * @author Gregory Amerson
  */
 public abstract class AbstractLiferayProjectProvider
-    implements ILiferayProjectProvider, Comparable<ILiferayProjectProvider>
-{
-    private Class<?>[] classTypes;
-    private String displayName;
-    private boolean isDefault;
-    private int priority;
-    private String shortName;
-    private String projectType;
+	implements ILiferayProjectProvider, Comparable<ILiferayProjectProvider> {
 
-    public AbstractLiferayProjectProvider( Class<?>[] types )
-    {
-        this.classTypes = types;
-    }
+	public AbstractLiferayProjectProvider(Class<?>[] types) {
+		_classTypes = types;
+	}
 
-    public int compareTo( ILiferayProjectProvider provider )
-    {
-        if( provider != null )
-        {
-            return this.shortName.compareTo( provider.getShortName() );
-        }
+	public int compareTo(ILiferayProjectProvider provider) {
+		if (provider == null) {
+			return 0;
+		}
 
-        return 0;
-    }
+		return _shortName.compareTo(provider.getShortName());
+	}
 
-    public <T> List<T> getData( String key, Class<T> type, Object... params )
-    {
-        return Collections.emptyList();
-    }
+	public <T> List<T> getData(String key, Class<T> type, Object... params) {
+		return Collections.emptyList();
+	}
 
-    public String getDisplayName()
-    {
-        return this.displayName;
-    }
+	public String getDisplayName() {
+		return _displayName;
+	}
 
-    public int getPriority()
-    {
-        return this.priority;
-    }
+	public int getPriority() {
+		return _priority;
+	}
 
-    public String getShortName()
-    {
-        return this.shortName;
-    }
+	public String getProjectType() {
+		return _projectType;
+	}
 
-    public String getProjectType()
-    {
-        return this.projectType;
-    }
+	public String getShortName() {
+		return _shortName;
+	}
 
-    public boolean isDefault()
-    {
-        return this.isDefault;
-    }
+	public boolean isDefault() {
+		return _isDefault;
+	}
 
-    public boolean provides( Class<?> type )
-    {
-        if( type != null && classTypes != null )
-        {
-            for( Class<?> classType : classTypes )
-            {
-                if( classType.isAssignableFrom( type ) )
-                {
-                    return true;
-                }
-            }
-        }
+	public boolean provides(Class<?> type) {
+		if ((type == null) || (_classTypes == null)) {
+			return false;
+		}
 
-        return false;
-    }
+		for (Class<?> classType : _classTypes) {
+			if (classType.isAssignableFrom(type)) {
+				return true;
+			}
+		}
 
-    public void setDefault( boolean isDefault )
-    {
-        this.isDefault = isDefault;
-    }
+		return false;
+	}
 
-    public void setDisplayName( String displayName )
-    {
-        this.displayName = displayName;
-    }
+	public void setDefault(boolean isDefault) {
+		_isDefault = isDefault;
+	}
 
-    public void setPriority( int priority )
-    {
-        this.priority = priority;
-    }
+	public void setDisplayName(String displayName) {
+		_displayName = displayName;
+	}
 
-    public void setShortName( String shortName )
-    {
-        this.shortName = shortName;
-    }
+	public void setPriority(int priority) {
+		_priority = priority;
+	}
 
-    public void setProjectType( String type )
-    {
-        this.projectType = type;
-    }
+	public void setProjectType(String type) {
+		_projectType = type;
+	}
+
+	public void setShortName(String shortName) {
+		_shortName = shortName;
+	}
+
+	private Class<?>[] _classTypes;
+	private String _displayName;
+	private boolean _isDefault;
+	private int _priority;
+	private String _projectType;
+	private String _shortName;
+
 }

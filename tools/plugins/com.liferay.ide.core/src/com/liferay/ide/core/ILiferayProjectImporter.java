@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core;
 
@@ -26,15 +25,14 @@ import org.eclipse.core.runtime.IStatus;
  * @author Andy Wu
  * @author Terry Jia
  */
-public interface ILiferayProjectImporter
-{
+public interface ILiferayProjectImporter {
 
-    IStatus canImport( String location );
+	public IStatus canImport(String location);
 
-    String getBuildType();
+	public String getBuildType();
 
-    int getPriority();
+	public int getPriority();
 
-    List<IProject> importProjects( String location, IProgressMonitor monitor ) throws CoreException;
+	public List<IProject> importProjects(String location, IProgressMonitor monitor) throws CoreException;
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core.templates;
 
@@ -22,35 +19,28 @@ import com.liferay.ide.core.util.CoreUtil;
 /**
  * @author Gregory Amerson
  */
-public class TemplateVariable
-{
+public class TemplateVariable {
 
-    private String name;
+	public TemplateVariable(String varName, String reqVal) {
+		_name = varName;
 
-    private boolean required;
+		if (CoreUtil.isNullOrEmpty(reqVal)) {
+			_required = Boolean.FALSE;
+		}
+		else {
+			_required = Boolean.parseBoolean(reqVal);
+		}
+	}
 
-    public TemplateVariable( String varName, String reqVal )
-    {
-        this.name = varName;
+	public String getName() {
+		return _name;
+	}
 
-        if( CoreUtil.isNullOrEmpty( reqVal ) )
-        {
-            this.required = Boolean.FALSE;
-        }
-        else
-        {
-            this.required = Boolean.parseBoolean( reqVal );
-        }
-    }
+	public boolean isRequired() {
+		return _required;
+	}
 
-    public String getName()
-    {
-        return name;
-    }
-
-    public boolean isRequired()
-    {
-        return required;
-    }
+	private String _name;
+	private boolean _required;
 
 }

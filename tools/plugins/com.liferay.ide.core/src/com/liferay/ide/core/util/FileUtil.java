@@ -1,14 +1,16 @@
-/******************************************************************************
- * Copyright (c) 2010 Oracle
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Original file was copied from
- * org.eclipse.wst.common.project.facet.core.util.internal.FileUtil
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- ******************************************************************************/
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.core.util;
 
@@ -29,7 +31,9 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+
 import java.nio.file.Files;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,14 +51,16 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.osgi.util.NLS;
+
 import org.w3c.dom.Document;
+
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 
@@ -62,713 +68,699 @@ import org.xml.sax.ErrorHandler;
  * @author Greg Amerson
  * @author Cindy Li
  * @author Simon Jiang
+ * @author Terry Jia
  */
-public class FileUtil
-{
+public class FileUtil {
 
-    public static void clearContents( File versionFile )
-    {
-        if( versionFile != null && versionFile.exists() )
-        {
-            try
-            {
-                RandomAccessFile file = new RandomAccessFile( versionFile, "rw" ); //$NON-NLS-1$
-                file.setLength( 0 );
-                file.close();
-            }
-            catch( Exception ex )
-            {
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    public static void copyFileToIFolder( File file, IFolder folder, IProgressMonitor monitor ) throws CoreException
-    {
-        final IFile iFile = folder.getFile( file.getName() );
-
-        try( final InputStream input = Files.newInputStream( file.toPath() ) )
-        {
-            if( iFile.exists() )
-            {
-                iFile.setContents( input, true, true, monitor );
-            }
-            else
-            {
-                iFile.create( input, true, monitor );
-            }
-        }
-        catch( Exception e )
-        {
-            throw new CoreException( LiferayCore.createErrorStatus(
-                "Could not copy file to folder " + file.getName(), e ) );
-        }
-    }
-
-    public static void copyFile( File src, File dest )
-    {
-        if( src == null || ( !src.exists() ) || dest == null || dest.isDirectory() )
-        {
-            return;
-        }
-
-        byte[] buf = new byte[4096];
-
-        try( OutputStream out = Files.newOutputStream( dest.toPath() );
-               InputStream in = Files.newInputStream( src.toPath() ) )
-        {
-            int avail = in.read( buf );
-            while( avail > 0 )
-            {
-                out.write( buf, 0, avail );
-                avail = in.read( buf );
-            }
-        }
-        catch( Exception e )
-        {
-            LiferayCore.logError( "Unable to copy file " + src.getName() + " to " + dest.getAbsolutePath(), e );
-        }
-    }
-
-    public static void copyFileToDir( File src, File dir )
-    {
-        copyFileToDir( src, src.getName(), dir );
-    }
-
-    public static void copyFileToDir( File src, String newName, File dir )
-    {
-        copyFile( src, new File( dir, newName ) );
-    }
-
-    public static void deleteDir( File directory, boolean removeAll )
-    {
-        if( directory == null || !directory.isDirectory() )
-        {
-            return;
-        }
-
-        for( File file : directory.listFiles() )
-        {
-            if( file.isDirectory() && removeAll )
-            {
-                deleteDir( file, removeAll );
-            }
-            else
-            {
-                file.delete();
-            }
-        }
-
-        directory.delete();
-    }
-
-    public static void deleteDirContents( final File directory )
-    {
-        if( directory == null || !directory.isDirectory() )
-        {
-            return;
-        }
-
-        for( File file : directory.listFiles() )
-        {
-            if( file.isDirectory() )
-            {
-                deleteDir( file, true );
-            }
-            else
-            {
-                file.delete();
-            }
-        }
-
-    }
-
-    public static boolean exists(File file)
-    {
-        	return file != null && file.exists();
-    }
-
-    public static boolean exists(IFile file)
-    {
-        	return file != null && file.exists();
-    }
-
-    public static boolean exists(IFolder folder)
-    {
-        	return folder != null && folder.exists();
-    }
-
-    public static boolean exists(IPath path)
-    {
-        	return path != null && path.toFile().exists();
-    }
-
-    public static boolean exists(IProject project)
-    {
-        	return project != null && project.exists();
-    }
-
-    public static boolean exists(IResource resource)
-    {
-        	return resource != null && resource.exists();
-    }
-
-    public static boolean exists(IContainer container)
-    {
-        	return container != null && container.exists();
-    }
-
-    public static File[] getDirectories( File directory )
-    {
-        return directory.listFiles
-        (
-            new FileFilter()
-            {
-                @Override
-                public boolean accept( File file )
-                {
-                    return file.isDirectory();
-                }
-            }
-        );
-    }
-
-	public static File getFile(IFile file) {
-		if (exists(file)) {
-			return file.getLocation().toFile();
+	public static void clearContents(File versionFile) {
+		if (notExists(versionFile)) {
+			return;
 		}
 
-		return null;
+		try {
+			RandomAccessFile file = new RandomAccessFile(versionFile, "rw");
+
+			file.setLength(0);
+
+			file.close();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public static void copyFile(File src, File dest) {
+		if (notExists(src) || (dest == null) || dest.isDirectory()) {
+			return;
+		}
+
+		byte[] buf = new byte[4096];
+
+		try (OutputStream out = Files.newOutputStream(dest.toPath());
+			InputStream in = Files.newInputStream(src.toPath())) {
+
+			int avail = in.read(buf);
+
+			while (avail > 0) {
+				out.write(buf, 0, avail);
+
+				avail = in.read(buf);
+			}
+		}
+		catch (Exception e) {
+			LiferayCore.logError("Unable to copy file " + src.getName() + " to " + dest.getAbsolutePath(), e);
+		}
+	}
+
+	public static void copyFileToDir(File src, File dir) {
+		copyFileToDir(src, src.getName(), dir);
+	}
+
+	public static void copyFileToDir(File src, String newName, File dir) {
+		copyFile(src, new File(dir, newName));
+	}
+
+	public static void copyFileToIFolder(File file, IFolder folder, IProgressMonitor monitor) throws CoreException {
+		IFile iFile = folder.getFile(file.getName());
+
+		try (InputStream input = Files.newInputStream(file.toPath())) {
+			if (exists(iFile)) {
+				iFile.setContents(input, true, true, monitor);
+			}
+			else {
+				iFile.create(input, true, monitor);
+			}
+		}
+		catch (Exception e) {
+			throw new CoreException(
+				LiferayCore.createErrorStatus("Could not copy file to folder " + file.getName(), e));
+		}
+	}
+
+	public static void deleteDir(File dir, boolean removeAll) {
+		if (isNotDir(dir)) {
+			return;
+		}
+
+		for (File file : dir.listFiles()) {
+			if (file.isDirectory() && removeAll) {
+				deleteDir(file, removeAll);
+			}
+			else {
+				file.delete();
+			}
+		}
+
+		dir.delete();
+	}
+
+	public static void deleteDirContents(File dir) {
+		if (isNotDir(dir)) {
+			return;
+		}
+
+		for (File file : dir.listFiles()) {
+			if (file.isDirectory()) {
+				deleteDir(file, true);
+			}
+			else {
+				file.delete();
+			}
+		}
+	}
+
+	public static boolean exists(File file) {
+		if ((file != null) && file.exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean exists(IContainer container) {
+		if ((container != null) && container.exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean exists(IFile file) {
+		if ((file != null) && file.exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean exists(IFolder folder) {
+		if ((folder != null) && folder.exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean exists(IJavaProject project) {
+		if ((project != null) && project.exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean exists(IPath path) {
+		if ((path != null) && path.toFile().exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean exists(IProject project) {
+		if ((project != null) && project.exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean exists(IResource resource) {
+		if ((resource != null) && resource.exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static File[] getDirectories(File directory) {
+		return directory.listFiles(
+			new FileFilter() {
+
+				@Override
+				public boolean accept(File file) {
+					return file.isDirectory();
+				}
+
+			});
+	}
+
+	public static File getFile(IFile file) {
+		if (notExists(file)) {
+			return null;
+		}
+
+		return file.getLocation().toFile();
 	}
 
 	public static File getFile(IPath path) {
-		if (exists(path)) {
-			return path.toFile();
+		if (notExists(path)) {
+			return null;
+		}
+
+		return path.toFile();
+	}
+
+	public static IContainer getWorkspaceContainer(File file) {
+		IWorkspaceRoot root = CoreUtil.getWorkspaceRoot();
+
+		IPath path = new Path(file.getAbsolutePath());
+
+		IContainer[] containers = root.findContainersForLocationURI(path.toFile().toURI());
+
+		if (containers.length == 0) {
+			return null;
+		}
+
+		return containers[0];
+	}
+
+	public static IFile getWorkspaceFile(File file, String expectedProjectName) {
+		IWorkspaceRoot root = CoreUtil.getWorkspaceRoot();
+
+		IPath path = new Path(file.getAbsolutePath());
+
+		IFile[] files = root.findFilesForLocationURI(path.toFile().toURI());
+
+		if (files.length == 0) {
+			return null;
+		}
+
+		for (IFile wsFile : files) {
+			String projectName = wsFile.getProject().getName();
+
+			if (projectName.equals(expectedProjectName)) {
+				return wsFile;
+			}
 		}
 
 		return null;
 	}
 
-    public static IContainer getWorkspaceContainer( final File f )
-    {
-        final IWorkspace ws = ResourcesPlugin.getWorkspace();
-        final IWorkspaceRoot wsroot = ws.getRoot();
-        final IPath path = new Path( f.getAbsolutePath() );
+	public static boolean isFile(File file) {
+		if (exists(file) && file.isFile()) {
+			return true;
+		}
 
-        final IContainer[] wsContainers = wsroot.findContainersForLocationURI( path.toFile().toURI() );
-
-        if( wsContainers.length > 0 )
-        {
-            return wsContainers[ 0 ];
-        }
-
-        return null;
-    }
-
-    public static IFile getWorkspaceFile( final File f, String expectedProjectName )
-    {
-        final IWorkspace ws = ResourcesPlugin.getWorkspace();
-        final IWorkspaceRoot wsroot = ws.getRoot();
-        final IPath path = new Path( f.getAbsolutePath() );
-
-        final IFile[] wsFiles = wsroot.findFilesForLocationURI( path.toFile().toURI() );
-
-        if( wsFiles.length > 0 )
-        {
-            for( IFile wsFile : wsFiles )
-            {
-                if( wsFile.getProject().getName().equals( expectedProjectName ) )
-                {
-                    return wsFile;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public static void mkdirs( final File f ) throws CoreException
-    {
-        if( f.exists() )
-        {
-            if( f.isFile() )
-            {
-                final String msg = NLS.bind( Msgs.locationIsFile, f.getAbsolutePath() );
-
-                throw new CoreException( LiferayCore.createErrorStatus( msg ) );
-            }
-        }
-        else
-        {
-            mkdirs( f.getParentFile() );
-
-            final IContainer wsContainer = getWorkspaceContainer( f );
-
-            if( wsContainer != null )
-            {
-                // Should be a folder...
-
-                final IFolder iFolder = (IFolder) wsContainer;
-                iFolder.create( true, true, null );
-            }
-            else
-            {
-                final boolean isSuccessful = f.mkdir();
-
-                if( !isSuccessful )
-                {
-                    final String msg = NLS.bind( Msgs.failedToCreateDirectory, f.getAbsolutePath() );
-
-                    throw new CoreException( LiferayCore.createErrorStatus( msg ) );
-                }
-            }
-        }
-    }
-
-	public static boolean notExists(File file){
-		return file == null || !file.exists();
+		return false;
 	}
 
-	public static boolean notExists(IPath path){
-		return path == null || !path.toFile().exists();
+	public static boolean isNotDir(File dir) {
+		if (notExists(dir) || !dir.isDirectory()) {
+			return true;
+		}
+
+		return false;
 	}
 
-    public static boolean notExists(IFile file)
-    {
-        	return file == null || !file.exists();
-    }
-
-    public static boolean notExists(IFolder folder)
-    {
-        	return folder == null || !folder.exists();
-    }
-
-    public static boolean notExists(IProject project)
-    {
-        	return project == null || !project.exists();
-    }
-
-    public static boolean notExists(IResource resource)
-    {
-        	return resource == null || !resource.exists();
-    }
-
-    public static String readContents( File file )
-    {
-        return readContents( file, false );
-    }
-
-    public static String readContents( File file, boolean includeNewlines )
-    {
-        if( file == null )
-        {
-            return null;
-        }
-
-        if( !file.exists() )
-        {
-            return null;
-        }
-
-        StringBuffer contents = new StringBuffer();
-        BufferedReader bufferedReader = null;
-
-        try
-        {
-            FileReader fileReader = new FileReader( file );
-
-            bufferedReader = new BufferedReader( fileReader );
-
-            String line;
-
-            while( ( line = bufferedReader.readLine() ) != null )
-            {
-                contents.append( line );
-
-                if( includeNewlines )
-                {
-                    contents.append( System.getProperty( "line.separator" ) ); //$NON-NLS-1$
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            LiferayCore.logError( "Could not read file: " + file.getPath() ); //$NON-NLS-1$
-        }
-        finally
-        {
-            if( bufferedReader != null )
-            {
-                try
-                {
-                    bufferedReader.close();
-                }
-                catch( IOException e )
-                {
-                    // best effort no need to log
-                }
-            }
-        }
-
-        return contents.toString();
-    }
-
-    public static String readContents( InputStream contents ) throws IOException
-    {
-        byte[] buffer = new byte[4096];
-
-        BufferedInputStream bin = new BufferedInputStream( contents );
-        StringBufferOutputStream out = new StringBufferOutputStream();
-
-        int bytesRead = 0;
-//        int bytesTotal = 0;
-
-        // Keep reading from the file while there is any content
-        // when the end of the stream has been reached, -1 is returned
-        while( ( bytesRead = bin.read( buffer ) ) != -1 )
-        {
-            out.write( buffer, 0, bytesRead );
-//            bytesTotal += bytesRead;
-        }
-
-        if( bin != null )
-        {
-            bin.close();
-        }
-
-        if( out != null )
-        {
-            out.flush();
-            out.close();
-        }
-
-        return out.toString();
-    }
-
-    public static String[] readLinesFromFile( File file )
-    {
-        return readLinesFromFile( file, false );
-    }
-
-    public static String[] readLinesFromFile( File file, boolean includeNewlines )
-    {
-        if( file == null )
-        {
-            return null;
-        }
-
-        if( !file.exists() )
-        {
-            return null;
-        }
-
-        List<String> lines = new ArrayList<String>();
-        BufferedReader bufferedReader = null;
-
-        try
-        {
-            FileReader fileReader = new FileReader( file );
-
-            bufferedReader = new BufferedReader( fileReader );
-
-            String line;
-
-            while( ( line = bufferedReader.readLine() ) != null )
-            {
-                StringBuffer contents = new StringBuffer(line);
-
-                if( includeNewlines )
-                {
-                    contents.append( System.getProperty( "line.separator" ) ); //$NON-NLS-1$
-                }
-
-                lines.add( contents.toString() );
-            }
-        }
-        catch( Exception e )
-        {
-            LiferayCore.logError( "Could not read file: " + file.getPath() ); //$NON-NLS-1$
-        }
-        finally
-        {
-            if( bufferedReader != null )
-            {
-                try
-                {
-                    bufferedReader.close();
-                }
-                catch( Exception e )
-                {
-                    // no need to log, best effort
-                }
-            }
-        }
-
-        return lines.toArray( new String[lines.size()] );
-    }
-
-    public static Document readXML( InputStream inputStream, EntityResolver resolver, ErrorHandler error )
-    {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db;
-
-        try
-        {
-            db = dbf.newDocumentBuilder();
-
-            if( resolver != null )
-            {
-                db.setEntityResolver( resolver );
-            }
-
-            if( error != null )
-            {
-                db.setErrorHandler( error );
-            }
-
-            return db.parse( inputStream );
-        }
-        catch( Throwable t )
-        {
-            return null;
-        }
-    }
-
-    public static Document readXML( String content )
-    {
-        return readXML( new ByteArrayInputStream( content.getBytes() ), null, null );
-    }
-
-    public static Document readXMLFile( File file )
-    {
-        return readXMLFile( file, null );
-    }
-
-    public static Document readXMLFile( File file, EntityResolver resolver )
-    {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db;
-
-        try
-        {
-            db = dbf.newDocumentBuilder();
-
-            if( resolver != null )
-            {
-                db.setEntityResolver( resolver );
-            }
-
-            return db.parse( file );
-        }
-        catch( Throwable t )
-        {
-            return null;
-        }
-    }
-
-    public static boolean searchAndReplace( File file, String search, String replace ) throws FileNotFoundException, IOException
-    {
-        boolean replaced = false;
-
-        if( file.exists() )
-        {
-            final String searchContents = CoreUtil.readStreamToString( Files.newInputStream( file.toPath() ) );
-
-            final String replaceContents = searchContents.replaceAll( search, replace );
-
-            replaced = ! searchContents.equals( replaceContents );
-
-            CoreUtil.writeStreamFromString( replaceContents, Files.newOutputStream( file.toPath() ) );
-        }
-
-        return replaced;
-    }
-
-    public static void validateEdit( final IFile... files ) throws CoreException
-    {
-        final IWorkspace ws = ResourcesPlugin.getWorkspace();
-        final IStatus st = ws.validateEdit( files, IWorkspace.VALIDATE_PROMPT );
-
-        if( st.getSeverity() == IStatus.ERROR )
-        {
-            throw new CoreException( st );
-        }
-    }
-
-    public static String validateNewFolder( IFolder folder, String folderValue )
-    {
-        if( folder == null || folderValue == null )
-        {
-            return null;
-        }
-
-        if( CoreUtil.isNullOrEmpty( folderValue ) )
-        {
-            return Msgs.folderValueNotEmpty;
-        }
-
-        if( !Path.ROOT.isValidPath( folderValue ) )
-        {
-            return Msgs.folderValueInvalid;
-        }
-
-        IWorkspace workspace = ResourcesPlugin.getWorkspace();
-
-        IStatus result =
-            workspace.validatePath( folder.getFolder( folderValue ).getFullPath().toString(), IResource.FOLDER );
-
-        if( !result.isOK() )
-        {
-            return result.getMessage();
-        }
-
-        if( folder.getFolder( new Path( folderValue ) ).exists() )
-        {
-            return Msgs.folderAlreadyExists;
-        }
-
-        return null;
-    }
-
-    public static void writeFile( final File f, final byte[] contents, final String expectedProjectName ) throws CoreException
-    {
-        writeFile( f, new ByteArrayInputStream( contents ), expectedProjectName );
-    }
-
-    public static void writeFile( final File f, final InputStream contents ) throws CoreException
-    {
-        writeFile( f, contents, null );
-    }
-
-    public static void writeFile( final File f, final InputStream contents, final String expectedProjectName ) throws CoreException
-    {
-        if( f.exists() )
-        {
-            if( f.isDirectory() )
-            {
-                final String msg = NLS.bind( Msgs.locationIsDirectory, f.getAbsolutePath() );
-
-                throw new CoreException( LiferayCore.createErrorStatus( msg ) );
-            }
-        }
-        else
-        {
-            mkdirs( f.getParentFile() );
-        }
-
-        final IFile wsfile = getWorkspaceFile( f, expectedProjectName );
-
-        if( wsfile != null )
-        {
-            validateEdit( new IFile[] { wsfile } );
-
-            if( wsfile.exists() )
-            {
-                wsfile.setContents( contents, true, false, null );
-            }
-            else
-            {
-                wsfile.create( contents, true, null );
-            }
-        }
-        else
-        {
-            if( f.exists() && !f.canWrite() )
-            {
-                final String msg = NLS.bind( Msgs.cannotWriteFile, f.getAbsolutePath() );
-
-                throw new CoreException( LiferayCore.createErrorStatus( msg ) );
-            }
-
-            final byte[] buffer = new byte[1024];
-
-            try( OutputStream out = Files.newOutputStream( f.toPath() ) )
-            {
-                for( int count; ( count = contents.read( buffer ) ) != -1; )
-                {
-                    out.write( buffer, 0, count );
-                }
-
-                out.flush();
-            }
-            catch( IOException e )
-            {
-                final String msg = NLS.bind( Msgs.failedWhileWriting, f.getAbsolutePath() );
-
-                throw new CoreException( LiferayCore.createErrorStatus( msg, e ) );
-            }
-        }
-    }
-
-    public static void writeFile( final File f, final String contents, final String expectedProjectName ) throws CoreException
-    {
-        try
-        {
-            writeFile( f, contents.getBytes( "UTF-8" ), expectedProjectName );
-        }
-        catch( UnsupportedEncodingException e )
-        {
-            throw new RuntimeException( e );
-        }
-    }
-
-    public static int writeFileFromStream( File tempFile, InputStream in ) throws IOException
-    {
-        byte[] buffer = new byte[1024];
-
-        BufferedOutputStream out = new BufferedOutputStream( Files.newOutputStream( tempFile.toPath() ) );
-        BufferedInputStream bin = new BufferedInputStream( in );
-
-        int bytesRead = 0;
-        int bytesTotal = 0;
-
-        // Keep reading from the file while there is any content
-        // when the end of the stream has been reached, -1 is returned
-        while( ( bytesRead = bin.read( buffer ) ) != -1 )
-        {
-            out.write( buffer, 0, bytesRead );
-            bytesTotal += bytesRead;
-        }
-
-        if( bin != null )
-        {
-            bin.close();
-        }
-
-        if( out != null )
-        {
-            out.flush();
-            out.close();
-        }
-
-        return bytesTotal;
-    }
-
-    private static class Msgs extends NLS
-    {
-        public static String cannotWriteFile;
-        public static String failedToCreateDirectory;
-        public static String failedWhileWriting;
-        public static String folderAlreadyExists;
-        public static String folderValueInvalid;
-        public static String folderValueNotEmpty;
-        public static String locationIsDirectory;
-        public static String locationIsFile;
-
-        static
-        {
-            initializeMessages( FileUtil.class.getName(), Msgs.class );
-        }
-    }
-
-    public static String writeXml( Document document ) throws Exception
-    {
-        TransformerFactory tf = TransformerFactory.newInstance();
-        Transformer transformer = tf.newTransformer();
-        StringWriter writer = new StringWriter();
-        transformer.transform( new DOMSource( document ), new StreamResult( writer ) );
-
-        return writer.getBuffer().toString();
-    }
+	public static void mkdirs(File f) throws CoreException {
+		if (f.exists()) {
+			if (f.isFile()) {
+				String msg = NLS.bind(Msgs.locationIsFile, f.getAbsolutePath());
+
+				throw new CoreException(LiferayCore.createErrorStatus(msg));
+			}
+		}
+		else {
+			mkdirs(f.getParentFile());
+
+			IContainer wsContainer = getWorkspaceContainer(f);
+
+			if (wsContainer != null) {
+				// Should be a folder...
+
+				IFolder iFolder = (IFolder) wsContainer;
+
+				iFolder.create(true, true, null);
+			}
+			else {
+				boolean isSuccessful = f.mkdir();
+
+				if (!isSuccessful) {
+					String msg = NLS.bind(Msgs.failedToCreateDirectory, f.getAbsolutePath());
+
+					throw new CoreException(LiferayCore.createErrorStatus(msg));
+				}
+			}
+		}
+	}
+
+	public static boolean notExists(File file) {
+		if ((file == null) || !file.exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean notExists(IFile file) {
+		if ((file == null) || !file.exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean notExists(IFolder folder) {
+		if ((folder == null) || !folder.exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean notExists(IJavaProject project) {
+		if ((project == null) || !project.exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean notExists(IPath path) {
+		if ((path == null) || !path.toFile().exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean notExists(IProject project) {
+		if ((project == null) || !project.exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean notExists(IResource resource) {
+		if ((resource == null) || !resource.exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static String readContents(File file) {
+		return readContents(file, false);
+	}
+
+	public static String readContents(File file, boolean includeNewlines) {
+		if (notExists(file)) {
+			return null;
+		}
+
+		StringBuffer contents = new StringBuffer();
+
+		BufferedReader bufferedReader = null;
+
+		try {
+			FileReader fileReader = new FileReader(file);
+
+			bufferedReader = new BufferedReader(fileReader);
+
+			String line;
+
+			while ((line = bufferedReader.readLine()) != null) {
+				contents.append(line);
+
+				if (includeNewlines) {
+					contents.append(System.getProperty("line.separator"));
+				}
+			}
+		}
+		catch (Exception e) {
+			LiferayCore.logError("Could not read file: " + file.getPath());
+		}
+		finally {
+			if (bufferedReader != null) {
+				try {
+					bufferedReader.close();
+				}
+				catch (IOException ioe) {
+
+					// best effort no need to log
+
+				}
+			}
+		}
+
+		return contents.toString();
+	}
+
+	public static String readContents(InputStream contents) throws IOException {
+		byte[] buffer = new byte[4096];
+
+		BufferedInputStream bin = new BufferedInputStream(contents);
+
+		StringBufferOutputStream out = new StringBufferOutputStream();
+
+		int bytesRead = 0;
+
+		// int bytesTotal = 0;
+
+		/*
+		 * Keep reading from the file while there is any content when the end of the stream has been reached,
+		 * -1 is returned
+		 */
+		while ((bytesRead = bin.read(buffer)) != -1) {
+			out.write(buffer, 0, bytesRead);
+
+			// bytesTotal += bytesRead;
+
+		}
+
+		if (bin != null) {
+			bin.close();
+		}
+
+		if (out != null) {
+			out.flush();
+
+			out.close();
+		}
+
+		return out.toString();
+	}
+
+	public static String[] readLinesFromFile(File file) {
+		return readLinesFromFile(file, false);
+	}
+
+	public static String[] readLinesFromFile(File file, boolean includeNewlines) {
+		if (notExists(file)) {
+			return null;
+		}
+
+		List<String> lines = new ArrayList<>();
+
+		BufferedReader bufferedReader = null;
+
+		try {
+			FileReader fileReader = new FileReader(file);
+
+			bufferedReader = new BufferedReader(fileReader);
+
+			String line;
+
+			while ((line = bufferedReader.readLine()) != null) {
+				StringBuffer contents = new StringBuffer(line);
+
+				if (includeNewlines) {
+					contents.append(System.getProperty("line.separator"));
+				}
+
+				lines.add(contents.toString());
+			}
+		}
+		catch (Exception e) {
+			LiferayCore.logError("Could not read file: " + file.getPath());
+		}
+		finally {
+			if (bufferedReader != null) {
+				try {
+					bufferedReader.close();
+				}
+				catch (Exception e) {
+
+					// no need to log, best effort
+
+				}
+			}
+		}
+
+		return lines.toArray(new String[lines.size()]);
+	}
+
+	public static Document readXML(InputStream inputStream, EntityResolver resolver, ErrorHandler error) {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+		DocumentBuilder db;
+
+		try {
+			db = dbf.newDocumentBuilder();
+
+			if (resolver != null) {
+				db.setEntityResolver(resolver);
+			}
+
+			if (error != null) {
+				db.setErrorHandler(error);
+			}
+
+			return db.parse(inputStream);
+		}
+		catch (Throwable t) {
+			return null;
+		}
+	}
+
+	public static Document readXML(String content) {
+		return readXML(new ByteArrayInputStream(content.getBytes()), null, null);
+	}
+
+	public static Document readXMLFile(File file) {
+		return readXMLFile(file, null);
+	}
+
+	public static Document readXMLFile(File file, EntityResolver resolver) {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+		DocumentBuilder db;
+
+		try {
+			db = dbf.newDocumentBuilder();
+
+			if (resolver != null) {
+				db.setEntityResolver(resolver);
+			}
+
+			return db.parse(file);
+		}
+		catch (Throwable t) {
+			return null;
+		}
+	}
+
+	public static boolean searchAndReplace(File file, String search, String replace)
+		throws FileNotFoundException, IOException {
+
+		if (notExists(file)) {
+			return false;
+		}
+
+		String searchContents = CoreUtil.readStreamToString(Files.newInputStream(file.toPath()));
+
+		String replaceContents = searchContents.replaceAll(search, replace);
+
+		boolean replaced = !searchContents.equals(replaceContents);
+
+		CoreUtil.writeStreamFromString(replaceContents, Files.newOutputStream(file.toPath()));
+
+		return replaced;
+	}
+
+	public static void validateEdit(IFile... files) throws CoreException {
+		IWorkspace ws = CoreUtil.getWorkspace();
+
+		IStatus st = ws.validateEdit(files, IWorkspace.VALIDATE_PROMPT);
+
+		if (st.getSeverity() == IStatus.ERROR) {
+			throw new CoreException(st);
+		}
+	}
+
+	public static String validateNewFolder(IFolder folder, String folderValue) {
+		if ((folder == null) || (folderValue == null)) {
+			return null;
+		}
+
+		if (CoreUtil.isNullOrEmpty(folderValue)) {
+			return Msgs.folderValueNotEmpty;
+		}
+
+		if (!Path.ROOT.isValidPath(folderValue)) {
+			return Msgs.folderValueInvalid;
+		}
+
+		IPath path = folder.getFolder(folderValue).getFullPath();
+
+		IStatus result = CoreUtil.getWorkspace().validatePath(path.toString(), IResource.FOLDER);
+
+		if (!result.isOK()) {
+			return result.getMessage();
+		}
+
+		if (folder.getFolder(new Path(folderValue)).exists()) {
+			return Msgs.folderAlreadyExists;
+		}
+
+		return null;
+	}
+
+	public static void writeFile(File f, byte[] contents, String expectedProjectName) throws CoreException {
+		writeFile(f, new ByteArrayInputStream(contents), expectedProjectName);
+	}
+
+	public static void writeFile(File f, InputStream contents) throws CoreException {
+		writeFile(f, contents, null);
+	}
+
+	public static void writeFile(File f, InputStream contents, String expectedProjectName) throws CoreException {
+		if (f.exists()) {
+			if (f.isDirectory()) {
+				String msg = NLS.bind(Msgs.locationIsDirectory, f.getAbsolutePath());
+
+				throw new CoreException(LiferayCore.createErrorStatus(msg));
+			}
+		}
+		else {
+			mkdirs(f.getParentFile());
+		}
+
+		IFile wsfile = getWorkspaceFile(f, expectedProjectName);
+
+		if (wsfile != null) {
+			validateEdit(new IFile[] {wsfile});
+
+			if (wsfile.exists()) {
+				wsfile.setContents(contents, true, false, null);
+			}
+			else {
+				wsfile.create(contents, true, null);
+			}
+		}
+		else {
+			if (f.exists() && !f.canWrite()) {
+				String msg = NLS.bind(Msgs.cannotWriteFile, f.getAbsolutePath());
+
+				throw new CoreException(LiferayCore.createErrorStatus(msg));
+			}
+
+			byte[] buffer = new byte[1024];
+
+			try (OutputStream out = Files.newOutputStream(f.toPath())) {
+				for (int count; (count = contents.read(buffer)) != -1;) {
+					out.write(buffer, 0, count);
+				}
+
+				out.flush();
+			}
+			catch (IOException ioe) {
+				String msg = NLS.bind(Msgs.failedWhileWriting, f.getAbsolutePath());
+
+				throw new CoreException(LiferayCore.createErrorStatus(msg, ioe));
+			}
+		}
+	}
+
+	public static void writeFile(File f, String contents, String expectedProjectName) throws CoreException {
+		try {
+			writeFile(f, contents.getBytes("UTF-8"), expectedProjectName);
+		}
+		catch (UnsupportedEncodingException uee) {
+			throw new RuntimeException(uee);
+		}
+	}
+
+	public static int writeFileFromStream(File tempFile, InputStream in) throws IOException {
+		byte[] buffer = new byte[1024];
+
+		BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(tempFile.toPath()));
+
+		BufferedInputStream bin = new BufferedInputStream(in);
+
+		int bytesRead = 0;
+		int bytesTotal = 0;
+
+		/*
+		 * Keep reading from the file while there is any content when the end of the stream has been reached, -1 is returned
+		 */
+		while ((bytesRead = bin.read(buffer)) != -1) {
+			out.write(buffer, 0, bytesRead);
+			bytesTotal += bytesRead;
+		}
+
+		if (bin != null) {
+			bin.close();
+		}
+
+		if (out != null) {
+			out.flush();
+
+			out.close();
+		}
+
+		return bytesTotal;
+	}
+
+	public static String writeXml(Document document) throws Exception {
+		TransformerFactory tf = TransformerFactory.newInstance();
+
+		Transformer transformer = tf.newTransformer();
+
+		StringWriter writer = new StringWriter();
+
+		transformer.transform(new DOMSource(document), new StreamResult(writer));
+
+		return writer.getBuffer().toString();
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String cannotWriteFile;
+		public static String failedToCreateDirectory;
+		public static String failedWhileWriting;
+		public static String folderAlreadyExists;
+		public static String folderValueInvalid;
+		public static String folderValueNotEmpty;
+		public static String locationIsDirectory;
+		public static String locationIsFile;
+
+		static {
+			initializeMessages(FileUtil.class.getName(), Msgs.class);
+		}
+
+	}
 
 }

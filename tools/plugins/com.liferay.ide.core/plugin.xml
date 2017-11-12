@@ -1,90 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="liferayProjectAdapters" name="%project.adapters.ext.point.name" schema="schema/liferayProjectAdapters.exsd"/>
-   <extension-point id="liferayProjectProviders" name="%project.providers.ext.point.name" schema="schema/liferayProjectProviders.exsd"/>
-   <extension-point id="templateDefinitions" name="Layout Template Definitions" schema="schema/templateDefinition.exsd"/>
-   <extension-point id="liferayProjectImporters" name="Liferay Project Importers" schema="schema/liferayProjectImporters.exsd"/>
+	<extension-point id="liferayProjectAdapters" name="%project.adapters.ext.point.name" schema="schema/liferayProjectAdapters.exsd" />
+	<extension-point id="liferayProjectProviders" name="%project.providers.ext.point.name" schema="schema/liferayProjectProviders.exsd" />
+	<extension-point id="templateDefinitions" name="Layout Template Definitions" schema="schema/templateDefinition.exsd" />
+	<extension-point id="liferayProjectImporters" name="Liferay Project Importers" schema="schema/liferayProjectImporters.exsd" />
 
-   <extension
-         point="org.eclipse.core.expressions.propertyTesters">
-      <propertyTester
-            class="com.liferay.ide.core.MinimumRequiredPortalVersion"
-            id="com.liferay.ide.core.minimumRequiredPortalVersion"
-            namespace="com.liferay.ide.core"
-            properties="minimumRequiredPortalVersion"
-            type="java.lang.Object">
-      </propertyTester>
-   </extension>
-   <extension
-         point="org.eclipse.core.contenttype.contentTypes">
-      <content-type
-            base-type="org.eclipse.jdt.core.javaProperties"
-            default-charset="UTF-8"
-            file-extensions="properties"
-            id="liferaylanguagepropertiesfile"
-            name="%liferay.language.properties.file.name"
-            priority="high">
-         <describer
-               class="com.liferay.ide.core.describer.LiferayLanguagePropertiesFileDescriber">
-         </describer>
-      </content-type>
-   </extension>
-   <extension
-         point="org.eclipse.core.contenttype.contentTypes">
-      <content-type
-            base-type="org.eclipse.jdt.core.javaProperties"
-            default-charset="UTF-8"
-            file-extensions="properties"
-            file-names="portal.properties,portal-ext.properties,portal-setup-wizard.properties,system-ext.properties"
-            id="liferayportalpropertiesfile"
-            name="Liferay Portal Properties File"
-            priority="high">
-         <describer
-               class="com.liferay.ide.core.describer.LiferayPortalPropertiesFileDescriber">
-         </describer>
-      </content-type>
-   </extension>
-   <extension
-         id="LiferayLanguagePropertiesMarker"
-         name="%liferay.language.properties.problem.name"
-         point="org.eclipse.core.resources.markers">
-      <super
-            type="org.eclipse.core.resources.problemmarker">
-      </super>
-      <persistent
-            value="true">
-      </persistent>
-   </extension>
-   <extension
-         point="com.liferay.ide.core.liferayProjectProviders">
-      <liferayProjectProvider
-            class="com.liferay.ide.core.adapter.NoopLiferayProjectProvider"
-            displayName="Noop Provider"
-            id="com.liferay.ide.core.noopProjectProvider"
-            priority="lowest"
-            shortName="noop"
-            projectType="noop">
-      </liferayProjectProvider>
-   </extension>
-   <extension
-         id="com.liferay.ide.core.liferayNature"
-         point="org.eclipse.core.resources.natures">
-      <runtime>
-         <run
-               class="com.liferay.ide.core.LiferayNature">
-         </run>
-      </runtime>
-   </extension>
-   <extension
-         id="MigrationProblemMarker"
-         name="Migration Problem"
-         point="org.eclipse.core.resources.markers">
-      <super
-            type="org.eclipse.core.resources.problemmarker">
-      </super>
-      <persistent
-            value="true">
-      </persistent>
-   </extension>
+	<extension
+		point="org.eclipse.core.expressions.propertyTesters"
+	>
+		<propertyTester
+			class="com.liferay.ide.core.MinimumRequiredPortalVersion"
+			id="com.liferay.ide.core.minimumRequiredPortalVersion"
+			namespace="com.liferay.ide.core"
+			properties="minimumRequiredPortalVersion"
+			type="java.lang.Object"
+		>
+		</propertyTester>
+	</extension>
+	<extension
+		point="org.eclipse.core.contenttype.contentTypes"
+	>
+		<content-type
+			base-type="org.eclipse.jdt.core.javaProperties"
+			default-charset="UTF-8"
+			file-extensions="properties"
+			id="liferaylanguagepropertiesfile"
+			name="%liferay.language.properties.file.name"
+			priority="high"
+		>
+			<describer
+				class="com.liferay.ide.core.describer.LiferayLanguagePropertiesFileDescriber"
+			>
+			</describer>
+		</content-type>
+	</extension>
+	<extension
+		point="org.eclipse.core.contenttype.contentTypes"
+	>
+		<content-type
+			base-type="org.eclipse.jdt.core.javaProperties"
+			default-charset="UTF-8"
+			file-extensions="properties"
+			file-names="portal.properties,portal-ext.properties,portal-setup-wizard.properties,system-ext.properties"
+			id="liferayportalpropertiesfile"
+			name="Liferay Portal Properties File"
+			priority="high"
+		>
+			<describer
+				class="com.liferay.ide.core.describer.LiferayPortalPropertiesFileDescriber"
+			>
+			</describer>
+		</content-type>
+	</extension>
+	<extension
+		id="LiferayLanguagePropertiesMarker"
+		name="%liferay.language.properties.problem.name"
+		point="org.eclipse.core.resources.markers"
+	>
+		<super
+			type="org.eclipse.core.resources.problemmarker"
+		>
+		</super>
+		<persistent
+			value="true"
+		>
+		</persistent>
+	</extension>
+	<extension
+		point="com.liferay.ide.core.liferayProjectProviders"
+	>
+		<liferayProjectProvider
+			class="com.liferay.ide.core.adapter.NoopLiferayProjectProvider"
+			displayName="Noop Provider"
+			id="com.liferay.ide.core.noopProjectProvider"
+			priority="lowest"
+			projectType="noop"
+			shortName="noop"
+		>
+		</liferayProjectProvider>
+	</extension>
+	<extension
+		id="com.liferay.ide.core.liferayNature"
+		point="org.eclipse.core.resources.natures"
+	>
+		<runtime>
+			<run
+				class="com.liferay.ide.core.LiferayNature"
+			>
+			</run>
+		</runtime>
+	</extension>
+	<extension
+		id="MigrationProblemMarker"
+		name="Migration Problem"
+		point="org.eclipse.core.resources.markers"
+	>
+		<super
+			type="org.eclipse.core.resources.problemmarker"
+		>
+		</super>
+		<persistent
+			value="true"
+		>
+		</persistent>
+	</extension>
 </plugin>

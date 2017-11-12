@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,12 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 
 import java.util.List;
 
@@ -30,100 +30,86 @@ import org.eclipse.jdt.core.JavaModelException;
 /**
  * @author Gregory Amerson
  */
-public abstract class BaseLiferayProject implements ILiferayProject
-{
+public abstract class BaseLiferayProject implements ILiferayProject {
 
-    private IProject project;
+	public BaseLiferayProject(IProject project) {
+		_project = project;
+	}
 
-    public BaseLiferayProject( IProject project )
-    {
-        this.project = project;
-    }
+	public <T> T adapt(Class<T> adapterType) {
+		ILiferayProjectAdapter[] adapters = LiferayCore.getProjectAdapters();
 
-    public <T> T adapt( Class<T> adapterType )
-    {
-        final ILiferayProjectAdapter[] adapters = LiferayCore.getProjectAdapters();
+		if (CoreUtil.isNullOrEmpty(adapters)) {
+			return null;
+		}
 
-        if( ! CoreUtil.isNullOrEmpty( adapters ) )
-        {
-            for( ILiferayProjectAdapter adapter : adapters )
-            {
-                T adapted = adapter.adapt( this, adapterType );
+		for (ILiferayProjectAdapter adapter : adapters) {
+			T adapted = adapter.adapt(this, adapterType);
 
-                if( adapted != null )
-                {
-                    return adapted;
-                }
-            }
-        }
+			if (adapted != null) {
+				return adapted;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    protected boolean filterResource( IPath resourcePath, String[] ignorePaths )
-    {
-        if( resourcePath == null || resourcePath.segmentCount() < 1 )
-        {
-            return false;
-        }
+	public IProject getProject() {
+		return _project;
+	}
 
-        for( String ignorePath : ignorePaths )
-        {
-            if( resourcePath.segment( 0 ).equals( ignorePath ) )
-            {
-                return true;
-            }
-        }
+	public IFolder getSourceFolder(String classification) {
+		List<IFolder> folders = CoreUtil.getSourceFolders(JavaCore.create(_project));
 
-        return false;
-    }
+		if (CoreUtil.isNullOrEmpty(folders)) {
+			return null;
+		}
 
-    public IProject getProject()
-    {
-        return this.project;
-    }
+		return folders.get(0);
+	}
 
-    public IFolder getSourceFolder( String classification )
-    {
-        final List<IFolder> folders = CoreUtil.getSourceFolders( JavaCore.create( project ) );
+	@Override
+	public IFolder[] getSourceFolders() {
+		try {
+			IProject project = getProject();
 
-        if( !CoreUtil.isNullOrEmpty( folders ) )
-        {
-            return folders.get( 0 );
-        }
+			if (project == null) {
+				return null;
+			}
 
-        return null;
-    }
+			IJavaProject javaproject = JavaCore.create(project);
 
-    @Override
-    public IFolder[] getSourceFolders()
-    {
-        IFolder[] retval = null;
+			if (FileUtil.notExists(javaproject)) {
+				return null;
+			}
 
-        try
-        {
-            final IProject project = getProject();
+			if (!javaproject.isOpen()) {
+				javaproject.open(new NullProgressMonitor());
+			}
 
-            if( project != null )
-            {
-                final IJavaProject javaproject = JavaCore.create( project );
+			return CoreUtil.getSourceFolders(javaproject).toArray(new IFolder[0]);
+		}
+		catch (JavaModelException jme) {
+			LiferayCore.logWarning(jme);
+		}
 
-                if( javaproject != null && javaproject.exists() )
-                {
-                    if( !javaproject.isOpen() )
-                    {
-                        javaproject.open( new NullProgressMonitor() );
-                    }
+		return null;
+	}
 
-                    retval = CoreUtil.getSourceFolders( javaproject ).toArray( new IFolder[0] );
-                }
-            }
-        }
-        catch( JavaModelException e )
-        {
-            LiferayCore.logWarning( e );
-        }
+	protected boolean filterResource(IPath resourcePath, String[] ignorePaths) {
+		if ((resourcePath == null) || (resourcePath.segmentCount() < 1)) {
+			return false;
+		}
 
-        return retval;
-    }
+		for (String ignorePath : ignorePaths) {
+			if (resourcePath.segment(0).equals(ignorePath)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private IProject _project;
+
 }

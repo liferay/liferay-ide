@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core.templates;
 
@@ -32,122 +29,103 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * @author Gregory Amerson
  * @author Cindy Li
  */
-public class TemplateOperation implements ITemplateOperation
-{
+public class TemplateOperation implements ITemplateOperation {
 
-    protected ITemplateContext context;
-    protected TemplateModel model;
-    protected StringBuffer outputBuffer;
-    protected IFile outputFile;
-    protected Template template;
+	public TemplateOperation(TemplateModel model) {
+		this.model = model;
+	}
 
-    public TemplateOperation( TemplateModel model )
-    {
-        super();
-        this.model = model;
-    }
+	public boolean canExecute() {
+		try {
+			if (((outputFile == null) && (outputBuffer == null)) || (model == null) || (getTemplate() == null)) {
+				return false;
+			}
 
-    public boolean canExecute()
-    {
-        try
-        {
-            if( ( this.outputFile == null && this.outputBuffer == null ) || this.model == null || getTemplate() == null )
-            {
-                return false;
-            }
+			String[] names = model.getRequiredVarNames();
 
-            String[] names = model.getRequiredVarNames();
+			if (CoreUtil.isNullOrEmpty(names)) {
+				return true;
+			}
 
-            if( !CoreUtil.isNullOrEmpty( names ) )
-            {
-                for( String name : names )
-                {
-                    if( !( getContext().containsKey( name ) ) )
-                    {
-                        LiferayCore.logError( "Could not execute template operation: context var " + name +
-                            " not found." );
-                        return false;
-                    }
-                }
-            }
+			for (String name : names) {
+				if (!getContext().containsKey(name)) {
+					LiferayCore.logError("Could not execute template operation: context var " + name + " not found.");
 
-            return true;
-        }
-        catch( Exception e )
-        {
-            return false;
-        }
-    }
+					return false;
+				}
+			}
 
-    protected TemplateContext createContext()
-    {
-        return new TemplateContext();
-    }
+			return true;
+		}
+		catch (Exception e) {
+			return false;
+		}
+	}
 
-    public void execute( IProgressMonitor monitor ) throws Exception
-    {
-        if( !canExecute() )
-        {
-            return;
-        }
+	public void execute(IProgressMonitor monitor) throws Exception {
+		if (!canExecute()) {
+			return;
+		}
 
-        final StringWriter writer = new StringWriter();
-        final TemplateContext templateContext = (TemplateContext)getContext();
+		StringWriter writer = new StringWriter();
 
-        getTemplate().process( templateContext.getMap(), writer );
+		TemplateContext templateContext = (TemplateContext)getContext();
 
-        final String result = writer.toString();
+		getTemplate().process(templateContext.getMap(), writer);
 
-        if( this.outputFile != null )
-        {
-            if( this.outputFile.exists() )
-            {
-                this.outputFile.setContents( new ByteArrayInputStream( result.getBytes() ), true, true, monitor );
-            }
-            else
-            {
-                this.outputFile.create( new ByteArrayInputStream( result.getBytes() ), true, monitor );
-            }
-        }
-        else if( this.outputBuffer != null )
-        {
-            this.outputBuffer.delete( 0, this.outputBuffer.length() );
-            this.outputBuffer.append( result );
-        }
-    }
+		String result = writer.toString();
 
-    public ITemplateContext getContext()
-    {
-        if( context == null )
-        {
-            context = createContext();
-        }
+		if (outputFile != null) {
+			if (outputFile.exists()) {
+				outputFile.setContents(new ByteArrayInputStream(result.getBytes()), true, true, monitor);
+			}
+			else {
+				outputFile.create(new ByteArrayInputStream(result.getBytes()), true, monitor);
+			}
+		}
+		else if (outputBuffer != null) {
+			outputBuffer.delete(0, outputBuffer.length());
 
-        return context;
-    }
+			outputBuffer.append(result);
+		}
+	}
 
-    protected Template getTemplate() throws Exception
-    {
-        if( this.model == null )
-        {
-            return null;
-        }
+	public ITemplateContext getContext() {
+		if (context == null) {
+			context = createContext();
+		}
 
-        if( template == null )
-        {
-            template = this.model.getConfig().getTemplate( this.model.getResource() );
-        }
+		return context;
+	}
 
-        return template;
-    }
+	public void setOutputBuffer(StringBuffer buffer) {
+		outputBuffer = buffer;
+	}
 
-    public void setOutputBuffer( StringBuffer buffer )
-    {
-        this.outputBuffer = buffer;
-    }
+	public void setOutputFile(IFile file) {
+		outputFile = file;
+	}
 
-    public void setOutputFile( IFile file )
-    {
-        this.outputFile = file;
-    }
+	protected TemplateContext createContext() {
+		return new TemplateContext();
+	}
+
+	protected Template getTemplate() throws Exception {
+		if (model == null) {
+			return null;
+		}
+
+		if (template == null) {
+			template = model.getConfig().getTemplate(model.getResource());
+		}
+
+		return template;
+	}
+
+	protected ITemplateContext context;
+	protected TemplateModel model;
+	protected StringBuffer outputBuffer;
+	protected IFile outputFile;
+	protected Template template;
+
 }

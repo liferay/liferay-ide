@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Kamesh Sampath - initial implementation
- *      Gregory Amerson - initial implementation review and ongoing maintanence
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core.model.internal;
 
@@ -23,8 +19,8 @@ import com.liferay.ide.core.util.CoreUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.sapphire.Element;
@@ -36,77 +32,66 @@ import org.eclipse.sapphire.services.RelativePathService;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class GenericResourceBundlePathService extends RelativePathService
-{
+public class GenericResourceBundlePathService extends RelativePathService {
 
-    public static final String RB_FILE_EXTENSION = "properties"; //$NON-NLS-1$
+	public static final String RB_FILE_EXTENSION = "properties";
 
-    private final IWorkspaceRoot WORKSPACE_ROOT = CoreUtil.getWorkspaceRoot();
+	public final List<Path> computeRoots(IProject project) {
+		if (project == null) {
+			return new ArrayList<>();
+		}
 
-    /**
-     * @param project
-     * @return
-     */
-    final List<Path> computeRoots( IProject project )
-    {
-        List<Path> roots = new ArrayList<Path>();
+		List<Path> roots = new ArrayList<>();
 
-        if( project != null )
-        {
-            IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
+		IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries(project);
 
-            for( IClasspathEntry iClasspathEntry : cpEntries )
-            {
-                if( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() )
-                {
-                    IPath entryPath = WORKSPACE_ROOT.getFolder( iClasspathEntry.getPath() ).getLocation();
-                    String fullPath = entryPath.toOSString();
-                    Path sapphirePath = new Path( fullPath );
-                    roots.add( sapphirePath );
-                }
-            }
-        }
+		for (IClasspathEntry iClasspathEntry : cpEntries) {
+			if (IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind()) {
+				IFolder folder = CoreUtil.getWorkspaceRoot().getFolder(iClasspathEntry.getPath());
 
-        return roots;
-    }
+				IPath entryPath = folder.getLocation();
 
+				String fullPath = entryPath.toOSString();
 
-    @Override
-    public Path convertToRelative( Path path )
-    {
-        final Path localPath = super.convertToRelative( path );
-        final String bundle = localPath.toPortableString();
+				Path sapphirePath = new Path(fullPath);
 
-        if ( bundle != null && bundle.indexOf( "/" ) != -1 )
-        {
-            final String correctBundle = bundle.replace( "/", "." );
-            Path newPath = Path.fromPortableString( correctBundle );
-            return newPath.removeFileExtension();
-        }
+				roots.add(sapphirePath);
+			}
+		}
 
-        return localPath;
-    }
+		return roots;
+	}
 
+	@Override
+	public Path convertToRelative(Path path) {
+		Path localPath = super.convertToRelative(path);
 
-    /**
-     * This method is used to get the IProject handle of the project relative to which the source paths needs to be
-     * computed
-     *
-     * @return handle to IProject
-     */
-    protected IProject project()
-    {
-        return context( Element.class ).adapt( IProject.class );
-    }
+		String bundle = localPath.toPortableString();
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.services.RelativePathService#roots()
-     */
-    @Override
-    public final List<Path> roots()
-    {
-        return computeRoots( project() );
-    }
+		if ((bundle == null) || (bundle.indexOf("/") == -1)) {
+			return localPath;
+		}
+
+		String correctBundle = bundle.replace("/", ".");
+
+		Path newPath = Path.fromPortableString(correctBundle);
+
+		return newPath.removeFileExtension();
+	}
+
+	@Override
+	public final List<Path> roots() {
+		return computeRoots(project());
+	}
+
+	/**
+	 * This method is used to get the IProject handle of the project relative to
+	 * which the source paths needs to be computed
+	 *
+	 * @return handle to IProject
+	 */
+	protected IProject project() {
+		return context(Element.class).adapt(IProject.class);
+	}
 
 }

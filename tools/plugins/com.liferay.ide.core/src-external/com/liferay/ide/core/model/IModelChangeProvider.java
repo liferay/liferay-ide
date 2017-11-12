@@ -1,30 +1,28 @@
-/*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.core.model;
 
 /**
- * Classes that implement this interface are capable of notifying listeners
- * about model changes. Interested parties should implement
- * <samp>IModelChangedListener </samp> and add as listeners to be able to
- * receive change notification.
- * 
- * @noimplement This interface is not intended to be implemented by clients.
- * @noextend This interface is not intended to be extended by clients.
- * @since 2.0
+ * @author Gregory Amerson
  */
 public interface IModelChangeProvider {
+
 	/**
 	 * Adds the listener to the list of listeners that will be notified on model
 	 * changes.
-	 * 
+	 *
 	 * @param listener
 	 *            a model change listener to be added
 	 */
@@ -32,7 +30,7 @@ public interface IModelChangeProvider {
 
 	/**
 	 * Delivers change event to all the registered listeners.
-	 * 
+	 *
 	 * @param event
 	 *            a change event that will be passed to all the listeners
 	 */
@@ -41,7 +39,7 @@ public interface IModelChangeProvider {
 	/**
 	 * Notifies listeners that a property of a model object changed. This is a
 	 * utility method that will create a model event and fire it.
-	 * 
+	 *
 	 * @param object
 	 *            an affected model object
 	 * @param property
@@ -55,9 +53,10 @@ public interface IModelChangeProvider {
 
 	/**
 	 * Takes the listener off the list of registered change listeners.
-	 * 
+	 *
 	 * @param listener
 	 *            a model change listener to be removed
 	 */
 	public void removeModelChangedListener(IModelChangedListener listener);
+
 }

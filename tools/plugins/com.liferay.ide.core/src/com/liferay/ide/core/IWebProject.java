@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,24 +10,21 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.core;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 
-
-
 /**
  * @author Gregory Amerson
  */
-public interface IWebProject extends ILiferayProject
-{
+public interface IWebProject extends ILiferayProject {
 
-    IResource findDocrootResource( IPath path );
+	public IResource findDocrootResource(IPath path);
 
-    IFolder getDefaultDocrootFolder();
+	public IFolder getDefaultDocrootFolder();
 
 }

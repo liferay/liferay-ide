@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.core;
 
 import java.util.HashMap;
@@ -22,74 +22,66 @@ import java.util.Map;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 
-
 /**
  * @author Gregory Amerson
  */
-public abstract class ExtensionReader<T> extends RegistryReader
-{
+public abstract class ExtensionReader<T> extends RegistryReader {
 
-    private static final String ATTRIBUTE_CLASS = "class"; //$NON-NLS-1$
-    private static final String ATTRIBUTE_ID = "id"; //$NON-NLS-1$
+	public ExtensionReader(String pluginID, String extension, String element) {
+		super(pluginID, extension);
 
-    private String element;
-    private Map<String, T> extensions = new HashMap<String, T>();
-    private boolean hasInitialized = false;
+		_element = element;
+	}
 
-    public ExtensionReader( String pluginID, String extension, String element )
-    {
-        super( pluginID, extension );
+	public List<T> getExtensions() {
+		if (!_hasInitialized) {
+			readRegistry();
 
-        this.element = element;
-    }
+			_hasInitialized = true;
+		}
 
-    public List<T> getExtensions()
-    {
-        if( !this.hasInitialized )
-        {
-            readRegistry();
+		List<T> adapters = new LinkedList<>();
 
-            this.hasInitialized = true;
-        }
+		for (T adapter : _extensions.values()) {
+			adapters.add(adapter);
+		}
 
-        List<T> adapters = new LinkedList<T>();
+		return adapters;
+	}
 
-        for( T adapter : this.extensions.values() )
-        {
-            adapters.add( adapter );
-        }
+	@Override
+	@SuppressWarnings("unchecked")
+	public boolean readElement(IConfigurationElement element) {
+		if (!_element.equals(element.getName())) {
+			return true;
+		}
 
-        return adapters;
-    }
+		String id = element.getAttribute(_ATTRIBUTE_ID);
 
-    protected abstract T initElement( IConfigurationElement configElement, T execExt );
+		try {
+			T execExt = (T)element.createExecutableExtension(_ATTRIBUTE_CLASS);
 
-    @SuppressWarnings( "unchecked" )
-    @Override
-    public boolean readElement( IConfigurationElement element )
-    {
-        if ( this.element.equals( element.getName() ) )
-        {
-            String id = element.getAttribute( ATTRIBUTE_ID );
+			execExt = initElement(element, execExt);
 
-            try
-            {
-                T execExt = (T) element.createExecutableExtension( ATTRIBUTE_CLASS );
+			if (execExt != null) {
+				_extensions.put(id, execExt);
+			}
+		}
+		catch (CoreException ce) {
+			LiferayCore.logError(ce);
+		}
 
-                execExt = initElement( element, execExt );
+		return true;
+	}
 
-                if( execExt != null )
-                {
-                    this.extensions.put( id, execExt );
-                }
-            }
-            catch( CoreException e )
-            {
-                LiferayCore.logError( e );
-            }
-        }
+	protected abstract T initElement(IConfigurationElement configElement, T execExt);
 
-        return true;
-    }
+	private static final String _ATTRIBUTE_CLASS = "class";
+
+	private static final String _ATTRIBUTE_ID = "id";
+
+	private String _element;
+	private Map<String, T> _extensions = new HashMap<>();
+	private boolean _hasInitialized = false;
 
 }

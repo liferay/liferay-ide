@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,15 +10,13 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,104 +28,93 @@ import org.eclipse.core.runtime.Path;
 /**
  * @author Greg Amerson
  */
-public class FileListing
-{
+public class FileListing {
 
-    public static IPath findFilePattern( File location, String pattern )
-    {
-        try
-        {
-            List<File> fileList = FileListing.getFileListing( location, false );
+	public static IPath findFilePattern(File location, String pattern) {
+		try {
+			List<File> fileList = getFileListing(location, false);
 
-            for( File file : fileList )
-            {
+			for (File file : fileList) {
+				if (file.getPath().contains(pattern)) {
 
-                if( file.getPath().contains( pattern ) )
-                {
-                    // found jvm
-                    File jreRoot = file.getParentFile().getParentFile();
+					// found jvm
 
-                    return new Path( jreRoot.getAbsolutePath() );
-                }
-            }
-        }
-        catch( FileNotFoundException e )
-        {
-        }
+					File jreRoot = file.getParentFile().getParentFile();
 
-        return null;
-    }
+					return new Path(jreRoot.getAbsolutePath());
+				}
+			}
+		}
+		catch (FileNotFoundException fnfe) {
+		}
 
-    static public List<File> getFileListing( File aStartingDir ) throws FileNotFoundException
-    {
-        List<File> result = new ArrayList<File>();
+		return null;
+	}
 
-        File[] filesAndDirs = aStartingDir.listFiles();
+	public static List<File> getFileListing(File aStartingDir) throws FileNotFoundException {
+		List<File> result = new ArrayList<>();
 
-        List<File> filesDirs = Arrays.asList( filesAndDirs );
+		File[] filesAndDirs = aStartingDir.listFiles();
 
-        for( File file : filesDirs )
-        {
-            result.add( file ); // always add, even if directory
+		List<File> filesDirs = Arrays.asList(filesAndDirs);
 
-            if( !file.isFile() )
-            {
-                // must be a directory
-                // recursive call!
-                List<File> deeperList = getFileListing( file );
+		for (File file : filesDirs) {
 
-                result.addAll( deeperList );
-            }
-        }
+			// always add, even if directory
 
-        return result;
-    }
+			result.add(file);
 
-    /**
-     * Recursively walk a directory tree and return a List of all Files found; the List is sorted using
-     * File.compareTo().
-     * 
-     * @param aStartingDir
-     *            is a valid directory, which can be read.
-     */
-    static public List<File> getFileListing( File aStartingDir, boolean sort ) throws FileNotFoundException
-    {
-        validateDirectory( aStartingDir );
+			if (!file.isFile()) {
 
-        List<File> result = getFileListing( aStartingDir );
+				// must be a directory recursive call!
 
-        if( sort )
-        {
-            Collections.sort( result );
-        }
+				List<File> deeperList = getFileListing(file);
 
-        return result;
-    }
+				result.addAll(deeperList);
+			}
+		}
 
-    /**
-     * Directory is valid if it exists, does not represent a file, and can be read.
-     */
-    static private void validateDirectory( File aDirectory ) throws FileNotFoundException
-    {
-        if( aDirectory == null )
-        {
-            throw new IllegalArgumentException( "Directory should not be null." ); //$NON-NLS-1$
-        }
+		return result;
+	}
 
-        if( !aDirectory.exists() )
-        {
-            throw new FileNotFoundException( "Directory does not exist: " + aDirectory ); //$NON-NLS-1$
-        }
+	/**
+	 * Recursively walk a directory tree and return a List of all Files found; the
+	 * List is sorted using File.compareTo().
+	 *
+	 * @param aStartingDir
+	 *            is a valid directory, which can be read.
+	 */
+	public static List<File> getFileListing(File aStartingDir, boolean sort) throws FileNotFoundException {
+		_validateDirectory(aStartingDir);
 
-        if( !aDirectory.isDirectory() )
-        {
-            throw new IllegalArgumentException( "Is not a directory: " + aDirectory ); //$NON-NLS-1$
-        }
+		List<File> result = getFileListing(aStartingDir);
 
-        if( !aDirectory.canRead() )
-        {
-            throw new IllegalArgumentException( "Directory cannot be read: " + aDirectory ); //$NON-NLS-1$
-        }
-    }
+		if (sort) {
+			Collections.sort(result);
+		}
+
+		return result;
+	}
+
+	/**
+	 * Directory is valid if it exists, does not represent a file, and can be read.
+	 */
+	private static void _validateDirectory(File aDirectory) throws FileNotFoundException {
+		if (aDirectory == null) {
+			throw new IllegalArgumentException("Directory should not be null.");
+		}
+
+		if (!aDirectory.exists()) {
+			throw new FileNotFoundException("Directory does not exist: " + aDirectory);
+		}
+
+		if (!aDirectory.isDirectory()) {
+			throw new IllegalArgumentException("Is not a directory: " + aDirectory);
+		}
+
+		if (!aDirectory.canRead()) {
+			throw new IllegalArgumentException("Directory cannot be read: " + aDirectory);
+		}
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.core;
 
 import java.util.ArrayList;
@@ -19,104 +19,97 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 
-
 /**
  * @author Gregory Amerson
  */
-public class LiferayProjectProviderReader extends ExtensionReader<ILiferayProjectProvider>
-{
-    private static final String ATTRIBUTE_DEFAULT = "default"; //$NON-NLS-1$
-    private static final String ATTRIBUTE_DISPLAYNAME = "displayName"; //$NON-NLS-1$
-    private static final String ATTRIBUTE_PRIORITY = "priority"; //$NON-NLS-1$
-    private static final String ATTRIBUTE_SHORTNAME = "shortName"; //$NON-NLS-1$
-    private static final String ATTRIBUTE_PROJECTTYPE = "projectType"; //$NON-NLS-1$
-    private static final String EXTENSION = "liferayProjectProviders"; //$NON-NLS-1$
-    private static final String PROVIDER_ELEMENT = "liferayProjectProvider"; //$NON-NLS-1$
+public class LiferayProjectProviderReader extends ExtensionReader<ILiferayProjectProvider> {
 
-    public LiferayProjectProviderReader()
-    {
-        super( LiferayCore.PLUGIN_ID, EXTENSION, PROVIDER_ELEMENT );
-    }
+	public LiferayProjectProviderReader() {
+		super(LiferayCore.PLUGIN_ID, _EXTENSION, _PROVIDER_ELEMENT);
+	}
 
-    public ILiferayProjectProvider[] getProviders()
-    {
-        return getExtensions().toArray( new ILiferayProjectProvider[0] );
-    }
+	public ILiferayProjectProvider[] getProviders() {
+		return getExtensions().toArray(new ILiferayProjectProvider[0]);
+	}
 
-    public ILiferayProjectProvider[] getProviders( Class<?> type )
-    {
-        final List<ILiferayProjectProvider> providers = new ArrayList<ILiferayProjectProvider>();
+	public ILiferayProjectProvider[] getProviders(Class<?> type) {
+		List<ILiferayProjectProvider> providers = new ArrayList<>();
 
-        for( ILiferayProjectProvider provider : getExtensions() )
-        {
-            if( provider.provides( type ) )
-            {
-                providers.add( provider );
-            }
-        }
+		for (ILiferayProjectProvider provider : getExtensions()) {
+			if (provider.provides(type)) {
+				providers.add(provider);
+			}
+		}
 
-        return providers.toArray( new ILiferayProjectProvider[0] );
-    }
+		return providers.toArray(new ILiferayProjectProvider[0]);
+	}
 
-    @Override
-    protected ILiferayProjectProvider initElement( IConfigurationElement configElement, ILiferayProjectProvider provider )
-    {
-        final String shortName = configElement.getAttribute( ATTRIBUTE_SHORTNAME );
-        final String displayName = configElement.getAttribute( ATTRIBUTE_DISPLAYNAME );
-        final String priority = configElement.getAttribute( ATTRIBUTE_PRIORITY );
-        final String type = configElement.getAttribute( ATTRIBUTE_PROJECTTYPE );
-        final boolean isDefault = Boolean.parseBoolean( configElement.getAttribute( ATTRIBUTE_DEFAULT ) );
+	public ILiferayProjectProvider[] getProviders(String projectType) {
+		List<ILiferayProjectProvider> retval = new ArrayList<>();
 
-        final AbstractLiferayProjectProvider projectProvider = (AbstractLiferayProjectProvider) provider;
+		ILiferayProjectProvider[] providers = getProviders();
 
-        projectProvider.setShortName( shortName );
-        projectProvider.setDisplayName( displayName );
-        projectProvider.setProjectType( type );
+		for (ILiferayProjectProvider provider : providers) {
+			if (provider.getProjectType().equals(projectType)) {
+				retval.add(provider);
+			}
+		}
 
-        int priorityValue = 10;
+		return retval.toArray(new ILiferayProjectProvider[0]);
+	}
 
-        if( "lowest".equals( priority ) ) //$NON-NLS-1$
-        {
-            priorityValue = 1;
-        }
-        else if( "low".equals( priority ) ) //$NON-NLS-1$
-        {
-            priorityValue = 2;
-        }
-        else if( "normal".equals( priority ) ) //$NON-NLS-1$
-        {
-            priorityValue = 3;
-        }
-        else if( "high".equals( priority ) ) //$NON-NLS-1$
-        {
-            priorityValue = 4;
-        }
-        else if( "highest".equals( priority ) ) //$NON-NLS-1$
-        {
-            priorityValue = 5;
-        }
+	@Override
+	protected ILiferayProjectProvider initElement(
+		IConfigurationElement configElement, ILiferayProjectProvider provider) {
 
-        projectProvider.setPriority( priorityValue );
-        projectProvider.setDefault( isDefault );
+		String shortName = configElement.getAttribute(_ATTRIBUTE_SHORTNAME);
+		String displayName = configElement.getAttribute(_ATTRIBUTE_DISPLAYNAME);
+		String priority = configElement.getAttribute(_ATTRIBUTE_PRIORITY);
+		String type = configElement.getAttribute(_ATTRIBUTE_PROJECTTYPE);
+		boolean isDefault = Boolean.parseBoolean(configElement.getAttribute(_ATTRIBUTE_DEFAULT));
 
-        return provider;
-    }
+		AbstractLiferayProjectProvider projectProvider = (AbstractLiferayProjectProvider)provider;
 
-    public ILiferayProjectProvider[] getProviders( String projectType )
-    {
-        final List<ILiferayProjectProvider> retval = new ArrayList<>();
+		projectProvider.setShortName(shortName);
+		projectProvider.setDisplayName(displayName);
+		projectProvider.setProjectType(type);
 
-        final ILiferayProjectProvider[] providers = getProviders();
+		int priorityValue = 10;
 
-        for( ILiferayProjectProvider provider : providers )
-        {
-            if( provider.getProjectType().equals( projectType ) )
-            {
-                retval.add( provider );
-            }
-        }
+		if ("lowest".equals(priority)) {
+			priorityValue = 1;
+		}
+		else if ("low".equals(priority)) {
+			priorityValue = 2;
+		}
+		else if ("normal".equals(priority)) {
+			priorityValue = 3;
+		}
+		else if ("high".equals(priority)) {
+			priorityValue = 4;
+		}
+		else if ("highest".equals(priority)) {
+			priorityValue = 5;
+		}
 
-        return retval.toArray( new ILiferayProjectProvider[0] );
-    }
+		projectProvider.setPriority(priorityValue);
+		projectProvider.setDefault(isDefault);
+
+		return provider;
+	}
+
+	private static final String _ATTRIBUTE_DEFAULT = "default";
+
+	private static final String _ATTRIBUTE_DISPLAYNAME = "displayName";
+
+	private static final String _ATTRIBUTE_PRIORITY = "priority";
+
+	private static final String _ATTRIBUTE_PROJECTTYPE = "projectType";
+
+	private static final String _ATTRIBUTE_SHORTNAME = "shortName";
+
+	private static final String _EXTENSION = "liferayProjectProviders";
+
+	private static final String _PROVIDER_ELEMENT = "liferayProjectProvider";
 
 }

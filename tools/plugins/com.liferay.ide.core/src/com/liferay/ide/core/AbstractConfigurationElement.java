@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core;
 
@@ -26,91 +23,74 @@ import org.eclipse.core.runtime.InvalidRegistryObjectException;
 /**
  * @author Greg Amerson
  */
-public abstract class AbstractConfigurationElement implements IConfigurationElement
-{
+public abstract class AbstractConfigurationElement implements IConfigurationElement {
 
-    public Object createExecutableExtension( String propertyName ) throws CoreException
-    {
-        return null;
-    }
+	public Object createExecutableExtension(String propertyName) throws CoreException {
+		return null;
+	}
 
-    public String getAttribute( String name ) throws InvalidRegistryObjectException
-    {
-        return null;
-    }
+	public String getAttribute(String name) throws InvalidRegistryObjectException {
+		return null;
+	}
 
-    public String getAttribute( String attrName, String locale ) throws InvalidRegistryObjectException
-    {
-        return null;
-    }
+	public String getAttribute(String attrName, String locale) throws InvalidRegistryObjectException {
+		return null;
+	}
 
-    public String getAttributeAsIs( String name ) throws InvalidRegistryObjectException
-    {
-        return null;
-    }
+	public String getAttributeAsIs(String name) throws InvalidRegistryObjectException {
+		return null;
+	}
 
-    public String[] getAttributeNames() throws InvalidRegistryObjectException
-    {
-        return null;
-    }
+	public String[] getAttributeNames() throws InvalidRegistryObjectException {
+		return null;
+	}
 
-    public IConfigurationElement[] getChildren() throws InvalidRegistryObjectException
-    {
-        return null;
-    }
+	public IConfigurationElement[] getChildren() throws InvalidRegistryObjectException {
+		return null;
+	}
 
-    public IConfigurationElement[] getChildren( String name ) throws InvalidRegistryObjectException
-    {
-        return null;
-    }
+	public IConfigurationElement[] getChildren(String name) throws InvalidRegistryObjectException {
+		return null;
+	}
 
-    public IContributor getContributor() throws InvalidRegistryObjectException
-    {
-        return null;
-    }
+	public IContributor getContributor() throws InvalidRegistryObjectException {
+		return null;
+	}
 
-    public IExtension getDeclaringExtension() throws InvalidRegistryObjectException
-    {
-        return null;
-    }
+	public IExtension getDeclaringExtension() throws InvalidRegistryObjectException {
+		return null;
+	}
 
-    public String getName() throws InvalidRegistryObjectException
-    {
-        return null;
-    }
+	public String getName() throws InvalidRegistryObjectException {
+		return null;
+	}
 
-    public String getNamespace() throws InvalidRegistryObjectException
-    {
-        return null;
-    }
+	public String getNamespace() throws InvalidRegistryObjectException {
+		return null;
+	}
 
-    public String getNamespaceIdentifier() throws InvalidRegistryObjectException
-    {
-        return null;
-    }
+	public String getNamespaceIdentifier() throws InvalidRegistryObjectException {
+		return null;
+	}
 
-    public Object getParent() throws InvalidRegistryObjectException
-    {
-        return null;
-    }
+	public Object getParent() throws InvalidRegistryObjectException {
+		return null;
+	}
 
-    public String getValue() throws InvalidRegistryObjectException
-    {
-        return null;
-    }
+	public String getValue() throws InvalidRegistryObjectException {
+		return null;
+	}
 
-    public String getValue( String locale ) throws InvalidRegistryObjectException
-    {
-        return null;
-    }
+	public String getValue(String locale) throws InvalidRegistryObjectException {
+		return null;
+	}
 
-    public String getValueAsIs() throws InvalidRegistryObjectException
-    {
-        return null;
-    }
+	public String getValueAsIs() throws InvalidRegistryObjectException {
+		return null;
+	}
 
-    public boolean isValid()
-    {
-        return false;
-    }
+	public boolean isValid() {
+		return false;
+	}
+
 }

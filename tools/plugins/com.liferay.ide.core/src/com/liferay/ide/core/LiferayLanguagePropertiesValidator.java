@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,15 +10,16 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 
 import java.lang.ref.WeakReference;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -28,234 +29,199 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Kuo Zhang
  */
-public class LiferayLanguagePropertiesValidator
-{
+public class LiferayLanguagePropertiesValidator {
 
-    public final static String ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT = "language-properties-encoding-not-defalut";
+	public static final String ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT = "language-properties-encoding-not-defalut";
 
-    public final static String LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE = "com.liferay.ide.core.LiferayLanguagePropertiesMarker";
+	public static final String LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE =
+		"com.liferay.ide.core.LiferayLanguagePropertiesMarker";
 
-    private static WeakHashMap<IFile, WeakReference<LiferayLanguagePropertiesValidator>> filesAndValidators =
-        new WeakHashMap<IFile, WeakReference<LiferayLanguagePropertiesValidator>>();
+	public static final String LOCATION_ENCODING = "Properties/Resource/Text file encoding";
 
-    public static final String LOCATION_ENCODING= "Properties/Resource/Text file encoding";
+	public static final String MESSAGE_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFALUT =
+		Msgs.languagePropertiesEncodingNotDefault;
 
-    public final static String MESSAGE_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFALUT = Msgs.languagePropertiesEncodingNotDefault;
+	/**
+	 * This is for the case where the workspace is closed accidently, clear those alive but incorrect markers.
+	 */
+	public static void clearAbandonedMarkers() {
+		try {
+			IMarker[] markers = CoreUtil.getWorkspaceRoot().findMarkers(
+				LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
 
-    private IFile file;
+			for (IMarker marker : markers) {
+				if (FileUtil.notExists(marker.getResource())) {
+					marker.delete();
+				}
+				else {
+					if (marker.getResource().getType() == IResource.FILE) {
+						getValidator((IFile)marker.getResource()).validateEncoding();
+					}
+				}
+			}
+		}
+		catch (CoreException ce) {
+		}
+	}
 
-    private Set<IMarker> markers = new HashSet<IMarker>();
+	public static void clearUnusedValidatorsAndMarkers(IProject project) throws CoreException {
+		synchronized (_filesAndValidators) {
+			Set<IFile> files = _filesAndValidators.keySet();
 
-    // This is for the case where the workspace is closed accidently, clear those alive but incorrect markers.
-    public static void clearAbandonedMarkers()
-    {
-        try
-        {
-            final IMarker[] markers =
-                CoreUtil.getWorkspaceRoot().findMarkers(
-                    LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, true, IResource.DEPTH_INFINITE );
+			for (Iterator<IFile> iterator = files.iterator(); iterator.hasNext();) {
+				IFile file = iterator.next();
 
-            for( IMarker marker : markers )
-            {
-                if( ! marker.getResource().exists() )
-                {
-                    marker.delete();
-                }
-                else
-                {
-                    if( marker.getResource().getType() == IResource.FILE )
-                    {
-                        getValidator( (IFile) marker.getResource() ).validateEncoding();
-                    }
-                }
-            }
-        }
-        catch( CoreException e )
-        {
-        }
-    }
+				if (!PropertiesUtil.isLanguagePropertiesFile(file)) {
+					iterator.remove();
+				}
+			}
 
-    public static void clearUnusedValidatorsAndMarkers( IProject project ) throws CoreException
-    {
-        synchronized( filesAndValidators )
-        {
-            Set<IFile> files = filesAndValidators.keySet();
+			IWorkspaceRoot root = project.getWorkspace().getRoot();
 
-            for( Iterator<IFile> iterator = files.iterator(); iterator.hasNext(); )
-            {
-                IFile file = iterator.next();
+			IMarker[] markers = root.findMarkers(
+				LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
 
-                if( ! PropertiesUtil.isLanguagePropertiesFile( file ) )
-                {
-                    iterator.remove();
-                }
-            }
+			for (IMarker marker : markers) {
+				if (!marker.getResource().exists()) {
+					marker.delete();
+				}
+				else {
+					if (marker.getResource().getType() == IResource.FILE) {
+						if (!files.contains((IFile)marker.getResource())) {
+							marker.delete();
+						}
+					}
+				}
+			}
+		}
+	}
 
-            final IMarker[] markers =
-                project.getWorkspace().getRoot().findMarkers(
-                    LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, true, IResource.DEPTH_INFINITE );
+	public static LiferayLanguagePropertiesValidator getValidator(IFile file) {
+		synchronized (_filesAndValidators) {
+			try {
+				if (_filesAndValidators.get(file).get() != null) {
+					return _filesAndValidators.get(file).get();
+				}
+				else {
+					throw new NullPointerException();
+				}
+			}
+			catch (NullPointerException npe) {
+				LiferayLanguagePropertiesValidator validator = new LiferayLanguagePropertiesValidator(file);
 
-            for( IMarker marker : markers )
-            {
-                if( ! marker.getResource().exists() )
-                {
-                    marker.delete();
-                }
-                else
-                {
-                    if( marker.getResource().getType() == IResource.FILE )
-                    {
-                        if( ! files.contains( (IFile) marker.getResource() ) )
-                        {
-                            marker.delete();
-                        }
-                    }
-                }
-            }
-        }
-    }
+				_filesAndValidators.put(file, new WeakReference<LiferayLanguagePropertiesValidator>(validator));
 
-    public static LiferayLanguagePropertiesValidator getValidator( IFile file )
-    {
-        synchronized( filesAndValidators )
-        {
-            try
-            {
-                if( filesAndValidators.get( file ).get() != null )
-                {
-                    return filesAndValidators.get( file ).get();
-                }
-                else
-                {
-                    throw new NullPointerException();
-                }
-            }
-            catch( NullPointerException e )
-            {
-                LiferayLanguagePropertiesValidator validator = new LiferayLanguagePropertiesValidator( file );
+				return validator;
+			}
+		}
+	}
 
-                filesAndValidators.put( file, new WeakReference<LiferayLanguagePropertiesValidator>( validator ) );
+	public void validateEncoding() {
+		if (!PropertiesUtil.isLanguagePropertiesFile(_file)) {
+			_clearMarker(ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT);
 
-                return validator;
-            }
-        }
-    }
+			return;
+		}
 
-    private LiferayLanguagePropertiesValidator( IFile file )
-    {
-        this.file = file;
+		try {
+			if (ILiferayConstants.LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET.equals(_file.getCharset())) {
+				_clearMarker(ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT);
 
-        try
-        {
-            for( IMarker marker : file.findMarkers(
-                LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, false, IResource.DEPTH_INFINITE ) )
-            {
-                if( ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT.equals( marker.getAttribute( IMarker.SOURCE_ID ) ) )
-                {
-                    markers.add( marker );
-                }
-            }
-        }
-        catch( CoreException e )
-        {
-            LiferayCore.logError( e );
-        }
-    }
+				return;
+			}
 
-    private void clearMarker( String markerSourceId )
-    {
-        try
-        {
-            synchronized( markers )
-            {
-                for( IMarker marker : markers )
-                {
-                    if( marker != null && marker.exists() &&
-                        markerSourceId.equals( marker.getAttribute( IMarker.SOURCE_ID ) ) )
-                    {
-                        markers.remove( marker );
+			_setMarker(
+				LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT,
+				IMarker.SEVERITY_WARNING, LOCATION_ENCODING,
+				NLS.bind(MESSAGE_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFALUT, new Object[] {_file.getName()}));
+		}
+		catch (Exception e) {
+			LiferayCore.logError(e);
+		}
+	}
 
-                        marker.delete();
-                    }
-                }
-            }
-        }
-        catch( CoreException e )
-        {
-            LiferayCore.logError( e );
-        }
-    }
+	private LiferayLanguagePropertiesValidator(IFile file) {
+		_file = file;
 
-    private void setMarker( String markerType, String markerSourceId, int markerSeverity, String location, String markerMsg )
-        throws CoreException, InterruptedException
-    {
-        synchronized( markers )
-        {
-            for( IMarker marker : markers )
-            {
-                if( marker != null && marker.exists() &&
-                    markerSourceId.equals( marker.getAttribute( IMarker.SOURCE_ID ) ) )
-                {
-                    return;
-                }
-            }
+		try {
+			IMarker[] markers = file.findMarkers(
+				LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, false, IResource.DEPTH_INFINITE);
 
-            IMarker marker = file.createMarker( markerType );
+			for (IMarker marker : markers) {
+				if (ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT.equals(marker.getAttribute(IMarker.SOURCE_ID))) {
+					_markers.add(marker);
+				}
+			}
+		}
+		catch (CoreException ce) {
+			LiferayCore.logError(ce);
+		}
+	}
 
-            marker.setAttribute( IMarker.SEVERITY, markerSeverity );
-            marker.setAttribute( IMarker.MESSAGE, markerMsg );
-            marker.setAttribute( IMarker.SOURCE_ID, markerSourceId );
-            marker.setAttribute( IMarker.LOCATION, location );
+	private void _clearMarker(String markerSourceId) {
+		try {
+			synchronized (_markers) {
+				for (IMarker marker : _markers) {
+					if ((marker != null) && marker.exists() &&
+						markerSourceId.equals(marker.getAttribute(IMarker.SOURCE_ID))) {
 
-            markers.add( marker );
-        }
+						_markers.remove(marker);
 
-    }
+						marker.delete();
+					}
+				}
+			}
+		}
+		catch (CoreException ce) {
+			LiferayCore.logError(ce);
+		}
+	}
 
-    public void validateEncoding()
-    {
-        if( PropertiesUtil.isLanguagePropertiesFile( file ) )
-        {
-            try
-            {
-                if( ! ILiferayConstants.LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET.equals( file.getCharset() ) )
-                {
-                    setMarker(
-                        LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT,
-                        IMarker.SEVERITY_WARNING, LOCATION_ENCODING,
-                        NLS.bind( MESSAGE_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFALUT, new Object[] { file.getName() } ) );
-                }
-                else
-                {
-                    clearMarker( ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT );
-                }
-            }
-            catch( Exception e )
-            {
-                LiferayCore.logError( e );
-            }
-        }
-        else
-        {
-            clearMarker( ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT );
-        }
-    }
+	private void _setMarker(
+			String markerType, String markerSourceId, int markerSeverity, String location, String markerMsg)
+		throws CoreException, InterruptedException {
 
-    private static class Msgs extends NLS
-    {
+		synchronized (_markers) {
+			for (IMarker marker : _markers) {
+				if ((marker != null) && marker.exists() &&
+					markerSourceId.equals(marker.getAttribute(IMarker.SOURCE_ID))) {
 
-        public static String languagePropertiesEncodingNotDefault;
+					return;
+				}
+			}
 
-        static
-        {
-            initializeMessages( LiferayLanguagePropertiesValidator.class.getName(), Msgs.class );
-        }
-    }
+			IMarker marker = _file.createMarker(markerType);
+
+			marker.setAttribute(IMarker.SEVERITY, markerSeverity);
+			marker.setAttribute(IMarker.MESSAGE, markerMsg);
+			marker.setAttribute(IMarker.SOURCE_ID, markerSourceId);
+			marker.setAttribute(IMarker.LOCATION, location);
+
+			_markers.add(marker);
+		}
+	}
+
+	private static WeakHashMap<IFile, WeakReference<LiferayLanguagePropertiesValidator>> _filesAndValidators =
+		new WeakHashMap<>();
+
+	private IFile _file;
+	private Set<IMarker> _markers = new HashSet<>();
+
+	private static class Msgs extends NLS {
+
+		public static String languagePropertiesEncodingNotDefault;
+
+		static {
+			initializeMessages(LiferayLanguagePropertiesValidator.class.getName(), Msgs.class);
+		}
+
+	}
 
 }

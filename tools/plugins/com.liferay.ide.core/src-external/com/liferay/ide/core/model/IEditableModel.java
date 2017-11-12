@@ -1,31 +1,30 @@
-/*******************************************************************************
- * Copyright (c) 2000, 2009 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.core.model;
 
 /**
- * Editable model is an editable object that can be saved. The classes
- * that implement this interface are responsible for calling the
- * method <code>save</code> of <code>IEditable</code> and supplying
- * the required <code>PrintWriter</code> object.
- * 
- * @noimplement This interface is not intended to be implemented by clients.
- * @noextend This interface is not intended to be extended by clients.
- * @since 2.0
+ * @author Gregory Amerson
  */
 public interface IEditableModel extends IEditable {
+
 	/**
-	 * Saves the editable model using the mechanism suitable for the 
-	 * concrete model implementation. It is responsible for 
-	 * wrapping the <code>IEditable.save(PrintWriter)</code> operation
-	 * and providing the print writer.
+	 * Saves the editable model using the mechanism suitable for the concrete model
+	 * implementation. It is responsible for wrapping the
+	 * <code>IEditable.save(PrintWriter)</code> operation and providing the print
+	 * writer.
 	 */
-	void save();
+	public void save();
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,41 +10,35 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core;
 
 /**
  * @author Andy Wu
  */
-public abstract class AbstractLiferayProjectImporter implements ILiferayProjectImporter
-{
-    private String buildType;
-    private int priority;
+public abstract class AbstractLiferayProjectImporter implements ILiferayProjectImporter {
 
-    public AbstractLiferayProjectImporter()
-    {
-    }
+	public AbstractLiferayProjectImporter() {
+	}
 
-    public String getBuildType()
-    {
-        return buildType;
-    }
+	public String getBuildType() {
+		return _buildType;
+	}
 
-    public void setBuildType( String buildType )
-    {
-        this.buildType = buildType;
-    }
+	public int getPriority() {
+		return _priority;
+	}
 
-    public int getPriority()
-    {
-        return priority;
-    }
+	public void setBuildType(String buildType) {
+		_buildType = buildType;
+	}
 
-    public void setPriority( int priority )
-    {
-        this.priority = priority;
-    }
+	public void setPriority(int priority) {
+		_priority = priority;
+	}
+
+	private String _buildType;
+	private int _priority;
 
 }

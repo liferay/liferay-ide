@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,40 +10,34 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core.remote;
 
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "serial" )
-public class APIException extends Exception
-{
+@SuppressWarnings("serial")
+public class APIException extends Exception {
 
-    private String msg;
-    private String api;
+	public APIException(String api, Exception e) {
+		super(e);
 
-    public APIException( String api, Exception e )
-    {
-        super( e );
+		_api = api;
+		_msg = e.getMessage();
+	}
 
-        this.api = api;
-        this.msg = e.getMessage();
-    }
+	public APIException(String api, String msg) {
+		_api = api;
+		_msg = msg;
+	}
 
-    public APIException( String api, String msg )
-    {
-        this.api = api;
-        this.msg = msg;
-    }
+	@Override
+	public String getMessage() {
+		return "API: " + _api + " " + _msg;
+	}
 
-    @Override
-    public String getMessage()
-    {
-        return "API: " + api + " " + msg; //$NON-NLS-1$ //$NON-NLS-2$
-    }
+	private String _api;
+	private String _msg;
+
 }

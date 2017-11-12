@@ -1,13 +1,17 @@
-/*******************************************************************************
- * Copyright (c) 2005, 2006 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.core;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -15,157 +19,140 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IPluginRegistry;
 import org.eclipse.core.runtime.Platform;
+
 import org.osgi.framework.Bundle;
 
-
 /**
- * Class to read a registry. It is meant to be subclassed to provide specific function.
- *
- * @since 1.0.0
+ * @author Gregory Amerson
  */
-@SuppressWarnings( "deprecation" )
+@SuppressWarnings("deprecation")
 public abstract class RegistryReader {
 
-    private static final String JEM_PLUGIN_ID = "org.eclipse.jem.util"; //$NON-NLS-1$
+	public static boolean canCreateExecutableExtension(IConfigurationElement element) {
+		if (Platform.isRunning() && (getSystemBundle().getState() != Bundle.STOPPING)) {
+			return true;
+		}
 
-    String pluginId;
+		return false;
+	}
 
-    String extensionPointId;
+	/**
+	 * Utility method to get the plugin id of a configuation element
+	 *
+	 * @param configurationElement
+	 * @return plugin id of configuration element
+	 * @since 1.0.0
+	 */
+	public static String getPluginId(IConfigurationElement configurationElement) {
+		if (configurationElement == null) {
+			return null;
+		}
 
-    private static Bundle systemBundle;
+		IExtension extension = configurationElement.getDeclaringExtension();
 
-    /**
-     * Utility method to get the plugin id of a configuation element
-     *
-     * @param configurationElement
-     * @return plugin id of configuration element
-     * @since 1.0.0
-     */
-    public static String getPluginId(IConfigurationElement configurationElement) {
-        String pluginId = null;
+		if (extension != null) {
+			return extension.getContributor().getName();
+		}
 
-        if (configurationElement != null) {
-            IExtension extension = configurationElement.getDeclaringExtension();
+		return null;
+	}
 
-            if (extension != null)
-                pluginId = extension.getContributor().getName();
-        }
+	public RegistryReader(IPluginRegistry registry, String pluginID, String extensionPoint) {
+		this(pluginID, extensionPoint);
+	}
 
-        return pluginId;
-    }
+	public RegistryReader(String pluginID, String extensionPoint) {
+		pluginId = pluginID;
 
-    /**
-     * Constructor for RegistryReader taking a registry, plugin id, and extension point id.
-     *
-     * @param registry
-     * @param pluginID
-     * @param extensionPoint
-     *
-     * @deprecated Use RegistryReader(plugin, extensionPoint) instead. The registry passed in is ignored.
-     * @since 1.0.0
-     */
-    public RegistryReader(IPluginRegistry registry, String pluginID, String extensionPoint) {
-        this(pluginID, extensionPoint);
-    }
+		extensionPointId = extensionPoint;
+	}
 
-    /**
-     * Constructor for RegistryReader taking the plugin id and extension point id.
-     *
-     * @param pluginID
-     * @param extensionPoint
-     *
-     * @since 1.0.0
-     */
-    public RegistryReader(String pluginID, String extensionPoint) {
-        super();
-        this.pluginId = pluginID;
-        extensionPointId = extensionPoint;
-    }
+	/**
+	 * Implement this method to read element attributes. If this element has
+	 * subelements, the reader will recursively cycle through them and call this
+	 * method so don't do it here.
+	 */
+	public abstract boolean readElement(IConfigurationElement element);
 
-    private void internalReadElement(IConfigurationElement element) {
-        boolean recognized = this.readElement(element);
-        if (!recognized) {
-            logError(element, "Error processing extension: " + element); //$NON-NLS-1$
-        }
-    }
+	public void readRegistry() {
+		IExtensionPoint point = Platform.getExtensionRegistry().getExtensionPoint(pluginId, extensionPointId);
 
-    /*
-     * Logs the error in the desktop log using the provided text and the information in the configuration element.
-     */
-    protected void logError(IConfigurationElement element, String text) {
-        IExtension extension = element.getDeclaringExtension();
-        StringBuffer buf = new StringBuffer();
-        buf.append("Plugin " + extension.getContributor().getName() + ", extension " + extension.getExtensionPointUniqueIdentifier()); //$NON-NLS-1$ //$NON-NLS-2$
-        buf.append("\n" + text); //$NON-NLS-1$
-        LiferayCore.logError(buf.toString());
-    }
+		if (point != null) {
+			IConfigurationElement[] elements = point.getConfigurationElements();
 
-    /*
-     * Logs a very common registry error when a required attribute is missing.
-     */
-    protected void logMissingAttribute(IConfigurationElement element, String attributeName) {
-        logError(element, "Required attribute '" + attributeName + "' not defined"); //$NON-NLS-1$ //$NON-NLS-2$
-    }
+			for (int i = 0; i < elements.length; i++) {
+				_internalReadElement(elements[i]);
+			}
+		}
 
-    /*
-     * Implement this method to read element attributes. If this element has subelements, the reader will recursively cycle through them and call this
-     * method so don't do it here.
-     */
-    public abstract boolean readElement(IConfigurationElement element);
+		// the following code is to handle the contributions to the deprecated org.eclipse.jem.util extensions
 
-    /**
-     * Read the extension point and parse it.
-     *
-     * @since 1.0.0
-     */
-    public void readRegistry() {
-        IExtensionPoint point = Platform.getExtensionRegistry().getExtensionPoint(pluginId, extensionPointId);
-        if (point != null)
-        {
-            IConfigurationElement[] elements = point.getConfigurationElements();
-            for (int i = 0; i < elements.length; i++) {
-                internalReadElement(elements[i]);
-            }
-        }
-        // the following code is to handle the contributions to the deprecated org.eclipse.jem.util extensions
-        if (!JEM_PLUGIN_ID.equals(pluginId))
-        {
-            point = Platform.getExtensionRegistry().getExtensionPoint(JEM_PLUGIN_ID, extensionPointId);
-            if (point != null)
-            {
-                IConfigurationElement[] elements = point.getConfigurationElements();
-                for (int i = 0; i < elements.length; i++) {
-                    internalReadElement(elements[i]);
-                }
-            }
-        }
-    }
+		if (_JEM_PLUGIN_ID.equals(pluginId)) {
+			return;
+		}
 
-    /**
-     * Tests to see if it is valid at this point in time to create an executable extension. A valid reason not to would be that the workspace is
-     * shutting donw.
-     *
-     * @param element
-     * @return <code>true</code> if it is valid point to create an executable extension.
-     *
-     * @since 1.0.0
-     */
-    public static boolean canCreateExecutableExtension(IConfigurationElement element) {
-        if (Platform.isRunning() && getSystemBundle().getState() != Bundle.STOPPING)
-            return true;
-        return false;
-    }
+		point = Platform.getExtensionRegistry().getExtensionPoint(_JEM_PLUGIN_ID, extensionPointId);
 
-    /**
-     * Get the system bundle
-     *
-     * @return system bundle.
-     *
-     * @since 1.0.0
-     */
-    protected static Bundle getSystemBundle() {
-        if (systemBundle == null)
-            systemBundle = Platform.getBundle("org.eclipse.osgi"); //$NON-NLS-1$
-        return systemBundle;
-    }
+		if (point == null) {
+			return;
+		}
+
+		IConfigurationElement[] elements = point.getConfigurationElements();
+
+		for (int i = 0; i < elements.length; i++) {
+			_internalReadElement(elements[i]);
+		}
+	}
+
+	public String extensionPointId;
+	public String pluginId;
+
+	protected static Bundle getSystemBundle() {
+		if (_systemBundle == null) {
+			_systemBundle = Platform.getBundle("org.eclipse.osgi");
+		}
+
+		return _systemBundle;
+	}
+
+	/**
+	 * Logs the error in the desktop log using the provided text and the information
+	 * in the configuration element.
+	 */
+	protected void logError(IConfigurationElement element, String text) {
+		IExtension extension = element.getDeclaringExtension();
+
+		StringBuffer sb = new StringBuffer();
+
+		sb.append("Plugin ");
+		sb.append(extension.getContributor().getName());
+		sb.append(", extension ");
+		sb.append(extension.getExtensionPointUniqueIdentifier());
+		sb.append("\n");
+		sb.append(text);
+
+		LiferayCore.logError(sb.toString());
+	}
+
+	/**
+	 * Logs a very common registry error when a required attribute is missing.
+	 */
+	protected void logMissingAttribute(IConfigurationElement element, String attributeName) {
+		logError(element, "Required attribute '" + attributeName + "' not defined");
+	}
+
+	private void _internalReadElement(IConfigurationElement element) {
+		boolean recognized = readElement(element);
+
+		if (recognized) {
+			return;
+		}
+
+		logError(element, "Error processing extension: " + element);
+	}
+
+	private static final String _JEM_PLUGIN_ID = "org.eclipse.jem.util";
+
+	private static Bundle _systemBundle;
+
 }

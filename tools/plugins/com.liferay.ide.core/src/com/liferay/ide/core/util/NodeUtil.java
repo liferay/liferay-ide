@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core.util;
 
@@ -27,281 +24,260 @@ import org.w3c.dom.Text;
  * @author Greg Amerson
  * @author Terry Jia
  */
-public class NodeUtil
-{
+public class NodeUtil {
 
-    public static Element appendChildElement( Element parentElement, String newElementName )
-    {
-        return NodeUtil.appendChildElement( parentElement, newElementName, null );
-    }
+	public static Element appendChildElement(Element parentElement, String newElementName) {
+		return appendChildElement(parentElement, newElementName, null);
+	}
 
-    public static Element appendChildElement( Element parentElement, String newElementName, String initialTextContent )
-    {
-        Element newChildElement = null;
+	public static Element appendChildElement(Element parentElement, String newElementName, String initialTextContent) {
+		Element newChildElement = null;
 
-        if( parentElement != null && newElementName != null )
-        {
-            Document ownerDocument = parentElement.getOwnerDocument();
+		if ((parentElement == null) || (newElementName == null)) {
+			return null;
+		}
 
-            newChildElement = ownerDocument.createElement( newElementName );
+		Document ownerDocument = parentElement.getOwnerDocument();
 
-            if( initialTextContent != null )
-            {
-                newChildElement.appendChild( ownerDocument.createTextNode( initialTextContent ) );
-            }
+		newChildElement = ownerDocument.createElement(newElementName);
 
-            parentElement.appendChild( newChildElement );
-        }
+		if (initialTextContent != null) {
+			newChildElement.appendChild(ownerDocument.createTextNode(initialTextContent));
+		}
 
-        return newChildElement;
-    }
+		parentElement.appendChild(newChildElement);
 
-    public static Node appendTextNode( Element parentElement, String initialTextContent )
-    {
-        Node newChildElement = null;
+		return newChildElement;
+	}
 
-        if( parentElement != null )
-        {
-            Document ownerDocument = parentElement.getOwnerDocument();
+	public static Node appendTextNode(Element parentElement, String initialTextContent) {
+		if (parentElement == null) {
+			return null;
+		}
 
-            newChildElement = ownerDocument.createTextNode( initialTextContent );
+		Document ownerDocument = parentElement.getOwnerDocument();
 
-            parentElement.appendChild( newChildElement );
-        }
+		Node newChildElement = ownerDocument.createTextNode(initialTextContent);
 
-        return newChildElement;
-    }
+		parentElement.appendChild(newChildElement);
 
-    public static Element findChildElement( Element parentElement, String elementName )
-    {
-        Element retval = null;
+		return newChildElement;
+	}
 
-        if( parentElement == null )
-        {
-            return retval;
-        }
+	public static Element findChildElement(Element parentElement, String elementName) {
+		if (parentElement == null) {
+			return null;
+		}
 
-        NodeList children = parentElement.getChildNodes();
+		NodeList children = parentElement.getChildNodes();
 
-        for( int i = 0; i < children.getLength(); i++ )
-        {
-            Node child = children.item( i );
+		if (isEmpty(children)) {
+			return null;
+		}
 
-            if( child instanceof Element && child.getNodeName().equals( elementName ) )
-            {
-                retval = (Element) child;
-                break;
-            }
-        }
+		for (int i = 0; i < children.getLength(); i++) {
+			Node child = children.item(i);
 
-        return retval;
-    }
+			if (child instanceof Element && child.getNodeName().equals(elementName)) {
+				return (Element)child;
+			}
+		}
 
-    public static Node findFirstChild( Element element, String elementName )
-    {
-        if( element != null && !( CoreUtil.isNullOrEmpty( elementName ) ) )
-        {
-            NodeList children = element.getChildNodes();
+		return null;
+	}
 
-            if( children != null && children.getLength() > 0 )
-            {
-                for( int i = 0; i < children.getLength(); i++ )
-                {
-                    Node child = children.item( i );
+	public static Node findFirstChild(Element element, String elementName) {
+		if ((element == null) || CoreUtil.isNullOrEmpty(elementName)) {
+			return null;
+		}
 
-                    if( elementName.equals( child.getNodeName() ) )
-                    {
-                        return child;
-                    }
-                }
-            }
-        }
+		NodeList children = element.getChildNodes();
 
-        return null;
-    }
+		if (isEmpty(children)) {
+			return null;
+		}
 
-    public static Node findLastChild( Element element, String elementName )
-    {
-        if( element != null && !( CoreUtil.isNullOrEmpty( elementName ) ) )
-        {
-            NodeList children = element.getChildNodes();
+		for (int i = 0; i < children.getLength(); i++) {
+			Node child = children.item(i);
 
-            if( children != null && children.getLength() > 0 )
-            {
-                for( int i = children.getLength() - 1; i >= 0; i-- )
-                {
-                    Node child = children.item( i );
+			if (elementName.equals(child.getNodeName())) {
+				return child;
+			}
+		}
 
-                    if( elementName.equals( child.getNodeName() ) )
-                    {
-                        return child;
-                    }
-                }
-            }
-        }
+		return null;
+	}
 
-        return null;
-    }
+	public static Node findLastChild(Element element, String elementName) {
+		if ((element == null) || CoreUtil.isNullOrEmpty(elementName)) {
+			return null;
+		}
 
-    public static String getChildElementContent( Node parent, String childElement )
-    {
-        String retval = null;
+		NodeList children = element.getChildNodes();
 
-        NodeList children = parent.getChildNodes();
+		if (isEmpty(children)) {
+			return null;
+		}
 
-        if( children != null && children.getLength() > 0 )
-        {
-            for( int i = 0; i < children.getLength(); i++ )
-            {
-                Node child = children.item( i );
+		for (int i = children.getLength() - 1; i >= 0; i--) {
+			Node child = children.item(i);
 
-                if( child instanceof Element && child.getNodeName().equals( childElement ) )
-                {
-                    return getTextContent( (Element) child );
-                }
-            }
-        }
-        return retval;
-    }
+			if (elementName.equals(child.getNodeName())) {
+				return child;
+			}
+		}
 
-    public static Node getFirstNamedChildNode( Element element, String string )
-    {
-        NodeList children = element.getChildNodes();
+		return null;
+	}
 
-        if( children != null && children.getLength() > 0 )
-        {
-            for( int i = 0; i < children.getLength(); i++ )
-            {
-                Node item = children.item( i );
+	public static String getChildElementContent(Node parent, String childElement) {
+		NodeList children = parent.getChildNodes();
 
-                if( item.getNodeName().equals( string ) )
-                {
-                    return item;
-                }
-            }
-        }
+		if (isEmpty(children)) {
+			return null;
+		}
 
-        return null;
-    }
+		for (int i = 0; i < children.getLength(); i++) {
+			Node child = children.item(i);
 
-    public static String getTextContent( Node node )
-    {
-        NodeList children = node.getChildNodes();
+			if (child instanceof Element && child.getNodeName().equals(childElement)) {
+				return getTextContent((Element)child);
+			}
+		}
 
-        if( children.getLength() == 1 )
-        {
-            return children.item( 0 ).getNodeValue().trim();
-        }
+		return null;
+	}
 
-        StringBuffer s = new StringBuffer();
+	public static Node getFirstNamedChildNode(Element element, String string) {
+		NodeList children = element.getChildNodes();
 
-        Node child = node.getFirstChild();
+		if (isEmpty(children)) {
+			return null;
+		}
 
-        while( child != null )
-        {
-            s.append( child.getNodeValue().trim() );
+		for (int i = 0; i < children.getLength(); i++) {
+			Node item = children.item(i);
 
-            child = child.getNextSibling();
-        }
+			if (item.getNodeName().equals(string)) {
+				return item;
+			}
+		}
 
-        return s.toString().trim();
-    }
+		return null;
+	}
 
-    public static Element insertChildElement(
-        Element parentElement, Node refNode, String newElementName, String initialTextContent )
-    {
-        Element newChildElement = null;
+	public static String getTextContent(Node node) {
+		NodeList children = node.getChildNodes();
 
-        if( parentElement != null && newElementName != null )
-        {
-            Document ownerDocument = parentElement.getOwnerDocument();
+		if (children.getLength() == 1) {
+			String value = children.item(0).getNodeValue();
 
-            newChildElement = ownerDocument.createElement( newElementName );
+			return value.trim();
+		}
 
-            if( initialTextContent != null )
-            {
-                newChildElement.appendChild( ownerDocument.createTextNode( initialTextContent ) );
-            }
+		StringBuffer sb = new StringBuffer();
 
-            parentElement.insertBefore( newChildElement, refNode );
-        }
+		Node child = node.getFirstChild();
 
-        return newChildElement;
-    }
+		while (child != null) {
+			sb.append(child.getNodeValue().trim());
 
-    public static Element insertChildElementAfter(
-        Element parentElement, Node refNode, String newElementName, String initialTextContent )
-    {
-        Element newChildElement = null;
+			child = child.getNextSibling();
+		}
 
-        if( parentElement != null && newElementName != null )
-        {
-            Document ownerDocument = parentElement.getOwnerDocument();
+		return sb.toString().trim();
+	}
 
-            newChildElement = ownerDocument.createElement( newElementName );
+	public static Element insertChildElement(
+		Element parentElement, Node refNode, String newElementName, String initialTextContent) {
 
-            if( initialTextContent != null )
-            {
-                newChildElement.appendChild( ownerDocument.createTextNode( initialTextContent ) );
-            }
+		Element newChildElement = null;
 
-            if( parentElement.getLastChild().equals( refNode ) )
-            {
-                parentElement.appendChild( newChildElement );
-            }
-            else
-            {
-                parentElement.insertBefore( newChildElement, refNode.getNextSibling() );
-            }
-        }
+		if ((parentElement != null) && (newElementName != null)) {
+			Document ownerDocument = parentElement.getOwnerDocument();
 
-        return newChildElement;
-    }
+			newChildElement = ownerDocument.createElement(newElementName);
 
-    public static void removeChildren( Element element )
-    {
-        while( element != null && element.hasChildNodes() )
-        {
-            element.removeChild( element.getFirstChild() );
-        }
-    }
+			if (initialTextContent != null) {
+				newChildElement.appendChild(ownerDocument.createTextNode(initialTextContent));
+			}
 
-    public static void removeChildren( Node node )
-    {
-        if( node == null || node.getChildNodes() == null || node.getChildNodes().getLength() <= 0 )
-        {
-            return;
-        }
+			parentElement.insertBefore(newChildElement, refNode);
+		}
 
-        NodeList children = node.getChildNodes();
+		return newChildElement;
+	}
 
-        for( int i = 0; i < children.getLength(); i++ )
-        {
-            node.removeChild( children.item( i ) );
-        }
-    }
+	public static Element insertChildElementAfter(
+		Element parentElement, Node refNode, String newElementName, String initialTextContent) {
 
-    public static Text setTextContent( Node namespaceNode, String textContent )
-    {
-        Text retval = null;
+		Element newChildElement = null;
 
-        if( namespaceNode instanceof Text )
-        {
-            namespaceNode.setNodeValue( textContent );
+		if ((parentElement != null) && (newElementName != null)) {
+			Document ownerDocument = parentElement.getOwnerDocument();
 
-            retval = (Text) namespaceNode;
-        }
-        else if( namespaceNode instanceof Element )
-        {
-            Element namespaceElement = (Element) namespaceNode;
+			newChildElement = ownerDocument.createElement(newElementName);
 
-            removeChildren( namespaceElement );
+			if (initialTextContent != null) {
+				newChildElement.appendChild(ownerDocument.createTextNode(initialTextContent));
+			}
 
-            retval = namespaceElement.getOwnerDocument().createTextNode( textContent );
+			if (parentElement.getLastChild().equals(refNode)) {
+				parentElement.appendChild(newChildElement);
+			}
+			else {
+				parentElement.insertBefore(newChildElement, refNode.getNextSibling());
+			}
+		}
 
-            namespaceElement.appendChild( retval );
-        }
-        return retval;
-    }
+		return newChildElement;
+	}
+
+	public static boolean isEmpty(NodeList nodes) {
+		if ((nodes == null) || (nodes.getLength() == 0)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static void removeChildren(Element element) {
+		while ((element != null) && element.hasChildNodes()) {
+			element.removeChild(element.getFirstChild());
+		}
+	}
+
+	public static void removeChildren(Node node) {
+		if ((node == null) || (node.getChildNodes() == null) || (node.getChildNodes().getLength() <= 0)) {
+			return;
+		}
+
+		NodeList children = node.getChildNodes();
+
+		for (int i = 0; i < children.getLength(); i++) {
+			node.removeChild(children.item(i));
+		}
+	}
+
+	public static Text setTextContent(Node namespaceNode, String textContent) {
+		Text retval = null;
+
+		if (namespaceNode instanceof Text) {
+			namespaceNode.setNodeValue(textContent);
+
+			retval = (Text)namespaceNode;
+		}
+		else if (namespaceNode instanceof Element) {
+			Element namespaceElement = (Element)namespaceNode;
+
+			removeChildren(namespaceElement);
+
+			retval = namespaceElement.getOwnerDocument().createTextNode(textContent);
+
+			namespaceElement.appendChild(retval);
+		}
+
+		return retval;
+	}
 
 }

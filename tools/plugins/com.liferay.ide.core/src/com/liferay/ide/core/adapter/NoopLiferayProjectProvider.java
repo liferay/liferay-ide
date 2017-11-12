@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.core.adapter;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
@@ -19,29 +19,22 @@ import com.liferay.ide.core.ILiferayProject;
 
 import org.eclipse.core.resources.IProject;
 
-
 /**
  * @author Gregory Amerson
  */
-public class NoopLiferayProjectProvider extends AbstractLiferayProjectProvider
-{
+public class NoopLiferayProjectProvider extends AbstractLiferayProjectProvider {
 
-    public NoopLiferayProjectProvider()
-    {
-        super( new Class<?>[] { IProject.class } );
-    }
+	public NoopLiferayProjectProvider() {
+		super(new Class<?>[] {IProject.class});
+	}
 
-    @Override
-    public ILiferayProject provide( Object adaptable )
-    {
-        if( adaptable instanceof IProject )
-        {
-            return new NoopLiferayProject( (IProject) adaptable );
-        }
-        else
-        {
-            return null;
-        }
-    }
+	@Override
+	public ILiferayProject provide(Object adaptable) {
+		if (adaptable instanceof IProject) {
+			return new NoopLiferayProject((IProject)adaptable);
+		}
+
+		return null;
+	}
 
 }

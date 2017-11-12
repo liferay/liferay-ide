@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.core;
 
 import org.eclipse.core.runtime.CoreException;
@@ -22,18 +22,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public interface IBundleProject extends ILiferayProject
-{
+public interface IBundleProject extends ILiferayProject {
 
-    boolean filterResource( IPath resourcePath );
+	public boolean filterResource(IPath resourcePath);
 
-    String getBundleShape();
+	public String getBundleShape();
 
-    IPath getOutputBundle( boolean cleanBuild, IProgressMonitor monitor ) throws CoreException;
+	public IPath getOutputBundle(boolean cleanBuild, IProgressMonitor monitor) throws CoreException;
 
-    IPath getOutputBundlePath();
+	public IPath getOutputBundlePath();
 
-    String getSymbolicName() throws CoreException;
+	public String getSymbolicName() throws CoreException;
 
-    boolean isFragmentBundle();
+	public boolean isFragmentBundle();
+
 }

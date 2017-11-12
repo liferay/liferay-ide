@@ -1,17 +1,24 @@
-/*******************************************************************************
- *  Copyright (c) 2000, 2008 IBM Corporation and others.
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Eclipse Public License v1.0
- *  which accompanies this distribution, and is available at
- *  http://www.eclipse.org/legal/epl-v10.html
- * 
- *  Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.core.model;
+
+import com.liferay.ide.core.LiferayCore;
 
 import java.io.File;
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,42 +33,23 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.core.runtime.Status;
+
 import org.xml.sax.SAXException;
 
-import com.liferay.ide.core.LiferayCore;
+/**
+ * @author Gregory Amerson
+ */
+public abstract class AbstractModel
+	extends PlatformObject implements IModel, IModelChangeProviderExtension, Serializable {
 
-public abstract class AbstractModel extends PlatformObject implements IModel, IModelChangeProviderExtension, Serializable {
-
-	private static final long serialVersionUID = 1L;
-
-	private transient List fListeners;
-
-	private boolean fLoaded;
-
-	protected boolean fDisposed;
-
-	private long fTimestamp;
-
-	private Exception fException;
+	public static final long serialVersionUID = 1L;
 
 	public AbstractModel() {
-		fListeners = Collections.synchronizedList(new ArrayList());
+		_fListeners = Collections.synchronizedList(new ArrayList<IModelChangedListener>());
 	}
 
 	public void addModelChangedListener(IModelChangedListener listener) {
-		fListeners.add(listener);
-	}
-
-	public void transferListenersTo(IModelChangeProviderExtension target, IModelChangedListenerFilter filter) {
-		ArrayList removed = new ArrayList();
-		for (int i = 0; i < fListeners.size(); i++) {
-			IModelChangedListener listener = (IModelChangedListener) fListeners.get(i);
-			if (filter == null || filter.accept(listener)) {
-				target.addModelChangedListener(listener);
-				removed.add(listener);
-			}
-		}
-		fListeners.removeAll(removed);
+		_fListeners.add(listener);
 	}
 
 	public void dispose() {
@@ -69,9 +57,12 @@ public abstract class AbstractModel extends PlatformObject implements IModel, IM
 	}
 
 	public void fireModelChanged(IModelChangedEvent event) {
-		IModelChangedListener[] list = (IModelChangedListener[]) fListeners.toArray(new IModelChangedListener[fListeners.size()]);
+		IModelChangedListener[] list = (IModelChangedListener[])_fListeners.toArray(
+			new IModelChangedListener[_fListeners.size()]);
+
 		for (int i = 0; i < list.length; i++) {
 			IModelChangedListener listener = list[i];
+
 			listener.modelChanged(event);
 		}
 	}
@@ -80,31 +71,20 @@ public abstract class AbstractModel extends PlatformObject implements IModel, IM
 		fireModelChanged(new ModelChangedEvent(this, object, property, oldValue, newValue));
 	}
 
+	public Exception getException() {
+		return _fException;
+	}
+
 	public String getResourceString(String key) {
 		return key;
 	}
 
+	public final long getTimeStamp() {
+		return _fTimestamp;
+	}
+
 	public IResource getUnderlyingResource() {
 		return null;
-	}
-
-	protected boolean isInSync(File localFile) {
-		return localFile.exists() && localFile.lastModified() == getTimeStamp();
-	}
-
-	public boolean isValid() {
-		return !isDisposed() && isLoaded();
-	}
-
-	public final long getTimeStamp() {
-		return fTimestamp;
-	}
-
-	protected abstract void updateTimeStamp();
-
-	protected void updateTimeStamp(File localFile) {
-		if (localFile.exists())
-			fTimestamp = localFile.lastModified();
 	}
 
 	public boolean isDisposed() {
@@ -112,42 +92,80 @@ public abstract class AbstractModel extends PlatformObject implements IModel, IM
 	}
 
 	public boolean isLoaded() {
-		return fLoaded;
+		return _fLoaded;
 	}
 
-	public void setLoaded(boolean loaded) {
-		fLoaded = loaded;
-	}
-
-	public void setException(Exception e) {
-		fException = e;
-	}
-
-	public Exception getException() {
-		return fException;
-	}
-
-	public void removeModelChangedListener(IModelChangedListener listener) {
-		fListeners.remove(listener);
-	}
-
-	public void throwParseErrorsException(Throwable e) throws CoreException {
-		Status status = new Status(IStatus.ERROR, LiferayCore.PLUGIN_ID, IStatus.OK, "Error in the service file", //$NON-NLS-1$
-				e);
-		throw new CoreException(status);
-	}
-
-	protected SAXParser getSaxParser() throws ParserConfigurationException, SAXException, FactoryConfigurationError {
-		return SAXParserFactory.newInstance().newSAXParser();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.pde.core.IModel#isReconcilingModel()
-	 */
 	public boolean isReconcilingModel() {
 		return false;
 	}
+
+	public boolean isValid() {
+		if (!isDisposed() && isLoaded()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public void removeModelChangedListener(IModelChangedListener listener) {
+		_fListeners.remove(listener);
+	}
+
+	public void setException(Exception e) {
+		_fException = e;
+	}
+
+	public void setLoaded(boolean loaded) {
+		_fLoaded = loaded;
+	}
+
+	public void throwParseErrorsException(Throwable e) throws CoreException {
+		Status status = new Status(IStatus.ERROR, LiferayCore.PLUGIN_ID, IStatus.OK, "Error in the service file", e);
+
+		throw new CoreException(status);
+	}
+
+	public void transferListenersTo(IModelChangeProviderExtension target, IModelChangedListenerFilter filter) {
+		ArrayList<IModelChangedListener> removed = new ArrayList<>();
+
+		for (int i = 0; i < _fListeners.size(); i++) {
+			IModelChangedListener listener = (IModelChangedListener)_fListeners.get(i);
+
+			if ((filter == null) || filter.accept(listener)) {
+				target.addModelChangedListener(listener);
+
+				removed.add(listener);
+			}
+		}
+
+		_fListeners.removeAll(removed);
+	}
+
+	protected SAXParser getSaxParser() throws FactoryConfigurationError, ParserConfigurationException, SAXException {
+		return SAXParserFactory.newInstance().newSAXParser();
+	}
+
+	protected boolean isInSync(File localFile) {
+		if (localFile.exists() && (localFile.lastModified() == getTimeStamp())) {
+			return true;
+		}
+
+		return false;
+	}
+
+	protected abstract void updateTimeStamp();
+
+	protected void updateTimeStamp(File localFile) {
+		if (localFile.exists()) {
+			_fTimestamp = localFile.lastModified();
+		}
+	}
+
+	protected boolean fDisposed;
+
+	private Exception _fException;
+	private transient List<IModelChangedListener> _fListeners;
+	private boolean _fLoaded;
+	private long _fTimestamp;
 
 }

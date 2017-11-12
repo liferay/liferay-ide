@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,12 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 
 import org.eclipse.core.resources.IFile;
@@ -35,132 +35,118 @@ import org.eclipse.core.runtime.jobs.Job;
 /**
  * @author Kuo Zhang
  */
-public class LiferayLanguagePropertiesListener implements IResourceChangeListener, IResourceDeltaVisitor
-{
-    public LiferayLanguagePropertiesListener()
-    {
-        new WorkspaceJob( "clear abondoned liferay language properties markers" )
-        {
-            @Override
-            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-            {
-                LiferayLanguagePropertiesValidator.clearAbandonedMarkers();
-                return Status.OK_STATUS;
-            }
-        }.schedule();
-    }
+public class LiferayLanguagePropertiesListener implements IResourceChangeListener, IResourceDeltaVisitor {
 
-    protected void processFile( IFile file ) throws CoreException
-    {
-        if( file != null && file.exists() )
-        {
-            if( PropertiesUtil.isLanguagePropertiesFile( file ) )
-            {
-                validateLanguagePropertiesEncoding( new IFile[]{file}, null );
-                return;
-            }
+	public LiferayLanguagePropertiesListener() {
+		new WorkspaceJob("clear abondoned liferay language properties markers") {
 
-            final String filename = file.getName();
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+				LiferayLanguagePropertiesValidator.clearAbandonedMarkers();
 
-            if( filename.equals( ILiferayConstants.PORTLET_XML_FILE ) )
-            {
-                final ILiferayProject lrproject = LiferayCore.create( CoreUtil.getLiferayProject( file ) );
+				return Status.OK_STATUS;
+			}
 
-                if( lrproject != null )
-                {
-                    final IFile portletXml = lrproject.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+		}.schedule();
+	}
 
-                    if( portletXml != null && file.equals( portletXml ) )
-                    {
-                        final IFile[] files = PropertiesUtil.getLanguagePropertiesFromPortletXml( portletXml );
-                        validateLanguagePropertiesEncoding( files, CoreUtil.getLiferayProject( file ) );
+	public void resourceChanged(IResourceChangeEvent event) {
+		if (event == null) {
+			return;
+		}
 
-                        return;
-                    }
-                }
-            }
+		try {
+			event.getDelta().accept(this);
+		}
+		catch (CoreException ce) {
+		}
+	}
 
-            if( filename.equals( ILiferayConstants.LIFERAY_HOOK_XML_FILE ) )
-            {
-                final ILiferayProject lrproject = LiferayCore.create( CoreUtil.getLiferayProject( file ) );
+	public boolean visit(IResourceDelta delta) throws CoreException {
+		switch (delta.getResource().getType()) {
+			case IResource.ROOT:
+			case IResource.PROJECT:
+			case IResource.FOLDER:
+				return true;
 
-                if( lrproject != null )
-                {
-                    final IFile liferayHookXml = lrproject.getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+			case IResource.FILE:
+				processFile((IFile)delta.getResource());
 
-                    if( file.equals( liferayHookXml ) )
-                    {
-                        final IFile[] files = PropertiesUtil.getLanguagePropertiesFromLiferayHookXml( liferayHookXml );
-                        validateLanguagePropertiesEncoding( files, CoreUtil.getLiferayProject( file ) );
+				return false;
+		}
 
-                        return;
-                    }
-                }
-            }
-        }
-    }
+		return false;
+	}
 
-    public void resourceChanged( IResourceChangeEvent event )
-    {
-        if( event == null )
-        {
-            return;
-        }
+	protected void processFile(IFile file) throws CoreException {
+		if (FileUtil.notExists(file)) {
+			return;
+		}
 
-        try
-        {
-            event.getDelta().accept( this );
-        }
-        catch( CoreException e )
-        {
-        }
-    }
+		if (PropertiesUtil.isLanguagePropertiesFile(file)) {
+			_validateLanguagePropertiesEncoding(new IFile[] {file}, null);
 
-    public boolean visit( final IResourceDelta delta ) throws CoreException
-    {
-        switch( delta.getResource().getType() )
-        {
-            case IResource.ROOT:
-            case IResource.PROJECT:
-            case IResource.FOLDER:
-                return true;
+			return;
+		}
 
-            case IResource.FILE:
-            {
-                processFile( (IFile) delta.getResource() );
-                return false;
-            }
-        }
+		String filename = file.getName();
 
-        return false;
-    }
+		if (filename.equals(ILiferayConstants.PORTLET_XML_FILE)) {
+			ILiferayProject lrproject = LiferayCore.create(CoreUtil.getLiferayProject(file));
 
-    private void validateLanguagePropertiesEncoding( final IFile[] files, final IProject project )
-    {
-        final Job job = new WorkspaceJob( "Validate Liferay language properties encoding..." )
-        {
-            @Override
-            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-            {
-                if( files != null && files.length > 0 )
-                {
-                    for( IFile file : files )
-                    {
-                        LiferayLanguagePropertiesValidator.getValidator( file ).validateEncoding();
-                    }
-                }
+			if (lrproject != null) {
+				IFile portletXml = lrproject.getDescriptorFile(ILiferayConstants.PORTLET_XML_FILE);
 
-                if( project != null )
-                {
-                    LiferayLanguagePropertiesValidator.clearUnusedValidatorsAndMarkers( project );
-                }
+				if ((portletXml != null) && file.equals(portletXml)) {
+					IFile[] files = PropertiesUtil.getLanguagePropertiesFromPortletXml(portletXml);
 
-                return Status.OK_STATUS;
-            }
-        };
+					_validateLanguagePropertiesEncoding(files, CoreUtil.getLiferayProject(file));
 
-        job.setRule( CoreUtil.getWorkspaceRoot() );
-        job.schedule();
-    }
+					return;
+				}
+			}
+		}
+
+		if (filename.equals(ILiferayConstants.LIFERAY_HOOK_XML_FILE)) {
+			ILiferayProject lrproject = LiferayCore.create(CoreUtil.getLiferayProject(file));
+
+			if (lrproject != null) {
+				IFile liferayHookXml = lrproject.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE);
+
+				if (file.equals(liferayHookXml)) {
+					IFile[] files = PropertiesUtil.getLanguagePropertiesFromLiferayHookXml(liferayHookXml);
+
+					_validateLanguagePropertiesEncoding(files, CoreUtil.getLiferayProject(file));
+
+					return;
+				}
+			}
+		}
+	}
+
+	private void _validateLanguagePropertiesEncoding(IFile[] files, IProject project) {
+		Job job = new WorkspaceJob("Validate Liferay language properties encoding...") {
+
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+				if ((files != null) && (files.length > 0)) {
+					for (IFile file : files) {
+						LiferayLanguagePropertiesValidator.getValidator(file).validateEncoding();
+					}
+				}
+
+				if (project != null) {
+					LiferayLanguagePropertiesValidator.clearUnusedValidatorsAndMarkers(project);
+				}
+
+				return Status.OK_STATUS;
+			}
+
+		};
+
+		job.setRule(CoreUtil.getWorkspaceRoot());
+
+		job.schedule();
+	}
 
 }

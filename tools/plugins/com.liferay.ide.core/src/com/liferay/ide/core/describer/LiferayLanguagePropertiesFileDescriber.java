@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core.describer;
 
@@ -22,17 +21,18 @@ import org.eclipse.core.resources.IFile;
 /**
  * @author Gregory Amerson
  */
-public class LiferayLanguagePropertiesFileDescriber extends LiferayPropertiesFileDescriber
-{
+public class LiferayLanguagePropertiesFileDescriber extends LiferayPropertiesFileDescriber {
 
-    public LiferayLanguagePropertiesFileDescriber()
-    {
-        super();
-    }
+	public LiferayLanguagePropertiesFileDescriber() {
+	}
 
-    @Override
-    protected boolean isPropertiesFile( Object file )
-    {
-        return file instanceof IFile && PropertiesUtil.isLanguagePropertiesFile( (IFile) file );
-    }
+	@Override
+	protected boolean isPropertiesFile(Object file) {
+		if (file instanceof IFile && PropertiesUtil.isLanguagePropertiesFile((IFile)file)) {
+			return true;
+		}
+
+		return false;
+	}
+
 }

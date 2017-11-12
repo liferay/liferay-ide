@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,87 +10,85 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core.util;
 
-import static com.liferay.ide.core.util.StringPool.SINGLE_QUOTE_CHAR;
 import static com.liferay.ide.core.util.StringPool.DOUBLE_QUOTE_CHAR;
+import static com.liferay.ide.core.util.StringPool.SINGLE_QUOTE_CHAR;
 
 /**
  * @author Kuo Zhang
  * @author Terry Jia
  */
-public class StringUtil
-{
+public class StringUtil {
 
-    public static boolean isQuoted( String string )
-    {
-        if( ( string == null ) || ( string.length() < 2 ) )
-        {
-            return false;
-        }
+	public static boolean isQuoted(String string) {
+		if ((string == null) || (string.length() < 2)) {
+			return false;
+		}
 
-        int lastIndex = string.length() - 1;
-        char firstChar = string.charAt( 0 );
-        char lastChar = string.charAt( lastIndex );
+		int lastIndex = string.length() - 1;
+		char firstChar = string.charAt(0);
+		char lastChar = string.charAt(lastIndex);
 
-        return( ( firstChar == SINGLE_QUOTE_CHAR && lastChar == SINGLE_QUOTE_CHAR ) ||
-                ( firstChar == DOUBLE_QUOTE_CHAR && lastChar == DOUBLE_QUOTE_CHAR ) );
-    }
+		if (((firstChar == SINGLE_QUOTE_CHAR) && (lastChar == SINGLE_QUOTE_CHAR)) ||
+			((firstChar == DOUBLE_QUOTE_CHAR) && (lastChar == DOUBLE_QUOTE_CHAR))) {
 
-    public static String merge( String[] array, String delimiter )
-    {
-        if( array == null )
-        {
-            return null;
-        }
+			return true;
+		}
 
-        if( array.length == 0 )
-        {
-            return StringPool.BLANK;
-        }
+		return false;
+	}
 
-        StringBuilder sb = new StringBuilder( 2 * array.length - 1 );
+	public static String merge(String[] array, String delimiter) {
+		if (array == null) {
+			return null;
+		}
 
-        for( int i = 0; i < array.length; i++ )
-        {
-            if( i != 0 )
-            {
-                sb.append( delimiter );
-            }
+		if (array.length == 0) {
+			return StringPool.BLANK;
+		}
 
-            sb.append( array[i] );
-        }
+		StringBuilder sb = new StringBuilder(2 * array.length - 1);
 
-        return sb.toString();
-    }
+		for (int i = 0; i < array.length; i++) {
+			if (i != 0) {
+				sb.append(delimiter);
+			}
 
-    public static String replace( String content, String source, String target )
-    {
-        if( content == null )
-        {
-            return null;
-        }
+			sb.append(array[i]);
+		}
 
-        int length = content.length();
-        int position = 0;
-        int previous = 0;
-        int spacer = source.length();
+		return sb.toString();
+	}
 
-        StringBuffer sb = new StringBuffer();
+	public static String replace(String content, String source, String target) {
+		if (content == null) {
+			return null;
+		}
 
-        while( position + spacer - 1 < length && content.indexOf( source, position ) > -1 )
-        {
-            position = content.indexOf( source, previous );
-            sb.append( content.substring( previous, position ) );
-            sb.append( target );
-            position += spacer;
-            previous = position;
-        }
+		int length = content.length();
+		int position = 0;
+		int previous = 0;
+		int spacer = source.length();
 
-        sb.append( content.substring( position, content.length() ) );
+		StringBuffer sb = new StringBuffer();
 
-        return sb.toString();
-    }
+		while (((position + spacer - 1) < length) && (content.indexOf(source, position) > -1)) {
+			position = content.indexOf(source, previous);
+
+			sb.append(content.substring(previous, position));
+
+			sb.append(target);
+
+			position += spacer;
+			previous = position;
+		}
+
+		sb.append(content.substring(position, content.length()));
+
+		return sb.toString();
+	}
+
 }
