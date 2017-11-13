@@ -1,17 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.util;
@@ -23,55 +21,53 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * @author Gregory Amerson
  */
 public class FileHelper {
 
-	public List<File> findFiles(final File dir, final String ext) {
-		final List<File> files = new ArrayList<>();
+	public List<File> findFiles(File dir, String ext) {
+		List<File> files = new ArrayList<>();
 
-		final FileVisitor<Path> visitor = new SimpleFileVisitor<Path>() {
+		FileVisitor<Path> visitor = new SimpleFileVisitor<Path>() {
+
 			@Override
-			public FileVisitResult visitFile(
-					Path path, BasicFileAttributes attrs)
-				throws IOException {
+			public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
 				File file = path.toFile();
 
-				if (file.isFile())
-				{
-					if (file.getName().endsWith( ext ))
-					{
+				if (file.isFile()) {
+					if (file.getName().endsWith(ext)) {
 						files.add(file);
 					}
 				}
 
 				return super.visitFile(path, attrs);
 			}
+
 		};
 
 		try {
 			Files.walkFileTree(dir.toPath(), visitor);
-		} catch (IOException e) {
-			e.printStackTrace();
+		}
+		catch (IOException ioe) {
+			ioe.printStackTrace();
 		}
 
 		return files;
 	}
 
-	public String readFile(File file)
-		throws FileNotFoundException, IOException {
-
+	public String readFile(File file) throws FileNotFoundException, IOException {
 		return new String(Files.readAllBytes(file.toPath()));
 	}
 
@@ -79,16 +75,17 @@ public class FileHelper {
 		int retval = -1;
 
 		try (OutputStream stream = Files.newOutputStream(file.toPath());
-			 BufferedOutputStream out = new BufferedOutputStream( stream );
-			 BufferedInputStream bin = new BufferedInputStream(new ByteArrayInputStream(contents.getBytes()))) {
+			BufferedOutputStream out = new BufferedOutputStream(stream);
+			BufferedInputStream bin = new BufferedInputStream(new ByteArrayInputStream(contents.getBytes()))) {
 
 			byte[] buffer = new byte[1024];
 
-	        int bytesRead = 0;
-	        int bytesTotal = 0;
+			int bytesRead = 0;
+			int bytesTotal = 0;
 
-	        // Keep reading from the file while there is any content
-	        // when the end of the stream has been reached, -1 is returned
+			// Keep reading from the file while there is any content
+			// when the end of the stream has been reached, -1 is returned
+
 			while ((bytesRead = bin.read(buffer)) != -1) {
 				out.write(buffer, 0, bytesRead);
 				bytesTotal += bytesRead;

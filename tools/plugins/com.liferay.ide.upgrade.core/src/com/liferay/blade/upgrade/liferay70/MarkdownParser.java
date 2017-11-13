@@ -1,17 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.upgrade.liferay70;
@@ -32,23 +30,38 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
-
 /**
  * @author Gregory Amerson
  */
 public class MarkdownParser {
 
-	private final static Map<String, Map<String, String>> _markdowns = new HashMap<>();
+	public static String getSection(String fileName, String sectionKey) {
+		String retval = null;
+
+		if (sectionKey.equals("#legacy")) {
+			retval = "#legacy";
+		}
+		else {
+			Map<String, String> sections = parse(fileName);
+
+			if (sections != null) {
+				retval = sections.get(sectionKey);
+			}
+		}
+
+		return retval;
+	}
 
 	public static Map<String, String> parse(String fileName) {
 		Map<String, String> retval = _markdowns.get(fileName);
 
 		if (retval == null) {
 			try {
-				final String markdown = CoreUtil.readStreamToString(MarkdownParser.class.getResourceAsStream(fileName));
-				final String html = MarkdownConverterFactoryUtil.create().convert(markdown);
+				String markdown = CoreUtil.readStreamToString(MarkdownParser.class.getResourceAsStream(fileName));
 
-				Map<String, String> sections = parseHtml(html);
+				String html = MarkdownConverterFactoryUtil.create().convert(markdown);
+
+				Map<String, String> sections = _parseHtml(html);
 
 				_markdowns.put(fileName, sections);
 
@@ -62,14 +75,16 @@ public class MarkdownParser {
 		return retval;
 	}
 
-	private static Map<String, String> parseHtml(String html) {
+	private static Map<String, String> _parseHtml(String html) {
 		Map<String, String> retval = new HashMap<>();
 
 		Document document = Jsoup.parse(html);
+
 		Elements elements = document.select("a[href] > h3");
 
-		for (Element h3 : elements)  {
+		for (Element h3 : elements) {
 			Element a = h3.parent();
+
 			int index = a.siblingIndex();
 			List<Node> siblings = a.siblingNodes();
 
@@ -97,14 +112,18 @@ public class MarkdownParser {
 			String idReg = "\\[\\]\\(id=[^\\s]+?\\)";
 			String replace = "";
 			Pattern idPattern = Pattern.compile(idReg);
+
 			Matcher idMatcher = idPattern.matcher(content);
+
 			content = idMatcher.replaceAll(replace);
 
 			String hyperLinkReg = "<a\\s+href\\s*=\\s*\"(http.+?)\"\\s*>.+?</a>";
+
 			Pattern hyperLinkPattern = Pattern.compile(hyperLinkReg);
+
 			Matcher hyperLinkMatcher = hyperLinkPattern.matcher(content);
 
-			while(hyperLinkMatcher.find()) {
+			while (hyperLinkMatcher.find()) {
 				content = content.replace(hyperLinkMatcher.group(), hyperLinkMatcher.group(1));
 			}
 
@@ -114,20 +133,6 @@ public class MarkdownParser {
 		return retval;
 	}
 
-	public static String getSection(String fileName, String sectionKey) {
-		String retval = null;
+	private static final Map<String, Map<String, String>> _markdowns = new HashMap<>();
 
-		if (sectionKey.equals("#legacy")) {
-			retval = "#legacy";
-		}
-		else {
-			final Map<String, String> sections = parse(fileName);
-
-			if (sections != null) {
-				retval = sections.get(sectionKey);
-			}
-		}
-
-		return retval;
-	}
 }

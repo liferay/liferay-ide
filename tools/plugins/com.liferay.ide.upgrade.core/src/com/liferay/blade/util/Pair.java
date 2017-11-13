@@ -19,13 +19,13 @@ package com.liferay.blade.util;
  */
 public class Pair<F, S> {
 
-	public Pair(final F l, final S r) {
+	public Pair(F l, S r) {
 		_first = l;
 		_second = r;
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -38,7 +38,7 @@ public class Pair<F, S> {
 			return false;
 		}
 
-		final Pair<?, ?> other = (Pair<?, ?>)obj;
+		Pair<?, ?> other = (Pair<?, ?>)obj;
 
 		if (_first == null) {
 			if (other.first() != null) {
@@ -67,7 +67,7 @@ public class Pair<F, S> {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
+		int prime = 31;
 		int result = 1;
 		result = prime * result + ((_first == null) ? 0 : _first.hashCode());
 		result = prime * result + ((_second == null) ? 0 : _second.hashCode());

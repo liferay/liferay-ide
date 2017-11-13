@@ -1,17 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.eclipse.provider;
@@ -19,12 +17,14 @@ package com.liferay.blade.eclipse.provider;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+
 import java.nio.file.Files;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -37,39 +37,21 @@ import org.eclipse.jdt.core.JavaCore;
  */
 public class WorkspaceHelper {
 
-	private void addNaturesToProject( IProject proj, String[] natureIds, IProgressMonitor monitor )
-	        throws CoreException {
-        IProjectDescription description = proj.getDescription();
-
-        String[] prevNatures = description.getNatureIds();
-        String[] newNatures = new String[prevNatures.length + natureIds.length];
-
-        System.arraycopy( prevNatures, 0, newNatures, 0, prevNatures.length );
-
-        for( int i = prevNatures.length; i < newNatures.length; i++ ) {
-            newNatures[i] = natureIds[i - prevNatures.length];
-        }
-
-        description.setNatureIds( newNatures );
-        proj.setDescription( description, monitor );
-    }
-
 	public IFile createIFile(String projectName, File file) throws CoreException, IOException {
-		IJavaProject project = getJavaProject(projectName);
+		IJavaProject project = _getJavaProject(projectName);
 
-		IFile projectFile = project.getProject().getFile( "/temp/" + file.getName() );
+		IFile projectFile = project.getProject().getFile("/temp/" + file.getName());
 
-		final IProgressMonitor npm = new NullProgressMonitor();
+		IProgressMonitor npm = new NullProgressMonitor();
 
 		if (projectFile.exists()) {
 			projectFile.delete(IFile.FORCE, npm);
 		}
 
-		if( !projectFile.getParent().exists() && projectFile.getParent() instanceof IFolder )
-		{
-			IFolder parentFolder = (IFolder) projectFile.getParent();
+		if (!projectFile.getParent().exists() && projectFile.getParent() instanceof IFolder) {
+			IFolder parentFolder = (IFolder)projectFile.getParent();
 
-			parentFolder.create( true, true, npm );
+			parentFolder.create(true, true, npm);
 		}
 
 		byte[] bytes = Files.readAllBytes(file.toPath());
@@ -79,20 +61,41 @@ public class WorkspaceHelper {
 		return projectFile;
 	}
 
-	private IJavaProject getJavaProject(String projectName) throws CoreException {
-		IProject javaProject = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+	private void _addNaturesToProject(IProject proj, String[] natureIds, IProgressMonitor monitor)
+		throws CoreException {
+
+		IProjectDescription description = proj.getDescription();
+
+		String[] prevNatures = description.getNatureIds();
+
+		String[] newNatures = new String[prevNatures.length + natureIds.length];
+
+		System.arraycopy(prevNatures, 0, newNatures, 0, prevNatures.length);
+
+		for (int i = prevNatures.length; i < newNatures.length; i++) {
+			newNatures[i] = natureIds[i - prevNatures.length];
+		}
+
+		description.setNatureIds(newNatures);
+		proj.setDescription(description, monitor);
+	}
+
+	private IJavaProject _getJavaProject(String projectName) throws CoreException {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+		IProject javaProject = workspace.getRoot().getProject(projectName);
 
 		IProgressMonitor monitor = new NullProgressMonitor();
 
 		if (!javaProject.exists()) {
-			IProjectDescription description = ResourcesPlugin.getWorkspace().newProjectDescription(projectName);
+			IProjectDescription description = workspace.newProjectDescription(projectName);
 			javaProject.create(monitor);
 			javaProject.open(monitor);
 			javaProject.setDescription(description, monitor);
 		}
 
 		javaProject.open(monitor);
-		addNaturesToProject(javaProject, new String[] { JavaCore.NATURE_ID }, monitor);
+		_addNaturesToProject(javaProject, new String[] {JavaCore.NATURE_ID}, monitor);
 
 		return JavaCore.create(javaProject);
 	}

@@ -1,17 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
@@ -27,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,28 +33,26 @@ import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
 
-@Component(
-	property = {
-		"file.extensions=java,jsp,jspf",
-		"problem.summary=The portal-kernel and portal-impl folders have many packages with the same name. Therefore, all of these packages are affected by the split package problem",
-		"problem.tickets=LPS-61952",
-		"problem.title=Renamed Packages to Fix the Split Packages Problem",
-		"problem.section=#renamed-packages-to-fix-the-split-packages-problem",
-		"auto.correct=import",
-		"implName=RenamePortalKernelImports"
-	},
-	service = {
-		AutoMigrator.class,
-		FileMigrator.class
-	}
-)
+/**
+ * @author Gregory Amerson
+ */
+@Component(property = {
+	"file.extensions=java,jsp,jspf",
+	"problem.summary=The portal-kernel and portal-impl folders have many packages with the same name. Therefore, al" +
+		"l of these packages are affected by the split package problem",
+	"problem.tickets=LPS-61952", "problem.title=Renamed Packages to Fix the Split Packages Problem",
+	"problem.section=#renamed-packages-to-fix-the-split-packages-problem", "auto.correct=import",
+	"implName=RenamePortalKernelImports"
+},
+	service = {AutoMigrator.class, FileMigrator.class})
 public class RenamePortalKernelImports extends ImportStatementMigrator {
 
-	// In my code I didn't handle the following package or class as I didn't find them in
+	// In my code I didn't handle the following package or class as I didn't
+	// find them in
 	// 6.2.x portal-service source or they are wrong.
 	// Keep them here for future research to make sure need them or not at all.
 
-	// private final static String[] IMPORTS = new String[] {
+	// private static final String[] IMPORTS = {
 	// "com.liferay.portal.exception",
 	// "com.liferay.portal.jdbc.pool.metrics",
 	// "com.liferay.portal.mail",
@@ -77,8 +74,10 @@ public class RenamePortalKernelImports extends ImportStatementMigrator {
 	// "com.liferay.portlet.ratings.exception",
 	// "com.liferay.portlet.ratings.transformer"
 	// };
+
 	//
-	// private final static String[] IMPORTS_FIXED = new String[] {
+
+	// private static final String[] IMPORTS_FIXED = {
 	// "com.liferay.portal.kernel.exception",
 	// "com.liferay.portal.kernel.jdbc.pool.metrics",
 	// "com.liferay.portal.kernel.mail",
@@ -101,52 +100,33 @@ public class RenamePortalKernelImports extends ImportStatementMigrator {
 	// "com.liferay.ratings.kernel.transformer"
 	// };
 
-	public RenamePortalKernelImports() {
-		super(getImports());
-	}
+	public static String[] getFixedImports(String[][] packageChangeMap) {
+		String[] newImports = new String[packageChangeMap.length];
 
-	private static Map<String, String> getImports() {
-		Map<String, String> imports = new HashMap<>();
-
-		String[][] csv = _readCSV();
-
-		String[] oldImports = getOldImports(csv);
-		String[] fixedImports = getFixedImports(csv);
-
-		for (int i = 0; i < oldImports.length; i++) {
-			imports.put(oldImports[i], fixedImports[i]);
+		for (int i = 0; i < packageChangeMap.length; i++) {
+			newImports[i] = packageChangeMap[i][1];
 		}
 
-		return imports;
+		return newImports;
 	}
 
 	public static String[] getOldImports(String[][] packageChangeMap) {
-		String[] _oldImports = new String[packageChangeMap.length];
+		String[] oldImports = new String[packageChangeMap.length];
 
 		for (int i = 0; i < packageChangeMap.length; i++) {
-			_oldImports[i] = packageChangeMap[i][0];
+			oldImports[i] = packageChangeMap[i][0];
 		}
 
-		return _oldImports;
+		return oldImports;
 	}
 
-	public static String[] getFixedImports(String[][] packageChangeMap) {
-		String[] _newImports = new String[packageChangeMap.length];
+	public static String[][] readCSV() {
+		try (InputStream in = RenamePortalKernelImports.class.getResourceAsStream(
+				"/com/liferay/blade/upgrade/liferay70/apichanges/kernel-rename.csv")) {
 
-		for (int i = 0; i < packageChangeMap.length; i++) {
-			_newImports[i] = packageChangeMap[i][1];
-		}
-
-		return _newImports;
-	}
-
-	public static String[][] _readCSV() {
-		try (InputStream in = RenamePortalKernelImports.class.getResourceAsStream("/com/liferay/blade/upgrade/liferay70/apichanges/kernel-rename.csv")) {
 			List<String> lines = new ArrayList<>();
 
-			try (BufferedReader bufferedReader =
-					new BufferedReader(new InputStreamReader(in))) {
-
+			try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in))) {
 				String line;
 
 				while ((line = bufferedReader.readLine()) != null) {
@@ -172,26 +152,34 @@ public class RenamePortalKernelImports extends ImportStatementMigrator {
 			}
 
 			return results;
-
-		} catch (IOException e) {
+		}
+		catch (IOException ioe) {
 		}
 
 		return null;
 	}
 
+	public RenamePortalKernelImports() {
+		super(_getImports());
+	}
+
 	@Override
 	public List<SearchResult> searchFile(File file, JavaFile javaFile) {
-		final List<SearchResult> searchResults = new ArrayList<>();
+		List<SearchResult> searchResults = new ArrayList<>();
 
-		final List<SearchResult> importResult = javaFile.findImports((getImports().keySet().toArray(new String[0])));
+		Map<String, String> imports = _getImports();
 
-		if (importResult.size() != 0) {
+		List<SearchResult> importResult = javaFile.findImports(imports.keySet().toArray(new String[0]));
+
+		if (!importResult.isEmpty()) {
 			for (SearchResult result : importResult) {
+
 				// make sure that our import is not in list of fixed imports
+
 				boolean skip = false;
 
 				if (result.searchContext != null) {
-					for (String fixed : getImports().values().toArray(new String[0])) {
+					for (String fixed : imports.values().toArray(new String[0])) {
 						if (result.searchContext.contains(fixed)) {
 							skip = true;
 							break;
@@ -200,17 +188,44 @@ public class RenamePortalKernelImports extends ImportStatementMigrator {
 				}
 
 				if (!skip) {
-					result.autoCorrectContext = getPrefix() + getImportNameFromResult(result);
+					result.autoCorrectContext = getPrefix() + _getImportNameFromResult(result);
 					searchResults.add(result);
 				}
 			}
 		}
 
-		return removeDuplicate(searchResults);
+		return _removeDuplicate(searchResults);
 	}
 
-	private List<SearchResult> removeDuplicate(List<SearchResult> searchResults) {
-		final List<SearchResult> newList = new ArrayList<>();
+	private static Map<String, String> _getImports() {
+		Map<String, String> imports = new HashMap<>();
+
+		String[][] csv = readCSV();
+
+		String[] oldImports = getOldImports(csv);
+		String[] fixedImports = getFixedImports(csv);
+
+		for (int i = 0; i < oldImports.length; i++) {
+			imports.put(oldImports[i], fixedImports[i]);
+		}
+
+		return imports;
+	}
+
+	private String _getImportNameFromResult(SearchResult result) {
+		String searchContext = result.searchContext;
+
+		if (searchContext != null) {
+			int offSet = result.endOffset - result.startOffset;
+
+			return searchContext.substring(0, offSet);
+		}
+
+		return "";
+	}
+
+	private List<SearchResult> _removeDuplicate(List<SearchResult> searchResults) {
+		List<SearchResult> newList = new ArrayList<>();
 
 		for (SearchResult searchResult : searchResults) {
 			if (!newList.contains(searchResult)) {
@@ -219,18 +234,6 @@ public class RenamePortalKernelImports extends ImportStatementMigrator {
 		}
 
 		return newList;
-	}
-
-	private String getImportNameFromResult(SearchResult result) {
-		String searchContext = result.searchContext;
-
-		if (searchContext != null) {
-			int offSet = result.endOffset - result.startOffset;
-			return searchContext.substring(0, offSet);
-
-		}
-
-		return "";
 	}
 
 }

@@ -1,17 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
@@ -21,25 +19,24 @@ import com.liferay.blade.upgrade.liferay70.JSPTagMigrator;
 
 import org.osgi.service.component.annotations.Component;
 
-@Component(
-	property = {
-		"file.extensions=jsp,jspf",
-		"problem.title=Custom AUI Validators Are No Longer Implicitly Required",
-		"problem.section=#custom-aui-validators-are-no-longer-implicitly-required",
-		"problem.summary=The AUI Validator tag no longer forces custom validators to be required",
-		"problem.tickets=LPS-60995",
-		"implName=CustomAUIValidatorTags"
-	},
-	service = FileMigrator.class
-)
+/**
+ * @author Gregory Amerson
+ */
+@Component(property = {
+	"file.extensions=jsp,jspf", "problem.title=Custom AUI Validators Are No Longer Implicitly Required",
+	"problem.section=#custom-aui-validators-are-no-longer-implicitly-required",
+	"problem.summary=The AUI Validator tag no longer forces custom validators to be required",
+	"problem.tickets=LPS-60995", "implName=CustomAUIValidatorTags"
+},
+	service = FileMigrator.class)
 public class CustomAUIValidatorTags extends JSPTagMigrator {
 
 	public CustomAUIValidatorTags() {
 		super(_attrNames, new String[0], _attrValues, new String[0], _tagNames, new String[0]);
 	}
 
-	private static final String[] _tagNames = new String[] { "aui:validator" };
-	private static final String[] _attrNames = new String[] { "name" };
-	private static final String[] _attrValues = new String[] { "custom" };
+	private static final String[] _attrNames = {"name"};
+	private static final String[] _attrValues = {"custom"};
+	private static final String[] _tagNames = {"aui:validator"};
 
 }

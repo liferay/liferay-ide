@@ -1,57 +1,57 @@
 [
 	{
-		"packageName": "com.liferay.portal.kernel.util",
 		"className": "Validator_IW",
 		"deprecatedVersion": "none",
+		"javadoc": "@deprecated",
 		"methodName": "isNotNull",
+		"packageName": "com.liferay.portal.kernel.util",
 		"parameters": [
 			"java.lang.Object[]"
-		],
-		"javadoc": "@deprecated"
+		]
 	},
 	{
-		"packageName": "com.liferay.portal.kernel.util",
 		"className": "Validator_IW",
 		"deprecatedVersion": "none",
+		"javadoc": "@deprecated",
 		"methodName": "isNull",
+		"packageName": "com.liferay.portal.kernel.util",
 		"parameters": [
 			"java.lang.Object[]"
-		],
-		"javadoc": "@deprecated"
+		]
 	},
 	{
-		"packageName": "com.liferay.portal.kernel.util",
 		"className": "StringUtil_IW",
 		"deprecatedVersion": "none",
+		"javadoc": "@deprecated",
 		"methodName": "highlight",
+		"packageName": "com.liferay.portal.kernel.util",
 		"parameters": [
 			"java.lang.String",
 			"java.lang.String"
-		],
-		"javadoc": "@deprecated"
+		]
 	},
 	{
-		"packageName": "com.liferay.portal.kernel.util",
 		"className": "StringUtil_IW",
 		"deprecatedVersion": "none",
+		"javadoc": "@deprecated",
 		"methodName": "highlight",
+		"packageName": "com.liferay.portal.kernel.util",
 		"parameters": [
 			"java.lang.String",
 			"java.lang.String",
 			"java.lang.String",
 			"java.lang.String"
-		],
-		"javadoc": "@deprecated"
+		]
 	},
 	{
-		"packageName": "com.liferay.portlet",
 		"className": "PortletPreferencesWrapper",
 		"deprecatedVersion": "none",
+		"javadoc": "@deprecated",
 		"methodName": "PortletPreferencesWrapper",
+		"packageName": "com.liferay.portlet",
 		"parameters": [
 			"PortletPreferences",
 			"String"
-		],
-		"javadoc": "@deprecated"
+		]
 	}
 ]

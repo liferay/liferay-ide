@@ -1,22 +1,21 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.api;
 
 import java.io.File;
+
 import java.util.UUID;
 
 /**
@@ -24,30 +23,34 @@ import java.util.UUID;
  */
 public class Problem {
 
-	public static final int STATUS_NOT_RESOLVED = 0;
-	public static final int STATUS_RESOLVED = 1;
-	public static final int STATUS_IGNORE = 2;
 	public static final long DEFAULT_MARKER_ID = -1;
-	public static final int MARKER_WARNING = 1;
+
 	public static final int MARKER_ERROR = 2;
+
+	public static final int MARKER_WARNING = 1;
+
+	public static final int STATUS_IGNORE = 2;
+
+	public static final int STATUS_NOT_RESOLVED = 0;
+
+	public static final int STATUS_RESOLVED = 1;
 
 	public Problem() {
 	}
 
-	public Problem( String title, String summary, String type,
-			String ticket, File file,
-			int lineNumber, int startOffset, int endOffset,
-			String html, String autoCorrectContext, int status, long markerId, int markerType ) {
+	public Problem(
+		String title, String summary, String type, String ticket, File file, int lineNumber, int startOffset,
+		int endOffset, String html, String autoCorrectContext, int status, long markerId, int markerType) {
 
-		this( UUID.randomUUID().toString(), title, summary, type, ticket, file,
-				lineNumber, startOffset, endOffset, html, autoCorrectContext,
-				status, markerId, markerType );
+		this(
+			UUID.randomUUID().toString(), title, summary, type, ticket, file, lineNumber, startOffset, endOffset, html,
+			autoCorrectContext, status, markerId, markerType);
 	}
 
-	public Problem( String uuid, String title, String summary, String type,
-			String ticket, File file,
-			int lineNumber, int startOffset, int endOffset,
-			String html, String autoCorrectContext, int status, long markerId, int markerType) {
+	public Problem(
+		String uuid, String title, String summary, String type, String ticket, File file, int lineNumber,
+		int startOffset, int endOffset, String html, String autoCorrectContext, int status, long markerId,
+		int markerType) {
 
 		this.uuid = uuid;
 		this.title = title;
@@ -65,191 +68,237 @@ public class Problem {
 		this.markerType = markerType;
 	}
 
-	public String uuid;
-	public File file;
-	public int lineNumber;
-	public int number;
-	public String summary;
-	public String ticket;
-	public String title;
-	public String type;
-	public int endOffset;
-	public int startOffset;
-	public String html;
-	public String autoCorrectContext;
-	public int status;
-	public long markerId;
-	public int markerType;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
 
-	public String getUuid() {
-        return uuid;
-   }
+		if (obj == null) {
+			return false;
+		}
 
-	public void setUuid(String uuid) {
-	    this.uuid = uuid;
-	}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
 
-	public String getTitle() {
-		return title;
-	}
+		Problem other = (Problem)obj;
 
-	public File getFile() {
-		return file;
-	}
+		if (uuid.equals(other.uuid)) {
+			return true;
+		}
 
-	public void setFile(File file) {
-		this.file = file;
-	}
+		if (endOffset != other.endOffset) {
+			return false;
+		}
 
-	public int getLineNumber() {
-		return lineNumber;
-	}
+		if (file == null) {
+			if (other.file != null) {
+				return false;
+			}
+		}
+		else if (!file.equals(other.file)) {
+			return false;
+		}
 
-	public void setLineNumber(int lineNumber) {
-		this.lineNumber = lineNumber;
-	}
+		if (lineNumber != other.lineNumber) {
+			return false;
+		}
 
-	public int getNumber() {
-		return number;
-	}
+		if (number != other.number) {
+			return false;
+		}
 
-	public void setNumber(int number) {
-		this.number = number;
-	}
+		if (startOffset != other.startOffset) {
+			return false;
+		}
 
-	public String getSummary() {
-		return summary;
-	}
+		if (summary == null) {
+			if (other.summary != null) {
+				return false;
+			}
+		}
+		else if (!summary.equals(other.summary)) {
+			return false;
+		}
 
-	public void setSummary(String summary) {
-		this.summary = summary;
-	}
+		if (ticket == null) {
+			if (other.ticket != null) {
+				return false;
+			}
+		}
+		else if (!ticket.equals(other.ticket)) {
+			return false;
+		}
 
-	public String getTicket() {
-		return ticket;
-	}
+		if (title == null) {
+			if (other.title != null) {
+				return false;
+			}
+		}
+		else if (!title.equals(other.title)) {
+			return false;
+		}
 
-	public void setTicket(String ticket) {
-		this.ticket = ticket;
-	}
+		if (type == null) {
+			if (other.type != null) {
+				return false;
+			}
+		}
+		else if (!type.equals(other.type)) {
+			return false;
+		}
 
-	public String getType() {
-		return type;
-	}
+		if (autoCorrectContext == null) {
+			if (other.autoCorrectContext != null) {
+				return false;
+			}
+		}
+		else if (!autoCorrectContext.equals(other.autoCorrectContext)) {
+			return false;
+		}
 
-	public void setType(String type) {
-		this.type = type;
-	}
+		if (status != other.status) {
+			return false;
+		}
 
-	public int getEndOffset() {
-		return endOffset;
-	}
+		if (markerId != other.markerId) {
+			return false;
+		}
 
-	public void setEndOffset(int endOffset) {
-		this.endOffset = endOffset;
-	}
+		if (markerType != other.markerType) {
+			return false;
+		}
 
-	public int getStartOffset() {
-		return startOffset;
-	}
-
-	public void setStartOffset(int startOffset) {
-		this.startOffset = startOffset;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
+		return true;
 	}
 
 	public String getAutoCorrectContext() {
 		return autoCorrectContext;
 	}
 
-	public void setAutoCorrectContext(String autoCorrectContext) {
-		this.autoCorrectContext = autoCorrectContext;
+	public int getEndOffset() {
+		return endOffset;
 	}
 
-	public int getStatus() {
-		return status;
+	public File getFile() {
+		return file;
 	}
 
-	public void setStatus(int status) {
-		this.status = status;
+	public int getLineNumber() {
+		return lineNumber;
 	}
 
 	public long getMarkerId() {
 		return markerId;
 	}
 
-	public void setMarkerId(long markerId) {
-		this.markerId = markerId;
+	public int getMarkerType() {
+		return markerType;
 	}
 
-	public int getMarkerType(){
-		return markerType;
+	public int getNumber() {
+		return number;
+	}
+
+	public int getStartOffset() {
+		return startOffset;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public String getSummary() {
+		return summary;
+	}
+
+	public String getTicket() {
+		return ticket;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setAutoCorrectContext(String autoCorrectContext) {
+		this.autoCorrectContext = autoCorrectContext;
+	}
+
+	public void setEndOffset(int endOffset) {
+		this.endOffset = endOffset;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+	public void setLineNumber(int lineNumber) {
+		this.lineNumber = lineNumber;
+	}
+
+	public void setMarkerId(long markerId) {
+		this.markerId = markerId;
 	}
 
 	public void setMarkerType(int markerType) {
 		this.markerType = markerType;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Problem other = (Problem) obj;
-		if (uuid.equals( other.uuid ))
-		    return true;
-		if (endOffset != other.endOffset)
-			return false;
-		if (file == null) {
-			if (other.file != null)
-				return false;
-		} else if (!file.equals(other.file))
-			return false;
-		if (lineNumber != other.lineNumber)
-			return false;
-		if (number != other.number)
-			return false;
-		if (startOffset != other.startOffset)
-			return false;
-		if (summary == null) {
-			if (other.summary != null)
-				return false;
-		} else if (!summary.equals(other.summary))
-			return false;
-		if (ticket == null) {
-			if (other.ticket != null)
-				return false;
-		} else if (!ticket.equals(other.ticket))
-			return false;
-		if (title == null) {
-			if (other.title != null)
-				return false;
-		} else if (!title.equals(other.title))
-			return false;
-		if (type == null) {
-			if (other.type != null)
-				return false;
-		} else if (!type.equals(other.type))
-			return false;
-		if (autoCorrectContext == null) {
-			if (other.autoCorrectContext != null)
-				return false;
-		} else if (!autoCorrectContext.equals(other.autoCorrectContext))
-			return false;
-		if (status != other.status)
-			return false;
-		if (markerId != other.markerId)
-			return false;
-		if(markerType != other.markerType)
-			return false;
-
-		return true;
+	public void setNumber(int number) {
+		this.number = number;
 	}
+
+	public void setStartOffset(int startOffset) {
+		this.startOffset = startOffset;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
+	public void setTicket(String ticket) {
+		this.ticket = ticket;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	public String autoCorrectContext;
+	public int endOffset;
+	public File file;
+	public String html;
+	public int lineNumber;
+	public long markerId;
+	public int markerType;
+	public int number;
+	public int startOffset;
+	public int status;
+	public String summary;
+	public String ticket;
+	public String title;
+	public String type;
+	public String uuid;
 
 }
