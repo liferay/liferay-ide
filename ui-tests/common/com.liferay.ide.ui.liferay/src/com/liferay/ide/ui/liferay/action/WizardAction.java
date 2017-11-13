@@ -108,14 +108,6 @@ public class WizardAction extends UIAction {
 		_newFragmentInfoWizard.getBrowseOsgiBtn().click();
 	}
 
-	public void delete() {
-		_newFragmentInfoWizard.getDeleteBtn().click();
-	}
-
-	public void selectFiles(String items) {
-		_newFragmentInfoWizard.getFiles().click(items);
-	}
-
 	public void openImportLiferayWorkspaceWizard() {
 		ide.getFileMenu().clickMenu(IMPORT);
 

@@ -15,7 +15,6 @@
 package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.swtbot.page.Dialog;
 
 import java.io.IOException;
 
@@ -96,7 +95,7 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openAddOverrideFilesDialog();
 
-		Assert.assertFalse(_dailog.confirmBtn().isEnabled());
+		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
 
 		dialogAction.cancel();
 
@@ -218,13 +217,13 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openAddOverrideFilesDialog();
 
-		Assert.assertFalse(_dailog.confirmBtn().isEnabled());
+		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
 
 		dialogAction.cancel();
 
-		wizardAction.selectFiles("META-INF/resources/configuration.jsp");
+		wizardAction.selectFragmentFile("META-INF/resources/configuration.jsp");
 
-		wizardAction.delete();
+		wizardAction.deleteFragmentFile();
 
 		wizardAction.openAddOverrideFilesDialog();
 
@@ -236,7 +235,5 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		viewAction.deleteProject(projectName);
 	}
-
-	private static final Dialog _dailog = new Dialog(bot);
 
 }
