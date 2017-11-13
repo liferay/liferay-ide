@@ -233,12 +233,12 @@ public abstract class Page extends Composite implements PageActionListener, Sele
 		return image;
 	}
 
-	protected void setBackPage(boolean canBack) {
-		this.canBack = canBack;
+	protected void setBackPage(boolean back) {
+		this.canBack = back;
 	}
 
-	protected void setNextPage(boolean canNext) {
-		this.canNext = canBack;
+	protected void setNextPage(boolean next) {
+		this.canNext = next;
 	}
 
 	protected boolean showBackPage() {
