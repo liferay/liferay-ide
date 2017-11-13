@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.vaadin.ui.wizard;
 
@@ -24,6 +23,7 @@ import com.liferay.ide.portlet.vaadin.ui.VaadinUI;
 import com.liferay.ide.project.ui.wizard.ValidProjectChecker;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.text.templates.ContextTypeRegistry;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -33,95 +33,95 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Henri Sara
  */
-@SuppressWarnings( "restriction" )
-public class NewVaadinPortletWizard extends NewPortletWizard
-{
+@SuppressWarnings("restriction")
+public class NewVaadinPortletWizard extends NewPortletWizard {
 
-    public static final String ID = "com.liferay.ide.eclipse.portlet.vaadin.ui.wizard.portlet"; //$NON-NLS-1$
+	public static final String ID = "com.liferay.ide.eclipse.portlet.vaadin.ui.wizard.portlet";
 
-    public NewVaadinPortletWizard()
-    {
-        this( null );
-    }
+	public NewVaadinPortletWizard() {
+		this(null);
+	}
 
-    public NewVaadinPortletWizard( IDataModel model )
-    {
-        super( model );
-    }
+	public NewVaadinPortletWizard(IDataModel model) {
+		super(model);
+	}
 
-    @Override
-    public String getTitle()
-    {
-        return Msgs.newLiferayVaadinPortlet;
-    }
+	@Override
+	public String getTitle() {
+		return Msgs.newLiferayVaadinPortlet;
+	}
 
-    @Override
-    protected void doAddPages()
-    {
-        addPage( new NewVaadinApplicationClassWizardPage(
-            getDataModel(), "pageOne", Msgs.createVaadinPortletApplicationClass, getDefaultPageTitle(), fragment ) ); //$NON-NLS-1$
-        addPage( new NewVaadinPortletOptionsWizardPage(
-            getDataModel(), "pageTwo", Msgs.specifyVaadinPortletDeployment, getDefaultPageTitle(), //$NON-NLS-1$
-            fragment ) );
-        addPage( new NewLiferayPortletWizardPage(
-            getDataModel(), "pageThree", Msgs.specifyLiferayPortletDeployment, //$NON-NLS-1$
-            getDefaultPageTitle(), fragment ) );
-    }
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		getDataModel();
+		ValidProjectChecker checker = new ValidProjectChecker(ID);
 
-    @Override
-    protected String getDefaultPageTitle()
-    {
-        return Msgs.createLiferayVaadinPortlet;
-    }
+		checker.checkValidProjectTypes();
+	}
 
-    @Override
-    protected IDataModelProvider getDefaultProvider()
-    {
-        // for now, no need for own template store and context type
-        final TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
+	@Override
+	protected void doAddPages() {
+		addPage(
+			new NewVaadinApplicationClassWizardPage(
+				getDataModel(), "pageOne", Msgs.createVaadinPortletApplicationClass, getDefaultPageTitle(), fragment));
+		addPage(
+			new NewVaadinPortletOptionsWizardPage(
+				getDataModel(), "pageTwo", Msgs.specifyVaadinPortletDeployment, getDefaultPageTitle(), fragment));
+		addPage(
+			new NewLiferayPortletWizardPage(
+				getDataModel(), "pageThree", Msgs.specifyLiferayPortletDeployment, getDefaultPageTitle(), fragment));
+	}
 
-        final TemplateContextType contextType =
-            PortletUIPlugin.getDefault().getTemplateContextRegistry().getContextType( PortletTemplateContextTypeIds.NEW );
+	@Override
+	protected String getDefaultPageTitle() {
+		return Msgs.createLiferayVaadinPortlet;
+	}
 
-        return new NewVaadinPortletClassDataModelProvider( fragment )
-        {
-            @Override
-            public IDataModelOperation getDefaultOperation()
-            {
-                return new AddVaadinApplicationOperation( this.model, templateStore, contextType );
-            }
-        };
-    }
+	@Override
+	protected IDataModelProvider getDefaultProvider() {
 
-    @Override
-    protected ImageDescriptor getImage()
-    {
-        return ImageDescriptor.createFromURL( VaadinUI.getDefault().getBundle().getEntry(
-            "/icons/wizban/vaadin_wiz.png" ) ); //$NON-NLS-1$
-    }
+		// for now, no need for own template store and context type
 
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-        getDataModel();
-        ValidProjectChecker checker = new ValidProjectChecker( ID );
-        checker.checkValidProjectTypes();
-    }
+		TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
 
-    private static class Msgs extends NLS
-    {
-        public static String createLiferayVaadinPortlet;
-        public static String createVaadinPortletApplicationClass;
-        public static String newLiferayVaadinPortlet;
-        public static String specifyLiferayPortletDeployment;
-        public static String specifyVaadinPortletDeployment;
+		ContextTypeRegistry contextTypeRegistry = PortletUIPlugin.getDefault().getTemplateContextRegistry();
 
-        static
-        {
-            initializeMessages( NewVaadinPortletWizard.class.getName(), Msgs.class );
-        }
-    }
+		TemplateContextType contextType = contextTypeRegistry.getContextType(PortletTemplateContextTypeIds.NEW);
+
+		return new NewVaadinPortletClassDataModelProvider(fragment) {
+
+			@Override
+			public IDataModelOperation getDefaultOperation() {
+				return new AddVaadinApplicationOperation(model, templateStore, contextType);
+			}
+
+		};
+	}
+
+	@Override
+	protected ImageDescriptor getImage() {
+		Bundle bundle = VaadinUI.getDefault().getBundle();
+
+		return ImageDescriptor.createFromURL(bundle.getEntry("/icons/wizban/vaadin_wiz.png"));
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String createLiferayVaadinPortlet;
+		public static String createVaadinPortletApplicationClass;
+		public static String newLiferayVaadinPortlet;
+		public static String specifyLiferayPortletDeployment;
+		public static String specifyVaadinPortletDeployment;
+
+		static {
+			initializeMessages(NewVaadinPortletWizard.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

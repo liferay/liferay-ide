@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.vaadin.ui;
 
@@ -25,50 +22,48 @@ import org.osgi.framework.BundleContext;
  * 
  * @author Gregory Amerson
  */
-public class VaadinUI extends Plugin
-{
+public class VaadinUI extends Plugin {
 
-    // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.vaadin.ui"; //$NON-NLS-1$
+	// The plugin ID
+	public static final String PLUGIN_ID = "com.liferay.ide.vaadin.ui";
 
-    // The shared instance
-    private static VaadinUI plugin;
+	// The shared instance
+	private static VaadinUI _plugin;
 
-    /**
-     * The constructor
-     */
-    public VaadinUI()
-    {
-    }
+	/**
+	 * The constructor
+	 */
+	public VaadinUI() {}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-     */
-    public void start( BundleContext context ) throws Exception
-    {
-        super.start( context );
-        plugin = this;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.
+	 * BundleContext)
+	 */
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		_plugin = this;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-     */
-    public void stop( BundleContext context ) throws Exception
-    {
-        plugin = null;
-        super.stop( context );
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 */
+	public void stop(BundleContext context) throws Exception {
+		_plugin = null;
+		super.stop(context);
+	}
 
-    /**
-     * Returns the shared instance
-     * 
-     * @return the shared instance
-     */
-    public static VaadinUI getDefault()
-    {
-        return plugin;
-    }
+	/**
+	 * Returns the shared instance
+	 * 
+	 * @return the shared instance
+	 */
+	public static VaadinUI getDefault() {
+		return _plugin;
+	}
 
 }

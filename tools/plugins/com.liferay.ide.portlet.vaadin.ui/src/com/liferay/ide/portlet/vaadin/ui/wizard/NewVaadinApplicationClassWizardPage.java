@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.vaadin.ui.wizard;
 
@@ -22,8 +21,8 @@ import com.liferay.ide.portlet.vaadin.ui.VaadinUI;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import java.net.URL;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -44,150 +43,156 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Henri Sara - borrows from superclass by Greg Amerson
  * @author Cindy Li
  */
-@SuppressWarnings( "restriction" )
-public class NewVaadinApplicationClassWizardPage extends NewPortletClassWizardPage
-    implements INewVaadinPortletClassDataModelProperties
-{
-    // superclass has unused fields that are named similarly, don't depend on them
-    protected Button vaadinPortletClassButton;
-    protected Combo vaadinPortletClassCombo;
-    protected Label vaadinPortletClassLabel;
+@SuppressWarnings("restriction")
+public class NewVaadinApplicationClassWizardPage
+	extends NewPortletClassWizardPage implements INewVaadinPortletClassDataModelProperties {
 
-    public NewVaadinApplicationClassWizardPage(
-        IDataModel model, String pageName, String pageDesc, String pageTitle, boolean fragment )
-    {
-        super( model, pageName, pageDesc, pageTitle, fragment );
-    }
+	// superclass has unused fields that are named similarly, don't depend on them
 
-    protected void createApplicationClassnameGroup( Composite parent )
-    {
-        // class name
-        classLabel = new Label( parent, SWT.LEFT );
-        classLabel.setText( Msgs.applicationClass );
-        classLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
+	public NewVaadinApplicationClassWizardPage(
+		IDataModel model, String pageName, String pageDesc, String pageTitle, boolean fragment) {
 
-        classText = new Text( parent, SWT.SINGLE | SWT.BORDER );
-        classText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-        synchHelper.synchText( classText, INewJavaClassDataModelProperties.CLASS_NAME, null );
+		super(model, pageName, pageDesc, pageTitle, fragment);
+	}
 
-        new Label( parent, SWT.LEFT );
-    }
+	protected void createApplicationClassnameGroup(Composite parent) {
 
-    @Override
-    protected void createClassnameGroup( Composite parent )
-    {
-        createApplicationClassnameGroup( parent );
-    }
+		// class name
 
-    protected void createCustomPortletClassGroup( Composite parent )
-    {
-        // portlet class
-        vaadinPortletClassLabel = new Label( parent, SWT.LEFT );
-        vaadinPortletClassLabel.setText( Msgs.portletClass );
-        vaadinPortletClassLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
+		classLabel = new Label(parent, SWT.LEFT);
 
-        vaadinPortletClassCombo = new Combo( parent, SWT.DROP_DOWN );
-        vaadinPortletClassCombo.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-        synchHelper.synchCombo( vaadinPortletClassCombo, VAADIN_PORTLET_CLASS, null );
+		classLabel.setText(Msgs.applicationClass);
+		classLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 
-        if( this.fragment )
-        {
-            SWTUtil.createLabel( parent, StringPool.EMPTY, 1 );
-        }
-        else
-        {
-            vaadinPortletClassButton = new Button( parent, SWT.PUSH );
-            vaadinPortletClassButton.setText( J2EEUIMessages.BROWSE_BUTTON_LABEL );
-            vaadinPortletClassButton.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
-            vaadinPortletClassButton.addSelectionListener( new SelectionListener()
-            {
+		classText = new Text(parent, SWT.SINGLE | SWT.BORDER);
 
-                public void widgetDefaultSelected( SelectionEvent e )
-                {
-                    // Do nothing
-                }
+		classText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		synchHelper.synchText(classText, INewJavaClassDataModelProperties.CLASS_NAME, null);
 
-                public void widgetSelected( SelectionEvent e )
-                {
-                    // handlePortletClassButtonPressed();
-                    handlePortletClassButtonSelected( vaadinPortletClassCombo );
-                }
-            } );
-        }
-    }
+		new Label(parent, SWT.LEFT);
+	}
 
-    protected void createSuperclassGroup( Composite parent )
-    {
-        super.createSuperclassGroup( parent );
+	@Override
+	protected void createClassnameGroup(Composite parent) {
+		createApplicationClassnameGroup(parent);
+	}
 
-        createCustomPortletClassGroup( parent );
-    }
+	protected void createCustomPortletClassGroup(Composite parent) {
 
-    protected String[] getValidationPropertyNames()
-    {
-        List<String> validationPropertyNames = new ArrayList<String>();
+		// portlet class
 
-        if( this.fragment )
-        {
-            return new String[]
-            {
-                IArtifactEditOperationDataModelProperties.COMPONENT_NAME,
-                INewJavaClassDataModelProperties.JAVA_PACKAGE,
-                INewJavaClassDataModelProperties.CLASS_NAME,
-                INewJavaClassDataModelProperties.SUPERCLASS,
-                VAADIN_PORTLET_CLASS
-            };
-        }
-        else
-        {
-            validationPropertyNames.add( IArtifactEditOperationDataModelProperties.PROJECT_NAME );
-            validationPropertyNames.add( INewJavaClassDataModelProperties.SOURCE_FOLDER );
-            validationPropertyNames.add( INewJavaClassDataModelProperties.CLASS_NAME );
-            validationPropertyNames.add( INewJavaClassDataModelProperties.JAVA_PACKAGE );
-            validationPropertyNames.add( INewJavaClassDataModelProperties.SUPERCLASS );
-            validationPropertyNames.add( VAADIN_PORTLET_CLASS );
-        }
+		vaadinPortletClassLabel = new Label(parent, SWT.LEFT);
 
-        return validationPropertyNames.toArray( new String[0] );
-    }
+		vaadinPortletClassLabel.setText(Msgs.portletClass);
+		vaadinPortletClassLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 
-    // superclass selection - different base class than in new portlet wizard
-    protected void handleClassButtonSelected( Control control )
-    {
-        handleClassButtonSelected(
-            control, QUALIFIED_VAADIN_APPLICATION, J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_TITLE,
-            J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_DESC );
-    }
+		vaadinPortletClassCombo = new Combo(parent, SWT.DROP_DOWN);
 
-    protected void handlePortletClassButtonSelected( Control control )
-    {
-        handleClassButtonSelected(
-            control, "javax.portlet.GenericPortlet", Msgs.portletClassSelection, Msgs.choosePortletClass ); //$NON-NLS-1$
-    }
+		vaadinPortletClassCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		synchHelper.synchCombo(vaadinPortletClassCombo, VAADIN_PORTLET_CLASS, null);
 
-    protected void setShellImage()
-    {
-        URL url = VaadinUI.getDefault().getBundle().getEntry( "/icons/e16/vaadinportlet.png" ); //$NON-NLS-1$
+		if (fragment) {
+			SWTUtil.createLabel(parent, StringPool.EMPTY, 1);
+		}
+		else {
+			vaadinPortletClassButton = new Button(parent, SWT.PUSH);
 
-        Image shellImage = ImageDescriptor.createFromURL( url ).createImage();
+			vaadinPortletClassButton.setText(J2EEUIMessages.BROWSE_BUTTON_LABEL);
+			vaadinPortletClassButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 
-        getShell().setImage( shellImage );
-    }
+			SelectionListener selectionListener = new SelectionListener() {
 
-    private static class Msgs extends NLS
-    {
-        public static String applicationClass;
-        public static String choosePortletClass;
-        public static String portletClass;
-        public static String portletClassSelection;
+				public void widgetDefaultSelected(SelectionEvent e) {
 
-        static
-        {
-            initializeMessages( NewVaadinApplicationClassWizardPage.class.getName(), Msgs.class );
-        }
-    }
+					// Do nothing
+
+				}
+
+				public void widgetSelected(SelectionEvent e) {
+
+					// handlePortletClassButtonPressed();
+
+					handlePortletClassButtonSelected(vaadinPortletClassCombo);
+				}
+
+			};
+
+			vaadinPortletClassButton.addSelectionListener(selectionListener);
+		}
+	}
+
+	protected void createSuperclassGroup(Composite parent) {
+		super.createSuperclassGroup(parent);
+
+		createCustomPortletClassGroup(parent);
+	}
+
+	protected String[] getValidationPropertyNames() {
+		List<String> validationPropertyNames = new ArrayList<>();
+
+		if (fragment) {
+			return new String[] {
+				IArtifactEditOperationDataModelProperties.COMPONENT_NAME, INewJavaClassDataModelProperties.JAVA_PACKAGE,
+				INewJavaClassDataModelProperties.CLASS_NAME, INewJavaClassDataModelProperties.SUPERCLASS,
+				VAADIN_PORTLET_CLASS
+			};
+		}
+		else {
+			validationPropertyNames.add(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
+			validationPropertyNames.add(INewJavaClassDataModelProperties.SOURCE_FOLDER);
+			validationPropertyNames.add(INewJavaClassDataModelProperties.CLASS_NAME);
+			validationPropertyNames.add(INewJavaClassDataModelProperties.JAVA_PACKAGE);
+			validationPropertyNames.add(INewJavaClassDataModelProperties.SUPERCLASS);
+			validationPropertyNames.add(VAADIN_PORTLET_CLASS);
+		}
+
+		return validationPropertyNames.toArray(new String[0]);
+	}
+
+	protected void handleClassButtonSelected(Control control) {
+		handleClassButtonSelected(
+			control, QUALIFIED_VAADIN_APPLICATION, J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_TITLE,
+			J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_DESC);
+	}
+
+	protected void handlePortletClassButtonSelected(Control control) {
+		handleClassButtonSelected(
+			control, "javax.portlet.GenericPortlet", Msgs.portletClassSelection, Msgs.choosePortletClass);
+	}
+
+	protected void setShellImage() {
+		Bundle bundle = VaadinUI.getDefault().getBundle();
+
+		URL url = bundle.getEntry("/icons/e16/vaadinportlet.png");
+
+		Image shellImage = ImageDescriptor.createFromURL(url).createImage();
+
+		getShell().setImage(shellImage);
+	}
+
+	// superclass selection - different base class than in new portlet wizard
+
+	protected Button vaadinPortletClassButton;
+	protected Combo vaadinPortletClassCombo;
+	protected Label vaadinPortletClassLabel;
+
+	private static class Msgs extends NLS {
+
+		public static String applicationClass;
+		public static String choosePortletClass;
+		public static String portletClass;
+		public static String portletClassSelection;
+
+		static {
+			initializeMessages(NewVaadinApplicationClassWizardPage.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

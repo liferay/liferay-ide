@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.vaadin.ui.wizard;
 
@@ -23,31 +22,33 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-public class NewVaadinPortletOptionsWizardPage extends NewPortletOptionsWizardPage
-{
+public class NewVaadinPortletOptionsWizardPage extends NewPortletOptionsWizardPage {
 
-    public NewVaadinPortletOptionsWizardPage(
-        IDataModel dataModel, String pageName, String desc, String title, boolean fragment )
-    {
-        super( dataModel, pageName, desc, title, fragment );
-    }
+	public NewVaadinPortletOptionsWizardPage(
+		IDataModel dataModel, String pageName, String desc, String title, boolean fragment) {
 
-    @Override
-    protected void createJSPsField( Composite parent )
-    {
-        // do nothing, Vaadin portlets dont yet use these fields
-    }
+		super(dataModel, pageName, desc, title, fragment);
+	}
 
-    @Override
-    protected void createLiferayPortletModesGroup( Composite composite )
-    {
-        // do nothing, Vaadin portlets dont yet use these fields
-    }
+	@Override
+	protected void createJSPsField(Composite parent) {
 
-    @Override
-    protected void createPortletModesGroup( Composite composite )
-    {
-        // do nothing, Vaadin portlets dont yet use these fields
-    }
+		// do nothing, Vaadin portlets dont yet use these fields
+
+	}
+
+	@Override
+	protected void createLiferayPortletModesGroup(Composite composite) {
+
+		// do nothing, Vaadin portlets dont yet use these fields
+
+	}
+
+	@Override
+	protected void createPortletModesGroup(Composite composite) {
+
+		// do nothing, Vaadin portlets dont yet use these fields
+
+	}
 
 }
