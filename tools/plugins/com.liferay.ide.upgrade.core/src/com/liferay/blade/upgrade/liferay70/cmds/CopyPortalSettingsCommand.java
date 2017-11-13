@@ -1,17 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.upgrade.liferay70.cmds;
@@ -22,41 +20,35 @@ import com.liferay.blade.api.CommandException;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
 
-@Component(
-	property = {
-		"osgi.command.scope=blade",
-		"osgi.command.function=copyPortalSettings"
-	},
-	service = Command.class
-)
+/**
+ * @author Gregory Amerson
+ */
+@Component(property = {"osgi.command.scope=blade", "osgi.command.function=copyPortalSettings"}, service = Command.class)
 public class CopyPortalSettingsCommand implements Command {
 
-	public static final String PARAM_SOURCE = "source";
 	public static final String PARAM_DEST = "dest";
 
-	private final String[] PROPERTIES_FILENAME_PATTERNS = {
-		"portal-.*\\.properties",
-		"system-ext\\.properties",
-	};
+	public static final String PARAM_SOURCE = "source";
 
-	public Object copyPortalSettings(File sourcePortalDir, File destPortalDir)
-			throws CommandException {
-
+	public Object copyPortalSettings(File sourcePortalDir, File destPortalDir) throws CommandException {
 		if (!sourcePortalDir.exists() || !destPortalDir.exists()) {
 			return null;
 		}
 
-		final File[] propertiesFiles = sourcePortalDir.listFiles(
+		File[] propertiesFiles = sourcePortalDir.listFiles(
 			new FilenameFilter() {
+
 				@Override
 				public boolean accept(File dir, String name) {
-					for (String pattern : PROPERTIES_FILENAME_PATTERNS) {
+					for (String pattern : _PROPERTIES_FILENAME_PATTERNS) {
 						if (name.matches(pattern)) {
 							return true;
 						}
@@ -64,19 +56,19 @@ public class CopyPortalSettingsCommand implements Command {
 
 					return false;
 				}
+
 			});
 
-		final StringBuilder errors = new StringBuilder();
+		StringBuilder errors = new StringBuilder();
 
-		for (File propertiesFile : propertiesFiles ) {
+		for (File propertiesFile : propertiesFiles) {
 			try {
 				Files.copy(
-					propertiesFile.toPath(),
-					destPortalDir.toPath().resolve(propertiesFile.getName()),
-					StandardCopyOption.REPLACE_EXISTING,
-					StandardCopyOption.COPY_ATTRIBUTES);
-			} catch (IOException e) {
-				errors.append(e.getMessage() + "\n");
+					propertiesFile.toPath(), destPortalDir.toPath().resolve(propertiesFile.getName()),
+					StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+			}
+			catch (IOException ioe) {
+				errors.append(ioe.getMessage() + "\n");
 			}
 		}
 
@@ -89,15 +81,15 @@ public class CopyPortalSettingsCommand implements Command {
 
 	@Override
 	public Object execute(Map<String, ?> parameters) throws CommandException {
-		File src = (File) parameters.get(PARAM_SOURCE);
-		File dest = (File) parameters.get(PARAM_DEST);
+		File src = (File)parameters.get(PARAM_SOURCE);
+		File dest = (File)parameters.get(PARAM_DEST);
 
 		return copyPortalSettings(src, dest);
 	}
 
 	@Override
 	public Object execute(String... args) throws CommandException {
-		if (args != null && args.length == 2) {
+		if ((args != null) && (args.length == 2)) {
 			File src = new File(args[0]);
 			File dest = new File(args[1]);
 
@@ -106,5 +98,8 @@ public class CopyPortalSettingsCommand implements Command {
 
 		return null;
 	}
+
+	private static final String[] _PROPERTIES_FILENAME_PATTERNS =
+		{"portal-.*\\.properties", "system-ext\\.properties", };
 
 }

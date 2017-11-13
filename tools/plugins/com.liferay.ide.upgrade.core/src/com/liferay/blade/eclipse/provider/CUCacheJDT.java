@@ -1,17 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.eclipse.provider;
@@ -19,7 +17,9 @@ package com.liferay.blade.eclipse.provider;
 import com.liferay.blade.api.CUCache;
 
 import java.io.File;
+
 import java.lang.ref.WeakReference;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -28,22 +28,14 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+
 import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Gregory Amerson
  */
-@Component(
-	property = {
-		"type=java"
-	},
-	service = CUCache.class
-)
+@Component(property = {"type=java"}, service = CUCache.class)
 public class CUCacheJDT extends BaseCUCache implements CUCache<CompilationUnit> {
-
-	private static final Object _lock = new Object();
-	private static final Map<File, Long> _fileModifiedTimeMap = new HashMap<>();
-	private static final Map<File, WeakReference<CompilationUnit>> _cuMap = new HashMap<>();
 
 	@Override
 	public CompilationUnit getCU(File file, Supplier<char[]> javaSource) {
@@ -52,14 +44,14 @@ public class CUCacheJDT extends BaseCUCache implements CUCache<CompilationUnit> 
 		synchronized (_lock) {
 			Long lastModified = _fileModifiedTimeMap.get(file);
 
-			if (lastModified != null && lastModified.equals(file.lastModified())) {
+			if ((lastModified != null) && lastModified.equals(file.lastModified())) {
 				retval = _cuMap.get(file).get();
 			}
 
 			if (retval == null) {
 				char[] chars = javaSource.get();
 
-				final CompilationUnit newAst = createCompilationUnit(file.getName(), chars);
+				CompilationUnit newAst = _createCompilationUnit(file.getName(), chars);
 
 				_fileModifiedTimeMap.put(file, file.lastModified());
 				_cuMap.put(file, new WeakReference<CompilationUnit>(newAst));
@@ -79,7 +71,7 @@ public class CUCacheJDT extends BaseCUCache implements CUCache<CompilationUnit> 
 		}
 	}
 
-	private CompilationUnit createCompilationUnit(String unitName, char[] javaSource) {
+	private CompilationUnit _createCompilationUnit(String unitName, char[] javaSource) {
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
 
 		Map<String, String> options = JavaCore.getOptions();
@@ -88,13 +80,16 @@ public class CUCacheJDT extends BaseCUCache implements CUCache<CompilationUnit> 
 
 		parser.setCompilerOptions(options);
 
-		//setUnitName for resolve bindings
+		// setUnitName for resolve bindings
+
 		parser.setUnitName(unitName);
 
-		String[] sources = { "" };
-		String[] classpath = { "" };
-		//setEnvironment for resolve bindings even if the args is empty
-		parser.setEnvironment(classpath, sources, new String[] { "UTF-8" }, true);
+		String[] sources = {""};
+		String[] classpath = {""};
+
+		// setEnvironment for resolve bindings even if the args is empty
+
+		parser.setEnvironment(classpath, sources, new String[] {"UTF-8"}, true);
 
 		parser.setResolveBindings(true);
 		parser.setStatementsRecovery(true);
@@ -104,4 +99,9 @@ public class CUCacheJDT extends BaseCUCache implements CUCache<CompilationUnit> 
 
 		return (CompilationUnit)parser.createAST(null);
 	}
+
+	private static final Map<File, WeakReference<CompilationUnit>> _cuMap = new HashMap<>();
+	private static final Map<File, Long> _fileModifiedTimeMap = new HashMap<>();
+	private static final Object _lock = new Object();
+
 }

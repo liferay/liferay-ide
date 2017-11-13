@@ -1,17 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
@@ -23,6 +21,7 @@ import com.liferay.blade.upgrade.liferay70.MarkdownParser;
 import com.liferay.blade.upgrade.liferay70.PropertiesFileChecker;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
@@ -30,59 +29,60 @@ import java.util.List;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 
+/**
+ * @author Gregory Amerson
+ */
 public abstract class PropertiesFileMigrator implements FileMigrator {
-
-	ComponentContext _context;
-	String _problemTitle;
-	String _problemSummary;
-	String _problemType;
-	String _problemTickets;
-	String _sectionKey = "";
-	final List<String> _properties = new ArrayList<String>();
 
 	@Activate
 	public void activate(ComponentContext ctx) {
-		_context = ctx;
+		context = ctx;
 
-		final Dictionary<String, Object> properties =
-			_context.getProperties();
+		Dictionary<String, Object> properties = context.getProperties();
 
-		_problemTitle = (String)properties.get("problem.title");
-		_problemSummary = (String)properties.get("problem.summary");
-		_problemType = (String)properties.get("file.extensions");
-		_problemTickets = (String)properties.get("problem.tickets");
-		_sectionKey = (String)properties.get("problem.section");
+		problemTitle = (String)properties.get("problem.title");
+		problemSummary = (String)properties.get("problem.summary");
+		problemType = (String)properties.get("file.extensions");
+		problemTickets = (String)properties.get("problem.tickets");
+		sectionKey = (String)properties.get("problem.section");
 
-		addPropertiesToSearch(this._properties);
+		addPropertiesToSearch(this.properties);
 	}
-
-	protected abstract void addPropertiesToSearch(List<String> _properties);
 
 	@Override
 	public List<Problem> analyze(File file) {
-		final List<Problem> problems = new ArrayList<>();
+		List<Problem> problems = new ArrayList<>();
 
-		PropertiesFileChecker propertiesFileChecker =
-			new PropertiesFileChecker(file);
+		PropertiesFileChecker propertiesFileChecker = new PropertiesFileChecker(file);
 
-		for (String key : _properties) {
-			List<SearchResult> results =
-				propertiesFileChecker.findProperties(key);
+		for (String key : properties) {
+			List<SearchResult> results = propertiesFileChecker.findProperties(key);
 
 			if (results != null) {
-				String sectionHtml = MarkdownParser.getSection("BREAKING_CHANGES.markdown", _sectionKey);
+				String sectionHtml = MarkdownParser.getSection("BREAKING_CHANGES.markdown", sectionKey);
 
 				for (SearchResult searchResult : results) {
-					problems.add(new Problem(_problemTitle, _problemSummary,
-						_problemType, _problemTickets, file,
-						searchResult.startLine, searchResult.startOffset,
-						searchResult.endOffset, sectionHtml, searchResult.autoCorrectContext,
-						Problem.STATUS_NOT_RESOLVED, Problem.DEFAULT_MARKER_ID, Problem.MARKER_ERROR));
+					problems.add(
+						new Problem(
+							problemTitle, problemSummary, problemType, problemTickets, file, searchResult.startLine,
+							searchResult.startOffset, searchResult.endOffset, sectionHtml,
+							searchResult.autoCorrectContext, Problem.STATUS_NOT_RESOLVED, Problem.DEFAULT_MARKER_ID,
+							Problem.MARKER_ERROR));
 				}
 			}
 		}
 
 		return problems;
 	}
+
+	protected abstract void addPropertiesToSearch(List<String> properties);
+
+	protected ComponentContext context;
+	protected String problemSummary;
+	protected String problemTickets;
+	protected String problemTitle;
+	protected String problemType;
+	protected final List<String> properties = new ArrayList<>();
+	protected String sectionKey = "";
 
 }

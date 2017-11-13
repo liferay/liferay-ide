@@ -5,7 +5,7 @@ functionality, APIs, or contracts with third party Liferay developers or users.
 We try our best to minimize these disruptions, but sometimes they are
 unavoidable.
 
-The breaking changes covered in this article apply to both the commercial and 
+The breaking changes covered in this article apply to both the commercial and
 open source versions of Liferay.
 
 Here are some of the types of changes documented in this file:
@@ -1510,7 +1510,7 @@ exceptions wherever possible. For example, instead of using
 
 This change was made in accordance with the new exceptions pattern being applied
 throughout Portal. It also allows the new localized user name configuration
-feature to be thoroughly covered by exceptions for different configurations.  
+feature to be thoroughly covered by exceptions for different configurations.
 
 ---------------------------------------
 
@@ -2719,7 +2719,6 @@ should follow these steps:
 
 2.  Call `SchedulerEngineHelper.register(MessageListener, SchedulerEntry)` to
     register your `SchedulerEventMessageListener`.
-
 
 #### Why was this change made? [](id=why-was-this-change-made-70)
 

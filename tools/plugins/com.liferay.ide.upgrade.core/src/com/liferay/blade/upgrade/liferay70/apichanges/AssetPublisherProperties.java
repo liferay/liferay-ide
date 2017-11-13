@@ -1,17 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
@@ -22,22 +20,21 @@ import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-@Component(
-	property = {
-		"file.extensions=properties",
-		"problem.title=Asset Publisher Properties Removed",
-		"problem.summary=Removed the asset.publisher.asset.entry.query.processors Property",
-		"problem.tickets=LPS-52966",
-		"problem.section=#removed-the-asset-publisher-asset-entry-query-processors-property",
-		"implName=AssetPublisherProperties"
-	},
-	service = FileMigrator.class
-)
+/**
+ * @author Gregory Amerson
+ */
+@Component(property = {
+	"file.extensions=properties", "problem.title=Asset Publisher Properties Removed",
+	"problem.summary=Removed the asset.publisher.asset.entry.query.processors Property", "problem.tickets=LPS-52966",
+	"problem.section=#removed-the-asset-publisher-asset-entry-query-processors-property",
+	"implName=AssetPublisherProperties"
+},
+	service = FileMigrator.class)
 public class AssetPublisherProperties extends PropertiesFileMigrator {
 
 	@Override
-	protected void addPropertiesToSearch(List<String> _properties) {
-		_properties.add("asset.publisher.asset.entry.query.processors");
+	protected void addPropertiesToSearch(List<String> properties) {
+		properties.add("asset.publisher.asset.entry.query.processors");
 	}
 
 }

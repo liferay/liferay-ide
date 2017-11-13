@@ -1,17 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.eclipse.provider;
@@ -27,7 +25,9 @@ import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+
 import org.osgi.service.component.annotations.Component;
+
 import org.w3c.dom.NodeList;
 
 /**
@@ -39,13 +39,13 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 
 	@Override
 	public List<SearchResult> findElement(String tagName, String value) {
-		List<SearchResult> _results = new ArrayList<>();
+		List<SearchResult> results = new ArrayList<>();
 
-		IFile xmlFile = getIFile(_file);
+		IFile xmlFile = getIFile(file);
 		IDOMModel domModel = null;
 
 		try {
-			domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead(xmlFile);
+			domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(xmlFile);
 
 			IDOMDocument document = domModel.getDocument();
 
@@ -53,26 +53,25 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 
 			if (elements != null) {
 				for (int i = 0; i < elements.getLength(); i++) {
-					IDOMElement element = (IDOMElement) elements.item(i);
+					IDOMElement element = (IDOMElement)elements.item(i);
 
 					String textContent = element.getTextContent();
 
-					if (textContent != null && value.trim().equals(textContent.trim())) {
-
+					if ((textContent != null) && value.trim().equals(textContent.trim())) {
 						int startOffset = element.getStartOffset();
 						int endOffset = element.getEndOffset();
 						int startLine = document.getStructuredDocument().getLineOfOffset(startOffset) + 1;
 						int endLine = document.getStructuredDocument().getLineOfOffset(endOffset) + 1;
 
-						SearchResult result = new SearchResult(_file, "startOffset:" + startOffset, startOffset,
-								endOffset, startLine, endLine, true);
+						SearchResult result = new SearchResult(
+							file, "startOffset:" + startOffset, startOffset, endOffset, startLine, endLine, true);
 
-						_results.add(result);
+						results.add(result);
 					}
 				}
 			}
-
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 		}
 		finally {
 			if (domModel != null) {
@@ -80,8 +79,7 @@ public class SSEXMLFile extends WorkspaceFile implements XMLFile {
 			}
 		}
 
-		return _results;
+		return results;
 	}
-
 
 }

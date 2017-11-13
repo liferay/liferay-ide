@@ -1,17 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.upgrade.liferay70;
@@ -24,8 +22,10 @@ import com.liferay.blade.api.SearchResult;
 
 import java.io.File;
 import java.io.InputStream;
+
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,10 +33,12 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -47,13 +49,6 @@ import org.w3c.dom.NodeList;
  */
 @SuppressWarnings("restriction")
 public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> implements AutoMigrator {
-
-	private final String[] _attrNames;
-	private final String[] _newAttrNames;
-	private final String[] _attrValues;
-	private final String[] _newAttrValues;
-	private final String[] _tagNames;
-	private final String[] _newTagNames;
 
 	public JSPTagMigrator(
 		String[] attrNames, String[] newAttrNames, String[] attrValues, String[] newAttrValues, String[] tagNames,
@@ -77,7 +72,9 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 
 		Stream<Problem> stream = problems.stream();
 
-		final String autoCorrectContext = "jsptag:" + getClass().getName();
+		Class<? extends JSPTagMigrator> class1 = getClass();
+
+		String autoCorrectContext = "jsptag:" + class1.getName();
 
 		stream.filter(
 			p -> p.autoCorrectContext.equals(autoCorrectContext)
@@ -86,26 +83,29 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 		).sorted();
 
 		for (Problem problem : problems) {
-			if (problem.autoCorrectContext.equals("jsptag:" + getClass().getName())) {
+			if (problem.autoCorrectContext.equals("jsptag:" + class1.getName())) {
 				autoCorrectTagOffsets.add(problem.getStartOffset());
 			}
 		}
 
-		Collections.sort(autoCorrectTagOffsets, new Comparator<Integer>() {
+		Collections.sort(
+			autoCorrectTagOffsets,
+			new Comparator<Integer>() {
 
-			@Override
-			public int compare(Integer i1, Integer i2) {
-				return i2.compareTo(i1);
-			}
-		});
+				@Override
+				public int compare(Integer i1, Integer i2) {
+					return i2.compareTo(i1);
+				}
+
+			});
 
 		IFile jspFile = getJSPFile(file);
 
-		if (autoCorrectTagOffsets.size() > 0) {
+		if (!autoCorrectTagOffsets.isEmpty()) {
 			IDOMModel domModel = null;
 
 			try {
-				domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit(jspFile);
+				domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForEdit(jspFile);
 
 				List<IDOMElement> elementsToCorrect = new ArrayList<>();
 
@@ -113,7 +113,7 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 					IndexedRegion region = domModel.getIndexedRegion(startOffset);
 
 					if (region instanceof IDOMElement) {
-						IDOMElement element = (IDOMElement) region;
+						IDOMElement element = (IDOMElement)region;
 
 						elementsToCorrect.add(element);
 					}
@@ -189,7 +189,9 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 				}
 			}
 
-			if (corrected > 0 && !jspFile.getLocation().toFile().equals(file)) {
+			IPath location = jspFile.getLocation();
+
+			if ((corrected > 0) && !location.toFile().equals(file)) {
 				try (InputStream jspFileContent = jspFile.getContents()) {
 					Files.copy(jspFileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 				}
@@ -202,12 +204,18 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 		return corrected;
 	}
 
+	protected IFile getJSPFile(File file) {
+		JSPFile jspFileService = context.getService(context.getServiceReference(JSPFile.class));
+
+		return jspFileService.getIFile(file);
+	}
+
 	@Override
 	protected List<SearchResult> searchFile(File file, JSPFile jspFileChecker) {
-		List<SearchResult> searchResults = new ArrayList<SearchResult>();
+		List<SearchResult> searchResults = new ArrayList<>();
 
 		for (String tagName : _tagNames) {
-			List<SearchResult> jspTagResults = new ArrayList<SearchResult>();
+			List<SearchResult> jspTagResults = new ArrayList<>();
 
 			if ((_tagNames.length > 0) && (_attrNames.length == 0) && (_attrValues.length == 0)) {
 				jspTagResults = jspFileChecker.findJSPTags(tagName);
@@ -224,19 +232,22 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 			}
 		}
 
-		if (_newAttrNames.length > 0 || _newAttrValues.length > 0 || _newTagNames.length > 0) {
+		if ((_newAttrNames.length > 0) || (_newAttrValues.length > 0) || (_newTagNames.length > 0)) {
 			for (SearchResult searchResult : searchResults) {
-				searchResult.autoCorrectContext = "jsptag:" + getClass().getName();
+				Class<? extends JSPTagMigrator> class1 = getClass();
+
+				searchResult.autoCorrectContext = "jsptag:" + class1.getName();
 			}
 		}
 
 		return searchResults;
 	}
 
-	protected IFile getJSPFile(File file) {
-		final JSPFile jspFileService = _context.getService(_context.getServiceReference(JSPFile.class));
-
-		return jspFileService.getIFile(file);
-	}
+	private final String[] _attrNames;
+	private final String[] _attrValues;
+	private final String[] _newAttrNames;
+	private final String[] _newAttrValues;
+	private final String[] _newTagNames;
+	private final String[] _tagNames;
 
 }

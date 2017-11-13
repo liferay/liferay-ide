@@ -1,17 +1,15 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.upgrade.liferay70;
@@ -24,49 +22,46 @@ import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
-public class JavaClassVisitor extends ASTVisitor
-{
+/**
+ * @author Gregory Amerson
+ */
+public class JavaClassVisitor extends ASTVisitor {
 
-	List<MethodDeclaration> methods = new ArrayList<>();
-	List<FieldDeclaration> fields = new ArrayList<>();
-	List<ImportDeclaration> imports = new ArrayList<>();
-
-	@Override
-	public boolean visit( MethodDeclaration node )
-	{
-		methods.add( node );
-
-		return super.visit( node );
+	public List<FieldDeclaration> getFields() {
+		return _fields;
 	}
 
-	public List<MethodDeclaration> getMethods()
-	{
-		return methods;
+	public List<ImportDeclaration> getImports() {
+		return _imports;
+	}
+
+	public List<MethodDeclaration> getMethods() {
+		return _methods;
 	}
 
 	@Override
-	public boolean visit( FieldDeclaration node )
-	{
-		fields.add( node );
+	public boolean visit(FieldDeclaration node) {
+		_fields.add(node);
 
-		return super.visit( node );
-	}
-
-	public List<FieldDeclaration> getFields()
-	{
-		return fields;
+		return super.visit(node);
 	}
 
 	@Override
-	public boolean visit( ImportDeclaration node )
-	{
-		imports.add( node );
+	public boolean visit(ImportDeclaration node) {
+		_imports.add(node);
 
-		return super.visit( node );
+		return super.visit(node);
 	}
 
-	public List<ImportDeclaration> getImports()
-	{
-		return imports;
+	@Override
+	public boolean visit(MethodDeclaration node) {
+		_methods.add(node);
+
+		return super.visit(node);
 	}
+
+	private List<FieldDeclaration> _fields = new ArrayList<>();
+	private List<ImportDeclaration> _imports = new ArrayList<>();
+	private List<MethodDeclaration> _methods = new ArrayList<>();
+
 }

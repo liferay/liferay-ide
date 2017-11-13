@@ -23,6 +23,7 @@ The following folders are already applied to portal code style:
 10. /tools/plugins/com.liferay.ide.ui.snippets
 11. /tools/plugins/com.liferay.ide.xml.search.ui
 12. /tools/plugins/com.liferay.ide.ui
+13. /tools/plugins/com.liferay.ide.upgrade.core
 
 ## Something you had better to do firstly by yourself before you run source-formatter:
 1. remove all of *//$NON-NLS-1$* *//$NON-NLS-2$* ...

@@ -1,39 +1,35 @@
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.blade.upgrade.liferay70.apichanges;
+
+import com.liferay.blade.api.FileMigrator;
 
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
 
-import com.liferay.blade.api.FileMigrator;
-
-@Component(
-		property = {
-			"file.extensions=properties",
-			"problem.title=Moved Journal Portlet Properties to OSGi Configuration",
-			"problem.summary=Moved Journal Portlet Properties to OSGi Configuration",
-			"problem.tickets=LPS-58672",
-			"problem.section=#moved-journal-portlet-properties-to-osgi-configuration",
-			"implName=JournalPortletProperties"
-		},
-		service = FileMigrator.class
-	)
-public class JournalPortletProperties extends PropertiesFileMigrator{
+/**
+ * @author Gregory Amerson
+ */
+@Component(property = {
+	"file.extensions=properties", "problem.title=Moved Journal Portlet Properties to OSGi Configuration",
+	"problem.summary=Moved Journal Portlet Properties to OSGi Configuration", "problem.tickets=LPS-58672",
+	"problem.section=#moved-journal-portlet-properties-to-osgi-configuration", "implName=JournalPortletProperties"
+},
+	service = FileMigrator.class)
+public class JournalPortletProperties extends PropertiesFileMigrator {
 
 	@Override
 	protected void addPropertiesToSearch(List<String> properties) {
@@ -70,14 +66,14 @@ public class JournalPortletProperties extends PropertiesFileMigrator{
 		properties.add("journal.email.article.approval.granted.body");
 		properties.add("journal.email.article.approval.requested.enabled");
 		properties.add("journal.email.article.approval.requested.subject");
-		properties.add("journal.email.article.approval.requested.body");		
+		properties.add("journal.email.article.approval.requested.body");
 		properties.add("journal.email.article.review.enabled");
 		properties.add("journal.email.article.review.subject");
 		properties.add("journal.email.article.review.body");
 		properties.add("journal.email.article.updated.enabled");
 		properties.add("journal.email.article.updated.subject");
-		properties.add("journal.email.article.updated.body");		
-		properties.add("journal.lar.creation.strategy");		
+		properties.add("journal.email.article.updated.body");
+		properties.add("journal.lar.creation.strategy");
 		properties.add("journal.error.template[ftl]");
 		properties.add("journal.error.template[vm]");
 		properties.add("journal.error.template[xsl]");
