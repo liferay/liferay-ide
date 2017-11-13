@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.vaadin.core.operation;
 
@@ -24,34 +23,31 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Henri Sara
  */
-@SuppressWarnings( "restriction" )
-public class NewVaadinApplicationClassOperation extends NewWebClassOperation
-    implements INewPortletClassDataModelProperties
-{
-    protected static final String TEMPLATE_DIR = "/templates/"; //$NON-NLS-1$
-    protected static final String TEMPLATE_FILE = TEMPLATE_DIR + "application.javajet"; //$NON-NLS-1$
+@SuppressWarnings("restriction")
+public class NewVaadinApplicationClassOperation
+	extends NewWebClassOperation implements INewPortletClassDataModelProperties {
 
-    public NewVaadinApplicationClassOperation( IDataModel dataModel )
-    {
-        super( dataModel );
-    }
+	public NewVaadinApplicationClassOperation(IDataModel dataModel) {
+		super(dataModel);
+	}
 
-    @Override
-    protected CreateWebClassTemplateModel createTemplateModel()
-    {
-        return new CreateVaadinPortletTemplateModel( getDataModel() );
-    }
+	@Override
+	protected CreateWebClassTemplateModel createTemplateModel() {
+		return new CreateVaadinPortletTemplateModel(getDataModel());
+	}
 
-    @Override
-    protected String getTemplateFile()
-    {
-        return TEMPLATE_FILE;
-    }
+	@Override
+	protected String getTemplateFile() {
+		return TEMPLATE_FILE;
+	}
 
-    @Override
-    protected Object getTemplateImplementation()
-    {
-        return VaadinPortletTemplate.create( null );
-    }
+	@Override
+	protected Object getTemplateImplementation() {
+		return VaadinPortletTemplate.create(null);
+	}
+
+	protected static final String TEMPLATE_DIR = "/templates/";
+
+	protected static final String TEMPLATE_FILE = TEMPLATE_DIR + "application.javajet";
 
 }

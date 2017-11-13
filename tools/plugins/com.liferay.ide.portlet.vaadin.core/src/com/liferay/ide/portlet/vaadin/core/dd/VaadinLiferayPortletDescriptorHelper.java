@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.vaadin.core.dd;
 
@@ -28,107 +27,98 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+
 import org.osgi.framework.Version;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 
 /**
  * @author Henri Sara
  * @author Tao Tao
  * @author Kuo Zhang
  */
-@SuppressWarnings( "restriction" )
-public class VaadinLiferayPortletDescriptorHelper extends LiferayPortletDescriptorHelper
-                                                  implements INewVaadinPortletClassDataModelProperties
-{
-    public VaadinLiferayPortletDescriptorHelper()
-    {
-        super();
-    }
+@SuppressWarnings("restriction")
+public class VaadinLiferayPortletDescriptorHelper
+	extends LiferayPortletDescriptorHelper implements INewVaadinPortletClassDataModelProperties {
 
-    public VaadinLiferayPortletDescriptorHelper( IProject project )
-    {
-        super( project );
-    }
+	public VaadinLiferayPortletDescriptorHelper() {
+	}
 
-    @Override
-    protected void addDescriptorOperations()
-    {
-        super.addDescriptorOperations();
-    }
+	public VaadinLiferayPortletDescriptorHelper(IProject project) {
+		super(project);
+	}
 
-    @Override
-    public boolean canAddNewPortlet( IDataModel model )
-    {
-        return model.getID().contains( "NewVaadinPortlet" );
-    }
+	@Override
+	public boolean canAddNewPortlet(IDataModel model) {
+		return model.getID().contains("NewVaadinPortlet");
+	}
 
-    @Override
-    protected IStatus doAddNewPortlet( IDOMDocument document, IDataModel model )
-    {
-        IStatus status = Status.OK_STATUS;
+	@Override
+	protected void addDescriptorOperations() {
+		super.addDescriptorOperations();
+	}
 
-        status = super.doAddNewPortlet( document, model );
+	@Override
+	protected IStatus doAddNewPortlet(IDOMDocument document, IDataModel model) {
+		IStatus status = Status.OK_STATUS;
 
-        if( ! status.isOK() )
-        {
-            return status;
-        }
+		status = super.doAddNewPortlet(document, model);
 
-        final Version runtimeVersion = ServerUtil.getRuntimeVersion( project );
+		if (!status.isOK()) {
+			return status;
+		}
 
-        // Runtime version should be equal or greater than 6.2.
-        if( CoreUtil.compareVersions( runtimeVersion, ILiferayConstants.V620 ) >= 0 )
-        {
-            final IFile descriptorFile = getDescriptorFile();
+		Version runtimeVersion = ServerUtil.getRuntimeVersion(project);
 
-            if( descriptorFile != null )
-            {
-                DOMModelOperation op = new DOMModelEditOperation( descriptorFile )
-                {
+		// Runtime version should be equal or greater than 6.2.
 
-                    @Override
-                    protected void createDefaultFile()
-                    {
-                        // Getting document from super( descriptorFile );
-                    }
+		if (CoreUtil.compareVersions(runtimeVersion, ILiferayConstants.V620) >= 0) {
+			IFile descriptorFile = getDescriptorFile();
 
-                    @Override
-                    protected IStatus doExecute( IDOMDocument document )
-                    {
-                        return updateVaadinLiferayPortletXMLTo62( document );
-                    }
-                };
+			if (descriptorFile != null) {
+				DOMModelOperation op = new DOMModelEditOperation(descriptorFile) {
 
-                return op.execute();
-            }
-        }
+					@Override
+					protected void createDefaultFile() {
 
-        return status;
-    }
+						// Getting document from super( descriptorFile );
 
-    private IStatus updateVaadinLiferayPortletXMLTo62( IDOMDocument document )
-    {
-        Element rootElement = document.getDocumentElement();
+					}
 
-        NodeList portletNodes = rootElement.getElementsByTagName( "portlet" );
+					@Override
+					protected IStatus doExecute(IDOMDocument document) {
+						return _updateVaadinLiferayPortletXMLTo62(document);
+					}
 
-        if( portletNodes.getLength() > 1 )
-        {
-            Element lastPortletElement = (Element) portletNodes.item( portletNodes.getLength() - 1 );
+				};
 
-            Node rnpNode = NodeUtil.appendChildElement( lastPortletElement, "requires-namespaced-parameters", "false" );
-            Node ajaxNode = NodeUtil.appendChildElement( lastPortletElement, "ajaxable", "false" );
-            Node hpcNode = lastPortletElement.getElementsByTagName( "header-portlet-css" ).item( 0 );
-            Node fpjNode = lastPortletElement.getElementsByTagName( "footer-portlet-javascript" ).item( 0 );
+				return op.execute();
+			}
+		}
 
-            lastPortletElement.replaceChild( rnpNode, hpcNode );
-            lastPortletElement.replaceChild( ajaxNode, fpjNode );
-        }
+		return status;
+	}
 
-        return Status.OK_STATUS;
-    }
+	private IStatus _updateVaadinLiferayPortletXMLTo62(IDOMDocument document) {
+		Element rootElement = document.getDocumentElement();
+
+		NodeList portletNodes = rootElement.getElementsByTagName("portlet");
+
+		if (portletNodes.getLength() > 1) {
+			Element lastPortletElement = (Element)portletNodes.item(portletNodes.getLength() - 1);
+
+			Node rnpNode = NodeUtil.appendChildElement(lastPortletElement, "requires-namespaced-parameters", "false");
+			Node ajaxNode = NodeUtil.appendChildElement(lastPortletElement, "ajaxable", "false");
+			Node hpcNode = lastPortletElement.getElementsByTagName("header-portlet-css").item(0);
+			Node fpjNode = lastPortletElement.getElementsByTagName("footer-portlet-javascript").item(0);
+
+			lastPortletElement.replaceChild(rnpNode, hpcNode);
+			lastPortletElement.replaceChild(ajaxNode, fpjNode);
+		}
+
+		return Status.OK_STATUS;
+	}
 
 }
