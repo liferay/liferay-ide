@@ -45,20 +45,20 @@ public class NewLiferayPluginProjectOp7sp3Tests extends NewLiferayPluginProjectO
     protected IPath getLiferayPluginsSdkDir()
     {
         return ProjectCore.getDefault().getStateLocation().append(
-            "com.liferay.portal.plugins.sdk-1.0.11-withdependencies" );
+            "com.liferay.portal.plugins.sdk-1.0.16-withdependencies" );
     }
 
     @Override
     protected IPath getLiferayPluginsSDKZip()
     {
         return getLiferayBundlesPath().append(
-            "com.liferay.portal.plugins.sdk-1.0.11-withdependencies-20170613175008905.zip" );
+            "com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip" );
     }
 
     @Override
     protected String getLiferayPluginsSdkZipFolder()
     {
-        return "com.liferay.portal.plugins.sdk-1.0.11-withdependencies/";
+        return "com.liferay.portal.plugins.sdk-1.0.16-withdependencies/";
     }
 
     @AfterClass
@@ -67,17 +67,20 @@ public class NewLiferayPluginProjectOp7sp3Tests extends NewLiferayPluginProjectO
         deleteAllWorkspaceProjects();
     }
 
-    protected IPath getLiferayRuntimeDir()
+    @Override
+	protected IPath getLiferayRuntimeDir()
     {
         return ProjectCore.getDefault().getStateLocation().append( "liferay-ce-portal-7.0-ga4/tomcat-8.0.32" );
     }
 
-    protected IPath getLiferayRuntimeZip()
+    @Override
+	protected IPath getLiferayRuntimeZip()
     {
         return getLiferayBundlesPath().append( "liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip" );
     }
 
-    public String getRuntimeVersion()
+    @Override
+	public String getRuntimeVersion()
     {
         return "7.0.2";
     }
@@ -151,7 +154,8 @@ public class NewLiferayPluginProjectOp7sp3Tests extends NewLiferayPluginProjectO
         super.testNewThemeProjects();
     }
 
-    @Test
+    @Override
+	@Test
     @Ignore
     public void testNewJsfAntProjects() throws Exception
     {
