@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.model.SDKProjectsImportOp;
@@ -23,72 +23,71 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.DerivedValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
-
 
 /**
  * @author Simon Jiang
  */
-public class SDKImportVersionDerivedValueService extends DerivedValueService
-{
-    private FilteredListener<PropertyContentEvent> listener;
+public class SDKImportVersionDerivedValueService extends DerivedValueService {
 
-    @Override
-    protected void initDerivedValueService()
-    {
-        super.initDerivedValueService();
+	@Override
+	public void dispose() {
+		SDKProjectsImportOp op = _op();
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		if (op != null) {
+			op.property(SDKProjectsImportOp.PROP_SDK_LOCATION).detach(_listener);
+		}
 
-        op().property( SDKProjectsImportOp.PROP_SDK_LOCATION ).attach( this.listener );
-    }
+		super.dispose();
+	}
 
-    @Override
-    protected String compute()
-    {
-        String retVal = null;
+	@Override
+	protected String compute() {
+		String retVal = null;
 
-        if ( op().getSdkLocation() != null )
-        {
-            if ( op().getSdkLocation().content() != null && !op().getSdkLocation().content().isEmpty() )
-            {
-                final Path sdkPath = op().getSdkLocation().content();
-                final IStatus status = ProjectImportUtil.validateSDKPath(
-                    op().getSdkLocation().content().toPortableString() );
+		SDKProjectsImportOp op = _op();
 
-                if ( status.isOK() )
-                {
-                    SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkPath ) );
+		Value<Path> sdkLocation = op.getSdkLocation();
 
-                    retVal = sdk.getVersion();
-                }
-            }
-        }
+		if ((sdkLocation != null) && (sdkLocation.content() != null) && !sdkLocation.content().isEmpty()) {
+			Path sdkPath = sdkLocation.content();
 
-        return retVal;
-    }
+			IStatus status = ProjectImportUtil.validateSDKPath(sdkLocation.content().toPortableString());
 
-    private SDKProjectsImportOp op()
-    {
-        return context( SDKProjectsImportOp.class );
-    }
+			if (status.isOK()) {
+				SDK sdk = SDKUtil.createSDKFromLocation(PathBridge.create(sdkPath));
 
-    @Override
-    public void dispose()
-    {
-        if ( op() != null)
-        {
-            op().property( SDKProjectsImportOp.PROP_SDK_LOCATION ).detach( this.listener );
-        }
+				retVal = sdk.getVersion();
+			}
+		}
 
-        super.dispose();
-    }
+		return retVal;
+	}
+
+	@Override
+	protected void initDerivedValueService() {
+		super.initDerivedValueService();
+
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		SDKProjectsImportOp op = _op();
+
+		op.property(SDKProjectsImportOp.PROP_SDK_LOCATION).attach(_listener);
+	}
+
+	private SDKProjectsImportOp _op() {
+		return context(SDKProjectsImportOp.class);
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+
 }

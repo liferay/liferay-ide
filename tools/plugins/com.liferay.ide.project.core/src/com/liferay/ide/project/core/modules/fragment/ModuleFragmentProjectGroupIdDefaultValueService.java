@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.fragment;
+
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
@@ -26,90 +28,86 @@ import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.ProjectCore;
-
 /**
  * @author Joye Luo
  */
-public class ModuleFragmentProjectGroupIdDefaultValueService extends DefaultValueService
-{
-    private Listener listener;
+public class ModuleFragmentProjectGroupIdDefaultValueService extends DefaultValueService {
 
-    @Override
-    protected String compute()
-    {
-        String groupId = null;
+	@Override
+	public void dispose() {
+		NewModuleFragmentOp op = _op();
 
-        final Path location = op().getLocation().content();
-        final NewModuleFragmentOp op = op();
+		if ((_listener != null) && (op != null) && !op.disposed()) {
+			op.getProjectName().detach(_listener);
+			op.getProjectName().attach(_listener);
 
-        if( location != null )
-        {
-            final String parentProjectLocation = location.toOSString();
-            final IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString( parentProjectLocation );
-            final String projectName = op().getProjectName().content();
+			_listener = null;
+		}
 
-            groupId = NewModuleFragmentOpMethods.getMavenParentPomGroupId( op, projectName, parentProjectOsPath );
-        }
+		super.dispose();
+	}
 
-        if( groupId == null )
-        {
-            groupId = getDefaultMavenGroupId();
+	@Override
+	protected String compute() {
+		String groupId = null;
 
-            if( CoreUtil.isNullOrEmpty( groupId ) )
-            {
-                groupId = op.getProjectName().content();
-            }
-        }
+		NewModuleFragmentOp op = _op();
 
-        return groupId;
-    }
+		Path location = op.getLocation().content();
 
-    @Override
-    public void dispose()
-    {
-        if( this.listener != null && op() != null && !op().disposed() )
-        {
-            op().getProjectName().detach( this.listener );
-            op().getProjectName().attach( this.listener );
+		if (location != null) {
+			String parentProjectLocation = location.toOSString();
 
-            this.listener = null;
-        }
+			IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString(parentProjectLocation);
 
-        super.dispose();
-    }
+			String projectName = op.getProjectName().content();
 
-    private String getDefaultMavenGroupId()
-    {
-        final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
-        final String defaultMavenGroupId = Platform.getPreferencesService().getString(
-            ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_MODULE_PROJECT_MAVEN_GROUPID, null, prefContexts );
-        return defaultMavenGroupId;
-    }
+			groupId = NewModuleFragmentOpMethods.getMavenParentPomGroupId(op, projectName, parentProjectOsPath);
+		}
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+		if (groupId == null) {
+			groupId = _getDefaultMavenGroupId();
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
+			if (CoreUtil.isNullOrEmpty(groupId)) {
+				groupId = op.getProjectName().content();
+			}
+		}
 
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		return groupId;
+	}
 
-        op().getLocation().attach( this.listener );
-        op().getProjectName().attach( this.listener );
-    }
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
 
-    private NewModuleFragmentOp op()
-    {
-        return context( NewModuleFragmentOp.class );
-    }
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		NewModuleFragmentOp op = _op();
+
+		op.getLocation().attach(_listener);
+		op.getProjectName().attach(_listener);
+	}
+
+	private String _getDefaultMavenGroupId() {
+		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
+
+		String defaultMavenGroupId = Platform.getPreferencesService().getString(
+			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_MODULE_PROJECT_MAVEN_GROUPID, null, prefContexts);
+
+		return defaultMavenGroupId;
+	}
+
+	private NewModuleFragmentOp _op() {
+		return context(NewModuleFragmentOp.class);
+	}
+
+	private Listener _listener;
 
 }

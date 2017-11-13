@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,13 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.workspace;
+
+import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
@@ -21,36 +24,29 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.DefaultValueService;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.ProjectCore;
-
 /**
  * @author Joye Luo
  */
-public class WorkspaceProjectProviderDefaultValueService extends DefaultValueService
-{
+public class WorkspaceProjectProviderDefaultValueService extends DefaultValueService {
 
-    @Override
-    protected String compute()
-    {
-        String retval = "gradle-liferay-workspace";
+	@Override
+	protected String compute() {
+		String retval = "gradle-liferay-workspace";
 
-        final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
-        final String defaultProjectBuildType = Platform.getPreferencesService().getString(
-            ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_WORKSPACE_PROJECT_BUILD_TYPE_OPTION, null, prefContexts );
+		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
 
-        if( defaultProjectBuildType != null )
-        {
-            final ILiferayProjectProvider provider = LiferayCore.getProvider( defaultProjectBuildType );
+		String defaultProjectBuildType = Platform.getPreferencesService().getString(
+			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_WORKSPACE_PROJECT_BUILD_TYPE_OPTION, null, prefContexts);
 
-            if( provider != null )
-            {
-                retval = defaultProjectBuildType;
-            }
-        }
+		if (defaultProjectBuildType != null) {
+			ILiferayProjectProvider provider = LiferayCore.getProvider(defaultProjectBuildType);
 
-        return retval;
-    }
+			if (provider != null) {
+				retval = defaultProjectBuildType;
+			}
+		}
+
+		return retval;
+	}
 
 }

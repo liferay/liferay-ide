@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.fragment;
 
@@ -24,25 +23,23 @@ import org.eclipse.wst.server.core.IRuntime;
 /**
  * @author Terry Jia
  */
-public class LiferayRuntimeNameValidationService extends ValidationService
-{
+public class LiferayRuntimeNameValidationService extends ValidationService {
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-        final NewModuleFragmentOp op = context( NewModuleFragmentOp.class );
+		final NewModuleFragmentOp op = context(NewModuleFragmentOp.class);
 
-        final String runtimeName = op.getLiferayRuntimeName().content( true );
+		final String runtimeName = op.getLiferayRuntimeName().content(true);
 
-        IRuntime runtime = ServerUtil.getRuntime( runtimeName );
+		IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
-        if( runtime == null )
-        {
-            retval = Status.createErrorStatus( "Liferay runtime must be configured." );
-        }
+		if (runtime == null) {
+			retval = Status.createErrorStatus("Liferay runtime must be configured.");
+		}
 
-        return retval;
-    }
+		return retval;
+	}
+
 }

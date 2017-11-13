@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -25,36 +24,35 @@ import org.eclipse.sapphire.services.ValueLabelService;
 /**
  * @author Simon Jiang
  */
-@SuppressWarnings( "rawtypes" )
-public class LiferayComponentTemplateValueLabelService extends ValueLabelService
-{
+@SuppressWarnings("rawtypes")
+public class LiferayComponentTemplateValueLabelService extends ValueLabelService {
 
-    
-    @Override
-    public String provide( String value )
-    {
-        IComponentTemplate componentTemplate = ProjectCore.getComponentTemplate( value );
+	@Override
+	public String provide(String value) {
+		IComponentTemplate componentTemplate = ProjectCore.getComponentTemplate(value);
 
-        return componentTemplate != null ? componentTemplate.getDisplayName() : value;
-    }
+		if (componentTemplate != null) {
+			return componentTemplate.getDisplayName();
+		}
 
-    public static class Condition extends ServiceCondition
-    {
+		return value;
+	}
 
-        @Override
-        public boolean applicable( final ServiceContext context )
-        {
-            boolean retval = false;
+	public static class Condition extends ServiceCondition {
 
-            final ValueProperty prop = context.find( ValueProperty.class );
+		@Override
+		public boolean applicable(ServiceContext context) {
+			boolean retval = false;
 
-            if( prop != null && prop.equals( NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME ) )
-            {
-                retval = true;
-            }
+			ValueProperty prop = context.find(ValueProperty.class);
 
-            return retval;
-        }
-    }
+			if ((prop != null) && prop.equals(NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME)) {
+				retval = true;
+			}
+
+			return retval;
+		}
+
+	}
 
 }

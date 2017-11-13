@@ -659,10 +659,10 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         op = newProjectOp( "test2-sdk" );
 
         op.setSdkLocation( "" );
-        assertEquals( "This sdk location is empty ", op.validation().message() );
+        assertEquals( "This sdk location is empty.", op.validation().message() );
 
         op.setSdkLocation( sdk.getLocation().getDevice() + "/" );
-        assertEquals( "This sdk location is not correct", op.validation().message() );
+        assertEquals( "This sdk location is not correct.", op.validation().message() );
 
         // sdk has no build.USERNAME.properties file
         sdkLocation.append( "build." + System.getenv().get( "USER" ) + ".properties" ).toFile().delete();

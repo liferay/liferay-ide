@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.workspace;
 
@@ -20,55 +19,54 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import org.eclipse.sapphire.DerivedValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 
 /**
  * @author Gregory Amerson
  * @author Andy Wu
  */
-public class HasBundlesDirDerivedValueService extends DerivedValueService
-{
+public class HasBundlesDirDerivedValueService extends DerivedValueService {
 
-    private FilteredListener<PropertyContentEvent> listener;
+	@Override
+	protected String compute() {
+		String retval = "false";
 
-    @Override
-    protected void initDerivedValueService()
-    {
-        super.initDerivedValueService();
+		Value<Path> workspaceLocationValue = _op().getWorkspaceLocation();
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		Path path = workspaceLocationValue.content();
 
-        op().property( ImportLiferayWorkspaceOp.PROP_WORKSPACE_LOCATION ).attach( this.listener );
-    }
+		if (path != null) {
+			if (LiferayWorkspaceUtil.isValidWorkspaceLocation(path.toPortableString())) {
+				retval = LiferayWorkspaceUtil.hasBundlesDir(path.toPortableString()) ? "true" : "false";
+			}
+		}
 
-    @Override
-    protected String compute()
-    {
-        String retval = "false";
+		return retval;
+	}
 
-        final Path path = op().getWorkspaceLocation().content();
+	@Override
+	protected void initDerivedValueService() {
+		super.initDerivedValueService();
 
-        if( path != null )
-        {
-            if( LiferayWorkspaceUtil.isValidWorkspaceLocation( path.toPortableString() ) )
-            {
-                retval = LiferayWorkspaceUtil.hasBundlesDir( path.toPortableString() ) ? "true" : "false";
-            }
-        }
+		_listener = new FilteredListener<PropertyContentEvent>() {
 
-        return retval;
-    }
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
 
-    private ImportLiferayWorkspaceOp op()
-    {
-        return context( ImportLiferayWorkspaceOp.class );
-    }
+		};
+
+		Value<Object> workspaceLaction = _op().property(ImportLiferayWorkspaceOp.PROP_WORKSPACE_LOCATION);
+
+		workspaceLaction.attach(_listener);
+	}
+
+	private ImportLiferayWorkspaceOp _op() {
+		return context(ImportLiferayWorkspaceOp.class);
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
 
 }

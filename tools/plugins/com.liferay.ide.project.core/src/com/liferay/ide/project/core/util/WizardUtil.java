@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.util;
 
@@ -33,53 +32,49 @@ import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class WizardUtil
-{
+@SuppressWarnings("restriction")
+public class WizardUtil {
 
-    public static void createDefaultServiceBuilderFile(
-        IFile serviceBuilderFile, String descriptorVersion, boolean useSampleTemplate, String packagePath,
-        String namespace, Object author, IProgressMonitor monitor ) throws CoreException
-    {
-        ITemplateOperation templateOp = null;
+	public static void createDefaultServiceBuilderFile(
+			IFile serviceBuilderFile, String descriptorVersion, boolean useSampleTemplate, String packagePath,
+			String namespace, Object author, IProgressMonitor monitor)
+		throws CoreException {
 
-        if( useSampleTemplate )
-        {
-            templateOp = TemplatesCore.getTemplateOperation( "com.liferay.ide.service.core.defaultServiceXmlFile" );
-        }
-        else
-        {
-            templateOp = TemplatesCore.getTemplateOperation( "com.liferay.ide.service.core.emptyServiceXmlFile" );
-        }
+		ITemplateOperation templateOp = null;
 
-        final ITemplateContext context = templateOp.getContext();
+		if (useSampleTemplate) {
+			templateOp = TemplatesCore.getTemplateOperation("com.liferay.ide.service.core.defaultServiceXmlFile");
+		}
+		else {
+			templateOp = TemplatesCore.getTemplateOperation("com.liferay.ide.service.core.emptyServiceXmlFile");
+		}
 
-        context.put( "version", descriptorVersion );
-        context.put( "version_", descriptorVersion.replace( '.', '_' ) );
-        context.put( "package_path", packagePath );
-        context.put( "namespace", namespace );
-        context.put( "author", author );
+		ITemplateContext context = templateOp.getContext();
 
-        try
-        {
-            final StringBuffer sb = new StringBuffer();
-            templateOp.setOutputBuffer( sb );
-            templateOp.execute( monitor );
+		context.put("version", descriptorVersion);
+		context.put("version_", descriptorVersion.replace('.', '_'));
+		context.put("package_path", packagePath);
+		context.put("namespace", namespace);
+		context.put("author", author);
 
-            CoreUtil.prepareFolder( (IFolder) serviceBuilderFile.getParent() );
+		try {
+			StringBuffer sb = new StringBuffer();
 
-            serviceBuilderFile.create(
-                new ByteArrayInputStream( sb.toString().getBytes( "UTF-8" ) ), IResource.FORCE, null ); //$NON-NLS-1$
+			templateOp.setOutputBuffer(sb);
 
-            FormatProcessorXML processor = new FormatProcessorXML();
+			templateOp.execute(monitor);
 
-            processor.formatFile( serviceBuilderFile );
-        }
-        catch( Exception e )
-        {
-            ProjectCore.logError( e );
-        }
+			CoreUtil.prepareFolder((IFolder)serviceBuilderFile.getParent());
 
-    }
+			serviceBuilderFile.create(new ByteArrayInputStream(sb.toString().getBytes("UTF-8")), IResource.FORCE, null);
+
+			FormatProcessorXML processor = new FormatProcessorXML();
+
+			processor.formatFile(serviceBuilderFile);
+		}
+		catch (Exception e) {
+			ProjectCore.logError(e);
+		}
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,25 +10,23 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
-package com.liferay.ide.project.core.modules;
+ */
 
+package com.liferay.ide.project.core.modules;
 
 /**
  * @author Gregory Amerson
  */
-public class BladeCLIException extends Exception
-{
-    public BladeCLIException( String msg )
-    {
-        super( msg );
-    }
+public class BladeCLIException extends Exception {
 
-    public BladeCLIException( String msg, Exception e )
-    {
-        super( msg, e );
-    }
+	public static final long serialVersionUID = 1081950550390345603L;
 
-    private static final long serialVersionUID = 1081950550390345603L;
+	public BladeCLIException(String msg) {
+		super(msg);
+	}
+
+	public BladeCLIException(String msg, Exception e) {
+		super(msg, e);
+	}
+
 }

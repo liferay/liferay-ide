@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -33,69 +33,67 @@ import org.eclipse.sapphire.modeling.Path;
 /**
  * @author Kuo Zhang
  */
-public class GroupIdDefaultValueService extends DefaultValueService
-{
+public class GroupIdDefaultValueService extends DefaultValueService {
 
-    @Override
-    protected String compute()
-    {
-        String groupId = null;
+	@Override
+	protected String compute() {
+		String groupId = null;
 
-        final Path location = op().getLocation().content();
+		NewLiferayPluginProjectOp op = _op();
 
-        if( location != null )
-        {
-            final NewLiferayPluginProjectOp op = op();
-            final String parentProjectLocation = location.toOSString();
-            final IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString( parentProjectLocation );
-            final String projectName = op().getProjectName().content();
+		Path location = op.getLocation().content();
 
-            groupId = NewLiferayPluginProjectOpMethods.getMavenParentPomGroupId( op, projectName, parentProjectOsPath );
+		if (location != null) {
+			String parentProjectLocation = location.toOSString();
 
-        }
+			IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString(parentProjectLocation);
 
-        if( groupId == null )
-        {
-            groupId = getDefaultMavenGroupId();
+			String projectName = op.getProjectName().content();
 
-            if( CoreUtil.isNullOrEmpty( groupId ) )
-            {
-                groupId = "com.example.plugins";
-            }
-        }
+			groupId = NewLiferayPluginProjectOpMethods.getMavenParentPomGroupId(op, projectName, parentProjectOsPath);
+		}
 
-        return groupId;
-    }
+		if (groupId == null) {
+			groupId = _getDefaultMavenGroupId();
 
-    private String getDefaultMavenGroupId()
-    {
-        final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
-        final String defaultMavenGroupId =
-            Platform.getPreferencesService().getString(
-                ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_MAVEN_GROUPID, null, prefContexts );
-        return defaultMavenGroupId;
-    }
+			if (CoreUtil.isNullOrEmpty(groupId)) {
+				groupId = "com.example.plugins";
+			}
+		}
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+		return groupId;
+	}
 
-        final Listener listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
 
-        op().getLocation().attach( listener );
-        op().getProjectName().attach( listener );
-    }
+		Listener listener = new FilteredListener<PropertyContentEvent>() {
 
-    private NewLiferayPluginProjectOp op()
-    {
-        return context( NewLiferayPluginProjectOp.class );
-    }
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		NewLiferayPluginProjectOp op = _op();
+
+		op.getLocation().attach(listener);
+		op.getProjectName().attach(listener);
+	}
+
+	private String _getDefaultMavenGroupId() {
+		IScopeContext[] prefContexts = {DefaultScope.INSTANCE, InstanceScope.INSTANCE};
+
+		String defaultMavenGroupId = Platform.getPreferencesService().getString(
+			ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_MAVEN_GROUPID, null, prefContexts);
+
+		return defaultMavenGroupId;
+	}
+
+	private NewLiferayPluginProjectOp _op() {
+		return context(NewLiferayPluginProjectOp.class);
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.jsf;
 
@@ -20,17 +19,15 @@ import org.eclipse.sapphire.PropertyContentEvent;
 /**
  * @author Simon Jiang
  */
-public class JSFModuleProjectUseDefaultLocationListener extends JSFModuleProjectNameListener
-{
+public class JSFModuleProjectUseDefaultLocationListener extends JSFModuleProjectNameListener {
 
-    @Override
-    protected void handleTypedEvent( PropertyContentEvent event )
-    {
-        final NewLiferayJSFModuleProjectOp op = op( event );
+	@Override
+	protected void handleTypedEvent(PropertyContentEvent event) {
+		NewLiferayJSFModuleProjectOp op = op(event);
 
-        if( op.getUseDefaultLocation().content( true ) )
-        {
-            super.handleTypedEvent( event );
-        }
-    }
+		if (op.getUseDefaultLocation().content(true)) {
+			super.handleTypedEvent(event);
+		}
+	}
+
 }

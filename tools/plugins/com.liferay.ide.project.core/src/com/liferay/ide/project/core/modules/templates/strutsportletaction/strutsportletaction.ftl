@@ -91,5 +91,4 @@ public class ${classname} extends ${supperclass} {
 
 	private UserLocalService _userLocalService;
 
-
 }

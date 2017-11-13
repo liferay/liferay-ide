@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.fragment;
 
@@ -25,72 +24,70 @@ import org.eclipse.sapphire.modeling.Path;
 /**
  * @author Joye Luo
  */
-public class ModuleFragmentProjectArtifactVersionDefaultValueService extends DefaultValueService
-{
+public class ModuleFragmentProjectArtifactVersionDefaultValueService extends DefaultValueService {
 
-    private Listener listener;
+	@Override
+	public void dispose() {
+		NewModuleFragmentOp op = _op();
 
-    @Override
-    protected String compute()
-    {
-        String data = null;
+		if ((_listener != null) && (op != null) && !op.disposed()) {
+			op.getProjectName().detach(_listener);
+			op.getProjectName().detach(_listener);
 
-        final Path location = op().getLocation().content();
+			_listener = null;
+		}
 
-        if( location != null )
-        {
-            final NewModuleFragmentOp op = op();
-            final String parentProjectLocation = location.toOSString();
-            final IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString( parentProjectLocation );
-            final String projectName = op().getProjectName().content();
+		super.dispose();
+	}
 
-            data = NewModuleFragmentOpMethods.getMavenParentPomVersion( op, projectName, parentProjectOsPath );
-        }
+	@Override
+	protected String compute() {
+		String data = null;
 
-        if( data == null )
-        {
-            data = "1.0.0-SNAPSHOT";
-        }
+		NewModuleFragmentOp op = _op();
 
-        return data;
-    }
+		Path location = op.getLocation().content();
 
-    @Override
-    public void dispose()
-    {
-        if( this.listener != null && op() != null && !op().disposed() )
-        {
-            op().getProjectName().detach( this.listener );
-            op().getProjectName().attach( this.listener );
+		if (location != null) {
+			String parentProjectLocation = location.toOSString();
 
-            this.listener = null;
-        }
+			IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString(parentProjectLocation);
 
-        super.dispose();
-    }
+			String projectName = op.getProjectName().content();
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+			data = NewModuleFragmentOpMethods.getMavenParentPomVersion(op, projectName, parentProjectOsPath);
+		}
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
+		if (data == null) {
+			data = "1.0.0-SNAPSHOT";
+		}
 
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		return data;
+	}
 
-        op().getLocation().attach( this.listener );
-        op().getProjectName().attach( this.listener );
-    }
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
 
-    private NewModuleFragmentOp op()
-    {
-        return context( NewModuleFragmentOp.class );
-    }
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		NewModuleFragmentOp op = _op();
+
+		op.getLocation().attach(_listener);
+		op.getProjectName().attach(_listener);
+	}
+
+	private NewModuleFragmentOp _op() {
+		return context(NewModuleFragmentOp.class);
+	}
+
+	private Listener _listener;
 
 }

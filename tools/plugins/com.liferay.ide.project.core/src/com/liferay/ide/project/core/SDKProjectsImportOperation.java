@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core;
 
@@ -32,60 +31,52 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 /**
  * @author Greg Amerson
  */
-public class SDKProjectsImportOperation extends AbstractDataModelOperation
-    implements ISDKProjectsImportDataModelProperties
-{
+public class SDKProjectsImportOperation
+	extends AbstractDataModelOperation implements ISDKProjectsImportDataModelProperties {
 
-    public SDKProjectsImportOperation( IDataModel model )
-    {
-        super( model );
+	public SDKProjectsImportOperation(IDataModel model) {
+		super(model);
+	}
 
-    }
+	@Override
+	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+		String sdkLocation = model.getStringProperty(ISDKProjectsImportDataModelProperties.SDK_LOCATION);
 
-    @Override
-    public IStatus execute( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException
-    {
-        final String sdkLocation = model.getStringProperty( ISDKProjectsImportDataModelProperties.SDK_LOCATION );
-        final IRuntime runtime = (IRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
-        final Object[] projects =
-            (Object[]) model.getProperty( ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS );
+		IRuntime runtime = (IRuntime)model.getProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME);
 
-        WorkspaceJob workspaceJob = new WorkspaceJob( Msgs.creatingSDKProjects )
-        {
-            /*
-             * (non-Javadoc)
-             * @see org.eclipse.core.resources.WorkspaceJob#runInWorkspace(org.eclipse.core.runtime.IProgressMonitor)
-             */
-            @Override
-            public IStatus runInWorkspace( IProgressMonitor monitor )
-            {
-                try
-                {
-                    ProjectImportUtil.createWorkspaceProjects( projects, runtime, sdkLocation, monitor );
-                }
-                catch( Exception ex )
-                {
-                    return ProjectCore.createErrorStatus( ex );
-                }
+		Object[] projects = (Object[])model.getProperty(ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS);
 
-                return Status.OK_STATUS;
-            }
+		WorkspaceJob workspaceJob = new WorkspaceJob(Msgs.creatingSDKProjects) {
 
-        };
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor monitor) {
+				try {
+					ProjectImportUtil.createWorkspaceProjects(projects, runtime, sdkLocation, monitor);
+				}
+				catch (Exception ex) {
+					return ProjectCore.createErrorStatus(ex);
+				}
 
-        workspaceJob.setUser( true );
-        workspaceJob.schedule();
+				return Status.OK_STATUS;
+			}
 
-        return Status.OK_STATUS;
-    }
+		};
 
-    private static class Msgs extends NLS
-    {
-        public static String creatingSDKProjects;
+		workspaceJob.setUser(true);
 
-        static
-        {
-            initializeMessages( SDKProjectsImportOperation.class.getName(), Msgs.class );
-        }
-    }
+		workspaceJob.schedule();
+
+		return Status.OK_STATUS;
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String creatingSDKProjects;
+
+		static {
+			initializeMessages(SDKProjectsImportOperation.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

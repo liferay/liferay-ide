@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.workspace;
 
@@ -21,56 +20,57 @@ import com.liferay.ide.core.util.StringPool;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Value;
 
 /**
  * @author Andy Wu
  */
-public class NewLiferayWorkspaceServerNameService extends DefaultValueService
-{
+public class NewLiferayWorkspaceServerNameService extends DefaultValueService {
 
-    private FilteredListener<PropertyContentEvent> listener;
+	@Override
+	public void dispose() {
+		Value<Object> workspaceNameValue = _op().property(NewLiferayWorkspaceOp.PROP_WORKSPACE_NAME);
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+		workspaceNameValue.detach(_listener);
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
+		super.dispose();
+	}
 
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+	@Override
+	protected String compute() {
+		Value<String> workspaceNameValue = _op().getWorkspaceName();
 
-        op().property( NewLiferayWorkspaceOp.PROP_WORKSPACE_NAME ).attach( this.listener );
-    }
+		String name = workspaceNameValue.content();
 
-    @Override
-    protected String compute()
-    {
-        String name = op().getWorkspaceName().content();
+		if (CoreUtil.isNullOrEmpty(name)) {
+			return StringPool.EMPTY;
+		}
 
-        if( CoreUtil.isNullOrEmpty( name ) )
-        {
-            return StringPool.EMPTY;
-        }
+		return name;
+	}
 
-        return name;
-    }
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
 
-    private NewLiferayWorkspaceOp op()
-    {
-        return context( NewLiferayWorkspaceOp.class );
-    }
+		_listener = new FilteredListener<PropertyContentEvent>() {
 
-    @Override
-    public void dispose()
-    {
-        op().property( NewLiferayWorkspaceOp.PROP_WORKSPACE_NAME ).detach( this.listener );
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
 
-        super.dispose();
-    }
+		};
+
+		Value<Object> workspaceNameValue = _op().property(NewLiferayWorkspaceOp.PROP_WORKSPACE_NAME);
+
+		workspaceNameValue.attach(_listener);
+	}
+
+	private NewLiferayWorkspaceOp _op() {
+		return context(NewLiferayWorkspaceOp.class);
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+
 }

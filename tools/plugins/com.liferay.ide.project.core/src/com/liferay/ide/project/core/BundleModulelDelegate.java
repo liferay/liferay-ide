@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.IBundleProject;
@@ -22,40 +22,38 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.server.core.model.IModuleResource;
 import org.eclipse.wst.server.core.util.ProjectModule;
-
 
 /**
  * @author Gregory Amerson
  */
-public class BundleModulelDelegate extends ProjectModule
-{
+public class BundleModulelDelegate extends ProjectModule {
 
-    public BundleModulelDelegate( IProject project )
-    {
-        super( project );
-    }
+	public BundleModulelDelegate(IProject project) {
+		super(project);
+	}
 
-    @Override
-    public IModuleResource[] members() throws CoreException
-    {
-        final List<IModuleResource> retval = new ArrayList<IModuleResource>();
-        final IModuleResource[] members = super.members();
-        final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, getProject() );
+	@Override
+	public IModuleResource[] members() throws CoreException {
+		List<IModuleResource> retval = new ArrayList<>();
 
-        for( IModuleResource moduleResource : members )
-        {
-            if( bundleProject.filterResource(
-                moduleResource.getModuleRelativePath().append( moduleResource.getName() ) ) )
-            {
-               continue;
-            }
+		IModuleResource[] members = super.members();
 
-            retval.add( moduleResource );
-        }
+		IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, getProject());
 
-        return retval.toArray( new IModuleResource[0] );
-    }
+		for (IModuleResource moduleResource : members) {
+			IPath path = moduleResource.getModuleRelativePath().append(moduleResource.getName());
+
+			if (bundleProject.filterResource(path)) {
+				continue;
+			}
+
+			retval.add(moduleResource);
+		}
+
+		return retval.toArray(new IModuleResource[0]);
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,12 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
 import org.apache.commons.lang.WordUtils;
+
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -23,82 +23,79 @@ import org.eclipse.sapphire.PropertyContentEvent;
 /**
  * @author Simon Jiang
  */
-public class NewLiferayComponentDefaultValueService extends DefaultValueService
-{
+public class NewLiferayComponentDefaultValueService extends DefaultValueService {
 
-    private FilteredListener<PropertyContentEvent> listener;
+	@Override
+	public void dispose() {
+		NewLiferayComponentOp op = _op();
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+		if (op != null) {
+			op.property(NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME).detach(_listener);
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
+			op.property(NewLiferayComponentOp.PROP_PROJECT_NAME).detach(_listener);
+		}
 
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		super.dispose();
+	}
 
-        op().property( NewLiferayComponentOp.PROP_PROJECT_NAME ).attach( this.listener );
-        op().property( NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME ).attach( this.listener );
-    }
+	@Override
+	protected String compute() {
+		String retVal = "";
 
-    
-    @Override
-    protected String compute()
-    {
-        String retVal = "";
+		NewLiferayComponentOp op = _op();
 
-        final String projectName = op().getProjectName().content( true );
+		String projectName = op.getProjectName().content(true);
 
-        if( projectName == null )
-        {
-            return retVal;
-        }
+		if (projectName == null) {
+			return retVal;
+		}
 
-        IComponentTemplate<NewLiferayComponentOp> componentTemplate =
-            op().getComponentClassTemplateName().content( true );
+		IComponentTemplate<NewLiferayComponentOp> componentTemplate = op.getComponentClassTemplateName().content(true);
 
-        if( componentTemplate != null )
-        {
-            final String projectTemplate = op().getComponentClassTemplateName().content( true ).getShortName();
+		if (componentTemplate != null) {
+			String projectTemplate = componentTemplate.getShortName();
 
-            final char[] tokens = new char[] { '-', '.', '_' };
+			char[] tokens = {'-', '.', '_'};
 
-            String finalProjectName = WordUtils.capitalizeFully( projectName, tokens );
+			String finalProjectName = WordUtils.capitalizeFully(projectName, tokens);
 
-            for( char token : tokens )
-            {
-                finalProjectName = finalProjectName.replaceAll( "\\" + token, "" );
-            }
+			for (char token : tokens) {
+				finalProjectName = finalProjectName.replaceAll("\\" + token, "");
+			}
 
-            final StringBuffer componentNameBuffer = new StringBuffer( finalProjectName );
+			StringBuffer componentNameBuffer = new StringBuffer(finalProjectName);
 
-            componentNameBuffer.append( projectTemplate );
+			componentNameBuffer.append(projectTemplate);
 
-            return componentNameBuffer.toString();
-        }
-        return null;
-    }
+			return componentNameBuffer.toString();
+		}
 
-    private NewLiferayComponentOp op()
-    {
-        return context( NewLiferayComponentOp.class );
-    }
+		return null;
+	}
 
-    @Override
-    public void dispose()
-    {
-        if( op() != null )
-        {
-            op().property( NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME ).detach( this.listener );
-            op().property( NewLiferayComponentOp.PROP_PROJECT_NAME ).detach( this.listener );
-        }
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
 
-        super.dispose();
-    }
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		NewLiferayComponentOp op = _op();
+
+		op.property(NewLiferayComponentOp.PROP_PROJECT_NAME).attach(_listener);
+		op.property(NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME).attach(_listener);
+	}
+
+	private NewLiferayComponentOp _op() {
+		return context(NewLiferayComponentOp.class);
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+
 }

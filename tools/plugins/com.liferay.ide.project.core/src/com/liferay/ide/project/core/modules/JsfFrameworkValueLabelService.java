@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp;
@@ -21,64 +21,44 @@ import org.eclipse.sapphire.services.ServiceCondition;
 import org.eclipse.sapphire.services.ServiceContext;
 import org.eclipse.sapphire.services.ValueLabelService;
 
-
 /**
  * @author Simon Jiang
  */
-public class JsfFrameworkValueLabelService extends ValueLabelService
-{
-    @Override
-    public String provide( String value )
-    {
-        switch (value)
-        {
-            case "jsf":
-            {
-                return "JSF Standard";
-            }
-            case "alloy":
-            {
-                return "Liferay Faces Alloy";
-            }
-            case "icefaces":
-            {
-                return "ICEFaces";
-            }      
-            case "primefaces":
-            {
-                return "PrimeFaces";
-            }    
-            case "richfaces":
-            {
-                return "RichFaces";
-            }        
-            default:
-            {
-                return "JSF Standard";
-            }
-        }
-    }
+public class JsfFrameworkValueLabelService extends ValueLabelService {
 
-    public static class Condition extends ServiceCondition
-    {
+	@Override
+	public String provide(String value) {
+		switch (value) {
+			case "jsf":
+				return "JSF Standard";
+			case "alloy":
+				return "Liferay Faces Alloy";
+			case "icefaces":
+				return "ICEFaces";
+			case "primefaces":
+				return "PrimeFaces";
+			case "richfaces":
+				return "RichFaces";
+			default:
+				return "JSF Standard";
+		}
+	}
 
-        @Override
-        public boolean applicable( final ServiceContext context )
-        {
-            boolean retval = false;
+	public static class Condition extends ServiceCondition {
 
-            final ValueProperty prop = context.find( ValueProperty.class );
+		@Override
+		public boolean applicable(ServiceContext context) {
+			boolean retval = false;
 
-            if( prop != null )
-            {
-                if( prop.equals( NewLiferayJSFModuleProjectOp.PROP_TEMPLATE_NAME ) )
-                {
-                    retval = true;
-                }
-            }
+			ValueProperty prop = context.find(ValueProperty.class);
 
-            return retval;
-        }
-    }
+			if ((prop != null) && prop.equals(NewLiferayJSFModuleProjectOp.PROP_TEMPLATE_NAME)) {
+				retval = true;
+			}
+
+			return retval;
+		}
+
+	}
 
 }

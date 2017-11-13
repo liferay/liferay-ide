@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.IBundleProject;
@@ -20,26 +20,23 @@ import com.liferay.ide.core.LiferayCore;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IProject;
 
-
 /**
  * @author Gregory Amerson
  */
-public class BundleProjectPropertyTester extends PropertyTester
-{
+public class BundleProjectPropertyTester extends PropertyTester {
 
-    public BundleProjectPropertyTester()
-    {
-        super();
-    }
+	public BundleProjectPropertyTester() {
+	}
 
-    @Override
-    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
-    {
-        return
-            property != null &&
-            property.equals( "isBundleProject" ) &&
-            receiver instanceof IProject &&
-            LiferayCore.create( IBundleProject.class, ( (IProject) receiver ) ) != null;
-    }
+	@Override
+	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
+		if ((property != null) && property.equals("isBundleProject") && receiver instanceof IProject &&
+			(LiferayCore.create(IBundleProject.class, (IProject)receiver) != null)) {
+
+			return true;
+		}
+
+		return false;
+	}
 
 }

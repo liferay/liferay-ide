@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -29,48 +29,45 @@ import org.eclipse.sapphire.services.ValidationService;
  * @author Simon Jiang
  * @author Terry Jia
  */
-@SuppressWarnings( "restriction" )
-public class JavaPackageNameValidationService extends ValidationService
-{
+@SuppressWarnings("restriction")
+public class JavaPackageNameValidationService extends ValidationService {
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-        final String projectName = op().getProjectName().text( false );
+		NewLiferayComponentOp op = _op();
 
-        if( projectName != null )
-        {
-            final IJavaProject javaproject =
-                JavaCore.create( CoreUtil.getProject( op().getProjectName().text( false ) ) );
+		String projectName = op.getProjectName().text(false);
 
-            if( CoreUtil.getSourceFolders( javaproject ).size() == 0 )
-            {
-                retval = Status.createErrorStatus( "Unable to find any source folders." );
+		if (projectName != null) {
+			IJavaProject javaproject = JavaCore.create(CoreUtil.getProject(op.getProjectName().text(false)));
 
-                return retval;
-            }
-        }
+			if (CoreUtil.getSourceFolders(javaproject).size() == 0) {
+				retval = Status.createErrorStatus("Unable to find any source folders.");
 
-        final JavaPackageName packageName = op().getPackageName().content( true );
+				return retval;
+			}
+		}
 
-        if( packageName != null )
-        {
-            int packageNameStatus = JavaConventions.validatePackageName(
-                packageName.toString(), CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 ).getSeverity();
+		JavaPackageName packageName = op.getPackageName().content(true);
 
-            if( packageNameStatus == IStatus.ERROR )
-            {
-                retval = Status.createErrorStatus( "Invalid package name" );
-            }
-        }
+		if (packageName != null) {
+			IStatus status = JavaConventions.validatePackageName(
+				packageName.toString(), CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7);
 
-        return retval;
-    }
+			int packageNameStatus = status.getSeverity();
 
-    private NewLiferayComponentOp op()
-    {
-        return context( NewLiferayComponentOp.class );
-    }
+			if (packageNameStatus == IStatus.ERROR) {
+				retval = Status.createErrorStatus("Invalid package name");
+			}
+		}
+
+		return retval;
+	}
+
+	private NewLiferayComponentOp _op() {
+		return context(NewLiferayComponentOp.class);
+	}
+
 }

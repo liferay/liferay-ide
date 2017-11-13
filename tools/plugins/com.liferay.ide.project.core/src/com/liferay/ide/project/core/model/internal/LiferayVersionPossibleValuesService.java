@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.model.internal;
 
@@ -32,78 +31,67 @@ import org.eclipse.sapphire.Value;
 /**
  * @author Gregory Amerson
  */
-public class LiferayVersionPossibleValuesService extends PossibleValuesService
-{
+public class LiferayVersionPossibleValuesService extends PossibleValuesService {
 
-    private List<String> versions = null;
-    private Job versionsJob = null;
-    private String groupId;
-    private String artifactId;
+	@Override
+	public boolean ordered() {
+		return true;
+	}
 
-    @Override
-    protected void initPossibleValuesService()
-    {
-        super.initPossibleValuesService();
+	@Override
+	public org.eclipse.sapphire.modeling.Status problem(Value<?> value) {
+		return org.eclipse.sapphire.modeling.Status.createOkStatus();
+	}
 
-        this.groupId = this.param( "groupId" );
-        this.artifactId = this.param( "artifactId" );
-    }
+	@Override
+	protected void compute(Set<String> values) {
+		if (_versions != null) {
+			values.addAll(_versions);
+		}
+		else if (_versionsJob == null) {
+			_versionsJob = new Job("Determining possible Liferay versions.") {
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        if( this.versions != null )
-        {
-            values.addAll( this.versions );
-        }
-        else if( this.versionsJob == null )
-        {
-            this.versionsJob = new Job( "Determining possible Liferay versions." )
-            {
-                @Override
-                protected IStatus run( IProgressMonitor monitor )
-                {
-                    final NewLiferayPluginProjectOp op = op();
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					NewLiferayPluginProjectOp op = _op();
 
-                    if( ! op.disposed() )
-                    {
-                        final ILiferayProjectProvider projectProvider = op.getProjectProvider().content();
+					if (!op.disposed()) {
+						ILiferayProjectProvider projectProvider = op.getProjectProvider().content();
 
-                        try
-                        {
-                            versions = projectProvider.getData( "liferayVersions", String.class, groupId, artifactId );
-                        }
-                        catch( Exception e )
-                        {
-                            ProjectCore.logError( "Could not determine possible versions.", e );
-                        }
+						try {
+							_versions = projectProvider.getData("liferayVersions", String.class, _groupId, _artifactId);
+						}
+						catch (Exception e) {
+							ProjectCore.logError("Could not determine possible versions.", e);
+						}
 
-                        refresh();
-                    }
+						refresh();
+					}
 
-                    return Status.OK_STATUS;
-                }
-            };
+					return Status.OK_STATUS;
+				}
 
-            this.versionsJob.schedule();
-        }
-    }
+			};
 
-    private NewLiferayPluginProjectOp op()
-    {
-        return context( NewLiferayPluginProjectOp.class );
-    }
+			_versionsJob.schedule();
+		}
+	}
 
-    @Override
-    public boolean ordered()
-    {
-        return true;
-    }
+	@Override
+	protected void initPossibleValuesService() {
+		super.initPossibleValuesService();
 
-    @Override
-    public org.eclipse.sapphire.modeling.Status problem( Value<?> value )
-    {
-        return org.eclipse.sapphire.modeling.Status.createOkStatus();
-    }
+		_groupId = param("groupId");
+		_artifactId = param("artifactId");
+	}
+
+	private NewLiferayPluginProjectOp _op() {
+		return context(NewLiferayPluginProjectOp.class);
+	}
+
+	private String _artifactId;
+	private String _groupId;
+	private List<String> _versions = null;
+	private Job _versionsJob = null;
 
 }

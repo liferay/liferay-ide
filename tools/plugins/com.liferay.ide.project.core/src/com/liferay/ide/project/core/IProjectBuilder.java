@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core;
 
 import java.util.List;
@@ -22,18 +22,17 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
-
 /**
  * @author Gregory Amerson
  */
-public interface IProjectBuilder
-{
+public interface IProjectBuilder {
 
-    IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException;
+	public IStatus buildLang(IFile langFile, IProgressMonitor monitor) throws CoreException;
 
-    IStatus buildService( IProgressMonitor monitor ) throws CoreException;
+	public IStatus buildService(IProgressMonitor monitor) throws CoreException;
 
-    IStatus buildWSDD( IProgressMonitor monitor ) throws CoreException;
+	public IStatus buildWSDD(IProgressMonitor monitor) throws CoreException;
 
-    IStatus updateProjectDependency( IProject project, List<String[]> dependecies ) throws CoreException;
+	public IStatus updateProjectDependency(IProject project, List<String[]> dependecies) throws CoreException;
+
 }

@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -14,95 +28,88 @@ import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 
-
 /**
  * @author Gregory Amerson
  */
-public class JavaPackageNameDefaultValueService extends DefaultValueService
-{
+public class JavaPackageNameDefaultValueService extends DefaultValueService {
 
-    @Override
-    protected String compute()
-    {
-        String retval = null;
+	@Override
+	protected String compute() {
+		String retval = null;
 
-        final IJavaProject project = context( NewLiferayComponentOp.class ).adapt( IJavaProject.class );
+		NewLiferayComponentOp op = _op();
 
-        if( project != null )
-        {
-            try
-            {
-                final List<IFolder> srcFolders = CoreUtil.getSourceFolders( project );
+		IJavaProject project = op.adapt(IJavaProject.class);
 
-                final IPackageFragmentRoot[] roots = project.getAllPackageFragmentRoots();
+		if (project == null) {
+			return retval;
+		}
 
-                if( !CoreUtil.isNullOrEmpty( roots ) )
-                {
-                    for( IPackageFragmentRoot root : roots )
-                    {
-                        final IJavaElement[] packages = root.getChildren();
+		try {
+			List<IFolder> srcFolders = CoreUtil.getSourceFolders(project);
 
-                        if( !CoreUtil.isNullOrEmpty( packages ) )
-                        {
-                            for( IJavaElement element : packages )
-                            {
-                                if( element instanceof IPackageFragment )
-                                {
-                                    final IPackageFragment fragment = (IPackageFragment) element;
+			IPackageFragmentRoot[] roots = project.getAllPackageFragmentRoots();
 
-                                    boolean isInSourceFolder = false;
+			if (CoreUtil.isNullOrEmpty(roots)) {
+				return retval;
+			}
 
-                                    for( IFolder srcFolder : srcFolders )
-                                    {
-                                        if( srcFolder.getFullPath().isPrefixOf( fragment.getPath() ) )
-                                        {
-                                            isInSourceFolder = true;
-                                            break;
-                                        }
-                                    }
+			for (IPackageFragmentRoot root : roots) {
+				IJavaElement[] packages = root.getChildren();
 
-                                    if( isInSourceFolder )
-                                    {
-                                        final String elementName = fragment.getElementName();
+				if (!CoreUtil.isNullOrEmpty(packages)) {
+					for (IJavaElement element : packages) {
+						if (element instanceof IPackageFragment) {
+							IPackageFragment fragment = (IPackageFragment)element;
 
-                                        if( !CoreUtil.isNullOrEmpty( elementName ) )
-                                        {
-                                            retval = elementName;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch( JavaModelException e )
-            {
-            }
-        }
+							boolean inSourceFolder = false;
 
-        return retval;
-    }
+							for (IFolder srcFolder : srcFolders) {
+								if (srcFolder.getFullPath().isPrefixOf(fragment.getPath())) {
+									inSourceFolder = true;
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+									break;
+								}
+							}
 
-        FilteredListener<PropertyContentEvent> listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+							if (inSourceFolder) {
+								String elementName = fragment.getElementName();
 
-        op().property( NewLiferayComponentOp.PROP_PROJECT_NAME ).attach( listener );
-    }
+								if (!CoreUtil.isNullOrEmpty(elementName)) {
+									retval = elementName;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		catch (JavaModelException jme) {
+		}
 
-    private NewLiferayComponentOp op()
-    {
-        return context( NewLiferayComponentOp.class );
-    }
+		return retval;
+	}
+
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
+
+		FilteredListener<PropertyContentEvent> listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		NewLiferayComponentOp op = _op();
+
+		op.property(NewLiferayComponentOp.PROP_PROJECT_NAME).attach(listener);
+	}
+
+	private NewLiferayComponentOp _op() {
+		return context(NewLiferayComponentOp.class);
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
+
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 
 import java.io.File;
 
@@ -30,122 +32,119 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
-public abstract class AbstractProjectLocationValidationService<T extends ExecutableElement> extends ValidationService
-{
+public abstract class AbstractProjectLocationValidationService<T extends ExecutableElement> extends ValidationService {
 
-    private Listener listener;
+	@Override
+	public void dispose() {
+		super.dispose();
 
-    private boolean canCreate( File file )
-    {
-        while( !file.exists() )
-        {
-            file = file.getParentFile();
+		BaseModuleOp op = op();
 
-            if( file == null )
-            {
-                return false;
-            }
-        }
+		if (_listener != null) {
+			op.detach(_listener);
 
-        return file.canWrite();
-    }
+			_listener = null;
+		}
+	}
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+	@Override
+	protected Status compute() {
+		BaseModuleOp op = op();
 
-        final String currentProjectName = op().getProjectName().content();
-        final Path currentProjectLocation = op().getLocation().content();
-        final Boolean userDefaultLocation = op().getUseDefaultLocation().content();
+		Status retval = Status.createOkStatus();
 
-        // Location won't be validated if the UseDefaultLocation has an error. Get the validation of the property might
-        // not work as excepted, let's use call the validation service manually.
-        if( !userDefaultLocation )
-        {
-            /*
-             * IDE-1150, instead of using annotation "@Required",use this service to validate the custom project
-             * location must be specified, let the wizard display the error of project name when project name and
-             * location are both null.
-             */
-            if( currentProjectName != null )
-            {
-                if( currentProjectLocation != null )
-                {
-                    final String currentPath = currentProjectLocation.toOSString();
+		String currentProjectName = op.getProjectName().content();
+		Path currentProjectLocation = op.getLocation().content();
+		Boolean userDefaultLocation = op.getUseDefaultLocation().content();
 
-                    if( !org.eclipse.core.runtime.Path.EMPTY.isValidPath( currentPath ) )
-                    {
-                        retval = Status.createErrorStatus( "\"" + currentPath + "\" is not a valid path." ); //$NON-NLS-1$ //$NON-NLS-2$
-                    }
-                    else
-                    {
-                        IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
+		/*
+		 * Location won't be validated if the UseDefaultLocation has an error.
+		 * Get the validation of the property might not work as excepted,
+		 * let's use call the validation service manually.
+		 */
+		if (userDefaultLocation) {
+			return retval;
+		}
 
-                        if( !osPath.toFile().isAbsolute() )
-                        {
-                            retval = Status.createErrorStatus( "\"" + currentPath + "\" is not an absolute path." ); //$NON-NLS-1$ //$NON-NLS-2$
-                        }
-                        else
-                        {
-                            if( !osPath.toFile().exists() )
-                            {
-                                // check non-existing external location
-                                if( !canCreate( osPath.toFile() ) )
-                                {
-                                    retval = Status.createErrorStatus( "Cannot create project content at \"" + //$NON-NLS-1$
-                                        currentPath + "\"" ); //$NON-NLS-1$
-                                }
-                            }
+		/*
+		 * IDE-1150, instead of using annotation "@Required",use this service to
+		 * validate the custom project location must be specified, let the wizard
+		 * display the error of project name when project name and location are both
+		 * null.
+		 */
+		if (currentProjectName == null) {
+			return retval;
+		}
 
-                            final IStatus locationStatus =
-                                op().getProjectProvider().content().validateProjectLocation( currentProjectName, osPath );
+		if (currentProjectLocation == null) {
+			return Status.createErrorStatus("Location must be specified.");
+		}
 
-                            if( !locationStatus.isOK() )
-                            {
-                                retval = Status.createErrorStatus( locationStatus.getMessage() ); // $NON-NLS-1$
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    retval = Status.createErrorStatus( "Location must be specified." ); //$NON-NLS-1$
-                }
-            }
-        }
+		String currentPath = currentProjectLocation.toOSString();
 
-        return retval;
-    }
+		if (!org.eclipse.core.runtime.Path.EMPTY.isValidPath(currentPath)) {
+			return Status.createErrorStatus("\"" + currentPath + "\" is not a valid path.");
+		}
+		else {
+			IPath osPath = org.eclipse.core.runtime.Path.fromOSString(currentPath);
 
-    @Override
-    public void dispose()
-    {
-        super.dispose();
+			if (!osPath.toFile().isAbsolute()) {
+				retval = Status.createErrorStatus("\"" + currentPath + "\" is not an absolute path.");
+			}
+			else {
+				if (FileUtil.notExists(osPath)) {
 
-        if( this.listener != null )
-        {
-            op().detach( this.listener );
-            this.listener = null;
-        }
-    }
+					// check non-existing external location
 
-    @Override
-    protected void initValidationService()
-    {
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
+					if (!_canCreate(osPath.toFile())) {
+						retval = Status.createErrorStatus("Cannot create project content at \"" + currentPath + "\"");
+					}
+				}
 
-            @Override
-            protected void handleTypedEvent( final PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+				NewLiferayProjectProvider<BaseModuleOp> provider = op.getProjectProvider().content();
 
-        op().getProjectName().attach( listener );
-        op().getProjectProvider().attach( listener );
-    }
+				IStatus locationStatus = provider.validateProjectLocation(currentProjectName, osPath);
 
-    protected abstract BaseModuleOp op();
+				if (!locationStatus.isOK()) {
+					retval = Status.createErrorStatus(locationStatus.getMessage());
+				}
+			}
+		}
+
+		return retval;
+	}
+
+	@Override
+	protected void initValidationService() {
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		BaseModuleOp op = op();
+
+		op.getProjectName().attach(_listener);
+		op.getProjectProvider().attach(_listener);
+	}
+
+	protected abstract BaseModuleOp op();
+
+	private boolean _canCreate(File file) {
+		while (FileUtil.notExists(file)) {
+			file = file.getParentFile();
+
+			if (file == null) {
+				return false;
+			}
+		}
+
+		return file.canWrite();
+	}
+
+	private Listener _listener;
+
 }

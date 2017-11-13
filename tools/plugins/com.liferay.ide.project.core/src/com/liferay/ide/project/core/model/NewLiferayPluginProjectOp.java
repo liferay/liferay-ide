@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
@@ -76,304 +76,254 @@ import org.eclipse.sapphire.modeling.annotations.Whitespace;
  * @author Kuo Zhang
  * @author Tao Tao
  */
-public interface NewLiferayPluginProjectOp extends ExecutableElement
-{
-    ElementType TYPE = new ElementType( NewLiferayPluginProjectOp.class );
+public interface NewLiferayPluginProjectOp extends ExecutableElement {
 
-    // *** Archetype ***
+	public ElementType TYPE = new ElementType(NewLiferayPluginProjectOp.class);
 
-    @Service( impl = ArchetypeDefaultValueService.class )
-    ValueProperty PROP_ARCHETYPE = new ValueProperty( TYPE, "Archetype" ); //$NON-NLS-1$
+	@DelegateImplementation(NewLiferayPluginProjectOpMethods.class)
+	@Override
+	public Status execute(ProgressMonitor monitor);
 
-    Value<String> getArchetype();
-    void setArchetype( String value );
+	public Value<String> getActiveProfilesValue();
 
-    // *** ProjectName ***
-
-    @Label( standard = "project name" )
-    @Listeners( ProjectNameListener.class )
-    @Service( impl = ProjectNameValidationService.class )
-    @Required
-    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" ); //$NON-NLS-1$
-
-    Value<String> getProjectName();
-    void setProjectName( String value );
+	public Value<String> getArchetype();
 
+	public Value<String> getArtifactVersion();
 
-    // *** DisplayName ***
+	public Value<Boolean> getCreateNewPortlet();
 
-    @Label( standard = "display name" )
-    @Service( impl = DisplayNameDefaultValueService.class )
-    ValueProperty PROP_DISPLAY_NAME = new ValueProperty( TYPE, "DisplayName" ); //$NON-NLS-1$
+	public Value<String> getDisplayName();
 
-    Value<String> getDisplayName();
-    void setDisplayName( String value );
+	public Value<String> getFinalProjectName();
 
+	public Value<String> getGroupId();
 
-    @Type( base = Boolean.class )
-    @Service( impl = HasWorkspaceSdkDefaultValueService.class )
-    ValueProperty PROP_HAS_WORKSPACE_SDK = new ValueProperty( TYPE, "HasWorkspaceSDK" ); //$NON-NLS-1$
+	public Value<Boolean> getImportProjectStatus();
 
+	public Value<Boolean> getIncludeSampleCode();
 
-    // *** UseDefaultLocation ***
+	public Value<Path> getLocation();
 
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "true" )
-    @Enablement( expr = "${ ProjectProvider != 'ant' }" )
-    @Label( standard = "use default location" )
-    @Listeners( UseDefaultLocationListener.class )
-    @Service( impl = UseDefaultLocationValidationService.class )
-    ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty( TYPE, "UseDefaultLocation" ); //$NON-NLS-1$
+	public ElementList<NewLiferayProfile> getNewLiferayProfiles();
 
-    Value<Boolean> getUseDefaultLocation();
-    void setUseDefaultLocation( String value );
-    void setUseDefaultLocation( Boolean value );
+	public Value<PluginType> getPluginType();
 
+	public Value<IPortletFramework> getPortletFramework();
 
-    // *** ProjectLocation ***
+	public Value<IPortletFramework> getPortletFrameworkAdvanced();
 
-    @Type( base = Path.class )
-    @AbsolutePath
-    @Enablement( expr = "${ UseDefaultLocation == 'false' && ProjectProvider != 'ant' }" )
-    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    @Label( standard = "location" )
-    @Service( impl = LocationValidationService.class )
-    ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" ); //$NON-NLS-1$
+	public Value<String> getPortletName();
 
-    Value<Path> getLocation();
-    void setLocation( String value );
-    void setLocation( Path value );
+	public Value<String> getProjectName();
 
+	public ElementList<ProjectName> getProjectNames();
 
-    // *** ProjectProvider ***
+	public Value<NewLiferayProjectProvider<NewLiferayPluginProjectOp>> getProjectProvider();
 
-    @Type( base = ILiferayProjectProvider.class )
-    @Label( standard = "build type" )
-    @Listeners( ProjectProviderListener.class )
-    @Services
-    (
-        value=
-        {
-            @Service( impl = ProjectProviderPossibleValuesService.class ),
-            @Service( impl = ProjectProviderDefaultValueService.class )
-        }
-    )
-    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" ); //$NON-NLS-1$
+	public Value<Path> getSdkLocation();
 
-    Value<NewLiferayProjectProvider<NewLiferayPluginProjectOp>> getProjectProvider();
-    void setProjectProvider( String value );
-    void setProjectProvider( NewLiferayProjectProvider<NewLiferayPluginProjectOp> value );
+	public ElementList<Profile> getSelectedProfiles();
 
-    // *** SDK Location ***
-    @Type( base = Path.class )
-    @AbsolutePath
-    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    @Label( standard = "SDK Location" )
-    @Listeners( SDKLocationListener.class )
-    @Service( impl = SDKLocationValidationService.class )
-    ValueProperty PROP_SDK_LOCATION = new ValueProperty( TYPE, "SdkLocation" ); //$NON-NLS-1$
+	public Value<String> getThemeFramework();
 
-    Value<Path> getSdkLocation();
-    void setSdkLocation( String value );
-    void setSdkLocation( Path value );
+	public Value<String> getThemeParent();
 
-    // *** PluginType ***
+	public Value<Boolean> getUseDefaultLocation();
 
-    @Type( base = PluginType.class )
-    @Label( standard = "plugin type" )
-    @Listeners( PluginTypeListener.class )
-    @DefaultValue( text = "portlet" )
-    @Services
-    (
-        value=
-        {
-            @Service( impl = PluginTypePossibleValuesService.class ),
-            @Service( impl = PluginTypeValidationService.class )
-        }
-    )
-    ValueProperty PROP_PLUGIN_TYPE = new ValueProperty( TYPE, "PluginType" ); //$NON-NLS-1$
+	public void setActiveProfilesValue(String value);
 
-    Value<PluginType> getPluginType();
-    void setPluginType( String value );
-    void setPluginType( PluginType value );
+	public void setArchetype(String value);
 
+	public void setArtifactVersion(String value);
 
-    // *** IncludeSampleCode ***
+	public void setCreateNewPortlet(Boolean value);
 
-    @Type( base = Boolean.class )
-    @Service( impl = IncludeSampleCodeDefaultValueService.class )
-    ValueProperty PROP_INCLUDE_SAMPLE_CODE = new ValueProperty( TYPE, "IncludeSampleCode" );
+	public void setCreateNewPortlet(String value);
 
-    Value<Boolean> getIncludeSampleCode();
-    void setIncludeSampleCode( String value );
-    void setIncludeSampleCode( Boolean value );
+	public void setDisplayName(String value);
 
+	public void setFinalProjectName(String value);
 
-    // *** CreateNewPortlet ***
+	public void setGroupId(String value);
 
-    @Type( base = Boolean.class )
-    @Service( impl = CreateNewPortletDefaultValueService.class )
-    ValueProperty PROP_CREATE_NEW_PORTLET = new ValueProperty( TYPE, "CreateNewPortlet" );
+	public void setImportProjectStatus(Boolean value);
 
-    Value<Boolean> getCreateNewPortlet();
-    void setCreateNewPortlet( String value );
-    void setCreateNewPortlet( Boolean value );
+	public void setImportProjectStatus(String value);
 
+	public void setIncludeSampleCode(Boolean value);
 
-    // *** PortletFramework ***
+	public void setIncludeSampleCode(String value);
 
-    @Type( base = IPortletFramework.class )
-    @Label( standard = "portlet framework" )
-    @DefaultValue( text = "mvc" )
-    @Services
-    (
-        value=
-        {
-            @Service( impl = PortletFrameworkValidationService.class ),
-            @Service( impl = PortletFrameworkPossibleValuesService.class )
-        }
-    )
-    ValueProperty PROP_PORTLET_FRAMEWORK = new ValueProperty( TYPE, "PortletFramework" ); //$NON-NLS-1$
+	public void setLocation(Path value);
 
-    Value<IPortletFramework> getPortletFramework();
-    void setPortletFramework( String value );
-    void setPortletFramework( IPortletFramework value );
+	public void setLocation(String value);
 
+	public void setPluginType(PluginType value);
 
-    // *** PortletFrameworkAdvanced ***
+	public void setPluginType(String value);
 
-    @Type( base = IPortletFramework.class )
-    @DefaultValue( text = "jsf" )
-    @Service( impl = PortletFrameworkAdvancedPossibleValuesService.class )
-    ValueProperty PROP_PORTLET_FRAMEWORK_ADVANCED = new ValueProperty( TYPE, "PortletFrameworkAdvanced" ); //$NON-NLS-1$
+	public void setPortletFramework(IPortletFramework value);
 
-    Value<IPortletFramework> getPortletFrameworkAdvanced();
-    void setPortletFrameworkAdvanced( String value );
-    void setPortletFrameworkAdvanced( IPortletFramework value );
+	public void setPortletFramework(String value);
 
+	public void setPortletFrameworkAdvanced(IPortletFramework value);
 
-    // *** ThemeParent ***
+	public void setPortletFrameworkAdvanced(String value);
 
-    @Label( standard = "theme parent" )
-    @PossibleValues( ordered = true, values = { "_unstyled", "_styled", "classic" } )
-    @DefaultValue( text = "_styled" )
-    ValueProperty PROP_THEME_PARENT = new ValueProperty( TYPE, "ThemeParent" ); //$NON-NLS-1$
+	public void setPortletName(String value);
 
-    Value<String> getThemeParent();
-    void setThemeParent( String value );
+	public void setProjectName(String value);
 
+	public void setProjectProvider(NewLiferayProjectProvider<NewLiferayPluginProjectOp> value);
 
-    // *** ThemeFramework ***
+	public void setProjectProvider(String value);
+
+	public void setSdkLocation(Path value);
+
+	public void setSdkLocation(String value);
+
+	public void setThemeFramework(String value);
+
+	public void setThemeParent(String value);
+
+	public void setUseDefaultLocation(Boolean value);
+
+	public void setUseDefaultLocation(String value);
+
+	@Fact(statement = "Supports comma separated list of active profiles")
+	@Label(standard = "active profiles")
+	@Service(impl = ActiveProfilesValidationService.class)
+	@Whitespace(trim = false)
+	public ValueProperty PROP_ACTIVE_PROFILES_VALUE = new ValueProperty(TYPE, "ActiveProfilesValue");
+
+	@Service(impl = ArchetypeDefaultValueService.class)
+	public ValueProperty PROP_ARCHETYPE = new ValueProperty(TYPE, "Archetype");
+
+	@Label(standard = "artifact version")
+	@Service(impl = ArtifactVersionDefaultValueService.class)
+	public ValueProperty PROP_ARTIFACT_VERSION = new ValueProperty(TYPE, "ArtifactVersion");
+
+	@Service(impl = CreateNewPortletDefaultValueService.class)
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_CREATE_NEW_PORTLET = new ValueProperty(TYPE, "CreateNewPortlet");
+
+	@Label(standard = "display name")
+	@Service(impl = DisplayNameDefaultValueService.class)
+	public ValueProperty PROP_DISPLAY_NAME = new ValueProperty(TYPE, "DisplayName");
+
+	@DefaultValue(text = "${ProjectName}")
+	public ValueProperty PROP_FINAL_PROJECT_NAME = new ValueProperty(TYPE, "FinalProjectName");
+
+	@Label(standard = "group id")
+	@Services(
+		value = {@Service(impl = GroupIdValidationService.class), @Service(impl = GroupIdDefaultValueService.class)}
+	)
+	@Whitespace(trim = false)
+	public ValueProperty PROP_GROUP_ID = new ValueProperty(TYPE, "GroupId");
+
+	@Service(impl = HasWorkspaceSdkDefaultValueService.class)
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_HAS_WORKSPACE_SDK = new ValueProperty(TYPE, "HasWorkspaceSDK");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_IMPORT_PROJECT_STATUS = new ValueProperty(TYPE, "ImportProjectStatus");
+
+	@Service(impl = IncludeSampleCodeDefaultValueService.class)
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_INCLUDE_SAMPLE_CODE = new ValueProperty(TYPE, "IncludeSampleCode");
+
+	@AbsolutePath
+	@Enablement(expr = "${ UseDefaultLocation == 'false' && ProjectProvider != 'ant' }")
+	@Label(standard = "location")
+	@Service(impl = LocationValidationService.class)
+	@Type(base = Path.class)
+	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
+	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
+
+	@Type(base = NewLiferayProfile.class)
+	public ListProperty PROP_NEW_LIFERAY_PROFILES = new ListProperty(TYPE, "NewLiferayProfiles");
+
+	@DefaultValue(text = "portlet")
+	@Label(standard = "plugin type")
+	@Listeners(PluginTypeListener.class)
+	@Services(
+		value =
+			{@Service(impl = PluginTypePossibleValuesService.class), @Service(impl = PluginTypeValidationService.class)}
+	)
+	@Type(base = PluginType.class)
+	public ValueProperty PROP_PLUGIN_TYPE = new ValueProperty(TYPE, "PluginType");
+
+	@DefaultValue(text = "mvc")
+	@Label(standard = "portlet framework")
+	@Services(
+		value = {
+			@Service(impl = PortletFrameworkValidationService.class),
+			@Service(impl = PortletFrameworkPossibleValuesService.class)
+		}
+	)
+	@Type(base = IPortletFramework.class)
+	public ValueProperty PROP_PORTLET_FRAMEWORK = new ValueProperty(TYPE, "PortletFramework");
+
+	@DefaultValue(text = "jsf")
+	@Service(impl = PortletFrameworkAdvancedPossibleValuesService.class)
+	@Type(base = IPortletFramework.class)
+	public ValueProperty PROP_PORTLET_FRAMEWORK_ADVANCED = new ValueProperty(TYPE, "PortletFrameworkAdvanced");
+
+	@DefaultValue(text = "${ProjectName}")
+	@Label(standard = "portlet name")
+	public ValueProperty PROP_PORTLET_NAME = new ValueProperty(TYPE, "PortletName");
+
+	@Label(standard = "project name")
+	@Listeners(ProjectNameListener.class)
+	@Required
+	@Service(impl = ProjectNameValidationService.class)
+	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, "ProjectName");
+
+	@Type(base = ProjectName.class)
+	public ListProperty PROP_PROJECT_NAMES = new ListProperty(TYPE, "ProjectNames");
+
+	@Label(standard = "build type")
+	@Listeners(ProjectProviderListener.class)
+	@Services(
+		value = {
+			@Service(impl = ProjectProviderPossibleValuesService.class),
+			@Service(impl = ProjectProviderDefaultValueService.class)
+		}
+	)
+	@Type(base = ILiferayProjectProvider.class)
+	public ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty(TYPE, "ProjectProvider");
+
+	@AbsolutePath
+	@Label(standard = "SDK Location")
+	@Listeners(SDKLocationListener.class)
+	@Service(impl = SDKLocationValidationService.class)
+	@Type(base = Path.class)
+	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
+	public ValueProperty PROP_SDK_LOCATION = new ValueProperty(TYPE, "SdkLocation");
+
+	@Label(standard = "selected profiles")
+	@Service(impl = ProfileIdPossibleValuesService.class)
+	@Type(base = Profile.class)
+	public ListProperty PROP_SELECTED_PROFILES = new ListProperty(TYPE, "SelectedProfiles");
+
+	@DefaultValue(text = "Freemarker")
+	@Label(standard = "theme framework")
+	@PossibleValues(ordered = true, values = {"Velocity", "Freemarker", "JSP"})
+	@Service(impl = ThemeFrameworkValidationService.class)
+	public ValueProperty PROP_THEME_FRAMEWORK = new ValueProperty(TYPE, "ThemeFramework");
+
+	@DefaultValue(text = "_styled")
+	@Label(standard = "theme parent")
+	@PossibleValues(ordered = true, values = {"_unstyled", "_styled", "classic"})
+	public ValueProperty PROP_THEME_PARENT = new ValueProperty(TYPE, "ThemeParent");
+
+	@DefaultValue(text = "true")
+	@Enablement(expr = "${ ProjectProvider != 'ant' }")
+	@Label(standard = "use default location")
+	@Listeners(UseDefaultLocationListener.class)
+	@Service(impl = UseDefaultLocationValidationService.class)
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty(TYPE, "UseDefaultLocation");
 
-    @Label( standard = "theme framework" )
-    @DefaultValue( text = "Freemarker" )
-    @PossibleValues( ordered = true, values = { "Velocity", "Freemarker", "JSP" } )
-    @Service( impl = ThemeFrameworkValidationService.class )
-    ValueProperty PROP_THEME_FRAMEWORK = new ValueProperty( TYPE, "ThemeFramework" ); //$NON-NLS-1$
-
-    Value<String> getThemeFramework();
-    void setThemeFramework( String value );
-
-
-    // *** Maven settings ***
-    // TODO move this to maven.core plugin
-
-    // *** ArtifactVersion ***
-
-    @Label( standard = "artifact version" )
-    @Service( impl = ArtifactVersionDefaultValueService.class )
-    ValueProperty PROP_ARTIFACT_VERSION = new ValueProperty( TYPE, "ArtifactVersion" ); //$NON-NLS-1$
-
-    Value<String> getArtifactVersion();
-    void setArtifactVersion( String value );
-
-
-    // *** GroupId ***
-
-    @Label( standard = "group id" )
-    @Services
-    (
-        value =
-        {
-            @Service( impl = GroupIdValidationService.class ),
-            @Service( impl = GroupIdDefaultValueService.class )
-        }
-    )
-    @Whitespace( trim = false )
-    ValueProperty PROP_GROUP_ID = new ValueProperty( TYPE, "GroupId" ); //$NON-NLS-1$
-
-    Value<String> getGroupId();
-    void setGroupId( String value );
-
-
-    // *** ActiveProfiles ***
-
-    @Label( standard = "active profiles" )
-    @Fact( statement = "Supports comma separated list of active profiles" )
-    @Service( impl = ActiveProfilesValidationService.class )
-    @Whitespace( trim = false )
-    ValueProperty PROP_ACTIVE_PROFILES_VALUE = new ValueProperty( TYPE, "ActiveProfilesValue" );
-
-    Value<String> getActiveProfilesValue();
-    void setActiveProfilesValue( String value );
-
-
-    // *** SelectedProfiles ***
-
-    @Type( base = Profile.class )
-    @Label( standard = "selected profiles" )
-    @Service( impl = ProfileIdPossibleValuesService.class )
-    ListProperty PROP_SELECTED_PROFILES = new ListProperty( TYPE, "SelectedProfiles" );
-
-    ElementList<Profile> getSelectedProfiles();
-
-
-    // *** NewLiferayProfiles ***
-
-    @Type( base = NewLiferayProfile.class )
-    ListProperty PROP_NEW_LIFERAY_PROFILES = new ListProperty( TYPE, "NewLiferayProfiles" );
-
-    ElementList<NewLiferayProfile> getNewLiferayProfiles();
-
-
-    // *** FinalProjectName ***
-
-    @DefaultValue( text = "${ProjectName}" )
-    ValueProperty PROP_FINAL_PROJECT_NAME = new ValueProperty( TYPE, "FinalProjectName" );
-
-    Value<String> getFinalProjectName();
-    void setFinalProjectName( String value );
-
-
-    // *** PortletName ***
-
-    @Label( standard = "portlet name" )
-    @DefaultValue( text = "${ProjectName}" )
-    ValueProperty PROP_PORTLET_NAME = new ValueProperty( TYPE, "PortletName" );
-
-    Value<String> getPortletName();
-    void setPortletName( String value );
-
-    // *** ProjectNames ***
-
-    @Type( base = ProjectName.class )
-    ListProperty PROP_PROJECT_NAMES = new ListProperty( TYPE, "ProjectNames" );
-
-    ElementList<ProjectName> getProjectNames();
-
-    // *** ImportProjectStatus ***
-
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_IMPORT_PROJECT_STATUS = new ValueProperty( TYPE, "ImportProjectStatus" );
-
-    Value<Boolean> getImportProjectStatus();
-    void setImportProjectStatus( String value );
-    void setImportProjectStatus( Boolean value );
-
-    // *** Method: execute ***
-
-    @Override
-    @DelegateImplementation( NewLiferayPluginProjectOpMethods.class )
-    Status execute( ProgressMonitor monitor );
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,13 +10,15 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.util.ResourceFilterUtil;
 import com.liferay.ide.sdk.core.SDKUtil;
+
+import java.io.File;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -26,39 +28,36 @@ import org.eclipse.core.resources.IResourceChangeListener;
 /**
  * @author Andy Wu
  */
-public class SDKProjectDeleteListener implements IResourceChangeListener
-{
+public class SDKProjectDeleteListener implements IResourceChangeListener {
 
-    @Override
-    public void resourceChanged( IResourceChangeEvent event )
-    {
-        try
-        {
-            if( event.getType() == IResourceChangeEvent.PRE_DELETE )
-            {
-                IProject project = (IProject) event.getResource();
+	@Override
+	public void resourceChanged(IResourceChangeEvent event) {
+		if (event.getType() != IResourceChangeEvent.PRE_DELETE) {
+			return;
+		}
 
-                if( SDKUtil.isSDKProject( project ) )
-                {
-                    String parentName = project.getLocation().toFile().getParentFile().getName();
-                    IProject sdkProject = SDKUtil.getWorkspaceSDKProject();
+		try {
+			IProject project = (IProject)event.getResource();
 
-                    if( sdkProject != null && sdkProject.exists() )
-                    {
-                        IFolder parentFolder = sdkProject.getFolder( parentName );
+			if (!SDKUtil.isSDKProject(project)) {
+				return;
+			}
 
-                        ResourceFilterUtil.deleteResourceFilter( parentFolder, project.getName() );
-                    }
-                }
+			File file = project.getLocation().toFile();
 
-                return;
-            }
-        }
-        catch( Exception e )
-        {
-            ProjectCore.logError( "delete project resource filter error", e );
-        }
+			String parentName = file.getParentFile().getName();
 
-        return;
-    }
+			IProject sdkProject = SDKUtil.getWorkspaceSDKProject();
+
+			if (FileUtil.exists(sdkProject)) {
+				IFolder parentFolder = sdkProject.getFolder(parentName);
+
+				ResourceFilterUtil.deleteResourceFilter(parentFolder, project.getName());
+			}
+		}
+		catch (Exception e) {
+			ProjectCore.logError("delete project resource filter error", e);
+		}
+	}
+
 }

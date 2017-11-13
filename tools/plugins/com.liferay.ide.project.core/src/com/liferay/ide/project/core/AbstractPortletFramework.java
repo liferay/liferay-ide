@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core;
 
 import java.net.URL;
@@ -22,139 +22,118 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 
-
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public abstract class AbstractPortletFramework implements IPortletFramework
-{
+public abstract class AbstractPortletFramework implements IPortletFramework {
 
-    private String bundleId;
-    private String description;
-    private String displayName;
-    private URL helpUrl;
-    private String id;
-    private boolean isAdvanced;
-    private boolean isDefault;
-    private String requiredSDKVersion;
-    private boolean requiresAdvanced;
-    private String shortName;
+	public String getBundleId() {
+		return _bundleId;
+	}
 
-    public String getBundleId()
-    {
-        return bundleId;
-    }
+	public String getDescription() {
+		return _description;
+	}
 
-    public String getDescription()
-    {
-        return description;
-    }
+	public String getDisplayName() {
+		return _displayName;
+	}
 
-    public String getDisplayName()
-    {
-        return displayName;
-    }
+	public IProjectFacet[] getFacets() {
+		return new IProjectFacet[0];
+	}
 
-    public IProjectFacet[] getFacets()
-    {
-        return new IProjectFacet[0];
-    }
+	public URL getHelpUrl() {
+		return _helpUrl;
+	}
 
-    public URL getHelpUrl()
-    {
-        return helpUrl;
-    }
+	public String getId() {
+		return _id;
+	}
 
-    public String getId()
-    {
-        return id;
-    }
+	public String getRequiredSDKVersion() {
+		return _requiredSDKVersion;
+	}
 
-    public String getRequiredSDKVersion()
-    {
-        return requiredSDKVersion;
-    }
+	public String getShortName() {
+		return _shortName;
+	}
 
-    public String getShortName()
-    {
-        return shortName;
-    }
+	public boolean isAdvanced() {
+		return _advanced;
+	}
 
-    public boolean isAdvanced()
-    {
-        return isAdvanced;
-    }
+	public boolean isDefault() {
+		return _isDefault;
+	}
 
-    public boolean isDefault()
-    {
-        return isDefault;
-    }
+	public boolean isRequiresAdvanced() {
+		return _requiresAdvanced;
+	}
 
-    public boolean isRequiresAdvanced()
-    {
-        return this.requiresAdvanced;
-    }
+	public IStatus postProjectCreated(
+		IProject project, String frameworkName, String portletName, IProgressMonitor monitor) {
 
-    public IStatus postProjectCreated( IProject project, String frameworkName, String portletName, IProgressMonitor monitor )
-    {
-        // by default do nothing;
-        return Status.OK_STATUS;
-    }
+		// by default do nothing;
 
-    public void setAdvanced( boolean adv )
-    {
-        this.isAdvanced = adv;
-    }
+		return Status.OK_STATUS;
+	}
 
-    public void setBundleId( String bundleId )
-    {
-        this.bundleId = bundleId;
-    }
+	public void setAdvanced(boolean adv) {
+		_advanced = adv;
+	}
 
-    public void setDefault( boolean isDefault )
-    {
-        this.isDefault = isDefault;
-    }
+	public void setBundleId(String bundleId) {
+		_bundleId = bundleId;
+	}
 
-    public void setDescription( String description )
-    {
-        this.description = description;
-    }
+	public void setDefault(boolean isDefault) {
+		_isDefault = isDefault;
+	}
 
-    public void setDisplayName( String displayName )
-    {
-        this.displayName = displayName;
-    }
+	public void setDescription(String description) {
+		_description = description;
+	}
 
-    public void setHelpUrl( URL helpUrl )
-    {
-        this.helpUrl = helpUrl;
-    }
+	public void setDisplayName(String displayName) {
+		_displayName = displayName;
+	}
 
-    public void setId( String id )
-    {
-        this.id = id;
-    }
+	public void setHelpUrl(URL helpUrl) {
+		_helpUrl = helpUrl;
+	}
 
-    public void setRequiredSDKVersion( String version )
-    {
-        this.requiredSDKVersion = version;
-    }
+	public void setId(String id) {
+		_id = id;
+	}
 
-    public void setRequiresAdvanced( boolean adv )
-    {
-        this.requiresAdvanced = adv;
-    }
+	public void setRequiredSDKVersion(String version) {
+		_requiredSDKVersion = version;
+	}
 
-    public void setShortName( String shortName )
-    {
-        this.shortName = shortName;
-    }
+	public void setRequiresAdvanced(boolean adv) {
+		_requiresAdvanced = adv;
+	}
 
-    @Override
-    public String toString()
-    {
-        return getShortName();
-    }
+	public void setShortName(String shortName) {
+		_shortName = shortName;
+	}
+
+	@Override
+	public String toString() {
+		return getShortName();
+	}
+
+	private boolean _advanced;
+	private String _bundleId;
+	private String _description;
+	private String _displayName;
+	private URL _helpUrl;
+	private String _id;
+	private boolean _isDefault;
+	private String _requiredSDKVersion;
+	private boolean _requiresAdvanced;
+	private String _shortName;
+
 }

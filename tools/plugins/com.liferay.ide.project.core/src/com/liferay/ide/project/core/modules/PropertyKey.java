@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.modules;
 
 import org.eclipse.sapphire.Element;
@@ -21,29 +21,31 @@ import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 
-
 /**
  * @author Simon Jiang
  */
-public interface PropertyKey extends Element
-{
-    ElementType TYPE = new ElementType( PropertyKey.class );
-    
-    // *** Name ***
-   
-    @Label( standard = "name" )
-    @Required
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
-    
-    void setName( String value );
-    Value<String> getName( );
-    
-    // *** Value ***
-    
-    @Label( standard = "value" )
-    @Required
-    ValueProperty PROP_Value = new ValueProperty( TYPE, "Value" );
-    
-    void setValue( String value );
-    Value<String> getValue( );
+public interface PropertyKey extends Element {
+
+	public ElementType TYPE = new ElementType(PropertyKey.class);
+
+	// *** Name ***
+
+	public Value<String> getName();
+
+	public Value<String> getValue();
+
+	public void setName(String value);
+
+	// *** Value ***
+
+	public void setValue(String value);
+
+	@Label(standard = "name")
+	@Required
+	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
+
+	@Label(standard = "value")
+	@Required
+	public ValueProperty PROP_Value = new ValueProperty(TYPE, "Value");
+
 }

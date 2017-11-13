@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -20,6 +19,7 @@ import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.core.JavaCore;
@@ -33,106 +33,101 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class NewLiferayComponentValidationService extends ValidationService
-{
+@SuppressWarnings("restriction")
+public class NewLiferayComponentValidationService extends ValidationService {
 
-    private FilteredListener<PropertyContentEvent> listener;
+	@Override
+	public void dispose() {
+		NewLiferayComponentOp op = _op();
 
-    @Override
-    protected void initValidationService()
-    {
-        super.initValidationService();
+		if (_listener != null) {
+			op.property(NewLiferayComponentOp.PROP_PROJECT_NAME).detach(_listener);
+			op.property(NewLiferayComponentOp.PROP_PACKAGE_NAME).detach(_listener);
+			op.property(NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME).detach(_listener);
 
-        listener = new FilteredListener<PropertyContentEvent>()
-        {
+			_listener = null;
+		}
 
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		super.dispose();
+	}
 
-        op().property( NewLiferayComponentOp.PROP_PROJECT_NAME ).attach( this.listener );
-        op().property( NewLiferayComponentOp.PROP_PACKAGE_NAME ).attach( this.listener );
-        op().property( NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME ).attach( this.listener );
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-    }
+		NewLiferayComponentOp op = _op();
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+		String className = op.getComponentClassName().content(true);
 
-        final String className = op().getComponentClassName().content( true );
+		if (!CoreUtil.isNullOrEmpty(className)) {
+			IStatus status = JavaConventions.validateJavaTypeName(
+				className, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7);
 
-        if( !CoreUtil.isNullOrEmpty( className ) )
-        {
-            int classNameStatus = JavaConventions.validateJavaTypeName(
-                className, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 ).getSeverity();;
+			int classNameStatus = status.getSeverity();
 
-            if( className.indexOf( '.' ) != -1 )
-            {
-                classNameStatus = IStatus.ERROR;
-            }
+			if (className.indexOf('.') != -1) {
+				classNameStatus = IStatus.ERROR;
+			}
 
-            if( classNameStatus == IStatus.ERROR )
-            {
-                retval = Status.createErrorStatus( "Invalid class name" );
-            }
-        }
+			if (classNameStatus == IStatus.ERROR) {
+				retval = Status.createErrorStatus("Invalid class name");
+			}
+		}
 
-        String projectName = op().getProjectName().content( true );
+		String projectName = op.getProjectName().content(true);
 
-        if( projectName != null )
-        {
-            IProject project = CoreUtil.getProject( projectName );
+		if (projectName != null) {
+			IProject project = CoreUtil.getProject(projectName);
 
-            if( project != null )
-            {
-                try
-                {
-                    JavaPackageName pack = op().getPackageName().content( true );
+			if (project != null) {
+				try {
+					JavaPackageName pack = op.getPackageName().content(true);
 
-                    if( pack != null )
-                    {
-                        String packageName = op().getPackageName().content( true ).toString();
-                        IType type = JavaCore.create( project ).findType( packageName + "." + className );
+					if (pack != null) {
+						String packageName = pack.toString();
 
-                        if( type != null )
-                        {
-                            retval = Status.createErrorStatus( packageName + "." + className + " already existed." );
-                        }
-                    }
-                }
-                catch( Exception e )
-                {
-                    ProjectCore.logError( "Checking component class name failed.", e );
-                }
+						IJavaProject javaProject = JavaCore.create(project);
 
-            }
-        }
+						IType type = javaProject.findType(packageName + "." + className);
 
-        return retval;
-    }
+						if (type != null) {
+							retval = Status.createErrorStatus(packageName + "." + className + " already existed.");
+						}
+					}
+				}
+				catch (Exception e) {
+					ProjectCore.logError("Checking component class name failed.", e);
+				}
+			}
+		}
 
-    @Override
-    public void dispose()
-    {
-        if( this.listener != null )
-        {
-            op().property( NewLiferayComponentOp.PROP_PROJECT_NAME ).detach( this.listener );
-            op().property( NewLiferayComponentOp.PROP_PACKAGE_NAME ).detach( this.listener );
-            op().property( NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME ).detach( this.listener );
+		return retval;
+	}
 
-            this.listener = null;
-        }
-        super.dispose();
-    }
+	@Override
+	protected void initValidationService() {
+		super.initValidationService();
 
-    private NewLiferayComponentOp op()
-    {
-        return context( NewLiferayComponentOp.class );
-    }
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		NewLiferayComponentOp op = _op();
+
+		op.property(NewLiferayComponentOp.PROP_PROJECT_NAME).attach(_listener);
+		op.property(NewLiferayComponentOp.PROP_PACKAGE_NAME).attach(_listener);
+		op.property(NewLiferayComponentOp.PROP_COMPONENT_CLASS_TEMPLATE_NAME).attach(_listener);
+	}
+
+	private NewLiferayComponentOp _op() {
+		return context(NewLiferayComponentOp.class);
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+
 }

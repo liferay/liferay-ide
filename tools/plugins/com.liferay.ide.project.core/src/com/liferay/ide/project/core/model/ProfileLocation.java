@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,24 +10,20 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model;
 
 import org.eclipse.sapphire.modeling.annotations.Label;
 
-
 /**
  * @author Gregory Amerson
  */
-public enum ProfileLocation
-{
-    @Label(standard="Project pom.xml")
-    projectPom,
+public enum ProfileLocation {
 
-//    @Label(standard="Parent pom.xml")
-//    parentPom,
+	@Label(standard = "Project pom.xml")
+	projectPom,
 
-    @Label(standard="User settings at ${user.home}/.m2/settings.xml")
-    userSettings,
+	@Label(standard = "User settings at ${user.home}/.m2/settings.xml")
+	userSettings,
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.jsf;
 
@@ -31,56 +30,50 @@ import org.eclipse.sapphire.platform.StatusBridge;
 /**
  * @author Simon Jiang
  */
-public class NewLiferayJSFModuleProjectOpMethods
-{
+public class NewLiferayJSFModuleProjectOpMethods {
 
-    public static final Status execute( final NewLiferayJSFModuleProjectOp op, final ProgressMonitor pm )
-    {
-        final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
+	public static final Status execute(NewLiferayJSFModuleProjectOp op, ProgressMonitor pm) {
+		IProgressMonitor monitor = ProgressMonitorBridge.create(pm);
 
-        monitor.beginTask( "Creating Liferay JSF project (this process may take several minutes)", 100 );
+		monitor.beginTask("Creating Liferay JSF project (this process may take several minutes)", 100);
 
-        Status retval = null;
+		Status retval = null;
 
-        try
-        {
-            final NewLiferayProjectProvider<BaseModuleOp> projectProvider =
-                op.getProjectProvider().content();
+		try {
+			NewLiferayProjectProvider<BaseModuleOp> projectProvider = op.getProjectProvider().content();
 
-            final IStatus status = projectProvider.createNewProject( op, monitor );
+			IStatus status = projectProvider.createNewProject(op, monitor);
 
-            retval = StatusBridge.create( status );
+			retval = StatusBridge.create(status);
 
-            if( retval.ok() )
-            {
-                updateBuildPrefs( op );
-            }
-        }
-        catch( Exception e )
-        {
-            final String msg = "Error creating Liferay module project."; //$NON-NLS-1$
-            ProjectCore.logError( msg, e );
+			if (retval.ok()) {
+				_updateBuildPrefs(op);
+			}
+		}
+		catch (Exception e) {
+			String msg = "Error creating Liferay module project.";
 
-            return Status.createErrorStatus( msg + " " + e.getMessage(), e );
-        }
+			ProjectCore.logError(msg, e);
 
-        return retval;
-    }
+			return Status.createErrorStatus(msg + " " + e.getMessage(), e);
+		}
 
-    private static void updateBuildPrefs( final NewLiferayJSFModuleProjectOp op )
-    {
-        try
-        {
-            final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+		return retval;
+	}
 
-            prefs.put( ProjectCore.PREF_DEFAULT_JSF_MODULE_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
+	private static void _updateBuildPrefs(NewLiferayJSFModuleProjectOp op) {
+		try {
+			IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
 
-            prefs.flush();
-        }
-        catch( Exception e )
-        {
-            final String msg = "Error updating default project build type."; //$NON-NLS-1$
-            ProjectCore.logError( msg, e );
-        }
-    }
+			prefs.put(ProjectCore.PREF_DEFAULT_JSF_MODULE_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text());
+
+			prefs.flush();
+		}
+		catch (Exception e) {
+			String msg = "Error updating default project build type.";
+
+			ProjectCore.logError(msg, e);
+		}
+	}
+
 }

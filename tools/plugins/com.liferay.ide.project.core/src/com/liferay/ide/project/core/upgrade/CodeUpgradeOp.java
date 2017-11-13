@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.upgrade;
 
@@ -39,137 +38,164 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
-@XmlBinding( path = "CodeUpgrade" )
-public interface CodeUpgradeOp extends Element
-{
-    ElementType TYPE = new ElementType( CodeUpgradeOp.class );
+/**
+ * @author Terry Jia
+ */
+@XmlBinding(path = "CodeUpgrade")
+public interface CodeUpgradeOp extends Element {
 
-    @XmlBinding( path = "SdkLocation" )
-    @Type( base = Path.class )
-    @AbsolutePath
-    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    @Required
-    @Label( standard = "SDK Location" )
-    @Service( impl = SdkLocationDefaultValueService.class )
-    @Service( impl = SdkLocationValidationService.class )
-    ValueProperty PROP_SDK_LOCATION = new ValueProperty( TYPE, "SdkLocation" );
+	public ElementType TYPE = new ElementType(CodeUpgradeOp.class);
 
-    Value<Path> getSdkLocation();
-    void setSdkLocation( String sdkLocation );
-    void setSdkLocation( Path sdkLocation );
+	public Value<Boolean> getConfirm();
 
-    @XmlBinding( path = "NewLocation" )
-    @Type( base = Path.class )
-    @AbsolutePath
-    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    @Required
-    ValueProperty PROP_NewLOCATION = new ValueProperty( TYPE, "NewLocation" );
+	public Value<Boolean> getHasExt();
 
-    Value<Path> getNewLocation();
-    void setNewLocation( String newLocation );
-    void setNewLocation( Path newLocation );
+	public Value<Boolean> getHasHook();
 
-    @XmlBinding( path = "ProjectName" )
-    @Required
-    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" );
+	public Value<Boolean> getHasLayout();
 
-    Value<String> getProjectName();
-    void setProjectName( String ProjectName );
+	public Value<Boolean> getHasPortlet();
 
-    @DefaultValue( text = "Use plugin sdk in liferay workspace" )
-    @Service( impl = LayoutPossibleValuesService.class )
-    ValueProperty PROP_LAYOUT = new ValueProperty( TYPE, "Layout" );
+	public Value<Boolean> getHasServiceBuilder();
 
-    Value<String> getLayout();
-    void setLayout( String Layout );
+	public Value<Boolean> getHasTheme();
 
-    @Service( impl = LiferayServerNamePossibleValuesService.class )
-    @Service( impl = LiferayServerNameDefaultValueService.class )
-    @Service( impl = LiferayServerNameValidationService.class )
-    @Required
-    @XmlBinding( path = "ServerName" )
-    ValueProperty PROP_LIFERAY_SERVER_NAME = new ValueProperty( TYPE, "LiferayServerName" );
+	public Value<Boolean> getHasWeb();
 
-    Value<String> getLiferayServerName();
-    void setLiferayServerName( String value );
+	public Value<String> getLayout();
 
-    @Derived
-    @Service( impl = CheckSDKLocationDerivedValueService.class )
-    ValueProperty PROP_LIFERAY_62SERVER_LOCATION = new ValueProperty( TYPE, "Liferay62ServerLocation" );
+	public Value<String> getLiferay62ServerLocation();
 
-    Value<String> getLiferay62ServerLocation();
-    void setLiferay62ServerLocation( String value );
+	public Value<String> getLiferayServerName();
 
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    @Label( standard = "Yes,I am confirm" )
-    ValueProperty PROP_CONFIRM = new ValueProperty( TYPE, "Confirm" );
+	public Value<Path> getNewLocation();
 
-    Value<Boolean> getConfirm();
-    void setConfirm( String confirm );
-    void setConfirm( Boolean confirm );
+	public Value<String> getProjectName();
 
-    @XmlBinding( path = "HasHook" )
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_HAS_HOOK = new ValueProperty( TYPE, "HasHook" );
+	public Value<Path> getSdkLocation();
 
-    Value<Boolean> getHasHook();
-    void setHasHook( String hasHook );
-    void setHasHook( Boolean hasHook );
+	public void setConfirm(Boolean confirm);
 
-    @XmlBinding( path = "HasPortlet" )
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_HAS_PORTLET = new ValueProperty( TYPE, "HasPortlet" );
+	public void setConfirm(String confirm);
 
-    Value<Boolean> getHasPortlet();
-    void setHasPortlet( String hasPortlet );
-    void setHasPortlet( Boolean hasPortlet );
+	public void setHasExt(Boolean hasExt);
 
-    @XmlBinding( path = "HasTheme" )
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_HAS_THEME = new ValueProperty( TYPE, "HasTheme" );
+	public void setHasExt(String hasExt);
 
-    Value<Boolean> getHasTheme();
-    void setHasTheme( String hasTheme );
-    void setHasTheme( Boolean hasTheme );
+	public void setHasHook(Boolean hasHook);
 
-    @XmlBinding( path = "HasExt" )
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_HAS_EXT = new ValueProperty( TYPE, "HasExt" );
+	public void setHasHook(String hasHook);
 
-    Value<Boolean> getHasExt();
-    void setHasExt( String hasExt );
-    void setHasExt( Boolean hasExt );
+	public void setHasLayout(Boolean hasLayout);
 
-    @XmlBinding( path = "HasServiceBuilder" )
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_HAS_SERVICE_BUILDER = new ValueProperty( TYPE, "HasServiceBuilder" );
+	public void setHasLayout(String hasLayout);
 
-    Value<Boolean> getHasServiceBuilder();
-    void setHasServiceBuilder( String hasServiceBuilder );
-    void setHasServiceBuilder( Boolean hasServiceBuilder );
+	public void setHasPortlet(Boolean hasPortlet);
 
-    @XmlBinding( path = "HasLayout" )
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_HAS_LAYOUT = new ValueProperty( TYPE, "HasLayout" );
+	public void setHasPortlet(String hasPortlet);
 
-    Value<Boolean> getHasLayout();
-    void setHasLayout( String hasLayout );
-    void setHasLayout( Boolean hasLayout );
+	public void setHasServiceBuilder(Boolean hasServiceBuilder);
 
-    @XmlBinding( path = "HasWeb" )
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_HAS_WEB = new ValueProperty( TYPE, "HasWeb" );
+	public void setHasServiceBuilder(String hasServiceBuilder);
 
-    Value<Boolean> getHasWeb();
-    void setHasWeb( String hasWeb );
-    void setHasWeb( Boolean hasWeb );
+	public void setHasTheme(Boolean hasTheme);
+
+	public void setHasTheme(String hasTheme);
+
+	public void setHasWeb(Boolean hasWeb);
+
+	public void setHasWeb(String hasWeb);
+
+	public void setLayout(String layout);
+
+	public void setLiferay62ServerLocation(String value);
+
+	public void setLiferayServerName(String value);
+
+	public void setNewLocation(Path newLocation);
+
+	public void setNewLocation(String newLocation);
+
+	public void setProjectName(String projectName);
+
+	public void setSdkLocation(Path sdkLocation);
+
+	public void setSdkLocation(String sdkLocation);
+
+	@DefaultValue(text = "false")
+	@Label(standard = "Yes,I am confirm")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_CONFIRM = new ValueProperty(TYPE, "Confirm");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "HasExt")
+	public ValueProperty PROP_HAS_EXT = new ValueProperty(TYPE, "HasExt");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "HasHook")
+	public ValueProperty PROP_HAS_HOOK = new ValueProperty(TYPE, "HasHook");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "HasLayout")
+	public ValueProperty PROP_HAS_LAYOUT = new ValueProperty(TYPE, "HasLayout");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "HasPortlet")
+	public ValueProperty PROP_HAS_PORTLET = new ValueProperty(TYPE, "HasPortlet");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "HasServiceBuilder")
+	public ValueProperty PROP_HAS_SERVICE_BUILDER = new ValueProperty(TYPE, "HasServiceBuilder");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "HasTheme")
+	public ValueProperty PROP_HAS_THEME = new ValueProperty(TYPE, "HasTheme");
+
+	@DefaultValue(text = "false")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "HasWeb")
+	public ValueProperty PROP_HAS_WEB = new ValueProperty(TYPE, "HasWeb");
+
+	@DefaultValue(text = "Use plugin sdk in liferay workspace")
+	@Service(impl = LayoutPossibleValuesService.class)
+	public ValueProperty PROP_LAYOUT = new ValueProperty(TYPE, "Layout");
+
+	@Derived
+	@Service(impl = CheckSDKLocationDerivedValueService.class)
+	public ValueProperty PROP_LIFERAY_62SERVER_LOCATION = new ValueProperty(TYPE, "Liferay62ServerLocation");
+
+	@Required
+	@Service(impl = LiferayServerNameDefaultValueService.class)
+	@Service(impl = LiferayServerNamePossibleValuesService.class)
+	@Service(impl = LiferayServerNameValidationService.class)
+	@XmlBinding(path = "ServerName")
+	public ValueProperty PROP_LIFERAY_SERVER_NAME = new ValueProperty(TYPE, "LiferayServerName");
+
+	@Required
+	@XmlBinding(path = "ProjectName")
+	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, "ProjectName");
+
+	@AbsolutePath
+	@Label(standard = "SDK Location")
+	@Required
+	@Service(impl = SdkLocationDefaultValueService.class)
+	@Service(impl = SdkLocationValidationService.class)
+	@Type(base = Path.class)
+	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
+	@XmlBinding(path = "SdkLocation")
+	public ValueProperty PROP_SDK_LOCATION = new ValueProperty(TYPE, "SdkLocation");
+
+	@AbsolutePath
+	@Required
+	@Type(base = Path.class)
+	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
+	@XmlBinding(path = "NewLocation")
+	public ValueProperty PROP_NewLOCATION = new ValueProperty(TYPE, "NewLocation");
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.fragment;
 
@@ -30,64 +29,53 @@ import org.eclipse.wst.server.core.ServerCore;
 /**
  * @author Terry Jia
  */
-public class LiferayRuntimeNamePossibleValuesService extends PossibleValuesService implements IRuntimeLifecycleListener
-{
+public class LiferayRuntimeNamePossibleValuesService
+	extends PossibleValuesService implements IRuntimeLifecycleListener {
 
-    @Override
-    protected void initPossibleValuesService()
-    {
-        super.initPossibleValuesService();
+	@Override
+	public boolean ordered() {
+		return true;
+	}
 
-        ServerCore.addRuntimeLifecycleListener( this );
-    }
+	@Override
+	public Status problem(Value<?> value) {
+		if (value.content().equals("<None>")) {
+			return Status.createOkStatus();
+		}
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        IRuntime[] runtimes = ServerCore.getRuntimes();
+		return super.problem(value);
+	}
 
-        if( !CoreUtil.isNullOrEmpty( runtimes ) )
-        {
-            for( IRuntime runtime : runtimes )
-            {
-                if( LiferayServerCore.newPortalBundle( runtime.getLocation() ) != null )
-                {
-                    values.add( runtime.getName() );
-                }
-            }
-        }
-    }
+	public void runtimeAdded(IRuntime runtime) {
+		refresh();
+	}
 
-    @Override
-    public boolean ordered()
-    {
-        return true;
-    }
+	public void runtimeChanged(IRuntime runtime) {
+		refresh();
+	}
 
-    @Override
-    public Status problem( Value<?> value )
-    {
-        if(  value.content().equals( "<None>" ) )
-        {
-            return Status.createOkStatus();
-        }
+	public void runtimeRemoved(IRuntime runtime) {
+		refresh();
+	}
 
-        return super.problem( value );
-    }
+	@Override
+	protected void compute(Set<String> values) {
+		IRuntime[] runtimes = ServerCore.getRuntimes();
 
-    public void runtimeAdded( IRuntime runtime )
-    {
-        refresh();
-    }
+		if (!CoreUtil.isNullOrEmpty(runtimes)) {
+			for (IRuntime runtime : runtimes) {
+				if (LiferayServerCore.newPortalBundle(runtime.getLocation()) != null) {
+					values.add(runtime.getName());
+				}
+			}
+		}
+	}
 
-    public void runtimeChanged( IRuntime runtime )
-    {
-        refresh();
-    }
+	@Override
+	protected void initPossibleValuesService() {
+		super.initPossibleValuesService();
 
-    public void runtimeRemoved( IRuntime runtime )
-    {
-        refresh();
-    }
+		ServerCore.addRuntimeLifecycleListener(this);
+	}
 
 }

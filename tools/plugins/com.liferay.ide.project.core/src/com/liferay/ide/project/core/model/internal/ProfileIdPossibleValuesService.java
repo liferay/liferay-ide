@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -25,50 +25,41 @@ import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
 
-
 /**
  * @author Gregory Amerson
  */
-public class ProfileIdPossibleValuesService extends PossibleValuesService
-{
+public class ProfileIdPossibleValuesService extends PossibleValuesService {
 
-    private List<String> possibleValues = new ArrayList<String>();
+	@Override
+	public Status problem(Value<?> value) {
+		return Status.createOkStatus();
+	}
 
-    private void fillPossibleValues()
-    {
-        final NewLiferayPluginProjectOp op = op();
+	@Override
+	protected void compute(Set<String> values) {
+		values.addAll(_possibleValues);
+	}
 
-        Set<String> possibleProfileIds = NewLiferayPluginProjectOpMethods.getPossibleProfileIds( op, true );
+	@Override
+	protected void initPossibleValuesService() {
+		super.initPossibleValuesService();
 
-        possibleValues.clear();
-        possibleValues.addAll( possibleProfileIds );
-    }
+		_fillPossibleValues();
+	}
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        values.addAll( possibleValues );
-    }
+	private void _fillPossibleValues() {
+		NewLiferayPluginProjectOp op = _op();
 
+		Set<String> possibleProfileIds = NewLiferayPluginProjectOpMethods.getPossibleProfileIds(op, true);
 
-    @Override
-    protected void initPossibleValuesService()
-    {
-        super.initPossibleValuesService();
+		_possibleValues.clear();
+		_possibleValues.addAll(possibleProfileIds);
+	}
 
-        fillPossibleValues();
-    }
+	private NewLiferayPluginProjectOp _op() {
+		return context(NewLiferayPluginProjectOp.class);
+	}
 
-
-    private NewLiferayPluginProjectOp op()
-    {
-        return context( NewLiferayPluginProjectOp.class );
-    }
-
-    @Override
-    public Status problem( Value<?> value )
-    {
-        return Status.createOkStatus();
-    }
+	private List<String> _possibleValues = new ArrayList<>();
 
 }

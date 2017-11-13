@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,35 +10,31 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.templates.authfailure;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * @author Simon Jiang
  */
+public class NewLiferayComponentMaxAuthFailureOperation extends NewLiferayComponentAuthFailureOperation {
 
-public class NewLiferayComponentMaxAuthFailureOperation extends NewLiferayComponentAuthFailureOperation
-{
+	public NewLiferayComponentMaxAuthFailureOperation() {
+	}
 
-    private final static String[] PROPERTIES_MAX_LIST = new String[] { "key=auth.max.failures" };
+	@Override
+	protected List<String> getProperties() {
+		List<String> properties = new ArrayList<>();
 
-    public NewLiferayComponentMaxAuthFailureOperation()
-    {
-        super();
-    }
+		Collections.addAll(properties, _PROPERTIES_MAX_LIST);
 
-    @Override
-    protected List<String> getProperties()
-    {
-        List<String> properties = new ArrayList<String>();
-        properties.addAll( Arrays.asList( PROPERTIES_MAX_LIST ) );
+		return properties;
+	}
 
-        return properties;
-    }
+	private static final String[] _PROPERTIES_MAX_LIST = {"key=auth.max.failures"};
+
 }

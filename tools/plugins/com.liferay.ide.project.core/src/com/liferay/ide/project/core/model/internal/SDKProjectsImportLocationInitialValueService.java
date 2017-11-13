@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.sdk.core.SDK;
@@ -20,31 +20,26 @@ import com.liferay.ide.sdk.core.SDKUtil;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.sapphire.InitialValueService;
 
-
 /**
  * @author Simon Jiang
  */
-public class SDKProjectsImportLocationInitialValueService extends InitialValueService
-{
+public class SDKProjectsImportLocationInitialValueService extends InitialValueService {
 
-    @Override
-    protected String compute()
-    {
-        String value = "";
+	@Override
+	protected String compute() {
+		String value = "";
 
-        try
-        {
-            final SDK sdk = SDKUtil.getWorkspaceSDK();
+		try {
+			SDK sdk = SDKUtil.getWorkspaceSDK();
 
-            if( sdk != null && sdk.validate().isOK() )
-            {
-                return sdk.getLocation().toOSString();
-            }
-        }
-        catch( CoreException e )
-        {
-        }
+			if ((sdk != null) && sdk.validate().isOK()) {
+				return sdk.getLocation().toOSString();
+			}
+		}
+		catch (CoreException ce) {
+		}
 
-        return value;
-    }
+		return value;
+	}
+
 }

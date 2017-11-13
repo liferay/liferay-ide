@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core;
 
@@ -22,43 +21,36 @@ import org.eclipse.osgi.util.NLS;
 /**
  * @author Greg Amerson
  */
-public class PortletClasspathContainer extends PluginClasspathContainer
-{
-    public final static String SEGMENT_PATH = "portlet"; //$NON-NLS-1$
+public class PortletClasspathContainer extends PluginClasspathContainer {
 
-    protected static final String[] portalJars = 
-    { 
-        "commons-logging.jar",  //$NON-NLS-1$
-        "log4j.jar",  //$NON-NLS-1$
-        "util-bridges.jar", //$NON-NLS-1$
-        "util-java.jar",  //$NON-NLS-1$
-        "util-taglib.jar",  //$NON-NLS-1$
-    };
+	public static final String SEGMENT_PATH = "portlet";
 
-    public PortletClasspathContainer(
-        IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL, IPath sourcePath )
-    {
-        super( containerPath, project, portalDir, javadocURL, sourcePath );
-    }
+	public PortletClasspathContainer(
+		IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL, IPath sourcePath) {
 
-    public String getDescription()
-    {
-        return Msgs.liferayPortletPluginAPI;
-    }
+		super(containerPath, project, portalDir, javadocURL, sourcePath);
+	}
 
-    @Override
-    protected String[] getPortalJars()
-    {
-        return portalJars;
-    }
+	public String getDescription() {
+		return Msgs.liferayPortletPluginAPI;
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String liferayPortletPluginAPI;
+	@Override
+	protected String[] getPortalJars() {
+		return portalJars;
+	}
 
-        static
-        {
-            initializeMessages( PortletClasspathContainer.class.getName(), Msgs.class );
-        }
-    }
+	protected static final String[] portalJars =
+		{"commons-logging.jar", "log4j.jar", "util-bridges.jar", "util-java.jar", "util-taglib.jar"};
+
+	private static class Msgs extends NLS {
+
+		public static String liferayPortletPluginAPI;
+
+		static {
+			initializeMessages(PortletClasspathContainer.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

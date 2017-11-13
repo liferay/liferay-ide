@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *    Kamesh Sampath - initial implementation
- *    Cindy Li - IDE-692
- ******************************************************************************/
+ */
 
 package com.liferay.ide.project.core;
 
@@ -27,44 +23,33 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-public class BinaryProjectImportDataModelProvider extends SDKProjectsImportDataModelProvider
-{
+public class BinaryProjectImportDataModelProvider extends SDKProjectsImportDataModelProvider {
 
-    /*
-     * (non-Javadoc)
-     * @see com.liferay.ide.project.core.SDKProjectsImportDataModelProvider#createProjectErrorStatus()
-     */
-    @Override
-    public IStatus createSelectedProjectsErrorStatus()
-    {
-        return ProjectCore.createErrorStatus( Msgs.selectBinary );
-    }
+	@Override
+	public IStatus createSelectedProjectsErrorStatus() {
+		return ProjectCore.createErrorStatus(Msgs.selectBinary);
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see com.liferay.ide.project.core.LiferayProjectImportDataModelProvider#getDefaultOperation()
-     */
-    @Override
-    public IDataModelOperation getDefaultOperation()
-    {
-        return new BinaryProjectImportOperation( this.model );
-    }
+	@Override
+	public IDataModelOperation getDefaultOperation() {
+		return new BinaryProjectImportOperation(model);
+	}
 
-    @Override
-    public void init()
-    {
-        super.init();
+	@Override
+	public void init() {
+		super.init();
 
-        ProjectUtil.setDefaultRuntime(getDataModel());
-    }
+		ProjectUtil.setDefaultRuntime(getDataModel());
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String selectBinary;
+	private static class Msgs extends NLS {
 
-        static
-        {
-            initializeMessages( BinaryProjectImportDataModelProvider.class.getName(), Msgs.class );
-        }
-    }
+		public static String selectBinary;
+
+		static {
+			initializeMessages(BinaryProjectImportDataModelProvider.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

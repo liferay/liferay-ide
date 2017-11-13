@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.facet;
 
@@ -26,82 +25,68 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( { "unchecked", "rawtypes" } )
-public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDataModelProvider
-    implements IPluginProjectDataModelProperties
-{
-    protected LibraryInstallDelegate libraryDelegate = null;
+@SuppressWarnings({"unchecked", "rawtypes"})
+public abstract class PluginFacetInstallDataModelProvider
+	extends FacetInstallDataModelProvider implements IPluginProjectDataModelProperties {
 
-    public PluginFacetInstallDataModelProvider()
-    {
-        super();
-    }
+	public PluginFacetInstallDataModelProvider() {
+	}
 
-    @Override
-    public Object getDefaultProperty( String propertyName )
-    {
-        if( propertyName.equals( CONFIGURE_DEPLOYMENT_ASSEMBLY ) )
-        {
-            return true;
-        }
-        else if( propertyName.equals( FACET_ID ) )
-        {
-            return getPluginFacetId();
-        }
-        else if( propertyName.equals( INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE ) )
-        {
-            return true;
-        }
-        else if( propertyName.equals( LIFERAY_PLUGIN_LIBRARY_DELEGATE ) )
-        {
-            if( libraryDelegate == null )
-            {
-                libraryDelegate =
-                    new LibraryInstallDelegate(
-                        (IFacetedProjectWorkingCopy) getProperty( IFacetDataModelProperties.FACETED_PROJECT_WORKING_COPY ),
-                        (IProjectFacetVersion) getProperty( IFacetDataModelProperties.FACET_VERSION ) );
-            }
+	@Override
+	public Object getDefaultProperty(String propertyName) {
+		if (propertyName.equals(CONFIGURE_DEPLOYMENT_ASSEMBLY)) {
+			return true;
+		}
+		else if (propertyName.equals(FACET_ID)) {
+			return getPluginFacetId();
+		}
+		else if (propertyName.equals(INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE)) {
+			return true;
+		}
+		else if (propertyName.equals(LIFERAY_PLUGIN_LIBRARY_DELEGATE)) {
+			if (libraryDelegate == null) {
+				libraryDelegate = new LibraryInstallDelegate(
+					(IFacetedProjectWorkingCopy)getProperty(IFacetDataModelProperties.FACETED_PROJECT_WORKING_COPY),
+					(IProjectFacetVersion)getProperty(IFacetDataModelProperties.FACET_VERSION));
+			}
 
-            return libraryDelegate;
-        }
-        else if( propertyName.equals( SETUP_DEFAULT_OUTPUT_LOCATION ) )
-        {
-            return true;
-        }
+			return libraryDelegate;
+		}
+		else if (propertyName.equals(SETUP_DEFAULT_OUTPUT_LOCATION)) {
+			return true;
+		}
 
-        return super.getDefaultProperty( propertyName );
-    }
+		return super.getDefaultProperty(propertyName);
+	}
 
-    @Override
-    public Set getPropertyNames()
-    {
-        Set propNames = super.getPropertyNames();
+	@Override
+	public Set getPropertyNames() {
+		Set propNames = super.getPropertyNames();
 
-        propNames.add( CONFIGURE_DEPLOYMENT_ASSEMBLY );
-        propNames.add( INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE );
-        propNames.add( INSTALL_THEME_CSS_BUILDER );
-        propNames.add( LIFERAY_PLUGIN_LIBRARY_DELEGATE );
-        propNames.add( SETUP_DEFAULT_OUTPUT_LOCATION );
-        propNames.add( SETUP_EXT_CLASSPATH );
-        propNames.add( UPDATE_BUILD_XML );
+		propNames.add(CONFIGURE_DEPLOYMENT_ASSEMBLY);
+		propNames.add(INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE);
+		propNames.add(INSTALL_THEME_CSS_BUILDER);
+		propNames.add(LIFERAY_PLUGIN_LIBRARY_DELEGATE);
+		propNames.add(SETUP_DEFAULT_OUTPUT_LOCATION);
+		propNames.add(SETUP_EXT_CLASSPATH);
+		propNames.add(UPDATE_BUILD_XML);
 
-        return propNames;
-    }
+		return propNames;
+	}
 
-    @Override
-    public boolean propertySet( String propertyName, Object propertyValue )
-    {
-        if( propertyName.equals( IFacetDataModelProperties.FACET_VERSION ) )
-        {
-            if( this.libraryDelegate != null )
-            {
-                libraryDelegate.setProjectFacetVersion( (IProjectFacetVersion) propertyValue );
-            }
-        }
+	@Override
+	public boolean propertySet(String propertyName, Object propertyValue) {
+		if (propertyName.equals(IFacetDataModelProperties.FACET_VERSION)) {
+			if (libraryDelegate != null) {
+				libraryDelegate.setProjectFacetVersion((IProjectFacetVersion)propertyValue);
+			}
+		}
 
-        return super.propertySet( propertyName, propertyValue );
-    }
+		return super.propertySet(propertyName, propertyValue);
+	}
 
-    protected abstract String getPluginFacetId();
+	protected abstract String getPluginFacetId();
+
+	protected LibraryInstallDelegate libraryDelegate = null;
 
 }

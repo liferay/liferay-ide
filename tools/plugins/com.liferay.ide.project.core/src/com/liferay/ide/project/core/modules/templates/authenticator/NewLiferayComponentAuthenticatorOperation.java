@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,18 +10,18 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.templates.authenticator;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
 import com.liferay.ide.project.core.modules.templates.BndProperties;
 import com.liferay.ide.project.core.modules.templates.BndPropertiesValue;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,109 +33,99 @@ import org.eclipse.core.runtime.Path;
 /**
  * @author Simon Jiang
  */
+public class NewLiferayComponentAuthenticatorOperation extends AbstractLiferayComponentTemplate {
 
-public class NewLiferayComponentAuthenticatorOperation extends AbstractLiferayComponentTemplate
-{
+	public NewLiferayComponentAuthenticatorOperation() {
+	}
 
-    private static final String TEMPLATE_FILE = "authenticator/authenticator.ftl";
+	@Override
+	protected void doMergeResourcesOperation() throws CoreException {
+		try {
+			IFolder resourceFolder = liferayProject.getSourceFolder("resources");
 
-    private final static String SUPER_CLASS = "Authenticator";
-    private final static String EXTENSION_CLASS = "Authenticator.class";
+			IFile authIni = resourceFolder.getFile(new Path(componentClassName.toLowerCase() + "/userauth.ini"));
 
-    private final static String[] PROPERTIES_LIST = new String[] { "key=auth.pipeline.pre" };
+			if (FileUtil.notExists(authIni)) {
+				createSampleFile(authIni, "authenticator/authenticator-sample.ini");
+			}
+		}
+		catch (Exception e) {
+			throw new CoreException(ProjectCore.createErrorStatus(e));
+		}
+	}
 
-    public NewLiferayComponentAuthenticatorOperation()
-    {
-        super();
-    }
+	@Override
+	protected List<String[]> getComponentDependency() throws CoreException {
+		List<String[]> specialList = new LinkedList<>(super.getComponentDependency());
 
-    @Override
-    protected List<String> getImports()
-    {
-        List<String> imports = new ArrayList<String>();
+		specialList.add(new String[] {"org.apache.shiro", "shiro-core", "1.1.0"});
 
-        imports.add( "com.liferay.portal.kernel.log.Log" );
-        imports.add( "com.liferay.portal.kernel.log.LogFactoryUtil" );
-        imports.add( "com.liferay.portal.kernel.security.auth.AuthException" );
-        imports.add( "com.liferay.portal.kernel.security.auth.Authenticator" );
-        imports.add( "java.util.Map" );
-        imports.add( "org.apache.shiro.SecurityUtils" );
-        imports.add( "org.apache.shiro.authc.AuthenticationException" );
-        imports.add( "org.apache.shiro.authc.UsernamePasswordToken" );
-        imports.add( "org.apache.shiro.config.IniSecurityManagerFactory" );
-        imports.add( "org.apache.shiro.mgt.SecurityManager" );
-        imports.add( "org.apache.shiro.subject.Subject" );
-        imports.add( "org.apache.shiro.util.Factory" );
-        imports.add( "org.osgi.service.component.annotations.Activate" );
-        imports.addAll( super.getImports() );
-        
-        return imports;
-    }
+		return specialList;
+	}
 
-    @Override
-    protected List<String> getProperties()
-    {
-        List<String> properties = new ArrayList<String>();
-        properties.addAll( Arrays.asList( PROPERTIES_LIST ) );
+	@Override
+	protected String getExtensionClass() {
+		return _EXTENSION_CLASS;
+	}
 
-        for( String property : super.getProperties() )
-        {
-            properties.add( property );
-        }
-        return properties;
-    }
+	@Override
+	protected List<String> getImports() {
+		List<String> imports = new ArrayList<>();
 
-    @Override
-    protected String getExtensionClass()
-    {
-        return EXTENSION_CLASS;
-    }
+		imports.add("com.liferay.portal.kernel.log.Log");
+		imports.add("com.liferay.portal.kernel.log.LogFactoryUtil");
+		imports.add("com.liferay.portal.kernel.security.auth.AuthException");
+		imports.add("com.liferay.portal.kernel.security.auth.Authenticator");
+		imports.add("java.util.Map");
+		imports.add("org.apache.shiro.SecurityUtils");
+		imports.add("org.apache.shiro.authc.AuthenticationException");
+		imports.add("org.apache.shiro.authc.UsernamePasswordToken");
+		imports.add("org.apache.shiro.config.IniSecurityManagerFactory");
+		imports.add("org.apache.shiro.mgt.SecurityManager");
+		imports.add("org.apache.shiro.subject.Subject");
+		imports.add("org.apache.shiro.util.Factory");
+		imports.add("org.osgi.service.component.annotations.Activate");
 
-    @Override
-    protected String getSuperClass()
-    {
-        return SUPER_CLASS;
-    }
+		imports.addAll(super.getImports());
 
-    @Override
-    protected String getTemplateFile()
-    {
-        return TEMPLATE_FILE;
-    }
+		return imports;
+	}
 
-    @Override
-    protected void doMergeResourcesOperation() throws CoreException
-    {
-        try
-        {
-            IFolder resourceFolder = liferayProject.getSourceFolder( "resources" );
+	@Override
+	protected List<String> getProperties() {
+		List<String> properties = new ArrayList<>();
 
-            final IFile authIni = resourceFolder.getFile( new Path( componentClassName.toLowerCase() + "/userauth.ini" ) );
+		Collections.addAll(properties, _PROPERTIES_LIST);
 
-            if( !authIni.getLocation().toFile().exists() )
-            {
-                createSampleFile( authIni, "authenticator/authenticator-sample.ini" );
-            }
-        }
-        catch( Exception e )
-        {
-            throw new CoreException( ProjectCore.createErrorStatus( e ) );
-        }
-    }
+		for (String property : super.getProperties()) {
+			properties.add(property);
+		}
 
-    @Override
-    protected List<String[]> getComponentDependency() throws CoreException
-    {
-        List<String[]> specialList = new LinkedList<>(super.getComponentDependency());
-        specialList.add(  new String[]{ "org.apache.shiro", "shiro-core", "1.1.0"} );
-        return specialList;
-    }
+		return properties;
+	}
 
-    @Override
-    protected void setBndProperties( BndProperties bndProperty )
-    {
-        bndProperty.addValue( "-includeresource", new BndPropertiesValue( "@shiro-core-1.1.0.jar" ) );
-        bndProperty.addValue( "-sources", new BndPropertiesValue("true"));
-    }
-    
+	@Override
+	protected String getSuperClass() {
+		return _SUPER_CLASS;
+	}
+
+	@Override
+	protected String getTemplateFile() {
+		return _TEMPLATE_FILE;
+	}
+
+	@Override
+	protected void setBndProperties(BndProperties bndProperty) {
+		bndProperty.addValue("-includeresource", new BndPropertiesValue("@shiro-core-1.1.0.jar"));
+		bndProperty.addValue("-sources", new BndPropertiesValue("true"));
+	}
+
+	private static final String _EXTENSION_CLASS = "Authenticator.class";
+
+	private static final String[] _PROPERTIES_LIST = {"key=auth.pipeline.pre"};
+
+	private static final String _SUPER_CLASS = "Authenticator";
+
+	private static final String _TEMPLATE_FILE = "authenticator/authenticator.ftl";
+
 }

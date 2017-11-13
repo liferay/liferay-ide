@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,16 +10,15 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
-import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
@@ -34,36 +33,39 @@ import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 /**
  * @author Andy Wu
  */
-public interface ImportLiferayModuleProjectOp extends ExecutableElement
-{
+public interface ImportLiferayModuleProjectOp extends ExecutableElement {
 
-    ElementType TYPE = new ElementType( ImportLiferayModuleProjectOp.class );
+	public ElementType TYPE = new ElementType(ImportLiferayModuleProjectOp.class);
 
-    // *** Location ***
+	// *** Location ***
 
-    @AbsolutePath
-    @Required
-    @Type( base = Path.class )
-    @Service( impl = ImportModuleProjectLocationValidationService.class )
-    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
+	@DelegateImplementation(ImportLiferayModuleProjectOpMethods.class)
+	@Override
+	public Status execute(ProgressMonitor monitor);
 
-    Value<Path> getLocation();
-    void setLocation( String value );
-    void setLocation( Path value );
+	public Value<String> getBuildType();
 
-    // *** Build Type ***
+	public Value<Path> getLocation();
 
-    @Derived
-    @Service( impl = ImportModuleProjectBuildTypeDerivedValueService.class )
-    ValueProperty PROP_BUILD_TYPE = new ValueProperty( TYPE, "BuildType" );
+	public void setBuildType(String value);
 
-    Value<String> getBuildType();
-    void setBuildType( String value );
+	// *** Build Type ***
 
-    // *** Method: execute ***
+	public void setLocation(Path value);
 
-    @Override
-    @DelegateImplementation( ImportLiferayModuleProjectOpMethods.class )
-    Status execute( ProgressMonitor monitor );
+	public void setLocation(String value);
+
+	@Derived
+	@Service(impl = ImportModuleProjectBuildTypeDerivedValueService.class)
+	public ValueProperty PROP_BUILD_TYPE = new ValueProperty(TYPE, "BuildType");
+
+	// *** Method: execute ***
+
+	@AbsolutePath
+	@Required
+	@Service(impl = ImportModuleProjectLocationValidationService.class)
+	@Type(base = Path.class)
+	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
+	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
+
 }

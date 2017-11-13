@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model;
 
 import com.liferay.ide.project.core.model.internal.HasWorkspaceSdkDefaultValueService;
@@ -23,9 +23,9 @@ import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
 import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
-import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
@@ -42,50 +42,50 @@ import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 /**
  * @author Simon Jiang
  */
-public interface SDKProjectsImportOp extends ExecutableElement
-{
-    ElementType TYPE = new ElementType( SDKProjectsImportOp.class );
+public interface SDKProjectsImportOp extends ExecutableElement {
 
-    // *** Location ***
-    @Type( base = Path.class )
-    @AbsolutePath
-    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    @Label( standard = "SDK Directory" )
-    @Enablement( expr = "${HasWorkspaceSDK == 'false'}" )
-    @Services
-    (
-        value =
-        {
-            @Service( impl = SDKImportLocationValidationService.class ),
-            @Service( impl = SDKProjectsImportLocationInitialValueService.class )
-        }
-    )
+	public ElementType TYPE = new ElementType(SDKProjectsImportOp.class);
 
-    ValueProperty PROP_SDK_LOCATION = new ValueProperty( TYPE, "SdkLocation" ); //$NON-NLS-1$
+	@DelegateImplementation(SDKImportProjectsOpMethods.class)
+	@Override
+	public Status execute(ProgressMonitor monitor);
 
-    Value<Path> getSdkLocation();
-    void setSdkLocation( String value );
-    void setSdkLocation( Path value );
+	public Value<Path> getSdkLocation();
 
-    // *** SDK Version ***
-    @Label( standard = "SDK Version" )
-    @Derived
-    @Enablement( expr = "${HasWorkspaceSDK == 'false'}" )
-    @Service( impl = SDKImportVersionDerivedValueService.class )
-    ValueProperty PROP_SDK_VERSION = new ValueProperty( TYPE, "SdkVersion" ); //$NON-NLS-1$
+	public Value<String> getSdkVersion();
 
-    Value<String> getSdkVersion();
-    void setSdkVersion( String value );
+	public ElementList<ProjectNamedItem> getSelectedProjects();
 
-    @Type( base = ProjectNamedItem.class )
-    ListProperty PROP_SELECTED_PROJECTS = new ListProperty( TYPE, "SelectedProjects" );
-    ElementList<ProjectNamedItem> getSelectedProjects();
+	public void setSdkLocation(Path value);
 
-    @Type( base = Boolean.class )
-    @Service( impl = HasWorkspaceSdkDefaultValueService.class )
-    ValueProperty PROP_HAS_WORKSPACE_SDK = new ValueProperty( TYPE, "HasWorkspaceSDK" ); //$NON-NLS-1$
+	public void setSdkLocation(String value);
 
-    @Override
-    @DelegateImplementation( SDKImportProjectsOpMethods.class )
-    Status execute( ProgressMonitor monitor );
+	public void setSdkVersion(String value);
+
+	@Service(impl = HasWorkspaceSdkDefaultValueService.class)
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_HAS_WORKSPACE_SDK = new ValueProperty(TYPE, "HasWorkspaceSDK");
+
+	@AbsolutePath
+	@Enablement(expr = "${HasWorkspaceSDK == 'false'}")
+	@Label(standard = "SDK Directory")
+	@Services(
+		value = {
+			@Service(impl = SDKImportLocationValidationService.class),
+			@Service(impl = SDKProjectsImportLocationInitialValueService.class)
+		}
+	)
+	@Type(base = Path.class)
+	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
+	public ValueProperty PROP_SDK_LOCATION = new ValueProperty(TYPE, "SdkLocation");
+
+	@Derived
+	@Enablement(expr = "${HasWorkspaceSDK == 'false'}")
+	@Label(standard = "SDK Version")
+	@Service(impl = SDKImportVersionDerivedValueService.class)
+	public ValueProperty PROP_SDK_VERSION = new ValueProperty(TYPE, "SdkVersion");
+
+	@Type(base = ProjectNamedItem.class)
+	public ListProperty PROP_SELECTED_PROJECTS = new ListProperty(TYPE, "SelectedProjects");
+
 }

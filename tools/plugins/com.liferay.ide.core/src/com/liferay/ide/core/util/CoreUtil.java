@@ -515,6 +515,11 @@ public class CoreUtil
         return ResourcesPlugin.getWorkspace().getRoot();
     }
 
+    public static IPath getWorkspaceRootLocation()
+    {
+        return getWorkspaceRoot().getLocation();
+    }
+
     public static Object invoke( String methodName, Object object, Class<?>[] argTypes, Object[] args )
         throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
         InvocationTargetException

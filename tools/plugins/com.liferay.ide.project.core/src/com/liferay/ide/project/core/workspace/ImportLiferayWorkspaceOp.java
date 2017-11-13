@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.workspace;
 
@@ -34,58 +33,61 @@ import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 /**
  * @author Andy Wu
  */
-public interface ImportLiferayWorkspaceOp extends BaseLiferayWorkspaceOp
-{
+public interface ImportLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 
-    ElementType TYPE = new ElementType( ImportLiferayWorkspaceOp.class );
+	public ElementType TYPE = new ElementType(ImportLiferayWorkspaceOp.class);
 
-    // *** WorkspaceLocation ***
+	@DelegateImplementation(ImportLiferayWorkspaceOpMethods.class)
+	@Override
+	public Status execute(ProgressMonitor monitor);
 
-    @Label( standard = "workspace location" )
-    @AbsolutePath
-    @Required
-    @Type( base = Path.class )
-    @Service( impl = ImportWorkspaceLocationValidationService.class )
-    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    ValueProperty PROP_WORKSPACE_LOCATION = new ValueProperty( TYPE, "WorkspaceLocation" );
+	public Value<String> getBuildType();
 
-    Value<Path> getWorkspaceLocation();
-    void setWorkspaceLocation( String value );
-    void setWorkspaceLocation( Path value );
+	public Value<Boolean> getHasBundlesDir();
 
-    // *** Build Type ***
+	public Value<Path> getWorkspaceLocation();
 
-    @Derived
-    @Service( impl = ImportWorkspaceBuildTypeDerivedValueService.class )
-    ValueProperty PROP_BUILD_TYPE = new ValueProperty( TYPE, "BuildType" );
+	public void setBuildType(String value);
 
-    Value<String> getBuildType();
-    void setBuildType( String value );
+	public void setHasBundlesDir(Boolean value);
 
-    // *** hasBundlesDir ***
+	public void setHasBundlesDir(String value);
 
-    @Derived
-    @Service( impl = HasBundlesDirDerivedValueService.class )
-    @Type( base = Boolean.class )
-    ValueProperty PROP_HAS_BUNDLES_DIR = new ValueProperty( TYPE, "hasBundlesDir" );
+	public void setWorkspaceLocation(Path value);
 
-    Value<Boolean> getHasBundlesDir();
-    void setHasBundlesDir( String value );
-    void setHasBundlesDir( Boolean value );
+	public void setWorkspaceLocation(String value);
 
-    // *** serverName ***
+	// BuildType
 
-    @Service( impl = ImportLiferayWorkspaceServerNameService.class )
-    ValueProperty PROP_SERVER_NAME = new ValueProperty( TYPE, BaseLiferayWorkspaceOp.PROP_SERVER_NAME );
+	@Derived
+	@Service(impl = ImportWorkspaceBuildTypeDerivedValueService.class)
+	public ValueProperty PROP_BUILD_TYPE = new ValueProperty(TYPE, "BuildType");
 
-    // *** bundleUrl ***
+	// BundleUrl
 
-    @Service( impl = BundleUrlDefaultValueService.class )
-    ValueProperty PROP_BUNDLE_URL = new ValueProperty( TYPE, BaseLiferayWorkspaceOp.PROP_BUNDLE_URL );
+	@Service(impl = BundleUrlDefaultValueService.class)
+	public ValueProperty PROP_BUNDLE_URL = new ValueProperty(TYPE, BaseLiferayWorkspaceOp.PROP_BUNDLE_URL);
 
-    // *** Method: execute ***
+	// HasBundlesDir
 
-    @Override
-    @DelegateImplementation( ImportLiferayWorkspaceOpMethods.class )
-    Status execute( ProgressMonitor monitor );
+	@Derived
+	@Service(impl = HasBundlesDirDerivedValueService.class)
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_HAS_BUNDLES_DIR = new ValueProperty(TYPE, "hasBundlesDir");
+
+	// ServerName
+
+	@Service(impl = ImportLiferayWorkspaceServerNameService.class)
+	public ValueProperty PROP_SERVER_NAME = new ValueProperty(TYPE, BaseLiferayWorkspaceOp.PROP_SERVER_NAME);
+
+	// WorkspaceLocation
+
+	@AbsolutePath
+	@Label(standard = "workspace location")
+	@Required
+	@Service(impl = ImportWorkspaceLocationValidationService.class)
+	@Type(base = Path.class)
+	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
+	public ValueProperty PROP_WORKSPACE_LOCATION = new ValueProperty(TYPE, "WorkspaceLocation");
+
 }

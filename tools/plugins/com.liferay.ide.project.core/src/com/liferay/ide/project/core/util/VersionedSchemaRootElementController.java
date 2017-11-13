@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,116 +10,111 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
-package com.liferay.ide.project.core.util;
+ */
 
+package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 
 import java.text.MessageFormat;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.sapphire.Resource;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.modeling.xml.StandardRootElementController;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 
 /**
  * @author Gregory Amerson
  */
-public class VersionedSchemaRootElementController extends StandardRootElementController
-{
-    private final String xmlBindingPath;
-    private final Pattern namespacePattern;
-    private final Pattern schemaPattern;
-    private final String namespaceTemplate;
-    private final String schemaTemplate;
-    private final String defaultVersion;
+public class VersionedSchemaRootElementController extends StandardRootElementController {
 
-    private RootElementInfo rootElementInfo;
+	public VersionedSchemaRootElementController(
+		String xmlBindingPath, Pattern namespacePattern, Pattern schemaPattern, String namespaceTemplate,
+		String schemaTemplate, String defaultVersion) {
 
-    public VersionedSchemaRootElementController( final String xmlBindingPath,
-                                                 final Pattern namespacePattern,
-                                                 final Pattern schemaPattern,
-                                                 final String namespaceTemplate,
-                                                 final String schemaTemplate,
-                                                 final String defaultVersion )
-    {
-        this.xmlBindingPath = xmlBindingPath;
-        this.namespacePattern = namespacePattern;
-        this.schemaPattern = schemaPattern;
-        this.namespaceTemplate = namespaceTemplate;
-        this.schemaTemplate = schemaTemplate;
-        this.defaultVersion = defaultVersion;
-    }
+		_xmlBindingPath = xmlBindingPath;
+		_namespacePattern = namespacePattern;
+		_schemaPattern = schemaPattern;
+		_namespaceTemplate = namespaceTemplate;
+		_schemaTemplate = schemaTemplate;
+		_defaultVersion = defaultVersion;
+	}
 
-    private Document getDocument()
-    {
-        return this.resource().root().adapt( RootXmlResource.class ).getDomDocument();
-    }
+	@Override
+	protected RootElementInfo getRootElementInfo() {
+		if (_rootElementInfo == null) {
+			Map<String, String> schemas = new HashMap<>();
+			Document doc = _getDocument();
 
-    @Override
-    protected RootElementInfo getRootElementInfo()
-    {
-        if( this.rootElementInfo == null )
-        {
-            final Map<String, String> schemas = new HashMap<String, String>();
-            final Document doc = getDocument();
+			String namespace = null;
+			String uri = null;
+			String location = null;
 
-            String namespace = null;
-            String uri = null;
-            String location = null;
+			if (doc != null) {
+				Element documentElement = doc.getDocumentElement();
 
-            if( doc != null )
-            {
-                final Element documentElement = doc.getDocumentElement();
+				if (documentElement != null) {
+					uri = documentElement.getNamespaceURI();
 
-                if( documentElement != null )
-                {
-                    uri = documentElement.getNamespaceURI();
+					if ((uri != null) && _namespacePattern.matcher(uri).matches()) {
+						namespace = uri;
 
-                    if( uri != null && namespacePattern.matcher( uri ).matches() )
-                    {
-                        namespace = uri;
+						String schema = documentElement.getAttribute("xsi:schemaLocation");
 
-                        final String schema = documentElement.getAttribute( "xsi:schemaLocation" );
+						Matcher matcher = _schemaPattern.matcher(schema);
 
-                        final Matcher matcher = schemaPattern.matcher( schema );
+						if ((schema != null) && matcher.matches()) {
+							location = matcher.group(1);
+						}
+					}
+				}
+				else {
+					String version = _defaultVersion;
 
-                        if( schema != null && matcher.matches() )
-                        {
-                            location = matcher.group( 1 );
-                        }
-                    }
-                }
-                else
-                {
-                    String version = defaultVersion;
+					// no documentElement lets get default values
 
-                    // no documentElement lets get default values
-                    final IProject project = resource().adapt( IProject.class );
+					IProject project = resource().adapt(IProject.class);
 
-                    if( project != null )
-                    {
-                        version = LiferayDescriptorHelper.getDescriptorVersion( project, defaultVersion );
-                    }
+					if (project != null) {
+						version = LiferayDescriptorHelper.getDescriptorVersion(project, _defaultVersion);
+					}
 
-                    namespace = MessageFormat.format( this.namespaceTemplate, version );
-                    uri = namespace;
-                    location = MessageFormat.format( this.schemaTemplate, version.replaceAll( "\\.", "_" ) );
-                }
-            }
+					namespace = MessageFormat.format(_namespaceTemplate, version);
 
-            schemas.put( uri, location );
-            this.rootElementInfo = new RootElementInfo( namespace, "", this.xmlBindingPath, schemas );
-        }
+					uri = namespace;
 
-        return this.rootElementInfo;
-    }
+					location = MessageFormat.format(_schemaTemplate, version.replaceAll("\\.", "_"));
+				}
+			}
+
+			schemas.put(uri, location);
+
+			_rootElementInfo = new RootElementInfo(namespace, "", _xmlBindingPath, schemas);
+		}
+
+		return _rootElementInfo;
+	}
+
+	private Document _getDocument() {
+		Resource resource = resource().root();
+
+		return resource.adapt(RootXmlResource.class).getDomDocument();
+	}
+
+	private final String _defaultVersion;
+	private final Pattern _namespacePattern;
+	private final String _namespaceTemplate;
+	private RootElementInfo _rootElementInfo;
+	private final Pattern _schemaPattern;
+	private final String _schemaTemplate;
+	private final String _xmlBindingPath;
+
 }

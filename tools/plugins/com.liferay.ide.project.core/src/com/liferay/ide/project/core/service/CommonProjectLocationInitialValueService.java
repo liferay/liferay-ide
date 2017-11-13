@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.service;
 
@@ -22,11 +21,11 @@ import org.eclipse.sapphire.InitialValueService;
 /**
  * @author Andy Wu
  */
-public class CommonProjectLocationInitialValueService extends InitialValueService
-{
-    @Override
-    protected String compute()
-    {
-        return CoreUtil.getWorkspaceRoot().getLocation().toPortableString();
-    }
+public class CommonProjectLocationInitialValueService extends InitialValueService {
+
+	@Override
+	protected String compute() {
+		return CoreUtil.getWorkspaceRootLocation().toPortableString();
+	}
+
 }

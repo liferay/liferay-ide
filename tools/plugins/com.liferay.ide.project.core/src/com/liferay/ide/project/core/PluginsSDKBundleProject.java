@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.IBundleProject;
@@ -29,6 +29,7 @@ import com.liferay.ide.server.remote.IRemoteServerPublisher;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -40,273 +41,251 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class PluginsSDKBundleProject extends FlexibleProject implements IWebProject, IBundleProject
-{
+public class PluginsSDKBundleProject extends FlexibleProject implements IWebProject, IBundleProject {
 
-    private final String[] IGNORE_PATHS = new String[] { "docroot/WEB-INF/classes" };
+	public PluginsSDKBundleProject(IProject project, PortalBundle portalBundle) {
+		super(project);
 
-    private PortalBundle portalBundle;
+		_portalBundle = portalBundle;
+	}
 
-    public PluginsSDKBundleProject( IProject project, PortalBundle portalBundle )
-    {
-        super( project );
+	public <T> T adapt(Class<T> adapterType) {
+		T adapter = super.adapt(adapterType);
 
-        this.portalBundle = portalBundle;
-    }
+		if (adapter != null) {
+			return adapter;
+		}
 
-    public <T> T adapt( Class<T> adapterType )
-    {
-        T adapter = super.adapt( adapterType );
+		if (IProjectBuilder.class.equals(adapterType)) {
+			SDK sdk = getSDK();
 
-        if( adapter != null )
-        {
-            return adapter;
-        }
+			if (sdk != null) {
+				IProjectBuilder projectBuilder = new SDKProjectBuilder(getProject(), sdk);
 
-        if( IProjectBuilder.class.equals( adapterType ) )
-        {
-            final SDK sdk = getSDK();
+				return adapterType.cast(projectBuilder);
+			}
+		}
+		else if (IRemoteServerPublisher.class.equals(adapterType)) {
+			SDK sdk = getSDK();
 
-            if( sdk != null )
-            {
-                final IProjectBuilder projectBuilder = new SDKProjectBuilder( getProject(), sdk );
+			if (sdk != null) {
+				IRemoteServerPublisher remotePublisher = new SDKProjectRemoteServerPublisher(getProject(), sdk);
 
-                return adapterType.cast( projectBuilder );
-            }
-        }
-        else if( IRemoteServerPublisher.class.equals( adapterType ) )
-        {
-            final SDK sdk = getSDK();
+				return adapterType.cast(remotePublisher);
+			}
+		}
+		else if (ILiferayPortal.class.equals(adapterType)) {
+			return adapterType.cast(_portalBundle);
+		}
 
-            if( sdk != null )
-            {
-                final IRemoteServerPublisher remotePublisher = new SDKProjectRemoteServerPublisher( getProject(), sdk );
+		return null;
+	}
 
-                return adapterType.cast( remotePublisher );
-            }
-        }
-        else if( ILiferayPortal.class.equals( adapterType ) )
-        {
-            return adapterType.cast( this.portalBundle );
-        }
+	@Override
+	public boolean filterResource(IPath resourcePath) {
+		if (filterResource(resourcePath, _IGNORE_PATHS)) {
+			return true;
+		}
 
-        return null;
-    }
+		return false;
+	}
 
-    public IPath getLibraryPath( String filename )
-    {
-        final IPath[] libs = getUserLibs();
+	@Override
+	public String getBundleShape() {
+		return "war";
+	}
 
-        if( ! CoreUtil.isNullOrEmpty( libs ) )
-        {
-            for( IPath lib : libs )
-            {
-                if( lib.lastSegment().startsWith( filename ) )
-                {
-                    return lib;
-                }
-            }
-        }
+	public IPath getLibraryPath(String filename) {
+		IPath[] libs = getUserLibs();
 
-        return null;
-    }
+		if (!CoreUtil.isNullOrEmpty(libs)) {
+			for (IPath lib : libs) {
+				if (lib.lastSegment().startsWith(filename)) {
+					return lib;
+				}
+			}
+		}
 
-    public String getProperty( final String key, final String defaultValue )
-    {
-        String retval = defaultValue;
+		return null;
+	}
 
-        if( ( "theme.type".equals( key ) || "theme.parent".equals( key ) ) && ProjectUtil.isThemeProject( getProject() ) )
-        {
-            try
-            {
-                Document buildXmlDoc = FileUtil.readXML( getProject().getFile( "build.xml" ).getContents(), null, null );
+	@Override
+	public IPath getOutputBundle(boolean cleanBuild, IProgressMonitor monitor) throws CoreException {
+		IPath retval = null;
 
-                NodeList properties = buildXmlDoc.getElementsByTagName( "property" ); //$NON-NLS-1$
+		SDK sdk = getSDK();
 
-                for( int i = 0; i < properties.getLength(); i++ )
-                {
-                    final Node item = properties.item( i );
-                    Node name = item.getAttributes().getNamedItem( "name" ); //$NON-NLS-1$
+		IStatus status = sdk.validate();
 
-                    if( name != null && key.equals( name.getNodeValue() ) )
-                    {
-                        Node value = item.getAttributes().getNamedItem( "value" ); //$NON-NLS-1$
+		if (!status.isOK()) {
+			throw new CoreException(status);
+		}
 
-                        retval = value.getNodeValue();
-                        break;
-                    }
-                }
-            }
-            catch( CoreException e )
-            {
-                ProjectCore.logError( "Unable to get property " + key, e );
-            }
-        }
+		IStatus warStatus = sdk.war(getProject(), null, true, new String[] {"-Duser.timezone=GMT"}, monitor);
 
-        return retval;
-    }
+		IPath distPath = sdk.getLocation().append("dist");
 
-    public SDK getSDK()
-    {
-        SDK retval = null;
+		// TODO need to find a better way to determine the actual output file.
 
-        // try to determine SDK based on project location
-        IPath sdkLocation = getProject().getRawLocation().removeLastSegments( 2 );
+		File[] distFiles = distPath.toFile().listFiles(
+			new FilenameFilter() {
 
-        retval = SDKManager.getInstance().getSDK( sdkLocation );
+				@Override
+				public boolean accept(File dir, String name) {
+					IPath location = getProject().getLocation();
 
-        if( retval == null )
-        {
-            retval = SDKUtil.createSDKFromLocation( sdkLocation );
-            SDKManager.getInstance().addSDK( retval );
-        }
+					return name.contains(location.lastSegment());
+				}
 
-        return retval;
-    }
+			});
 
-    public IPath[] getUserLibs()
-    {
-        return this.portalBundle.getUserLibs();
-    }
+		if (warStatus.isOK()) {
+			try {
+				retval = new Path(distFiles[0].getCanonicalPath());
+			}
+			catch (IOException ioe) {
+				throw new CoreException(ProjectCore.createErrorStatus(ioe));
+			}
+		}
 
-    public Collection<IFile> getOutputs( boolean build, IProgressMonitor monitor ) throws CoreException
-    {
-        final Collection<IFile> outputs = new HashSet<IFile>();
+		return retval;
+	}
 
-        if( build )
-        {
-            this.getProject().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
+	@Override
+	public IPath getOutputBundlePath() {
+		IPath retval = null;
 
-            final SDK sdk = SDKUtil.getSDK( this.getProject() );
+		SDK sdk = getSDK();
 
-            final IStatus warStatus = sdk.war( this.getProject(), null, true, monitor );
+		IStatus status = sdk.validate();
 
-            if( warStatus.isOK() )
-            {
+		if (!status.isOK()) {
+			return retval;
+		}
 
-            }
-        }
+		IPath distPath = sdk.getLocation().append("dist");
 
-        return outputs;
-    }
+		File[] distFiles = distPath.toFile().listFiles(
+			new FilenameFilter() {
 
-    @Override
-    public boolean filterResource( IPath resourcePath )
-    {
-        if( filterResource( resourcePath, IGNORE_PATHS ) )
-        {
-            return true;
-        }
+				@Override
+				public boolean accept(File dir, String name) {
+					IPath location = getProject().getLocation();
 
-        return false;
-    }
+					return name.contains(location.lastSegment());
+				}
 
-    @Override
-    public String getBundleShape()
-    {
-        return "war";
-    }
+			});
 
-    @Override
-    public IPath getOutputBundle( boolean cleanBuild, IProgressMonitor monitor ) throws CoreException
-    {
-        IPath retval = null;
+		try {
+			retval = new Path(distFiles[0].getCanonicalPath());
+		}
+		catch (IOException ioe) {
+			ProjectCore.createErrorStatus(ioe);
+		}
 
-        final SDK sdk = getSDK();
-        final IStatus status = sdk.validate();
+		return retval;
+	}
 
-        if ( !status.isOK() )
-        {
-            throw new CoreException( status );
-        }
+	public Collection<IFile> getOutputs(boolean build, IProgressMonitor monitor) throws CoreException {
+		Collection<IFile> outputs = new HashSet<>();
 
-        IStatus warStatus = sdk.war(
-                getProject(), null, true, new String[] { "-Duser.timezone=GMT" }, monitor );
+		if (!build) {
+			return outputs;
+		}
 
-        final IPath distPath = sdk.getLocation().append( "dist" );
+		getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
 
-        // TODO need to find a better way to determine the actual output file.
+		SDK sdk = SDKUtil.getSDK(getProject());
 
-        final File[] distFiles = distPath.toFile().listFiles( new FilenameFilter()
-        {
-            @Override
-            public boolean accept( File dir, String name )
-            {
-                return name.contains( getProject().getLocation().lastSegment() );
-            }
-        });
+		IStatus warStatus = sdk.war(getProject(), null, true, monitor);
 
-        if( warStatus.isOK() )
-        {
-            try
-            {
-                retval = new Path( distFiles[0].getCanonicalPath() );
-            }
-            catch( IOException e )
-            {
-                throw new CoreException( ProjectCore.createErrorStatus( e ) );
-            }
-        }
+		if (warStatus.isOK()) {
+		}
 
-        return retval;
-    }
+		return outputs;
+	}
 
-    @Override
-    public IPath getOutputBundlePath()
-    {
-        IPath retval = null;
+	public String getProperty(String key, String defaultValue) {
+		String retval = defaultValue;
 
-        final SDK sdk = getSDK();
-        final IStatus status = sdk.validate();
+		if (("theme.type".equals(key) || "theme.parent".equals(key)) && ProjectUtil.isThemeProject(getProject())) {
+			try {
+				IFile buildXml = getProject().getFile("build.xml");
 
-        if( !status.isOK() )
-        {
-            return retval;
-        }
+				Document buildXmlDoc = FileUtil.readXML(buildXml.getContents(), null, null);
 
-        final IPath distPath = sdk.getLocation().append( "dist" );
+				NodeList properties = buildXmlDoc.getElementsByTagName("property");
 
-        final File[] distFiles = distPath.toFile().listFiles( new FilenameFilter()
-        {
+				for (int i = 0; i < properties.getLength(); i++) {
+					Node item = properties.item(i);
 
-            @Override
-            public boolean accept( File dir, String name )
-            {
-                return name.contains( getProject().getLocation().lastSegment() );
-            }
-        } );
+					Node name = item.getAttributes().getNamedItem("name");
 
-        try
-        {
-            retval = new Path( distFiles[0].getCanonicalPath() );
-        }
-        catch( IOException e )
-        {
-            ProjectCore.createErrorStatus( e );
-        }
+					if ((name != null) && key.equals(name.getNodeValue())) {
+						Node value = item.getAttributes().getNamedItem("value");
 
-        return retval;
-    }
+						retval = value.getNodeValue();
 
-    @Override
-    public String getSymbolicName() throws CoreException
-    {
-        return this.getProject().getLocation().lastSegment();
-    }
+						break;
+					}
+				}
+			}
+			catch (CoreException ce) {
+				ProjectCore.logError("Unable to get property " + key, ce);
+			}
+		}
 
-    @Override
-    public boolean isFragmentBundle()
-    {
-        return false;
-    }
+		return retval;
+	}
+
+	public SDK getSDK() {
+		SDK retval = null;
+
+		// try to determine SDK based on project location
+
+		IPath rawLocation = getProject().getRawLocation();
+
+		IPath sdkLocation = rawLocation.removeLastSegments(2);
+
+		retval = SDKManager.getInstance().getSDK(sdkLocation);
+
+		if (retval == null) {
+			retval = SDKUtil.createSDKFromLocation(sdkLocation);
+
+			SDKManager.getInstance().addSDK(retval);
+		}
+
+		return retval;
+	}
+
+	@Override
+	public String getSymbolicName() throws CoreException {
+		IPath path = getProject().getLocation();
+
+		return path.lastSegment();
+	}
+
+	public IPath[] getUserLibs() {
+		return _portalBundle.getUserLibs();
+	}
+
+	@Override
+	public boolean isFragmentBundle() {
+		return false;
+	}
+
+	private static final String[] _IGNORE_PATHS = {"docroot/WEB-INF/classes"};
+
+	private PortalBundle _portalBundle;
 
 }

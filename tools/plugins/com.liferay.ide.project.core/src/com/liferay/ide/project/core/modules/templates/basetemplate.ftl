@@ -15,6 +15,6 @@
  */
 package ${packagename};
 
-<#list importlibs as import> 
+<#list importlibs as import>
 import ${import};
 </#list>

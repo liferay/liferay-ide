@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -22,6 +21,7 @@ import com.liferay.ide.project.core.ProjectCore;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.Status.Severity;
@@ -31,70 +31,64 @@ import org.eclipse.sapphire.platform.StatusBridge;
 /**
  * @author Andy Wu
  */
-public class ImportLiferayModuleProjectOpMethods
-{
+public class ImportLiferayModuleProjectOpMethods {
 
-    public static final Status execute( final ImportLiferayModuleProjectOp op, final ProgressMonitor pm )
-    {
-        final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
+	public static final Status execute(ImportLiferayModuleProjectOp op, ProgressMonitor pm) {
+		IProgressMonitor monitor = ProgressMonitorBridge.create(pm);
 
-        monitor.beginTask( "Importing Module project...", 100 );
+		monitor.beginTask("Importing Module project...", 100);
 
-        String location = op.getLocation().content().toOSString();
+		Path path = op.getLocation().content();
 
-        ILiferayProjectImporter importer = LiferayCore.getImporter( op.getBuildType().content() );
+		String location = path.toOSString();
 
-        Status retval = Status.createOkStatus();
+		ILiferayProjectImporter importer = LiferayCore.getImporter(op.getBuildType().content());
 
-        try
-        {
-            importer.importProjects( location, monitor );
-        }
-        catch( CoreException e )
-        {
-            retval = Status.createErrorStatus( e );
-        }
+		Status retval = Status.createOkStatus();
 
-        return retval;
-    }
+		try {
+			importer.importProjects(location, monitor);
+		}
+		catch (CoreException ce) {
+			retval = Status.createErrorStatus(ce);
+		}
 
-    public static IStatus getBuildType( String location )
-    {
-        IStatus retval = null;
+		return retval;
+	}
 
-        final ILiferayProjectImporter[] importers = LiferayCore.getImporters();
+	public static IStatus getBuildType(String location) {
+		IStatus retval = null;
 
-        for( ILiferayProjectImporter importer : importers )
-        {
-            final IStatus status = importer.canImport( location );
+		ILiferayProjectImporter[] importers = LiferayCore.getImporters();
 
-            if( status == null )
-            {
-                retval = ProjectCore.createErrorStatus( "Location is not recognized as a valid project type." );
-            }
-            else if( status.isOK() )
-            {
-                retval = StatusBridge.create( Status.createStatus( Severity.OK, importer.getBuildType() ) );
-                break;
-            }
-            else if( status.getSeverity() == IStatus.ERROR )
-            {
-                retval = StatusBridge.create( Status.createStatus( Severity.ERROR, status.getMessage() ) );
-                break;
-            }
-            else if( status.getSeverity() == IStatus.WARNING )
-            {
-                retval = StatusBridge.create( Status.createStatus( Severity.WARNING, status.getMessage() ) );
-                break;
-            }
-        }
+		for (ILiferayProjectImporter importer : importers) {
+			IStatus status = importer.canImport(location);
 
-        if( retval == null )
-        {
-            retval = StatusBridge.create( Status.createStatus( Severity.ERROR, "No project importers found." ) );
-        }
+			if (status == null) {
+				retval = ProjectCore.createErrorStatus("Location is not recognized as a valid project type.");
+			}
+			else if (status.isOK()) {
+				retval = StatusBridge.create(Status.createStatus(Severity.OK, importer.getBuildType()));
 
-        return retval;
-    }
+				break;
+			}
+			else if (status.getSeverity() == IStatus.ERROR) {
+				retval = StatusBridge.create(Status.createStatus(Severity.ERROR, status.getMessage()));
+
+				break;
+			}
+			else if (status.getSeverity() == IStatus.WARNING) {
+				retval = StatusBridge.create(Status.createStatus(Severity.WARNING, status.getMessage()));
+
+				break;
+			}
+		}
+
+		if (retval == null) {
+			retval = StatusBridge.create(Status.createStatus(Severity.ERROR, "No project importers found."));
+		}
+
+		return retval;
+	}
 
 }

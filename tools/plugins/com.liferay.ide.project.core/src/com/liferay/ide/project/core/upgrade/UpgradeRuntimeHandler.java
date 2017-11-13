@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,13 +10,13 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.upgrade;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.AbstractUpgradeProjectHandler;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.Collections;
@@ -32,62 +32,61 @@ import org.eclipse.wst.common.project.facet.core.runtime.RuntimeManager;
 /**
  * @author Simon Jiang
  */
-public class UpgradeRuntimeHandler extends AbstractUpgradeProjectHandler
-{
+public class UpgradeRuntimeHandler extends AbstractUpgradeProjectHandler {
 
-    @Override
-    public Status execute( IProject project, String runtimeName, IProgressMonitor monitor, int perUnit )
-    {
-        Status retval = Status.createOkStatus();
+	@Override
+	public Status execute(IProject project, String runtimeName, IProgressMonitor monitor, int perUnit) {
+		Status retval = Status.createOkStatus();
 
-        try
-        {
-            int worked = 0;
-            final IProgressMonitor submon = CoreUtil.newSubMonitor( monitor, 25 );
-            submon.subTask( "Update project runtime" );
+		try {
+			int worked = 0;
+			IProgressMonitor submon = CoreUtil.newSubMonitor(monitor, 25);
 
-            final org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime =
-                RuntimeManager.getRuntime( runtimeName );
+			submon.subTask("Update project runtime");
 
-            if( runtime != null )
-            {
-                worked = worked + perUnit;
-                submon.worked( worked );
+			org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime = RuntimeManager.getRuntime(runtimeName);
 
-                if( runtime != null )
-                {
-                    final IFacetedProject fProject = ProjectUtil.getFacetedProject( project );
+			if (runtime != null) {
+				worked = worked + perUnit;
 
-                    final org.eclipse.wst.common.project.facet.core.runtime.IRuntime primaryRuntime =
-                        fProject.getPrimaryRuntime();
+				submon.worked(worked);
 
-                    if( !runtime.equals( primaryRuntime ) )
-                    {
+				if (runtime != null) {
+					IFacetedProject fProject = ProjectUtil.getFacetedProject(project);
 
-                        worked = worked + perUnit;
-                        submon.worked( worked );
+					org.eclipse.wst.common.project.facet.core.runtime.IRuntime primaryRuntime =
+						fProject.getPrimaryRuntime();
 
-                        fProject.setTargetedRuntimes( Collections.singleton( runtime ), monitor );
+					if (!runtime.equals(primaryRuntime)) {
+						worked = worked + perUnit;
 
-                        worked = worked + perUnit;
-                        submon.worked( worked );
+						submon.worked(worked);
 
-                        fProject.setPrimaryRuntime( runtime, monitor );
-                        worked = worked + perUnit;
-                        submon.worked( worked );
-                    }
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            final IStatus error =
-                ProjectCore.createErrorStatus( "Unable to upgrade target runtime for " + project.getName(), e );
-            ProjectCore.logError( error );
+						fProject.setTargetedRuntimes(Collections.singleton(runtime), monitor);
 
-            retval = StatusBridge.create( error );
-        }
+						worked = worked + perUnit;
 
-        return retval;
-    }
+						submon.worked(worked);
+
+						fProject.setPrimaryRuntime(runtime, monitor);
+
+						worked = worked + perUnit;
+
+						submon.worked(worked);
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			IStatus error = ProjectCore.createErrorStatus(
+				"Unable to upgrade target runtime for " + project.getName(), e);
+
+			ProjectCore.logError(error);
+
+			retval = StatusBridge.create(error);
+		}
+
+		return retval;
+	}
+
 }

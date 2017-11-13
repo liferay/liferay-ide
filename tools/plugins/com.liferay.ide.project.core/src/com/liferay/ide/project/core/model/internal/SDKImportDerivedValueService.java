@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.model.internal;
 
@@ -22,70 +21,69 @@ import com.liferay.ide.sdk.core.SDKUtil;
 import org.eclipse.sapphire.DerivedValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 
 /**
  * @author Simon Jiang
  */
-public class SDKImportDerivedValueService extends DerivedValueService
-{
+public class SDKImportDerivedValueService extends DerivedValueService {
 
-    private FilteredListener<PropertyContentEvent> listener;
+	@Override
+	public void dispose() {
+		ParentSDKProjectImportOp op = _op();
 
-    @Override
-    protected void initDerivedValueService()
-    {
-        super.initDerivedValueService();
+		if (op != null) {
+			op.property(ParentSDKProjectImportOp.PROP_SDK_LOCATION).detach(_listener);
+		}
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		super.dispose();
+	}
 
-        op().property( ParentSDKProjectImportOp.PROP_SDK_LOCATION ).attach( this.listener );
-    }
+	@Override
+	protected String compute() {
+		String retVal = null;
 
-    @Override
-    protected String compute()
-    {
-        String retVal = null;
+		ParentSDKProjectImportOp op = _op();
 
-        if( op().getSdkLocation() != null )
-        {
-            if( op().getSdkLocation().content() != null && !op().getSdkLocation().content().isEmpty() )
-            {
-                final Path sdkPath = op().getSdkLocation().content();
+		Value<Path> path = op.getSdkLocation();
 
-                SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkPath ) );
+		if ((path != null) && (path.content() != null) && !path.content().isEmpty()) {
+			Path sdkPath = path.content();
 
-                if ( sdk != null )
-                {
-                    retVal = sdk.getVersion();
-                }
-            }
-        }
+			SDK sdk = SDKUtil.createSDKFromLocation(PathBridge.create(sdkPath));
 
-        return retVal;
-    }
+			if (sdk != null) {
+				retVal = sdk.getVersion();
+			}
+		}
 
-    private ParentSDKProjectImportOp op()
-    {
-        return context( ParentSDKProjectImportOp.class );
-    }
+		return retVal;
+	}
 
-    @Override
-    public void dispose()
-    {
-        if( op() != null )
-        {
-            op().property( ParentSDKProjectImportOp.PROP_SDK_LOCATION ).detach( this.listener );
-        }
+	@Override
+	protected void initDerivedValueService() {
+		super.initDerivedValueService();
 
-        super.dispose();
-    }
+		_listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		ParentSDKProjectImportOp op = _op();
+
+		op.property(ParentSDKProjectImportOp.PROP_SDK_LOCATION).attach(_listener);
+	}
+
+	private ParentSDKProjectImportOp _op() {
+		return context(ParentSDKProjectImportOp.class);
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -21,10 +21,13 @@ import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
 import java.io.OutputStream;
+
 import java.nio.file.Files;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -58,348 +61,341 @@ import org.eclipse.text.edits.TextEdit;
  * @author Simon Jiang
  * @author Lovett Li
  */
-public class NewLiferayModuleProjectOpMethods
-{
-    public static final Status execute( final NewLiferayModuleProjectOp op, final ProgressMonitor pm )
-    {
-        final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
+public class NewLiferayModuleProjectOpMethods {
 
-        monitor.beginTask( "Creating Liferay module project (this process may take several minutes)", 100 ); //$NON-NLS-1$
+	@SuppressWarnings("unchecked")
+	public static void addProperties(File dest, List<String> properties) throws Exception {
+		if ((properties == null) || properties.isEmpty()) {
+			return;
+		}
 
-        Status retval = null;
+		try {
+			ASTParser parser = ASTParser.newParser(AST.JLS8);
 
-        try
-        {
-            final NewLiferayProjectProvider<BaseModuleOp> projectProvider = op.getProjectProvider().content( true );
+			String readContents = FileUtil.readContents(dest, true);
 
-            final IStatus status = projectProvider.createNewProject( op, monitor );
+			parser.setSource(readContents.toCharArray());
 
-            retval = StatusBridge.create( status );
+			parser.setKind(ASTParser.K_COMPILATION_UNIT);
 
-            final String projectName = op.getProjectName().content();
-            final String className = op.getComponentName().content();
-            final String packageName = op.getPackageName().content();
-            final String projectTemplateName = op.getProjectTemplateName().content();
+			parser.setResolveBindings(true);
 
-            IPath location = PathBridge.create( op.getLocation().content() );
-            IPath projectLocation = location;
+			CompilationUnit cu = (CompilationUnit)parser.createAST(new NullProgressMonitor());
 
-            final String lastSegment = location.lastSegment();
+			cu.recordModifications();
 
-            if( location != null && location.segmentCount() > 0 )
-            {
-                if( !lastSegment.equals( projectName ) )
-                {
-                    projectLocation = location.append( projectName );
-                }
-            }
+			Document document = new Document(new String(readContents));
 
+			cu.accept(
+				new ASTVisitor() {
 
-            final List<IPath> finalClassPaths = getClassFilePath( projectName, className, packageName, projectTemplateName, projectLocation );
+					@Override
+					public boolean visit(NormalAnnotation node) {
+						String qualifiedName = node.getTypeName().getFullyQualifiedName();
 
-            for( IPath classFilePath : finalClassPaths )
-            {
-                final File finalClassFile = classFilePath.toFile();
+						if (qualifiedName.equals("Component")) {
+							ASTRewrite rewrite = ASTRewrite.create(cu.getAST());
 
-                if( finalClassFile.exists() )
-                {
-                    ElementList<PropertyKey> propertyKeys = op.getPropertyKeys();
+							AST ast = cu.getAST();
 
-                    final List<String> properties = new ArrayList<String>();
+							List<ASTNode> values = node.values();
 
-                    for( PropertyKey propertyKey : propertyKeys )
-                    {
-                        properties.add( propertyKey.getName().content( true ) + "=" + propertyKey.getValue().content( true ) );
-                    }
+							boolean hasProperty = false;
 
-                    NewLiferayModuleProjectOpMethods.addProperties( finalClassFile, properties );
+							for (ASTNode astNode : values) {
+								if (astNode instanceof MemberValuePair) {
+									MemberValuePair pairNode = (MemberValuePair)astNode;
 
-                    CoreUtil.getProject( op.getProjectName().content() ).refreshLocal( IResource.DEPTH_INFINITE, monitor );
-                }
-            }
+									String fullQualifiedName = pairNode.getName().getFullyQualifiedName();
 
-            if( retval.ok() )
-            {
-                updateBuildPrefs( op );
-            }
-        }
-        catch( Exception e )
-        {
-            final String msg = "Error creating Liferay module project."; //$NON-NLS-1$
-            ProjectCore.logError( msg, e );
+									if (fullQualifiedName.equals("property")) {
+										Expression express = pairNode.getValue();
 
-            return Status.createErrorStatus( msg + " " + e.getMessage(), e );
-        }
+										if (express instanceof ArrayInitializer) {
+											ListRewrite lrw = rewrite.getListRewrite(
+												express, ArrayInitializer.EXPRESSIONS_PROPERTY);
 
-        return retval;
-    }
+											ArrayInitializer initializer = (ArrayInitializer)express;
 
-    private static void updateBuildPrefs( final NewLiferayModuleProjectOp op )
-    {
-        try
-        {
-            final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+											List<ASTNode> expressions = (List<ASTNode>)initializer.expressions();
 
-            prefs.put( ProjectCore.PREF_DEFAULT_MODULE_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
+											ASTNode propertyNode = null;
 
-            prefs.flush();
-        }
-        catch( Exception e )
-        {
-            final String msg = "Error updating default project build type."; //$NON-NLS-1$
-            ProjectCore.logError( msg, e );
-        }
-    }
+											for (int i = properties.size() - 1; i >= 0; i--) {
+												StringLiteral stringLiteral = ast.newStringLiteral();
 
-    private static void getClassFile( File packageRoot, List<IPath> classFiles )
-    {
-        File[] children = packageRoot.listFiles();
+												stringLiteral.setLiteralValue(properties.get(i));
 
-        if( children != null && children.length > 0 )
-        {
-            for( File child : children )
-            {
-                if( child.isDirectory() )
-                {
-                    getClassFile( child, classFiles );
-                }
-                else
-                {
-                    try
-                    {
-                        boolean hasComponentAnnotation = checkComponentAnnotation( child.getAbsoluteFile() );
+												if (!expressions.isEmpty()) {
+													propertyNode = expressions.get(expressions.size() - 1);
 
-                        if( hasComponentAnnotation )
-                        {
-                            classFiles.add( new Path( child.getAbsolutePath() ) );
-                        }
-                    }
-                    catch( Exception e )
-                    {
-                        ProjectCore.logError( e );;
-                    }
-                }
-            }
-        }
-    }
+													lrw.insertAfter(stringLiteral, propertyNode, null);
+												}
+												else {
+													lrw.insertFirst(stringLiteral, null);
+												}
+											}
+										}
 
-    private static List<IPath> getClassFilePath(
-        final String projectName, String className, final String packageName, final String projectTemplateName,
-        IPath projecLocation )
-    {
-        IPath packageNamePath = projecLocation.append( "src/main/java" );
+										hasProperty = true;
+									}
+								}
+							}
 
-        File packageRoot = packageNamePath.toFile();
+							if (hasProperty == false) {
+								ListRewrite clrw = rewrite.getListRewrite(node, NormalAnnotation.VALUES_PROPERTY);
 
-        List<IPath> classFiles = new ArrayList<IPath>();
-        getClassFile( packageRoot, classFiles );
+								ASTNode lastNode = values.get(values.size() - 1);
 
-        return classFiles;
-    }
+								ArrayInitializer newArrayInitializer = ast.newArrayInitializer();
 
-    public static String getMavenParentPomGroupId( NewLiferayModuleProjectOp op, String projectName, IPath path )
-    {
-        String retval = null;
+								MemberValuePair propertyMemberValuePair = ast.newMemberValuePair();
 
-        final File parentProjectDir = path.toFile();
-        final IStatus locationStatus = op.getProjectProvider().content().validateProjectLocation( projectName, path );
+								propertyMemberValuePair.setName(ast.newSimpleName("property"));
+								propertyMemberValuePair.setValue(newArrayInitializer);
 
-        if( locationStatus.isOK() && parentProjectDir.exists() && parentProjectDir.list().length > 0 )
-        {
-            List<String> groupId =
-                op.getProjectProvider().content().getData( "parentGroupId", String.class, parentProjectDir );
+								clrw.insertBefore(propertyMemberValuePair, lastNode, null);
 
-            if( !CoreUtil.isNullOrEmpty( groupId ) )
-            {
-                retval = groupId.get( 0 );
-            }
-        }
+								ListRewrite newLrw = rewrite.getListRewrite(
+									newArrayInitializer, ArrayInitializer.EXPRESSIONS_PROPERTY);
 
-        return retval;
-    }
+								for (String property : properties) {
+									StringLiteral stringLiteral = ast.newStringLiteral();
 
-    public static String getMavenParentPomVersion( NewLiferayModuleProjectOp op, String projectName, IPath path )
-    {
-        String retval = null;
+									stringLiteral.setLiteralValue(property);
 
-        final File parentProjectDir = path.toFile();
-        final IStatus locationStatus = op.getProjectProvider().content().validateProjectLocation( projectName, path );
+									newLrw.insertAt(stringLiteral, 0, null);
+								}
+							}
 
-        if( locationStatus.isOK() && parentProjectDir.exists() && parentProjectDir.list().length > 0 )
-        {
-            List<String> version =
-                op.getProjectProvider().content().getData( "parentVersion", String.class, parentProjectDir );
+							try (OutputStream fos = Files.newOutputStream(dest.toPath())) {
+								TextEdit edits = rewrite.rewriteAST(document, null);
 
-            if( !CoreUtil.isNullOrEmpty( version ) )
-            {
-                retval = version.get( 0 );
-            }
-        }
+								edits.apply(document);
 
-        return retval;
-    }
+								fos.write(document.get().getBytes());
 
-    private static class CheckComponentAnnotationVistor extends ASTVisitor
-    {
+								fos.flush();
+							}
+							catch (Exception e) {
+								ProjectCore.logError(e);
+							}
+						}
 
-        public CheckComponentAnnotationVistor()
-        {
-            super();
-        }
+						return super.visit(node);
+					}
 
-        private boolean hasComponentAnnotation = false;
+				});
+		}
+		catch (Exception e) {
+			ProjectCore.logError("error when adding properties to " + dest.getAbsolutePath(), e);
+		}
+	}
 
-        @Override
-        public boolean visit( NormalAnnotation node )
-        {
-            if( node.getTypeName().getFullyQualifiedName().equals( "Component" ) )
-            {
-                hasComponentAnnotation = true;
-            }
+	public static boolean checkComponentAnnotation(File dest) throws Exception {
+		try {
+			ASTParser parser = ASTParser.newParser(AST.JLS8);
 
-            return super.visit( node );
-        }
+			String readContents = FileUtil.readContents(dest, true);
 
-        public boolean hasComponentAnnotation()
-        {
-            return this.hasComponentAnnotation;
-        }
-    }
+			parser.setSource(readContents.toCharArray());
 
-    public static boolean checkComponentAnnotation( File dest ) throws Exception
-    {
-        try
-        {
-            ASTParser parser = ASTParser.newParser( AST.JLS8 );
-            String readContents = FileUtil.readContents( dest, true );
-            parser.setSource( readContents.toCharArray() );
-            parser.setKind( ASTParser.K_COMPILATION_UNIT );
-            parser.setResolveBindings( true );
-            final CompilationUnit cu = (CompilationUnit) parser.createAST( new NullProgressMonitor() );
-            CheckComponentAnnotationVistor componentAnnotationVistor = new CheckComponentAnnotationVistor();
-            cu.accept( componentAnnotationVistor );
+			parser.setKind(ASTParser.K_COMPILATION_UNIT);
 
-            return componentAnnotationVistor.hasComponentAnnotation();
-        }
-        catch( Exception e )
-        {
-            ProjectCore.logError( "error when adding properties to " + dest.getAbsolutePath(), e );
-        }
+			parser.setResolveBindings(true);
 
-        return false;
-    }
+			CompilationUnit cu = (CompilationUnit)parser.createAST(new NullProgressMonitor());
 
-    @SuppressWarnings( "unchecked" )
-    public static void addProperties( File dest, List<String> properties ) throws Exception
-    {
-        try
-        {
-            if( properties == null || properties.size() < 1 )
-            {
-                return;
-            }
+			CheckComponentAnnotationVistor componentAnnotationVistor = new CheckComponentAnnotationVistor();
 
-            ASTParser parser = ASTParser.newParser( AST.JLS8 );
-            String readContents = FileUtil.readContents( dest, true );
-            parser.setSource( readContents.toCharArray() );
-            parser.setKind( ASTParser.K_COMPILATION_UNIT );
-            parser.setResolveBindings( true );
-            final CompilationUnit cu = (CompilationUnit) parser.createAST( new NullProgressMonitor() );
-            cu.recordModifications();
-            Document document = new Document( new String( readContents ) );
-            cu.accept( new ASTVisitor()
-            {
+			cu.accept(componentAnnotationVistor);
 
-                @Override
-                public boolean visit( NormalAnnotation node )
-                {
-                    if( node.getTypeName().getFullyQualifiedName().equals( "Component" ) )
-                    {
-                        ASTRewrite rewrite = ASTRewrite.create( cu.getAST() );
-                        AST ast = cu.getAST();
-                        List<ASTNode> values = node.values();
-                        boolean hasProperty = false;
+			return componentAnnotationVistor.hasComponentAnnotation();
+		}
+		catch (Exception e) {
+			ProjectCore.logError("error when adding properties to " + dest.getAbsolutePath(), e);
+		}
 
-                        for( ASTNode astNode : values )
-                        {
-                            if( astNode instanceof MemberValuePair )
-                            {
-                                MemberValuePair pairNode = (MemberValuePair) astNode;
+		return false;
+	}
 
-                                if( pairNode.getName().getFullyQualifiedName().equals( "property" ) )
-                                {
-                                    Expression express = pairNode.getValue();
+	public static final Status execute(NewLiferayModuleProjectOp op, ProgressMonitor pm) {
+		IProgressMonitor monitor = ProgressMonitorBridge.create(pm);
 
-                                    if( express instanceof ArrayInitializer )
-                                    {
-                                        ListRewrite lrw =
-                                            rewrite.getListRewrite( express, ArrayInitializer.EXPRESSIONS_PROPERTY );
-                                        ArrayInitializer initializer = (ArrayInitializer) express;
-                                        List<ASTNode> expressions = (List<ASTNode>) initializer.expressions();
-                                        ASTNode propertyNode = null;
+		monitor.beginTask("Creating Liferay module project (this process may take several minutes)", 100);
 
-                                        for( int i = properties.size() - 1; i >= 0; i-- )
-                                        {
-                                            StringLiteral stringLiteral = ast.newStringLiteral();
-                                            stringLiteral.setLiteralValue( properties.get( i ) );
+		Status retval = null;
 
-                                            if( expressions.size() > 0 )
-                                            {
-                                                propertyNode = expressions.get( expressions.size() - 1 );
-                                                lrw.insertAfter( stringLiteral, propertyNode, null );
-                                            }
-                                            else
-                                            {
-                                                lrw.insertFirst( stringLiteral, null );
-                                            }
-                                        }
-                                    }
-                                    hasProperty = true;
-                                }
-                            }
-                        }
+		try {
+			NewLiferayProjectProvider<BaseModuleOp> projectProvider = op.getProjectProvider().content(true);
 
-                        if( hasProperty == false )
-                        {
-                            ListRewrite clrw = rewrite.getListRewrite( node, NormalAnnotation.VALUES_PROPERTY );
-                            ASTNode lastNode = values.get( values.size() - 1 );
+			IStatus status = projectProvider.createNewProject(op, monitor);
 
-                            ArrayInitializer newArrayInitializer = ast.newArrayInitializer();
-                            MemberValuePair propertyMemberValuePair = ast.newMemberValuePair();
+			retval = StatusBridge.create(status);
 
-                            propertyMemberValuePair.setName( ast.newSimpleName( "property" ) );
-                            propertyMemberValuePair.setValue( newArrayInitializer );
+			String projectName = op.getProjectName().content();
 
-                            clrw.insertBefore( propertyMemberValuePair, lastNode, null );
-                            ListRewrite newLrw =
-                                rewrite.getListRewrite( newArrayInitializer, ArrayInitializer.EXPRESSIONS_PROPERTY );
+			IPath location = PathBridge.create(op.getLocation().content());
 
-                            for( String property : properties )
-                            {
-                                StringLiteral stringLiteral = ast.newStringLiteral();
-                                stringLiteral.setLiteralValue( property );
-                                newLrw.insertAt( stringLiteral, 0, null );
-                            }
-                        }
-                        try(OutputStream fos = Files.newOutputStream( dest.toPath() ))
-                        {
-                            TextEdit edits = rewrite.rewriteAST( document, null );
-                            edits.apply( document );
-                            fos.write( document.get().getBytes() );
-                            fos.flush();
-                        }
-                        catch( Exception e )
-                        {
-                            ProjectCore.logError( e );
-                        }
-                    }
-                    return super.visit( node );
-                }
-            } );
-        }
-        catch( Exception e )
-        {
-            ProjectCore.logError( "error when adding properties to " + dest.getAbsolutePath(), e );
-        }
-    }
+			IPath projectLocation = location;
+
+			String lastSegment = location.lastSegment();
+
+			if ((location != null) && (location.segmentCount() > 0) && !lastSegment.equals(projectName)) {
+				projectLocation = location.append(projectName);
+			}
+
+			List<IPath> finalClassPaths = _getClassFilePath(projectLocation);
+
+			for (IPath classFilePath : finalClassPaths) {
+				File finalClassFile = classFilePath.toFile();
+
+				if (finalClassFile.exists()) {
+					ElementList<PropertyKey> propertyKeys = op.getPropertyKeys();
+
+					List<String> properties = new ArrayList<>();
+
+					for (PropertyKey propertyKey : propertyKeys) {
+						properties.add(
+							propertyKey.getName().content(true) + "=" + propertyKey.getValue().content(true));
+					}
+
+					addProperties(finalClassFile, properties);
+
+					IProject project = CoreUtil.getProject(op.getProjectName().content());
+
+					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+				}
+			}
+
+			if (retval.ok()) {
+				_updateBuildPrefs(op);
+			}
+		}
+		catch (Exception e) {
+			String msg = "Error creating Liferay module project.";
+
+			ProjectCore.logError(msg, e);
+
+			return Status.createErrorStatus(msg + " " + e.getMessage(), e);
+		}
+
+		return retval;
+	}
+
+	public static String getMavenParentPomGroupId(NewLiferayModuleProjectOp op, String projectName, IPath path) {
+		String retval = null;
+
+		File parentProjectDir = path.toFile();
+
+		NewLiferayProjectProvider<BaseModuleOp> provider = op.getProjectProvider().content();
+
+		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
+
+		if (locationStatus.isOK() && parentProjectDir.exists() && (parentProjectDir.list().length > 0)) {
+			List<String> groupId = provider.getData("parentGroupId", String.class, parentProjectDir);
+
+			if (!CoreUtil.isNullOrEmpty(groupId)) {
+				retval = groupId.get(0);
+			}
+		}
+
+		return retval;
+	}
+
+	public static String getMavenParentPomVersion(NewLiferayModuleProjectOp op, String projectName, IPath path) {
+		String retval = null;
+
+		File parentProjectDir = path.toFile();
+
+		NewLiferayProjectProvider<BaseModuleOp> provider = op.getProjectProvider().content();
+
+		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
+
+		if (locationStatus.isOK() && parentProjectDir.exists() && (parentProjectDir.list().length > 0)) {
+			List<String> version = provider.getData("parentVersion", String.class, parentProjectDir);
+
+			if (!CoreUtil.isNullOrEmpty(version)) {
+				retval = version.get(0);
+			}
+		}
+
+		return retval;
+	}
+
+	private static void _getClassFile(File packageRoot, List<IPath> classFiles) {
+		File[] children = packageRoot.listFiles();
+
+		if ((children != null) && (children.length > 0)) {
+			for (File child : children) {
+				if (child.isDirectory()) {
+					_getClassFile(child, classFiles);
+				}
+				else {
+					try {
+						boolean hasComponentAnnotation = checkComponentAnnotation(child.getAbsoluteFile());
+
+						if (hasComponentAnnotation) {
+							classFiles.add(new Path(child.getAbsolutePath()));
+						}
+					}
+					catch (Exception e) {
+						ProjectCore.logError(e);
+					}
+				}
+			}
+		}
+	}
+
+	private static List<IPath> _getClassFilePath(IPath projecLocation) {
+		IPath packageNamePath = projecLocation.append("src/main/java");
+
+		File packageRoot = packageNamePath.toFile();
+
+		List<IPath> classFiles = new ArrayList<>();
+
+		_getClassFile(packageRoot, classFiles);
+
+		return classFiles;
+	}
+
+	private static void _updateBuildPrefs(NewLiferayModuleProjectOp op) {
+		try {
+			IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
+
+			prefs.put(ProjectCore.PREF_DEFAULT_MODULE_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text());
+
+			prefs.flush();
+		}
+		catch (Exception e) {
+			String msg = "Error updating default project build type.";
+
+			ProjectCore.logError(msg, e);
+		}
+	}
+
+	private static class CheckComponentAnnotationVistor extends ASTVisitor {
+
+		public CheckComponentAnnotationVistor() {
+		}
+
+		public boolean hasComponentAnnotation() {
+			return _hasComponentAnnotation;
+		}
+
+		@Override
+		public boolean visit(NormalAnnotation node) {
+			String qualifiedName = node.getTypeName().getFullyQualifiedName();
+
+			if (qualifiedName.equals("Component")) {
+				_hasComponentAnnotation = true;
+			}
+
+			return super.visit(node);
+		}
+
+		private boolean _hasComponentAnnotation = false;
+
+	}
+
 }

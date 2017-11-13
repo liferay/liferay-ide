@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.StatusBridge;
@@ -34,119 +35,107 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Andy Wu
  */
-public class WorkspaceNameValidationService extends ValidationService
-{
-    private static final String PROJECT_NAME_REGEX = "[A-Za-z0-9_\\-.]+";
+public class WorkspaceNameValidationService extends ValidationService {
 
-    private Listener listener;
+	@Override
+	public void dispose() {
+		super.dispose();
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+		if (_listener != null) {
+			Value<Path> location = _op().getLocation();
 
-        try
-        {
-            if( LiferayWorkspaceUtil.hasWorkspace() )
-            {
-                retval = Status.createErrorStatus( LiferayWorkspaceUtil.hasLiferayWorkspaceMsg );
+			location.detach(_listener);
 
-                return retval;
-            }
-        }
-        catch( CoreException e )
-        {
-            return StatusBridge.create( e.getStatus() );
-        }
+			_listener = null;
+		}
+	}
 
-        final NewLiferayWorkspaceOp op = op();
-        final String currentWorkspaceName = op.getWorkspaceName().content();
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-        if( CoreUtil.isNullOrEmpty( currentWorkspaceName ) )
-        {
-            return Status.createErrorStatus( "Liferay Workspace project name could not be empty." );
-        }
+		try {
+			if (LiferayWorkspaceUtil.hasWorkspace()) {
+				retval = Status.createErrorStatus(LiferayWorkspaceUtil.hasLiferayWorkspaceMsg);
 
-        final IStatus nameStatus = CoreUtil.getWorkspace().validateName( currentWorkspaceName, IResource.PROJECT );
+				return retval;
+			}
+		}
+		catch (CoreException ce) {
+			return StatusBridge.create(ce.getStatus());
+		}
 
-        if( !nameStatus.isOK() )
-        {
-            return StatusBridge.create( nameStatus );
-        }
+		NewLiferayWorkspaceOp op = _op();
 
-        if( !isValidProjectName( currentWorkspaceName ) )
-        {
-            return Status.createErrorStatus( "The name is invalid for a project." );
-        }
+		String currentWorkspaceName = op.getWorkspaceName().content();
 
-        if( ValidationUtil.isExistingProjectName( currentWorkspaceName ) )
-        {
-            return Status.createErrorStatus( "A project with that name(ignore case) already exists." );
-        }
+		if (CoreUtil.isNullOrEmpty(currentWorkspaceName)) {
+			return Status.createErrorStatus("Liferay Workspace project name could not be empty.");
+		}
 
-        if( isExistingFolder( op, currentWorkspaceName ) )
-        {
-            return Status.createErrorStatus( "Target project folder is not empty." );
-        }
+		IStatus nameStatus = CoreUtil.getWorkspace().validateName(currentWorkspaceName, IResource.PROJECT);
 
-        return retval;
-    }
+		if (!nameStatus.isOK()) {
+			return StatusBridge.create(nameStatus);
+		}
 
-    @Override
-    public void dispose()
-    {
-        super.dispose();
+		if (!_isValidProjectName(currentWorkspaceName)) {
+			return Status.createErrorStatus("The name is invalid for a project.");
+		}
 
-        if( this.listener != null )
-        {
-            op().getLocation().detach( this.listener );
+		if (ValidationUtil.isExistingProjectName(currentWorkspaceName)) {
+			return Status.createErrorStatus("A project with that name(ignore case) already exists.");
+		}
 
-            this.listener = null;
-        }
-    }
+		if (_isExistingFolder(op, currentWorkspaceName)) {
+			return Status.createErrorStatus("Target project folder is not empty.");
+		}
 
-    @Override
-    protected void initValidationService()
-    {
-        super.initValidationService();
+		return retval;
+	}
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
+	@Override
+	protected void initValidationService() {
+		super.initValidationService();
 
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		_listener = new FilteredListener<PropertyContentEvent>() {
 
-        op().getLocation().attach( this.listener );
-    }
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
 
-    private boolean isExistingFolder( NewLiferayWorkspaceOp op, String projectName )
-    {
-        Path location = op.getLocation().content();
+		};
 
-        if( location != null )
-        {
-            File targetDir = location.append( projectName ).toFile();
+		Value<Path> location = _op().getLocation();
 
-            if( targetDir.exists() && targetDir.list().length > 0 )
-            {
-                return true;
-            }
-        }
+		location.attach(_listener);
+	}
 
-        return false;
-    }
+	private boolean _isExistingFolder(NewLiferayWorkspaceOp op, String projectName) {
+		Path location = op.getLocation().content();
 
-    private boolean isValidProjectName( String currentProjectName )
-    {
-        return currentProjectName.matches( PROJECT_NAME_REGEX );
-    }
+		if (location != null) {
+			File targetDir = location.append(projectName).toFile();
 
-    private NewLiferayWorkspaceOp op()
-    {
-        return context( NewLiferayWorkspaceOp.class );
-    }
+			if (targetDir.exists() && (targetDir.list().length > 0)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private boolean _isValidProjectName(String currentProjectName) {
+		return currentProjectName.matches(_PROJECT_NAME_REGEX);
+	}
+
+	private NewLiferayWorkspaceOp _op() {
+		return context(NewLiferayWorkspaceOp.class);
+	}
+
+	private static final String _PROJECT_NAME_REGEX = "[A-Za-z0-9_\\-.]+";
+
+	private Listener _listener;
+
 }

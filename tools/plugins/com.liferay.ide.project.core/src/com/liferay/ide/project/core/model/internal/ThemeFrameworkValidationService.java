@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -19,30 +19,28 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 
-
 /**
  * @author Tao Tao
  */
-public class ThemeFrameworkValidationService extends ValidationService
-{
+public class ThemeFrameworkValidationService extends ValidationService {
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-        final String currentThemeFramework = op().getThemeFramework().content();
+		NewLiferayPluginProjectOp op = _op();
 
-        if( currentThemeFramework.equals( "JSP" ) )
-        {
-            retval = Status.createWarningStatus( "For advanced theme developers only." );
-        }
+		String currentThemeFramework = op.getThemeFramework().content();
 
-        return retval;
-    }
+		if (currentThemeFramework.equals("JSP")) {
+			retval = Status.createWarningStatus("For advanced theme developers only.");
+		}
 
-    private NewLiferayPluginProjectOp op()
-    {
-        return context( NewLiferayPluginProjectOp.class );
-    }
+		return retval;
+	}
+
+	private NewLiferayPluginProjectOp _op() {
+		return context(NewLiferayPluginProjectOp.class);
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.fragment;
 
@@ -29,67 +28,60 @@ import org.eclipse.wst.server.core.IRuntime;
  * @author Terry Jia
  * @author Andy Wu
  */
-public class HostOSGiBundlePossibleValuesService extends PossibleValuesService
-{
+public class HostOSGiBundlePossibleValuesService extends PossibleValuesService {
 
-    private List<String> bundles = null;
+	@Override
+	public boolean ordered() {
+		return true;
+	}
 
-    private FilteredListener<PropertyContentEvent> listener;
+	@Override
+	protected void compute(Set<String> values) {
+		if (_bundles != null) {
+			values.addAll(_bundles);
+		}
+		else {
+			NewModuleFragmentOp op = _op();
 
-    @Override
-    protected void initPossibleValuesService()
-    {
-        super.initPossibleValuesService();
+			if (!op.disposed()) {
+				String runtimeName = op.getLiferayRuntimeName().content();
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
+				IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                bundles = null;
-                refresh();
-            }
-        };
+				if (runtime != null) {
+					_bundles = ServerUtil.getModuleFileListFrom70Server(runtime);
 
-        op().property( NewModuleFragmentOp.PROP_LIFERAY_RUNTIME_NAME ).attach( this.listener );
-    }
+					values.addAll(_bundles);
+				}
+			}
+		}
+	}
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        if( this.bundles != null )
-        {
-            values.addAll( this.bundles );
-        }
-        else
-        {
-            final NewModuleFragmentOp op = op();
+	@Override
+	protected void initPossibleValuesService() {
+		super.initPossibleValuesService();
 
-            if( !op.disposed() )
-            {
-                final String runtimeName = op.getLiferayRuntimeName().content();
+		_listener = new FilteredListener<PropertyContentEvent>() {
 
-                IRuntime runtime = ServerUtil.getRuntime( runtimeName );
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				_bundles = null;
 
-                if ( runtime != null )
-                {
-                    bundles = ServerUtil.getModuleFileListFrom70Server(runtime);
-                    values.addAll( bundles );
-                }
-            }
+				refresh();
+			}
 
-        }
-    }
+		};
 
-    private NewModuleFragmentOp op()
-    {
-        return context( NewModuleFragmentOp.class );
-    }
+		NewModuleFragmentOp op = _op();
 
-    @Override
-    public boolean ordered()
-    {
-        return true;
-    }
+		op.property(NewModuleFragmentOp.PROP_LIFERAY_RUNTIME_NAME).attach(_listener);
+	}
+
+	private NewModuleFragmentOp _op() {
+		return context(NewModuleFragmentOp.class);
+	}
+
+	private List<String> _bundles = null;
+	private FilteredListener<PropertyContentEvent> _listener;
+
 }

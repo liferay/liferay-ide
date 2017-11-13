@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.templates.pollerprocessor;
 
@@ -22,15 +21,21 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
 
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+
 import java.net.URL;
+
 import java.nio.file.Files;
+
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,280 +49,256 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-
 /**
  * @author Simon Jiang
  */
+public class NewLiferayComponentPollerProcessorOperation extends AbstractLiferayComponentTemplate {
 
-public class NewLiferayComponentPollerProcessorOperation extends AbstractLiferayComponentTemplate
-{
-	private static final String POLLER_TEMPLATE_FILE = "pollerprocessor/pollerprocessor.ftl";
+	public NewLiferayComponentPollerProcessorOperation() {
+	}
 
-    private final static String POLLER_SUPER_CLASSES = "BasePollerProcessor";
-    private final static String POLLER_PORTLET_SUPER_CLASSES = "MVCPortlet";
+	@Override
+	public void doExecute(NewLiferayComponentOp op, IProgressMonitor monitor) throws CoreException {
+		try {
+			initializeOperation(op);
 
-    private final static String POLLER_EXTENSION_CLASSES = "PollerProcessor.class";
-    private final static String POLLER_PORTLET_EXTENSION_CLASSES = "Portlet.class";
+			project = CoreUtil.getProject(projectName);
 
-    private final static String[] POLLER_PORTLET_PROPERTIES_LIST =
-    	{
-        	"com.liferay.portlet.css-class-wrapper=portlet-pollprocessor-blade",
-        	"com.liferay.portlet.display-category=category.sample",
-        	"com.liferay.portlet.private-request-attributes=false",
-        	"com.liferay.portlet.private-session-attributes=false",
-        	"com.liferay.portlet.remoteable=true",
-        	"com.liferay.portlet.render-weight=50",
-        	"javax.portlet.expiration-cache=0",
-        	"javax.portlet.portlet.info.keywords=pollprocessor",
-        	"javax.portlet.security-role-ref=power-user,user"
-    	};
+			if (project != null) {
+				liferayProject = LiferayCore.create(project);
 
-    public NewLiferayComponentPollerProcessorOperation()
-    {
-        super();
-    }
+				if (liferayProject != null) {
+					initFreeMarker();
 
-    private List<String> getPollerPortletImports()
-    {
-        List<String> imports = new ArrayList<String>();
+					IFile pollerClassFile = prepareClassFile(componentClassName);
 
-        imports.add( "javax.portlet.Portlet" );
-        imports.add( "com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet" );
-        imports.addAll( super.getImports() );
+					_sourceCodeOperation(pollerClassFile, "poller");
 
-        return imports;
-    }
+					IFile pollerPortletClassFile = prepareClassFile(componentClassName + "Portlet");
 
-    private List<String> getPollerImports()
-    {
-        List<String> imports = new ArrayList<String>();
+					_sourceCodeOperation(pollerPortletClassFile, "pollerPortlet");
 
-        imports.add( "com.liferay.portal.kernel.json.JSONFactoryUtil" );
-        imports.add( "com.liferay.portal.kernel.json.JSONObject" );
-        imports.add( "com.liferay.portal.kernel.log.Log" );
-        imports.add( "com.liferay.portal.kernel.log.LogFactoryUtil" );
-        imports.add( "com.liferay.portal.kernel.poller.BasePollerProcessor" );
-        imports.add( "com.liferay.portal.kernel.poller.DefaultPollerResponse" );
-        imports.add( "com.liferay.portal.kernel.poller.PollerProcessor" );
-        imports.add( "com.liferay.portal.kernel.poller.PollerRequest" );
-        imports.add( "com.liferay.portal.kernel.poller.PollerResponse" );
-        imports.add( "java.util.Date" );
+					doMergeResourcesOperation();
 
-        imports.addAll( super.getImports() );
-        return imports;
-    }
+					project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+				}
+			}
+		}
+		catch (Exception e) {
+			throw new CoreException(ProjectCore.createErrorStatus(e));
+		}
+	}
 
-    private List<String> getPollerProperties()
-    {
-        List<String> properties = new ArrayList<String>();
+	@Override
+	protected void doMergeResourcesOperation() throws CoreException {
+		try {
+			IFolder resourceFolder = liferayProject.getSourceFolder("resources");
 
-        for( String property : super.getProperties() )
-        {
-            properties.add( property );
-        }
-        properties.add( "javax.portlet.name=" + this.componentClassName + "Portlet" );
+			IFolder contentFolder = resourceFolder.getFolder("content");
 
-        return properties;
-    }
+			IFile languageProperties = contentFolder.getFile(new Path("Language.properties"));
 
-    private List<String> getPollerPortletProperties()
-    {
-        List<String> properties = new ArrayList<String>();
-        properties.addAll( Arrays.asList( POLLER_PORTLET_PROPERTIES_LIST ) );
+			File languagePropertiesFile = languageProperties.getLocation().toFile();
 
-        for( String property : super.getProperties() )
-        {
-            properties.add( property );
-        }
-        properties.add( "javax.portlet.init-param.template-path=/");
-        properties.add( "com.liferay.portlet.poller-processor-class=" + this.packageName + "." + this.componentClassName );
-        properties.add( "javax.portlet.display-name=" + this.componentClassName );
-        properties.add( "javax.portlet.portlet.info.short-title=" + this.componentClassName );
-        properties.add( "javax.portlet.portlet.info.title=" + this.componentClassName );
-        properties.add( "com.liferay.portlet.header-portlet-javascript=/" + componentClassName.toLowerCase() + "/js/main.js" );
-        properties.add( "javax.portlet.init-param.view-template=/" + componentClassName.toLowerCase() + "/view.jsp" );
-        properties.add( "javax.portlet.resource-bundle=content.Language" );
+			if (FileUtil.exists(languagePropertiesFile)) {
+				String originContent = FileUtil.readContents(languagePropertiesFile, true);
 
-        return properties;
-    }
+				Class<?> clazz = getClass();
 
-    private String getPollerExtensionClass()
-    {
-        return POLLER_EXTENSION_CLASSES;
-    }
+				URL sampleFileURL = clazz.getClassLoader().getResource(
+					TEMPLATE_DIR + "/pollerprocessor/poller-language.properties");
 
-    private String getPollerPortletExtensionClass()
-    {
-        return POLLER_PORTLET_EXTENSION_CLASSES;
-    }
+				String addContent = FileUtil.readContents(
+					new File(FileLocator.toFileURL(sampleFileURL).getFile()), true);
 
-    private String getPollerSuperClass()
-    {
-        return POLLER_SUPER_CLASSES;
-    }
+				String totalContent = originContent + System.getProperty("line.separator") + addContent;
 
-    private String getPollerPortletSuperClass()
-    {
-        return POLLER_PORTLET_SUPER_CLASSES;
-    }
+				FileUtil.writeFile(languagePropertiesFile, totalContent.getBytes(), projectName);
+			}
+			else {
+				createSampleFile(languageProperties, "pollerprocessor/poller-language.properties");
+			}
 
-    @Override
-    public void doExecute( NewLiferayComponentOp op, IProgressMonitor monitor ) throws CoreException
-    {
-        try
-        {
-            initializeOperation( op );
+			IFolder metaFolder = resourceFolder.getFolder("META-INF/resources");
 
-            this.project = CoreUtil.getProject( projectName );
+			IFile mainJs = metaFolder.getFile(new Path(componentClassName.toLowerCase() + "/js/main.js"));
 
-            if( project != null )
-            {
-                liferayProject = LiferayCore.create( project );
+			if (FileUtil.notExists(mainJs)) {
+				createSampleFile(mainJs, "pollerprocessor/poller-main.js");
+			}
 
-                if( liferayProject != null )
-                {
-                    initFreeMarker();
+			IFile initJsp = metaFolder.getFile(new Path(componentClassName.toLowerCase() + "/init.jsp"));
 
-                    IFile pollerClassFile = prepareClassFile( this.componentClassName );
-                    doSourceCodeOperation( pollerClassFile, "poller" );
+			if (FileUtil.notExists(initJsp)) {
+				createSampleFile(initJsp, "pollerprocessor/poller-init.jsp");
+			}
 
-                    IFile pollerPortletClassFile = prepareClassFile( this.componentClassName + "Portlet" );
-                    doSourceCodeOperation( pollerPortletClassFile, "pollerPortlet" );
+			IFile viewJsp = metaFolder.getFile(new Path(componentClassName.toLowerCase() + "/view.jsp"));
 
-                    doMergeResourcesOperation();
+			if (FileUtil.notExists(viewJsp)) {
+				createSampleFile(
+					viewJsp, "pollerprocessor/poller-view.jsp", "/init.jsp",
+					"/" + componentClassName.toLowerCase() + "/init.jsp");
+			}
+		}
+		catch (Exception e) {
+			throw new CoreException(ProjectCore.createErrorStatus(e));
+		}
+	}
 
-                    project.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            throw new CoreException( ProjectCore.createErrorStatus( e ) );
-        }
-    }
+	@Override
+	protected List<String[]> getComponentDependency() throws CoreException {
+		List<String[]> componentDependency = super.getComponentDependency();
 
-    private Map<String, Object> getTemplateMap( String type )
-    {
-        Map<String, Object> root = new HashMap<String, Object>();
+		componentDependency.add(new String[] {"javax.portlet", "portlet-api", "2.0"});
 
-        if( type.equals( "poller" ) )
-        {
-            root.put( "importlibs", getPollerImports() );
-            root.put( "properties", getPollerProperties() );
-            root.put( "classname", componentClassName );
-            root.put( "supperclass", getPollerSuperClass() );
-            root.put( "extensionclass", getPollerExtensionClass() );
-        }
-        else
-        {
-            root.put( "importlibs", getPollerPortletImports() );
-            root.put( "properties", getPollerPortletProperties() );
-            root.put( "classname", componentClassName + "Portlet" );
-            root.put( "supperclass", getPollerPortletSuperClass() );
-            root.put( "extensionclass", getPollerPortletExtensionClass() );
-        }
+		return componentDependency;
+	}
 
-        root.put( "packagename", packageName );
-        root.put( "projectname", projectName );
-        root.put( "componenttype", templateName );
+	@Override
+	protected String getTemplateFile() {
+		return _POLLER_TEMPLATE_FILE;
+	}
 
-        return root;
-    }
+	private String _getPollerExtensionClass() {
+		return _POLLER_EXTENSION_CLASSES;
+	}
 
-    @Override
-    protected String getTemplateFile()
-    {
-        return POLLER_TEMPLATE_FILE;
-    }
+	private List<String> _getPollerImports() {
+		List<String> imports = new ArrayList<>();
 
-    private void doSourceCodeOperation( IFile srcFile, String type ) throws CoreException
-    {
-        try(OutputStream fos = Files.newOutputStream( srcFile.getLocation().toFile().toPath() ))
-        {
+		imports.add("com.liferay.portal.kernel.json.JSONFactoryUtil");
+		imports.add("com.liferay.portal.kernel.json.JSONObject");
+		imports.add("com.liferay.portal.kernel.log.Log");
+		imports.add("com.liferay.portal.kernel.log.LogFactoryUtil");
+		imports.add("com.liferay.portal.kernel.poller.BasePollerProcessor");
+		imports.add("com.liferay.portal.kernel.poller.DefaultPollerResponse");
+		imports.add("com.liferay.portal.kernel.poller.PollerProcessor");
+		imports.add("com.liferay.portal.kernel.poller.PollerRequest");
+		imports.add("com.liferay.portal.kernel.poller.PollerResponse");
+		imports.add("java.util.Date");
 
-            Template temp = cfg.getTemplate( getTemplateFile() );
+		imports.addAll(super.getImports());
 
-            Map<String, Object> root = getTemplateMap( type );
+		return imports;
+	}
 
-            Writer out = new OutputStreamWriter( fos );
-            temp.process( root, out );
-            fos.flush();
-        }
-        catch( IOException | TemplateException e )
-        {
-            throw new CoreException( ProjectCore.createErrorStatus( e ) );
-        }
-    }
+	private String _getPollerPortletExtensionClass() {
+		return _POLLER_PORTLET_EXTENSION_CLASSES;
+	}
 
-    @Override
-    protected void doMergeResourcesOperation() throws CoreException
-    {
-        try
-        {
-            IFolder resourceFolder = liferayProject.getSourceFolder( "resources" );
+	private List<String> _getPollerPortletImports() {
+		List<String> imports = new ArrayList<>();
 
-            IFolder contentFolder = resourceFolder.getFolder( "content" );
+		imports.add("javax.portlet.Portlet");
+		imports.add("com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet");
+		imports.addAll(super.getImports());
 
-            final IFile languageProperties = contentFolder.getFile( new Path( "Language.properties" ) );
+		return imports;
+	}
 
-            final File languagePropertiesFile = languageProperties.getLocation().toFile();
+	private List<String> _getPollerPortletProperties() {
+		List<String> properties = new ArrayList<>();
 
-            if( languagePropertiesFile.exists() )
-            {
-                String originContent = FileUtil.readContents( languagePropertiesFile, true );
+		Collections.addAll(properties, _POLLER_PORTLET_PROPERTIES_LIST);
 
-                URL sampleFileURL = getClass().getClassLoader().getResource(
-                    TEMPLATE_DIR + "/pollerprocessor/poller-language.properties" );
+		for (String property : super.getProperties()) {
+			properties.add(property);
+		}
 
-                String addContent =
-                    FileUtil.readContents( new File( FileLocator.toFileURL( sampleFileURL ).getFile() ), true );
+		properties.add("javax.portlet.init-param.template-path=/");
+		properties.add("com.liferay.portlet.poller-processor-class=" + packageName + "." + componentClassName);
+		properties.add("javax.portlet.display-name=" + componentClassName);
+		properties.add("javax.portlet.portlet.info.short-title=" + componentClassName);
+		properties.add("javax.portlet.portlet.info.title=" + componentClassName);
+		properties.add(
+			"com.liferay.portlet.header-portlet-javascript=/" + componentClassName.toLowerCase() + "/js/main.js");
+		properties.add("javax.portlet.init-param.view-template=/" + componentClassName.toLowerCase() + "/view.jsp");
+		properties.add("javax.portlet.resource-bundle=content.Language");
 
-                String totalContent = originContent + System.getProperty( "line.separator" ) + addContent;
+		return properties;
+	}
 
-                FileUtil.writeFile( languagePropertiesFile, totalContent.getBytes(), projectName );
-            }
-            else
-            {
-                createSampleFile( languageProperties, "pollerprocessor/poller-language.properties" );
-            }
+	private String _getPollerPortletSuperClass() {
+		return _POLLER_PORTLET_SUPER_CLASSES;
+	}
 
-            IFolder metaFolder = resourceFolder.getFolder( "META-INF/resources" );
+	private List<String> _getPollerProperties() {
+		List<String> properties = new ArrayList<>();
 
-            final IFile mainJs = metaFolder.getFile( new Path( componentClassName.toLowerCase() + "/js/main.js" ) );
+		for (String property : super.getProperties()) {
+			properties.add(property);
+		}
 
-            if( !mainJs.getLocation().toFile().exists() )
-            {
-                createSampleFile( mainJs, "pollerprocessor/poller-main.js" );
-            }
+		properties.add("javax.portlet.name=" + componentClassName + "Portlet");
 
-            final IFile initJsp = metaFolder.getFile( new Path( componentClassName.toLowerCase() + "/init.jsp" ) );
+		return properties;
+	}
 
-            if( !initJsp.getLocation().toFile().exists() )
-            {
-                createSampleFile( initJsp, "pollerprocessor/poller-init.jsp" );
-            }
+	private String _getPollerSuperClass() {
+		return _POLLER_SUPER_CLASSES;
+	}
 
-            final IFile viewJsp = metaFolder.getFile( new Path( componentClassName.toLowerCase() + "/view.jsp" ) );
+	private Map<String, Object> _getTemplateMap(String type) {
+		Map<String, Object> root = new HashMap<>();
 
-            if( !viewJsp.getLocation().toFile().exists() )
-            {
-                createSampleFile( viewJsp, "pollerprocessor/poller-view.jsp", "/init.jsp", "/" + componentClassName.toLowerCase() + "/init.jsp" );
-            }
+		if (type.equals("poller")) {
+			root.put("classname", componentClassName);
+			root.put("extensionclass", _getPollerExtensionClass());
+			root.put("importlibs", _getPollerImports());
+			root.put("properties", _getPollerProperties());
+			root.put("supperclass", _getPollerSuperClass());
+		}
+		else {
+			root.put("classname", componentClassName + "Portlet");
+			root.put("extensionclass", _getPollerPortletExtensionClass());
+			root.put("importlibs", _getPollerPortletImports());
+			root.put("properties", _getPollerPortletProperties());
+			root.put("supperclass", _getPollerPortletSuperClass());
+		}
 
-        }
-        catch( Exception e )
-        {
-            throw new CoreException( ProjectCore.createErrorStatus( e ) );
-        }
-    }
+		root.put("componenttype", templateName);
+		root.put("packagename", packageName);
+		root.put("projectname", projectName);
 
-    @Override
-    protected List<String[]> getComponentDependency() throws CoreException
-    {
-        List<String[]> componentDependency = super.getComponentDependency();
-        componentDependency.add( new String[]{ "javax.portlet", "portlet-api", "2.0"} );
-        return componentDependency;
-    }
+		return root;
+	}
+
+	private void _sourceCodeOperation(IFile srcFile, String type) throws CoreException {
+		File file = srcFile.getLocation().toFile();
+
+		try (OutputStream fos = Files.newOutputStream(file.toPath())) {
+			Template temp = cfg.getTemplate(getTemplateFile());
+
+			Map<String, Object> root = _getTemplateMap(type);
+
+			Writer out = new OutputStreamWriter(fos);
+
+			temp.process(root, out);
+
+			fos.flush();
+		}
+		catch (IOException | TemplateException e) {
+			throw new CoreException(ProjectCore.createErrorStatus(e));
+		}
+	}
+
+	private static final String _POLLER_EXTENSION_CLASSES = "PollerProcessor.class";
+
+	private static final String _POLLER_PORTLET_EXTENSION_CLASSES = "Portlet.class";
+
+	private static final String[] _POLLER_PORTLET_PROPERTIES_LIST = {
+		"com.liferay.portlet.css-class-wrapper=portlet-pollprocessor-blade",
+		"com.liferay.portlet.display-category=category.sample", "com.liferay.portlet.private-request-attributes=false",
+		"com.liferay.portlet.private-session-attributes=false", "com.liferay.portlet.remoteable=true",
+		"com.liferay.portlet.render-weight=50", "javax.portlet.expiration-cache=0",
+		"javax.portlet.portlet.info.keywords=pollprocessor", "javax.portlet.security-role-ref=power-user,user"
+	};
+
+	private static final String _POLLER_PORTLET_SUPER_CLASSES = "MVCPortlet";
+
+	private static final String _POLLER_SUPER_CLASSES = "BasePollerProcessor";
+
+	private static final String _POLLER_TEMPLATE_FILE = "pollerprocessor/pollerprocessor.ftl";
+
 }

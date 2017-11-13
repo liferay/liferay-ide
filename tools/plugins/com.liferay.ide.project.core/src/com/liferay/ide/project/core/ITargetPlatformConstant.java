@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,17 +10,17 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core;
 
 /**
  * @author Lovett Li
  */
-public interface ITargetPlatformConstant
-{
+public interface ITargetPlatformConstant {
 
-    String CURRENT_TARGETFORM_VERSION = "current_targetplatform_version";
-    String DEFAULT_TARGETFORM_VERSION = "CE-7.0.0-GA2";
+	public String CURRENT_TARGETFORM_VERSION = "current_targetplatform_version";
+
+	public String DEFAULT_TARGETFORM_VERSION = "CE-7.0.0-GA2";
 
 }

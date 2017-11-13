@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.upgrade;
 
@@ -34,96 +33,93 @@ import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 /**
  * @author Simon Jiang
  */
-public class UpgradeLiferayProjectsOpMethods
-{
+public class UpgradeLiferayProjectsOpMethods {
 
-    public static final Status execute( final UpgradeLiferayProjectsOp op, final ProgressMonitor pm )
-    {
-        Status retval = Status.createOkStatus();
+	public static final Status execute(UpgradeLiferayProjectsOp op, ProgressMonitor pm) {
+		Status retval = Status.createOkStatus();
 
-        final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
+		IProgressMonitor monitor = ProgressMonitorBridge.create(pm);
 
-        monitor.beginTask( "Upgrading Liferay plugin projects (this process may take several minutes)", 30 );
+		monitor.beginTask("Upgrading Liferay plugin projects (this process may take several minutes)", 30);
 
-        final ElementList<NamedItem> projectItems = op.getSelectedProjects();
-        final ElementList<NamedItem> upgradeActions = op.getSelectedActions();
-        final String runtimeName = op.getRuntimeName().content();
-        final List<String> projectItemNames = new ArrayList<String>();
-        final List<String> projectActionItems = new ArrayList<String>();
+		ElementList<NamedItem> projectItems = op.getSelectedProjects();
+		ElementList<NamedItem> upgradeActions = op.getSelectedActions();
+		String runtimeName = op.getRuntimeName().content();
+		List<String> projectItemNames = new ArrayList<>();
+		List<String> projectActionItems = new ArrayList<>();
 
-        for( NamedItem projectItem : projectItems )
-        {
-            projectItemNames.add( projectItem.getName().content() );
-        }
+		for (NamedItem projectItem : projectItems) {
+			projectItemNames.add(projectItem.getName().content());
+		}
 
-        for( NamedItem upgradeAction : upgradeActions )
-        {
-            projectActionItems.add( upgradeAction.getName().content() );
-        }
+		for (NamedItem upgradeAction : upgradeActions) {
+			projectActionItems.add(upgradeAction.getName().content());
+		}
 
-        Status[] upgradeStatuses = performUpgrade( projectItemNames, projectActionItems, runtimeName, monitor );
+		Status[] upgradeStatuses = _performUpgrade(projectItemNames, projectActionItems, runtimeName, monitor);
 
+		for (Status s : upgradeStatuses) {
+			if (!s.ok()) {
+				retval = Status.createErrorStatus(
+					"Some upgrade actions failed, please see Eclipse error log for more details");
+			}
+		}
 
-        for( Status s : upgradeStatuses )
-        {
-            if( !s.ok() )
-            {
-                retval =
-                    Status.createErrorStatus( "Some upgrade actions failed, please see Eclipse error log for more details" );
-            }
-        }
+		return retval;
+	}
 
-        return retval;
-    }
+	private static HashMap<String, AbstractUpgradeProjectHandler> _getActionMap(
+		List<AbstractUpgradeProjectHandler> upgradeActions) {
 
-    private static HashMap<String, AbstractUpgradeProjectHandler> getActionMap(
-        List<AbstractUpgradeProjectHandler> upgradeActions )
-    {
-        HashMap<String, AbstractUpgradeProjectHandler> actionMaps = new HashMap<String,AbstractUpgradeProjectHandler>();
+		HashMap<String, AbstractUpgradeProjectHandler> actionMaps = new HashMap<>();
 
-        for( AbstractUpgradeProjectHandler upgradeHandler : upgradeActions)
-        {
-            actionMaps.put( upgradeHandler.getName(), upgradeHandler );
-        }
+		for (AbstractUpgradeProjectHandler upgradeHandler : upgradeActions) {
+			actionMaps.put(upgradeHandler.getName(), upgradeHandler);
+		}
 
-        return actionMaps;
-    }
+		return actionMaps;
+	}
 
-    private static final Status[] performUpgrade(
-        final List<String> projectItems, final List<String> projectActions, final String runtimeName,
-        final IProgressMonitor monitor )
-    {
-        final List<Status> retval = new ArrayList<Status>();
+	private static Status[] _performUpgrade(
+		List<String> projectItems, List<String> projectActions, String runtimeName, IProgressMonitor monitor) {
 
-        int worked = 0;
-        int workUnit = projectItems.size();
-        int actionUnit = projectActions.size();
-        int totalWork = 100;
-        int perUnit = totalWork / ( workUnit * actionUnit );
-        monitor.beginTask( "Upgrading Project ", totalWork );
+		List<Status> retval = new ArrayList<>();
 
-        final UpgradeProjectHandlerReader upgradeLiferayProjectActionReader = new UpgradeProjectHandlerReader();
-        final HashMap<String, AbstractUpgradeProjectHandler> actionMap =
-            getActionMap( upgradeLiferayProjectActionReader.getUpgradeActions() );
+		int worked = 0;
+		int workUnit = projectItems.size();
+		int actionUnit = projectActions.size();
+		int totalWork = 100;
 
-        for( String projectItem : projectItems )
-        {
-            if( projectItem != null )
-            {
-                final IProject project = ProjectUtil.getProject( projectItem );
-                monitor.subTask( "Upgrading project " + project.getName() );
+		int perUnit = totalWork / (workUnit * actionUnit);
 
-                for( String action : projectActions )
-                {
-                    final AbstractUpgradeProjectHandler upgradeLiferayProjectAction = actionMap.get( action );
-                    final Status status = upgradeLiferayProjectAction.execute( project, runtimeName, monitor, perUnit );
-                    retval.add( status );
-                    worked = worked + totalWork / ( workUnit * actionUnit );
-                    monitor.worked( worked );
-                }
-            }
-        }
+		monitor.beginTask("Upgrading Project ", totalWork);
 
-        return retval.toArray( new Status[0] );
-    }
+		UpgradeProjectHandlerReader upgradeLiferayProjectActionReader = new UpgradeProjectHandlerReader();
+
+		HashMap<String, AbstractUpgradeProjectHandler> actionMap = _getActionMap(
+			upgradeLiferayProjectActionReader.getUpgradeActions());
+
+		for (String projectItem : projectItems) {
+			if (projectItem != null) {
+				IProject project = ProjectUtil.getProject(projectItem);
+
+				monitor.subTask("Upgrading project " + project.getName());
+
+				for (String action : projectActions) {
+					AbstractUpgradeProjectHandler upgradeLiferayProjectAction = actionMap.get(action);
+
+					Status status = upgradeLiferayProjectAction.execute(project, runtimeName, monitor, perUnit);
+
+					retval.add(status);
+
+					worked = worked + totalWork / (workUnit * actionUnit);
+
+					monitor.worked(worked);
+				}
+			}
+		}
+
+		return retval.toArray(new Status[0]);
+	}
+
 }

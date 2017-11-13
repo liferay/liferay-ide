@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -26,66 +25,62 @@ import org.eclipse.sapphire.Value;
 /**
  * @author Simon Jiang
  */
-public class NewLiferayComponentLocationDerivedService extends DerivedValueService
-{
+public class NewLiferayComponentLocationDerivedService extends DerivedValueService {
 
-    private FilteredListener<PropertyContentEvent> listener;
+	@Override
+	public void dispose() {
+		NewLiferayComponentOp op = _op();
 
-    @Override
-    protected void initDerivedValueService()
-    {
-        super.initDerivedValueService();
+		if (op != null) {
+			op.property(NewLiferayComponentOp.PROP_PROJECT_NAME).detach(_listener);
+		}
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
+		super.dispose();
+	}
 
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+	@Override
+	protected String compute() {
+		String retVal = null;
 
-        op().property( NewLiferayComponentOp.PROP_PROJECT_NAME ).attach( this.listener );
-    }
+		Value<String> projectName = _op().getProjectName();
 
-    @Override
-    protected String compute()
-    {
-        String retVal = null;
+		if (projectName != null) {
+			String iProjectName = projectName.content(true);
 
-        final Value<String> projectName = op().getProjectName();
+			if (iProjectName != null) {
+				IProject project = CoreUtil.getProject(iProjectName);
 
-        if( projectName != null )
-        {
-            final String iProjectName = projectName.content( true );
+				if (project != null) {
+					return project.getLocation().toOSString();
+				}
+			}
+		}
 
-            if( iProjectName != null )
-            {
-                final IProject project = CoreUtil.getProject( iProjectName );
+		return retVal;
+	}
 
-                if( project != null )
-                {
-                    return project.getLocation().toOSString();
-                }
-            }
-        }
+	@Override
+	protected void initDerivedValueService() {
+		super.initDerivedValueService();
 
-        return retVal;
-    }
+		_listener = new FilteredListener<PropertyContentEvent>() {
 
-    private NewLiferayComponentOp op()
-    {
-        return context( NewLiferayComponentOp.class );
-    }
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
 
-    @Override
-    public void dispose()
-    {
-        if( op() != null )
-        {
-            op().property( NewLiferayComponentOp.PROP_PROJECT_NAME ).detach( this.listener );
-        }
-        super.dispose();
-    }
+		};
+
+		NewLiferayComponentOp op = _op();
+
+		op.property(NewLiferayComponentOp.PROP_PROJECT_NAME).attach(_listener);
+	}
+
+	private NewLiferayComponentOp _op() {
+		return context(NewLiferayComponentOp.class);
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+
 }

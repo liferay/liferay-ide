@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.upgrade;
 
@@ -34,33 +33,25 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 /**
  * @author Simon Jiang
  */
-public interface UpgradeLiferayProjectsOp extends ExecutableElement, HasLiferayRuntime
-{
+public interface UpgradeLiferayProjectsOp extends ExecutableElement, HasLiferayRuntime {
 
-    ElementType TYPE = new ElementType( UpgradeLiferayProjectsOp.class );
+	public ElementType TYPE = new ElementType(UpgradeLiferayProjectsOp.class);
 
+	@DelegateImplementation(UpgradeLiferayProjectsOpMethods.class)
+	public Status execute(ProgressMonitor monitor);
 
-    // *** Project Name ***
+	public ElementList<NamedItem> getSelectedActions();
 
-    @Type( base = NamedItem.class )
-    ListProperty PROP_SELECTED_PROJECTS = new ListProperty( TYPE, "SelectedProjects" );
+	public ElementList<NamedItem> getSelectedProjects();
 
-    ElementList<NamedItem> getSelectedProjects();
+	@Service(impl = LeastVersionRuntimeValidationService.class)
+	public ValueProperty PROP_RUNTIME_NAME = new ValueProperty(TYPE, HasLiferayRuntime.PROP_RUNTIME_NAME);
 
-    // *** Target Runtime Name ***
+	@Length(min = 1)
+	@Type(base = NamedItem.class)
+	public ListProperty PROP_SELECTED_ACTIONS = new ListProperty(TYPE, "SelectedActions");
 
-    @Service( impl = LeastVersionRuntimeValidationService.class )
-    ValueProperty PROP_RUNTIME_NAME = new ValueProperty( TYPE, HasLiferayRuntime.PROP_RUNTIME_NAME ); 
+	@Type(base = NamedItem.class)
+	public ListProperty PROP_SELECTED_PROJECTS = new ListProperty(TYPE, "SelectedProjects");
 
-    // *** Selected Upgrade Action Name ***
-
-    @Type( base = NamedItem.class )
-    @Length( min = 1 )
-    ListProperty PROP_SELECTED_ACTIONS = new ListProperty( TYPE, "SelectedActions" );
-
-    ElementList<NamedItem> getSelectedActions();
-
-
-    @DelegateImplementation( UpgradeLiferayProjectsOpMethods.class )
-    Status execute( ProgressMonitor monitor );
 }

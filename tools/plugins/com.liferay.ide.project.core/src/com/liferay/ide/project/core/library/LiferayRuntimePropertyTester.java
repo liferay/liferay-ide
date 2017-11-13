@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.library;
 
@@ -24,31 +23,32 @@ import org.eclipse.wst.server.core.internal.facets.FacetUtil;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class LiferayRuntimePropertyTester extends PropertyTester
-{
+@SuppressWarnings("restriction")
+public class LiferayRuntimePropertyTester extends PropertyTester {
 
-    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
-    {
-        boolean retval = false;
+	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
+		boolean retval = false;
 
-        try
-        {
-            EnablementExpressionContext ctx = (EnablementExpressionContext) receiver;
-            IFacetedProjectBase projectBase = ctx.getFacetedProject();
-            IRuntime serverRuntime = FacetUtil.getRuntime( projectBase.getPrimaryRuntime() );
+		try {
+			EnablementExpressionContext ctx = (EnablementExpressionContext)receiver;
 
-            if( serverRuntime.getRuntimeType().getId().startsWith( "com.liferay." ) ) //$NON-NLS-1$
-            {
-                retval = true;
-            }
-        }
-        catch( Throwable t )
-        {
-            // don't log error just means test returns false;
-        }
+			IFacetedProjectBase projectBase = ctx.getFacetedProject();
 
-        return retval;
-    }
+			IRuntime serverRuntime = FacetUtil.getRuntime(projectBase.getPrimaryRuntime());
+
+			String runtimeId = serverRuntime.getRuntimeType().getId();
+
+			if (runtimeId.startsWith("com.liferay.")) {
+				retval = true;
+			}
+		}
+		catch (Throwable t) {
+
+			// don't log error just means test returns false;
+
+		}
+
+		return retval;
+	}
 
 }

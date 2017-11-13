@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
@@ -25,39 +25,33 @@ import java.util.Set;
 
 import org.eclipse.sapphire.PossibleValuesService;
 
-
 /**
  * @author Simon Jiang
  */
-public class ModuleProjectProviderPossibleValuesService extends PossibleValuesService
-{
-    private List<String> possibleValues;
+public class ModuleProjectProviderPossibleValuesService extends PossibleValuesService {
 
-    protected void initPossibleValuesService()
-    {
-        possibleValues = new ArrayList<String>();
+	@Override
+	public boolean ordered() {
+		return true;
+	}
 
-        for( final ILiferayProjectProvider provider : LiferayCore.getProviders( "module") )
-        {
-            if( provider instanceof NewLiferayProjectProvider<?>)
-            {
-                possibleValues.add( provider.getShortName() );
-            }
-        }
+	@Override
+	protected void compute(Set<String> values) {
+		values.addAll(_possibleValues);
+	}
 
-        Collections.sort( possibleValues );
-    }
+	protected void initPossibleValuesService() {
+		_possibleValues = new ArrayList<>();
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        values.addAll( this.possibleValues );
-    }
+		for (ILiferayProjectProvider provider : LiferayCore.getProviders("module")) {
+			if (provider instanceof NewLiferayProjectProvider<?>) {
+				_possibleValues.add(provider.getShortName());
+			}
+		}
 
-    @Override
-    public boolean ordered()
-    {
-        return true;
-    }
+		Collections.sort(_possibleValues);
+	}
+
+	private List<String> _possibleValues;
 
 }

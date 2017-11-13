@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -23,58 +22,58 @@ import org.eclipse.sapphire.PropertyContentEvent;
  * @author Andy Wu
  * @author Gregory Amerson
  */
-public class PackageNameDefaultValueService extends DefaultValueService
-{
+public class PackageNameDefaultValueService extends DefaultValueService {
 
-    private FilteredListener<PropertyContentEvent> listener;
+	@Override
+	public void dispose() {
+		NewLiferayModuleProjectOp op = _op();
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+		if (op != null) {
+			op.property(NewLiferayModuleProjectOp.PROP_PROJECT_NAME).detach(_listener);
+		}
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		super.dispose();
+	}
 
-        op().property( NewLiferayModuleProjectOp.PROP_PROJECT_NAME ).attach( this.listener );
-    }
+	@Override
+	protected String compute() {
+		String retVal = "";
 
-    @Override
-    protected String compute()
-    {
-        String retVal = "";
+		NewLiferayModuleProjectOp op = _op();
 
-        final String projectName = op().getProjectName().content( true );
+		String projectName = op.getProjectName().content(true);
 
-        if( projectName != null )
-        {
-            String packageName = projectName.replace('-', '.');
-            retVal = packageName.replace(' ', '.');
+		if (projectName != null) {
+			String packageName = projectName.replace('-', '.');
 
-        }
+			retVal = packageName.replace(' ', '.');
+		}
 
-        return retVal;
-    }
+		return retVal;
+	}
 
-    private NewLiferayModuleProjectOp op()
-    {
-        return context( NewLiferayModuleProjectOp.class );
-    }
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
 
-    @Override
-    public void dispose()
-    {
-        if( op() != null )
-        {
-            op().property( NewLiferayModuleProjectOp.PROP_PROJECT_NAME ).detach( this.listener );
-        }
+		_listener = new FilteredListener<PropertyContentEvent>() {
 
-        super.dispose();
-    }
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		NewLiferayModuleProjectOp op = _op();
+
+		op.property(NewLiferayModuleProjectOp.PROP_PROJECT_NAME).attach(_listener);
+	}
+
+	private NewLiferayModuleProjectOp _op() {
+		return context(NewLiferayModuleProjectOp.class);
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,159 +10,153 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
-package com.liferay.ide.project.core.util;
+ */
 
+package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 
 import java.text.MessageFormat;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.modeling.xml.StandardRootElementController;
+
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
-
 
 /**
  * @author Gregory Amerson
  */
-public class VersionedDTDRootElementController extends StandardRootElementController
-{
-    private final Pattern publicIdPattern;
-    private final String publicIdTemplate;
-    private RootElementInfo rootElementInfo;
-    private final Pattern systemIdPattern;
-    private final String systemIdTemplate;
+public class VersionedDTDRootElementController extends StandardRootElementController {
 
-    private final String xmlBindingPath;
+	public VersionedDTDRootElementController(
+		String xmlBindingPath, String publicIdTemplate, String systemIdTemplate, Pattern publicIdPattern,
+		Pattern systemIdPattern) {
 
-    public VersionedDTDRootElementController( final String xmlBindingPath,
-                                              final String publicIdTemplate,
-                                              final String systemIdTemplate,
-                                              final Pattern publicIdPattern,
-                                              final Pattern systemIdPattern )
-    {
-        this.xmlBindingPath = xmlBindingPath;
-        this.publicIdTemplate = publicIdTemplate;
-        this.systemIdTemplate = systemIdTemplate;
-        this.publicIdPattern = publicIdPattern;
-        this.systemIdPattern = systemIdPattern;
-    }
+		_xmlBindingPath = xmlBindingPath;
+		_publicIdTemplate = publicIdTemplate;
+		_systemIdTemplate = systemIdTemplate;
+		_publicIdPattern = publicIdPattern;
+		_systemIdPattern = systemIdPattern;
+	}
 
-    private boolean checkDocType()
-    {
-        try
-        {
-            Document document = getDocument();
+	@Override
+	public boolean checkRootElement() {
+		boolean checkRoot = super.checkRootElement();
 
-            if( document != null )
-            {
-                DocumentType docType = document.getDoctype();
+		if (checkRoot) {
+			return _checkDocType();
+		}
+		else {
+			return false;
+		}
+	}
 
-                if( docType != null)
-                {
-                    Matcher publicIdMatcher = this.publicIdPattern.matcher( docType.getPublicId() );
+	@Override
+	public void createRootElement() {
+		super.createRootElement();
 
-                    if( publicIdMatcher.matches() )
-                    {
-                        String version = publicIdMatcher.group( 1 );
+		if (!_checkDocType()) {
+			IProject project = resource().adapt(IProject.class);
 
-                        if( version != null )
-                        {
-                            Matcher systemIdMatcher = this.systemIdPattern.matcher( docType.getSystemId() );
+			String defaultVersion = LiferayDescriptorHelper.getDescriptorVersion(project);
 
-                            if( systemIdMatcher.matches() )
-                            {
-                                String systemIdVersion = systemIdMatcher.group( 1 );
+			DocumentType existingDocType = _getDocument().getDoctype();
 
-                                if( systemIdVersion != null )
-                                {
-                                    if( systemIdVersion.replaceAll( StringPool.UNDERSCORE, StringPool.EMPTY )
-                                            .equals( version.replaceAll( "\\.", StringPool.EMPTY ) ) ) //$NON-NLS-1$
-                                    {
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            // fail back to the default
-        }
+			if (existingDocType != null) {
+				_getDocument().removeChild(existingDocType);
+			}
 
-        return false;
-    }
+			String publicId = MessageFormat.format(_publicIdTemplate, defaultVersion);
+			String systemId = MessageFormat.format(_systemIdTemplate, defaultVersion.replaceAll("\\.", "_"));
 
-    @Override
-    public boolean checkRootElement()
-    {
-        boolean checkRoot = super.checkRootElement();
+			DOMImplementation domImpl = _getDocument().getImplementation();
 
-        if( checkRoot )
-        {
-            return checkDocType();
-        }
-        else
-        {
-            return false;
-        }
-    }
+			DocumentType newDocType = domImpl.createDocumentType(_xmlBindingPath, publicId, systemId);
 
-    @Override
-    public void createRootElement()
-    {
-        super.createRootElement();
+			if (newDocType != null) {
+				_getDocument().insertBefore(newDocType, _getDocument().getDocumentElement());
+			}
+		}
+	}
 
-        if( ! checkDocType() )
-        {
-            final IProject project = this.resource().adapt( IProject.class );
+	@Override
+	protected RootElementInfo getRootElementInfo() {
+		if (_rootElementInfo == null) {
+			_rootElementInfo = new RootElementInfo(null, null, _xmlBindingPath, null);
+		}
 
-            final String defaultVersion = LiferayDescriptorHelper.getDescriptorVersion( project );
+		return _rootElementInfo;
+	}
 
-            DocumentType existingDocType = getDocument().getDoctype();
+	private boolean _checkDocType() {
+		try {
+			Document document = _getDocument();
 
-            if( existingDocType != null )
-            {
-                getDocument().removeChild( existingDocType );
-            }
+			if (document == null) {
+				return false;
+			}
 
-            final String publicId = MessageFormat.format( this.publicIdTemplate, defaultVersion );
-            final String systemId = MessageFormat.format( this.systemIdTemplate, defaultVersion.replaceAll( "\\.", "_" ) ); //$NON-NLS-1$ //$NON-NLS-2$
+			DocumentType docType = document.getDoctype();
 
-            final DocumentType newDocType =
-                getDocument().getImplementation().createDocumentType( this.xmlBindingPath, publicId, systemId );
+			if (docType == null) {
+				return false;
+			}
 
-            if (newDocType != null)
-            {
-                getDocument().insertBefore(newDocType, getDocument().getDocumentElement() );
-            }
-        }
-    }
+			Matcher publicIdMatcher = _publicIdPattern.matcher(docType.getPublicId());
 
-    private Document getDocument()
-    {
-        RootXmlResource rootXmlResource = (RootXmlResource) this.resource().root();
-        return rootXmlResource.getDomDocument();
-    }
+			if (!publicIdMatcher.matches()) {
+				return false;
+			}
 
-    @Override
-    protected RootElementInfo getRootElementInfo()
-    {
-        if( this.rootElementInfo == null )
-        {
-            this.rootElementInfo = new RootElementInfo( null, null, this.xmlBindingPath, null );
-        }
+			String version = publicIdMatcher.group(1);
 
-        return this.rootElementInfo;
-    }
+			if (version == null) {
+				return false;
+			}
+
+			Matcher systemIdMatcher = _systemIdPattern.matcher(docType.getSystemId());
+
+			if (!systemIdMatcher.matches()) {
+				return false;
+			}
+
+			String systemIdVersion = systemIdMatcher.group(1);
+
+			if (systemIdVersion == null) {
+				return false;
+			}
+
+			systemIdVersion = systemIdVersion.replaceAll(StringPool.UNDERSCORE, StringPool.EMPTY);
+			version = version.replaceAll("\\.", StringPool.EMPTY);
+
+			if (systemIdVersion.equals(version)) {
+				return true;
+			}
+		}
+		catch (Exception e) {
+		}
+
+		return false;
+	}
+
+	private Document _getDocument() {
+		RootXmlResource rootXmlResource = (RootXmlResource)resource().root();
+
+		return rootXmlResource.getDomDocument();
+	}
+
+	private final Pattern _publicIdPattern;
+	private final String _publicIdTemplate;
+	private RootElementInfo _rootElementInfo;
+	private final Pattern _systemIdPattern;
+	private final String _systemIdTemplate;
+	private final String _xmlBindingPath;
+
 }

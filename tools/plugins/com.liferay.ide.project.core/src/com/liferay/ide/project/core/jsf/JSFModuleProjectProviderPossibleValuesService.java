@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.jsf;
 
@@ -29,37 +28,32 @@ import org.eclipse.sapphire.PossibleValuesService;
 /**
  * @author Simon Jiang
  */
-public class JSFModuleProjectProviderPossibleValuesService extends PossibleValuesService
-{
-    private List<String> possibleValues;
+public class JSFModuleProjectProviderPossibleValuesService extends PossibleValuesService {
 
-    protected void initPossibleValuesService()
-    {
-        possibleValues = new ArrayList<String>();
+	@Override
+	public boolean ordered() {
+		return true;
+	}
 
-        ILiferayProjectProvider[] jsfProviders = LiferayCore.getProviders( "jsf-module" );
+	@Override
+	protected void compute(Set<String> values) {
+		values.addAll(_possibleValues);
+	}
 
-        for( final ILiferayProjectProvider provider : jsfProviders )
-        {
-            if( provider instanceof NewLiferayProjectProvider<?> )
-            {
-                possibleValues.add( provider.getShortName() );
-            }
-        }
+	protected void initPossibleValuesService() {
+		_possibleValues = new ArrayList<>();
 
-        Collections.sort( possibleValues );
-    }
+		ILiferayProjectProvider[] jsfProviders = LiferayCore.getProviders("jsf-module");
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        values.addAll( this.possibleValues );
-    }
+		for (ILiferayProjectProvider provider : jsfProviders) {
+			if (provider instanceof NewLiferayProjectProvider<?>) {
+				_possibleValues.add(provider.getShortName());
+			}
+		}
 
-    @Override
-    public boolean ordered()
-    {
-        return true;
-    }
+		Collections.sort(_possibleValues);
+	}
+
+	private List<String> _possibleValues;
 
 }

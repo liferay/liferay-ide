@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,21 +10,20 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.IPortletFramework;
 
-
 /**
  * @author Gregory Amerson
  */
-public class PortletFrameworkAdvancedPossibleValuesService extends PortletFrameworkPossibleValuesService
-{
-    @Override
-    protected boolean shouldAdd( IPortletFramework framework )
-    {
-        return framework.isAdvanced();
-    }
+public class PortletFrameworkAdvancedPossibleValuesService extends PortletFrameworkPossibleValuesService {
+
+	@Override
+	protected boolean shouldAdd(IPortletFramework framework) {
+		return framework.isAdvanced();
+	}
+
 }

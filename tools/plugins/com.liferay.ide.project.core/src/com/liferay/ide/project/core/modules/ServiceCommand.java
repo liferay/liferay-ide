@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -32,6 +31,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.eclipse.wst.server.core.IServer;
 
 /**
@@ -39,318 +39,258 @@ import org.eclipse.wst.server.core.IServer;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public class ServiceCommand
-{
+public class ServiceCommand {
 
-    private final IServer _server;
-    private String _serviceName;
+	public ServiceCommand(IServer server) {
+		_server = server;
+	}
 
-    private static final String[] _portalImplExpPackage = new String[] {
-        "com.liferay.portal.bean",
-        "com.liferay.portal.cache.thread.local",
-        "com.liferay.portal.cluster",
-        "com.liferay.portal.convert.database",
-        "com.liferay.portal.convert.util",
-        "com.liferay.portal.dao.jdbc.aop",
-        "com.liferay.portal.dao.orm.hibernate",
-        "com.liferay.portal.deploy.hot",
-        "com.liferay.portal.events",
-        "com.liferay.portal.freemarker",
-        "com.liferay.portal.increment",
-        "com.liferay.portal.messaging.async",
-        "com.liferay.portal.monitoring.statistics.service",
-        "com.liferay.portal.plugin",
-        "com.liferay.portal.resiliency.service",
-        "com.liferay.portal.search",
-        "com.liferay.portal.security.access.control",
-        "com.liferay.portal.security.auth",
-        "com.liferay.portal.security.lang",
-        "com.liferay.portal.service.http",
-        "com.liferay.portal.service.permission",
-        "com.liferay.portal.servlet",
-        "com.liferay.portal.spring.aop",
-        "com.liferay.portal.spring.bean",
-        "com.liferay.portal.spring.context",
-        "com.liferay.portal.spring.hibernate",
-        "com.liferay.portal.spring.transaction",
-        "com.liferay.portal.systemevent",
-        "com.liferay.portal.template",
-        "com.liferay.portal.tools",
-        "com.liferay.portal.upgrade.util",
-        "com.liferay.portal.upgrade.v7_0_0",
-        "com.liferay.portal.upload",
-        "com.liferay.portal.util",
-        "com.liferay.portal.xml",
-        "com.liferay.portlet.asset",
-        "com.liferay.portlet.documentlibrary",
-        "com.liferay.portlet.expando.model",
-        "com.liferay.portlet.expando.service",
-        "com.liferay.portlet.expando.util",
-        "com.liferay.portlet.layoutsadmin.display.context",
-        "com.liferay.portlet.messageboards.model",
-        "com.liferay.portlet.messageboards.service",
-        "com.liferay.portlet.social.model",
-        "com.liferay.portlet.social.service",
-        "com.liferay.portlet.trash",
-        "com.liferay.portlet.usersadmin.search"
-    };
+	public ServiceCommand(IServer server, String serviceName) {
+		_server = server;
+		_serviceName = serviceName;
+	}
 
-    public ServiceCommand( IServer server )
-    {
-        _server = server;
-    }
+	public ServiceContainer execute() throws Exception {
+		BundleSupervisor supervisor = null;
+		ServiceContainer result;
 
-    public ServiceCommand( IServer server, String serviceName )
-    {
-        _serviceName = serviceName;
-        _server = server;
-    }
+		if (_server == null) {
+			return _getServiceFromTargetPlatform();
+		}
 
-    public ServiceContainer execute() throws Exception
-    {
-        BundleSupervisor supervisor = null;
-        ServiceContainer result;
+		try {
+			PortalServerBehavior serverBehavior = (PortalServerBehavior)_server.loadAdapter(
+				PortalServerBehavior.class, null);
 
-        if( _server == null )
-        {
-            return getServiceFromTargetPlatform();
-        }
-        try
-        {
-            PortalServerBehavior serverBehavior =
-                (PortalServerBehavior) _server.loadAdapter( PortalServerBehavior.class, null );
-            supervisor = serverBehavior.createBundleSupervisor();
+			supervisor = serverBehavior.createBundleSupervisor();
 
-            if( supervisor == null )
-            {
-                return getServiceFromTargetPlatform();
-            }
+			if (supervisor == null) {
+				return _getServiceFromTargetPlatform();
+			}
 
-            if( !supervisor.getAgent().redirect( Agent.COMMAND_SESSION ) )
-            {
-                return getServiceFromTargetPlatform();
-            }
+			if (!supervisor.getAgent().redirect(Agent.COMMAND_SESSION)) {
+				return _getServiceFromTargetPlatform();
+			}
 
-            if( _serviceName == null )
-            {
-                String[] services = getServices( supervisor );
-                result = new ServiceContainer( Arrays.asList( services ) );
-            }
-            else
-            {
-                String[] serviceBundle = getServiceBundle( _serviceName, supervisor );
-                result = new ServiceContainer( serviceBundle[0], serviceBundle[1], serviceBundle[2] );
-            }
-        }
-        finally
-        {
-            if( supervisor != null )
-            {
-                supervisor.getAgent().redirect( Agent.NONE );
-                supervisor.close();
-            }
-        }
+			if (_serviceName == null) {
+				String[] services = _getServices(supervisor);
 
-        return result;
-    }
+				result = new ServiceContainer(Arrays.asList(services));
+			}
+			else {
+				String[] serviceBundle = _getServiceBundle(_serviceName, supervisor);
 
-    private ServiceContainer getServiceFromTargetPlatform() throws Exception
-    {
-        ServiceContainer result;
+				result = new ServiceContainer(serviceBundle[0], serviceBundle[1], serviceBundle[2]);
+			}
+		}
+		finally {
+			if (supervisor != null) {
+				supervisor.getAgent().redirect(Agent.NONE);
+				supervisor.close();
+			}
+		}
 
-        if( _serviceName == null )
-        {
-            result = TargetPlatformUtil.getServicesList();
-        }
-        else
-        {
-            result = TargetPlatformUtil.getServiceBundle( _serviceName );
-        }
+		return result;
+	}
 
-        return result;
-    }
+	private String[] _getServiceBundle(String serviceName, BundleSupervisor supervisor) throws Exception {
+		String[] serviceBundleInfo;
+		String bundleGroup = "";
+		String bundleName;
+		String bundleVersion;
 
-    private String[] getServiceBundle( String serviceName, BundleSupervisor supervisor ) throws Exception
-    {
-        String[] serviceBundleInfo;
-        String bundleGroup = "";
-        String bundleName;
-        String bundleVersion;
+		supervisor.getAgent().stdin("packages " + serviceName.substring(0, serviceName.lastIndexOf(".")));
 
-        supervisor.getAgent().stdin( "packages " + serviceName.substring( 0, serviceName.lastIndexOf( "." ) ) );
+		if (supervisor.getOutInfo().startsWith("No exported packages")) {
+			supervisor.getAgent().stdin("services (objectClass=" + serviceName + ") | grep \"Registered by bundle:\" ");
 
-        if( supervisor.getOutInfo().startsWith( "No exported packages" ) )
-        {
-            supervisor.getAgent().stdin(
-                "services " + "(objectClass=" + serviceName + ")" + " | grep \"Registered by bundle:\" " );
-            serviceBundleInfo = parseRegisteredBundle( supervisor.getOutInfo() );
-        }
-        else
-        {
-            serviceBundleInfo = parseSymbolicName( supervisor.getOutInfo() );
-        }
+			serviceBundleInfo = _parseRegisteredBundle(supervisor.getOutInfo());
+		}
+		else {
+			serviceBundleInfo = _parseSymbolicName(supervisor.getOutInfo());
+		}
 
-        bundleName = serviceBundleInfo[0];
-        bundleVersion = serviceBundleInfo[1];
+		bundleName = serviceBundleInfo[0];
+		bundleVersion = serviceBundleInfo[1];
 
-        if( bundleName.equals( "org.eclipse.osgi,system.bundle" ) )
-        {
-            bundleGroup = "com.liferay.portal";
-        }
-        else if( bundleName.startsWith( "com.liferay" ) )
-        {
-            bundleGroup = "com.liferay";
-        }
-        else
-        {
-            int ordinalIndexOf = StringUtils.ordinalIndexOf( bundleName, ".", 3 );
+		if (bundleName.equals("org.eclipse.osgi,system.bundle")) {
+			bundleGroup = "com.liferay.portal";
+		}
+		else if (bundleName.startsWith("com.liferay")) {
+			bundleGroup = "com.liferay";
+		}
+		else {
+			int ordinalIndexOf = StringUtils.ordinalIndexOf(bundleName, ".", 3);
 
-            if(ordinalIndexOf != -1)
-            {
-                bundleGroup = bundleName.substring( 0, ordinalIndexOf );
-            }else{
-                ordinalIndexOf = StringUtils.ordinalIndexOf( bundleName, ".", 2 );
+			if (ordinalIndexOf != -1) {
+				bundleGroup = bundleName.substring(0, ordinalIndexOf);
+			}
+			else {
+				ordinalIndexOf = StringUtils.ordinalIndexOf(bundleName, ".", 2);
 
-                if(ordinalIndexOf != -1){
-                    bundleGroup = bundleName.substring( 0, ordinalIndexOf );
-                }
-            }
-        }
+				if (ordinalIndexOf != -1) {
+					bundleGroup = bundleName.substring(0, ordinalIndexOf);
+				}
+			}
+		}
 
-        return new String[] { bundleGroup, bundleName, bundleVersion };
-    }
+		return new String[] {bundleGroup, bundleName, bundleVersion};
+	}
 
-    private String[] getServices( BundleSupervisor supervisor ) throws Exception
-    {
-        supervisor.getAgent().stdin( "services" );
+	private ServiceContainer _getServiceFromTargetPlatform() throws Exception {
+		ServiceContainer result;
 
-        return parseService( supervisor.getOutInfo() );
-    }
+		if (_serviceName == null) {
+			result = TargetPlatformUtil.getServicesList();
+		}
+		else {
+			result = TargetPlatformUtil.getServiceBundle(_serviceName);
+		}
 
-    private String[] parseRegisteredBundle( String serviceName )
-    {
-        if( serviceName.startsWith( "false" ) )
-        {
-            return null;
-        }
+		return result;
+	}
 
-        String str = serviceName.substring( 0, serviceName.indexOf( "[" ) );
-        str = str.replaceAll( "\"Registered by bundle:\"", "" ).trim();
-        String[] result = str.split( "_" );
+	private String[] _getServices(BundleSupervisor supervisor) throws Exception {
+		supervisor.getAgent().stdin("services");
 
-        if( result.length == 2 )
-        {
-            return result;
-        }
+		return _parseService(supervisor.getOutInfo());
+	}
 
-        return null;
-    }
+	private String[] _parseRegisteredBundle(String serviceName) {
+		if (serviceName.startsWith("false")) {
+			return null;
+		}
 
-    private String[] parseService( String outinfo )
-    {
-        final Pattern pattern = Pattern.compile( "(?<=\\{)(.+?)(?=\\})" );
-        final Matcher matcher = pattern.matcher( outinfo );
-        final List<String> ls = new ArrayList<>();
+		String str = serviceName.substring(0, serviceName.indexOf("["));
 
-        while( matcher.find() )
-        {
-            ls.add( matcher.group() );
-        }
+		str = str.replaceAll("\"Registered by bundle:\"", "").trim();
 
-        Iterator<String> iterator = ls.iterator();
+		String[] result = str.split("_");
 
-        while( iterator.hasNext() )
-        {
-            String serviceName = iterator.next();
+		if (result.length == 2) {
+			return result;
+		}
 
-            if( serviceName.contains( "bundle.id=" ) || serviceName.contains( "service.id=" ) ||
-                serviceName.contains( "=" ) )
-            {
-                iterator.remove();
-            }
-        }
+		return null;
+	}
 
-        final List<String> listservice = new ArrayList<>();
+	private String[] _parseService(String outinfo) {
+		Matcher matcher = _pattern.matcher(outinfo);
+		List<String> ls = new ArrayList<>();
 
-        for( String bs : ls )
-        {
-            if( bs.split( "," ).length > 1 )
-            {
-                for( String bbs : bs.split( "," ) )
-                {
-                    listservice.add( bbs.trim() );
-                }
-            }
-            else
-            {
-                listservice.add( bs );
-            }
-        }
+		while (matcher.find()) {
+			ls.add(matcher.group());
+		}
 
-        final Set<String> set = new HashSet<String>();
-        final List<String> newList = new ArrayList<>();
+		Iterator<String> iterator = ls.iterator();
 
-        for( Iterator<String> iter = listservice.iterator(); iter.hasNext(); )
-        {
-            String element = iter.next();
+		while (iterator.hasNext()) {
+			String serviceName = iterator.next();
 
-            if( set.add( element ) )
-            {
-                newList.add( element );
-            }
-        }
+			if (serviceName.contains("bundle.id=") || serviceName.contains("service.id=") ||
+				serviceName.contains("=")) {
 
-        Collections.sort( newList );
+				iterator.remove();
+			}
+		}
 
-        Iterator<String> newListIterator = newList.iterator();
+		List<String> listservice = new ArrayList<>();
 
-        while( newListIterator.hasNext() )
-        {
-            String serviceName = newListIterator.next();
+		for (String bs : ls) {
+			if (bs.split(",").length > 1) {
+				for (String bbs : bs.split(",")) {
+					listservice.add(bbs.trim());
+				}
+			}
+			else {
+				listservice.add(bs);
+			}
+		}
 
-            for( String packageName : _portalImplExpPackage )
-            {
-                if( serviceName.startsWith( packageName ) )
-                {
-                    newListIterator.remove();
-                    break;
-                }
-            }
-        }
+		Set<String> set = new HashSet<>();
+		List<String> newList = new ArrayList<>();
 
-        return newList.toArray( new String[0] );
-    }
+		for (Iterator<String> iter = listservice.iterator(); iter.hasNext();) {
+			String element = iter.next();
 
-    private String[] parseSymbolicName( String info )
-    {
-        final int symbolicIndex = info.indexOf( "bundle-symbolic-name" );
-        final int versionIndex = info.indexOf( "version:Version" );
-        String symbolicName;
-        String version;
+			if (set.add(element)) {
+				newList.add(element);
+			}
+		}
 
-        if( symbolicIndex != -1 && versionIndex != -1 )
-        {
-            symbolicName = info.substring( symbolicIndex, info.indexOf( ";", symbolicIndex ) );
-            version = info.substring( versionIndex, info.indexOf( ";", versionIndex ) );
+		Collections.sort(newList);
 
-            final Pattern p = Pattern.compile( "\"([^\"]*)\"" );
-            Matcher m = p.matcher( symbolicName );
+		Iterator<String> newListIterator = newList.iterator();
 
-            while( m.find() )
-            {
-                symbolicName = m.group( 1 );
-            }
+		while (newListIterator.hasNext()) {
+			String serviceName = newListIterator.next();
 
-            m = p.matcher( version );
+			for (String packageName : _portalImplExpPackage) {
+				if (serviceName.startsWith(packageName)) {
+					newListIterator.remove();
 
-            while( m.find() )
-            {
-                version = m.group( 1 );
-            }
+					break;
+				}
+			}
+		}
 
-            return new String[] { symbolicName, version };
-        }
+		return newList.toArray(new String[0]);
+	}
 
-        return null;
-    }
+	private String[] _parseSymbolicName(String info) {
+		int symbolicIndex = info.indexOf("bundle-symbolic-name");
+		int versionIndex = info.indexOf("version:Version");
+
+		String symbolicName;
+		String version;
+
+		if ((symbolicIndex != -1) && (versionIndex != -1)) {
+			symbolicName = info.substring(symbolicIndex, info.indexOf(";", symbolicIndex));
+
+			version = info.substring(versionIndex, info.indexOf(";", versionIndex));
+
+			Matcher m = _p.matcher(symbolicName);
+
+			while (m.find()) {
+				symbolicName = m.group(1);
+			}
+
+			m = _p.matcher(version);
+
+			while (m.find()) {
+				version = m.group(1);
+			}
+
+			return new String[] {symbolicName, version};
+		}
+
+		return null;
+	}
+
+	private static final String[] _portalImplExpPackage = {
+		"com.liferay.portal.bean", "com.liferay.portal.cache.thread.local", "com.liferay.portal.cluster",
+		"com.liferay.portal.convert.database", "com.liferay.portal.convert.util", "com.liferay.portal.dao.jdbc.aop",
+		"com.liferay.portal.dao.orm.hibernate", "com.liferay.portal.deploy.hot", "com.liferay.portal.events",
+		"com.liferay.portal.freemarker", "com.liferay.portal.increment", "com.liferay.portal.messaging.async",
+		"com.liferay.portal.monitoring.statistics.service", "com.liferay.portal.plugin",
+		"com.liferay.portal.resiliency.service", "com.liferay.portal.search",
+		"com.liferay.portal.security.access.control", "com.liferay.portal.security.auth",
+		"com.liferay.portal.security.lang", "com.liferay.portal.service.http", "com.liferay.portal.service.permission",
+		"com.liferay.portal.servlet", "com.liferay.portal.spring.aop", "com.liferay.portal.spring.bean",
+		"com.liferay.portal.spring.context", "com.liferay.portal.spring.hibernate",
+		"com.liferay.portal.spring.transaction", "com.liferay.portal.systemevent", "com.liferay.portal.template",
+		"com.liferay.portal.tools", "com.liferay.portal.upgrade.util", "com.liferay.portal.upgrade.v7_0_0",
+		"com.liferay.portal.upload", "com.liferay.portal.util", "com.liferay.portal.xml", "com.liferay.portlet.asset",
+		"com.liferay.portlet.documentlibrary", "com.liferay.portlet.expando.model",
+		"com.liferay.portlet.expando.service", "com.liferay.portlet.expando.util",
+		"com.liferay.portlet.layoutsadmin.display.context", "com.liferay.portlet.messageboards.model",
+		"com.liferay.portlet.messageboards.service", "com.liferay.portlet.social.model",
+		"com.liferay.portlet.social.service", "com.liferay.portlet.trash", "com.liferay.portlet.usersadmin.search"
+	};
+
+	private final Pattern _p = Pattern.compile("\"([^\"]*)\"");
+	private final Pattern _pattern = Pattern.compile("(?<=\\{)(.+?)(?=\\})");
+	private final IServer _server;
+	private String _serviceName;
+
 }

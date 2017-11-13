@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core;
 
@@ -47,145 +46,132 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class SDKProjectConvertOperation extends AbstractDataModelOperation
-    implements ISDKProjectsImportDataModelProperties
-{
-    IProject convertedProject;
+@SuppressWarnings("restriction")
+public class SDKProjectConvertOperation
+	extends AbstractDataModelOperation implements ISDKProjectsImportDataModelProperties {
 
-    public SDKProjectConvertOperation( IDataModel model )
-    {
-        super( model );
-    }
+	public SDKProjectConvertOperation(IDataModel model) {
+		super(model);
+	}
 
-    @Override
-    public IStatus execute( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException
-    {
-        Object[] selectedProjects = (Object[]) getDataModel().getProperty( SELECTED_PROJECTS );
+	@Override
+	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+		Object[] selectedProjects = (Object[])getDataModel().getProperty(SELECTED_PROJECTS);
 
-        for( int i = 0; i < selectedProjects.length; i++ )
-        {
-            if( selectedProjects[i] instanceof ProjectRecord )
-            {
-                IStatus status = convertProject( (ProjectRecord) selectedProjects[i], monitor );
+		for (int i = 0; i < selectedProjects.length; i++) {
+			if (selectedProjects[i] instanceof ProjectRecord) {
+				IStatus status = convertProject((ProjectRecord)selectedProjects[i], monitor);
 
-                if( !status.isOK() )
-                {
-                    return status;
-                }
-            }
-        }
+				if (!status.isOK()) {
+					return status;
+				}
+			}
+		}
 
-        return Status.OK_STATUS;
-    }
+		return Status.OK_STATUS;
+	}
 
-    protected IProject convertExistingProject( final ProjectRecord record, IProgressMonitor monitor )
-        throws CoreException
-    {
-        String projectName = record.getProjectName();
+	public IProject convertedProject;
 
-        final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+	protected IProject convertExistingProject(ProjectRecord record, IProgressMonitor monitor) throws CoreException {
+		String projectName = record.getProjectName();
 
-        IProject project = workspace.getRoot().getProject( projectName );
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
-        if( record.description == null )
-        {
-            // error case
-            record.description = workspace.newProjectDescription( projectName );
+		IProject project = workspace.getRoot().getProject(projectName);
 
-            IPath locationPath = new Path( record.projectSystemFile.getAbsolutePath() );
+		if (record.description == null) {
 
-            // If it is under the root use the default location
-            if( Platform.getLocation().isPrefixOf( locationPath ) )
-            {
-                record.description.setLocation( null );
-            }
-            else
-            {
-                record.description.setLocation( locationPath );
-            }
-        }
-        else
-        {
-            record.description.setName( projectName );
-        }
+			// error case
 
-        monitor.beginTask( Msgs.importingProject, 100 );
+			record.description = workspace.newProjectDescription(projectName);
 
-        project.open( IResource.FORCE, CoreUtil.newSubMonitor( monitor, 70 ) );
+			IPath locationPath = new Path(record.projectSystemFile.getAbsolutePath());
 
-        IFacetedProject fProject = ProjectFacetsManager.create( project, true, monitor );
+			// If it is under the root use the default location
 
-        FacetedProjectWorkingCopy fpwc = new FacetedProjectWorkingCopy( fProject );
+			if (Platform.getLocation().isPrefixOf(locationPath)) {
+				record.description.setLocation(null);
+			}
+			else {
+				record.description.setLocation(locationPath);
+			}
+		}
+		else {
+			record.description.setName(projectName);
+		}
 
-        String sdkLocation = getDataModel().getStringProperty( SDK_LOCATION );
+		monitor.beginTask(Msgs.importingProject, 100);
 
-        final IRuntime runtime = (IRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
+		project.open(IResource.FORCE, CoreUtil.newSubMonitor(monitor, 70));
 
-        final String pluginType = ProjectUtil.guessPluginType( fpwc );
+		IFacetedProject fProject = ProjectFacetsManager.create(project, true, monitor);
 
-        SDKPluginFacetUtil.configureProjectAsRuntimeProject( fpwc, runtime, pluginType, sdkLocation, record );
+		FacetedProjectWorkingCopy fpwc = new FacetedProjectWorkingCopy(fProject);
 
-        fpwc.commitChanges( monitor );
+		String sdkLocation = getDataModel().getStringProperty(SDK_LOCATION);
 
-        monitor.done();
+		IRuntime runtime = (IRuntime)model.getProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME);
 
-        return project;
-    }
+		String pluginType = ProjectUtil.guessPluginType(fpwc);
 
-    protected IStatus convertProject( ProjectRecord projectRecord, IProgressMonitor monitor )
-    {
-        IProject project = null;
+		SDKPluginFacetUtil.configureProjectAsRuntimeProject(fpwc, runtime, pluginType, sdkLocation, record);
 
-        if( projectRecord.project != null )
-        {
-            try
-            {
-                project = convertExistingProject( projectRecord, monitor );
-            }
-            catch( CoreException e )
-            {
-                return ProjectCore.createErrorStatus( e );
-            }
-        }
-        convertedProject = project;
+		fpwc.commitChanges(monitor);
 
-        return Status.OK_STATUS;
-    }
+		monitor.done();
 
-    protected String getSDKName()
-    {
-        String sdkLocation = getDataModel().getStringProperty( SDK_LOCATION );
+		return project;
+	}
 
-        IPath sdkLocationPath = new Path( sdkLocation );
+	protected IStatus convertProject(ProjectRecord projectRecord, IProgressMonitor monitor) {
+		IProject project = null;
 
-        SDK sdk = SDKManager.getInstance().getSDK( sdkLocationPath );
+		if (projectRecord.project != null) {
+			try {
+				project = convertExistingProject(projectRecord, monitor);
+			}
+			catch (CoreException ce) {
+				return ProjectCore.createErrorStatus(ce);
+			}
+		}
 
-        String sdkName = null;
+		convertedProject = project;
 
-        if( sdk != null )
-        {
-            sdkName = sdk.getName();
-        }
-        else
-        {
-            sdk = SDKUtil.createSDKFromLocation( sdkLocationPath );
+		return Status.OK_STATUS;
+	}
 
-            SDKManager.getInstance().addSDK( sdk );
+	protected String getSDKName() {
+		String sdkLocation = getDataModel().getStringProperty(SDK_LOCATION);
 
-            sdkName = sdk.getName();
-        }
+		IPath sdkLocationPath = new Path(sdkLocation);
 
-        return sdkName;
-    }
+		SDK sdk = SDKManager.getInstance().getSDK(sdkLocationPath);
 
-    private static class Msgs extends NLS
-    {
-        public static String importingProject;
+		String sdkName = null;
 
-        static
-        {
-            initializeMessages( SDKProjectConvertOperation.class.getName(), Msgs.class );
-        }
-    }
+		if (sdk != null) {
+			sdkName = sdk.getName();
+		}
+		else {
+			sdk = SDKUtil.createSDKFromLocation(sdkLocationPath);
+
+			SDKManager.getInstance().addSDK(sdk);
+
+			sdkName = sdk.getName();
+		}
+
+		return sdkName;
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String importingProject;
+
+		static {
+			initializeMessages(SDKProjectConvertOperation.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

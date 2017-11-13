@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -35,84 +34,80 @@ import org.eclipse.sapphire.modeling.annotations.Service;
  * @author Simon Jiang
  * @author Gregory Amerson
  */
-@Service( impl = IJavaProjectConversionService.class )
-public interface NewLiferayComponentOp extends ExecutableElement
-{
+@Service(impl = IJavaProjectConversionService.class)
+public interface NewLiferayComponentOp extends ExecutableElement {
 
-    ElementType TYPE = new ElementType( NewLiferayComponentOp.class );
+	public ElementType TYPE = new ElementType(NewLiferayComponentOp.class);
 
-    @Label( standard = "project name" )
-    @Required
-    @Service( impl = NewLiferayComponentProjectNameDefaultValueService.class )
-    @Service( impl = NewLiferayComponentProjectNamePossibleService.class )
-    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" );
+	@DelegateImplementation(NewLiferayComponentOpMethods.class)
+	@Override
+	public Status execute(ProgressMonitor monitor);
 
-    Value<String> getProjectName();
-    void setProjectName( String value );
+	public Value<String> getComponentClassName();
 
-    // *** Package ***
+	public Value<IComponentTemplate<NewLiferayComponentOp>> getComponentClassTemplateName();
 
-    @Type( base = JavaPackageName.class )
-    @Required
-    @Service( impl = JavaPackageNameDefaultValueService.class )
-    @Service( impl = JavaPackageNameValidationService.class )
-    ValueProperty PROP_PACKAGE_NAME = new ValueProperty( TYPE, "PackageName" );
+	public Value<String> getModelClass();
 
-    Value<JavaPackageName> getPackageName();
-    void setPackageName( String value );
-    void setPackageName( JavaPackageName value );
+	public Value<JavaPackageName> getPackageName();
 
-    // *** ComponentClassName ***
+	public Value<String> getProjectName();
 
-    @Label( standard = "Component Class Name" )
-    @Service( impl = NewLiferayComponentDefaultValueService.class )
-    @Service( impl = NewLiferayComponentValidationService.class )
-    ValueProperty PROP_COMPONENT_CLASS_NAME = new ValueProperty( TYPE, "ComponentClassName" );
+	public ElementList<PropertyKey> getPropertyKeys();
 
-    Value<String> getComponentClassName();
-    void setComponentClassName( String value );
+	public Value<String> getServiceName();
 
-    // *** Component Class Template Name ***
+	public void setComponentClassName(String value);
 
-    @Type( base = IComponentTemplate.class )
-    @DefaultValue( text = "Portlet" )
-    @Label( standard = "Component Class Template" )
-    @Service( impl = NewLiferayComponentTemplatePossibleValuesService.class )
-    ValueProperty PROP_COMPONENT_CLASS_TEMPLATE_NAME = new ValueProperty( TYPE, "ComponentClassTemplateName" );
+	public void setComponentClassTemplateName(IComponentTemplate<NewLiferayComponentOp> value);
 
-    Value<IComponentTemplate<NewLiferayComponentOp>> getComponentClassTemplateName();
-    void setComponentClassTemplateName( IComponentTemplate<NewLiferayComponentOp> value );
-    void setComponentClassTemplateName( String value );
+	public void setComponentClassTemplateName(String value);
 
+	public void setModelClass(String value);
 
-    // *** ModleClass ***
-    @Label( standard = "Model Class" )
-    @Required
-    @Service( impl = NewLiferayComponentModelClassPossibleValuesService.class )
-    ValueProperty PROP_MODEL_CLASS = new ValueProperty( TYPE, "ModelClass" );
+	public void setPackageName(JavaPackageName value);
 
-    Value<String> getModelClass();
-    void setModelClass( String value );
+	public void setPackageName(String value);
 
-    // *** ServiceName ***
-    @Label( standard = "Service Name" )
-    @Required
-    @Service( impl = NewLiferayComponentServicePossibleValuesService.class )
-    ValueProperty PROP_SERVICE_NAME = new ValueProperty( TYPE, "ServiceName" );
+	public void setProjectName(String value);
 
-    Value<String> getServiceName();
-    void setServiceName( String value );
+	public void setServiceName(String value);
 
-    // *** PropertyKeys ***
-    @Type( base = PropertyKey.class )
-    @Label( standard = "Properties" )
-    ListProperty PROP_PROPERTYKEYS = new ListProperty( TYPE, "PropertyKeys" );
+	@Label(standard = "Component Class Name")
+	@Service(impl = NewLiferayComponentDefaultValueService.class)
+	@Service(impl = NewLiferayComponentValidationService.class)
+	public ValueProperty PROP_COMPONENT_CLASS_NAME = new ValueProperty(TYPE, "ComponentClassName");
 
-    ElementList<PropertyKey> getPropertyKeys();
+	@DefaultValue(text = "Portlet")
+	@Label(standard = "Component Class Template")
+	@Service(impl = NewLiferayComponentTemplatePossibleValuesService.class)
+	@Type(base = IComponentTemplate.class)
+	public ValueProperty PROP_COMPONENT_CLASS_TEMPLATE_NAME = new ValueProperty(TYPE, "ComponentClassTemplateName");
 
-    // *** Method: execute ***
+	@Label(standard = "Model Class")
+	@Required
+	@Service(impl = NewLiferayComponentModelClassPossibleValuesService.class)
+	public ValueProperty PROP_MODEL_CLASS = new ValueProperty(TYPE, "ModelClass");
 
-    @Override
-    @DelegateImplementation( NewLiferayComponentOpMethods.class )
-    Status execute( ProgressMonitor monitor );
+	@Required
+	@Service(impl = JavaPackageNameDefaultValueService.class)
+	@Service(impl = JavaPackageNameValidationService.class)
+	@Type(base = JavaPackageName.class)
+	public ValueProperty PROP_PACKAGE_NAME = new ValueProperty(TYPE, "PackageName");
+
+	@Label(standard = "project name")
+	@Required
+	@Service(impl = NewLiferayComponentProjectNameDefaultValueService.class)
+	@Service(impl = NewLiferayComponentProjectNamePossibleService.class)
+	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, "ProjectName");
+
+	@Label(standard = "Properties")
+	@Type(base = PropertyKey.class)
+	public ListProperty PROP_PROPERTYKEYS = new ListProperty(TYPE, "PropertyKeys");
+
+	@Label(standard = "Service Name")
+	@Required
+	@Service(impl = NewLiferayComponentServicePossibleValuesService.class)
+	public ValueProperty PROP_SERVICE_NAME = new ValueProperty(TYPE, "ServiceName");
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.templates.servicewrapper;
 
@@ -23,78 +22,73 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+
 import org.osgi.framework.Version;
 
 /**
  * @author Simon Jiang
  */
+public class NewLiferayComponentServiceOperation extends AbstractLiferayComponentTemplate {
 
-public class NewLiferayComponentServiceOperation extends AbstractLiferayComponentTemplate
-{
+	public NewLiferayComponentServiceOperation() {
+	}
 
-    private static final String TEMPLATE_FILE = "servicewrapper/servicewrapper.ftl";
-    private String serviceClassName;
+	@Override
+	protected List<String[]> getComponentDependency() throws CoreException {
+		List<String[]> componentDependency = super.getComponentDependency();
 
-    public NewLiferayComponentServiceOperation()
-    {
-        super();
-    }
+		try {
+			ServiceContainer serviceBundle = TargetPlatformUtil.getServiceWrapperBundle(serviceName);
 
-    @Override
-    protected List<String> getImports()
-    {
-        List<String> imports = new ArrayList<String>();
+			if (serviceBundle != null) {
+				Version retriveVersion = new Version(serviceBundle.getBundleVersion());
 
-        imports.add( "com.liferay.portal.kernel.service.ServiceWrapper" );
-        imports.add( serviceName );
-        imports.addAll( super.getImports() );
+				componentDependency.add(new String[] {
+					serviceBundle.getBundleGroup(), serviceBundle.getBundleName(),
+					retriveVersion.getMajor() + "." + retriveVersion.getMinor() + ".0"
+				});
+			}
+		}
+		catch (Exception e) {
+		}
 
-        return imports;
-    }
+		return componentDependency;
+	}
 
-    @Override
-    protected String getSuperClass()
-    {
-        if( serviceName != null )
-        {
-            int servicePos = serviceName.lastIndexOf( "." );
+	@Override
+	protected String getExtensionClass() {
+		return "ServiceWrapper.class";
+	}
 
-            serviceClassName = serviceName.substring( servicePos + 1 );
-        }
+	@Override
+	protected List<String> getImports() {
+		List<String> imports = new ArrayList<>();
 
-        return serviceClassName;
-    }
+		imports.add("com.liferay.portal.kernel.service.ServiceWrapper");
+		imports.add(serviceName);
+		imports.addAll(super.getImports());
 
-    @Override
-    protected String getExtensionClass()
-    {
-        return "ServiceWrapper.class";
-    }
+		return imports;
+	}
 
-    @Override
-    protected String getTemplateFile()
-    {
-        return TEMPLATE_FILE;
-    }
+	@Override
+	protected String getSuperClass() {
+		if (serviceName != null) {
+			int servicePos = serviceName.lastIndexOf(".");
 
-    @Override
-    protected List<String[]> getComponentDependency() throws CoreException
-    {
-        List<String[]> componentDependency = super.getComponentDependency();
-        try
-        {
-            ServiceContainer serviceBundle = TargetPlatformUtil.getServiceWrapperBundle( serviceName );
+			_serviceClassName = serviceName.substring(servicePos + 1);
+		}
 
-            if ( serviceBundle != null )
-            {
-                Version retriveVersion = new Version( serviceBundle.getBundleVersion() );
-                componentDependency.add( new String[]{ serviceBundle.getBundleGroup(), serviceBundle.getBundleName(), retriveVersion.getMajor() + "." + retriveVersion.getMinor() + ".0" } );
-            }
-        }
-        catch( Exception e )
-        {
-        }
+		return _serviceClassName;
+	}
 
-        return componentDependency;
-    }
+	@Override
+	protected String getTemplateFile() {
+		return _TEMPLATE_FILE;
+	}
+
+	private static final String _TEMPLATE_FILE = "servicewrapper/servicewrapper.ftl";
+
+	private String _serviceClassName;
+
 }

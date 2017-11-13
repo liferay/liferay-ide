@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core;
 
@@ -19,6 +18,7 @@ import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.IResourceBundleProject;
 import com.liferay.ide.core.IWebProject;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 
 import java.util.ArrayList;
@@ -42,190 +42,165 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
 /**
  * @author Gregory Amerson
  */
-public abstract class FlexibleProject extends BaseLiferayProject implements IWebProject, IResourceBundleProject
-{
+public abstract class FlexibleProject extends BaseLiferayProject implements IWebProject, IResourceBundleProject {
 
-    private static IFolder getDefaultDocroot( IProject project )
-    {
-        IFolder folder = null;
+	public FlexibleProject(IProject project) {
+		super(project);
+	}
 
-        final IVirtualFolder webappRoot = getVirtualDocroot( project );
+	@Override
+	public IResource findDocrootResource(IPath path) {
+		IVirtualFolder docroot = _getVirtualDocroot(getProject());
 
-        if( webappRoot != null )
-        {
-            try
-            {
-                final IPath defaultFolder =
-                    J2EEModuleVirtualComponent.getDefaultDeploymentDescriptorFolder( webappRoot );
+		if (docroot == null) {
+			return null;
+		}
 
-                if( defaultFolder != null )
-                {
-                    IFolder f = project.getFolder( defaultFolder );
+		IVirtualResource virtualResource = docroot.findMember(path);
 
-                    if( f.exists() )
-                    {
-                        folder = f;
-                    }
-                }
-            }
-            catch( Exception e )
-            {
-                ProjectCore.logError( "Could not determine default docroot", e );
-            }
-        }
+		if ((virtualResource == null) || !virtualResource.exists()) {
+			return null;
+		}
 
-        return folder;
-    }
+		for (IResource resource : virtualResource.getUnderlyingResources()) {
+			if (FileUtil.exists(resource) && resource instanceof IFile) {
+				return resource;
+			}
+		}
 
-    private static IVirtualFolder getVirtualDocroot( IProject project )
-    {
-        IVirtualFolder retval = null;
+		return null;
+	}
 
-        if( project != null && project.isOpen() )
-        {
-            IVirtualComponent comp = ComponentCore.createComponent( project );
+	@Override
+	public IFolder getDefaultDocrootFolder() {
+		return _getDefaultDocroot(getProject());
+	}
 
-            if( comp != null )
-            {
-                retval = comp.getRootFolder();
-            }
-        }
+	@Override
+	public List<IFile> getDefaultLanguageProperties() {
+		return PropertiesUtil.getDefaultLanguagePropertiesFromPortletXml(
+			getDescriptorFile(ILiferayConstants.PORTLET_XML_FILE));
+	}
 
-        return retval;
-    }
+	@Override
+	public IFile getDescriptorFile(String name) {
+		IFile retval = null;
 
-    public FlexibleProject( IProject project )
-    {
-        super( project );
-    }
+		IFolder defaultDocrootFolder = getDefaultDocrootFolder();
 
-    @Override
-    public IResource findDocrootResource( IPath path )
-    {
-        IFile retval = null;
+		if (FileUtil.exists(defaultDocrootFolder)) {
+			retval = defaultDocrootFolder.getFile(new Path("WEB-INF").append(name));
+		}
 
-        final IVirtualFolder docroot = getVirtualDocroot( getProject() );
+		if (retval != null) {
+			return retval;
+		}
 
-        if( docroot != null )
-        {
-            final IVirtualResource virtualResource = docroot.findMember( path );
+		// fallback to looping through all virtual folders
 
-            if( virtualResource != null && virtualResource.exists() )
-            {
-                for( IResource r : virtualResource.getUnderlyingResources() )
-                {
-                    if( r.exists() && r instanceof IFile )
-                    {
-                        retval = (IFile) r;
-                        break;
-                    }
-                }
-            }
-        }
+		IVirtualFolder webappRoot = _getVirtualDocroot(getProject());
 
-        return retval;
-    }
+		if (webappRoot == null) {
+			return retval;
+		}
 
-    @Override
-    public IFolder getDefaultDocrootFolder()
-    {
-        return getDefaultDocroot( getProject() );
-    }
+		for (IContainer container : webappRoot.getUnderlyingFolders()) {
+			if (FileUtil.exists(container)) {
+				IFile descriptorFile = container.getFile(new Path("WEB-INF").append(name));
 
-    @Override
-    public List<IFile> getDefaultLanguageProperties()
-    {
-        return PropertiesUtil.getDefaultLanguagePropertiesFromPortletXml(
-            getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE ) );
-    }
+				if (descriptorFile.exists()) {
+					retval = descriptorFile;
 
-    @Override
-    public IFile getDescriptorFile( String name )
-    {
-        IFile retval = null;
+					break;
+				}
+			}
+		}
 
-//        if( ! CoreUtil.isLiferayProject( project ) )
-//        {
-//            project = CoreUtil.getLiferayProject( project );
-//        }
+		return retval;
+	}
 
-        final IFolder defaultDocrootFolder = getDefaultDocrootFolder();
+	@Override
+	public IFolder[] getSourceFolders() {
+		List<IFolder> retval = new ArrayList<>();
 
-        if( defaultDocrootFolder != null && defaultDocrootFolder.exists() )
-        {
-            retval = defaultDocrootFolder.getFile( new Path( "WEB-INF" ).append( name ) );
-        }
+		List<IContainer> sourceFolders = JavaLiteUtilities.getJavaSourceContainers(JavaCoreLite.create(getProject()));
 
-        if( retval == null )
-        {
-            // fallback to looping through all virtual folders
-            final IVirtualFolder webappRoot = getVirtualDocroot( getProject() );
+		if ((sourceFolders != null) && !sourceFolders.isEmpty()) {
+			for (IContainer sourceFolder : sourceFolders) {
+				if (sourceFolder instanceof IFolder) {
+					retval.add((IFolder)sourceFolder);
+				}
+			}
+		}
 
-            if( webappRoot != null )
-            {
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
-                {
-                    if( container != null && container.exists() )
-                    {
-                        final IFile descriptorFile = container.getFile( new Path( "WEB-INF" ).append( name ) );
+		return retval.toArray(new IFolder[retval.size()]);
+	}
 
-                        if( descriptorFile.exists() )
-                        {
-                            retval = descriptorFile;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+	public boolean pathInDocroot(IPath path) {
+		if (path == null) {
+			return false;
+		}
 
-        return retval;
-    }
+		IVirtualFolder webappRoot = _getVirtualDocroot(getProject());
 
-    @Override
-    public IFolder[] getSourceFolders()
-    {
-        final List<IFolder> retval = new ArrayList<IFolder>();
+		if (webappRoot == null) {
+			return false;
+		}
 
-        final List<IContainer> sourceFolders =
-            JavaLiteUtilities.getJavaSourceContainers( JavaCoreLite.create( getProject() ) );
+		for (IContainer container : webappRoot.getUnderlyingFolders()) {
+			boolean docrootResource = false;
 
-        if( sourceFolders != null && sourceFolders.size() > 0 )
-        {
-            for( IContainer sourceFolder : sourceFolders )
-            {
-                if( sourceFolder instanceof IFolder )
-                {
-                    retval.add( (IFolder) sourceFolder );
-                }
-            }
-        }
+			if (FileUtil.exists(container) && container.getFullPath().isPrefixOf(path)) {
+				docrootResource = true;
+			}
 
-        return retval.toArray( new IFolder[retval.size()] );
-    }
+			if (docrootResource == true) {
+				return true;
+			}
+		}
 
-    public boolean pathInDocroot( IPath path )
-    {
-        if( path != null )
-        {
-            IVirtualFolder webappRoot = getVirtualDocroot( getProject() );
+		return false;
+	}
 
-            if( webappRoot != null )
-            {
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
-                {
-                    boolean isDocrootResource = container != null && container.exists() &&
-                        container.getFullPath().isPrefixOf( path );
+	private static IFolder _getDefaultDocroot(IProject project) {
+		IVirtualFolder webappRoot = _getVirtualDocroot(project);
 
-                    if ( isDocrootResource == true )
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
+		if (webappRoot == null) {
+			return null;
+		}
 
-        return false;
-    }
+		try {
+			IPath defaultFolder = J2EEModuleVirtualComponent.getDefaultDeploymentDescriptorFolder(webappRoot);
+
+			if (defaultFolder == null) {
+				return null;
+			}
+
+			IFolder folder = project.getFolder(defaultFolder);
+
+			if (folder.exists()) {
+				return folder;
+			}
+		}
+		catch (Exception e) {
+			ProjectCore.logError("Could not determine default docroot", e);
+		}
+
+		return null;
+	}
+
+	private static IVirtualFolder _getVirtualDocroot(IProject project) {
+		if ((project == null) || !project.isOpen()) {
+			return null;
+		}
+
+		IVirtualComponent component = ComponentCore.createComponent(project);
+
+		if (component != null) {
+			return component.getRootFolder();
+		}
+
+		return null;
+	}
 
 }

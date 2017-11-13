@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.IPortletFramework;
@@ -23,42 +23,38 @@ import org.eclipse.sapphire.services.ServiceCondition;
 import org.eclipse.sapphire.services.ServiceContext;
 import org.eclipse.sapphire.services.ValueLabelService;
 
-
 /**
  * @author Gregory Amerson
  */
-public class PortletFrameworkValueLabelService extends ValueLabelService
-{
+public class PortletFrameworkValueLabelService extends ValueLabelService {
 
-    @Override
-    public String provide( String value )
-    {
-        IPortletFramework framework = ProjectCore.getPortletFramework( value );
+	@Override
+	public String provide(String value) {
+		IPortletFramework framework = ProjectCore.getPortletFramework(value);
 
-        return framework != null ? framework.getDisplayName() : value;
-    }
+		if (framework != null) {
+			return framework.getDisplayName();
+		}
 
-    public static class Condition extends ServiceCondition
-    {
+		return value;
+	}
 
-        @Override
-        public boolean applicable( final ServiceContext context )
-        {
-            boolean retval = false;
+	public static class Condition extends ServiceCondition {
 
-            final ValueProperty prop = context.find( ValueProperty.class );
+		@Override
+		public boolean applicable(final ServiceContext context) {
+			ValueProperty prop = context.find(ValueProperty.class);
 
-            if( prop != null )
-            {
-                if( prop.equals( NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK ) ||
-                    prop.equals( NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK_ADVANCED ) )
-                {
-                    retval = true;
-                }
-            }
+			if ((prop != null) &&
+				(prop.equals(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK) ||
+				 prop.equals(NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK_ADVANCED))) {
 
-            return retval;
-        }
-    }
+				return true;
+			}
+
+			return false;
+		}
+
+	}
 
 }

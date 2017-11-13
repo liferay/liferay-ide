@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.model;
 
@@ -31,35 +30,31 @@ import org.eclipse.sapphire.platform.StatusBridge;
 /**
  * @author Simon Jiang
  */
-public class ParentSDKProjectImportOpMethods
-{
+public class ParentSDKProjectImportOpMethods {
 
-    public static final Status execute( final ParentSDKProjectImportOp op, final ProgressMonitor pm )
-    {
-        final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
+	public static final Status execute(ParentSDKProjectImportOp op, ProgressMonitor pm) {
+		IProgressMonitor monitor = ProgressMonitorBridge.create(pm);
 
-        monitor.beginTask( "Importing Liferay parent sdk project...", 100 );
+		monitor.beginTask("Importing Liferay parent sdk project...", 100);
 
-        Status retval = Status.createOkStatus();
+		Status retval = Status.createOkStatus();
 
-        final Path sdkLocation = op.getSdkLocation().content();
+		Path sdkLocation = op.getSdkLocation().content();
 
-        if( sdkLocation == null || sdkLocation.isEmpty() )
-        {
-            return Status.createErrorStatus( "SDK folder cannot be empty" );
-        }
+		if ((sdkLocation == null) || sdkLocation.isEmpty()) {
+			return Status.createErrorStatus("SDK folder cannot be empty");
+		}
 
-        final SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkLocation ) );
+		SDK sdk = SDKUtil.createSDKFromLocation(PathBridge.create(sdkLocation));
 
-        try
-        {
-            SDKUtil.openAsProject( sdk, monitor );
-        }
-        catch( CoreException e )
-        {
-            retval = StatusBridge.create( ProjectCore.createErrorStatus( e ) );
-        }
+		try {
+			SDKUtil.openAsProject(sdk, monitor);
+		}
+		catch (CoreException ce) {
+			retval = StatusBridge.create(ProjectCore.createErrorStatus(ce));
+		}
 
-        return retval;
-    }
+		return retval;
+	}
+
 }

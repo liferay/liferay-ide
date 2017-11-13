@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.workspace;
 
@@ -20,59 +19,60 @@ import com.liferay.ide.core.util.StringPool;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 
 /**
  * @author Andy Wu
  */
-public class ImportLiferayWorkspaceServerNameService extends DefaultValueService
-{
+public class ImportLiferayWorkspaceServerNameService extends DefaultValueService {
 
-    private FilteredListener<PropertyContentEvent> listener;
+	@Override
+	public void dispose() {
+		Value<Object> workspaceLocation = _op().property(ImportLiferayWorkspaceOp.PROP_WORKSPACE_LOCATION);
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+		workspaceLocation.detach(_listener);
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
+		super.dispose();
+	}
 
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+	@Override
+	protected String compute() {
+		Value<Path> workspaceLocation = _op().getWorkspaceLocation();
 
-        op().property( ImportLiferayWorkspaceOp.PROP_WORKSPACE_LOCATION ).attach( this.listener );
-    }
+		Path path = workspaceLocation.content();
 
-    @Override
-    protected String compute()
-    {
-        Path path = op().getWorkspaceLocation().content();
+		if (path == null) {
+			return StringPool.EMPTY;
+		}
 
-        if( path == null )
-        {
-            return StringPool.EMPTY;
-        }
+		String serverName = path.lastSegment() + " server";
 
-        String serverName = path.lastSegment() + " server";
+		return serverName;
+	}
 
-        return serverName;
-    }
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
 
-    private ImportLiferayWorkspaceOp op()
-    {
-        return context( ImportLiferayWorkspaceOp.class );
-    }
+		_listener = new FilteredListener<PropertyContentEvent>() {
 
-    @Override
-    public void dispose()
-    {
-        op().property( ImportLiferayWorkspaceOp.PROP_WORKSPACE_LOCATION ).detach( this.listener );
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
 
-        super.dispose();
-    }
+		};
+
+		Value<Object> workspaceLocation = _op().property(ImportLiferayWorkspaceOp.PROP_WORKSPACE_LOCATION);
+
+		workspaceLocation.attach(_listener);
+	}
+
+	private ImportLiferayWorkspaceOp _op() {
+		return context(ImportLiferayWorkspaceOp.class);
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
+
 }

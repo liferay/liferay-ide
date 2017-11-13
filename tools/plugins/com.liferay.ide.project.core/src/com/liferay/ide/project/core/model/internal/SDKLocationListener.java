@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -19,6 +19,7 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
@@ -27,69 +28,67 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Simon Jiang
  */
-public class SDKLocationListener extends FilteredListener<PropertyContentEvent>
-{
+public class SDKLocationListener extends FilteredListener<PropertyContentEvent> {
 
-    @Override
-    protected void handleTypedEvent( PropertyContentEvent event )
-    {
-        updateLocation( op( event ) );
-    }
+	public static void updateLocation(NewLiferayPluginProjectOp op) {
+		Path newLocationBase = null;
 
-    protected NewLiferayPluginProjectOp op( PropertyContentEvent event )
-    {
-        return event.property().element().nearest( NewLiferayPluginProjectOp.class );
-    }
+		Path sdkLocation = op.getSdkLocation().content(true);
 
-    public static void updateLocation( final NewLiferayPluginProjectOp op )
-    {
-        Path newLocationBase = null;
+		if (sdkLocation == null) {
+			return;
+		}
 
-        Path sdkLocation = op.getSdkLocation().content(true);
+		SDK sdk = SDKUtil.createSDKFromLocation(PathBridge.create(sdkLocation));
 
-        if ( sdkLocation == null )
-        {
-            return;
-        }
+		op.setImportProjectStatus(false);
 
-        SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkLocation ) );
+		if (sdk == null) {
+			return;
+		}
 
-        op.setImportProjectStatus( false );
+		switch (op.getPluginType().content(true)) {
+			case portlet:
+			case servicebuilder:
+				newLocationBase = sdkLocation.append("portlets");
 
-        if( sdk != null )
-        {
-            switch ( op.getPluginType().content( true ) )
-            {
-                case portlet:
-                case servicebuilder:
-                    newLocationBase = sdkLocation.append( "portlets" ); //$NON-NLS-1$
-                    break;
-                case ext:
-                    newLocationBase = sdkLocation.append( "ext" ); //$NON-NLS-1$
-                    break;
-                case hook:
-                    newLocationBase = sdkLocation.append( "hooks" ); //$NON-NLS-1$
-                    break;
-                case layouttpl:
-                    newLocationBase = sdkLocation.append( "layouttpl" ); //$NON-NLS-1$
-                    break;
-                case theme:
-                    newLocationBase = sdkLocation.append( "themes" ); //$NON-NLS-1$
-                    break;
-                case web:
-                    newLocationBase = sdkLocation.append( "webs" ); //$NON-NLS-1$
-                    break;
-            }
-        }
-        else
-        {
-            return;
-        }
+				break;
+			case ext:
+				newLocationBase = sdkLocation.append("ext");
 
-        if( newLocationBase != null )
-        {
-            NewLiferayPluginProjectOpMethods.updateLocation( op, newLocationBase );
-        }
+				break;
+			case hook:
+				newLocationBase = sdkLocation.append("hooks");
 
-    }
+				break;
+			case layouttpl:
+				newLocationBase = sdkLocation.append("layouttpl");
+
+				break;
+			case theme:
+				newLocationBase = sdkLocation.append("themes");
+
+				break;
+			case web:
+				newLocationBase = sdkLocation.append("webs");
+
+				break;
+		}
+
+		if (newLocationBase != null) {
+			NewLiferayPluginProjectOpMethods.updateLocation(op, newLocationBase);
+		}
+	}
+
+	@Override
+	protected void handleTypedEvent(PropertyContentEvent event) {
+		updateLocation(_op(event));
+	}
+
+	private NewLiferayPluginProjectOp _op(PropertyContentEvent event) {
+		Element element = event.property().element();
+
+		return element.nearest(NewLiferayPluginProjectOp.class);
+	}
+
 }

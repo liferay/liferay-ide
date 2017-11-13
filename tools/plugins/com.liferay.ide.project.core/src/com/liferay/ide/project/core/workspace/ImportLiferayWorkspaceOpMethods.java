@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.workspace;
 
@@ -31,79 +30,72 @@ import org.eclipse.sapphire.platform.StatusBridge;
 /**
  * @author Andy Wu
  */
-public class ImportLiferayWorkspaceOpMethods
-{
+public class ImportLiferayWorkspaceOpMethods {
 
-    public static final Status execute( final ImportLiferayWorkspaceOp op, final ProgressMonitor pm )
-    {
-        final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
+	public static Status execute(ImportLiferayWorkspaceOp op, ProgressMonitor pm) {
+		IProgressMonitor monitor = ProgressMonitorBridge.create(pm);
 
-        monitor.beginTask( "Importing Liferay Workspace project...", 100 );
+		monitor.beginTask("Importing Liferay Workspace project...", 100);
 
-        Status retval = null;
+		Status retval = null;
 
-        try
-        {
-            op.setProjectProvider( op.getBuildType().content() );
+		try {
+			op.setProjectProvider(op.getBuildType().content());
 
-            final NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> provider =
-                op.getProjectProvider().content( true );
+			NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> provider = op.getProjectProvider().content(true);
 
-            String location = op.getWorkspaceLocation().content().toOSString();
+			org.eclipse.sapphire.modeling.Path workspaceLocation = op.getWorkspaceLocation().content();
 
-            LiferayWorkspaceUtil.clearWorkspace( location );
+			String location = workspaceLocation.toOSString();
 
-            boolean isInitBundle = op.getProvisionLiferayBundle().content();
-            boolean isHasBundlesDir = op.getHasBundlesDir().content();
-            String bundleUrl = op.getBundleUrl().content( false );
+			LiferayWorkspaceUtil.clearWorkspace(location);
 
-            final IStatus importStatus;
+			boolean initBundle = op.getProvisionLiferayBundle().content();
+			boolean hasBundlesDir = op.getHasBundlesDir().content();
+			String bundleUrl = op.getBundleUrl().content(false);
 
-            if( isInitBundle && !isHasBundlesDir )
-            {
-                importStatus = provider.importProject( location, monitor, true, bundleUrl );
-            }
-            else
-            {
-                importStatus = provider.importProject( location, monitor, false, null );
-            }
+			IStatus importStatus;
 
-            retval = StatusBridge.create( importStatus );
+			if (initBundle && !hasBundlesDir) {
+				importStatus = provider.importProject(location, monitor, true, bundleUrl);
+			}
+			else {
+				importStatus = provider.importProject(location, monitor, false, null);
+			}
 
-            if( !retval.ok() || retval.exception() != null )
-            {
-                return retval;
-            }
+			retval = StatusBridge.create(importStatus);
 
-            if( isInitBundle || isHasBundlesDir )
-            {
-                String serverRuntimeName = op.getServerName().content();
-                IPath bundlesLocation = null;
+			if (!retval.ok() || (retval.exception() != null)) {
+				return retval;
+			}
 
-                if( op.getBuildType().content().equals( "gradle-liferay-workspace" ) )
-                {
-                    bundlesLocation = LiferayWorkspaceUtil.getHomeLocation( location );
-                }
-                else
-                {
-                    bundlesLocation = new Path( location ).append( "bundles" );
-                }
+			if (initBundle || hasBundlesDir) {
+				String serverRuntimeName = op.getServerName().content();
+				IPath bundlesLocation = null;
 
-                if( bundlesLocation != null && bundlesLocation.toFile().exists() )
-                {
-                    ServerUtil.addPortalRuntimeAndServer( serverRuntimeName, bundlesLocation, monitor );
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            final String msg = "import Liferay Workspace project error";
+				String buildType = op.getBuildType().content();
 
-            ProjectCore.logError( msg, e );
+				if (buildType.equals("gradle-liferay-workspace")) {
+					bundlesLocation = LiferayWorkspaceUtil.getHomeLocation(location);
+				}
+				else {
+					bundlesLocation = new Path(location).append("bundles");
+				}
 
-            retval = Status.createErrorStatus( msg, e );
-        }
+				if ((bundlesLocation != null) && bundlesLocation.toFile().exists()) {
+					ServerUtil.addPortalRuntimeAndServer(serverRuntimeName, bundlesLocation, monitor);
+				}
+			}
+		}
+		catch (Exception e) {
+			String msg = "import Liferay Workspace project error";
 
-        return retval;
-    }
+			ProjectCore.logError(msg, e);
+
+			retval = Status.createErrorStatus(msg, e);
+		}
+
+		return retval;
+	}
+
 }

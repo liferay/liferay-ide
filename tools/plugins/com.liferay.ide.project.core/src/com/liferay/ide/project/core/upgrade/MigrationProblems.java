@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,50 +10,42 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.upgrade;
 
 /**
  * @author Terry Jia
  */
-public class MigrationProblems implements UpgradeProblems
-{
+public class MigrationProblems implements UpgradeProblems {
 
-    private FileProblems[] _problems;
-    private String _suffix;
-    private String _type;
+	public FileProblems[] getProblems() {
+		return _problems;
+	}
 
-    public FileProblems[] getProblems()
-    {
-        return _problems;
-    }
+	public String getSuffix() {
+		return _suffix;
+	}
 
-    public String getSuffix()
-    {
-        return _suffix;
-    }
+	@Override
+	public String getType() {
+		return _type;
+	}
 
-    @Override
-    public String getType()
-    {
-        return _type;
-    }
+	public void setProblems(FileProblems[] problems) {
+		_problems = problems;
+	}
 
-    public void setProblems( FileProblems[] problems )
-    {
-        _problems = problems;
-    }
+	public void setSuffix(String suffix) {
+		_suffix = suffix;
+	}
 
-    public void setSuffix( String suffix )
-    {
-        _suffix = suffix;
-    }
+	public void setType(String type) {
+		_type = type;
+	}
 
-    public void setType( String type )
-    {
-        _type = type;
-    }
+	private FileProblems[] _problems;
+	private String _suffix;
+	private String _type;
 
 }

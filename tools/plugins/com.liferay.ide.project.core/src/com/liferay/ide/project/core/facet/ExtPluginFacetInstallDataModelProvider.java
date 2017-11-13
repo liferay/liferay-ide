@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,31 +10,27 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.facet;
 
 /**
  * @author Greg Amerson
  */
-public class ExtPluginFacetInstallDataModelProvider extends PluginFacetInstallDataModelProvider
-{
+public class ExtPluginFacetInstallDataModelProvider extends PluginFacetInstallDataModelProvider {
 
-    @Override
-    public Object getDefaultProperty( String propertyName )
-    {
-        if( SETUP_EXT_CLASSPATH.equals( propertyName ) )
-        {
-            return true;
-        }
+	@Override
+	public Object getDefaultProperty(String propertyName) {
+		if (SETUP_EXT_CLASSPATH.equals(propertyName)) {
+			return true;
+		}
 
-        return super.getDefaultProperty( propertyName );
-    }
+		return super.getDefaultProperty(propertyName);
+	}
 
-    @Override
-    protected String getPluginFacetId()
-    {
-        return IPluginFacetConstants.LIFERAY_EXT_FACET_ID;
-    }
+	@Override
+	protected String getPluginFacetId() {
+		return IPluginFacetConstants.LIFERAY_EXT_FACET_ID;
+	}
+
 }

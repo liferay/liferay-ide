@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.upgrade;
 
@@ -23,37 +22,35 @@ import java.util.List;
 /**
  * @author Terry Jia
  */
-public class FileProblemsUtil
-{
-    public static List<FileProblems> newFileProblemsListFrom( Problem[] problems )
-    {
-        List<FileProblems> fileProblemsList = new ArrayList<FileProblems>();
+public class FileProblemsUtil {
 
-        for( Problem problem : problems )
-        {
-            boolean added = false;
+	public static List<FileProblems> newFileProblemsListFrom(Problem[] problems) {
+		List<FileProblems> fileProblemsList = new ArrayList<>();
 
-            for( FileProblems fileProblems : fileProblemsList )
-            {
-                if( fileProblems.getFile().getPath().equals( problem.getFile().getPath() ) )
-                {
-                    fileProblems.addProblem( problem );
+		for (Problem problem : problems) {
+			boolean added = false;
 
-                    added = true;
-                    break;
-                }
-            }
+			for (FileProblems fileProblems : fileProblemsList) {
+				String path = fileProblems.getFile().getPath();
 
-            if( !added )
-            {
-                FileProblems fileProblems = new FileProblems();
-                fileProblems.addProblem( problem );
-                fileProblems.setFile( problem.getFile() );
-                fileProblemsList.add( fileProblems );
-            }
-        }
+				if (path.equals(problem.getFile().getPath())) {
+					fileProblems.addProblem(problem);
 
-        return fileProblemsList;
-    }
+					added = true;
+					break;
+				}
+			}
+
+			if (!added) {
+				FileProblems fileProblems = new FileProblems();
+
+				fileProblems.addProblem(problem);
+				fileProblems.setFile(problem.getFile());
+				fileProblemsList.add(fileProblems);
+			}
+		}
+
+		return fileProblemsList;
+	}
 
 }

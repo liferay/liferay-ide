@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.upgrade.service;
 
@@ -27,193 +26,164 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DerivedValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 
 /**
  * @author Andy Wu
  */
-public class CheckSDKLocationDerivedValueService extends DerivedValueService
-{
-    private FilteredListener<PropertyContentEvent> listener;
+public class CheckSDKLocationDerivedValueService extends DerivedValueService {
 
-    private void checkProjects( CodeUpgradeOp op, SDK sdk )
-    {
-        File[] portlets = getFiles( sdk, "portlet" );
+	@Override
+	protected String compute() {
+		CodeUpgradeOp op = _op();
 
-        if( portlets != null )
-        {
-            for( File file : portlets )
-            {
-                if( file.isDirectory() )
-                {
-                    op.setHasPortlet( "true" );
+		final Path path = op.getSdkLocation().content();
 
-                    File serviceXml = new Path( file.getPath() ).append( "docroot/WEB-INF/service.xml" ).toFile();
+		SDK sdk = SDKUtil.createSDKFromLocation(PathBridge.create(path));
 
-                    if( serviceXml.exists() )
-                    {
-                        op.setHasServiceBuilder( "true" );
-                    }
-                }
-            }
-        }
+		String liferay62ServerLocation = null;
 
-        File[] hooks = getFiles( sdk, "hook" );
+		try {
+			if (sdk != null) {
+				liferay62ServerLocation =
+					(String)(sdk.getBuildProperties(true).get(ISDKConstants.PROPERTY_APP_SERVER_PARENT_DIR));
 
-        if( hooks != null )
-        {
-            for( File file : hooks )
-            {
-                if( file.isDirectory() )
-                {
-                    op.setHasHook( "true" );
+				_checkProjects(op, sdk);
+			}
+			else {
+				_setAllStateFalse(op);
+			}
+		}
+		catch (CoreException ce) {
+		}
 
-                    File serviceXml = new Path( file.getPath() ).append( "docroot/WEB-INF/service.xml" ).toFile();
+		return liferay62ServerLocation;
+	}
 
-                    if( serviceXml.exists() )
-                    {
-                        op.setHasServiceBuilder( "true" );
-                    }
-                }
-            }
-        }
+	@Override
+	protected void initDerivedValueService() {
+		super.initDerivedValueService();
 
-        File[] exts = getFiles( sdk, "ext" );
+		_listener = new FilteredListener<PropertyContentEvent>() {
 
-        if( exts != null )
-        {
-            for( File file : exts )
-            {
-                if( file.isDirectory() )
-                {
-                    op.setHasExt( "true" );
-                    break;
-                }
-            }
-        }
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
 
-        File[] layouttpls = getFiles( sdk, "layouttpl" );
+		};
 
-        if( layouttpls != null )
-        {
-            for( File file : layouttpls )
-            {
-                if( file.isDirectory() )
-                {
-                    op.setHasLayout( "true" );
-                    break;
-                }
-            }
-        }
+		Value<Object> sdkLocation = _op().property(CodeUpgradeOp.PROP_SDK_LOCATION);
 
-        File[] themes = getFiles( sdk, "theme" );
+		sdkLocation.attach(_listener);
+	}
 
-        if( themes != null )
-        {
-            for( File file : themes )
-            {
-                if( file.isDirectory() )
-                {
-                    op.setHasTheme( "true" );
-                    break;
-                }
-            }
-        }
+	private void _checkProjects(CodeUpgradeOp op, SDK sdk) {
+		File[] portlets = _getFiles(sdk, "portlet");
 
-        File[] webs = getFiles( sdk, "web" );
+		if (portlets != null) {
+			for (File file : portlets) {
+				if (file.isDirectory()) {
+					op.setHasPortlet("true");
 
-        if( webs != null )
-        {
-            for( File file : webs )
-            {
-                if( file.isDirectory() )
-                {
-                    op.setHasWeb( "true" );
-                    break;
-                }
-            }
-        }
-    }
+					File serviceXml = new Path(file.getPath()).append("docroot/WEB-INF/service.xml").toFile();
 
-    @Override
-    protected String compute()
-    {
-        CodeUpgradeOp op = op();
+					if (serviceXml.exists()) {
+						op.setHasServiceBuilder("true");
+					}
+				}
+			}
+		}
 
-        final Path path = op.getSdkLocation().content();
+		File[] hooks = _getFiles(sdk, "hook");
 
-        SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( path ) );
+		if (hooks != null) {
+			for (File file : hooks) {
+				if (file.isDirectory()) {
+					op.setHasHook("true");
 
-        String liferay62ServerLocation = null;
+					File serviceXml = new Path(file.getPath()).append("docroot/WEB-INF/service.xml").toFile();
 
-        try
-        {
-            if( sdk != null )
-            {
-                liferay62ServerLocation =
-                    (String) ( sdk.getBuildProperties( true ).get( ISDKConstants.PROPERTY_APP_SERVER_PARENT_DIR ) );
+					if (serviceXml.exists()) {
+						op.setHasServiceBuilder("true");
+					}
+				}
+			}
+		}
 
-                checkProjects( op, sdk );
-            }
-            else
-            {
-                setAllStateFalse( op );
-            }
-        }
-        catch( CoreException e )
-        {
-        }
+		File[] exts = _getFiles(sdk, "ext");
 
-        return liferay62ServerLocation;
-    }
+		if (exts != null) {
+			for (File file : exts) {
+				if (file.isDirectory()) {
+					op.setHasExt("true");
+					break;
+				}
+			}
+		}
 
-    private File[] getFiles( SDK sdk, String projectType )
-    {
-        IPath folderPath = sdk.getLocation().append( sdk.getPluginFolder( projectType ) );
+		File[] layouttpls = _getFiles(sdk, "layouttpl");
 
-        File folder = folderPath.toFile();
+		if (layouttpls != null) {
+			for (File file : layouttpls) {
+				if (file.isDirectory()) {
+					op.setHasLayout("true");
+					break;
+				}
+			}
+		}
 
-        if( !folder.exists() )
-        {
-            return null;
-        }
+		File[] themes = _getFiles(sdk, "theme");
 
-        return folder.listFiles();
-    }
+		if (themes != null) {
+			for (File file : themes) {
+				if (file.isDirectory()) {
+					op.setHasTheme("true");
+					break;
+				}
+			}
+		}
 
-    @Override
-    protected void initDerivedValueService()
-    {
-        super.initDerivedValueService();
+		File[] webs = _getFiles(sdk, "web");
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
+		if (webs != null) {
+			for (File file : webs) {
+				if (file.isDirectory()) {
+					op.setHasWeb("true");
+					break;
+				}
+			}
+		}
+	}
 
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+	private File[] _getFiles(SDK sdk, String projectType) {
+		IPath folderPath = sdk.getLocation().append(sdk.getPluginFolder(projectType));
 
-        op().property( CodeUpgradeOp.PROP_SDK_LOCATION ).attach( this.listener );
-    }
+		File folder = folderPath.toFile();
 
-    private CodeUpgradeOp op()
-    {
-        return context( CodeUpgradeOp.class );
-    }
+		if (!folder.exists()) {
+			return null;
+		}
 
-    private void setAllStateFalse( CodeUpgradeOp op )
-    {
-        op.setHasPortlet( false );
-        op.setHasServiceBuilder( false );
-        op.setHasHook( false );
-        op.setHasExt( false );
-        op.setHasLayout( false );
-        op.setHasTheme( false );
-        op.setHasWeb( false );
-    }
+		return folder.listFiles();
+	}
+
+	private CodeUpgradeOp _op() {
+		return context(CodeUpgradeOp.class);
+	}
+
+	private void _setAllStateFalse(CodeUpgradeOp op) {
+		op.setHasPortlet(false);
+		op.setHasServiceBuilder(false);
+		op.setHasHook(false);
+		op.setHasExt(false);
+		op.setHasLayout(false);
+		op.setHasTheme(false);
+		op.setHasWeb(false);
+	}
+
+	private FilteredListener<PropertyContentEvent> _listener;
 
 }

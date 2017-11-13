@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ExtensionReader;
@@ -23,58 +23,52 @@ import java.util.List;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.content.IContentType;
 
-
 /**
  * @author Kuo Zhang
  */
-public class LiferayDescriptorHelperReader extends ExtensionReader<LiferayDescriptorHelper>
-{
+public class LiferayDescriptorHelperReader extends ExtensionReader<LiferayDescriptorHelper> {
 
-    private static final String EXTENSION = "liferayDescriptorHelpers";
-    private static final String HELPER_ELEMENT = "liferayDescriptorHelper";
-    private static final String CONTENTTYPEBINDING_ELEMENT = "contentTypeBinding";
-    private static LiferayDescriptorHelperReader instance;
+	public static LiferayDescriptorHelperReader getInstance() {
+		if (_instance == null) {
+			_instance = new LiferayDescriptorHelperReader();
+		}
 
-    public static LiferayDescriptorHelperReader getInstance()
-    {
-        if( instance == null )
-        {
-            instance = new LiferayDescriptorHelperReader();
-        }
+		return _instance;
+	}
 
-        return instance;
-    }
+	public LiferayDescriptorHelper[] getAllHelpers() {
+		return getExtensions().toArray(new LiferayDescriptorHelper[0]);
+	}
 
-    private LiferayDescriptorHelperReader()
-    {
-        super( ProjectCore.PLUGIN_ID, EXTENSION, HELPER_ELEMENT );
-    }
+	public LiferayDescriptorHelper[] getHelpers(IContentType contentType) {
+		List<LiferayDescriptorHelper> retval = new ArrayList<>();
 
-    @Override
-    protected LiferayDescriptorHelper initElement( IConfigurationElement configElement, LiferayDescriptorHelper helper )
-    {
-        helper.setContentType( configElement.getAttribute( CONTENTTYPEBINDING_ELEMENT ) );
+		for (LiferayDescriptorHelper helper : getAllHelpers()) {
+			if (contentType.equals(helper.getContentType())) {
+				retval.add(helper);
+			}
+		}
 
-        return helper;
-    }
+		return retval.toArray(new LiferayDescriptorHelper[0]);
+	}
 
-    public LiferayDescriptorHelper[] getAllHelpers()
-    {
-        return getExtensions().toArray( new LiferayDescriptorHelper[0] );
-    }
+	@Override
+	protected LiferayDescriptorHelper initElement(IConfigurationElement configElement, LiferayDescriptorHelper helper) {
+		helper.setContentType(configElement.getAttribute(_CONTENTTYPEBINDING_ELEMENT));
 
-    public LiferayDescriptorHelper[] getHelpers( IContentType contentType )
-    {
-        List<LiferayDescriptorHelper> retval = new ArrayList<LiferayDescriptorHelper>();
+		return helper;
+	}
 
-        for( LiferayDescriptorHelper helper : getAllHelpers() )
-        {
-            if( contentType.equals( helper.getContentType() ) )
-            {
-                retval.add( helper );
-            }
-        }
+	private LiferayDescriptorHelperReader() {
+		super(ProjectCore.PLUGIN_ID, _EXTENSION, _HELPER_ELEMENT);
+	}
 
-        return retval.toArray( new LiferayDescriptorHelper[0] );
-    }
+	private static final String _CONTENTTYPEBINDING_ELEMENT = "contentTypeBinding";
+
+	private static final String _EXTENSION = "liferayDescriptorHelpers";
+
+	private static final String _HELPER_ELEMENT = "liferayDescriptorHelper";
+
+	private static LiferayDescriptorHelperReader _instance;
+
 }

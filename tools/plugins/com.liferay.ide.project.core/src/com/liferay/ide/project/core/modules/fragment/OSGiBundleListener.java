@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.fragment;
 
@@ -20,6 +19,7 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.wst.server.core.IRuntime;
@@ -28,31 +28,30 @@ import org.eclipse.wst.server.core.IRuntime;
  * @author Terry Jia
  * @author Andy Wu
  */
-public class OSGiBundleListener extends FilteredListener<PropertyContentEvent>
-{
+public class OSGiBundleListener extends FilteredListener<PropertyContentEvent> {
 
-    @Override
-    protected void handleTypedEvent( PropertyContentEvent event )
-    {
-        NewModuleFragmentOp op = op( event );
+	@Override
+	protected void handleTypedEvent(PropertyContentEvent event) {
+		NewModuleFragmentOp op = op(event);
 
-        final IPath temp = ProjectCore.getDefault().getStateLocation();
+		IPath temp = ProjectCore.getDefault().getStateLocation();
 
-        final String runtimeName = op.getLiferayRuntimeName().content();
-        final String hostOsgiBundle = op.getHostOsgiBundle().content();
+		String runtimeName = op.getLiferayRuntimeName().content();
+		String hostOsgiBundle = op.getHostOsgiBundle().content();
 
-        IRuntime runtime = ServerUtil.getRuntime( runtimeName );
+		IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
-        if( !CoreUtil.empty( hostOsgiBundle ) )
-        {
-            ServerUtil.getModuleFileFrom70Server( runtime, hostOsgiBundle, temp );
-        }
+		if (!CoreUtil.empty(hostOsgiBundle)) {
+			ServerUtil.getModuleFileFrom70Server(runtime, hostOsgiBundle, temp);
+		}
 
-        op.getOverrideFiles().clear();
-    }
+		op.getOverrideFiles().clear();
+	}
 
-    protected NewModuleFragmentOp op( PropertyContentEvent event )
-    {
-        return event.property().element().nearest( NewModuleFragmentOp.class );
-    }
+	protected NewModuleFragmentOp op(PropertyContentEvent event) {
+		Element element = event.property().element();
+
+		return element.nearest(NewModuleFragmentOp.class);
+	}
+
 }

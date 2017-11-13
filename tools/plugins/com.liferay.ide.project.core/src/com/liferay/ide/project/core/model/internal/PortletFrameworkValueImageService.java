@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.IPortletFramework;
@@ -21,32 +21,29 @@ import org.eclipse.sapphire.ImageData;
 import org.eclipse.sapphire.Result;
 import org.eclipse.sapphire.services.ValueImageService;
 
-
 /**
  * @author Gregory Amerson
  */
-public class PortletFrameworkValueImageService extends ValueImageService
-{
+public class PortletFrameworkValueImageService extends ValueImageService {
 
-    @Override
-    public ImageData provide( String value )
-    {
-        ImageData data = null;
+	@Override
+	public ImageData provide(String value) {
+		ImageData data = null;
 
-        final IPortletFramework framework = ProjectCore.getPortletFramework( value );
+		IPortletFramework framework = ProjectCore.getPortletFramework(value);
 
-        if( framework != null )
-        {
-            final String name = framework.getShortName();
-            Result<ImageData> result = ImageData.readFromClassLoader( framework.getClass(), "images/" + name + ".png" );
-            data = result.optional();
-        }
+		if (framework != null) {
+			String name = framework.getShortName();
 
-        return data;
-    }
+			Result<ImageData> result = ImageData.readFromClassLoader(framework.getClass(), "images/" + name + ".png");
 
-    public static class Condition extends PortletFrameworkValueLabelService.Condition
-    {
-    }
+			data = result.optional();
+		}
+
+		return data;
+	}
+
+	public static class Condition extends PortletFrameworkValueLabelService.Condition {
+	}
 
 }

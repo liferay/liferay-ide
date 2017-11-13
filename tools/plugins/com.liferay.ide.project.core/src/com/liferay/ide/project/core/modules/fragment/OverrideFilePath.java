@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules.fragment;
 
@@ -30,20 +27,19 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 /**
  * @author Terry Jia
  */
-@Image( path = "images/jsp_type_16x16.gif" )
-public interface OverrideFilePath extends Element
-{
+@Image(path = "images/jsp_type_16x16.gif")
+public interface OverrideFilePath extends Element {
 
-    ElementType TYPE = new ElementType( OverrideFilePath.class );
+	public ElementType TYPE = new ElementType(OverrideFilePath.class);
 
-    // *** Value ***
+	public Value<String> getValue();
 
-    @Label( standard = "Override File Path" )
-    @Unique
-    @Service( impl = OverrideFilePathPossibleValuesService.class )
-    @Required
-    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
+	public void setValue(String value);
 
-    Value<String> getValue();
-    void setValue( String value );
+	@Label(standard = "Override File Path")
+	@Required
+	@Service(impl = OverrideFilePathPossibleValuesService.class)
+	@Unique
+	public ValueProperty PROP_VALUE = new ValueProperty(TYPE, "Value");
+
 }

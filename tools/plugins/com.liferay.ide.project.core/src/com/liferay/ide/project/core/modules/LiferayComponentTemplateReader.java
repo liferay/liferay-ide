@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core.modules;
 
@@ -24,35 +23,35 @@ import org.eclipse.core.runtime.IConfigurationElement;
 /**
  * @author Simon Jiang
  */
-@SuppressWarnings( "rawtypes" )
-public class LiferayComponentTemplateReader extends ExtensionReader<IComponentTemplate>
-{
+@SuppressWarnings("rawtypes")
+public class LiferayComponentTemplateReader extends ExtensionReader<IComponentTemplate> {
 
-    private static final String EXTENSION = "liferayComponentTemplates";
-    private static final String COMPONENT_TEMPLATE = "liferayComponentTemplate";
-    private static final String COMPONENT_TEMPLATE_DISPLAY_NAME_ELEMENT = "displayName";
-    private static final String COMPONENT_TEMPLATE_SHORT_NAME_ELEMENT = "shortName";
+	public LiferayComponentTemplateReader() {
+		super(ProjectCore.PLUGIN_ID, _EXTENSION, _COMPONENT_TEMPLATE);
+	}
 
-    public LiferayComponentTemplateReader()
-    {
-        super( ProjectCore.PLUGIN_ID, EXTENSION, COMPONENT_TEMPLATE );
-    }
+	public IComponentTemplate[] getComponentTemplates() {
+		return getExtensions().toArray(new IComponentTemplate[0]);
+	}
 
-    @Override
-    protected IComponentTemplate initElement(
-        IConfigurationElement configElement, IComponentTemplate componentTemplate )
-    {
-        final AbstractLiferayComponentTemplate template = (AbstractLiferayComponentTemplate) componentTemplate;
+	@Override
+	protected IComponentTemplate initElement(
+		IConfigurationElement configElement, IComponentTemplate componentTemplate) {
 
-        template.setDisplayName( configElement.getAttribute( COMPONENT_TEMPLATE_DISPLAY_NAME_ELEMENT ) );
-        template.setShortName( configElement.getAttribute( COMPONENT_TEMPLATE_SHORT_NAME_ELEMENT ) );
+		AbstractLiferayComponentTemplate template = (AbstractLiferayComponentTemplate)componentTemplate;
 
-        return template;
-    }
+		template.setDisplayName(configElement.getAttribute(_COMPONENT_TEMPLATE_DISPLAY_NAME_ELEMENT));
+		template.setShortName(configElement.getAttribute(_COMPONENT_TEMPLATE_SHORT_NAME_ELEMENT));
 
-    public IComponentTemplate[] getComponentTemplates()
-    {
-        return getExtensions().toArray( new IComponentTemplate[0] );
-    }
+		return template;
+	}
+
+	private static final String _COMPONENT_TEMPLATE = "liferayComponentTemplate";
+
+	private static final String _COMPONENT_TEMPLATE_DISPLAY_NAME_ELEMENT = "displayName";
+
+	private static final String _COMPONENT_TEMPLATE_SHORT_NAME_ELEMENT = "shortName";
+
+	private static final String _EXTENSION = "liferayComponentTemplates";
 
 }

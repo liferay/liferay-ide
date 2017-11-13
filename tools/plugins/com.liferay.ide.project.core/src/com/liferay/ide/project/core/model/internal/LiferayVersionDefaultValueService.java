@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.model.NewLiferayProfile;
@@ -36,138 +36,129 @@ import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.PropertyDef;
 
-
 /**
  * @author Gregory Amerson
  */
-public class LiferayVersionDefaultValueService extends DefaultValueService
-{
-    private Set<String> possibleValues;
-    private String runtimeVersion;
+public class LiferayVersionDefaultValueService extends DefaultValueService {
 
-    @Override
-    protected void initDefaultValueService()
-    {
-        super.initDefaultValueService();
+	@Override
+	protected String compute() {
+		String data = null;
 
-        final PropertyDef def = context().find( PropertyDef.class );
-        final Property property = context( Element.class ).property( def );
-        final PossibleValuesService possibleValuesService = property.service( PossibleValuesService.class );
+		if (_possibleValues.size() > 0) {
+			if (_runtimeVersion == null) {
+				new Job("get runtime version") {
 
-        possibleValuesService.attach
-        (
-            new Listener()
-            {
-                @Override
-                public void handle( Event event )
-                {
-                    possibleValues = possibleValuesService.values();
-                    refresh();
-                }
-            }
-        );
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						NewLiferayProfile newLiferayProfile = context(NewLiferayProfile.class);
 
-        context( NewLiferayProfile.class ).property( NewLiferayProfile.PROP_RUNTIME_NAME ).attach
-        (
-            new FilteredListener<PropertyContentEvent>()
-            {
-                @Override
-                protected void handleTypedEvent( PropertyContentEvent event )
-                {
-                    possibleValues = possibleValuesService.values();
-                    runtimeVersion = null;
-                    refresh();
-                }
-            }
-        );
+						if (newLiferayProfile.disposed()) {
+							return Status.OK_STATUS;
+						}
 
-        this.possibleValues = possibleValuesService.values();
-    }
+						String runtimeName = newLiferayProfile.getRuntimeName().content();
 
-    @Override
-    protected String compute()
-    {
-        String data = null;
+						ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(runtimeName);
 
-        if( this.possibleValues.size() > 0 )
-        {
-            if( this.runtimeVersion == null )
-            {
-                new Job("get runtime version")
-                {
-                    @Override
-                    protected IStatus run( IProgressMonitor monitor )
-                    {
-                        final NewLiferayProfile newLiferayProfile = context( NewLiferayProfile.class );
+						if (liferayRuntime != null) {
+							_runtimeVersion = liferayRuntime.getPortalVersion();
 
-                        if( !newLiferayProfile.disposed() )
-                        {
-                            final String runtimeName = newLiferayProfile.getRuntimeName().content();
-                            final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtimeName );
+							refresh();
+						}
 
-                            if( liferayRuntime != null )
-                            {
-                                runtimeVersion = liferayRuntime.getPortalVersion();
-                                refresh();
-                            }
-                        }
-                        return Status.OK_STATUS;
-                    }
-                }.schedule();
-            }
-            else
-            {
-                try
-                {
-                    final List<String> filteredVals = new ArrayList<String>();
+						return Status.OK_STATUS;
+					}
 
-                    for( final String val : possibleValues )
-                    {
-                        if( val.equals( runtimeVersion ) )
-                        {
-                            data = val;
-                            break;
-                        }
+				}.schedule();
+			}
+			else {
+				try {
+					List<String> filteredVals = new ArrayList<>();
 
-                        if( val.contains( runtimeVersion ) )
-                        {
-                            filteredVals.add( val );
-                        }
-                    }
+					for (String val : _possibleValues) {
+						if (val.equals(_runtimeVersion)) {
+							data = val;
 
-                    if( data == null )
-                    {
-                        if( filteredVals.size() > 0 )
-                        {
-                            data = checkForSnapshots( filteredVals.toArray( new String[0] ) );
-                        }
-                        else
-                        {
-                            data = checkForSnapshots( possibleValues.toArray( new String[0] ) );
-                        }
-                    }
-                }
-                catch( Exception e )
-                {
-                }
-            }
-        }
+							break;
+						}
 
-        return data;
-    }
+						if (val.contains(_runtimeVersion)) {
+							filteredVals.add(val);
+						}
+					}
 
-    private String checkForSnapshots( final String[] values )
-    {
-        String retval = null;
+					if (data == null) {
+						if (filteredVals.isEmpty()) {
+							data = _checkForSnapshots(_possibleValues.toArray(new String[0]));
+						}
+						else {
+							data = _checkForSnapshots(filteredVals.toArray(new String[0]));
+						}
+					}
+				}
+				catch (Exception e) {
+				}
+			}
+		}
 
-        retval = values[ values.length - 1 ];
+		return data;
+	}
 
-        if( retval.endsWith( "SNAPSHOT" ) && values.length > 1 )
-        {
-            retval = values[ values.length - 2 ];
-        }
+	@Override
+	protected void initDefaultValueService() {
+		super.initDefaultValueService();
 
-        return retval;
-    }
+		PropertyDef def = context().find(PropertyDef.class);
+
+		Property property = context(Element.class).property(def);
+
+		PossibleValuesService possibleValuesService = property.service(PossibleValuesService.class);
+
+		possibleValuesService.attach(
+			new Listener() {
+
+				@Override
+				public void handle(Event event) {
+					_possibleValues = possibleValuesService.values();
+
+					refresh();
+				}
+
+			});
+
+		NewLiferayProfile profile = context(NewLiferayProfile.class);
+
+		profile.property(NewLiferayProfile.PROP_RUNTIME_NAME).attach(
+			new FilteredListener<PropertyContentEvent>() {
+
+				@Override
+				protected void handleTypedEvent(PropertyContentEvent event) {
+					_possibleValues = possibleValuesService.values();
+
+					_runtimeVersion = null;
+
+					refresh();
+				}
+
+			});
+
+		_possibleValues = possibleValuesService.values();
+	}
+
+	private String _checkForSnapshots(String[] values) {
+		String retval = null;
+
+		retval = values[values.length - 1];
+
+		if (retval.endsWith("SNAPSHOT") && (values.length > 1)) {
+			retval = values[values.length - 2];
+		}
+
+		return retval;
+	}
+
+	private Set<String> _possibleValues;
+	private String _runtimeVersion;
 
 }

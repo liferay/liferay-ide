@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core;
 
@@ -34,160 +33,155 @@ import org.eclipse.jst.common.jdt.internal.classpath.ClasspathDecorationsManager
 /**
  * @author Simon.Jiang
  */
-@SuppressWarnings( "restriction" )
-public class SDKClasspathContainerInitializer extends ClasspathContainerInitializer
-{
-    protected static final ClasspathDecorationsManager cpDecorations = SDKClasspathContainer.getDecorationsManager();
+@SuppressWarnings("restriction")
+public class SDKClasspathContainerInitializer extends ClasspathContainerInitializer {
 
-    @Override
-    public boolean canUpdateClasspathContainer( IPath containerPath, IJavaProject project )
-    {
-        return true;
-    }
+	@Override
+	public boolean canUpdateClasspathContainer(IPath containerPath, IJavaProject project) {
+		return true;
+	}
 
-    private IPath[] getSDKDependencies( IJavaProject project )
-    {
-        IPath[] dependencyJarPaths = null;
+	@Override
+	public void initialize(IPath containerPath, IJavaProject project) throws CoreException {
+		IClasspathContainer classpathContainer = null;
 
-        SDK sdk = SDKUtil.getSDKFromProjectDir( project.getProject().getLocation().toFile() );
+		String root = containerPath.segment(0);
 
-        if ( sdk != null )
-        {
-            dependencyJarPaths = sdk.getDependencyJarPaths();
-        }
+		if (!SDKClasspathContainer.ID.equals(root)) {
+			String msg = "Invalid plugin classpath container, expecting container root ";
 
-        return dependencyJarPaths;
-    }
+			throw new CoreException(ProjectCore.createErrorStatus(msg + SDKClasspathContainer.ID));
+		}
 
-    @Override
-    public void initialize( IPath containerPath, IJavaProject project ) throws CoreException
-    {
-        IClasspathContainer classpathContainer = null;
+		PortalBundle bundle = ServerUtil.getPortalBundle(project.getProject());
 
-        String root = containerPath.segment( 0 );
+		if (bundle == null) {
+			String msg = "Invalid sdk properties setting.";
 
-        if( !SDKClasspathContainer.ID.equals( root ) )
-        {
-            final String msg = "Invalid plugin classpath container, expecting container root "; //$NON-NLS-1$
-            throw new CoreException( ProjectCore.createErrorStatus( msg + SDKClasspathContainer.ID ) );
-        }
+			throw new CoreException(ProjectCore.createErrorStatus(msg));
+		}
 
-        PortalBundle bundle = ServerUtil.getPortalBundle(project.getProject());
+		IPath globalDir = bundle.getAppServerLibGlobalDir();
 
-        if ( bundle == null )
-        {
-            final String msg = "Invalid sdk properties setting.";
-            throw new CoreException( ProjectCore.createErrorStatus( msg ) );
-        }
+		IPath portalDir = bundle.getAppServerPortalDir();
 
-        IPath globalDir = bundle.getAppServerLibGlobalDir();
+		IPath bundleDir = bundle.getAppServerDir();
 
-        IPath portalDir = bundle.getAppServerPortalDir();
+		IPath[] bundleDependencyJars = bundle.getBundleDependencyJars();
 
-        IPath bundleDir = bundle.getAppServerDir();
+		IPath[] sdkDependencyJarPaths = _getSDKDependencies(project);
 
-        IPath[] bundleDependencyJars = bundle.getBundleDependencyJars();
+		if (portalDir == null) {
+			return;
+		}
 
-        IPath[] sdkDependencyJarPaths = getSDKDependencies( project );
+		classpathContainer = new SDKClasspathContainer(
+			containerPath, project, portalDir, null, null, globalDir, bundleDir, bundleDependencyJars,
+			sdkDependencyJarPaths);
 
-        if( portalDir == null )
-        {
-            return;
-        }
+		IJavaProject[] projects = {project};
 
-        classpathContainer =
-            new SDKClasspathContainer(
-                containerPath, project, portalDir, null, null, globalDir, bundleDir, bundleDependencyJars,
-                sdkDependencyJarPaths );
+		IClasspathContainer[] containers = {classpathContainer};
 
-        JavaCore.setClasspathContainer(
-            containerPath, new IJavaProject[] { project }, new IClasspathContainer[] { classpathContainer }, null );
-    }
+		JavaCore.setClasspathContainer(containerPath, projects, containers, null);
+	}
 
-    @Override
-    public void requestClasspathContainerUpdate(
-        IPath containerPath, IJavaProject project, IClasspathContainer containerSuggestion ) throws CoreException
-    {
-        final String key =
-            SDKClasspathContainer.getDecorationManagerKey( project.getProject(), containerPath.toString() );
+	@Override
+	public void requestClasspathContainerUpdate(
+			IPath containerPath, IJavaProject project, IClasspathContainer containerSuggestion)
+		throws CoreException {
 
-        final IClasspathEntry[] entries = containerSuggestion.getClasspathEntries();
+		String key = SDKClasspathContainer.getDecorationManagerKey(project.getProject(), containerPath.toString());
 
-        cpDecorations.clearAllDecorations( key );
+		IClasspathEntry[] entries = containerSuggestion.getClasspathEntries();
 
-        for( int i = 0; i < entries.length; i++ )
-        {
-            final IClasspathEntry entry = entries[i];
+		cpDecorations.clearAllDecorations(key);
 
-            final IPath srcpath = entry.getSourceAttachmentPath();
-            final IPath srcrootpath = entry.getSourceAttachmentRootPath();
-            final IClasspathAttribute[] attrs = entry.getExtraAttributes();
+		for (int i = 0; i < entries.length; i++) {
+			IClasspathEntry entry = entries[i];
 
-            if( srcpath != null || attrs.length > 0 )
-            {
-                final String eid = entry.getPath().toString();
-                final ClasspathDecorations dec = new ClasspathDecorations();
+			IPath srcpath = entry.getSourceAttachmentPath();
 
-                dec.setSourceAttachmentPath( srcpath );
-                dec.setSourceAttachmentRootPath( srcrootpath );
-                dec.setExtraAttributes( attrs );
+			IPath srcrootpath = entry.getSourceAttachmentRootPath();
 
-                cpDecorations.setDecorations( key, eid, dec );
-            }
-        }
+			IClasspathAttribute[] attrs = entry.getExtraAttributes();
 
-        cpDecorations.save();
+			if ((srcpath != null) || (attrs.length > 0)) {
+				String eid = entry.getPath().toString();
 
-        IPath portalDir = null;
-        IPath portalGlobalDir = null;
-        String javadocURL = null;
-        IPath sourceLocation = null;
-        IPath bundleDir = null;
-        IPath[] bundleDependencyJarPaths = null;
+				ClasspathDecorations dec = new ClasspathDecorations();
 
-        PortalBundle bundle = ServerUtil.getPortalBundle(project.getProject());
+				dec.setSourceAttachmentPath(srcpath);
+				dec.setSourceAttachmentRootPath(srcrootpath);
+				dec.setExtraAttributes(attrs);
 
-        boolean containerChanged = true;
+				cpDecorations.setDecorations(key, eid, dec);
+			}
+		}
 
-        if( containerSuggestion instanceof SDKClasspathContainer )
-        {
-            portalDir = ( (SDKClasspathContainer) containerSuggestion ).getPortalDir();
-            bundleDir = ( (SDKClasspathContainer) containerSuggestion ).getBundleDir();
-            portalGlobalDir = ( (SDKClasspathContainer) containerSuggestion ).getPortalGlobalDir();
-            javadocURL = ( (SDKClasspathContainer) containerSuggestion ).getJavadocURL();
-            sourceLocation = ( (SDKClasspathContainer) containerSuggestion ).getSourceLocation();
-            bundleDependencyJarPaths = ( (SDKClasspathContainer) containerSuggestion ).getBundleLibDependencyPath();
+		cpDecorations.save();
 
-            if ( bundle != null && bundle.getAppServerPortalDir().equals( portalDir ) )
-            {
-                containerChanged = false;
-            }
-        }
+		IPath portalDir = null;
+		IPath portalGlobalDir = null;
+		String javadocURL = null;
+		IPath sourceLocation = null;
+		IPath bundleDir = null;
+		IPath[] bundleDependencyJarPaths = null;
 
-        if ( containerChanged == true)
-        {
-            if ( bundle == null )
-            {
-                return;
-            }
+		PortalBundle bundle = ServerUtil.getPortalBundle(project.getProject());
 
-            portalDir = bundle.getAppServerPortalDir();
-            portalGlobalDir = bundle.getAppServerLibGlobalDir();
-            bundleDependencyJarPaths = bundle.getBundleDependencyJars();
-        }
+		boolean containerChanged = true;
 
-        IPath[] sdkDependencyPaths = getSDKDependencies( project );
+		if (containerSuggestion instanceof SDKClasspathContainer) {
+			portalDir = ((SDKClasspathContainer)containerSuggestion).getPortalDir();
+			bundleDir = ((SDKClasspathContainer)containerSuggestion).getBundleDir();
+			portalGlobalDir = ((SDKClasspathContainer)containerSuggestion).getPortalGlobalDir();
+			javadocURL = ((SDKClasspathContainer)containerSuggestion).getJavadocURL();
+			sourceLocation = ((SDKClasspathContainer)containerSuggestion).getSourceLocation();
+			bundleDependencyJarPaths = ((SDKClasspathContainer)containerSuggestion).getBundleLibDependencyPath();
 
-        if( portalDir != null && portalGlobalDir != null )
-        {
-            IClasspathContainer newContainer =
-                new SDKClasspathContainer(
-                    containerPath, project, portalDir, javadocURL, sourceLocation, portalGlobalDir, bundleDir,
-                    bundleDependencyJarPaths, sdkDependencyPaths );
+			if ((bundle != null) && bundle.getAppServerPortalDir().equals(portalDir)) {
+				containerChanged = false;
+			}
+		}
 
-            JavaCore.setClasspathContainer(
-                containerPath, new IJavaProject[] { project }, new IClasspathContainer[] { newContainer }, null );
-        }
-    }
+		if (containerChanged == true) {
+			if (bundle == null) {
+				return;
+			}
+
+			portalDir = bundle.getAppServerPortalDir();
+			portalGlobalDir = bundle.getAppServerLibGlobalDir();
+			bundleDependencyJarPaths = bundle.getBundleDependencyJars();
+		}
+
+		IPath[] sdkDependencyPaths = _getSDKDependencies(project);
+
+		if ((portalDir != null) && (portalGlobalDir != null)) {
+			IClasspathContainer newContainer = new SDKClasspathContainer(
+				containerPath, project, portalDir, javadocURL, sourceLocation, portalGlobalDir, bundleDir,
+				bundleDependencyJarPaths, sdkDependencyPaths);
+
+			IJavaProject[] projects = {project};
+
+			IClasspathContainer[] containers = {newContainer};
+
+			JavaCore.setClasspathContainer(containerPath, projects, containers, null);
+		}
+	}
+
+	protected static final ClasspathDecorationsManager cpDecorations = SDKClasspathContainer.getDecorationsManager();
+
+	private IPath[] _getSDKDependencies(IJavaProject project) {
+		IPath path = project.getProject().getLocation();
+
+		SDK sdk = SDKUtil.getSDKFromProjectDir(path.toFile());
+
+		if (sdk == null) {
+			return null;
+		}
+
+		return sdk.getDependencyJarPaths();
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.project.core;
 
@@ -35,125 +34,119 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
  * @author Kuo Zhang
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidator
-{
-    public static final String LOCATION_TARGETED_RUNTIMES = "Targeted Runtimes";
+@SuppressWarnings("restriction")
+public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidator {
 
-    public static final String ID_PRIMARY_RUNTIME_NOT_SET = "primary-runtime-not-set";
-    public static final String ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME = "primary-runtime-not-liferay-runtime";
-    public static final String ID_PLUGINS_SDK_NOT_SET = "plugins-sdk-not-set";
+	public static final String ID_PLUGINS_SDK_NOT_SET = "plugins-sdk-not-set";
 
-    public static final String MSG_PRIMARY_RUNTIME_NOT_SET = Msgs.primaryRuntimeNotSet;
-    public static final String MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME = Msgs.primaryRuntimeNotLiferayRuntime;
+	public static final String ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME = "primary-runtime-not-liferay-runtime";
 
-    public static final String LOCATION_TARGETED_SDK = "Targeted SDK";
+	public static final String ID_PRIMARY_RUNTIME_NOT_SET = "primary-runtime-not-set";
 
-    public void validate( IFacetedProject fproj ) throws CoreException
-    {
+	public static final String LOCATION_TARGETED_RUNTIMES = "Targeted Runtimes";
 
-        final IProject proj = fproj.getProject();
+	public static final String LOCATION_TARGETED_SDK = "Targeted SDK";
 
-        if ( ProjectUtil.isLiferayFacetedProject( proj ) )
-        {
-            clearMarkers( proj );
+	public static final String MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME = Msgs.primaryRuntimeNotLiferayRuntime;
 
-            if( SDKUtil.isSDKProject( fproj.getProject() ) )
-            {
-                IJavaProject javaProject = JavaCore.create( proj );
+	public static final String MSG_PRIMARY_RUNTIME_NOT_SET = Msgs.primaryRuntimeNotSet;
 
-                for( IClasspathEntry entry : javaProject.getRawClasspath() )
-                {
-                    if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
-                        entry.getPath().segment( 0 ).equals( SDKClasspathContainer.ID ) )
-                    {
-                        return;
-                    }
-                }
+	public void validate(IFacetedProject fproj) throws CoreException {
+		IProject project = fproj.getProject();
 
-                if( fproj.getPrimaryRuntime() == null )
-                {
-                    setMarker(
-                        proj, ProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR,
-                        MSG_PRIMARY_RUNTIME_NOT_SET, LOCATION_TARGETED_RUNTIMES, ID_PRIMARY_RUNTIME_NOT_SET );
-                }
-                else
-                {
-                    if( ! ServerUtil.isLiferayRuntime( (BridgedRuntime) fproj.getPrimaryRuntime() ) )
-                    {
-                        setMarker(
-                            proj, ProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR,
-                            MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME, LOCATION_TARGETED_RUNTIMES,
-                            ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME );
-                    }
-                }
-            }
-            else if ( !ProjectUtil.isMavenProject( proj ) )
-            {
+		if (!ProjectUtil.isLiferayFacetedProject(project)) {
+			return;
+		}
 
-                setMarker(
-                    proj, ProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR, Msgs.pluginSDKNotSet,
-                    LOCATION_TARGETED_SDK, ID_PLUGINS_SDK_NOT_SET );
-            }
-        }
-    }
+		_clearMarkers(project);
 
-    private void clearMarkers( IProject proj )
-    {
-        try
-        {
-            if( proj.isOpen() )
-            {
-                IMarker[] markers =
-                    proj.findMarkers( ProjectCore.LIFERAY_PROJECT_MARKER_TYPE, true, IResource.DEPTH_INFINITE );
+		if (SDKUtil.isSDKProject(fproj.getProject())) {
+			IJavaProject javaProject = JavaCore.create(project);
 
-                for( IMarker marker : markers )
-                {
-                    for( String id : getMarkerSourceIds() )
-                    {
-                        if( marker.getAttribute( IMarker.SOURCE_ID ).equals( id ) )
-                        {
-                            marker.delete();
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        catch( CoreException e )
-        {
-            ProjectCore.logError( e );
-        }
-    }
+			for (IClasspathEntry entry : javaProject.getRawClasspath()) {
+				String segment = entry.getPath().segment(0);
 
-    private String[] getMarkerSourceIds()
-    {
-        return new String[] { ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME, ID_PRIMARY_RUNTIME_NOT_SET,
-            ID_PLUGINS_SDK_NOT_SET };
-    }
+				if ((entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) &&
+					segment.equals(SDKClasspathContainer.ID)) {
 
-    private void setMarker(
-        IProject proj, String markerType, int markerSeverity, String markerMsg, String markerLocation,
-        String markerSourceId ) throws CoreException
-    {
-        IMarker marker = proj.createMarker( markerType );
+					return;
+				}
+			}
 
-        marker.setAttribute( IMarker.SEVERITY, markerSeverity );
-        marker.setAttribute( IMarker.MESSAGE, markerMsg );
-        marker.setAttribute( IMarker.LOCATION, markerLocation );
-        marker.setAttribute( IMarker.SOURCE_ID, markerSourceId );
-    }
+			if (fproj.getPrimaryRuntime() == null) {
+				_setMarker(
+					project, ProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR,
+					MSG_PRIMARY_RUNTIME_NOT_SET, LOCATION_TARGETED_RUNTIMES, ID_PRIMARY_RUNTIME_NOT_SET);
+			}
+			else {
+				if (!ServerUtil.isLiferayRuntime((BridgedRuntime)fproj.getPrimaryRuntime())) {
+					_setMarker(
+						project, ProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR,
+						MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME, LOCATION_TARGETED_RUNTIMES,
+						ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME);
+				}
+			}
+		}
+		else if (!ProjectUtil.isMavenProject(project)) {
+			_setMarker(
+				project, ProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR, Msgs.pluginSDKNotSet,
+				LOCATION_TARGETED_SDK, ID_PLUGINS_SDK_NOT_SET);
+		}
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String primaryRuntimeNotSet;
-        public static String primaryRuntimeNotLiferayRuntime;
-        public static String pluginSDKNotSet;
+	private void _clearMarkers(IProject project) {
+		if (!project.isOpen()) {
+			return;
+		}
 
-        static
-        {
-            initializeMessages( PluginsSDKProjectRuntimeValidator.class.getName(), Msgs.class );
-        }
-    }
+		try {
+			IMarker[] markers = project.findMarkers(
+				ProjectCore.LIFERAY_PROJECT_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
+
+			for (IMarker marker : markers) {
+				for (String id : _getMarkerSourceIds()) {
+					if (marker.getAttribute(IMarker.SOURCE_ID).equals(id)) {
+						marker.delete();
+
+						break;
+					}
+				}
+			}
+		}
+		catch (CoreException ce) {
+			ProjectCore.logError(ce);
+		}
+	}
+
+	private String[] _getMarkerSourceIds() {
+		return new String[] {
+			ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME, ID_PRIMARY_RUNTIME_NOT_SET, ID_PLUGINS_SDK_NOT_SET
+		};
+	}
+
+	private void _setMarker(
+			IProject proj, String markerType, int markerSeverity, String markerMsg, String markerLocation,
+			String markerSourceId)
+		throws CoreException {
+
+		IMarker marker = proj.createMarker(markerType);
+
+		marker.setAttribute(IMarker.SEVERITY, markerSeverity);
+		marker.setAttribute(IMarker.MESSAGE, markerMsg);
+		marker.setAttribute(IMarker.LOCATION, markerLocation);
+		marker.setAttribute(IMarker.SOURCE_ID, markerSourceId);
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String pluginSDKNotSet;
+		public static String primaryRuntimeNotLiferayRuntime;
+		public static String primaryRuntimeNotSet;
+
+		static {
+			initializeMessages(PluginsSDKProjectRuntimeValidator.class.getName(), Msgs.class);
+		}
+
+	}
 
 }

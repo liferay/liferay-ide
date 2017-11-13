@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import static com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods.supportsTypePlugin;
@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
-import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -36,82 +35,86 @@ import org.eclipse.sapphire.services.ValidationService;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public class PluginTypeValidationService extends ValidationService
-{
+public class PluginTypeValidationService extends ValidationService {
 
-    @Override
-    protected void initValidationService()
-    {
-        super.initValidationService();
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-        final Listener listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		NewLiferayPluginProjectOp op = _op();
 
-        op().getProjectProvider().attach( listener );
-    }
+		try {
+			SDK sdk = SDKUtil.getWorkspaceSDK();
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+			if (sdk == null) {
+				Path sdkLocation = op.getSdkLocation().content();
 
-        try
-        {
-            SDK sdk = SDKUtil.getWorkspaceSDK();
+				if (sdkLocation != null) {
+					sdk = SDKUtil.createSDKFromLocation(PathBridge.create(sdkLocation));
+				}
+			}
 
-            final NewLiferayPluginProjectOp op = op();
+			PluginType pluginType = op.getPluginType().content();
 
-            if ( sdk == null )
-            {
-                Path sdkLocation = op.getSdkLocation().content();
-                
-                if ( sdkLocation != null )
-                {
-                    sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkLocation ) );
-                }
-            }
-            
-            if( sdk != null )
-            {
-                if( op.getPluginType().content().equals( PluginType.web ) && !supportsTypePlugin( op, "web" ) )
-                {
-                    retval = Status.createErrorStatus(
-                        "The selected Plugins SDK does not support creating new web type plugins.  " +
-                            "Please configure version 7.0 or greater." );
-                }
-                else if( op.getPluginType().content().equals( PluginType.theme ) && !supportsTypePlugin( op, "theme" ) )
-                {
-                    retval = Status.createErrorStatus(
-                        "The selected Plugins SDK does not support creating theme type plugins.  " +
-                            "Please configure version 6.2 or less or using gulp way." );
-                }
-                else if( op.getPluginType().content().equals( PluginType.ext ) && !supportsTypePlugin( op, "ext" ) )
-                {
-                    retval = Status.createErrorStatus( "The selected Plugins SDK does not support creating ext type plugins. " +
-                                    "Please try to confirm whether sdk has ext folder." );
-                }
-            }
-            else if( op.getPluginType().content().equals( PluginType.ext ) && !supportsTypePlugin( op, "ext" ) )
-            {
-                retval = Status.createErrorStatus( "New ext plugins with maven build type are no longer supported." );
-            }
-        }
-        catch( CoreException e )
-        {
-        }
+			if (sdk != null) {
+				if (pluginType.equals(PluginType.web) && !supportsTypePlugin(op, "web")) {
+					StringBuilder sb = new StringBuilder();
 
-        return retval;
-    }
+					sb.append("The selected Plugins SDK does not support creating new web type plugins. ");
+					sb.append("");
+					sb.append("Please configure version 7.0 or greater.");
 
-    private NewLiferayPluginProjectOp op()
-    {
-        return context( NewLiferayPluginProjectOp.class );
-    }
+					return Status.createErrorStatus(sb.toString());
+				}
+				else if (pluginType.equals(PluginType.theme) && !supportsTypePlugin(op, "theme")) {
+					StringBuilder sb = new StringBuilder();
+
+					sb.append("The selected Plugins SDK does not support creating theme type plugins. ");
+					sb.append("");
+					sb.append("Please configure version 6.2 or less or using gulp way.");
+
+					return Status.createErrorStatus(sb.toString());
+				}
+				else if (pluginType.equals(PluginType.ext) && !supportsTypePlugin(op, "ext")) {
+					StringBuilder sb = new StringBuilder();
+
+					sb.append("The selected Plugins SDK does not support creating ext type plugins. ");
+					sb.append("");
+					sb.append("Please try to confirm whether sdk has ext folder.");
+
+					return Status.createErrorStatus(sb.toString());
+				}
+			}
+			else if (pluginType.equals(PluginType.ext) && !supportsTypePlugin(op, "ext")) {
+				retval = Status.createErrorStatus("New ext plugins with maven build type are no longer supported.");
+			}
+		}
+		catch (CoreException ce) {
+		}
+
+		return retval;
+	}
+
+	@Override
+	protected void initValidationService() {
+		super.initValidationService();
+
+		Listener listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		NewLiferayPluginProjectOp op = _op();
+
+		op.getProjectProvider().attach(listener);
+	}
+
+	private NewLiferayPluginProjectOp _op() {
+		return context(NewLiferayPluginProjectOp.class);
+	}
 
 }

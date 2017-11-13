@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.StringPool;
@@ -21,51 +21,52 @@ import java.util.regex.Pattern;
 
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.Resource;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
-import org.w3c.dom.Document;
 
+import org.w3c.dom.Document;
 
 /**
  * @author Gregory Amerson
  */
-public class VersionedDTDDefaultValueService extends DefaultValueService
-{
-    private Pattern systemIdPattern;
+public class VersionedDTDDefaultValueService extends DefaultValueService {
 
-    public VersionedDTDDefaultValueService(Pattern systemIdPattern)
-    {
-        this.systemIdPattern = systemIdPattern;
-    }
+	public VersionedDTDDefaultValueService(Pattern systemIdPattern) {
+		_systemIdPattern = systemIdPattern;
+	}
 
-    @Override
-    protected String compute()
-    {
-        String defaultVersion = null;
+	@Override
+	protected String compute() {
+		String defaultVersion = null;
 
-        final RootXmlResource xmlResource = this.context( Element.class ).resource().adapt( RootXmlResource.class );
+		Resource resource = context(Element.class).resource();
 
-        if( xmlResource != null )
-        {
-            final Document document = xmlResource.getDomDocument();
+		RootXmlResource xmlResource = resource.adapt(RootXmlResource.class);
 
-            if( document != null && document.getDoctype() != null )
-            {
-                String systemId = document.getDoctype().getSystemId();
-                Matcher matcher = this.systemIdPattern.matcher( systemId );
+		if (xmlResource != null) {
+			Document document = xmlResource.getDomDocument();
 
-                if( matcher.matches() )
-                {
-                    defaultVersion = matcher.group( 1 );
-                }
-            }
-        }
+			if ((document != null) && (document.getDoctype() != null)) {
+				String systemId = document.getDoctype().getSystemId();
 
-        if( defaultVersion == null )
-        {
-            defaultVersion = "6.0.0"; // default should be 6.0.0 //$NON-NLS-1$
-        }
+				Matcher matcher = _systemIdPattern.matcher(systemId);
 
-        return defaultVersion.replaceAll( StringPool.UNDERSCORE, "." );
-    }
+				if (matcher.matches()) {
+					defaultVersion = matcher.group(1);
+				}
+			}
+		}
+
+		if (defaultVersion == null) {
+
+			// default should be 6.0.0
+
+			defaultVersion = "6.0.0";
+		}
+
+		return defaultVersion.replaceAll(StringPool.UNDERSCORE, ".");
+	}
+
+	private final Pattern _systemIdPattern;
 
 }

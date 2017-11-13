@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.IPortletFramework;
@@ -23,45 +23,38 @@ import java.util.Set;
 
 import org.eclipse.sapphire.PossibleValuesService;
 
-
 /**
  * @author Gregory Amerson
  */
-public class PortletFrameworkPossibleValuesService extends PossibleValuesService
-{
-    private List<String> possibleValues;
+public class PortletFrameworkPossibleValuesService extends PossibleValuesService {
 
-    @Override
-    protected void initPossibleValuesService()
-    {
-        super.initPossibleValuesService();
+	@Override
+	public boolean ordered() {
+		return true;
+	}
 
-        possibleValues = new ArrayList<String>();
+	@Override
+	protected void compute(Set<String> values) {
+		values.addAll(_possibleValues);
+	}
 
-        for( final IPortletFramework portletFramework : ProjectCore.getPortletFrameworks() )
-        {
-            if( shouldAdd( portletFramework ) )
-            {
-                possibleValues.add( portletFramework.getShortName() );
-            }
-        }
-    }
+	@Override
+	protected void initPossibleValuesService() {
+		super.initPossibleValuesService();
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        values.addAll( this.possibleValues );
-    }
+		_possibleValues = new ArrayList<>();
 
-    protected boolean shouldAdd( IPortletFramework framework )
-    {
-        return ! framework.isAdvanced();
-    }
+		for (IPortletFramework portletFramework : ProjectCore.getPortletFrameworks()) {
+			if (shouldAdd(portletFramework)) {
+				_possibleValues.add(portletFramework.getShortName());
+			}
+		}
+	}
 
-    @Override
-    public boolean ordered()
-    {
-        return true;
-    }
+	protected boolean shouldAdd(IPortletFramework framework) {
+		return !framework.isAdvanced();
+	}
+
+	private List<String> _possibleValues;
 
 }

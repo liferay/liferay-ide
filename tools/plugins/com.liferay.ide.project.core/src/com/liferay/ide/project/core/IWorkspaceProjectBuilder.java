@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.project.core;
 
 import org.eclipse.core.resources.IProject;
@@ -19,11 +19,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
-
 /**
  * @author Gregory Amerson
  */
-public interface IWorkspaceProjectBuilder
-{
-    IStatus initBundle( IProject project, String bundleUrl, IProgressMonitor monitor ) throws CoreException;
+public interface IWorkspaceProjectBuilder {
+
+	public IStatus initBundle(IProject project, String bundleUrl, IProgressMonitor monitor) throws CoreException;
+
 }
