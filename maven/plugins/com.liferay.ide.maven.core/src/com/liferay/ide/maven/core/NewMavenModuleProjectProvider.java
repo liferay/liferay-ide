@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.core;
 
@@ -26,6 +25,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.archetype.catalog.Archetype;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -43,134 +43,124 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider implements NewLiferayProjectProvider<NewLiferayModuleProjectOp>
-{
-    @Override
-    public IStatus createNewProject( NewLiferayModuleProjectOp op, IProgressMonitor monitor ) throws CoreException
-    {
-        IStatus retval = null;
+@SuppressWarnings("restriction")
+public class NewMavenModuleProjectProvider
+	extends LiferayMavenProjectProvider implements NewLiferayProjectProvider<NewLiferayModuleProjectOp> {
 
-        final IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
+	@Override
+	public IStatus createNewProject(NewLiferayModuleProjectOp op, IProgressMonitor monitor) throws CoreException {
+		IStatus retval = null;
 
-        IPath location = PathBridge.create( op.getLocation().content() );
+		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
-        final String groupId = op.getGroupId().content();
-        final String artifactId = op.getProjectName().content();
-        final String version = op.getArtifactVersion().content();
-        final String javaPackage = op.getPackageName().content();
-        final String className = op.getComponentName().content();
-        final String serviceName = op.getServiceName().content();
+		IPath location = PathBridge.create(op.getLocation().content());
 
-        final String archetypeArtifactId = op.getArchetype().content();
+		String groupId = op.getGroupId().content();
+		String artifactId = op.getProjectName().content();
+		String version = op.getArtifactVersion().content();
+		String javaPackage = op.getPackageName().content();
+		String className = op.getComponentName().content();
+		String serviceName = op.getServiceName().content();
 
-        final Archetype archetype = new Archetype();
+		String archetypeArtifactId = op.getArchetype().content();
 
-        final String[] gav = archetypeArtifactId.split( ":" );
+		Archetype archetype = new Archetype();
 
-        final String archetypeVersion = gav[gav.length - 1];
+		String[] gav = archetypeArtifactId.split(":");
 
-        archetype.setGroupId( gav[0] );
-        archetype.setArtifactId( gav[1] );
-        archetype.setVersion( archetypeVersion );
+		String archetypeVersion = gav[gav.length - 1];
 
-        final Properties properties = new Properties();
+		archetype.setGroupId(gav[0]);
+		archetype.setArtifactId(gav[1]);
 
-        if( archetype.getArtifactId().endsWith( "service.builder") )
-        {
-            String apiPath = ":" + artifactId + "-api";
+		archetype.setVersion(archetypeVersion);
 
-            properties.put( "apiPath", apiPath );
-        }
+		Properties properties = new Properties();
 
-        properties.put( "buildType", "maven" );
-        properties.put( "package", javaPackage );
-        properties.put( "className", className == null ? "" : className );
-        properties.put( "projectType", "standalone" );
-        properties.put( "serviceClass", serviceName == null ? "" : serviceName );
-        properties.put( "serviceWrapperClass", serviceName == null ? "" : serviceName );
-        properties.put( "contributorType", artifactId );
-        properties.put( "author", "liferay" );
+		if (archetype.getArtifactId().endsWith("service.builder")) {
+			String apiPath = ":" + artifactId + "-api";
 
-        for( PropertyKey propertyKey : op.getPropertyKeys() )
-        {
-            String key = propertyKey.getName().content();
-            String value = propertyKey.getValue().content();
+			properties.put("apiPath", apiPath);
+		}
 
-            properties.put( key, value );
-        }
+		properties.put("buildType", "maven");
+		properties.put("package", javaPackage);
+		properties.put("className", className == null ? "" : className);
+		properties.put("projectType", "standalone");
+		properties.put("serviceClass", serviceName == null ? "" : serviceName);
+		properties.put("serviceWrapperClass", serviceName == null ? "" : serviceName);
+		properties.put("contributorType", artifactId);
+		properties.put("author", "liferay");
 
-        if( serviceName != null )
-        {
-            properties.put( "service", serviceName );
-        }
+		for (PropertyKey propertyKey : op.getPropertyKeys()) {
+			String key = propertyKey.getName().content();
+			String value = propertyKey.getValue().content();
 
-        final ResolverConfiguration resolverConfig = new ResolverConfiguration();
-        ProjectImportConfiguration configuration = new ProjectImportConfiguration( resolverConfig );
+			properties.put(key, value);
+		}
 
-        final List<IProject> newProjects =
-            projectConfigurationManager.createArchetypeProjects(
-                location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor );
+		if (serviceName != null) {
+			properties.put("service", serviceName);
+		}
 
-        ElementList<ProjectName> projectNames = op.getProjectNames();
+		ResolverConfiguration resolverConfig = new ResolverConfiguration();
 
-        if( newProjects == null || newProjects.size() == 0 )
-        {
-            retval = LiferayMavenCore.createErrorStatus( "Unable to create project from archetype." );
-        }
-        else
-        {
-            for( IProject newProject : newProjects )
-            {
-                projectNames.insert().setName( newProject.getName() );
+		ProjectImportConfiguration configuration = new ProjectImportConfiguration(resolverConfig);
 
-                String[] gradleFiles = new String[] { "build.gradle", "settings.gradle" };
+		List<IProject> newProjects = projectConfigurationManager.createArchetypeProjects(
+			location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor);
 
-                for( String path : gradleFiles )
-                {
-                    IFile gradleFile = newProject.getFile( path );
+		ElementList<ProjectName> projectNames = op.getProjectNames();
 
-                    if( gradleFile.exists() )
-                    {
-                        gradleFile.delete( true, monitor );
-                    }
-                }
-            }
+		if ((newProjects == null) || newProjects.isEmpty()) {
+			retval = LiferayMavenCore.createErrorStatus("Unable to create project from archetype.");
+		}
+		else {
+			for (IProject newProject : newProjects) {
+				projectNames.insert().setName(newProject.getName());
 
-            retval = Status.OK_STATUS;
-        }
+				String[] gradleFiles = {"build.gradle", "settings.gradle"};
 
-        return retval;
-    }
+				for (String path : gradleFiles) {
+					IFile gradleFile = newProject.getFile(path);
 
-    @Override
-    public <T> List<T> getData( String key, Class<T> type, Object... params )
-    {
-        if( "archetypeGAV".equals( key ) && type.equals( String.class ) && params.length == 1 )
-        {
-            List<T> retval = new ArrayList<>();
+					if (gradleFile.exists()) {
+						gradleFile.delete(true, monitor);
+					}
+				}
+			}
 
-            String templateName = params[0].toString();
+			retval = Status.OK_STATUS;
+		}
 
-            String gav = LiferayMavenCore.getPreferenceString( LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_PREFIX + templateName, "");
+		return retval;
+	}
 
-            if( CoreUtil.empty( gav ) )
-            {
-                gav = "com.liferay:com.liferay.project.templates." + templateName.replace( "-", "." ) + ":1.0.0";
-            }
+	@Override
+	public <T> List<T> getData(String key, Class<T> type, Object... params) {
+		if ("archetypeGAV".equals(key) && type.equals(String.class) && (params.length == 1)) {
+			List<T> retval = new ArrayList<>();
 
-            retval.add( type.cast( gav ) );
+			String templateName = params[0].toString();
 
-            return retval;
-        }
+			String gav = LiferayMavenCore.getPreferenceString(
+				LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_PREFIX + templateName, "");
 
-        return super.getData( key, type, params );
-    }
+			if (CoreUtil.empty(gav)) {
+				gav = "com.liferay:com.liferay.project.templates." + templateName.replace("-", ".") + ":1.0.0";
+			}
 
-    @Override
-    public IStatus validateProjectLocation( String projectName, IPath path )
-    {
-        return Status.OK_STATUS;
-    }
+			retval.add(type.cast(gav));
+
+			return retval;
+		}
+
+		return super.getData(key, type, params);
+	}
+
+	@Override
+	public IStatus validateProjectLocation(String projectName, IPath path) {
+		return Status.OK_STATUS;
+	}
 
 }

@@ -1,13 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2010, 2013 Sonatype, Inc.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *    Sonatype, Inc. - initial API and implementation
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.maven.core.aether;
 
@@ -17,6 +20,7 @@ import com.liferay.ide.maven.core.MavenUtil;
 import java.util.List;
 
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
+
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
@@ -35,134 +39,126 @@ import org.eclipse.m2e.core.internal.MavenPluginActivator;
 
 /**
  * A helper to boot the repository system and a repository system session.
+ * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class AetherUtil
-{
+@SuppressWarnings("restriction")
+public class AetherUtil {
 
-    public static Artifact getLatestAvailableArtifact( final String gavCoords )
-    {
-        Artifact retval = null;
+	public static Artifact getLatestAvailableArtifact(String gavCoords) {
+		Artifact retval = null;
 
-        final RepositorySystem system = newRepositorySystem();
-        final RepositorySystemSession session = newRepositorySystemSession( system );
+		RepositorySystem system = newRepositorySystem();
 
-        final String latestVersion = AetherUtil.getLatestVersion( gavCoords, system, session );
+		RepositorySystemSession session = newRepositorySystemSession(system);
 
-        final String[] gav = gavCoords.split( ":" );
+		String latestVersion = getLatestVersion(gavCoords, system, session);
 
-        final Artifact defaultArtifact = new DefaultArtifact( gav[0] + ":" + gav[1] + ":" + latestVersion );
+		String[] gav = gavCoords.split(":");
 
-        ArtifactRequest artifactRequest = new ArtifactRequest();
-        artifactRequest.setArtifact( defaultArtifact );
-        artifactRequest.addRepository( newCentralRepository() );
-//        artifactRequest.addRepository( newLiferayRepository() );
+		Artifact defaultArtifact = new DefaultArtifact(gav[0] + ":" + gav[1] + ":" + latestVersion);
 
-        try
-        {
-            ArtifactResult artifactResult = system.resolveArtifact( session, artifactRequest );
-            retval = artifactResult.getArtifact();
-        }
-        catch( ArtifactResolutionException e )
-        {
-            LiferayMavenCore.logError( "Unable to get latest Liferay archetype", e );
+		ArtifactRequest artifactRequest = new ArtifactRequest();
 
-            artifactRequest.setArtifact( new DefaultArtifact( gavCoords ) );
+		artifactRequest.setArtifact(defaultArtifact);
+		artifactRequest.addRepository(newCentralRepository());
 
-            try
-            {
-                retval = system.resolveArtifact( session, artifactRequest ).getArtifact();
-            }
-            catch( ArtifactResolutionException e1 )
-            {
-                LiferayMavenCore.logError( "Unable to get default Liferay archetype", e1 );
-            }
-        }
+		// artifactRequest.addRepository( newLiferayRepository() );
 
-        if( retval == null )
-        {
-            retval = defaultArtifact;
-        }
+		try {
+			ArtifactResult artifactResult = system.resolveArtifact(session, artifactRequest);
 
-        return retval;
-    }
+			retval = artifactResult.getArtifact();
+		}
+		catch (ArtifactResolutionException e) {
+			LiferayMavenCore.logError("Unable to get latest Liferay archetype", e);
 
-    public static String getLatestVersion( String gavCoords, RepositorySystem system, RepositorySystemSession session )
-    {
-        String retval = null;
+			artifactRequest.setArtifact(new DefaultArtifact(gavCoords));
 
-        final String[] gav = gavCoords.split( ":" );
+			try {
+				retval = system.resolveArtifact(session, artifactRequest).getArtifact();
+			}
+			catch (ArtifactResolutionException e1) {
+				LiferayMavenCore.logError("Unable to get default Liferay archetype", e1);
+			}
+		}
 
-        if( gav == null || gav.length != 3 )
-        {
-            throw new IllegalArgumentException( "gavCoords should be group:artifactId:version" );
-        }
+		if (retval == null) {
+			retval = defaultArtifact;
+		}
 
-        final Artifact artifact = new DefaultArtifact( gav[0] + ":" + gav[1] + ":[" + gav[2] + ",)" );
+		return retval;
+	}
 
-        final VersionRangeRequest rangeRequest = new VersionRangeRequest();
-        rangeRequest.setArtifact( artifact );
-        rangeRequest.addRepository( newCentralRepository() );
-//        rangeRequest.addRepository( newLiferayRepository() );
+	public static String getLatestVersion(String gavCoords, RepositorySystem system, RepositorySystemSession session) {
+		String retval = null;
 
-        try
-        {
-            final VersionRangeResult rangeResult = system.resolveVersionRange( session, rangeRequest );
-            final Version newestVersion = rangeResult.getHighestVersion();
-            final List<Version> versions = rangeResult.getVersions();
+		String[] gav = gavCoords.split(":");
 
-            if( versions.size() > 1 && newestVersion.toString().endsWith( "-SNAPSHOT" ) )
-            {
-                retval = versions.get( versions.size() - 2 ).toString();
-            }
-            else if( newestVersion != null )
-            {
-                retval = newestVersion.toString();
-            }
-        }
-        catch( VersionRangeResolutionException e )
-        {
-            LiferayMavenCore.logError( "Unable to get latest artifact version.", e );
-        }
+		if ((gav == null) || (gav.length != 3)) {
+			throw new IllegalArgumentException("gavCoords should be group:artifactId:version");
+		}
 
-        if( retval == null )
-        {
-            retval = gav[2];
-        }
+		Artifact artifact = new DefaultArtifact(gav[0] + ":" + gav[1] + ":[" + gav[2] + ",)");
 
-        return retval;
-    }
+		VersionRangeRequest rangeRequest = new VersionRangeRequest();
 
-    public static RemoteRepository newCentralRepository()
-    {
-        return new RemoteRepository.Builder( "central", "default", "http://repo1.maven.org/maven2/" ).build();
-    }
+		rangeRequest.setArtifact(artifact);
+		rangeRequest.addRepository(newCentralRepository());
 
-    public static RemoteRepository newLiferayRepository()
-    {
-        return new RemoteRepository.Builder(
-            "liferay", "default", "https://repository.liferay.com/nexus/content/groups/public/" ).build();
-    }
+		// rangeRequest.addRepository( newLiferayRepository() );
 
-    public static RepositorySystem newRepositorySystem()
-    {
-        return MavenPluginActivator.getDefault().getRepositorySystem();
-    }
+		try {
+			VersionRangeResult rangeResult = system.resolveVersionRange(session, rangeRequest);
 
-    public static DefaultRepositorySystemSession newRepositorySystemSession( RepositorySystem system )
-    {
-        DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
+			Version newestVersion = rangeResult.getHighestVersion();
+			List<Version> versions = rangeResult.getVersions();
 
-        LocalRepository localRepo = new LocalRepository( MavenUtil.getLocalRepositoryDir() );
-        session.setLocalRepositoryManager( system.newLocalRepositoryManager( session, localRepo ) );
+			if ((versions.size() > 1) && newestVersion.toString().endsWith("-SNAPSHOT")) {
+				retval = versions.get(versions.size() - 2).toString();
+			}
+			else if (newestVersion != null) {
+				retval = newestVersion.toString();
+			}
+		}
+		catch (VersionRangeResolutionException vrre) {
+			LiferayMavenCore.logError("Unable to get latest artifact version.", vrre);
+		}
 
-        session.setTransferListener( new ConsoleTransferListener() );
-        session.setRepositoryListener( new ConsoleRepositoryListener() );
+		if (retval == null) {
+			retval = gav[2];
+		}
 
-        // uncomment to generate dirty trees
-        // session.setDependencyGraphTransformer( null );
+		return retval;
+	}
 
-        return session;
-    }
+	public static RemoteRepository newCentralRepository() {
+		return new RemoteRepository.Builder("central", "default", "http://repo1.maven.org/maven2/").build();
+	}
+
+	public static RemoteRepository newLiferayRepository() {
+		return new RemoteRepository.Builder(
+			"liferay", "default", "https://repository.liferay.com/nexus/content/groups/public/"
+		).build();
+	}
+
+	public static RepositorySystem newRepositorySystem() {
+		return MavenPluginActivator.getDefault().getRepositorySystem();
+	}
+
+	public static DefaultRepositorySystemSession newRepositorySystemSession(RepositorySystem system) {
+		DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
+
+		LocalRepository localRepo = new LocalRepository(MavenUtil.getLocalRepositoryDir());
+
+		session.setLocalRepositoryManager(system.newLocalRepositoryManager(session, localRepo));
+
+		session.setTransferListener(new ConsoleTransferListener());
+		session.setRepositoryListener(new ConsoleRepositoryListener());
+
+		// uncomment to generate dirty trees
+		// session.setDependencyGraphTransformer( null );
+
+		return session;
+	}
 
 }

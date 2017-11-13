@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.core;
 
@@ -19,6 +18,7 @@ import com.liferay.ide.core.LiferayNature;
 
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -33,83 +33,67 @@ import org.eclipse.m2e.jdt.IJavaProjectConfigurator;
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public class BundleProjectConfigurator extends AbstractProjectConfigurator implements IJavaProjectConfigurator
-{
+public class BundleProjectConfigurator extends AbstractProjectConfigurator implements IJavaProjectConfigurator {
 
-    public BundleProjectConfigurator()
-    {
-        super();
-    }
+	public BundleProjectConfigurator() {
+	}
 
-    public void configureClasspath( IMavenProjectFacade facade, IClasspathDescriptor classpath, IProgressMonitor monitor )
-        throws CoreException
-    {
-    }
+	@Override
+	public void configure(ProjectConfigurationRequest request, IProgressMonitor monitor) throws CoreException {
+		if (monitor == null) {
+			monitor = new NullProgressMonitor();
+		}
 
-    public void configureRawClasspath(
-        ProjectConfigurationRequest request, IClasspathDescriptor classpath, IProgressMonitor monitor )
-        throws CoreException
-    {
-    }
+		IProject project = request.getProject();
 
-    @Override
-    public void configure( ProjectConfigurationRequest request, IProgressMonitor monitor ) throws CoreException
-    {
-        if( monitor == null )
-        {
-            monitor = new NullProgressMonitor();
-        }
+		if (_isMavenBundlePlugin(project)) {
+			LiferayNature.addLiferayNature(project, monitor);
+		}
 
-        IProject project = request.getProject();
+		monitor.worked(100);
+		monitor.done();
+	}
 
-        if( isMavenBundlePlugin( project ) )
-        {
-            LiferayNature.addLiferayNature( project, monitor );
-        }
+	public void configureClasspath(IMavenProjectFacade facade, IClasspathDescriptor classpath, IProgressMonitor monitor)
+		throws CoreException {
+	}
 
-        monitor.worked( 100 );
-        monitor.done();
-    }
+	public void configureRawClasspath(
+			ProjectConfigurationRequest request, IClasspathDescriptor classpath, IProgressMonitor monitor)
+		throws CoreException {
+	}
 
-    private boolean isMavenBundlePlugin( IProject project )
-    {
-        final NullProgressMonitor monitor = new NullProgressMonitor();
-        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( project, monitor );
+	private boolean _isMavenBundlePlugin(IProject project) {
+		NullProgressMonitor monitor = new NullProgressMonitor();
 
-        if( facade != null )
-        {
-            try
-            {
-                final MavenProject mavenProject = facade.getMavenProject( new NullProgressMonitor() );
+		IMavenProjectFacade facade = MavenUtil.getProjectFacade(project, monitor);
 
-                if( mavenProject != null && "bundle".equals( mavenProject.getPackaging() ) )
-                {
-                    final Plugin mavenBundlePlugin =
-                        MavenUtil.getPlugin( facade, ILiferayMavenConstants.MAVEN_BUNDLE_PLUGIN_KEY, monitor );
+		if (facade != null) {
+			try {
+				MavenProject mavenProject = facade.getMavenProject(new NullProgressMonitor());
 
-                    if( mavenBundlePlugin != null )
-                    {
-                        return true;
-                    }
+				if ((mavenProject != null) && "bundle".equals(mavenProject.getPackaging())) {
+					Plugin mavenBundlePlugin = MavenUtil.getPlugin(
+						facade, ILiferayMavenConstants.MAVEN_BUNDLE_PLUGIN_KEY, monitor);
 
-                }
-                else if( mavenProject != null && "jar".equals( mavenProject.getPackaging() ) )
-                {
-                    final Plugin bndMavenPlugin =
-                        MavenUtil.getPlugin( facade, ILiferayMavenConstants.BND_MAVEN_PLUGIN_KEY, monitor );
+					if (mavenBundlePlugin != null) {
+						return true;
+					}
+				}
+				else if ((mavenProject != null) && "jar".equals(mavenProject.getPackaging())) {
+					Plugin bndMavenPlugin = MavenUtil.getPlugin(
+						facade, ILiferayMavenConstants.BND_MAVEN_PLUGIN_KEY, monitor);
 
-                    if( bndMavenPlugin != null )
-                    {
-                        return true;
-                    }
-                }
-            }
-            catch( CoreException e )
-            {
-            }
-        }
+					if (bndMavenPlugin != null) {
+						return true;
+					}
+				}
+			}
+			catch (CoreException ce) {
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 }

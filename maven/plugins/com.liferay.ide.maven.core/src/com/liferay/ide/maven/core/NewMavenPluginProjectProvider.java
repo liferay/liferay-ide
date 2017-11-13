@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -27,7 +27,9 @@ import com.liferay.ide.theme.core.util.ThemeUtil;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.text.SimpleDateFormat;
+
 import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
@@ -46,6 +48,7 @@ import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.cli.configuration.SettingsXmlConfigurationProcessor;
 import org.apache.maven.model.Model;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -66,11 +69,12 @@ import org.eclipse.m2e.core.project.MavenUpdateRequest;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.w3c.dom.Document;
 
+import org.w3c.dom.Document;
 
 /**
  * @author Gregory Amerson
@@ -78,319 +82,302 @@ import org.w3c.dom.Document;
  * @author Kuo Zhang
  * @author Terry Jia
  */
-@SuppressWarnings( "restriction" )
-public class NewMavenPluginProjectProvider extends LiferayMavenProjectProvider implements NewLiferayProjectProvider<NewLiferayPluginProjectOp>
-{
+@SuppressWarnings("restriction")
+public class NewMavenPluginProjectProvider
+	extends LiferayMavenProjectProvider implements NewLiferayProjectProvider<NewLiferayPluginProjectOp> {
 
-    @Override
-    public IStatus createNewProject( NewLiferayPluginProjectOp op, IProgressMonitor monitor ) throws CoreException
-    {
-        ElementList<ProjectName> projectNames = op.getProjectNames();
+	@Override
+	public IStatus createNewProject(NewLiferayPluginProjectOp op, IProgressMonitor monitor) throws CoreException {
+		ElementList<ProjectName> projectNames = op.getProjectNames();
 
-        IStatus retval = null;
+		IStatus retval = null;
 
-        final IMavenConfiguration mavenConfiguration = MavenPlugin.getMavenConfiguration();
-        final IMavenProjectRegistry mavenProjectRegistry = MavenPlugin.getMavenProjectRegistry();
-        final IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
+		IMavenConfiguration mavenConfiguration = MavenPlugin.getMavenConfiguration();
+		IMavenProjectRegistry mavenProjectRegistry = MavenPlugin.getMavenProjectRegistry();
+		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
-        final String groupId = op.getGroupId().content();
-        final String artifactId = op.getProjectName().content();
-        final String version = op.getArtifactVersion().content();
-        final String javaPackage = op.getGroupId().content();
-        final String activeProfilesValue = op.getActiveProfilesValue().content();
-        final IPortletFramework portletFramework = op.getPortletFramework().content( true );
-        final String frameworkName = NewLiferayPluginProjectOpMethods.getFrameworkName( op );
+		String groupId = op.getGroupId().content();
+		String artifactId = op.getProjectName().content();
+		String version = op.getArtifactVersion().content();
+		String javaPackage = op.getGroupId().content();
+		String activeProfilesValue = op.getActiveProfilesValue().content();
+		IPortletFramework portletFramework = op.getPortletFramework().content(true);
+		String frameworkName = NewLiferayPluginProjectOpMethods.getFrameworkName(op);
 
-        IPath location = PathBridge.create( op.getLocation().content() );
+		IPath location = PathBridge.create(op.getLocation().content());
 
-        // for location we should use the parent location
-        if( location.lastSegment().equals( artifactId ) )
-        {
-            // use parent dir since maven archetype will generate new dir under this location
-            location = location.removeLastSegments( 1 );
-        }
+		// for location we should use the parent location
 
-        final String archetypeArtifactId = op.getArchetype().content( true );
+		if (location.lastSegment().equals(artifactId)) {
 
-        final Archetype archetype = new Archetype();
+			// use parent dir since maven archetype will generate new dir under this
+			// location
 
-        final String[] gav = archetypeArtifactId.split( ":" );
+			location = location.removeLastSegments(1);
+		}
 
-        final String archetypeVersion = gav[gav.length - 1];
+		String archetypeArtifactId = op.getArchetype().content(true);
 
-        archetype.setGroupId( gav[0] );
-        archetype.setArtifactId( gav[1] );
-        archetype.setVersion( archetypeVersion );
+		Archetype archetype = new Archetype();
 
-        final ArchetypeManager archetypeManager = MavenPluginActivator.getDefault().getArchetypeManager();
-        final ArtifactRepository remoteArchetypeRepository = archetypeManager.getArchetypeRepository( archetype );
-        final Properties properties = new Properties();
+		String[] gav = archetypeArtifactId.split(":");
 
-        try
-        {
-            final List<?> archProps =
-                archetypeManager.getRequiredProperties( archetype, remoteArchetypeRepository, monitor );
+		String archetypeVersion = gav[gav.length - 1];
 
-            if( !CoreUtil.isNullOrEmpty( archProps ) )
-            {
-                for( Object prop : archProps )
-                {
-                    if( prop instanceof RequiredProperty )
-                    {
-                        final RequiredProperty rProp = (RequiredProperty) prop;
+		archetype.setGroupId(gav[0]);
+		archetype.setArtifactId(gav[1]);
 
-                        if( op.getPluginType().content().equals( PluginType.theme ) )
-                        {
-                            final String key = rProp.getKey();
+		archetype.setVersion(archetypeVersion);
 
-                            if( key.equals( "themeParent" ) )
-                            {
-                                properties.put( key, op.getThemeParent().content( true ) );
-                            }
-                            else if( key.equals( "themeType" ) )
-                            {
-                                properties.put(
-                                    key, ThemeUtil.getTemplateExtension( op.getThemeFramework().content( true ) ) );
-                            }
-                        }
-                        else
-                        {
-                            properties.put( rProp.getKey(), rProp.getDefaultValue() );
-                        }
-                    }
-                }
-            }
-        }
-        catch( UnknownArchetype e1 )
-        {
-            LiferayMavenCore.logError( "Unable to find archetype required properties", e1 );
-        }
+		ArchetypeManager archetypeManager = MavenPluginActivator.getDefault().getArchetypeManager();
 
-        final ResolverConfiguration resolverConfig = new ResolverConfiguration();
+		ArtifactRepository remoteArchetypeRepository = archetypeManager.getArchetypeRepository(archetype);
 
-        if( ! CoreUtil.isNullOrEmpty( activeProfilesValue ) )
-        {
-            resolverConfig.setSelectedProfiles( activeProfilesValue );
-        }
+		Properties properties = new Properties();
 
-        final ProjectImportConfiguration configuration = new ProjectImportConfiguration( resolverConfig );
+		try {
+			List<?> archProps = archetypeManager.getRequiredProperties(archetype, remoteArchetypeRepository, monitor);
 
-        final List<IProject> newProjects =
-            projectConfigurationManager.createArchetypeProjects(
-                location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor );
+			if (!CoreUtil.isNullOrEmpty(archProps)) {
+				for (Object prop : archProps) {
+					if (prop instanceof RequiredProperty) {
+						RequiredProperty rProp = (RequiredProperty)prop;
+						Value<PluginType> pluginType = op.getPluginType();
 
-        if( !CoreUtil.isNullOrEmpty( newProjects ) )
-        {
-            op.setImportProjectStatus( true );
-            for( IProject project : newProjects )
-            {
-                projectNames.insert().setName( project.getName() );
-            }
-        }
+						if (pluginType.content().equals(PluginType.theme)) {
+							String key = rProp.getKey();
 
-        if( CoreUtil.isNullOrEmpty( newProjects ) )
-        {
-            retval = LiferayMavenCore.createErrorStatus( "New project was not created due to unknown error" );
-        }
-        else
-        {
-            final IProject firstProject = newProjects.get( 0 );
+							if (key.equals("themeParent")) {
+								properties.put(key, op.getThemeParent().content(true));
+							}
+							else if (key.equals("themeType")) {
+								properties.put(
+									key, ThemeUtil.getTemplateExtension(op.getThemeFramework().content(true)));
+							}
+						}
+						else {
+							properties.put(rProp.getKey(), rProp.getDefaultValue());
+						}
+					}
+				}
+			}
+		}
+		catch (UnknownArchetype e1) {
+			LiferayMavenCore.logError("Unable to find archetype required properties", e1);
+		}
 
-            // add new profiles if it was specified to add to project or parent poms
-            if( ! CoreUtil.isNullOrEmpty( activeProfilesValue ) )
-            {
-                final String[] activeProfiles = activeProfilesValue.split( "," );
+		ResolverConfiguration resolverConfig = new ResolverConfiguration();
 
-                // find all profiles that should go in user settings file
-                final List<NewLiferayProfile> newUserSettingsProfiles =
-                    getNewProfilesToSave( activeProfiles, op.getNewLiferayProfiles(), ProfileLocation.userSettings );
+		if (!CoreUtil.isNullOrEmpty(activeProfilesValue)) {
+			resolverConfig.setSelectedProfiles(activeProfilesValue);
+		}
 
-                if( newUserSettingsProfiles.size() > 0 )
-                {
-                    final String userSettingsFile = mavenConfiguration.getUserSettingsFile();
+		ProjectImportConfiguration configuration = new ProjectImportConfiguration(resolverConfig);
 
-                    String userSettingsPath = null;
+		List<IProject> newProjects = projectConfigurationManager.createArchetypeProjects(
+			location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor);
 
-                    if( CoreUtil.isNullOrEmpty( userSettingsFile ) )
-                    {
-                        userSettingsPath =
-                            SettingsXmlConfigurationProcessor.DEFAULT_USER_SETTINGS_FILE.getAbsolutePath();
-                    }
-                    else
-                    {
-                        userSettingsPath = userSettingsFile;
-                    }
+		if (!CoreUtil.isNullOrEmpty(newProjects)) {
+			op.setImportProjectStatus(true);
 
-                    try
-                    {
-                        // backup user's settings.xml file
-                        final File settingsXmlFile = new File( userSettingsPath );
-                        final File backupFile = getBackupFile( settingsXmlFile );
+			for (IProject project : newProjects) {
+				projectNames.insert().setName(project.getName());
+			}
+		}
 
-                        FileUtils.copyFile( settingsXmlFile, backupFile );
+		if (CoreUtil.isNullOrEmpty(newProjects)) {
+			retval = LiferayMavenCore.createErrorStatus("New project was not created due to unknown error");
+		}
+		else {
+			IProject firstProject = newProjects.get(0);
 
-                        final DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-                        final DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-                        final Document pomDocument = docBuilder.parse( settingsXmlFile.getCanonicalPath() );
+			// add new profiles if it was specified to add to project or parent poms
 
-                        for( NewLiferayProfile newProfile : newUserSettingsProfiles )
-                        {
-                            MavenUtil.createNewLiferayProfileNode( pomDocument, newProfile );
-                        }
+			if (!CoreUtil.isNullOrEmpty(activeProfilesValue)) {
+				String[] activeProfiles = activeProfilesValue.split(",");
 
-                        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                        Transformer transformer = transformerFactory.newTransformer();
-                        DOMSource source = new DOMSource( pomDocument );
-                        StreamResult result = new StreamResult( settingsXmlFile );
-                        transformer.transform(source, result);
-                    }
-                    catch( Exception e )
-                    {
-                        LiferayMavenCore.logError( "Unable to save new Liferay profile to user settings.xml.", e );
-                    }
-                }
+				// find all profiles that should go in user settings file
 
-                // find all profiles that should go in the project pom
-                final List<NewLiferayProfile> newProjectPomProfiles =
-                    getNewProfilesToSave( activeProfiles, op.getNewLiferayProfiles(), ProfileLocation.projectPom );
+				List<NewLiferayProfile> newUserSettingsProfiles = getNewProfilesToSave(
+					activeProfiles, op.getNewLiferayProfiles(), ProfileLocation.userSettings);
 
-                // only need to set the first project as nested projects should pickup the parent setting
-                final IMavenProjectFacade newMavenProject = mavenProjectRegistry.getProject( firstProject );
+				if (newUserSettingsProfiles.isEmpty()) {
+					String userSettingsFile = mavenConfiguration.getUserSettingsFile();
 
-                final IFile pomFile = newMavenProject.getPom();
+					String userSettingsPath = null;
 
-                IDOMModel domModel = null;
+					if (CoreUtil.isNullOrEmpty(userSettingsFile)) {
+						userSettingsPath =
+							SettingsXmlConfigurationProcessor.DEFAULT_USER_SETTINGS_FILE.getAbsolutePath();
+					}
+					else {
+						userSettingsPath = userSettingsFile;
+					}
 
-                try
-                {
-                    domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( pomFile );
+					try {
 
-                    for( final NewLiferayProfile newProfile : newProjectPomProfiles )
-                    {
-                        MavenUtil.createNewLiferayProfileNode( domModel.getDocument(), newProfile );
-                    }
+						// backup user's settings.xml file
 
-                    domModel.save();
+						File settingsXmlFile = new File(userSettingsPath);
 
-                }
-                catch( IOException e )
-                {
-                    LiferayMavenCore.logError( "Unable to save new Liferay profiles to project pom.", e );
-                }
-                finally
-                {
-                    if( domModel != null )
-                    {
-                        domModel.releaseFromEdit();
-                    }
-                }
+						File backupFile = _getBackupFile(settingsXmlFile);
 
-                for( final IProject project : newProjects )
-                {
-                    try
-                    {
-                        projectConfigurationManager.updateProjectConfiguration(
-                            new MavenUpdateRequest( project, mavenConfiguration.isOffline(), true ), monitor );
-                    }
-                    catch( Exception e )
-                    {
-                        LiferayMavenCore.logError( "Unable to update configuration for " + project.getName(), e );
-                    }
-                }
+						FileUtils.copyFile(settingsXmlFile, backupFile);
 
-                final String pluginVersion =
-                    getNewLiferayProfilesPluginVersion( activeProfiles, op.getNewLiferayProfiles(), archetypeVersion );
+						DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 
-                final String archVersion = MavenUtil.getMajorMinorVersionOnly( archetypeVersion );
-                updateDtdVersion( firstProject, pluginVersion, archVersion );
-            }
+						DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
-            if( op.getPluginType().content().equals( PluginType.portlet ) )
-            {
-                final String portletName = op.getPortletName().content( false );
-                retval = portletFramework.postProjectCreated( firstProject, frameworkName, portletName, monitor );
-            }
-        }
+						Document pomDocument = docBuilder.parse(settingsXmlFile.getCanonicalPath());
 
-        if( retval == null )
-        {
-            retval = Status.OK_STATUS;
-        }
+						for (NewLiferayProfile newProfile : newUserSettingsProfiles) {
+							MavenUtil.createNewLiferayProfileNode(pomDocument, newProfile);
+						}
 
-        return retval;
-    }
+						TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
-    private File getBackupFile( final File file )
-    {
-        final String suffix = new SimpleDateFormat( "yyyyMMddhhmmss" ).format( Calendar.getInstance().getTime() );
-        return new File( file.getParentFile(), file.getName() + "." + suffix );
-    }
+						Transformer transformer = transformerFactory.newTransformer();
 
-    @Override
-    public IStatus validateProjectLocation( String projectName, IPath path )
-    {
-        IStatus retval = Status.OK_STATUS;
-        // if the path is a folder and it has a pom.xml that is a package type of 'pom' then this is a valid location
-        //if projectName is null or empty , don't need to check , just return
-        if( CoreUtil.isNullOrEmpty(projectName) )
-            return  retval;
+						DOMSource source = new DOMSource(pomDocument);
 
-        final File dir = path.toFile();
+						StreamResult result = new StreamResult(settingsXmlFile);
 
-        if( dir.exists() )
-        {
-            final File pomFile = path.append( IMavenConstants.POM_FILE_NAME ).toFile();
+						transformer.transform(source, result);
+					}
+					catch (Exception e) {
+						LiferayMavenCore.logError("Unable to save new Liferay profile to user settings.xml.", e);
+					}
+				}
 
-            if( pomFile.exists() )
-            {
-                final IMaven maven = MavenPlugin.getMaven();
+				// find all profiles that should go in the project pom
 
-                try
-                {
-                    final Model result = maven.readModel( pomFile );
+				List<NewLiferayProfile> newProjectPomProfiles = getNewProfilesToSave(
+					activeProfiles, op.getNewLiferayProfiles(), ProfileLocation.projectPom);
 
-                    if( ! "pom".equals( result.getPackaging() ) )
-                    {
-                        retval =
-                            LiferayMavenCore.createErrorStatus( "\"" + pomFile.getParent() +
-                                "\" contains a non-parent maven project." );
-                    }
-                    else
-                    {
-                        final String name = result.getName();
+				// only need to set the first project as nested projects should pickup the
+				// parent setting
 
-                        if( projectName.equals( name ) )
-                        {
-                            retval =
-                                LiferayMavenCore.createErrorStatus( "The project name \"" + projectName +
-                                    "\" can't be the same as the parent." );
-                        }
-                        else
-                        {
-                            final IPath newProjectPath = path.append( projectName );
+				IMavenProjectFacade newMavenProject = mavenProjectRegistry.getProject(firstProject);
 
-                            retval = validateProjectLocation( projectName, newProjectPath );
-                        }
-                    }
-                }
-                catch( CoreException e )
-                {
-                    retval = LiferayMavenCore.createErrorStatus( "Invalid project location.", e );
-                    LiferayMavenCore.log( retval );
-                }
-            }
-            else
-            {
-                final File[] files = dir.listFiles();
+				IFile pomFile = newMavenProject.getPom();
 
-                if( files.length > 0 )
-                {
-                    retval = LiferayMavenCore.createErrorStatus( "Project location is not empty or a parent pom." );
-                }
-            }
-        }
+				IDOMModel domModel = null;
 
-        return retval;
-    }
+				try {
+					domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForEdit(pomFile);
+
+					for (NewLiferayProfile newProfile : newProjectPomProfiles) {
+						MavenUtil.createNewLiferayProfileNode(domModel.getDocument(), newProfile);
+					}
+
+					domModel.save();
+				}
+				catch (IOException ioe) {
+					LiferayMavenCore.logError("Unable to save new Liferay profiles to project pom.", ioe);
+				}
+				finally {
+					if (domModel != null) {
+						domModel.releaseFromEdit();
+					}
+				}
+
+				for (IProject project : newProjects) {
+					try {
+						projectConfigurationManager.updateProjectConfiguration(
+							new MavenUpdateRequest(project, mavenConfiguration.isOffline(), true), monitor);
+					}
+					catch (Exception e) {
+						LiferayMavenCore.logError("Unable to update configuration for " + project.getName(), e);
+					}
+				}
+
+				String pluginVersion = getNewLiferayProfilesPluginVersion(
+					activeProfiles, op.getNewLiferayProfiles(), archetypeVersion);
+
+				String archVersion = MavenUtil.getMajorMinorVersionOnly(archetypeVersion);
+
+				updateDtdVersion(firstProject, pluginVersion, archVersion);
+			}
+
+			Value<PluginType> pluginType = op.getPluginType();
+
+			if (pluginType.content().equals(PluginType.portlet)) {
+				String portletName = op.getPortletName().content(false);
+
+				retval = portletFramework.postProjectCreated(firstProject, frameworkName, portletName, monitor);
+			}
+		}
+
+		if (retval == null) {
+			retval = Status.OK_STATUS;
+		}
+
+		return retval;
+	}
+
+	@Override
+	public IStatus validateProjectLocation(String projectName, IPath path) {
+		IStatus retval = Status.OK_STATUS;
+
+		// if the path is a folder and it has a pom.xml that is a package type of 'pom'
+		// then this is a valid location
+		// if projectName is null or empty , don't need to check , just return
+
+		if (CoreUtil.isNullOrEmpty(projectName)) {
+			return retval;
+		}
+
+		File dir = path.toFile();
+
+		if (dir.exists()) {
+			File pomFile = path.append(IMavenConstants.POM_FILE_NAME).toFile();
+
+			if (pomFile.exists()) {
+				IMaven maven = MavenPlugin.getMaven();
+
+				try {
+					Model result = maven.readModel(pomFile);
+
+					if (!"pom".equals(result.getPackaging())) {
+						retval = LiferayMavenCore.createErrorStatus(
+							"\"" + pomFile.getParent() + "\" contains a non-parent maven project.");
+					}
+					else {
+						String name = result.getName();
+
+						if (projectName.equals(name)) {
+							retval = LiferayMavenCore.createErrorStatus(
+								"The project name \"" + projectName + "\" can't be the same as the parent.");
+						}
+						else {
+							IPath newProjectPath = path.append(projectName);
+
+							retval = validateProjectLocation(projectName, newProjectPath);
+						}
+					}
+				}
+				catch (CoreException ce) {
+					retval = LiferayMavenCore.createErrorStatus("Invalid project location.", ce);
+
+					LiferayMavenCore.log(retval);
+				}
+			}
+			else {
+				File[] files = dir.listFiles();
+
+				if (files.length > 0) {
+					retval = LiferayMavenCore.createErrorStatus("Project location is not empty or a parent pom.");
+				}
+			}
+		}
+
+		return retval;
+	}
+
+	private File _getBackupFile(File file) {
+		String suffix = new SimpleDateFormat("yyyyMMddhhmmss").format(Calendar.getInstance().getTime());
+
+		return new File(file.getParentFile(), file.getName() + "." + suffix);
+	}
 
 }

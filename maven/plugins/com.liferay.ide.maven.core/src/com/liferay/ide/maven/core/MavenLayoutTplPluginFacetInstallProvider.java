@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,32 +10,27 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.layouttpl.core.facet.LayoutTplPluginFacetInstallDataModelProvider;
 
-
 /**
  * @author Gregory Amerson
  */
-public class MavenLayoutTplPluginFacetInstallProvider extends LayoutTplPluginFacetInstallDataModelProvider
-{
+public class MavenLayoutTplPluginFacetInstallProvider extends LayoutTplPluginFacetInstallDataModelProvider {
 
-    @Override
-    public Object getDefaultProperty( String propertyName )
-    {
-        if( INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE.equals( propertyName ) )
-        {
-            return false;
-        }
-        else if( SETUP_DEFAULT_OUTPUT_LOCATION.equals( propertyName ) )
-        {
-            return false;
-        }
+	@Override
+	public Object getDefaultProperty(String propertyName) {
+		if (INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE.equals(propertyName)) {
+			return false;
+		}
+		else if (SETUP_DEFAULT_OUTPUT_LOCATION.equals(propertyName)) {
+			return false;
+		}
 
-        return super.getDefaultProperty( propertyName );
-    }
+		return super.getDefaultProperty(propertyName);
+	}
 
 }

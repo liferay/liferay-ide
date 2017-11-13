@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,14 +10,14 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectImporter;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,43 +31,36 @@ import org.eclipse.m2e.core.project.IMavenProjectImportResult;
 /**
  * @author Andy Wu
  */
-public class MavenModuleProjectImporter extends AbstractLiferayProjectImporter
-{
+public class MavenModuleProjectImporter extends AbstractLiferayProjectImporter {
 
-    @Override
-    public IStatus canImport( String location )
-    {
-        IStatus retval = null;
+	@Override
+	public IStatus canImport(String location) {
+		IStatus retval = null;
 
-        File pom = new File( location, "pom.xml" );
+		File pom = new File(location, "pom.xml");
 
-        if( pom.exists() )
-        {
-            retval = Status.OK_STATUS;
-        }
+		if (pom.exists()) {
+			retval = Status.OK_STATUS;
+		}
 
-        return retval;
-    }
+		return retval;
+	}
 
-    @Override
-    public List<IProject> importProjects( String location, IProgressMonitor monitor ) throws CoreException
-    {
-        List<IProject> projects = new ArrayList<>();
+	@Override
+	public List<IProject> importProjects(String location, IProgressMonitor monitor) throws CoreException {
+		List<IProject> projects = new ArrayList<>();
 
-        try
-        {
-            List<IMavenProjectImportResult> results = MavenUtil.importProject( location, monitor );
+		try {
+			List<IMavenProjectImportResult> results = MavenUtil.importProject(location, monitor);
 
-            for( IMavenProjectImportResult result : results )
-            {
-                projects.add( result.getProject() );
-            }
-        }
-        catch( InterruptedException e )
-        {
-        }
+			for (IMavenProjectImportResult result : results) {
+				projects.add(result.getProject());
+			}
+		}
+		catch (InterruptedException ie) {
+		}
 
-        return projects;
-    }
+		return projects;
+	}
 
 }

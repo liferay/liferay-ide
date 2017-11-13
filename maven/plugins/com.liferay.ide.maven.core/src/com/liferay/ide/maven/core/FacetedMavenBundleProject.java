@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.IBundleProject;
@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.maven.project.MavenProject;
+
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -31,134 +32,119 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 /**
  * @author Gregory Amerson
  */
-public class FacetedMavenBundleProject extends FacetedMavenProject implements IBundleProject
-{
+public class FacetedMavenBundleProject extends FacetedMavenProject implements IBundleProject {
 
-    private final MavenBundlePluginProject bundleProject;
+	public FacetedMavenBundleProject(IProject project) {
+		super(project);
 
-    public FacetedMavenBundleProject( IProject project )
-    {
-        super( project );
+		_bundleProject = new MavenBundlePluginProject(project);
+	}
 
-        this.bundleProject = new MavenBundlePluginProject( project );
-    }
+	@Override
+	public <T> T adapt(Class<T> adapterType) {
+		if (ILiferayPortal.class.equals(adapterType)) {
+			return null;
+		}
 
-    @Override
-    public <T> T adapt( Class<T> adapterType )
-    {
-        if( ILiferayPortal.class.equals( adapterType ) )
-        {
-            return null;
-        }
+		return super.adapt(adapterType);
+	}
 
-        return super.adapt( adapterType );
-    }
+	@Override
+	public boolean filterResource(IPath resourcePath) {
+		return _bundleProject.filterResource(resourcePath);
+	}
 
+	@Override
+	public String getBundleShape() {
+		return "war";
+	}
 
-    @Override
-    public boolean filterResource( IPath resourcePath )
-    {
-        return this.bundleProject.filterResource( resourcePath );
-    }
+	@Override
+	public IPath getOutputBundle(boolean cleanBuild, IProgressMonitor monitor) throws CoreException {
+		IPath outputJar = null;
 
-    @Override
-    public String getBundleShape()
-    {
-        return "war";
-    }
+		MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder(getProject());
 
-    @Override
-    public IPath getOutputBundle( boolean cleanBuild, IProgressMonitor monitor ) throws CoreException
-    {
-        IPath outputJar = null;
+		List<String> goals = new ArrayList<>();
 
-        final MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder( this.getProject() );
+		if (cleanBuild) {
+			goals.add("clean");
+		}
 
-        final List<String> goals = new ArrayList<>();
+		goals.add("package");
 
-        if( cleanBuild )
-        {
-            goals.add( "clean" );
-        }
+		for (String goal : goals) {
+			mavenProjectBuilder.runMavenGoal(getProject(), goal, monitor);
+		}
 
-        goals.add( "package" );
+		// we are going to try to get the output jar even if the package failed.
 
-        for( String goal : goals )
-        {
-            mavenProjectBuilder.runMavenGoal( this.getProject(), goal, monitor );
-        }
+		IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade(getProject(), monitor);
 
-        // we are going to try to get the output jar even if the package failed.
-        final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
-        final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
+		MavenProject mavenProject = projectFacade.getMavenProject(monitor);
 
-        final String targetName = mavenProject.getBuild().getFinalName() + "." + getBundleShape();
+		String targetName = mavenProject.getBuild().getFinalName() + "." + getBundleShape();
 
-        final IFolder targetFolder = getProject().getFolder( "target" );
+		IFolder targetFolder = getProject().getFolder("target");
 
-        if( targetFolder.exists() )
-        {
-            //targetFolder.refreshLocal( IResource.DEPTH_ONE, monitor );
-            final IPath targetFile = targetFolder.getRawLocation().append( targetName );
+		if (targetFolder.exists()) {
 
-            if( targetFile.toFile().exists() )
-            {
-                outputJar = targetFile;
-            }
-        }
+			// targetFolder.refreshLocal( IResource.DEPTH_ONE, monitor );
 
-        if( outputJar == null || !outputJar.toFile().exists() )
-        {
-            throw new CoreException(
-                LiferayMavenCore.createErrorStatus(
-                    "Unable to get output bundle for project " + getProject().getName() ) );
-        }
+			IPath targetFile = targetFolder.getRawLocation().append(targetName);
 
-        return outputJar;
-    }
+			if (targetFile.toFile().exists()) {
+				outputJar = targetFile;
+			}
+		}
 
-    @Override
-    public IPath getOutputBundlePath()
-    {
-        IPath outputJar = null;
+		if ((outputJar == null) || !outputJar.toFile().exists()) {
+			throw new CoreException(
+				LiferayMavenCore.createErrorStatus(
+					"Unable to get output bundle for project " + getProject().getName()));
+		}
 
-        try
-        {
-            final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), null );
-            final MavenProject mavenProject = projectFacade.getMavenProject( null );
+		return outputJar;
+	}
 
-            final String targetName = mavenProject.getBuild().getFinalName() + "." + getBundleShape();
+	@Override
+	public IPath getOutputBundlePath() {
+		IPath outputJar = null;
 
-            final IFolder targetFolder = getProject().getFolder( "target" );
+		try {
+			IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade(getProject(), null);
 
-            if( targetFolder.exists() )
-            {
-                final IPath targetFile = targetFolder.getRawLocation().append( targetName );
+			MavenProject mavenProject = projectFacade.getMavenProject(null);
 
-                if( targetFile.toFile().exists() )
-                {
-                    outputJar = targetFile;
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            LiferayMavenCore.logError( e );
-        }
+			String targetName = mavenProject.getBuild().getFinalName() + "." + getBundleShape();
 
-        return outputJar;
-    }
+			IFolder targetFolder = getProject().getFolder("target");
 
-    @Override
-    public String getSymbolicName() throws CoreException
-    {
-        return this.bundleProject.getSymbolicName();
-    }
+			if (targetFolder.exists()) {
+				IPath targetFile = targetFolder.getRawLocation().append(targetName);
 
-    @Override
-    public boolean isFragmentBundle()
-    {
-        return false;
-    }
+				if (targetFile.toFile().exists()) {
+					outputJar = targetFile;
+				}
+			}
+		}
+		catch (Exception e) {
+			LiferayMavenCore.logError(e);
+		}
+
+		return outputJar;
+	}
+
+	@Override
+	public String getSymbolicName() throws CoreException {
+		return this._bundleProject.getSymbolicName();
+	}
+
+	@Override
+	public boolean isFragmentBundle() {
+		return false;
+	}
+
+	private MavenBundlePluginProject _bundleProject;
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.core;
 
@@ -22,9 +21,11 @@ import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.io.File;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -38,82 +39,70 @@ import org.eclipse.core.runtime.Status;
 /**
  * @author Simon Jiang
  */
-public class NewGradleJSFModuleProjectProvider extends NewMavenJSFModuleProjectProvider
-{
-    private final static Pattern PATTERN_LIFERAY_WAR_PLUGIN = Pattern.compile(
-        ".*apply.*plugin.*:.*[\'\"]((com\\.liferay)|(war))[\'\"].*", Pattern.MULTILINE | Pattern.DOTALL );
+public class NewGradleJSFModuleProjectProvider extends NewMavenJSFModuleProjectProvider {
 
-    @Override
-    public IStatus createNewProject( NewLiferayJSFModuleProjectOp op, IProgressMonitor monitor ) throws CoreException
-    {
-        IStatus retval = Status.OK_STATUS;
+	@Override
+	public IStatus createNewProject(NewLiferayJSFModuleProjectOp op, IProgressMonitor monitor) throws CoreException {
+		IStatus retval = Status.OK_STATUS;
 
-        try
-        {
-            IPath projectLocation = createArchetypeProject(op, monitor );
+		try {
+			IPath projectLocation = createArchetypeProject(op, monitor);
 
-            IPath buildGradlePath = projectLocation.append( "build.gradle" );
+			IPath buildGradlePath = projectLocation.append("build.gradle");
 
-            if( buildGradlePath.toFile().exists() )
-            {
-                try
-                {
-                    File workspaceDir = LiferayWorkspaceUtil.getWorkspaceDir( buildGradlePath.toFile() );
+			if (buildGradlePath.toFile().exists()) {
+				try {
+					File workspaceDir = LiferayWorkspaceUtil.getWorkspaceDir(buildGradlePath.toFile());
 
-                    if ( workspaceDir != null && workspaceDir.exists() )
-                    {
-                        boolean hasLiferayWorkspace =
-                                        LiferayWorkspaceUtil.isValidWorkspaceLocation( workspaceDir.getAbsolutePath() );
+					if ((workspaceDir != null) && workspaceDir.exists()) {
+						boolean hasLiferayWorkspace = LiferayWorkspaceUtil.isValidWorkspaceLocation(
+							workspaceDir.getAbsolutePath());
 
-                        if( hasLiferayWorkspace )
-                        {
-                            List<String> buildGradleContents =
-                                Files.readAllLines( Paths.get( buildGradlePath.toFile().toURI() ), StandardCharsets.UTF_8 );
+						if (hasLiferayWorkspace) {
+							List<String> buildGradleContents = Files.readAllLines(
+								Paths.get(buildGradlePath.toFile().toURI()), StandardCharsets.UTF_8);
 
-                            List<String> modifyContents = new ArrayList<String>();
+							List<String> modifyContents = new ArrayList<>();
 
-                            for( String line : buildGradleContents )
-                            {
-                                if( PATTERN_LIFERAY_WAR_PLUGIN.matcher( line ).matches() )
-                                {
-                                    continue;
-                                }
+							for (String line : buildGradleContents) {
+								if (_PATTERN_LIFERAY_WAR_PLUGIN.matcher(line).matches()) {
+									continue;
+								}
 
-                                modifyContents.add( line );
-                            }
+								modifyContents.add(line);
+							}
 
-                            Files.write( buildGradlePath.toFile().toPath(), modifyContents, StandardCharsets.UTF_8 );
-                        }
-                    }
+							Files.write(buildGradlePath.toFile().toPath(), modifyContents, StandardCharsets.UTF_8);
+						}
+					}
+				}
+				catch (Exception e) {
+					ProjectCore.logError("Failed to check LiferayWorkspace project. ");
+				}
+			}
 
-                }
-                catch( Exception e )
-                {
-                    ProjectCore.logError( "Failed to check LiferayWorkspace project. " );
-                }
-            }
+			IPath buildPom = projectLocation.append("pom.xml");
 
-            IPath buildPom = projectLocation.append( "pom.xml" );
+			if (buildPom.toFile().exists()) {
+				buildPom.toFile().delete();
+			}
 
-            if( buildPom.toFile().exists() )
-            {
-                buildPom.toFile().delete();
-            }
+			ILiferayProjectImporter importer = LiferayCore.getImporter("gradle");
 
-            ILiferayProjectImporter importer = LiferayCore.getImporter( "gradle" );
+			IStatus canImport = importer.canImport(projectLocation.toOSString());
 
-            IStatus canImport = importer.canImport( projectLocation.toOSString() );
+			if (canImport.getCode() != Status.ERROR) {
+				importer.importProjects(projectLocation.toOSString(), monitor);
+			}
+		}
+		catch (Exception e) {
+			throw new CoreException(LiferayCore.createErrorStatus(e));
+		}
 
-            if( canImport.getCode() != Status.ERROR )
-            {
-                importer.importProjects( projectLocation.toOSString(), monitor );
-            }
-        }
-        catch( Exception e )
-        {
-            throw new CoreException( LiferayCore.createErrorStatus( e ) );
-        }
+		return retval;
+	}
 
-        return retval;
-    }
+	private static final Pattern _PATTERN_LIFERAY_WAR_PLUGIN = Pattern.compile(
+		".*apply.*plugin.*:.*[\'\"]((com\\.liferay)|(war))[\'\"].*", Pattern.MULTILINE | Pattern.DOTALL);
+
 }
