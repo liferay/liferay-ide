@@ -40,6 +40,7 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
  * @author Terry Jia
  * @author Ying Xu
  * @author Ashley Yuan
+ * @author Lily Li
  */
 public class WizardAction extends UIAction {
 
@@ -49,6 +50,10 @@ public class WizardAction extends UIAction {
 
 	public void cancel() {
 		_wizard.cancel();
+	}
+
+	public void deleteFragmentFile() {
+		_newFragmentInfoWizard.getDeleteBtn().click();
 	}
 
 	public void finish() {
@@ -373,6 +378,10 @@ public class WizardAction extends UIAction {
 
 	public void prepareRuntimeType(String category, String type) {
 		_newRuntimeWizard.getServerTypes().selectTreeItem(category, type);
+	}
+
+	public void selectFragmentFile(String file) {
+		_newFragmentInfoWizard.getFiles().click(file);
 	}
 
 	private final ImportLiferayWorkspaceProjectWizard _importLiferayWorkspaceProjectWizard =
