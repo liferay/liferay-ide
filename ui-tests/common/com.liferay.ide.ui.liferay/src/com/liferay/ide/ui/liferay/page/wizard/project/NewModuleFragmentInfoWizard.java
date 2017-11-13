@@ -22,6 +22,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Ying Xu
+ * @author Lily Li
  */
 public class NewModuleFragmentInfoWizard extends Wizard {
 

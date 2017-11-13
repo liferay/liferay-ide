@@ -15,25 +15,24 @@
 package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.swtbot.page.Dialog;
 
 import java.io.IOException;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * @author Vicky Wang
  * @author Sunny Shi
+ * @author Lily Li
  */
 public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 	@BeforeClass
 	public static void init() throws IOException {
 		envAction.unzipServer();
-	}
-
-	@Test
-	public void createFragmentUseTableActions() {
 	}
 
 	@Test
@@ -65,6 +64,41 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 		dialogAction.selectItems("META-INF/resources/configuration.jsp");
 
 		dialogAction.confirm();
+
+		wizardAction.finishToWait();
+
+		viewAction.deleteProject(projectName);
+	}
+
+	@Test
+	public void createFragmentWithoutOverrideFile() {
+		String projectName = "test-fragment";
+
+		wizardAction.openNewFragmentWizard();
+
+		wizardAction.openNewRuntimeWizardFragment();
+
+		wizardAction.next();
+
+		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
+
+		wizardAction.finish();
+
+		wizardAction.prepareFragmentGradle(projectName);
+
+		wizardAction.next();
+
+		wizardAction.openBrowseOsgiBundleDialog();
+
+		dialogAction.prepareText("com.liferay.hello.world.web");
+
+		dialogAction.confirm();
+
+		wizardAction.openAddOverrideFilesDialog();
+
+		Assert.assertFalse(_dailog.confirmBtn().isEnabled());
+
+		dialogAction.cancel();
 
 		wizardAction.finishToWait();
 
@@ -114,6 +148,95 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createFragmentWithResourceAction() {
+		String projectName = "test-fragment";
+
+		wizardAction.openNewFragmentWizard();
+
+		wizardAction.openNewRuntimeWizardFragment();
+
+		wizardAction.next();
+
+		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
+
+		wizardAction.finish();
+
+		wizardAction.prepareFragmentGradle(projectName);
+
+		wizardAction.next();
+
+		wizardAction.openBrowseOsgiBundleDialog();
+
+		dialogAction.prepareText("com.liferay.bookmarks.web");
+
+		dialogAction.confirm();
+
+		wizardAction.openAddOverrideFilesDialog();
+
+		dialogAction.selectItems("resource-actions/default.xml");
+
+		dialogAction.confirm();
+
+		wizardAction.finishToWait();
+
+		viewAction.deleteProject(projectName);
 	}
+
+	@Test
+	public void createFragmentWithWholeOverrideFiles() {
+		String projectName = "test-fragment";
+
+		wizardAction.openNewFragmentWizard();
+
+		wizardAction.openNewRuntimeWizardFragment();
+
+		wizardAction.next();
+
+		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
+
+		wizardAction.finish();
+
+		wizardAction.prepareFragmentGradle(projectName);
+
+		wizardAction.next();
+
+		wizardAction.openBrowseOsgiBundleDialog();
+
+		dialogAction.prepareText("com.liferay.asset.tags.navigation.web");
+
+		dialogAction.confirm();
+
+		String[] files = {
+			"META-INF/resources/configuration.jsp", "META-INF/resources/init-ext.jsp", "META-INF/resources/init.jsp",
+			"META-INF/resources/view.jsp", "portlet.properties", "resource-actions/default.xml"
+		};
+
+		wizardAction.openAddOverrideFilesDialog();
+
+		dialogAction.selectItems(files);
+
+		dialogAction.confirm();
+
+		wizardAction.openAddOverrideFilesDialog();
+
+		Assert.assertFalse(_dailog.confirmBtn().isEnabled());
+
+		dialogAction.cancel();
+
+		wizardAction.selectFiles("META-INF/resources/configuration.jsp");
+
+		wizardAction.delete();
+
+		wizardAction.openAddOverrideFilesDialog();
+
+		dialogAction.selectItems("META-INF/resources/configuration.jsp");
+
+		dialogAction.confirm();
+
+		wizardAction.finishToWait();
+
+		viewAction.deleteProject(projectName);
+	}
+
+	private static final Dialog _dailog = new Dialog(bot);
 
 }
