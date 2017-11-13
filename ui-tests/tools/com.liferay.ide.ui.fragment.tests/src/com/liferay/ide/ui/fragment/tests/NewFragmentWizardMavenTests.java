@@ -109,7 +109,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openAddOverrideFilesDialog();
 
-		Assert.assertFalse(dialogAction.getOkBtn().isEnabled());
+		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
 
 		dialogAction.cancel();
 
@@ -203,13 +203,13 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openBrowseOsgiBundleDialog();
 
-		Assert.assertFalse(dialogAction.getOkBtn().isEnabled());
+		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
 
 		dialogAction.cancel();
 
-		wizardAction.selectOverridenFiles("portlet.properties");
+		wizardAction.selectFragmentFile("portlet.properties");
 
-		wizardAction.overriddenFilesDelete();
+		wizardAction.deleteFragmentFile();
 
 		wizardAction.openAddOverrideFilesDialog();
 

@@ -51,6 +51,10 @@ public class WizardAction extends UIAction {
 		_wizard.cancel();
 	}
 
+	public void deleteFragmentFile() {
+		_newFragmentInfoWizard.getDeleteBtn().click();
+	}
+
 	public void finish() {
 		ide.sleep();
 
@@ -163,10 +167,6 @@ public class WizardAction extends UIAction {
 
 	public void openSelectServiceDialog() {
 		_newModuleInfoWizard.getBrowseBtn().click();
-	}
-
-	public void overriddenFilesDelete() {
-		_newFragmentInfoWizard.getDeleteBtn().click();
 	}
 
 	public void prepareComponentClass(String projectName) {
@@ -379,8 +379,8 @@ public class WizardAction extends UIAction {
 		_newRuntimeWizard.getServerTypes().selectTreeItem(category, type);
 	}
 
-	public void selectOverridenFiles(String item) {
-		_newFragmentInfoWizard.getFiles().click(item);
+	public void selectFragmentFile(String file) {
+		_newFragmentInfoWizard.getFiles().click(file);
 	}
 
 	private final ImportLiferayWorkspaceProjectWizard _importLiferayWorkspaceProjectWizard =

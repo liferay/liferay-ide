@@ -78,7 +78,7 @@ public class DialogAction extends UIAction {
 		SWTBotPreferences.TIMEOUT = origin;
 	}
 
-	public Button getOkBtn() {
+	public Button getConfirmBtn() {
 		return _dialog.confirmBtn();
 	}
 
