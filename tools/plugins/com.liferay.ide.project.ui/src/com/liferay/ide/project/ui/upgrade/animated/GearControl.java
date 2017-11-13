@@ -191,7 +191,7 @@ public class GearControl
 			retVal = true;
 		}
 
-		if (_speed >= _constAngle) {
+		if (_speed >= _teethAngle) {
 			_startAnimation = 0;
 
 			return retVal;
@@ -205,7 +205,7 @@ public class GearControl
 
 		long timeSinceStart = now - _startAnimation;
 
-		_speed = timeSinceStart * _constAngle / 400;
+		_speed = timeSinceStart * _teethAngle / 400;
 
 		_angle += _speed;
 
@@ -258,7 +258,7 @@ public class GearControl
 		gc.setLineWidth(3);
 		gc.setAntialias(SWT.ON);
 
-		int alpha = Math.min((int)(255 * _speed / _constAngle), 255);
+		int alpha = Math.min((int)(255 * _speed / _teethAngle), 255);
 
 		int number = UpgradeView.getPageNumber();
 
@@ -290,13 +290,13 @@ public class GearControl
 	private Path _drawGear(
 		GC gc, Display display, double cx, double cy, double outerR, double innerR, float angleOffset) {
 
-		double radian2 = _constAngle / 2 * _radian;
+		double radian2 = _teethAngle / 2 * _radian;
 		double radian3 = .06;
 
 		Path path = new Path(display);
 
 		for (int i = 0; i < _teeth; i++) {
-			double radian = (i * _constAngle + angleOffset) * _radian;
+			double radian = (i * _teethAngle + angleOffset) * _radian;
 
 			double x = cx + outerR * Math.cos(radian);
 			double y = cy - outerR * Math.sin(radian);
@@ -378,14 +378,14 @@ public class GearControl
 		double factor = 1;
 
 		if (i == _oldSelection) {
-			if (_speed < (_constAngle / 2)) {
+			if (_speed < (_teethAngle / 2)) {
 				selected = 1;
 			}
 		}
 		else if (i == _selection) {
-			if (_speed >= (_constAngle / 2)) {
+			if (_speed >= (_teethAngle / 2)) {
 				selected = 1;
-				factor += (_constAngle - _speed) * .02;
+				factor += (_teethAngle - _speed) * .02;
 			}
 			else {
 				factor += _speed * .02;
@@ -405,7 +405,7 @@ public class GearControl
 
 		double outerR = factor * _radius;
 		double innerR = factor * r2;
-		float angleOffset = (_angle + i * _constAngle) * (i % 2 == 1 ? -1 : 1) / 7;
+		float angleOffset = (_angle + i * _teethAngle) * (i % 2 == 1 ? -1 : 1) / 7;
 
 		gc.setForeground(hovered ? _darkGray : _gearForeground[selected]);
 		gc.setBackground(hovered ? _gray : _gearBackground[selected]);
@@ -476,7 +476,6 @@ public class GearControl
 
 	private float _angle;
 	private final int _border = 20;
-	private final float _constAngle = 360;
 	private Color _darkGray;
 	private Display _display;
 	private Image _errorImage;
@@ -499,6 +498,7 @@ public class GearControl
 	private float _speed;
 	private long _startAnimation;
 	private final int _teeth = 8;
+	private final float _teethAngle = 360 / _teeth;
 	private Color _tooltipColor;
 	private Font _tooltipFont;
 	private final Point[] _tooltipPoints = new Point[_gearMaxNumber];
