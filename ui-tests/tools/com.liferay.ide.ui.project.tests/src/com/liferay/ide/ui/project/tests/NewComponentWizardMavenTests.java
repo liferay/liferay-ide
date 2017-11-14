@@ -25,8 +25,12 @@ import org.junit.Test;
 public class NewComponentWizardMavenTests extends SwtbotBase {
 
 	@Test
+	public void createComponentPortlet() {
+	}
+
+	@Test
 	public void createComponentModelListener() {
-		String projectName = "test-model-listener-maven";
+		String projectName = "test-component-model-listener-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 		wizardAction.prepareLiferayModuleMaven(projectName, MVC_PORTLET);
@@ -46,10 +50,6 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 				projectName, "src/main/java", "test.component.maven.portlet", "TestComponentMavenModelListener.java"));
 
 		viewAction.deleteProject(projectName);
-	}
-
-	@Test
-	public void createComponentPortlet() {
 	}
 
 	@Test
