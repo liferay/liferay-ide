@@ -1580,7 +1580,7 @@
                      name="com.liferay.ide.project.core.upgrade.UpgradeProblems">
                </objectClass>
                <objectClass
-                     name="com.liferay.ide.project.ui.migration.MigrationProblemsContainer">
+                     name="com.liferay.ide.project.core.upgrade.MigrationProblemsContainer">
                </objectClass>
            </or>
         </enablement>
