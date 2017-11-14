@@ -36,7 +36,7 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createFragmentWithJsp() {
-		String projectName = "test-fragment";
+		String projectName = "test-fragment-jsp-gradle";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -71,7 +71,7 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createFragmentWithJspf() {
-		String projectName = "test-fragment";
+		String projectName = "test-fragment-jspf-gradle";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -105,8 +105,8 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createFragmentWithoutOverrideFile() {
-		String projectName = "test-fragment";
+	public void createFragmentWithoutFiles() {
+		String projectName = "test-fragment-without-files-gradle";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -141,7 +141,7 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createFragmentWithPortletProperites() {
-		String projectName = "test-fragment";
+		String projectName = "test-fragment-portlet-properties-gradle";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -182,7 +182,7 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createFragmentWithResourceAction() {
-		String projectName = "test-fragment";
+		String projectName = "test-fragment-resource-action-gradle";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -216,8 +216,8 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createFragmentWithWholeOverrideFiles() {
-		String projectName = "test-fragment";
+	public void createFragmentWithWholeFiles() {
+		String projectName = "test-fragment-whole-files-gradle";
 
 		wizardAction.openNewFragmentWizard();
 

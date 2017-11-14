@@ -107,8 +107,10 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		String[] files = {"META-INF/resources/blogs_admin/entry_search_columns.jspf",
-			"META-INF/resources/blogs_admin/entry_search_results.jspf"};
+		String[] files = {
+			"META-INF/resources/blogs_admin/entry_search_columns.jspf",
+			"META-INF/resources/blogs_admin/entry_search_results.jspf"
+		};
 
 		wizardAction.openAddOverrideFilesDialog();
 
