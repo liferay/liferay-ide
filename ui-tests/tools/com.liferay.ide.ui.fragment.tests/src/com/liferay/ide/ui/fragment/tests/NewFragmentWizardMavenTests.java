@@ -65,7 +65,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createFragmentWithJsp() {
+	public void createFragmentWithJspFiles() {
 		String projectName = "test-fragment-jsp-files-maven";
 
 		wizardAction.openNewFragmentWizard();
@@ -83,6 +83,36 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 		wizardAction.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("META-INF/resources/blogs_admin/configuration.jsp");
+
+		dialogAction.confirm();
+
+		wizardAction.finishToWait();
+
+		viewAction.deleteProject(projectName);
+	}
+
+	@Test
+	public void createFragmentWithJspfFiles() {
+		String projectName = "test-fragment-jspf-files-maven";
+
+		wizardAction.openNewFragmentWizard();
+
+		wizardAction.prepareFragmentMaven(projectName);
+
+		wizardAction.next();
+
+		wizardAction.openBrowseOsgiBundleDialog();
+
+		dialogAction.prepareText("com.liferay.blogs.web");
+
+		dialogAction.confirm();
+
+		String[] files = {"META-INF/resources/blogs_admin/entry_search_columns.jspf",
+			"META-INF/resources/blogs_admin/entry_search_results.jspf"};
+
+		wizardAction.openAddOverrideFilesDialog();
+
+		dialogAction.selectItems(files);
 
 		dialogAction.confirm();
 
