@@ -97,7 +97,7 @@ public abstract class MavenGoalAction extends AbstractObjectAction
                 {
                     plugin =
                         MavenUtil.getPlugin(
-                            MavenUtil.getProjectFacade( p ), ILiferayMavenConstants._LIFERAY_MAVEN_PLUGINS_GROUP_ID +
+                            MavenUtil.getProjectFacade( p ), ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_GROUP_ID +
                                 ":" + ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_ARTIFACT_ID,
                             new NullProgressMonitor() );
 

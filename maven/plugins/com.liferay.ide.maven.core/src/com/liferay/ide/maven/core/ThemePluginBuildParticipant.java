@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.maven.core;
 
 import java.util.ArrayList;
@@ -19,11 +19,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
+
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomUtils;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -40,168 +43,154 @@ import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.m2e.core.project.configurator.AbstractBuildParticipant;
 
-
 /**
  * @author Gregory Amerson
  */
-public abstract class ThemePluginBuildParticipant extends AbstractBuildParticipant
-{
-    protected final IMaven maven = MavenPlugin.getMaven();
-    protected final IMavenProjectRegistry projectManager = MavenPlugin.getMavenProjectRegistry();
+public abstract class ThemePluginBuildParticipant extends AbstractBuildParticipant {
 
-    @Override
-    public Set<IProject> build( int kind, IProgressMonitor monitor ) throws Exception
-    {
-        final IMavenProjectFacade facade = getMavenProjectFacade();
+	@Override
+	public Set<IProject> build(int kind, IProgressMonitor monitor) throws Exception {
+		IMavenProjectFacade facade = getMavenProjectFacade();
 
-        if( ! shouldBuild( kind, facade ) )
-        {
-            return null;
-        }
+		if (!shouldBuild(kind, facade)) {
+			return null;
+		}
 
-        final ICallable<IStatus> callable = new ICallable<IStatus>()
-        {
-            public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor ) throws CoreException
-            {
-                return executeThemeMojo( facade, context, monitor );
-            }
-        };
+		ICallable<IStatus> callable = new ICallable<IStatus>() {
 
-        IStatus retval = null;
+			public IStatus call(IMavenExecutionContext context, IProgressMonitor monitor) throws CoreException {
+				return executeThemeMojo(facade, context, monitor);
+			}
 
-        try
-        {
-            retval = executeMaven( facade, callable, monitor );
-        }
-        catch( Exception e )
-        {
-            retval = LiferayMavenCore.createErrorStatus( getGoal() + " build error", e ); //$NON-NLS-1$
-        }
+		};
 
-        if( retval != null && ! retval.isOK() )
-        {
-            LiferayMavenCore.log( retval );
-        }
+		IStatus retval = null;
 
-        try
-        {
-            facade.getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
-        }
-        catch( CoreException e )
-        {
-        }
+		try {
+			retval = executeMaven(facade, callable, monitor);
+		}
+		catch (Exception e) {
+			retval = LiferayMavenCore.createErrorStatus(getGoal() + " build error", e);
+		}
 
-        monitor.worked( 10 );
+		if ((retval != null) && !retval.isOK()) {
+			LiferayMavenCore.log(retval);
+		}
 
-        return null;
-    }
+		try {
+			facade.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+		}
+		catch (CoreException ce) {
+		}
 
-    protected void configureExecution( IMavenProjectFacade facade, Xpp3Dom config )
-    {
-        final IPath m2eLiferayFolder =
-                        MavenUtil.getM2eLiferayFolder( facade.getMavenProject(), facade.getProject() );
-        final IPath themeResourcesFolder =
-                        m2eLiferayFolder.append( ILiferayMavenConstants.THEME_RESOURCES_FOLDER );
-        final String targetFolderValue = themeResourcesFolder.toPortableString();
+		monitor.worked(10);
 
-        MavenUtil.setConfigValue( config, ILiferayMavenConstants.PLUGIN_CONFIG_WEBAPP_DIR, targetFolderValue );
-    }
+		return null;
+	}
 
-    protected IStatus executeMaven( final IMavenProjectFacade projectFacade,
-                                    final ICallable<IStatus> callable,
-                                    final IProgressMonitor monitor ) throws CoreException
-    {
-        return this.maven.execute
-        (
-            new ICallable<IStatus>()
-            {
-                public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor ) throws CoreException
-                {
-                    return projectManager.execute( projectFacade, callable, monitor );
-                }
-            },
-            monitor
-        );
-    }
+	protected void configureExecution(IMavenProjectFacade facade, Xpp3Dom config) {
+		IPath m2eLiferayFolder = MavenUtil.getM2eLiferayFolder(facade.getMavenProject(), facade.getProject());
 
+		IPath themeResourcesFolder = m2eLiferayFolder.append(ILiferayMavenConstants.THEME_RESOURCES_FOLDER);
 
-    protected IStatus executeThemeMojo( final IMavenProjectFacade facade,
-                                        final IMavenExecutionContext context,
-                                        final IProgressMonitor monitor ) throws CoreException
-    {
-        IStatus retval = null;
+		String targetFolderValue = themeResourcesFolder.toPortableString();
 
-        final List<String> goals = Collections.singletonList( getGoal() );
+		MavenUtil.setConfigValue(config, ILiferayMavenConstants.PLUGIN_CONFIG_WEBAPP_DIR, targetFolderValue);
+	}
 
-        final MavenProject mavenProject = facade.getMavenProject( monitor );
-        final MavenExecutionPlan plan = maven.calculateExecutionPlan( mavenProject, goals, true, monitor );
+	protected IStatus executeMaven(
+			IMavenProjectFacade projectFacade, ICallable<IStatus> callable, IProgressMonitor monitor)
+		throws CoreException {
 
-        monitor.worked( 10 );
+		ICallable<IStatus> status = new ICallable<IStatus>() {
 
-        final MojoExecution liferayMojoExecution =
-            MavenUtil.getExecution( plan, ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_ARTIFACT_ID );
+			public IStatus call(IMavenExecutionContext context, IProgressMonitor monitor) throws CoreException {
+				return projectManager.execute(projectFacade, callable, monitor);
+			}
 
-        final Xpp3Dom originalConfig = liferayMojoExecution.getConfiguration();
+		};
 
-        final Xpp3Dom config = Xpp3DomUtils.mergeXpp3Dom( new Xpp3Dom( "configuration" ), originalConfig ); //$NON-NLS-1$
+		return this.maven.execute(status, monitor);
+	}
 
-        configureExecution( facade, config );
+	protected IStatus executeThemeMojo(
+			IMavenProjectFacade facade, IMavenExecutionContext context, IProgressMonitor monitor)
+		throws CoreException {
 
-        boolean parentHierarchyLoaded = false;
+		IStatus retval = null;
 
-        try
-        {
-            parentHierarchyLoaded = MavenUtil.loadParentHierarchy( facade, monitor );
+		List<String> goals = Collections.singletonList(getGoal());
 
-            monitor.worked( 10 );
+		MavenProject mavenProject = facade.getMavenProject(monitor);
 
-            final ResolverConfiguration configuration = facade.getResolverConfiguration();
-            configuration.setResolveWorkspaceProjects( true );
+		MavenExecutionPlan plan = maven.calculateExecutionPlan(mavenProject, goals, true, monitor);
 
-            liferayMojoExecution.setConfiguration( config );
+		monitor.worked(10);
 
-            maven.execute( mavenProject, liferayMojoExecution, monitor );
+		MojoExecution liferayMojoExecution = MavenUtil.getExecution(
+			plan, ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_ARTIFACT_ID);
 
-            monitor.worked( 50 );
+		Xpp3Dom originalConfig = liferayMojoExecution.getConfiguration();
 
-            List<Throwable> exceptions = context.getSession().getResult().getExceptions();
+		Xpp3Dom config = Xpp3DomUtils.mergeXpp3Dom(new Xpp3Dom("configuration"), originalConfig);
 
-            if( exceptions.size() == 1 )
-            {
-                retval = LiferayMavenCore.createErrorStatus( exceptions.get( 0 ) );
-            }
-            else if( exceptions.size() > 1 )
-            {
-                List<IStatus> statuses = new ArrayList<IStatus>();
+		configureExecution(facade, config);
 
-                for( Throwable t : exceptions )
-                {
-                    statuses.add( LiferayMavenCore.createErrorStatus( t ) );
-                }
+		boolean parentHierarchyLoaded = false;
 
-                retval = LiferayMavenCore.createMultiStatus( IStatus.ERROR, statuses.toArray( new IStatus[0] ) );
-            }
+		try {
+			parentHierarchyLoaded = MavenUtil.loadParentHierarchy(facade, monitor);
 
-            retval = retval == null ? Status.OK_STATUS : retval;
-        }
-        catch( CoreException e )
-        {
-            retval = LiferayMavenCore.createErrorStatus( e );
-        }
-        finally
-        {
-            liferayMojoExecution.setConfiguration( originalConfig );
+			monitor.worked(10);
 
-            if( parentHierarchyLoaded )
-            {
-                mavenProject.setParent( null );
-            }
-        }
+			ResolverConfiguration configuration = facade.getResolverConfiguration();
 
-        return retval;
-    }
+			configuration.setResolveWorkspaceProjects(true);
 
-    protected abstract String getGoal();
+			liferayMojoExecution.setConfiguration(config);
 
-    protected abstract boolean shouldBuild( int kind, IMavenProjectFacade facade );
+			maven.execute(mavenProject, liferayMojoExecution, monitor);
+
+			monitor.worked(50);
+
+			MavenSession mavenSession = context.getSession();
+
+			List<Throwable> exceptions = mavenSession.getResult().getExceptions();
+
+			if (exceptions.size() == 1) {
+				retval = LiferayMavenCore.createErrorStatus(exceptions.get(0));
+			}
+			else if (exceptions.size() > 1) {
+				List<IStatus> statuses = new ArrayList<>();
+
+				for (Throwable t : exceptions) {
+					statuses.add(LiferayMavenCore.createErrorStatus(t));
+				}
+
+				retval = LiferayMavenCore.createMultiStatus(IStatus.ERROR, statuses.toArray(new IStatus[0]));
+			}
+
+			retval = retval == null ? Status.OK_STATUS : retval;
+		}
+		catch (CoreException ce) {
+			retval = LiferayMavenCore.createErrorStatus(ce);
+		}
+		finally {
+			liferayMojoExecution.setConfiguration(originalConfig);
+
+			if (parentHierarchyLoaded) {
+				mavenProject.setParent(null);
+			}
+		}
+
+		return retval;
+	}
+
+	protected abstract String getGoal();
+
+	protected abstract boolean shouldBuild(int kind, IMavenProjectFacade facade);
+
+	protected IMaven maven = MavenPlugin.getMaven();
+	protected IMavenProjectRegistry projectManager = MavenPlugin.getMavenProjectRegistry();
+
 }

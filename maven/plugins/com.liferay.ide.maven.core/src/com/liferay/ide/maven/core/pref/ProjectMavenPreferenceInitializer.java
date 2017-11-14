@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.maven.core.pref;
 
 import com.liferay.ide.maven.core.LiferayMavenCore;
@@ -23,20 +23,17 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
  * @author Simon Jiang
  * @author Eric Min
  */
-public class ProjectMavenPreferenceInitializer extends AbstractPreferenceInitializer
-{
+public class ProjectMavenPreferenceInitializer extends AbstractPreferenceInitializer {
 
-    public ProjectMavenPreferenceInitializer()
-    {
-        super();
-    }
+	public ProjectMavenPreferenceInitializer() {
+	}
 
-    @Override
-    public void initializeDefaultPreferences()
-    {
-        final IEclipsePreferences defaultPrefs = LiferayMavenCore.getDefaultPrefs();
-        defaultPrefs.putBoolean( LiferayMavenCore.PREF_ADD_MAVEN_PLUGIN_SUFFIX, false );
-        defaultPrefs.putBoolean( LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION, true );
-    }
+	@Override
+	public void initializeDefaultPreferences() {
+		IEclipsePreferences defaultPrefs = LiferayMavenCore.getDefaultPrefs();
+
+		defaultPrefs.putBoolean(LiferayMavenCore.PREF_ADD_MAVEN_PLUGIN_SUFFIX, false);
+		defaultPrefs.putBoolean(LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION, true);
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
@@ -26,6 +26,7 @@ import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import com.liferay.ide.server.util.ComponentUtil;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +36,7 @@ import java.util.regex.Pattern;
 
 import org.apache.maven.model.Model;
 import org.apache.maven.settings.Profile;
+
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.artifact.Artifact;
@@ -51,12 +53,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.internal.IMavenConstants;
+import org.eclipse.sapphire.Value;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.xml.core.internal.document.DocumentTypeImpl;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-
 
 /**
  * @author Gregory Amerson
@@ -64,446 +66,395 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
  * @author Kuo Zhang
  * @author Terry Jia
  */
-@SuppressWarnings( "restriction" )
-public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
-{
-
-    private static final String[] fileNames =
-    {
-        "liferay-portlet.xml",
-        "liferay-display.xml",
-        "service.xml",
-        "liferay-hook.xml",
-        "liferay-layout-templates.xml",
-        "liferay-look-and-feel.xml",
-        "liferay-portlet-ext.xml"
-    };
-
-    private static final Pattern publicid_pattern = Pattern.compile(
-        "-\\//(?:[a-z][a-z]+)\\//(?:[a-z][a-z]+)[\\s+(?:[a-z][a-z0-9_]*)]*\\s+(\\d\\.\\d\\.\\d)\\//(?:[a-z][a-z]+)",
-        Pattern.CASE_INSENSITIVE | Pattern.DOTALL );
-
-    private static final Pattern systemid_pattern = Pattern.compile(
-        "^http://www.liferay.com/dtd/[-A-Za-z0-9+&@#/%?=~_()]*(\\d_\\d_\\d).dtd", Pattern.CASE_INSENSITIVE |
-            Pattern.DOTALL );
-
-    public LiferayMavenProjectProvider()
-    {
-        super( new Class<?>[] { IProject.class } );
-    }
-
-    @Override
-    public <T> List<T> getData( String key, Class<T> type, Object... params )
-    {
-        List<T> retval = null;
-
-        if( "profileIds".equals( key ) )
-        {
-            final List<T> profileIds = new ArrayList<T>();
-
-            try
-            {
-                final List<Profile> profiles = MavenPlugin.getMaven().getSettings().getProfiles();
-
-                for( final Profile profile : profiles )
-                {
-                    if( profile.getActivation() != null )
-                    {
-                        if( profile.getActivation().isActiveByDefault() )
-                        {
-                            continue;
-                        }
-                    }
-
-                    profileIds.add( type.cast( profile.getId() ) );
-                }
-
-                if( params[0] != null && params[0] instanceof File )
-                {
-                    final File locationDir = (File) params[0];
-
-                    File pomFile = new File( locationDir, IMavenConstants.POM_FILE_NAME );
-
-                    if( ! pomFile.exists() && locationDir.getParentFile().exists() )
-                    {
-                        // try one level up for when user is adding new module
-                        pomFile = new File( locationDir.getParentFile(), IMavenConstants.POM_FILE_NAME );
-                    }
-
-                    if( pomFile.exists() )
-                    {
-                        final IMaven maven = MavenPlugin.getMaven();
-
-                        Model model = maven.readModel( pomFile );
-
-                        File parentDir = pomFile.getParentFile();
-
-                        while( model != null )
-                        {
-                            for( org.apache.maven.model.Profile p : model.getProfiles() )
-                            {
-                                profileIds.add( type.cast( p.getId() ) );
-                            }
-
-                            parentDir = parentDir.getParentFile();
-
-                            if( parentDir != null && parentDir.exists() )
-                            {
-                                try
-                                {
-                                    model = maven.readModel( new File( parentDir, IMavenConstants.POM_FILE_NAME ) );
-                                }
-                                catch( Exception e)
-                                {
-                                    model = null;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch( CoreException e )
-            {
-                LiferayMavenCore.logError( e );
-            }
-
-            retval = profileIds;
-        }
-        else if( "liferayVersions".equals( key ) )
-        {
-            final List<T> possibleVersions = new ArrayList<T>();
+@SuppressWarnings("restriction")
+public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider {
 
-            final RepositorySystem system = AetherUtil.newRepositorySystem();
-
-            final RepositorySystemSession session = AetherUtil.newRepositorySystemSession( system );
+	public LiferayMavenProjectProvider() {
+		super(new Class<?>[] {IProject.class});
+	}
 
-            final String groupId = params[0].toString();
-            final String artifactId = params[1].toString();
+	@Override
+	public <T> List<T> getData(String key, Class<T> type, Object... params) {
+		List<T> retval = null;
 
-            final String coords = groupId + ":" + artifactId + ":[6,)";
-
-            final Artifact artifact = new DefaultArtifact( coords );
-
-            final VersionRangeRequest rangeRequest = new VersionRangeRequest();
-            rangeRequest.setArtifact( artifact );
-            rangeRequest.addRepository( AetherUtil.newCentralRepository() );
-            rangeRequest.addRepository( AetherUtil.newLiferayRepository() );
+		if ("profileIds".equals(key)) {
+			List<T> profileIds = new ArrayList<>();
 
-            try
-            {
-                final VersionRangeResult rangeResult = system.resolveVersionRange( session, rangeRequest );
+			try {
+				IMaven maven = MavenPlugin.getMaven();
 
-                final List<Version> versions = rangeResult.getVersions();
+				List<Profile> profiles = maven.getSettings().getProfiles();
 
-                for( Version version : versions )
-                {
-                    final String val = version.toString();
-
-                    if( ! "6.2.0".equals( val ) )
-                    {
-                        possibleVersions.add( type.cast( val ) );
-                    }
-                }
+				for (Profile profile : profiles) {
+					if (profile.getActivation() != null) {
+						if (profile.getActivation().isActiveByDefault()) {
+							continue;
+						}
+					}
 
-                retval = possibleVersions;
-            }
-            catch( VersionRangeResolutionException e )
-            {
-            }
-        }
-        else if( "parentVersion".equals( key ) )
-        {
-            final List<T> version = new ArrayList<T>();
+					profileIds.add(type.cast(profile.getId()));
+				}
 
-            final File locationDir = (File) params[0];
+				if ((params[0] != null) && params[0] instanceof File) {
+					File locationDir = (File)params[0];
 
-            final File parentPom = new File( locationDir, IMavenConstants.POM_FILE_NAME );
+					File pomFile = new File(locationDir, IMavenConstants.POM_FILE_NAME);
 
-            if( parentPom.exists() )
-            {
-                try
-                {
-                    final IMaven maven = MavenPlugin.getMaven();
+					if (!pomFile.exists() && locationDir.getParentFile().exists()) {
 
-                    final Model model = maven.readModel( parentPom );
-
-                    version.add( type.cast( model.getVersion() ) );
+						// try one level up for when user is adding new module
 
-                    retval = version;
-                }
-                catch( CoreException e )
-                {
-                    LiferayMavenCore.logError( "unable to get parent version", e );
-                }
-            }
-        }
-        else if( "parentGroupId".equals( key ) )
-        {
-            final List<T> groupId = new ArrayList<T>();
+						pomFile = new File(locationDir.getParentFile(), IMavenConstants.POM_FILE_NAME);
+					}
 
-            final File locationDir = (File) params[0];
-
-            final File parentPom = new File( locationDir, IMavenConstants.POM_FILE_NAME );
-
-            if( parentPom.exists() )
-            {
-                try
-                {
-                    final IMaven maven = MavenPlugin.getMaven();
-
-                    final Model model = maven.readModel( parentPom );
-
-                    groupId.add( type.cast( model.getGroupId() ) );
-
-                    retval = groupId;
-                }
-                catch( CoreException e )
-                {
-                    LiferayMavenCore.logError( "unable to get parent groupId", e );
-                }
-            }
-        }
-        else if( "archetypeGAV".equals( key ) )
-        {
-            final String frameworkType = (String) params[0];
-
-            final String value = LiferayMavenCore.getPreferenceString( "archetype-gav-" + frameworkType, "" );
-
-            retval = Collections.singletonList( type.cast( value ) );
-        }
-
-        return retval;
-    }
-
-    private IFile[] getLiferayMetaFiles( IProject project )
-    {
-        List<IFile> files = new ArrayList<IFile>();
-
-        for( String name : fileNames )
-        {
-            files.addAll( new SearchFilesVisitor().searchFiles( project, name ) );
-        }
-
-        return files.toArray( new IFile[files.size()] );
-    }
-
-    private String getNewDoctTypeSetting( String doctypeSetting, String newValue, Pattern p )
-    {
-        String newDoctTypeSetting = null;
-
-        final Matcher m = p.matcher( doctypeSetting );
-
-        if( m.find() )
-        {
-            String oldVersionString = m.group( m.groupCount() );
-            newDoctTypeSetting = doctypeSetting.replace( oldVersionString, newValue );
-        }
-
-        return newDoctTypeSetting;
-    }
-
-    protected String getNewLiferayProfilesPluginVersion( String[] activeProfiles, List<NewLiferayProfile> newLiferayProfiles, String archetypeVersion )
-    {
-        org.osgi.framework.Version minVersion = new org.osgi.framework.Version( archetypeVersion.substring( 0, 3 ) );
-
-        try
-        {
-            final List<Profile> profiles = MavenPlugin.getMaven().getSettings().getProfiles();
-
-            org.osgi.framework.Version minNewVersion =
-                new org.osgi.framework.Version( archetypeVersion.substring( 0, 3 ) );
-
-            org.osgi.framework.Version minExistedVersion =
-                new org.osgi.framework.Version( archetypeVersion.substring( 0, 3 ) );
-
-            for( final String activeProfile : activeProfiles )
-            {
-                for( final NewLiferayProfile newProfile : newLiferayProfiles )
-                {
-                    if( activeProfile.equals( newProfile.getId().content() ) )
-                    {
-                        final String liferayVersion = newProfile.getLiferayVersion().content();
-
-                        final org.osgi.framework.Version shortLiferayVersion =
-                            new org.osgi.framework.Version( liferayVersion.substring( 0, 3 ) );
-
-                        final org.osgi.framework.Version shortPluginVersion =
-                            new org.osgi.framework.Version( archetypeVersion.substring( 0, 3 ) );
-
-                        minNewVersion = shortLiferayVersion.compareTo( shortPluginVersion ) < 0
-                                ? shortLiferayVersion : shortPluginVersion;
-                    }
-                }
-
-                minVersion = minVersion.compareTo( minNewVersion ) < 0 ? minVersion : minNewVersion;
-
-                for( final Profile existProfile : profiles )
-                {
-                    if( activeProfile.equals( existProfile.getId() ) )
-                    {
-                        final Properties properties = existProfile.getProperties();
-                        final String liferayVersion = properties.getProperty( "liferay.version" );
-                        final String pluginVersion = properties.getProperty( "liferay.maven.plugin.version" );
-
-                        if( pluginVersion != null && liferayVersion != null )
-                        {
-                            final org.osgi.framework.Version shortLiferayVersion =
-                                new org.osgi.framework.Version( liferayVersion.substring( 0, 3 ) );
-
-                            final org.osgi.framework.Version shortPluginVersion =
-                                new org.osgi.framework.Version( pluginVersion.substring( 0, 3 ) );
-
-                            minExistedVersion = shortLiferayVersion.compareTo( shortPluginVersion ) < 0
-                                    ? shortLiferayVersion : shortPluginVersion;
-                        }
-                    }
-                }
-
-                minVersion = minVersion.compareTo( minExistedVersion ) < 0 ? minVersion : minExistedVersion;
-            }
-        }
-        catch(Exception e)
-        {
-        }
-
-        return minVersion.toString();
-    }
-
-    protected List<NewLiferayProfile> getNewProfilesToSave(
-        String[] activeProfiles, List<NewLiferayProfile> newLiferayProfiles, ProfileLocation location )
-    {
-        List<NewLiferayProfile> profilesToSave = new ArrayList<NewLiferayProfile>();
-
-        for( String activeProfile : activeProfiles )
-        {
-            for( NewLiferayProfile newProfile : newLiferayProfiles )
-            {
-                if( activeProfile.equals( newProfile.getId().content() ) &&
-                    newProfile.getProfileLocation().content().equals( location ) )
-                {
-                    profilesToSave.add( newProfile );
-                }
-            }
-        }
-
-        return profilesToSave;
-    }
-
-    @Override
-    public ILiferayProject provide( Object adaptable )
-    {
-        if( adaptable instanceof IProject )
-        {
-            final IProject project = (IProject) adaptable;
-
-            try
-            {
-                if( MavenUtil.isMavenProject( project ) )
-                {
-                    final boolean hasLiferayNature = LiferayNature.hasNature( project );
-                    final boolean hasLiferayFacet = ComponentUtil.hasLiferayFacet( project );
-
-                    if( ( hasLiferayNature ||
-                        MavenUtil.hasDependency( project, "com.liferay.portal", "com.liferay.portal.kernel" ) ||
-                        MavenUtil.hasDependency( project, "com.liferay.faces", "com.liferay.faces.bridge.ext" ) ) &&
-                        hasLiferayFacet )
-                    {
-                        return new FacetedMavenBundleProject( project );
-                    }
-                    else if( hasLiferayFacet )
-                    {
-                        return new FacetedMavenProject( project );
-                    }
-                    else if( hasLiferayNature )
-                    {
-                        return new MavenBundlePluginProject( project );
-                    }
-                    else
-                    {
-                        // return dummy maven project that can't lookup docroot resources
-                        return new LiferayMavenProject( project )
-                        {
-                            @Override
-                            public IFile getDescriptorFile( String name )
-                            {
-                                return null;
-                            }
-
-                            @Override
-                            public IFolder[] getSourceFolders()
-                            {
-                                return null;
-                            }
-                        };
-                    }
-                }
-            }
-            catch( CoreException e )
-            {
-                LiferayMavenCore.logError(
-                    "Unable to create ILiferayProject from maven project " + project.getName(), e );
-            }
-        }
-
-        return null;
-    }
-
-    protected void updateDtdVersion( IProject project, String dtdVersion, String archetypeVesion )
-    {
-        final String tmpPublicId = dtdVersion;
-        final String tmpSystemId = dtdVersion.replaceAll( "\\.", "_" );
-
-        IStructuredModel editModel = null;
-
-        final IFile[] metaFiles = getLiferayMetaFiles( project );
-
-        for( IFile file : metaFiles )
-        {
-            try
-            {
-                editModel = StructuredModelManager.getModelManager().getModelForEdit( file );
-
-                if( editModel != null && editModel instanceof IDOMModel )
-                {
-                    final IDOMDocument xmlDocument = ( (IDOMModel) editModel ).getDocument();
-                    final DocumentTypeImpl docType = (DocumentTypeImpl) xmlDocument.getDoctype();
-
-                    final String publicId = docType.getPublicId();
-                    final String newPublicId = getNewDoctTypeSetting( publicId, tmpPublicId, publicid_pattern );
-
-                    if( newPublicId != null )
-                    {
-                        docType.setPublicId( newPublicId );
-                    }
-
-                    final String systemId = docType.getSystemId();
-                    final String newSystemId = getNewDoctTypeSetting( systemId, tmpSystemId, systemid_pattern );
-
-                    if( newSystemId != null )
-                    {
-                        docType.setSystemId( newSystemId );
-                    }
-
-                    editModel.save();
-                }
-            }
-            catch( Exception e )
-            {
-                final IStatus error =
-                    ProjectCore.createErrorStatus(
-                        "Unable to upgrade deployment meta file for " + file.getName(), e );
-                ProjectCore.logError( error );
-            }
-            finally
-            {
-                if ( editModel != null )
-                {
-                    editModel.releaseFromEdit();
-                }
-            }
-        }
-
-        ProjectCore.operate( project, UpdateDescriptorVersionOperation.class, archetypeVesion, dtdVersion );
-    }
+					if (pomFile.exists()) {
+						Model model = maven.readModel(pomFile);
+
+						File parentDir = pomFile.getParentFile();
+
+						while (model != null) {
+							for (org.apache.maven.model.Profile p : model.getProfiles()) {
+								profileIds.add(type.cast(p.getId()));
+							}
+
+							parentDir = parentDir.getParentFile();
+
+							if ((parentDir != null) && parentDir.exists()) {
+								try {
+									model = maven.readModel(new File(parentDir, IMavenConstants.POM_FILE_NAME));
+								}
+								catch (Exception e) {
+									model = null;
+								}
+							}
+						}
+					}
+				}
+			}
+			catch (CoreException ce) {
+				LiferayMavenCore.logError(ce);
+			}
+
+			retval = profileIds;
+		}
+		else if ("liferayVersions".equals(key)) {
+			List<T> possibleVersions = new ArrayList<>();
+
+			RepositorySystem system = AetherUtil.newRepositorySystem();
+
+			RepositorySystemSession session = AetherUtil.newRepositorySystemSession(system);
+
+			String groupId = params[0].toString();
+			String artifactId = params[1].toString();
+
+			String coords = groupId + ":" + artifactId + ":[6,)";
+
+			Artifact artifact = new DefaultArtifact(coords);
+
+			VersionRangeRequest rangeRequest = new VersionRangeRequest();
+
+			rangeRequest.setArtifact(artifact);
+			rangeRequest.addRepository(AetherUtil.newCentralRepository());
+			rangeRequest.addRepository(AetherUtil.newLiferayRepository());
+
+			try {
+				VersionRangeResult rangeResult = system.resolveVersionRange(session, rangeRequest);
+
+				List<Version> versions = rangeResult.getVersions();
+
+				for (Version version : versions) {
+					String val = version.toString();
+
+					if (!"6.2.0".equals(val)) {
+						possibleVersions.add(type.cast(val));
+					}
+				}
+
+				retval = possibleVersions;
+			}
+			catch (VersionRangeResolutionException vrre) {
+			}
+		}
+		else if ("parentVersion".equals(key)) {
+			List<T> version = new ArrayList<>();
+
+			File locationDir = (File)params[0];
+
+			File parentPom = new File(locationDir, IMavenConstants.POM_FILE_NAME);
+
+			if (parentPom.exists()) {
+				try {
+					IMaven maven = MavenPlugin.getMaven();
+
+					Model model = maven.readModel(parentPom);
+
+					version.add(type.cast(model.getVersion()));
+
+					retval = version;
+				}
+				catch (CoreException ce) {
+					LiferayMavenCore.logError("unable to get parent version", ce);
+				}
+			}
+		}
+		else if ("parentGroupId".equals(key)) {
+			List<T> groupId = new ArrayList<>();
+
+			File locationDir = (File)params[0];
+
+			File parentPom = new File(locationDir, IMavenConstants.POM_FILE_NAME);
+
+			if (parentPom.exists()) {
+				try {
+					IMaven maven = MavenPlugin.getMaven();
+
+					Model model = maven.readModel(parentPom);
+
+					groupId.add(type.cast(model.getGroupId()));
+
+					retval = groupId;
+				}
+				catch (CoreException ce) {
+					LiferayMavenCore.logError("unable to get parent groupId", ce);
+				}
+			}
+		}
+		else if ("archetypeGAV".equals(key)) {
+			String frameworkType = (String)params[0];
+
+			String value = LiferayMavenCore.getPreferenceString("archetype-gav-" + frameworkType, "");
+
+			retval = Collections.singletonList(type.cast(value));
+		}
+
+		return retval;
+	}
+
+	@Override
+	public ILiferayProject provide(Object adaptable) {
+		if (adaptable instanceof IProject) {
+			IProject project = (IProject)adaptable;
+
+			try {
+				if (MavenUtil.isMavenProject(project)) {
+					boolean hasLiferayNature = LiferayNature.hasNature(project);
+					boolean hasLiferayFacet = ComponentUtil.hasLiferayFacet(project);
+
+					if ((hasLiferayNature ||
+						 MavenUtil.hasDependency(project, "com.liferay.portal", "com.liferay.portal.kernel") ||
+						 MavenUtil.hasDependency(project, "com.liferay.faces", "com.liferay.faces.bridge.ext")) &&
+						hasLiferayFacet) {
+
+						return new FacetedMavenBundleProject(project);
+					}
+					else if (hasLiferayFacet) {
+						return new FacetedMavenProject(project);
+					}
+					else if (hasLiferayNature) {
+						return new MavenBundlePluginProject(project);
+					}
+					else {
+
+						// return dummy maven project that can't lookup docroot resources
+
+						return new LiferayMavenProject(project) {
+
+							@Override
+							public IFile getDescriptorFile(String name) {
+								return null;
+							}
+
+							@Override
+							public IFolder[] getSourceFolders() {
+								return null;
+							}
+
+						};
+					}
+				}
+			}
+			catch (CoreException ce) {
+				LiferayMavenCore.logError(
+					"Unable to create ILiferayProject from maven project " + project.getName(), ce);
+			}
+		}
+
+		return null;
+	}
+
+	protected String getNewLiferayProfilesPluginVersion(
+		String[] activeProfiles, List<NewLiferayProfile> newLiferayProfiles, String archetypeVersion) {
+
+		org.osgi.framework.Version minVersion = new org.osgi.framework.Version(archetypeVersion.substring(0, 3));
+
+		try {
+			IMaven maven = MavenPlugin.getMaven();
+
+			List<Profile> profiles = maven.getSettings().getProfiles();
+
+			org.osgi.framework.Version minNewVersion = new org.osgi.framework.Version(archetypeVersion.substring(0, 3));
+
+			org.osgi.framework.Version minExistedVersion = new org.osgi.framework.Version(
+				archetypeVersion.substring(0, 3));
+
+			for (String activeProfile : activeProfiles) {
+				for (NewLiferayProfile newProfile : newLiferayProfiles) {
+					if (activeProfile.equals(newProfile.getId().content())) {
+						String liferayVersion = newProfile.getLiferayVersion().content();
+
+						org.osgi.framework.Version shortLiferayVersion = new org.osgi.framework.Version(
+							liferayVersion.substring(0, 3));
+
+						org.osgi.framework.Version shortPluginVersion = new org.osgi.framework.Version(
+							archetypeVersion.substring(0, 3));
+
+						if (shortLiferayVersion.compareTo(shortPluginVersion) < 0) {
+							minNewVersion = shortLiferayVersion;
+						}
+						else {
+							minNewVersion = shortPluginVersion;
+						}
+					}
+				}
+
+				minVersion = minVersion.compareTo(minNewVersion) < 0 ? minVersion : minNewVersion;
+
+				for (Profile existProfile : profiles) {
+					if (activeProfile.equals(existProfile.getId())) {
+						Properties properties = existProfile.getProperties();
+
+						String liferayVersion = properties.getProperty("liferay.version");
+						String pluginVersion = properties.getProperty("liferay.maven.plugin.version");
+
+						if ((pluginVersion != null) && (liferayVersion != null)) {
+							org.osgi.framework.Version shortLiferayVersion = new org.osgi.framework.Version(
+								liferayVersion.substring(0, 3));
+
+							org.osgi.framework.Version shortPluginVersion = new org.osgi.framework.Version(
+								pluginVersion.substring(0, 3));
+
+							if (shortLiferayVersion.compareTo(shortPluginVersion) < 0) {
+								minExistedVersion = shortLiferayVersion;
+							}
+							else {
+								shortLiferayVersion = shortPluginVersion;
+							}
+						}
+					}
+				}
+
+				minVersion = minVersion.compareTo(minExistedVersion) < 0 ? minVersion : minExistedVersion;
+			}
+		}
+		catch (Exception e) {
+		}
+
+		return minVersion.toString();
+	}
+
+	protected List<NewLiferayProfile> getNewProfilesToSave(
+		String[] activeProfiles, List<NewLiferayProfile> newLiferayProfiles, ProfileLocation location) {
+
+		List<NewLiferayProfile> profilesToSave = new ArrayList<>();
+
+		for (String activeProfile : activeProfiles) {
+			for (NewLiferayProfile newProfile : newLiferayProfiles) {
+				Value<ProfileLocation> profileLocation = newProfile.getProfileLocation();
+
+				if (activeProfile.equals(newProfile.getId().content()) && profileLocation.content().equals(location)) {
+					profilesToSave.add(newProfile);
+				}
+			}
+		}
+
+		return profilesToSave;
+	}
+
+	protected void updateDtdVersion(IProject project, String dtdVersion, String archetypeVesion) {
+		String tmpPublicId = dtdVersion;
+		String tmpSystemId = dtdVersion.replaceAll("\\.", "_");
+
+		IStructuredModel editModel = null;
+
+		IFile[] metaFiles = _getLiferayMetaFiles(project);
+
+		for (IFile file : metaFiles) {
+			try {
+				editModel = StructuredModelManager.getModelManager().getModelForEdit(file);
+
+				if ((editModel != null) && editModel instanceof IDOMModel) {
+					IDOMDocument xmlDocument = ((IDOMModel)editModel).getDocument();
+
+					DocumentTypeImpl docType = (DocumentTypeImpl)xmlDocument.getDoctype();
+
+					String publicId = docType.getPublicId();
+
+					String newPublicId = _getNewDoctTypeSetting(publicId, tmpPublicId, _publicid_pattern);
+
+					if (newPublicId != null) {
+						docType.setPublicId(newPublicId);
+					}
+
+					String systemId = docType.getSystemId();
+
+					String newSystemId = _getNewDoctTypeSetting(systemId, tmpSystemId, _systemid_pattern);
+
+					if (newSystemId != null) {
+						docType.setSystemId(newSystemId);
+					}
+
+					editModel.save();
+				}
+			}
+			catch (Exception e) {
+				IStatus error = ProjectCore.createErrorStatus(
+					"Unable to upgrade deployment meta file for " + file.getName(), e);
+
+				ProjectCore.logError(error);
+			}
+			finally {
+				if (editModel != null) {
+					editModel.releaseFromEdit();
+				}
+			}
+		}
+
+		ProjectCore.operate(project, UpdateDescriptorVersionOperation.class, archetypeVesion, dtdVersion);
+	}
+
+	private IFile[] _getLiferayMetaFiles(IProject project) {
+		List<IFile> files = new ArrayList<>();
+
+		for (String name : _fileNames) {
+			files.addAll(new SearchFilesVisitor().searchFiles(project, name));
+		}
+
+		return files.toArray(new IFile[files.size()]);
+	}
+
+	private String _getNewDoctTypeSetting(String doctypeSetting, String newValue, Pattern p) {
+		String newDoctTypeSetting = null;
+
+		Matcher m = p.matcher(doctypeSetting);
+
+		if (m.find()) {
+			String oldVersionString = m.group(m.groupCount());
+
+			newDoctTypeSetting = doctypeSetting.replace(oldVersionString, newValue);
+		}
+
+		return newDoctTypeSetting;
+	}
+
+	private static final String[] _fileNames = {
+		"liferay-portlet.xml", "liferay-display.xml", "service.xml", "liferay-hook.xml", "liferay-layout-templates.xml",
+		"liferay-look-and-feel.xml", "liferay-portlet-ext.xml"
+	};
+	private static final Pattern _publicid_pattern = Pattern.compile(
+		"-\\//(?:[a-z][a-z]+)\\//(?:[a-z][a-z]+)[\\s+(?:[a-z][a-z0-9_]*)]*\\s+(\\d\\.\\d\\.\\d)\\//(?:[a-z][a-z]+)",
+		Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	private static final Pattern _systemid_pattern = Pattern.compile(
+		"^http://www.liferay.com/dtd/[-A-Za-z0-9+&@#/%?=~_()]*(\\d_\\d_\\d).dtd",
+		Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.core;
 
@@ -25,6 +24,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.archetype.catalog.Archetype;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -42,110 +42,103 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Joye Luo
  */
-@SuppressWarnings( "restriction" )
-public class MavenModuleFragmentProjectProvider extends LiferayMavenProjectProvider
-    implements NewLiferayProjectProvider<NewModuleFragmentOp>
-{
+@SuppressWarnings("restriction")
+public class MavenModuleFragmentProjectProvider
+	extends LiferayMavenProjectProvider implements NewLiferayProjectProvider<NewModuleFragmentOp> {
 
-    @Override
-    public IStatus createNewProject( NewModuleFragmentOp op, IProgressMonitor monitor ) throws CoreException
-    {
-        IStatus retval = Status.OK_STATUS;
+	@Override
+	public IStatus createNewProject(NewModuleFragmentOp op, IProgressMonitor monitor) throws CoreException {
+		IStatus retval = Status.OK_STATUS;
 
-        final String projectName = op.getProjectName().content();
+		String projectName = op.getProjectName().content();
 
-        IPath location = PathBridge.create( op.getLocation().content() );
+		IPath location = PathBridge.create(op.getLocation().content());
 
-        String[] bsnAndVersion = NewModuleFragmentOpMethods.getBsnAndVersion( op );
-        String hostBundleSymbolicName = bsnAndVersion[0];
-        String hostBundleVersion = bsnAndVersion[1];
+		String[] bsnAndVersion = NewModuleFragmentOpMethods.getBsnAndVersion(op);
 
-        final String groupId = op.getGroupId().content();
-        final String artifactId = projectName;
-        final String version = op.getArtifactVersion().content();
-        final String javaPackage = "";
+		String hostBundleSymbolicName = bsnAndVersion[0];
+		String hostBundleVersion = bsnAndVersion[1];
 
-        final String archetypeArtifactId = getData( "archetypeGAV", String.class, "" ).get( 0 );
-        final Archetype archetype = new Archetype();
-        final String[] gav = archetypeArtifactId.split( ":" );
+		String groupId = op.getGroupId().content();
+		String artifactId = projectName;
+		String version = op.getArtifactVersion().content();
+		String javaPackage = "";
 
-        final String archetypeVersion = gav[gav.length - 1];
+		String archetypeArtifactId = getData("archetypeGAV", String.class, "").get(0);
+		Archetype archetype = new Archetype();
+		String[] gav = archetypeArtifactId.split(":");
 
-        archetype.setGroupId( gav[0] );
-        archetype.setArtifactId( gav[1] );
-        archetype.setVersion( archetypeVersion );
+		String archetypeVersion = gav[gav.length - 1];
 
-        final Properties properties = new Properties();
+		archetype.setGroupId(gav[0]);
+		archetype.setArtifactId(gav[1]);
 
-        properties.put( "package", artifactId );
-        properties.put( "hostBundleSymbolicName", hostBundleSymbolicName );
-        properties.put( "hostBundleVersion", hostBundleVersion );
-        properties.put( "buildType", "maven" );
-        properties.put( "projectType", "standalone" );
+		archetype.setVersion(archetypeVersion);
 
-        final IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
+		Properties properties = new Properties();
 
-        final ResolverConfiguration resolverConfig = new ResolverConfiguration();
-        ProjectImportConfiguration configuration = new ProjectImportConfiguration( resolverConfig );
+		properties.put("package", artifactId);
+		properties.put("hostBundleSymbolicName", hostBundleSymbolicName);
+		properties.put("hostBundleVersion", hostBundleVersion);
+		properties.put("buildType", "maven");
+		properties.put("projectType", "standalone");
 
-        final List<IProject> newProjects = projectConfigurationManager.createArchetypeProjects(
-            location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor );
+		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
-        NewModuleFragmentOpMethods.copyOverrideFiles( op );
+		ResolverConfiguration resolverConfig = new ResolverConfiguration();
 
-        if( newProjects == null || newProjects.size() == 0 )
-        {
-            return LiferayMavenCore.createErrorStatus( "Unable to create fragment project from archetype." );
-        }
-        else
-        {
-            for( IProject newProject : newProjects )
-            {
-                String[] gradleFiles = new String[] { "build.gradle", "settings.gradle" };
+		ProjectImportConfiguration configuration = new ProjectImportConfiguration(resolverConfig);
 
-                for( String path : gradleFiles )
-                {
-                    IFile gradleFile = newProject.getFile( path );
+		List<IProject> newProjects = projectConfigurationManager.createArchetypeProjects(
+			location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor);
 
-                    if( gradleFile.exists() )
-                    {
-                        gradleFile.delete( true, monitor );
-                    }
-                }
+		NewModuleFragmentOpMethods.copyOverrideFiles(op);
 
-                newProject.refreshLocal( IResource.DEPTH_INFINITE, null );
-            }
-        }
+		if ((newProjects == null) || newProjects.isEmpty()) {
+			return LiferayMavenCore.createErrorStatus("Unable to create fragment project from archetype.");
+		}
+		else {
+			for (IProject newProject : newProjects) {
+				String[] gradleFiles = {"build.gradle", "settings.gradle"};
 
-        return retval;
-    }
+				for (String path : gradleFiles) {
+					IFile gradleFile = newProject.getFile(path);
 
-    @Override
-    public <T> List<T> getData( String key, Class<T> type, Object... params )
-    {
-        if( "archetypeGAV".equals( key ) && type.equals( String.class ) && params.length == 1 )
-        {
-            List<T> retval = new ArrayList<>();
+					if (gradleFile.exists()) {
+						gradleFile.delete(true, monitor);
+					}
+				}
 
-            String gav =
-                LiferayMavenCore.getPreferenceString( LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_FRAGMENT, "" );
+				newProject.refreshLocal(IResource.DEPTH_INFINITE, null);
+			}
+		}
 
-            if( CoreUtil.empty( gav ) )
-            {
-                gav = "com.liferay:com.liferay.project.templates.fragment" + ":1.0.1";
-            }
+		return retval;
+	}
 
-            retval.add( type.cast( gav ) );
+	@Override
+	public <T> List<T> getData(String key, Class<T> type, Object... params) {
+		if ("archetypeGAV".equals(key) && type.equals(String.class) && (params.length == 1)) {
+			List<T> retval = new ArrayList<>();
 
-            return retval;
-        }
+			String gav = LiferayMavenCore.getPreferenceString(
+				LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_FRAGMENT, "");
 
-        return super.getData( key, type, params );
-    }
+			if (CoreUtil.empty(gav)) {
+				gav = "com.liferay:com.liferay.project.templates.fragment:1.0.1";
+			}
 
-    @Override
-    public IStatus validateProjectLocation( String projectName, IPath path )
-    {
-        return Status.OK_STATUS;
-    }
+			retval.add(type.cast(gav));
+
+			return retval;
+		}
+
+		return super.getData(key, type, params);
+	}
+
+	@Override
+	public IStatus validateProjectLocation(String projectName, IPath path) {
+		return Status.OK_STATUS;
+	}
+
 }

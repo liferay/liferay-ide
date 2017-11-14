@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -29,75 +29,69 @@ import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.osgi.util.NLS;
 
-
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class ThemeMergeBuildParticipant extends ThemePluginBuildParticipant
-{
+@SuppressWarnings("restriction")
+public class ThemeMergeBuildParticipant extends ThemePluginBuildParticipant {
 
-    @Override
-    public Set<IProject> build( int kind, IProgressMonitor monitor ) throws Exception
-    {
-        IProgressMonitor sub = CoreUtil.newSubMonitor( monitor, 100 );
+	@Override
+	public Set<IProject> build(int kind, IProgressMonitor monitor) throws Exception {
+		IProgressMonitor sub = CoreUtil.newSubMonitor(monitor, 100);
 
-        sub.beginTask( Msgs.mergingTheme, 100 );
+		sub.beginTask(Msgs.mergingTheme, 100);
 
-        final Set<IProject> retval = super.build( kind, monitor );
+		Set<IProject> retval = super.build(kind, monitor);
 
-        try
-        {
-            ThemeCSSBuilder.ensureLookAndFeelFileExists( getMavenProjectFacade().getProject() );
-        }
-        catch( CoreException e )
-        {
-            LiferayMavenCore.logError( "Unable to ensure look and feel file exists", e ); //$NON-NLS-1$
-        }
+		try {
+			ThemeCSSBuilder.ensureLookAndFeelFileExists(getMavenProjectFacade().getProject());
+		}
+		catch (CoreException ce) {
+			LiferayMavenCore.logError("Unable to ensure look and feel file exists", ce);
+		}
 
-        sub.done();
+		sub.done();
 
-        return retval;
-    }
+		return retval;
+	}
 
-    @Override
-    protected String getGoal()
-    {
-        return ILiferayMavenConstants.PLUGIN_GOAL_THEME_MERGE;
-    }
+	@Override
+	protected String getGoal() {
+		return ILiferayMavenConstants.PLUGIN_GOAL_THEME_MERGE;
+	}
 
-    protected boolean shouldBuild( int kind, IMavenProjectFacade facade )
-    {
-        boolean retval = false;
+	protected boolean shouldBuild(int kind, IMavenProjectFacade facade) {
+		boolean retval = false;
 
-        final IResourceDelta delta = this.getDelta( facade.getProject() );
+		IResourceDelta delta = getDelta(facade.getProject());
 
-        final String warSourceDirectory = MavenUtil.getWarSourceDirectory( facade );
+		String warSourceDirectory = MavenUtil.getWarSourceDirectory(facade);
 
-        if( ! CoreUtil.isNullOrEmpty( warSourceDirectory ) )
-        {
-            final IPath warSourceProjectPath =
-                facade.getProject().getFolder( warSourceDirectory ).getProjectRelativePath();
+		if (!CoreUtil.isNullOrEmpty(warSourceDirectory)) {
+			IProject project = facade.getProject();
 
-            if( delta != null && ( delta.findMember( warSourceProjectPath ) != null ||
-                delta.findMember( new Path( IMavenConstants.POM_FILE_NAME ) ) != null ) )
-            {
-                retval = true;
-            }
-        }
+			IPath warSourceProjectPath = project.getFolder(warSourceDirectory).getProjectRelativePath();
 
-        return retval;
-    }
+			if ((delta != null) &&
+				((delta.findMember(warSourceProjectPath) != null) ||
+				 (delta.findMember(new Path(IMavenConstants.POM_FILE_NAME)) != null))) {
 
-    private static class Msgs extends NLS
-    {
-        public static String mergingTheme;
+				retval = true;
+			}
+		}
 
-        static
-        {
-            initializeMessages( ThemeMergeBuildParticipant.class.getName(), Msgs.class );
-        }
-    }
+		return retval;
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String mergingTheme;
+
+		static {
+			initializeMessages(ThemeMergeBuildParticipant.class.getName(), Msgs.class);
+		}
+
+	}
 
 }

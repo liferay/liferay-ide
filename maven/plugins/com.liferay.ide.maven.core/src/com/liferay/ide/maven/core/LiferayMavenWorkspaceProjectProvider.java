@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.core;
 
@@ -26,6 +25,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.archetype.catalog.Archetype;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -44,142 +44,130 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Joye Luo
  * @author Andy Wu
  */
-@SuppressWarnings( "restriction" )
-public class LiferayMavenWorkspaceProjectProvider extends LiferayMavenProjectProvider
-    implements NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp>
-{
+@SuppressWarnings("restriction")
+public class LiferayMavenWorkspaceProjectProvider
+	extends LiferayMavenProjectProvider implements NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> {
 
-    @Override
-    public IStatus createNewProject( NewLiferayWorkspaceOp op, IProgressMonitor monitor ) throws CoreException
-    {
-        IStatus retval = Status.OK_STATUS;;
+	@Override
+	public IStatus createNewProject(NewLiferayWorkspaceOp op, IProgressMonitor monitor) throws CoreException {
+		IStatus retval = Status.OK_STATUS;
 
-        final IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
+		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
-        IPath location = PathBridge.create( op.getLocation().content() );
+		IPath location = PathBridge.create(op.getLocation().content());
 
-        final String projectName = op.getWorkspaceName().content();
+		String projectName = op.getWorkspaceName().content();
 
-        final String groupId = projectName;
-        final String artifactId = projectName;
-        final String version = "1.0.0-SNAPSHOT";
-        final String javaPackage = "";
+		String groupId = projectName;
+		String artifactId = projectName;
 
-        final String archetypeArtifactId = getData( "archetypeGAV", String.class, "" ).get( 0 );
-        final Archetype archetype = new Archetype();
-        final String[] gav = archetypeArtifactId.split( ":" );
+		String version = "1.0.0-SNAPSHOT";
+		String javaPackage = "";
 
-        final String archetypeVersion = gav[gav.length - 1];
+		String archetypeArtifactId = getData("archetypeGAV", String.class, "").get(0);
+		Archetype archetype = new Archetype();
+		String[] gav = archetypeArtifactId.split(":");
 
-        archetype.setGroupId( gav[0] );
-        archetype.setArtifactId( gav[1] );
-        archetype.setVersion( archetypeVersion );
+		String archetypeVersion = gav[gav.length - 1];
 
-        final Properties properties = new Properties();
+		archetype.setGroupId(gav[0]);
+		archetype.setArtifactId(gav[1]);
 
-        final ResolverConfiguration resolverConfig = new ResolverConfiguration();
-        ProjectImportConfiguration configuration = new ProjectImportConfiguration( resolverConfig );
+		archetype.setVersion(archetypeVersion);
 
-        final List<IProject> newProjects = projectConfigurationManager.createArchetypeProjects(
-            location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor );
+		Properties properties = new Properties();
 
-        if( newProjects == null || newProjects.size() == 0 )
-        {
-            retval = LiferayMavenCore.createErrorStatus( "Unable to create liferay workspace project from archetype." );
-        }
-        else
-        {
-            for( IProject newProject : newProjects )
-            {
-                String[] gradleFiles = new String[] { "build.gradle", "settings.gradle", "gradle.properties" };
+		ResolverConfiguration resolverConfig = new ResolverConfiguration();
 
-                for( String path : gradleFiles )
-                {
-                    IFile gradleFile = newProject.getFile( path );
+		ProjectImportConfiguration configuration = new ProjectImportConfiguration(resolverConfig);
 
-                    if( gradleFile.exists() )
-                    {
-                        gradleFile.delete( true, monitor );
-                    }
-                }
-            }
-        }
+		List<IProject> newProjects = projectConfigurationManager.createArchetypeProjects(
+			location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor);
 
-        boolean isInitBundle = op.getProvisionLiferayBundle().content();
+		if ((newProjects == null) || newProjects.isEmpty()) {
+			retval = LiferayMavenCore.createErrorStatus("Unable to create liferay workspace project from archetype.");
+		}
+		else {
+			for (IProject newProject : newProjects) {
+				String[] gradleFiles = {"build.gradle", "settings.gradle", "gradle.properties"};
 
-        if( retval.isOK() && isInitBundle )
-        {
-            IProject workspaceProject = ProjectUtil.getProject( projectName );
-            String bundleUrl = op.getBundleUrl().content();
+				for (String path : gradleFiles) {
+					IFile gradleFile = newProject.getFile(path);
 
-            final MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder( workspaceProject );
+					if (gradleFile.exists()) {
+						gradleFile.delete(true, monitor);
+					}
+				}
+			}
+		}
 
-            mavenProjectBuilder.initBundle( workspaceProject, bundleUrl, monitor );
-        }
+		boolean initBundle = op.getProvisionLiferayBundle().content();
 
-        return retval;
-    }
+		if (retval.isOK() && initBundle) {
+			IProject workspaceProject = ProjectUtil.getProject(projectName);
+			String bundleUrl = op.getBundleUrl().content();
 
-    @Override
-    public <T> List<T> getData( String key, Class<T> type, Object... params )
-    {
-        if( "archetypeGAV".equals( key ) && type.equals( String.class ) )
-        {
-            List<T> retval = new ArrayList<>();
+			MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder(workspaceProject);
 
-            String gav =
-                LiferayMavenCore.getPreferenceString( LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_WORKSPACE, "" );
+			mavenProjectBuilder.initBundle(workspaceProject, bundleUrl, monitor);
+		}
 
-            if( CoreUtil.empty( gav ) )
-            {
-                gav = "com.liferay:com.liferay.project.templates.workspace" + ":1.0.2";
-            }
+		return retval;
+	}
 
-            retval.add( type.cast( gav ) );
+	@Override
+	public <T> List<T> getData(String key, Class<T> type, Object... params) {
+		if ("archetypeGAV".equals(key) && type.equals(String.class)) {
+			List<T> retval = new ArrayList<>();
 
-            return retval;
-        }
+			String gav = LiferayMavenCore.getPreferenceString(
+				LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_WORKSPACE, "");
 
-        return super.getData( key, type, params );
-    }
+			if (CoreUtil.empty(gav)) {
+				gav = "com.liferay:com.liferay.project.templates.workspace:1.0.2";
+			}
 
-    @Override
-    public IStatus importProject( String location, IProgressMonitor monitor, boolean initBundle, String bundleUrl )
-    {
-        IStatus retval = Status.OK_STATUS;
+			retval.add(type.cast(gav));
 
-        IPath path = new Path( location );
+			return retval;
+		}
 
-        String projectName = path.lastSegment();
+		return super.getData(key, type, params);
+	}
 
-        try
-        {
-            MavenUtil.importProject( location, monitor );
+	@Override
+	public IStatus importProject(String location, IProgressMonitor monitor, boolean initBundle, String bundleUrl) {
+		IStatus retval = Status.OK_STATUS;
 
-            if( initBundle )
-            {
-                IProject workspaceProject = ProjectUtil.getProject( projectName );
+		IPath path = new Path(location);
 
-                final MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder( workspaceProject );
+		String projectName = path.lastSegment();
 
-                mavenProjectBuilder.initBundle( workspaceProject, bundleUrl, monitor );
-            }
-        }
-        catch( Exception e )
-        {
-            retval = ProjectCore.createErrorStatus( e );
-        }
+		try {
+			MavenUtil.importProject(location, monitor);
 
-        return retval;
-    }
+			if (initBundle) {
+				IProject workspaceProject = ProjectUtil.getProject(projectName);
 
-    @Override
-    public IStatus validateProjectLocation( String projectName, IPath path )
-    {
-        IStatus retval = Status.OK_STATUS;
+				MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder(workspaceProject);
 
-        // TODO validation maven project location
+				mavenProjectBuilder.initBundle(workspaceProject, bundleUrl, monitor);
+			}
+		}
+		catch (Exception e) {
+			retval = ProjectCore.createErrorStatus(e);
+		}
 
-        return retval;
-    }
+		return retval;
+	}
+
+	@Override
+	public IStatus validateProjectLocation(String projectName, IPath path) {
+		IStatus retval = Status.OK_STATUS;
+
+		// TODO validation maven project location
+
+		return retval;
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -19,6 +19,8 @@ import com.liferay.ide.core.util.CoreUtil;
 import java.util.Set;
 
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.IPath;
@@ -26,70 +28,66 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.osgi.util.NLS;
 
-
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class BuildThumbnailBuildParticipant extends ThemePluginBuildParticipant
-{
+public class BuildThumbnailBuildParticipant extends ThemePluginBuildParticipant {
 
-    @Override
-    public Set<IProject> build( int kind, IProgressMonitor monitor ) throws Exception
-    {
-        IProgressMonitor sub = CoreUtil.newSubMonitor( monitor, 100 );
+	@Override
+	public Set<IProject> build(int kind, IProgressMonitor monitor) throws Exception {
+		IProgressMonitor sub = CoreUtil.newSubMonitor(monitor, 100);
 
-        sub.beginTask( Msgs.thumbnailBuilder, 100 );
+		sub.beginTask(Msgs.thumbnailBuilder, 100);
 
-        final Set<IProject> retval = super.build( kind, monitor );
+		Set<IProject> retval = super.build(kind, monitor);
 
-        sub.done();
+		sub.done();
 
-        return retval;
-    }
+		return retval;
+	}
 
-    @Override
-    protected void configureExecution( IMavenProjectFacade facade, Xpp3Dom config )
-    {
-        // dont call super.configure() because we don't need the webappDir
-    }
+	@Override
+	protected void configureExecution(IMavenProjectFacade facade, Xpp3Dom config) {
 
-    @Override
-    protected String getGoal()
-    {
-        return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_THUMBNAIL;
-    }
+		// dont call super.configure() because we don't need the webappDir
 
-    @Override
-    protected boolean shouldBuild( int kind, IMavenProjectFacade facade )
-    {
-        boolean retval = false;
+	}
 
-        final IResourceDelta delta = this.getDelta( facade.getProject() );
+	@Override
+	protected String getGoal() {
+		return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_THUMBNAIL;
+	}
 
-        final String warSourceDirectory = MavenUtil.getWarSourceDirectory( facade );
+	@Override
+	protected boolean shouldBuild(int kind, IMavenProjectFacade facade) {
+		boolean retval = false;
 
-        if( ! CoreUtil.isNullOrEmpty( warSourceDirectory ) )
-        {
-            final IPath screenshotPath =
-                facade.getProject().getFolder( warSourceDirectory + "/images/screenshot.png" ).getProjectRelativePath();
+		IResourceDelta delta = getDelta(facade.getProject());
 
-            if( delta != null && delta.findMember( screenshotPath ) != null )
-            {
-                retval = true;
-            }
-        }
+		String warSourceDirectory = MavenUtil.getWarSourceDirectory(facade);
 
-        return retval;
-    }
+		if (!CoreUtil.isNullOrEmpty(warSourceDirectory)) {
+			IFolder folder = facade.getProject().getFolder(warSourceDirectory + "/images/screenshot.png");
 
-    private static class Msgs extends NLS
-    {
-        public static String thumbnailBuilder;
+			IPath screenshotPath = folder.getProjectRelativePath();
 
-        static
-        {
-            initializeMessages( BuildThumbnailBuildParticipant.class.getName(), Msgs.class );
-        }
-    }
+			if ((delta != null) && (delta.findMember(screenshotPath) != null)) {
+				retval = true;
+			}
+		}
+
+		return retval;
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String thumbnailBuilder;
+
+		static {
+			initializeMessages(BuildThumbnailBuildParticipant.class.getName(), Msgs.class);
+		}
+
+	}
+
 }
