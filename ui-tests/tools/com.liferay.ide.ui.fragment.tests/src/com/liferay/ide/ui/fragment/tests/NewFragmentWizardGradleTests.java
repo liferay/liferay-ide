@@ -70,6 +70,41 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 	}
 
 	@Test
+	public void createFragmentWithJspf() {
+		String projectName = "test-fragment";
+
+		wizardAction.openNewFragmentWizard();
+
+		wizardAction.openNewRuntimeWizardFragment();
+
+		wizardAction.next();
+
+		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
+
+		wizardAction.finish();
+
+		wizardAction.prepareFragmentGradle(projectName);
+
+		wizardAction.next();
+
+		wizardAction.openBrowseOsgiBundleDialog();
+
+		dialogAction.prepareText("com.liferay.document.library.web");
+
+		dialogAction.confirm();
+
+		wizardAction.openAddOverrideFilesDialog();
+
+		dialogAction.selectItems("META-INF/resources/document_library/cast_result.jspf");
+
+		dialogAction.confirm();
+
+		wizardAction.finishToWait();
+
+		viewAction.deleteProject(projectName);
+	}
+
+	@Test
 	public void createFragmentWithoutOverrideFile() {
 		String projectName = "test-fragment";
 
