@@ -40,22 +40,23 @@ public class ServiceBuilderEditor extends SapphireEditorForXml {
 	}
 
 	public InputStream getFileContents() throws CoreException, IOException, MalformedURLException {
+		InputStream retval = null;
+
 		IEditorInput editorInput = getEditorInput();
 
 		if (editorInput instanceof FileEditorInput) {
-			return ((FileEditorInput)editorInput).getFile().getContents();
+			retval = ((FileEditorInput)editorInput).getFile().getContents();
 		}
 		else if (editorInput instanceof IStorageEditorInput) {
-			return ((IStorageEditorInput)editorInput).getStorage().getContents();
+			retval = ((IStorageEditorInput)editorInput).getStorage().getContents();
 		}
 		else if (editorInput instanceof FileStoreEditorInput) {
 			URL editorInputURL = ((FileStoreEditorInput)editorInput).getURI().toURL();
 
-			return editorInputURL.openStream();
+			retval = editorInputURL.openStream();
 		}
-		else {
-			return null;
-		}
+
+		return retval;
 	}
 
 	@Override

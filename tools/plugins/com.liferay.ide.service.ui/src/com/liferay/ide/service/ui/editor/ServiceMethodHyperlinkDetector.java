@@ -151,15 +151,16 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 
 			IMethodWrapper wrapperMethod = _getServiceWrapperMethod(method);
 
-			if (wrapperMethod != null) {
-				if (wrapperMethod._base) {
-					links.add(
-						new ServiceMethodWrapperLookupHyperlink(
-							editor, word, openAction, wrapperMethod._method, qualify));
-				}
-				else {
-					links.add(new ServiceMethodWrapperHyperlink(word, openAction, wrapperMethod._method, qualify));
-				}
+			if (wrapperMethod == null) {
+				return;
+			}
+
+			if (wrapperMethod._base) {
+				links.add(
+					new ServiceMethodWrapperLookupHyperlink(editor, word, openAction, wrapperMethod._method, qualify));
+			}
+			else {
+				links.add(new ServiceMethodWrapperHyperlink(word, openAction, wrapperMethod._method, qualify));
 			}
 		}
 	}

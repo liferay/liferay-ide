@@ -14,6 +14,7 @@
 
 package com.liferay.ide.service.ui.actions;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.service.core.job.BuildWSDDJob;
 import com.liferay.ide.service.ui.ServiceUIUtil;
 
@@ -33,10 +34,8 @@ public class BuildWSDDActionHandler extends SapphireActionHandler {
 
 		IFile file = modelElement.adapt(IFile.class);
 
-		if ((file != null) && file.exists()) {
-			if (ServiceUIUtil.shouldCreateServiceBuilderJob(file)) {
-				new BuildWSDDJob(file.getProject()).schedule();
-			}
+		if (FileUtil.exists(file) && ServiceUIUtil.shouldCreateServiceBuilderJob(file)) {
+			new BuildWSDDJob(file.getProject()).schedule();
 		}
 
 		return null;

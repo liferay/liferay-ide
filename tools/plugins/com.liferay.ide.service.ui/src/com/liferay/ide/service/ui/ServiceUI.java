@@ -51,11 +51,13 @@ public class ServiceUI extends AbstractUIPlugin {
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+
 		_plugin = this;
 	}
 
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
+
 		super.stop(context);
 	}
 

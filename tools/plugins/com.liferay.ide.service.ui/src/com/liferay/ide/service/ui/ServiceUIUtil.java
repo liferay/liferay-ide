@@ -53,14 +53,7 @@ public class ServiceUIUtil {
 
 							savePartMethod.setAccessible(true);
 
-							boolean save = (Boolean)savePartMethod.invoke(null, part, part, window, true);
-
-							if (save) {
-								return true;
-							}
-							else {
-								return false;
-							}
+							return (Boolean)savePartMethod.invoke(null, part, part, window, true);
 						}
 						catch (Exception e) {
 						}

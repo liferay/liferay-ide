@@ -14,6 +14,7 @@
 
 package com.liferay.ide.service.ui.actions;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.service.core.job.BuildServiceJob;
 import com.liferay.ide.service.ui.ServiceUIUtil;
 
@@ -37,7 +38,7 @@ public class BuildServicesActionHandler extends SapphireActionHandler {
 
 		IFile file = modelElement.adapt(IFile.class);
 
-		if ((file != null) && file.exists()) {
+		if (FileUtil.exists(file)) {
 			if (ServiceUIUtil.shouldCreateServiceBuilderJob(file)) {
 				new BuildServiceJob(file.getProject()).schedule();
 			}

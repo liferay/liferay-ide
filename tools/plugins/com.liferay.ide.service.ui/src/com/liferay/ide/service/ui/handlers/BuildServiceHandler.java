@@ -16,6 +16,7 @@ package com.liferay.ide.service.ui.handlers;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.service.core.ServiceCore;
 import com.liferay.ide.service.core.job.BuildServiceJob;
 
@@ -86,6 +87,7 @@ public class BuildServiceHandler extends AbstractHandler {
 
 		try {
 			new BuildServiceJob(project).schedule();
+
 			retval = Status.OK_STATUS;
 		}
 		catch (Exception e) {
@@ -98,12 +100,12 @@ public class BuildServiceHandler extends AbstractHandler {
 	protected IFile getServiceFile(IProject project) {
 		IFolder docroot = CoreUtil.getDefaultDocrootFolder(project);
 
-		if ((docroot != null) && docroot.exists()) {
+		if (FileUtil.exists(docroot)) {
 			IPath path = new Path("WEB-INF/" + ILiferayConstants.SERVICE_XML_FILE);
 
 			IFile serviceFile = docroot.getFile(path);
 
-			if (serviceFile.exists()) {
+			if (FileUtil.exists(serviceFile)) {
 				return serviceFile;
 			}
 		}
