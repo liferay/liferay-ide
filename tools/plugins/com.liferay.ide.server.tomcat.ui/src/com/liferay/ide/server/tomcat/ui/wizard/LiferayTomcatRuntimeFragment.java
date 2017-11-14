@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.tomcat.ui.wizard;
 
@@ -26,35 +25,36 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.eclipse.wst.server.ui.wizard.WizardFragment;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class LiferayTomcatRuntimeFragment extends TomcatRuntimeWizardFragment
-{
+@SuppressWarnings("restriction")
+public class LiferayTomcatRuntimeFragment extends TomcatRuntimeWizardFragment {
 
-    protected List<WizardFragment> childFragments;
+	public Composite createComposite(Composite parent, IWizardHandle wizard) {
+		comp = new LiferayTomcatRuntimeComposite(parent, wizard);
 
-    public Composite createComposite( Composite parent, IWizardHandle wizard )
-    {
-        comp = new LiferayTomcatRuntimeComposite( parent, wizard );
+		Bundle liferayTomcatUIBundle = LiferayTomcatUIPlugin.getDefault().getBundle();
 
-        wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayTomcatUIPlugin.getDefault().getBundle().getEntry(
-            "/icons/wizban/server_wiz.png" ) ) ); //$NON-NLS-1$
+		wizard.setImageDescriptor(
+			ImageDescriptor.createFromURL(liferayTomcatUIBundle.getEntry("/icons/wizban/server_wiz.png")));
 
-        return comp;
-    }
+		return comp;
+	}
 
-    @Override
-    public List<WizardFragment> getChildFragments()
-    {
-        if( childFragments == null )
-        {
-            childFragments = new ArrayList<WizardFragment>();
-            childFragments.add( new LiferayTomcatRuntimeOptionalFragment() );
-        }
+	@Override
+	public List<WizardFragment> getChildFragments() {
+		if (childFragments == null) {
+			childFragments = new ArrayList<>();
 
-        return childFragments;
-    }
+			childFragments.add(new LiferayTomcatRuntimeOptionalFragment());
+		}
+
+		return childFragments;
+	}
+
+	protected List<WizardFragment> childFragments;
 
 }

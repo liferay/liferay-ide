@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.tomcat.ui.wizard;
 
@@ -24,26 +21,25 @@ import org.eclipse.jst.server.tomcat.ui.internal.TomcatRuntimeWizardFragment;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class LiferayTomcatRuntimeOptionalFragment extends TomcatRuntimeWizardFragment
-{
+@SuppressWarnings("restriction")
+public class LiferayTomcatRuntimeOptionalFragment extends TomcatRuntimeWizardFragment {
 
-    public LiferayTomcatRuntimeOptionalFragment()
-    {
-        super();
-    }
+	public LiferayTomcatRuntimeOptionalFragment() {
+	}
 
-    public Composite createComposite( Composite parent, IWizardHandle wizard )
-    {
-        comp = new LiferayTomcatRuntimeOptionalComposite( parent, wizard );
+	public Composite createComposite(Composite parent, IWizardHandle wizard) {
+		comp = new LiferayTomcatRuntimeOptionalComposite(parent, wizard);
 
-        wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayTomcatUIPlugin.getDefault().getBundle().getEntry(
-            "/icons/wizban/server_wiz.png" ) ) ); //$NON-NLS-1$
+		Bundle bundle = LiferayTomcatUIPlugin.getDefault().getBundle();
 
-        return comp;
-    }
+		wizard.setImageDescriptor(ImageDescriptor.createFromURL(bundle.getEntry("/icons/wizban/server_wiz.png")));
+
+		return comp;
+	}
 
 }
