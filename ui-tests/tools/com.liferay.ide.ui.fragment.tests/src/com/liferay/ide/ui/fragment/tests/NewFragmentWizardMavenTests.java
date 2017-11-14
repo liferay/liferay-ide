@@ -65,8 +65,8 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createFragmentWithJspFiles() {
-		String projectName = "test-fragment-jsp-files-maven";
+	public void createFragmentWithJsp() {
+		String projectName = "test-fragment-jsp-maven";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -92,8 +92,8 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createFragmentWithJspfFiles() {
-		String projectName = "test-fragment-jspf-files-maven";
+	public void createFragmentWithJspf() {
+		String projectName = "test-fragment-jspf-maven";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -122,7 +122,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createFragmentWithoutOverrideFiles() {
+	public void createFragmentWithoutFiles() {
 		String projectName = "test-fragment-without-files-maven";
 
 		wizardAction.openNewFragmentWizard();
@@ -205,7 +205,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createFragmentWithWholeOverrideFiles() {
+	public void createFragmentWithWholeFiles() {
 		String projectName = "test-fragment-whole-files-maven";
 
 		wizardAction.openNewFragmentWizard();
