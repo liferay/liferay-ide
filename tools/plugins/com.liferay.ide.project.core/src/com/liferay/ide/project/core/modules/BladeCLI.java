@@ -14,9 +14,7 @@
 
 package com.liferay.ide.project.core.modules;
 
-import aQute.bnd.deployer.repository.FixedIndexedRepo;
 import aQute.bnd.osgi.Domain;
-import aQute.bnd.osgi.Processor;
 
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.StringBufferOutputStream;
@@ -27,12 +25,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import java.net.URL;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Java;
@@ -56,6 +55,8 @@ import org.osgi.service.prefs.Preferences;
 public class BladeCLI {
 
 	public static final String BLADE_CLI_REPO_URL = "BLADE_CLI_REPO_URL";
+
+	public static final String BLADE_JAR_FILE_NAME = "blade.jar";
 
 	public static final File settingsDir = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
 
@@ -120,22 +121,27 @@ public class BladeCLI {
 		return lines.toArray(new String[0]);
 	}
 
-	public static File fetchBladeJarFromRepo() throws Exception {
-		Processor reporter = new Processor();
-		FixedIndexedRepo repo = new FixedIndexedRepo();
-		Map<String, String> props = new HashMap<>();
+	public static synchronized File fetchBladeJarFromRepo(boolean useCache) throws Exception {
+		if (!useCache) {
+			_bladeJarCacheFile = null;
+		}
 
-		props.put("locations", _getRepoURL() + "index.xml.gz");
-		props.put("name", "index1");
-		props.put(FixedIndexedRepo.PROP_CACHE, _repoCache.getAbsolutePath());
+		if (_bladeJarCacheFile == null) {
+			File bladeFile = new File(_repoCache.getAbsolutePath(), BLADE_JAR_FILE_NAME);
 
-		repo.setProperties(props);
+			String urlStr = _getRepoURL() + "/" + BLADE_JAR_FILE_NAME;
 
-		repo.setReporter(reporter);
+			URL url = new URL(urlStr);
 
-		File[] files = repo.get("com.liferay.blade.cli", "[2.0.2,3)");
+			FileUtils.copyURLToFile(url, bladeFile);
 
-		return files[0];
+			_bladeJarCacheFile = bladeFile;
+
+			return bladeFile;
+		}
+		else {
+			return _bladeJarCacheFile;
+		}
 	}
 
 	/**
@@ -206,7 +212,7 @@ public class BladeCLI {
 		Bundle bundle = ProjectCore.getDefault().getBundle();
 
 		File bladeJarBundleFile = new File(
-			FileLocator.toFileURL(bundle.getEntry("lib/com.liferay.blade.cli.jar")).getFile());
+			FileLocator.toFileURL(bundle.getEntry("lib/" + BLADE_JAR_FILE_NAME)).getFile());
 
 		return new Path(bladeJarBundleFile.getCanonicalPath());
 	}
@@ -235,8 +241,9 @@ public class BladeCLI {
 		return false;
 	}
 
+	private static File _bladeJarCacheFile = null;
 	private static final IPath _bladeJarInstanceArea = ProjectCore.getDefault().getStateLocation().append("blade-jar");
-	private static final IPath _bladeJarInstancePath = _bladeJarInstanceArea.append("com.liferay.blade.cli.jar");
+	private static final IPath _bladeJarInstancePath = _bladeJarInstanceArea.append(BLADE_JAR_FILE_NAME);
 	private static final IEclipsePreferences _defaultPrefs = DefaultScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
 	private static final IEclipsePreferences _instancePrefs = InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
 	private static final File _repoCache = new File(settingsDir, "repoCache");
