@@ -106,7 +106,7 @@ public class BladeCLITests
 
         try
         {
-            latestVersion = Domain.domain( BladeCLI.fetchBladeJarFromRepo() ).getBundleVersion();
+            latestVersion = Domain.domain( BladeCLI.fetchBladeJarFromRepo(false) ).getBundleVersion();
         }
         catch( Exception e )
         {
@@ -128,7 +128,7 @@ public class BladeCLITests
 
         prefs.flush();
 
-        File latestBladeJar = BladeCLI.fetchBladeJarFromRepo();
+        File latestBladeJar = BladeCLI.fetchBladeJarFromRepo(false);
 
         Version latestVersionFromRepo = new Version( Domain.domain( latestBladeJar ).getBundleVersion() );
 

@@ -124,7 +124,7 @@ public class BladeCLIPreferencePage extends FieldEditorPreferencePage implements
 				@Override
 				public void widgetSelected(SelectionEvent event) {
 					try {
-						File newBladeJar = BladeCLI.fetchBladeJarFromRepo();
+						File newBladeJar = BladeCLI.fetchBladeJarFromRepo(true);
 
 						if (newBladeJar != null) {
 							BladeCLI.addToLocalInstance(newBladeJar);
@@ -169,7 +169,7 @@ public class BladeCLIPreferencePage extends FieldEditorPreferencePage implements
 				try {
 					String currentVersion = _getCurrentBladeVersion();
 
-					File updateJar = BladeCLI.fetchBladeJarFromRepo();
+					File updateJar = BladeCLI.fetchBladeJarFromRepo(false);
 
 					String newVersion = Domain.domain(updateJar).getBundleVersion();
 
@@ -181,13 +181,7 @@ public class BladeCLIPreferencePage extends FieldEditorPreferencePage implements
 							@Override
 							public void run() {
 								if (!latestBladeVersionText.isDisposed() && !updateBladeButton.isDisposed()) {
-									if (newAvailable) {
-										latestBladeVersionText.setText(newVersion);
-									}
-									else {
-										latestBladeVersionText.setText("");
-									}
-
+									latestBladeVersionText.setText(newVersion);
 									updateBladeButton.setEnabled(newAvailable);
 								}
 							}

@@ -40,7 +40,7 @@
 						<fileset>
 							<directory>lib</directory>
 							<includes>
-								<include>com.liferay.blade.cli.jar</include>
+								<include>blade.jar</include>
 							</includes>
 						</fileset>
 					</filesets>
@@ -60,7 +60,7 @@
 						<configuration>
 							<url>${blade-latest-download-url}</url>
 							<outputDirectory>lib/</outputDirectory>
-							<outputFileName>com.liferay.blade.cli.jar</outputFileName>
+							<outputFileName>blade.jar</outputFileName>
 							<md5>${blade-latest-md5}</md5>
 						</configuration>
 					</execution>

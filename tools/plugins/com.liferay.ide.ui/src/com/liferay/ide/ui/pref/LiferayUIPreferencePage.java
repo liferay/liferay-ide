@@ -39,7 +39,6 @@ import org.osgi.service.prefs.BackingStoreException;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
 public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	public LiferayUIPreferencePage() {
@@ -99,8 +98,6 @@ public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenc
 
 		public static String clear;
 		public static String clearAllSettings;
-		public static String createNewLiferayRuntime;
-		public static String createNewLiferayServer;
 		public static String messageDialogs;
 
 		static {
