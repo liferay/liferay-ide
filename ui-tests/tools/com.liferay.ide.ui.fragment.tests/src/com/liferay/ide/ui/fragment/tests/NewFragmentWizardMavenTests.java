@@ -66,7 +66,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createFragmentWithJsp() {
-		String projectName = "test-fragment-jsp-files-maven";
+		String projectName = "test-fragment-jsp-maven";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -92,7 +92,39 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createFragmentWithoutOverrideFiles() {
+	public void createFragmentWithJspf() {
+		String projectName = "test-fragment-jspf-maven";
+
+		wizardAction.openNewFragmentWizard();
+
+		wizardAction.prepareFragmentMaven(projectName);
+
+		wizardAction.next();
+
+		wizardAction.openBrowseOsgiBundleDialog();
+
+		dialogAction.prepareText("com.liferay.blogs.web");
+
+		dialogAction.confirm();
+
+		String[] files = {
+			"META-INF/resources/blogs_admin/entry_search_columns.jspf",
+			"META-INF/resources/blogs_admin/entry_search_results.jspf"
+		};
+
+		wizardAction.openAddOverrideFilesDialog();
+
+		dialogAction.selectItems(files);
+
+		dialogAction.confirm();
+
+		wizardAction.finishToWait();
+
+		viewAction.deleteProject(projectName);
+	}
+
+	@Test
+	public void createFragmentWithoutFiles() {
 		String projectName = "test-fragment-without-files-maven";
 
 		wizardAction.openNewFragmentWizard();
@@ -175,7 +207,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createFragmentWithWholeOverrideFiles() {
+	public void createFragmentWithWholeFiles() {
 		String projectName = "test-fragment-whole-files-maven";
 
 		wizardAction.openNewFragmentWizard();

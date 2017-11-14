@@ -54,6 +54,18 @@ public class Tree extends AbstractWidget {
 		item.doubleClick();
 	}
 
+	public String[] getItemLabels() {
+		SWTBotTreeItem[] items = getWidget().getAllItems();
+
+		String[] labels = new String[items.length];
+
+		for (int i = 0; i < items.length; i++) {
+			labels[i] = items[i].getText();
+		}
+
+		return labels;
+	}
+
 	public boolean isVisible(String... items) {
 		SWTBotTreeItem item = getWidget().expandNode(items);
 

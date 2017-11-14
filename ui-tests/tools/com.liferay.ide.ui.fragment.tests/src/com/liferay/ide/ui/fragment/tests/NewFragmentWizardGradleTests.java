@@ -36,7 +36,7 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createFragmentWithJsp() {
-		String projectName = "test-fragment";
+		String projectName = "test-fragment-jsp-gradle";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -70,8 +70,43 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createFragmentWithoutOverrideFile() {
-		String projectName = "test-fragment";
+	public void createFragmentWithJspf() {
+		String projectName = "test-fragment-jspf-gradle";
+
+		wizardAction.openNewFragmentWizard();
+
+		wizardAction.openNewRuntimeWizardFragment();
+
+		wizardAction.next();
+
+		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
+
+		wizardAction.finish();
+
+		wizardAction.prepareFragmentGradle(projectName);
+
+		wizardAction.next();
+
+		wizardAction.openBrowseOsgiBundleDialog();
+
+		dialogAction.prepareText("com.liferay.document.library.web");
+
+		dialogAction.confirm();
+
+		wizardAction.openAddOverrideFilesDialog();
+
+		dialogAction.selectItems("META-INF/resources/document_library/cast_result.jspf");
+
+		dialogAction.confirm();
+
+		wizardAction.finishToWait();
+
+		viewAction.deleteProject(projectName);
+	}
+
+	@Test
+	public void createFragmentWithoutFiles() {
+		String projectName = "test-fragment-without-files-gradle";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -106,7 +141,7 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createFragmentWithPortletProperites() {
-		String projectName = "test-fragment";
+		String projectName = "test-fragment-portlet-properties-gradle";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -147,7 +182,7 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createFragmentWithResourceAction() {
-		String projectName = "test-fragment";
+		String projectName = "test-fragment-resource-action-gradle";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -181,8 +216,8 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createFragmentWithWholeOverrideFiles() {
-		String projectName = "test-fragment";
+	public void createFragmentWithWholeFiles() {
+		String projectName = "test-fragment-whole-files-gradle";
 
 		wizardAction.openNewFragmentWizard();
 

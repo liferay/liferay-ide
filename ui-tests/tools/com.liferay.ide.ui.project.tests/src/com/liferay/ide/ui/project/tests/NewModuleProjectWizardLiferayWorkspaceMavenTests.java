@@ -12,45 +12,40 @@
  * details.
  */
 
-package com.liferay.ide.ui.workspace.tests;
+package com.liferay.ide.ui.project.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * @author Vicky Wang
- * @author Ying Xu
+ * @author Terry Jia
  */
-public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
+public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
-	@Test
-	public void createLiferayWorksapce() {
-		String workspaceName = "test-liferay-workspace-maven";
+	@AfterClass
+	public static void cleanLiferayWorkspace() {
+		viewAction.deleteProject(_liferayWorkspaceName);
+	}
 
+	@BeforeClass
+	public static void createLiferayWorkspace() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.prepareLiferayWorkspaceMaven(workspaceName);
+		wizardAction.prepareLiferayWorkspaceMaven(_liferayWorkspaceName);
 
 		wizardAction.finishToWait();
 
-		viewAction.deleteProject(workspaceName);
+		Assert.assertTrue(viewAction.visibleProjectFileTry(_liferayWorkspaceName));
 	}
 
 	@Test
-	public void createLiferayWorksapceChangeLocation() {
+	public void createActivator() {
 	}
 
-	@Test
-	public void createLiferayWorksapceWithDownloadBundle() {
-	}
-
-	@Test
-	public void createLiferayWorksapceWithDownloadBundleChangeBundleUrl() {
-	}
-
-	@Test
-	public void createLiferayWorksapceWithDownloadBundleChangeServerName() {
-	}
+	private static final String _liferayWorkspaceName = "test-liferay-workspace-maven";
 
 }

@@ -16,16 +16,17 @@ package com.liferay.ide.ui.project.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author Ying Xu
  */
-public class NewLiferayJsfProjectWizardTests extends SwtbotBase {
+public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 
 	@Test
-	public void createICEFacesProject() {
-		String projectName = "testICEFacesProject";
+	public void createICEFaces() {
+		String projectName = "test-ice-faces-gradle";
 
 		wizardAction.openNewLiferayJsfProjectWizard();
 
@@ -33,12 +34,14 @@ public class NewLiferayJsfProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createJSFStandardProject() {
-		String projectName = "testJSFStandardProject";
+	public void createJSFStandard() {
+		String projectName = "test-jsf-standard-gradle";
 
 		wizardAction.openNewLiferayJsfProjectWizard();
 
@@ -46,12 +49,14 @@ public class NewLiferayJsfProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createLiferayFacesAlloyProject() {
-		String projectName = "testLiferayFacesAlloyProject";
+	public void createLiferayFacesAlloy() {
+		String projectName = "test-liferay-faces-alloy-gradle";
 
 		wizardAction.openNewLiferayJsfProjectWizard();
 
@@ -59,12 +64,14 @@ public class NewLiferayJsfProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createPrimeFacesProject() {
-		String projectName = "testPrimeFacesProject";
+	public void createPrimeFaces() {
+		String projectName = "test-prime-faces-gradle";
 
 		wizardAction.openNewLiferayJsfProjectWizard();
 
@@ -72,18 +79,22 @@ public class NewLiferayJsfProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createRichFacesProject() {
-		String projectName = "testRichFacesProject";
+	public void createRichFaces() {
+		String projectName = "test-rich-faces-gradle";
 
 		wizardAction.openNewLiferayJsfProjectWizard();
 
 		wizardAction.prepareJsfProjectGradle(projectName, RICHFACES);
 
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
