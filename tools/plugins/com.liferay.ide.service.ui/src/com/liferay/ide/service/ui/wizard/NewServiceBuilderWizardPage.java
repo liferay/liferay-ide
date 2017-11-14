@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.ui.wizard;
 
@@ -53,312 +52,305 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
-@SuppressWarnings( "restriction" )
-public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
-    implements INewServiceBuilderDataModelProperties
-{
-    protected Text author;
-    protected Text namespace;
-    protected Button packageButton;
-    protected Label packageLabel;
-    protected Text packageText;
-    protected String projectName;
-    protected Combo projectNameCombo;
-    protected Label projectNameLabel;
-    protected Text serviceFile;
-    protected Button useSampleTemplate;
+import org.osgi.framework.Bundle;
 
-    public NewServiceBuilderWizardPage( IDataModel dataModel, String pageName, String title, String description )
-    {
-        super( dataModel, pageName, title, ServiceUI.imageDescriptorFromPlugin(
-            ServiceUI.PLUGIN_ID, "/icons/wizban/service_wiz.png" ) ); //$NON-NLS-1$
+/**
+ * @author Greg Amerson
+ */
+@SuppressWarnings("restriction")
+public class NewServiceBuilderWizardPage
+	extends LiferayDataModelWizardPage implements INewServiceBuilderDataModelProperties {
 
-        setDescription( description );
-    }
+	public NewServiceBuilderWizardPage(IDataModel dataModel, String pageName, String title, String description) {
+		super(
+			dataModel, pageName, title,
+			ServiceUI.imageDescriptorFromPlugin(ServiceUI.PLUGIN_ID, "/icons/wizban/service_wiz.png"));
 
-    protected void createPackageNamespaceAuthorGroup( Composite parent )
-    {
-        Composite group = SWTUtil.createTopComposite( parent, 3 );
-        group.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 2, 1 ) );
+		setDescription(description);
+	}
 
-        // package
-        packageLabel = new Label( group, SWT.LEFT );
-        packageLabel.setText( Msgs.packagePath );
-        packageLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
+	protected void createPackageNamespaceAuthorGroup(Composite parent) {
+		Composite group = SWTUtil.createTopComposite(parent, 3);
 
-        packageText = new Text( group, SWT.SINGLE | SWT.BORDER );
-        packageText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 
-        synchHelper.synchText( packageText, PACKAGE_PATH, null );
+		// package
 
-        IPackageFragment packageFragment = getSelectedPackageFragment();
+		packageLabel = new Label(group, SWT.LEFT);
 
-        String targetProject = model.getStringProperty( PROJECT_NAME );
+		packageLabel.setText(Msgs.packagePath);
+		packageLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 
-        if( packageFragment != null && packageFragment.exists() &&
-            packageFragment.getJavaProject().getElementName().equals( targetProject ) )
-        {
+		packageText = new Text(group, SWT.SINGLE | SWT.BORDER);
 
-            // IPackageFragmentRoot root =
-            // getPackageFragmentRoot(packageFragment);
-            // if (root != null)
-            // folderText.setText(root.getPath().toString());
+		packageText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-            model.setProperty( PACKAGE_PATH, packageFragment.getElementName() );
-        }
+		synchHelper.synchText(packageText, PACKAGE_PATH, null);
 
-        packageButton = new Button( group, SWT.PUSH );
-        packageButton.setText( J2EEUIMessages.BROWSE_BUTTON_LABEL );
-        packageButton.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
-        packageButton.addSelectionListener( new SelectionListener()
-        {
+		IPackageFragment packageFragment = getSelectedPackageFragment();
 
-            public void widgetDefaultSelected( SelectionEvent e )
-            {
-                // Do nothing
-            }
+		String targetProject = model.getStringProperty(PROJECT_NAME);
 
-            public void widgetSelected( SelectionEvent e )
-            {
-                handlePackageButtonPressed();
-            }
-        } );
+		String packageFragmentName = packageFragment.getJavaProject().getElementName();
 
-        SWTUtil.createLabel( group, SWT.LEAD, Msgs.namespace, 1 );
-        namespace = SWTUtil.createText( group, 1 );
-        this.synchHelper.synchText( namespace, NAMESPACE, null );
-        SWTUtil.createLabel( group, SWT.LEAD, StringPool.EMPTY, 1 );
+		if ((packageFragment != null) && packageFragment.exists() && packageFragmentName.equals(targetProject)) {
+			model.setProperty(PACKAGE_PATH, packageFragment.getElementName());
+		}
 
-        SWTUtil.createLabel( group, SWT.LEAD, Msgs.author, 1 );
-        author = SWTUtil.createText( group, 1 );
-        this.synchHelper.synchText( author, AUTHOR, null );
-        SWTUtil.createLabel( group, StringPool.EMPTY, 1 );
+		packageButton = new Button(group, SWT.PUSH);
 
-        SWTUtil.createLabel( group, StringPool.EMPTY, 1 );
-        Composite checkboxParent = SWTUtil.createComposite( group, 1, 1, SWT.FILL, 0, 3 );
-        useSampleTemplate =
-            SWTUtil.createCheckButton( checkboxParent, Msgs.includeSampleEntity, null, true, 1 );
-        GridData data = new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 );
-        useSampleTemplate.setLayoutData( data );
-        this.synchHelper.synchCheckbox( useSampleTemplate, USE_SAMPLE_TEMPLATE, null );
-    }
+		packageButton.setText(J2EEUIMessages.BROWSE_BUTTON_LABEL);
+		packageButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+		packageButton.addSelectionListener(
+			new SelectionListener() {
 
-    /**
-     * Add project group
-     */
-    protected void createProjectNameServiceFileGroup( Composite parent )
-    {
-        // set up project name label
-        projectNameLabel = new Label( parent, SWT.NONE );
-        projectNameLabel.setText( "Plugin project:" ); //$NON-NLS-1$
-        projectNameLabel.setLayoutData( new GridData() );
+				public void widgetDefaultSelected(SelectionEvent e) {
 
-        // set up project name entry field
-        projectNameCombo = new Combo( parent, SWT.BORDER | SWT.READ_ONLY );
-        GridData data = new GridData( GridData.FILL_HORIZONTAL );
-        data.widthHint = 300;
-        data.horizontalSpan = 1;
-        data.grabExcessHorizontalSpace = true;
-        projectNameCombo.setLayoutData( data );
-        synchHelper.synchCombo( projectNameCombo, PROJECT_NAME, null );
+					// Do nothing
 
-        String initialProjectName = initializeProjectList( projectNameCombo, model );
-        if( projectName == null && initialProjectName != null )
-        {
-            projectName = initialProjectName;
-        }
+				}
 
-        SWTUtil.createLabel( parent, SWT.LEAD, Msgs.serviceFile, 1 );
-        serviceFile = SWTUtil.createText( parent, 1 );
-        this.synchHelper.synchText( serviceFile, SERVICE_FILE, null );
-    }
+				public void widgetSelected(SelectionEvent e) {
+					handlePackageButtonPressed();
+				}
 
-    @Override
-    protected Composite createTopLevelComposite( Composite parent )
-    {
-        Composite topComposite = SWTUtil.createTopComposite( parent, 2 );
+			});
 
-        createProjectNameServiceFileGroup( topComposite );
+		SWTUtil.createLabel(group, SWT.LEAD, Msgs.namespace, 1);
+		namespace = SWTUtil.createText(group, 1);
 
-        SWTUtil.createSeparator( topComposite, 2 );
+		this.synchHelper.synchText(namespace, NAMESPACE, null);
 
-        createPackageNamespaceAuthorGroup( topComposite );
+		SWTUtil.createLabel(group, SWT.LEAD, StringPool.EMPTY, 1);
 
-        setShellImage();
+		SWTUtil.createLabel(group, SWT.LEAD, Msgs.author, 1);
+		author = SWTUtil.createText(group, 1);
 
-        return topComposite;
-    }
+		this.synchHelper.synchText(author, AUTHOR, null);
 
-    protected IPackageFragmentRoot getPackageFragmentRoot( IPackageFragment packageFragment )
-    {
-        if( packageFragment == null )
-        {
-            return null;
-        }
-        else if( packageFragment.getParent() instanceof IPackageFragment )
-        {
-            return getPackageFragmentRoot( (IPackageFragment) packageFragment.getParent() );
-        }
-        else if( packageFragment.getParent() instanceof IPackageFragmentRoot )
-        {
-            return (IPackageFragmentRoot) packageFragment.getParent();
-        }
-        else
-        {
-            return null;
-        }
-    }
+		SWTUtil.createLabel(group, StringPool.EMPTY, 1);
 
-    protected IPackageFragment getSelectedPackageFragment()
-    {
-        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		SWTUtil.createLabel(group, StringPool.EMPTY, 1);
+		Composite checkboxParent = SWTUtil.createComposite(group, 1, 1, SWT.FILL, 0, 3);
 
-        if( window == null )
-        {
-            return null;
-        }
+		useSampleTemplate = SWTUtil.createCheckButton(checkboxParent, Msgs.includeSampleEntity, null, true, 1);
 
-        ISelection selection = window.getSelectionService().getSelection();
+		GridData data = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 
-        if( selection == null )
-        {
-            return null;
-        }
+		useSampleTemplate.setLayoutData(data);
 
-        IJavaElement element = getInitialJavaElement( selection );
+		this.synchHelper.synchCheckbox(useSampleTemplate, USE_SAMPLE_TEMPLATE, null);
+	}
 
-        if( element != null )
-        {
-            if( element.getElementType() == IJavaElement.PACKAGE_FRAGMENT )
-            {
-                return (IPackageFragment) element;
-            }
-            else if( element.getElementType() == IJavaElement.COMPILATION_UNIT )
-            {
-                IJavaElement parent = ( (ICompilationUnit) element ).getParent();
+	/**
+	 * Add project group
+	 */
+	protected void createProjectNameServiceFileGroup(Composite parent) {
+		projectNameLabel = new Label(parent, SWT.NONE);
 
-                if( parent.getElementType() == IJavaElement.PACKAGE_FRAGMENT )
-                {
-                    return (IPackageFragment) parent;
-                }
-            }
-            else if( element.getElementType() == IJavaElement.TYPE )
-            {
-                return ( (IType) element ).getPackageFragment();
-            }
-        }
+		projectNameLabel.setText("Plugin project:");
+		projectNameLabel.setLayoutData(new GridData());
 
-        return null;
-    }
+		projectNameCombo = new Combo(parent, SWT.BORDER | SWT.READ_ONLY);
+		GridData data = new GridData(GridData.FILL_HORIZONTAL);
 
-    protected IPackageFragmentRoot getSelectedPackageFragmentRoot()
-    {
-        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		data.widthHint = 300;
+		data.horizontalSpan = 1;
+		data.grabExcessHorizontalSpace = true;
+		projectNameCombo.setLayoutData(data);
 
-        if( window == null )
-        {
-            return null;
-        }
+		synchHelper.synchCombo(projectNameCombo, PROJECT_NAME, null);
 
-        ISelection selection = window.getSelectionService().getSelection();
+		String initialProjectName = initializeProjectList(projectNameCombo, model);
 
-        if( selection == null )
-        {
-            return null;
-        }
+		if ((projectName == null) && (initialProjectName != null)) {
+			projectName = initialProjectName;
+		}
 
-        // StructuredSelection stucturedSelection = (StructuredSelection)
-        // selection;
+		SWTUtil.createLabel(parent, SWT.LEAD, Msgs.serviceFile, 1);
+		serviceFile = SWTUtil.createText(parent, 1);
 
-        IJavaElement element = getInitialJavaElement( selection );
+		this.synchHelper.synchText(serviceFile, SERVICE_FILE, null);
+	}
 
-        if( element != null )
-        {
-            if( element.getElementType() == IJavaElement.PACKAGE_FRAGMENT_ROOT )
-                return (IPackageFragmentRoot) element;
-        }
+	@Override
+	protected Composite createTopLevelComposite(Composite parent) {
+		Composite topComposite = SWTUtil.createTopComposite(parent, 2);
 
-        return null;
-    }
+		createProjectNameServiceFileGroup(topComposite);
 
-    protected String[] getValidationPropertyNames()
-    {
-        return new String[] { PROJECT_NAME, SERVICE_FILE, PACKAGE_PATH, NAMESPACE, AUTHOR };
-    }
+		SWTUtil.createSeparator(topComposite, 2);
 
-    protected void handlePackageButtonPressed()
-    {
-        IPackageFragmentRoot packRoot = (IPackageFragmentRoot) model.getProperty( JAVA_PACKAGE_FRAGMENT_ROOT );
+		createPackageNamespaceAuthorGroup(topComposite);
 
-        if( packRoot == null )
-        {
-            return;
-        }
+		setShellImage();
 
-        IJavaElement[] packages = null;
+		return topComposite;
+	}
 
-        try
-        {
-            packages = packRoot.getChildren();
-        }
-        catch( JavaModelException e )
-        {
-            // Do nothing
-        }
+	protected IPackageFragmentRoot getPackageFragmentRoot(IPackageFragment packageFragment) {
+		if (packageFragment == null) {
+			return null;
+		}
+		else if (packageFragment.getParent() instanceof IPackageFragment) {
+			return getPackageFragmentRoot((IPackageFragment)packageFragment.getParent());
+		}
+		else if (packageFragment.getParent() instanceof IPackageFragmentRoot) {
+			return (IPackageFragmentRoot)packageFragment.getParent();
+		}
+		else {
+			return null;
+		}
+	}
 
-        if( packages == null )
-            packages = new IJavaElement[0];
+	protected IPackageFragment getSelectedPackageFragment() {
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
-        ElementListSelectionDialog dialog =
-            new ElementListSelectionDialog( getShell(), new JavaElementLabelProvider(
-                JavaElementLabelProvider.SHOW_DEFAULT ) );
-        dialog.setTitle( J2EEUIMessages.PACKAGE_SELECTION_DIALOG_TITLE );
-        dialog.setMessage( J2EEUIMessages.PACKAGE_SELECTION_DIALOG_DESC );
-        dialog.setEmptyListMessage( J2EEUIMessages.PACKAGE_SELECTION_DIALOG_MSG_NONE );
-        dialog.setElements( packages );
+		if (window == null) {
+			return null;
+		}
 
-        if( dialog.open() == Window.OK )
-        {
-            IPackageFragment fragment = (IPackageFragment) dialog.getFirstResult();
+		ISelection selection = window.getSelectionService().getSelection();
 
-            if( fragment != null )
-            {
-                packageText.setText( fragment.getElementName() );
-            }
-            else
-            {
-                packageText.setText( J2EEUIMessages.EMPTY_STRING );
-            }
-        }
-    }
+		if (selection == null) {
+			return null;
+		}
 
-    protected boolean isProjectValid( IProject project )
-    {
-        return ( ProjectUtil.isPortletProject( project ) || ProjectUtil.isHookProject( project ) ||
-            ProjectUtil.isExtProject( project ) ) && SDKUtil.isSDKProject( project );
-    }
+		IJavaElement element = getInitialJavaElement(selection);
 
-    protected void setShellImage()
-    {
-        URL url = ServiceUI.getDefault().getBundle().getEntry( "/icons/e16/service.png" ); //$NON-NLS-1$
+		if (element != null) {
+			if (element.getElementType() == IJavaElement.PACKAGE_FRAGMENT) {
+				return (IPackageFragment)element;
+			}
+			else if (element.getElementType() == IJavaElement.COMPILATION_UNIT) {
+				IJavaElement parent = ((ICompilationUnit)element).getParent();
 
-        Image shellImage = ImageDescriptor.createFromURL( url ).createImage();
+				if (parent.getElementType() == IJavaElement.PACKAGE_FRAGMENT) {
+					return (IPackageFragment)parent;
+				}
+			}
+			else if (element.getElementType() == IJavaElement.TYPE) {
+				return ((IType)element).getPackageFragment();
+			}
+		}
 
-        getShell().setImage( shellImage );
+		return null;
+	}
 
-    }
+	protected IPackageFragmentRoot getSelectedPackageFragmentRoot() {
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
-    private static class Msgs extends NLS
-    {
-        public static String author;
-        public static String includeSampleEntity;
-        public static String namespace;
-        public static String packagePath;
-        public static String serviceFile;
+		if (window == null) {
+			return null;
+		}
 
-        static
-        {
-            initializeMessages( NewServiceBuilderWizardPage.class.getName(), Msgs.class );
-        }
-    }
+		ISelection selection = window.getSelectionService().getSelection();
+
+		if (selection == null) {
+			return null;
+		}
+
+		IJavaElement element = getInitialJavaElement(selection);
+
+		if (element != null) {
+			if (element.getElementType() == IJavaElement.PACKAGE_FRAGMENT_ROOT) {
+				return (IPackageFragmentRoot)element;
+			}
+		}
+
+		return null;
+	}
+
+	protected String[] getValidationPropertyNames() {
+		return new String[] {PROJECT_NAME, SERVICE_FILE, PACKAGE_PATH, NAMESPACE, AUTHOR};
+	}
+
+	protected void handlePackageButtonPressed() {
+		IPackageFragmentRoot packRoot = (IPackageFragmentRoot)model.getProperty(JAVA_PACKAGE_FRAGMENT_ROOT);
+
+		if (packRoot == null) {
+			return;
+		}
+
+		IJavaElement[] packages = null;
+
+		try {
+			packages = packRoot.getChildren();
+		}
+		catch (JavaModelException jme) {
+
+			// Do nothing
+
+		}
+
+		if (packages == null) {
+			packages = new IJavaElement[0];
+		}
+
+		ElementListSelectionDialog dialog = new ElementListSelectionDialog(
+			getShell(), new JavaElementLabelProvider(JavaElementLabelProvider.SHOW_DEFAULT));
+
+		dialog.setTitle(J2EEUIMessages.PACKAGE_SELECTION_DIALOG_TITLE);
+		dialog.setMessage(J2EEUIMessages.PACKAGE_SELECTION_DIALOG_DESC);
+		dialog.setEmptyListMessage(J2EEUIMessages.PACKAGE_SELECTION_DIALOG_MSG_NONE);
+		dialog.setElements(packages);
+
+		if (dialog.open() == Window.OK) {
+			IPackageFragment fragment = (IPackageFragment)dialog.getFirstResult();
+
+			if (fragment != null) {
+				packageText.setText(fragment.getElementName());
+			}
+			else {
+				packageText.setText(J2EEUIMessages.EMPTY_STRING);
+			}
+		}
+	}
+
+	protected boolean isProjectValid(IProject project) {
+		if ((ProjectUtil.isPortletProject(project) || ProjectUtil.isHookProject(project) ||
+			 ProjectUtil.isExtProject(project)) &&
+			SDKUtil.isSDKProject(project)) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	protected void setShellImage() {
+		Bundle bundle = ServiceUI.getDefault().getBundle();
+
+		URL url = bundle.getEntry("/icons/e16/service.png");
+
+		Image shellImage = ImageDescriptor.createFromURL(url).createImage();
+
+		getShell().setImage(shellImage);
+	}
+
+	protected Text author;
+	protected Text namespace;
+	protected Button packageButton;
+	protected Label packageLabel;
+	protected Text packageText;
+	protected String projectName;
+	protected Combo projectNameCombo;
+	protected Label projectNameLabel;
+	protected Text serviceFile;
+	protected Button useSampleTemplate;
+
+	private static class Msgs extends NLS {
+
+		public static String author;
+		public static String includeSampleEntity;
+		public static String namespace;
+		public static String packagePath;
+		public static String serviceFile;
+
+		static {
+			initializeMessages(NewServiceBuilderWizardPage.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

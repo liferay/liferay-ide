@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- 
+<!--
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -12,53 +12,53 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
-  -->
+-->
 <extension xmlns="http://www.eclipse.org/sapphire/xmlns/extension">
-<!--
-    <action-handler>
-        <action>Liferay.Diagram.Service.ToggleConnectionLabels</action>
-        <impl>com.liferay.ide.service.ui.actions.ToggleDiagramConnectionLabelsActionHandler</impl>
-        <description>Show/Hide Connection Labels</description>
-        <context>Sapphire.Diagram.Editor</context>
-    </action-handler>
-    <action>
-        <id>Liferay.Diagram.Service.ToggleConnectionLabels</id>
-        <type>TOGGLE</type>
-        <label>Show Connection Labels</label>
-        <description>Show or hide the connection labels</description>
-        <context>Sapphire.Diagram.Editor</context>
-    </action>
-  -->
-    <action>
-        <id>Liferay.ServiceBuilder.BuildServices</id>
-        <label>Build Services</label>
-        <context>Sapphire.Diagram.Header</context>
-        <context>Sapphire.Diagram.Editor</context>
-        <tooltip>Build Services (Ctrl+Shift+B)</tooltip>
-        <description>Build Services</description>
-        <image>icons/e16/builder_16x16.gif</image>
-        <hint>
-            <name>style</name>
-            <value>image</value>
-        </hint>
-        <context>Sapphire.EditorPage</context>
-        <key-binding>SHIFT+CONTROL+b</key-binding>
-        <key-binding-behavior>propagated</key-binding-behavior>
-    </action>
-    <action>
-        <id>Liferay.ServiceBuilder.BuildWSDD</id>
-        <label>Build WSDD</label>
-        <description>Build WSDD</description>
-        <image>icons/e16/webservicedesc_16x16.gif</image>
-        <key-binding>SHIFT+CONTROL+ALT+b</key-binding>
-        <context>Sapphire.Diagram.Header</context>
-        <context>Sapphire.Diagram.Editor</context>
-        <hint>
-            <name>style</name>
-            <value>image</value>
-        </hint>
-        <context>Sapphire.EditorPage</context>
-        <tooltip>Build WSDD (Ctrl+Shift+Alt+b)</tooltip>
-    </action>
-    
+	<!--
+	<action-handler>
+		<action>Liferay.Diagram.Service.ToggleConnectionLabels</action>
+		<impl>com.liferay.ide.service.ui.actions.ToggleDiagramConnectionLabelsActionHandler</impl>
+		<description>Show/Hide Connection Labels</description>
+		<context>Sapphire.Diagram.Editor</context>
+	</action-handler>
+	<action>
+		<id>Liferay.Diagram.Service.ToggleConnectionLabels</id>
+		<type>TOGGLE</type>
+		<label>Show Connection Labels</label>
+		<description>Show or hide the connection labels</description>
+		<context>Sapphire.Diagram.Editor</context>
+	</action>
+-->
+	<action>
+		<id>Liferay.ServiceBuilder.BuildServices</id>
+		<label>Build Services</label>
+		<context>Sapphire.Diagram.Header</context>
+		<context>Sapphire.Diagram.Editor</context>
+		<tooltip>Build Services (Ctrl+Shift+B)</tooltip>
+		<description>Build Services</description>
+		<image>icons/e16/builder_16x16.gif</image>
+		<hint>
+			<name>style</name>
+			<value>image</value>
+		</hint>
+		<context>Sapphire.EditorPage</context>
+		<key-binding>SHIFT+CONTROL+b</key-binding>
+		<key-binding-behavior>propagated</key-binding-behavior>
+	</action>
+	<action>
+		<id>Liferay.ServiceBuilder.BuildWSDD</id>
+		<label>Build WSDD</label>
+		<description>Build WSDD</description>
+		<image>icons/e16/webservicedesc_16x16.gif</image>
+		<key-binding>SHIFT+CONTROL+ALT+b</key-binding>
+		<context>Sapphire.Diagram.Header</context>
+		<context>Sapphire.Diagram.Editor</context>
+		<hint>
+			<name>style</name>
+			<value>image</value>
+		</hint>
+		<context>Sapphire.EditorPage</context>
+		<tooltip>Build WSDD (Ctrl+Shift+Alt+b)</tooltip>
+	</action>
+
 </extension>

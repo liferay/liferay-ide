@@ -2,157 +2,183 @@
 <?eclipse version="3.4"?>
 
 <plugin>
-   <extension
-         point="org.eclipse.ui.newWizards">
-      <category
-            id="com.liferay.ide.newWizards"
-            name="%category.name">
-      </category>
-      <wizard
-            category="com.liferay.ide.newWizards"
-            icon="icons/n16/service_new.png"
-            id="com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder"
-            name="%service.wizard.name">
-         <class class="com.liferay.ide.service.ui.wizard.NewServiceBuilderWizard">
-          <parameter name="liferay_artifact" value="true"/>
-            <parameter name="menuIndex" value="30" />
-            <parameter name="validProjectTypes" value="portlet,hook,ext" />
-         </class>
-         <description>
-            %service.wizard.description
-         </description>
-      </wizard>
-   </extension>
-      <extension
-         point="org.eclipse.ui.editors.templates">
-      <contextType
-            class="com.liferay.ide.service.ui.template.ServiceBuilderTemplateContextType"
-            id="servicebuilder_new"
-            name="%context.type.name">
-      </contextType>
-      <include
-            file="templates/servicebuilder-templates.xml"
-            translations="templates/servicebuilder-templates.properties">
-      </include>
-   </extension>
-      <extension
-         point="org.eclipse.ui.popupMenus">
-         <objectContribution
-            adaptable="true"
-            id="com.liferay.ide.service.ui.service.popup"
-            objectClass="org.eclipse.core.resources.IResource">
-         <action
-               definitionId="com.liferay.ide.service.ui.buildWSDD"
-               class="com.liferay.ide.service.ui.actions.BuildWSDDAction"
-               enablesFor="1"
-               icon="icons/e16/service.png"
-               id="com.liferay.ide.service.ui.wsdd.popup.action"
-               label="%build.wsdd.action.label"
-               menubarPath="liferayPopupMenuCategory/slot1"
-               tooltip="%build.web.services.descriptor.action.tooltip">
-         </action>
-         <action
-               definitionId="com.liferay.ide.service.ui.buildService"
-               class="com.liferay.ide.service.ui.actions.BuildServicesAction"
-               enablesFor="1"
-               icon="icons/e16/service.png"
-               id="com.liferay.ide.service.ui.service.popup.action"
-               label="%build.services.action.label"
-               menubarPath="liferayPopupMenuCategory/slot1"
-               tooltip="%build.services.action.tooltip">
-         </action>
+	<extension
+		point="org.eclipse.ui.newWizards"
+	>
+		<category
+			id="com.liferay.ide.newWizards"
+			name="%category.name"
+		>
+		</category>
+		<wizard
+			category="com.liferay.ide.newWizards"
+			icon="icons/n16/service_new.png"
+			id="com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder"
+			name="%service.wizard.name"
+		>
+			<class class="com.liferay.ide.service.ui.wizard.NewServiceBuilderWizard">
+				<parameter name="liferay_artifact" value="true" />
+				<parameter name="menuIndex" value="30" />
+				<parameter name="validProjectTypes" value="portlet,hook,ext" />
+			</class>
+			<description>
+			%service.wizard.description
+			</description>
+		</wizard>
+	</extension>
+	<extension
+		point="org.eclipse.ui.editors.templates"
+	>
+		<contextType
+			class="com.liferay.ide.service.ui.template.ServiceBuilderTemplateContextType"
+			id="servicebuilder_new"
+			name="%context.type.name"
+		>
+		</contextType>
+		<include
+			file="templates/servicebuilder-templates.xml"
+			translations="templates/servicebuilder-templates.properties"
+		>
+		</include>
+	</extension>
+	<extension
+		point="org.eclipse.ui.popupMenus"
+	>
+		<objectContribution
+			adaptable="true"
+			id="com.liferay.ide.service.ui.service.popup"
+			objectClass="org.eclipse.core.resources.IResource"
+		>
+			<action
+				class="com.liferay.ide.service.ui.actions.BuildWSDDAction"
+				definitionId="com.liferay.ide.service.ui.buildWSDD"
+				enablesFor="1"
+				icon="icons/e16/service.png"
+				id="com.liferay.ide.service.ui.wsdd.popup.action"
+				label="%build.wsdd.action.label"
+				menubarPath="liferayPopupMenuCategory/slot1"
+				tooltip="%build.web.services.descriptor.action.tooltip"
+			>
+			</action>
+			<action
+				class="com.liferay.ide.service.ui.actions.BuildServicesAction"
+				definitionId="com.liferay.ide.service.ui.buildService"
+				enablesFor="1"
+				icon="icons/e16/service.png"
+				id="com.liferay.ide.service.ui.service.popup.action"
+				label="%build.services.action.label"
+				menubarPath="liferayPopupMenuCategory/slot1"
+				tooltip="%build.services.action.tooltip"
+			>
+			</action>
 
-         <enablement>
-          <adapt type="org.eclipse.core.resources.IResource">
-               <test forcePluginActivation="true"
-                   property="com.liferay.ide.service.ui.hasServiceFile"
-                   value="true" />
-           </adapt>
-         </enablement>
-      </objectContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.editors">
-      <editor
-            contributorClass="com.liferay.ide.service.ui.editor.ServiceBuilderEditorActionBarContributor"
-            default="true"
-            filenames="service.xml"
-            icon="icons/e16/service.png"
-            id="com.liferay.ide.eclipse.service.ui.editor.servicebuilder"
-            name="%service.editor.name"
-            symbolicFontName="org.eclipse.wst.sse.ui.textfont">
-         <class class="com.liferay.ide.service.ui.editor.ServiceBuilderEditor">
-             <parameter name="sdef" value="com.liferay.ide.service.ui.editor.ServiceBuilderEditor"/>
-             <parameter name="pageName" value="Overview"/>
-         </class>
-        <contentTypeBinding
-               contentTypeId="com.liferay.ide.service.core.servicebuildercontent">
-         </contentTypeBinding>
-      </editor>
-   </extension>
-      <extension
-         point="org.eclipse.core.expressions.propertyTesters">
-      <propertyTester
-            class="com.liferay.ide.service.ui.HasServiceFilePropertyTester"
-            id="com.liferay.ide.service.ui.hasServiceFile"
-            namespace="com.liferay.ide.service.ui"
-            properties="hasServiceFile"
-            type="org.eclipse.core.resources.IResource">
-      </propertyTester>
-   </extension>
+			<enablement>
+				<adapt type="org.eclipse.core.resources.IResource">
+					<test forcePluginActivation="true"
+				   property="com.liferay.ide.service.ui.hasServiceFile"
+				   value="true" />
+				</adapt>
+			</enablement>
+		</objectContribution>
+	</extension>
+	<extension
+		point="org.eclipse.ui.editors"
+	>
+		<editor
+			contributorClass="com.liferay.ide.service.ui.editor.ServiceBuilderEditorActionBarContributor"
+			default="true"
+			filenames="service.xml"
+			icon="icons/e16/service.png"
+			id="com.liferay.ide.eclipse.service.ui.editor.servicebuilder"
+			name="%service.editor.name"
+			symbolicFontName="org.eclipse.wst.sse.ui.textfont"
+		>
+			<class class="com.liferay.ide.service.ui.editor.ServiceBuilderEditor">
+				<parameter name="sdef" value="com.liferay.ide.service.ui.editor.ServiceBuilderEditor" />
+				<parameter name="pageName" value="Overview" />
+			</class>
+			<contentTypeBinding
+				contentTypeId="com.liferay.ide.service.core.servicebuildercontent"
+			>
+			</contentTypeBinding>
+		</editor>
+	</extension>
+	<extension
+		point="org.eclipse.core.expressions.propertyTesters"
+	>
+		<propertyTester
+			class="com.liferay.ide.service.ui.HasServiceFilePropertyTester"
+			id="com.liferay.ide.service.ui.hasServiceFile"
+			namespace="com.liferay.ide.service.ui"
+			properties="hasServiceFile"
+			type="org.eclipse.core.resources.IResource"
+		>
+		</propertyTester>
+	</extension>
 
-    <extension
-         point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
-         <hyperlinkDetector
-               class="com.liferay.ide.service.ui.editor.ServiceMethodHyperlinkDetector"
-               description="Locates real implementation and wrapper methods for service util class methods"
-               id="com.liferay.ide.service.ui.ServiceMethodHyperlinkDetector"
-               name="Open Service"
-               targetId="org.eclipse.jdt.ui.javaCode">
-      </hyperlinkDetector>
-   </extension>
+	<extension
+		point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors"
+	>
+		<hyperlinkDetector
+			class="com.liferay.ide.service.ui.editor.ServiceMethodHyperlinkDetector"
+			description="Locates real implementation and wrapper methods for service util class methods"
+			id="com.liferay.ide.service.ui.ServiceMethodHyperlinkDetector"
+			name="Open Service"
+			targetId="org.eclipse.jdt.ui.javaCode"
+		>
+		</hyperlinkDetector>
+	</extension>
 
-   <extension
-         point="org.eclipse.ui.commands">
-        <command
-            categoryId="com.liferay.ide.project.ui.handlers"
-            description="Run the build-service command"
-            id="com.liferay.ide.service.ui.buildService"
-            name="Build Service">
-        </command>
-        <command
-            categoryId="com.liferay.ide.project.ui.handlers"
-            description="Run the build-wsdd command"
-            id="com.liferay.ide.service.ui.buildWSDD"
-            name="Build WSDD">
-        </command>
-   </extension>
+	<extension
+		point="org.eclipse.ui.commands"
+	>
+		<command
+			categoryId="com.liferay.ide.project.ui.handlers"
+			description="Run the build-service command"
+			id="com.liferay.ide.service.ui.buildService"
+			name="Build Service"
+		>
+		</command>
+		<command
+			categoryId="com.liferay.ide.project.ui.handlers"
+			description="Run the build-wsdd command"
+			id="com.liferay.ide.service.ui.buildWSDD"
+			name="Build WSDD"
+		>
+		</command>
+	</extension>
 
-   <extension
-         point="org.eclipse.ui.handlers">
-      <handler
-            class="com.liferay.ide.service.ui.handlers.BuildServiceHandler"
-            commandId="com.liferay.ide.service.ui.buildService">
-      </handler>
-      <handler
-            class="com.liferay.ide.service.ui.handlers.BuildWSDDHandler"
-            commandId="com.liferay.ide.service.ui.buildWSDD">
-      </handler>
-   </extension>
-   <extension
-         point="org.eclipse.ui.bindings">
-      <key
-            commandId="com.liferay.ide.service.ui.buildService"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+M3+V">
-      </key>
-      <key
-            commandId="com.liferay.ide.service.ui.buildWSDD"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+M3+W">
-      </key>
-   </extension>
+	<extension
+		point="org.eclipse.ui.handlers"
+	>
+		<handler
+			class="com.liferay.ide.service.ui.handlers.BuildServiceHandler"
+			commandId="com.liferay.ide.service.ui.buildService"
+		>
+		</handler>
+		<handler
+			class="com.liferay.ide.service.ui.handlers.BuildWSDDHandler"
+			commandId="com.liferay.ide.service.ui.buildWSDD"
+		>
+		</handler>
+	</extension>
+	<extension
+		point="org.eclipse.ui.bindings"
+	>
+		<key
+			commandId="com.liferay.ide.service.ui.buildService"
+			contextId="org.eclipse.ui.contexts.window"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+			sequence="M1+M3+V"
+		>
+		</key>
+		<key
+			commandId="com.liferay.ide.service.ui.buildWSDD"
+			contextId="org.eclipse.ui.contexts.window"
+			schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+			sequence="M1+M3+W"
+		>
+		</key>
+	</extension>
 
 </plugin>

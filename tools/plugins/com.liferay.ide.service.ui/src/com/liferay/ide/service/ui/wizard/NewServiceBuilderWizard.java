@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.ui.wizard;
 
@@ -35,78 +34,70 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class NewServiceBuilderWizard extends NewWebArtifactWizard
-    implements INewWizard, INewServiceBuilderDataModelProperties
-{
+@SuppressWarnings("restriction")
+public class NewServiceBuilderWizard
+	extends NewWebArtifactWizard implements INewWizard, INewServiceBuilderDataModelProperties {
 
-    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder"; //$NON-NLS-1$
+	public static final String ID = "com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder";
 
-    public NewServiceBuilderWizard()
-    {
-        this( null );
-    }
+	public NewServiceBuilderWizard() {
+		this(null);
+	}
 
-    public NewServiceBuilderWizard( IDataModel model )
-    {
-        super( model );
+	public NewServiceBuilderWizard(IDataModel model) {
+		super(model);
 
-        setDefaultPageImageDescriptor( getImage() );
-    }
+		setDefaultPageImageDescriptor(getImage());
+	}
 
-    @Override
-    protected void doAddPages()
-    {
-        addPage( new NewServiceBuilderWizardPage(
-            getDataModel(), "pageOne", Msgs.newLiferayServiceBuilder, //$NON-NLS-1$
-            Msgs.createNewServiceBuilderXmlFile ) );
-    }
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		super.init(workbench, selection);
+		ValidProjectChecker checker = new ValidProjectChecker(ID);
 
-    @Override
-    protected IDataModelProvider getDefaultProvider()
-    {
-        return new NewServiceBuilderDataModelProvider();
-    }
+		checker.checkValidProjectTypes();
+	}
 
-    protected ImageDescriptor getImage()
-    {
-        return ServiceUI.imageDescriptorFromPlugin( ServiceUI.PLUGIN_ID, "/icons/wizban/service_wiz.png" ); //$NON-NLS-1$
-    }
+	@Override
+	protected void doAddPages() {
+		addPage(
+			new NewServiceBuilderWizardPage(
+				getDataModel(), "pageOne", Msgs.newLiferayServiceBuilder, Msgs.createNewServiceBuilderXmlFile));
+	}
 
-    @Override
-    protected String getTitle()
-    {
-        return Msgs.newServiceBuilder;
-    }
+	@Override
+	protected IDataModelProvider getDefaultProvider() {
+		return new NewServiceBuilderDataModelProvider();
+	}
 
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-        super.init( workbench, selection );
-        ValidProjectChecker checker = new ValidProjectChecker( ID );
-        checker.checkValidProjectTypes();
-    }
+	protected ImageDescriptor getImage() {
+		return ServiceUI.imageDescriptorFromPlugin(ServiceUI.PLUGIN_ID, "/icons/wizban/service_wiz.png");
+	}
 
-    @Override
-    protected void postPerformFinish() throws InvocationTargetException
-    {
-        Object file = getDataModel().getProperty( CREATED_SERVICE_FILE );
+	@Override
+	protected String getTitle() {
+		return Msgs.newServiceBuilder;
+	}
 
-        if( file instanceof IFile )
-        {
-            openEditor( (IFile) file );
-        }
-    }
+	@Override
+	protected void postPerformFinish() throws InvocationTargetException {
+		Object file = getDataModel().getProperty(CREATED_SERVICE_FILE);
 
-    private static class Msgs extends NLS
-    {
-        public static String createNewServiceBuilderXmlFile;
-        public static String newLiferayServiceBuilder;
-        public static String newServiceBuilder;
+		if (file instanceof IFile) {
+			openEditor((IFile)file);
+		}
+	}
 
-        static
-        {
-            initializeMessages( NewServiceBuilderWizard.class.getName(), Msgs.class );
-        }
-    }
+	private static class Msgs extends NLS {
+
+		public static String createNewServiceBuilderXmlFile;
+		public static String newLiferayServiceBuilder;
+		public static String newServiceBuilder;
+
+		static {
+			initializeMessages(NewServiceBuilderWizard.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

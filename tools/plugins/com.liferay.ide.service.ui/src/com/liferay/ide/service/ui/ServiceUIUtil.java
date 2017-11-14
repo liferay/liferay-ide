@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.service.ui;
 
 import java.lang.reflect.Method;
@@ -28,58 +28,41 @@ import org.eclipse.ui.internal.SaveableHelper;
 /**
  * @author Cindy Li
  */
-@SuppressWarnings( "restriction" )
-public class ServiceUIUtil
-{
-    public static boolean shouldCreateServiceBuilderJob( IFile file )
-    {
-        final IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+@SuppressWarnings("restriction")
+public class ServiceUIUtil {
 
-        for( IWorkbenchWindow window  : windows )
-        {
-            final IWorkbenchPage[] pages = window.getPages();
+	public static boolean shouldCreateServiceBuilderJob(IFile file) {
+		IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
 
-            for( IWorkbenchPage page : pages )
-            {
-                final IEditorReference[] editorReferences = page.getEditorReferences();
+		for (IWorkbenchWindow window : windows) {
+			IWorkbenchPage[] pages = window.getPages();
 
-                for( IEditorReference editorReference : editorReferences )
-                {
-                    if( file.getName().equals( editorReference.getName() ) )
-                    {
-                        final IWorkbenchPart part = editorReference.getPart( true );
+			for (IWorkbenchPage page : pages) {
+				IEditorReference[] editorReferences = page.getEditorReferences();
 
-                        // SaveableHelper.savePart is not visible on Indigo so must use reflection
-                        try
-                        {
-                            Method savePartMethod = SaveableHelper.class.getDeclaredMethod( "savePart",
-                                                                                            ISaveablePart.class,
-                                                                                            IWorkbenchPart.class,
-                                                                                            IWorkbenchWindow.class,
-                                                                                            Boolean.TYPE );
+				for (IEditorReference editorReference : editorReferences) {
+					if (file.getName().equals(editorReference.getName())) {
+						IWorkbenchPart part = editorReference.getPart(true);
 
-                            savePartMethod.setAccessible( true );
+						// SaveableHelper.savePart is not visible on Indigo so must use reflection
 
-                            boolean save = (Boolean) savePartMethod.invoke( null, part, part, window, true );
+						try {
+							Method savePartMethod = SaveableHelper.class.getDeclaredMethod(
+								"savePart", ISaveablePart.class, IWorkbenchPart.class, IWorkbenchWindow.class,
+								Boolean.TYPE);
 
-                            if( save )
-                            {
-                                return true;
-                            }
-                            else
-                            {
-                                return false;
-                            }
-                        }
-                        catch( Exception e )
-                        {
-                        }
-                    }
-                }
-            }
-        }
+							savePartMethod.setAccessible(true);
 
-        return true;
-    }
+							return (Boolean)savePartMethod.invoke(null, part, part, window, true);
+						}
+						catch (Exception e) {
+						}
+					}
+				}
+			}
+		}
+
+		return true;
+	}
 
 }

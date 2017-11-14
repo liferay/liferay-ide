@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,36 +10,34 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.ui.actions;
 
 import com.liferay.ide.service.core.operation.ServiceBuilderDescriptorHelper;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 
 /**
  * @author Kuo Zhang
  */
-public class AddDefaultEntityAction extends SapphireActionHandler
-{
+public class AddDefaultEntityAction extends SapphireActionHandler {
 
-    public AddDefaultEntityAction()
-    {
-        super();
-    }
+	public AddDefaultEntityAction() {
+	}
 
-    @Override
-    protected Object run( Presentation context )
-    {
-        final IFile serviceXML = context.part().getLocalModelElement().adapt( IFile.class );
+	@Override
+	protected Object run(Presentation context) {
+		Element localModelElement = context.part().getLocalModelElement();
 
-        new ServiceBuilderDescriptorHelper( serviceXML.getProject() ).addDefaultEntity();
+		IFile serviceXML = localModelElement.adapt(IFile.class);
 
-        return null;
-    }
+		new ServiceBuilderDescriptorHelper(serviceXML.getProject()).addDefaultEntity();
+
+		return null;
+	}
 
 }
