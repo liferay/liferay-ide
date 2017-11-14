@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.vaadin.core.dd;
 
@@ -22,37 +21,32 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
- * Helper for editing various portlet configuration XML files, to add Vaadin portlet configuration to them. Also
- * supports adding a dependency to Vaadin in liferay-plugin-package.properties (if necessary).
+ * Helper for editing various portlet configuration XML files, to add Vaadin
+ * portlet configuration to them. Also supports adding a dependency to Vaadin in
+ * liferay-plugin-package.properties (if necessary).
  *
  * @author Henri Sara
  * @author Tao Tao
  * @author Kuo Zhang
  */
-public class VaadinPortletDescriptorHelper extends PortletDescriptorHelper 
-                                           implements INewVaadinPortletClassDataModelProperties
-{
+public class VaadinPortletDescriptorHelper
+	extends PortletDescriptorHelper implements INewVaadinPortletClassDataModelProperties {
 
-    public VaadinPortletDescriptorHelper()
-    {
-        super();
-    }
+	public VaadinPortletDescriptorHelper() {
+	}
 
-    public VaadinPortletDescriptorHelper( IProject project )
-    {
-        super( project );
-    }
+	public VaadinPortletDescriptorHelper(IProject project) {
+		super(project);
+	}
 
-    @Override
-    public boolean canAddNewPortlet( IDataModel model )
-    {
-        return model.getID().contains( "NewVaadinPortlet" );
-    }
+	@Override
+	public boolean canAddNewPortlet(IDataModel model) {
+		return model.getID().contains("NewVaadinPortlet");
+	}
 
-    @Override
-    protected String getPortletClassText( IDataModel model )
-    {
-        return model.getStringProperty( VAADIN_PORTLET_CLASS );
-    }
+	@Override
+	protected String getPortletClassText(IDataModel model) {
+		return model.getStringProperty(VAADIN_PORTLET_CLASS);
+	}
 
 }

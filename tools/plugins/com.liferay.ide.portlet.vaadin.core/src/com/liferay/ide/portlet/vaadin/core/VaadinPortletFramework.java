@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.vaadin.core;
 
@@ -27,25 +26,24 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class VaadinPortletFramework extends BasePortletFramework
-{
+public class VaadinPortletFramework extends BasePortletFramework {
 
-    public VaadinPortletFramework()
-    {
-        super();
-    }
+	public VaadinPortletFramework() {
+	}
 
-    public IStatus configureNewProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
-    {
-        // nothing todo for vaadin projects
+	public IStatus configureNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject) {
 
-        return Status.OK_STATUS;
-    }
+		// nothing todo for vaadin projects
 
-    public boolean supports( ILiferayProjectProvider provider )
-    {
-        return provider != null &&
-            ( "ant".equals( provider.getShortName() ) || "maven".equals( provider.getShortName() ) );
-    }
+		return Status.OK_STATUS;
+	}
+
+	public boolean supports(ILiferayProjectProvider provider) {
+		if ((provider != null) && ("ant".equals(provider.getShortName()) || "maven".equals(provider.getShortName()))) {
+			return true;
+		}
+
+		return false;
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.vaadin.core.operation;
 
@@ -37,168 +36,150 @@ import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
  * @author Henri Sara
  * @author Cindy Li
  */
-@SuppressWarnings( { "restriction", "rawtypes", "unchecked" } )
-public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataModelProvider
-    implements INewVaadinPortletClassDataModelProperties
-{
+@SuppressWarnings({"restriction", "rawtypes", "unchecked"})
+public class NewVaadinPortletClassDataModelProvider
+	extends NewPortletClassDataModelProvider implements INewVaadinPortletClassDataModelProperties {
 
-    public NewVaadinPortletClassDataModelProvider( boolean fragment )
-    {
-        super( fragment );
-    }
+	public NewVaadinPortletClassDataModelProvider(boolean fragment) {
+		super(fragment);
+	}
 
-    @Override
-    public Object getDefaultProperty( String propertyName )
-    {
-        if( CLASS_NAME.equals( propertyName ) )
-        {
-            return "NewVaadinPortletApplication"; //$NON-NLS-1$
-        }
-        else if( PORTLET_NAME.equals( propertyName ) || LIFERAY_PORTLET_NAME.equals( propertyName ) )
-        {
-            return getPortletName().toLowerCase();
-        }
-        else if( DISPLAY_NAME.equals( propertyName ) || TITLE.equals( propertyName ) ||
-            SHORT_TITLE.equals( propertyName ) )
-        {
-            return getPortletName();
-        }
-        else if( CSS_CLASS_WRAPPER.equals( propertyName ) )
-        {
-            return getPortletName().toLowerCase() + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
-        }
-        else if( SUPERCLASS.equals( propertyName ) )
-        {
-            return QUALIFIED_VAADIN_APPLICATION;
-        }
-        else if( VAADIN_PORTLET_CLASS.equals( propertyName ) )
-        {
-            return QUALIFIED_VAADIN_PORTLET;
-        }
-        else if( CREATE_JSPS.equals( propertyName ) )
-        {
-            return false;
-        }
-        else if( CONSTRUCTOR.equals( propertyName ) )
-        {
-            return false;
-        }
-        else if( SHOW_NEW_CLASS_OPTION.equals( propertyName ) )
-        {
-            return false;
-        }
+	@Override
+	public Object getDefaultProperty(String propertyName) {
+		if (CLASS_NAME.equals(propertyName)) {
+			return "NewVaadinPortletApplication";
+		}
+		else if (PORTLET_NAME.equals(propertyName) || LIFERAY_PORTLET_NAME.equals(propertyName)) {
+			return _getPortletName().toLowerCase();
+		}
+		else if (DISPLAY_NAME.equals(propertyName) || TITLE.equals(propertyName) || SHORT_TITLE.equals(propertyName)) {
+			return _getPortletName();
+		}
+		else if (CSS_CLASS_WRAPPER.equals(propertyName)) {
+			return _getPortletName().toLowerCase() + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
+		}
+		else if (SUPERCLASS.equals(propertyName)) {
+			return QUALIFIED_VAADIN_APPLICATION;
+		}
+		else if (VAADIN_PORTLET_CLASS.equals(propertyName)) {
+			return QUALIFIED_VAADIN_PORTLET;
+		}
+		else if (CREATE_JSPS.equals(propertyName)) {
+			return false;
+		}
+		else if (CONSTRUCTOR.equals(propertyName)) {
+			return false;
+		}
+		else if (SHOW_NEW_CLASS_OPTION.equals(propertyName)) {
+			return false;
+		}
 
-        return super.getDefaultProperty( propertyName );
-    }
+		return super.getDefaultProperty(propertyName);
+	}
 
-    private String getPortletName()
-    {
-        return getProperty( CLASS_NAME ).toString().replaceAll( "Application", StringPool.EMPTY ); //$NON-NLS-1$
-    }
+	@Override
+	public Set getPropertyNames() {
+		Set propertyNames = super.getPropertyNames();
 
-    @Override
-    public Set getPropertyNames()
-    {
-        Set propertyNames = super.getPropertyNames();
-        propertyNames.add( VAADIN_PORTLET_CLASS );
-        return propertyNames;
-    }
+		propertyNames.add(VAADIN_PORTLET_CLASS);
 
-    @Override
-    public DataModelPropertyDescriptor[] getValidPropertyDescriptors( String propertyName )
-    {
-        if( SUPERCLASS.equals( propertyName ) )
-        {
-            String[] vals = new String[] { QUALIFIED_VAADIN_APPLICATION };
+		return propertyNames;
+	}
 
-            return DataModelPropertyDescriptor.createDescriptors( vals, vals );
-        }
-        else if( VAADIN_PORTLET_CLASS.equals( propertyName ) )
-        {
-            String[] vals = new String[] { QUALIFIED_VAADIN_PORTLET };
+	@Override
+	public DataModelPropertyDescriptor[] getValidPropertyDescriptors(String propertyName) {
+		if (SUPERCLASS.equals(propertyName)) {
+			String[] vals = {QUALIFIED_VAADIN_APPLICATION};
 
-            return DataModelPropertyDescriptor.createDescriptors( vals, vals );
-        }
+			return DataModelPropertyDescriptor.createDescriptors(vals, vals);
+		}
+		else if (VAADIN_PORTLET_CLASS.equals(propertyName)) {
+			String[] vals = {QUALIFIED_VAADIN_PORTLET};
 
-        return super.getValidPropertyDescriptors( propertyName );
-    }
+			return DataModelPropertyDescriptor.createDescriptors(vals, vals);
+		}
 
-    @Override
-    public boolean isPropertyEnabled( String propertyName )
-    {
-        if( CREATE_JSPS.equals( propertyName ) || CREATE_JSPS_FOLDER.equals( propertyName ) )
-        {
-            return false;
-        }
-        else if( EDIT_MODE.equals( propertyName ) || HELP_MODE.equals( propertyName ) )
-        {
-            return false;
-        }
+		return super.getValidPropertyDescriptors(propertyName);
+	}
 
-        return super.isPropertyEnabled( propertyName );
-    }
+	@Override
+	public boolean isPropertyEnabled(String propertyName) {
+		if (CREATE_JSPS.equals(propertyName) || CREATE_JSPS_FOLDER.equals(propertyName)) {
+			return false;
+		}
+		else if (EDIT_MODE.equals(propertyName) || HELP_MODE.equals(propertyName)) {
+			return false;
+		}
 
-    @Override
-    public IStatus validate( String propertyName )
-    {
-        // also accept the case where the superclass/portlet class does not exist (yet), perform basic java validation
-        if( SUPERCLASS.equals( propertyName ) )
-        {
-            String superclass = getStringProperty( propertyName );
+		return super.isPropertyEnabled(propertyName);
+	}
 
-            if( CoreUtil.isNullOrEmpty( superclass ) )
-            {
-                return VaadinCore.createErrorStatus( Msgs.specifyPortletSuperclass );
-            }
+	@Override
+	public IStatus validate(String propertyName) {
 
-            return JavaConventions.validateJavaTypeName( superclass, JavaCore.VERSION_1_5, JavaCore.VERSION_1_5 );
-        }
+		// also accept the case where the superclass/portlet class does not exist (yet),
+		// perform basic java validation
 
-        if( VAADIN_PORTLET_CLASS.equals( propertyName ) )
-        {
-            String vaadinPortletClass = getStringProperty( propertyName );
+		if (SUPERCLASS.equals(propertyName)) {
+			String superclass = getStringProperty(propertyName);
 
-            if( CoreUtil.isNullOrEmpty( vaadinPortletClass ) )
-            {
-                return VaadinCore.createErrorStatus( Msgs.specifyVaadinPortletClass );
-            }
+			if (CoreUtil.isNullOrEmpty(superclass)) {
+				return VaadinCore.createErrorStatus(Msgs.specifyPortletSuperclass);
+			}
 
-            return JavaConventions.validateJavaTypeName( vaadinPortletClass, JavaCore.VERSION_1_5, JavaCore.VERSION_1_5 );
-        }
+			return JavaConventions.validateJavaTypeName(superclass, JavaCore.VERSION_1_5, JavaCore.VERSION_1_5);
+		}
 
-        return super.validate( propertyName );
-    }
+		if (VAADIN_PORTLET_CLASS.equals(propertyName)) {
+			String vaadinPortletClass = getStringProperty(propertyName);
 
-    @Override
-    protected Object getInitParams()
-    {
-        List<ParamValue> initParams = new ArrayList<ParamValue>();
+			if (CoreUtil.isNullOrEmpty(vaadinPortletClass)) {
+				return VaadinCore.createErrorStatus(Msgs.specifyVaadinPortletClass);
+			}
 
-        if( getStringProperty( VAADIN_PORTLET_CLASS ).equals( QUALIFIED_VAADIN_PORTLET ) )
-        {
-            ParamValue paramValue = CommonFactory.eINSTANCE.createParamValue();
-            paramValue.setName( "application" ); //$NON-NLS-1$
+			return JavaConventions.validateJavaTypeName(vaadinPortletClass, JavaCore.VERSION_1_5, JavaCore.VERSION_1_5);
+		}
 
-            String pkg = getDataModel().getStringProperty( JAVA_PACKAGE );
-            String cls = getDataModel().getStringProperty( CLASS_NAME );
-            String qualifiedApplicationClass = ( pkg == null || StringPool.EMPTY.equals( pkg ) ) ? cls : pkg + "." + cls; //$NON-NLS-1$
+		return super.validate(propertyName);
+	}
 
-            paramValue.setValue( qualifiedApplicationClass );
+	@Override
+	protected Object getInitParams() {
+		List<ParamValue> initParams = new ArrayList<>();
 
-            initParams.add( paramValue );
-        }
+		if (getStringProperty(VAADIN_PORTLET_CLASS).equals(QUALIFIED_VAADIN_PORTLET)) {
+			ParamValue paramValue = CommonFactory.eINSTANCE.createParamValue();
 
-        return initParams;
-    }
+			paramValue.setName("application");
 
-    private static class Msgs extends NLS
-    {
-        public static String specifyPortletSuperclass;
-        public static String specifyVaadinPortletClass;
+			String pkg = getDataModel().getStringProperty(JAVA_PACKAGE);
+			String cls = getDataModel().getStringProperty(CLASS_NAME);
 
-        static
-        {
-            initializeMessages( NewVaadinPortletClassDataModelProvider.class.getName(), Msgs.class );
-        }
-    }
+			String qualifiedApplicationClass = (pkg == null || StringPool.EMPTY.equals(pkg)) ? cls : pkg + "." + cls;
+
+			paramValue.setValue(qualifiedApplicationClass);
+
+			initParams.add(paramValue);
+		}
+
+		return initParams;
+	}
+
+	private String _getPortletName() {
+		String property = getProperty(CLASS_NAME).toString();
+
+		return property.replaceAll("Application", StringPool.EMPTY);
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String specifyPortletSuperclass;
+		public static String specifyVaadinPortletClass;
+
+		static {
+			initializeMessages(NewVaadinPortletClassDataModelProvider.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

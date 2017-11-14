@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.vaadin.core.operation;
 
@@ -24,31 +23,28 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Henri Sara
  */
-@SuppressWarnings( "restriction" )
-public class CreateVaadinPortletTemplateModel extends CreateWebClassTemplateModel
-{
-    protected boolean generateGenericInclude = false;
+@SuppressWarnings("restriction")
+public class CreateVaadinPortletTemplateModel extends CreateWebClassTemplateModel {
 
-    public CreateVaadinPortletTemplateModel( IDataModel dataModel )
-    {
-        super( dataModel );
-    }
+	public CreateVaadinPortletTemplateModel(IDataModel dataModel) {
+		super(dataModel);
+	}
 
-    public String getClassName()
-    {
-        return dataModel.getStringProperty( INewJavaClassDataModelProperties.CLASS_NAME );
-    }
+	public String getClassName() {
+		return dataModel.getStringProperty(INewJavaClassDataModelProperties.CLASS_NAME);
+	}
 
-    @Override
-    public Collection<String> getImports()
-    {
-        Collection<String> collection = super.getImports();
+	@Override
+	public Collection<String> getImports() {
+		Collection<String> collection = super.getImports();
 
-        collection.add( "com.vaadin.Application" ); //$NON-NLS-1$
-        collection.add( "com.vaadin.ui.Label" ); //$NON-NLS-1$
-        collection.add( "com.vaadin.ui.Window" ); //$NON-NLS-1$
+		collection.add("com.vaadin.Application");
+		collection.add("com.vaadin.ui.Label");
+		collection.add("com.vaadin.ui.Window");
 
-        return collection;
-    }
+		return collection;
+	}
+
+	protected boolean generateGenericInclude = false;
 
 }
