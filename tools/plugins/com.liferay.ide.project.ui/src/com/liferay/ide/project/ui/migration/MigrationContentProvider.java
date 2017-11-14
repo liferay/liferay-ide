@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.ide.project.core.upgrade.MigrationProblemsContainer;
+import com.liferay.ide.project.core.upgrade.ProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 

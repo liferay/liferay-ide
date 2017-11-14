@@ -12,9 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.project.ui.migration;
-
-import com.liferay.ide.project.core.upgrade.UpgradeProblems;
+package com.liferay.ide.project.core.upgrade;
 
 /**
  * @author Terry Jia

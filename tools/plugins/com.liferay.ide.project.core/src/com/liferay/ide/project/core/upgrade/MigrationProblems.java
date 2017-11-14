@@ -19,33 +19,34 @@ package com.liferay.ide.project.core.upgrade;
  */
 public class MigrationProblems implements UpgradeProblems {
 
+	@Override
 	public FileProblems[] getProblems() {
-		return _problems;
+		return problems;
 	}
 
 	public String getSuffix() {
-		return _suffix;
+		return suffix;
 	}
 
 	@Override
 	public String getType() {
-		return _type;
+		return type;
 	}
 
 	public void setProblems(FileProblems[] problems) {
-		_problems = problems;
+		this.problems = problems;
 	}
 
 	public void setSuffix(String suffix) {
-		_suffix = suffix;
+		this.suffix = suffix;
 	}
 
 	public void setType(String type) {
-		_type = type;
+		this.type = type;
 	}
 
-	private FileProblems[] _problems;
-	private String _suffix;
-	private String _type;
+	private FileProblems[] problems;
+	private String suffix;
+	private String type;
 
 }
