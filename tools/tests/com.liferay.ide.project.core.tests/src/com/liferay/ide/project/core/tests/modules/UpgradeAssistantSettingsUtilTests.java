@@ -18,12 +18,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.liferay.blade.api.Problem;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.Liferay7UpgradeAssistantSettings;
+import com.liferay.ide.project.core.upgrade.MigrationProblems;
+import com.liferay.ide.project.core.upgrade.MigrationProblemsContainer;
 import com.liferay.ide.project.core.upgrade.PortalSettings;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 
 import java.io.File;
+import java.io.InputStream;
+import java.util.List;
 
 import org.eclipse.core.runtime.IPath;
 import org.junit.Before;
@@ -37,7 +44,7 @@ public class UpgradeAssistantSettingsUtilTests
     private static final IPath stateLocation = ProjectCore.getDefault().getStateLocation();
 
     @Before
-    public void deleteJsonfiles()
+    public void beforeTest() throws Exception
     {
         File jsonFile =
             stateLocation.append( "Liferay7UpgradeAssistantSettings.json" ).toFile();
@@ -46,6 +53,15 @@ public class UpgradeAssistantSettingsUtilTests
         {
             assertTrue( jsonFile.delete() );
         }
+
+        File existingFile =
+        		stateLocation.append("MigrationProblemsContainer.json").toFile();
+
+        InputStream input = UpgradeAssistantSettingsUtilTests.class.getResourceAsStream("files/MigrationProblemsContainer.json");
+
+        FileUtil.writeFile(existingFile, input);
+
+        input.close();
     }
 
     @Test
@@ -86,5 +102,29 @@ public class UpgradeAssistantSettingsUtilTests
         settings.setPortalSettings( portalSettings );
 
         return settings;
+    }
+
+    @Test
+    public void readExistingMigrationProblemsContainer() throws Exception {
+    		MigrationProblemsContainer migrationProblemsContainer =
+    			UpgradeAssistantSettingsUtil.getObjectFromStore(MigrationProblemsContainer.class);
+
+    		assertNotNull(migrationProblemsContainer);
+
+    		MigrationProblems[] migrationProblems = migrationProblemsContainer.getProblemsArray();
+
+    		assertEquals(2, migrationProblems.length);
+
+    		FileProblems[] fileProblems = migrationProblems[0].getProblems();
+
+    		assertNotNull(fileProblems);
+
+    		assertEquals(18, fileProblems.length);
+
+    		List<Problem> problems = fileProblems[0].getProblems();
+
+    		assertNotNull(problems);
+
+    		assertEquals(9, problems.size());
     }
 }
