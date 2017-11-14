@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.server.tomcat.core;
 
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.ServerUtil;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 
@@ -36,177 +37,160 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
  * @author Greg Amerson
  * @author Simon Jiang
  */
-public class TomcatExtPluginPublisher extends AbstractPluginPublisher
-{
+public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 
-    public TomcatExtPluginPublisher()
-    {
-        super();
-    }
+	public TomcatExtPluginPublisher() {
+	}
 
-    public TomcatExtPluginPublisher( String facetId )
-    {
-        super( facetId );
-    }
+	public TomcatExtPluginPublisher(String facetId) {
+		super(facetId);
+	}
 
-    public IStatus canPublishModule( IServer server, IModule module )
-    {
-        // check to make sure that the user isn't trying to add multiple
-        // ext-plugins to server
-        if( ILiferayTomcatConstants.PREVENT_MULTI_EXT_PLUGINS_DEPLOY && module != null && server != null )
-        {
-            if( ProjectUtil.isExtProject( module.getProject() ) )
-            {
-                for( IModule currentModule : server.getModules() )
-                {
-                    if( ProjectUtil.isExtProject( currentModule.getProject() ) )
-                    {
-                        return LiferayTomcatPlugin.createErrorStatus( Msgs.oneExtPlugin );
-                    }
-                }
-            }
-        }
+	public IStatus canPublishModule(IServer server, IModule module) {
 
-        return Status.OK_STATUS;
-    }
+		// check to make sure that the user isn't trying to add multiple ext-plugins to server
 
-    public boolean prePublishModule(
-        ServerBehaviourDelegate delegate, int kind, int deltaKind, IModule[] moduleTree, IModuleResourceDelta[] delta,
-        IProgressMonitor monitor )
-    {
+		if (ILiferayTomcatConstants.PREVENT_MULTI_EXT_PLUGINS_DEPLOY && (module != null) && (server != null)) {
+			if (ProjectUtil.isExtProject(module.getProject())) {
+				for (IModule currentModule : server.getModules()) {
+					if (ProjectUtil.isExtProject(currentModule.getProject())) {
+						return LiferayTomcatPlugin.createErrorStatus(Msgs.oneExtPlugin);
+					}
+				}
+			}
+		}
 
-        if( kind == IServer.PUBLISH_AUTO )
-        {
-            LiferayTomcatUtil.displayToggleMessage(
-                Msgs.extPluginNotSupportAutoPublishing, LiferayTomcatPlugin.PREFERENCES_ADDED_EXT_PLUGIN_TOGGLE_KEY );
+		return Status.OK_STATUS;
+	}
 
-            return false;
-        }
+	public boolean prePublishModule(
+		ServerBehaviourDelegate delegate, int kind, int deltaKind, IModule[] moduleTree, IModuleResourceDelta[] delta,
+		IProgressMonitor monitor) {
 
-        if( kind == IServer.PUBLISH_CLEAN || moduleTree == null )
-        {
-            return false;
-        }
+		if (kind == IServer.PUBLISH_AUTO) {
+			LiferayTomcatUtil.displayToggleMessage(
+				Msgs.extPluginNotSupportAutoPublishing, LiferayTomcatPlugin.PREFERENCES_ADDED_EXT_PLUGIN_TOGGLE_KEY);
 
-        try
-        {
-            if( deltaKind == ServerBehaviourDelegate.ADDED || deltaKind == ServerBehaviourDelegate.CHANGED )
-            {
-                addExtModule( delegate, moduleTree[0], monitor );
-            }
-            else if( deltaKind == ServerBehaviourDelegate.REMOVED )
-            {
-                // nothing to do right now
-                // removeExtModule(delegate, moduleTree[0], monitor);
-            }
-        }
-        catch( Exception e )
-        {
-            LiferayTomcatPlugin.logError( "Failed pre-publishing ext module.", e ); //$NON-NLS-1$
-            return false;
-        }
+			return false;
+		}
 
-        return true;
-    }
+		if ((kind == IServer.PUBLISH_CLEAN) || (moduleTree == null)) {
+			return false;
+		}
 
-    protected void addExtModule( final ServerBehaviourDelegate delegate, IModule module, final IProgressMonitor monitor )
-        throws CoreException
-    {
+		try {
+			if ((deltaKind == ServerBehaviourDelegate.ADDED) || (deltaKind == ServerBehaviourDelegate.CHANGED)) {
+				addExtModule(delegate, moduleTree[0], monitor);
+			}
+			else if (deltaKind == ServerBehaviourDelegate.REMOVED) {
+				/*
+				 * nothing to do right now
+				 * removeExtModule(delegate, moduleTree[0], monitor);
+				 */
+			}
+		}
+		catch (Exception e) {
+			LiferayTomcatPlugin.logError("Failed pre-publishing ext module.", e);
 
-        SDK sdk = null;
-        IProject project = module.getProject();
+			return false;
+		}
 
-        sdk = SDKUtil.getSDK( project );
+		return true;
+	}
 
-        if( sdk == null )
-        {
-            throw new CoreException(
-                LiferayTomcatPlugin.createErrorStatus( "No SDK for project configured. Could not deploy ext module" ) ); //$NON-NLS-1$
-        }
+	protected void addExtModule(ServerBehaviourDelegate delegate, IModule module, IProgressMonitor monitor)
+		throws CoreException {
 
-        final String mode =
-            delegate.getServer().getServerState() == IServer.STATE_STARTED ? delegate.getServer().getMode() : null;
+		SDK sdk = null;
+		IProject project = module.getProject();
 
-        if( mode != null )
-        {
-            LiferayTomcatUtil.syncStopServer( delegate.getServer() );
-        }
+		sdk = SDKUtil.getSDK(project);
 
-        IStatus status = sdk.directDeploy( project, null, true, monitor );
+		if (sdk == null) {
+			throw new CoreException(
+				LiferayTomcatPlugin.createErrorStatus("No SDK for project configured. Could not deploy ext module"));
+		}
 
-        assertStatus( status );
+		IServer server = delegate.getServer();
 
-        if( mode != null )
-        {
-            new ServerJob( delegate.getServer(), "Starting Liferay server after ext plugin deploy" )
-            {
-                @Override
-                protected IStatus run( IProgressMonitor monitor )
-                {
-                    try
-                    {
-                        delegate.getServer().start( mode, monitor );
-                    }
+		String mode = server.getServerState() == IServer.STATE_STARTED ? server.getMode() : null;
 
-                    catch( CoreException e )
-                    {
-                        LiferayTomcatPlugin.logError( "Failed to restart server for ext module.", e );
-                    }
+		if (mode != null) {
+			LiferayTomcatUtil.syncStopServer(delegate.getServer());
+		}
 
-                    return Status.OK_STATUS;
-                }
-            }.schedule();
-        }
-    }
+		IStatus status = sdk.directDeploy(project, null, true, monitor);
 
-    protected void assertStatus( IStatus status ) throws CoreException
-    {
-        if( status == null )
-        {
-            throw new CoreException( LiferayTomcatPlugin.createErrorStatus( "null status" ) ); //$NON-NLS-1$
-        }
+		assertStatus(status);
 
-        if( !status.isOK() )
-        {
-            throw new CoreException( status );
-        }
-    }
+		if (mode != null) {
+			new ServerJob(server, "Starting Liferay server after ext plugin deploy") {
 
-    protected void removeExtModule( ServerBehaviourDelegate delegate, IModule module, IProgressMonitor monitor )
-        throws CoreException
-    {
-    }
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					try {
+						server.start(mode, monitor);
+					}
+					catch (CoreException ce) {
+						LiferayTomcatPlugin.logError("Failed to restart server for ext module.", ce);
+					}
 
-    private static class Msgs extends NLS
-    {
-        public static String extPluginNotSupportAutoPublishing;
-        public static String oneExtPlugin;
+					return Status.OK_STATUS;
+				}
 
-        static
-        {
-            initializeMessages( TomcatExtPluginPublisher.class.getName(), Msgs.class );
-        }
-    }
+			}.schedule();
+		}
+	}
 
-    private static abstract class ServerJob extends Job
-    {
-        private IServer server;
+	protected void assertStatus(IStatus status) throws CoreException {
+		if (status == null) {
+			throw new CoreException(LiferayTomcatPlugin.createErrorStatus("null status"));
+		}
 
-        public ServerJob( IServer server, String name )
-        {
-            super( name );
-            this.server = server;
-        }
+		if (!status.isOK()) {
+			throw new CoreException(status);
+		}
+	}
 
-        public boolean belongsTo( Object family )
-        {
-            return org.eclipse.wst.server.core.ServerUtil.SERVER_JOB_FAMILY.equals( family );
-        }
+	protected void removeExtModule(ServerBehaviourDelegate delegate, IModule module, IProgressMonitor monitor)
+		throws CoreException {
+	}
 
-        @SuppressWarnings( "unused" )
-        public IServer getServer()
-        {
-            return this.server;
-        }
-    }
+	private static class Msgs extends NLS {
+
+		public static String extPluginNotSupportAutoPublishing;
+		public static String oneExtPlugin;
+
+		static {
+			initializeMessages(TomcatExtPluginPublisher.class.getName(), Msgs.class);
+		}
+
+	}
+
+	private static class ServerJob extends Job {
+
+		public ServerJob(IServer server, String name) {
+			super(name);
+
+			_server = server;
+		}
+
+		public boolean belongsTo(Object family) {
+			return ServerUtil.SERVER_JOB_FAMILY.equals(family);
+		}
+
+		@SuppressWarnings("unused")
+		public IServer getServer() {
+			return _server;
+		}
+
+		@Override
+		protected IStatus run(IProgressMonitor arg0) {
+			return null;
+		}
+
+		private IServer _server;
+
+	}
+
 }

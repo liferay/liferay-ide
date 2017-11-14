@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.tomcat.core;
 
@@ -25,29 +24,30 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
  * @author Terry Jia
  * @author Simon Jiang
  */
-public interface ILiferayTomcatConstants
-{
-    @SuppressWarnings( "deprecation" )
-    IEclipsePreferences _defaultPrefs = new DefaultScope().getNode( LiferayTomcatPlugin.PLUGIN_ID );
+public interface ILiferayTomcatConstants {
 
-    String DEFAULT_AUTO_DEPLOY_INTERVAL = _defaultPrefs.get( "default.auto.deploy.interval", "500" ); //$NON-NLS-1$ //$NON-NLS-2$
+	public static final IEclipsePreferences defaultPrefs = DefaultScope.INSTANCE.getNode(LiferayTomcatPlugin.PLUGIN_ID);
 
-    String DEFAULT_AUTO_DEPLOYDIR = "../deploy"; //$NON-NLS-1$
+	public static final String DEFAULT_AUTO_DEPLOY_INTERVAL = defaultPrefs.get("default.auto.deploy.interval", "500");
 
-    String DEFAULT_DEPLOYDIR = "webapps"; //$NON-NLS-1$
+	public static final String DEFAULT_AUTO_DEPLOYDIR = "../deploy";
 
-    String DEFAULT_MEMORY_ARGS = _defaultPrefs.get( "default.memory.args", "-Xmx1024m" ); //$NON-NLS-1$ //$NON-NLS-2$
+	public static final String DEFAULT_DEPLOYDIR = "webapps";
 
-    boolean DEFAULT_USE_DEFAULT_PORTAL_SERVER_SETTING = false;
+	public static final String DEFAULT_MEMORY_ARGS = defaultPrefs.get("default.memory.args", "-Xmx1024m");
 
-    String DEFAULT_USER_TIMEZONE = _defaultPrefs.get( "default.user.timezone", "GMT" ); //$NON-NLS-1$ //$NON-NLS-2$
+	public static final boolean DEFAULT_USE_DEFAULT_PORTAL_SERVER_SETTING = false;
 
-    int DEVELOPMENT_SERVER_MODE = 2;
+	public static final String DEFAULT_USER_TIMEZONE = defaultPrefs.get("default.user.timezone", "GMT");
 
-    String[] LIB_EXCLUDES = _defaultPrefs.get( "tomcat.lib.excludes", StringPool.EMPTY ).split( StringPool.COMMA ); //$NON-NLS-1$
+	public static final int DEVELOPMENT_SERVER_MODE = 2;
 
-    boolean PREVENT_MULTI_EXT_PLUGINS_DEPLOY = _defaultPrefs.getBoolean( "prevent.multi.ext.plugins.deploy", false ); //$NON-NLS-1$
+	public static final String[] LIB_EXCLUDES = defaultPrefs.get("tomcat.lib.excludes", StringPool.EMPTY).split(
+		StringPool.COMMA);
 
-    int STANDARD_SERVER_MODE = 1;
+	public static final boolean PREVENT_MULTI_EXT_PLUGINS_DEPLOY = defaultPrefs.getBoolean(
+		"prevent.multi.ext.plugins.deploy", false);
+
+	public static final int STANDARD_SERVER_MODE = 1;
 
 }

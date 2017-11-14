@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.tomcat.core;
 
@@ -22,9 +21,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * @author Greg Amerson
  */
-public interface ILiferayTomcatConfiguration
-{
-    public void load( IFolder folder, IProgressMonitor monitor ) throws CoreException;
+public interface ILiferayTomcatConfiguration {
 
-    // public IStatus updateContextsToServeDirectly(IPath baseDir, String sharedLoader, IProgressMonitor monitor);
+	public void load(IFolder folder, IProgressMonitor monitor) throws CoreException;
+
+	// public IStatus updateContextsToServeDirectly(IPath baseDir, String sharedLoader, IProgressMonitor monitor);
+
 }

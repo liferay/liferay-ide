@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.tomcat.core;
 
@@ -29,45 +26,42 @@ import org.eclipse.wst.server.core.model.PublishOperation;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-@SuppressWarnings( { "rawtypes", "restriction", "unchecked" } )
-public class LiferayPublishTask extends PublishTask
-{
+@SuppressWarnings({"rawtypes", "restriction", "unchecked"})
+public class LiferayPublishTask extends PublishTask {
 
-    public PublishOperation[] getTasks( IServer server, int kind, List modules, List kindList )
-    {
-        if( modules == null )
-        {
-            return null;
-        }
+	public PublishOperation[] getTasks(IServer server, int kind, List modules, List kindList) {
+		if (modules == null) {
+			return null;
+		}
 
-        LiferayTomcatServerBehavior liferayServer =
-            (LiferayTomcatServerBehavior) server.loadAdapter( LiferayTomcatServerBehavior.class, null );
+		LiferayTomcatServerBehavior liferayServer = (LiferayTomcatServerBehavior)server.loadAdapter(
+			LiferayTomcatServerBehavior.class, null);
 
-        final List tasks = new ArrayList();
-        final int size = modules.size();
+		List tasks = new ArrayList();
+		int size = modules.size();
 
-        for( int i = 0; i < size; i++ )
-        {
-            final IModule[] module = (IModule[]) modules.get( i );
+		for (int i = 0; i < size; i++) {
+			IModule[] module = (IModule[])modules.get(i);
 
-            if( liferayServer.getRedeployModules() != null )
-            {
-                for( IModule[] moduleItem : liferayServer.getRedeployModules() )
-                {
-                    if( moduleItem[0].getId().equals( module[0].getId() ) )
-                    {
-                        int in = (Integer) kindList.get( i );
-                        tasks.add( new LiferayPublishOperation( liferayServer, kind, module, in ) );
-                    }
-                }
-            }
-            else
-            {
-                int in = (Integer) kindList.get( i );
-                tasks.add( new LiferayPublishOperation( liferayServer, kind, module, in ) );
-            }
-        }
+			if (liferayServer.getRedeployModules() != null) {
+				for (IModule[] moduleItem : liferayServer.getRedeployModules()) {
+					String moduleItemId = moduleItem[0].getId();
 
-        return (PublishOperation[]) tasks.toArray( new PublishOperation[0] );
-    }
+					if (moduleItemId.equals(module[0].getId())) {
+						int in = (Integer)kindList.get(i);
+
+						tasks.add(new LiferayPublishOperation(liferayServer, kind, module, in));
+					}
+				}
+			}
+			else {
+				int in = (Integer)kindList.get(i);
+
+				tasks.add(new LiferayPublishOperation(liferayServer, kind, module, in));
+			}
+		}
+
+		return (PublishOperation[])tasks.toArray(new PublishOperation[0]);
+	}
+
 }
