@@ -16,64 +16,85 @@ package com.liferay.ide.ui.project.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author Ying Xu
  */
-public class NewLiferayMavenJSFProjectWizardTests extends SwtbotBase {
+public class NewJsfProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
-	public void createMavenICEFacesProject() {
-		String projectName = "testMavenICEFacesProject";
+	public void createICEFaces() {
+		String projectName = "test-ice-faces-maven";
 
 		wizardAction.openNewLiferayJsfProjectWizard();
+
 		wizardAction.prepareJsfProjectMaven(projectName, ICEFACES);
+
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createMavenJSFStandardProject() {
-		String projectName = "testMavenJSFStandardProject";
+	public void createJsfStandard() {
+		String projectName = "test-jsf-standard-maven";
 
 		wizardAction.openNewLiferayJsfProjectWizard();
+
 		wizardAction.prepareJsfProjectMaven(projectName, JSF_STANDARD);
+
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createMavenLiferayFacesAlloyProject() {
-		String projectName = "testMavenLiferayFacesAlloyProject";
+	public void createLiferayFacesAlloy() {
+		String projectName = "test-liferay-faces-alloy-maven";
 
 		wizardAction.openNewLiferayJsfProjectWizard();
+
 		wizardAction.prepareJsfProjectMaven(projectName, LIFERAY_FACES_ALLOY);
+
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createMavenPrimeFacesProject() {
-		String projectName = "testMavenPrimeFacesProject";
+	public void createPrimeFaces() {
+		String projectName = "test-prime-faces-maven";
 
 		wizardAction.openNewLiferayJsfProjectWizard();
+
 		wizardAction.prepareJsfProjectMaven(projectName, PRIMEFACES);
+
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createMavenRichFacesProject() {
-		String projectName = "testMavenRichFacesProject";
+	public void createRichFaces() {
+		String projectName = "test-rich-faces-maven";
 
 		wizardAction.openNewLiferayJsfProjectWizard();
+
 		wizardAction.prepareJsfProjectMaven(projectName, RICHFACES);
+
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}

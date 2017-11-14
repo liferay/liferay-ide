@@ -38,7 +38,11 @@ public class ViewAction extends UIAction {
 	}
 
 	public void deleteProject(String... items) {
-		getProjects().contextMenu(DELETE, items);
+		ide.sleep();
+
+		_getProjects().contextMenu(DELETE, items);
+
+		ide.sleep(500);
 
 		_deleteResourcesDialog.getDeleteFromDisk().select();
 
@@ -46,7 +50,7 @@ public class ViewAction extends UIAction {
 
 		long origin = SWTBotPreferences.TIMEOUT;
 
-		SWTBotPreferences.TIMEOUT = 2000;
+		SWTBotPreferences.TIMEOUT = 1500;
 
 		try {
 			_continueDeleteResourcesDialog.confirm();
@@ -63,13 +67,8 @@ public class ViewAction extends UIAction {
 		SWTBotPreferences.TIMEOUT = origin;
 	}
 
-	public Tree getProjects() {
-		try {
-			return _projectExplorerView.getProjects();
-		}
-		catch (Exception e) {
-			return _packageExplorerView.getProjects();
-		}
+	public String[] getProjectNames() {
+		return _getProjects().getItemLabels();
 	}
 
 	public void openAddAndRemoveDialog(String serverLabel) {
@@ -83,7 +82,11 @@ public class ViewAction extends UIAction {
 	}
 
 	public void openProjectFile(String... files) {
-		getProjects().doubleClick(files);
+		ide.sleep();
+
+		_getProjects().setFocus();
+
+		_getProjects().doubleClick(files);
 	}
 
 	public void openServerEditor(String serverLabel) {
@@ -127,6 +130,31 @@ public class ViewAction extends UIAction {
 
 	public void showServersView() {
 		ide.showServersView();
+	}
+
+	public boolean visibleProjectFileTry(String... files) {
+		try {
+			return _getProjects().isVisible(files);
+		}
+		catch (Exception e) {
+
+			// give more time to wait the file visible
+
+			_getProjects().setFocus();
+
+			ide.sleep(2000);
+
+			return _getProjects().isVisible(files);
+		}
+	}
+
+	private Tree _getProjects() {
+		try {
+			return _projectExplorerView.getProjects();
+		}
+		catch (Exception e) {
+			return _packageExplorerView.getProjects();
+		}
 	}
 
 	private boolean _hasConsoleLog(String content) {

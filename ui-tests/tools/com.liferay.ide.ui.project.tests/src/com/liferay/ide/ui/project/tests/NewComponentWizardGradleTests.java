@@ -23,69 +23,58 @@ import org.junit.Test;
  * @author Ying Xu
  * @author Ashley Yuan
  */
-public class NewLiferayComponentWizardTests extends SwtbotBase {
+public class NewComponentWizardGradleTests extends SwtbotBase {
 
 	@Test
-	public void newComponentClassOnModelListenerTest() {
-		String projectName = "test-component-maven";
-
-		wizardAction.openNewLiferayModuleWizard();
-		wizardAction.prepareLiferayModuleMaven(projectName, MVC_PORTLET);
-		wizardAction.finishToWait();
-
-		wizardAction.openNewLiferayComponentClassWizard();
-		wizardAction.prepareComponentClass(projectName, MODEL_LISTENER);
-		wizardAction.openSelectModelClassAndServiceDialog();
-
-		dialogAction.prepareText("*com.liferay.blogs.kernel.model.BlogsEntry");
-		dialogAction.confirm();
-
-		wizardAction.finishToWait();
-
-		Assert.assertTrue(
-			viewAction.getProjects().isVisible(
-				projectName, "src/main/java", "test.component.maven.portlet", "TestComponentMavenModelListener.java"));
-
-		viewAction.deleteProject(projectName);
+	public void createComponentModelListener() {
 	}
 
 	@Test
-	public void newComponentClassOnPortletTest() {
-		String projectName = "test-component";
+	public void createComponentPortlet() {
+		String projectName = "test-component-portlet-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
+
 		wizardAction.prepareLiferayModuleGradle(projectName);
+
 		wizardAction.finishToWait();
 
 		wizardAction.openNewLiferayComponentClassWizard();
+
 		wizardAction.prepareComponentClass(projectName);
+
 		wizardAction.finishToWait();
 
 		Assert.assertTrue(
-			viewAction.getProjects().isVisible(projectName, "src/main/java", "content", "TestComponentPortlet.java"));
+			viewAction.visibleProjectFileTry(projectName, "src/main/java", "content", "TestComponentPortlet.java"));
 
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void newComponentClassOnServiceWrapperTest() {
-		String projectName = "test-component-gradle";
+	public void createComponentServiceWrapper() {
+		String projectName = "test-component-service-wrapper-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
+
 		wizardAction.prepareLiferayModuleGradle(projectName);
+
 		wizardAction.finishToWait();
 
 		wizardAction.openNewLiferayComponentClassWizard();
+
 		wizardAction.prepareComponentClass(projectName, SERVICE_WRAPPER_UPCASE);
+
 		wizardAction.openSelectModelClassAndServiceDialog();
 
 		dialogAction.prepareText("*bookmarksEntryLocal");
+
 		dialogAction.confirm();
 
 		wizardAction.finishToWait();
 
 		Assert.assertTrue(
-			viewAction.getProjects().isVisible(
+			viewAction.visibleProjectFileTry(
 				projectName, "src/main/java", "content", "TestComponentGradleServiceHook.java"));
 
 		viewAction.deleteProject(projectName);

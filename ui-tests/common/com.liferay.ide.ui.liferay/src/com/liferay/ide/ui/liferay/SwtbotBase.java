@@ -52,6 +52,16 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 	@AfterClass
 	public static void afterClass() {
 		viewAction.deleteProject("init-project");
+
+		String[] projectNames = viewAction.getProjectNames();
+
+		if (projectNames.length > 0) {
+			System.out.println("The following projects are unable to be deleted, some error may happened:");
+
+			for (String projectName : projectNames) {
+				System.out.println(projectName);
+			}
+		}
 	}
 
 	@BeforeClass

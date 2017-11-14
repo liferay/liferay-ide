@@ -16,18 +16,17 @@ package com.liferay.ide.ui.project.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
-import java.io.IOException;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author Ying Xu
  * @author Sunny Shi
  */
-public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
+public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 	@Test
-	public void createActivatorModuleProject() {
+	public void createActivator() {
 		String projectName = "test-activator-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -36,11 +35,13 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createApiModuleProject() {
+	public void createApi() {
 		String projectName = "test-api-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -49,11 +50,13 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createContentTargetingReportModuleProject() {
+	public void createContentTargetingReport() {
 		String projectName = "test-content-targeting-report-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -62,11 +65,13 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createContentTargetingRuleModuleProject() {
+	public void createContentTargetingRule() {
 		String projectName = "test-content-targeting-rule-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -75,11 +80,13 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createContentTargetingTrackingActionModuleProject() {
+	public void createContentTargetingTrackingAction() {
 		String projectName = "test-content-targeting-tracking-action-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -88,11 +95,13 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createControlMenuEntryModuleProject() {
+	public void createControlMenuEntry() {
 		String projectName = "test-control-menu-entry-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -101,11 +110,13 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createFormFieldModuleProject() {
+	public void createFormField() {
 		String projectName = "test-form-field-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -114,11 +125,13 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createMvcportletModuleProject() {
+	public void createMvcportlet() {
 		String projectName = "test-mvc-portlet-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -127,32 +140,13 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createMvcPortletModuleProjectInLiferayWorkspace() throws IOException {
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		String liferayWorkspaceName = "liferayWorkspace";
-
-		wizardAction.prepareLiferayWorkspaceGradle(liferayWorkspaceName);
-
-		wizardAction.finishToWait();
-
-		wizardAction.openNewLiferayModuleWizard();
-
-		String projectName = "test-mvc-portlet-in_lws";
-
-		wizardAction.prepareLiferayModuleGradle(projectName, MVC_PORTLET);
-
-		wizardAction.finishToWait();
-
-		viewAction.deleteProject(liferayWorkspaceName);
-	}
-
-	@Test
-	public void createPanelAppModuleProject() {
+	public void createPanelApp() {
 		String projectName = "test-panel-app-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -161,24 +155,13 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
-		viewAction.deleteProject(projectName);
-	}
-
-	@Test
-	public void createPortletConfigurationIconModuleProject() {
-		String projectName = "test-portlet-configuration-icon-gradle";
-
-		wizardAction.openNewLiferayModuleWizard();
-
-		wizardAction.prepareLiferayModuleGradle(projectName, PORTLET_CONFIGURATION_ICON);
-
-		wizardAction.finishToWait();
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createPortletModuleProject() {
+	public void createPortlet() {
 		String projectName = "test-portlet-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -187,11 +170,28 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createPortletProviderModuleProject() {
+	public void createPortletConfigurationIcon() {
+		String projectName = "test-portlet-configuration-icon-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.prepareLiferayModuleGradle(projectName, PORTLET_CONFIGURATION_ICON);
+
+		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.deleteProject(projectName);
+	}
+
+	@Test
+	public void createPortletProvider() {
 		String projectName = "test-portlet-provider-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -200,11 +200,13 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createPortletToolbarContributorModuleProject() {
+	public void createPortletToolbarContributor() {
 		String projectName = "test-portlet-toolbar-contributor-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -213,11 +215,13 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createRestModuleProject() {
+	public void createRest() {
 		String projectName = "test-rest-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -226,24 +230,13 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
-		viewAction.deleteProject(projectName);
-	}
-
-	@Test
-	public void createServiceBuilderModuleProject() {
-		String projectName = "test-service-builder-gradle";
-
-		wizardAction.openNewLiferayModuleWizard();
-
-		wizardAction.prepareLiferayModuleGradle(projectName, SERVICE_BUILDER);
-
-		wizardAction.finishToWait();
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createServiceModuleProject() {
+	public void createService() {
 		String projectName = "test-service-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -260,11 +253,28 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createServiceWrapperModuleProject() {
+	public void createServiceBuilder() {
+		String projectName = "test-service-builder-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.prepareLiferayModuleGradle(projectName, SERVICE_BUILDER);
+
+		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.deleteProject(projectName);
+	}
+
+	@Test
+	public void createServiceWrapper() {
 		String projectName = "test-service-wrapper-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -281,11 +291,13 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createSimulationPanelEntryModuleProject() {
+	public void createSimulationPanelEntry() {
 		String projectName = "test-simulation-panel-entry-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -294,11 +306,13 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
 	@Test
-	public void createTemplateContextContributorModuleProject() {
+	public void createTemplateContextContributor() {
 		String projectName = "test-template-context-contributor-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -306,6 +320,23 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 		wizardAction.prepareLiferayModuleGradle(projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR);
 
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.deleteProject(projectName);
+	}
+
+	@Test
+	public void createTheme() {
+		String projectName = "test-theme-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.prepareLiferayModuleGradle(projectName, THEME);
+
+		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
@@ -320,18 +351,7 @@ public class NewLiferayModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
-		viewAction.deleteProject(projectName);
-	}
-
-	@Test
-	public void createThemeModuleProject() {
-		String projectName = "test-theme-gradle";
-
-		wizardAction.openNewLiferayModuleWizard();
-
-		wizardAction.prepareLiferayModuleGradle(projectName, THEME);
-
-		wizardAction.finishToWait();
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}

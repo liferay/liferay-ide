@@ -16,6 +16,7 @@ package com.liferay.ide.ui.project.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -23,7 +24,7 @@ import org.junit.Test;
  * @author Sunny Shi
  * @author Ying Xu
  */
-public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
+public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createActivator() {
@@ -34,6 +35,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 		wizardAction.prepareLiferayModuleMaven(projectName, ACTIVATOR);
 
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
@@ -48,6 +51,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -60,6 +65,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 		wizardAction.prepareLiferayModuleMaven(projectName, CONTENT_TARGETING_REPORT);
 
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
@@ -74,6 +81,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -86,6 +95,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 		wizardAction.prepareLiferayModuleMaven(projectName, CONTENT_TARGETING_TRACKING_ACTION);
 
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
@@ -100,6 +111,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -112,6 +125,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 		wizardAction.prepareLiferayModuleMaven(projectName, FORM_FIELD);
 
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
@@ -126,6 +141,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -138,6 +155,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 		wizardAction.prepareLiferayModuleMaven(projectName, PANEL_APP);
 
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
@@ -152,6 +171,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -164,6 +185,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET_CONFIGURATION_ICON);
 
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
@@ -178,6 +201,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -191,6 +216,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -203,6 +230,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 		wizardAction.prepareLiferayModuleMaven(projectName, REST);
 
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
@@ -225,6 +254,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -237,6 +268,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 		wizardAction.prepareLiferayModuleMaven(projectName, SERVICE_BUILDER);
 
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
@@ -259,6 +292,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -272,6 +307,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -284,6 +321,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 		wizardAction.prepareLiferayModuleMaven(projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR);
 
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
@@ -299,6 +338,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -311,6 +352,8 @@ public class NewLiferayMavenModuleProjectWizardTests extends SwtbotBase {
 		wizardAction.prepareLiferayModuleMaven(projectName, THEME_CONTRIBUTOR);
 
 		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.deleteProject(projectName);
 	}
