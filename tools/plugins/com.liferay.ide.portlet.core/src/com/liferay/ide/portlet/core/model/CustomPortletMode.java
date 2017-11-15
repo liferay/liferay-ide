@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -31,39 +28,36 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-public interface CustomPortletMode extends Element, Describeable, Identifiable
-{
+public interface CustomPortletMode extends Element, Describeable, Identifiable {
 
-    ElementType TYPE = new ElementType( CustomPortletMode.class );
+	public ElementType TYPE = new ElementType(CustomPortletMode.class);
 
-    // *** PortletMode ***
+	// *** PortletMode ***
 
-    @Required
-    @Unique
-    @Label( standard = "Portlet Mode" )
-    @XmlBinding( path = "portlet-mode" )
-    ValueProperty PROP_PORTLET_MODE = new ValueProperty( TYPE, "PortletMode" ); //$NON-NLS-1$
+	@Required
+	@Unique
+	@Label(standard = "Portlet Mode")
+	@XmlBinding(path = "portlet-mode")
+	public ValueProperty PROP_PORTLET_MODE = new ValueProperty(TYPE, "PortletMode");
 
-    Value<String> getPortletMode();
+	public Value<String> getPortletMode();
 
-    void setPortletMode( String value );
+	public void setPortletMode(String value);
 
-    // void setPortletMode( IPortletMode value );
+	// void setPortletMode( IPortletMode value );
 
-    /*
-     * Portlet Managed
-     */
+	/**
+	 * Portlet Managed
+	 */
+	@Type(base = Boolean.class)
+	@Label(standard = "Portal managed")
+	@DefaultValue(text = "true")
+	@XmlBinding(path = "portal-managed")
+	public ValueProperty PROP_PORTAL_MANAGED = new ValueProperty(TYPE, "PortalManaged");
 
-    @Type( base = Boolean.class )
-    @Label( standard = "Portal managed" )
-    @DefaultValue( text = "true" )
-    @XmlBinding( path = "portal-managed" )
-    ValueProperty PROP_PORTAL_MANAGED = new ValueProperty( TYPE, "PortalManaged" ); //$NON-NLS-1$
+	public Value<Boolean> getPortalManaged();
 
+	public void setPortalManaged(String value);
 
-    Value<Boolean> getPortalManaged();
-
-    void setPortalManaged( String value );
-
-    void setPortalManaged( Boolean value );
+	public void setPortalManaged(Boolean value);
 }

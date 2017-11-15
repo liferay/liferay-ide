@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model.internal;
 
@@ -28,25 +25,25 @@ import org.eclipse.sapphire.PossibleValuesService;
 /**
  * @author Kamesh Sampath
  */
-public class PublicRenderParameterValuesService extends PossibleValuesService
-{
+public class PublicRenderParameterValuesService extends PossibleValuesService {
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
-     */
-    @Override
-    protected void compute( Set<String> values )
-    {
-        final PortletApp portletApp = context( PortletApp.class );
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.
+	 *      util.SortedSet)
+	 */
+	@Override
+	protected void compute(Set<String> values) {
+		PortletApp portletApp = context(PortletApp.class);
 
-        ElementList<PublicRenderParameter> publicRenderParameters = portletApp.getPublicRenderParameters();
+		ElementList<PublicRenderParameter> publicRenderParameters = portletApp.getPublicRenderParameters();
 
-        for( PublicRenderParameter renderParameter : publicRenderParameters )
-        {
-            final String indentifer = renderParameter.getIdentifier().content();
-            values.add( indentifer );
-        }
-    }
+		for (PublicRenderParameter renderParameter : publicRenderParameters) {
+			String indentifer = renderParameter.getIdentifier().content();
+
+			values.add(indentifer);
+		}
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,14 +10,14 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core;
 
 import com.liferay.ide.portlet.core.job.BuildLanguageJob;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jst.jsf.core.IJSFCoreConstants;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.service.prefs.Preferences;
 
@@ -35,104 +36,97 @@ import org.osgi.service.prefs.Preferences;
  * @auther Greg Amerson
  * @author Cindy Li
  */
-public class PortletCore extends Plugin
-{
+public class PortletCore extends Plugin {
 
-    public static final IProjectFacet JSF_FACET =
-                    ProjectFacetsManager.getProjectFacet( IJSFCoreConstants.JSF_CORE_FACET_ID );
+	public static final IProjectFacet JSF_FACET = ProjectFacetsManager.getProjectFacet(
+		IJSFCoreConstants.JSF_CORE_FACET_ID);
 
-    // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.portlet.core"; //$NON-NLS-1$
+	// The plugin ID
 
-    public static final String PREF_KEY_PORTLET_SUPERCLASSES_USED = "portlet-superclasses-used"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.liferay.ide.portlet.core";
 
-    // The shared instance
-    private static PortletCore plugin;
+	public static final String PREF_KEY_PORTLET_SUPERCLASSES_USED = "portlet-superclasses-used";
 
-    public static BuildLanguageJob createBuildLanguageJob( IFile file )
-    {
-        BuildLanguageJob job = new BuildLanguageJob( file );
+	// The shared instance
 
-        return job;
-    }
+	public static BuildLanguageJob createBuildLanguageJob(IFile file) {
+		BuildLanguageJob job = new BuildLanguageJob(file);
 
-    public static IStatus createErrorStatus( Exception e )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e );
-    }
+		return job;
+	}
 
-    public static IStatus createErrorStatus( String msg )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, msg );
-    }
+	public static IStatus createErrorStatus(Exception e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e);
+	}
 
-    public static IStatus createErrorStatus( String msg, Exception e )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
-    }
+	public static IStatus createErrorStatus(String msg) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg);
+	}
 
-    public static IStatus createWarningStatus( String msg )
-    {
-        return new Status( IStatus.WARNING, PLUGIN_ID, msg );
-    }
+	public static IStatus createErrorStatus(String msg, Exception e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
+	}
 
-    /**
-     * Returns the shared instance
-     *
-     * @return the shared instance
-     */
-    public static PortletCore getDefault()
-    {
-        return plugin;
-    }
+	public static IStatus createWarningStatus(String msg) {
+		return new Status(IStatus.WARNING, PLUGIN_ID, msg);
+	}
 
-    public static Preferences getPreferences()
-    {
-        @SuppressWarnings( "deprecation" )
-        final IScopeContext scope = new InstanceScope();
+	/**
+	 * Returns the shared instance
+	 *
+	 * @return the shared instance
+	 */
+	public static PortletCore getDefault() {
+		return _plugin;
+	}
 
-        return scope.getNode( PLUGIN_ID );
-    }
+	public static Preferences getPreferences() {
+		@SuppressWarnings("deprecation")
+		IScopeContext scope = new InstanceScope();
 
-    public static void logError( Exception ex )
-    {
-        getDefault().getLog().log( createErrorStatus( ex ) );
-    }
+		return scope.getNode(PLUGIN_ID);
+	}
 
-    public static void logError( String msg, Exception e )
-    {
-        getDefault().getLog().log( createErrorStatus( msg, e ) );
-    }
+	public static void logError(Exception ex) {
+		ILog iLog=getDefault().getLog();
+		
+		iLog.log(createErrorStatus(ex));
+	}
 
-    /**
-     * The constructor
-     */
-    public PortletCore()
-    {
-    }
+	public static void logError(String msg, Exception e) {
+		ILog iLog=getDefault().getLog();
+		
+		iLog.log(createErrorStatus(msg, e));
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
-     */
-    public void start( BundleContext context ) throws Exception
-    {
+	/**
+	 * The constructor
+	 */
+	public PortletCore() {
+	}
 
-        super.start( context );
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(BundleContext )
+	 */
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
 
-        plugin = this;
-    }
+		_plugin = this;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
-     */
-    public void stop( BundleContext context ) throws Exception
-    {
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(BundleContext )
+	 */
+	public void stop(BundleContext context) throws Exception {
+		_plugin = null;
 
-        plugin = null;
+		super.stop(context);
+	}
 
-        super.stop( context );
-    }
+	private static PortletCore _plugin;
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Kamesh Sampath - initial implementation
- *      Gregory Amerson - initial implementation review and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -38,161 +34,120 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlSchema;
  * @author Kamesh Sampath <br/>
  * @author Gregory Amerson
  */
-@Image( path = "images/obj16/portlet_model_obj.gif" )
-@XmlNamespace( prefix = "", uri = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" )
-@XmlSchema
-(
-    namespace = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd",
-    location = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
-)
-@XmlBinding( path = "portlet-app" )
-public interface PortletApp extends ResourceBundle, Identifiable
-{
+@Image(path = "images/obj16/portlet_model_obj.gif")
+@XmlBinding(path = "portlet-app")
+@XmlNamespace(prefix = "", uri = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd")
+@XmlSchema(namespace = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd", location = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd")
+public interface PortletApp extends ResourceBundle, Identifiable {
 
-    ElementType TYPE = new ElementType( PortletApp.class );
+	public ElementType TYPE = new ElementType(PortletApp.class);
 
-    /*
-     * Portlets
-     */
+	/**
+	 * Portlets
+	 */
+	@Type(base = Portlet.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "portlet", type = Portlet.class))
+	public ListProperty PROP_PORTLETS = new ListProperty(TYPE, "Portlets");
 
-    @Type( base = Portlet.class )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "portlet", type = Portlet.class ) )
-    ListProperty PROP_PORTLETS = new ListProperty( TYPE, "Portlets" ); //$NON-NLS-1$
+	public ElementList<Portlet> getPortlets();
 
-    ElementList<Portlet> getPortlets();
+	// *** CustomPortletMode ***
 
-    // *** CustomPortletMode ***
+	@Type(base = CustomPortletMode.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "custom-portlet-mode", type = CustomPortletMode.class))
+	public ListProperty PROP_CUSTOM_PORTLET_MODES = new ListProperty(TYPE, "CustomPortletModes");
 
-    @Type( base = CustomPortletMode.class )
-    @XmlListBinding
-    (
-        mappings = @XmlListBinding.Mapping
-        (
-            element = "custom-portlet-mode",
-            type = CustomPortletMode.class
-        )
-    )
-    ListProperty PROP_CUSTOM_PORTLET_MODES = new ListProperty( TYPE, "CustomPortletModes" ); //$NON-NLS-1$
+	public ElementList<CustomPortletMode> getCustomPortletModes();
 
-    ElementList<CustomPortletMode> getCustomPortletModes();
+	// *** CustomWindowStates ***
 
-    // *** CustomWindowStates ***
+	@Type(base = CustomWindowState.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "custom-window-state", type = CustomWindowState.class))
+	public 	ListProperty PROP_CUSTOM_WINDOW_STATES = new ListProperty(TYPE, "CustomWindowStates");
 
-    @Type( base = CustomWindowState.class )
-    @XmlListBinding
-    (
-        mappings = @XmlListBinding.Mapping
-        (
-            element = "custom-window-state",
-            type = CustomWindowState.class
-        )
-    )
-    ListProperty PROP_CUSTOM_WINDOW_STATES = new ListProperty( TYPE, "CustomWindowStates" ); //$NON-NLS-1$
+	public 	ElementList<CustomWindowState> getCustomWindowStates();
 
-    ElementList<CustomWindowState> getCustomWindowStates();
+	// *** UserAttributes ***
 
-    // *** UserAttributes ***
+	@Type(base = UserAttribute.class)
+	@Label(standard = "User Attribute")
+	@XmlListBinding(mappings = {@XmlListBinding.Mapping(type = UserAttribute.class, element = "user-attribute")})
+	public ListProperty PROP_USER_ATTRIBUTES = new ListProperty(TYPE, "UserAttributes");
 
-    @Type( base = UserAttribute.class )
-    @Label( standard = "User Attribute" )
-    @XmlListBinding( mappings = { @XmlListBinding.Mapping( type = UserAttribute.class, element = "user-attribute" ) } )
-    ListProperty PROP_USER_ATTRIBUTES = new ListProperty( TYPE, "UserAttributes" ); //$NON-NLS-1$
+	public 	ElementList<UserAttribute> getUserAttributes();
 
-    ElementList<UserAttribute> getUserAttributes();
+	// *** SecurityConstraints ***
 
-    // *** SecurityConstraints ***
+	@Type(base = SecurityConstraint.class)
+	@Label(standard = "Security Constraints")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(type = SecurityConstraint.class, element = "security-constraint"))
+	public ListProperty PROP_SECURITY_CONSTRAINTS = new ListProperty(TYPE, "SecurityConstraints");
 
-    @Type( base = SecurityConstraint.class )
-    @Label( standard = "Security Constraints" )
-    @XmlListBinding
-    (
-        mappings = @XmlListBinding.Mapping
-        (
-            type = SecurityConstraint.class,
-            element = "security-constraint"
-        )
-    )
-    ListProperty PROP_SECURITY_CONSTRAINTS = new ListProperty( TYPE, "SecurityConstraints" ); //$NON-NLS-1$
+	public ElementList<SecurityConstraint> getSecurityConstraints();
 
-    ElementList<SecurityConstraint> getSecurityConstraints();
+	// *** Filters ***
 
-    // *** Filters ***
+	@Type(base = Filter.class)
+	@Label(standard = "filters")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "filter", type = Filter.class))
+	public ListProperty PROP_FILTERS = new ListProperty(TYPE, "Filters");
 
-    @Type( base = Filter.class )
-    @Label( standard = "filters" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "filter", type = Filter.class ) )
-    ListProperty PROP_FILTERS = new ListProperty( TYPE, "Filters" ); //$NON-NLS-1$
+	public ElementList<Filter> getFilters();
 
-    ElementList<Filter> getFilters();
+	// *** FilterMappings ***
 
-    // *** FilterMappings ***
+	@Type(base = FilterMapping.class)
+	@Label(standard = "filter mappings")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "filter-mapping", type = FilterMapping.class))
+	public ListProperty PROP_FILTER_MAPPINGS = new ListProperty(TYPE, "FilterMappings");
 
-    @Type( base = FilterMapping.class )
-    @Label( standard = "filter mappings" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "filter-mapping", type = FilterMapping.class ) )
-    ListProperty PROP_FILTER_MAPPINGS = new ListProperty( TYPE, "FilterMappings" ); //$NON-NLS-1$
+	public 	ElementList<FilterMapping> getFilterMappings();
 
-    ElementList<FilterMapping> getFilterMappings();
+	// *** DefaultNameSpace ***
 
-    // *** DefaultNameSpace ***
+	@Label(standard = "Default Namespace")
+	@Unique
+	@XmlBinding(path = "default-namespace")
+	public ValueProperty PROP_DEFAULT_NAMESPACE = new ValueProperty(TYPE, "DefaultNameSpace");
 
-    @Label( standard = "Default Namespace" )
-    @Unique
-    @XmlBinding( path = "default-namespace" )
-    ValueProperty PROP_DEFAULT_NAMESPACE = new ValueProperty( TYPE, "DefaultNameSpace" ); //$NON-NLS-1$
+	public Value<String> getDefaultNameSpace();
 
-    Value<String> getDefaultNameSpace();
+	public void setDefaultNameSpace(String value);
 
-    void setDefaultNameSpace( String value );
+	// *** EventDefinitions ***
 
-    // *** EventDefinitions ***
+	@Type(base = EventDefinition.class)
+	@Label(standard = "Event Definitions")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "event-definition", type = EventDefinition.class))
+	public 	ListProperty PROP_EVENT_DEFINITIONS = new ListProperty(TYPE, "EventDefinitions");
 
-    @Type( base = EventDefinition.class )
-    @Label( standard = "Event Definitions" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "event-definition", type = EventDefinition.class ) )
-    ListProperty PROP_EVENT_DEFINITIONS = new ListProperty( TYPE, "EventDefinitions" ); //$NON-NLS-1$
+	public ElementList<EventDefinition> getEventDefinitions();
 
-    ElementList<EventDefinition> getEventDefinitions();
+	// *** PublicRenderParameters ***
 
-    // *** PublicRenderParameters ***
+	@Type(base = PublicRenderParameter.class)
+	@Label(standard = "Public Render Parameters")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "public-render-parameter", type = PublicRenderParameter.class))
+	public ListProperty PROP_PUBLIC_RENDER_PARAMETERS = new ListProperty(TYPE, "PublicRenderParameters");
 
-    @Type( base = PublicRenderParameter.class )
-    @Label( standard = "Public Render Parameters" )
-    @XmlListBinding
-    (
-        mappings = @XmlListBinding.Mapping
-        (
-            element = "public-render-parameter",
-            type = PublicRenderParameter.class
-        )
-    )
-    ListProperty PROP_PUBLIC_RENDER_PARAMETERS = new ListProperty( TYPE, "PublicRenderParameters" ); //$NON-NLS-1$
+	public ElementList<PublicRenderParameter> getPublicRenderParameters();
 
-    ElementList<PublicRenderParameter> getPublicRenderParameters();
+	// *** Listeners ***
 
-    // *** Listeners ***
+	@Type(base = Listener.class)
+	@Label(standard = "listeners")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "listener", type = Listener.class))
+	public 	ListProperty PROP_LISTENERS = new ListProperty(TYPE, "Listeners");
 
-    @Type( base = Listener.class )
-    @Label( standard = "listeners" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "listener", type = Listener.class ) )
-    ListProperty PROP_LISTENERS = new ListProperty( TYPE, "Listeners" ); //$NON-NLS-1$
+	public 	ElementList<Listener> getListeners();
 
-    ElementList<Listener> getListeners();
+	// *** ContainerRuntimeOptions ***
 
-    // *** ContainerRuntimeOptions ***
+	@Type(base = ContainerRuntimeOption.class)
+	@Label(standard = "Container Runtime Options")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "container-runtime-option", type = ContainerRuntimeOption.class))
+	public 	ListProperty PROP_CONTAINER_RUNTIME_OPTIONS = new ListProperty(TYPE, "ContainerRuntimeOptions");
 
-    @Type( base = ContainerRuntimeOption.class )
-    @Label( standard = "Container Runtime Options" )
-    @XmlListBinding
-    (
-        mappings = @XmlListBinding.Mapping
-        (
-            element = "container-runtime-option",
-            type = ContainerRuntimeOption.class
-        )
-    )
-    ListProperty PROP_CONTAINER_RUNTIME_OPTIONS = new ListProperty( TYPE, "ContainerRuntimeOptions" ); //$NON-NLS-1$
-
-    ElementList<ContainerRuntimeOption> getContainerRuntimeOptions();
+	public ElementList<ContainerRuntimeOption> getContainerRuntimeOptions();
 
 }

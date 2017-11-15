@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Kamesh Sampath - initial implementation
- *      Gregory Amerson - initial implementation review and ongoing maintanence
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -35,37 +31,30 @@ import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
-
 /**
  * @author Kamesh Sampath
  * @author Simon Jiang
  */
-@Image( path = "images/elcl16/resources_16x16.gif" )
-public interface ResourceBundle extends Element
-{
+@Image(path = "images/elcl16/resources_16x16.gif")
+public interface ResourceBundle extends Element {
 
-    ElementType TYPE = new ElementType( ResourceBundle.class );
+	public ElementType TYPE = new ElementType(ResourceBundle.class);
 
-    // *** ResourceBundle ***
+	// *** ResourceBundle ***
 
-    @Type( base = Path.class )
-    @Services
-    (
-        value =
-        {
-            @Service( impl = GenericResourceBundlePathService.class ),
-            @Service( impl = ResourceBundleValidationService.class )
-        }
-    )
-    @FileExtensions( expr = "properties" )
-    @ValidFileSystemResourceType( FileSystemResourceType.FILE )
-    @XmlBinding( path = "resource-bundle" )
-    ValueProperty PROP_RESOURCE_BUNDLE = new ValueProperty( TYPE, "ResourceBundle" ); //$NON-NLS-1$
+	@Type(base = Path.class)
+	@Services(value = {
+		@Service(impl = GenericResourceBundlePathService.class), @Service(impl = ResourceBundleValidationService.class)
+	})
+	@FileExtensions(expr = "properties")
+	@ValidFileSystemResourceType(FileSystemResourceType.FILE)
+	@XmlBinding(path = "resource-bundle")
+	public 	ValueProperty PROP_RESOURCE_BUNDLE = new ValueProperty(TYPE, "ResourceBundle");
 
-    Value<Path> getResourceBundle();
+	public 	Value<Path> getResourceBundle();
 
-    void setResourceBundle( String value );
+	public 	void setResourceBundle(String value);
 
-    void setResourceBundle( Path value );
+	public 	void setResourceBundle(Path value);
 
 }
