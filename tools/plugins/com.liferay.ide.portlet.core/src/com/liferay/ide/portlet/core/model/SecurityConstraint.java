@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -34,39 +31,31 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Kamesh Sampath
  */
-@Image( path = "images/elcl16/constraint_16x16.png" )
-public interface SecurityConstraint extends Element, Identifiable, Displayable
-{
+@Image(path = "images/elcl16/constraint_16x16.png")
+public interface SecurityConstraint extends Element, Identifiable, Displayable {
 
-    ElementType TYPE = new ElementType( SecurityConstraint.class );
+	public ElementType TYPE = new ElementType(SecurityConstraint.class);
 
-    // *** Portlet Name ***
-    @Type( base = PortletName.class )
-    @Label( standard = "Portlet name" )
-    @Required
-    @Length( min = 1 )
-    @Unique
-    @XmlListBinding
-    (
-        path = "portlet-collection",
-        mappings = @XmlListBinding.Mapping
-        (
-            element = "portlet-name",
-            type = PortletName.class
-        )
-    )
-    ListProperty PROP_PORTLET_NAMES = new ListProperty( TYPE, "PortletNames" ); //$NON-NLS-1$
+	// *** Portlet Name ***
 
-    ElementList<PortletName> getPortletNames();
+	@Type(base = PortletName.class)
+	@Label(standard = "Portlet name")
+	@Required
+	@Length(min = 1)
+	@Unique
+	@XmlListBinding(path = "portlet-collection", mappings = @XmlListBinding.Mapping(element = "portlet-name", type = PortletName.class))
+	public ListProperty PROP_PORTLET_NAMES = new ListProperty(TYPE, "PortletNames");
 
-    // *** UserDataConstraint ***
+	public 	ElementList<PortletName> getPortletNames();
 
-    @Type( base = UserDataConstraint.class )
-    @Label( standard = "User Data Constraint" )
-    @Required
-    @XmlBinding( path = "user-data-constraint" )
-    ImpliedElementProperty PROP_USER_DATA_CONSTRAINT = new ImpliedElementProperty( TYPE, "UserDataConstraint" ); //$NON-NLS-1$
+	// *** UserDataConstraint ***
 
-    UserDataConstraint getUserDataConstraint();
+	@Type(base = UserDataConstraint.class)
+	@Label(standard = "User Data Constraint")
+	@Required
+	@XmlBinding(path = "user-data-constraint")
+	public ImpliedElementProperty PROP_USER_DATA_CONSTRAINT = new ImpliedElementProperty(TYPE, "UserDataConstraint");
+
+	public UserDataConstraint getUserDataConstraint();
 
 }

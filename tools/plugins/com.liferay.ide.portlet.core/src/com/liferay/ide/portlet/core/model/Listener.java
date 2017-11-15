@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *    Kamesh Sampath - initial implementation
- *    Gregory Amerson - IDE-405 - added image listener
- ******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -39,28 +35,27 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  * @author Kamesh Sampath
  * @author Simon Jiang
  */
-@Image( path = "images/obj16/portlet_class_obj.gif" )
-public interface Listener extends Element, Describeable, Displayable
-{
+@Image(path = "images/obj16/portlet_class_obj.gif")
+public interface Listener extends Element, Describeable, Displayable {
 
-    ElementType TYPE = new ElementType( Listener.class );
+	public ElementType TYPE = new ElementType(Listener.class);
 
-    // *** Implementation ***
+	// *** Implementation ***
 
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "javax.portlet.PortletURLGenerationListener" )
-    @Label( standard = "Implementation", full = "Listener implementation class" )
-    @Required
-    @MustExist
-    @XmlBinding( path = "listener-class" )
-    @Documentation( content = "The listener implementation class." )
-    ValueProperty PROP_IMPLEMENTATION = new ValueProperty( TYPE, "Implementation" ); //$NON-NLS-1$
+	@Type(base = JavaTypeName.class)
+	@Reference(target = JavaType.class)
+	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = "javax.portlet.PortletURLGenerationListener")
+	@Label(standard = "Implementation", full = "Listener implementation class")
+	@Required
+	@MustExist
+	@XmlBinding(path = "listener-class")
+	@Documentation(content = "The listener implementation class.")
+	public 	ValueProperty PROP_IMPLEMENTATION = new ValueProperty(TYPE, "Implementation");
 
-    ReferenceValue<JavaTypeName, JavaType> getImplementation();
+	public ReferenceValue<JavaTypeName, JavaType> getImplementation();
 
-    void setImplementation( String value );
+	public void setImplementation(String value);
 
-    void setImplementation( JavaTypeName value );
+	public 	void setImplementation(JavaTypeName value);
 
 }

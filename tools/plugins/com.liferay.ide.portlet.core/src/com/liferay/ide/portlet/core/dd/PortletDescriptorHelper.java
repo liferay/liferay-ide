@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.dd;
 
@@ -36,6 +35,7 @@ import org.eclipse.jst.j2ee.common.ParamValue;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -47,387 +47,364 @@ import org.w3c.dom.NodeList;
  * @author Kuo Zhang
  * @author Terry Jia
  */
-@SuppressWarnings( { "restriction", "unchecked" } )
-public class PortletDescriptorHelper extends LiferayDescriptorHelper implements INewPortletClassDataModelProperties
-{
-
-    public static final String DESCRIPTOR_FILE = ILiferayConstants.PORTLET_XML_FILE;
-
-    private static final String DESCRIPTOR_TEMPLATE =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<portlet-app xmlns=\"http://java.sun.com/xml/ns/" //$NON-NLS-1$
-        + "portlet/portlet-app_2_0.xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:" //$NON-NLS-1$
-        + "schemaLocation=\"http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/" //$NON-NLS-1$
-        + "xml/ns/portlet/portlet-app_2_0.xsd\" version=\"2.0\">\n</portlet-app>"; //$NON-NLS-1$
-
-    public PortletDescriptorHelper()
-    {
-        super();
-    }
-
-    public PortletDescriptorHelper( IProject project )
-    {
-        super( project );
-    }
-
-    protected void addDescriptorOperations()
-    {
-        addDescriptorOperation
-        (
-            new RemoveSampleElementsOperation()
-            {
-                @Override
-                public IStatus removeSampleElements()
-                {
-                    return doRemoveAllPortlets();
-                };
-            }
-        );
-
-        addDescriptorOperation
-        (
-            new AddNewPortletOperation()
-            {
-                @Override
-                public IStatus addNewPortlet( final IDataModel model )
-                {
-                    IStatus status = Status.OK_STATUS;
-
-                    if( canAddNewPortlet( model ) )
-                    {
-                        final IFile descriptorFile = getDescriptorFile();
-
-                        if( descriptorFile != null )
-                        {
-                            DOMModelOperation domModelOperation = new DOMModelEditOperation( descriptorFile )
-                            {
-                                protected void createDefaultFile()
-                                {
-                                    createDefaultDescriptor( DESCRIPTOR_TEMPLATE, "" ); //$NON-NLS-1$
-                                }
-
-                                protected IStatus doExecute( IDOMDocument document )
-                                {
-                                    return doAddNewPortlet( document, model );
-                                }
-                            };
-
-                            status = domModelOperation.execute();
-                        }
-                    }
-
-                    return status;
-                }
-            }
-        );
-
-        addDescriptorOperation
-        (
-            new RemoveAllPortletsOperation()
-            {
-                @Override
-                public IStatus removeAllPortlets()
-                {
-                    return doRemoveAllPortlets();
-                }
-            }
-        );
-    }
-
-    public IStatus addResourceBundle( final String resourceBundle, final String portletName )
-    {
-        final IFile descriptorFile = getDescriptorFile();
-
-        DOMModelOperation operation = new DOMModelEditOperation( descriptorFile )
-        {
-
-            @Override
-            protected IStatus doExecute( IDOMDocument document )
-            {
-                return doAddResourceBundle( document, resourceBundle, portletName );
-            }
-        };
-
-        return operation.execute();
-    }
+@SuppressWarnings({"restriction", "unchecked"})
+public class PortletDescriptorHelper extends LiferayDescriptorHelper implements INewPortletClassDataModelProperties {
 
-    public boolean canAddNewPortlet( IDataModel model )
-    {
-        return model.getID().contains( "NewPortlet" );
-    }
+	public static final String DESCRIPTOR_FILE = ILiferayConstants.PORTLET_XML_FILE;
 
-    public IStatus configurePortletXml( final String newPortletName )
-    {
-        final IFile descriptorFile = getDescriptorFile();
+	public PortletDescriptorHelper() {
+	}
 
-        final IStatus status = new DOMModelEditOperation( descriptorFile )
-        {
-            protected IStatus doExecute( IDOMDocument document )
-            {
-                final Element rootElement = document.getDocumentElement();
+	public PortletDescriptorHelper(IProject project) {
+		super(project);
+	}
 
-                final NodeList portletNodes = rootElement.getElementsByTagName( "portlet" );
+	public IStatus addResourceBundle(String resourceBundle, String portletName) {
+		IFile descriptorFile = getDescriptorFile();
 
-                if( portletNodes.getLength() > 0 )
-                {
-                    final Element lastPortletElement = (Element) portletNodes.item( portletNodes.getLength() - 1 );
-                    final Element portletName = NodeUtil.findChildElement( lastPortletElement, "portlet-name" );
-                    portletName.replaceChild( document.createTextNode( newPortletName ), portletName.getFirstChild() );
-                }
+		DOMModelOperation operation = new DOMModelEditOperation(descriptorFile) {
 
-                return Status.OK_STATUS;
-            }
-        }.execute();
+			@Override
+			protected IStatus doExecute(IDOMDocument document) {
+				return doAddResourceBundle(document, resourceBundle, portletName);
+			}
 
-        return status;
-    }
+		};
 
-    public IStatus doAddNewPortlet( IDOMDocument document, IDataModel model )
-    {
-        // <portlet-app> element
-        Element rootElement = document.getDocumentElement();
+		return operation.execute();
+	}
 
-        // new <portlet> element
-        Element newPortletElement = document.createElement( "portlet" ); //$NON-NLS-1$
+	public boolean canAddNewPortlet(IDataModel model) {
+		return model.getID().contains("NewPortlet");
+	}
 
-        NodeUtil.appendChildElement( newPortletElement, "portlet-name", model.getStringProperty( PORTLET_NAME ) ); //$NON-NLS-1$
+	public IStatus configurePortletXml(String newPortletName) {
+		IFile descriptorFile = getDescriptorFile();
 
-        NodeUtil.appendChildElement( newPortletElement, "display-name", model.getStringProperty( DISPLAY_NAME ) ); //$NON-NLS-1$
+		IStatus status = new DOMModelEditOperation(descriptorFile) {
 
-        NodeUtil.appendChildElement( newPortletElement, "portlet-class", getPortletClassText( model ) ); //$NON-NLS-1$
+			protected IStatus doExecute(IDOMDocument document) {
+				Element rootElement = document.getDocumentElement();
 
-        // add <init-param> elements as needed
-        List<ParamValue> initParams = (List<ParamValue>) model.getProperty( INIT_PARAMS );
+				NodeList portletNodes = rootElement.getElementsByTagName("portlet");
 
-        for( ParamValue initParam : initParams )
-        {
-            Element newInitParamElement = NodeUtil.appendChildElement( newPortletElement, "init-param" ); //$NON-NLS-1$
+				if (portletNodes.getLength() > 0) {
+					Element lastPortletElement = (Element)portletNodes.item(portletNodes.getLength() - 1);
 
-            NodeUtil.appendChildElement( newInitParamElement, "name", initParam.getName() ); //$NON-NLS-1$
+					Element portletName = NodeUtil.findChildElement(lastPortletElement, "portlet-name");
 
-            NodeUtil.appendChildElement( newInitParamElement, "value", initParam.getValue() ); //$NON-NLS-1$
-        }
+					portletName.replaceChild(document.createTextNode(newPortletName), portletName.getFirstChild());
+				}
 
-        // expiration cache
-        NodeUtil.appendChildElement( newPortletElement, "expiration-cache", "0" ); //$NON-NLS-1$ //$NON-NLS-2$
+				return Status.OK_STATUS;
+			}
 
-        // supports node
-        Element newSupportsElement = NodeUtil.appendChildElement( newPortletElement, "supports" ); //$NON-NLS-1$
+		}.execute();
 
-        NodeUtil.appendChildElement( newSupportsElement, "mime-type", "text/html" ); //$NON-NLS-1$ //$NON-NLS-2$
+		return status;
+	}
 
-        // for all support modes need to add into
-        for( String portletMode : ALL_PORTLET_MODES )
-        {
-            if( model.getBooleanProperty( portletMode ) )
-            {
-                NodeUtil.appendChildElement(
-                    newSupportsElement, "portlet-mode", //$NON-NLS-1$
-                    model.getPropertyDescriptor( portletMode ).getPropertyDescription() );
-            }
-        }
+	public IStatus doAddNewPortlet(IDOMDocument document, IDataModel model) {
 
-        if( model.getBooleanProperty( CREATE_RESOURCE_BUNDLE_FILE ) )
-        {
-            // need to remove .properties off the end of the bundle_file_path
-            String bundlePath = model.getStringProperty( CREATE_RESOURCE_BUNDLE_FILE_PATH );
-            String bundleValue = bundlePath.replaceAll( "\\.properties$", StringPool.EMPTY ); //$NON-NLS-1$
-            String validBuildValue = bundleValue.replaceAll( "\\/", "." ); //$NON-NLS-1$
+		// <portlet-app> element
 
-            NodeUtil.appendChildElement( newPortletElement, "resource-bundle", validBuildValue ); //$NON-NLS-1$
-        }
+		Element rootElement = document.getDocumentElement();
 
-        // add portlet-info
-        Element newPortletInfoElement = NodeUtil.appendChildElement( newPortletElement, "portlet-info" ); //$NON-NLS-1$
+		// new <portlet> element
 
-        NodeUtil.appendChildElement( newPortletInfoElement, "title", model.getStringProperty( TITLE ) ); //$NON-NLS-1$
+		Element newPortletElement = document.createElement("portlet");
 
-        NodeUtil.appendChildElement( newPortletInfoElement, "short-title", model.getStringProperty( SHORT_TITLE ) ); //$NON-NLS-1$
+		NodeUtil.appendChildElement(newPortletElement, "portlet-name", model.getStringProperty(PORTLET_NAME));
 
-        NodeUtil.appendChildElement( newPortletInfoElement, "keywords", model.getStringProperty( KEYWORDS ) ); //$NON-NLS-1$
+		NodeUtil.appendChildElement(newPortletElement, "display-name", model.getStringProperty(DISPLAY_NAME));
 
-        // security role refs
-        for( String roleName : DEFAULT_SECURITY_ROLE_NAMES )
-        {
-            NodeUtil.appendChildElement( NodeUtil.appendChildElement( newPortletElement, "security-role-ref" ), "role-name", roleName ); //$NON-NLS-1$ //$NON-NLS-2$
-        }
+		NodeUtil.appendChildElement(newPortletElement, "portlet-class", getPortletClassText(model));
 
-        // check for event-definition elements
+		// add <init-param> elements as needed
 
-        Node refNode = null;
+		List<ParamValue> initParams = (List<ParamValue>)model.getProperty(INIT_PARAMS);
 
-        String[] refElementNames =
-            new String[] { "custom-portlet-mode", "custom-window-state", "user-attribute", "security-constraint", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-                "resource-bundle", "filter", "filter-mapping", "default-namespace", "event-definition", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-                "public-render-parameter", "listener", "container-runtime-option" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		for (ParamValue initParam : initParams) {
+			Element newInitParamElement = NodeUtil.appendChildElement(newPortletElement, "init-param");
 
-        for( int i = 0; i < refElementNames.length; i++ )
-        {
-            refNode = NodeUtil.findFirstChild( rootElement, refElementNames[i] );
+			NodeUtil.appendChildElement(newInitParamElement, "name", initParam.getName());
 
-            if( refNode != null )
-            {
-                break;
-            }
-        }
+			NodeUtil.appendChildElement(newInitParamElement, "value", initParam.getValue());
+		}
 
-        rootElement.insertBefore( newPortletElement, refNode );
+		// expiration cache
 
-        // append a newline text node
-        rootElement.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) ); //$NON-NLS-1$
+		NodeUtil.appendChildElement(newPortletElement, "expiration-cache", "0");
 
-        // format the new node added to the model;
-        FormatProcessorXML processor = new FormatProcessorXML();
+		// supports node
 
-        processor.formatNode( newPortletElement );
+		Element newSupportsElement = NodeUtil.appendChildElement(newPortletElement, "supports");
 
-        return Status.OK_STATUS;
-    }
+		NodeUtil.appendChildElement(newSupportsElement, "mime-type", "text/html");
 
-    protected IStatus doAddResourceBundle( IDOMDocument document, String resourceBundle, String portletName )
-    {
-        final FormatProcessorXML processor = new FormatProcessorXML();
+		// for all support modes need to add into
 
-        final NodeList portletNameList = document.getElementsByTagName( "portlet-name" );
+		for (String portletMode : ALL_PORTLET_MODES) {
+			if (model.getBooleanProperty(portletMode)) {
+				NodeUtil.appendChildElement(
+					newSupportsElement, "portlet-mode",
+					model.getPropertyDescriptor(portletMode).getPropertyDescription());
+			}
+		}
 
-        if( ( portletNameList != null ) && ( portletNameList.getLength() > 0 ) &&
-            !CoreUtil.isNullOrEmpty( resourceBundle ) )
-        {
-            Node portletNameNode = null;
+		if (model.getBooleanProperty(CREATE_RESOURCE_BUNDLE_FILE)) {
 
-            for( int i = 0; i < portletNameList.getLength(); i++ )
-            {
-                if( NodeUtil.getTextContent( portletNameList.item( i ) ).equals( portletName ) )
-                {
-                    portletNameNode = portletNameList.item( i );
-                }
-            }
+			// need to remove .properties off the end of the bundle_file_path
 
-            if( portletNameNode == null )
-            {
-                return Status.CANCEL_STATUS;
-            }
+			String bundlePath = model.getStringProperty(CREATE_RESOURCE_BUNDLE_FILE_PATH);
 
-            Element newResourceBundleElement = null;
+			String bundleValue = bundlePath.replaceAll("\\.properties$", StringPool.EMPTY);
 
-            Node portlet = portletNameNode.getParentNode();
+			String validBuildValue = bundleValue.replaceAll("\\/", ".");
 
-            Node refNode = null;
+			NodeUtil.appendChildElement(newPortletElement, "resource-bundle", validBuildValue);
+		}
 
-            Node supports = NodeUtil.findLastChild( (Element) portlet, "supports" );
+		// add portlet-info
 
-            if( supports != null )
-            {
-                Node supportedLocale = NodeUtil.findLastChild( (Element) portlet, "supported-locale" );
+		Element newPortletInfoElement = NodeUtil.appendChildElement(newPortletElement, "portlet-info");
 
-                if( supportedLocale != null )
-                {
-                    refNode = supportedLocale;
-                }
-                else
-                {
-                    refNode = supports;
-                }
-            }
-            else
-            {
-                return Status.CANCEL_STATUS;
-            }
+		NodeUtil.appendChildElement(newPortletInfoElement, "title", model.getStringProperty(TITLE));
 
-            newResourceBundleElement =
-                NodeUtil.insertChildElementAfter( (Element) portlet, refNode, "resource-bundle", resourceBundle );
+		NodeUtil.appendChildElement(newPortletInfoElement, "short-title", model.getStringProperty(SHORT_TITLE));
 
-            processor.formatNode( newResourceBundleElement );
-        }
+		NodeUtil.appendChildElement(newPortletInfoElement, "keywords", model.getStringProperty(KEYWORDS));
 
-        return Status.OK_STATUS;
-    }
+		// security role refs
 
-    public IStatus doRemoveAllPortlets()
-    {
-        final String portletTagName = "portlet";
+		for (String roleName : DEFAULT_SECURITY_ROLE_NAMES) {
+			NodeUtil.appendChildElement(
+				NodeUtil.appendChildElement(newPortletElement, "security-role-ref"), "role-name", roleName);
+		}
 
-        DOMModelEditOperation domModelOperation = new DOMModelEditOperation( getDescriptorFile() )
-        {
-            protected IStatus doExecute( IDOMDocument document )
-            {
-                return removeAllElements( document, portletTagName );
-            }
-        };
+		// check for event-definition elements
 
-        IStatus status = domModelOperation.execute();
+		Node refNode = null;
 
-        return status;
-    }
+		String[] refElementNames = {
+			"custom-portlet-mode", "custom-window-state", "user-attribute", "security-constraint", "resource-bundle",
+			"filter", "filter-mapping", "default-namespace", "event-definition", "public-render-parameter", "listener",
+			"container-runtime-option"
+		};
 
-    public String[] getAllPortletNames()
-    {
-        final List<String> allPortletNames = new ArrayList<String>();
+		for (int i = 0; i < refElementNames.length; i++) {
+			refNode = NodeUtil.findFirstChild(rootElement, refElementNames[i]);
 
-        final IFile descriptorFile = getDescriptorFile();
+			if (refNode != null) {
+				break;
+			}
+		}
 
-        if( descriptorFile != null )
-        {
-            DOMModelOperation op = new DOMModelReadOperation( descriptorFile )
-            {
-                protected IStatus doExecute( IDOMDocument document )
-                {
-                    NodeList nodeList = document.getElementsByTagName( "portlet-name" ); //$NON-NLS-1$
+		rootElement.insertBefore(newPortletElement, refNode);
 
-                    for( int i = 0; i < nodeList.getLength(); i++ )
-                    {
-                        Element portletName = (Element) nodeList.item( i );
-                        allPortletNames.add( NodeUtil.getTextContent( portletName ) );
-                    }
+		// append a newline text node
 
-                    return Status.OK_STATUS;
-                }
-            };
+		rootElement.appendChild(document.createTextNode(System.getProperty("line.separator")));
 
-            op.execute();
-        }
+		// format the new node added to the model;
 
-        return allPortletNames.toArray( new String[0] );
-    }
+		FormatProcessorXML processor = new FormatProcessorXML();
 
-    public String[] getAllResourceBundles()
-    {
-        final List<String> allResourceBundles = new ArrayList<String>();
+		processor.formatNode(newPortletElement);
 
-        final IFile descriptorFile = getDescriptorFile();
+		return Status.OK_STATUS;
+	}
 
-        if( descriptorFile != null )
-        {
-            DOMModelOperation op = new DOMModelReadOperation( descriptorFile )
-            {
-                protected IStatus doExecute( IDOMDocument document )
-                {
-                    NodeList nodeList = document.getElementsByTagName( "resource-bundle" ); //$NON-NLS-1$
+	public IStatus doRemoveAllPortlets() {
+		String portletTagName = "portlet";
 
-                    for( int i = 0; i < nodeList.getLength(); i++ )
-                    {
-                        Element resourceBundle = (Element) nodeList.item( i );
+		DOMModelEditOperation domModelOperation = new DOMModelEditOperation(getDescriptorFile()) {
 
-                        allResourceBundles.add( NodeUtil.getTextContent( resourceBundle ) );
-                    }
+			protected IStatus doExecute(IDOMDocument document) {
+				return removeAllElements(document, portletTagName);
+			}
 
-                    return Status.OK_STATUS;
-                }
-            };
+		};
 
-            op.execute();
-        }
+		IStatus status = domModelOperation.execute();
 
-        return allResourceBundles.toArray( new String[0] );
-    }
+		return status;
+	}
 
-    public IFile getDescriptorFile()
-    {
-        return super.getDescriptorFile( DESCRIPTOR_FILE );
-    }
+	public String[] getAllPortletNames() {
+		List<String> allPortletNames = new ArrayList<>();
 
-    protected String getPortletClassText( IDataModel model )
-    {
-        return model.getStringProperty( QUALIFIED_CLASS_NAME );
-    }
+		IFile descriptorFile = getDescriptorFile();
+
+		if (descriptorFile != null) {
+			DOMModelOperation op = new DOMModelReadOperation(descriptorFile) {
+
+				protected IStatus doExecute(IDOMDocument document) {
+					NodeList nodeList = document.getElementsByTagName("portlet-name");
+
+					for (int i = 0; i < nodeList.getLength(); i++) {
+						Element portletName = (Element)nodeList.item(i);
+
+						allPortletNames.add(NodeUtil.getTextContent(portletName));
+					}
+
+					return Status.OK_STATUS;
+				}
+
+			};
+
+			op.execute();
+		}
+
+		return allPortletNames.toArray(new String[0]);
+	}
+
+	public String[] getAllResourceBundles() {
+		List<String> allResourceBundles = new ArrayList<>();
+
+		IFile descriptorFile = getDescriptorFile();
+
+		if (descriptorFile != null) {
+			DOMModelOperation op = new DOMModelReadOperation(descriptorFile) {
+
+				protected IStatus doExecute(IDOMDocument document) {
+					NodeList nodeList = document.getElementsByTagName("resource-bundle");
+
+					for (int i = 0; i < nodeList.getLength(); i++) {
+						Element resourceBundle = (Element)nodeList.item(i);
+
+						allResourceBundles.add(NodeUtil.getTextContent(resourceBundle));
+					}
+
+					return Status.OK_STATUS;
+				}
+
+			};
+
+			op.execute();
+		}
+
+		return allResourceBundles.toArray(new String[0]);
+	}
+
+	public IFile getDescriptorFile() {
+		return super.getDescriptorFile(DESCRIPTOR_FILE);
+	}
+
+	protected void addDescriptorOperations() {
+		RemoveSampleElementsOperation rseOperation = new RemoveSampleElementsOperation() {
+
+			@Override
+			public IStatus removeSampleElements() {
+				return doRemoveAllPortlets();
+			};
+
+		};
+
+		addDescriptorOperation(rseOperation);
+
+		AddNewPortletOperation apOperation = new AddNewPortletOperation() {
+
+			@Override
+			public IStatus addNewPortlet(IDataModel model) {
+				IStatus status = Status.OK_STATUS;
+
+				if (canAddNewPortlet(model)) {
+					IFile descriptorFile = getDescriptorFile();
+
+					if (descriptorFile != null) {
+						DOMModelOperation domModelOperation = new DOMModelEditOperation(descriptorFile) {
+
+							protected void createDefaultFile() {
+								createDefaultDescriptor(_DESCRIPTOR_TEMPLATE, "");
+							}
+
+							protected IStatus doExecute(IDOMDocument document) {
+								return doAddNewPortlet(document, model);
+							}
+
+						};
+
+						status = domModelOperation.execute();
+					}
+				}
+
+				return status;
+			}
+
+		};
+
+		addDescriptorOperation(apOperation);
+
+		RemoveAllPortletsOperation rapOperation = new RemoveAllPortletsOperation() {
+
+			@Override
+			public IStatus removeAllPortlets() {
+				return doRemoveAllPortlets();
+			}
+
+		};
+
+		addDescriptorOperation(rapOperation);
+	}
+
+	protected IStatus doAddResourceBundle(IDOMDocument document, String resourceBundle, String portletName) {
+		FormatProcessorXML processor = new FormatProcessorXML();
+
+		NodeList portletNameList = document.getElementsByTagName("portlet-name");
+
+		if ((portletNameList != null) && (portletNameList.getLength() > 0) && !CoreUtil.isNullOrEmpty(resourceBundle)) {
+			Node portletNameNode = null;
+
+			for (int i = 0; i < portletNameList.getLength(); i++) {
+				if (NodeUtil.getTextContent(portletNameList.item(i)).equals(portletName)) {
+					portletNameNode = portletNameList.item(i);
+				}
+			}
+
+			if (portletNameNode == null) {
+				return Status.CANCEL_STATUS;
+			}
+
+			Element newResourceBundleElement = null;
+
+			Node portlet = portletNameNode.getParentNode();
+
+			Node refNode = null;
+
+			Node supports = NodeUtil.findLastChild((Element)portlet, "supports");
+
+			if (supports != null) {
+				Node supportedLocale = NodeUtil.findLastChild((Element)portlet, "supported-locale");
+
+				if (supportedLocale != null) {
+					refNode = supportedLocale;
+				}
+				else {
+					refNode = supports;
+				}
+			}
+			else {
+				return Status.CANCEL_STATUS;
+			}
+
+			newResourceBundleElement = NodeUtil.insertChildElementAfter(
+				(Element)portlet, refNode, "resource-bundle", resourceBundle);
+
+			processor.formatNode(newResourceBundleElement);
+		}
+
+		return Status.OK_STATUS;
+	}
+
+	protected String getPortletClassText(IDataModel model) {
+		return model.getStringProperty(QUALIFIED_CLASS_NAME);
+	}
+
+	private static final String _DESCRIPTOR_TEMPLATE =
+		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<portlet-app xmlns=\"http://java.sun.com/xml/ns/portlet" +
+			"/portlet-app_2_0.xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:" +
+				"schemaLocation=\"http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns" +
+					"/portlet/portlet-app_2_0.xsd\" version=\"2.0\">\n</portlet-app>";
 
 }

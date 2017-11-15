@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.job;
 
@@ -37,139 +36,127 @@ import org.eclipse.osgi.util.NLS;
 /**
  * @author Gregory Amerson
  */
-public class BuildLanguageJob extends Job
-{
+public class BuildLanguageJob extends Job {
 
-    protected IFile langFile;
+	public BuildLanguageJob(IFile langFile) {
+		super(Msgs.buildLanguages);
 
-    public BuildLanguageJob( IFile langFile )
-    {
-        super( Msgs.buildLanguages );
+		this.langFile = langFile;
+		setUser(true);
+	}
 
-        this.langFile = langFile;
-        setUser( true );
-    }
+	@Override
+	protected IStatus run(IProgressMonitor monitor) {
+		IStatus retval = null;
 
-    @Override
-    protected IStatus run( IProgressMonitor monitor )
-    {
-        IStatus retval = null;
+		IWorkspaceDescription desc = ResourcesPlugin.getWorkspace().getDescription();
 
-        IWorkspaceDescription desc = ResourcesPlugin.getWorkspace().getDescription();
+		boolean saveAutoBuild = desc.isAutoBuilding();
 
-        boolean saveAutoBuild = desc.isAutoBuilding();
+		desc.setAutoBuilding(false);
 
-        desc.setAutoBuilding( false );
+		monitor.beginTask(Msgs.buildingLanguages, 100);
 
-        monitor.beginTask( Msgs.buildingLanguages, 100 );
+		IWorkspaceRunnable workspaceRunner = new IWorkspaceRunnable() {
 
-        final IWorkspaceRunnable workspaceRunner = new IWorkspaceRunnable()
-        {
-            public void run( IProgressMonitor monitor ) throws CoreException
-            {
-                runBuildLang( monitor );
-            }
-        };
+			public void run(IProgressMonitor monitor) throws CoreException {
+				runBuildLang(monitor);
+			}
 
-        try
-        {
-            ResourcesPlugin.getWorkspace().setDescription( desc );
+		};
 
-            ResourcesPlugin.getWorkspace().run( workspaceRunner, monitor );
-        }
-        catch( CoreException e1 )
-        {
-            retval = PortletCore.createErrorStatus( e1 );
-        }
-        finally
-        {
-            desc = ResourcesPlugin.getWorkspace().getDescription();
-            desc.setAutoBuilding( saveAutoBuild );
+		try {
+			ResourcesPlugin.getWorkspace().setDescription(desc);
 
-            try
-            {
-                ResourcesPlugin.getWorkspace().setDescription( desc );
-            }
-            catch( CoreException e1 )
-            {
-                retval = PortletCore.createErrorStatus( e1 );
-            }
-        }
+			ResourcesPlugin.getWorkspace().run(workspaceRunner, monitor);
+		}
+		catch (CoreException ce) {
+			retval = PortletCore.createErrorStatus(ce);
+		}
+		finally {
+			desc = ResourcesPlugin.getWorkspace().getDescription();
 
-        return retval == null || retval.isOK() ? Status.OK_STATUS : retval;
-    }
+			desc.setAutoBuilding(saveAutoBuild);
 
-    protected void runBuildLang( IProgressMonitor monitor ) throws CoreException
-    {
-        final ILiferayProject liferayProject = LiferayCore.create( getProject() );
+			try {
+				ResourcesPlugin.getWorkspace().setDescription(desc);
+			}
+			catch (CoreException ce) {
+				retval = PortletCore.createErrorStatus(ce);
+			}
+		}
 
-        if( liferayProject == null )
-        {
-            throw new CoreException( PortletCore.createErrorStatus( NLS.bind(
-                Msgs.couldNotCreateLiferayProject, getProject() ) ) );
-        }
+		if ((retval == null) || retval.isOK()) {
+			return Status.OK_STATUS;
+		}
 
-        final IProjectBuilder builder = liferayProject.adapt( IProjectBuilder.class );
+		return retval;
+	}
 
-        if( builder == null )
-        {
-            throw new CoreException( PortletCore.createErrorStatus( NLS.bind(
-                Msgs.couldNotCreateProjectBuilder, getProject() ) ) );
-        }
+	protected void runBuildLang(IProgressMonitor monitor) throws CoreException {
+		ILiferayProject liferayProject = LiferayCore.create(_getProject());
 
-        monitor.worked( 50 );
+		if (liferayProject == null) {
+			throw new CoreException(
+				PortletCore.createErrorStatus(NLS.bind(Msgs.couldNotCreateLiferayProject, _getProject())));
+		}
 
-        IStatus retval = builder.buildLang( this.langFile, monitor );
+		IProjectBuilder builder = liferayProject.adapt(IProjectBuilder.class);
 
-        if( retval == null )
-        {
-            retval = PortletCore.createErrorStatus( NLS.bind( Msgs.errorRunningBuildLang, getProject() ) );
-        }
+		if (builder == null) {
+			throw new CoreException(
+				PortletCore.createErrorStatus(NLS.bind(Msgs.couldNotCreateProjectBuilder, _getProject())));
+		}
 
-        try
-        {
-            getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
-        }
-        catch( Exception e )
-        {
-            PortletCore.logError( e );
-        }
+		monitor.worked(50);
 
-        getProject().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
+		IStatus retval = builder.buildLang(langFile, monitor);
 
-        try
-        {
-            getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
-        }
-        catch( Exception e )
-        {
-            PortletCore.logError( e );
-        }
+		if (retval == null) {
+			retval = PortletCore.createErrorStatus(NLS.bind(Msgs.errorRunningBuildLang, _getProject()));
+		}
 
-        if( retval == null || ! retval.isOK() )
-        {
-            throw new CoreException( retval );
-        }
+		try {
+			_getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+		}
+		catch (Exception e) {
+			PortletCore.logError(e);
+		}
 
-        monitor.worked( 90 );
-    }
+		_getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
 
-    private IProject getProject()
-    {
-        return this.langFile.getProject();
-    }
+		try {
+			_getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+		}
+		catch (Exception e) {
+			PortletCore.logError(e);
+		}
 
-    private static class Msgs extends NLS
-    {
-        public static String buildingLanguages;
-        public static String buildLanguages;
-        public static String couldNotCreateProjectBuilder;
-        public static String couldNotCreateLiferayProject;
-        public static String errorRunningBuildLang;
+		if ((retval == null) || !retval.isOK()) {
+			throw new CoreException(retval);
+		}
 
-        static
-        {
-            initializeMessages( BuildLanguageJob.class.getName(), Msgs.class );
-        }
-    }
+		monitor.worked(90);
+	}
+
+	protected IFile langFile;
+
+	private IProject _getProject() {
+		return this.langFile.getProject();
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String buildingLanguages;
+		public static String buildLanguages;
+		public static String couldNotCreateLiferayProject;
+		public static String couldNotCreateProjectBuilder;
+		public static String errorRunningBuildLang;
+
+		static {
+			initializeMessages(BuildLanguageJob.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.lfportlet.model.internal;
 
@@ -26,44 +26,36 @@ import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.services.RelativePathService;
 
-
 /**
  * @author Simon Jiang
  */
-public class IconRelativePathService extends RelativePathService
-{
+public class IconRelativePathService extends RelativePathService {
 
-    final List<Path> computeRoots( IProject project )
-    {
-        List<Path> roots = new ArrayList<Path>();
+	List<Path> computeRoots(IProject project) {
+		List<Path> roots = new ArrayList<>();
 
-        if( project != null )
-        {
-            final IFolder webappRoot = CoreUtil.getDefaultDocrootFolder( project );
+		if (project != null) {
+			IFolder webappRoot = CoreUtil.getDefaultDocrootFolder(project);
 
-            if( webappRoot != null )
-            {
-                final IPath location = webappRoot.getLocation();
+			if (webappRoot != null) {
+				IPath location = webappRoot.getLocation();
 
-                if( location != null )
-                {
-                    roots.add( new Path( location.toPortableString() ) );
-                }
-            }
-        }
+				if (location != null) {
+					roots.add(new Path(location.toPortableString()));
+				}
+			}
+		}
 
-        return roots;
-    }
+		return roots;
+	}
 
-    protected IProject project()
-    {
-        return context( Element.class ).adapt( IProject.class );
-    }
+	@Override
+	public List<Path> roots() {
+		return computeRoots(project());
+	}
 
-    @Override
-    public final List<Path> roots()
-    {
-        return computeRoots( project() );
-    }
+	protected IProject project() {
+		return context(Element.class).adapt(IProject.class);
+	}
 
 }

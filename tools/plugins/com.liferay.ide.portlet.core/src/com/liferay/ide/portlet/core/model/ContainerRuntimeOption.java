@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -29,19 +26,18 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Kamesh Sampath
  */
-@Image( path = "images/elcl16/option_16x16.gif" )
-public interface ContainerRuntimeOption extends Element, Nameable
-{
+@Image(path = "images/elcl16/option_16x16.gif")
+public interface ContainerRuntimeOption extends Element, Nameable {
 
-    ElementType TYPE = new ElementType( ContainerRuntimeOption.class );
+	public ElementType TYPE = new ElementType(ContainerRuntimeOption.class);
 
-    // *** Values ***
+	// *** Values ***
 
-    @Type( base = OptionValue.class )
-    @Label( standard = "Options" )
-    @XmlListBinding( mappings = { @XmlListBinding.Mapping( type = OptionValue.class, element = "value" ) } )
-    ListProperty PROP_OPTIONS = new ListProperty( TYPE, "Options" ); //$NON-NLS-1$
+	@Type(base = OptionValue.class)
+	@Label(standard = "Options")
+	@XmlListBinding(mappings = {@XmlListBinding.Mapping(type = OptionValue.class, element = "value")})
+	public 	ListProperty PROP_OPTIONS = new ListProperty(TYPE, "Options");
 
-    ElementList<OptionValue> getOptions();
+	public ElementList<OptionValue> getOptions();
 
 }

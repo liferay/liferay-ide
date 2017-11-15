@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -27,21 +24,19 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-public interface Displayable extends Element
-{
+public interface Displayable extends Element {
 
-    ElementType TYPE = new ElementType( Displayable.class );
+	public ElementType TYPE = new ElementType(Displayable.class);
 
-    /*
-     * Display name Element
-     */
+	/**
+	 * Display name Element
+	 */
+	@Label(standard = "Display name")
+	@XmlBinding(path = "display-name")
+	public ValueProperty PROP_DISPLAY_NAME = new ValueProperty(TYPE, "DisplayName");
 
-    @Label( standard = "Display name" )
-    @XmlBinding( path = "display-name" )
-    ValueProperty PROP_DISPLAY_NAME = new ValueProperty( TYPE, "DisplayName" ); //$NON-NLS-1$
+	public Value<String> getDisplayName();
 
-    Value<String> getDisplayName();
-
-    void setDisplayName( String displayName );
+	public void setDisplayName(String displayName);
 
 }

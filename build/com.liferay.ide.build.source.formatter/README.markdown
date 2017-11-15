@@ -24,6 +24,11 @@ The following folders are already applied to portal code style:
 11. /tools/plugins/com.liferay.ide.xml.search.ui
 12. /tools/plugins/com.liferay.ide.ui
 13. /tools/plugins/com.liferay.ide.upgrade.core
+14. /maven/plugins/com.liferay.ide.maven.core
+15. /maven/plugins/com.liferay.ide.maven.ui
+16. /tools/plugins/com.liferay.ide.portlet.vaadin.core
+17. /tools/plugins/com.liferay.ide.portlet.vaadin.ui
+18. /tools/plugins/com.liferay.ide.portlet.core
 
 ## Something you had better to do firstly by yourself before you run source-formatter:
 1. remove all of *//$NON-NLS-1$* *//$NON-NLS-2$* ...

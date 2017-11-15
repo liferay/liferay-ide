@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.operation;
 
@@ -21,76 +20,64 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class PortletSupertypesValidator extends AbstractSupertypesValidator
-{
+@SuppressWarnings("restriction")
+public class PortletSupertypesValidator extends AbstractSupertypesValidator {
 
-    public static boolean isGenericPortletSuperclass( IDataModel dataModel )
-    {
-        return isGenericPortletSuperclass( dataModel, false );
-    }
+	public static boolean isGenericPortletSuperclass(IDataModel dataModel) {
+		return isGenericPortletSuperclass(dataModel, false);
+	}
 
-    public static boolean isGenericPortletSuperclass( IDataModel dataModel, boolean checkHierarchy )
-    {
-        if( INewPortletClassDataModelProperties.QUALIFIED_GENERIC_PORTLET.equals( getSuperclass( dataModel ) ) )
-        {
-            return true;
-        }
+	public static boolean isGenericPortletSuperclass(IDataModel dataModel, boolean checkHierarchy) {
+		if (INewPortletClassDataModelProperties.QUALIFIED_GENERIC_PORTLET.equals(getSuperclass(dataModel))) {
+			return true;
+		}
 
-        if( checkHierarchy &&
-            hasSuperclass(
-                dataModel, getSuperclass( dataModel ), INewPortletClassDataModelProperties.QUALIFIED_GENERIC_PORTLET ) )
-        {
-            return true;
-        }
+		if (checkHierarchy &&
+			hasSuperclass(
+				dataModel, getSuperclass(dataModel), INewPortletClassDataModelProperties.QUALIFIED_GENERIC_PORTLET)) {
 
-        return false;
-    }
+			return true;
+		}
 
-    public static boolean isLiferayPortletSuperclass( IDataModel dataModel )
-    {
-        return isLiferayPortletSuperclass( dataModel, false );
-    }
+		return false;
+	}
 
-    public static boolean isLiferayPortletSuperclass( IDataModel dataModel, boolean checkHierarchy )
-    {
-        if( INewPortletClassDataModelProperties.QUALIFIED_LIFERAY_PORTLET.equals( getSuperclass( dataModel ) ) )
-        {
-            return true;
-        }
+	public static boolean isLiferayPortletSuperclass(IDataModel dataModel) {
+		return isLiferayPortletSuperclass(dataModel, false);
+	}
 
-        if( checkHierarchy &&
-            hasSuperclass(
-                dataModel, getSuperclass( dataModel ), INewPortletClassDataModelProperties.QUALIFIED_LIFERAY_PORTLET ) )
-        {
+	public static boolean isLiferayPortletSuperclass(IDataModel dataModel, boolean checkHierarchy) {
+		if (INewPortletClassDataModelProperties.QUALIFIED_LIFERAY_PORTLET.equals(getSuperclass(dataModel))) {
+			return true;
+		}
 
-            return true;
-        }
+		if (checkHierarchy &&
+			hasSuperclass(
+				dataModel, getSuperclass(dataModel), INewPortletClassDataModelProperties.QUALIFIED_LIFERAY_PORTLET)) {
 
-        return false;
-    }
+			return true;
+		}
 
-    public static boolean isMVCPortletSuperclass( IDataModel dataModel )
-    {
-        return isMVCPortletSuperclass( dataModel, false );
-    }
+		return false;
+	}
 
-    public static boolean isMVCPortletSuperclass( IDataModel dataModel, boolean checkHierarchy )
-    {
-        if( INewPortletClassDataModelProperties.QUALIFIED_MVC_PORTLET.equals( getSuperclass( dataModel ) ) )
-        {
-            return true;
-        }
+	public static boolean isMVCPortletSuperclass(IDataModel dataModel) {
+		return isMVCPortletSuperclass(dataModel, false);
+	}
 
-        if( checkHierarchy &&
-            hasSuperclass(
-                dataModel, getSuperclass( dataModel ), INewPortletClassDataModelProperties.QUALIFIED_MVC_PORTLET ) )
-        {
+	public static boolean isMVCPortletSuperclass(IDataModel dataModel, boolean checkHierarchy) {
+		if (INewPortletClassDataModelProperties.QUALIFIED_MVC_PORTLET.equals(getSuperclass(dataModel))) {
+			return true;
+		}
 
-            return true;
-        }
+		if (checkHierarchy &&
+			hasSuperclass(
+				dataModel, getSuperclass(dataModel), INewPortletClassDataModelProperties.QUALIFIED_MVC_PORTLET)) {
 
-        return false;
-    }
+			return true;
+		}
+
+		return false;
+	}
 
 }

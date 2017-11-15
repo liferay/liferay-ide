@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.operation;
 
@@ -27,112 +26,98 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
  * @author Cindy Li
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class CreatePortletTemplateModel extends CreateWebClassTemplateModel
-{
-    protected boolean generateGenericInclude = false;
+@SuppressWarnings("restriction")
+public class CreatePortletTemplateModel extends CreateWebClassTemplateModel {
 
-    public CreatePortletTemplateModel( IDataModel dataModel )
-    {
-        super( dataModel );
-    }
+	public CreatePortletTemplateModel(IDataModel dataModel) {
+		super(dataModel);
+	}
 
-    public String getClassName()
-    {
-        return dataModel.getStringProperty( INewPortletClassDataModelProperties.CLASS_NAME );
-    }
+	public String getClassName() {
+		return dataModel.getStringProperty(INewPortletClassDataModelProperties.CLASS_NAME);
+	}
 
-    @Override
-    public Collection<String> getImports()
-    {
-        final List<String> collectionList = new ArrayList<String>();
+	@Override
+	public Collection<String> getImports() {
+		List<String> collectionList = new ArrayList<>();
 
-        for( String importItem : super.getImports() )
-        {
-            if( importItem.contains( "<" ) && importItem.contains( ">" ) )
-            {
-                continue;
-            }
+		for (String importItem : super.getImports()) {
+			if (importItem.contains("<") && importItem.contains(">")) {
+				continue;
+			}
 
-            collectionList.add( importItem );
-        }
+			collectionList.add(importItem);
+		}
 
-        if( !isMVCPortletSuperclass() )
-        {
-            collectionList.add( "java.io.IOException" ); //$NON-NLS-1$
-            collectionList.add( "javax.portlet.PortletException" ); //$NON-NLS-1$
-            // collection.add("javax.portlet.PortletRequest");
-            collectionList.add( "javax.portlet.PortletRequestDispatcher" ); //$NON-NLS-1$
-            // collection.add("javax.portlet.PortletResponse");
-            collectionList.add( "javax.portlet.RenderRequest" ); //$NON-NLS-1$
-            collectionList.add( "javax.portlet.RenderResponse" ); //$NON-NLS-1$
-            collectionList.add( "com.liferay.portal.kernel.log.Log" ); //$NON-NLS-1$
-            collectionList.add( "com.liferay.portal.kernel.log.LogFactoryUtil" ); //$NON-NLS-1$
-        }
+		if (!isMVCPortletSuperclass()) {
+			collectionList.add("java.io.IOException");
+			collectionList.add("javax.portlet.PortletException");
 
-        if( shouldGenerateOverride( INewPortletClassDataModelProperties.PROCESSACTION_OVERRIDE ) )
-        {
-            collectionList.add( "javax.portlet.ActionRequest" ); //$NON-NLS-1$
-            collectionList.add( "javax.portlet.ActionResponse" ); //$NON-NLS-1$
-        }
+			// collection.add("javax.portlet.PortletRequest");
 
-        if( shouldGenerateOverride( INewPortletClassDataModelProperties.SERVERESOURCE_OVERRIDE ) )
-        {
-            collectionList.add( "javax.portlet.ResourceRequest" ); //$NON-NLS-1$
-            collectionList.add( "javax.portlet.ResourceResponse" ); //$NON-NLS-1$
-        }
+			collectionList.add("javax.portlet.PortletRequestDispatcher");
 
-        return collectionList;
-    }
+			// collection.add("javax.portlet.PortletResponse");
 
-    public String getInitParameterName()
-    {
-        return dataModel.getStringProperty( INewPortletClassDataModelProperties.INIT_PARAMETER_NAME );
-    }
+			collectionList.add("javax.portlet.RenderRequest");
+			collectionList.add("javax.portlet.RenderResponse");
+			collectionList.add("com.liferay.portal.kernel.log.Log");
+			collectionList.add("com.liferay.portal.kernel.log.LogFactoryUtil");
+		}
 
-    public boolean hasPortletMode( String portletModeProperty )
-    {
-        return dataModel.getBooleanProperty( portletModeProperty );
-    }
+		if (shouldGenerateOverride(INewPortletClassDataModelProperties.PROCESSACTION_OVERRIDE)) {
+			collectionList.add("javax.portlet.ActionRequest");
+			collectionList.add("javax.portlet.ActionResponse");
+		}
 
-    public boolean isGenericPortletSuperclass()
-    {
-        return isGenericPortletSuperclass( false );
-    }
+		if (shouldGenerateOverride(INewPortletClassDataModelProperties.SERVERESOURCE_OVERRIDE)) {
+			collectionList.add("javax.portlet.ResourceRequest");
+			collectionList.add("javax.portlet.ResourceResponse");
+		}
 
-    public boolean isGenericPortletSuperclass( boolean checkHierarchy )
-    {
-        return PortletSupertypesValidator.isGenericPortletSuperclass( dataModel, checkHierarchy );
-    }
+		return collectionList;
+	}
 
-    public boolean isLiferayPortletSuperclass()
-    {
-        return PortletSupertypesValidator.isLiferayPortletSuperclass( dataModel );
-    }
+	public String getInitParameterName() {
+		return dataModel.getStringProperty(INewPortletClassDataModelProperties.INIT_PARAMETER_NAME);
+	}
 
-    public boolean isMVCPortletSuperclass()
-    {
-        return PortletSupertypesValidator.isMVCPortletSuperclass( dataModel );
-    }
+	public boolean hasPortletMode(String portletModeProperty) {
+		return dataModel.getBooleanProperty(portletModeProperty);
+	}
 
-    public void setGenerateGenericInclude( boolean include )
-    {
-        this.generateGenericInclude = include;
-    }
+	public boolean isGenericPortletSuperclass() {
+		return isGenericPortletSuperclass(false);
+	}
 
-    public boolean shouldGenerateGenericInclude()
-    {
-        return this.generateGenericInclude;
-    }
+	public boolean isGenericPortletSuperclass(boolean checkHierarchy) {
+		return PortletSupertypesValidator.isGenericPortletSuperclass(dataModel, checkHierarchy);
+	}
 
-    public boolean shouldGenerateOverride( String generateProperty )
-    {
-        if( isMVCPortletSuperclass() )
-        {
-            return false;
-        }
+	public boolean isLiferayPortletSuperclass() {
+		return PortletSupertypesValidator.isLiferayPortletSuperclass(dataModel);
+	}
 
-        return dataModel.getBooleanProperty( generateProperty );
-    }
+	public boolean isMVCPortletSuperclass() {
+		return PortletSupertypesValidator.isMVCPortletSuperclass(dataModel);
+	}
+
+	public void setGenerateGenericInclude(boolean include) {
+		generateGenericInclude = include;
+	}
+
+	public boolean shouldGenerateGenericInclude() {
+		return generateGenericInclude;
+	}
+
+	public boolean shouldGenerateOverride(String generateProperty) {
+		if (isMVCPortletSuperclass()) {
+			return false;
+		}
+
+		return dataModel.getBooleanProperty(generateProperty);
+	}
+
+	protected boolean generateGenericInclude = false;
 
 }
