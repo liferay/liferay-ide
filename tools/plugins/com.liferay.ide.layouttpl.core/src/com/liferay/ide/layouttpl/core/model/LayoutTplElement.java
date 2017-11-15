@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.layouttpl.core.model;
 
@@ -26,55 +25,50 @@ import org.eclipse.sapphire.modeling.annotations.Required;
  * @author Kuo Zhang
  * @author Joye Luo
  */
-public interface LayoutTplElement extends CanAddPortletLayouts
-{
+public interface LayoutTplElement extends CanAddPortletLayouts {
 
-    ElementType TYPE = new ElementType( LayoutTplElement.class );
+	public static final ElementType TYPE = new ElementType(LayoutTplElement.class);
 
-    // *** Role ***
+	@DefaultValue(text = "true")
+	@Required
+	@Type(base = Boolean.class)
+	public static final ValueProperty PROP_BOOTSTRAP_STYLE = new ValueProperty(TYPE, "BootstrapStyle");
 
-    @DefaultValue( text = "main" )
-    ValueProperty PROP_ROLE = new ValueProperty( TYPE, "Role" );
+	@DefaultValue(text = "main-content")
+	public static final ValueProperty PROP_ID = new ValueProperty(TYPE, "Id");
 
-    Value<String> getRole();
-    void setRole( String role );
+	@Required
+	@Type(base = Boolean.class)
+	public static final ValueProperty PROP_IS_62 = new ValueProperty(TYPE, "Is62");
 
-    // *** Id ***
+	@DefaultValue(text = "main")
+	public static final ValueProperty PROP_ROLE = new ValueProperty(TYPE, "Role");
 
-    @DefaultValue( text = "main-content" )
-    ValueProperty PROP_ID = new ValueProperty( TYPE, "Id" );
+	@Required
+	public static final ValueProperty PROP_ClASS_NAME = new ValueProperty(TYPE, "ClassName");
 
-    Value<String> getId();
-    void setId( String id );
+	public Value<Boolean> getBootstrapStyle();
 
-    // *** Class Name ***
+	public Value<String> getClassName();
 
-    @Required
-    ValueProperty PROP_ClASS_NAME = new ValueProperty( TYPE, "ClassName" );
+	public Value<String> getId();
 
-    Value<String> getClassName();
-    void setClassName( String className );
+	public Value<Boolean> getIs62();
 
-    // *** Style ***
+	public Value<String> getRole();
 
-    // only two styles, use Boolean, if there are more styles in the future, use subclasses
-    @DefaultValue( text = "true" )
-    @Required
-    @Type( base = Boolean.class )
-    ValueProperty PROP_BOOTSTRAP_STYLE = new ValueProperty( TYPE, "BootstrapStyle" );
+	public void setBootstrapStyle(Boolean value);
 
-    Value<Boolean> getBootstrapStyle();
-    void setBootstrapStyle( String value );
-    void setBootstrapStyle( Boolean value );
+	public void setBootstrapStyle(String value);
 
- // *** Version ***
+	public void setClassName(String className);
 
-    @Required
-    @Type( base = Boolean.class )
-    ValueProperty PROP_IS_62 = new ValueProperty( TYPE, "Is62" );
+	public void setId(String id);
 
-    Value<Boolean> getIs62();
-    void setIs62( String value );
-    void setIs62( Boolean value );
+	public void setIs62(Boolean value);
+
+	public void setIs62(String value);
+
+	public void setRole(String role);
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.layouttpl.core.facet;
 
@@ -23,13 +20,11 @@ import com.liferay.ide.project.core.facet.PluginFacetInstallDataModelProvider;
 /**
  * @author Greg Amerson
  */
-public class LayoutTplPluginFacetInstallDataModelProvider extends PluginFacetInstallDataModelProvider
-{
+public class LayoutTplPluginFacetInstallDataModelProvider extends PluginFacetInstallDataModelProvider {
 
-    @Override
-    protected String getPluginFacetId()
-    {
-        return IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_ID;
-    }
+	@Override
+	protected String getPluginFacetId() {
+		return IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_ID;
+	}
 
 }

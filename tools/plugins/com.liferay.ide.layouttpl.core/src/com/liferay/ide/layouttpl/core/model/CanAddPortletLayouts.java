@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.layouttpl.core.model;
 
@@ -24,19 +23,17 @@ import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
 
-
 /**
  * @author Kuo Zhang
- *
  */
-public interface CanAddPortletLayouts extends Element
-{
-    ElementType TYPE = new ElementType( CanAddPortletLayouts.class );
+public interface CanAddPortletLayouts extends Element {
 
-    @Listeners( value = PortletLayoutsListener.class )
-    @Type( base = PortletLayoutElement.class )
-    ListProperty PROP_PORTLET_LAYOUTS = new ListProperty( TYPE, "PortletLayouts" );
+	public static final ElementType TYPE = new ElementType(CanAddPortletLayouts.class);
 
-    ElementList<PortletLayoutElement> getPortletLayouts();
+	@Listeners(value = PortletLayoutsListener.class)
+	@Type(base = PortletLayoutElement.class)
+	public static final ListProperty PROP_PORTLET_LAYOUTS = new ListProperty(TYPE, "PortletLayouts");
+
+	public ElementList<PortletLayoutElement> getPortletLayouts();
 
 }

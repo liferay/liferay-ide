@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.layouttpl.core.model.internal;
 
@@ -20,80 +19,76 @@ import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
 import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
 import com.liferay.ide.layouttpl.core.model.PortletLayoutElement;
 
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyContentEvent;
-
 
 /**
  * @author Kuo Zhang
- *
  */
-public class PortletColumnsListener extends FilteredListener<PropertyContentEvent>
-{
+public class PortletColumnsListener extends FilteredListener<PropertyContentEvent> {
 
-    @Override
-    protected void handleTypedEvent( PropertyContentEvent event )
-    {
-        LayoutTplElement layouttpl = event.property().element().nearest( LayoutTplElement.class );
-        updateColumns( layouttpl, 1 );
-    }
+	@Override
+	protected void handleTypedEvent(PropertyContentEvent event) {
+		Property property = event.property();
 
-    protected int updateColumns( CanAddPortletLayouts columnsParent, int numId )
-    {
-        for( PortletLayoutElement portletLayout : columnsParent.getPortletLayouts() )
-        {
-            ElementList<PortletColumnElement> columns = portletLayout.getPortletColumns();
+		Element element = property.element();
 
-            int size = columns.size();
+		LayoutTplElement layouttpl = element.nearest(LayoutTplElement.class);
 
-            for( int i = 0; i < size; i++ )
-            {
-                PortletColumnElement column = columns.get( i );
+		updateColumns(layouttpl, 1);
+	}
 
-                if( column.getPortletLayouts().size() == 0 )
-                { 
-                    column.setNumId( String.valueOf( numId++ ) );
-                }
-                else if( column.getPortletLayouts().size() > 0 )
-                {
-                    // when new child is added, the parent column will have no numId
-                    column.setNumId( "N/A" );
-                    numId = updateColumns( column, numId++ );
-                }
+	protected int updateColumns(CanAddPortletLayouts columnsParent, int numId) {
+		for (PortletLayoutElement portletLayout : columnsParent.getPortletLayouts()) {
+			ElementList<PortletColumnElement> columns = portletLayout.getPortletColumns();
 
-                column.setOnly( false );
-                column.setFirst( false );
-                column.setLast( false );
+			int size = columns.size();
 
-                column.setColumnDescriptor( "" );
-                column.setColumnContentDescriptor( "" );
+			for (int i = 0; i < size; i++) {
+				PortletColumnElement column = columns.get(i);
 
-                if( size == 1 )
-                {
-                    column.setOnly( true );
-                    column.setColumnDescriptor( "portlet-column-only" );
-                    column.setColumnContentDescriptor( "portlet-column-content-only" );
-                }
-                else if( size > 1 )
-                {
-                    if( i == 0 )
-                    {
-                        column.setFirst( true );
-                        column.setColumnDescriptor( "portlet-column-first" );
-                        column.setColumnContentDescriptor( "portlet-column-content-first" );
-                    }
-                    else if( i == size - 1 )
-                    {
-                        column.setLast( true );
-                        column.setColumnDescriptor( "portlet-column-last" );
-                        column.setColumnContentDescriptor( "portlet-column-content-last" );
-                    }
-                }
-            }
-        }
+				if (column.getPortletLayouts().size() == 0) {
+					column.setNumId(String.valueOf(numId++));
+				}
+				else if (column.getPortletLayouts().size() > 0) {
 
-        return numId;
-    }
+					// when new child is added, the parent column will have no numId
+
+					column.setNumId("N/A");
+					numId = updateColumns(column, numId++);
+				}
+
+				column.setOnly(false);
+				column.setFirst(false);
+				column.setLast(false);
+
+				column.setColumnDescriptor("");
+				column.setColumnContentDescriptor("");
+
+				if (size == 1) {
+					column.setOnly(true);
+					column.setColumnDescriptor("portlet-column-only");
+					column.setColumnContentDescriptor("portlet-column-content-only");
+				}
+				else if (size > 1) {
+					if (i == 0) {
+						column.setFirst(true);
+						column.setColumnDescriptor("portlet-column-first");
+						column.setColumnContentDescriptor("portlet-column-content-first");
+					}
+					else if (i == (size - 1)) {
+						column.setLast(true);
+						column.setColumnDescriptor("portlet-column-last");
+						column.setColumnContentDescriptor("portlet-column-content-last");
+					}
+				}
+			}
+		}
+
+		return numId;
+	}
 
 }
