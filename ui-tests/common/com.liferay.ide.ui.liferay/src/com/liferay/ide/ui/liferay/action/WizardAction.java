@@ -388,12 +388,16 @@ public class WizardAction extends UIAction {
 	}
 
 	public void prepareNewServer62(String serverName) {
+		ide.sleep();
+
 		_newServerWizard.getServerName().setText(serverName);
 
 		_newServerWizard.getServerTypes().selectTreeItem(LIFERAY_INC, LIFERAY_V_62_SERVER_TOMCAT_7);
 	}
 
 	public void prepareRuntimeType(String category, String type) {
+		ide.sleep();
+
 		_newRuntimeWizard.getServerTypes().selectTreeItem(category, type);
 	}
 
