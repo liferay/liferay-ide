@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -33,32 +30,31 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Kamesh Sampath
  */
-@Image( path = "/images/elcl16/parameter_16x16.gif" )
-@Label( full = "Public Render Parameter", standard = "Public Render Parameter" )
-public interface PublicRenderParameter extends QName, Identifiable
-{
+@Image(path = "/images/elcl16/parameter_16x16.gif")
+@Label(full = "Public Render Parameter", standard = "Public Render Parameter")
+public interface PublicRenderParameter extends QName, Identifiable {
 
-    ElementType TYPE = new ElementType( PublicRenderParameter.class );
+	public ElementType TYPE = new ElementType(PublicRenderParameter.class);
 
-    // *** Identifier ***
+	// *** Identifier ***
 
-    @Label( standard = "Identifier" )
-    @Required
-    @Unique
-    @XmlBinding( path = "identifier" )
-    ValueProperty PROP_IDENTIFIER = new ValueProperty( TYPE, "Identifier" ); //$NON-NLS-1$
+	@Label(standard = "Identifier")
+	@Required
+	@Unique
+	@XmlBinding(path = "identifier")
+	public ValueProperty PROP_IDENTIFIER = new ValueProperty(TYPE, "Identifier");
 
-    Value<String> getIdentifier();
+	public Value<String> getIdentifier();
 
-    void setIdentifier( String value );
+	public void setIdentifier(String value);
 
-    // *** Aliases ***
+	// *** Aliases ***
 
-    @Type( base = AliasQName.class )
-    @Label( standard = "Aliases" )
-    @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "alias", type = AliasQName.class ) } )
-    ListProperty PROP_ALIASES = new ListProperty( TYPE, "Aliases" ); //$NON-NLS-1$
+	@Type(base = AliasQName.class)
+	@Label(standard = "Aliases")
+	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "alias", type = AliasQName.class)})
+	public ListProperty PROP_ALIASES = new ListProperty(TYPE, "Aliases");
 
-    ElementList<AliasQName> getAliases();
+	public ElementList<AliasQName> getAliases();
 
 }

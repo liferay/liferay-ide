@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,16 +10,12 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
-import org.eclipse.sapphire.Length;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Image;
@@ -29,40 +25,39 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-@Image( path = "images/obj16/info_obj.gif" )
-public interface PortletInfo extends Element, Identifiable
-{
+@Image(path = "images/obj16/info_obj.gif")
+public interface PortletInfo extends Element, Identifiable {
 
-    ElementType TYPE = new ElementType( PortletInfo.class );
+	public ElementType TYPE = new ElementType(PortletInfo.class);
 
-    // *** Title ***
+	// *** Title ***
 
-    @Label( standard = "Title" )
-    @XmlBinding( path = "title" )
-    ValueProperty PROP_TITLE = new ValueProperty( TYPE, "Title" ); //$NON-NLS-1$
+	@Label(standard = "Title")
+	@XmlBinding(path = "title")
+	public ValueProperty PROP_TITLE = new ValueProperty(TYPE, "Title");
 
-    Value<String> getTitle();
+	public Value<String> getTitle();
 
-    void setTitle( String value );
+	public void setTitle(String value);
 
-    // *** ShortTitle ***
+	// *** ShortTitle ***
 
-    @Label( standard = "Short Title" )
-    @XmlBinding( path = "short-title" )
-    ValueProperty PROP_SHORT_TITLE = new ValueProperty( TYPE, "ShortTitle" ); //$NON-NLS-1$
+	@Label(standard = "Short Title")
+	@XmlBinding(path = "short-title")
+	public ValueProperty PROP_SHORT_TITLE = new ValueProperty(TYPE, "ShortTitle");
 
-    Value<String> getShortTitle();
+	public 	Value<String> getShortTitle();
 
-    void setShortTitle( String value );
+	public void setShortTitle(String value);
 
-    // *** Keywords ***
+	// *** Keywords ***
 
-    @Label( standard = "Keywords" )
-    @XmlBinding( path = "keywords" )
-    ValueProperty PROP_KEYWORDS = new ValueProperty( TYPE, "Keywords" ); //$NON-NLS-1$
+	@Label(standard = "Keywords")
+	@XmlBinding(path = "keywords")
+	public ValueProperty PROP_KEYWORDS = new ValueProperty(TYPE, "Keywords");
 
-    Value<String> getKeywords();
+	public Value<String> getKeywords();
 
-    void setKeywords( String value );
+	public void setKeywords(String value);
 
 }

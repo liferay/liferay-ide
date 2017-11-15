@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- ******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.lfportlet.model;
 
@@ -27,29 +27,23 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Simon Jiang
  */
-public interface SimpleTriggerValueTrigger extends ISimpleTrigger
-{
+public interface SimpleTriggerValueTrigger extends ISimpleTrigger {
 
-    ElementType TYPE = new ElementType( SimpleTriggerValueTrigger.class );
+	public ElementType TYPE = new ElementType(SimpleTriggerValueTrigger.class);
 
+	// *** Simple Trigger Value ***
 
-    // *** Simple Trigger Value ***
+	@Label(standard = "Simple Trigger Value")
+	@Required
+	@Service(impl = NumberValueValidationService.class, params = {
+		@Service.Param(name = "min", value = "1"), @Service.Param(name = "max", value = "")
 
-    @Label( standard = "Simple Trigger Value" )
-    @Required
-    @Service
-    (
-        impl = NumberValueValidationService.class,
-        params =
-        {
-            @Service.Param( name = "min", value = "1" ),
-            @Service.Param( name = "max", value = "" )
-        }
-    )
-    @XmlBinding( path = "" )
-    ValueProperty PROP_SIMPLE_TRIGGER_VALUE = new ValueProperty( TYPE, "SimpleTriggerValue" ); //$NON-NLS-1$
+	})
+	@XmlBinding(path = "")
+	public ValueProperty PROP_SIMPLE_TRIGGER_VALUE = new ValueProperty(TYPE, "SimpleTriggerValue");
 
-    Value<String> getSimpleTriggerValue();
-    void setSimpleTriggerValue( String value );
+	public Value<String> getSimpleTriggerValue();
+
+	public void setSimpleTriggerValue(String value);
 
 }

@@ -1,21 +1,15 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
- *   
+ *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
-/**
- * 
  */
 
 package com.liferay.ide.portlet.core.model.lfrportlet.common;
@@ -41,52 +35,54 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 @GenerateImpl
 public interface ISimple extends Element {
 
-	ElementType TYPE = new ElementType( ISimple.class );
+	public ElementType TYPE = new ElementType(ISimple.class);
 
 	// *** PropertyKey ***
 
-	@Label( standard = "Property Key" )
-	@XmlBinding( path = "property-key" )
-	@Enablement( expr = "${SimpleTriggerValue=='0'}" )
-	@DefaultValue( text = "PROPERTY_KEY" )
-	@CustomXmlValueBinding( impl = ChoiceValueBinding.class, params = { "property-key", "property-key",
-		"cron-trigger-value" } )
-	ValueProperty PROP_PROPERTY_KEY = new ValueProperty( TYPE, "PropertyKey" );
+	@Label(standard = "Property Key")
+	@XmlBinding(path = "property-key")
+	@Enablement(expr = "${SimpleTriggerValue=='0'}")
+	@DefaultValue(text = "PROPERTY_KEY")
+	@CustomXmlValueBinding(impl = ChoiceValueBinding.class, params = {"property-key", "property-key",
+		"cron-trigger-value"
+	})
+	public ValueProperty PROP_PROPERTY_KEY = new ValueProperty(TYPE, "PropertyKey");
 
-	Value<String> getPropertyKey();
+	public Value<String> getPropertyKey();
 
-	void setPropertyKey( String value );
+	public void setPropertyKey(String value);
 
 	// *** Simple Trigger Value ***
 
-	@Label( standard = "Simple Trigger Value" )
-	@Type( base = Integer.class )
-	@XmlBinding( path = "simple-trigger-value" )
-	@DefaultValue( text = "0" )
-	@Enablement( expr = "${PropertyKey=='PROPERTY_KEY'}" )
-	@CustomXmlValueBinding( impl = ChoiceValueBinding.class, params = { "simple-trigger-value", "property-key",
-		"cron-trigger-value" } )
-	ValueProperty PROP_SIMPLE_TRIGGER_VALUE = new ValueProperty( TYPE, "SimpleTriggerValue" );
+	@Label(standard = "Simple Trigger Value")
+	@Type(base = Integer.class)
+	@XmlBinding(path = "simple-trigger-value")
+	@DefaultValue(text = "0")
+	@Enablement(expr = "${PropertyKey=='PROPERTY_KEY'}")
+	@CustomXmlValueBinding(impl = ChoiceValueBinding.class, params = {"simple-trigger-value", "property-key",
+		"cron-trigger-value"
+	})
+	public ValueProperty PROP_SIMPLE_TRIGGER_VALUE = new ValueProperty(TYPE, "SimpleTriggerValue");
 
-	Value<Integer> getSimpleTriggerValue();
+	public Value<Integer> getSimpleTriggerValue();
 
-	void setSimpleTriggerValue( Integer value );
+	public void setSimpleTriggerValue(Integer value);
 
-	void setSimpleTriggerValue( String value );
+	public void setSimpleTriggerValue(String value);
 
 	// *** TimeUnit ***
 
-	@Type( base = TimeUnit.class )
-	@Label( standard = "Version" )
-	@DefaultValue( text = "second" )
+	@Type(base = TimeUnit.class)
+	@Label(standard = "Version")
+	@DefaultValue(text = "second")
 	@Required
-	@XmlBinding( path = "time-unit" )
-	ValueProperty PROP_TIME_UNIT = new ValueProperty( TYPE, "TimeUnit" );
+	@XmlBinding(path = "time-unit")
+	public ValueProperty PROP_TIME_UNIT = new ValueProperty(TYPE, "TimeUnit");
 
-	Value<TimeUnit> getTimeUnit();
+	public Value<TimeUnit> getTimeUnit();
 
-	void setTimeUnit( TimeUnit timeUnit );
+	public void setTimeUnit(TimeUnit timeUnit);
 
-	void setTimeUnit( String timeUnit );
+	public void setTimeUnit(String timeUnit);
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core;
 
@@ -19,6 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.IOException;
 import java.io.Writer;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -36,286 +36,258 @@ import org.apache.commons.lang.StringUtils;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "rawtypes" )
-public class PluginPropertiesConfigurationLayout extends PropertiesConfigurationLayout
-{
+@SuppressWarnings("rawtypes")
+public class PluginPropertiesConfigurationLayout extends PropertiesConfigurationLayout {
 
-    public static class PluginPropertiesWriter extends PropertiesWriter
-    {
+	public static final String[] sortedKeys = {
+		"name", "module-group-id", "module-incremental-version", "tags", "short-description", "long-description",
+		"change-log", "page-url", "author", "licenses", "liferay-versions", "portal-dependency-jars", "deploy-excludes",
+		"portal-dependency-tlds", "speed-filters-enabled"
+	};
 
-        /** Constant for the escaping character. */
-        private static final String ESCAPE = "\\"; //$NON-NLS-1$
+	public PluginPropertiesConfigurationLayout(PropertiesConfiguration config) {
+		super(config);
 
-        /** The list of possible key/value separators */
-        private static final char[] SEPARATORS = new char[] { '=', ':' };
+		setForceSingleLine(true);
+		setSingleLine(IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS, false);
+		setSingleLine(IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS, false);
+		setSingleLine(IPluginPackageModel.PROPERTY_DEPLOY_EXCLUDE, false);
+		setSingleLine(IPluginPackageModel.PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS, false);
+	}
 
-        /** The white space characters used as key/value separators. */
-        private static final char[] WHITE_SPACE = new char[] { ' ', '\t', '\f' };
+	public boolean isWrappedProperty(String key) {
+		if (key.equals(IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS) ||
+			key.equals(IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS) ||
+			key.equals(IPluginPackageModel.PROPERTY_DEPLOY_EXCLUDE) ||
+			key .equals(IPluginPackageModel.PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS)) {
 
-        private char delimiter;
+			return true;
+		}
 
-        public PluginPropertiesWriter( Writer writer, char delimiter )
-        {
-            super( writer, delimiter );
+		return false;
+	}
 
-            this.delimiter = delimiter;
-        }
+	public void save(Writer out) throws ConfigurationException {
+		try {
+			char delimiter =
+				getConfiguration().isDelimiterParsingDisabled() ? 0 : getConfiguration().getListDelimiter();
 
-        public void writeProperty( String key, Object value, boolean forceSingleLine, boolean wrappedProperty )
-            throws IOException
-        {
+			PluginPropertiesWriter writer = new PluginPropertiesWriter(out, delimiter);
 
-            String v;
+			if (getHeaderComment() != null) {
+				writer.writeln(getCanonicalHeaderComment(true));
+				writer.writeln(null);
+			}
 
-            if( value instanceof List )
-            {
-                List values = (List) value;
+			List<Object> keyList = Arrays.asList(getKeys().toArray());
 
-                if( forceSingleLine )
-                {
-                    v = makeSingleLineValue( values );
-                }
-                else
-                {
-                    writeProperty( key, values );
-                    return;
-                }
-            }
-            else if( wrappedProperty )
-            {
-                String[] values = value.toString().split( "," ); //$NON-NLS-1$
+			Comparator<Object> comparator = new Comparator<Object>() {
 
-                StringBuffer buf = new StringBuffer();
+				public int compare(Object o1, Object o2) {
+					int index1 = Integer.MAX_VALUE;
+					int index2 = Integer.MAX_VALUE;
 
-                for( String val : values )
-                {
-                    if( key.equals( IPluginPackageModel.PROPERTY_DEPLOY_EXCLUDE ) &&
-                        !val.startsWith( "**/WEB-INF/lib/" ) )
-                    {
-                        val = "**/WEB-INF/lib/" + val;
-                    }
+					for (int i = 0; i < sortedKeys.length; i++) {
+						if (sortedKeys[i].equals(o1)) {
+							index1 = i;
+						}
 
-                    if( CoreUtil.isNullOrEmpty( buf.toString() ) )
-                    {
-                        buf.append( "\\\n" ); //$NON-NLS-1$
-                        buf.append( "    " + escapeValue( val ) ); //$NON-NLS-1$
-                    }
-                    else
-                    {
-                        buf.append( ",\\\n    " + escapeValue( val ) ); //$NON-NLS-1$
-                    }
-                }
-                v = buf.toString();
-            }
-            else
-            {
-                v = escapeValue( value );
-            }
+						if (sortedKeys[i].equals(o2)) {
+							index2 = i;
+						}
+					}
 
-            write( escapeKey( key ) );
-            write( "=" ); //$NON-NLS-1$
-            write( v );
+					if (index1 < index2) {
+						return -1;
+					}
+					else if (index1 > index2) {
+						return 1;
+					}
 
-            writeln( null );
-        }
+					return 0;
+				}
 
-        private String escapeKey( String key )
-        {
-            StringBuffer newkey = new StringBuffer();
+			};
 
-            for( int i = 0; i < key.length(); i++ )
-            {
-                char c = key.charAt( i );
+			Collections.sort(keyList, comparator);
 
-                if( ArrayUtils.contains( SEPARATORS, c ) || ArrayUtils.contains( WHITE_SPACE, c ) )
-                {
-                    // escape the separator
-                    newkey.append( '\\' );
-                    newkey.append( c );
-                }
-                else
-                {
-                    newkey.append( c );
-                }
-            }
+			for (Iterator it = keyList.iterator(); it.hasNext();) {
+				String key = (String)it.next();
 
-            return newkey.toString();
-        }
+				if (getConfiguration().containsKey(key)) {
 
-        private String escapeValue( Object value )
-        {
-            String escapedValue = StringEscapeUtils.escapeJava( String.valueOf( value ) );
+					// Output blank lines before property
 
-            if( delimiter != 0 )
-            {
-                escapedValue = StringUtils.replace( escapedValue, String.valueOf( delimiter ), ESCAPE + delimiter );
-            }
+					for (int i = 0; i < getBlancLinesBefore(key); i++) {
+						writer.writeln(null);
+					}
 
-            return escapedValue;
-        }
+					// Output the comment
 
-        private String makeSingleLineValue( List values )
-        {
-            if( !values.isEmpty() )
-            {
-                Iterator it = values.iterator();
+					if (getComment(key) != null) {
+						writer.writeln(getCanonicalComment(key, true));
+					}
 
-                String lastValue = escapeValue( it.next() );
+					// Output the property and its value
 
-                StringBuffer buf = new StringBuffer( lastValue );
+					boolean singleLine = false;
 
-                while( it.hasNext() )
-                {
-                    // if the last value ended with an escape character, it has
-                    // to be escaped itself; otherwise the list delimiter will
-                    // be escaped
-                    if( lastValue.endsWith( ESCAPE ) )
-                    {
-                        buf.append( ESCAPE ).append( ESCAPE );
-                    }
+					if ((isForceSingleLine() || isSingleLine(key)) &&
+						!getConfiguration().isDelimiterParsingDisabled()) {
 
-                    buf.append( delimiter );
+						singleLine = true;
+					}
 
-                    lastValue = escapeValue( it.next() );
+					boolean wrappedProperty = isWrappedProperty(key);
 
-                    buf.append( lastValue );
-                }
+					writer.writeProperty(key, getConfiguration().getProperty(key), singleLine, wrappedProperty);
+				}
+			}
 
-                return buf.toString();
-            }
-            else
-            {
-                return null;
-            }
-        }
+			writer.flush();
+			writer.close();
+		}
+		catch (IOException ioe) {
+			throw new ConfigurationException(ioe);
+		}
+	}
 
-    }
+	public static class PluginPropertiesWriter extends PropertiesWriter {
 
-    public static final String[] sortedKeys = new String[] 
-    {
-        "name",  //$NON-NLS-1$
-        "module-group-id",  //$NON-NLS-1$
-        "module-incremental-version", //$NON-NLS-1$
-        "tags",  //$NON-NLS-1$
-        "short-description",  //$NON-NLS-1$
-        "long-description",  //$NON-NLS-1$
-        "change-log",  //$NON-NLS-1$
-        "page-url",  //$NON-NLS-1$
-        "author",  //$NON-NLS-1$
-        "licenses",  //$NON-NLS-1$
-        "liferay-versions",  //$NON-NLS-1$
-        "portal-dependency-jars", //$NON-NLS-1$
-        "deploy-excludes", //$NON-NLS-1$
-        "portal-dependency-tlds",  //$NON-NLS-1$
-        "speed-filters-enabled"  //$NON-NLS-1$
-    };
+		public PluginPropertiesWriter(Writer writer, char delimiter) {
+			super(writer, delimiter);
 
-    public PluginPropertiesConfigurationLayout( PropertiesConfiguration config )
-    {
-        super( config );
+			_delimiter = delimiter;
+		}
 
-        this.setForceSingleLine( true );
-        this.setSingleLine( IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS, false );
-        this.setSingleLine( IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS, false );
-        this.setSingleLine( IPluginPackageModel.PROPERTY_DEPLOY_EXCLUDE, false );
-        this.setSingleLine( IPluginPackageModel.PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS, false );
-    }
+		public void writeProperty(String key, Object value, boolean forceSingleLine, boolean wrappedProperty)
+			throws IOException {
 
-    public boolean isWrappedProperty( String key )
-    {
-        return key.equals( IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS ) ||
-            key.equals( IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS ) ||
-            key.equals( IPluginPackageModel.PROPERTY_DEPLOY_EXCLUDE ) ||
-            key.equals( IPluginPackageModel.PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS );
-    }
+			String v;
 
-    public void save( Writer out ) throws ConfigurationException
-    {
-        try
-        {
-            char delimiter =
-                getConfiguration().isDelimiterParsingDisabled() ? 0 : getConfiguration().getListDelimiter();
+			if (value instanceof List) {
+				List values = (List)value;
 
-            PluginPropertiesWriter writer = new PluginPropertiesWriter( out, delimiter );
+				if (forceSingleLine) {
+					v = _makeSingleLineValue(values);
+				}
+				else {
+					writeProperty(key, values);
+					return;
+				}
+			}
+			else if (wrappedProperty) {
+				String[] values = value.toString().split(",");
 
-            if( getHeaderComment() != null )
-            {
-                writer.writeln( getCanonicalHeaderComment( true ) );
-                writer.writeln( null );
-            }
+				StringBuffer buf = new StringBuffer();
 
-            List<Object> keyList = Arrays.asList( getKeys().toArray() );
+				for (String val : values) {
+					if (key.equals(IPluginPackageModel.PROPERTY_DEPLOY_EXCLUDE) && !val.startsWith("**/WEB-INF/lib/")) {
+						val = "**/WEB-INF/lib/" + val;
+					}
 
-            Collections.sort( keyList, new Comparator<Object>()
-            {
-                public int compare( Object o1, Object o2 )
-                {
-                    int index1 = Integer.MAX_VALUE;
-                    int index2 = Integer.MAX_VALUE;
+					if (CoreUtil.isNullOrEmpty(buf.toString())) {
+						buf.append("\\\n");
+						buf.append("    " + _escapeValue(val));
+					}
+					else {
+						buf.append(",\\\n    " + _escapeValue(val));
+					}
+				}
 
-                    for( int i = 0; i < sortedKeys.length; i++ )
-                    {
-                        if( sortedKeys[i].equals( o1 ) )
-                        {
-                            index1 = i;
-                        }
+				v = buf.toString();
+			}
+			else {
+				v = _escapeValue(value);
+			}
 
-                        if( sortedKeys[i].equals( o2 ) )
-                        {
-                            index2 = i;
-                        }
-                    }
+			write(_escapeKey(key));
+			write("=");
+			write(v);
 
-                    if( index1 < index2 )
-                    {
-                        return -1;
-                    }
-                    else if( index1 > index2 )
-                    {
-                        return 1;
-                    }
+			writeln(null);
+		}
 
-                    return 0;
-                }
+		private String _escapeKey(String key) {
+			StringBuffer newkey = new StringBuffer();
 
-            } );
+			for (int i = 0; i < key.length(); i++) {
+				char c = key.charAt(i);
 
-            for( Iterator it = keyList.iterator(); it.hasNext(); )
-            {
-                String key = (String) it.next();
+				if (ArrayUtils.contains(_SEPARATORS, c) || ArrayUtils.contains(_WHITE_SPACE, c)) {
 
-                if( getConfiguration().containsKey( key ) )
-                {
+					// escape the separator
 
-                    // Output blank lines before property
-                    for( int i = 0; i < getBlancLinesBefore( key ); i++ )
-                    {
-                        writer.writeln( null );
-                    }
+					newkey.append('\\');
+					newkey.append(c);
+				}
+				else {
+					newkey.append(c);
+				}
+			}
 
-                    // Output the comment
-                    if( getComment( key ) != null )
-                    {
-                        writer.writeln( getCanonicalComment( key, true ) );
-                    }
+			return newkey.toString();
+		}
 
-                    // Output the property and its value
-                    boolean singleLine =
-                        ( isForceSingleLine() || isSingleLine( key ) ) &&
-                            !getConfiguration().isDelimiterParsingDisabled();
+		private String _escapeValue(Object value) {
+			String escapedValue = StringEscapeUtils.escapeJava(String.valueOf(value));
 
-                    boolean wrappedProperty = isWrappedProperty( key );
+			if (_delimiter != 0) {
+				escapedValue = StringUtils.replace(escapedValue, String.valueOf(_delimiter), _ESCAPE + _delimiter);
+			}
 
-                    writer.writeProperty( key, getConfiguration().getProperty( key ), singleLine, wrappedProperty );
-                }
-            }
+			return escapedValue;
+		}
 
-            writer.flush();
-            writer.close();
-        }
-        catch( IOException ioex )
-        {
-            throw new ConfigurationException( ioex );
-        }
-    }
+		private String _makeSingleLineValue(List values) {
+			if (!values.isEmpty()) {
+				Iterator it = values.iterator();
+
+				String lastValue = _escapeValue(it.next());
+
+				StringBuffer buf = new StringBuffer(lastValue);
+
+				while (it.hasNext()) {
+
+					// if the last value ended with an escape character, it has
+					// to be escaped itself; otherwise the list delimiter will
+					// be escaped
+
+					if (lastValue.endsWith(_ESCAPE)) {
+						buf.append(_ESCAPE).append(_ESCAPE);
+					}
+
+					buf.append(_delimiter);
+
+					lastValue = _escapeValue(it.next());
+
+					buf.append(lastValue);
+				}
+
+				return buf.toString();
+			}
+			else {
+				return null;
+			}
+		}
+
+		/**
+		 * Constant for the escaping character.
+		 */
+		private static final String _ESCAPE = "\\";
+
+		/**
+		 * The list of possible key/value separators
+		 */
+		private static final char[] _SEPARATORS = {'=', ':'};
+
+		/**
+		 * The white space characters used as key/value separators.
+		 */
+		private static final char[] _WHITE_SPACE = {' ', '\t', '\f'};
+
+		private char _delimiter;
+
+	}
+
 }

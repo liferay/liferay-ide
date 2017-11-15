@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -28,22 +25,21 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-public interface LifeCycle extends Element
-{
+public interface LifeCycle extends Element {
 
-    ElementType TYPE = new ElementType( LifeCycle.class );
+	public ElementType TYPE = new ElementType(LifeCycle.class);
 
-    // *** LifeCycle ***
+	// *** LifeCycle ***
 
-    @Type( base = LifeCycleType.class )
-    @Label( standard = "lifecycle name" )
-    @XmlBinding( path = "" )
-    ValueProperty PROP_LIFE_CYCLE = new ValueProperty( TYPE, "LifeCycle" ); //$NON-NLS-1$
+	@Type(base = LifeCycleType.class)
+	@Label(standard = "lifecycle name")
+	@XmlBinding(path = "")
+	public ValueProperty PROP_LIFE_CYCLE = new ValueProperty(TYPE, "LifeCycle");
 
-    Value<LifeCycleType> getLifeCycle();
+	public Value<LifeCycleType> getLifeCycle();
 
-    void setLifeCycle( String value );
+	public void setLifeCycle(String value);
 
-    void setLifeCycle( LifeCycleType value );
+	public void setLifeCycle(LifeCycleType value);
 
 }

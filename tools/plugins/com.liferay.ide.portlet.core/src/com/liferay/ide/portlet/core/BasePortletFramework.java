@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core;
 
@@ -30,42 +29,37 @@ import org.eclipse.core.runtime.Status;
  * @author Simon Jiang
  * @author Kuo Zhang
  */
-public abstract class BasePortletFramework extends AbstractPortletFramework
-{
+public abstract class BasePortletFramework extends AbstractPortletFramework {
 
-    @Override
-    public IStatus postProjectCreated(
-        IProject project, String frameworkName, String portletName, IProgressMonitor monitor )
-    {
-        IStatus status = Status.OK_STATUS;
+	@Override
+	public IStatus postProjectCreated(
+		IProject project, String frameworkName, String portletName, IProgressMonitor monitor) {
 
-        if( ! CoreUtil.isNullOrEmpty( portletName ) )
-        {
-            final PortletDescriptorHelper portletDH = new PortletDescriptorHelper( project );
+		IStatus status = Status.OK_STATUS;
 
-            status = portletDH.configurePortletXml( portletName );
+		if (!CoreUtil.isNullOrEmpty(portletName)) {
+			PortletDescriptorHelper portletDH = new PortletDescriptorHelper(project);
 
-            if( !status.isOK() )
-            {
-                return status;
-            }
+			status = portletDH.configurePortletXml(portletName);
 
-            final LiferayPortletDescriptorHelper liferayPortletDH = new LiferayPortletDescriptorHelper( project );
+			if (!status.isOK()) {
+				return status;
+			}
 
-            status = liferayPortletDH.configureLiferayPortletXml( portletName );
+			LiferayPortletDescriptorHelper liferayPortletDH = new LiferayPortletDescriptorHelper(project);
 
-            if( !status.isOK() )
-            {
-                return status;
-            }
+			status = liferayPortletDH.configureLiferayPortletXml(portletName);
 
-            final LiferayDisplayDescriptorHelper liferayDisplayDH = new LiferayDisplayDescriptorHelper( project );
+			if (!status.isOK()) {
+				return status;
+			}
 
-            status = liferayDisplayDH.configureLiferayDisplayXml( portletName );
+			LiferayDisplayDescriptorHelper liferayDisplayDH = new LiferayDisplayDescriptorHelper(project);
 
-        }
+			status = liferayDisplayDH.configureLiferayDisplayXml(portletName);
+		}
 
-        return status;
-    }
+		return status;
+	}
 
 }

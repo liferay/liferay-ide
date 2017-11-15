@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model.internal;
 
@@ -34,85 +31,84 @@ import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 /**
  * @author Kamesh Sampath
  */
-public final class QNameValueBinding extends XmlValueBindingImpl
-{
+public class QNameValueBinding extends XmlValueBindingImpl {
 
-    private String[] params;
-    private XmlPath path;
+	@Override
+	public XmlNode getXmlNode() {
+		XmlElement parent = xml();
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.PropertyBinding#init(org.eclipse.sapphire.modeling.Element,
-     * org.eclipse.sapphire.modeling.Property, java.lang.String[])
-     */
-    @Override
-    public void init( Property property )
-    {
-        super.init( property );
+		XmlElement element = parent.getChildElement(params[0], false);
 
-        this.params = property.definition().getAnnotation( CustomXmlValueBinding.class ).params();
-        this.path = new XmlPath( params[0], resource().getXmlNamespaceResolver() );
-    }
+		if (element != null) {
+			return element;
+		}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#read()
-     */
-    @Override
-    public String read()
-    {
-        final XmlElement parent = xml( false );
-        String value = null;
-        if( parent != null )
-        {
-            final XmlElement qNameElement = parent.getChildElement( params[0], false );
-            value = qNameElement.getText();
-        }
+		return null;
+	}
 
-        return value;
-    }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.sapphire.modeling.PropertyBinding#init(org.eclipse.sapphire.
+	 *      modeling.Element, org.eclipse.sapphire.modeling.Property,
+	 *      java.lang.String[])
+	 */
+	@Override
+	public void init(Property property) {
+		super.init(property);
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#write(java.lang.String)
-     */
-    @Override
-    public void write( final String value )
-    {
-        final XmlElement parent = xml( true );
-        // System.out.println( "EventDefinitionValueBinding.write()" + parent );
-        final XmlElement qNameElement = parent.getChildElement( params[0], true );
-        qNameElement.setChildNodeText( this.path, value, true );
+		this.params = property.definition().getAnnotation(CustomXmlValueBinding.class).params();
+		this.path = new XmlPath(params[0], resource().getXmlNamespaceResolver());
+	}
 
-        // Only for debugging purposes
-        try
-        {
-            PortletModelUtil.printDocument( parent.getDomNode().getOwnerDocument(), System.out );
-        }
-        catch( IOException e )
-        {
-            PortletCore.logError( e );
-        }
-        catch( TransformerException e )
-        {
-            PortletCore.logError( e );
-        }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#read()
+	 */
+	@Override
+	public String read() {
+		XmlElement parent = xml(false);
+		String value = null;
 
-    }
+		if (parent != null) {
+			XmlElement qNameElement = parent.getChildElement(params[0], false);
 
-    @Override
-    public XmlNode getXmlNode()
-    {
-        final XmlElement parent = xml();
+			value = qNameElement.getText();
+		}
 
-        XmlElement element = parent.getChildElement( params[0], false );
+		return value;
+	}
 
-        if( element != null )
-        {
-            return element;
-        }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#write(java.lang.String)
+	 */
+	@Override
+	public void write(String value) {
+		XmlElement parent = xml(true);
 
-        return null;
-    }
+		// System.out.println( "EventDefinitionValueBinding.write()" + parent );
+
+		XmlElement qNameElement = parent.getChildElement(params[0], true);
+
+		qNameElement.setChildNodeText(this.path, value, true);
+
+		// Only for debugging purposes
+
+		try {
+			PortletModelUtil.printDocument(parent.getDomNode().getOwnerDocument(), System.out);
+		}
+		catch (IOException ioe) {
+			PortletCore.logError(ioe);
+		}
+		catch (TransformerException te) {
+			PortletCore.logError(te);
+		}
+	}
+
+	private String[] params;
+	private XmlPath path;
 
 }

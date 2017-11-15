@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- ******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.lfportlet.model;
 
@@ -30,39 +30,33 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlElementBinding;
 /**
  * @author Simon Jiang
  */
-public interface SimpleTrigger extends ISimpleTrigger
-{
+public interface SimpleTrigger extends ISimpleTrigger {
 
-    ElementType TYPE = new ElementType( SimpleTrigger.class );
+	public ElementType TYPE = new ElementType(SimpleTrigger.class);
 
+	// *** Simple Trigger ***
 
-    // *** Simple Trigger ***
+	@Required
+	@Type(base = ISimpleTrigger.class, possible = {PropertySimpleTrigger.class, SimpleTriggerValueTrigger.class})
+	@XmlElementBinding(path = "", mappings = {
+		@XmlElementBinding.Mapping(element = "property-key", type = PropertySimpleTrigger.class),
+		@XmlElementBinding.Mapping(element = "simple-trigger-value", type = SimpleTriggerValueTrigger.class)
 
-    @Required
-    @Type( base = ISimpleTrigger.class, possible = { PropertySimpleTrigger.class, SimpleTriggerValueTrigger.class } )
-    @XmlElementBinding
-    (
-        path = "",
-        mappings =
-        {
-            @XmlElementBinding.Mapping( element = "property-key", type = PropertySimpleTrigger.class ),
-            @XmlElementBinding.Mapping( element = "simple-trigger-value", type = SimpleTriggerValueTrigger.class )
-        }
-    )
-    ElementProperty PROP_SIMPLE_TRIGGER = new ElementProperty( TYPE, "SimpleTrigger" );
+	})
+	public ElementProperty PROP_SIMPLE_TRIGGER = new ElementProperty(TYPE, "SimpleTrigger");
 
-    ElementHandle<ISimpleTrigger> getSimpleTrigger();
+	public ElementHandle<ISimpleTrigger> getSimpleTrigger();
 
+	// *** Time Unit ***
 
-    // *** Time Unit ***
+	@DefaultValue(text = "second")
+	@Label(standard = "Time Unit")
+	@Required
+	@PossibleValues(values = {"day", "hour", "minute", "second", "week"})
+	@XmlBinding(path = "time-unit")
+	public ValueProperty PROP_TIME_UNIT = new ValueProperty(TYPE, "TimeUnit");
 
-    @DefaultValue( text = "second" )
-    @Label( standard = "Time Unit" )
-    @Required
-    @PossibleValues( values = { "day", "hour", "minute", "second", "week" } )
-    @XmlBinding( path = "time-unit" )
-    ValueProperty PROP_TIME_UNIT = new ValueProperty( TYPE, "TimeUnit" ); //$NON-NLS-1$
+	public Value<String> getTimeUnit();
 
-    Value<String> getTimeUnit();
-    void setTimeUnit( String value );
+	public void setTimeUnit(String value);
 }

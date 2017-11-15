@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -31,35 +28,34 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlValueBinding;
 /**
  * @author Kamesh Sampath
  */
-@Label( standard = "filter mapping" )
-@Image( path = "images/elcl16/filter_mapping_16x16.gif" )
-public interface FilterMapping extends Element
-{
+@Image(path = "images/elcl16/filter_mapping_16x16.gif")
+@Label(standard = "filter mapping")
+public interface FilterMapping extends Element {
 
-    ElementType TYPE = new ElementType( FilterMapping.class );
+	public ElementType TYPE = new ElementType(FilterMapping.class);
 
-    // *** Filter ***
+	// *** Filter ***
 
-    @Label( standard = "filter" )
-    @Required
-    @PossibleValues( property = "/Filters/Name" )
-    @XmlBinding( path = "filter-name" )
-    ValueProperty PROP_FILTER = new ValueProperty( TYPE, "Filter" ); //$NON-NLS-1$
+	@Label(standard = "filter")
+	@Required
+	@PossibleValues(property = "/Filters/Name")
+	@XmlBinding(path = "filter-name")
+	public ValueProperty PROP_FILTER = new ValueProperty(TYPE, "Filter");
 
-    Value<String> getFilter();
+	public Value<String> getFilter();
 
-    void setFilter( String value );
+	public void setFilter(String value);
 
-    // *** Portlet ***
+	// *** Portlet ***
 
-    @Label( standard = "portlet" )
-    @Required
-    @PossibleValues( property = "/Portlets/PortletName" )
-    @XmlValueBinding( path = "portlet-name", removeNodeOnSetIfNull = false )
-    ValueProperty PROP_PORTLET = new ValueProperty( TYPE, "Portlet" ); //$NON-NLS-1$
+	@Label(standard = "portlet")
+	@Required
+	@PossibleValues(property = "/Portlets/PortletName")
+	@XmlValueBinding(path = "portlet-name", removeNodeOnSetIfNull = false)
+	public 	ValueProperty PROP_PORTLET = new ValueProperty(TYPE, "Portlet");
 
-    Value<String> getPortlet();
+	public Value<String> getPortlet();
 
-    void setPortlet( String value );
+	public void setPortlet(String value);
 
 }

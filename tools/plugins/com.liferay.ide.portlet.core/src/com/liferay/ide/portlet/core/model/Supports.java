@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -39,44 +36,43 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Kamesh Sampath
  */
-@Label( standard = "Supports configuration" )
-@Image( path = "images/obj16/supports_obj.gif" )
-public interface Supports extends Element
-{
+@Image(path = "images/obj16/supports_obj.gif")
+@Label(standard = "Supports configuration")
+public interface Supports extends Element {
 
-    ElementType TYPE = new ElementType( Supports.class );
+	public ElementType TYPE = new ElementType(Supports.class);
 
-    // *** MimeType ***
+	// *** MimeType ***
 
-    @Label( standard = "Mime Type" )
-    @InitialValue( text = "text/html" )
-    @Required
-    @XmlBinding( path = "mime-type" )
-    ValueProperty PROP_MIME_TYPE = new ValueProperty( TYPE, "MimeType" ); //$NON-NLS-1$
+	@Label(standard = "Mime Type")
+	@InitialValue(text = "text/html")
+	@Required
+	@XmlBinding(path = "mime-type")
+	public ValueProperty PROP_MIME_TYPE = new ValueProperty(TYPE, "MimeType");
 
-    Value<String> getMimeType();
+	public Value<String> getMimeType();
 
-    void setMimeType( String value );
+	public void setMimeType(String value);
 
-    // *** PortletModes ***
+	// *** PortletModes ***
 
-    @Type( base = PortletMode.class )
-    @Label( standard = "Portlet Modes" )
-    @Service( impl = PortletModePossibleValueService.class )
-    @Collation( ignoreCaseDifferences = "true" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "portlet-mode", type = PortletMode.class ) )
-    ListProperty PROP_PORTLET_MODES = new ListProperty( TYPE, "PortletModes" ); //$NON-NLS-1$
+	@Type(base = PortletMode.class)
+	@Label(standard = "Portlet Modes")
+	@Service(impl = PortletModePossibleValueService.class)
+	@Collation(ignoreCaseDifferences = "true")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "portlet-mode", type = PortletMode.class))
+	public ListProperty PROP_PORTLET_MODES = new ListProperty(TYPE, "PortletModes");
 
-    ElementList<PortletMode> getPortletModes();
+	public ElementList<PortletMode> getPortletModes();
 
-    // *** Window States ***
+	// *** Window States ***
 
-    @Type( base = WindowState.class )
-    @Label( standard = "Window States" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "window-state", type = WindowState.class ) )
-    @Service( impl = WindowStatesPossibleValueService.class )
-    @Collation( ignoreCaseDifferences = "true" )
-    ListProperty PROP_WINDOW_STATES = new ListProperty( TYPE, "WindowStates" ); //$NON-NLS-1$
+	@Type(base = WindowState.class)
+	@Label(standard = "Window States")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "window-state", type = WindowState.class))
+	@Service(impl = WindowStatesPossibleValueService.class)
+	@Collation(ignoreCaseDifferences = "true")
+	public 	ListProperty PROP_WINDOW_STATES = new ListProperty(TYPE, "WindowStates");
 
-    ElementList<WindowState> getWindowStates();
+	public ElementList<WindowState> getWindowStates();
 }
