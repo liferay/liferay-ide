@@ -174,9 +174,26 @@ public class WizardAction extends UIAction {
 		_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
 	}
 
-	public void prepareComponentClass(String projectName, String componentClassTemplate) {
+	public void prepareComponentClass(String projectName, String template) {
 		_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
-		_newLiferayComponentWizard.getComponentClassTemplates().setSelection(componentClassTemplate);
+		_newLiferayComponentWizard.getComponentClassTemplates().setSelection(template);
+
+		ide.sleep();
+	}
+
+	public void prepareComponentClass(String projectName, String template, String className) {
+		_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
+		_newLiferayComponentWizard.getComponentClassTemplates().setSelection(template);
+		_newLiferayComponentWizard.getComponentClassName().setText(className);
+
+		ide.sleep();
+	}
+
+	public void prepareComponentClass(String projectName, String template, String className, String packageName) {
+		_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
+		_newLiferayComponentWizard.getComponentClassTemplates().setSelection(template);
+		_newLiferayComponentWizard.getComponentClassName().setText(className);
+		_newLiferayComponentWizard.getPackageName().setText(packageName);
 
 		ide.sleep();
 	}

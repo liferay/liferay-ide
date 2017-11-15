@@ -37,7 +37,13 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		wizardAction.finishToWait();
 
 		wizardAction.openNewLiferayComponentClassWizard();
-		wizardAction.prepareComponentClass(projectName, MODEL_LISTENER);
+
+		String className = "MyListener";
+		String packageName = "com.liferay.ide.test";
+		String template = MODEL_LISTENER;
+
+		wizardAction.prepareComponentClass(projectName, template, className, packageName);
+
 		wizardAction.openSelectModelClassAndServiceDialog();
 
 		dialogAction.prepareText("*com.liferay.blogs.kernel.model.BlogsEntry");
@@ -46,8 +52,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		wizardAction.finishToWait();
 
 		Assert.assertTrue(
-			viewAction.visibleProjectFileTry(
-				projectName, "src/main/java", "test.component.maven.portlet", "TestComponentMavenModelListener.java"));
+			viewAction.visibleProjectFileTry(projectName, "src/main/java", packageName, className + ".java"));
 
 		viewAction.deleteProject(projectName);
 	}

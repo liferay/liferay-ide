@@ -41,12 +41,16 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
-		wizardAction.prepareComponentClass(projectName);
+		String className = "MyPortlet";
+		String packageName = "com.liferay.ide.test";
+		String template = PORTLET_UPCASE;
+
+		wizardAction.prepareComponentClass(projectName, template, className, packageName);
 
 		wizardAction.finishToWait();
 
 		Assert.assertTrue(
-			viewAction.visibleProjectFileTry(projectName, "src/main/java", "content", "TestComponentPortlet.java"));
+			viewAction.visibleProjectFileTry(projectName, "src/main/java", packageName, className + ".java"));
 
 		viewAction.deleteProject(projectName);
 	}
@@ -63,7 +67,11 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
-		wizardAction.prepareComponentClass(projectName, SERVICE_WRAPPER_UPCASE);
+		String className = "MyServiceWrapper";
+		String packageName = "com.liferay.ide.test";
+		String template = SERVICE_WRAPPER_UPCASE;
+
+		wizardAction.prepareComponentClass(projectName, template, className, packageName);
 
 		wizardAction.openSelectModelClassAndServiceDialog();
 
@@ -74,8 +82,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		wizardAction.finishToWait();
 
 		Assert.assertTrue(
-			viewAction.visibleProjectFileTry(
-				projectName, "src/main/java", "content", "TestComponentGradleServiceHook.java"));
+			viewAction.visibleProjectFileTry(projectName, "src/main/java", packageName, className + ".java"));
 
 		viewAction.deleteProject(projectName);
 	}
