@@ -18,6 +18,8 @@ import com.liferay.ide.ui.liferay.SwtbotBase;
 
 import java.io.IOException;
 
+import org.eclipse.core.runtime.IPath;
+
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -32,6 +34,34 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 	@BeforeClass
 	public static void init() throws IOException {
 		envAction.unzipServer();
+
+		String serverName = "Liferay 7-fragment-gradle";
+
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+
+		dialogAction.openNewRuntimeWizard();
+
+		wizardAction.prepareLiferay7RuntimeType();
+
+		wizardAction.next();
+
+		IPath serverDir = envAction.getLiferayServerDir();
+
+		IPath fullServerDir = serverDir.append(envAction.getLiferayPluginServerName());
+
+		wizardAction.prepareLiferay7RuntimeInfo(serverName, fullServerDir.toOSString());
+
+		wizardAction.finish();
+
+		dialogAction.confirmPreferences();
+
+		wizardAction.openNewLiferayServerWizard();
+
+		wizardAction.prepareNewServer(serverName);
+
+		wizardAction.finish();
 	}
 
 	@Test
@@ -39,14 +69,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 		String projectName = "test-fragment-jsp-gradle";
 
 		wizardAction.openNewFragmentWizard();
-
-		wizardAction.openNewRuntimeWizardFragment();
-
-		wizardAction.next();
-
-		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
-
-		wizardAction.finish();
 
 		wizardAction.prepareFragmentGradle(projectName);
 
@@ -75,14 +97,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.openNewRuntimeWizardFragment();
-
-		wizardAction.next();
-
-		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
-
-		wizardAction.finish();
-
 		wizardAction.prepareFragmentGradle(projectName);
 
 		wizardAction.next();
@@ -110,14 +124,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.openNewRuntimeWizardFragment();
-
-		wizardAction.next();
-
-		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
-
-		wizardAction.finish();
-
 		wizardAction.prepareFragmentGradle(projectName);
 
 		wizardAction.next();
@@ -144,14 +150,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 		String projectName = "test-fragment-portlet-properties-gradle";
 
 		wizardAction.openNewFragmentWizard();
-
-		wizardAction.openNewRuntimeWizardFragment();
-
-		wizardAction.next();
-
-		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
-
-		wizardAction.finish();
 
 		wizardAction.prepareFragmentGradle(projectName);
 
@@ -186,14 +184,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.openNewRuntimeWizardFragment();
-
-		wizardAction.next();
-
-		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
-
-		wizardAction.finish();
-
 		wizardAction.prepareFragmentGradle(projectName);
 
 		wizardAction.next();
@@ -220,14 +210,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 		String projectName = "test-fragment-whole-files-gradle";
 
 		wizardAction.openNewFragmentWizard();
-
-		wizardAction.openNewRuntimeWizardFragment();
-
-		wizardAction.next();
-
-		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
-
-		wizardAction.finish();
 
 		wizardAction.prepareFragmentGradle(projectName);
 
