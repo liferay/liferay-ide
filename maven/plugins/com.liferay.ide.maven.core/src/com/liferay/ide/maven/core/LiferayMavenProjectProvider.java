@@ -17,6 +17,7 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.maven.core.aether.AetherUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.descriptor.UpdateDescriptorVersionOperation;
@@ -100,14 +101,14 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 					File pomFile = new File(locationDir, IMavenConstants.POM_FILE_NAME);
 
-					if (!pomFile.exists() && locationDir.getParentFile().exists()) {
+					if (FileUtil.notExists(pomFile) && FileUtil.exists(locationDir.getParentFile())) {
 
 						// try one level up for when user is adding new module
 
 						pomFile = new File(locationDir.getParentFile(), IMavenConstants.POM_FILE_NAME);
 					}
 
-					if (pomFile.exists()) {
+					if (FileUtil.exists(pomFile)) {
 						Model model = maven.readModel(pomFile);
 
 						File parentDir = pomFile.getParentFile();
@@ -119,7 +120,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 							parentDir = parentDir.getParentFile();
 
-							if ((parentDir != null) && parentDir.exists()) {
+							if (FileUtil.exists(parentDir)) {
 								try {
 									model = maven.readModel(new File(parentDir, IMavenConstants.POM_FILE_NAME));
 								}
@@ -182,7 +183,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 			File parentPom = new File(locationDir, IMavenConstants.POM_FILE_NAME);
 
-			if (parentPom.exists()) {
+			if (FileUtil.exists(parentPom)) {
 				try {
 					IMaven maven = MavenPlugin.getMaven();
 
@@ -204,7 +205,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 
 			File parentPom = new File(locationDir, IMavenConstants.POM_FILE_NAME);
 
-			if (parentPom.exists()) {
+			if (FileUtil.exists(parentPom)) {
 				try {
 					IMaven maven = MavenPlugin.getMaven();
 

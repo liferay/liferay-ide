@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOpMethods;
@@ -104,7 +105,7 @@ public class MavenModuleFragmentProjectProvider
 				for (String path : gradleFiles) {
 					IFile gradleFile = newProject.getFile(path);
 
-					if (gradleFile.exists()) {
+					if (FileUtil.exists(gradleFile)) {
 						gradleFile.delete(true, monitor);
 					}
 				}

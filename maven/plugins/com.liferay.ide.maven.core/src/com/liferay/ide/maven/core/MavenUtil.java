@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.server.core.ILiferayRuntime;
@@ -413,7 +414,7 @@ public class MavenUtil {
 		IMavenProjectRegistry projectManager = MavenPlugin.getMavenProjectRegistry();
 		IFile pomResource = project.getFile(IMavenConstants.POM_FILE_NAME);
 
-		if (pomResource.exists()) {
+		if (FileUtil.exists(pomResource)) {
 			return projectManager.create(pomResource, true, monitor);
 		}
 
@@ -464,27 +465,27 @@ public class MavenUtil {
 
 		IFile pomFile = mavenProject.getFile("pom.xml");
 
-		if (pomFile.exists()) {
-			try (FileReader reader = new FileReader(pomFile.getLocation().toFile())) {
-				Model model = mavenReader.read(reader);
+		if (FileUtil.notExists(pomFile)) {
+			return false;
+		}
 
-				if (model != null) {
-					List<Dependency> dependencies = model.getDependencies();
+		try (FileReader reader = new FileReader(pomFile.getLocation().toFile())) {
+			Model model = mavenReader.read(reader);
 
-					for (Dependency dependency : dependencies) {
-						String tempgroutId = dependency.getGroupId();
-						String tempartifactId = dependency.getArtifactId();
+			if (model != null) {
+				List<Dependency> dependencies = model.getDependencies();
 
-						if (groupId.equals(tempgroutId) && artifactId.equals(tempartifactId)) {
-							return true;
-						}
+				for (Dependency dependency : dependencies) {
+					String tempgroutId = dependency.getGroupId();
+					String tempartifactId = dependency.getArtifactId();
+
+					if (groupId.equals(tempgroutId) && artifactId.equals(tempartifactId)) {
+						return true;
 					}
 				}
-
-				return false;
 			}
-			catch (Exception e) {
-			}
+		}
+		catch (Exception e) {
 		}
 
 		return false;
@@ -520,8 +521,10 @@ public class MavenUtil {
 	}
 
 	public static boolean isMavenProject(IProject project) throws CoreException {
-		if ((project != null) && project.exists() && project.isAccessible() &&
-			(project.hasNature(IMavenConstants.NATURE_ID) || project.getFile(IMavenConstants.POM_FILE_NAME).exists())) {
+		IFile pomFile = project.getFile(IMavenConstants.POM_FILE_NAME);
+
+		if (FileUtil.exists(project) && project.isAccessible() &&
+			(project.hasNature(IMavenConstants.NATURE_ID) || FileUtil.exists(pomFile))) {
 
 			return true;
 		}
@@ -530,7 +533,7 @@ public class MavenUtil {
 	}
 
 	public static boolean isPomFile(IFile pomFile) {
-		if ((pomFile != null) && pomFile.exists() && IMavenConstants.POM_FILE_NAME.equals(pomFile.getName()) &&
+		if (FileUtil.exists(pomFile) && IMavenConstants.POM_FILE_NAME.equals(pomFile.getName()) &&
 			pomFile.getParent() instanceof IProject) {
 
 			return true;
@@ -548,9 +551,10 @@ public class MavenUtil {
 		try {
 			if ((mavenProject.getModel().getParent() == null) || (mavenProject.getParent() != null)) {
 
-				// If the method is called without error, we can assume the project has been
-				// fully loaded
-				// No need to continue.
+				/*
+				 *  If the method is called without error, we can assume the project has been fully loaded
+				 *  No need to continue.
+				 */
 
 				return false;
 			}
@@ -611,8 +615,9 @@ public class MavenUtil {
 				boolean alreadyExists = false;
 
 				for (IProject project : CoreUtil.getAllProjects()) {
-					if (project.exists() && project.getLocationURI().equals(mavenuri)) {
+					if (FileUtil.exists(project) && project.getLocationURI().equals(mavenuri)) {
 						alreadyExists = true;
+
 						break;
 					}
 				}

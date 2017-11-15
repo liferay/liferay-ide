@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectImporter;
+import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
 
@@ -39,7 +40,7 @@ public class MavenModuleProjectImporter extends AbstractLiferayProjectImporter {
 
 		File pom = new File(location, "pom.xml");
 
-		if (pom.exists()) {
+		if (FileUtil.exists(pom)) {
 			retval = Status.OK_STATUS;
 		}
 

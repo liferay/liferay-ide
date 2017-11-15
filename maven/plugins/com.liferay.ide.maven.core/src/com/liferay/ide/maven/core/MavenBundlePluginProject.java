@@ -108,7 +108,7 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 
 		IFile manifest = getProject().getFile("target/classes/META-INF/MANIFEST.MF");
 
-		if (manifest.exists()) {
+		if (FileUtil.exists(manifest)) {
 			manifest.delete(true, monitor);
 		}
 
@@ -136,13 +136,13 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 
 		IFolder targetFolder = _getTargetFolder(getProject(), relativePath);
 
-		if (targetFolder.exists()) {
+		if (FileUtil.exists(targetFolder)) {
 
 			// targetFolder.refreshLocal( IResource.DEPTH_ONE, monitor );
 
 			IPath targetFile = targetFolder.getRawLocation().append(targetName);
 
-			if (targetFile.toFile().exists()) {
+			if (FileUtil.exists(targetFile)) {
 				outputJar = targetFile;
 			}
 		}
@@ -163,10 +163,10 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 
 			IFolder targetFolder = getProject().getFolder("target");
 
-			if (targetFolder.exists()) {
+			if (FileUtil.exists(targetFolder)) {
 				IPath targetFile = targetFolder.getRawLocation().append(targetName);
 
-				if (targetFile.toFile().exists()) {
+				if (FileUtil.exists(targetFile)) {
 					outputJar = targetFile;
 				}
 			}
@@ -198,7 +198,7 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 
 		File file = artifact.getFile();
 
-		if ((file != null) && file.exists() && !file.getName().equals("classes")) {
+		if (FileUtil.exists(file) && !file.getName().equals("classes")) {
 			retval = new DefaultMaven2OsgiConverter().getBundleSymbolicName(artifact);
 		}
 		else {
@@ -216,7 +216,7 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 	public boolean isFragmentBundle() {
 		IFile bndFile = getProject().getFile("bnd.bnd");
 
-		if (bndFile.exists()) {
+		if (FileUtil.exists(bndFile)) {
 			try {
 				String content = FileUtil.readContents(bndFile.getContents());
 
@@ -234,7 +234,7 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 	private IFolder _getTargetFolder(IProject project, IPath relativePath) {
 		IFolder targetFolder = project.getFolder(relativePath);
 
-		if (!targetFolder.exists()) {
+		if (FileUtil.notExists(targetFolder)) {
 			targetFolder = project.getFolder("target");
 		}
 

@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.upgrade.ILiferayLegacyProjectUpdater;
 
 import java.io.File;
@@ -217,7 +218,7 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 				domModel.changedModel();
 			}
 
-			if (tempPomFile.exists()) {
+			if (FileUtil.exists(tempPomFile)) {
 				tempPomFile.delete(true, null);
 			}
 
@@ -741,7 +742,7 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 		IFile portletFile = project.getFile("src/main/webapp/WEB-INF/portlet.xml");
 		IFile liferayPortletFile = project.getFile("src/main/webapp/WEB-INF/liferay-portlet.xml");
 
-		if (portletFile.exists() && liferayPortletFile.exists()) {
+		if (FileUtil.exists(portletFile) && FileUtil.exists(liferayPortletFile)) {
 			return true;
 		}
 
@@ -751,7 +752,7 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 	private boolean _isServiceBuilderProject(IProject project) {
 		IFile serviceFile = project.getFile("src/main/webapp/WEB-INF/service.xml");
 
-		if (serviceFile.exists()) {
+		if (FileUtil.exists(serviceFile)) {
 			return true;
 		}
 
@@ -769,7 +770,7 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 	private boolean _isThemeProject(IProject project) {
 		IFile lookAndFeelFile = project.getFile("src/main/webapp/WEB-INF/liferay-look-and-feel.xml");
 
-		if (lookAndFeelFile.exists()) {
+		if (FileUtil.exists(lookAndFeelFile)) {
 			return true;
 		}
 

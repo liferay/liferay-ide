@@ -18,6 +18,7 @@ import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.WizardUtil;
@@ -110,7 +111,7 @@ public class AddServiceBuilderOperation
 
 		IFile serviceBuilderFile = defaultDocroot.getFile(path);
 
-		if (!serviceBuilderFile.exists()) {
+		if (FileUtil.notExists(serviceBuilderFile)) {
 			try {
 				createDefaultServiceBuilderFile(serviceBuilderFile, monitor);
 			}

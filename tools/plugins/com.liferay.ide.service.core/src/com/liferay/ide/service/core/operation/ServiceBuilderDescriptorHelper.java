@@ -16,6 +16,7 @@ package com.liferay.ide.service.core.operation;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 import com.liferay.ide.project.core.descriptor.RemoveSampleElementsOperation;
@@ -89,7 +90,7 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper {
 	public IStatus addEntity(String entityName) {
 		IFile descriptorFile = getDescriptorFile();
 
-		if ((descriptorFile == null) || !descriptorFile.exists()) {
+		if (FileUtil.notExists(descriptorFile)) {
 			return Status.OK_STATUS;
 		}
 
@@ -112,7 +113,7 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper {
 	public IStatus removeAllEntities() {
 		IFile descriptorFile = getDescriptorFile();
 
-		if ((descriptorFile == null) || !descriptorFile.exists()) {
+		if (FileUtil.notExists(descriptorFile)) {
 			return Status.OK_STATUS;
 		}
 

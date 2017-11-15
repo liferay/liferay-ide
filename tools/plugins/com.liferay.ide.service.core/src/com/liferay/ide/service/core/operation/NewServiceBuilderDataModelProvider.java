@@ -20,6 +20,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.service.core.AddServiceBuilderOperation;
 import com.liferay.ide.service.core.ServiceCore;
 import com.liferay.ide.service.core.util.ServiceUtil;
@@ -82,7 +83,7 @@ public class NewServiceBuilderDataModelProvider
 		else if (propertyName.equals(SOURCE_FOLDER)) {
 			IFolder sourceFolder = getDefaultJavaSourceFolder();
 
-			if ((sourceFolder != null) && sourceFolder.exists()) {
+			if (FileUtil.exists(sourceFolder)) {
 				return sourceFolder.getFullPath().toOSString();
 			}
 		}
@@ -134,7 +135,7 @@ public class NewServiceBuilderDataModelProvider
 		if (SERVICE_FILE.equals(propertyName)) {
 			IFile serviceFile = getServiceFile();
 
-			if ((serviceFile != null) && serviceFile.exists()) {
+			if (FileUtil.exists(serviceFile)) {
 				return ServiceCore.createErrorStatus(Msgs.projectContainsServiceXmlFile);
 			}
 		}
@@ -256,7 +257,7 @@ public class NewServiceBuilderDataModelProvider
 
 		IResource serviceXmlResource = webproject.findDocrootResource(new Path("WEB-INF/" + serviceFileProperty));
 
-		if ((serviceXmlResource != null) && serviceXmlResource.exists() && (serviceXmlResource instanceof IFile)) {
+		if (FileUtil.exists(serviceXmlResource) && (serviceXmlResource instanceof IFile)) {
 			return (IFile)serviceXmlResource;
 		}
 

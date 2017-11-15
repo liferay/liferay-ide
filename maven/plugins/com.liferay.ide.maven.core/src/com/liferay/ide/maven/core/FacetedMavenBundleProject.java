@@ -16,6 +16,7 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayPortal;
+import com.liferay.ide.core.util.FileUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,18 +88,18 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
 
 		IFolder targetFolder = getProject().getFolder("target");
 
-		if (targetFolder.exists()) {
+		if (FileUtil.exists(targetFolder)) {
 
 			// targetFolder.refreshLocal( IResource.DEPTH_ONE, monitor );
 
 			IPath targetFile = targetFolder.getRawLocation().append(targetName);
 
-			if (targetFile.toFile().exists()) {
+			if (FileUtil.exists(targetFile)) {
 				outputJar = targetFile;
 			}
 		}
 
-		if ((outputJar == null) || !outputJar.toFile().exists()) {
+		if (FileUtil.notExists(outputJar)) {
 			throw new CoreException(
 				LiferayMavenCore.createErrorStatus(
 					"Unable to get output bundle for project " + getProject().getName()));
