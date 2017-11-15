@@ -1,14 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2010 SAS Institute, Inc. and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *     Larry Isaacs - Initial API and implementation
- *     Greg Amerson <gregory.amerson@liferay.com>
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.server.tomcat.ui.command;
 
@@ -18,46 +20,26 @@ import org.eclipse.jst.server.tomcat.core.internal.Messages;
 import org.eclipse.jst.server.tomcat.core.internal.command.ServerCommand;
 
 /**
- * Command to change the server model
- *
  * @author Terry Jia
  */
-@SuppressWarnings( "restriction" )
-public class SetServerModeCommand extends ServerCommand
-{
+@SuppressWarnings("restriction")
+public class SetServerModeCommand extends ServerCommand {
 
-    protected int serverMode;
-    protected int oldServerMode;
+	public SetServerModeCommand(LiferayTomcatServer server, int serverMode) {
+		super(server, Messages.serverEditorActionSetDeployDirectory);
+		this.serverMode = serverMode;
+	}
 
-    /**
-     * Constructs command to set the server mode
-     *
-     * @param server
-     *            a Tomcat server
-     * @param server
-     *            mode
-     */
-    public SetServerModeCommand( LiferayTomcatServer server, int serverMode )
-    {
-        super( server, Messages.serverEditorActionSetDeployDirectory );
-        this.serverMode = serverMode;
-    }
+	public void execute() {
+		oldServerMode = ((LiferayTomcatServer)server).getServerMode();
+		((LiferayTomcatServer)server).setServerMode(serverMode);
+	}
 
-    /**
-     * Execute setting the server model
-     */
-    public void execute()
-    {
-        oldServerMode = ( (LiferayTomcatServer) server ).getServerMode();
-        ( (LiferayTomcatServer) server ).setServerMode( serverMode );
-    }
+	public void undo() {
+		((LiferayTomcatServer)server).setServerMode(oldServerMode);
+	}
 
-    /**
-     * Restore prior server model
-     */
-    public void undo()
-    {
-        ( (LiferayTomcatServer) server ).setServerMode( oldServerMode );
-    }
+	protected int oldServerMode;
+	protected int serverMode;
 
 }

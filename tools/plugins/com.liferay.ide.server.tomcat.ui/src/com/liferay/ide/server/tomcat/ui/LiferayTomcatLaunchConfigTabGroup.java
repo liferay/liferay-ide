@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.tomcat.ui;
 
@@ -28,41 +27,38 @@ import org.eclipse.wst.server.ui.ServerLaunchConfigurationTab;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class LiferayTomcatLaunchConfigTabGroup extends TomcatLaunchConfigurationTabGroup
-{
+@SuppressWarnings("restriction")
+public class LiferayTomcatLaunchConfigTabGroup extends TomcatLaunchConfigurationTabGroup {
 
-    public LiferayTomcatLaunchConfigTabGroup()
-    {
-    }
+	public LiferayTomcatLaunchConfigTabGroup() {
+	}
 
-    public void createTabs( ILaunchConfigurationDialog dialog, String mode )
-    {
-        ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[6];
+	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
+		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[6];
 
-        tabs[0] = new ServerLaunchConfigurationTab( new String[] { getServerTypeId() } );
-        tabs[0].setLaunchConfigurationDialog( dialog );
+		tabs[0] = new ServerLaunchConfigurationTab(new String[] {getServerTypeId()});
+		tabs[0].setLaunchConfigurationDialog(dialog);
 
-        tabs[1] = new JavaArgumentsTab();
-        tabs[1].setLaunchConfigurationDialog( dialog );
+		tabs[1] = new JavaArgumentsTab();
+		tabs[1].setLaunchConfigurationDialog(dialog);
 
-        tabs[2] = new JavaClasspathTab();
-        tabs[2].setLaunchConfigurationDialog( dialog );
+		tabs[2] = new JavaClasspathTab();
+		tabs[2].setLaunchConfigurationDialog(dialog);
 
-        tabs[3] = new SourceLookupTab();
-        tabs[3].setLaunchConfigurationDialog( dialog );
+		tabs[3] = new SourceLookupTab();
+		tabs[3].setLaunchConfigurationDialog(dialog);
 
-        tabs[4] = new EnvironmentTab();
-        tabs[4].setLaunchConfigurationDialog( dialog );
+		tabs[4] = new EnvironmentTab();
+		tabs[4].setLaunchConfigurationDialog(dialog);
 
-        tabs[5] = new CommonTab();
-        tabs[5].setLaunchConfigurationDialog( dialog );
+		tabs[5] = new CommonTab();
+		tabs[5].setLaunchConfigurationDialog(dialog);
 
-        setTabs( tabs );
-    }
+		setTabs(tabs);
+	}
 
-    protected String getServerTypeId()
-    {
-        return "com.liferay.ide.eclipse.server.tomcat"; //$NON-NLS-1$
-    }
+	protected String getServerTypeId() {
+		return "com.liferay.ide.eclipse.server.tomcat";
+	}
+
 }

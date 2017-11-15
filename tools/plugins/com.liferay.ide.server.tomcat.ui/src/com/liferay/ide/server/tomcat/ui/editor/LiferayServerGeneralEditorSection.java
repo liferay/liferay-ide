@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,41 +10,36 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.server.tomcat.ui.editor;
 
 import org.eclipse.jst.server.tomcat.ui.internal.editor.ServerGeneralEditorSection;
 
-@SuppressWarnings( "restriction" )
-public class LiferayServerGeneralEditorSection extends ServerGeneralEditorSection
-{
+/**
+ * @author Greg Amerson
+ */
+@SuppressWarnings("restriction")
+public class LiferayServerGeneralEditorSection extends ServerGeneralEditorSection {
 
-    public LiferayServerGeneralEditorSection()
-    {
-        super();
-    }
+	public LiferayServerGeneralEditorSection() {
+	}
 
-    @Override
-    protected void initialize()
-    {
-        super.initialize();
+	@Override
+	protected void initialize() {
+		super.initialize();
 
-        if( this.noPublish != null )
-        {
-            this.noPublish.setEnabled( false );
-        }
+		if (noPublish != null) {
+			noPublish.setEnabled(false);
+		}
 
-        if( this.separateContextFiles != null )
-        {
-            this.separateContextFiles.setEnabled( false );
-        }
+		if (separateContextFiles != null) {
+			separateContextFiles.setEnabled(false);
+		}
 
-        if( this.secure != null )
-        {
-            this.secure.setEnabled( false );
-        }
-    }
+		if (secure != null) {
+			secure.setEnabled(false);
+		}
+	}
 
 }

@@ -1,14 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2010 SAS Institute, Inc. and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *     Larry Isaacs - Initial API and implementation
- *     Greg Amerson <gregory.amerson@liferay.com>
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.server.tomcat.ui.command;
 
@@ -18,44 +20,26 @@ import org.eclipse.jst.server.tomcat.core.internal.Messages;
 import org.eclipse.jst.server.tomcat.core.internal.command.ServerCommand;
 
 /**
- * Command to change the server model
- *
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class SetUseDefaultPortalSeverSettingsCommand extends ServerCommand
-{
+@SuppressWarnings("restriction")
+public class SetUseDefaultPortalSeverSettingsCommand extends ServerCommand {
 
-    protected boolean useDefaultPortalServerSettings;
-    protected boolean oldUseDefaultPortalServerSettings;
+	public SetUseDefaultPortalSeverSettingsCommand(LiferayTomcatServer server, boolean useDefaultPortalServerSettings) {
+		super(server, Messages.serverEditorActionSetDeployDirectory);
+		this.useDefaultPortalServerSettings = useDefaultPortalServerSettings;
+	}
 
-    /**
-     * Constructs command to set portal server setting
-     *
-     * @param server a Tomcat server
-     * @param value of portalServerSettings
-     */
-    public SetUseDefaultPortalSeverSettingsCommand( LiferayTomcatServer server, boolean useDefaultPortalServerSettings )
-    {
-        super( server, Messages.serverEditorActionSetDeployDirectory );
-        this.useDefaultPortalServerSettings = useDefaultPortalServerSettings;
-    }
+	public void execute() {
+		oldUseDefaultPortalServerSettings = ((LiferayTomcatServer)server).getUseDefaultPortalServerSettings();
+		((LiferayTomcatServer)server).setUseDefaultPortalServerSettings(useDefaultPortalServerSettings);
+	}
 
-    /**
-     * Execute setting portalServerSettings propety
-     */
-    public void execute()
-    {
-        oldUseDefaultPortalServerSettings = ( (LiferayTomcatServer) server ).getUseDefaultPortalServerSettings();
-        ( (LiferayTomcatServer) server ).setUseDefaultPortalServerSettings( useDefaultPortalServerSettings );
-    }
+	public void undo() {
+		((LiferayTomcatServer)server).setUseDefaultPortalServerSettings(oldUseDefaultPortalServerSettings);
+	}
 
-    /**
-     * Restore prior portalServerSettings prooperty
-     */
-    public void undo()
-    {
-        ( (LiferayTomcatServer) server ).setUseDefaultPortalServerSettings( oldUseDefaultPortalServerSettings );
-    }
+	protected boolean oldUseDefaultPortalServerSettings;
+	protected boolean useDefaultPortalServerSettings;
 
 }

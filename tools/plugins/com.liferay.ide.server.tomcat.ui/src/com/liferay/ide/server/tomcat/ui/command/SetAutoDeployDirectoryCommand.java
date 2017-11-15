@@ -1,14 +1,16 @@
-/*******************************************************************************
- * Copyright (c) 2010 SAS Institute, Inc. and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     Larry Isaacs - Initial API and implementation
- *     Greg Amerson <gregory.amerson@liferay.com>
- *******************************************************************************/
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.server.tomcat.ui.command;
 
@@ -18,43 +20,26 @@ import org.eclipse.jst.server.tomcat.core.internal.Messages;
 import org.eclipse.jst.server.tomcat.core.internal.command.ServerCommand;
 
 /**
- * Command to change the deploy directory
+ * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class SetAutoDeployDirectoryCommand extends ServerCommand
-{
+@SuppressWarnings("restriction")
+public class SetAutoDeployDirectoryCommand extends ServerCommand {
 
-    protected String autoDeployDir;
-    protected String oldAutoDeployDir;
+	public SetAutoDeployDirectoryCommand(LiferayTomcatServer server, String autoDeployDir) {
+		super(server, Messages.serverEditorActionSetDeployDirectory);
+		this.autoDeployDir = autoDeployDir;
+	}
 
-    /**
-     * Constructs command to set the deploy directory.
-     * 
-     * @param server
-     *            a Tomcat server
-     * @param deployDir
-     *            deployment directory to set
-     */
-    public SetAutoDeployDirectoryCommand( LiferayTomcatServer server, String autoDeployDir )
-    {
-        super( server, Messages.serverEditorActionSetDeployDirectory );
-        this.autoDeployDir = autoDeployDir;
-    }
+	public void execute() {
+		oldAutoDeployDir = ((LiferayTomcatServer)server).getAutoDeployDirectory();
+		((LiferayTomcatServer)server).setAutoDeployDirectory(autoDeployDir);
+	}
 
-    /**
-     * Execute setting the deploy directory
-     */
-    public void execute()
-    {
-        oldAutoDeployDir = ( (LiferayTomcatServer) server ).getAutoDeployDirectory();
-        ( (LiferayTomcatServer) server ).setAutoDeployDirectory( autoDeployDir );
-    }
+	public void undo() {
+		((LiferayTomcatServer)server).setAutoDeployDirectory(oldAutoDeployDir);
+	}
 
-    /**
-     * Restore prior deploy directory
-     */
-    public void undo()
-    {
-        ( (LiferayTomcatServer) server ).setAutoDeployDirectory( oldAutoDeployDir );
-    }
+	protected String autoDeployDir;
+	protected String oldAutoDeployDir;
+
 }
