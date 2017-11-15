@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.core;
 
 import org.eclipse.core.resources.IFile;
@@ -19,25 +19,23 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 
-
 /**
  * @author Gregory Amerson
  */
-public interface ILiferayProject
-{
+public interface ILiferayProject {
 
-    <T> T adapt( Class<T> adapterType );
+	public <T> T adapt(Class<T> adapterType);
 
-    IFile getDescriptorFile( String name );
+	public IFile getDescriptorFile(String name);
 
-    IPath getLibraryPath( String filename );
+	public IPath getLibraryPath(String filename);
 
-    IProject getProject();
+	public IProject getProject();
 
-    String getProperty( String key, String defaultValue );
+	public String getProperty(String key, String defaultValue);
 
-    IFolder getSourceFolder( String classification );
+	public IFolder getSourceFolder(String classification);
 
-    IFolder[] getSourceFolders();
+	public IFolder[] getSourceFolders();
 
 }

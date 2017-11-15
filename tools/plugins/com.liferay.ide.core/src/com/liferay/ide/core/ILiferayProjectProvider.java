@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.core;
 
 import java.util.List;
@@ -19,19 +19,20 @@ import java.util.List;
 /**
  * @author Gregory Amerson
  */
-public interface ILiferayProjectProvider
-{
-    <T> List<T> getData( String key, Class<T> type, Object... params );
+public interface ILiferayProjectProvider {
 
-    String getDisplayName();
+	public <T> List<T> getData(String key, Class<T> type, Object... params);
 
-    int getPriority();
+	public String getDisplayName();
 
-    String getShortName();
+	public int getPriority();
 
-    String getProjectType();
+	public String getProjectType();
 
-    ILiferayProject provide( Object adaptable );
+	public String getShortName();
 
-    boolean provides( Class<?> type );
+	public ILiferayProject provide(Object adaptable);
+
+	public boolean provides(Class<?> type);
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core;
 
@@ -18,303 +18,260 @@ import com.liferay.ide.core.util.CoreUtil;
 
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- *
  * @author Gregory Amerson
  */
-public class LiferayCore extends Plugin
-{
-    private static final LiferayProjectAdapterReader adapterReader = new LiferayProjectAdapterReader();
+public class LiferayCore extends Plugin {
 
-    public static final IPath GLOBAL_SETTINGS_PATH =
-        new Path( System.getProperty( "user.home", "" ) + "/.liferay-ide" );
+	public static final IPath GLOBAL_SETTINGS_PATH = new Path(System.getProperty("user.home", "") + "/.liferay-ide");
 
-    private static LiferayLanguagePropertiesListener liferayLanguagePropertiesListener;
+	public static final String PLUGIN_ID = "com.liferay.ide.core";
 
-    // The shared instance
-    private static LiferayCore plugin;
+	public static <T> T create(Class<T> type, Object adaptable) {
+		if (type == null) {
+			return null;
+		}
 
-    // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.core";
+		T retval = null;
 
-    private static LiferayProjectProviderReader providerReader;
+		ILiferayProject lrproject = create(adaptable);
 
-    private static LiferayProjectImporterReader importerReader;
+		if ((lrproject != null) && type.isAssignableFrom(lrproject.getClass())) {
+			retval = type.cast(lrproject);
+		}
 
-    public static ILiferayProject create( Object adaptable )
-    {
-        ILiferayProject project = null;
+		if ((retval == null) && (lrproject != null)) {
+			retval = lrproject.adapt(type);
+		}
 
-        if( adaptable != null )
-        {
-            final ILiferayProjectProvider[] providers = getProviders( adaptable.getClass() );
+		return retval;
+	}
 
-            if( ! CoreUtil.isNullOrEmpty( providers ) )
-            {
-                ILiferayProjectProvider currentProvider = null;
+	// The shared instance
 
-                for( ILiferayProjectProvider provider : providers )
-                {
-                    if ( currentProvider == null || provider.getPriority() > currentProvider.getPriority() )
-                    {
-                        final ILiferayProject lrp = provider.provide( adaptable );
+	public static ILiferayProject create(Object adaptable) {
+		if (adaptable == null) {
+			return null;
+		}
 
-                        if( lrp != null )
-                        {
-                            currentProvider = provider;
-                            project = lrp;
-                        }
-                    }
-                }
-            }
-        }
+		ILiferayProjectProvider[] providers = getProviders(adaptable.getClass());
 
-        return project;
-    }
+		if (CoreUtil.isNullOrEmpty(providers)) {
+			return null;
+		}
 
-    public static <T> T create( Class<T> type, Object adaptable )
-    {
-        T retval = null;
+		ILiferayProjectProvider currentProvider = null;
+		ILiferayProject project = null;
 
-        if( type != null )
-        {
-            final ILiferayProject lrproject = create( adaptable );
+		for (ILiferayProjectProvider provider : providers) {
+			if ((currentProvider == null) || (provider.getPriority() > currentProvider.getPriority())) {
+				ILiferayProject lrp = provider.provide(adaptable);
 
-            if( lrproject != null && type.isAssignableFrom( lrproject.getClass() ) )
-            {
-                retval = type.cast( lrproject );
-            }
+				if (lrp != null) {
+					currentProvider = provider;
 
-            if( retval == null && lrproject != null )
-            {
-                retval = lrproject.adapt( type );
-            }
-        }
+					project = lrp;
+				}
+			}
+		}
 
-        return retval;
-    }
+		return project;
+	}
 
-    public static IStatus createErrorStatus( Exception e )
-    {
-        return createErrorStatus( PLUGIN_ID, e );
-    }
+	// The plugin ID
 
-    public static IStatus createErrorStatus( String msg )
-    {
-        return createErrorStatus( PLUGIN_ID, msg );
-    }
+	public static IStatus createErrorStatus(Exception e) {
+		return createErrorStatus(PLUGIN_ID, e);
+	}
 
-    public static IStatus createErrorStatus( String pluginId, String msg )
-    {
-        return new Status( IStatus.ERROR, pluginId, msg );
-    }
+	public static IStatus createErrorStatus(String msg) {
+		return createErrorStatus(PLUGIN_ID, msg);
+	}
 
-    public static IStatus createErrorStatus( String pluginId, String msg, Throwable e )
-    {
-        return new Status( IStatus.ERROR, pluginId, msg, e );
-    }
+	public static IStatus createErrorStatus(String pluginId, String msg) {
+		return new Status(IStatus.ERROR, pluginId, msg);
+	}
 
-    public static IStatus createErrorStatus( String pluginId, Throwable t )
-    {
-        return new Status( IStatus.ERROR, pluginId, t.getMessage(), t );
-    }
+	public static IStatus createErrorStatus(String pluginId, String msg, Throwable e) {
+		return new Status(IStatus.ERROR, pluginId, msg, e);
+	}
 
-    public static IStatus createInfoStatus( String msg )
-    {
-        return createInfoStatus( PLUGIN_ID, msg );
-    }
+	public static IStatus createErrorStatus(String pluginId, Throwable t) {
+		return new Status(IStatus.ERROR, pluginId, t.getMessage(), t);
+	}
 
-    public static IStatus createInfoStatus( String pluginId, String msg )
-    {
-        return new Status( IStatus.INFO, pluginId, msg );
-    }
+	public static IStatus createInfoStatus(String msg) {
+		return createInfoStatus(PLUGIN_ID, msg);
+	}
 
-    public static IStatus createWarningStatus( String message )
-    {
-        return new Status( IStatus.WARNING, PLUGIN_ID, message );
-    }
+	public static IStatus createInfoStatus(String pluginId, String msg) {
+		return new Status(IStatus.INFO, pluginId, msg);
+	}
 
-    public static IStatus createWarningStatus( String message, String id )
-    {
-        return new Status( IStatus.WARNING, id, message );
-    }
+	public static IStatus createWarningStatus(String message) {
+		return new Status(IStatus.WARNING, PLUGIN_ID, message);
+	}
 
-    public static IStatus createWarningStatus( String message, String id, Exception e )
-    {
-        return new Status( IStatus.WARNING, id, message, e );
-    }
+	public static IStatus createWarningStatus(String message, String id) {
+		return new Status(IStatus.WARNING, id, message);
+	}
 
-    /**
-     * Returns the shared instance
-     *
-     * @return the shared instance
-     */
-    public static LiferayCore getDefault()
-    {
-        return plugin;
-    }
+	public static IStatus createWarningStatus(String message, String id, Exception e) {
+		return new Status(IStatus.WARNING, id, message, e);
+	}
 
-    public static synchronized ILiferayProjectImporter[] getImporters()
-    {
-        if( importerReader == null )
-        {
-            importerReader = new LiferayProjectImporterReader();
-        }
+	public static LiferayCore getDefault() {
+		return _plugin;
+	}
 
-        return importerReader.getImporters();
-    }
+	public static synchronized ILiferayProjectImporter getImporter(String buildType) {
+		if (_importerReader == null) {
+			_importerReader = new LiferayProjectImporterReader();
+		}
 
-    public static synchronized ILiferayProjectImporter getImporter( String buildType )
-    {
-        if( importerReader == null )
-        {
-            importerReader = new LiferayProjectImporterReader();
-        }
+		return _importerReader.getImporter(buildType);
+	}
 
-        return importerReader.getImporter( buildType );
-    }
+	public static synchronized ILiferayProjectImporter[] getImporters() {
+		if (_importerReader == null) {
+			_importerReader = new LiferayProjectImporterReader();
+		}
 
-    public static synchronized ILiferayProjectAdapter[] getProjectAdapters()
-    {
-        return adapterReader.getExtensions().toArray( new ILiferayProjectAdapter[0] );
-    }
+		return _importerReader.getImporters();
+	}
 
-    public static synchronized ILiferayProjectProvider getProvider( String shortName )
-    {
-        for( ILiferayProjectProvider provider : getProviders() )
-        {
-            if( provider.getShortName().equals( shortName ) )
-            {
-                return provider;
-            }
-        }
+	public static synchronized ILiferayProjectAdapter[] getProjectAdapters() {
+		return _adapterReader.getExtensions().toArray(new ILiferayProjectAdapter[0]);
+	}
 
-        return null;
-    }
+	public static synchronized ILiferayProjectProvider getProvider(String shortName) {
+		for (ILiferayProjectProvider provider : getProviders()) {
+			if (provider.getShortName().equals(shortName)) {
+				return provider;
+			}
+		}
 
-    public static synchronized ILiferayProjectProvider[] getProviders()
-    {
-        if( providerReader == null )
-        {
-            providerReader = new LiferayProjectProviderReader();
-        }
+		return null;
+	}
 
-        return providerReader.getProviders();
-    }
+	public static synchronized ILiferayProjectProvider[] getProviders() {
+		if (_providerReader == null) {
+			_providerReader = new LiferayProjectProviderReader();
+		}
 
-    public static synchronized ILiferayProjectProvider[] getProviders( String projectType )
-    {
-        if( providerReader == null )
-        {
-            providerReader = new LiferayProjectProviderReader();
-        }
+		return _providerReader.getProviders();
+	}
 
-        return providerReader.getProviders( projectType );
-    }
+	public static synchronized ILiferayProjectProvider[] getProviders(Class<?> type) {
+		if (_providerReader == null) {
+			_providerReader = new LiferayProjectProviderReader();
+		}
 
-    public static synchronized ILiferayProjectProvider[] getProviders( Class<?> type )
-    {
-        if( providerReader == null )
-        {
-            providerReader = new LiferayProjectProviderReader();
-        }
+		return _providerReader.getProviders(type);
+	}
 
-        return providerReader.getProviders( type );
-    }
+	public static synchronized ILiferayProjectProvider[] getProviders(String projectType) {
+		if (_providerReader == null) {
+			_providerReader = new LiferayProjectProviderReader();
+		}
 
-    public static IProxyService getProxyService()
-    {
-        final ServiceTracker<Object, Object> proxyTracker =
-            new ServiceTracker<Object, Object>(
-                getDefault().getBundle().getBundleContext(), IProxyService.class.getName(), null );
+		return _providerReader.getProviders(projectType);
+	}
 
-        proxyTracker.open();
+	public static IProxyService getProxyService() {
+		Bundle bundle = getDefault().getBundle();
 
-        final IProxyService proxyService = (IProxyService) proxyTracker.getService();
+		ServiceTracker<Object, Object> proxyTracker = new ServiceTracker<>(
+			bundle.getBundleContext(), IProxyService.class.getName(), null);
 
-        proxyTracker.close();
+		proxyTracker.open();
 
-        return proxyService;
-    }
+		IProxyService proxyService = (IProxyService)proxyTracker.getService();
 
-    public static void logError( IStatus status )
-    {
-        getDefault().getLog().log( status );
-    }
+		proxyTracker.close();
 
-    public static void logError( String msg )
-    {
-        logError( createErrorStatus( msg ) );
-    }
+		return proxyService;
+	}
 
-    public static void logError( String msg, Throwable t )
-    {
-        getDefault().getLog().log( createErrorStatus( PLUGIN_ID, msg, t ) );
-    }
+	public static void logError(IStatus status) {
+		ILog log = getDefault().getLog();
 
-    public static void logError( Throwable t )
-    {
-        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, t.getMessage(), t ) );
-    }
+		log.log(status);
+	}
 
-    public static void logInfo( String msg )
-    {
-        logError( createInfoStatus( msg ) );
-    }
+	public static void logError(String msg) {
+		logError(createErrorStatus(msg));
+	}
 
-    public static void logWarning( Throwable t )
-    {
-        getDefault().getLog().log( new Status( IStatus.WARNING, PLUGIN_ID, t.getMessage(), t ) );
-    }
+	public static void logError(String msg, Throwable t) {
+		ILog log = getDefault().getLog();
 
-    /**
-     * The constructor
-     */
-    public LiferayCore()
-    {
-    }
+		log.log(createErrorStatus(PLUGIN_ID, msg, t));
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
-     */
-    public void start( BundleContext context ) throws Exception
-    {
-        super.start( context );
-        plugin = this;
+	public static void logError(Throwable t) {
+		ILog log = getDefault().getLog();
 
-        if( liferayLanguagePropertiesListener == null )
-        {
-            liferayLanguagePropertiesListener = new LiferayLanguagePropertiesListener();
+		log.log(new Status(IStatus.ERROR, PLUGIN_ID, t.getMessage(), t));
+	}
 
-            ResourcesPlugin.getWorkspace().addResourceChangeListener(
-                liferayLanguagePropertiesListener, IResourceChangeEvent.POST_CHANGE );
-        }
-    }
+	public static void logInfo(String msg) {
+		logError(createInfoStatus(msg));
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
-     */
-    public void stop( BundleContext context ) throws Exception
-    {
-        plugin = null;
-        super.stop( context );
+	public static void logWarning(Throwable t) {
+		ILog log = getDefault().getLog();
 
-        if( liferayLanguagePropertiesListener != null )
-        {
-            ResourcesPlugin.getWorkspace().removeResourceChangeListener( liferayLanguagePropertiesListener );
-            liferayLanguagePropertiesListener = null;
-        }
-    }
+		log.log(new Status(IStatus.WARNING, PLUGIN_ID, t.getMessage(), t));
+	}
+
+	public LiferayCore() {
+	}
+
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+
+		_plugin = this;
+
+		if (_liferayLanguagePropertiesListener != null) {
+			return;
+		}
+
+		_liferayLanguagePropertiesListener = new LiferayLanguagePropertiesListener();
+
+		CoreUtil.getWorkspace().addResourceChangeListener(
+			_liferayLanguagePropertiesListener, IResourceChangeEvent.POST_CHANGE);
+	}
+
+	public void stop(BundleContext context) throws Exception {
+		_plugin = null;
+
+		super.stop(context);
+
+		if (_liferayLanguagePropertiesListener == null) {
+			return;
+		}
+
+		CoreUtil.getWorkspace().removeResourceChangeListener(_liferayLanguagePropertiesListener);
+
+		_liferayLanguagePropertiesListener = null;
+	}
+
+	private static final LiferayProjectAdapterReader _adapterReader = new LiferayProjectAdapterReader();
+	private static LiferayProjectImporterReader _importerReader;
+	private static LiferayLanguagePropertiesListener _liferayLanguagePropertiesListener;
+	private static LiferayCore _plugin;
+	private static LiferayProjectProviderReader _providerReader;
 
 }

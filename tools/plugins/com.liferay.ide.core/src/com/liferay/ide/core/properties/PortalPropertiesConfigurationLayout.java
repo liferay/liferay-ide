@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core.properties;
 
@@ -20,6 +19,7 @@ import com.liferay.ide.core.util.StringPool;
 
 import java.io.IOException;
 import java.io.Writer;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,277 +37,241 @@ import org.apache.commons.lang.StringUtils;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "rawtypes" )
-public class PortalPropertiesConfigurationLayout extends PropertiesConfigurationLayout
-{
+@SuppressWarnings("rawtypes")
+public class PortalPropertiesConfigurationLayout extends PropertiesConfigurationLayout {
 
-    public static class PluginPropertiesWriter extends PropertiesWriter
-    {
+	public static final String[] sortedKeys = {
+		"name", "module-group-id", "module-incremental-version", "tags", "short-description", "change-log", "page-url",
+		"author", "licenses", "portal-dependency-jars", "portal-dependency-tlds"
+	};
 
-        /** Constant for the escaping character. */
-        private static final String ESCAPE = "\\"; //$NON-NLS-1$
+	public PortalPropertiesConfigurationLayout(PropertiesConfiguration config) {
+		super(config);
 
-        /** The list of possible key/value separators */
-        private static final char[] SEPARATORS = new char[] { '=', ':' };
+		setForceSingleLine(true);
+	}
 
-        /** The white space characters used as key/value separators. */
-        private static final char[] WHITE_SPACE = new char[] { ' ', '\t', '\f' };
+	public boolean isWrappedProperty(String key) {
+		return false;
+	}
 
-        private char delimiter;
+	public void save(Writer out) throws ConfigurationException {
+		try {
+			char delimiter =
+				getConfiguration().isDelimiterParsingDisabled() ? 0 : getConfiguration().getListDelimiter();
 
-        public PluginPropertiesWriter( Writer writer, char delimiter )
-        {
-            super( writer, delimiter );
+			PluginPropertiesWriter writer = new PluginPropertiesWriter(out, delimiter);
 
-            this.delimiter = delimiter;
-        }
+			if (getHeaderComment() != null) {
+				writer.writeln(getCanonicalHeaderComment(true));
+				writer.writeln(null);
+			}
 
-        public void writeProperty( String key, Object value, boolean forceSingleLine, boolean wrappedProperty )
-            throws IOException
-        {
+			List<Object> keyList = Arrays.asList(getKeys().toArray());
 
-            String v;
+			Collections.sort(
+				keyList,
+				new Comparator<Object>() {
 
-            if( value instanceof List )
-            {
-                List values = (List) value;
+					public int compare(Object o1, Object o2) {
+						int index1 = Integer.MAX_VALUE;
+						int index2 = Integer.MAX_VALUE;
 
-                if( forceSingleLine )
-                {
-                    v = makeSingleLineValue( values );
-                }
-                else
-                {
-                    writeProperty( key, values );
-                    return;
-                }
-            }
-            else if( wrappedProperty )
-            {
-                String[] values = value.toString().split( StringPool.COMMA );
+						for (int i = 0; i < sortedKeys.length; i++) {
+							if (sortedKeys[i].equals(o1)) {
+								index1 = i;
+							}
 
-                if( values.length == 1 )
-                {
-                    v = escapeValue( values[0] );
-                }
-                else
-                {
-                    StringBuffer buf = new StringBuffer();
+							if (sortedKeys[i].equals(o2)) {
+								index2 = i;
+							}
+						}
 
-                    for( String val : values )
-                    {
-                        if( CoreUtil.isNullOrEmpty( buf.toString() ) )
-                        {
-                            buf.append( "\\\n" ); //$NON-NLS-1$
-                            buf.append( "    " + escapeValue( val ) ); //$NON-NLS-1$
-                        }
-                        else
-                        {
-                            buf.append( ",\\\n    " + escapeValue( val ) ); //$NON-NLS-1$
-                        }
-                    }
-                    v = buf.toString();
-                }
-            }
-            else
-            {
-                v = escapeValue( value );
-            }
+						if (index1 < index2) {
+							return -1;
+						}
+						else if (index1 > index2) {
+							return 1;
+						}
 
-            write( escapeKey( key ) );
-            write( StringPool.EQUALS );
-            write( v );
+						return 0;
+					}
 
-            writeln( null );
-        }
+				});
 
-        private String escapeKey( String key )
-        {
-            StringBuffer newkey = new StringBuffer();
+			for (Iterator it = keyList.iterator(); it.hasNext();) {
+				String key = (String)it.next();
 
-            for( int i = 0; i < key.length(); i++ )
-            {
-                char c = key.charAt( i );
+				if (getConfiguration().containsKey(key)) {
 
-                if( ArrayUtils.contains( SEPARATORS, c ) || ArrayUtils.contains( WHITE_SPACE, c ) )
-                {
-                    // escape the separator
-                    newkey.append( '\\' );
-                    newkey.append( c );
-                }
-                else
-                {
-                    newkey.append( c );
-                }
-            }
+					// Output blank lines before property
 
-            return newkey.toString();
-        }
+					for (int i = 0; i < getBlancLinesBefore(key); i++) {
+						writer.writeln(null);
+					}
 
-        private String escapeValue( Object value )
-        {
-            String escapedValue = StringEscapeUtils.escapeJava( String.valueOf( value ) );
+					// Output the comment
 
-            if( delimiter != 0 )
-            {
-                escapedValue = StringUtils.replace( escapedValue, String.valueOf( delimiter ), ESCAPE + delimiter );
-            }
+					if (getComment(key) != null) {
+						writer.writeln(getCanonicalComment(key, true));
+					}
 
-            return escapedValue;
-        }
+					// Output the property and its value
 
-        private String makeSingleLineValue( List values )
-        {
-            if( !values.isEmpty() )
-            {
-                Iterator it = values.iterator();
+					boolean singleLine = false;
 
-                String lastValue = escapeValue( it.next() );
+					if ((isForceSingleLine() || isSingleLine(key)) &&
+						!getConfiguration().isDelimiterParsingDisabled()) {
 
-                StringBuffer buf = new StringBuffer( lastValue );
+						singleLine = true;
+					}
 
-                while( it.hasNext() )
-                {
-                    // if the last value ended with an escape character, it has
-                    // to be escaped itself; otherwise the list delimiter will
-                    // be escaped
-                    if( lastValue.endsWith( ESCAPE ) )
-                    {
-                        buf.append( ESCAPE ).append( ESCAPE );
-                    }
+					boolean wrappedProperty = isWrappedProperty(key);
 
-                    buf.append( delimiter );
+					writer.writeProperty(key, getConfiguration().getProperty(key), singleLine, wrappedProperty);
+				}
+			}
 
-                    lastValue = escapeValue( it.next() );
+			writer.flush();
+			writer.close();
+		}
+		catch (IOException ioe) {
+			throw new ConfigurationException(ioe);
+		}
+	}
 
-                    buf.append( lastValue );
-                }
+	public static class PluginPropertiesWriter extends PropertiesWriter {
 
-                return buf.toString();
-            }
-            else
-            {
-                return null;
-            }
-        }
+		// Constant for the escaping character.
 
-    }
+		public PluginPropertiesWriter(Writer writer, char delimiter) {
+			super(writer, delimiter);
 
-    public static final String[] sortedKeys = new String[] 
-    { 
-        "name",  //$NON-NLS-1$
-        "module-group-id",  //$NON-NLS-1$
-        "module-incremental-version", //$NON-NLS-1$
-        "tags",  //$NON-NLS-1$
-        "short-description",  //$NON-NLS-1$
-        "change-log",  //$NON-NLS-1$
-        "page-url",  //$NON-NLS-1$
-        "author",  //$NON-NLS-1$
-        "licenses",  //$NON-NLS-1$
-        "portal-dependency-jars", //$NON-NLS-1$
-        "portal-dependency-tlds"  //$NON-NLS-1$
-    };
+			_delimiter = delimiter;
+		}
 
-    public PortalPropertiesConfigurationLayout( PropertiesConfiguration config )
-    {
-        super( config );
+		// The list of possible key/value separators
 
-        this.setForceSingleLine( true );
-    }
+		public void writeProperty(String key, Object value, boolean forceSingleLine, boolean wrappedProperty)
+			throws IOException {
 
-    public boolean isWrappedProperty( String key )
-    {
-        return false;
-    }
+			String v;
 
-    public void save( Writer out ) throws ConfigurationException
-    {
-        try
-        {
-            char delimiter =
-                getConfiguration().isDelimiterParsingDisabled() ? 0 : getConfiguration().getListDelimiter();
+			if (value instanceof List) {
+				List values = (List)value;
 
-            PluginPropertiesWriter writer = new PluginPropertiesWriter( out, delimiter );
+				if (forceSingleLine) {
+					v = _makeSingleLineValue(values);
+				}
+				else {
+					writeProperty(key, values);
+					return;
+				}
+			}
+			else if (wrappedProperty) {
+				String[] values = value.toString().split(StringPool.COMMA);
 
-            if( getHeaderComment() != null )
-            {
-                writer.writeln( getCanonicalHeaderComment( true ) );
-                writer.writeln( null );
-            }
+				if (values.length == 1) {
+					v = _escapeValue(values[0]);
+				}
+				else {
+					StringBuffer buf = new StringBuffer();
 
-            List<Object> keyList = Arrays.asList( getKeys().toArray() );
+					for (String val : values) {
+						if (CoreUtil.isNullOrEmpty(buf.toString())) {
+							buf.append("\\\n");
+							buf.append("    " + _escapeValue(val));
+						}
+						else {
+							buf.append(",\\\n    " + _escapeValue(val));
+						}
+					}
 
-            Collections.sort( keyList, new Comparator<Object>()
-            {
+					v = buf.toString();
+				}
+			}
+			else {
+				v = _escapeValue(value);
+			}
 
-                public int compare( Object o1, Object o2 )
-                {
-                    int index1 = Integer.MAX_VALUE;
-                    int index2 = Integer.MAX_VALUE;
+			write(_escapeKey(key));
+			write(StringPool.EQUALS);
+			write(v);
 
-                    for( int i = 0; i < sortedKeys.length; i++ )
-                    {
-                        if( sortedKeys[i].equals( o1 ) )
-                        {
-                            index1 = i;
-                        }
+			writeln(null);
+		}
 
-                        if( sortedKeys[i].equals( o2 ) )
-                        {
-                            index2 = i;
-                        }
-                    }
+		// The white space characters used as key/value separators.
 
-                    if( index1 < index2 )
-                    {
-                        return -1;
-                    }
-                    else if( index1 > index2 )
-                    {
-                        return 1;
-                    }
+		private String _escapeKey(String key) {
+			StringBuffer newkey = new StringBuffer();
 
-                    return 0;
-                }
+			for (int i = 0; i < key.length(); i++) {
+				char c = key.charAt(i);
 
-            } );
+				if (ArrayUtils.contains(_SEPARATORS, c) || ArrayUtils.contains(_WHITE_SPACE, c)) {
 
-            for( Iterator it = keyList.iterator(); it.hasNext(); )
-            {
-                String key = (String) it.next();
+					// escape the separator
 
-                if( getConfiguration().containsKey( key ) )
-                {
+					newkey.append('\\');
+					newkey.append(c);
+				}
+				else {
+					newkey.append(c);
+				}
+			}
 
-                    // Output blank lines before property
-                    for( int i = 0; i < getBlancLinesBefore( key ); i++ )
-                    {
-                        writer.writeln( null );
-                    }
+			return newkey.toString();
+		}
 
-                    // Output the comment
-                    if( getComment( key ) != null )
-                    {
-                        writer.writeln( getCanonicalComment( key, true ) );
-                    }
+		private String _escapeValue(Object value) {
+			String escapedValue = StringEscapeUtils.escapeJava(String.valueOf(value));
 
-                    // Output the property and its value
-                    boolean singleLine =
-                        ( isForceSingleLine() || isSingleLine( key ) ) &&
-                            !getConfiguration().isDelimiterParsingDisabled();
+			if (_delimiter != 0) {
+				escapedValue = StringUtils.replace(escapedValue, String.valueOf(_delimiter), _ESCAPE + _delimiter);
+			}
 
-                    boolean wrappedProperty = isWrappedProperty( key );
+			return escapedValue;
+		}
 
-                    writer.writeProperty( key, getConfiguration().getProperty( key ), singleLine, wrappedProperty );
-                }
-            }
+		private String _makeSingleLineValue(List values) {
+			if (values.isEmpty()) {
+				return null;
+			}
 
-            writer.flush();
-            writer.close();
-        }
-        catch( IOException ioex )
-        {
-            throw new ConfigurationException( ioex );
-        }
-    }
+			Iterator it = values.iterator();
+
+			String lastValue = _escapeValue(it.next());
+
+			StringBuffer buf = new StringBuffer(lastValue);
+
+			while (it.hasNext()) {
+				/*
+				 * if the last value ended with an escape character, it has to be escaped
+				 * itself; otherwise the list delimiter will be escaped
+				 */
+				if (lastValue.endsWith(_ESCAPE)) {
+					buf.append(_ESCAPE).append(_ESCAPE);
+				}
+
+				buf.append(_delimiter);
+
+				lastValue = _escapeValue(it.next());
+
+				buf.append(lastValue);
+			}
+
+			return buf.toString();
+		}
+
+		private static final String _ESCAPE = "\\";
+
+		private static final char[] _SEPARATORS = {'=', ':'};
+
+		private static final char[] _WHITE_SPACE = {' ', '\t', '\f'};
+
+		private char _delimiter;
+
+	}
+
 }

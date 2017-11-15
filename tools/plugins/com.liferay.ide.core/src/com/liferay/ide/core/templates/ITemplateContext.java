@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,17 +10,17 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core.templates;
 
 /**
  * @author Cindy Li
  */
-public interface ITemplateContext
-{
-    boolean containsKey( String name );
+public interface ITemplateContext {
 
-    public Object put( String string, Object object );
+	public boolean containsKey(String name);
+
+	public Object put(String string, Object object);
 
 }

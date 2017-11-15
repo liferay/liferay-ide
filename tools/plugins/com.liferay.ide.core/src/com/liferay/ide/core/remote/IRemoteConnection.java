@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,34 +10,31 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core.remote;
 
 /**
  * @author Gregory Amerson
  */
-public interface IRemoteConnection
-{
+public interface IRemoteConnection {
 
-    String _API = "/api/jsonws"; //$NON-NLS-1$
+	public String getHost();
 
-    String getHost();
+	public int getHttpPort();
 
-    int getHttpPort();
+	public String getPassword();
 
-    String getPassword();
+	public String getUsername();
 
-    String getUsername();
+	public void setHost(String host);
 
-    void setHost( String host );
+	public void setHttpPort(String httpPort);
 
-    void setHttpPort( String httpPort );
+	public void setPassword(String password);
 
-    void setPassword( String password );
+	public void setUsername(String username);
 
-    void setUsername( String username );
+	public String _API = "/api/jsonws";
+
 }

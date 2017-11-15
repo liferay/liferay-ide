@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.core;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -19,21 +19,19 @@ import org.eclipse.core.runtime.IConfigurationElement;
 /**
  * @author Gregory Amerson
  */
-public class LiferayProjectAdapterReader extends ExtensionReader<ILiferayProjectAdapter>
-{
+public class LiferayProjectAdapterReader extends ExtensionReader<ILiferayProjectAdapter> {
 
-    private static final String EXTENSION = "liferayProjectAdapters"; //$NON-NLS-1$
-    private static final String PROVIDER_ELEMENT = "liferayProjectAdapter"; //$NON-NLS-1$
+	public LiferayProjectAdapterReader() {
+		super(LiferayCore.PLUGIN_ID, _EXTENSION, _PROVIDER_ELEMENT);
+	}
 
-    public LiferayProjectAdapterReader()
-    {
-        super( LiferayCore.PLUGIN_ID, EXTENSION, PROVIDER_ELEMENT );
-    }
+	@Override
+	protected ILiferayProjectAdapter initElement(IConfigurationElement configElement, ILiferayProjectAdapter adapter) {
+		return adapter;
+	}
 
-    @Override
-    protected ILiferayProjectAdapter initElement( IConfigurationElement configElement, ILiferayProjectAdapter adapter )
-    {
-        return adapter;
-    }
+	private static final String _EXTENSION = "liferayProjectAdapters";
+
+	private static final String _PROVIDER_ELEMENT = "liferayProjectAdapter";
 
 }

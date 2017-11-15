@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.core;
 
 import java.util.Arrays;
@@ -22,65 +22,65 @@ import org.eclipse.core.runtime.IConfigurationElement;
 /**
  * @author Andy Wu
  */
-public class LiferayProjectImporterReader extends ExtensionReader<ILiferayProjectImporter>
-{
-    private static final String ATTRIBUTE_BUILDTYPE = "buildType";
-    private static final String ATTRIBUTE_PRIORITY = "priority";
-    private static final String EXTENSION = "liferayProjectImporters";
-    private static final String PROVIDER_ELEMENT = "liferayProjectImporter";
+public class LiferayProjectImporterReader extends ExtensionReader<ILiferayProjectImporter> {
 
-    public LiferayProjectImporterReader()
-    {
-        super( LiferayCore.PLUGIN_ID, EXTENSION, PROVIDER_ELEMENT );
-    }
+	public LiferayProjectImporterReader() {
+		super(LiferayCore.PLUGIN_ID, _EXTENSION, _PROVIDER_ELEMENT);
+	}
 
-    public ILiferayProjectImporter[] getImporters()
-    {
-        ILiferayProjectImporter[] importers = getExtensions().toArray( new ILiferayProjectImporter[0] );
+	public ILiferayProjectImporter getImporter(String buildType) {
+		ILiferayProjectImporter retval = null;
 
-        Arrays.sort( importers, new Comparator<ILiferayProjectImporter>()
-        {
+		ILiferayProjectImporter[] importers = getImporters();
 
-            @Override
-            public int compare( ILiferayProjectImporter importer1, ILiferayProjectImporter importer2 )
-            {
-                return importer1.getPriority() > importer2.getPriority() ? 1 : -1;
-            }
+		for (ILiferayProjectImporter importer : importers) {
+			if (importer.getBuildType().equals(buildType)) {
+				retval = importer;
+			}
+		}
 
-        } );
+		return retval;
+	}
 
-        return importers;
-    }
+	public ILiferayProjectImporter[] getImporters() {
+		ILiferayProjectImporter[] importers = getExtensions().toArray(new ILiferayProjectImporter[0]);
 
-    @Override
-    protected ILiferayProjectImporter initElement( IConfigurationElement configElement, ILiferayProjectImporter importer )
-    {
-        final String buildType = configElement.getAttribute( ATTRIBUTE_BUILDTYPE );
-        final String priority = configElement.getAttribute( ATTRIBUTE_PRIORITY );
+		Arrays.sort(
+			importers,
+			new Comparator<ILiferayProjectImporter>() {
 
-        final AbstractLiferayProjectImporter projectImporter = (AbstractLiferayProjectImporter) importer;
+				@Override
+				public int compare(ILiferayProjectImporter importer1, ILiferayProjectImporter importer2) {
+					return importer1.getPriority() > importer2.getPriority() ? 1 : -1;
+				}
 
-        projectImporter.setBuildType( buildType );
-        projectImporter.setPriority( Integer.valueOf( priority ) );
+			});
 
-        return importer;
-    }
+		return importers;
+	}
 
-    public ILiferayProjectImporter getImporter( String buildType )
-    {
-        ILiferayProjectImporter retval = null;
+	@Override
+	protected ILiferayProjectImporter initElement(
+		IConfigurationElement configElement, ILiferayProjectImporter importer) {
 
-        ILiferayProjectImporter[] importers = getImporters();
+		String buildType = configElement.getAttribute(_ATTRIBUTE_BUILDTYPE);
+		String priority = configElement.getAttribute(_ATTRIBUTE_PRIORITY);
 
-        for( ILiferayProjectImporter importer : importers )
-        {
-            if( importer.getBuildType().equals( buildType ) )
-            {
-                retval = importer;
-            }
-        }
+		AbstractLiferayProjectImporter projectImporter = (AbstractLiferayProjectImporter)importer;
 
-        return retval;
-    }
+		projectImporter.setBuildType(buildType);
+
+		projectImporter.setPriority(Integer.valueOf(priority));
+
+		return importer;
+	}
+
+	private static final String _ATTRIBUTE_BUILDTYPE = "buildType";
+
+	private static final String _ATTRIBUTE_PRIORITY = "priority";
+
+	private static final String _EXTENSION = "liferayProjectImporters";
+
+	private static final String _PROVIDER_ELEMENT = "liferayProjectImporter";
 
 }

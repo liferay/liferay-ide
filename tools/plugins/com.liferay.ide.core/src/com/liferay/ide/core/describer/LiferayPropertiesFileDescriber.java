@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,20 +10,21 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core.describer;
+
+import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+
 import java.lang.reflect.Field;
 
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.internal.utils.FileUtil;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.content.IContentDescription;
@@ -33,138 +34,137 @@ import org.eclipse.core.runtime.content.ITextContentDescriber;
  * @author Kuo Zhang
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public abstract class LiferayPropertiesFileDescriber implements ITextContentDescriber
-{
+@SuppressWarnings({"restriction", "rawtypes"})
+public abstract class LiferayPropertiesFileDescriber implements ITextContentDescriber {
 
-    public LiferayPropertiesFileDescriber()
-    {
-        super();
-    }
+	public LiferayPropertiesFileDescriber() {
+	}
 
-    public int describe( InputStream contents, IContentDescription description ) throws IOException
-    {
-        int retval = INVALID;
+	public int describe(InputStream contents, IContentDescription description) throws IOException {
+		try {
+			Class<?> contentClass = contents.getClass();
 
-        try
-        {
-            final Field inputStreamField = contents.getClass().getDeclaredField( "in" );
+			Field inputStreamField = contentClass.getDeclaredField("in");
 
-            inputStreamField.setAccessible( true );
+			inputStreamField.setAccessible(true);
 
-            final InputStream inputStream = (InputStream) inputStreamField.get( contents );
+			InputStream inputStream = (InputStream)inputStreamField.get(contents);
 
-            try
-            {
-                final Field fileStoreField = inputStream.getClass().getDeclaredField( "target" );
+			Class<?> clazz = inputStream.getClass();
 
-                fileStoreField.setAccessible( true );
+			try {
+				Field fileStoreField = clazz.getDeclaredField("target");
 
-                final IFileStore fileStore = (IFileStore) fileStoreField.get( inputStream );
+				fileStoreField.setAccessible(true);
 
-                if( fileStore != null )
-                {
-                    final IFile file =
-                        ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(
-                            FileUtil.toPath( fileStore.toURI() ) );
+				IFileStore fileStore = (IFileStore)fileStoreField.get(inputStream);
 
-                    if( isPropertiesFile( file ) )
-                    {
-                        return VALID;
-                    }
-                }
-            }
-            catch( Exception e )
-            {
-                final Field pathField = inputStream.getClass().getDeclaredField( "path" );
+				if (fileStore == null) {
+					return INVALID;
+				}
 
-                pathField.setAccessible( true );
+				IFile file = CoreUtil.getWorkspaceRoot().getFileForLocation(FileUtil.toPath(fileStore.toURI()));
 
-                final String path = (String) pathField.get( inputStream );
+				if (isPropertiesFile(file)) {
+					return VALID;
+				}
+			}
+			catch (Exception e) {
+				Field pathField = clazz.getDeclaredField("path");
 
-                if( isPropertiesFile( path ) )
-                {
-                    return VALID;
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            // ignore errors
-        }
+				pathField.setAccessible(true);
 
-        return retval;
-    }
+				String path = (String)pathField.get(inputStream);
 
-    public int describe( Reader contents, IContentDescription description ) throws IOException
-    {
-        try
-        {
-            final Field documentReaderField = contents.getClass().getDeclaredField( "in" );
+				if (isPropertiesFile(path)) {
+					return VALID;
+				}
+			}
+		}
+		catch (Exception e) {
 
-            documentReaderField.setAccessible( true );
+			// ignore errors
 
-            final Object documentReader = documentReaderField.get( contents );
+		}
 
-            final Field fDocumentField = documentReader.getClass().getDeclaredField( "fDocument" );
+		return INVALID;
+	}
 
-            fDocumentField.setAccessible( true );
+	public int describe(Reader contents, IContentDescription description) throws IOException {
+		try {
+			Class<?> contentClass = contents.getClass();
 
-            final Object fDocument = fDocumentField.get( documentReader );
+			Field documentReaderField = contentClass.getDeclaredField("in");
 
-            final Field fDocumentListenersField = fDocument.getClass().getSuperclass().getSuperclass().getDeclaredField( "fDocumentListeners" );
+			documentReaderField.setAccessible(true);
 
-            fDocumentListenersField.setAccessible( true );
+			Object documentReader = documentReaderField.get(contents);
 
-            final ListenerList fDocumentListeners = (ListenerList) fDocumentListenersField.get( fDocument );
+			Class<?> documentReaderClass = documentReader.getClass();
 
-            final Object[] listeners = fDocumentListeners.getListeners();
+			Field fDocumentField = documentReaderClass.getDeclaredField("fDocument");
 
-            for( Object listener : listeners )
-            {
-                try
-                {
-                    final Field fFileField = listener.getClass().getEnclosingClass().getSuperclass().getDeclaredField( "fFile" );
+			fDocumentField.setAccessible(true);
 
-                    fFileField.setAccessible( true );
+			Object fDocument = fDocumentField.get(documentReader);
 
-                    // get enclosing instance of listener
+			Class<?> documentClass = fDocument.getClass();
 
-                    final Field thisField = listener.getClass().getDeclaredField( "this$0" );
+			Class<?> clazz = documentClass.getSuperclass();
 
-                    thisField.setAccessible( true );
+			Field fDocumentListenersField = clazz.getSuperclass().getDeclaredField("fDocumentListeners");
 
-                    Object enclosingObject = thisField.get( listener );
+			fDocumentListenersField.setAccessible(true);
 
-                    Object fFile = fFileField.get( enclosingObject );
+			ListenerList fDocumentListeners = (ListenerList)fDocumentListenersField.get(fDocument);
 
-                    if( fFile instanceof IFile )
-                    {
-                        IFile file = (IFile) fFile;
+			Object[] listeners = fDocumentListeners.getListeners();
 
-                        if( isPropertiesFile( file ) )
-                        {
-                            return VALID;
-                        }
-                    }
-                }
-                catch( Exception e )
-                {
-                }
-            }
-        }
-        catch ( Exception e )
-        {
-            // ignore errors
-        }
+			for (Object listener : listeners) {
+				try {
+					Class<?> listenerClass = listener.getClass();
 
-        return INVALID;
-    }
+					Class<?> superClass = listenerClass.getEnclosingClass().getSuperclass();
 
-    public QualifiedName[] getSupportedOptions()
-    {
-        return null;
-    }
+					Field fFileField = superClass.getDeclaredField("fFile");
 
-    protected abstract boolean isPropertiesFile( Object file );
+					fFileField.setAccessible(true);
+
+					// get enclosing instance of listener
+
+					Field thisField = listenerClass.getDeclaredField("this$0");
+
+					thisField.setAccessible(true);
+
+					Object enclosingObject = thisField.get(listener);
+
+					Object fFile = fFileField.get(enclosingObject);
+
+					if (fFile instanceof IFile) {
+						IFile file = (IFile)fFile;
+
+						if (isPropertiesFile(file)) {
+							return VALID;
+						}
+					}
+				}
+				catch (Exception e) {
+				}
+			}
+		}
+		catch (Exception e) {
+
+			// ignore errors
+
+		}
+
+		return INVALID;
+	}
+
+	public QualifiedName[] getSupportedOptions() {
+		return null;
+	}
+
+	protected abstract boolean isPropertiesFile(Object file);
+
 }

@@ -1,19 +1,16 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- *   This library is free software; you can redistribute it and/or modify it under
- *   the terms of the GNU Lesser General Public License as published by the Free
- *   Software Foundation; either version 2.1 of the License, or (at your option)
- *   any later version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *   This library is distributed in the hope that it will be useful, but WITHOUT
- *   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- *   FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- *   details.
- *
- *   Contributors:
- *          Gregory Amerson -initial implementation
- *******************************************************************************/
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.core.properties;
 
@@ -27,59 +24,51 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 /**
  * @author Gregory Amerson
  */
-public interface PluginPackageProperties extends Element
-{
-    ElementType TYPE = new ElementType( PluginPackageProperties.class );
+public interface PluginPackageProperties extends Element {
 
-    // *** Author ***
+	public ElementType TYPE = new ElementType(PluginPackageProperties.class);
 
-    @Label( standard = "&Author" )
-    @PropertyBinding( key = "author" )
-    ValueProperty PROP_AUTHOR = new ValueProperty( TYPE, "Author" ); //$NON-NLS-1$
+	public Value<String> getAuthor();
 
-    Value<String> getAuthor();
+	public Value<String> getChangeLog();
 
-    void setAuthor( String value );
+	public Value<String> getLongDescription();
 
-    // *** ChangeLog ***
+	public Value<String> getShortDescription();
 
-    @Label( standard = "&Change Log" )
-    @PropertyBinding( key = "change-log" )
-    ValueProperty PROP_CHANGE_LOG = new ValueProperty( TYPE, "ChangeLog" ); //$NON-NLS-1$
+	public Value<Boolean> getSpeedFilters();
 
-    Value<String> getChangeLog();
+	public void setAuthor(String value);
 
-    void setChangeLog( String value );
+	public void setChangeLog(String value);
 
-    // *** ChangeLog ***
+	public void setLongDescription(String value);
 
-    @Label( standard = "Short &Description" )
-    @PropertyBinding( key = "short-description" )
-    ValueProperty PROP_SHORT_DESCRIPTION = new ValueProperty( TYPE, "ShortDescription" ); //$NON-NLS-1$
+	public void setShortDescription(String value);
 
-    Value<String> getShortDescription();
+	public void setSpeedFilters(Boolean value);
 
-    void setShortDescription( String value );
+	public void setSpeedFilters(String value);
 
-    // *** ChangeLog ***
+	@Label(standard = "&Author")
+	@PropertyBinding(key = "author")
+	public ValueProperty PROP_AUTHOR = new ValueProperty(TYPE, "Author");
 
-    @Label( standard = "Long &Description" )
-    @PropertyBinding( key = "long-description" )
-    ValueProperty PROP_LONG_DESCRIPTION = new ValueProperty( TYPE, "LongDescription" ); //$NON-NLS-1$
+	@Label(standard = "&Change Log")
+	@PropertyBinding(key = "change-log")
+	public ValueProperty PROP_CHANGE_LOG = new ValueProperty(TYPE, "ChangeLog");
 
-    Value<String> getLongDescription();
+	@Label(standard = "Long &Description")
+	@PropertyBinding(key = "long-description")
+	public ValueProperty PROP_LONG_DESCRIPTION = new ValueProperty(TYPE, "LongDescription");
 
-    void setLongDescription( String value );
+	@Label(standard = "Short &Description")
+	@PropertyBinding(key = "short-description")
+	public ValueProperty PROP_SHORT_DESCRIPTION = new ValueProperty(TYPE, "ShortDescription");
 
-    @Type( base = Boolean.class )
-    @Label( standard = "Speed &Filters" )
-    @PropertyBinding( key = "speed-filters-enabled" )
-    ValueProperty PROP_SPEED_FILTERS = new ValueProperty( TYPE, "SpeedFilters" ); //$NON-NLS-1$
-
-    Value<Boolean> getSpeedFilters();
-
-    void setSpeedFilters( String value );
-
-    void setSpeedFilters( Boolean value );
+	@Label(standard = "Speed &Filters")
+	@PropertyBinding(key = "speed-filters-enabled")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_SPEED_FILTERS = new ValueProperty(TYPE, "SpeedFilters");
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core;
 
@@ -28,142 +27,117 @@ import org.eclipse.core.runtime.OperationCanceledException;
  * @author Terry Jia
  * @author Andy Wu
  */
-public class LiferayNature implements IProjectNature
-{
+public class LiferayNature implements IProjectNature {
 
-    public static final String NATURE_ID = LiferayCore.PLUGIN_ID + ".liferayNature";
+	public static final String NATURE_ID = LiferayCore.PLUGIN_ID + ".liferayNature";
 
-    private IProject currentProject;
-    private IProgressMonitor monitor;
+	public static void addLiferayNature(IProject project, IProgressMonitor monitor) throws CoreException {
+		if ((monitor != null) && monitor.isCanceled()) {
+			throw new OperationCanceledException();
+		}
 
-    public LiferayNature()
-    {
-        monitor = new NullProgressMonitor();
-    }
+		if (!hasNature(project)) {
+			IProjectDescription description = project.getDescription();
 
-    public LiferayNature( IProject project, IProgressMonitor monitor )
-    {
-        currentProject = project;
+			String[] prevNatures = description.getNatureIds();
 
-        if( monitor != null )
-        {
-            this.monitor = monitor;
-        }
-        else
-        {
-            monitor = new NullProgressMonitor();
-        }
-    }
+			String[] newNatures = new String[prevNatures.length + 1];
 
-    public static void addLiferayNature( IProject project, IProgressMonitor monitor ) throws CoreException
-    {
-        if( monitor != null && monitor.isCanceled() )
-        {
-            throw new OperationCanceledException();
-        }
+			System.arraycopy(prevNatures, 0, newNatures, 0, prevNatures.length);
 
-        if( !hasNature( project ) )
-        {
-            IProjectDescription description = project.getDescription();
+			newNatures[prevNatures.length] = NATURE_ID;
 
-            String[] prevNatures = description.getNatureIds();
-            String[] newNatures = new String[prevNatures.length + 1];
+			description.setNatureIds(newNatures);
 
-            System.arraycopy( prevNatures, 0, newNatures, 0, prevNatures.length );
+			project.setDescription(description, monitor);
 
-            newNatures[prevNatures.length] = NATURE_ID;
+			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+		}
+		else if (monitor != null) {
+			monitor.worked(1);
+		}
+	}
 
-            description.setNatureIds( newNatures );
-            project.setDescription( description, monitor );
-            project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-        }
-        else
-        {
-            if( monitor != null )
-            {
-                monitor.worked( 1 );
-            }
-        }
-    }
+	public static boolean hasNature(IProject project) {
+		try {
+			if (project.hasNature(NATURE_ID)) {
+				return true;
+			}
+		}
+		catch (CoreException ce) {
+		}
 
-    @Override
-    public void configure() throws CoreException
-    {
-        addLiferayNature( currentProject, monitor );
+		return false;
+	}
 
-        currentProject.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-    }
+	public static void removeLiferayNature(IProject project, IProgressMonitor monitor) throws CoreException {
+		if ((monitor != null) && monitor.isCanceled()) {
+			throw new OperationCanceledException();
+		}
 
-    @Override
-    public void deconfigure() throws CoreException
-    {
-        removeLiferayNature( currentProject, monitor );
+		if (hasNature(project)) {
+			IProjectDescription description = project.getDescription();
 
-        currentProject.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-    }
+			String[] prevNatures = description.getNatureIds();
 
-    public IProject getProject()
-    {
-        return this.currentProject;
-    }
+			String[] newNatures = new String[prevNatures.length - 1];
 
-    public static boolean hasNature( IProject project )
-    {
-        try
-        {
-            if( !project.hasNature( NATURE_ID ) )
-            {
-                return false;
-            }
-        }
-        catch( CoreException e )
-        {
-            return false;
-        }
+			int k = 0;
 
-        return true;
-    }
+			for (int i = 0; i < prevNatures.length; i++) {
+				if (!prevNatures[i].equals(NATURE_ID)) {
+					newNatures[k++] = prevNatures[i];
+				}
+			}
 
-    public static void removeLiferayNature( IProject project, IProgressMonitor monitor ) throws CoreException
-    {
-        if( monitor != null && monitor.isCanceled() )
-        {
-            throw new OperationCanceledException();
-        }
+			description.setNatureIds(newNatures);
 
-        if( hasNature( project ) )
-        {
-            IProjectDescription description = project.getDescription();
+			project.setDescription(description, monitor);
+		}
+		else if (monitor != null) {
+			monitor.worked(1);
+		}
+	}
 
-            String[] prevNatures = description.getNatureIds();
-            String[] newNatures = new String[prevNatures.length - 1];
+	public LiferayNature() {
+		_monitor = new NullProgressMonitor();
+	}
 
-            int k = 0;
+	public LiferayNature(IProject project, IProgressMonitor monitor) {
+		_currentProject = project;
 
-            for( int i = 0; i < prevNatures.length; i++ )
-            {
-                if( !prevNatures[i].equals( NATURE_ID ) )
-                {
-                    newNatures[k++] = prevNatures[i];
-                }
-            }
+		if (monitor != null) {
+			_monitor = monitor;
+		}
+		else {
+			monitor = new NullProgressMonitor();
+		}
+	}
 
-            description.setNatureIds( newNatures );
-            project.setDescription( description, monitor );
-        }
-        else
-        {
-            if( monitor != null )
-            {
-                monitor.worked( 1 );
-            }
-        }
-    }
+	@Override
+	public void configure() throws CoreException {
+		addLiferayNature(_currentProject, _monitor);
 
-    @Override
-    public void setProject( IProject project )
-    {
-        this.currentProject = project;
-    }
+		_currentProject.refreshLocal(IResource.DEPTH_INFINITE, _monitor);
+	}
+
+	@Override
+	public void deconfigure() throws CoreException {
+		removeLiferayNature(_currentProject, _monitor);
+
+		_currentProject.refreshLocal(IResource.DEPTH_INFINITE, _monitor);
+	}
+
+	public IProject getProject() {
+		return _currentProject;
+	}
+
+	@Override
+	public void setProject(IProject project) {
+		_currentProject = project;
+	}
+
+	private IProject _currentProject;
+	private IProgressMonitor _monitor;
 
 }

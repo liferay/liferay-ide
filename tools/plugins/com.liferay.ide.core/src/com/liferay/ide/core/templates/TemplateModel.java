@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core.templates;
 
@@ -28,78 +25,65 @@ import java.util.List;
  * @author Gregory Amerson
  * @author Cindy Li
  */
-public class TemplateModel
-{
+public class TemplateModel {
 
-    private String bundleId;
-    private Configuration config;
-    private String id;
-    private String resource;
-    private String templateFolder;
-    private TemplateVariable[] vars;
+	public TemplateModel(
+		String bundleId, Configuration config, String id, String resource, String templateFolder,
+		TemplateVariable[] vars) {
 
-    public TemplateModel( String bundleId,
-                          Configuration config,
-                          String id,
-                          String resource,
-                          String templateFolder,
-                          TemplateVariable[] vars )
-    {
-        super();
-        this.bundleId = bundleId;
-        this.config = config;
-        this.id = id;
-        this.resource = resource;
-        this.templateFolder = templateFolder;
-        this.vars = vars;
-    }
+		_bundleId = bundleId;
+		_config = config;
+		_id = id;
+		_resource = resource;
+		_templateFolder = templateFolder;
+		_vars = vars;
+	}
 
-    public String getBundleId()
-    {
-        return bundleId;
-    }
+	public String getBundleId() {
+		return _bundleId;
+	}
 
-    public Configuration getConfig()
-    {
-        return config;
-    }
+	public Configuration getConfig() {
+		return _config;
+	}
 
-    public String getId()
-    {
-        return id;
-    }
+	public String getId() {
+		return _id;
+	}
 
-    public String[] getRequiredVarNames()
-    {
-        List<String> reqVarNames = new ArrayList<String>();
+	public String[] getRequiredVarNames() {
+		if (CoreUtil.isNullOrEmpty(_vars)) {
+			return new String[0];
+		}
 
-        if( !CoreUtil.isNullOrEmpty( vars ) )
-        {
-            for( TemplateVariable var : vars )
-            {
-                if( var.isRequired() )
-                {
-                    reqVarNames.add( var.getName() );
-                }
-            }
-        }
+		List<String> reqVarNames = new ArrayList<>();
 
-        return reqVarNames.toArray( new String[0] );
-    }
+		for (TemplateVariable var : _vars) {
+			if (var.isRequired()) {
+				reqVarNames.add(var.getName());
+			}
+		}
 
-    public String getResource()
-    {
-        return resource;
-    }
+		return reqVarNames.toArray(new String[0]);
+	}
 
-    public String getTemplateFolder()
-    {
-        return templateFolder;
-    }
+	public String getResource() {
+		return _resource;
+	}
 
-    public void setConfig( Configuration config )
-    {
-        this.config = config;
-    }
+	public String getTemplateFolder() {
+		return _templateFolder;
+	}
+
+	public void setConfig(Configuration config) {
+		_config = config;
+	}
+
+	private String _bundleId;
+	private Configuration _config;
+	private String _id;
+	private String _resource;
+	private String _templateFolder;
+	private TemplateVariable[] _vars;
 
 }

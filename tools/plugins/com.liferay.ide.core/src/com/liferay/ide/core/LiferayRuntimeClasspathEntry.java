@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,30 +10,27 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.core;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.internal.launching.RuntimeClasspathEntry;
 
-
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class LiferayRuntimeClasspathEntry extends RuntimeClasspathEntry
-{
+@SuppressWarnings("restriction")
+public class LiferayRuntimeClasspathEntry extends RuntimeClasspathEntry {
 
-    public LiferayRuntimeClasspathEntry( IClasspathEntry entry )
-    {
-        super( entry );
-    }
+	public LiferayRuntimeClasspathEntry(IClasspathEntry entry) {
+		super(entry);
+	}
 
-    @Override
-    public IResource getResource()
-    {
-        return null;
-    }
+	@Override
+	public IResource getResource() {
+		return null;
+	}
+
 }

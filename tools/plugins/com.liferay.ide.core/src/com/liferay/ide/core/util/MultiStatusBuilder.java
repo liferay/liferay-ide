@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.core.util;
 
 import java.util.List;
@@ -20,40 +20,38 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 
-
 /**
  * @author Gregory Amerson
  */
-public class MultiStatusBuilder
-{
-    private final String pluginId;
-    private final MultiStatus retval;
+public class MultiStatusBuilder {
 
-    public MultiStatusBuilder(String pluginId )
-    {
-        this.pluginId = pluginId;
-        this.retval = new MultiStatus( pluginId, 0, null, null );
-    }
+	public MultiStatusBuilder(String pluginId) {
+		_pluginId = pluginId;
 
-    public MultiStatusBuilder add( IStatus status )
-    {
-        this.retval.add( status );
+		_retval = new MultiStatus(pluginId, 0, null, null);
+	}
 
-        return this;
-    }
+	public MultiStatusBuilder add(IStatus status) {
+		_retval.add(status);
 
-    public MultiStatusBuilder addAll( List<Throwable> exceptions )
-    {
-        for( Throwable t : exceptions )
-        {
-            this.retval.add( new Status( IStatus.ERROR, this.pluginId, t.getMessage(), t ) );
-        }
+		return this;
+	}
 
-        return this;
-    }
+	public MultiStatusBuilder addAll(List<Throwable> exceptions) {
+		for (Throwable t : exceptions) {
+			Status status = new Status(IStatus.ERROR, _pluginId, t.getMessage(), t);
 
-    public IStatus retval()
-    {
-        return this.retval;
-    }
+			_retval.add(status);
+		}
+
+		return this;
+	}
+
+	public IStatus retval() {
+		return _retval;
+	}
+
+	private final String _pluginId;
+	private final MultiStatus _retval;
+
 }
