@@ -74,10 +74,10 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall {
 
 		IFolder folder = new PluginsSDKBundleProject(project, null).getDefaultDocrootFolder();
 
-		if ((folder != null) && folder.exists()) {
+		if (FileUtil.exists(folder)) {
 			IResource libRes = folder.findMember("WEB-INF/lib");
 
-			if ((libRes != null) && libRes.exists()) {
+			if (FileUtil.exists(libRes)) {
 				IFolder libFolder = (IFolder)libRes;
 
 				IResource[] libFiles = libFolder.members(true);
@@ -133,7 +133,7 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall {
 			IResource sourceFolder =
 				javaProject.getProject().findMember(IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER);
 
-			if (sourceFolder.exists()) {
+			if (FileUtil.exists(sourceFolder)) {
 				sourceFolder.delete(true, null);
 			}
 		}

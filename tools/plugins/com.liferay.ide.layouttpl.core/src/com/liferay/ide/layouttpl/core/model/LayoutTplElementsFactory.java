@@ -15,6 +15,7 @@
 package com.liferay.ide.layouttpl.core.model;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.layouttpl.core.LayoutTplCore;
 import com.liferay.ide.layouttpl.core.util.LayoutTplUtil;
 
@@ -86,7 +87,7 @@ public class LayoutTplElementsFactory {
 	}
 
 	public LayoutTplElement newLayoutTplFromFile(IFile file, Boolean bootstrapStyle, Boolean is62) {
-		if ((file == null) || !file.exists()) {
+		if (FileUtil.notExists(file)) {
 			return null;
 		}
 
