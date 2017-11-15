@@ -16,6 +16,8 @@ package com.liferay.ide.studio.ui;
 
 import com.liferay.ide.project.core.workspace.ImportLiferayWorkspaceOp;
 import com.liferay.ide.project.ui.workspace.ImportLiferayWorkspaceWizard;
+import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
+import com.liferay.ide.ui.util.ProjectExplorerLayoutUtil;
 
 import java.io.File;
 
@@ -34,6 +36,12 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
+import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.IPerspectiveRegistry;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.intro.impl.IntroPlugin;
 import org.eclipse.ui.intro.IIntroSite;
 import org.eclipse.ui.intro.config.IIntroAction;
@@ -61,7 +69,7 @@ public class ImportLiferayWorkspaceFromInstallerAction implements IIntroAction {
 		if (!workspaceDir.exists()) {
 			MessageDialog.openInformation(
 				site.getShell(), "Liferay",
-				"Can't import liferay workspace.\nFile \"" + workspaceDir.getAbsolutePath() + "\" doesn't exist.");
+				"Can't import liferay workspace.\nDirectory \"" + workspaceDir.getAbsolutePath() + "\" doesn't exist.");
 			return;
 		}
 
@@ -91,7 +99,39 @@ public class ImportLiferayWorkspaceFromInstallerAction implements IIntroAction {
 
 		job.schedule();
 
+		_openLiferayPerspective();
+
+		ProjectExplorerLayoutUtil.setNested(true);
+
 		IntroPlugin.closeIntro();
+	}
+
+	private void _openLiferayPerspective() {
+		IWorkbench workbench = PlatformUI.getWorkbench();
+
+		IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+
+		IPerspectiveDescriptor perspective = activeWorkbenchWindow.getActivePage().getPerspective();
+
+		if (!perspective.getId().equals(LiferayWorkspacePerspectiveFactory.ID)) {
+			IPerspectiveRegistry reg = PlatformUI.getWorkbench().getPerspectiveRegistry();
+
+			IPerspectiveDescriptor finalPersp = reg.findPerspectiveWithId(LiferayWorkspacePerspectiveFactory.ID);
+
+			IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+
+			if (window == null) {
+				return;
+			}
+
+			IWorkbenchPage page = window.getActivePage();
+
+			if (page == null) {
+				return;
+			}
+
+			page.setPerspective(finalPersp);
+		}
 	}
 
 }
