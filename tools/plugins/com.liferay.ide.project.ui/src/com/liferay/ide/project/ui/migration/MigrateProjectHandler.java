@@ -25,6 +25,7 @@ import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.FileProblemsUtil;
 import com.liferay.ide.project.core.upgrade.IgnoredProblemsContainer;
 import com.liferay.ide.project.core.upgrade.MigrationProblems;
+import com.liferay.ide.project.core.upgrade.MigrationProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 import com.liferay.ide.project.core.util.ValidationUtil;
@@ -35,7 +36,6 @@ import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -76,7 +76,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -113,7 +112,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 			else if (element instanceof IAdaptable) {
 				IAdaptable adaptable = (IAdaptable)element;
 
-				project = (IProject)adaptable.getAdapter(IProject.class);
+				project = adaptable.getAdapter(IProject.class);
 			}
 			else if (element instanceof Object[]) {
 				projects = Arrays.copyOf((Object[])element, ((Object[])element).length, IProject[].class);
@@ -401,7 +400,9 @@ public class MigrateProjectHandler extends AbstractHandler {
 					if (currentTreeNode instanceof FileProblems) {
 						FileProblems currentNode = (FileProblems)currentTreeNode;
 
-						currentPath = currentNode.getFileAbsolutePath();
+						File currentFile = currentNode.getFile();
+
+						currentPath = currentFile.getAbsolutePath();
 					}
 
 					MigrationContentProvider contentProvider =
@@ -416,9 +417,16 @@ public class MigrateProjectHandler extends AbstractHandler {
 						while (fileProblemItertor.hasNext()) {
 							FileProblems fileProblem = fileProblemItertor.next();
 
-							if (fileProblem.getFileAbsolutePath().equals(currentPath)) {
-								fileProblem.getProblems().clear();
-								fileProblem.getProblems().addAll(allProblems);
+							File file = fileProblem.getFile();
+
+							String fileAbsolutePath = file.getAbsolutePath();
+
+							if (fileAbsolutePath.equals(currentPath)) {
+								List<Problem> problems = fileProblem.getProblems();
+
+								problems.clear();
+								problems.addAll(allProblems);
+
 								break;
 							}
 						}

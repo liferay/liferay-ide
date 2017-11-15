@@ -18,6 +18,7 @@ import com.liferay.blade.api.AutoMigrateException;
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.project.core.upgrade.FileProblems;
+import com.liferay.ide.project.core.upgrade.ProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;

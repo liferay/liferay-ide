@@ -12,29 +12,29 @@
  * details.
  */
 
-package com.liferay.ide.project.ui.migration;
-
-import com.liferay.ide.project.core.upgrade.MigrationProblems;
+package com.liferay.ide.project.core.upgrade;
 
 /**
  * @author Terry Jia
  */
 public class MigrationProblemsContainer implements ProblemsContainer {
 
+	@Override
 	public MigrationProblems[] getProblemsArray() {
-		return _problemsArray;
+		return this.problemsArray;
 	}
 
+	@Override
 	public String getType() {
-		return _type;
+		return this.type;
 	}
 
 	public void setProblemsArray(MigrationProblems[] problemsArray) {
-		_problemsArray = problemsArray;
-		_type = problemsArray[0].getType();
+		this.problemsArray = problemsArray;
+		this.type = problemsArray[0].getType();
 	}
 
-	private MigrationProblems[] _problemsArray;
-	private String _type;
+	private MigrationProblems[] problemsArray;
+	private String type;
 
 }

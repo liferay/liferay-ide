@@ -14,9 +14,9 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.project.core.upgrade.MigrationProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.migration.MigrationProblemsContainer;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
 

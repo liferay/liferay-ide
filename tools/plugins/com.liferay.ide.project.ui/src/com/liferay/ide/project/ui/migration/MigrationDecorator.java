@@ -16,6 +16,7 @@ package com.liferay.ide.project.ui.migration;
 
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.project.core.upgrade.FileProblems;
+import com.liferay.ide.project.core.upgrade.ProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 
 import java.util.ArrayList;
