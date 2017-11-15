@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.core.model.internal;
 
@@ -29,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.LayeredListPropertyBinding;
@@ -39,166 +37,140 @@ import org.eclipse.sapphire.Resource;
 /**
  * @author Gregory Amerson
  */
-public class RelationshipsBindingImpl extends LayeredListPropertyBinding
-{
+public class RelationshipsBindingImpl extends LayeredListPropertyBinding {
 
-    private List<RelationshipObject> relationships = new ArrayList<RelationshipObject>();
+	@Override
+	public void init(Property property) {
+		super.init(property);
 
-    private Column findPrimaryKey( final Entity entity )
-    {
-        if( entity != null )
-        {
-            for( Column column : entity.getColumns() )
-            {
-                if( column.isPrimary().content() )
-                {
-                    return column;
-                }
-            }
-        }
+		_serviceBuilder().attach(
+			new FilteredListener<PropertyEvent>() {
 
-        return null;
-    }
+				@Override
+				public void handleTypedEvent(PropertyEvent event) {
+					if (event != null) {
+						_refreshRelationships();
+					}
+				}
 
-    @Override
-    public void init( Property property )
-    {
-        super.init( property );
+			},
+			"Entities/*");
 
-        serviceBuilder().attach
-        (
-            new FilteredListener<PropertyEvent>()
-            {
-                @Override
-                public void handleTypedEvent( final PropertyEvent event )
-                {
-                    if( event != null )
-                    {
-                        refreshRelationships();
-                    }
-                }
-            },
-            "Entities/*"
-        );
+		_refreshRelationships();
+	}
 
-        refreshRelationships();
-    }
+	@Override
+	public void remove(Resource resource) {
+		RelationshipObject relObject = resource.adapt(RelationshipResource.class).getRelationshipObject();
 
-    @Override
-    protected Object insertUnderlyingObject( ElementType type, int position )
-    {
-        RelationshipObject newRelationship = new RelationshipObject();
+		_relationships.remove(relObject);
+		_removeRelationship(relObject);
+	}
 
-        if( position > this.relationships.size() )
-        {
-            this.relationships.add( newRelationship );
-        }
-        else
-        {
-            this.relationships.add( position, newRelationship );
-        }
-        return newRelationship;
-    }
+	@Override
+	public ElementType type(Resource resource) {
+		return Relationship.TYPE;
+	}
 
-    @Override
-    protected List<?> readUnderlyingList()
-    {
-        return this.relationships;
-    }
+	@Override
+	protected Object insertUnderlyingObject(ElementType type, int position) {
+		RelationshipObject newRelationship = new RelationshipObject();
 
-    private void refreshRelationships()
-    {
-        this.relationships.clear();
+		if (position > _relationships.size()) {
+			_relationships.add(newRelationship);
+		}
+		else {
+			_relationships.add(position, newRelationship);
+		}
 
-        Map<String, String> primaryKeys = new HashMap<String, String>();
+		return newRelationship;
+	}
 
-        for( Entity entity : serviceBuilder().getEntities() )
-        {
-            Column primaryKeyColumn = findPrimaryKey( entity );
+	@Override
+	protected List<?> readUnderlyingList() {
+		return _relationships;
+	}
 
-            if( primaryKeyColumn != null && !empty( primaryKeyColumn.getName().content() ) )
-            {
-                primaryKeys.put( primaryKeyColumn.getName().content(), entity.getName().content() );
-            }
-        }
+	@Override
+	protected Resource resource(Object obj) {
+		Element element = property().element();
 
-        for( Entity entity : serviceBuilder().getEntities() )
-        {
-            for( Column column : entity.getColumns() )
-            {
-                if( !column.isPrimary().content() )
-                {
-                    final String columnName = column.getName().content();
+		return new RelationshipResource((RelationshipObject)obj, element.resource());
+	}
 
-                    final String entityName = primaryKeys.get( columnName );
+	private Column _findPrimaryKey(Entity entity) {
+		if (entity != null) {
+			for (Column column : entity.getColumns()) {
+				if (column.isPrimary().content()) {
+					return column;
+				}
+			}
+		}
 
-                    if( entityName != null )
-                    {
-                        this.relationships.add( new RelationshipObject( entity.getName().content(), entityName ) );
-                    }
-                }
-            }
-        }
-    }
+		return null;
+	}
 
-    @Override
-    public void remove( Resource resource )
-    {
-        RelationshipObject relObject = resource.adapt( RelationshipResource.class ).getRelationshipObject();
-        this.relationships.remove( relObject );
-        removeRelationship( relObject );
-    }
+	private void _refreshRelationships() {
+		_relationships.clear();
 
-    private void removeRelationship( RelationshipObject relObject )
-    {
-        String fromName = relObject.getFromName();
-        String toName = relObject.getToName();
+		Map<String, String> primaryKeys = new HashMap<>();
 
-        Entity fromEntity = EntityRelationshipService.findEntity( fromName, serviceBuilder() );
-        Entity toEntity = EntityRelationshipService.findEntity( toName, serviceBuilder() );
+		for (Entity entity : _serviceBuilder().getEntities()) {
+			Column primaryKeyColumn = _findPrimaryKey(entity);
 
-        Column primaryKeyColumn = findPrimaryKey( toEntity );
+			if ((primaryKeyColumn != null) && !empty(primaryKeyColumn.getName().content())) {
+				primaryKeys.put(primaryKeyColumn.getName().content(), entity.getName().content());
+			}
+		}
 
-        if( primaryKeyColumn != null )
-        {
-            String primaryKeyName = primaryKeyColumn.getName().content();
+		for (Entity entity : _serviceBuilder().getEntities()) {
+			for (Column column : entity.getColumns()) {
+				if (!column.isPrimary().content()) {
+					String columnName = column.getName().content();
 
-            if( !empty( primaryKeyName ) )
-            {
-                Column columnToRemove = null;
+					String entityName = primaryKeys.get(columnName);
 
-                for( Column column : fromEntity.getColumns() )
-                {
-                    if( primaryKeyName.equals( column.getName().content() ) )
-                    {
-                        columnToRemove = column;
-                        break;
-                    }
-                }
+					if (entityName != null) {
+						_relationships.add(new RelationshipObject(entity.getName().content(), entityName));
+					}
+				}
+			}
+		}
+	}
 
-                if( columnToRemove != null )
-                {
-                    fromEntity.getColumns().remove( columnToRemove );
-                }
-            }
-        }
-    }
+	private void _removeRelationship(RelationshipObject relObject) {
+		String fromName = relObject.getFromName();
+		String toName = relObject.getToName();
 
-    @Override
-    protected Resource resource( Object obj )
-    {
-        return new RelationshipResource( (RelationshipObject) obj, this.property().element().resource() );
-    }
+		Entity fromEntity = EntityRelationshipService.findEntity(fromName, _serviceBuilder());
+		Entity toEntity = EntityRelationshipService.findEntity(toName, _serviceBuilder());
 
-    private ServiceBuilder serviceBuilder()
-    {
-        return this.property().nearest( ServiceBuilder.class );
-    }
+		Column primaryKeyColumn = _findPrimaryKey(toEntity);
 
-    @Override
-    public ElementType type( Resource resource )
-    {
-        return Relationship.TYPE;
-    }
+		if (primaryKeyColumn != null) {
+			String primaryKeyName = primaryKeyColumn.getName().content();
+
+			if (!empty(primaryKeyName)) {
+				Column columnToRemove = null;
+
+				for (Column column : fromEntity.getColumns()) {
+					if (primaryKeyName.equals(column.getName().content())) {
+						columnToRemove = column;
+						break;
+					}
+				}
+
+				if (columnToRemove != null) {
+					fromEntity.getColumns().remove(columnToRemove);
+				}
+			}
+		}
+	}
+
+	private ServiceBuilder _serviceBuilder() {
+		return property().nearest(ServiceBuilder.class);
+	}
+
+	private List<RelationshipObject> _relationships = new ArrayList<>();
 
 }

@@ -3,11 +3,11 @@
 <service-builder package-path="com.liferay.sample">
 	<author>liferay</author>
 	<namespace>SAMPLE</namespace>
-	<entity name="Sample" local-service="true" remote-service="true">
+	<entity local-service="true" name="Sample" remote-service="true">
 
 		<!-- PK fields -->
 
-		<column name="sampleId" type="long" primary="true"></column>
+		<column name="sampleId" primary="true" type="long"></column>
 
 		<!-- Group instance -->
 

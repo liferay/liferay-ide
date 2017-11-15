@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,22 +10,19 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.service.core.model.internal;
 
 import com.liferay.ide.project.core.util.VersionedDTDDefaultValueService;
 
-
 /**
  * @author Gregory Amerson
  */
-public class ServiceBuilderDefaultValueService extends VersionedDTDDefaultValueService
-{
+public class ServiceBuilderDefaultValueService extends VersionedDTDDefaultValueService {
 
-    public ServiceBuilderDefaultValueService()
-    {
-        super( ServiceBuilderRootElementController.systemIdPattern );
-    }
+	public ServiceBuilderDefaultValueService() {
+		super(ServiceBuilderRootElementController.systemIdPattern);
+	}
 
 }

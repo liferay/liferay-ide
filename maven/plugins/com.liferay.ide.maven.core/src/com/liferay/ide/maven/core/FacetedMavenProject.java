@@ -17,6 +17,7 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.IResourceBundleProject;
 import com.liferay.ide.core.IWebProject;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.FlexibleProject;
 
 import java.util.Collection;
@@ -119,7 +120,7 @@ public class FacetedMavenProject extends LiferayMavenProject implements IWebProj
 
 			IFile output = getProject().getFile(new Path(targetFolder).append(targetWar));
 
-			if (output.exists()) {
+			if (FileUtil.exists(output)) {
 				outputs.add(output);
 			}
 		}

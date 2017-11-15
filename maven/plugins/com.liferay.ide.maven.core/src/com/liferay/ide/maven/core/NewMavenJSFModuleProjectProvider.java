@@ -17,6 +17,7 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.ILiferayProjectImporter;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.maven.core.aether.AetherUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp;
@@ -51,7 +52,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.internal.MavenPluginActivator;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,7 +76,7 @@ public class NewMavenJSFModuleProjectProvider
 
 		IPath buildGradle = projectLocation.append("build.gradle");
 
-		if (buildGradle.toFile().exists()) {
+		if (FileUtil.exists(buildGradle)) {
 			buildGradle.toFile().delete();
 		}
 
@@ -169,7 +169,7 @@ public class NewMavenJSFModuleProjectProvider
 		if (liferayWorkspace) {
 			File workspaceDir = LiferayWorkspaceUtil.getWorkspaceDir(currentProjectLocation.toFile());
 
-			if ((workspaceDir == null) || !workspaceDir.exists()) {
+			if (FileUtil.notExists(workspaceDir)) {
 				return LiferayCore.createErrorStatus("The project location of Liferay Workspace shoule be existed.");
 			}
 
@@ -278,7 +278,7 @@ public class NewMavenJSFModuleProjectProvider
 
 			projectLocation = location.append(artifactId);
 
-			if (!projectLocation.toFile().exists()) {
+			if (FileUtil.notExists(projectLocation)) {
 				throw new CoreException(LiferayCore.createErrorStatus("Can't create gradle JSF project. "));
 			}
 		}

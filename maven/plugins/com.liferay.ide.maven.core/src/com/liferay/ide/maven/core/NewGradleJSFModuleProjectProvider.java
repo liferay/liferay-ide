@@ -16,6 +16,7 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayProjectImporter;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
@@ -50,11 +51,11 @@ public class NewGradleJSFModuleProjectProvider extends NewMavenJSFModuleProjectP
 
 			IPath buildGradlePath = projectLocation.append("build.gradle");
 
-			if (buildGradlePath.toFile().exists()) {
+			if (FileUtil.exists(buildGradlePath)) {
 				try {
 					File workspaceDir = LiferayWorkspaceUtil.getWorkspaceDir(buildGradlePath.toFile());
 
-					if ((workspaceDir != null) && workspaceDir.exists()) {
+					if (FileUtil.exists(workspaceDir)) {
 						boolean hasLiferayWorkspace = LiferayWorkspaceUtil.isValidWorkspaceLocation(
 							workspaceDir.getAbsolutePath());
 
@@ -83,7 +84,7 @@ public class NewGradleJSFModuleProjectProvider extends NewMavenJSFModuleProjectP
 
 			IPath buildPom = projectLocation.append("pom.xml");
 
-			if (buildPom.toFile().exists()) {
+			if (FileUtil.exists(buildPom)) {
 				buildPom.toFile().delete();
 			}
 

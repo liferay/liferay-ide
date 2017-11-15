@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.core;
 
@@ -19,6 +18,7 @@ import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.WizardUtil;
@@ -36,97 +36,91 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+
 import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
  * @author Cindy Li
  */
-@SuppressWarnings( { "restriction" } )
-public class AddServiceBuilderOperation extends AbstractDataModelOperation
-    implements INewServiceBuilderDataModelProperties
-{
+public class AddServiceBuilderOperation
+	extends AbstractDataModelOperation implements INewServiceBuilderDataModelProperties {
 
-    public AddServiceBuilderOperation( IDataModel model )
-    {
-        super( model );
-    }
+	public AddServiceBuilderOperation(IDataModel model) {
+		super(model);
+	}
 
-    public void createDefaultServiceBuilderFile( IFile serviceBuilderFile, IProgressMonitor monitor )
-        throws CoreException
-    {
-        String descriptorVersion = null;
+	public void createDefaultServiceBuilderFile(IFile serviceBuilderFile, IProgressMonitor monitor)
+		throws CoreException {
 
-        try
-        {
-            final ILiferayProject liferayProject = LiferayCore.create( serviceBuilderFile.getProject() );
-            final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
-            final Version portalVersion = new Version( portal.getVersion() );
+		String descriptorVersion = null;
 
-            descriptorVersion = portalVersion.getMajor() + "." + portalVersion.getMinor() + ".0";  //$NON-NLS-1$//$NON-NLS-2$
-        }
-        catch( Exception e )
-        {
-            ProjectCore.logError( "Could not determine liferay runtime version", e ); //$NON-NLS-1$
-            descriptorVersion = "6.0.0"; //$NON-NLS-1$
-        }
+		try {
+			ILiferayProject liferayProject = LiferayCore.create(serviceBuilderFile.getProject());
 
-        WizardUtil.createDefaultServiceBuilderFile(
-            serviceBuilderFile, descriptorVersion, getDataModel().getBooleanProperty( USE_SAMPLE_TEMPLATE ),
-            getDataModel().getStringProperty( PACKAGE_PATH ), getDataModel().getStringProperty( NAMESPACE ),
-            getDataModel().getStringProperty( AUTHOR ), monitor );
+			ILiferayPortal portal = liferayProject.adapt(ILiferayPortal.class);
 
-        getDataModel().setProperty( CREATED_SERVICE_FILE, serviceBuilderFile );
-    }
+			Version portalVersion = new Version(portal.getVersion());
 
-    private IStatus createServiceBuilderFile( IProject project, IProgressMonitor monitor )
-    {
-        // IDE-110 IDE-648
-        final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
+			descriptorVersion = portalVersion.getMajor() + "." + portalVersion.getMinor() + ".0";
+		}
+		catch (Exception e) {
+			ProjectCore.logError("Could not determine liferay runtime version", e);
+			descriptorVersion = "6.0.0";
+		}
 
-        if( webproject == null || webproject.getDefaultDocrootFolder() == null )
-        {
-            return ServiceCore.createErrorStatus( "Could not find webapp root folder." ); //$NON-NLS-1$
-        }
+		WizardUtil.createDefaultServiceBuilderFile(
+			serviceBuilderFile, descriptorVersion, getDataModel().getBooleanProperty(USE_SAMPLE_TEMPLATE),
+			getDataModel().getStringProperty(PACKAGE_PATH), getDataModel().getStringProperty(NAMESPACE),
+			getDataModel().getStringProperty(AUTHOR), monitor);
 
-        final IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
-        final Path path = new Path( "WEB-INF/" + getDataModel().getStringProperty( SERVICE_FILE ) ); //$NON-NLS-1$
-        final IFile serviceBuilderFile = defaultDocroot.getFile( path );
+		getDataModel().setProperty(CREATED_SERVICE_FILE, serviceBuilderFile);
+	}
 
-        if( !serviceBuilderFile.exists() )
-        {
-            try
-            {
-                createDefaultServiceBuilderFile( serviceBuilderFile, monitor );
-            }
-            catch( Exception ex )
-            {
-                return ServiceCore.createErrorStatus( ex );
-            }
-        }
+	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+		IStatus retval = null;
 
-        return Status.OK_STATUS;
-    }
+		IStatus status = _createServiceBuilderFile(getTargetProject(), monitor);
 
-    public IStatus execute( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException
-    {
-        IStatus retval = null;
+		if (!status.isOK()) {
+			return status;
+		}
 
-        IStatus status = createServiceBuilderFile( getTargetProject(), monitor );
+		return retval;
+	}
 
-        if( !status.isOK() )
-        {
-            return status;
-        }
+	@SuppressWarnings("restriction")
+	protected IProject getTargetProject() {
+		String projectName = model.getStringProperty(PROJECT_NAME);
 
-        return retval;
-    }
+		return ProjectUtil.getProject(projectName);
+	}
 
-    protected IProject getTargetProject()
-    {
-        String projectName = model.getStringProperty( PROJECT_NAME );
+	private IStatus _createServiceBuilderFile(IProject project, IProgressMonitor monitor) {
 
-        return ProjectUtil.getProject( projectName );
-    }
+		// IDE-110 IDE-648
+
+		IWebProject webproject = LiferayCore.create(IWebProject.class, project);
+
+		if ((webproject == null) || (webproject.getDefaultDocrootFolder() == null)) {
+			return ServiceCore.createErrorStatus("Could not find webapp root folder.");
+		}
+
+		IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
+		Path path = new Path("WEB-INF/" + getDataModel().getStringProperty(SERVICE_FILE));
+
+		IFile serviceBuilderFile = defaultDocroot.getFile(path);
+
+		if (FileUtil.notExists(serviceBuilderFile)) {
+			try {
+				createDefaultServiceBuilderFile(serviceBuilderFile, monitor);
+			}
+			catch (Exception ex) {
+				return ServiceCore.createErrorStatus(ex);
+			}
+		}
+
+		return Status.OK_STATUS;
+	}
 
 }

@@ -19,6 +19,7 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
 import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
@@ -336,7 +337,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 					else {
 						File configDir = new File(value);
 
-						if (!configDir.exists() || !configDir.isDirectory()) {
+						if (FileUtil.notExists(configDir) || !configDir.isDirectory()) {
 							message = NLS.bind(Msgs.unusableConfigValue, configParam, value);
 						}
 					}
@@ -555,9 +556,9 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
 		IProject project = facetedProject.getProject();
 
-		if ((project != null) && project.exists() &&
-			project.getFile("src/main/webapp/WEB-INF/liferay-layout-templates.xml").exists()) {
+		IFile templateFile = project.getFile("src/main/webapp/WEB-INF/liferay-layout-templates.xml");
 
+		if (FileUtil.exists(project) && FileUtil.exists(templateFile)) {
 			layoutTemplateProject = true;
 		}
 

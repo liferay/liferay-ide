@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -319,9 +320,11 @@ public class NewMavenPluginProjectProvider
 	public IStatus validateProjectLocation(String projectName, IPath path) {
 		IStatus retval = Status.OK_STATUS;
 
-		// if the path is a folder and it has a pom.xml that is a package type of 'pom'
-		// then this is a valid location
-		// if projectName is null or empty , don't need to check , just return
+		/*
+		 * if the path is a folder and it has a pom.xml that is a package type of 'pom'
+		 * then this is a valid location if projectName is null or empty , don't need to check
+		 * just return
+		 */
 
 		if (CoreUtil.isNullOrEmpty(projectName)) {
 			return retval;
@@ -329,45 +332,47 @@ public class NewMavenPluginProjectProvider
 
 		File dir = path.toFile();
 
-		if (dir.exists()) {
-			File pomFile = path.append(IMavenConstants.POM_FILE_NAME).toFile();
+		if (FileUtil.notExists(dir)) {
+			return retval;
+		}
 
-			if (pomFile.exists()) {
-				IMaven maven = MavenPlugin.getMaven();
+		File pomFile = path.append(IMavenConstants.POM_FILE_NAME).toFile();
 
-				try {
-					Model result = maven.readModel(pomFile);
+		if (FileUtil.exists(pomFile)) {
+			IMaven maven = MavenPlugin.getMaven();
 
-					if (!"pom".equals(result.getPackaging())) {
+			try {
+				Model result = maven.readModel(pomFile);
+
+				if (!"pom".equals(result.getPackaging())) {
+					retval = LiferayMavenCore.createErrorStatus(
+						"\"" + pomFile.getParent() + "\" contains a non-parent maven project.");
+				}
+				else {
+					String name = result.getName();
+
+					if (projectName.equals(name)) {
 						retval = LiferayMavenCore.createErrorStatus(
-							"\"" + pomFile.getParent() + "\" contains a non-parent maven project.");
+							"The project name \"" + projectName + "\" can't be the same as the parent.");
 					}
 					else {
-						String name = result.getName();
+						IPath newProjectPath = path.append(projectName);
 
-						if (projectName.equals(name)) {
-							retval = LiferayMavenCore.createErrorStatus(
-								"The project name \"" + projectName + "\" can't be the same as the parent.");
-						}
-						else {
-							IPath newProjectPath = path.append(projectName);
-
-							retval = validateProjectLocation(projectName, newProjectPath);
-						}
+						retval = validateProjectLocation(projectName, newProjectPath);
 					}
 				}
-				catch (CoreException ce) {
-					retval = LiferayMavenCore.createErrorStatus("Invalid project location.", ce);
-
-					LiferayMavenCore.log(retval);
-				}
 			}
-			else {
-				File[] files = dir.listFiles();
+			catch (CoreException ce) {
+				retval = LiferayMavenCore.createErrorStatus("Invalid project location.", ce);
 
-				if (files.length > 0) {
-					retval = LiferayMavenCore.createErrorStatus("Project location is not empty or a parent pom.");
-				}
+				LiferayMavenCore.log(retval);
+			}
+		}
+		else {
+			File[] files = dir.listFiles();
+
+			if (files.length > 0) {
+				retval = LiferayMavenCore.createErrorStatus("Project location is not empty or a parent pom.");
 			}
 		}
 

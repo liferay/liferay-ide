@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.service.core.model;
 
 import org.eclipse.sapphire.Element;
@@ -33,78 +33,78 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author Gregory Amerson
  */
 @Image(path = "images/finder_16x16.gif")
-public interface Finder extends Element
-{
-    ElementType TYPE = new ElementType( Finder.class );
+public interface Finder extends Element {
 
-    // *** Name ***
+	public ElementType TYPE = new ElementType(Finder.class);
 
-    @XmlBinding( path = "@name" )
-    @Label( standard = "&name" )
-    @Required
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
+	// *** Name ***
 
-    Value<String> getName();
+	public ElementList<FinderColumn> getFinderColumns();
 
-    void setName( String value );
+	public Value<String> getName();
 
-    // *** Return Type ***
+	public Value<String> getReturnType();
 
-    @XmlBinding( path = "@return-type" )
-    @Label( standard = "&return type" )
-    @Required
-    ValueProperty PROP_RETURN_TYPE = new ValueProperty( TYPE, "ReturnType" ); //$NON-NLS-1$
+	// *** Return Type ***
 
-    Value<String> getReturnType();
+	public Value<String> getWhere();
 
-    void setReturnType( String value );
+	public Value<Boolean> isDbIndex();
 
-    // *** Unique ***
+	public Value<Boolean> isUnique();
 
-    @Type( base = Boolean.class )
-    @Label( standard = "&unique" )
-    @XmlBinding( path = "@unique" )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_UNIQUE = new ValueProperty( TYPE, "Unique" ); //$NON-NLS-1$
+	// *** Unique ***
 
-    Value<Boolean> isUnique();
+	public void setDbIndex(Boolean value);
 
-    void setUnique( String value );
+	public void setDbIndex(String value);
 
-    void setUnique( Boolean value );
+	public void setName(String value);
 
-    // *** Where ***
+	public void setReturnType(String value);
 
-    @XmlBinding( path = "@where" )
-    @Label( standard = "&where" )
-    ValueProperty PROP_WHERE = new ValueProperty( TYPE, "Where" ); //$NON-NLS-1$
+	// *** Where ***
 
-    Value<String> getWhere();
+	public void setUnique(Boolean value);
 
-    void setWhere( String value );
+	public void setUnique(String value);
 
-    // *** DB Index ***
+	public void setWhere(String value);
 
-    @Type( base = Boolean.class )
-    @Label( standard = "&db index" )
-    @XmlBinding( path = "@db-index" )
-    @DefaultValue( text = "true" )
-    ValueProperty PROP_DB_INDEX = new ValueProperty( TYPE, "DbIndex" ); //$NON-NLS-1$
+	// *** DB Index ***
 
-    Value<Boolean> isDbIndex();
+	@DefaultValue(text = "true")
+	@Label(standard = "&db index")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "@db-index")
+	public ValueProperty PROP_DB_INDEX = new ValueProperty(TYPE, "DbIndex");
 
-    void setDbIndex( String value );
+	@Label(standard = "finder columns")
+	@Length(min = 1)
+	@Type(base = FinderColumn.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "finder-column", type = FinderColumn.class))
+	public ListProperty PROP_FINDER_COLUMNS = new ListProperty(TYPE, "FinderColumns");
 
-    void setDbIndex( Boolean value );
+	@Label(standard = "&name")
+	@Required
+	@XmlBinding(path = "@name")
+	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
-    // *** Finder Columns ***
+	@Label(standard = "&return type")
+	@Required
+	@XmlBinding(path = "@return-type")
+	public ValueProperty PROP_RETURN_TYPE = new ValueProperty(TYPE, "ReturnType");
 
-    @Type( base = FinderColumn.class )
-    @Label( standard = "finder columns" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "finder-column", type = FinderColumn.class ) )
-    @Length( min = 1 )
-    ListProperty PROP_FINDER_COLUMNS = new ListProperty( TYPE, "FinderColumns" ); //$NON-NLS-1$
+	// *** Finder Columns ***
 
-    ElementList<FinderColumn> getFinderColumns();
+	@DefaultValue(text = "false")
+	@Label(standard = "&unique")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "@unique")
+	public ValueProperty PROP_UNIQUE = new ValueProperty(TYPE, "Unique");
+
+	@Label(standard = "&where")
+	@XmlBinding(path = "@where")
+	public ValueProperty PROP_WHERE = new ValueProperty(TYPE, "Where");
 
 }

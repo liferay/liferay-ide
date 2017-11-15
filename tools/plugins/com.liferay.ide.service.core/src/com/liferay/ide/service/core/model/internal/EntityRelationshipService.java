@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
+
 package com.liferay.ide.service.core.model.internal;
 
 import com.liferay.ide.service.core.model.Entity;
@@ -25,34 +23,27 @@ import org.eclipse.sapphire.services.ReferenceService;
 /**
  * @author Gregory Amerson
  */
-public class EntityRelationshipService extends ReferenceService<Entity>
-{
+public class EntityRelationshipService extends ReferenceService<Entity> {
 
-    public static Entity findEntity(final String entityName, final ServiceBuilder serviceBuilder)
-    {
-        if( entityName != null && serviceBuilder != null)
-        {
-            if( serviceBuilder != null )
-            {
-                for( Entity entity : serviceBuilder.getEntities() )
-                {
-                    if( entityName.equals( entity.getName().content() ) )
-                    {
-                        return entity;
-                    }
-                }
-            }
-        }
+	public static Entity findEntity(String entityName, ServiceBuilder serviceBuilder) {
+		if ((entityName != null) && (serviceBuilder != null)) {
+			if (serviceBuilder != null) {
+				for (Entity entity : serviceBuilder.getEntities()) {
+					if (entityName.equals(entity.getName().content())) {
+						return entity;
+					}
+				}
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-    public Entity compute()
-    {
-        final String reference = context( Value.class ).text();
+	@Override
+	public Entity compute() {
+		String reference = context(Value.class).text();
 
-        return findEntity( reference, context( ServiceBuilder.class ) );
-    }
+		return findEntity(reference, context(ServiceBuilder.class));
+	}
 
 }

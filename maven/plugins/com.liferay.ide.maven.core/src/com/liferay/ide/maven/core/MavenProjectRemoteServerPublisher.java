@@ -17,6 +17,7 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
@@ -83,11 +84,12 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 			boolean deltaZip = false;
 			IPath deltaPath = null;
 
-			if ((webappRoot != null) && webappRoot.exists()) {
+			if (FileUtil.exists(webappRoot)) {
 				IPath containerFullPath = webappRoot.getFullPath();
 
 				if (containerFullPath.isPrefixOf(deltaFullPath)) {
 					deltaZip = true;
+
 					deltaPath = new Path(deltaPrefix + deltaFullPath.makeRelativeTo(containerFullPath));
 				}
 			}
@@ -100,6 +102,7 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 
 					if (folderPath.isPrefixOf(deltaFullPath)) {
 						deltaZip = true;
+
 						break;
 					}
 				}

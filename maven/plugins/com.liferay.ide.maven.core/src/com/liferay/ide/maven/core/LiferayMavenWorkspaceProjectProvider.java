@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
@@ -94,7 +95,7 @@ public class LiferayMavenWorkspaceProjectProvider
 				for (String path : gradleFiles) {
 					IFile gradleFile = newProject.getFile(path);
 
-					if (gradleFile.exists()) {
+					if (FileUtil.exists(gradleFile)) {
 						gradleFile.delete(true, monitor);
 					}
 				}

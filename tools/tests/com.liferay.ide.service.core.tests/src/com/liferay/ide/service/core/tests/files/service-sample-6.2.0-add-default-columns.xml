@@ -7,7 +7,7 @@
 
 		<!-- PK fields -->
 
-		<column name="addDefaultColumnsId" type="long" primary="true"></column>
+		<column name="addDefaultColumnsId"  primary="true" type="long"></column>
 
 		<!-- Group instance -->
 

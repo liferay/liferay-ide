@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.service.core.model;
 
 import org.eclipse.sapphire.Element;
@@ -27,34 +27,32 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
-
 /**
  * @author Gregory Amerson
  */
-public interface Order extends Element
-{
+public interface Order extends Element {
 
-    ElementType TYPE = new ElementType( Order.class );
+	public ElementType TYPE = new ElementType(Order.class);
 
-    // *** By ***
+	// *** By ***
 
-    @Label( standard = "by" )
-    @XmlBinding( path = "@by" )
-    @PossibleValues( values = { "asc", "desc" }, invalidValueMessage = "{0} is not valid." )
-    ValueProperty PROP_BY = new ValueProperty( TYPE, "By" ); //$NON-NLS-1$
+	public Value<String> getBy();
 
-    Value<String> getBy();
+	public ElementList<OrderColumn> getOrderColumns();
 
-    void setBy( String value );
+	public void setBy(String value);
 
-    // *** Order Columns ***
+	// *** Order Columns ***
 
-    @Type( base = OrderColumn.class )
-    @Label( standard = "order columns" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "order-column", type = OrderColumn.class ) )
-    @Length( min = 1 )
-    ListProperty PROP_ORDER_COLUMNS = new ListProperty( TYPE, "OrderColumns" ); //$NON-NLS-1$
+	@Label(standard = "by")
+	@PossibleValues(invalidValueMessage = "{0} is not valid.", values = {"asc", "desc"})
+	@XmlBinding(path = "@by")
+	public ValueProperty PROP_BY = new ValueProperty(TYPE, "By");
 
-    ElementList<OrderColumn> getOrderColumns();
+	@Label(standard = "order columns")
+	@Length(min = 1)
+	@Type(base = OrderColumn.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "order-column", type = OrderColumn.class))
+	public ListProperty PROP_ORDER_COLUMNS = new ListProperty(TYPE, "OrderColumns");
 
 }

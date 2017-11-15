@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.core.job;
 
@@ -34,112 +33,104 @@ import org.eclipse.osgi.util.NLS;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class BuildServiceJob extends Job
-{
+public class BuildServiceJob extends Job {
 
-    protected IProject project;
+	public BuildServiceJob(IProject project) {
+		super(Msgs.buildServices);
 
-    public BuildServiceJob( IProject project )
-    {
-        super( Msgs.buildServices );
+		this.project = project;
 
-        this.project = project;
+		setUser(true);
+	}
 
-        setUser( true );
-    }
+	protected IProject getProject() {
+		return project;
+	}
 
-    protected IProject getProject()
-    {
-        return this.project;
-    }
+	protected IProjectBuilder getProjectBuilder() throws CoreException {
+		ILiferayProject liferayProject = LiferayCore.create(getProject());
 
-    protected IProjectBuilder getProjectBuilder() throws CoreException
-    {
-        final ILiferayProject liferayProject = LiferayCore.create( getProject() );
+		if (liferayProject == null) {
+			throw new CoreException(
+				ServiceCore.createErrorStatus(NLS.bind(Msgs.couldNotCreateLiferayProject, getProject())));
+		}
 
-        if( liferayProject == null )
-        {
-            throw new CoreException( ServiceCore.createErrorStatus( NLS.bind(
-                Msgs.couldNotCreateLiferayProject, getProject() ) ) );
-        }
+		IProjectBuilder builder = liferayProject.adapt(IProjectBuilder.class);
 
-        final IProjectBuilder builder = liferayProject.adapt( IProjectBuilder.class );
+		if (builder == null) {
+			throw new CoreException(
+				ServiceCore.createErrorStatus(NLS.bind(Msgs.couldNotCreateProjectBuilder, getProject())));
+		}
 
-        if( builder == null )
-        {
-            throw new CoreException( ServiceCore.createErrorStatus( NLS.bind(
-                Msgs.couldNotCreateProjectBuilder, getProject() ) ) );
-        }
+		return builder;
+	}
 
-        return builder;
-    }
+	@Override
+	protected IStatus run(IProgressMonitor monitor) {
+		IStatus retval = null;
 
-    @Override
-    protected IStatus run( IProgressMonitor monitor )
-    {
-        IStatus retval = null;
+		if (getProject() == null) {
+			return ServiceCore.createErrorStatus(Msgs.useLiferayProjectImportWizard);
+		}
 
-        if( getProject() == null )
-        {
-            return ServiceCore.createErrorStatus( Msgs.useLiferayProjectImportWizard );
-        }
+		monitor.beginTask(Msgs.buildingLiferayServices, 100);
 
-        monitor.beginTask( Msgs.buildingLiferayServices, 100 );
+		IWorkspaceRunnable workspaceRunner = new IWorkspaceRunnable() {
 
-        final IWorkspaceRunnable workspaceRunner = new IWorkspaceRunnable()
-        {
-            public void run( IProgressMonitor monitor ) throws CoreException
-            {
-                runBuild( monitor );
-            }
-        };
+			public void run(IProgressMonitor monitor) throws CoreException {
+				runBuild(monitor);
+			}
 
-        try
-        {
-            ResourcesPlugin.getWorkspace().run( workspaceRunner, monitor );
-        }
-        catch( CoreException e1 )
-        {
-            retval = ServiceCore.createErrorStatus( e1 );
-        }
+		};
 
-        return retval == null || retval.isOK() ? Status.OK_STATUS : retval;
-    }
+		try {
+			ResourcesPlugin.getWorkspace().run(workspaceRunner, monitor);
+		}
+		catch (CoreException ce) {
+			retval = ServiceCore.createErrorStatus(ce);
+		}
 
-    protected void runBuild( final IProgressMonitor monitor ) throws CoreException
-    {
-        final IProjectBuilder builder = getProjectBuilder();
+		if ((retval == null) || retval.isOK()) {
+			return Status.OK_STATUS;
+		}
 
-        monitor.worked( 50 );
+		return retval;
+	}
 
-        IStatus retval = builder.buildService( monitor );
+	protected void runBuild(IProgressMonitor monitor) throws CoreException {
+		IProjectBuilder builder = getProjectBuilder();
 
-        if( retval == null )
-        {
-            retval = ServiceCore.createErrorStatus( NLS.bind( Msgs.errorRunningBuildService, getProject() ) );
-        }
+		monitor.worked(50);
 
-        if( retval == null || ! retval.isOK() )
-        {
-            throw new CoreException( retval );
-        }
+		IStatus retval = builder.buildService(monitor);
 
-        monitor.worked( 90 );
-    }
+		if (retval == null) {
+			retval = ServiceCore.createErrorStatus(NLS.bind(Msgs.errorRunningBuildService, getProject()));
+		}
 
-    protected static class Msgs extends NLS
-    {
-        public static String buildingLiferayServices;
-        public static String buildServices;
-        public static String couldNotCreateLiferayProject;
-        public static String couldNotCreateProjectBuilder;
-        public static String errorRunningBuildService;
-        public static String useConvertLiferayProject;
-        public static String useLiferayProjectImportWizard;
+		if ((retval == null) || !retval.isOK()) {
+			throw new CoreException(retval);
+		}
 
-        static
-        {
-            initializeMessages( BuildServiceJob.class.getName(), Msgs.class );
-        }
-    }
+		monitor.worked(90);
+	}
+
+	protected IProject project;
+
+	protected static class Msgs extends NLS {
+
+		public static String buildingLiferayServices;
+		public static String buildServices;
+		public static String couldNotCreateLiferayProject;
+		public static String couldNotCreateProjectBuilder;
+		public static String errorRunningBuildService;
+		public static String useConvertLiferayProject;
+		public static String useLiferayProjectImportWizard;
+
+		static {
+			initializeMessages(BuildServiceJob.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

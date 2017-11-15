@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.service.core.model;
 
@@ -31,23 +30,23 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@XmlBinding( path = "service-builder" )
-@VersionCompatibilityTarget( version = "${ Version }", versioned = "Service Builder" )
-@CustomXmlRootBinding( value = ServiceBuilderRootElementController.class )
-public interface ServiceBuilder6xx extends ServiceBuilder
-{
+@CustomXmlRootBinding(value = ServiceBuilderRootElementController.class)
+@VersionCompatibilityTarget(version = "${ Version }", versioned = "Service Builder")
+@XmlBinding(path = "service-builder")
+public interface ServiceBuilder6xx extends ServiceBuilder {
 
-    ElementType TYPE = new ElementType( ServiceBuilder6xx.class );
+	public ElementType TYPE = new ElementType(ServiceBuilder6xx.class);
 
-    // *** Version ***
+	// *** Version ***
 
-    @Type( base = Version.class )
-    @Service( impl = ServiceBuilderDefaultValueService.class )
-    ValueProperty PROP_VERSION = new ValueProperty( TYPE, "Version" ); //$NON-NLS-1$
+	public Value<Version> getVersion();
 
-    Value<Version> getVersion();
+	public void setVersion(String value);
 
-    void setVersion( String value );
+	public void setVersion(Version value);
 
-    void setVersion( Version value );
+	@Service(impl = ServiceBuilderDefaultValueService.class)
+	@Type(base = Version.class)
+	public ValueProperty PROP_VERSION = new ValueProperty(TYPE, "Version");
+
 }

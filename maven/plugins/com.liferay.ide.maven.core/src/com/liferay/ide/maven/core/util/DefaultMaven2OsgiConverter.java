@@ -14,16 +14,16 @@
 
 package com.liferay.ide.maven.core.util;
 
-import aQute.bnd.osgi.Analyzer;
+import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.regex.Matcher;
@@ -31,6 +31,8 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 
 import org.apache.maven.artifact.Artifact;
+
+import aQute.bnd.osgi.Analyzer;
 
 /**
  * Default implementation of {@link Maven2OsgiConverter}
@@ -68,10 +70,10 @@ public class DefaultMaven2OsgiConverter {
 	 * </ul>
 	 */
 	public String getBundleSymbolicName(Artifact artifact) {
-		if ((artifact.getFile() != null) && artifact.getFile().exists()) {
-			Analyzer analyzer = new Analyzer();
+		File artifactFile = artifact.getFile();
 
-			try (JarFile jar = new JarFile(artifact.getFile()); Analyzer analyzser = new Analyzer()) {
+		if (FileUtil.exists(artifactFile)) {
+			try (JarFile jar = new JarFile(artifactFile); Analyzer analyzer = new Analyzer()) {
 				if (jar.getManifest() != null) {
 					Manifest manifestFile = jar.getManifest();
 
@@ -95,7 +97,7 @@ public class DefaultMaven2OsgiConverter {
 
 		int i = artifact.getGroupId().lastIndexOf('.');
 
-		if ((i < 0) && (artifact.getFile() != null) && artifact.getFile().exists()) {
+		if ((i < 0) && FileUtil.exists(artifactFile)) {
 			String groupIdFromPackage = _getGroupIdFromPackage(artifact.getFile());
 
 			if (groupIdFromPackage != null) {
@@ -258,8 +260,8 @@ public class DefaultMaven2OsgiConverter {
 
 			// get package names from jar
 
-			Set packageNames = new HashSet();
-			Enumeration entries = jar.entries();
+			Set<String> packageNames = new HashSet<>();
+			Enumeration<JarEntry> entries = jar.entries();
 
 			while (entries.hasMoreElements()) {
 				ZipEntry entry = (ZipEntry)entries.nextElement();
@@ -279,7 +281,7 @@ public class DefaultMaven2OsgiConverter {
 
 			String[] groupIdSections = null;
 
-			for (Iterator it = packageNames.iterator(); it.hasNext();) {
+			for (Iterator<String> it = packageNames.iterator(); it.hasNext();) {
 				String packageName = (String)it.next();
 
 				String[] packageNameSections = packageName.split("\\" + _FILE_SEPARATOR);

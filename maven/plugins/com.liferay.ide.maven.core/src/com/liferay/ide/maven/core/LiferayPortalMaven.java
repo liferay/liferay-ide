@@ -16,6 +16,7 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -77,7 +78,7 @@ public class LiferayPortalMaven implements ILiferayPortal {
 
 		IPath appServerPortalDir = getAppServerPortalDir();
 
-		if ((appServerPortalDir != null) && appServerPortalDir.toFile().exists()) {
+		if (FileUtil.exists(appServerPortalDir)) {
 			retval = ServerUtil.getPortletCategories(appServerPortalDir);
 		}
 
@@ -96,7 +97,7 @@ public class LiferayPortalMaven implements ILiferayPortal {
 
 		IPath appServerPortalDir = getAppServerPortalDir();
 
-		if ((appServerPortalDir != null) && appServerPortalDir.toFile().exists()) {
+		if (FileUtil.exists(appServerPortalDir)) {
 			String portalVersion = getVersion();
 
 			if (portalVersion != null) {
