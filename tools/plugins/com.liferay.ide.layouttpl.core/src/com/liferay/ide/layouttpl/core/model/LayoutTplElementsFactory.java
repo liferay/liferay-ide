@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.layouttpl.core.model;
 
@@ -25,137 +24,123 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
-
 /**
  * @author Gregory Amerson
  * @author Cindy Li
  * @author Kuo Zhang
- *
  */
-@SuppressWarnings( "restriction" )
-public class LayoutTplElementsFactory
-{
+@SuppressWarnings("restriction")
+public class LayoutTplElementsFactory {
 
-    public static LayoutTplElementsFactory INSTANCE = new LayoutTplElementsFactory();
+	public static final LayoutTplElementsFactory INSTANCE = new LayoutTplElementsFactory();
 
-    public void initPortletColumnFromElement( PortletColumnElement portletColumn, IDOMElement domElement )
-    {
-        if( domElement == null )
-        {
-            return;
-        }
+	public void initPortletColumnFromElement(PortletColumnElement portletColumn, IDOMElement domElement) {
+		if (domElement == null) {
+			return;
+		}
 
-        String existingClassName = domElement.getAttribute( "class" );
+		String existingClassName = domElement.getAttribute("class");
 
-        if( !CoreUtil.isNullOrEmpty( existingClassName ) &&
-            !existingClassName.equals( portletColumn.getClassName().content() ) &&
-             existingClassName.contains( "portlet-column" ) )
-        {
-            portletColumn.setClassName( existingClassName );
-        }
+		if (!CoreUtil.isNullOrEmpty(existingClassName) &&
+			!existingClassName.equals(portletColumn.getClassName().content()) &&
+			existingClassName.contains("portlet-column")) {
 
-        portletColumn.setWeight( LayoutTplUtil.getWeightValue( domElement, -1 ) );
+			portletColumn.setClassName(existingClassName);
+		}
 
-        IDOMElement[] portletLayoutDOMElements =
-            LayoutTplUtil.findChildElementsByClassName( domElement, "div", "portlet-layout" );
+		portletColumn.setWeight(LayoutTplUtil.getWeightValue(domElement, -1));
 
-        if( !CoreUtil.isNullOrEmpty( portletLayoutDOMElements ) )
-        {
-            for( IDOMElement portletLayoutDOMElement : portletLayoutDOMElements )
-            {
-                PortletLayoutElement portletLayout = portletColumn.getPortletLayouts().insert();
-                this.initPortletLayoutFromElement( portletLayout, portletLayoutDOMElement );
-            }
-        }
-    }
+		IDOMElement[] portletLayoutDOMElements = LayoutTplUtil.findChildElementsByClassName(
+			domElement, "div", "portlet-layout");
 
-    public void initPortletLayoutFromElement( PortletLayoutElement portletLayout, IDOMElement domElement )
-    {
-        if( domElement == null )
-        {
-            return;
-        }
+		if (!CoreUtil.isNullOrEmpty(portletLayoutDOMElements)) {
+			for (IDOMElement portletLayoutDOMElement : portletLayoutDOMElements) {
+				PortletLayoutElement portletLayout = portletColumn.getPortletLayouts().insert();
 
-        String existingClassName = domElement.getAttribute( "class" );
+				initPortletLayoutFromElement(portletLayout, portletLayoutDOMElement);
+			}
+		}
+	}
 
-        if( ( !CoreUtil.isNullOrEmpty( existingClassName ) ) &&
-               existingClassName.contains( portletLayout.getClassName().content() ) )
-        {
-            portletLayout.setClassName( existingClassName );
-        }
+	public void initPortletLayoutFromElement(PortletLayoutElement portletLayout, IDOMElement domElement) {
+		if (domElement == null) {
+			return;
+		}
 
-        IDOMElement[] portletColumnDOMElements =
-            LayoutTplUtil.findChildElementsByClassName( domElement, "div", "portlet-column" );
+		String existingClassName = domElement.getAttribute("class");
 
-        for( IDOMElement portletColumnElement : portletColumnDOMElements )
-        {
-            PortletColumnElement portletColumn = portletLayout.getPortletColumns().insert();
-            this.initPortletColumnFromElement( portletColumn, portletColumnElement );
-        }
-    }
+		if (!CoreUtil.isNullOrEmpty(existingClassName) &&
+			existingClassName.contains(portletLayout.getClassName().content())) {
 
-    public LayoutTplElement newLayoutTplFromFile( IFile file, Boolean isBootstrapStyle, Boolean is62 )
-    {
-        if( file == null || !( file.exists() ) )
-        {
-            return null;
-        }
+			portletLayout.setClassName(existingClassName);
+		}
 
-        LayoutTplElement layoutTpl = null;
-        IDOMModel domModel = null;
-        try
-        {
-            domModel= (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( file );
-            layoutTpl = newLayoutTplFromModel( domModel, isBootstrapStyle, is62 );
-        }
-        catch( Exception e )
-        {
-            LayoutTplCore.logError( "Unable to read layout template file " + file.getName(), e );
-        }
-        finally
-        {
-            if( domModel != null )
-            {
-                domModel.releaseFromRead();
-            }
-        }
+		IDOMElement[] portletColumnDOMElements = LayoutTplUtil.findChildElementsByClassName(
+			domElement, "div", "portlet-column");
 
-        return layoutTpl;
-    }
+		for (IDOMElement portletColumnElement : portletColumnDOMElements) {
+			PortletColumnElement portletColumn = portletLayout.getPortletColumns().insert();
 
-    public LayoutTplElement newLayoutTplFromModel( IDOMModel model, Boolean isBootstrapStyle, Boolean is62 )
-    {
-        if( model == null )
-        {
-            return null;
-        }
+			initPortletColumnFromElement(portletColumn, portletColumnElement);
+		}
+	}
 
-        LayoutTplElement layoutTpl = null;
+	public LayoutTplElement newLayoutTplFromFile(IFile file, Boolean bootstrapStyle, Boolean is62) {
+		if ((file == null) || !file.exists()) {
+			return null;
+		}
 
-        IDOMDocument rootDocument = model.getDocument();
-        IDOMElement mainContentElement = LayoutTplUtil.findMainContentElement( rootDocument );
+		LayoutTplElement layoutTpl = null;
+		IDOMModel domModel = null;
 
-        if( mainContentElement != null )
-        {
-            layoutTpl = LayoutTplElement.TYPE.instantiate();
-            layoutTpl.setBootstrapStyle( isBootstrapStyle );
-            layoutTpl.setClassName( mainContentElement.getAttribute( "class" ) );
-            layoutTpl.setIs62( is62 );
+		try {
+			domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(file);
 
-            IDOMElement[] portletLayoutElements =
-                LayoutTplUtil.findChildElementsByClassName( mainContentElement, "div", "portlet-layout" );
+			layoutTpl = newLayoutTplFromModel(domModel, bootstrapStyle, is62);
+		}
+		catch (Exception e) {
+			LayoutTplCore.logError("Unable to read layout template file " + file.getName(), e);
+		}
+		finally {
+			if (domModel != null) {
+				domModel.releaseFromRead();
+			}
+		}
 
-            if( !CoreUtil.isNullOrEmpty( portletLayoutElements ) )
-            {
-                for( IDOMElement portletLayoutElement : portletLayoutElements )
-                {
-                    PortletLayoutElement portletLayout = layoutTpl.getPortletLayouts().insert();
-                    this.initPortletLayoutFromElement( portletLayout, portletLayoutElement );
-                }
-            }
-        }
+		return layoutTpl;
+	}
 
-        return layoutTpl;
-    }
+	public LayoutTplElement newLayoutTplFromModel(IDOMModel model, Boolean bootstrapStyle, Boolean is62) {
+		if (model == null) {
+			return null;
+		}
+
+		LayoutTplElement layoutTpl = null;
+
+		IDOMDocument rootDocument = model.getDocument();
+
+		IDOMElement mainContentElement = LayoutTplUtil.findMainContentElement(rootDocument);
+
+		if (mainContentElement != null) {
+			layoutTpl = LayoutTplElement.TYPE.instantiate();
+
+			layoutTpl.setBootstrapStyle(bootstrapStyle);
+			layoutTpl.setClassName(mainContentElement.getAttribute("class"));
+			layoutTpl.setIs62(is62);
+
+			IDOMElement[] portletLayoutElements = LayoutTplUtil.findChildElementsByClassName(
+				mainContentElement, "div", "portlet-layout");
+
+			if (!CoreUtil.isNullOrEmpty(portletLayoutElements)) {
+				for (IDOMElement portletLayoutElement : portletLayoutElements) {
+					PortletLayoutElement portletLayout = layoutTpl.getPortletLayouts().insert();
+
+					initPortletLayoutFromElement(portletLayout, portletLayoutElement);
+				}
+			}
+		}
+
+		return layoutTpl;
+	}
 
 }

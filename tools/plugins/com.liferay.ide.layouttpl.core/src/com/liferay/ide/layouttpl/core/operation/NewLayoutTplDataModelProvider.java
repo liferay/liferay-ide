@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.layouttpl.core.operation;
 
@@ -37,258 +34,232 @@ import org.eclipse.wst.common.componentcore.internal.operation.ArtifactEditOpera
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( { "restriction", "unchecked", "rawtypes" } )
-public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataModelProvider
-    implements INewLayoutTplDataModelProperties
-{
+@SuppressWarnings({"restriction", "unchecked", "rawtypes"})
+public class NewLayoutTplDataModelProvider
+	extends ArtifactEditOperationDataModelProvider implements INewLayoutTplDataModelProperties {
 
-    protected boolean ignoreLayoutOptionPropertySet = false;
+	public NewLayoutTplDataModelProvider() {
+	}
 
-    public NewLayoutTplDataModelProvider()
-    {
-        super();
-    }
+	@Override
+	public Object getDefaultProperty(String propertyName) {
+		if (LAYOUT_TEMPLATE_NAME.equals(propertyName)) {
+			return "New Template";
+		}
+		else if (LAYOUT_TEMPLATE_ID.equals(propertyName)) {
+			String name = getStringProperty(LAYOUT_TEMPLATE_NAME);
 
-    private boolean checkDocrootFileExists( final IPath path )
-    {
-        final IWebProject webproject = LiferayCore.create( IWebProject.class, getTargetProject() );
+			if (!CoreUtil.isNullOrEmpty(name)) {
+				return name.replaceAll("[^a-zA-Z0-9]+", StringPool.EMPTY).toLowerCase();
+			}
+		}
+		else if (LAYOUT_TEMPLATE_FILE.equals(propertyName)) {
+			return "/" + getStringProperty(LAYOUT_TEMPLATE_ID) + ".tpl";
+		}
+		else if (LAYOUT_WAP_TEMPLATE_FILE.equals(propertyName)) {
+			return "/" + getStringProperty(LAYOUT_TEMPLATE_ID) + ".wap.tpl";
+		}
+		else if (LAYOUT_THUMBNAIL_FILE.equals(propertyName)) {
+			return "/" + getStringProperty(LAYOUT_TEMPLATE_ID) + ".png";
+		}
+		else if (LAYOUT_IMAGE_1_COLUMN.equals(propertyName)) {
+			return true;
+		}
+		else if (LAYOUT_IMAGE_1_2_1_COLUMN.equals(propertyName) || LAYOUT_IMAGE_1_2_I_COLUMN.equals(propertyName) ||
+				 LAYOUT_IMAGE_1_2_II_COLUMN.equals(propertyName) ||
+				 LAYOUT_IMAGE_2_2_COLUMN.equals(
+					 propertyName
+						 ) ||
+				 LAYOUT_IMAGE_2_I_COLUMN.equals(propertyName) || LAYOUT_IMAGE_2_II_COLUMN.equals(propertyName) ||
+				 LAYOUT_IMAGE_2_III_COLUMN.equals(propertyName) || LAYOUT_IMAGE_3_COLUMN.equals(propertyName)) {
 
-        if( webproject != null )
-        {
-            final IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
-            return defaultDocroot != null && defaultDocroot.exists( path );
-        }
+			return false;
+		}
 
-        return false;
-    }
+		return super.getDefaultProperty(propertyName);
+	}
 
-    private boolean checkoutDocrootFileNameCorrect( String filename, String type )
-    {
-        int firstindex = filename.indexOf( "/" );
-        int lastindex = filename.lastIndexOf( "." + type );
-        String filetype = filename.substring( lastindex + 1 );
+	@Override
+	public Set getPropertyNames() {
+		Set propertyNames = super.getPropertyNames();
 
-        if( lastindex != -1 )
-        {
-            if( firstindex != -1 )
-            {
-                filename = filename.substring( firstindex + 1, lastindex );
-            }
-            else
-            {
-                filename = filename.substring( 0, lastindex );
-            }
+		propertyNames.add(LAYOUT_TEMPLATE_NAME);
+		propertyNames.add(LAYOUT_TEMPLATE_ID);
+		propertyNames.add(LAYOUT_TEMPLATE_FILE);
+		propertyNames.add(LAYOUT_WAP_TEMPLATE_FILE);
+		propertyNames.add(LAYOUT_THUMBNAIL_FILE);
 
-            if( !CoreUtil.isNullOrEmpty( filename ) && !filename.startsWith( "/" ) &&
-                !filename.startsWith( "." ) && !CoreUtil.isNullOrEmpty( filetype ) )
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+		propertyNames.add(LAYOUT_IMAGE_1_2_1_COLUMN);
+		propertyNames.add(LAYOUT_IMAGE_1_2_I_COLUMN);
+		propertyNames.add(LAYOUT_IMAGE_1_2_II_COLUMN);
+		propertyNames.add(LAYOUT_IMAGE_1_COLUMN);
+		propertyNames.add(LAYOUT_IMAGE_2_2_COLUMN);
+		propertyNames.add(LAYOUT_IMAGE_2_I_COLUMN);
+		propertyNames.add(LAYOUT_IMAGE_2_II_COLUMN);
+		propertyNames.add(LAYOUT_IMAGE_2_III_COLUMN);
+		propertyNames.add(LAYOUT_IMAGE_3_COLUMN);
 
-    @Override
-    public Object getDefaultProperty( String propertyName )
-    {
-        if( LAYOUT_TEMPLATE_NAME.equals( propertyName ) )
-        {
-            return "New Template"; //$NON-NLS-1$
-        }
-        else if( LAYOUT_TEMPLATE_ID.equals( propertyName ) )
-        {
-            String name = getStringProperty( LAYOUT_TEMPLATE_NAME );
+		propertyNames.add(LAYOUT_TPL_FILE_CREATED);
 
-            if( !CoreUtil.isNullOrEmpty( name ) )
-            {
-                return name.replaceAll( "[^a-zA-Z0-9]+", StringPool.EMPTY ).toLowerCase(); //$NON-NLS-1$
-            }
-        }
-        else if( LAYOUT_TEMPLATE_FILE.equals( propertyName ) )
-        {
-            return "/" + getStringProperty( LAYOUT_TEMPLATE_ID ) + ".tpl";  //$NON-NLS-1$//$NON-NLS-2$
-        }
-        else if( LAYOUT_WAP_TEMPLATE_FILE.equals( propertyName ) )
-        {
-            return "/" + getStringProperty( LAYOUT_TEMPLATE_ID ) + ".wap.tpl";  //$NON-NLS-1$//$NON-NLS-2$
-        }
-        else if( LAYOUT_THUMBNAIL_FILE.equals( propertyName ) )
-        {
-            return "/" + getStringProperty( LAYOUT_TEMPLATE_ID ) + ".png";  //$NON-NLS-1$//$NON-NLS-2$
-        }
-        else if( LAYOUT_IMAGE_1_COLUMN.equals( propertyName ) )
-        {
-            return true;
-        }
-        else if( LAYOUT_IMAGE_1_2_1_COLUMN.equals( propertyName ) || LAYOUT_IMAGE_1_2_I_COLUMN.equals( propertyName ) ||
-            LAYOUT_IMAGE_1_2_II_COLUMN.equals( propertyName ) || LAYOUT_IMAGE_2_2_COLUMN.equals( propertyName ) ||
-            LAYOUT_IMAGE_2_I_COLUMN.equals( propertyName ) || LAYOUT_IMAGE_2_II_COLUMN.equals( propertyName ) ||
-            LAYOUT_IMAGE_2_III_COLUMN.equals( propertyName ) || LAYOUT_IMAGE_3_COLUMN.equals( propertyName ) )
-        {
+		return propertyNames;
+	}
 
-            return false;
-        }
+	@Override
+	public boolean propertySet(String propertyName, Object propertyValue) {
+		boolean layoutOption = false;
 
-        return super.getDefaultProperty( propertyName );
-    }
+		for (int i = 0; i < LAYOUT_PROPERTIES.length; i++) {
+			if (LAYOUT_PROPERTIES[i].equals(propertyName)) {
+				layoutOption = true;
+				break;
+			}
+		}
 
-    @Override
-    public Set getPropertyNames()
-    {
-        Set propertyNames = super.getPropertyNames();
+		if (layoutOption && !ignoreLayoutOptionPropertySet) {
+			ignoreLayoutOptionPropertySet = true;
 
-        propertyNames.add( LAYOUT_TEMPLATE_NAME );
-        propertyNames.add( LAYOUT_TEMPLATE_ID );
-        propertyNames.add( LAYOUT_TEMPLATE_FILE );
-        propertyNames.add( LAYOUT_WAP_TEMPLATE_FILE );
-        propertyNames.add( LAYOUT_THUMBNAIL_FILE );
+			for (int i = 0; i < LAYOUT_PROPERTIES.length; i++) {
+				setBooleanProperty(LAYOUT_PROPERTIES[i], false);
+			}
 
-        propertyNames.add( LAYOUT_IMAGE_1_2_1_COLUMN );
-        propertyNames.add( LAYOUT_IMAGE_1_2_I_COLUMN );
-        propertyNames.add( LAYOUT_IMAGE_1_2_II_COLUMN );
-        propertyNames.add( LAYOUT_IMAGE_1_COLUMN );
-        propertyNames.add( LAYOUT_IMAGE_2_2_COLUMN );
-        propertyNames.add( LAYOUT_IMAGE_2_I_COLUMN );
-        propertyNames.add( LAYOUT_IMAGE_2_II_COLUMN );
-        propertyNames.add( LAYOUT_IMAGE_2_III_COLUMN );
-        propertyNames.add( LAYOUT_IMAGE_3_COLUMN );
+			setProperty(propertyName, propertyValue);
 
-        propertyNames.add( LAYOUT_TPL_FILE_CREATED );
+			ignoreLayoutOptionPropertySet = false;
+		}
 
-        return propertyNames;
-    }
+		return super.propertySet(propertyName, propertyValue);
+	}
 
-    @Override
-    public boolean propertySet( String propertyName, Object propertyValue )
-    {
-        boolean isLayoutOption = false;
+	@Override
+	public IStatus validate(String propertyName) {
+		if (LAYOUT_TEMPLATE_ID.equals(propertyName)) {
 
-        for( int i = 0; i < LAYOUT_PROPERTIES.length; i++ )
-        {
-            if( LAYOUT_PROPERTIES[i].equals( propertyName ) )
-            {
-                isLayoutOption = true;
-                break;
-            }
-        }
+			// first check to see if an existing property exists.
 
-        if( isLayoutOption && !ignoreLayoutOptionPropertySet )
-        {
-            ignoreLayoutOptionPropertySet = true;
+			LayoutTplDescriptorHelper helper = new LayoutTplDescriptorHelper(getTargetProject());
 
-            for( int i = 0; i < LAYOUT_PROPERTIES.length; i++ )
-            {
-                setBooleanProperty( LAYOUT_PROPERTIES[i], false );
-            }
+			if (helper.hasTemplateId(getStringProperty(propertyName))) {
+				return LayoutTplCore.createErrorStatus(Msgs.templateIdExists);
+			}
 
-            setProperty( propertyName, propertyValue );
+			// to avoid marking text like "this" as bad add a z to the end of the string
 
-            ignoreLayoutOptionPropertySet = false;
+			String idValue = getStringProperty(propertyName) + "z";
 
-        }
+			if (CoreUtil.isNullOrEmpty(idValue)) {
+				return super.validate(propertyName);
+			}
 
-        return super.propertySet( propertyName, propertyValue );
-    }
+			IStatus status = JavaConventions.validateFieldName(
+				idValue, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7);
 
-    @Override
-    public IStatus validate( String propertyName )
-    {
-        if( LAYOUT_TEMPLATE_ID.equals( propertyName ) )
-        {
-            // first check to see if an existing property exists.
-            LayoutTplDescriptorHelper helper = new LayoutTplDescriptorHelper( getTargetProject() );
+			if (!status.isOK()) {
+				return LayoutTplCore.createErrorStatus(Msgs.templateIdInvalid);
+			}
 
-            if( helper.hasTemplateId( getStringProperty( propertyName ) ) )
-            {
-                return LayoutTplCore.createErrorStatus( Msgs.templateIdExists );
-            }
+			String idText = getStringProperty(propertyName);
 
-            // to avoid marking text like "this" as bad add a z to the end of the string
-            String idValue = getStringProperty( propertyName ) + "z"; //$NON-NLS-1$
+			if (CoreUtil.isNullOrEmpty(idText)) {
+				return LayoutTplCore.createErrorStatus("Id can't be empty.");
+			}
+		}
+		else if (LAYOUT_TEMPLATE_FILE.equals(propertyName)) {
+			String filename = getStringProperty(propertyName);
 
-            if( CoreUtil.isNullOrEmpty( idValue ) )
-            {
-                return super.validate( propertyName );
-            }
+			if (!_checkoutDocrootFileNameCorrect(filename, "tpl")) {
+				return LayoutTplCore.createErrorStatus("Template file name is invalid.");
+			}
 
-            IStatus status =
-                JavaConventions.validateFieldName( idValue, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 );
+			IPath filePath = new Path(getStringProperty(LAYOUT_TEMPLATE_FILE));
 
-            if( !status.isOK() )
-            {
-                return LayoutTplCore.createErrorStatus( Msgs.templateIdInvalid );
-            }
+			if (_checkDocrootFileExists(filePath)) {
+				return LayoutTplCore.createWarningStatus(Msgs.templateFileExists);
+			}
+		}
+		else if (LAYOUT_WAP_TEMPLATE_FILE.equals(propertyName)) {
+			String filename = getStringProperty(propertyName);
 
-            String idText = getStringProperty( propertyName );
+			if (!_checkoutDocrootFileNameCorrect(filename, "tpl")) {
+				return LayoutTplCore.createErrorStatus("WAP template file name is invalid.");
+			}
 
-            if( CoreUtil.isNullOrEmpty( idText ) )
-            {
-                return LayoutTplCore.createErrorStatus( "Id can't be empty." );
-            }
-        }
-        else if( LAYOUT_TEMPLATE_FILE.equals( propertyName ) )
-        {
-            String filename = getStringProperty( propertyName );
+			IPath filePath = new Path(getStringProperty(LAYOUT_WAP_TEMPLATE_FILE));
 
-            if( !checkoutDocrootFileNameCorrect( filename, "tpl" ) )
-            {
-                return LayoutTplCore.createErrorStatus( "Template file name is invalid." );
-            }
+			if (_checkDocrootFileExists(filePath)) {
+				return LayoutTplCore.createWarningStatus(Msgs.wapTemplateFileExists);
+			}
+		}
+		else if (LAYOUT_THUMBNAIL_FILE.equals(propertyName)) {
+			String filename = getStringProperty(propertyName);
 
-            final IPath filePath = new Path( getStringProperty( LAYOUT_TEMPLATE_FILE ) );
+			if (!_checkoutDocrootFileNameCorrect(filename, "")) {
+				return LayoutTplCore.createErrorStatus("Thumbnail file name is invalid.");
+			}
 
-            if( checkDocrootFileExists( filePath ) )
-            {
-                return LayoutTplCore.createWarningStatus( Msgs.templateFileExists );
-            }
-        }
-        else if( LAYOUT_WAP_TEMPLATE_FILE.equals( propertyName ) )
-        {
-            String filename = getStringProperty( propertyName );
+			IPath filePath = new Path(getStringProperty(LAYOUT_THUMBNAIL_FILE));
 
-            if( !checkoutDocrootFileNameCorrect( filename, "tpl" ) )
-            {
-                return LayoutTplCore.createErrorStatus( "WAP template file name is invalid." );
-            }
+			if (_checkDocrootFileExists(filePath)) {
+				return LayoutTplCore.createWarningStatus(Msgs.thumbnailFileExists);
+			}
+		}
 
-            final IPath filePath = new Path( getStringProperty( LAYOUT_WAP_TEMPLATE_FILE ) );
+		return super.validate(propertyName);
+	}
 
-            if( checkDocrootFileExists( filePath ) )
-            {
-                return LayoutTplCore.createWarningStatus( Msgs.wapTemplateFileExists );
-            }
-        }
-        else if( LAYOUT_THUMBNAIL_FILE.equals( propertyName ) )
-        {
-            String filename = getStringProperty( propertyName );
+	protected boolean ignoreLayoutOptionPropertySet = false;
 
-            if( !checkoutDocrootFileNameCorrect( filename, "" ) )
-            {
-                return LayoutTplCore.createErrorStatus( "Thumbnail file name is invalid." );
-            }
+	private boolean _checkDocrootFileExists(IPath path) {
+		IWebProject webproject = LiferayCore.create(IWebProject.class, getTargetProject());
 
-            final IPath filePath = new Path( getStringProperty( LAYOUT_THUMBNAIL_FILE ) );
+		if (webproject != null) {
+			IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
 
-            if( checkDocrootFileExists( filePath ) )
-            {
-                return LayoutTplCore.createWarningStatus( Msgs.thumbnailFileExists );
-            }
-        }
+			if ((defaultDocroot != null) && defaultDocroot.exists(path)) {
+				return true;
+			}
 
-        return super.validate( propertyName );
-    }
+			return false;
+		}
 
-    private static class Msgs extends NLS
-    {
-        public static String templateFileExists;
-        public static String templateIdExists;
-        public static String templateIdInvalid;
-        public static String thumbnailFileExists;
-        public static String wapTemplateFileExists;
+		return false;
+	}
 
-        static
-        {
-            initializeMessages( NewLayoutTplDataModelProvider.class.getName(), Msgs.class );
-        }
-    }
+	private boolean _checkoutDocrootFileNameCorrect(String filename, String type) {
+		int firstindex = filename.indexOf("/");
+		int lastindex = filename.lastIndexOf("." + type);
+
+		String filetype = filename.substring(lastindex + 1);
+
+		if (lastindex != -1) {
+			if (firstindex != -1) {
+				filename = filename.substring(firstindex + 1, lastindex);
+			}
+			else {
+				filename = filename.substring(0, lastindex);
+			}
+
+			if (!CoreUtil.isNullOrEmpty(filename) && !filename.startsWith("/") && !filename.startsWith(".") &&
+				!CoreUtil.isNullOrEmpty(filetype)) {
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String templateFileExists;
+		public static String templateIdExists;
+		public static String templateIdInvalid;
+		public static String thumbnailFileExists;
+		public static String wapTemplateFileExists;
+
+		static {
+			initializeMessages(NewLayoutTplDataModelProvider.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

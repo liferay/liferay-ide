@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.layouttpl.core.model;
 
@@ -28,105 +27,99 @@ import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Services;
 
-
 /**
  * @author Kuo Zhang
  */
-@Label( standard = "Column" )
-public interface PortletColumnElement extends CanAddPortletLayouts
-{
-    ElementType TYPE = new ElementType( PortletColumnElement.class );
+@Label(standard = "Column")
+public interface PortletColumnElement extends CanAddPortletLayouts {
 
-    // *** NumId ***
+	public static final ElementType TYPE = new ElementType(PortletColumnElement.class);
 
-    ValueProperty PROP_NUM_ID = new ValueProperty( TYPE, "NumId" );
+	@DefaultValue(text = "")
+	public static final ValueProperty PROP_COLUMN_CONTENT_DESCRIPTOR = new ValueProperty(
+		TYPE, "ColumnContentDescriptor");
 
-    Value<String> getNumId();
-    void setNumId( String value );
+	@DefaultValue(text = "")
+	public static final ValueProperty PROP_COLUMN_DESCRIPTOR = new ValueProperty(TYPE, "ColumnDescriptor");
 
-    // *** Class Name ***
+	@Required
+	@Type(base = Boolean.class)
+	public static final ValueProperty PROP_FIRST = new ValueProperty(TYPE, "First");
 
-    @DefaultValue( text = "portlet-column" )
-    ValueProperty PROP_ClASS_NAME = new ValueProperty( TYPE, "ClassName" );
+	@DefaultValue(text = "${Root.BootstrapStyle ? \"12\" : \"100\"}")
+	@Type(base = Integer.class)
+	public static final ValueProperty PROP_FULL_WEIGHT = new ValueProperty(TYPE, "FullWeight");
 
-    Value<String> getClassName();
-    void setClassName( String value );
+	@DefaultValue(text = "false")
+	@Required
+	@Type(base = Boolean.class)
+	public static final ValueProperty PROP_LAST = new ValueProperty(TYPE, "Last");
 
-    // *** Weight ***
+	public static final ValueProperty PROP_NUM_ID = new ValueProperty(TYPE, "NumId");
 
-    @DefaultValue( text = "${Root.BootstrapStyle ? \"3\" : \"25\"}" )
-    @Type( base = Integer.class )
-    @Services
-    (
-        {
-            @Service( impl = PortletColumnWeightValidationService.class ),
-            @Service( impl = PortletColumnWeightInitialValueService.class )
-        }
-    )
-    @Required
-    ValueProperty PROP_WEIGHT = new ValueProperty( TYPE, "Weight" );
+	@DefaultValue(text = "false")
+	@Required
+	@Type(base = Boolean.class)
+	public static final ValueProperty PROP_ONLY = new ValueProperty(TYPE, "Only");
 
-    Value<Integer> getWeight();
-    void setWeight( String value );
-    void setWeight( Integer value );
+	@DefaultValue(text = "${Root.BootstrapStyle ? \"3\" : \"25\"}")
+	@Required
+	@Services(
+		{
+			@Service(impl = PortletColumnWeightValidationService.class),
+			@Service(impl = PortletColumnWeightInitialValueService.class)
+		}
+	)
+	@Type(base = Integer.class)
+	public static final ValueProperty PROP_WEIGHT = new ValueProperty(TYPE, "Weight");
 
+	@DefaultValue(text = "portlet-column")
+	public static final ValueProperty PROP_ClASS_NAME = new ValueProperty(TYPE, "ClassName");
 
-    // *** Full Weight ***
+	public Value<String> getClassName();
 
-    @DefaultValue( text = "${Root.BootstrapStyle ? \"12\" : \"100\"}" )
-    @Type( base = Integer.class )
-    ValueProperty PROP_FULL_WEIGHT = new ValueProperty( TYPE, "FullWeight" );
+	public Value<String> getColumnContentDescriptor();
 
-    Value<Integer> getFullWeight();
-    void setFullWeight( String value );
-    void setFullWeight( Integer value );
+	public Value<String> getColumnDescriptor();
 
-    // *** Is First ***
+	public Value<Boolean> getFirst();
 
-    @Required
-    @Type( base = Boolean.class )
-    ValueProperty PROP_FIRST = new ValueProperty( TYPE, "First" );
+	public Value<Integer> getFullWeight();
 
-    Value<Boolean> getFirst();
-    void setFirst( Boolean value );
-    void setFirst( String value );
+	public Value<Boolean> getLast();
 
-    // *** Is Last ***
+	public Value<String> getNumId();
 
-    @DefaultValue( text = "false" )
-    @Required
-    @Type( base = Boolean.class )
-    ValueProperty PROP_LAST = new ValueProperty( TYPE, "Last" );
+	public Value<Boolean> getOnly();
 
-    Value<Boolean> getLast();
-    void setLast( Boolean value );
-    void setLast( String value );
+	public Value<Integer> getWeight();
 
-    // *** Is Only ***
+	public void setClassName(String value);
 
-    @DefaultValue( text = "false" )
-    @Required
-    @Type( base = Boolean.class )
-    ValueProperty PROP_ONLY = new ValueProperty( TYPE, "Only" );
+	public void setColumnContentDescriptor(String value);
 
-    Value<Boolean> getOnly();
-    void setOnly( Boolean value );
-    void setOnly( String value );
+	public void setColumnDescriptor(String value);
 
-    // *** Column Descriptor ***
+	public void setFirst(Boolean value);
 
-    @DefaultValue( text = "" )
-    ValueProperty PROP_COLUMN_DESCRIPTOR = new ValueProperty( TYPE, "ColumnDescriptor" );
+	public void setFirst(String value);
 
-    Value<String> getColumnDescriptor();
-    void setColumnDescriptor( String value );
+	public void setFullWeight(Integer value);
 
-    // *** Column Content Descriptor ***
+	public void setFullWeight(String value);
 
-    @DefaultValue( text = "" )
-    ValueProperty PROP_COLUMN_CONTENT_DESCRIPTOR = new ValueProperty( TYPE, "ColumnContentDescriptor" );
+	public void setLast(Boolean value);
 
-    Value<String> getColumnContentDescriptor();
-    void setColumnContentDescriptor( String value );
+	public void setLast(String value);
+
+	public void setNumId(String value);
+
+	public void setOnly(Boolean value);
+
+	public void setOnly(String value);
+
+	public void setWeight(Integer value);
+
+	public void setWeight(String value);
 
 }
