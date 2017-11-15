@@ -112,7 +112,7 @@ public class ViewAction extends UIAction {
 	}
 
 	public void serverStartWait() throws TimeoutException {
-		_serverWaitInConsole(300000, 25000, 10000, "Server startup in");
+		_serverWaitInConsole(600000, 25000, 10000, "Server startup in");
 	}
 
 	public void serverStop(String serverLabel) {
