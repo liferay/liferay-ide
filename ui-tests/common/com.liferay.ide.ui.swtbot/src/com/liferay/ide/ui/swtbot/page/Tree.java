@@ -14,7 +14,10 @@
 
 package com.liferay.ide.ui.swtbot.page;
 
+import java.util.Arrays;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -22,6 +25,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 /**
  * @author Li Lu
  * @author Ashley Yuan
+ * @author Terry Jia
  */
 public class Tree extends AbstractWidget {
 
@@ -66,10 +70,24 @@ public class Tree extends AbstractWidget {
 		return labels;
 	}
 
-	public boolean isVisible(String... items) {
-		SWTBotTreeItem item = getWidget().expandNode(items);
+	public void expand(String... items) {
+		getWidget().expandNode(items);
+	}
 
-		return item.isVisible();
+	public boolean isVisible(String... items) throws WidgetNotFoundException {
+		int length = items.length;
+
+		if (length == 1) {
+			SWTBotTreeItem item = getWidget().getTreeItem(items[0]);
+
+			return item.isVisible();
+		}
+
+		String[] parents = Arrays.copyOfRange(items, 0, length - 1);
+
+		SWTBotTreeItem parent = getWidget().expandNode(parents);
+
+		return parent.getNode(items[length - 1]).isVisible();
 	}
 
 	public void select(String... items) {

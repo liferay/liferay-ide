@@ -24,6 +24,8 @@ import com.liferay.ide.ui.swtbot.eclipse.page.ServersView;
 import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.Tree;
 
+import java.util.Arrays;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
@@ -110,7 +112,7 @@ public class ViewAction extends UIAction {
 	}
 
 	public void serverStartWait() throws TimeoutException {
-		_serverWaitInConsole(300000, 25000, 10000, "Server startup in");
+		_serverWaitInConsole(600000, 25000, 10000, "Server startup in");
 	}
 
 	public void serverStop(String serverLabel) {
@@ -137,10 +139,13 @@ public class ViewAction extends UIAction {
 			return _getProjects().isVisible(files);
 		}
 		catch (Exception e) {
-
-			// give more time to wait the file visible
-
 			_getProjects().setFocus();
+
+			String[] parents = Arrays.copyOfRange(files, 0, files.length - 1);
+
+			_getProjects().expand(parents);
+
+			_getProjects().contextMenu(REFRESH, parents);
 
 			ide.sleep(2000);
 
