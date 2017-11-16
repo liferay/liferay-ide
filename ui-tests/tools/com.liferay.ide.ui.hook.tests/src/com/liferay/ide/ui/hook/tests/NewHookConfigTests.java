@@ -25,7 +25,7 @@ import org.junit.Test;
 /**
  * @author Terry Jia
  */
-public class NewHookProjectSdkTests extends SwtbotBase {
+public class NewHookConfigTests extends SwtbotBase {
 
 	@AfterClass
 	public static void cleanPluginsSdk() {
