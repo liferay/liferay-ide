@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.vaadin.ui.wizard;
 
@@ -27,18 +26,16 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Henri Sara
  */
-@SuppressWarnings( "restriction" )
-public class AddVaadinApplicationOperation extends AddPortletOperation
-    implements INewVaadinPortletClassDataModelProperties
-{
+@SuppressWarnings("restriction")
+public class AddVaadinApplicationOperation
+	extends AddPortletOperation implements INewVaadinPortletClassDataModelProperties {
 
-    public AddVaadinApplicationOperation( IDataModel dataModel, TemplateStore type, TemplateContextType store )
-    {
-        super( dataModel, type, store );
-    }
+	public AddVaadinApplicationOperation(IDataModel dataModel, TemplateStore type, TemplateContextType store) {
+		super(dataModel, type, store);
+	}
 
-    protected NewJavaEEArtifactClassOperation getNewClassOperation()
-    {
-        return new NewVaadinApplicationClassOperation( getDataModel() );
-    }
+	protected NewJavaEEArtifactClassOperation getNewClassOperation() {
+		return new NewVaadinApplicationClassOperation(getDataModel());
+	}
+
 }
