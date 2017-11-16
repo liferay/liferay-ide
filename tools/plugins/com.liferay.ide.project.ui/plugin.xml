@@ -1360,6 +1360,10 @@
          class="com.liferay.ide.project.ui.migration.MigrateProjectHandler">
        </handler>
        <handler
+         commandId="com.liferay.ide.project.ui.codeUpgrade"
+         class="com.liferay.ide.project.ui.upgrade.CodeUpgradeHandler">
+       </handler>
+       <handler
          commandId="com.liferay.ide.project.ui.developerNetwork"
          class="com.liferay.ide.project.ui.handlers.DeveloperNetwork">
        </handler>
@@ -1596,7 +1600,7 @@
          </adapter>
       </factory>
       <factory
-            adaptableType="com.liferay.ide.project.ui.migration.ProblemsContainer"
+            adaptableType="com.liferay.ide.project.core.upgrade.ProblemsContainer"
             class="com.liferay.ide.project.ui.migration.MigrationAdapterFactory">
          <adapter
                type="org.eclipse.ui.model.IWorkbenchAdapter">
