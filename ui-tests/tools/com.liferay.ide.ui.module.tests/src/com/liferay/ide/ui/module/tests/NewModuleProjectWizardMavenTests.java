@@ -17,7 +17,6 @@ package com.liferay.ide.ui.module.tests;
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -132,42 +131,12 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createMvcPortlet() {
-		String projectName = "test-mvc-portlet-maven";
-
-		wizardAction.openNewLiferayModuleWizard();
-
-		wizardAction.prepareLiferayModuleMaven(projectName, MVC_PORTLET);
-
-		wizardAction.finishToWait();
-
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
-
-		viewAction.deleteProject(projectName);
-	}
-
-	@Test
 	public void createPanelApp() {
 		String projectName = "test-panel-app-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.prepareLiferayModuleMaven(projectName, PANEL_APP);
-
-		wizardAction.finishToWait();
-
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
-
-		viewAction.deleteProject(projectName);
-	}
-
-	@Test
-	public void createPortlet() {
-		String projectName = "test-portlet-maven";
-
-		wizardAction.openNewLiferayModuleWizard();
-
-		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET);
 
 		wizardAction.finishToWait();
 

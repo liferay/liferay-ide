@@ -131,42 +131,12 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createMvcportlet() {
-		String projectName = "test-mvc-portlet-gradle";
-
-		wizardAction.openNewLiferayModuleWizard();
-
-		wizardAction.prepareLiferayModuleGradle(projectName, MVC_PORTLET);
-
-		wizardAction.finishToWait();
-
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
-
-		viewAction.deleteProject(projectName);
-	}
-
-	@Test
 	public void createPanelApp() {
 		String projectName = "test-panel-app-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.prepareLiferayModuleGradle(projectName, PANEL_APP);
-
-		wizardAction.finishToWait();
-
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
-
-		viewAction.deleteProject(projectName);
-	}
-
-	@Test
-	public void createPortlet() {
-		String projectName = "test-portlet-gradle";
-
-		wizardAction.openNewLiferayModuleWizard();
-
-		wizardAction.prepareLiferayModuleGradle(projectName, PORTLET);
 
 		wizardAction.finishToWait();
 

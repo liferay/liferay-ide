@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.ui.module.tests;
+package com.liferay.ide.ui.sdk.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.page.wizard.LiferayProjectFromExistSourceWizard;
