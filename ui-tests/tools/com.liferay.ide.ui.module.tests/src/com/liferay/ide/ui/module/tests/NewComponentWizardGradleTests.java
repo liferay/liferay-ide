@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.ui.project.tests;
+package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
@@ -20,34 +20,32 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * @author Terry Jia
+ * @author Ying Xu
+ * @author Ashley Yuan
  */
-public class NewComponentWizardMavenTests extends SwtbotBase {
-
-	@Test
-	public void createComponentPortlet() {
-	}
+public class NewComponentWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createComponentModelListener() {
-		String projectName = "test-component-model-listener-maven";
+	}
+
+	@Test
+	public void createComponentPortlet() {
+		String projectName = "test-component-portlet-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
-		wizardAction.prepareLiferayModuleMaven(projectName, MVC_PORTLET);
+
+		wizardAction.prepareLiferayModuleGradle(projectName);
+
 		wizardAction.finishToWait();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
-		String className = "MyListener";
+		String className = "MyPortlet";
 		String packageName = "com.liferay.ide.test";
-		String template = MODEL_LISTENER;
+		String template = PORTLET_UPCASE;
 
 		wizardAction.prepareComponentClass(projectName, template, className, packageName);
-
-		wizardAction.openSelectModelClassAndServiceDialog();
-
-		dialogAction.prepareText("*com.liferay.blogs.kernel.model.BlogsEntry");
-		dialogAction.confirm();
 
 		wizardAction.finishToWait();
 
@@ -59,6 +57,34 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createComponentServiceWrapper() {
+		String projectName = "test-component-service-wrapper-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.prepareLiferayModuleGradle(projectName);
+
+		wizardAction.finishToWait();
+
+		wizardAction.openNewLiferayComponentClassWizard();
+
+		String className = "MyServiceWrapper";
+		String packageName = "com.liferay.ide.test";
+		String template = SERVICE_WRAPPER_UPCASE;
+
+		wizardAction.prepareComponentClass(projectName, template, className, packageName);
+
+		wizardAction.openSelectModelClassAndServiceDialog();
+
+		dialogAction.prepareText("*bookmarksEntryLocal");
+
+		dialogAction.confirm();
+
+		wizardAction.finishToWait();
+
+		Assert.assertTrue(
+			viewAction.visibleProjectFileTry(projectName, "src/main/java", packageName, className + ".java"));
+
+		viewAction.deleteProject(projectName);
 	}
 
 }

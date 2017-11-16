@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Liferay IDE UI Project Tests
-Bundle-SymbolicName: com.liferay.ide.ui.project.tests
+Bundle-Name: Liferay IDE UI Module Tests
+Bundle-SymbolicName: com.liferay.ide.ui.module.tests
 Bundle-Version: 3.2.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.junit,

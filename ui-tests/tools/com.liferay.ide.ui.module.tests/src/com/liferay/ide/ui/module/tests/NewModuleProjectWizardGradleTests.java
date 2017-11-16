@@ -12,27 +12,26 @@
  * details.
  */
 
-package com.liferay.ide.ui.project.tests;
+package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * @author Sunny Shi
  * @author Ying Xu
+ * @author Sunny Shi
  */
-public class NewModuleProjectWizardMavenTests extends SwtbotBase {
+public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createActivator() {
-		String projectName = "test-activator-maven";
+		String projectName = "test-activator-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, ACTIVATOR);
+		wizardAction.prepareLiferayModuleGradle(projectName, ACTIVATOR);
 
 		wizardAction.finishToWait();
 
@@ -43,11 +42,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createApi() {
-		String projectName = "test-api-maven";
+		String projectName = "test-api-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, API);
+		wizardAction.prepareLiferayModuleGradle(projectName, API);
 
 		wizardAction.finishToWait();
 
@@ -58,11 +57,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createContentTargetingReport() {
-		String projectName = "test-content-targeting-report-maven";
+		String projectName = "test-content-targeting-report-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, CONTENT_TARGETING_REPORT);
+		wizardAction.prepareLiferayModuleGradle(projectName, CONTENT_TARGETING_REPORT);
 
 		wizardAction.finishToWait();
 
@@ -73,11 +72,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createContentTargetingRule() {
-		String projectName = "test-content-targeting-rule-maven";
+		String projectName = "test-content-targeting-rule-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, CONTENT_TARGETING_RULE);
+		wizardAction.prepareLiferayModuleGradle(projectName, CONTENT_TARGETING_RULE);
 
 		wizardAction.finishToWait();
 
@@ -88,11 +87,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createContentTargetingTrackingAction() {
-		String projectName = "test-content-targeting-tracking-action-maven";
+		String projectName = "test-content-targeting-tracking-action-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, CONTENT_TARGETING_TRACKING_ACTION);
+		wizardAction.prepareLiferayModuleGradle(projectName, CONTENT_TARGETING_TRACKING_ACTION);
 
 		wizardAction.finishToWait();
 
@@ -103,11 +102,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createControlMenuEntry() {
-		String projectName = "test-control-menu-entry-maven";
+		String projectName = "test-control-menu-entry-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, CONTROL_MENU_ENTRY);
+		wizardAction.prepareLiferayModuleGradle(projectName, CONTROL_MENU_ENTRY);
 
 		wizardAction.finishToWait();
 
@@ -118,11 +117,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createFormField() {
-		String projectName = "test-form-field-maven";
+		String projectName = "test-form-field-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, FORM_FIELD);
+		wizardAction.prepareLiferayModuleGradle(projectName, FORM_FIELD);
 
 		wizardAction.finishToWait();
 
@@ -132,12 +131,12 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createMvcPortlet() {
-		String projectName = "test-mvc-portlet-maven";
+	public void createMvcportlet() {
+		String projectName = "test-mvc-portlet-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, MVC_PORTLET);
+		wizardAction.prepareLiferayModuleGradle(projectName, MVC_PORTLET);
 
 		wizardAction.finishToWait();
 
@@ -148,11 +147,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createPanelApp() {
-		String projectName = "test-panel-app-maven";
+		String projectName = "test-panel-app-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, PANEL_APP);
+		wizardAction.prepareLiferayModuleGradle(projectName, PANEL_APP);
 
 		wizardAction.finishToWait();
 
@@ -163,11 +162,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createPortlet() {
-		String projectName = "test-portlet-maven";
+		String projectName = "test-portlet-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET);
+		wizardAction.prepareLiferayModuleGradle(projectName, PORTLET);
 
 		wizardAction.finishToWait();
 
@@ -178,11 +177,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createPortletConfigurationIcon() {
-		String projectName = "test-portlet-configuration-icon-maven";
+		String projectName = "test-portlet-configuration-icon-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET_CONFIGURATION_ICON);
+		wizardAction.prepareLiferayModuleGradle(projectName, PORTLET_CONFIGURATION_ICON);
 
 		wizardAction.finishToWait();
 
@@ -193,11 +192,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createPortletProvider() {
-		String projectName = "test-portlet-provider-maven";
+		String projectName = "test-portlet-provider-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET_PROVIDER);
+		wizardAction.prepareLiferayModuleGradle(projectName, PORTLET_PROVIDER);
 
 		wizardAction.finishToWait();
 
@@ -208,11 +207,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createPortletToolbarContributor() {
-		String projectName = "test-portlet-toolbar-contributor-maven";
+		String projectName = "test-portlet-toolbar-contributor-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET_TOOLBAR_CONTRIBUTOR);
+		wizardAction.prepareLiferayModuleGradle(projectName, PORTLET_TOOLBAR_CONTRIBUTOR);
 
 		wizardAction.finishToWait();
 
@@ -223,11 +222,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createRest() {
-		String projectName = "test-rest-maven";
+		String projectName = "test-rest-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, REST);
+		wizardAction.prepareLiferayModuleGradle(projectName, REST);
 
 		wizardAction.finishToWait();
 
@@ -238,11 +237,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createService() {
-		String projectName = "test-service-maven";
+		String projectName = "test-service-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, SERVICE);
+		wizardAction.prepareLiferayModuleGradle(projectName, SERVICE);
 
 		wizardAction.next();
 
@@ -261,11 +260,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createServiceBuilder() {
-		String projectName = "test-service-builder-maven";
+		String projectName = "test-service-builder-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, SERVICE_BUILDER);
+		wizardAction.prepareLiferayModuleGradle(projectName, SERVICE_BUILDER);
 
 		wizardAction.finishToWait();
 
@@ -276,17 +275,17 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createServiceWrapper() {
-		String projectName = "test-service-wrapper-maven";
+		String projectName = "test-service-wrapper-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, SERVICE_WRAPPER);
+		wizardAction.prepareLiferayModuleGradle(projectName, SERVICE_WRAPPER);
 
 		wizardAction.next();
 
 		wizardAction.openSelectServiceDialog();
 
-		dialogAction.prepareText("*bookmarksEntryServiceWrapper");
+		dialogAction.prepareText("*BookmarksEntryLocalServiceWrapper");
 
 		dialogAction.confirm();
 
@@ -299,11 +298,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createSimulationPanelEntry() {
-		String projectName = "test-simulation-panel-entry-maven";
+		String projectName = "test-simulation-panel-entry-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, SIMULATION_PANEL_ENTRY);
+		wizardAction.prepareLiferayModuleGradle(projectName, SIMULATION_PANEL_ENTRY);
 
 		wizardAction.finishToWait();
 
@@ -314,11 +313,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createTemplateContextContributor() {
-		String projectName = "test-template-context-contributor-maven";
+		String projectName = "test-template-context-contributor-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR);
+		wizardAction.prepareLiferayModuleGradle(projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR);
 
 		wizardAction.finishToWait();
 
@@ -327,14 +326,13 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 		viewAction.deleteProject(projectName);
 	}
 
-	@Ignore
 	@Test
 	public void createTheme() {
-		String projectName = "test-theme-maven";
+		String projectName = "test-theme-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, THEME);
+		wizardAction.prepareLiferayModuleGradle(projectName, THEME);
 
 		wizardAction.finishToWait();
 
@@ -345,11 +343,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createThemeContributor() {
-		String projectName = "test-theme-contributor-maven";
+		String projectName = "test-theme-contributor-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, THEME_CONTRIBUTOR);
+		wizardAction.prepareLiferayModuleGradle(projectName, THEME_CONTRIBUTOR);
 
 		wizardAction.finishToWait();
 

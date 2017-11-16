@@ -58,6 +58,10 @@ public class Tree extends AbstractWidget {
 		item.doubleClick();
 	}
 
+	public void expand(String... items) {
+		getWidget().expandNode(items);
+	}
+
 	public String[] getItemLabels() {
 		SWTBotTreeItem[] items = getWidget().getAllItems();
 
@@ -68,10 +72,6 @@ public class Tree extends AbstractWidget {
 		}
 
 		return labels;
-	}
-
-	public void expand(String... items) {
-		getWidget().expandNode(items);
 	}
 
 	public boolean isVisible(String... items) throws WidgetNotFoundException {

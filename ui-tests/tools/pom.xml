@@ -47,10 +47,13 @@
 	<modules>
 		<module>com.liferay.ide.ui.code.upgrade.tests</module>
 		<module>com.liferay.ide.ui.fragment.tests</module>
+		<module>com.liferay.ide.ui.theme.tests</module>
 		<module>com.liferay.ide.ui.hook.tests</module>
+		<module>com.liferay.ide.ui.jsf.tests</module>
 		<module>com.liferay.ide.ui.layouttpl.tests</module>
 		<module>com.liferay.ide.ui.portlet.tests</module>
-		<module>com.liferay.ide.ui.project.tests</module>
+		<module>com.liferay.ide.ui.module.tests</module>
+		<module>com.liferay.ide.ui.sdk.tests</module>
 		<module>com.liferay.ide.ui.server.tests</module>
 		<module>com.liferay.ide.ui.service.tests</module>
 		<module>com.liferay.ide.ui.workspace.tests</module>
