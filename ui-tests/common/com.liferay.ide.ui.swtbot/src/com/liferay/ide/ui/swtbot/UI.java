@@ -329,6 +329,8 @@ public interface UI {
 
 	public final String LAYOUT_TEMPLATE = "layout-template";
 
+	public final String LAYOUT_TEMPLATE_UPCASE = "Layout Template";
+
 	public final String LIFERAY = "Liferay";
 
 	public final String LIFERAY_7_MIGRATION_PROBLEMS = "Liferay 7 Migration Problems";
@@ -697,6 +699,8 @@ public interface UI {
 	public final String THEME_CONTRIBUTOR = "theme-contributor";
 
 	public final String THEME_PARENT = "Theme parent:";
+
+	public final String THEME_UPCASE = "Theme";
 
 	public final String THUMBNAIL_FILE = "Thumbnail file:";
 

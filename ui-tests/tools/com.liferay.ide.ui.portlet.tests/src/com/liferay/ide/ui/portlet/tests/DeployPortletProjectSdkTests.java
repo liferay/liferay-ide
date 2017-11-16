@@ -12,28 +12,19 @@
  * details.
  */
 
-package com.liferay.ide.ui.fragment.tests;
+package com.liferay.ide.ui.portlet.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
 import org.junit.Test;
 
 /**
- * @author Vicky Wang
- * @author Sunny Shi
+ * @author Terry Jia
  */
-public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
+public class DeployPortletProjectSdkTests extends SwtbotBase {
 
 	@Test
-	public void addFragmentJsp() {
-	}
-
-	@Test
-	public void addFragmentPortletProperties() {
-	}
-
-	@Test
-	public void addFragmentResourceAction() {
+	public void DeployPortlet() {
 	}
 
 }

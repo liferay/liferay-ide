@@ -19,52 +19,34 @@ import com.liferay.ide.ui.swtbot.util.StringPool;
 /**
  * @author Terry Jia
  */
-public class BundleInfo {
+public class SdkInfo {
 
-	public String getBundleDir() {
-		return _bundleDir;
+	public String getSdkDir() {
+		return _sdkDir;
 	}
 
-	public String getBundleZip() {
-		return _bundleZip;
-	}
-
-	public String getServerDir() {
-		return _serverDir;
-	}
-
-	public String getType() {
-		return _type;
+	public String getSdkZip() {
+		return _sdkZip;
 	}
 
 	public String getVersion() {
 		return _version;
 	}
 
-	public void setBundleDir(String bundleDir) {
-		_bundleDir = bundleDir;
+	public void setSdkDir(String sdkDir) {
+		_sdkDir = sdkDir;
 	}
 
-	public void setBundleZip(String bundleZip) {
-		_bundleZip = bundleZip;
-	}
-
-	public void setServerDir(String serverDir) {
-		_serverDir = serverDir;
-	}
-
-	public void setType(String type) {
-		_type = type;
+	public void setSdkZip(String sdkZip) {
+		_sdkZip = sdkZip;
 	}
 
 	public void setVersion(String version) {
 		_version = version;
 	}
 
-	private String _bundleDir = StringPool.BLANK;
-	private String _bundleZip = StringPool.BLANK;
-	private String _serverDir = StringPool.BLANK;
-	private String _type = StringPool.BLANK;
+	private String _sdkDir = StringPool.BLANK;
+	private String _sdkZip = StringPool.BLANK;
 	private String _version = StringPool.BLANK;
 
 }

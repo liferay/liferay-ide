@@ -18,9 +18,11 @@ import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.liferay.util.BundleInfo;
 import com.liferay.ide.ui.liferay.util.CSVReader;
 import com.liferay.ide.ui.liferay.util.FileUtil;
+import com.liferay.ide.ui.liferay.util.SdkInfo;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
 import com.liferay.ide.ui.liferay.util.ZipUtil;
 import com.liferay.ide.ui.swtbot.util.CoreUtil;
+import com.liferay.ide.ui.swtbot.util.StringPool;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,7 +34,6 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -55,45 +56,8 @@ public class EnvAction extends UIAction {
 	public EnvAction(SWTWorkbenchBot bot) {
 		super(bot);
 
-		_bundleInfos = getBundleInfos();
-	}
-
-	public BundleInfo[] getBundleInfos() {
-		IPath bundlesCsvPath = getLiferayBundlesPath().append("bundles.csv");
-
-		File bundleCSV = bundlesCsvPath.toFile();
-
-		Assert.assertTrue(bundleCSV.exists());
-
-		String[][] infos = CSVReader.readCSV(bundleCSV);
-
-		BundleInfo[] bundleInfos = new BundleInfo[infos.length];
-
-		for (int i = 0; i < infos.length; i++) {
-			bundleInfos[i] = new BundleInfo();
-
-			String[] columns = infos[i];
-
-			for (int t = 0; t < columns.length; t++) {
-				if (t == 0) {
-					bundleInfos[i].setBundleZip(columns[t]);
-				}
-				else if (t == 1) {
-					bundleInfos[i].setBundleDir(columns[t]);
-				}
-				else if (t == 2) {
-					bundleInfos[i].setTomcatDir(columns[t]);
-				}
-				else if (t == 3) {
-					bundleInfos[i].setType(columns[t]);
-				}
-				else if (t == 4) {
-					bundleInfos[i].setVersion(columns[t]);
-				}
-			}
-		}
-
-		return bundleInfos;
+		_bundleInfos = _getBundleInfos();
+		_sdkInfos = _getSdkInfos();
 	}
 
 	public IPath getEclipseWorkspacePath() {
@@ -133,25 +97,39 @@ public class EnvAction extends UIAction {
 	}
 
 	public String getLiferayPluginServerName() {
-		return _bundleInfos[0].getTomcatDir();
+		return _bundleInfos[0].getServerDir();
 	}
 
 	public String getLiferayPluginServerName62() {
-		return _bundleInfos[1].getTomcatDir();
+		return _bundleInfos[1].getServerDir();
+	}
+
+	public IPath getLiferayPluginsSdk62Dir() {
+		IPath bundlesPath = getLiferayBundlesPath().append("bundles");
+
+		return bundlesPath.append(_sdkInfos[1].getSdkDir());
+	}
+
+	public String getLiferayPluginsSdk62Name() {
+		return _sdkInfos[1].getSdkDir();
+	}
+
+	public IPath getLiferayPluginsSDK62Zip() {
+		return getLiferayBundlesPath().append(_sdkInfos[1].getSdkZip());
 	}
 
 	public IPath getLiferayPluginsSdkDir() {
 		IPath bundlesPath = getLiferayBundlesPath().append("bundles");
 
-		return bundlesPath.append(_PLUGINS_SDK_DIR);
+		return bundlesPath.append(_sdkInfos[0].getSdkDir());
 	}
 
 	public String getLiferayPluginsSdkName() {
-		return _PLUGINS_SDK_DIR;
+		return _sdkInfos[0].getSdkDir();
 	}
 
 	public IPath getLiferayPluginsSDKZip() {
-		return getLiferayBundlesPath().append(_PLUGINS_SDK_ZIP);
+		return getLiferayBundlesPath().append(_sdkInfos[0].getSdkZip());
 	}
 
 	public IPath getLiferayServerDir() {
@@ -377,42 +355,29 @@ public class EnvAction extends UIAction {
 			"Expected file to exist: " + liferayPluginsSdkZipFile.getAbsolutePath(), true,
 			liferayPluginsSdkZipFile.exists());
 
-		File liferayPluginsSdkDirFile = getLiferayPluginsSdkDir().toFile();
+		sdkDir.mkdirs();
 
-		liferayPluginsSdkDirFile.mkdirs();
+		ZipUtil.unzip(liferayPluginsSdkZipFile, getLiferayPluginsSdkName(), sdkDir, new NullProgressMonitor());
 
-		if (CoreUtil.isNullOrEmpty(_PLUGINS_SDK_DIR)) {
-			ZipUtil.unzip(liferayPluginsSdkZipFile, liferayPluginsSdkDirFile);
-		}
-		else {
-			ZipUtil.unzip(
-				liferayPluginsSdkZipFile, _PLUGINS_SDK_DIR, liferayPluginsSdkDirFile, new NullProgressMonitor());
-		}
+		Assert.assertEquals(true, sdkDir.exists());
 
-		Assert.assertEquals(true, liferayPluginsSdkDirFile.exists());
+		String username = _getUsername();
 
-		Properties evnMap = System.getProperties();
+		File userBuildFile = new File(sdkDir, "build." + username + ".properties");
 
-		String username = evnMap.getProperty("USERNAME");
+		userBuildFile.createNewFile();
 
-		File userBuildFile = new File(liferayPluginsSdkDirFile, "build." + username + ".properties");
+		unzipServer();
 
-		if (!userBuildFile.exists()) {
-			userBuildFile.createNewFile();
+		File serverDir = getLiferayServerDir().toFile();
 
-			File serverDir = getLiferayServerDir().toFile();
+		String appServerParentDir = "app.server.parent.dir=" + serverDir.getPath().replace("\\", "/");
 
-			String appServerParentDir = "app.server.parent.dir=" + serverDir.getPath().replace("\\", "/");
+		FileWriter writer = new FileWriter(userBuildFile.getPath(), true);
 
-			try {
-				FileWriter writer = new FileWriter(userBuildFile.getPath(), true);
+		writer.write(appServerParentDir);
 
-				writer.write(appServerParentDir);
-				writer.close();
-			}
-			catch (IOException ioe) {
-			}
-		}
+		writer.close();
 	}
 
 	public void unzipServer() throws IOException {
@@ -434,13 +399,7 @@ public class EnvAction extends UIAction {
 
 		String liferayServerZipFolder = getLiferayServerZipFolder();
 
-		if (CoreUtil.isNullOrEmpty(liferayServerZipFolder)) {
-			ZipUtil.unzip(liferayServerZipFile, liferayServerDirFile);
-		}
-		else {
-			ZipUtil.unzip(
-				liferayServerZipFile, liferayServerZipFolder, liferayServerDirFile, new NullProgressMonitor());
-		}
+		ZipUtil.unzip(liferayServerZipFile, liferayServerZipFolder, liferayServerDirFile, new NullProgressMonitor());
 	}
 
 	public void unzipServer62() throws IOException {
@@ -463,22 +422,101 @@ public class EnvAction extends UIAction {
 
 		String liferayServerZipFolder62 = getLiferayServerZipFolder62();
 
-		if (CoreUtil.isNullOrEmpty(liferayServerZipFolder62)) {
-			ZipUtil.unzip(liferayServerZipFile62, liferayServerDirFile62);
-		}
-		else {
-			ZipUtil.unzip(
-				liferayServerZipFile62, liferayServerZipFolder62, liferayServerDirFile62, new NullProgressMonitor());
-		}
+		ZipUtil.unzip(
+			liferayServerZipFile62, liferayServerZipFolder62, liferayServerDirFile62, new NullProgressMonitor());
 	}
 
-	private static final String _PLUGINS_SDK_DIR = "com.liferay.portal.plugins.sdk-1.0.11-withdependencies";
+	private BundleInfo[] _getBundleInfos() {
+		IPath bundlesCsvPath = getLiferayBundlesPath().append("bundles.csv");
 
-	private static final String _PLUGINS_SDK_ZIP =
-		"com.liferay.portal.plugins.sdk-1.0.11-withdependencies-20170613175008905.zip";
+		File bundleCsv = bundlesCsvPath.toFile();
+
+		Assert.assertTrue(bundleCsv.exists());
+
+		String[][] infos = CSVReader.readCSV(bundleCsv);
+
+		BundleInfo[] bundleInfos = new BundleInfo[infos.length];
+
+		for (int i = 0; i < infos.length; i++) {
+			bundleInfos[i] = new BundleInfo();
+
+			String[] columns = infos[i];
+
+			for (int t = 0; t < columns.length; t++) {
+				String value = columns[t];
+
+				if (t == 0) {
+					bundleInfos[i].setBundleZip(value);
+				}
+				else if (t == 1) {
+					bundleInfos[i].setBundleDir(value);
+				}
+				else if (t == 2) {
+					bundleInfos[i].setServerDir(value);
+				}
+				else if (t == 3) {
+					bundleInfos[i].setType(value);
+				}
+				else if (t == 4) {
+					bundleInfos[i].setVersion(value);
+				}
+			}
+		}
+
+		return bundleInfos;
+	}
+
+	private SdkInfo[] _getSdkInfos() {
+		IPath sdksCsvPath = getLiferayBundlesPath().append("sdks.csv");
+
+		File sdksCsv = sdksCsvPath.toFile();
+
+		Assert.assertTrue(sdksCsv.exists());
+
+		String[][] infos = CSVReader.readCSV(sdksCsv);
+
+		SdkInfo[] sdkInfos = new SdkInfo[infos.length];
+
+		for (int i = 0; i < infos.length; i++) {
+			sdkInfos[i] = new SdkInfo();
+
+			String[] columns = infos[i];
+
+			for (int t = 0; t < columns.length; t++) {
+				String value = columns[t];
+
+				if (t == 0) {
+					sdkInfos[i].setSdkZip(value);
+				}
+				else if (t == 1) {
+					sdkInfos[i].setSdkDir(value);
+				}
+				else if (t == 2) {
+					sdkInfos[i].setVersion(value);
+				}
+			}
+		}
+
+		return sdkInfos;
+	}
+
+	private String _getUsername() {
+		String retval = StringPool.BLANK;
+
+		retval = System.getenv("USERNAME");
+
+		if (CoreUtil.empty(retval)) {
+			retval = System.getenv("USER");
+		}
+
+		Assert.assertTrue((retval != null) && !retval.equals(""));
+
+		return retval;
+	}
 
 	private final BundleInfo[] _bundleInfos;
 	private String _liferayBundlesDir = System.getProperty("liferay.bundles.dir");
 	private IPath _liferayBundlesPath;
+	private final SdkInfo[] _sdkInfos;
 
 }

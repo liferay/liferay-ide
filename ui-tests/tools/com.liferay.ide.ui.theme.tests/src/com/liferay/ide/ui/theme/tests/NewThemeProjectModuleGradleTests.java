@@ -12,28 +12,31 @@
  * details.
  */
 
-package com.liferay.ide.ui.fragment.tests;
+package com.liferay.ide.ui.theme.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * @author Vicky Wang
- * @author Sunny Shi
+ * @author Terry Jia
  */
-public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
+public class NewThemeProjectModuleGradleTests extends SwtbotBase {
 
 	@Test
-	public void addFragmentJsp() {
-	}
+	public void createTheme() {
+		String projectName = "test-theme-gradle";
 
-	@Test
-	public void addFragmentPortletProperties() {
-	}
+		wizardAction.openNewLiferayModuleWizard();
 
-	@Test
-	public void addFragmentResourceAction() {
+		wizardAction.prepareLiferayModuleGradle(projectName, THEME);
+
+		wizardAction.finishToWait();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.deleteProject(projectName);
 	}
 
 }

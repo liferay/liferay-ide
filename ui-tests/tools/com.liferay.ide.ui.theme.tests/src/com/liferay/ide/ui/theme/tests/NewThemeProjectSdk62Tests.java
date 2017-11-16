@@ -12,28 +12,31 @@
  * details.
  */
 
-package com.liferay.ide.ui.fragment.tests;
+package com.liferay.ide.ui.theme.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
+import java.io.IOException;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * @author Vicky Wang
- * @author Sunny Shi
+ * @author Terry Jia
  */
-public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
+public class NewThemeProjectSdk62Tests extends SwtbotBase {
 
-	@Test
-	public void addFragmentJsp() {
+	@AfterClass
+	public static void cleanPluginsSdk() {
+	}
+
+	@BeforeClass
+	public static void createPluginsSdk() throws IOException {
 	}
 
 	@Test
-	public void addFragmentPortletProperties() {
-	}
-
-	@Test
-	public void addFragmentResourceAction() {
+	public void createTheme() {
 	}
 
 }

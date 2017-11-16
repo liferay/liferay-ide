@@ -14,13 +14,15 @@
 
 package com.liferay.ide.ui.fragment.tests;
 
+import com.liferay.ide.ui.liferay.SwtbotBase;
+
 import org.junit.Test;
 
 /**
  * @author Vicky Wang
  * @author Sunny Shi
  */
-public class NewFragmentFilesWizardMavenTests {
+public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void addFragmentJsp() {
