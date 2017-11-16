@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.wizard;
 
@@ -26,12 +25,14 @@ import com.liferay.ide.project.ui.wizard.IPluginWizardFragment;
 import com.liferay.ide.project.ui.wizard.ValidProjectChecker;
 
 import java.lang.reflect.InvocationTargetException;
+
 import java.util.Hashtable;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -66,231 +67,217 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
  * @author Cindy Li
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class NewPortletWizard extends NewWebArtifactWizard
-    implements IPluginWizardFragment, INewPortletClassDataModelProperties
-{
+@SuppressWarnings("restriction")
+public class NewPortletWizard
+	extends NewWebArtifactWizard implements IPluginWizardFragment, INewPortletClassDataModelProperties {
 
-    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.wizard.portlet"; //$NON-NLS-1$
+	public static final String ID = "com.liferay.ide.eclipse.portlet.ui.wizard.portlet";
 
-    protected boolean fragment;
-    protected IWizardPage hostPage;
-    protected IProject initialProject;
+	public NewPortletWizard() {
+		this((IDataModel)null);
+		setupWizard();
+	}
 
-    public NewPortletWizard()
-    {
-        this( (IDataModel) null );
-        setupWizard();
-    }
+	public NewPortletWizard(IDataModel model) {
+		super(model);
+		setDefaultPageImageDescriptor(getImage());
+		setupWizard();
+	}
 
-    public NewPortletWizard( IDataModel model )
-    {
-        super( model );
-        setDefaultPageImageDescriptor( getImage() );
-        setupWizard();
-    }
+	public NewPortletWizard(IProject project) {
+		this((IDataModel)null);
+		initialProject = project;
+		setupWizard();
+	}
 
-    public NewPortletWizard( IProject project )
-    {
-        this( (IDataModel) null );
-        this.initialProject = project;
-        setupWizard();
-    }
+	public IDataModelProvider getDataModelProvider() {
+		return getDefaultProvider();
+	}
 
-    @Override
-    protected void doAddPages()
-    {
-        addPage( new NewPortletClassWizardPage(
-            getDataModel(), "pageOne", Msgs.createPortletClass, getDefaultPageTitle(), this.fragment, //$NON-NLS-1$
-            ( initialProject != null ) ) );
-        addPage( new NewPortletOptionsWizardPage(
-            getDataModel(), "pageTwo", Msgs.specifyPortletDeployment, getDefaultPageTitle(), //$NON-NLS-1$
-            this.fragment ) );
-        addPage( new NewLiferayPortletWizardPage(
-            getDataModel(), "pageThree", Msgs.specifyLiferayPortletDeployment, //$NON-NLS-1$
-            getDefaultPageTitle(), this.fragment ) );
-        addPage( new NewPortletClassOptionsWizardPage(
-            getDataModel(), "pageFour", //$NON-NLS-1$
-            Msgs.specifyModifiersInterfacesMethodStubs, getDefaultPageTitle(),
-            this.fragment ) );
-    }
+	public String getTitle() {
+		return Msgs.newLiferayPortlet;
+	}
 
-    public IDataModelProvider getDataModelProvider()
-    {
-        return getDefaultProvider();
-    }
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		Object selected = selection.getFirstElement();
 
-    protected String getDefaultPageTitle()
-    {
-        return Msgs.createLiferayPortlet;
-    }
+		if (selected instanceof IProject) {
+			getDataModel().setStringProperty(
+				IArtifactEditOperationDataModelProperties.COMPONENT_NAME, ((IProject)selected).getProject().getName());
+		}
 
-    @Override
-    protected IDataModelProvider getDefaultProvider()
-    {
-        final TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
+		super.init(workbench, selection);
+		ValidProjectChecker checker = new ValidProjectChecker(ID);
 
-        final TemplateContextType contextType =
-            PortletUIPlugin.getDefault().getTemplateContextRegistry().getContextType( PortletTemplateContextTypeIds.NEW );
+		checker.checkValidProjectTypes();
+	}
 
-        return new NewPortletClassDataModelProvider( this.fragment, initialProject )
-        {
-            @Override
-            public IDataModelOperation getDefaultOperation()
-            {
-                return new AddPortletOperation( this.model, templateStore, contextType );
-            }
-        };
-    }
+	public void initFragmentDataModel(IDataModel parentDataModel, String projectName) {
+		getDataModel().setBooleanProperty(IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS, true);
+		getDataModel().setProperty(
+			IPluginWizardFragmentProperties.FACET_RUNTIME,
+			parentDataModel.getProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME));
+		getDataModel().setStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME, projectName);
+	}
 
-    protected ImageDescriptor getImage()
-    {
-        return PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "/icons/wizban/portlet_wiz.png" ); //$NON-NLS-1$
-    }
+	public void setFragment(boolean fragment) {
+		this.fragment = fragment;
+	}
 
-    public String getTitle()
-    {
-        return Msgs.newLiferayPortlet;
-    }
+	public void setHostPage(IWizardPage hostPage) {
+		this.hostPage = hostPage;
+	}
 
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-        final Object selected = selection.getFirstElement();
+	@Override
+	protected void doAddPages() {
+		addPage(
+			new NewPortletClassWizardPage(
+				getDataModel(), "pageOne", Msgs.createPortletClass, getDefaultPageTitle(), fragment,
+				initialProject != null));
+		addPage(
+			new NewPortletOptionsWizardPage(
+				getDataModel(), "pageTwo", Msgs.specifyPortletDeployment, getDefaultPageTitle(), fragment));
+		addPage(
+			new NewLiferayPortletWizardPage(
+				getDataModel(), "pageThree", Msgs.specifyLiferayPortletDeployment, getDefaultPageTitle(), fragment));
+		addPage(
+			new NewPortletClassOptionsWizardPage(
+				getDataModel(), "pageFour", Msgs.specifyModifiersInterfacesMethodStubs, getDefaultPageTitle(),
+				fragment));
+	}
 
-        if( selected instanceof IProject )
-        {
-            getDataModel().setStringProperty(
-                IArtifactEditOperationDataModelProperties.COMPONENT_NAME,
-                ( (IProject) selected ).getProject().getName() );
-        }
+	protected String getDefaultPageTitle() {
+		return Msgs.createLiferayPortlet;
+	}
 
-        super.init( workbench, selection );
-        ValidProjectChecker checker = new ValidProjectChecker( ID );
-        checker.checkValidProjectTypes();
-    }
+	@Override
+	protected IDataModelProvider getDefaultProvider() {
+		TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
 
-    public void initFragmentDataModel( IDataModel parentDataModel, String projectName )
-    {
-        getDataModel().setBooleanProperty( IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS, true );
-        getDataModel().setProperty(
-            IPluginWizardFragmentProperties.FACET_RUNTIME,
-            parentDataModel.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME ) );
-        getDataModel().setStringProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME, projectName );
-    }
+		PortletUIPlugin plugin = PortletUIPlugin.getDefault();
 
-    @Override
-    protected void openJavaClass()
-    {
-        IProject project =
-            ResourcesPlugin.getWorkspace().getRoot().getProject( getDataModel().getStringProperty( PROJECT_NAME ) );
+		TemplateContextType contextType =
+			plugin.getTemplateContextRegistry().getContextType(PortletTemplateContextTypeIds.NEW);
 
-        if( getDataModel().getBooleanProperty( USE_DEFAULT_PORTLET_CLASS ) )
-        {
-            try
-            {
-                String jspsFolder = getDataModel().getStringProperty( CREATE_JSPS_FOLDER );
+		return new NewPortletClassDataModelProvider(fragment, initialProject) {
 
-                // IDE-110 IDE-648
-                final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
+			@Override
+			public IDataModelOperation getDefaultOperation() {
+				return new AddPortletOperation(model, templateStore, contextType);
+			}
 
-                if( webproject != null && webproject.getDefaultDocrootFolder() != null )
-                {
-                    final IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
-                    final IFile viewFile = defaultDocroot.getFile( new Path( jspsFolder + "/view.jsp" ) );
+		};
+	}
 
-                    if( viewFile.exists() )
-                    {
-                        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-                        IDE.openEditor( page, viewFile, true );
+	protected ImageDescriptor getImage() {
+		return PortletUIPlugin.imageDescriptorFromPlugin(PortletUIPlugin.PLUGIN_ID, "/icons/wizban/portlet_wiz.png");
+	}
 
-                        return;
-                    }
-                }
-            }
-            catch( Exception e )
-            {
-                // eat this exception this is just best effort
-            }
-        }
-        else
-        {
-            Map<String, String> settings = new Hashtable<String, String>();
-            settings.put( CleanUpConstants.ORGANIZE_IMPORTS, CleanUpOptions.TRUE );
-            ImportsCleanUp importsCleanUp = new ImportsCleanUp( settings );
+	@Override
+	protected void openJavaClass() {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
-            ICleanUp[] cleanUps = new ICleanUp[] { importsCleanUp };
+		IProject project = workspace.getRoot().getProject(getDataModel().getStringProperty(PROJECT_NAME));
 
-            IJavaProject javaProject = JavaCore.create( project );
+		if (getDataModel().getBooleanProperty(USE_DEFAULT_PORTLET_CLASS)) {
+			try {
+				String jspsFolder = getDataModel().getStringProperty(CREATE_JSPS_FOLDER);
 
-            try
-            {
-                IType type =
-                    javaProject.findType( getDataModel().getStringProperty(
-                        INewJavaClassDataModelProperties.QUALIFIED_CLASS_NAME ) );
+				// IDE-110 IDE-648
 
-                ICompilationUnit cu = (ICompilationUnit) type.getParent();
+				IWebProject webproject = LiferayCore.create(IWebProject.class, project);
 
-                ICompilationUnit[] units = new ICompilationUnit[] { cu };
+				if ((webproject != null) && (webproject.getDefaultDocrootFolder() != null)) {
+					IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
 
-                RefactoringExecutionStarter.startCleanupRefactoring(
-                    units, cleanUps, false, getShell(), false, "organize imports" ); //$NON-NLS-1$
-            }
-            catch( Exception e )
-            {
-            }
+					IFile viewFile = defaultDocroot.getFile(new Path(jspsFolder + "/view.jsp"));
 
-            super.openJavaClass();
-        }
-    }
+					if (viewFile.exists()) {
+						IWorkbench workbench = PlatformUI.getWorkbench();
 
-    @Override
-    protected void postPerformFinish() throws InvocationTargetException
-    {
-        openJavaClass();
-    }
+						IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
 
-    @Override
-    protected boolean prePerformFinish()
-    {
-        if( this.fragment )
-        {
-            // if this is added to plugin wizard as fragment we don't want this to execute performFinish
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
+						IDE.openEditor(page, viewFile, true);
 
-    public void setFragment( boolean fragment )
-    {
-        this.fragment = fragment;
-    }
+						return;
+					}
+				}
+			}
+			catch (Exception e) {
 
-    public void setHostPage( IWizardPage hostPage )
-    {
-        this.hostPage = hostPage;
-    }
+				// eat this exception this is just best effort
 
-    protected void setupWizard()
-    {
-        setNeedsProgressMonitor( true );
-    }
+			}
+		}
+		else {
+			Map<String, String> settings = new Hashtable<>();
 
-    private static class Msgs extends NLS
-    {
-        public static String createLiferayPortlet;
-        public static String createPortletClass;
-        public static String newLiferayPortlet;
-        public static String specifyLiferayPortletDeployment;
-        public static String specifyModifiersInterfacesMethodStubs;
-        public static String specifyPortletDeployment;
+			settings.put(CleanUpConstants.ORGANIZE_IMPORTS, CleanUpOptions.TRUE);
+			ImportsCleanUp importsCleanUp = new ImportsCleanUp(settings);
 
-        static
-        {
-            initializeMessages( NewPortletWizard.class.getName(), Msgs.class );
-        }
-    }
+			ICleanUp[] cleanUps = {importsCleanUp};
+
+			IJavaProject javaProject = JavaCore.create(project);
+
+			try {
+				IType type = javaProject.findType(
+					getDataModel().getStringProperty(INewJavaClassDataModelProperties.QUALIFIED_CLASS_NAME));
+
+				ICompilationUnit cu = (ICompilationUnit)type.getParent();
+
+				ICompilationUnit[] units = {cu};
+
+				RefactoringExecutionStarter.startCleanupRefactoring(
+					units, cleanUps, false, getShell(), false, "organize imports");
+			}
+			catch (Exception e) {
+			}
+
+			super.openJavaClass();
+		}
+	}
+
+	@Override
+	protected void postPerformFinish() throws InvocationTargetException {
+		openJavaClass();
+	}
+
+	@Override
+	protected boolean prePerformFinish() {
+		if (fragment) {
+
+			// if this is added to plugin wizard as fragment we don't want this to execute
+			// performFinish
+
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	protected void setupWizard() {
+		setNeedsProgressMonitor(true);
+	}
+
+	protected boolean fragment;
+	protected IWizardPage hostPage;
+	protected IProject initialProject;
+
+	private static class Msgs extends NLS {
+
+		public static String createLiferayPortlet;
+		public static String createPortletClass;
+		public static String newLiferayPortlet;
+		public static String specifyLiferayPortletDeployment;
+		public static String specifyModifiersInterfacesMethodStubs;
+		public static String specifyPortletDeployment;
+
+		static {
+			initializeMessages(NewPortletWizard.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

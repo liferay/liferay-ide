@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Kamesh Sampath - initial implementation
- *      Gregory Amerson - initial implementation review and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.editor.internal;
 
@@ -35,6 +31,7 @@ import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.PropertyEvent;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
@@ -47,86 +44,97 @@ import org.eclipse.sapphire.ui.def.ActionHandlerDef;
  * @author Kamesh Sampath
  * @author Gregory Amerson
  */
-public class CreatePortletAppResourceBundleActionHandler extends AbstractResourceBundleActionHandler
-{
+public class CreatePortletAppResourceBundleActionHandler extends AbstractResourceBundleActionHandler {
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#init(org.eclipse.sapphire.ui.SapphireAction,
-     * org.eclipse.sapphire.ui.def.ActionHandlerDef)
-     */
-    @Override
-    public void init( SapphireAction action, ActionHandlerDef def )
-    {
-        super.init( action, def );
-        final Element element = getModelElement();
-        final Property property = property();
-        this.listener = new FilteredListener<PropertyEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( final PropertyEvent event )
-            {
-                refreshEnablementState();
-            }
-        };
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#init(org.eclipse.
+	 * sapphire.ui.SapphireAction, ActionHandlerDef)
+	 */
+	@Override
+	public void init(SapphireAction action, ActionHandlerDef def) {
+		super.init(action, def);
+		Element element = getModelElement();
+		Property property = property();
+		listener = new FilteredListener<PropertyEvent>() {
 
-        element.attach( this.listener, property.definition().name() );
+			@Override
+			protected void handleTypedEvent(PropertyEvent event) {
+				refreshEnablementState();
+			}
 
-        attach
-        (
-            new Listener()
-            {
-                @Override
-                public void handle( Event event )
-                {
-                    if( event instanceof DisposeEvent )
-                    {
-                        getModelElement().detach( listener, property().definition().name() );
-                    }
-                }
-            }
-        );
-    }
+		};
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
-     */
-    @Override
-    protected Object run( Presentation context )
-    {
-        final Element element = getModelElement();
-        final IProject project = element.adapt( IProject.class );
-        final Property property = property();
-        final Value<Path> resourceBundle = element.property( (ValueProperty) property.definition() );
-        final String resourceBundleText = resourceBundle.text();
+		element.attach(listener, property.definition().name());
 
-        int index = resourceBundleText.lastIndexOf( "." ); //$NON-NLS-1$
+		Listener listen = new Listener() {
 
-        if( index == -1 )
-        {
-            index = resourceBundleText.length();
-        }
+			@Override
+			public void handle(Event event) {
+				if (event instanceof DisposeEvent) {
+					PropertyDef definition = property().definition();
 
-        final String packageName = resourceBundleText.substring( 0, index );
+					getModelElement().detach(listener, definition.name());
+				}
+			}
 
-        final String defaultRBFileName =
-            PortletUtil.convertJavaToIoFileName(
-                resourceBundleText, GenericResourceBundlePathService.RB_FILE_EXTENSION );
+		};
 
-        final IFolder rbSourecFolder = getResourceBundleFolderLocation( project, defaultRBFileName );
-        final IPath entryPath = rbSourecFolder.getLocation();
-        if( getModelElement() instanceof PortletApp )
-        {
-            List<IFile> missingRBFiles = new ArrayList<IFile>();
-            final StringBuilder rbFileBuffer = new StringBuilder( "#Portlet Application Resource Bundle \n" ); //$NON-NLS-1$
-            final IFile rbFile = wroot.getFileForLocation( entryPath.append( defaultRBFileName ) );
-            missingRBFiles.add( rbFile );
-            createFiles( context, project, packageName, missingRBFiles, rbFileBuffer );
-            setEnabled( false );
-            getModelElement().property( property().definition() ).refresh();
-        }
-        return null;
-    }
+		attach(listen);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.
+	 * SapphireRenderingContext)
+	 */
+	@Override
+	protected Object run(Presentation context) {
+		Element element = getModelElement();
+
+		IProject project = element.adapt(IProject.class);
+
+		Property property = property();
+
+		Value<Path> resourceBundle = element.property((ValueProperty)property.definition());
+
+		String resourceBundleText = resourceBundle.text();
+
+		int index = resourceBundleText.lastIndexOf(".");
+
+		if (index == -1) {
+			index = resourceBundleText.length();
+		}
+
+		String packageName = resourceBundleText.substring(0, index);
+
+		String defaultRBFileName = PortletUtil.convertJavaToIoFileName(
+			resourceBundleText, GenericResourceBundlePathService.RB_FILE_EXTENSION);
+
+		IFolder rbSourecFolder = getResourceBundleFolderLocation(project, defaultRBFileName);
+
+		IPath entryPath = rbSourecFolder.getLocation();
+
+		if (getModelElement() instanceof PortletApp) {
+			List<IFile> missingRBFiles = new ArrayList<>();
+			StringBuilder rbFileBuffer = new StringBuilder("#Portlet Application Resource Bundle \n");
+			IFile rbFile = wroot.getFileForLocation(entryPath.append(defaultRBFileName));
+
+			missingRBFiles.add(rbFile);
+
+			createFiles(context, project, packageName, missingRBFiles, rbFileBuffer);
+			setEnabled(false);
+
+			Property modelElement = getModelElement().property(property().definition());
+
+			modelElement.refresh();
+		}
+
+		return null;
+	}
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.editor.internal;
 
@@ -24,32 +21,31 @@ import org.eclipse.sapphire.ui.forms.MasterDetailsContentNodePart;
 /**
  * @author Kamesh Sampath
  */
-public class ExpandSectionOutlineNodeHandler extends SapphireActionHandler
-{
+public class ExpandSectionOutlineNodeHandler extends SapphireActionHandler {
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
-     */
-    @Override
-    protected Object run( Presentation context )
-    {
-        final MasterDetailsContentNodePart mContentNode = getPart().nearest( MasterDetailsContentNodePart.class );
+	protected boolean computeEnabledState() {
+		return true;
+	}
 
-        if( mContentNode.isExpanded() )
-        {
-            mContentNode.setExpanded( false );
-        }
-        else
-        {
-            mContentNode.setExpanded( true );
-        }
-        return null;
-    }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * SapphireActionHandler#run(org.eclipse.sapphire.ui.
+	 * SapphireRenderingContext)
+	 */
+	@Override
+	protected Object run(Presentation context) {
+		MasterDetailsContentNodePart mContentNode = getPart().nearest(MasterDetailsContentNodePart.class);
 
-    protected boolean computeEnabledState()
-    {
-        return true;
-    }
+		if (mContentNode.isExpanded()) {
+			mContentNode.setExpanded(false);
+		}
+		else {
+			mContentNode.setExpanded(true);
+		}
+
+		return null;
+	}
 
 }

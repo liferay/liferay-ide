@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.portlet.ui.editor;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -25,76 +25,72 @@ import org.eclipse.jface.text.Region;
 import org.eclipse.wst.sse.ui.internal.taginfo.AbstractHoverProcessor;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.search.core.util.DOMUtils;
-import org.w3c.dom.Node;
 
+import org.w3c.dom.Node;
 
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class MessageKeyHover extends AbstractHoverProcessor
-{
-    private Region foundRegion;
-    private MessageKey[] messageKeys;
+@SuppressWarnings("restriction")
+public class MessageKeyHover extends AbstractHoverProcessor {
 
-    public MessageKeyHover()
-    {
-        super();
-    }
+	public MessageKeyHover() {
+	}
 
-    public String getHoverInfo( ITextViewer textViewer, IRegion hoverRegion )
-    {
-        String retval = null;
+	public String getHoverInfo(ITextViewer textViewer, IRegion hoverRegion) {
+		String retval = null;
 
-        if( hoverRegion != null && hoverRegion.equals( this.foundRegion ) &&
-            ( !CoreUtil.isNullOrEmpty( this.messageKeys ) ) )
-        {
-            retval = this.messageKeys[0].value;
-        }
+		if ((hoverRegion != null) && hoverRegion.equals(_foundRegion) && !CoreUtil.isNullOrEmpty(_messageKeys)) {
+			retval = _messageKeys[0].value;
+		}
 
-        return retval;
-    }
+		return retval;
+	}
 
-    public IRegion getHoverRegion( ITextViewer textViewer, int offset )
-    {
-        IRegion retval = null;
+	public IRegion getHoverRegion(ITextViewer textViewer, int offset) {
+		IRegion retval = null;
 
-        if( shouldHover( textViewer ) )
-        {
-            final IDocument document = textViewer.getDocument();
-            final IDOMNode node = DOMUtils.getNodeByOffset( document, offset );
-            final Node keyNode = NodeUtils.getMessageKey( node );
+		if (_shouldHover(textViewer)) {
+			IDocument document = textViewer.getDocument();
 
-            if( keyNode != null )
-            {
-                MessageKey[] messageKeys = NodeUtils.findMessageKeys( document, keyNode.getNodeValue(), true );
+			IDOMNode node = DOMUtils.getNodeByOffset(document, offset);
 
-                if( ! CoreUtil.isNullOrEmpty( messageKeys ) )
-                {
-                    IDOMNode regionNode = node;
-                    // check if this is an attr hover and return attribute region
-                    final IDOMNode attr = DOMUtils.getAttrByOffset( node, offset );
+			Node keyNode = NodeUtils.getMessageKey(node);
 
-                    if( attr != null )
-                    {
-                        regionNode = attr;
-                    }
+			if (keyNode != null) {
+				MessageKey[] messageKeys = NodeUtils.findMessageKeys(document, keyNode.getNodeValue(), true);
 
-                    this.foundRegion =
-                        new Region( regionNode.getStartOffset(), regionNode.getEndOffset() -
-                            regionNode.getStartOffset() );
-                    this.messageKeys = messageKeys;
-                    retval = this.foundRegion;
-                }
-            }
-        }
+				if (!CoreUtil.isNullOrEmpty(messageKeys)) {
+					IDOMNode regionNode = node;
 
-        return retval;
-    }
+					// check if this is an attr hover and return attribute region
 
-    private boolean shouldHover( ITextViewer textViewer )
-    {
-        return textViewer != null;
-    }
+					IDOMNode attr = DOMUtils.getAttrByOffset(node, offset);
+
+					if (attr != null) {
+						regionNode = attr;
+					}
+
+					_foundRegion = new Region(
+						regionNode.getStartOffset(), regionNode.getEndOffset() - regionNode.getStartOffset());
+					_messageKeys = messageKeys;
+					retval = _foundRegion;
+				}
+			}
+		}
+
+		return retval;
+	}
+
+	private boolean _shouldHover(ITextViewer textViewer) {
+		if (textViewer != null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private Region _foundRegion;
+	private MessageKey[] _messageKeys;
 
 }

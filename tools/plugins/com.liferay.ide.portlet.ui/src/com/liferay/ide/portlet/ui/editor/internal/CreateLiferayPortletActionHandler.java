@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.editor.internal;
 
@@ -29,30 +26,33 @@ import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 /**
  * @author Kamesh Sampath
  */
-public class CreateLiferayPortletActionHandler extends SapphireActionHandler
-{
+public class CreateLiferayPortletActionHandler extends SapphireActionHandler {
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
-     */
-    @Override
-    protected Object run( Presentation context )
-    {
-        IProject currentProject = null;
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * SapphireActionHandler#run(org.eclipse.sapphire.ui.
+	 * SapphireRenderingContext)
+	 */
+	@Override
+	protected Object run(Presentation context) {
+		IProject currentProject = null;
 
-        if( context.part().parent() instanceof PortletXmlEditor )
-        {
-            PortletXmlEditor portletXmlEditor = (PortletXmlEditor) context.part().parent();
-            currentProject = portletXmlEditor.getProject();
-        }
+		if (context.part().parent() instanceof PortletXmlEditor) {
+			PortletXmlEditor portletXmlEditor = (PortletXmlEditor)context.part().parent();
 
-        NewPortletWizard newPortletWizard = new NewPortletWizard( currentProject );
-        WizardDialog wizardDialog = new WizardDialog( ( (SwtPresentation) context ).shell(), newPortletWizard );
-        wizardDialog.create();
-        wizardDialog.open();
+			currentProject = portletXmlEditor.getProject();
+		}
 
-        return null;
-    }
+		NewPortletWizard newPortletWizard = new NewPortletWizard(currentProject);
+
+		WizardDialog wizardDialog = new WizardDialog(((SwtPresentation)context).shell(), newPortletWizard);
+
+		wizardDialog.create();
+		wizardDialog.open();
+
+		return null;
+	}
 
 }

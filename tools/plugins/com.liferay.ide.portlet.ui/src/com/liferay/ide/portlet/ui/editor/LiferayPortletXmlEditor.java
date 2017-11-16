@@ -1,5 +1,5 @@
-/*******************************************************************************
- * Copyright (c) 2000-2014 Liferay, Inc. All rights reserved.
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -10,10 +10,9 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.editor;
-
 
 import com.liferay.ide.portlet.core.lfportlet.model.LiferayPortletXml;
 
@@ -24,16 +23,15 @@ import org.eclipse.ui.PartInitException;
  * @author Simon Jiang
  * @author Gregory Amerson
  */
-public class LiferayPortletXmlEditor extends SapphireEditorForXml
-{
-    public LiferayPortletXmlEditor()
-    {
-        super( LiferayPortletXml.TYPE, null );
-    }
+public class LiferayPortletXmlEditor extends SapphireEditorForXml {
 
-    @Override
-    protected void createFormPages() throws PartInitException
-    {
-        addDeferredPage( 1, "Overview", "liferay-portlet-app.editor" );
-    }
+	public LiferayPortletXmlEditor() {
+		super(LiferayPortletXml.TYPE, null);
+	}
+
+	@Override
+	protected void createFormPages() throws PartInitException {
+		addDeferredPage(1, "Overview", "liferay-portlet-app.editor");
+	}
+
 }
