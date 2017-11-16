@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -36,35 +33,34 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Kamesh Sampath
  */
-@Image( path = "images/elcl16/event_16x16.gif" )
-@Label( full = "Event Definition", standard = "Event Definition" )
-public interface EventDefinition extends QName, Identifiable, Describeable
-{
+@Image(path = "images/elcl16/event_16x16.gif")
+@Label(full = "Event Definition", standard = "Event Definition")
+public interface EventDefinition extends QName, Identifiable, Describeable {
 
-    ElementType TYPE = new ElementType( EventDefinition.class );
+	public ElementType TYPE = new ElementType(EventDefinition.class);
 
-    // *** Aliases ***
+	// *** Aliases ***
 
-    @Type( base = AliasQName.class )
-    @Label( standard = "Aliases" )
-    @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "alias", type = AliasQName.class ) } )
-    ListProperty PROP_ALIASES = new ListProperty( TYPE, "Aliases" ); //$NON-NLS-1$
+	@Type(base = AliasQName.class)
+	@Label(standard = "Aliases")
+	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "alias", type = AliasQName.class)})
+	public ListProperty PROP_ALIASES = new ListProperty(TYPE, "Aliases");
 
-    ElementList<AliasQName> getAliases();
+	public ElementList<AliasQName> getAliases();
 
-    // *** Event Value Type ***
+	// *** Event Value Type ***
 
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @JavaTypeConstraint( kind = { JavaTypeKind.CLASS, JavaTypeKind.INTERFACE }, type = { "java.io.Serializable" } )
-    @Label( standard = "Value Type" )
-    @XmlBinding( path = "value-type" )
-    ValueProperty PROP_EVENT_VALUE_TYPE = new ValueProperty( TYPE, "EventValueType" ); //$NON-NLS-1$
+	@Type(base = JavaTypeName.class)
+	@Reference(target = JavaType.class)
+	@JavaTypeConstraint(kind = {JavaTypeKind.CLASS, JavaTypeKind.INTERFACE}, type = {"java.io.Serializable"})
+	@Label(standard = "Value Type")
+	@XmlBinding(path = "value-type")
+	public ValueProperty PROP_EVENT_VALUE_TYPE = new ValueProperty(TYPE, "EventValueType");
 
-    ReferenceValue<JavaTypeName, JavaType> getEventValueType();
+	public ReferenceValue<JavaTypeName, JavaType> getEventValueType();
 
-    void setEventValueType( String eventValueType );
+	public void setEventValueType(String eventValueType);
 
-    void setEventValueType( JavaTypeName eventValueType );
+	public void setEventValueType(JavaTypeName eventValueType);
 
 }

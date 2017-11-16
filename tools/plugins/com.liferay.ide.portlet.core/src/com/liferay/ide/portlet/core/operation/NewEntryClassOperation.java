@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.operation;
 
@@ -22,34 +21,30 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Cindy Li
  */
-@SuppressWarnings( "restriction" )
-public class NewEntryClassOperation extends NewWebClassOperation
-{
+@SuppressWarnings("restriction")
+public class NewEntryClassOperation extends NewWebClassOperation {
 
-    protected static final String TEMPLATE_DIR = "/templates/"; //$NON-NLS-1$
+	public NewEntryClassOperation(IDataModel dataModel) {
+		super(dataModel);
+	}
 
-    protected static final String TEMPLATE_FILE = TEMPLATE_DIR + "entry.javajet"; //$NON-NLS-1$
+	@Override
+	protected CreateWebClassTemplateModel createTemplateModel() {
+		return new CreateEntryTemplateModel(getDataModel());
+	}
 
-    public NewEntryClassOperation( IDataModel dataModel )
-    {
-        super( dataModel );
-    }
+	@Override
+	protected String getTemplateFile() {
+		return TEMPLATE_FILE;
+	}
 
-    @Override
-    protected CreateWebClassTemplateModel createTemplateModel()
-    {
-        return new CreateEntryTemplateModel( getDataModel() );
-    }
+	@Override
+	protected Object getTemplateImplementation() {
+		return EntryTemplate.create(null);
+	}
 
-    @Override
-    protected String getTemplateFile()
-    {
-        return TEMPLATE_FILE;
-    }
+	protected static final String TEMPLATE_DIR = "/templates/";
 
-    @Override
-    protected Object getTemplateImplementation()
-    {
-        return EntryTemplate.create( null );
-    }
+	protected static final String TEMPLATE_FILE = TEMPLATE_DIR + "entry.javajet";
+
 }

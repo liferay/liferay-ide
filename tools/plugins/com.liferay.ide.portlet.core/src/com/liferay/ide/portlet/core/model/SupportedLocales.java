@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -36,30 +33,25 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-@Image( path = "images/elcl16/locale_16x16.gif" )
-public interface SupportedLocales extends Element
-{
+@Image(path = "images/elcl16/locale_16x16.gif")
+public interface SupportedLocales extends Element {
 
-    ElementType TYPE = new ElementType( SupportedLocales.class );
+	public ElementType TYPE = new ElementType(SupportedLocales.class);
 
-    // *** SupportedLocale ***
+	// *** SupportedLocale ***
 
-    @Label( standard = "Locale" )
-    @Unique
-    @XmlBinding( path = "" )
-    @Services
-    (
-        value =
-        {
-            @Service( impl = LocalePossibleValueService.class ),
-            @Service( impl = LocaleBundleValidationService.class )
-        }
-    )
-    @CustomXmlValueBinding( impl = LocaleTextNodeValueBinding.class )
-    ValueProperty PROP_SUPPORTED_LOCALE = new ValueProperty( TYPE, "SupportedLocale" ); //$NON-NLS-1$
+	@Label(standard = "Locale")
+	@Unique
+	@XmlBinding(path = "")
+	@Services(value = {
+		@Service(impl = LocalePossibleValueService.class), @Service(impl = LocaleBundleValidationService.class)
 
-    Value<String> getSupportedLocale();
+	})
+	@CustomXmlValueBinding(impl = LocaleTextNodeValueBinding.class)
+	public ValueProperty PROP_SUPPORTED_LOCALE = new ValueProperty(TYPE, "SupportedLocale");
 
-    void setSupportedLocale( String value );
+	public Value<String> getSupportedLocale();
+
+	public 	void setSupportedLocale(String value);
 
 }

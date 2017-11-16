@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.operation;
 
@@ -26,43 +25,37 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
  * @author Cindy Li
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class CreateEntryTemplateModel extends CreateWebClassTemplateModel
-{
+@SuppressWarnings("restriction")
+public class CreateEntryTemplateModel extends CreateWebClassTemplateModel {
 
-    protected boolean generateGenericInclude = false;
+	public CreateEntryTemplateModel(IDataModel dataModel) {
+		super(dataModel);
+	}
 
-    public CreateEntryTemplateModel( IDataModel dataModel )
-    {
-        super( dataModel );
-    }
+	@Override
+	public String getClassName() {
+		return dataModel.getStringProperty(INewPortletClassDataModelProperties.ENTRY_CLASS_NAME);
+	}
 
-    @Override
-    public String getClassName()
-    {
-        return dataModel.getStringProperty( INewPortletClassDataModelProperties.ENTRY_CLASS_NAME );
-    }
+	@Override
+	public Collection<String> getImports() {
+		List<String> collectionList = new ArrayList<>();
 
-    @Override
-    public Collection<String> getImports()
-    {
+		for (String importItem : super.getImports()) {
+			if (importItem.contains("<") && importItem.contains(">")) {
+				continue;
+			}
 
-        final List<String> collectionList = new ArrayList<String>();
+			collectionList.add(importItem);
+		}
 
-        for( String importItem : super.getImports() )
-        {
-            if( importItem.contains( "<" ) && importItem.contains( ">" ) )
-            {
-                continue;
-            }
+		collectionList.add("com.liferay.portlet.BaseControlPanelEntry");
+		collectionList.add("com.liferay.portal.model.Portlet");
+		collectionList.add("com.liferay.portal.security.permission.PermissionChecker");
 
-            collectionList.add( importItem );
-        }
+		return collectionList;
+	}
 
-        collectionList.add( "com.liferay.portlet.BaseControlPanelEntry" ); //$NON-NLS-1$
-        collectionList.add( "com.liferay.portal.model.Portlet" ); //$NON-NLS-1$
-        collectionList.add( "com.liferay.portal.security.permission.PermissionChecker" ); //$NON-NLS-1$
+	protected boolean generateGenericInclude = false;
 
-        return collectionList;
-    }
 }

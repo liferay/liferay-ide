@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- ******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.lfportlet.model;
 
@@ -36,54 +36,49 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlElementBinding;
 /**
  * @author Simon Jiang
  */
-@Image( path = "images/elcl16/dates.gif" )
-public interface SchedulerEntry extends Element
-{
+@Image(path = "images/elcl16/dates.gif")
+public interface SchedulerEntry extends Element {
 
-    ElementType TYPE = new ElementType( SchedulerEntry.class );
+	public ElementType TYPE = new ElementType(SchedulerEntry.class);
 
+	// *** SchedulerDescription ***
 
-    // *** SchedulerDescription ***
+	@Label(standard = "SchedulerDescription")
+	@Required
+	@XmlBinding(path = "scheduler-description")
+	public ValueProperty PROP_SCHEDULER_DESCRIPTION = new ValueProperty(TYPE, "SchedulerDescription");
 
-    @Label( standard = "SchedulerDescription" )
-    @Required
-    @XmlBinding( path = "scheduler-description" )
-    ValueProperty PROP_SCHEDULER_DESCRIPTION = new ValueProperty( TYPE, "SchedulerDescription" );
+	public Value<String> getSchedulerDescription();
 
-    Value<String> getSchedulerDescription();
-    void SetSchedulerDescription( String value );
+	void SetSchedulerDescription(String value);
 
+	// *** Scheduler Event Listener Class ***
 
-    // *** Scheduler Event Listener Class ***
+	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = {"com.liferay.portal.kernel.messaging.MessageListener"})
+	@Label(standard = "SchedulerEventListenerClass")
+	@Reference(target = JavaType.class)
+	@Required
+	@Type(base = JavaTypeName.class)
+	@XmlBinding(path = "scheduler-event-listener-class")
+	public ValueProperty PROP_SCHEDULER_EVENT_LISTENER_CLASS = new ValueProperty(TYPE, "SchedulerEventListenerClass");
 
-    @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = { "com.liferay.portal.kernel.messaging.MessageListener" } )
-    @Label( standard = "SchedulerEventListenerClass" )
-    @Reference( target = JavaType.class )
-    @Required
-    @Type( base = JavaTypeName.class )
-    @XmlBinding( path = "scheduler-event-listener-class" )
-    ValueProperty PROP_SCHEDULER_EVENT_LISTENER_CLASS = new ValueProperty( TYPE, "SchedulerEventListenerClass" );
+	public ReferenceValue<JavaTypeName, JavaType> getSchedulerEventListenerClass();
 
-    ReferenceValue<JavaTypeName, JavaType> getSchedulerEventListenerClass();
-    void setSchedulerEventListenerClass( JavaTypeName value );
-    void setSchedulerEventListenerClass( String value );
+	void setSchedulerEventListenerClass(JavaTypeName value);
 
+	void setSchedulerEventListenerClass(String value);
 
-    // *** Trigger ***
+	// *** Trigger ***
 
-    @Required
-    @Type( base = ITrigger.class, possible = { CronTrigger.class, SimpleTrigger.class } )
-    @XmlElementBinding
-    (
-        mappings =
-        {
-            @XmlElementBinding.Mapping( element = "cron", type = CronTrigger.class ),
-            @XmlElementBinding.Mapping( element = "simple", type = SimpleTrigger.class )
-        },
-        path = "trigger"
-    )
-    ElementProperty PROP_PORTLET_TRIGGER = new ElementProperty( TYPE, "PortletTrigger" );
+	@Required
+	@Type(base = ITrigger.class, possible = {CronTrigger.class, SimpleTrigger.class})
+	@XmlElementBinding(mappings = {
+		@XmlElementBinding.Mapping(element = "cron", type = CronTrigger.class),
+		@XmlElementBinding.Mapping(element = "simple", type = SimpleTrigger.class)
 
-    ElementHandle<ITrigger> getPortletTrigger();
+	}, path = "trigger")
+	public ElementProperty PROP_PORTLET_TRIGGER = new ElementProperty(TYPE, "PortletTrigger");
+
+	public 	ElementHandle<ITrigger> getPortletTrigger();
 
 }

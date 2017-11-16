@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *******************************************************************************/
+ */
+
 package com.liferay.ide.portlet.core.lfportlet.model.internal;
 
 import com.liferay.ide.core.LiferayCore;
@@ -31,73 +32,63 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
-public class PortletStyleValidationService extends ValidationService
-{
+public class PortletStyleValidationService extends ValidationService {
 
-    @Override
-    protected Status compute()
-    {
-        final Element modelElement = context( Element.class );
+	@Override
+	protected Status compute() {
+		Element modelElement = context(Element.class);
 
-        if( !modelElement.disposed() && modelElement instanceof PortletStyleElement )
-        {
-            final Path path = (Path) modelElement.property( context( ValueProperty.class ) ).content();
+		if (!modelElement.disposed() && modelElement instanceof PortletStyleElement) {
+			Path path = (Path)modelElement.property(context(ValueProperty.class)).content();
 
-            if( path != null )
-            {
-                final String name = path.lastSegment();
-                final IProject project = modelElement.adapt( IProject.class );
-                boolean fileExisted = new FileCheckVisitor().checkFiles( project, name );
+			if (path != null) {
+				String name = path.lastSegment();
+				IProject project = modelElement.adapt(IProject.class);
 
-                if( !fileExisted )
-                {
-                    return Status.createErrorStatus( "File " + path.toPortableString() + " is not existed" );
-                }
-            }
-            else
-            {
-                return Status.createErrorStatus( "Can not set empty value" );
-            }
-        }
+				boolean fileExisted = new FileCheckVisitor().checkFiles(project, name);
 
-        return Status.createOkStatus();
-    }
+				if (!fileExisted) {
+					return Status.createErrorStatus("File " + path.toPortableString() + " is not existed");
+				}
+			}
+			else {
+				return Status.createErrorStatus("Can not set empty value");
+			}
+		}
 
-    private static class FileCheckVisitor implements IResourceProxyVisitor
-    {
-        String searchFileName = null;
-        boolean fileExisted = false;
+		return Status.createOkStatus();
+	}
 
-        public boolean visit( IResourceProxy resourceProxy )
-        {
-            if( resourceProxy.getType() == IResource.FILE && resourceProxy.getName().equals( searchFileName ) )
-            {
-                IResource resource = resourceProxy.requestResource();
+	private static class FileCheckVisitor implements IResourceProxyVisitor {
 
-                if( resource.exists() )
-                {
-                    fileExisted = true;
-                }
-            }
+		public boolean checkFiles(IResource container, String searchFileName) {
+			this.searchFileName = searchFileName;
 
-            return true;
-        }
+			try {
+				container.accept(this, IContainer.EXCLUDE_DERIVED);
+			}
+			catch (CoreException ce) {
+				LiferayCore.logError(ce);
+			}
 
-        public boolean checkFiles( IResource container, String searchFileName )
-        {
-            this.searchFileName = searchFileName;
+			return fileExisted;
+		}
 
-            try
-            {
-                container.accept( this, IContainer.EXCLUDE_DERIVED );
-            }
-            catch( CoreException e )
-            {
-                LiferayCore.logError( e );
-            }
+		public boolean visit(IResourceProxy resourceProxy) {
+			if ((resourceProxy.getType() == IResource.FILE) && resourceProxy.getName().equals(searchFileName)) {
+				IResource resource = resourceProxy.requestResource();
 
-            return fileExisted;
-        }
-    }
+				if (resource.exists()) {
+					fileExisted = true;
+				}
+			}
+
+			return true;
+		}
+
+		public boolean fileExisted = false;
+		public String searchFileName = null;
+
+	}
 
 }

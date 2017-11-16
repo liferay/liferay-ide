@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -32,32 +29,31 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-public interface AliasQName extends Element
-{
+public interface AliasQName extends Element {
 
-    ElementType TYPE = new ElementType( AliasQName.class );
+	public ElementType TYPE = new ElementType(AliasQName.class);
 
-    // *** NamespaceURI ***
+	// *** NamespaceURI ***
 
-    @Label( standard = "Namespace URI" )
-    @XmlBinding( path = "alias" )
-    @Required
-    @CustomXmlValueBinding( impl = QNamespaceValueBinding.class, params = { "alias" } )
-    ValueProperty PROP_NAMESPACE_URI = new ValueProperty( TYPE, "NamespaceURI" ); //$NON-NLS-1$
+	@Label(standard = "Namespace URI")
+	@XmlBinding(path = "alias")
+	@Required
+	@CustomXmlValueBinding(impl = QNamespaceValueBinding.class, params = {"alias"})
+	public ValueProperty PROP_NAMESPACE_URI = new ValueProperty(TYPE, "NamespaceURI");
 
-    Value<String> getNamespaceURI();
+	public Value<String> getNamespaceURI();
 
-    void setNamespaceURI( String value );
+	public void setNamespaceURI(String value);
 
-    // *** LocalPart ***
+	// *** LocalPart ***
 
-    @Label( standard = "Local Part" )
-    @XmlBinding( path = "alias" )
-    @Required
-    @CustomXmlValueBinding( impl = QNameLocalPartValueBinding.class, params = { "alias" } )
-    ValueProperty PROP_LOCAL_PART = new ValueProperty( TYPE, "LocalPart" ); //$NON-NLS-1$
+	@Label(standard = "Local Part")
+	@XmlBinding(path = "alias")
+	@Required
+	@CustomXmlValueBinding(impl = QNameLocalPartValueBinding.class, params = {"alias"})
+	public ValueProperty PROP_LOCAL_PART = new ValueProperty(TYPE, "LocalPart");
 
-    Value<String> getLocalPart();
+	public Value<String> getLocalPart();
 
-    void setLocalPart( String value );
+	public void setLocalPart(String value);
 }

@@ -24,11 +24,10 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@CustomXmlRootBinding( value = DisplayRootElementController.class )
-@XmlBinding( path = "display" )
-public interface Display6xx extends Display
-{
+@CustomXmlRootBinding(value = DisplayRootElementController.class)
+@XmlBinding(path = "display")
+public interface Display6xx extends Display {
 
-    ElementType TYPE = new ElementType( Display6xx.class );
+	public ElementType TYPE = new ElementType(Display6xx.class);
 
 }

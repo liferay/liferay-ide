@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.lfportlet.model.internal;
 
@@ -35,99 +35,82 @@ import org.eclipse.sapphire.modeling.annotations.FileExtensions;
 /**
  * @author Simon Jiang
  */
-public class LiferayScriptPossibleValuesService extends PossibleValuesService
-{
+public class LiferayScriptPossibleValuesService extends PossibleValuesService {
 
-    private String type;
+	@Override
+	public boolean strict() {
+		return false;
+	}
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        Element modeElement = context( Element.class );
-        List<FileExtensions> exts = modeElement.parent().definition().getAnnotations( FileExtensions.class );
+	@Override
+	protected void compute(Set<String> values) {
+		Element modeElement = context(Element.class);
 
-        if( exts != null && exts.size() > 0 )
-        {
-            this.type = exts.get( 0 ).expr();
-            final IProject project = modeElement.adapt( IProject.class );
+		List<FileExtensions> exts = modeElement.parent().definition().getAnnotations(FileExtensions.class);
 
-            if( project != null )
-            {
-                final IFolder webappRoot = CoreUtil.getDefaultDocrootFolder( project );
+		if ((exts != null) && (exts.size() > 0)) {
+			this.type = exts.get(0).expr();
+			IProject project = modeElement.adapt(IProject.class);
 
-                if( webappRoot != null )
-                {
-                    final IPath location = webappRoot.getLocation();
+			if (project != null) {
+				IFolder webappRoot = CoreUtil.getDefaultDocrootFolder(project);
 
-                    if( location != null )
-                    {
-                        if( location.toFile().exists() )
-                        {
-                            values.addAll( new PropertiesVisitor().visitScriptFiles( webappRoot, type, values ) );
-                        }
-                    }
-                }
-            }
-        }
-    }
+				if (webappRoot != null) {
+					IPath location = webappRoot.getLocation();
 
-    @Override
-    public boolean strict()
-    {
-        return false;
-    }
+					if (location != null) {
+						if (location.toFile().exists()) {
+							values.addAll(new PropertiesVisitor().visitScriptFiles(webappRoot, type, values));
+						}
+					}
+				}
+			}
+		}
+	}
 
-    private static class PropertiesVisitor implements IResourceProxyVisitor
-    {
-        IResource entryResource = null;
-        String type = null;
-        Set<String> values = null;
+	private String type;
 
-        public boolean visit( IResourceProxy resourceProxy )
-        {
-            if( resourceProxy.getType() == IResource.FILE && resourceProxy.getName().endsWith( type ) )
-            {
-                IResource resource = resourceProxy.requestResource();
+	private static class PropertiesVisitor implements IResourceProxyVisitor {
 
-                if( resource.exists() )
-                {
-                    String relativePath =
-                        resource.getLocation().makeRelativeTo( entryResource.getLocation() ).toString();
+		IResource entryResource = null;
+		String type = null;
+		Set<String> values = null;
 
-                    try
-                    {
-                        if( !relativePath.startsWith( "/" ) )
-                        {
-                            values.add( "/" + relativePath );
-                        }
+		public boolean visit(IResourceProxy resourceProxy) {
+			if (resourceProxy.getType() == IResource.FILE && resourceProxy.getName().endsWith(type)) {
+				IResource resource = resourceProxy.requestResource();
 
-                    }
-                    catch( Exception e )
-                    {
-                        return true;
-                    }
-                }
-            }
+				if (resource.exists()) {
+					String relativePath = resource.getLocation().makeRelativeTo(entryResource.getLocation()).toString();
 
-            return true;
-        }
+					try {
+						if (!relativePath.startsWith("/")) {
+							values.add("/" + relativePath);
+						}
+					}
+					catch (Exception e) {
+						return true;
+					}
+				}
+			}
 
-        public Set<String> visitScriptFiles( final IResource container, final String type, final Set<String> values )
-        {
-            this.entryResource = container;
-            this.type = type;
-            this.values = values;
-            try
-            {
-                container.accept( this, IContainer.EXCLUDE_DERIVED );
-            }
-            catch( CoreException e )
-            {
-                LiferayCore.logError( e );
-            }
+			return true;
+		}
 
-            return values;
-        }
-    }
+		public Set<String> visitScriptFiles(IResource container, String type, Set<String> values) {
+			this.entryResource = container;
+			this.type = type;
+			this.values = values;
+			try {
+				container.accept(this, IContainer.EXCLUDE_DERIVED);
+			}
+			catch (CoreException ce) {
+				LiferayCore.logError(ce);
+			}
+
+			return values;
+		}
+
+	}
 
 }

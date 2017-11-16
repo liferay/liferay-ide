@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.spring;
 
@@ -26,17 +25,18 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 /**
  * @author Terry Jia
  */
-public class SpringPortletFramework extends BasePortletFramework
-{
+public class SpringPortletFramework extends BasePortletFramework {
 
-    public IStatus configureNewProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
-    {
-        return Status.OK_STATUS;
-    }
+	public IStatus configureNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject) {
+		return Status.OK_STATUS;
+	}
 
-    public boolean supports( ILiferayProjectProvider provider )
-    {
-        return ( provider != null ) &&
-            ( "ant".equals( provider.getShortName() ) || "maven".equals( provider.getShortName() ) );
-    }
+	public boolean supports(ILiferayProjectProvider provider) {
+		if ((provider != null) && ("ant".equals(provider.getShortName()) || "maven".equals(provider.getShortName()))) {
+			return true;
+		}
+
+		return false;
+	}
+
 }

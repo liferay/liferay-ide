@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -24,10 +21,9 @@ import org.eclipse.sapphire.modeling.annotations.Image;
 /**
  * @author Kamesh Sampath
  */
-@Image( path = "images/user_icon.png" )
-public interface UserAttribute extends Element, Identifiable, Describeable, Nameable
-{
+@Image(path = "images/user_icon.png")
+public interface UserAttribute extends Element, Identifiable, Describeable, Nameable {
 
-    ElementType TYPE = new ElementType( UserAttribute.class );
+	public ElementType TYPE = new ElementType(UserAttribute.class);
 
 }

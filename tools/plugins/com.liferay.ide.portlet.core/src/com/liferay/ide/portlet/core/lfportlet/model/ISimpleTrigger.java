@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- ******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.lfportlet.model;
 
@@ -26,21 +26,21 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Simon Jiang
  */
-public interface ISimpleTrigger extends ITrigger
-{
+public interface ISimpleTrigger extends ITrigger {
 
-    ElementType TYPE = new ElementType( ISimpleTrigger.class );
+	public ElementType TYPE = new ElementType(ISimpleTrigger.class);
 
-    // *** Time Unit ***
+	// *** Time Unit ***
 
-    @DefaultValue( text = "second" )
-    @Label( standard = "Time Unit" )
-    @Required
-    @PossibleValues( values = { "day", "hour", "minute", "second", "week" } )
-    @XmlBinding( path = "time-unit" )
-    ValueProperty PROP_TIME_UNIT = new ValueProperty( TYPE, "TimeUnit" ); //$NON-NLS-1$
+	@DefaultValue(text = "second")
+	@Label(standard = "Time Unit")
+	@Required
+	@PossibleValues(values = {"day", "hour", "minute", "second", "week"})
+	@XmlBinding(path = "time-unit")
+	public ValueProperty PROP_TIME_UNIT = new ValueProperty(TYPE, "TimeUnit");
 
-    Value<String> getTimeUnit();
-    void setTimeUnit( String value );
+	public Value<String> getTimeUnit();
+
+	public void setTimeUnit(String value);
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core;
 
@@ -26,25 +25,24 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
  * @author Greg Amerson
  * @author Simon Jiang
  */
-public class MVCPortletFramework extends BasePortletFramework
-{
+public class MVCPortletFramework extends BasePortletFramework {
 
-    public MVCPortletFramework()
-    {
-        super();
-    }
+	public MVCPortletFramework() {
+	}
 
-    public IStatus configureNewProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
-    {
-        // nothing to do for MVCPortlet projects its already properly configured.
+	public IStatus configureNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject) {
 
-        return Status.OK_STATUS;
-    }
+		// nothing to do for MVCPortlet projects its already properly configured.
 
-    public boolean supports( ILiferayProjectProvider provider )
-    {
-        return provider != null &&
-            ( "ant".equals( provider.getShortName() ) || "maven".equals( provider.getShortName() ) );
-    }
+		return Status.OK_STATUS;
+	}
+
+	public boolean supports(ILiferayProjectProvider provider) {
+		if ((provider != null) && ("ant".equals(provider.getShortName()) || "maven".equals(provider.getShortName()))) {
+			return true;
+		}
+
+		return false;
+	}
 
 }

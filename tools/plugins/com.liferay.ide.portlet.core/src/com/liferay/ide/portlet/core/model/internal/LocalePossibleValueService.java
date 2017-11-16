@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model.internal;
 
@@ -27,25 +24,23 @@ import org.eclipse.sapphire.PossibleValuesService;
 /**
  * @author Kamesh Sampath
  */
-public class LocalePossibleValueService extends PossibleValuesService
-{
+public class LocalePossibleValueService extends PossibleValuesService {
 
-    static final Locale[] locales = Locale.getAvailableLocales();
+	static final Locale[] locales = Locale.getAvailableLocales();
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
-     */
-    @Override
-    protected void compute( Set<String> values )
-    {
-        for( Locale locale : locales )
-        {
-        	if( !locale.toString().isEmpty() )
-        	{
-        		values.add( PortletUtil.buildLocaleDisplayString( locale.getDisplayName(), locale ) );
-        	}    
-        }
-    }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.
+	 *      util.SortedSet)
+	 */
+	@Override
+	protected void compute(Set<String> values) {
+		for (Locale locale : locales) {
+			if (!locale.toString().isEmpty()) {
+				values.add(PortletUtil.buildLocaleDisplayString(locale.getDisplayName(), locale));
+			}
+		}
+	}
 
 }

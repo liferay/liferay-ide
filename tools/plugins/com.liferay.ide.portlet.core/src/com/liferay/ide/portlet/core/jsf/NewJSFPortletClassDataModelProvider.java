@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.jsf;
 
@@ -38,202 +37,176 @@ import org.eclipse.osgi.util.NLS;
  * @author Simon Jiang
  * @author Terry Jia
  */
-@SuppressWarnings( { "restriction", "rawtypes", "unchecked" } )
-public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataModelProvider
-    implements INewJSFPortletClassDataModelProperties
-{
+@SuppressWarnings({"restriction", "rawtypes", "unchecked"})
+public class NewJSFPortletClassDataModelProvider
+	extends NewPortletClassDataModelProvider implements INewJSFPortletClassDataModelProperties {
 
-    public NewJSFPortletClassDataModelProvider( boolean fragment )
-    {
-        super( fragment );
-    }
+	public NewJSFPortletClassDataModelProvider(boolean fragment) {
+		super(fragment);
+	}
 
-    @Override
-    protected Object getInitParams()
-    {
-        List<ParamValue> initParams = new ArrayList<ParamValue>();
+	@Override
+	public Object getDefaultProperty(String propertyName) {
+		if (CLASS_NAME.equals(propertyName)) {
+			return "NewJSFPortlet";
+		}
+		else if (JSF_PORTLET_CLASS.equals(propertyName)) {
+			return QUALIFIED_JSF_PORTLET;
+		}
+		else if (INewWebClassDataModelProperties.USE_EXISTING_CLASS.equals(propertyName)) {
+			return true; // to prevent a new class from being created
+		}
+		else if (CREATE_JSPS_FOLDER.equals(propertyName)) {
+			String property = "/WEB-INF/views/" + getProperty(PORTLET_NAME).toString();
 
-        // if the user is using FacesPortlet and creating XHTMLs then we need to
-        // define init-params for each view mode that is checked
-        if( getBooleanProperty( CREATE_JSPS ) )
-        {
-            String[] modes = ALL_JSF_PORTLET_MODES;
+			return property.toLowerCase();
+		}
+		else if (SHOW_NEW_CLASS_OPTION.equals(propertyName)) {
+			return false;
+		}
+		else if (ICE_FACES.equals(propertyName)) {
+			return false;
+		}
+		else if (LIFERAY_FACES_ALLOY.equals(propertyName)) {
+			return false;
+		}
+		else if (PRIME_FACES.equals(propertyName)) {
+			return false;
+		}
+		else if (RICH_FACES.equals(propertyName)) {
+			return false;
+		}
+		else if (STANDARD_JSF.equals(propertyName)) {
+			return true;
+		}
 
-            String[] names =
-            {
-                "javax.portlet.faces.defaultViewId.view",  //$NON-NLS-1$
-                "javax.portlet.faces.defaultViewId.edit", //$NON-NLS-1$
-                "javax.portlet.faces.defaultViewId.help"  //$NON-NLS-1$
-            };
+		return super.getDefaultProperty(propertyName);
+	}
 
-            String[] values = { "/view.xhtml", "/edit.xhtml", "/help.xhtml" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	@Override
+	public Set getPropertyNames() {
+		Set propertyNames = super.getPropertyNames();
 
-            ParamValue[] paramVals = createDefaultParamValuesForModes( modes, names, values );
+		propertyNames.add(ICE_FACES);
+		propertyNames.add(JSF_PORTLET_CLASS);
+		propertyNames.add(LIFERAY_FACES_ALLOY);
+		propertyNames.add(PRIME_FACES);
+		propertyNames.add(RICH_FACES);
+		propertyNames.add(STANDARD_JSF);
 
-            Collections.addAll( initParams, paramVals );
-        }
+		return propertyNames;
+	}
 
-        return initParams;
-    }
+	@Override
+	public IStatus validate(String propertyName) {
+		if (PORTLET_NAME.equals(propertyName)) {
+			IStatus status = super.validate(propertyName);
 
-    @Override
-    public Object getDefaultProperty( String propertyName )
-    {
-        if( CLASS_NAME.equals( propertyName ) )
-        {
-            return "NewJSFPortlet"; //$NON-NLS-1$
-        }
-        else if( JSF_PORTLET_CLASS.equals( propertyName ) )
-        {
-            return QUALIFIED_JSF_PORTLET;
-        }
-        else if( INewWebClassDataModelProperties.USE_EXISTING_CLASS.equals( propertyName ) )
-        {
-            return true; // to prevent a new class from being created
-        }
-        else if( CREATE_JSPS_FOLDER.equals( propertyName ) )
-        {
-            return "/WEB-INF/views/" + getProperty( PORTLET_NAME ).toString().toLowerCase(); //$NON-NLS-1$
-        }
-        else if( SHOW_NEW_CLASS_OPTION.equals( propertyName ) )
-        {
-            return false;
-        }
-        else if( ICE_FACES.equals( propertyName ) )
-        {
-            return false;
-        }
-        else if( LIFERAY_FACES_ALLOY.equals( propertyName ) )
-        {
-            return false;
-        }
-        else if( PRIME_FACES.equals( propertyName ) )
-        {
-            return false;
-        }
-        else if( RICH_FACES.equals( propertyName ) )
-        {
-            return false;
-        }
-        else if( STANDARD_JSF.equals( propertyName ) )
-        {
-            return true;
-        }
+			if (!status.isOK()) {
+				return status;
+			}
 
-        return super.getDefaultProperty( propertyName );
-    }
+			String currentPortletName = getStringProperty(PORTLET_NAME);
+			PortletDescriptorHelper helper = new PortletDescriptorHelper(getTargetProject());
 
-    @Override
-    public Set getPropertyNames()
-    {
-        Set propertyNames = super.getPropertyNames();
+			for (String portletName : helper.getAllPortletNames()) {
+				if (currentPortletName.equals(portletName)) {
+					return PortletCore.createErrorStatus(Msgs.duplicatePortletName);
+				}
+			}
+		}
 
-        propertyNames.add( ICE_FACES );
-        propertyNames.add( JSF_PORTLET_CLASS );
-        propertyNames.add( LIFERAY_FACES_ALLOY );
-        propertyNames.add( PRIME_FACES );
-        propertyNames.add( RICH_FACES );
-        propertyNames.add( STANDARD_JSF );
+		if (JSF_PORTLET_CLASS.equals(propertyName)) {
+			String jsfPortletClass = getStringProperty(propertyName);
 
-        return propertyNames;
-    }
+			if (CoreUtil.isNullOrEmpty(jsfPortletClass)) {
+				return PortletCore.createErrorStatus(Msgs.specifyJSFPortletClass);
+			}
 
-    @Override
-    public IStatus validate( String propertyName )
-    {
-        if( PORTLET_NAME.equals( propertyName ) )
-        {
-            IStatus status = super.validate( propertyName );
+			// won't be fragment right now, just in case
 
-            if( !status.isOK() )
-            {
-                return status;
-            }
+			if (fragment) {
+				return Status.OK_STATUS;
+			}
 
-            String currentPortletName = getStringProperty( PORTLET_NAME );
-            PortletDescriptorHelper helper = new PortletDescriptorHelper( getTargetProject() );
+			if (!isValidPortletClass(jsfPortletClass)) {
+				return PortletCore.createErrorStatus(Msgs.jsfPortletClassValid);
+			}
+		}
 
-            for( String portletName : helper.getAllPortletNames() )
-            {
-                if( currentPortletName.equals( portletName ) )
-                {
-                    return PortletCore.createErrorStatus( Msgs.duplicatePortletName );
-                }
-            }
-        }
+		// IDE-1412
+		// Because JSF Portlet wizard doesn't need to to check MVCPortlet super class,
+		// just return OK.
 
-        if( JSF_PORTLET_CLASS.equals( propertyName ) )
-        {
-            String jsfPortletClass = getStringProperty( propertyName );
+		if (SUPERCLASS.equals(propertyName)) {
+			return Status.OK_STATUS;
+		}
 
-            if( CoreUtil.isNullOrEmpty( jsfPortletClass ) )
-            {
-                return PortletCore.createErrorStatus( Msgs.specifyJSFPortletClass );
-            }
+		if (CREATE_JSPS_FOLDER.equals(propertyName)) {
+			if (!getBooleanProperty(CREATE_JSPS)) {
+				return Status.OK_STATUS;
+			}
 
-            if( this.fragment ) //won't be fragment right now, just in case
-            {
-                return Status.OK_STATUS;
-            }
+			String jspsFolder = getStringProperty(propertyName);
 
-            if( ! isValidPortletClass( jsfPortletClass ) )
-            {
-                return PortletCore.createErrorStatus( Msgs.jsfPortletClassValid );
-            }
-        }
+			if (CoreUtil.isNullOrEmpty(jspsFolder)) {
+				return PortletCore.createErrorStatus(Msgs.jspFolderNotEmpty);
+			}
 
-        //IDE-1412
-        //Because JSF Portlet wizard doesn't need to to check MVCPortlet super class, just return OK.
-        if( SUPERCLASS.equals( propertyName ) )
-        {
-            return Status.OK_STATUS;
-        }
+			if (!jspsFolder.startsWith("/WEB-INF/") && !jspsFolder.startsWith("WEB-INF/")) {
+				return PortletCore.createErrorStatus(Msgs.jsfFolderValid);
+			}
 
-        if( CREATE_JSPS_FOLDER.equals( propertyName ) )
-        {
-            if( !getBooleanProperty( CREATE_JSPS ) )
-            {
-                return Status.OK_STATUS;
-            }
-            
-            String jspsFolder = getStringProperty( propertyName );
+			IFolder viewFolder = CoreUtil.getDefaultDocrootFolder(getProject()).getFolder(jspsFolder);
 
-            if( CoreUtil.isNullOrEmpty( jspsFolder ) )
-            {
-                return PortletCore.createErrorStatus( Msgs.jspFolderNotEmpty );
-            }
+			if (viewFolder.exists()) {
+				if (viewFolder.getFile("view.xhtml").exists()) {
+					return PortletCore.createWarningStatus(Msgs.viewFileAlreadyExists);
+				}
+			}
+		}
 
-            if( !jspsFolder.startsWith( "/WEB-INF/" ) && !jspsFolder.startsWith( "WEB-INF/" ) )
-            {
-                return PortletCore.createErrorStatus( Msgs.jsfFolderValid );
-            }
+		return super.validate(propertyName);
+	}
 
-            IFolder viewFolder = CoreUtil.getDefaultDocrootFolder( getProject() ).getFolder( jspsFolder );
+	@Override
+	protected Object getInitParams() {
+		List<ParamValue> initParams = new ArrayList<>();
 
-            if( viewFolder.exists() )
-            {
-                if( viewFolder.getFile( "view.xhtml" ).exists() )
-                {
-                    return PortletCore.createWarningStatus( Msgs.viewFileAlreadyExists );
-                }
-            }
-        }
+		// if the user is using FacesPortlet and creating XHTMLs then we need to
+		// define init-params for each view mode that is checked
 
-        return super.validate( propertyName );
-    }
+		if (getBooleanProperty(CREATE_JSPS)) {
+			String[] modes = ALL_JSF_PORTLET_MODES;
 
-    private static class Msgs extends NLS
-    {
-        public static String jspFolderNotEmpty;
-        public static String viewFileAlreadyExists;
-        public static String duplicatePortletName;
-        public static String jsfFolderValid;
-        public static String jsfPortletClassValid;
-        public static String specifyJSFPortletClass;
+			String[] names = {
+				"javax.portlet.faces.defaultViewId.view", "javax.portlet.faces.defaultViewId.edit",
+				"javax.portlet.faces.defaultViewId.help"
+			};
 
-        static
-        {
-            initializeMessages( NewJSFPortletClassDataModelProvider.class.getName(), Msgs.class );
-        }
-    }
+			String[] values = {"/view.xhtml", "/edit.xhtml", "/help.xhtml"};
+
+			ParamValue[] paramVals = createDefaultParamValuesForModes(modes, names, values);
+
+			Collections.addAll(initParams, paramVals);
+		}
+
+		return initParams;
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String duplicatePortletName;
+		public static String jsfFolderValid;
+		public static String jsfPortletClassValid;
+		public static String jspFolderNotEmpty;
+		public static String specifyJSFPortletClass;
+		public static String viewFileAlreadyExists;
+
+		static {
+			initializeMessages(NewJSFPortletClassDataModelProvider.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

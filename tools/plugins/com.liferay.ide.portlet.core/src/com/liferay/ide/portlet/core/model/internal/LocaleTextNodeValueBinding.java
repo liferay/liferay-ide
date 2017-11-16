@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model.internal;
 
@@ -27,67 +24,63 @@ import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 /**
  * @author Kamesh Sampath
  */
-public class LocaleTextNodeValueBinding extends XmlValueBindingImpl
-{
+public class LocaleTextNodeValueBinding extends XmlValueBindingImpl {
 
-    final Locale[] AVAILABLE_LOCALES = Locale.getAvailableLocales();
+	Locale[] AVAILABLE_LOCALES = Locale.getAvailableLocales();
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#read()
-     */
-    @Override
-    public String read()
-    {
-        String value = null;
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#read()
+	 */
+	@Override
+	public String read() {
+		String value = null;
 
-        final XmlElement element = xml( false );
+		XmlElement element = xml(false);
 
-        if( element != null )
-        {
+		if (element != null) {
+			value = xml(true).getText();
 
-            value = xml( true ).getText();
+			// System.out.println( "Locale Reading VALUE ___________________ " + value );
 
-            // System.out.println( "Locale Reading VALUE ___________________ " + value );
+			if (!value.isEmpty()) {
+				value = value.trim();
 
-            if( !value.isEmpty() )
-            {
-                value = value.trim();
-                for( int i = 0; i < AVAILABLE_LOCALES.length; i++ )
-                {
-                    Locale locale = AVAILABLE_LOCALES[i];
-                    if( value.equals( locale.toString() ) )
-                    {
-                        value = PortletUtil.buildLocaleDisplayString( locale.getDisplayName(), locale );
-                        break;
-                    }
-                }
-            }
-        }
+				for (int i = 0; i < AVAILABLE_LOCALES.length; i++) {
+					Locale locale = AVAILABLE_LOCALES[i];
 
-        return value;
-    }
+					if (value.equals(locale.toString())) {
+						value = PortletUtil.buildLocaleDisplayString(locale.getDisplayName(), locale);
+						break;
+					}
+				}
+			}
+		}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#write(java.lang.String)
-     */
-    @Override
-    public void write( String value )
-    {
-        String val = value;
+		return value;
+	}
 
-        // System.out.println( "Locale : VALUE ___________________ " + val );
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#write(java.lang.String)
+	 */
+	@Override
+	public void write(String value) {
+		String val = value;
 
-        if( val != null )
-        {
-            val = PortletUtil.localeString( value.trim() );
-            xml( true ).setText( val );
+		// System.out.println( "Locale : VALUE ___________________ " + val );
 
-        }
+		if (val != null) {
+			val = PortletUtil.localeString(value.trim());
 
-        // System.out.println( "LocaleTextNodeValueBinding.write() - Parent " + xml( true ).getParent() );
+			xml(true).setText(val);
+		}
 
-    }
+		// System.out.println( "LocaleTextNodeValueBinding.write() - Parent " + xml(
+		// true ).getParent() );
+
+	}
 
 }

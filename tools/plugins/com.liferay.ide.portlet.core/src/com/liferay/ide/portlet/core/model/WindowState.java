@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Kamesh Sampath - initial implementation
- *      Gregory Amerson - initial implementation review and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -33,18 +29,17 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  * @author Kamesh Sampath
  * @author Gregory Amerson
  */
-@Service( impl = WindowStateImageService.class )
-public interface WindowState extends Element
-{
+@Service(impl = WindowStateImageService.class)
+public interface WindowState extends Element {
 
-    ElementType TYPE = new ElementType( WindowState.class );
+	public ElementType TYPE = new ElementType(WindowState.class);
 
-    @Label( standard = "state", full = "Window States" )
-    @Unique
-    @XmlBinding( path = "" )
-    ValueProperty PROP_WINDOW_STATE = new ValueProperty( TYPE, "WindowState" ); //$NON-NLS-1$
+	@Label(standard = "state", full = "Window States")
+	@Unique
+	@XmlBinding(path = "")
+	public ValueProperty PROP_WINDOW_STATE = new ValueProperty(TYPE, "WindowState");
 
-    Value<String> getWindowState();
+	public Value<String> getWindowState();
 
-    void setWindowState( String state );
+	public void setWindowState(String state);
 }

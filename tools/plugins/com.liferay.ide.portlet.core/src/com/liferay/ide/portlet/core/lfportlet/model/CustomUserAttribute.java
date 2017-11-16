@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.lfportlet.model;
 
@@ -32,44 +32,37 @@ import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
-
 /**
  * @author Simon Jiang
  */
-@Image( path = "images/elcl16/custom.png" )
-public interface CustomUserAttribute extends Element
-{
+@Image(path = "images/elcl16/custom.png")
+public interface CustomUserAttribute extends Element {
 
-    ElementType TYPE = new ElementType( CustomUserAttribute.class );
+	public ElementType TYPE = new ElementType(CustomUserAttribute.class);
 
-    // *** Custom Name ***
+	// *** Custom Name ***
 
-    @Label( standard = "Custom Name" )
-    @Type( base = CutomUserAttributeName.class )
-    @XmlListBinding
-    (
-        mappings = @XmlListBinding.Mapping
-        (
-            element = "name",
-            type = CutomUserAttributeName.class
-        )
-    )
-    ListProperty PROP_CUSTOM_USER_ATTRIBUTE_NAMES = new ListProperty( TYPE, "CustomUserAttributeNames" );
+	@Label(standard = "Custom Name")
+	@Type(base = CutomUserAttributeName.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "name", type = CutomUserAttributeName.class))
+	public ListProperty PROP_CUSTOM_USER_ATTRIBUTE_NAMES = new ListProperty(TYPE, "CustomUserAttributeNames");
 
-    ElementList<CutomUserAttributeName> getCustomUserAttributeNames();
+	public ElementList<CutomUserAttributeName> getCustomUserAttributeNames();
 
-    // *** Custom Class ***
+	// *** Custom Class ***
 
-    @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.liferay.portlet.CustomUserAttributes" )
-    @Label( standard = "Custom Class" )
-    @MustExist
-    @Reference( target = JavaType.class )
-    @Type( base = JavaTypeName.class )
-    @XmlBinding( path = "custom-class" )
-    ValueProperty PROP_CUSTOM_CLASS = new ValueProperty( TYPE, "CustomClass" );
+	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = "com.liferay.portlet.CustomUserAttributes")
+	@Label(standard = "Custom Class")
+	@MustExist
+	@Reference(target = JavaType.class)
+	@Type(base = JavaTypeName.class)
+	@XmlBinding(path = "custom-class")
+	public ValueProperty PROP_CUSTOM_CLASS = new ValueProperty(TYPE, "CustomClass");
 
-    ReferenceValue<JavaTypeName, JavaType> getCustomClass();
-    void setCustomClass( JavaTypeName value );
-    void setCustomClass( String value );
+	public ReferenceValue<JavaTypeName, JavaType> getCustomClass();
+
+	public void setCustomClass(JavaTypeName value);
+
+	public void setCustomClass(String value);
 
 }

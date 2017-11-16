@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -42,63 +39,60 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author Kamesh Sampath
  * @author Simon Jiang
  */
-@Image( path = "images/elcl16/filter_16x16.gif" )
-public interface Filter extends Describeable, Displayable
-{
+@Image(path = "images/elcl16/filter_16x16.gif")
+public interface Filter extends Describeable, Displayable {
 
-    ElementType TYPE = new ElementType( Filter.class );
+	public ElementType TYPE = new ElementType(Filter.class);
 
-    // *** Name ***
+	// *** Name ***
 
-    @Label( standard = "name" )
-    @Required
-    @XmlBinding( path = "filter-name" )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
+	@Label(standard = "name")
+	@Required
+	@XmlBinding(path = "filter-name")
+	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
-    Value<String> getName();
+	public Value<String> getName();
 
-    void setName( String value );
+	public void setName(String value);
 
-    // *** Implementation ***
+	// *** Implementation ***
 
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @Label( standard = "implementation class", full = "Filter implementation class" )
-    @Required
-    @MustExist
-    @JavaTypeConstraint
-    (
-        kind = JavaTypeKind.CLASS,
-        type = { "javax.portlet.filter.ResourceFilter", "javax.portlet.filter.RenderFilter",
-                 "javax.portlet.filter.ActionFilter", "javax.portlet.filter.EventFilter" },
-        behavior = JavaTypeConstraintBehavior.AT_LEAST_ONE
-    )
-    @XmlBinding( path = "filter-class" )
-    ValueProperty PROP_IMPLEMENTATION = new ValueProperty( TYPE, "Implementation" ); //$NON-NLS-1$
+	@Type(base = JavaTypeName.class)
+	@Reference(target = JavaType.class)
+	@Label(standard = "implementation class", full = "Filter implementation class")
+	@Required
+	@MustExist
+	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = {
+		"javax.portlet.filter.ResourceFilter", "javax.portlet.filter.RenderFilter", "javax.portlet.filter.ActionFilter",
+		"javax.portlet.filter.EventFilter"
 
-    ReferenceValue<JavaTypeName, JavaType> getImplementation();
+	}, behavior = JavaTypeConstraintBehavior.AT_LEAST_ONE)
+	@XmlBinding(path = "filter-class")
+	public ValueProperty PROP_IMPLEMENTATION = new ValueProperty(TYPE, "Implementation");
 
-    void setImplementation( String value );
+	public ReferenceValue<JavaTypeName, JavaType> getImplementation();
 
-    void setImplementation( JavaTypeName value );
+	public void setImplementation(String value);
 
-    // *** LifeCycle ***
+	public 	void setImplementation(JavaTypeName value);
 
-    @Type( base = LifeCycle.class )
-    @Label( standard = "lifecycle" )
-    @Length( min = 1 )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "lifecycle", type = LifeCycle.class ) )
-    ListProperty PROP_LIFE_CYCLE = new ListProperty( TYPE, "LifeCycle" ); //$NON-NLS-1$
+	// *** LifeCycle ***
 
-    ElementList<LifeCycle> getLifeCycle();
+	@Type(base = LifeCycle.class)
+	@Label(standard = "lifecycle")
+	@Length(min = 1)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "lifecycle", type = LifeCycle.class))
+	public ListProperty PROP_LIFE_CYCLE = new ListProperty(TYPE, "LifeCycle");
 
-    // *** InitParams ***
+	public ElementList<LifeCycle> getLifeCycle();
 
-    @Type( base = Param.class )
-    @Label( standard = "initialization parameters" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "init-param", type = Param.class ) )
-    ListProperty PROP_INIT_PARAMS = new ListProperty( TYPE, "InitParams" ); //$NON-NLS-1$
+	// *** InitParams ***
 
-    ElementList<Param> getInitParams();
+	@Type(base = Param.class)
+	@Label(standard = "initialization parameters")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "init-param", type = Param.class))
+	public ListProperty PROP_INIT_PARAMS = new ListProperty(TYPE, "InitParams");
+
+	public ElementList<Param> getInitParams();
 
 }
