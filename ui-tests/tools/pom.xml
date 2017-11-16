@@ -53,6 +53,7 @@
 		<module>com.liferay.ide.ui.layouttpl.tests</module>
 		<module>com.liferay.ide.ui.portlet.tests</module>
 		<module>com.liferay.ide.ui.module.tests</module>
+		<module>com.liferay.ide.ui.sdk.tests</module>
 		<module>com.liferay.ide.ui.server.tests</module>
 		<module>com.liferay.ide.ui.service.tests</module>
 		<module>com.liferay.ide.ui.workspace.tests</module>
