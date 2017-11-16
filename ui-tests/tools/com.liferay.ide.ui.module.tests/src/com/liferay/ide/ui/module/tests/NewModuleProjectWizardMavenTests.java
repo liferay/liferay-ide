@@ -327,22 +327,6 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 		viewAction.deleteProject(projectName);
 	}
 
-	@Ignore
-	@Test
-	public void createTheme() {
-		String projectName = "test-theme-maven";
-
-		wizardAction.openNewLiferayModuleWizard();
-
-		wizardAction.prepareLiferayModuleMaven(projectName, THEME);
-
-		wizardAction.finishToWait();
-
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
-
-		viewAction.deleteProject(projectName);
-	}
-
 	@Test
 	public void createThemeContributor() {
 		String projectName = "test-theme-contributor-maven";

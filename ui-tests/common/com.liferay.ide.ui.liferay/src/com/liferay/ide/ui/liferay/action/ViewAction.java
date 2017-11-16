@@ -106,6 +106,8 @@ public class ViewAction extends UIAction {
 	}
 
 	public void serverStart(String serverLabel) {
+		ide.sleep(2000);
+
 		_serversView.getServers().select(serverLabel);
 
 		_serversView.clickStartBtn();
@@ -116,9 +118,15 @@ public class ViewAction extends UIAction {
 	}
 
 	public void serverStop(String serverLabel) {
+		ide.sleep(2000);
+
 		_serversView.getServers().select(serverLabel);
 
 		_serversView.clickStopBtn();
+	}
+
+	public void switchLiferayPerspective() {
+		ide.getLiferayPerspective().activate();
 	}
 
 	public void serverStopWait() {

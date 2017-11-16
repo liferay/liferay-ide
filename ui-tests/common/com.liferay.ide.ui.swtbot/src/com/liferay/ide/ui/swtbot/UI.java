@@ -329,6 +329,8 @@ public interface UI {
 
 	public final String LAYOUT_TEMPLATE = "layout-template";
 
+	public final String LAYOUT_TEMPLATE_UPCASE = "Layout Template";
+
 	public final String LIFERAY = "Liferay";
 
 	public final String LIFERAY_7_MIGRATION_PROBLEMS = "Liferay 7 Migration Problems";
@@ -693,6 +695,8 @@ public interface UI {
 	public final String TEST_LIFERAY_WEB_SERVICE = "Test Liferay Web Services";
 
 	public final String THEME = "theme";
+
+	public final String THEME_UPCASE = "Theme";
 
 	public final String THEME_CONTRIBUTOR = "theme-contributor";
 

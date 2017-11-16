@@ -12,44 +12,27 @@
  * details.
  */
 
-package com.liferay.ide.ui.swtbot.page;
+package com.liferay.ide.ui.liferay.page.wizard.project;
+
+import com.liferay.ide.ui.swtbot.page.ComboBox;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotWorkbenchPart;
 
 /**
  * @author Terry Jia
  */
-public abstract class AbstractPart extends BasePageObject {
+public class NewLiferayPluginSdkProjectWizard extends NewProjectWizard {
 
-	public AbstractPart(SWTWorkbenchBot bot) {
+	public NewLiferayPluginSdkProjectWizard(SWTWorkbenchBot bot) {
 		super(bot);
+
+		_pluginTypes = new ComboBox(bot, PLUGIN_TYPE);
 	}
 
-	public AbstractPart(SWTWorkbenchBot bot, String label) {
-		super(bot, label);
+	public ComboBox getPluginTypes() {
+		return _pluginTypes;
 	}
 
-	public void close() {
-		getPart().close();
-	}
-
-	public boolean isActive() {
-		return getPart().isActive();
-	}
-
-	public void setFocus() {
-		getPart().setFocus();
-	}
-
-	public void show() {
-		setFocus();
-
-		getPart().show();
-
-		setFocus();
-	}
-
-	protected abstract SWTBotWorkbenchPart<?> getPart();
+	private final ComboBox _pluginTypes;
 
 }

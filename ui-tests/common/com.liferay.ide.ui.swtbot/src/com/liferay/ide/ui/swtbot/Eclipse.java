@@ -122,21 +122,14 @@ public class Eclipse extends BasePageObject {
 		return _packageExporerView;
 	}
 
-	public ServersView showServersView() {
-		try {
-			_serversView.show();
-		}
-		catch (Exception e) {
-			_otherMenu.click();
+	public void showServersView() {
+		_otherMenu.click();
 
-			_showViewDialog.getText().setText(SERVERS);
+		_showViewDialog.getText().setText(SERVERS);
 
-			_showViewDialog.confirm();
+		_showViewDialog.confirm(OPEN);
 
-			_serversView.show();
-		}
-
-		return _serversView;
+		_serversView.show();
 	}
 
 	private Browser _browser;
