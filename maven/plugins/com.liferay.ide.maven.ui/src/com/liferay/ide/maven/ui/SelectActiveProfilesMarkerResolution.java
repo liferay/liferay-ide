@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.maven.ui;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -24,26 +24,24 @@ import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
 import org.eclipse.sapphire.ui.forms.DialogDef;
 import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
 
-
 /**
  * @author Gregory Amerson
  */
-public class SelectActiveProfilesMarkerResolution extends AbstractProjectMarkerResolution
-{
+public class SelectActiveProfilesMarkerResolution extends AbstractProjectMarkerResolution {
 
-    public String getLabel()
-    {
-        return "Select existing maven profiles to attach to the current project.";
-    }
+	public String getLabel() {
+		return "Select existing maven profiles to attach to the current project.";
+	}
 
-    protected int promptUser( final IProject project, final NewLiferayPluginProjectOp op )
-    {
-        final Reference<DialogDef> dialogRef =
-            DefinitionLoader.sdef( NewLiferayPluginProjectWizard.class ).dialog( "SelectActiveProfiles" );
-        final SapphireDialog dialog = new SapphireDialog( UIUtil.getActiveShell(), op, dialogRef );
+	protected int promptUser(IProject project, NewLiferayPluginProjectOp op) {
+		Reference<DialogDef> dialogRef = DefinitionLoader.sdef(
+			NewLiferayPluginProjectWizard.class).dialog("SelectActiveProfiles");
 
-        dialog.setBlockOnOpen( true );
-        return dialog.open();
-    }
+		SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), op, dialogRef);
+
+		dialog.setBlockOnOpen(true);
+
+		return dialog.open();
+	}
 
 }

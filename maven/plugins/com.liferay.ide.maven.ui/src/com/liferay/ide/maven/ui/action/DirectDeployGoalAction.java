@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.ui.action;
 
@@ -23,18 +22,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * @author Gregory Amerson
  */
-public class DirectDeployGoalAction extends MavenGoalAction
-{
+public class DirectDeployGoalAction extends MavenGoalAction {
 
-    @Override
-    protected String getMavenGoals()
-    {
-        return "package " + ILiferayMavenConstants.PLUGIN_GOAL_DIRECT_DEPLOY;
-    }
+	@Override
+	protected String getMavenGoals() {
+		return "package " + ILiferayMavenConstants.PLUGIN_GOAL_DIRECT_DEPLOY;
+	}
 
-    @Override
-    protected void updateProject( IProject p, IProgressMonitor monitor )
-    {
-    }
+	@Override
+	protected void updateProject(IProject p, IProgressMonitor monitor) {
+	}
 
 }

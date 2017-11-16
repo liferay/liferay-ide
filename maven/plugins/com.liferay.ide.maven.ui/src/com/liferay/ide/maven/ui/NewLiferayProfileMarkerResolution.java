@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.ui;
 
@@ -37,67 +36,56 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerResolution
-{
+@SuppressWarnings("restriction")
+public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerResolution {
 
-    public NewLiferayProfileMarkerResolution()
-    {
-        super();
-    }
+	public NewLiferayProfileMarkerResolution() {
+	}
 
-    public String getLabel()
-    {
-        return "Create a new maven profile based on a Liferay runtime and attach it to the project.";
-    }
+	public String getLabel() {
+		return "Create a new maven profile based on a Liferay runtime and attach it to the project.";
+	}
 
-    @Override
-    protected int promptUser( IProject project, NewLiferayPluginProjectOp op )
-    {
-        final NewLiferayProfile newLiferayProfile = op.getNewLiferayProfiles().insert();
+	@Override
+	protected int promptUser(IProject project, NewLiferayPluginProjectOp op) {
+		NewLiferayProfile newLiferayProfile = op.getNewLiferayProfiles().insert();
 
-        final Reference<DialogDef> dialogRef = DefinitionLoader.sdef(
-            NewLiferayPluginProjectWizard.class ).dialog( "NewLiferayProfile" );
-        final SapphireDialog dialog = new SapphireDialog( UIUtil.getActiveShell(), newLiferayProfile, dialogRef );
+		Reference<DialogDef> dialogRef = DefinitionLoader.sdef(
+			NewLiferayPluginProjectWizard.class).dialog("NewLiferayProfile");
 
-        dialog.setBlockOnOpen( true );
-        final int result = dialog.open();
+		SapphireDialog dialog = new SapphireDialog(UIUtil.getActiveShell(), newLiferayProfile, dialogRef);
 
-        if( result == SapphireDialog.OK )
-        {
-            IDOMModel domModel = null;
+		dialog.setBlockOnOpen(true);
+		int result = dialog.open();
 
-            try
-            {
-                final IFile pomFile = project.getFile( IMavenConstants.POM_FILE_NAME );
+		if (result == SapphireDialog.OK) {
+			IDOMModel domModel = null;
 
-                domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( pomFile );
+			try {
+				IFile pomFile = project.getFile(IMavenConstants.POM_FILE_NAME);
 
-                MavenUtil.createNewLiferayProfileNode( domModel.getDocument(), newLiferayProfile );
+				domModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForEdit(pomFile);
 
-                domModel.save();
+				MavenUtil.createNewLiferayProfileNode(domModel.getDocument(), newLiferayProfile);
 
-            }
-            catch( Exception e )
-            {
-                LiferayMavenCore.logError( "Unable to save new Liferay profiles to project pom.", e );
-            }
-            finally
-            {
-                if( domModel != null )
-                {
-                    domModel.releaseFromEdit();
-                }
-            }
+				domModel.save();
+			}
+			catch (Exception e) {
+				LiferayMavenCore.logError("Unable to save new Liferay profiles to project pom.", e);
+			}
+			finally {
+				if (domModel != null) {
+					domModel.releaseFromEdit();
+				}
+			}
 
-            NewLiferayProfileActionHandler.addToActiveProfiles( op, newLiferayProfile );
-        }
-        else
-        {
-            op.getNewLiferayProfiles().remove( newLiferayProfile );
-        }
+			NewLiferayProfileActionHandler.addToActiveProfiles(op, newLiferayProfile);
+		}
+		else {
+			op.getNewLiferayProfiles().remove(newLiferayProfile);
+		}
 
-        return result;
-    }
+		return result;
+	}
 
 }

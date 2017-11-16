@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.maven.ui.action;
 
@@ -20,13 +19,11 @@ import com.liferay.ide.maven.core.ILiferayMavenConstants;
 /**
  * @author Gregory Amerson
  */
-public class ThemeMergeGoalAction extends MavenGoalAction
-{
+public class ThemeMergeGoalAction extends MavenGoalAction {
 
-    @Override
-    protected String getMavenGoals()
-    {
-        return "compile " + ILiferayMavenConstants.PLUGIN_GOAL_THEME_MERGE;
-    }
+	@Override
+	protected String getMavenGoals() {
+		return "compile " + ILiferayMavenConstants.PLUGIN_GOAL_THEME_MERGE;
+	}
 
 }
