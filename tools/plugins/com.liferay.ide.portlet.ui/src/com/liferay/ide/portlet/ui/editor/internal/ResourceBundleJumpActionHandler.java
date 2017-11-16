@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Kamesh Sampath - initial implementation
- *      Gregory Amerson - initial implemenation and ongoing maintanence
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.editor.internal;
 
@@ -47,113 +43,118 @@ import org.eclipse.ui.ide.IDE;
 /**
  * @author Kamesh Sampath
  */
-public class ResourceBundleJumpActionHandler extends JumpActionHandler
-{
+public class ResourceBundleJumpActionHandler extends JumpActionHandler {
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#computeEnablementState()
-     */
-    @Override
-    protected boolean computeEnablementState()
-    {
-        final Element element = getModelElement();
-        IProject project = element.adapt( IProject.class );
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#
+	 * computeEnablementState()
+	 */
+	@Override
+	protected boolean computeEnablementState() {
+		Element element = getModelElement();
 
-        final ValueProperty property = (ValueProperty) property().definition();
+		IProject project = element.adapt(IProject.class);
 
-        final String text = element.property( property ).text( true );
-        boolean isEnabled = super.computeEnablementState();
-        if( isEnabled && text != null )
-        {
-            final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-            final IWorkspaceRoot wroot = workspace.getRoot();
-            final IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
-            String ioFileName = PortletUtil.convertJavaToIoFileName( text, RB_FILE_EXTENSION );
+		ValueProperty property = (ValueProperty)property().definition();
 
-            if ( cpEntries != null )
-            {
-                for( IClasspathEntry iClasspathEntry : cpEntries )
-                {
-                    if( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() )
-                    {
-                        IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
-                        entryPath = entryPath.append( ioFileName );
-                        IFile resourceBundleFile = wroot.getFileForLocation( entryPath );
-                        if( resourceBundleFile != null && resourceBundleFile.exists() )
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
+		String text = element.property(property).text(true);
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
-     */
-    @Override
-    protected Object run( Presentation context )
-    {
+		boolean enabled = super.computeEnablementState();
 
-        final Element element = getModelElement();
+		if (enabled && (text != null)) {
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
-        final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+			IWorkspaceRoot wroot = workspace.getRoot();
 
-        final ValueProperty property = (ValueProperty) property().definition();
+			IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries(project);
+			String ioFileName = PortletUtil.convertJavaToIoFileName(text, RB_FILE_EXTENSION);
 
-        final IProject project = element.adapt( IProject.class );
+			if (cpEntries != null) {
+				for (IClasspathEntry iClasspathEntry : cpEntries) {
+					if (IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind()) {
+						IPath entryPath = wroot.getFolder(iClasspathEntry.getPath()).getLocation();
 
-        final Value<Path> value = element.property( property );
+						entryPath = entryPath.append(ioFileName);
 
-        final String text = value.text( false );
+						IFile resourceBundleFile = wroot.getFileForLocation(entryPath);
 
-        final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-        final IWorkspaceRoot wroot = workspace.getRoot();
-        final IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
-        String ioFileName = PortletUtil.convertJavaToIoFileName( text, RB_FILE_EXTENSION );
+						if ((resourceBundleFile != null) && resourceBundleFile.exists()) {
+							return true;
+						}
+					}
+				}
+			}
+		}
 
-        for( IClasspathEntry iClasspathEntry : cpEntries )
-        {
-            if( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() )
-            {
-                IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
-                entryPath = entryPath.append( ioFileName );
-                IFile resourceBundleFile = wroot.getFileForLocation( entryPath );
-                if( resourceBundleFile != null && resourceBundleFile.exists() )
-                {
-                    if( window != null )
-                    {
-                        final IWorkbenchPage page = window.getActivePage();
-                        IEditorDescriptor editorDescriptor = null;
+		return false;
+	}
 
-                        try
-                        {
-                            editorDescriptor = IDE.getEditorDescriptor( resourceBundleFile.getName() );
-                        }
-                        catch( PartInitException e )
-                        {
-                            // No editor was found for this file type.
-                        }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.
+	 * SapphireRenderingContext)
+	 */
+	@Override
+	protected Object run(Presentation context) {
+		Element element = getModelElement();
 
-                        if( editorDescriptor != null )
-                        {
-                            try
-                            {
-                                IDE.openEditor( page, resourceBundleFile, editorDescriptor.getId(), true );
-                            }
-                            catch( PartInitException e )
-                            {
-                                PortletUIPlugin.logError( e );
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+
+		ValueProperty property = (ValueProperty)property().definition();
+
+		IProject project = element.adapt(IProject.class);
+
+		Value<Path> value = element.property(property);
+
+		String text = value.text(false);
+
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+		IWorkspaceRoot wroot = workspace.getRoot();
+
+		IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries(project);
+		String ioFileName = PortletUtil.convertJavaToIoFileName(text, RB_FILE_EXTENSION);
+
+		for (IClasspathEntry iClasspathEntry : cpEntries) {
+			if (IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind()) {
+				IPath entryPath = wroot.getFolder(iClasspathEntry.getPath()).getLocation();
+
+				entryPath = entryPath.append(ioFileName);
+
+				IFile resourceBundleFile = wroot.getFileForLocation(entryPath);
+
+				if ((resourceBundleFile != null) && resourceBundleFile.exists()) {
+					if (window != null) {
+						IWorkbenchPage page = window.getActivePage();
+						IEditorDescriptor editorDescriptor = null;
+
+						try {
+							editorDescriptor = IDE.getEditorDescriptor(resourceBundleFile.getName());
+						}
+						catch (PartInitException pie) {
+
+							// No editor was found for this file type.
+
+						}
+
+						if (editorDescriptor != null) {
+							try {
+								IDE.openEditor(page, resourceBundleFile, editorDescriptor.getId(), true);
+							}
+							catch (PartInitException pie) {
+								PortletUIPlugin.logError(pie);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+
 }

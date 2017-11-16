@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Kamesh Sampath - initial implementation
- *      Gregory Amerson - initial implementation review and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.navigator;
 
@@ -37,131 +33,112 @@ import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class PortletsNode
-{
+@SuppressWarnings("restriction")
+public class PortletsNode {
 
-    private static final Object[] EMPTY = new Object[] {};
+	public PortletsNode(PortletResourcesRootNode parent) {
+		_parent = parent;
+	}
 
-    private PortletApp modelElement = null;
-    private PortletResourcesRootNode parent;
+	public Object[] getChildren() {
+		if (_getPortletAppModelElement() != null) {
+			List<PortletNode> portletNodes = new ArrayList<>();
 
-    public PortletsNode( PortletResourcesRootNode parent )
-    {
-        this.parent = parent;
-    }
+			for (Portlet portlet : _getPortletAppModelElement().getPortlets()) {
+				portletNodes.add(new PortletNode(this, portlet));
+			}
 
-    public Object[] getChildren()
-    {
-        if( this.getPortletAppModelElement() != null )
-        {
-            final List<PortletNode> portletNodes = new ArrayList<PortletNode>();
+			return portletNodes.toArray(new PortletNode[0]);
+		}
 
-            for( Portlet portlet : this.getPortletAppModelElement().getPortlets() )
-            {
-                portletNodes.add( new PortletNode( this, portlet ) );
-            }
+		return _EMPTY;
+	}
 
-            return portletNodes.toArray( new PortletNode[0] );
-        }
+	public PortletResourcesRootNode getParent() {
+		return _parent;
+	}
 
-        return EMPTY;
-    }
+	public boolean hasChildren() {
+		PortletApp model = _getPortletAppModelElement();
 
-    public PortletResourcesRootNode getParent()
-    {
-        return this.parent;
-    }
+		if (model != null) {
+			if (model.getPortlets().size() > 0) {
+				return true;
+			}
 
-    private PortletApp getPortletAppModelElement()
-    {
-        if( this.modelElement == null )
-        {
-            IFile portletXmlFile = ProjectUtil.getPortletXmlFile( this.parent.getProject() );
+			return false;
+		}
 
-            if( portletXmlFile != null && portletXmlFile.exists() )
-            {
-                try
-                {
-                    final IStructuredModel portletXmlModel =
-                        StructuredModelManager.getModelManager().getModelForRead( portletXmlFile );
+		return false;
+	}
 
-                    IModelStateListener listener = new IModelStateListener()
-                    {
+	private PortletApp _getPortletAppModelElement() {
+		if (_modelElement == null) {
+			IFile portletXmlFile = ProjectUtil.getPortletXmlFile(this._parent.getProject());
 
-                        public void modelAboutToBeChanged( IStructuredModel model )
-                        {
-                        }
+			if ((portletXmlFile != null) && portletXmlFile.exists()) {
+				try {
+					IStructuredModel portletXmlModel =
+						StructuredModelManager.getModelManager().getModelForRead(portletXmlFile);
 
-                        public void modelAboutToBeReinitialized( IStructuredModel structuredModel )
-                        {
-                        }
+					IModelStateListener listener = new IModelStateListener() {
 
-                        public void modelChanged( IStructuredModel model )
-                        {
-                            refresh();
-                        }
+						public void modelAboutToBeChanged(IStructuredModel model) {
+						}
 
-                        public void modelDirtyStateChanged( IStructuredModel model, boolean isDirty )
-                        {
-                            refresh();
-                        }
+						public void modelAboutToBeReinitialized(IStructuredModel structuredModel) {
+						}
 
-                        public void modelReinitialized( IStructuredModel structuredModel )
-                        {
-                            refresh();
-                        }
+						public void modelChanged(IStructuredModel model) {
+							_refresh();
+						}
 
-                        public void modelResourceDeleted( IStructuredModel model )
-                        {
-                            refresh();
-                        }
+						public void modelDirtyStateChanged(IStructuredModel model, boolean dirty) {
+							_refresh();
+						}
 
-                        public void modelResourceMoved( IStructuredModel oldModel, IStructuredModel newModel )
-                        {
-                            refresh();
-                        }
+						public void modelReinitialized(IStructuredModel structuredModel) {
+							_refresh();
+						}
 
-                        private void refresh()
-                        {
-                            portletXmlModel.removeModelStateListener( this );
+						public void modelResourceDeleted(IStructuredModel model) {
+							_refresh();
+						}
 
-                            if( !PortletsNode.this.modelElement.disposed() )
-                            {
-                                PortletsNode.this.modelElement.dispose();
-                            }
+						public void modelResourceMoved(IStructuredModel oldModel, IStructuredModel newModel) {
+							_refresh();
+						}
 
-                            PortletsNode.this.modelElement = null;
-                            PortletsNode.this.parent.refresh();
-                        }
-                    };
+						private void _refresh() {
+							portletXmlModel.removeModelStateListener(this);
 
-                    portletXmlModel.addModelStateListener( listener );
+							if (!PortletsNode.this._modelElement.disposed()) {
+								PortletsNode.this._modelElement.dispose();
+							}
 
-                    modelElement =
-                        PortletApp.TYPE.instantiate( new RootXmlResource( new XmlResourceStore(
-                            portletXmlFile.getContents() ) ) );
-                }
-                catch( Exception e )
-                {
-                    PortletUIPlugin.logError( e );
-                }
-            }
-        }
+							PortletsNode.this._modelElement = null;
+							PortletsNode.this._parent.refresh();
+						}
 
-        return this.modelElement;
-    }
+					};
 
-    public boolean hasChildren()
-    {
-        PortletApp model = getPortletAppModelElement();
+					portletXmlModel.addModelStateListener(listener);
 
-        if( model != null )
-        {
-            return model.getPortlets().size() > 0;
-        }
+					_modelElement = PortletApp.TYPE.instantiate(
+						new RootXmlResource(new XmlResourceStore(portletXmlFile.getContents())));
+				}
+				catch (Exception e) {
+					PortletUIPlugin.logError(e);
+				}
+			}
+		}
 
-        return false;
-    }
+		return _modelElement;
+	}
+
+	private static final Object[] _EMPTY = {};
+
+	private PortletApp _modelElement = null;
+	private PortletResourcesRootNode _parent;
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.jsf;
 
@@ -21,21 +20,17 @@ import org.eclipse.jface.text.templates.TemplateContextType;
 /**
  * @author Greg Amerson
  */
-public class JSFPortletXHTMLTemplateContextType extends TemplateContextType
-{
+public class JSFPortletXHTMLTemplateContextType extends TemplateContextType {
 
-    public JSFPortletXHTMLTemplateContextType()
-    {
-        super();
-
-        addResolver( new GlobalTemplateVariables.Cursor() );
-        addResolver( new GlobalTemplateVariables.Date() );
-        addResolver( new GlobalTemplateVariables.Dollar() );
-        addResolver( new GlobalTemplateVariables.LineSelection() );
-        addResolver( new GlobalTemplateVariables.Time() );
-        addResolver( new GlobalTemplateVariables.User() );
-        addResolver( new GlobalTemplateVariables.WordSelection() );
-        addResolver( new GlobalTemplateVariables.Year() );
-    }
+	public JSFPortletXHTMLTemplateContextType() {
+		addResolver(new GlobalTemplateVariables.Cursor());
+		addResolver(new GlobalTemplateVariables.Date());
+		addResolver(new GlobalTemplateVariables.Dollar());
+		addResolver(new GlobalTemplateVariables.LineSelection());
+		addResolver(new GlobalTemplateVariables.Time());
+		addResolver(new GlobalTemplateVariables.User());
+		addResolver(new GlobalTemplateVariables.WordSelection());
+		addResolver(new GlobalTemplateVariables.Year());
+	}
 
 }

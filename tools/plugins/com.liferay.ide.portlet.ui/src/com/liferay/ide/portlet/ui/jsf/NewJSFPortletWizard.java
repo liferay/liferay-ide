@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.jsf;
 
@@ -27,6 +26,7 @@ import com.liferay.ide.project.ui.wizard.ValidProjectChecker;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -42,135 +42,139 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 
+import org.osgi.framework.Bundle;
+
 /**
  * @author Greg Amerson
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
-public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPortletClassDataModelProperties
-{
+@SuppressWarnings("restriction")
+public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPortletClassDataModelProperties {
 
-    public static final String ID = "com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet"; //$NON-NLS-1$
+	public static final String ID = "com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet";
 
-    public NewJSFPortletWizard()
-    {
-        super();
-    }
+	public NewJSFPortletWizard() {
+	}
 
-    public NewJSFPortletWizard( IDataModel model )
-    {
-        super( model );
-    }
+	public NewJSFPortletWizard(IDataModel model) {
+		super(model);
+	}
 
-    @Override
-    public String getTitle()
-    {
-        return Msgs.newLiferayJSFPortlet;
-    }
+	@Override
+	public String getTitle() {
+		return Msgs.newLiferayJSFPortlet;
+	}
 
-    @Override
-    protected String getDefaultPageTitle()
-    {
-        return Msgs.createLiferayJSFPortlet;
-    }
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		getDataModel();
+		ValidProjectChecker checker = new ValidProjectChecker(ID);
 
-    @Override
-    protected void doAddPages()
-    {
-        addPage( new NewJSFPortletClassWizardPage(
-            getDataModel(), "pageOne", Msgs.createJSFPortlet, getDefaultPageTitle(), fragment ) ); //$NON-NLS-1$
-        addPage( new NewJSFPortletOptionsWizardPage(
-            getDataModel(), "pageTwo", Msgs.specifyJSFPortletDeployment, getDefaultPageTitle(), //$NON-NLS-1$
-            fragment ) );
-        addPage( new NewLiferayPortletWizardPage(
-            getDataModel(), "pageThree", Msgs.specifyLiferayPortletDeployment, //$NON-NLS-1$
-            getDefaultPageTitle(), fragment ) );
-    }
+		checker.checkValidProjectTypes();
+	}
 
-    @Override
-    protected ImageDescriptor getImage()
-    {
-        return ImageDescriptor.createFromURL( PortletUIPlugin.getDefault().getBundle().getEntry(
-            "/icons/wizban/liferay_faces_75x66.png" ) ); //$NON-NLS-1$
-    }
+	@Override
+	protected void doAddPages() {
+		addPage(
+			new NewJSFPortletClassWizardPage(
+				getDataModel(), "pageOne", Msgs.createJSFPortlet, getDefaultPageTitle(), fragment));
+		addPage(
+			new NewJSFPortletOptionsWizardPage(
+				getDataModel(), "pageTwo", Msgs.specifyJSFPortletDeployment, getDefaultPageTitle(), fragment));
+		addPage(
+			new NewLiferayPortletWizardPage(
+				getDataModel(), "pageThree", Msgs.specifyLiferayPortletDeployment, getDefaultPageTitle(), fragment));
+	}
 
-    @Override
-    protected IDataModelProvider getDefaultProvider()
-    {
-        // for now, no need for own template store and context type
-        final TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
+	@Override
+	protected String getDefaultPageTitle() {
+		return Msgs.createLiferayJSFPortlet;
+	}
 
-        final TemplateContextType contextType =
-            PortletUIPlugin.getDefault().getTemplateContextRegistry().getContextType( JSFPortletTemplateContextTypeIds.NEW );
+	@Override
+	protected IDataModelProvider getDefaultProvider() {
 
-        return new NewJSFPortletClassDataModelProvider( fragment )
-        {
-            @Override
-            public IDataModelOperation getDefaultOperation()
-            {
-                return new AddJSFPortletOperation( this.model, templateStore, contextType );
-            }
-        };
-    }
+		// for now, no need for own template store and context type
 
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-        getDataModel();
-        ValidProjectChecker checker = new ValidProjectChecker( ID );
-        checker.checkValidProjectTypes();
-    }
+		TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
 
-    @Override
-    protected void openJavaClass()
-    {
-        // instead of opening a java class lets open the view xhtml file
-        if( getDataModel().getBooleanProperty( CREATE_JSPS ) )
-        {
-            try
-            {
-                final String jspsFolder = getDataModel().getStringProperty( CREATE_JSPS_FOLDER );
-                final String projectName = getDataModel().getStringProperty( PROJECT_NAME );
-                final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
+		PortletUIPlugin plugin = PortletUIPlugin.getDefault();
 
-                // IDE-110 IDE-648
-                final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
+		TemplateContextType contextType =
+			plugin.getTemplateContextRegistry().getContextType(JSFPortletTemplateContextTypeIds.NEW);
 
-                if( webproject != null && webproject.getDefaultDocrootFolder() != null )
-                {
-                    final IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
-                    final Path path = new Path( jspsFolder + "/view.xhtml" ); //$NON-NLS-1$
-                    final IFile viewFile = defaultDocroot.getFile( path );
+		return new NewJSFPortletClassDataModelProvider(fragment) {
 
-                    if( viewFile.exists() )
-                    {
-                        IWorkbenchPage page =
-                            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			@Override
+			public IDataModelOperation getDefaultOperation() {
+				return new AddJSFPortletOperation(model, templateStore, contextType);
+			}
 
-                        IDE.openEditor( page, viewFile, true );
+		};
+	}
 
-                        return;
-                    }
-                }
-            }
-            catch( Exception e )
-            {
-                // best effort
-            }
-        }
-    }
+	@Override
+	protected ImageDescriptor getImage() {
+		Bundle bundle = PortletUIPlugin.getDefault().getBundle();
 
-    private static class Msgs extends NLS
-    {
-        public static String createJSFPortlet;
-        public static String createLiferayJSFPortlet;
-        public static String newLiferayJSFPortlet;
-        public static String specifyJSFPortletDeployment;
-        public static String specifyLiferayPortletDeployment;
+		return ImageDescriptor.createFromURL(bundle.getEntry("/icons/wizban/liferay_faces_75x66.png"));
+	}
 
-        static
-        {
-            initializeMessages( NewJSFPortletWizard.class.getName(), Msgs.class );
-        }
-    }
+	@Override
+	protected void openJavaClass() {
+
+		// instead of opening a java class lets open the view xhtml file
+
+		if (getDataModel().getBooleanProperty(CREATE_JSPS)) {
+			try {
+				String jspsFolder = getDataModel().getStringProperty(CREATE_JSPS_FOLDER);
+				String projectName = getDataModel().getStringProperty(PROJECT_NAME);
+
+				IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+				IProject project = workspace.getRoot().getProject(projectName);
+
+				// IDE-110 IDE-648
+
+				IWebProject webproject = LiferayCore.create(IWebProject.class, project);
+
+				if ((webproject != null) && (webproject.getDefaultDocrootFolder() != null)) {
+					IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
+					Path path = new Path(jspsFolder + "/view.xhtml");
+
+					IFile viewFile = defaultDocroot.getFile(path);
+
+					if (viewFile.exists()) {
+						IWorkbench workbench = PlatformUI.getWorkbench();
+
+						IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
+
+						IDE.openEditor(page, viewFile, true);
+
+						return;
+					}
+				}
+			}
+			catch (Exception e) {
+
+				// best effort
+
+			}
+		}
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String createJSFPortlet;
+		public static String createLiferayJSFPortlet;
+		public static String newLiferayJSFPortlet;
+		public static String specifyJSFPortletDeployment;
+		public static String specifyLiferayPortletDeployment;
+
+		static {
+			initializeMessages(NewJSFPortletWizard.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Kamesh Sampath - initial implementation
- *      Gregory Amerson - initial implementation review and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.editor.internal;
 
@@ -30,30 +26,34 @@ import org.eclipse.sapphire.ui.forms.MasterDetailsEditorPagePart;
  * @author Kamesh Sampath
  * @author Gregory Amerson
  */
-public class DefinePortletEventHandler extends SapphireActionHandler
-{
+public class DefinePortletEventHandler extends SapphireActionHandler {
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
-     */
-    @Override
-    protected Object run( Presentation context )
-    {
-        PortletApp rootModel = (PortletApp) context.part().getModelElement();
-        EventDefinition eventDefintion = rootModel.getEventDefinitions().insert();
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * SapphireActionHandler#run(org.eclipse.sapphire.ui.
+	 * SapphireRenderingContext)
+	 */
+	@Override
+	protected Object run(Presentation context) {
+		PortletApp rootModel = (PortletApp)context.part().getModelElement();
 
-        // Select the node
+		EventDefinition eventDefintion = rootModel.getEventDefinitions().insert();
 
-        final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
-        final MasterDetailsContentNodePart root = page.outline().getRoot();
-        final MasterDetailsContentNodePart node = root.findNode( eventDefintion );
+		// Select the node
 
-        if( node != null )
-        {
-            node.select();
-        }
+		MasterDetailsEditorPagePart page = getPart().nearest(MasterDetailsEditorPagePart.class);
 
-        return eventDefintion;
-    }
+		MasterDetailsContentNodePart root = page.outline().getRoot();
+
+		MasterDetailsContentNodePart node = root.findNode(eventDefintion);
+
+		if (node != null) {
+			node.select();
+		}
+
+		return eventDefintion;
+	}
+
 }

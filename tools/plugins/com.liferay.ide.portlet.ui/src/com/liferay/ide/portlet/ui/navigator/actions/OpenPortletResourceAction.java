@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,12 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Kamesh Sampath - initial implementation
- *      Gregory Amerson - initial implementation review and ongoing maintenance
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.navigator.actions;
 
@@ -39,6 +34,7 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.ui.SapphireEditor;
+import org.eclipse.sapphire.ui.forms.MasterDetailsContentNodeList;
 import org.eclipse.sapphire.ui.forms.MasterDetailsContentNodePart;
 import org.eclipse.sapphire.ui.forms.MasterDetailsContentOutline;
 import org.eclipse.sapphire.ui.forms.swt.MasterDetailsEditorPage;
@@ -48,6 +44,7 @@ import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorRegistry;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
@@ -58,285 +55,263 @@ import org.eclipse.ui.part.FileEditorInput;
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  * @author Gregory Amerson
  */
-public class OpenPortletResourceAction extends BaseSelectionListenerAction
-{
+public class OpenPortletResourceAction extends BaseSelectionListenerAction {
 
-    private static final String ACTION_MESSAGE = Msgs.openPortletConfigurationFile;
-    private static final String PORTLETS_NODE_LABEL = Msgs.portlets;
+	public OpenPortletResourceAction() {
+		super(_ACTION_MESSAGE);
+	}
 
-    protected IEditorPart editorPart;
-    protected Object selectedNode;
+	@Override
+	public void run() {
+		if (isEnabled()) {
+			IFile file = initEditorPart();
 
-    public OpenPortletResourceAction()
-    {
-        super( ACTION_MESSAGE );
-    }
+			if ((file != null) && file.exists()) {
+				editorPart = openEditor(file);
 
-    /**
-     * @param file
-     * @return
-     */
-    protected IEditorDescriptor findEditor( IFile file )
-    {
-        IEditorRegistry registry = PlatformUI.getWorkbench().getEditorRegistry();
-        IContentType contentType = IDE.getContentType( file );
-        IEditorDescriptor editorDescriptor = registry.getDefaultEditor( file.getName(), contentType );
+				if ((editorPart != null) && selectedNode instanceof PortletNode) {
+					selectAndRevealItem(editorPart);
+					openPortletJavaClass(file);
+				}
+			}
+		}
+	}
 
-        if( editorDescriptor == null )
-        {
-            return null; // no editor associated...
-        }
+	/**
+	 * @param file
+	 * @return
+	 */
+	protected IEditorDescriptor findEditor(IFile file) {
+		IEditorRegistry registry = PlatformUI.getWorkbench().getEditorRegistry();
+		IContentType contentType = IDE.getContentType(file);
 
-        return editorDescriptor;
-    }
+		IEditorDescriptor editorDescriptor = registry.getDefaultEditor(file.getName(), contentType);
 
-    protected IFile initEditorPart()
-    {
-        IFile file = null;
+		if (editorDescriptor == null) {
+			return null; // no editor associated...
+		}
 
-        if( this.selectedNode instanceof PortletsNode )
-        {
-            PortletsNode portletsNode = (PortletsNode) this.selectedNode;
-            PortletResourcesRootNode rootNode = portletsNode.getParent();
-            file = ProjectUtil.getPortletXmlFile( rootNode.getProject() );
-        }
-        else if( this.selectedNode instanceof PortletNode )
-        {
-            PortletNode portletNode = (PortletNode) this.selectedNode;
-            PortletResourcesRootNode rootNode = portletNode.getParent().getParent();
-            file = ProjectUtil.getPortletXmlFile( rootNode.getProject() );
-        }
+		return editorDescriptor;
+	}
 
-        // Check to see if the editor part is already open
-        if( editorPart == null && file != null )
-        {
-            IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-            IEditorReference[] editorReferences = page.getEditorReferences();
+	protected IFile initEditorPart() {
+		IFile file = null;
 
-            for( IEditorReference iEditorReference : editorReferences )
-            {
-                if( file.getName().equals( iEditorReference.getName() ) )
-                {
-                    this.editorPart = iEditorReference.getEditor( false );
-                }
-            }
-        }
+		if (selectedNode instanceof PortletsNode) {
+			PortletsNode portletsNode = (PortletsNode)selectedNode;
 
-        return file;
-    }
+			PortletResourcesRootNode rootNode = portletsNode.getParent();
 
-    protected IEditorPart openEditor( IFile file )
-    {
-        IEditorDescriptor editorDescriptor = findEditor( file );
-        IEditorPart editorPart = null;
+			file = ProjectUtil.getPortletXmlFile(rootNode.getProject());
+		}
+		else if (selectedNode instanceof PortletNode) {
+			PortletNode portletNode = (PortletNode)selectedNode;
 
-        if( editorDescriptor != null )
-        {
-            IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			PortletResourcesRootNode rootNode = portletNode.getParent().getParent();
 
-            try
-            {
-                editorPart = page.findEditor( new FileEditorInput( file ) );
+			file = ProjectUtil.getPortletXmlFile(rootNode.getProject());
+		}
 
-                if( editorPart == null )
-                {
-                    editorPart = page.openEditor( new FileEditorInput( file ), editorDescriptor.getId() );
-                }
+		// Check to see if the editor part is already open
 
-            }
-            catch( Exception e )
-            {
-                MessageDialog.openError( page.getWorkbenchWindow().getShell(), Msgs.errorOpeningFile, e.getMessage() );
-            }
-        }
+		if ((editorPart == null) && (file != null)) {
+			IWorkbench workbench = PlatformUI.getWorkbench();
 
-        return editorPart;
-    }
+			IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
 
-    /**
-     * @param file
-     */
-    protected void openPortletJavaClass( final IFile file )
-    {
-        Element modelElement = ( (PortletNode) this.selectedNode ).getModel();
+			IEditorReference[] editorReferences = page.getEditorReferences();
 
-        if( modelElement instanceof Portlet )
-        {
-            final Portlet portlet = (Portlet) modelElement;
-            final JavaTypeName portletClassFile = portlet.getPortletClass().content();
+			for (IEditorReference iEditorReference : editorReferences) {
+				if (file.getName().equals(iEditorReference.getName())) {
+					editorPart = iEditorReference.getEditor(false);
+				}
+			}
+		}
 
-            Display.getDefault().asyncExec( new Runnable()
-            {
+		return file;
+	}
 
-                public void run()
-                {
-                    IJavaProject project = JavaCore.create( file.getProject() );
+	protected IEditorPart openEditor(IFile file) {
+		IEditorDescriptor editorDescriptor = findEditor(file);
+		IEditorPart editorPart = null;
 
-                    String fullyQualifiedName = portletClassFile.qualified();
-                    try
-                    {
-                        IType type = project.findType( fullyQualifiedName );
+		if (editorDescriptor != null) {
+			IWorkbench workbench = PlatformUI.getWorkbench();
 
-                        if( type != null && type.exists() )
-                        {
-                            IResource resource = type.getResource();
+			IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
 
-                            if( resource instanceof IFile )
-                            {
-                                IFile javaFile = (IFile) resource;
-                                IEditorDescriptor editorDescriptor = findEditor( javaFile );
-                                IEditorPart editorPart = null;
+			try {
+				editorPart = page.findEditor(new FileEditorInput(file));
 
-                                if( editorDescriptor != null )
-                                {
-                                    IWorkbenchPage page =
-                                        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				if (editorPart == null) {
+					editorPart = page.openEditor(new FileEditorInput(file), editorDescriptor.getId());
+				}
+			}
+			catch (Exception e) {
+				MessageDialog.openError(page.getWorkbenchWindow().getShell(), Msgs.errorOpeningFile, e.getMessage());
+			}
+		}
 
-                                    try
-                                    {
-                                        editorPart = page.findEditor( new FileEditorInput( javaFile ) );
+		return editorPart;
+	}
 
-                                        if( editorPart == null )
-                                        {
-                                            editorPart =
-                                                page.openEditor(
-                                                    new FileEditorInput( javaFile ), editorDescriptor.getId() );
-                                        }
+	/**
+	 * @param file
+	 */
+	protected void openPortletJavaClass(IFile file) {
+		Element modelElement = ((PortletNode)selectedNode).getModel();
 
-                                    }
-                                    catch( Exception e )
-                                    {
-                                        MessageDialog.openError(
-                                            page.getWorkbenchWindow().getShell(), Msgs.errorOpeningFile, e.getMessage() );
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch( JavaModelException e )
-                    {
-                        PortletUIPlugin.logError( e );
-                    }
-                }
-            } );
-        }
-    }
+		if (modelElement instanceof Portlet) {
+			Portlet portlet = (Portlet)modelElement;
 
-    @Override
-    public void run()
-    {
-        if( isEnabled() )
-        {
-            final IFile file = initEditorPart();
+			JavaTypeName portletClassFile = portlet.getPortletClass().content();
 
-            if( file != null && file.exists() )
-            {
-                editorPart = openEditor( file );
+			Runnable run = new Runnable() {
 
-                if( editorPart != null && this.selectedNode instanceof PortletNode )
-                {
-                    selectAndRevealItem( editorPart );
-                    openPortletJavaClass( file );
-                }
+				public void run() {
+					IJavaProject project = JavaCore.create(file.getProject());
 
-            }
-        }
-    }
+					String fullyQualifiedName = portletClassFile.qualified();
 
-    /**
-     * @param editor
-     *            TODO: need to work on to fix to reveal the selected node
-     */
-    protected void selectAndRevealItem( IEditorPart editorPart )
-    {
-        if( this.editorPart instanceof SapphireEditor )
-        {
-            SapphireEditorForXml editor = (SapphireEditorForXml) editorPart;
+					try {
+						IType type = project.findType(fullyQualifiedName);
 
-            PortletNode portletNavigatorNode = (PortletNode) this.selectedNode;
-            Element selectedModelElement = portletNavigatorNode.getModel();
+						if ((type != null) && type.exists()) {
+							IResource resource = type.getResource();
 
-            if( selectedModelElement != null )
-            {
-                MasterDetailsEditorPage mdepDetailsEditorPage =
-                    (MasterDetailsEditorPage) editor.getActivePageInstance();
+							if (resource instanceof IFile) {
+								IFile javaFile = (IFile)resource;
 
-                if( mdepDetailsEditorPage != null )
-                {
-                    MasterDetailsContentOutline contentOutline = mdepDetailsEditorPage.outline();
-                    MasterDetailsContentNodePart rootNode = contentOutline.getRoot();
+								IEditorDescriptor editorDescriptor = findEditor(javaFile);
 
-                    if( rootNode != null )
-                    {
-                        MasterDetailsContentNodePart portletAppNode = rootNode.nodes().visible().get( 0 );
-                        MasterDetailsContentNodePart portletsNode = portletAppNode.findNode( PORTLETS_NODE_LABEL );
+								IEditorPart editorPart = null;
 
-                        // TODO: Performance Check ???, cant we not have the shared model ?
+								if (editorDescriptor != null) {
+									IWorkbench workbench = PlatformUI.getWorkbench();
 
-                        if( portletsNode != null )
-                        {
-                            if( selectedModelElement instanceof Portlet )
-                            {
-                                Portlet selectedPortlet = (Portlet) selectedModelElement;
+									IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
 
-                                for( MasterDetailsContentNodePart childNode : portletsNode.nodes().visible() )
-                                {
-                                    String selectedPortletName = selectedPortlet.getPortletName().content();
+									try {
+										editorPart = page.findEditor(new FileEditorInput(javaFile));
 
-                                    if( childNode.getModelElement() instanceof Portlet )
-                                    {
-                                        Portlet mpContentNodePortlet = (Portlet) childNode.getModelElement();
-                                        String mpContentNodePortletName =
-                                            mpContentNodePortlet.getPortletName().content();
+										if (editorPart == null) {
+											editorPart = page.openEditor(
+												new FileEditorInput(javaFile), editorDescriptor.getId());
+										}
+									}
+									catch (Exception e) {
+										MessageDialog.openError(
+											page.getWorkbenchWindow().getShell(), Msgs.errorOpeningFile,
+											e.getMessage());
+									}
+								}
+							}
+						}
+					}
+					catch (JavaModelException jme) {
+						PortletUIPlugin.logError(jme);
+					}
+				}
 
-                                        if( selectedPortletName.equals( mpContentNodePortletName ) )
-                                        {
-                                            childNode.select();
-                                            childNode.setExpanded( true );
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+			};
 
-    @Override
-    protected boolean updateSelection( IStructuredSelection selection )
-    {
-        if( selection.size() == 1 )
-        {
-            this.selectedNode = selection.getFirstElement();
+			Display.getDefault().asyncExec(run);
+		}
+	}
 
-            if( editorPart == null )
-            {
-                initEditorPart();
-            }
+	/**
+	 * @param editor
+	 *            TODO: need to work on to fix to reveal the selected node
+	 */
+	protected void selectAndRevealItem(IEditorPart editorPart) {
+		if (this.editorPart instanceof SapphireEditor) {
+			SapphireEditorForXml editor = (SapphireEditorForXml)editorPart;
 
-            if( editorPart != null && this.selectedNode instanceof PortletNode )
-            {
-                selectAndRevealItem( editorPart );
-            }
+			PortletNode portletNavigatorNode = (PortletNode)selectedNode;
 
-            return true;
-        }
+			Element selectedModelElement = portletNavigatorNode.getModel();
 
-        return false;
-    }
+			if (selectedModelElement != null) {
+				MasterDetailsEditorPage mdepDetailsEditorPage = (MasterDetailsEditorPage)editor.getActivePageInstance();
 
-    private static class Msgs extends NLS
-    {
-        public static String errorOpeningFile;
-        public static String openPortletConfigurationFile;
-        public static String portlets;
+				if (mdepDetailsEditorPage != null) {
+					MasterDetailsContentOutline contentOutline = mdepDetailsEditorPage.outline();
 
-        static
-        {
-            initializeMessages( OpenPortletResourceAction.class.getName(), Msgs.class );
-        }
-    }
+					MasterDetailsContentNodePart rootNode = contentOutline.getRoot();
+
+					if (rootNode != null) {
+						MasterDetailsContentNodeList nodes = rootNode.nodes();
+
+						MasterDetailsContentNodePart portletAppNode = nodes.visible().get(0);
+
+						MasterDetailsContentNodePart portletsNode = portletAppNode.findNode(_PORTLETS_NODE_LABEL);
+
+						// TODO: Performance Check ???, cant we not have the shared model ?
+
+						if (portletsNode != null) {
+							if (selectedModelElement instanceof Portlet) {
+								Portlet selectedPortlet = (Portlet)selectedModelElement;
+
+								for (MasterDetailsContentNodePart childNode : portletsNode.nodes().visible()) {
+									String selectedPortletName = selectedPortlet.getPortletName().content();
+
+									if (childNode.getModelElement() instanceof Portlet) {
+										Portlet mpContentNodePortlet = (Portlet)childNode.getModelElement();
+
+										String mpContentNodePortletName =
+											mpContentNodePortlet.getPortletName().content();
+
+										if (selectedPortletName.equals(mpContentNodePortletName)) {
+											childNode.select();
+											childNode.setExpanded(true);
+											break;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	protected boolean updateSelection(IStructuredSelection selection) {
+		if (selection.size() == 1) {
+			selectedNode = selection.getFirstElement();
+
+			if (editorPart == null) {
+				initEditorPart();
+			}
+
+			if ((editorPart != null) && selectedNode instanceof PortletNode) {
+				selectAndRevealItem(editorPart);
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	protected IEditorPart editorPart;
+	protected Object selectedNode;
+
+	private static final String _ACTION_MESSAGE = Msgs.openPortletConfigurationFile;
+
+	private static final String _PORTLETS_NODE_LABEL = Msgs.portlets;
+
+	private static class Msgs extends NLS {
+
+		public static String errorOpeningFile;
+		public static String openPortletConfigurationFile;
+		public static String portlets;
+
+		static {
+			initializeMessages(OpenPortletResourceAction.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

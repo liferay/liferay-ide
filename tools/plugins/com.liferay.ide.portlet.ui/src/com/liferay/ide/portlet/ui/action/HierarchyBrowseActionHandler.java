@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.action;
 
@@ -47,93 +44,83 @@ import org.eclipse.ui.dialogs.SelectionDialog;
 /**
  * @author Simon Jiang
  */
-public final class HierarchyBrowseActionHandler extends BrowseActionHandler
-{
+public class HierarchyBrowseActionHandler extends BrowseActionHandler {
 
-    public static final String ID = "Hierarchy.Browse.Java.Type"; //$NON-NLS-1$
+	public static final String ID = "Hierarchy.Browse.Java.Type";
 
-    @Override
-    public String browse( final Presentation context )
-    {
-        final Element element = getModelElement();
-        final Property property = property();
-        final IProject project = element.adapt( IProject.class );
+	@Override
+	public String browse(Presentation context) {
+		Element element = getModelElement();
+		Property property = property();
+		IProject project = element.adapt(IProject.class);
 
-        try
-        {
-            IJavaSearchScope scope = null;
+		try {
+			IJavaSearchScope scope = null;
 
-            TypeSelectionExtension extension = null;
+			TypeSelectionExtension extension = null;
 
-            final String javaType = getClassReferenceType( property );
+			String javaType = _getClassReferenceType(property);
 
-            if( javaType != null )
-            {
-                scope = SearchEngine.createHierarchyScope( JavaCore.create( project ).findType( javaType ) );
-            }
-            else
-            {
-                MessageDialog.openInformation(
-                    ( (SwtPresentation) context ).shell(), Msgs.browseImplementation, Msgs.validClassImplProperty );
+			if (javaType != null) {
+				scope = SearchEngine.createHierarchyScope(JavaCore.create(project).findType(javaType));
+			}
+			else {
+				MessageDialog.openInformation(
+					((SwtPresentation)context).shell(), Msgs.browseImplementation, Msgs.validClassImplProperty);
 
-                return null;
-            }
+				return null;
+			}
 
-            final SelectionDialog dlg =
-                JavaUI.createTypeDialog(
-                    ( (SwtPresentation) context ).shell(), null, scope, IJavaElementSearchConstants.CONSIDER_CLASSES,
-                    false, StringPool.DOUBLE_ASTERISK, extension );
+			SelectionDialog dlg = JavaUI.createTypeDialog(
+				((SwtPresentation)context).shell(), null, scope, IJavaElementSearchConstants.CONSIDER_CLASSES, false,
+				StringPool.DOUBLE_ASTERISK, extension);
 
-            final String title = property.definition().getLabel( true, CapitalizationType.TITLE_STYLE, false );
-            dlg.setTitle( Msgs.select + title );
+			String title = property.definition().getLabel(true, CapitalizationType.TITLE_STYLE, false);
 
-            if( dlg.open() == SelectionDialog.OK )
-            {
-                Object results[] = dlg.getResult();
-                assert results != null && results.length == 1;
+			dlg.setTitle(Msgs.select + title);
 
-                if( results[0] instanceof IType )
-                {
-                    return ( (IType) results[0] ).getFullyQualifiedName();
-                }
-            }
-        }
-        catch( JavaModelException e )
-        {
-            PortletUIPlugin.logError( e );
-        }
+			if (dlg.open() == SelectionDialog.OK) {
+				Object[] results = dlg.getResult();
 
-        return null;
-    }
+				assert results != null && results.length == 1;
 
-    private String getClassReferenceType( Property property )
-    {
-        JavaTypeConstraint typeConstraint = property.definition().getAnnotation( JavaTypeConstraint.class );
+				if (results[0] instanceof IType) {
+					return ((IType)results[0]).getFullyQualifiedName();
+				}
+			}
+		}
+		catch (JavaModelException jme) {
+			PortletUIPlugin.logError(jme);
+		}
 
-        final String retval = Arrays.toString( typeConstraint.type() ).replaceAll( "[\\[\\]\\s,]", "" );
+		return null;
+	}
 
-        return retval;
-    }
+	@Override
+	public void init(SapphireAction action, ActionHandlerDef def) {
+		super.init(action, def);
 
-    @Override
-    public void init( final SapphireAction action, final ActionHandlerDef def )
-    {
-        super.init( action, def );
+		setId(ID);
+	}
 
-        setId( ID );
+	private String _getClassReferenceType(Property property) {
+		JavaTypeConstraint typeConstraint = property.definition().getAnnotation(JavaTypeConstraint.class);
 
-    }
+		String retval = Arrays.toString(typeConstraint.type()).replaceAll("[\\[\\]\\s,]", "");
 
-    private static class Msgs extends NLS
-    {
+		return retval;
+	}
 
-        public static String browseImplementation;
-        public static String select;
-        public static String validClassImplProperty;
+	private static class Msgs extends NLS {
 
-        static
-        {
-            initializeMessages( HierarchyBrowseActionHandler.class.getName(), Msgs.class );
-        }
-    }
+		public static String browseImplementation;
+		public static String select;
+		public static String validClassImplProperty;
+
+		static {
+			initializeMessages(HierarchyBrowseActionHandler.class.getName(), Msgs.class);
+		}
+
+	}
+
 }
