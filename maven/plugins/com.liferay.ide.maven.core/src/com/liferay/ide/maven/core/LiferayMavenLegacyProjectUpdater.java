@@ -23,17 +23,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
-
 import java.nio.file.Files;
-
 import java.util.List;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -42,7 +38,6 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -484,7 +479,7 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 
 		_addChildNode(serviceBuidlerPlugin, document, "groupId", "com.liferay");
 		_addChildNode(serviceBuidlerPlugin, document, "artifactId", "com.liferay.portal.tools.service.builder");
-		_addChildNode(serviceBuidlerPlugin, document, "version", "1.0.142");
+		_addChildNode(serviceBuidlerPlugin, document, "version", "1.0.148");
 
 		Element configuration = document.createElement("configuration");
 
