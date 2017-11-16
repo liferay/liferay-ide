@@ -142,14 +142,14 @@ public class WizardAction extends UIAction {
 		menu.click();
 	}
 
-	public void openNewLiferayPluginProjectWizard() {
-		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayPlugin();
+	public void openNewLiferayPluginProjectsFromExistingSourceWizard() {
+		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayPluginProjectFromExistingSource();
 
 		menu.click();
 	}
 
-	public void openNewLiferayPluginProjectsFromExistingSourceWizard() {
-		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayPluginProjectFromExistingSource();
+	public void openNewLiferayPluginProjectWizard() {
+		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayPlugin();
 
 		menu.click();
 	}
@@ -209,44 +209,6 @@ public class WizardAction extends UIAction {
 	public void prepareFragment(String projectName, String buildType) {
 		_newFragmentWizard.getProjectName().setText(projectName);
 		_newFragmentWizard.getBuildTypes().setSelection(buildType);
-	}
-
-	public void preparePlugin(String projectName, String buildType) {
-		_newPluginSdkWizard.getProjectName().setText(projectName);
-
-		_newPluginSdkWizard.getBuildTypes().setSelection(buildType);
-	}
-
-	public void preparePlugin(String projectName, String pluginType, String buildType) {
-		_newPluginSdkWizard.getProjectName().setText(projectName);
-
-		_newPluginSdkWizard.getPluginTypes().setSelection(pluginType);
-
-		_newPluginSdkWizard.getBuildTypes().setSelection(buildType);
-	}
-
-	public void preparePluginHookSdk(String projectName) {
-		preparePlugin(projectName, HOOK, ANT_LIFERAY_PLUGINS_SDK);
-	}
-
-	public void preparePluginLayoutTemplateSdk(String projectName) {
-		preparePlugin(projectName, LAYOUT_TEMPLATE_UPCASE, ANT_LIFERAY_PLUGINS_SDK);
-	}
-
-	public void preparePluginPortletSdk(String projectName) {
-		preparePlugin(projectName, PORTLET_UPCASE, ANT_LIFERAY_PLUGINS_SDK);
-	}
-
-	public void preparePluginThemeSdk(String projectName) {
-		preparePlugin(projectName, THEME_UPCASE, ANT_LIFERAY_PLUGINS_SDK);
-	}
-
-	public void preparePluginSdk(String projectName) {
-		preparePlugin(projectName, ANT_LIFERAY_PLUGINS_SDK);
-	}
-
-	public void preparePluginSdkLocation(String location) {
-		_setSdkLocationWizard.getSdkLocation().setText(location);
 	}
 
 	public void prepareFragmentGradle(String projectName) {
@@ -441,6 +403,44 @@ public class WizardAction extends UIAction {
 		_newServerWizard.getServerTypes().selectTreeItem(LIFERAY_INC, LIFERAY_V_62_SERVER_TOMCAT_7);
 	}
 
+	public void preparePlugin(String projectName, String buildType) {
+		_newPluginSdkWizard.getProjectName().setText(projectName);
+
+		_newPluginSdkWizard.getBuildTypes().setSelection(buildType);
+	}
+
+	public void preparePlugin(String projectName, String pluginType, String buildType) {
+		_newPluginSdkWizard.getProjectName().setText(projectName);
+
+		_newPluginSdkWizard.getPluginTypes().setSelection(pluginType);
+
+		_newPluginSdkWizard.getBuildTypes().setSelection(buildType);
+	}
+
+	public void preparePluginHookSdk(String projectName) {
+		preparePlugin(projectName, HOOK, ANT_LIFERAY_PLUGINS_SDK);
+	}
+
+	public void preparePluginLayoutTemplateSdk(String projectName) {
+		preparePlugin(projectName, LAYOUT_TEMPLATE_UPCASE, ANT_LIFERAY_PLUGINS_SDK);
+	}
+
+	public void preparePluginPortletSdk(String projectName) {
+		preparePlugin(projectName, PORTLET_UPCASE, ANT_LIFERAY_PLUGINS_SDK);
+	}
+
+	public void preparePluginSdk(String projectName) {
+		preparePlugin(projectName, ANT_LIFERAY_PLUGINS_SDK);
+	}
+
+	public void preparePluginSdkLocation(String location) {
+		_setSdkLocationWizard.getSdkLocation().setText(location);
+	}
+
+	public void preparePluginThemeSdk(String projectName) {
+		preparePlugin(projectName, THEME_UPCASE, ANT_LIFERAY_PLUGINS_SDK);
+	}
+
 	public void prepareRuntimeType(String category, String type) {
 		ide.sleep();
 
@@ -462,10 +462,10 @@ public class WizardAction extends UIAction {
 	private final NewLiferayComponentWizard _newLiferayComponentWizard = new NewLiferayComponentWizard(bot);
 	private final NewLiferayModuleInfoWizard _newModuleInfoWizard = new NewLiferayModuleInfoWizard(bot);
 	private final NewLiferayModuleWizard _newModuleWizard = new NewLiferayModuleWizard(bot);
+	private final NewLiferayPluginSdkProjectWizard _newPluginSdkWizard = new NewLiferayPluginSdkProjectWizard(bot);
 	private final NewRuntimeWizard _newRuntimeWizard = new NewRuntimeWizard(bot);
 	private final NewServerWizard _newServerWizard = new NewServerWizard(bot);
 	private final NewLiferayWorkspaceWizard _newWorkspaceWizard = new NewLiferayWorkspaceWizard(bot);
-	private final NewLiferayPluginSdkProjectWizard _newPluginSdkWizard = new NewLiferayPluginSdkProjectWizard(bot);
 	private final SetSDKLocationWizard _setSdkLocationWizard = new SetSDKLocationWizard(bot);
 	private final Wizard _wizard = new Wizard(bot);
 

@@ -27,6 +27,11 @@ import org.junit.Test;
  */
 public class NewPortletProjectSdkTests extends SwtbotBase {
 
+	@AfterClass
+	public static void cleanPluginsSdk() {
+		viewAction.deleteProject(envAction.getLiferayPluginsSdkName());
+	}
+
 	@BeforeClass
 	public static void createPluginsSdk() throws IOException {
 		envAction.unzipPluginsSDK();
@@ -52,11 +57,6 @@ public class NewPortletProjectSdkTests extends SwtbotBase {
 		viewAction.deleteProject(projectName);
 	}
 
-	@AfterClass
-	public static void cleanPluginsSdk() {
-		viewAction.deleteProject(envAction.getLiferayPluginsSdkName());
-	}
-
 	@Test
 	public void createMvcPortletProject() {
 		wizardAction.openNewLiferayPluginProjectWizard();
@@ -69,4 +69,5 @@ public class NewPortletProjectSdkTests extends SwtbotBase {
 
 		viewAction.deleteProject(projectName);
 	}
+
 }

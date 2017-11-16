@@ -125,10 +125,6 @@ public class ViewAction extends UIAction {
 		_serversView.clickStopBtn();
 	}
 
-	public void switchLiferayPerspective() {
-		ide.getLiferayPerspective().activate();
-	}
-
 	public void serverStopWait() {
 		_serverWaitInConsole(
 			300000, 5000, 1000, "org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler [\"ajp-nio");
@@ -140,6 +136,10 @@ public class ViewAction extends UIAction {
 
 	public void showServersView() {
 		ide.showServersView();
+	}
+
+	public void switchLiferayPerspective() {
+		ide.getLiferayPerspective().activate();
 	}
 
 	public boolean visibleProjectFileTry(String... files) {

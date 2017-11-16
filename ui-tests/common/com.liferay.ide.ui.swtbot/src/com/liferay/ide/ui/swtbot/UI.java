@@ -696,11 +696,11 @@ public interface UI {
 
 	public final String THEME = "theme";
 
-	public final String THEME_UPCASE = "Theme";
-
 	public final String THEME_CONTRIBUTOR = "theme-contributor";
 
 	public final String THEME_PARENT = "Theme parent:";
+
+	public final String THEME_UPCASE = "Theme";
 
 	public final String THUMBNAIL_FILE = "Thumbnail file:";
 

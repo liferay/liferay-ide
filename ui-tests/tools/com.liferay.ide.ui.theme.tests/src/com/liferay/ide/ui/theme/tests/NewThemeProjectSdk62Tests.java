@@ -27,15 +27,16 @@ import org.junit.Test;
  */
 public class NewThemeProjectSdk62Tests extends SwtbotBase {
 
-	@BeforeClass
-	public static void createPluginsSdk() throws IOException {
-	}
-
 	@AfterClass
 	public static void cleanPluginsSdk() {
+	}
+
+	@BeforeClass
+	public static void createPluginsSdk() throws IOException {
 	}
 
 	@Test
 	public void createTheme() {
 	}
+
 }
