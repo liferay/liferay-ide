@@ -14,6 +14,7 @@
 
 package com.liferay.ide.gradle.action;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.action.AbstractObjectAction;
@@ -58,63 +59,65 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 				gradleBuildFile = project.getFile("build.gradle");
 			}
 
-			if (gradleBuildFile.exists()) {
-				final Job job = new Job(project.getName() + " - " + getGradleTask()) {
+			if (FileUtil.notExists(gradleBuildFile)) {
+				return;
+			}
 
-					@Override
-					protected IStatus run(IProgressMonitor monitor) {
-						try {
-							monitor.beginTask(getGradleTask(), 100);
+			Job job = new Job(project.getName() + " - " + getGradleTask()) {
 
-							GradleUtil.runGradleTask(project, getGradleTask(), monitor);
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					try {
+						monitor.beginTask(getGradleTask(), 100);
 
-							monitor.worked(80);
+						GradleUtil.runGradleTask(project, getGradleTask(), monitor);
 
-							project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+						monitor.worked(80);
 
-							monitor.worked(20);
-						}
-						catch (Exception e) {
-							return ProjectUI.createErrorStatus("Error running Gradle goal " + getGradleTask(), e);
-						}
+						project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 
-						return Status.OK_STATUS;
+						monitor.worked(20);
+					}
+					catch (Exception e) {
+						return ProjectUI.createErrorStatus("Error running Gradle goal " + getGradleTask(), e);
 					}
 
-				};
+					return Status.OK_STATUS;
+				}
 
-				job.addJobChangeListener(
-					new IJobChangeListener() {
+			};
 
-						@Override
-						public void aboutToRun(IJobChangeEvent event) {
-						}
+			job.addJobChangeListener(
+				new IJobChangeListener() {
 
-						@Override
-						public void awake(IJobChangeEvent event) {
-						}
+					@Override
+					public void aboutToRun(IJobChangeEvent event) {
+					}
 
-						@Override
-						public void done(IJobChangeEvent event) {
-							afterTask();
-						}
+					@Override
+					public void awake(IJobChangeEvent event) {
+					}
 
-						@Override
-						public void running(IJobChangeEvent event) {
-						}
+					@Override
+					public void done(IJobChangeEvent event) {
+						afterTask();
+					}
 
-						@Override
-						public void scheduled(IJobChangeEvent event) {
-						}
+					@Override
+					public void running(IJobChangeEvent event) {
+					}
 
-						@Override
-						public void sleeping(IJobChangeEvent event) {
-						}
+					@Override
+					public void scheduled(IJobChangeEvent event) {
+					}
 
-					});
+					@Override
+					public void sleeping(IJobChangeEvent event) {
+					}
 
-				job.schedule();
-			}
+				});
+
+			job.schedule();
 		}
 	}
 

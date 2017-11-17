@@ -14,6 +14,7 @@
 
 package com.liferay.ide.gradle.ui.handler;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.project.ui.handlers.AbstractCompareFileHandler;
 
@@ -58,7 +59,7 @@ public class CompareFileHandler extends AbstractCompareFileHandler {
 
 			templateFile = new File(templateLocation.toOSString());
 
-			if (!templateFile.exists()) {
+			if (FileUtil.notExists(templateFile)) {
 				throw new FileNotFoundException("Template not found.");
 			}
 		}

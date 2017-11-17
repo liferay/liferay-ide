@@ -15,6 +15,7 @@
 package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.IWebProject;
+import com.liferay.ide.core.util.FileUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -45,7 +46,7 @@ public class FacetedGradleBundleProject extends LiferayGradleProject implements 
 	public IFolder getDefaultDocrootFolder() {
 		IFolder webAppDir = getProject().getFolder("src/main/webapp");
 
-		if (webAppDir.exists()) {
+		if (FileUtil.exists(webAppDir)) {
 			return webAppDir;
 		}
 		else {
@@ -60,7 +61,7 @@ public class FacetedGradleBundleProject extends LiferayGradleProject implements 
 		if (defaultDocrootFolder != null) {
 			IFile file = defaultDocrootFolder.getFile("WEB-INF/" + name);
 
-			if (file.exists()) {
+			if (FileUtil.exists(file)) {
 				return file;
 			}
 		}

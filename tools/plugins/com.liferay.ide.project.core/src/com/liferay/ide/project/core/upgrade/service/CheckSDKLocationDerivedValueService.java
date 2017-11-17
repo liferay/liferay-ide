@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.upgrade.service;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.upgrade.CodeUpgradeOp;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
@@ -90,7 +91,7 @@ public class CheckSDKLocationDerivedValueService extends DerivedValueService {
 
 					File serviceXml = new Path(file.getPath()).append("docroot/WEB-INF/service.xml").toFile();
 
-					if (serviceXml.exists()) {
+					if (FileUtil.exists(serviceXml)) {
 						op.setHasServiceBuilder("true");
 					}
 				}
@@ -106,7 +107,7 @@ public class CheckSDKLocationDerivedValueService extends DerivedValueService {
 
 					File serviceXml = new Path(file.getPath()).append("docroot/WEB-INF/service.xml").toFile();
 
-					if (serviceXml.exists()) {
+					if (FileUtil.exists(serviceXml)) {
 						op.setHasServiceBuilder("true");
 					}
 				}
@@ -163,7 +164,7 @@ public class CheckSDKLocationDerivedValueService extends DerivedValueService {
 
 		File folder = folderPath.toFile();
 
-		if (!folder.exists()) {
+		if (FileUtil.notExists(folder)) {
 			return null;
 		}
 

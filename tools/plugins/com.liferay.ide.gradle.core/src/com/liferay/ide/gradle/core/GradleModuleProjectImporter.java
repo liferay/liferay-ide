@@ -16,6 +16,7 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectImporter;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
 
@@ -102,19 +103,19 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter 
 	}
 
 	private boolean _findFile(File dir, String name) {
-		boolean retval = false;
+		if (FileUtil.notExists(dir)) {
+			return false;
+		}
 
-		if (dir.exists()) {
-			File[] files = dir.listFiles();
+		File[] files = dir.listFiles();
 
-			for (File file : files) {
-				if (!file.isDirectory() && file.getName().equals(name)) {
-					retval = true;
-				}
+		for (File file : files) {
+			if (FileUtil.isNotDir(file) && file.getName().equals(name)) {
+				return true;
 			}
 		}
 
-		return retval;
+		return false;
 	}
 
 	private boolean _findGradleFile(File dir) {

@@ -121,10 +121,10 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
 
 			IFolder targetFolder = getProject().getFolder("target");
 
-			if (targetFolder.exists()) {
+			if (FileUtil.exists(targetFolder)) {
 				IPath targetFile = targetFolder.getRawLocation().append(targetName);
 
-				if (targetFile.toFile().exists()) {
+				if (FileUtil.exists(targetFile)) {
 					outputJar = targetFile;
 				}
 			}

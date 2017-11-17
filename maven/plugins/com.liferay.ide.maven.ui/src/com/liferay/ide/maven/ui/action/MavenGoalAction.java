@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.ui.action;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
 import com.liferay.ide.maven.core.MavenUtil;
 import com.liferay.ide.maven.ui.LiferayMavenUI;
@@ -69,7 +70,7 @@ public abstract class MavenGoalAction extends AbstractObjectAction {
 				pomXml = project.getFile(IMavenConstants.POM_FILE_NAME);
 			}
 
-			if (pomXml.exists()) {
+			if (FileUtil.exists(pomXml)) {
 				IProject p = project;
 				IFile pomXmlFile = pomXml;
 

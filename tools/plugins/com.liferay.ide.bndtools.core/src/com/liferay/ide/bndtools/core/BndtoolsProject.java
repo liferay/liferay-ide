@@ -80,7 +80,7 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
 			if (!CoreUtil.isNullOrEmpty(buildFiles)) {
 				File buildFile = buildFiles[0];
 
-				if (buildFile.exists()) {
+				if (FileUtil.exists(buildFile)) {
 					retval = new Path(buildFile.getCanonicalPath());
 				}
 			}
@@ -102,7 +102,7 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
 			if (!CoreUtil.isNullOrEmpty(buildFiles)) {
 				File buildFile = buildFiles[0];
 
-				if (buildFile.exists()) {
+				if (FileUtil.exists(buildFile)) {
 					retval = new Path(buildFile.getCanonicalPath());
 				}
 			}
@@ -140,7 +140,7 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
 	public boolean isFragmentBundle() {
 		IFile bndFile = getProject().getFile("bnd.bnd");
 
-		if (bndFile.exists()) {
+		if (FileUtil.exists(bndFile)) {
 			try {
 				String content = FileUtil.readContents(bndFile.getContents());
 

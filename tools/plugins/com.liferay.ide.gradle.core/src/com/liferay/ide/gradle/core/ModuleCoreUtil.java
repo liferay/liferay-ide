@@ -70,7 +70,7 @@ public class ModuleCoreUtil {
 
 		File compoment = new File(project.getLocation().toFile(), ".settings/org.eclipse.wst.common.component");
 
-		if (!compoment.exists()) {
+		if (FileUtil.notExists(compoment)) {
 			FileUtil.writeFile(compoment, finalContent.getBytes(), project.getName());
 		}
 	}
@@ -131,7 +131,7 @@ public class ModuleCoreUtil {
 
 							// don't check child project
 
-							if (childFile.exists() && !projectFile.equals(childFile)) {
+							if (FileUtil.exists(childFile) && !projectFile.equals(childFile)) {
 								return false;
 							}
 

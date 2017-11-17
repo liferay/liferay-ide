@@ -14,6 +14,7 @@
 
 package com.liferay.ide.gradle.ui.quickfix;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.parser.GradleDependency;
@@ -75,7 +76,7 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 
 		List<IJavaCompletionProposal> resultingCollections = new ArrayList<>();
 
-		if (_gradleFile.exists()) {
+		if (FileUtil.exists(_gradleFile)) {
 			for (int i = 0; i < locations.length; i++) {
 				IProblemLocation curr = locations[i];
 

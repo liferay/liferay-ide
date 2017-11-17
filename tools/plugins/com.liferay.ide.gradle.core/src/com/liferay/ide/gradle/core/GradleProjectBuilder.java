@@ -14,6 +14,7 @@
 
 package com.liferay.ide.gradle.core;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.parser.GradleDependency;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
@@ -91,22 +92,24 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 
 	@Override
 	public IStatus updateProjectDependency(IProject project, List<String[]> dependencies) throws CoreException {
+		if (FileUtil.notExists(_gradleBuildFile)) {
+			return Status.OK_STATUS;
+		}
+
 		try {
-			if (_gradleBuildFile.exists()) {
-				GradleDependencyUpdater updater = new GradleDependencyUpdater(_gradleBuildFile.getLocation().toFile());
+			GradleDependencyUpdater updater = new GradleDependencyUpdater(FileUtil.getFile(_gradleBuildFile));
 
-				List<GradleDependency> existDependencies = updater.getAllDependencies();
+			List<GradleDependency> existDependencies = updater.getAllDependencies();
 
-				for (String[] dependency : dependencies) {
-					GradleDependency gd = new GradleDependency(dependency[0], dependency[1], dependency[2]);
+			for (String[] dependency : dependencies) {
+				GradleDependency gd = new GradleDependency(dependency[0], dependency[1], dependency[2]);
 
-					if (!existDependencies.contains(gd)) {
-						updater.insertDependency(gd);
+				if (!existDependencies.contains(gd)) {
+					updater.insertDependency(gd);
 
-						FileUtils.writeLines(_gradleBuildFile.getLocation().toFile(), updater.getGradleFileContents());
+					FileUtils.writeLines(_gradleBuildFile.getLocation().toFile(), updater.getGradleFileContents());
 
-						GradleUtil.refreshGradleProject(project);
-					}
+					GradleUtil.refreshGradleProject(project);
 				}
 			}
 		}
@@ -118,26 +121,25 @@ public class GradleProjectBuilder extends AbstractProjectBuilder implements IWor
 	}
 
 	private IStatus _runGradleTask(String task, IProgressMonitor monitor) {
+		if (FileUtil.notExists(_gradleBuildFile)) {
+			return GradleCore.createErrorStatus("No build.gradle file");
+		}
+
 		IStatus status = Status.OK_STATUS;
 
-		if (_gradleBuildFile.exists()) {
-			try {
-				monitor.beginTask(task, 100);
+		try {
+			monitor.beginTask(task, 100);
 
-				GradleUtil.runGradleTask(getProject(), task, monitor);
+			GradleUtil.runGradleTask(getProject(), task, monitor);
 
-				monitor.worked(80);
+			monitor.worked(80);
 
-				getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+			getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
 
-				monitor.worked(10);
-			}
-			catch (Exception e) {
-				status = GradleCore.createErrorStatus("Error running Gradle goal " + task, e);
-			}
+			monitor.worked(10);
 		}
-		else {
-			status = GradleCore.createErrorStatus("No build.gradle file");
+		catch (Exception e) {
+			status = GradleCore.createErrorStatus("Error running Gradle goal " + task, e);
 		}
 
 		return status;

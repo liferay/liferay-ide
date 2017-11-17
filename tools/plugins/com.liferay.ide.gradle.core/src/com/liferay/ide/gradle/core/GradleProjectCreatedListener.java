@@ -17,6 +17,7 @@ package com.liferay.ide.gradle.core;
 import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.File;
@@ -70,7 +71,7 @@ public class GradleProjectCreatedListener implements EventListener {
 
 			// case 1: has bnd file
 
-			if ((bndFile != null) && bndFile.exists()) {
+			if (FileUtil.exists(bndFile)) {
 				needAddNature[0] = true;
 			}
 			else if (ProjectUtil.isWorkspaceWars(project)) {
@@ -79,7 +80,7 @@ public class GradleProjectCreatedListener implements EventListener {
 			else {
 				IFile gulpFile = project.getFile("gulpfile.js");
 
-				if ((gulpFile != null) && gulpFile.exists()) {
+				if (FileUtil.exists(gulpFile)) {
 					String gulpFileContent;
 
 					File file = gulpFile.getLocation().toFile();

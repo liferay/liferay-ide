@@ -217,7 +217,7 @@ public abstract class AbstractLiferayComponentTemplate
 			pack = packRoot.getPackageFragment("");
 		}
 
-		if (pack.exists() ) {
+		if (pack.exists()) {
 			return pack;
 		}
 

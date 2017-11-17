@@ -70,7 +70,7 @@ public class GradleTooling {
 
 			File scriptFile = new File(cacheDir, "init.gradle");
 
-			if (!scriptFile.exists()) {
+			if (FileUtil.notExists(scriptFile)) {
 				scriptFile.createNewFile();
 			}
 
@@ -123,7 +123,7 @@ public class GradleTooling {
 
 		File jarFile = new File(depsDir, fullFileName);
 
-		if (jarFile.exists()) {
+		if (FileUtil.exists(jarFile)) {
 			boolean shouldDelete = false;
 
 			try (JarFile jar = new JarFile(jarFile)) {
@@ -153,7 +153,7 @@ public class GradleTooling {
 			}
 		}
 
-		if (!jarFile.exists()) {
+		if (FileUtil.notExists(jarFile)) {
 			FileUtil.copyFile(embeddedJarFile, jarFile);
 		}
 	}

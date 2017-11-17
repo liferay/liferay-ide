@@ -16,6 +16,7 @@ package com.liferay.ide.portlet.vaadin.core.dd;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.IPluginPackageModel;
 import com.liferay.ide.portlet.core.PluginPropertiesConfiguration;
@@ -56,7 +57,7 @@ public class VaadinPluginPackageDescriptorHelper extends PluginPackagesDescripto
 		try {
 			IFile pluginPackageFile = getDescriptorFile();
 
-			if (!pluginPackageFile.exists()) {
+			if (FileUtil.notExists(pluginPackageFile)) {
 				IStatus warning = PortletCore.createWarningStatus(
 					"No " + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE + " file in the project.");
 

@@ -16,6 +16,7 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.ILiferayPortal;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.server.core.LiferayServerCore;
@@ -43,7 +44,7 @@ public class LiferayWorkspaceProject extends BaseLiferayProject {
 
 			IFolder bundlesFolder = getProject().getFolder("bundles");
 
-			if (bundlesFolder.exists()) {
+			if (FileUtil.exists(bundlesFolder)) {
 				PortalBundle portalBundle = LiferayServerCore.newPortalBundle(bundlesFolder.getLocation());
 
 				if (portalBundle != null) {

@@ -32,6 +32,7 @@ import java.util.zip.ZipEntry;
 
 import org.apache.maven.artifact.Artifact;
 
+import aQute.bnd.header.Attrs;
 import aQute.bnd.osgi.Analyzer;
 
 /**
@@ -80,9 +81,9 @@ public class DefaultMaven2OsgiConverter {
 					String symbolicNameAttribute =
 						manifestFile.getMainAttributes().getValue(Analyzer.BUNDLE_SYMBOLICNAME);
 
-					Map bundleSymbolicNameHeader = analyzer.parseHeader(symbolicNameAttribute);
+					Map<String, Attrs> bundleSymbolicNameHeader = analyzer.parseHeader(symbolicNameAttribute);
 
-					Iterator it = bundleSymbolicNameHeader.keySet().iterator();
+					Iterator<String> it = bundleSymbolicNameHeader.keySet().iterator();
 
 					if (it.hasNext()) {
 						return (String)it.next();
