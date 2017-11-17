@@ -140,6 +140,11 @@ public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitio
 		 */
 		IStructuredDocumentRegion previousRegion = sdRegion.getPrevious();
 
+		if (previousRegion==null)
+		{
+			return false;
+		}
+
 		String info = previousRegion.toString();
 
 		if ((sdRegion != null) && (sdRegion.getPrevious() != null) && info.contains("aui:script")) {
