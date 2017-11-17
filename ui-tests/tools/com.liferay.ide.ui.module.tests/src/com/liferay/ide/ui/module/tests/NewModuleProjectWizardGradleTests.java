@@ -37,6 +37,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -51,6 +55,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.finishToWait();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -67,6 +75,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -81,6 +93,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.finishToWait();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -97,6 +113,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -111,6 +131,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.finishToWait();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -127,6 +151,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -141,6 +169,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.finishToWait();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -157,6 +189,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -171,6 +207,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.finishToWait();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -187,6 +227,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -201,6 +245,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.finishToWait();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -225,6 +273,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -239,6 +291,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.finishToWait();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -263,6 +319,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -277,6 +337,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.finishToWait();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -293,6 +357,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -307,6 +375,10 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		wizardAction.finishToWait();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}

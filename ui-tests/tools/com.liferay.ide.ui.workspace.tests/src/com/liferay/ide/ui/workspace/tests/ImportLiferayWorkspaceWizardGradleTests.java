@@ -65,6 +65,10 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		editorAction.close();
 
+		viewAction.closeProject(liferayWorkspaceName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(liferayWorkspaceName);
 	}
 
@@ -86,6 +90,10 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		Assert.assertTrue(viewAction.visibleProjectFileTry(liferayWorkspaceName, "bundles"));
 		Assert.assertTrue(viewAction.visibleProjectFileTry(liferayWorkspaceName, "configs"));
 		Assert.assertTrue(viewAction.visibleProjectFileTry(liferayWorkspaceName, "gradle"));
+
+		viewAction.closeProject(liferayWorkspaceName);
+
+		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(liferayWorkspaceName);
 	}

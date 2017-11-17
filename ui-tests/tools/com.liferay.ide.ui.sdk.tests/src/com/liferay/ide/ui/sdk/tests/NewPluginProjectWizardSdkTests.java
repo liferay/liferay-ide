@@ -29,6 +29,12 @@ public class NewPluginProjectWizardSdkTests extends SwtbotBase {
 
 	@AfterClass
 	public static void cleanPluginsSdk() {
+		jobAction.waitForCancelIvy();
+
+		viewAction.closeProject(envAction.getLiferayPluginsSdkName());
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(envAction.getLiferayPluginsSdkName());
 	}
 
@@ -54,6 +60,14 @@ public class NewPluginProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		jobAction.waitForCancelIvy();
+
+		jobAction.waitForCancelValidate(projectName);
+
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -66,6 +80,14 @@ public class NewPluginProjectWizardSdkTests extends SwtbotBase {
 		wizardAction.preparePluginSdk(projectName);
 
 		wizardAction.finishToWait();
+
+		jobAction.waitForCancelIvy();
+
+		jobAction.waitForCancelValidate(projectName);
+
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}

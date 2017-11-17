@@ -36,6 +36,14 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
+		jobAction.waitForCancelIvy();
+
+		jobAction.waitForCancelValidate(projectName);
+
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(projectName);
 	}
 
@@ -50,6 +58,14 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 		wizardAction.finishToWait();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		jobAction.waitForCancelIvy();
+
+		jobAction.waitForCancelValidate(projectName);
+
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}

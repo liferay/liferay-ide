@@ -36,6 +36,14 @@ public class NewThemeProjectModuleGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
+		jobAction.waitForCancelIvy();
+
+		jobAction.waitForCancelValidate(projectName);
+
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(projectName);
 	}
 
