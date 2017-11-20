@@ -1,673 +1,673 @@
 <templates>
-  <template name="aui-ace-editor" description="An embeddable code editor that matches the features of native editors." id="com.liferay.ide.alloy.ui.templates.ace-editor" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-ace-editor',
-  function(A) {
-    new A.AceEditor(
-      {
-        boundingBox: '#myEditor',
-        height: '200',
-        value: 'Write something here...',
-        width: '700'
-      }
-    ).render();
-  }
+	<template autoinsert="true" context="javaScript" description="An embeddable code editor that matches the features of native editors." enabled="true" id="com.liferay.ide.alloy.ui.templates.ace-editor" name="aui-ace-editor">
+	AUI().use(
+'aui-ace-editor',
+function(A) {
+	new A.AceEditor(
+	  {
+		boundingBox: '#myEditor',
+		height: '200',
+		value: 'Write something here...',
+		width: '700'
+	  }
+	).render();
+}
 );
-  </template>
-  <template name="aui-audio" description="Creates an interactive audio player in HTML5 with fallback for old browsers." id="com.liferay.ide.alloy.ui.templates.audio" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-audio',
-  function(A) {
-    new A.Audio(
-      {
-        boundingBox: '#myAudio',
-        url: 'http://alloyui.com/audio/zelda.mp3',
-        oggUrl: 'http://alloyui.com/audio/zelda.ogg'
-      }
-    ).render();
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Creates an interactive audio player in HTML5 with fallback for old browsers." enabled="true" id="com.liferay.ide.alloy.ui.templates.audio" name="aui-audio">
+	AUI().use(
+'aui-audio',
+function(A) {
+	new A.Audio(
+	  {
+		boundingBox: '#myAudio',
+		url: 'http://alloyui.com/audio/zelda.mp3',
+		oggUrl: 'http://alloyui.com/audio/zelda.ogg'
+	  }
+	).render();
+}
 );
-  </template>
-  <template name="aui-base" description="Creates a aui-base sandbox" id="com.liferay.ide.alloy.ui.templates.base" context="javaScript" enabled="true" autoinsert="true">
-  AUI().use('aui-base', function(A) {
-    ${cursor}
+	</template>
+	<template autoinsert="true" context="javaScript" description="Creates a aui-base sandbox" enabled="true" id="com.liferay.ide.alloy.ui.templates.base" name="aui-base">
+AUI().use('aui-base', function(A) {
+	${cursor}
 });
-  </template>
-  <template name="aui-button" description="Enables the creation of rich buttons different from traditional HTML form buttons." id="com.liferay.ide.alloy.ui.templates.button" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-button',
-  function(A) {
-    new A.Button(
-      {
-        icon: 'icon-print',
-        iconAlign: 'left',
-        label: 'Basic',
-        srcNode: '#myButton'
-      }
-    ).render();
+	</template>
+	<template autoinsert="true" context="javaScript" description="Enables the creation of rich buttons different from traditional HTML form buttons." enabled="true" id="com.liferay.ide.alloy.ui.templates.button" name="aui-button">
+	AUI().use(
+'aui-button',
+function(A) {
+	new A.Button(
+	  {
+		icon: 'icon-print',
+		iconAlign: 'left',
+		label: 'Basic',
+		srcNode: '#myButton'
+	  }
+	).render();
 
-    new A.ToggleButton(
-      {
-        label: 'Click to toggle',
-        srcNode: '#myToggleButton'
-      }
-    ).render();
-  }
+	new A.ToggleButton(
+	  {
+		label: 'Click to toggle',
+		srcNode: '#myToggleButton'
+	  }
+	).render();
+}
 );
-  </template>
-  <template name="aui-carousel" description="Provides an interactive way of cycling through elements." id="com.liferay.ide.alloy.ui.templates.carousel" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-carousel',
-  function(A) {
-    new A.Carousel(
-      {
-        contentBox: '#myCarousel',
-        height: 250,
-        width: 700
-      }
-    ).render();
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Provides an interactive way of cycling through elements." enabled="true" id="com.liferay.ide.alloy.ui.templates.carousel" name="aui-carousel">
+	AUI().use(
+'aui-carousel',
+function(A) {
+	new A.Carousel(
+	  {
+		contentBox: '#myCarousel',
+		height: 250,
+		width: 700
+	  }
+	).render();
+}
 );
-  </template>
-  <template name="aui-char-counter" description="Provides a character counter that limits the amount of text in a field." id="com.liferay.ide.alloy.ui.templates.char-counter" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-char-counter',
-  function(A) {
-    new A.CharCounter(
-      {
-        counter: '#myCounter',
-        input: '#myInput',
-        maxLength: 10
-      }
-    );
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Provides a character counter that limits the amount of text in a field." enabled="true" id="com.liferay.ide.alloy.ui.templates.char-counter" name="aui-char-counter">
+	AUI().use(
+'aui-char-counter',
+function(A) {
+	new A.CharCounter(
+	  {
+		counter: '#myCounter',
+		input: '#myInput',
+		maxLength: 10
+	  }
+	);
+}
 );
-  </template>
-  <template name="aui-component" description="Provides a mechanism for creating new AUI components" id="com.liferay.ide.alloy.ui.templates.component" context="javaScript" enabled="true" autoinsert="true">
-  AUI().add('${componentName}', function(A){
-    var ${componentVar} = A.Component.create({
-        AUGMENTS: [Liferay.PortletBase],
-        ATTRS: {},
-        EXTENDS: A.Base,
-        NAME: '${componentVar}',
-        prototype: {
-            initializer: function(config) {
-                var instance = this;
-            }
-        }
-    });
+	</template>
+	<template autoinsert="true" context="javaScript" description="Provides a mechanism for creating new AUI components" enabled="true" id="com.liferay.ide.alloy.ui.templates.component" name="aui-component">
+AUI().add('${componentName}', function(A){
+	var ${componentVar} = A.Component.create({
+		AUGMENTS: [Liferay.PortletBase],
+		ATTRS: {},
+		EXTENDS: A.Base,
+		NAME: '${componentVar}',
+		prototype: {
+			initializer: function(config) {
+				var instance = this;
+			}
+		}
+	});
 
-    Liferay.Portlet.${componentVar} = ${componentVar};
+	Liferay.Portlet.${componentVar} = ${componentVar};
 },
 '',
 { requires: ['liferay-portlet-base'] });
-  </template>
-  <template name="aui-datatable" description="Provides the user with a method of organizing, arranging, and editing tables of information." id="com.liferay.ide.alloy.ui.templates.datatable" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-datatable',
-  function(A) {
-    var columns = ['name', 'address', 'city', 'state'];
+	</template>
+	<template autoinsert="true" context="javaScript" description="Provides the user with a method of organizing, arranging, and editing tables of information." enabled="true" id="com.liferay.ide.alloy.ui.templates.datatable" name="aui-datatable">
+	AUI().use(
+'aui-datatable',
+function(A) {
+	var columns = ['name', 'address', 'city', 'state'];
 
-    var data = [
-      {address: '1236 Some Street', city: 'San Francisco', name: 'John A. Smith', state: 'CA'},
-      {address: '3271 Another Ave', city: 'New York', name: 'Joan B. Jones', state: 'NY'},
-      {address: '9996 Random Road', city: 'Los Angeles', name: 'Bob C. Uncle', state: 'CA'},
-      {address: '1623 Some Street', city: 'San Francisco', name: 'John D. Smith', state: 'CA'},
-      {address: '9899 Random Road', city: 'Los Angeles', name: 'Bob F. Uncle', state: 'CA'}
-    ];
+	var data = [
+	  {address: '1236 Some Street', city: 'San Francisco', name: 'John A. Smith', state: 'CA'},
+	  {address: '3271 Another Ave', city: 'New York', name: 'Joan B. Jones', state: 'NY'},
+	  {address: '9996 Random Road', city: 'Los Angeles', name: 'Bob C. Uncle', state: 'CA'},
+	  {address: '1623 Some Street', city: 'San Francisco', name: 'John D. Smith', state: 'CA'},
+	  {address: '9899 Random Road', city: 'Los Angeles', name: 'Bob F. Uncle', state: 'CA'}
+	];
 
-    new A.DataTable.Base(
-      {
-        columnset: columns,
-        recordset: data
-      }
-    ).render('#myDataTable');
-  }
+	new A.DataTable.Base(
+	  {
+		columnset: columns,
+		recordset: data
+	  }
+	).render('#myDataTable');
+}
 );
-  </template>
-  <template name="aui-datepicker" description="Create a dynamic datepicker that allows users to select the date with a calendar." id="com.liferay.ide.alloy.ui.templates.datepicker" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-datepicker',
-  function(A) {
-    new A.DatePicker(
-      {
-        trigger: 'button',
-        popover: {
-          zIndex: 1
-        },
-        on: {
-          selectionChange: function(event) {
-            console.log(event.newSelection)
-          }
-        }
-      }
-    );
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Create a dynamic datepicker that allows users to select the date with a calendar." enabled="true" id="com.liferay.ide.alloy.ui.templates.datepicker" name="aui-datepicker">
+	AUI().use(
+'aui-datepicker',
+function(A) {
+	new A.DatePicker(
+	  {
+		trigger: 'button',
+		popover: {
+		  zIndex: 1
+		},
+		on: {
+		  selectionChange: function(event) {
+			console.log(event.newSelection)
+		  }
+		}
+	  }
+	);
+}
 );
-  </template>
-  <template name="aui-diagram-builder" description="Drag and drop diagram elements, create new tasks, draw connectors from node to node." id="com.liferay.ide.alloy.ui.templates.diagram-builder" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-diagram-builder',
-  function(A) {
+	</template>
+	<template autoinsert="true" context="javaScript" description="Drag and drop diagram elements, create new tasks, draw connectors from node to node." enabled="true" id="com.liferay.ide.alloy.ui.templates.diagram-builder" name="aui-diagram-builder">
+	AUI().use(
+'aui-diagram-builder',
+function(A) {
 
-    var availableFields = [
-      {
-        iconClass: 'diagram-node-task-icon',
-        label: 'Task',
-        type: 'task'
-      }
-    ];
+	var availableFields = [
+	  {
+		iconClass: 'diagram-node-task-icon',
+		label: 'Task',
+		type: 'task'
+	  }
+	];
 
-    var diagramBuilder = new A.DiagramBuilder (
-      {
-        availableFields: availableFields,
-        boundingBox: '#diagram-builder-bb',
-        fields: [
-          {
-            name: 'StartNode',
-            type: 'start',
-            xy: [10, 10]
-          },
-          {
-            name: 'EndNode',
-            type: 'end',
-            xy: [300, 400]
-          }
-        ],
-        render: true,
-        srcNode: '#diagram-builder-sn'
-      }
-    );
+	var diagramBuilder = new A.DiagramBuilder (
+	  {
+		availableFields: availableFields,
+		boundingBox: '#diagram-builder-bb',
+		fields: [
+		  {
+			name: 'StartNode',
+			type: 'start',
+			xy: [10, 10]
+		  },
+		  {
+			name: 'EndNode',
+			type: 'end',
+			xy: [300, 400]
+		  }
+		],
+		render: true,
+		srcNode: '#diagram-builder-sn'
+	  }
+	);
 
-    diagramBuilder.connectAll(
-      [
-        {
-          connector: {
-            name: 'TaskConnector'
-          },
-          source: 'StartNode',
-          target: 'EndNode'
-        }
-      ]
-    );
-  }
+	diagramBuilder.connectAll(
+	  [
+		{
+		  connector: {
+			name: 'TaskConnector'
+		  },
+		  source: 'StartNode',
+		  target: 'EndNode'
+		}
+	  ]
+	);
+}
 );
-  </template>
-  <template name="aui-form-builder" description="Provides a graphic user interface method for contructing forms." id="com.liferay.ide.alloy.ui.templates.form-builder" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-form-builder',
-  function(A) {
-    new A.FormBuilder(
-      {
-        availableFields: [
-          {
-            iconClass: 'form-builder-field-icon-text',
-            id: 'uniqueTextField',
-            label: 'Text',
-            readOnlyAttributes: ['name'],
-            type: 'text',
-            unique: true,
-            width: 75
-          },
-          {
-            hiddenAttributes: ['tip'],
-            iconClass: 'form-builder-field-icon-textarea',
-            label: 'Textarea',
-            type: 'textarea'
-          },
-          {
-            iconClass: 'form-builder-field-icon-checkbox',
-            label: 'Checkbox',
-            type: 'checkbox'
-          },
-          {
-            iconClass: 'form-builder-field-icon-button',
-            label: 'Button',
-            type: 'button'
-          },
-          {
-            iconClass: 'form-builder-field-icon-select',
-            label: 'Select',
-            type: 'select'
-          },
-          {
-            iconClass: 'form-builder-field-icon-radio',
-            label: 'Radio Buttons',
-            type: 'radio'
-          },
-          {
-            iconClass: 'form-builder-field-icon-fileupload',
-            label: 'File Upload',
-            type: 'fileupload'
-          },
-          {
-            iconClass: 'form-builder-field-icon-fieldset',
-            label: 'Fieldset',
-            type: 'fieldset'
-          }
-        ],
-        boundingBox: '#myFormBuilder',
-        fields: [
-          {
-            label: 'City',
-            options: [
-              {
-                label: 'Ney York',
-                value: 'new york'
-              },
-              {
-                label: 'Chicago',
-                value: 'chicago'
-              }
-            ],
-            predefinedValue: 'chicago',
-            type: 'select'
-          },
-          {
-            label: 'Colors',
-            options: [
-              {
-                label: 'Red',
-                value: 'red'
-              },
-              {
-                label: 'Green',
-                value: 'green'
-              },
-              {
-                label: 'Blue',
-                value: 'blue'
-              }
-            ],
-            type: 'radio'
-          }
-        ]
-      }
-    ).render();
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Provides a graphic user interface method for contructing forms." enabled="true" id="com.liferay.ide.alloy.ui.templates.form-builder" name="aui-form-builder">
+	AUI().use(
+'aui-form-builder',
+function(A) {
+	new A.FormBuilder(
+	  {
+		availableFields: [
+		  {
+			iconClass: 'form-builder-field-icon-text',
+			id: 'uniqueTextField',
+			label: 'Text',
+			readOnlyAttributes: ['name'],
+			type: 'text',
+			unique: true,
+			width: 75
+		  },
+		  {
+			hiddenAttributes: ['tip'],
+			iconClass: 'form-builder-field-icon-textarea',
+			label: 'Textarea',
+			type: 'textarea'
+		  },
+		  {
+			iconClass: 'form-builder-field-icon-checkbox',
+			label: 'Checkbox',
+			type: 'checkbox'
+		  },
+		  {
+			iconClass: 'form-builder-field-icon-button',
+			label: 'Button',
+			type: 'button'
+		  },
+		  {
+			iconClass: 'form-builder-field-icon-select',
+			label: 'Select',
+			type: 'select'
+		  },
+		  {
+			iconClass: 'form-builder-field-icon-radio',
+			label: 'Radio Buttons',
+			type: 'radio'
+		  },
+		  {
+			iconClass: 'form-builder-field-icon-fileupload',
+			label: 'File Upload',
+			type: 'fileupload'
+		  },
+		  {
+			iconClass: 'form-builder-field-icon-fieldset',
+			label: 'Fieldset',
+			type: 'fieldset'
+		  }
+		],
+		boundingBox: '#myFormBuilder',
+		fields: [
+		  {
+			label: 'City',
+			options: [
+			  {
+				label: 'Ney York',
+				value: 'new york'
+			  },
+			  {
+				label: 'Chicago',
+				value: 'chicago'
+			  }
+			],
+			predefinedValue: 'chicago',
+			type: 'select'
+		  },
+		  {
+			label: 'Colors',
+			options: [
+			  {
+				label: 'Red',
+				value: 'red'
+			  },
+			  {
+				label: 'Green',
+				value: 'green'
+			  },
+			  {
+				label: 'Blue',
+				value: 'blue'
+			  }
+			],
+			type: 'radio'
+		  }
+		]
+	  }
+	).render();
+}
 );
-  </template>
-  <template name="aui-form-validator" description="Provides a method of ensuring the validity of form entries." id="com.liferay.ide.alloy.ui.templates.form-validator" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-form-validator',
-  function(A) {
-    new A.FormValidator(
-      {
-        boundingBox: '#myForm'
-      }
-    );
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Provides a method of ensuring the validity of form entries." enabled="true" id="com.liferay.ide.alloy.ui.templates.form-validator" name="aui-form-validator">
+	AUI().use(
+'aui-form-validator',
+function(A) {
+	new A.FormValidator(
+	  {
+		boundingBox: '#myForm'
+	  }
+	);
+}
 );
-  </template>
-  <template name="aui-image-cropper" description="Provides a draggable/resizable cropper widget to crop image sizes." id="com.liferay.ide.alloy.ui.templates.image-cropper" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-image-cropper',
-  function(A) {
-    new A.ImageCropper(
-      {
-        cropHeight: 200,
-        cropWidth: 200,
-        srcNode: '#myImage',
-        x: 50,
-        y: 50
-      }
-    ).render();
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Provides a draggable/resizable cropper widget to crop image sizes." enabled="true" id="com.liferay.ide.alloy.ui.templates.image-cropper" name="aui-image-cropper">
+	AUI().use(
+'aui-image-cropper',
+function(A) {
+	new A.ImageCropper(
+	  {
+		cropHeight: 200,
+		cropWidth: 200,
+		srcNode: '#myImage',
+		x: 50,
+		y: 50
+	  }
+	).render();
+}
 );
-  </template>
-  <template name="aui-image-viewer" description="Allows users to view and navigate through a collection of images." id="com.liferay.ide.alloy.ui.templates.image-viewer" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-image-viewer-base',
-  function(A) {
-    new A.ImageViewer(
-      {
-        links: '#myGallery a'
-      }
-    ).render();
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Allows users to view and navigate through a collection of images." enabled="true" id="com.liferay.ide.alloy.ui.templates.image-viewer" name="aui-image-viewer">
+	AUI().use(
+'aui-image-viewer-base',
+function(A) {
+	new A.ImageViewer(
+	  {
+		links: '#myGallery a'
+	  }
+	).render();
+}
 );
-  </template>
-  <template name="aui-io" description="Allows you to make asynchronous HTTP (Ajax) requests." id="com.liferay.ide.alloy.ui.templates.io" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-io-request',
-  function (A) {
-    A.io.request(
-      'http://alloyui.com/io/data/content.html',
-      {
-        on: {
-          success: function() {
-            var data = this.get('responseData');
-            alert(data);
-          }
-        }
-      }
-    );
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Allows you to make asynchronous HTTP (Ajax) requests." enabled="true" id="com.liferay.ide.alloy.ui.templates.io" name="aui-io">
+	AUI().use(
+'aui-io-request',
+function (A) {
+	A.io.request(
+	  'http://alloyui.com/io/data/content.html',
+	  {
+		on: {
+		  success: function() {
+			var data = this.get('responseData');
+			alert(data);
+		  }
+		}
+	  }
+	);
+}
 );
-  </template>
-  <template name="aui-modal" description="Provides a resizable, drag and drop window with toolbar functionality." id="com.liferay.ide.alloy.ui.templates.modal" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-modal',
-  function(A) {
-    var modal = new A.Modal(
-      {
-        bodyContent: 'Modal body',
-        centered: true,
-        headerContent: '&lt;h3&gt;Modal header&lt;/h3&gt;',
-        modal: true,
-        render: '#modal',
-        width: 450
-      }
-    ).render();
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Provides a resizable, drag and drop window with toolbar functionality." enabled="true" id="com.liferay.ide.alloy.ui.templates.modal" name="aui-modal">
+	AUI().use(
+'aui-modal',
+function(A) {
+	var modal = new A.Modal(
+	  {
+		bodyContent: 'Modal body',
+		centered: true,
+		headerContent: '&lt;h3&gt;Modal header&lt;/h3&gt;',
+		modal: true,
+		render: '#modal',
+		width: 450
+	  }
+	).render();
+}
 );
-  </template>
-  <template name="aui-node" description="Allows for interaction with the DOM through a set of utility methods." id="com.liferay.ide.alloy.ui.templates.node" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-node',
-  function(A) {
-    // Select the node(s) using a css selector string
-    var node = A.one('#toggleColor');
+	</template>
+	<template autoinsert="true" context="javaScript" description="Allows for interaction with the DOM through a set of utility methods." enabled="true" id="com.liferay.ide.alloy.ui.templates.node" name="aui-node">
+	AUI().use(
+'aui-node',
+function(A) {
+	// Select the node(s) using a css selector string
+	var node = A.one('#toggleColor');
 
-    // Change the background color on a `click` event
-    node.on(
-      'click',
-      function() {
-        var randomColor = Math.floor(Math.random() * 16777215).toString(16);
-        node.setStyle('background', '#' + randomColor);
-      }
-    );
-  }
+	// Change the background color on a `click` event
+	node.on(
+	  'click',
+	  function() {
+		var randomColor = Math.floor(Math.random() * 16777215).toString(16);
+		node.setStyle('background', '#' + randomColor);
+	  }
+	);
+}
 );
-  </template>
-  <template name="aui-pagination" description="Provides a set of controls to navigate through paged data." id="com.liferay.ide.alloy.ui.templates.pagination" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-pagination',
-  function(A) {
-    new A.Pagination(
-      {
-        after: {
-          changeRequest: function(event) {
-            console.log(
-              'page:', event.state.page,
-              'getOffsetPageNumber:', this.getOffsetPageNumber()
-            );
-          }
-        },
-        boundingBox: '#jslarge',
-        offset: 999,
-        page: 1,
-        strings: {
-          next: '&amp;raquo;',
-          prev: '&amp;laquo;'
-        },
-        total: 5
-      }
-    ).render();
+	</template>
+	<template autoinsert="true" context="javaScript" description="Provides a set of controls to navigate through paged data." enabled="true" id="com.liferay.ide.alloy.ui.templates.pagination" name="aui-pagination">
+	AUI().use(
+'aui-pagination',
+function(A) {
+	new A.Pagination(
+	  {
+		after: {
+		  changeRequest: function(event) {
+			console.log(
+			  'page:', event.state.page,
+			  'getOffsetPageNumber:', this.getOffsetPageNumber()
+			);
+		  }
+		},
+		boundingBox: '#jslarge',
+		offset: 999,
+		page: 1,
+		strings: {
+		  next: '&amp;raquo;',
+		  prev: '&amp;laquo;'
+		},
+		total: 5
+	  }
+	).render();
 
-    new A.Pagination(
-      {
-        boundingBox: '#jssmall',
-        total: 15
-      }
-    ).render();
+	new A.Pagination(
+	  {
+		boundingBox: '#jssmall',
+		total: 15
+	  }
+	).render();
 
-    new A.Pagination(
-      {
-        boundingBox: '#jsmini',
-        total: 15
-      }
-    ).render();
-  }
+	new A.Pagination(
+	  {
+		boundingBox: '#jsmini',
+		total: 15
+	  }
+	).render();
+}
 );
-  </template>
-  <template name="aui-popover" description="Provides a positionable pop up box with toggle capabilities." id="com.liferay.ide.alloy.ui.templates.popover" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-popover',
-  function(A) {
-    var trigger = A.one('#myPopover');
+	</template>
+	<template autoinsert="true" context="javaScript" description="Provides a positionable pop up box with toggle capabilities." enabled="true" id="com.liferay.ide.alloy.ui.templates.popover" name="aui-popover">
+	AUI().use(
+'aui-popover',
+function(A) {
+	var trigger = A.one('#myPopover');
 
-    var popover = new A.Popover(
-      {
-        align: {
-          node: trigger,
-          points:[A.WidgetPositionAlign.BC, A.WidgetPositionAlign.TC]
-        },
-        bodyContent: 'Body Content',
-        headerContent: 'Header content',
-        position: 'top'
-      }
-    ).render();
+	var popover = new A.Popover(
+	  {
+		align: {
+		  node: trigger,
+		  points:[A.WidgetPositionAlign.BC, A.WidgetPositionAlign.TC]
+		},
+		bodyContent: 'Body Content',
+		headerContent: 'Header content',
+		position: 'top'
+	  }
+	).render();
 
-    trigger.on(
-      'click',
-      function() {
-        popover.set('visible', !popover.get('visible'));
-      }
-    );
-  }
+	trigger.on(
+	  'click',
+	  function() {
+		popover.set('visible', !popover.get('visible'));
+	  }
+	);
+}
 );
-  </template>
-  <template name="aui-progress-bar" description="Allows users to view loading progress in real time." id="com.liferay.ide.alloy.ui.templates.progress-bar" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-progressbar',
-  function(A) {
-    new A.ProgressBar(
-      {
-        boundingBox: '#myProgressBar',
-        value: 70,
-        width: 700
-      }
-    ).render();
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Allows users to view loading progress in real time." enabled="true" id="com.liferay.ide.alloy.ui.templates.progress-bar" name="aui-progress-bar">
+	AUI().use(
+'aui-progressbar',
+function(A) {
+	new A.ProgressBar(
+	  {
+		boundingBox: '#myProgressBar',
+		value: 70,
+		width: 700
+	  }
+	).render();
+}
 );
-  </template>
-  <template name="aui-rating" description="Allows users to set ratings for content." id="com.liferay.ide.alloy.ui.templates.rating" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-rating',
-  function(A) {
-    new A.ThumbRating(
-      {
-        boundingBox: '#myRating'
-      }
-    ).render();
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Allows users to set ratings for content." enabled="true" id="com.liferay.ide.alloy.ui.templates.rating" name="aui-rating">
+	AUI().use(
+'aui-rating',
+function(A) {
+	new A.ThumbRating(
+	  {
+		boundingBox: '#myRating'
+	  }
+	).render();
+}
 );
-  </template>
-  <template name="aui-sandbox" description="Create an AUI sandbox" id="com.liferay.ide.alloy.ui.templates.sandbox" context="javaScript" enabled="true" autoinsert="true">
-  AUI().use('${sandbox}', function(A) {
-    var node = A.one("${selector}");
-    ${cursor}
+	</template>
+	<template autoinsert="true" context="javaScript" description="Create an AUI sandbox" enabled="true" id="com.liferay.ide.alloy.ui.templates.sandbox" name="aui-sandbox">
+AUI().use('${sandbox}', function(A) {
+	var node = A.one("${selector}");
+	${cursor}
 });
-  </template>
-  <template name="aui-scheduler" description="Allows user to access scheduler widget with built-in calendar." id="com.liferay.ide.alloy.ui.templates.scheduler" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-scheduler',
-  function(A) {
-    var events = [
-      {
-        content: 'Event1',
-        endDate: new Date(2013, 1, 4, 5),
-        startDate: new Date(2013, 1, 4, 1)
-      }
-    ];
+	</template>
+	<template autoinsert="true" context="javaScript" description="Allows user to access scheduler widget with built-in calendar." enabled="true" id="com.liferay.ide.alloy.ui.templates.scheduler" name="aui-scheduler">
+	AUI().use(
+'aui-scheduler',
+function(A) {
+	var events = [
+	  {
+		content: 'Event1',
+		endDate: new Date(2013, 1, 4, 5),
+		startDate: new Date(2013, 1, 4, 1)
+	  }
+	];
 
-    var eventRecorder = new A.SchedulerEventRecorder();
-    var weekView = new A.SchedulerWeekView();
+	var eventRecorder = new A.SchedulerEventRecorder();
+	var weekView = new A.SchedulerWeekView();
 
-    new A.Scheduler(
-      {
-        boundingBox: '#myScheduler',
-        date: new Date(2013, 1, 4),
-        eventRecorder: eventRecorder,
-        items: events,
-        render: true,
-        views: [weekView]
-      }
-    );
-  }
+	new A.Scheduler(
+	  {
+		boundingBox: '#myScheduler',
+		date: new Date(2013, 1, 4),
+		eventRecorder: eventRecorder,
+		items: events,
+		render: true,
+		views: [weekView]
+	  }
+	);
+}
 );
-  </template>
-  <template name="aui-sortable-layout" description="Enables a layout with draggable/droppable functionality." id="com.liferay.ide.alloy.ui.templates.sortable-layout" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-sortable-layout',
-  function(A) {
-    new A.SortableLayout(
-      {
-        dragNodes: '.portlet',
-        dropNodes: '#mySortableLayout'
-      }
-    );
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Enables a layout with draggable/droppable functionality." enabled="true" id="com.liferay.ide.alloy.ui.templates.sortable-layout" name="aui-sortable-layout">
+	AUI().use(
+'aui-sortable-layout',
+function(A) {
+	new A.SortableLayout(
+	  {
+		dragNodes: '.portlet',
+		dropNodes: '#mySortableLayout'
+	  }
+	);
+}
 );
-  </template>
-  <template name="aui-sortable-list" description="Gives the user the ability to interact with a list element." id="com.liferay.ide.alloy.ui.templates.sortable-list" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-sortable-list',
-  function(A) {
-    var placeholder = A.Node.create('&lt;li class="placeholder"&gt;&lt;/li&gt;');
+	</template>
+	<template autoinsert="true" context="javaScript" description="Gives the user the ability to interact with a list element." enabled="true" id="com.liferay.ide.alloy.ui.templates.sortable-list" name="aui-sortable-list">
+	AUI().use(
+'aui-sortable-list',
+function(A) {
+	var placeholder = A.Node.create('&lt;li class="placeholder"&gt;&lt;/li&gt;');
 
-    new A.SortableList(
-      {
-        dropCondition: function(event) {
-          return true;
-        },
-        dropOn: 'myList',
-        nodes: '#myList li',
-        placeholder: placeholder
-      }
-    );
-  }
+	new A.SortableList(
+	  {
+		dropCondition: function(event) {
+		  return true;
+		},
+		dropOn: 'myList',
+		nodes: '#myList li',
+		placeholder: placeholder
+	  }
+	);
+}
 );
-  </template>
-  <template name="aui-tabview" description="'Allows user to swap content between different sections.'" id="com.liferay.ide.alloy.ui.templates.tabview" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-tabview',
-  function(A) {
-    new A.TabView(
-      {
-        srcNode: '#myTab'
-      }
-    ).render();
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="'Allows user to swap content between different sections.'" enabled="true" id="com.liferay.ide.alloy.ui.templates.tabview" name="aui-tabview">
+	AUI().use(
+'aui-tabview',
+function(A) {
+	new A.TabView(
+	  {
+		srcNode: '#myTab'
+	  }
+	).render();
+}
 );
-  </template>
-  <template name="aui-timepicker" description="Create a dynamic timepicker that allows users to select the time with a popover." id="com.liferay.ide.alloy.ui.templates.timepicker" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-timepicker',
-  function(A) {
-    new A.TimePicker(
-      {
-        trigger: 'input',
-        popover: {
-          zIndex: 1
-        },
-        on: {
-          selectionChange: function(event) {
-            console.log(event.newSelection)
-          }
-        }
-      }
-    );
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Create a dynamic timepicker that allows users to select the time with a popover." enabled="true" id="com.liferay.ide.alloy.ui.templates.timepicker" name="aui-timepicker">
+	AUI().use(
+'aui-timepicker',
+function(A) {
+	new A.TimePicker(
+	  {
+		trigger: 'input',
+		popover: {
+		  zIndex: 1
+		},
+		on: {
+		  selectionChange: function(event) {
+			console.log(event.newSelection)
+		  }
+		}
+	  }
+	);
+}
 );
-  </template>
-  <template name="aui-toggler" description="Allows users to toggle content on and off." id="com.liferay.ide.alloy.ui.templates.toggler" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-toggler',
-  function(A) {
-    new A.Toggler(
-      {
-        container: '#myToggler',
-        content: '.content',
-        expanded: false,
-        header: '.header'
-      }
-    );
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Allows users to toggle content on and off." enabled="true" id="com.liferay.ide.alloy.ui.templates.toggler" name="aui-toggler">
+	AUI().use(
+'aui-toggler',
+function(A) {
+	new A.Toggler(
+	  {
+		container: '#myToggler',
+		content: '.content',
+		expanded: false,
+		header: '.header'
+	  }
+	);
+}
 );
-  </template>
-  <template name="aui-toolbar" description="A collection of buttons that offer the ability of managed user interaction states." id="com.liferay.ide.alloy.ui.templates.toolbar" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-toolbar',
-  function(A) {
-    new A.Toolbar(
-      {
-        boundingBox: '#myToolbar'
-      }
-    ).render();
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="A collection of buttons that offer the ability of managed user interaction states." enabled="true" id="com.liferay.ide.alloy.ui.templates.toolbar" name="aui-toolbar">
+	AUI().use(
+'aui-toolbar',
+function(A) {
+	new A.Toolbar(
+	  {
+		boundingBox: '#myToolbar'
+	  }
+	).render();
+}
 );
-  </template>
-  <template name="aui-tooltip" description="Gives users contextual information or content." id="com.liferay.ide.alloy.ui.templates.tooltip" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-tooltip',
-  function(A) {
-    new A.Tooltip(
-      {
-        trigger: '#myTooltip',
-        position: 'right'
-      }
-    ).render();
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Gives users contextual information or content." enabled="true" id="com.liferay.ide.alloy.ui.templates.tooltip" name="aui-tooltip">
+	AUI().use(
+'aui-tooltip',
+function(A) {
+	new A.Tooltip(
+	  {
+		trigger: '#myTooltip',
+		position: 'right'
+	  }
+	).render();
+}
 );
-  </template>
-  <template name="aui-tree" description="Allows users to view file/folder structure in expandable tree view." id="com.liferay.ide.alloy.ui.templates.tree" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-tree-view',
-  function(A) {
-    // Create an array object for the tree root and child nodes
-    var children = [
-      {
-        children: [
-          {
-            label: 'File X'
-          },
-          {
-            label: 'File A'
-          },
-          {
-            label: 'File Z'
-          }
-        ],
-        expanded: true,
-        label: 'Root'
-      }
-    ];
+	</template>
+	<template autoinsert="true" context="javaScript" description="Allows users to view file/folder structure in expandable tree view." enabled="true" id="com.liferay.ide.alloy.ui.templates.tree" name="aui-tree">
+	AUI().use(
+'aui-tree-view',
+function(A) {
+	// Create an array object for the tree root and child nodes
+	var children = [
+	  {
+		children: [
+		  {
+			label: 'File X'
+		  },
+		  {
+			label: 'File A'
+		  },
+		  {
+			label: 'File Z'
+		  }
+		],
+		expanded: true,
+		label: 'Root'
+	  }
+	];
 
-    // Create a TreeView Component
-    new A.TreeView(
-      {
-        boundingBox: '#myTreeView',
-        children: children
-      }
-    ).render();
-  }
+	// Create a TreeView Component
+	new A.TreeView(
+	  {
+		boundingBox: '#myTreeView',
+		children: children
+	  }
+	).render();
+}
 );
-  </template>
- <template name="aui-video" description="Creates an interactive HTML5 video player with fallback Flash video player." id="com.liferay.ide.alloy.ui.templates.video" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-video',
-  function(A) {
-    new A.Video(
-      {
-        boundingBox: '#myVideo',
-        ogvUrl: 'http://alloyui.com/video/movie.ogg',
-        url: 'http://alloyui.com/video/movie.mp4'
-      }
-    ).render();
-  }
+	</template>
+	<template autoinsert="true" context="javaScript" description="Creates an interactive HTML5 video player with fallback Flash video player." enabled="true" id="com.liferay.ide.alloy.ui.templates.video" name="aui-video">
+	AUI().use(
+'aui-video',
+function(A) {
+	new A.Video(
+	  {
+		boundingBox: '#myVideo',
+		ogvUrl: 'http://alloyui.com/video/movie.ogg',
+		url: 'http://alloyui.com/video/movie.mp4'
+	  }
+	).render();
+}
 );
-  </template>
-  <template name="aui-viewport" description="Provides a cross-browser method of adapting web design to display size." id="com.liferay.ide.alloy.ui.templates.viewport" context="javaScript" enabled="true" autoinsert="true">
-    AUI().use(
-  'aui-viewport'
+	</template>
+	<template autoinsert="true" context="javaScript" description="Provides a cross-browser method of adapting web design to display size." enabled="true" id="com.liferay.ide.alloy.ui.templates.viewport" name="aui-viewport">
+	AUI().use(
+'aui-viewport'
 );
 
-  </template>
-  <template name="self-invoke-fn" description="A self invoking function." id="com.liferay.ide.alloy.ui.template.selffn" context="javaScript" enabled="true" autoinsert="true">
-  (function (${args}) {
-    ${cursor}
+	</template>
+	<template autoinsert="true" context="javaScript" description="A self invoking function." enabled="true" id="com.liferay.ide.alloy.ui.template.selffn" name="self-invoke-fn">
+(function (${args}) {
+	${cursor}
 })(${args});
-  </template>
+	</template>
 </templates>
