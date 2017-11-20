@@ -1,16 +1,18 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.action;
-
 
 import com.liferay.ide.kaleo.core.model.Node;
 
@@ -25,83 +27,69 @@ import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 import org.eclipse.sapphire.ui.forms.PropertyEditorActionHandler;
 
-
 /**
  * @author Gregory Amerson
  */
-public abstract class DefaultListAddActionHandler extends PropertyEditorActionHandler
-{
+public abstract class DefaultListAddActionHandler extends PropertyEditorActionHandler {
 
-    private final ElementType type;
-    private final ListProperty property;
+	public static String getDefaultName(String initialName, Node newNode, Node[] nodes) {
+		String newName = initialName;
+		int count = 1;
+		boolean newNameIsValid = false;
 
-    public DefaultListAddActionHandler( final ElementType type, final ListProperty property )
-    {
-        this.type = type;
-        this.property = property;
-    }
+		do {
+			newNameIsValid = true;
 
-    public static String getDefaultName( final String initialName, final Node newNode, final Node[] nodes )
-    {
-        String newName = initialName;
-        int count = 1;
-        boolean newNameIsValid = false;
+			for (Node node : nodes) {
+				if (newName.equals(node.getName().content())) {
+					newNameIsValid = false;
+					break;
+				}
+			}
 
-        do
-        {
-            newNameIsValid = true;
+			if (!newNameIsValid) {
+				newName = newName.replace(Integer.toString(count), "") + (++count);
+			}
+		}
+		while (!newNameIsValid);
 
-            for (Node node : nodes)
-            {
-               if (newName.equals(node.getName().content()))
-               {
-                   newNameIsValid = false;
-                   break;
-               }
-            }
+		return newName;
+	}
 
-            if (!newNameIsValid)
-            {
-                newName = newName.replace( Integer.toString( count ), "" ) + (++count);
-            }
-        }
-        while (!newNameIsValid);
+	public DefaultListAddActionHandler(ElementType type, ListProperty property) {
+		_type = type;
+		_property = property;
+	}
 
-        return newName;
-    }
+	public ElementList<Element> getList() {
+		Element modelElement = getModelElement();
 
-    @Override
-    public void init( final SapphireAction action,
-                      final ActionHandlerDef def )
-    {
-        super.init( action, def );
+		if (modelElement != null) {
+			return modelElement.property(_property);
+		}
 
-        final ImageData typeSpecificAddImage = this.type.image();
+		return null;
+	}
 
-        if( typeSpecificAddImage != null )
-        {
-            addImage( typeSpecificAddImage );
-        }
+	@Override
+	public void init(SapphireAction action, ActionHandlerDef def) {
+		super.init(action, def);
 
-        setLabel( this.type.getLabel( false, CapitalizationType.TITLE_STYLE, false ) );
-    }
+		ImageData typeSpecificAddImage = _type.image();
 
-    public final ElementList<Element> getList()
-    {
-        final Element modelElement = getModelElement();
+		if (typeSpecificAddImage != null) {
+			addImage(typeSpecificAddImage);
+		}
 
-        if( modelElement != null )
-        {
-            return modelElement.property( this.property );
-        }
+		setLabel(_type.getLabel(false, CapitalizationType.TITLE_STYLE, false));
+	}
 
-        return null;
-    }
+	@Override
+	protected Object run(Presentation context) {
+		return getList().insert(_type);
+	}
 
-    @Override
-    protected Object run( Presentation context )
-    {
-        return getList().insert( this.type );
-    }
+	private final ListProperty _property;
+	private final ElementType _type;
 
 }

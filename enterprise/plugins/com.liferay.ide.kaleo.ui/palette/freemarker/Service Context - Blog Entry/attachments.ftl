@@ -1,1 +1,1 @@
-<#assign attachments = serviceContext.getAttribute("attachments")!"">
+<#assign attachments = serviceContext.getAttribute("attachments")!"" />

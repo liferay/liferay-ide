@@ -1,1 +1,1 @@
-<#assign defaultLanguageId = serviceContext.getAttribute("defaultLanguageId")!"">
+<#assign defaultLanguageId = serviceContext.getAttribute("defaultLanguageId")!"" />

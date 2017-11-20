@@ -1,1 +1,1 @@
-<#assign neverReviewCheckbox = serviceContext.getAttribute("neverReviewCheckbox")!"">
+<#assign neverReviewCheckbox = serviceContext.getAttribute("neverReviewCheckbox")!"" />

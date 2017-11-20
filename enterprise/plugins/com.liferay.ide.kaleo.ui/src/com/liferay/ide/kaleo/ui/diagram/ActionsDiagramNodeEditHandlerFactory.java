@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.diagram;
@@ -36,99 +39,90 @@ import org.eclipse.sapphire.util.ListFactory;
  * @author Gregory Amerson
  * @author Kuo Zhang
  */
-public class ActionsDiagramNodeEditHandlerFactory extends SapphireActionHandlerFactory
-{
-    private Listener listener;
+public class ActionsDiagramNodeEditHandlerFactory extends SapphireActionHandlerFactory {
 
-    @Override
-    public List<SapphireActionHandler> create()
-    {
-        ListFactory<SapphireActionHandler> factory = ListFactory.start();
+	@Override
+	public List<SapphireActionHandler> create() {
+		ListFactory<SapphireActionHandler> factory = ListFactory.start();
 
-        Element element = getElement();
+		Element element = getElement();
 
-        if (element == null)
-        {
-            return factory.result();
-        }
+		if (element == null) {
+			return factory.result();
+		}
 
-        ElementList<Action> actions = getActions();
+		ElementList<Action> actions = getActions();
 
-        if (this.listener == null)
-        {
-            this.listener = new FilteredListener<PropertyEvent>()
-            {
-                @Override
-                public void handleTypedEvent( final PropertyEvent event )
-                {
-                    broadcast( new Event() );
-                }
-            };
-        }
+		if (_listener == null) {
+			_listener = new FilteredListener<PropertyEvent>() {
 
-        element.attach( listener, getListPropertyName() );
+				@Override
+				public void handleTypedEvent(PropertyEvent event) {
+					broadcast(new Event());
+				}
 
-        for (final Action action : actions)
-        {
-            action.getName().attach( listener );
+			};
+		}
 
-            factory.add
-            (
-                new ScriptableOpenActionHandler()
-                {
-                    @Override
-                    public void init( SapphireAction sapphireAction, ActionHandlerDef def )
-                    {
-                        super.init( sapphireAction, def );
+		element.attach(_listener, getListPropertyName());
 
-                        String name = action.getName().content( true );
+		for (Action action : actions) {
+			action.getName().attach(_listener);
 
-                        this.setLabel( empty( name ) ? "<null>" : name );
-                        this.addImage( Action.TYPE.image() );
-                    }
+			factory.add(
+				new ScriptableOpenActionHandler() {
 
-                    @Override
-                    protected Scriptable scriptable( Presentation context )
-                    {
-                        return action;
-                    }
-                }
-            );
-        }
+					@Override
+					public void init(SapphireAction sapphireAction, ActionHandlerDef def) {
+						super.init(sapphireAction, def);
 
-        return factory.result();
-    }
+						String name = action.getName().content(true);
 
-    @Override
-    public void dispose()
-    {
-        super.dispose();
+						setLabel(empty(name) ? "<null>" : name);
 
-        final Element element = getElement();
-        element.detach( this.listener, getListPropertyName() );
-    }
+						addImage(Action.TYPE.image());
+					}
 
-    protected ElementList<Action> getActions()
-    {
-        ElementList<Action> actions = null;
+					@Override
+					protected Scriptable scriptable(Presentation context) {
+						return action;
+					}
 
-        final ActionTimer actionTimer = getModelElement().nearest( ActionTimer.class );
+				});
+		}
 
-        if (actionTimer != null)
-        {
-            actions = actionTimer.getActions();
-        }
+		return factory.result();
+	}
 
-        return actions;
-    }
+	@Override
+	public void dispose() {
+		super.dispose();
 
-    protected Element getElement()
-    {
-        return getModelElement().nearest( ActionTimer.class );
-    }
+		Element element = getElement();
 
-    protected String getListPropertyName()
-    {
-        return ActionTimer.PROP_ACTIONS.name();
-    }
+		element.detach(_listener, getListPropertyName());
+	}
+
+	protected ElementList<Action> getActions() {
+		ElementList<Action> actions = null;
+
+		ActionTimer actionTimer = getModelElement().nearest(ActionTimer.class);
+
+		if (actionTimer != null) {
+			actions = actionTimer.getActions();
+		}
+
+		return actions;
+	}
+
+	protected Element getElement() {
+		return getModelElement().nearest(ActionTimer.class);
+	}
+
+	protected String getListPropertyName() {
+		return ActionTimer.PROP_ACTIONS.name();
+	}
+
+	private Listener _listener;
+
 }

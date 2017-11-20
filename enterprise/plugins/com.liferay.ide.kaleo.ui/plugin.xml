@@ -1,470 +1,524 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="editorHelpers" name="Kaleo Editor Helpers" schema="schema/editorHelpers.exsd"/>
-   <extension
-         point="org.eclipse.ui.editors">
-        
-      <editor
-            class="com.liferay.ide.kaleo.ui.editor.WorkflowDefinitionEditor"
-            contributorClass="org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorActionBarContributor"
-            icon="icons/e16/workflow_16x16.png"
-            id="com.liferay.ide.kaleo.ui.editor.workflowDefinition"
-            name="Kaleo Designer"
-            symbolicFontName="org.eclipse.wst.sse.ui.textfont">
-         <contentTypeBinding
-               contentTypeId="com.liferay.ide.kaleo.core.workflowdefinitioncontent">
-         </contentTypeBinding>
-      </editor>
-      <!--
-      <editor
-            class="com.liferay.ide.kaleo.ui.editor.KaleoFreemarkerEditor"
-            contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
-            default="false"
-            icon="icons/e16/freemarker.gif"
-            id="com.liferay.ide.kaleo.ui.editor.freemarker"
-            name="Workflow Freemarker Editor">
-      </editor>
-      -->
-      <editor
-            class="com.liferay.ide.kaleo.ui.editor.WorkflowTextEditor"
-            contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
-            default="false"
-            icon="icons/e16/text_16x16.gif"
-            id="com.liferay.ide.kaleo.ui.editor.text"
-            name="Workflow Text Editor">
-      </editor>
-      <editor
-            class="com.liferay.ide.kaleo.ui.editor.KaleoJavaScriptEditor"
-            contributorClass="org.eclipse.wst.jsdt.internal.ui.javaeditor.CompilationUnitEditorActionContributor"
-            default="false"
-            id="com.liferay.ide.kaleo.ui.editor.jsdt"
-            name="Workflow JavaScript Editor"
-            symbolicFontName="org.eclipse.jdt.ui.editors.textfont">
-      </editor>
-   </extension>
-   <extension
-         point="org.eclipse.ui.navigator.viewer">
-      <viewerContentBinding
-            viewerId="org.eclipse.wst.server.ui.ServersView">
-         <includes>
-            <contentExtension
-                  isRoot="false"
-                  pattern="com.liferay.ide.server.ui.serverview.workflowdefinitions">
-            </contentExtension>
-         </includes>
-      </viewerContentBinding>
-      <viewerContentBinding
-            viewerId="org.eclipse.ui.navigator.ProjectExplorer">
-         <includes>
-            <contentExtension
-                  pattern="com.liferay.ide.server.ui.serverview.workflowdefinitions.filter">
-            </contentExtension>
-         </includes>
-      </viewerContentBinding>
-   </extension>
-   <extension
-         point="org.eclipse.ui.navigator.navigatorContent">
-      <navigatorContent
-            activeByDefault="true"
-            contentProvider="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsCustomContentProvider"
-            icon="icons/e16/workflow_16x16.png"
-            id="com.liferay.ide.server.ui.serverview.workflowdefinitions"
-            labelProvider="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsDecorator"
-            name="Kaleo Workflow"
-            priority="higher"
-            providesSaveables="true">
-         <triggerPoints>
-            <or>
-               <instanceof
-                     value="org.eclipse.wst.server.core.IServer">
-               </instanceof>
-            </or>
-         </triggerPoints>
-         <possibleChildren>
-            <or>
-               <instanceof
-                     value="java.lang.Object">
-               </instanceof>
-               <instanceof
-                     value="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsFolder">
-               </instanceof>
-               <instanceof
-                     value="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionEntry">
-               </instanceof>
-            </or>
-         </possibleChildren>
-         <override
-               policy="InvokeAlwaysRegardlessOfSuppressedExt"
-               suppressedExtensionId="org.eclipse.wst.server.ui.ServersView.content.root">
-         </override>
-         <actionProvider
-            class="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsActionProvider"
-            id="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsActionProvider"
-            priority="highest">
-            <enablement>
-              <or>
-                <instanceof
-                     value="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsFolder">
-                </instanceof>
-                <instanceof
-                     value="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionEntry">
-                </instanceof>
-              </or>
-            </enablement>
-         </actionProvider>
-         <dropAssistant
-               class="com.liferay.ide.kaleo.ui.navigator.WorkflowDropAdapterAssistant"
-               id="com.liferay.ide.server.ui.serverview.workflowdefinitions.dropAssistant">
-            <possibleDropTargets>
-               <or>
-                  <instanceof
-                        value="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsFolder">
-                  </instanceof>
-               </or>
-            </possibleDropTargets>
-         </dropAssistant>
-      </navigatorContent>
-      <commonFilter
-            activeByDefault="true"
-            description="Hide the &quot;Kaleo Designer Support&quot; project"
-            id="com.liferay.ide.server.ui.serverview.workflowdefinitions.filter"
-            name="Kaleo Designer support project"
-            visibleInUI="true">
-         <filterExpression>
-            <instanceof
-                  value="org.eclipse.core.resources.IProject">
-            </instanceof>
-                <test
-                      property="org.eclipse.core.resources.name"
-                      value="Kaleo Designer Support">
-                </test>
-        </filterExpression>
-      </commonFilter>
-   </extension>
-   <extension
-         point="org.eclipse.ui.decorators">
-      <decorator
-            class="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsDecorator"
-            icon="/icons/e16/workflow_16x16.png"
-            id="com.liferay.ide.kaleo.ui.definitionsDecorator"
-            label="Kaleo Workflow Decorator"
-            lightweight="true"
-            state="true">
-         <enablement>
-            <or>
-               <objectClass
-                     name="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionEntry">
-               </objectClass>
-               <objectClass
-                     name="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsFolder">
-               </objectClass>
-            </or>
-         </enablement>
-      </decorator>
-   </extension>
-   <extension
-         point="org.eclipse.ui.newWizards">
-      <category
-            id="com.liferay.ide.newWizards"
-            name="Liferay">
-      </category>
-      <wizard
-            category="com.liferay.ide.newWizards"
-            class="com.liferay.ide.kaleo.ui.wizard.NewWorkflowDefinitionWizard"
-            icon="icons/n16/workflow_new_16x16.png"
-            id="com.liferay.ide.kaleo.ui.new.definition"
-            name="Liferay Kaleo Workflow">
-           <class class="com.liferay.ide.kaleo.ui.wizard.NewWorkflowDefinitionWizard">
-            <parameter name="liferay_extra_artifact" value="true"/>
-            <parameter name="menuIndex" value="30" />
-         </class>
-      </wizard>
-   </extension>
-   
-   <extension
-         point="com.liferay.ide.kaleo.ui.editorHelpers">
-      
-      <editorHelper
-            class="com.liferay.ide.kaleo.ui.helpers.DrlScriptEditorHelper"
-            editorId="org.eclipse.ui.DefaultTextEditor"
-            fileExtension="drl"
-            languageType="drl">
-      </editorHelper>
-      <!--
-      <editorHelper
-            class="com.liferay.ide.kaleo.ui.helpers.ColorScriptEditorHelper"
-            editorId="com.liferay.ide.core.editor.ui.ColoringEditor"
-            fileExtension="bsh"
-            languageType="beanshell">
-      </editorHelper>
-      
-      <editorHelper
-            class="com.liferay.ide.kaleo.ui.helpers.ColorScriptEditorHelper"
-            editorId="com.liferay.ide.core.editor.ui.ColoringEditor"
-            fileExtension="py"
-            languageType="python">
-      </editorHelper>
-      
-      <editorHelper
-            class="com.liferay.ide.kaleo.ui.helpers.ColorScriptEditorHelper"
-            editorId="com.liferay.ide.core.editor.ui.ColoringEditor"
-            fileExtension="rb"
-            languageType="ruby">
-      </editorHelper>
-      
-      <editorHelper
-            class="com.liferay.ide.kaleo.ui.helpers.FreemarkerEditorHelper"
-            editorId="com.liferay.ide.kaleo.ui.editor.freemarker"
-            fileExtension="ftl"
-            languageType="freemarker">
-      </editorHelper>
-      -->
-      <editorHelper
-            class="com.liferay.ide.kaleo.ui.helpers.TextEditorHelper"
-            editorId="com.liferay.ide.kaleo.ui.editor.text"
-            fileExtension="txt"
-            languageType="text">
-      </editorHelper>
-      <editorHelper
-            class="com.liferay.ide.kaleo.ui.helpers.JavaScriptEditorHelper"
-            editorId="com.liferay.ide.kaleo.ui.editor.jsdt"
-            fileExtension="js"
-            languageType="javascript">
-      </editorHelper>
-   </extension>
-   <extension
-         point="org.eclipse.ui.editors.templates">
-      <contextType
-            class="com.liferay.ide.kaleo.ui.KaleoTemplateContextType"
-            id="com.liferay.ide.kaleo.ui.templates.contextType.#document"
-            name="Document">
-      </contextType>
-      <contextType
-            class="com.liferay.ide.kaleo.ui.KaleoTemplateContextType"
-            id="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
-            name="Workflow Definition">
-      </contextType>
-      <contextType
-            class="com.liferay.ide.kaleo.ui.KaleoTemplateContextType"
-            id="com.liferay.ide.kaleo.ui.templates.contextType.state"
-            name="State">
-      </contextType>
-      <contextType
-            class="com.liferay.ide.kaleo.ui.KaleoTemplateContextType"
-            id="com.liferay.ide.kaleo.ui.templates.contextType.task"
-            name="Task">
-      </contextType>
-      <contextType
-            class="com.liferay.ide.kaleo.ui.KaleoTemplateContextType"
-            id="com.liferay.ide.kaleo.ui.templates.contextType.condition"
-            name="Condition">
-      </contextType>
-      <contextType
-            class="com.liferay.ide.kaleo.ui.KaleoTemplateContextType"
-            id="com.liferay.ide.kaleo.ui.templates.contextType.fork"
-            name="Fork">
-      </contextType>
-      <contextType
-            class="com.liferay.ide.kaleo.ui.KaleoTemplateContextType"
-            id="com.liferay.ide.kaleo.ui.templates.contextType.join"
-            name="Join">
-      </contextType>
-      <template
-            contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
-            description="New State Node"
-            id="com.liferay.ide.kaleo.ui.templates.state.skeleton"
-            name="state">
-         <pattern>
-    &lt;state&gt;
-        &lt;name&gt;${cursor}&lt;/name&gt;
-        &lt;transitions&gt;
-            &lt;transition&gt;
-                &lt;name&gt;default_transition&lt;/name&gt;
-                &lt;target&gt;NODE_NAME&lt;/target&gt;
-                &lt;default&gt;true&lt;/default&gt;
-            &lt;/transition&gt;
-        &lt;/transitions&gt;
-    &lt;/state&gt;
-         </pattern>
-      </template>
-      
-      
-      <template
-            contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
-            description="New State (Approval node)"
-            id="com.liferay.ide.kaleo.ui.templates.state.approval.skeleton"
-            name="state">
-         <pattern>
-    &lt;state&gt;
-        &lt;name&gt;approved&lt;/name&gt;
-        &lt;actions&gt;
-            &lt;action&gt;
-                &lt;name&gt;approve&lt;/name&gt;
-                &lt;script&gt;
-                    &lt;![CDATA[
-                        import com.liferay.portal.kernel.workflow.WorkflowConstants
-                        import com.liferay.portal.kernel.workflow.WorkflowStatusManagerUtil
+	<extension-point id="editorHelpers" name="Kaleo Editor Helpers" schema="schema/editorHelpers.exsd" />
+	<extension
+		point="org.eclipse.ui.editors"
+	>
 
-                        WorkflowStatusManagerUtil.updateStatus(WorkflowConstants.toStatus("approved"), workflowContext)
-                    ]]&gt;
-                &lt;/script&gt;
-                &lt;script-language&gt;groovy&lt;/script-language&gt;
-                &lt;execution-type&gt;onEntry&lt;/execution-type&gt;
-            &lt;/action&gt;
-        &lt;/actions&gt;
-    &lt;/state&gt;
-         </pattern>
-      </template>
-      
-      
-      
-      <template
-            contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
-            description="New Task (User assignment)"
-            id="com.liferay.ide.kaleo.ui.templates.task.user.skeleton"
-            name="task">
-         <pattern>
-    &lt;task&gt;
-        &lt;name&gt;${cursor}&lt;/name&gt;
-        &lt;assignments&gt;
-            &lt;user /&gt;
-        &lt;/assignments&gt;
-        &lt;transitions&gt;
-            &lt;transition&gt;
-                &lt;name&gt;default_transition&lt;/name&gt;
-                &lt;target&gt;NODE_NAME&lt;/target&gt;
-                &lt;default&gt;true&lt;/default&gt;
-            &lt;/transition&gt;
-        &lt;/transitions&gt;
-    &lt;/task&gt;
-    
-         </pattern>
-      </template>
+		<editor
+			class="com.liferay.ide.kaleo.ui.editor.WorkflowDefinitionEditor"
+			contributorClass="org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorActionBarContributor"
+			icon="icons/e16/workflow_16x16.png"
+			id="com.liferay.ide.kaleo.ui.editor.workflowDefinition"
+			name="Kaleo Designer"
+			symbolicFontName="org.eclipse.wst.sse.ui.textfont"
+		>
+			<contentTypeBinding
+				contentTypeId="com.liferay.ide.kaleo.core.workflowdefinitioncontent"
+			>
+			</contentTypeBinding>
+		</editor>
+		<!--
+		<editor
+				class="com.liferay.ide.kaleo.ui.editor.KaleoFreemarkerEditor"
+				contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+				default="false"
+				icon="icons/e16/freemarker.gif"
+				id="com.liferay.ide.kaleo.ui.editor.freemarker"
+				name="Workflow Freemarker Editor"
+		>
+		</editor>
+		-->
+		<editor
+			class="com.liferay.ide.kaleo.ui.editor.WorkflowTextEditor"
+			contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+			default="false"
+			icon="icons/e16/text_16x16.gif"
+			id="com.liferay.ide.kaleo.ui.editor.text"
+			name="Workflow Text Editor"
+		>
+		</editor>
+		<editor
+			class="com.liferay.ide.kaleo.ui.editor.KaleoJavaScriptEditor"
+			contributorClass="org.eclipse.wst.jsdt.internal.ui.javaeditor.CompilationUnitEditorActionContributor"
+			default="false"
+			id="com.liferay.ide.kaleo.ui.editor.jsdt"
+			name="Workflow JavaScript Editor"
+			symbolicFontName="org.eclipse.jdt.ui.editors.textfont"
+		>
+		</editor>
+	</extension>
+	<extension
+		point="org.eclipse.ui.navigator.viewer"
+	>
+		<viewerContentBinding
+			viewerId="org.eclipse.wst.server.ui.ServersView"
+		>
+			<includes>
+				<contentExtension
+					isRoot="false"
+					pattern="com.liferay.ide.server.ui.serverview.workflowdefinitions"
+				>
+				</contentExtension>
+			</includes>
+		</viewerContentBinding>
+		<viewerContentBinding
+			viewerId="org.eclipse.ui.navigator.ProjectExplorer"
+		>
+			<includes>
+				<contentExtension
+					pattern="com.liferay.ide.server.ui.serverview.workflowdefinitions.filter"
+				>
+				</contentExtension>
+			</includes>
+		</viewerContentBinding>
+	</extension>
+	<extension
+		point="org.eclipse.ui.navigator.navigatorContent"
+	>
+		<navigatorContent
+			activeByDefault="true"
+			contentProvider="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsCustomContentProvider"
+			icon="icons/e16/workflow_16x16.png"
+			id="com.liferay.ide.server.ui.serverview.workflowdefinitions"
+			labelProvider="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsDecorator"
+			name="Kaleo Workflow"
+			priority="higher"
+			providesSaveables="true"
+		>
+			<triggerPoints>
+				<or>
+					<instanceof
+						value="org.eclipse.wst.server.core.IServer"
+					>
+					</instanceof>
+				</or>
+			</triggerPoints>
+			<possibleChildren>
+				<or>
+					<instanceof
+						value="java.lang.Object"
+					>
+					</instanceof>
+					<instanceof
+						value="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsFolder"
+					>
+					</instanceof>
+					<instanceof
+						value="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionEntry"
+					>
+					</instanceof>
+				</or>
+			</possibleChildren>
+			<override
+				policy="InvokeAlwaysRegardlessOfSuppressedExt"
+				suppressedExtensionId="org.eclipse.wst.server.ui.ServersView.content.root"
+			>
+			</override>
+			<actionProvider
+				class="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsActionProvider"
+				id="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsActionProvider"
+				priority="highest"
+			>
+				<enablement>
+					<or>
+						<instanceof
+							value="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsFolder"
+						>
+						</instanceof>
+						<instanceof
+							value="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionEntry"
+						>
+						</instanceof>
+					</or>
+				</enablement>
+			</actionProvider>
+			<dropAssistant
+				class="com.liferay.ide.kaleo.ui.navigator.WorkflowDropAdapterAssistant"
+				id="com.liferay.ide.server.ui.serverview.workflowdefinitions.dropAssistant"
+			>
+				<possibleDropTargets>
+					<or>
+						<instanceof
+							value="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsFolder"
+						>
+						</instanceof>
+					</or>
+				</possibleDropTargets>
+			</dropAssistant>
+		</navigatorContent>
+		<commonFilter
+			activeByDefault="true"
+			description="Hide the &quot;Kaleo Designer Support&quot; project"
+			id="com.liferay.ide.server.ui.serverview.workflowdefinitions.filter"
+			name="Kaleo Designer support project"
+			visibleInUI="true"
+		>
+			<filterExpression>
+				<instanceof
+					value="org.eclipse.core.resources.IProject"
+				>
+				</instanceof>
+				<test
+					property="org.eclipse.core.resources.name"
+					value="Kaleo Designer Support"
+				>
+				</test>
+			</filterExpression>
+		</commonFilter>
+	</extension>
+	<extension
+		point="org.eclipse.ui.decorators"
+	>
+		<decorator
+			class="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsDecorator"
+			icon="/icons/e16/workflow_16x16.png"
+			id="com.liferay.ide.kaleo.ui.definitionsDecorator"
+			label="Kaleo Workflow Decorator"
+			lightweight="true"
+			state="true"
+		>
+			<enablement>
+				<or>
+					<objectClass
+						name="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionEntry"
+					>
+					</objectClass>
+					<objectClass
+						name="com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionsFolder"
+					>
+					</objectClass>
+				</or>
+			</enablement>
+		</decorator>
+	</extension>
+	<extension
+		point="org.eclipse.ui.newWizards"
+	>
+		<category
+			id="com.liferay.ide.newWizards"
+			name="Liferay"
+		>
+		</category>
+		<wizard
+			category="com.liferay.ide.newWizards"
+			class="com.liferay.ide.kaleo.ui.wizard.NewWorkflowDefinitionWizard"
+			icon="icons/n16/workflow_new_16x16.png"
+			id="com.liferay.ide.kaleo.ui.new.definition"
+			name="Liferay Kaleo Workflow"
+		>
+			<class class="com.liferay.ide.kaleo.ui.wizard.NewWorkflowDefinitionWizard">
+				<parameter name="liferay_extra_artifact" value="true" />
+				<parameter name="menuIndex" value="30" />
+			</class>
+		</wizard>
+	</extension>
 
-      <template
-            contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
-            description="New Task (Role assignment)"
-            id="com.liferay.ide.kaleo.ui.templates.task.role.skeleton"
-            name="task">
-         <pattern>
-    &lt;task&gt;
-        &lt;name&gt;${cursor}&lt;/name&gt;
-        &lt;assignments&gt;
-            &lt;roles&gt;
-                &lt;role&gt;
-                    &lt;role-type&gt;site&lt;/role-type&gt;
-                    &lt;name&gt;Administrator&lt;/name&gt;
-                &lt;/role&gt;
-            &lt;/roles&gt;
-        &lt;/assignments&gt;
-        &lt;transitions&gt;
-            &lt;transition&gt;
-                &lt;name&gt;default_transition&lt;/name&gt;
-                &lt;target&gt;&lt;/target&gt;
-                &lt;default&gt;true&lt;/default&gt;
-            &lt;/transition&gt;
-        &lt;/transitions&gt;
-    &lt;/task&gt;
-    
-         </pattern>
-      </template>
-      
-      <template
-            contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
-            description="New Task (Scripted assignment)"
-            id="com.liferay.ide.kaleo.ui.templates.task.script.skeleton"
-            name="task">
-         <pattern>
-    &lt;task&gt;
-        &lt;name&gt;${cursor}&lt;/name&gt;
-        &lt;assignments&gt;
-            &lt;scripted-assignment&gt;
-                &lt;script&gt;&lt;![CDATA[
-                    /* enter script */
-                ]]&gt;&lt;/script&gt;
-                &lt;script-language&gt;groovy&lt;/script-language&gt;
-            &lt;/scripted-assignment&gt;
-        &lt;/assignments&gt;
-        &lt;transitions&gt;
-            &lt;transition&gt;
-                &lt;name&gt;default_transition&lt;/name&gt;
-                &lt;target&gt;&lt;/target&gt;
-                &lt;default&gt;true&lt;/default&gt;
-            &lt;/transition&gt;
-        &lt;/transitions&gt;
-    &lt;/task&gt;
-    
-         </pattern>
-      </template>      
-      
-      
-      <template
-            contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
-            description="New Condition Node"
-            id="com.liferay.ide.kaleo.ui.templates.condition.skeleton"
-            name="condition">
-         <pattern>
-    &lt;condition&gt;
-        &lt;name&gt;${cursor}&lt;/name&gt;
-        &lt;script&gt;&lt;![CDATA[
-            /* enter script */
-        ]]&gt;&lt;/script&gt;
-        &lt;script-language&gt;groovy&lt;/script-language&gt;
-        &lt;transitions&gt;
-            &lt;transition&gt;
-                &lt;name&gt;default_transition&lt;/name&gt;
-                &lt;target&gt;&lt;/target&gt;
-                &lt;default&gt;true&lt;/default&gt;
-            &lt;/transition&gt;
-        &lt;/transitions&gt;
-    &lt;/condition&gt;
-         </pattern>
-      </template>
-      <template
-            contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
-            description="New Fork Node"
-            id="com.liferay.ide.kaleo.ui.templates.fork.skeleton"
-            name="fork">
-         <pattern>
-    &lt;fork&gt;
-        &lt;name&gt;${cursor}&lt;/name&gt;
-        &lt;transitions&gt;
-            &lt;transition&gt;
-                &lt;name&gt;fork-transition-a&lt;/name&gt;
-                &lt;target&gt;NODE_A_NAME&lt;/target&gt;
-            &lt;/transition&gt;
-            &lt;transition&gt;
-                &lt;name&gt;fork-transition-b&lt;/name&gt;
-                &lt;target&gt;NODE_B_NAME&lt;/target&gt;
-            &lt;/transition&gt;
-        &lt;/transitions&gt;
-    &lt;/fork&gt;
-         </pattern>
-      </template>
-      <template
-            contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
-            description="New Join Node"
-            id="com.liferay.ide.kaleo.ui.templates.join.skeleton"
-            name="join">
-         <pattern>
-    &lt;join&gt;
-        &lt;name&gt;${cursor}&lt;/name&gt;
-        &lt;transitions&gt;
-            &lt;transition&gt;
-                &lt;name&gt;exit-transition&lt;/name&gt;
-                &lt;target&gt;NODE_NAME&lt;/target&gt;
-            &lt;/transition&gt;
-        &lt;/transitions&gt;
-    &lt;/join&gt;
-         </pattern>
-      </template>
-      <template
-            contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.#document"
-            description="New Workflow Definition Element"
-            id="com.liferay.ide.kaleo.ui.templates.workflowDefinition.skeleton"
-            name="workflow-definition">
-         <pattern>
+	<extension
+		point="com.liferay.ide.kaleo.ui.editorHelpers"
+	>
+
+		<editorHelper
+			class="com.liferay.ide.kaleo.ui.helpers.DrlScriptEditorHelper"
+			editorId="org.eclipse.ui.DefaultTextEditor"
+			fileExtension="drl"
+			languageType="drl"
+		>
+		</editorHelper>
+		<!--
+		<editorHelper
+				class="com.liferay.ide.kaleo.ui.helpers.ColorScriptEditorHelper"
+				editorId="com.liferay.ide.core.editor.ui.ColoringEditor"
+				fileExtension="bsh"
+				languageType="beanshell"
+		>
+		</editorHelper>
+
+		<editorHelper
+				class="com.liferay.ide.kaleo.ui.helpers.ColorScriptEditorHelper"
+				editorId="com.liferay.ide.core.editor.ui.ColoringEditor"
+				fileExtension="py"
+				languageType="python"
+				>
+		</editorHelper>
+
+		<editorHelper
+				class="com.liferay.ide.kaleo.ui.helpers.ColorScriptEditorHelper"
+				editorId="com.liferay.ide.core.editor.ui.ColoringEditor"
+				fileExtension="rb"
+				languageType="ruby"
+				>
+		</editorHelper>
+
+		<editorHelper
+				class="com.liferay.ide.kaleo.ui.helpers.FreemarkerEditorHelper"
+				editorId="com.liferay.ide.kaleo.ui.editor.freemarker"
+				fileExtension="ftl"
+				languageType="freemarker"
+				>
+		</editorHelper>
+		-->
+		<editorHelper
+			class="com.liferay.ide.kaleo.ui.helpers.TextEditorHelper"
+			editorId="com.liferay.ide.kaleo.ui.editor.text"
+			fileExtension="txt"
+			languageType="text"
+		>
+		</editorHelper>
+		<editorHelper
+			class="com.liferay.ide.kaleo.ui.helpers.JavaScriptEditorHelper"
+			editorId="com.liferay.ide.kaleo.ui.editor.jsdt"
+			fileExtension="js"
+			languageType="javascript"
+		>
+		</editorHelper>
+	</extension>
+	<extension
+		point="org.eclipse.ui.editors.templates"
+	>
+		<contextType
+			class="com.liferay.ide.kaleo.ui.KaleoTemplateContextType"
+			id="com.liferay.ide.kaleo.ui.templates.contextType.#document"
+			name="Document"
+		>
+		</contextType>
+		<contextType
+			class="com.liferay.ide.kaleo.ui.KaleoTemplateContextType"
+			id="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
+			name="Workflow Definition"
+		>
+		</contextType>
+		<contextType
+			class="com.liferay.ide.kaleo.ui.KaleoTemplateContextType"
+			id="com.liferay.ide.kaleo.ui.templates.contextType.state"
+			name="State"
+		>
+		</contextType>
+		<contextType
+			class="com.liferay.ide.kaleo.ui.KaleoTemplateContextType"
+			id="com.liferay.ide.kaleo.ui.templates.contextType.task"
+			name="Task"
+		>
+		</contextType>
+		<contextType
+			class="com.liferay.ide.kaleo.ui.KaleoTemplateContextType"
+			id="com.liferay.ide.kaleo.ui.templates.contextType.condition"
+			name="Condition"
+		>
+		</contextType>
+		<contextType
+			class="com.liferay.ide.kaleo.ui.KaleoTemplateContextType"
+			id="com.liferay.ide.kaleo.ui.templates.contextType.fork"
+			name="Fork"
+		>
+		</contextType>
+		<contextType
+			class="com.liferay.ide.kaleo.ui.KaleoTemplateContextType"
+			id="com.liferay.ide.kaleo.ui.templates.contextType.join"
+			name="Join"
+		>
+		</contextType>
+		<template
+			contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
+			description="New State Node"
+			id="com.liferay.ide.kaleo.ui.templates.state.skeleton"
+			name="state"
+		>
+			<pattern>
+	&lt;state&gt;
+		&lt;name&gt;${cursor}&lt;/name&gt;
+		&lt;transitions&gt;
+				&lt;transition&gt;
+					&lt;name&gt;default_transition&lt;/name&gt;
+					&lt;target&gt;NODE_NAME&lt;/target&gt;
+					&lt;default&gt;true&lt;/default&gt;
+				&lt;/transition&gt;
+		&lt;/transitions&gt;
+	&lt;/state&gt;
+			</pattern>
+		</template>
+
+		<template
+			contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
+			description="New State (Approval node)"
+			id="com.liferay.ide.kaleo.ui.templates.state.approval.skeleton"
+			name="state"
+		>
+			<pattern>
+	&lt;state&gt;
+		&lt;name&gt;approved&lt;/name&gt;
+		&lt;actions&gt;
+				&lt;action&gt;
+					&lt;name&gt;approve&lt;/name&gt;
+					&lt;script&gt;
+						&lt;![CDATA[
+								import com.liferay.portal.kernel.workflow.WorkflowConstants
+								import com.liferay.portal.kernel.workflow.WorkflowStatusManagerUtil
+
+								WorkflowStatusManagerUtil.updateStatus(WorkflowConstants.toStatus("approved"), workflowContext)
+						]]&gt;
+					&lt;/script&gt;
+					&lt;script-language&gt;groovy&lt;/script-language&gt;
+					&lt;execution-type&gt;onEntry&lt;/execution-type&gt;
+				&lt;/action&gt;
+		&lt;/actions&gt;
+	&lt;/state&gt;
+			</pattern>
+		</template>
+
+		<template
+			contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
+			description="New Task (User assignment)"
+			id="com.liferay.ide.kaleo.ui.templates.task.user.skeleton"
+			name="task"
+		>
+			<pattern>
+	&lt;task&gt;
+		&lt;name&gt;${cursor}&lt;/name&gt;
+		&lt;assignments&gt;
+				&lt;user /&gt;
+		&lt;/assignments&gt;
+		&lt;transitions&gt;
+				&lt;transition&gt;
+					&lt;name&gt;default_transition&lt;/name&gt;
+					&lt;target&gt;NODE_NAME&lt;/target&gt;
+					&lt;default&gt;true&lt;/default&gt;
+				&lt;/transition&gt;
+		&lt;/transitions&gt;
+	&lt;/task&gt;
+
+			</pattern>
+		</template>
+
+		<template
+			contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
+			description="New Task (Role assignment)"
+			id="com.liferay.ide.kaleo.ui.templates.task.role.skeleton"
+			name="task"
+		>
+			<pattern>
+	&lt;task&gt;
+		&lt;name&gt;${cursor}&lt;/name&gt;
+		&lt;assignments&gt;
+				&lt;roles&gt;
+					&lt;role&gt;
+						&lt;role-type&gt;site&lt;/role-type&gt;
+						&lt;name&gt;Administrator&lt;/name&gt;
+					&lt;/role&gt;
+				&lt;/roles&gt;
+		&lt;/assignments&gt;
+		&lt;transitions&gt;
+				&lt;transition&gt;
+					&lt;name&gt;default_transition&lt;/name&gt;
+					&lt;target&gt;&lt;/target&gt;
+					&lt;default&gt;true&lt;/default&gt;
+				&lt;/transition&gt;
+		&lt;/transitions&gt;
+	&lt;/task&gt;
+
+			</pattern>
+		</template>
+
+		<template
+			contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
+			description="New Task (Scripted assignment)"
+			id="com.liferay.ide.kaleo.ui.templates.task.script.skeleton"
+			name="task"
+		>
+			<pattern>
+	&lt;task&gt;
+		&lt;name&gt;${cursor}&lt;/name&gt;
+		&lt;assignments&gt;
+				&lt;scripted-assignment&gt;
+					&lt;script&gt;&lt;![CDATA[
+						/* enter script */
+					]]&gt;&lt;/script&gt;
+					&lt;script-language&gt;groovy&lt;/script-language&gt;
+				&lt;/scripted-assignment&gt;
+		&lt;/assignments&gt;
+		&lt;transitions&gt;
+				&lt;transition&gt;
+					&lt;name&gt;default_transition&lt;/name&gt;
+					&lt;target&gt;&lt;/target&gt;
+					&lt;default&gt;true&lt;/default&gt;
+				&lt;/transition&gt;
+		&lt;/transitions&gt;
+	&lt;/task&gt;
+
+			</pattern>
+		</template>
+
+		<template
+			contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
+			description="New Condition Node"
+			id="com.liferay.ide.kaleo.ui.templates.condition.skeleton"
+			name="condition"
+		>
+			<pattern>
+	&lt;condition&gt;
+		&lt;name&gt;${cursor}&lt;/name&gt;
+		&lt;script&gt;&lt;![CDATA[
+				/* enter script */
+		]]&gt;&lt;/script&gt;
+		&lt;script-language&gt;groovy&lt;/script-language&gt;
+		&lt;transitions&gt;
+				&lt;transition&gt;
+					&lt;name&gt;default_transition&lt;/name&gt;
+					&lt;target&gt;&lt;/target&gt;
+					&lt;default&gt;true&lt;/default&gt;
+				&lt;/transition&gt;
+		&lt;/transitions&gt;
+	&lt;/condition&gt;
+			</pattern>
+		</template>
+		<template
+			contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
+			description="New Fork Node"
+			id="com.liferay.ide.kaleo.ui.templates.fork.skeleton"
+			name="fork"
+		>
+			<pattern>
+	&lt;fork&gt;
+		&lt;name&gt;${cursor}&lt;/name&gt;
+		&lt;transitions&gt;
+				&lt;transition&gt;
+					&lt;name&gt;fork-transition-a&lt;/name&gt;
+					&lt;target&gt;NODE_A_NAME&lt;/target&gt;
+				&lt;/transition&gt;
+				&lt;transition&gt;
+					&lt;name&gt;fork-transition-b&lt;/name&gt;
+					&lt;target&gt;NODE_B_NAME&lt;/target&gt;
+				&lt;/transition&gt;
+		&lt;/transitions&gt;
+	&lt;/fork&gt;
+			</pattern>
+		</template>
+		<template
+			contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.workflow-definition"
+			description="New Join Node"
+			id="com.liferay.ide.kaleo.ui.templates.join.skeleton"
+			name="join"
+		>
+			<pattern>
+	&lt;join&gt;
+		&lt;name&gt;${cursor}&lt;/name&gt;
+		&lt;transitions&gt;
+				&lt;transition&gt;
+					&lt;name&gt;exit-transition&lt;/name&gt;
+					&lt;target&gt;NODE_NAME&lt;/target&gt;
+				&lt;/transition&gt;
+		&lt;/transitions&gt;
+	&lt;/join&gt;
+			</pattern>
+		</template>
+		<template
+			contextTypeId="com.liferay.ide.kaleo.ui.templates.contextType.#document"
+			description="New Workflow Definition Element"
+			id="com.liferay.ide.kaleo.ui.templates.workflowDefinition.skeleton"
+			name="workflow-definition"
+		>
+			<pattern>
 &lt;?xml version="1.0"?&gt;
 
 &lt;workflow-definition
@@ -476,90 +530,109 @@
 	&lt;description&gt;A single approver can approve a workflow content.&lt;/description&gt;
 	&lt;version&gt;1&lt;/version&gt;
 &lt;/workflow-definition&gt;
-         </pattern>
-      </template>
-   </extension>
-   <extension
-         point="org.eclipse.wst.sse.ui.editorConfiguration">
-      <sourceViewerConfiguration
-            class="com.liferay.ide.kaleo.ui.xml.KaleoStructuredTextViewConfiguration"
-            target="com.liferay.ide.kaleo.core.workflowdefinitioncontent,com.liferay.ide.kaleo.ui.editor.workflowDefinition">
-      </sourceViewerConfiguration>
-   </extension>
-   <extension
-         point="org.eclipse.ui.perspectives">
-      <perspective
-            class="com.liferay.ide.kaleo.ui.WorkflowDesignerPerspectiveFactory"
-            icon="icons/e16/workflow_16x16.png"
-            id="com.liferay.ide.eclipse.kaleo.ui.perspective.designer"
-            name="Kaleo Designer">
-      </perspective>
-   </extension>
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="com.liferay.ide.eclipse.ui.perspective.liferay">
-         <perspectiveShortcut
-               id="com.liferay.ide.kaleo.ui.perspective.designer">
-         </perspectiveShortcut>
-         <newWizardShortcut
-               id="com.liferay.ide.kaleo.ui.new.definition">
-         </newWizardShortcut>
-      </perspectiveExtension>
-   </extension>
-   <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            category="com.liferay.ide.ui.preferences.liferay"
-            class="com.liferay.ide.kaleo.ui.KaleoUIPreferencePage"
-            id="com.liferay.ide.kaleo.ui.preference"
-            name="Kaleo Designer">
-      </page>
-      <page
-            category="com.liferay.ide.ui.preferences.liferay"
-            class="com.liferay.ide.kaleo.ui.WorkflowValidationSettingsPage"
-            id="com.liferay.ide.kaleo.ui.validation.preference"
-            name="Kaleo Workflow Validation">
-      </page>
-   </extension>
-   <extension
-         point="org.eclipse.jdt.ui.javaElementFilters">
-      <filter
-            class="com.liferay.ide.kaleo.ui.WorkflowSupportProjectFilter"
-            description="Hide the &quot;Kaleo Designer Support&quot; project"
-            enabled="true"
-            id="com.liferay.ide.kaleo.ui.WorkflowSupportProjectFilter"
-            name="Kaleo Designer support project"
-            targetId="org.eclipse.jdt.ui.PackageExplorer">
-      </filter>
-      <filter
-            class="com.liferay.ide.kaleo.ui.WorkflowSupportProjectFilter"
-            description="Hide the &quot;Kaleo Designer Support&quot; project"
-            enabled="true"
-            id="com.liferay.ide.kaleo.ui.WorkflowSupportProjectFilter"
-            name="Kaleo Designer support project"
-            targetId="org.eclipse.jdt.ui.ProjectsView">
-      </filter>
-   </extension>
-   
-   <extension
-         point="org.eclipse.ui.propertyPages">
-      <page
-            category="com.liferay.ide.project.ui.properties"
-            class="com.liferay.ide.kaleo.ui.WorkflowValidationSettingsPage"
-            id="com.liferay.ide.kaleo.ui.propertyPage.workflow.validation"
-            name="Kaleo Workflow Validation">
-         <enabledWhen>
-            <adapt
-                  type="org.eclipse.core.resources.IProject">
-               <test
-                     property="com.liferay.ide.project.ui.isLiferayProject">
-               </test>
-            </adapt>
-         </enabledWhen>
-      </page>
-   </extension>
-   <extension
-         point="org.eclipse.ui.navigator.viewer">
-   </extension>
+			</pattern>
+		</template>
+	</extension>
+	<extension
+		point="org.eclipse.wst.sse.ui.editorConfiguration"
+	>
+		<sourceViewerConfiguration
+			class="com.liferay.ide.kaleo.ui.xml.KaleoStructuredTextViewConfiguration"
+			target="com.liferay.ide.kaleo.core.workflowdefinitioncontent,com.liferay.ide.kaleo.ui.editor.workflowDefinition"
+		>
+		</sourceViewerConfiguration>
+	</extension>
+	<extension
+		point="org.eclipse.ui.perspectives"
+	>
+		<perspective
+			class="com.liferay.ide.kaleo.ui.WorkflowDesignerPerspectiveFactory"
+			icon="icons/e16/workflow_16x16.png"
+			id="com.liferay.ide.eclipse.kaleo.ui.perspective.designer"
+			name="Kaleo Designer"
+		>
+		</perspective>
+	</extension>
+	<extension
+		point="org.eclipse.ui.perspectiveExtensions"
+	>
+		<perspectiveExtension
+			targetID="com.liferay.ide.eclipse.ui.perspective.liferay"
+		>
+			<perspectiveShortcut
+				id="com.liferay.ide.kaleo.ui.perspective.designer"
+			>
+			</perspectiveShortcut>
+			<newWizardShortcut
+				id="com.liferay.ide.kaleo.ui.new.definition"
+			>
+			</newWizardShortcut>
+		</perspectiveExtension>
+	</extension>
+	<extension
+		point="org.eclipse.ui.preferencePages"
+	>
+		<page
+			category="com.liferay.ide.ui.preferences.liferay"
+			class="com.liferay.ide.kaleo.ui.KaleoUIPreferencePage"
+			id="com.liferay.ide.kaleo.ui.preference"
+			name="Kaleo Designer"
+		>
+		</page>
+		<page
+			category="com.liferay.ide.ui.preferences.liferay"
+			class="com.liferay.ide.kaleo.ui.WorkflowValidationSettingsPage"
+			id="com.liferay.ide.kaleo.ui.validation.preference"
+			name="Kaleo Workflow Validation"
+		>
+		</page>
+	</extension>
+	<extension
+		point="org.eclipse.jdt.ui.javaElementFilters"
+	>
+		<filter
+			class="com.liferay.ide.kaleo.ui.WorkflowSupportProjectFilter"
+			description="Hide the &quot;Kaleo Designer Support&quot; project"
+			enabled="true"
+			id="com.liferay.ide.kaleo.ui.WorkflowSupportProjectFilter"
+			name="Kaleo Designer support project"
+			targetId="org.eclipse.jdt.ui.PackageExplorer"
+		>
+		</filter>
+		<filter
+			class="com.liferay.ide.kaleo.ui.WorkflowSupportProjectFilter"
+			description="Hide the &quot;Kaleo Designer Support&quot; project"
+			enabled="true"
+			id="com.liferay.ide.kaleo.ui.WorkflowSupportProjectFilter"
+			name="Kaleo Designer support project"
+			targetId="org.eclipse.jdt.ui.ProjectsView"
+		>
+		</filter>
+	</extension>
+
+	<extension
+		point="org.eclipse.ui.propertyPages"
+	>
+		<page
+			category="com.liferay.ide.project.ui.properties"
+			class="com.liferay.ide.kaleo.ui.WorkflowValidationSettingsPage"
+			id="com.liferay.ide.kaleo.ui.propertyPage.workflow.validation"
+			name="Kaleo Workflow Validation"
+		>
+			<enabledWhen>
+				<adapt
+					type="org.eclipse.core.resources.IProject"
+				>
+					<test
+						property="com.liferay.ide.project.ui.isLiferayProject"
+					>
+					</test>
+				</adapt>
+			</enabledWhen>
+		</page>
+	</extension>
+	<extension
+		point="org.eclipse.ui.navigator.viewer"
+	>
+	</extension>
 </plugin>

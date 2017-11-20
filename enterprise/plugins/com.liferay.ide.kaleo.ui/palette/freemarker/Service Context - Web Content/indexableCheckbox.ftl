@@ -1,1 +1,1 @@
-<#assign indexableCheckbox = serviceContext.getAttribute("indexableCheckbox")!"">
+<#assign indexableCheckbox = serviceContext.getAttribute("indexableCheckbox")!"" />

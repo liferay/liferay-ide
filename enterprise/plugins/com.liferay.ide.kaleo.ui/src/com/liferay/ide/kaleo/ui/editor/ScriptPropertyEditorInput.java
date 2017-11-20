@@ -1,16 +1,25 @@
-/******************************************************************************
- * Copyright (c) 2014 Liferay, Inc.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- ******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.kaleo.ui.editor;
 
 import com.liferay.ide.kaleo.core.model.ScriptLanguageType;
 import com.liferay.ide.kaleo.core.model.Scriptable;
+
+import java.io.File;
+
+import java.lang.reflect.Field;
 
 import java.net.URI;
 
@@ -19,6 +28,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.EnumSerialization;
 import org.eclipse.ui.IPersistableElement;
@@ -26,99 +36,96 @@ import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.editors.text.ILocationProvider;
 
 /**
- * A storage editor input that can read a sapphire value property.
- *
  * @author Gregory Amerson
  */
-public class ScriptPropertyEditorInput extends PlatformObject implements IStorageEditorInput, ILocationProvider
-{
+public class ScriptPropertyEditorInput extends PlatformObject implements IStorageEditorInput, ILocationProvider {
 
-    private Element modelElement;
-    private ValueProperty valueProperty;
+	public ScriptPropertyEditorInput(Element modelElement, ValueProperty property) {
+		_modelElement = modelElement;
+		_valueProperty = property;
+	}
 
-    public ScriptPropertyEditorInput( Element modelElement, ValueProperty property )
-    {
-        super();
-        this.modelElement = modelElement;
-        this.valueProperty = property;
-    }
+	public boolean exists() {
+		if ((_modelElement != null) && (_valueProperty != null)) {
+			return true;
+		}
 
-    public boolean exists()
-    {
-        return this.modelElement != null && this.valueProperty != null;
-    }
+		return false;
+	}
 
-    @SuppressWarnings( "rawtypes" )
-    @Override
-    public Object getAdapter( Class adapter )
-    {
-        if( ILocationProvider.class.equals( adapter ) )
-        {
-            return this;
-        }
+	@Override
+	@SuppressWarnings("rawtypes")
+	public Object getAdapter(Class adapter) {
+		if (ILocationProvider.class.equals(adapter)) {
+			return this;
+		}
 
-        return super.getAdapter( adapter );
-    }
+		return super.getAdapter(adapter);
+	}
 
-    public ImageDescriptor getImageDescriptor()
-    {
-        return null;
-    }
+	public ImageDescriptor getImageDescriptor() {
+		return null;
+	}
 
-    public String getName()
-    {
-        return this.valueProperty.name();
-    }
+	public String getName() {
+		return _valueProperty.name();
+	}
 
-    public IPath getPath( Object element )
-    {
-        return getStorage().getFullPath();
-    }
+	public IPath getPath(Object element) {
+		return getStorage().getFullPath();
+	}
 
-    public IPersistableElement getPersistable()
-    {
-        return null;
-    }
+	public IPersistableElement getPersistable() {
+		return null;
+	}
 
-    public ValueProperty getProperty()
-    {
-        return this.valueProperty;
-    }
+	public ValueProperty getProperty() {
+		return _valueProperty;
+	}
 
-    public String getScriptLanguage()
-    {
-        String retval = null;
+	public String getScriptLanguage() {
+		String retval = null;
 
-        try
-        {
-            ScriptLanguageType scriptType =
-                this.modelElement.nearest( Scriptable.class ).getScriptLanguage().content();
+		try {
+			Scriptable scriptable = _modelElement.nearest(Scriptable.class);
 
-            EnumSerialization enumValue =
-                scriptType.getClass().getFields()[scriptType.ordinal()].getAnnotation( EnumSerialization.class );
+			Value<ScriptLanguageType> languageType = scriptable.getScriptLanguage();
 
-            retval = enumValue.primary();
-        }
-        catch( Exception e )
-        {
-        }
+			ScriptLanguageType scriptType = languageType.content();
 
-        return retval;
-    }
+			Class<?> scriptTypeClass = scriptType.getClass();
 
-    public IStorage getStorage()
-    {
-        return new ScriptPropertyStorage( this.modelElement, this.valueProperty );
-    }
+			Field field = scriptTypeClass.getFields()[scriptType.ordinal()];
 
-    public String getToolTipText()
-    {
-        return getStorage().getFullPath().toPortableString();
-    }
+			EnumSerialization enumValue = field.getAnnotation(EnumSerialization.class);
 
-    public URI getURI( Object element )
-    {
-        return getStorage().getFullPath().toFile().toURI();
-    }
+			retval = enumValue.primary();
+		}
+		catch (Exception e) {
+		}
+
+		return retval;
+	}
+
+	public IStorage getStorage() {
+		return new ScriptPropertyStorage(_modelElement, _valueProperty);
+	}
+
+	public String getToolTipText() {
+		IPath path = getStorage().getFullPath();
+
+		return path.toPortableString();
+	}
+
+	public URI getURI(Object element) {
+		IPath path = getStorage().getFullPath();
+
+		File file = path.toFile();
+
+		return file.toURI();
+	}
+
+	private Element _modelElement;
+	private ValueProperty _valueProperty;
 
 }

@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.action;
@@ -26,79 +29,74 @@ import org.eclipse.sapphire.ui.forms.PropertyEditorActionHandler;
 /**
  * @author Gregory Amerson
  */
-public abstract class ListSelectionEditHandler extends PropertyEditorActionHandler
-{
+public abstract class ListSelectionEditHandler extends PropertyEditorActionHandler {
 
-    @Override
-    protected boolean computeEnablementState()
-    {
-        if( super.computeEnablementState() == true )
-        {
-            ListSelectionService selectionService = getSelectionService();
+	public abstract Object edit(Element element, Presentation context);
 
-            if( selectionService != null )
-            {
-                List<Element> selection = selectionService.selection();
+	@Override
+	public void init(SapphireAction action, ActionHandlerDef def) {
+		super.init(action, def);
 
-                return selection != null && selection.size() == 1;
-            }
-        }
+		ImageData typeImage = typeImage();
 
-        return false;
-    }
+		if (typeImage != null) {
+			addImage(typeImage);
+		}
 
-    public abstract Object edit( Element element, final Presentation context );
+		ListSelectionService selectionService = action.getPart().service(ListSelectionService.class);
 
-    protected ListSelectionService getSelectionService()
-    {
-        return getPart().service( ListSelectionService.class );
-    }
+		Listener selectionListener = new Listener() {
 
-    @Override
-    public void init( final SapphireAction action, final ActionHandlerDef def )
-    {
-        super.init( action, def );
+			@Override
+			public void handle(Event event) {
+				refreshEnablementState();
+			}
 
-        final ImageData typeImage = typeImage();
+		};
 
-        if( typeImage != null )
-        {
-            addImage( typeImage );
-        }
+		if (selectionService != null) {
+			selectionService.attach(selectionListener);
+		}
+	}
 
-        ListSelectionService selectionService = action.getPart().service( ListSelectionService.class );
+	@Override
+	protected boolean computeEnablementState() {
+		if (super.computeEnablementState() == true) {
+			ListSelectionService selectionService = getSelectionService();
 
-        Listener selectionListener = new Listener()
-        {
-            @Override
-            public void handle( Event event )
-            {
-                refreshEnablementState();
-            }
-        };
+			if (selectionService != null) {
+				List<Element> selection = selectionService.selection();
 
-        if( selectionService != null )
-        {
-            selectionService.attach( selectionListener );
-        }
-    }
+				if ((selection != null) && (selection.size() == 1)) {
+					return true;
+				}
 
-    @Override
-    protected Object run( final Presentation context )
-    {
-        Object retval = null;
+				return false;
+			}
+		}
 
-        ListSelectionService selectionService = getSelectionService();
+		return false;
+	}
 
-        if( selectionService != null )
-        {
-            List<Element> selection = selectionService.selection();
+	protected ListSelectionService getSelectionService() {
+		return getPart().service(ListSelectionService.class);
+	}
 
-            retval = edit( selection.get( 0 ), context );
-        }
+	@Override
+	protected Object run(Presentation context) {
+		Object retval = null;
 
-        return retval;
-    }
+		ListSelectionService selectionService = getSelectionService();
 
-    protected abstract ImageData typeImage();
+		if (selectionService != null) {
+			List<Element> selection = selectionService.selection();
+
+			retval = edit(selection.get(0), context);
+		}
+
+		return retval;
+	}
+
+	protected abstract ImageData typeImage();
+
 }

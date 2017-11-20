@@ -1,1 +1,1 @@
-<#assign neverExpireCheckbox = serviceContext.getAttribute("neverExpireCheckbox")!"">
+<#assign neverExpireCheckbox = serviceContext.getAttribute("neverExpireCheckbox")!"" />

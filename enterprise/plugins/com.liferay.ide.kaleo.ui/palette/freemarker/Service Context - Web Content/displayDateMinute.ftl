@@ -1,1 +1,1 @@
-<#assign displayDateMinute = serviceContext.getAttribute("displayDateMinute")!"">
+<#assign displayDateMinute = serviceContext.getAttribute("displayDateMinute")!"" />

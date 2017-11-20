@@ -1,1 +1,1 @@
-<#assign anonymous = serviceContext.getAttribute("anonymous")!"">
+<#assign anonymous = serviceContext.getAttribute("anonymous")!"" />

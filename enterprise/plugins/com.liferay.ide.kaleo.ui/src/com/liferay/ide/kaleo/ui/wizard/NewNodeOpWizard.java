@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.wizard;
@@ -16,6 +19,8 @@ import static com.liferay.ide.ui.util.UIUtil.sync;
 import com.liferay.ide.kaleo.core.model.CanTransition;
 import com.liferay.ide.kaleo.core.model.Condition;
 import com.liferay.ide.kaleo.core.model.Fork;
+import com.liferay.ide.kaleo.core.model.Join;
+import com.liferay.ide.kaleo.core.model.JoinXor;
 import com.liferay.ide.kaleo.core.model.Node;
 import com.liferay.ide.kaleo.core.model.State;
 import com.liferay.ide.kaleo.core.model.Task;
@@ -31,6 +36,8 @@ import com.liferay.ide.kaleo.core.op.NewNodeOp.StateForOp;
 import com.liferay.ide.kaleo.core.op.NewNodeOp.TaskForOp;
 import com.liferay.ide.kaleo.ui.diagram.NewNodeAddActionHandler;
 
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.ui.Presentation;
@@ -41,125 +48,146 @@ import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 /**
  * @author Gregory Amerson
  */
-public class NewNodeOpWizard extends SapphireWizard<NewNodeOp>
-{
+public class NewNodeOpWizard extends SapphireWizard<NewNodeOp> {
 
-    private NewNodeAddActionHandler actionHandler;
-    private Presentation context;
-    private DiagramNodePart diagramNodePart;
+	public NewNodeOpWizard(
+		NewNodeOp modelElement, String wizardId, NewNodeAddActionHandler actionHandler, Presentation context) {
 
-    public NewNodeOpWizard(
-        NewNodeOp modelElement, String wizardId, NewNodeAddActionHandler actionHandler,
-        Presentation context )
-    {
-        super( modelElement, DefinitionLoader.context( NewNodeOpWizard.class ).sdef( "WorkflowDefinitionWizards" ).wizard( wizardId ) );
-        this.actionHandler = actionHandler;
-        this.context = context;
-    }
+		super(modelElement, _loaderSdef.wizard(wizardId));
 
-    @Override
-    protected Status performFinish( ProgressMonitor monitor )
-    {
-        final Object[] diagramNode = new Object[1];
+		_actionHandler = actionHandler;
+		_context = context;
+	}
 
-        monitor.beginTask( "Creating new node", 2 );
+	@Override
+	protected Status performFinish(ProgressMonitor monitor) {
+		Object[] diagramNode = new Object[1];
 
-        sync
-        (
-            new Runnable()
-            {
-                public void run()
-                {
-                    diagramNode[0] = NewNodeOpWizard.this.actionHandler.insertDiagramPart( NewNodeOpWizard.this.context, false );
-                }
-            }
-        );
+		monitor.beginTask("Creating new node", 2);
 
-        monitor.worked( 1 );
+		sync(
+			new Runnable() {
 
-        if( diagramNode[0] instanceof DiagramNodePart )
-        {
-            this.diagramNodePart = (DiagramNodePart) diagramNode[0];
+				public void run() {
+					diagramNode[0] = NewNodeOpWizard.this._actionHandler.insertDiagramPart(
+						NewNodeOpWizard.this._context, false);
+				}
 
-            sync
-            (
-                new Runnable()
-                {
-                    public void run()
-                    {
-                        performPostDiagramNodeAdded();
-                    }
-                }
-            );
+			});
 
-            monitor.worked( 1 );
-        }
+		monitor.worked(1);
 
-        return Status.createOkStatus();
-    }
+		if (diagramNode[0] instanceof DiagramNodePart) {
+			_diagramNodePart = (DiagramNodePart)diagramNode[0];
 
-    protected void performPostDiagramNodeAdded()
-    {
-        final NewNodeOp newNodeOp = this.element().nearest( NewNodeOp.class );
+			sync(
+				new Runnable() {
 
-        final CanTransition newNode = newNodeOp.adapt( CanTransition.class );
+					public void run() {
+						performPostDiagramNodeAdded();
+					}
 
-        final CanTransition node = this.diagramNodePart.getLocalModelElement().nearest( CanTransition.class );
+				});
 
-        final WorkflowDefinition workflowDefinition = node.nearest( WorkflowDefinition.class );
+			monitor.worked(1);
+		}
 
-        if( newNode != null && node != null )
-        {
-            node.setName( newNode.getName().content() );
+		return Status.createOkStatus();
+	}
 
-            if( newNodeOp.getConnectedNodes().size() > 0 )
-            {
-                for( Node diagramNode : newNodeOp.getConnectedNodes() )
-                {
-                    String diagramNodeName = diagramNode.getName().content( true );
+	protected void performPostDiagramNodeAdded() {
+		NewNodeOp newNodeOp = element().nearest(NewNodeOp.class);
 
-                    if( diagramNode instanceof ConditionForOp )
-                    {
-                        workflowDefinition.getConditions().insert().setName( diagramNodeName );
-                    }
-                    else if( diagramNode instanceof ForkForOp )
-                    {
-                        workflowDefinition.getForks().insert().setName( diagramNodeName );
-                    }
-                    else if( diagramNode instanceof JoinForOp )
-                    {
-                        workflowDefinition.getJoins().insert().setName( diagramNodeName );
-                    }
-                    else if( diagramNode instanceof JoinXorForOp)
-                    {
-                        workflowDefinition.getJoinXors().insert().setName( diagramNodeName );
-                    }
-                    else if( diagramNode instanceof StateForOp )
-                    {
-                        workflowDefinition.getStates().insert().setName( diagramNodeName );
-                    }
-                    else if( diagramNode instanceof TaskForOp )
-                    {
-                        workflowDefinition.getTasks().insert().setName( diagramNodeName );
-                    }
+		CanTransition newNode = newNodeOp.adapt(CanTransition.class);
 
-                    if( diagramNode instanceof ChooseDiagramNode || node instanceof State || node instanceof Task ||
-                                    node instanceof Condition || node instanceof Fork )
-                    {
-                        Transition newTransition = node.getTransitions().insert();
-                        newTransition.setName( diagramNodeName );
-                        newTransition.setTarget( diagramNodeName );
-                    }
-                    else
-                    {
-                        Transition joinTransition = diagramNode.nearest( CanTransition.class ).getTransitions().insert();
-                        joinTransition.setName( node.getName().content() );
-                        joinTransition.setTarget( node.getName().content() );
-                    }
-                }
-            }
-        }
+		CanTransition node = _diagramNodePart.getLocalModelElement().nearest(CanTransition.class);
 
-        this.actionHandler.postDiagramNodePartAdded( this.element(), newNode, node );
-    }
+		WorkflowDefinition workflowDefinition = node.nearest(WorkflowDefinition.class);
+
+		if ((newNode != null) && (node != null)) {
+			Value<String> newNodeName = newNode.getName();
+
+			node.setName(newNodeName.content());
+
+			if (newNodeOp.getConnectedNodes().size() > 0) {
+				for (Node diagramNode : newNodeOp.getConnectedNodes()) {
+					Value<String> nodeName = diagramNode.getName();
+
+					String diagramNodeName = nodeName.content(true);
+
+					if (diagramNode instanceof ConditionForOp) {
+						ElementList<Condition> conditions = workflowDefinition.getConditions();
+
+						Condition insertCondition = conditions.insert();
+
+						insertCondition.setName(diagramNodeName);
+					}
+					else if (diagramNode instanceof ForkForOp) {
+						ElementList<Fork> forks = workflowDefinition.getForks();
+
+						Fork insertFork = forks.insert();
+
+						insertFork.setName(diagramNodeName);
+					}
+					else if (diagramNode instanceof JoinForOp) {
+						ElementList<Join> joins = workflowDefinition.getJoins();
+
+						Join insertJoin = joins.insert();
+
+						insertJoin.setName(diagramNodeName);
+					}
+					else if (diagramNode instanceof JoinXorForOp) {
+						ElementList<JoinXor> joinXors = workflowDefinition.getJoinXors();
+
+						JoinXor insertJoinXor = joinXors.insert();
+
+						insertJoinXor.setName(diagramNodeName);
+					}
+					else if (diagramNode instanceof StateForOp) {
+						ElementList<State> states = workflowDefinition.getStates();
+
+						State insertState = states.insert();
+
+						insertState.setName(diagramNodeName);
+					}
+					else if (diagramNode instanceof TaskForOp) {
+						ElementList<Task> tasks = workflowDefinition.getTasks();
+
+						Task insertTask = tasks.insert();
+
+						insertTask.setName(diagramNodeName);
+					}
+
+					if (diagramNode instanceof ChooseDiagramNode || node instanceof Condition ||
+						node instanceof Fork || node instanceof State || node instanceof Task) {
+
+						Transition newTransition = node.getTransitions().insert();
+
+						newTransition.setName(diagramNodeName);
+						newTransition.setTarget(diagramNodeName);
+					}
+					else {
+						CanTransition canTransition = diagramNode.nearest(CanTransition.class);
+
+						ElementList<Transition> transition = canTransition.getTransitions();
+
+						Transition joinTransition = transition.insert();
+
+						joinTransition.setName(node.getName().content());
+						joinTransition.setTarget(node.getName().content());
+					}
+				}
+			}
+		}
+
+		_actionHandler.postDiagramNodePartAdded(element(), newNode, node);
+	}
+
+	private static DefinitionLoader _loader = DefinitionLoader.context(NewNodeOpWizard.class);
+	private static DefinitionLoader _loaderSdef = _loader.sdef("WorkflowDefinitionWizards");
+
+	private NewNodeAddActionHandler _actionHandler;
+	private Presentation _context;
+	private DiagramNodePart _diagramNodePart;
+
 }

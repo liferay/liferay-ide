@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.diagram;
@@ -36,99 +39,100 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 /**
  * @author Gregory Amerson
  */
-public class ShowDiagramPartActionHandler extends SapphireActionHandler
-{
+public class ShowDiagramPartActionHandler extends SapphireActionHandler {
 
-    @Override
-    protected Object run( Presentation context )
-    {
-        final SapphireDiagramEditorPagePart diagramPart = context.part().nearest( SapphireDiagramEditorPagePart.class );
+	@Override
+	protected Object run(Presentation context) {
+		SapphireDiagramEditorPagePart diagramPart = context.part().nearest(SapphireDiagramEditorPagePart.class);
 
-        if( diagramPart != null )
-        {
-            final LabelProvider labelProvider = new LabelProvider()
-            {
-                @Override
-                public Image getImage( Object element )
-                {
-                    if( element instanceof DiagramNodePart )
-                    {
-                        DiagramNodePart diagramNodePart = (DiagramNodePart) element;
+		if (diagramPart != null) {
+			LabelProvider labelProvider = new LabelProvider() {
 
-                        Element modelElement = diagramNodePart.getLocalModelElement();
+				@Override
+				public Image getImage(Object element) {
+					if (element instanceof DiagramNodePart) {
+						DiagramNodePart diagramNodePart = (DiagramNodePart)element;
 
-                        return diagramPart.getSwtResourceCache().image( modelElement.type().image() );
-                    }
-                    else if( element instanceof DiagramConnectionPart )
-                    {
-                        return diagramPart.getSwtResourceCache().image( Transition.TYPE.image() );
-                    }
-                    else
-                    {
-                        return diagramPart.getSwtResourceCache().image( WorkflowNode.TYPE.image() );
-                    }
-                }
+						Element modelElement = diagramNodePart.getLocalModelElement();
 
-                @Override
-                public String getText( Object element )
-                {
-                    if( element instanceof DiagramNodePart )
-                    {
-                        return ( (DiagramNodePart) element ).getId();
-                    }
-                    else if( element instanceof DiagramConnectionPart )
-                    {
-                        return ( (DiagramConnectionPart) element ).getLabel();
-                    }
-                    else
-                    {
-                        return element != null ? element.toString() : "";
-                    }
-                }
-            };
+						return diagramPart.getSwtResourceCache().image(modelElement.type().image());
+					}
+					else if (element instanceof DiagramConnectionPart) {
+						return diagramPart.getSwtResourceCache().image(Transition.TYPE.image());
+					}
+					else {
+						return diagramPart.getSwtResourceCache().image(WorkflowNode.TYPE.image());
+					}
+				}
 
-            final ElementListSelectionDialog dialog =
-                new ElementListSelectionDialog( ( (SwtPresentation) context ).shell(), labelProvider );
+				@Override
+				public String getText(Object element) {
+					if (element instanceof DiagramNodePart) {
+						return ((DiagramNodePart)element).getId();
+					}
+					else if (element instanceof DiagramConnectionPart) {
+						return ((DiagramConnectionPart)element).getLabel();
+					}
+					else {
+						if (element != null) {
+							return element.toString();
+						}
 
-            final List<SapphirePart> parts = new ArrayList<SapphirePart>();
-            parts.addAll( diagramPart.getNodes() );
-            parts.addAll( diagramPart.getConnections() );
+						return "";
+					}
+				}
 
-            dialog.setElements( parts.toArray() );
-            dialog.setMultipleSelection( false );
-            dialog.setHelpAvailable( false );
-            dialog.setTitle( "Find Part" );
-            dialog.setMessage( "Select part:" );
+			};
 
-            dialog.open();
+			ElementListSelectionDialog dialog = new ElementListSelectionDialog(
+				((SwtPresentation)context).shell(), labelProvider);
 
-            final Object[] result = dialog.getResult();
+			List<SapphirePart> parts = new ArrayList<>();
 
-            if( result != null && result.length == 1 )
-            {
-                //select node in diagram
-                final ISapphirePart part = (ISapphirePart) result[0];
+			parts.addAll(diagramPart.getNodes());
+			parts.addAll(diagramPart.getConnections());
 
-                if( part instanceof DiagramNodePart || part instanceof DiagramConnectionPart )
-                {
-//                    diagramPart.setSelections( ReadOnlyListFactory.create( part ) );
-                    SapphireDiagramEditor diagramEditor = diagramPart.adapt( SapphireDiagramEditor.class );
-                    GraphicalViewer viewer = diagramEditor.getGraphicalViewer();
+			dialog.setElements(parts.toArray());
 
-                    GraphicalEditPart editpart = diagramEditor.getGraphicalEditPart(part);
+			dialog.setMultipleSelection(false);
+			dialog.setHelpAvailable(false);
+			dialog.setTitle("Find Part");
+			dialog.setMessage("Select part:");
 
-                    if (editpart != null)
-                    {
-                        // Force a layout first.
-                        viewer.flush();
-                        viewer.select( editpart );
-                        viewer.reveal( editpart );
-                    }
-                }
-            }
-        }
+			dialog.open();
 
-        return null;
-    }
+			Object[] result = dialog.getResult();
+
+			if ((result != null) && (result.length == 1)) {
+
+				// select node in diagram
+
+				ISapphirePart part = (ISapphirePart)result[0];
+
+				if (part instanceof DiagramConnectionPart || part instanceof DiagramNodePart) {
+					/*
+					 * diagramPart.setSelections( ReadOnlyListFactory.create(
+					 * part ) );
+					 */
+					SapphireDiagramEditor diagramEditor = diagramPart.adapt(SapphireDiagramEditor.class);
+
+					GraphicalViewer viewer = diagramEditor.getGraphicalViewer();
+
+					GraphicalEditPart editpart = diagramEditor.getGraphicalEditPart(part);
+
+					if (editpart != null) {
+
+						// Force a layout first.
+
+						viewer.flush();
+						viewer.select(editpart);
+						viewer.reveal(editpart);
+					}
+				}
+			}
+		}
+
+		return null;
+	}
 
 }

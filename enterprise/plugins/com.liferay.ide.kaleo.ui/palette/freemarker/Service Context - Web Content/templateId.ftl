@@ -1,1 +1,1 @@
-<#assign templateId = serviceContext.getAttribute("templateId")!"">
+<#assign templateId = serviceContext.getAttribute("templateId")!"" />

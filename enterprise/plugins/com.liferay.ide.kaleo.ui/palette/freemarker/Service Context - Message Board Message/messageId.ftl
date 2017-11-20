@@ -1,1 +1,1 @@
-<#assign messageId = serviceContext.getAttribute("messageId")!"">
+<#assign messageId = serviceContext.getAttribute("messageId")!"" />

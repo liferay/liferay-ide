@@ -1,1 +1,1 @@
-<#assign type = serviceContext.getAttribute("type")!"">
+<#assign type = serviceContext.getAttribute("type")!"" />

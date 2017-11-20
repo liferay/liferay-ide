@@ -1,1 +1,1 @@
-<#assign assetLinksSearchContainerPrimaryKeys = serviceContext.getAttribute("assetLinksSearchContainerPrimaryKeys")!"">
+<#assign assetLinksSearchContainerPrimaryKeys = serviceContext.getAttribute("assetLinksSearchContainerPrimaryKeys")!"" />

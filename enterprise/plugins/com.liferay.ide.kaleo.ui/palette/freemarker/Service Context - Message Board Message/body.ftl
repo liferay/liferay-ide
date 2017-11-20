@@ -1,1 +1,1 @@
-<#assign body = serviceContext.getAttribute("body")!"">
+<#assign body = serviceContext.getAttribute("body")!"" />

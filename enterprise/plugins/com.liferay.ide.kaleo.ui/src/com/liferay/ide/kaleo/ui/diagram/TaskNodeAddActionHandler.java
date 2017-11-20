@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.diagram;
@@ -24,59 +27,59 @@ import com.liferay.ide.kaleo.core.op.NewTaskNode.INewTaskNotification;
 import com.liferay.ide.kaleo.core.op.NewTaskNodeOp;
 import com.liferay.ide.kaleo.core.util.KaleoModelUtil;
 
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.diagram.editor.DiagramNodeTemplate;
 
 /**
  * @author Gregory Amerson
  */
-public class TaskNodeAddActionHandler extends NewNodeAddActionHandler
-{
+public class TaskNodeAddActionHandler extends NewNodeAddActionHandler {
 
-    private static final String WIZARD_ID = "newTaskNodeWizard";
+	public TaskNodeAddActionHandler(DiagramNodeTemplate nodeTemplate) {
+		super(nodeTemplate);
+	}
 
-    public TaskNodeAddActionHandler( DiagramNodeTemplate nodeTemplate )
-    {
-        super( nodeTemplate );
-    }
+	@Override
+	public void postDiagramNodePartAdded(NewNodeOp op, CanTransition newNodeFromWizard, CanTransition newNode) {
+		Task newTask = newNode.nearest(Task.class);
+		NewTaskNode newTaskFromWizard = newNodeFromWizard.nearest(NewTaskNode.class);
 
-    @Override
-    protected NewNodeOp createOp( Presentation context )
-    {
-        NewTaskNodeOp op = NewTaskNodeOp.TYPE.instantiate();
+		KaleoModelUtil.changeTaskAssignments(newTask, op.nearest(AssignableOp.class));
 
-        op.getImpliedScriptable().setScriptLanguage(
-            KaleoModelUtil.getDefaultValue(
-                getModelElement(), KaleoCore.DEFAULT_SCRIPT_LANGUAGE_KEY, ScriptLanguageType.GROOVY ) );
+		for (Action taskAction : newTaskFromWizard.getTaskActions()) {
+			ElementList<Action> action = newTask.getTaskActions();
 
-        return op;
-    }
+			Action insertAction = action.insert();
 
-    @Override
-    protected String getWizardId()
-    {
-        return WIZARD_ID;
-    }
+			insertAction.copy(taskAction);
+		}
 
-    @Override
-    public void postDiagramNodePartAdded( NewNodeOp op, CanTransition newNodeFromWizard, CanTransition newNode )
-    {
-        Task newTask = newNode.nearest( Task.class );
-        NewTaskNode newTaskFromWizard = newNodeFromWizard.nearest( NewTaskNode.class );
+		for (INewTaskNotification taskNotification : newTaskFromWizard.getNewTaskNotifications()) {
+			ActionNotification newTaskNotification = newTask.getTaskNotifications().insert();
 
-        KaleoModelUtil.changeTaskAssignments( newTask, op.nearest( AssignableOp.class ) );
+			newTaskNotification.setName(taskNotification.getName().content());
+			newTaskNotification.setExecutionType(taskNotification.getExecutionType().content());
+			newTaskNotification.setTemplateLanguage(taskNotification.getTemplateLanguage().content());
+		}
+	}
 
-        for( Action taskAction : newTaskFromWizard.getTaskActions() )
-        {
-            newTask.getTaskActions().insert().copy( taskAction );
-        }
+	@Override
+	protected NewNodeOp createOp(Presentation context) {
+		NewTaskNodeOp op = NewTaskNodeOp.TYPE.instantiate();
 
-        for( INewTaskNotification taskNotification : newTaskFromWizard.getNewTaskNotifications() )
-        {
-            ActionNotification newTaskNotification = newTask.getTaskNotifications().insert();
-            newTaskNotification.setName( taskNotification.getName().content() );
-            newTaskNotification.setExecutionType( taskNotification.getExecutionType().content() );
-            newTaskNotification.setTemplateLanguage( taskNotification.getTemplateLanguage().content() );
-        }
-    }
+		op.getImpliedScriptable().setScriptLanguage(
+			KaleoModelUtil.getDefaultValue(
+				getModelElement(), KaleoCore.DEFAULT_SCRIPT_LANGUAGE_KEY, ScriptLanguageType.GROOVY));
+
+		return op;
+	}
+
+	@Override
+	protected String getWizardId() {
+		return _WIZARD_ID;
+	}
+
+	private static final String _WIZARD_ID = "newTaskNodeWizard";
+
 }

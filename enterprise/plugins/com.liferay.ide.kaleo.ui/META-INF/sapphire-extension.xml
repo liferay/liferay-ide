@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension xmlns="http://www.eclipse.org/sapphire/xmlns/extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <action>
-        <id>Sapphire.Edit</id>
-        <label>${ Handlers.Size == 1 ? Concat( &quot;edit &quot;, Handlers[ 0 ].Label ) : &quot;edit&quot; }</label>
-        <image>icons/e16/edit_16x16.gif</image>
-        <key-binding>F2</key-binding>
-        <description>Edits an entity.</description>
-        <location>after:Sapphire.Add</location>
-        <group>Sapphire.AddDeleteGroup</group>
-        <context>Sapphire.ListPropertyEditor</context>
-        <context>Sapphire.Actuator</context>
-        <context>Sapphire.Diagram.Node</context>
-        <context>Sapphire.ValuePropertyEditor</context>
-    </action>
-    <action>
-        <id>Sapphire.Edit.Actions</id>
-        <label>Edit Actions</label>
-        <image>icons/e16/action_16x16.gif</image>
-        <location>after:Sapphire.Add</location>
-        <group>Sapphire.AddDeleteGroup</group>
-        <context>Sapphire.Diagram.Node</context>
-    </action>
-    <action>
-        <id>Sapphire.Edit.Notifications</id>
-        <label>Edit Notifications</label>
-        <image>icons/e16/notification_16x16.png</image>
-        <location>after:Sapphire.Add</location>
-        <group>Sapphire.AddDeleteGroup</group>
-        <context>Sapphire.Diagram.Node</context>
-    </action>
-    <action>
-        <id>Kaleo.Edit.Assignments</id>
-        <label>Change Assignments</label>
-        <image>icons/e16/user_16x16.gif</image>
-        <location>after:Sapphire.Add</location>
-        <group>Sapphire.AddDeleteGroup</group>
-        <context>Sapphire.Diagram.Node</context>
-    </action>
-    <action>
-        <id>Kaleo.Diagram.Start.Transition</id>
-        <label>Start Transition</label>
-        <image>icons/e16/arrow_16x16.png</image>
-        <location>after:Sapphire.ShowInSource</location>
-        <context>Sapphire.Diagram.Node</context>
-    </action>
+	<action>
+		<id>Sapphire.Edit</id>
+		<label>${ Handlers.Size == 1 ? Concat( &quot;edit &quot;, Handlers[ 0 ].Label ) : &quot;edit&quot; }</label>
+		<image>icons/e16/edit_16x16.gif</image>
+		<key-binding>F2</key-binding>
+		<description>Edits an entity.</description>
+		<location>after:Sapphire.Add</location>
+		<group>Sapphire.AddDeleteGroup</group>
+		<context>Sapphire.ListPropertyEditor</context>
+		<context>Sapphire.Actuator</context>
+		<context>Sapphire.Diagram.Node</context>
+		<context>Sapphire.ValuePropertyEditor</context>
+	</action>
+	<action>
+		<id>Sapphire.Edit.Actions</id>
+		<label>Edit Actions</label>
+		<image>icons/e16/action_16x16.gif</image>
+		<location>after:Sapphire.Add</location>
+		<group>Sapphire.AddDeleteGroup</group>
+		<context>Sapphire.Diagram.Node</context>
+	</action>
+	<action>
+		<id>Sapphire.Edit.Notifications</id>
+		<label>Edit Notifications</label>
+		<image>icons/e16/notification_16x16.png</image>
+		<location>after:Sapphire.Add</location>
+		<group>Sapphire.AddDeleteGroup</group>
+		<context>Sapphire.Diagram.Node</context>
+	</action>
+	<action>
+		<id>Kaleo.Edit.Assignments</id>
+		<label>Change Assignments</label>
+		<image>icons/e16/user_16x16.gif</image>
+		<location>after:Sapphire.Add</location>
+		<group>Sapphire.AddDeleteGroup</group>
+		<context>Sapphire.Diagram.Node</context>
+	</action>
+	<action>
+		<id>Kaleo.Diagram.Start.Transition</id>
+		<label>Start Transition</label>
+		<image>icons/e16/arrow_16x16.png</image>
+		<location>after:Sapphire.ShowInSource</location>
+		<context>Sapphire.Diagram.Node</context>
+	</action>
 </extension>

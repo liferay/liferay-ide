@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.navigator;
@@ -20,225 +23,286 @@ import org.json.JSONObject;
 /**
  * @author Gregory Amerson
  */
-public class WorkflowDefinitionEntry
-{
-    public static WorkflowDefinitionEntry createFromJSONObject( JSONObject jsonDefinition )
-    {
-        WorkflowDefinitionEntry node = new WorkflowDefinitionEntry();
+public class WorkflowDefinitionEntry {
 
-        try
-        {
-            node.setName( jsonDefinition.getString( "name" ) );
+	public static WorkflowDefinitionEntry createFromJsObject(JSONObject objectDefinition) {
+		WorkflowDefinitionEntry node = new WorkflowDefinitionEntry();
 
-            if( jsonDefinition.has( "title" ) )
-            {
-                node.setTitle( jsonDefinition.getString( "title" ) );
-            }
+		try {
+			node.setName(objectDefinition.getString("name"));
 
-            if( jsonDefinition.has( "titleMap" ) )
-            {
-                node.setTitleMap( jsonDefinition.getString( "titleMap" ) );
-            }
-            else if( !empty( node.getTitle() ) )
-            {
-                node.setTitleMap( KaleoUtil.createJSONTitleMap( node.getTitle() ) );
-            }
+			if (objectDefinition.has("title")) {
+				node.setTitle(objectDefinition.getString("title"));
+			}
 
-            node.setVersion( jsonDefinition.getInt( "version" ) );
+			if (objectDefinition.has("titleMap")) {
+				node.setTitleMap(objectDefinition.getString("titleMap"));
+			}
+			else if (!empty(node.getTitle())) {
+				node.setTitleMap(KaleoUtil.createJSONTitleMap(node.getTitle()));
+			}
 
-            if( jsonDefinition.has( "draftVersion" ) )
-            {
-                node.setDraftVersion( jsonDefinition.getInt( "draftVersion" ) );
-            }
+			node.setVersion(objectDefinition.getInt("version"));
 
-            if( jsonDefinition.has( "companyId" ) )
-            {
-                node.setCompanyId( jsonDefinition.getLong( "companyId" ) );
-            }
+			if (objectDefinition.has("draftVersion")) {
+				node.setDraftVersion(objectDefinition.getInt("draftVersion"));
+			}
 
-            if( jsonDefinition.has( "userId" ) )
-            {
-                node.setUserId( jsonDefinition.getLong( "userId" ) );
-            }
+			if (objectDefinition.has("companyId")) {
+				node.setCompanyId(objectDefinition.getLong("companyId"));
+			}
 
-            if( jsonDefinition.has( "groupId" ) )
-            {
-                node.setGroupId( jsonDefinition.getLong( "groupId" ) );
-            }
+			if (objectDefinition.has("userId")) {
+				node.setUserId(objectDefinition.getLong("userId"));
+			}
 
-            node.setContent( jsonDefinition.getString( "content" ) );
-        }
-        catch( Exception e )
-        {
+			if (objectDefinition.has("groupId")) {
+				node.setGroupId(objectDefinition.getLong("groupId"));
+			}
 
-        }
+			node.setContent(objectDefinition.getString("content"));
+		}
+		catch (Exception e) {
+		}
 
-        return node;
-    }
+		return node;
+	}
 
-    @Override
-    public boolean equals( Object obj )
-    {
-        if( obj != null && obj instanceof WorkflowDefinitionEntry )
-        {
-            WorkflowDefinitionEntry input = (WorkflowDefinitionEntry) obj;
-            return this.companyId == input.getCompanyId() &&
-                ( this.content == null ? input.getContent() == null : this.content.equals( input.getContent() ) ) &&
-                this.draftVersion == input.getDraftVersion() && this.groupId == input.getGroupId() &&
-                ( this.location == null ? input.getLocation() == null : this.location.equals( input.getLocation() ) ) &&
-                ( this.name == null ? input.getName() == null : this.name.equals( input.getName() ) ) &&
-                ( this.parent == null ? input.getParent() == null : this.parent.equals( input.getParent() ) &&
-                        ( this.title == null ? input.getTitle() == null : this.title.equals( input.getTitle() ) ) &&
-                        ( this.titleCurrentValue == null? input.getTitleCurrentValue() == null : this.titleCurrentValue.equals( input.getTitleCurrentValue() ) ) &&
-                        ( this.titleMap == null ? input.getTitleMap() == null : this.titleMap.equals( input.getTitleMap() ) ) &&
-                        this.userId == input.getUserId() && this.version == input.getVersion() );
-        }
+	@Override
+	public boolean equals(Object obj) {
+		if ((obj != null) && obj instanceof WorkflowDefinitionEntry) {
+			WorkflowDefinitionEntry input = (WorkflowDefinitionEntry)obj;
 
-        return false;
-    }
+			return _inforEquals(input);
+		}
 
-    private long companyId = -1;
-    private String content;
-    private int draftVersion = -1;
-    private long groupId = -1;
-    private boolean loadingNode;
-    private String location;
-    private String name;
-    private WorkflowDefinitionsFolder parent;
-    private String title;
-    private String titleCurrentValue;
-    private String titleMap;
-    private long userId = -1;
-    private int version = -1;
+		return false;
+	}
 
-    public long getCompanyId()
-    {
-        return companyId;
-    }
+	public long getCompanyId() {
+		return _companyId;
+	}
 
-    public String getContent()
-    {
-        return content;
-    }
+	public String getContent() {
+		return _content;
+	}
 
-    public int getDraftVersion()
-    {
-        return draftVersion;
-    }
+	public int getDraftVersion() {
+		return _draftVersion;
+	}
 
-    public long getGroupId()
-    {
-        return groupId;
-    }
+	public long getGroupId() {
+		return _groupId;
+	}
 
-    public String getLocation()
-    {
-        return this.location;
-    }
+	public String getLocation() {
+		return _location;
+	}
 
-    public String getName()
-    {
-        return isLoadingNode() ? "Loading kaleo workflows..." : name;
-    }
+	public String getName() {
+		if (isLoadingNode()) {
+			return "Loading kaleo workflows...";
+		}
 
-    public WorkflowDefinitionsFolder getParent()
-    {
-        return this.parent;
-    }
+		return _name;
+	}
 
-    public String getTitle()
-    {
-        return title;
-    }
+	public WorkflowDefinitionsFolder getParent() {
+		return _parent;
+	}
 
-    public String getTitleCurrentValue()
-    {
-        return titleCurrentValue;
-    }
+	public String getTitle() {
+		return _title;
+	}
 
-    public String getTitleMap()
-    {
-        return titleMap;
-    }
+	public String getTitleCurrentValue() {
+		return _titleCurrentValue;
+	}
 
-    public long getUserId()
-    {
-        return userId;
-    }
+	public String getTitleMap() {
+		return _titleMap;
+	}
 
-    public int getVersion()
-    {
-        return version;
-    }
+	public long getUserId() {
+		return _userId;
+	}
 
-    public boolean isLoadingNode()
-    {
-        return loadingNode;
-    }
+	public int getVersion() {
+		return _version;
+	}
 
-    public void setCompanyId( long companyId )
-    {
-        this.companyId = companyId;
-    }
+	public boolean isLoadingNode() {
+		return _loadingNode;
+	}
 
-    public void setContent( String content )
-    {
-        this.content = content;
-    }
+	public void setCompanyId(long companyId) {
+		_companyId = companyId;
+	}
 
-    public void setDraftVersion( int draftVersion )
-    {
-        this.draftVersion = draftVersion;
-    }
+	public void setContent(String content) {
+		_content = content;
+	}
 
-    public void setGroupId( long groupId )
-    {
-        this.groupId = groupId;
-    }
+	public void setDraftVersion(int draftVersion) {
+		_draftVersion = draftVersion;
+	}
 
-    public void setLoadingNode( boolean loadingNode )
-    {
-        this.loadingNode = loadingNode;
-    }
+	public void setGroupId(long groupId) {
+		_groupId = groupId;
+	}
 
-    public void setLocation( String loc )
-    {
-        this.location = loc;
-    }
+	public void setLoadingNode(boolean loadingNode) {
+		_loadingNode = loadingNode;
+	}
 
-    public void setName( String name )
-    {
-        this.name = name;
-    }
+	public void setLocation(String loc) {
+		_location = loc;
+	}
 
-    public void setParent( WorkflowDefinitionsFolder parent )
-    {
-        this.parent = parent;
-    }
+	public void setName(String name) {
+		_name = name;
+	}
 
-    public void setTitle( String title )
-    {
-        this.title = title;
-    }
+	public void setParent(WorkflowDefinitionsFolder parent) {
+		_parent = parent;
+	}
 
-    public void setTitleCurrentValue( String titleCurrentValue )
-    {
-        this.titleCurrentValue = titleCurrentValue;
-    }
+	public void setTitle(String title) {
+		_title = title;
+	}
 
-    public void setTitleMap( String title )
-    {
-        this.titleMap = title;
-    }
+	public void setTitleCurrentValue(String titleCurrentValue) {
+		_titleCurrentValue = titleCurrentValue;
+	}
 
-    public void setUserId( long userId )
-    {
-        this.userId = userId;
-    }
+	public void setTitleMap(String title) {
+		_titleMap = title;
+	}
 
-    public void setVersion( int version )
-    {
-        this.version = version;
-    }
+	public void setUserId(long userId) {
+		_userId = userId;
+	}
+
+	public void setVersion(int version) {
+		_version = version;
+	}
+
+	private boolean _inforEquals(WorkflowDefinitionEntry input) {
+		boolean infoEqual = false;
+
+		boolean idEqual = false;
+
+		if (_companyId == input.getCompanyId()) {
+			idEqual = true;
+		}
+
+		boolean contentEqual = false;
+
+		if (_content == null) {
+			contentEqual = input.getContent() == null;
+		}
+		else {
+			contentEqual = _content.equals(input.getContent());
+		}
+
+		boolean draftVersionEqual = false;
+
+		if (_draftVersion == input.getDraftVersion()) {
+			draftVersionEqual = true;
+		}
+
+		boolean groupIdEqual = false;
+
+		if (_groupId == input.getGroupId()) {
+			groupIdEqual = true;
+		}
+
+		boolean locationEqual = false;
+
+		if (_location == null) {
+			locationEqual = input.getLocation() == null;
+		}
+		else {
+			locationEqual = _location.equals(input.getLocation());
+		}
+
+		boolean nameEqual = false;
+
+		if (_name == null) {
+			nameEqual = input.getName() == null;
+		}
+		else {
+			nameEqual = _name.equals(input.getName());
+		}
+
+		if (idEqual && contentEqual && draftVersionEqual && groupIdEqual && locationEqual && nameEqual) {
+			boolean parentEqual = false;
+
+			if (_parent == null) {
+				parentEqual = input.getParent() == null;
+			}
+			else {
+				parentEqual = _parent.equals(input.getParent());
+			}
+
+			boolean titleEqual = false;
+
+			if (_title == null) {
+				titleEqual = input.getTitle() == null;
+			}
+			else {
+				titleEqual = _title.equals(input.getTitle());
+			}
+
+			boolean titleCurrentValueEqual = false;
+
+			if (_titleCurrentValue == null) {
+				titleCurrentValueEqual = input.getTitleCurrentValue() == null;
+			}
+			else {
+				titleCurrentValueEqual = _titleCurrentValue.equals(input.getTitleCurrentValue());
+			}
+
+			boolean titleMapEqual = false;
+
+			if (_titleMap == null) {
+				titleMapEqual = input.getTitleMap() == null;
+			}
+			else {
+				titleMapEqual = _titleMap.equals(input.getTitleMap());
+			}
+
+			boolean userIdEqual = false;
+
+			if (_userId == input.getUserId()) {
+				userIdEqual = true;
+			}
+
+			boolean versionEqual = false;
+
+			if (_version == input.getVersion()) {
+				versionEqual = true;
+			}
+
+			infoEqual =
+				parentEqual && titleEqual && titleCurrentValueEqual && titleMapEqual && userIdEqual && versionEqual;
+		}
+
+		return infoEqual;
+	}
+
+	private long _companyId = -1;
+	private String _content;
+	private int _draftVersion = -1;
+	private long _groupId = -1;
+	private boolean _loadingNode;
+	private String _location;
+	private String _name;
+	private WorkflowDefinitionsFolder _parent;
+	private String _title;
+	private String _titleCurrentValue;
+	private String _titleMap;
+	private long _userId = -1;
+	private int _version = -1;
 
 }

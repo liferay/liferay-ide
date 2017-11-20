@@ -1,20 +1,24 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui;
 
-import com.liferay.ide.kaleo.ui.editor.WorkflowDefinitionEditorInput;
 import com.liferay.ide.kaleo.core.KaleoCore;
 import com.liferay.ide.kaleo.core.WorkflowSupportManager;
 import com.liferay.ide.kaleo.core.model.WorkflowDefinition;
+import com.liferay.ide.kaleo.ui.editor.WorkflowDefinitionEditorInput;
+import com.liferay.ide.kaleo.ui.navigator.WorkflowDefinitionEntry;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -27,48 +31,48 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Gregory Amerson
  */
-public class WorkflowProjectAdapterService extends UniversalConversionService
-{
+public class WorkflowProjectAdapterService extends UniversalConversionService {
 
-    @Override
-    public <A> A convert( Object object, Class<A> adapterType )
-    {
-        A retval = null;
+	@Override
+	public <A> A convert(Object object, Class<A> adapterType) {
+		A retval = null;
 
-        if( IProject.class.equals( adapterType ) )
-        {
-            ISapphirePart sapphirePart = context().find( ISapphirePart.class );
+		if (IProject.class.equals(adapterType)) {
+			ISapphirePart sapphirePart = context().find(ISapphirePart.class);
 
-            WorkflowDefinition workflowDefinition = sapphirePart.getLocalModelElement().nearest( WorkflowDefinition.class );
+			WorkflowDefinition workflowDefinition =
+				sapphirePart.getLocalModelElement().nearest(WorkflowDefinition.class);
 
-            IFile file = workflowDefinition.adapt( IFile.class );
+			IFile file = workflowDefinition.adapt(IFile.class);
 
-            if( file != null )
-            {
-                retval = adapterType.cast( file.getProject() );
-            }
-            else
-            {
-                // create support project
-                WorkflowSupportManager workflowSupportManager = KaleoCore.getDefault().getWorkflowSupportManager();
+			if (file != null) {
+				retval = adapterType.cast(file.getProject());
+			}
+			else {
 
-                IEditorInput editorInput = workflowDefinition.adapt( IEditorInput.class );
+				// create support project
 
-                if( editorInput instanceof WorkflowDefinitionEditorInput )
-                {
-                    WorkflowDefinitionEditorInput workflowInput = (WorkflowDefinitionEditorInput) editorInput;
-                    IServer server = workflowInput.getWorkflowDefinitionEntry().getParent().getParent();
+				WorkflowSupportManager workflowSupportManager = KaleoCore.getDefault().getWorkflowSupportManager();
 
-                    workflowSupportManager.setCurrentServer( server );
-                }
+				IEditorInput editorInput = workflowDefinition.adapt(IEditorInput.class);
 
-                IJavaProject supportProject = workflowSupportManager.getSupportProject();
+				if (editorInput instanceof WorkflowDefinitionEditorInput) {
+					WorkflowDefinitionEditorInput workflowInput = (WorkflowDefinitionEditorInput)editorInput;
 
-                retval = adapterType.cast( supportProject.getProject() );
-            }
-        }
+					WorkflowDefinitionEntry workflowEntry = workflowInput.getWorkflowDefinitionEntry();
 
-        return retval;
-    }
+					IServer server = workflowEntry.getParent().getParent();
+
+					workflowSupportManager.setCurrentServer(server);
+				}
+
+				IJavaProject supportProject = workflowSupportManager.getSupportProject();
+
+				retval = adapterType.cast(supportProject.getProject());
+			}
+		}
+
+		return retval;
+	}
 
 }

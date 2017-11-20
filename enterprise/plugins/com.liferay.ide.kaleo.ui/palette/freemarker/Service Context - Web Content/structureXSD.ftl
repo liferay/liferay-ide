@@ -1,1 +1,1 @@
-<#assign structureXSD = serviceContext.getAttribute("structureXSD")!"">
+<#assign structureXSD = serviceContext.getAttribute("structureXSD")!"" />

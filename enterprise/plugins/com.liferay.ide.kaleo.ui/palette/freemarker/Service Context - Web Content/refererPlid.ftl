@@ -1,1 +1,1 @@
-<#assign refererPlid = serviceContext.getAttribute("refererPlid")!"">
+<#assign refererPlid = serviceContext.getAttribute("refererPlid")!"" />

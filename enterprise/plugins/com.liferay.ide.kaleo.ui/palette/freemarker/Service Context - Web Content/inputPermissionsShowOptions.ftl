@@ -1,1 +1,1 @@
-<#assign inputPermissionsShowOptions = serviceContext.getAttribute("inputPermissionsShowOptions")!"">
+<#assign inputPermissionsShowOptions = serviceContext.getAttribute("inputPermissionsShowOptions")!"" />

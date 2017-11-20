@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.diagram;
@@ -19,6 +22,7 @@ import com.liferay.ide.kaleo.ui.wizard.NewNodeOpWizard;
 
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.sapphire.ui.ISapphirePart;
 import org.eclipse.sapphire.ui.Point;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.diagram.actions.DiagramNodeAddActionHandler;
@@ -30,91 +34,90 @@ import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 /**
  * @author Gregory Amerson
  */
-public abstract class NewNodeAddActionHandler extends DiagramNodeAddActionHandler
-{
-    public NewNodeAddActionHandler( DiagramNodeTemplate nodeTemplate )
-    {
-        super( nodeTemplate );
-    }
+public abstract class NewNodeAddActionHandler extends DiagramNodeAddActionHandler {
 
-    protected boolean canRunWizard( Presentation context )
-    {
-        WorkflowDefinitionEditor definitionEditor = context.part().adapt( WorkflowDefinitionEditor.class );
+	public NewNodeAddActionHandler(DiagramNodeTemplate nodeTemplate) {
+		super(nodeTemplate);
+	}
 
-        return definitionEditor.isNodeWizardsEnabled();
-    }
+	public Object insertDiagramPart(Presentation context, boolean enableDirectEditing) {
+		ISapphirePart spPart = getNodeTemplate().parent();
 
-    protected NewNodeOpWizard createNewNodeWizard(
-        NewNodeOp op, NewNodeAddActionHandler actionHandler, Presentation context )
-    {
-        return new NewNodeOpWizard( op, getWizardId(), actionHandler, context );
-    }
+		SapphireDiagramEditorPagePart diagramPart = (SapphireDiagramEditorPagePart)spPart;
 
-    protected abstract NewNodeOp createOp( Presentation context );
+		DiagramNodePart nodePart = getNodeTemplate().createNewDiagramNode();
+		Point pt = diagramPart.getMouseLocation();
 
-    protected abstract String getWizardId();
+		nodePart.setNodeBounds(pt.getX(), pt.getY());
 
-    public Object insertDiagramPart( Presentation context, boolean enableDirectEditing )
-    {
-        SapphireDiagramEditorPagePart diagramPart = (SapphireDiagramEditorPagePart) this.getNodeTemplate().parent();
+		if (enableDirectEditing) {
 
-        DiagramNodePart nodePart = this.getNodeTemplate().createNewDiagramNode();
-        Point pt = diagramPart.getMouseLocation();
-        nodePart.setNodeBounds(pt.getX(), pt.getY());
+			// Select the new node and put it in direct-edit mode
 
-        if( enableDirectEditing )
-        {
-            // Select the new node and put it in direct-edit mode
-            diagramPart.selectAndDirectEdit(nodePart);
-        }
+			diagramPart.selectAndDirectEdit(nodePart);
+		}
 
-        return nodePart;
-    }
+		return nodePart;
+	}
 
-    public abstract void postDiagramNodePartAdded(
-        NewNodeOp op, CanTransition newNodeFromWizard, CanTransition newNode );
+	public abstract void postDiagramNodePartAdded(NewNodeOp op, CanTransition newNodeFromWizard, CanTransition newNode);
 
-    @Override
-    public final Object run( Presentation context )
-    {
-        Object retval = null;
+	@Override
+	public Object run(Presentation context) {
+		Object retval = null;
 
-        if( canRunWizard( context ) )
-        {
-            NewNodeOp op = createOp( context );
+		if (canRunWizard(context)) {
+			NewNodeOp op = createOp(context);
 
-            final WorkflowDefinition oldWorkflowDefinition = (WorkflowDefinition) getModelElement();
-            WorkflowDefinition newWorkflowDefinition = op.getWorkflowDefinition().content( true );
+			WorkflowDefinition oldWorkflowDefinition = (WorkflowDefinition)getModelElement();
+			WorkflowDefinition newWorkflowDefinition = op.getWorkflowDefinition().content(true);
 
-            newWorkflowDefinition.copy( oldWorkflowDefinition );
+			newWorkflowDefinition.copy(oldWorkflowDefinition);
 
-            // When WorkflowDefinition.getSchemaVersion(), VersionedSchemaDefaultValueService.compute() 
-            // can't get the version, always returns the default value, directly set the schema version here.
-            newWorkflowDefinition.setSchemaVersion( oldWorkflowDefinition.getSchemaVersion().content() );
+			// When WorkflowDefinition.getSchemaVersion(),
+			// VersionedSchemaDefaultValueService.compute()
+			// can't get the version, always returns the default value, directly
+			// set the schema version here.
 
-            NewNodeOpWizard wizard = createNewNodeWizard( op, this, context );
+			newWorkflowDefinition.setSchemaVersion(oldWorkflowDefinition.getSchemaVersion().content());
 
-            WorkflowDefinitionEditor definitionEditor = context.part().adapt( WorkflowDefinitionEditor.class );
+			NewNodeOpWizard wizard = createNewNodeWizard(op, this, context);
 
-            op.setUseNodeWizards( definitionEditor.isNodeWizardsEnabled() );
+			WorkflowDefinitionEditor definitionEditor = context.part().adapt(WorkflowDefinitionEditor.class);
 
-            runWizard( context, wizard );
+			op.setUseNodeWizards(definitionEditor.isNodeWizardsEnabled());
 
-            definitionEditor.setNodeWizardsEnabled( op.isUseNodeWizards().content() );
-        }
-        else
-        {
-            retval = insertDiagramPart( context, true );
-        }
+			runWizard(context, wizard);
 
-        return retval;
-    }
+			definitionEditor.setNodeWizardsEnabled(op.isUseNodeWizards().content());
+		}
+		else {
+			retval = insertDiagramPart(context, true);
+		}
 
-    protected int runWizard( Presentation context, IWizard wizard )
-    {
-        WizardDialog wizardDiagram = new WizardDialog( ( (SwtPresentation) context ).shell(), wizard );
+		return retval;
+	}
 
-        return wizardDiagram.open();
-    }
+	protected boolean canRunWizard(Presentation context) {
+		WorkflowDefinitionEditor definitionEditor = context.part().adapt(WorkflowDefinitionEditor.class);
+
+		return definitionEditor.isNodeWizardsEnabled();
+	}
+
+	protected NewNodeOpWizard createNewNodeWizard(
+		NewNodeOp op, NewNodeAddActionHandler actionHandler, Presentation context) {
+
+		return new NewNodeOpWizard(op, getWizardId(), actionHandler, context);
+	}
+
+	protected abstract NewNodeOp createOp(Presentation context);
+
+	protected abstract String getWizardId();
+
+	protected int runWizard(Presentation context, IWizard wizard) {
+		WizardDialog wizardDiagram = new WizardDialog(((SwtPresentation)context).shell(), wizard);
+
+		return wizardDiagram.open();
+	}
 
 }

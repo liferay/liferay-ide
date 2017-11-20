@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.util;
@@ -15,6 +18,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.ILiferayServer;
 
 import java.io.ByteArrayInputStream;
+
 import java.util.Locale;
 
 import org.eclipse.core.resources.IFile;
@@ -25,12 +29,17 @@ import org.eclipse.wst.validation.ValidationResults;
 import org.eclipse.wst.validation.ValidatorMessage;
 import org.eclipse.wst.validation.internal.ValOperation;
 import org.eclipse.wst.validation.internal.ValType;
+import org.eclipse.wst.validation.internal.ValidationResultSummary;
 import org.eclipse.wst.validation.internal.ValidationRunner;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -39,111 +48,102 @@ import org.xml.sax.SAXParseException;
  * @author Gregory Amerson
  * @author Terry Jia
  */
-@SuppressWarnings( "restriction" )
-public class KaleoUtil
-{
+@SuppressWarnings("restriction")
+public class KaleoUtil {
 
-    public static String checkWorkflowDefinitionForErrors( IFile workspaceFile )
-    {
-        String retval = null;
-        // first perform manual validation to check for errors
-        try
-        {
-            StringBuilder errorMsgs = new StringBuilder();
+	public static String checkWorkflowDefinitionForErrors(IFile workspaceFile) {
+		String retval = null;
 
-            ValOperation result = ValidationRunner.validate( workspaceFile, ValType.Manual, null, true );
+		// first perform manual validation to check for errors
 
-            if( result.getResult().getSeverityError() == 1 )
-            {
-                ValidationResults results = result.getResults();
+		try {
+			StringBuilder errorMsgs = new StringBuilder();
 
-                for( ValidatorMessage message : results.getMessages() )
-                {
-                    if( message.getAttribute( IMarker.SEVERITY, -1 ) == IMarker.SEVERITY_ERROR )
-                    {
-                        errorMsgs.append( message.getAttribute( IMarker.MESSAGE ) ).append( '\n' );
-                    }
-                }
-            }
+			ValOperation result = ValidationRunner.validate(workspaceFile, ValType.Manual, null, true);
 
-            retval = errorMsgs.toString();
-        }
-        catch( Exception e )
-        {
-        }
+			ValidationResultSummary validationResult = result.getResult();
 
-        return retval;
-    }
+			if (validationResult.getSeverityError() == 1) {
+				ValidationResults results = result.getResults();
 
-    public static String createJSONTitleMap( String title ) throws JSONException
-    {
-        return createJSONTitleMap( title, Locale.getDefault().toString() );
-    }
+				for (ValidatorMessage message : results.getMessages()) {
+					if (message.getAttribute(IMarker.SEVERITY, -1) == IMarker.SEVERITY_ERROR) {
+						errorMsgs.append(message.getAttribute(IMarker.MESSAGE)).append('\n');
+					}
+				}
+			}
 
-    public static String createJSONTitleMap( String title, String portalLocale ) throws JSONException
-    {
-        JSONObject jsonTitleMap = new JSONObject();
+			retval = errorMsgs.toString();
+		}
+		catch (Exception e) {
+		}
 
-        try
-        {
-            Document doc = FileUtil.readXML( new ByteArrayInputStream( title.getBytes() ), null, new ErrorHandler()
-            {
-                public void warning( SAXParseException exception ) throws SAXException
-                {
-                }
+		return retval;
+	}
 
-                public void fatalError( SAXParseException exception ) throws SAXException
-                {
-                }
+	public static String createJSONTitleMap(String title) throws JSONException {
+		return createJSONTitleMap(title, Locale.getDefault().toString());
+	}
 
-                public void error( SAXParseException exception ) throws SAXException
-                {
-                }
-            });
+	public static String createJSONTitleMap(String title, String portalLocale) throws JSONException {
+		JSONObject jsonTitleMap = new JSONObject();
 
-            String defaultLocale = doc.getDocumentElement().getAttribute( "default-locale" );
+		try {
+			ErrorHandler errorHandle = new ErrorHandler() {
 
-            NodeList titles = doc.getElementsByTagName( "Title" );
+				public void error(SAXParseException exception) throws SAXException {
+				}
 
-            for (int i = 0; i < titles.getLength(); i++)
-            {
-                Node titleNode = titles.item( i );
+				public void fatalError(SAXParseException exception) throws SAXException {
+				}
 
-                String titleValue = titleNode.getTextContent();
+				public void warning(SAXParseException exception) throws SAXException {
+				}
 
-                String languageId = titleNode.getAttributes().getNamedItem( "language-id" ).getNodeValue();
+			};
 
-                if (languageId.equals( defaultLocale ))
-                {
-                    jsonTitleMap.put( languageId, titleValue );
-                    break;
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            jsonTitleMap.put( portalLocale, title );
-        }
+			Document doc = FileUtil.readXML(new ByteArrayInputStream(title.getBytes()), null, errorHandle);
 
-        return jsonTitleMap.toString();
-    }
+			String defaultLocale = doc.getDocumentElement().getAttribute("default-locale");
 
-    public static ILiferayServer getLiferayServer( IServer server, IProgressMonitor monitor )
-    {
-        ILiferayServer retval = null;
+			NodeList titles = doc.getElementsByTagName("Title");
 
-        if( server != null )
-        {
-            try
-            {
-                retval = (ILiferayServer) server.loadAdapter( ILiferayServer.class, monitor );
-            }
-            catch( Exception e )
-            {
-            }
-        }
+			for (int i = 0; i < titles.getLength(); i++) {
+				Node titleNode = titles.item(i);
 
-        return retval;
-    }
+				String titleValue = titleNode.getTextContent();
+
+				NamedNodeMap nameNodeMap = titleNode.getAttributes();
+
+				Node node = nameNodeMap.getNamedItem("language-id");
+
+				String languageId = node.getNodeValue();
+
+				if (languageId.equals(defaultLocale)) {
+					jsonTitleMap.put(languageId, titleValue);
+					break;
+				}
+			}
+		}
+		catch (Exception e) {
+			jsonTitleMap.put(portalLocale, title);
+		}
+
+		return jsonTitleMap.toString();
+	}
+
+	public static ILiferayServer getLiferayServer(IServer server, IProgressMonitor monitor) {
+		ILiferayServer retval = null;
+
+		if (server != null) {
+			try {
+				retval = (ILiferayServer)server.loadAdapter(ILiferayServer.class, monitor);
+			}
+			catch (Exception e) {
+			}
+		}
+
+		return retval;
+	}
 
 }

@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.action;
@@ -23,26 +26,23 @@ import org.eclipse.sapphire.ui.Presentation;
 /**
  * @author Gregory Amerson
  */
-public class EditNotificationHandler extends ListSelectionEditHandler
-{
+public class EditNotificationHandler extends ListSelectionEditHandler {
 
-    @Override
-    public Object edit( final Element modelElement, final Presentation context )
-    {
-        final Notification notification = modelElement.nearest( Notification.class );
+	@Override
+	public Object edit(Element modelElement, Presentation context) {
+		Notification notification = modelElement.nearest(Notification.class);
 
-        IKaleoEditorHelper kaleoEditorHelper =
-            KaleoUI.getKaleoEditorHelper( notification.getTemplateLanguage().text( true ) );
+		IKaleoEditorHelper kaleoEditorHelper = KaleoUI.getKaleoEditorHelper(
+			notification.getTemplateLanguage().text(true));
 
-        kaleoEditorHelper.openEditor( this.getPart(), notification, Notification.PROP_TEMPLATE );
+		kaleoEditorHelper.openEditor(getPart(), notification, Notification.PROP_TEMPLATE);
 
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-    protected ImageData typeImage()
-    {
-        return Action.TYPE.image();
-    }
+	@Override
+	protected ImageData typeImage() {
+		return Action.TYPE.image();
+	}
 
 }

@@ -1,1 +1,1 @@
-<#assign preview = serviceContext.getAttribute("preview")!"">
+<#assign preview = serviceContext.getAttribute("preview")!"" />

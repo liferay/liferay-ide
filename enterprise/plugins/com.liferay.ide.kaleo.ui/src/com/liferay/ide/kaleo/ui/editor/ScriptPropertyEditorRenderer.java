@@ -1,11 +1,16 @@
-/******************************************************************************
- * Copyright (c) 2014 Liferay, Inc.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- ******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.kaleo.ui.editor;
 
@@ -25,8 +30,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.text.DocumentEvent;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.ui.assist.internal.PropertyEditorAssistDecorator;
 import org.eclipse.sapphire.ui.forms.FormComponentPart;
@@ -43,240 +50,223 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
- * Create a full-featured code editor part based on platform default text editor. Adopters can specify contentType and
- * fileExtension hints that will be used when querying the platform for the correct editor descriptor.
- *
- * @author <a href="mailto:gregory.amerson@liferay.com">Gregory Amerson</a>
+ * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class ScriptPropertyEditorRenderer extends PropertyEditorPresentation
-{
+@SuppressWarnings("restriction")
+public class ScriptPropertyEditorRenderer extends PropertyEditorPresentation {
 
-    public static final class Factory extends PropertyEditorPresentationFactory
-    {
-        @Override
-        public PropertyEditorPresentation create( PropertyEditorPart part, SwtPresentation parent, Composite composite )
-        {
-            return new ScriptPropertyEditorRenderer( part, parent, composite );
-        }
-    }
+	public ScriptPropertyEditorRenderer(FormComponentPart part, SwtPresentation context, Composite composite) {
+		super(part, context, composite);
+	}
 
-    private IEditorPart editorPart;
+	public static final class Factory extends PropertyEditorPresentationFactory {
 
-    public ScriptPropertyEditorRenderer( FormComponentPart part, SwtPresentation context, Composite composite )
-    {
-        super( part, context, composite );
-    }
+		@Override
+		public PropertyEditorPresentation create(PropertyEditorPart part, SwtPresentation parent, Composite composite) {
+			return new ScriptPropertyEditorRenderer(part, parent, composite);
+		}
 
-    @Override
-    protected boolean canScaleVertically()
-    {
-        return true;
-    }
+	}
 
-    @Override
-    protected void createContents( Composite parent )
-    {
-        final PropertyEditorPart part = part();
-        final Element element = part.getLocalModelElement();
-        final ValueProperty property = part.property().nearest( ValueProperty.class );
+	@Override
+	protected boolean canScaleVertically() {
+		return true;
+	}
 
-        final Composite codeEditorParent = createMainComposite
-        (
-            parent,
-            new CreateMainCompositeDelegate( part )
-            {
-                @Override
-                public boolean canScaleVertically()
-                {
-                    return true;
-                }
-            }
-        );
+	@Override
+	protected void createContents(Composite parent) {
+		PropertyEditorPart part = part();
 
-//        this.context.adapt( codeEditorParent );
+		Element element = part.getLocalModelElement();
+		ValueProperty property = part.property().nearest(ValueProperty.class);
 
-        int codeEditorParentColumns = 1;
-        final SapphireToolBarActionPresentation toolBarActionsPresentation =
-            new SapphireToolBarActionPresentation( getActionPresentationManager() );
+		CreateMainCompositeDelegate createMainCompositeDelegate = new CreateMainCompositeDelegate(part) {
 
-        final boolean isActionsToolBarNeeded = toolBarActionsPresentation.hasActions();
-        if( isActionsToolBarNeeded )
-        {
-            codeEditorParentColumns++;
-        }
+			@Override
+			public boolean canScaleVertically() {
+				return true;
+			}
 
-        codeEditorParent.setLayout( glayout( codeEditorParentColumns, 0, 0, 0, 0 ) );
+		};
 
-        final Composite nestedComposite = new Composite( codeEditorParent, SWT.NONE );
-        nestedComposite.setLayoutData( gdfill() );
-        // nestedComposite.setLayout( glspacing( glayout( 2, 0, 0 ), 2 ) );
+		Composite codeEditorParent = createMainComposite(parent, createMainCompositeDelegate);
 
-        addControl( nestedComposite );
+		// context.adapt( codeEditorParent );
 
-        final PropertyEditorAssistDecorator decorator = createDecorator( nestedComposite );
+		int codeEditorParentColumns = 1;
+		SapphireToolBarActionPresentation toolBarActionsPresentation = new SapphireToolBarActionPresentation(
+			getActionPresentationManager());
 
-        decorator.control().setLayoutData( gdvalign( gd(), SWT.TOP ) );
-        decorator.addEditorControl( nestedComposite );
+		boolean actionsToolBarNeeded = toolBarActionsPresentation.hasActions();
 
-        final ScriptPropertyEditorInput editorInput = new ScriptPropertyEditorInput( element, property );
-        final List<Control> relatedControls = new ArrayList<Control>();
+		if (actionsToolBarNeeded) {
+			codeEditorParentColumns++;
+		}
 
-        try
-        {
-            final IEditorSite editorSite = this.part().adapt( IEditorSite.class );
+		codeEditorParent.setLayout(glayout(codeEditorParentColumns, 0, 0, 0, 0));
 
-            this.editorPart = createEditorPart( editorInput, editorSite );
+		Composite nestedComposite = new Composite(codeEditorParent, SWT.NONE);
 
-            this.editorPart.createPartControl( nestedComposite );
+		nestedComposite.setLayoutData(gdfill());
 
-            Control editorControl = (Control) this.editorPart.getAdapter( Control.class );
+		// nestedComposite.setLayout( glspacing( glayout( 2, 0, 0 ), 2 ) );
 
-            // need to find the first child of nestedComposite to relayout editor control
+		addControl(nestedComposite);
 
-            Composite editorControlParent = null;
-            Control control = editorControl;
+		PropertyEditorAssistDecorator decorator = createDecorator(nestedComposite);
 
-            while( editorControlParent == null && control != null && !nestedComposite.equals( control.getParent() ) )
-            {
-                control = control.getParent();
-            }
+		decorator.control().setLayoutData(gdvalign(gd(), SWT.TOP));
+		decorator.addEditorControl(nestedComposite);
 
-            nestedComposite.setLayout( glspacing( glayout( 2, 0, 0 ), 2 ) );
-            control.setLayoutData( gdfill() );
+		ScriptPropertyEditorInput editorInput = new ScriptPropertyEditorInput(element, property);
+		List<Control> relatedControls = new ArrayList<>();
 
-            decorator.addEditorControl( editorControl, true );
+		try {
+			IEditorSite editorSite = part().adapt(IEditorSite.class);
 
-            editorControl.setData( RELATED_CONTROLS, relatedControls );
+			_editorPart = createEditorPart(editorInput, editorSite);
 
-        }
-        catch( Exception e )
-        {
-            KaleoUI.logError( e );
-        }
+			_editorPart.createPartControl(nestedComposite);
 
-        if( isActionsToolBarNeeded )
-        {
-            final ToolBar toolbar = new ToolBar( codeEditorParent, SWT.FLAT | SWT.HORIZONTAL );
-            toolbar.setLayoutData( gdvfill() );
-            toolBarActionsPresentation.setToolBar( toolbar );
-            toolBarActionsPresentation.render();
+			Control editorControl = _editorPart.getAdapter(Control.class);
 
-            addControl( toolbar );
+			// need to find the first child of nestedComposite to relayout
+			// editor control
 
-            decorator.addEditorControl( toolbar );
-            relatedControls.add( toolbar );
-        }
+			Composite editorControlParent = null;
+			Control control = editorControl;
 
-        final List<Class<?>> listenerClasses =
-            part.getRenderingHint( PropertyEditorDef.HINT_LISTENERS, Collections.<Class<?>> emptyList() );
-        final List<ValuePropertyEditorListener> listeners = new ArrayList<ValuePropertyEditorListener>();
+			while ((editorControlParent == null) && (control != null) && !nestedComposite.equals(control.getParent())) {
+				control = control.getParent();
+			}
 
-        if( !listenerClasses.isEmpty() )
-        {
-            for( Class<?> cl : listenerClasses )
-            {
-                try
-                {
-                    final ValuePropertyEditorListener listener = (ValuePropertyEditorListener) cl.newInstance();
-                    listener.initialize( this );
-                    listeners.add( listener );
-                }
-                catch( Exception e )
-                {
-                    KaleoUI.logError( e );
-                }
-            }
-        }
+			nestedComposite.setLayout(glspacing(glayout(2, 0, 0), 2));
+			control.setLayoutData(gdfill());
 
-        ITextEditor textEditor = null;
+			decorator.addEditorControl(editorControl, true);
 
-        if( this.editorPart instanceof ITextEditor )
-        {
-            textEditor = (ITextEditor) this.editorPart;
-        }
-        else
-        {
-            textEditor = (ITextEditor) this.editorPart.getAdapter( ITextEditor.class );
-        }
+			editorControl.setData(RELATED_CONTROLS, relatedControls);
+		}
+		catch (Exception e) {
+			KaleoUI.logError(e);
+		}
 
-        addControl( (Control) textEditor.getAdapter( Control.class ) );
+		if (actionsToolBarNeeded) {
+			ToolBar toolbar = new ToolBar(codeEditorParent, SWT.FLAT | SWT.HORIZONTAL);
 
-        textEditor.getDocumentProvider().getDocument( this.editorPart.getEditorInput() ).addDocumentListener(
-            new IDocumentListener()
-            {
+			toolbar.setLayoutData(gdvfill());
+			toolBarActionsPresentation.setToolBar(toolbar);
 
-                public void documentAboutToBeChanged( DocumentEvent event )
-                {
-                }
+			toolBarActionsPresentation.render();
 
-                public void documentChanged( DocumentEvent event )
-                {
-                    element.property( property ).write( event.getDocument().get() );
+			addControl(toolbar);
 
-                    if( !listeners.isEmpty() )
-                    {
-                        for( ValuePropertyEditorListener listener : listeners )
-                        {
-                            try
-                            {
-                                listener.handleValueChanged();
-                            }
-                            catch( Exception e )
-                            {
-                                KaleoUI.logError( e );
-                            }
-                        }
-                    }
-                }
-            } );
-    }
+			decorator.addEditorControl(toolbar);
+			relatedControls.add(toolbar);
+		}
 
-    protected IEditorPart createEditorPart( ScriptPropertyEditorInput editorInput, IEditorSite editorSite )
-    {
-        IKaleoEditorHelper scriptEditorHelper = KaleoUI.getKaleoEditorHelper( editorInput.getScriptLanguage() );
+		List<Class<?>> listenerClasses = part.getRenderingHint(
+			PropertyEditorDef.HINT_LISTENERS, Collections.<Class<?>>emptyList());
+		List<ValuePropertyEditorListener> listeners = new ArrayList<>();
 
-        if( scriptEditorHelper == null )
-        {
-            scriptEditorHelper = new DefaultScriptEditorHelper();
-        }
+		if (!listenerClasses.isEmpty()) {
+			for (Class<?> cl : listenerClasses) {
+				try {
+					ValuePropertyEditorListener listener = (ValuePropertyEditorListener)cl.newInstance();
 
-        return scriptEditorHelper.createEditorPart( editorInput, editorSite );
-    }
+					listener.initialize(this);
+					listeners.add(listener);
+				}
+				catch (Exception e) {
+					KaleoUI.logError(e);
+				}
+			}
+		}
 
-    // public static final class Groovy extends PropertyEditorRendererFactory
-    // {
-    //
-    // @Override
-    // public boolean isApplicableTo( final PropertyEditorPart propertyEditorDefinition )
-    // {
-    // return ( propertyEditorDefinition.getProperty() instanceof ValueProperty );
-    // }
-    //
-    // @Override
-    // public PropertyEditorRenderer create( final SapphireRenderingContext context, final PropertyEditorPart part )
-    // {
-    // return new ScriptPropertyEditorRenderer( context, part, ScriptLanguageType.GROOVY );
-    // }
-    // }
-    //
-    // public static final class Javascript extends PropertyEditorRendererFactory
-    // {
-    //
-    // @Override
-    // public boolean isApplicableTo( final PropertyEditorPart propertyEditorDefinition )
-    // {
-    // return ( propertyEditorDefinition.getProperty() instanceof ValueProperty );
-    // }
-    //
-    // @Override
-    // public PropertyEditorRenderer create( final SapphireRenderingContext context, final PropertyEditorPart part )
-    // {
-    // return new ScriptPropertyEditorRenderer( context, part, ScriptLanguageType.JAVASCRIPT );
-    // }
-    // }
+		ITextEditor textEditor = null;
 
+		if (_editorPart instanceof ITextEditor) {
+			textEditor = (ITextEditor)_editorPart;
+		}
+		else {
+			ITextEditor textEdit = _editorPart.getAdapter(ITextEditor.class);
+
+			textEditor = textEdit;
+		}
+
+		addControl((Control)textEditor.getAdapter(Control.class));
+
+		IDocumentListener documentListener = new IDocumentListener() {
+
+			public void documentAboutToBeChanged(DocumentEvent event) {
+			}
+
+			public void documentChanged(DocumentEvent event) {
+				Value<Object> elementProperty = element.property(property);
+
+				elementProperty.write(event.getDocument().get());
+
+				if (!listeners.isEmpty()) {
+					for (ValuePropertyEditorListener listener : listeners) {
+						try {
+							listener.handleValueChanged();
+						}
+						catch (Exception e) {
+							KaleoUI.logError(e);
+						}
+					}
+				}
+			}
+
+		};
+
+		IDocumentProvider documentProvider = textEditor.getDocumentProvider();
+
+		IDocument document = documentProvider.getDocument(_editorPart.getEditorInput());
+
+		document.addDocumentListener(documentListener);
+	}
+
+	protected IEditorPart createEditorPart(ScriptPropertyEditorInput editorInput, IEditorSite editorSite) {
+		IKaleoEditorHelper scriptEditorHelper = KaleoUI.getKaleoEditorHelper(editorInput.getScriptLanguage());
+
+		if (scriptEditorHelper == null) {
+			scriptEditorHelper = new DefaultScriptEditorHelper();
+		}
+
+		return scriptEditorHelper.createEditorPart(editorInput, editorSite);
+	}
+
+	private IEditorPart _editorPart;
+
+	/**
+	 * public static final class Groovy extends PropertyEditorRendererFactory {
+	 *
+	 * @Override public boolean isApplicableTo( PropertyEditorPart
+	 *           propertyEditorDefinition ) { return (
+	 *           propertyEditorDefinition.getProperty() instanceof ValueProperty
+	 *           ); }
+	 *
+	 * @Override public PropertyEditorRenderer create( SapphireRenderingContext
+	 *           context, PropertyEditorPart part ) { return new
+	 *           ScriptPropertyEditorRenderer( context, part,
+	 *           ScriptLanguageType.GROOVY ); } }
+	 *
+	 *           public static class Javascript extends
+	 *           PropertyEditorRendererFactory {
+	 *
+	 * @Override public boolean isApplicableTo( PropertyEditorPart
+	 *           propertyEditorDefinition ) { return (
+	 *           propertyEditorDefinition.getProperty() instanceof ValueProperty
+	 *           ); }
+	 *
+	 * @Override public PropertyEditorRenderer create( SapphireRenderingContext
+	 *           context, PropertyEditorPart part ) { return new
+	 *           ScriptPropertyEditorRenderer( context, part,
+	 *           ScriptLanguageType.JAVASCRIPT ); } }
+	 */
 }

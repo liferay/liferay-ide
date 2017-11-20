@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui;
@@ -14,10 +17,11 @@ package com.liferay.ide.kaleo.ui;
 import static com.liferay.ide.core.util.CoreUtil.empty;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.kaleo.ui.editor.HiddenFileEditorInput;
-import com.liferay.ide.kaleo.ui.editor.ScriptPropertyEditorInput;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.kaleo.core.KaleoCore;
 import com.liferay.ide.kaleo.core.model.Node;
+import com.liferay.ide.kaleo.ui.editor.HiddenFileEditorInput;
+import com.liferay.ide.kaleo.ui.editor.ScriptPropertyEditorInput;
 
 import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
@@ -26,6 +30,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -46,276 +51,256 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * @author Gregory Amerson
  */
-public abstract class AbstractKaleoEditorHelper implements IKaleoEditorHelper
-{
-    private String contributorName;
-    private String editorId;
-    private String fileExtension;
-    private String languageType;
+public abstract class AbstractKaleoEditorHelper implements IKaleoEditorHelper {
 
-    public IEditorPart createEditorPart( ScriptPropertyEditorInput editorInput, IEditorSite editorSite )
-    {
-        IEditorPart editorPart = null;
+	public IEditorPart createEditorPart(ScriptPropertyEditorInput editorInput, IEditorSite editorSite) {
+		IEditorPart editorPart = null;
 
-        try
-        {
-            editorPart = new TextEditor();
-            editorPart.init( editorSite, editorInput );
-        }
-        catch( PartInitException e )
-        {
-            KaleoUI.logError( "Could not create default script editor.", e );
-        }
+		try {
+			editorPart = new TextEditor();
 
-        return editorPart;
-    }
+			editorPart.init(editorSite, editorInput);
+		}
+		catch (PartInitException pie) {
+			KaleoUI.logError("Could not create default script editor.", pie);
+		}
 
-    public String getContributorName()
-    {
-        return contributorName;
-    }
+		return editorPart;
+	}
 
-    public String getEditorId()
-    {
-        return editorId;
-    }
+	public String getContributorName() {
+		return _contributorName;
+	}
 
-    public String getFileExtension()
-    {
-        return fileExtension;
-    }
+	public String getEditorId() {
+		return _editorId;
+	}
 
-    private HiddenFileEditorInput getHiddenFileEditorInput(
-        IProject project, String name, String nodeName, String fileContents )
-    {
-        return new HiddenFileEditorInput( getTemporaryFile( project, name, nodeName, getFileExtension(), fileContents ) );
-    }
+	public String getFileExtension() {
+		return _fileExtension;
+	}
 
-    public String getLanguageType()
-    {
-        return this.languageType;
-    }
+	public String getLanguageType() {
+		return _languageType;
+	}
 
-    private IFile getTemporaryFile(
-        IProject project, String name, String nodeName, String fileExtension, String fileContents )
-    {
-        if( empty( fileContents ) )
-        {
-            fileContents = "";
-        }
+	public void handleDropFromPalette(IEditorPart activeEditor) {
 
-        IPath tempScriptFilePath = getTempScriptFilePath( project, name, nodeName, fileExtension );
+		// default do nothing
 
-        IFile tempFile = ResourcesPlugin.getWorkspace().getRoot().getFile( tempScriptFilePath );
+	}
 
-        try
-        {
-            final ByteArrayInputStream source = new ByteArrayInputStream( fileContents.getBytes( "UTF-8" ) );
+	public void openEditor(ISapphirePart sapphirePart, Element modelElement, ValueProperty valueProperty) {
+		try {
+			Object content = modelElement.property(valueProperty).content();
 
-            if( tempFile.exists() )
-            {
-                tempFile.setContents( source, true, false, null );
-            }
-            else
-            {
-                tempFile.create( source, true, null );
-            }
+			if (content == null) {
+				content = "";
+			}
 
-            tempFile.setCharset( "UTF-8", new NullProgressMonitor() );
-        }
-        catch( CoreException | UnsupportedEncodingException e )
-        {
-            KaleoCore.logError( e );
-        }
+			IProject project = sapphirePart.adapt(IProject.class);
 
-        return tempFile;
-    }
+			IEditorInput editorInput = modelElement.adapt(IEditorInput.class);
 
-    private String getTempScriptFileName( String name, String nodeName, String fileExtension )
-    {
-        StringBuilder retval = new StringBuilder( /*"."*/ );
+			String name = editorInput.getName();
 
-        if( !empty( nodeName ))
-        {
-            retval.append( nodeName.replaceAll( "![A-Za-z]+", "" ).replaceAll( "\\s+", "" ) );
-        }
-        else if (!empty( name ) )
-        {
-            retval.append( name.replaceAll( "![A-Za-z]+", "" ) );
-        }
+			Node node = modelElement.nearest(Node.class);
 
-        retval.append( "." ).append( fileExtension );
+			String nodeName = node.getName().content();
 
-        return retval.toString();
-    }
+			HiddenFileEditorInput hiddenFileEditorInput = _getHiddenFileEditorInput(
+				project, name, nodeName, content.toString());
 
-    private IPath getTempScriptFilePath( IProject project, String name, String nodeName, String fileExtension )
-    {
-        IPath retval = null;
+			IEditorSite editorSite = sapphirePart.adapt(IEditorSite.class);
 
-        IContainer folder = null;
+			IWorkbenchWindow wbWindow = editorSite.getWorkbenchWindow();
 
-        Path tempPath = new Path(KALEO_TEMP_PREFIX + System.currentTimeMillis() + "/" + getTempScriptFileName( name, nodeName, fileExtension ) );
+			IEditorPart editorPart = wbWindow.getActivePage().openEditor(hiddenFileEditorInput, _editorId);
 
-        if( project != null && tempPath != null)
-        {
-            IFolder[] folders = CoreUtil.getSourceFolders( JavaCore.create( project ) ).toArray( new IFolder[0] );
+			ITextEditor textEditor = (ITextEditor)editorPart.getAdapter(ITextEditor.class);
 
-            if( !empty( folders ) )
-            {
-                folder = folders[0];;
+			IDocumentListener documentListener = new IDocumentListener() {
 
-            }
-            else
-            {
-                folder = project;
-            }
-        }
+				public void documentAboutToBeChanged(DocumentEvent event) {
+				}
 
-        if (folder != null)
-        {
-            // create a temporary folder that will contain the script
-            final IFile tempFile = folder.getFile( tempPath );
+				public void documentChanged(DocumentEvent event) {
+					String contents = event.getDocument().get();
 
-            try
-            {
-                CoreUtil.makeFolders( (IFolder) tempFile.getParent() );
-                retval = tempFile.getFullPath();
-            }
-            catch( CoreException e )
-            {
-            }
-        }
+					modelElement.property(valueProperty).write(contents);
+				}
 
-        return retval;
-    }
+			};
 
-    public void handleDropFromPalette( IEditorPart activeEditor )
-    {
-        // default do nothing
-    }
+			IDocumentProvider documentProvider = textEditor.getDocumentProvider();
 
-    public void openEditor( ISapphirePart sapphirePart, final Element modelElement, final ValueProperty valueProperty )
-    {
-        try
-        {
-            Object content = modelElement.property( valueProperty ).content();
+			documentProvider.getDocument(hiddenFileEditorInput).addDocumentListener(documentListener);
 
-            if( content == null )
-            {
-                content = "";
-            }
+			IWorkbenchPartSite wbPartSite = editorPart.getSite();
 
-            final IProject project = sapphirePart.adapt( IProject.class );
+			IPartListener partListener = new IPartListener() {
 
-            final IEditorInput editorInput = modelElement.adapt( IEditorInput.class );
+				public void partActivated(IWorkbenchPart part) {
+				}
 
-            final String name = editorInput.getName();
+				public void partBroughtToTop(IWorkbenchPart part) {
+				}
 
-            final String nodeName = modelElement.nearest( Node.class ).getName().content();
+				public void partClosed(IWorkbenchPart part) {
+					if ((part != null) && part.equals(editorPart)) {
+						new WorkspaceJob("delete temp editor file") {
 
-            final HiddenFileEditorInput hiddenFileEditorInput =
-                getHiddenFileEditorInput( project, name, nodeName, content.toString() );
+							@Override
+							public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+								try {
+									IFile file = hiddenFileEditorInput.getFile();
 
-            final IEditorSite editorSite = sapphirePart.adapt( IEditorSite.class );
+									file.getParent().delete(true, null);
+								}
+								catch (CoreException ce) {
+								}
 
-            final IEditorPart editorPart =
-                editorSite.getWorkbenchWindow().getActivePage().openEditor( hiddenFileEditorInput, this.editorId );
+								return Status.OK_STATUS;
+							}
 
-            final ITextEditor textEditor = (ITextEditor) editorPart.getAdapter( ITextEditor.class );
+						}.schedule(100);
+					}
+				}
 
-            textEditor.getDocumentProvider().getDocument( hiddenFileEditorInput ).addDocumentListener
-            (
-                new IDocumentListener()
-                {
-                    public void documentAboutToBeChanged( DocumentEvent event )
-                    {
-                    }
+				public void partDeactivated(IWorkbenchPart part) {
+				}
 
-                    public void documentChanged( DocumentEvent event )
-                    {
-                        String contents = event.getDocument().get();
+				public void partOpened(IWorkbenchPart part) {
+				}
 
-                        modelElement.property( valueProperty ).write( contents );
-                    }
-                }
-            );
+			};
 
-            editorPart.getSite().getPage().addPartListener
-            (
-                new IPartListener()
-                {
-                    public void partActivated( IWorkbenchPart part )
-                    {
-                    }
+			wbPartSite.getPage().addPartListener(partListener);
+		}
+		catch (Exception e) {
+			KaleoUI.logError("Error opening editor.", e);
+		}
+	}
 
-                    public void partBroughtToTop( IWorkbenchPart part )
-                    {
-                    }
+	public void setContributorName(String contributorName) {
+		_contributorName = contributorName;
+	}
 
-                    public void partClosed( IWorkbenchPart part )
-                    {
-                        if( part != null && part.equals( editorPart ) )
-                        {
-                            new WorkspaceJob( "delete temp editor file" )
-                            {
-                                @Override
-                                public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-                                {
-                                    try
-                                    {
-                                        hiddenFileEditorInput.getFile().getParent().delete( true, null );
-                                    }
-                                    catch( CoreException e )
-                                    {
-                                    }
+	public void setEditorId(String editorId) {
+		_editorId = editorId;
+	}
 
-                                    return Status.OK_STATUS;
-                                }
-                            }.schedule( 100 );
-                        }
-                    }
+	public void setFileExtension(String fileExtension) {
+		_fileExtension = fileExtension;
+	}
 
-                    public void partDeactivated( IWorkbenchPart part )
-                    {
-                    }
+	public void setLanguageType(String langauge) {
+		_languageType = langauge;
+	}
 
-                    public void partOpened( IWorkbenchPart part )
-                    {
-                    }
-                }
-            );
-        }
-        catch( Exception e )
-        {
-            KaleoUI.logError( "Error opening editor.", e );
-        }
-    }
+	private HiddenFileEditorInput _getHiddenFileEditorInput(
+		IProject project, String name, String nodeName, String fileContents) {
 
-    public void setContributorName( String contributorName )
-    {
-        this.contributorName = contributorName;
-    }
+		return new HiddenFileEditorInput(_getTemporaryFile(project, name, nodeName, getFileExtension(), fileContents));
+	}
 
-    public void setEditorId( String editorId )
-    {
-        this.editorId = editorId;
-    }
+	private IFile _getTemporaryFile(
+		IProject project, String name, String nodeName, String fileExtension, String fileContents) {
 
-    public void setFileExtension( String fileExtension )
-    {
-        this.fileExtension = fileExtension;
-    }
+		if (empty(fileContents)) {
+			fileContents = "";
+		}
 
-    public void setLanguageType( String langauge )
-    {
-        this.languageType = langauge;
-    }
+		IPath tempScriptFilePath = _getTempScriptFilePath(project, name, nodeName, fileExtension);
+
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+		IFile tempFile = workspace.getRoot().getFile(tempScriptFilePath);
+
+		try {
+			ByteArrayInputStream source = new ByteArrayInputStream(fileContents.getBytes("UTF-8"));
+
+			if (FileUtil.exists(tempFile)) {
+				tempFile.setContents(source, true, false, null);
+			}
+			else {
+				tempFile.create(source, true, null);
+			}
+
+			tempFile.setCharset("UTF-8", new NullProgressMonitor());
+		}
+		catch (CoreException | UnsupportedEncodingException e) {
+			KaleoCore.logError(e);
+		}
+
+		return tempFile;
+	}
+
+	private String _getTempScriptFileName(String name, String nodeName, String fileExtension) {
+		StringBuilder retval = new StringBuilder(/* "." */);
+
+		if (!empty(nodeName)) {
+			retval.append(nodeName.replaceAll("![A-Za-z]+", "").replaceAll("\\s+", ""));
+		}
+		else if (!empty(name)) {
+			retval.append(name.replaceAll("![A-Za-z]+", ""));
+		}
+
+		retval.append(".").append(fileExtension);
+
+		return retval.toString();
+	}
+
+	private IPath _getTempScriptFilePath(IProject project, String name, String nodeName, String fileExtension) {
+		IPath retval = null;
+
+		IContainer folder = null;
+
+		String tempScriptFileName = _getTempScriptFileName(name, nodeName, fileExtension);
+
+		Path tempPath = new Path(KALEO_TEMP_PREFIX + System.currentTimeMillis() + "/" + tempScriptFileName);
+
+		if ((project != null) && (tempPath != null)) {
+			IFolder[] folders = CoreUtil.getSourceFolders(JavaCore.create(project)).toArray(new IFolder[0]);
+
+			if (!empty(folders)) {
+				folder = folders[0];
+			}
+			else {
+				folder = project;
+			}
+		}
+
+		if (folder != null) {
+
+			// create a temporary folder that will contain the script
+
+			IFile tempFile = folder.getFile(tempPath);
+
+			try {
+				CoreUtil.makeFolders((IFolder)tempFile.getParent());
+				retval = tempFile.getFullPath();
+			}
+			catch (CoreException ce) {
+			}
+		}
+
+		return retval;
+	}
+
+	private String _contributorName;
+	private String _editorId;
+	private String _fileExtension;
+	private String _languageType;
+
 }
