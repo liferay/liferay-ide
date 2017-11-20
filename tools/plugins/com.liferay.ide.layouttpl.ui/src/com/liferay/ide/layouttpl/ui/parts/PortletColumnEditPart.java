@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.layouttpl.ui.parts;
 
@@ -22,11 +21,13 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.LayoutManager;
 import org.eclipse.draw2d.Panel;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.sapphire.Value;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
@@ -35,131 +36,124 @@ import org.eclipse.swt.graphics.Color;
  * @author Cindy Li
  * @author Kuo Zhang
  */
-public class PortletColumnEditPart extends PortletRowLayoutEditPart
-{
-    public static final int COLUMN_MARGIN = 5;
+public class PortletColumnEditPart extends PortletRowLayoutEditPart {
 
-    public PortletColumnEditPart()
-    {
-        super();
-    }
+	public static final int COLUMN_MARGIN = 5;
 
-    protected IFigure createFigure()
-    {
-        IFigure f;
+	public PortletColumnEditPart() {
+	}
 
-        if( getModelChildren().isEmpty() )
-        {
-            f = createFigureForModel();
-            f.setOpaque( true ); // non-transparent figure
-        }
-        else
-        {
-            f = super.createFigure();
-        }
+	public GridData createGridData() {
+		GridData gd = new GridData(SWT.LEFT, SWT.FILL, false, true, 1, 1);
 
-        f.setBackgroundColor( new Color( null, 232, 232, 232 ) );
+		gd.heightHint = getCastedParent().getDefaultColumnHeight();
 
-        return f;
-    }
+		return gd;
+	}
 
-    protected Figure createFigureForModel()
-    {
-        if( getModel() instanceof PortletColumnElement )
-        {
-            RoundedRectangle rect = new ColumnFigure();
-            rect.setCornerDimensions( new Dimension( 10, 10 ) );
+	@Override
+	public PortletColumnElement getCastedModel() {
+		return (PortletColumnElement)getModel();
+	}
 
-            return rect;
-        }
-        else
-        {
-            throw new IllegalArgumentException();
-        }
-    }
+	public PortletLayoutEditPart getCastedParent() {
+		return (PortletLayoutEditPart)getParent();
+	}
 
-    public GridData createGridData()
-    {
-        GridData gd = new GridData( SWT.LEFT, SWT.FILL, false, true, 1, 1 );
-        gd.heightHint = getCastedParent().getDefaultColumnHeight();
+	@Override
+	public int getMargin() {
+		return COLUMN_MARGIN;
+	}
 
-        return gd;
-    }
+	@Override
+	protected void createEditPolicies() {
+	}
 
-    @Override
-    protected Panel createPanel()
-    {
-        return new Panel()
-        {
-            @Override
-            protected void paintFigure( Graphics graphics )
-            {
-                Rectangle r = Rectangle.SINGLETON.setBounds( getBounds() );
-                r.width -= 1;
-                r.height -= 1;
+	protected IFigure createFigure() {
+		IFigure f;
 
-                graphics.drawRoundRectangle( r, 10, 10 ); //draw the outline
+		if (getModelChildren().isEmpty()) {
+			f = createFigureForModel();
 
-                r.width -= 1;
-                r.height -= 1;
-                r.x += 1;
-                r.y += 1;
+			f.setOpaque(true);
+		}
+		else {
+			f = super.createFigure();
+		}
 
-                graphics.fillRoundRectangle( r, 10, 10 ); //fill the color
-            }
-        };
-    }
+		f.setBackgroundColor(new Color(null, 232, 232, 232));
 
-    @Override
-    public PortletColumnElement getCastedModel()
-    {
-        return (PortletColumnElement) getModel();
-    }
+		return f;
+	}
 
-    public PortletLayoutEditPart getCastedParent()
-    {
-        return (PortletLayoutEditPart) getParent();
-    }
+	protected Figure createFigureForModel() {
+		if (getModel() instanceof PortletColumnElement) {
+			RoundedRectangle rect = new ColumnFigure();
 
-    @Override
-    public int getMargin()
-    {
-        return COLUMN_MARGIN;
-    }
+			rect.setCornerDimensions(new Dimension(10, 10));
 
-    protected void refreshVisuals()
-    {
-        super.refreshVisuals();
+			return rect;
+		}
+		else {
+			throw new IllegalArgumentException();
+		}
+	}
 
-        Object constraint =
-            ( (GraphicalEditPart) getParent() ).getFigure().getLayoutManager().getConstraint( getFigure() );
-        GridData gd = null;
+	@Override
+	protected Panel createPanel() {
+		return new Panel() {
 
-        if( constraint instanceof GridData )
-        {
-            gd = (GridData) constraint;
+			@Override
+			protected void paintFigure(Graphics graphics) {
+				Rectangle r = Rectangle.SINGLETON.setBounds(getBounds());
 
-            if( gd.heightHint == SWT.DEFAULT )
-            {
-                gd.heightHint = getCastedParent().getDefaultColumnHeight();
-            }
+				r.width -= 1;
+				r.height -= 1;
 
-        }
-        else
-        {
-            gd = createGridData();
-        }
+				graphics.drawRoundRectangle(r, 10, 10);
 
-        ( (GraphicalEditPart) getParent() ).setLayoutConstraint( this, getFigure(), gd );
+				r.width -= 1;
+				r.height -= 1;
+				r.x += 1;
+				r.y += 1;
 
-        if( getFigure() instanceof ColumnFigure )
-        {
-            ( (ColumnFigure) getFigure() ).setText( getCastedModel().getWeight().content().toString() ); //$NON-NLS-1$
-        }
-    }
+				graphics.fillRoundRectangle(r, 10, 10);
+			}
 
-    @Override
-    protected void createEditPolicies()
-    {
-    }
+		};
+	}
+
+	protected void refreshVisuals() {
+		super.refreshVisuals();
+
+		IFigure parentFigure = ((GraphicalEditPart)getParent()).getFigure();
+
+		LayoutManager layoutManager = parentFigure.getLayoutManager();
+
+		Object constraint = layoutManager.getConstraint(getFigure());
+
+		GridData gd = null;
+
+		if (constraint instanceof GridData) {
+			gd = (GridData)constraint;
+
+			if (gd.heightHint == SWT.DEFAULT) {
+				gd.heightHint = getCastedParent().getDefaultColumnHeight();
+			}
+		}
+		else {
+			gd = createGridData();
+		}
+
+		((GraphicalEditPart)getParent()).setLayoutConstraint(this, getFigure(), gd);
+
+		if (getFigure() instanceof ColumnFigure) {
+			Value<Integer> weight = getCastedModel().getWeight();
+
+			Integer weightValue = weight.content();
+
+			((ColumnFigure)getFigure()).setText(weightValue.toString());
+		}
+	}
+
 }

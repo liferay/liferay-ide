@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.layouttpl.ui.wizard;
 
@@ -40,151 +39,144 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizardPa
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class NewLayoutTplLayoutWizardPage extends DataModelWizardPage implements INewLayoutTplDataModelProperties
-{
+@SuppressWarnings("restriction")
+public class NewLayoutTplLayoutWizardPage extends DataModelWizardPage implements INewLayoutTplDataModelProperties {
 
-    protected static final ImageDescriptor[] layoutOptionsImages =
-        new ImageDescriptor[] {
-            ImageDescriptor.createFromURL( LayoutTplUI.getDefault().getBundle().getEntry(
-                "/icons/layouts/1_column.png" ) ), //$NON-NLS-1$
-            ImageDescriptor.createFromURL( LayoutTplUI.getDefault().getBundle().getEntry(
-                "/icons/layouts/1_2_columns_i.png" ) ), //$NON-NLS-1$
-            ImageDescriptor.createFromURL( LayoutTplUI.getDefault().getBundle().getEntry(
-                "/icons/layouts/1_2_columns_ii.png" ) ), //$NON-NLS-1$
-            ImageDescriptor.createFromURL( LayoutTplUI.getDefault().getBundle().getEntry(
-                "/icons/layouts/1_2_1_columns.png" ) ), //$NON-NLS-1$
-            ImageDescriptor.createFromURL( LayoutTplUI.getDefault().getBundle().getEntry(
-                "/icons/layouts/2_columns_i.png" ) ), //$NON-NLS-1$
-            ImageDescriptor.createFromURL( LayoutTplUI.getDefault().getBundle().getEntry(
-                "/icons/layouts/2_columns_ii.png" ) ), //$NON-NLS-1$
-            ImageDescriptor.createFromURL( LayoutTplUI.getDefault().getBundle().getEntry(
-                "/icons/layouts/2_columns_iii.png" ) ), //$NON-NLS-1$
-            ImageDescriptor.createFromURL( LayoutTplUI.getDefault().getBundle().getEntry(
-                "/icons/layouts/2_2_columns.png" ) ), //$NON-NLS-1$
-            ImageDescriptor.createFromURL( LayoutTplUI.getDefault().getBundle().getEntry(
-                "/icons/layouts/3_columns.png" ) ), }; //$NON-NLS-1$
+	public NewLayoutTplLayoutWizardPage(IDataModel dataModel, String pageName) {
+		super(
+			dataModel, pageName, Msgs.createLayoutTemplate,
+			LayoutTplUI.imageDescriptorFromPlugin(LayoutTplUI.PLUGIN_ID, "/icons/wizban/layout_template_wiz.png"));
 
-    protected static final String[] layoutOptionsText = new String[] { Msgs.oneColumn, Msgs.oneTwoColumns3070,
-        Msgs.oneTwoColumns7030, Msgs.oneTwoOneColumns, Msgs.twoColumns5050, Msgs.twoColumns3070, Msgs.twoColumns7030,
-        Msgs.twoTwoColumns, Msgs.threeColumns };
+		setDescription(Msgs.selectInitialTemplate);
+	}
 
-    protected List<Image> imagesToDispose;
+	@Override
+	public void dispose() {
+		super.dispose();
 
-    public NewLayoutTplLayoutWizardPage( IDataModel dataModel, String pageName )
-    {
-        super( dataModel, pageName, Msgs.createLayoutTemplate, LayoutTplUI.imageDescriptorFromPlugin(
-            LayoutTplUI.PLUGIN_ID, "/icons/wizban/layout_template_wiz.png" ) ); //$NON-NLS-1$
+		if ((imagesToDispose != null) && (imagesToDispose.size() > 0)) {
+			for (Image img : imagesToDispose) {
+				if ((img != null) && !img.isDisposed()) {
+					img.dispose();
+				}
+			}
+		}
+	}
 
-        setDescription( Msgs.selectInitialTemplate );
-    }
+	protected void createLayoutOption(Composite parent, String property, String text, Image image) {
+		Composite optionParent = new Composite(parent, SWT.NONE);
 
-    @Override
-    public void dispose()
-    {
-        super.dispose();
+		optionParent.setLayout(new GridLayout(1, false));
 
-        if( imagesToDispose != null && imagesToDispose.size() > 0 )
-        {
-            for( Image img : imagesToDispose )
-            {
-                if( img != null && !img.isDisposed() )
-                {
-                    img.dispose();
-                }
-            }
-        }
-    }
+		Label imageLabel = new Label(optionParent, SWT.NONE);
 
-    protected void createLayoutOption( Composite parent, final String property, String text, Image image )
-    {
-        Composite optionParent = new Composite( parent, SWT.NONE );
-        optionParent.setLayout( new GridLayout( 1, false ) );
+		imageLabel.setImage(image);
+		imageLabel.addMouseListener(
+			new MouseAdapter() {
 
-        Label imageLabel = new Label( optionParent, SWT.NONE );
-        imageLabel.setImage( image );
-        imageLabel.addMouseListener( new MouseAdapter()
-        {
+				@Override
+				public void mouseUp(MouseEvent e) {
+					getDataModel().setProperty(property, true);
+				}
 
-            @Override
-            public void mouseUp( MouseEvent e )
-            {
-                getDataModel().setProperty( property, true );
-            }
+			});
 
-        } );
+		Button radio = new Button(optionParent, SWT.RADIO);
 
-        Button radio = new Button( optionParent, SWT.RADIO );
-        radio.setText( text );
+		radio.setText(text);
 
-        this.synchHelper.synchRadio( radio, property, null );
-    }
+		this.synchHelper.synchRadio(radio, property, null);
+	}
 
-    protected void createSelectLayoutGroup( Composite parent )
-    {
-        SWTUtil.createLabel( parent, Msgs.selectInitialLayout, 1 );
+	protected void createSelectLayoutGroup(Composite parent) {
+		SWTUtil.createLabel(parent, Msgs.selectInitialLayout, 1);
 
-        // Composite group = SWTUtil.createTopComposite(parent, 4);
-        // group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        Composite group = new Composite( parent, SWT.NONE );
-        GridData gd = new GridData( SWT.FILL, SWT.FILL, true, true );
-        gd.widthHint = 575;
-        group.setLayoutData( gd );
-        RowLayout rowLayout = new RowLayout();
-        rowLayout.wrap = true;
-        rowLayout.pack = false;
-        group.setLayout( rowLayout );
+		/*
+		 * Composite group = SWTUtil.createTopComposite(parent, 4);
+		 * group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
+		 * 1));
+		 */
+		Composite group = new Composite(parent, SWT.NONE);
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 
-        if( LAYOUT_PROPERTIES.length == layoutOptionsText.length &&
-            LAYOUT_PROPERTIES.length == layoutOptionsImages.length )
-        {
+		gd.widthHint = 575;
+		group.setLayoutData(gd);
 
-            imagesToDispose = new ArrayList<Image>();
+		RowLayout rowLayout = new RowLayout();
 
-            for( int i = 0; i < LAYOUT_PROPERTIES.length; i++ )
-            {
-                Image img = layoutOptionsImages[i].createImage();
-                createLayoutOption( group, LAYOUT_PROPERTIES[i], layoutOptionsText[i], img );
-                imagesToDispose.add( img );
-            }
-        }
+		rowLayout.wrap = true;
+		rowLayout.pack = false;
+		group.setLayout(rowLayout);
 
-    }
+		if ((LAYOUT_PROPERTIES.length == layoutOptionsText.length) &&
+			(LAYOUT_PROPERTIES.length == layoutOptionsImages.length)) {
 
-    @Override
-    protected Composite createTopLevelComposite( Composite parent )
-    {
-        Composite topComposite = SWTUtil.createTopComposite( parent, 1 );
+			imagesToDispose = new ArrayList<>();
 
-        createSelectLayoutGroup( topComposite );
+			for (int i = 0; i < LAYOUT_PROPERTIES.length; i++) {
+				Image img = layoutOptionsImages[i].createImage();
 
-        return topComposite;
-    }
+				createLayoutOption(group, LAYOUT_PROPERTIES[i], layoutOptionsText[i], img);
+				imagesToDispose.add(img);
+			}
+		}
+	}
 
-    @Override
-    protected String[] getValidationPropertyNames()
-    {
-        return LAYOUT_PROPERTIES;
-    }
+	@Override
+	protected Composite createTopLevelComposite(Composite parent) {
+		Composite topComposite = SWTUtil.createTopComposite(parent, 1);
 
-    private static class Msgs extends NLS
-    {
-        public static String createLayoutTemplate;
-        public static String oneColumn;
-        public static String oneTwoColumns3070;
-        public static String oneTwoColumns7030;
-        public static String oneTwoOneColumns;
-        public static String selectInitialLayout;
-        public static String selectInitialTemplate;
-        public static String threeColumns;
-        public static String twoColumns3070;
-        public static String twoColumns5050;
-        public static String twoColumns7030;
-        public static String twoTwoColumns;
+		createSelectLayoutGroup(topComposite);
 
-        static
-        {
-            initializeMessages( NewLayoutTplLayoutWizardPage.class.getName(), Msgs.class );
-        }
-    }
+		return topComposite;
+	}
+
+	@Override
+	protected String[] getValidationPropertyNames() {
+		return LAYOUT_PROPERTIES;
+	}
+
+	protected static final ImageDescriptor[] layoutOptionsImages = {
+		ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/layouts/1_column.png")),
+		ImageDescriptor.createFromURL(LayoutTplUI.
+			getDefault().getBundle().getEntry("/icons/layouts/1_2_columns_i.png")),
+		ImageDescriptor.createFromURL(LayoutTplUI.
+			getDefault().getBundle().getEntry("/icons/layouts/1_2_columns_ii.png")),
+		ImageDescriptor.createFromURL(LayoutTplUI.
+			getDefault().getBundle().getEntry("/icons/layouts/1_2_1_columns.png")),
+		ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/layouts/2_columns_i.png")),
+		ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/layouts/2_columns_ii.png")),
+		ImageDescriptor.createFromURL(LayoutTplUI.
+			getDefault().getBundle().getEntry("/icons/layouts/2_columns_iii.png")),
+		ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/layouts/2_2_columns.png")),
+		ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/layouts/3_columns.png"))
+	};
+	protected static final String[] layoutOptionsText = {
+		Msgs.oneColumn, Msgs.oneTwoColumns3070, Msgs.oneTwoColumns7030, Msgs.oneTwoOneColumns, Msgs.twoColumns5050,
+		Msgs.twoColumns3070, Msgs.twoColumns7030, Msgs.twoTwoColumns, Msgs.threeColumns
+	};
+
+	protected List<Image> imagesToDispose;
+
+	private static class Msgs extends NLS {
+
+		public static String createLayoutTemplate;
+		public static String oneColumn;
+		public static String oneTwoColumns3070;
+		public static String oneTwoColumns7030;
+		public static String oneTwoOneColumns;
+		public static String selectInitialLayout;
+		public static String selectInitialTemplate;
+		public static String threeColumns;
+		public static String twoColumns3070;
+		public static String twoColumns5050;
+		public static String twoColumns7030;
+		public static String twoTwoColumns;
+
+		static {
+			initializeMessages(NewLayoutTplLayoutWizardPage.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

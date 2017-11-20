@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.layouttpl.ui.draw2d;
 
@@ -22,146 +19,132 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 
 /**
  * @author Gregory Amerson
  */
-public class ColumnFigure extends RoundedRectangle
-{
-    protected boolean drawText = true;
-    protected String text = null;
+public class ColumnFigure extends RoundedRectangle {
 
-    public ColumnFigure()
-    {
-        super();
-        setAntialias( SWT.ON );
-        // setText("50%");
-    }
+	public ColumnFigure() {
+		setAntialias(SWT.ON);
 
-    private boolean compareFonts( Font font1, Font font2 )
-    {
-        if( font1 == null || font2 == null )
-        {
-            return false;
-        }
+		// setText("50%");
 
-        if( ! font1.getDevice().equals( font2.getDevice() ) )
-        {
-            return false;
-        }
+	}
 
-        FontData[] data1 = font1.getFontData();
-        FontData[] data2 = font2.getFontData();
+	public String getText() {
+		return text;
+	}
 
-        if( !( data1.length == data2.length ) )
-        {
-            return false;
-        }
+	@Override
+	public void paintFigure(Graphics graphics) {
+		super.paintFigure(graphics);
 
-        for( int i = 0; i < data1.length; i++ )
-        {
-            if( ! data1[i].equals( data2[i] ) )
-            {
-                return false;
-            }
-        }
+		if (getText() == null) {
+			return;
+		}
 
-        return true;
-    }
+		if (!shouldDrawText()) {
+			return;
+		}
 
-    protected void correctFont()
-    {
-        Font initialFont = this.getFont();
+		correctFont();
 
-        if( initialFont != null && ( !this.getFont().isDisposed() ) && ( !this.getFont().getDevice().isDisposed() ) )
-        {
-            FontData[] fontData = initialFont.getFontData();
+		if (graphics.getFont() != null) {
+			graphics.setTextAntialias(SWT.ON);
+			graphics.setFont(getFont());
+			Dimension extent = FigureUtilities.getTextExtents(getText(), graphics.getFont());
 
-            for( int i = 0; i < fontData.length; i++ )
-            {
-                int height = 24;
-                fontData[i].setHeight( height );
+			graphics.drawString(
+				getText(), bounds.x + (bounds.width / 2) - (extent.width / 2),
+				bounds.y + (bounds.height / 2) - (extent.height / 2));
+		}
+	}
 
-                int width = getFontWidth( fontData[i] );
+	public void setDrawText(boolean drawText) {
+		this.drawText = drawText;
+	}
 
-                while( width > getPreferredSize().width() - 1 )
-                {
-                    height--;
-                    fontData[i].setHeight( height );
-                    width = getFontWidth( fontData[i] );
-                }
-            }
+	public void setText(String text) {
+		this.text = text;
+	}
 
-            final Font correctedFont = new Font( this.getFont().getDevice(), fontData );
+	public boolean shouldDrawText() {
+		return drawText;
+	}
 
-            if( ! compareFonts( initialFont, correctedFont ) )
-            {
-                setFont( correctedFont );
-            }
-            else
-            {
-                correctedFont.dispose();
-            }
-        }
-    }
+	protected void correctFont() {
+		Font initialFont = getFont();
 
-    protected int getFontWidth( FontData fontData )
-    {
-        int width;
-        Font newFont = new Font( this.getFont().getDevice(), fontData );
-        width = FigureUtilities.getTextExtents( getText(), newFont ).width();
-        newFont.dispose();
+		Device device = getFont().getDevice();
 
-        return width;
-    }
+		if ((initialFont != null) && !getFont().isDisposed() && !device.isDisposed()) {
+			FontData[] fontData = initialFont.getFontData();
 
-    public String getText()
-    {
-        return text;
-    }
+			for (int i = 0; i < fontData.length; i++) {
+				int height = 24;
 
-    @Override
-    public void paintFigure( Graphics graphics )
-    {
-        super.paintFigure( graphics );
+				fontData[i].setHeight(height);
 
-        if( getText() == null )
-        {
-            return;
-        }
+				int width = getFontWidth(fontData[i]);
 
-        if( !shouldDrawText() )
-        {
-            return;
-        }
+				while (width > (getPreferredSize().width() - 1)) {
+					height--;
+					fontData[i].setHeight(height);
+					width = getFontWidth(fontData[i]);
+				}
+			}
 
-        correctFont();
+			Font correctedFont = new Font(getFont().getDevice(), fontData);
 
-        if( graphics.getFont() != null )
-        {
-            graphics.setTextAntialias( SWT.ON );
-            graphics.setFont( getFont() );
-            Dimension extent = FigureUtilities.getTextExtents( getText(), graphics.getFont() );
+			if (!_compareFonts(initialFont, correctedFont)) {
+				setFont(correctedFont);
+			}
+			else {
+				correctedFont.dispose();
+			}
+		}
+	}
 
-            graphics.drawString( getText(), bounds.x + ( bounds.width / 2 ) - ( extent.width / 2 ), bounds.y +
-                ( bounds.height / 2 ) - ( extent.height / 2 ) );
-        }
-    }
+	protected int getFontWidth(FontData fontData) {
+		int width;
+		Font newFont = new Font(getFont().getDevice(), fontData);
 
-    public void setDrawText( boolean drawText )
-    {
-        this.drawText = drawText;
-    }
+		width = FigureUtilities.getTextExtents(getText(), newFont).width();
+		newFont.dispose();
 
-    public void setText( String text )
-    {
-        this.text = text;
-    }
+		return width;
+	}
 
-    public boolean shouldDrawText()
-    {
-        return drawText;
-    }
+	protected boolean drawText = true;
+	protected String text = null;
+
+	private boolean _compareFonts(Font font1, Font font2) {
+		if ((font1 == null) || (font2 == null)) {
+			return false;
+		}
+
+		if (!font1.getDevice().equals(font2.getDevice())) {
+			return false;
+		}
+
+		FontData[] data1 = font1.getFontData();
+		FontData[] data2 = font2.getFontData();
+
+		if (!(data1.length == data2.length)) {
+			return false;
+		}
+
+		for (int i = 0; i < data1.length; i++) {
+			if (!data1[i].equals(data2[i])) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.layouttpl.ui.parts;
 
@@ -23,29 +22,26 @@ import org.eclipse.swt.graphics.Color;
  * @author Cindy Li
  * @author Kuo Zhang
  */
-public class LayoutTplDiagramEditPart extends PortletRowLayoutEditPart
-{
-    public static final int DIAGRAM_MARGIN = 5;
+public class LayoutTplDiagramEditPart extends PortletRowLayoutEditPart {
 
-    public LayoutTplDiagramEditPart()
-    {
-    }
+	public static final int DIAGRAM_MARGIN = 5;
 
-    @Override
-    protected void configurePanel( Panel panel )
-    {
-        super.configurePanel( panel );
-        panel.setBackgroundColor( new Color( null, 10, 10, 10 ) );
-    }
+	public LayoutTplDiagramEditPart() {
+	}
 
-    @Override
-    protected void createEditPolicies()
-    {
-    }
+	@Override
+	public int getMargin() {
+		return DIAGRAM_MARGIN;
+	}
 
-    @Override
-    public int getMargin()
-    {
-        return DIAGRAM_MARGIN;
-    }
+	@Override
+	protected void configurePanel(Panel panel) {
+		super.configurePanel(panel);
+		panel.setBackgroundColor(new Color(null, 10, 10, 10));
+	}
+
+	@Override
+	protected void createEditPolicies() {
+	}
+
 }

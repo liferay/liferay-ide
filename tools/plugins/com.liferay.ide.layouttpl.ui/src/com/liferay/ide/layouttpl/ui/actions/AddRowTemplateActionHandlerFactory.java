@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *******************************************************************************/
+ */
+
 package com.liferay.ide.layouttpl.ui.actions;
 
 import com.liferay.ide.layouttpl.core.model.CanAddPortletLayouts;
@@ -20,6 +21,7 @@ import com.liferay.ide.layouttpl.ui.util.LayoutTemplatesFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
@@ -27,217 +29,208 @@ import org.eclipse.sapphire.ui.SapphireActionHandlerFactory;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 import org.eclipse.sapphire.ui.def.ActionHandlerFactoryDef;
 
-
 /**
  * @author Kuo Zhang
  */
-public class AddRowTemplateActionHandlerFactory extends SapphireActionHandlerFactory
-{
-    private final static String ADD_ROW_TEMPLATE_ACTION_ID = "LayoutTpl.Add.RowTemplate";
-    private static final String ADD_ROW_1_ACTION_HANDLER_ID = "Add.Row.1.ActionHandler";
-    private static final String ADD_ROW_2_I_ACTION_HANDLER_ID = "Add.Row.2_I.ActionHandler";
-    private static final String ADD_ROW_2_II_ACTION_HANDLER_ID = "Add.Row.2_II.ActionHandler";
-    private static final String ADD_ROW_2_III_ACTION_HANDLER_ID = "Add.Row.2_III.ActionHandler";
-    private static final String ADD_ROW_3_ACTION_HANDLER_ID = "Add.Row.3.ActionHandler";
+public class AddRowTemplateActionHandlerFactory extends SapphireActionHandlerFactory {
 
-    private boolean isBootstrapStyle;
+	public AddRowTemplateActionHandlerFactory() {
+	}
 
-    public AddRowTemplateActionHandlerFactory()
-    {
-        super();
-    }
+	@Override
+	public List<SapphireActionHandler> create() {
+		if (_ADD_ROW_TEMPLATE_ACTION_ID.equals(getAction().getId())) {
+			ArrayList<SapphireActionHandler> actionHandlers = new ArrayList<>();
 
-    @Override
-    public void init( SapphireAction action, ActionHandlerFactoryDef def )
-    {
-        super.init( action, def );
-        isBootstrapStyle = getModelElement().nearest( LayoutTplElement.class ).getBootstrapStyle().content();
-    }
+			actionHandlers.add(new Add_Row_1_ActionHandler());
+			actionHandlers.add(new Add_Row_2_I_ActionHandler());
+			actionHandlers.add(new Add_Row_2_II_ActionHandler());
+			actionHandlers.add(new Add_Row_2_III_ActionHandler());
+			actionHandlers.add(new Add_Row_3_ActionHandler());
 
-    @Override
-    public List<SapphireActionHandler> create()
-    {
-        if( ADD_ROW_TEMPLATE_ACTION_ID.equals( getAction().getId() ) )
-        {
-            ArrayList<SapphireActionHandler> actionHandlers = new ArrayList<SapphireActionHandler>();
-            actionHandlers.add( new Add_Row_1_ActionHandler() );
-            actionHandlers.add( new Add_Row_2_I_ActionHandler() );
-            actionHandlers.add( new Add_Row_2_II_ActionHandler() );
-            actionHandlers.add( new Add_Row_2_III_ActionHandler() );
-            actionHandlers.add( new Add_Row_3_ActionHandler() );
-            return actionHandlers;
-        }
+			return actionHandlers;
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    private class Add_Row_1_ActionHandler extends SapphireActionHandler
-    {
+	@Override
+	public void init(SapphireAction action, ActionHandlerFactoryDef def) {
+		super.init(action, def);
+		LayoutTplElement layoutElement = getModelElement().nearest(LayoutTplElement.class);
 
-        @Override
-        public void init( SapphireAction action, ActionHandlerDef def )
-        {
-            super.init( action, def );
-            setId( ADD_ROW_1_ACTION_HANDLER_ID );
-            setLabel();
-        }
- 
-        protected void setLabel()
-        {
-            final String prefix = "Row with 1 Column ";
+		Value<Boolean> bootstrapStyle = layoutElement.getBootstrapStyle();
 
-            if( isBootstrapStyle )
-            {
-                super.setLabel( prefix + "(12)" );
-            }
-            else
-            {
-                super.setLabel( prefix + "(100)");
-            }
-        }
+		_bootstrapStyle = bootstrapStyle.content();
+	}
 
-        @Override
-        protected Object run( Presentation context )
-        {
-            CanAddPortletLayouts element = getModelElement().nearest( CanAddPortletLayouts.class );
-            LayoutTemplatesFactory.add_Row_1( element );
-            return null;
-        }
-    }
+	private static final String _ADD_ROW_1_ACTION_HANDLER_ID = "Add.Row.1.ActionHandler";
 
-    private class Add_Row_2_I_ActionHandler extends SapphireActionHandler
-    {
+	private static final String _ADD_ROW_2_I_ACTION_HANDLER_ID = "Add.Row.2_I.ActionHandler";
 
-        @Override
-        public void init( SapphireAction action, ActionHandlerDef def )
-        {
-            super.init( action, def );
-            setId( ADD_ROW_2_I_ACTION_HANDLER_ID );
-            setLabel();
-        }
- 
-        protected void setLabel()
-        {
-            final String prefix = "Row with 2 Columns ";
+	private static final String _ADD_ROW_2_II_ACTION_HANDLER_ID = "Add.Row.2_II.ActionHandler";
 
-            if( isBootstrapStyle )
-            {
-                super.setLabel( prefix + "(6, 6)" );
-            }
-            else
-            {
-                super.setLabel( prefix + "(50, 50)");
-            }
-        }
+	private static final String _ADD_ROW_2_III_ACTION_HANDLER_ID = "Add.Row.2_III.ActionHandler";
 
-        @Override
-        protected Object run( Presentation context )
-        {
-            CanAddPortletLayouts element = getModelElement().nearest( CanAddPortletLayouts.class );
-            LayoutTemplatesFactory.add_Row_2_I( element );
-            return null;
-        }
-    }
+	private static final String _ADD_ROW_3_ACTION_HANDLER_ID = "Add.Row.3.ActionHandler";
 
-    private class Add_Row_2_II_ActionHandler extends SapphireActionHandler
-    {
+	private static final String _ADD_ROW_TEMPLATE_ACTION_ID = "LayoutTpl.Add.RowTemplate";
 
-        @Override
-        public void init( SapphireAction action, ActionHandlerDef def )
-        {
-            super.init( action, def );
-            setId( ADD_ROW_2_II_ACTION_HANDLER_ID );
-            setLabel();
-        }
+	private boolean _bootstrapStyle;
 
-        protected void setLabel()
-        {
-            final String prefix = "Row with 2 Columns ";
+	private class Add_Row_1_ActionHandler extends SapphireActionHandler {
 
-            if( isBootstrapStyle )
-            {
-                super.setLabel( prefix + "(4, 8)" );
-            }
-            else
-            {
-                super.setLabel( prefix + "(30, 70)");
-            }
-        }
+		@Override
+		public void init(SapphireAction action, ActionHandlerDef def) {
+			super.init(action, def);
+			setId(_ADD_ROW_1_ACTION_HANDLER_ID);
+			setLabel();
+		}
 
-        @Override
-        protected Object run( Presentation context )
-        {
-            CanAddPortletLayouts element = getModelElement().nearest( CanAddPortletLayouts.class );
-            LayoutTemplatesFactory.add_Row_2_II( element );
-            return null;
-        }
-    }
+		@Override
+		protected Object run(Presentation context) {
+			CanAddPortletLayouts element = getModelElement().nearest(CanAddPortletLayouts.class);
 
-    private class Add_Row_2_III_ActionHandler extends SapphireActionHandler
-    {
+			LayoutTemplatesFactory.add_Row_1(element);
 
-        @Override
-        public void init( SapphireAction action, ActionHandlerDef def )
-        {
-            super.init( action, def );
-            setId( ADD_ROW_2_III_ACTION_HANDLER_ID );
-            setLabel();
-        }
+			return null;
+		}
 
-        protected void setLabel()
-        {
-            final String prefix = "Row with 2 Columns ";
+		protected void setLabel() {
+			String prefix = "Row with 1 Column ";
 
-            if( isBootstrapStyle )
-            {
-                super.setLabel( prefix + "(8, 4)" );
-            }
-            else
-            {
-                super.setLabel( prefix + "(70, 30)");
-            }
-        }
+			if (_bootstrapStyle) {
+				super.setLabel(prefix + "(12)");
+			}
+			else {
+				super.setLabel(prefix + "(100)");
+			}
+		}
 
-        @Override
-        protected Object run( Presentation context )
-        {
-            CanAddPortletLayouts element = getModelElement().nearest( CanAddPortletLayouts.class );
-            LayoutTemplatesFactory.add_Row_2_III( element );
-            return null;
-        }
-    }
+	}
 
-    private class Add_Row_3_ActionHandler extends SapphireActionHandler
-    {
+	private class Add_Row_2_I_ActionHandler extends SapphireActionHandler {
 
-        @Override
-        public void init( SapphireAction action, ActionHandlerDef def )
-        {
-            super.init( action, def );
-            setId( ADD_ROW_3_ACTION_HANDLER_ID );
-            setLabel();
-        }
+		@Override
+		public void init(SapphireAction action, ActionHandlerDef def) {
+			super.init(action, def);
+			setId(_ADD_ROW_2_I_ACTION_HANDLER_ID);
+			setLabel();
+		}
 
-        protected void setLabel()
-        {
-            final String prefix = "Row with 3 Columns ";
+		@Override
+		protected Object run(Presentation context) {
+			CanAddPortletLayouts element = getModelElement().nearest(CanAddPortletLayouts.class);
 
-            if( isBootstrapStyle )
-            {
-                super.setLabel( prefix + "(4, 4, 4)" );
-            }
-            else
-            {
-                super.setLabel( prefix + "(33, 33, 33)" );
-            }
-        }
+			LayoutTemplatesFactory.add_Row_2_I(element);
 
-        @Override
-        protected Object run( Presentation context )
-        {
-            CanAddPortletLayouts element = getModelElement().nearest( CanAddPortletLayouts.class );
-            LayoutTemplatesFactory.add_Row_3( element );
-            return null;
-        }
-    }
+			return null;
+		}
+
+		protected void setLabel() {
+			String prefix = "Row with 2 Columns ";
+
+			if (_bootstrapStyle) {
+				super.setLabel(prefix + "(6, 6)");
+			}
+			else {
+				super.setLabel(prefix + "(50, 50)");
+			}
+		}
+
+	}
+
+	private class Add_Row_2_II_ActionHandler extends SapphireActionHandler {
+
+		@Override
+		public void init(SapphireAction action, ActionHandlerDef def) {
+			super.init(action, def);
+			setId(_ADD_ROW_2_II_ACTION_HANDLER_ID);
+			setLabel();
+		}
+
+		@Override
+		protected Object run(Presentation context) {
+			CanAddPortletLayouts element = getModelElement().nearest(CanAddPortletLayouts.class);
+
+			LayoutTemplatesFactory.add_Row_2_II(element);
+
+			return null;
+		}
+
+		protected void setLabel() {
+			String prefix = "Row with 2 Columns ";
+
+			if (_bootstrapStyle) {
+				super.setLabel(prefix + "(4, 8)");
+			}
+			else {
+				super.setLabel(prefix + "(30, 70)");
+			}
+		}
+
+	}
+
+	private class Add_Row_2_III_ActionHandler extends SapphireActionHandler {
+
+		@Override
+		public void init(SapphireAction action, ActionHandlerDef def) {
+			super.init(action, def);
+			setId(_ADD_ROW_2_III_ACTION_HANDLER_ID);
+			setLabel();
+		}
+
+		@Override
+		protected Object run(Presentation context) {
+			CanAddPortletLayouts element = getModelElement().nearest(CanAddPortletLayouts.class);
+
+			LayoutTemplatesFactory.add_Row_2_III(element);
+
+			return null;
+		}
+
+		protected void setLabel() {
+			String prefix = "Row with 2 Columns ";
+
+			if (_bootstrapStyle) {
+				super.setLabel(prefix + "(8, 4)");
+			}
+			else {
+				super.setLabel(prefix + "(70, 30)");
+			}
+		}
+
+	}
+
+	private class Add_Row_3_ActionHandler extends SapphireActionHandler {
+
+		@Override
+		public void init(SapphireAction action, ActionHandlerDef def) {
+			super.init(action, def);
+			setId(_ADD_ROW_3_ACTION_HANDLER_ID);
+			setLabel();
+		}
+
+		@Override
+		protected Object run(Presentation context) {
+			CanAddPortletLayouts element = getModelElement().nearest(CanAddPortletLayouts.class);
+
+			LayoutTemplatesFactory.add_Row_3(element);
+
+			return null;
+		}
+
+		protected void setLabel() {
+			String prefix = "Row with 3 Columns ";
+
+			if (_bootstrapStyle) {
+				super.setLabel(prefix + "(4, 4, 4)");
+			}
+			else {
+				super.setLabel(prefix + "(33, 33, 33)");
+			}
+		}
+
+	}
+
 }
