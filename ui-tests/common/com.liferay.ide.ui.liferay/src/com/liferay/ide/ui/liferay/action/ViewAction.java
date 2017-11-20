@@ -39,12 +39,18 @@ public class ViewAction extends UIAction {
 		super(bot);
 	}
 
-	public void deleteProject(String... items) {
+	public void closeProject(String... items) {
 		ide.sleep();
+
+		_getProjects().contextMenu("Close Project", items);
+	}
+
+	public void deleteProject(String... items) {
+		ide.sleep(2000);
 
 		_getProjects().contextMenu(DELETE, items);
 
-		ide.sleep(500);
+		ide.sleep();
 
 		_deleteResourcesDialog.getDeleteFromDisk().select();
 

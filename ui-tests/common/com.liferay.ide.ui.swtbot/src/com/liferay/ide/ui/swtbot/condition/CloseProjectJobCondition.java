@@ -12,19 +12,35 @@
  * details.
  */
 
-package com.liferay.ide.ui.jsf.tests;
+package com.liferay.ide.ui.swtbot.condition;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
-
-import org.junit.Test;
+import org.eclipse.core.runtime.jobs.Job;
 
 /**
  * @author Terry Jia
  */
-public class DeployJsfSdk62Tests extends SwtbotBase {
+public class CloseProjectJobCondition extends WaitForSingleJob {
 
-	@Test
-	public void deployICEFaces() {
+	public CloseProjectJobCondition() {
+		super(null, "Close Project");
+	}
+
+	@Override
+	public String getJobName() {
+		return "Close Project";
+	}
+
+	@Override
+	public boolean test() {
+		Job[] jobs = Job.getJobManager().find(family);
+
+		for (Job job : jobs) {
+			if (getJobName().equals(job.getName())) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 }

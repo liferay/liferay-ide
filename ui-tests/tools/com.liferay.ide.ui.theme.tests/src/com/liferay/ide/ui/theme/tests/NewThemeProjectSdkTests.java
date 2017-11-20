@@ -36,8 +36,8 @@ public class NewThemeProjectSdkTests extends SwtbotBase {
 	public static void createPluginsSdk() throws IOException {
 	}
 
-	@Test
 	@Ignore("wait for IDE-3568")
+	@Test
 	public void createTheme() {
 	}
 

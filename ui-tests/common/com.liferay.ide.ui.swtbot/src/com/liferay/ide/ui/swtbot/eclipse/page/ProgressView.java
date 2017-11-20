@@ -27,15 +27,11 @@ public class ProgressView extends View {
 	public ProgressView(SWTWorkbenchBot bot) {
 		super(bot, PROGRESS);
 
-		_noOperations = new Text(bot, 0);
+		_noOperations = new Text(bot);
 	}
 
-	public boolean noRunningProgress() {
-		return _getNoOperation().equals(NO_OPERTAIONS);
-	}
-
-	private String _getNoOperation() {
-		return _noOperations.getText();
+	public Text getNoOperation() {
+		return _noOperations;
 	}
 
 	private Text _noOperations;

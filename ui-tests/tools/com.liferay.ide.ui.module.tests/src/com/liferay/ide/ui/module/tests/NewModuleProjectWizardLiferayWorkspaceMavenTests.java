@@ -28,6 +28,10 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@AfterClass
 	public static void cleanLiferayWorkspace() {
+		viewAction.closeProject(_liferayWorkspaceName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(_liferayWorkspaceName);
 	}
 

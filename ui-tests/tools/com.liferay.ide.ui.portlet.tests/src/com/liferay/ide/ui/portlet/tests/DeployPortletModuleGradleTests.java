@@ -25,7 +25,6 @@ public class DeployPortletModuleGradleTests extends SwtbotBase {
 
 	@Test
 	public void deployMvcPortlet() {
-
 	}
 
 	@Test

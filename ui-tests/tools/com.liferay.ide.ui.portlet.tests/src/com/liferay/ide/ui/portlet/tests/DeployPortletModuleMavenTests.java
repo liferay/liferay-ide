@@ -25,7 +25,6 @@ public class DeployPortletModuleMavenTests extends SwtbotBase {
 
 	@Test
 	public void deployMvcPortlet() {
-
 	}
 
 	@Test

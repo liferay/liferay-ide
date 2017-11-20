@@ -35,6 +35,10 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		viewAction.closeProject(workspaceName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(workspaceName);
 	}
 
@@ -82,6 +86,10 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finishToWait();
 
+		viewAction.closeProject(workspaceName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(workspaceName);
 	}
 
@@ -112,6 +120,10 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		wizardAction.prepareLiferayModuleGradle("test-theme", THEME);
 
 		wizardAction.finishToWait();
+
+		viewAction.closeProject(workspaceName);
+
+		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(workspaceName);
 	}

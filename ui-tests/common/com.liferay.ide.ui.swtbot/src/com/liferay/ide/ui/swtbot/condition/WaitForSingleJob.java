@@ -12,19 +12,37 @@
  * details.
  */
 
-package com.liferay.ide.ui.jsf.tests;
+package com.liferay.ide.ui.swtbot.condition;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
-
-import org.junit.Test;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
  */
-public class DeployJsfSdk62Tests extends SwtbotBase {
+public abstract class WaitForSingleJob extends JobCondition {
 
-	@Test
-	public void deployICEFaces() {
+	public WaitForSingleJob(Object family, String readableJobFamily) {
+		super(family, readableJobFamily);
 	}
+
+	@Override
+	public String getFailureMessage() {
+		String msg = "Wait for jobs failed: ";
+
+		if (readableJobFamily != null) {
+			return readableJobFamily + " jobs are still running.";
+		}
+
+		return msg;
+	}
+
+	public abstract String getJobName();
+
+	@Override
+	public void init(SWTBot bot) {
+	}
+
+	@Override
+	public abstract boolean test();
 
 }

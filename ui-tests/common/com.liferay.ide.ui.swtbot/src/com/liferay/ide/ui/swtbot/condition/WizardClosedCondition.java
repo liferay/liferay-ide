@@ -16,41 +16,36 @@ package com.liferay.ide.ui.swtbot.condition;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotStyledText;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 
 /**
  * @author Terry Jia
  */
-public class StyledTextContainCondition implements ICondition {
+public class WizardClosedCondition implements ICondition {
 
-	public StyledTextContainCondition(SWTBotStyledText styledText, String content, boolean contain) {
-		_styledText = styledText;
-		_content = content;
-		_contain = contain;
+	public WizardClosedCondition(String title) {
+		_title = title;
 	}
 
 	public String getFailureMessage() {
-		if (_contain) {
-			return "wait for styled text to contain " + _content + " failed";
-		}
-		else {
-			return "wait for styled text not to contain " + _content + " failed";
-		}
+		return "Wizard \"" + _title + "\" still active";
 	}
 
 	public void init(SWTBot bot) {
+		_bot = bot;
 	}
 
 	public boolean test() throws Exception {
-		if (_styledText.getText().contains(_content) == _contain) {
-			return true;
+		SWTBotShell shell = _bot.activeShell();
+
+		if (shell.getText().equals(_title)) {
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 
-	private boolean _contain;
-	private String _content;
-	private SWTBotStyledText _styledText;
+	private SWTBot _bot;
+	private String _title;
 
 }

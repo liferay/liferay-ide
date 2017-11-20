@@ -38,6 +38,12 @@ public class NewThemeProjectModuleMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
+		jobAction.waitForCancelValidate(projectName);
+
+		viewAction.closeProject(projectName);
+
+		jobAction.waitForCloseProject();
+
 		viewAction.deleteProject(projectName);
 	}
 

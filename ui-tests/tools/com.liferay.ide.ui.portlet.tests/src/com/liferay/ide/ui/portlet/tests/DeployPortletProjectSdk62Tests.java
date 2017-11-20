@@ -24,7 +24,7 @@ import org.junit.Test;
 public class DeployPortletProjectSdk62Tests extends SwtbotBase {
 
 	@Test
-	public void DeployPortlet() {
+	public void deployPortlet() {
 	}
 
 }
