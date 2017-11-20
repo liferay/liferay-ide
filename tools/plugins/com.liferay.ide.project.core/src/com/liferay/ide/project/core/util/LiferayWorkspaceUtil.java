@@ -73,19 +73,19 @@ public class LiferayWorkspaceUtil {
 	public static void clearWorkspace(String location) {
 		File projectFile = new File(location, ".project");
 
-		if (projectFile.exists()) {
+		if (FileUtil.exists(projectFile)) {
 			projectFile.delete();
 		}
 
 		File classpathFile = new File(location, ".classpath");
 
-		if (classpathFile.exists()) {
+		if (FileUtil.exists(classpathFile)) {
 			classpathFile.delete();
 		}
 
 		File settings = new File(location, ".settings");
 
-		if (settings.exists() && settings.isDirectory()) {
+		if (FileUtil.isDir(settings)) {
 			FileUtil.deleteDir(settings, true);
 		}
 	}
@@ -98,7 +98,7 @@ public class LiferayWorkspaceUtil {
 		for (String fileName : fileNames) {
 			File file = new File(dir, fileName);
 
-			if (file.exists()) {
+			if (FileUtil.exists(file)) {
 				return dir;
 			}
 		}
@@ -115,7 +115,7 @@ public class LiferayWorkspaceUtil {
 
 		String retVal = null;
 
-		if (gradleProperties.exists()) {
+		if (FileUtil.exists(gradleProperties)) {
 			Properties properties = PropertiesUtil.loadProperties(gradleProperties);
 
 			retVal = properties.getProperty(key, defaultValue);
@@ -143,13 +143,13 @@ public class LiferayWorkspaceUtil {
 
 		IPath homePath = new Path(location).append(homeNameOrPath);
 
-		if (homePath.toFile().exists()) {
+		if (FileUtil.exists(homePath)) {
 			return homePath;
 		}
 
 		homePath = new Path(homeNameOrPath);
 
-		if (homePath.toFile().exists()) {
+		if (FileUtil.exists(homePath)) {
 			return homePath;
 		}
 
@@ -261,7 +261,7 @@ public class LiferayWorkspaceUtil {
 		if (isValidWorkspaceLocation(location)) {
 			File pomFile = new File(location, "pom.xml");
 
-			if (pomFile.exists()) {
+			if (FileUtil.exists(pomFile)) {
 				return "maven-liferay-workspace";
 			}
 			else {
@@ -277,9 +277,7 @@ public class LiferayWorkspaceUtil {
 
 		File outsideOfWorkspaceBundles = new File(getHomeDir(location));
 
-		if ((bundles.exists() && bundles.isDirectory()) ||
-			(outsideOfWorkspaceBundles.exists() && outsideOfWorkspaceBundles.isDirectory())) {
-
+		if (FileUtil.isDir(bundles) || FileUtil.isDir(outsideOfWorkspaceBundles)) {
 			return true;
 		}
 
@@ -356,7 +354,9 @@ public class LiferayWorkspaceUtil {
 		File settingsGradle = new File(workspaceDir, _SETTINGS_GRADLE_FILE_NAME);
 		File gradleProperties = new File(workspaceDir, _GRADLE_PROPERTIES_FILE_NAME);
 
-		if (!(buildGradle.exists() && settingsGradle.exists() && gradleProperties.exists())) {
+		if (FileUtil.notExists(buildGradle) || FileUtil.notExists(settingsGradle) ||
+			FileUtil.notExists(gradleProperties)) {
+
 			return false;
 		}
 
@@ -374,7 +374,7 @@ public class LiferayWorkspaceUtil {
 
 		File pomFile = new File(workspaceDir, "pom.xml");
 
-		if (pomFile.exists()) {
+		if (FileUtil.exists(pomFile)) {
 			String content = FileUtil.readContents(pomFile);
 
 			if (content.contains("com.liferay.portal.tools.bundle.support")) {

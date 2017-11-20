@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
@@ -96,7 +97,7 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
 				if ((gradleModule && hasGradleWorkspace) || (mavenModule && hasMavenWorkspace)) {
 					IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-					if ((liferayWorkspaceProject != null) && liferayWorkspaceProject.exists()) {
+					if (FileUtil.exists(liferayWorkspaceProject)) {
 						if (themeProject) {
 							String[] warsNames = LiferayWorkspaceUtil.getWarsDirs(liferayWorkspaceProject);
 

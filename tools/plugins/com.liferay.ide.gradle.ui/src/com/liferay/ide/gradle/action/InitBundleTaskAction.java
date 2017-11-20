@@ -15,6 +15,7 @@
 package com.liferay.ide.gradle.action;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.sdk.core.SDK;
@@ -37,7 +38,7 @@ public class InitBundleTaskAction extends GradleTaskAction {
 		IPath bundlesLocation = LiferayWorkspaceUtil.getHomeLocation(project);
 
 		try {
-			if (bundlesLocation.toFile().exists()) {
+			if (FileUtil.exists(bundlesLocation)) {
 				String serverName = bundlesLocation.lastSegment();
 
 				ServerUtil.addPortalRuntimeAndServer(serverName, bundlesLocation, new NullProgressMonitor());
@@ -45,7 +46,7 @@ public class InitBundleTaskAction extends GradleTaskAction {
 				IProject pluginsSDK = CoreUtil.getProject(
 					LiferayWorkspaceUtil.getPluginsSDKDir(project.getLocation().toPortableString()));
 
-				if ((pluginsSDK != null) && pluginsSDK.exists()) {
+				if (FileUtil.exists(pluginsSDK)) {
 					SDK sdk = SDKUtil.createSDKFromLocation(pluginsSDK.getLocation());
 
 					sdk.addOrUpdateServerProperties(

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.maven.ui;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
 import com.liferay.ide.maven.core.MavenUtil;
 
@@ -39,31 +40,33 @@ public class MavenConfigProblemMarkerResolutionGenerator extends ConfigProblemMa
 
 		IProject project = marker.getResource().getProject();
 
-		if ((project != null) && project.exists()) {
-			IMavenProjectFacade projectFacade =
-				MavenPlugin.getMavenProjectRegistry().getProject(marker.getResource().getProject());
+		if (FileUtil.notExists(project)) {
+			return false;
+		}
 
-			if (projectFacade != null) {
-				MavenProject mavenProject = null;
-				IProgressMonitor npm = new NullProgressMonitor();
+		IMavenProjectFacade projectFacade =
+			MavenPlugin.getMavenProjectRegistry().getProject(marker.getResource().getProject());
 
+		if (projectFacade != null) {
+			MavenProject mavenProject = null;
+			IProgressMonitor npm = new NullProgressMonitor();
+
+			try {
+				mavenProject = projectFacade.getMavenProject(npm);
+			}
+			catch (CoreException ce) {
+			}
+
+			if (mavenProject != null) {
 				try {
-					mavenProject = projectFacade.getMavenProject(npm);
+					Plugin liferayMavenPlugin = MavenUtil.getPlugin(
+						projectFacade, ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, npm);
+
+					if (liferayMavenPlugin != null) {
+						retval = true;
+					}
 				}
 				catch (CoreException ce) {
-				}
-
-				if (mavenProject != null) {
-					try {
-						Plugin liferayMavenPlugin = MavenUtil.getPlugin(
-							projectFacade, ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, npm);
-
-						if (liferayMavenPlugin != null) {
-							retval = true;
-						}
-					}
-					catch (CoreException ce) {
-					}
 				}
 			}
 		}

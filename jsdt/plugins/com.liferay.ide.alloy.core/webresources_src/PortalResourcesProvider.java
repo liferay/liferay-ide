@@ -18,6 +18,7 @@ import com.liferay.ide.alloy.core.AlloyCore;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.File;
@@ -60,7 +61,7 @@ public class PortalResourcesProvider implements IWebResourcesFileSystemProvider 
 				if (portalDir != null) {
 					IPath cssPath = portalDir.append("html/themes/_unstyled/css");
 
-					if (cssPath.toFile().exists()) {
+					if (FileUtil.exists(cssPath)) {
 						synchronized (_fileCache) {
 							Collection<File> cachedFiles = _fileCache.get(cssPath);
 
@@ -80,7 +81,7 @@ public class PortalResourcesProvider implements IWebResourcesFileSystemProvider 
 											file.getParent(),
 											".sass-cache/" + file.getName().replaceAll("scss$", "css"));
 
-										if (cachedFile.exists()) {
+										if (FileUtil.exists(cachedFile)) {
 											cached.add(file);
 										}
 									}

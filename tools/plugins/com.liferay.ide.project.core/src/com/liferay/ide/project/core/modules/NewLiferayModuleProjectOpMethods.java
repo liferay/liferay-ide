@@ -250,7 +250,7 @@ public class NewLiferayModuleProjectOpMethods {
 			for (IPath classFilePath : finalClassPaths) {
 				File finalClassFile = classFilePath.toFile();
 
-				if (finalClassFile.exists()) {
+				if (FileUtil.exists(finalClassFile)) {
 					ElementList<PropertyKey> propertyKeys = op.getPropertyKeys();
 
 					List<String> properties = new ArrayList<>();
@@ -292,7 +292,7 @@ public class NewLiferayModuleProjectOpMethods {
 
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
-		if (locationStatus.isOK() && parentProjectDir.exists() && (parentProjectDir.list().length > 0)) {
+		if (locationStatus.isOK() && FileUtil.hasChildren(parentProjectDir)) {
 			List<String> groupId = provider.getData("parentGroupId", String.class, parentProjectDir);
 
 			if (!CoreUtil.isNullOrEmpty(groupId)) {
@@ -312,7 +312,7 @@ public class NewLiferayModuleProjectOpMethods {
 
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
-		if (locationStatus.isOK() && parentProjectDir.exists() && (parentProjectDir.list().length > 0)) {
+		if (locationStatus.isOK() && FileUtil.hasChildren(parentProjectDir)) {
 			List<String> version = provider.getData("parentVersion", String.class, parentProjectDir);
 
 			if (!CoreUtil.isNullOrEmpty(version)) {

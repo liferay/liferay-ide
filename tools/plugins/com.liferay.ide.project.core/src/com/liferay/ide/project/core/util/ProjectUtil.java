@@ -134,7 +134,7 @@ public class ProjectUtil {
 
 					IProject project = workspace.getRoot().getProject(projectDescription.getName());
 
-					if ((project != null) && project.exists()) {
+					if (FileUtil.exists(project)) {
 						result.add(project);
 					}
 				}
@@ -279,12 +279,11 @@ public class ProjectUtil {
 	public static IFile createEmptyProjectFile(String fileName, IFolder folder) throws CoreException {
 		IFile emptyFile = folder.getFile(fileName);
 
-		if (emptyFile.exists()) {
+		if (FileUtil.exists(emptyFile)) {
 			return emptyFile;
 		}
-		else {
-			emptyFile.create(new ByteArrayInputStream(StringPool.EMPTY.getBytes()), true, null);
-		}
+
+		emptyFile.create(new ByteArrayInputStream(StringPool.EMPTY.getBytes()), true, null);
 
 		return emptyFile;
 	}
@@ -532,18 +531,20 @@ public class ProjectUtil {
 		IPath webXmlPath =
 			projectRecord.getProjectLocation().append(ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/web.xml");
 
+		File webXmlFile = webXmlPath.toFile();
+
 		if (projectRecord.getProjectName().endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_PORTLET, true);
 
-			if (!(webXmlPath.toFile().exists())) {
-				createDefaultWebXml(webXmlPath.toFile(), projectRecord.getProjectName());
+			if (FileUtil.notExists(webXmlFile)) {
+				createDefaultWebXml(webXmlFile, projectRecord.getProjectName());
 			}
 		}
 		else if (projectRecord.getProjectName().endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_HOOK, true);
 
-			if (!(webXmlPath.toFile().exists())) {
-				createDefaultWebXml(webXmlPath.toFile(), projectRecord.getProjectName());
+			if (FileUtil.notExists(webXmlFile)) {
+				createDefaultWebXml(webXmlFile, projectRecord.getProjectName());
 			}
 		}
 		else if (projectRecord.getProjectName().endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
@@ -551,9 +552,11 @@ public class ProjectUtil {
 
 			webXmlPath = webXmlPath.removeLastSegments(3).append(path);
 
+			webXmlFile = webXmlPath.toFile();
+
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_EXT, true);
 
-			if (!(webXmlPath.toFile().exists())) {
+			if (FileUtil.notExists(webXmlFile)) {
 				createDefaultWebXml(webXmlPath.toFile(), projectRecord.getProjectName());
 			}
 		}

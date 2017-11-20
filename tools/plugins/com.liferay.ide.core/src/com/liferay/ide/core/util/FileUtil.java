@@ -297,6 +297,14 @@ public class FileUtil {
 		return null;
 	}
 
+	public static boolean hasChildren(File dir) {
+		if (isDir(dir) && dir.list().length > 0) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public static boolean isFile(File file) {
 		if (exists(file) && file.isFile()) {
 			return true;
@@ -305,8 +313,16 @@ public class FileUtil {
 		return false;
 	}
 
-	public static boolean isNotDir(File dir) {
-		if (notExists(dir) || !dir.isDirectory()) {
+	public static boolean isDir(File file) {
+		if (exists(file) && file.isDirectory()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean isNotDir(File file) {
+		if (notExists(file) || !file.isDirectory()) {
 			return true;
 		}
 

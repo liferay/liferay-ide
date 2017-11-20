@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.ProjectName;
@@ -87,7 +88,7 @@ public class ModuleProjectNameValidationService extends ValidationService {
 
 				File projectFodler = osPath.append(currentProjectName).toFile();
 
-				if (projectFodler.exists() && (projectFodler.list().length > 0)) {
+				if (FileUtil.hasChildren(projectFodler)) {
 					return StatusBridge.create(ProjectCore.createErrorStatus("Target project folder is not empty."));
 				}
 			}

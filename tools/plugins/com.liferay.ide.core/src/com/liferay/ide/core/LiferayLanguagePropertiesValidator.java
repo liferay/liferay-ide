@@ -89,7 +89,7 @@ public class LiferayLanguagePropertiesValidator {
 				LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, true, IResource.DEPTH_INFINITE);
 
 			for (IMarker marker : markers) {
-				if (!marker.getResource().exists()) {
+				if (FileUtil.notExists(marker.getResource())) {
 					marker.delete();
 				}
 				else {

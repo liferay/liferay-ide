@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.FileListing;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 
@@ -90,7 +91,7 @@ public class ServiceWrapperCommand {
 			libFiles = FileListing.getFileListing(new File(bundleLibPath.toOSString()));
 
 			for (File lib : libFiles) {
-				if (lib.exists() && lib.getName().endsWith("portal-kernel.jar")) {
+				if (FileUtil.exists(lib) && lib.getName().endsWith("portal-kernel.jar")) {
 					portalkernelJar = lib;
 
 					break;

@@ -147,7 +147,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
 		IPath outputBundlePath = getOutputBundlePath();
 
-		if (outputBundlePath.toFile().exists()) {
+		if (FileUtil.exists(outputBundlePath)) {
 			return outputBundlePath;
 		}
 
@@ -176,7 +176,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
 			File nodeThemeOutput = gradleProjectLocation.append("dist/" + gradleProject.getName() + ".war").toFile();
 
-			if (nodeThemeOutput.exists()) {
+			if (FileUtil.exists(nodeThemeOutput)) {
 				return new Path(nodeThemeOutput.getAbsolutePath());
 			}
 			else {
@@ -265,7 +265,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 	public IFolder[] getSourceFolders() {
 		IFile gulpFile = getProject().getFile("gulpfile.js");
 
-		if ((gulpFile != null) && gulpFile.exists()) {
+		if (FileUtil.exists(gulpFile)) {
 			return new IFolder[] {getProject().getFolder("src")};
 		}
 
@@ -287,7 +287,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 		if ((outputBundle == null) || outputBundle.lastSegment().endsWith(".war")) {
 			return getProject().getName();
 		}
-		else if ((outputBundle != null) && outputBundle.toFile().exists()) {
+		else if (FileUtil.exists(outputBundle)) {
 			try (final Jar jar = new Jar(outputBundle.toFile())) {
 				retval = jar.getBsn();
 			}
@@ -301,16 +301,18 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 	public boolean isFragmentBundle() {
 		IFile bndFile = getProject().getFile("bnd.bnd");
 
-		if (bndFile.exists()) {
-			try {
-				String content = FileUtil.readContents(bndFile.getContents());
+		if (FileUtil.notExists(bndFile)) {
+			return false;
+		}
 
-				if (content.contains("Fragment-Host")) {
-					return true;
-				}
+		try {
+			String content = FileUtil.readContents(bndFile.getContents());
+
+			if (content.contains("Fragment-Host")) {
+				return true;
 			}
-			catch (Exception e) {
-			}
+		}
+		catch (Exception e) {
 		}
 
 		return false;

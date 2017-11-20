@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.BinaryProjectRecord;
 import com.liferay.ide.project.core.IPortletFramework;
@@ -232,7 +233,7 @@ public class ProjectImportUtil {
 
 			File projectFile = new File(projectPath.toFile(), ".project");
 
-			if (projectFile.exists()) {
+			if (FileUtil.exists(projectFile)) {
 				projectRecord = new ProjectRecord(projectFile);
 			}
 			else {
@@ -467,7 +468,7 @@ public class ProjectImportUtil {
 			return ProjectCore.createErrorStatus("\"" + currentPath + "\" is not an absolute path.");
 		}
 
-		if (!osPath.toFile().exists()) {
+		if (FileUtil.notExists(osPath)) {
 			return ProjectCore.createErrorStatus("Directory doesn't exist.");
 		}
 
@@ -520,7 +521,7 @@ public class ProjectImportUtil {
 
 		IProject existingProject = CoreUtil.getWorkspaceRoot().getProject(projectName);
 
-		if ((existingProject != null) && existingProject.exists()) {
+		if (FileUtil.exists(existingProject)) {
 			return ProjectCore.createErrorStatus("Project name already exists.");
 		}
 

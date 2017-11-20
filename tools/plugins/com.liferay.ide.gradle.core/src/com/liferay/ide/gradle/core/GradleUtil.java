@@ -17,6 +17,7 @@ package com.liferay.ide.gradle.core;
 import com.google.common.base.Optional;
 
 import com.gradleware.tooling.toolingutils.binding.Validator;
+import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
 
@@ -100,7 +101,7 @@ public class GradleUtil {
 	}
 
 	public static boolean isBuildFile(IFile buildFile) {
-		if ((buildFile != null) && buildFile.exists() && "build.gradle".equals(buildFile.getName()) &&
+		if (FileUtil.exists(buildFile) && "build.gradle".equals(buildFile.getName()) &&
 			buildFile.getParent() instanceof IProject) {
 
 			return true;
