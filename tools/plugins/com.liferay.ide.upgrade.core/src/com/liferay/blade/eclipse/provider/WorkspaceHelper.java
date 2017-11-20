@@ -27,6 +27,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
@@ -45,7 +46,14 @@ public class WorkspaceHelper {
 		IProgressMonitor npm = new NullProgressMonitor();
 
 		if (projectFile.exists()) {
-			projectFile.delete(IFile.FORCE, npm);
+			try {
+				projectFile.delete(IFile.FORCE, npm);
+			}
+			catch (CoreException ce) {
+				IPath projectFileLocation = projectFile.getLocation();
+
+				projectFileLocation.toFile().delete();
+			}
 		}
 
 		if (!projectFile.getParent().exists() && projectFile.getParent() instanceof IFolder) {
