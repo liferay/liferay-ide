@@ -81,10 +81,10 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page {
 	public static IPath getTempLocation(String prefix, String fileName) {
 		IPath tmpStation = ProjectUI.getPluginStateLocation().append("tmp");
 
-		tmpStation.append(prefix).append("/");
-		tmpStation.append(String.valueOf(System.currentTimeMillis()));
-		tmpStation.append(CoreUtil.isNullOrEmpty(fileName) ? StringPool.EMPTY : "/");
-		tmpStation.append(fileName);
+		tmpStation = tmpStation.append(prefix).append("/");
+		tmpStation = tmpStation.append(String.valueOf(System.currentTimeMillis()));
+		tmpStation = tmpStation.append(CoreUtil.isNullOrEmpty(fileName) ? StringPool.EMPTY : "/");
+		tmpStation = tmpStation.append(fileName);
 
 		return tmpStation;
 	}
