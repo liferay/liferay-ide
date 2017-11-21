@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model.internal;
@@ -22,85 +25,79 @@ import org.eclipse.sapphire.ValuePropertyBinding;
 /**
  * @author Gregory Amerson
  */
-public class LabelPositionResource extends Resource
-{
-    private Point point;
+public class LabelPositionResource extends Resource {
 
-    public LabelPositionResource( Point point, Resource parent )
-    {
-        super( parent );
-        this.point = point;
-    }
+	public LabelPositionResource(Point point, Resource parent) {
+		super(parent);
 
-    public Point getPoint()
-    {
-        return this.point;
-    }
+		_point = point;
+	}
 
-    @Override
-    protected PropertyBinding createBinding( final Property property )
-    {
-        PropertyBinding binding = null;
-        final PropertyDef def = property.definition();
+	public Point getPoint() {
+		return _point;
+	}
 
-        if( Position.PROP_X.equals( def ) || Position.PROP_Y.equals( def ) )
-        {
-            binding = new ValuePropertyBinding()
-            {
-                @Override
-                public String read()
-                {
-                    String retval = null;
+	@Override
+	protected PropertyBinding createBinding(Property property) {
+		PropertyBinding binding = null;
 
-                    if (LabelPositionResource.this.point != null)
-                    {
-                        if (Position.PROP_X.equals( def ) )
-                        {
-                            retval = Integer.toString( LabelPositionResource.this.point.getX() );
-                        }
-                        else if (Position.PROP_Y.equals( def ) )
-                        {
-                            retval = Integer.toString( LabelPositionResource.this.point.getY());
-                        }
-                    }
+		PropertyDef def = property.definition();
 
-                    return retval;
-                }
+		if (Position.PROP_X.equals(def) || Position.PROP_Y.equals(def)) {
+			binding = new ValuePropertyBinding() {
 
-                @Override
-                public void write( String value )
-                {
-                    if (LabelPositionResource.this.point == null)
-                    {
-                        LabelPositionResource.this.point = new Point();
-                    }
+				@Override
+				public String read() {
+					String retval = null;
 
-                    if (Position.PROP_X.equals( def ) )
-                    {
-                        LabelPositionResource.this.point.setX( Integer.parseInt( value ) );
-                    }
-                    else if (Position.PROP_Y.equals( def ) )
-                    {
-                        LabelPositionResource.this.point.setY( Integer.parseInt( value ));
-                    }
+					if (LabelPositionResource.this._point != null) {
+						if (Position.PROP_X.equals(def)) {
+							retval = Integer.toString(LabelPositionResource.this._point.getX());
+						}
+						else if (Position.PROP_Y.equals(def)) {
+							retval = Integer.toString(LabelPositionResource.this._point.getY());
+						}
+					}
 
-//                    if (Position.PROP_X.equals( def ) || Position.PROP_Y.equals( def ))
-//                    {
-//                        WorkflowNodeMetadataObject parentMetadata = parent().adapt( WorkflowNodeMetadataResource.class ).getMetadata();
-//                        parentMetadata.setNodeLocation( LabelPositionResource.this.point );
-//                    }
+					return retval;
+				}
 
-                    parent().adapt( WorkflowNodeMetadataResource.class ).saveMetadata();
-                }
-            };
-        }
+				@Override
+				public void write(String value) {
+					if (LabelPositionResource.this._point == null) {
+						LabelPositionResource.this._point = new Point();
+					}
 
-        if( binding != null )
-        {
-            binding.init( property );
-        }
+					if (Position.PROP_X.equals(def)) {
+						LabelPositionResource.this._point.setX(Integer.parseInt(value));
+					}
+					else if (Position.PROP_Y.equals(def)) {
+						LabelPositionResource.this._point.setY(Integer.parseInt(value));
+					}
 
-        return binding;
-    }
+					/*
+					 * if (Position.PROP_X.equals( def ) ||
+					 * Position.PROP_Y.equals( def )) {
+					 * WorkflowNodeMetadataObject parentMetadata =
+					 * parent().adapt( WorkflowNodeMetadataResource.class
+					 * ).getMetadata(); parentMetadata.setNodeLocation(
+					 * LabelPositionResource.this.point ); }
+					 */
+					WorkflowNodeMetadataResource metadataResource = parent().adapt(WorkflowNodeMetadataResource.class);
+
+					metadataResource.saveMetadata();
+				}
+
+			};
+		}
+
+		if (binding != null) {
+			binding.init(property);
+		}
+
+		return binding;
+	}
+
+	private Point _point;
 
 }

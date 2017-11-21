@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model.internal;
@@ -29,122 +32,120 @@ import org.eclipse.sapphire.modeling.LayeredElementBindingImpl;
 /**
  * @author Gregory Amerson
  */
-public class TransitionMetadataResource extends Resource
-{
-    private TransitionMetadataObject metadata;
+public class TransitionMetadataResource extends Resource {
 
-    public TransitionMetadataResource( TransitionMetadataObject metadata, Resource parent )
-    {
-        super( parent );
-        this.metadata = metadata;
-    }
+	public TransitionMetadataResource(TransitionMetadataObject metadata, Resource parent) {
+		super(parent);
+		_metadata = metadata;
+	}
 
-    public TransitionMetadataObject getMetadata()
-    {
-        return this.metadata;
-    }
+	public TransitionMetadataObject getMetadata() {
+		return _metadata;
+	}
 
-    @Override
-    protected PropertyBinding createBinding( final Property property )
-    {
-        PropertyBinding binding = null;
-        final PropertyDef def = property.definition();
+	@Override
+	protected PropertyBinding createBinding(Property property) {
+		PropertyBinding binding = null;
+		PropertyDef def = property.definition();
 
-        if( TransitionMetadata.PROP_NAME.equals( def ) )
-        {
-            binding = new ValuePropertyBinding()
-            {
-                @Override
-                public String read()
-                {
-                    return TransitionMetadataResource.this.metadata.getName();
-                }
+		if (TransitionMetadata.PROP_NAME.equals(def)) {
+			binding = new ValuePropertyBinding() {
 
-                @Override
-                public void write( String value )
-                {
-                    TransitionMetadataResource.this.metadata.setName( value );
-                    parent().adapt( WorkflowNodeMetadataResource.class ).saveMetadata();
-                }
+				@Override
+				public String read() {
+					return TransitionMetadataResource.this._metadata.getName();
+				}
 
-            };
-        }
-        else if( TransitionMetadata.PROP_LABEL_LOCATION.equals( def ) )
-        {
-            binding = new LayeredElementBindingImpl()
-            {
-                @Override
-                public ElementType type( Resource resource )
-                {
-                    return Position.TYPE;
-                }
+				@Override
+				public void write(String value) {
+					TransitionMetadataResource.this._metadata.setName(value);
 
-                @Override
-                protected Object readUnderlyingObject()
-                {
-                    return TransitionMetadataResource.this.metadata.getLabelPosition();
-                }
+					WorkflowNodeMetadataResource wfNodeMetadataResource =
+						parent().adapt(WorkflowNodeMetadataResource.class);
 
-                @Override
-                protected Resource createResource( Object obj )
-                {
-                    return new LabelPositionResource( (Point) obj, TransitionMetadataResource.this );
-                }
-            };
-        }
-        else if(TransitionMetadata.PROP_BENDPOINTS.equals( def ) )
-        {
-            binding = new LayeredListPropertyBinding()
-            {
-                @Override
-                public ElementType type( Resource resource )
-                {
-                    return ConnectionBendpoint.TYPE;
-                }
+					wfNodeMetadataResource.saveMetadata();
+				}
 
-                @Override
-                protected List<?> readUnderlyingList()
-                {
-                    return TransitionMetadataResource.this.metadata.getBendpoints();
-                }
+			};
+		}
+		else if (TransitionMetadata.PROP_LABEL_LOCATION.equals(def)) {
+			binding = new LayeredElementBindingImpl() {
 
-                @Override
-                protected Resource resource( Object obj )
-                {
-                    return new PositionResource( (Point) obj, TransitionMetadataResource.this );
-                }
+				@Override
+				public ElementType type(Resource resource) {
+					return Position.TYPE;
+				}
 
-                @Override
-                protected Object insertUnderlyingObject( ElementType type, int position)
-                {
-                    Point newBendpoint = new Point();
+				@Override
+				protected Resource createResource(Object obj) {
+					return new LabelPositionResource((Point)obj, TransitionMetadataResource.this);
+				}
 
-                    TransitionMetadataResource.this.metadata.getBendpoints().add(position, newBendpoint );
+				@Override
+				protected Object readUnderlyingObject() {
+					return TransitionMetadataResource.this._metadata.getLabelPosition();
+				}
 
-                    parent().adapt( WorkflowNodeMetadataResource.class ).saveMetadata();
+			};
+		}
+		else if (TransitionMetadata.PROP_BENDPOINTS.equals(def)) {
+			binding = new LayeredListPropertyBinding() {
 
-                    return newBendpoint;
-                }
+				@Override
+				public void remove(Resource resource) {
+					if (resource instanceof PositionResource) {
+						List<Point> bendPoints = TransitionMetadataResource.this._metadata.getBendpoints();
 
-                @Override
-                public void remove( Resource resource )
-                {
-                    if( resource instanceof PositionResource )
-                    {
-                        TransitionMetadataResource.this.metadata.getBendpoints().remove(
-                            ( (PositionResource) resource ).getPoint() );
-                        parent().adapt( WorkflowNodeMetadataResource.class ).saveMetadata();
-                    }
-                }
-            };
-        }
+						bendPoints.remove(((PositionResource)resource).getPoint());
 
-        if( binding != null )
-        {
-            binding.init( property );
-        }
+						WorkflowNodeMetadataResource wfNodeMetadataResource =
+							parent().adapt(WorkflowNodeMetadataResource.class);
 
-        return binding;
-    }
+						wfNodeMetadataResource.saveMetadata();
+					}
+				}
+
+				@Override
+				public ElementType type(Resource resource) {
+					return ConnectionBendpoint.TYPE;
+				}
+
+				@Override
+				protected Object insertUnderlyingObject(ElementType type, int position) {
+					Point newBendpoint = new Point();
+
+					List<Point> bendPoints = TransitionMetadataResource.this._metadata.getBendpoints();
+
+					bendPoints.add(position, newBendpoint);
+
+					WorkflowNodeMetadataResource wfNodeMetadataResource =
+						parent().adapt(WorkflowNodeMetadataResource.class);
+
+					wfNodeMetadataResource.saveMetadata();
+
+					return newBendpoint;
+				}
+
+				@Override
+				protected List<?> readUnderlyingList() {
+					return TransitionMetadataResource.this._metadata.getBendpoints();
+				}
+
+				@Override
+				protected Resource resource(Object obj) {
+					return new PositionResource((Point)obj, TransitionMetadataResource.this);
+				}
+
+			};
+		}
+
+		if (binding != null) {
+			binding.init(property);
+		}
+
+		return binding;
+	}
+
+	private TransitionMetadataObject _metadata;
 
 }

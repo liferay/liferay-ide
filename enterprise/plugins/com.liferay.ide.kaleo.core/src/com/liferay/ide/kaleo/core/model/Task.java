@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model;
@@ -26,55 +29,38 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Gregory Amerson
  */
-@Image( path = "images/task_16x16.png" )
-public interface Task extends WorkflowNode, Assignable, MustTransition
-{
+@Image(path = "images/task_16x16.png")
+public interface Task extends WorkflowNode, Assignable, MustTransition {
 
-    ElementType TYPE = new ElementType( Task.class );
+	public ElementType TYPE = new ElementType(Task.class);
 
+	public ElementList<Action> getTaskActions();
 
-    // *** TaskValidationService ***
+	public ElementList<TaskActionNotification> getTaskNotifications();
 
-    @Service( impl = TaskValidationService.class )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, Node.PROP_NAME );
+	public ElementList<TaskTimer> getTaskTimers();
 
-    // *** Actions ***
+	@Service(impl = TaskValidationService.class)
+	public ValueProperty PROP_NAME = new ValueProperty(TYPE, Node.PROP_NAME);
 
-    @Type( base = Action.class )
-    @Label( standard = "task actions" )
-    @XmlListBinding
-    (
-        path = "actions",
-        mappings = @XmlListBinding.Mapping( element = "action", type = Action.class )
-    )
-    ListProperty PROP_TASK_ACTIONS = new ListProperty( TYPE, "TaskActions" );
+	@Label(standard = "task actions")
+	@Type(base = Action.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "action", type = Action.class), path = "actions")
+	public ListProperty PROP_TASK_ACTIONS = new ListProperty(TYPE, "TaskActions");
 
-    ElementList<Action> getTaskActions();
+	@Label(standard = "task notifications")
+	@Type(base = TaskActionNotification.class)
+	@XmlListBinding(
+		mappings = @XmlListBinding.Mapping(element = "notification", type = TaskActionNotification.class),
+		path = "actions"
+	)
+	public ListProperty PROP_TASK_NOTIFICATIONS = new ListProperty(TYPE, "TaskNotifications");
 
-    // *** Notifications ***
+	@Label(standard = "task timers")
+	@Type(base = TaskTimer.class)
+	@XmlListBinding(
+		mappings = @XmlListBinding.Mapping(element = "task-timer", type = TaskTimer.class), path = "task-timers"
+	)
+	public ListProperty PROP_TASK_TIMERS = new ListProperty(TYPE, "TaskTimers");
 
-    @Type( base = TaskActionNotification.class )
-    @Label( standard = "task notifications" )
-    @XmlListBinding
-    (
-        path = "actions",
-        mappings = @XmlListBinding.Mapping( element = "notification", type = TaskActionNotification.class )
-    )
-    ListProperty PROP_TASK_NOTIFICATIONS = new ListProperty( TYPE, "TaskNotifications" );
-
-    ElementList<TaskActionNotification> getTaskNotifications();
-
-
-    // *** TaskTimers ***
-
-    @Type( base = TaskTimer.class )
-    @Label( standard = "task timers" )
-    @XmlListBinding
-    (
-        path = "task-timers",
-        mappings = @XmlListBinding.Mapping( element = "task-timer", type = TaskTimer.class )
-    )
-    ListProperty PROP_TASK_TIMERS = new ListProperty( TYPE, "TaskTimers" );
-
-    ElementList<TaskTimer> getTaskTimers();
 }

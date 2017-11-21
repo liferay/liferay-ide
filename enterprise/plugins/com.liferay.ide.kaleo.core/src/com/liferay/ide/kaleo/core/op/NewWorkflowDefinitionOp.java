@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.op;
@@ -50,112 +53,96 @@ import org.eclipse.sapphire.workspace.ProjectRelativePath;
  * @author Gregory Amerson
  * @author Kuo Zhang
  */
-@Service( impl = NewWorkflowDefinitionAdapter.class )
-public interface NewWorkflowDefinitionOp extends ExecutableElement, AssignableOp
-{
-    ElementType TYPE = new ElementType( NewWorkflowDefinitionOp.class );
+@Service(impl = NewWorkflowDefinitionAdapter.class)
+public interface NewWorkflowDefinitionOp extends ExecutableElement, AssignableOp {
 
-    @Reference( target = IProject.class )
-    @Services
-    (
-        {
-            @Service( impl = ProjectReferenceService.class ),
-            @Service( impl = ProjectNamesPossibleValuesService.class )
-        }
-    )
-    @Label( standard = "&project" )
-    @Required
-    ValueProperty PROP_PROJECT = new ValueProperty( TYPE, "Project" );
+	public ElementType TYPE = new ElementType(NewWorkflowDefinitionOp.class);
 
+	@DelegateImplementation(NewWorkflowDefinitionOpMethods.class)
+	public Status execute(ProgressMonitor monitor);
 
-    @Type( base = Path.class )
-    @Label( standard = "&folder" )
-    @ProjectRelativePath
-    @MustExist
-    ValueProperty PROP_FOLDER = new ValueProperty( TYPE, "Folder" );
+	public ElementList<Node> getConnectedNodes();
 
+	public Value<TemplateLanguageType> getDefaultTemplateLanguage();
 
-    @Label( standard = "&name" )
-    @DefaultValue( text = "New Workflow" )
-    @Required
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+	public Value<String> getFinalStateName();
 
+	public Value<Path> getFolder();
 
-    @Label( standard = "&initial state name" )
-    @DefaultValue( text = "created" )
-    ValueProperty PROP_INITIAL_STATE_NAME = new ValueProperty( TYPE, "InitialStateName" );
+	public Value<String> getInitialStateName();
 
+	public Value<String> getInitialTaskName();
 
-    @Type( base = TemplateLanguageType.class )
-    @Label( standard = "default t&emplate type" )
-    @DefaultValue( text = "freemarker" )
-    ValueProperty PROP_DEFAULT_TEMPLATE_LANGUAGE = new ValueProperty( TYPE, "DefaultTemplateLanguage" );
+	public Value<String> getName();
 
+	public Value<String> getNewFilePath();
 
-    @Label( standard = "initial &task name" )
-    @DefaultValue( text = "review" )
-    ValueProperty PROP_INITIAL_TASK_NAME = new ValueProperty( TYPE, "InitialTaskName" );
+	public ReferenceValue<String, IProject> getProject();
 
+	public void setDefaultTemplateLanguage(String templateLanguage);
 
-    @Label( standard = "&final state name" )
-    @DefaultValue( text = "approved" )
-    ValueProperty PROP_FINAL_STATE_NAME = new ValueProperty( TYPE, "FinalStateName" );
+	public void setDefaultTemplateLanguage(TemplateLanguageType templateLanguage);
 
-    ValueProperty PROP_NEW_FILE_PATH = new ValueProperty( TYPE, "NewFilePath" );
+	public void setFinalStateName(String name);
 
-    @Type
-    (
-        base = Node.class,
-        possible =
-        {
-            ChooseDiagramNode.class,
-            StateForOp.class,
-            TaskForOp.class,
-            ConditionForOp.class,
-            ForkForOp.class,
-            JoinForOp.class,
-            JoinXorForOp.class
-        }
-    )
-    @Label( standard = "connected nodes" )
-    ListProperty PROP_CONNECTED_NODES = new ListProperty( TYPE, "ConnectedNodes" );
+	public void setFolder(Path value);
 
-    ElementList<Node> getConnectedNodes();
+	public void setFolder(String value);
 
-    // Methods
+	public void setInitialStateName(String name);
 
-    ReferenceValue<String, IProject> getProject();
-    void setProject( String project );
+	public void setInitialTaskName(String name);
 
-    Value<Path> getFolder();
-    void setFolder( String value );
-    void setFolder( Path value );
+	public void setName(String name);
 
-    Value<String> getName();
-    void setName( String name );
+	public void setNewFilePath(String name);
 
-    Value<String> getInitialStateName();
-    void setInitialStateName( String name );
+	public void setProject(String project);
 
+	@Label(standard = "connected nodes")
+	@Type(base = Node.class, possible = {
+		ChooseDiagramNode.class, StateForOp.class, TaskForOp.class, ConditionForOp.class, ForkForOp.class,
+		JoinForOp.class, JoinXorForOp.class
+	}
+	)
+	public ListProperty PROP_CONNECTED_NODES = new ListProperty(TYPE, "ConnectedNodes");
 
+	@DefaultValue(text = "freemarker")
+	@Label(standard = "default t&emplate type")
+	@Type(base = TemplateLanguageType.class)
+	public ValueProperty PROP_DEFAULT_TEMPLATE_LANGUAGE = new ValueProperty(TYPE, "DefaultTemplateLanguage");
 
-    Value<TemplateLanguageType> getDefaultTemplateLanguage();
-    void setDefaultTemplateLanguage( String templateLanguage );
-    void setDefaultTemplateLanguage( TemplateLanguageType templateLanguage );
+	@DefaultValue(text = "approved")
+	@Label(standard = "&final state name")
+	public ValueProperty PROP_FINAL_STATE_NAME = new ValueProperty(TYPE, "FinalStateName");
 
-    Value<String> getInitialTaskName();
-    void setInitialTaskName( String name );
+	@Label(standard = "&folder")
+	@MustExist
+	@ProjectRelativePath
+	@Type(base = Path.class)
+	public ValueProperty PROP_FOLDER = new ValueProperty(TYPE, "Folder");
 
-    Value<String> getFinalStateName();
-    void setFinalStateName( String name );
+	@DefaultValue(text = "created")
+	@Label(standard = "&initial state name")
+	public ValueProperty PROP_INITIAL_STATE_NAME = new ValueProperty(TYPE, "InitialStateName");
 
-    Value<String> getNewFilePath();
-    void setNewFilePath( String name );
+	@DefaultValue(text = "review")
+	@Label(standard = "initial &task name")
+	public ValueProperty PROP_INITIAL_TASK_NAME = new ValueProperty(TYPE, "InitialTaskName");
 
-    // *** Method: execute ***
+	@DefaultValue(text = "New Workflow")
+	@Label(standard = "&name")
+	@Required
+	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
-    @DelegateImplementation( NewWorkflowDefinitionOpMethods.class )
+	public ValueProperty PROP_NEW_FILE_PATH = new ValueProperty(TYPE, "NewFilePath");
 
-    Status execute( ProgressMonitor monitor );
+	@Label(standard = "&project")
+	@Reference(target = IProject.class)
+	@Required
+	@Services(
+		{@Service(impl = ProjectReferenceService.class), @Service(impl = ProjectNamesPossibleValuesService.class)}
+	)
+	public ValueProperty PROP_PROJECT = new ValueProperty(TYPE, "Project");
 
 }

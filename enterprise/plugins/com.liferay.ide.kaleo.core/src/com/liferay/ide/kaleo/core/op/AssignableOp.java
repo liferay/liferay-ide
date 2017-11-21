@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.op;
@@ -33,52 +36,52 @@ import org.eclipse.sapphire.modeling.annotations.Required;
 /**
  * @author Gregory Amerson
  */
-public interface AssignableOp extends Assignable
-{
+public interface AssignableOp extends Assignable {
 
-    ElementType TYPE = new ElementType( AssignableOp.class );
+	public ElementType TYPE = new ElementType(AssignableOp.class);
 
-    @Type( base = AssignmentType.class )
-    @Required
-    @DefaultValue( text = "CREATOR" )
-    ValueProperty PROP_ASSIGNMENT_TYPE = new ValueProperty( TYPE, "AssignmentType" );
+	public Value<AssignmentType> getAssignmentType();
 
-    @Type( base = Role.class )
-    @Label( standard = "roles" )
-    ImpliedElementProperty PROP_IMPLIED_ROLE = new ImpliedElementProperty( TYPE, "ImpliedRole" );
+	public Value<ScriptLanguageType> getDefaultScriptLanguage();
 
-    @Type( base = User.class )
-    @Label( standard = "user" )
-    ImpliedElementProperty PROP_IMPLIED_USER = new ImpliedElementProperty( TYPE, "ImpliedUser" );
+	public Role getImpliedRole();
 
-    @Type( base = Scriptable.class )
-    ImpliedElementProperty PROP_IMPLIED_SCRIPTABLE = new ImpliedElementProperty( TYPE, "ImpliedScriptable" );
+	public Scriptable getImpliedScriptable();
 
-    @Type( base = RoleName.class )
-    ListProperty PROP_ROLE_NAMES = new ListProperty( TYPE, "RoleNames" );
+	public User getImpliedUser();
 
-    @Type( base = ScriptLanguageType.class )
-    @Label( standard = "default &script type" )
-    @DefaultValue( text = "groovy" )
-    ValueProperty PROP_DEFAULT_SCRIPT_LANGUAGE = new ValueProperty( TYPE, "DefaultScriptLanguage" );
+	public ElementList<RoleName> getRoleNames();
 
-    Value<AssignmentType> getAssignmentType();
+	public void setAssignmentType(AssignmentType value);
 
-    void setAssignmentType( String value );
+	public void setAssignmentType(String value);
 
-    void setAssignmentType( AssignmentType value );
+	public void setDefaultScriptLanguage(ScriptLanguageType scriptLanguage);
 
-    Role getImpliedRole();
+	public void setDefaultScriptLanguage(String scriptLanguage);
 
-    User getImpliedUser();
+	@DefaultValue(text = "CREATOR")
+	@Required
+	@Type(base = AssignmentType.class)
+	public ValueProperty PROP_ASSIGNMENT_TYPE = new ValueProperty(TYPE, "AssignmentType");
 
-    Scriptable getImpliedScriptable();
+	@DefaultValue(text = "groovy")
+	@Label(standard = "default &script type")
+	@Type(base = ScriptLanguageType.class)
+	public ValueProperty PROP_DEFAULT_SCRIPT_LANGUAGE = new ValueProperty(TYPE, "DefaultScriptLanguage");
 
-    ElementList<RoleName> getRoleNames();
+	@Label(standard = "roles")
+	@Type(base = Role.class)
+	public ImpliedElementProperty PROP_IMPLIED_ROLE = new ImpliedElementProperty(TYPE, "ImpliedRole");
 
-    Value<ScriptLanguageType> getDefaultScriptLanguage();
+	@Type(base = Scriptable.class)
+	public ImpliedElementProperty PROP_IMPLIED_SCRIPTABLE = new ImpliedElementProperty(TYPE, "ImpliedScriptable");
 
-    void setDefaultScriptLanguage( String scriptLanguage );
+	@Label(standard = "user")
+	@Type(base = User.class)
+	public ImpliedElementProperty PROP_IMPLIED_USER = new ImpliedElementProperty(TYPE, "ImpliedUser");
 
-    void setDefaultScriptLanguage( ScriptLanguageType scriptLanguage );
+	@Type(base = RoleName.class)
+	public ListProperty PROP_ROLE_NAMES = new ListProperty(TYPE, "RoleNames");
+
 }

@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model;
@@ -27,40 +30,38 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@Image( path = "images/user_16x16.gif" )
-public interface User extends Element
-{
-    ElementType TYPE = new ElementType( User.class );
+@Image(path = "images/user_16x16.gif")
+public interface User extends Element {
 
-    // *** user-id ***
+	public ElementType TYPE = new ElementType(User.class);
 
-    @Type( base = Integer.class )
-    @Label( standard = "&user-id" )
-    @XmlBinding( path = "user-id" )
-    @Service( impl = UserValidationService.class )
-    ValueProperty PROP_USER_ID = new ValueProperty( TYPE, "UserId" );
+	public Value<String> getEmailAddress();
 
-    Value<Integer> getUserId();
-    void setUserId( String val );
-    void setUserId( Integer val );
+	public Value<String> getScreenName();
 
-    // *** Screen Name ***
+	public Value<Integer> getUserId();
 
-    @XmlBinding( path = "screen-name" )
-    @Label( standard = "&screen name" )
-    ValueProperty PROP_SCREEN_NAME = new ValueProperty( TYPE, "ScreenName" );
+	public void setEmailAddress(String value);
 
-    Value<String> getScreenName();
-    void setScreenName( String value );
+	public void setScreenName(String value);
 
-    // *** Email Address ***
+	public void setUserId(Integer val);
 
-    @XmlBinding( path = "email-address" )
-    @Label( standard = "&email address" )
-    @Service( impl = EmailAddressValidationService.class )
-    ValueProperty PROP_EMAIL_ADDRESS = new ValueProperty( TYPE, "EmailAddress" );
+	public void setUserId(String val);
 
-    Value<String> getEmailAddress();
-    void setEmailAddress( String value );
+	@Label(standard = "&email address")
+	@Service(impl = EmailAddressValidationService.class)
+	@XmlBinding(path = "email-address")
+	public ValueProperty PROP_EMAIL_ADDRESS = new ValueProperty(TYPE, "EmailAddress");
+
+	@Label(standard = "&screen name")
+	@XmlBinding(path = "screen-name")
+	public ValueProperty PROP_SCREEN_NAME = new ValueProperty(TYPE, "ScreenName");
+
+	@Label(standard = "&user-id")
+	@Service(impl = UserValidationService.class)
+	@Type(base = Integer.class)
+	@XmlBinding(path = "user-id")
+	public ValueProperty PROP_USER_ID = new ValueProperty(TYPE, "UserId");
 
 }

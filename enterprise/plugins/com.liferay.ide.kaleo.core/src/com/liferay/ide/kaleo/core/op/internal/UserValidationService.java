@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.op.internal;
@@ -19,82 +22,93 @@ import com.liferay.ide.kaleo.core.model.User;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 
 /**
  * @author Gregory Amerson
  */
-public class UserValidationService extends ValidationService
-{
-    private Listener listener;
+public class UserValidationService extends ValidationService {
 
-    @Override
-    protected void initValidationService()
-    {
-        final User user = context( User.class );
+	@Override
+	public Status compute() {
+		User user = context(User.class);
 
-        if( user != null )
-        {
-            this.listener = new FilteredListener<PropertyContentEvent>()
-            {
-                @Override
-                protected void handleTypedEvent( PropertyContentEvent event )
-                {
-                    refresh();
-                }
-            };
+		if (user != null) {
+			int count = 0;
 
-            user.attach( this.listener, "*" );
-        }
-    }
+			Value<Integer> id = user.getUserId();
 
-    @Override
-    public void dispose()
-    {
-        final User user = context( User.class );
+			boolean userId = false;
 
-        if( user != null )
-        {
-            user.detach( this.listener );
-        }
-    }
+			if (id.content() != null) {
+				userId = true;
+			}
 
-    @Override
-    public Status compute()
-    {
-        final User user = context( User.class );
+			Value<String> userScreenName = user.getScreenName();
 
-        if( user != null )
-        {
-            int count = 0;
+			boolean screenName = false;
 
-            boolean userId = user.getUserId().content() != null;
-            boolean screenName = user.getScreenName().content() != null;
-            boolean emailAddress = user.getEmailAddress().content() != null;
+			if (userScreenName.content() != null) {
+				screenName = true;
+			}
 
-            if( userId )
-            {
-                count++;
-            }
+			Value<String> userEmailAddress = user.getEmailAddress();
 
-            if( screenName )
-            {
-                count++;
-            }
+			boolean emailAddress = false;
 
-            if( emailAddress )
-            {
-                count++;
-            }
+			if (userEmailAddress.content() != null) {
+				emailAddress = true;
+			}
 
-            if( count > 1 )
-            {
-                return createErrorStatus( "Only specify one of the three user fields." );
-            }
-        }
+			if (userId) {
+				count++;
+			}
 
-        return createOkStatus();
-    }
+			if (screenName) {
+				count++;
+			}
+
+			if (emailAddress) {
+				count++;
+			}
+
+			if (count > 1) {
+				return createErrorStatus("Only specify one of the three user fields.");
+			}
+		}
+
+		return createOkStatus();
+	}
+
+	@Override
+	public void dispose() {
+		User user = context(User.class);
+
+		if (user != null) {
+			user.detach(_listener);
+		}
+	}
+
+	@Override
+	protected void initValidationService() {
+		User user = context(User.class);
+
+		if (user != null) {
+			_listener = new FilteredListener<PropertyContentEvent>() {
+
+				@Override
+				protected void handleTypedEvent(PropertyContentEvent event) {
+					refresh();
+				}
+
+			};
+
+			user.attach(_listener, "*");
+		}
+	}
+
+	private Listener _listener;
 
 }

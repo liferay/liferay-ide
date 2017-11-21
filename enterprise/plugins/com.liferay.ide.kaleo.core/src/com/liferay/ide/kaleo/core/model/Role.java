@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model;
@@ -33,69 +36,68 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  * @author Gregory Amerson
  * @author Kuo Zhang
  */
-public interface Role extends Element
-{
-    ElementType TYPE = new ElementType( Role.class );
+public interface Role extends Element {
 
-    // *** role-id ***
+	public ElementType TYPE = new ElementType(Role.class);
 
-    @Type( base = Integer.class )
-    @Label( standard = "&role-id" )
-    @XmlBinding( path = "role-id" )
-    ValueProperty PROP_ROLE_ID = new ValueProperty( TYPE, "RoleId" );
+	public Value<Boolean> getAutoCreate();
 
-    Value<Integer> getRoleId();
-    void setRoleId( String val );
-    void setRoleId( Integer val );
+	public Value<RoleEditMode> getEditMode();
 
-    // *** role-type
+	public Value<String> getName();
 
-    @Type( base = RoleType.class )
-    @Label( standard = "role type" )
-    @XmlBinding( path = "role-type" )
-    @DefaultValue( text = "regular" )
-    ValueProperty PROP_ROLE_TYPE = new ValueProperty( TYPE, "RoleType" );
+	public Value<Integer> getRoleId();
 
-    Value<RoleType> getRoleType();
-    void setRoleType( String roleType );
-    void setRoleType( RoleType roleType );
+	public Value<RoleType> getRoleType();
 
-    // *** Name ***
+	public void setAutoCreate(Boolean value);
 
-    @XmlBinding( path = "name" )
-    @Label( standard = "&name" )
-    @Required
-    @Services
-    (
-         value = 
-         { 
-             @Service( impl = RoleNamePossibleValuesMetaService.class, context = Context.METAMODEL ),
-             @Service( impl = RoleNamePossibleValuesService.class )
-         }
-    )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+	public void setAutoCreate(String value);
 
-    Value<String> getName();
-    void setName( String value );
+	public void setEditMode(RoleEditMode editMode);
 
-    // *** Auto create ***
+	public void setEditMode(String editMode);
 
-    @Type( base = Boolean.class )
-    @XmlBinding( path = "auto-create" )
-    @Label( standard = "&auto-create" )
-    ValueProperty PROP_AUTO_CREATE = new ValueProperty( TYPE, "AutoCreate" );
+	public void setName(String value);
 
-    Value<Boolean> getAutoCreate();
-    void setAutoCreate( String value );
-    void setAutoCreate( Boolean value );
+	public void setRoleId(Integer val);
 
-    @Type( base = RoleEditMode.class )
-    @Label( standard = "edit mode" )
-    @CustomXmlValueBinding( impl = RoleEditModeBinding.class )
-    ValueProperty PROP_EDIT_MODE = new ValueProperty( TYPE, "EditMode" );
+	public void setRoleId(String val);
 
-    Value<RoleEditMode> getEditMode();
-    void setEditMode( String editMode );
-    void setEditMode( RoleEditMode editMode );
+	public void setRoleType(RoleType roleType);
+
+	public void setRoleType(String roleType);
+
+	@Label(standard = "&auto-create")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "auto-create")
+	public ValueProperty PROP_AUTO_CREATE = new ValueProperty(TYPE, "AutoCreate");
+
+	@CustomXmlValueBinding(impl = RoleEditModeBinding.class)
+	@Label(standard = "edit mode")
+	@Type(base = RoleEditMode.class)
+	public ValueProperty PROP_EDIT_MODE = new ValueProperty(TYPE, "EditMode");
+
+	@Label(standard = "&name")
+	@Required
+	@Services(
+		value = {
+			@Service(context = Context.METAMODEL, impl = RoleNamePossibleValuesMetaService.class),
+			@Service(impl = RoleNamePossibleValuesService.class)
+		}
+	)
+	@XmlBinding(path = "name")
+	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
+
+	@Label(standard = "&role-id")
+	@Type(base = Integer.class)
+	@XmlBinding(path = "role-id")
+	public ValueProperty PROP_ROLE_ID = new ValueProperty(TYPE, "RoleId");
+
+	@DefaultValue(text = "regular")
+	@Label(standard = "role type")
+	@Type(base = RoleType.class)
+	@XmlBinding(path = "role-type")
+	public ValueProperty PROP_ROLE_TYPE = new ValueProperty(TYPE, "RoleType");
 
 }

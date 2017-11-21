@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model;
@@ -29,40 +32,40 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@Image( path = "images/script_16x16.gif" )
-public interface Scriptable extends Element
-{
-    ElementType TYPE = new ElementType( Scriptable.class );
+@Image(path = "images/script_16x16.gif")
+public interface Scriptable extends Element {
 
-    // *** properties ***
+	public ElementType TYPE = new ElementType(Scriptable.class);
 
-    @LongString
-    @Whitespace(trim = false)
-    @Label( standard = "&script" )
-    @XmlBinding( path = "script" )
-    @CustomXmlValueBinding( impl = CDataValueBindingImpl.class )
-    ValueProperty PROP_SCRIPT = new ValueProperty( TYPE, "Script" );
+	public Value<String> getScript();
 
-    Value<String> getScript();
-    void setScript( String value );
+	public Value<ScriptLanguageType> getScriptLanguage();
 
-    @Type( base = ScriptLanguageType.class )
-    @Label( standard = "script &language" )
-    @XmlBinding( path = "script-language" )
-    ValueProperty PROP_SCRIPT_LANGUAGE = new ValueProperty( TYPE, "ScriptLanguage" );
+	public Value<String> getScriptRequiredContexts();
 
-    Value<ScriptLanguageType> getScriptLanguage();
-    void setScriptLanguage( String scriptLanguage );
-    void setScriptLanguage( ScriptLanguageType scriptLanguage );
+	public void setScript(String value);
 
-    // *** ScriptRequiredContexts ***
+	public void setScriptLanguage(ScriptLanguageType scriptLanguage);
 
-    @Label( standard = "script required contexts" )
-    @XmlBinding( path = "script-required-contexts" )
-    @VersionCompatibility( "[6.2.0" )
-    ValueProperty PROP_SCRIPT_REQUIRED_CONTEXTS = new ValueProperty( TYPE, "ScriptRequiredContexts" );
+	public void setScriptLanguage(String scriptLanguage);
 
-    Value<String> getScriptRequiredContexts();
-    void setScriptRequiredContexts( String value );
+	public void setScriptRequiredContexts(String value);
+
+	@CustomXmlValueBinding(impl = CDataValueBindingImpl.class)
+	@Label(standard = "&script")
+	@LongString
+	@Whitespace(trim = false)
+	@XmlBinding(path = "script")
+	public ValueProperty PROP_SCRIPT = new ValueProperty(TYPE, "Script");
+
+	@Label(standard = "script &language")
+	@Type(base = ScriptLanguageType.class)
+	@XmlBinding(path = "script-language")
+	public ValueProperty PROP_SCRIPT_LANGUAGE = new ValueProperty(TYPE, "ScriptLanguage");
+
+	@Label(standard = "script required contexts")
+	@VersionCompatibility("[6.2.0")
+	@XmlBinding(path = "script-required-contexts")
+	public ValueProperty PROP_SCRIPT_REQUIRED_CONTEXTS = new ValueProperty(TYPE, "ScriptRequiredContexts");
 
 }

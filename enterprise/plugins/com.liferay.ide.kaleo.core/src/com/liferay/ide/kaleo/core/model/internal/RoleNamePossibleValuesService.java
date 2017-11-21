@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model.internal;
@@ -18,124 +21,131 @@ import com.liferay.ide.kaleo.core.op.AssignableOp;
 
 import java.util.Set;
 
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
 
 /**
  * @author Gregory Amerson
  * @author Kuo Zhang
  */
-public class RoleNamePossibleValuesService extends PossibleValuesService
-{
+public class RoleNamePossibleValuesService extends PossibleValuesService {
 
-    private RoleNamePossibleValuesMetaService metaService;
-    private String previousRoleName;
-    private String currentRoleName;
-    private Listener metaRoleNamesListener;
-    private Listener roleNameListener;
+	@Override
+	public void dispose() {
+		_metaService.updateRoleNames(_previousRoleName, StringPool.EMPTY);
 
-    @Override
-    protected void initPossibleValuesService()
-    {
-        invalidValueSeverity = Status.Severity.OK;
-        metaService = context().service( RoleNamePossibleValuesMetaService.class );
-        previousRoleName = StringPool.EMPTY;
-        currentRoleName = StringPool.EMPTY;
+		if ((_op() != null) && !_op().disposed()) {
+			Value<String> opName = _op().getName();
 
-        initMetaServiceIfNecessary();
+			opName.detach(_roleNameListener);
+		}
 
-        metaRoleNamesListener = new FilteredListener<Event>()
-        {
-            @Override
-            protected void handleTypedEvent( Event event )
-            {
-                if( !context( Role.class ).disposed() )
-                {
-                    try
-                    {
-                        refresh();
-                    }
-                    catch( Exception e )
-                    {
-                        // The previous refreshing is not done; 
-                    }
-                }
-            }
-        };
+		_metaService.detach(_metaRoleNamesListener);
 
-        roleNameListener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                if( ! event.property().element().disposed() )
-                {
-                    currentRoleName = event.property().element().nearest( Role.class ).getName().content();
-                    metaService.updateRoleNames( previousRoleName, currentRoleName );
-                    previousRoleName = currentRoleName;
-                }
-            }
-        };
+		_previousRoleName = null;
 
-        metaService.attach( metaRoleNamesListener );
-        op().getName().attach( roleNameListener );
+		_currentRoleName = null;
 
-        super.initPossibleValuesService();
-    }
+		_roleNameListener = null;
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        for( String roleName : metaService.getRoleNames() )
-        {
-            values.add( roleName );
-        }
-    }
+		_metaRoleNamesListener = null;
 
-    @Override
-    public void dispose()
-    {
-        metaService.updateRoleNames( previousRoleName, StringPool.EMPTY );
+		_metaService = null;
 
-        if( op() != null && ! op().disposed() )
-        {
-            op().getName().detach( roleNameListener );
-        }
+		super.dispose();
+	}
 
-        metaService.detach( metaRoleNamesListener );
+	@Override
+	protected void compute(Set<String> values) {
+		for (String roleName : _metaService.getRoleNames()) {
+			values.add(roleName);
+		}
+	}
 
-        previousRoleName = null;
-        currentRoleName = null;
-        roleNameListener = null;
-        metaRoleNamesListener = null;
-        metaService = null;
+	@Override
+	protected void initPossibleValuesService() {
+		invalidValueSeverity = Status.Severity.OK;
+		_metaService = context().service(RoleNamePossibleValuesMetaService.class);
+		_previousRoleName = StringPool.EMPTY;
+		_currentRoleName = StringPool.EMPTY;
 
-        super.dispose();
-    }
+		_initMetaServiceIfNecessary();
 
-    private void initMetaServiceIfNecessary()
-    {
-        final WorkflowDefinition definition = op().nearest( WorkflowDefinition.class );
+		_metaRoleNamesListener = new FilteredListener<Event>() {
 
-        if( definition != null )
-        { 
-            metaService.initIfNecessary( definition );
-        }
+			@Override
+			protected void handleTypedEvent(Event event) {
+				if (!context(Role.class).disposed()) {
+					try {
+						refresh();
+					}
+					catch (Exception e) {
+					}
+				}
+			}
 
-        final AssignableOp assignableOp = op().nearest( AssignableOp.class );
+		};
 
-        if( assignableOp != null )
-        {
-            metaService.initIfNecessary( assignableOp );
-        }
-    }
+		_roleNameListener = new FilteredListener<PropertyContentEvent>() {
 
-    private Role op()
-    {
-        return context( Role.class );
-    }
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				Property property = event.property();
+
+				Element element = property.element();
+
+				if (!element.disposed()) {
+					Role role = element.nearest(Role.class);
+
+					Value<String> roleName = role.getName();
+
+					_currentRoleName = roleName.content();
+
+					_metaService.updateRoleNames(_previousRoleName, _currentRoleName);
+					_previousRoleName = _currentRoleName;
+				}
+			}
+
+		};
+
+		_metaService.attach(_metaRoleNamesListener);
+
+		Value<String> opName = _op().getName();
+
+		opName.attach(_roleNameListener);
+
+		super.initPossibleValuesService();
+	}
+
+	private void _initMetaServiceIfNecessary() {
+		WorkflowDefinition definition = _op().nearest(WorkflowDefinition.class);
+
+		if (definition != null) {
+			_metaService.initIfNecessary(definition);
+		}
+
+		AssignableOp assignableOp = _op().nearest(AssignableOp.class);
+
+		if (assignableOp != null) {
+			_metaService.initIfNecessary(assignableOp);
+		}
+	}
+
+	private Role _op() {
+		return context(Role.class);
+	}
+
+	private String _currentRoleName;
+	private Listener _metaRoleNamesListener;
+	private RoleNamePossibleValuesMetaService _metaService;
+	private String _previousRoleName;
+	private Listener _roleNameListener;
+
 }

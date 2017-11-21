@@ -1,65 +1,75 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model.internal;
 
 import com.liferay.ide.kaleo.core.model.CanTransition;
+import com.liferay.ide.kaleo.core.model.Node;
 import com.liferay.ide.kaleo.core.model.Transition;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.ReferenceValue;
+import org.eclipse.sapphire.Value;
 
 /**
  * @author Gregory Amerson
  * @author Kuo Zhang
  */
-public class TransitionTargetListener extends FilteredListener<PropertyContentEvent>
-{
+public class TransitionTargetListener extends FilteredListener<PropertyContentEvent> {
 
-    @Override
-    protected void handleTypedEvent( final PropertyContentEvent event )
-    {
-        final Transition transition = event.property().nearest( Transition.class );
+	@Override
+	protected void handleTypedEvent(PropertyContentEvent event) {
+		Property property = event.property();
 
-        if( transition != null )
-        {
-            if( transition.getTarget().content() != null && transition.getName().content( false ) == null )
-            {
-                final String targetName = transition.getTarget().content();
+		Transition transition = property.nearest(Transition.class);
 
-                String defaultName = targetName;
+		if (transition != null) {
+			ReferenceValue<String, Node> targe = transition.getTarget();
 
-                final Set<String> existingNames = new HashSet<String>();
+			Value<String> transitionName = transition.getName();
 
-                for( Transition t : transition.nearest( CanTransition.class ).getTransitions() )
-                {
-                    if( t.getName().content() != null )
-                    {
-                        existingNames.add( t.getName().content() );
-                    }
-                }
+			if ((targe.content() != null) && (transitionName.content(false) == null)) {
+				String targetName = targe.content();
 
-                int count = 1;
+				String defaultName = targetName;
 
-                while( existingNames.contains( defaultName ) )
-                {
-                    defaultName = targetName + "_" + count++;
-                }
+				Set<String> existingNames = new HashSet<>();
 
-                transition.setName( defaultName );
-            }
-        }
-    }
+				CanTransition camtransition = transition.nearest(CanTransition.class);
+
+				for (Transition t : camtransition.getTransitions()) {
+					Value<String> tName = t.getName();
+
+					if (tName.content() != null) {
+						existingNames.add(tName.content());
+					}
+				}
+
+				int count = 1;
+
+				while (existingNames.contains(defaultName)) {
+					defaultName = targetName + "_" + count++;
+				}
+
+				transition.setName(defaultName);
+			}
+		}
+	}
 
 }

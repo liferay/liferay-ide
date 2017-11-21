@@ -1,13 +1,17 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
+
 package com.liferay.ide.kaleo.core;
 
 import com.liferay.ide.kaleo.core.util.IWorkflowValidation;
@@ -15,8 +19,10 @@ import com.liferay.ide.kaleo.core.util.WorkflowValidationProxy;
 import com.liferay.ide.server.core.ILiferayServer;
 
 import java.lang.reflect.Proxy;
+
 import java.util.HashMap;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.QualifiedName;
@@ -25,180 +31,149 @@ import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerLifecycleListener;
 import org.eclipse.wst.server.core.ServerCore;
+
 import org.osgi.framework.BundleContext;
 
 /**
  * @author Gregory Amerson
  */
-public class KaleoCore extends Plugin
-{
-    public static final String DEFAULT_KALEO_VERSION = "7.0.0";
+public class KaleoCore extends Plugin {
 
-    public static final String PLUGIN_ID = "com.liferay.ide.kaleo.core"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.liferay.ide.kaleo.core";
 
-    public static final QualifiedName DEFAULT_SCRIPT_LANGUAGE_KEY = new QualifiedName( PLUGIN_ID, "defaultScriptLanguage" );
+	public static final String DEFAULT_KALEO_VERSION = "7.0.0";
 
-    public static final QualifiedName DEFAULT_TEMPLATE_LANGUAGE_KEY = new QualifiedName( PLUGIN_ID, "defaultTemplateLanguage" );
+	public static final QualifiedName DEFAULT_SCRIPT_LANGUAGE_KEY = new QualifiedName(
+		PLUGIN_ID, "defaultScriptLanguage");
 
-    public static final QualifiedName GRID_VISIBLE_KEY = new QualifiedName( PLUGIN_ID, "gridVisible" );
+	public static final QualifiedName DEFAULT_TEMPLATE_LANGUAGE_KEY = new QualifiedName(
+		PLUGIN_ID, "defaultTemplateLanguage");
 
-    private static HashMap<String, IKaleoConnection> kaleoConnections;
+	public static final QualifiedName GRID_VISIBLE_KEY = new QualifiedName(PLUGIN_ID, "gridVisible");
 
-    // The shared instance
-    private static KaleoCore plugin;
+	public static IStatus createErrorStatus(String msg) {
+		return createErrorStatus(msg, null);
+	}
 
-    private static HashMap<String, IWorkflowValidation> workflowValidators;
-    // The plug-in ID
+	public static IStatus createErrorStatus(String msg, Exception e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
+	}
 
-    public static IStatus createErrorStatus( String msg )
-    {
-        return createErrorStatus( msg, null );
-    }
+	public static KaleoCore getDefault() {
+		return _plugin;
+	}
 
-    public static IStatus createErrorStatus( String msg, Exception e )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
-    }
+	public static IKaleoConnection getKaleoConnection(ILiferayServer liferayServer) {
+		if (_kaleoConnections == null) {
+			_kaleoConnections = new HashMap<>();
 
-    /**
-     * Returns the shared instance
-     *
-     * @return the shared instance
-     */
-    public static KaleoCore getDefault()
-    {
-        return plugin;
-    }
+			IServerLifecycleListener serverLifecycleListener = new IServerLifecycleListener() {
 
-    public static IKaleoConnection getKaleoConnection( final ILiferayServer liferayServer )
-    {
-        if( kaleoConnections == null )
-        {
-            kaleoConnections = new HashMap<String, IKaleoConnection>();
+				public void serverAdded(IServer server) {
+				}
 
-            ServerCore.addServerLifecycleListener( new IServerLifecycleListener()
-            {
+				public void serverChanged(IServer server) {
+				}
 
-                public void serverAdded( IServer server )
-                {
-                }
+				public void serverRemoved(IServer s) {
+					if (liferayServer.equals(s)) {
+						IKaleoConnection service = _kaleoConnections.get(liferayServer.getId());
 
-                public void serverChanged( IServer server )
-                {
-                }
+						if (service != null) {
+							service = null;
+							_kaleoConnections.put(liferayServer.getId(), null);
+						}
+					}
+				}
 
-                public void serverRemoved( IServer s )
-                {
-                    if( liferayServer.equals( s ) )
-                    {
-                        IKaleoConnection service = kaleoConnections.get( liferayServer.getId() );
+			};
 
-                        if( service != null )
-                        {
-                            service = null;
-                            kaleoConnections.put( liferayServer.getId(), null );
-                        }
-                    }
-                }
-            } );
-        }
+			ServerCore.addServerLifecycleListener(serverLifecycleListener);
+		}
 
-        IKaleoConnection service = kaleoConnections.get( liferayServer.getId() );
+		IKaleoConnection service = _kaleoConnections.get(liferayServer.getId());
 
-        if( service == null )
-        {
-            service = new KaleoConnection();
+		if (service == null) {
+			service = new KaleoConnection();
 
-            updateKaleoConnectionSettings( liferayServer, service );
+			updateKaleoConnectionSettings(liferayServer, service);
 
-            kaleoConnections.put( liferayServer.getId(), service );
-        }
+			_kaleoConnections.put(liferayServer.getId(), service);
+		}
 
-        return service;
-    }
+		return service;
+	}
 
-    public static IKaleoConnection getKaleoConnection( IServer parent )
-    {
-        return getKaleoConnection( (ILiferayServer) parent.loadAdapter( ILiferayServer.class, null ) );
-    }
+	public static IKaleoConnection getKaleoConnection(IServer parent) {
+		return getKaleoConnection((ILiferayServer)parent.loadAdapter(ILiferayServer.class, null));
+	}
 
-    public static IWorkflowValidation getWorkflowValidation(final IRuntime runtime)
-    {
-        if (workflowValidators == null)
-        {
-            workflowValidators = new HashMap<String, IWorkflowValidation>();
-        }
+	public static IWorkflowValidation getWorkflowValidation(IRuntime runtime) {
+		if (_workflowValidators == null) {
+			_workflowValidators = new HashMap<>();
+		}
 
-        IWorkflowValidation validator = workflowValidators.get(runtime.getId());
+		IWorkflowValidation validator = _workflowValidators.get(runtime.getId());
 
-        if (validator == null)
-        {
-            Class<?>[] interfaces = new Class<?>[] { IWorkflowValidation.class };
+		if (validator == null) {
+			Class<?>[] interfaces = new Class<?>[] {IWorkflowValidation.class};
 
-            validator =
-                (IWorkflowValidation) Proxy.newProxyInstance(
-                    IWorkflowValidation.class.getClassLoader(), interfaces, new WorkflowValidationProxy(runtime));
+			validator = (IWorkflowValidation)Proxy.newProxyInstance(
+				IWorkflowValidation.class.getClassLoader(), interfaces, new WorkflowValidationProxy(runtime));
 
-            workflowValidators.put(runtime.getId(), validator);
-        }
+			_workflowValidators.put(runtime.getId(), validator);
+		}
 
-        return validator;
-    }
+		return validator;
+	}
 
-    public static void logError( Exception e )
-    {
-        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e ) );
-    }
+	public static void logError(Exception e) {
+		ILog log = getDefault().getLog();
 
-    public static void logError( String msg, Exception e )
-    {
-        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, msg, e ) );
-    }
+		log.log(new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e));
+	}
 
-    public static void updateKaleoConnectionSettings( ILiferayServer server )
-    {
-        updateKaleoConnectionSettings( server, getKaleoConnection( server ) );
-    }
+	public static void logError(String msg, Exception e) {
+		ILog log = getDefault().getLog();
 
-    public static void updateKaleoConnectionSettings( ILiferayServer server, IKaleoConnection connection )
-    {
-        connection.setHost( server.getHost() );
-        connection.setHttpPort( server.getHttpPort() );
-        connection.setPortalHtmlUrl( server.getPortalHomeUrl() );
-        connection.setPortalContextPath( "/" );
-        connection.setUsername( server.getUsername() );
-        connection.setPassword( server.getPassword() );
-    }
+		log.log(new Status(IStatus.ERROR, PLUGIN_ID, msg, e));
+	}
 
-    private WorkflowSupportManager workflowSupportManager;
+	public static void updateKaleoConnectionSettings(ILiferayServer server) {
+		updateKaleoConnectionSettings(server, getKaleoConnection(server));
+	}
 
-    public synchronized WorkflowSupportManager getWorkflowSupportManager()
-    {
-        if( this.workflowSupportManager == null )
-        {
-            this.workflowSupportManager = new WorkflowSupportManager();
-        }
+	public static void updateKaleoConnectionSettings(ILiferayServer server, IKaleoConnection connection) {
+		connection.setHost(server.getHost());
+		connection.setHttpPort(server.getHttpPort());
+		connection.setPortalHtmlUrl(server.getPortalHomeUrl());
+		connection.setPortalContextPath("/");
+		connection.setUsername(server.getUsername());
+		connection.setPassword(server.getPassword());
+	}
 
-        return this.workflowSupportManager;
-    }
+	public synchronized WorkflowSupportManager getWorkflowSupportManager() {
+		if (_workflowSupportManager == null) {
+			_workflowSupportManager = new WorkflowSupportManager();
+		}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-     */
-    public void start( BundleContext context ) throws Exception
-    {
-        super.start( context );
-        plugin = this;
-    }
+		return _workflowSupportManager;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-     */
-    public void stop( BundleContext context ) throws Exception
-    {
-        plugin = null;
-        super.stop( context );
-    }
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		_plugin = this;
+	}
+
+	public void stop(BundleContext context) throws Exception {
+		_plugin = null;
+		super.stop(context);
+	}
+
+	private static HashMap<String, IKaleoConnection> _kaleoConnections;
+	private static KaleoCore _plugin;
+	private static HashMap<String, IWorkflowValidation> _workflowValidators;
+
+	private WorkflowSupportManager _workflowSupportManager;
+
 }

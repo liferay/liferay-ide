@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.util;
@@ -31,6 +34,7 @@ import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.validation.ValidationResult;
 import org.eclipse.wst.validation.ValidationState;
@@ -42,123 +46,112 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( { "restriction", "deprecation" } )
-public class WorkflowDefinitionValidator extends BaseValidator
-{
-    public static final String MARKER_TYPE = "com.liferay.ide.kaleo.core.workflowDefinitionMarker";
-    public static final String PREFERENCE_NODE_QUALIFIER = KaleoCore.getDefault().getBundle().getSymbolicName();
-    public static final String WORKFLOW_DEFINITION_VALIDATE = "validation-workflow-definition-validate";
+@SuppressWarnings({"restriction", "deprecation"})
+public class WorkflowDefinitionValidator extends BaseValidator {
 
-    public WorkflowDefinitionValidator()
-    {
-        super();
-    }
+	public static final String MARKER_TYPE = "com.liferay.ide.kaleo.core.workflowDefinitionMarker";
 
-    @SuppressWarnings( "unchecked" )
-    Map<String, Object>[] detectProblems( IFile workflowDefinitionXml, IScopeContext[] preferenceScopes )
-        throws CoreException
-    {
-        List<Map<String, Object>> problems = new ArrayList<Map<String, Object>>();
+	public static final String PREFERENCE_NODE_QUALIFIER = KaleoCore.getDefault().getBundle().getSymbolicName();
 
-        IStructuredModel model = null;
+	public static final String WORKFLOW_DEFINITION_VALIDATE = "validation-workflow-definition-validate";
 
-        try
-        {
-            model = StructuredModelManager.getModelManager().getModelForRead( workflowDefinitionXml );
+	public WorkflowDefinitionValidator() {
+	}
 
-            if( model != null && model instanceof IDOMModel )
-            {
-                IDOMDocument document = ( (IDOMModel) model ).getDocument();
+	@SuppressWarnings("unchecked")
+	public Map<String, Object>[] detectProblems(IFile workflowDefinitionXml, IScopeContext[] preferenceScopes)
+		throws CoreException {
 
-                try
-                {
-                    IWorkflowValidation workflowValidation =
-                        KaleoCore.getWorkflowValidation( ServerUtil.getRuntime( workflowDefinitionXml.getProject() ) );
+		List<Map<String, Object>> problems = new ArrayList<>();
 
-                    Exception error = workflowValidation.validate( workflowDefinitionXml.getContents() );
+		IStructuredModel model = null;
 
-                    if( error != null && ! CoreUtil.isNullOrEmpty( error.getMessage() ) )
-                    {
-                        Map<String, Object> problem = createMarkerValues( PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-                            WORKFLOW_DEFINITION_VALIDATE, (IDOMNode)document.getFirstChild(), error.getMessage() );
-                        problems.add( problem );
-                    }
-                }
-                catch (Exception e)
-                {
-                    // if workflowValidation fails just skip marking any errors
-                }
-            }
+		try {
+			IModelManager modelManage = StructuredModelManager.getModelManager();
 
-        }
-        catch( Exception e )
-        {
-        }
-        finally
-        {
-            if( model != null )
-            {
-                model.releaseFromRead();
-            }
-        }
+			model = modelManage.getModelForRead(workflowDefinitionXml);
 
-        Map<String, Object>[] retval = new Map[problems.size()];
+			if ((model != null) && model instanceof IDOMModel) {
+				IDOMDocument document = ((IDOMModel)model).getDocument();
 
-        return (Map<String, Object>[]) problems.toArray( retval );
-    }
+				try {
+					IWorkflowValidation workflowValidation = KaleoCore.getWorkflowValidation(
+						ServerUtil.getRuntime(workflowDefinitionXml.getProject()));
 
-    @Override
-    public ValidationResult validate( IResource resource, int kind, ValidationState state, IProgressMonitor monitor )
-    {
-        if( resource.getType() != IResource.FILE )
-        {
-            return null;
-        }
+					Exception error = workflowValidation.validate(workflowDefinitionXml.getContents());
 
-        ValidationResult result = new ValidationResult();
+					if ((error != null) && !CoreUtil.isNullOrEmpty(error.getMessage())) {
+						Map<String, Object> problem = createMarkerValues(
+							PREFERENCE_NODE_QUALIFIER, preferenceScopes, WORKFLOW_DEFINITION_VALIDATE,
+							(IDOMNode)document.getFirstChild(), error.getMessage());
 
-        IFile workflowDefinitionXml = (IFile) resource;
+						problems.add(problem);
+					}
+				}
+				catch (Exception e) {
+				}
+			}
+		}
+		catch (Exception e) {
+		}
+		finally {
+			if (model != null) {
+				model.releaseFromRead();
+			}
+		}
 
-        if( workflowDefinitionXml.isAccessible() && CoreUtil.isLiferayProject( resource.getProject() ) )
-        {
-            IScopeContext[] scopes = new IScopeContext[] { new InstanceScope(), new DefaultScope() };
+		Map<String, Object>[] retval = new Map[problems.size()];
 
-            ProjectScope projectScope = new ProjectScope( workflowDefinitionXml.getProject() );
+		return (Map<String, Object>[])problems.toArray(retval);
+	}
 
-            boolean useProjectSettings =
-                projectScope.getNode( PREFERENCE_NODE_QUALIFIER ).getBoolean(
-                    ProjectCore.USE_PROJECT_SETTINGS, false );
+	@Override
+	public ValidationResult validate(IResource resource, int kind, ValidationState state, IProgressMonitor monitor) {
+		if (resource.getType() != IResource.FILE) {
+			return null;
+		}
 
-            if( useProjectSettings )
-            {
-                scopes = new IScopeContext[] { projectScope, new InstanceScope(), new DefaultScope() };
-            }
+		ValidationResult result = new ValidationResult();
 
-            try
-            {
-                Map<String, Object>[] problems = detectProblems( workflowDefinitionXml, scopes );
+		IFile workflowDefinitionXml = (IFile)resource;
 
-                for( int i = 0; i < problems.length; i++ )
-                {
-                    ValidatorMessage message =
-                        ValidatorMessage.create( problems[i].get( IMarker.MESSAGE ).toString(), resource );
-                    message.setType( MARKER_TYPE );
-                    message.setAttributes( problems[i] );
-                    result.add( message );
-                }
+		if (workflowDefinitionXml.isAccessible() && CoreUtil.isLiferayProject(resource.getProject())) {
+			IScopeContext[] scopes = {new InstanceScope(), new DefaultScope()};
 
-                if( problems.length > 0 )
-                {
-                    result.setDependsOn( new IResource[] { workflowDefinitionXml } );
-                }
-            }
-            catch( Exception e )
-            {
-                KaleoCore.logError( e );
-            }
-        }
+			ProjectScope projectScope = new ProjectScope(workflowDefinitionXml.getProject());
 
-        return result;
-    }
+			boolean useProjectSettings = projectScope.getNode(
+				PREFERENCE_NODE_QUALIFIER).getBoolean(ProjectCore.USE_PROJECT_SETTINGS, false);
+
+			if (useProjectSettings) {
+				scopes = new IScopeContext[] {projectScope, new InstanceScope(), new DefaultScope()};
+			}
+
+			try {
+				Map<String, Object>[] problems = detectProblems(workflowDefinitionXml, scopes);
+
+				for (int i = 0; i < problems.length; i++) {
+					Object messageValue = problems[i].get(IMarker.MESSAGE);
+
+					ValidatorMessage message = ValidatorMessage.create(messageValue.toString(), resource);
+
+					message.setType(MARKER_TYPE);
+					message.setAttributes(problems[i]);
+					result.add(message);
+				}
+
+				if (problems.length > 0) {
+					IResource[] resources = {workflowDefinitionXml};
+
+					result.setDependsOn(resources);
+				}
+			}
+			catch (Exception e) {
+				KaleoCore.logError(e);
+			}
+		}
+
+		return result;
+	}
 
 }

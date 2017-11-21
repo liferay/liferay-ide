@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model.internal;
@@ -21,58 +24,57 @@ import java.util.Set;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.Version;
 
 /**
  * @author Gregory Amerson
  */
-public class TransitionPossibleValuesService extends PossibleValuesService
-{
+public class TransitionPossibleValuesService extends PossibleValuesService {
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        // if we are a task return states and tasks, if we are a state, find tasks.
-        Element modelElement = context( Element.class );
+	protected void addNodeNames(Set<String> values, ElementList<?> nodeList) {
+		Node[] nodes = nodeList.toArray(new Node[0]);
 
-        WorkflowDefinition workflow = modelElement.nearest( WorkflowDefinition.class );
+		for (Node node : nodes) {
+			Value<String> nodeName = node.getName();
 
-        if( workflow == null )
-        {
-            workflow = modelElement.adapt( WorkflowDefinition.class );
-        }
+			String name = nodeName.content();
 
-        if( workflow != null )
-        {
-            addNodeNames( values, workflow.getTasks() );
-            addNodeNames( values, workflow.getStates() );
-            addNodeNames( values, workflow.getConditions() );
-            addNodeNames( values, workflow.getForks() );
-            addNodeNames( values, workflow.getJoins() );
+			if (!empty(name)) {
+				values.add(name);
+			}
+		}
+	}
 
-            final Version version = workflow.getSchemaVersion().content();
+	@Override
+	protected void compute(Set<String> values) {
+		/*
+		 * if we are a task return states and tasks, if we are a state, find
+		 * tasks.
+		 */
+		Element modelElement = context(Element.class);
 
-            if( version.compareTo( new Version( "6.2" ) ) >= 0 )
-            {
-                addNodeNames( values, workflow.getJoinXors() );
-            }
+		WorkflowDefinition workflow = modelElement.nearest(WorkflowDefinition.class);
 
-        }
-    }
+		if (workflow == null) {
+			workflow = modelElement.adapt(WorkflowDefinition.class);
+		}
 
-    protected void addNodeNames( Set<String> values, ElementList<?> nodeList )
-    {
-        Node[] nodes = nodeList.toArray( new Node[0] );
+		if (workflow != null) {
+			addNodeNames(values, workflow.getTasks());
+			addNodeNames(values, workflow.getStates());
+			addNodeNames(values, workflow.getConditions());
+			addNodeNames(values, workflow.getForks());
+			addNodeNames(values, workflow.getJoins());
 
-        for( Node node : nodes )
-        {
-            String name = node.getName().content();
+			Value<Version> schemaVersion = workflow.getSchemaVersion();
 
-            if( !empty( name ) )
-            {
-                values.add( name );
-            }
-        }
-    }
+			Version version = schemaVersion.content();
+
+			if (version.compareTo(new Version("6.2")) >= 0) {
+				addNodeNames(values, workflow.getJoinXors());
+			}
+		}
+	}
 
 }

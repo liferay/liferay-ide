@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model.internal;
@@ -29,143 +32,145 @@ import org.eclipse.sapphire.ValuePropertyBinding;
 import org.eclipse.sapphire.modeling.ElementPropertyBinding;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlResource;
+
 import org.json.JSONException;
+
 import org.w3c.dom.CDATASection;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
  * @author Gregory Amerson
  */
-public class WorkflowNodeMetadataResource extends Resource
-{
-    private WorkflowNodeMetadataObject metadata;
+public class WorkflowNodeMetadataResource extends Resource {
 
-    public WorkflowNodeMetadataResource( WorkflowNodeMetadataObject obj, Resource parent )
-    {
-        super( parent );
-        this.metadata = obj;
-    }
+	public WorkflowNodeMetadataResource(WorkflowNodeMetadataObject obj, Resource parent) {
+		super(parent);
 
-    public WorkflowNodeMetadataObject getMetadata()
-    {
-        return metadata;
-    }
+		_metadata = obj;
+	}
 
-    @Override
-    protected PropertyBinding createBinding( final Property property )
-    {
-        PropertyBinding binding = null;
+	public WorkflowNodeMetadataObject getMetadata() {
+		return _metadata;
+	}
 
-        final PropertyDef def = property.definition();
+	public void saveMetadata() {
+		XmlResource xmlResource = parent().adapt(XmlResource.class);
 
-        if( WorkflowNodeMetadata.PROP_TERMINAL.equals( def ) )
-        {
-            binding = new ValuePropertyBinding()
-            {
-                @Override
-                public String read()
-                {
-                    return Boolean.toString( WorkflowNodeMetadataResource.this.metadata.isTerminal() );
-                }
+		XmlElement xmlElement = xmlResource.getXmlElement();
 
-                @Override
-                public void write( String value )
-                {
-                    WorkflowNodeMetadataResource.this.metadata.setTerminal( Boolean.parseBoolean( value ) );
-                    saveMetadata();
-                }
-            };
-        }
-        else if( WorkflowNodeMetadata.PROP_POSITION.equals( def ) )
-        {
-            binding = new ElementPropertyBinding()
-            {
-                @Override
-                public Resource read()
-                {
-                    return new PositionResource(
-                        WorkflowNodeMetadataResource.this.metadata.getNodeLocation(), WorkflowNodeMetadataResource.this );
-                }
+		XmlElement metadataElement = xmlElement.getChildElement("metadata", true);
 
-                @Override
-                public ElementType type( Resource resource )
-                {
-                    return Position.TYPE;
-                }
-            };
-        }
-        else if(WorkflowNodeMetadata.PROP_TRANSITIONS_METADATA.equals( def ) )
-        {
-            binding = new LayeredListPropertyBinding()
-            {
-                @Override
-                public ElementType type( Resource resource )
-                {
-                    return TransitionMetadata.TYPE;
-                }
+		Element domElement = metadataElement.getDomNode();
 
-                @Override
-                protected List<?> readUnderlyingList()
-                {
-                    return WorkflowNodeMetadataResource.this.metadata.getTransitionsMetadata();
-                }
+		try {
+			Document document = domElement.getOwnerDocument();
 
-                @Override
-                protected Object insertUnderlyingObject( ElementType type, int position )
-                {
-                    TransitionMetadataObject newTransitionMeta = new TransitionMetadataObject();
+			CDATASection cdata = document.createCDATASection(this._metadata.toJSONString());
 
-                    WorkflowNodeMetadataResource.this.metadata.getTransitionsMetadata().add(
-                        position, newTransitionMeta );
+			CoreUtil.removeChildren(domElement);
+			domElement.insertBefore(cdata, null);
+		}
+		catch (JSONException jsone) {
+			KaleoCore.logError(jsone);
+		}
+	}
 
-                    saveMetadata();
+	@Override
+	protected PropertyBinding createBinding(Property property) {
+		PropertyBinding binding = null;
 
-                    return newTransitionMeta;
-                }
+		PropertyDef def = property.definition();
 
-                @Override
-                public void remove( Resource resource )
-                {
-                    TransitionMetadataResource transitionMetaResource = (TransitionMetadataResource) resource;
-                    WorkflowNodeMetadataResource.this.metadata.getTransitionsMetadata().remove( transitionMetaResource.getMetadata() );
-                    saveMetadata();
-                }
+		if (WorkflowNodeMetadata.PROP_TERMINAL.equals(def)) {
+			binding = new ValuePropertyBinding() {
 
-                @Override
-                protected Resource resource( Object obj )
-                {
-                    return new TransitionMetadataResource( (TransitionMetadataObject) obj, WorkflowNodeMetadataResource.this );
-                }
-            };
-        }
+				@Override
+				public String read() {
+					return Boolean.toString(WorkflowNodeMetadataResource.this._metadata.isTerminal());
+				}
 
-        if( binding != null )
-        {
-            binding.init( property );
-        }
+				@Override
+				public void write(String value) {
+					WorkflowNodeMetadataResource.this._metadata.setTerminal(Boolean.parseBoolean(value));
 
-        return binding;
-    }
+					saveMetadata();
+				}
 
+			};
+		}
+		else if (WorkflowNodeMetadata.PROP_POSITION.equals(def)) {
+			binding = new ElementPropertyBinding() {
 
-    public void saveMetadata()
-    {
-        XmlElement metadataElement =
-                        parent().adapt( XmlResource.class ).getXmlElement().getChildElement( "metadata", true );
+				@Override
+				public Resource read() {
+					return new PositionResource(
+						WorkflowNodeMetadataResource.this._metadata.getNodeLocation(),
+						WorkflowNodeMetadataResource.this);
+				}
 
-        Element domElement = metadataElement.getDomNode();
+				@Override
+				public ElementType type(Resource resource) {
+					return Position.TYPE;
+				}
 
-        try
-        {
-            CDATASection cdata = domElement.getOwnerDocument().createCDATASection( this.metadata.toJSONString());
+			};
+		}
+		else if (WorkflowNodeMetadata.PROP_TRANSITIONS_METADATA.equals(def)) {
+			binding = new LayeredListPropertyBinding() {
 
-            CoreUtil.removeChildren( domElement );
-            domElement.insertBefore( cdata, null );
-        }
-        catch( JSONException e )
-        {
-            KaleoCore.logError( e );
-        }
-    }
+				@Override
+				public void remove(Resource resource) {
+					TransitionMetadataResource transitionMetaResource = (TransitionMetadataResource)resource;
+
+					List<TransitionMetadataObject> transitionMetadataObject =
+						WorkflowNodeMetadataResource.this._metadata.getTransitionsMetadata();
+
+					transitionMetadataObject.remove(transitionMetaResource.getMetadata());
+
+					saveMetadata();
+				}
+
+				@Override
+				public ElementType type(Resource resource) {
+					return TransitionMetadata.TYPE;
+				}
+
+				@Override
+				protected Object insertUnderlyingObject(ElementType type, int position) {
+					TransitionMetadataObject newTransitionMeta = new TransitionMetadataObject();
+
+					List<TransitionMetadataObject> transitionMetadataObject =
+						WorkflowNodeMetadataResource.this._metadata.getTransitionsMetadata();
+
+					transitionMetadataObject.add(position, newTransitionMeta);
+
+					saveMetadata();
+
+					return newTransitionMeta;
+				}
+
+				@Override
+				protected List<?> readUnderlyingList() {
+					return WorkflowNodeMetadataResource.this._metadata.getTransitionsMetadata();
+				}
+
+				@Override
+				protected Resource resource(Object obj) {
+					return new TransitionMetadataResource(
+						(TransitionMetadataObject)obj, WorkflowNodeMetadataResource.this);
+				}
+
+			};
+		}
+
+		if (binding != null) {
+			binding.init(property);
+		}
+
+		return binding;
+	}
+
+	private WorkflowNodeMetadataObject _metadata;
 
 }

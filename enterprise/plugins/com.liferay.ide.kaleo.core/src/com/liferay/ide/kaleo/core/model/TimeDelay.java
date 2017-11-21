@@ -1,13 +1,17 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
+
 package com.liferay.ide.kaleo.core.model;
 
 import org.eclipse.sapphire.Element;
@@ -21,34 +25,30 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-public interface TimeDelay extends Element
-{
+public interface TimeDelay extends Element {
 
-    ElementType TYPE = new ElementType( TimeDelay.class );
+	public ElementType TYPE = new ElementType(TimeDelay.class);
 
-    // *** duration ***
+	public Value<Double> getDuration();
 
-    @Type( base = Double.class )
-    @Label( standard = "&duration" )
-    @XmlBinding( path = "duration" )
-    ValueProperty PROP_DURATION = new ValueProperty( TYPE, "Duration" );
+	public Value<TimeScaleType> getScale();
 
-    Value<Double> getDuration();
+	public void setDuration(Double val);
 
-    void setDuration( String val );
+	public void setDuration(String val);
 
-    void setDuration( Double val );
+	public void setScale(String scaleType);
 
-    // *** scale ***
+	public void setScale(TimeScaleType scaleType);
 
-    @Type( base = TimeScaleType.class )
-    @Label( standard = "scale" )
-    @XmlBinding( path = "scale" )
-    ValueProperty PROP_SCALE = new ValueProperty( TYPE, "Scale" );
+	@Label(standard = "&duration")
+	@Type(base = Double.class)
+	@XmlBinding(path = "duration")
+	public ValueProperty PROP_DURATION = new ValueProperty(TYPE, "Duration");
 
-    Value<TimeScaleType> getScale();
+	@Label(standard = "scale")
+	@Type(base = TimeScaleType.class)
+	@XmlBinding(path = "scale")
+	public ValueProperty PROP_SCALE = new ValueProperty(TYPE, "Scale");
 
-    void setScale( String scaleType );
-
-    void setScale( TimeScaleType scaleType );
 }

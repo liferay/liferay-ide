@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model.internal;
@@ -24,252 +27,215 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 /**
  * @author Gregory Amerson
  * @author Kuo Zhang
  */
-public class WorkflowNodeMetadataObject
-{
-    private boolean terminal = false;
-    private Point nodeLocation = new Point();
-    private List<TransitionMetadataObject> transitionsMetadata = new ArrayList<TransitionMetadataObject>();
+public class WorkflowNodeMetadataObject {
 
-    public WorkflowNodeMetadataObject( String contents )
-    {
-        if (!empty( contents ))
-        {
-            initialize(contents);
-        }
-    }
+	public WorkflowNodeMetadataObject() {
+	}
 
-    public WorkflowNodeMetadataObject()
-    {
-    }
+	public WorkflowNodeMetadataObject(String contents) {
+		if (!empty(contents)) {
+			_initialize(contents);
+		}
+	}
 
-    @Override
-    public boolean equals( Object obj )
-    {
-        boolean retval = true;
+	@Override
+	public boolean equals(Object obj) {
+		boolean retval = true;
 
-        if (this != obj)
-        {
-            if (obj instanceof WorkflowNodeMetadataObject)
-            {
-                WorkflowNodeMetadataObject object = (WorkflowNodeMetadataObject) obj;
+		if (this != obj) {
+			if (obj instanceof WorkflowNodeMetadataObject) {
+				WorkflowNodeMetadataObject object = (WorkflowNodeMetadataObject)obj;
 
-                if (this.terminal == object.terminal && this.nodeLocation.equals( object.getNodeLocation() ))
-                {
-                    for (int i = 0; i < this.transitionsMetadata.size(); i++)
-                    {
-                        if (!(this.transitionsMetadata.get( i ).equals( object.transitionsMetadata.get( i ) )))
-                        {
-                            retval = false;
-                        }
-                    }
-                }
-                else
-                {
-                    retval = false;
-                }
-            }
-            else
-            {
-                retval = false;
-            }
-        }
+				if ((_terminal == object._terminal) && _nodeLocation.equals(object.getNodeLocation())) {
+					for (int i = 0; i < _transitionsMetadata.size(); i++) {
+						TransitionMetadataObject transitionMetadataObject = _transitionsMetadata.get(i);
 
-        return retval;
-    }
+						if (!(transitionMetadataObject.equals(object._transitionsMetadata.get(i)))) {
+							retval = false;
+						}
+					}
+				}
+				else {
+					retval = false;
+				}
+			}
+			else {
+				retval = false;
+			}
+		}
 
-    public Point getNodeLocation()
-    {
-        return this.nodeLocation;
-    }
+		return retval;
+	}
 
-    public List<TransitionMetadataObject> getTransitionsMetadata()
-    {
-        return this.transitionsMetadata;
-    }
+	public Point getNodeLocation() {
+		return _nodeLocation;
+	}
 
-    @SuppressWarnings( "rawtypes" )
-    private void initialize( String contents )
-    {
-        try
-        {
-            JSONObject json = new JSONObject( contents );
+	public List<TransitionMetadataObject> getTransitionsMetadata() {
+		return _transitionsMetadata;
+	}
 
-            if (json.has( "terminal" ))
-            {
-                this.terminal = json.getBoolean( "terminal" );
-            }
+	public boolean isTerminal() {
+		return _terminal;
+	}
 
-            this.nodeLocation = jsonPointToPoint( json );
+	public void setNodeLocation(Point nodeLocation) {
+		_nodeLocation = nodeLocation;
+	}
 
-            if (json.has( "transitions" ))
-            {
-                JSONObject jsonTransitions = json.getJSONObject( "transitions" );
+	public void setTerminal(boolean terminal) {
+		_terminal = terminal;
+	}
 
-                Iterator transitionNames = jsonTransitions.keys();
+	public String toJSONString() throws JSONException {
+		JSONObject jsonObject = new JSONObject();
 
-                while(transitionNames.hasNext())
-                {
-                    String name = transitionNames.next().toString();
+		if (isTerminal()) {
+			jsonObject.put("terminal", true);
+		}
 
-                    if( jsonTransitions.has( name ) )
-                    {
-                        JSONObject jsonTransitionMetadata = jsonTransitions.getJSONObject( name );
+		if (_nodeLocation != null) {
+			JSONArray jsonXY = _pointToJSONPoint(_nodeLocation);
 
-                        TransitionMetadataObject transitionMetaObject = new TransitionMetadataObject();
+			jsonObject.put("xy", jsonXY);
+		}
 
-                        transitionMetaObject.setName(name);
+		if (_transitionsMetadata.size() > 0) {
+			JSONObject jsonTransitions = new JSONObject();
 
-                        if( jsonTransitionMetadata.has( "xy" ) )
-                        {
-                            JSONArray jsonLabelPosition = jsonTransitionMetadata.getJSONArray( "xy" );
-                            transitionMetaObject.setLabelPosition( jsonArrayToPoint( jsonLabelPosition ) );
-                        }
+			for (TransitionMetadataObject transitionMetadata : _transitionsMetadata) {
+				String transitionName = transitionMetadata.getName();
 
-                        if( jsonTransitionMetadata.has( "bendpoints" ) )
-                        {
-                            JSONArray jsonBendpoints = jsonTransitionMetadata.getJSONArray( "bendpoints" );
+				if (!empty(transitionName)) {
+					JSONObject jsonTransitionMetadata = new JSONObject();
 
-                            for( int i = 0; i < jsonBendpoints.length(); i++ )
-                            {
-                                JSONArray xy = jsonBendpoints.optJSONArray( i );
+					JSONArray jsonBendpoints = new JSONArray();
 
-                                if( xy != null )
-                                {
-                                    transitionMetaObject.getBendpoints().add( jsonArrayToPoint( xy ) );
-                                }
-                            }
-                        }
+					for (Point bendpoint : transitionMetadata.getBendpoints()) {
+						JSONArray xy = _pointToJSONPoint(bendpoint);
 
-                        this.transitionsMetadata.add( transitionMetaObject );
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            KaleoCore.logError( "Error loading node metadata object", e );
-        }
-    }
+						jsonBendpoints.put(xy);
+					}
 
-    private JSONArray pointToJSONPoint(Point point)
-    {
-        JSONArray jsonXY = new JSONArray();
-        jsonXY.put( point.getX() );
-        jsonXY.put( point.getY() );
-        return jsonXY;
-    }
+					Point labelPosition = transitionMetadata.getLabelPosition();
 
-    private Point jsonArrayToPoint( JSONArray jsonArray )
-    {
-        Point point = DEFAULT_POINT;
+					if (!labelPosition.equals(DEFAULT_POINT)) {
+						JSONArray xy = _pointToJSONPoint(labelPosition);
 
-        try
-        {
-            if( jsonArray.length() == 2 && ! jsonArray.isNull( 0 ) && ! jsonArray.isNull( 1 ) )
-            {
-                point = new Point( jsonArray.getInt( 0 ), jsonArray.getInt( 1 ) );
-            }
-        }
-        catch( JSONException ex )
-        {
-            KaleoCore.logError( "Invalid JSON syntax", ex );
-        }
+						jsonTransitionMetadata.put("xy", xy);
+					}
 
-        return point;
-    }
+					jsonTransitionMetadata.put("bendpoints", jsonBendpoints);
 
-    private Point jsonPointToPoint( JSONObject jsonPoint ) throws JSONException
-    {
-        if( jsonPoint.has( "xy" ) )
-        {
-            JSONArray jsonXY = jsonPoint.getJSONArray( "xy" );
-            return jsonArrayToPoint( jsonXY );
-        }
-        else
-        {
-            return DEFAULT_POINT;
-        }
-    }
+					jsonTransitions.put(transitionName, jsonTransitionMetadata);
+				}
+			}
 
-    public String toJSONString() throws JSONException
-    {
-        JSONObject json = new JSONObject();
+			jsonObject.put("transitions", jsonTransitions);
+		}
 
-        if (this.isTerminal())
-        {
-            json.put( "terminal", true );
-        }
+		return jsonObject.toString();
+	}
 
-        if (this.nodeLocation != null)
-        {
-            JSONArray jsonXY = pointToJSONPoint( this.nodeLocation );
+	@SuppressWarnings("rawtypes")
+	private void _initialize(String contents) {
+		try {
+			JSONObject jsonObject = new JSONObject(contents);
 
-            json.put( "xy", jsonXY );
-        }
+			if (jsonObject.has("terminal")) {
+				_terminal = jsonObject.getBoolean("terminal");
+			}
 
-        if (this.transitionsMetadata.size() > 0)
-        {
-            JSONObject jsonTransitions = new JSONObject();
+			_nodeLocation = _jsonPointToPoint(jsonObject);
 
-            for (TransitionMetadataObject transitionMetadata : this.transitionsMetadata)
-            {
-                String transitionName = transitionMetadata.getName();
+			if (jsonObject.has("transitions")) {
+				JSONObject jsonTransitions = jsonObject.getJSONObject("transitions");
 
-                if (!empty(transitionName))
-                {
-                    JSONObject jsonTransitionMetadata = new JSONObject();
+				Iterator transitionNames = jsonTransitions.keys();
 
-                    JSONArray jsonBendpoints = new JSONArray();
+				while (transitionNames.hasNext()) {
+					Object transitionName = transitionNames.next();
 
-                    for (Point bendpoint : transitionMetadata.getBendpoints())
-                    {
-                        JSONArray xy = pointToJSONPoint( bendpoint );
+					String name = transitionName.toString();
 
-                        jsonBendpoints.put( xy );
-                    }
+					if (jsonTransitions.has(name)) {
+						JSONObject jsonTransitionMetadata = jsonTransitions.getJSONObject(name);
 
-                    Point labelPosition = transitionMetadata.getLabelPosition();
+						TransitionMetadataObject transitionMetaObject = new TransitionMetadataObject();
 
-                    if( !labelPosition.equals( DEFAULT_POINT ) )
-                    {
-                        JSONArray xy = pointToJSONPoint( labelPosition );
+						transitionMetaObject.setName(name);
 
-                        jsonTransitionMetadata.put( "xy", xy );
-                    }
+						if (jsonTransitionMetadata.has("xy")) {
+							JSONArray jsonLabelPosition = jsonTransitionMetadata.getJSONArray("xy");
 
-                    jsonTransitionMetadata.put( "bendpoints", jsonBendpoints );
+							transitionMetaObject.setLabelPosition(_jsonArrayToPoint(jsonLabelPosition));
+						}
 
-                    jsonTransitions.put( transitionName, jsonTransitionMetadata );
-                }
-            }
+						if (jsonTransitionMetadata.has("bendpoints")) {
+							JSONArray jsonBendpoints = jsonTransitionMetadata.getJSONArray("bendpoints");
 
-            json.put( "transitions", jsonTransitions );
-        }
+							for (int i = 0; i < jsonBendpoints.length(); i++) {
+								JSONArray xy = jsonBendpoints.optJSONArray(i);
 
-        return json.toString();
-    }
+								if (xy != null) {
+									List<Point> bendPoint = transitionMetaObject.getBendpoints();
 
+									bendPoint.add(_jsonArrayToPoint(xy));
+								}
+							}
+						}
 
-    public boolean isTerminal()
-    {
-        return terminal;
-    }
+						_transitionsMetadata.add(transitionMetaObject);
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			KaleoCore.logError("Error loading node metadata object", e);
+		}
+	}
 
+	private Point _jsonArrayToPoint(JSONArray jsonArray) {
+		Point point = DEFAULT_POINT;
 
-    public void setTerminal( boolean terminal )
-    {
-        this.terminal = terminal;
-    }
+		try {
+			if ((jsonArray.length() == 2) && !jsonArray.isNull(0) && !jsonArray.isNull(1)) {
+				point = new Point(jsonArray.getInt(0), jsonArray.getInt(1));
+			}
+		}
+		catch (JSONException jsone) {
+			KaleoCore.logError("Invalid JSON syntax", jsone);
+		}
 
+		return point;
+	}
 
-    public void setNodeLocation( Point nodeLocation )
-    {
-        this.nodeLocation = nodeLocation;
-    }
+	private Point _jsonPointToPoint(JSONObject jsonPoint) throws JSONException {
+		if (jsonPoint.has("xy")) {
+			JSONArray jsonXY = jsonPoint.getJSONArray("xy");
+
+			return _jsonArrayToPoint(jsonXY);
+		}
+		else {
+			return DEFAULT_POINT;
+		}
+	}
+
+	private JSONArray _pointToJSONPoint(Point point) {
+		JSONArray jsonXY = new JSONArray();
+
+		jsonXY.put(point.getX());
+		jsonXY.put(point.getY());
+
+		return jsonXY;
+	}
+
+	private Point _nodeLocation = new Point();
+	private boolean _terminal = false;
+	private List<TransitionMetadataObject> _transitionsMetadata = new ArrayList<>();
 
 }

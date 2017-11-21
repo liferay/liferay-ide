@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model;
@@ -20,34 +23,33 @@ import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
- * abstract-timer-complex-type
- *
  * @author Gregory Amerson
  */
-public interface Timer extends WorkflowNode
-{
+public interface Timer extends WorkflowNode {
 
-    ElementType TYPE = new ElementType( Timer.class );
+	public ElementType TYPE = new ElementType(Timer.class);
 
-    // *** delay ***
+	public ElementHandle<TimeDelay> getDelay();
 
-    @Type( base = TimeDelay.class )
-    @Label( standard = "delay" )
-    @Required
-    // @XmlElementBinding( mappings = @XmlElementBinding.Mapping( element = "delay", type = ITimeDelay.class ) )
-    @XmlBinding( path = "delay" )
-    ElementProperty PROP_DELAY = new ElementProperty( TYPE, "Delay" );
+	public ElementHandle<TimeDelay> getRecurrence();
 
-    ElementHandle<TimeDelay> getDelay();
+	@Type(base = TimeDelay.class)
+	@Label(standard = "delay")
+	@Required
+	/**
+	 * @XmlElementBinding( mappings = @XmlElementBinding.Mapping( element =
+	 * "delay", type = ITimeDelay.class ) )
+	 */
+	@XmlBinding(path = "delay")
+	public ElementProperty PROP_DELAY = new ElementProperty(TYPE, "Delay");
 
-    // *** recurrance ***
-
-    @Type( base = TimeDelay.class )
-    @Label( standard = "recurrence" )
-    // @XmlElementBinding( mappings = @XmlElementBinding.Mapping( element = "recurrence", type = ITimeDelay.class ) )
-    @XmlBinding( path = "recurrence" )
-    ElementProperty PROP_RECURRENCE = new ElementProperty( TYPE, "Recurrence" );
-
-    ElementHandle<TimeDelay> getRecurrence();
+	@Type(base = TimeDelay.class)
+	@Label(standard = "recurrence")
+	/**
+	 * @XmlElementBinding( mappings = @XmlElementBinding.Mapping( element =
+	 * "recurrence", type = ITimeDelay.class ) )
+	 */
+	@XmlBinding(path = "recurrence")
+	public ElementProperty PROP_RECURRENCE = new ElementProperty(TYPE, "Recurrence");
 
 }

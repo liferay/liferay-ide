@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model.internal;
@@ -23,124 +26,94 @@ import org.json.JSONObject;
 /**
  * @author Gregory Amerson
  */
-public class TransitionMetadataObject
-{
-    private String name;
-    private Point labelPosition = new Point(-1, -1);
-    private List<Point> bendpoints = new ArrayList<Point>();
+public class TransitionMetadataObject {
 
-    public TransitionMetadataObject()
-    {
-    }
+	public TransitionMetadataObject() {
+	}
 
-    public String getName()
-    {
-        return this.name;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		boolean retval = true;
 
-    public void setName(String n)
-    {
-        this.name = n;
-    }
+		if (this != obj) {
+			if (obj instanceof TransitionMetadataObject) {
+				try {
+					if (!(toJSONString().equals(((TransitionMetadataObject)obj).toJSONString()))) {
+						retval = false;
+					}
+				}
+				catch (Exception e) {
+					retval = false;
+				}
+			}
+			else {
+				retval = false;
+			}
+		}
 
-    public Point getLabelPosition()
-    {
-        return this.labelPosition;
-    }
+		return retval;
+	}
 
-    public void setLabelPosition( Point p )
-    {
-        this.labelPosition = p;
-    }
+	public List<Point> getBendpoints() {
+		return _bendpoints;
+	}
 
-    @Override
-    public boolean equals( Object obj )
-    {
-        boolean retval = true;
+	public Point getLabelPosition() {
+		return _labelPosition;
+	}
 
-        if (this != obj)
-        {
-            if (obj instanceof TransitionMetadataObject)
-            {
-                try
-                {
-                    if (!(this.toJSONString().equals( ((TransitionMetadataObject)obj).toJSONString())))
-                    {
-                        retval = false;
-                    }
-                }
-                catch (Exception e)
-                {
-                    retval = false;
-                }
-            }
-            else
-            {
-                retval = false;
-            }
-        }
+	public String getName() {
+		return _name;
+	}
 
-        return retval;
-    }
+	public void setLabelPosition(Point p) {
+		_labelPosition = p;
+	}
 
-    public List<Point> getBendpoints()
-    {
-        return this.bendpoints;
-    }
+	public void setName(String n) {
+		_name = n;
+	}
 
-//    private void initialize( String contents )
-//    {
-//        try
-//        {
-//            JSONObject json = new JSONObject( contents );
-//
-//            if (json.has( "name" ))
-//            {
-//                this.name = json.getString( "name");
-//            }
-//        }
-//        catch (Exception e)
-//        {
-//            e.printStackTrace();
-//        }
-//    }
+	/**
+	 * private void initialize( String contents ) { try { JSONObject json = new
+	 * JSONObject( contents );
+	 *
+	 * if (json.has( "name" )) { _name = json.getString( "name"); } } catch
+	 * (Exception e) { e.printStackTrace(); } }
+	 */
+	public String toJSONString() throws JSONException {
+		JSONObject jsonObject = new JSONObject();
 
+		if (!empty(_name)) {
+			JSONArray jsonBendpoints = new JSONArray();
 
-    public String toJSONString() throws JSONException
-    {
-        JSONObject json = new JSONObject();
+			for (Point point : _bendpoints) {
+				JSONArray xy = new JSONArray();
 
-        if (!empty(this.name))
-        {
-            JSONArray jsonBendpoints = new JSONArray();
+				xy.put(point.getX());
+				xy.put(point.getY());
 
-            for (Point point : this.bendpoints)
-            {
-                JSONArray xy = new JSONArray();
-                xy.put( point.getX() );
-                xy.put( point.getY() );
+				jsonBendpoints.put(xy);
+			}
 
-                jsonBendpoints.put( xy );
-            }
+			jsonObject.put(_name, jsonBendpoints);
+		}
 
-            json.put( this.name, jsonBendpoints);
-        }
+		return jsonObject.toString();
+	}
 
+	@Override
+	public String toString() {
+		try {
+			return toJSONString();
+		}
+		catch (JSONException jsone) {
+			return super.toString();
+		}
+	}
 
-        return json.toString();
-    }
-
-    @Override
-    public String toString()
-    {
-        try
-        {
-            return toJSONString();
-        }
-        catch( JSONException e )
-        {
-            return super.toString();
-        }
-    }
+	private List<Point> _bendpoints = new ArrayList<>();
+	private Point _labelPosition = new Point(-1, -1);
+	private String _name;
 
 }

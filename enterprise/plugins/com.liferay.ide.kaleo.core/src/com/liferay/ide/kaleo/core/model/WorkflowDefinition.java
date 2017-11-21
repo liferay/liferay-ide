@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model;
@@ -38,95 +41,80 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Gregory Amerson
  */
-@CustomXmlRootBinding( value = WorkflowDefinitionRootElementController.class )
-@VersionCompatibilityTarget( version = "${ SchemaVersion }", versioned = "Workflow Definition" )
-@XmlBinding( path = "workflow-definition" )
-public interface WorkflowDefinition extends Node
-{
+@CustomXmlRootBinding(value = WorkflowDefinitionRootElementController.class)
+@VersionCompatibilityTarget(version = "${ SchemaVersion }", versioned = "Workflow Definition")
+@XmlBinding(path = "workflow-definition")
+public interface WorkflowDefinition extends Node {
 
-    ElementType TYPE = new ElementType( WorkflowDefinition.class );
+	public ElementType TYPE = new ElementType(WorkflowDefinition.class);
 
-    // *** SchemaVersion ***
-    // this property is used by root element controller and version compatibility target
+	public ElementList<Condition> getConditions();
 
-    @Type( base = Version.class )
-    @Service( impl = WorkflowDefinitionSchemaVersionService.class )
-    ValueProperty PROP_SCHEMA_VERSION = new ValueProperty( TYPE, "SchemaVersion" ); //$NON-NLS-1$
+	@DelegateImplementation(value = WorkflowDefinitionMethods.class)
+	public List<WorkflowNode> getDiagramNodes();
 
-    Value<Version> getSchemaVersion();
-    void setSchemaVersion( String value );
-    void setSchemaVersion( Version value );
+	public ElementList<Fork> getForks();
 
+	public ElementList<Join> getJoins();
 
-    // *** Version ***
+	public ElementList<JoinXor> getJoinXors();
 
-    @Type( base = Integer.class )
-    @Label( standard = "&version" )
-    @NumericRange( min = "0" )
-    @XmlBinding( path = "version" )
-    @Required
-    ValueProperty PROP_VERSION = new ValueProperty( TYPE, "Version" );
+	public Value<Version> getSchemaVersion();
 
-    Value<Integer> getVersion();
-    void setVersion( String val );
-    void setVersion( Integer val );
+	public ElementList<State> getStates();
 
-    // *** Conditions ***
+	public ElementList<Task> getTasks();
 
-    @Type( base = Condition.class )
-    @Label( standard = "condition" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "condition", type = Condition.class ) )
-    ListProperty PROP_CONDITIONS = new ListProperty( TYPE, "Conditions" );
+	public Value<Integer> getVersion();
 
-    ElementList<Condition> getConditions();
+	public void setSchemaVersion(String value);
 
-    // *** Forks ***
+	public void setSchemaVersion(Version value);
 
-    @Type( base = Fork.class )
-    @Label( standard = "fork" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "fork", type = Fork.class ) )
-    ListProperty PROP_FORKS = new ListProperty( TYPE, "Forks" );
+	public void setVersion(Integer val);
 
-    ElementList<Fork> getForks();
+	public void setVersion(String val);
 
-    // *** Joins ***
+	@Label(standard = "condition")
+	@Type(base = Condition.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "condition", type = Condition.class))
+	public ListProperty PROP_CONDITIONS = new ListProperty(TYPE, "Conditions");
 
-    @Type( base = Join.class )
-    @Label( standard = "join" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "join", type = Join.class ) )
-    ListProperty PROP_JOINS = new ListProperty( TYPE, "Joins" );
+	@Label(standard = "fork")
+	@Type(base = Fork.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "fork", type = Fork.class))
+	public ListProperty PROP_FORKS = new ListProperty(TYPE, "Forks");
 
-    ElementList<Join> getJoins();
+	@Label(standard = "join XOR")
+	@Since(value = "6.2")
+	@Type(base = JoinXor.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "join-xor", type = JoinXor.class))
+	public ListProperty PROP_JOIN_XORS = new ListProperty(TYPE, "JoinXors");
 
-    // *** JoinXors ***
+	@Label(standard = "join")
+	@Type(base = Join.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "join", type = Join.class))
+	public ListProperty PROP_JOINS = new ListProperty(TYPE, "Joins");
 
-    @Type( base = JoinXor.class )
-    @Label( standard = "join XOR" )
-    @Since( value = "6.2" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "join-xor", type = JoinXor.class ) )
-    ListProperty PROP_JOIN_XORS = new ListProperty( TYPE, "JoinXors" );
+	@Service(impl = WorkflowDefinitionSchemaVersionService.class)
+	@Type(base = Version.class)
+	public ValueProperty PROP_SCHEMA_VERSION = new ValueProperty(TYPE, "SchemaVersion");
 
-    ElementList<JoinXor> getJoinXors();
+	@Label(standard = "state")
+	@Type(base = State.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "state", type = State.class))
+	public ListProperty PROP_STATES = new ListProperty(TYPE, "States");
 
-    // *** States ***
+	@Label(standard = "task")
+	@Type(base = Task.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "task", type = Task.class))
+	public ListProperty PROP_TASKS = new ListProperty(TYPE, "Tasks");
 
-    @Type( base = State.class )
-    @Label( standard = "state" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "state", type = State.class ) )
-    ListProperty PROP_STATES = new ListProperty( TYPE, "States" );
-
-    ElementList<State> getStates();
-
-    // *** Tasks ***
-
-    @Type( base = Task.class )
-    @Label( standard = "task" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "task", type = Task.class ) )
-    ListProperty PROP_TASKS = new ListProperty( TYPE, "Tasks" );
-
-    ElementList<Task> getTasks();
-
-    @DelegateImplementation( value = WorkflowDefinitionMethods.class )
-    List<WorkflowNode> getDiagramNodes();
+	@Label(standard = "&version")
+	@NumericRange(min = "0")
+	@Required
+	@Type(base = Integer.class)
+	@XmlBinding(path = "version")
+	public ValueProperty PROP_VERSION = new ValueProperty(TYPE, "Version");
 
 }

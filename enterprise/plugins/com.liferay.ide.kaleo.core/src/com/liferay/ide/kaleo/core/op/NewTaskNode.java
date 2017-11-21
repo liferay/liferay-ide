@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.op;
@@ -30,43 +33,38 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Gregory Amerson
  */
-public interface NewTaskNode extends Task
-{
-    ElementType TYPE = new ElementType( NewTaskNode.class );
+public interface NewTaskNode extends Task {
 
-    public interface INewTaskNotification extends ActionNotification
-    {
-        ElementType TYPE = new ElementType( INewTaskNotification.class );
+	public ElementType TYPE = new ElementType(NewTaskNode.class);
 
-        @Length( min = 0 )
-        ListProperty PROP_NOTIFICATION_TRANSPORTS = new ListProperty(
-            TYPE, ActionNotification.PROP_NOTIFICATION_TRANSPORTS );
+	public ElementList<INewTaskNotification> getNewTaskNotifications();
 
-        @DefaultValue( text = "" )
-        ValueProperty PROP_TEMPLATE = new ValueProperty( TYPE, "Template" );
-    }
+	@DefaultValue(text = "New Task")
+	@Service(impl = NewNodeNameValidationService.class)
+	public ValueProperty PROP_NAME = new ValueProperty(TYPE, Node.PROP_NAME);
 
-    @DefaultValue( text = "New Task" )
-    @Service( impl = NewNodeNameValidationService.class )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, Node.PROP_NAME );
+	@Label(standard = "task notifications")
+	@Type(base = INewTaskNotification.class)
+	@XmlListBinding(
+		mappings = {@XmlListBinding.Mapping(element = "notification", type = INewTaskNotification.class)},
+		path = "actions"
+	)
+	public ListProperty PROP_NEW_TASK_NOTIFICATIONS = new ListProperty(TYPE, "NewTaskNotifications");
 
-    @Length( min = 0 )
-    ListProperty PROP_TRANSITIONS = new ListProperty( TYPE, Task.PROP_TRANSITIONS );
+	@Length(min = 0)
+	public ListProperty PROP_TRANSITIONS = new ListProperty(TYPE, Task.PROP_TRANSITIONS);
 
-    @Type( base = INewTaskNotification.class )
-    @Label( standard = "task notifications" )
-    @XmlListBinding
-    (
-        path = "actions",
-        mappings =
-        {
-            @XmlListBinding.Mapping
-            (
-                element = "notification", type = INewTaskNotification.class
-            )
-        }
-    )
-    ListProperty PROP_NEW_TASK_NOTIFICATIONS = new ListProperty( TYPE, "NewTaskNotifications" );
+	public interface INewTaskNotification extends ActionNotification {
 
-    ElementList<INewTaskNotification> getNewTaskNotifications();
+		public ElementType TYPE = new ElementType(INewTaskNotification.class);
+
+		@Length(min = 0)
+		public ListProperty PROP_NOTIFICATION_TRANSPORTS = new ListProperty(
+			TYPE, ActionNotification.PROP_NOTIFICATION_TRANSPORTS);
+
+		@DefaultValue(text = "")
+		public ValueProperty PROP_TEMPLATE = new ValueProperty(TYPE, "Template");
+
+	}
+
 }

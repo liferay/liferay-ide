@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model.internal;
@@ -22,6 +25,8 @@ import com.liferay.ide.kaleo.core.op.NewWorkflowDefinitionOp;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.sapphire.ElementHandle;
+import org.eclipse.sapphire.ReferenceValue;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.Version;
 import org.eclipse.sapphire.modeling.Status;
@@ -31,73 +36,76 @@ import org.eclipse.sapphire.services.ValidationService;
  * @author Gregory Amerson
  * @author Kuo Zhang
  */
-public class EmailAddressValidationService extends ValidationService
-{
+public class EmailAddressValidationService extends ValidationService {
 
-    static final Pattern emailAddressPattern = Pattern.compile( "[^@]+@[^\\.]+\\..+" );
-    private boolean shouldValidate;
+	@Override
+	protected Status compute() {
+		Status retval = Status.createOkStatus();
 
-    @Override
-    protected void initValidationService()
-    {
-        super.initValidationService();
+		if (_shouldValidate) {
+			Value<?> value = context(Value.class);
 
-        final Version schemaVersion = getSchemaVersion();
+			if (!value.empty()) {
+				if (!_emailAddressPattern.matcher(value.content().toString()).matches()) {
+					retval = Status.createErrorStatus("Email address syntax is not valid");
+				}
+			}
+		}
 
-        shouldValidate = schemaVersion.compareTo( new Version( "6.2" ) ) >= 0;
-    }
+		return retval;
+	}
 
-    private Version getSchemaVersion()
-    {
-        Version schemaVersion = new Version( KaleoCore.DEFAULT_KALEO_VERSION );
+	@Override
+	protected void initValidationService() {
+		super.initValidationService();
 
-        if( context( WorkflowDefinition.class ) != null )
-        {
-            final WorkflowDefinition workflowDefinition = context( WorkflowDefinition.class );
+		Version schemaVersion = _getSchemaVersion();
 
-            schemaVersion = workflowDefinition.getSchemaVersion().content();
-        }
-        else if( context( NewNodeOp.class ) != null  )
-        {
-            final NewNodeOp newNodeOp = context( NewNodeOp.class );
+		_shouldValidate = schemaVersion.compareTo(new Version("6.2")) >= 0;
+	}
 
-            schemaVersion = newNodeOp.getWorkflowDefinition().content().getSchemaVersion().content();
-        }
-        else if( context( NewWorkflowDefinitionOp.class ) != null )
-        {
-            final NewWorkflowDefinitionOp newWorkflowDenitionOp = context( NewWorkflowDefinitionOp.class );
-            final IProject project = newWorkflowDenitionOp.getProject().target();
-            final ILiferayProject liferayProj = LiferayCore.create( project );
-            final ILiferayPortal portal = liferayProj.adapt( ILiferayPortal.class );
+	private Version _getSchemaVersion() {
+		Version schemaVersion = new Version(KaleoCore.DEFAULT_KALEO_VERSION);
 
-            if( portal != null )
-            {
-                schemaVersion = new Version( portal.getVersion() );
-            }
-        }
+		if (context(WorkflowDefinition.class) != null) {
+			WorkflowDefinition workflowDefinition = context(WorkflowDefinition.class);
 
-        return schemaVersion;
-    }
+			Value<Version> version = workflowDefinition.getSchemaVersion();
 
-    @Override
-    protected Status compute()
-    {
-        Status retval = Status.createOkStatus();
+			schemaVersion = version.content();
+		}
+		else if (context(NewNodeOp.class) != null) {
+			NewNodeOp newNodeOp = context(NewNodeOp.class);
 
-        if( shouldValidate )
-        {
-            Value<?> value = context( Value.class );
+			ElementHandle<WorkflowDefinition> workflowDef = newNodeOp.getWorkflowDefinition();
 
-            if( ! value.empty() )
-            {
-                if( ! emailAddressPattern.matcher( value.content().toString() ).matches() )
-                {
-                    retval = Status.createErrorStatus( "Email address syntax is not valid" );
-                }
-            }
-        }
+			WorkflowDefinition workflowDefinition = workflowDef.content();
 
-        return retval;
-    }
+			Value<Version> version = workflowDefinition.getSchemaVersion();
+
+			schemaVersion = version.content();
+		}
+		else if (context(NewWorkflowDefinitionOp.class) != null) {
+			NewWorkflowDefinitionOp newWorkflowDenitionOp = context(NewWorkflowDefinitionOp.class);
+
+			ReferenceValue<String, IProject> opProject = newWorkflowDenitionOp.getProject();
+
+			IProject project = opProject.target();
+
+			ILiferayProject liferayProj = LiferayCore.create(project);
+
+			ILiferayPortal portal = liferayProj.adapt(ILiferayPortal.class);
+
+			if (portal != null) {
+				schemaVersion = new Version(portal.getVersion());
+			}
+		}
+
+		return schemaVersion;
+	}
+
+	private static final Pattern _emailAddressPattern = Pattern.compile("[^@]+@[^\\.]+\\..+");
+
+	private boolean _shouldValidate;
 
 }

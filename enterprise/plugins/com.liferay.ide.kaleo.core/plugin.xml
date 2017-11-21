@@ -1,58 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension
-         point="org.eclipse.core.contenttype.contentTypes">
-      <content-type
-            base-type="org.eclipse.core.runtime.xml"
-            default-charset="UTF8"
-            file-extensions="xml"
-            id="workflowdefinitioncontent"
-            name="Kaleo Workflow Definition"
-            priority="high">
-         <describer
-               class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber">
-            <parameter
-                  name="element"
-                  value="workflow-definition">
-            </parameter>
-         </describer>
-      </content-type>
-   </extension>
-   
-    <extension
-         id="workflowDefinitionMarker"
-         name="Kaleo Workflow Problem"
-         point="org.eclipse.core.resources.markers">
-      <persistent
-            value="true">
-      </persistent>
-      <super
-            type="org.eclipse.wst.validation.problemmarker">
-      </super>
-   </extension>
+	<extension
+		point="org.eclipse.core.contenttype.contentTypes"
+	>
+		<content-type
+			base-type="org.eclipse.core.runtime.xml"
+			default-charset="UTF8"
+			file-extensions="xml"
+			id="workflowdefinitioncontent"
+			name="Kaleo Workflow Definition"
+			priority="high"
+		>
+			<describer
+				class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber"
+			>
+				<parameter
+					name="element"
+					value="workflow-definition"
+				>
+				</parameter>
+			</describer>
+		</content-type>
+	</extension>
 
-    <extension
-         id="workflowdefinitionvalidator"
-         name="Kaleo Workflow Validator"
-         point="org.eclipse.wst.validation.validatorV2">
-      <validator
-            build="true"
-            class="com.liferay.ide.kaleo.core.util.WorkflowDefinitionValidator"
-            manual="true"
-            markerId="com.liferay.ide.kaleo.core.workflowDefinitionMarker"
-            version="1">
-         <include>
-            <rules>
-               <contentType
-                     id="com.liferay.ide.kaleo.core.workflowdefinitioncontent">
-               </contentType>
-            </rules>
-         </include>
-         <group
-               id="org.eclipse.wst.sse.core.structuredModelGroup">
-         </group>
-      </validator>
-   </extension>
-   
+	<extension
+		id="workflowDefinitionMarker"
+		name="Kaleo Workflow Problem"
+		point="org.eclipse.core.resources.markers"
+	>
+		<persistent
+			value="true"
+		>
+		</persistent>
+		<super
+			type="org.eclipse.wst.validation.problemmarker"
+		>
+		</super>
+	</extension>
+
+	<extension
+		id="workflowdefinitionvalidator"
+		name="Kaleo Workflow Validator"
+		point="org.eclipse.wst.validation.validatorV2"
+	>
+		<validator
+			build="true"
+			class="com.liferay.ide.kaleo.core.util.WorkflowDefinitionValidator"
+			manual="true"
+			markerId="com.liferay.ide.kaleo.core.workflowDefinitionMarker"
+			version="1"
+		>
+			<include>
+				<rules>
+					<contentType
+						id="com.liferay.ide.kaleo.core.workflowdefinitioncontent"
+					>
+					</contentType>
+				</rules>
+			</include>
+			<group
+				id="org.eclipse.wst.sse.core.structuredModelGroup"
+			>
+			</group>
+		</validator>
+	</extension>
+
 </plugin>

@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model;
@@ -26,30 +29,32 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@Image( path = "images/initial_16x16.png" )
-public interface State extends ActionTimer, CanTransition
-{
-    ElementType TYPE = new ElementType( State.class );
+@Image(path = "images/initial_16x16.png")
+public interface State extends ActionTimer, CanTransition {
 
-    // *** Initial ***
+	public ElementType TYPE = new ElementType(State.class);
 
-    @Type( base = Boolean.class )
-    @Label( standard = "&initial" )
-    @XmlBinding( path = "initial" )
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_INITIAL = new ValueProperty( TYPE, "Initial" );
+	public Value<Boolean> isEnd();
 
-    Value<Boolean> isInitial();
-    void setInitial( String value );
-    void setInitial( Boolean value );
+	public Value<Boolean> isInitial();
 
-    @Type( base = Boolean.class )
-    @Label( standard = "&end" )
-    @CustomXmlValueBinding( impl = StateEndValueBinding.class )
-    ValueProperty PROP_END = new ValueProperty( TYPE, "End" );
+	public void setEnd(Boolean value);
 
-    Value<Boolean> isEnd();
-    void setEnd( String value );
-    void setEnd( Boolean value );
+	public void setEnd(String value);
+
+	public void setInitial(Boolean value);
+
+	public void setInitial(String value);
+
+	@CustomXmlValueBinding(impl = StateEndValueBinding.class)
+	@Label(standard = "&end")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_END = new ValueProperty(TYPE, "End");
+
+	@DefaultValue(text = "false")
+	@Label(standard = "&initial")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "initial")
+	public ValueProperty PROP_INITIAL = new ValueProperty(TYPE, "Initial");
 
 }
