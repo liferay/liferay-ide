@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,11 +32,20 @@ import org.junit.Test;
  */
 public class NewFragmentWizardMavenTests extends SwtbotBase {
 
+	@AfterClass
+	public static void deleteRuntime() {
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+
+		dialogAction.deleteRuntimeTryConfirm(_serverName);
+
+		dialogAction.confirmPreferences();
+	}
+
 	@BeforeClass
 	public static void init() throws IOException {
 		envAction.unzipServer();
-
-		String serverName = "Liferay 7-fragment-maven";
 
 		dialogAction.openPreferencesDialog();
 
@@ -51,7 +61,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		IPath fullServerDir = serverDir.append(envAction.getLiferayPluginServerName());
 
-		wizardAction.prepareLiferay7RuntimeInfo(serverName, fullServerDir.toOSString());
+		wizardAction.prepareLiferay7RuntimeInfo(_serverName, fullServerDir.toOSString());
 
 		wizardAction.finish();
 
@@ -59,7 +69,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.prepareNewServer(serverName);
+		wizardAction.prepareNewServer(_serverName);
 
 		wizardAction.finish();
 	}
@@ -277,5 +287,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		viewAction.deleteProject(projectName);
 	}
+
+	private static final String _serverName = "Liferay 7-fragment-maven";
 
 }

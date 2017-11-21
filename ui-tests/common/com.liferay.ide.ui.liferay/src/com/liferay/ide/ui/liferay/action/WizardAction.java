@@ -26,10 +26,12 @@ import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayModuleWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayPluginSdkProjectWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayWorkspaceWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewModuleFragmentInfoWizard;
+import com.liferay.ide.ui.liferay.page.wizard.project.NewProjectWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.SetSDKLocationWizard;
 import com.liferay.ide.ui.swtbot.eclipse.page.ImportProjectWizard;
 import com.liferay.ide.ui.swtbot.eclipse.page.NewRuntimeWizard;
 import com.liferay.ide.ui.swtbot.eclipse.page.NewServerWizard;
+import com.liferay.ide.ui.swtbot.page.Button;
 import com.liferay.ide.ui.swtbot.page.MenuItem;
 import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.Wizard;
@@ -58,6 +60,10 @@ public class WizardAction extends UIAction {
 		_newFragmentInfoWizard.getDeleteBtn().click();
 	}
 
+	public void deselectUseDefaultLocation() {
+		_newProjectWizard.getUseDefaultLocation().deselect();
+	}
+
 	public void finish() {
 		ide.sleep();
 
@@ -82,6 +88,14 @@ public class WizardAction extends UIAction {
 		cancel();
 
 		SWTBotPreferences.TIMEOUT = origin;
+	}
+
+	public Button getFinishBtn() {
+		return _wizard.finishBtn();
+	}
+
+	public Button getNextBtn() {
+		return _wizard.nextBtn();
 	}
 
 	public String getValidationMsg() {
@@ -206,17 +220,28 @@ public class WizardAction extends UIAction {
 		ide.sleep();
 	}
 
-	public void prepareFragment(String projectName, String buildType) {
+	public void prepareFragment(String projectName, String location, String buildType) {
 		_newFragmentWizard.getProjectName().setText(projectName);
+
+		if (!location.equals(StringPool.BLANK)) {
+			_newFragmentWizard.getLocation().setText(location);
+		}
+
 		_newFragmentWizard.getBuildTypes().setSelection(buildType);
 	}
 
 	public void prepareFragmentGradle(String projectName) {
-		prepareFragment(projectName, GRADLE);
+		prepareFragment(projectName, StringPool.BLANK, GRADLE);
+
+		ide.sleep();
+	}
+
+	public void prepareFragmentGradle(String projectName, String location) {
+		prepareFragment(projectName, location, GRADLE);
 	}
 
 	public void prepareFragmentMaven(String projectName) {
-		prepareFragment(projectName, MAVEN);
+		prepareFragment(projectName, StringPool.BLANK, MAVEN);
 	}
 
 	public void prepareImportLiferayWorkspace(String location) {
@@ -463,6 +488,7 @@ public class WizardAction extends UIAction {
 	private final NewLiferayModuleInfoWizard _newModuleInfoWizard = new NewLiferayModuleInfoWizard(bot);
 	private final NewLiferayModuleWizard _newModuleWizard = new NewLiferayModuleWizard(bot);
 	private final NewLiferayPluginSdkProjectWizard _newPluginSdkWizard = new NewLiferayPluginSdkProjectWizard(bot);
+	private final NewProjectWizard _newProjectWizard = new NewProjectWizard(bot);
 	private final NewRuntimeWizard _newRuntimeWizard = new NewRuntimeWizard(bot);
 	private final NewServerWizard _newServerWizard = new NewServerWizard(bot);
 	private final NewLiferayWorkspaceWizard _newWorkspaceWizard = new NewLiferayWorkspaceWizard(bot);

@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -28,14 +29,24 @@ import org.junit.Test;
  * @author Vicky Wang
  * @author Sunny Shi
  * @author Lily Li
+ * @author Ying Xu
  */
 public class NewFragmentWizardGradleTests extends SwtbotBase {
+
+	@AfterClass
+	public static void deleteRuntime() {
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+
+		dialogAction.deleteRuntimeTryConfirm(_serverName);
+
+		dialogAction.confirmPreferences();
+	}
 
 	@BeforeClass
 	public static void init() throws IOException {
 		envAction.unzipServer();
-
-		String serverName = "Liferay 7-fragment-gradle";
 
 		dialogAction.openPreferencesDialog();
 
@@ -51,7 +62,7 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		IPath fullServerDir = serverDir.append(envAction.getLiferayPluginServerName());
 
-		wizardAction.prepareLiferay7RuntimeInfo(serverName, fullServerDir.toOSString());
+		wizardAction.prepareLiferay7RuntimeInfo(_serverName, fullServerDir.toOSString());
 
 		wizardAction.finish();
 
@@ -59,7 +70,7 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.prepareNewServer(serverName);
+		wizardAction.prepareNewServer(_serverName);
 
 		wizardAction.finish();
 	}
@@ -276,5 +287,7 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		viewAction.deleteProject(projectName);
 	}
+
+	private static final String _serverName = "Liferay 7-fragment-gradle";
 
 }

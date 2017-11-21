@@ -29,35 +29,6 @@ public class NoRunningJobsCondition extends JobCondition {
 	}
 
 	@Override
-	public boolean test() {
-		return _checkRunningJobs().size() == 0;
-	}
-
-	private List<Job> _checkRunningJobs(){
-		Job[] jobs = Job.getJobManager().find(family);
-
-		List<Job> runningJobs = new ArrayList<>();
-
-		for (Job job : jobs) {
-			boolean found = false;
-
-			for (String expectedJob : expectedJobs) {
-				if (job.getName().equals(expectedJob)) {
-					found = true;
-
-					break;
-				}
-			}
-
-			if (!found) {
-				runningJobs.add(job);
-			}
-		}
-
-		return runningJobs;
-	}
-
-	@Override
 	public String getFailureMessage() {
 		Job[] jobs = _checkRunningJobs().toArray(new Job[0]);
 
@@ -73,9 +44,43 @@ public class NoRunningJobsCondition extends JobCondition {
 		return sb.toString();
 	}
 
-	private String[] expectedJobs = { "Open Notification Job", "Activity Monitor Job", "Task List Save Job",
-			"Git Repository Change Scanner", "Workbench Auto-Save Job", "Compacting resource model",
-			"Synchronizing Relevant Tasks", "Periodic workspace save.", "Synchronizing Task List",
-			"Task Data Snapshot" };
+	@Override
+	public boolean test() {
+		if (_checkRunningJobs().size() == 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private List<Job> _checkRunningJobs() {
+		Job[] jobs = Job.getJobManager().find(family);
+
+		List<Job> runningJobs = new ArrayList<>();
+
+		for (Job job : jobs) {
+			boolean found = false;
+
+			for (String expectedJob : _expectedJobs) {
+				if (job.getName().equals(expectedJob)) {
+					found = true;
+
+					break;
+				}
+			}
+
+			if (!found) {
+				runningJobs.add(job);
+			}
+		}
+
+		return runningJobs;
+	}
+
+	private final String[] _expectedJobs = {
+		"Open Notification Job", "Activity Monitor Job", "Task List Save Job", "Git Repository Change Scanner",
+		"Workbench Auto-Save Job", "Compacting resource model", "Synchronizing Relevant Tasks",
+		"Periodic workspace save.", "Synchronizing Task List", "Task Data Snapshot"
+	};
 
 }

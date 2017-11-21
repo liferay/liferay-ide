@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.liferay.page.wizard.project;
 
 import com.liferay.ide.ui.swtbot.page.Table;
+import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
@@ -34,6 +35,7 @@ public class NewModuleFragmentInfoWizard extends Wizard {
 		_files = new Table(bot, OVERRIDDEN_FILES);
 		_addOverrideFilePathBtn = new ToolbarButtonWithTooltip(bot, ADD_FILE_PATH);
 		_deleteBtn = new ToolbarButtonWithTooltip(bot, DELETE);
+		_hostOsgiBundle = new Text(bot, HOST_OSGI_BUNDLE);
 	}
 
 	public ToolbarButtonWithTooltip getAddOverrideFilePathBtn() {
@@ -56,10 +58,15 @@ public class NewModuleFragmentInfoWizard extends Wizard {
 		return _files;
 	}
 
+	public Text getHostOsgiBundle() {
+		return _hostOsgiBundle;
+	}
+
 	private ToolbarButtonWithTooltip _addOverrideFilePathBtn;
 	private ToolbarButtonWithTooltip _addOverrideFilesBtn;
 	private ToolbarButtonWithTooltip _browseOsgiBtn;
 	private ToolbarButtonWithTooltip _deleteBtn;
 	private Table _files;
+	private Text _hostOsgiBundle;
 
 }

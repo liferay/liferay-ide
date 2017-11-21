@@ -266,6 +266,8 @@ public interface UI {
 
 	public final String HOOK_PLUGIN_PROJECT = "Hook plugin project:";
 
+	public final String HOST_OSGI_BUNDLE = "Host OSGi Bundle:";
+
 	public final String ICEFACES = "ICEFaces";
 
 	public final String ICON = "Icon:";

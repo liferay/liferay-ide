@@ -12,33 +12,36 @@
  * details.
  */
 
-package com.liferay.ide.ui.swtbot.condition;
+package com.liferay.ide.ui.swtbot.eclipse.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-import org.eclipse.swtbot.swt.finder.waits.ICondition;
+import com.liferay.ide.ui.swtbot.page.Dialog;
+import com.liferay.ide.ui.swtbot.page.Table;
+import com.liferay.ide.ui.swtbot.page.Text;
+
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
+ * @author Ying Xu
  */
-public abstract class JobCondition implements ICondition {
+public class TextTableDialog extends Dialog {
 
-	public JobCondition(Object family, String readableJobFamily) {
-		this.family = family;
+	public TextTableDialog(SWTWorkbenchBot bot) {
+		super(bot);
 
-		this.readableJobFamily = readableJobFamily;
+		_items = new Table(bot);
+		_text = new Text(bot);
 	}
 
-	@Override
-	public abstract String getFailureMessage();
-
-	@Override
-	public void init(SWTBot bot) {
+	public Table getItems() {
+		return _items;
 	}
 
-	@Override
-	public abstract boolean test();
+	public Text getText() {
+		return _text;
+	}
 
-	protected final Object family;
-	protected final String readableJobFamily;
+	private Table _items;
+	private Text _text;
 
 }
