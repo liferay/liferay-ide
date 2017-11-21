@@ -12,27 +12,19 @@
  * details.
  */
 
-package com.liferay.ide.ui.swtbot.page;
+package com.liferay.ide.ui.liferay.action;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotCanvas;
+import com.liferay.ide.ui.liferay.UIAction;
+
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  */
-public class Canvas extends AbstractWidget {
+public class BrowserAction extends UIAction {
 
-	public Canvas(SWTBot bot, int index) {
-		super(bot, index);
-	}
-
-	public void click(int x, int y) {
-		getWidget().click(x, y);
-	}
-
-	@Override
-	protected SWTBotCanvas getWidget() {
-		return bot.canvas(index);
+	public BrowserAction(SWTWorkbenchBot bot) {
+		super(bot);
 	}
 
 }

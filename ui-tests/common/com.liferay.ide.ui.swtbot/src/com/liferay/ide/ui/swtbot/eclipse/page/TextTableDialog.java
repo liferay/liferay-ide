@@ -12,31 +12,30 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay.page.wizard.project;
+package com.liferay.ide.ui.swtbot.eclipse.page;
 
-import com.liferay.ide.ui.swtbot.page.ComboBox;
-import com.liferay.ide.ui.swtbot.page.Wizard;
+import com.liferay.ide.ui.swtbot.page.Dialog;
+import com.liferay.ide.ui.swtbot.page.Table;
+import com.liferay.ide.ui.swtbot.page.Text;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
- * @author Vicky Wang
+ * @author Terry Jia
+ * @author Ying Xu
  */
-public class ThemeWizard extends Wizard {
+public class TextTableDialog extends Dialog {
 
-	public ThemeWizard(SWTWorkbenchBot bot) {
-		super(bot, 0);
-
-		_themeParentTypes = new ComboBox(bot, THEME_PARENT);
-		_themeFrameworkTypes = new ComboBox(bot, FARMEWORK_TYPE);
+	public TextTableDialog(SWTWorkbenchBot bot) {
+		super(bot);
 	}
 
-	public void setParentFramework(String parent, String framework) {
-		_themeParentTypes.setSelection(parent);
-		_themeFrameworkTypes.setSelection(framework);
+	public Table getItems() {
+		return new Table(getShell().bot());
 	}
 
-	private ComboBox _themeFrameworkTypes;
-	private ComboBox _themeParentTypes;
+	public Text getText() {
+		return new Text(getShell().bot());
+	}
 
 }

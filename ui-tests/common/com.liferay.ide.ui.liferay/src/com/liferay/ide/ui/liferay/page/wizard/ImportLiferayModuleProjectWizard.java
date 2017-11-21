@@ -18,35 +18,27 @@ import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ashley Yuan
  */
 public class ImportLiferayModuleProjectWizard extends Wizard {
 
-	public ImportLiferayModuleProjectWizard(SWTWorkbenchBot bot) {
-		super(bot, IMPORT_LIFERAY_MODULE_PROJECT, 2);
-
-		_location = new Text(bot, LOCATION_WITH_COLON);
-		_buildType = new Text(bot, BUILD_TYPE);
-		_browseBtn = new ToolbarButtonWithTooltip(bot, BROWSE);
+	public ImportLiferayModuleProjectWizard(SWTBot bot) {
+		super(bot, 2);
 	}
 
 	public ToolbarButtonWithTooltip getBrowseBtn() {
-		return _browseBtn;
+		return new ToolbarButtonWithTooltip(getShell().bot(), BROWSE);
 	}
 
 	public Text getBuildType() {
-		return _buildType;
+		return new Text(getShell().bot(), BUILD_TYPE);
 	}
 
 	public Text getLocation() {
-		return _location;
+		return new Text(getShell().bot(), LOCATION_WITH_COLON);
 	}
-
-	private ToolbarButtonWithTooltip _browseBtn;
-	private Text _buildType;
-	private Text _location;
 
 }

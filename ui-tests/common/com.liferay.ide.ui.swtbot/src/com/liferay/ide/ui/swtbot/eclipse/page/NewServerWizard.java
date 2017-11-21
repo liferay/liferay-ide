@@ -18,7 +18,7 @@ import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.Tree;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Vicky Wang
@@ -26,28 +26,20 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class NewServerWizard extends Wizard {
 
-	public NewServerWizard(SWTWorkbenchBot bot) {
-		super(bot, NEW_SERVER, 3);
-
-		_serverTypes = new Tree(bot);
-		_serverHostName = new Text(bot, SERVERS_HOST_NAME);
-		_serverName = new Text(bot, SERVER_NAME);
+	public NewServerWizard(SWTBot bot) {
+		super(bot, 3);
 	}
 
 	public Text getServerHostName() {
-		return _serverHostName;
+		return new Text(getShell().bot(), SERVERS_HOST_NAME);
 	}
 
 	public Text getServerName() {
-		return _serverName;
+		return new Text(getShell().bot(), SERVER_NAME);
 	}
 
 	public Tree getServerTypes() {
-		return _serverTypes;
+		return new Tree(getShell().bot());
 	}
-
-	private Text _serverHostName;
-	private Text _serverName;
-	private Tree _serverTypes;
 
 }

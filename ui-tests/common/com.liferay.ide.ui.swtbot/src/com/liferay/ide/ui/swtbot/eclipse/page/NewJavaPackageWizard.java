@@ -17,29 +17,23 @@ package com.liferay.ide.ui.swtbot.eclipse.page;
 import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ying Xu
  */
 public class NewJavaPackageWizard extends Wizard {
 
-	public NewJavaPackageWizard(SWTWorkbenchBot bot) {
+	public NewJavaPackageWizard(SWTBot bot) {
 		super(bot);
-
-		_sourceFolder = new Text(bot, SOURCE_FOLDER);
-		_name = new Text(bot, NAME);
 	}
 
 	public Text getName() {
-		return _name;
+		return new Text(getShell().bot(), NAME);
 	}
 
 	public Text getSourceFolder() {
-		return _sourceFolder;
+		return new Text(getShell().bot(), SOURCE_FOLDER);
 	}
-
-	private Text _name;
-	private Text _sourceFolder;
 
 }

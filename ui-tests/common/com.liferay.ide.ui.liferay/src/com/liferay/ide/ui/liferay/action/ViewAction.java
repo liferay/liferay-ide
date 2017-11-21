@@ -15,7 +15,6 @@
 package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
-import com.liferay.ide.ui.swtbot.eclipse.page.ConsoleView;
 import com.liferay.ide.ui.swtbot.eclipse.page.DeleteResourcesContinueDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.DeleteResourcesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.PackageExplorerView;
@@ -43,6 +42,8 @@ public class ViewAction extends UIAction {
 		ide.sleep();
 
 		_getProjects().contextMenu("Close Project", items);
+
+		_jobAction.waitForCloseProject();
 	}
 
 	public void deleteProject(String... items) {
@@ -86,7 +87,7 @@ public class ViewAction extends UIAction {
 	public void openLiferayPortalHome(String serverLabel) {
 		_serversView.getServers().contextMenu(OPEN_LIFERAY_PORTAL_HOME, serverLabel);
 
-		ide.sleep(10000);
+		_jobAction.waitForBrowserLoaded();
 	}
 
 	public void openProjectFile(String... files) {
@@ -108,11 +109,11 @@ public class ViewAction extends UIAction {
 	}
 
 	public void serverDeployWait(String projectName) {
-		_serverWaitInConsole(10000, 1000, 1000, "STARTED " + projectName + "_");
+		_jobAction.waitForConsoleContent("STARTED " + projectName + "_", 20 * 1000);
 	}
 
 	public void serverStart(String serverLabel) {
-		ide.sleep(2000);
+		ide.sleep(5000);
 
 		_serversView.getServers().select(serverLabel);
 
@@ -120,7 +121,7 @@ public class ViewAction extends UIAction {
 	}
 
 	public void serverStartWait() throws TimeoutException {
-		_serverWaitInConsole(600000, 25000, 10000, "Server startup in");
+		_jobAction.waitForConsoleContent("Server startup in", 600 * 1000);
 	}
 
 	public void serverStop(String serverLabel) {
@@ -132,12 +133,12 @@ public class ViewAction extends UIAction {
 	}
 
 	public void serverStopWait() {
-		_serverWaitInConsole(
-			300000, 5000, 1000, "org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler [\"ajp-nio");
+		_jobAction.waitForConsoleContent(
+			"org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler [\"ajp-nio", 300 * 1000);
 	}
 
 	public void serverStopWait62() {
-		_serverWaitInConsole(300000, 5000, 1000, "Destroying ProtocolHandler [\"ajp-bio-");
+		_jobAction.waitForConsoleContent("Destroying ProtocolHandler [\"ajp-bio-", 300 * 1000);
 	}
 
 	public void showServersView() {
@@ -168,46 +169,22 @@ public class ViewAction extends UIAction {
 	}
 
 	private Tree _getProjects() {
-		try {
+		String perspectiveLabel = ide.getPerspectiveLabel();
+
+		if (perspectiveLabel.equals(LIFERAY_WORKSPACE)) {
 			return _projectExplorerView.getProjects();
 		}
-		catch (Exception e) {
+		else if (perspectiveLabel.equals(LIFERAY_PLUGINS)) {
 			return _packageExplorerView.getProjects();
 		}
+
+		return null;
 	}
 
-	private boolean _hasConsoleLog(String content) {
-		String consoleLog = _consoleView.getLog().getText();
-
-		return consoleLog.contains(content);
-	}
-
-	private void _serverWaitInConsole(long timeout, long startTime, long endTime, String consoleLog)
-		throws TimeoutException {
-
-		ide.sleep(startTime);
-
-		long limit = System.currentTimeMillis() + timeout;
-
-		while (true) {
-			if (_hasConsoleLog(consoleLog)) {
-				ide.sleep(endTime);
-
-				return;
-			}
-
-			ide.sleep(500);
-
-			if (System.currentTimeMillis() > limit) {
-				throw new TimeoutException("Timeout after: " + timeout + " ms.");
-			}
-		}
-	}
-
-	private final ConsoleView _consoleView = new ConsoleView(bot);
 	private final DeleteResourcesContinueDialog _continueDeleteResourcesDialog = new DeleteResourcesContinueDialog(bot);
 	private final DeleteResourcesDialog _deleteResourcesDialog = new DeleteResourcesDialog(bot);
 	private final Dialog _dialog = new Dialog(bot);
+	private final JobAction _jobAction = new JobAction(bot);
 	private final PackageExplorerView _packageExplorerView = new PackageExplorerView(bot);
 	private final ProjectExplorerView _projectExplorerView = new ProjectExplorerView(bot);
 	private final ServersView _serversView = new ServersView(bot);

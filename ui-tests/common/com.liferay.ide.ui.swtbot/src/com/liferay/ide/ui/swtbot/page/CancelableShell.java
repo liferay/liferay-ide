@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.swtbot.page;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
@@ -22,16 +22,12 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class CancelableShell extends Shell {
 
-	public CancelableShell(SWTWorkbenchBot bot) {
+	public CancelableShell(SWTBot bot) {
 		super(bot);
 	}
 
-	public CancelableShell(SWTWorkbenchBot bot, String label) {
-		super(bot, label);
-	}
-
-	public CancelableShell(SWTWorkbenchBot bot, String label, String cancelBtnLabel) {
-		super(bot, label);
+	public CancelableShell(SWTBot bot, String cancelBtnLabel) {
+		super(bot);
 
 		_cancelBtnLabel = cancelBtnLabel;
 	}

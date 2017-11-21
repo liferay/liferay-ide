@@ -19,71 +19,51 @@ import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ying Xu
  */
 public class NewLiferayModuleInfoWizard extends Wizard {
 
-	public NewLiferayModuleInfoWizard(SWTWorkbenchBot bot) {
+	public NewLiferayModuleInfoWizard(SWTBot bot) {
 		super(bot, 2);
-
-		_componentClassName = new Text(bot, COMPONENT_CLASS_NAME);
-		_packageName = new Text(bot, PACKAGE_NAME);
-		_serviceName = new Text(bot, SERVICE_NAME);
-		_properties = new Table(bot, PROPERTIES);
-		_browseBtn = new ToolbarButtonWithTooltip(bot, BROWSE);
-		_addPropertyKeyBtn = new ToolbarButtonWithTooltip(bot, ADD_PROPERTY_KEY);
-		_moveUpBtn = new ToolbarButtonWithTooltip(bot, MOVE_UP);
-		_moveDownBtn = new ToolbarButtonWithTooltip(bot, MOVE_DOWN);
-		_deleteBtn = new ToolbarButtonWithTooltip(bot, DELETE);
 	}
 
 	public ToolbarButtonWithTooltip getAddPropertyKeyBtn() {
-		return _addPropertyKeyBtn;
+		return new ToolbarButtonWithTooltip(getShell().bot(), ADD_PROPERTY_KEY);
 	}
 
 	public ToolbarButtonWithTooltip getBrowseBtn() {
-		return _browseBtn;
+		return new ToolbarButtonWithTooltip(getShell().bot(), BROWSE);
 	}
 
 	public Text getComponentClassName() {
-		return _componentClassName;
+		return new Text(getShell().bot(), COMPONENT_CLASS_NAME);
 	}
 
 	public ToolbarButtonWithTooltip getDeleteBtn() {
-		return _deleteBtn;
+		return new ToolbarButtonWithTooltip(getShell().bot(), DELETE);
 	}
 
 	public ToolbarButtonWithTooltip getMoveDownBtn() {
-		return _moveDownBtn;
+		return new ToolbarButtonWithTooltip(getShell().bot(), MOVE_DOWN);
 	}
 
 	public ToolbarButtonWithTooltip getMoveUpBtn() {
-		return _moveUpBtn;
+		return new ToolbarButtonWithTooltip(getShell().bot(), MOVE_UP);
 	}
 
 	public Text getPackageName() {
-		return _packageName;
+		return new Text(getShell().bot(), PACKAGE_NAME);
 	}
 
 	public Table getProperties() {
-		return _properties;
+		return new Table(getShell().bot(), PROPERTIES);
 	}
 
 	public Text getServiceName() {
-		return _serviceName;
+		return new Text(getShell().bot(), SERVICE_NAME);
 	}
-
-	private ToolbarButtonWithTooltip _addPropertyKeyBtn;
-	private ToolbarButtonWithTooltip _browseBtn;
-	private Text _componentClassName;
-	private ToolbarButtonWithTooltip _deleteBtn;
-	private ToolbarButtonWithTooltip _moveDownBtn;
-	private ToolbarButtonWithTooltip _moveUpBtn;
-	private Text _packageName;
-	private Table _properties;
-	private Text _serviceName;
 
 }

@@ -48,12 +48,20 @@ public class Editor extends AbstractPart {
 		botEditor.setText(text);
 	}
 
-	protected SWTBotEditor getPart() {
+	public String getLabel() {
 		if (isLabelNull()) {
-			return bot.activeEditor();
+			return ((SWTWorkbenchBot) bot).activeEditor().getTitle();
 		}
 
-		return bot.editorByTitle(label);
+		return label;
+	}
+
+	protected SWTBotEditor getPart() {
+		if (isLabelNull()) {
+			return ((SWTWorkbenchBot)bot).activeEditor();
+		}
+
+		return ((SWTWorkbenchBot)bot).editorByTitle(label);
 	}
 
 }

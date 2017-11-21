@@ -26,17 +26,18 @@ import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayModuleWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayPluginSdkProjectWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayWorkspaceWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewModuleFragmentInfoWizard;
+import com.liferay.ide.ui.liferay.page.wizard.project.NewProjectWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.SetSDKLocationWizard;
 import com.liferay.ide.ui.swtbot.eclipse.page.ImportProjectWizard;
 import com.liferay.ide.ui.swtbot.eclipse.page.NewRuntimeWizard;
 import com.liferay.ide.ui.swtbot.eclipse.page.NewServerWizard;
+import com.liferay.ide.ui.swtbot.page.Button;
 import com.liferay.ide.ui.swtbot.page.MenuItem;
 import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 
 /**
  * @author Terry Jia
@@ -58,30 +59,26 @@ public class WizardAction extends UIAction {
 		_newFragmentInfoWizard.getDeleteBtn().click();
 	}
 
+	public void deselectUseDefaultLocation() {
+		_newProjectWizard.getUseDefaultLocation().deselect();
+	}
+
 	public void finish() {
 		ide.sleep();
 
+		String title = _wizard.getLabel();
+
 		_wizard.finish();
 
-		ide.sleep();
+		_jobAction.waitForWizardClosed(title);
 	}
 
-	public void finishToWait() {
-		ide.sleep();
+	public Button getFinishBtn() {
+		return _wizard.finishBtn();
+	}
 
-		_wizard.finish();
-
-		ide.sleep();
-
-		long origin = SWTBotPreferences.TIMEOUT;
-
-		SWTBotPreferences.TIMEOUT = 1000 * 60;
-
-		openNewLiferayModuleWizard();
-
-		cancel();
-
-		SWTBotPreferences.TIMEOUT = origin;
+	public Button getNextBtn() {
+		return _wizard.nextBtn();
 	}
 
 	public String getValidationMsg() {
@@ -199,24 +196,44 @@ public class WizardAction extends UIAction {
 
 	public void prepareComponentClass(String projectName, String template, String className, String packageName) {
 		_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
+
+		ide.sleep();
+
 		_newLiferayComponentWizard.getComponentClassTemplates().setSelection(template);
+
+		ide.sleep();
+
 		_newLiferayComponentWizard.getComponentClassName().setText(className);
+
+		ide.sleep();
+
 		_newLiferayComponentWizard.getPackageName().setText(packageName);
 
 		ide.sleep();
 	}
 
-	public void prepareFragment(String projectName, String buildType) {
+	public void prepareFragment(String projectName, String location, String buildType) {
 		_newFragmentWizard.getProjectName().setText(projectName);
+
+		if (!location.equals(StringPool.BLANK)) {
+			_newFragmentWizard.getLocation().setText(location);
+		}
+
 		_newFragmentWizard.getBuildTypes().setSelection(buildType);
 	}
 
 	public void prepareFragmentGradle(String projectName) {
-		prepareFragment(projectName, GRADLE);
+		prepareFragment(projectName, StringPool.BLANK, GRADLE);
+
+		ide.sleep();
+	}
+
+	public void prepareFragmentGradle(String projectName, String location) {
+		prepareFragment(projectName, location, GRADLE);
 	}
 
 	public void prepareFragmentMaven(String projectName) {
-		prepareFragment(projectName, MAVEN);
+		prepareFragment(projectName, StringPool.BLANK, MAVEN);
 	}
 
 	public void prepareImportLiferayWorkspace(String location) {
@@ -454,6 +471,7 @@ public class WizardAction extends UIAction {
 	private final ImportLiferayWorkspaceProjectWizard _importLiferayWorkspaceProjectWizard =
 		new ImportLiferayWorkspaceProjectWizard(bot);
 	private final ImportProjectWizard _importProjectWizard = new ImportProjectWizard(bot);
+	private final JobAction _jobAction = new JobAction(bot);
 	private final NewModuleFragmentInfoWizard _newFragmentInfoWizard = new NewModuleFragmentInfoWizard(bot);
 	private final NewFragmentWizard _newFragmentWizard = new NewFragmentWizard(bot);
 	private final NewLiferayJsfProjectWizard _newJsfProjectWizard = new NewLiferayJsfProjectWizard(bot);
@@ -463,6 +481,7 @@ public class WizardAction extends UIAction {
 	private final NewLiferayModuleInfoWizard _newModuleInfoWizard = new NewLiferayModuleInfoWizard(bot);
 	private final NewLiferayModuleWizard _newModuleWizard = new NewLiferayModuleWizard(bot);
 	private final NewLiferayPluginSdkProjectWizard _newPluginSdkWizard = new NewLiferayPluginSdkProjectWizard(bot);
+	private final NewProjectWizard _newProjectWizard = new NewProjectWizard(bot);
 	private final NewRuntimeWizard _newRuntimeWizard = new NewRuntimeWizard(bot);
 	private final NewServerWizard _newServerWizard = new NewServerWizard(bot);
 	private final NewLiferayWorkspaceWizard _newWorkspaceWizard = new NewLiferayWorkspaceWizard(bot);

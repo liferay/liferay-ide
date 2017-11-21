@@ -28,33 +28,22 @@ public class ServerEditor extends Editor {
 
 	public ServerEditor(SWTWorkbenchBot bot, String editorName) {
 		super(bot, editorName);
-
-		_httpPort = new Text(bot, "Http Port:");
-
-		_defaultLaunchSettings = new Radio(bot, "Default Launch Settings");
-		_customLaunchSettings = new Radio(bot, "Custom Launch Settings");
-		_useDeveloperMode = new CheckBox(bot, "Use developer mode");
 	}
 
 	public Radio getCustomLaunchSettings() {
-		return _customLaunchSettings;
+		return new Radio(getPart().bot(), "Custom Launch Settings");
 	}
 
 	public Radio getDefaultLaunchSettings() {
-		return _defaultLaunchSettings;
+		return new Radio(getPart().bot(), "Default Launch Settings");
 	}
 
 	public Text getHttpPort() {
-		return _httpPort;
+		return new Text(getPart().bot(), "Http Port:");
 	}
 
 	public CheckBox getUseDeveloperMode() {
-		return _useDeveloperMode;
+		return new CheckBox(getPart().bot(), "Use developer mode");
 	}
-
-	private Radio _customLaunchSettings;
-	private Radio _defaultLaunchSettings;
-	private Text _httpPort;
-	private CheckBox _useDeveloperMode;
 
 }

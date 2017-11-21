@@ -18,51 +18,39 @@ import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.ComboBox;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Vicky Wang
  */
 public class CreateLiferayHookConfigurationWizard extends Wizard {
 
-	public CreateLiferayHookConfigurationWizard(SWTWorkbenchBot bot) {
-		super(bot, NEW_LIFERAY_HOOK, 0);
-
-		_customJsps = new CheckBox(bot, CUSTOM_JSPS);
-		_portalProperties = new CheckBox(bot, PORTAL_PROPERTIES);
-		_services = new CheckBox(bot, SERVICES);
-		_languageProperties = new CheckBox(bot, LANGUAGE_PROPERTIES);
-		_hookPluginProject = new ComboBox(bot, HOOK_PLUGIN_PROJECT);
+	public CreateLiferayHookConfigurationWizard(SWTBot bot) {
+		super(bot, 0);
 	}
 
 	public CheckBox getCustomJsps() {
-		return _customJsps;
+		return new CheckBox(getShell().bot(), CUSTOM_JSPS);
 	}
 
 	public ComboBox getHookPluginProjectComboBox() {
-		return _hookPluginProject;
+		return new ComboBox(getShell().bot(), HOOK_PLUGIN_PROJECT);
 	}
 
 	public CheckBox getLanguageProperties() {
-		return _languageProperties;
+		return new CheckBox(getShell().bot(), LANGUAGE_PROPERTIES);
 	}
 
 	public CheckBox getPortalProperties() {
-		return _portalProperties;
+		return new CheckBox(getShell().bot(), PORTAL_PROPERTIES);
 	}
 
 	public CheckBox getServices() {
-		return _services;
+		return new CheckBox(getShell().bot(), SERVICES);
 	}
 
-	public void setHookPluginProjectComboBox(String hookPluginProjectComboBox) {
-		this._hookPluginProject.setText(hookPluginProjectComboBox);
+	public ComboBox getHookProjects() {
+		return new ComboBox(getShell().bot(), HOOK_PLUGIN_PROJECT);
 	}
-
-	private CheckBox _customJsps;
-	private ComboBox _hookPluginProject;
-	private CheckBox _languageProperties;
-	private CheckBox _portalProperties;
-	private CheckBox _services;
 
 }

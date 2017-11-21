@@ -15,10 +15,14 @@
 package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
+import com.liferay.ide.ui.swtbot.condition.BrowserLoadedCondition;
 import com.liferay.ide.ui.swtbot.condition.CancelIvyJobCondition;
 import com.liferay.ide.ui.swtbot.condition.CancelValidateJobCondition;
 import com.liferay.ide.ui.swtbot.condition.CloseProjectJobCondition;
+import com.liferay.ide.ui.swtbot.condition.ConsoleContentCondition;
 import com.liferay.ide.ui.swtbot.condition.NoRunningJobsCondition;
+import com.liferay.ide.ui.swtbot.condition.ServerStartJobCondition;
+import com.liferay.ide.ui.swtbot.condition.WizardClosedCondition;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
@@ -31,24 +35,36 @@ public class JobAction extends UIAction {
 		super(bot);
 	}
 
+	public void waitForBrowserLoaded() {
+		ide.waitUntil(new BrowserLoadedCondition(bot));
+	}
+
 	public void waitForCancelIvy() {
-		bot.waitUntil(_cancelIvyJobCondition, 30000);
+		ide.waitUntil(new CancelIvyJobCondition());
 	}
 
 	public void waitForCancelValidate(String projectName) {
-		bot.waitUntil(new CancelValidateJobCondition(projectName), 120 * 1000);
+		ide.waitUntil(new CancelValidateJobCondition(projectName), 120 * 1000);
 	}
 
 	public void waitForCloseProject() {
-		bot.waitUntil(_closeProjectJobCondition, 30000);
+		ide.waitUntil(new CloseProjectJobCondition());
 	}
 
 	public void waitForNoRunningJobs() {
-		bot.waitUntil(_noRunningJobsCondition, 60 * 1000);
+		ide.waitUntil(new NoRunningJobsCondition());
 	}
 
-	private final CancelIvyJobCondition _cancelIvyJobCondition = new CancelIvyJobCondition();
-	private final CloseProjectJobCondition _closeProjectJobCondition = new CloseProjectJobCondition();
-	private final NoRunningJobsCondition _noRunningJobsCondition = new NoRunningJobsCondition();
+	public void waitForWizardClosed(String title) {
+		ide.waitUntil(new WizardClosedCondition(bot, title));
+	}
+
+	public void waitForServer62Started(String serverName) {
+		ide.waitUntil(new ServerStartJobCondition(serverName));
+	}
+
+	public void waitForConsoleContent(String content, long timeout) {
+		ide.waitUntil(new ConsoleContentCondition(bot, content), timeout);
+	}
 
 }

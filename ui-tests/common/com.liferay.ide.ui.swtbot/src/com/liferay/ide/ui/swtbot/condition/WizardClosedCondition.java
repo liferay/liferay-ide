@@ -23,7 +23,9 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
  */
 public class WizardClosedCondition implements ICondition {
 
-	public WizardClosedCondition(String title) {
+	public WizardClosedCondition(SWTBot bot, String title) {
+		_bot = bot;
+
 		_title = title;
 	}
 
@@ -32,7 +34,6 @@ public class WizardClosedCondition implements ICondition {
 	}
 
 	public void init(SWTBot bot) {
-		_bot = bot;
 	}
 
 	public boolean test() throws Exception {

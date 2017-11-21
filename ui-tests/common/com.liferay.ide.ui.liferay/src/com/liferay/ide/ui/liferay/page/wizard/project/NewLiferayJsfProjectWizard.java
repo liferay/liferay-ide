@@ -16,23 +16,19 @@ package com.liferay.ide.ui.liferay.page.wizard.project;
 
 import com.liferay.ide.ui.swtbot.page.ComboBox;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ying Xu
  */
 public class NewLiferayJsfProjectWizard extends NewProjectWizard {
 
-	public NewLiferayJsfProjectWizard(SWTWorkbenchBot bot) {
+	public NewLiferayJsfProjectWizard(SWTBot bot) {
 		super(bot, 2);
-
-		_componentSuite = new ComboBox(bot, COMPONENT_SUITE);
 	}
 
 	public ComboBox getComponentSuite() {
-		return _componentSuite;
+		return new ComboBox(getShell().bot(), COMPONENT_SUITE);
 	}
-
-	private ComboBox _componentSuite;
 
 }

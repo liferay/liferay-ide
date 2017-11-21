@@ -32,7 +32,7 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleGradle(projectName, MVC_PORTLET);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
@@ -41,8 +41,6 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 		jobAction.waitForCancelValidate(projectName);
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -55,7 +53,7 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleGradle(projectName, PORTLET);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
@@ -64,8 +62,6 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 		jobAction.waitForCancelValidate(projectName);
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}

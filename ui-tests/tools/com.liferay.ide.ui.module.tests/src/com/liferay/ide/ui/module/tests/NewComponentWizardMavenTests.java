@@ -30,7 +30,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 		wizardAction.prepareLiferayModuleMaven(projectName, MVC_PORTLET);
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -45,14 +45,12 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		dialogAction.prepareText("*com.liferay.blogs.kernel.model.BlogsEntry");
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(
 			viewAction.visibleProjectFileTry(projectName, "src/main/java", packageName, className + ".java"));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}

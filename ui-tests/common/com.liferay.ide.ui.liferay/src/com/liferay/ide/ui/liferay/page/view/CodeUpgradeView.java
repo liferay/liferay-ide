@@ -35,8 +35,8 @@ public class CodeUpgradeView extends View {
 
 		_showAllPagesBtn = new ToolbarButtonWithTooltip(bot, SHOW_ALL_PAGES);
 		_restartBtn = new ToolbarButtonWithTooltip(bot, RESTART_UPGRADE);
-		_restartDialog = new Dialog(bot, RESTART_CODE_UPGRADE, NO, YES);
-		_showAllPagesDialog = new Dialog(bot, SHOW_ALL_PAGES, NO, YES);
+		_restartDialog = new Dialog(bot, NO, YES);
+		_showAllPagesDialog = new Dialog(bot, NO, YES);
 	}
 
 	public GearPO getGear() {

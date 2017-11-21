@@ -23,19 +23,19 @@ import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotPerspective;
 public class Perspective extends BasePageObject {
 
 	public Perspective(SWTWorkbenchBot bot, String label) {
-		super(bot);
-
-		_label = label;
+		super(bot, label);
 	}
 
 	public void activate() {
 		getPerspective().activate();
 	}
 
-	protected SWTBotPerspective getPerspective() {
-		return bot.perspectiveByLabel(_label);
+	public String getLabel() {
+		return label;
 	}
 
-	private String _label;
+	protected SWTBotPerspective getPerspective() {
+		return ((SWTWorkbenchBot)bot).perspectiveByLabel(getLabel());
+	}
 
 }

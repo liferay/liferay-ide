@@ -20,6 +20,7 @@ import com.liferay.ide.ui.swtbot.eclipse.page.PreferenceRecorderDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.PreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.ServerRuntimeEnvironmentsPreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
+import com.liferay.ide.ui.swtbot.eclipse.page.TextTableDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TreeDialog;
 import com.liferay.ide.ui.swtbot.page.Button;
 import com.liferay.ide.ui.swtbot.page.Dialog;
@@ -127,10 +128,16 @@ public class DialogAction extends UIAction {
 
 	public void prepareText(String text) {
 		_textDialog.getText().setText(text);
+
+		ide.sleep();
 	}
 
 	public void selectItems(String... items) {
 		_treeDialog.getItems().select(items);
+	}
+
+	public void selectTableItem(String item) {
+		_textTableDialog.getItems();
 	}
 
 	private final AddAndRemoveDialog _addAndRemoveDialog = new AddAndRemoveDialog(bot);
@@ -141,6 +148,7 @@ public class DialogAction extends UIAction {
 	private final ServerRuntimeEnvironmentsPreferencesDialog _serverRuntimeEnvironmentsDialog =
 		new ServerRuntimeEnvironmentsPreferencesDialog(bot);
 	private final TextDialog _textDialog = new TextDialog(bot);
+	private final TextTableDialog _textTableDialog = new TextTableDialog(bot);
 	private final TreeDialog _treeDialog = new TreeDialog(bot);
 
 }

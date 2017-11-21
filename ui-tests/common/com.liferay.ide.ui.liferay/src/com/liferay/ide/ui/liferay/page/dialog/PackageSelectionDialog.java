@@ -18,14 +18,14 @@ import com.liferay.ide.ui.swtbot.eclipse.page.TreeDialog;
 import com.liferay.ide.ui.swtbot.page.Table;
 import com.liferay.ide.ui.swtbot.page.Text;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ashley Yuan
  */
 public class PackageSelectionDialog extends TreeDialog {
 
-	public PackageSelectionDialog(SWTWorkbenchBot bot) {
+	public PackageSelectionDialog(SWTBot bot) {
 		super(bot);
 
 		_packageToSelect = new Text(bot);

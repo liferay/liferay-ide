@@ -30,8 +30,6 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	public static void cleanLiferayWorkspace() {
 		viewAction.closeProject(_liferayWorkspaceName);
 
-		jobAction.waitForCloseProject();
-
 		viewAction.deleteProject(_liferayWorkspaceName);
 	}
 
@@ -41,7 +39,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		wizardAction.prepareLiferayWorkspaceMaven(_liferayWorkspaceName);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(_liferayWorkspaceName));
 	}

@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.swtbot.page;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 
 /**
@@ -23,19 +23,19 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
  */
 public class Text extends AbstractWidget {
 
-	public Text(SWTWorkbenchBot bot) {
+	public Text(SWTBot bot) {
 		super(bot);
 	}
 
-	public Text(SWTWorkbenchBot bot, int index) {
+	public Text(SWTBot bot, int index) {
 		super(bot, index);
 	}
 
-	public Text(SWTWorkbenchBot bot, String label) {
+	public Text(SWTBot bot, String label) {
 		super(bot, label);
 	}
 
-	public Text(SWTWorkbenchBot bot, String label, int index) {
+	public Text(SWTBot bot, String label, int index) {
 		super(bot, label, index);
 	}
 

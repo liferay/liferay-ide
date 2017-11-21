@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.swtbot.page;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 
 /**
@@ -23,11 +23,11 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
  */
 public class Menu extends AbstractWidget {
 
-	public Menu(SWTWorkbenchBot bot, String label) {
+	public Menu(SWTBot bot, String label) {
 		super(bot, label);
 	}
 
-	public Menu(SWTWorkbenchBot bot, String[] labels) {
+	public Menu(SWTBot bot, String[] labels) {
 		super(bot);
 
 		_labels = labels;

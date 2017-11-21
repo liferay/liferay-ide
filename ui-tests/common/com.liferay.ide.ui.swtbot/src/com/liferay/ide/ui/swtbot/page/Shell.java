@@ -14,14 +14,8 @@
 
 package com.liferay.ide.ui.swtbot.page;
 
-import com.liferay.ide.ui.swtbot.condition.ShellCondition;
-import com.liferay.ide.ui.swtbot.util.StringPool;
-
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
-import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
-import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 
 /**
  * @author Terry Jia
@@ -30,20 +24,12 @@ import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
  */
 public class Shell extends BasePageObject {
 
-	public Shell(SWTWorkbenchBot bot) {
+	public Shell(SWTBot bot) {
 		super(bot);
 	}
 
-	public Shell(SWTWorkbenchBot bot, String label) {
+	public Shell(SWTBot bot, String label) {
 		super(bot, label);
-	}
-
-	public Shell(SWTWorkbenchBot bot, String label, int index) {
-		super(bot, label, index);
-	}
-
-	public void activate() {
-		getShell().isActive();
 	}
 
 	public void clickBtn(Button btn) {
@@ -54,61 +40,18 @@ public class Shell extends BasePageObject {
 		getShell().close();
 	}
 
-	public void closeIfOpen() {
-		long oldTimeOut = SWTBotPreferences.TIMEOUT;
+	public String getLabel() {
+		if (isLabelNull()) {
+			assert bot.activeShell() != null;
 
-		SWTBotPreferences.TIMEOUT = 1000;
-
-		try {
-			SWTBotShell[] shells = bot.shells();
-
-			for (SWTBotShell shell : shells) {
-				if (shell.getText().equals(label)) {
-					log.warn("force closing of still open shell\"" + shell.getText() + StringPool.DOUBLE_QUOTE);
-
-					shell.close();
-
-					bot.waitUntil(new ShellCondition(label, false));
-
-					break;
-				}
-			}
+			return bot.activeShell().getText();
 		}
-		catch (WidgetNotFoundException wnfe) {
-		}
-		catch (TimeoutException te) {
-		}
-		finally {
-			SWTBotPreferences.TIMEOUT = oldTimeOut;
-		}
-	}
 
-	public String getTitle() {
 		return label;
 	}
 
-	public boolean isOpen() {
-		return getShell().isVisible();
-	}
-
-	public void setFocus() {
-		getShell().setFocus();
-	}
-
-	public void waitForPageToClose() {
-		bot.waitUntil(new ShellCondition(label, false));
-	}
-
-	public void waitForPageToOpen() {
-		bot.waitUntil(new ShellCondition(label, true));
-	}
-
 	protected SWTBotShell getShell() {
-		if (hasIndex()) {
-			return bot.shell(label, index);
-		}
-
-		return bot.shell(label);
+		return bot.shell(getLabel());
 	}
 
 }

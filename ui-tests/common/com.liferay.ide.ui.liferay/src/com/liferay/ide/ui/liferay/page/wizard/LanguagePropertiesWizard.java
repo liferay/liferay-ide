@@ -19,53 +19,39 @@ import com.liferay.ide.ui.swtbot.page.Table;
 import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Vicky Wang
  */
 public class LanguagePropertiesWizard extends Wizard {
 
-	public LanguagePropertiesWizard(SWTWorkbenchBot bot) {
-		super(bot, NEW_LIFERAY_HOOK, 0);
-
-		_contentFolder = new Text(bot, CONTENT_FOLDER);
-		_languagePropertyFiles = new Table(bot, LANGUAGE_PROPERTY_FILES);
-		_browseBtn = new Button(bot, BROWSE_WITH_DOT);
-		_addBtn = new Button(bot, ADD_WITH_DOT);
-		_editBtn = new Button(bot, EDIT_WITH_DOT);
-		_removeBtn = new Button(bot, REMOVE_WITH_DOT);
+	public LanguagePropertiesWizard(SWTBot bot) {
+		super(bot, 0);
 	}
 
 	public Button getAddBtn() {
-		return _addBtn;
+		return new Button(getShell().bot(), ADD_WITH_DOT);
 	}
 
 	public Button getBrowseBtn() {
-		return _browseBtn;
+		return new Button(getShell().bot(), BROWSE_WITH_DOT);
 	}
 
 	public Text getContentFolder() {
-		return _contentFolder;
+		return new Text(getShell().bot(), CONTENT_FOLDER);
 	}
 
 	public Button getEditBtn() {
-		return _editBtn;
+		return new Button(getShell().bot(), EDIT_WITH_DOT);
 	}
 
 	public Table getLanguagePropertyFiles() {
-		return _languagePropertyFiles;
+		return new Table(getShell().bot(), LANGUAGE_PROPERTY_FILES);
 	}
 
 	public Button getRemoveBtn() {
-		return _removeBtn;
+		return new Button(getShell().bot(), REMOVE_WITH_DOT);
 	}
-
-	private Button _addBtn;
-	private Button _browseBtn;
-	private Text _contentFolder;
-	private Button _editBtn;
-	private Table _languagePropertyFiles;
-	private Button _removeBtn;
 
 }

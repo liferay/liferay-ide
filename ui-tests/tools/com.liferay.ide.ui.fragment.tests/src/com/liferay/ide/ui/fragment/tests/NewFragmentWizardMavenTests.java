@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,11 +32,20 @@ import org.junit.Test;
  */
 public class NewFragmentWizardMavenTests extends SwtbotBase {
 
+	@AfterClass
+	public static void deleteRuntime() {
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+
+		dialogAction.deleteRuntimeTryConfirm(_serverName);
+
+		dialogAction.confirmPreferences();
+	}
+
 	@BeforeClass
 	public static void init() throws IOException {
 		envAction.unzipServer();
-
-		String serverName = "Liferay 7-fragment-maven";
 
 		dialogAction.openPreferencesDialog();
 
@@ -51,7 +61,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		IPath fullServerDir = serverDir.append(envAction.getLiferayPluginServerName());
 
-		wizardAction.prepareLiferay7RuntimeInfo(serverName, fullServerDir.toOSString());
+		wizardAction.prepareLiferay7RuntimeInfo(_serverName, fullServerDir.toOSString());
 
 		wizardAction.finish();
 
@@ -59,7 +69,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.prepareNewServer(serverName);
+		wizardAction.prepareNewServer(_serverName);
 
 		wizardAction.finish();
 	}
@@ -86,11 +96,9 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -111,10 +119,9 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		String[] files = {
-			"META-INF/resources/blogs_admin/entry_search_columns.jspf",
-			"META-INF/resources/blogs_admin/entry_search_results.jspf"
-		};
+		String[] files = {"META-INF/resources/blogs_admin/entry_search_columns.jspf",
+				"META-INF/resources/blogs_admin/entry_search_results.jspf"
+			};
 
 		wizardAction.openAddOverrideFilesDialog();
 
@@ -122,11 +129,9 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -153,11 +158,9 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.cancel();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -186,11 +189,9 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -217,11 +218,9 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -242,10 +241,10 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		String[] files = {
-			"META-INF/resources/configuration.jsp", "META-INF/resources/init-ext.jsp", "META-INF/resources/init.jsp",
-			"META-INF/resources/view.jsp", "portlet.properties", "resource-actions/default.xml"
-		};
+		String[] files = {"META-INF/resources/configuration.jsp", "META-INF/resources/init-ext.jsp",
+				"META-INF/resources/init.jsp", "META-INF/resources/view.jsp", "portlet.properties",
+				"resource-actions/default.xml"
+			};
 
 		wizardAction.openAddOverrideFilesDialog();
 
@@ -269,13 +268,13 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
 
-		jobAction.waitForCloseProject();
-
 		viewAction.deleteProject(projectName);
 	}
+
+	private static final String _serverName = "Liferay 7-fragment-maven";
 
 }

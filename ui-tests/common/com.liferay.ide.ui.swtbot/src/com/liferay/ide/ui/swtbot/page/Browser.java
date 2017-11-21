@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.swtbot.page;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
 
 /**
@@ -22,12 +22,16 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
  */
 public class Browser extends AbstractWidget {
 
-	public Browser(SWTWorkbenchBot bot) {
+	public Browser(SWTBot bot) {
 		super(bot);
 	}
 
-	public Browser(SWTWorkbenchBot bot, String label) {
+	public Browser(SWTBot bot, String label) {
 		super(bot, label);
+	}
+
+	public boolean loaded() {
+		return getWidget().isPageLoaded();
 	}
 
 	public void setUrl(String url) {

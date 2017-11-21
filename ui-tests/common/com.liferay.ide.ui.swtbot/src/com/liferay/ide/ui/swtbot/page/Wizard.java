@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.swtbot.page;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 
 /**
@@ -23,50 +23,12 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
  */
 public class Wizard extends CancelableShell {
 
-	public Wizard(SWTWorkbenchBot bot) {
+	public Wizard(SWTBot bot) {
 		super(bot);
 	}
 
-	public Wizard(SWTWorkbenchBot bot, int validationMsgIndex) {
+	public Wizard(SWTBot bot, int validationMsgIndex) {
 		super(bot);
-
-		_validationMsgIndex = validationMsgIndex;
-	}
-
-	public Wizard(SWTWorkbenchBot bot, String title) {
-		super(bot, title);
-	}
-
-	public Wizard(SWTWorkbenchBot bot, String title, int validationMsgIndex) {
-		super(bot, title);
-
-		_validationMsgIndex = validationMsgIndex;
-	}
-
-	public Wizard(
-		SWTWorkbenchBot bot, String title, String cancelBtnLabel, String finishBtnLabel, String backBtnLabel,
-		String nextButtonText) {
-
-		super(bot, title, cancelBtnLabel);
-
-		_finishBtnLabel = finishBtnLabel;
-
-		_backBtnLabel = backBtnLabel;
-
-		_nextBtnLabel = nextButtonText;
-	}
-
-	public Wizard(
-		SWTWorkbenchBot bot, String title, String cancelBtnLabel, String finishBtnLabel, String backBtnLabel,
-		String nextBtnLabel, int validationMsgIndex) {
-
-		super(bot, title, cancelBtnLabel);
-
-		_finishBtnLabel = finishBtnLabel;
-
-		_backBtnLabel = backBtnLabel;
-
-		_nextBtnLabel = nextBtnLabel;
 
 		_validationMsgIndex = validationMsgIndex;
 	}

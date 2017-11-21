@@ -18,9 +18,8 @@ import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.ComboBox;
 import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.Wizard;
-import com.liferay.ide.ui.swtbot.util.StringPool;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
@@ -28,54 +27,36 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class NewProjectWizard extends Wizard {
 
-	public NewProjectWizard(SWTWorkbenchBot bot) {
-		this(bot, -1);
+	public NewProjectWizard(SWTBot bot) {
+		super(bot, -1);
 	}
 
-	public NewProjectWizard(SWTWorkbenchBot bot, int index) {
-		this(bot, StringPool.BLANK, index);
-	}
-
-	public NewProjectWizard(SWTWorkbenchBot bot, String title, int index) {
-		super(bot, title, index);
-
-		_projectName = new Text(bot, PROJECT_NAME);
-		_addToWorkingSet = new CheckBox(bot, ADD_PROJECT_TO_WORKING_SET);
-		_workingSets = new ComboBox(bot, WORKING_SET);
-		_location = new Text(bot, LOCATION_WITH_COLON);
-		_useDefaultLocation = new CheckBox(bot, USE_DEFAULT_LOCATION);
-		_buildTypes = new ComboBox(bot, BUILD_TYPE);
+	public NewProjectWizard(SWTBot bot, int index) {
+		super(bot, index);
 	}
 
 	public CheckBox getAddToWorkingSet() {
-		return _addToWorkingSet;
+		return new CheckBox(getShell().bot(), ADD_PROJECT_TO_WORKING_SET);
 	}
 
 	public ComboBox getBuildTypes() {
-		return _buildTypes;
+		return new ComboBox(getShell().bot(), BUILD_TYPE);
 	}
 
 	public Text getLocation() {
-		return _location;
+		return new Text(getShell().bot(), LOCATION_WITH_COLON);
 	}
 
 	public Text getProjectName() {
-		return _projectName;
+		return new Text(getShell().bot(), PROJECT_NAME);
 	}
 
 	public CheckBox getUseDefaultLocation() {
-		return _useDefaultLocation;
+		return	new CheckBox(getShell().bot(), USE_DEFAULT_LOCATION);
 	}
 
 	public ComboBox getWorkingSets() {
-		return _workingSets;
+		return new ComboBox(getShell().bot(), WORKING_SET);
 	}
-
-	private CheckBox _addToWorkingSet;
-	private ComboBox _buildTypes;
-	private Text _location;
-	private Text _projectName;
-	private CheckBox _useDefaultLocation;
-	private ComboBox _workingSets;
 
 }

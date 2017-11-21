@@ -16,6 +16,7 @@ package com.liferay.ide.ui.liferay;
 
 /**
  * @author Terry Jia
+ * @author Ying Xu
  */
 public interface Messages {
 
@@ -43,6 +44,9 @@ public interface Messages {
 
 	public static final String CREATE_A_NEW_LIFERAY_WORKSPACE = "Create a new liferay workspace";
 
+	public static final String CREATE_A_NEW_PROJECT_CONFIGURED_AS_A_LIFERAY_MODULE_PROJECT_FRAGMENT =
+		"Create a new project configured as a Liferay Module Project Fragment";
+
 	public static final String CREATE_A_NEW_SERVICE_BUILDER_XML_FILE =
 		"Create a new service builder xml file in a project.";
 
@@ -65,6 +69,8 @@ public interface Messages {
 	public static final String FOLDER_VALUE_IS_INVALID = "Folder value is invalid.";
 
 	public static final String FOR_ADVANCED_THEME_DEVELOPERS_ONLY = "For advanced theme developers only.";
+
+	public static final String HOST_OSGI_BUNDLE_MUST_BE_SPECIFIED = "Host OSGi Bundle must be specified";
 
 	public static final String ID_CANNT_BE_EMPTY = "Id can't be empty.";
 
@@ -101,6 +107,8 @@ public interface Messages {
 
 	public static final String LANGUAGE_PROPERTIES_IN_SDK7_IS_NOT_SUPPORTED =
 		"Modifying Language properties in Plugins SDK 7.0 is not supported, use Liferay module instead.";
+
+	public static final String LIFERAY_RUNTIME_MUST_BE_CONFIGURED = "Liferay runtime must be configured.";
 
 	public static final String LIFERAY_WORKSPACE_NAME_COULD_NOT_EMPTY =
 		"Liferay Workspace project name could not be empty.";

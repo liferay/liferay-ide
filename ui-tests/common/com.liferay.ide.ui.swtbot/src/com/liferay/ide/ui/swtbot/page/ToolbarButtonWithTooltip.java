@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.swtbot.page;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotToolbarButton;
 
 /**
@@ -23,11 +23,11 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotToolbarButton;
  */
 public class ToolbarButtonWithTooltip extends AbstractWidget {
 
-	public ToolbarButtonWithTooltip(SWTWorkbenchBot bot, String label) {
+	public ToolbarButtonWithTooltip(SWTBot bot, String label) {
 		super(bot, label);
 	}
 
-	public ToolbarButtonWithTooltip(SWTWorkbenchBot bot, String label, int index) {
+	public ToolbarButtonWithTooltip(SWTBot bot, String label, int index) {
 		super(bot, label, index);
 	}
 

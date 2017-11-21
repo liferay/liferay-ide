@@ -26,20 +26,14 @@ public class PomXmlEditor extends Editor {
 
 	public PomXmlEditor(SWTWorkbenchBot bot) {
 		super(bot);
-
-		_pomXml = new CTabItem(bot, POM_XML);
 	}
 
 	public PomXmlEditor(SWTWorkbenchBot bot, String editorName) {
 		super(bot, editorName);
-
-		_pomXml = new CTabItem(bot, POM_XML);
 	}
 
 	public CTabItem getPomXml() {
-		return _pomXml;
+		return new CTabItem(getPart().bot(), POM_XML);
 	}
-
-	private CTabItem _pomXml;
 
 }

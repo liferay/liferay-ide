@@ -34,15 +34,13 @@ public class NewThemeProjectModuleMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, THEME);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		jobAction.waitForCancelValidate(projectName);
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}

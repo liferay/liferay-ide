@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.swtbot.page;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotRadio;
 
 /**
@@ -24,15 +24,15 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotRadio;
  */
 public class Radio extends AbstractWidget {
 
-	public Radio(SWTWorkbenchBot bot, int index) {
+	public Radio(SWTBot bot, int index) {
 		super(bot, index);
 	}
 
-	public Radio(SWTWorkbenchBot bot, String label) {
+	public Radio(SWTBot bot, String label) {
 		super(bot, label);
 	}
 
-	public Radio(SWTWorkbenchBot bot, String label, int index) {
+	public Radio(SWTBot bot, String label, int index) {
 		super(bot, label, index);
 	}
 

@@ -17,29 +17,23 @@ package com.liferay.ide.ui.liferay.page.wizard;
 import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
  */
 public class NewLiferay62RuntimeWizard extends Wizard {
 
-	public NewLiferay62RuntimeWizard(SWTWorkbenchBot bot) {
+	public NewLiferay62RuntimeWizard(SWTBot bot) {
 		super(bot, 3);
-
-		_location = new Text(bot, LIFERAY_TOMCAT_DIRECTORY);
-		_name = new Text(bot, NAME);
 	}
 
 	public Text getLocation() {
-		return _location;
+		return new Text(getShell().bot(), LIFERAY_TOMCAT_DIRECTORY);
 	}
 
 	public Text getName() {
-		return _name;
+		return new Text(getShell().bot(), NAME);
 	}
-
-	private Text _location;
-	private Text _name;
 
 }

@@ -14,14 +14,14 @@
 
 package com.liferay.ide.ui.swtbot.eclipse.page;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
  */
 public class ShowViewDialog extends TextDialog {
 
-	public ShowViewDialog(SWTWorkbenchBot bot) {
+	public ShowViewDialog(SWTBot bot) {
 		super(bot, CANCEL, OPEN);
 	}
 

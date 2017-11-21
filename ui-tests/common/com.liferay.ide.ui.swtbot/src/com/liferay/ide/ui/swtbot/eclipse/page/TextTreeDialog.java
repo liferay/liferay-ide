@@ -16,23 +16,19 @@ package com.liferay.ide.ui.swtbot.eclipse.page;
 
 import com.liferay.ide.ui.swtbot.page.Text;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
  */
 public class TextTreeDialog extends TreeDialog {
 
-	public TextTreeDialog(SWTWorkbenchBot bot) {
+	public TextTreeDialog(SWTBot bot) {
 		super(bot);
-
-		_text = new Text(bot);
 	}
 
 	public Text getText() {
-		return _text;
+		return new Text(getShell().bot());
 	}
-
-	private Text _text;
 
 }

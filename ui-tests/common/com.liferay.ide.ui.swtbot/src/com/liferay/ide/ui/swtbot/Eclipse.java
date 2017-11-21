@@ -20,13 +20,13 @@ import com.liferay.ide.ui.swtbot.eclipse.page.ServersView;
 import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
 import com.liferay.ide.ui.swtbot.page.BasePageObject;
 import com.liferay.ide.ui.swtbot.page.Browser;
-import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.Editor;
 import com.liferay.ide.ui.swtbot.page.Menu;
 import com.liferay.ide.ui.swtbot.page.Tree;
 import com.liferay.ide.ui.swtbot.page.View;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.waits.ICondition;
 
 /**
  * @author Terry Jia
@@ -56,10 +56,12 @@ public class Eclipse extends BasePageObject {
 		_browser = new Browser(bot);
 	}
 
-	public void closeShell(String title) {
-		Dialog shell = new Dialog(bot, title);
+	public String getLabel() {
+		if (isLabelNull()) {
+			return bot.activeShell().getText();
+		}
 
-		shell.closeIfOpen();
+		return label;
 	}
 
 	public Browser getBrowser() {
@@ -67,7 +69,7 @@ public class Eclipse extends BasePageObject {
 	}
 
 	public Editor getEditor(String fileName) {
-		return new Editor(bot, fileName);
+		return new Editor((SWTWorkbenchBot)bot, fileName);
 	}
 
 	public Menu getFileMenu() {
@@ -106,6 +108,10 @@ public class Eclipse extends BasePageObject {
 		return _welcomeView;
 	}
 
+	public String getPerspectiveLabel() {
+		return ((SWTWorkbenchBot)bot).activePerspective().getLabel();
+	}
+
 	public PackageExplorerView showPackageExporerView() {
 		try {
 			_packageExporerView.show();
@@ -130,6 +136,14 @@ public class Eclipse extends BasePageObject {
 		_showViewDialog.confirm(OPEN);
 
 		_serversView.show();
+	}
+
+	public void waitUntil(ICondition condition) {
+		waitUntil(condition, 60 * 1000);
+	}
+
+	public void waitUntil(ICondition condition, long timeout) {
+		bot.waitUntil(condition, timeout);
 	}
 
 	private Browser _browser;

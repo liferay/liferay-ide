@@ -26,14 +26,10 @@ public class ProgressView extends View {
 
 	public ProgressView(SWTWorkbenchBot bot) {
 		super(bot, PROGRESS);
-
-		_noOperations = new Text(bot);
 	}
 
 	public Text getNoOperation() {
-		return _noOperations;
+		return new Text(getPart().bot());
 	}
-
-	private Text _noOperations;
 
 }

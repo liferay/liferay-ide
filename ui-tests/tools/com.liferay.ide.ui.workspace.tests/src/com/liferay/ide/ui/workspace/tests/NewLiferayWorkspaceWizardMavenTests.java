@@ -32,11 +32,9 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayWorkspaceMaven(workspaceName);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(workspaceName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(workspaceName);
 	}

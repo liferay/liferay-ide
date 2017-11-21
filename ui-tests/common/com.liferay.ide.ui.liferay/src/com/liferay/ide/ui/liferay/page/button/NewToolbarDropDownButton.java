@@ -17,14 +17,14 @@ package com.liferay.ide.ui.liferay.page.button;
 import com.liferay.ide.ui.swtbot.page.MenuItem;
 import com.liferay.ide.ui.swtbot.page.ToolbarDropDownButton;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ying Xu
  */
 public class NewToolbarDropDownButton extends ToolbarDropDownButton {
 
-	public NewToolbarDropDownButton(SWTWorkbenchBot bot) {
+	public NewToolbarDropDownButton(SWTBot bot) {
 		super(bot, NEW);
 
 		_liferayPluginProject = new MenuItem(bot, this, LIFERAY_PLUGIN_PROJECT);

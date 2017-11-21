@@ -32,7 +32,7 @@ public class NewThemeProjectModuleGradleTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleGradle(projectName, THEME);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
@@ -41,8 +41,6 @@ public class NewThemeProjectModuleGradleTests extends SwtbotBase {
 		jobAction.waitForCancelValidate(projectName);
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
