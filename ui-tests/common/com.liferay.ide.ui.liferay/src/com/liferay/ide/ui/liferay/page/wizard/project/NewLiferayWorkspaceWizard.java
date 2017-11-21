@@ -17,7 +17,7 @@ package com.liferay.ide.ui.liferay.page.wizard.project;
 import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.Text;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Vicky Wang
@@ -25,28 +25,20 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class NewLiferayWorkspaceWizard extends NewProjectWizard {
 
-	public NewLiferayWorkspaceWizard(SWTWorkbenchBot bot) {
+	public NewLiferayWorkspaceWizard(SWTBot bot) {
 		super(bot, 2);
-
-		_serverName = new Text(bot, SERVER_NAME);
-		_bundleUrl = new Text(bot, BUNDLE_URL);
-		_downloadLiferayBundle = new CheckBox(bot, DOWNLOAD_LIFERAY_BUNDLE);
 	}
 
 	public Text getBundleUrl() {
-		return _bundleUrl;
+		return new Text(getShell().bot(), BUNDLE_URL);
 	}
 
 	public CheckBox getDownloadLiferayBundle() {
-		return _downloadLiferayBundle;
+		return new CheckBox(getShell().bot(), DOWNLOAD_LIFERAY_BUNDLE);
 	}
 
 	public Text getServerName() {
-		return _serverName;
+		return new Text(getShell().bot(), SERVER_NAME);
 	}
-
-	private Text _bundleUrl;
-	private CheckBox _downloadLiferayBundle;
-	private Text _serverName;
 
 }

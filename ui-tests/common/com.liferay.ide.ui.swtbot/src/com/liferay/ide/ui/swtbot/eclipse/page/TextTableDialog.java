@@ -28,20 +28,14 @@ public class TextTableDialog extends Dialog {
 
 	public TextTableDialog(SWTWorkbenchBot bot) {
 		super(bot);
-
-		_items = new Table(bot);
-		_text = new Text(bot);
 	}
 
 	public Table getItems() {
-		return _items;
+		return new Table(getShell().bot());
 	}
 
 	public Text getText() {
-		return _text;
+		return new Text(getShell().bot());
 	}
-
-	private Table _items;
-	private Text _text;
 
 }

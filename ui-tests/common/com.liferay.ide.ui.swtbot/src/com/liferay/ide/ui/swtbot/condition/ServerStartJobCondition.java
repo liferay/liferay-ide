@@ -12,33 +12,39 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay.page.wizard;
+package com.liferay.ide.ui.swtbot.condition;
 
-import com.liferay.ide.ui.swtbot.page.Text;
-import com.liferay.ide.ui.swtbot.page.Wizard;
-
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.core.runtime.jobs.Job;
 
 /**
- * @author Vicky Wang
- * @author Ying Xu
+ * @author Terry Jia
  */
-public class NewLiferay7RuntimeWizard extends Wizard {
+public class ServerStartJobCondition extends WaitForSingleJob {
 
-	public NewLiferay7RuntimeWizard(SWTBot bot) {
-		super(bot, 3);
+	public ServerStartJobCondition(String serverName) {
+		super(null, "Server starting");
+
+		_serverName = serverName;
 	}
 
-	public Text getLocation() {
-		return new Text(getShell().bot(), LIFERAY_PORTAL_BUNDLE_DIRECTORY);
+	@Override
+	public String getJobName() {
+		return "Starting " + _serverName;
 	}
 
-	public Text getName() {
-		return new Text(getShell().bot(), NAME);
+	@Override
+	public boolean test() {
+		Job[] jobs = Job.getJobManager().find(family);
+
+		for (Job job : jobs) {
+			if (job.getName().equals(getJobName())) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
-	public Text getPortalBundleType() {
-		return new Text(getShell().bot(), DETECTED_PORTAL_BUNDLE_TYPE);
-	}
+	private String _serverName;
 
 }

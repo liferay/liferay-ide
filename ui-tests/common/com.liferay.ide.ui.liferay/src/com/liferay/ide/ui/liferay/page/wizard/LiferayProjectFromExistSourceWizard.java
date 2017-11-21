@@ -19,7 +19,7 @@ import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Li Lu
@@ -27,46 +27,32 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class LiferayProjectFromExistSourceWizard extends Wizard {
 
-	public LiferayProjectFromExistSourceWizard(SWTWorkbenchBot bot) {
+	public LiferayProjectFromExistSourceWizard(SWTBot bot) {
 		super(bot, 2);
-
-		_sdkDirectory = new Text(bot, SDK_DIRECTORY);
-		_sdkVersion = new Text(bot, SDK_VERSION);
-		_browseSdkDirectoryBtn = new ToolbarButtonWithTooltip(bot, BROWSE);
-		_selectAllBtn = new Button(bot, SELECT_ALL);
-		_deselectAllBtn = new Button(bot, DESELECT_ALL);
-		_refreshBtn = new Button(bot, REFRESH);
 	}
 
 	public ToolbarButtonWithTooltip getBrowseSdkDirectoryBtn() {
-		return _browseSdkDirectoryBtn;
+		return new ToolbarButtonWithTooltip(bot, BROWSE);
 	}
 
 	public Button getDeselectAllBtn() {
-		return _deselectAllBtn;
+		return new Button(getShell().bot(), DESELECT_ALL);
 	}
 
 	public Button getRefreshBtn() {
-		return _refreshBtn;
+		return new Button(getShell().bot(), REFRESH);
 	}
 
 	public Text getSdkDirectory() {
-		return _sdkDirectory;
+		return new Text(getShell().bot(), SDK_DIRECTORY);
 	}
 
 	public Text getSdkVersion() {
-		return _sdkVersion;
+		return new Text(getShell().bot(), SDK_VERSION);
 	}
 
 	public Button getSelectAllBtn() {
-		return _selectAllBtn;
+		return new Button(getShell().bot(), SELECT_ALL);
 	}
-
-	private ToolbarButtonWithTooltip _browseSdkDirectoryBtn;
-	private Button _deselectAllBtn;
-	private Button _refreshBtn;
-	private Text _sdkDirectory;
-	private Text _sdkVersion;
-	private Button _selectAllBtn;
 
 }

@@ -18,7 +18,7 @@ import com.liferay.ide.ui.swtbot.page.Button;
 import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.Tree;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Li Lu
@@ -26,46 +26,32 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class AddAndRemoveDialog extends Dialog {
 
-	public AddAndRemoveDialog(SWTWorkbenchBot bot) {
-		super(bot, ADD_AND_REMOVE, CANCEL, FINISH);
-
-		_addBtn = new Button(bot, ADD_WITH_BRACKET);
-		_addAllBtn = new Button(bot, ADD_ALL);
-		_removeBtn = new Button(bot, REMOVE_PROJECT);
-		_removeAllBtn = new Button(bot, REMOVE_ALL);
-		_availables = new Tree(bot, 0);
-		_configureds = new Tree(bot, 1);
+	public AddAndRemoveDialog(SWTBot bot) {
+		super(bot, CANCEL, FINISH);
 	}
 
 	public Button getAddAllBtn() {
-		return _addAllBtn;
+		return new Button(getShell().bot(), ADD_ALL);
 	}
 
 	public Button getAddBtn() {
-		return _addBtn;
+		return new Button(getShell().bot(), ADD_WITH_BRACKET);
 	}
 
 	public Tree getAvailables() {
-		return _availables;
+		return new Tree(getShell().bot(), 0);
 	}
 
 	public Tree getConfigureds() {
-		return _configureds;
+		return new Tree(getShell().bot(), 1);
 	}
 
 	public Button getRemoveAllBtn() {
-		return _removeAllBtn;
+		return new Button(getShell().bot(), REMOVE_ALL);
 	}
 
 	public Button getRemoveBtn() {
-		return _removeBtn;
+		return new Button(getShell().bot(), REMOVE_PROJECT);
 	}
-
-	private Button _addAllBtn;
-	private Button _addBtn;
-	private Tree _availables;
-	private Tree _configureds;
-	private Button _removeAllBtn;
-	private Button _removeBtn;
 
 }

@@ -37,7 +37,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleGradle(projectName);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -47,14 +47,12 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.prepareComponentClass(projectName, template, className, packageName);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(
 			viewAction.visibleProjectFileTry(projectName, "src/main/java", packageName, className + ".java"));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -67,7 +65,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleGradle(projectName);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
@@ -83,14 +81,12 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(
 			viewAction.visibleProjectFileTry(projectName, "src/main/java", packageName, className + ".java"));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}

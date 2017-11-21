@@ -17,29 +17,23 @@ package com.liferay.ide.ui.swtbot.eclipse.page;
 import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.Text;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
  */
 public class TextDialog extends Dialog {
 
-	public TextDialog(SWTWorkbenchBot bot) {
+	public TextDialog(SWTBot bot) {
 		super(bot);
-
-		_text = new Text(bot);
 	}
 
-	public TextDialog(SWTWorkbenchBot bot, String cancelBtnLabel, String confirmBtnLabel) {
+	public TextDialog(SWTBot bot, String cancelBtnLabel, String confirmBtnLabel) {
 		super(bot, cancelBtnLabel, confirmBtnLabel);
-
-		_text = new Text(bot);
 	}
 
 	public Text getText() {
-		return _text;
+		return new Text(getShell().bot());
 	}
-
-	private Text _text;
 
 }

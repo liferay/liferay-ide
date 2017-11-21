@@ -33,13 +33,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, ACTIVATOR);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -52,13 +50,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, API);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -71,13 +67,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, CONTENT_TARGETING_REPORT);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -90,13 +84,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, CONTENT_TARGETING_RULE);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -109,13 +101,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, CONTENT_TARGETING_TRACKING_ACTION);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -128,13 +118,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, CONTROL_MENU_ENTRY);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -147,13 +135,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, FORM_FIELD);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -166,13 +152,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, PANEL_APP);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -185,13 +169,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET_CONFIGURATION_ICON);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -204,13 +186,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET_PROVIDER);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -223,13 +203,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET_TOOLBAR_CONTRIBUTOR);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -242,13 +220,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, REST);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -269,13 +245,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -288,13 +262,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, SERVICE_BUILDER);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -315,13 +287,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -334,13 +304,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, SIMULATION_PANEL_ENTRY);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -353,13 +321,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -372,13 +338,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, THEME_CONTRIBUTOR);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}

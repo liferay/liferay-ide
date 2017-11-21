@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.swtbot.page;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.AbstractSWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 
@@ -24,19 +24,19 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
  */
 public abstract class AbstractWidget extends BasePageObject {
 
-	public AbstractWidget(SWTWorkbenchBot bot) {
+	public AbstractWidget(SWTBot bot) {
 		super(bot);
 	}
 
-	public AbstractWidget(SWTWorkbenchBot bot, int index) {
+	public AbstractWidget(SWTBot bot, int index) {
 		super(bot, index);
 	}
 
-	public AbstractWidget(SWTWorkbenchBot bot, String label) {
+	public AbstractWidget(SWTBot bot, String label) {
 		super(bot, label);
 	}
 
-	public AbstractWidget(SWTWorkbenchBot bot, String label, int index) {
+	public AbstractWidget(SWTBot bot, String label, int index) {
 		super(bot, label, index);
 	}
 

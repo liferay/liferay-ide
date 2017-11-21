@@ -50,7 +50,7 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.prepareImportLiferayWorkspace(workspaceProject.getPath());
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.openProjectFile(liferayWorkspaceName, "pom.xml");
 
@@ -65,8 +65,6 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		editorAction.close();
 
 		viewAction.closeProject(liferayWorkspaceName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(liferayWorkspaceName);
 	}

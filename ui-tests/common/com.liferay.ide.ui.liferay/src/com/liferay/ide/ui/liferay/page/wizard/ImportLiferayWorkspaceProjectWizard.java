@@ -18,53 +18,39 @@ import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
  */
 public class ImportLiferayWorkspaceProjectWizard extends Wizard {
 
-	public ImportLiferayWorkspaceProjectWizard(SWTWorkbenchBot bot) {
-		super(bot, IMPORT_LIFERAY_WORKSPACE, 2);
-
-		_buildType = new Text(bot, BUILD_TYPE);
-		_location = new Text(bot, WORKSPACE_LOCATION);
-		_downloadLiferaybundle = new CheckBox(bot, DOWNLOAD_LIFERAY_BUNDLE);
-		_serverName = new Text(bot, SERVER_NAME);
-		_bundleUrl = new Text(bot, BUNDLE_URL);
-		_addProjectToWorkingSet = new CheckBox(bot, ADD_PROJECT_TO_WORKING_SET);
+	public ImportLiferayWorkspaceProjectWizard(SWTBot bot) {
+		super(bot, 2);
 	}
 
 	public CheckBox getAddProjectToWorkingSet() {
-		return _addProjectToWorkingSet;
+		return new CheckBox(getShell().bot(), ADD_PROJECT_TO_WORKING_SET);
 	}
 
 	public Text getBuildTypeText() {
-		return _buildType;
+		return new Text(getShell().bot(), BUILD_TYPE);
 	}
 
 	public Text getBundleUrl() {
-		return _bundleUrl;
+		return new Text(getShell().bot(), BUNDLE_URL);
 	}
 
 	public CheckBox getDownloadLiferaybundle() {
-		return _downloadLiferaybundle;
+		return new CheckBox(getShell().bot(), DOWNLOAD_LIFERAY_BUNDLE);
 	}
 
 	public Text getServerName() {
-		return _serverName;
+		return new Text(getShell().bot(), SERVER_NAME);
 	}
 
 	public Text getWorkspaceLocation() {
-		return _location;
+		return new Text(getShell().bot(), WORKSPACE_LOCATION);
 	}
-
-	private CheckBox _addProjectToWorkingSet;
-	private Text _buildType;
-	private Text _bundleUrl;
-	private CheckBox _downloadLiferaybundle;
-	private Text _location;
-	private Text _serverName;
 
 }

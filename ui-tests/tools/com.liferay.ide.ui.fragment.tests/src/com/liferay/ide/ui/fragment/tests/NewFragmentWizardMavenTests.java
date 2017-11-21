@@ -96,11 +96,9 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -121,10 +119,9 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		String[] files = {
-			"META-INF/resources/blogs_admin/entry_search_columns.jspf",
-			"META-INF/resources/blogs_admin/entry_search_results.jspf"
-		};
+		String[] files = {"META-INF/resources/blogs_admin/entry_search_columns.jspf",
+				"META-INF/resources/blogs_admin/entry_search_results.jspf"
+			};
 
 		wizardAction.openAddOverrideFilesDialog();
 
@@ -132,11 +129,9 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -163,11 +158,9 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.cancel();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -196,11 +189,9 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -227,11 +218,9 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -252,10 +241,10 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		String[] files = {
-			"META-INF/resources/configuration.jsp", "META-INF/resources/init-ext.jsp", "META-INF/resources/init.jsp",
-			"META-INF/resources/view.jsp", "portlet.properties", "resource-actions/default.xml"
-		};
+		String[] files = {"META-INF/resources/configuration.jsp", "META-INF/resources/init-ext.jsp",
+				"META-INF/resources/init.jsp", "META-INF/resources/view.jsp", "portlet.properties",
+				"resource-actions/default.xml"
+			};
 
 		wizardAction.openAddOverrideFilesDialog();
 
@@ -279,11 +268,9 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}

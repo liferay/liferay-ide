@@ -19,7 +19,7 @@ import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ying Xu
@@ -27,46 +27,32 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class NewModuleFragmentInfoWizard extends Wizard {
 
-	public NewModuleFragmentInfoWizard(SWTWorkbenchBot bot) {
+	public NewModuleFragmentInfoWizard(SWTBot bot) {
 		super(bot, 1);
-
-		_browseOsgiBtn = new ToolbarButtonWithTooltip(bot, BROWSE);
-		_addOverrideFilesBtn = new ToolbarButtonWithTooltip(bot, ADD_FILES_FROM_OSGI_TO_OVERRIDE);
-		_files = new Table(bot, OVERRIDDEN_FILES);
-		_addOverrideFilePathBtn = new ToolbarButtonWithTooltip(bot, ADD_FILE_PATH);
-		_deleteBtn = new ToolbarButtonWithTooltip(bot, DELETE);
-		_hostOsgiBundle = new Text(bot, HOST_OSGI_BUNDLE);
 	}
 
 	public ToolbarButtonWithTooltip getAddOverrideFilePathBtn() {
-		return _addOverrideFilePathBtn;
+		return new ToolbarButtonWithTooltip(getShell().bot(), ADD_FILE_PATH);
 	}
 
 	public ToolbarButtonWithTooltip getAddOverrideFilesBtn() {
-		return _addOverrideFilesBtn;
+		return new ToolbarButtonWithTooltip(getShell().bot(), ADD_FILES_FROM_OSGI_TO_OVERRIDE);
 	}
 
 	public ToolbarButtonWithTooltip getBrowseOsgiBtn() {
-		return _browseOsgiBtn;
+		return new ToolbarButtonWithTooltip(getShell().bot(), BROWSE);
 	}
 
 	public ToolbarButtonWithTooltip getDeleteBtn() {
-		return _deleteBtn;
+		return new ToolbarButtonWithTooltip(getShell().bot(), DELETE);
 	}
 
 	public Table getFiles() {
-		return _files;
+		return new Table(getShell().bot(), OVERRIDDEN_FILES);
 	}
 
 	public Text getHostOsgiBundle() {
-		return _hostOsgiBundle;
+		return new Text(getShell().bot(), HOST_OSGI_BUNDLE);
 	}
-
-	private ToolbarButtonWithTooltip _addOverrideFilePathBtn;
-	private ToolbarButtonWithTooltip _addOverrideFilesBtn;
-	private ToolbarButtonWithTooltip _browseOsgiBtn;
-	private ToolbarButtonWithTooltip _deleteBtn;
-	private Table _files;
-	private Text _hostOsgiBundle;
 
 }

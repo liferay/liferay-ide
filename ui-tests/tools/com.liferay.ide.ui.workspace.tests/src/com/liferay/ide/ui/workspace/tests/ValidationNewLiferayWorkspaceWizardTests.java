@@ -48,7 +48,7 @@ public class ValidationNewLiferayWorkspaceWizardTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayWorkspace("test");
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 

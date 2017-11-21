@@ -71,7 +71,7 @@ public class ServerTomcat62Tests extends SwtbotBase {
 
 		viewAction.serverStart(serverStoppedLabel);
 
-		viewAction.serverStartWait();
+		jobAction.waitForServer62Started(serverName);
 
 		String serverStartedLabel = serverName + "  [Started, Synchronized]";
 

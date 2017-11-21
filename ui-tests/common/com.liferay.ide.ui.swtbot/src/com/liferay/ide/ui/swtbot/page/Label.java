@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.swtbot.page;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotLabel;
 
@@ -24,7 +24,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotLabel;
  */
 public class Label extends AbstractWidget {
 
-	public Label(SWTWorkbenchBot bot, String label) {
+	public Label(SWTBot bot, String label) {
 		super(bot, label);
 	}
 

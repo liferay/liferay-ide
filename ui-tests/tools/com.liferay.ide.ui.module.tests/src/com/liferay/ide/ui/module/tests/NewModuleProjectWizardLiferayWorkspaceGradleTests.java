@@ -32,8 +32,6 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 	public static void cleanLiferayWorkspace() {
 		viewAction.closeProject(_liferayWorkspaceName);
 
-		jobAction.waitForCloseProject();
-
 		viewAction.deleteProject(_liferayWorkspaceName);
 	}
 
@@ -43,7 +41,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayWorkspaceGradle(_liferayWorkspaceName);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(_liferayWorkspaceName));
 	}
@@ -56,17 +54,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, ACTIVATOR);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -77,17 +73,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, API);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -98,17 +92,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, CONTENT_TARGETING_REPORT);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -119,17 +111,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, CONTENT_TARGETING_RULE);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -140,17 +130,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, CONTENT_TARGETING_TRACKING_ACTION);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -161,17 +149,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, CONTROL_MENU_ENTRY);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -182,17 +168,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, FORM_FIELD);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -203,17 +187,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, MVC_PORTLET);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -224,17 +206,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, PANEL_APP);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -245,17 +225,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, PORTLET);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -266,17 +244,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, PORTLET_CONFIGURATION_ICON);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -287,17 +263,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, PORTLET_PROVIDER);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -308,17 +282,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, PORTLET_TOOLBAR_CONTRIBUTOR);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -329,17 +301,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, REST);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -350,17 +320,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, SERVICE);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -371,17 +339,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, SERVICE_BUILDER);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -392,17 +358,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, SERVICE_WRAPPER);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -413,17 +377,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, SIMULATION_PANEL_ENTRY);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -434,17 +396,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -455,17 +415,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, THEME);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "wars", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	@Test
@@ -476,17 +434,15 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		wizardAction.prepareLiferayModuleGradle(projectName, THEME_CONTRIBUTOR);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeProject(projectNames);
 
-		jobAction.waitForCloseProject();
-
-		viewAction.deleteProject(projectName);
+		viewAction.deleteProject(projectNames);
 	}
 
 	private static final String _liferayWorkspaceName = "test-liferay-workspace-gradle";

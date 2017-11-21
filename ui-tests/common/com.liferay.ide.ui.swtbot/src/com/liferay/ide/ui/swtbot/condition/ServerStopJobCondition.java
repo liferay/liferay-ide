@@ -12,28 +12,39 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay.page.wizard;
+package com.liferay.ide.ui.swtbot.condition;
 
-import com.liferay.ide.ui.swtbot.page.Tree;
-import com.liferay.ide.ui.swtbot.page.Wizard;
-
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.core.runtime.jobs.Job;
 
 /**
- * @author Ying Xu
+ * @author Terry Jia
  */
-public class NewLiferayServerWizard extends Wizard {
+public class ServerStopJobCondition extends WaitForSingleJob {
 
-	public NewLiferayServerWizard(SWTWorkbenchBot bot) {
-		super(bot);
+	public ServerStopJobCondition(String serverName) {
+		super(null, "Server stop");
 
-		_serverTypes = new Tree(bot);
+		_serverName = serverName;
 	}
 
-	public Tree getServerTypeTree() {
-		return _serverTypes;
+	@Override
+	public String getJobName() {
+		return "Stopping " + _serverName;
 	}
 
-	private Tree _serverTypes;
+	@Override
+	public boolean test() {
+		Job[] jobs = Job.getJobManager().find(family);
+
+		for (Job job : jobs) {
+			if (job.getName().equals(getJobName())) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	private String _serverName;
 
 }

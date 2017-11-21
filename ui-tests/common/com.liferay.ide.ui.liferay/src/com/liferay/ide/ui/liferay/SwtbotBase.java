@@ -14,6 +14,7 @@
 
 package com.liferay.ide.ui.liferay;
 
+import com.liferay.ide.ui.liferay.action.BrowserAction;
 import com.liferay.ide.ui.liferay.action.DialogAction;
 import com.liferay.ide.ui.liferay.action.EditorAction;
 import com.liferay.ide.ui.liferay.action.EnvAction;
@@ -23,7 +24,11 @@ import com.liferay.ide.ui.liferay.action.WizardAction;
 import com.liferay.ide.ui.liferay.page.LiferayIDE;
 import com.liferay.ide.ui.swtbot.Keys;
 import com.liferay.ide.ui.swtbot.UI;
+import com.liferay.ide.ui.swtbot.util.CoreUtil;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
@@ -43,6 +48,7 @@ import org.junit.runner.RunWith;
 public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 
 	public static SWTWorkbenchBot bot;
+	public static BrowserAction browserAction;
 	public static DialogAction dialogAction;
 	public static EditorAction editorAction;
 	public static EnvAction envAction;
@@ -53,15 +59,24 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 
 	@AfterClass
 	public static void afterClass() {
-		viewAction.deleteProject("init-project");
-
 		String[] projectNames = viewAction.getProjectNames();
 
 		if (projectNames.length > 0) {
-			System.out.println("The following projects are unable to be deleted, some error may happened:");
+			System.out.println(
+				"The following projects are unable to be deleted, some error may happened, try by core's IProject:");
 
 			for (String projectName : projectNames) {
 				System.out.println(projectName);
+			}
+
+			for (String projectName : projectNames) {
+				IProject project = CoreUtil.getProject(projectName);
+
+				try {
+					project.delete(true, new NullProgressMonitor());
+				}
+				catch (CoreException ce) {
+				}
 			}
 		}
 	}
@@ -78,6 +93,7 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 		wizardAction = new WizardAction(bot);
 		viewAction = new ViewAction(bot);
 		jobAction = new JobAction(bot);
+		browserAction = new BrowserAction(bot);
 
 		try {
 			long origin = SWTBotPreferences.TIMEOUT;
@@ -99,31 +115,6 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 		System.setProperty(SWTBotPreferenceConstants.KEY_DEFAULT_POLL_DELAY, "5000");
 
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
-
-		try {
-			dialogAction.openPreferencesDialog();
-
-			long origin = SWTBotPreferences.TIMEOUT;
-
-			SWTBotPreferences.TIMEOUT = 1000;
-
-			dialogAction.openPreferencesRecorderDialog();
-
-			dialogAction.preparePreferencesRecorder();
-
-			SWTBotPreferences.TIMEOUT = origin;
-
-			dialogAction.confirmPreferences();
-		}
-		catch (Exception e) {
-			dialogAction.cancel();
-		}
-
-		wizardAction.openNewLiferayModuleWizard();
-
-		wizardAction.prepareLiferayModuleGradle("init-project");
-
-		wizardAction.finishToWait();
 	}
 
 }

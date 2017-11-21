@@ -85,13 +85,13 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModule("test");
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.prepareLiferayModule("test2");
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.openAddAndRemoveDialog(_serverStartedLabel);
 

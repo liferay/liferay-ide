@@ -20,14 +20,14 @@ import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.Tree;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Vicky Wang
  */
 public class NewClassDialog extends Dialog {
 
-	public NewClassDialog(SWTWorkbenchBot bot) {
+	public NewClassDialog(SWTBot bot) {
 		super(bot);
 
 		_className = new Text(bot, CLASSNAME);

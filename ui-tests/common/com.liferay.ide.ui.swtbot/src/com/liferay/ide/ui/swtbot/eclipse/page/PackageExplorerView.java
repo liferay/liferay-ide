@@ -22,7 +22,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class PackageExplorerView extends ExplorerView {
 
 	public PackageExplorerView(SWTWorkbenchBot bot) {
-		super(bot, PROJECT_EXPLORER);
+		super(bot, PACKAGE_EXPLORER);
 	}
 
 }

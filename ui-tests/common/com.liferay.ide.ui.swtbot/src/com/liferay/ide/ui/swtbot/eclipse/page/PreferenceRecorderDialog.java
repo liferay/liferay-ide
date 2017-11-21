@@ -17,23 +17,19 @@ package com.liferay.ide.ui.swtbot.eclipse.page;
 import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.Dialog;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
  */
 public class PreferenceRecorderDialog extends Dialog {
 
-	public PreferenceRecorderDialog(SWTWorkbenchBot bot) {
+	public PreferenceRecorderDialog(SWTBot bot) {
 		super(bot);
-
-		_recordIntoCheckBox = new CheckBox(bot, RECORD_INTO);
 	}
 
 	public CheckBox getRecordIntoCheckBox() {
-		return _recordIntoCheckBox;
+		return new CheckBox(getShell().bot(), RECORD_INTO);
 	}
-
-	private CheckBox _recordIntoCheckBox;
 
 }

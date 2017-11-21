@@ -17,29 +17,23 @@ package com.liferay.ide.ui.liferay.page.wizard.project;
 import com.liferay.ide.ui.swtbot.page.ComboBox;
 import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ying Xu
  */
 public class NewFragmentWizard extends NewProjectWizard {
 
-	public NewFragmentWizard(SWTWorkbenchBot bot) {
+	public NewFragmentWizard(SWTBot bot) {
 		super(bot, 2);
-
-		_liferyRuntimes = new ComboBox(bot, LIFERAY_RUNTIME_NAME);
-		_newRuntimeBtn = new ToolbarButtonWithTooltip(bot, NEW_LIFERAY_RUNTIME);
 	}
 
 	public ComboBox getLiferyRuntimes() {
-		return _liferyRuntimes;
+		return new ComboBox(getShell().bot(), LIFERAY_RUNTIME_NAME);
 	}
 
 	public ToolbarButtonWithTooltip getNewRuntimeBtn() {
-		return _newRuntimeBtn;
+		return new ToolbarButtonWithTooltip(getShell().bot(), NEW_LIFERAY_RUNTIME);
 	}
-
-	private ComboBox _liferyRuntimes;
-	private ToolbarButtonWithTooltip _newRuntimeBtn;
 
 }

@@ -32,13 +32,11 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, MVC_PORTLET);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -51,13 +49,11 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}

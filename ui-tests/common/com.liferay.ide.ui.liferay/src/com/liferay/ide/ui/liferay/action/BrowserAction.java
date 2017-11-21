@@ -12,31 +12,19 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay.page.wizard.project;
+package com.liferay.ide.ui.liferay.action;
 
-import com.liferay.ide.ui.swtbot.page.ComboBox;
-import com.liferay.ide.ui.swtbot.page.Wizard;
+import com.liferay.ide.ui.liferay.UIAction;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
- * @author Vicky Wang
+ * @author Terry Jia
  */
-public class ThemeWizard extends Wizard {
+public class BrowserAction extends UIAction {
 
-	public ThemeWizard(SWTWorkbenchBot bot) {
-		super(bot, 0);
-
-		_themeParentTypes = new ComboBox(bot, THEME_PARENT);
-		_themeFrameworkTypes = new ComboBox(bot, FARMEWORK_TYPE);
+	public BrowserAction(SWTWorkbenchBot bot) {
+		super(bot);
 	}
-
-	public void setParentFramework(String parent, String framework) {
-		_themeParentTypes.setSelection(parent);
-		_themeFrameworkTypes.setSelection(framework);
-	}
-
-	private ComboBox _themeFrameworkTypes;
-	private ComboBox _themeParentTypes;
 
 }

@@ -17,23 +17,19 @@ package com.liferay.ide.ui.swtbot.eclipse.page;
 import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.Dialog;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Li Lu
  */
 public class DeleteResourcesDialog extends Dialog {
 
-	public DeleteResourcesDialog(SWTWorkbenchBot bot) {
+	public DeleteResourcesDialog(SWTBot bot) {
 		super(bot);
-
-		_deleteFromDisk = new CheckBox(bot, DELETE_FROM_DISK);
 	}
 
 	public CheckBox getDeleteFromDisk() {
-		return _deleteFromDisk;
+		return new CheckBox(getShell().bot(), DELETE_FROM_DISK);
 	}
-
-	private CheckBox _deleteFromDisk;
 
 }

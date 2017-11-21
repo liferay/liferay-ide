@@ -252,7 +252,7 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.deleteProject(projectName);
 

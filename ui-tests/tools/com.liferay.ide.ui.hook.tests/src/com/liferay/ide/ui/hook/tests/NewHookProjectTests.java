@@ -33,8 +33,6 @@ public class NewHookProjectTests extends SwtbotBase {
 
 		viewAction.closeProject(envAction.getLiferayPluginsSdkName());
 
-		jobAction.waitForCloseProject();
-
 		jobAction.waitForNoRunningJobs();
 
 		viewAction.deleteProject(envAction.getLiferayPluginsSdkName());
@@ -60,15 +58,13 @@ public class NewHookProjectTests extends SwtbotBase {
 
 		wizardAction.preparePluginSdkLocation(location);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		jobAction.waitForCancelIvy();
 
 		jobAction.waitForCancelValidate(projectName);
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -81,15 +77,13 @@ public class NewHookProjectTests extends SwtbotBase {
 
 		wizardAction.preparePluginHookSdk(projectName);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		jobAction.waitForCancelIvy();
 
 		jobAction.waitForCancelValidate(projectName);
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}

@@ -17,7 +17,7 @@ package com.liferay.ide.ui.liferay.page.button;
 import com.liferay.ide.ui.swtbot.page.MenuItem;
 import com.liferay.ide.ui.swtbot.page.ToolbarDropDownButton;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
@@ -27,7 +27,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class CreateLifeayProjectToolbarDropDownButton extends ToolbarDropDownButton {
 
-	public CreateLifeayProjectToolbarDropDownButton(SWTWorkbenchBot bot) {
+	public CreateLifeayProjectToolbarDropDownButton(SWTBot bot) {
 		super(bot, CREATE_A_NEW_LIFERAY_MODULE_PROJECT);
 
 		_newLiferayPlugin = new MenuItem(bot, this, NEW_LIFERAY_PLUGIN_PROJECT);

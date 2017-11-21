@@ -26,14 +26,10 @@ public class ConsoleView extends View {
 
 	public ConsoleView(SWTWorkbenchBot bot) {
 		super(bot, CONSOLE);
-
-		_log = new StyledText(bot);
 	}
 
 	public StyledText getLog() {
-		return _log;
+		return new StyledText(getPart().bot());
 	}
-
-	private StyledText _log;
 
 }

@@ -27,8 +27,6 @@ public class ServersView extends View {
 
 	public ServersView(SWTWorkbenchBot bot) {
 		super(bot, SERVERS);
-
-		_servers = new Tree(bot, 1);
 	}
 
 	public void clickDebugBtn() {
@@ -59,9 +57,7 @@ public class ServersView extends View {
 	}
 
 	public Tree getServers() {
-		return _servers;
+		return new Tree(getPart().bot());
 	}
-
-	private Tree _servers;
 
 }

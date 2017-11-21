@@ -18,29 +18,23 @@ import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.Tree;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
  */
 public class PreferencesDialog extends Dialog {
 
-	public PreferencesDialog(SWTWorkbenchBot bot) {
+	public PreferencesDialog(SWTBot bot) {
 		super(bot, CANCEL, APPLY_AND_CLOSE);
-
-		_preferencesTypes = new Tree(bot);
-		_search = new Text(bot);
 	}
 
 	public Tree getPreferencesTypes() {
-		return _preferencesTypes;
+		return new Tree(getShell().bot());
 	}
 
 	public Text getSearch() {
-		return _search;
+		return new Text(getShell().bot());
 	}
-
-	private Tree _preferencesTypes;
-	private Text _search;
 
 }

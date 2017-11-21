@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.swtbot.page;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotCombo;
 
 /**
@@ -24,7 +24,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotCombo;
  */
 public class ComboBox extends AbstractWidget {
 
-	public ComboBox(SWTWorkbenchBot bot, String label) {
+	public ComboBox(SWTBot bot, String label) {
 		super(bot, label);
 	}
 

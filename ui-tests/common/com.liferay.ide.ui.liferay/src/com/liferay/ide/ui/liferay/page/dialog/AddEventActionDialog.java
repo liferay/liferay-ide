@@ -18,14 +18,14 @@ import com.liferay.ide.ui.swtbot.page.Button;
 import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.Text;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Vicky Wang
  */
 public class AddEventActionDialog extends Dialog {
 
-	public AddEventActionDialog(SWTWorkbenchBot bot) {
+	public AddEventActionDialog(SWTBot bot) {
 		super(bot);
 
 		_event = new Text(bot, EVENT);

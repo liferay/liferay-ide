@@ -32,13 +32,11 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.prepareJsfProjectGradle(projectName, ICEFACES);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -51,13 +49,11 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.prepareJsfProjectGradle(projectName, JSF_STANDARD);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -70,13 +66,11 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.prepareJsfProjectGradle(projectName, LIFERAY_FACES_ALLOY);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -89,13 +83,11 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.prepareJsfProjectGradle(projectName, PRIMEFACES);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -108,13 +100,11 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.prepareJsfProjectGradle(projectName, RICHFACES);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}

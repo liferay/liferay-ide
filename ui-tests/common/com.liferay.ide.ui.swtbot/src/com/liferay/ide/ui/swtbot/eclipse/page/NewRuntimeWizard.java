@@ -18,29 +18,23 @@ import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.Tree;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
  */
 public class NewRuntimeWizard extends Wizard {
 
-	public NewRuntimeWizard(SWTWorkbenchBot bot) {
-		super(bot, NEW_SERVER_RUNTIME_ENVIRONMENT, 3);
-
-		_search = new Text(bot);
-		_serverTypes = new Tree(bot);
+	public NewRuntimeWizard(SWTBot bot) {
+		super(bot, 3);
 	}
 
 	public Text getSearch() {
-		return _search;
+		return new Text(getShell().bot());
 	}
 
 	public Tree getServerTypes() {
-		return _serverTypes;
+		return new Tree(getShell().bot());
 	}
-
-	private Text _search;
-	private Tree _serverTypes;
 
 }

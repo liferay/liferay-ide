@@ -24,14 +24,8 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotToolbarButton;
  */
 public class View extends AbstractPart {
 
-	public View(SWTWorkbenchBot bot, String viewIdentifier) {
-		this(bot, viewIdentifier, false);
-	}
-
-	public View(SWTWorkbenchBot bot, String identifier, boolean id) {
-		super(bot, identifier);
-
-		_id = id;
+	public View(SWTWorkbenchBot bot, String label) {
+		super(bot, label);
 	}
 
 	public void clickToolbarButton(String btnLabel) {
@@ -42,14 +36,12 @@ public class View extends AbstractPart {
 		return getPart().toolbarButton(btnLabel);
 	}
 
-	protected SWTBotView getPart() {
-		if (_id) {
-			return bot.viewById(label);
-		}
-
-		return bot.viewByTitle(label);
+	public String getLabel() {
+		return label;
 	}
 
-	private boolean _id;
+	protected SWTBotView getPart() {
+		return ((SWTWorkbenchBot)bot).viewByTitle(label);
+	}
 
 }

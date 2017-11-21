@@ -19,33 +19,35 @@ import com.liferay.ide.ui.swtbot.util.StringPool;
 
 import org.apache.log4j.Logger;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
  * @author Ashley Yuan
  */
-public class BasePageObject implements UI {
+public abstract class BasePageObject implements UI {
 
-	public BasePageObject(SWTWorkbenchBot bot) {
+	public BasePageObject(SWTBot bot) {
 		this.bot = bot;
 
 		log = Logger.getLogger(getClass());
 	}
 
-	public BasePageObject(SWTWorkbenchBot bot, int index) {
+	public BasePageObject(SWTBot bot, int index) {
 		this(bot);
 
 		this.index = index;
 	}
 
-	public BasePageObject(SWTWorkbenchBot bot, String label) {
+	public abstract String getLabel();
+
+	public BasePageObject(SWTBot bot, String label) {
 		this(bot);
 
 		this.label = label;
 	}
 
-	public BasePageObject(SWTWorkbenchBot bot, String label, int index) {
+	public BasePageObject(SWTBot bot, String label, int index) {
 		this(bot);
 
 		this.label = label;
@@ -72,7 +74,7 @@ public class BasePageObject implements UI {
 		return label.equals(StringPool.BLANK);
 	}
 
-	protected SWTWorkbenchBot bot;
+	protected SWTBot bot;
 	protected int index = -1;
 	protected String label = "";
 	protected Logger log;

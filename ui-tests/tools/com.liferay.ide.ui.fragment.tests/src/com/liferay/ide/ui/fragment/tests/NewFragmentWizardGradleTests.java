@@ -97,11 +97,9 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -128,11 +126,9 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -159,11 +155,9 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		dialogAction.cancel();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -184,11 +178,10 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		String[] files = {
-			"META-INF/resources/blogs_admin/configuration.jsp", "META-INF/resources/blogs_aggregator/init.jsp",
-			"META-INF/resources/blogs/asset/abstract.jsp", "META-INF/resources/blogs/edit_entry.jsp",
-			"portlet.properties"
-		};
+		String[] files = {"META-INF/resources/blogs_admin/configuration.jsp",
+				"META-INF/resources/blogs_aggregator/init.jsp", "META-INF/resources/blogs/asset/abstract.jsp",
+				"META-INF/resources/blogs/edit_entry.jsp", "portlet.properties"
+			};
 
 		wizardAction.openAddOverrideFilesDialog();
 
@@ -196,11 +189,9 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -227,11 +218,9 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}
@@ -252,10 +241,10 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		String[] files = {
-			"META-INF/resources/configuration.jsp", "META-INF/resources/init-ext.jsp", "META-INF/resources/init.jsp",
-			"META-INF/resources/view.jsp", "portlet.properties", "resource-actions/default.xml"
-		};
+		String[] files = {"META-INF/resources/configuration.jsp", "META-INF/resources/init-ext.jsp",
+				"META-INF/resources/init.jsp", "META-INF/resources/view.jsp", "portlet.properties",
+				"resource-actions/default.xml"
+			};
 
 		wizardAction.openAddOverrideFilesDialog();
 
@@ -279,11 +268,9 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(projectName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(projectName);
 	}

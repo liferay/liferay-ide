@@ -26,14 +26,10 @@ public class ExplorerView extends View {
 
 	public ExplorerView(SWTWorkbenchBot bot, String title) {
 		super(bot, title);
-
-		_projects = new Tree(bot);
 	}
 
 	public Tree getProjects() {
-		return _projects;
+		return new Tree(getPart().bot());
 	}
-
-	private Tree _projects;
 
 }

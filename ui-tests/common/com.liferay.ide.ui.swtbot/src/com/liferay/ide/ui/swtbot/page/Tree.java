@@ -16,7 +16,7 @@ package com.liferay.ide.ui.swtbot.page;
 
 import java.util.Arrays;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
@@ -29,11 +29,11 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
  */
 public class Tree extends AbstractWidget {
 
-	public Tree(SWTWorkbenchBot bot) {
+	public Tree(SWTBot bot) {
 		super(bot);
 	}
 
-	public Tree(SWTWorkbenchBot bot, int index) {
+	public Tree(SWTBot bot, int index) {
 		super(bot, index);
 	}
 

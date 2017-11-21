@@ -33,11 +33,9 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(workspaceName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(workspaceName);
 	}
@@ -66,7 +64,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.openProjectFile(workspaceName, "gradle.properties");
 
@@ -84,11 +82,9 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleGradle("test-mvc-portlet", MVC_PORTLET);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(workspaceName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(workspaceName);
 	}
@@ -101,7 +97,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.openProjectFile(workspaceName, "gradle.properties");
 
@@ -119,11 +115,9 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.prepareLiferayModuleGradle("test-theme", THEME);
 
-		wizardAction.finishToWait();
+		wizardAction.finish();
 
 		viewAction.closeProject(workspaceName);
-
-		jobAction.waitForCloseProject();
 
 		viewAction.deleteProject(workspaceName);
 	}

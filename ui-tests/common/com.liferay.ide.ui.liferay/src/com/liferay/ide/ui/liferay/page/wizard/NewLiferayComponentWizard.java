@@ -19,65 +19,47 @@ import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ying Xu
  */
 public class NewLiferayComponentWizard extends Wizard {
 
-	public NewLiferayComponentWizard(SWTWorkbenchBot bot) {
-		super(bot, NEW_LIFERAY_COMPONENT, 4);
-
-		_packageName = new Text(bot, PACKAGE_NAME);
-		_componentClassName = new Text(bot, COMPONENT_CLASS_NAME);
-		_serviceName = new Text(bot, SERVICE_NAME);
-		_modelClassName = new Text(bot, MODEL_CLASS);
-		_projectNames = new ComboBox(bot, PROJECT_NAME);
-		_componentClassTemplates = new ComboBox(bot, COMPONENT_CLASS_TEMPLATE);
-		_browseBtn = new ToolbarButtonWithTooltip(bot, BROWSE, 1);
-		_packageBrowseBtn = new ToolbarButtonWithTooltip(bot, BROWSE);
+	public NewLiferayComponentWizard(SWTBot bot) {
+		super(bot, 4);
 	}
 
 	public ToolbarButtonWithTooltip getBrowseBtn() {
-		return _browseBtn;
+		return new ToolbarButtonWithTooltip(getShell().bot(), BROWSE, 1);
 	}
 
 	public Text getComponentClassName() {
-		return _componentClassName;
+		return new Text(getShell().bot(), COMPONENT_CLASS_NAME);
 	}
 
 	public ComboBox getComponentClassTemplates() {
-		return _componentClassTemplates;
+		return new ComboBox(getShell().bot(), COMPONENT_CLASS_TEMPLATE);
 	}
 
 	public Text getModelClassName() {
-		return _modelClassName;
+		return new Text(getShell().bot(), MODEL_CLASS);
 	}
 
 	public ToolbarButtonWithTooltip getPackageBrowseBtn() {
-		return _packageBrowseBtn;
+		return new ToolbarButtonWithTooltip(getShell().bot(), BROWSE);
 	}
 
 	public Text getPackageName() {
-		return _packageName;
+		return new Text(getShell().bot(), PACKAGE_NAME);
 	}
 
 	public ComboBox getProjectNames() {
-		return _projectNames;
+		return new ComboBox(getShell().bot(), PROJECT_NAME);
 	}
 
 	public Text getServiceName() {
-		return _serviceName;
+		return new Text(getShell().bot(), SERVICE_NAME);
 	}
-
-	private ToolbarButtonWithTooltip _browseBtn;
-	private Text _componentClassName;
-	private ComboBox _componentClassTemplates;
-	private Text _modelClassName;
-	private ToolbarButtonWithTooltip _packageBrowseBtn;
-	private Text _packageName;
-	private ComboBox _projectNames;
-	private Text _serviceName;
 
 }

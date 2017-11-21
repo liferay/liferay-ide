@@ -17,7 +17,7 @@ package com.liferay.ide.ui.swtbot.eclipse.page;
 import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.Tree;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Terry Jia
@@ -25,16 +25,12 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class TreeDialog extends Dialog {
 
-	public TreeDialog(SWTWorkbenchBot bot) {
+	public TreeDialog(SWTBot bot) {
 		super(bot);
-
-		_items = new Tree(bot);
 	}
 
 	public Tree getItems() {
-		return _items;
+		return new Tree(getShell().bot());
 	}
-
-	private Tree _items;
 
 }

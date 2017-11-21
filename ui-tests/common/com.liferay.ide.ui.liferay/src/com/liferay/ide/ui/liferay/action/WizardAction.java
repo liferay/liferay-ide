@@ -38,7 +38,6 @@ import com.liferay.ide.ui.swtbot.page.Wizard;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 
 /**
  * @author Terry Jia
@@ -67,27 +66,11 @@ public class WizardAction extends UIAction {
 	public void finish() {
 		ide.sleep();
 
-		_wizard.finish();
-
-		ide.sleep();
-	}
-
-	public void finishToWait() {
-		ide.sleep();
+		String title = _wizard.getLabel();
 
 		_wizard.finish();
 
-		ide.sleep();
-
-		long origin = SWTBotPreferences.TIMEOUT;
-
-		SWTBotPreferences.TIMEOUT = 1000 * 60;
-
-		openNewLiferayModuleWizard();
-
-		cancel();
-
-		SWTBotPreferences.TIMEOUT = origin;
+		_jobAction.waitForWizardClosed(title);
 	}
 
 	public Button getFinishBtn() {
@@ -213,8 +196,17 @@ public class WizardAction extends UIAction {
 
 	public void prepareComponentClass(String projectName, String template, String className, String packageName) {
 		_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
+
+		ide.sleep();
+
 		_newLiferayComponentWizard.getComponentClassTemplates().setSelection(template);
+
+		ide.sleep();
+
 		_newLiferayComponentWizard.getComponentClassName().setText(className);
+
+		ide.sleep();
+
 		_newLiferayComponentWizard.getPackageName().setText(packageName);
 
 		ide.sleep();
@@ -479,6 +471,7 @@ public class WizardAction extends UIAction {
 	private final ImportLiferayWorkspaceProjectWizard _importLiferayWorkspaceProjectWizard =
 		new ImportLiferayWorkspaceProjectWizard(bot);
 	private final ImportProjectWizard _importProjectWizard = new ImportProjectWizard(bot);
+	private final JobAction _jobAction = new JobAction(bot);
 	private final NewModuleFragmentInfoWizard _newFragmentInfoWizard = new NewModuleFragmentInfoWizard(bot);
 	private final NewFragmentWizard _newFragmentWizard = new NewFragmentWizard(bot);
 	private final NewLiferayJsfProjectWizard _newJsfProjectWizard = new NewLiferayJsfProjectWizard(bot);
