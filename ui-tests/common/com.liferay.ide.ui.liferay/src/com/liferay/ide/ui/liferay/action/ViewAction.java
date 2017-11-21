@@ -120,6 +120,18 @@ public class ViewAction extends UIAction {
 		_serversView.getServers().doubleClick(serverLabel);
 	}
 
+	public void runBuildServicesSdk() {
+		_getProjects().contextMenu(BUILD_SERVICES);
+
+		ide.sleep(2000);
+	}
+
+	public void runBuildWSDDSdk() {
+		_getProjects().contextMenu(BUILD_WSDD);
+
+		ide.sleep(2000);
+	}
+
 	public void serverDebug(String serverLabel) {
 		_serversView.getServers().select(serverLabel);
 

@@ -16,6 +16,7 @@ package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.liferay.page.editor.PomXmlEditor;
+import com.liferay.ide.ui.liferay.page.editor.ServiceXmlEditor;
 import com.liferay.ide.ui.swtbot.page.Editor;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -45,11 +46,30 @@ public class EditorAction extends UIAction {
 		_editor.setText(text);
 	}
 
+	public void switchTabDiagramServiceXml() {
+		_serviceXmlEditor.getDiagramTab();
+
+		ide.sleep(2000);
+	}
+
+	public void switchTabOverViewServiceXml() {
+		_serviceXmlEditor.getOverviewTab().click();
+
+		ide.sleep(2000);
+	}
+
 	public void switchTabPomXml() {
 		_pomXmlEditor.getPomXml().click();
 	}
 
+	public void switchTabSourceServiceXml() {
+		_serviceXmlEditor.getSourceTab().click();
+
+		ide.sleep(2000);
+	}
+
 	private final Editor _editor = new Editor(bot);
 	private final PomXmlEditor _pomXmlEditor = new PomXmlEditor(bot);
+	private final ServiceXmlEditor _serviceXmlEditor = new ServiceXmlEditor(bot);
 
 }

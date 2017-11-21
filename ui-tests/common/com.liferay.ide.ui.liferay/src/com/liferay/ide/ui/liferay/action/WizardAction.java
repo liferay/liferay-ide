@@ -454,6 +454,10 @@ public class WizardAction extends UIAction {
 		_setSdkLocationWizard.getSdkLocation().setText(location);
 	}
 
+	public void preparePluginServiceBuilderPortletSdk(String projectName) {
+		preparePlugin(projectName, SERVICE_BUILDER_PORTLET, ANT_LIFERAY_PLUGINS_SDK);
+	}
+
 	public void preparePluginThemeSdk(String projectName) {
 		preparePlugin(projectName, THEME_UPCASE, ANT_LIFERAY_PLUGINS_SDK);
 	}
