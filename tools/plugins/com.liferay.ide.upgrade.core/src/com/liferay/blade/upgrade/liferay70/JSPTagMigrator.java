@@ -83,7 +83,9 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 		).sorted();
 
 		for (Problem problem : problems) {
-			if (problem.autoCorrectContext.equals("jsptag:" + class1.getName())) {
+			if ((problem.autoCorrectContext != null) &&
+					problem.autoCorrectContext.equals("jsptag:" + class1.getName())) {
+
 				autoCorrectTagOffsets.add(problem.getStartOffset());
 			}
 		}
@@ -150,6 +152,10 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 
 								break;
 							}
+						}
+
+						if (newTagName.equals("")) {
+							continue;
 						}
 
 						Element newNode = element.getOwnerDocument().createElement(newTagName);
