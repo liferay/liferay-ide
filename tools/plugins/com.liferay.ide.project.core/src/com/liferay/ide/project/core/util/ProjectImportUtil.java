@@ -501,7 +501,7 @@ public class ProjectImportUtil {
 			return ProjectCore.createErrorStatus("Can't find sdk in workspace");
 		}
 
-		return sdk.validate();
+		return sdk.validate(true);
 	}
 
 	public static IStatus validateSDKProjectPath(String currentPath) {

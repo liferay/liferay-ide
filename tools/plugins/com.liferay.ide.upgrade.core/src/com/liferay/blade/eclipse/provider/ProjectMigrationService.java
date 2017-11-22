@@ -49,9 +49,13 @@ import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 @Component
 public class ProjectMigrationService implements Migration {
+
+	private static int _count = 0;
+	private static int _total = 0;
 
 	@Activate
 	public void activate(BundleContext context) {
@@ -74,11 +78,16 @@ public class ProjectMigrationService implements Migration {
 
 		monitor.beginTask("Analyzing files", -1);
 
+		_countTotal(projectDir);
+
 		_walkFiles(projectDir, problems, monitor);
 
 		_updateListeners(problems);
 
 		monitor.done();
+
+		_count = 0;
+		_total = 0;
 
 		return problems;
 	}
@@ -89,7 +98,11 @@ public class ProjectMigrationService implements Migration {
 
 		monitor.beginTask("Analyzing files", -1);
 
+		_total = files.size();
+
 		for (File file : files) {
+			_count++;
+
 			if (monitor.isCanceled()) {
 				return Collections.emptyList();
 			}
@@ -100,6 +113,9 @@ public class ProjectMigrationService implements Migration {
 		_updateListeners(problems);
 
 		monitor.done();
+
+		_count = 0;
+		_total = 0;
 
 		return problems;
 	}
@@ -174,7 +190,7 @@ public class ProjectMigrationService implements Migration {
 
 		String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
 
-		monitor.setTaskName("Analyzing file " + fileName);
+		monitor.setTaskName("Analyzing file " + _count + "/" + _total + " " + fileName);
 
 		ServiceReference<FileMigrator>[] fileMigrators = _fileMigratorTracker.getServiceReferences();
 
@@ -203,7 +219,10 @@ public class ProjectMigrationService implements Migration {
 					_context.ungetService(fm);
 				}
 			}
+
+			_count++;
 		}
+
 
 		return FileVisitResult.CONTINUE;
 	}
@@ -222,6 +241,39 @@ public class ProjectMigrationService implements Migration {
 
 				}
 			}
+		}
+	}
+
+	private void _countTotal(File dir) {
+		FileVisitor<Path> visitor = new SimpleFileVisitor<Path>() {
+
+			@Override
+			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+				if (dir.endsWith(".git")) {
+					return FileVisitResult.SKIP_SUBTREE;
+				}
+
+				return super.preVisitDirectory(dir, attrs);
+			}
+
+			@Override
+			public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
+				File file = path.toFile();
+
+				if (file.isFile()) {
+					_total++;
+				}
+
+				return super.visitFile(path, attrs);
+			}
+
+		};
+
+		try {
+			Files.walkFileTree(dir.toPath(), visitor);
+		}
+		catch (IOException ioe) {
+			ioe.printStackTrace();
 		}
 	}
 

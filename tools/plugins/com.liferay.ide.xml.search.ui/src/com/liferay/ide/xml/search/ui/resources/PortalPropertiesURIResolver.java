@@ -36,7 +36,7 @@ public class PortalPropertiesURIResolver extends ResourceBaseURIResolver {
 
 		String extension = file.getFileExtension();
 
-		if (!getExtensions().contains(extension.toLowerCase())) {
+		if ((extension == null) || !getExtensions().contains(extension.toLowerCase())) {
 			return false;
 		}
 

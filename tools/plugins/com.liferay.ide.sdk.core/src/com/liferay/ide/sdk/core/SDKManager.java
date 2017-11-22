@@ -16,6 +16,7 @@ package com.liferay.ide.sdk.core;
 
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
@@ -257,6 +258,10 @@ public final class SDKManager {
 
 		for (SDK sdk : _sdkList) {
 			XMLMemento child = root.createChild("sdk");
+
+			if (FileUtil.notExists(sdk.getLocation())) {
+				continue;
+			}
 
 			sdk.saveToMemento(child);
 
