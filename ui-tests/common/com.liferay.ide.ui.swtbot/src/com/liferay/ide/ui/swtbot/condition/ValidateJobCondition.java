@@ -12,35 +12,39 @@
  * details.
  */
 
-package com.liferay.ide.ui.theme.tests;
+package com.liferay.ide.ui.swtbot.condition;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
-
-import org.junit.Assert;
-import org.junit.Test;
+import org.eclipse.core.runtime.jobs.Job;
 
 /**
  * @author Terry Jia
  */
-public class NewThemeProjectModuleGradleTests extends SwtbotBase {
+public class ValidateJobCondition extends WaitForSingleJob {
 
-	@Test
-	public void createTheme() {
-		String projectName = "test-theme-gradle";
+	public ValidateJobCondition(String projectName) {
+		super(null, "Cancel Validate");
 
-		wizardAction.openNewLiferayModuleWizard();
-
-		wizardAction.prepareLiferayModuleGradle(projectName, THEME);
-
-		wizardAction.finish();
-
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
-
-		jobAction.waitForValidate(projectName);
-
-		viewAction.closeProject(projectName);
-
-		viewAction.deleteProject(projectName);
+		_projectName = projectName;
 	}
+
+	@Override
+	public String getJobName() {
+		return "Validating " + _projectName;
+	}
+
+	@Override
+	public boolean test() {
+		Job[] jobs = Job.getJobManager().find(family);
+
+		for (Job job : jobs) {
+			if (getJobName().equals(job.getName())) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	private String _projectName;
 
 }
