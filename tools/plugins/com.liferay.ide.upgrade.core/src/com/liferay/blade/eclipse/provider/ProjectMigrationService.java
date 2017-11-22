@@ -98,7 +98,11 @@ public class ProjectMigrationService implements Migration {
 
 		monitor.beginTask("Analyzing files", -1);
 
+		_total = files.size();
+
 		for (File file : files) {
+			_count++;
+
 			if (monitor.isCanceled()) {
 				return Collections.emptyList();
 			}
@@ -109,6 +113,9 @@ public class ProjectMigrationService implements Migration {
 		_updateListeners(problems);
 
 		monitor.done();
+
+		_count = 0;
+		_total = 0;
 
 		return problems;
 	}
