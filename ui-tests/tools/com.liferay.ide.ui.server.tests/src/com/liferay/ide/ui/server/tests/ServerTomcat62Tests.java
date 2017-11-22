@@ -67,19 +67,19 @@ public class ServerTomcat62Tests extends SwtbotBase {
 
 		viewAction.showServersView();
 
-		String serverStoppedLabel = serverName + "  [Stopped]";
-
-		viewAction.serverStart(serverStoppedLabel);
-
-		jobAction.waitForServer62Started(serverName);
-
-		String serverStartedLabel = serverName + "  [Started, Synchronized]";
-
-		viewAction.openLiferayPortalHome(serverStartedLabel);
-
-		viewAction.serverStop(serverStartedLabel);
-
-		viewAction.serverStopWait62();
+		// String serverStoppedLabel = serverName + " [Stopped]";
+		//
+		// viewAction.serverStart(serverStoppedLabel);
+		//
+		// jobAction.waitForServer62Started(serverName);
+		//
+		// String serverStartedLabel = serverName + " [Started, Synchronized]";
+		//
+		// viewAction.openLiferayPortalHome(serverStartedLabel);
+		//
+		// viewAction.serverStop(serverStartedLabel);
+		//
+		// viewAction.serverStopWait62();
 
 		dialogAction.openPreferencesDialog();
 
@@ -98,7 +98,7 @@ public class ServerTomcat62Tests extends SwtbotBase {
 
 		wizardAction.next();
 
-		String runtimeName = "Liferay 7-add-runtime";
+		String runtimeName = "Liferay 6.2-add-runtime";
 
 		wizardAction.prepareLiferay62RuntimeInfo(runtimeName, envAction.getLiferayServerFullDir62().toOSString());
 
