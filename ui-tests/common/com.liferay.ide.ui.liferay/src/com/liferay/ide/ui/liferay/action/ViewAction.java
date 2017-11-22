@@ -53,27 +53,27 @@ public class ViewAction extends UIAction {
 
 		ide.sleep();
 
-		_deleteResourcesDialog.getDeleteFromDisk().select();
+		// _deleteResourcesDialog.getDeleteFromDisk().select();
 
 		_deleteResourcesDialog.confirm();
 
-		long origin = SWTBotPreferences.TIMEOUT;
-
-		SWTBotPreferences.TIMEOUT = 1500;
-
-		try {
-			_continueDeleteResourcesDialog.confirm();
-		}
-		catch (Exception e) {
-		}
-
-		try {
-			_dialog.confirm();
-		}
-		catch (Exception e) {
-		}
-
-		SWTBotPreferences.TIMEOUT = origin;
+//		long origin = SWTBotPreferences.TIMEOUT;
+//
+//		SWTBotPreferences.TIMEOUT = 1500;
+//
+//		try {
+//			_continueDeleteResourcesDialog.confirm();
+//		}
+//		catch (Exception e) {
+//		}
+//
+//		try {
+//			_dialog.confirm();
+//		}
+//		catch (Exception e) {
+//		}
+//
+//		SWTBotPreferences.TIMEOUT = origin;
 	}
 
 	public String[] getProjectNames() {

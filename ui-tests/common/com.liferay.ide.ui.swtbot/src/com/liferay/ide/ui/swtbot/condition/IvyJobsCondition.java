@@ -12,35 +12,39 @@
  * details.
  */
 
-package com.liferay.ide.ui.theme.tests;
+package com.liferay.ide.ui.swtbot.condition;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
-
-import org.junit.Assert;
-import org.junit.Test;
+import org.eclipse.core.runtime.jobs.Job;
 
 /**
  * @author Terry Jia
  */
-public class NewThemeProjectModuleGradleTests extends SwtbotBase {
+public class IvyJobsCondition extends WaitForMultiJobs {
 
-	@Test
-	public void createTheme() {
-		String projectName = "test-theme-gradle";
+	public IvyJobsCondition() {
+		super(null, "Ivy config");
+	}
 
-		wizardAction.openNewLiferayModuleWizard();
+	@Override
+	public String[] getJobNames() {
+		String[] jobNames = {"Configuring project with Ivy dependencies", "IvyDE resolve"};
 
-		wizardAction.prepareLiferayModuleGradle(projectName, THEME);
+		return jobNames;
+	}
 
-		wizardAction.finish();
+	@Override
+	public boolean test() {
+		Job[] jobs = Job.getJobManager().find(family);
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		for (Job job : jobs) {
+			for (String jobName : getJobNames()) {
+				if (jobName.equals(job.getName())) {
+					return false;
+				}
+			}
+		}
 
-		jobAction.waitForValidate(projectName);
-
-		viewAction.closeProject(projectName);
-
-		viewAction.deleteProject(projectName);
+		return true;
 	}
 
 }

@@ -14,17 +14,19 @@
 
 package com.liferay.ide.ui.liferay.action;
 
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.swtbot.condition.BrowserLoadedCondition;
 import com.liferay.ide.ui.swtbot.condition.CancelIvyJobCondition;
 import com.liferay.ide.ui.swtbot.condition.CancelValidateJobCondition;
 import com.liferay.ide.ui.swtbot.condition.CloseProjectJobCondition;
 import com.liferay.ide.ui.swtbot.condition.ConsoleContentCondition;
+import com.liferay.ide.ui.swtbot.condition.IvyJobsCondition;
 import com.liferay.ide.ui.swtbot.condition.NoRunningJobsCondition;
 import com.liferay.ide.ui.swtbot.condition.ServerStartJobCondition;
+import com.liferay.ide.ui.swtbot.condition.ValidateJobCondition;
 import com.liferay.ide.ui.swtbot.condition.WizardClosedCondition;
-
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
@@ -39,12 +41,20 @@ public class JobAction extends UIAction {
 		ide.waitUntil(new BrowserLoadedCondition(bot));
 	}
 
+	public void waitForIvy() {
+		ide.waitUntil(new IvyJobsCondition(), 300 * 1000);
+	}
+
 	public void waitForCancelIvy() {
 		ide.waitUntil(new CancelIvyJobCondition());
 	}
 
 	public void waitForCancelValidate(String projectName) {
 		ide.waitUntil(new CancelValidateJobCondition(projectName), 120 * 1000);
+	}
+
+	public void waitForValidate(String projectName) {
+		ide.waitUntil(new ValidateJobCondition(projectName), 300 * 1000);
 	}
 
 	public void waitForCloseProject() {
