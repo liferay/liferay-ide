@@ -520,7 +520,7 @@ public class ProjectCoreBase extends ServerCoreBase
     /**
      * @throws Exception
      */
-    @Before
+    
     public void setupPluginsSDK() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
@@ -641,12 +641,13 @@ public class ProjectCoreBase extends ServerCoreBase
         super.setupRuntime();
     }
 
+    @Before
     public void setupPluginsSDKAndRuntime() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
 
-        setupPluginsSDK();
         setupRuntime();
+        setupPluginsSDK();
     }
 
 }

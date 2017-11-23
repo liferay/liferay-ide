@@ -83,20 +83,20 @@ public class ImportPluginsSDKProjectTests extends ProjectCoreBase
     protected IPath getLiferayPluginsSdkDir()
     {
         return ProjectCore.getDefault().getStateLocation().append(
-            "com.liferay.portal.plugins.sdk-1.0.16-withdependencies" );
+            "com.liferay.portal.plugins.sdk-1.0.11-withdependencies" );
     }
 
     @Override
     protected IPath getLiferayPluginsSDKZip()
     {
         return getLiferayBundlesPath().append(
-            "com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip" );
+            "com.liferay.portal.plugins.sdk-1.0.11-withdependencies-20170613175008905.zip" );
     }
 
     @Override
     protected String getLiferayPluginsSdkZipFolder()
     {
-        return "com.liferay.portal.plugins.sdk-1.0.16-withdependencies/";
+        return "com.liferay.portal.plugins.sdk-1.0.11-withdependencies/";
     }
 
     private IPath importProject( String pluginType, String name ) throws Exception
