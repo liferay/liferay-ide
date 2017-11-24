@@ -26,6 +26,10 @@ import com.liferay.ide.ui.swtbot.Keys;
 import com.liferay.ide.ui.swtbot.UI;
 import com.liferay.ide.ui.swtbot.util.CoreUtil;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -64,11 +68,13 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 		String[] projectNames = viewAction.getProjectNames();
 
 		if (projectNames.length > 0) {
-			System.out.println(
-				"The following projects are unable to be deleted, some error may happened, try by core's IProject:");
+			String message =
+				"The following projects are unable to be deleted, some error may happened, try by core's IProject:";
+
+			Logger.getLogger(SwtbotBase.class.getName()).log(Level.WARN, message);
 
 			for (String projectName : projectNames) {
-				System.out.println(projectName);
+				Logger.getLogger(SwtbotBase.class.getName()).log(Level.WARN, projectName);
 			}
 
 			for (String projectName : projectNames) {
@@ -117,6 +123,8 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 		System.setProperty(SWTBotPreferenceConstants.KEY_DEFAULT_POLL_DELAY, "5000");
 
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
+
+		BasicConfigurator.configure();
 	}
 
 }
