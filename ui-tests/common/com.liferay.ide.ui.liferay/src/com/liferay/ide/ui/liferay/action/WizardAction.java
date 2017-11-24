@@ -32,6 +32,7 @@ import com.liferay.ide.ui.swtbot.eclipse.page.ImportProjectWizard;
 import com.liferay.ide.ui.swtbot.eclipse.page.NewRuntimeWizard;
 import com.liferay.ide.ui.swtbot.eclipse.page.NewServerWizard;
 import com.liferay.ide.ui.swtbot.page.Button;
+import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.MenuItem;
 import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.Wizard;
@@ -73,12 +74,32 @@ public class WizardAction extends UIAction {
 		_jobAction.waitForWizardClosed(title);
 	}
 
+	public Text getBundleUrl() {
+		return _newWorkspaceWizard.getBundleUrl();
+	}
+
+	public CheckBox getDownloadLiferayBundle() {
+		return _newWorkspaceWizard.getDownloadLiferayBundle();
+	}
+
 	public Button getFinishBtn() {
 		return _wizard.finishBtn();
 	}
 
+	public Text getLocation() {
+		return _newProjectWizard.getLocation();
+	}
+
 	public Button getNextBtn() {
 		return _wizard.nextBtn();
+	}
+
+	public Text getServerName() {
+		return _newWorkspaceWizard.getServerName();
+	}
+
+	public CheckBox getUseDefaultLocation() {
+		return _newProjectWizard.getUseDefaultLocation();
 	}
 
 	public String getValidationMsg() {

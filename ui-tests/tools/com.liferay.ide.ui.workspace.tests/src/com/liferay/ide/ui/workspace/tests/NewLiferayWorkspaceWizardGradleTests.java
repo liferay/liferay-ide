@@ -40,14 +40,78 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorksapceChangeLocation() {
+		String workspaceName = "test-liferay-workspace-gradle-change-location";
+
+		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
+
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
+
+		wizardAction.getUseDefaultLocation().deselect();
+
+		String newFolderName = "changeLocation";
+
+		wizardAction.getLocation().setText(workspacePath + "/" + newFolderName);
+
+		wizardAction.finish();
+
+		viewAction.closeAndDeleteProject(workspaceName);
 	}
 
 	@Test
 	public void createLiferayWorksapceWithDownloadBundle() {
+		String workspaceName = "test-liferay-workspace-gradle-download-bundle";
+
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
+
+		wizardAction.getDownloadLiferayBundle().select();
+
+		wizardAction.getServerName().setText("Liferay 7-download-bundle");
+
+		wizardAction.finish();
+
+		viewAction.closeAndDeleteProject(workspaceName);
+
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+
+		dialogAction.deleteRuntimeTryConfirm("Liferay 7-download-bundle");
+
+		dialogAction.confirmPreferences();
 	}
 
 	@Test
 	public void createLiferayWorksapceWithDownloadBundleChangeBundleUrl() {
+		String workspaceName = "test-liferay-workspace-gradle-change-bundle-url";
+
+		String bundleUrl =
+			"http://mirrors.dlc.liferay.com/portal/7.0.3-ga4/liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip";
+
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
+
+		wizardAction.getDownloadLiferayBundle().select();
+
+		wizardAction.getServerName().setText("Liferay 7-change-bundle-url");
+
+		wizardAction.getBundleUrl().setText(bundleUrl);
+
+		wizardAction.finish();
+
+		viewAction.closeAndDeleteProject(workspaceName);
+
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+
+		dialogAction.deleteRuntimeTryConfirm("Liferay 7-change-bundle-url");
+
+		dialogAction.confirmPreferences();
 	}
 
 	@Test
