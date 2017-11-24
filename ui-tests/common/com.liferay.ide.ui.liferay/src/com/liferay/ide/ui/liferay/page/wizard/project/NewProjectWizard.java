@@ -52,7 +52,7 @@ public class NewProjectWizard extends Wizard {
 	}
 
 	public CheckBox getUseDefaultLocation() {
-		return	new CheckBox(getShell().bot(), USE_DEFAULT_LOCATION);
+		return new CheckBox(getShell().bot(), USE_DEFAULT_LOCATION);
 	}
 
 	public ComboBox getWorkingSets() {

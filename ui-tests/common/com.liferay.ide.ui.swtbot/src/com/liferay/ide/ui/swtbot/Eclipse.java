@@ -14,15 +14,16 @@
 
 package com.liferay.ide.ui.swtbot;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.waits.ICondition;
-
 import com.liferay.ide.ui.swtbot.eclipse.page.PackageExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
 import com.liferay.ide.ui.swtbot.page.BasePageObject;
 import com.liferay.ide.ui.swtbot.page.Editor;
 import com.liferay.ide.ui.swtbot.page.Menu;
+import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.View;
+
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.waits.ICondition;
 
 /**
  * @author Terry Jia
@@ -40,16 +41,16 @@ public class Eclipse extends BasePageObject {
 		_welcomeView = new View(bot, WELCOME);
 	}
 
-	public String getLabel() {
-		return label;
-	}
-
 	public Editor getEditor(String fileName) {
 		return new Editor((SWTWorkbenchBot)bot, fileName);
 	}
 
 	public Menu getFileMenu() {
 		return new Menu(bot.shell(label).bot(), FILE);
+	}
+
+	public String getLabel() {
+		return label;
 	}
 
 	public Menu getOtherMenu() {
@@ -60,6 +61,10 @@ public class Eclipse extends BasePageObject {
 
 	public PackageExplorerView getPackageExporerView() {
 		return _packageExporerView;
+	}
+
+	public String getPerspectiveLabel() {
+		return ((SWTWorkbenchBot)bot).activePerspective().getLabel();
 	}
 
 	public Menu getPreferencesMenu() {
@@ -76,14 +81,12 @@ public class Eclipse extends BasePageObject {
 		return _welcomeView;
 	}
 
-	public String getPerspectiveLabel() {
-		return ((SWTWorkbenchBot)bot).activePerspective().getLabel();
-	}
-
 	public void showServersView() {
 		getOtherMenu().click();
 
-		getShowViewDialog().getText().setText(SERVERS);
+		Text text = getShowViewDialog().getText();
+
+		text.setText(SERVERS);
 
 		getShowViewDialog().confirm(OPEN);
 	}

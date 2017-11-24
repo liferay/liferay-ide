@@ -14,8 +14,6 @@
 
 package com.liferay.ide.ui.liferay.action;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.swtbot.condition.BrowserLoadedCondition;
 import com.liferay.ide.ui.swtbot.condition.CancelIvyJobCondition;
@@ -28,6 +26,8 @@ import com.liferay.ide.ui.swtbot.condition.ServerStartJobCondition;
 import com.liferay.ide.ui.swtbot.condition.ShellAppearedCondition;
 import com.liferay.ide.ui.swtbot.condition.ValidateJobCondition;
 import com.liferay.ide.ui.swtbot.condition.WizardClosedCondition;
+
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
@@ -42,10 +42,6 @@ public class JobAction extends UIAction {
 		ide.waitUntil(new BrowserLoadedCondition(bot));
 	}
 
-	public void waitForIvy() {
-		ide.waitUntil(new IvyJobsCondition(), 300 * 1000);
-	}
-
 	public void waitForCancelIvy() {
 		ide.waitUntil(new CancelIvyJobCondition());
 	}
@@ -54,32 +50,36 @@ public class JobAction extends UIAction {
 		ide.waitUntil(new CancelValidateJobCondition(projectName), 120 * 1000);
 	}
 
-	public void waitForValidate(String projectName) {
-		ide.waitUntil(new ValidateJobCondition(projectName), 300 * 1000);
-	}
-
 	public void waitForCloseProject() {
 		ide.waitUntil(new CloseProjectJobCondition());
+	}
+
+	public void waitForConsoleContent(String content, long timeout) {
+		ide.waitUntil(new ConsoleContentCondition(bot, content), timeout);
+	}
+
+	public void waitForIvy() {
+		ide.waitUntil(new IvyJobsCondition(), 300 * 1000);
 	}
 
 	public void waitForNoRunningJobs() {
 		ide.waitUntil(new NoRunningJobsCondition());
 	}
 
-	public void waitForWizardClosed(String title) {
-		ide.waitUntil(new WizardClosedCondition(bot, title));
+	public void waitForServer62Started(String serverName) {
+		ide.waitUntil(new ServerStartJobCondition(serverName));
 	}
 
 	public void waitForShellAppeared(String title) {
 		ide.waitUntil(new ShellAppearedCondition(bot, title));
 	}
 
-	public void waitForServer62Started(String serverName) {
-		ide.waitUntil(new ServerStartJobCondition(serverName));
+	public void waitForValidate(String projectName) {
+		ide.waitUntil(new ValidateJobCondition(projectName), 300 * 1000);
 	}
 
-	public void waitForConsoleContent(String content, long timeout) {
-		ide.waitUntil(new ConsoleContentCondition(bot, content), timeout);
+	public void waitForWizardClosed(String title) {
+		ide.waitUntil(new WizardClosedCondition(bot, title));
 	}
 
 }

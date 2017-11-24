@@ -14,17 +14,17 @@
 
 package com.liferay.ide.ui.liferay.action;
 
-import java.util.Arrays;
-
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
-
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.swtbot.eclipse.page.DeleteResourcesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.PackageExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ProjectExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ServersView;
 import com.liferay.ide.ui.swtbot.page.Tree;
+
+import java.util.Arrays;
+
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 
 /**
  * @author Terry Jia
@@ -33,14 +33,6 @@ public class ViewAction extends UIAction {
 
 	public ViewAction(SWTWorkbenchBot bot) {
 		super(bot);
-	}
-
-	public void closeProject(String... items) {
-		ide.sleep();
-
-		_getProjects().contextMenu("Close Project", items);
-
-		_jobAction.waitForCloseProject();
 	}
 
 	public void closeAndDeleteProject(String... items) {
@@ -57,6 +49,14 @@ public class ViewAction extends UIAction {
 		deleteProject(items);
 	}
 
+	public void closeProject(String... items) {
+		ide.sleep();
+
+		_getProjects().contextMenu("Close Project", items);
+
+		_jobAction.waitForCloseProject();
+	}
+
 	public void deleteProject(String... items) {
 		_getProjects().contextMenu(DELETE, items);
 
@@ -67,22 +67,31 @@ public class ViewAction extends UIAction {
 		_deleteResourcesDialog.confirm();
 
 		// long origin = SWTBotPreferences.TIMEOUT;
+
 		//
+
 		// SWTBotPreferences.TIMEOUT = 1500;
+
 		//
+
 		// try {
 		// _continueDeleteResourcesDialog.confirm();
 		// }
 		// catch (Exception e) {
 		// }
+
 		//
+
 		// try {
 		// _dialog.confirm();
 		// }
 		// catch (Exception e) {
 		// }
+
 		//
+
 		// SWTBotPreferences.TIMEOUT = origin;
+
 	}
 
 	public String[] getProjectNames() {

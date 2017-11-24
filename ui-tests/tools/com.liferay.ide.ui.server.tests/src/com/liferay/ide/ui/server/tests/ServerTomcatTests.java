@@ -74,17 +74,29 @@ public class ServerTomcatTests extends SwtbotBase {
 		viewAction.showServersView();
 
 		// String serverStoppedLabel = serverName + " [Stopped]";
+
 		//
+
 		// viewAction.serverStart(serverStoppedLabel);
+
 		//
+
 		// viewAction.serverStartWait();
+
 		//
+
 		// String serverStartedLabel = serverName + " [Started]";
+
 		//
+
 		// viewAction.openLiferayPortalHome(serverStartedLabel);
+
 		//
+
 		// viewAction.serverStop(serverStartedLabel);
+
 		//
+
 		// viewAction.serverStopWait();
 
 		dialogAction.openPreferencesDialog();
@@ -223,8 +235,8 @@ public class ServerTomcatTests extends SwtbotBase {
 		dialogAction.confirmPreferences();
 	}
 
-	@Test
 	@Ignore("ignore to wait Terry finish the server start checker")
+	@Test
 	public void serverEditorCustomLaunchSettingsChangeAndStart() {
 		String serverName = "Liferay 7-custom-launch-settings-start";
 
@@ -433,8 +445,8 @@ public class ServerTomcatTests extends SwtbotBase {
 		editorAction.close();
 	}
 
-	@Test
 	@Ignore("ignore to wait Terry finish the server start checker")
+	@Test
 	public void testLiferay7ServerDebug() {
 		String serverName = "Liferay 7-debug";
 

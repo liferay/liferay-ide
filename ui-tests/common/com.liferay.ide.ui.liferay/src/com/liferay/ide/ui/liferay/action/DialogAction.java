@@ -144,6 +144,7 @@ public class DialogAction extends UIAction {
 
 	private final AddAndRemoveDialog _addAndRemoveDialog = new AddAndRemoveDialog(bot);
 	private final Dialog _dialog = new Dialog(bot);
+	private final JobAction _jobAction = new JobAction(bot);
 	private final KeyboardAction _keyboradAction = new KeyboardAction(bot);
 	private final PreferenceRecorderDialog _preferenceRecorderDialog = new PreferenceRecorderDialog(bot);
 	private final PreferencesDialog _preferencesDialog = new PreferencesDialog(bot);
@@ -152,6 +153,5 @@ public class DialogAction extends UIAction {
 	private final TextDialog _textDialog = new TextDialog(bot);
 	private final TextTableDialog _textTableDialog = new TextTableDialog(bot);
 	private final TreeDialog _treeDialog = new TreeDialog(bot);
-	private final JobAction _jobAction = new JobAction(bot);
 
 }

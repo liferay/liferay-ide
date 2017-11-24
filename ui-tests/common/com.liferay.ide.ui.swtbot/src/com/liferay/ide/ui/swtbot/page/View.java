@@ -32,12 +32,12 @@ public class View extends AbstractPart {
 		toolbarBtn(btnLabel).click();
 	}
 
-	public SWTBotToolbarButton toolbarBtn(String btnLabel) {
-		return getPart().toolbarButton(btnLabel);
-	}
-
 	public String getLabel() {
 		return label;
+	}
+
+	public SWTBotToolbarButton toolbarBtn(String btnLabel) {
+		return getPart().toolbarButton(btnLabel);
 	}
 
 	protected SWTBotView getPart() {
