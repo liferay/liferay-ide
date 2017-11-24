@@ -33,11 +33,7 @@ public class NewHookProjectTests extends SwtbotBase {
 
 		String sdkName = envAction.getLiferayPluginsSdkName() + "-" + envAction.getTimestamp();
 
-		viewAction.closeProject(sdkName);
-
-		jobAction.waitForNoRunningJobs();
-
-		viewAction.deleteProject(sdkName);
+		viewAction.closeAndDeleteProjectWithNoRunningJobs(sdkName);
 	}
 
 	@BeforeClass
@@ -66,9 +62,7 @@ public class NewHookProjectTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeProject(projectName);
-
-		viewAction.deleteProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 	@Test
@@ -85,9 +79,7 @@ public class NewHookProjectTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeProject(projectName);
-
-		viewAction.deleteProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 }

@@ -38,9 +38,7 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeProject(projectName);
-
-		viewAction.deleteProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 	@Test
@@ -57,9 +55,7 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeProject(projectName);
-
-		viewAction.deleteProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 }

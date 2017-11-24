@@ -36,9 +36,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
-		viewAction.closeProject(projectName);
-
-		viewAction.deleteProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 	@Test
@@ -53,9 +51,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
-		viewAction.closeProject(projectName);
-
-		viewAction.deleteProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 }

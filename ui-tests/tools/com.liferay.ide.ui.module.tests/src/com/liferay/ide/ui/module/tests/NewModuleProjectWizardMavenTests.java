@@ -188,8 +188,6 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeAndDeleteProject(projectName);
-
-		viewAction.deleteProject(projectName);
 	}
 
 	@Test

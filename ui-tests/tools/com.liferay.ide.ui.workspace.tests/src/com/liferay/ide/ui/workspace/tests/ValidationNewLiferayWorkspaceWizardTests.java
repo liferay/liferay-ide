@@ -46,20 +46,22 @@ public class ValidationNewLiferayWorkspaceWizardTests extends SwtbotBase {
 	public void checkExsitingLiferayWorkspace() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.prepareLiferayWorkspace("test");
+		String projectName = "test";
+
+		wizardAction.prepareLiferayWorkspace(projectName);
 
 		wizardAction.finish();
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.prepareLiferayWorkspace("test");
+		wizardAction.prepareLiferayWorkspace(projectName);
 
 		Assert.assertEquals(
 			A_LIFERAY_WORKSPACE_PROJECT_ALREADY_EXISTS, _newLiferayWorkspaceProjectWizard.getValidationMsg());
 
 		wizardAction.cancel();
 
-		viewAction.deleteProject("test");
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 	@Ignore

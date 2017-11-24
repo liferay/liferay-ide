@@ -79,7 +79,7 @@ public class JobAction extends UIAction {
 	}
 
 	public void waitForWizardClosed(String title) {
-		ide.waitUntil(new WizardClosedCondition(bot, title));
+		ide.waitUntil(new WizardClosedCondition(bot, title), 300 * 1000);
 	}
 
 }
