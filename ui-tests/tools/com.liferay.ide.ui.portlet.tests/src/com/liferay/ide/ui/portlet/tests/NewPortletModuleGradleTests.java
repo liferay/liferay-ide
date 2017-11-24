@@ -25,6 +25,21 @@ import org.junit.Test;
 public class NewPortletModuleGradleTests extends SwtbotBase {
 
 	@Test
+	public void createFreemarkerPortlet() {
+		String projectName = "test-freemarker-portlet-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.prepareLiferayModuleGradle(projectName, FREEMARKER_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeAndDeleteProject(projectName);
+	}
+
+	@Test
 	public void createMvcPortlet() {
 		String projectName = "test-mvc-portlet-gradle";
 
@@ -54,6 +69,36 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		jobAction.waitForValidate(projectName);
+
+		viewAction.closeAndDeleteProject(projectName);
+	}
+
+	@Test
+	public void createSoyPortlet() {
+		String projectName = "test-soy-portlet-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.prepareLiferayModuleGradle(projectName, SOY_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeAndDeleteProject(projectName);
+	}
+
+	@Test
+	public void createSpringMvcPortlet() {
+		String projectName = "test-spring-mvc-portlet-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.prepareLiferayModuleGradle(projectName, SPRING_MVC_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
 		viewAction.closeAndDeleteProject(projectName);
 	}

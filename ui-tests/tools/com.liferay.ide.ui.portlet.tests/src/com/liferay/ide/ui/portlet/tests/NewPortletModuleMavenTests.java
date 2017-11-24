@@ -25,6 +25,21 @@ import org.junit.Test;
 public class NewPortletModuleMavenTests extends SwtbotBase {
 
 	@Test
+	public void createFreemarkerPortlet() {
+		String projectName = "test-freemarker-portlet-maven";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.prepareLiferayModuleMaven(projectName, FREEMARKER_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeAndDeleteProject(projectName);
+	}
+
+	@Test
 	public void createMvcPortlet() {
 		String projectName = "test-mvc-portlet-maven";
 
@@ -46,6 +61,36 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeAndDeleteProject(projectName);
+	}
+
+	@Test
+	public void createSoyPortlet() {
+		String projectName = "test-soy-portlet-maven";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.prepareLiferayModuleMaven(projectName, SOY_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeAndDeleteProject(projectName);
+	}
+
+	@Test
+	public void createSpringMvcPortlet() {
+		String projectName = "test-spring-mvc-portlet-maven";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.prepareLiferayModuleMaven(projectName, SPRING_MVC_PORTLET);
 
 		wizardAction.finish();
 
