@@ -36,9 +36,9 @@ public class NewJsfProjectWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 
-		viewAction.deleteProject(projectName);
+		
 	}
 
 	@Test
@@ -53,9 +53,9 @@ public class NewJsfProjectWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 
-		viewAction.deleteProject(projectName);
+		
 	}
 
 	@Test
@@ -70,9 +70,9 @@ public class NewJsfProjectWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 
-		viewAction.deleteProject(projectName);
+		
 	}
 
 	@Test
@@ -87,9 +87,9 @@ public class NewJsfProjectWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 
-		viewAction.deleteProject(projectName);
+		
 	}
 
 	@Test
@@ -104,9 +104,9 @@ public class NewJsfProjectWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 
-		viewAction.deleteProject(projectName);
+		
 	}
 
 }

@@ -31,11 +31,13 @@ public class NewHookProjectTests extends SwtbotBase {
 	public static void cleanPluginsSdk() {
 		jobAction.waitForIvy();
 
-		viewAction.closeProject(envAction.getLiferayPluginsSdkName());
+		String sdkName = envAction.getLiferayPluginsSdkName() + "-" + envAction.getTimestamp();
+
+		viewAction.closeProject(sdkName);
 
 		jobAction.waitForNoRunningJobs();
 
-		viewAction.deleteProject(envAction.getLiferayPluginsSdkName());
+		viewAction.deleteProject(sdkName);
 	}
 
 	@BeforeClass

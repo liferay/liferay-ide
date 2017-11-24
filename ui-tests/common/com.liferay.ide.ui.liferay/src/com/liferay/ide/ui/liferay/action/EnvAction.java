@@ -14,27 +14,16 @@
 
 package com.liferay.ide.ui.liferay.action;
 
-import com.liferay.ide.ui.liferay.UIAction;
-import com.liferay.ide.ui.liferay.util.BundleInfo;
-import com.liferay.ide.ui.liferay.util.CSVReader;
-import com.liferay.ide.ui.liferay.util.FileUtil;
-import com.liferay.ide.ui.liferay.util.SdkInfo;
-import com.liferay.ide.ui.liferay.util.ValidationMsg;
-import com.liferay.ide.ui.liferay.util.ZipUtil;
-import com.liferay.ide.ui.swtbot.util.CoreUtil;
-import com.liferay.ide.ui.swtbot.util.StringPool;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
 import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
@@ -44,8 +33,17 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.utils.FileUtils;
-
 import org.junit.Assert;
+
+import com.liferay.ide.ui.liferay.UIAction;
+import com.liferay.ide.ui.liferay.util.BundleInfo;
+import com.liferay.ide.ui.liferay.util.CSVReader;
+import com.liferay.ide.ui.liferay.util.FileUtil;
+import com.liferay.ide.ui.liferay.util.SdkInfo;
+import com.liferay.ide.ui.liferay.util.ValidationMsg;
+import com.liferay.ide.ui.liferay.util.ZipUtil;
+import com.liferay.ide.ui.swtbot.util.CoreUtil;
+import com.liferay.ide.ui.swtbot.util.StringPool;
 
 /**
  * @author Terry Jia
@@ -58,6 +56,8 @@ public class EnvAction extends UIAction {
 
 		_bundleInfos = _getBundleInfos();
 		_sdkInfos = _getSdkInfos();
+
+		log = Logger.getLogger(getClass());
 	}
 
 	public IPath getEclipseWorkspacePath() {
@@ -121,7 +121,9 @@ public class EnvAction extends UIAction {
 	public IPath getLiferayPluginsSdkDir() {
 		IPath bundlesPath = getLiferayBundlesPath().append("bundles");
 
-		return bundlesPath.append(_sdkInfos[0].getSdkDir());
+		String sdkDir = _sdkInfos[0].getSdkDir() + "-" + getTimestamp();
+
+		return bundlesPath.append(sdkDir);
 	}
 
 	public String getLiferayPluginsSdkName() {
@@ -192,6 +194,13 @@ public class EnvAction extends UIAction {
 		return validationPath.toFile();
 	}
 
+	public long getTimestamp() {
+		if (_timestamp == 0) {
+			_timestamp = System.currentTimeMillis();
+		}
+
+		return _timestamp;
+	}
 	public ValidationMsg[] getValidationMsgs(File csv) {
 		Assert.assertTrue(csv.exists());
 
@@ -342,8 +351,6 @@ public class EnvAction extends UIAction {
 	}
 
 	public void unzipPluginsSDK() throws IOException {
-		FileUtil.deleteDir(getLiferayPluginsSdkDir().toFile(), true);
-
 		File sdkDir = getLiferayPluginsSdkDir().toFile();
 
 		Assert.assertEquals(
@@ -514,9 +521,16 @@ public class EnvAction extends UIAction {
 		return retval;
 	}
 
+	public void resetTimestamp() {
+		_timestamp = 0;
+	}
+
 	private final BundleInfo[] _bundleInfos;
 	private String _liferayBundlesDir = System.getProperty("liferay.bundles.dir");
 	private IPath _liferayBundlesPath;
 	private final SdkInfo[] _sdkInfos;
+
+	private long _timestamp = 0;
+	protected Logger log;
 
 }

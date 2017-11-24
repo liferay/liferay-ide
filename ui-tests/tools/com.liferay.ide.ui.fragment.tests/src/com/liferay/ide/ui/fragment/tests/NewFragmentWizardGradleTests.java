@@ -99,9 +99,9 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.closeProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 
-		viewAction.deleteProject(projectName);
+		
 	}
 
 	@Test
@@ -128,9 +128,9 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.closeProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 
-		viewAction.deleteProject(projectName);
+		
 	}
 
 	@Test
@@ -157,9 +157,9 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.closeProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 
-		viewAction.deleteProject(projectName);
+		
 	}
 
 	@Test
@@ -191,9 +191,9 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.closeProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 
-		viewAction.deleteProject(projectName);
+		
 	}
 
 	@Test
@@ -220,9 +220,9 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.closeProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 
-		viewAction.deleteProject(projectName);
+		
 	}
 
 	@Test
@@ -270,9 +270,9 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.closeProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 
-		viewAction.deleteProject(projectName);
+		
 	}
 
 	private static final String _serverName = "Liferay 7-fragment-gradle";

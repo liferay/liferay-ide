@@ -64,9 +64,7 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		editorAction.close();
 
-		viewAction.closeProject(liferayWorkspaceName);
-
-		viewAction.deleteProject(liferayWorkspaceName);
+		viewAction.closeAndDeleteProject(liferayWorkspaceName);
 	}
 
 }

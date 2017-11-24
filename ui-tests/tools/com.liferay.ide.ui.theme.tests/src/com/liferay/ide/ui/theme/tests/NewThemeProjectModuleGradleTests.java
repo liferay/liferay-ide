@@ -38,9 +38,7 @@ public class NewThemeProjectModuleGradleTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeProject(projectName);
-
-		viewAction.deleteProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 }

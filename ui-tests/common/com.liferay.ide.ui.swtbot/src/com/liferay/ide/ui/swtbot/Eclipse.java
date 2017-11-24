@@ -14,19 +14,15 @@
 
 package com.liferay.ide.ui.swtbot;
 
-import com.liferay.ide.ui.swtbot.eclipse.page.PackageExplorerView;
-import com.liferay.ide.ui.swtbot.eclipse.page.ProjectExplorerView;
-import com.liferay.ide.ui.swtbot.eclipse.page.ServersView;
-import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
-import com.liferay.ide.ui.swtbot.page.BasePageObject;
-import com.liferay.ide.ui.swtbot.page.Browser;
-import com.liferay.ide.ui.swtbot.page.Editor;
-import com.liferay.ide.ui.swtbot.page.Menu;
-import com.liferay.ide.ui.swtbot.page.Tree;
-import com.liferay.ide.ui.swtbot.page.View;
-
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
+
+import com.liferay.ide.ui.swtbot.eclipse.page.PackageExplorerView;
+import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
+import com.liferay.ide.ui.swtbot.page.BasePageObject;
+import com.liferay.ide.ui.swtbot.page.Editor;
+import com.liferay.ide.ui.swtbot.page.Menu;
+import com.liferay.ide.ui.swtbot.page.View;
 
 /**
  * @author Terry Jia
@@ -38,34 +34,14 @@ public class Eclipse extends BasePageObject {
 	public Eclipse(SWTWorkbenchBot bot) {
 		super(bot);
 
+		label = bot.activeShell().getText();
+
 		_packageExporerView = new PackageExplorerView(bot);
 		_welcomeView = new View(bot, WELCOME);
-		_projectTree = new Tree(bot);
-		_fileMenu = new Menu(bot, FILE);
-
-		String[] otherLabel = {WINDOW, SHOW_VIEW, OTHER};
-		String[] preferencesLabel = {WINDOW, PREFERENCES};
-
-		_preferencesMenu = new Menu(bot, preferencesLabel);
-
-		_otherMenu = new Menu(bot, otherLabel);
-
-		_showViewDialog = new TextDialog(bot);
-		_projectExplorerView = new ProjectExplorerView(bot);
-		_serversView = new ServersView(bot);
-		_browser = new Browser(bot);
 	}
 
 	public String getLabel() {
-		if (isLabelNull()) {
-			return bot.activeShell().getText();
-		}
-
 		return label;
-	}
-
-	public Browser getBrowser() {
-		return _browser;
 	}
 
 	public Editor getEditor(String fileName) {
@@ -73,11 +49,13 @@ public class Eclipse extends BasePageObject {
 	}
 
 	public Menu getFileMenu() {
-		return _fileMenu;
+		return new Menu(bot.shell(label).bot(), FILE);
 	}
 
 	public Menu getOtherMenu() {
-		return _otherMenu;
+		String[] otherLabel = {WINDOW, SHOW_VIEW, OTHER};
+
+		return new Menu(bot.shell(label).bot(), otherLabel);
 	}
 
 	public PackageExplorerView getPackageExporerView() {
@@ -85,23 +63,13 @@ public class Eclipse extends BasePageObject {
 	}
 
 	public Menu getPreferencesMenu() {
-		return _preferencesMenu;
-	}
+		String[] preferencesLabel = {WINDOW, PREFERENCES};
 
-	public ProjectExplorerView getProjectExplorerView() {
-		return _projectExplorerView;
-	}
-
-	public Tree getProjectTree() {
-		return _projectTree;
-	}
-
-	public ServersView getServersView() {
-		return _serversView;
+		return new Menu(bot.shell(label).bot(), preferencesLabel);
 	}
 
 	public TextDialog getShowViewDialog() {
-		return _showViewDialog;
+		return new TextDialog(bot);
 	}
 
 	public View getWelcomeView() {
@@ -112,30 +80,12 @@ public class Eclipse extends BasePageObject {
 		return ((SWTWorkbenchBot)bot).activePerspective().getLabel();
 	}
 
-	public PackageExplorerView showPackageExporerView() {
-		try {
-			_packageExporerView.show();
-		}
-		catch (Exception e) {
-			_otherMenu.click();
-			_showViewDialog.getText().setText(PACKAGE_EXPLORER);
-
-			_showViewDialog.confirm();
-
-			_packageExporerView.show();
-		}
-
-		return _packageExporerView;
-	}
-
 	public void showServersView() {
-		_otherMenu.click();
+		getOtherMenu().click();
 
-		_showViewDialog.getText().setText(SERVERS);
+		getShowViewDialog().getText().setText(SERVERS);
 
-		_showViewDialog.confirm(OPEN);
-
-		_serversView.show();
+		getShowViewDialog().confirm(OPEN);
 	}
 
 	public void waitUntil(ICondition condition) {
@@ -146,15 +96,7 @@ public class Eclipse extends BasePageObject {
 		bot.waitUntil(condition, timeout);
 	}
 
-	private Browser _browser;
-	private Menu _fileMenu;
-	private Menu _otherMenu;
 	private PackageExplorerView _packageExporerView;
-	private Menu _preferencesMenu;
-	private ProjectExplorerView _projectExplorerView;
-	private Tree _projectTree;
-	private ServersView _serversView;
-	private TextDialog _showViewDialog;
 	private View _welcomeView;
 
 }

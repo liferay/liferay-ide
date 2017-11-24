@@ -92,6 +92,8 @@ public class DialogAction extends UIAction {
 			_keyboradAction.pressKeysPreferencesDialogMac();
 		}
 		else {
+			_jobAction.waitForShellAppeared(ide.getLabel());
+
 			ide.getPreferencesMenu().click();
 		}
 	}
@@ -150,5 +152,6 @@ public class DialogAction extends UIAction {
 	private final TextDialog _textDialog = new TextDialog(bot);
 	private final TextTableDialog _textTableDialog = new TextTableDialog(bot);
 	private final TreeDialog _treeDialog = new TreeDialog(bot);
+	private final JobAction _jobAction = new JobAction(bot);
 
 }

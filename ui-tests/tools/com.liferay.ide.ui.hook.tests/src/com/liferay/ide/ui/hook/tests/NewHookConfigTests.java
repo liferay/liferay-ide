@@ -31,11 +31,9 @@ public class NewHookConfigTests extends SwtbotBase {
 	public static void cleanPluginsSdk() {
 		jobAction.waitForIvy();
 
-		viewAction.closeProject(envAction.getLiferayPluginsSdkName());
+		String sdkName = envAction.getLiferayPluginsSdkName() + "-" + envAction.getTimestamp();
 
-		jobAction.waitForNoRunningJobs();
-
-		viewAction.deleteProject(envAction.getLiferayPluginsSdkName());
+		viewAction.closeAndDeleteProjectWithNoRunningJobs(sdkName);
 	}
 
 	@BeforeClass
@@ -64,9 +62,7 @@ public class NewHookConfigTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeProject(projectName);
-
-		viewAction.deleteProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 	@Test
@@ -83,9 +79,7 @@ public class NewHookConfigTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeProject(projectName);
-
-		viewAction.deleteProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 }

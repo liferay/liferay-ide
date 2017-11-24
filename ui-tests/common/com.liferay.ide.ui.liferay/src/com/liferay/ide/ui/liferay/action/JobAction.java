@@ -25,6 +25,7 @@ import com.liferay.ide.ui.swtbot.condition.ConsoleContentCondition;
 import com.liferay.ide.ui.swtbot.condition.IvyJobsCondition;
 import com.liferay.ide.ui.swtbot.condition.NoRunningJobsCondition;
 import com.liferay.ide.ui.swtbot.condition.ServerStartJobCondition;
+import com.liferay.ide.ui.swtbot.condition.ShellAppearedCondition;
 import com.liferay.ide.ui.swtbot.condition.ValidateJobCondition;
 import com.liferay.ide.ui.swtbot.condition.WizardClosedCondition;
 
@@ -67,6 +68,10 @@ public class JobAction extends UIAction {
 
 	public void waitForWizardClosed(String title) {
 		ide.waitUntil(new WizardClosedCondition(bot, title));
+	}
+
+	public void waitForShellAppeared(String title) {
+		ide.waitUntil(new ShellAppearedCondition(bot, title));
 	}
 
 	public void waitForServer62Started(String serverName) {

@@ -59,6 +59,8 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 
 	@AfterClass
 	public static void afterClass() {
+		envAction.resetTimestamp();
+
 		String[] projectNames = viewAction.getProjectNames();
 
 		if (projectNames.length > 0) {
