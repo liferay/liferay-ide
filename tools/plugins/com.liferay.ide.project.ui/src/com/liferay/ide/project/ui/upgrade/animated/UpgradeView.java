@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.project.core.upgrade.BreakingChangeSelectedProject;
 import com.liferay.ide.project.core.upgrade.MigrationProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.ui.ProjectUI;
@@ -497,6 +498,13 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 
 				if (container != null) {
 					UpgradeAssistantSettingsUtil.setObjectToStore(MigrationProblemsContainer.class, null);
+				}
+
+				BreakingChangeSelectedProject selectedProject = UpgradeAssistantSettingsUtil.getObjectFromStore(
+					BreakingChangeSelectedProject.class);
+
+				if (selectedProject != null) {
+					UpgradeAssistantSettingsUtil.setObjectToStore(BreakingChangeSelectedProject.class, null);
 				}
 			}
 			catch (IOException ioe) {

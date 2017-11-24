@@ -60,19 +60,6 @@ public class ProjectLocationValidationService extends ValidationService {
 		SDK sdk = SDKUtil.createSDKFromLocation(PathBridge.create(location));
 
 		if (sdk != null) {
-			IStatus status = sdk.validate(true);
-
-			if (!status.isOK()) {
-				return StatusBridge.create(status);
-			}
-
-			// if( isInLiferayWorkspace( location ) )
-			// {
-			// return StatusBridge.create(
-			// ProjectCore.createErrorStatus( "sdk project is already in a Liferay
-			// workspace" ) );
-			// }
-
 			String version = sdk.getVersion();
 
 			if (version != null) {

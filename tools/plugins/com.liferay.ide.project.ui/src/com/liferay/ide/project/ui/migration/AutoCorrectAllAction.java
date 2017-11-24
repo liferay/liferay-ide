@@ -17,20 +17,27 @@ package com.liferay.ide.project.ui.migration;
 import com.liferay.blade.api.AutoMigrateException;
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.Problem;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.ProblemsContainer;
+import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
 import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.ide.project.core.upgrade.BreakingChangeSelectedProject;
+import com.liferay.ide.project.core.upgrade.BreakingChangeSimpleProject;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -38,8 +45,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IViewPart;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -134,9 +141,32 @@ public class AutoCorrectAllAction extends Action {
 							public void run() {
 								IViewPart view = UIUtil.findView(UpgradeView.ID);
 
-								new RunMigrationToolAction("Run Migration Tool", view.getViewSite().getShell()).run();
-							}
+								try {
+									BreakingChangeSelectedProject selectedProject =
+										UpgradeAssistantSettingsUtil.getObjectFromStore(
+											BreakingChangeSelectedProject.class);
 
+									StructuredSelection projectSelection = null;
+									List<IProject> projects = new ArrayList<>();
+
+									if (selectedProject != null) {
+										List<BreakingChangeSimpleProject> selectedProjects =
+											selectedProject.getSelectedProjects();
+
+										selectedProjects.stream().forEach(
+											breakingProject -> projects.add(
+												CoreUtil.getProject(breakingProject.getName())));
+
+										projectSelection = new StructuredSelection(projects.toArray(new IProject[0]));
+									}
+
+									new RunMigrationToolAction(
+										"Run Migration Tool", view.getViewSite().getShell(), projectSelection).run();
+								}
+								catch (IOException ioe) {
+									ProjectUI.logError(ioe);
+								}
+							}
 						});
 				}
 				catch (AutoMigrateException | CoreException | InvalidSyntaxException e) {
@@ -145,7 +175,6 @@ public class AutoCorrectAllAction extends Action {
 
 				return retval;
 			}
-
 		};
 
 		job.schedule();
