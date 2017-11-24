@@ -14,32 +14,29 @@
 
 package com.liferay.ide.gradle.core.parser;
 
-import com.liferay.ide.core.util.CoreUtil;
-
 import java.io.File;
 import java.io.IOException;
-
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.GroovyCodeVisitor;
 import org.codehaus.groovy.ast.builder.AstBuilder;
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 /**
  * @author Lovett Li
+ * @author Simon Jiang
  */
 public class GradleDependencyUpdater {
 
 	public GradleDependencyUpdater(File file) throws IOException, MultipleCompilationErrorsException {
-		this(IOUtils.toString(Files.newInputStream(file.toPath()), "UTF-8"));
+		this(FileUtils.readFileToString(file, "UTF-8"));
 		_file = file;
 	}
 
