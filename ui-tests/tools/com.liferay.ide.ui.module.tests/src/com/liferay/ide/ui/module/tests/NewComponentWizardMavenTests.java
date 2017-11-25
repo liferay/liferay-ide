@@ -17,6 +17,7 @@ package com.liferay.ide.ui.module.tests;
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -24,6 +25,7 @@ import org.junit.Test;
  */
 public class NewComponentWizardMavenTests extends SwtbotBase {
 
+	@Ignore("ignore as it may fails but happen unstable, need more research for it")
 	@Test
 	public void createComponentModelListener() {
 		String projectName = "test-component-model-listener-maven";
