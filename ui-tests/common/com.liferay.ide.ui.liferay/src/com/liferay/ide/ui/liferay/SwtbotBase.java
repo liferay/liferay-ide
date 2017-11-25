@@ -27,8 +27,6 @@ import com.liferay.ide.ui.swtbot.UI;
 import com.liferay.ide.ui.swtbot.util.CoreUtil;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -68,13 +66,13 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 		String[] projectNames = viewAction.getProjectNames();
 
 		if (projectNames.length > 0) {
-			String message =
+			String msg =
 				"The following projects are unable to be deleted, some error may happened, try by core's IProject:";
 
-			Logger.getLogger(SwtbotBase.class.getName()).log(Level.WARN, message);
+			envAction.logWarn(SwtbotBase.class.getName(), msg);
 
 			for (String projectName : projectNames) {
-				Logger.getLogger(SwtbotBase.class.getName()).log(Level.WARN, projectName);
+				envAction.logWarn(SwtbotBase.class.getName(), projectName);
 			}
 
 			for (String projectName : projectNames) {
