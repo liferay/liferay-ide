@@ -83,6 +83,10 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		jobAction.waitForIvy();
+
+		jobAction.waitForValidate(projectName);
+
 		viewAction.openProjectFile(projectName, "docroot", "WEB-INF", "service.xml");
 
 		editorAction.switchTabDiagramServiceXml();
@@ -94,10 +98,6 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 		viewAction.runBuildServicesSdk();
 
 		viewAction.runBuildWSDDSdk();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(projectName);
 
 		viewAction.closeAndDeleteProject(projectName);
 	}
