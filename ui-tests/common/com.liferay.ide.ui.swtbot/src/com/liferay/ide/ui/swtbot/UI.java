@@ -182,6 +182,8 @@ public interface UI {
 
 	public final String DESELECT_ALL = "Deselect All";
 
+	public final String DESIGN = "Design";
+
 	public final String DESTROY = "destroy";
 
 	public final String DESTROYING_PROTOCALHANDLER = "Destroying ProtocolHandler";

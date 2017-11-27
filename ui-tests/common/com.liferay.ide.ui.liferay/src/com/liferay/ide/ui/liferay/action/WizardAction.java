@@ -154,6 +154,12 @@ public class WizardAction extends UIAction {
 		menu.click();
 	}
 
+	public void openNewLiferayLayoutTemplate() {
+		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayLayoutTemplate();
+
+		menu.click();
+	}
+
 	public void openNewLiferayModuleWizard() {
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayModule();
 

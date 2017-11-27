@@ -69,6 +69,39 @@ public class NewLayouttplProjectSdkTests extends SwtbotBase {
 	public void createLayoutTemplate() {
 		wizardAction.openNewLiferayPluginProjectWizard();
 
+		String projectName = "test-template-layouttpl";
+
+		wizardAction.preparePluginLayoutTemplateSdk(projectName);
+
+		wizardAction.finish();
+
+		jobAction.waitForIvy();
+
+		jobAction.waitForValidate(projectName);
+
+		wizardAction.openNewLiferayLayoutTemplate();
+
+		wizardAction.finish();
+
+		String layoutTpl = "test_template.tpl";
+
+		viewAction.openProjectFile(projectName, "docroot", layoutTpl);
+
+		editorAction.close();
+
+		String layoutWapTpl = "blank_columns.wap.tpl";
+
+		viewAction.openProjectFile(projectName, "docroot", layoutWapTpl);
+
+		editorAction.close();
+
+		viewAction.closeAndDeleteProject(projectName);
+	}
+
+	@Test
+	public void createLayoutTemplateProject() {
+		wizardAction.openNewLiferayPluginProjectWizard();
+
 		String projectName = "test-layouttpl";
 
 		wizardAction.preparePluginLayoutTemplateSdk(projectName);
