@@ -52,9 +52,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		Assert.assertTrue(
 			viewAction.visibleProjectFileTry(projectName, "src/main/java", packageName, className + ".java"));
 
-		viewAction.closeProject(projectName);
-
-		viewAction.deleteProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 	@Test
@@ -86,9 +84,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		Assert.assertTrue(
 			viewAction.visibleProjectFileTry(projectName, "src/main/java", packageName, className + ".java"));
 
-		viewAction.closeProject(projectName);
-
-		viewAction.deleteProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 }

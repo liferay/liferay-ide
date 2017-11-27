@@ -37,6 +37,10 @@ public class CreateLiferayHookConfigurationWizard extends Wizard {
 		return new ComboBox(getShell().bot(), HOOK_PLUGIN_PROJECT);
 	}
 
+	public ComboBox getHookProjects() {
+		return new ComboBox(getShell().bot(), HOOK_PLUGIN_PROJECT);
+	}
+
 	public CheckBox getLanguageProperties() {
 		return new CheckBox(getShell().bot(), LANGUAGE_PROPERTIES);
 	}
@@ -47,10 +51,6 @@ public class CreateLiferayHookConfigurationWizard extends Wizard {
 
 	public CheckBox getServices() {
 		return new CheckBox(getShell().bot(), SERVICES);
-	}
-
-	public ComboBox getHookProjects() {
-		return new ComboBox(getShell().bot(), HOOK_PLUGIN_PROJECT);
 	}
 
 }

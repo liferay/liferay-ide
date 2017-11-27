@@ -35,21 +35,83 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.closeProject(workspaceName);
-
-		viewAction.deleteProject(workspaceName);
+		viewAction.closeAndDeleteProject(workspaceName);
 	}
 
 	@Test
 	public void createLiferayWorksapceChangeLocation() {
+		String workspaceName = "test-liferay-workspace-gradle-change-location";
+
+		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
+
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
+
+		wizardAction.getUseDefaultLocation().deselect();
+
+		String newFolderName = "changeLocation";
+
+		wizardAction.getLocation().setText(workspacePath + "/" + newFolderName);
+
+		wizardAction.finish();
+
+		viewAction.closeAndDeleteProject(workspaceName);
 	}
 
 	@Test
 	public void createLiferayWorksapceWithDownloadBundle() {
+		String workspaceName = "test-liferay-workspace-gradle-download-bundle";
+
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
+
+		wizardAction.getDownloadLiferayBundle().select();
+
+		wizardAction.getServerName().setText("Liferay 7-download-bundle");
+
+		wizardAction.finish();
+
+		viewAction.closeAndDeleteProject(workspaceName);
+
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+
+		dialogAction.deleteRuntimeTryConfirm("Liferay 7-download-bundle");
+
+		dialogAction.confirmPreferences();
 	}
 
 	@Test
 	public void createLiferayWorksapceWithDownloadBundleChangeBundleUrl() {
+		String workspaceName = "test-liferay-workspace-gradle-change-bundle-url";
+
+		String bundleUrl =
+			"http://mirrors.dlc.liferay.com/portal/7.0.3-ga4/liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip";
+
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
+
+		wizardAction.getDownloadLiferayBundle().select();
+
+		wizardAction.getServerName().setText("Liferay 7-change-bundle-url");
+
+		wizardAction.getBundleUrl().setText(bundleUrl);
+
+		wizardAction.finish();
+
+		viewAction.closeAndDeleteProject(workspaceName);
+
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+
+		dialogAction.deleteRuntimeTryConfirm("Liferay 7-change-bundle-url");
+
+		dialogAction.confirmPreferences();
 	}
 
 	@Test
@@ -58,7 +120,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorkspaceChangeModulesDir() {
-		String workspaceName = "test-gradle-liferay-workspace-without-bundle";
+		String workspaceName = "test-gradle-liferay-workspace-change-modules-dir";
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -70,7 +132,11 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		StringBuffer sb = new StringBuffer();
 
-		sb.append("liferay.workspace.modules.dir=modulesTest");
+		String newModulesFolderName = "modulesTest";
+
+		sb.append("liferay.workspace.modules.dir");
+		sb.append("=");
+		sb.append(newModulesFolderName);
 
 		editorAction.setText(sb.toString());
 
@@ -80,18 +146,22 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleGradle("test-mvc-portlet", MVC_PORTLET);
+		String projectName = "test-mvc-portlet";
+
+		wizardAction.prepareLiferayModuleGradle(projectName, MVC_PORTLET);
 
 		wizardAction.finish();
 
-		viewAction.closeProject(workspaceName);
+		viewAction.closeAndDeleteProject(workspaceName);
 
-		viewAction.deleteProject(workspaceName);
+		viewAction.closeAndDeleteProject(newModulesFolderName);
+
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 	@Test
 	public void createLiferayWorkspaceChangeWarsDir() {
-		String workspaceName = "test-gradle-liferay-workspace-without-bundle";
+		String workspaceName = "test-gradle-liferay-workspace-change-wars-dir";
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -103,7 +173,11 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		StringBuffer sb = new StringBuffer();
 
-		sb.append("liferay.workspace.wars.dir=warsTest");
+		String newWarsFolderName = "warsTest";
+
+		sb.append("liferay.workspace.wars.dir");
+		sb.append("=");
+		sb.append(newWarsFolderName);
 
 		editorAction.setText(sb.toString());
 
@@ -112,14 +186,18 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		editorAction.close();
 
 		wizardAction.openNewLiferayModuleWizard();
+
+		String projectName = "test-theme";
 
 		wizardAction.prepareLiferayModuleGradle("test-theme", THEME);
 
 		wizardAction.finish();
 
-		viewAction.closeProject(workspaceName);
+		viewAction.closeAndDeleteProject(workspaceName);
 
-		viewAction.deleteProject(workspaceName);
+		viewAction.closeAndDeleteProject(newWarsFolderName);
+
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 }

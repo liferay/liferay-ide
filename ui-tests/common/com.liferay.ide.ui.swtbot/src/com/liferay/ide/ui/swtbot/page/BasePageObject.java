@@ -39,8 +39,6 @@ public abstract class BasePageObject implements UI {
 		this.index = index;
 	}
 
-	public abstract String getLabel();
-
 	public BasePageObject(SWTBot bot, String label) {
 		this(bot);
 
@@ -53,6 +51,8 @@ public abstract class BasePageObject implements UI {
 		this.label = label;
 		this.index = index;
 	}
+
+	public abstract String getLabel();
 
 	public void sleep() {
 		sleep(_DEFAULT_SLEEP_MILLIS);

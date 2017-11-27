@@ -32,6 +32,14 @@ public class Editor extends AbstractPart {
 		super(bot, label);
 	}
 
+	public String getLabel() {
+		if (isLabelNull()) {
+			return ((SWTWorkbenchBot)bot).activeEditor().getTitle();
+		}
+
+		return label;
+	}
+
 	public String getText() {
 		SWTBotEclipseEditor botEditor = getPart().toTextEditor();
 
@@ -46,14 +54,6 @@ public class Editor extends AbstractPart {
 		SWTBotEclipseEditor botEditor = getPart().toTextEditor();
 
 		botEditor.setText(text);
-	}
-
-	public String getLabel() {
-		if (isLabelNull()) {
-			return ((SWTWorkbenchBot) bot).activeEditor().getTitle();
-		}
-
-		return label;
 	}
 
 	protected SWTBotEditor getPart() {

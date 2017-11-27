@@ -24,11 +24,9 @@ import com.liferay.ide.ui.liferay.action.WizardAction;
 import com.liferay.ide.ui.liferay.page.LiferayIDE;
 import com.liferay.ide.ui.swtbot.Keys;
 import com.liferay.ide.ui.swtbot.UI;
-import com.liferay.ide.ui.swtbot.util.CoreUtil;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.apache.log4j.BasicConfigurator;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
@@ -59,24 +57,18 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 
 	@AfterClass
 	public static void afterClass() {
+		envAction.resetTimestamp();
+
 		String[] projectNames = viewAction.getProjectNames();
 
 		if (projectNames.length > 0) {
-			System.out.println(
-				"The following projects are unable to be deleted, some error may happened, try by core's IProject:");
+			String msg =
+				"The following projects are unable to be deleted, some error may happened:";
+
+			envAction.logWarn(SwtbotBase.class.getName(), msg);
 
 			for (String projectName : projectNames) {
-				System.out.println(projectName);
-			}
-
-			for (String projectName : projectNames) {
-				IProject project = CoreUtil.getProject(projectName);
-
-				try {
-					project.delete(true, new NullProgressMonitor());
-				}
-				catch (CoreException ce) {
-				}
+				envAction.logWarn(SwtbotBase.class.getName(), projectName);
 			}
 		}
 	}
@@ -115,6 +107,8 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 		System.setProperty(SWTBotPreferenceConstants.KEY_DEFAULT_POLL_DELAY, "5000");
 
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
+
+		BasicConfigurator.configure();
 	}
 
 }

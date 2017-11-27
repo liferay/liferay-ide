@@ -65,9 +65,7 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		editorAction.close();
 
-		viewAction.closeProject(liferayWorkspaceName);
-
-		viewAction.deleteProject(liferayWorkspaceName);
+		viewAction.closeAndDeleteProject(liferayWorkspaceName);
 	}
 
 	@Ignore("Failed on mac, need to fix")
@@ -89,9 +87,7 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		Assert.assertTrue(viewAction.visibleProjectFileTry(liferayWorkspaceName, "configs"));
 		Assert.assertTrue(viewAction.visibleProjectFileTry(liferayWorkspaceName, "gradle"));
 
-		viewAction.closeProject(liferayWorkspaceName);
-
-		viewAction.deleteProject(liferayWorkspaceName);
+		viewAction.closeAndDeleteProject(liferayWorkspaceName);
 	}
 
 	@Test

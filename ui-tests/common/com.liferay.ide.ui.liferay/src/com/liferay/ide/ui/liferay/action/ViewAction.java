@@ -15,18 +15,15 @@
 package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
-import com.liferay.ide.ui.swtbot.eclipse.page.DeleteResourcesContinueDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.DeleteResourcesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.PackageExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ProjectExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ServersView;
-import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.Tree;
 
 import java.util.Arrays;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 
 /**
@@ -38,6 +35,20 @@ public class ViewAction extends UIAction {
 		super(bot);
 	}
 
+	public void closeAndDeleteProject(String... items) {
+		closeProject(items);
+
+		deleteProject(items);
+	}
+
+	public void closeAndDeleteProjectWithNoRunningJobs(String... items) {
+		closeProject(items);
+
+		_jobAction.waitForNoRunningJobs();
+
+		deleteProject(items);
+	}
+
 	public void closeProject(String... items) {
 		ide.sleep();
 
@@ -47,33 +58,44 @@ public class ViewAction extends UIAction {
 	}
 
 	public void deleteProject(String... items) {
-		ide.sleep(2000);
-
 		_getProjects().contextMenu(DELETE, items);
 
 		ide.sleep();
+
+		String label = _deleteResourcesDialog.getLabel();
 
 		// _deleteResourcesDialog.getDeleteFromDisk().select();
 
 		_deleteResourcesDialog.confirm();
 
-//		long origin = SWTBotPreferences.TIMEOUT;
-//
-//		SWTBotPreferences.TIMEOUT = 1500;
-//
-//		try {
-//			_continueDeleteResourcesDialog.confirm();
-//		}
-//		catch (Exception e) {
-//		}
-//
-//		try {
-//			_dialog.confirm();
-//		}
-//		catch (Exception e) {
-//		}
-//
-//		SWTBotPreferences.TIMEOUT = origin;
+		_jobAction.waitForShellClosed(label);
+
+		// long origin = SWTBotPreferences.TIMEOUT;
+
+		//
+
+		// SWTBotPreferences.TIMEOUT = 1500;
+
+		//
+
+		// try {
+		// _continueDeleteResourcesDialog.confirm();
+		// }
+		// catch (Exception e) {
+		// }
+
+		//
+
+		// try {
+		// _dialog.confirm();
+		// }
+		// catch (Exception e) {
+		// }
+
+		//
+
+		// SWTBotPreferences.TIMEOUT = origin;
+
 	}
 
 	public String[] getProjectNames() {
@@ -100,6 +122,18 @@ public class ViewAction extends UIAction {
 
 	public void openServerEditor(String serverLabel) {
 		_serversView.getServers().doubleClick(serverLabel);
+	}
+
+	public void runBuildServicesSdk() {
+		_getProjects().contextMenu(BUILD_SERVICES);
+
+		ide.sleep(2000);
+	}
+
+	public void runBuildWSDDSdk() {
+		_getProjects().contextMenu(BUILD_WSDD);
+
+		ide.sleep(2000);
 	}
 
 	public void serverDebug(String serverLabel) {
@@ -181,9 +215,7 @@ public class ViewAction extends UIAction {
 		return null;
 	}
 
-	private final DeleteResourcesContinueDialog _continueDeleteResourcesDialog = new DeleteResourcesContinueDialog(bot);
 	private final DeleteResourcesDialog _deleteResourcesDialog = new DeleteResourcesDialog(bot);
-	private final Dialog _dialog = new Dialog(bot);
 	private final JobAction _jobAction = new JobAction(bot);
 	private final PackageExplorerView _packageExplorerView = new PackageExplorerView(bot);
 	private final ProjectExplorerView _projectExplorerView = new ProjectExplorerView(bot);

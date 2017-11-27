@@ -31,11 +31,9 @@ public class NewLayouttplProjectSdkTests extends SwtbotBase {
 	public static void cleanPluginsSdk() {
 		jobAction.waitForIvy();
 
-		viewAction.closeProject(envAction.getLiferayPluginsSdkName());
+		String sdkName = envAction.getLiferayPluginsSdkName() + "-" + envAction.getTimestamp();
 
-		jobAction.waitForNoRunningJobs();
-
-		viewAction.deleteProject(envAction.getLiferayPluginsSdkName());
+		viewAction.closeAndDeleteProjectWithNoRunningJobs(sdkName);
 	}
 
 	@BeforeClass
@@ -64,13 +62,44 @@ public class NewLayouttplProjectSdkTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeProject(projectName);
-
-		viewAction.deleteProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 	@Test
 	public void createLayoutTemplate() {
+		wizardAction.openNewLiferayPluginProjectWizard();
+
+		String projectName = "test-template-layouttpl";
+
+		wizardAction.preparePluginLayoutTemplateSdk(projectName);
+
+		wizardAction.finish();
+
+		jobAction.waitForIvy();
+
+		jobAction.waitForValidate(projectName);
+
+		wizardAction.openNewLiferayLayoutTemplate();
+
+		wizardAction.finish();
+
+		String layoutTpl = "test_template.tpl";
+
+		viewAction.openProjectFile(projectName, "docroot", layoutTpl);
+
+		editorAction.close();
+
+		String layoutWapTpl = "blank_columns.wap.tpl";
+
+		viewAction.openProjectFile(projectName, "docroot", layoutWapTpl);
+
+		editorAction.close();
+
+		viewAction.closeAndDeleteProject(projectName);
+	}
+
+	@Test
+	public void createLayoutTemplateProject() {
 		wizardAction.openNewLiferayPluginProjectWizard();
 
 		String projectName = "test-layouttpl";
@@ -83,9 +112,7 @@ public class NewLayouttplProjectSdkTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeProject(projectName);
-
-		viewAction.deleteProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 }

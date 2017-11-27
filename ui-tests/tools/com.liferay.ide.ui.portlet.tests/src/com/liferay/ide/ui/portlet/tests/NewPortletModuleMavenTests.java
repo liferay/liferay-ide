@@ -17,12 +17,28 @@ package com.liferay.ide.ui.portlet.tests;
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
 public class NewPortletModuleMavenTests extends SwtbotBase {
+
+	@Test
+	public void createFreemarkerPortlet() {
+		String projectName = "test-freemarker-portlet-maven";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.prepareLiferayModuleMaven(projectName, FREEMARKER_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeAndDeleteProject(projectName);
+	}
 
 	@Test
 	public void createMvcPortlet() {
@@ -36,9 +52,7 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
-		viewAction.closeProject(projectName);
-
-		viewAction.deleteProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 	@Test
@@ -53,9 +67,38 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
-		viewAction.closeProject(projectName);
+		viewAction.closeAndDeleteProject(projectName);
+	}
 
-		viewAction.deleteProject(projectName);
+	@Ignore("ignore to wait IDE-3579 as it will take too long unexpected")
+	@Test
+	public void createSoyPortlet() {
+		String projectName = "test-soy-portlet-maven";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.prepareLiferayModuleMaven(projectName, SOY_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeAndDeleteProject(projectName);
+	}
+
+	@Test
+	public void createSpringMvcPortlet() {
+		String projectName = "test-spring-mvc-portlet-maven";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.prepareLiferayModuleMaven(projectName, SPRING_MVC_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 }

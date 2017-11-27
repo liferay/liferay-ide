@@ -63,14 +63,20 @@ public class TomcatDeployTests extends SwtbotBase {
 		viewAction.showServersView();
 
 		// viewAction.serverStart(_serverStoppedLabel);
+
 		//
+
 		// viewAction.serverStartWait();
+
 	}
 
 	@AfterClass
 	public static void stopServer() throws IOException {
+
 		// viewAction.serverStop(_serverStartedLabel);
+
 		//
+
 		// viewAction.serverStopWait();
 
 		dialogAction.openPreferencesDialog();
@@ -80,8 +86,8 @@ public class TomcatDeployTests extends SwtbotBase {
 		dialogAction.confirmPreferences();
 	}
 
-	@Test
 	@Ignore("ignore to wait Terry finish the server start checker")
+	@Test
 	public void deploySampleProject() {
 		wizardAction.openNewLiferayModuleWizard();
 

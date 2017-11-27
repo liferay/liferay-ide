@@ -34,9 +34,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.closeProject(workspaceName);
-
-		viewAction.deleteProject(workspaceName);
+		viewAction.closeAndDeleteProject(workspaceName);
 	}
 
 	@Test

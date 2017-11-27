@@ -32,6 +32,7 @@ import com.liferay.ide.ui.swtbot.eclipse.page.ImportProjectWizard;
 import com.liferay.ide.ui.swtbot.eclipse.page.NewRuntimeWizard;
 import com.liferay.ide.ui.swtbot.eclipse.page.NewServerWizard;
 import com.liferay.ide.ui.swtbot.page.Button;
+import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.MenuItem;
 import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.Wizard;
@@ -70,15 +71,35 @@ public class WizardAction extends UIAction {
 
 		_wizard.finish();
 
-		_jobAction.waitForWizardClosed(title);
+		_jobAction.waitForShellClosed(title);
+	}
+
+	public Text getBundleUrl() {
+		return _newWorkspaceWizard.getBundleUrl();
+	}
+
+	public CheckBox getDownloadLiferayBundle() {
+		return _newWorkspaceWizard.getDownloadLiferayBundle();
 	}
 
 	public Button getFinishBtn() {
 		return _wizard.finishBtn();
 	}
 
+	public Text getLocation() {
+		return _newProjectWizard.getLocation();
+	}
+
 	public Button getNextBtn() {
 		return _wizard.nextBtn();
+	}
+
+	public Text getServerName() {
+		return _newWorkspaceWizard.getServerName();
+	}
+
+	public CheckBox getUseDefaultLocation() {
+		return _newProjectWizard.getUseDefaultLocation();
 	}
 
 	public String getValidationMsg() {
@@ -129,6 +150,12 @@ public class WizardAction extends UIAction {
 
 	public void openNewLiferayJsfProjectWizard() {
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayJSFProject();
+
+		menu.click();
+	}
+
+	public void openNewLiferayLayoutTemplate() {
+		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayLayoutTemplate();
 
 		menu.click();
 	}
@@ -452,6 +479,10 @@ public class WizardAction extends UIAction {
 
 	public void preparePluginSdkLocation(String location) {
 		_setSdkLocationWizard.getSdkLocation().setText(location);
+	}
+
+	public void preparePluginServiceBuilderPortletSdk(String projectName) {
+		preparePlugin(projectName, SERVICE_BUILDER_PORTLET, ANT_LIFERAY_PLUGINS_SDK);
 	}
 
 	public void preparePluginThemeSdk(String projectName) {

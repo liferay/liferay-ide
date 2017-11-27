@@ -92,6 +92,8 @@ public class DialogAction extends UIAction {
 			_keyboradAction.pressKeysPreferencesDialogMac();
 		}
 		else {
+			_jobAction.waitForShellAppeared(ide.getLabel());
+
 			ide.getPreferencesMenu().click();
 		}
 	}
@@ -142,6 +144,7 @@ public class DialogAction extends UIAction {
 
 	private final AddAndRemoveDialog _addAndRemoveDialog = new AddAndRemoveDialog(bot);
 	private final Dialog _dialog = new Dialog(bot);
+	private final JobAction _jobAction = new JobAction(bot);
 	private final KeyboardAction _keyboradAction = new KeyboardAction(bot);
 	private final PreferenceRecorderDialog _preferenceRecorderDialog = new PreferenceRecorderDialog(bot);
 	private final PreferencesDialog _preferencesDialog = new PreferencesDialog(bot);
