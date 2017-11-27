@@ -17,6 +17,7 @@ package com.liferay.ide.ui.portlet.tests;
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -73,6 +74,7 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 		viewAction.closeAndDeleteProject(projectName);
 	}
 
+	@Ignore("ignore to wait IDE-3579 as it will take too long unexpected")
 	@Test
 	public void createSoyPortlet() {
 		String projectName = "test-soy-portlet-gradle";
