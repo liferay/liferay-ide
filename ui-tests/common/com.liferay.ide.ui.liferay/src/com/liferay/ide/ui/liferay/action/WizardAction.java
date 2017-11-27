@@ -71,7 +71,7 @@ public class WizardAction extends UIAction {
 
 		_wizard.finish();
 
-		_jobAction.waitForWizardClosed(title);
+		_jobAction.waitForShellClosed(title);
 	}
 
 	public Text getBundleUrl() {

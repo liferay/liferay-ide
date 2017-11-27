@@ -62,9 +62,13 @@ public class ViewAction extends UIAction {
 
 		ide.sleep();
 
+		String label = _deleteResourcesDialog.getLabel();
+
 		// _deleteResourcesDialog.getDeleteFromDisk().select();
 
 		_deleteResourcesDialog.confirm();
+
+		_jobAction.waitForShellClosed(label);
 
 		// long origin = SWTBotPreferences.TIMEOUT;
 

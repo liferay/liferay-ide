@@ -78,7 +78,7 @@ public class JobAction extends UIAction {
 		ide.waitUntil(new ValidateJobCondition(projectName), 300 * 1000);
 	}
 
-	public void waitForWizardClosed(String title) {
+	public void waitForShellClosed(String title) {
 		ide.waitUntil(new WizardClosedCondition(bot, title), 300 * 1000);
 	}
 
