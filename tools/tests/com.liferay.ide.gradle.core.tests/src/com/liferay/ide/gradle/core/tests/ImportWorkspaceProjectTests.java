@@ -145,7 +145,7 @@ public class ImportWorkspaceProjectTests
         String bundleUrl = op.getBundleUrl().content( true );
 
         assertEquals(
-            "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.3-ga4/liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip",
+            "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip",
             bundleUrl );
 
         final NullProgressMonitor monitor = new NullProgressMonitor();
@@ -183,7 +183,7 @@ public class ImportWorkspaceProjectTests
         String bundleUrl = op.getBundleUrl().content( true );
 
         assertEquals(
-            "https://api.liferay.com/downloads/portal/7.0.10.4/liferay-dxp-digital-enterprise-tomcat-7.0-sp4-20170705142422877.zip",
+            "https://api.liferay.com/downloads/portal/7.0.10.6/liferay-dxp-digital-enterprise-tomcat-7.0-sp6-20171010144253003.zip",
             bundleUrl );
     }
 

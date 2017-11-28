@@ -33,8 +33,8 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 	public ElementType TYPE = new ElementType(BaseLiferayWorkspaceOp.class);
 
 	public static final String DEFAULT_BUNDLE_URL =
-		"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.3-ga4" +
-			"/liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip";
+		"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5" +
+			"/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
 
 	public Value<String> getBundleUrl();
 
