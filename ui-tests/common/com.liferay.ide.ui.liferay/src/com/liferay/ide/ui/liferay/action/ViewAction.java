@@ -112,6 +112,10 @@ public class ViewAction extends UIAction {
 		_jobAction.waitForBrowserLoaded();
 	}
 
+	public void openNewFragmentFileWizard() {
+		_getProjects().contextMenu(LIFERAY_MODULE_FRAGMENT_FILES);
+	}
+
 	public void openProjectFile(String... files) {
 		ide.sleep();
 
