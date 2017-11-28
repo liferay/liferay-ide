@@ -52,6 +52,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.internal.MavenPluginActivator;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

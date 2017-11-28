@@ -589,26 +589,6 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
     }
 
     @Test
-    public void testProjectTemplateFragment() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "fragment-test" );
-        op.setProjectProvider( "maven-module" );
-        op.setProjectTemplateName( "fragment" );
-
-        PropertyKey hostBundleSymbolicName = op.getPropertyKeys().insert();
-        hostBundleSymbolicName.setName( "hostBundleSymbolicName" );
-        hostBundleSymbolicName.setValue( "com.liferay.login.web" );
-
-        PropertyKey hostBundleVersion = op.getPropertyKeys().insert();
-        hostBundleVersion.setName( "hostBundleVersion" );
-        hostBundleVersion.setValue( "1.0.0" );
-
-        createAndBuild(op);
-    }
-
-    @Test
     public void testProjectTemplateLayoutTemplate() throws Exception
     {
         NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -621,7 +601,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
         project.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );
 
-        assertTrue( project.getFile( "target/layout-test-1.0.0-SNAPSHOT.war" ).exists() );
+        assertTrue( project.getFile( "target/layout-test-1.0.0.war" ).exists() );
     }
 
     @Test
@@ -632,6 +612,102 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         op.setProjectName( "mvc-portlet-test" );
         op.setProjectProvider( "maven-module" );
         op.setProjectTemplateName( "mvc-portlet" );
+
+        createAndBuild(op);
+    }
+
+    @Test
+    public void testProjectTemplateNpmAngularPortlet () throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "npm-angular-portlet-test" );
+        op.setProjectProvider( "maven-module" );
+        op.setProjectTemplateName( "npm-angular-portlet" );
+
+        createAndBuild(op);
+    }
+
+    @Test
+    public void testProjectTemplateNpmBillboardjsPortlet() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "npm-billboardjs-portlet-test" );
+        op.setProjectProvider( "maven-module" );
+        op.setProjectTemplateName( "npm-billboardjs-portlet" );
+
+        createAndBuild(op);
+    }
+
+    @Test
+    public void testProjectTemplateNpmIsomorphicPortlet () throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "npm-isomorphic-portlet-test" );
+        op.setProjectProvider( "maven-module" );
+        op.setProjectTemplateName( "npm-isomorphic-portlet" );
+
+        createAndBuild(op);
+    }
+
+    @Test
+    public void testProjectTemplateNpmJqueryPortlet() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "npm-jquery-portlet-test" );
+        op.setProjectProvider( "maven-module" );
+        op.setProjectTemplateName( "npm-jquery-portlet" );
+
+        createAndBuild(op);
+    }
+
+    @Test
+    public void testProjectTemplateNpmMetaljsPortlet() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "npm-metaljs-portlet-test" );
+        op.setProjectProvider( "maven-module" );
+        op.setProjectTemplateName( "npm-metaljs-portlet" );
+
+        createAndBuild(op);
+    }
+
+    @Test
+    public void testProjectTemplateNpmPortlet() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "npm-portlet-test" );
+        op.setProjectProvider( "maven-module" );
+        op.setProjectTemplateName( "npm-portlet" );
+
+        createAndBuild(op);
+    }
+
+    @Test
+    public void testProjectTemplateNpmReactPortlet() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "npm-react-portlet-test" );
+        op.setProjectProvider( "maven-module" );
+        op.setProjectTemplateName( "npm-react-portlet" );
+
+        createAndBuild(op);
+    }
+
+    @Test
+    public void testProjectTemplateNpmVuejsPortlet() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "npm-vuejs-portlet-test" );
+        op.setProjectProvider( "maven-module" );
+        op.setProjectTemplateName( "npm-vuejs-portlet" );
 
         createAndBuild(op);
     }
@@ -783,7 +859,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
         assertTrue( apiOutput.toFile().exists() );
 
-        assertEquals( "service-builder-test-api-1.0.0-SNAPSHOT.jar", apiOutput.lastSegment() );
+        assertEquals( "service-builder-test-api-1.0.0.jar", apiOutput.lastSegment() );
 
         IBundleProject serviceBundle = LiferayCore.create( IBundleProject.class, service );
 
@@ -793,7 +869,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
         assertTrue( serviceOutput.toFile().exists() );
 
-        assertEquals( "service-builder-test-service-1.0.0-SNAPSHOT.jar", serviceOutput.lastSegment() );
+        assertEquals( "service-builder-test-service-1.0.0.jar", serviceOutput.lastSegment() );
     }
 
     @Test
@@ -847,7 +923,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
         project.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );
 
-        assertTrue( project.getFile( "target/spring-mvc-portlet-test-1.0.0-SNAPSHOT.war" ).exists() );
+        assertTrue( project.getFile( "target/spring-mvc-portlet-test-1.0.0.war" ).exists() );
     }
 
     @Test
@@ -884,6 +960,38 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         op.setProjectTemplateName( "theme-contributor" );
 
         createAndBuild(op);
+    }
+
+    @Test
+    public void testProjectTemplateWarHook() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "war-hook-test" );
+        op.setProjectProvider( "maven-module" );
+        op.setProjectTemplateName( "war-hook" );
+
+        IProject project = createAndBuild(op);
+
+        project.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );
+
+        assertTrue( project.getFile( "target/war-hook-test-1.0.0.war" ).exists() );
+    }
+
+    @Test
+    public void testProjectTemplateWarMvcPortlet() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "war-mvc-portlet-test" );
+        op.setProjectProvider( "maven-module" );
+        op.setProjectTemplateName( "war-mvc-portlet" );
+
+        IProject project = createAndBuild(op);
+
+        project.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );
+
+        assertTrue( project.getFile( "target/war-mvc-portlet-test-1.0.0.war" ).exists() );
     }
 
     @Test

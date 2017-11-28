@@ -14,10 +14,14 @@
 
 package com.liferay.ide.maven.core.util;
 
+import aQute.bnd.header.Attrs;
+import aQute.bnd.osgi.Analyzer;
+
 import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -31,9 +35,6 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 
 import org.apache.maven.artifact.Artifact;
-
-import aQute.bnd.header.Attrs;
-import aQute.bnd.osgi.Analyzer;
 
 /**
  * Default implementation of {@link Maven2OsgiConverter}

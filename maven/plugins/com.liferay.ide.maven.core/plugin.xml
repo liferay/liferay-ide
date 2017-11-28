@@ -74,7 +74,7 @@
 		point="com.liferay.ide.core.liferayProjectProviders"
 	>
 		<liferayProjectProvider
-			class="com.liferay.ide.maven.core.NewMavenModuleProjectProvider"
+			class="com.liferay.ide.maven.core.LiferayMavenModuleProjectProvider"
 			displayName="Maven"
 			id="com.liferay.ide.maven.core.mavenModuleProjectProvider"
 			priority="high"
