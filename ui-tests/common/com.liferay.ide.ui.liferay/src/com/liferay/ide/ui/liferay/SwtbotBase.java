@@ -62,10 +62,10 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 		if (projectNames.length > 0) {
 			String msg = "The following projects are unable to be deleted, some error may happened:";
 
-			envAction.logWarn(SwtbotBase.class.getName(), msg);
+			envAction.logWarn(msg);
 
 			for (String projectName : projectNames) {
-				envAction.logWarn(SwtbotBase.class.getName(), projectName);
+				envAction.logWarn(projectName);
 			}
 		}
 	}

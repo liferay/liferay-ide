@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -266,12 +265,12 @@ public class EnvAction extends UIAction {
 		}
 	}
 
-	public void logWarn(String className, String msg) {
+	public void logWarn(String msg) {
 		BasicConfigurator.configure();
 
-		Logger logger = Logger.getLogger(className);
+		Logger logger = Logger.getRootLogger();
 
-		logger.log(Level.WARN, msg);
+		logger.warn(msg);
 
 		BasicConfigurator.resetConfiguration();
 	}
