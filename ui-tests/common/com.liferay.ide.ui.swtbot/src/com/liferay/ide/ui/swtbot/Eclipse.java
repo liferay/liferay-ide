@@ -14,12 +14,10 @@
 
 package com.liferay.ide.ui.swtbot;
 
-import com.liferay.ide.ui.swtbot.eclipse.page.PackageExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
 import com.liferay.ide.ui.swtbot.page.BasePageObject;
 import com.liferay.ide.ui.swtbot.page.Editor;
 import com.liferay.ide.ui.swtbot.page.Menu;
-import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.View;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -37,7 +35,6 @@ public class Eclipse extends BasePageObject {
 
 		label = bot.activeShell().getText();
 
-		_packageExporerView = new PackageExplorerView(bot);
 		_welcomeView = new View(bot, WELCOME);
 	}
 
@@ -59,10 +56,6 @@ public class Eclipse extends BasePageObject {
 		return new Menu(bot.shell(label).bot(), otherLabel);
 	}
 
-	public PackageExplorerView getPackageExporerView() {
-		return _packageExporerView;
-	}
-
 	public String getPerspectiveLabel() {
 		return ((SWTWorkbenchBot)bot).activePerspective().getLabel();
 	}
@@ -73,7 +66,7 @@ public class Eclipse extends BasePageObject {
 		return new Menu(bot.shell(label).bot(), preferencesLabel);
 	}
 
-	public TextDialog getShowViewDialog() {
+	private TextDialog _getShowViewDialog() {
 		return new TextDialog(bot);
 	}
 
@@ -81,14 +74,26 @@ public class Eclipse extends BasePageObject {
 		return _welcomeView;
 	}
 
-	public void showServersView() {
+	protected void showView(String viewName) {
 		getOtherMenu().click();
 
-		Text text = getShowViewDialog().getText();
+		TextDialog showViewDialog = _getShowViewDialog();
 
-		text.setText(SERVERS);
+		showViewDialog.getText().setText(viewName);
 
-		getShowViewDialog().confirm(OPEN);
+		sleep(3000);
+
+		showViewDialog.confirm(OPEN);
+
+		sleep(3000);
+	}
+
+	public void showServersView() {
+		showView(SERVERS);
+	}
+
+	public void showErrorLogView() {
+		showView(ERROR_LOG);
 	}
 
 	public void waitUntil(ICondition condition) {
@@ -99,7 +104,6 @@ public class Eclipse extends BasePageObject {
 		bot.waitUntil(condition, timeout);
 	}
 
-	private PackageExplorerView _packageExporerView;
 	private View _welcomeView;
 
 }

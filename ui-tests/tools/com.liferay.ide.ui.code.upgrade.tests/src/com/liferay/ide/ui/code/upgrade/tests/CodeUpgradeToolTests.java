@@ -15,9 +15,7 @@
 package com.liferay.ide.ui.code.upgrade.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.page.view.CodeUpgradeView;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -25,35 +23,49 @@ import org.junit.Test;
  */
 public class CodeUpgradeToolTests extends SwtbotBase {
 
-	@Ignore
 	@Test
-	public void testGear()
-	{
+	public void testGear() {
+		viewAction.showCodeUpgradeView();
 
-		CodeUpgradeView codeUpgrade = ide.showCodeUpgradeView();
-
-		codeUpgrade.getGear().clickGear(0);
+		viewAction.switchGear(0);
 
 		// the number of gears starts from 0, that means, the Import Page should be 1 or not 2
 
-		codeUpgrade.getGear().clickGear(1);
+		viewAction.switchGear(1);
 
-		codeUpgrade.getGear().clickGear(0);
+		viewAction.switchGear(0);
 
-		codeUpgrade.showAllPagesWithConfirm();
-		codeUpgrade.getGear().clickGear(0);
-		codeUpgrade.getGear().clickGear(1);
-		codeUpgrade.getGear().clickGear(2);
-		codeUpgrade.getGear().clickGear(3);
-		codeUpgrade.getGear().clickGear(4);
-		codeUpgrade.getGear().clickGear(5);
-		codeUpgrade.getGear().clickGear(6);
-		codeUpgrade.getGear().clickGear(7);
-		codeUpgrade.getGear().clickGear(8);
-		codeUpgrade.getGear().clickGear(9);
-		codeUpgrade.restartWithConfirm();
-		codeUpgrade.getGear().clickGear(0);
-		codeUpgrade.getGear().clickGear(1);
+		viewAction.showAllPages();
+
+		dialogAction.confirm(YES);
+
+		viewAction.switchGear(0);
+
+		viewAction.switchGear(1);
+
+		viewAction.switchGear(2);
+
+		viewAction.switchGear(3);
+
+		viewAction.switchGear(4);
+
+		viewAction.switchGear(5);
+
+		viewAction.switchGear(6);
+
+		viewAction.switchGear(7);
+
+		viewAction.switchGear(8);
+
+		viewAction.switchGear(9);
+
+		viewAction.restartUpgrade();
+
+		dialogAction.confirm(YES);
+
+		viewAction.switchGear(0);
+
+		viewAction.switchGear(1);
 	}
 
 }
