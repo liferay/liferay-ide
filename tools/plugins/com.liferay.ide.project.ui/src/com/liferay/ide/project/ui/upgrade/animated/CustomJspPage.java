@@ -1126,7 +1126,7 @@ public class CustomJspPage extends Page {
 				return CoreUtil.getProject(html).getName();
 			}
 			else {
-				if (!name.isEmpty()) {
+				if (name.isEmpty()) {
 					return file.getPath();
 				}
 
@@ -1204,7 +1204,7 @@ public class CustomJspPage extends Page {
 				return parentParentFile.getParentFile().getName();
 			}
 			else {
-				if (!name.isEmpty()) {
+				if (name.isEmpty()) {
 					return file.getPath();
 				}
 
