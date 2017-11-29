@@ -35,6 +35,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -266,9 +267,13 @@ public class EnvAction extends UIAction {
 	}
 
 	public void logWarn(String className, String msg) {
+		BasicConfigurator.configure();
+
 		Logger logger = Logger.getLogger(className);
 
 		logger.log(Level.WARN, msg);
+
+		BasicConfigurator.resetConfiguration();
 	}
 
 	public void prepareGeoFile() {
