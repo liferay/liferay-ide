@@ -35,7 +35,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Level;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -265,10 +265,14 @@ public class EnvAction extends UIAction {
 		}
 	}
 
-	public void logWarn(String className, String msg) {
-		Logger logger = Logger.getLogger(className);
+	public void logWarn(String msg) {
+		BasicConfigurator.configure();
 
-		logger.log(Level.WARN, msg);
+		Logger logger = Logger.getRootLogger();
+
+		logger.warn(msg);
+
+		BasicConfigurator.resetConfiguration();
 	}
 
 	public void prepareGeoFile() {

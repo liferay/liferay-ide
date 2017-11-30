@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
+import com.liferay.ide.ui.liferay.page.view.CodeUpgradeView;
 import com.liferay.ide.ui.swtbot.eclipse.page.DeleteResourcesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.PackageExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ProjectExplorerView;
@@ -183,8 +184,24 @@ public class ViewAction extends UIAction {
 		ide.showServersView();
 	}
 
+	public void showCodeUpgradeView() {
+		ide.showCodeUpgradeView();
+	}
+
 	public void switchLiferayPerspective() {
 		ide.getLiferayPerspective().activate();
+	}
+
+	public void showAllPages() {
+		_codeUpgradeView.getShowAllPagesBtn().click();
+	}
+
+	public void restartUpgrade() {
+		_codeUpgradeView.getRestartUpgradeBtn().click();
+	}
+
+	public void switchGear(int index) {
+		_codeUpgradeView.getGear().clickGear(index);
 	}
 
 	public boolean visibleProjectFileTry(String... files) {
@@ -224,5 +241,6 @@ public class ViewAction extends UIAction {
 	private final PackageExplorerView _packageExplorerView = new PackageExplorerView(bot);
 	private final ProjectExplorerView _projectExplorerView = new ProjectExplorerView(bot);
 	private final ServersView _serversView = new ServersView(bot);
+	private final CodeUpgradeView _codeUpgradeView = new CodeUpgradeView(bot);
 
 }

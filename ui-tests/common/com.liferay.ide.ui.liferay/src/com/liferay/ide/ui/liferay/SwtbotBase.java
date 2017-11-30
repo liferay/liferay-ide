@@ -25,8 +25,6 @@ import com.liferay.ide.ui.liferay.page.LiferayIDE;
 import com.liferay.ide.ui.swtbot.Keys;
 import com.liferay.ide.ui.swtbot.UI;
 
-import org.apache.log4j.BasicConfigurator;
-
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
@@ -62,13 +60,12 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 		String[] projectNames = viewAction.getProjectNames();
 
 		if (projectNames.length > 0) {
-			String msg =
-				"The following projects are unable to be deleted, some error may happened:";
+			String msg = "The following projects are unable to be deleted, some error may happened:";
 
-			envAction.logWarn(SwtbotBase.class.getName(), msg);
+			envAction.logWarn(msg);
 
 			for (String projectName : projectNames) {
-				envAction.logWarn(SwtbotBase.class.getName(), projectName);
+				envAction.logWarn(projectName);
 			}
 		}
 	}
@@ -108,7 +105,7 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
 
-		BasicConfigurator.configure();
+		ide.showErrorLogView();
 	}
 
 }

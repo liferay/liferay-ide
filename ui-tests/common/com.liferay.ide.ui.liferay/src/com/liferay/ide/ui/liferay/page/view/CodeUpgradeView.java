@@ -15,7 +15,6 @@
 package com.liferay.ide.ui.liferay.page.view;
 
 import com.liferay.ide.ui.swtbot.page.Canvas;
-import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.ui.swtbot.page.View;
 
@@ -27,16 +26,11 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class CodeUpgradeView extends View {
 
-	public CodeUpgradeView(SWTWorkbenchBot bot, String viewIdentifier) {
-		super(bot, viewIdentifier);
+	public CodeUpgradeView(SWTWorkbenchBot bot) {
+		super(bot, LIFERAY_CODE_UPGRADE);
 
 		_gear = new GearPO(bot, 3);
 		_navigator = new Canvas(bot, 4);
-
-		_showAllPagesBtn = new ToolbarButtonWithTooltip(bot, SHOW_ALL_PAGES);
-		_restartBtn = new ToolbarButtonWithTooltip(bot, RESTART_UPGRADE);
-		_restartDialog = new Dialog(bot, NO, YES);
-		_showAllPagesDialog = new Dialog(bot, NO, YES);
 	}
 
 	public GearPO getGear() {
@@ -47,14 +41,12 @@ public class CodeUpgradeView extends View {
 		return _navigator;
 	}
 
-	public void restartWithConfirm() {
-		_restartBtn.click();
-		_restartDialog.confirm();
+	public ToolbarButtonWithTooltip getShowAllPagesBtn() {
+		return new ToolbarButtonWithTooltip(bot, SHOW_ALL_PAGES);
 	}
 
-	public void showAllPagesWithConfirm() {
-		_showAllPagesBtn.click();
-		_showAllPagesDialog.confirm();
+	public ToolbarButtonWithTooltip getRestartUpgradeBtn() {
+		return new ToolbarButtonWithTooltip(bot, RESTART_UPGRADE);
 	}
 
 	public class GearPO extends Canvas {
@@ -75,9 +67,5 @@ public class CodeUpgradeView extends View {
 
 	private GearPO _gear;
 	private Canvas _navigator;
-	private ToolbarButtonWithTooltip _restartBtn;
-	private Dialog _restartDialog;
-	private ToolbarButtonWithTooltip _showAllPagesBtn;
-	private Dialog _showAllPagesDialog;
 
 }

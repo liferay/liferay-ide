@@ -24,17 +24,11 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 public class ErrorLogView extends View {
 
 	public ErrorLogView(SWTWorkbenchBot bot) {
-		super(bot, ERROR_LOG_WORKSPACE_LOG);
+		super(bot, ERROR_LOG);
 	}
 
-	public void clearErrorLog() {
-		if (hasProblems()) {
-			clickToolbarButton(CLEAR_LOG_VIEWER);
-		}
-	}
-
-	public boolean hasProblems() {
-		return false;
+	public void clickDeleteLogBtn() {
+		clickToolbarButton(DELETE_LOG);
 	}
 
 }

@@ -15,12 +15,9 @@
 package com.liferay.ide.ui.liferay.page;
 
 import com.liferay.ide.ui.liferay.page.button.CreateLifeayProjectToolbarDropDownButton;
-import com.liferay.ide.ui.liferay.page.button.NewToolbarDropDownButton;
-import com.liferay.ide.ui.liferay.page.view.CodeUpgradeView;
-import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayWorkspaceWizard;
 import com.liferay.ide.ui.swtbot.Eclipse;
+import com.liferay.ide.ui.swtbot.page.Menu;
 import com.liferay.ide.ui.swtbot.page.Perspective;
-import com.liferay.ide.ui.swtbot.page.Text;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
@@ -33,11 +30,8 @@ public class LiferayIDE extends Eclipse {
 		super(bot);
 
 		_createLiferayProjectToolbar = new CreateLifeayProjectToolbarDropDownButton(bot);
-		_codeUpgradeView = new CodeUpgradeView(bot, LIFERAY_CODE_UPGRADE);
 		_liferayPerspective = new Perspective(bot, LIFERAY_PLUGINS);
 		_liferayWorkspacePerspective = new Perspective(bot, LIFERAY_WORKSPACE);
-		_newBtn = new NewToolbarDropDownButton(bot);
-		_newLiferayWorkspaceProjectWizard = new NewLiferayWorkspaceWizard(bot);
 	}
 
 	public CreateLifeayProjectToolbarDropDownButton getCreateLiferayProjectToolbar() {
@@ -52,38 +46,13 @@ public class LiferayIDE extends Eclipse {
 		return _liferayWorkspacePerspective;
 	}
 
-	public NewToolbarDropDownButton getNewBtn() {
-		return _newBtn;
+	public void showCodeUpgradeView() {
+		showView(LIFERAY_CODE_UPGRADE);
 	}
 
-	public NewLiferayWorkspaceWizard getNewLiferayWorkspaceProjectWizard() {
-		return _newLiferayWorkspaceProjectWizard;
-	}
-
-	public CodeUpgradeView showCodeUpgradeView() {
-		try {
-			_codeUpgradeView.show();
-		}
-		catch (Exception e) {
-			getOtherMenu().click();
-
-			Text text = getShowViewDialog().getText();
-
-			text.setText(LIFERAY_CODE_UPGRADE);
-
-			getShowViewDialog().confirm();
-
-			_codeUpgradeView.show();
-		}
-
-		return _codeUpgradeView;
-	}
-
-	private CodeUpgradeView _codeUpgradeView;
 	private CreateLifeayProjectToolbarDropDownButton _createLiferayProjectToolbar;
 	private Perspective _liferayPerspective;
 	private Perspective _liferayWorkspacePerspective;
-	private NewToolbarDropDownButton _newBtn;
-	private NewLiferayWorkspaceWizard _newLiferayWorkspaceProjectWizard;
+
 
 }
