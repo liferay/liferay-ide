@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,14 +10,15 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.layouttpl.ui;
 
 /**
  * @author Gregory Amerson
  */
-public interface ILayoutTplUIPreferenceNames
-{
-    String LAST_ACTIVE_PAGE = "LAST_ACTIVE_PAGE"; //$NON-NLS-1$
+public interface ILayoutTplUIPreferenceNames {
+
+	public String LAST_ACTIVE_PAGE = "LAST_ACTIVE_PAGE";
+
 }

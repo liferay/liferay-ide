@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.layouttpl.ui;
 
@@ -21,6 +18,7 @@ import com.liferay.ide.layouttpl.ui.wizard.LayoutTplTemplateContextTypeIds;
 
 import java.io.IOException;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.text.templates.ContextTypeRegistry;
@@ -28,116 +26,82 @@ import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.ui.editors.text.templates.ContributionContextTypeRegistry;
 import org.eclipse.ui.editors.text.templates.ContributionTemplateStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plugin life cycle
- * 
  * @author Gregory Amerson
  */
-public class LayoutTplUI extends AbstractUIPlugin
-{
+public class LayoutTplUI extends AbstractUIPlugin {
 
-    // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.layouttpl.ui"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.liferay.ide.layouttpl.ui";
 
-    // The shared instance
-    private static LayoutTplUI plugin;
+	public static IStatus createErrorStatus(Exception e) {
+		return createErrorStatus(e.getMessage(), e);
+	}
 
-    public static IStatus createErrorStatus( Exception e )
-    {
-        return createErrorStatus( e.getMessage(), e );
-    }
+	public static IStatus createErrorStatus(String msg, Exception e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
+	}
 
-    public static IStatus createErrorStatus( String msg, Exception e )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
-    }
+	public static LayoutTplUI getDefault() {
+		return _plugin;
+	}
 
-    /**
-     * Returns the shared instance
-     * 
-     * @return the shared instance
-     */
-    public static LayoutTplUI getDefault()
-    {
-        return plugin;
-    }
+	public static void logError(Exception e) {
+		logError(e.getMessage(), e);
+	}
 
-    public static void logError( Exception e )
-    {
-        logError( e.getMessage(), e );
-    }
+	public static void logError(String msg, Exception e) {
+		ILog log = getDefault().getLog();
 
-    public static void logError( String msg, Exception e )
-    {
-        getDefault().getLog().log( createErrorStatus( msg, e ) );
-    }
+		log.log(createErrorStatus(msg, e));
+	}
 
-    private ContributionContextTypeRegistry fContextTypeRegistry;
+	public LayoutTplUI() {
+	}
 
-    private ContributionTemplateStore fTemplateStore;
+	public ContextTypeRegistry getTemplateContextRegistry() {
+		if (_fContextTypeRegistry == null) {
+			ContributionContextTypeRegistry registry = new ContributionContextTypeRegistry();
 
-    /**
-     * The constructor
-     */
-    public LayoutTplUI()
-    {
-    }
+			registry.addContextType(LayoutTplTemplateContextTypeIds.NEW);
 
-    public ContextTypeRegistry getTemplateContextRegistry()
-    {
-        if( fContextTypeRegistry == null )
-        {
-            ContributionContextTypeRegistry registry = new ContributionContextTypeRegistry();
+			_fContextTypeRegistry = registry;
+		}
 
-            registry.addContextType( LayoutTplTemplateContextTypeIds.NEW );
+		return _fContextTypeRegistry;
+	}
 
-            fContextTypeRegistry = registry;
-        }
+	public TemplateStore getTemplateStore() {
+		if (_fTemplateStore == null) {
+			_fTemplateStore = new ContributionTemplateStore(
+				getTemplateContextRegistry(), getPreferenceStore(), "com.liferay.ide.layouttpl.ui.custom_templates");
 
-        return fContextTypeRegistry;
-    }
+			try {
+				_fTemplateStore.load();
+			}
+			catch (IOException ioe) {
+				logError(ioe);
+			}
+		}
 
-    public TemplateStore getTemplateStore()
-    {
-        if( fTemplateStore == null )
-        {
-            fTemplateStore =
-                new ContributionTemplateStore(
-                    getTemplateContextRegistry(), getPreferenceStore(), "com.liferay.ide.layouttpl.ui.custom_templates" ); //$NON-NLS-1$
+		return _fTemplateStore;
+	}
 
-            try
-            {
-                fTemplateStore.load();
-            }
-            catch( IOException e )
-            {
-                logError( e );
-            }
-        }
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		_plugin = this;
+	}
 
-        return fTemplateStore;
-    }
+	public void stop(BundleContext context) throws Exception {
+		_plugin = null;
+		super.stop(context);
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-     */
-    public void start( BundleContext context ) throws Exception
-    {
-        super.start( context );
-        plugin = this;
-    }
+	private static LayoutTplUI _plugin;
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-     */
-    public void stop( BundleContext context ) throws Exception
-    {
-        plugin = null;
-        super.stop( context );
-    }
+	private ContributionContextTypeRegistry _fContextTypeRegistry;
+	private ContributionTemplateStore _fTemplateStore;
 
 }

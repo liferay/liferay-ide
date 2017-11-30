@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.layouttpl.ui.wizard;
 
@@ -40,204 +39,199 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class NewLayoutTplWizardPage extends LiferayDataModelWizardPage implements INewLayoutTplDataModelProperties
-{
+@SuppressWarnings("restriction")
+public class NewLayoutTplWizardPage extends LiferayDataModelWizardPage implements INewLayoutTplDataModelProperties {
 
-    protected Text id;
+	public NewLayoutTplWizardPage(IDataModel dataModel, String pageName) {
+		super(
+			dataModel, pageName, Msgs.createLayoutTemplate,
+			LayoutTplUI.imageDescriptorFromPlugin(LayoutTplUI.PLUGIN_ID, "/icons/wizban/layout_template_wiz.png"));
 
-    protected Text name;
+		setDescription(Msgs.createLiferayLayoutTemplate);
+	}
 
-    protected String projectName;
+	protected void createProjectNameGroup(Composite parent) {
+		projectNameLabel = new Label(parent, SWT.NONE);
 
-    protected Combo projectNameCombo;
+		projectNameLabel.setText("Layout plugin project:");
+		projectNameLabel.setLayoutData(new GridData());
 
-    protected Label projectNameLabel;
+		// set up project name entry field
 
-    protected Text templateFile;
+		projectNameCombo = new Combo(parent, SWT.BORDER | SWT.READ_ONLY);
+		GridData data = new GridData(GridData.FILL_HORIZONTAL);
 
-    protected Text thumbnailFile;
+		data.widthHint = 300;
+		data.horizontalSpan = 1;
+		data.grabExcessHorizontalSpace = true;
+		projectNameCombo.setLayoutData(data);
 
-    protected Text wapTemplateFile;
+		synchHelper.synchCombo(projectNameCombo, PROJECT_NAME, null);
 
-    public NewLayoutTplWizardPage( IDataModel dataModel, String pageName )
-    {
-        super( dataModel, pageName, Msgs.createLayoutTemplate, LayoutTplUI.imageDescriptorFromPlugin(
-            LayoutTplUI.PLUGIN_ID, "/icons/wizban/layout_template_wiz.png" ) ); //$NON-NLS-1$
+		String initialProjectName = initializeProjectList(projectNameCombo, model);
 
-        setDescription( Msgs.createLiferayLayoutTemplate );
-    }
+		if ((projectName == null) && (initialProjectName != null)) {
+			projectName = initialProjectName;
+		}
+	}
 
-    protected void createProjectNameGroup( Composite parent )
-    {
-        projectNameLabel = new Label( parent, SWT.NONE );
-        projectNameLabel.setText( "Layout plugin project:" ); //$NON-NLS-1$
-        projectNameLabel.setLayoutData( new GridData() );
+	protected void createTemplateInfoGroup(Composite parent) {
+		SWTUtil.createLabel(parent, SWT.RIGHT, Msgs.name, 1);
 
-        // set up project name entry field
-        projectNameCombo = new Combo( parent, SWT.BORDER | SWT.READ_ONLY );
-        GridData data = new GridData( GridData.FILL_HORIZONTAL );
-        data.widthHint = 300;
-        data.horizontalSpan = 1;
-        data.grabExcessHorizontalSpace = true;
-        projectNameCombo.setLayoutData( data );
-        synchHelper.synchCombo( projectNameCombo, PROJECT_NAME, null );
+		name = SWTUtil.createText(parent, 1);
 
-        String initialProjectName = initializeProjectList( projectNameCombo, model );
-        if( projectName == null && initialProjectName != null )
-        {
-            projectName = initialProjectName;
-        }
-    }
+		this.synchHelper.synchText(name, LAYOUT_TEMPLATE_NAME, null);
 
-    protected void createTemplateInfoGroup( Composite parent )
-    {
-        SWTUtil.createLabel( parent, SWT.RIGHT, Msgs.name, 1 );
+		SWTUtil.createLabel(parent, StringPool.EMPTY, 1);
 
-        this.name = SWTUtil.createText( parent, 1 );
-        this.synchHelper.synchText( name, LAYOUT_TEMPLATE_NAME, null );
-        SWTUtil.createLabel( parent, StringPool.EMPTY, 1 );
+		SWTUtil.createLabel(parent, SWT.RIGHT, Msgs.id, 1);
 
-        SWTUtil.createLabel( parent, SWT.RIGHT, Msgs.id, 1 );
+		id = SWTUtil.createText(parent, 1);
 
-        this.id = SWTUtil.createText( parent, 1 );
-        this.synchHelper.synchText( id, LAYOUT_TEMPLATE_ID, null );
-        SWTUtil.createLabel( parent, StringPool.EMPTY, 1 );
+		this.synchHelper.synchText(id, LAYOUT_TEMPLATE_ID, null);
 
-        SWTUtil.createLabel( parent, SWT.RIGHT, Msgs.templateFile, 1 );
+		SWTUtil.createLabel(parent, StringPool.EMPTY, 1);
 
-        this.templateFile = SWTUtil.createText( parent, 1 );
-        this.synchHelper.synchText( templateFile, LAYOUT_TEMPLATE_FILE, null );
+		SWTUtil.createLabel(parent, SWT.RIGHT, Msgs.templateFile, 1);
 
-        Button templateFileBrowse = SWTUtil.createPushButton( parent, Msgs.browse, null );
+		templateFile = SWTUtil.createText(parent, 1);
 
-        templateFileBrowse.addSelectionListener( new SelectionAdapter()
-        {
+		this.synchHelper.synchText(templateFile, LAYOUT_TEMPLATE_FILE, null);
 
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                handleFileBrowseButton(
-                    NewLayoutTplWizardPage.this.templateFile, Msgs.templateFileSelection, Msgs.chooseTemplateFile );
-            }
+		Button templateFileBrowse = SWTUtil.createPushButton(parent, Msgs.browse, null);
 
-        } );
+		templateFileBrowse.addSelectionListener(
+			new SelectionAdapter() {
 
-        SWTUtil.createLabel( parent, SWT.RIGHT, Msgs.wapTemplateFile, 1 );
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					handleFileBrowseButton(
+						NewLayoutTplWizardPage.this.templateFile, Msgs.templateFileSelection, Msgs.chooseTemplateFile);
+				}
 
-        this.wapTemplateFile = SWTUtil.createText( parent, 1 );
-        this.synchHelper.synchText( wapTemplateFile, LAYOUT_WAP_TEMPLATE_FILE, null );
+			});
 
-        Button wapTemplateFileBrowse = SWTUtil.createPushButton( parent, Msgs.browse, null );
+		SWTUtil.createLabel(parent, SWT.RIGHT, Msgs.wapTemplateFile, 1);
 
-        wapTemplateFileBrowse.addSelectionListener( new SelectionAdapter()
-        {
+		wapTemplateFile = SWTUtil.createText(parent, 1);
 
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                handleFileBrowseButton(
-                    NewLayoutTplWizardPage.this.wapTemplateFile, Msgs.wapTemplateFileSelection,
-                    Msgs.chooseWAPTemplateFile );
-            }
+		this.synchHelper.synchText(wapTemplateFile, LAYOUT_WAP_TEMPLATE_FILE, null);
 
-        } );
+		Button wapTemplateFileBrowse = SWTUtil.createPushButton(parent, Msgs.browse, null);
 
-        SWTUtil.createLabel( parent, SWT.RIGHT, Msgs.thumbnailFile, 1 );
+		wapTemplateFileBrowse.addSelectionListener(
+			new SelectionAdapter() {
 
-        this.thumbnailFile = SWTUtil.createText( parent, 1 );
-        this.synchHelper.synchText( thumbnailFile, LAYOUT_THUMBNAIL_FILE, null );
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					handleFileBrowseButton(
+						NewLayoutTplWizardPage.this.wapTemplateFile, Msgs.wapTemplateFileSelection,
+						Msgs.chooseWAPTemplateFile);
+				}
 
-        Button thumbnailFileBrowse = SWTUtil.createPushButton( parent, Msgs.browse, null );
+			});
 
-        thumbnailFileBrowse.addSelectionListener( new SelectionAdapter()
-        {
+		SWTUtil.createLabel(parent, SWT.RIGHT, Msgs.thumbnailFile, 1);
 
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                handleFileBrowseButton(
-                    NewLayoutTplWizardPage.this.thumbnailFile, Msgs.wapTemplateFileSelection,
-                    Msgs.chooseThumbnailFile );
-            }
+		thumbnailFile = SWTUtil.createText(parent, 1);
 
-        } );
+		this.synchHelper.synchText(thumbnailFile, LAYOUT_THUMBNAIL_FILE, null);
 
-        synchHelper.getDataModel().addListener( new IDataModelListener()
-        {
+		Button thumbnailFileBrowse = SWTUtil.createPushButton(parent, Msgs.browse, null);
 
-            public void propertyChanged( DataModelEvent event )
-            {
-                if( LAYOUT_TEMPLATE_NAME.equals( event.getPropertyName() ) ||
-                    LAYOUT_TEMPLATE_ID.equals( event.getPropertyName() ) )
-                {
+		thumbnailFileBrowse.addSelectionListener(
+			new SelectionAdapter() {
 
-                    synchHelper.synchAllUIWithModel();
-                }
-            }
-        } );
-    }
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					handleFileBrowseButton(
+						NewLayoutTplWizardPage.this.thumbnailFile, Msgs.wapTemplateFileSelection,
+						Msgs.chooseThumbnailFile);
+				}
 
-    @Override
-    protected Composite createTopLevelComposite( Composite parent )
-    {
-        Composite topComposite = SWTUtil.createTopComposite( parent, 3 );
+			});
 
-        createProjectNameGroup( topComposite );
+		synchHelper.getDataModel().addListener(
+			new IDataModelListener() {
 
-        SWTUtil.createSeparator( topComposite, 3 );
+				public void propertyChanged(DataModelEvent event) {
+					if (LAYOUT_TEMPLATE_NAME.equals(event.getPropertyName()) ||
+						LAYOUT_TEMPLATE_ID.equals(event.getPropertyName())) {
 
-        createTemplateInfoGroup( topComposite );
+						synchHelper.synchAllUIWithModel();
+					}
+				}
 
-        return topComposite;
-    }
+			});
+	}
 
-    @Override
-    protected void enter()
-    {
-        super.enter();
+	@Override
+	protected Composite createTopLevelComposite(Composite parent) {
+		Composite topComposite = SWTUtil.createTopComposite(parent, 3);
 
-        validatePage( true );
-    }
+		createProjectNameGroup(topComposite);
 
-    @Override
-    protected String[] getValidationPropertyNames()
-    {
-        return new String[] { PROJECT_NAME, LAYOUT_TEMPLATE_NAME, LAYOUT_TEMPLATE_ID, LAYOUT_TEMPLATE_FILE,
-            LAYOUT_WAP_TEMPLATE_FILE, LAYOUT_THUMBNAIL_FILE };
-    }
+		SWTUtil.createSeparator(topComposite, 3);
 
-    @Override
-    protected boolean isProjectValid( IProject project )
-    {
-        return LayoutTplUIUtil.isLayoutTplProject( project );
-    }
+		createTemplateInfoGroup(topComposite);
 
-    @Override
-    protected boolean showValidationErrorsOnEnter()
-    {
-        return true;
-    }
+		return topComposite;
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String browse;
-        public static String chooseTemplateFile;
-        public static String chooseThumbnailFile;
-        public static String chooseWAPTemplateFile;
-        public static String createLayoutTemplate;
-        public static String createLiferayLayoutTemplate;
-        public static String id;
-        public static String name;
-        public static String templateFile;
-        public static String templateFileSelection;
-        public static String thumbnailFile;
-        public static String wapTemplateFile;
-        public static String wapTemplateFileSelection;
+	@Override
+	protected void enter() {
+		super.enter();
 
-        static
-        {
-            initializeMessages( NewLayoutTplWizardPage.class.getName(), Msgs.class );
-        }
-    }
+		validatePage(true);
+	}
+
+	@Override
+	protected String[] getValidationPropertyNames() {
+		return new String[] {
+			PROJECT_NAME, LAYOUT_TEMPLATE_NAME, LAYOUT_TEMPLATE_ID, LAYOUT_TEMPLATE_FILE, LAYOUT_WAP_TEMPLATE_FILE,
+			LAYOUT_THUMBNAIL_FILE
+		};
+	}
+
+	@Override
+	protected boolean isProjectValid(IProject project) {
+		return LayoutTplUIUtil.isLayoutTplProject(project);
+	}
+
+	@Override
+	protected boolean showValidationErrorsOnEnter() {
+		return true;
+	}
+
+	protected Text id;
+	protected Text name;
+	protected String projectName;
+	protected Combo projectNameCombo;
+	protected Label projectNameLabel;
+	protected Text templateFile;
+	protected Text thumbnailFile;
+	protected Text wapTemplateFile;
+
+	private static class Msgs extends NLS {
+
+		public static String browse;
+		public static String chooseTemplateFile;
+		public static String chooseThumbnailFile;
+		public static String chooseWAPTemplateFile;
+		public static String createLayoutTemplate;
+		public static String createLiferayLayoutTemplate;
+		public static String id;
+		public static String name;
+		public static String templateFile;
+		public static String templateFileSelection;
+		public static String thumbnailFile;
+		public static String wapTemplateFile;
+		public static String wapTemplateFileSelection;
+
+		static {
+			initializeMessages(NewLayoutTplWizardPage.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

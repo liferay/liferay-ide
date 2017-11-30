@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.layouttpl.ui.draw2d;
 
@@ -26,91 +23,74 @@ import org.eclipse.swt.SWT;
 /**
  * @author Gregory Amerson
  */
-public class PortletLayoutPanel extends Panel
-{
-    protected boolean top = false;
-    protected boolean bottom = false;
+public class PortletLayoutPanel extends Panel {
 
-    public PortletLayoutPanel()
-    {
-        super();
-    }
+	public PortletLayoutPanel() {
+	}
 
-    public PortletLayoutPanel( boolean top, boolean bottom )
-    {
-        super();
-        this.top = top;
-        this.bottom = bottom;
-    }
+	public PortletLayoutPanel(boolean top, boolean bottom) {
+		this.top = top;
+		this.bottom = bottom;
+	}
 
-    protected void setup()
-    {
-    }
+	public boolean isBottom() {
+		return bottom;
+	}
 
-    @Override
-    protected void paintFigure( Graphics graphics )
-    {
-        if( isOpaque() )
-        {
-            graphics.setAntialias( SWT.ON );
+	public boolean isTop() {
+		return top;
+	}
 
-            if( !top && !bottom )
-            {
-                graphics.fillRectangle( getBounds() );
-            }
-            else
-            {
-                Rectangle normalFillRectangle = new Rectangle( getBounds() );
-                Rectangle roundedFillRectangle = new Rectangle( getBounds() );
-                int remainder = normalFillRectangle.height % 2;
-                int halfHeight = ( normalFillRectangle.height / 2 );
+	public void setBottom(boolean bottom) {
+		this.bottom = bottom;
+	}
 
-                if( top && !bottom )
-                {
-                    roundedFillRectangle.height = ( roundedFillRectangle.height / 2 ) + remainder;
-                    normalFillRectangle.y = normalFillRectangle.y + halfHeight - 10;
-                    normalFillRectangle.height = halfHeight + remainder + 10;
+	public void setTop(boolean top) {
+		this.top = top;
+	}
 
-                    graphics.fillRectangle( normalFillRectangle );
-                }
-                else if( !top && bottom )
-                {
-                    roundedFillRectangle.height = ( roundedFillRectangle.height / 2 ) + remainder;
-                    roundedFillRectangle.y = roundedFillRectangle.y + halfHeight;
-                    normalFillRectangle.height = halfHeight + remainder + 10;
+	@Override
+	protected void paintFigure(Graphics graphics) {
+		if (isOpaque()) {
+			graphics.setAntialias(SWT.ON);
 
-                    graphics.fillRectangle( normalFillRectangle );
-                }
+			if (!top && !bottom) {
+				graphics.fillRectangle(getBounds());
+			}
+			else {
+				Rectangle normalFillRectangle = new Rectangle(getBounds());
+				Rectangle roundedFillRectangle = new Rectangle(getBounds());
+				int remainder = normalFillRectangle.height % 2;
+				int halfHeight = normalFillRectangle.height / 2;
 
-                graphics.fillRoundRectangle( roundedFillRectangle, 10, 10 );
-            }
+				if (top && !bottom) {
+					roundedFillRectangle.height = (roundedFillRectangle.height / 2) + remainder;
+					normalFillRectangle.y = normalFillRectangle.y + halfHeight - 10;
+					normalFillRectangle.height = halfHeight + remainder + 10;
 
-        }
+					graphics.fillRectangle(normalFillRectangle);
+				}
+				else if (!top && bottom) {
+					roundedFillRectangle.height = (roundedFillRectangle.height / 2) + remainder;
+					roundedFillRectangle.y = roundedFillRectangle.y + halfHeight;
+					normalFillRectangle.height = halfHeight + remainder + 10;
 
-        if( getBorder() instanceof AbstractBackground )
-        {
-            ( (AbstractBackground) getBorder() ).paintBackground( this, graphics, NO_INSETS );
-        }
-    }
+					graphics.fillRectangle(normalFillRectangle);
+				}
 
-    public boolean isTop()
-    {
-        return top;
-    }
+				graphics.fillRoundRectangle(roundedFillRectangle, 10, 10);
+			}
+		}
 
-    public void setTop( boolean top )
-    {
-        this.top = top;
-    }
+		if (getBorder() instanceof AbstractBackground) {
+			((AbstractBackground)getBorder()).paintBackground(this, graphics, NO_INSETS);
+		}
+	}
 
-    public boolean isBottom()
-    {
-        return bottom;
-    }
+	protected void setup() {
+	}
 
-    public void setBottom( boolean bottom )
-    {
-        this.bottom = bottom;
-    }
+	protected boolean bottom = false;
+	protected boolean top = false;
 
 }

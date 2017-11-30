@@ -3,42 +3,48 @@
 <plugin>
 
 	<extension
-         point="org.eclipse.wst.common.project.facet.ui.images">
+		point="org.eclipse.wst.common.project.facet.ui.images"
+	>
 
-      <image
-            category="liferay.plugins"
-            facet="liferay.layouttpl"
-            path="icons/e16/layout.png">
-      </image>
+		<image
+			category="liferay.plugins"
+			facet="liferay.layouttpl"
+			path="icons/e16/layout.png"
+		>
+		</image>
 
-   </extension>
-   <extension
-       point="org.eclipse.ui.editors">
-    <editor
-          class="com.liferay.ide.layouttpl.ui.editor.LayoutTplEditor"
-          default="true"
-          extensions="tpl"
-          icon="icons/e16/layout.png"
-          id="com.liferay.ide.eclipse.layouttpl.ui.template.multiEditor"
-          name="%layout.editor.name">
-    </editor>
- </extension>
- <extension
-       point="org.eclipse.ui.newWizards">
-       <wizard
-            category="com.liferay.ide.newWizards"
-            icon="icons/n16/layout_new.png"
-            id="com.liferay.ide.eclipse.layouttpl.ui.wizard.layouttemplate"
-            name="%layout.wizard.name">
-         <class class="com.liferay.ide.layouttpl.ui.wizard.NewLayoutTplWizard">
-         	<parameter name="liferay_artifact" value="true"/>
-            <parameter name="menuIndex" value="40" />
-            <parameter name="validProjectTypes" value="layouttpl" />
-         </class>
-         <description>
-            %layout.wizard.description
-         </description>
-      </wizard>
- </extension>
+	</extension>
+	<extension
+		point="org.eclipse.ui.editors"
+	>
+		<editor
+			class="com.liferay.ide.layouttpl.ui.editor.LayoutTplEditor"
+			default="true"
+			extensions="tpl"
+			icon="icons/e16/layout.png"
+			id="com.liferay.ide.eclipse.layouttpl.ui.template.multiEditor"
+			name="%layout.editor.name"
+		>
+		</editor>
+	</extension>
+	<extension
+		point="org.eclipse.ui.newWizards"
+	>
+		<wizard
+			category="com.liferay.ide.newWizards"
+			icon="icons/n16/layout_new.png"
+			id="com.liferay.ide.eclipse.layouttpl.ui.wizard.layouttemplate"
+			name="%layout.wizard.name"
+		>
+			<class class="com.liferay.ide.layouttpl.ui.wizard.NewLayoutTplWizard">
+				<parameter name="liferay_artifact" value="true" />
+				<parameter name="menuIndex" value="40" />
+				<parameter name="validProjectTypes" value="layouttpl" />
+			</class>
+			<description>
+			%layout.wizard.description
+			</description>
+		</wizard>
+	</extension>
 
 </plugin>
