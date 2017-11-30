@@ -84,6 +84,8 @@ public class DialogAction extends UIAction {
 	}
 
 	public void openNewRuntimeWizard() {
+		ide.sleep(5000);
+
 		_serverRuntimeEnvironmentsDialog.getAddBtn().click();
 	}
 

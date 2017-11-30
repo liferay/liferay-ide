@@ -57,17 +57,18 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 	public static void afterClass() {
 		envAction.resetTimestamp();
 
-		String[] projectNames = viewAction.getProjectNames();
-
-		if (projectNames.length > 0) {
-			String msg = "The following projects are unable to be deleted, some error may happened:";
-
-			envAction.logWarn(msg);
-
-			for (String projectName : projectNames) {
-				envAction.logWarn(projectName);
-			}
-		}
+		// String[] projectNames = viewAction.getProjectNames();
+		//
+		// if (projectNames.length > 0) {
+		// String msg = "The following projects are unable to be deleted, some error may
+		// happened:";
+		//
+		// envAction.logWarn(msg);
+		//
+		// for (String projectName : projectNames) {
+		// envAction.logWarn(projectName);
+		// }
+		// }
 	}
 
 	@BeforeClass

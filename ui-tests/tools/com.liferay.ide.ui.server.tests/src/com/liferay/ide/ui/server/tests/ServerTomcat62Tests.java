@@ -104,6 +104,8 @@ public class ServerTomcat62Tests extends SwtbotBase {
 	public void addLiferay62RuntimeFromPreferences() {
 		dialogAction.openPreferencesDialog();
 
+		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+
 		dialogAction.openNewRuntimeWizard();
 
 		wizardAction.prepareLiferay62RuntimeType();
@@ -128,6 +130,8 @@ public class ServerTomcat62Tests extends SwtbotBase {
 	@Test
 	public void addLiferay62ServerFromMenu() {
 		dialogAction.openPreferencesDialog();
+
+		dialogAction.openServerRuntimeEnvironmentsDialogTry();
 
 		dialogAction.openNewRuntimeWizard();
 
