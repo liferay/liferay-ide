@@ -15,8 +15,8 @@
 package com.liferay.ide.ui.liferay.page;
 
 import com.liferay.ide.ui.liferay.page.button.CreateLifeayProjectToolbarDropDownButton;
+import com.liferay.ide.ui.liferay.page.button.NewToolbarDropDownButton;
 import com.liferay.ide.ui.swtbot.Eclipse;
-import com.liferay.ide.ui.swtbot.page.Menu;
 import com.liferay.ide.ui.swtbot.page.Perspective;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -46,6 +46,10 @@ public class LiferayIDE extends Eclipse {
 		return _liferayWorkspacePerspective;
 	}
 
+	public NewToolbarDropDownButton getNewBtn() {
+		return _newBtn;
+	}
+
 	public void showCodeUpgradeView() {
 		showView(LIFERAY_CODE_UPGRADE);
 	}
@@ -53,6 +57,6 @@ public class LiferayIDE extends Eclipse {
 	private CreateLifeayProjectToolbarDropDownButton _createLiferayProjectToolbar;
 	private Perspective _liferayPerspective;
 	private Perspective _liferayWorkspacePerspective;
-
+	private NewToolbarDropDownButton _newBtn;
 
 }

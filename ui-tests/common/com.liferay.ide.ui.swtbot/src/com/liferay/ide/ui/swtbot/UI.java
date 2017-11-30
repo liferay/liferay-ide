@@ -113,8 +113,6 @@ public interface UI {
 
 	public final String CLEAR_LOG_VIEWER = "Clear Log Viewer";
 
-	public final String DELETE_LOG = "Delete Log";
-
 	public final String CLOSE_PROJECT = "Close Project";
 
 	public final String COMPONENT_CLASS_NAME = "Component Class Name:";
@@ -177,6 +175,8 @@ public interface UI {
 	public final String DELETE = "Delete";
 
 	public final String DELETE_FROM_DISK = "Delete project contents on disk (cannot be undone)";
+
+	public final String DELETE_LOG = "Delete Log";
 
 	public final String DELETE_RESOURCES = "Delete Resources";
 
@@ -552,13 +552,13 @@ public interface UI {
 
 	public final String PROJECT = "Project";
 
-	public final String PROJECT_WITH_DOT = "Project...";
-
 	public final String PROJECT_EXPLORER = "Project Explorer";
 
 	public final String PROJECT_NAME = "Project name:";
 
 	public final String PROJECT_TEMPLATE_NAME = "Project Template Name:";
+
+	public final String PROJECT_WITH_DOT = "Project...";
 
 	public final String PROPERTIES = "Properties:";
 

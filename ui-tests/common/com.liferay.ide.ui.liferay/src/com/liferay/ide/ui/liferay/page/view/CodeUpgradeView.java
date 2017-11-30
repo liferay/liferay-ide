@@ -41,12 +41,12 @@ public class CodeUpgradeView extends View {
 		return _navigator;
 	}
 
-	public ToolbarButtonWithTooltip getShowAllPagesBtn() {
-		return new ToolbarButtonWithTooltip(bot, SHOW_ALL_PAGES);
-	}
-
 	public ToolbarButtonWithTooltip getRestartUpgradeBtn() {
 		return new ToolbarButtonWithTooltip(bot, RESTART_UPGRADE);
+	}
+
+	public ToolbarButtonWithTooltip getShowAllPagesBtn() {
+		return new ToolbarButtonWithTooltip(bot, SHOW_ALL_PAGES);
 	}
 
 	public class GearPO extends Canvas {

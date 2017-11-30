@@ -66,12 +66,24 @@ public class Eclipse extends BasePageObject {
 		return new Menu(bot.shell(label).bot(), preferencesLabel);
 	}
 
-	private TextDialog _getShowViewDialog() {
-		return new TextDialog(bot);
-	}
-
 	public View getWelcomeView() {
 		return _welcomeView;
+	}
+
+	public void showErrorLogView() {
+		showView(ERROR_LOG);
+	}
+
+	public void showServersView() {
+		showView(SERVERS);
+	}
+
+	public void waitUntil(ICondition condition) {
+		waitUntil(condition, 60 * 1000);
+	}
+
+	public void waitUntil(ICondition condition, long timeout) {
+		bot.waitUntil(condition, timeout);
 	}
 
 	protected void showView(String viewName) {
@@ -88,20 +100,8 @@ public class Eclipse extends BasePageObject {
 		sleep(3000);
 	}
 
-	public void showServersView() {
-		showView(SERVERS);
-	}
-
-	public void showErrorLogView() {
-		showView(ERROR_LOG);
-	}
-
-	public void waitUntil(ICondition condition) {
-		waitUntil(condition, 60 * 1000);
-	}
-
-	public void waitUntil(ICondition condition, long timeout) {
-		bot.waitUntil(condition, timeout);
+	private TextDialog _getShowViewDialog() {
+		return new TextDialog(bot);
 	}
 
 	private View _welcomeView;
