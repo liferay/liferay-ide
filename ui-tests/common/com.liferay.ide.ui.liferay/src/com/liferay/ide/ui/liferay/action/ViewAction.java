@@ -17,6 +17,7 @@ package com.liferay.ide.ui.liferay.action;
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.liferay.page.view.CodeUpgradeView;
 import com.liferay.ide.ui.swtbot.eclipse.page.DeleteResourcesDialog;
+import com.liferay.ide.ui.swtbot.eclipse.page.ErrorLogView;
 import com.liferay.ide.ui.swtbot.eclipse.page.PackageExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ProjectExplorerView;
 import com.liferay.ide.ui.swtbot.eclipse.page.ServersView;
@@ -236,8 +237,13 @@ public class ViewAction extends UIAction {
 		return null;
 	}
 
+	public void checkErrorLog() {
+		System.out.println(_errorLogView.getLogs().size());
+	}
+
 	private final CodeUpgradeView _codeUpgradeView = new CodeUpgradeView(bot);
 	private final DeleteResourcesDialog _deleteResourcesDialog = new DeleteResourcesDialog(bot);
+	private final ErrorLogView _errorLogView = new ErrorLogView(bot);
 	private final JobAction _jobAction = new JobAction(bot);
 	private final PackageExplorerView _packageExplorerView = new PackageExplorerView(bot);
 	private final ProjectExplorerView _projectExplorerView = new ProjectExplorerView(bot);
