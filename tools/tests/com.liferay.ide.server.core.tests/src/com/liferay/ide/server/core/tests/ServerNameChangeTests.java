@@ -47,47 +47,47 @@ public class ServerNameChangeTests extends ServerCoreBase
 {
     protected IPath getLiferayTomcatUnzipRuntimeDir()
     {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-ce-portal-7.0-ga4-tomcat" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-ce-portal-7.0-ga5-tomcat" );
     }
     
     protected IPath getLiferayTomcatRuntimeDir()
     {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-ce-portal-7.0-ga4-tomcat/liferay-ce-portal-7.0-ga4" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-ce-portal-7.0-ga5-tomcat/liferay-ce-portal-7.0-ga5" );
     }
 
     protected IPath getLiferayTomcatRuntimeZip()
     {
-        return getLiferayBundlesPath().append( "liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip" );
+        return getLiferayBundlesPath().append( "liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip" );
     }
 
     public String getTomcatRuntimeName()
     {
-        return "Liferay CE GA4 Tomcat";
+        return "Liferay CE GA5 Tomcat";
     }
 
     protected IPath getLiferayWildflyUnzipRuntimeDir()
     {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-ce-portal-7.0-ga4-wildfly" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-ce-portal-7.0-ga5-wildfly" );
     }
     
     protected IPath getLiferayWildflyRuntimeDir()
     {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-ce-portal-7.0-ga4-wildfly/liferay-ce-portal-7.0-ga4" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-ce-portal-7.0-ga5-wildfly/liferay-ce-portal-7.0-ga5" );
     }
 
     protected IPath getLiferayWildflyRuntimeZip()
     {
-        return getLiferayBundlesPath().append( "liferay-ce-portal-wildfly-7.0-ga4-20170613175008905.zip" );
+        return getLiferayBundlesPath().append( "liferay-ce-portal-wildfly-7.0-ga5-20171018150113838.zip" );
     }
 
     protected String getLiferayWildflyZipDir()
     {
-        return "liferay-ce-portal-7.0-ga4-wildfly";
+        return "liferay-ce-portal-7.0-ga5-wildfly";
     }
     
     public String getWildflyRuntimeName()
     {
-        return "Liferay CE GA4 Wildfly";
+        return "Liferay CE GA5 Wildfly";
     }
 
     protected IPath getLiferayTomcat62UnzipRuntimeDir()
@@ -240,11 +240,11 @@ public class ServerNameChangeTests extends ServerCoreBase
 
         newServer.setRuntime( ServerUtil.getRuntime( getTomcatRuntimeName() ) );
         ((ServerWorkingCopy)newServer).setDefaults(null);
-        assertEquals( "Liferay CE GA4 Tomcat at localhost", newServer.getName() );
+        assertEquals( "Liferay CE GA5 Tomcat at localhost", newServer.getName() );
 
         newServer.setRuntime( ServerUtil.getRuntime( getWildflyRuntimeName() ) );
         ((ServerWorkingCopy)newServer).setDefaults(null);
-        assertEquals( "Liferay CE GA4 Wildfly at localhost", newServer.getName() );
+        assertEquals( "Liferay CE GA5 Wildfly at localhost", newServer.getName() );
     }
 
     @Test
