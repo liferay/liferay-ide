@@ -51,6 +51,10 @@ public class Table extends AbstractWidget {
 		tableItem.click();
 	}
 
+	public int size() {
+		return getWidget().rowCount();
+	}
+
 	public boolean containsItem(String item) {
 		return getWidget().containsItem(item);
 	}

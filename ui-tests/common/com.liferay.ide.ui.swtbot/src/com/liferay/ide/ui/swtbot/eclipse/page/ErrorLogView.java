@@ -14,6 +14,7 @@
 
 package com.liferay.ide.ui.swtbot.eclipse.page;
 
+import com.liferay.ide.ui.swtbot.page.Tree;
 import com.liferay.ide.ui.swtbot.page.View;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -29,6 +30,10 @@ public class ErrorLogView extends View {
 
 	public void clickDeleteLogBtn() {
 		clickToolbarButton(DELETE_LOG);
+	}
+
+	public Tree getLogs() {
+		return new Tree(getPart().bot());
 	}
 
 }
