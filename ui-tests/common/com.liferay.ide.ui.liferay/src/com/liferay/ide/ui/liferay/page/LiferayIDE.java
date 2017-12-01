@@ -32,6 +32,7 @@ public class LiferayIDE extends Eclipse {
 		_createLiferayProjectToolbar = new CreateLifeayProjectToolbarDropDownButton(bot);
 		_liferayPerspective = new Perspective(bot, LIFERAY_PLUGINS);
 		_liferayWorkspacePerspective = new Perspective(bot, LIFERAY_WORKSPACE);
+		_newBtn = new NewToolbarDropDownButton(bot);
 	}
 
 	public CreateLifeayProjectToolbarDropDownButton getCreateLiferayProjectToolbar() {
