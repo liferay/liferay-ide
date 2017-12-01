@@ -206,11 +206,13 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
 				boolean canAdd = true;
 
 				for (IMarker marker : problemMarkers) {
-					String message = (String)marker.getAttribute(IMarker.MESSAGE);
+					if (marker.exists()) {
+						String message = (String)marker.getAttribute(IMarker.MESSAGE);
 
-					if (status.getMessage().equals(message)) {
-						canAdd = false;
-						break;
+						if (status.getMessage().equals(message)) {
+							canAdd = false;
+							break;
+						}
 					}
 				}
 
