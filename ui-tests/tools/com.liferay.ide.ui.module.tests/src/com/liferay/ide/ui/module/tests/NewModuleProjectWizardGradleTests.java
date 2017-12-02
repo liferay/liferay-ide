@@ -229,21 +229,6 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createServiceBuilder() {
-		String projectName = "test-service-builder-gradle";
-
-		wizardAction.openNewLiferayModuleWizard();
-
-		wizardAction.prepareLiferayModuleGradle(projectName, SERVICE_BUILDER);
-
-		wizardAction.finish();
-
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
-
-		viewAction.closeAndDeleteProject(projectName);
-	}
-
-	@Test
 	public void createServiceWrapper() {
 		String projectName = "test-service-wrapper-gradle";
 

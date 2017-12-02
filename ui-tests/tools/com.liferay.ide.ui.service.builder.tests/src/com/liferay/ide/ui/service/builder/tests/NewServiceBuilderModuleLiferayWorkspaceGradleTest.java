@@ -16,17 +16,37 @@ package com.liferay.ide.ui.service.builder.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * @author Joye Luo
  */
-public class NewServiceBuilderModuleGradleTest extends SwtbotBase {
+public class NewServiceBuilderModuleLiferayWorkspaceGradleTest extends SwtbotBase {
+
+	@AfterClass
+	public static void cleanLiferayWorkspace() {
+		viewAction.closeAndDeleteProject(_lrwsName);
+
+		viewAction.closeAndDeleteProject("modules");
+	}
+
+	@BeforeClass
+	public static void createLiferayWorkspace() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.prepareLiferayWorkspaceGradle(_lrwsName);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(_lrwsName));
+	}
 
 	@Test
 	public void createServiceBuilder() {
-		String projectName = "test-sb-gradle";
+		String projectName = "test-sb-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -34,23 +54,27 @@ public class NewServiceBuilderModuleGradleTest extends SwtbotBase {
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		String[] projectNames = {_lrwsName, "modules", projectName};
 
-		String[] serviceNames = { projectName, projectName + "-service" };
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
+
+		String[] serviceNames = { _lrwsName, "modules", projectName, projectName + "-service" };
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(serviceNames));
 
-		String[] apiNames = { projectName, projectName + "-api" };
+		String[] apiNames = { _lrwsName, "modules", projectName, projectName + "-api" };
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(apiNames));
 
-		String[] serviceXmlNames = { projectName, projectName + "-service", "service.xml" };
+		String[] serviceXmlNames = { _lrwsName, "modules", projectName, projectName + "-service", "service.xml" };
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(serviceXmlNames));
 
 		viewAction.closeAndDeleteProject(apiNames);
 		viewAction.closeAndDeleteProject(serviceNames);
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.closeAndDeleteProject(projectNames);
 	}
+
+	private static final String _lrwsName = "test-sb-lrws-gradle";
 
 }

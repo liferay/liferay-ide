@@ -16,6 +16,7 @@ package com.liferay.ide.ui.service.builder.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -25,6 +26,31 @@ public class NewServiceBuilderModuleMavenTest extends SwtbotBase {
 
 	@Test
 	public void createServiceBuilder() {
+		String projectName = "test-sb-maven";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.prepareLiferayModuleMaven(projectName, SERVICE_BUILDER);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+
+		String[] serviceNames = { projectName, projectName + "-service" };
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(serviceNames));
+
+		String[] apiNames = { projectName, projectName + "-api" };
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(apiNames));
+
+		String[] serviceXmlNames = { projectName, projectName + "-service", "service.xml" };
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(serviceXmlNames));
+
+		viewAction.closeAndDeleteProject(apiNames);
+		viewAction.closeAndDeleteProject(serviceNames);
+		viewAction.closeAndDeleteProject(projectName);
 	}
 
 }
