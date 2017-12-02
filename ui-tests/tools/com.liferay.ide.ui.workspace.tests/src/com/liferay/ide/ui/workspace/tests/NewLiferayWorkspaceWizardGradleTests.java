@@ -62,6 +62,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		viewAction.closeAndDeleteProject(workspaceName);
 	}
 
+	@Ignore("ignore every tests which need download progress to wait internal resource server")
 	@Test
 	public void createLiferayWorksapceWithDownloadBundle() {
 		String workspaceName = "test-liferay-workspace-gradle-download-bundle";
