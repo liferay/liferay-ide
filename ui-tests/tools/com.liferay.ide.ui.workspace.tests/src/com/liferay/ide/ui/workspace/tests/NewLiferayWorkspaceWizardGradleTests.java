@@ -16,12 +16,15 @@ package com.liferay.ide.ui.workspace.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Vicky Wang
  * @author Ying Xu
  * @author Terry Jia
+ * @author Lily Li
  */
 public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
@@ -84,6 +87,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		dialogAction.confirmPreferences();
 	}
 
+	@Ignore("ignore every tests which need download progress to wait internal resource server")
 	@Test
 	public void createLiferayWorksapceWithDownloadBundleChangeBundleUrl() {
 		String workspaceName = "test-liferay-workspace-gradle-change-bundle-url";
@@ -152,11 +156,15 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		String[] projectNames = {workspaceName, newModulesFolderName, projectName};
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
+
+		viewAction.closeAndDeleteProject(projectNames);
+
 		viewAction.closeAndDeleteProject(workspaceName);
 
 		viewAction.closeAndDeleteProject(newModulesFolderName);
-
-		viewAction.closeAndDeleteProject(projectName);
 	}
 
 	@Test
@@ -193,11 +201,15 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		String[] projectNames = {workspaceName, newWarsFolderName, projectName};
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
+
+		viewAction.closeAndDeleteProject(projectNames);
+
 		viewAction.closeAndDeleteProject(workspaceName);
 
 		viewAction.closeAndDeleteProject(newWarsFolderName);
-
-		viewAction.closeAndDeleteProject(projectName);
 	}
 
 }

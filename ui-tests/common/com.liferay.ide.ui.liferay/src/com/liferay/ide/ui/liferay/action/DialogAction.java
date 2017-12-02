@@ -62,7 +62,11 @@ public class DialogAction extends UIAction {
 	}
 
 	public void deleteRuntimeTryConfirm(String runtimeName) {
+		ide.sleep(3000);
+
 		_serverRuntimeEnvironmentsDialog.getRuntimes().click(runtimeName);
+
+		ide.sleep(3000);
 
 		_serverRuntimeEnvironmentsDialog.getRemoveBtn().click();
 

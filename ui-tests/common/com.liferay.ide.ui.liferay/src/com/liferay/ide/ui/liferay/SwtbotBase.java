@@ -106,9 +106,9 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
 
-		ide.showErrorLogView();
+		//ide.showErrorLogView();
 
-		viewAction.checkErrorLog();
+		//viewAction.checkErrorLog();
 	}
 
 }
