@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.swtbot.swt.finder.SWTBotAssert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -40,9 +40,9 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void importMavenLiferayWorkspaceProject() throws IOException {
-		String liferayWorkspaceName = "test-liferay-workspace-maven";
+		String workspaceName = "test-liferay-workspace-maven";
 
-		IPath testProject = envAction.getProjectsFolder().append(liferayWorkspaceName);
+		IPath testProject = envAction.getProjectsFolder().append(workspaceName);
 
 		File workspaceProject = envAction.prepareTempProject(testProject.toFile());
 
@@ -52,11 +52,11 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.openProjectFile(liferayWorkspaceName, "pom.xml");
+		viewAction.openProjectFile(workspaceName, "pom.xml");
 
 		editorAction.switchTabPomXml();
 
-		SWTBotAssert.assertContains(liferayWorkspaceName, editorAction.getContent());
+		SWTBotAssert.assertContains(workspaceName, editorAction.getContent());
 		SWTBotAssert.assertContains("artifactId", editorAction.getContent());
 		SWTBotAssert.assertContains("modules", editorAction.getContent());
 		SWTBotAssert.assertContains("themes", editorAction.getContent());
@@ -64,7 +64,23 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		editorAction.close();
 
-		viewAction.closeAndDeleteProject(liferayWorkspaceName);
+		String[] moduleNames = {workspaceName, "test-liferay-workspace-maven-modules (in modules)"};
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(moduleNames));
+
+		String[] themeNames = {workspaceName, "test-liferay-workspace-maven-themes (in themes)"};
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(themeNames));
+
+		String[] warNames = {workspaceName, "test-liferay-workspace-maven-wars (in wars)"};
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(warNames));
+
+		viewAction.closeAndDeleteProject(moduleNames);
+		viewAction.closeAndDeleteProject(themeNames);
+		viewAction.closeAndDeleteProject(warNames);
+
+		viewAction.closeAndDeleteProject(workspaceName);
 	}
 
 }

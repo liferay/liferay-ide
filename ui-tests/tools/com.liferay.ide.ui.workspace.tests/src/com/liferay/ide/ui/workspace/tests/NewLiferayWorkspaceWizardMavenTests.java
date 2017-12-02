@@ -16,6 +16,7 @@ package com.liferay.ide.ui.workspace.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -33,6 +34,22 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		wizardAction.prepareLiferayWorkspaceMaven(workspaceName);
 
 		wizardAction.finish();
+
+		String[] moduleNames = {workspaceName, "test-liferay-workspace-maven-modules (in modules)"};
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(moduleNames));
+
+		String[] themeNames = {workspaceName, "test-liferay-workspace-maven-themes (in themes)"};
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(themeNames));
+
+		String[] warNames = {workspaceName, "test-liferay-workspace-maven-wars (in wars)"};
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(warNames));
+
+		viewAction.closeAndDeleteProject(moduleNames);
+		viewAction.closeAndDeleteProject(themeNames);
+		viewAction.closeAndDeleteProject(warNames);
 
 		viewAction.closeAndDeleteProject(workspaceName);
 	}
