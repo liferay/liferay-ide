@@ -33,7 +33,7 @@ public class View extends AbstractPart {
 	}
 
 	public String getLabel() {
-		return ((SWTWorkbenchBot)bot).activeView().getTitle();
+		return label;
 	}
 
 	public SWTBotToolbarButton toolbarBtn(String btnLabel) {
@@ -41,9 +41,7 @@ public class View extends AbstractPart {
 	}
 
 	protected SWTBotView getPart() {
-		System.out.println(getLabel());
-
-		return ((SWTWorkbenchBot)bot).viewByPartName(getLabel());
+		return ((SWTWorkbenchBot)bot).viewByTitle(label);
 	}
 
 }
