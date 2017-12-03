@@ -71,9 +71,8 @@ public class NewServiceBuilderModuleLiferayWorkspaceMavenTest extends SwtbotBase
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(apiNames));
 
-		String[] serviceXmlNames = {
-			_lrwsName, _lrwsName + "-modules (in modules)", projectName, projectName + "-service", "service.xml"
-		};
+		String[] serviceXmlNames =
+			{_lrwsName, _lrwsName + "-modules (in modules)", projectName, projectName + "-service", "service.xml"};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(serviceXmlNames));
 
