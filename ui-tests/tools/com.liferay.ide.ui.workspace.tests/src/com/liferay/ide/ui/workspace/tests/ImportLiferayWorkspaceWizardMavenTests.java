@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.swtbot.swt.finder.SWTBotAssert;
+
 import org.junit.Assert;
 import org.junit.Test;
 

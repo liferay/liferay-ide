@@ -28,9 +28,9 @@ public class NewServiceBuilderModuleLiferayWorkspaceMavenTest extends SwtbotBase
 
 	@AfterClass
 	public static void cleanLiferayWorkspace() {
-		String[] moduleNames = { _lrwsName, _lrwsName + "-modules (in modules)" };
-		String[] themeNames = { _lrwsName, _lrwsName + "-themes (in themes)" };
-		String[] warNames = { _lrwsName, _lrwsName + "-wars (in wars)" };
+		String[] moduleNames = {_lrwsName, _lrwsName + "-modules (in modules)"};
+		String[] themeNames = {_lrwsName, _lrwsName + "-themes (in themes)"};
+		String[] warNames = {_lrwsName, _lrwsName + "-wars (in wars)"};
 
 		viewAction.closeAndDeleteProject(moduleNames);
 		viewAction.closeAndDeleteProject(themeNames);
@@ -59,25 +59,21 @@ public class NewServiceBuilderModuleLiferayWorkspaceMavenTest extends SwtbotBase
 
 		wizardAction.finish();
 
-		String[] projectNames = { _lrwsName, _lrwsName + "-modules (in modules)", projectName };
+		String[] projectNames = {_lrwsName, _lrwsName + "-modules (in modules)", projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		String[] serviceNames = {
-			_lrwsName, _lrwsName + "-modules (in modules)", projectName,
-			projectName + "-service" };
+		String[] serviceNames = {_lrwsName, _lrwsName + "-modules (in modules)", projectName, projectName + "-service"};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(serviceNames));
 
-		String[] apiNames = {
-			_lrwsName, _lrwsName + "-modules (in modules)", projectName,
-			projectName + "-api"
-		};
+		String[] apiNames = {_lrwsName, _lrwsName + "-modules (in modules)", projectName, projectName + "-api"};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(apiNames));
 
-		String[] serviceXmlNames = { _lrwsName, _lrwsName + "-modules (in modules)",
-			projectName, projectName + "-service", "service.xml" };
+		String[] serviceXmlNames = {
+			_lrwsName, _lrwsName + "-modules (in modules)", projectName, projectName + "-service", "service.xml"
+		};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(serviceXmlNames));
 

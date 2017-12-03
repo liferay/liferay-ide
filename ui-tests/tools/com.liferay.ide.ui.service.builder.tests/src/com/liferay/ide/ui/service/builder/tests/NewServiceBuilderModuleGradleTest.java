@@ -36,15 +36,15 @@ public class NewServiceBuilderModuleGradleTest extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
 
-		String[] serviceNames = { projectName, projectName + "-service" };
+		String[] serviceNames = {projectName, projectName + "-service"};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(serviceNames));
 
-		String[] apiNames = { projectName, projectName + "-api" };
+		String[] apiNames = {projectName, projectName + "-api"};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(apiNames));
 
-		String[] serviceXmlNames = { projectName, projectName + "-service", "service.xml" };
+		String[] serviceXmlNames = {projectName, projectName + "-service", "service.xml"};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(serviceXmlNames));
 

@@ -37,6 +37,10 @@ public class ViewAction extends UIAction {
 		super(bot);
 	}
 
+	public void checkErrorLog() {
+		System.out.println(_errorLogView.getLogs().size());
+	}
+
 	public void closeAndDeleteProject(String... items) {
 		closeProject(items);
 
@@ -235,10 +239,6 @@ public class ViewAction extends UIAction {
 		}
 
 		return null;
-	}
-
-	public void checkErrorLog() {
-		System.out.println(_errorLogView.getLogs().size());
 	}
 
 	private final CodeUpgradeView _codeUpgradeView = new CodeUpgradeView(bot);

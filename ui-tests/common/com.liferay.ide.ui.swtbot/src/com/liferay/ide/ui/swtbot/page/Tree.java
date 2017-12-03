@@ -62,10 +62,6 @@ public class Tree extends AbstractWidget {
 		getWidget().expandNode(items);
 	}
 
-	public int size() {
-		return getWidget().columnCount();
-	}
-
 	public String[] getItemLabels() {
 		SWTBotTreeItem[] items = getWidget().getAllItems();
 
@@ -108,6 +104,10 @@ public class Tree extends AbstractWidget {
 		}
 
 		item.select();
+	}
+
+	public int size() {
+		return getWidget().columnCount();
 	}
 
 	protected SWTBotTree getWidget() {

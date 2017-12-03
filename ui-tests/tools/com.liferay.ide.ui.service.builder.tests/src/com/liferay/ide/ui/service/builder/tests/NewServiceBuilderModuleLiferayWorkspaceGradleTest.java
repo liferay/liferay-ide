@@ -58,15 +58,15 @@ public class NewServiceBuilderModuleLiferayWorkspaceGradleTest extends SwtbotBas
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		String[] serviceNames = { _lrwsName, "modules", projectName, projectName + "-service" };
+		String[] serviceNames = {_lrwsName, "modules", projectName, projectName + "-service"};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(serviceNames));
 
-		String[] apiNames = { _lrwsName, "modules", projectName, projectName + "-api" };
+		String[] apiNames = {_lrwsName, "modules", projectName, projectName + "-api"};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(apiNames));
 
-		String[] serviceXmlNames = { _lrwsName, "modules", projectName, projectName + "-service", "service.xml" };
+		String[] serviceXmlNames = {_lrwsName, "modules", projectName, projectName + "-service", "service.xml"};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(serviceXmlNames));
 
