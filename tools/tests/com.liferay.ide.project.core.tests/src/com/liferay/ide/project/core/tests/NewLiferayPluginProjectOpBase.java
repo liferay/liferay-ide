@@ -728,6 +728,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         assertEquals(
             "/ is an invalid character in resource name '" + invalidProjectName + "'.", vs.validation().message() );
 
+        op3.dispose();
 //        invalidProjectName = validProjectName + ".";
 //        op3.setProjectName( invalidProjectName );
 //        assertEquals( "'" + invalidProjectName + "' is an invalid name on this platform.", vs.validation().message() );
