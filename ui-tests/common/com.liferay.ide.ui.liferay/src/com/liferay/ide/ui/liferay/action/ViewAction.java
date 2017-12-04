@@ -26,6 +26,7 @@ import com.liferay.ide.ui.swtbot.page.Tree;
 import java.util.Arrays;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 
 /**
@@ -35,6 +36,10 @@ public class ViewAction extends UIAction {
 
 	public ViewAction(SWTWorkbenchBot bot) {
 		super(bot);
+	}
+
+	public void checkErrorLog() {
+		System.out.println(_errorLogView.getLogs().size());
 	}
 
 	public void closeAndDeleteProject(String... items) {
@@ -212,13 +217,29 @@ public class ViewAction extends UIAction {
 		catch (Exception e) {
 			_getProjects().setFocus();
 
-			String[] parents = Arrays.copyOfRange(files, 0, files.length - 1);
+			try {
+				String[] parents = Arrays.copyOfRange(files, 0, files.length - 1);
 
-			_getProjects().expand(parents);
+				_getProjects().expand(parents);
 
-			_getProjects().contextMenu(REFRESH, parents);
+				_getProjects().contextMenu(REFRESH, parents);
 
-			ide.sleep(2000);
+				ide.sleep(2000);
+			}
+			catch (Exception e1) {
+			}
+
+			for (int i = files.length - 1; i > 0; i--) {
+				String[] parents = Arrays.copyOfRange(files, 0, files.length - i);
+
+				SWTBotTreeItem parent = _getProjects().getTreeItem(parents);
+
+				_getProjects().expand(parents);
+
+				String subnode = files[files.length - i];
+
+				_jobAction.waitForSubnote(parent, subnode, REFRESH);
+			}
 
 			return _getProjects().isVisible(files);
 		}
@@ -235,10 +256,6 @@ public class ViewAction extends UIAction {
 		}
 
 		return null;
-	}
-
-	public void checkErrorLog() {
-		System.out.println(_errorLogView.getLogs().size());
 	}
 
 	private final CodeUpgradeView _codeUpgradeView = new CodeUpgradeView(bot);

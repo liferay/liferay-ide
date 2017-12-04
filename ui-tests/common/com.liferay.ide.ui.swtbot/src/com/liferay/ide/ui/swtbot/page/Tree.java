@@ -37,6 +37,19 @@ public class Tree extends AbstractWidget {
 		super(bot, index);
 	}
 
+	public SWTBotTreeItem getTreeItem(String... items) {
+		SWTBotTreeItem item = null;
+
+		if (items.length > 1) {
+			item = getWidget().expandNode(items);
+		}
+		else {
+			item = getWidget().getTreeItem(items[0]);
+		}
+
+		return item;
+	}
+
 	public void contextMenu(String menu, String... items) {
 		SWTBotTreeItem item = null;
 
@@ -60,10 +73,6 @@ public class Tree extends AbstractWidget {
 
 	public void expand(String... items) {
 		getWidget().expandNode(items);
-	}
-
-	public int size() {
-		return getWidget().columnCount();
 	}
 
 	public String[] getItemLabels() {
@@ -108,6 +117,10 @@ public class Tree extends AbstractWidget {
 		}
 
 		item.select();
+	}
+
+	public int size() {
+		return getWidget().columnCount();
 	}
 
 	protected SWTBotTree getWidget() {

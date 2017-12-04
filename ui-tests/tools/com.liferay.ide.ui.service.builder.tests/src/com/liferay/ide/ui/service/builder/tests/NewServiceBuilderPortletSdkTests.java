@@ -77,7 +77,7 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 	public void createServiceBuilderPortlet() {
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-service-builder-sb-portlet";
+		String projectName = "test-sb-portlet";
 
 		wizardAction.preparePluginServiceBuilderPortletSdk(projectName);
 

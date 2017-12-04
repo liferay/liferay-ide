@@ -51,10 +51,6 @@ public class Table extends AbstractWidget {
 		tableItem.click();
 	}
 
-	public int size() {
-		return getWidget().rowCount();
-	}
-
 	public boolean containsItem(String item) {
 		return getWidget().containsItem(item);
 	}
@@ -65,6 +61,10 @@ public class Table extends AbstractWidget {
 
 	public void setText(int index, String text) {
 		bot.text(index).setText(text);
+	}
+
+	public int size() {
+		return getWidget().rowCount();
 	}
 
 	protected SWTBotTable getWidget() {

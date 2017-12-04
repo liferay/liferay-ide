@@ -39,3 +39,10 @@ download the blade cli jar file from **${blade-latest-download-url}** in **/buil
 And if this file updated you also need to redownload it.
 2. please make sure you have run *mvc source-formatter:format* in /build/com.liferay.ide.build.source.formatter folder for *ui-tests*.
 3. if you have to add *sleep* for some reasons, remember you should also add **ide.sleep()** or **ide.sleep(millis)** into action class(e.g. WizardAction or DialogAction), or not add them into any testcase files or page object.
+
+## Short Name
+If you want to use one short name instead of one long name, please follow this map:
+Liferay Workspace/LiferayWorkspace => lrws
+Service Builder/ServiceBuilder => sb
+
+**DO NOT** use short name for any Class Names and Methon names.

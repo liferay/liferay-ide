@@ -22,12 +22,14 @@ import com.liferay.ide.ui.swtbot.condition.CloseProjectJobCondition;
 import com.liferay.ide.ui.swtbot.condition.ConsoleContentCondition;
 import com.liferay.ide.ui.swtbot.condition.IvyJobsCondition;
 import com.liferay.ide.ui.swtbot.condition.NoRunningJobsCondition;
+import com.liferay.ide.ui.swtbot.condition.RefreshForSubnodeCondition;
 import com.liferay.ide.ui.swtbot.condition.ServerStartJobCondition;
 import com.liferay.ide.ui.swtbot.condition.ShellAppearedCondition;
 import com.liferay.ide.ui.swtbot.condition.ValidateJobCondition;
 import com.liferay.ide.ui.swtbot.condition.WizardClosedCondition;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
 /**
  * @author Terry Jia
@@ -80,6 +82,10 @@ public class JobAction extends UIAction {
 
 	public void waitForValidate(String projectName) {
 		ide.waitUntil(new ValidateJobCondition(projectName), 300 * 1000);
+	}
+
+	public void waitForSubnote(SWTBotTreeItem parent, String subnode, String refreshText) {
+		ide.waitUntil(new RefreshForSubnodeCondition(parent, subnode, refreshText), 30 * 1000);
 	}
 
 }
