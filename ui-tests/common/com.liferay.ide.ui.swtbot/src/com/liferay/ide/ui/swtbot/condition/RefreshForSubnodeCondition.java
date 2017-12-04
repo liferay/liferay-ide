@@ -23,43 +23,43 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
  */
 public class RefreshForSubnodeCondition implements ICondition {
 
-	public RefreshForSubnodeCondition(SWTBotTreeItem parentItem, String subnodeText, String refreshContextMenuText) {
-		_itsParentItem = parentItem;
+	public RefreshForSubnodeCondition(SWTBotTreeItem parent, String subnode, String refreshText) {
+		_parent = parent;
 
-		_itsSubnodeText = subnodeText;
+		_subnode = subnode;
 
-		_itsRefreshContextMenuText = refreshContextMenuText;
+		_refreshText = refreshText;
 	}
 
 	public String getFailureMessage() {
-		return "sub node " + _itsSubnodeText + " not found after refresh";
+		return _parent.getText() +"'s sub node " + _subnode + " not found after refresh";
 	}
 
 	public void init(SWTBot bot) {
 	}
 
 	public boolean test() throws Exception {
-		boolean ret = false;
+		boolean found = false;
 
-		for (String itemText : _itsParentItem.getNodes()) {
-			if (itemText.equals(_itsSubnodeText)) {
-				ret = true;
+		for (String itemText : _parent.getNodes()) {
+			if (itemText.equals(_subnode)) {
+				found = true;
 
 				break;
 			}
 		}
 
-		if (!ret) {
-			_itsParentItem.contextMenu(_itsRefreshContextMenuText).click();
+		if (!found) {
+			_parent.contextMenu(_refreshText).click();
 
-			_itsParentItem = _itsParentItem.select().expand();
+			_parent = _parent.select().expand();
 		}
 
-		return ret;
+		return found;
 	}
 
-	private SWTBotTreeItem _itsParentItem;
-	private String _itsRefreshContextMenuText;
-	private String _itsSubnodeText;
+	private SWTBotTreeItem _parent;
+	private String _refreshText;
+	private String _subnode;
 
 }

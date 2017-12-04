@@ -163,9 +163,11 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		viewAction.closeAndDeleteProject(projectNames);
 
-		viewAction.closeAndDeleteProject(workspaceName);
+		String[] newModuleNames = {workspaceName, newModulesFolderName};
 
-		viewAction.closeAndDeleteProject(newModulesFolderName);
+		viewAction.closeAndDeleteProject(newModuleNames);
+
+		viewAction.closeAndDeleteProject(workspaceName);
 	}
 
 	@Test
@@ -208,9 +210,11 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		viewAction.closeAndDeleteProject(projectNames);
 
-		viewAction.closeAndDeleteProject(workspaceName);
+		String[] newModuleNames = {workspaceName, newWarsFolderName};
 
-		viewAction.closeAndDeleteProject(newWarsFolderName);
+		viewAction.closeAndDeleteProject(newModuleNames);
+
+		viewAction.closeAndDeleteProject(workspaceName);
 	}
 
 }
