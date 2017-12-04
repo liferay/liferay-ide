@@ -217,6 +217,18 @@ public class ViewAction extends UIAction {
 		catch (Exception e) {
 			_getProjects().setFocus();
 
+			try {
+				String[] parents = Arrays.copyOfRange(files, 0, files.length - 1);
+
+				_getProjects().expand(parents);
+
+				_getProjects().contextMenu(REFRESH, parents);
+
+				ide.sleep(2000);
+			}
+			catch (Exception e1) {
+			}
+
 			for (int i = files.length - 1; i > 0; i--) {
 				String[] parents = Arrays.copyOfRange(files, 0, files.length - i);
 
