@@ -32,11 +32,16 @@ public class LiferayIDE extends Eclipse {
 		_createLiferayProjectToolbar = new CreateLifeayProjectToolbarDropDownButton(bot);
 		_liferayPerspective = new Perspective(bot, LIFERAY_PLUGINS);
 		_liferayWorkspacePerspective = new Perspective(bot, LIFERAY_WORKSPACE);
+		_kaleoDesignerPerspective = new Perspective(bot, KALEO_DESIGNER);
 		_newBtn = new NewToolbarDropDownButton(bot);
 	}
 
 	public CreateLifeayProjectToolbarDropDownButton getCreateLiferayProjectToolbar() {
 		return _createLiferayProjectToolbar;
+	}
+
+	public Perspective getKaleoDesignerPerspective() {
+		return _kaleoDesignerPerspective;
 	}
 
 	public Perspective getLiferayPerspective() {
@@ -56,6 +61,7 @@ public class LiferayIDE extends Eclipse {
 	}
 
 	private CreateLifeayProjectToolbarDropDownButton _createLiferayProjectToolbar;
+	private Perspective _kaleoDesignerPerspective;
 	private Perspective _liferayPerspective;
 	private Perspective _liferayWorkspacePerspective;
 	private NewToolbarDropDownButton _newBtn;

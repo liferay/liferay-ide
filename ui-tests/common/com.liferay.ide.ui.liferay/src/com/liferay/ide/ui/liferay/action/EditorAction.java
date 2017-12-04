@@ -18,6 +18,7 @@ import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.liferay.page.editor.LayoutTplEditor;
 import com.liferay.ide.ui.liferay.page.editor.PomXmlEditor;
 import com.liferay.ide.ui.liferay.page.editor.ServiceXmlEditor;
+import com.liferay.ide.ui.liferay.page.editor.WorkflowXmlEditor;
 import com.liferay.ide.ui.swtbot.page.Editor;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -59,6 +60,12 @@ public class EditorAction extends UIAction {
 		ide.sleep(2000);
 	}
 
+	public void switchTabDiagramWorkflowXml() {
+		_workflowXmlEditor.getDiagramTab().click();
+
+		ide.sleep(2000);
+	}
+
 	public void switchTabOverViewServiceXml() {
 		_serviceXmlEditor.getOverviewTab().click();
 
@@ -87,9 +94,16 @@ public class EditorAction extends UIAction {
 		ide.sleep(2000);
 	}
 
+	public void switchTabSourceWorkflowXml() {
+		_workflowXmlEditor.getSourceTab().click();
+
+		ide.sleep(2000);
+	}
+
 	private final Editor _editor = new Editor(bot);
 	private final LayoutTplEditor _layoutTplEditor = new LayoutTplEditor(bot);
 	private final PomXmlEditor _pomXmlEditor = new PomXmlEditor(bot);
 	private final ServiceXmlEditor _serviceXmlEditor = new ServiceXmlEditor(bot);
+	private final WorkflowXmlEditor _workflowXmlEditor = new WorkflowXmlEditor(bot);
 
 }
