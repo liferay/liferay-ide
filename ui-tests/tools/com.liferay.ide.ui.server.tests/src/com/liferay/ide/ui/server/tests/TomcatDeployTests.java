@@ -60,24 +60,16 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.showServersView();
-
 		// viewAction.serverStart(_serverStoppedLabel);
-
 		//
-
-		// viewAction.serverStartWait();
-
+		// jobAction.waitForServerStarted(_serverName);
 	}
 
 	@AfterClass
 	public static void stopServer() throws IOException {
-
 		// viewAction.serverStop(_serverStartedLabel);
-
 		//
-
-		// viewAction.serverStopWait();
+		// jobAction.waitForServerStopped(_serverName);
 
 		dialogAction.openPreferencesDialog();
 
@@ -91,7 +83,9 @@ public class TomcatDeployTests extends SwtbotBase {
 	public void deploySampleProject() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModule("test");
+		String projectName = "test";
+
+		wizardAction.prepareLiferayModule(projectName);
 
 		wizardAction.finish();
 
@@ -103,11 +97,11 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		viewAction.openAddAndRemoveDialog(_serverStartedLabel);
 
-		dialogAction.addModule("test");
+		dialogAction.addModule(projectName);
 
 		dialogAction.confirm(FINISH);
 
-		viewAction.serverDeployWait("test");
+		jobAction.waitForConsoleContent(_serverName, "STARTED " + projectName + "_", 20 * 1000);
 	}
 
 	private static final String _serverName = "Liferay 7-deploy";

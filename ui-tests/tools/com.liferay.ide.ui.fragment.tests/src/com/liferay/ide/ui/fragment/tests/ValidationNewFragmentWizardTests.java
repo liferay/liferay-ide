@@ -362,6 +362,10 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 		wizardAction.cancel();
 	}
 
+	@Test
+	public void createFragmentWithoutRuntimeLiferayWorkspace() {
+	}
+
 	private static final NewModuleFragmentInfoWizard _newFragmentInfoWizard = new NewModuleFragmentInfoWizard(bot);
 	private static final NewFragmentWizard _newFragmentWizard = new NewFragmentWizard(bot);
 

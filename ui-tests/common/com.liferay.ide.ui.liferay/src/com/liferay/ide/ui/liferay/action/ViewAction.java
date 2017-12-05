@@ -27,7 +27,6 @@ import java.util.Arrays;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 
 /**
  * @author Terry Jia
@@ -139,26 +138,20 @@ public class ViewAction extends UIAction {
 		_codeUpgradeView.getRestartUpgradeBtn().click();
 	}
 
-	public void runBuildServicesSdk() {
-		_getProjects().contextMenu(BUILD_SERVICES);
-
-		ide.sleep(2000);
+	public void runBuildServices(String... projectNames) {
+		_getProjects().contextMenu(BUILD_SERVICES, projectNames);
 	}
 
-	public void runBuildWSDDSdk() {
-		_getProjects().contextMenu(BUILD_WSDD);
-
-		ide.sleep(2000);
+	public void runBuildWSDD(String... projectNames) {
+		_getProjects().contextMenu(BUILD_WSDD, projectNames);
 	}
 
 	public void serverDebug(String serverLabel) {
+		ide.sleep(5000);
+
 		_serversView.getServers().select(serverLabel);
 
 		_serversView.clickDebugBtn();
-	}
-
-	public void serverDeployWait(String projectName) {
-		_jobAction.waitForConsoleContent("STARTED " + projectName + "_", 20 * 1000);
 	}
 
 	public void serverStart(String serverLabel) {
@@ -169,25 +162,12 @@ public class ViewAction extends UIAction {
 		_serversView.clickStartBtn();
 	}
 
-	public void serverStartWait() throws TimeoutException {
-		_jobAction.waitForConsoleContent("Server startup in", 600 * 1000);
-	}
-
 	public void serverStop(String serverLabel) {
 		ide.sleep(2000);
 
 		_serversView.getServers().select(serverLabel);
 
 		_serversView.clickStopBtn();
-	}
-
-	public void serverStopWait() {
-		_jobAction.waitForConsoleContent(
-			"org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler [\"ajp-nio", 300 * 1000);
-	}
-
-	public void serverStopWait62() {
-		_jobAction.waitForConsoleContent("Destroying ProtocolHandler [\"ajp-bio-", 300 * 1000);
 	}
 
 	public void showAllPages() {

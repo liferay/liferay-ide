@@ -23,10 +23,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * @author Joye Luo
  * @author Terry Jia
  */
-public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
+public class EditorServiceBuilderTests extends SwtbotBase {
 
 	@AfterClass
 	public static void cleanPluginsSdk() {
@@ -67,31 +66,18 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 	}
 
 	@Test
-	public void buildServiceOnProject() {
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		String projectName = "test-sb-build-services-portlet";
-
-		wizardAction.preparePluginServiceBuilderPortletSdk(projectName);
-
-		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(projectName);
-
-		viewAction.runBuildServices(projectName);
-
-		jobAction.waitForConsoleContent("build.xml", "BUILD SUCCESSFUL", 300 * 1000);
-
-		viewAction.closeAndDeleteProject(projectName);
+	public void addColumn() {
 	}
 
 	@Test
-	public void buildWSDDOnProject() {
+	public void addEntity() {
+	}
+
+	@Test
+	public void createServiceBuilderPortlet() {
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-sb-build-wsdd-portlet";
+		String projectName = "test-sb-portlet";
 
 		wizardAction.preparePluginServiceBuilderPortletSdk(projectName);
 
@@ -101,9 +87,13 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.runBuildWSDD(projectName);
+		viewAction.openProjectFile(projectName, "docroot", "WEB-INF", "service.xml");
 
-		jobAction.waitForConsoleContent("build.xml", "BUILD SUCCESSFUL", 300 * 1000);
+		editorAction.switchTabDiagramServiceXml();
+
+		editorAction.switchTabOverViewServiceXml();
+
+		editorAction.switchTabSourceServiceXml();
 
 		viewAction.closeAndDeleteProject(projectName);
 	}

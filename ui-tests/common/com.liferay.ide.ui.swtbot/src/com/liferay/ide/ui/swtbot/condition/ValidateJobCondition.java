@@ -22,7 +22,7 @@ import org.eclipse.core.runtime.jobs.Job;
 public class ValidateJobCondition extends WaitForSingleJob {
 
 	public ValidateJobCondition(String projectName) {
-		super(null, "Cancel Validate");
+		super(null, "Validate Project");
 
 		_projectName = projectName;
 	}
