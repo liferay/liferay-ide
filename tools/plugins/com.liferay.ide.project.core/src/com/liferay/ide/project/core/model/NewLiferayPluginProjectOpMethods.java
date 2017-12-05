@@ -310,7 +310,7 @@ public class NewLiferayPluginProjectOpMethods {
 				greaterThan700 = true;
 			}
 
-			if ((greaterThan700 && "web".equals(type)) || (!greaterThan700 && "theme".equals(type))) {
+			if ((greaterThan700 && "web".equals(type)) || ("theme".equals(type))) {
 				retval = true;
 			}
 
