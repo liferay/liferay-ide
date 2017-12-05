@@ -24,6 +24,7 @@ import com.liferay.ide.ui.swtbot.condition.IvyJobsCondition;
 import com.liferay.ide.ui.swtbot.condition.NoRunningJobsCondition;
 import com.liferay.ide.ui.swtbot.condition.RefreshForSubnodeCondition;
 import com.liferay.ide.ui.swtbot.condition.ServerStartJobCondition;
+import com.liferay.ide.ui.swtbot.condition.ServerStopJobCondition;
 import com.liferay.ide.ui.swtbot.condition.ShellAppearedCondition;
 import com.liferay.ide.ui.swtbot.condition.ValidateJobCondition;
 import com.liferay.ide.ui.swtbot.condition.WizardClosedCondition;
@@ -56,8 +57,8 @@ public class JobAction extends UIAction {
 		ide.waitUntil(new CloseProjectJobCondition());
 	}
 
-	public void waitForConsoleContent(String content, long timeout) {
-		ide.waitUntil(new ConsoleContentCondition(bot, content), timeout);
+	public void waitForConsoleContent(String consoleName, String content, long timeout) {
+		ide.waitUntil(new ConsoleContentCondition(consoleName, content), timeout);
 	}
 
 	public void waitForIvy() {
@@ -68,8 +69,12 @@ public class JobAction extends UIAction {
 		ide.waitUntil(new NoRunningJobsCondition());
 	}
 
-	public void waitForServer62Started(String serverName) {
-		ide.waitUntil(new ServerStartJobCondition(serverName));
+	public void waitForServerStarted(String serverName) {
+		ide.waitUntil(new ServerStartJobCondition(serverName), 300 * 1000);
+	}
+
+	public void waitForServerStopped(String serverName) {
+		ide.waitUntil(new ServerStopJobCondition(serverName));
 	}
 
 	public void waitForShellAppeared(String title) {

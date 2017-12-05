@@ -65,33 +65,19 @@ public class ServerTomcat62Tests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.showServersView();
-
 		// String serverStoppedLabel = serverName + " [Stopped]";
-
 		//
-
 		// viewAction.serverStart(serverStoppedLabel);
-
 		//
-
-		// jobAction.waitForServer62Started(serverName);
-
+		// jobAction.waitForServerStarted(serverName);
 		//
-
 		// String serverStartedLabel = serverName + " [Started, Synchronized]";
-
 		//
-
 		// viewAction.openLiferayPortalHome(serverStartedLabel);
-
 		//
-
 		// viewAction.serverStop(serverStartedLabel);
-
 		//
-
-		// viewAction.serverStopWait62();
+		// jobAction.waitForServerStopped(serverName);
 
 		dialogAction.openPreferencesDialog();
 
@@ -152,8 +138,6 @@ public class ServerTomcat62Tests extends SwtbotBase {
 		wizardAction.prepareNewServer62("Liferay 62-add-server");
 
 		wizardAction.finish();
-
-		viewAction.showServersView();
 
 		dialogAction.openPreferencesDialog();
 

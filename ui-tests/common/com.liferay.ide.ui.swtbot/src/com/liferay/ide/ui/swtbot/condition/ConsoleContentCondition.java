@@ -14,19 +14,21 @@
 
 package com.liferay.ide.ui.swtbot.condition;
 
-import com.liferay.ide.ui.swtbot.eclipse.page.ConsoleView;
-
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
+import org.eclipse.ui.console.ConsolePlugin;
+import org.eclipse.ui.console.IConsole;
+import org.eclipse.ui.console.IConsoleManager;
+import org.eclipse.ui.console.TextConsole;
 
 /**
  * @author Terry Jia
  */
 public class ConsoleContentCondition implements ICondition {
 
-	public ConsoleContentCondition(SWTWorkbenchBot bot, String content) {
-		_bot = bot;
+	public ConsoleContentCondition(String consoleName, String content) {
+		_consoleName = consoleName;
 
 		_content = content;
 	}
@@ -42,14 +44,24 @@ public class ConsoleContentCondition implements ICondition {
 
 	@Override
 	public boolean test() throws Exception {
-		ConsoleView console = new ConsoleView(_bot);
+		ConsolePlugin plugin = ConsolePlugin.getDefault();
 
-		String consoleContent = console.getLog().getText();
+		IConsoleManager manager = plugin.getConsoleManager();
 
-		return consoleContent.contains(_content);
+		IConsole[] consoles = manager.getConsoles();
+
+		for (IConsole console : consoles) {
+			if (console.getName().contains(_consoleName) && console instanceof TextConsole) {
+				IDocument content = ((TextConsole)console).getDocument();
+
+				return content.get().contains(_content);
+			}
+		}
+
+		return false;
 	}
 
-	private SWTWorkbenchBot _bot;
+	private String _consoleName;
 	private String _content;
 
 }

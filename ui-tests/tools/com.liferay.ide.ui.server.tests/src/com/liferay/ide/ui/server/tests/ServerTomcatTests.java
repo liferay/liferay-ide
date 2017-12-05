@@ -71,33 +71,19 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.showServersView();
-
 		// String serverStoppedLabel = serverName + " [Stopped]";
-
 		//
-
 		// viewAction.serverStart(serverStoppedLabel);
-
 		//
-
-		// viewAction.serverStartWait();
-
+		// jobAction.waitForServerStarted(serverName);
 		//
-
 		// String serverStartedLabel = serverName + " [Started]";
-
 		//
-
 		// viewAction.openLiferayPortalHome(serverStartedLabel);
-
 		//
-
 		// viewAction.serverStop(serverStartedLabel);
-
 		//
-
-		// viewAction.serverStopWait();
+		// jobAction.waitForServerStopped(serverName);
 
 		dialogAction.openPreferencesDialog();
 
@@ -155,8 +141,6 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.showServersView();
-
 		dialogAction.openPreferencesDialog();
 
 		dialogAction.deleteRuntimeTryConfirm(runtimeName);
@@ -187,8 +171,6 @@ public class ServerTomcatTests extends SwtbotBase {
 		wizardAction.prepareNewServer(serverName);
 
 		wizardAction.finish();
-
-		viewAction.showServersView();
 
 		String serverStoppedLabel = serverName + "  [Stopped]";
 
@@ -260,8 +242,6 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.showServersView();
-
 		String serverStoppedLabel = serverName + "  [Stopped]";
 
 		viewAction.openServerEditor(serverStoppedLabel);
@@ -289,13 +269,13 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		viewAction.serverStart(serverStoppedLabel);
 
-		viewAction.serverStartWait();
+		jobAction.waitForServerStarted(serverName);
 
 		String serverStartedLabel = serverName + "  [Started]";
 
 		viewAction.serverStop(serverStartedLabel);
 
-		viewAction.serverStopWait();
+		jobAction.waitForServerStopped(serverName);
 
 		viewAction.openServerEditor(serverStoppedLabel);
 
@@ -341,8 +321,6 @@ public class ServerTomcatTests extends SwtbotBase {
 		wizardAction.prepareNewServer(serverName);
 
 		wizardAction.finish();
-
-		viewAction.showServersView();
 
 		String serverStoppedLabel = serverName + "  [Stopped]";
 
@@ -401,8 +379,6 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.showServersView();
-
 		String serverStoppedLabel = serverName + "  [Stopped]";
 
 		viewAction.openServerEditor(serverStoppedLabel);
@@ -423,13 +399,13 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		viewAction.serverStart(serverStoppedLabel);
 
-		viewAction.serverStartWait();
+		jobAction.waitForServerStarted(serverName);
 
 		String serverStartedLabel = serverName + "  [Started]";
 
 		viewAction.serverStop(serverStartedLabel);
 
-		viewAction.serverStopWait();
+		jobAction.waitForServerStopped(serverName);
 
 		viewAction.openServerEditor(serverStoppedLabel);
 
@@ -470,19 +446,17 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.showServersView();
-
 		String serverStoppedLabel = serverName + "  [Stopped]";
 
 		viewAction.serverDebug(serverStoppedLabel);
 
-		viewAction.serverStartWait();
+		jobAction.waitForServerStarted(serverName);
 
 		String serverDebuggingLabel = serverName + "  [Debugging]";
 
 		viewAction.serverStop(serverDebuggingLabel);
 
-		viewAction.serverStopWait();
+		jobAction.waitForServerStopped(serverName);
 
 		dialogAction.openPreferencesDialog();
 
