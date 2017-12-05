@@ -69,11 +69,11 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
 			if (project != null && project.isAccessible() && project.exists()) {
 				try {
 					project.close(new NullProgressMonitor());
-					project.delete(true, true, new NullProgressMonitor());
+					project.delete(true, new NullProgressMonitor());
 				}
 				catch (ResourceException re) {
 					project.close(new NullProgressMonitor());
-					project.delete(true, true, new NullProgressMonitor());
+					project.delete(true, new NullProgressMonitor());
 				}
 			}
 		}
