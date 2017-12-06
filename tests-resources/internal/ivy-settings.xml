@@ -1,0 +1,11 @@
+<ivysettings>
+	<settings defaultResolver="default" />
+
+	<resolvers>
+		<ibiblio m2compatible="true" name="liferay-public" root="http://192.168.130.84:8080/repository/liferay-public/" />
+
+		<chain dual="true" name="default">
+			<resolver ref="liferay-public" />
+		</chain>
+	</resolvers>
+</ivysettings>

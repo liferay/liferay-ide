@@ -169,6 +169,7 @@
 								<systemProperties>
 									<liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
 									<runTest>${runTest}</runTest>
+									<internal>${internal}</internal>
 								</systemProperties>
 								<dependencies>
 									<dependency>
@@ -244,6 +245,7 @@
 								<systemProperties>
 									<liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
 									<runTest>${runTest}</runTest>
+									<internal>${internal}</internal>
 								</systemProperties>
 								<dependencies>
 									<dependency>
@@ -319,6 +321,7 @@
 								<systemProperties>
 									<liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
 									<runTest>${runTest}</runTest>
+									<internal>${internal}</internal>
 								</systemProperties>
 								<dependencies>
 									<dependency>
