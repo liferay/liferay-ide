@@ -131,6 +131,16 @@ public class EnvAction extends UIAction {
 		return bundlesPath.append(sdkDir);
 	}
 
+	private boolean _internal() {
+		//TODO also need to add ping checker to ensure the internal servers accessible
+
+		if (_internal == null || _internal.equals("") || _internal.equals("null")) {
+			return true;
+		}
+
+		return Boolean.parseBoolean(_internal);
+	}
+
 	public String getLiferayPluginsSdkName() {
 		return _sdkInfos[0].getSdkDir();
 	}
@@ -405,6 +415,19 @@ public class EnvAction extends UIAction {
 		writer.write(appServerParentDir);
 
 		writer.close();
+
+		if (_internal()) {
+			IPath source = getLiferayBundlesPath().append("internal").append("ivy-settings.xml");
+
+			IPath dest = getLiferayPluginsSdkDir().append("ivy-settings.xml");
+
+			try {
+				FileUtil.copyFile(source.toFile(), dest.toFile());
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void unzipServer() throws IOException {
@@ -545,6 +568,7 @@ public class EnvAction extends UIAction {
 
 	private final BundleInfo[] _bundleInfos;
 	private String _liferayBundlesDir = System.getProperty("liferay.bundles.dir");
+	private String _internal = System.getProperty("internal");
 	private IPath _liferayBundlesPath;
 	private final SdkInfo[] _sdkInfos;
 	private long _timestamp = 0;

@@ -46,3 +46,10 @@ Liferay Workspace/LiferayWorkspace => lrws
 Service Builder/ServiceBuilder => sb
 
 **DO NOT** use short name for any Class Names and Methon names.
+
+## Paraments
+1. internal
+For China internal resource server, if it be set internal="true" means the ui tests will point to the internal resource server. Default value is ture. TODO also need to add ping checker to ensure the internal servers accessible.
+
+## Internal Resource server
+please add the hosts map from tests-resources/internal/hosts into your own system hosts file to use internal resource server
