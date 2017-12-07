@@ -740,20 +740,25 @@ public class SDK {
 				try {
 					version = SDKUtil.readSDKVersion(sdkLocation.toOSString());
 
-					if (version.equals(ILiferayConstants.V611.toString())) {
-						Properties buildProperties = _getProperties(sdkLocation.append("build.properties").toFile());
+					if (version != null) {
+						if (version.equals(ILiferayConstants.V611.toString())) {
+							Properties buildProperties =
+								_getProperties(sdkLocation.append("build.properties").toFile());
 
-						if (_hasAppServerSpecificProps(buildProperties)) {
-							version = ILiferayConstants.V612.toString();
+							if (_hasAppServerSpecificProps(buildProperties)) {
+								version = ILiferayConstants.V612.toString();
+							}
 						}
-					}
 
-					if (version.equals(ILiferayConstants.V6120.toString())) {
-						Properties buildProperties = _getProperties(sdkLocation.append("build.properties").toFile());
+						if (version.equals(ILiferayConstants.V6120.toString())) {
+							Properties buildProperties =
+								_getProperties(sdkLocation.append("build.properties").toFile());
 
-						if (_hasAppServerSpecificProps(buildProperties)) {
-							version = ILiferayConstants.V6130.toString();
+							if (_hasAppServerSpecificProps(buildProperties)) {
+								version = ILiferayConstants.V6130.toString();
+							}
 						}
+
 					}
 				}
 				catch (Exception e) {
@@ -1074,11 +1079,9 @@ public class SDK {
 	private Properties _getProperties(File file) {
 		Properties properties = new Properties();
 
-		try {
-			InputStream propertiesInput = Files.newInputStream(file.toPath());
+		try(InputStream propertiesInput = Files.newInputStream(file.toPath())) {
 
 			properties.load(propertiesInput);
-			propertiesInput.close();
 		}
 		catch (Exception e) {
 			SDKCorePlugin.logError(e);
