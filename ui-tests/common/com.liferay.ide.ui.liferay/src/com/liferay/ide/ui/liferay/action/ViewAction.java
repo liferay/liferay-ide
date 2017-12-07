@@ -112,14 +112,14 @@ public class ViewAction extends UIAction {
 		_serversView.getServers().contextMenu(ADD_AND_REMOVE, serverLabel);
 	}
 
+	public void openFragmentFilesWizard() {
+		_getProjects().contextMenu(LIFERAY_MODULE_FRAGMENT_FILES);
+	}
+
 	public void openLiferayPortalHome(String serverLabel) {
 		_serversView.getServers().contextMenu(OPEN_LIFERAY_PORTAL_HOME, serverLabel);
 
 		_jobAction.waitForBrowserLoaded();
-	}
-
-	public void openNewFragmentFileWizard() {
-		_getProjects().contextMenu(LIFERAY_MODULE_FRAGMENT_FILES);
 	}
 
 	public void openProjectFile(String... files) {
