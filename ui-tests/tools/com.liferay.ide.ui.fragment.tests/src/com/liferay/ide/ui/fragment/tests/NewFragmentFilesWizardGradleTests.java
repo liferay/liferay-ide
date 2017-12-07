@@ -21,6 +21,7 @@ import java.io.IOException;
 import org.eclipse.core.runtime.IPath;
 
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -76,8 +77,8 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 	}
 
 	@Test
-	public void addFragmentJsp() {
-		String projectName = "test-fragment-jsp";
+	public void addFragmentJspFiles() {
+		String projectName = "test-fragment-jsp-files-gradle";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -87,13 +88,13 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.asset.browser.web-1.0.17.jar");
+		dialogAction.prepareText("com.liferay.asset.browser.web");
 
 		dialogAction.confirm();
 
 		wizardAction.finish();
 
-		wizardAction.openLiferayModuleFragmentFilesWizard();
+		viewAction.openFragmentFilesWizard();
 
 		wizardAction.openAddOverrideFilesDialog();
 
@@ -103,12 +104,16 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		String[] jspFile = {projectName, "src", "main", "resources", "META-INF", "resources", "init-ext.jsp"};
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(jspFile));
+
 		viewAction.closeAndDeleteProject(projectName);
 	}
 
 	@Test
-	public void addFragmentJspf() {
-		String projectName = "test-fragment-jspf";
+	public void addFragmentJspfFiles() {
+		String projectName = "test-fragment-jspf-files-gradle";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -118,13 +123,13 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.asset.categories.admin.web-1.0.19.jar");
+		dialogAction.prepareText("com.liferay.asset.categories.admin.web");
 
 		dialogAction.confirm();
 
 		wizardAction.finish();
 
-		wizardAction.openLiferayModuleFragmentFilesWizard();
+		viewAction.openFragmentFilesWizard();
 
 		wizardAction.openAddOverrideFilesDialog();
 
@@ -133,13 +138,17 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 		dialogAction.confirm();
 
 		wizardAction.finish();
+		
+		String[] jspfFile = {projectName, "src", "main", "resources", "META-INF", "resources", "edit_vocabulary_settings.jspf"};
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(jspfFile));
 
 		viewAction.closeAndDeleteProject(projectName);
 	}
 
 	@Test
-	public void addFragmentPortletProperties() {
-		String projectName = "test-fragment-portlet";
+	public void addFragmentPortletPropertiesFiles() {
+		String projectName = "test-fragment-portlet-files-gradle";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -149,13 +158,13 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.announcements.web-1.1.9.jar");
+		dialogAction.prepareText("com.liferay.announcements.web");
 
 		dialogAction.confirm();
 
 		wizardAction.finish();
 
-		wizardAction.openLiferayModuleFragmentFilesWizard();
+		viewAction.openFragmentFilesWizard();
 
 		wizardAction.openAddOverrideFilesDialog();
 
@@ -165,12 +174,16 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		String[] protletFile = {projectName, "src", "main", "java", "portlet-ext.properties"};
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(protletFile));
+
 		viewAction.closeAndDeleteProject(projectName);
 	}
 
 	@Test
-	public void addFragmentResourceAction() {
-		String projectName = "test-fragment-resource";
+	public void addFragmentResourceActionFiles() {
+		String projectName = "test-fragment-resource-files-gradle";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -180,13 +193,13 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.asset.publisher.web-1.5.3.jar");
+		dialogAction.prepareText("com.liferay.asset.publisher.web");
 
 		dialogAction.confirm();
 
 		wizardAction.finish();
 
-		wizardAction.openLiferayModuleFragmentFilesWizard();
+		viewAction.openFragmentFilesWizard();
 
 		wizardAction.openAddOverrideFilesDialog();
 
@@ -196,9 +209,136 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		String[] resourceActionFile = {projectName, "src", "main", "resources", "resource-actions", "default-ext.xml"};
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(resourceActionFile));
+
 		viewAction.closeAndDeleteProject(projectName);
 	}
 
+	@Test
+	public void testFragmentFilesWithDeleteFuction() {
+		String projectName = "test-fragment-files-delete-fuction-gradle";
+
+		wizardAction.openNewFragmentWizard();
+
+		wizardAction.prepareFragmentGradle(projectName);
+
+		wizardAction.next();
+
+		wizardAction.openBrowseOsgiBundleDialog();
+
+		dialogAction.prepareText("com.liferay.asset.display.web");
+
+		dialogAction.confirm();
+
+		wizardAction.finish();
+
+		String[] files = {"META-INF/resources/init-ext.jsp", "META-INF/resources/init.jsp",
+			"META-INF/resources/view.jsp"
+		};
+
+		viewAction.openFragmentFilesWizard();
+
+		wizardAction.openAddOverrideFilesDialog();
+
+		dialogAction.selectItems(files);
+
+		dialogAction.confirm();
+
+		wizardAction.openAddOverrideFilesDialog();
+
+		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
+
+		dialogAction.cancel();
+
+		wizardAction.selectFragmentFile("META-INF/resources/init-ext.jsp");
+
+		wizardAction.deleteFragmentFile();
+
+		wizardAction.openAddOverrideFilesDialog();
+
+		Assert.assertTrue(dialogAction.getConfirmBtn().isEnabled());
+
+		dialogAction.cancel();
+
+		wizardAction.finish();
+
+		String[] viewjspFile = {projectName, "src", "main", "resources", "META-INF", "resources", "view.jsp"};
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(viewjspFile));
+
+		String[] initFile = {projectName, "src", "main", "resources", "META-INF", "resources", "init.jsp"};
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(initFile));
+
+		viewAction.closeAndDeleteProject(projectName);
+
+	}
+
+	@Test
+	 public void addFragmentFilesShortcuts() {
+		String projectName = "test-fragment-files-shortcuts-gradle";
+
+		wizardAction.openNewFragmentWizard();
+
+		wizardAction.prepareFragmentGradle(projectName);
+
+		wizardAction.next();
+
+		wizardAction.openBrowseOsgiBundleDialog();
+
+		dialogAction.prepareText("com.liferay.journal.web");
+
+		dialogAction.confirm();
+
+		wizardAction.finish();
+
+		wizardAction.openNewBtnFragmentFilesWizard();
+
+		wizardAction.openAddOverrideFilesDialog();
+
+		dialogAction.selectItems("META-INF/resources/add_button.jsp");
+
+		dialogAction.confirm();
+
+		wizardAction.finish();
+
+		String[] buttonjspFile = {projectName, "src", "main", "resources", "META-INF", "resources", "add_button.jsp"};
+		
+		Assert.assertTrue(viewAction.visibleProjectFileTry(buttonjspFile));
+		
+		wizardAction.openFileMenuFragmentFilesWizard();
+
+		wizardAction.openAddOverrideFilesDialog();
+
+		dialogAction.selectItems("META-INF/resources/article/display_page.jsp");
+
+		dialogAction.confirm();
+
+		wizardAction.finish();
+		
+		String[] pageFile = {projectName, "src", "main", "resources", "META-INF", "resources", "article", "display_page.jsp"};
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(pageFile));
+
+		viewAction.openFragmentFilesWizard();
+		
+		wizardAction.openAddOverrideFilesDialog();
+
+		dialogAction.selectItems("portlet.properties");
+
+		dialogAction.confirm();
+
+		wizardAction.finish();
+		
+		String[] propertiesFile = {projectName, "src", "main", "java", "portlet-ext.properties"};
+
+		Assert.assertTrue(viewAction.visibleProjectFileTry(propertiesFile));
+
+		viewAction.closeAndDeleteProject(projectName);
+	}
+	
 	private static final String _serverName = "Liferay 7-fragment-gradle";
 
 }
