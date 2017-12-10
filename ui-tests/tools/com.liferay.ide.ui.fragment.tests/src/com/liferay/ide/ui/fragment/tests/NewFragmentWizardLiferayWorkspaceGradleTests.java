@@ -133,9 +133,13 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		String[] projectNames = {_liferayWorkspaceName, newModulesFolderName, projectName};
 
+		String[] newModulesFolderNames = {_liferayWorkspaceName, newModulesFolderName};
+
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
 		viewAction.closeAndDeleteProjectFromDisk(projectNames);
+
+		viewAction.closeAndDeleteProjectFromDisk(newModulesFolderNames);
 
 		viewAction.openProjectFile(_liferayWorkspaceName, "gradle.properties");
 
