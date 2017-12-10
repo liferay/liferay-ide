@@ -133,13 +133,9 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		String[] projectNames = {_liferayWorkspaceName, newModulesFolderName, projectName};
 
-		String[] newModulesFolderNames = {_liferayWorkspaceName, newModulesFolderName};
-
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeAndDeleteProject(projectNames);
-
-		viewAction.closeAndDeleteProject(newModulesFolderNames);
+		viewAction.closeAndDeleteProjectFromDisk(projectNames);
 
 		viewAction.openProjectFile(_liferayWorkspaceName, "gradle.properties");
 
@@ -181,7 +177,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeAndDeleteProject(projectNames);
+		viewAction.closeAndDeleteProjectFromDisk(projectNames);
 	}
 
 	@Test
@@ -212,7 +208,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeAndDeleteProject(projectNames);
+		viewAction.closeAndDeleteProjectFromDisk(projectNames);
 	}
 
 	@Test
@@ -243,7 +239,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeAndDeleteProject(projectNames);
+		viewAction.closeAndDeleteProjectFromDisk(projectNames);
 	}
 
 	@Test
@@ -279,7 +275,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeAndDeleteProject(projectNames);
+		viewAction.closeAndDeleteProjectFromDisk(projectNames);
 	}
 
 	@Test
@@ -310,7 +306,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeAndDeleteProject(projectNames);
+		viewAction.closeAndDeleteProjectFromDisk(projectNames);
 	}
 
 	@Test
@@ -362,7 +358,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeAndDeleteProject(projectNames);
+		viewAction.closeAndDeleteProjectFromDisk(projectNames);
 	}
 
 	private static final String _liferayWorkspaceName = "test-liferay-workspace-gradle";
