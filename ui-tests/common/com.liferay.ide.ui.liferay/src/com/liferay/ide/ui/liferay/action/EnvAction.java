@@ -131,7 +131,7 @@ public class EnvAction extends UIAction {
 		return bundlesPath.append(sdkDir);
 	}
 
-	private boolean _internal() {
+	public boolean internal() {
 		//TODO also need to add ping checker to ensure the internal servers accessible
 
 		if (_internal == null || _internal.equals("") || _internal.equals("null")) {
@@ -416,7 +416,7 @@ public class EnvAction extends UIAction {
 
 		writer.close();
 
-		if (_internal()) {
+		if (internal()) {
 			IPath source = getLiferayBundlesPath().append("internal").append("ivy-settings.xml");
 
 			IPath dest = getLiferayPluginsSdkDir().append("ivy-settings.xml");

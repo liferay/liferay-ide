@@ -62,7 +62,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		viewAction.closeAndDeleteProject(workspaceName);
 	}
 
-	@Ignore("ignore every tests which need download progress to wait internal resource server")
+	@Ignore("Ignore forever and test the download bundle in createLiferayWorksapceWithDownloadBundleChangeBundleUrl")
 	@Test
 	public void createLiferayWorksapceWithDownloadBundle() {
 		String workspaceName = "test-liferay-workspace-gradle-download-bundle";
@@ -88,13 +88,20 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		dialogAction.confirmPreferences();
 	}
 
-	@Ignore("ignore every tests which need download progress to wait internal resource server")
 	@Test
 	public void createLiferayWorksapceWithDownloadBundleChangeBundleUrl() {
+		// Only do this test in the internal net
+
+		if (!envAction.internal()) {
+			return;
+		}
+
 		String workspaceName = "test-liferay-workspace-gradle-change-bundle-url";
 
+		// Use the internal server instead of the public server and also need to append the internal host
+
 		String bundleUrl =
-			"http://mirrors.dlc.liferay.com/portal/7.0.3-ga4/liferay-ce-portal-tomcat-7.0-ga4-20170613175008905.zip";
+			"http://releases.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
