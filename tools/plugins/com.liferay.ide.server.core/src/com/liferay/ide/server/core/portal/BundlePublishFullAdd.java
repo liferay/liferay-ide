@@ -39,6 +39,7 @@ import org.osgi.framework.dto.BundleDTO;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class BundlePublishFullAdd extends BundlePublishOperation
 {
@@ -83,7 +84,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
         return false;
     }
 
-    @Override
+	@Override
     public void execute( IProgressMonitor monitor, IAdaptable info ) throws CoreException
     {
         for( IModule module : modules )
@@ -150,7 +151,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
             else
             {
                 this.portalServerBehavior.setModulePublishState2(
-                    new IModule[] { module }, IServer.PUBLISH_STATE_FULL );
+                    new IModule[] { module }, IServer.PUBLISH_STATE_NONE );
 
                 project.createMarker( LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE );
 
