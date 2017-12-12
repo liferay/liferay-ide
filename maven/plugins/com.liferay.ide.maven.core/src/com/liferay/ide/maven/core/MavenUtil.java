@@ -555,7 +555,6 @@ public class MavenUtil {
 				 *  If the method is called without error, we can assume the project has been fully loaded
 				 *  No need to continue.
 				 */
-
 				return false;
 			}
 		}

@@ -325,7 +325,6 @@ public class NewMavenPluginProjectProvider
 		 * then this is a valid location if projectName is null or empty , don't need to check
 		 * just return
 		 */
-
 		if (CoreUtil.isNullOrEmpty(projectName)) {
 			return retval;
 		}
