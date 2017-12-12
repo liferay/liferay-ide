@@ -28,7 +28,7 @@ import org.junit.Test;
 /**
  * @author Lily Li
  */
-public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
+public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@BeforeClass
 	public static void addServerAndWorkspace() throws IOException {
@@ -62,7 +62,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.prepareLiferayWorkspaceGradle(_liferayWorkspaceName);
+		wizardAction.prepareLiferayWorkspaceMaven(_liferayWorkspaceName);
 
 		wizardAction.finish();
 
@@ -71,9 +71,21 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@AfterClass
 	public static void cleanWorkspaceAndServer() {
-		String[] modulesFolderNames = {_liferayWorkspaceName, "modules"};
+		String themesFolderName = _liferayWorkspaceName + "-themes (in themes)";
+
+		String warsFolderName = _liferayWorkspaceName + "-wars (in wars)";
+
+		String[] modulesFolderNames = {_liferayWorkspaceName, _modulesFolderName};
+
+		String[] themesFolderNames = {_liferayWorkspaceName, themesFolderName};
+
+		String[] warsFolderNames = {_liferayWorkspaceName, warsFolderName};
 
 		viewAction.closeAndDeleteProject(modulesFolderNames);
+
+		viewAction.closeAndDeleteProject(themesFolderNames);
+
+		viewAction.closeAndDeleteProject(warsFolderNames);
 
 		viewAction.closeAndDeleteProject(_liferayWorkspaceName);
 
@@ -87,110 +99,43 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 	}
 
 	@Test
-	public void createFragmentChangeModulesDir() {
-		viewAction.openProjectFile(_liferayWorkspaceName, "gradle.properties");
-
-		StringBuffer sb = new StringBuffer();
-
-		String newModulesFolderName = "modulesTest";
-
-		sb.append("liferay.workspace.modules.dir");
-		sb.append("=");
-		sb.append(newModulesFolderName);
-
-		editorAction.setText(sb.toString());
-
-		editorAction.save();
-
-		editorAction.close();
-
-		String projectName = "test-fragment-change-modules-dir";
-
-		wizardAction.openNewFragmentWizard();
-
-		wizardAction.prepareFragmentGradle(projectName);
-
-		wizardAction.next();
-
-		wizardAction.openBrowseOsgiBundleDialog();
-
-		dialogAction.prepareText("com.liferay.site.navigation.site.map.web");
-
-		dialogAction.confirm();
-
-		String[] files = {
-			"META-INF/resources/configuration.jsp", "META-INF/resources/init-ext.jsp", "META-INF/resources/init.jsp",
-			"META-INF/resources/view.jsp", "portlet.properties", "resource-actions/default.xml"
-		};
-
-		wizardAction.openAddOverrideFilesDialog();
-
-		dialogAction.selectItems(files);
-
-		dialogAction.confirm();
-
-		wizardAction.finish();
-
-		String[] projectNames = {_liferayWorkspaceName, newModulesFolderName, projectName};
-
-		String[] newModulesFolderNames = {_liferayWorkspaceName, newModulesFolderName};
-
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
-
-		viewAction.closeAndDeleteProjectFromDisk(projectNames);
-
-		viewAction.closeAndDeleteProjectFromDisk(newModulesFolderNames);
-
-		viewAction.openProjectFile(_liferayWorkspaceName, "gradle.properties");
-
-		sb.delete(0, sb.length());
-		sb.append("liferay.workspace.modules.dir=modules");
-
-		editorAction.setText(sb.toString());
-
-		editorAction.save();
-
-		editorAction.close();
-	}
-
-	@Test
 	public void createFragmentWithJsp() {
-		String projectName = "test-fragment-jsp-gradle";
+		String projectName = "test-fragment-jsp-maven";
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.prepareFragmentMaven(projectName);
 
 		wizardAction.next();
 
 		wizardAction.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.layout.admin.web");
+		dialogAction.prepareText("com.liferay.iframe.web");
 
 		dialogAction.confirm();
 
 		wizardAction.openAddOverrideFilesDialog();
 
-		dialogAction.selectItems("META-INF/resources/add_layout.jsp");
+		dialogAction.selectItems("META-INF/resources/proxy.jsp");
 
 		dialogAction.confirm();
 
 		wizardAction.finish();
 
-		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
+		String[] projectNames = {_liferayWorkspaceName, _modulesFolderName, projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeAndDeleteProjectFromDisk(projectNames);
+		viewAction.closeAndDeleteProject(projectNames);
 	}
 
 	@Test
 	public void createFragmentWithJspf() {
-		String projectName = "test-fragment-jspf-gradle";
+		String projectName = "test-fragment-jspf-maven";
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.prepareFragmentMaven(projectName);
 
 		wizardAction.next();
 
@@ -208,26 +153,26 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
+		String[] projectNames = {_liferayWorkspaceName, _modulesFolderName, projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeAndDeleteProjectFromDisk(projectNames);
+		viewAction.closeAndDeleteProject(projectNames);
 	}
 
 	@Test
 	public void createFragmentWithoutFiles() {
-		String projectName = "test-fragment-without-files-gradle";
+		String projectName = "test-fragment-without-files-maven";
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.prepareFragmentMaven(projectName);
 
 		wizardAction.next();
 
 		wizardAction.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.asset.web");
+		dialogAction.prepareText("com.liferay.frontend.image.editor.web");
 
 		dialogAction.confirm();
 
@@ -239,33 +184,30 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
+		String[] projectNames = {_liferayWorkspaceName, _modulesFolderName, projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeAndDeleteProjectFromDisk(projectNames);
+		viewAction.closeAndDeleteProject(projectNames);
 	}
 
 	@Test
 	public void createFragmentWithPortletProperites() {
-		String projectName = "test-fragment-portlet-properties-gradle";
+		String projectName = "test-fragment-portlet-properties-maven";
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.prepareFragmentMaven(projectName);
 
 		wizardAction.next();
 
 		wizardAction.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.dynamic.data.mapping.web");
+		dialogAction.prepareText("com.liferay.item.selector.web");
 
 		dialogAction.confirm();
 
-		String[] files = {
-			"META-INF/resources/template_add_buttons.jsp", "META-INF/resources/error.jsp",
-			"META-INF/resources/init.jsp", "portlet.properties"
-		};
+		String[] files = {"META-INF/resources/init.jsp", "META-INF/resources/view.jsp", "portlet.properties"};
 
 		wizardAction.openAddOverrideFilesDialog();
 
@@ -275,26 +217,26 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
+		String[] projectNames = {_liferayWorkspaceName, _modulesFolderName, projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeAndDeleteProjectFromDisk(projectNames);
+		viewAction.closeAndDeleteProject(projectNames);
 	}
 
 	@Test
 	public void createFragmentWithResourceAction() {
-		String projectName = "test-fragment-resource-action-gradle";
+		String projectName = "test-fragment-resource-action-maven";
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.prepareFragmentMaven(projectName);
 
 		wizardAction.next();
 
 		wizardAction.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.login.web");
+		dialogAction.prepareText("com.liferay.layout.admin.web");
 
 		dialogAction.confirm();
 
@@ -306,26 +248,26 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
+		String[] projectNames = {_liferayWorkspaceName, _modulesFolderName, projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeAndDeleteProjectFromDisk(projectNames);
+		viewAction.closeAndDeleteProject(projectNames);
 	}
 
 	@Test
 	public void createFragmentWithWholeFiles() {
-		String projectName = "test-fragment-whole-files-gradle";
+		String projectName = "test-fragment-whole-files-maven";
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.prepareFragmentMaven(projectName);
 
 		wizardAction.next();
 
 		wizardAction.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.xsl.content.web");
+		dialogAction.prepareText("com.liferay.site.navigation.language.web");
 
 		dialogAction.confirm();
 
@@ -358,14 +300,15 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
+		String[] projectNames = {_liferayWorkspaceName, _modulesFolderName, projectName};
 
 		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
 
-		viewAction.closeAndDeleteProjectFromDisk(projectNames);
+		viewAction.closeAndDeleteProject(projectNames);
 	}
 
-	private static final String _liferayWorkspaceName = "test-liferay-workspace-gradle";
-	private static final String _serverName = "Liferay 7-fragment-gradle";
+	private static final String _liferayWorkspaceName = "test-liferay-workspace-maven";
+	private static final String _modulesFolderName = _liferayWorkspaceName + "-modules (in modules)";
+	private static final String _serverName = "Liferay 7-fragment-maven";
 
 }

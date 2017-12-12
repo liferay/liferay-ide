@@ -47,6 +47,12 @@ public class ViewAction extends UIAction {
 		deleteProject(items);
 	}
 
+	public void closeAndDeleteProjectFromDisk(String... items) {
+		closeProject(items);
+
+		deleteProjectFromDisk(items);
+	}
+
 	public void closeAndDeleteProjectWithNoRunningJobs(String... items) {
 		closeProject(items);
 
@@ -70,38 +76,23 @@ public class ViewAction extends UIAction {
 
 		String label = _deleteResourcesDialog.getLabel();
 
-		// _deleteResourcesDialog.getDeleteFromDisk().select();
+		_deleteResourcesDialog.confirm();
+
+		_jobAction.waitForShellClosed(label);
+	}
+
+	public void deleteProjectFromDisk(String... items) {
+		_getProjects().contextMenu(DELETE, items);
+
+		ide.sleep();
+
+		String label = _deleteResourcesDialog.getLabel();
+
+		_deleteResourcesDialog.getDeleteFromDisk().select();
 
 		_deleteResourcesDialog.confirm();
 
 		_jobAction.waitForShellClosed(label);
-
-		// long origin = SWTBotPreferences.TIMEOUT;
-
-		//
-
-		// SWTBotPreferences.TIMEOUT = 1500;
-
-		//
-
-		// try {
-		// _continueDeleteResourcesDialog.confirm();
-		// }
-		// catch (Exception e) {
-		// }
-
-		//
-
-		// try {
-		// _dialog.confirm();
-		// }
-		// catch (Exception e) {
-		// }
-
-		//
-
-		// SWTBotPreferences.TIMEOUT = origin;
-
 	}
 
 	public String[] getProjectNames() {
@@ -112,14 +103,14 @@ public class ViewAction extends UIAction {
 		_serversView.getServers().contextMenu(ADD_AND_REMOVE, serverLabel);
 	}
 
+	public void openFragmentFilesWizard() {
+		_getProjects().contextMenu(LIFERAY_MODULE_FRAGMENT_FILES);
+	}
+
 	public void openLiferayPortalHome(String serverLabel) {
 		_serversView.getServers().contextMenu(OPEN_LIFERAY_PORTAL_HOME, serverLabel);
 
 		_jobAction.waitForBrowserLoaded();
-	}
-
-	public void openNewFragmentFileWizard() {
-		_getProjects().contextMenu(LIFERAY_MODULE_FRAGMENT_FILES);
 	}
 
 	public void openProjectFile(String... files) {

@@ -129,6 +129,10 @@ public class WizardAction extends UIAction {
 		_newFragmentInfoWizard.getBrowseOsgiBtn().click();
 	}
 
+	public void openFileMenuFragmentFilesWizard() {
+		ide.getFileMenu().clickMenu(NEW, LIFERAY_MODULE_FRAGMENT_FILES);
+	}
+
 	public void openImportLiferayWorkspaceWizard() {
 		ide.getFileMenu().clickMenu(IMPORT);
 
@@ -137,7 +141,7 @@ public class WizardAction extends UIAction {
 		next();
 	}
 
-	public void openLiferayModuleFragmentFilesWizard() {
+	public void openNewBtnFragmentFilesWizard() {
 		MenuItem menu = ide.getNewBtn().getLiferayMoudleFragmentFiles();
 
 		menu.click();
