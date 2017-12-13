@@ -27,6 +27,7 @@ import com.liferay.ide.layouttpl.core.operation.LayoutTplDescriptorHelper;
 import com.liferay.ide.layouttpl.core.util.LayoutTplUtil;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
 import com.liferay.ide.layouttpl.ui.util.LayoutTemplatesFactory;
+import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.wizard.LiferayDataModelOperation;
 
@@ -71,7 +72,7 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 
 		String diagramClassName = dm.getStringProperty(LAYOUT_TEMPLATE_ID);
 
-		LayoutTplElement diagramModel = createLayoutTplDigram(dm, _isBootstrapStyle(), diagramClassName);
+		LayoutTplElement diagramModel = createLayoutTplDigram(dm, _isBootstrapStyle(), _is62(), diagramClassName);
 
 		try {
 			IFile templateFile = null;
@@ -122,11 +123,14 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 		return ProjectUtil.getProject(projectName);
 	}
 
-	protected LayoutTplElement createLayoutTplDigram(IDataModel dm, boolean bootstrapStyle, String className) {
+	protected LayoutTplElement createLayoutTplDigram(
+		IDataModel dm, boolean bootstrapStyle, boolean is62, String className) {
+
 		LayoutTplElement layoutTpl = LayoutTplElement.TYPE.instantiate();
 
 		layoutTpl.setBootstrapStyle(bootstrapStyle);
 		layoutTpl.setClassName(className);
+		layoutTpl.setIs62(is62);
 
 		if (dm.getBooleanProperty(LAYOUT_IMAGE_1_COLUMN)) {
 			LayoutTemplatesFactory.add_Layout_1(layoutTpl);
@@ -200,6 +204,18 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 		else {
 			thumbnailFile.create(iconFileURL.openStream(), true, null);
 		}
+	}
+
+	private boolean _is62() {
+		IProject project = getTargetProject();
+
+		Version version = new Version(LiferayDescriptorHelper.getDescriptorVersion(project));
+
+		if (CoreUtil.compareVersions(version, ILiferayConstants.V620) == 0) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private boolean _isBootstrapStyle() {
