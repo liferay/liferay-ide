@@ -33,7 +33,7 @@ public class NewHookConfigTests extends SwtbotBase {
 
 		String sdkName = envAction.getLiferayPluginsSdkName() + "-" + envAction.getTimestamp();
 
-		viewAction.closeAndDeleteProjectWithNoRunningJobs(sdkName);
+		viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
 	}
 
 	@BeforeClass
@@ -46,7 +46,7 @@ public class NewHookConfigTests extends SwtbotBase {
 
 		String projectName = "test-portlet";
 
-		wizardAction.preparePluginSdk(projectName);
+		wizardAction.newPlugin.prepareSdk(projectName);
 
 		wizardAction.next();
 
@@ -54,7 +54,7 @@ public class NewHookConfigTests extends SwtbotBase {
 
 		String location = envAction.getLiferayPluginsSdkDir().toOSString();
 
-		wizardAction.preparePluginSdkLocation(location);
+		wizardAction.setSdkLocation.prepare(location);
 
 		wizardAction.finish();
 
@@ -62,7 +62,7 @@ public class NewHookConfigTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -71,7 +71,7 @@ public class NewHookConfigTests extends SwtbotBase {
 
 		String projectName = "test-hook";
 
-		wizardAction.preparePluginHookSdk(projectName);
+		wizardAction.newPlugin.prepareHookSdk(projectName);
 
 		wizardAction.finish();
 
@@ -79,7 +79,7 @@ public class NewHookConfigTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 }

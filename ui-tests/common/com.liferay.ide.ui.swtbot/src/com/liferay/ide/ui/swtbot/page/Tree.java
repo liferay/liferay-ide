@@ -37,19 +37,6 @@ public class Tree extends AbstractWidget {
 		super(bot, index);
 	}
 
-	public SWTBotTreeItem getTreeItem(String... items) {
-		SWTBotTreeItem item = null;
-
-		if (items.length > 1) {
-			item = getWidget().expandNode(items);
-		}
-		else {
-			item = getWidget().getTreeItem(items[0]);
-		}
-
-		return item;
-	}
-
 	public void contextMenu(String menu, String... items) {
 		SWTBotTreeItem item = null;
 
@@ -85,6 +72,19 @@ public class Tree extends AbstractWidget {
 		}
 
 		return labels;
+	}
+
+	public SWTBotTreeItem getTreeItem(String... items) {
+		SWTBotTreeItem item = null;
+
+		if (items.length > 1) {
+			item = getWidget().expandNode(items);
+		}
+		else {
+			item = getWidget().getTreeItem(items[0]);
+		}
+
+		return item;
 	}
 
 	public boolean isVisible(String... items) throws WidgetNotFoundException {

@@ -30,15 +30,15 @@ public class NewThemeProjectModuleGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleGradle(projectName, THEME);
+		wizardAction.newModule.prepareGradle(projectName, THEME);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 }

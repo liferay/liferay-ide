@@ -15,7 +15,7 @@
 package com.liferay.ide.ui.workspace.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.page.wizard.ImportLiferayWorkspaceProjectWizard;
+import com.liferay.ide.ui.liferay.page.wizard.project.ImportLiferayWorkspaceWizard;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
@@ -34,25 +34,25 @@ public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 
 	@Test
 	public void checkInitialState() {
-		wizardAction.openImportLiferayWorkspaceWizard();
+		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
-		Assert.assertEquals(PLEASE_SELECT_THE_WORKSPACE_LOCATION, _importLiferayWorkspaceProject.getValidationMsg());
+		Assert.assertEquals(PLEASE_SELECT_THE_WORKSPACE_LOCATION, _importLiferayWorkspace.getValidationMsg());
 
-		Assert.assertEquals(StringPool.BLANK, _importLiferayWorkspaceProject.getWorkspaceLocation().getText());
-		Assert.assertEquals(StringPool.BLANK, _importLiferayWorkspaceProject.getBuildTypeText().getText());
-		Assert.assertFalse(_importLiferayWorkspaceProject.getAddProjectToWorkingSet().isChecked());
+		Assert.assertEquals(StringPool.BLANK, _importLiferayWorkspace.getWorkspaceLocation().getText());
+		Assert.assertEquals(StringPool.BLANK, _importLiferayWorkspace.getBuildTypeText().getText());
+		Assert.assertFalse(_importLiferayWorkspace.getAddProjectToWorkingSet().isChecked());
 
-		Assert.assertTrue(_importLiferayWorkspaceProject.backBtn().isEnabled());
-		Assert.assertFalse(_importLiferayWorkspaceProject.nextBtn().isEnabled());
-		Assert.assertFalse(_importLiferayWorkspaceProject.finishBtn().isEnabled());
-		Assert.assertTrue(_importLiferayWorkspaceProject.cancelBtn().isEnabled());
+		Assert.assertTrue(_importLiferayWorkspace.backBtn().isEnabled());
+		Assert.assertFalse(_importLiferayWorkspace.nextBtn().isEnabled());
+		Assert.assertFalse(_importLiferayWorkspace.finishBtn().isEnabled());
+		Assert.assertTrue(_importLiferayWorkspace.cancelBtn().isEnabled());
 
 		wizardAction.cancel();
 	}
 
 	@Test
 	public void checkProjectName() {
-		wizardAction.openImportLiferayWorkspaceWizard();
+		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
 		for (ValidationMsg msg : envAction.getValidationMsgs(
 				new File(envAction.getValidationFolder(), "import-liferay-workspace-wizard-location.csv"))) {
@@ -61,7 +61,7 @@ public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 				continue;
 			}
 
-			_importLiferayWorkspaceProject.getWorkspaceLocation().setText(msg.getInput());
+			_importLiferayWorkspace.getWorkspaceLocation().setText(msg.getInput());
 
 			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
@@ -69,7 +69,6 @@ public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 		wizardAction.cancel();
 	}
 
-	private ImportLiferayWorkspaceProjectWizard _importLiferayWorkspaceProject =
-		new ImportLiferayWorkspaceProjectWizard(bot);
+	private ImportLiferayWorkspaceWizard _importLiferayWorkspace = new ImportLiferayWorkspaceWizard(bot);
 
 }

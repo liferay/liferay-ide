@@ -32,7 +32,7 @@ public class RefreshForSubnodeCondition implements ICondition {
 	}
 
 	public String getFailureMessage() {
-		return _parent.getText() +"'s sub node " + _subnode + " not found after refresh";
+		return _parent.getText() + "'s sub node " + _subnode + " not found after refresh";
 	}
 
 	public void init(SWTBot bot) {

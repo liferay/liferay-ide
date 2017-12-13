@@ -48,20 +48,20 @@ public class ValidationNewLiferayWorkspaceWizardTests extends SwtbotBase {
 
 		String projectName = "test";
 
-		wizardAction.prepareLiferayWorkspace(projectName);
+		wizardAction.newLiferayWorkspace.prepareGradle(projectName);
 
 		wizardAction.finish();
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.prepareLiferayWorkspace(projectName);
+		wizardAction.newLiferayWorkspace.prepareGradle(projectName);
 
 		Assert.assertEquals(
 			A_LIFERAY_WORKSPACE_PROJECT_ALREADY_EXISTS, _newLiferayWorkspaceProjectWizard.getValidationMsg());
 
 		wizardAction.cancel();
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Ignore
@@ -106,7 +106,7 @@ public class ValidationNewLiferayWorkspaceWizardTests extends SwtbotBase {
 				continue;
 			}
 
-			_newLiferayWorkspaceProjectWizard.getProjectName().setText(msg.getInput());
+			wizardAction.newLiferayWorkspace.setProjectName(msg.getInput());
 
 			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}

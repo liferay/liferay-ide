@@ -15,17 +15,17 @@
 package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
-import com.liferay.ide.ui.liferay.page.wizard.ImportLiferayWorkspaceProjectWizard;
-import com.liferay.ide.ui.liferay.page.wizard.NewLiferay62RuntimeWizard;
-import com.liferay.ide.ui.liferay.page.wizard.NewLiferay7RuntimeWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewLiferayComponentWizard;
+import com.liferay.ide.ui.liferay.page.wizard.NewRuntime62Wizard;
+import com.liferay.ide.ui.liferay.page.wizard.NewRuntime7Wizard;
+import com.liferay.ide.ui.liferay.page.wizard.project.ImportLiferayWorkspaceWizard;
+import com.liferay.ide.ui.liferay.page.wizard.project.NewFragmentInfoWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewFragmentWizard;
-import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayJsfProjectWizard;
+import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayJsfWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayModuleInfoWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayModuleWizard;
-import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayPluginSdkProjectWizard;
+import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayPluginWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayWorkspaceWizard;
-import com.liferay.ide.ui.liferay.page.wizard.project.NewModuleFragmentInfoWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewProjectWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.SetSDKLocationWizard;
 import com.liferay.ide.ui.swtbot.eclipse.page.ImportProjectWizard;
@@ -57,14 +57,6 @@ public class WizardAction extends UIAction {
 		_wizard.cancel();
 	}
 
-	public void deleteFragmentFile() {
-		_newFragmentInfoWizard.getDeleteBtn().click();
-	}
-
-	public void deselectUseDefaultLocation() {
-		_newProjectWizard.getUseDefaultLocation().deselect();
-	}
-
 	public void finish() {
 		ide.sleep();
 
@@ -75,32 +67,12 @@ public class WizardAction extends UIAction {
 		_jobAction.waitForShellClosed(title);
 	}
 
-	public Text getBundleUrl() {
-		return _newWorkspaceWizard.getBundleUrl();
-	}
-
-	public CheckBox getDownloadLiferayBundle() {
-		return _newWorkspaceWizard.getDownloadLiferayBundle();
-	}
-
 	public Button getFinishBtn() {
 		return _wizard.finishBtn();
 	}
 
-	public Text getLocation() {
-		return _newProjectWizard.getLocation();
-	}
-
 	public Button getNextBtn() {
 		return _wizard.nextBtn();
-	}
-
-	public Text getServerName() {
-		return _newWorkspaceWizard.getServerName();
-	}
-
-	public CheckBox getUseDefaultLocation() {
-		return _newProjectWizard.getUseDefaultLocation();
 	}
 
 	public String getValidationMsg() {
@@ -121,24 +93,8 @@ public class WizardAction extends UIAction {
 		_wizard.next();
 	}
 
-	public void openAddOverrideFilesDialog() {
-		_newFragmentInfoWizard.getAddOverrideFilesBtn().click();
-	}
-
-	public void openBrowseOsgiBundleDialog() {
-		_newFragmentInfoWizard.getBrowseOsgiBtn().click();
-	}
-
 	public void openFileMenuFragmentFilesWizard() {
 		ide.getFileMenu().clickMenu(NEW, LIFERAY_MODULE_FRAGMENT_FILES);
-	}
-
-	public void openImportLiferayWorkspaceWizard() {
-		ide.getFileMenu().clickMenu(IMPORT);
-
-		prepareImportType(LIFERAY, LIFERAY_WORKSPACE_PROJECT);
-
-		next();
 	}
 
 	public void openNewBtnFragmentFilesWizard() {
@@ -201,337 +157,463 @@ public class WizardAction extends UIAction {
 		menu.click();
 	}
 
-	public void openNewRuntimeWizardFragment() {
-		_newFragmentWizard.getNewRuntimeBtn().click();
-	}
+	public ImportLiferayWorkspaceWizardAction importLiferayWorkspace = new ImportLiferayWorkspaceWizardAction();
+	public ImportProjectWizardAction importProject = new ImportProjectWizardAction();
+	public NewFragmentWizardAction newFragment = new NewFragmentWizardAction();
+	public NewFragmentInfoWizardAction newFragmentInfo = new NewFragmentInfoWizardAction();
+	public NewLiferayComponentWizardAction newLiferayComponent = new NewLiferayComponentWizardAction();
+	public NewLiferayJsfWizardAction newLiferayJsf = new NewLiferayJsfWizardAction();
+	public NewLiferayWorkspaceWizardAction newLiferayWorkspace = new NewLiferayWorkspaceWizardAction();
+	public NewModuleWizardAction newModule = new NewModuleWizardAction();
+	public NewModuleInfoWizardAction newModuleInfo = new NewModuleInfoWizardAction();
+	public NewPluginWizardAction newPlugin = new NewPluginWizardAction();
+	public NewProjectWizardAction newProject = new NewProjectWizardAction();
+	public NewRuntimeWizardAction newRuntime = new NewRuntimeWizardAction();
+	public NewRuntime7WizardAction newRuntime7 = new NewRuntime7WizardAction();
+	public NewRuntime62WizardAction newRuntime62 = new NewRuntime62WizardAction();
+	public NewServerWizardAction newServer = new NewServerWizardAction();
+	public SetSdkLocationWizardAction setSdkLocation = new SetSdkLocationWizardAction();
 
-	public void openSelectModelClassAndServiceDialog() {
-		_newLiferayComponentWizard.getBrowseBtn().click();
-	}
+	public class ImportLiferayWorkspaceWizardAction {
 
-	public void openSelectServiceDialog() {
-		_newModuleInfoWizard.getBrowseBtn().click();
-	}
-
-	public void prepareComponentClass(String projectName) {
-		_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
-	}
-
-	public void prepareComponentClass(String projectName, String template) {
-		_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
-		_newLiferayComponentWizard.getComponentClassTemplates().setSelection(template);
-
-		ide.sleep();
-	}
-
-	public void prepareComponentClass(String projectName, String template, String className) {
-		_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
-		_newLiferayComponentWizard.getComponentClassTemplates().setSelection(template);
-		_newLiferayComponentWizard.getComponentClassName().setText(className);
-
-		ide.sleep();
-	}
-
-	public void prepareComponentClass(String projectName, String template, String className, String packageName) {
-		_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
-
-		ide.sleep();
-
-		_newLiferayComponentWizard.getComponentClassTemplates().setSelection(template);
-
-		ide.sleep();
-
-		_newLiferayComponentWizard.getComponentClassName().setText(className);
-
-		ide.sleep();
-
-		_newLiferayComponentWizard.getPackageName().setText(packageName);
-
-		ide.sleep();
-	}
-
-	public void prepareFragment(String projectName, String location, String buildType) {
-		_newFragmentWizard.getProjectName().setText(projectName);
-
-		if (!location.equals(StringPool.BLANK)) {
-			_newFragmentWizard.getLocation().setText(location);
+		public void prepare(String location) {
+			_importLiferayWorkspaceProjectWizard.getWorkspaceLocation().setText(location);
 		}
 
-		_newFragmentWizard.getBuildTypes().setSelection(buildType);
-	}
+		public void prepare(String location, boolean downloadLiferayBundle) {
+			_importLiferayWorkspaceProjectWizard.getWorkspaceLocation().setText(location);
 
-	public void prepareFragmentGradle(String projectName) {
-		prepareFragment(projectName, StringPool.BLANK, GRADLE);
-
-		ide.sleep();
-	}
-
-	public void prepareFragmentGradle(String projectName, String location) {
-		prepareFragment(projectName, location, GRADLE);
-	}
-
-	public void prepareFragmentMaven(String projectName) {
-		prepareFragment(projectName, StringPool.BLANK, MAVEN);
-	}
-
-	public void prepareImportLiferayWorkspace(String location) {
-		_importLiferayWorkspaceProjectWizard.getWorkspaceLocation().setText(location);
-	}
-
-	public void prepareImportLiferayWorkspace(String location, boolean downloadLiferayBundle) {
-		_importLiferayWorkspaceProjectWizard.getWorkspaceLocation().setText(location);
-
-		if (downloadLiferayBundle) {
-			_importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle().select();
-		}
-	}
-
-	public void prepareImportLiferayWorkspace(String location, boolean downloadLiferayBundle, String serverName) {
-		_importLiferayWorkspaceProjectWizard.getWorkspaceLocation().setText(location);
-
-		if (!downloadLiferayBundle) {
-			return;
-		}
-
-		_importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle().select();
-
-		if (!serverName.equals(StringPool.EMPTY)) {
-			_importLiferayWorkspaceProjectWizard.getServerName().setText(serverName);
-		}
-	}
-
-	public void prepareImportType(String category, String type) {
-		_importProjectWizard.getTypes().selectTreeItem(category, type);
-	}
-
-	public void prepareImportType(String filterText, String category, String type) {
-		Text filter = _importProjectWizard.getFilter();
-
-		filter.setText(filterText);
-
-		_importProjectWizard.getTypes().selectTreeItem(category, type);
-	}
-
-	public void prepareJsfProject(String projectName, String buildType, String componentSuite) {
-		_newJsfProjectWizard.getProjectName().setText(projectName);
-		_newJsfProjectWizard.getBuildTypes().setSelection(buildType);
-		_newJsfProjectWizard.getComponentSuite().setSelection(componentSuite);
-	}
-
-	public void prepareJsfProjectGradle(String projectName, String componentSuite) {
-		prepareJsfProject(projectName, GRADLE, componentSuite);
-	}
-
-	public void prepareJsfProjectMaven(String projectName, String componentSuite) {
-		prepareJsfProject(projectName, MAVEN, componentSuite);
-	}
-
-	public void prepareLiferay7RuntimeInfo(String location) {
-		_newLiferay7RuntimeWizard.getLocation().setText(location);
-	}
-
-	public void prepareLiferay7RuntimeInfo(String name, String location) {
-		_newLiferay7RuntimeWizard.getName().setText(name);
-		_newLiferay7RuntimeWizard.getLocation().setText(location);
-	}
-
-	public void prepareLiferay7RuntimeType() {
-		prepareRuntimeType(LIFERAY_INC, LIFERAY_7_X);
-	}
-
-	public void prepareLiferay62RuntimeInfo(String name, String location) {
-		_newLiferay62RuntimeWizard.getName().setText(name);
-		_newLiferay62RuntimeWizard.getLocation().setText(location);
-	}
-
-	public void prepareLiferay62RuntimeType() {
-		prepareRuntimeType(LIFERAY_INC, LIFERAY_V_62_TOMCAT_7);
-	}
-
-	public void prepareLiferayModule(String projectName) {
-		_newModuleWizard.getProjectName().setText(projectName);
-	}
-
-	public void prepareLiferayModule(String projectName, String buildType) {
-		_newModuleWizard.getProjectName().setText(projectName);
-		_newModuleWizard.getBuildTypes().setSelection(buildType);
-	}
-
-	public void prepareLiferayModule(String projectName, String buildType, String template) {
-		_newModuleWizard.getProjectName().setText(projectName);
-		_newModuleWizard.getBuildTypes().setSelection(buildType);
-		_newModuleWizard.getProjectTemplates().setSelection(template);
-	}
-
-	public void prepareLiferayModule(
-		String projectName, String buildType, String template, boolean useDefaultLocation, String location) {
-
-		prepareLiferayModule(projectName, buildType, template);
-
-		if (useDefaultLocation) {
-			_newModuleWizard.getUseDefaultLocation().deselect();
-			_newModuleWizard.getLocation().setText(location);
-		}
-		else {
-			_newModuleWizard.getUseDefaultLocation().select();
-		}
-	}
-
-	public void prepareLiferayModuleGradle(String projectName) {
-		prepareLiferayModule(projectName, GRADLE, MVC_PORTLET);
-	}
-
-	public void prepareLiferayModuleGradle(String projectName, String template) {
-		prepareLiferayModule(projectName, GRADLE, template);
-	}
-
-	public void prepareLiferayModuleInfo(String className, String packageName) {
-		_newModuleInfoWizard.getComponentClassName().setText(className);
-		_newModuleInfoWizard.getPackageName().setText(packageName);
-	}
-
-	public void prepareLiferayModuleInfoProperties(String propertiesName, String propertiesValue) {
-		_newModuleInfoWizard.getAddPropertyKeyBtn().click();
-		_newModuleInfoWizard.getProperties().setText(2, propertiesName);
-		_newModuleInfoWizard.getProperties().doubleClick(0, 1);
-		_newModuleInfoWizard.getProperties().setText(2, propertiesValue);
-		_newModuleInfoWizard.getProperties().setFocus();
-	}
-
-	public void prepareLiferayModuleMaven(String projectName, String template) {
-		prepareLiferayModule(projectName, MAVEN, template);
-	}
-
-	public void prepareLiferayWorkspace(String projectName) {
-		_newWorkspaceWizard.getProjectName().setText(projectName);
-	}
-
-	public void prepareLiferayWorkspace(String projectName, String buildType) {
-		_newWorkspaceWizard.getProjectName().setText(projectName);
-		_newWorkspaceWizard.getBuildTypes().setSelection(buildType);
-	}
-
-	public void prepareLiferayWorkspace(
-		String projectName, String buildType, boolean downloadLiferayBundle, String serverName,
-		boolean useDefaultBundleUrl, String bundleUrl) {
-
-		prepareLiferayWorkspace(projectName, buildType);
-
-		if (downloadLiferayBundle) {
-			_newWorkspaceWizard.getDownloadLiferayBundle().select();
-
-			_newWorkspaceWizard.getServerName().setText(serverName);
-
-			if (!useDefaultBundleUrl) {
-				_newWorkspaceWizard.getBundleUrl().setText(bundleUrl);
+			if (downloadLiferayBundle) {
+				_importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle().select();
 			}
 		}
-		else {
-			_newWorkspaceWizard.getDownloadLiferayBundle().deselect();
+
+		public void prepare(String location, boolean downloadLiferayBundle, String serverName) {
+			_importLiferayWorkspaceProjectWizard.getWorkspaceLocation().setText(location);
+
+			if (!downloadLiferayBundle) {
+				return;
+			}
+
+			_importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle().select();
+
+			if (!serverName.equals(StringPool.EMPTY)) {
+				_importLiferayWorkspaceProjectWizard.getServerName().setText(serverName);
+			}
 		}
+
+		private final ImportLiferayWorkspaceWizard _importLiferayWorkspaceProjectWizard =
+			new ImportLiferayWorkspaceWizard(bot);
+
 	}
 
-	public void prepareLiferayWorkspaceGradle(String projectName) {
-		prepareLiferayWorkspace(projectName, GRADLE);
+	public class ImportProjectWizardAction {
+
+		public void openImportLiferayWorkspaceWizard() {
+			ide.getFileMenu().clickMenu(IMPORT);
+
+			_prepare(LIFERAY, LIFERAY_WORKSPACE_PROJECT);
+
+			next();
+		}
+
+		private void _prepare(String category, String type) {
+			_importProjectWizard.getTypes().selectTreeItem(category, type);
+		}
+
+		private void _prepare(String filterText, String category, String type) {
+			Text filter = _importProjectWizard.getFilter();
+
+			filter.setText(filterText);
+
+			_importProjectWizard.getTypes().selectTreeItem(category, type);
+		}
+
+		private final ImportProjectWizard _importProjectWizard = new ImportProjectWizard(bot);
+
 	}
 
-	public void prepareLiferayWorkspaceGradle(
-		String projectName, boolean downloadLiferayBundle, String serverName, boolean useDefaultBundleUrl,
-		String bundleUrl) {
+	public class NewFragmentInfoWizardAction {
 
-		prepareLiferayWorkspace(projectName, GRADLE, downloadLiferayBundle, serverName, useDefaultBundleUrl, bundleUrl);
+		public void deleteFile() {
+			_newFragmentInfoWizard.getDeleteBtn().click();
+		}
+
+		public void openAddOverrideFilesDialog() {
+			_newFragmentInfoWizard.getAddOverrideFilesBtn().click();
+		}
+
+		public void openBrowseOsgiBundleDialog() {
+			_newFragmentInfoWizard.getBrowseOsgiBtn().click();
+		}
+
+		public void selectFile(String file) {
+			_newFragmentInfoWizard.getFiles().click(file);
+		}
+
+		private final NewFragmentInfoWizard _newFragmentInfoWizard = new NewFragmentInfoWizard(bot);
+
 	}
 
-	public void prepareLiferayWorkspaceMaven(String projectName) {
-		prepareLiferayWorkspace(projectName, MAVEN);
+	public class NewFragmentWizardAction extends NewProjectWizardAction {
+
+		public void openNewRuntimeWizard() {
+			_newFragmentWizard.getNewRuntimeBtn().click();
+		}
+
+		public void prepareGradle(String projectName) {
+			_prepare(projectName, StringPool.BLANK, GRADLE);
+
+			ide.sleep();
+		}
+
+		public void prepareGradle(String projectName, String location) {
+			_prepare(projectName, location, GRADLE);
+		}
+
+		public void prepareMaven(String projectName) {
+			_prepare(projectName, StringPool.BLANK, MAVEN);
+		}
+
+		private void _prepare(String projectName, String location, String buildType) {
+			_newFragmentWizard.getProjectName().setText(projectName);
+
+			if (!location.equals(StringPool.BLANK)) {
+				_newFragmentWizard.getLocation().setText(location);
+			}
+
+			_newFragmentWizard.getBuildTypes().setSelection(buildType);
+		}
+
+		private final NewFragmentWizard _newFragmentWizard = new NewFragmentWizard(bot);
+
 	}
 
-	public void prepareNewServer(String serverName) {
-		ide.sleep(500);
+	public class NewLiferayComponentWizardAction {
 
-		_newServerWizard.getServerName().setText(serverName);
+		public void openSelectModelClassAndServiceDialog() {
+			_newLiferayComponentWizard.getBrowseBtn().click();
+		}
+
+		public void prepare(String projectName, String template, String className, String packageName) {
+			_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
+
+			ide.sleep();
+
+			_newLiferayComponentWizard.getComponentClassTemplates().setSelection(template);
+
+			ide.sleep();
+
+			_newLiferayComponentWizard.getComponentClassName().setText(className);
+
+			ide.sleep();
+
+			_newLiferayComponentWizard.getPackageName().setText(packageName);
+
+			ide.sleep();
+		}
+
+		private final NewLiferayComponentWizard _newLiferayComponentWizard = new NewLiferayComponentWizard(bot);
+
 	}
 
-	public void prepareNewServer62(String serverName) {
-		ide.sleep(500);
+	public class NewLiferayJsfWizardAction {
 
-		_newServerWizard.getServerName().setText(serverName);
+		public void prepareGradle(String projectName, String componentSuite) {
+			_prepare(projectName, GRADLE, componentSuite);
+		}
 
-		ide.sleep(500);
+		public void prepareMaven(String projectName, String componentSuite) {
+			_prepare(projectName, MAVEN, componentSuite);
+		}
 
-		_newServerWizard.getServerTypes().selectTreeItem(LIFERAY_INC, LIFERAY_V_62_SERVER_TOMCAT_7);
+		private void _prepare(String projectName, String buildType, String componentSuite) {
+			_newJsfProjectWizard.getProjectName().setText(projectName);
+			_newJsfProjectWizard.getBuildTypes().setSelection(buildType);
+			_newJsfProjectWizard.getComponentSuite().setSelection(componentSuite);
+		}
+
+		private final NewLiferayJsfWizard _newJsfProjectWizard = new NewLiferayJsfWizard(bot);
+
 	}
 
-	public void preparePlugin(String projectName, String buildType) {
-		_newPluginSdkWizard.getProjectName().setText(projectName);
+	public class NewLiferayWorkspaceWizardAction extends NewProjectWizardAction {
 
-		_newPluginSdkWizard.getBuildTypes().setSelection(buildType);
+		public void prepareGradle(String projectName) {
+			_prepare(projectName, GRADLE);
+		}
+
+		public void prepareGradle(
+			String projectName, boolean downloadLiferayBundle, String serverName, boolean useDefaultBundleUrl,
+			String bundleUrl) {
+
+			_prepare(projectName, GRADLE, downloadLiferayBundle, serverName, useDefaultBundleUrl, bundleUrl);
+		}
+
+		public void prepareMaven(String projectName) {
+			_prepare(projectName, MAVEN);
+		}
+
+		public void selectDownloadLiferayBundle() {
+			_newLiferayWorkspaceWizard.getDownloadLiferayBundle().select();
+		}
+
+		public void setBundleUrl(String bundleUrl) {
+			_newLiferayWorkspaceWizard.getBundleUrl().setText(bundleUrl);
+		}
+
+		public void setServerName(String serverName) {
+			_newLiferayWorkspaceWizard.getServerName().setText(serverName);
+		}
+
+		private void _prepare(String projectName, String buildType) {
+			_newLiferayWorkspaceWizard.getProjectName().setText(projectName);
+			_newLiferayWorkspaceWizard.getBuildTypes().setSelection(buildType);
+		}
+
+		private void _prepare(
+			String projectName, String buildType, boolean downloadLiferayBundle, String serverName,
+			boolean useDefaultBundleUrl, String bundleUrl) {
+
+			_prepare(projectName, buildType);
+
+			if (downloadLiferayBundle) {
+				_newLiferayWorkspaceWizard.getDownloadLiferayBundle().select();
+
+				_newLiferayWorkspaceWizard.getServerName().setText(serverName);
+
+				if (!useDefaultBundleUrl) {
+					_newLiferayWorkspaceWizard.getBundleUrl().setText(bundleUrl);
+				}
+			}
+			else {
+				_newLiferayWorkspaceWizard.getDownloadLiferayBundle().deselect();
+			}
+		}
+
+		private final NewLiferayWorkspaceWizard _newLiferayWorkspaceWizard = new NewLiferayWorkspaceWizard(bot);
+
 	}
 
-	public void preparePlugin(String projectName, String pluginType, String buildType) {
-		_newPluginSdkWizard.getProjectName().setText(projectName);
+	public class NewModuleInfoWizardAction {
 
-		_newPluginSdkWizard.getPluginTypes().setSelection(pluginType);
+		public void openSelectServiceDialog() {
+			_newModuleInfoWizard.getBrowseBtn().click();
+		}
 
-		_newPluginSdkWizard.getBuildTypes().setSelection(buildType);
+		public void prepare(String className, String packageName) {
+			_newModuleInfoWizard.getComponentClassName().setText(className);
+			_newModuleInfoWizard.getPackageName().setText(packageName);
+		}
+
+		public void prepareProperties(String propertiesName, String propertiesValue) {
+			_newModuleInfoWizard.getAddPropertyKeyBtn().click();
+			_newModuleInfoWizard.getProperties().setText(2, propertiesName);
+			_newModuleInfoWizard.getProperties().doubleClick(0, 1);
+			_newModuleInfoWizard.getProperties().setText(2, propertiesValue);
+			_newModuleInfoWizard.getProperties().setFocus();
+		}
+
+		private final NewLiferayModuleInfoWizard _newModuleInfoWizard = new NewLiferayModuleInfoWizard(bot);
+
 	}
 
-	public void preparePluginHookSdk(String projectName) {
-		preparePlugin(projectName, HOOK, ANT_LIFERAY_PLUGINS_SDK);
+	public class NewModuleWizardAction {
+
+		public void prepare(String projectName) {
+			_newModuleWizard.getProjectName().setText(projectName);
+		}
+
+		public void prepare(String projectName, String buildType) {
+			_newModuleWizard.getProjectName().setText(projectName);
+			_newModuleWizard.getBuildTypes().setSelection(buildType);
+		}
+
+		public void prepare(
+			String projectName, String buildType, String template, boolean useDefaultLocation, String location) {
+
+			_prepare(projectName, buildType, template);
+
+			if (useDefaultLocation) {
+				_newModuleWizard.getUseDefaultLocation().deselect();
+				_newModuleWizard.getLocation().setText(location);
+			}
+			else {
+				_newModuleWizard.getUseDefaultLocation().select();
+			}
+		}
+
+		public void prepareGradle(String projectName) {
+			_prepare(projectName, GRADLE, MVC_PORTLET);
+		}
+
+		public void prepareGradle(String projectName, String template) {
+			_prepare(projectName, GRADLE, template);
+		}
+
+		public void prepareMaven(String projectName, String template) {
+			_prepare(projectName, MAVEN, template);
+		}
+
+		private void _prepare(String projectName, String buildType, String template) {
+			_newModuleWizard.getProjectName().setText(projectName);
+			_newModuleWizard.getBuildTypes().setSelection(buildType);
+			_newModuleWizard.getProjectTemplates().setSelection(template);
+		}
+
+		private final NewLiferayModuleWizard _newModuleWizard = new NewLiferayModuleWizard(bot);
+
 	}
 
-	public void preparePluginLayoutTemplateSdk(String projectName) {
-		preparePlugin(projectName, LAYOUT_TEMPLATE_UPCASE, ANT_LIFERAY_PLUGINS_SDK);
+	public class NewPluginWizardAction {
+
+		public void prepareHookSdk(String projectName) {
+			_prepare(projectName, HOOK, ANT_LIFERAY_PLUGINS_SDK);
+		}
+
+		public void prepareLayoutTemplateSdk(String projectName) {
+			_prepare(projectName, LAYOUT_TEMPLATE_UPCASE, ANT_LIFERAY_PLUGINS_SDK);
+		}
+
+		public void preparePortletSdk(String projectName) {
+			_prepare(projectName, PORTLET_UPCASE, ANT_LIFERAY_PLUGINS_SDK);
+		}
+
+		public void prepareSdk(String projectName) {
+			_prepare(projectName, ANT_LIFERAY_PLUGINS_SDK);
+		}
+
+		public void prepareServiceBuilderPortletSdk(String projectName) {
+			_prepare(projectName, SERVICE_BUILDER_PORTLET, ANT_LIFERAY_PLUGINS_SDK);
+		}
+
+		public void prepareThemeSdk(String projectName) {
+			_prepare(projectName, THEME_UPCASE, ANT_LIFERAY_PLUGINS_SDK);
+		}
+
+		private void _prepare(String projectName, String buildType) {
+			_newPluginProjectWizard.getProjectName().setText(projectName);
+
+			_newPluginProjectWizard.getBuildTypes().setSelection(buildType);
+		}
+
+		private void _prepare(String projectName, String pluginType, String buildType) {
+			_newPluginProjectWizard.getProjectName().setText(projectName);
+
+			_newPluginProjectWizard.getPluginTypes().setSelection(pluginType);
+
+			_newPluginProjectWizard.getBuildTypes().setSelection(buildType);
+		}
+
+		private final NewLiferayPluginWizard _newPluginProjectWizard = new NewLiferayPluginWizard(bot);
+
 	}
 
-	public void preparePluginPortletSdk(String projectName) {
-		preparePlugin(projectName, PORTLET_UPCASE, ANT_LIFERAY_PLUGINS_SDK);
+	public class NewProjectWizardAction {
+
+		public void deselectUseDefaultLocation() {
+			_newProjectWizard.getUseDefaultLocation().deselect();
+		}
+
+		public Text getLocation() {
+			return _newProjectWizard.getLocation();
+		}
+
+		public CheckBox getUseDefaultLocation() {
+			return _newProjectWizard.getUseDefaultLocation();
+		}
+
+		public void setLocation(String location) {
+			_newProjectWizard.getLocation().setText(location);
+		}
+
+		public void setProjectName(String projectName) {
+			_newProjectWizard.getProjectName().setText(projectName);
+		}
+
+		private final NewProjectWizard _newProjectWizard = new NewProjectWizard(bot);
+
 	}
 
-	public void preparePluginSdk(String projectName) {
-		preparePlugin(projectName, ANT_LIFERAY_PLUGINS_SDK);
+	public class NewRuntime7WizardAction {
+
+		public void prepare(String location) {
+			_newLiferay7RuntimeWizard.getLocation().setText(location);
+		}
+
+		public void prepare(String name, String location) {
+			_newLiferay7RuntimeWizard.getName().setText(name);
+			_newLiferay7RuntimeWizard.getLocation().setText(location);
+		}
+
+		private final NewRuntime7Wizard _newLiferay7RuntimeWizard = new NewRuntime7Wizard(bot);
+
 	}
 
-	public void preparePluginSdkLocation(String location) {
-		_setSdkLocationWizard.getSdkLocation().setText(location);
+	public class NewRuntime62WizardAction {
+
+		public void prepare(String name, String location) {
+			_newLiferay62RuntimeWizard.getName().setText(name);
+			_newLiferay62RuntimeWizard.getLocation().setText(location);
+		}
+
+		private final NewRuntime62Wizard _newLiferay62RuntimeWizard = new NewRuntime62Wizard(bot);
+
 	}
 
-	public void preparePluginServiceBuilderPortletSdk(String projectName) {
-		preparePlugin(projectName, SERVICE_BUILDER_PORTLET, ANT_LIFERAY_PLUGINS_SDK);
+	public class NewRuntimeWizardAction {
+
+		public void prepare7() {
+			_prepare(LIFERAY_INC, LIFERAY_7_X);
+		}
+
+		public void prepare62() {
+			_prepare(LIFERAY_INC, LIFERAY_V_62_TOMCAT_7);
+		}
+
+		private void _prepare(String category, String type) {
+			ide.sleep(5000);
+
+			_newRuntimeWizard.getServerTypes().selectTreeItem(category, type);
+		}
+
+		private final NewRuntimeWizard _newRuntimeWizard = new NewRuntimeWizard(bot);
+
 	}
 
-	public void preparePluginThemeSdk(String projectName) {
-		preparePlugin(projectName, THEME_UPCASE, ANT_LIFERAY_PLUGINS_SDK);
+	public class NewServerWizardAction {
+
+		public void prepare(String serverName) {
+			ide.sleep(500);
+
+			_newServerWizard.getServerName().setText(serverName);
+		}
+
+		public void prepare62(String serverName) {
+			ide.sleep(500);
+
+			_newServerWizard.getServerName().setText(serverName);
+
+			ide.sleep(500);
+
+			_newServerWizard.getServerTypes().selectTreeItem(LIFERAY_INC, LIFERAY_V_62_SERVER_TOMCAT_7);
+		}
+
+		private final NewServerWizard _newServerWizard = new NewServerWizard(bot);
+
 	}
 
-	public void prepareRuntimeType(String category, String type) {
-		ide.sleep(5000);
+	public class SetSdkLocationWizardAction {
 
-		_newRuntimeWizard.getServerTypes().selectTreeItem(category, type);
+		public void prepare(String location) {
+			_setSdkLocationWizard.getSdkLocation().setText(location);
+		}
+
+		private final SetSDKLocationWizard _setSdkLocationWizard = new SetSDKLocationWizard(bot);
+
 	}
 
-	public void selectFragmentFile(String file) {
-		_newFragmentInfoWizard.getFiles().click(file);
-	}
-
-	private final ImportLiferayWorkspaceProjectWizard _importLiferayWorkspaceProjectWizard =
-		new ImportLiferayWorkspaceProjectWizard(bot);
-	private final ImportProjectWizard _importProjectWizard = new ImportProjectWizard(bot);
 	private final JobAction _jobAction = new JobAction(bot);
-	private final NewModuleFragmentInfoWizard _newFragmentInfoWizard = new NewModuleFragmentInfoWizard(bot);
-	private final NewFragmentWizard _newFragmentWizard = new NewFragmentWizard(bot);
-	private final NewLiferayJsfProjectWizard _newJsfProjectWizard = new NewLiferayJsfProjectWizard(bot);
-	private final NewLiferay7RuntimeWizard _newLiferay7RuntimeWizard = new NewLiferay7RuntimeWizard(bot);
-	private final NewLiferay62RuntimeWizard _newLiferay62RuntimeWizard = new NewLiferay62RuntimeWizard(bot);
-	private final NewLiferayComponentWizard _newLiferayComponentWizard = new NewLiferayComponentWizard(bot);
-	private final NewLiferayModuleInfoWizard _newModuleInfoWizard = new NewLiferayModuleInfoWizard(bot);
-	private final NewLiferayModuleWizard _newModuleWizard = new NewLiferayModuleWizard(bot);
-	private final NewLiferayPluginSdkProjectWizard _newPluginSdkWizard = new NewLiferayPluginSdkProjectWizard(bot);
-	private final NewProjectWizard _newProjectWizard = new NewProjectWizard(bot);
-	private final NewRuntimeWizard _newRuntimeWizard = new NewRuntimeWizard(bot);
-	private final NewServerWizard _newServerWizard = new NewServerWizard(bot);
-	private final NewLiferayWorkspaceWizard _newWorkspaceWizard = new NewLiferayWorkspaceWizard(bot);
-	private final SetSDKLocationWizard _setSdkLocationWizard = new SetSDKLocationWizard(bot);
 	private final Wizard _wizard = new Wizard(bot);
 
 }

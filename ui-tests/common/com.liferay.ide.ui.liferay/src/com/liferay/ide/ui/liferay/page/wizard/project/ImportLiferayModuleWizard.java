@@ -14,21 +14,31 @@
 
 package com.liferay.ide.ui.liferay.page.wizard.project;
 
-import com.liferay.ide.ui.swtbot.page.ComboBox;
+import com.liferay.ide.ui.swtbot.page.Text;
+import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
+import com.liferay.ide.ui.swtbot.page.Wizard;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
- * @author Ying Xu
+ * @author Ashley Yuan
  */
-public class NewLiferayJsfProjectWizard extends NewProjectWizard {
+public class ImportLiferayModuleWizard extends Wizard {
 
-	public NewLiferayJsfProjectWizard(SWTBot bot) {
+	public ImportLiferayModuleWizard(SWTBot bot) {
 		super(bot, 2);
 	}
 
-	public ComboBox getComponentSuite() {
-		return new ComboBox(getShell().bot(), COMPONENT_SUITE);
+	public ToolbarButtonWithTooltip getBrowseBtn() {
+		return new ToolbarButtonWithTooltip(getShell().bot(), BROWSE);
+	}
+
+	public Text getBuildType() {
+		return new Text(getShell().bot(), BUILD_TYPE);
+	}
+
+	public Text getLocation() {
+		return new Text(getShell().bot(), LOCATION_WITH_COLON);
 	}
 
 }

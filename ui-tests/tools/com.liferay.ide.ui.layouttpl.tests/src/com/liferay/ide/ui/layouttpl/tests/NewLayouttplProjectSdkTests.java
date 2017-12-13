@@ -33,7 +33,7 @@ public class NewLayouttplProjectSdkTests extends SwtbotBase {
 
 		String sdkName = envAction.getLiferayPluginsSdkName() + "-" + envAction.getTimestamp();
 
-		viewAction.closeAndDeleteProjectWithNoRunningJobs(sdkName);
+		viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
 	}
 
 	@BeforeClass
@@ -46,7 +46,7 @@ public class NewLayouttplProjectSdkTests extends SwtbotBase {
 
 		String projectName = "test-portlet";
 
-		wizardAction.preparePluginSdk(projectName);
+		wizardAction.newPlugin.prepareSdk(projectName);
 
 		wizardAction.next();
 
@@ -54,7 +54,7 @@ public class NewLayouttplProjectSdkTests extends SwtbotBase {
 
 		String location = envAction.getLiferayPluginsSdkDir().toOSString();
 
-		wizardAction.preparePluginSdkLocation(location);
+		wizardAction.setSdkLocation.prepare(location);
 
 		wizardAction.finish();
 
@@ -62,7 +62,7 @@ public class NewLayouttplProjectSdkTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -71,7 +71,7 @@ public class NewLayouttplProjectSdkTests extends SwtbotBase {
 
 		String projectName = "test-template-layouttpl";
 
-		wizardAction.preparePluginLayoutTemplateSdk(projectName);
+		wizardAction.newPlugin.prepareLayoutTemplateSdk(projectName);
 
 		wizardAction.finish();
 
@@ -85,17 +85,17 @@ public class NewLayouttplProjectSdkTests extends SwtbotBase {
 
 		String layoutTpl = "test_template.tpl";
 
-		viewAction.openProjectFile(projectName, "docroot", layoutTpl);
+		viewAction.project.openFile(projectName, "docroot", layoutTpl);
 
 		editorAction.close();
 
 		String layoutWapTpl = "blank_columns.wap.tpl";
 
-		viewAction.openProjectFile(projectName, "docroot", layoutWapTpl);
+		viewAction.project.openFile(projectName, "docroot", layoutWapTpl);
 
 		editorAction.close();
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -104,7 +104,7 @@ public class NewLayouttplProjectSdkTests extends SwtbotBase {
 
 		String projectName = "test-layouttpl";
 
-		wizardAction.preparePluginLayoutTemplateSdk(projectName);
+		wizardAction.newPlugin.prepareLayoutTemplateSdk(projectName);
 
 		wizardAction.finish();
 
@@ -112,7 +112,7 @@ public class NewLayouttplProjectSdkTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 }

@@ -36,11 +36,11 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.openNewRuntimeWizard();
+		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.prepareLiferay7RuntimeType();
+		wizardAction.newRuntime.prepare7();
 
 		wizardAction.next();
 
@@ -48,47 +48,47 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		IPath fullServerDir = serverDir.append(envAction.getLiferayPluginServerName());
 
-		wizardAction.prepareLiferay7RuntimeInfo(_serverName, fullServerDir.toOSString());
+		wizardAction.newRuntime7.prepare(_serverName, fullServerDir.toOSString());
 
 		wizardAction.finish();
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.prepareNewServer(_serverName);
+		wizardAction.newServer.prepare(_serverName);
 
 		wizardAction.finish();
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.prepareLiferayWorkspaceGradle(_liferayWorkspaceName);
+		wizardAction.newLiferayWorkspace.prepareGradle(_liferayWorkspaceName);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(_liferayWorkspaceName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(_liferayWorkspaceName));
 	}
 
 	@AfterClass
 	public static void cleanWorkspaceAndServer() {
 		String[] modulesFolderNames = {_liferayWorkspaceName, "modules"};
 
-		viewAction.closeAndDeleteProject(modulesFolderNames);
+		viewAction.project.closeAndDelete(modulesFolderNames);
 
-		viewAction.closeAndDeleteProject(_liferayWorkspaceName);
+		viewAction.project.closeAndDelete(_liferayWorkspaceName);
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.deleteRuntimeTryConfirm(_serverName);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(_serverName);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@Test
 	public void createFragmentChangeModulesDir() {
-		viewAction.openProjectFile(_liferayWorkspaceName, "gradle.properties");
+		viewAction.project.openFile(_liferayWorkspaceName, "gradle.properties");
 
 		StringBuffer sb = new StringBuffer();
 
@@ -108,11 +108,11 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.newFragment.prepareGradle(projectName);
 
 		wizardAction.next();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("com.liferay.site.navigation.site.map.web");
 
@@ -123,7 +123,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 			"META-INF/resources/view.jsp", "portlet.properties", "resource-actions/default.xml"
 		};
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems(files);
 
@@ -135,13 +135,13 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		String[] newModulesFolderNames = {_liferayWorkspaceName, newModulesFolderName};
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		viewAction.closeAndDeleteProjectFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(projectNames);
 
-		viewAction.closeAndDeleteProjectFromDisk(newModulesFolderNames);
+		viewAction.project.closeAndDeleteFromDisk(newModulesFolderNames);
 
-		viewAction.openProjectFile(_liferayWorkspaceName, "gradle.properties");
+		viewAction.project.openFile(_liferayWorkspaceName, "gradle.properties");
 
 		sb.delete(0, sb.length());
 		sb.append("liferay.workspace.modules.dir=modules");
@@ -159,17 +159,17 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.newFragment.prepareGradle(projectName);
 
 		wizardAction.next();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("com.liferay.layout.admin.web");
 
 		dialogAction.confirm();
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("META-INF/resources/add_layout.jsp");
 
@@ -179,9 +179,9 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		viewAction.closeAndDeleteProjectFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
 
 	@Test
@@ -190,17 +190,17 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.newFragment.prepareGradle(projectName);
 
 		wizardAction.next();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("com.liferay.site.memberships.web");
 
 		dialogAction.confirm();
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("META-INF/resources/role_columns.jspf");
 
@@ -210,9 +210,9 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		viewAction.closeAndDeleteProjectFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
 
 	@Test
@@ -221,17 +221,17 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.newFragment.prepareGradle(projectName);
 
 		wizardAction.next();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("com.liferay.asset.web");
 
 		dialogAction.confirm();
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
 
@@ -241,9 +241,9 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		viewAction.closeAndDeleteProjectFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
 
 	@Test
@@ -252,11 +252,11 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.newFragment.prepareGradle(projectName);
 
 		wizardAction.next();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("com.liferay.dynamic.data.mapping.web");
 
@@ -267,7 +267,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 			"META-INF/resources/init.jsp", "portlet.properties"
 		};
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems(files);
 
@@ -277,9 +277,9 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		viewAction.closeAndDeleteProjectFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
 
 	@Test
@@ -288,17 +288,17 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.newFragment.prepareGradle(projectName);
 
 		wizardAction.next();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("com.liferay.login.web");
 
 		dialogAction.confirm();
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("resource-actions/default.xml");
 
@@ -308,9 +308,9 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		viewAction.closeAndDeleteProjectFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
 
 	@Test
@@ -319,11 +319,11 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.newFragment.prepareGradle(projectName);
 
 		wizardAction.next();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("com.liferay.xsl.content.web");
 
@@ -334,23 +334,23 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 			"META-INF/resources/view.jsp", "portlet.properties", "resource-actions/default.xml"
 		};
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems(files);
 
 		dialogAction.confirm();
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
 
 		dialogAction.cancel();
 
-		wizardAction.selectFragmentFile("META-INF/resources/configuration.jsp");
+		wizardAction.newFragmentInfo.selectFile("META-INF/resources/configuration.jsp");
 
-		wizardAction.deleteFragmentFile();
+		wizardAction.newFragmentInfo.deleteFile();
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("META-INF/resources/configuration.jsp");
 
@@ -360,9 +360,9 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		String[] projectNames = {_liferayWorkspaceName, "modules", projectName};
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		viewAction.closeAndDeleteProjectFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
 
 	private static final String _liferayWorkspaceName = "test-liferay-workspace-gradle";

@@ -36,11 +36,11 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 	public static void deleteRuntime() {
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.deleteRuntimeTryConfirm(_serverName);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(_serverName);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@BeforeClass
@@ -49,11 +49,11 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.openNewRuntimeWizard();
+		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.prepareLiferay7RuntimeType();
+		wizardAction.newRuntime.prepare7();
 
 		wizardAction.next();
 
@@ -61,15 +61,15 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		IPath fullServerDir = serverDir.append(envAction.getLiferayPluginServerName());
 
-		wizardAction.prepareLiferay7RuntimeInfo(_serverName, fullServerDir.toOSString());
+		wizardAction.newRuntime7.prepare(_serverName, fullServerDir.toOSString());
 
 		wizardAction.finish();
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.prepareNewServer(_serverName);
+		wizardAction.newServer.prepare(_serverName);
 
 		wizardAction.finish();
 	}
@@ -80,17 +80,17 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentMaven(projectName);
+		wizardAction.newFragment.prepareMaven(projectName);
 
 		wizardAction.next();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("com.liferay.blogs.web");
 
 		dialogAction.confirm();
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("META-INF/resources/blogs_admin/configuration.jsp");
 
@@ -98,7 +98,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -107,11 +107,11 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentMaven(projectName);
+		wizardAction.newFragment.prepareMaven(projectName);
 
 		wizardAction.next();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("com.liferay.blogs.web");
 
@@ -122,7 +122,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 			"META-INF/resources/blogs_admin/entry_search_results.jspf"
 		};
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems(files);
 
@@ -130,7 +130,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -139,17 +139,17 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentMaven(projectName);
+		wizardAction.newFragment.prepareMaven(projectName);
 
 		wizardAction.next();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("com.liferay.application.list.api");
 
 		dialogAction.confirm();
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
 
@@ -157,7 +157,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -166,11 +166,11 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentMaven(projectName);
+		wizardAction.newFragment.prepareMaven(projectName);
 
 		wizardAction.next();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("com.liferay.blogs.web");
 
@@ -178,7 +178,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		String[] files = {"META-INF/resources/blogs_admin/configuration.jsp", "portlet.properties"};
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems(files);
 
@@ -186,7 +186,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -195,17 +195,17 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentMaven(projectName);
+		wizardAction.newFragment.prepareMaven(projectName);
 
 		wizardAction.next();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("com.liferay.blogs.web");
 
 		dialogAction.confirm();
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("resource-actions/default.xml");
 
@@ -213,7 +213,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -222,11 +222,11 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentMaven(projectName);
+		wizardAction.newFragment.prepareMaven(projectName);
 
 		wizardAction.next();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("com.liferay.asset.categories.navigation.web");
 
@@ -237,23 +237,23 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 			"META-INF/resources/view.jsp", "portlet.properties", "resource-actions/default.xml"
 		};
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems(files);
 
 		dialogAction.confirm();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
 
 		dialogAction.cancel();
 
-		wizardAction.selectFragmentFile("portlet.properties");
+		wizardAction.newFragmentInfo.selectFile("portlet.properties");
 
-		wizardAction.deleteFragmentFile();
+		wizardAction.newFragmentInfo.deleteFile();
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("portlet.properties");
 
@@ -261,7 +261,7 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	private static final String _serverName = "Liferay 7-fragment-maven";

@@ -34,7 +34,7 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 
 		String sdkName = envAction.getLiferayPluginsSdkName() + "-" + envAction.getTimestamp();
 
-		viewAction.closeAndDeleteProjectWithNoRunningJobs(sdkName);
+		viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
 	}
 
 	@BeforeClass
@@ -47,7 +47,7 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 
 		String projectName = "test-portlet";
 
-		wizardAction.preparePluginSdk(projectName);
+		wizardAction.newPlugin.prepareSdk(projectName);
 
 		wizardAction.next();
 
@@ -55,7 +55,7 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 
 		String location = envAction.getLiferayPluginsSdkDir().toOSString();
 
-		wizardAction.preparePluginSdkLocation(location);
+		wizardAction.setSdkLocation.prepare(location);
 
 		wizardAction.finish();
 
@@ -63,7 +63,7 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -72,7 +72,7 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 
 		String projectName = "test-sb-build-services-portlet";
 
-		wizardAction.preparePluginServiceBuilderPortletSdk(projectName);
+		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(projectName);
 
 		wizardAction.finish();
 
@@ -80,11 +80,11 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.runBuildServices(projectName);
+		viewAction.project.runBuildServices(projectName);
 
 		jobAction.waitForConsoleContent("build.xml", "BUILD SUCCESSFUL", 300 * 1000);
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -93,7 +93,7 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 
 		String projectName = "test-sb-build-wsdd-portlet";
 
-		wizardAction.preparePluginServiceBuilderPortletSdk(projectName);
+		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(projectName);
 
 		wizardAction.finish();
 
@@ -101,11 +101,11 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.runBuildWSDD(projectName);
+		viewAction.project.runBuildWSDD(projectName);
 
 		jobAction.waitForConsoleContent("build.xml", "BUILD SUCCESSFUL", 300 * 1000);
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 }

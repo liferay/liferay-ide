@@ -42,30 +42,30 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		File workspaceProject = envAction.prepareTempProject(testProject.toFile());
 
-		wizardAction.openImportLiferayWorkspaceWizard();
+		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
-		wizardAction.prepareImportLiferayWorkspace(workspaceProject.getPath());
+		wizardAction.importLiferayWorkspace.prepare(workspaceProject.getPath());
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(liferayWorkspaceName, "configs"));
-		Assert.assertTrue(viewAction.visibleProjectFileTry(liferayWorkspaceName, "gradle"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspaceName, "configs"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspaceName, "gradle"));
 
-		viewAction.openProjectFile(liferayWorkspaceName, GRADLE_PROPERTIES);
+		viewAction.project.openFile(liferayWorkspaceName, GRADLE_PROPERTIES);
 
 		SWTBotAssert.assertContains("liferay.workspace.modules.dir", editorAction.getContent());
 		SWTBotAssert.assertContains("liferay.workspace.home.dir", editorAction.getContent());
 
 		editorAction.close();
 
-		viewAction.openProjectFile(liferayWorkspaceName, SETTINGS_GRADLE);
+		viewAction.project.openFile(liferayWorkspaceName, SETTINGS_GRADLE);
 
 		SWTBotAssert.assertContains("buildscript", editorAction.getContent());
 		SWTBotAssert.assertContains("repositories", editorAction.getContent());
 
 		editorAction.close();
 
-		viewAction.closeAndDeleteProject(liferayWorkspaceName);
+		viewAction.project.closeAndDelete(liferayWorkspaceName);
 	}
 
 	@Ignore("Failed on mac, need to fix")
@@ -73,21 +73,21 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 	public void importLiferayWorkspaceWithDownloadLiferayBundle() throws IOException {
 		String liferayWorkspaceName = "test-liferay-workspace-gradle";
 
-		wizardAction.openImportLiferayWorkspaceWizard();
+		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
 		IPath testProject = envAction.getProjectsFolder().append(liferayWorkspaceName);
 
 		File workspaceProject = envAction.prepareTempProject(testProject.toFile());
 
-		wizardAction.prepareImportLiferayWorkspace(workspaceProject.getPath(), true, StringPool.EMPTY);
+		wizardAction.importLiferayWorkspace.prepare(workspaceProject.getPath(), true, StringPool.EMPTY);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(liferayWorkspaceName, "bundles"));
-		Assert.assertTrue(viewAction.visibleProjectFileTry(liferayWorkspaceName, "configs"));
-		Assert.assertTrue(viewAction.visibleProjectFileTry(liferayWorkspaceName, "gradle"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspaceName, "bundles"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspaceName, "configs"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspaceName, "gradle"));
 
-		viewAction.closeAndDeleteProject(liferayWorkspaceName);
+		viewAction.project.closeAndDelete(liferayWorkspaceName);
 	}
 
 	@Test

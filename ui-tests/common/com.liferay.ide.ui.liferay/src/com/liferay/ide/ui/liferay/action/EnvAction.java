@@ -131,16 +131,6 @@ public class EnvAction extends UIAction {
 		return bundlesPath.append(sdkDir);
 	}
 
-	public boolean internal() {
-		//TODO also need to add ping checker to ensure the internal servers accessible
-
-		if (_internal == null || _internal.equals("") || _internal.equals("null")) {
-			return true;
-		}
-
-		return Boolean.parseBoolean(_internal);
-	}
-
 	public String getLiferayPluginsSdkName() {
 		return _sdkInfos[0].getSdkDir();
 	}
@@ -243,6 +233,16 @@ public class EnvAction extends UIAction {
 		}
 
 		return validationMsgs;
+	}
+
+	public boolean internal() {
+		//TODO also need to add ping checker to ensure the internal servers accessible
+
+		if ((_internal == null) || _internal.equals("") || _internal.equals("null")) {
+			return true;
+		}
+
+		return Boolean.parseBoolean(_internal);
 	}
 
 	public void killGradleProcess() throws IOException {
@@ -417,7 +417,9 @@ public class EnvAction extends UIAction {
 		writer.close();
 
 		if (internal()) {
-			IPath source = getLiferayBundlesPath().append("internal").append("ivy-settings.xml");
+			IPath bundlesPath = getLiferayBundlesPath();
+
+			IPath source = bundlesPath.append("internal").append("ivy-settings.xml");
 
 			IPath dest = getLiferayPluginsSdkDir().append("ivy-settings.xml");
 
@@ -567,8 +569,8 @@ public class EnvAction extends UIAction {
 	}
 
 	private final BundleInfo[] _bundleInfos;
-	private String _liferayBundlesDir = System.getProperty("liferay.bundles.dir");
 	private String _internal = System.getProperty("internal");
+	private String _liferayBundlesDir = System.getProperty("liferay.bundles.dir");
 	private IPath _liferayBundlesPath;
 	private final SdkInfo[] _sdkInfos;
 	private long _timestamp = 0;

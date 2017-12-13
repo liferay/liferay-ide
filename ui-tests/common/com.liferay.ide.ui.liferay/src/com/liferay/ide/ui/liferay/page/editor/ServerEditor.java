@@ -26,8 +26,8 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class ServerEditor extends Editor {
 
-	public ServerEditor(SWTWorkbenchBot bot, String editorName) {
-		super(bot, editorName);
+	public ServerEditor(SWTWorkbenchBot bot) {
+		super(bot);
 	}
 
 	public Radio getCustomLaunchSettings() {

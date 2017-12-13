@@ -15,8 +15,8 @@
 package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.page.wizard.project.NewFragmentInfoWizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.NewFragmentWizard;
-import com.liferay.ide.ui.liferay.page.wizard.project.NewModuleFragmentInfoWizard;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
@@ -58,19 +58,19 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.newFragment.prepareGradle(projectName);
 
-		wizardAction.openNewRuntimeWizardFragment();
+		wizardAction.newFragment.openNewRuntimeWizard();
 
 		wizardAction.next();
 
-		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
+		wizardAction.newRuntime7.prepare(envAction.getLiferayServerDir().toOSString());
 
 		wizardAction.finish();
 
 		wizardAction.next();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("gg");
 
@@ -92,11 +92,11 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.deleteRuntimeTryConfirm(LIFERAY_7_X);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(LIFERAY_7_X);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@Test
@@ -105,13 +105,13 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.newFragment.prepareGradle(projectName);
 
-		wizardAction.openNewRuntimeWizardFragment();
+		wizardAction.newFragment.openNewRuntimeWizard();
 
 		wizardAction.next();
 
-		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
+		wizardAction.newRuntime7.prepare(envAction.getLiferayServerDir().toOSString());
 
 		wizardAction.finish();
 
@@ -133,11 +133,11 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.deleteRuntimeTryConfirm(LIFERAY_7_X);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(LIFERAY_7_X);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@Test
@@ -150,7 +150,7 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 
 		Assert.assertTrue(_newFragmentWizard.getUseDefaultLocation().isChecked());
 
-		wizardAction.deselectUseDefaultLocation();
+		wizardAction.newProject.deselectUseDefaultLocation();
 
 		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
 
@@ -173,17 +173,17 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.newFragment.prepareGradle(projectName);
 
 		Assert.assertFalse(_newFragmentWizard.nextBtn().isEnabled());
 
 		Assert.assertEquals(LIFERAY_RUNTIME_MUST_BE_CONFIGURED, _newFragmentWizard.getValidationMsg(2));
 
-		wizardAction.openNewRuntimeWizardFragment();
+		wizardAction.newFragment.openNewRuntimeWizard();
 
 		wizardAction.next();
 
-		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
+		wizardAction.newRuntime7.prepare(envAction.getLiferayServerDir().toOSString());
 
 		wizardAction.finish();
 
@@ -197,11 +197,11 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.deleteRuntimeTryConfirm(LIFERAY_7_X);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(LIFERAY_7_X);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@Test
@@ -210,17 +210,17 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.newFragment.prepareGradle(projectName);
 
-		wizardAction.openNewRuntimeWizardFragment();
+		wizardAction.newFragment.openNewRuntimeWizard();
 
 		wizardAction.next();
 
-		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
+		wizardAction.newRuntime7.prepare(envAction.getLiferayServerDir().toOSString());
 
 		wizardAction.finish();
 
-		wizardAction.deselectUseDefaultLocation();
+		wizardAction.newFragment.deselectUseDefaultLocation();
 
 		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
 
@@ -237,16 +237,16 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 				continue;
 			}
 
-			_newFragmentWizard.getLocation().setText(msg.getInput());
+			wizardAction.newFragment.setLocation(msg.getInput());
 
 			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
 
-		wizardAction.prepareFragmentGradle(projectName, workspacePath + "/testLocation");
+		wizardAction.newFragment.prepareGradle(projectName, workspacePath + "/testLocation");
 
 		wizardAction.next();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("com.liferay.blogs.web");
 
@@ -254,15 +254,15 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.deleteRuntimeTryConfirm(LIFERAY_7_X);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(LIFERAY_7_X);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@Test
@@ -271,13 +271,13 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.newFragment.prepareGradle(projectName);
 
-		wizardAction.openNewRuntimeWizardFragment();
+		wizardAction.newFragment.openNewRuntimeWizard();
 
 		wizardAction.next();
 
-		wizardAction.prepareLiferay7RuntimeInfo(envAction.getLiferayServerDir().toOSString());
+		wizardAction.newRuntime7.prepare(envAction.getLiferayServerDir().toOSString());
 
 		wizardAction.finish();
 
@@ -289,43 +289,43 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 			"portlet.properties"
 		};
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("com.liferay.application.list.api");
 
 		dialogAction.confirm();
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
 
 		dialogAction.cancel();
 
-		wizardAction.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
 		dialogAction.prepareText("com.liferay.blogs.web");
 
 		dialogAction.confirm();
 
-		wizardAction.openAddOverrideFilesDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems(files);
 
 		dialogAction.confirm();
 
-		wizardAction.selectFragmentFile("META-INF/resources/blogs_admin/configuration.jsp");
+		wizardAction.newFragmentInfo.selectFile("META-INF/resources/blogs_admin/configuration.jsp");
 
-		wizardAction.deleteFragmentFile();
+		wizardAction.newFragmentInfo.deleteFile();
 
 		wizardAction.cancel();
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.deleteRuntimeTryConfirm(LIFERAY_7_X);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(LIFERAY_7_X);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@Test
@@ -339,7 +339,7 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 				continue;
 			}
 
-			_newFragmentWizard.getProjectName().setText(msg.getInput());
+			wizardAction.newFragment.setProjectName(msg.getInput());
 
 			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
@@ -353,7 +353,7 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.prepareFragmentGradle(projectName);
+		wizardAction.newFragment.prepareGradle(projectName);
 
 		Assert.assertFalse(_newFragmentWizard.nextBtn().isEnabled());
 
@@ -366,7 +366,7 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 	public void createFragmentWithoutRuntimeLiferayWorkspace() {
 	}
 
-	private static final NewModuleFragmentInfoWizard _newFragmentInfoWizard = new NewModuleFragmentInfoWizard(bot);
+	private static final NewFragmentInfoWizard _newFragmentInfoWizard = new NewFragmentInfoWizard(bot);
 	private static final NewFragmentWizard _newFragmentWizard = new NewFragmentWizard(bot);
 
 }

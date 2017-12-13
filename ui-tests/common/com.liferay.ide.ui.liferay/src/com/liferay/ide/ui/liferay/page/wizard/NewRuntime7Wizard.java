@@ -14,43 +14,31 @@
 
 package com.liferay.ide.ui.liferay.page.wizard;
 
-import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
- * @author Terry Jia
+ * @author Vicky Wang
+ * @author Ying Xu
  */
-public class ImportLiferayWorkspaceProjectWizard extends Wizard {
+public class NewRuntime7Wizard extends Wizard {
 
-	public ImportLiferayWorkspaceProjectWizard(SWTBot bot) {
-		super(bot, 2);
+	public NewRuntime7Wizard(SWTBot bot) {
+		super(bot, 3);
 	}
 
-	public CheckBox getAddProjectToWorkingSet() {
-		return new CheckBox(getShell().bot(), ADD_PROJECT_TO_WORKING_SET);
+	public Text getLocation() {
+		return new Text(getShell().bot(), LIFERAY_PORTAL_BUNDLE_DIRECTORY);
 	}
 
-	public Text getBuildTypeText() {
-		return new Text(getShell().bot(), BUILD_TYPE);
+	public Text getName() {
+		return new Text(getShell().bot(), NAME);
 	}
 
-	public Text getBundleUrl() {
-		return new Text(getShell().bot(), BUNDLE_URL);
-	}
-
-	public CheckBox getDownloadLiferaybundle() {
-		return new CheckBox(getShell().bot(), DOWNLOAD_LIFERAY_BUNDLE);
-	}
-
-	public Text getServerName() {
-		return new Text(getShell().bot(), SERVER_NAME);
-	}
-
-	public Text getWorkspaceLocation() {
-		return new Text(getShell().bot(), WORKSPACE_LOCATION);
+	public Text getPortalBundleType() {
+		return new Text(getShell().bot(), DETECTED_PORTAL_BUNDLE_TYPE);
 	}
 
 }

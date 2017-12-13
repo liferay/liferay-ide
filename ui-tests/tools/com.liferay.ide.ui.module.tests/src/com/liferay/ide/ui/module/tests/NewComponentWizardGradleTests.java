@@ -35,7 +35,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleGradle(projectName);
+		wizardAction.newModule.prepareGradle(projectName);
 
 		wizardAction.finish();
 
@@ -45,14 +45,14 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		String packageName = "com.liferay.ide.test";
 		String template = PORTLET_UPCASE;
 
-		wizardAction.prepareComponentClass(projectName, template, className, packageName);
+		wizardAction.newLiferayComponent.prepare(projectName, template, className, packageName);
 
 		wizardAction.finish();
 
 		Assert.assertTrue(
-			viewAction.visibleProjectFileTry(projectName, "src/main/java", packageName, className + ".java"));
+			viewAction.project.visibleFileTry(projectName, "src/main/java", packageName, className + ".java"));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleGradle(projectName);
+		wizardAction.newModule.prepareGradle(projectName);
 
 		wizardAction.finish();
 
@@ -71,9 +71,9 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		String packageName = "com.liferay.ide.test";
 		String template = SERVICE_WRAPPER_UPCASE;
 
-		wizardAction.prepareComponentClass(projectName, template, className, packageName);
+		wizardAction.newLiferayComponent.prepare(projectName, template, className, packageName);
 
-		wizardAction.openSelectModelClassAndServiceDialog();
+		wizardAction.newLiferayComponent.openSelectModelClassAndServiceDialog();
 
 		dialogAction.prepareText("*bookmarksEntryLocal");
 
@@ -82,9 +82,9 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		wizardAction.finish();
 
 		Assert.assertTrue(
-			viewAction.visibleProjectFileTry(projectName, "src/main/java", packageName, className + ".java"));
+			viewAction.project.visibleFileTry(projectName, "src/main/java", packageName, className + ".java"));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 }
