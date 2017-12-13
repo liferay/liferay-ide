@@ -85,12 +85,12 @@ public class JobAction extends UIAction {
 		ide.waitUntil(new WizardClosedCondition(bot, title), 300 * 1000);
 	}
 
-	public void waitForValidate(String projectName) {
-		ide.waitUntil(new ValidateJobCondition(projectName), 300 * 1000);
-	}
-
 	public void waitForSubnote(SWTBotTreeItem parent, String subnode, String refreshText) {
 		ide.waitUntil(new RefreshForSubnodeCondition(parent, subnode, refreshText), 30 * 1000);
+	}
+
+	public void waitForValidate(String projectName) {
+		ide.waitUntil(new ValidateJobCondition(projectName), 300 * 1000);
 	}
 
 }

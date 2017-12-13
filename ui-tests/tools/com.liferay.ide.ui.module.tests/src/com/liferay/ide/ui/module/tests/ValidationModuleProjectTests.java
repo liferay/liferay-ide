@@ -38,17 +38,17 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModule(projectName);
+		wizardAction.newModule.prepare(projectName);
 
 		wizardAction.next();
 
 		Assert.assertTrue(_newModuleInfoWizard.finishBtn().isEnabled());
 		Assert.assertEquals(CONFIGURE_COMPONENT_CLASS, wizardAction.getValidationMsg(2));
 
-		wizardAction.prepareLiferayModuleInfo(projectName, StringPool.BLANK);
+		wizardAction.newModuleInfo.prepare(projectName, StringPool.BLANK);
 		Assert.assertEquals(INVALID_CLASS_NAME, wizardAction.getValidationMsg(2));
 
-		wizardAction.prepareLiferayModuleInfo(StringPool.BLANK, "!!");
+		wizardAction.newModuleInfo.prepare(StringPool.BLANK, "!!");
 		Assert.assertEquals(INVALID_PACKAGE_NAME, wizardAction.getValidationMsg(2));
 
 		_newModuleProjectWizard.cancel();
@@ -78,29 +78,29 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModule(projectName);
+		wizardAction.newModule.prepare(projectName);
 
 		wizardAction.next();
 
-		wizardAction.prepareLiferayModuleInfoProperties(StringPool.BLANK, StringPool.BLANK);
+		wizardAction.newModuleInfo.prepareProperties(StringPool.BLANK, StringPool.BLANK);
 
 		Assert.assertEquals(NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(2));
 
 		_newModuleInfoWizard.getDeleteBtn().click();
 
-		wizardAction.prepareLiferayModuleInfoProperties(StringPool.BLANK, projectName);
+		wizardAction.newModuleInfo.prepareProperties(StringPool.BLANK, projectName);
 
 		Assert.assertEquals(NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(2));
 
 		_newModuleInfoWizard.getDeleteBtn().click();
 
-		wizardAction.prepareLiferayModuleInfoProperties(projectName, StringPool.BLANK);
+		wizardAction.newModuleInfo.prepareProperties(projectName, StringPool.BLANK);
 
 		Assert.assertEquals(VALUE_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(2));
 
 		_newModuleInfoWizard.getDeleteBtn().click();
 
-		wizardAction.prepareLiferayModuleInfoProperties(projectName, projectName);
+		wizardAction.newModuleInfo.prepareProperties(projectName, projectName);
 
 		Assert.assertEquals(CONFIGURE_COMPONENT_CLASS, wizardAction.getValidationMsg(2));
 

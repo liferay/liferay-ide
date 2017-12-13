@@ -30,13 +30,13 @@ public class NewJsfProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.prepareJsfProjectMaven(projectName, ICEFACES);
+		wizardAction.newLiferayJsf.prepareMaven(projectName, ICEFACES);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -45,13 +45,13 @@ public class NewJsfProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.prepareJsfProjectMaven(projectName, JSF_STANDARD);
+		wizardAction.newLiferayJsf.prepareMaven(projectName, JSF_STANDARD);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -60,13 +60,13 @@ public class NewJsfProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.prepareJsfProjectMaven(projectName, LIFERAY_FACES_ALLOY);
+		wizardAction.newLiferayJsf.prepareMaven(projectName, LIFERAY_FACES_ALLOY);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -75,13 +75,13 @@ public class NewJsfProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.prepareJsfProjectMaven(projectName, PRIMEFACES);
+		wizardAction.newLiferayJsf.prepareMaven(projectName, PRIMEFACES);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -90,13 +90,13 @@ public class NewJsfProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.prepareJsfProjectMaven(projectName, RICHFACES);
+		wizardAction.newLiferayJsf.prepareMaven(projectName, RICHFACES);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 }

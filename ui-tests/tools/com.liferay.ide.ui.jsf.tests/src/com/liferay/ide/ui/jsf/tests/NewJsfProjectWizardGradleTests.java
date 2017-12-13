@@ -30,13 +30,13 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.prepareJsfProjectGradle(projectName, ICEFACES);
+		wizardAction.newLiferayJsf.prepareGradle(projectName, ICEFACES);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -45,13 +45,13 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.prepareJsfProjectGradle(projectName, JSF_STANDARD);
+		wizardAction.newLiferayJsf.prepareGradle(projectName, JSF_STANDARD);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -60,13 +60,13 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.prepareJsfProjectGradle(projectName, LIFERAY_FACES_ALLOY);
+		wizardAction.newLiferayJsf.prepareGradle(projectName, LIFERAY_FACES_ALLOY);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -75,13 +75,13 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.prepareJsfProjectGradle(projectName, PRIMEFACES);
+		wizardAction.newLiferayJsf.prepareGradle(projectName, PRIMEFACES);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -90,13 +90,13 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.prepareJsfProjectGradle(projectName, RICHFACES);
+		wizardAction.newLiferayJsf.prepareGradle(projectName, RICHFACES);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 }

@@ -37,134 +37,6 @@ public class ViewAction extends UIAction {
 		super(bot);
 	}
 
-	public void checkErrorLog() {
-		System.out.println(_errorLogView.getLogs().size());
-	}
-
-	public void closeAndDeleteProject(String... items) {
-		closeProject(items);
-
-		deleteProject(items);
-	}
-
-	public void closeAndDeleteProjectFromDisk(String... items) {
-		closeProject(items);
-
-		deleteProjectFromDisk(items);
-	}
-
-	public void closeAndDeleteProjectWithNoRunningJobs(String... items) {
-		closeProject(items);
-
-		_jobAction.waitForNoRunningJobs();
-
-		deleteProject(items);
-	}
-
-	public void closeProject(String... items) {
-		ide.sleep();
-
-		_getProjects().contextMenu("Close Project", items);
-
-		_jobAction.waitForCloseProject();
-	}
-
-	public void deleteProject(String... items) {
-		_getProjects().contextMenu(DELETE, items);
-
-		ide.sleep();
-
-		String label = _deleteResourcesDialog.getLabel();
-
-		_deleteResourcesDialog.confirm();
-
-		_jobAction.waitForShellClosed(label);
-	}
-
-	public void deleteProjectFromDisk(String... items) {
-		_getProjects().contextMenu(DELETE, items);
-
-		ide.sleep();
-
-		String label = _deleteResourcesDialog.getLabel();
-
-		_deleteResourcesDialog.getDeleteFromDisk().select();
-
-		_deleteResourcesDialog.confirm();
-
-		_jobAction.waitForShellClosed(label);
-	}
-
-	public String[] getProjectNames() {
-		return _getProjects().getItemLabels();
-	}
-
-	public void openAddAndRemoveDialog(String serverLabel) {
-		_serversView.getServers().contextMenu(ADD_AND_REMOVE, serverLabel);
-	}
-
-	public void openFragmentFilesWizard() {
-		_getProjects().contextMenu(LIFERAY_MODULE_FRAGMENT_FILES);
-	}
-
-	public void openLiferayPortalHome(String serverLabel) {
-		_serversView.getServers().contextMenu(OPEN_LIFERAY_PORTAL_HOME, serverLabel);
-
-		_jobAction.waitForBrowserLoaded();
-	}
-
-	public void openProjectFile(String... files) {
-		ide.sleep();
-
-		_getProjects().setFocus();
-
-		_getProjects().doubleClick(files);
-	}
-
-	public void openServerEditor(String serverLabel) {
-		_serversView.getServers().doubleClick(serverLabel);
-	}
-
-	public void restartUpgrade() {
-		_codeUpgradeView.getRestartUpgradeBtn().click();
-	}
-
-	public void runBuildServices(String... projectNames) {
-		_getProjects().contextMenu(BUILD_SERVICES, projectNames);
-	}
-
-	public void runBuildWSDD(String... projectNames) {
-		_getProjects().contextMenu(BUILD_WSDD, projectNames);
-	}
-
-	public void serverDebug(String serverLabel) {
-		ide.sleep(5000);
-
-		_serversView.getServers().select(serverLabel);
-
-		_serversView.clickDebugBtn();
-	}
-
-	public void serverStart(String serverLabel) {
-		ide.sleep(5000);
-
-		_serversView.getServers().select(serverLabel);
-
-		_serversView.clickStartBtn();
-	}
-
-	public void serverStop(String serverLabel) {
-		ide.sleep(2000);
-
-		_serversView.getServers().select(serverLabel);
-
-		_serversView.clickStopBtn();
-	}
-
-	public void showAllPages() {
-		_codeUpgradeView.getShowAllPagesBtn().click();
-	}
-
 	public void showCodeUpgradeView() {
 		ide.showCodeUpgradeView();
 	}
@@ -173,68 +45,220 @@ public class ViewAction extends UIAction {
 		ide.showServersView();
 	}
 
-	public void switchGear(int index) {
-		_codeUpgradeView.getGear().clickGear(index);
-	}
-
 	public void switchLiferayPerspective() {
 		ide.getLiferayPerspective().activate();
 	}
 
-	public boolean visibleProjectFileTry(String... files) {
-		try {
-			return _getProjects().isVisible(files);
+	public CodeUpgradeViewAction codeUpgrade = new CodeUpgradeViewAction();
+	public ProjectViewAction project = new ProjectViewAction();
+	public ServersViewAction servers = new ServersViewAction();
+
+	public class CodeUpgradeViewAction {
+
+		public void restartUpgrade() {
+			_codeUpgradeView.getRestartUpgradeBtn().click();
 		}
-		catch (Exception e) {
+
+		public void showAllPages() {
+			_codeUpgradeView.getShowAllPagesBtn().click();
+		}
+
+		public void switchGear(int index) {
+			_codeUpgradeView.getGear().clickGear(index);
+		}
+
+		private final CodeUpgradeView _codeUpgradeView = new CodeUpgradeView(bot);
+
+	}
+
+	public class ErrorLogViewAction {
+
+		public void checkErrorLog() {
+			System.out.println(_errorLogView.getLogs().size());
+		}
+
+		private final ErrorLogView _errorLogView = new ErrorLogView(bot);
+
+	}
+
+	public class ProjectViewAction {
+
+		public void closeAndDelete(String... items) {
+			closeProject(items);
+
+			deleteProject(items);
+		}
+
+		public void closeAndDeleteFromDisk(String... items) {
+			closeProject(items);
+
+			deleteProjectFromDisk(items);
+		}
+
+		public void closeAndDeleteWithNoRunningJobs(String... items) {
+			closeProject(items);
+
+			_jobAction.waitForNoRunningJobs();
+
+			deleteProject(items);
+		}
+
+		public void closeProject(String... items) {
+			ide.sleep();
+
+			_getProjects().contextMenu("Close Project", items);
+
+			_jobAction.waitForCloseProject();
+		}
+
+		public void deleteProject(String... items) {
+			_getProjects().contextMenu(DELETE, items);
+
+			ide.sleep();
+
+			String label = _deleteResourcesDialog.getLabel();
+
+			_deleteResourcesDialog.confirm();
+
+			_jobAction.waitForShellClosed(label);
+		}
+
+		public void deleteProjectFromDisk(String... items) {
+			_getProjects().contextMenu(DELETE, items);
+
+			ide.sleep();
+
+			String label = _deleteResourcesDialog.getLabel();
+
+			_deleteResourcesDialog.getDeleteFromDisk().select();
+
+			_deleteResourcesDialog.confirm();
+
+			_jobAction.waitForShellClosed(label);
+		}
+
+		public String[] getProjectNames() {
+			return _getProjects().getItemLabels();
+		}
+
+		public void openFile(String... files) {
+			ide.sleep();
+
 			_getProjects().setFocus();
 
+			_getProjects().doubleClick(files);
+		}
+
+		public void openFragmentFilesWizard() {
+			_getProjects().contextMenu(LIFERAY_MODULE_FRAGMENT_FILES);
+		}
+
+		public void runBuildServices(String... projectNames) {
+			_getProjects().contextMenu(BUILD_SERVICES, projectNames);
+		}
+
+		public void runBuildWSDD(String... projectNames) {
+			_getProjects().contextMenu(BUILD_WSDD, projectNames);
+		}
+
+		public boolean visibleFileTry(String... files) {
 			try {
-				String[] parents = Arrays.copyOfRange(files, 0, files.length - 1);
-
-				_getProjects().expand(parents);
-
-				_getProjects().contextMenu(REFRESH, parents);
-
-				ide.sleep(2000);
+				return _getProjects().isVisible(files);
 			}
-			catch (Exception e1) {
+			catch (Exception e) {
+				_getProjects().setFocus();
+
+				try {
+					String[] parents = Arrays.copyOfRange(files, 0, files.length - 1);
+
+					_getProjects().expand(parents);
+
+					_getProjects().contextMenu(REFRESH, parents);
+
+					ide.sleep(2000);
+				}
+				catch (Exception e1) {
+				}
+
+				for (int i = files.length - 1; i > 0; i--) {
+					String[] parents = Arrays.copyOfRange(files, 0, files.length - i);
+
+					SWTBotTreeItem parent = _getProjects().getTreeItem(parents);
+
+					_getProjects().expand(parents);
+
+					String subnode = files[files.length - i];
+
+					_jobAction.waitForSubnote(parent, subnode, REFRESH);
+				}
+
+				return _getProjects().isVisible(files);
 			}
-
-			for (int i = files.length - 1; i > 0; i--) {
-				String[] parents = Arrays.copyOfRange(files, 0, files.length - i);
-
-				SWTBotTreeItem parent = _getProjects().getTreeItem(parents);
-
-				_getProjects().expand(parents);
-
-				String subnode = files[files.length - i];
-
-				_jobAction.waitForSubnote(parent, subnode, REFRESH);
-			}
-
-			return _getProjects().isVisible(files);
 		}
+
+		private Tree _getProjects() {
+			String perspectiveLabel = ide.getPerspectiveLabel();
+
+			if (perspectiveLabel.equals(LIFERAY_WORKSPACE)) {
+				return _projectExplorerView.getProjects();
+			}
+			else if (perspectiveLabel.equals(LIFERAY_PLUGINS)) {
+				return _packageExplorerView.getProjects();
+			}
+
+			return null;
+		}
+
+		private final DeleteResourcesDialog _deleteResourcesDialog = new DeleteResourcesDialog(bot);
+		private final PackageExplorerView _packageExplorerView = new PackageExplorerView(bot);
+		private final ProjectExplorerView _projectExplorerView = new ProjectExplorerView(bot);
+
 	}
 
-	private Tree _getProjects() {
-		String perspectiveLabel = ide.getPerspectiveLabel();
+	public class ServersViewAction {
 
-		if (perspectiveLabel.equals(LIFERAY_WORKSPACE)) {
-			return _projectExplorerView.getProjects();
-		}
-		else if (perspectiveLabel.equals(LIFERAY_PLUGINS)) {
-			return _packageExplorerView.getProjects();
+		public void debug(String serverLabel) {
+			ide.sleep(5000);
+
+			_serversView.getServers().select(serverLabel);
+
+			_serversView.clickDebugBtn();
 		}
 
-		return null;
+		public void openAddAndRemoveDialog(String serverLabel) {
+			_serversView.getServers().contextMenu(ADD_AND_REMOVE, serverLabel);
+		}
+
+		public void openEditor(String serverLabel) {
+			_serversView.getServers().doubleClick(serverLabel);
+		}
+
+		public void openLiferayPortalHome(String serverLabel) {
+			_serversView.getServers().contextMenu(OPEN_LIFERAY_PORTAL_HOME, serverLabel);
+
+			_jobAction.waitForBrowserLoaded();
+		}
+
+		public void start(String serverLabel) {
+			ide.sleep(5000);
+
+			_serversView.getServers().select(serverLabel);
+
+			_serversView.clickStartBtn();
+		}
+
+		public void stop(String serverLabel) {
+			ide.sleep(2000);
+
+			_serversView.getServers().select(serverLabel);
+
+			_serversView.clickStopBtn();
+		}
+
+		private final ServersView _serversView = new ServersView(bot);
+
 	}
 
-	private final CodeUpgradeView _codeUpgradeView = new CodeUpgradeView(bot);
-	private final DeleteResourcesDialog _deleteResourcesDialog = new DeleteResourcesDialog(bot);
-	private final ErrorLogView _errorLogView = new ErrorLogView(bot);
 	private final JobAction _jobAction = new JobAction(bot);
-	private final PackageExplorerView _packageExplorerView = new PackageExplorerView(bot);
-	private final ProjectExplorerView _projectExplorerView = new ProjectExplorerView(bot);
-	private final ServersView _serversView = new ServersView(bot);
 
 }

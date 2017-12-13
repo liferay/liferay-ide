@@ -33,7 +33,7 @@ public class EditorServiceBuilderTests extends SwtbotBase {
 
 		String sdkName = envAction.getLiferayPluginsSdkName() + "-" + envAction.getTimestamp();
 
-		viewAction.closeAndDeleteProjectWithNoRunningJobs(sdkName);
+		viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
 	}
 
 	@BeforeClass
@@ -46,7 +46,7 @@ public class EditorServiceBuilderTests extends SwtbotBase {
 
 		String projectName = "test-portlet";
 
-		wizardAction.preparePluginSdk(projectName);
+		wizardAction.newPlugin.prepareSdk(projectName);
 
 		wizardAction.next();
 
@@ -54,7 +54,7 @@ public class EditorServiceBuilderTests extends SwtbotBase {
 
 		String location = envAction.getLiferayPluginsSdkDir().toOSString();
 
-		wizardAction.preparePluginSdkLocation(location);
+		wizardAction.setSdkLocation.prepare(location);
 
 		wizardAction.finish();
 
@@ -62,7 +62,7 @@ public class EditorServiceBuilderTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -79,7 +79,7 @@ public class EditorServiceBuilderTests extends SwtbotBase {
 
 		String projectName = "test-sb-portlet";
 
-		wizardAction.preparePluginServiceBuilderPortletSdk(projectName);
+		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(projectName);
 
 		wizardAction.finish();
 
@@ -87,15 +87,15 @@ public class EditorServiceBuilderTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.openProjectFile(projectName, "docroot", "WEB-INF", "service.xml");
+		viewAction.project.openFile(projectName, "docroot", "WEB-INF", "service.xml");
 
-		editorAction.switchTabDiagramServiceXml();
+		editorAction.serviceXml.switchTabDiagram();
 
-		editorAction.switchTabOverViewServiceXml();
+		editorAction.serviceXml.switchTabOverview();
 
-		editorAction.switchTabSourceServiceXml();
+		editorAction.serviceXml.switchTabSource();
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 }

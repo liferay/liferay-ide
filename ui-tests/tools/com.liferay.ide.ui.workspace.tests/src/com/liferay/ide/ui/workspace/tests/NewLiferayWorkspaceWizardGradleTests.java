@@ -34,11 +34,11 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareGradle(workspaceName);
 
 		wizardAction.finish();
 
-		viewAction.closeAndDeleteProject(workspaceName);
+		viewAction.project.closeAndDelete(workspaceName);
 	}
 
 	@Test
@@ -49,17 +49,17 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareGradle(workspaceName);
 
-		wizardAction.getUseDefaultLocation().deselect();
+		wizardAction.newLiferayWorkspace.deselectUseDefaultLocation();
 
 		String newFolderName = "changeLocation";
 
-		wizardAction.getLocation().setText(workspacePath + "/" + newFolderName);
+		wizardAction.newLiferayWorkspace.setLocation(workspacePath + "/" + newFolderName);
 
 		wizardAction.finish();
 
-		viewAction.closeAndDeleteProject(workspaceName);
+		viewAction.project.closeAndDelete(workspaceName);
 	}
 
 	@Ignore("Ignore forever and test the download bundle in createLiferayWorksapceWithDownloadBundleChangeBundleUrl")
@@ -69,27 +69,28 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareGradle(workspaceName);
 
-		wizardAction.getDownloadLiferayBundle().select();
+		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
 
-		wizardAction.getServerName().setText("Liferay 7-download-bundle");
+		wizardAction.newLiferayWorkspace.setServerName("Liferay 7-download-bundle");
 
 		wizardAction.finish();
 
-		viewAction.closeAndDeleteProject(workspaceName);
+		viewAction.project.closeAndDelete(workspaceName);
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.deleteRuntimeTryConfirm("Liferay 7-download-bundle");
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay 7-download-bundle");
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@Test
 	public void createLiferayWorksapceWithDownloadBundleChangeBundleUrl() {
+
 		// Only do this test in the internal net
 
 		if (!envAction.internal()) {
@@ -105,25 +106,25 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareGradle(workspaceName);
 
-		wizardAction.getDownloadLiferayBundle().select();
+		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
 
-		wizardAction.getServerName().setText("Liferay 7-change-bundle-url");
+		wizardAction.newLiferayWorkspace.setServerName("Liferay 7-change-bundle-url");
 
-		wizardAction.getBundleUrl().setText(bundleUrl);
+		wizardAction.newLiferayWorkspace.setBundleUrl(bundleUrl);
 
 		wizardAction.finish();
 
-		viewAction.closeAndDeleteProject(workspaceName);
+		viewAction.project.closeAndDelete(workspaceName);
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.deleteRuntimeTryConfirm("Liferay 7-change-bundle-url");
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay 7-change-bundle-url");
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@Test
@@ -136,11 +137,11 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareGradle(workspaceName);
 
 		wizardAction.finish();
 
-		viewAction.openProjectFile(workspaceName, "gradle.properties");
+		viewAction.project.openFile(workspaceName, "gradle.properties");
 
 		StringBuffer sb = new StringBuffer();
 
@@ -160,21 +161,21 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		String projectName = "test-mvc-portlet";
 
-		wizardAction.prepareLiferayModuleGradle(projectName, MVC_PORTLET);
+		wizardAction.newModule.prepareGradle(projectName, MVC_PORTLET);
 
 		wizardAction.finish();
 
 		String[] projectNames = {workspaceName, newModulesFolderName, projectName};
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		viewAction.closeAndDeleteProject(projectNames);
+		viewAction.project.closeAndDelete(projectNames);
 
 		String[] newModuleNames = {workspaceName, newModulesFolderName};
 
-		viewAction.closeAndDeleteProject(newModuleNames);
+		viewAction.project.closeAndDelete(newModuleNames);
 
-		viewAction.closeAndDeleteProject(workspaceName);
+		viewAction.project.closeAndDelete(workspaceName);
 	}
 
 	@Test
@@ -183,11 +184,11 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.prepareLiferayWorkspaceGradle(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareGradle(workspaceName);
 
 		wizardAction.finish();
 
-		viewAction.openProjectFile(workspaceName, "gradle.properties");
+		viewAction.project.openFile(workspaceName, "gradle.properties");
 
 		StringBuffer sb = new StringBuffer();
 
@@ -207,21 +208,21 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		String projectName = "test-theme";
 
-		wizardAction.prepareLiferayModuleGradle("test-theme", THEME);
+		wizardAction.newModule.prepareGradle("test-theme", THEME);
 
 		wizardAction.finish();
 
 		String[] projectNames = {workspaceName, newWarsFolderName, projectName};
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		viewAction.closeAndDeleteProject(projectNames);
+		viewAction.project.closeAndDelete(projectNames);
 
 		String[] newModuleNames = {workspaceName, newWarsFolderName};
 
-		viewAction.closeAndDeleteProject(newModuleNames);
+		viewAction.project.closeAndDelete(newModuleNames);
 
-		viewAction.closeAndDeleteProject(workspaceName);
+		viewAction.project.closeAndDelete(workspaceName);
 	}
 
 }

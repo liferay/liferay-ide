@@ -41,11 +41,11 @@ public class ServerTomcat62Tests extends SwtbotBase {
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.openNewRuntimeWizard();
+		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.prepareLiferay62RuntimeType();
+		wizardAction.newRuntime.prepare62();
 
 		wizardAction.next();
 
@@ -53,97 +53,109 @@ public class ServerTomcat62Tests extends SwtbotBase {
 
 		IPath fullServerDir = serverDir.append(envAction.getLiferayPluginServerName62());
 
-		wizardAction.prepareLiferay62RuntimeInfo(serverName, fullServerDir.toOSString());
+		wizardAction.newRuntime62.prepare(serverName, fullServerDir.toOSString());
 
 		wizardAction.finish();
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.prepareNewServer62(serverName);
+		wizardAction.newServer.prepare(serverName);
 
 		wizardAction.finish();
 
 		// String serverStoppedLabel = serverName + " [Stopped]";
+
 		//
+
 		// viewAction.serverStart(serverStoppedLabel);
+
 		//
+
 		// jobAction.waitForServerStarted(serverName);
+
 		//
+
 		// String serverStartedLabel = serverName + " [Started, Synchronized]";
+
 		//
+
 		// viewAction.openLiferayPortalHome(serverStartedLabel);
+
 		//
+
 		// viewAction.serverStop(serverStartedLabel);
+
 		//
+
 		// jobAction.waitForServerStopped(serverName);
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.deleteRuntimeTryConfirm(serverName);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(serverName);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@Test
 	public void addLiferay62RuntimeFromPreferences() {
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.openNewRuntimeWizard();
+		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.prepareLiferay62RuntimeType();
+		wizardAction.newRuntime.prepare62();
 
 		wizardAction.next();
 
 		String runtimeName = "Liferay 6.2-add-runtime";
 
-		wizardAction.prepareLiferay62RuntimeInfo(runtimeName, envAction.getLiferayServerFullDir62().toOSString());
+		wizardAction.newRuntime62.prepare(runtimeName, envAction.getLiferayServerFullDir62().toOSString());
 
 		wizardAction.finish();
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.deleteRuntimeTryConfirm(runtimeName);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(runtimeName);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@Test
 	public void addLiferay62ServerFromMenu() {
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.openNewRuntimeWizard();
+		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.prepareLiferay62RuntimeType();
+		wizardAction.newRuntime.prepare62();
 
 		wizardAction.next();
 
 		String runtimeName = "Liferay 62-add-server";
 
-		wizardAction.prepareLiferay62RuntimeInfo(runtimeName, envAction.getLiferayServerFullDir62().toOSString());
+		wizardAction.newRuntime62.prepare(runtimeName, envAction.getLiferayServerFullDir62().toOSString());
 
 		wizardAction.finish();
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.prepareNewServer62("Liferay 62-add-server");
+		wizardAction.newServer.prepare62("Liferay 62-add-server");
 
 		wizardAction.finish();
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.deleteRuntimeTryConfirm(runtimeName);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(runtimeName);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@Test

@@ -12,33 +12,23 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay.page.wizard;
+package com.liferay.ide.ui.liferay.page.wizard.project;
 
-import com.liferay.ide.ui.swtbot.page.Text;
-import com.liferay.ide.ui.swtbot.page.Wizard;
+import com.liferay.ide.ui.swtbot.page.ComboBox;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
- * @author Vicky Wang
- * @author Ying Xu
+ * @author Terry Jia
  */
-public class NewLiferay7RuntimeWizard extends Wizard {
+public class NewLiferayPluginWizard extends NewProjectWizard {
 
-	public NewLiferay7RuntimeWizard(SWTBot bot) {
-		super(bot, 3);
+	public NewLiferayPluginWizard(SWTBot bot) {
+		super(bot);
 	}
 
-	public Text getLocation() {
-		return new Text(getShell().bot(), LIFERAY_PORTAL_BUNDLE_DIRECTORY);
-	}
-
-	public Text getName() {
-		return new Text(getShell().bot(), NAME);
-	}
-
-	public Text getPortalBundleType() {
-		return new Text(getShell().bot(), DETECTED_PORTAL_BUNDLE_TYPE);
+	public ComboBox getPluginTypes() {
+		return new ComboBox(getShell().bot(), PLUGIN_TYPE);
 	}
 
 }

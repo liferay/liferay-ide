@@ -15,7 +15,6 @@
 package com.liferay.ide.ui.server.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.page.editor.ServerEditor;
 
 import java.io.IOException;
 
@@ -47,11 +46,11 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.openNewRuntimeWizard();
+		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.prepareLiferay7RuntimeType();
+		wizardAction.newRuntime.prepare7();
 
 		wizardAction.next();
 
@@ -59,93 +58,93 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		IPath fullServerDir = serverDir.append(envAction.getLiferayPluginServerName());
 
-		wizardAction.prepareLiferay7RuntimeInfo(serverName, fullServerDir.toOSString());
+		wizardAction.newRuntime7.prepare(serverName, fullServerDir.toOSString());
 
 		wizardAction.finish();
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.prepareNewServer(serverName);
+		wizardAction.newServer.prepare(serverName);
 
 		wizardAction.finish();
 
-		// String serverStoppedLabel = serverName + " [Stopped]";
-		//
-		// viewAction.serverStart(serverStoppedLabel);
-		//
+		// String serverStoppedLabel = serverName + "  [Stopped]";
+
+		// viewAction.servers.start(serverStoppedLabel);
+
 		// jobAction.waitForServerStarted(serverName);
-		//
-		// String serverStartedLabel = serverName + " [Started]";
-		//
+
+		// String serverStartedLabel = serverName + "  [Started]";
+
 		// viewAction.openLiferayPortalHome(serverStartedLabel);
-		//
-		// viewAction.serverStop(serverStartedLabel);
-		//
+
+		// viewAction.servers.stop(serverStartedLabel);
+
 		// jobAction.waitForServerStopped(serverName);
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.deleteRuntimeTryConfirm(serverName);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(serverName);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@Test
 	public void addLiferay7RuntimeFromPreferences() {
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openNewRuntimeWizard();
+		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.prepareLiferay7RuntimeType();
+		wizardAction.newRuntime.prepare7();
 
 		wizardAction.next();
 
 		String runtimeName = "Liferay 7-add-runtime";
 
-		wizardAction.prepareLiferay7RuntimeInfo(runtimeName, envAction.getLiferayServerFullDir().toOSString());
+		wizardAction.newRuntime7.prepare(runtimeName, envAction.getLiferayServerFullDir().toOSString());
 
 		wizardAction.finish();
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.deleteRuntimeTryConfirm(runtimeName);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(runtimeName);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@Test
 	public void addLiferay7ServerFromMenu() {
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openNewRuntimeWizard();
+		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.prepareLiferay7RuntimeType();
+		wizardAction.newRuntime.prepare7();
 
 		wizardAction.next();
 
 		String runtimeName = "Liferay 7-add-server";
 
-		wizardAction.prepareLiferay7RuntimeInfo(runtimeName, envAction.getLiferayServerFullDir().toOSString());
+		wizardAction.newRuntime7.prepare(runtimeName, envAction.getLiferayServerFullDir().toOSString());
 
 		wizardAction.finish();
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.prepareNewServer("Liferay 7-add-server");
+		wizardAction.newServer.prepare("Liferay 7-add-server");
 
 		wizardAction.finish();
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.deleteRuntimeTryConfirm(runtimeName);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(runtimeName);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@Test
@@ -154,57 +153,39 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openNewRuntimeWizard();
+		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.prepareLiferay7RuntimeType();
+		wizardAction.newRuntime.prepare7();
 
 		wizardAction.next();
 
-		wizardAction.prepareLiferay7RuntimeInfo(serverName, envAction.getLiferayServerFullDir().toOSString());
+		wizardAction.newRuntime7.prepare(serverName, envAction.getLiferayServerFullDir().toOSString());
 
 		wizardAction.finish();
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.prepareNewServer(serverName);
+		wizardAction.newServer.prepare(serverName);
 
 		wizardAction.finish();
 
 		String serverStoppedLabel = serverName + "  [Stopped]";
 
-		viewAction.openServerEditor(serverStoppedLabel);
+		viewAction.servers.openEditor(serverStoppedLabel);
 
-		ServerEditor serverEditor = new ServerEditor(bot, serverName);
-		ServerEditor serverEditorWithLabel = new ServerEditor(bot, serverStoppedLabel);
+		editorAction.server.selectCustomLaunchSettings();
 
-		try {
-			serverEditor.getCustomLaunchSettings().click();
-		}
-		catch (Exception e) {
-			serverEditorWithLabel.getCustomLaunchSettings().click();
-		}
-
-		try {
-			serverEditor.getUseDeveloperMode().select();
-		}
-		catch (Exception e) {
-			serverEditorWithLabel.getUseDeveloperMode().select();
-		}
+		editorAction.server.selectUseDeveloperMode();
 
 		editorAction.save();
 
 		editorAction.close();
 
-		viewAction.openServerEditor(serverStoppedLabel);
+		viewAction.servers.openEditor(serverStoppedLabel);
 
-		try {
-			serverEditor.getDefaultLaunchSettings().click();
-		}
-		catch (Exception e) {
-			serverEditorWithLabel.getDefaultLaunchSettings().click();
-		}
+		editorAction.server.selectDefaultLaunchSettings();
 
 		editorAction.save();
 
@@ -212,79 +193,60 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.deleteRuntimeTryConfirm(serverName);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(serverName);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
-	@Ignore("ignore to wait Terry finish the server start checker")
 	@Test
 	public void serverEditorCustomLaunchSettingsChangeAndStart() {
 		String serverName = "Liferay 7-custom-launch-settings-start";
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openNewRuntimeWizard();
+		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.prepareLiferay7RuntimeType();
+		wizardAction.newRuntime.prepare7();
 
 		wizardAction.next();
 
-		wizardAction.prepareLiferay7RuntimeInfo(serverName, envAction.getLiferayServerFullDir().toOSString());
+		wizardAction.newRuntime7.prepare(serverName, envAction.getLiferayServerFullDir().toOSString());
 
 		wizardAction.finish();
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.prepareNewServer(serverName);
+		wizardAction.newServer.prepare(serverName);
 
 		wizardAction.finish();
 
 		String serverStoppedLabel = serverName + "  [Stopped]";
 
-		viewAction.openServerEditor(serverStoppedLabel);
+		viewAction.servers.openEditor(serverStoppedLabel);
 
-		ServerEditor serverEditor = new ServerEditor(bot, serverName);
-		ServerEditor serverEditorWithLabelStopped = new ServerEditor(bot, serverStoppedLabel);
+		editorAction.server.selectCustomLaunchSettings();
 
-		try {
-			serverEditor.getCustomLaunchSettings().click();
-		}
-		catch (Exception e) {
-			serverEditorWithLabelStopped.getCustomLaunchSettings().click();
-		}
-
-		try {
-			serverEditor.getUseDeveloperMode().select();
-		}
-		catch (Exception e) {
-			serverEditorWithLabelStopped.getUseDeveloperMode().select();
-		}
+		editorAction.server.selectUseDeveloperMode();
 
 		editorAction.save();
 
 		editorAction.close();
 
-		viewAction.serverStart(serverStoppedLabel);
+		// viewAction.servers.start(serverStoppedLabel);
 
-		jobAction.waitForServerStarted(serverName);
+		// jobAction.waitForServerStarted(serverName);
 
-		String serverStartedLabel = serverName + "  [Started]";
+		// String serverStartedLabel = serverName + "  [Started]";
 
-		viewAction.serverStop(serverStartedLabel);
+		// viewAction.servers.stop(serverStartedLabel);
 
-		jobAction.waitForServerStopped(serverName);
+		// jobAction.waitForServerStopped(serverName);
 
-		viewAction.openServerEditor(serverStoppedLabel);
+		viewAction.servers.openEditor(serverStoppedLabel);
 
-		try {
-			serverEditor.getDefaultLaunchSettings().click();
-		}
-		catch (Exception e) {
-			serverEditorWithLabelStopped.getDefaultLaunchSettings().click();
-		}
+		editorAction.server.selectDefaultLaunchSettings();
 
 		editorAction.save();
 
@@ -292,9 +254,9 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.deleteRuntimeTryConfirm(serverName);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(serverName);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@Ignore("To wait for IDE-3343")
@@ -304,50 +266,37 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openNewRuntimeWizard();
+		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.prepareLiferay7RuntimeType();
+		wizardAction.newRuntime.prepare7();
 
 		wizardAction.next();
 
-		wizardAction.prepareLiferay7RuntimeInfo(serverName, envAction.getLiferayServerFullDir().toOSString());
+		wizardAction.newRuntime7.prepare(serverName, envAction.getLiferayServerFullDir().toOSString());
 
 		wizardAction.finish();
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.prepareNewServer(serverName);
+		wizardAction.newServer.prepare(serverName);
 
 		wizardAction.finish();
 
 		String serverStoppedLabel = serverName + "  [Stopped]";
 
-		viewAction.openServerEditor(serverStoppedLabel);
+		viewAction.servers.openEditor(serverStoppedLabel);
 
-		ServerEditor serverEditor = new ServerEditor(bot, serverName);
-		ServerEditor serverEditorWithLabel = new ServerEditor(bot, serverStoppedLabel);
-
-		try {
-			serverEditor.getHttpPort().setText("8081");
-		}
-		catch (Exception e) {
-			serverEditorWithLabel.getHttpPort().setText("8081");
-		}
+		editorAction.server.setHttpPort("8081");
 
 		editorAction.save();
 
 		editorAction.close();
 
-		viewAction.openServerEditor(serverStoppedLabel);
+		viewAction.servers.openEditor(serverStoppedLabel);
 
-		try {
-			serverEditor.getHttpPort().setText("8080");
-		}
-		catch (Exception e) {
-			serverEditorWithLabel.getHttpPort().setText("8080");
-		}
+		editorAction.server.setHttpPort("8080");
 
 		editorAction.save();
 
@@ -361,108 +310,94 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openNewRuntimeWizard();
+		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.prepareLiferay7RuntimeType();
+		wizardAction.newRuntime.prepare7();
 
 		wizardAction.next();
 
-		wizardAction.prepareLiferay7RuntimeInfo(serverName, envAction.getLiferayServerFullDir().toOSString());
+		wizardAction.newRuntime7.prepare(serverName, envAction.getLiferayServerFullDir().toOSString());
 
 		wizardAction.finish();
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.prepareNewServer(serverName);
+		wizardAction.newServer.prepare(serverName);
 
 		wizardAction.finish();
 
 		String serverStoppedLabel = serverName + "  [Stopped]";
 
-		viewAction.openServerEditor(serverStoppedLabel);
+		viewAction.servers.openEditor(serverStoppedLabel);
 
-		ServerEditor serverEditor = new ServerEditor(bot, serverName);
-		ServerEditor serverEditorWithLabelStopped = new ServerEditor(bot, serverStoppedLabel);
-
-		try {
-			serverEditor.getHttpPort().setText("8082");
-		}
-		catch (Exception e) {
-			serverEditorWithLabelStopped.getHttpPort().setText("8082");
-		}
+		editorAction.server.setHttpPort("8082");
 
 		editorAction.save();
 
 		editorAction.close();
 
-		viewAction.serverStart(serverStoppedLabel);
+		viewAction.servers.start(serverStoppedLabel);
 
 		jobAction.waitForServerStarted(serverName);
 
 		String serverStartedLabel = serverName + "  [Started]";
 
-		viewAction.serverStop(serverStartedLabel);
+		viewAction.servers.stop(serverStartedLabel);
 
 		jobAction.waitForServerStopped(serverName);
 
-		viewAction.openServerEditor(serverStoppedLabel);
+		viewAction.servers.openEditor(serverStoppedLabel);
 
-		try {
-			serverEditor.getHttpPort().setText("8080");
-		}
-		catch (Exception e) {
-			serverEditorWithLabelStopped.getHttpPort().setText("8080");
-		}
+		editorAction.server.setHttpPort("8080");
 
 		editorAction.save();
 
 		editorAction.close();
 	}
 
-	@Ignore("ignore to wait Terry finish the server start checker")
 	@Test
 	public void testLiferay7ServerDebug() {
 		String serverName = "Liferay 7-debug";
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openNewRuntimeWizard();
+		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.prepareLiferay7RuntimeType();
+		wizardAction.newRuntime.prepare7();
 
 		wizardAction.next();
 
-		wizardAction.prepareLiferay7RuntimeInfo(serverName, envAction.getLiferayServerFullDir().toOSString());
+		wizardAction.newRuntime7.prepare(serverName, envAction.getLiferayServerFullDir().toOSString());
 
 		wizardAction.finish();
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.prepareNewServer(serverName);
+		wizardAction.newServer.prepare(serverName);
 
 		wizardAction.finish();
 
-		String serverStoppedLabel = serverName + "  [Stopped]";
+		// String serverStoppedLabel = serverName + "  [Stopped]";
 
-		viewAction.serverDebug(serverStoppedLabel);
+		// viewAction.servers.debug(serverStoppedLabel);
 
-		jobAction.waitForServerStarted(serverName);
+		// jobAction.waitForServerStarted(serverName);
 
-		String serverDebuggingLabel = serverName + "  [Debugging]";
+		// String serverDebuggingLabel = serverName + "  [Debugging]";
 
-		viewAction.serverStop(serverDebuggingLabel);
+		// viewAction.servers.stop(serverDebuggingLabel);
 
-		jobAction.waitForServerStopped(serverName);
+		// jobAction.waitForServerStopped(serverName);
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.deleteRuntimeTryConfirm(serverName);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(serverName);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 }

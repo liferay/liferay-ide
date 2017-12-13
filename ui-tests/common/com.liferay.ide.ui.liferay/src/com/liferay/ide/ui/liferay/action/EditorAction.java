@@ -17,6 +17,7 @@ package com.liferay.ide.ui.liferay.action;
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.liferay.page.editor.LayoutTplEditor;
 import com.liferay.ide.ui.liferay.page.editor.PomXmlEditor;
+import com.liferay.ide.ui.liferay.page.editor.ServerEditor;
 import com.liferay.ide.ui.liferay.page.editor.ServiceXmlEditor;
 import com.liferay.ide.ui.swtbot.page.Editor;
 
@@ -47,49 +48,91 @@ public class EditorAction extends UIAction {
 		_editor.setText(text);
 	}
 
-	public void switchTabDesignLayoutTpl() {
-		_layoutTplEditor.getDesignTab().click();
+	public LayoutTplEditorAction layoutTpl = new LayoutTplEditorAction();
+	public PomXmlEditorAction pomXml = new PomXmlEditorAction();
+	public ServerEditorAction server = new ServerEditorAction();
+	public ServiceXmlEditorAction serviceXml = new ServiceXmlEditorAction();
 
-		ide.sleep(2000);
+	public class LayoutTplEditorAction {
+
+		public void switchTabDesign() {
+			_layoutTplEditor.getDesignTab().click();
+
+			ide.sleep(2000);
+		}
+
+		public void switchTabPreview() {
+			_layoutTplEditor.getPreviewTab().click();
+
+			ide.sleep(2000);
+		}
+
+		public void switchTabSource() {
+			_layoutTplEditor.getSourceTab().click();
+
+			ide.sleep(2000);
+		}
+
+		private final LayoutTplEditor _layoutTplEditor = new LayoutTplEditor(bot);
+
 	}
 
-	public void switchTabDiagramServiceXml() {
-		_serviceXmlEditor.getDiagramTab();
+	public class PomXmlEditorAction {
 
-		ide.sleep(2000);
+		public void switchTabPomXml() {
+			_pomXmlEditor.getPomXml().click();
+		}
+
+		private final PomXmlEditor _pomXmlEditor = new PomXmlEditor(bot);
+
 	}
 
-	public void switchTabOverViewServiceXml() {
-		_serviceXmlEditor.getOverviewTab().click();
+	public class ServerEditorAction {
 
-		ide.sleep(2000);
+		public void selectCustomLaunchSettings() {
+			_serverEditor.getCustomLaunchSettings().click();
+		}
+
+		public void selectDefaultLaunchSettings() {
+			_serverEditor.getDefaultLaunchSettings().click();
+		}
+
+		public void selectUseDeveloperMode() {
+			_serverEditor.getUseDeveloperMode().select();
+		}
+
+		public void setHttpPort(String httpPort) {
+			_serverEditor.getHttpPort().setText(httpPort);
+		}
+
+		private final ServerEditor _serverEditor = new ServerEditor(bot);
+
 	}
 
-	public void switchTabPomXml() {
-		_pomXmlEditor.getPomXml().click();
-	}
+	public class ServiceXmlEditorAction {
 
-	public void switchTabPreviewLayoutTpl() {
-		_layoutTplEditor.getPreviewTab().click();
+		public void switchTabDiagram() {
+			_serviceXmlEditor.getDiagramTab();
 
-		ide.sleep(2000);
-	}
+			ide.sleep(2000);
+		}
 
-	public void switchTabSourceLayoutTpl() {
-		_layoutTplEditor.getSourceTab().click();
+		public void switchTabOverview() {
+			_serviceXmlEditor.getOverviewTab().click();
 
-		ide.sleep(2000);
-	}
+			ide.sleep(2000);
+		}
 
-	public void switchTabSourceServiceXml() {
-		_serviceXmlEditor.getSourceTab().click();
+		public void switchTabSource() {
+			_serviceXmlEditor.getSourceTab().click();
 
-		ide.sleep(2000);
+			ide.sleep(2000);
+		}
+
+		private final ServiceXmlEditor _serviceXmlEditor = new ServiceXmlEditor(bot);
+
 	}
 
 	private final Editor _editor = new Editor(bot);
-	private final LayoutTplEditor _layoutTplEditor = new LayoutTplEditor(bot);
-	private final PomXmlEditor _pomXmlEditor = new PomXmlEditor(bot);
-	private final ServiceXmlEditor _serviceXmlEditor = new ServiceXmlEditor(bot);
 
 }

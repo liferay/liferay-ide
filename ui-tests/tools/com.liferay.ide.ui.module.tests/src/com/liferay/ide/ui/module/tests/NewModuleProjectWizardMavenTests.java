@@ -31,13 +31,13 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, ACTIVATOR);
+		wizardAction.newModule.prepareMaven(projectName, ACTIVATOR);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -46,13 +46,13 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, API);
+		wizardAction.newModule.prepareMaven(projectName, API);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -61,13 +61,13 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, CONTENT_TARGETING_REPORT);
+		wizardAction.newModule.prepareMaven(projectName, CONTENT_TARGETING_REPORT);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -76,13 +76,13 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, CONTENT_TARGETING_RULE);
+		wizardAction.newModule.prepareMaven(projectName, CONTENT_TARGETING_RULE);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -91,13 +91,13 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, CONTENT_TARGETING_TRACKING_ACTION);
+		wizardAction.newModule.prepareMaven(projectName, CONTENT_TARGETING_TRACKING_ACTION);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -106,13 +106,13 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, CONTROL_MENU_ENTRY);
+		wizardAction.newModule.prepareMaven(projectName, CONTROL_MENU_ENTRY);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -121,13 +121,13 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, FORM_FIELD);
+		wizardAction.newModule.prepareMaven(projectName, FORM_FIELD);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -136,13 +136,13 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, PANEL_APP);
+		wizardAction.newModule.prepareMaven(projectName, PANEL_APP);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -151,13 +151,13 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET_CONFIGURATION_ICON);
+		wizardAction.newModule.prepareMaven(projectName, PORTLET_CONFIGURATION_ICON);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -166,13 +166,13 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET_PROVIDER);
+		wizardAction.newModule.prepareMaven(projectName, PORTLET_PROVIDER);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -181,13 +181,13 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, PORTLET_TOOLBAR_CONTRIBUTOR);
+		wizardAction.newModule.prepareMaven(projectName, PORTLET_TOOLBAR_CONTRIBUTOR);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -196,13 +196,13 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, REST);
+		wizardAction.newModule.prepareMaven(projectName, REST);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -211,11 +211,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, SERVICE);
+		wizardAction.newModule.prepareMaven(projectName, SERVICE);
 
 		wizardAction.next();
 
-		wizardAction.openSelectServiceDialog();
+		wizardAction.newModuleInfo.openSelectServiceDialog();
 
 		dialogAction.prepareText("*lifecycleAction");
 
@@ -223,9 +223,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -234,11 +234,11 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, SERVICE_WRAPPER);
+		wizardAction.newModule.prepareMaven(projectName, SERVICE_WRAPPER);
 
 		wizardAction.next();
 
-		wizardAction.openSelectServiceDialog();
+		wizardAction.newModuleInfo.openSelectServiceDialog();
 
 		dialogAction.prepareText("*bookmarksEntryServiceWrapper");
 
@@ -246,9 +246,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -257,13 +257,13 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, SIMULATION_PANEL_ENTRY);
+		wizardAction.newModule.prepareMaven(projectName, SIMULATION_PANEL_ENTRY);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -272,13 +272,13 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR);
+		wizardAction.newModule.prepareMaven(projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -287,13 +287,13 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleMaven(projectName, THEME_CONTRIBUTOR);
+		wizardAction.newModule.prepareMaven(projectName, THEME_CONTRIBUTOR);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 }

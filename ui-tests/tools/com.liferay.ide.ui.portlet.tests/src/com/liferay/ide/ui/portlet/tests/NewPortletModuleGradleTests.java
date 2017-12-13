@@ -31,13 +31,13 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleGradle(projectName, FREEMARKER_PORTLET);
+		wizardAction.newModule.prepareGradle(projectName, FREEMARKER_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -46,15 +46,15 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleGradle(projectName, MVC_PORTLET);
+		wizardAction.newModule.prepareGradle(projectName, MVC_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -63,15 +63,15 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleGradle(projectName, PORTLET);
+		wizardAction.newModule.prepareGradle(projectName, PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Ignore("ignore to wait IDE-3579 as it will take too long unexpected")
@@ -81,13 +81,13 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleGradle(projectName, SOY_PORTLET);
+		wizardAction.newModule.prepareGradle(projectName, SOY_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
@@ -96,13 +96,13 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleGradle(projectName, SPRING_MVC_PORTLET);
+		wizardAction.newModule.prepareGradle(projectName, SPRING_MVC_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 }

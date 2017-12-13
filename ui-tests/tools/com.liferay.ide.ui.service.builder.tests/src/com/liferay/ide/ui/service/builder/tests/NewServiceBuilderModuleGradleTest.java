@@ -30,27 +30,27 @@ public class NewServiceBuilderModuleGradleTest extends SwtbotBase {
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModuleGradle(projectName, SERVICE_BUILDER);
+		wizardAction.newModule.prepareGradle(projectName, SERVICE_BUILDER);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
 		String[] serviceNames = {projectName, projectName + "-service"};
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(serviceNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(serviceNames));
 
 		String[] apiNames = {projectName, projectName + "-api"};
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(apiNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(apiNames));
 
 		String[] serviceXmlNames = {projectName, projectName + "-service", "service.xml"};
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(serviceXmlNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(serviceXmlNames));
 
-		viewAction.closeAndDeleteProject(apiNames);
-		viewAction.closeAndDeleteProject(serviceNames);
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(apiNames);
+		viewAction.project.closeAndDelete(serviceNames);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 }

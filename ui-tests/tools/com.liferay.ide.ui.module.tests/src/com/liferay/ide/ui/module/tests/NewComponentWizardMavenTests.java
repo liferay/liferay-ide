@@ -31,7 +31,7 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		String projectName = "test-component-model-listener-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
-		wizardAction.prepareLiferayModuleMaven(projectName, MVC_PORTLET);
+		wizardAction.newModule.prepareMaven(projectName, MVC_PORTLET);
 		wizardAction.finish();
 
 		wizardAction.openNewLiferayComponentClassWizard();
@@ -40,9 +40,9 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		String packageName = "com.liferay.ide.test";
 		String template = MODEL_LISTENER;
 
-		wizardAction.prepareComponentClass(projectName, template, className, packageName);
+		wizardAction.newLiferayComponent.prepare(projectName, template, className, packageName);
 
-		wizardAction.openSelectModelClassAndServiceDialog();
+		wizardAction.newLiferayComponent.openSelectModelClassAndServiceDialog();
 
 		dialogAction.prepareText("*com.liferay.blogs.kernel.model.BlogsEntry");
 		dialogAction.confirm();
@@ -50,9 +50,9 @@ public class NewComponentWizardMavenTests extends SwtbotBase {
 		wizardAction.finish();
 
 		Assert.assertTrue(
-			viewAction.visibleProjectFileTry(projectName, "src/main/java", packageName, className + ".java"));
+			viewAction.project.visibleFileTry(projectName, "src/main/java", packageName, className + ".java"));
 
-		viewAction.closeAndDeleteProject(projectName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test

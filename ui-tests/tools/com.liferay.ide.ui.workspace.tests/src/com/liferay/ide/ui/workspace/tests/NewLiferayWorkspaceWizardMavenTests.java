@@ -31,27 +31,27 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.prepareLiferayWorkspaceMaven(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareMaven(workspaceName);
 
 		wizardAction.finish();
 
 		String[] moduleNames = {workspaceName, "test-liferay-workspace-maven-modules (in modules)"};
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(moduleNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(moduleNames));
 
 		String[] themeNames = {workspaceName, "test-liferay-workspace-maven-themes (in themes)"};
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(themeNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(themeNames));
 
 		String[] warNames = {workspaceName, "test-liferay-workspace-maven-wars (in wars)"};
 
-		Assert.assertTrue(viewAction.visibleProjectFileTry(warNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(warNames));
 
-		viewAction.closeAndDeleteProject(moduleNames);
-		viewAction.closeAndDeleteProject(themeNames);
-		viewAction.closeAndDeleteProject(warNames);
+		viewAction.project.closeAndDelete(moduleNames);
+		viewAction.project.closeAndDelete(themeNames);
+		viewAction.project.closeAndDelete(warNames);
 
-		viewAction.closeAndDeleteProject(workspaceName);
+		viewAction.project.closeAndDelete(workspaceName);
 	}
 
 	@Test

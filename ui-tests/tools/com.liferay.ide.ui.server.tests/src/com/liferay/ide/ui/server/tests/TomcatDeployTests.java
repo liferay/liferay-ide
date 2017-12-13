@@ -40,42 +40,42 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.openServerRuntimeEnvironmentsDialogTry();
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.openNewRuntimeWizard();
+		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.prepareLiferay7RuntimeType();
+		wizardAction.newRuntime.prepare7();
 
 		wizardAction.next();
 
-		wizardAction.prepareLiferay7RuntimeInfo(_serverName, envAction.getLiferayServerFullDir().toOSString());
+		wizardAction.newRuntime7.prepare(_serverName, envAction.getLiferayServerFullDir().toOSString());
 
 		wizardAction.finish();
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.prepareNewServer(_serverName);
+		wizardAction.newServer.prepare(_serverName);
 
 		wizardAction.finish();
 
-		// viewAction.serverStart(_serverStoppedLabel);
-		//
+		// viewAction.servers.start(_serverStoppedLabel);
+
 		// jobAction.waitForServerStarted(_serverName);
 	}
 
 	@AfterClass
 	public static void stopServer() throws IOException {
-		// viewAction.serverStop(_serverStartedLabel);
-		//
+		// viewAction.servers.stop(_serverStartedLabel);
+
 		// jobAction.waitForServerStopped(_serverName);
 
 		dialogAction.openPreferencesDialog();
 
-		dialogAction.deleteRuntimeTryConfirm(_serverName);
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(_serverName);
 
-		dialogAction.confirmPreferences();
+		dialogAction.preferences.confirm();
 	}
 
 	@Ignore("ignore to wait Terry finish the server start checker")
@@ -85,19 +85,21 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		String projectName = "test";
 
-		wizardAction.prepareLiferayModule(projectName);
+		wizardAction.newModule.prepare(projectName);
 
 		wizardAction.finish();
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.prepareLiferayModule("test2");
+		projectName = "test2";
+
+		wizardAction.newModule.prepare(projectName);
 
 		wizardAction.finish();
 
-		viewAction.openAddAndRemoveDialog(_serverStartedLabel);
+		viewAction.servers.openAddAndRemoveDialog(_serverStartedLabel);
 
-		dialogAction.addModule(projectName);
+		dialogAction.addAndRemove.addModule(projectName);
 
 		dialogAction.confirm(FINISH);
 
