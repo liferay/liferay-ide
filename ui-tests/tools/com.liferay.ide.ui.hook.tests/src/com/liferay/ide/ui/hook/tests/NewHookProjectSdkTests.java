@@ -12,24 +12,24 @@
  * details.
  */
 
-package com.liferay.ide.ui.theme.tests;
+package com.liferay.ide.ui.hook.tests;
 
-import com.liferay.ide.ui.liferay.Sdk62Base;
+import com.liferay.ide.ui.liferay.SdkBase;
 
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class NewThemeProjectSdk62Tests extends Sdk62Base {
+public class NewHookProjectSdkTests extends SdkBase {
 
 	@Test
-	public void createTheme() {
+	public void createSampleProject() {
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-theme";
+		String projectName = "test-hook";
 
-		wizardAction.newPlugin.prepareThemeSdk(projectName);
+		wizardAction.newPlugin.prepareHookSdk(projectName);
 
 		wizardAction.finish();
 

@@ -72,7 +72,7 @@ public class ValidationNewFragmentFilesWizardTests extends SwtbotBase {
 
 		wizardAction.next();
 
-		wizardAction.newRuntime7.prepare(envAction.getLiferayServerDir().toOSString());
+		wizardAction.newRuntime7.prepare(envAction.getServerDir().toOSString());
 
 		wizardAction.finish();
 
@@ -130,7 +130,7 @@ public class ValidationNewFragmentFilesWizardTests extends SwtbotBase {
 
 		wizardAction.next();
 
-		wizardAction.newRuntime7.prepare(envAction.getLiferayServerDir().toOSString());
+		wizardAction.newRuntime7.prepare(envAction.getServerDir().toOSString());
 
 		wizardAction.finish();
 
@@ -189,7 +189,7 @@ public class ValidationNewFragmentFilesWizardTests extends SwtbotBase {
 
 		wizardAction.next();
 
-		wizardAction.newRuntime7.prepare(envAction.getLiferayServerDir().toOSString());
+		wizardAction.newRuntime7.prepare(envAction.getServerDir().toOSString());
 
 		wizardAction.finish();
 

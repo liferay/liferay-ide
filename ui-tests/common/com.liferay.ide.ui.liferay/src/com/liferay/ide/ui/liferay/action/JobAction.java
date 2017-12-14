@@ -58,6 +58,8 @@ public class JobAction extends UIAction {
 	}
 
 	public void waitForConsoleContent(String consoleName, String content, long timeout) {
+		ide.sleep(2000);
+
 		ide.waitUntil(new ConsoleContentCondition(consoleName, content), timeout);
 	}
 

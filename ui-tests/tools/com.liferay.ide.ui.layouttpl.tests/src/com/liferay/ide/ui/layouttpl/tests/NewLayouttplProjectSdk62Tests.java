@@ -14,14 +14,14 @@
 
 package com.liferay.ide.ui.layouttpl.tests;
 
-import com.liferay.ide.ui.liferay.SdkBase;
+import com.liferay.ide.ui.liferay.Sdk62Base;
 
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class NewLayouttplProjectSdkTests extends SdkBase {
+public class NewLayouttplProjectSdk62Tests extends Sdk62Base {
 
 	@Test
 	public void createLayoutTemplate() {
@@ -47,7 +47,7 @@ public class NewLayouttplProjectSdkTests extends SdkBase {
 
 		editorAction.close();
 
-		String layoutWapTpl = "blank_columns.wap.tpl";
+		String layoutWapTpl = "test_template.wap.tpl";
 
 		viewAction.project.openFile(projectName, "docroot", layoutWapTpl);
 

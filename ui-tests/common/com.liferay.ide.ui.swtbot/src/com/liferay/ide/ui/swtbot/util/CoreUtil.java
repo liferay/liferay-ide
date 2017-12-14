@@ -25,9 +25,6 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import java.util.List;
 import java.util.Properties;
 
@@ -196,19 +193,6 @@ public class CoreUtil {
 
 	public static IWorkspaceRoot getWorkspaceRoot() {
 		return ResourcesPlugin.getWorkspace().getRoot();
-	}
-
-	public static Object invoke(String methodName, Object object, Class<?>[] argTypes, Object[] args)
-		throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
-			SecurityException {
-
-		Class<?> clazz = object.getClass();
-
-		Method method = clazz.getDeclaredMethod(methodName, argTypes);
-
-		method.setAccessible(true);
-
-		return method.invoke(object, args);
 	}
 
 	public static boolean isEqual(Object object1, Object object2) {

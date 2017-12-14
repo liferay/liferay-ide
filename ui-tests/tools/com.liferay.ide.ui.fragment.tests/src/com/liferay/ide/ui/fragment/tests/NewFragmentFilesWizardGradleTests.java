@@ -77,8 +77,8 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 	}
 
 	@Test
-	public void addFragmentJspFiles() {
-		String projectName = "test-fragment-jsp-files-gradle";
+	public void addFragmentFilesShortcuts() {
+		String projectName = "test-fragment-files-shortcuts-gradle";
 
 		wizardAction.openNewFragmentWizard();
 
@@ -88,25 +88,54 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.asset.browser.web");
+		dialogAction.prepareText("com.liferay.journal.web");
 
 		dialogAction.confirm();
 
 		wizardAction.finish();
+
+		wizardAction.openNewBtnFragmentFilesWizard();
+
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+
+		dialogAction.selectItems("META-INF/resources/add_button.jsp");
+
+		dialogAction.confirm();
+
+		wizardAction.finish();
+
+		String[] buttonjspFile = {projectName, "src", "main", "resources", "META-INF", "resources", "add_button.jsp"};
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(buttonjspFile));
+
+		wizardAction.openFileMenuFragmentFilesWizard();
+
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+
+		dialogAction.selectItems("META-INF/resources/article/display_page.jsp");
+
+		dialogAction.confirm();
+
+		wizardAction.finish();
+
+		String[] pageFile =
+			{projectName, "src", "main", "resources", "META-INF", "resources", "article", "display_page.jsp"};
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(pageFile));
 
 		viewAction.project.openFragmentFilesWizard();
 
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
-		dialogAction.selectItems("META-INF/resources/init-ext.jsp");
+		dialogAction.selectItems("portlet.properties");
 
 		dialogAction.confirm();
 
 		wizardAction.finish();
 
-		String[] jspFile = {projectName, "src", "main", "resources", "META-INF", "resources", "init-ext.jsp"};
+		String[] propertiesFile = {projectName, "src", "main", "java", "portlet-ext.properties"};
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(jspFile));
+		Assert.assertTrue(viewAction.project.visibleFileTry(propertiesFile));
 
 		viewAction.project.closeAndDelete(projectName);
 	}
@@ -139,9 +168,45 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] jspfFile = {projectName, "src", "main", "resources", "META-INF", "resources", "edit_vocabulary_settings.jspf"};
+		String[] jspfFile =
+			{projectName, "src", "main", "resources", "META-INF", "resources", "edit_vocabulary_settings.jspf"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspfFile));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void addFragmentJspFiles() {
+		String projectName = "test-fragment-jsp-files-gradle";
+
+		wizardAction.openNewFragmentWizard();
+
+		wizardAction.newFragment.prepareGradle(projectName);
+
+		wizardAction.next();
+
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
+
+		dialogAction.prepareText("com.liferay.asset.browser.web");
+
+		dialogAction.confirm();
+
+		wizardAction.finish();
+
+		viewAction.project.openFragmentFilesWizard();
+
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+
+		dialogAction.selectItems("META-INF/resources/init-ext.jsp");
+
+		dialogAction.confirm();
+
+		wizardAction.finish();
+
+		String[] jspFile = {projectName, "src", "main", "resources", "META-INF", "resources", "init-ext.jsp"};
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(jspFile));
 
 		viewAction.project.closeAndDelete(projectName);
 	}
@@ -234,9 +299,8 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] files = {"META-INF/resources/init-ext.jsp", "META-INF/resources/init.jsp",
-			"META-INF/resources/view.jsp"
-		};
+		String[] files =
+			{"META-INF/resources/init-ext.jsp", "META-INF/resources/init.jsp", "META-INF/resources/view.jsp"};
 
 		viewAction.project.openFragmentFilesWizard();
 
@@ -275,69 +339,6 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(projectName);
 	}
 
-	@Test
-	 public void addFragmentFilesShortcuts() {
-		String projectName = "test-fragment-files-shortcuts-gradle";
-
-		wizardAction.openNewFragmentWizard();
-
-		wizardAction.newFragment.prepareGradle(projectName);
-
-		wizardAction.next();
-
-		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
-
-		dialogAction.prepareText("com.liferay.journal.web");
-
-		dialogAction.confirm();
-
-		wizardAction.finish();
-
-		wizardAction.openNewBtnFragmentFilesWizard();
-
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
-
-		dialogAction.selectItems("META-INF/resources/add_button.jsp");
-
-		dialogAction.confirm();
-
-		wizardAction.finish();
-
-		String[] buttonjspFile = {projectName, "src", "main", "resources", "META-INF", "resources", "add_button.jsp"};
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(buttonjspFile));
-
-		wizardAction.openFileMenuFragmentFilesWizard();
-
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
-
-		dialogAction.selectItems("META-INF/resources/article/display_page.jsp");
-
-		dialogAction.confirm();
-
-		wizardAction.finish();
-
-		String[] pageFile = {projectName, "src", "main", "resources", "META-INF", "resources", "article", "display_page.jsp"};
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(pageFile));
-
-		viewAction.project.openFragmentFilesWizard();
-
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
-
-		dialogAction.selectItems("portlet.properties");
-
-		dialogAction.confirm();
-
-		wizardAction.finish();
-
-		String[] propertiesFile = {projectName, "src", "main", "java", "portlet-ext.properties"};
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(propertiesFile));
-
-		viewAction.project.closeAndDelete(projectName);
-	}
-	
 	private static final String _serverName = "Liferay 7-fragment-gradle";
 
 }

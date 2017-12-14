@@ -230,8 +230,9 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 
 		Assert.assertEquals(workspacePath, _newFragmentWizard.getLocation().getText());
 
-		for (ValidationMsg msg : envAction.getValidationMsgs(
-				new File(envAction.getValidationFolder(), "new-fragment-wizard-project-location.csv"))) {
+		for (ValidationMsg msg :
+				envAction.getValidationMsgs(
+					new File(envAction.getValidationFolder(), "new-fragment-wizard-project-location.csv"))) {
 
 			if (!msg.getOs().equals(Platform.getOS())) {
 				continue;
@@ -332,8 +333,9 @@ public class ValidationNewFragmentWizardTests extends SwtbotBase {
 	public void checkProjectName() {
 		wizardAction.openNewFragmentWizard();
 
-		for (ValidationMsg msg : envAction.getValidationMsgs(
-				new File(envAction.getValidationFolder(), "new-fragment-wizard-project-name.csv"))) {
+		for (ValidationMsg msg :
+				envAction.getValidationMsgs(
+					new File(envAction.getValidationFolder(), "new-fragment-wizard-project-name.csv"))) {
 
 			if (!msg.getOs().equals(Platform.getOS())) {
 				continue;

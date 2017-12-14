@@ -12,24 +12,46 @@
  * details.
  */
 
-package com.liferay.ide.ui.theme.tests;
+package com.liferay.ide.ui.liferay;
 
-import com.liferay.ide.ui.liferay.Sdk62Base;
+import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 
 /**
  * @author Terry Jia
  */
-public class NewThemeProjectSdk62Tests extends Sdk62Base {
+public class SdkBase extends SwtbotBase {
 
-	@Test
-	public void createTheme() {
+	@AfterClass
+	public static void cleanPluginsSdk() {
+		jobAction.waitForIvy();
+
+		String sdkName = envAction.getSdkName() + "-" + envAction.getTimestamp();
+
+		viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
+	}
+
+	@BeforeClass
+	public static void createPluginsSdk() throws IOException {
+		envAction.unzipPluginsSdk();
+
+		viewAction.switchLiferayPerspective();
+
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-theme";
+		String projectName = "test-portlet";
 
-		wizardAction.newPlugin.prepareThemeSdk(projectName);
+		wizardAction.newPlugin.prepareSdk(projectName);
+
+		wizardAction.next();
+
+		wizardAction.next();
+
+		String location = envAction.getSdkDir().toOSString();
+
+		wizardAction.setSdkLocation.prepare(location);
 
 		wizardAction.finish();
 

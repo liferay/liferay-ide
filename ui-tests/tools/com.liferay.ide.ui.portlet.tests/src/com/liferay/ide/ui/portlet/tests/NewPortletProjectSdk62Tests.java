@@ -14,59 +14,14 @@
 
 package com.liferay.ide.ui.portlet.tests;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.Sdk62Base;
 
-import java.io.IOException;
-
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class NewPortletProjectSdk62Tests extends SwtbotBase {
-
-	@AfterClass
-	public static void cleanPluginsSdk() {
-		jobAction.waitForIvy();
-
-		String sdkName = envAction.getSdkName62() + "-" + envAction.getTimestamp();
-
-		viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
-	}
-
-	@BeforeClass
-	public static void createPluginsSdk() throws IOException {
-		Assert.assertTrue(envAction.test_in_the_internal_net, envAction.internal());
-
-		envAction.unzipPluginsSdk62();
-
-		viewAction.switchLiferayPerspective();
-
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		String projectName = "test-portlet";
-
-		wizardAction.newPlugin.prepareSdk(projectName);
-
-		wizardAction.next();
-
-		wizardAction.next();
-
-		String location = envAction.getSdkDir62().toOSString();
-
-		wizardAction.setSdkLocation.prepare(location);
-
-		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(projectName);
-
-		viewAction.project.closeAndDelete(projectName);
-	}
+public class NewPortletProjectSdk62Tests extends Sdk62Base {
 
 	@Test
 	public void createMvcPortletProject() {

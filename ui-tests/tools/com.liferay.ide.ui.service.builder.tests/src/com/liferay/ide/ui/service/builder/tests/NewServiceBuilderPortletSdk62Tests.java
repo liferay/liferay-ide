@@ -12,24 +12,27 @@
  * details.
  */
 
-package com.liferay.ide.ui.layouttpl.tests;
+package com.liferay.ide.ui.service.builder.tests;
 
-import com.liferay.ide.ui.liferay.SdkBase;
+import com.liferay.ide.ui.liferay.Sdk62Base;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
+ * @author Joye Luo
  * @author Terry Jia
  */
-public class NewLayouttplProjectSdkTests extends SdkBase {
+public class NewServiceBuilderPortletSdk62Tests extends Sdk62Base {
 
+	@Ignore("ignore as service builder in sdk62 is only able run in java 7")
 	@Test
-	public void createLayoutTemplate() {
+	public void buildServiceOnProject() {
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-template-layouttpl";
+		String projectName = "test-sb-build-services-portlet";
 
-		wizardAction.newPlugin.prepareLayoutTemplateSdk(projectName);
+		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(projectName);
 
 		wizardAction.finish();
 
@@ -37,38 +40,30 @@ public class NewLayouttplProjectSdkTests extends SdkBase {
 
 		jobAction.waitForValidate(projectName);
 
-		wizardAction.openNewLiferayLayoutTemplate();
+		viewAction.project.runBuildServices(projectName);
 
-		wizardAction.finish();
-
-		String layoutTpl = "test_template.tpl";
-
-		viewAction.project.openFile(projectName, "docroot", layoutTpl);
-
-		editorAction.close();
-
-		String layoutWapTpl = "blank_columns.wap.tpl";
-
-		viewAction.project.openFile(projectName, "docroot", layoutWapTpl);
-
-		editorAction.close();
+		jobAction.waitForConsoleContent("build.xml", "BUILD SUCCESSFUL", 30 * 1000);
 
 		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
-	public void createLayoutTemplateProject() {
+	public void buildWSDDOnProject() {
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-layouttpl";
+		String projectName = "test-sb-build-wsdd-portlet";
 
-		wizardAction.newPlugin.prepareLayoutTemplateSdk(projectName);
+		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(projectName);
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
 		jobAction.waitForValidate(projectName);
+
+		viewAction.project.runBuildWSDD(projectName);
+
+		jobAction.waitForConsoleContent("build.xml", "BUILD SUCCESSFUL", 300 * 1000);
 
 		viewAction.project.closeAndDelete(projectName);
 	}
