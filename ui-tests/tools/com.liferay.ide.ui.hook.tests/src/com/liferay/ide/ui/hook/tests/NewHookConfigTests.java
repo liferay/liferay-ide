@@ -31,14 +31,14 @@ public class NewHookConfigTests extends SwtbotBase {
 	public static void cleanPluginsSdk() {
 		jobAction.waitForIvy();
 
-		String sdkName = envAction.getLiferayPluginsSdkName() + "-" + envAction.getTimestamp();
+		String sdkName = envAction.getSdkName() + "-" + envAction.getTimestamp();
 
 		viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
 	}
 
 	@BeforeClass
 	public static void createPluginsSdk() throws IOException {
-		envAction.unzipPluginsSDK();
+		envAction.unzipPluginsSdk();
 
 		viewAction.switchLiferayPerspective();
 
@@ -52,7 +52,7 @@ public class NewHookConfigTests extends SwtbotBase {
 
 		wizardAction.next();
 
-		String location = envAction.getLiferayPluginsSdkDir().toOSString();
+		String location = envAction.getSdkDir().toOSString();
 
 		wizardAction.setSdkLocation.prepare(location);
 

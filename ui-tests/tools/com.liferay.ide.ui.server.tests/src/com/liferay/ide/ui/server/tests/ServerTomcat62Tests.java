@@ -49,9 +49,9 @@ public class ServerTomcat62Tests extends SwtbotBase {
 
 		wizardAction.next();
 
-		IPath serverDir = envAction.getLiferayServerDir62();
+		IPath serverDir = envAction.getServerDir62();
 
-		IPath fullServerDir = serverDir.append(envAction.getLiferayPluginServerName62());
+		IPath fullServerDir = serverDir.append(envAction.getServerName62());
 
 		wizardAction.newRuntime62.prepare(serverName, fullServerDir.toOSString());
 
@@ -112,7 +112,7 @@ public class ServerTomcat62Tests extends SwtbotBase {
 
 		String runtimeName = "Liferay 6.2-add-runtime";
 
-		wizardAction.newRuntime62.prepare(runtimeName, envAction.getLiferayServerFullDir62().toOSString());
+		wizardAction.newRuntime62.prepare(runtimeName, envAction.getServerFullDir62().toOSString());
 
 		wizardAction.finish();
 
@@ -139,7 +139,7 @@ public class ServerTomcat62Tests extends SwtbotBase {
 
 		String runtimeName = "Liferay 62-add-server";
 
-		wizardAction.newRuntime62.prepare(runtimeName, envAction.getLiferayServerFullDir62().toOSString());
+		wizardAction.newRuntime62.prepare(runtimeName, envAction.getServerFullDir62().toOSString());
 
 		wizardAction.finish();
 
