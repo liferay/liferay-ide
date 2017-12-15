@@ -30,6 +30,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import java.net.InetAddress;
 import java.net.URL;
 
 import java.util.ArrayList;
@@ -71,112 +72,8 @@ public class EnvAction extends UIAction {
 		return root.getLocation();
 	}
 
-	public IPath getLiferayBundlesPath() {
-		if (_liferayBundlesPath == null) {
-			if ((_liferayBundlesDir == null) || _liferayBundlesDir.equals("") || _liferayBundlesDir.equals("null")) {
-				URL rootUrl = Platform.getBundle("com.liferay.ide.ui.liferay").getEntry("/");
-
-				try {
-					String filePath = FileLocator.toFileURL(rootUrl).getFile();
-
-					if (filePath.contains("target/work/configuration")) {
-						int index = filePath.indexOf("/ui-tests/");
-
-						_liferayBundlesPath = new Path(filePath.substring(0, index) + "/tests-resources");
-					}
-					else {
-						_liferayBundlesPath = new Path(filePath).removeLastSegments(3).append("tests-resources");
-					}
-				}
-				catch (IOException ioe) {
-				}
-			}
-			else {
-				_liferayBundlesPath = new Path(_liferayBundlesDir);
-			}
-		}
-
-		Assert.assertTrue(_liferayBundlesPath.toFile().exists());
-
-		return _liferayBundlesPath;
-	}
-
-	public String getLiferayPluginServerName() {
-		return _bundleInfos[0].getServerDir();
-	}
-
-	public String getLiferayPluginServerName62() {
-		return _bundleInfos[1].getServerDir();
-	}
-
-	public IPath getLiferayPluginsSdk62Dir() {
-		IPath bundlesPath = getLiferayBundlesPath().append("bundles");
-
-		return bundlesPath.append(_sdkInfos[1].getSdkDir());
-	}
-
-	public String getLiferayPluginsSdk62Name() {
-		return _sdkInfos[1].getSdkDir();
-	}
-
-	public IPath getLiferayPluginsSDK62Zip() {
-		return getLiferayBundlesPath().append(_sdkInfos[1].getSdkZip());
-	}
-
-	public IPath getLiferayPluginsSdkDir() {
-		IPath bundlesPath = getLiferayBundlesPath().append("bundles");
-
-		String sdkDir = _sdkInfos[0].getSdkDir() + "-" + getTimestamp();
-
-		return bundlesPath.append(sdkDir);
-	}
-
-	public String getLiferayPluginsSdkName() {
-		return _sdkInfos[0].getSdkDir();
-	}
-
-	public IPath getLiferayPluginsSDKZip() {
-		return getLiferayBundlesPath().append(_sdkInfos[0].getSdkZip());
-	}
-
-	public IPath getLiferayServerDir() {
-		IPath bundlesPath = getLiferayBundlesPath().append("bundles");
-
-		return bundlesPath.append(_bundleInfos[0].getBundleDir());
-	}
-
-	public IPath getLiferayServerDir62() {
-		IPath bundlesPath = getLiferayBundlesPath().append("bundles");
-
-		return bundlesPath.append(_bundleInfos[1].getBundleDir());
-	}
-
-	public IPath getLiferayServerFullDir() {
-		return getLiferayServerDir().append(getLiferayPluginServerName());
-	}
-
-	public IPath getLiferayServerFullDir62() {
-		return getLiferayServerDir62().append(getLiferayPluginServerName62());
-	}
-
-	public IPath getLiferayServerZip() {
-		return getLiferayBundlesPath().append(_bundleInfos[0].getBundleZip());
-	}
-
-	public IPath getLiferayServerZip62() {
-		return getLiferayBundlesPath().append(_bundleInfos[1].getBundleZip());
-	}
-
-	public String getLiferayServerZipFolder() {
-		return _bundleInfos[0].getBundleDir();
-	}
-
-	public String getLiferayServerZipFolder62() {
-		return _bundleInfos[1].getBundleDir();
-	}
-
 	public IPath getProjectsFolder() {
-		return getLiferayBundlesPath().append("projects");
+		return _getBundlesPath().append("projects");
 	}
 
 	public File getProjectZip(String bundleId, String projectName) throws IOException {
@@ -187,8 +84,64 @@ public class EnvAction extends UIAction {
 		return projectZipFile;
 	}
 
+	public IPath getSdkDir() {
+		IPath bundlesPath = _getBundlesPath().append("bundles");
+
+		String sdkDir = _sdkInfos[0].getSdkDir() + "-" + getTimestamp();
+
+		return bundlesPath.append(sdkDir);
+	}
+
+	public IPath getSdkDir62() {
+		IPath bundlesPath = _getBundlesPath().append("bundles");
+
+		String sdkDir = _sdkInfos[1].getSdkDir() + "-" + getTimestamp();
+
+		return bundlesPath.append(sdkDir);
+	}
+
+	public String getSdkName() {
+		return _sdkInfos[0].getSdkDir();
+	}
+
+	public String getSdkName62() {
+		return _sdkInfos[1].getSdkDir();
+	}
+
+	public IPath getSdkZip62() {
+		return _getBundlesPath().append(_sdkInfos[1].getSdkZip());
+	}
+
+	public IPath getServerDir() {
+		IPath bundlesPath = _getBundlesPath().append("bundles");
+
+		return bundlesPath.append(_bundleInfos[0].getBundleDir());
+	}
+
+	public IPath getServerDir62() {
+		IPath bundlesPath = _getBundlesPath().append("bundles");
+
+		return bundlesPath.append(_bundleInfos[1].getBundleDir());
+	}
+
+	public IPath getServerFullDir() {
+		return getServerDir().append(getServerName());
+	}
+
+	public IPath getServerFullDir62() {
+		return getServerDir62().append(getServerName62());
+	}
+
+	public String getServerName() {
+		return _bundleInfos[0].getServerDir();
+	}
+
+	public String getServerName62() {
+		return _bundleInfos[1].getServerDir();
+	}
+
 	public File getTempDir() {
-		IPath temp = getLiferayBundlesPath().append("temp");
+		IPath temp = _getBundlesPath().append("temp");
 
 		return temp.toFile();
 	}
@@ -202,7 +155,7 @@ public class EnvAction extends UIAction {
 	}
 
 	public File getValidationFolder() {
-		IPath validationPath = getLiferayBundlesPath().append("validation");
+		IPath validationPath = _getBundlesPath().append("validation");
 
 		return validationPath.toFile();
 	}
@@ -236,13 +189,31 @@ public class EnvAction extends UIAction {
 	}
 
 	public boolean internal() {
-		//TODO also need to add ping checker to ensure the internal servers accessible
+		boolean retval = false;
 
 		if ((_internal == null) || _internal.equals("") || _internal.equals("null")) {
-			return true;
+			retval = true;
+		}
+		else {
+			retval = Boolean.parseBoolean(_internal);
 		}
 
-		return Boolean.parseBoolean(_internal);
+		boolean reachable = false;
+
+		if (retval) {
+			try {
+				InetAddress address = InetAddress.getByAddress(_internalServerIp);
+
+				reachable = address.isReachable(2000);
+			}
+			catch (Exception e) {
+			}
+			finally {
+				Assert.assertTrue("The argument \"internal\" is true but can't reach the internal server", reachable);
+			}
+		}
+
+		return retval;
 	}
 
 	public void killGradleProcess() throws IOException {
@@ -288,11 +259,11 @@ public class EnvAction extends UIAction {
 	public void prepareGeoFile() {
 		String filename = "com.liferay.ip.geocoder.internal.IPGeocoderConfiguration.cfg";
 
-		IPath sourceGeoPath = getLiferayBundlesPath().append(filename);
+		IPath sourceGeoPath = _getBundlesPath().append(filename);
 
 		File source = sourceGeoPath.toFile();
 
-		IPath osgiPath = getLiferayServerDir().append("osgi");
+		IPath osgiPath = getServerDir().append("osgi");
 
 		IPath configsPath = osgiPath.append("configs");
 
@@ -303,7 +274,7 @@ public class EnvAction extends UIAction {
 		try {
 			FileUtil.copyFile(source, dest);
 
-			String content = "filePath=" + getLiferayBundlesPath().toPortableString() + "/GeoLiteCity.dat";
+			String content = "filePath=" + _getBundlesPath().toPortableString() + "/GeoLiteCity.dat";
 
 			FileUtils.write(content, dest);
 		}
@@ -314,11 +285,11 @@ public class EnvAction extends UIAction {
 	public void preparePortalExtFile() {
 		String filename = "portal-ext.properties";
 
-		IPath sourcePortalExtPath = getLiferayBundlesPath().append(filename);
+		IPath sourcePortalExtPath = _getBundlesPath().append(filename);
 
 		File source = sourcePortalExtPath.toFile();
 
-		IPath destPortalExtPath = getLiferayServerDir().append(filename);
+		IPath destPortalExtPath = getServerDir().append(filename);
 
 		File dest = destPortalExtPath.toFile();
 
@@ -333,11 +304,11 @@ public class EnvAction extends UIAction {
 	public void preparePortalExtFile62() {
 		String filename = "portal-ext.properties";
 
-		IPath sourcePortalExtPath = getLiferayBundlesPath().append(filename);
+		IPath sourcePortalExtPath = _getBundlesPath().append(filename);
 
 		File source = sourcePortalExtPath.toFile();
 
-		IPath destPortalExtPath = getLiferayServerDir62().append(filename);
+		IPath destPortalExtPath = getServerDir62().append(filename);
 
 		File dest = destPortalExtPath.toFile();
 
@@ -352,11 +323,11 @@ public class EnvAction extends UIAction {
 	public void preparePortalSetupWizardFile() {
 		String filename = "portal-setup-wizard.properties";
 
-		IPath sourcePortalSetupWizardPath = getLiferayBundlesPath().append(filename);
+		IPath sourcePortalSetupWizardPath = _getBundlesPath().append(filename);
 
 		File source = sourcePortalSetupWizardPath.toFile();
 
-		IPath destPortalSetupWizardPath = getLiferayServerDir().append(filename);
+		IPath destPortalSetupWizardPath = getServerDir().append(filename);
 
 		File dest = destPortalSetupWizardPath.toFile();
 
@@ -380,21 +351,18 @@ public class EnvAction extends UIAction {
 		_timestamp = 0;
 	}
 
-	public void unzipPluginsSDK() throws IOException {
-		File sdkDir = getLiferayPluginsSdkDir().toFile();
+	public void unzipPluginsSdk() throws IOException {
+		File sdkDir = getSdkDir().toFile();
 
-		Assert.assertEquals(
-			"Expected file to be not exist:" + getLiferayPluginsSdkDir().toPortableString(), false, sdkDir.exists());
+		Assert.assertEquals("Expected file to be not exist:" + getSdkDir().toPortableString(), false, sdkDir.exists());
 
-		File liferayPluginsSdkZipFile = getLiferayPluginsSDKZip().toFile();
+		File sdkZipFile = _getSdkZip().toFile();
 
-		Assert.assertEquals(
-			"Expected file to exist: " + liferayPluginsSdkZipFile.getAbsolutePath(), true,
-			liferayPluginsSdkZipFile.exists());
+		Assert.assertEquals("Expected file to exist: " + sdkZipFile.getAbsolutePath(), true, sdkZipFile.exists());
 
 		sdkDir.mkdirs();
 
-		ZipUtil.unzip(liferayPluginsSdkZipFile, getLiferayPluginsSdkName(), sdkDir, new NullProgressMonitor());
+		ZipUtil.unzip(sdkZipFile, getSdkName(), sdkDir, new NullProgressMonitor());
 
 		Assert.assertEquals(true, sdkDir.exists());
 
@@ -406,7 +374,7 @@ public class EnvAction extends UIAction {
 
 		unzipServer();
 
-		File serverDir = getLiferayServerDir().toFile();
+		File serverDir = getServerDir().toFile();
 
 		String appServerParentDir = "app.server.parent.dir=" + serverDir.getPath().replace("\\", "/");
 
@@ -417,11 +385,11 @@ public class EnvAction extends UIAction {
 		writer.close();
 
 		if (internal()) {
-			IPath bundlesPath = getLiferayBundlesPath();
+			IPath bundlesPath = _getBundlesPath();
 
 			IPath source = bundlesPath.append("internal").append("ivy-settings.xml");
 
-			IPath dest = getLiferayPluginsSdkDir().append("ivy-settings.xml");
+			IPath dest = getSdkDir().append("ivy-settings.xml");
 
 			try {
 				FileUtil.copyFile(source.toFile(), dest.toFile());
@@ -432,56 +400,109 @@ public class EnvAction extends UIAction {
 		}
 	}
 
-	public void unzipServer() throws IOException {
-		FileUtil.deleteDir(getLiferayServerDir().toFile(), true);
+	public void unzipPluginsSdk62() throws IOException {
+		Assert.assertTrue(test_in_the_internal_net, internal());
 
-		File serverDir = getLiferayServerDir().toFile();
+		File sdkDir = getSdkDir62().toFile();
 
 		Assert.assertEquals(
-			"Expected file to be not exist:" + getLiferayServerDir().toPortableString(), false, serverDir.exists());
+			"Expected file to be not exist:" + getSdkDir62().toPortableString(), false, sdkDir.exists());
 
-		File liferayServerZipFile = getLiferayServerZip().toFile();
+		File sdkZipFile = _getSdkZip62().toFile();
+
+		Assert.assertEquals("Expected file to exist: " + sdkZipFile.getAbsolutePath(), true, sdkZipFile.exists());
+
+		sdkDir.mkdirs();
+
+		ZipUtil.unzip(sdkZipFile, getSdkName62(), sdkDir, new NullProgressMonitor());
+
+		Assert.assertEquals(true, sdkDir.exists());
+
+		String username = _getUsername();
+
+		File userBuildFile = new File(sdkDir, "build." + username + ".properties");
+
+		userBuildFile.createNewFile();
+
+		unzipServer62();
+
+		File serverDir = getServerDir62().toFile();
+
+		String appServerParentDir = "app.server.parent.dir=" + serverDir.getPath().replace("\\", "/");
+
+		FileWriter writer = new FileWriter(userBuildFile.getPath(), true);
+
+		writer.write(appServerParentDir);
+
+		writer.close();
+
+		IPath bundlesPath = _getBundlesPath();
+
+		IPath source = bundlesPath.append("internal").append("ivy-settings.xml");
+
+		IPath dest = getSdkDir62().append("ivy-settings.xml");
+
+		try {
+			FileUtil.copyFile(source.toFile(), dest.toFile());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void unzipServer() throws IOException {
+		FileUtil.deleteDir(getServerDir().toFile(), true);
+
+		File serverDir = getServerDir().toFile();
+
+		Assert.assertEquals(
+			"Expected file to be not exist:" + getServerDir().toPortableString(), false, serverDir.exists());
+
+		File liferayServerZipFile = _getServerZip().toFile();
 
 		Assert.assertEquals(
 			"Expected file to exist: " + liferayServerZipFile.getAbsolutePath(), true, liferayServerZipFile.exists());
 
-		File liferayServerDirFile = getLiferayServerDir().toFile();
+		File liferayServerDirFile = getServerDir().toFile();
 
 		liferayServerDirFile.mkdirs();
 
-		String liferayServerZipFolder = getLiferayServerZipFolder();
+		String liferayServerZipFolder = _getServerZipFolder();
 
 		ZipUtil.unzip(liferayServerZipFile, liferayServerZipFolder, liferayServerDirFile, new NullProgressMonitor());
 	}
 
 	public void unzipServer62() throws IOException {
-		FileUtil.deleteDir(getLiferayServerDir62().toFile(), true);
+		FileUtil.deleteDir(getServerDir62().toFile(), true);
 
-		File serverDir62 = getLiferayServerDir62().toFile();
+		File serverDir62 = getServerDir62().toFile();
 
 		Assert.assertEquals(
-			"Expected file to be not exist:" + getLiferayServerDir62().toPortableString(), false, serverDir62.exists());
+			"Expected file to be not exist:" + getServerDir62().toPortableString(), false, serverDir62.exists());
 
-		File liferayServerZipFile62 = getLiferayServerZip62().toFile();
+		File liferayServerZipFile62 = _getServerZip62().toFile();
 
 		Assert.assertEquals(
 			"Expected file to exist: " + liferayServerZipFile62.getAbsolutePath(), true,
 			liferayServerZipFile62.exists());
 
-		File liferayServerDirFile62 = getLiferayServerDir62().toFile();
+		File liferayServerDirFile62 = getServerDir62().toFile();
 
 		liferayServerDirFile62.mkdirs();
 
-		String liferayServerZipFolder62 = getLiferayServerZipFolder62();
+		String liferayServerZipFolder62 = _getServerZipFolder62();
 
 		ZipUtil.unzip(
 			liferayServerZipFile62, liferayServerZipFolder62, liferayServerDirFile62, new NullProgressMonitor());
 	}
 
+	public final String test_in_the_internal_net =
+		"Only do this test in the internal net, add -Dinternal=\"false\" if you are out of the China office.";
+
 	protected Logger log;
 
 	private BundleInfo[] _getBundleInfos() {
-		IPath bundlesCsvPath = getLiferayBundlesPath().append("bundles.csv");
+		IPath bundlesCsvPath = _getBundlesPath().append("bundles.csv");
 
 		File bundleCsv = bundlesCsvPath.toFile();
 
@@ -520,8 +541,38 @@ public class EnvAction extends UIAction {
 		return bundleInfos;
 	}
 
+	private IPath _getBundlesPath() {
+		if (_bundlesPath == null) {
+			if ((_bundlesDir == null) || _bundlesDir.equals("") || _bundlesDir.equals("null")) {
+				URL rootUrl = Platform.getBundle("com.liferay.ide.ui.liferay").getEntry("/");
+
+				try {
+					String filePath = FileLocator.toFileURL(rootUrl).getFile();
+
+					if (filePath.contains("target/work/configuration")) {
+						int index = filePath.indexOf("/ui-tests/");
+
+						_bundlesPath = new Path(filePath.substring(0, index) + "/tests-resources");
+					}
+					else {
+						_bundlesPath = new Path(filePath).removeLastSegments(3).append("tests-resources");
+					}
+				}
+				catch (IOException ioe) {
+				}
+			}
+			else {
+				_bundlesPath = new Path(_bundlesDir);
+			}
+		}
+
+		Assert.assertTrue(_bundlesPath.toFile().exists());
+
+		return _bundlesPath;
+	}
+
 	private SdkInfo[] _getSdkInfos() {
-		IPath sdksCsvPath = getLiferayBundlesPath().append("sdks.csv");
+		IPath sdksCsvPath = _getBundlesPath().append("sdks.csv");
 
 		File sdksCsv = sdksCsvPath.toFile();
 
@@ -554,6 +605,30 @@ public class EnvAction extends UIAction {
 		return sdkInfos;
 	}
 
+	private IPath _getSdkZip() {
+		return _getBundlesPath().append(_sdkInfos[0].getSdkZip());
+	}
+
+	private IPath _getSdkZip62() {
+		return _getBundlesPath().append(_sdkInfos[1].getSdkZip());
+	}
+
+	private IPath _getServerZip() {
+		return _getBundlesPath().append(_bundleInfos[0].getBundleZip());
+	}
+
+	private IPath _getServerZip62() {
+		return _getBundlesPath().append(_bundleInfos[1].getBundleZip());
+	}
+
+	private String _getServerZipFolder() {
+		return _bundleInfos[0].getBundleDir();
+	}
+
+	private String _getServerZipFolder62() {
+		return _bundleInfos[1].getBundleDir();
+	}
+
 	private String _getUsername() {
 		String retval = StringPool.BLANK;
 
@@ -569,9 +644,10 @@ public class EnvAction extends UIAction {
 	}
 
 	private final BundleInfo[] _bundleInfos;
+	private String _bundlesDir = System.getProperty("liferay.bundles.dir");
+	private IPath _bundlesPath;
 	private String _internal = System.getProperty("internal");
-	private String _liferayBundlesDir = System.getProperty("liferay.bundles.dir");
-	private IPath _liferayBundlesPath;
+	private byte[] _internalServerIp = {(byte)192, (byte)168, (byte)130, 84};
 	private final SdkInfo[] _sdkInfos;
 	private long _timestamp = 0;
 

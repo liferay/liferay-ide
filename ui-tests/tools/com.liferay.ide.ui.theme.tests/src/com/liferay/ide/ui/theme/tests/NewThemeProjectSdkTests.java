@@ -30,15 +30,58 @@ public class NewThemeProjectSdkTests extends SwtbotBase {
 
 	@AfterClass
 	public static void cleanPluginsSdk() {
+		jobAction.waitForIvy();
+
+		String sdkName = envAction.getSdkName() + "-" + envAction.getTimestamp();
+
+		viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
 	}
 
 	@BeforeClass
 	public static void createPluginsSdk() throws IOException {
+		envAction.unzipPluginsSdk();
+
+		viewAction.switchLiferayPerspective();
+
+		wizardAction.openNewLiferayPluginProjectWizard();
+
+		String projectName = "test-portlet";
+
+		wizardAction.newPlugin.prepareSdk(projectName);
+
+		wizardAction.next();
+
+		wizardAction.next();
+
+		String location = envAction.getSdkDir().toOSString();
+
+		wizardAction.setSdkLocation.prepare(location);
+
+		wizardAction.finish();
+
+		jobAction.waitForIvy();
+
+		jobAction.waitForValidate(projectName);
+
+		viewAction.project.closeAndDelete(projectName);
 	}
 
-	@Ignore("wait for IDE-3568")
+	@Ignore("ignore as the jre problem on testing server for right now")
 	@Test
 	public void createTheme() {
+		wizardAction.openNewLiferayPluginProjectWizard();
+
+		String projectName = "test-theme";
+
+		wizardAction.newPlugin.prepareThemeSdk(projectName);
+
+		wizardAction.finish();
+
+		jobAction.waitForIvy();
+
+		jobAction.waitForValidate(projectName);
+
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 }

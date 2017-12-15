@@ -58,6 +58,8 @@ public class JobAction extends UIAction {
 	}
 
 	public void waitForConsoleContent(String consoleName, String content, long timeout) {
+		ide.sleep(2000);
+
 		ide.waitUntil(new ConsoleContentCondition(consoleName, content), timeout);
 	}
 
@@ -85,7 +87,7 @@ public class JobAction extends UIAction {
 		ide.waitUntil(new WizardClosedCondition(bot, title), 300 * 1000);
 	}
 
-	public void waitForSubnote(SWTBotTreeItem parent, String subnode, String refreshText) {
+	public void waitForSubnode(SWTBotTreeItem parent, String subnode, String refreshText) {
 		ide.waitUntil(new RefreshForSubnodeCondition(parent, subnode, refreshText), 30 * 1000);
 	}
 

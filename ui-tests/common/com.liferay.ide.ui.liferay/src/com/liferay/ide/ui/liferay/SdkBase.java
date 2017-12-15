@@ -12,20 +12,17 @@
  * details.
  */
 
-package com.liferay.ide.ui.hook.tests;
-
-import com.liferay.ide.ui.liferay.SwtbotBase;
+package com.liferay.ide.ui.liferay;
 
 import java.io.IOException;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class NewHookConfigTests extends SwtbotBase {
+public class SdkBase extends SwtbotBase {
 
 	@AfterClass
 	public static void cleanPluginsSdk() {
@@ -55,23 +52,6 @@ public class NewHookConfigTests extends SwtbotBase {
 		String location = envAction.getSdkDir().toOSString();
 
 		wizardAction.setSdkLocation.prepare(location);
-
-		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(projectName);
-
-		viewAction.project.closeAndDelete(projectName);
-	}
-
-	@Test
-	public void createSampleProject() {
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		String projectName = "test-hook";
-
-		wizardAction.newPlugin.prepareHookSdk(projectName);
 
 		wizardAction.finish();
 

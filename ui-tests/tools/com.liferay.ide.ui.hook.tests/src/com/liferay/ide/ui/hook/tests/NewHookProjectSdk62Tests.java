@@ -25,20 +25,20 @@ import org.junit.Test;
 /**
  * @author Terry Jia
  */
-public class NewHookProjectTests extends SwtbotBase {
+public class NewHookProjectSdk62Tests extends SwtbotBase {
 
 	@AfterClass
 	public static void cleanPluginsSdk() {
 		jobAction.waitForIvy();
 
-		String sdkName = envAction.getLiferayPluginsSdkName() + "-" + envAction.getTimestamp();
+		String sdkName = envAction.getSdkName62() + "-" + envAction.getTimestamp();
 
 		viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
 	}
 
 	@BeforeClass
 	public static void createPluginsSdk() throws IOException {
-		envAction.unzipPluginsSDK();
+		envAction.unzipPluginsSdk62();
 
 		viewAction.switchLiferayPerspective();
 
@@ -52,7 +52,7 @@ public class NewHookProjectTests extends SwtbotBase {
 
 		wizardAction.next();
 
-		String location = envAction.getLiferayPluginsSdkDir().toOSString();
+		String location = envAction.getSdkDir62().toOSString();
 
 		wizardAction.setSdkLocation.prepare(location);
 

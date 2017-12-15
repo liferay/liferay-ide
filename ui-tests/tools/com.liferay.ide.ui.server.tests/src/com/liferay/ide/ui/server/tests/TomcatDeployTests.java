@@ -48,7 +48,7 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		wizardAction.next();
 
-		wizardAction.newRuntime7.prepare(_serverName, envAction.getLiferayServerFullDir().toOSString());
+		wizardAction.newRuntime7.prepare(_serverName, envAction.getServerFullDir().toOSString());
 
 		wizardAction.finish();
 
@@ -63,10 +63,12 @@ public class TomcatDeployTests extends SwtbotBase {
 		// viewAction.servers.start(_serverStoppedLabel);
 
 		// jobAction.waitForServerStarted(_serverName);
+
 	}
 
 	@AfterClass
 	public static void stopServer() throws IOException {
+
 		// viewAction.servers.stop(_serverStartedLabel);
 
 		// jobAction.waitForServerStopped(_serverName);

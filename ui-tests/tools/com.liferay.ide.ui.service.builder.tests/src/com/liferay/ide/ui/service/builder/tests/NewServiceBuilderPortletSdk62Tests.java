@@ -12,72 +12,58 @@
  * details.
  */
 
-package com.liferay.ide.ui.hook.tests;
+package com.liferay.ide.ui.service.builder.tests;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.Sdk62Base;
 
-import java.io.IOException;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
+ * @author Joye Luo
  * @author Terry Jia
  */
-public class NewHookConfigTests extends SwtbotBase {
+public class NewServiceBuilderPortletSdk62Tests extends Sdk62Base {
 
-	@AfterClass
-	public static void cleanPluginsSdk() {
-		jobAction.waitForIvy();
-
-		String sdkName = envAction.getSdkName() + "-" + envAction.getTimestamp();
-
-		viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
-	}
-
-	@BeforeClass
-	public static void createPluginsSdk() throws IOException {
-		envAction.unzipPluginsSdk();
-
-		viewAction.switchLiferayPerspective();
-
+	@Ignore("ignore as service builder in sdk62 is only able run in java 7")
+	@Test
+	public void buildServiceOnProject() {
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-portlet";
+		String projectName = "test-sb-build-services-portlet";
 
-		wizardAction.newPlugin.prepareSdk(projectName);
-
-		wizardAction.next();
-
-		wizardAction.next();
-
-		String location = envAction.getSdkDir().toOSString();
-
-		wizardAction.setSdkLocation.prepare(location);
+		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(projectName);
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
 		jobAction.waitForValidate(projectName);
+
+		viewAction.project.runBuildServices(projectName);
+
+		jobAction.waitForConsoleContent("build.xml", "BUILD SUCCESSFUL", 30 * 1000);
 
 		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
-	public void createSampleProject() {
+	public void buildWSDDOnProject() {
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-hook";
+		String projectName = "test-sb-build-wsdd-portlet";
 
-		wizardAction.newPlugin.prepareHookSdk(projectName);
+		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(projectName);
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
 		jobAction.waitForValidate(projectName);
+
+		viewAction.project.runBuildWSDD(projectName);
+
+		jobAction.waitForConsoleContent("build.xml", "BUILD SUCCESSFUL", 300 * 1000);
 
 		viewAction.project.closeAndDelete(projectName);
 	}

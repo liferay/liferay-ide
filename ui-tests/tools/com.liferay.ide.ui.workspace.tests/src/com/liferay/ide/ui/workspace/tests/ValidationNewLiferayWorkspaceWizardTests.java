@@ -99,8 +99,9 @@ public class ValidationNewLiferayWorkspaceWizardTests extends SwtbotBase {
 	public void checkProjectName() {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		for (ValidationMsg msg : envAction.getValidationMsgs(
-				new File(envAction.getValidationFolder(), "new-liferay-workspace-wizard-project-name.csv"))) {
+		for (ValidationMsg msg :
+				envAction.getValidationMsgs(
+					new File(envAction.getValidationFolder(), "new-liferay-workspace-wizard-project-name.csv"))) {
 
 			if (!msg.getOs().equals(Platform.getOS())) {
 				continue;

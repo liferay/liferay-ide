@@ -12,33 +12,33 @@
  * details.
  */
 
-package com.liferay.ide.ui.hook.tests;
-
-import com.liferay.ide.ui.liferay.SwtbotBase;
+package com.liferay.ide.ui.liferay;
 
 import java.io.IOException;
 
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class NewHookConfigTests extends SwtbotBase {
+public class Sdk62Base extends SwtbotBase {
 
 	@AfterClass
 	public static void cleanPluginsSdk() {
 		jobAction.waitForIvy();
 
-		String sdkName = envAction.getSdkName() + "-" + envAction.getTimestamp();
+		String sdkName = envAction.getSdkName62() + "-" + envAction.getTimestamp();
 
 		viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
 	}
 
 	@BeforeClass
 	public static void createPluginsSdk() throws IOException {
-		envAction.unzipPluginsSdk();
+		Assert.assertTrue(envAction.test_in_the_internal_net, envAction.internal());
+
+		envAction.unzipPluginsSdk62();
 
 		viewAction.switchLiferayPerspective();
 
@@ -52,26 +52,9 @@ public class NewHookConfigTests extends SwtbotBase {
 
 		wizardAction.next();
 
-		String location = envAction.getSdkDir().toOSString();
+		String location = envAction.getSdkDir62().toOSString();
 
 		wizardAction.setSdkLocation.prepare(location);
-
-		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(projectName);
-
-		viewAction.project.closeAndDelete(projectName);
-	}
-
-	@Test
-	public void createSampleProject() {
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		String projectName = "test-hook";
-
-		wizardAction.newPlugin.prepareHookSdk(projectName);
 
 		wizardAction.finish();
 

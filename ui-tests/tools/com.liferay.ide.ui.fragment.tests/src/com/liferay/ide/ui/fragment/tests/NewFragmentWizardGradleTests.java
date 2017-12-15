@@ -58,9 +58,9 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.next();
 
-		IPath serverDir = envAction.getLiferayServerDir();
+		IPath serverDir = envAction.getServerDir();
 
-		IPath fullServerDir = serverDir.append(envAction.getLiferayPluginServerName());
+		IPath fullServerDir = serverDir.append(envAction.getServerName());
 
 		wizardAction.newRuntime7.prepare(_serverName, fullServerDir.toOSString());
 

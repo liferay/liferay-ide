@@ -189,7 +189,7 @@ public class ViewAction extends UIAction {
 
 					String subnode = files[files.length - i];
 
-					_jobAction.waitForSubnote(parent, subnode, REFRESH);
+					_jobAction.waitForSubnode(parent, subnode, REFRESH);
 				}
 
 				return _getProjects().isVisible(files);

@@ -14,56 +14,14 @@
 
 package com.liferay.ide.ui.portlet.tests;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.SdkBase;
 
-import java.io.IOException;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class NewPortletProjectSdkTests extends SwtbotBase {
-
-	@AfterClass
-	public static void cleanPluginsSdk() {
-		jobAction.waitForIvy();
-
-		String sdkName = envAction.getLiferayPluginsSdkName() + "-" + envAction.getTimestamp();
-
-		viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
-	}
-
-	@BeforeClass
-	public static void createPluginsSdk() throws IOException {
-		envAction.unzipPluginsSDK();
-
-		viewAction.switchLiferayPerspective();
-
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		String projectName = "test-portlet";
-
-		wizardAction.newPlugin.prepareSdk(projectName);
-
-		wizardAction.next();
-
-		wizardAction.next();
-
-		String location = envAction.getLiferayPluginsSdkDir().toOSString();
-
-		wizardAction.setSdkLocation.prepare(location);
-
-		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(projectName);
-
-		viewAction.project.closeAndDelete(projectName);
-	}
+public class NewPortletProjectSdkTests extends SdkBase {
 
 	@Test
 	public void createMvcPortletProject() {
