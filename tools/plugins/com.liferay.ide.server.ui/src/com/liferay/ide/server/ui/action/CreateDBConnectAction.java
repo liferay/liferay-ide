@@ -18,6 +18,7 @@ package com.liferay.ide.server.ui.action;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -50,6 +51,7 @@ import org.eclipse.wst.server.core.IServer;
 
 /**
  * @author Simon Jiang
+ * @author Charles Wu
  */
 public class CreateDBConnectAction extends AbstractServerRunningAction
 {
@@ -230,7 +232,9 @@ public class CreateDBConnectAction extends AbstractServerRunningAction
 
                                 if( dbConnection != null )
                                 {
-                                    dbConnection.addDatabaseConnectionProfile( connectionName, driverPath );
+                                    if (!dbConnection.addDatabaseConnectionProfile(connectionName, driverPath)) {
+                                        return LiferayServerUI.createErrorStatus("An error happened when create connection profile");
+                                    }
 
                                     UIUtil.async( new Runnable()
                                     {
@@ -339,13 +343,17 @@ public class CreateDBConnectAction extends AbstractServerRunningAction
             this.connectionUrl = connectionUrl;
         }
 
-        public void addDatabaseConnectionProfile( String connectionName, String driverPath )
+        public boolean addDatabaseConnectionProfile( String connectionName, String driverPath )
             throws ConnectionProfileException
         {
             final String uniqueDriverInstanceName = generateUniqueDriverDefinitionName( connectionName );
             final DriverInstance driverInstance =
                 DriverManager.getInstance().createNewDriverInstance(
                     driverTemplate, uniqueDriverInstanceName, driverPath, driverClass );
+
+            if (driverInstance == null) {
+                return false;
+            }
 
             final String vendor = driverInstance.getProperty( IJDBCDriverDefinitionConstants.DATABASE_VENDOR_PROP_ID );
             final String uniqueConnectionProfileName = generateUniqueConnectionProfileName( connectionName + " " + vendor ); //$NON-NLS-1$
@@ -362,6 +370,8 @@ public class CreateDBConnectAction extends AbstractServerRunningAction
 
             ProfileManager.getInstance().createProfile(
                 uniqueConnectionProfileName, connectionDesc, providerId, connectionProfileProperties, "", false ); //$NON-NLS-1$
+            
+			return true;
         }
 
         private String generateUniqueDriverDefinitionName( final String driverDefinitionNameBase )
