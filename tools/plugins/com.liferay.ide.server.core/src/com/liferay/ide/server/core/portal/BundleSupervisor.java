@@ -21,6 +21,7 @@ import aQute.remote.api.Supervisor;
 import aQute.remote.util.AgentSupervisor;
 
 import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.jmx.PortalBundleDeployer;
 import com.liferay.ide.server.util.ServerUtil;
@@ -314,6 +315,11 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
 
     public String uninstall( IBundleProject bundleProject, IPath outputJar ) throws Exception
     {
+        if (FileUtil.notExists(outputJar))
+        {
+        	    return null;
+        }
+
         String retVal = null;
 
         String fragmentHostName = ServerUtil.getFragemtHostName( outputJar.toFile() );
