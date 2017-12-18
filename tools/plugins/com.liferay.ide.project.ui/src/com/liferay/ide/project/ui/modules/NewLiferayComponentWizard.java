@@ -65,7 +65,7 @@ public class NewLiferayComponentWizard
 			final int messageType = wizardPage.getMessageType();
 
 			if ((messageType == IMessageProvider.ERROR) && !CoreUtil.isNullOrEmpty(message)) {
-				wizardPage.setMessage("Please enter a project name.", SapphireWizardPage.NONE);
+				wizardPage.setMessage("No suitable liferay module project.", SapphireWizardPage.NONE);
 				_firstErrorMessageRemoved = true;
 			}
 		}
