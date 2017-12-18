@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.liferay.page.wizard;
 
 import com.liferay.ide.ui.swtbot.page.ComboBox;
+import com.liferay.ide.ui.swtbot.page.Table;
 import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.ui.swtbot.page.Wizard;
@@ -23,6 +24,7 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Ying Xu
+ * @author Lily Li
  */
 public class NewModuleFragmentFilesWizard extends Wizard {
 
@@ -36,6 +38,10 @@ public class NewModuleFragmentFilesWizard extends Wizard {
 
 	public ToolbarButtonWithTooltip getDeleteBtn() {
 		return new ToolbarButtonWithTooltip(getShell().bot(), DELETE);
+	}
+
+	public Table getFiles() {
+		return new Table(getShell().bot(), OVERRIDDEN_FILES);
 	}
 
 	public Text getHostOsgiBundle() {

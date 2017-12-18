@@ -16,6 +16,7 @@ package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.liferay.page.wizard.NewLiferayComponentWizard;
+import com.liferay.ide.ui.liferay.page.wizard.NewModuleFragmentFilesWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewRuntime62Wizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewRuntime7Wizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.ImportLiferayWorkspaceWizard;
@@ -160,6 +161,7 @@ public class WizardAction extends UIAction {
 	public ImportLiferayWorkspaceWizardAction importLiferayWorkspace = new ImportLiferayWorkspaceWizardAction();
 	public ImportProjectWizardAction importProject = new ImportProjectWizardAction();
 	public NewFragmentWizardAction newFragment = new NewFragmentWizardAction();
+	public NewFragmentFilesWizardAction newFragmentFiles = new NewFragmentFilesWizardAction();
 	public NewFragmentInfoWizardAction newFragmentInfo = new NewFragmentInfoWizardAction();
 	public NewLiferayComponentWizardAction newLiferayComponent = new NewLiferayComponentWizardAction();
 	public NewLiferayJsfWizardAction newLiferayJsf = new NewLiferayJsfWizardAction();
@@ -230,6 +232,24 @@ public class WizardAction extends UIAction {
 		}
 
 		private final ImportProjectWizard _importProjectWizard = new ImportProjectWizard(bot);
+
+	}
+
+	public class NewFragmentFilesWizardAction {
+
+		public void deleteFile() {
+			_newFragmentFilesWizard.getDeleteBtn().click();
+		}
+
+		public void openAddOverrideFilesDialog() {
+			_newFragmentFilesWizard.getAddOverrideFilesBtn().click();
+		}
+
+		public void selectFile(String file) {
+			_newFragmentFilesWizard.getFiles().click(file);
+		}
+
+		private final NewModuleFragmentFilesWizard _newFragmentFilesWizard = new NewModuleFragmentFilesWizard(bot);
 
 	}
 

@@ -94,7 +94,7 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewBtnFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("META-INF/resources/add_button.jsp");
 
@@ -108,7 +108,7 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openFileMenuFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("META-INF/resources/article_vertical_card.jspf");
 
@@ -123,7 +123,7 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 		viewAction.project.openFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("portlet.properties");
 
@@ -158,7 +158,7 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 		viewAction.project.openFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("META-INF/resources/user/search_columns.jspf");
 
@@ -194,7 +194,7 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 		viewAction.project.openFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("META-INF/resources/view_comment.jsp");
 
@@ -229,7 +229,7 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 		viewAction.project.openFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("portlet.properties");
 
@@ -264,7 +264,7 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 		viewAction.project.openFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("resource-actions/default.xml");
 
@@ -306,23 +306,23 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 		viewAction.project.openFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems(files);
 
 		dialogAction.confirm();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
 
 		dialogAction.cancel();
 
-		wizardAction.newFragmentInfo.selectFile("META-INF/resources/init-ext.jsp");
+		wizardAction.newFragmentFiles.selectFile("META-INF/resources/init-ext.jsp");
 
-		wizardAction.newFragmentInfo.deleteFile();
+		wizardAction.newFragmentFiles.deleteFile();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		Assert.assertTrue(dialogAction.getConfirmBtn().isEnabled());
 

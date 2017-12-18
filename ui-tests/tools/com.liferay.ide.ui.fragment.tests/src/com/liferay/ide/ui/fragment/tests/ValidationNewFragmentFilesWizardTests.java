@@ -93,13 +93,13 @@ public class ValidationNewFragmentFilesWizardTests extends SwtbotBase {
 			"META-INF/resources/view.jsp", "portlet.properties", "resource-actions/default.xml"
 		};
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems(files);
 
 		dialogAction.confirm();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
 
@@ -157,7 +157,7 @@ public class ValidationNewFragmentFilesWizardTests extends SwtbotBase {
 
 		wizardAction.openFileMenuFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		// wait for IDE-3566 fixed
 		// Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
@@ -205,7 +205,7 @@ public class ValidationNewFragmentFilesWizardTests extends SwtbotBase {
 
 		wizardAction.openFileMenuFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
 
