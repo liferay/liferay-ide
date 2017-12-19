@@ -54,6 +54,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.templates.TemplateException;
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
@@ -65,6 +66,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
  * @author Simon Jiang
  * @author Terry Jia
  * @author Andy Wu
+ * @author Charles Wu
  */
 @SuppressWarnings( {
 	"restriction", "unchecked"
@@ -246,11 +248,19 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 	protected IStatus createLanguageProperties(IDataModel dm) {
 		IProject project = getTargetProject();
 
-		String contentFolderValue = dm.getStringProperty(CONTENT_FOLDER);
+		String contentFolderStr = dm.getStringProperty(CONTENT_FOLDER);
+
+		IPath contentFolderPath = new Path(contentFolderStr);
+
+		if (!contentFolderStr.startsWith("/")) {
+			IFolder sourceFolder = CoreUtil.getSourceFolders(JavaCore.create(project)).get(0);
+
+			contentFolderPath = sourceFolder.getFullPath().append(contentFolderStr);
+		}
 
 		IWorkspaceRoot root = project.getWorkspace().getRoot();
 
-		IFolder contentFolder = root.getFolder(new Path(contentFolderValue));
+		IFolder contentFolder = root.getFolder(contentFolderPath);
 
 		try {
 			CoreUtil.prepareFolder(contentFolder);
@@ -319,6 +329,12 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 		// check to see if we have an existing file to read in
 
 		IPath portalPropertiesPath = new Path(portalPropertiesFile);
+
+		if (!portalPropertiesFile.startsWith("/")) {
+			IFolder sourceFolder = CoreUtil.getSourceFolders(JavaCore.create(project)).get(0);
+
+			portalPropertiesPath = sourceFolder.getFullPath().append(portalPropertiesFile);
+		}
 
 		IPath propertiesFilesPath = portalPropertiesPath.makeRelativeTo(project.getFullPath());
 
