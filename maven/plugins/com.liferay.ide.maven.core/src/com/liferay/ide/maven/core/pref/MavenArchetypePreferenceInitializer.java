@@ -72,7 +72,7 @@ public class MavenArchetypePreferenceInitializer extends AbstractPreferenceIniti
 
 		defaultPrefs.put(
 			LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_WORKSPACE,
-			"com.liferay:com.liferay.project.templates.workspace:1.0.4");
+			"com.liferay:com.liferay.project.templates.workspace:1.0.7");
 	}
 
 }
