@@ -17,7 +17,6 @@ package com.liferay.ide.ui.liferay;
 import java.io.IOException;
 
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 
 /**
@@ -27,6 +26,10 @@ public class Sdk62Base extends SwtbotBase {
 
 	@AfterClass
 	public static void cleanPluginsSdk() {
+		if (!envAction.internal()) {
+			return;
+		}
+
 		jobAction.waitForIvy();
 
 		String sdkName = envAction.getSdkName62() + "-" + envAction.getTimestamp();
@@ -36,7 +39,9 @@ public class Sdk62Base extends SwtbotBase {
 
 	@BeforeClass
 	public static void createPluginsSdk() throws IOException {
-		Assert.assertTrue(envAction.test_in_the_internal_net, envAction.internal());
+		if (!envAction.internal()) {
+			return;
+		}
 
 		envAction.unzipPluginsSdk62();
 

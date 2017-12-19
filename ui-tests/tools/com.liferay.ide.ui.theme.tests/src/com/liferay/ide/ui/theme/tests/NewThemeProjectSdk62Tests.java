@@ -25,6 +25,10 @@ public class NewThemeProjectSdk62Tests extends Sdk62Base {
 
 	@Test
 	public void createTheme() {
+		if (!envAction.internal()) {
+			return;
+		}
+
 		wizardAction.openNewLiferayPluginProjectWizard();
 
 		String projectName = "test-theme";

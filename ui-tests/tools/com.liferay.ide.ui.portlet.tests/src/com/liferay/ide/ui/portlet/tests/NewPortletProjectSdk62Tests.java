@@ -25,6 +25,10 @@ public class NewPortletProjectSdk62Tests extends Sdk62Base {
 
 	@Test
 	public void createMvcPortletProject() {
+		if (!envAction.internal()) {
+			return;
+		}
+
 		wizardAction.openNewLiferayPluginProjectWizard();
 
 		String projectName = "test-mvc-portlet";

@@ -90,7 +90,9 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorksapceWithDownloadBundleChangeBundleUrl() {
-		Assert.assertTrue(envAction.test_in_the_internal_net, envAction.internal());
+		if (!envAction.internal()) {
+			return;
+		}
 
 		String workspaceName = "test-liferay-workspace-gradle-change-bundle-url";
 
