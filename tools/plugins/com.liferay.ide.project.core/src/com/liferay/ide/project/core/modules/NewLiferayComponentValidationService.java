@@ -91,7 +91,7 @@ public class NewLiferayComponentValidationService extends ValidationService {
 						IType type = javaProject.findType(packageName + "." + className);
 
 						if (type != null) {
-							retval = Status.createErrorStatus(packageName + "." + className + " already existed.");
+							retval = Status.createErrorStatus(packageName + "." + className + " already exists.");
 						}
 					}
 				}
