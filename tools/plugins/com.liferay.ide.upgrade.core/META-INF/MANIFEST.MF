@@ -128,6 +128,8 @@ Service-Component: OSGI-INF/com.liferay.blade.eclipse.provider.CUCacheWTP.xml,
  OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.JournalArticleTags.xml,
  OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.PortletConfigGetFormatMethods.xml,
  OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.BaseAssetRendererGetIconPathDecl.xml,
- OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.DateUtilApiChange.xml
+ OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.DateUtilApiChange.xml,
+ OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.BuildAutoUpgradeProperties.xml,
+ OSGI-INF/com.liferay.blade.upgrade.liferay70.apichanges.DynamicDataListsWebImport.xml
 Bundle-ClassPath: .,
  libs/com.liferay.markdown.parser.jar
