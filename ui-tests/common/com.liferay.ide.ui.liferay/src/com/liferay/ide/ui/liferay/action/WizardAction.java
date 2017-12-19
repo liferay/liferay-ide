@@ -122,6 +122,12 @@ public class WizardAction extends UIAction {
 		menu.click();
 	}
 
+	public void openNewLiferayKaleoWorkflowWizard() {
+		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayKaleoWorkflow();
+
+		menu.click();
+	}
+
 	public void openNewLiferayLayoutTemplate() {
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayLayoutTemplate();
 
