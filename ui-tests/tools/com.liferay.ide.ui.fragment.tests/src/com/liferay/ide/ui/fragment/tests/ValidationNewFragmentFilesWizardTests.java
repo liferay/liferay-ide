@@ -15,7 +15,7 @@
 package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.page.wizard.NewModuleFragmentFilesWizard;
+import com.liferay.ide.ui.liferay.page.wizard.NewFragmentFilesWizard;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
 import java.io.IOException;
@@ -39,7 +39,7 @@ public class ValidationNewFragmentFilesWizardTests extends SwtbotBase {
 	public void checkInitialState() {
 		wizardAction.openFileMenuFragmentFilesWizard();
 
-		Assert.assertEquals(PROJECT_NAME_MUST_BE_SPECIFIED, _newFragmentFilesWizard.getValidationMsg(2));
+		Assert.assertEquals(PROJECT_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(2));
 
 		Assert.assertEquals(StringPool.BLANK, _newFragmentFilesWizard.getProjectName().getText());
 
@@ -236,7 +236,7 @@ public class ValidationNewFragmentFilesWizardTests extends SwtbotBase {
 
 		wizardAction.openFileMenuFragmentFilesWizard();
 
-		Assert.assertEquals(PROJECT_NAME_MUST_BE_SPECIFIED, _newFragmentFilesWizard.getValidationMsg(2));
+		Assert.assertEquals(PROJECT_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(2));
 
 		Assert.assertFalse(_newFragmentFilesWizard.getAddOverrideFilesBtn().isEnabled());
 
@@ -251,6 +251,6 @@ public class ValidationNewFragmentFilesWizardTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(projectName);
 	}
 
-	private static final NewModuleFragmentFilesWizard _newFragmentFilesWizard = new NewModuleFragmentFilesWizard(bot);
+	private static final NewFragmentFilesWizard _newFragmentFilesWizard = new NewFragmentFilesWizard(bot);
 
 }

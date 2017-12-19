@@ -16,7 +16,7 @@ package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.liferay.page.wizard.NewLiferayComponentWizard;
-import com.liferay.ide.ui.liferay.page.wizard.NewModuleFragmentFilesWizard;
+import com.liferay.ide.ui.liferay.page.wizard.NewFragmentFilesWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewRuntime62Wizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewRuntime7Wizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.ImportLiferayWorkspaceWizard;
@@ -249,7 +249,7 @@ public class WizardAction extends UIAction {
 			_newFragmentFilesWizard.getFiles().click(file);
 		}
 
-		private final NewModuleFragmentFilesWizard _newFragmentFilesWizard = new NewModuleFragmentFilesWizard(bot);
+		private final NewFragmentFilesWizard _newFragmentFilesWizard = new NewFragmentFilesWizard(bot);
 
 	}
 
