@@ -25,6 +25,7 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 /**
  * @author Ying Xu
  * @author Lily Li
+ * @author Rui Wang
  */
 public class NewModuleFragmentFilesWizard extends Wizard {
 
