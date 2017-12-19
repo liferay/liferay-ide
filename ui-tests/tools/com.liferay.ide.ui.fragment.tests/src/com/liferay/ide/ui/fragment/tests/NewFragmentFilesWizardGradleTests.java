@@ -96,7 +96,7 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewBtnFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("META-INF/resources/add_button.jsp");
 
@@ -110,7 +110,7 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openFileMenuFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("META-INF/resources/article/display_page.jsp");
 
@@ -125,7 +125,7 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		viewAction.project.openFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("portlet.properties");
 
@@ -196,7 +196,7 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		viewAction.project.openFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("META-INF/resources/init-ext.jsp");
 
@@ -231,7 +231,7 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		viewAction.project.openFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("portlet.properties");
 
@@ -266,7 +266,7 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		viewAction.project.openFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems("resource-actions/default.xml");
 
@@ -304,23 +304,23 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		viewAction.project.openFragmentFilesWizard();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		dialogAction.selectItems(files);
 
 		dialogAction.confirm();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
 
 		dialogAction.cancel();
 
-		wizardAction.newFragmentInfo.selectFile("META-INF/resources/init-ext.jsp");
+		wizardAction.newFragmentFiles.selectFile("META-INF/resources/init-ext.jsp");
 
-		wizardAction.newFragmentInfo.deleteFile();
+		wizardAction.newFragmentFiles.deleteFile();
 
-		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+		wizardAction.newFragmentFiles.openAddOverrideFilesDialog();
 
 		Assert.assertTrue(dialogAction.getConfirmBtn().isEnabled());
 

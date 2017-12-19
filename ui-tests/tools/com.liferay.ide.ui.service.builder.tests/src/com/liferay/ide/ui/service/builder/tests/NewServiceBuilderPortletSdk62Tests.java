@@ -28,6 +28,10 @@ public class NewServiceBuilderPortletSdk62Tests extends Sdk62Base {
 	@Ignore("ignore as service builder in sdk62 is only able run in java 7")
 	@Test
 	public void buildServiceOnProject() {
+		if (!envAction.internal()) {
+			return;
+		}
+
 		wizardAction.openNewLiferayPluginProjectWizard();
 
 		String projectName = "test-sb-build-services-portlet";
@@ -49,6 +53,10 @@ public class NewServiceBuilderPortletSdk62Tests extends Sdk62Base {
 
 	@Test
 	public void buildWSDDOnProject() {
+		if (!envAction.internal()) {
+			return;
+		}
+
 		wizardAction.openNewLiferayPluginProjectWizard();
 
 		String projectName = "test-sb-build-wsdd-portlet";

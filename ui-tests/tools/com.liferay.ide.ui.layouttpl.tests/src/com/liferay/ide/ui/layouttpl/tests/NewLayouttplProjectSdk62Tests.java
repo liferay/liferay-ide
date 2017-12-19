@@ -25,6 +25,10 @@ public class NewLayouttplProjectSdk62Tests extends Sdk62Base {
 
 	@Test
 	public void createLayoutTemplate() {
+		if (!envAction.internal()) {
+			return;
+		}
+
 		wizardAction.openNewLiferayPluginProjectWizard();
 
 		String projectName = "test-template-layouttpl";
@@ -58,6 +62,10 @@ public class NewLayouttplProjectSdk62Tests extends Sdk62Base {
 
 	@Test
 	public void createLayoutTemplateProject() {
+		if (!envAction.internal()) {
+			return;
+		}
+
 		wizardAction.openNewLiferayPluginProjectWizard();
 
 		String projectName = "test-layouttpl";
