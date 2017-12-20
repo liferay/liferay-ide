@@ -37,8 +37,8 @@ public class PropertiesFileChecker {
 	public PropertiesFileChecker(File file) {
 		_file = file;
 
-		try {
-			_keyInfos = _parse(Files.newInputStream(file.toPath()));
+		try (InputStream inputStream = Files.newInputStream(file.toPath())) {
+			_keyInfos = _parse(inputStream);
 		}
 		catch (Exception e) {
 			throw new IllegalArgumentException(e);
