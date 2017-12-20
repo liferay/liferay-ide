@@ -84,7 +84,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
         return false;
     }
 
-	@Override
+    @Override
     public void execute( IProgressMonitor monitor, IAdaptable info ) throws CoreException
     {
         for( IModule module : modules )
