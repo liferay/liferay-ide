@@ -430,7 +430,7 @@ public class LiferayTomcatUtil
         if( configInfoFile.exists() )
         {
             try(InputStream fileInput = Files.newInputStream( configInfoFile.toPath() ))
-            { 
+            {
                 properties.load( fileInput );
 
                 String configInfo = (String) properties.get( portalDirKey );
@@ -683,7 +683,7 @@ public class LiferayTomcatUtil
                 Properties properties = new Properties();
 
                 try(InputStream fileInput = Files.newInputStream( versionInfoFile.toPath() ))
-                {   
+                {
                     properties.load( fileInput );
                 }
                 catch( FileNotFoundException e )
@@ -698,7 +698,7 @@ public class LiferayTomcatUtil
                 properties.put( portalDirKey, configInfo );
 
                 try(OutputStream fileOutput = Files.newOutputStream( versionInfoFile.toPath() ))
-                {      
+                {
                     properties.store( fileOutput, StringPool.EMPTY );
                 }
                 catch( Exception e )
@@ -718,14 +718,12 @@ public class LiferayTomcatUtil
         if( externalPropertiesFile.exists() )
         {
             ExternalPropertiesConfiguration props = new ExternalPropertiesConfiguration();
-            try
+
+            try( InputStream newInputStream = Files.newInputStream( externalPropertiesFile.toPath() ))
             {
-                props.load( Files.newInputStream( externalPropertiesFile.toPath() ) );
-
+                props.load( newInputStream );
                 props.setProperty( "include-and-override", portalIdePropFile.getAbsolutePath() ); //$NON-NLS-1$
-
                 props.setHeader( "# Last modified by Liferay IDE " + new Date() ); //$NON-NLS-1$
-
                 props.save( Files.newOutputStream( externalPropertiesFile.toPath() ) );
 
                 retval = externalPropertiesFile;

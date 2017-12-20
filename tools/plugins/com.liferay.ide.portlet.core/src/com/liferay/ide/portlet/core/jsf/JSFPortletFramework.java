@@ -27,6 +27,7 @@ import com.liferay.ide.sdk.core.SDKUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Set;
@@ -65,7 +66,8 @@ public class JSFPortletFramework extends BasePortletFramework
         super();
     }
 
-    public IStatus configureNewProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
+    @Override
+	public IStatus configureNewProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
     {
         IProjectFacetVersion jsfFacetVersion = getJSFProjectFacet( facetedProject );
         IProjectFacet jsfFacet = PortletCore.JSF_FACET;
@@ -159,8 +161,10 @@ public class JSFPortletFramework extends BasePortletFramework
                     {
                         IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
 
-                        defaultDocroot.getFile( "WEB-INF/web.xml" ).setContents(
-                            Files.newInputStream( originalWebXmlFile.toPath() ), IResource.FORCE, null );
+                        try (InputStream newInputStream = Files.newInputStream( originalWebXmlFile.toPath() )) {
+                            defaultDocroot.getFile( "WEB-INF/web.xml" ).setContents(
+                                newInputStream, IResource.FORCE, null );
+                        }
                     }
                 }
             }
@@ -203,7 +207,8 @@ public class JSFPortletFramework extends BasePortletFramework
         return Status.OK_STATUS;
     }
 
-    public boolean supports( ILiferayProjectProvider provider )
+    @Override
+	public boolean supports( ILiferayProjectProvider provider )
     {
         return provider != null &&
             ( "ant".equals( provider.getShortName() ) || "maven".equals( provider.getShortName() ) );

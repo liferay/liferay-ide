@@ -19,6 +19,7 @@ import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.util.LiferayPublishHelper;
 
 import java.io.File;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +77,8 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
             kind, ( redeployModules == null ) ? modules : redeployModules, deltaKinds, monitor, info );
     }
 
-    public IPath getDeployedPath( IModule[] module )
+    @Override
+	public IPath getDeployedPath( IModule[] module )
     {
         return getModuleDeployDirectory( module[0] );
     }
@@ -108,12 +110,14 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
         return (LiferayTomcatServer) getServer().loadAdapter( LiferayTomcatServer.class, null );
     }
 
-    public IModuleResourceDelta[] getPublishedResourceDelta( IModule[] module )
+    @Override
+	public IModuleResourceDelta[] getPublishedResourceDelta( IModule[] module )
     {
         return super.getPublishedResourceDelta( module );
     }
 
-    public IModuleResource[] getResources( IModule[] module )
+    @Override
+	public IModuleResource[] getResources( IModule[] module )
     {
         return super.getResources( module );
     }
@@ -135,11 +139,12 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
         IPath confDir = baseDir.append( "conf" ); //$NON-NLS-1$
         IPath serverXml = confDir.append( "server.xml" ); //$NON-NLS-1$
 
-        try
+        try( InputStream newInputStream = Files.newInputStream( serverXml.toFile().toPath() ))
         {
             Factory factory = new Factory();
             factory.setPackageName( "org.eclipse.jst.server.tomcat.core.internal.xml.server40" ); //$NON-NLS-1$
-            Server publishedServer = (Server) factory.loadDocument( Files.newInputStream( serverXml.toFile().toPath() ) );
+
+            Server publishedServer = (Server) factory.loadDocument( newInputStream );
             ServerInstance publishedInstance = new ServerInstance( publishedServer, null, null );
 
             IPath contextPath = null;
@@ -268,13 +273,15 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
         super.publishModules( kind, ( redeployModules == null ) ? modules : redeployModules, deltaKind2, multi, monitor );
     }
 
-    public void redeployModule( IModule[] module ) throws CoreException
+    @Override
+	public void redeployModule( IModule[] module ) throws CoreException
     {
         setModulePublishState( module, IServer.PUBLISH_STATE_FULL );
 
         IAdaptable info = new IAdaptable()
         {
-            @SuppressWarnings( "unchecked" )
+            @Override
+			@SuppressWarnings( "unchecked" )
             public Object getAdapter( Class adapter )
             {
                 if( String.class.equals( adapter ) )
