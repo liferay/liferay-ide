@@ -29,6 +29,7 @@ import com.liferay.ide.server.remote.ServerManagerConnection;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -681,27 +682,29 @@ public class LiferayServerCore extends Plugin
                 {
                     try
                     {
-                        final IMemento existingMemento =
-                            XMLMemento.loadMemento( Files.newInputStream( runtimesGlobalFile.toPath() ) );
+                        try (InputStream newInputStream = Files.newInputStream( runtimesGlobalFile.toPath() )) {
+                            final IMemento existingMemento =
+                                XMLMemento.loadMemento( newInputStream );
 
-                        if( existingMemento != null )
-                        {
-                            final IMemento[] children = existingMemento.getChildren( "runtime" );
-
-                            if( ! CoreUtil.isNullOrEmpty( children ) )
+                            if( existingMemento != null )
                             {
-                                for( IMemento child : children )
+                                final IMemento[] children = existingMemento.getChildren( "runtime" );
+
+                                if( ! CoreUtil.isNullOrEmpty( children ) )
                                 {
-                                    final IPath loc = Path.fromPortableString( child.getString( "location" ) );
-
-                                    if( loc != null && loc.toFile().exists() )
+                                    for( IMemento child : children )
                                     {
-                                        boolean duplicate =
-                                            ServerCore.findRuntime( child.getString( "id" ) ) != null;
+                                        final IPath loc = Path.fromPortableString( child.getString( "location" ) );
 
-                                        if( ! duplicate )
+                                        if( loc != null && loc.toFile().exists() )
                                         {
-                                            existing.add( child );
+                                            boolean duplicate =
+                                                ServerCore.findRuntime( child.getString( "id" ) ) != null;
+
+                                            if( ! duplicate )
+                                            {
+                                                existing.add( child );
+                                            }
                                         }
                                     }
                                 }
@@ -765,23 +768,24 @@ public class LiferayServerCore extends Plugin
                 {
                     try
                     {
-                        final IMemento existingMemento =
-                            XMLMemento.loadMemento( Files.newInputStream( globalServersFile.toPath() ) );
+                        try (InputStream newInputStream = Files.newInputStream( globalServersFile.toPath() )) {
+                            final IMemento existingMemento = XMLMemento.loadMemento( newInputStream );
 
-                        if( existingMemento != null )
-                        {
-                            final IMemento[] children = existingMemento.getChildren( "server" );
-
-                            if( ! CoreUtil.isNullOrEmpty( children ) )
+                            if( existingMemento != null )
                             {
-                                for( IMemento child : children )
-                                {
-                                    final boolean duplicate =
-                                        ServerCore.findServer( child.getString( "id" ) ) != null;
+                                final IMemento[] children = existingMemento.getChildren( "server" );
 
-                                    if( ! duplicate )
+                                if( ! CoreUtil.isNullOrEmpty( children ) )
+                                {
+                                    for( IMemento child : children )
                                     {
-                                        existing.add( child );
+                                        final boolean duplicate =
+                                            ServerCore.findServer( child.getString( "id" ) ) != null;
+
+                                        if( ! duplicate )
+                                        {
+                                            existing.add( child );
+                                        }
                                     }
                                 }
                             }

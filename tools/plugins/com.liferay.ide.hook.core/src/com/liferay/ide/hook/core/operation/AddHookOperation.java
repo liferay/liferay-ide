@@ -152,13 +152,13 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
 		if (!file.exists()) {
 			if (originalPortalJspPath.toFile().exists()) {
-				InputStream fis = Files.newInputStream(originalPortalJspPath.toFile().toPath());
-
-				if (newJspFile.exists()) {
-					newJspFile.setContents(fis, IResource.FORCE, null);
-				}
-				else {
-					newJspFile.create(fis, true, null);
+				try (InputStream fis = Files.newInputStream(originalPortalJspPath.toFile().toPath())) {
+					if (newJspFile.exists()) {
+						newJspFile.setContents(fis, IResource.FORCE, null);
+					}
+					else {
+						newJspFile.create(fis, true, null);
+					}
 				}
 			}
 			else {
@@ -182,7 +182,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
 		IWorkspaceRoot root = project.getWorkspace().getRoot();
 
-		IFolder customFolder = (IFolder)root.getFolder(new Path(customFolderValue));
+		IFolder customFolder = root.getFolder(new Path(customFolderValue));
 
 		try {
 			CoreUtil.prepareFolder(customFolder);
@@ -250,7 +250,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
 		IWorkspaceRoot root = project.getWorkspace().getRoot();
 
-		IFolder contentFolder = (IFolder)root.getFolder(new Path(contentFolderValue));
+		IFolder contentFolder = root.getFolder(new Path(contentFolderValue));
 
 		try {
 			CoreUtil.prepareFolder(contentFolder);

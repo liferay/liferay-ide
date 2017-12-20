@@ -19,6 +19,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.nio.file.Files;
@@ -149,29 +150,31 @@ public class SDKCorePlugin extends Plugin {
 
 			if (sdkGlobalFile.exists()) {
 				try {
-					IMemento existingMemento = XMLMemento.loadMemento(Files.newInputStream(sdkGlobalFile.toPath()));
+					try (InputStream newInputStream = Files.newInputStream(sdkGlobalFile.toPath())) {
+						IMemento existingMemento = XMLMemento.loadMemento(newInputStream);
 
-					if (existingMemento != null) {
-						IMemento[] children = existingMemento.getChildren("sdk");
+						if (existingMemento != null) {
+							IMemento[] children = existingMemento.getChildren("sdk");
 
-						if (!CoreUtil.isNullOrEmpty(children)) {
-							for (IMemento child : children) {
-								IPath loc = Path.fromPortableString(child.getString("location"));
+							if (!CoreUtil.isNullOrEmpty(children)) {
+								for (IMemento child : children) {
+									IPath loc = Path.fromPortableString(child.getString("location"));
 
-								if ((loc != null) && loc.toFile().exists()) {
-									boolean duplicate = false;
+									if ((loc != null) && loc.toFile().exists()) {
+										boolean duplicate = false;
 
-									for (SDK sdk : sdks) {
-										IPath sdkLocation = sdk.getLocation();
+										for (SDK sdk : sdks) {
+											IPath sdkLocation = sdk.getLocation();
 
-										if (sdkLocation.toFile().equals(loc.toFile())) {
-											duplicate = true;
-											break;
+											if (sdkLocation.toFile().equals(loc.toFile())) {
+												duplicate = true;
+												break;
+											}
 										}
-									}
 
-									if (!duplicate) {
-										existing.add(child);
+										if (!duplicate) {
+											existing.add(child);
+										}
 									}
 								}
 							}
