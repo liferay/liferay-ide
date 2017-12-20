@@ -31,7 +31,7 @@ import org.junit.Test;
  * @author Ashley Yuan
  * @author Ying Xu
  */
-public class ValidationNewFragmentWizardTests extends SwtbotBase {
+public class ValidationFragmentTests extends SwtbotBase {
 
 	@Test
 	public void checkBuildType() {

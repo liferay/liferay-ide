@@ -135,6 +135,8 @@ public interface Messages {
 
 	public static final String NAMESPACE_EMPTY_BE_MESSAGE = "Namespace cannot be empty.";
 
+	public static final String NO_SUITABLE_LIFERAY_MODULE_PROJECT = "No suitable liferay module project.";
+
 	public static final String NOT_A_JAVA_SOURCE_FOLDER = "Not a Java source folder.";
 
 	public static final String PACKAGE_PATH_CANNOT_BE_EMPTY = "Package path cannot be empty.";

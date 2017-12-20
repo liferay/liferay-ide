@@ -15,8 +15,8 @@
 package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
-import com.liferay.ide.ui.liferay.page.wizard.NewLiferayComponentWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewFragmentFilesWizard;
+import com.liferay.ide.ui.liferay.page.wizard.NewLiferayComponentWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewRuntime62Wizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewRuntime7Wizard;
 import com.liferay.ide.ui.liferay.page.wizard.project.ImportLiferayWorkspaceWizard;
@@ -321,6 +321,26 @@ public class WizardAction extends UIAction {
 			_newLiferayComponentWizard.getBrowseBtn().click();
 		}
 
+		public void openSelectPackageNameDialog() {
+			_newLiferayComponentWizard.getPackageBrowseBtn().click();
+		}
+
+		public void prepare(String template) {
+			_newLiferayComponentWizard.getComponentClassTemplates().setSelection(template);
+
+			ide.sleep();
+		}
+
+		public void prepare(String projectName, String packageName) {
+			_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
+
+			ide.sleep();
+
+			_newLiferayComponentWizard.getPackageName().setText(packageName);
+
+			ide.sleep();
+		}
+
 		public void prepare(String projectName, String template, String className, String packageName) {
 			_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
 
@@ -335,6 +355,18 @@ public class WizardAction extends UIAction {
 			ide.sleep();
 
 			_newLiferayComponentWizard.getPackageName().setText(packageName);
+
+			ide.sleep();
+		}
+
+		public void prepareModelClass(String modelClass) {
+			_newLiferayComponentWizard.getModelClassName().setText(modelClass);
+
+			ide.sleep();
+		}
+
+		public void prepareServiceName(String serviceName) {
+			_newLiferayComponentWizard.getServiceName().setText(serviceName);
 
 			ide.sleep();
 		}
