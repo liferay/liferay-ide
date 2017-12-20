@@ -54,9 +54,6 @@ import org.osgi.util.tracker.ServiceTracker;
 @Component
 public class ProjectMigrationService implements Migration {
 
-	private static int _count = 0;
-	private static int _total = 0;
-
 	@Activate
 	public void activate(BundleContext context) {
 		_context = context;
@@ -223,25 +220,7 @@ public class ProjectMigrationService implements Migration {
 			_count++;
 		}
 
-
 		return FileVisitResult.CONTINUE;
-	}
-
-	private void _updateListeners(List<Problem> problems) {
-		if (!problems.isEmpty()) {
-			MigrationListener[] listeners = _migrationListenerTracker.getServices(new MigrationListener[0]);
-
-			for (MigrationListener listener : listeners) {
-				try {
-					listener.problemsFound(problems);
-				}
-				catch (Exception e) {
-
-					// ignore
-
-				}
-			}
-		}
 	}
 
 	private void _countTotal(File dir) {
@@ -274,6 +253,23 @@ public class ProjectMigrationService implements Migration {
 		}
 		catch (IOException ioe) {
 			ioe.printStackTrace();
+		}
+	}
+
+	private void _updateListeners(List<Problem> problems) {
+		if (!problems.isEmpty()) {
+			MigrationListener[] listeners = _migrationListenerTracker.getServices(new MigrationListener[0]);
+
+			for (MigrationListener listener : listeners) {
+				try {
+					listener.problemsFound(problems);
+				}
+				catch (Exception e) {
+
+					// ignore
+
+				}
+			}
 		}
 	}
 
@@ -317,6 +313,9 @@ public class ProjectMigrationService implements Migration {
 			ioe.printStackTrace();
 		}
 	}
+
+	private static int _count = 0;
+	private static int _total = 0;
 
 	private BundleContext _context;
 	private FileHelper _fileHelper = new FileHelper();

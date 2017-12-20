@@ -74,11 +74,14 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 			for (SearchResult searchResult : searchResults) {
 				String fileExtension = new Path(file.getAbsolutePath()).getFileExtension();
 
-				problems.add(
-					new Problem(
-						problemTitle, problemSummary, fileExtension, problemTickets, file, searchResult.startLine,
-						searchResult.startOffset, searchResult.endOffset, sectionHtml, searchResult.autoCorrectContext,
-						Problem.STATUS_NOT_RESOLVED, Problem.DEFAULT_MARKER_ID, Problem.MARKER_ERROR));
+				if (searchResult != null) {
+					problems.add(
+						new Problem(
+							problemTitle, problemSummary, fileExtension, problemTickets, file, searchResult.startLine,
+							searchResult.startOffset, searchResult.endOffset, sectionHtml,
+							searchResult.autoCorrectContext, Problem.STATUS_NOT_RESOLVED, Problem.DEFAULT_MARKER_ID,
+							Problem.MARKER_ERROR));
+				}
 			}
 		}
 

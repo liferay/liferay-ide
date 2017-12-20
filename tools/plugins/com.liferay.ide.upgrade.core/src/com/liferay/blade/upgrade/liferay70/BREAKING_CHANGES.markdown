@@ -4399,3 +4399,77 @@ Old signature:
 New signature:
 
       DateUtil.compareTo(date1,date2);
+
+---------------------------------------
+
+### Build Auto Upgrade [](id=build-auto-upgrade)
+- **Date:** 2017-Aug-17
+- **JIRA Ticket:** LPS-73967
+
+#### What changed? [](id=what-changed-111)
+
+The `build.auto.upgrade` property in `service.properties` for Liferay Portal 6.x
+Service Builder portlets applies Liferay Service schema changes on rebuilding
+the services and redeploying the portlets.
+
+Since 7.0, the per portlet property `build.auto.upgrade` is deprecated.
+
+This change reintroduces Build Auto Upgrade in a new global property
+`schema.module.build.auto.upgrade` in the
+`[Liferay_Home]/portal-developer.properties` file.
+
+Setting the global property `schema.module.build.auto.upgrade` to `true` applies
+module schema changes for redeployed modules whose service build numbers have
+incremented. The `build.number` property in the module's `service.properties`
+file indicates the service build number.
+
+#### Who is affected? [](id=who-is-affected-111)
+
+This feature is available for developers to use in development only.
+
+**WARNING**: DO NOT USE the Build Auto Upgrade feature in production. Liferay
+DOES NOT support Build Auto Upgrade in production.
+
+#### How should I update my code? [](id=how-should-i-update-my-code-111)
+
+To use this feature in development, set the global property
+`schema.module.build.auto.upgrade` in
+`[Liferay_Home]/portal-developer.properties` to `true`, increment your module's
+`build.number` in the `service.properties` file, and deploy the module.
+
+#### Why was this change made? [](id=why-was-this-change-made-111)
+
+This change was made so that 7.0 developers could test database schema changes
+on the fly, without having to write upgrade processes.
+
+---------------------------------------
+
+### Removed Exports from Dynamic Data Lists Web (id=removed-exports-from-dynamic-data-lists-web)
+- **Date:** 2017-Nov-27
+- **JIRA Ticket:** LPS-75778
+
+#### What changed? [](id=what-changed-112)
+
+The `Dynamic Data Lists Web` module no longer exports the
+`com.liferay.dynamic.data.lists.web.asset` package.
+
+#### Who is affected? [](id=who-is-affected-112)
+
+This change affects anyone who is using the
+`com.liferay.dynamic.data.lists.web.asset` package. This particularly affects
+anyone using
+`com.liferay.dynamic.data.lists.web.asset.DDLRecordAssetRendererFactory` and
+casting the return `AssetRenderer` to
+`com.liferay.dynamic.data.lists.web.asset.DDLRecordAssetRenderer`.
+
+#### How should I update my code? [](id=how-should-i-update-my-code-112)
+
+There are no replacements for this package; you must remove all usages.
+`DDLRecordAssetRendererFactory` can still be used as an OSGi service; however,
+you can no longer cast the returned `AssetRenderer` to `DDLRecordAssetRenderer`.
+
+#### Why was this change made? [](id=why-was-this-change-made-112)
+
+This change was made to clean up LPKG dependencies.
+
+---------------------------------------
