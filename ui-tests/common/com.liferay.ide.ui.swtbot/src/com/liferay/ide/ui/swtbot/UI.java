@@ -353,6 +353,8 @@ public interface UI {
 
 	public final String LIFERAY_CODE_UPGRADE = "Liferay Code Upgrade";
 
+	public final String LIFERAY_COMPONENT_CLASS = "Liferay Component Class";
+
 	public final String LIFERAY_FACES_ALLOY = "Liferay Faces Alloy";
 
 	public final String LIFERAY_HOOK_CONFIGURATION = "Liferay Hook Configuration";

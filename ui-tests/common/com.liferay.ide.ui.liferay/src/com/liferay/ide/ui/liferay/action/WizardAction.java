@@ -98,8 +98,18 @@ public class WizardAction extends UIAction {
 		ide.getFileMenu().clickMenu(NEW, LIFERAY_MODULE_FRAGMENT_FILES);
 	}
 
+	public void openFileMenuLiferayComponentClassWizard() {
+		ide.getFileMenu().clickMenu(NEW, LIFERAY_COMPONENT_CLASS);
+	}
+
 	public void openNewBtnFragmentFilesWizard() {
 		MenuItem menu = ide.getNewBtn().getLiferayMoudleFragmentFiles();
+
+		menu.click();
+	}
+
+	public void openNewBtnLiferayComponentClassWizard() {
+		MenuItem menu = ide.getNewBtn().getLiferayComponentClass();
 
 		menu.click();
 	}
@@ -476,7 +486,7 @@ public class WizardAction extends UIAction {
 
 	}
 
-	public class NewModuleWizardAction {
+	public class NewModuleWizardAction extends NewProjectWizardAction {
 
 		public void prepare(String projectName) {
 			_newModuleWizard.getProjectName().setText(projectName);
@@ -507,6 +517,10 @@ public class WizardAction extends UIAction {
 
 		public void prepareGradle(String projectName, String template) {
 			_prepare(projectName, GRADLE, template);
+		}
+
+		public void prepareMaven(String projectName) {
+			_prepare(projectName, MAVEN, MVC_PORTLET);
 		}
 
 		public void prepareMaven(String projectName, String template) {
