@@ -29,7 +29,7 @@ import org.junit.Test;
 public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 	@Test
-	public void createLiferayWorksapce() {
+	public void createLiferayWorkspace() {
 		String workspaceName = "test-liferay-workspace-gradle";
 
 		wizardAction.openNewLiferayWorkspaceWizard();
@@ -38,11 +38,23 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		String[] moduleNames = {workspaceName, "modules"};
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(moduleNames));
+
+		String[] themeNames = {workspaceName, "themes"};
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(themeNames));
+
+		String[] warNames = {workspaceName, "wars"};
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(warNames));
+
 		viewAction.project.closeAndDelete(workspaceName);
 	}
 
 	@Test
-	public void createLiferayWorksapceChangeLocation() {
+	public void createLiferayWorkspaceChangeLocation() {
 		String workspaceName = "test-liferay-workspace-gradle-change-location";
 
 		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
@@ -60,72 +72,6 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		wizardAction.finish();
 
 		viewAction.project.closeAndDelete(workspaceName);
-	}
-
-	@Ignore("Ignore forever and test the download bundle in createLiferayWorksapceWithDownloadBundleChangeBundleUrl")
-	@Test
-	public void createLiferayWorksapceWithDownloadBundle() {
-		String workspaceName = "test-liferay-workspace-gradle-download-bundle";
-
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		wizardAction.newLiferayWorkspace.prepareGradle(workspaceName);
-
-		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
-
-		wizardAction.newLiferayWorkspace.setServerName("Liferay 7-download-bundle");
-
-		wizardAction.finish();
-
-		viewAction.project.closeAndDelete(workspaceName);
-
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay 7-download-bundle");
-
-		dialogAction.preferences.confirm();
-	}
-
-	@Test
-	public void createLiferayWorksapceWithDownloadBundleChangeBundleUrl() {
-		if (!envAction.internal()) {
-			return;
-		}
-
-		String workspaceName = "test-liferay-workspace-gradle-change-bundle-url";
-
-		// Use the internal server instead of the public server and also need to append the internal host
-
-		String bundleUrl =
-			"http://releases.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
-
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		wizardAction.newLiferayWorkspace.prepareGradle(workspaceName);
-
-		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
-
-		wizardAction.newLiferayWorkspace.setServerName("Liferay 7-change-bundle-url");
-
-		wizardAction.newLiferayWorkspace.setBundleUrl(bundleUrl);
-
-		wizardAction.finish();
-
-		viewAction.project.closeAndDelete(workspaceName);
-
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay 7-change-bundle-url");
-
-		dialogAction.preferences.confirm();
-	}
-
-	@Test
-	public void createLiferayWorksapceWithDownloadBundleChangeServerName() {
 	}
 
 	@Test
@@ -220,6 +166,67 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(newModuleNames);
 
 		viewAction.project.closeAndDelete(workspaceName);
+	}
+
+	@Ignore("Ignore forever and test the download bundle in createLiferayWorkspaceWithDownloadBundleChangeBundleUrl")
+	@Test
+	public void createLiferayWorkspaceWithDownloadBundle() {
+		String workspaceName = "test-liferay-workspace-gradle-download-bundle";
+
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(workspaceName);
+
+		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
+
+		wizardAction.finish();
+
+		viewAction.project.closeAndDelete(workspaceName);
+
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
+
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay 7-download-bundle");
+
+		dialogAction.preferences.confirm();
+	}
+
+	@Ignore("waiting for server configuration")
+	@Test
+	public void createLiferayWorkspaceWithDownloadBundleChangeBundleUrl() {
+		if (!envAction.internal()) {
+			return;
+		}
+
+		String workspaceName = "test-liferay-workspace-gradle-change-bundle-url";
+
+		// Use the internal server instead of the public server and also need to append the internal host
+
+		String bundleUrl =
+			"http://releases.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
+
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		wizardAction.newLiferayWorkspace.prepareGradle(workspaceName);
+
+		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
+
+		wizardAction.newLiferayWorkspace.setServerName("Liferay 7-change-bundle-url");
+
+		wizardAction.newLiferayWorkspace.setBundleUrl(bundleUrl);
+
+		wizardAction.finish();
+
+		viewAction.project.closeAndDelete(workspaceName);
+
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
+
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay 7-change-bundle-url");
+
+		dialogAction.preferences.confirm();
 	}
 
 }
