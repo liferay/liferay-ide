@@ -28,6 +28,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 @SuppressWarnings("deprecation")
 public class CUCache {
@@ -36,7 +37,7 @@ public class CUCache {
 		synchronized (_map) {
 			WeakReference<CompilationUnit> astRef = _map.get(file);
 
-			if ((astRef.get() == null) || (astRef == null)) {
+			if ((astRef == null) || (astRef.get() == null)) {
 				final CompilationUnit newAst = createCompilationUnit(file.getName(), javaSource);
 
 				_map.put(file, new WeakReference<CompilationUnit>(newAst));
@@ -55,7 +56,6 @@ public class CUCache {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private static CompilationUnit createCompilationUnit(String unitName, char[] javaSource) {
 		ASTParser parser = ASTParser.newParser(AST.JLS2);
 
