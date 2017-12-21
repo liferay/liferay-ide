@@ -22,6 +22,7 @@ import org.junit.Test;
 
 /**
  * @author Terry Jia
+ * @author Rui Wang
  */
 public class NewPortletModuleGradleTests extends SwtbotBase {
 
@@ -53,6 +54,111 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
 		jobAction.waitForValidate(projectName);
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createNpmAngularPortlet() {
+		String projectName = "test-npm-angular-portlet-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(projectName, NPM_ANGULAR_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createNpmBillboardjsPortlet() {
+		String projectName = "test-npm-billboardjs-portlet-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(projectName, NPM_BILLBOARDJS_PORLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createNpmIsomorphicPortlet() {
+		String projectName = "test-npm-isomorphic-portlet-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(projectName, NPM_ISOMORPHIC_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createNpmJqueryPortlet() {
+		String projectName = "test-npm-jquery-portlet-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(projectName, NPM_JQUERY_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createNpmMetaljsPortletGradle() {
+		String projectName = "test-npm-metaljs-portlet-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(projectName, NPM_METALJS_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createNpmPortlet() {
+		String projectName = "test-npm-portlet-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(projectName, NPM_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createNpmReactPortlet() {
+		String projectName = "test-npm-react-portlet-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(projectName, NPM_REACT_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
 		viewAction.project.closeAndDelete(projectName);
 	}
@@ -97,6 +203,21 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, SPRING_MVC_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createNpmVuejsPortlet() {
+		String projectName = "test-npm-vuejs-portlet-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(projectName, NPM_VUEJS_PORTLET);
 
 		wizardAction.finish();
 
