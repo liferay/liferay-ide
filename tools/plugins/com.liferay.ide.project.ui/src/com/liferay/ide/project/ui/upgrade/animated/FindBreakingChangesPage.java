@@ -607,8 +607,8 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 		TableColumn column1 = col1.getColumn();
 		TableColumn column2 = col2.getColumn();
 
-		tableLayout.setColumnData(column0, new ColumnWeightData(0, column0.getWidth()));
-		tableLayout.setColumnData(column1, new ColumnWeightData(0, column1.getWidth()));
+		tableLayout.setColumnData(column0, new ColumnWeightData(50, column0.getWidth()));
+		tableLayout.setColumnData(column1, new ColumnWeightData(50, column1.getWidth()));
 		tableLayout.setColumnData(column2, new ColumnWeightData(100, column2.getWidth()));
 
 		Table table = problemsViewer.getTable();
@@ -716,19 +716,9 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 			else {
 				_browser.setText(problem.html);
 			}
-
-			// }
-
 		}
 		else {
-			/*
-			 * if( Platform.getOS().equals( Platform.OS_LINUX ) ) { _form.setText( "",
-			 * false, false ); } else {
-			 */
 			_browser.setUrl("about:blank");
-
-			// }
-
 		}
 	}
 
