@@ -780,6 +780,10 @@ public interface UI {
 
 	public final String WAR = "war";
 
+	public final String WAR_HOOK = "war-hook";
+
+	public final String WAR_MVC_PORTLET = "war-mvc-portlet";
+
 	public final String WEB = "Web";
 
 	public final String WEB_ROOT_FOLDER = "Web root folder:";
