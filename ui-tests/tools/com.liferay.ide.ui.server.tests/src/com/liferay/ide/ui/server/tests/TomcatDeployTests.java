@@ -27,27 +27,27 @@ public class TomcatDeployTests extends TomcatBase {
 	public void deploySampleProject() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		String projectName = "test1";
+		String projectName1 = "test1";
 
-		wizardAction.newModule.prepare(projectName);
+		wizardAction.newModule.prepare(projectName1);
 
 		wizardAction.finish();
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		projectName = "test2";
+		String projectName2 = "test2";
 
-		wizardAction.newModule.prepare(projectName);
+		wizardAction.newModule.prepare(projectName2);
 
 		wizardAction.finish();
 
 		viewAction.servers.openAddAndRemoveDialog(getServerStartedLabel());
 
-		dialogAction.addAndRemove.addModule(projectName);
+		dialogAction.addAndRemove.addModule(projectName1);
 
 		dialogAction.confirm(FINISH);
 
-		jobAction.waitForConsoleContent(getServerName(), "STARTED " + projectName + "_", 20 * 1000);
+		jobAction.waitForConsoleContent(getServerName(), "STARTED " + projectName1 + "_", 20 * 1000);
 	}
 
 }

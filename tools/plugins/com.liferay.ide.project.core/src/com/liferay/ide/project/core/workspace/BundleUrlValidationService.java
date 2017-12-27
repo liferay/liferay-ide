@@ -14,9 +14,6 @@
 
 package com.liferay.ide.project.core.workspace;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.apache.xerces.util.URI;
 
 import org.eclipse.sapphire.modeling.Status;
@@ -34,14 +31,6 @@ public class BundleUrlValidationService extends ValidationService {
 		BaseLiferayWorkspaceOp op = _op();
 
 		String bundleUrl = op.getBundleUrl().content();
-
-		try {
-			new URL(bundleUrl);
-		}
-		catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 
 		try {
 			new URI(bundleUrl);
