@@ -16,8 +16,6 @@ package com.liferay.ide.project.core.workspace;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
@@ -30,15 +28,7 @@ public class WorkspaceLocationValidationService extends ValidationService {
 	@Override
 	protected Status compute() {
 		Status retval = Status.createOkStatus();
-
-		Value<Path> locationValue = _op().getLocation();
-		Value<String> workspaceNameValue = _op().getWorkspaceName();
-		Value<Boolean> useDefaultLocationValue = _op().getUseDefaultLocation();
-
-		Path currentProjectLocation = locationValue.content(true);
-		String currentWorkspaceName = workspaceNameValue.content();
-		boolean useDefaultLocation = useDefaultLocationValue.content(true);
-
+		
 		/*
 		 * Location won't be validated if the UseDefaultLocation has an error. Get the
 		 * validation of the property might not work as excepted, let's use call the
@@ -49,23 +39,29 @@ public class WorkspaceLocationValidationService extends ValidationService {
 		 * display the error of project name when project name and location are both
 		 * null.
 		 */
-		if (!useDefaultLocation && (currentWorkspaceName != null)) {
+
+		Path currentProjectLocation = _op().getLocation().content(true);
+		boolean useDefaultLocation = _op().getUseDefaultLocation().content(true);
+
+		if (!useDefaultLocation) {
 			if (currentProjectLocation != null) {
-				String currentPath = currentProjectLocation.append(currentWorkspaceName).toOSString();
+				
+				String currentPath = currentProjectLocation.toOSString();
 
-				IPath osPath = org.eclipse.core.runtime.Path.fromOSString(currentPath);
+				File osPathFile = Path.fromOSString(currentPath).toFile();
 
-				if (!osPath.toFile().isAbsolute()) {
+				if (!osPathFile.isAbsolute()) {
 					return Status.createErrorStatus("\"" + currentPath + "\" is not an absolute path.");
 				}
 
-				if (!_canCreate(osPath.toFile())) {
+				if (!_canCreate(osPathFile)) {
 					return Status.createErrorStatus("Cannot create project content at \"" + currentPath + "\".");
 				}
 			}
 			else {
 				return Status.createErrorStatus("Location must be specified.");
 			}
+			
 		}
 
 		return retval;
