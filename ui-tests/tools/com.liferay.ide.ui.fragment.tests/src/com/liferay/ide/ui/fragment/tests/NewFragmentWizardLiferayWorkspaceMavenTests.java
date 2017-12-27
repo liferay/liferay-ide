@@ -14,89 +14,15 @@
 
 package com.liferay.ide.ui.fragment.tests;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.LiferayWorkspaceTomcatMavenBase;
 
-import java.io.IOException;
-
-import org.eclipse.core.runtime.IPath;
-
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * @author Lily Li
  */
-public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
-
-	@BeforeClass
-	public static void addServerAndWorkspace() throws IOException {
-		envAction.unzipServer();
-
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
-
-		wizardAction.newRuntime.prepare7();
-
-		wizardAction.next();
-
-		IPath serverDir = envAction.getServerDir();
-
-		IPath fullServerDir = serverDir.append(envAction.getServerName());
-
-		wizardAction.newRuntime7.prepare(_serverName, fullServerDir.toOSString());
-
-		wizardAction.finish();
-
-		dialogAction.preferences.confirm();
-
-		wizardAction.openNewLiferayServerWizard();
-
-		wizardAction.newServer.prepare(_serverName);
-
-		wizardAction.finish();
-
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		wizardAction.newLiferayWorkspace.prepareMaven(_liferayWorkspaceName);
-
-		wizardAction.finish();
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(_liferayWorkspaceName));
-	}
-
-	@AfterClass
-	public static void cleanWorkspaceAndServer() {
-		String themesFolderName = _liferayWorkspaceName + "-themes (in themes)";
-
-		String warsFolderName = _liferayWorkspaceName + "-wars (in wars)";
-
-		String[] modulesFolderNames = {_liferayWorkspaceName, _modulesFolderName};
-
-		String[] themesFolderNames = {_liferayWorkspaceName, themesFolderName};
-
-		String[] warsFolderNames = {_liferayWorkspaceName, warsFolderName};
-
-		viewAction.project.closeAndDelete(modulesFolderNames);
-
-		viewAction.project.closeAndDelete(themesFolderNames);
-
-		viewAction.project.closeAndDelete(warsFolderNames);
-
-		viewAction.project.closeAndDelete(_liferayWorkspaceName);
-
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(_serverName);
-
-		dialogAction.preferences.confirm();
-	}
+public class NewFragmentWizardLiferayWorkspaceMavenTests extends LiferayWorkspaceTomcatMavenBase {
 
 	@Test
 	public void createFragmentWithJsp() {
@@ -122,7 +48,7 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {_liferayWorkspaceName, _modulesFolderName, projectName};
+		String[] projectNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -153,7 +79,7 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {_liferayWorkspaceName, _modulesFolderName, projectName};
+		String[] projectNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -184,7 +110,7 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {_liferayWorkspaceName, _modulesFolderName, projectName};
+		String[] projectNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -217,7 +143,7 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {_liferayWorkspaceName, _modulesFolderName, projectName};
+		String[] projectNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -248,7 +174,7 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {_liferayWorkspaceName, _modulesFolderName, projectName};
+		String[] projectNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -300,15 +226,11 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {_liferayWorkspaceName, _modulesFolderName, projectName};
+		String[] projectNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
 		viewAction.project.closeAndDelete(projectNames);
 	}
-
-	private static final String _liferayWorkspaceName = "test-liferay-workspace-maven";
-	private static final String _modulesFolderName = _liferayWorkspaceName + "-modules (in modules)";
-	private static final String _serverName = "Liferay 7-fragment-maven";
 
 }

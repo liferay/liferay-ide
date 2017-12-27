@@ -12,19 +12,15 @@
  * details.
  */
 
-package com.liferay.ide.ui.module.tests;
-
-import com.liferay.ide.ui.liferay.base.LiferayWorkspaceTomcatMavenBase;
-
-import org.junit.Test;
+package com.liferay.ide.ui.liferay.base;
 
 /**
  * @author Terry Jia
  */
-public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWorkspaceTomcatMavenBase {
+public interface ServerSupport {
 
-	@Test
-	public void createActivator() {
-	}
+	public static final String STARTED_LABEL = "  [Started]";
+
+	public static final String STOPPED_LABEL = "  [Stopped]";
 
 }

@@ -164,6 +164,21 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 	}
 
 	@Test
+	public void createNpmVuejsPortlet() {
+		String projectName = "test-npm-vuejs-portlet-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(projectName, NPM_VUEJS_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
 	public void createPortlet() {
 		String projectName = "test-portlet-gradle";
 
@@ -203,21 +218,6 @@ public class NewPortletModuleGradleTests extends SwtbotBase {
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, SPRING_MVC_PORTLET);
-
-		wizardAction.finish();
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
-
-		viewAction.project.closeAndDelete(projectName);
-	}
-
-	@Test
-	public void createNpmVuejsPortlet() {
-		String projectName = "test-npm-vuejs-portlet-gradle";
-
-		wizardAction.openNewLiferayModuleWizard();
-
-		wizardAction.newModule.prepareGradle(projectName, NPM_VUEJS_PORTLET);
 
 		wizardAction.finish();
 

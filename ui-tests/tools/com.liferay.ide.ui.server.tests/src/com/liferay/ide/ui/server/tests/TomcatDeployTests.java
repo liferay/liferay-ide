@@ -14,14 +14,14 @@
 
 package com.liferay.ide.ui.server.tests;
 
-import com.liferay.ide.ui.liferay.TomcatBase;
+import com.liferay.ide.ui.liferay.base.TomcatRunningBase;
 
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class TomcatDeployTests extends TomcatBase {
+public class TomcatDeployTests extends TomcatRunningBase {
 
 	@Test
 	public void deploySampleProject() {

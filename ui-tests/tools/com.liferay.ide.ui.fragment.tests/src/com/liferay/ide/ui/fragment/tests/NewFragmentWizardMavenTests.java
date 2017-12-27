@@ -14,15 +14,9 @@
 
 package com.liferay.ide.ui.fragment.tests;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.TomcatBase;
 
-import java.io.IOException;
-
-import org.eclipse.core.runtime.IPath;
-
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -30,49 +24,7 @@ import org.junit.Test;
  * @author Sunny Shi
  * @author Ying Xu
  */
-public class NewFragmentWizardMavenTests extends SwtbotBase {
-
-	@AfterClass
-	public static void deleteRuntime() {
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(_serverName);
-
-		dialogAction.preferences.confirm();
-	}
-
-	@BeforeClass
-	public static void init() throws IOException {
-		envAction.unzipServer();
-
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
-
-		wizardAction.newRuntime.prepare7();
-
-		wizardAction.next();
-
-		IPath serverDir = envAction.getServerDir();
-
-		IPath fullServerDir = serverDir.append(envAction.getServerName());
-
-		wizardAction.newRuntime7.prepare(_serverName, fullServerDir.toOSString());
-
-		wizardAction.finish();
-
-		dialogAction.preferences.confirm();
-
-		wizardAction.openNewLiferayServerWizard();
-
-		wizardAction.newServer.prepare(_serverName);
-
-		wizardAction.finish();
-	}
+public class NewFragmentWizardMavenTests extends TomcatBase {
 
 	@Test
 	public void createFragmentWithJsp() {
@@ -263,7 +215,5 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		viewAction.project.closeAndDelete(projectName);
 	}
-
-	private static final String _serverName = "Liferay 7-fragment-maven";
 
 }

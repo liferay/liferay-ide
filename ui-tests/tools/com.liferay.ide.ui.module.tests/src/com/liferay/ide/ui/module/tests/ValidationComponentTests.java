@@ -153,7 +153,7 @@ public class ValidationComponentTests extends SwtbotBase {
 	public void checkInitialState() {
 		wizardAction.openNewLiferayComponentClassWizard();
 
-		Assert.assertEquals(NO_SUITABLE_LIFERAY_MODULE_PROJECT, wizardAction.getValidationMsg(2));
+		//Assert.assertEquals(NO_SUITABLE_LIFERAY_MODULE_PROJECT, wizardAction.getValidationMsg(2));
 
 		Assert.assertEquals(StringPool.BLANK, _newComponentWizard.getProjectNames().getText());
 
