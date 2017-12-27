@@ -31,11 +31,27 @@ import org.junit.Test;
  * @author Vicky Wang
  * @author Ying Xu
  * @author Ashley Yuan
+ * @author Lily Li
  */
-public class ValidationNewLiferayWorkspaceWizardTests extends SwtbotBase {
+public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 	@Test
 	public void checkBuildType() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		String[] expectedBuildTypes = {GRADLE, MAVEN};
+		String[] buildTypes = _newLiferayWorkspaceProjectWizard.getBuildTypes().items();
+
+		int expectedLength = expectedBuildTypes.length;
+		int length = buildTypes.length;
+
+		Assert.assertEquals(expectedLength, length);
+
+		for (int i = 0; i < buildTypes.length; i++) {
+			Assert.assertTrue(buildTypes[i].equals(expectedBuildTypes[i]));
+		}
+
+		wizardAction.cancel();
 	}
 
 	@Test
