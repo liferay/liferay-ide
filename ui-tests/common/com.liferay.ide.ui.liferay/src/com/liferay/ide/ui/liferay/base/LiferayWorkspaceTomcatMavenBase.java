@@ -40,8 +40,6 @@ public class LiferayWorkspaceTomcatMavenBase extends TomcatBase {
 		viewAction.project.closeAndDelete(warsFolderNames);
 
 		viewAction.project.closeAndDelete(getLiferayWorkspaceName());
-
-		dialogAction.openPreferencesDialog();
 	}
 
 	public static String getLiferayWorkspaceName() {
