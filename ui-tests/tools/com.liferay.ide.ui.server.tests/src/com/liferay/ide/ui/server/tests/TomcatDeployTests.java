@@ -14,78 +14,20 @@
 
 package com.liferay.ide.ui.server.tests;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.TomcatBase;
 
-import java.io.IOException;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class TomcatDeployTests extends SwtbotBase {
+public class TomcatDeployTests extends TomcatBase {
 
-	@BeforeClass
-	public static void startServer() throws IOException {
-		envAction.unzipServer();
-
-		envAction.prepareGeoFile();
-
-		envAction.preparePortalExtFile();
-
-		envAction.preparePortalSetupWizardFile();
-
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
-
-		wizardAction.newRuntime.prepare7();
-
-		wizardAction.next();
-
-		wizardAction.newRuntime7.prepare(_serverName, envAction.getServerFullDir().toOSString());
-
-		wizardAction.finish();
-
-		dialogAction.preferences.confirm();
-
-		wizardAction.openNewLiferayServerWizard();
-
-		wizardAction.newServer.prepare(_serverName);
-
-		wizardAction.finish();
-
-		// viewAction.servers.start(_serverStoppedLabel);
-
-		// jobAction.waitForServerStarted(_serverName);
-
-	}
-
-	@AfterClass
-	public static void stopServer() throws IOException {
-
-		// viewAction.servers.stop(_serverStartedLabel);
-
-		// jobAction.waitForServerStopped(_serverName);
-
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(_serverName);
-
-		dialogAction.preferences.confirm();
-	}
-
-	@Ignore("ignore to wait Terry finish the server start checker")
 	@Test
 	public void deploySampleProject() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		String projectName = "test";
+		String projectName = "test1";
 
 		wizardAction.newModule.prepare(projectName);
 
@@ -99,17 +41,13 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.servers.openAddAndRemoveDialog(_serverStartedLabel);
+		viewAction.servers.openAddAndRemoveDialog(getServerStartedLabel());
 
 		dialogAction.addAndRemove.addModule(projectName);
 
 		dialogAction.confirm(FINISH);
 
-		jobAction.waitForConsoleContent(_serverName, "STARTED " + projectName + "_", 20 * 1000);
+		jobAction.waitForConsoleContent(getServerName(), "STARTED " + projectName + "_", 20 * 1000);
 	}
-
-	private static final String _serverName = "Liferay 7-deploy";
-	private static final String _serverStartedLabel = _serverName + "  [Started]";
-	private static final String _serverStoppedLabel = _serverName + "  [Stopped]";
 
 }
