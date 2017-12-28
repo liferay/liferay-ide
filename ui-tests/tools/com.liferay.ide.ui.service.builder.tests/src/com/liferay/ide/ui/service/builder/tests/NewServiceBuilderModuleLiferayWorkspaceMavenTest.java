@@ -14,40 +14,15 @@
 
 package com.liferay.ide.ui.service.builder.tests;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.LiferayWorkspaceTomcatMavenBase;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * @author Joye Luo
  */
-public class NewServiceBuilderModuleLiferayWorkspaceMavenTest extends SwtbotBase {
-
-	@AfterClass
-	public static void cleanLiferayWorkspace() {
-		String[] moduleNames = {_lrwsName, _lrwsName + "-modules (in modules)"};
-		String[] themeNames = {_lrwsName, _lrwsName + "-themes (in themes)"};
-		String[] warNames = {_lrwsName, _lrwsName + "-wars (in wars)"};
-
-		viewAction.project.closeAndDelete(moduleNames);
-		viewAction.project.closeAndDelete(themeNames);
-		viewAction.project.closeAndDelete(warNames);
-		viewAction.project.closeAndDelete(_lrwsName);
-	}
-
-	@BeforeClass
-	public static void createLiferayWorkspace() {
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		wizardAction.newLiferayWorkspace.prepareMaven(_lrwsName);
-
-		wizardAction.finish();
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(_lrwsName));
-	}
+public class NewServiceBuilderModuleLiferayWorkspaceMavenTest extends LiferayWorkspaceTomcatMavenBase {
 
 	@Test
 	public void createServiceBuilder() {
@@ -59,20 +34,20 @@ public class NewServiceBuilderModuleLiferayWorkspaceMavenTest extends SwtbotBase
 
 		wizardAction.finish();
 
-		String[] projectNames = {_lrwsName, _lrwsName + "-modules (in modules)", projectName};
+		String[] projectNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		String[] serviceNames = {_lrwsName, _lrwsName + "-modules (in modules)", projectName, projectName + "-service"};
+		String[] serviceNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName, projectName + "-service"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(serviceNames));
 
-		String[] apiNames = {_lrwsName, _lrwsName + "-modules (in modules)", projectName, projectName + "-api"};
+		String[] apiNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName, projectName + "-api"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(apiNames));
 
 		String[] serviceXmlNames =
-			{_lrwsName, _lrwsName + "-modules (in modules)", projectName, projectName + "-service", "service.xml"};
+			{getLiferayWorkspaceName(), getModulesDirName(), projectName, projectName + "-service", "service.xml"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(serviceXmlNames));
 
@@ -80,7 +55,5 @@ public class NewServiceBuilderModuleLiferayWorkspaceMavenTest extends SwtbotBase
 		viewAction.project.closeAndDelete(serviceNames);
 		viewAction.project.closeAndDelete(projectNames);
 	}
-
-	private static final String _lrwsName = "test-sb-lrws-maven";
 
 }

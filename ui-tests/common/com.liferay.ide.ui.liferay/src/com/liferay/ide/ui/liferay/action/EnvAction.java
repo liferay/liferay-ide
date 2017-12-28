@@ -188,6 +188,10 @@ public class EnvAction extends UIAction {
 		return validationMsgs;
 	}
 
+	public boolean notInternal() {
+		return !internal();
+	}
+
 	public boolean internal() {
 		boolean retval = false;
 

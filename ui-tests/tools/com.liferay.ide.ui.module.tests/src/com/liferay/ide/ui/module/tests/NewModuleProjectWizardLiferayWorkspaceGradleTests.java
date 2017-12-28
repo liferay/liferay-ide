@@ -28,7 +28,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createActivator() {
-		String projectName = "test-activator-in-lws";
+		String projectName = "test-activator-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -45,7 +45,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createApi() {
-		String projectName = "test-api-in-lws";
+		String projectName = "test-api-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -62,7 +62,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createContentTargetingReport() {
-		String projectName = "test-content-targeting-report-in-lws";
+		String projectName = "test-content-targeting-report-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -79,7 +79,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createContentTargetingRule() {
-		String projectName = "test-content-targeting-rule-in-lws";
+		String projectName = "test-content-targeting-rule-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -96,7 +96,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createContentTargetingTrackingAction() {
-		String projectName = "test-content-targeting-tracking-action-in-lws";
+		String projectName = "test-content-targeting-tracking-action-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -113,7 +113,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createControlMenuEntry() {
-		String projectName = "test-control-menu-entry-in-lws";
+		String projectName = "test-control-menu-entry-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -130,7 +130,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createFormField() {
-		String projectName = "test-form-field-in-lws";
+		String projectName = "test-form-field-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -147,7 +147,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createMvcPortlet() {
-		String projectName = "test-mvc-portlet-in-lws";
+		String projectName = "test-mvc-portlet-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -164,7 +164,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createPanelApp() {
-		String projectName = "test-panel-app-in-lws";
+		String projectName = "test-panel-app-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -181,7 +181,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createPortlet() {
-		String projectName = "test-portlet-in-lws";
+		String projectName = "test-portlet-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -198,7 +198,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createPortletConfigurationIcon() {
-		String projectName = "test-portlet-configuration-icon-in-lws";
+		String projectName = "test-portlet-configuration-icon-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -215,7 +215,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createPortletProvider() {
-		String projectName = "test-portlet-provider-in-lws";
+		String projectName = "test-portlet-provider-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -232,7 +232,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createPortletToolbarContributor() {
-		String projectName = "test-portlet-toolbar-contributor-in-lws";
+		String projectName = "test-portlet-toolbar-contributor-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -249,7 +249,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createRest() {
-		String projectName = "test-rest-in-lws";
+		String projectName = "test-rest-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -266,7 +266,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createService() {
-		String projectName = "test-service-in-lws";
+		String projectName = "test-service-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -283,7 +283,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createServiceBuilder() {
-		String projectName = "test-service-builder-in-lws";
+		String projectName = "test-service-builder-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -300,7 +300,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createServiceWrapper() {
-		String projectName = "test-service-wrapper-in-lws";
+		String projectName = "test-service-wrapper-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -317,7 +317,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createSimulationPanelEntry() {
-		String projectName = "test-simulation-panel-entry-in-lws";
+		String projectName = "test-simulation-panel-entry-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -334,7 +334,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createTemplateContextContributor() {
-		String projectName = "test-template-context-contributor-in-lws";
+		String projectName = "test-template-context-contributor-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -351,7 +351,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createTheme() {
-		String projectName = "test-theme-in-lws";
+		String projectName = "test-theme-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -368,7 +368,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends LiferayWo
 
 	@Test
 	public void createThemeContributor() {
-		String projectName = "test-theme-contributor-in-lws";
+		String projectName = "test-theme-contributor-in-lrws";
 
 		wizardAction.openNewLiferayModuleWizard();
 

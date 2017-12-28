@@ -12,7 +12,9 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay;
+package com.liferay.ide.ui.liferay.base;
+
+import com.liferay.ide.ui.liferay.SwtbotBase;
 
 import java.io.IOException;
 
@@ -22,28 +24,20 @@ import org.junit.BeforeClass;
 /**
  * @author Terry Jia
  */
-public class Sdk62Base extends SwtbotBase {
+public class SdkBase extends SwtbotBase {
 
 	@AfterClass
 	public static void cleanPluginsSdk() {
-		if (!envAction.internal()) {
-			return;
-		}
-
 		jobAction.waitForIvy();
 
-		String sdkName = envAction.getSdkName62() + "-" + envAction.getTimestamp();
+		String sdkName = envAction.getSdkName() + "-" + envAction.getTimestamp();
 
 		viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
 	}
 
 	@BeforeClass
 	public static void createPluginsSdk() throws IOException {
-		if (!envAction.internal()) {
-			return;
-		}
-
-		envAction.unzipPluginsSdk62();
+		envAction.unzipPluginsSdk();
 
 		viewAction.switchLiferayPerspective();
 
@@ -57,7 +51,7 @@ public class Sdk62Base extends SwtbotBase {
 
 		wizardAction.next();
 
-		String location = envAction.getSdkDir62().toOSString();
+		String location = envAction.getSdkDir().toOSString();
 
 		wizardAction.setSdkLocation.prepare(location);
 

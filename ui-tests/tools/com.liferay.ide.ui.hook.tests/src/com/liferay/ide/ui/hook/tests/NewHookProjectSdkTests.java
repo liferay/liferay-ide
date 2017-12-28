@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.hook.tests;
 
-import com.liferay.ide.ui.liferay.SdkBase;
+import com.liferay.ide.ui.liferay.base.SdkBase;
 
 import org.junit.Test;
 

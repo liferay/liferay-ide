@@ -14,57 +14,15 @@
 
 package com.liferay.ide.ui.theme.tests;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.SdkBase;
 
-import java.io.IOException;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class NewThemeProjectSdkTests extends SwtbotBase {
-
-	@AfterClass
-	public static void cleanPluginsSdk() {
-		jobAction.waitForIvy();
-
-		String sdkName = envAction.getSdkName() + "-" + envAction.getTimestamp();
-
-		viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
-	}
-
-	@BeforeClass
-	public static void createPluginsSdk() throws IOException {
-		envAction.unzipPluginsSdk();
-
-		viewAction.switchLiferayPerspective();
-
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		String projectName = "test-portlet";
-
-		wizardAction.newPlugin.prepareSdk(projectName);
-
-		wizardAction.next();
-
-		wizardAction.next();
-
-		String location = envAction.getSdkDir().toOSString();
-
-		wizardAction.setSdkLocation.prepare(location);
-
-		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(projectName);
-
-		viewAction.project.closeAndDelete(projectName);
-	}
+public class NewThemeProjectSdkTests extends SdkBase {
 
 	@Ignore("ignore as the jre problem on testing server for right now")
 	@Test
