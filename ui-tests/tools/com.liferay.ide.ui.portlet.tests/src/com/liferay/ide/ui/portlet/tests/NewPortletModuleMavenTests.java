@@ -56,6 +56,126 @@ public class NewPortletModuleMavenTests extends SwtbotBase {
 	}
 
 	@Test
+	public void createNpmAngularPortlet() {
+		String projectName = "test-npm-angular-portlet-maven";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(projectName, NPM_ANGULAR_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createNpmBillboardjsPortlet() {
+		String projectName = "test-npm-billboardjs-portlet-maven";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(projectName, NPM_BILLBOARDJS_PORLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createNpmIsomorphicPortlet() {
+		String projectName = "test-npm-isomorphic-portlet-maven";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(projectName, NPM_ISOMORPHIC_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createNpmJqueryPortlet() {
+		String projectName = "test-npm-jquery-portlet-maven";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(projectName, NPM_JQUERY_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createNpmMetaljsPortletGradle() {
+		String projectName = "test-npm-metaljs-portlet-maven";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(projectName, NPM_METALJS_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createNpmPortlet() {
+		String projectName = "test-npm-portlet-maven";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(projectName, NPM_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createNpmReactPortlet() {
+		String projectName = "test-npm-react-portlet-maven";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(projectName, NPM_REACT_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createNpmVuejsPortlet() {
+		String projectName = "test-npm-vuejs-portlet-maven";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(projectName, NPM_VUEJS_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
 	public void createPortlet() {
 		String projectName = "test-portlet-maven";
 
