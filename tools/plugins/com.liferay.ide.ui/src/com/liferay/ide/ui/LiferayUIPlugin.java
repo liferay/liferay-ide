@@ -27,6 +27,9 @@ import java.io.InputStream;
 
 import java.lang.management.ManagementFactory;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -50,6 +53,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.equinox.p2.operations.ProvisioningSession;
+import org.eclipse.equinox.p2.ui.ProvisioningUI;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.formatter.DefaultCodeFormatterOptions;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
@@ -199,6 +204,8 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
+		_addRepository();
+
 		_plugin = this;
 
 		_serviceListener = new ServiceListener() {
@@ -269,6 +276,16 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 
 	protected TextFileDocumentProvider fTextFileDocumentProvider;
 	protected Map<String, ImageDescriptor> imageDescriptors = new HashMap<>();
+
+	private void _addRepository() throws URISyntaxException {
+		ProvisioningUI provisioningUI = ProvisioningUI.getDefaultUI();
+
+		ProvisioningSession provisioningSession = provisioningUI.getSession();
+
+		URI uri = new URI("https://releases.liferay.com/tools/ide/latest/stable/");
+
+		provisioningUI.getRepositoryTracker().addRepository(uri, "Liferay IDE Stable releases", provisioningSession);
+	}
 
 	private void _applyWorkspaceBadge() {
 		IWorkspaceRoot workspaceRoot = CoreUtil.getWorkspaceRoot();
