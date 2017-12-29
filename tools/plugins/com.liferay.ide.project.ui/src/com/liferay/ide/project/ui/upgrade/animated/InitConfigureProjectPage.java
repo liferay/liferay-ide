@@ -560,8 +560,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 		List<IFile> searchFiles = new SearchFilesVisitor().searchFiles(project, "service.xml");
 
-		if (searchFiles.isEmpty()) {
-			dataModel.setHasServiceBuilder(false);
+		if (!searchFiles.isEmpty()) {
+			dataModel.setHasServiceBuilder(true);
 		}
 
 		if (ProjectUtil.isLayoutTplProject(project)) {
