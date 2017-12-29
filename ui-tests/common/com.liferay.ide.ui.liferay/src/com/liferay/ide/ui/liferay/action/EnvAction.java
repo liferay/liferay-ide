@@ -188,10 +188,6 @@ public class EnvAction extends UIAction {
 		return validationMsgs;
 	}
 
-	public boolean notInternal() {
-		return !internal();
-	}
-
 	public boolean internal() {
 		boolean retval = false;
 
@@ -258,6 +254,10 @@ public class EnvAction extends UIAction {
 		logger.warn(msg);
 
 		BasicConfigurator.resetConfiguration();
+	}
+
+	public boolean notInternal() {
+		return !internal();
 	}
 
 	public void prepareGeoFile() {

@@ -30,6 +30,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
 /**
  * @author Terry Jia
+ * @author Ying Xu
  */
 public class ViewAction extends UIAction {
 
@@ -58,6 +59,12 @@ public class ViewAction extends UIAction {
 	public ServersViewAction servers = new ServersViewAction();
 
 	public class CodeUpgradeViewAction {
+
+		// Just for right now
+
+		public void prepareMigrateLayout(String migrateLayout) {
+			_codeUpgradeView.getSelectMigrateLayouts().setSelection(migrateLayout);
+		}
 
 		public void restartUpgrade() {
 			_codeUpgradeView.getRestartUpgradeBtn().click();

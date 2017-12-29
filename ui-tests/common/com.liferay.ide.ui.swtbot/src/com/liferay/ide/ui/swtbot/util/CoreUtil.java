@@ -152,6 +152,7 @@ public class CoreUtil {
 				for (int j = 0; j < oldObjects.length; j++) {
 					if (oldObjects[j] == object) {
 						found = true;
+
 						break;
 					}
 				}

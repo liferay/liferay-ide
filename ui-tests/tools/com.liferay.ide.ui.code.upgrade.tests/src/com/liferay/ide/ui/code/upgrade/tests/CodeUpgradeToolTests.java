@@ -15,16 +15,31 @@
 package com.liferay.ide.ui.code.upgrade.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.page.view.CodeUpgradeView;
+import com.liferay.ide.ui.swtbot.util.StringPool;
 
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
+ * @author Ying Xu
  */
 public class CodeUpgradeToolTests extends SwtbotBase {
 
-	@Test
-	public void testGear() {
+	@AfterClass
+	public static void restartUpgradeTool() {
+		viewAction.codeUpgrade.restartUpgrade();
+
+		dialogAction.confirm(YES);
+
+		viewAction.codeUpgrade.switchGear(0);
+	}
+
+	@BeforeClass
+	public static void runCodeUpgradeTool() {
 		viewAction.showCodeUpgradeView();
 
 		viewAction.codeUpgrade.switchGear(0);
@@ -38,7 +53,10 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 		viewAction.codeUpgrade.showAllPages();
 
 		dialogAction.confirm(YES);
+	}
 
+	@Test
+	public void testGear() {
 		viewAction.codeUpgrade.switchGear(0);
 
 		viewAction.codeUpgrade.switchGear(1);
@@ -58,14 +76,46 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 		viewAction.codeUpgrade.switchGear(8);
 
 		viewAction.codeUpgrade.switchGear(9);
+	}
 
-		viewAction.codeUpgrade.restartUpgrade();
-
-		dialogAction.confirm(YES);
-
-		viewAction.codeUpgrade.switchGear(0);
+	@Test
+	public void testSelectProjectsToUpgrade() {
+		String bundleUrl =
+			"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5" +
+				"/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
 
 		viewAction.codeUpgrade.switchGear(1);
+
+		Assert.assertEquals(StringPool.BLANK, _codeUpgradeView.getPluginsSdkOrMavenProjectRootLocation().getText());
+
+		Assert.assertTrue(_codeUpgradeView.getBrowseBtn().isEnabled());
+
+		Assert.assertTrue(_codeUpgradeView.getDownloadLiferayBundleRecommended().isChecked());
+
+		Assert.assertEquals(LIFERAY_7_X, _codeUpgradeView.getServerName().getText());
+
+		Assert.assertEquals(bundleUrl, _codeUpgradeView.getBundleUrl().getText());
+
+		Assert.assertFalse(_codeUpgradeView.getImportProjectsBtn().isEnabled());
+
+		viewAction.codeUpgrade.prepareMigrateLayout(UPGRADE_TO_LIFERAY_PLUGINS_SDK_7);
+
+		Assert.assertEquals(StringPool.BLANK, _codeUpgradeView.getLiferayServerName().getText());
+
+		Assert.assertTrue(_codeUpgradeView.getAddServerBtn().isEnabled());
 	}
+
+	@Test
+	public void testUpgradePomFiles() {
+		viewAction.codeUpgrade.switchGear(2);
+
+		Assert.assertTrue(_codeUpgradeView.getSelectAllBtn().isEnabled());
+
+		Assert.assertTrue(_codeUpgradeView.getDeselectAllBtn().isEnabled());
+
+		Assert.assertTrue(_codeUpgradeView.getUpgradeSelectedBtn().isEnabled());
+	}
+
+	private static final CodeUpgradeView _codeUpgradeView = new CodeUpgradeView(bot);
 
 }
