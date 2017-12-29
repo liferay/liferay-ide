@@ -57,12 +57,12 @@ public class MigrationUtil {
 
 	@SuppressWarnings("rawtypes")
 	public static List<Problem> getCurrentProblemsFromTreeNode(ISelection selection) {
+		List<Problem> notIgnoreProblems = new ArrayList<>();
+
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection ss = (IStructuredSelection)selection;
 
 			Iterator iterator = ss.iterator();
-
-			List<Problem> notIgnoreProblems = new ArrayList<>();
 
 			while (iterator.hasNext()) {
 				Object element = iterator.next();
@@ -111,7 +111,7 @@ public class MigrationUtil {
 			return notIgnoreProblems;
 		}
 
-		return null;
+		return notIgnoreProblems;
 	}
 
 	public static IgnoredProblemsContainer getIgnoredProblemsContainer() {
@@ -244,12 +244,11 @@ public class MigrationUtil {
 
 	@SuppressWarnings("rawtypes")
 	public static List<Problem> getProblemsFromTreeNode(ISelection selection) {
+		List<Problem> allProblems = new ArrayList<>();
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection ss = (IStructuredSelection)selection;
 
 			Iterator iterator = ss.iterator();
-
-			List<Problem> allProblems = new ArrayList<>();
 
 			while (iterator.hasNext()) {
 				Object element = iterator.next();
@@ -286,7 +285,7 @@ public class MigrationUtil {
 			return allProblems;
 		}
 
-		return null;
+		return allProblems;
 	}
 
 	public static List<Problem> getResolvedProblemsFromResource(IResource resource) {

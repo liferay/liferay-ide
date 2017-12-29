@@ -169,13 +169,12 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 						problems = MigrationUtil.getCurrentProblemsFromTreeNode(event.getSelection());
 					}
 
+					_problemsViewer.setInput(problems.toArray());
+
 					if ((problems != null) && !problems.isEmpty()) {
-						_problemsViewer.setInput(problems.toArray());
 						_problemsViewer.setSelection(new StructuredSelection(problems.get(0)));
 					}
-					else {
-						_problemsViewer.setInput(null);
-					}
+
 				}
 
 			});
