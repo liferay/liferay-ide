@@ -17,6 +17,7 @@ package com.liferay.ide.project.ui.migration;
 import com.liferay.blade.api.AutoMigrateException;
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.Problem;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.ProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
@@ -75,6 +76,10 @@ public class AutoCorrectAllAction extends Action {
 
 									for (Problem problem : problems) {
 										final IResource file = MigrationUtil.getIResourceFromProblem(problem);
+
+										if ( FileUtil.notExists(file) ) {
+											continue;
+										}
 
 										String fixedKey =
 											file.getLocation().toString() + "," + problem.autoCorrectContext;
