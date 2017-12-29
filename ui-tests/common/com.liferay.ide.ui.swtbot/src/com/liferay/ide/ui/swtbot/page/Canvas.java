@@ -22,8 +22,11 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotCanvas;
  */
 public class Canvas extends AbstractWidget {
 
-	public Canvas(SWTBot bot, int index) {
-		super(bot, index);
+	/**
+	 * This label is not the "label" of view, the value may be found by debug mode.
+	 */
+	public Canvas(SWTBot bot, String label) {
+		super(bot, label);
 	}
 
 	public void click(int x, int y) {
@@ -32,7 +35,25 @@ public class Canvas extends AbstractWidget {
 
 	@Override
 	protected SWTBotCanvas getWidget() {
+		if (index < 0) {
+			index = _findIndex(label);
+		}
+
+		assert index > -1;
+
 		return bot.canvas(index);
+	}
+
+	private int _findIndex(String canvasName) {
+		for (int i = 0; i < 100; i++) {
+			org.eclipse.swt.widgets.Canvas canvas = bot.canvas(i).widget;
+
+			if (canvas.toString().contains(canvasName)) {
+				return i;
+			}
+		}
+
+		return -1;
 	}
 
 }

@@ -29,16 +29,11 @@ public class CodeUpgradeView extends View {
 	public CodeUpgradeView(SWTWorkbenchBot bot) {
 		super(bot, LIFERAY_CODE_UPGRADE);
 
-		_gear = new GearPO(bot, 3);
-		_navigator = new Canvas(bot, 4);
+		_gear = new Gear(bot);
 	}
 
-	public GearPO getGear() {
+	public Gear getGear() {
 		return _gear;
-	}
-
-	public Canvas getNavigator() {
-		return _navigator;
 	}
 
 	public ToolbarButtonWithTooltip getRestartUpgradeBtn() {
@@ -49,10 +44,10 @@ public class CodeUpgradeView extends View {
 		return new ToolbarButtonWithTooltip(bot, SHOW_ALL_PAGES);
 	}
 
-	public class GearPO extends Canvas {
+	public class Gear extends Canvas {
 
-		public GearPO(SWTWorkbenchBot bot, int index) {
-			super(bot, index);
+		public Gear(SWTWorkbenchBot bot) {
+			super(bot, "GearControl");
 		}
 
 		public void clickGear(int i) {
@@ -65,7 +60,6 @@ public class CodeUpgradeView extends View {
 
 	}
 
-	private GearPO _gear;
-	private Canvas _navigator;
+	private Gear _gear;
 
 }
