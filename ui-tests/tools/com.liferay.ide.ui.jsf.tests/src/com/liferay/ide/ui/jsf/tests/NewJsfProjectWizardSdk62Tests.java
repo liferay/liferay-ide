@@ -14,17 +14,20 @@
 
 package com.liferay.ide.ui.jsf.tests;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.Sdk62Base;
 
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class NewJsfProjectWizardSdk62Tests extends SwtbotBase {
+public class NewJsfProjectWizardSdk62Tests extends Sdk62Base {
 
 	@Test
 	public void createJsfStandard() {
+		if (envAction.notInternal()) {
+			return;
+		}
 	}
 
 }

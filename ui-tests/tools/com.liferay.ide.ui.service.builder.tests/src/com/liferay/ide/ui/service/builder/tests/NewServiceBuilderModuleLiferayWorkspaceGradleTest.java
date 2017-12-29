@@ -14,35 +14,15 @@
 
 package com.liferay.ide.ui.service.builder.tests;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.LiferayWorkspaceTomcatGradleBase;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * @author Joye Luo
  */
-public class NewServiceBuilderModuleLiferayWorkspaceGradleTest extends SwtbotBase {
-
-	@AfterClass
-	public static void cleanLiferayWorkspace() {
-		viewAction.project.closeAndDelete(_lrwsName);
-
-		viewAction.project.closeAndDelete("modules");
-	}
-
-	@BeforeClass
-	public static void createLiferayWorkspace() {
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		wizardAction.newLiferayWorkspace.prepareGradle(_lrwsName);
-
-		wizardAction.finish();
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(_lrwsName));
-	}
+public class NewServiceBuilderModuleLiferayWorkspaceGradleTest extends LiferayWorkspaceTomcatGradleBase {
 
 	@Test
 	public void createServiceBuilder() {
@@ -54,19 +34,19 @@ public class NewServiceBuilderModuleLiferayWorkspaceGradleTest extends SwtbotBas
 
 		wizardAction.finish();
 
-		String[] projectNames = {_lrwsName, "modules", projectName};
+		String[] projectNames = {getLiferayWorkspaceName(), "modules", projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		String[] serviceNames = {_lrwsName, "modules", projectName, projectName + "-service"};
+		String[] serviceNames = {getLiferayWorkspaceName(), "modules", projectName, projectName + "-service"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(serviceNames));
 
-		String[] apiNames = {_lrwsName, "modules", projectName, projectName + "-api"};
+		String[] apiNames = {getLiferayWorkspaceName(), "modules", projectName, projectName + "-api"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(apiNames));
 
-		String[] serviceXmlNames = {_lrwsName, "modules", projectName, projectName + "-service", "service.xml"};
+		String[] serviceXmlNames = {getLiferayWorkspaceName(), "modules", projectName, projectName + "-service", "service.xml"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(serviceXmlNames));
 
@@ -74,7 +54,5 @@ public class NewServiceBuilderModuleLiferayWorkspaceGradleTest extends SwtbotBas
 		viewAction.project.closeAndDelete(serviceNames);
 		viewAction.project.closeAndDelete(projectNames);
 	}
-
-	private static final String _lrwsName = "test-sb-lrws-gradle";
 
 }

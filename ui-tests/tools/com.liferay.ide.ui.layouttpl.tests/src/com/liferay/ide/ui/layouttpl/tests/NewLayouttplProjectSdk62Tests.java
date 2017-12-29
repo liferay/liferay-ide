@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.layouttpl.tests;
 
-import com.liferay.ide.ui.liferay.Sdk62Base;
+import com.liferay.ide.ui.liferay.base.Sdk62Base;
 
 import org.junit.Test;
 

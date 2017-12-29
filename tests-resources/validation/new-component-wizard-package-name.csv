@@ -1,0 +1,12 @@
+..,".." is not a valid Java package name,linux
+##,"##" is not a valid Java package name,linux
+*,"*" is not a valid Java package name,linux
+123,"123" is not a valid Java package name,linux
+package,Invalid package name,linux
+com.liferay.ide.test,Create a new Liferay Component Class,linux
+..,".." is not a valid Java package name,win32
+##,"##" is not a valid Java package name,win32
+*,"*" is not a valid Java package name,win32
+123,"123" is not a valid Java package name,win32
+package,Invalid package name,win32
+com.liferay.ide.test,Create a new Liferay Component Class,win32

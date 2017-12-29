@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.theme.tests;
 
-import com.liferay.ide.ui.liferay.Sdk62Base;
+import com.liferay.ide.ui.liferay.base.Sdk62Base;
 
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class NewThemeProjectSdk62Tests extends Sdk62Base {
 
 	@Test
 	public void createTheme() {
-		if (!envAction.internal()) {
+		if (envAction.notInternal()) {
 			return;
 		}
 

@@ -38,6 +38,11 @@ public class NewToolbarDropDownButton extends ToolbarDropDownButton {
 		_liferayLayoutTemplate = new MenuItem(bot, this, LIFERAY_LAYOUT_TEMPLATE);
 		_newPackage = new MenuItem(bot, this, PACKAGE);
 		_liferayMoudleFragmentFiles = new MenuItem(bot, this, LIFERAY_MODULE_FRAGMENT_FILES);
+		_liferayComponentClass = new MenuItem(bot, this, LIFERAY_COMPONENT_CLASS);
+	}
+
+	public MenuItem getLiferayComponentClass() {
+		return _liferayComponentClass;
 	}
 
 	public MenuItem getLiferayHookConfiguration() {
@@ -80,6 +85,7 @@ public class NewToolbarDropDownButton extends ToolbarDropDownButton {
 		return _newPackage;
 	}
 
+	private MenuItem _liferayComponentClass;
 	private MenuItem _liferayHookConfiguration;
 	private MenuItem _liferayJSFPortlet;
 	private MenuItem _liferayLayoutTemplate;

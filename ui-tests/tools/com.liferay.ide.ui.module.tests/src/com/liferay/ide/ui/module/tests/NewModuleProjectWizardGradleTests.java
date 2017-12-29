@@ -296,4 +296,34 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(projectName);
 	}
 
+	@Test
+	public void createWarHook() {
+		String projectName = "test-war-hook-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(projectName, WAR_HOOK);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createWarMvcPortlet() {
+		String projectName = "test-war-mvc-portlet-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(projectName, WAR_MVC_PORTLET);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
 }

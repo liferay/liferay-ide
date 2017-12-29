@@ -12,32 +12,15 @@
  * details.
  */
 
-package com.liferay.ide.ui.hook.tests;
-
-import com.liferay.ide.ui.liferay.base.SdkBase;
-
-import org.junit.Test;
+package com.liferay.ide.ui.liferay.base;
 
 /**
  * @author Terry Jia
  */
-public class NewHookProjectSdkTests extends SdkBase {
+public interface ServerSupport {
 
-	@Test
-	public void createSampleProject() {
-		wizardAction.openNewLiferayPluginProjectWizard();
+	public static final String STARTED_LABEL = "  [Started]";
 
-		String projectName = "test-hook";
-
-		wizardAction.newPlugin.prepareHookSdk(projectName);
-
-		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(projectName);
-
-		viewAction.project.closeAndDelete(projectName);
-	}
+	public static final String STOPPED_LABEL = "  [Stopped]";
 
 }

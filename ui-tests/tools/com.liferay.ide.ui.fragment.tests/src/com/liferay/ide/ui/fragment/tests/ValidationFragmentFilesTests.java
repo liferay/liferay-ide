@@ -28,7 +28,7 @@ import org.junit.Test;
  * @author Ashley Yuan
  * @author Ying Xu
  */
-public class ValidationNewFragmentFilesWizardTests extends SwtbotBase {
+public class ValidationFragmentFilesTests extends SwtbotBase {
 
 	@BeforeClass
 	public static void init() throws IOException {
