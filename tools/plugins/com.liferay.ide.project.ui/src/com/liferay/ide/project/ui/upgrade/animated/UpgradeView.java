@@ -420,9 +420,9 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 					StringBuilder desriptors = new StringBuilder(
 						"If you fail to import projects, you can skip step 2 by ");
 
-					desriptors.append("doing following steps:\n");
+					desriptors.append("doing the following steps:\n");
 					desriptors.append("   1.upgrade SDK 6.2 to SDK 7.0 manually\n");
-					desriptors.append("\"   or use blade cli to create a Liferay workspace for your SDK\\n\"");
+					desriptors.append("      or use blade cli to create a Liferay workspace for your SDK\n");
 					desriptors.append("   2.import projects you want to upgrade into Eclipse workspace\n");
 					desriptors.append("   3.click \"yes\" to show all the steps");
 
