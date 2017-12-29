@@ -12,22 +12,22 @@
  * details.
  */
 
-package com.liferay.ide.ui.portlet.tests;
+package com.liferay.ide.ui.kaleo.tests;
 
 import com.liferay.ide.ui.liferay.SdkBase;
 
 import org.junit.Test;
 
 /**
- * @author Terry Jia
+ * @author Haoyi Sun
  */
-public class NewPortletProjectSdkTests extends SdkBase {
+public class EditorKaleoWorkflowTests extends SdkBase {
 
 	@Test
-	public void createMvcPortletProject() {
+	public void createKaleoWorkflow() {
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-mvc-portlet";
+		String projectName = "test-kaleo-workflow-portlet";
 
 		wizardAction.newPlugin.preparePortletSdk(projectName);
 
@@ -36,6 +36,18 @@ public class NewPortletProjectSdkTests extends SdkBase {
 		jobAction.waitForIvy();
 
 		jobAction.waitForValidate(projectName);
+
+		viewAction.switchKaleoDesignerPerspective();
+
+		wizardAction.openNewLiferayKaleoWorkflowWizard();
+
+		wizardAction.finish();
+
+		editorAction.kaleoWorkflow.switchTabSource();
+
+		editorAction.kaleoWorkflow.switchTabDiagram();
+
+		editorAction.close();
 
 		viewAction.project.closeAndDelete(projectName);
 	}
