@@ -14,29 +14,32 @@
 
 package com.liferay.ide.ui.liferay.base;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
-
-import java.io.IOException;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  */
-public class SdkBase extends SwtbotBase {
+public class SdkSupport extends SupportBase {
 
-	@AfterClass
-	public static void cleanPluginsSdk() {
+	public SdkSupport(SWTWorkbenchBot bot) {
+		super(bot);
+	}
+
+	@Override
+	public void after() {
 		jobAction.waitForIvy();
 
 		String sdkName = envAction.getSdkName() + "-" + envAction.getTimestamp();
 
 		viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
+
+		envAction.resetTimestamp();
 	}
 
-	@BeforeClass
-	public static void createPluginsSdk() throws IOException {
+	@Override
+	public void before() {
+		super.before();
+
 		envAction.unzipPluginsSdk();
 
 		viewAction.switchLiferayPerspective();

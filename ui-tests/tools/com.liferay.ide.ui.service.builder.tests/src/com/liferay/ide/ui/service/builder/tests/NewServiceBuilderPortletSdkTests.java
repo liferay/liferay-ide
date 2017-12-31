@@ -14,18 +14,25 @@
 
 package com.liferay.ide.ui.service.builder.tests;
 
-import com.liferay.ide.ui.liferay.base.SdkBase;
+import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.SdkSupport;
 
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
  * @author Joye Luo
  * @author Terry Jia
  */
-public class NewServiceBuilderPortletSdkTests extends SdkBase {
+public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
+
+	@ClassRule
+	public static SdkSupport sdk = new SdkSupport(bot);
 
 	@Test
 	public void buildServiceOnProject() {
+		viewAction.switchLiferayPerspective();
+
 		wizardAction.openNewLiferayPluginProjectWizard();
 
 		String projectName = "test-sb-build-services-portlet";

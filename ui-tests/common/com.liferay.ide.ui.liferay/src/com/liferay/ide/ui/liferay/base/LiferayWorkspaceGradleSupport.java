@@ -14,32 +14,28 @@
 
 package com.liferay.ide.ui.liferay.base;
 
-import java.io.IOException;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 
 /**
  * @author Terry Jia
  */
-public class LiferayWorkspaceTomcatGradleBase extends TomcatBase {
+public class LiferayWorkspaceGradleSupport extends SupportBase {
 
-	@AfterClass
-	public static void cleanLiferayWorkspace() {
+	public LiferayWorkspaceGradleSupport(SWTWorkbenchBot bot) {
+		super(bot);
+	}
+
+	@Override
+	public void after() {
 		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspaceName());
 	}
 
-	public static String getLiferayWorkspaceName() {
-		return "test-liferay-workspace-gradle";
-	}
+	@Override
+	public void before() {
+		super.before();
 
-	public static String getServerName() {
-		return "test-tomcat-gradle";
-	}
-
-	@BeforeClass
-	public static void prepareLiferayWorkspace() throws IOException {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
 		wizardAction.newLiferayWorkspace.prepareGradle(getLiferayWorkspaceName());
@@ -47,6 +43,14 @@ public class LiferayWorkspaceTomcatGradleBase extends TomcatBase {
 		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(getLiferayWorkspaceName()));
+	}
+
+	public String getLiferayWorkspaceName() {
+		return "test-liferay-workspace-gradle";
+	}
+
+	public String getServerName() {
+		return "test-tomcat-gradle";
 	}
 
 }

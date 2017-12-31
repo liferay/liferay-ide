@@ -14,16 +14,21 @@
 
 package com.liferay.ide.ui.module.tests;
 
-import com.liferay.ide.ui.liferay.base.LiferayWorkspaceTomcatMavenBase;
+import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.LiferayWorkspaceMavenSupport;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  * @author Ying Xu
  */
-public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWorkspaceTomcatMavenBase {
+public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase {
+
+	@ClassRule
+	public static LiferayWorkspaceMavenSupport liferayWorkspace = new LiferayWorkspaceMavenSupport(bot);
 
 	@Test
 	public void createActivator() {
@@ -36,7 +41,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -54,7 +59,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -72,7 +77,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -90,7 +95,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -108,7 +113,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -126,7 +131,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -144,7 +149,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -162,7 +167,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -180,7 +185,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -198,7 +203,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -216,7 +221,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -234,7 +239,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -252,7 +257,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -270,7 +275,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -288,7 +293,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -306,7 +311,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -324,7 +329,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 		wizardAction.finish();
 
 		String[] projectNames =
-			{getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-modules (in modules)", projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -341,7 +346,8 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 
 		wizardAction.finish();
 
-		String[] projectNames = {getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-wars (in wars)", projectName};
+		String[] projectNames =
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getWarsDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -358,7 +364,8 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends LiferayWor
 
 		wizardAction.finish();
 
-		String[] projectNames = {getLiferayWorkspaceName(), getLiferayWorkspaceName() + "-wars (in wars)", projectName};
+		String[] projectNames =
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getWarsDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 

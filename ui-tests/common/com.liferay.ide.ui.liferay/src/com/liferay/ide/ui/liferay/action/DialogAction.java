@@ -34,8 +34,12 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
  */
 public class DialogAction extends UIAction {
 
-	public DialogAction(SWTWorkbenchBot bot) {
-		super(bot);
+	public static DialogAction getInstance(SWTWorkbenchBot bot) {
+		if (_dialogAction == null) {
+			_dialogAction = new DialogAction(bot);
+		}
+
+		return _dialogAction;
 	}
 
 	public void cancel() {
@@ -159,9 +163,15 @@ public class DialogAction extends UIAction {
 
 	}
 
+	private DialogAction(SWTWorkbenchBot bot) {
+		super(bot);
+	}
+
+	private static DialogAction _dialogAction;
+
 	private final Dialog _dialog = new Dialog(bot);
-	private final JobAction _jobAction = new JobAction(bot);
-	private final KeyboardAction _keyboradAction = new KeyboardAction(bot);
+	private final JobAction _jobAction = JobAction.getInstance(bot);
+	private final KeyboardAction _keyboradAction = KeyboardAction.getInstance(bot);
 	private final TextDialog _textDialog = new TextDialog(bot);
 	private final TextTableDialog _textTableDialog = new TextTableDialog(bot);
 	private final TreeDialog _treeDialog = new TreeDialog(bot);

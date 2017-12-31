@@ -14,9 +14,11 @@
 
 package com.liferay.ide.ui.fragment.tests;
 
-import com.liferay.ide.ui.liferay.base.TomcatBase;
+import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
@@ -25,7 +27,10 @@ import org.junit.Test;
  * @author Lily Li
  * @author Ying Xu
  */
-public class NewFragmentWizardGradleTests extends TomcatBase {
+public class NewFragmentWizardGradleTests extends SwtbotBase {
+
+	@ClassRule
+	public static TomcatSupport tomcat = new TomcatSupport(bot);
 
 	@Test
 	public void createFragmentWithJsp() {

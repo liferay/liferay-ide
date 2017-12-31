@@ -50,8 +50,12 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class WizardAction extends UIAction {
 
-	public WizardAction(SWTWorkbenchBot bot) {
-		super(bot);
+	public static WizardAction getInstance(SWTWorkbenchBot bot) {
+		if (_wizardAction == null) {
+			_wizardAction = new WizardAction(bot);
+		}
+
+		return _wizardAction;
 	}
 
 	public void cancel() {
@@ -659,6 +663,10 @@ public class WizardAction extends UIAction {
 			ide.sleep(500);
 
 			_newServerWizard.getServerName().setText(serverName);
+
+			ide.sleep(500);
+
+			_newServerWizard.getServerTypes().selectTreeItem(LIFERAY_INC, LIFERAY_7_X);
 		}
 
 		public void prepare62(String serverName) {
@@ -685,7 +693,13 @@ public class WizardAction extends UIAction {
 
 	}
 
-	private final JobAction _jobAction = new JobAction(bot);
+	private WizardAction(SWTWorkbenchBot bot) {
+		super(bot);
+	}
+
+	private static WizardAction _wizardAction;
+
+	private final JobAction _jobAction = JobAction.getInstance(bot);
 	private final Wizard _wizard = new Wizard(bot);
 
 }

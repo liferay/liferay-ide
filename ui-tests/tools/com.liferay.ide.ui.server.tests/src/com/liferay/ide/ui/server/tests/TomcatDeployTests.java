@@ -14,14 +14,19 @@
 
 package com.liferay.ide.ui.server.tests;
 
-import com.liferay.ide.ui.liferay.base.TomcatRunningBase;
+import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.TomcatRunningSupport;
 
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class TomcatDeployTests extends TomcatRunningBase {
+public class TomcatDeployTests extends SwtbotBase {
+
+	@ClassRule
+	public static TomcatRunningSupport tomcat = new TomcatRunningSupport(bot);
 
 	@Test
 	public void deploySampleProject() {
@@ -41,13 +46,13 @@ public class TomcatDeployTests extends TomcatRunningBase {
 
 		wizardAction.finish();
 
-		viewAction.servers.openAddAndRemoveDialog(getServerStartedLabel());
+		viewAction.servers.openAddAndRemoveDialog(tomcat.getServerStartedLabel());
 
 		dialogAction.addAndRemove.addModule(projectName1);
 
 		dialogAction.confirm(FINISH);
 
-		jobAction.waitForConsoleContent(getServerName(), "STARTED " + projectName1 + "_", 20 * 1000);
+		jobAction.waitForConsoleContent(tomcat.getServerName(), "STARTED " + projectName1 + "_", 20 * 1000);
 	}
 
 }

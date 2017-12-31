@@ -26,14 +26,12 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class LiferayIDE extends Eclipse {
 
-	public LiferayIDE(SWTWorkbenchBot bot) {
-		super(bot);
+	public static LiferayIDE getInstance(SWTWorkbenchBot bot) {
+		if (_ide == null) {
+			_ide = new LiferayIDE(bot);
+		}
 
-		_createLiferayProjectToolbar = new CreateLifeayProjectToolbarDropDownButton(bot);
-		_kaleoDesignerPerspective = new Perspective(bot, KALEO_DESIGNER);
-		_liferayPerspective = new Perspective(bot, LIFERAY_PLUGINS);
-		_liferayWorkspacePerspective = new Perspective(bot, LIFERAY_WORKSPACE);
-		_newBtn = new NewToolbarDropDownButton(bot);
+		return _ide;
 	}
 
 	public CreateLifeayProjectToolbarDropDownButton getCreateLiferayProjectToolbar() {
@@ -59,6 +57,18 @@ public class LiferayIDE extends Eclipse {
 	public void showCodeUpgradeView() {
 		showView(LIFERAY_CODE_UPGRADE);
 	}
+
+	private LiferayIDE(SWTWorkbenchBot bot) {
+		super(bot);
+
+		_createLiferayProjectToolbar = new CreateLifeayProjectToolbarDropDownButton(bot);
+		_kaleoDesignerPerspective = new Perspective(bot, KALEO_DESIGNER);
+		_liferayPerspective = new Perspective(bot, LIFERAY_PLUGINS);
+		_liferayWorkspacePerspective = new Perspective(bot, LIFERAY_WORKSPACE);
+		_newBtn = new NewToolbarDropDownButton(bot);
+	}
+
+	private static LiferayIDE _ide;
 
 	private CreateLifeayProjectToolbarDropDownButton _createLiferayProjectToolbar;
 	private Perspective _kaleoDesignerPerspective;

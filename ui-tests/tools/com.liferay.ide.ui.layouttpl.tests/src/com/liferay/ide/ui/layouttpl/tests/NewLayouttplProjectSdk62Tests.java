@@ -14,20 +14,27 @@
 
 package com.liferay.ide.ui.layouttpl.tests;
 
-import com.liferay.ide.ui.liferay.base.Sdk62Base;
+import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.Sdk62Support;
 
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class NewLayouttplProjectSdk62Tests extends Sdk62Base {
+public class NewLayouttplProjectSdk62Tests extends SwtbotBase {
+
+	@ClassRule
+	public static Sdk62Support sdk62 = new Sdk62Support(bot);
 
 	@Test
 	public void createLayoutTemplate() {
 		if (!envAction.internal()) {
 			return;
 		}
+
+		viewAction.switchLiferayPerspective();
 
 		wizardAction.openNewLiferayPluginProjectWizard();
 

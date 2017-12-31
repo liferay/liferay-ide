@@ -34,8 +34,12 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
  */
 public class ViewAction extends UIAction {
 
-	public ViewAction(SWTWorkbenchBot bot) {
-		super(bot);
+	public static ViewAction getInstance(SWTWorkbenchBot bot) {
+		if (_viewAction == null) {
+			_viewAction = new ViewAction(bot);
+		}
+
+		return _viewAction;
 	}
 
 	public void showCodeUpgradeView() {
@@ -281,6 +285,12 @@ public class ViewAction extends UIAction {
 
 	}
 
-	private final JobAction _jobAction = new JobAction(bot);
+	private ViewAction(SWTWorkbenchBot bot) {
+		super(bot);
+	}
+
+	private static ViewAction _viewAction;
+
+	private final JobAction _jobAction = JobAction.getInstance(bot);
 
 }

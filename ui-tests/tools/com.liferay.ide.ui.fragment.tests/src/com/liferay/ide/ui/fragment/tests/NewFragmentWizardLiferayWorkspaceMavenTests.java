@@ -14,15 +14,24 @@
 
 package com.liferay.ide.ui.fragment.tests;
 
-import com.liferay.ide.ui.liferay.base.LiferayWorkspaceTomcatMavenBase;
+import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.LiferayWorkspaceMavenSupport;
+import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
  * @author Lily Li
  */
-public class NewFragmentWizardLiferayWorkspaceMavenTests extends LiferayWorkspaceTomcatMavenBase {
+public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
+
+	@ClassRule
+	public static LiferayWorkspaceMavenSupport liferayWorkspace = new LiferayWorkspaceMavenSupport(bot);
+
+	@ClassRule
+	public static TomcatSupport tomcat = new TomcatSupport(bot);
 
 	@Test
 	public void createFragmentWithJsp() {
@@ -48,7 +57,8 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends LiferayWorkspac
 
 		wizardAction.finish();
 
-		String[] projectNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName};
+		String[] projectNames =
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -79,7 +89,8 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends LiferayWorkspac
 
 		wizardAction.finish();
 
-		String[] projectNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName};
+		String[] projectNames =
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -110,7 +121,8 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends LiferayWorkspac
 
 		wizardAction.finish();
 
-		String[] projectNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName};
+		String[] projectNames =
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -143,7 +155,8 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends LiferayWorkspac
 
 		wizardAction.finish();
 
-		String[] projectNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName};
+		String[] projectNames =
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -174,7 +187,8 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends LiferayWorkspac
 
 		wizardAction.finish();
 
-		String[] projectNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName};
+		String[] projectNames =
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -226,7 +240,8 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends LiferayWorkspac
 
 		wizardAction.finish();
 
-		String[] projectNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName};
+		String[] projectNames =
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 

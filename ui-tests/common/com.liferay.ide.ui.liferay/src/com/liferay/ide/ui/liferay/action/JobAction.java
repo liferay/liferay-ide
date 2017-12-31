@@ -37,8 +37,12 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
  */
 public class JobAction extends UIAction {
 
-	public JobAction(SWTWorkbenchBot bot) {
-		super(bot);
+	public static JobAction getInstance(SWTWorkbenchBot bot) {
+		if (_jobAction == null) {
+			_jobAction = new JobAction(bot);
+		}
+
+		return _jobAction;
 	}
 
 	public void waitForBrowserLoaded() {
@@ -94,5 +98,11 @@ public class JobAction extends UIAction {
 	public void waitForValidate(String projectName) {
 		ide.waitUntil(new ValidateJobCondition(projectName), 300 * 1000);
 	}
+
+	private JobAction(SWTWorkbenchBot bot) {
+		super(bot);
+	}
+
+	private static JobAction _jobAction;
 
 }

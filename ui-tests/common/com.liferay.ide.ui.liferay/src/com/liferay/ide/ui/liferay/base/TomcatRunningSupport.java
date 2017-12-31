@@ -12,19 +12,35 @@
  * details.
  */
 
-package com.liferay.ide.ui.theme.tests;
+package com.liferay.ide.ui.liferay.base;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
-
-import org.junit.Test;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  */
-public class NewThemeProjectModuleWorkspaceMavenTests extends SwtbotBase {
+public class TomcatRunningSupport extends TomcatSupport {
 
-	@Test
-	public void createTheme() {
+	public TomcatRunningSupport(SWTWorkbenchBot bot) {
+		super(bot);
+	}
+
+	@Override
+	public void after() {
+		viewAction.servers.stop(getServerStartedLabel());
+
+		jobAction.waitForServerStopped(getServerName());
+
+		super.after();
+	}
+
+	@Override
+	public void before() {
+		super.before();
+
+		viewAction.servers.start(getServerStoppedLabel());
+
+		jobAction.waitForServerStarted(getServerName());
 	}
 
 }

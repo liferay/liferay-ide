@@ -29,8 +29,12 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class EditorAction extends UIAction {
 
-	public EditorAction(SWTWorkbenchBot bot) {
-		super(bot);
+	public static EditorAction getInstance(SWTWorkbenchBot bot) {
+		if (_editorAction == null) {
+			_editorAction = new EditorAction(bot);
+		}
+
+		return _editorAction;
 	}
 
 	public void close() {
@@ -152,6 +156,12 @@ public class EditorAction extends UIAction {
 		private final ServiceXmlEditor _serviceXmlEditor = new ServiceXmlEditor(bot);
 
 	}
+
+	private EditorAction(SWTWorkbenchBot bot) {
+		super(bot);
+	}
+
+	private static EditorAction _editorAction;
 
 	private final Editor _editor = new Editor(bot);
 
