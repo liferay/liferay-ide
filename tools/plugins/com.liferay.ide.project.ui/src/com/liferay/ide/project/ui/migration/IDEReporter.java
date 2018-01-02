@@ -45,9 +45,11 @@ public class IDEReporter implements Reporter {
 					FindBreakingChangesPage page = UpgradeView.getPage(
 						Page.findbreackingchangesPageId, FindBreakingChangesPage.class);
 
-					page.getTreeViewer().setInput(CoreUtil.getWorkspaceRoot());
+					if (page != null) {
+						page.getTreeViewer().setInput(CoreUtil.getWorkspaceRoot());
 
-					page.setButtonState(true);
+						page.setButtonState(true);
+					}
 				}
 
 			});
