@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
@@ -54,6 +56,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.equinox.p2.operations.ProvisioningSession;
+import org.eclipse.equinox.p2.operations.RepositoryTracker;
 import org.eclipse.equinox.p2.ui.ProvisioningUI;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.formatter.DefaultCodeFormatterOptions;
@@ -162,6 +165,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 	public LiferayUIPlugin() {
 	}
 
+	@Override
 	public void earlyStartup() {
 		if (_isFirstStartup()) {
 			_installLiferayFormatterProfile();
@@ -201,6 +205,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 	 * @see AbstractUIPlugin#start(org.osgi.framework.
 	 * BundleContext )
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
@@ -247,6 +252,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 	 * @see AbstractUIPlugin#stop(org.osgi.framework.
 	 * BundleContext )
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 
@@ -282,9 +288,21 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 
 		ProvisioningSession provisioningSession = provisioningUI.getSession();
 
-		URI uri = new URI("https://releases.liferay.com/tools/ide/latest/stable/");
+		RepositoryTracker repositoryTracker = provisioningUI.getRepositoryTracker();
 
-		provisioningUI.getRepositoryTracker().addRepository(uri, "Liferay IDE Stable releases", provisioningSession);
+		URI[] knownRepositories = repositoryTracker.getKnownRepositories(provisioningSession);
+
+		URI liferayUri = new URI("https://releases.liferay.com/tools/ide/latest/stable/");
+
+		boolean containLifreayUri = Stream.of(
+			knownRepositories
+		).anyMatch(
+			uri -> Objects.equals(uri, liferayUri)
+		);
+
+		if (!containLifreayUri) {
+			repositoryTracker.addRepository(liferayUri, "Liferay IDE Stable releases", provisioningSession);
+		}
 	}
 
 	private void _applyWorkspaceBadge() {
@@ -295,6 +313,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 		UIUtil.async(
 			new Runnable() {
 
+				@Override
 				public void run() {
 					try {
 						Display display = Display.getDefault();
