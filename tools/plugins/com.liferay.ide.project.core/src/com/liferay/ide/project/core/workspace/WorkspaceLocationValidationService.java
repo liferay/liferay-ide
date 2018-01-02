@@ -28,7 +28,7 @@ public class WorkspaceLocationValidationService extends ValidationService {
 	@Override
 	protected Status compute() {
 		Status retval = Status.createOkStatus();
-		
+
 		/*
 		 * Location won't be validated if the UseDefaultLocation has an error. Get the
 		 * validation of the property might not work as excepted, let's use call the
@@ -45,7 +45,7 @@ public class WorkspaceLocationValidationService extends ValidationService {
 
 		if (!useDefaultLocation) {
 			if (currentProjectLocation != null) {
-				
+
 				String currentPath = currentProjectLocation.toOSString();
 
 				File osPathFile = Path.fromOSString(currentPath).toFile();
@@ -61,7 +61,6 @@ public class WorkspaceLocationValidationService extends ValidationService {
 			else {
 				return Status.createErrorStatus("Location must be specified.");
 			}
-			
 		}
 
 		return retval;
