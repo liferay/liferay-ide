@@ -54,6 +54,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.equinox.p2.operations.ProvisioningSession;
+import org.eclipse.equinox.p2.operations.RepositoryTracker;
 import org.eclipse.equinox.p2.ui.ProvisioningUI;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.formatter.DefaultCodeFormatterOptions;
@@ -282,9 +283,25 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 
 		ProvisioningSession provisioningSession = provisioningUI.getSession();
 
-		URI uri = new URI("https://releases.liferay.com/tools/ide/latest/stable/");
+		RepositoryTracker repositoryTracker = provisioningUI.getRepositoryTracker();
 
-		provisioningUI.getRepositoryTracker().addRepository(uri, "Liferay IDE Stable releases", provisioningSession);
+		URI[] knownRepositories = repositoryTracker.getKnownRepositories(provisioningSession);
+
+		boolean containLifreayUri = false;
+
+		URI liferayUri = new URI("https://releases.liferay.com/tools/ide/latest/stable/");
+
+		for (URI uri : knownRepositories) {
+			if (uri.equals(liferayUri)) {
+				containLifreayUri = true;
+
+				break;
+			}
+		}
+
+		if (!containLifreayUri) {
+			repositoryTracker.addRepository(liferayUri, "Liferay IDE Stable releases", provisioningSession);
+		}
 	}
 
 	private void _applyWorkspaceBadge() {
