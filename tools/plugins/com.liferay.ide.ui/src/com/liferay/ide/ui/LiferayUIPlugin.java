@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
@@ -163,6 +165,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 	public LiferayUIPlugin() {
 	}
 
+	@Override
 	public void earlyStartup() {
 		if (_isFirstStartup()) {
 			_installLiferayFormatterProfile();
@@ -202,6 +205,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 	 * @see AbstractUIPlugin#start(org.osgi.framework.
 	 * BundleContext )
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
@@ -248,6 +252,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 	 * @see AbstractUIPlugin#stop(org.osgi.framework.
 	 * BundleContext )
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 
@@ -287,17 +292,13 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 
 		URI[] knownRepositories = repositoryTracker.getKnownRepositories(provisioningSession);
 
-		boolean containLifreayUri = false;
-
 		URI liferayUri = new URI("https://releases.liferay.com/tools/ide/latest/stable/");
 
-		for (URI uri : knownRepositories) {
-			if (uri.equals(liferayUri)) {
-				containLifreayUri = true;
-
-				break;
-			}
-		}
+		boolean containLifreayUri = Stream.of(
+			knownRepositories
+		).anyMatch(
+			uri -> Objects.equals(uri, liferayUri)
+		);
 
 		if (!containLifreayUri) {
 			repositoryTracker.addRepository(liferayUri, "Liferay IDE Stable releases", provisioningSession);
@@ -312,6 +313,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 		UIUtil.async(
 			new Runnable() {
 
+				@Override
 				public void run() {
 					try {
 						Display display = Display.getDefault();
