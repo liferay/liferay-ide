@@ -14,8 +14,10 @@
 
 package com.liferay.ide.ui.service.builder.tests;
 
-import com.liferay.ide.ui.liferay.base.Sdk62Base;
+import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.Sdk62Support;
 
+import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -23,7 +25,10 @@ import org.junit.Test;
  * @author Joye Luo
  * @author Terry Jia
  */
-public class NewServiceBuilderPortletSdk62Tests extends Sdk62Base {
+public class NewServiceBuilderPortletSdk62Tests extends SwtbotBase {
+
+	@ClassRule
+	public static Sdk62Support sdk62 = new Sdk62Support(bot);
 
 	@Ignore("ignore as service builder in sdk62 is only able run in java 7")
 	@Test
@@ -31,6 +36,8 @@ public class NewServiceBuilderPortletSdk62Tests extends Sdk62Base {
 		if (envAction.notInternal()) {
 			return;
 		}
+
+		viewAction.switchLiferayPerspective();
 
 		wizardAction.openNewLiferayPluginProjectWizard();
 

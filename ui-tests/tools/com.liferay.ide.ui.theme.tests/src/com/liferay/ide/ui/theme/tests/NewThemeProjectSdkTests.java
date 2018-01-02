@@ -14,19 +14,26 @@
 
 package com.liferay.ide.ui.theme.tests;
 
-import com.liferay.ide.ui.liferay.base.SdkBase;
+import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.SdkSupport;
 
+import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class NewThemeProjectSdkTests extends SdkBase {
+public class NewThemeProjectSdkTests extends SwtbotBase {
+
+	@ClassRule
+	public static SdkSupport sdk = new SdkSupport(bot);
 
 	@Ignore("ignore as the jre problem on testing server for right now")
 	@Test
 	public void createTheme() {
+		viewAction.switchLiferayPerspective();
+
 		wizardAction.openNewLiferayPluginProjectWizard();
 
 		String projectName = "test-theme";

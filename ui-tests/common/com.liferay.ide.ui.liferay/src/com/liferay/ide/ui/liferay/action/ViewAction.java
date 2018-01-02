@@ -30,11 +30,16 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
 /**
  * @author Terry Jia
+ * @author Ying Xu
  */
 public class ViewAction extends UIAction {
 
-	public ViewAction(SWTWorkbenchBot bot) {
-		super(bot);
+	public static ViewAction getInstance(SWTWorkbenchBot bot) {
+		if (_viewAction == null) {
+			_viewAction = new ViewAction(bot);
+		}
+
+		return _viewAction;
 	}
 
 	public void showCodeUpgradeView() {
@@ -58,6 +63,12 @@ public class ViewAction extends UIAction {
 	public ServersViewAction servers = new ServersViewAction();
 
 	public class CodeUpgradeViewAction {
+
+		// Just for right now
+
+		public void prepareMigrateLayout(String migrateLayout) {
+			_codeUpgradeView.getSelectMigrateLayouts().setSelection(migrateLayout);
+		}
 
 		public void restartUpgrade() {
 			_codeUpgradeView.getRestartUpgradeBtn().click();
@@ -274,6 +285,12 @@ public class ViewAction extends UIAction {
 
 	}
 
-	private final JobAction _jobAction = new JobAction(bot);
+	private ViewAction(SWTWorkbenchBot bot) {
+		super(bot);
+	}
+
+	private static ViewAction _viewAction;
+
+	private final JobAction _jobAction = JobAction.getInstance(bot);
 
 }

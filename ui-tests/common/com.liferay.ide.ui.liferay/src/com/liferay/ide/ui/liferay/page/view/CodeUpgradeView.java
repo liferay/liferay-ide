@@ -14,7 +14,11 @@
 
 package com.liferay.ide.ui.liferay.page.view;
 
+import com.liferay.ide.ui.swtbot.page.Button;
 import com.liferay.ide.ui.swtbot.page.Canvas;
+import com.liferay.ide.ui.swtbot.page.CheckBox;
+import com.liferay.ide.ui.swtbot.page.ComboBox;
+import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.ui.swtbot.page.View;
 
@@ -23,6 +27,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  * @author Ashley Yuan
+ * @author Ying Xu
  */
 public class CodeUpgradeView extends View {
 
@@ -32,16 +37,64 @@ public class CodeUpgradeView extends View {
 		_gear = new Gear(bot);
 	}
 
+	public Button getAddServerBtn() {
+		return new Button(bot, ADD_SERVER_WITH_DOT);
+	}
+
+	public Button getBrowseBtn() {
+		return new Button(bot, BROWSE_WITH_DOT);
+	}
+
+	public Text getBundleUrl() {
+		return new Text(bot, BUNDLE_URL_UPCASE);
+	}
+
+	public Button getDeselectAllBtn() {
+		return new Button(bot, DESELECT_ALL);
+	}
+
+	public CheckBox getDownloadLiferayBundleRecommended() {
+		return new CheckBox(bot, DOWNLOAD_LIFERAY_BUNDLE_RECOMMENDED);
+	}
+
 	public Gear getGear() {
 		return _gear;
+	}
+
+	public Button getImportProjectsBtn() {
+		return new Button(bot, IMPORT_PROJECTS);
+	}
+
+	public ComboBox getLiferayServerName() {
+		return new ComboBox(bot, LIFERAY_SERVER_NAME);
+	}
+
+	public Text getPluginsSdkOrMavenProjectRootLocation() {
+		return new Text(bot, PLUGINS_SDK_OR_MAVEN_PROJECT_ROOT_LOCATION);
 	}
 
 	public ToolbarButtonWithTooltip getRestartUpgradeBtn() {
 		return new ToolbarButtonWithTooltip(bot, RESTART_UPGRADE);
 	}
 
+	public Button getSelectAllBtn() {
+		return new Button(bot, SELECT_ALL);
+	}
+
+	public ComboBox getSelectMigrateLayouts() {
+		return new ComboBox(bot, SELECT_MIGRATE_LAYOUT);
+	}
+
+	public Text getServerName() {
+		return new Text(bot, SERVER_NAME_UPCASE);
+	}
+
 	public ToolbarButtonWithTooltip getShowAllPagesBtn() {
 		return new ToolbarButtonWithTooltip(bot, SHOW_ALL_PAGES);
+	}
+
+	public Button getUpgradeSelectedBtn() {
+		return new Button(bot, UPGRADE_SELECTED);
 	}
 
 	public class Gear extends Canvas {

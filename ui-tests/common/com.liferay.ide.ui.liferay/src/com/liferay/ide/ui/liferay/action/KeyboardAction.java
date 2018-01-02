@@ -25,12 +25,22 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class KeyboardAction extends UIAction implements Keys {
 
-	public KeyboardAction(SWTWorkbenchBot bot) {
-		super(bot);
+	public static KeyboardAction getInstance(SWTWorkbenchBot bot) {
+		if (_keyboardAction == null) {
+			_keyboardAction = new KeyboardAction(bot);
+		}
+
+		return _keyboardAction;
 	}
 
 	public void pressKeysPreferencesDialogMac() {
 		keyPress.pressShortcut(SWT.COMMAND, ',');
 	}
+
+	private KeyboardAction(SWTWorkbenchBot bot) {
+		super(bot);
+	}
+
+	private static KeyboardAction _keyboardAction;
 
 }

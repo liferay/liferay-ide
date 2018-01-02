@@ -47,6 +47,8 @@ public interface UI {
 
 	public final String ADD_PROPERTY_OVERRIDE = "Add Property Override";
 
+	public final String ADD_SERVER_WITH_DOT = "Add Server...";
+
 	public final String ADD_SERVICE = "Add Service";
 
 	public final String ADD_SERVICE_WRAPPER = "Add Service Wrapper";
@@ -96,6 +98,8 @@ public interface UI {
 	public final String BUILD_WSDD = "Build WSDD";
 
 	public final String BUNDLE_URL = "Bundle url:";
+
+	public final String BUNDLE_URL_UPCASE = "Bundle URL:";
 
 	public final String CANCEL = "Cancel";
 
@@ -220,6 +224,8 @@ public interface UI {
 
 	public final String DOWNLOAD_LIFERAY_BUNDLE = "Download Liferay bundle";
 
+	public final String DOWNLOAD_LIFERAY_BUNDLE_RECOMMENDED = "Download Liferay bundle (recommended)";
+
 	public final String EDIT = "Edit";
 
 	public final String EDIT_DEFAULTS = "Edit Defaults";
@@ -296,6 +302,8 @@ public interface UI {
 	public final String IMPORT_LIFERAY_MODULE_PROJECT = "Import Liferay Module Project or Multi-Module Projects";
 
 	public final String IMPORT_LIFERAY_WORKSPACE = "Import Liferay Workspace";
+
+	public final String IMPORT_PROJECTS = "Import Projects";
 
 	public final String INCLUDE_SAMPLE_CODE = "Include sample code";
 
@@ -384,6 +392,8 @@ public interface UI {
 	public final String LIFERAY_PROJECT_FROM_EXISTING_SOURCE = "Liferay Project from Existing Source";
 
 	public final String LIFERAY_RUNTIME_NAME = "Liferay runtime name:";
+
+	public final String LIFERAY_SERVER_NAME = "Liferay Server Name:";
 
 	public final String LIFERAY_SERVICE_BUILDER = "Liferay Service Builder";
 
@@ -530,6 +540,8 @@ public interface UI {
 
 	public final String PLUGIN_TYPE = "Plugin type:";
 
+	public final String PLUGINS_SDK_OR_MAVEN_PROJECT_ROOT_LOCATION = "Plugins SDK or Maven Project Root Location:";
+
 	public final String POLLER_PROCESSOR = "Poller Processor";
 
 	public final String POM_XML = "pom.xml";
@@ -636,6 +648,8 @@ public interface UI {
 
 	public final String SELECT_MAVEN_PROFILES = "Select Maven Profiles...";
 
+	public final String SELECT_MIGRATE_LAYOUT = "Select Migrate Layout:";
+
 	public final String SELECT_MODEL_CLASS = "Select Model Class:";
 
 	public final String SELECT_SERVICE_NAME = "Select Service Name:";
@@ -645,6 +659,8 @@ public interface UI {
 	public final String SERVER = "Server";
 
 	public final String SERVER_NAME = "Server name:";
+
+	public final String SERVER_NAME_UPCASE = "Server Name:";
 
 	public final String SERVER_RUNTIEME_ENVIRONMENTS = "Server runtime environments:";
 
@@ -757,6 +773,12 @@ public interface UI {
 	public final String UPDATE_EXCLUSION_FILTERS = "Update exclusion filters in other source folders to solve nesting";
 
 	public final String UPDATE_PROJECT = "Update Project...";
+
+	public final String UPGRADE_SELECTED = "Upgrade Selected";
+
+	public final String UPGRADE_TO_LIFERAY_PLUGINS_SDK_7 = "Upgrade to Liferay Plugins SDK 7";
+
+	public final String UPGRADE_TO_LIFERAY_WORKSPACE = "Upgrade to Liferay Workspace";
 
 	public final String USE_DEFAULT_LOCATION = "Use default location";
 

@@ -12,10 +12,10 @@
  * details.
  */
 
-package com.liferay.ide.ui.hook.tests;
+package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.SdkSupport;
+import com.liferay.ide.ui.liferay.base.TomcatRunningSupport;
 
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -23,26 +23,29 @@ import org.junit.Test;
 /**
  * @author Terry Jia
  */
-public class NewHookProjectSdkTests extends SwtbotBase {
+public class DeployModuleMavenTomcatTests extends SwtbotBase {
 
 	@ClassRule
-	public static SdkSupport sdk = new SdkSupport(bot);
+	public static TomcatRunningSupport tomcat = new TomcatRunningSupport(bot);
 
 	@Test
-	public void createSampleProject() {
-		viewAction.switchLiferayPerspective();
+	public void deployActivator() {
+		String projectName = "deploy-activator-maven";
 
-		wizardAction.openNewLiferayPluginProjectWizard();
+		wizardAction.openNewLiferayModuleWizard();
 
-		String projectName = "test-hook";
-
-		wizardAction.newPlugin.prepareHookSdk(projectName);
+		wizardAction.newModule.prepareMaven(projectName, ACTIVATOR);
 
 		wizardAction.finish();
 
-		jobAction.waitForIvy();
+		viewAction.servers.openAddAndRemoveDialog(tomcat.getServerStartedLabel());
 
-		jobAction.waitForValidate(projectName);
+		dialogAction.addAndRemove.addModule(projectName);
+
+		dialogAction.confirm(FINISH);
+
+		jobAction.waitForConsoleContent(
+			tomcat.getServerName(), "STARTED " + projectName.replace('-', '.') + "_", 20 * 1000);
 
 		viewAction.project.closeAndDelete(projectName);
 	}

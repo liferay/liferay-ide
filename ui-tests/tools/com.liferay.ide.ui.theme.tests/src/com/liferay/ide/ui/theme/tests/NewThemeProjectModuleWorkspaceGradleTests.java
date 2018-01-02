@@ -14,14 +14,14 @@
 
 package com.liferay.ide.ui.theme.tests;
 
-import com.liferay.ide.ui.liferay.base.LiferayWorkspaceTomcatGradleBase;
+import com.liferay.ide.ui.liferay.SwtbotBase;
 
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class NewThemeProjectModuleWorkspaceGradleTests extends LiferayWorkspaceTomcatGradleBase {
+public class NewThemeProjectModuleWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createTheme() {

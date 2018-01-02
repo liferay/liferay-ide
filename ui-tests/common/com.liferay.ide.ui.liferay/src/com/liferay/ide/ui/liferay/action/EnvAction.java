@@ -57,13 +57,12 @@ import org.junit.Assert;
  */
 public class EnvAction extends UIAction {
 
-	public EnvAction(SWTWorkbenchBot bot) {
-		super(bot);
+	public static EnvAction getInstance(SWTWorkbenchBot bot) {
+		if (_envAction == null) {
+			_envAction = new EnvAction(bot);
+		}
 
-		_bundleInfos = _getBundleInfos();
-		_sdkInfos = _getSdkInfos();
-
-		log = Logger.getLogger(getClass());
+		return _envAction;
 	}
 
 	public IPath getEclipseWorkspacePath() {
@@ -188,10 +187,6 @@ public class EnvAction extends UIAction {
 		return validationMsgs;
 	}
 
-	public boolean notInternal() {
-		return !internal();
-	}
-
 	public boolean internal() {
 		boolean retval = false;
 
@@ -258,6 +253,10 @@ public class EnvAction extends UIAction {
 		logger.warn(msg);
 
 		BasicConfigurator.resetConfiguration();
+	}
+
+	public boolean notInternal() {
+		return !internal();
 	}
 
 	public void prepareGeoFile() {
@@ -355,98 +354,98 @@ public class EnvAction extends UIAction {
 		_timestamp = 0;
 	}
 
-	public void unzipPluginsSdk() throws IOException {
-		File sdkDir = getSdkDir().toFile();
+	public void unzipPluginsSdk() {
+		try {
+			File sdkDir = getSdkDir().toFile();
 
-		Assert.assertEquals("Expected file to be not exist:" + getSdkDir().toPortableString(), false, sdkDir.exists());
+			Assert.assertEquals(
+				"Expected file to be not exist:" + getSdkDir().toPortableString(), false, sdkDir.exists());
 
-		File sdkZipFile = _getSdkZip().toFile();
+			File sdkZipFile = _getSdkZip().toFile();
 
-		Assert.assertEquals("Expected file to exist: " + sdkZipFile.getAbsolutePath(), true, sdkZipFile.exists());
+			Assert.assertEquals("Expected file to exist: " + sdkZipFile.getAbsolutePath(), true, sdkZipFile.exists());
 
-		sdkDir.mkdirs();
+			sdkDir.mkdirs();
 
-		ZipUtil.unzip(sdkZipFile, getSdkName(), sdkDir, new NullProgressMonitor());
+			ZipUtil.unzip(sdkZipFile, getSdkName(), sdkDir, new NullProgressMonitor());
 
-		Assert.assertEquals(true, sdkDir.exists());
+			Assert.assertEquals(true, sdkDir.exists());
 
-		String username = _getUsername();
+			String username = _getUsername();
 
-		File userBuildFile = new File(sdkDir, "build." + username + ".properties");
+			File userBuildFile = new File(sdkDir, "build." + username + ".properties");
 
-		userBuildFile.createNewFile();
+			userBuildFile.createNewFile();
 
-		unzipServer();
+			unzipServer();
 
-		File serverDir = getServerDir().toFile();
+			File serverDir = getServerDir().toFile();
 
-		String appServerParentDir = "app.server.parent.dir=" + serverDir.getPath().replace("\\", "/");
+			String appServerParentDir = "app.server.parent.dir=" + serverDir.getPath().replace("\\", "/");
 
-		FileWriter writer = new FileWriter(userBuildFile.getPath(), true);
+			FileWriter writer = new FileWriter(userBuildFile.getPath(), true);
 
-		writer.write(appServerParentDir);
+			writer.write(appServerParentDir);
 
-		writer.close();
+			writer.close();
 
-		if (internal()) {
+			if (internal()) {
+				IPath bundlesPath = _getBundlesPath();
+
+				IPath source = bundlesPath.append("internal").append("ivy-settings.xml");
+
+				IPath dest = getSdkDir().append("ivy-settings.xml");
+
+				FileUtil.copyFile(source.toFile(), dest.toFile());
+			}
+		}
+		catch (Exception e) {
+		}
+	}
+
+	public void unzipPluginsSdk62() {
+		try {
+			Assert.assertTrue(test_in_the_internal_net, internal());
+
+			File sdkDir = getSdkDir62().toFile();
+
+			Assert.assertEquals(
+				"Expected file to be not exist:" + getSdkDir62().toPortableString(), false, sdkDir.exists());
+
+			File sdkZipFile = _getSdkZip62().toFile();
+
+			Assert.assertEquals("Expected file to exist: " + sdkZipFile.getAbsolutePath(), true, sdkZipFile.exists());
+
+			sdkDir.mkdirs();
+
+			ZipUtil.unzip(sdkZipFile, getSdkName62(), sdkDir, new NullProgressMonitor());
+
+			Assert.assertEquals(true, sdkDir.exists());
+
+			String username = _getUsername();
+
+			File userBuildFile = new File(sdkDir, "build." + username + ".properties");
+
+			userBuildFile.createNewFile();
+
+			unzipServer62();
+
+			File serverDir = getServerDir62().toFile();
+
+			String appServerParentDir = "app.server.parent.dir=" + serverDir.getPath().replace("\\", "/");
+
+			FileWriter writer = new FileWriter(userBuildFile.getPath(), true);
+
+			writer.write(appServerParentDir);
+
+			writer.close();
+
 			IPath bundlesPath = _getBundlesPath();
 
 			IPath source = bundlesPath.append("internal").append("ivy-settings.xml");
 
-			IPath dest = getSdkDir().append("ivy-settings.xml");
+			IPath dest = getSdkDir62().append("ivy-settings.xml");
 
-			try {
-				FileUtil.copyFile(source.toFile(), dest.toFile());
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public void unzipPluginsSdk62() throws IOException {
-		Assert.assertTrue(test_in_the_internal_net, internal());
-
-		File sdkDir = getSdkDir62().toFile();
-
-		Assert.assertEquals(
-			"Expected file to be not exist:" + getSdkDir62().toPortableString(), false, sdkDir.exists());
-
-		File sdkZipFile = _getSdkZip62().toFile();
-
-		Assert.assertEquals("Expected file to exist: " + sdkZipFile.getAbsolutePath(), true, sdkZipFile.exists());
-
-		sdkDir.mkdirs();
-
-		ZipUtil.unzip(sdkZipFile, getSdkName62(), sdkDir, new NullProgressMonitor());
-
-		Assert.assertEquals(true, sdkDir.exists());
-
-		String username = _getUsername();
-
-		File userBuildFile = new File(sdkDir, "build." + username + ".properties");
-
-		userBuildFile.createNewFile();
-
-		unzipServer62();
-
-		File serverDir = getServerDir62().toFile();
-
-		String appServerParentDir = "app.server.parent.dir=" + serverDir.getPath().replace("\\", "/");
-
-		FileWriter writer = new FileWriter(userBuildFile.getPath(), true);
-
-		writer.write(appServerParentDir);
-
-		writer.close();
-
-		IPath bundlesPath = _getBundlesPath();
-
-		IPath source = bundlesPath.append("internal").append("ivy-settings.xml");
-
-		IPath dest = getSdkDir62().append("ivy-settings.xml");
-
-		try {
 			FileUtil.copyFile(source.toFile(), dest.toFile());
 		}
 		catch (Exception e) {
@@ -454,7 +453,7 @@ public class EnvAction extends UIAction {
 		}
 	}
 
-	public void unzipServer() throws IOException {
+	public void unzipServer() {
 		FileUtil.deleteDir(getServerDir().toFile(), true);
 
 		File serverDir = getServerDir().toFile();
@@ -473,7 +472,12 @@ public class EnvAction extends UIAction {
 
 		String liferayServerZipFolder = _getServerZipFolder();
 
-		ZipUtil.unzip(liferayServerZipFile, liferayServerZipFolder, liferayServerDirFile, new NullProgressMonitor());
+		try {
+			ZipUtil.unzip(
+				liferayServerZipFile, liferayServerZipFolder, liferayServerDirFile, new NullProgressMonitor());
+		}
+		catch (IOException ioe) {
+		}
 	}
 
 	public void unzipServer62() throws IOException {
@@ -504,6 +508,15 @@ public class EnvAction extends UIAction {
 		"Only do this test in the internal net, add -Dinternal=\"false\" if you are out of the China office.";
 
 	protected Logger log;
+
+	private EnvAction(SWTWorkbenchBot bot) {
+		super(bot);
+
+		_bundleInfos = _getBundleInfos();
+		_sdkInfos = _getSdkInfos();
+
+		log = Logger.getLogger(getClass());
+	}
 
 	private BundleInfo[] _getBundleInfos() {
 		IPath bundlesCsvPath = _getBundlesPath().append("bundles.csv");
@@ -646,6 +659,8 @@ public class EnvAction extends UIAction {
 
 		return retval;
 	}
+
+	private static EnvAction _envAction;
 
 	private final BundleInfo[] _bundleInfos;
 	private String _bundlesDir = System.getProperty("liferay.bundles.dir");

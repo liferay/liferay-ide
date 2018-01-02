@@ -14,17 +14,24 @@
 
 package com.liferay.ide.ui.kaleo.tests;
 
-import com.liferay.ide.ui.liferay.SdkBase;
+import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.SdkSupport;
 
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
  * @author Haoyi Sun
  */
-public class EditorKaleoWorkflowTests extends SdkBase {
+public class EditorKaleoWorkflowTests extends SwtbotBase {
+
+	@ClassRule
+	public static SdkSupport sdk = new SdkSupport(bot);
 
 	@Test
 	public void createKaleoWorkflow() {
+		viewAction.switchLiferayPerspective();
+
 		wizardAction.openNewLiferayPluginProjectWizard();
 
 		String projectName = "test-kaleo-workflow-portlet";

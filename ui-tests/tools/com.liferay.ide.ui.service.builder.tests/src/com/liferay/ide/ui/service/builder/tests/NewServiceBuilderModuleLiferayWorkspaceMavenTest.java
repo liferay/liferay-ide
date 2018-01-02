@@ -14,15 +14,24 @@
 
 package com.liferay.ide.ui.service.builder.tests;
 
-import com.liferay.ide.ui.liferay.base.LiferayWorkspaceTomcatMavenBase;
+import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.LiferayWorkspaceMavenSupport;
+import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
  * @author Joye Luo
  */
-public class NewServiceBuilderModuleLiferayWorkspaceMavenTest extends LiferayWorkspaceTomcatMavenBase {
+public class NewServiceBuilderModuleLiferayWorkspaceMavenTest extends SwtbotBase {
+
+	@ClassRule
+	public static LiferayWorkspaceMavenSupport liferayWorkspace = new LiferayWorkspaceMavenSupport(bot);
+
+	@ClassRule
+	public static TomcatSupport tomcat = new TomcatSupport(bot);
 
 	@Test
 	public void createServiceBuilder() {
@@ -34,20 +43,29 @@ public class NewServiceBuilderModuleLiferayWorkspaceMavenTest extends LiferayWor
 
 		wizardAction.finish();
 
-		String[] projectNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName};
+		String[] projectNames =
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		String[] serviceNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName, projectName + "-service"};
+		String[] serviceNames = {
+			liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName,
+			projectName + "-service"
+		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(serviceNames));
 
-		String[] apiNames = {getLiferayWorkspaceName(), getModulesDirName(), projectName, projectName + "-api"};
+		String[] apiNames = {
+			liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName,
+			projectName + "-api"
+		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(apiNames));
 
-		String[] serviceXmlNames =
-			{getLiferayWorkspaceName(), getModulesDirName(), projectName, projectName + "-service", "service.xml"};
+		String[] serviceXmlNames = {
+			liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName,
+			projectName + "-service", "service.xml"
+		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(serviceXmlNames));
 

@@ -14,17 +14,24 @@
 
 package com.liferay.ide.ui.portlet.tests;
 
-import com.liferay.ide.ui.liferay.base.SdkBase;
+import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.SdkSupport;
 
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class NewPortletProjectSdkTests extends SdkBase {
+public class NewPortletProjectSdkTests extends SwtbotBase {
+
+	@ClassRule
+	public static SdkSupport sdk = new SdkSupport(bot);
 
 	@Test
 	public void createMvcPortletProject() {
+		viewAction.switchLiferayPerspective();
+
 		wizardAction.openNewLiferayPluginProjectWizard();
 
 		String projectName = "test-mvc-portlet";

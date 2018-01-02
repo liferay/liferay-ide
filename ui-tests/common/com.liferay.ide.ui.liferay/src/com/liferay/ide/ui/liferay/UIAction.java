@@ -27,7 +27,7 @@ public class UIAction implements UI {
 	public UIAction(SWTWorkbenchBot bot) {
 		this.bot = bot;
 
-		ide = new LiferayIDE(bot);
+		ide = LiferayIDE.getInstance(bot);
 	}
 
 	protected SWTWorkbenchBot bot;

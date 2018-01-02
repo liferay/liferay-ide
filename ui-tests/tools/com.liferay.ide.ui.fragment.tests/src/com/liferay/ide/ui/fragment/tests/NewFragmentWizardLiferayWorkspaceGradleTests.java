@@ -14,19 +14,28 @@
 
 package com.liferay.ide.ui.fragment.tests;
 
-import com.liferay.ide.ui.liferay.base.LiferayWorkspaceTomcatGradleBase;
+import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.LiferayWorkspaceGradleSupport;
+import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
  * @author Lily Li
  */
-public class NewFragmentWizardLiferayWorkspaceGradleTests extends LiferayWorkspaceTomcatGradleBase {
+public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
+
+	@ClassRule
+	public static LiferayWorkspaceGradleSupport liferayWorkspace = new LiferayWorkspaceGradleSupport(bot);
+
+	@ClassRule
+	public static TomcatSupport tomcat = new TomcatSupport(bot);
 
 	@Test
 	public void createFragmentChangeModulesDir() {
-		viewAction.project.openFile(getLiferayWorkspaceName(), "gradle.properties");
+		viewAction.project.openFile(liferayWorkspace.getLiferayWorkspaceName(), "gradle.properties");
 
 		StringBuffer sb = new StringBuffer();
 
@@ -69,9 +78,9 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends LiferayWorkspa
 
 		wizardAction.finish();
 
-		String[] projectNames = {getLiferayWorkspaceName(), newModulesFolderName, projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), newModulesFolderName, projectName};
 
-		String[] newModulesFolderNames = {getLiferayWorkspaceName(), newModulesFolderName};
+		String[] newModulesFolderNames = {liferayWorkspace.getLiferayWorkspaceName(), newModulesFolderName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -79,7 +88,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends LiferayWorkspa
 
 		viewAction.project.closeAndDeleteFromDisk(newModulesFolderNames);
 
-		viewAction.project.openFile(getLiferayWorkspaceName(), "gradle.properties");
+		viewAction.project.openFile(liferayWorkspace.getLiferayWorkspaceName(), "gradle.properties");
 
 		sb.delete(0, sb.length());
 		sb.append("liferay.workspace.modules.dir=modules");
@@ -115,7 +124,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends LiferayWorkspa
 
 		wizardAction.finish();
 
-		String[] projectNames = {getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -146,7 +155,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends LiferayWorkspa
 
 		wizardAction.finish();
 
-		String[] projectNames = {getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -177,7 +186,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends LiferayWorkspa
 
 		wizardAction.finish();
 
-		String[] projectNames = {getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -213,7 +222,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends LiferayWorkspa
 
 		wizardAction.finish();
 
-		String[] projectNames = {getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -244,7 +253,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends LiferayWorkspa
 
 		wizardAction.finish();
 
-		String[] projectNames = {getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -296,7 +305,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends LiferayWorkspa
 
 		wizardAction.finish();
 
-		String[] projectNames = {getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 

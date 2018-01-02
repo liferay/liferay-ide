@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay;
+package com.liferay.ide.ui.liferay.base;
 
 import com.liferay.ide.ui.liferay.action.BrowserAction;
 import com.liferay.ide.ui.liferay.action.DialogAction;
@@ -22,65 +22,19 @@ import com.liferay.ide.ui.liferay.action.JobAction;
 import com.liferay.ide.ui.liferay.action.ViewAction;
 import com.liferay.ide.ui.liferay.action.WizardAction;
 import com.liferay.ide.ui.liferay.page.LiferayIDE;
-import com.liferay.ide.ui.swtbot.Keys;
-import com.liferay.ide.ui.swtbot.UI;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
+import org.junit.rules.ExternalResource;
 
 /**
  * @author Terry Jia
- * @author Ashley Yuan
- * @author Vicky Wang
- * @author Ying Xu
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class SwtbotBase implements UI, Keys, Messages, FileConstants {
+public class SupportBase extends ExternalResource {
 
-	public static SWTWorkbenchBot bot = new SWTWorkbenchBot();
-	public static BrowserAction browserAction;
-	public static DialogAction dialogAction;
-	public static EditorAction editorAction;
-	public static EnvAction envAction;
-	public static LiferayIDE ide;
-	public static JobAction jobAction;
-	public static ViewAction viewAction;
-	public static WizardAction wizardAction;
-
-	@AfterClass
-	public static void afterClass() {
-
-		// envAction.resetTimestamp();
-
-		// String[] projectNames = viewAction.getProjectNames();
-
-		//
-
-		// if (projectNames.length > 0) {
-		// String msg = "The following projects are unable to be deleted, some error may
-		// happened:";
-
-		//
-
-		// envAction.logWarn(msg);
-
-		//
-
-		// for (String projectName : projectNames) {
-		// envAction.logWarn(projectName);
-		// }
-		// }
-
-	}
-
-	@BeforeClass
-	public static void beforeClass() throws Exception {
+	public SupportBase(SWTWorkbenchBot bot) {
 		ide = LiferayIDE.getInstance(bot);
 
 		dialogAction = DialogAction.getInstance(bot);
@@ -90,7 +44,9 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 		viewAction = ViewAction.getInstance(bot);
 		jobAction = JobAction.getInstance(bot);
 		browserAction = BrowserAction.getInstance(bot);
+	}
 
+	public void before() {
 		try {
 			long origin = SWTBotPreferences.TIMEOUT;
 
@@ -111,10 +67,15 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 		System.setProperty(SWTBotPreferenceConstants.KEY_DEFAULT_POLL_DELAY, "5000");
 
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
-
-		//ide.showErrorLogView();
-
-		//viewAction.checkErrorLog();
 	}
+
+	public BrowserAction browserAction;
+	public DialogAction dialogAction;
+	public EditorAction editorAction;
+	public EnvAction envAction;
+	public LiferayIDE ide;
+	public JobAction jobAction;
+	public ViewAction viewAction;
+	public WizardAction wizardAction;
 
 }

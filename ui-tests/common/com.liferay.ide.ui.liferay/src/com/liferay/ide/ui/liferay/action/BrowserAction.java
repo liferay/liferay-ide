@@ -23,8 +23,18 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class BrowserAction extends UIAction {
 
-	public BrowserAction(SWTWorkbenchBot bot) {
+	public static BrowserAction getInstance(SWTWorkbenchBot bot) {
+		if (_browserAction == null) {
+			_browserAction = new BrowserAction(bot);
+		}
+
+		return _browserAction;
+	}
+
+	private BrowserAction(SWTWorkbenchBot bot) {
 		super(bot);
 	}
+
+	private static BrowserAction _browserAction;
 
 }

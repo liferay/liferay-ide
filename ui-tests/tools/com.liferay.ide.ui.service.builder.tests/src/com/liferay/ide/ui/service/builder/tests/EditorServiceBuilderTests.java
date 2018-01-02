@@ -14,14 +14,19 @@
 
 package com.liferay.ide.ui.service.builder.tests;
 
-import com.liferay.ide.ui.liferay.base.SdkBase;
+import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.SdkSupport;
 
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class EditorServiceBuilderTests extends SdkBase {
+public class EditorServiceBuilderTests extends SwtbotBase {
+
+	@ClassRule
+	public static SdkSupport sdk = new SdkSupport(bot);
 
 	@Test
 	public void addColumn() {
@@ -33,6 +38,8 @@ public class EditorServiceBuilderTests extends SdkBase {
 
 	@Test
 	public void createServiceBuilderPortlet() {
+		viewAction.switchLiferayPerspective();
+
 		wizardAction.openNewLiferayPluginProjectWizard();
 
 		String projectName = "test-sb-portlet";

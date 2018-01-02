@@ -12,9 +12,10 @@
  * details.
  */
 
-package com.liferay.ide.ui.server.tests;
+package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.LiferayWorkspaceGradleSupport;
 import com.liferay.ide.ui.liferay.base.TomcatRunningSupport;
 
 import org.junit.ClassRule;
@@ -23,36 +24,40 @@ import org.junit.Test;
 /**
  * @author Terry Jia
  */
-public class TomcatDeployTests extends SwtbotBase {
+public class DeployModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
+
+	@ClassRule
+	public static LiferayWorkspaceGradleSupport liferayWorkspace = new LiferayWorkspaceGradleSupport(bot);
 
 	@ClassRule
 	public static TomcatRunningSupport tomcat = new TomcatRunningSupport(bot);
 
 	@Test
-	public void deploySampleProject() {
-		wizardAction.openNewLiferayModuleWizard();
-
-		String projectName1 = "test1";
-
-		wizardAction.newModule.prepare(projectName1);
-
-		wizardAction.finish();
+	public void deployActivator() {
+		String projectName = "deploy-activator-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		String projectName2 = "test2";
-
-		wizardAction.newModule.prepare(projectName2);
+		wizardAction.newModule.prepareGradle(projectName, ACTIVATOR);
 
 		wizardAction.finish();
+
+		// need to use job instead
+
+		ide.sleep(5000);
+
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
 
 		viewAction.servers.openAddAndRemoveDialog(tomcat.getServerStartedLabel());
 
-		dialogAction.addAndRemove.addModule(projectName1);
+		dialogAction.addAndRemove.addModule(projectName);
 
 		dialogAction.confirm(FINISH);
 
-		jobAction.waitForConsoleContent(tomcat.getServerName(), "STARTED " + projectName1 + "_", 20 * 1000);
+		jobAction.waitForConsoleContent(
+			tomcat.getServerName(), "STARTED " + projectName.replace('-', '.') + "_", 20 * 1000);
+
+		viewAction.project.closeAndDelete(projectNames);
 	}
 
 }

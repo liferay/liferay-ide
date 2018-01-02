@@ -14,20 +14,27 @@
 
 package com.liferay.ide.ui.theme.tests;
 
-import com.liferay.ide.ui.liferay.base.Sdk62Base;
+import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.Sdk62Support;
 
+import org.junit.ClassRule;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
-public class NewThemeProjectSdk62Tests extends Sdk62Base {
+public class NewThemeProjectSdk62Tests extends SwtbotBase {
+
+	@ClassRule
+	public static Sdk62Support sdk62 = new Sdk62Support(bot);
 
 	@Test
 	public void createTheme() {
 		if (envAction.notInternal()) {
 			return;
 		}
+
+		viewAction.switchLiferayPerspective();
 
 		wizardAction.openNewLiferayPluginProjectWizard();
 

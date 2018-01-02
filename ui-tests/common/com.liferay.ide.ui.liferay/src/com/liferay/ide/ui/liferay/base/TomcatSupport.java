@@ -14,32 +14,32 @@
 
 package com.liferay.ide.ui.liferay.base;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
-
-import java.io.IOException;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  */
-public abstract class TomcatRunningBase extends SwtbotBase implements ServerSupport {
+public class TomcatSupport extends SupportBase implements ServerSupport {
 
-	public static String getServerName() {
-		return "tomcat-support";
+	public TomcatSupport(SWTWorkbenchBot bot) {
+		super(bot);
 	}
 
-	public static String getServerStartedLabel() {
-		return getServerName() + STARTED_LABEL;
+	@Override
+	public void after() {
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
+
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(getServerName());
+
+		dialogAction.preferences.confirm();
 	}
 
-	public static String getServerStoppedLabel() {
-		return getServerName() + STOPPED_LABEL;
-	}
+	@Override
+	public void before() {
+		super.before();
 
-	@BeforeClass
-	public static void startServer() throws IOException {
 		envAction.unzipServer();
 
 		envAction.prepareGeoFile();
@@ -69,23 +69,18 @@ public abstract class TomcatRunningBase extends SwtbotBase implements ServerSupp
 		wizardAction.newServer.prepare(getServerName());
 
 		wizardAction.finish();
-
-		viewAction.servers.start(getServerStoppedLabel());
-
-		jobAction.waitForServerStarted(getServerName());
 	}
 
-	@AfterClass
-	public static void stopServer() throws IOException {
-		viewAction.servers.stop(getServerStartedLabel());
+	public String getServerName() {
+		return "tomcat-support";
+	}
 
-		jobAction.waitForServerStopped(getServerName());
+	public String getServerStartedLabel() {
+		return getServerName() + STARTED_LABEL;
+	}
 
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(getServerName());
-
-		dialogAction.preferences.confirm();
+	public String getServerStoppedLabel() {
+		return getServerName() + STOPPED_LABEL;
 	}
 
 }

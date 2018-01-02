@@ -14,19 +14,21 @@
 
 package com.liferay.ide.ui.liferay.base;
 
-import java.io.IOException;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 
 /**
  * @author Terry Jia
  */
-public class LiferayWorkspaceTomcatMavenBase extends TomcatBase {
+public class LiferayWorkspaceMavenSupport extends SupportBase {
 
-	@AfterClass
-	public static void cleanLiferayWorkspace() {
+	public LiferayWorkspaceMavenSupport(SWTWorkbenchBot bot) {
+		super(bot);
+	}
+
+	@Override
+	public void after() {
 		String[] modulesFolderNames = {getLiferayWorkspaceName(), getModulesDirName()};
 
 		String[] themesFolderNames = {getLiferayWorkspaceName(), getThemesDirName()};
@@ -42,24 +44,10 @@ public class LiferayWorkspaceTomcatMavenBase extends TomcatBase {
 		viewAction.project.closeAndDelete(getLiferayWorkspaceName());
 	}
 
-	public static String getLiferayWorkspaceName() {
-		return "liferay-workspace-maven-support";
-	}
+	@Override
+	public void before() {
+		super.before();
 
-	public static String getModulesDirName() {
-		return getLiferayWorkspaceName() + "-modules (in modules)";
-	}
-
-	public static String getThemesDirName() {
-		return getLiferayWorkspaceName() + "-themes (in themes)";
-	}
-
-	public static String getWarsDirName() {
-		return getLiferayWorkspaceName() + "-wars (in wars)";
-	}
-
-	@BeforeClass
-	public static void prepareLiferayWorkspace() throws IOException {
 		wizardAction.openNewLiferayWorkspaceWizard();
 
 		wizardAction.newLiferayWorkspace.prepareMaven(getLiferayWorkspaceName());
@@ -67,6 +55,22 @@ public class LiferayWorkspaceTomcatMavenBase extends TomcatBase {
 		wizardAction.finish();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(getLiferayWorkspaceName()));
+	}
+
+	public String getLiferayWorkspaceName() {
+		return "liferay-workspace-maven-support";
+	}
+
+	public String getModulesDirName() {
+		return getLiferayWorkspaceName() + "-modules (in modules)";
+	}
+
+	public String getThemesDirName() {
+		return getLiferayWorkspaceName() + "-themes (in themes)";
+	}
+
+	public String getWarsDirName() {
+		return getLiferayWorkspaceName() + "-wars (in wars)";
 	}
 
 }
