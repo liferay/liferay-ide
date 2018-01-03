@@ -81,6 +81,8 @@ public interface UI {
 
 	public final String AUTHOR = "Author";
 
+	public final String AVAILABLE_SOFTWARE_SITES = "Available Software Sites";
+
 	public final String BACK_WITH_LEFT_BRACKET = "< Back";
 
 	public final String BROWSE = "Browse";
@@ -317,6 +319,8 @@ public interface UI {
 
 	public final String INITIALIZE_SERVER_BUNDLE = "Initialize Server Bundle";
 
+	public final String INSTALL_UPDATE = "Install/Update";
+
 	public final String INTERFACES = "Interfaces:";
 
 	public final String JAVA_PACKAGE = "Java package:";
@@ -366,6 +370,8 @@ public interface UI {
 	public final String LIFERAY_FACES_ALLOY = "Liferay Faces Alloy";
 
 	public final String LIFERAY_HOOK_CONFIGURATION = "Liferay Hook Configuration";
+
+	public final String LIFERAY_IDE_STABLE_RELEASES = "Liferay IDE Stable releases";
 
 	public final String LIFERAY_INC = "Liferay, Inc.";
 

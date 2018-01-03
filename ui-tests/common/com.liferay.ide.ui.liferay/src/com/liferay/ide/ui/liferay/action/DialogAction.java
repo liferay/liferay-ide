@@ -16,6 +16,7 @@ package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.swtbot.eclipse.page.AddAndRemoveDialog;
+import com.liferay.ide.ui.swtbot.eclipse.page.AvailableSoftwareSitesPreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.PreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.ServerRuntimeEnvironmentsPreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
@@ -98,6 +99,7 @@ public class DialogAction extends UIAction {
 	}
 
 	public AddAndRemoveDialogAction addAndRemove = new AddAndRemoveDialogAction();
+	public AvailableSoftwareSitesDialogAction availableSoftwareSites = new AvailableSoftwareSitesDialogAction();
 	public PreferencesDialogAction preferences = new PreferencesDialogAction();
 	public UpdateMavenProjectDialogAction updateMavenProject = new UpdateMavenProjectDialogAction();
 	public ServerRuntimeEnvironmentsDialogAction serverRuntimeEnvironments =
@@ -121,10 +123,25 @@ public class DialogAction extends UIAction {
 
 	}
 
+	public class AvailableSoftwareSitesDialogAction {
+
+		public boolean checkLiferayIdeSiteExist() {
+			return _availableSoftwareSitesPreferencesDialog.getSites().containsText(LIFERAY_IDE_STABLE_RELEASES);
+		}
+
+		private final AvailableSoftwareSitesPreferencesDialog _availableSoftwareSitesPreferencesDialog =
+			new AvailableSoftwareSitesPreferencesDialog(bot);
+
+	}
+
 	public class PreferencesDialogAction {
 
 		public void confirm() {
 			_preferencesDialog.confirm();
+		}
+
+		public void openAvailableSoftwareSites() {
+			openPreferenceType(INSTALL_UPDATE, AVAILABLE_SOFTWARE_SITES);
 		}
 
 		public void openPreferenceType(String categroy, String type) {
