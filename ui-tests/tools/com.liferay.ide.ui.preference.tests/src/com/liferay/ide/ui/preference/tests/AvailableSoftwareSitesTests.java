@@ -30,7 +30,7 @@ public class AvailableSoftwareSitesTests extends SwtbotBase {
 
 		dialogAction.preferences.openAvailableSoftwareSites();
 
-		Assert.assertTrue(dialogAction.availableSoftwareSites.checkLiferayIdeSiteExist());
+		Assert.assertTrue(dialogAction.availableSoftwareSites.getSites().containsItem(LIFERAY_IDE_STABLE_RELEASES));
 	}
 
 }

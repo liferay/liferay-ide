@@ -25,6 +25,7 @@ import com.liferay.ide.ui.swtbot.eclipse.page.TreeDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.UpdateMavenProjectDialog;
 import com.liferay.ide.ui.swtbot.page.Button;
 import com.liferay.ide.ui.swtbot.page.Dialog;
+import com.liferay.ide.ui.swtbot.page.Table;
 import com.liferay.ide.ui.swtbot.util.CoreUtil;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -125,8 +126,8 @@ public class DialogAction extends UIAction {
 
 	public class AvailableSoftwareSitesDialogAction {
 
-		public boolean checkLiferayIdeSiteExist() {
-			return _availableSoftwareSitesPreferencesDialog.getSites().containsText(LIFERAY_IDE_STABLE_RELEASES);
+		public Table getSites() {
+			return _availableSoftwareSitesPreferencesDialog.getSites();
 		}
 
 		private final AvailableSoftwareSitesPreferencesDialog _availableSoftwareSitesPreferencesDialog =

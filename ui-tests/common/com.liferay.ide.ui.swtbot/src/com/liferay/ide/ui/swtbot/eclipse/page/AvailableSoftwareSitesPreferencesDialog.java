@@ -15,24 +15,22 @@
 package com.liferay.ide.ui.swtbot.eclipse.page;
 
 import com.liferay.ide.ui.swtbot.page.Dialog;
+import com.liferay.ide.ui.swtbot.page.Table;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotTable;
 
 /**
  * @author Joye Luo
+ * @author Terry Jia
  */
 public class AvailableSoftwareSitesPreferencesDialog extends Dialog {
 
 	public AvailableSoftwareSitesPreferencesDialog(SWTBot bot) {
 		super(bot);
-		_bot = bot;
 	}
 
-	public SWTBotTable getSites() {
-		return _bot.table();
+	public Table getSites() {
+		return new Table(getShell().bot(), 0);
 	}
-
-	private SWTBot _bot;
 
 }
