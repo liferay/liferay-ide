@@ -121,22 +121,6 @@
                 <move file="${updatesite.name}" tofile="${final.updatesite.name}" verbose="true" />
             </then>
         </if>
-
-    </target>
-
-    <target name="copy-liferay-mobile-sdk" depends="download-liferay-mobile-sdk">
-        <unzip src="${downloads.dir}/${liferay.mobile.sdk.zip}" dest="${work.dir}/" />
-    </target>
-
-    <target name="download-liferay-mobile-sdk" depends="create-downloads-dir">
-        <if>
-            <not>
-                <available file="${downloads.dir}/${liferay.mobile.sdk.zip}" />
-            </not>
-            <then>
-                <get dest="${downloads.dir}/${liferay.mobile.sdk.zip}" src="${liferay.mobile.sdk.url}" verbose="true" />
-            </then>
-        </if>
     </target>
 
     <target name="win64">
@@ -299,26 +283,6 @@
             <arg value="${arch}" />
             <arg value="-roaming" />
         </exec>
-    </target>
-
-    <target name="install-adt-ide-features" depends="setup-builder">
-        <if>
-            <available file="${builder.dir}/eclipse" />
-            <then>
-                <chmod file="${builder.dir}/eclipse" perm="+x" />
-            </then>
-        </if>
-
-        <antcall target="clean-eclipse" />
-        <antcall target="setup-eclipse" />
-
-        <echo>adt-site: ${google-adt-repository}</echo>
-        <antcallback target="install-feature" return="output">
-            <param name="repositoryURL" value="${google-adt-repository}" />
-            <param name="featureId" value="${adt.ide.features}" />
-        </antcallback>
-
-        <echo>${output}</echo>
     </target>
 
     <target name="install-all-features" depends="setup-builder">
