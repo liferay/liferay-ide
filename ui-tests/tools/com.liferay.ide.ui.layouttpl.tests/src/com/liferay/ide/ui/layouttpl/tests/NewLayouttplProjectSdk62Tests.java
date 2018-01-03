@@ -73,6 +73,8 @@ public class NewLayouttplProjectSdk62Tests extends SwtbotBase {
 			return;
 		}
 
+		viewAction.switchLiferayPerspective();
+
 		wizardAction.openNewLiferayPluginProjectWizard();
 
 		String projectName = "test-layouttpl";
