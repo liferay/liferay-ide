@@ -17,6 +17,7 @@ package com.liferay.ide.project.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.PluginType;
@@ -226,6 +227,12 @@ public class PluginsSDKProjectProvider
 			File projectParent = projectDir.getParentFile();
 
 			projectParent.mkdirs();
+
+			if (FileUtil.notExists(newSDKProjectPath)) {
+				return ProjectCore.createErrorStatus(
+					"Error create project due to '" + newSDKProjectPath + "' does not exist."
+				);
+			}
 
 			File newSDKProjectDir = newSDKProjectPath.toFile();
 
