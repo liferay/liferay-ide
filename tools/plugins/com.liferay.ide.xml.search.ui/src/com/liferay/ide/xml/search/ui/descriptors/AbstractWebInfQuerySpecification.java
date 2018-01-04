@@ -24,6 +24,7 @@ import org.eclipse.wst.xml.search.core.queryspecifications.requestor.IXMLSearchR
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public abstract class AbstractWebInfQuerySpecification implements IResourceProvider, IXMLSearchRequestorProvider {
 
@@ -52,11 +53,8 @@ public abstract class AbstractWebInfQuerySpecification implements IResourceProvi
 				return webInf;
 			}
 		}
-		else {
-			return folder;
-		}
 
-		return null;
+		return folder;
 	}
 
 }
