@@ -879,7 +879,7 @@ public class PropertiesUtil {
 			_matchedRelativePath = matchedRelativePath;
 
 			try {
-				container.accept(this, IContainer.EXCLUDE_DERIVED);
+				container.accept(this, IContainer.EXCLUDE_DERIVED | IContainer.DO_NOT_CHECK_EXISTENCE);
 			}
 			catch (CoreException ce) {
 				LiferayCore.logError(ce);
