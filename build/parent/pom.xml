@@ -30,7 +30,7 @@
         <tycho-packaging-format>yyyyMMddHHmm'-m1'</tycho-packaging-format>
         <tycho-version>1.0.0</tycho-version>
         <tycho-extras-version>1.0.0</tycho-extras-version>
-        <eclipse-site>http://download.eclipse.org/releases/photon/201711031000/</eclipse-site>
+        <eclipse-site>http://download.eclipse.org/releases/photon/</eclipse-site>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20170919201930/repository/</orbit-site>
         <tm-site>http://download.eclipse.org/tm/terminal/updates/4.2/</tm-site>
         <liferay-ide-swtbot-testing-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
