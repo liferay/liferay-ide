@@ -29,12 +29,9 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
-import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -46,31 +43,13 @@ import org.eclipse.ui.ide.IDE;
 
 /**
  * @author Simon Jiang
+ * @author Charles Wu
  */
 public class NewLiferayComponentWizard
 	extends SapphireWizard<NewLiferayComponentOp> implements IWorkbenchWizard, INewWizard {
 
 	public NewLiferayComponentWizard() {
 		super(_createDefaultOp(), DefinitionLoader.sdef(NewLiferayComponentWizard.class).wizard());
-	}
-
-	@Override
-	public IWizardPage[] getPages() {
-		final IWizardPage[] wizardPages = super.getPages();
-
-		if (!_firstErrorMessageRemoved && (wizardPages != null)) {
-			final SapphireWizardPage wizardPage = (SapphireWizardPage)wizardPages[0];
-
-			final String message = wizardPage.getMessage();
-			final int messageType = wizardPage.getMessageType();
-
-			if ((messageType == IMessageProvider.ERROR) && !CoreUtil.isNullOrEmpty(message)) {
-				wizardPage.setMessage("No suitable liferay module project.", SapphireWizardPage.NONE);
-				_firstErrorMessageRemoved = true;
-			}
-		}
-
-		return wizardPages;
 	}
 
 	@Override
@@ -171,7 +150,6 @@ public class NewLiferayComponentWizard
 		return NewLiferayComponentOp.TYPE.instantiate();
 	}
 
-	private boolean _firstErrorMessageRemoved = false;
 	private IPackageFragment _initialPackage;
 	private IPackageFragmentRoot _initialPackageRoot;
 	private IProject _initialProject;
