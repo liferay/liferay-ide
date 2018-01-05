@@ -64,6 +64,8 @@ public class NewServiceBuilderPortletSdk62Tests extends SwtbotBase {
 			return;
 		}
 
+		viewAction.switchLiferayPerspective();
+
 		wizardAction.openNewLiferayPluginProjectWizard();
 
 		String projectName = "test-sb-build-wsdd-portlet";

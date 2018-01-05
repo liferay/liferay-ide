@@ -80,7 +80,7 @@ public class NoRunningJobsCondition extends JobCondition {
 	private final String[] _expectedJobs = {
 		"Open Notification Job", "Activity Monitor Job", "Task List Save Job", "Git Repository Change Scanner",
 		"Workbench Auto-Save Job", "Compacting resource model", "Synchronizing Relevant Tasks",
-		"Periodic workspace save.", "Synchronizing Task List", "Task Data Snapshot"
+		"Periodic workspace save.", "Synchronizing Task List", "Task Data Snapshot", "Refreshing server adapter list"
 	};
 
 }
