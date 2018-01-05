@@ -35,7 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
-import org.apache.maven.cli.MavenCli;
+import org.apache.maven.cli.configuration.SettingsXmlConfigurationProcessor;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
 import org.apache.maven.model.Dependency;
@@ -306,7 +306,6 @@ public class MavenUtil {
 		return getLiferayMavenPluginConfig(mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_PLUGIN_TYPE);
 	}
 
-	@SuppressWarnings("deprecation")
 	public static String getLocalRepositoryDir() {
 		String retval = null;
 
@@ -315,12 +314,10 @@ public class MavenUtil {
 		String userSettings = mavenConfiguration.getUserSettingsFile();
 
 		if ((userSettings == null) || (userSettings.length() == 0)) {
-			userSettings = MavenCli.DEFAULT_USER_SETTINGS_FILE.getAbsolutePath();
+			userSettings = SettingsXmlConfigurationProcessor.DEFAULT_USER_SETTINGS_FILE.getAbsolutePath();
 		}
 
-		org.eclipse.m2e.core.embedder.MavenRuntimeManager runtimeManager = MavenPlugin.getMavenRuntimeManager();
-
-		String globalSettings = runtimeManager.getGlobalSettingsFile();
+		String globalSettings = MavenPlugin.getMavenConfiguration().getGlobalSettingsFile();
 
 		IMaven maven = MavenPlugin.getMaven();
 
