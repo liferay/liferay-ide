@@ -61,6 +61,10 @@ public abstract class AbstractConfigurationElement implements IConfigurationElem
 		return null;
 	}
 
+	public int getHandleId() {
+		return 0;
+	}
+
 	public String getName() throws InvalidRegistryObjectException {
 		return null;
 	}
