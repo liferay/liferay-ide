@@ -6,7 +6,7 @@
 workspace,"workspace" is not an absolute path.,linux
 Z:\workspace,"Z:\workspace" is not an absolute path.,linux
 /homehome,Cannot create project content at "/homehome".,linux
-D:\,"*" is not a valid path,linux
+D:\,"D:\" is not an absolute path.,linux
 .,"." is not an absolute path.,win32
 ..,".." is not an absolute path.,win32
 ##,"##" is not an absolute path.,win32
