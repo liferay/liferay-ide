@@ -76,7 +76,7 @@ public class JobAction extends UIAction {
 	}
 
 	public void waitForServerStarted(String serverName) {
-		ide.waitUntil(new ServerStartJobCondition(serverName), 300 * 1000);
+		ide.waitUntil(new ServerStartJobCondition(serverName), 450 * 1000);
 	}
 
 	public void waitForServerStopped(String serverName) {
