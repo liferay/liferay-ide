@@ -25,6 +25,7 @@ import org.junit.Test;
  * @author Joye Luo
  * @author Terry Jia
  */
+@Ignore("there are a few sub process still running after Refresh server adapter")
 public class NewServiceBuilderPortletSdk62Tests extends SwtbotBase {
 
 	@ClassRule
