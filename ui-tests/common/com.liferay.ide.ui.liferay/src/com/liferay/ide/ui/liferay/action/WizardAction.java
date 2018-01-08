@@ -379,6 +379,12 @@ public class WizardAction extends UIAction {
 			ide.sleep();
 		}
 
+		public void prepareProjectName(String projectName) {
+			_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
+
+			ide.sleep();
+		}
+
 		public void prepareServiceName(String serviceName) {
 			_newLiferayComponentWizard.getServiceName().setText(serviceName);
 

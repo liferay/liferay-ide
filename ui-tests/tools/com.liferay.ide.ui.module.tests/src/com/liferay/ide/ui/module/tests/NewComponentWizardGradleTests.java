@@ -22,11 +22,82 @@ import org.junit.Test;
 /**
  * @author Ying Xu
  * @author Ashley Yuan
+ * @author Rui Wang
  */
 public class NewComponentWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createComponentModelListener() {
+		String projectName = "test-component-moduel-listener-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(projectName, MVC_PORTLET);
+
+		wizardAction.finish();
+
+		wizardAction.openNewLiferayComponentClassWizard();
+
+		String className = "MyListener";
+		String packageName = "com.liferay.ide.test";
+		String template = MODEL_LISTENER;
+
+		wizardAction.newLiferayComponent.prepare(projectName, template, className, packageName);
+
+		wizardAction.newLiferayComponent.openSelectModelClassAndServiceDialog();
+
+		dialogAction.prepareText("*com.liferay.blogs.kernel.model.BlogsEntry");
+
+		dialogAction.confirm();
+
+		wizardAction.finish();
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(projectName, "src/main/java", packageName, className + ".java"));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createComponentOnMultipleProject() {
+		String firstProjectName = "first-component-gradle";
+		String secondProjectName = "second-component-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(firstProjectName);
+
+		wizardAction.finish();
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(secondProjectName);
+
+		wizardAction.finish();
+
+		wizardAction.openNewLiferayComponentClassWizard();
+
+		wizardAction.finish();
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				firstProjectName, "src/main/java", "content", "FirstComponentGradlePortlet.java"));
+
+		wizardAction.openNewLiferayComponentClassWizard();
+
+		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
+
+		wizardAction.newLiferayComponent.prepareProjectName(secondProjectName);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				secondProjectName, "src/main/java", "content", "SecondComponentGradlePortlet.java"));
+
+		viewAction.project.closeAndDelete(firstProjectName);
+
+		viewAction.project.closeAndDelete(secondProjectName);
 	}
 
 	@Test
@@ -80,6 +151,99 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		dialogAction.confirm();
 
 		wizardAction.finish();
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(projectName, "src/main/java", packageName, className + ".java"));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createComponentShortcuts() {
+		String projectName = "shortcut-component-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(projectName);
+
+		wizardAction.finish();
+
+		wizardAction.openFileMenuLiferayComponentClassWizard();
+
+		wizardAction.newLiferayComponent.prepare(MVC_PORTLET_UPCASE);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				projectName, "src/main/java", "content", "ShortcutComponentGradleMVCPortlet.java"));
+
+		viewAction.project.openComponentClassWizard(projectName);
+
+		wizardAction.newLiferayComponent.prepare(REST_UPCASE);
+
+		wizardAction.finish();
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				projectName, "src/main/java", "content", "ShortcutComponentGradleRestService.java"));
+
+		wizardAction.openNewBtnLiferayComponentClassWizard();
+
+		wizardAction.finish();
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				projectName, "src/main/java", "content", "ShortcutComponentGradlePortlet.java"));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createComponentWithPackage() {
+		String projectName = "test-component-with-packages-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(projectName);
+
+		wizardAction.finish();
+
+		wizardAction.openNewLiferayComponentClassWizard();
+
+		String className = "TestComponentWithPackagesGradlePortlet";
+		String packageName = "test.component.with.packages.gradle.constants";
+
+		wizardAction.newLiferayComponent.openSelectPackageNameDialog();
+
+		dialogAction.prepareText(packageName);
+
+		dialogAction.confirm();
+
+		wizardAction.finish();
+
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(projectName, "src/main/java", packageName, className + ".java"));
+
+		viewAction.project.closeAndDelete(projectName);
+	}
+
+	@Test
+	public void createDefaultComponent() {
+		String projectName = "test-componentDefault-gradle";
+
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareGradle(projectName);
+
+		wizardAction.finish();
+
+		wizardAction.openNewLiferayComponentClassWizard();
+
+		wizardAction.finish();
+
+		String className = "TestComponentdefaultGradlePortlet";
+		String packageName = "content";
 
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(projectName, "src/main/java", packageName, className + ".java"));
