@@ -31,7 +31,13 @@ public class SdkSupport extends SupportBase {
 
 		String sdkName = envAction.getSdkName() + "-" + envAction.getTimestamp();
 
-		viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
+		// In fact we need to wait our jobs done
+
+		// but now it takes too long as the fetch the server list job 
+
+		// viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
+
+		viewAction.project.closeAndDelete(sdkName);
 
 		envAction.resetTimestamp();
 	}
