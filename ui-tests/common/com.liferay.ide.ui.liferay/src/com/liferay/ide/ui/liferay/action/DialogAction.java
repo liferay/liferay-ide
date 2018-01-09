@@ -43,15 +43,27 @@ public class DialogAction extends UIAction {
 	}
 
 	public void cancel() {
+		String title = _dialog.getLabel();
+
 		_dialog.cancel();
+
+		_jobAction.waitForShellClosed(title);
 	}
 
 	public void confirm() {
+		String title = _dialog.getLabel();
+
 		_dialog.confirm();
+
+		_jobAction.waitForShellClosed(title);
 	}
 
 	public void confirm(String confirmLabel) {
+		String title = _dialog.getLabel();
+
 		_dialog.confirm(confirmLabel);
+
+		_jobAction.waitForShellClosed(title);
 	}
 
 	public Button getConfirmBtn() {
