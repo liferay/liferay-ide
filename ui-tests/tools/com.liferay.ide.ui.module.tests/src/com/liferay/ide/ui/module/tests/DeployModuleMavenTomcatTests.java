@@ -45,7 +45,7 @@ public class DeployModuleMavenTomcatTests extends SwtbotBase {
 		dialogAction.confirm(FINISH);
 
 		jobAction.waitForConsoleContent(
-			tomcat.getServerName(), "STARTED " + projectName.replace('-', '.') + "_", 20 * 1000);
+			tomcat.getServerName(), "STARTED " + projectName.replace('-', '.') + "_", 60 * 1000);
 
 		viewAction.project.closeAndDelete(projectName);
 	}

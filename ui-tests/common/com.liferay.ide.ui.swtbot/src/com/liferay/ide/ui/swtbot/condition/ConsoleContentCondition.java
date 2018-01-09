@@ -31,11 +31,13 @@ public class ConsoleContentCondition implements ICondition {
 		_consoleName = consoleName;
 
 		_content = content;
+
+		_lastContent = "No Text Console be found.";
 	}
 
 	@Override
 	public String getFailureMessage() {
-		return "Console doesn't contain " + _content;
+		return "Console doesn't contain " + _content + ". The last content is " + _lastContent;
 	}
 
 	@Override
@@ -54,7 +56,9 @@ public class ConsoleContentCondition implements ICondition {
 			if (console.getName().contains(_consoleName) && console instanceof TextConsole) {
 				IDocument content = ((TextConsole)console).getDocument();
 
-				return content.get().contains(_content);
+				_lastContent = content.get();
+
+				return _lastContent.contains(_content);
 			}
 		}
 
@@ -63,5 +67,6 @@ public class ConsoleContentCondition implements ICondition {
 
 	private String _consoleName;
 	private String _content;
+	private String _lastContent;
 
 }
