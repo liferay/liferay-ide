@@ -99,31 +99,35 @@ public class ViewAction extends UIAction {
 	public class ProjectViewAction {
 
 		public void closeAndDelete(String... items) {
-			closeProject(items);
+			closeProjectTry(items);
 
 			delete(items);
 		}
 
 		public void closeAndDeleteFromDisk(String... items) {
-			closeProject(items);
+			closeProjectTry(items);
 
 			deleteProjectFromDisk(items);
 		}
 
 		public void closeAndDeleteWithNoRunningJobs(String... items) {
-			closeProject(items);
+			closeProjectTry(items);
 
 			_jobAction.waitForNoRunningJobs();
 
 			delete(items);
 		}
 
-		public void closeProject(String... items) {
+		public void closeProjectTry(String... items) {
 			ide.sleep();
 
-			_getProjects().contextMenu("Close Project", items);
+			try {
+				_getProjects().contextMenu("Close Project", items);
 
-			_jobAction.waitForCloseProject();
+				_jobAction.waitForCloseProject();
+			}
+			catch (Exception e) {
+			}
 		}
 
 		/**
