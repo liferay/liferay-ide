@@ -103,9 +103,15 @@ public class DialogAction extends UIAction {
 	public class AddAndRemoveDialogAction {
 
 		public void addModule(String projectName) {
+			ide.sleep();
+
 			_addAndRemoveDialog.getAvailables().select(projectName);
 
+			ide.sleep();
+
 			_addAndRemoveDialog.getAddBtn().click();
+
+			ide.sleep();
 		}
 
 		private final AddAndRemoveDialog _addAndRemoveDialog = new AddAndRemoveDialog(bot);
