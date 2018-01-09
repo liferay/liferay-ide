@@ -17,8 +17,6 @@ package com.liferay.ide.project.core.modules.fragment;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
@@ -92,42 +90,34 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 
 			IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
-			PortalBundle portalBundle = LiferayServerCore.newPortalBundle(runtime.getLocation());
+			if (!hostOSGiBundle.endsWith("jar")) {
+				hostOSGiBundle = hostOSGiBundle + ".jar";
+			}
 
-			if (portalBundle != null) {
-				if (!hostOSGiBundle.endsWith("jar")) {
-					hostOSGiBundle = hostOSGiBundle + ".jar";
-				}
+			IPath tempLocation = ProjectCore.getDefault().getStateLocation();
 
-				IPath modulesPath = portalBundle.getOSGiBundlesDir().append("modules");
+			ServerUtil.getModuleFileFrom70Server(runtime, hostOSGiBundle, tempLocation);
 
-				File module = modulesPath.append(hostOSGiBundle).toFile();
+			File module = tempLocation.append(hostOSGiBundle).toFile();
 
-				if (FileUtil.notExists(module)) {
-					IPath temp = ProjectCore.getDefault().getStateLocation();
+			if (FileUtil.exists(module)) {
+				try (JarFile jar = new JarFile(module)) {
+					Enumeration<JarEntry> enu = jar.entries();
 
-					module = new File(temp.toFile(), hostOSGiBundle);
-				}
+					while (enu.hasMoreElements()) {
+						JarEntry entry = enu.nextElement();
 
-				if (FileUtil.exists(module)) {
-					try (JarFile jar = new JarFile(module)) {
-						Enumeration<JarEntry> enu = jar.entries();
+						String name = entry.getName();
 
-						while (enu.hasMoreElements()) {
-							JarEntry entry = enu.nextElement();
+						if ((name.startsWith("META-INF/resources/") &&
+							 (name.endsWith(".jsp") || name.endsWith(".jspf"))) ||
+							name.equals("portlet.properties") || name.equals("resource-actions/default.xml")) {
 
-							String name = entry.getName();
-
-							if ((name.startsWith("META-INF/resources/") &&
-								 (name.endsWith(".jsp") || name.endsWith(".jspf"))) ||
-								name.equals("portlet.properties") || name.equals("resource-actions/default.xml")) {
-
-								_possibleValues.add(name);
-							}
+							_possibleValues.add(name);
 						}
 					}
-					catch (Exception e) {
-					}
+				}
+				catch (Exception e) {
 				}
 			}
 		}

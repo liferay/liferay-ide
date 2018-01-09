@@ -14,11 +14,10 @@
 
 package com.liferay.ide.project.ui.modules.fragment.action;
 
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
@@ -108,11 +107,10 @@ public class AddFilesFromOSGiBundleAction extends PropertyEditorActionHandler {
 
 		final IRuntime runtime = ServerUtil.getRuntime(runtimeName);
 
-		final IPath tempLocation = ProjectUI.getPluginStateLocation();
+		final IPath tempLocation = ProjectCore.getDefault().getStateLocation();
 
 		dialog.setTitle("Add files from OSGi bundle to override");
 
-		final PortalBundle portalBundle = LiferayServerCore.newPortalBundle(runtime.getLocation());
 		String currentOSGiBundle = op.getHostOsgiBundle().content();
 
 		if (!currentOSGiBundle.endsWith("jar")) {
@@ -121,20 +119,10 @@ public class AddFilesFromOSGiBundleAction extends PropertyEditorActionHandler {
 
 		ServerUtil.getModuleFileFrom70Server(runtime, currentOSGiBundle, tempLocation);
 
-		if (portalBundle != null) {
-			try {
-				IPath osGiBundlesDir = portalBundle.getOSGiBundlesDir().append("modules");
+		File module = tempLocation.append(currentOSGiBundle).toFile();
 
-				File module = osGiBundlesDir.append(currentOSGiBundle).toFile();
-
-				if (!module.exists()) {
-					module = tempLocation.append(currentOSGiBundle).toFile();
-				}
-
-				dialog.setInput(module);
-			}
-			catch (Exception e) {
-			}
+		if(FileUtil.exists(module)) {
+			dialog.setInput(module);
 		}
 
 		if (dialog.open() == Window.OK) {

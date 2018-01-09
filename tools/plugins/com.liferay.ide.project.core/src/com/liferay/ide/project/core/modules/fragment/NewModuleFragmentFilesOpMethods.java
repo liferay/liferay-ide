@@ -18,8 +18,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
@@ -62,18 +60,14 @@ public class NewModuleFragmentFilesOpMethods {
 			if (FileUtil.notExists(temp)) {
 				IRuntime runtime = ServerUtil.getRuntime(op.getLiferayRuntimeName().content());
 
-				PortalBundle portalBundle = LiferayServerCore.newPortalBundle(runtime.getLocation());
+				String hostOsgiJar = hostBundleName + ".jar";
 
-				IPath modulesPath = portalBundle.getOSGiBundlesDir().append("modules");
+				ServerUtil.getModuleFileFrom70Server(runtime, hostOsgiJar, projectCoreLocation);
 
-				File hostBundle = modulesPath.append(hostBundleName + ".jar").toFile();
-
-				if (FileUtil.notExists(hostBundle)) {
-					hostBundle = projectCoreLocation.append(hostBundleName + ".jar").toFile();
-				}
+				IPath tempJarPath = projectCoreLocation.append(hostOsgiJar);
 
 				try {
-					ZipUtil.unzip(hostBundle, temp.toFile());
+					ZipUtil.unzip(tempJarPath.toFile(), temp.toFile());
 				}
 				catch (IOException ioe) {
 					throw new CoreException(ProjectCore.createErrorStatus(ioe));

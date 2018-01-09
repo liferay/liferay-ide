@@ -20,8 +20,6 @@ import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
-import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
@@ -171,25 +169,19 @@ public class NewModuleFragmentOpMethods {
 	public static String[] getBsnAndVersion(NewModuleFragmentOp op) throws CoreException {
 		String hostBundleName = op.getHostOsgiBundle().content();
 
-		IPath path = ProjectCore.getDefault().getStateLocation();
+		IPath tempLocation = ProjectCore.getDefault().getStateLocation();
 
-		IPath temp = path.append(hostBundleName.substring(0, hostBundleName.lastIndexOf(".jar")));
+		IPath hostBundle = tempLocation.append(hostBundleName.substring(0, hostBundleName.lastIndexOf(".jar")));
 
-		if (FileUtil.notExists(temp)) {
+		if (FileUtil.notExists(hostBundle)) {
 			IRuntime runtime = ServerUtil.getRuntime(op.getLiferayRuntimeName().content());
 
-			PortalBundle portalBundle = LiferayServerCore.newPortalBundle(runtime.getLocation());
+			ServerUtil.getModuleFileFrom70Server(runtime, hostBundleName, tempLocation);
 
-			IPath modulesPath = portalBundle.getOSGiBundlesDir().append("modules");
-
-			File hostBundle = modulesPath.append(hostBundleName).toFile();
-
-			if (FileUtil.notExists(hostBundle)) {
-				hostBundle = path.append(hostBundleName).toFile();
-			}
+			IPath hostBundleJar = tempLocation.append(hostBundleName);
 
 			try {
-				ZipUtil.unzip(hostBundle, temp.toFile());
+				ZipUtil.unzip(hostBundleJar.toFile(), hostBundle.toFile());
 			}
 			catch (IOException ioe) {
 				throw new CoreException(ProjectCore.createErrorStatus(ioe));
@@ -199,8 +191,8 @@ public class NewModuleFragmentOpMethods {
 		String bundleSymbolicName = "";
 		String version = "";
 
-		if (FileUtil.exists(temp)) {
-			File file = temp.append("META-INF/MANIFEST.MF").toFile();
+		if (FileUtil.exists(hostBundle)) {
+			File file = hostBundle.append("META-INF/MANIFEST.MF").toFile();
 
 			String[] contents = FileUtil.readLinesFromFile(file);
 

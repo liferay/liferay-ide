@@ -561,6 +561,13 @@ public class ServerUtil
 
     public static File getModuleFileFrom70Server( IRuntime runtime, String hostOsgiBundle, IPath temp )
     {
+        final File f = new File( temp.toFile(), hostOsgiBundle );
+
+        if( f.exists() )
+        {
+            return f;
+        }
+
         PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
 
         String[] dirs = new String[] { "core", "modules", "portal", "static" };
@@ -573,17 +580,10 @@ public class ServerUtil
 
             if( moduleOsgiBundle.exists() )
             {
-                FileUtil.copyFile( moduleOsgiBundle, temp.toFile() );
+                FileUtil.copyFileToDir( moduleOsgiBundle, temp.toFile() );
 
                 return moduleOsgiBundle;
             }
-        }
-
-        final File f = new File( temp.toFile(), hostOsgiBundle );
-
-        if( f.exists() )
-        {
-            return f;
         }
 
         File[] files = getMarketplaceLpkgFiles( portalBundle );
