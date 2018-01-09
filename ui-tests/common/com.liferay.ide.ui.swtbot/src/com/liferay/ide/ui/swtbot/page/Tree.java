@@ -103,6 +103,36 @@ public class Tree extends AbstractWidget {
 		return parent.getNode(items[length - 1]).isVisible();
 	}
 
+	public boolean isVisibleStartsBy(String... items) throws WidgetNotFoundException {
+		int length = items.length;
+
+		if (length == 1) {
+			SWTBotTreeItem[] treeItems = getWidget().getAllItems();
+
+			for (SWTBotTreeItem item : treeItems) {
+				if (item.getText().startsWith(items[0]) && item.isVisible()) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		String[] parents = Arrays.copyOfRange(items, 0, length - 1);
+
+		SWTBotTreeItem parent = getWidget().expandNode(parents);
+
+		SWTBotTreeItem[] treeItems = parent.getItems();
+
+		for (SWTBotTreeItem item : treeItems) {
+			if (item.getText().startsWith(items[length - 1]) && item.isVisible()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public void select(String... items) {
 		getWidget().select(items);
 	}

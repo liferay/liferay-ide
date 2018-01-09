@@ -37,6 +37,12 @@ public class KeyboardAction extends UIAction implements Keys {
 		keyPress.pressShortcut(SWT.COMMAND, ',');
 	}
 
+	public void pressKeysUpdateMavenProjectDialog() {
+		// the latest one has no meaning but it has to have something
+
+		keyPress.pressShortcut(SWT.ALT, SWT.F5, 'a');
+	}
+
 	private KeyboardAction(SWTWorkbenchBot bot) {
 		super(bot);
 	}

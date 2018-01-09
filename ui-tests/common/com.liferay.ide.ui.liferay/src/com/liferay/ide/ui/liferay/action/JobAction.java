@@ -26,6 +26,7 @@ import com.liferay.ide.ui.swtbot.condition.RefreshForSubnodeCondition;
 import com.liferay.ide.ui.swtbot.condition.ServerStartJobCondition;
 import com.liferay.ide.ui.swtbot.condition.ServerStopJobCondition;
 import com.liferay.ide.ui.swtbot.condition.ShellAppearedCondition;
+import com.liferay.ide.ui.swtbot.condition.UpdateMavenProjectCondition;
 import com.liferay.ide.ui.swtbot.condition.ValidateJobCondition;
 import com.liferay.ide.ui.swtbot.condition.WizardClosedCondition;
 
@@ -97,6 +98,10 @@ public class JobAction extends UIAction {
 
 	public void waitForValidate(String projectName) {
 		ide.waitUntil(new ValidateJobCondition(projectName), 300 * 1000);
+	}
+
+	public void waitForUpdateMavenProject() {
+		ide.waitUntil(new UpdateMavenProjectCondition(), 10 * 1000);
 	}
 
 	private JobAction(SWTWorkbenchBot bot) {

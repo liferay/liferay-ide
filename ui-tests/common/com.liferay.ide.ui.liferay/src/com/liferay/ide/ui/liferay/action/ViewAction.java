@@ -285,6 +285,21 @@ public class ViewAction extends UIAction {
 			_serversView.clickStopBtn();
 		}
 
+		public boolean visibleModuleTry(String serverLabel, String projectName) {
+			try {
+				return _serversView.getServers().isVisibleStartsBy(serverLabel, projectName);
+			}
+			catch (Exception e) {
+				_serversView.getServers().setFocus();
+
+				_serversView.getServers().select(serverLabel);
+
+				_serversView.getServers().expand(serverLabel);
+
+				return _serversView.getServers().isVisibleStartsBy(serverLabel, projectName);
+			}
+		}
+
 		private final ServersView _serversView = new ServersView(bot);
 
 	}

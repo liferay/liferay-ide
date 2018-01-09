@@ -40,6 +40,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		wizardAction.finish();
 
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
@@ -57,6 +65,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		wizardAction.newModule.prepareMaven(projectName, API);
 
 		wizardAction.finish();
+
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
@@ -76,6 +92,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		wizardAction.finish();
 
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
@@ -93,6 +117,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		wizardAction.newModule.prepareMaven(projectName, CONTENT_TARGETING_RULE);
 
 		wizardAction.finish();
+
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
@@ -112,6 +144,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		wizardAction.finish();
 
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
@@ -129,6 +169,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		wizardAction.newModule.prepareMaven(projectName, CONTROL_MENU_ENTRY);
 
 		wizardAction.finish();
+
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
@@ -148,6 +196,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		wizardAction.finish();
 
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
@@ -165,6 +221,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		wizardAction.newModule.prepareMaven(projectName, PANEL_APP);
 
 		wizardAction.finish();
+
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
@@ -184,6 +248,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		wizardAction.finish();
 
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
@@ -201,6 +273,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		wizardAction.newModule.prepareMaven(projectName, PORTLET_PROVIDER);
 
 		wizardAction.finish();
+
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
@@ -220,6 +300,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		wizardAction.finish();
 
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
@@ -237,6 +325,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		wizardAction.newModule.prepareMaven(projectName, REST);
 
 		wizardAction.finish();
+
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
@@ -256,6 +352,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		wizardAction.finish();
 
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
@@ -273,6 +377,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		wizardAction.newModule.prepareMaven(projectName, SERVICE_WRAPPER);
 
 		wizardAction.finish();
+
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
@@ -292,6 +404,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		wizardAction.finish();
 
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
@@ -309,6 +429,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		wizardAction.newModule.prepareMaven(projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR);
 
 		wizardAction.finish();
+
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
@@ -328,6 +456,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		wizardAction.finish();
 
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
 
@@ -346,6 +482,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		wizardAction.finish();
 
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getWarsDirName(), projectName};
 
@@ -363,6 +507,14 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		wizardAction.newModule.prepareMaven(projectName, WAR_MVC_PORTLET);
 
 		wizardAction.finish();
+
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getWarsDirName(), projectName};

@@ -38,11 +38,21 @@ public class DeployModuleMavenTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		dialogAction.openUpdateMavenProjectDialog();
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		viewAction.servers.openAddAndRemoveDialog(tomcat.getServerStartedLabel());
 
 		dialogAction.addAndRemove.addModule(projectName);
 
 		dialogAction.confirm(FINISH);
+
+		viewAction.servers.visibleModuleTry(tomcat.getServerStartedLabel(), projectName);
 
 		jobAction.waitForConsoleContent(
 			tomcat.getServerName(), "STARTED " + projectName.replace('-', '.') + "_", 60 * 1000);

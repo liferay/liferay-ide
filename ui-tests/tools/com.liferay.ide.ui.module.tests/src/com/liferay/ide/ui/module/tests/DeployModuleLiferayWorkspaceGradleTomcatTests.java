@@ -54,6 +54,8 @@ public class DeployModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 		dialogAction.confirm(FINISH);
 
+		viewAction.servers.visibleModuleTry(tomcat.getServerStartedLabel(), projectName);
+
 		jobAction.waitForConsoleContent(
 			tomcat.getServerName(), "STARTED " + projectName.replace('-', '.') + "_", 20 * 1000);
 

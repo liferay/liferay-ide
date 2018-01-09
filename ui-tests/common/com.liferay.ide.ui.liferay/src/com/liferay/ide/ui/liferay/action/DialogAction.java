@@ -21,12 +21,14 @@ import com.liferay.ide.ui.swtbot.eclipse.page.ServerRuntimeEnvironmentsPreferenc
 import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TextTableDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TreeDialog;
+import com.liferay.ide.ui.swtbot.eclipse.page.UpdateMavenProjectDialog;
 import com.liferay.ide.ui.swtbot.page.Button;
 import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.util.CoreUtil;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
+import org.junit.Assert;
 
 /**
  * @author Terry Jia
@@ -81,6 +83,12 @@ public class DialogAction extends UIAction {
 		}
 	}
 
+	public void openUpdateMavenProjectDialog() {
+		_jobAction.waitForShellAppeared(ide.getLabel());
+
+		_keyboradAction.pressKeysUpdateMavenProjectDialog();
+	}
+
 	public void prepareText(String text) {
 		_textDialog.getText().setText(text);
 
@@ -97,6 +105,7 @@ public class DialogAction extends UIAction {
 
 	public AddAndRemoveDialogAction addAndRemove = new AddAndRemoveDialogAction();
 	public PreferencesDialogAction preferences = new PreferencesDialogAction();
+	public UpdateMavenProjectDialogAction updateMavenProject = new UpdateMavenProjectDialogAction();
 	public ServerRuntimeEnvironmentsDialogAction serverRuntimeEnvironments =
 		new ServerRuntimeEnvironmentsDialogAction();
 
@@ -125,10 +134,14 @@ public class DialogAction extends UIAction {
 		}
 
 		public void openPreferenceType(String categroy, String type) {
+			Assert.assertTrue(_dialog.getLabel().equals(_preferencesDialog.getLabel()));
+
 			_preferencesDialog.getPreferencesTypes().selectTreeItem(categroy, type);
 		}
 
 		public void openServerRuntimeEnvironmentsTry() {
+			Assert.assertTrue(_dialog.getLabel().equals(_preferencesDialog.getLabel()));
+
 			long origin = SWTBotPreferences.TIMEOUT;
 
 			SWTBotPreferences.TIMEOUT = 500;
@@ -144,6 +157,19 @@ public class DialogAction extends UIAction {
 
 		private final PreferencesDialog _preferencesDialog = new PreferencesDialog(bot);
 
+	}
+
+	public class UpdateMavenProjectDialogAction {
+
+		public void selectAll() {
+			Assert.assertTrue(
+				"Now under \"" + _dialog.getLabel() + "\" or not \"" + _updateMavenProjectDialog.getLabel() + "\"",
+				_dialog.getLabel().equals(_updateMavenProjectDialog.getLabel()));
+
+			_updateMavenProjectDialog.getSelectAllBtn().click();
+		}
+
+		private final UpdateMavenProjectDialog _updateMavenProjectDialog = new UpdateMavenProjectDialog(bot);
 	}
 
 	public class ServerRuntimeEnvironmentsDialogAction {

@@ -26,8 +26,9 @@ import org.eclipse.swtbot.swt.finder.keyboard.KeyboardFactory;
  */
 public interface Keys {
 
-	public final KeyStroke alt = KeyStroke.getInstance(SWT.ALT, 0);
-	public final KeyStroke ctrl = KeyStroke.getInstance(SWT.CTRL, 0);
+	public final KeyStroke alt = KeyStroke.getInstance(SWT.ALT);
+	public final KeyStroke f5 = KeyStroke.getInstance(SWT.F5);
+	public final KeyStroke ctrl = KeyStroke.getInstance(SWT.CTRL);
 	public final KeyStroke enter = KeyStroke.getInstance(KeyEvent.VK_ENTER);
 	public final Keyboard keyPress = KeyboardFactory.getAWTKeyboard();
 	public final KeyStroke page_down = KeyStroke.getInstance(SWT.PAGE_DOWN);
