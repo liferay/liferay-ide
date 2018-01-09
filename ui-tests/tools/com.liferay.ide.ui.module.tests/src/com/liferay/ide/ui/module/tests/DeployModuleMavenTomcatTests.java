@@ -38,7 +38,7 @@ public class DeployModuleMavenTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		dialogAction.openUpdateMavenProjectDialog();
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
 
 		dialogAction.updateMavenProject.selectAll();
 

@@ -54,7 +54,7 @@ public class LiferayWorkspaceMavenSupport extends SupportBase {
 
 		wizardAction.finish();
 
-		dialogAction.openUpdateMavenProjectDialog();
+		viewAction.project.openUpdateMavenProjectDialog(getLiferayWorkspaceName());
 
 		dialogAction.updateMavenProject.selectAll();
 

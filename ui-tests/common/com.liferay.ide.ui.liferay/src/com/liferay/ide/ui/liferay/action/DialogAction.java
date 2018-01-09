@@ -83,12 +83,6 @@ public class DialogAction extends UIAction {
 		}
 	}
 
-	public void openUpdateMavenProjectDialog() {
-		_jobAction.waitForShellAppeared(ide.getLabel());
-
-		_keyboradAction.pressKeysUpdateMavenProjectDialog();
-	}
-
 	public void prepareText(String text) {
 		_textDialog.getText().setText(text);
 

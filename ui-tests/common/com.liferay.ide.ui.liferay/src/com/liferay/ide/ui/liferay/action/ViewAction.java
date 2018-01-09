@@ -180,6 +180,10 @@ public class ViewAction extends UIAction {
 			_getProjects().contextMenu(LIFERAY_MODULE_FRAGMENT_FILES);
 		}
 
+		public void openUpdateMavenProjectDialog(String projectName) {
+			_getProjects().contextMenu("Update Project...", projectName);
+		}
+
 		public void runBuildServices(String... projectNames) {
 			_getProjects().contextMenu(BUILD_SERVICES, projectNames);
 		}

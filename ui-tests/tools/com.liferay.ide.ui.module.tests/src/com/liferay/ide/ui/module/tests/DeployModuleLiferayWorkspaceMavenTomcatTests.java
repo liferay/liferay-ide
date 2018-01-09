@@ -42,7 +42,7 @@ public class DeployModuleLiferayWorkspaceMavenTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		dialogAction.openUpdateMavenProjectDialog();
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
 
 		dialogAction.updateMavenProject.selectAll();
 
