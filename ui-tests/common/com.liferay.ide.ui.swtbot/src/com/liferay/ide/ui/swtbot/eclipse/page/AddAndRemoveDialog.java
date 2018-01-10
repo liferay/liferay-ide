@@ -27,7 +27,7 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class AddAndRemoveDialog extends Dialog {
 
 	public AddAndRemoveDialog(SWTBot bot) {
-		super(bot, CANCEL, FINISH);
+		super(bot, ADD_AND_REMOVE, CANCEL, FINISH);
 	}
 
 	public Button getAddAllBtn() {

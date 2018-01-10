@@ -26,7 +26,7 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class ServerRuntimeEnvironmentsPreferencesDialog extends Dialog {
 
 	public ServerRuntimeEnvironmentsPreferencesDialog(SWTBot bot) {
-		super(bot);
+		super(bot, PREFERENCES);
 	}
 
 	public Button getAddBtn() {

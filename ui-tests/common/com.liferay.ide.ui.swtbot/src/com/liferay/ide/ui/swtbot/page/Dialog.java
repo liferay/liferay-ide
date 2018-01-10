@@ -37,6 +37,13 @@ public class Dialog extends Shell {
 		_confirmBtnLabel = confirmBtnLabel;
 	}
 
+	public Dialog(SWTBot bot, String label, String cancelBtnLabel, String confirmBtnLabel) {
+		super(bot, label);
+
+		_cancelBtnLabel = cancelBtnLabel;
+		_confirmBtnLabel = confirmBtnLabel;
+	}
+
 	public void confirm() {
 		clickBtn(confirmBtn());
 	}

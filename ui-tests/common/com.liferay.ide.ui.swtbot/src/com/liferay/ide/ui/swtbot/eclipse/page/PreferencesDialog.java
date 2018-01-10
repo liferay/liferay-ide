@@ -26,7 +26,7 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class PreferencesDialog extends Dialog {
 
 	public PreferencesDialog(SWTBot bot) {
-		super(bot, CANCEL, APPLY_AND_CLOSE);
+		super(bot, PREFERENCES, CANCEL, APPLY_AND_CLOSE);
 	}
 
 	public Tree getPreferencesTypes() {

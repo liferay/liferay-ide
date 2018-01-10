@@ -30,7 +30,6 @@ import com.liferay.ide.ui.swtbot.util.CoreUtil;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
-import org.junit.Assert;
 
 /**
  * @author Terry Jia
@@ -47,31 +46,31 @@ public class DialogAction extends UIAction {
 	}
 
 	public void cancel() {
-		String title = _dialog.getLabel();
+		String title = _getDialog().getLabel();
 
-		_dialog.cancel();
+		_getDialog().cancel();
 
 		_jobAction.waitForShellClosed(title);
 	}
 
 	public void confirm() {
-		String title = _dialog.getLabel();
+		String title = _getDialog().getLabel();
 
-		_dialog.confirm();
+		_getDialog().confirm();
 
 		_jobAction.waitForShellClosed(title);
 	}
 
 	public void confirm(String confirmLabel) {
-		String title = _dialog.getLabel();
+		String title = _getDialog().getLabel();
 
-		_dialog.confirm(confirmLabel);
+		_getDialog().confirm(confirmLabel);
 
 		_jobAction.waitForShellClosed(title);
 	}
 
 	public Button getConfirmBtn() {
-		return _dialog.confirmBtn();
+		return _getDialog().confirmBtn();
 	}
 
 	public void openPreferencesDialog() {
@@ -109,6 +108,8 @@ public class DialogAction extends UIAction {
 	public class AddAndRemoveDialogAction {
 
 		public void addModule(String projectName) {
+			assertTitle(_getDialog(), _addAndRemoveDialog);
+
 			ide.sleep();
 
 			_addAndRemoveDialog.getAvailables().select(projectName);
@@ -127,6 +128,8 @@ public class DialogAction extends UIAction {
 	public class AvailableSoftwareSitesDialogAction {
 
 		public Table getSites() {
+			assertTitle(_getDialog(), _availableSoftwareSitesPreferencesDialog);
+
 			return _availableSoftwareSitesPreferencesDialog.getSites();
 		}
 
@@ -138,28 +141,30 @@ public class DialogAction extends UIAction {
 	public class PreferencesDialogAction {
 
 		public void confirm() {
+			assertTitle(_getDialog(), _preferencesDialog);
+
 			_preferencesDialog.confirm();
 		}
 
 		public void openAvailableSoftwareSites() {
-			openPreferenceType(INSTALL_UPDATE, AVAILABLE_SOFTWARE_SITES);
+			assertTitle(_getDialog(), _preferencesDialog);
+
+			_openPreferenceType(INSTALL_UPDATE, AVAILABLE_SOFTWARE_SITES);
 		}
 
-		public void openPreferenceType(String categroy, String type) {
-			Assert.assertTrue(_dialog.getLabel().equals(_preferencesDialog.getLabel()));
-
+		private void _openPreferenceType(String categroy, String type) {
 			_preferencesDialog.getPreferencesTypes().selectTreeItem(categroy, type);
 		}
 
 		public void openServerRuntimeEnvironmentsTry() {
-			Assert.assertTrue(_dialog.getLabel().equals(_preferencesDialog.getLabel()));
+			assertTitle(_getDialog(), _preferencesDialog);
 
 			long origin = SWTBotPreferences.TIMEOUT;
 
 			SWTBotPreferences.TIMEOUT = 500;
 
 			try {
-				openPreferenceType(SERVER, RUNTIME_ENVIRONMENTS);
+				_openPreferenceType(SERVER, RUNTIME_ENVIRONMENTS);
 			}
 			catch (Exception e) {
 			}
@@ -174,9 +179,7 @@ public class DialogAction extends UIAction {
 	public class UpdateMavenProjectDialogAction {
 
 		public void selectAll() {
-			Assert.assertTrue(
-				"Now under \"" + _dialog.getLabel() + "\" or not \"" + _updateMavenProjectDialog.getLabel() + "\"",
-				_dialog.getLabel().equals(_updateMavenProjectDialog.getLabel()));
+			assertTitle(_getDialog(), _updateMavenProjectDialog);
 
 			_updateMavenProjectDialog.getSelectAllBtn().click();
 		}
@@ -187,6 +190,8 @@ public class DialogAction extends UIAction {
 	public class ServerRuntimeEnvironmentsDialogAction {
 
 		public void deleteRuntimeTryConfirm(String runtimeName) {
+			assertTitle(_getDialog(), _serverRuntimeEnvironmentsDialog);
+
 			ide.sleep(3000);
 
 			_serverRuntimeEnvironmentsDialog.getRuntimes().click(runtimeName);
@@ -209,6 +214,8 @@ public class DialogAction extends UIAction {
 		}
 
 		public void openNewRuntimeWizard() {
+			assertTitle(_getDialog(), _serverRuntimeEnvironmentsDialog);
+
 			ide.sleep(5000);
 
 			_serverRuntimeEnvironmentsDialog.getAddBtn().click();
@@ -225,7 +232,10 @@ public class DialogAction extends UIAction {
 
 	private static DialogAction _dialogAction;
 
-	private final Dialog _dialog = new Dialog(bot);
+	private Dialog _getDialog() {
+		return new Dialog(bot);
+	}
+
 	private final JobAction _jobAction = JobAction.getInstance(bot);
 	private final KeyboardAction _keyboradAction = KeyboardAction.getInstance(bot);
 	private final TextDialog _textDialog = new TextDialog(bot);
