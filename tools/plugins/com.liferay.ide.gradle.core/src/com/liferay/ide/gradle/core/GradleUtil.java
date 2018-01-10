@@ -88,6 +88,7 @@ public class GradleUtil {
 		configuration.setApplyWorkingSets(false);
 		configuration.setBuildScansEnabled(gradleConfig.isBuildScansEnabled());
 		configuration.setOfflineMode(gradleConfig.isOffline());
+		configuration.setAutoSync(true);
 
 		BuildConfiguration buildConfig = configuration.toBuildConfig();
 

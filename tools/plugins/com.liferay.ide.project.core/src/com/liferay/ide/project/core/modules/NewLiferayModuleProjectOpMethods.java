@@ -64,12 +64,13 @@ import org.eclipse.text.edits.TextEdit;
 public class NewLiferayModuleProjectOpMethods {
 
 	@SuppressWarnings("unchecked")
-	public static void addProperties(File dest, List<String> properties) throws Exception {
+	public static boolean addProperties(File dest, List<String> properties) throws Exception {
 		if ((properties == null) || properties.isEmpty()) {
-			return;
+			return false;
 		}
 
 		try {
+			@SuppressWarnings("deprecation")
 			ASTParser parser = ASTParser.newParser(AST.JLS8);
 
 			String readContents = FileUtil.readContents(dest, true);
@@ -117,7 +118,7 @@ public class NewLiferayModuleProjectOpMethods {
 
 											ArrayInitializer initializer = (ArrayInitializer)express;
 
-											List<ASTNode> expressions = (List<ASTNode>)initializer.expressions();
+											List<ASTNode> expressions = initializer.expressions();
 
 											ASTNode propertyNode = null;
 
@@ -186,14 +187,18 @@ public class NewLiferayModuleProjectOpMethods {
 					}
 
 				});
+
+			return true;
 		}
 		catch (Exception e) {
 			ProjectCore.logError("error when adding properties to " + dest.getAbsolutePath(), e);
+			return false;
 		}
 	}
 
 	public static boolean checkComponentAnnotation(File dest) throws Exception {
 		try {
+			@SuppressWarnings("deprecation")
 			ASTParser parser = ASTParser.newParser(AST.JLS8);
 
 			String readContents = FileUtil.readContents(dest, true);
@@ -260,11 +265,12 @@ public class NewLiferayModuleProjectOpMethods {
 							propertyKey.getName().content(true) + "=" + propertyKey.getValue().content(true));
 					}
 
-					addProperties(finalClassFile, properties);
+					if (addProperties(finalClassFile, properties)) {
 
-					IProject project = CoreUtil.getProject(op.getProjectName().content());
+						IProject project = CoreUtil.getProject(op.getProjectName().content());
 
-					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+						project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+					}
 				}
 			}
 
