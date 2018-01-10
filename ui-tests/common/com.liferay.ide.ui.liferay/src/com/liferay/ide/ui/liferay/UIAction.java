@@ -42,6 +42,15 @@ public class UIAction implements UI {
 		Assert.assertTrue("Now under \"" + label1 + "\" but expect \"" + label2 + "\"", label1.equals(label2));
 	}
 
+	public void assertTitleStartBy(Shell shell1, Shell shell2) {
+		String label1 = shell1.getLabel();
+		String label2 = shell2.getLabel();
+
+		Assert.assertFalse("Need to set label for shell1", label1.equals(""));
+		Assert.assertFalse("Need to set label for shell2", label2.equals(""));
+
+		Assert.assertTrue("Now under \"" + label1 + "\" but expect \"" + label2 + "\"", label2.startsWith(label1));
+	}
 	protected SWTWorkbenchBot bot;
 	protected LiferayIDE ide;
 

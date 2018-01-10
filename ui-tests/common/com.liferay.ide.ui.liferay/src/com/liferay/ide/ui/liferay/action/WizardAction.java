@@ -107,7 +107,7 @@ public class WizardAction extends UIAction {
 	}
 
 	public void openNewBtnFragmentFilesWizard() {
-		assertTitle(_getWizard(), ide.getShell());
+		assertTitleStartBy(_getWizard(), ide.getShell());
 
 		MenuItem menu = ide.getNewBtn().getLiferayMoudleFragmentFiles();
 
@@ -115,7 +115,7 @@ public class WizardAction extends UIAction {
 	}
 
 	public void openNewBtnLiferayComponentClassWizard() {
-		assertTitle(_getWizard(), ide.getShell());
+		assertTitleStartBy(_getWizard(), ide.getShell());
 
 		MenuItem menu = ide.getNewBtn().getLiferayComponentClass();
 
@@ -123,7 +123,7 @@ public class WizardAction extends UIAction {
 	}
 
 	public void openNewFragmentWizard() {
-		assertTitle(_getWizard(), ide.getShell());
+		assertTitleStartBy(_getWizard(), ide.getShell());
 
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayModuleFragment();
 
@@ -131,7 +131,7 @@ public class WizardAction extends UIAction {
 	}
 
 	public void openNewLiferayComponentClassWizard() {
-		assertTitle(_getWizard(), ide.getShell());
+		assertTitleStartBy(_getWizard(), ide.getShell());
 
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayComponentClass();
 
@@ -139,7 +139,7 @@ public class WizardAction extends UIAction {
 	}
 
 	public void openNewLiferayJsfProjectWizard() {
-		assertTitle(_getWizard(), ide.getShell());
+		assertTitleStartBy(_getWizard(), ide.getShell());
 
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayJSFProject();
 
@@ -147,7 +147,7 @@ public class WizardAction extends UIAction {
 	}
 
 	public void openNewLiferayKaleoWorkflowWizard() {
-		assertTitle(_getWizard(), ide.getShell());
+		assertTitleStartBy(_getWizard(), ide.getShell());
 
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayKaleoWorkflow();
 
@@ -155,7 +155,7 @@ public class WizardAction extends UIAction {
 	}
 
 	public void openNewLiferayLayoutTemplate() {
-		assertTitle(_getWizard(), ide.getShell());
+		assertTitleStartBy(_getWizard(), ide.getShell());
 
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayLayoutTemplate();
 
@@ -163,7 +163,7 @@ public class WizardAction extends UIAction {
 	}
 
 	public void openNewLiferayModuleWizard() {
-		assertTitle(_getWizard(), ide.getShell());
+		assertTitleStartBy(_getWizard(), ide.getShell());
 
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayModule();
 
@@ -171,7 +171,7 @@ public class WizardAction extends UIAction {
 	}
 
 	public void openNewLiferayPluginProjectsFromExistingSourceWizard() {
-		assertTitle(_getWizard(), ide.getShell());
+		assertTitleStartBy(_getWizard(), ide.getShell());
 
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayPluginProjectFromExistingSource();
 
@@ -179,7 +179,7 @@ public class WizardAction extends UIAction {
 	}
 
 	public void openNewLiferayPluginProjectWizard() {
-		assertTitle(_getWizard(), ide.getShell());
+		assertTitleStartBy(_getWizard(), ide.getShell());
 
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayPlugin();
 
@@ -187,7 +187,7 @@ public class WizardAction extends UIAction {
 	}
 
 	public void openNewLiferayServerWizard() {
-		assertTitle(_getWizard(), ide.getShell());
+		assertTitleStartBy(_getWizard(), ide.getShell());
 
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayServer();
 
@@ -195,7 +195,7 @@ public class WizardAction extends UIAction {
 	}
 
 	public void openNewLiferayWorkspaceWizard() {
-		assertTitle(_getWizard(), ide.getShell());
+		assertTitleStartBy(_getWizard(), ide.getShell());
 
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayWorkspaceProject();
 
