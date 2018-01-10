@@ -245,6 +245,21 @@ public class EnvAction extends UIAction {
 		}
 	}
 
+	public boolean localConnected() {
+		boolean connected = true;
+
+		try {
+			URL url = new URL("http://127.0.0.1:8080");
+
+			url.openStream();
+		}
+		catch (Exception e) {
+			connected = false;
+		}
+
+		return connected;
+	}
+
 	public void logWarn(String msg) {
 		BasicConfigurator.configure();
 
@@ -451,21 +466,6 @@ public class EnvAction extends UIAction {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public boolean localConnected() {
-		boolean connected = true;
-
-		try {
-			URL url = new URL("http://127.0.0.1:8080");
-
-			url.openStream();
-		}
-		catch (Exception e) {
-			connected = false;
-		}
-
-		return connected;
 	}
 
 	public void unzipServer() {

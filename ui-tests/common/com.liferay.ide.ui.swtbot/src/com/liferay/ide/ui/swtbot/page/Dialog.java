@@ -44,6 +44,14 @@ public class Dialog extends Shell {
 		_confirmBtnLabel = confirmBtnLabel;
 	}
 
+	public void cancel() {
+		clickBtn(cancelBtn());
+	}
+
+	public Button cancelBtn() {
+		return new Button(bot, _cancelBtnLabel);
+	}
+
 	public void confirm() {
 		clickBtn(confirmBtn());
 	}
@@ -54,14 +62,6 @@ public class Dialog extends Shell {
 
 	public Button confirmBtn() {
 		return new Button(bot, _confirmBtnLabel);
-	}
-
-	public void cancel() {
-		clickBtn(cancelBtn());
-	}
-
-	public Button cancelBtn() {
-		return new Button(bot, _cancelBtnLabel);
 	}
 
 	private String _cancelBtnLabel = CANCEL;

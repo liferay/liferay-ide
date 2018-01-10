@@ -33,7 +33,7 @@ public class SdkSupport extends SupportBase {
 
 		// In fact we need to wait our jobs done
 
-		// but now it takes too long as the fetch the server list job 
+		// but now it takes too long as the fetch the server list job
 
 		// viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
 

@@ -715,12 +715,12 @@ public class WizardAction extends UIAction {
 
 	}
 
-	private Wizard _getWizard() {
-		return new Wizard(bot);
-	}
-
 	private WizardAction(SWTWorkbenchBot bot) {
 		super(bot);
+	}
+
+	private Wizard _getWizard() {
+		return new Wizard(bot);
 	}
 
 	private static WizardAction _wizardAction;

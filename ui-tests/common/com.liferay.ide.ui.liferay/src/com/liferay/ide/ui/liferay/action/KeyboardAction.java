@@ -38,6 +38,7 @@ public class KeyboardAction extends UIAction implements Keys {
 	}
 
 	public void pressKeysUpdateMavenProjectDialog() {
+
 		// the latest one has no meaning but it has to have something
 
 		keyPress.pressShortcut(SWT.ALT, SWT.F5, 'a');

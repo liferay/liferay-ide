@@ -96,12 +96,12 @@ public class JobAction extends UIAction {
 		ide.waitUntil(new RefreshForSubnodeCondition(parent, subnode, refreshText), 30 * 1000);
 	}
 
-	public void waitForValidate(String projectName) {
-		ide.waitUntil(new ValidateJobCondition(projectName), 300 * 1000);
-	}
-
 	public void waitForUpdateMavenProject() {
 		ide.waitUntil(new UpdateMavenProjectCondition(), 10 * 1000);
+	}
+
+	public void waitForValidate(String projectName) {
+		ide.waitUntil(new ValidateJobCondition(projectName), 300 * 1000);
 	}
 
 	private JobAction(SWTWorkbenchBot bot) {

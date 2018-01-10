@@ -19,6 +19,7 @@ import com.liferay.ide.ui.swtbot.UI;
 import com.liferay.ide.ui.swtbot.page.Shell;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+
 import org.junit.Assert;
 
 /**
@@ -49,9 +50,11 @@ public class UIAction implements UI {
 		Assert.assertFalse("Need to set label for shell1", label1.equals(""));
 		Assert.assertFalse("Need to set label for shell2", label2.equals(""));
 
-		Assert.assertTrue("Now under \"" + label1 + "\" but expect \"" + label2 + "\"",
+		Assert.assertTrue(
+			"Now under \"" + label1 + "\" but expect \"" + label2 + "\"",
 			label2.startsWith(label1) || label1.startsWith(label2));
 	}
+
 	protected SWTWorkbenchBot bot;
 	protected LiferayIDE ide;
 

@@ -37,6 +37,7 @@ public class Eclipse extends BasePageObject {
 		label = bot.activeShell().getText();
 
 		_shell = new Shell(bot, label);
+
 		_welcomeView = new View(bot, WELCOME);
 	}
 
@@ -66,6 +67,10 @@ public class Eclipse extends BasePageObject {
 		String[] preferencesLabel = {WINDOW, PREFERENCES};
 
 		return new Menu(bot.shell(label).bot(), preferencesLabel);
+	}
+
+	public Shell getShell() {
+		return _shell;
 	}
 
 	public View getWelcomeView() {
@@ -106,12 +111,7 @@ public class Eclipse extends BasePageObject {
 		return new TextDialog(bot);
 	}
 
-	public Shell getShell() {
-		return _shell;
-	}
-
-	private View _welcomeView;
-
 	private Shell _shell;
+	private View _welcomeView;
 
 }

@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.liferay.base;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+
 import org.junit.Assert;
 
 /**

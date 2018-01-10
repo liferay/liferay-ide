@@ -101,9 +101,9 @@ public class DialogAction extends UIAction {
 	public AddAndRemoveDialogAction addAndRemove = new AddAndRemoveDialogAction();
 	public AvailableSoftwareSitesDialogAction availableSoftwareSites = new AvailableSoftwareSitesDialogAction();
 	public PreferencesDialogAction preferences = new PreferencesDialogAction();
-	public UpdateMavenProjectDialogAction updateMavenProject = new UpdateMavenProjectDialogAction();
 	public ServerRuntimeEnvironmentsDialogAction serverRuntimeEnvironments =
 		new ServerRuntimeEnvironmentsDialogAction();
+	public UpdateMavenProjectDialogAction updateMavenProject = new UpdateMavenProjectDialogAction();
 
 	public class AddAndRemoveDialogAction {
 
@@ -152,10 +152,6 @@ public class DialogAction extends UIAction {
 			_openPreferenceType(INSTALL_UPDATE, AVAILABLE_SOFTWARE_SITES);
 		}
 
-		private void _openPreferenceType(String categroy, String type) {
-			_preferencesDialog.getPreferencesTypes().selectTreeItem(categroy, type);
-		}
-
 		public void openServerRuntimeEnvironmentsTry() {
 			assertTitle(_getDialog(), _preferencesDialog);
 
@@ -172,19 +168,12 @@ public class DialogAction extends UIAction {
 			SWTBotPreferences.TIMEOUT = origin;
 		}
 
-		private final PreferencesDialog _preferencesDialog = new PreferencesDialog(bot);
-
-	}
-
-	public class UpdateMavenProjectDialogAction {
-
-		public void selectAll() {
-			assertTitle(_getDialog(), _updateMavenProjectDialog);
-
-			_updateMavenProjectDialog.getSelectAllBtn().click();
+		private void _openPreferenceType(String categroy, String type) {
+			_preferencesDialog.getPreferencesTypes().selectTreeItem(categroy, type);
 		}
 
-		private final UpdateMavenProjectDialog _updateMavenProjectDialog = new UpdateMavenProjectDialog(bot);
+		private final PreferencesDialog _preferencesDialog = new PreferencesDialog(bot);
+
 	}
 
 	public class ServerRuntimeEnvironmentsDialogAction {
@@ -226,15 +215,27 @@ public class DialogAction extends UIAction {
 
 	}
 
+	public class UpdateMavenProjectDialogAction {
+
+		public void selectAll() {
+			assertTitle(_getDialog(), _updateMavenProjectDialog);
+
+			_updateMavenProjectDialog.getSelectAllBtn().click();
+		}
+
+		private final UpdateMavenProjectDialog _updateMavenProjectDialog = new UpdateMavenProjectDialog(bot);
+
+	}
+
 	private DialogAction(SWTWorkbenchBot bot) {
 		super(bot);
 	}
 
-	private static DialogAction _dialogAction;
-
 	private Dialog _getDialog() {
 		return new Dialog(bot);
 	}
+
+	private static DialogAction _dialogAction;
 
 	private final JobAction _jobAction = JobAction.getInstance(bot);
 	private final KeyboardAction _keyboradAction = KeyboardAction.getInstance(bot);
