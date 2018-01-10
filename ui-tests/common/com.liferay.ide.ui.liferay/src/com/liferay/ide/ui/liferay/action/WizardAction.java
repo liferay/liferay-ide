@@ -59,43 +59,43 @@ public class WizardAction extends UIAction {
 	}
 
 	public void cancel() {
-		_wizard.cancel();
+		_getWizard().cancel();
 	}
 
 	public void finish() {
 		ide.sleep();
 
-		String title = _wizard.getLabel();
+		String title = _getWizard().getLabel();
 
-		_wizard.finish();
+		_getWizard().finish();
 
 		_jobAction.waitForShellClosed(title);
 	}
 
 	public Button getFinishBtn() {
-		return _wizard.finishBtn();
+		return _getWizard().finishBtn();
 	}
 
 	public Button getNextBtn() {
-		return _wizard.nextBtn();
+		return _getWizard().nextBtn();
 	}
 
 	public String getValidationMsg() {
 		ide.sleep();
 
-		return _wizard.getValidationMsg();
+		return _getWizard().getValidationMsg();
 	}
 
 	public String getValidationMsg(int validationMsgIndex) {
 		ide.sleep();
 
-		return _wizard.getValidationMsg(validationMsgIndex);
+		return _getWizard().getValidationMsg(validationMsgIndex);
 	}
 
 	public void next() {
 		ide.sleep();
 
-		_wizard.next();
+		_getWizard().next();
 	}
 
 	public void openFileMenuFragmentFilesWizard() {
@@ -107,72 +107,96 @@ public class WizardAction extends UIAction {
 	}
 
 	public void openNewBtnFragmentFilesWizard() {
+		assertTitle(_getWizard(), ide.getShell());
+
 		MenuItem menu = ide.getNewBtn().getLiferayMoudleFragmentFiles();
 
 		menu.click();
 	}
 
 	public void openNewBtnLiferayComponentClassWizard() {
+		assertTitle(_getWizard(), ide.getShell());
+
 		MenuItem menu = ide.getNewBtn().getLiferayComponentClass();
 
 		menu.click();
 	}
 
 	public void openNewFragmentWizard() {
+		assertTitle(_getWizard(), ide.getShell());
+
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayModuleFragment();
 
 		menu.click();
 	}
 
 	public void openNewLiferayComponentClassWizard() {
+		assertTitle(_getWizard(), ide.getShell());
+
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayComponentClass();
 
 		menu.click();
 	}
 
 	public void openNewLiferayJsfProjectWizard() {
+		assertTitle(_getWizard(), ide.getShell());
+
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayJSFProject();
 
 		menu.click();
 	}
 
 	public void openNewLiferayKaleoWorkflowWizard() {
+		assertTitle(_getWizard(), ide.getShell());
+
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayKaleoWorkflow();
 
 		menu.click();
 	}
 
 	public void openNewLiferayLayoutTemplate() {
+		assertTitle(_getWizard(), ide.getShell());
+
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayLayoutTemplate();
 
 		menu.click();
 	}
 
 	public void openNewLiferayModuleWizard() {
+		assertTitle(_getWizard(), ide.getShell());
+
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayModule();
 
 		menu.click();
 	}
 
 	public void openNewLiferayPluginProjectsFromExistingSourceWizard() {
+		assertTitle(_getWizard(), ide.getShell());
+
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayPluginProjectFromExistingSource();
 
 		menu.click();
 	}
 
 	public void openNewLiferayPluginProjectWizard() {
+		assertTitle(_getWizard(), ide.getShell());
+
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayPlugin();
 
 		menu.click();
 	}
 
 	public void openNewLiferayServerWizard() {
+		assertTitle(_getWizard(), ide.getShell());
+
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayServer();
 
 		menu.click();
 	}
 
 	public void openNewLiferayWorkspaceWizard() {
+		assertTitle(_getWizard(), ide.getShell());
+
 		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayWorkspaceProject();
 
 		menu.click();
@@ -240,14 +264,6 @@ public class WizardAction extends UIAction {
 		}
 
 		private void _prepare(String category, String type) {
-			_importProjectWizard.getTypes().selectTreeItem(category, type);
-		}
-
-		private void _prepare(String filterText, String category, String type) {
-			Text filter = _importProjectWizard.getFilter();
-
-			filter.setText(filterText);
-
 			_importProjectWizard.getTypes().selectTreeItem(category, type);
 		}
 
@@ -699,6 +715,10 @@ public class WizardAction extends UIAction {
 
 	}
 
+	private Wizard _getWizard() {
+		return new Wizard(bot);
+	}
+
 	private WizardAction(SWTWorkbenchBot bot) {
 		super(bot);
 	}
@@ -706,6 +726,5 @@ public class WizardAction extends UIAction {
 	private static WizardAction _wizardAction;
 
 	private final JobAction _jobAction = JobAction.getInstance(bot);
-	private final Wizard _wizard = new Wizard(bot);
 
 }
