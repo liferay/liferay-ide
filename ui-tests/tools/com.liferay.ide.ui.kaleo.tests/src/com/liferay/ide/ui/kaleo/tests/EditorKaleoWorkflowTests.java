@@ -18,6 +18,7 @@ import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.SdkSupport;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -28,6 +29,7 @@ public class EditorKaleoWorkflowTests extends SwtbotBase {
 	@ClassRule
 	public static SdkSupport sdk = new SdkSupport(bot);
 
+	@Ignore("ignore as IDE-xxxx")
 	@Test
 	public void createKaleoWorkflow() {
 		viewAction.switchLiferayPerspective();
