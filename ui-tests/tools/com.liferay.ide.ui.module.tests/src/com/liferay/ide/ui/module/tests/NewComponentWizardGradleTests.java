@@ -28,7 +28,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createComponentModelListener() {
-		String projectName = "test-component-moduel-listener-gradle";
+		String projectName = "test-component-module-listener-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 

@@ -70,6 +70,8 @@ public class WizardAction extends UIAction {
 		_getWizard().finish();
 
 		_jobAction.waitForShellClosed(title);
+
+		ide.sleep(2000);
 	}
 
 	public Button getFinishBtn() {
