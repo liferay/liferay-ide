@@ -19,11 +19,13 @@ import com.liferay.ide.ui.liferay.base.LiferayWorkspaceMavenSupport;
 import com.liferay.ide.ui.liferay.base.TomcatRunningSupport;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
+@Ignore("ignore for more research")
 public class DeployModuleLiferayWorkspaceMavenTomcatTests extends SwtbotBase {
 
 	@ClassRule
