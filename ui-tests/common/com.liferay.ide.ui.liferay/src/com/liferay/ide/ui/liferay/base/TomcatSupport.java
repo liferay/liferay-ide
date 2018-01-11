@@ -15,6 +15,9 @@
 package com.liferay.ide.ui.liferay.base;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.junit.Assert;
+
+import com.liferay.ide.ui.swtbot.page.Table;
 
 /**
  * @author Terry Jia
@@ -32,6 +35,12 @@ public class TomcatSupport extends SupportBase implements ServerSupport {
 		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
 		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(getServerName());
+
+		Table runtimes = dialogAction.serverRuntimeEnvironments.getRuntimes();
+
+		Assert.assertFalse(
+			"expect to have not runtime " + getServerName() + " but still having",
+			runtimes.containsItem(getServerName()));
 
 		dialogAction.preferences.confirm();
 	}
@@ -52,6 +61,12 @@ public class TomcatSupport extends SupportBase implements ServerSupport {
 
 		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
+		Table runtimes = dialogAction.serverRuntimeEnvironments.getRuntimes();
+
+		Assert.assertFalse(
+			"expect to have not runtime " + getServerName() + " but still having",
+			runtimes.containsItem(getServerName()));
+
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
 		wizardAction.newRuntime.prepare7();
@@ -61,6 +76,10 @@ public class TomcatSupport extends SupportBase implements ServerSupport {
 		wizardAction.newRuntime7.prepare(getServerName(), envAction.getServerFullDir().toOSString());
 
 		wizardAction.finish();
+
+		runtimes = dialogAction.serverRuntimeEnvironments.getRuntimes();
+
+		Assert.assertTrue("expect to have runtime " + getServerName() + " but not", runtimes.containsItem(getServerName()));
 
 		dialogAction.preferences.confirm();
 

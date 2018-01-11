@@ -210,6 +210,10 @@ public class DialogAction extends UIAction {
 			_serverRuntimeEnvironmentsDialog.getAddBtn().click();
 		}
 
+		public Table getRuntimes() {
+			return _serverRuntimeEnvironmentsDialog.getRuntimes();
+		}
+
 		private final ServerRuntimeEnvironmentsPreferencesDialog _serverRuntimeEnvironmentsDialog =
 			new ServerRuntimeEnvironmentsPreferencesDialog(bot);
 
