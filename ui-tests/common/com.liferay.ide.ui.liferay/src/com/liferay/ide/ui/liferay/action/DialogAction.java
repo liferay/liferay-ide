@@ -202,16 +202,16 @@ public class DialogAction extends UIAction {
 			SWTBotPreferences.TIMEOUT = origin;
 		}
 
+		public Table getRuntimes() {
+			return _serverRuntimeEnvironmentsDialog.getRuntimes();
+		}
+
 		public void openNewRuntimeWizard() {
 			assertTitle(_getDialog(), _serverRuntimeEnvironmentsDialog);
 
 			ide.sleep(5000);
 
 			_serverRuntimeEnvironmentsDialog.getAddBtn().click();
-		}
-
-		public Table getRuntimes() {
-			return _serverRuntimeEnvironmentsDialog.getRuntimes();
 		}
 
 		private final ServerRuntimeEnvironmentsPreferencesDialog _serverRuntimeEnvironmentsDialog =
