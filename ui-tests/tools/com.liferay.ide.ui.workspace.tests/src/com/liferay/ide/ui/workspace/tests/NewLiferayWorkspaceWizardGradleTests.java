@@ -15,9 +15,11 @@
 package com.liferay.ide.ui.workspace.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.TimestampSupport;
 
 import org.junit.Assert;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -28,9 +30,12 @@ import org.junit.Test;
  */
 public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
+	@Rule
+	public TimestampSupport timestamp = new TimestampSupport(bot);
+
 	@Test
 	public void createLiferayWorkspace() {
-		String workspaceName = "test-liferay-workspace-gradle";
+		String workspaceName = timestamp.getName("test-liferay-workspace-gradle");
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -55,7 +60,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorkspaceChangeLocation() {
-		String workspaceName = "test-liferay-workspace-gradle-change-location";
+		String workspaceName = timestamp.getName("test-liferay-workspace-gradle");
 
 		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
 
@@ -76,7 +81,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorkspaceChangeModulesDir() {
-		String workspaceName = "test-gradle-liferay-workspace-change-modules-dir";
+		String workspaceName = timestamp.getName("test-liferay-workspace-gradle");
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -123,7 +128,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorkspaceChangeWarsDir() {
-		String workspaceName = "test-gradle-liferay-workspace-change-wars-dir";
+		String workspaceName = timestamp.getName("test-liferay-workspace-gradle");
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -171,7 +176,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 	@Ignore("Ignore forever and test the download bundle in createLiferayWorkspaceWithDownloadBundleChangeBundleUrl")
 	@Test
 	public void createLiferayWorkspaceWithDownloadBundle() {
-		String workspaceName = "test-liferay-workspace-gradle-download-bundle";
+		String workspaceName = timestamp.getName("test-liferay-workspace-gradle");
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -199,12 +204,12 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 			return;
 		}
 
-		String workspaceName = "test-liferay-workspace-gradle-change-bundle-url";
+		String workspaceName = timestamp.getName("test-liferay-workspace-gradle");
 
 		// Use the internal server instead of the public server and also need to append the internal host
 
 		String bundleUrl =
-			"http://releases.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
+			"http://ide-resources-site/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
