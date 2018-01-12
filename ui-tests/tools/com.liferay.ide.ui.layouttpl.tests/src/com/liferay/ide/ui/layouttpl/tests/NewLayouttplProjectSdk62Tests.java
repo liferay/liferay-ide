@@ -18,11 +18,13 @@ import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.Sdk62Support;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
+@Ignore("ignore for more research")
 public class NewLayouttplProjectSdk62Tests extends SwtbotBase {
 
 	@ClassRule
@@ -72,6 +74,8 @@ public class NewLayouttplProjectSdk62Tests extends SwtbotBase {
 		if (!envAction.internal()) {
 			return;
 		}
+
+		viewAction.switchLiferayPerspective();
 
 		wizardAction.openNewLiferayPluginProjectWizard();
 

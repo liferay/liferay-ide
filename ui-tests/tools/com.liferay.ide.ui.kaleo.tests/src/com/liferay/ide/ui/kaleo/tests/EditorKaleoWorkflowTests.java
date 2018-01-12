@@ -18,11 +18,13 @@ import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.SdkSupport;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Haoyi Sun
  */
+@Ignore("ignore as IDE-3622")
 public class EditorKaleoWorkflowTests extends SwtbotBase {
 
 	@ClassRule

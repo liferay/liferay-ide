@@ -12,29 +12,35 @@
  * details.
  */
 
-package com.liferay.ide.ui.swtbot.eclipse.page;
+package com.liferay.ide.ui.swtbot.condition;
 
-import com.liferay.ide.ui.swtbot.page.Dialog;
-import com.liferay.ide.ui.swtbot.page.Text;
-import com.liferay.ide.ui.swtbot.page.Tree;
-
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.core.runtime.jobs.Job;
 
 /**
  * @author Terry Jia
  */
-public class PreferencesDialog extends Dialog {
+public class UpdateMavenProjectCondition extends WaitForSingleJob {
 
-	public PreferencesDialog(SWTBot bot) {
-		super(bot, PREFERENCES, CANCEL, APPLY_AND_CLOSE);
+	public UpdateMavenProjectCondition() {
+		super(null, "Update Maven Project");
 	}
 
-	public Tree getPreferencesTypes() {
-		return new Tree(getShell().bot());
+	@Override
+	public String getJobName() {
+		return "Update Maven Project";
 	}
 
-	public Text getSearch() {
-		return new Text(getShell().bot());
+	@Override
+	public boolean test() {
+		Job[] jobs = Job.getJobManager().find(family);
+
+		for (Job job : jobs) {
+			if (getJobName().equals(job.getName())) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 }

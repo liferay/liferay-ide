@@ -19,11 +19,13 @@ import com.liferay.ide.ui.liferay.base.LiferayWorkspaceMavenSupport;
 import com.liferay.ide.ui.liferay.base.TomcatRunningSupport;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
+@Ignore("ignore for more research")
 public class DeployModuleLiferayWorkspaceMavenTomcatTests extends SwtbotBase {
 
 	@ClassRule
@@ -42,9 +44,13 @@ public class DeployModuleLiferayWorkspaceMavenTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		// need to use job instead
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
 
-		ide.sleep(5000);
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
 			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
@@ -54,6 +60,8 @@ public class DeployModuleLiferayWorkspaceMavenTomcatTests extends SwtbotBase {
 		dialogAction.addAndRemove.addModule(projectName);
 
 		dialogAction.confirm(FINISH);
+
+		viewAction.servers.visibleModuleTry(tomcat.getServerStartedLabel(), projectName);
 
 		jobAction.waitForConsoleContent(
 			tomcat.getServerName(), "STARTED " + projectName.replace('-', '.') + "_", 20 * 1000);

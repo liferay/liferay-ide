@@ -18,11 +18,13 @@ import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.TomcatRunningSupport;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
+@Ignore("ignore for more research")
 public class DeployModuleMavenTomcatTests extends SwtbotBase {
 
 	@ClassRule
@@ -38,14 +40,24 @@ public class DeployModuleMavenTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		viewAction.servers.openAddAndRemoveDialog(tomcat.getServerStartedLabel());
 
 		dialogAction.addAndRemove.addModule(projectName);
 
 		dialogAction.confirm(FINISH);
 
+		viewAction.servers.visibleModuleTry(tomcat.getServerStartedLabel(), projectName);
+
 		jobAction.waitForConsoleContent(
-			tomcat.getServerName(), "STARTED " + projectName.replace('-', '.') + "_", 20 * 1000);
+			tomcat.getServerName(), "STARTED " + projectName.replace('-', '.') + "_", 60 * 1000);
 
 		viewAction.project.closeAndDelete(projectName);
 	}

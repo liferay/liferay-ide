@@ -12,29 +12,25 @@
  * details.
  */
 
-package com.liferay.ide.ui.swtbot.eclipse.page;
+package com.liferay.ide.ui.preference.tests;
 
-import com.liferay.ide.ui.swtbot.page.Dialog;
-import com.liferay.ide.ui.swtbot.page.Text;
-import com.liferay.ide.ui.swtbot.page.Tree;
+import com.liferay.ide.ui.liferay.SwtbotBase;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * @author Terry Jia
+ * @author Joye Luo
  */
-public class PreferencesDialog extends Dialog {
+public class AvailableSoftwareSitesTests extends SwtbotBase {
 
-	public PreferencesDialog(SWTBot bot) {
-		super(bot, PREFERENCES, CANCEL, APPLY_AND_CLOSE);
-	}
+	@Test
+	public void checkLiferayIdeSite() {
+		dialogAction.openPreferencesDialog();
 
-	public Tree getPreferencesTypes() {
-		return new Tree(getShell().bot());
-	}
+		dialogAction.preferences.openAvailableSoftwareSites();
 
-	public Text getSearch() {
-		return new Text(getShell().bot());
+		Assert.assertTrue(dialogAction.availableSoftwareSites.getSites().containsItem(LIFERAY_IDE_STABLE_RELEASES));
 	}
 
 }

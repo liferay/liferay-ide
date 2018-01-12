@@ -16,6 +16,8 @@ package com.liferay.ide.ui.liferay.base;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
+import org.junit.Assert;
+
 /**
  * @author Terry Jia
  */
@@ -31,6 +33,8 @@ public class TomcatRunningSupport extends TomcatSupport {
 
 		jobAction.waitForServerStopped(getServerName());
 
+		Assert.assertFalse("http://localhost:8080 still running", envAction.localConnected());
+
 		super.after();
 	}
 
@@ -38,9 +42,13 @@ public class TomcatRunningSupport extends TomcatSupport {
 	public void before() {
 		super.before();
 
+		Assert.assertFalse("http://localhost:8080 still running", envAction.localConnected());
+
 		viewAction.servers.start(getServerStoppedLabel());
 
 		jobAction.waitForServerStarted(getServerName());
+
+		Assert.assertTrue("Could not connent to http://localhost:8080", envAction.localConnected());
 	}
 
 }

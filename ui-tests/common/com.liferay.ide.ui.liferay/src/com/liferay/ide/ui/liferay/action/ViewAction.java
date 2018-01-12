@@ -99,31 +99,35 @@ public class ViewAction extends UIAction {
 	public class ProjectViewAction {
 
 		public void closeAndDelete(String... items) {
-			closeProject(items);
+			closeProjectTry(items);
 
 			delete(items);
 		}
 
 		public void closeAndDeleteFromDisk(String... items) {
-			closeProject(items);
+			closeProjectTry(items);
 
 			deleteProjectFromDisk(items);
 		}
 
 		public void closeAndDeleteWithNoRunningJobs(String... items) {
-			closeProject(items);
+			closeProjectTry(items);
 
 			_jobAction.waitForNoRunningJobs();
 
 			delete(items);
 		}
 
-		public void closeProject(String... items) {
+		public void closeProjectTry(String... items) {
 			ide.sleep();
 
-			_getProjects().contextMenu("Close Project", items);
+			try {
+				_getProjects().contextMenu("Close Project", items);
 
-			_jobAction.waitForCloseProject();
+				_jobAction.waitForCloseProject();
+			}
+			catch (Exception e) {
+			}
 		}
 
 		/**
@@ -174,6 +178,10 @@ public class ViewAction extends UIAction {
 
 		public void openFragmentFilesWizard() {
 			_getProjects().contextMenu(LIFERAY_MODULE_FRAGMENT_FILES);
+		}
+
+		public void openUpdateMavenProjectDialog(String projectName) {
+			_getProjects().contextMenu("Update Project...", projectName);
 		}
 
 		public void runBuildServices(String... projectNames) {
@@ -279,6 +287,21 @@ public class ViewAction extends UIAction {
 			_serversView.getServers().select(serverLabel);
 
 			_serversView.clickStopBtn();
+		}
+
+		public boolean visibleModuleTry(String serverLabel, String projectName) {
+			try {
+				return _serversView.getServers().isVisibleStartsBy(serverLabel, projectName);
+			}
+			catch (Exception e) {
+				_serversView.getServers().setFocus();
+
+				_serversView.getServers().select(serverLabel);
+
+				_serversView.getServers().expand(serverLabel);
+
+				return _serversView.getServers().isVisibleStartsBy(serverLabel, projectName);
+			}
 		}
 
 		private final ServersView _serversView = new ServersView(bot);

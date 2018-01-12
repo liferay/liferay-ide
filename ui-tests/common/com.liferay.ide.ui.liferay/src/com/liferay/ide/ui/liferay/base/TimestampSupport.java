@@ -12,29 +12,33 @@
  * details.
  */
 
-package com.liferay.ide.ui.swtbot.eclipse.page;
+package com.liferay.ide.ui.liferay.base;
 
-import com.liferay.ide.ui.swtbot.page.Dialog;
-import com.liferay.ide.ui.swtbot.page.Text;
-import com.liferay.ide.ui.swtbot.page.Tree;
-
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  */
-public class PreferencesDialog extends Dialog {
+public class TimestampSupport extends SupportBase {
 
-	public PreferencesDialog(SWTBot bot) {
-		super(bot, PREFERENCES, CANCEL, APPLY_AND_CLOSE);
+	public TimestampSupport(SWTWorkbenchBot bot) {
+		super(bot);
 	}
 
-	public Tree getPreferencesTypes() {
-		return new Tree(getShell().bot());
+	@Override
+	public void after() {
+		_timestamp = 0;
 	}
 
-	public Text getSearch() {
-		return new Text(getShell().bot());
+	@Override
+	public void before() {
+		_timestamp = System.currentTimeMillis();
 	}
+
+	public String getName(String name) {
+		return name + "-" + _timestamp;
+	}
+
+	private long _timestamp = 0;
 
 }

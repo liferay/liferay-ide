@@ -58,5 +58,6 @@
 		<module>com.liferay.ide.ui.workspace.tests</module>
 		<module>com.liferay.ide.ui.service.builder.tests</module>
 		<module>com.liferay.ide.ui.kaleo.tests</module>
+		<module>com.liferay.ide.ui.preference.tests</module>
 	</modules>
 </project>

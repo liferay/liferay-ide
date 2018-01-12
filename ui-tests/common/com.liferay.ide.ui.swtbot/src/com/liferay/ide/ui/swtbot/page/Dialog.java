@@ -20,16 +20,36 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
  * @author Terry Jia
  * @author Ashley Yuan
  */
-public class Dialog extends CancelableShell {
+public class Dialog extends Shell {
 
 	public Dialog(SWTBot bot) {
 		super(bot);
 	}
 
-	public Dialog(SWTBot bot, String cancelBtnLabel, String confirmBtnLabel) {
-		super(bot, cancelBtnLabel);
+	public Dialog(SWTBot bot, String label) {
+		super(bot, label);
+	}
 
+	public Dialog(SWTBot bot, String cancelBtnLabel, String confirmBtnLabel) {
+		super(bot);
+
+		_cancelBtnLabel = cancelBtnLabel;
 		_confirmBtnLabel = confirmBtnLabel;
+	}
+
+	public Dialog(SWTBot bot, String label, String cancelBtnLabel, String confirmBtnLabel) {
+		super(bot, label);
+
+		_cancelBtnLabel = cancelBtnLabel;
+		_confirmBtnLabel = confirmBtnLabel;
+	}
+
+	public void cancel() {
+		clickBtn(cancelBtn());
+	}
+
+	public Button cancelBtn() {
+		return new Button(bot, _cancelBtnLabel);
 	}
 
 	public void confirm() {
@@ -44,6 +64,7 @@ public class Dialog extends CancelableShell {
 		return new Button(bot, _confirmBtnLabel);
 	}
 
+	private String _cancelBtnLabel = CANCEL;
 	private String _confirmBtnLabel = OK;
 
 }

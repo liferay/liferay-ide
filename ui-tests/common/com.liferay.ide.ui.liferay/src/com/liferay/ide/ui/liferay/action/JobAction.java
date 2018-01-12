@@ -26,6 +26,7 @@ import com.liferay.ide.ui.swtbot.condition.RefreshForSubnodeCondition;
 import com.liferay.ide.ui.swtbot.condition.ServerStartJobCondition;
 import com.liferay.ide.ui.swtbot.condition.ServerStopJobCondition;
 import com.liferay.ide.ui.swtbot.condition.ShellAppearedCondition;
+import com.liferay.ide.ui.swtbot.condition.UpdateMavenProjectCondition;
 import com.liferay.ide.ui.swtbot.condition.ValidateJobCondition;
 import com.liferay.ide.ui.swtbot.condition.WizardClosedCondition;
 
@@ -76,7 +77,7 @@ public class JobAction extends UIAction {
 	}
 
 	public void waitForServerStarted(String serverName) {
-		ide.waitUntil(new ServerStartJobCondition(serverName), 300 * 1000);
+		ide.waitUntil(new ServerStartJobCondition(serverName), 450 * 1000);
 	}
 
 	public void waitForServerStopped(String serverName) {
@@ -93,6 +94,10 @@ public class JobAction extends UIAction {
 
 	public void waitForSubnode(SWTBotTreeItem parent, String subnode, String refreshText) {
 		ide.waitUntil(new RefreshForSubnodeCondition(parent, subnode, refreshText), 30 * 1000);
+	}
+
+	public void waitForUpdateMavenProject() {
+		ide.waitUntil(new UpdateMavenProjectCondition(), 10 * 1000);
 	}
 
 	public void waitForValidate(String projectName) {

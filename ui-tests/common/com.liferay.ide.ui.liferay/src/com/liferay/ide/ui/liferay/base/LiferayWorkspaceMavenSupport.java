@@ -35,13 +35,13 @@ public class LiferayWorkspaceMavenSupport extends SupportBase {
 
 		String[] warsFolderNames = {getLiferayWorkspaceName(), getWarsDirName()};
 
-		viewAction.project.closeAndDelete(modulesFolderNames);
+		viewAction.project.closeAndDeleteFromDisk(modulesFolderNames);
 
-		viewAction.project.closeAndDelete(themesFolderNames);
+		viewAction.project.closeAndDeleteFromDisk(themesFolderNames);
 
-		viewAction.project.closeAndDelete(warsFolderNames);
+		viewAction.project.closeAndDeleteFromDisk(warsFolderNames);
 
-		viewAction.project.closeAndDelete(getLiferayWorkspaceName());
+		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspaceName());
 	}
 
 	@Override
@@ -53,6 +53,14 @@ public class LiferayWorkspaceMavenSupport extends SupportBase {
 		wizardAction.newLiferayWorkspace.prepareMaven(getLiferayWorkspaceName());
 
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(getLiferayWorkspaceName());
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(getLiferayWorkspaceName()));
 	}

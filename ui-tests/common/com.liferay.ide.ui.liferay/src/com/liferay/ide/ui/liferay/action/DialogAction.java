@@ -16,13 +16,16 @@ package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.swtbot.eclipse.page.AddAndRemoveDialog;
+import com.liferay.ide.ui.swtbot.eclipse.page.AvailableSoftwareSitesPreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.PreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.ServerRuntimeEnvironmentsPreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TextTableDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TreeDialog;
+import com.liferay.ide.ui.swtbot.eclipse.page.UpdateMavenProjectDialog;
 import com.liferay.ide.ui.swtbot.page.Button;
 import com.liferay.ide.ui.swtbot.page.Dialog;
+import com.liferay.ide.ui.swtbot.page.Table;
 import com.liferay.ide.ui.swtbot.util.CoreUtil;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -43,19 +46,31 @@ public class DialogAction extends UIAction {
 	}
 
 	public void cancel() {
-		_dialog.cancel();
+		String title = _getDialog().getLabel();
+
+		_getDialog().cancel();
+
+		_jobAction.waitForShellClosed(title);
 	}
 
 	public void confirm() {
-		_dialog.confirm();
+		String title = _getDialog().getLabel();
+
+		_getDialog().confirm();
+
+		_jobAction.waitForShellClosed(title);
 	}
 
 	public void confirm(String confirmLabel) {
-		_dialog.confirm(confirmLabel);
+		String title = _getDialog().getLabel();
+
+		_getDialog().confirm(confirmLabel);
+
+		_jobAction.waitForShellClosed(title);
 	}
 
 	public Button getConfirmBtn() {
-		return _dialog.confirmBtn();
+		return _getDialog().confirmBtn();
 	}
 
 	public void openPreferencesDialog() {
@@ -84,44 +99,77 @@ public class DialogAction extends UIAction {
 	}
 
 	public AddAndRemoveDialogAction addAndRemove = new AddAndRemoveDialogAction();
+	public AvailableSoftwareSitesDialogAction availableSoftwareSites = new AvailableSoftwareSitesDialogAction();
 	public PreferencesDialogAction preferences = new PreferencesDialogAction();
 	public ServerRuntimeEnvironmentsDialogAction serverRuntimeEnvironments =
 		new ServerRuntimeEnvironmentsDialogAction();
+	public UpdateMavenProjectDialogAction updateMavenProject = new UpdateMavenProjectDialogAction();
 
 	public class AddAndRemoveDialogAction {
 
 		public void addModule(String projectName) {
+			assertTitle(_getDialog(), _addAndRemoveDialog);
+
+			ide.sleep();
+
 			_addAndRemoveDialog.getAvailables().select(projectName);
 
+			ide.sleep();
+
 			_addAndRemoveDialog.getAddBtn().click();
+
+			ide.sleep();
 		}
 
 		private final AddAndRemoveDialog _addAndRemoveDialog = new AddAndRemoveDialog(bot);
 
 	}
 
+	public class AvailableSoftwareSitesDialogAction {
+
+		public Table getSites() {
+			assertTitle(_getDialog(), _availableSoftwareSitesPreferencesDialog);
+
+			return _availableSoftwareSitesPreferencesDialog.getSites();
+		}
+
+		private final AvailableSoftwareSitesPreferencesDialog _availableSoftwareSitesPreferencesDialog =
+			new AvailableSoftwareSitesPreferencesDialog(bot);
+
+	}
+
 	public class PreferencesDialogAction {
 
 		public void confirm() {
+			assertTitle(_getDialog(), _preferencesDialog);
+
 			_preferencesDialog.confirm();
 		}
 
-		public void openPreferenceType(String categroy, String type) {
-			_preferencesDialog.getPreferencesTypes().selectTreeItem(categroy, type);
+		public void openAvailableSoftwareSites() {
+			assertTitle(_getDialog(), _preferencesDialog);
+
+			_openPreferenceType(INSTALL_UPDATE, AVAILABLE_SOFTWARE_SITES);
 		}
 
 		public void openServerRuntimeEnvironmentsTry() {
+			assertTitle(_getDialog(), _preferencesDialog);
+
 			long origin = SWTBotPreferences.TIMEOUT;
 
 			SWTBotPreferences.TIMEOUT = 500;
 
 			try {
-				openPreferenceType(SERVER, RUNTIME_ENVIRONMENTS);
+				_openPreferenceType(SERVER, RUNTIME_ENVIRONMENTS);
 			}
 			catch (Exception e) {
 			}
 
 			SWTBotPreferences.TIMEOUT = origin;
+		}
+
+		private void _openPreferenceType(String categroy, String type) {
+			_preferencesDialog.getPreferencesTypes().selectTreeItem(categroy, type);
 		}
 
 		private final PreferencesDialog _preferencesDialog = new PreferencesDialog(bot);
@@ -131,6 +179,8 @@ public class DialogAction extends UIAction {
 	public class ServerRuntimeEnvironmentsDialogAction {
 
 		public void deleteRuntimeTryConfirm(String runtimeName) {
+			assertTitle(_getDialog(), _serverRuntimeEnvironmentsDialog);
+
 			ide.sleep(3000);
 
 			_serverRuntimeEnvironmentsDialog.getRuntimes().click(runtimeName);
@@ -152,7 +202,13 @@ public class DialogAction extends UIAction {
 			SWTBotPreferences.TIMEOUT = origin;
 		}
 
+		public Table getRuntimes() {
+			return _serverRuntimeEnvironmentsDialog.getRuntimes();
+		}
+
 		public void openNewRuntimeWizard() {
+			assertTitle(_getDialog(), _serverRuntimeEnvironmentsDialog);
+
 			ide.sleep(5000);
 
 			_serverRuntimeEnvironmentsDialog.getAddBtn().click();
@@ -163,13 +219,28 @@ public class DialogAction extends UIAction {
 
 	}
 
+	public class UpdateMavenProjectDialogAction {
+
+		public void selectAll() {
+			assertTitle(_getDialog(), _updateMavenProjectDialog);
+
+			_updateMavenProjectDialog.getSelectAllBtn().click();
+		}
+
+		private final UpdateMavenProjectDialog _updateMavenProjectDialog = new UpdateMavenProjectDialog(bot);
+
+	}
+
 	private DialogAction(SWTWorkbenchBot bot) {
 		super(bot);
 	}
 
+	private Dialog _getDialog() {
+		return new Dialog(bot);
+	}
+
 	private static DialogAction _dialogAction;
 
-	private final Dialog _dialog = new Dialog(bot);
 	private final JobAction _jobAction = JobAction.getInstance(bot);
 	private final KeyboardAction _keyboradAction = KeyboardAction.getInstance(bot);
 	private final TextDialog _textDialog = new TextDialog(bot);

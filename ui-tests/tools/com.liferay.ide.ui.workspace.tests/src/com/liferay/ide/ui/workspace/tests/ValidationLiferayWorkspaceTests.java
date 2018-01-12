@@ -24,7 +24,6 @@ import java.io.File;
 import org.eclipse.core.runtime.Platform;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -80,7 +79,6 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(projectName);
 	}
 
-	@Ignore
 	@Test
 	public void checkInitialState() {
 		wizardAction.openNewLiferayWorkspaceWizard();
@@ -93,11 +91,14 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		_newLiferayWorkspaceProjectWizard.getUseDefaultLocation().deselect();
 
-		//will add tests on there OS since '/' and '\'
 		String exceptLocation = envAction.getEclipseWorkspacePath().toOSString();
 		String actualLocation = _newLiferayWorkspaceProjectWizard.getLocation().getText();
 
-		Assert.assertEquals(exceptLocation.replace("\\", "/"), actualLocation);
+		if (Platform.getOS().equals("win32")) {
+			exceptLocation = exceptLocation.replaceAll("\\\\", "/");
+		}
+
+		Assert.assertEquals(exceptLocation, actualLocation);
 
 		_newLiferayWorkspaceProjectWizard.getUseDefaultLocation().select();
 
@@ -109,6 +110,28 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 	@Test
 	public void checkLocation() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		String projectName = "test";
+
+		wizardAction.newLiferayWorkspace.prepareGradle(projectName);
+
+		wizardAction.newLiferayWorkspace.deselectUseDefaultLocation();
+
+		for (ValidationMsg msg :
+				envAction.getValidationMsgs(
+					new File(envAction.getValidationFolder(), "new-liferay-workspace-wizard-location.csv"))) {
+
+			if (!msg.getOs().equals(Platform.getOS())) {
+				continue;
+			}
+
+			wizardAction.newLiferayWorkspace.setLocation(msg.getInput());
+
+			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
+		}
+
+		wizardAction.cancel();
 	}
 
 	@Test

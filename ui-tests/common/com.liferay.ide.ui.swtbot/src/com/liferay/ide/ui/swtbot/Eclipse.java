@@ -18,6 +18,7 @@ import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
 import com.liferay.ide.ui.swtbot.page.BasePageObject;
 import com.liferay.ide.ui.swtbot.page.Editor;
 import com.liferay.ide.ui.swtbot.page.Menu;
+import com.liferay.ide.ui.swtbot.page.Shell;
 import com.liferay.ide.ui.swtbot.page.View;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -34,6 +35,8 @@ public class Eclipse extends BasePageObject {
 		super(bot);
 
 		label = bot.activeShell().getText();
+
+		_shell = new Shell(bot, label);
 
 		_welcomeView = new View(bot, WELCOME);
 	}
@@ -64,6 +67,10 @@ public class Eclipse extends BasePageObject {
 		String[] preferencesLabel = {WINDOW, PREFERENCES};
 
 		return new Menu(bot.shell(label).bot(), preferencesLabel);
+	}
+
+	public Shell getShell() {
+		return _shell;
 	}
 
 	public View getWelcomeView() {
@@ -104,6 +111,7 @@ public class Eclipse extends BasePageObject {
 		return new TextDialog(bot);
 	}
 
+	private Shell _shell;
 	private View _welcomeView;
 
 }

@@ -14,35 +14,23 @@
 
 package com.liferay.ide.ui.swtbot.eclipse.page;
 
-import com.liferay.ide.ui.swtbot.page.Button;
 import com.liferay.ide.ui.swtbot.page.Dialog;
 import com.liferay.ide.ui.swtbot.page.Table;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
+ * @author Joye Luo
  * @author Terry Jia
  */
-public class ServerRuntimeEnvironmentsPreferencesDialog extends Dialog {
+public class AvailableSoftwareSitesPreferencesDialog extends Dialog {
 
-	public ServerRuntimeEnvironmentsPreferencesDialog(SWTBot bot) {
-		super(bot, PREFERENCES);
+	public AvailableSoftwareSitesPreferencesDialog(SWTBot bot) {
+		super(bot);
 	}
 
-	public Button getAddBtn() {
-		return new Button(getShell().bot(), ADD_WITH_DOT);
-	}
-
-	public Button getEditBtn() {
-		return new Button(getShell().bot(), EDIT_WITH_DOT);
-	}
-
-	public Button getRemoveBtn() {
-		return new Button(getShell().bot(), REMOVE);
-	}
-
-	public Table getRuntimes() {
-		return new Table(getShell().bot(), SERVER_RUNTIEME_ENVIRONMENTS);
+	public Table getSites() {
+		return new Table(getShell().bot(), 0);
 	}
 
 }
