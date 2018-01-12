@@ -24,12 +24,12 @@ import org.junit.Test;
 /**
  * @author Haoyi Sun
  */
+@Ignore("ignore as IDE-3622")
 public class EditorKaleoWorkflowTests extends SwtbotBase {
 
 	@ClassRule
 	public static SdkSupport sdk = new SdkSupport(bot);
 
-	@Ignore("ignore as IDE-xxxx")
 	@Test
 	public void createKaleoWorkflow() {
 		viewAction.switchLiferayPerspective();
