@@ -18,11 +18,13 @@ import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.Sdk62Support;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  */
+@Ignore("ignore for more research")
 public class NewPortletProjectSdk62Tests extends SwtbotBase {
 
 	@ClassRule
