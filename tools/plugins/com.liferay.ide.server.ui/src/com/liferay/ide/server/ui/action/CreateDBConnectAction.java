@@ -370,7 +370,7 @@ public class CreateDBConnectAction extends AbstractServerRunningAction
 
             ProfileManager.getInstance().createProfile(
                 uniqueConnectionProfileName, connectionDesc, providerId, connectionProfileProperties, "", false ); //$NON-NLS-1$
-            
+
 			return true;
         }
 
