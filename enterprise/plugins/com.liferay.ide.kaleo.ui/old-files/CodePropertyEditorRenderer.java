@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.ide.kaleo.ui.editor;
 
 import static org.eclipse.sapphire.ui.swt.renderer.GridLayoutUtil.gd;
@@ -16,9 +30,9 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
 import org.eclipse.sapphire.modeling.ModelPropertyListener;
-import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.ui.PropertyEditorPart;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
@@ -39,6 +53,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
@@ -50,277 +65,263 @@ import org.eclipse.ui.internal.WorkbenchPartReference;
 import org.eclipse.ui.internal.registry.EditorDescriptor;
 import org.eclipse.ui.texteditor.ITextEditor;
 
+/**
+ * @author Gregory Amerson
+ */
+@SuppressWarnings("restriction")
+public class CodePropertyEditorRenderer extends ValuePropertyEditorRenderer {
 
-@SuppressWarnings( "restriction" )
-public class CodePropertyEditorRenderer extends ValuePropertyEditorRenderer
-{
-
-	class ScriptLanguageModelPropertyListener extends ModelPropertyListener
-	{
-
-		@Override
-		public void handlePropertyChangedEvent( ModelPropertyChangeEvent event )
-		{
-
-		}
-	}
-
-	private class ScriptEditorReference extends WorkbenchPartReference implements IEditorReference
-	{
-
-		private IEditorInput editorInput;
-		private IEditorPart editor;
-
-		public ScriptEditorReference( IEditorPart editor, IEditorInput input )
-		{
-			super();
-			this.editor = editor;
-			this.editorInput = input;
-		}
-
-		public IWorkbenchPage getPage()
-		{
-			return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		}
-
-		public String getFactoryId()
-		{
-			return null;
-		}
-
-		public String getName()
-		{
-			return null;
-		}
-
-		public IEditorPart getEditor( boolean restore )
-		{
-			return editor;
-		}
-
-		public IEditorInput getEditorInput() throws PartInitException
-		{
-			return this.editorInput;
-		}
+	class ScriptLanguageModelPropertyListener extends ModelPropertyListener {
 
 		@Override
-		protected IWorkbenchPart createPart()
-		{
-			return null;
-		}
-
-		@Override
-		protected PartPane createPane()
-		{
-			return null;
+		public void handlePropertyChangedEvent(ModelPropertyChangeEvent event) {
 		}
 
 	}
 
-	private class ScriptEditorSite extends PartSite implements IEditorSite
-	{
+	public CodePropertyEditorRenderer(SapphireRenderingContext context, PropertyEditorPart part) {
+		super(context, part);
 
-		public ScriptEditorSite( IWorkbenchPartReference ref, IWorkbenchPart part, IWorkbenchPage page )
-		{
-			super( ref, part, page );
-		}
-
-		@Override
-		public Shell getShell()
-		{
-			return this.getPage().getActivePart().getSite().getShell();
-		}
-
-		@Override
-		public IActionBars getActionBars()
-		{
-			IActionBars bars = ( (PartSite) this.getPage().getActivePart().getSite() ).getActionBars();
-
-			return bars;
-		}
-
-		public IEditorActionBarContributor getActionBarContributor()
-		{
-			return null;
-		}
-
-		public void registerContextMenu(
-			MenuManager menuManager, ISelectionProvider selectionProvider, boolean includeEditorInput )
-		{
-		}
-
-		public void registerContextMenu(
-			String menuId, MenuManager menuManager, ISelectionProvider selectionProvider, boolean includeEditorInput )
-		{
-		}
-
-	}
-
-	private ITextEditor textEditor;
-
-	public CodePropertyEditorRenderer( SapphireRenderingContext context, PropertyEditorPart part )
-	{
-		super( context, part );
-
-		IScriptable scriptable = context.getPart().getLocalModelElement().nearest( IScriptable.class );
+		IScriptable scriptable = context.getPart().getLocalModelElement().nearest(IScriptable.class);
 
 		ScriptLanguageModelPropertyListener listener = new ScriptLanguageModelPropertyListener();
 
-		scriptable.addListener( listener, "ScriptLanguage" );
+		scriptable.addListener(listener, "ScriptLanguage");
+	}
+
+	public static final class Factory extends PropertyEditorRendererFactory {
+
+		@Override
+		public PropertyEditorRenderer create(SapphireRenderingContext context, PropertyEditorPart part) {
+			return new CodePropertyEditorRenderer(context, part);
+		}
+
+		@Override
+		public boolean isApplicableTo(PropertyEditorPart propertyEditorDefinition) {
+			return (propertyEditorDefinition.getProperty() instanceof ValueProperty);
+		}
+
 	}
 
 	@Override
-	protected void createContents( Composite parent )
-	{
-		final PropertyEditorPart part = getPart();
-		final Composite scriptEditorParent = createMainComposite( parent, new CreateMainCompositeDelegate( part )
-		{
-			@Override
-			public boolean canScaleVertically()
-			{
-				return true;
-			}
-		} );
+	protected boolean canScaleVertically() {
+		return true;
+	}
 
-		this.context.adapt( scriptEditorParent );
-
-		int textFieldParentColumns = 1;
-		final SapphireToolBarActionPresentation toolBarActionsPresentation =
-			new SapphireToolBarActionPresentation( getActionPresentationManager() );
-
-		final boolean isActionsToolBarNeeded = toolBarActionsPresentation.hasActions();
-		if ( isActionsToolBarNeeded || true )
-			textFieldParentColumns++;
-
-		scriptEditorParent.setLayout( glayout( textFieldParentColumns, 0, 0, 0, 0 ) );
-
-		final Composite nestedComposite = new Composite( scriptEditorParent, SWT.NONE );
-		nestedComposite.setLayoutData( gdfill() );
-		nestedComposite.setLayout( glspacing( glayout( 2, 0, 0 ), 2 ) );
-		this.context.adapt( nestedComposite );
-
-		final PropertyEditorAssistDecorator decorator = createDecorator( nestedComposite );
-
-		decorator.control().setLayoutData( gdvalign( gd(), SWT.TOP ) );
-		decorator.addEditorControl( nestedComposite );
-
-		// scriptEditorParent.setLayout( new FillLayout( SWT.HORIZONTAL ) );
-		// scriptEditorParent.setLayoutData( gdhhint( gdfill(), 300 ) );
-        
-		final PropertyEditorInput editorInput =
-			new PropertyEditorInput( part.getLocalModelElement(), (ValueProperty) part.getProperty() );
-
-		try
-		{
-			ScriptLanguageType scriptLang =
-				context.getPart().getLocalModelElement().nearest( IScriptable.class ).getScriptLanguage().getContent(
-					false );
-			String fileName =
-				scriptLang.getClass().getField( scriptLang.toString() ).getAnnotation( DefaultValue.class ).text();
-
-			IContentDescription contentDescription =
-				ContentTypeManager.getInstance().getDescriptionFor(
-					editorInput.getStorage().getContents(), fileName, IContentDescription.ALL );
-			EditorDescriptor defaultEditor =
-				(EditorDescriptor) PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(
-					editorInput.getName(), contentDescription.getContentType() );
-			this.textEditor = (ITextEditor) defaultEditor.createEditor();
-		}
-		catch ( Exception e1 )
-		{
-		}
-
-		IEditorReference ref = new ScriptEditorReference( this.textEditor, editorInput );
-		IEditorSite site =
-			new ScriptEditorSite(
-				ref, this.textEditor, PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage() );
-		try
-		{
-
-			this.textEditor.init( site, editorInput );
-			this.textEditor.getDocumentProvider().getDocument( editorInput ).addDocumentListener(
-				new IDocumentListener()
-				{
-
-					public void documentChanged( DocumentEvent event )
-					{
-						String content = event.getDocument().get();
-						part.getLocalModelElement().write( ( (ValueProperty) part.getProperty() ), content );
-					}
-
-					public void documentAboutToBeChanged( DocumentEvent event )
-					{
-					}
-				} );
-
-			part.getLocalModelElement().addListener( new ModelPropertyListener()
-			{
+	@Override
+	protected void createContents(Composite parent) {
+		PropertyEditorPart part = getPart();
+		Composite scriptEditorParent = createMainComposite(
+			parent, new CreateMainCompositeDelegate(part) {
 
 				@Override
-				public void handlePropertyChangedEvent( ModelPropertyChangeEvent event )
-				{
-					CodePropertyEditorRenderer.this.textEditor.getDocumentProvider().getDocument( editorInput ).set(
-						part.getLocalModelElement().read( getProperty() ).getText() );
+				public boolean canScaleVertically() {
+					return true;
 				}
-			}, part.getProperty().getName() );
+
+			});
+
+		context.adapt(scriptEditorParent);
+
+		int textFieldParentColumns = 1;
+		SapphireToolBarActionPresentation toolBarActionsPresentation = new SapphireToolBarActionPresentation(
+			getActionPresentationManager());
+
+		boolean actionsToolBarNeeded = toolBarActionsPresentation.hasActions();
+
+		if (actionsToolBarNeeded || true)textFieldParentColumns++;
+
+		scriptEditorParent.setLayout(glayout(textFieldParentColumns, 0, 0, 0, 0));
+
+		Composite nestedComposite = new Composite(scriptEditorParent, SWT.NONE);
+
+		nestedComposite.setLayoutData(gdfill());
+		nestedComposite.setLayout(glspacing(glayout(2, 0, 0), 2));
+		this.context.adapt(nestedComposite);
+
+		PropertyEditorAssistDecorator decorator = createDecorator(nestedComposite);
+
+		decorator.control().setLayoutData(gdvalign(gd(), SWT.TOP));
+		decorator.addEditorControl(nestedComposite);
+
+		/*
+		 * scriptEditorParent.setLayout( new FillLayout( SWT.HORIZONTAL ) );
+		 * scriptEditorParent.setLayoutData( gdhhint( gdfill(), 300 ) );
+		 */
+		PropertyEditorInput editorInput = new PropertyEditorInput(
+			part.getLocalModelElement(), (ValueProperty)part.getProperty());
+
+		try {
+			ScriptLanguageType scriptLang = context.getPart().getLocalModelElement().nearest(IScriptable.class)
+				.getScriptLanguage().getContent(false);
+
+			String fileName =
+				scriptLang.getClass().getField(scriptLang.toString()).getAnnotation(DefaultValue.class).text();
+
+			IContentDescription contentDescription = ContentTypeManager.getInstance()
+				.getDescriptionFor(editorInput.getStorage().getContents(), fileName, IContentDescription.ALL);
+
+			EditorDescriptor defaultEditor = (EditorDescriptor)PlatformUI.getWorkbench().getEditorRegistry()
+				.getDefaultEditor(editorInput.getName(), contentDescription.getContentType());
+
+			_textEditor = (ITextEditor) defaultEditor.createEditor();
 		}
-		catch ( PartInitException e )
-		{
-			e.printStackTrace();
+		catch (Exception e1) {
 		}
-		
+
+		IEditorReference ref = new ScriptEditorReference(_textEditor, editorInput);
+		IEditorSite site = new ScriptEditorSite(
+			ref, _textEditor, PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage());
+		try {
+			_textEditor.init(site, editorInput);
+			_textEditor.getDocumentProvider().getDocument(editorInput).addDocumentListener(
+				new IDocumentListener() {
+
+					public void documentAboutToBeChanged(DocumentEvent event) {
+					}
+
+					public void documentChanged(DocumentEvent event) {
+						String content = event.getDocument().get();
+						part.getLocalModelElement().write(((ValueProperty)part.getProperty()), content);
+					}
+
+				});
+
+			ModelPropertyListener modelListener = new ModelPropertyListener() {
+
+				@Override
+				public void handlePropertyChangedEvent(ModelPropertyChangeEvent event) {
+					CodePropertyEditorRenderer.this.textEditor.getDocumentProvider().getDocument(editorInput)
+						.set(part.getLocalModelElement().read(getProperty()).getText());
+				}
+
+			};
+
+			part.getLocalModelElement().addListener(modelListener, part.getProperty().getName());
+		}
+		catch (PartInitException pie) {
+			pie.printStackTrace();
+		}
+
 		Control[] prevChildren = scriptEditorParent.getChildren();
-		// this.textEditor.createPartControl( scriptEditorParent );
-		new Label( scriptEditorParent, SWT.NONE );
+
+		// _textEditor.createPartControl( scriptEditorParent );
+
+		new Label(scriptEditorParent, SWT.NONE);
 		Control[] newChildren = scriptEditorParent.getChildren();
 
-		decorator.addEditorControl( newChildren[prevChildren.length], true );
+		decorator.addEditorControl(newChildren[prevChildren.length], true);
 
-		if ( isActionsToolBarNeeded )
-		{
-			final ToolBar toolbar = new ToolBar( scriptEditorParent, SWT.FLAT | SWT.HORIZONTAL );
-			toolbar.setLayoutData( gdvfill() );
-			toolBarActionsPresentation.setToolBar( toolbar );
+		if (actionsToolBarNeeded) {
+			ToolBar toolbar = new ToolBar(scriptEditorParent, SWT.FLAT | SWT.HORIZONTAL);
+
+			toolbar.setLayoutData(gdvfill());
+
+			toolBarActionsPresentation.setToolBar(toolbar);
+
 			toolBarActionsPresentation.render();
-			this.context.adapt( toolbar );
-			decorator.addEditorControl( toolbar );
+
+			context.adapt(toolbar);
+
+			decorator.addEditorControl(toolbar);
+
 			// relatedControls.add( toolbar );
+
 		}
 	}
 
 	@Override
-	protected void handlePropertyChangedEvent()
-	{
-		super.handlePropertyChangedEvent();
-	}
-
-	@Override
-	protected void handleFocusReceivedEvent()
-	{
+	protected void handleFocusReceivedEvent() {
 		super.handleFocusReceivedEvent();
 	}
 
 	@Override
-	protected boolean canScaleVertically()
-	{
-		return true;
+	protected void handlePropertyChangedEvent() {
+		super.handlePropertyChangedEvent();
 	}
 
+	private ITextEditor _textEditor;
 
-	public static final class Factory extends PropertyEditorRendererFactory
-	{
+	private class ScriptEditorReference extends WorkbenchPartReference implements IEditorReference {
 
-		@Override
-		public boolean isApplicableTo( final PropertyEditorPart propertyEditorDefinition )
-		{
-			return ( propertyEditorDefinition.getProperty() instanceof ValueProperty );
+		public ScriptEditorReference(IEditorPart editor, IEditorInput input) {
+			_editor = editor;
+			_editorInput = input;
+		}
+
+		public IEditorPart getEditor(boolean restore) {
+			return _editor;
+		}
+
+		public IEditorInput getEditorInput() throws PartInitException {
+			return _editorInput;
+		}
+
+		public String getFactoryId() {
+			return null;
+		}
+
+		public String getName() {
+			return null;
+		}
+
+		public IWorkbenchPage getPage() {
+			IWorkbench workBench = PlatformUI.getWorkbench();
+
+			return workBench.getActiveWorkbenchWindow().getActivePage();
 		}
 
 		@Override
-		public PropertyEditorRenderer create( final SapphireRenderingContext context, final PropertyEditorPart part )
-		{
-			return new CodePropertyEditorRenderer( context, part );
+		protected PartPane createPane() {
+			return null;
 		}
+
+		@Override
+		protected IWorkbenchPart createPart() {
+			return null;
+		}
+
+		private IEditorPart _editor;
+		private IEditorInput _editorInput;
+
+	}
+
+	private class ScriptEditorSite extends PartSite implements IEditorSite {
+
+		public ScriptEditorSite(IWorkbenchPartReference ref, IWorkbenchPart part, IWorkbenchPage page) {
+			super(ref, part, page);
+		}
+
+		public IEditorActionBarContributor getActionBarContributor() {
+			return null;
+		}
+
+		@Override
+		public IActionBars getActionBars() {
+			IWorkbenchPart wbPart = getPage().getActivePart();
+
+			PartSite wkSite = (PartSite)wbPart.getSite();
+
+			IActionBars bars = wkSite.getActionBars();
+
+			return bars;
+		}
+
+		@Override
+		public Shell getShell() {
+			IWorkbenchPart wbPart = getPage().getActivePart();
+
+			return wbPart.getSite().getShell();
+		}
+
+		public void registerContextMenu(
+			MenuManager menuManager, ISelectionProvider selectionProvider, boolean includeEditorInput) {
+		}
+
+		public void registerContextMenu(
+			String menuId, MenuManager menuManager, ISelectionProvider selectionProvider, boolean includeEditorInput) {
+		}
+
 	}
 
 }

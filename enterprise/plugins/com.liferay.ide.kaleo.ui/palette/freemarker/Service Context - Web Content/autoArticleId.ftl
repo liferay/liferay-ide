@@ -1,1 +1,1 @@
-<#assign autoArticleId = serviceContext.getAttribute("autoArticleId")!"">
+<#assign autoArticleId = serviceContext.getAttribute("autoArticleId")!"" />

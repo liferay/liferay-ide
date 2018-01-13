@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.diagram;
@@ -15,49 +18,54 @@ import com.liferay.ide.kaleo.core.model.Notification;
 import com.liferay.ide.kaleo.ui.IKaleoEditorHelper;
 import com.liferay.ide.kaleo.ui.KaleoUI;
 
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ui.ISapphirePart;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
+import org.eclipse.sapphire.ui.SapphirePart;
 import org.eclipse.sapphire.ui.forms.DetailSectionPart;
+import org.eclipse.sapphire.ui.forms.FormPart;
 
 /**
  * @author Gregory Amerson
  */
-public class TemplateOpenActionHandler extends SapphireActionHandler
-{
+public class TemplateOpenActionHandler extends SapphireActionHandler {
 
-    protected Notification notification( Presentation context )
-    {
-        ISapphirePart part = context.part();
+	protected Notification notification(Presentation context) {
+		ISapphirePart part = context.part();
 
-        if (part instanceof DetailSectionPart)
-        {
-            DetailSectionPart pageBook = part.nearest( DetailSectionPart.class );
+		if (part instanceof DetailSectionPart) {
+			DetailSectionPart pageBook = part.nearest(DetailSectionPart.class);
 
-            return pageBook.getCurrentPage().getLocalModelElement().nearest( Notification.class );
-        }
+			FormPart currentPage = pageBook.getCurrentPage();
 
-        return context.part().getLocalModelElement().nearest( Notification.class );
-    }
+			Element element = currentPage.getLocalModelElement();
 
-    @Override
-    protected Object run( final Presentation context )
-    {
-        try
-        {
-            Notification notification = notification( context );
+			return element.nearest(Notification.class);
+		}
 
-            IKaleoEditorHelper kaleoEditorHelper =
-                KaleoUI.getKaleoEditorHelper( notification.getTemplateLanguage().text( true ) );
+		SapphirePart spPart = context.part();
 
-            kaleoEditorHelper.openEditor( context.part(), notification, Notification.PROP_TEMPLATE );
-        }
-        catch( Exception e )
-        {
-            KaleoUI.logError( "Could not open template editor.", e );
-        }
+		Element element = spPart.getLocalModelElement();
 
-        return null;
-    }
+		return element.nearest(Notification.class);
+	}
+
+	@Override
+	protected Object run(Presentation context) {
+		try {
+			Notification notification = notification(context);
+
+			IKaleoEditorHelper kaleoEditorHelper = KaleoUI.getKaleoEditorHelper(
+				notification.getTemplateLanguage().text(true));
+
+			kaleoEditorHelper.openEditor(context.part(), notification, Notification.PROP_TEMPLATE);
+		}
+		catch (Exception e) {
+			KaleoUI.logError("Could not open template editor.", e);
+		}
+
+		return null;
+	}
 
 }

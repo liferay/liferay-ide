@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.diagram;
@@ -28,126 +31,107 @@ import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireActionHandlerFactory;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 
-
 /**
  * @author Gregory Amerson
  */
-public class WorkflowNodeAddHandlerFactory extends SapphireActionHandlerFactory
-{
+public class WorkflowNodeAddHandlerFactory extends SapphireActionHandlerFactory {
 
-    @Override
-    public List<SapphireActionHandler> create()
-    {
-        final List<SapphireActionHandler> handlers = new ArrayList<SapphireActionHandler>();
+	@Override
+	public List<SapphireActionHandler> create() {
+		List<SapphireActionHandler> handlers = new ArrayList<>();
 
-        if( this.getModelElement() instanceof Task )
-        {
-            final Task task = this.getModelElement().nearest( Task.class );
+		if (getModelElement() instanceof Task) {
+			Task task = getModelElement().nearest(Task.class);
 
-            handlers.add
-            (
-                new SapphireActionHandler()
-                {
-                    @Override
-                    public void init( SapphireAction action, ActionHandlerDef def )
-                    {
-                        super.init( action, def );
-                        this.addImage( Action.TYPE.image() );
-                        this.setLabel( "Task Action" );
-                    }
+			handlers.add(
+				new SapphireActionHandler() {
 
-                    @Override
-                    protected Object run( Presentation context )
-                    {
-                        Action newAction = task.getTaskActions().insert();
+					@Override
+					public void init(SapphireAction action, ActionHandlerDef def) {
+						super.init(action, def);
+						addImage(Action.TYPE.image());
+						setLabel("Task Action");
+					}
 
-                        ActionsListAddActionHandler.addActionDefaults( newAction );
+					@Override
+					protected Object run(Presentation context) {
+						Action newAction = task.getTaskActions().insert();
 
-                        return newAction;
-                    }
-                }
-            );
+						ActionsListAddActionHandler.addActionDefaults(newAction);
 
-            handlers.add
-            (
-                new SapphireActionHandler()
-                {
-                    @Override
-                    public void init( SapphireAction action, ActionHandlerDef def )
-                    {
-                        super.init( action, def );
-                        this.addImage( ActionNotification.TYPE.image() );
-                        this.setLabel( "Task Notification" );
-                    }
+						return newAction;
+					}
 
-                    @Override
-                    protected Object run( Presentation context )
-                    {
-                        ActionNotification newTaskNotificaction = task.getTaskNotifications().insert();
+				});
 
-                        NotificationsListAddActionHandler.addNotificationDefaults( newTaskNotificaction );
+			handlers.add(
+				new SapphireActionHandler() {
 
-                        return newTaskNotificaction;
-                    }
+					@Override
+					public void init(SapphireAction action, ActionHandlerDef def) {
+						super.init(action, def);
+						addImage(ActionNotification.TYPE.image());
+						setLabel("Task Notification");
+					}
 
-                }
-            );
-        }
-        else
-        {
-            final ActionTimer actionTimer = this.getModelElement().nearest( ActionTimer.class );
+					@Override
+					protected Object run(Presentation context) {
+						ActionNotification newTaskNotificaction = task.getTaskNotifications().insert();
 
-            handlers.add
-            (
-                new SapphireActionHandler()
-                {
-                    @Override
-                    public void init( SapphireAction action, ActionHandlerDef def )
-                    {
-                        super.init( action, def );
-                        this.addImage( Action.TYPE.image() );
-                        this.setLabel( "Action" );
-                    }
+						NotificationsListAddActionHandler.addNotificationDefaults(newTaskNotificaction);
 
-                    @Override
-                    protected Object run( Presentation context )
-                    {
-                        Action newAction = actionTimer.getActions().insert();
+						return newTaskNotificaction;
+					}
 
-                        ActionsListAddActionHandler.addActionDefaults( newAction );
+				});
+		}
+		else {
+			ActionTimer actionTimer = getModelElement().nearest(ActionTimer.class);
 
-                        return newAction;
-                    }
-                }
-            );
+			handlers.add(
+				new SapphireActionHandler() {
 
-            handlers.add
-            (
-                new SapphireActionHandler()
-                {
-                    @Override
-                    public void init( SapphireAction action, ActionHandlerDef def )
-                    {
-                        super.init( action, def );
-                        this.addImage( Notification.TYPE.image() );
-                        this.setLabel( "Notification" );
-                    }
+					@Override
+					public void init(SapphireAction action, ActionHandlerDef def) {
+						super.init(action, def);
+						addImage(Action.TYPE.image());
+						setLabel("Action");
+					}
 
-                    @Override
-                    protected Object run( Presentation context )
-                    {
-                        ActionNotification newNotificaction = actionTimer.getNotifications().insert();
+					@Override
+					protected Object run(Presentation context) {
+						Action newAction = actionTimer.getActions().insert();
 
-                        NotificationsListAddActionHandler.addNotificationDefaults( newNotificaction );
+						ActionsListAddActionHandler.addActionDefaults(newAction);
 
-                        return newNotificaction;
-                    }
+						return newAction;
+					}
 
-                }
-            );
-        }
+				});
 
-        return handlers;
-    }
+			handlers.add(
+				new SapphireActionHandler() {
+
+					@Override
+					public void init(SapphireAction action, ActionHandlerDef def) {
+						super.init(action, def);
+						addImage(Notification.TYPE.image());
+						setLabel("Notification");
+					}
+
+					@Override
+					protected Object run(Presentation context) {
+						ActionNotification newNotificaction = actionTimer.getNotifications().insert();
+
+						NotificationsListAddActionHandler.addNotificationDefaults(newNotificaction);
+
+						return newNotificaction;
+					}
+
+				});
+		}
+
+		return handlers;
+	}
 
 }

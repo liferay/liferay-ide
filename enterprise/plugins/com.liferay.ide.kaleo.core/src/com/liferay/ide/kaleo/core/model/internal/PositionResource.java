@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model.internal;
@@ -23,87 +26,80 @@ import org.eclipse.sapphire.ValuePropertyBinding;
 /**
  * @author Gregory Amerson
  */
-public class PositionResource extends Resource
-{
-    private Point point;
+public class PositionResource extends Resource {
 
-    public PositionResource( Point point, Resource parent )
-    {
-        super( parent );
-        this.point = point;
-    }
+	public PositionResource(Point point, Resource parent) {
+		super(parent);
+		_point = point;
+	}
 
-    public Point getPoint()
-    {
-        return this.point;
-    }
+	public Point getPoint() {
+		return _point;
+	}
 
-    @Override
-    protected PropertyBinding createBinding( final Property property )
-    {
-        PropertyBinding binding = null;
-        final PropertyDef def = property.definition();
+	@Override
+	protected PropertyBinding createBinding(Property property) {
+		PropertyBinding binding = null;
+		PropertyDef def = property.definition();
 
-        if( Position.PROP_X.equals( def ) || ConnectionBendpoint.PROP_X.equals( def ) ||
-            Position.PROP_Y.equals( def ) || ConnectionBendpoint.PROP_Y.equals( def ) )
-        {
-            binding = new ValuePropertyBinding()
-            {
-                @Override
-                public String read()
-                {
-                    String retval = null;
+		if (Position.PROP_X.equals(def) || ConnectionBendpoint.PROP_X.equals(def) || Position.PROP_Y.equals(def) ||
+			ConnectionBendpoint.PROP_Y.equals(def)) {
 
-                    if (PositionResource.this.point != null)
-                    {
-                        if( Position.PROP_X.equals( def ) || ConnectionBendpoint.PROP_X.equals( def ) )
-                        {
-                            retval = Integer.toString( PositionResource.this.point.getX() );
-                        }
-                        else if( Position.PROP_Y.equals( def ) || ConnectionBendpoint.PROP_Y.equals( def ) )
-                        {
-                            retval = Integer.toString( PositionResource.this.point.getY() );
-                        }
-                    }
+			binding = new ValuePropertyBinding() {
 
-                    return retval;
-                }
+				@Override
+				public String read() {
+					String retval = null;
 
-                @Override
-                public void write( String value )
-                {
-                    if( PositionResource.this.point == null )
-                    {
-                        PositionResource.this.point = new Point();
-                    }
+					if (PositionResource.this._point != null) {
+						if (Position.PROP_X.equals(def) || ConnectionBendpoint.PROP_X.equals(def)) {
+							retval = Integer.toString(PositionResource.this._point.getX());
+						}
+						else if (Position.PROP_Y.equals(def) || ConnectionBendpoint.PROP_Y.equals(def)) {
+							retval = Integer.toString(PositionResource.this._point.getY());
+						}
+					}
 
-                    if( Position.PROP_X.equals( def ) || ConnectionBendpoint.PROP_X.equals( def ) )
-                    {
-                        PositionResource.this.point.setX( Integer.parseInt( value ) );
-                    }
-                    else if( Position.PROP_Y.equals( def ) || ConnectionBendpoint.PROP_Y.equals( def ) )
-                    {
-                        PositionResource.this.point.setY( Integer.parseInt( value ) );
-                    }
+					return retval;
+				}
 
-                    if( Position.PROP_X.equals( def ) || Position.PROP_Y.equals( def ) )
-                    {
-                        WorkflowNodeMetadataObject parentMetadata =
-                            parent().adapt( WorkflowNodeMetadataResource.class ).getMetadata();
-                        parentMetadata.setNodeLocation( PositionResource.this.point );
-                    }
+				@Override
+				public void write(String value) {
+					if (PositionResource.this._point == null) {
+						PositionResource.this._point = new Point();
+					}
 
-                    parent().adapt( WorkflowNodeMetadataResource.class ).saveMetadata();
-                }
-            };
-        }
+					if (Position.PROP_X.equals(def) || ConnectionBendpoint.PROP_X.equals(def)) {
+						PositionResource.this._point.setX(Integer.parseInt(value));
+					}
+					else if (Position.PROP_Y.equals(def) || ConnectionBendpoint.PROP_Y.equals(def)) {
+						PositionResource.this._point.setY(Integer.parseInt(value));
+					}
 
-        if( binding != null )
-        {
-            binding.init( property );
-        }
+					if (Position.PROP_X.equals(def) || Position.PROP_Y.equals(def)) {
+						WorkflowNodeMetadataResource metadataResource =
+							parent().adapt(WorkflowNodeMetadataResource.class);
 
-        return binding;
-    }
+						WorkflowNodeMetadataObject parentMetadata = metadataResource.getMetadata();
+
+						parentMetadata.setNodeLocation(PositionResource.this._point);
+					}
+
+					WorkflowNodeMetadataResource metadataResource = parent().adapt(WorkflowNodeMetadataResource.class);
+
+					metadataResource.saveMetadata();
+				}
+
+			};
+		}
+
+		if (binding != null) {
+			binding.init(property);
+		}
+
+		return binding;
+	}
+
+	private Point _point;
 
 }

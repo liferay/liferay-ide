@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.op;
@@ -24,28 +27,29 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 /**
  * @author Gregory Amerson
  */
-public interface NewForkNodeOp extends NewNodeOp
-{
-    ElementType TYPE = new ElementType( NewForkNodeOp.class );
+public interface NewForkNodeOp extends NewNodeOp {
 
-    @Type( base = NewForkNode.class )
-    @Label( standard = "new fork node" )
-    ImpliedElementProperty PROP_NEW_FORK_NODE = new ImpliedElementProperty( TYPE, "NewForkNode" );
+	public ElementType TYPE = new ElementType(NewForkNodeOp.class);
 
-    NewForkNode getNewForkNode();
+	public NewForkNode getNewForkNode();
 
-    @Label( standard = "fork nodes" )
-    @Length( min = 0, max = 2 )
-    ListProperty PROP_CONNECTED_NODES = new ListProperty( TYPE, NewNodeOp.PROP_CONNECTED_NODES );
+	public Value<Boolean> isAddJoin();
 
-    // *** AddJoin ***
+	public void setAddJoin(Boolean value);
 
-    @Type( base = Boolean.class )
-    @Label( standard = "Automatically add join node" )
-    @DefaultValue( text = "true" )
-    ValueProperty PROP_ADD_JOIN = new ValueProperty( TYPE, "AddJoin" );
+	public void setAddJoin(String value);
 
-    Value<Boolean> isAddJoin();
-    void setAddJoin( Boolean value );
-    void setAddJoin( String value );
+	@DefaultValue(text = "true")
+	@Label(standard = "Automatically add join node")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_ADD_JOIN = new ValueProperty(TYPE, "AddJoin");
+
+	@Label(standard = "fork nodes")
+	@Length(max = 2, min = 0)
+	public ListProperty PROP_CONNECTED_NODES = new ListProperty(TYPE, NewNodeOp.PROP_CONNECTED_NODES);
+
+	@Label(standard = "new fork node")
+	@Type(base = NewForkNode.class)
+	public ImpliedElementProperty PROP_NEW_FORK_NODE = new ImpliedElementProperty(TYPE, "NewForkNode");
+
 }

@@ -1,1 +1,1 @@
-<#assign indexable = serviceContext.getAttribute("indexable")!"">
+<#assign indexable = serviceContext.getAttribute("indexable")!"" />

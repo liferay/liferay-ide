@@ -1,1 +1,1 @@
-<#assign displayDateDay = serviceContext.getAttribute("displayDateDay")!"">
+<#assign displayDateDay = serviceContext.getAttribute("displayDateDay")!"" />

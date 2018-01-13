@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.navigator;
@@ -36,160 +39,154 @@ import org.eclipse.ui.navigator.ICommonViewerWorkbenchSite;
 /**
  * @author Gregory Amerson
  */
-public class WorkflowDefinitionsActionProvider extends CommonActionProvider
-{
+public class WorkflowDefinitionsActionProvider extends CommonActionProvider {
 
-    public static final String NEW_MENU_ID = "org.eclipse.wst.server.ui.internal.cnf.newMenuId";
-    public static final String TOP_SECTION_END_SEPARATOR = "org.eclipse.wst.server.ui.internal.cnf.topSectionEnd";
-    public static final String TOP_SECTION_START_SEPARATOR = "org.eclipse.wst.server.ui.internal.cnf.topSectionStart";
+	public static final String NEW_MENU_ID = "org.eclipse.wst.server.ui.internal.cnf.newMenuId";
 
-    private ICommonActionExtensionSite actionSite;
-    private EditWorkflowDefinitionAction editAction;
-    private PublishWorkflowDefinitionAction publishAction;
-    private RefreshWorkflowDefinitionsAction refreshAction;
-    private UploadNewWorkflowDefinitionAction uploadAction;
+	public static final String TOP_SECTION_END_SEPARATOR = "org.eclipse.wst.server.ui.internal.cnf.topSectionEnd";
 
-    public WorkflowDefinitionsActionProvider()
-    {
-        super();
-    }
+	public static final String TOP_SECTION_START_SEPARATOR = "org.eclipse.wst.server.ui.internal.cnf.topSectionStart";
 
-    private void addListeners( CommonViewer tableViewer )
-    {
-        tableViewer.addOpenListener( new IOpenListener()
-        {
+	public WorkflowDefinitionsActionProvider() {
+	}
 
-            public void open( OpenEvent event )
-            {
-                try
-                {
-                    IStructuredSelection sel = (IStructuredSelection) event.getSelection();
-                    Object data = sel.getFirstElement();
+	public void fillContextMenu(IMenuManager menu) {
+		/*
+		 * This is a temp workaround to clean up the default group that are
+		 * provided by CNF
+		 */
+		menu.removeAll();
 
-                    if( !( data instanceof WorkflowDefinitionEntry ) )
-                    {
-                        return;
-                    }
+		ICommonViewerSite site = _actionSite.getViewSite();
+		IStructuredSelection selection = null;
 
-                    WorkflowDefinitionsActionProvider.this.editAction.run();
+		if (site instanceof ICommonViewerWorkbenchSite) {
+			ICommonViewerWorkbenchSite wsSite = (ICommonViewerWorkbenchSite)site;
 
-                }
-                catch( Exception e )
-                {
-                    KaleoUI.logError( "Error opening kaleo workflow.", e );
-                }
-            }
-        } );
-    }
+			selection = (IStructuredSelection)wsSite.getSelectionProvider().getSelection();
+		}
 
-    protected void addTopSection(
-        IMenuManager menu, WorkflowDefinitionEntry definition, WorkflowDefinitionsFolder definitionsFolder )
-    {
-        // open action
-        if( definition != null )
-        {
-            menu.add( editAction );
-            menu.add( publishAction );
-        }
+		WorkflowDefinitionEntry definition = null;
 
-        if( definitionsFolder != null )
-        {
-            menu.add( refreshAction );
-            menu.add( uploadAction );
-        }
-    }
+		WorkflowDefinitionsFolder definitionsFolder = null;
 
-    public void fillContextMenu( IMenuManager menu )
-    {
-        // This is a temp workaround to clean up the default group that are provided by CNF
-        menu.removeAll();
+		if ((selection != null) && !selection.isEmpty()) {
+			Iterator<?> iterator = selection.iterator();
 
-        ICommonViewerSite site = actionSite.getViewSite();
-        IStructuredSelection selection = null;
+			Object obj = iterator.next();
 
-        if( site instanceof ICommonViewerWorkbenchSite )
-        {
-            ICommonViewerWorkbenchSite wsSite = (ICommonViewerWorkbenchSite) site;
-            selection = (IStructuredSelection) wsSite.getSelectionProvider().getSelection();
-        }
+			if (obj instanceof WorkflowDefinitionEntry) {
+				definition = (WorkflowDefinitionEntry)obj;
+			}
 
-        WorkflowDefinitionEntry definition = null;
-        WorkflowDefinitionsFolder definitionsFolder = null;
+			if (obj instanceof WorkflowDefinitionsFolder) {
+				definitionsFolder = (WorkflowDefinitionsFolder)obj;
+			}
 
-        if( selection != null && !selection.isEmpty() )
-        {
-            Iterator<?> iterator = selection.iterator();
-            Object obj = iterator.next();
+			if (iterator.hasNext()) {
+				definition = null;
+				definitionsFolder = null;
+			}
+		}
 
-            if( obj instanceof WorkflowDefinitionEntry )
-            {
-                definition = (WorkflowDefinitionEntry) obj;
-            }
+		menu.add(_invisibleSeparator(TOP_SECTION_START_SEPARATOR));
+		addTopSection(menu, definition, definitionsFolder);
+		menu.add(_invisibleSeparator(TOP_SECTION_END_SEPARATOR));
+		menu.add(new Separator());
 
-            if( obj instanceof WorkflowDefinitionsFolder )
-            {
-                definitionsFolder = (WorkflowDefinitionsFolder) obj;
-            }
+		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS + "-end"));
+	}
 
-            if( iterator.hasNext() )
-            {
-                definition = null;
-                definitionsFolder = null;
-            }
-        }
+	public void init(ICommonActionExtensionSite site) {
+		super.init(site);
+		_actionSite = site;
+		ICommonViewerSite viewerSite = site.getViewSite();
 
-        menu.add( invisibleSeparator( TOP_SECTION_START_SEPARATOR ) );
-        addTopSection( menu, definition, definitionsFolder );
-        menu.add( invisibleSeparator( TOP_SECTION_END_SEPARATOR ) );
-        menu.add( new Separator() );
+		if (viewerSite instanceof ICommonViewerWorkbenchSite) {
+			StructuredViewer v = site.getStructuredViewer();
 
-        menu.add( new Separator( IWorkbenchActionConstants.MB_ADDITIONS ) );
-        menu.add( new Separator( IWorkbenchActionConstants.MB_ADDITIONS + "-end" ) );
-    }
+			if (v instanceof CommonViewer) {
+				CommonViewer cv = (CommonViewer)v;
+				ICommonViewerWorkbenchSite wsSite = (ICommonViewerWorkbenchSite)viewerSite;
+				_addListeners(cv);
+				_makeActions(wsSite.getSelectionProvider());
+			}
+		}
+	}
 
-    public void init( ICommonActionExtensionSite site )
-    {
-        super.init( site );
-        this.actionSite = site;
-        ICommonViewerSite viewerSite = site.getViewSite();
+	protected void addTopSection(
+		IMenuManager menu, WorkflowDefinitionEntry definition, WorkflowDefinitionsFolder definitionsFolder) {
 
-        if( viewerSite instanceof ICommonViewerWorkbenchSite )
-        {
-            StructuredViewer v = site.getStructuredViewer();
+		// open action
 
-            if( v instanceof CommonViewer )
-            {
-                CommonViewer cv = (CommonViewer) v;
-                ICommonViewerWorkbenchSite wsSite = (ICommonViewerWorkbenchSite) viewerSite;
-                addListeners( cv );
-                makeActions( cv, wsSite.getSelectionProvider() );
-            }
-        }
-    }
+		if (definition != null) {
+			menu.add(_editAction);
+			menu.add(_publishAction);
+		}
 
-    private Separator invisibleSeparator( String s )
-    {
-        Separator sep = new Separator( s );
-        sep.setVisible( false );
-        return sep;
-    }
+		if (definitionsFolder != null) {
+			menu.add(_refreshAction);
+			menu.add(_uploadAction);
+		}
+	}
 
-    private void makeActions( CommonViewer tableViewer, ISelectionProvider provider )
-    {
-        // Shell shell = tableViewer.getTree().getShell();
+	private void _addListeners(CommonViewer tableViewer) {
+		tableViewer.addOpenListener(
+			new IOpenListener() {
 
-        // create the open action
-        editAction = new EditWorkflowDefinitionAction( provider );
-        refreshAction = new RefreshWorkflowDefinitionsAction( provider );
-        publishAction = new PublishWorkflowDefinitionAction( provider );
-        uploadAction = new UploadNewWorkflowDefinitionAction( provider );
+				public void open(OpenEvent event) {
+					try {
+						IStructuredSelection sel = (IStructuredSelection)event.getSelection();
 
-        // create copy, paste, and delete actions
-        // pasteAction = new PasteAction(shell, provider, clipboard);
-        // copyAction = new CopyAction(provider, clipboard, pasteAction);
-        // globalDeleteAction = new GlobalDeleteAction(shell, provider);
-        // renameAction = new RenameAction(shell, tableViewer, provider);
+						Object data = sel.getFirstElement();
 
-    }
+						if (!(data instanceof WorkflowDefinitionEntry)) {
+							return;
+						}
+
+						WorkflowDefinitionsActionProvider.this._editAction.run();
+					}
+					catch (Exception e) {
+						KaleoUI.logError("Error opening kaleo workflow.", e);
+					}
+				}
+
+			});
+	}
+
+	private Separator _invisibleSeparator(String s) {
+		Separator sep = new Separator(s);
+
+		sep.setVisible(false);
+
+		return sep;
+	}
+
+	private void _makeActions(ISelectionProvider provider) {
+
+		// Shell shell = tableViewer.getTree().getShell();
+
+		// create the open action
+
+		_editAction = new EditWorkflowDefinitionAction(provider);
+		_refreshAction = new RefreshWorkflowDefinitionsAction(provider);
+		_publishAction = new PublishWorkflowDefinitionAction(provider);
+		_uploadAction = new UploadNewWorkflowDefinitionAction(provider);
+
+		/*
+		 * create copy, paste, and delete actions pasteAction = new
+		 * PasteAction(shell, provider, clipboard); copyAction = new
+		 * CopyAction(provider, clipboard, pasteAction); globalDeleteAction =
+		 * new GlobalDeleteAction(shell, provider); renameAction = new
+		 * RenameAction(shell, tableViewer, provider);
+		 */
+	}
+
+	private ICommonActionExtensionSite _actionSite;
+	private EditWorkflowDefinitionAction _editAction;
+	private PublishWorkflowDefinitionAction _publishAction;
+	private RefreshWorkflowDefinitionsAction _refreshAction;
+	private UploadNewWorkflowDefinitionAction _uploadAction;
 
 }

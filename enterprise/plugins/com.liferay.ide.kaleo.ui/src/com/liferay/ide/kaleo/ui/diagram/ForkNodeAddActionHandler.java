@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.diagram;
@@ -22,62 +25,63 @@ import com.liferay.ide.kaleo.core.op.NewForkNode;
 import com.liferay.ide.kaleo.core.op.NewForkNodeOp;
 import com.liferay.ide.kaleo.core.op.NewNodeOp;
 
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.diagram.editor.DiagramNodeTemplate;
 
 /**
  * @author Gregory Amerson
  */
-public class ForkNodeAddActionHandler extends NewNodeAddActionHandler
-{
+public class ForkNodeAddActionHandler extends NewNodeAddActionHandler {
 
-    private static final String WIZARD_ID = "newForkNodeWizard";
+	public ForkNodeAddActionHandler(DiagramNodeTemplate nodeTemplate) {
+		super(nodeTemplate);
+	}
 
-    public ForkNodeAddActionHandler( DiagramNodeTemplate nodeTemplate )
-    {
-        super( nodeTemplate );
-    }
+	@Override
+	public void postDiagramNodePartAdded(NewNodeOp op, CanTransition newNodeFromWizard, CanTransition newNode) {
+		NewForkNodeOp newForkOp = op.nearest(NewForkNodeOp.class);
+		NewForkNode newForkNodeFromWizard = newNodeFromWizard.nearest(NewForkNode.class);
+		Fork newFork = newNode.nearest(Fork.class);
 
-    @Override
-    protected NewNodeOp createOp( Presentation context )
-    {
-        return NewForkNodeOp.TYPE.instantiate();
-    }
+		WorkflowDefinition workflowDefinition = newFork.nearest(WorkflowDefinition.class);
 
-    @Override
-    protected String getWizardId()
-    {
-        return WIZARD_ID;
-    }
+		if (newForkOp.isAddJoin().content(true)) {
+			Join newJoin = workflowDefinition.getJoins().insert();
+			String newJoinName = newForkNodeFromWizard.getName().content() + " Join";
 
-    @Override
-    public void postDiagramNodePartAdded( NewNodeOp op, CanTransition newNodeFromWizard, CanTransition newNode )
-    {
-        final NewForkNodeOp newForkOp = op.nearest( NewForkNodeOp.class );
-        NewForkNode newForkNodeFromWizard = newNodeFromWizard.nearest( NewForkNode.class );
-        final Fork newFork = newNode.nearest( Fork.class );
-        final WorkflowDefinition workflowDefinition = newFork.nearest( WorkflowDefinition.class );
+			newJoin.setName(newJoinName);
 
-        if( newForkOp.isAddJoin().content( true ) )
-        {
-            Join newJoin = workflowDefinition.getJoins().insert();
-            final String newJoinName = newForkNodeFromWizard.getName().content() + " Join";
+			for (Node connectedNode : op.getConnectedNodes()) {
+				for (WorkflowNode diagramNode : workflowDefinition.getDiagramNodes()) {
+					Value<String> nodeName = connectedNode.getName();
 
-            newJoin.setName( newJoinName );
+					if (nodeName.content().equals(diagramNode.getName().content())) {
+						CanTransition canTransition = diagramNode.nearest(CanTransition.class);
 
-            for( Node connectedNode : op.getConnectedNodes() )
-            {
-                for( WorkflowNode diagramNode : workflowDefinition.getDiagramNodes() )
-                {
-                    if( connectedNode.getName().content().equals( diagramNode.getName().content() ) )
-                    {
-                        Transition newTransition =
-                            diagramNode.nearest( CanTransition.class ).getTransitions().insert();
-                        newTransition.setName( newJoinName );
-                        newTransition.setTarget( newJoinName );
-                    }
-                }
-            }
-        }
-    }
+						ElementList<Transition> transitions = canTransition.getTransitions();
+
+						Transition newTransition = transitions.insert();
+
+						newTransition.setName(newJoinName);
+						newTransition.setTarget(newJoinName);
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	protected NewNodeOp createOp(Presentation context) {
+		return NewForkNodeOp.TYPE.instantiate();
+	}
+
+	@Override
+	protected String getWizardId() {
+		return _WIZARD_ID;
+	}
+
+	private static final String _WIZARD_ID = "newForkNodeWizard";
+
 }

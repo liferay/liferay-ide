@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.op;
@@ -42,102 +45,100 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 /**
  * @author Gregory Amerson
  */
-@Service( impl = NewNodeOpAdapter.class )
-public interface NewNodeOp extends ExecutableElement
-{
+@Service(impl = NewNodeOpAdapter.class)
+public interface NewNodeOp extends ExecutableElement {
 
-    @Label( standard = "new condition" )
-    @Image( path = "images/condition_16x16.png" )
-    public interface ConditionForOp extends Fork, Scriptable
-    {
-        ElementType TYPE = new ElementType( ConditionForOp.class );
+	@Image(path = "images/condition_16x16.png")
+	@Label(standard = "new condition")
+	public interface ConditionForOp extends Fork, Scriptable {
 
-        @Length( min = 0 )
-        ListProperty PROP_TRANSITIONS = new ListProperty( TYPE, Fork.PROP_TRANSITIONS );
-    }
+		public ElementType TYPE = new ElementType(ConditionForOp.class);
 
-    @Label( standard = "new fork" )
-    public interface ForkForOp extends Fork
-    {
-        ElementType TYPE = new ElementType( ForkForOp.class );
+		@Length(min = 0)
+		public ListProperty PROP_TRANSITIONS = new ListProperty(TYPE, Fork.PROP_TRANSITIONS);
 
-        @Length( min = 0 )
-        ListProperty PROP_TRANSITIONS = new ListProperty( TYPE, Fork.PROP_TRANSITIONS );
-    }
+	}
 
-    @Label( standard = "new join" )
-    public interface JoinForOp extends Join
-    {
-        ElementType TYPE = new ElementType( JoinForOp.class );
+	@Label(standard = "new fork")
+	public interface ForkForOp extends Fork {
 
-        @Length( min = 0 )
-        ListProperty PROP_TRANSITIONS = new ListProperty( TYPE, Join.PROP_TRANSITIONS );
-    }
+		public ElementType TYPE = new ElementType(ForkForOp.class);
 
-    @Label( standard = "new join XOR" )
-    public interface JoinXorForOp extends JoinXor
-    {
-        ElementType TYPE = new ElementType( JoinXorForOp.class );
+		@Length(min = 0)
+		public ListProperty PROP_TRANSITIONS = new ListProperty(TYPE, Fork.PROP_TRANSITIONS);
 
-        @Length( min = 0 )
-        ListProperty PROP_TRANSITIONS = new ListProperty( TYPE, Join.PROP_TRANSITIONS );
-    }
+	}
 
-    @Label( standard = "new state" )
-    public interface StateForOp extends State
-    {
-        ElementType TYPE = new ElementType( StateForOp.class );
+	@Label(standard = "new join")
+	public interface JoinForOp extends Join {
 
-        @Length( min = 0 )
-        ListProperty PROP_TRANSITIONS = new ListProperty( TYPE, State.PROP_TRANSITIONS );
-    }
+		public ElementType TYPE = new ElementType(JoinForOp.class);
 
-    @Label( standard = "new task" )
-    public interface TaskForOp extends Task
-    {
-        ElementType TYPE = new ElementType( TaskForOp.class );
+		@Length(min = 0)
+		public ListProperty PROP_TRANSITIONS = new ListProperty(TYPE, Join.PROP_TRANSITIONS);
 
-        @Length( min = 0 )
-        ListProperty PROP_TRANSITIONS = new ListProperty( TYPE, Task.PROP_TRANSITIONS );
-    }
+	}
 
-    ElementType TYPE = new ElementType( NewNodeOp.class );
+	@Label(standard = "new join XOR")
+	public interface JoinXorForOp extends JoinXor {
 
-    // *** ConnectedNodes ***
+		public ElementType TYPE = new ElementType(JoinXorForOp.class);
 
-    @Type
-    (
-        base = Node.class,
-        possible =
-        {
-            ChooseDiagramNode.class,
-            StateForOp.class,
-            TaskForOp.class,
-            ConditionForOp.class,
-            ForkForOp.class,
-            JoinForOp.class,
-            JoinXorForOp.class
-        }
-    )
-    @Label( standard = "connected nodes" )
-    ListProperty PROP_CONNECTED_NODES = new ListProperty( TYPE, "ConnectedNodes" );
+		@Length(min = 0)
+		public ListProperty PROP_TRANSITIONS = new ListProperty(TYPE, Join.PROP_TRANSITIONS);
 
-    ElementList<Node> getConnectedNodes();
+	}
 
-    @Type( base = Boolean.class )
-    @Label( standard = "Use Add wizards on drop from palette" )
-    ValueProperty PROP_USE_NODE_WIZARDS = new ValueProperty( TYPE, "UseNodeWizards" );
+	@Label(standard = "new state")
+	public interface StateForOp extends State {
 
-    Value<Boolean> isUseNodeWizards();
-    void setUseNodeWizards( Boolean value );
-    void setUseNodeWizards( String value );
+		public ElementType TYPE = new ElementType(StateForOp.class);
 
-    @Type( base = WorkflowDefinition.class )
-    ElementProperty PROP_WORKFLOW_DEFINITION = new ElementProperty( TYPE, "WorkflowDefinition" );
+		@Length(min = 0)
+		public ListProperty PROP_TRANSITIONS = new ListProperty(TYPE, State.PROP_TRANSITIONS);
 
-    ElementHandle<WorkflowDefinition> getWorkflowDefinition();
+	}
 
-    @DelegateImplementation( DefaultOpMethods.class )
-    Status execute( ProgressMonitor monitor );
+	@Label(standard = "new task")
+	public interface TaskForOp extends Task {
+
+		public ElementType TYPE = new ElementType(TaskForOp.class);
+
+		@Length(min = 0)
+		public ListProperty PROP_TRANSITIONS = new ListProperty(TYPE, Task.PROP_TRANSITIONS);
+
+	}
+
+	public ElementType TYPE = new ElementType(NewNodeOp.class);
+
+	@DelegateImplementation(DefaultOpMethods.class)
+	public Status execute(ProgressMonitor monitor);
+
+	public ElementList<Node> getConnectedNodes();
+
+	public ElementHandle<WorkflowDefinition> getWorkflowDefinition();
+
+	public Value<Boolean> isUseNodeWizards();
+
+	public void setUseNodeWizards(Boolean value);
+
+	public void setUseNodeWizards(String value);
+
+	@Label(standard = "connected nodes")
+	@Type(
+		base = Node.class,
+		possible = {
+			ChooseDiagramNode.class, StateForOp.class, TaskForOp.class, ConditionForOp.class, ForkForOp.class,
+			JoinForOp.class, JoinXorForOp.class
+		}
+	)
+	public ListProperty PROP_CONNECTED_NODES = new ListProperty(TYPE, "ConnectedNodes");
+
+	@Label(standard = "Use Add wizards on drop from palette")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_USE_NODE_WIZARDS = new ValueProperty(TYPE, "UseNodeWizards");
+
+	@Type(base = WorkflowDefinition.class)
+	public ElementProperty PROP_WORKFLOW_DEFINITION = new ElementProperty(TYPE, "WorkflowDefinition");
 
 }

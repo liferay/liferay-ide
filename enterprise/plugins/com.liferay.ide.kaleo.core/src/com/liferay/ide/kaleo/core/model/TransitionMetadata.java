@@ -1,13 +1,17 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
+
 package com.liferay.ide.kaleo.core.model;
 
 import org.eclipse.sapphire.Element;
@@ -20,26 +24,26 @@ import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 
 /**
- * abstract-workflow-node-complex-type
- *
  * @author Gregory Amerson
  */
-public interface TransitionMetadata extends Element
-{
-    ElementType TYPE = new ElementType( TransitionMetadata.class );
+public interface TransitionMetadata extends Element {
 
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+	public ElementType TYPE = new ElementType(TransitionMetadata.class);
 
-    Value<String> getName();
-    void setName( String value );
+	public ElementList<ConnectionBendpoint> getBendpoints();
 
-    @Type( base = Position.class )
-    ImpliedElementProperty PROP_LABEL_LOCATION = new ImpliedElementProperty( TYPE, "LabelLocation" );
+	public Position getLabelLocation();
 
-    Position getLabelLocation();
+	public Value<String> getName();
 
-    @Type( base = ConnectionBendpoint.class )
-    ListProperty PROP_BENDPOINTS = new ListProperty( TYPE, "Bendpoints" );
+	public void setName(String value);
 
-    ElementList<ConnectionBendpoint> getBendpoints();
+	@Type(base = ConnectionBendpoint.class)
+	public ListProperty PROP_BENDPOINTS = new ListProperty(TYPE, "Bendpoints");
+
+	@Type(base = Position.class)
+	public ImpliedElementProperty PROP_LABEL_LOCATION = new ImpliedElementProperty(TYPE, "LabelLocation");
+
+	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
+
 }

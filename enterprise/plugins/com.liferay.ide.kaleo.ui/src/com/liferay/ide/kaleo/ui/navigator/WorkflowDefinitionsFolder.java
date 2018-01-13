@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.navigator;
@@ -26,6 +29,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.wst.server.core.IServer;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,225 +37,218 @@ import org.json.JSONObject;
 /**
  * @author Greg Amerson
  */
-public class WorkflowDefinitionsFolder
-{
+public class WorkflowDefinitionsFolder {
 
-    private WorkflowDefinitionEntry[] cachedDefinitions;
-    private Job cacheDefinitionsJob;
-    private IStatus currentStatus;
-    private IServer input;
-    private ICommonContentExtensionSite site;
+	public WorkflowDefinitionsFolder(ICommonContentExtensionSite site, IServer server) {
+		_site = site;
+		_input = server;
+		KaleoCore.updateKaleoConnectionSettings(_getLiferayServer());
+		_scheduleCacheDefinitionsJob();
+	}
 
-    public WorkflowDefinitionsFolder( ICommonContentExtensionSite site, IServer server )
-    {
-        this.site = site;
-        this.input = server;
-        KaleoCore.updateKaleoConnectionSettings( getLiferayServer() );
-        scheduleCacheDefinitionsJob();
-    }
+	public void clearCache() {
+		_cachedDefinitions = null;
+	}
 
-    public void clearCache()
-    {
-        this.cachedDefinitions = null;
-    }
+	public Object[] getChildren() {
+		if (_input.getServerState() != IServer.STATE_STARTED) {
+			return null;
+		}
 
-    private Object createLoadingNode()
-    {
-        WorkflowDefinitionEntry node = new WorkflowDefinitionEntry();
-        node.setLoadingNode( true );
-        return node;
-    }
+		if (_getLiferayServer() == null) {
+			return null;
+		}
 
-    public Object[] getChildren()
-    {
-        if( this.input.getServerState() != IServer.STATE_STARTED )
-        {
-            return null;
-        }
+		if (_cachedDefinitions == null) {
+			_scheduleCacheDefinitionsJob();
 
-        if( getLiferayServer() == null )
-        {
-            return null;
-        }
+			return new Object[] {_createLoadingNode()};
+		}
 
-        if( this.cachedDefinitions == null )
-        {
-            scheduleCacheDefinitionsJob();
+		return _cachedDefinitions;
+	}
 
-            return new Object[] { createLoadingNode() };
-        }
+	public IServer getParent() {
+		return _input;
+	}
 
-        return this.cachedDefinitions;
-    }
+	public IStatus getStatus() {
+		return _currentStatus;
+	}
 
-    private ILiferayServer getLiferayServer()
-    {
-        return (ILiferayServer) this.input.loadAdapter( ILiferayServer.class, null );
-    }
+	private Object _createLoadingNode() {
+		WorkflowDefinitionEntry node = new WorkflowDefinitionEntry();
 
-    public IServer getParent()
-    {
-        return this.input;
-    }
+		node.setLoadingNode(true);
 
-    public IStatus getStatus()
-    {
-        return this.currentStatus;
-    }
+		return node;
+	}
 
-    private boolean same( JSONObject json1, JSONObject json2, String field ) throws JSONException
-    {
-        return json1 != null && json2 != null && json1.get( field ) != null &&
-            json1.get( field ).equals( json2.get( field ) );
-    }
+	private ILiferayServer _getLiferayServer() {
+		Object object = _input.loadAdapter(ILiferayServer.class, null);
 
-    private void scheduleCacheDefinitionsJob()
-    {
-        if( cacheDefinitionsJob == null )
-        {
-            cacheDefinitionsJob = new Job( "Loading kaleo workflows..." )
-            {
+		return (ILiferayServer)object;
+	}
 
-                @Override
-                protected IStatus run( IProgressMonitor monitor )
-                {
-                    currentStatus = KaleoUI.createInfoStatus( "Loading kaleo workflows..." );
+	private boolean _same(JSONObject json1, JSONObject json2, String field) throws JSONException {
+		if ((json1 != null) && (json2 != null) && (json1.get(field) != null) &&
+			json1.get(field).equals(json2.get(field))) {
 
-                    site.getService().update();
+			return true;
+		}
 
-                    IKaleoConnection kaleoConnection = KaleoCore.getKaleoConnection( getLiferayServer() );
+		return false;
+	}
 
-                    List<WorkflowDefinitionEntry> definitionEntries = new ArrayList<WorkflowDefinitionEntry>();
+	private void _scheduleCacheDefinitionsJob() {
+		if (_cacheDefinitionsJob == null) {
+			_cacheDefinitionsJob = new Job("Loading kaleo workflows...") {
 
-                    IStatus errorStatus = null;
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					_currentStatus = KaleoUI.createInfoStatus("Loading kaleo workflows...");
 
-                    try
-                    {
-                        JSONArray kaleoDefinitions = kaleoConnection.getKaleoDefinitions();
-                        JSONArray kaleoDraftDefinitions = kaleoConnection.getKaleoDraftWorkflowDefinitions();
+					_site.getService().update();
 
-                        for( int i = 0; i < kaleoDefinitions.length(); i++ )
-                        {
-                            JSONObject definition = (JSONObject) kaleoDefinitions.get( i );
+					IKaleoConnection kaleoConnection = KaleoCore.getKaleoConnection(_getLiferayServer());
 
-                            // if( definition.has( "active" ) && !definition.getBoolean( "active" ) )
-                            // {
-                            // continue;
-                            // }
+					List<WorkflowDefinitionEntry> definitionEntries = new ArrayList<>();
 
-                            // kaleoConnection.getLatestKaleoDraftDefinition(
-                            // definition.getString( "name" ), definition.getString( "version" ) );
+					IStatus errorStatus = null;
 
-                            WorkflowDefinitionEntry definitionEntry =
-                                WorkflowDefinitionEntry.createFromJSONObject( definition );
-                            definitionEntry.setParent( WorkflowDefinitionsFolder.this );
+					try {
+						JSONArray kaleoDefinitions = kaleoConnection.getKaleoDefinitions();
+						JSONArray kaleoDraftDefinitions = kaleoConnection.getKaleoDraftWorkflowDefinitions();
 
-                            if( kaleoDraftDefinitions != null )
-                            {
-                                for( int j = 0; j < kaleoDraftDefinitions.length(); j++ )
-                                {
-                                    JSONObject draftDefinition = kaleoDraftDefinitions.getJSONObject( j );
+						for (int i = 0; i < kaleoDefinitions.length(); i++) {
+							JSONObject definition = (JSONObject)kaleoDefinitions.get(i);
 
-                                    if( same( definition, draftDefinition, "name" ) &&
-                                        same( definition, draftDefinition, "version" ) )
-                                    {
-                                        if( definitionEntry.getDraftVersion() < draftDefinition.getInt( "draftVersion" ) )
-                                        {
-                                            if (draftDefinition.has( "title" ))
-                                            {
-                                                definitionEntry.setTitle( draftDefinition.getString("title") );
-                                            }
+							/*
+							 * if( definition.has( "active" ) &&
+							 * !definition.getBoolean( "active" ) ) { continue;
+							 * }
+							 */
 
-                                            if (draftDefinition.has( "titleMap" ))
-                                            {
-                                                definitionEntry.setTitleMap( draftDefinition.getString("titleMap") );
-                                            }
-                                            else
-                                            {
-                                                definitionEntry.setTitleMap( KaleoUtil.createJSONTitleMap( definitionEntry.getTitle() ) );
-                                            }
+							/*
+							 * kaleoConnection.getLatestKaleoDraftDefinition(
+							 * definition.getString( "name" ),
+							 * definition.getString( "version" ) );
+							 */
+							WorkflowDefinitionEntry definitionEntry = WorkflowDefinitionEntry.createFromJsObject(
+								definition);
 
-                                            definitionEntry.setCompanyId( draftDefinition.getLong( "companyId" ) );
-                                            definitionEntry.setContent( draftDefinition.getString( "content" ) );
-                                            definitionEntry.setDraftVersion( draftDefinition.getInt( "draftVersion" ) );
-                                            definitionEntry.setTitleCurrentValue( draftDefinition.getString( "titleCurrentValue" ) );
-                                            definitionEntry.setUserId( draftDefinition.getLong( "userId" ) );
-                                            definitionEntry.setGroupId( draftDefinition.getLong( "groupId" ) );
-                                            definitionEntry.setLocation( kaleoConnection.getHost() + ":" +
-                                                kaleoConnection.getHttpPort() );
-                                        }
-                                    }
+							definitionEntry.setParent(WorkflowDefinitionsFolder.this);
 
-                                }
-                            }
+							if (kaleoDraftDefinitions != null) {
+								for (int j = 0; j < kaleoDraftDefinitions.length(); j++) {
+									JSONObject draftDefinition = kaleoDraftDefinitions.getJSONObject(j);
 
-                            definitionEntries.add( definitionEntry );
-                        }
+									if (_same(definition, draftDefinition, "name") &&
+										_same(definition, draftDefinition, "version")) {
 
-                        if( kaleoDraftDefinitions != null )
-                        {
-                            for( int i = 0; i < kaleoDraftDefinitions.length(); i++ )
-                            {
-                                JSONObject draftDefinition = kaleoDraftDefinitions.getJSONObject( i );
-                                WorkflowDefinitionEntry draftEntry = null;
+										int draftVersion = draftDefinition.getInt("draftVersion");
 
-                                for( WorkflowDefinitionEntry entry : definitionEntries )
-                                {
-                                    if( entry.getName().equals( draftDefinition.getString( "name" ) ) &&
-                                        entry.getVersion() == draftDefinition.getInt( "version" ) )
-                                    {
-                                        draftEntry = entry;
+										if (definitionEntry.getDraftVersion() < draftVersion) {
+											if (draftDefinition.has("title")) {
+												definitionEntry.setTitle(draftDefinition.getString("title"));
+											}
 
-                                        if( entry.getDraftVersion() < draftDefinition.getInt( "draftVersion" ) )
-                                        {
-                                            entry.setCompanyId( draftDefinition.getLong( "companyId" ) );
-                                            entry.setContent( draftDefinition.getString( "content" ) );
-                                            entry.setDraftVersion( draftDefinition.getInt( "draftVersion" ) );
-                                            entry.setTitleCurrentValue( draftDefinition.getString( "titleCurrentValue" ) );
-                                            entry.setUserId( draftDefinition.getLong( "userId" ) );
-                                            entry.setLocation( kaleoConnection.getHost() + ":" +
-                                                kaleoConnection.getHttpPort() );
-                                        }
-                                    }
-                                }
+											if (draftDefinition.has("titleMap")) {
+												definitionEntry.setTitleMap(draftDefinition.getString("titleMap"));
+											}
+											else {
+												definitionEntry.setTitleMap(
+													KaleoUtil.createJSONTitleMap(definitionEntry.getTitle()));
+											}
 
-                                if( draftEntry == null )
-                                {
-                                    // draftEntry = WorkflowDefinitionEntry.createFromJSONObject( draftDefinition );
-                                    // draftEntry.setParent( WorkflowDefinitionsFolder.this );
-                                    // draftEntry.setDraftVersion( draftDefinition.getInt( "draftVersion" ) );
-                                    // definitionEntries.add( draftEntry );
-                                }
-                            }
-                        }
+											definitionEntry.setCompanyId(draftDefinition.getLong("companyId"));
+											definitionEntry.setContent(draftDefinition.getString("content"));
+											definitionEntry.setDraftVersion(draftDefinition.getInt("draftVersion"));
 
-                        cachedDefinitions = definitionEntries.toArray( new WorkflowDefinitionEntry[0] );
+											String titleCurrentValue = draftDefinition.getString("titleCurrentValue");
 
-                    }
-                    catch( Exception e )
-                    {
-                        errorStatus = KaleoUI.createErrorStatus( e );
-                    }
+											definitionEntry.setTitleCurrentValue(titleCurrentValue);
 
-                    if( errorStatus != null )
-                    {
-                        currentStatus = errorStatus;
-                    }
-                    else
-                    {
-                        currentStatus = null;
-                    }
+											definitionEntry.setUserId(draftDefinition.getLong("userId"));
+											definitionEntry.setGroupId(draftDefinition.getLong("groupId"));
+											definitionEntry.setLocation(
+												kaleoConnection.getHost() + ":" + kaleoConnection.getHttpPort());
+										}
+									}
+								}
+							}
 
-                    site.getService().update();
+							definitionEntries.add(definitionEntry);
+						}
 
-                    cacheDefinitionsJob = null;
+						if (kaleoDraftDefinitions != null) {
+							for (int i = 0; i < kaleoDraftDefinitions.length(); i++) {
+								JSONObject draftDefinition = kaleoDraftDefinitions.getJSONObject(i);
+								WorkflowDefinitionEntry draftEntry = null;
 
-                    return Status.OK_STATUS;
-                }
-            };
+								for (WorkflowDefinitionEntry entry : definitionEntries) {
+									if (entry.getName().equals(draftDefinition.getString("name"))) {
+										if (entry.getVersion() == draftDefinition.getInt("version")) {
+											draftEntry = entry;
 
-            cacheDefinitionsJob.schedule();
-        }
-    }
+											if (entry.getDraftVersion() < draftDefinition.getInt("draftVersion")) {
+												entry.setCompanyId(draftDefinition.getLong("companyId"));
+												entry.setContent(draftDefinition.getString("content"));
+												entry.setDraftVersion(draftDefinition.getInt("draftVersion"));
+												entry.setTitleCurrentValue(
+													draftDefinition.getString("titleCurrentValue"));
+												entry.setUserId(draftDefinition.getLong("userId"));
+												entry.setLocation(
+													kaleoConnection.getHost() + ":" + kaleoConnection.getHttpPort());
+											}
+										}
+									}
+								}
+
+								if (draftEntry == null) {
+									/*
+									 * draftEntry = WorkflowDefinitionEntry.
+									 * createFromJSONObject( draftDefinition );
+									 * draftEntry.setParent(
+									 * WorkflowDefinitionsFolder.this );
+									 * draftEntry.setDraftVersion(
+									 * draftDefinition.getInt( "draftVersion" )
+									 * ); definitionEntries.add( draftEntry );
+									 */
+								}
+							}
+						}
+
+						_cachedDefinitions = definitionEntries.toArray(new WorkflowDefinitionEntry[0]);
+					}
+					catch (Exception e) {
+						errorStatus = KaleoUI.createErrorStatus(e);
+					}
+
+					if (errorStatus != null) {
+						_currentStatus = errorStatus;
+					}
+					else {
+						_currentStatus = null;
+					}
+
+					_site.getService().update();
+
+					_cacheDefinitionsJob = null;
+
+					return Status.OK_STATUS;
+				}
+
+			};
+
+			_cacheDefinitionsJob.schedule();
+		}
+	}
+
+	private WorkflowDefinitionEntry[] _cachedDefinitions;
+	private Job _cacheDefinitionsJob;
+	private IStatus _currentStatus;
+	private IServer _input;
+	private ICommonContentExtensionSite _site;
 
 }

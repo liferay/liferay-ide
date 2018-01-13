@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.editor;
@@ -21,29 +24,27 @@ import org.eclipse.ui.texteditor.ITextEditor;
 /**
  * @author Gregory Amerson
  */
-public class EditorSiteAdapterService extends UniversalConversionService
-{
+public class EditorSiteAdapterService extends UniversalConversionService {
 
-    @Override
-    public <A> A convert( Object object, Class<A> adapterType )
-    {
-        A retval = null;
+	@Override
+	public <A> A convert(Object object, Class<A> adapterType) {
+		A retval = null;
 
-        if( IEditorSite.class.equals( adapterType ) )
-        {
-            SapphirePart sapphirePart = context( SapphirePart.class );
-            Element localElement = sapphirePart.getLocalModelElement();
-            ITextEditor editor = localElement.adapt( ITextEditor.class );
+		if (IEditorSite.class.equals(adapterType)) {
+			SapphirePart sapphirePart = context(SapphirePart.class);
 
-            IWorkbenchPartSite editorSite = editor.getSite();
+			Element localElement = sapphirePart.getLocalModelElement();
 
-            if( editorSite instanceof IEditorSite )
-            {
-                retval = adapterType.cast( editorSite );
-            }
-        }
+			ITextEditor editor = localElement.adapt(ITextEditor.class);
 
-        return retval;
-    }
+			IWorkbenchPartSite editorSite = editor.getSite();
+
+			if (editorSite instanceof IEditorSite) {
+				retval = adapterType.cast(editorSite);
+			}
+		}
+
+		return retval;
+	}
 
 }

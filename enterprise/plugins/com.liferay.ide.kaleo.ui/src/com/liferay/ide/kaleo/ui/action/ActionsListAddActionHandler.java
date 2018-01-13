@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.action;
@@ -27,70 +30,63 @@ import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 
-
 /**
  * @author Gregory Amerson
  */
-public class ActionsListAddActionHandler extends DefaultListAddActionHandler
-{
+public class ActionsListAddActionHandler extends DefaultListAddActionHandler {
 
-    public static void addActionDefaults(Action newAction)
-    {
-        Node[] actions = new Node[0];
+	public static void addActionDefaults(Action newAction) {
+		Node[] actions = new Node[0];
 
-        if( newAction.nearest( Task.class ) != null )
-        {
-            actions = newAction.nearest( Task.class ).getTaskActions().toArray( new Node[0] );
-        }
-        else
-        {
-            actions = newAction.nearest( ActionTimer.class ).getActions().toArray( new Node[0] );
-        }
+		if (newAction.nearest(Task.class) != null) {
+			Task task = newAction.nearest(Task.class);
 
-        String newName = getDefaultName("newAction1", newAction, actions);
-        String defaultScriptLanguage =
-            KaleoModelUtil.getDefaultValue( newAction, KaleoCore.DEFAULT_SCRIPT_LANGUAGE_KEY, ScriptLanguageType.GROOVY );
+			actions = task.getTaskActions().toArray(new Node[0]);
+		}
+		else {
+			ActionTimer actionTimer = newAction.nearest(ActionTimer.class);
 
-        newAction.setName( newName );
-        newAction.setScriptLanguage( defaultScriptLanguage );
-        newAction.setExecutionType( Executable.DEFAULT_EXECUTION_TYPE );
+			actions = actionTimer.getActions().toArray(new Node[0]);
+		}
 
-        if (newAction.nearest( Task.class ) != null)
-        {
-            newAction.setScript( "/* specify task action script */" );
-        }
-        else
-        {
-            newAction.setScript( "/* specify action script */" );
-        }
-    }
+		String newName = getDefaultName("newAction1", newAction, actions);
+		String defaultScriptLanguage = KaleoModelUtil.getDefaultValue(
+			newAction, KaleoCore.DEFAULT_SCRIPT_LANGUAGE_KEY, ScriptLanguageType.GROOVY);
 
-    public ActionsListAddActionHandler()
-    {
-        super(Action.TYPE, ActionTimer.PROP_ACTIONS);
-    }
+		newAction.setName(newName);
+		newAction.setScriptLanguage(defaultScriptLanguage);
+		newAction.setExecutionType(Executable.DEFAULT_EXECUTION_TYPE);
 
-    public ActionsListAddActionHandler( ElementType type, ListProperty listProperty )
-    {
-        super(type, listProperty);
-    }
+		if (newAction.nearest(Task.class) != null) {
+			newAction.setScript("/* specify task action script */");
+		}
+		else {
+			newAction.setScript("/* specify action script */");
+		}
+	}
 
-    @Override
-    public void init( SapphireAction action, ActionHandlerDef def )
-    {
-        super.init( action, def );
+	public ActionsListAddActionHandler() {
+		super(Action.TYPE, ActionTimer.PROP_ACTIONS);
+	}
 
-    }
+	public ActionsListAddActionHandler(ElementType type, ListProperty listProperty) {
+		super(type, listProperty);
+	}
 
-    @Override
-    protected Object run( final Presentation context )
-    {
-        Element newElement = (Element) super.run( context );
-        Action newAction = newElement.nearest( Action.class );
+	@Override
+	public void init(SapphireAction action, ActionHandlerDef def) {
+		super.init(action, def);
+	}
 
-        addActionDefaults( newAction );
+	@Override
+	protected Object run(Presentation context) {
+		Element newElement = (Element)super.run(context);
 
-        return newAction;
-    }
+		Action newAction = newElement.nearest(Action.class);
+
+		addActionDefaults(newAction);
+
+		return newAction;
+	}
 
 }

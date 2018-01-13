@@ -1,1 +1,1 @@
-<#assign variableName = serviceContext.getAttribute("variableName")!"">
+<#assign variableName = serviceContext.getAttribute("variableName")!"" />

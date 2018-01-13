@@ -1,1 +1,1 @@
-<#assign smallImage = serviceContext.getAttribute("smallImage")!"">
+<#assign smallImage = serviceContext.getAttribute("smallImage")!"" />

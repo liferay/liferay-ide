@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model;
@@ -32,94 +35,54 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Gregory Amerson
  */
-public interface Assignable extends Element
-{
-    ElementType TYPE = new ElementType( Assignable.class );
+public interface Assignable extends Element {
 
-    // *** resource actions ***
+	public ElementType TYPE = new ElementType(Assignable.class);
 
-    @Type( base = ResourceAction.class )
-    @Label( standard = "resource actions" )
-    @XmlListBinding
-    (
-        path = "assignments/resource-actions",
-        mappings =
-        {
-            @XmlListBinding.Mapping
-            (
-                element = "resource-action", type = ResourceAction.class
-            )
-        }
-    )
-    ListProperty PROP_RESOURCE_ACTIONS = new ListProperty( TYPE, "ResourceActions" );
+	public Value<String> getCurrentAssignments();
 
-    ElementList<ResourceAction> getResourceActions();
+	public ElementList<ResourceAction> getResourceActions();
 
-    // // *** roles ***
+	public ElementList<Role> getRoles();
 
-    @Type( base = Role.class )
-    @Label( standard = "roles" )
-    @XmlListBinding
-    (
-        path = "assignments/roles",
-        mappings =
-        {
-            @XmlListBinding.Mapping
-            (
-                element = "role", type = Role.class
-            )
-        }
-    )
-    ListProperty PROP_ROLES = new ListProperty( TYPE, "Roles" );
+	public ElementHandle<Scriptable> getScriptedAssignment();
 
-    ElementList<Role> getRoles();
+	public ElementHandle<User> getUser();
 
-    //** scripted assignment **
+	@Derived
+	@Label(standard = "current assignments")
+	@ReadOnly
+	@Service(impl = CurrentAssignmentsDerviedValueService.class)
+	public ValueProperty PROP_CURRENT_ASSIGNMENTS = new ValueProperty(TYPE, "CurrentAssignments");
 
-    @Type( base = Scriptable.class )
-    @Label( standard = "scripted assignment" )
-    @XmlElementBinding
-    (
-        path = "assignments",
-        mappings =
-        {
-            @XmlElementBinding.Mapping
-            (
-                element = "scripted-assignment", type = Scriptable.class
-            )
-        }
-    )
-    ElementProperty PROP_SCRIPTED_ASSIGNMENT = new ElementProperty( TYPE, "ScriptedAssignment" );
+	@Label(standard = "resource actions")
+	@Type(base = ResourceAction.class)
+	@XmlListBinding(
+		mappings = {@XmlListBinding.Mapping(element = "resource-action", type = ResourceAction.class)},
+		path = "assignments/resource-actions"
+	)
+	public ListProperty PROP_RESOURCE_ACTIONS = new ListProperty(TYPE, "ResourceActions");
 
-    ElementHandle<Scriptable> getScriptedAssignment();
+	@Label(standard = "roles")
+	@Type(base = Role.class)
+	@XmlListBinding(
+		mappings = {@XmlListBinding.Mapping(element = "role", type = Role.class)}, path = "assignments/roles"
+	)
+	public ListProperty PROP_ROLES = new ListProperty(TYPE, "Roles");
 
-    // // ** User **
+	@Label(standard = "scripted assignment")
+	@Type(base = Scriptable.class)
+	@XmlElementBinding(
+		mappings = {@XmlElementBinding.Mapping(element = "scripted-assignment", type = Scriptable.class)},
+		path = "assignments"
+	)
+	public ElementProperty PROP_SCRIPTED_ASSIGNMENT = new ElementProperty(TYPE, "ScriptedAssignment");
 
-    @Type( base = User.class )
-    @Label( standard = "user" )
-    @XmlElementBinding
-    (
-        path = "assignments",
-        mappings =
-        {
-            @XmlElementBinding.Mapping
-            (
-                element="user", type=User.class
-            )
-        }
-    )
-    ElementProperty PROP_USER = new ElementProperty( TYPE, "User" );
-
-    ElementHandle<User> getUser();
-
-    // *** CurrentAssignments ***
-
-    @Label( standard = "current assignments" )
-    @ReadOnly
-    @Service( impl = CurrentAssignmentsDerviedValueService.class )
-    @Derived
-    ValueProperty PROP_CURRENT_ASSIGNMENTS = new ValueProperty( TYPE, "CurrentAssignments" );
-
-    Value<String> getCurrentAssignments();
+	@Label(standard = "user")
+	@Type(base = User.class)
+	@XmlElementBinding(
+		mappings = {@XmlElementBinding.Mapping(element = "user", type = User.class)}, path = "assignments"
+	)
+	public ElementProperty PROP_USER = new ElementProperty(TYPE, "User");
 
 }

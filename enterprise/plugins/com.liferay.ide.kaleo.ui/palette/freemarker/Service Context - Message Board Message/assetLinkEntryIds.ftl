@@ -1,1 +1,1 @@
-<#assign assetLinkEntryIds = serviceContext.getAttribute("assetLinkEntryIds")!"">
+<#assign assetLinkEntryIds = serviceContext.getAttribute("assetLinkEntryIds")!"" />

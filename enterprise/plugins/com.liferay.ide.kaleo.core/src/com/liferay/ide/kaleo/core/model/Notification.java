@@ -1,13 +1,17 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
+
 package com.liferay.ide.kaleo.core.model;
 
 import com.liferay.ide.kaleo.core.model.internal.NotificationTypesDerivedValueService;
@@ -33,92 +37,70 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author Gregory Amerson
  */
 @Image(path = "images/notification_16x16.png")
-public interface Notification extends Node
-{
-    ElementType TYPE = new ElementType( Notification.class );
+public interface Notification extends Node {
 
-    // *** Template ***
+	public ElementType TYPE = new ElementType(Notification.class);
 
-    @XmlBinding( path = "template" )
-    @Label( standard = "&template" )
-    @Required
-    @LongString
-    ValueProperty PROP_TEMPLATE = new ValueProperty( TYPE, "Template" );
+	public ElementList<Address> getAddresses();
 
-    Value<String> getTemplate();
+	public ElementList<NotificationTransport> getNotificationTransports();
 
-    void setTemplate( String value );
+	public Value<String> getNotificationTypes();
 
-    @Type( base = TemplateLanguageType.class )
-    @Label( standard = "template language" )
-    @XmlBinding( path = "template-language" )
-    @Required
-    // @Service( impl = DefaultTemplateLanguageService.class )
-    ValueProperty PROP_TEMPLATE_LANGUAGE = new ValueProperty( TYPE, "TemplateLanguage" );
+	public ElementList<Role> getRoles();
 
-    Value<TemplateLanguageType> getTemplateLanguage();
+	public Value<String> getTemplate();
 
-    void setTemplateLanguage( String templateLanguage );
+	public Value<TemplateLanguageType> getTemplateLanguage();
 
-    void setTemplateLanguage( TemplateLanguageType templateLanguage );
+	public ElementList<User> getUsers();
 
-    @Label( standard = "notification types" )
-    @ReadOnly
-    @Derived
-    @Service( impl = NotificationTypesDerivedValueService.class )
-    ValueProperty PROP_NOTIFICATION_TYPES = new ValueProperty( TYPE, "NotificationTypes" );
+	public void setTemplate(String value);
 
-    Value<String> getNotificationTypes();
+	public void setTemplateLanguage(String templateLanguage);
 
-    // *** NotificationTypes ***
+	public void setTemplateLanguage(TemplateLanguageType templateLanguage);
 
-    @Type( base = NotificationTransport.class )
-    @Label( standard = "notification transports" )
-    @Required
-    @Length( min = 1 )
-    @XmlListBinding
-    (
-        mappings = @XmlListBinding.Mapping
-        (
-            element = "notification-type",
-            type = NotificationTransport.class
-        )
-    )
-    ListProperty PROP_NOTIFICATION_TRANSPORTS = new ListProperty( TYPE, "NotificationTransports" );
+	@Label(standard = "addresses")
+	@Type(base = Address.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "address", type = Address.class), path = "recipients")
+	public ListProperty PROP_ADDRESSES = new ListProperty(TYPE, "Addresses");
 
-    ElementList<NotificationTransport> getNotificationTransports();
+	@Label(standard = "notification transports")
+	@Length(min = 1)
+	@Required
+	@Type(base = NotificationTransport.class)
+	@XmlListBinding(
+		mappings = @XmlListBinding.Mapping(element = "notification-type", type = NotificationTransport.class)
+	)
+	public ListProperty PROP_NOTIFICATION_TRANSPORTS = new ListProperty(TYPE, "NotificationTransports");
 
-    @Type( base = Address.class )
-    @Label( standard = "addresses" )
-    @XmlListBinding
-    (
-        path = "recipients",
-        mappings = @XmlListBinding.Mapping
-        (
-            element = "address",
-            type = Address.class
-        )
-    )
-    ListProperty PROP_ADDRESSES = new ListProperty( TYPE, "Addresses" );
+	@Derived
+	@Label(standard = "notification types")
+	@ReadOnly
+	@Service(impl = NotificationTypesDerivedValueService.class)
+	public ValueProperty PROP_NOTIFICATION_TYPES = new ValueProperty(TYPE, "NotificationTypes");
 
-    ElementList<Address> getAddresses();
+	@Label(standard = "roles")
+	@Type(base = Role.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "role", type = Role.class), path = "recipients/roles")
+	public ListProperty PROP_ROLES = new ListProperty(TYPE, "Roles");
 
-    // *** Roles ***
+	@Label(standard = "&template")
+	@LongString
+	@Required
+	@XmlBinding(path = "template")
+	public ValueProperty PROP_TEMPLATE = new ValueProperty(TYPE, "Template");
 
-    @Type( base = Role.class )
-    @Label( standard = "roles" )
-    @XmlListBinding( path = "recipients/roles", mappings = @XmlListBinding.Mapping( element = "role", type = Role.class ) )
-    ListProperty PROP_ROLES = new ListProperty( TYPE, "Roles" );
+	@Label(standard = "template language")
+	@Required
+	@Type(base = TemplateLanguageType.class)
+	@XmlBinding(path = "template-language")
+	public ValueProperty PROP_TEMPLATE_LANGUAGE = new ValueProperty(TYPE, "TemplateLanguage");
 
-    ElementList<Role> getRoles();
-
-    // *** Users ***
-
-    @Type( base = User.class )
-    @Label( standard = "users" )
-    @XmlListBinding( path = "recipients", mappings = @XmlListBinding.Mapping( element = "user", type = User.class ) )
-    ListProperty PROP_USERS = new ListProperty( TYPE, "Users" );
-
-    ElementList<User> getUsers();
+	@Label(standard = "users")
+	@Type(base = User.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "user", type = User.class), path = "recipients")
+	public ListProperty PROP_USERS = new ListProperty(TYPE, "Users");
 
 }

@@ -1,1 +1,1 @@
-<#assign version = serviceContext.getAttribute("version")!"">
+<#assign version = serviceContext.getAttribute("version")!"" />

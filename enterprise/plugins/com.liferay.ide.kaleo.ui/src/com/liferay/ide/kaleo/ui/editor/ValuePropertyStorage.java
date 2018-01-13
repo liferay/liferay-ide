@@ -1,11 +1,16 @@
-/******************************************************************************
- * Copyright (c) 2014 Liferay, Inc.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- ******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.kaleo.ui.editor;
 
@@ -22,70 +27,58 @@ import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ValueProperty;
 
 /**
- * A storage object that can read a sapphire value property.
- *
- * @author <a href="mailto:gregory.amerson@liferay.com">Gregory Amerson</a>
+ * @author Gregory Amerson
  */
-public class ValuePropertyStorage extends PlatformObject implements IStorage
-{
+public class ValuePropertyStorage extends PlatformObject implements IStorage {
 
-    private static final String EMPTY_CONTENTS = "";
+	public ValuePropertyStorage(Element modelElement, ValueProperty valueProperty) {
+		_modelElement = modelElement;
 
-    private Element modelElement;
-    private ValueProperty valueProperty;
+		_valueProperty = valueProperty;
+	}
 
-    public ValuePropertyStorage( Element modelElement, ValueProperty valueProperty )
-    {
-        super();
-        this.modelElement = modelElement;
-        this.valueProperty = valueProperty;
-    }
+	public InputStream getContents() throws CoreException {
+		Object content = _modelElement.property(_valueProperty).content();
 
-    protected Element element()
-    {
-        return this.modelElement;
-    }
+		if (content == null) {
+			content = _EMPTY_CONTENTS;
+		}
 
-    public InputStream getContents() throws CoreException
-    {
-        Object content =  this.modelElement.property( this.valueProperty ).content();
+		return new ByteArrayInputStream(content.toString().getBytes());
+	}
 
-        if( content == null )
-        {
-            content = EMPTY_CONTENTS;
-        }
+	public IPath getFullPath() {
+		IPath retval = null;
 
-        return new ByteArrayInputStream( content.toString().getBytes() );
-    }
+		String localPath = _modelElement.type().getSimpleName() + "." + _valueProperty.name();
 
-    public IPath getFullPath()
-    {
-        IPath retval = null;
+		IFile file = _modelElement.adapt(IFile.class);
 
-        String localPath = this.modelElement.type().getSimpleName() + "." + this.valueProperty.name();
+		if (file != null) {
+			retval = file.getFullPath().append(localPath);
+		}
+		else {
+			retval = new Path(localPath);
+		}
 
-        IFile file = this.modelElement.adapt( IFile.class );
+		return retval;
+	}
 
-        if( file != null )
-        {
-            retval = file.getFullPath().append( localPath );
-        }
-        else
-        {
-            retval = new Path( localPath );
-        }
+	public String getName() {
+		return _valueProperty.name();
+	}
 
-        return retval;
-    }
+	public boolean isReadOnly() {
+		return false;
+	}
 
-    public String getName()
-    {
-        return this.valueProperty.name();
-    }
+	protected Element element() {
+		return _modelElement;
+	}
 
-    public boolean isReadOnly()
-    {
-        return false;
-    }
+	private static final String _EMPTY_CONTENTS = "";
+
+	private Element _modelElement;
+	private ValueProperty _valueProperty;
 
 }

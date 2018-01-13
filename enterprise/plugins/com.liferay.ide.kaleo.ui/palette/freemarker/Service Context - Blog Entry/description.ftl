@@ -1,1 +1,1 @@
-<#assign description = serviceContext.getAttribute("description")!"">
+<#assign description = serviceContext.getAttribute("description")!"" />

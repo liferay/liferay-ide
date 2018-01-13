@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.action;
@@ -16,11 +19,14 @@ import com.liferay.ide.kaleo.core.model.ActionNotification;
 import com.liferay.ide.kaleo.core.model.ActionTimer;
 import com.liferay.ide.kaleo.core.model.Executable;
 import com.liferay.ide.kaleo.core.model.Node;
+import com.liferay.ide.kaleo.core.model.NotificationTransport;
 import com.liferay.ide.kaleo.core.model.Task;
+import com.liferay.ide.kaleo.core.model.TaskActionNotification;
 import com.liferay.ide.kaleo.core.model.TemplateLanguageType;
 import com.liferay.ide.kaleo.core.util.KaleoModelUtil;
 
 import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.ui.Presentation;
@@ -28,63 +34,67 @@ import org.eclipse.sapphire.ui.Presentation;
 /**
  * @author Gregory Amerson
  */
-public class NotificationsListAddActionHandler extends DefaultListAddActionHandler
-{
+public class NotificationsListAddActionHandler extends DefaultListAddActionHandler {
 
-    public NotificationsListAddActionHandler()
-    {
-        super( ActionNotification.TYPE, ActionTimer.PROP_NOTIFICATIONS );
-    }
+	public static void addNotificationDefaults(ActionNotification newNotification) {
+		String defaultTemplateLanguage = KaleoModelUtil.getDefaultValue(
+			newNotification, KaleoCore.DEFAULT_TEMPLATE_LANGUAGE_KEY, TemplateLanguageType.FREEMARKER);
 
-    public NotificationsListAddActionHandler( ElementType type, ListProperty listProperty )
-    {
-        super( type, listProperty );
-    }
+		Node[] nodes = new Node[0];
 
-    public static void addNotificationDefaults( final ActionNotification newNotification )
-    {
-        final String defaultTemplateLanguage =
-            KaleoModelUtil.getDefaultValue(
-                newNotification, KaleoCore.DEFAULT_TEMPLATE_LANGUAGE_KEY, TemplateLanguageType.FREEMARKER );
+		if (newNotification.nearest(Task.class) != null) {
+			Task task = newNotification.nearest(Task.class);
 
-        Node[] nodes = new Node[0];
+			ElementList<TaskActionNotification> taskNotifications = task.getTaskNotifications();
 
-        if( newNotification.nearest( Task.class ) != null )
-        {
-            nodes = newNotification.nearest( Task.class ).getTaskNotifications().toArray( new Node[0] );
-        }
-        else
-        {
-            nodes = newNotification.nearest( ActionTimer.class ).getNotifications().toArray( new Node[0] );
-        }
+			nodes = taskNotifications.toArray(new Node[0]);
+		}
+		else {
+			ActionTimer actionTimer = newNotification.nearest(ActionTimer.class);
 
-        final String newName = getDefaultName( "newNotification1", newNotification, nodes );
+			ElementList<ActionNotification> actionNotifications = actionTimer.getNotifications();
 
-        newNotification.setName( newName );
-        newNotification.setTemplateLanguage( defaultTemplateLanguage );
-        newNotification.setExecutionType( Executable.DEFAULT_EXECUTION_TYPE );
+			nodes = actionNotifications.toArray(new Node[0]);
+		}
 
-        if( newNotification.nearest( Task.class ) != null )
-        {
-            newNotification.setTemplate( "/* specify task notification template */" );
-        }
-        else
-        {
-            newNotification.setTemplate( "/* specify notification template */" );
-        }
+		String newName = getDefaultName("newNotification1", newNotification, nodes);
 
-        newNotification.getNotificationTransports().insert().setNotificationTransport( "email" );
-    }
+		newNotification.setName(newName);
 
-    @Override
-    protected Object run( final Presentation context )
-    {
-        Element newElement = (Element) super.run( context );
-        ActionNotification newNotification = newElement.nearest( ActionNotification.class );
+		newNotification.setTemplateLanguage(defaultTemplateLanguage);
+		newNotification.setExecutionType(Executable.DEFAULT_EXECUTION_TYPE);
 
-        addNotificationDefaults( newNotification );
+		if (newNotification.nearest(Task.class) != null) {
+			newNotification.setTemplate("/* specify task notification template */");
+		}
+		else {
+			newNotification.setTemplate("/* specify notification template */");
+		}
 
-        return newNotification;
-    }
+		ElementList<NotificationTransport> notificationTransports = newNotification.getNotificationTransports();
+
+		NotificationTransport insertTransport = notificationTransports.insert();
+
+		insertTransport.setNotificationTransport("email");
+	}
+
+	public NotificationsListAddActionHandler() {
+		super(ActionNotification.TYPE, ActionTimer.PROP_NOTIFICATIONS);
+	}
+
+	public NotificationsListAddActionHandler(ElementType type, ListProperty listProperty) {
+		super(type, listProperty);
+	}
+
+	@Override
+	protected Object run(Presentation context) {
+		Element newElement = (Element)super.run(context);
+
+		ActionNotification newNotification = newElement.nearest(ActionNotification.class);
+
+		addNotificationDefaults(newNotification);
+
+		return newNotification;
+	}
 
 }

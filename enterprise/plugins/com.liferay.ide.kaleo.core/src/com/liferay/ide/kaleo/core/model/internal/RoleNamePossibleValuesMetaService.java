@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model.internal;
@@ -25,118 +28,110 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.services.Service;
-
 
 /**
  * @author Kuo Zhang
  */
-public class RoleNamePossibleValuesMetaService extends Service
-{
-    private final Map<String, Integer> additionalRoleNames = new HashMap<String, Integer>();
-    private final static Set<String> originalRoleNames = new TreeSet<String>();
-    static
-    {
-        originalRoleNames.add( "Organization Administrator" );
-        originalRoleNames.add( "Organization Content Reviewer" );
-        originalRoleNames.add( "Organization Owner" );
-        originalRoleNames.add( "Administrator" );
-        originalRoleNames.add( "Portal Content Reviewer" );
-        originalRoleNames.add( "Site Administrator" );
-        originalRoleNames.add( "Site Content Reviewer" );
-        originalRoleNames.add( "Site Owner" );
-    }
+public class RoleNamePossibleValuesMetaService extends Service {
 
-    protected void initIfNecessary( Object object )
-    {
-        if( object instanceof WorkflowDefinition )
-        {
-            for( WorkflowNode node : ( (WorkflowDefinition) object ).getDiagramNodes() )
-            {
-                final Assignable assignable = node.nearest( Assignable.class );
+	protected String[] getRoleNames() {
+		Set<String> retval = new TreeSet<>();
 
-                if( assignable != null )
-                {
-                    for( Role role : assignable.getRoles() )
-                    {
-                        final String name = role.getName().content( false );
+		for (String roleName : _additionalRoleNames.keySet()) {
+			Integer nameVlue = _additionalRoleNames.get(roleName);
 
-                        if( ! CoreUtil.isNullOrEmpty( name ) )
-                        {
-                            originalRoleNames.add( name );
-                        }
-                    }
-                }
-            }
-        }
-        else if( object instanceof AssignableOp )
-        {
-            ElementList<RoleName> roleNames = ( (AssignableOp) object ).getRoleNames();
+			if (nameVlue.intValue() > 0) {
+				retval.add(roleName);
+			}
+		}
 
-            for( RoleName roleName : roleNames )
-            {
-                final String name = roleName.getName().content( false );
+		retval.addAll(_originalRoleNames);
 
-                if( ! CoreUtil.isNullOrEmpty( name ) )
-                {
-                    originalRoleNames.add( name );
-                }
-            }
-        }
-    }
+		return retval.toArray(new String[0]);
+	}
 
-    protected String[] getRoleNames()
-    {
-        Set<String> retval = new TreeSet<String>();
+	protected void initIfNecessary(Object object) {
+		if (object instanceof WorkflowDefinition) {
+			for (WorkflowNode node : ((WorkflowDefinition)object).getDiagramNodes()) {
+				Assignable assignable = node.nearest(Assignable.class);
 
-        for( String roleName : additionalRoleNames.keySet() )
-        {
-            if( additionalRoleNames.get( roleName ).intValue() > 0 )
-            {
-                retval.add( roleName );
-            }
-        }
+				if (assignable != null) {
+					for (Role role : assignable.getRoles()) {
+						Value<String> roleName = role.getName();
 
-        retval.addAll( originalRoleNames );
+						String name = roleName.content(false);
 
-        return retval.toArray( new String[0] );
-    }
+						if (!CoreUtil.isNullOrEmpty(name)) {
+							_originalRoleNames.add(name);
+						}
+					}
+				}
+			}
+		}
+		else if (object instanceof AssignableOp) {
+			ElementList<RoleName> roleNames = ((AssignableOp)object).getRoleNames();
 
-    protected void updateRoleNames( String previousRoleName, String currentRoleName )
-    {
-        if( previousRoleName != null && currentRoleName != null && previousRoleName.equals( currentRoleName ) )
-        {
-            return;
-        }
+			for (RoleName roleName : roleNames) {
+				Value<String> nameValue = roleName.getName();
 
-        boolean needsBroadcast = false;
+				String name = nameValue.content(false);
 
-        if( ! CoreUtil.isNullOrEmpty( previousRoleName ) && ! originalRoleNames.contains( previousRoleName ) )
-        {
-            int times = additionalRoleNames.containsKey( previousRoleName ) ?
-                        additionalRoleNames.get( previousRoleName ).intValue() : 0;
+				if (!CoreUtil.isNullOrEmpty(name)) {
+					_originalRoleNames.add(name);
+				}
+			}
+		}
+	}
 
-            if( times >= 1 )
-            {
-                additionalRoleNames.put( previousRoleName, new Integer( --times ) );
-            }
+	protected void updateRoleNames(String previousRoleName, String currentRoleName) {
+		if ((previousRoleName != null) && (currentRoleName != null) && previousRoleName.equals(currentRoleName)) {
+			return;
+		}
 
-            needsBroadcast = ( times == 0 );
-        }
+		boolean needsBroadcast = false;
 
-        if( ! CoreUtil.isNullOrEmpty( currentRoleName ) && ! originalRoleNames.contains( currentRoleName ) )
-        {
-            int times = additionalRoleNames.containsKey( currentRoleName ) ?
-                        additionalRoleNames.get( currentRoleName ).intValue() : 0;
+		if (!CoreUtil.isNullOrEmpty(previousRoleName) && !_originalRoleNames.contains(previousRoleName)) {
+			Integer preRoleNameValue = _additionalRoleNames.get(previousRoleName);
 
-            additionalRoleNames.put( currentRoleName, new Integer( ++times ) );
+			int times = _additionalRoleNames.containsKey(previousRoleName) ? preRoleNameValue.intValue() : 0;
 
-            needsBroadcast = needsBroadcast ? true : ( times == 1 );
-        }
+			if (times >= 1) {
+				_additionalRoleNames.put(previousRoleName, Integer.valueOf(--times));
+			}
 
-        if( needsBroadcast )
-        {
-            broadcast();
-        }
-    }
+			needsBroadcast = times == 0;
+		}
+
+		if (!CoreUtil.isNullOrEmpty(currentRoleName) && !_originalRoleNames.contains(currentRoleName)) {
+			Integer curRoleNameValue = _additionalRoleNames.get(currentRoleName);
+
+			int times = _additionalRoleNames.containsKey(currentRoleName) ? curRoleNameValue.intValue() : 0;
+
+			_additionalRoleNames.put(currentRoleName, Integer.valueOf(++times));
+
+			needsBroadcast = needsBroadcast ? true : (times == 1);
+		}
+
+		if (needsBroadcast) {
+			broadcast();
+		}
+	}
+
+	private static final Set<String> _originalRoleNames = new TreeSet<>();
+
+	static {
+		_originalRoleNames.add("Administrator");
+		_originalRoleNames.add("Organization Administrator");
+		_originalRoleNames.add("Organization Content Reviewer");
+		_originalRoleNames.add("Organization Owner");
+		_originalRoleNames.add("Portal Content Reviewer");
+		_originalRoleNames.add("Site Administrator");
+		_originalRoleNames.add("Site Content Reviewer");
+		_originalRoleNames.add("Site Owner");
+	}
+
+	private final Map<String, Integer> _additionalRoleNames = new HashMap<>();
+
 }

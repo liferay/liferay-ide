@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model;
@@ -21,29 +24,28 @@ import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 /**
  * @author Gregory Amerson
  */
-public interface Position extends Element
-{
+public interface Position extends Element {
 
-    ElementType TYPE = new ElementType( Position.class );
+	public ElementType TYPE = new ElementType(Position.class);
 
-    // *** X ***
+	public Value<Integer> getX();
 
-    @Type( base = Integer.class )
-    @DefaultValue( text = "0" )
-    ValueProperty PROP_X = new ValueProperty( TYPE, "X" );
+	public Value<Integer> getY();
 
-    Value<Integer> getX();
-    void setX( Integer value );
-    void setX( String value );
+	public void setX(Integer value);
 
-    // *** Y ***
+	public void setX(String value);
 
-    @Type( base = Integer.class )
-    @DefaultValue( text = "0" )
-    ValueProperty PROP_Y = new ValueProperty( TYPE, "Y" );
+	public void setY(Integer value);
 
-    Value<Integer> getY();
-    void setY( Integer value );
-    void setY( String value );
+	public void setY(String value);
+
+	@DefaultValue(text = "0")
+	@Type(base = Integer.class)
+	public ValueProperty PROP_X = new ValueProperty(TYPE, "X");
+
+	@DefaultValue(text = "0")
+	@Type(base = Integer.class)
+	public ValueProperty PROP_Y = new ValueProperty(TYPE, "Y");
 
 }

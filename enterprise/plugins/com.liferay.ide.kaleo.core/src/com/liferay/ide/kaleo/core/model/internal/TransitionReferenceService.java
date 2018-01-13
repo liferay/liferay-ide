@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model.internal;
@@ -24,46 +27,41 @@ import org.eclipse.sapphire.services.ReferenceService;
 /**
  * @author Gregory Amerson
  */
-public class TransitionReferenceService extends ReferenceService<Node>
-{
+public class TransitionReferenceService extends ReferenceService<Node> {
 
-    @Override
-    public Node compute()
-    {
-        final String reference = context( Value.class ).text();
+	@Override
+	public Node compute() {
+		String reference = context(Value.class).text();
 
-        if( reference != null )
-        {
-            final WorkflowDefinition workflow = context( WorkflowDefinition.class );
+		if (reference != null) {
+			WorkflowDefinition workflow = context(WorkflowDefinition.class);
 
-            List<Node> nodes = new ArrayList<Node>();
+			List<Node> nodes = new ArrayList<>();
 
-            if ( workflow != null )
-            {
-                nodes.addAll( workflow.getTasks() );
-                nodes.addAll( workflow.getStates() );
-                nodes.addAll( workflow.getConditions() );
-                nodes.addAll( workflow.getForks() );
-                nodes.addAll( workflow.getJoins() );
+			if (workflow != null) {
+				nodes.addAll(workflow.getTasks());
+				nodes.addAll(workflow.getStates());
+				nodes.addAll(workflow.getConditions());
+				nodes.addAll(workflow.getForks());
+				nodes.addAll(workflow.getJoins());
 
-                final Version version = workflow.getSchemaVersion().content();
+				Value<Version> schemaVersion = workflow.getSchemaVersion();
 
-                if( version.compareTo( new Version( "6.2" ) ) >= 0 )
-                {
-                    nodes.addAll( workflow.getJoinXors() );
-                }
+				Version version = schemaVersion.content();
 
-                for( Node node : nodes )
-                {
-                    if( reference.equals( node.getName().content() ) )
-                    {
-                        return node;
-                    }
-                }
-            }
-        }
+				if (version.compareTo(new Version("6.2")) >= 0) {
+					nodes.addAll(workflow.getJoinXors());
+				}
 
-        return null;
-    }
+				for (Node node : nodes) {
+					if (reference.equals(node.getName().content())) {
+						return node;
+					}
+				}
+			}
+		}
+
+		return null;
+	}
 
 }

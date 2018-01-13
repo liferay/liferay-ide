@@ -1,1 +1,1 @@
-<#assign title = serviceContext.getAttribute("title")!"">
+<#assign title = serviceContext.getAttribute("title")!"" />

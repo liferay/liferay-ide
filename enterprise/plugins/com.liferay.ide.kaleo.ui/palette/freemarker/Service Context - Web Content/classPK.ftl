@@ -1,1 +1,1 @@
-<#assign classPK = serviceContext.getAttribute("classPK")!"">
+<#assign classPK = serviceContext.getAttribute("classPK")!"" />

@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model.internal;
@@ -14,104 +17,117 @@ package com.liferay.ide.kaleo.core.model.internal;
 import com.liferay.ide.kaleo.core.model.Assignable;
 import com.liferay.ide.kaleo.core.model.ResourceAction;
 import com.liferay.ide.kaleo.core.model.Role;
+import com.liferay.ide.kaleo.core.model.ScriptLanguageType;
 import com.liferay.ide.kaleo.core.model.Scriptable;
 import com.liferay.ide.kaleo.core.model.User;
 
 import org.eclipse.sapphire.DerivedValueService;
+import org.eclipse.sapphire.ElementHandle;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
-
+import org.eclipse.sapphire.Value;
 
 /**
  * @author Gregory Amerson
  */
-public class CurrentAssignmentsDerviedValueService extends DerivedValueService
-{
+public class CurrentAssignmentsDerviedValueService extends DerivedValueService {
 
-    @Override
-    protected String compute()
-    {
-        StringBuilder data = new StringBuilder();
+	@Override
+	protected String compute() {
+		StringBuilder data = new StringBuilder();
 
-        Assignable assignable = this.context( Assignable.class );
+		Assignable assignable = context(Assignable.class);
 
-        User user = assignable.getUser().content( false );
-        ElementList<Role> roles = assignable.getRoles();
-        Scriptable scriptable = assignable.getScriptedAssignment().content( false );
-        ElementList<ResourceAction> resourceActions = assignable.getResourceActions();
+		ElementHandle<User> assignableUser = assignable.getUser();
 
-        if( user != null )
-        {
-            if( user.getUserId().content() != null )
-            {
-                data.append( user.getUserId().content() + ", " );
-            }
-            else if( user.getScreenName().content() != null )
-            {
-                data.append( user.getScreenName().content() + ", " );
-            }
-            else if( user.getEmailAddress().content() != null )
-            {
-                data.append( user.getEmailAddress().content() + ", " );
-            }
-            else
-            {
-                data.append( "User: Asset Creator" );
-            }
-        }
+		User user = assignableUser.content(false);
 
-        if( roles.size() > 0 )
-        {
-            data.append( "Roles: " );
+		ElementList<Role> roles = assignable.getRoles();
 
-            for( Role role : roles )
-            {
-                if( role.getRoleId().content() != null )
-                {
-                    data.append( role.getRoleId().content() + ", " );
-                }
-                else
-                {
-                    data.append( role.getName().text() + ", " );
-                }
-            }
-        }
+		ElementHandle<Scriptable> scripteAssignment = assignable.getScriptedAssignment();
 
-        if( scriptable != null && scriptable.getScript().content() != null )
-        {
-            data.append( "Script language: " + scriptable.getScriptLanguage().content() );
-        }
+		Scriptable scriptable = scripteAssignment.content(false);
 
-        if( resourceActions.size() > 0 )
-        {
-            data.append( "Resource actions: " );
+		ElementList<ResourceAction> resourceActions = assignable.getResourceActions();
 
-            for( ResourceAction resourceAction : resourceActions )
-            {
-                if( resourceAction.getResourceAction().content() != null )
-                {
-                    data.append( resourceAction.getResourceAction().content() + ", " );
-                }
-            }
-        }
+		if (user != null) {
+			Value<Integer> userId = user.getUserId();
 
-        return data.toString().replaceAll( ", $", "" );
-    }
+			Value<String> userScreenName = user.getScreenName();
 
-    @Override
-    protected void initDerivedValueService()
-    {
-        final FilteredListener<PropertyContentEvent> listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            public void handleTypedEvent( final PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+			Value<String> userEmailAddress = user.getEmailAddress();
 
-        context( Assignable.class ).attach( listener, "*" );
-    }
+			if (userId.content() != null) {
+				data.append(userId.content() + ", ");
+			}
+			else if (userScreenName.content() != null) {
+				data.append(userScreenName.content() + ", ");
+			}
+			else if (userEmailAddress.content() != null) {
+				data.append(userEmailAddress.content() + ", ");
+			}
+			else {
+				data.append("User: Asset Creator");
+			}
+		}
+
+		if (roles.isEmpty()) {
+			data.append("Roles: ");
+
+			for (Role role : roles) {
+				Value<Integer> roleId = role.getRoleId();
+
+				Value<String> roleName = role.getName();
+
+				if (roleId.content() != null) {
+					data.append(roleId.content() + ", ");
+				}
+				else {
+					data.append(roleName.text() + ", ");
+				}
+			}
+		}
+
+		if (scriptable != null) {
+			Value<String> script = scriptable.getScript();
+
+			Value<ScriptLanguageType> scriptLanguageType = scriptable.getScriptLanguage();
+
+			if (script.content() != null) {
+				data.append("Script language: " + scriptLanguageType.content());
+			}
+		}
+
+		if (resourceActions.isEmpty()) {
+			data.append("Resource actions: ");
+
+			for (ResourceAction resourceAction : resourceActions) {
+				Value<String> reAction = resourceAction.getResourceAction();
+
+				if (reAction.content() != null) {
+					data.append(reAction.content() + ", ");
+				}
+			}
+		}
+
+		String dataInfo = data.toString();
+
+		return dataInfo.replaceAll(", $", "");
+	}
+
+	@Override
+	protected void initDerivedValueService() {
+		FilteredListener<PropertyContentEvent> listener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			public void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
+
+		};
+
+		context(Assignable.class).attach(listener, "*");
+	}
 
 }

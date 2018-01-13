@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.diagram;
@@ -14,64 +17,60 @@ package com.liferay.ide.kaleo.ui.diagram;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireActionHandlerFactory;
+import org.eclipse.sapphire.ui.diagram.def.IDiagramNodeDef;
 import org.eclipse.sapphire.ui.diagram.editor.DiagramNodeTemplate;
 import org.eclipse.sapphire.ui.diagram.editor.SapphireDiagramEditorPagePart;
 
 /**
  * @author Gregory Amerson
  */
-public class KaleoNodeAddActionHandlerFactory extends SapphireActionHandlerFactory
-{
+public class KaleoNodeAddActionHandlerFactory extends SapphireActionHandlerFactory {
 
-    @Override
-    public List<SapphireActionHandler> create()
-    {
-        final List<SapphireActionHandler> handlers = new ArrayList<SapphireActionHandler>();
+	@Override
+	public List<SapphireActionHandler> create() {
+		List<SapphireActionHandler> handlers = new ArrayList<>();
 
-        final SapphireDiagramEditorPagePart diagramPart = (SapphireDiagramEditorPagePart) getPart();
+		SapphireDiagramEditorPagePart diagramPart = (SapphireDiagramEditorPagePart)getPart();
 
-        for( final DiagramNodeTemplate nodeTemplate : diagramPart.getVisibleNodeTemplates() )
-        {
-            final NewNodeAddActionHandler addNodeHandler = createKaleoNodeActionHandlerForTemplate( nodeTemplate );
+		for (DiagramNodeTemplate nodeTemplate : diagramPart.getVisibleNodeTemplates()) {
+			NewNodeAddActionHandler addNodeHandler = _createKaleoNodeActionHandlerForTemplate(nodeTemplate);
 
-            handlers.add( addNodeHandler );
-        }
+			handlers.add(addNodeHandler);
+		}
 
-        return handlers;
-    }
+		return handlers;
+	}
 
-    private NewNodeAddActionHandler createKaleoNodeActionHandlerForTemplate( DiagramNodeTemplate nodeTemplate )
-    {
-        NewNodeAddActionHandler retval = null;
+	private NewNodeAddActionHandler _createKaleoNodeActionHandlerForTemplate(DiagramNodeTemplate nodeTemplate) {
+		NewNodeAddActionHandler retval = null;
 
-        if( "state".equals( nodeTemplate.definition().getId().content() ) )
-        {
-            retval = new StateNodeAddActionHandler( nodeTemplate );
-        }
-        else if( "task".equals( nodeTemplate.definition().getId().content() ) )
-        {
-            retval = new TaskNodeAddActionHandler( nodeTemplate );
-        }
-        else if( "condition".equals( nodeTemplate.definition().getId().content() ) )
-        {
-            retval = new ConditionNodeAddActionHandler( nodeTemplate );
-        }
-        else if( "fork".equals( nodeTemplate.definition().getId().content() ) )
-        {
-            retval = new ForkNodeAddActionHandler( nodeTemplate );
-        }
-        else if( "join".equals( nodeTemplate.definition().getId().content() ) )
-        {
-            retval = new JoinNodeAddActionHandler( nodeTemplate );
-        }
-        else if( "join-xor".equals( nodeTemplate.definition().getId().content() ) )
-        {
-            retval = new JoinXorNodeAddActionHandler( nodeTemplate );
-        }
+		IDiagramNodeDef diagramNode = nodeTemplate.definition();
 
-        return retval;
-    }
+		Value<String> nodeId = diagramNode.getId();
+
+		if ("state".equals(nodeId.content())) {
+			retval = new StateNodeAddActionHandler(nodeTemplate);
+		}
+		else if ("task".equals(nodeId.content())) {
+			retval = new TaskNodeAddActionHandler(nodeTemplate);
+		}
+		else if ("condition".equals(nodeId.content())) {
+			retval = new ConditionNodeAddActionHandler(nodeTemplate);
+		}
+		else if ("fork".equals(nodeId.content())) {
+			retval = new ForkNodeAddActionHandler(nodeTemplate);
+		}
+		else if ("join".equals(nodeId.content())) {
+			retval = new JoinNodeAddActionHandler(nodeTemplate);
+		}
+		else if ("join-xor".equals(nodeId.content())) {
+			retval = new JoinXorNodeAddActionHandler(nodeTemplate);
+		}
+
+		return retval;
+	}
 
 }

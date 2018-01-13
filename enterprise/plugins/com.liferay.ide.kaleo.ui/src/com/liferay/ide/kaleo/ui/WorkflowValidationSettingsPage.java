@@ -1,20 +1,23 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui;
 
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.ui.pref.AbstractValidationSettingsPage;
 import com.liferay.ide.kaleo.core.KaleoCore;
 import com.liferay.ide.kaleo.core.util.WorkflowDefinitionValidator;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.ui.pref.AbstractValidationSettingsPage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,192 +40,193 @@ import org.eclipse.wst.sse.ui.internal.preferences.ui.ScrolledPageContent;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class WorkflowValidationSettingsPage extends AbstractValidationSettingsPage
-{
+@SuppressWarnings("restriction")
+public class WorkflowValidationSettingsPage extends AbstractValidationSettingsPage {
 
-    public static final Map<Integer, Integer> ERROR_MAP = new HashMap<Integer, Integer>();
+	public static final int[] ERROR_VALUES = {1, 2, -1};
 
-    public static final int[] ERROR_VALUES = new int[] { 1, 2, -1 };
-    public static final String[] ERRORS = new String[] { "Error", "Warning", "Ignore" };
+	public static final String[] ERRORS = {"Error", "Warning", "Ignore"};
 
-    public static final String PORTLET_UI_PROPERTY_PAGE_PROJECT_VALIDATION_ID =
-        "com.liferay.ide.eclipse.kaleo.ui.propertyPage.workflow.validation";
+	public static final String PORTLET_UI_PROPERTY_PAGE_PROJECT_VALIDATION_ID =
+		"com.liferay.ide.eclipse.kaleo.ui.propertyPage.workflow.validation";
 
-    public static final String SETTINGS_SECTION_NAME = "WorkflowValidationSeverities";
+	public static final String SETTINGS_SECTION_NAME = "WorkflowValidationSeverities";
 
-    public static final String VALIDATION_ID = "com.liferay.ide.eclipse.kaleo.ui.validation.preference";
+	public static final String VALIDATION_ID = "com.liferay.ide.eclipse.kaleo.ui.validation.preference";
 
-    static
-    {
-        ERROR_MAP.put( IMarker.SEVERITY_ERROR, 0 );
-        ERROR_MAP.put( IMarker.SEVERITY_WARNING, 1 );
-        ERROR_MAP.put( IMarker.SEVERITY_INFO, 2 );
-    }
+	public static final Map<Integer, Integer> errorMap = new HashMap<>();
 
-    private PixelConverter pixelConverter;
+	static {
+		errorMap.put(IMarker.SEVERITY_ERROR, 0);
+		errorMap.put(IMarker.SEVERITY_WARNING, 1);
+		errorMap.put(IMarker.SEVERITY_INFO, 2);
+	}
 
-    @Override
-    public void dispose()
-    {
-        storeSectionExpansionStates( getDialogSettings().addNewSection( SETTINGS_SECTION_NAME ) );
-        super.dispose();
-    }
+	@Override
+	public void dispose() {
+		storeSectionExpansionStates(getDialogSettings().addNewSection(SETTINGS_SECTION_NAME));
+		super.dispose();
+	}
 
-    public void init( IWorkbench workbench )
-    {
-    }
+	public void init(IWorkbench workbench) {
+	}
 
-    @Override
-    public boolean performOk()
-    {
-        boolean result = super.performOk();
-        storeValues();
-        return result;
-    }
+	@Override
+	public boolean performOk() {
+		boolean result = super.performOk();
+		storeValues();
 
-    protected Combo createCombo( Composite parent, String label, String key )
-    {
-        return addComboBox( parent, label, key, ERROR_VALUES, ERRORS, 0 );
-    }
+		return result;
+	}
 
-    @Override
-    protected Control createCommonContents( Composite composite )
-    {
-        final Composite page = new Composite( composite, SWT.NULL );
+	protected Combo createCombo(Composite parent, String label, String key) {
+		return addComboBox(parent, label, key, ERROR_VALUES, ERRORS, 0);
+	}
 
-        GridLayout layout = new GridLayout();
-        layout.numColumns = 1;
-        page.setLayout( layout );
+	@Override
+	protected Control createCommonContents(Composite composite) {
+		Composite page = new Composite(composite, SWT.NULL);
 
-        this.pixelConverter = new PixelConverter( composite );
+		GridLayout layout = new GridLayout();
 
-        final Composite content = createValidationSection( page );
+		layout.numColumns = 1;
+		page.setLayout(layout);
 
-        loadPreferences();
-        restoreSectionExpansionStates( getDialogSettings().getSection( SETTINGS_SECTION_NAME ) );
+		_pixelConverter = new PixelConverter(composite);
 
-        GridData gridData = new GridData( GridData.FILL, GridData.FILL, true, true );
-        gridData.heightHint = pixelConverter.convertHeightInCharsToPixels( 20 );
-        content.setLayoutData( gridData );
+		Composite content = createValidationSection(page);
 
-        return page;
-    }
+		loadPreferences();
+		restoreSectionExpansionStates(getDialogSettings().getSection(SETTINGS_SECTION_NAME));
 
-    protected Composite createValidationSection( Composite parent )
-    {
-        GridLayout layout = new GridLayout();
-        layout.numColumns = 2;
-        layout.marginHeight = 0;
-        layout.marginWidth = 0;
+		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 
-        final ScrolledPageContent pageContent = new ScrolledPageContent( parent );
-        pageContent.setLayoutData( new GridData( GridData.FILL_BOTH ) );
-        pageContent.setExpandHorizontal( true );
-        pageContent.setExpandVertical( true );
+		gridData.heightHint = _pixelConverter.convertHeightInCharsToPixels(20);
+		content.setLayoutData(gridData);
 
-        Composite body = pageContent.getBody();
-        body.setLayout( layout );
+		return page;
+	}
 
-        GridData gd = new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 );
-        gd.horizontalIndent = 0;
+	protected Composite createValidationSection(Composite parent) {
+		GridLayout layout = new GridLayout();
 
-        Label description = new Label( body, SWT.NONE );
-        description.setText( "Select the severity level for the following validation problems:" );
-        description.setFont( pageContent.getFont() );
-        description.setLayoutData( gd );
+		layout.numColumns = 2;
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
 
-        ExpandableComposite twistie;
+		ScrolledPageContent pageContent = new ScrolledPageContent(parent);
 
-        int columns = 3;
-        twistie = createTwistie( body, "Workflow Validation", columns );
-        twistie.setBackground( parent.getBackground() );
-        Composite inner = createInnerComposite( parent, twistie, columns );
+		pageContent.setLayoutData(new GridData(GridData.FILL_BOTH));
+		pageContent.setExpandHorizontal(true);
+		pageContent.setExpandVertical(true);
 
-        inner = createInnerComposite( parent, twistie, columns );
-        createCombo(
-            inner, "Default workflow validation (logical)", WorkflowDefinitionValidator.WORKFLOW_DEFINITION_VALIDATE );
+		Composite body = pageContent.getBody();
 
-        return parent;
-    }
+		body.setLayout(layout);
 
-    protected void enableValues()
-    {
-    }
+		GridData gd = new GridData(GridData.FILL, GridData.CENTER, true, false, 2, 1);
 
-    protected IDialogSettings getDialogSettings()
-    {
-        return KaleoUI.getDefault().getDialogSettings();
-    }
+		gd.horizontalIndent = 0;
 
-    @Override
-    protected String getPreferenceNodeQualifier()
-    {
-        return KaleoCore.getDefault().getBundle().getSymbolicName();
-    }
+		Label description = new Label(body, SWT.NONE);
 
-    @Override
-    protected String getPreferencePageID()
-    {
-        return VALIDATION_ID;
-    }
+		description.setText("Select the severity level for the following validation problems:");
 
-    @Override
-    protected String getProjectSettingsKey()
-    {
-        return ProjectCore.USE_PROJECT_SETTINGS;
-    }
+		description.setFont(pageContent.getFont());
 
-    @Override
-    protected String getPropertyPageID()
-    {
-        return PORTLET_UI_PROPERTY_PAGE_PROJECT_VALIDATION_ID;
-    }
+		description.setLayoutData(gd);
 
-    protected String getQualifier()
-    {
-        return ProjectCore.getDefault().getBundle().getSymbolicName();
-    }
+		ExpandableComposite twistie;
 
-    protected void initializeValues()
-    {
-        // for (Map.Entry<String, Combo> entry : combos.entrySet()) {
-        // int val = getPortletCorePreferences().getInt(entry.getKey(), -1);
-        // entry.getValue().select(ERROR_MAP.get(val));
-        // }
-    }
+		int columns = 3;
 
-    protected boolean loadPreferences()
-    {
-        BusyIndicator.showWhile
-        (
-            getControl().getDisplay(),
-            new Runnable()
-            {
-                public void run()
-                {
-                    initializeValues();
-                    validateValues();
-                    enableValues();
-                }
-            }
-        );
+		twistie = createTwistie(body, "Workflow Validation", columns);
 
-        return true;
-    }
+		twistie.setBackground(parent.getBackground());
 
-    @Override
-    protected void performDefaults()
-    {
-        resetSeverities();
-        super.performDefaults();
-    }
+		Composite inner = createInnerComposite(parent, twistie, columns);
 
-    protected void validateValues()
-    {
-        String errorMessage = null;
-        setErrorMessage( errorMessage );
-        setValid( errorMessage == null );
-    }
+		inner = createInnerComposite(parent, twistie, columns);
+
+		createCombo(
+			inner, "Default workflow validation (logical)", WorkflowDefinitionValidator.WORKFLOW_DEFINITION_VALIDATE);
+
+		return parent;
+	}
+
+	protected void enableValues() {
+	}
+
+	protected IDialogSettings getDialogSettings() {
+		return KaleoUI.getDefault().getDialogSettings();
+	}
+
+	@Override
+	protected String getPreferenceNodeQualifier() {
+		KaleoCore kaleoCore = KaleoCore.getDefault();
+
+		return kaleoCore.getBundle().getSymbolicName();
+	}
+
+	@Override
+	protected String getPreferencePageID() {
+		return VALIDATION_ID;
+	}
+
+	@Override
+	protected String getProjectSettingsKey() {
+		return ProjectCore.USE_PROJECT_SETTINGS;
+	}
+
+	@Override
+	protected String getPropertyPageID() {
+		return PORTLET_UI_PROPERTY_PAGE_PROJECT_VALIDATION_ID;
+	}
+
+	protected String getQualifier() {
+		ProjectCore projectCore = ProjectCore.getDefault();
+
+		return projectCore.getBundle().getSymbolicName();
+	}
+
+	protected void initializeValues() {
+		/*
+		 * for (Map.Entry<String, Combo> entry : combos.entrySet()) { int val =
+		 * getPortletCorePreferences().getInt(entry.getKey(), -1);
+		 * entry.getValue().select(ERROR_MAP.get(val)); }
+		 */
+	}
+
+	protected boolean loadPreferences() {
+		Runnable runnable = new Runnable() {
+
+			public void run() {
+				initializeValues();
+				validateValues();
+				enableValues();
+			}
+
+		};
+
+		BusyIndicator.showWhile(getControl().getDisplay(), runnable);
+
+		return true;
+	}
+
+	@Override
+	protected void performDefaults() {
+		resetSeverities();
+		super.performDefaults();
+	}
+
+	protected void validateValues() {
+		String errorMessage = null;
+
+		setErrorMessage(errorMessage);
+
+		setValid(errorMessage == null);
+	}
+
+	private PixelConverter _pixelConverter;
 
 }

@@ -1,1 +1,1 @@
-<#assign doAsGroupId = serviceContext.getAttribute("doAsGroupId")!"">
+<#assign doAsGroupId = serviceContext.getAttribute("doAsGroupId")!"" />

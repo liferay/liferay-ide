@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model.internal;
@@ -14,57 +17,60 @@ package com.liferay.ide.kaleo.core.model.internal;
 import com.liferay.ide.core.util.CoreUtil;
 
 import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
+import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
  * @author Gregory Amerson
  */
-public class CDataValueBindingImpl extends XmlValueBindingImpl
-{
-    private XmlPath path;
+public class CDataValueBindingImpl extends XmlValueBindingImpl {
 
-    @Override
-    public void init( Property property )
-    {
-        super.init( property );
+	@Override
+	public void init(Property property) {
+		super.init(property);
 
-        final XmlBinding bindingAnnotation = property.definition().getAnnotation( XmlBinding.class );
+		PropertyDef propertyDef = property.definition();
 
-        this.path = new XmlPath( bindingAnnotation.path(), resource().getXmlNamespaceResolver() );
-    }
+		XmlBinding bindingAnnotation = propertyDef.getAnnotation(XmlBinding.class);
 
-    @Override
-    public String read()
-    {
-        String retval = null;
+		_path = new XmlPath(bindingAnnotation.path(), resource().getXmlNamespaceResolver());
+	}
 
-        XmlElement xmlElement = xml( false );
+	@Override
+	public String read() {
+		String retval = null;
 
-        if( xmlElement != null )
-        {
-            retval = xmlElement.getChildNodeText( this.path );
-        }
+		XmlElement xmlElement = xml(false);
 
-        return retval;
-    }
+		if (xmlElement != null) {
+			retval = xmlElement.getChildNodeText(_path);
+		}
 
-    @Override
-    public void write( String value )
-    {
-        XmlElement xmlElement = xml( true );
+		return retval;
+	}
 
-        Node cdataNode = xmlElement.getChildNode( this.path, true ).getDomNode();
+	@Override
+	public void write(String value) {
+		XmlElement xmlElement = xml(true);
 
-        CoreUtil.removeChildren( cdataNode );
+		XmlNode childNode = xmlElement.getChildNode(_path, true);
 
-        Document document = cdataNode.getOwnerDocument();
+		Node cdataNode = childNode.getDomNode();
 
-        cdataNode.insertBefore( document.createCDATASection( value ), null );
-    }
+		CoreUtil.removeChildren(cdataNode);
+
+		Document document = cdataNode.getOwnerDocument();
+
+		cdataNode.insertBefore(document.createCDATASection(value), null);
+	}
+
+	private XmlPath _path;
 
 }

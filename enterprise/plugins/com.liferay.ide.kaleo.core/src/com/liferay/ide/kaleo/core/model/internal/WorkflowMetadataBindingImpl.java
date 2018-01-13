@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model.internal;
@@ -14,6 +17,7 @@ package com.liferay.ide.kaleo.core.model.internal;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.kaleo.core.model.WorkflowNodeMetadata;
 
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Resource;
 import org.eclipse.sapphire.modeling.LayeredElementBindingImpl;
@@ -23,68 +27,68 @@ import org.eclipse.sapphire.modeling.xml.XmlResource;
 /**
  * @author Gregory Amerson
  */
-public class WorkflowMetadataBindingImpl extends LayeredElementBindingImpl
-{
+public class WorkflowMetadataBindingImpl extends LayeredElementBindingImpl {
 
-    private WorkflowNodeMetadataObject underlyingObject;
+	@Override
+	public ElementType type(Resource resource) {
+		return WorkflowNodeMetadata.TYPE;
+	}
 
-    @Override
-    protected Object readUnderlyingObject()
-    {
-        WorkflowNodeMetadataObject metadataObject = null;
+	@Override
+	protected Resource createResource(Object obj) {
+		Element element = property().element();
 
-        final XmlResource xmlResource = property().element().resource().adapt( XmlResource.class );
+		Resource resource = element.resource();
 
-        final XmlElement metadataElement = xmlResource.getXmlElement().getChildElement( "metadata", false );
+		XmlResource xmlResource = resource.adapt(XmlResource.class);
 
-        if( metadataElement != null )
-        {
-            String metadata = metadataElement.getChildNodeText( "" );
+		return new WorkflowNodeMetadataResource((WorkflowNodeMetadataObject)obj, xmlResource);
+	}
 
-            if( !CoreUtil.empty( metadata ) )
-            {
-                metadataObject = new WorkflowNodeMetadataObject( metadata.trim() );
-            }
-        }
+	@Override
+	protected Object createUnderlyingObject(ElementType type) {
+		Object retval = null;
 
-        if( metadataObject == null )
-        {
-            metadataObject = new WorkflowNodeMetadataObject();
-        }
+		if (WorkflowNodeMetadata.TYPE.equals(type)) {
+			retval = new WorkflowNodeMetadataObject();
+		}
 
-        if( !metadataObject.equals( this.underlyingObject ) )
-        {
-            this.underlyingObject = metadataObject;
-        }
+		return retval;
+	}
 
-        return this.underlyingObject;
-    }
+	@Override
+	protected Object readUnderlyingObject() {
+		WorkflowNodeMetadataObject metadataObject = null;
 
-    @Override
-    protected Object createUnderlyingObject( ElementType type )
-    {
-        Object retval = null;
+		Element element = property().element();
 
-        if( WorkflowNodeMetadata.TYPE.equals( type ) )
-        {
-            retval = new WorkflowNodeMetadataObject();
-        }
+		Resource resource = element.resource();
 
-        return retval;
-    }
+		XmlResource xmlResource = resource.adapt(XmlResource.class);
 
-    @Override
-    protected Resource createResource( Object obj )
-    {
-        XmlResource xmlResource = property().element().resource().adapt( XmlResource.class );
+		XmlElement xmlElement = xmlResource.getXmlElement();
 
-        return new WorkflowNodeMetadataResource( (WorkflowNodeMetadataObject) obj, xmlResource );
-    }
+		XmlElement metadataElement = xmlElement.getChildElement("metadata", false);
 
-    @Override
-    public ElementType type( Resource resource )
-    {
-        return WorkflowNodeMetadata.TYPE;
-    }
+		if (metadataElement != null) {
+			String metadata = metadataElement.getChildNodeText("");
+
+			if (!CoreUtil.empty(metadata)) {
+				metadataObject = new WorkflowNodeMetadataObject(metadata.trim());
+			}
+		}
+
+		if (metadataObject == null) {
+			metadataObject = new WorkflowNodeMetadataObject();
+		}
+
+		if (!metadataObject.equals(_underlyingObject)) {
+			_underlyingObject = metadataObject;
+		}
+
+		return _underlyingObject;
+	}
+
+	private WorkflowNodeMetadataObject _underlyingObject;
 
 }

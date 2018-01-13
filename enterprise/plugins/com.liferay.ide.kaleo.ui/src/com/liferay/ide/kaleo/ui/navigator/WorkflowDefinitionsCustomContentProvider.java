@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.navigator;
@@ -36,265 +39,222 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class WorkflowDefinitionsCustomContentProvider extends PluginsCustomContentProvider
-{
+@SuppressWarnings("restriction")
+public class WorkflowDefinitionsCustomContentProvider extends PluginsCustomContentProvider {
 
-    protected final static Object[] EMPTY = new Object[] {};
+	public WorkflowDefinitionsCustomContentProvider() {
+	}
 
-    private final Map<String, WorkflowDefinitionsFolder> workflowDefinitionFolders =
-        new HashMap<String, WorkflowDefinitionsFolder>();
+	public void dispose() {
+	}
 
-    private final Map<String, IStatus> checkApiStatuses = new HashMap<String, IStatus>();
+	public Object[] getChildren(Object parentElement) {
+		if (parentElement instanceof IServer) {
+			return null;
+		}
+		else if (parentElement instanceof WorkflowDefinitionsFolder) {
+			return ((WorkflowDefinitionsFolder)parentElement).getChildren();
+		}
 
-    public WorkflowDefinitionsCustomContentProvider()
-    {
-        super();
-    }
+		return null;
+	}
 
-    public void dispose()
-    {
-    }
+	public Object getParent(Object element) {
+		if (element instanceof IWorkspaceRoot) {
+			return null;
+		}
 
-    public Object[] getChildren( Object parentElement )
-    {
-        if( parentElement instanceof IServer )
-        {
-            return null;
-        }
-        else if( parentElement instanceof WorkflowDefinitionsFolder )
-        {
-            return ( (WorkflowDefinitionsFolder) parentElement ).getChildren();
-        }
+		return null;
+	}
 
-        return null;
-    }
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	public void getPipelinedChildren(Object parent, Set currentChildren) {
+		if (parent instanceof IServer) {
+			IServer server = (IServer)parent;
 
-    public Object getParent( Object element )
-    {
-        if( element instanceof IWorkspaceRoot )
-        {
-            return null;
-        }
+			/*
+			 * IServerListener listener = new IServerListener() {
 
-        return null;
-    }
+			 *
+			 *
+			 * @Override public void serverChanged( ServerEvent event ) { try {
+			 * WorkflowDefinitionsCustomContentProvider.checkApiStatuses.
+			 * remove( server.getId() ); refreshUI( (NavigatorContentService)
+			 * getConfig().getService(), server ); } catch( Exception e) {} } };
+			 * server.addServerListener( listener );
+			 */
+			if (server.getServerState() == IServer.STATE_STARTED) {
+				WorkflowDefinitionsFolder definitionsNode = _workflowDefinitionFolders.get(server.getId());
 
-    @SuppressWarnings( { "rawtypes", "unchecked" } )
-    public void getPipelinedChildren( final Object parent, final Set currentChildren )
-    {
-        if( parent instanceof IServer )
-        {
-            final IServer server = (IServer) parent;
+				if (definitionsNode == null) {
+					IStatus checkApiStatus = _checkApiStatuses.get(server.getId());
 
-//            final IServerListener listener = new IServerListener()
-//            {
-//                @Override
-//                public void serverChanged( ServerEvent event )
-//                {
-//                    try
-//                    {
-//                        WorkflowDefinitionsCustomContentProvider.this.checkApiStatuses.remove( server.getId() );
-//                        refreshUI( (NavigatorContentService) getConfig().getService(), server );
-//                    }
-//                    catch( Exception e) {}
-//                }
-//            };
-//            server.addServerListener( listener );
+					if (checkApiStatus == null) {
+						Job checkJob = new Job("Checking for Kaleo Designer API...") {
 
-            if( server.getServerState() == IServer.STATE_STARTED )
-            {
-                final WorkflowDefinitionsFolder definitionsNode = this.workflowDefinitionFolders.get( server.getId() );
+							@Override
+							protected IStatus run(IProgressMonitor monitor) {
+								try {
+									IKaleoConnection kaleoConnection = KaleoCore.getKaleoConnection(server);
 
-                if( definitionsNode == null )
-                {
-                    final IStatus checkApiStatus = this.checkApiStatuses.get( server.getId() );
+									KaleoCore.updateKaleoConnectionSettings(
+										KaleoUtil.getLiferayServer(server, monitor), kaleoConnection);
 
-                    if( checkApiStatus == null )
-                    {
-                        Job checkJob = new Job( "Checking for Kaleo Designer API..." )
-                        {
-                            @Override
-                            protected IStatus run( IProgressMonitor monitor )
-                            {
-                                try
-                                {
-                                    IKaleoConnection kaleoConnection = KaleoCore.getKaleoConnection( server );
-                                    KaleoCore.updateKaleoConnectionSettings(
-                                        KaleoUtil.getLiferayServer( server, monitor ), kaleoConnection );
+									kaleoConnection.getKaleoDefinitions();
+									kaleoConnection.getKaleoDraftWorkflowDefinitions();
 
-                                    kaleoConnection.getKaleoDefinitions();
-                                    kaleoConnection.getKaleoDraftWorkflowDefinitions();
+									WorkflowDefinitionsCustomContentProvider.this._checkApiStatuses.put(
+										server.getId(), Status.OK_STATUS);
 
-                                    WorkflowDefinitionsCustomContentProvider.this.checkApiStatuses.put(
-                                        server.getId(), Status.OK_STATUS );
+									refreshUI((NavigatorContentService)getConfig().getService(), server);
+								}
+								catch (Exception e) {
+									WorkflowDefinitionsCustomContentProvider.this._checkApiStatuses.put(
+										server.getId(), KaleoUI.createErrorStatus(e));
+								}
 
-                                    refreshUI( (NavigatorContentService) getConfig().getService(), server );
-                                }
-                                catch (Exception e)
-                                {
-                                    WorkflowDefinitionsCustomContentProvider.this.checkApiStatuses.put(
-                                        server.getId(), KaleoUI.createErrorStatus( e ) );
-                                }
+								return Status.OK_STATUS;
+							}
 
-                                return Status.OK_STATUS;
-                            }
-                        };
+						};
 
-                        checkJob.schedule();
-                    }
-                    else
-                    {
-                        if( checkApiStatus.isOK() )
-                        {
-                            insertDefinitionsNode( server, currentChildren );
-                            WorkflowDefinitionsCustomContentProvider.this.checkApiStatuses.put( server.getId(), null );
-                        }
-                        else
-                        {
-                            KaleoUI.logInfo("Kaleo Workflow API unavailable.", checkApiStatus);
-                        }
-                    }
-                }
-                else
-                {
-                    if( !currentChildren.contains( definitionsNode ) )
-                    {
-                        currentChildren.add( definitionsNode );
-                        definitionsNode.getChildren(); // make sure children are cached.
-                    }
-                }
-            }
-            else
-            {
-                this.workflowDefinitionFolders.put( server.getId(), null );
-                this.checkApiStatuses.put( server.getId(), null );
-            }
-        }
-    }
+						checkJob.schedule();
+					}
+					else {
+						if (checkApiStatus.isOK()) {
+							_insertDefinitionsNode(server, currentChildren);
+							WorkflowDefinitionsCustomContentProvider.this._checkApiStatuses.put(server.getId(), null);
+						}
+						else {
+							KaleoUI.logInfo("Kaleo Workflow API unavailable.", checkApiStatus);
+						}
+					}
+				}
+				else {
+					if (!currentChildren.contains(definitionsNode)) {
+						currentChildren.add(definitionsNode);
 
-    protected void refreshUI( final NavigatorContentService s, final IServer server )
-    {
-        UIUtil.async
-        (
-            new Runnable()
-            {
-                public void run()
-                {
-                    try
-                    {
-                        final CommonViewer viewer = (CommonViewer) s.getViewer();
-                        viewer.refresh( true );
-                        viewer.setExpandedState( server, true );
-                    }
-                    catch (Exception e)
-                    {
-                    }
-                }
-            }
-        );
-    }
+						// make sure children are cached.
 
-    public Object getPipelinedParent( final Object object, final Object suggestedParent )
-    {
-        if( object instanceof WorkflowDefinitionsFolder )
-        {
-            return ( (WorkflowDefinitionsFolder) object ).getParent();
+						definitionsNode.getChildren();
+					}
+				}
+			}
+			else {
+				_workflowDefinitionFolders.put(server.getId(), null);
+				_checkApiStatuses.put(server.getId(), null);
+			}
+		}
+	}
 
-            // if ( ProjectUtil.isLiferayProject( project ) && this.definitionsContentNode != null )
-            // {
-            // return this.definitionsContentNode;
-            // }
-        }
-        // else if ( anObject instanceof DefinitionsContainer && anObject.equals( this.definitionsContentNode ) )
-        // {
-        // return this.definitionsContentNode.getParent();
-        // }
+	public Object getPipelinedParent(Object object, Object suggestedParent) {
+		if (object instanceof WorkflowDefinitionsFolder) {
+			return ((WorkflowDefinitionsFolder)object).getParent();
 
-        return null;
-    }
+			/*
+			 * if ( ProjectUtil.isLiferayProject( project ) &&
+			 * (definitionsContentNode != null) ) { return
+			 * definitionsContentNode; }
+			 */
+		}
+		/*
+		 * else if ( anObject instanceof DefinitionsContainer &&
+		 * anObject.equals( definitionsContentNode ) ) { return
+		 * definitionsContentNode.getParent(); }
+		 */
+		return null;
+	}
 
-    public boolean hasChildren( Object element)
-    {
-        return element instanceof WorkflowDefinitionsFolder;
-    }
+	public boolean hasChildren(Object element) {
+		return element instanceof WorkflowDefinitionsFolder;
+	}
 
-    public boolean hasChildren( Object element, boolean currentHasChildren )
-    {
-        if( element instanceof IServer )
-        {
-            // higher priority extension should consider Properties File extension's result
-            if( currentHasChildren )
-            {
-                return true;
-            }
+	public boolean hasChildren(Object element, boolean currentHasChildren) {
+		if (element instanceof IServer) {
+			/*
+			 * higher priority extension should consider Properties File
+			 * extension's result
+			 */
+			if (currentHasChildren) {
+				return true;
+			}
 
-            IServer server = (IServer) element;
+			IServer server = (IServer)element;
 
-            final WorkflowDefinitionsFolder definitionsNode = this.workflowDefinitionFolders.get( server.getId() );
+			WorkflowDefinitionsFolder definitionsNode = _workflowDefinitionFolders.get(server.getId());
 
-            if( definitionsNode != null )
-            {
-                return true;
-            }
+			if (definitionsNode != null) {
+				return true;
+			}
 
-            if( ServerUtil.isLiferayRuntime( server ) )
-            {
-                if( server.getServerState() == IServer.STATE_STARTED )
-                {
-                    return true;
-                }
-            }
-        }
+			if (ServerUtil.isLiferayRuntime(server)) {
+				if (server.getServerState() == IServer.STATE_STARTED) {
+					return true;
+				}
+			}
+		}
 
-        return currentHasChildren;
-    }
+		return currentHasChildren;
+	}
 
-    @SuppressWarnings( { "rawtypes", "unchecked" } )
-    private void insertDefinitionsNode( IServer server, Set currentChildren )
-    {
-        WorkflowDefinitionsFolder node = new WorkflowDefinitionsFolder( this.getConfig(), server );
+	public boolean interceptRefresh(PipelinedViewerUpdate viewerUpdate) {
+		for (Object refreshTarget : viewerUpdate.getRefreshTargets()) {
+			if (refreshTarget instanceof IServer) {
+				_clearStatuses((IServer)refreshTarget);
+			}
+		}
 
-        this.workflowDefinitionFolders.put( server.getId(), node );
+		return false;
+	}
 
-        currentChildren.add( node );
-    }
+	public boolean interceptUpdate(PipelinedViewerUpdate viewerUpdate) {
+		for (Object updateTarget : viewerUpdate.getRefreshTargets()) {
+			if (updateTarget instanceof IServer) {
+				_clearStatuses((IServer)updateTarget);
+			}
+		}
 
-    public boolean interceptRefresh( PipelinedViewerUpdate viewerUpdate )
-    {
-        for( Object refreshTarget : viewerUpdate.getRefreshTargets() )
-        {
-            if( refreshTarget instanceof IServer )
-            {
-                clearStatuses((IServer) refreshTarget);
-            }
-        }
+		return false;
+	}
 
-        return false;
-    }
+	protected void refreshUI(NavigatorContentService s, IServer server) {
+		UIUtil.async(
+			new Runnable() {
 
-    private void clearStatuses( IServer server )
-    {
-        if( ServerUtil.isLiferayRuntime( server ) )
-        {
-            if( server.getServerState() != IServer.STATE_STARTED )
-            {
-                this.checkApiStatuses.put( server.getId(), null );
-            }
-        }
-    }
+				public void run() {
+					try {
+						CommonViewer viewer = (CommonViewer)s.getViewer();
 
-    public boolean interceptUpdate( PipelinedViewerUpdate viewerUpdate )
-    {
-        for( Object updateTarget : viewerUpdate.getRefreshTargets() )
-        {
-            if( updateTarget instanceof IServer )
-            {
-                clearStatuses( (IServer) updateTarget );
-            }
-        }
+						viewer.refresh(true);
+						viewer.setExpandedState(server, true);
+					}
+					catch (Exception e) {
+					}
+				}
 
-        return false;
-    }
+			});
+	}
+
+	protected static final Object[] EMPTY = {};
+
+	private void _clearStatuses(IServer server) {
+		if (ServerUtil.isLiferayRuntime(server)) {
+			if (server.getServerState() != IServer.STATE_STARTED) {
+				_checkApiStatuses.put(server.getId(), null);
+			}
+		}
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	private void _insertDefinitionsNode(IServer server, Set currentChildren) {
+		WorkflowDefinitionsFolder node = new WorkflowDefinitionsFolder(getConfig(), server);
+
+		_workflowDefinitionFolders.put(server.getId(), node);
+
+		currentChildren.add(node);
+	}
+
+	private final Map<String, IStatus> _checkApiStatuses = new HashMap<>();
+	private final Map<String, WorkflowDefinitionsFolder> _workflowDefinitionFolders = new HashMap<>();
 
 }

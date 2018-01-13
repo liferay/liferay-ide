@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model;
@@ -27,78 +30,53 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Gregory Amerson
  */
-@Image( path = "images/timer_16x16.png" )
-public interface TaskTimer extends TimerAction
-{
-    ElementType TYPE = new ElementType( TaskTimer.class );
+@Image(path = "images/timer_16x16.png")
+public interface TaskTimer extends TimerAction {
 
-    // *** Blocking ***
+	public ElementType TYPE = new ElementType(TaskTimer.class);
 
-    @Type( base = Boolean.class )
-    @Label( standard = "&blocking" )
-    @XmlBinding( path = "blocking" )
-    ValueProperty PROP_BLOCKING = new ValueProperty( TYPE, "Blocking" );
+	public ElementList<ResourceAction> getResourceActions();
 
-    Value<Boolean> isBlocking();
+	public ElementList<Role> getRoles();
 
-    void setBlocking( String value );
+	public Scriptable getScriptedAssignment();
 
-    void setBlocking( Boolean value );
+	public User getUser();
 
-    // *** re-assignments node ***
+	public Value<Boolean> isBlocking();
 
-    // *** resource actions ***
+	public void setBlocking(Boolean value);
 
-    @Type( base = ResourceAction.class )
-    @Label( standard = "resource actions" )
-    @XmlListBinding
-    (
-        path = "reassignments/resource-actions",
-        mappings = @XmlListBinding.Mapping
-        (
-            element = "resource-action",
-            type = ResourceAction.class
-        )
-    )
-    ListProperty PROP_RESOURCE_ACTIONS = new ListProperty( TYPE, "ResourceActions" );
+	public void setBlocking(String value);
 
-    ElementList<ResourceAction> getResourceActions();
+	@Label(standard = "&blocking")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "blocking")
+	public ValueProperty PROP_BLOCKING = new ValueProperty(TYPE, "Blocking");
 
-    // *** roles ***
+	@Label(standard = "resource actions")
+	@Type(base = ResourceAction.class)
+	@XmlListBinding(
+		mappings = @XmlListBinding.Mapping(element = "resource-action", type = ResourceAction.class),
+		path = "reassignments/resource-actions"
+	)
+	public ListProperty PROP_RESOURCE_ACTIONS = new ListProperty(TYPE, "ResourceActions");
 
-    @Type( base = Role.class )
-    @Label( standard = "roles" )
-    @XmlListBinding
-    (
-        path = "reassignments/roles",
-        mappings = @XmlListBinding.Mapping
-        (
-            element = "role",
-            type = Role.class
-        )
-    )
-    ListProperty PROP_ROLES = new ListProperty( TYPE, "Roles" );
+	@Label(standard = "roles")
+	@Type(base = Role.class)
+	@XmlListBinding(
+		mappings = @XmlListBinding.Mapping(element = "role", type = Role.class), path = "reassignments/roles"
+	)
+	public ListProperty PROP_ROLES = new ListProperty(TYPE, "Roles");
 
-    ElementList<Role> getRoles();
+	@Label(standard = "scripted assignment")
+	@Type(base = Scriptable.class)
+	@XmlElementBinding(path = "reassignments/scripted-assignment")
+	public ImpliedElementProperty PROP_SCRIPTED_ASSIGNMENT = new ImpliedElementProperty(TYPE, "ScriptedAssignment");
 
-    // ** scripted assignment **
-
-    @Type( base = Scriptable.class )
-    @Label( standard = "scripted assignment" )
-    @XmlElementBinding( path = "reassignments/scripted-assignment" )
-    ImpliedElementProperty PROP_SCRIPTED_ASSIGNMENT = new ImpliedElementProperty( TYPE, "ScriptedAssignment" );
-
-    Scriptable getScriptedAssignment();
-
-    // ** User **
-
-    @Type( base = User.class )
-    @Label( standard = "user" )
-    @XmlElementBinding( path = "reassignments/user" )
-    ImpliedElementProperty PROP_USER = new ImpliedElementProperty( TYPE, "User" );
-
-    User getUser();
-
-    // *** re-assignments node end ***
+	@Label(standard = "user")
+	@Type(base = User.class)
+	@XmlElementBinding(path = "reassignments/user")
+	public ImpliedElementProperty PROP_USER = new ImpliedElementProperty(TYPE, "User");
 
 }

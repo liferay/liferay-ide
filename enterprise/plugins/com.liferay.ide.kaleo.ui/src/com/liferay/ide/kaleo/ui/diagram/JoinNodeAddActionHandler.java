@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.diagram;
@@ -26,59 +29,55 @@ import org.eclipse.sapphire.ui.diagram.editor.DiagramNodeTemplate;
 /**
  * @author Gregory Amerson
  */
-public class JoinNodeAddActionHandler extends NewNodeAddActionHandler
-{
+public class JoinNodeAddActionHandler extends NewNodeAddActionHandler {
 
-    private static final String WIZARD_ID = "newJoinNodeWizard";
+	public JoinNodeAddActionHandler(DiagramNodeTemplate nodeTemplate) {
+		super(nodeTemplate);
+	}
 
-    public JoinNodeAddActionHandler( DiagramNodeTemplate nodeTemplate )
-    {
-        super( nodeTemplate );
-    }
+	@Override
+	public void postDiagramNodePartAdded(NewNodeOp op, CanTransition newNodeFromWizard, CanTransition newNode) {
+		NewJoinNodeOp newJoinNodeOp = op.nearest(NewJoinNodeOp.class);
 
-    @Override
-    protected NewNodeOp createOp( Presentation context )
-    {
-        return NewJoinNodeOp.TYPE.instantiate();
-    }
+		Join newJoin = newNode.nearest(Join.class);
 
-    @Override
-    protected String getWizardId()
-    {
-        return WIZARD_ID;
-    }
+		WorkflowDefinition workflowDefinition = newJoin.nearest(WorkflowDefinition.class);
 
-    @Override
-    public void postDiagramNodePartAdded( NewNodeOp op, CanTransition newNodeFromWizard, CanTransition newNode )
-    {
-        NewJoinNodeOp newJoinNodeOp = op.nearest( NewJoinNodeOp.class );
+		for (Node nodeName : newJoinNodeOp.getConnectedNodes()) {
+			for (WorkflowNode diagramNode : workflowDefinition.getDiagramNodes()) {
+				if (nodeName.getName().content() != null) {
+					String name = nodeName.getName().content();
 
-        Join newJoin = newNode.nearest( Join.class );
+					if (name.equals(diagramNode.getName().content())) {
+						CanTransition canTransition = diagramNode.nearest(CanTransition.class);
 
-        WorkflowDefinition workflowDefinition = newJoin.nearest( WorkflowDefinition.class );
+						Transition newTransition = canTransition.getTransitions().insert();
 
-        for( Node nodeName : newJoinNodeOp.getConnectedNodes() )
-        {
-            for( WorkflowNode diagramNode : workflowDefinition.getDiagramNodes() )
-            {
-                if( nodeName.getName().content() != null &&
-                    nodeName.getName().content().equals( diagramNode.getName().content() ) )
-                {
-                    CanTransition canTransition = diagramNode.nearest( CanTransition.class );
+						newTransition.setName(newJoin.getName().content());
+						newTransition.setTarget(newJoin.getName().content());
+					}
+				}
+			}
+		}
 
-                    Transition newTransition = canTransition.getTransitions().insert();
-                    newTransition.setName( newJoin.getName().content() );
-                    newTransition.setTarget( newJoin.getName().content() );
-                }
-            }
-        }
+		if (newJoinNodeOp.getExitTransitionName().content() != null) {
+			Transition newTransition = newJoin.getTransitions().insert();
 
-        if( newJoinNodeOp.getExitTransitionName().content() != null )
-        {
-            Transition newTransition = newJoin.getTransitions().insert();
-            newTransition.setTarget( newJoinNodeOp.getExitTransitionName().content() );
-            newTransition.setName( newJoinNodeOp.getExitTransitionName().content() );
-        }
-    }
+			newTransition.setTarget(newJoinNodeOp.getExitTransitionName().content());
+			newTransition.setName(newJoinNodeOp.getExitTransitionName().content());
+		}
+	}
+
+	@Override
+	protected NewNodeOp createOp(Presentation context) {
+		return NewJoinNodeOp.TYPE.instantiate();
+	}
+
+	@Override
+	protected String getWizardId() {
+		return _WIZARD_ID;
+	}
+
+	private static final String _WIZARD_ID = "newJoinNodeWizard";
 
 }

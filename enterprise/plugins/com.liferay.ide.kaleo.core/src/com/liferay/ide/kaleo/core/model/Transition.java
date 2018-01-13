@@ -1,13 +1,17 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
+
 package com.liferay.ide.kaleo.core.model;
 
 import com.liferay.ide.kaleo.core.model.internal.TransitionPossibleValuesService;
@@ -34,54 +38,46 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  * @author Gregory Amerson
  */
 @Image(path = "images/arrow_16x16.png")
-//@Listeners( value = {TransitionTargetListener.class} )
-public interface Transition extends Element
-{
 
-    ElementType TYPE = new ElementType( Transition.class );
+// @Listeners( value = {TransitionTargetListener.class} )
+public interface Transition extends Element {
 
-    // *** Name ***
+	public ElementType TYPE = new ElementType(Transition.class);
 
-    @XmlBinding(path = "name")
-    @Label(standard = "&name")
-    @DefaultValue( text = "${Target}" )
-    @Required
-    ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
+	public Value<String> getName();
 
-    Value<String> getName();
+	public ReferenceValue<String, Node> getTarget();
 
-    void setName(String value);
+	public Value<Boolean> isDefaultTransition();
 
-    // *** Target ***
+	public void setDefaultTransition(Boolean value);
 
-    @Reference(target = Node.class)
-    @Services
-    (
-        {
-            @Service( impl = TransitionReferenceService.class ),
-            @Service( impl = TransitionPossibleValuesService.class )
-        }
-    )
-    @XmlBinding( path = "target" )
-    @Label( standard = "&target" )
-    @Required
-    @Listeners( value = { TransitionTargetListener.class } )
-    ValueProperty PROP_TARGET = new ValueProperty( TYPE, "Target" );
+	public void setDefaultTransition(String value);
 
-    ReferenceValue<String, Node> getTarget();
+	public void setName(String value);
 
-    void setTarget(String value);
+	public void setTarget(String value);
 
-    // *** Default ***
+	@DefaultValue(text = "false")
+	@Label(standard = "&default")
+	@Type(base = Boolean.class)
+	@XmlBinding(path = "default")
+	public ValueProperty PROP_DEFAULT_TRANSITION = new ValueProperty(TYPE, "DefaultTransition");
 
-    @Type(base = Boolean.class)
-    @Label(standard = "&default")
-    @XmlBinding(path = "default")
-    @DefaultValue( text = "false" )
-    ValueProperty PROP_DEFAULT_TRANSITION = new ValueProperty( TYPE, "DefaultTransition" );
+	@DefaultValue(text = "${Target}")
+	@Label(standard = "&name")
+	@Required
+	@XmlBinding(path = "name")
+	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
-    Value<Boolean> isDefaultTransition();
-    void setDefaultTransition( String value );
-    void setDefaultTransition( Boolean value );
+	@Label(standard = "&target")
+	@Listeners(value = TransitionTargetListener.class)
+	@Reference(target = Node.class)
+	@Required
+	@Services(
+		{@Service(impl = TransitionReferenceService.class), @Service(impl = TransitionPossibleValuesService.class)}
+	)
+	@XmlBinding(path = "target")
+	public ValueProperty PROP_TARGET = new ValueProperty(TYPE, "Target");
 
 }

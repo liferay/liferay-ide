@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.editor;
@@ -21,35 +24,32 @@ import org.eclipse.wst.jsdt.internal.ui.javaeditor.CompilationUnitEditor;
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class KaleoJavaScriptEditor extends CompilationUnitEditor
-{
-    public static final String EDITOR_ID = "com.liferay.ide.kaleo.ui.editor.jsdt";
-    private KaleoPaletteHelper paletteHelper;
+@SuppressWarnings("restriction")
+public class KaleoJavaScriptEditor extends CompilationUnitEditor {
 
-    public KaleoJavaScriptEditor()
-    {
-        super();
-        final ImageDescriptor entryImage =
-            KaleoUI.imageDescriptorFromPlugin( KaleoUI.PLUGIN_ID, "icons/e16/js_obj.gif" );
-        this.paletteHelper = new KaleoPaletteHelper( this, KaleoUI.getDefault(), "palette/jsdt", entryImage );
-    }
+	public static final String EDITOR_ID = "com.liferay.ide.kaleo.ui.editor.jsdt";
 
-    @Override
-    @SuppressWarnings( "rawtypes" )
-    public Object getAdapter( Class required )
-    {
-        if( required == PalettePage.class )
-        {
-            return this.paletteHelper.createPalettePage();
-        }
+	public KaleoJavaScriptEditor() {
+		ImageDescriptor entryImage = KaleoUI.imageDescriptorFromPlugin(KaleoUI.PLUGIN_ID, "icons/e16/js_obj.gif");
 
-        return super.getAdapter( required );
-    }
+		_paletteHelper = new KaleoPaletteHelper(this, KaleoUI.getDefault(), "palette/jsdt", entryImage);
+	}
 
-    @Override
-    public boolean isDirty()
-    {
-        return false;
-    }
+	@Override
+	@SuppressWarnings("rawtypes")
+	public Object getAdapter(Class required) {
+		if (required == PalettePage.class) {
+			return _paletteHelper.createPalettePage();
+		}
+
+		return super.getAdapter(required);
+	}
+
+	@Override
+	public boolean isDirty() {
+		return false;
+	}
+
+	private KaleoPaletteHelper _paletteHelper;
+
 }

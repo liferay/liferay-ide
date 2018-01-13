@@ -1,1 +1,1 @@
-<#assign threadId = serviceContext.getAttribute("threadId")!"">
+<#assign threadId = serviceContext.getAttribute("threadId")!"" />

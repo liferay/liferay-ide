@@ -1,159 +1,174 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.util;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.kaleo.core.KaleoCore;
 import com.liferay.ide.scripting.core.GroovyScriptProxy;
 import com.liferay.ide.server.core.ILiferayRuntime;
 
 import java.io.File;
 import java.io.FilenameFilter;
+
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.wst.server.core.IRuntime;
+
+import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class WorkflowValidationProxy extends GroovyScriptProxy
-{
+public class WorkflowValidationProxy extends GroovyScriptProxy {
 
-    private IRuntime runtime;
+	public WorkflowValidationProxy(IRuntime runtime) {
+		_runtime = runtime;
+	}
 
-    public WorkflowValidationProxy( IRuntime runtime )
-    {
-        this.runtime = runtime;
-    }
+	protected File getGroovyFile() throws Exception {
+		Object loadAdapter = _runtime.loadAdapter(ILiferayRuntime.class, null);
 
-    @SuppressWarnings( "deprecation" )
-    protected URL[] getProxyClasspath() throws CoreException
-    {
-        List<URL> scriptUrlList = new ArrayList<URL>();
+		ILiferayRuntime liferayRuntime = (ILiferayRuntime)loadAdapter;
 
-        IRuntime serverRuntime = this.runtime;
+		KaleoCore kaleoCore = KaleoCore.getDefault();
 
-        if( serverRuntime == null )
-        {
-            throw new CoreException( KaleoCore.createErrorStatus( "Could not get server runtime." ) );
-        }
+		if (liferayRuntime != null) {
+			Version version = new Version(liferayRuntime.getPortalVersion());
 
-        ILiferayRuntime liferayRuntime = (ILiferayRuntime) serverRuntime.loadAdapter( ILiferayRuntime.class, null );
+			Bundle bundle = kaleoCore.getBundle();
 
-        File libFolder = liferayRuntime.getAppServerPortalDir().append( "WEB-INF/lib" ).toFile();
+			URL bundleURL = FileLocator.toFileURL(bundle.getEntry(_getGroovyWorkflowValidationScript(version)));
 
-        // dom4j.jar portal-impl.jar xercesImpl.jar
+			return new File(bundleURL.getFile());
+		}
 
-        String[] libs = libFolder.list( new FilenameFilter()
-        {
-            public boolean accept( File dir, String name )
-            {
-                return name.endsWith( ".jar" ) &&
-                    ( name.contains( "dom4j" ) || name.contains( "xercesImpl" ) || name.contains( "portal-impl" ) ||
-                        name.contains( "util-java" ) || name.contains( "commons-lang" ) );
-            }
-        } );
+		IStatus error = KaleoCore.createErrorStatus("Unable to locate groovy script");
 
-        for( String lib : libs )
-        {
-            File libJar = new File( libFolder, lib );
+		ILog log = kaleoCore.getLog();
 
-            if( libJar.exists() )
-            {
-                try
-                {
-                    scriptUrlList.add( libJar.toURL() );
-                }
-                catch( MalformedURLException e )
-                {
-                }
-            }
-        }
+		log.log(error);
 
-        File[] jars = new File[]
-        {
-            runtime.getLocation().append( "webapps/kaleo-designer-portlet/WEB-INF/lib/kaleo-web-service.jar" ).toFile(),
-            runtime.getLocation().append( "lib/ext/portal-service.jar" ).toFile()
-        };
+		throw new CoreException(error);
+	}
 
-        for( File jar : jars )
-        {
-            if( jar.exists() )
-            {
-                try
-                {
-                    scriptUrlList.add( jar.toURL() );
-                }
-                catch( MalformedURLException e )
-                {
-                }
-            }
-        }
+	@SuppressWarnings("deprecation")
+	protected URL[] getProxyClasspath() throws CoreException {
+		List<URL> scriptUrlList = new ArrayList<>();
 
-        File parserDir = runtime.getLocation().append( "webapps/kaleo-web/WEB-INF/classes/" ).toFile();
+		IRuntime serverRuntime = _runtime;
 
-        if( parserDir.exists() )
-        {
-            try
-            {
-                scriptUrlList.add( parserDir.toURL() );
-            }
-            catch( Exception e )
-            {
-            }
-        }
+		if (serverRuntime == null) {
+			throw new CoreException(KaleoCore.createErrorStatus("Could not get server runtime."));
+		}
 
-        return scriptUrlList.toArray( new URL[0] );
-    }
+		ILiferayRuntime liferayRuntime = (ILiferayRuntime)serverRuntime.loadAdapter(ILiferayRuntime.class, null);
 
-    protected File getGroovyFile() throws Exception
-    {
-        final ILiferayRuntime liferayRuntime = (ILiferayRuntime) runtime.loadAdapter( ILiferayRuntime.class, null );
+		IPath appServerPortalDir = liferayRuntime.getAppServerPortalDir();
 
-        if( liferayRuntime != null )
-        {
-            final Version version = new Version( liferayRuntime.getPortalVersion() );
+		IPath appServerPortalLibDir = appServerPortalDir.append("WEB-INF/lib");
 
-            return new File( FileLocator.toFileURL(
-                KaleoCore.getDefault().getBundle().getEntry( getGroovyWorkflowValidationScript( version ) ) ).getFile() );
-        }
+		File libFolder = appServerPortalLibDir.toFile();
 
-        IStatus error = KaleoCore.createErrorStatus( "Unable to locate groovy script" );
-        KaleoCore.getDefault().getLog().log( error );
-        throw new CoreException( error );
-    }
+		FilenameFilter fileNameFilter = new FilenameFilter() {
 
-    private String getGroovyWorkflowValidationScript( final Version runtimeVersion )
-    {
-        final int result = runtimeVersion.compareTo( new Version( 6, 1, 30 ) );
+			public boolean accept(File dir, String name) {
+				if (name.endsWith(".jar") &&
+					(name.contains("dom4j") || name.contains("xercesImpl") || name.contains("portal-impl") ||
+					 name.contains("util-java") || name.contains("commons-lang"))) {
 
-        if( result > 0 )
-        {
-            return "/scripts/portal/WorkflowValidation620.groovy";
-        }
-        else if( result == 0 )
-        {
-            return "/scripts/portal/WorkflowValidation6130.groovy";
-        }
-        else
-        {
-            return "/scripts/portal/WorkflowValidation6120.groovy";
-        }
-    }
+					return true;
+				}
+
+				return false;
+			}
+
+		};
+
+		String[] libs = libFolder.list(fileNameFilter);
+
+		for (String lib : libs) {
+			File libJar = new File(libFolder, lib);
+
+			if (FileUtil.exists(libJar)) {
+				try {
+					scriptUrlList.add(libJar.toURL());
+				}
+				catch (MalformedURLException murle) {
+				}
+			}
+		}
+
+		IPath runtimePath = _runtime.getLocation();
+
+		IPath kaleoWebServiceJarDir = runtimePath.append(
+			"webapps/kaleo-designer-portlet/WEB-INF/lib/kaleo-web-service.jar");
+
+		IPath portalServiceJarDir = runtimePath.append("lib/ext/portal-service.jar");
+
+		File[] jars = {kaleoWebServiceJarDir.toFile(), portalServiceJarDir.toFile()};
+
+		for (File jar : jars) {
+			if (FileUtil.exists(jar)) {
+				try {
+					scriptUrlList.add(jar.toURL());
+				}
+				catch (MalformedURLException murle) {
+				}
+			}
+		}
+
+		IPath classesDir = runtimePath.append("webapps/kaleo-web/WEB-INF/classes/");
+
+		File parserDir = classesDir.toFile();
+
+		if (FileUtil.exists(parserDir)) {
+			try {
+				scriptUrlList.add(parserDir.toURL());
+			}
+			catch (Exception e) {
+			}
+		}
+
+		return scriptUrlList.toArray(new URL[0]);
+	}
+
+	private String _getGroovyWorkflowValidationScript(Version runtimeVersion) {
+		int result = runtimeVersion.compareTo(new Version(6, 1, 30));
+
+		if (result > 0) {
+			return "/scripts/portal/WorkflowValidation620.groovy";
+		}
+		else if (result == 0) {
+			return "/scripts/portal/WorkflowValidation6130.groovy";
+		}
+		else {
+			return "/scripts/portal/WorkflowValidation6120.groovy";
+		}
+	}
+
+	private IRuntime _runtime;
+
 }

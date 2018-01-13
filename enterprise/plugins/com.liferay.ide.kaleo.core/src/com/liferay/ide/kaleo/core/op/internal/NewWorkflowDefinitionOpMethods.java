@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.op.internal;
@@ -14,10 +17,13 @@ package com.liferay.ide.kaleo.core.op.internal;
 import com.liferay.ide.kaleo.core.KaleoCore;
 import com.liferay.ide.kaleo.core.model.Action;
 import com.liferay.ide.kaleo.core.model.ExecutionType;
+import com.liferay.ide.kaleo.core.model.Position;
 import com.liferay.ide.kaleo.core.model.ScriptLanguageType;
 import com.liferay.ide.kaleo.core.model.State;
 import com.liferay.ide.kaleo.core.model.Task;
+import com.liferay.ide.kaleo.core.model.TemplateLanguageType;
 import com.liferay.ide.kaleo.core.model.Transition;
+import com.liferay.ide.kaleo.core.model.TransitionMetadata;
 import com.liferay.ide.kaleo.core.model.WorkflowDefinition;
 import com.liferay.ide.kaleo.core.model.WorkflowNodeMetadata;
 import com.liferay.ide.kaleo.core.op.NewWorkflowDefinitionOp;
@@ -28,6 +34,11 @@ import java.io.ByteArrayInputStream;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.sapphire.ElementHandle;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ReferenceValue;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
@@ -39,144 +50,212 @@ import org.eclipse.sapphire.workspace.WorkspaceFileResourceStore;
  * @author Gregory Amerson
  * @author Kuo Zhang
  */
-public final class NewWorkflowDefinitionOpMethods
-{
+public class NewWorkflowDefinitionOpMethods {
 
-    public static final Status execute( final NewWorkflowDefinitionOp op, final ProgressMonitor monitor )
-    {
-        try
-        {
-            final IProject project = op.getProject().target();
+	public static Status execute(NewWorkflowDefinitionOp op, ProgressMonitor monitor) {
+		try {
+			ReferenceValue<String, IProject> referProject = op.getProject();
 
-            final Path projectPath = op.getFolder().content();
+			IProject project = referProject.target();
 
-            IContainer folder = null;
+			Value<Path> opFolder = op.getFolder();
 
-            if( projectPath != null )
-            {
-                folder = project.getFolder( projectPath.toPortableString() );
-            }
-            else
-            {
-                folder = project;
-            }
+			Path projectPath = opFolder.content();
 
-            if( !folder.exists() )
-            {
-                folder = folder.getParent();
-            }
+			IContainer folder = null;
 
-            final String name = op.getName().content();
+			if (projectPath != null) {
+				folder = project.getFolder(projectPath.toPortableString());
+			}
+			else {
+				folder = project;
+			}
 
-            final String[] segments = name.toLowerCase().split( "\\s+" );
+			if (!folder.exists()) {
+				folder = folder.getParent();
+			}
 
-            final StringBuilder newName = new StringBuilder();
+			Value<String> opName = op.getName();
 
-            for( String segment : segments )
-            {
-                newName.append( segment ).append( '-' );
-            }
+			String name = opName.content();
 
-            final String fileNameBase = newName.toString() + "definition";
-            final String extension = ".xml";
-            String fileName = fileNameBase + extension;
+			String lowerCaseName = name.toLowerCase();
 
-            IFile newDefinitionFile = project.getFile( folder.getProjectRelativePath().append( fileName ) );
+			String[] segments = lowerCaseName.split("\\s+");
 
-            int count = 1;
+			StringBuilder newName = new StringBuilder();
 
-            while( newDefinitionFile.exists() )
-            {
-                fileName = fileNameBase + " (" + count + ")" + extension;
+			for (String segment : segments) {
+				StringBuilder segNewName = newName.append(segment);
 
-                newDefinitionFile = project.getFile( folder.getProjectRelativePath().append( fileName ) );
+				segNewName.append('-');
+			}
 
-                count++;
-            }
+			String fileNameBase = newName.toString() + "definition";
 
-            newDefinitionFile.create( new ByteArrayInputStream( "".getBytes() ), true, null );
+			String extension = ".xml";
 
-            newDefinitionFile.setPersistentProperty(
-                KaleoCore.DEFAULT_SCRIPT_LANGUAGE_KEY, op.getDefaultScriptLanguage().text( true ) );
+			String fileName = fileNameBase + extension;
 
-            newDefinitionFile.setPersistentProperty(
-                KaleoCore.DEFAULT_TEMPLATE_LANGUAGE_KEY, op.getDefaultTemplateLanguage().text( true ) );
+			IPath proRelativePath = folder.getProjectRelativePath();
 
-            final RootXmlResource rootXmlResource =
-                new RootXmlResource( new XmlResourceStore( new WorkspaceFileResourceStore( newDefinitionFile ) ) );
+			IFile newDefinitionFile = project.getFile(proRelativePath.append(fileName));
 
-            final WorkflowDefinition workflowDefinition = WorkflowDefinition.TYPE.instantiate( rootXmlResource );
+			int count = 1;
 
-            workflowDefinition.setName( name );
-            workflowDefinition.setVersion( "1" );
+			while (newDefinitionFile.exists()) {
+				fileName = fileNameBase + " (" + count + ")" + extension;
 
-            final String initialStateName = op.getInitialStateName().content( true );
+				newDefinitionFile = project.getFile(proRelativePath.append(fileName));
 
-            final State state = workflowDefinition.getStates().insert();
-            state.setName( initialStateName );
-            state.setInitial( true );
+				count++;
+			}
 
-            final String initialTaskName = op.getInitialTaskName().content( true );
-            final Task task = workflowDefinition.getTasks().insert();
-            task.setName( initialTaskName );
+			newDefinitionFile.create(new ByteArrayInputStream("".getBytes()), true, null);
 
-            KaleoModelUtil.changeTaskAssignments( task, op );
+			Value<ScriptLanguageType> scLanguageType = op.getDefaultScriptLanguage();
 
-            final Transition transition = state.getTransitions().insert();
+			newDefinitionFile.setPersistentProperty(KaleoCore.DEFAULT_SCRIPT_LANGUAGE_KEY, scLanguageType.text(true));
 
-            transition.setName( initialTaskName );
-            transition.setTarget( initialTaskName );
+			Value<TemplateLanguageType> deTemplateLanguage = op.getDefaultTemplateLanguage();
 
-            final String finalStateName = op.getFinalStateName().content( true );
+			newDefinitionFile.setPersistentProperty(
+				KaleoCore.DEFAULT_TEMPLATE_LANGUAGE_KEY, deTemplateLanguage.text(true));
 
-            final State finalState = workflowDefinition.getStates().insert();
-            finalState.setName( finalStateName );
-            finalState.setEnd( true );
+			RootXmlResource rootXmlResource = new RootXmlResource(
+				new XmlResourceStore(new WorkspaceFileResourceStore(newDefinitionFile)));
 
-            final Action finalAction = finalState.getActions().insert();
-            finalAction.setName( "approve" );
-            finalAction.setExecutionType( ExecutionType.ON_ENTRY );
-            finalAction.setScriptLanguage( ScriptLanguageType.JAVASCRIPT );
-            finalAction.setScript( "Packages.com.liferay.portal.kernel.workflow.WorkflowStatusManagerUtil.updateStatus(Packages.com.liferay.portal.kernel.workflow.WorkflowConstants.toStatus(\"approved\"), workflowContext);" );
+			WorkflowDefinition workflowDefinition = WorkflowDefinition.TYPE.instantiate(rootXmlResource);
 
-            final Transition taskTransition = task.getTransitions().insert();
+			workflowDefinition.setName(name);
 
-            taskTransition.setName( finalStateName );
-            taskTransition.setTarget( finalStateName );
+			workflowDefinition.setVersion("1");
 
-            final WorkflowNodeMetadata stateMetadata = state.getMetadata().content();
-            stateMetadata.getPosition().setX( 100 );
-            stateMetadata.getPosition().setY( 50 );
-            stateMetadata.getTransitionsMetadata().insert().setName( initialTaskName );
+			Value<String> initStateName = op.getInitialStateName();
 
-            final WorkflowNodeMetadata taskMetadata = task.getMetadata().content();
-            taskMetadata.getPosition().setX( 300 );
-            taskMetadata.getPosition().setY( 35 );
-            taskMetadata.getTransitionsMetadata().insert().setName( finalStateName );
+			String initialStateName = initStateName.content(true);
 
-            final WorkflowNodeMetadata finalStateMetadata = finalState.getMetadata().content();
-            finalStateMetadata.getPosition().setX( 520 );
-            finalStateMetadata.getPosition().setY( 50 );
+			ElementList<State> workflowState = workflowDefinition.getStates();
 
-            /*Document document = rootXmlResource.getDomDocument();
-            Element docElement = document.getDocumentElement();
-            Attr schemaLocation = docElement.getAttributeNode( "xsi:schemaLocation" );
-            schemaLocation.setNodeValue( schemaLocation.getNodeValue().replaceAll(
-                " http://www.w3.org/XML/1998/namespace ", "" ) );*/
+			State state = workflowState.insert();
 
-            rootXmlResource.save();
+			state.setName(initialStateName);
+			state.setInitial(true);
 
-            op.setNewFilePath( newDefinitionFile.getFullPath().toPortableString() );
+			Value<String> initTaskName = op.getInitialTaskName();
 
-            return Status.createOkStatus();
+			String initialTaskName = initTaskName.content(true);
 
-        }
-        catch( Exception e )
-        {
-            KaleoCore.logError( "Error creating new kaleo workflow file.", e );
-            return Status.createErrorStatus( "Error creating new kaleo workflow file.", e );
-        }
+			ElementList<Task> workflowTask = workflowDefinition.getTasks();
 
-    }
+			Task task = workflowTask.insert();
+
+			task.setName(initialTaskName);
+
+			KaleoModelUtil.changeTaskAssignments(task, op);
+
+			ElementList<Transition> transitions = state.getTransitions();
+
+			Transition transition = transitions.insert();
+
+			transition.setName(initialTaskName);
+			transition.setTarget(initialTaskName);
+
+			Value<String> opFinalName = op.getFinalStateName();
+
+			String finalStateName = opFinalName.content(true);
+
+			ElementList<State> states = workflowDefinition.getStates();
+
+			State finalState = states.insert();
+
+			finalState.setName(finalStateName);
+			finalState.setEnd(true);
+
+			ElementList<Action> actions = finalState.getActions();
+
+			Action finalAction = actions.insert();
+
+			finalAction.setName("approve");
+			finalAction.setExecutionType(ExecutionType.ON_ENTRY);
+			finalAction.setScriptLanguage(ScriptLanguageType.JAVASCRIPT);
+
+			String updateStatus = "Packages.com.liferay.portal.kernel.workflow.WorkflowStatusManagerUtil.updateStatus";
+
+			String workflowConstants = "(Packages.com.liferay.portal.kernel.workflow.WorkflowConstants.";
+
+			String toStatus = "toStatus(\"approved\"), workflowContext);";
+
+			finalAction.setScript(updateStatus + workflowConstants + toStatus);
+
+			ElementList<Transition> taskTransitions = task.getTransitions();
+
+			Transition taskTransition = taskTransitions.insert();
+
+			taskTransition.setName(finalStateName);
+			taskTransition.setTarget(finalStateName);
+
+			ElementHandle<WorkflowNodeMetadata> wfMetadata = state.getMetadata();
+
+			WorkflowNodeMetadata stateMetadata = wfMetadata.content();
+
+			Position statePosition = stateMetadata.getPosition();
+
+			statePosition.setX(100);
+			statePosition.setY(50);
+
+			ElementList<TransitionMetadata> transitionMetadata = stateMetadata.getTransitionsMetadata();
+
+			TransitionMetadata insertTransitionMetadata = transitionMetadata.insert();
+
+			insertTransitionMetadata.setName(initialTaskName);
+
+			ElementHandle<WorkflowNodeMetadata> taskWorkflow = task.getMetadata();
+
+			WorkflowNodeMetadata taskMetadata = taskWorkflow.content();
+
+			Position taskPosition = taskMetadata.getPosition();
+
+			taskPosition.setX(300);
+			taskPosition.setY(35);
+
+			ElementList<TransitionMetadata> transitionTask = taskMetadata.getTransitionsMetadata();
+
+			TransitionMetadata transitionTaskMetadata = transitionTask.insert();
+
+			transitionTaskMetadata.setName(finalStateName);
+
+			ElementHandle<WorkflowNodeMetadata> finalMetadata = finalState.getMetadata();
+
+			WorkflowNodeMetadata finalStateMetadata = finalMetadata.content();
+
+			Position finalStatePosition = finalStateMetadata.getPosition();
+
+			finalStatePosition.setX(520);
+			finalStatePosition.setY(50);
+
+			/*
+			 * Document document = rootXmlResource.getDomDocument(); Element
+			 * docElement = document.getDocumentElement(); Attr schemaLocation =
+			 * docElement.getAttributeNode( "xsi:schemaLocation" ); =
+			 * schemaLocation.getNodeValue(); String nodeValue =
+			 * schemaLocation.getNodeValue(); schemaLocation.setNodeValue(
+			 * nodeValue.replaceAll( " http://www.w3.org/XML/1998/namespace ",
+			 * "" ) );
+			 */
+			rootXmlResource.save();
+
+			IPath fullPath = newDefinitionFile.getFullPath();
+
+			op.setNewFilePath(fullPath.toPortableString());
+
+			return Status.createOkStatus();
+		}
+		catch (Exception e) {
+			KaleoCore.logError("Error creating new kaleo workflow file.", e);
+
+			return Status.createErrorStatus("Error creating new kaleo workflow file.", e);
+		}
+	}
 
 }

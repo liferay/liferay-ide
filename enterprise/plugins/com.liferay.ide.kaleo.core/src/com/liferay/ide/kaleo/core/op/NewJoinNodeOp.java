@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.op;
@@ -26,25 +29,26 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 /**
  * @author Gregory Amerson
  */
-public interface NewJoinNodeOp extends NewNodeOp
-{
-    ElementType TYPE = new ElementType( NewJoinNodeOp.class );
+public interface NewJoinNodeOp extends NewNodeOp {
 
-    @Type( base = NewJoinNode.class )
-    @Label( standard = "new join node" )
-    ImpliedElementProperty PROP_NEW_JOIN_NODE = new ImpliedElementProperty( TYPE, "NewJoinNode" );
+	public ElementType TYPE = new ElementType(NewJoinNodeOp.class);
 
-    NewJoinNode getNewJoinNode();
+	public Value<String> getExitTransitionName();
 
-    @Label( standard = "nodes to join" )
-    @Length( min = 0, max = 2 )
-    ListProperty PROP_CONNECTED_NODES = new ListProperty( TYPE, NewNodeOp.PROP_CONNECTED_NODES );
+	public NewJoinNode getNewJoinNode();
 
-    @Label( standard = "&exit transition name" )
-    @Service( impl = TransitionPossibleValuesService.class )
-    ValueProperty PROP_EXIT_TRANSITION_NAME = new ValueProperty( TYPE, "ExitTransitionName" );
+	public void setExitTransitionName(String value);
 
-    Value<String> getExitTransitionName();
+	@Label(standard = "nodes to join")
+	@Length(max = 2, min = 0)
+	public ListProperty PROP_CONNECTED_NODES = new ListProperty(TYPE, NewNodeOp.PROP_CONNECTED_NODES);
 
-    void setExitTransitionName( String value );
+	@Label(standard = "&exit transition name")
+	@Service(impl = TransitionPossibleValuesService.class)
+	public ValueProperty PROP_EXIT_TRANSITION_NAME = new ValueProperty(TYPE, "ExitTransitionName");
+
+	@Label(standard = "new join node")
+	@Type(base = NewJoinNode.class)
+	public ImpliedElementProperty PROP_NEW_JOIN_NODE = new ImpliedElementProperty(TYPE, "NewJoinNode");
+
 }

@@ -1,90 +1,107 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.editor;
 
 import com.liferay.ide.kaleo.core.model.Assignable;
 
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.ui.ISapphirePart;
 import org.eclipse.sapphire.ui.SapphireCondition;
 
-
 /**
  * @author Gregory Amerson
  */
-public class CurrentAssignmentsCondition extends SapphireCondition
-{
+public class CurrentAssignmentsCondition extends SapphireCondition {
 
-    private String parameter;
+	@Override
+	protected boolean evaluate() {
+		boolean retval = false;
 
-    @Override
-    protected boolean evaluate()
-    {
-        boolean retval = false;
+		Assignable assignable = _op();
 
-        Assignable assignable = op();
+		boolean hasUser = false;
 
-        boolean hasUser = assignable.getUser().content( false ) != null;
-        boolean hasScript = assignable.getScriptedAssignment().content( false ) != null;
-        boolean hasRoles = assignable.getRoles().size() > 0;
-        boolean hasResourceActions = assignable.getResourceActions().size() > 0;
+		if (assignable.getUser().content(false) != null) {
+			hasUser = true;
+		}
 
-        if (hasUser)
-        {
-            retval = "user".equals(this.parameter) || "creator".equals(this.parameter);
-        }
-        else if (hasScript)
-        {
-            retval = "script".equals(this.parameter);
-        }
-        else if (hasRoles)
-        {
-            retval = "role".equals(this.parameter) || "roles".equals(this.parameter);
-        }
-        else if (hasResourceActions)
-        {
-            retval = "resources".equals(this.parameter);
-        }
+		boolean hasScript = false;
 
-        return retval;
-    }
+		if (assignable.getScriptedAssignment().content(false) != null) {
+			hasScript = true;
+		}
 
-    @Override
-    protected void initCondition( ISapphirePart part, String parameter )
-    {
-        super.initCondition( part, parameter );
+		boolean hasRoles = false;
 
-        this.parameter = parameter;
+		if (assignable.getRoles().size() > 0) {
+			hasRoles = true;
+		}
 
-        Assignable assignable = op();
+		boolean hasResourceActions = false;
 
-        Listener assignmentTypeListener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            public void handleTypedEvent( final PropertyContentEvent event )
-            {
-                updateConditionState();
-            }
-        };
+		if (assignable.getResourceActions().size() > 0) {
+			hasResourceActions = true;
+		}
 
-        assignable.attach( assignmentTypeListener, "*" );
+		if (hasUser) {
+			retval = "user".equals(_parameter) || "creator".equals(_parameter);
+		}
+		else if (hasScript) {
+			retval = "script".equals(_parameter);
+		}
+		else if (hasRoles) {
+			retval = "role".equals(_parameter) || "roles".equals(_parameter);
+		}
+		else if (hasResourceActions) {
+			retval = "resources".equals(_parameter);
+		}
 
-        updateConditionState();
-    }
+		return retval;
+	}
 
-    private Assignable op()
-    {
-        return getPart().getLocalModelElement().nearest( Assignable.class );
-    }
+	@Override
+	protected void initCondition(ISapphirePart part, String parameter) {
+		super.initCondition(part, parameter);
+
+		_parameter = parameter;
+
+		Assignable assignable = _op();
+
+		Listener assignmentTypeListener = new FilteredListener<PropertyContentEvent>() {
+
+			@Override
+			public void handleTypedEvent(PropertyContentEvent event) {
+				updateConditionState();
+			}
+
+		};
+
+		assignable.attach(assignmentTypeListener, "*");
+
+		updateConditionState();
+	}
+
+	private Assignable _op() {
+		Element element = getPart().getLocalModelElement();
+
+		return element.nearest(Assignable.class);
+	}
+
+	private String _parameter;
+
 }

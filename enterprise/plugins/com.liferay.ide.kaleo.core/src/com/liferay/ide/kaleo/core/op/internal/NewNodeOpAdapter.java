@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.op.internal;
@@ -17,53 +20,50 @@ import com.liferay.ide.kaleo.core.op.NewNodeOp;
 
 import java.lang.reflect.Method;
 
+import org.eclipse.sapphire.ElementHandle;
 import org.eclipse.sapphire.UniversalConversionService;
-
 
 /**
  * @author Gregory Amerson
  */
-public class NewNodeOpAdapter extends UniversalConversionService
-{
+public class NewNodeOpAdapter extends UniversalConversionService {
 
-    @Override
-    public <T> T convert( Object object, Class<T> type )
-    {
-        if( type.equals( WorkflowDefinition.class ) )
-        {
-            NewNodeOp op = context().find( NewNodeOp.class );
+	@Override
+	public <T> T convert(Object object, Class<T> type) {
+		if (type.equals(WorkflowDefinition.class)) {
+			NewNodeOp op = context().find(NewNodeOp.class);
 
-            if( op.getWorkflowDefinition().content( false ) != null )
-            {
-                return type.cast( op.getWorkflowDefinition().content( false ) );
-            }
-        }
-        else if( type.equals( CanTransition.class ) )
-        {
-            final String simpleName = object.getClass().getSimpleName();
+			if (op.getWorkflowDefinition().content(false) != null) {
+				ElementHandle<WorkflowDefinition> workflowDefinition = op.getWorkflowDefinition();
 
-            final int index = simpleName.indexOf( "Op$Impl" );
+				return type.cast(workflowDefinition.content(false));
+			}
+		}
+		else if (type.equals(CanTransition.class)) {
+			Class<?> clazz = object.getClass();
 
-            if( index > -1 )
-            {
-                try
-                {
-                    final String simpleNamePrefix = object.getClass().getSimpleName().substring( 0, index );
+			String simpleName = clazz.getSimpleName();
 
-                    final String methodName = "get" + simpleNamePrefix;
+			int index = simpleName.indexOf("Op$Impl");
 
-                    final Method method = object.getClass().getMethod( methodName );
+			if (index > -1) {
+				try {
+					String wholeSimpleName = clazz.getSimpleName();
 
-                    return type.cast( method.invoke( object ) );
-                }
-                catch( Exception e )
-                {
-                }
-            }
+					String simpleNamePrefix = wholeSimpleName.substring(0, index);
 
-        }
+					String methodName = "get" + simpleNamePrefix;
 
-        return null;
-    }
+					Method method = clazz.getMethod(methodName);
+
+					return type.cast(method.invoke(object));
+				}
+				catch (Exception e) {
+				}
+			}
+		}
+
+		return null;
+	}
 
 }

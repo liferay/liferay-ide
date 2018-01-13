@@ -1,1 +1,1 @@
-<#assign articleURL = serviceContext.getAttribute("articleURL")!"">
+<#assign articleURL = serviceContext.getAttribute("articleURL")!"" />

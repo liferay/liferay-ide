@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.op;
@@ -27,52 +30,41 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 /**
  * @author Gregory Amerson
  */
-public interface NewStateNodeOp extends NewNodeOp
-{
-    ElementType TYPE = new ElementType( NewStateNodeOp.class );
+public interface NewStateNodeOp extends NewNodeOp {
 
-    @Type( base = NewStateNode.class )
-    ImpliedElementProperty PROP_NEW_STATE_NODE = new ImpliedElementProperty( TYPE, "NewStateNode" );
+	public ElementType TYPE = new ElementType(NewStateNodeOp.class);
 
-    NewStateNode getNewStateNode();
+	public Value<String> getExitTransitionName();
 
-    @Type( base = NewStateType.class )
-    @Label( standard = "state &type" )
-    @DefaultValue( text = "default" )
-    ValueProperty PROP_TYPE = new ValueProperty( TYPE, "Type" );
+	public NewStateNode getNewStateNode();
 
-    Value<NewStateType> getType();
-    void setType( String type );
-    void setType( NewStateType type );
+	public Value<NewStateType> getType();
 
-    // *** WorkflowStatus ***
+	public Value<String> getWorkflowStatus();
 
-    @Label( standard = "&workflow status" )
-    @PossibleValues
-    (
-        values =
-        {
-            "approved",
-            "denied",
-            "draft",
-            "expired",
-            "inactive",
-            "incomplete",
-            "pending"
-        }
-    )
-    ValueProperty PROP_WORKFLOW_STATUS = new ValueProperty( TYPE, "WorkflowStatus" );
+	public void setExitTransitionName(String value);
 
-    Value<String> getWorkflowStatus();
-    void setWorkflowStatus( String value );
+	public void setType(NewStateType type);
 
+	public void setType(String type);
 
-    @Label( standard = "&exit transition node" )
-    @Enablement( expr = "${Type != \"end\"}" )
-    @Service( impl = TransitionPossibleValuesService.class )
-    ValueProperty PROP_EXIT_TRANSITION_NAME = new ValueProperty( TYPE, "ExitTransitionName" );
+	public void setWorkflowStatus(String value);
 
-    Value<String> getExitTransitionName();
-    void setExitTransitionName( String value );
+	@Enablement(expr = "${Type != \"end\"}")
+	@Label(standard = "&exit transition node")
+	@Service(impl = TransitionPossibleValuesService.class)
+	public ValueProperty PROP_EXIT_TRANSITION_NAME = new ValueProperty(TYPE, "ExitTransitionName");
+
+	@Type(base = NewStateNode.class)
+	public ImpliedElementProperty PROP_NEW_STATE_NODE = new ImpliedElementProperty(TYPE, "NewStateNode");
+
+	@DefaultValue(text = "default")
+	@Label(standard = "state &type")
+	@Type(base = NewStateType.class)
+	public ValueProperty PROP_TYPE = new ValueProperty(TYPE, "Type");
+
+	@Label(standard = "&workflow status")
+	@PossibleValues(values = {"approved", "denied", "draft", "expired", "inactive", "incomplete", "pending"})
+	public ValueProperty PROP_WORKFLOW_STATUS = new ValueProperty(TYPE, "WorkflowStatus");
 
 }

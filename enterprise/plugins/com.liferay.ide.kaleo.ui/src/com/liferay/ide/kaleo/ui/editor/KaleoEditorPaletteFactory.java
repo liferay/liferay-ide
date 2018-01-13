@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.editor;
@@ -27,69 +30,58 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 /**
  * @author Gregory Amerson
  */
-public class KaleoEditorPaletteFactory
-{
+public class KaleoEditorPaletteFactory {
 
-    public static PaletteRoot createPalette( AbstractUIPlugin bundle, String folderName, ImageDescriptor entryImage )
-    {
-        PaletteRoot root = new PaletteRoot();
+	public static PaletteRoot createPalette(AbstractUIPlugin bundle, String folderName, ImageDescriptor entryImage) {
+		PaletteRoot root = new PaletteRoot();
 
-        try
-        {
-            File paletteFolder = getPaletteFolder( bundle, folderName );
+		try {
+			File paletteFolder = _getPaletteFolder(bundle, folderName);
 
-            if( paletteFolder != null )
-            {
-                for( File file : paletteFolder.listFiles() )
-                {
-                    createPaletteEntries( root, file, entryImage );
-                }
-            }
-        }
-        catch( Exception e )
-        {
-        }
+			if (paletteFolder != null) {
+				for (File file : paletteFolder.listFiles()) {
+					_createPaletteEntries(root, file, entryImage);
+				}
+			}
+		}
+		catch (Exception e) {
+		}
 
-        return root;
-    }
+		return root;
+	}
 
-    private static void createPaletteEntries( PaletteContainer container, File paletteFile, ImageDescriptor image )
-    {
-        if( paletteFile.isDirectory() )
-        {
-            PaletteContainer newDrawer = new PaletteDrawer( paletteFile.getName() );
+	private static void _createPaletteEntries(PaletteContainer container, File paletteFile, ImageDescriptor image) {
+		if (paletteFile.isDirectory()) {
+			PaletteContainer newDrawer = new PaletteDrawer(paletteFile.getName());
 
-            for( File file : paletteFile.listFiles() )
-            {
-                createPaletteEntries( newDrawer, file, image );
-            }
+			for (File file : paletteFile.listFiles()) {
+				_createPaletteEntries(newDrawer, file, image);
+			}
 
-            container.add( newDrawer );
-        }
-        else
-        {
-            CreationFactory factory = new ScriptCreationFactory( paletteFile );
+			container.add(newDrawer);
+		}
+		else {
+			CreationFactory factory = new ScriptCreationFactory(paletteFile);
 
-            String label = new Path( paletteFile.getName() ).removeFileExtension().toPortableString();
+			String label = new Path(paletteFile.getName()).removeFileExtension().toPortableString();
 
-            CombinedTemplateCreationEntry entry =
-                new CombinedTemplateCreationEntry( label, label, factory, image, image );
-            // entry.setToolClass( CreationTool.class );
-            container.add( entry );
-        }
-    }
+			CombinedTemplateCreationEntry entry = new CombinedTemplateCreationEntry(
+				label, label, factory, image, image);
 
-    private static File getPaletteFolder( AbstractUIPlugin bundle, String folderName )
-    {
-        try
-        {
-            return new File( FileLocator.toFileURL( bundle.getBundle().getEntry( folderName ) ).getFile() );
-        }
-        catch( IOException e )
-        {
-        }
+			// entry.setToolClass( CreationTool.class );
 
-        return null;
-    }
+			container.add(entry);
+		}
+	}
+
+	private static File _getPaletteFolder(AbstractUIPlugin bundle, String folderName) {
+		try {
+			return new File(FileLocator.toFileURL(bundle.getBundle().getEntry(folderName)).getFile());
+		}
+		catch (IOException ioe) {
+		}
+
+		return null;
+	}
 
 }

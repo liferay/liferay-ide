@@ -1,1 +1,1 @@
-<#assign structureId = serviceContext.getAttribute("structureId")!"">
+<#assign structureId = serviceContext.getAttribute("structureId")!"" />

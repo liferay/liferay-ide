@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.model;
@@ -21,38 +24,31 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Gregory Amerson
  */
-public interface ActionTimer extends WorkflowNode
-{
+public interface ActionTimer extends WorkflowNode {
 
-    ElementType TYPE = new ElementType( ActionTimer.class );
+	public ElementType TYPE = new ElementType(ActionTimer.class);
 
-    // *** Actions ***
+	public ElementList<Action> getActions();
 
-    @Type( base = Action.class )
-    @Label( standard = "action" )
-    @XmlListBinding( path = "actions", mappings = @XmlListBinding.Mapping( element = "action", type = Action.class ) )
-    ListProperty PROP_ACTIONS = new ListProperty( TYPE, "Actions" );
+	public ElementList<ActionNotification> getNotifications();
 
-    ElementList<Action> getActions();
+	public ElementList<Timer> getTimers();
 
-    // *** Notifications ***
+	@Label(standard = "action")
+	@Type(base = Action.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "action", type = Action.class), path = "actions")
+	public ListProperty PROP_ACTIONS = new ListProperty(TYPE, "Actions");
 
-    @Type( base = ActionNotification.class )
-    @Label( standard = "notification" )
-    @XmlListBinding( path = "actions", mappings = @XmlListBinding.Mapping(
-                    element = "notification",
-                    type = ActionNotification.class ) )
-    ListProperty PROP_NOTIFICATIONS = new ListProperty( TYPE, "Notifications" );
+	@Label(standard = "notification")
+	@Type(base = ActionNotification.class)
+	@XmlListBinding(
+		mappings = @XmlListBinding.Mapping(element = "notification", type = ActionNotification.class), path = "actions"
+	)
+	public ListProperty PROP_NOTIFICATIONS = new ListProperty(TYPE, "Notifications");
 
-    ElementList<ActionNotification> getNotifications();
-
-    // *** Timer ***
-
-    @Type( base = Timer.class )
-    @Label( standard = "timer" )
-    @XmlListBinding( path = "timers", mappings = @XmlListBinding.Mapping( element = "timer", type = Timer.class ) )
-    ListProperty PROP_TIMERS = new ListProperty( TYPE, "Timers" );
-
-    ElementList<Timer> getTimers();
+	@Label(standard = "timer")
+	@Type(base = Timer.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "timer", type = Timer.class), path = "timers")
+	public ListProperty PROP_TIMERS = new ListProperty(TYPE, "Timers");
 
 }

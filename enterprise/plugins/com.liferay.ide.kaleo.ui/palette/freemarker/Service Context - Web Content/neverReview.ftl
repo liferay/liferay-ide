@@ -1,1 +1,1 @@
-<#assign neverReview = serviceContext.getAttribute("neverReview")!"">
+<#assign neverReview = serviceContext.getAttribute("neverReview")!"" />

@@ -1,13 +1,16 @@
-/******************************************************************************
- * Copyright (c) 2012 Oracle
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *    Shenxue Zhou - initial implementation
- ******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.kaleo.core.model;
 
@@ -19,30 +22,30 @@ import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 
 /**
- * @author <a href="mailto:shenxue.zhou@oracle.com">Shenxue Zhou</a>
+ * @author Shenxue Zhou
  */
-public interface ConnectionBendpoint extends Element
-{
-    ElementType TYPE = new ElementType( ConnectionBendpoint.class );
+public interface ConnectionBendpoint extends Element {
 
-    // *** X ***
+	public ElementType TYPE = new ElementType(ConnectionBendpoint.class);
 
-    @Type( base = Integer.class )
-    @DefaultValue( text = "0" )
-    ValueProperty PROP_X = new ValueProperty( TYPE, "X");
+	public Value<Integer> getX();
 
-    Value<Integer> getX();
-    void setX(Integer value);
-    void setX(String value);
+	public Value<Integer> getY();
 
-    // *** Y ***
+	public void setX(Integer value);
 
-    @Type( base = Integer.class )
-    @DefaultValue( text = "0" )
-    ValueProperty PROP_Y = new ValueProperty( TYPE, "Y");
+	public void setX(String value);
 
-    Value<Integer> getY();
-    void setY(Integer value);
-    void setY(String value);
+	public void setY(Integer value);
+
+	public void setY(String value);
+
+	@DefaultValue(text = "0")
+	@Type(base = Integer.class)
+	public ValueProperty PROP_X = new ValueProperty(TYPE, "X");
+
+	@DefaultValue(text = "0")
+	@Type(base = Integer.class)
+	public ValueProperty PROP_Y = new ValueProperty(TYPE, "Y");
 
 }

@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.action;
@@ -26,74 +29,57 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.navigator.CommonViewer;
 
 /**
- * "Publish" menu action.
- *
  * @author Gregory Amerson
  */
-public class PublishWorkflowDefinitionAction extends AbstractWorkflowDefinitionAction
-{
+public class PublishWorkflowDefinitionAction extends AbstractWorkflowDefinitionAction {
 
-    /**
-     * OpenAction constructor.
-     *
-     * @param sp
-     *            a selection provider
-     */
-    public PublishWorkflowDefinitionAction( ISelectionProvider sp )
-    {
-        super( sp, "Publish Kaleo workflow" );
-    }
+	public PublishWorkflowDefinitionAction(ISelectionProvider sp) {
+		super(sp, "Publish Kaleo workflow");
+	}
 
-    @Override
-    public void perform( final Object node )
-    {
-        if( this.getSelectionProvider() instanceof CommonViewer && node instanceof WorkflowDefinitionEntry )
-        {
-            final WorkflowDefinitionEntry definitionNode = (WorkflowDefinitionEntry) node;
+	@Override
+	public void perform(Object node) {
+		if (getSelectionProvider() instanceof CommonViewer && node instanceof WorkflowDefinitionEntry) {
+			WorkflowDefinitionEntry definitionNode = (WorkflowDefinitionEntry)node;
 
-            Job publishJob = new Job( "Publishing workflow draft definition" )
-            {
-                @Override
-                protected IStatus run( IProgressMonitor monitor )
-                {
-                    IKaleoConnection kaleoConnection = KaleoCore.getKaleoConnection( definitionNode.getParent().getParent());
+			Job publishJob = new Job("Publishing workflow draft definition") {
 
-                    try
-                    {
-                        kaleoConnection.publishKaleoDraftDefinition(
-                            definitionNode.getName(), definitionNode.getTitleMap(), definitionNode.getContent(),
-                            definitionNode.getCompanyId() + "", definitionNode.getUserId() + "",
-                            definitionNode.getGroupId() + "" );
-                    }
-                    catch( KaleoAPIException e )
-                    {
-                        e.printStackTrace();
-                    }
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					IKaleoConnection kaleoConnection = KaleoCore.getKaleoConnection(
+						definitionNode.getParent().getParent());
 
-                    final WorkflowDefinitionsFolder definitionsFolder =
-                        (WorkflowDefinitionsFolder) definitionNode.getParent();
+					try {
+						kaleoConnection.publishKaleoDraftDefinition(
+							definitionNode.getName(), definitionNode.getTitleMap(), definitionNode.getContent(),
+							definitionNode.getCompanyId() + "", definitionNode.getUserId() + "",
+							definitionNode.getGroupId() + "");
+					}
+					catch (KaleoAPIException kapie) {
+						kapie.printStackTrace();
+					}
 
-                    final CommonViewer viewer = (CommonViewer) getSelectionProvider();
+					WorkflowDefinitionsFolder definitionsFolder = (WorkflowDefinitionsFolder)definitionNode.getParent();
 
-                    Display.getDefault().asyncExec
-                    (
-                        new Runnable()
-                        {
-                            public void run()
-                            {
-                                definitionsFolder.clearCache();
-                                viewer.refresh( true );
-                            }
-                        }
-                    );
+					CommonViewer viewer = (CommonViewer)getSelectionProvider();
 
-                    return Status.OK_STATUS;
-                }
-            };
+					Display.getDefault().asyncExec(
+						new Runnable() {
 
-            publishJob.schedule();
+							public void run() {
+								definitionsFolder.clearCache();
+								viewer.refresh(true);
+							}
 
-        }
-    }
+						});
+
+					return Status.OK_STATUS;
+				}
+
+			};
+
+			publishJob.schedule();
+		}
+	}
 
 }

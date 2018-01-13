@@ -1,1 +1,1 @@
-<#assign assetTagNames = serviceContext.getAttribute("assetTagNames")!"">
+<#assign assetTagNames = serviceContext.getAttribute("assetTagNames")!"" />

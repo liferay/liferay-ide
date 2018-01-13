@@ -1,1 +1,1 @@
-<#assign localized = serviceContext.getAttribute("localized")!"">
+<#assign localized = serviceContext.getAttribute("localized")!"" />

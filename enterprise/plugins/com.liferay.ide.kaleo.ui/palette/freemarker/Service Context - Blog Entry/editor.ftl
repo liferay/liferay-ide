@@ -1,1 +1,1 @@
-<#assign editor = serviceContext.getAttribute("editor")!"">
+<#assign editor = serviceContext.getAttribute("editor")!"" />

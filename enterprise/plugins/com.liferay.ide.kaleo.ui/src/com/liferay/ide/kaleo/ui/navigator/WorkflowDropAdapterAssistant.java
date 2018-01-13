@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.navigator;
@@ -33,98 +36,92 @@ import org.eclipse.ui.navigator.CommonViewer;
 /**
  * @author Gregory Amerson
  */
-public class WorkflowDropAdapterAssistant extends CommonDropAdapterAssistant
-{
+public class WorkflowDropAdapterAssistant extends CommonDropAdapterAssistant {
 
-    public WorkflowDropAdapterAssistant()
-    {
-        super();
-    }
+	public WorkflowDropAdapterAssistant() {
+	}
 
-    @Override
-    public IStatus validateDrop( Object target, int operation, TransferData data )
-    {
-        try
-        {
-            if( target instanceof WorkflowDefinitionsFolder )
-            {
-                if( LocalSelectionTransfer.getTransfer().isSupportedType( data ) )
-                {
-                    Object dropData = LocalSelectionTransfer.getTransfer().nativeToJava( data );
+	@Override
+	public IStatus handleDrop(CommonDropAdapter aDropAdapter, DropTargetEvent aDropTargetEvent, Object aTarget) {
+		if (aTarget instanceof WorkflowDefinitionsFolder) {
+			WorkflowDefinitionsFolder folder = (WorkflowDefinitionsFolder)aTarget;
 
-                    if( dropData instanceof IStructuredSelection )
-                    {
-                        IStructuredSelection selection = (IStructuredSelection) dropData;
-                        Object element = selection.getFirstElement();
+			IKaleoConnection kaleoConnection = KaleoCore.getKaleoConnection(folder.getParent());
 
-                        if( element instanceof IFile )
-                        {
-                            IFile file = (IFile) element;
+			TransferData transferData = aDropTargetEvent.currentDataType;
 
-                            IContentType contentType = file.getContentDescription().getContentType();
+			if (LocalSelectionTransfer.getTransfer().isSupportedType(transferData)) {
+				Object dropData = LocalSelectionTransfer.getTransfer().nativeToJava(transferData);
 
-                            if( "com.liferay.ide.kaleo.core.workflowdefinitioncontent".equals( contentType.getId() ) )
-                            {
-                                return Status.OK_STATUS;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            // ignore and don't allow drop
-        }
+				if (dropData instanceof IStructuredSelection) {
+					IStructuredSelection selection = (IStructuredSelection)dropData;
 
-        return null;
-    }
+					Object element = selection.getFirstElement();
 
-    @Override
-    public IStatus handleDrop( CommonDropAdapter aDropAdapter, final DropTargetEvent aDropTargetEvent, Object aTarget )
-    {
-        if( aTarget instanceof WorkflowDefinitionsFolder )
-        {
-            final WorkflowDefinitionsFolder folder = (WorkflowDefinitionsFolder) aTarget;
+					if (element instanceof IFile) {
+						IFile file = (IFile)element;
 
-            IKaleoConnection kaleoConnection = KaleoCore.getKaleoConnection( folder.getParent() );
+						Runnable runnable = new Runnable() {
 
-            final TransferData transferData = aDropTargetEvent.currentDataType;
+							public void run() {
+								folder.clearCache();
 
-            if( LocalSelectionTransfer.getTransfer().isSupportedType( transferData ) )
-            {
-                Object dropData = LocalSelectionTransfer.getTransfer().nativeToJava( transferData );
+								Runnable runnable = new Runnable() {
 
-                if( dropData instanceof IStructuredSelection )
-                {
-                    IStructuredSelection selection = (IStructuredSelection) dropData;
-                    Object element = selection.getFirstElement();
+									public void run() {
+										IViewPart serversView = UIUtil.showView(
+											"org.eclipse.wst.server.ui.ServersView");
 
-                    if( element instanceof IFile )
-                    {
-                        IFile file = (IFile) element;
+										CommonViewer viewer = (CommonViewer)serversView.getAdapter(CommonViewer.class);
 
-                        new UploadWorkflowFileJob( kaleoConnection, file, new Runnable()
-                        {
-                            public void run()
-                            {
-                                folder.clearCache();
-                                Display.getDefault().asyncExec( new Runnable(){
+										viewer.refresh(true);
+									}
 
-                                    public void run()
-                                    {
-                                        IViewPart serversView = UIUtil.showView("org.eclipse.wst.server.ui.ServersView");
-                                        CommonViewer viewer = (CommonViewer) serversView.getAdapter(CommonViewer.class);
-                                        viewer.refresh( true );
-                                    }} );
-                            }
-                        } ).schedule();
-                    }
-                }
-            }
-        }
+								};
 
-        return Status.OK_STATUS;
-    }
+								Display.getDefault().asyncExec(runnable);
+							}
+
+						};
+
+						new UploadWorkflowFileJob(kaleoConnection, file, runnable).schedule();
+					}
+				}
+			}
+		}
+
+		return Status.OK_STATUS;
+	}
+
+	@Override
+	public IStatus validateDrop(Object target, int operation, TransferData data) {
+		try {
+			if (target instanceof WorkflowDefinitionsFolder) {
+				if (LocalSelectionTransfer.getTransfer().isSupportedType(data)) {
+					Object dropData = LocalSelectionTransfer.getTransfer().nativeToJava(data);
+
+					if (dropData instanceof IStructuredSelection) {
+						IStructuredSelection selection = (IStructuredSelection)dropData;
+
+						Object element = selection.getFirstElement();
+
+						if (element instanceof IFile) {
+							IFile file = (IFile)element;
+
+							IContentType contentType = file.getContentDescription().getContentType();
+
+							if ("com.liferay.ide.kaleo.core.workflowdefinitioncontent".equals(contentType.getId())) {
+								return Status.OK_STATUS;
+							}
+						}
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+		}
+
+		return null;
+	}
 
 }

@@ -1,1 +1,1 @@
-<#assign workflowAction = serviceContext.getAttribute("workflowAction")!"">
+<#assign workflowAction = serviceContext.getAttribute("workflowAction")!"" />

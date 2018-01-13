@@ -1,1 +1,1 @@
-<#assign folderId = serviceContext.getAttribute("folderId")!"">
+<#assign folderId = serviceContext.getAttribute("folderId")!"" />

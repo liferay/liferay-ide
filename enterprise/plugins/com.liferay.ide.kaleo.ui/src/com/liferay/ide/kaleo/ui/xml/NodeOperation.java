@@ -1,29 +1,29 @@
-/*******************************************************************************
- * Copyright (c) 2008-2010 Sonatype, Inc.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * Contributors:
- *      Sonatype, Inc. - initial API and implementation
- *******************************************************************************/
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.kaleo.ui.xml;
 
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
+
 import org.w3c.dom.Node;
 
 /**
- * A non-editing operation on top of the DOM document, to be used with XmlUtils.performOnRootElement and
- * XmlUtils.performOnCurrentElement
- * 
- * @author mkleint
- * @param <T>
+ * @author Mkleint
  */
-@SuppressWarnings( "restriction" )
-public interface NodeOperation<T extends Node>
-{
+@SuppressWarnings("restriction")
+public interface NodeOperation<T extends Node> {
 
-	void process( T node, IStructuredDocument structuredDocument );
+	public void process(T node, IStructuredDocument structuredDocument);
+
 }

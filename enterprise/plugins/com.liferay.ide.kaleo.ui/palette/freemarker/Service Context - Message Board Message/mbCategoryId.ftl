@@ -1,1 +1,1 @@
-<#assign mbCategoryId = serviceContext.getAttribute("mbCategoryId")!"">
+<#assign mbCategoryId = serviceContext.getAttribute("mbCategoryId")!"" />

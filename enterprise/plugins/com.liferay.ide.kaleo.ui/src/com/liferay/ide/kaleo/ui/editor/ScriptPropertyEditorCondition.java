@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.editor;
@@ -16,6 +19,7 @@ import com.liferay.ide.kaleo.core.model.ScriptLanguageType;
 import com.liferay.ide.kaleo.core.model.Scriptable;
 import com.liferay.ide.kaleo.core.util.KaleoModelUtil;
 
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -25,73 +29,66 @@ import org.eclipse.sapphire.ui.SapphireCondition;
 /**
  * @author Gregory Amerson
  */
-public class ScriptPropertyEditorCondition extends SapphireCondition
-{
+public class ScriptPropertyEditorCondition extends SapphireCondition {
 
-    private ScriptLanguageType paramType;
+	@Override
+	protected boolean evaluate() {
+		if (_paramType != null) {
+			Scriptable scriptable = _scriptable();
 
-    @Override
-    protected boolean evaluate()
-    {
-        if( paramType != null )
-        {
-            Scriptable scriptable = scriptable();
+			ScriptLanguageType scriptLanguageType = scriptable.getScriptLanguage().content(true);
 
-            ScriptLanguageType scriptLanguageType = scriptable.getScriptLanguage().content( true );
+			if (scriptLanguageType == null) {
+				scriptLanguageType = ScriptLanguageType.valueOf(
+					KaleoModelUtil.getDefaultValue(
+						scriptable, KaleoCore.DEFAULT_SCRIPT_LANGUAGE_KEY, ScriptLanguageType.GROOVY));
+			}
 
-            if (scriptLanguageType == null)
-            {
-                scriptLanguageType =
-                    ScriptLanguageType.valueOf( KaleoModelUtil.getDefaultValue(
-                        scriptable, KaleoCore.DEFAULT_SCRIPT_LANGUAGE_KEY, ScriptLanguageType.GROOVY ) );
-            }
+			if (_paramType.equals(scriptLanguageType)) {
+				return true;
+			}
+		}
 
-            if( paramType.equals( scriptLanguageType ) )
-            {
-                return true;
-            }
-        }
+		return false;
+	}
 
-        return false;
-    }
+	@Override
+	protected void initCondition(ISapphirePart part, String parameter) {
+		super.initCondition(part, parameter);
 
-    @Override
-    protected void initCondition( ISapphirePart part, String parameter )
-    {
-        super.initCondition( part, parameter );
+		/*
+		 * TODO replace with visible when
+		 *
+		 * SapphireIfElseDirectiveDef ifDef =
+		 * this.getPart().definition().nearest( SapphireIfElseDirectiveDef.class
+		 * );
+		 *
+		 * String param = ifDef.getConditionParameter().content();
+		 *
+		 * for( ScriptLanguageType type :
+		 * ScriptLanguageType.class.getEnumConstants() ) { if(
+		 * type.name().equals( param ) ) { this.paramType = type; break; } }
+		 */
+		Scriptable scriptable = _scriptable();
 
-        // TODO replace with visible when
+		Listener listener = new FilteredListener<PropertyContentEvent>() {
 
-//        SapphireIfElseDirectiveDef ifDef = this.getPart().definition().nearest( SapphireIfElseDirectiveDef.class );
+			@Override
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				ScriptPropertyEditorCondition.this.updateConditionState();
+			}
 
-//        String param = ifDef.getConditionParameter().content();
+		};
 
-//        for( ScriptLanguageType type : ScriptLanguageType.class.getEnumConstants() )
-//        {
-//            if( type.name().equals( param ) )
-//            {
-//                this.paramType = type;
-//                break;
-//            }
-//        }
+		scriptable.attach(listener, "ScriptLanguage");
+	}
 
-        Scriptable scriptable = scriptable();
+	private Scriptable _scriptable() {
+		Element element = getPart().getLocalModelElement();
 
-        Listener listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( final PropertyContentEvent event )
-            {
-                ScriptPropertyEditorCondition.this.updateConditionState();
-            }
-        };
+		return element.nearest(Scriptable.class);
+	}
 
-        scriptable.attach( listener, "ScriptLanguage" );
-    }
-
-    private Scriptable scriptable()
-    {
-        return this.getPart().getLocalModelElement().nearest( Scriptable.class );
-    }
+	private ScriptLanguageType _paramType;
 
 }

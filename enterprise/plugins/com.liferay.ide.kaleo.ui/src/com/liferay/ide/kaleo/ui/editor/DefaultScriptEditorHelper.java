@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.editor;
@@ -14,87 +17,99 @@ package com.liferay.ide.kaleo.ui.editor;
 import com.liferay.ide.kaleo.ui.AbstractKaleoEditorHelper;
 import com.liferay.ide.kaleo.ui.KaleoUI;
 
+import java.io.InputStream;
+
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.core.runtime.content.IContentTypeManager;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Gregory Amerson
  */
-public class DefaultScriptEditorHelper extends AbstractKaleoEditorHelper
-{
+public class DefaultScriptEditorHelper extends AbstractKaleoEditorHelper {
 
-    public IEditorPart createEditorPart( ScriptPropertyEditorInput editorInput, IEditorSite editorSite )
-    {
-        IEditorPart editorPart = null;
+	public IEditorPart createEditorPart(ScriptPropertyEditorInput editorInput, IEditorSite editorSite) {
+		IEditorPart editorPart = null;
 
-        try
-        {
-            final String fileName = editorInput.getName();
+		try {
+			String fileName = editorInput.getName();
 
-            IContentType contentType = null;
+			IContentType contentType = null;
 
-            // if ( editorInput.getProperty().hasAnnotation( ContentType.class ) )
-            // {
-            // String contentTypeId = editorInput.getProperty().getAnnotation( ContentType.class ).contentTypeId();
-            // contentType = Platform.getContentTypeManager().getContentType( contentTypeId );
-            // }
-            // else
-            {
-                IContentDescription contentDescription =
-                    Platform.getContentTypeManager().getDescriptionFor(
-                        editorInput.getStorage().getContents(), fileName, IContentDescription.ALL );
+			/*
+			 * if ( editorInput.getProperty().hasAnnotation( ContentType.class )
+			 * ) { String contentTypeId =
+			 * editorInput.getProperty().getAnnotation( ContentType.class
+			 * ).contentTypeId(); contentType =
+			 * Platform.getContentTypeManager().getContentType( contentTypeId );
+			 * } else
+			 */
+			IContentTypeManager contentTypeManager = Platform.getContentTypeManager();
 
-                if( contentDescription != null )
-                {
-                    contentType = contentDescription.getContentType();
-                }
-            }
+			InputStream inputStream = editorInput.getStorage().getContents();
 
-            if( contentType == null )
-            {
-                // use basic text content type
-                contentType = Platform.getContentTypeManager().getContentType( "org.eclipse.core.runtime.text" );
-            }
+			IContentDescription contentDescription = contentTypeManager.getDescriptionFor(
+				inputStream, fileName, IContentDescription.ALL);
 
-            IEditorDescriptor defaultEditorDescriptor =
-                PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor( fileName, contentType );
-            String editorId = defaultEditorDescriptor.getId();
-            IConfigurationElement[] editorConfigs =
-                Platform.getExtensionRegistry().getConfigurationElementsFor( "org.eclipse.ui.editors" );
+			if (contentDescription != null) {
+				contentType = contentDescription.getContentType();
+			}
 
-            for( IConfigurationElement config : editorConfigs )
-            {
-                if( editorId.equals( config.getAttribute( "id" ) ) )
-                {
-                    editorPart = (IEditorPart) config.createExecutableExtension( "class" );
-                    break;
-                }
-            }
+			if (contentType == null) {
 
-            editorPart.init( editorSite, editorInput );
-        }
-        catch( Exception e )
-        {
-            KaleoUI.logError( "Could not create default script editor.", e );
-        }
+				// use basic text content type
 
-        return editorPart;
-    }
+				contentType = Platform.getContentTypeManager().getContentType("org.eclipse.core.runtime.text");
+			}
 
-    public String getEditorId()
-    {
-        IContentType contentType = Platform.getContentTypeManager().getContentType( "org.eclipse.core.runtime.text" );
+			IWorkbench workBench = PlatformUI.getWorkbench();
 
-        IEditorDescriptor defaultEditorDescriptor =
-            PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor( "default.txt", contentType );
+			IEditorRegistry editRegistry = workBench.getEditorRegistry();
 
-        return defaultEditorDescriptor.getId();
-    }
+			IEditorDescriptor defaultEditorDescriptor = editRegistry.getDefaultEditor(fileName, contentType);
+
+			String editorId = defaultEditorDescriptor.getId();
+
+			IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
+
+			IConfigurationElement[] editorConfigs = extensionRegistry.getConfigurationElementsFor(
+				"org.eclipse.ui.editors");
+
+			for (IConfigurationElement config : editorConfigs) {
+				if (editorId.equals(config.getAttribute("id"))) {
+					editorPart = (IEditorPart)config.createExecutableExtension("class");
+					break;
+				}
+			}
+
+			editorPart.init(editorSite, editorInput);
+		}
+		catch (Exception e) {
+			KaleoUI.logError("Could not create default script editor.", e);
+		}
+
+		return editorPart;
+	}
+
+	public String getEditorId() {
+		IContentType contentType = Platform.getContentTypeManager().getContentType("org.eclipse.core.runtime.text");
+
+		IWorkbench workBench = PlatformUI.getWorkbench();
+
+		IEditorRegistry editRegistry = workBench.getEditorRegistry();
+
+		IEditorDescriptor defaultEditorDescriptor = editRegistry.getDefaultEditor("default.txt", contentType);
+
+		return defaultEditorDescriptor.getId();
+	}
 
 }

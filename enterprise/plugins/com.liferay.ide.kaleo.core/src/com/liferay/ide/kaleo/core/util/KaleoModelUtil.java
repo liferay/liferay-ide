@@ -1,140 +1,173 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core.util;
 
 import com.liferay.ide.kaleo.core.model.ResourceAction;
 import com.liferay.ide.kaleo.core.model.Role;
+import com.liferay.ide.kaleo.core.model.RoleType;
+import com.liferay.ide.kaleo.core.model.ScriptLanguageType;
 import com.liferay.ide.kaleo.core.model.Scriptable;
 import com.liferay.ide.kaleo.core.model.Task;
+import com.liferay.ide.kaleo.core.model.User;
 import com.liferay.ide.kaleo.core.model.WorkflowDefinition;
 import com.liferay.ide.kaleo.core.model.internal.Point;
 import com.liferay.ide.kaleo.core.op.AssignableOp;
+
+import java.lang.reflect.Field;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementHandle;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.annotations.EnumSerialization;
 
 /**
  * @author Gregory Amerson
  */
-public class KaleoModelUtil
-{
-    public static final Point DEFAULT_POINT = new Point( -1, -1 );
+public class KaleoModelUtil {
 
-    public static void changeTaskAssignments( Task task, AssignableOp op )
-    {
-        if( task == null || op == null )
-        {
-            return;
-        }
+	public static final Point DEFAULT_POINT = new Point(-1, -1);
 
-        task.getUser().clear();
-        task.getScriptedAssignment().clear();
-        task.getResourceActions().clear();
-        task.getRoles().clear();
+	public static void changeTaskAssignments(Task task, AssignableOp op) {
+		if ((task == null) || (op == null)) {
+			return;
+		}
 
-        switch( op.getAssignmentType().content( true ) )
-        {
-            case CREATOR:
-                task.getUser().content( true );
-                break;
+		ElementHandle<User> user = task.getUser();
 
-            case USER:
-                task.getUser().content( true ).copy( op.getImpliedUser() );
-                break;
+		user.clear();
 
-            case ROLE:
-                final Role newRole = task.getRoles().insert();
-                newRole.copy( op.getImpliedRole() );
-                break;
+		ElementHandle<Scriptable> scripteAssignment = task.getScriptedAssignment();
 
-            case ROLE_TYPE:
-                for( Role role : op.getRoles() )
-                {
-                    final Role newRoleType = task.getRoles().insert();
-                    newRoleType.copy( role );
-                    newRoleType.setRoleType( role.getRoleType().content(true) );
+		scripteAssignment.clear();
 
-                    if( role.getAutoCreate().content() != null )
-                    {
-                        newRoleType.setAutoCreate( role.getAutoCreate().content() );
-                    }
-                }
-                break;
+		ElementList<ResourceAction> resourceAction = task.getResourceActions();
 
-            case SCRIPTED_ASSIGNMENT:
-                final Scriptable scriptable = task.getScriptedAssignment().content( true );
-                scriptable.setScriptLanguage( op.getImpliedScriptable().getScriptLanguage().content( true ) );
-                scriptable.setScript( "/*specify script assignment */" );
-                break;
+		resourceAction.clear();
 
-            case RESOURCE_ACTIONS:
-                for( ResourceAction ra : op.getResourceActions() )
-                {
-                    task.getResourceActions().insert().copy( ra );
-                }
-                break;
-        }
-    }
+		ElementList<Role> taskRole = task.getRoles();
 
-    public static String getEnumSerializationAnnotation( Enum<?> type )
-    {
-        try
-        {
-            return type.getClass().getField( type.name() ).getAnnotation( EnumSerialization.class ).primary();
-        }
-        catch( Exception e )
-        {
-            return null;
-        }
-    }
+		taskRole.clear();
 
-    public static String getDefaultValue( Element modelElement, QualifiedName key, Enum<?> defaultValue )
-    {
-        String value = null;
+		switch (op.getAssignmentType().content(true)) {
+			case CREATOR:
+				user.content(true);
+				break;
 
-        IFile definitionFile = null;
+			case USER:
+				User content = user.content(true);
 
-        WorkflowDefinition workflowDefinition = modelElement.nearest( WorkflowDefinition.class );
+				content.copy(op.getImpliedUser());
+				break;
 
-        if( workflowDefinition == null )
-        {
-            workflowDefinition = modelElement.adapt( WorkflowDefinition.class );
-        }
+			case ROLE:
+				final Role newRole = taskRole.insert();
 
-        if( workflowDefinition != null )
-        {
-            definitionFile = workflowDefinition.adapt( IFile.class );
-        }
+				newRole.copy(op.getImpliedRole());
+				break;
 
-        if( definitionFile != null )
-        {
-            try
-            {
-                value = definitionFile.getPersistentProperty( key );
-            }
-            catch( CoreException e )
-            {
-            }
-        }
+			case ROLE_TYPE:
+				for (Role role : op.getRoles()) {
+					Role newRoleType = taskRole.insert();
 
-        if( value == null )
-        {
-            value = getEnumSerializationAnnotation( defaultValue );
-        }
+					newRoleType.copy(role);
 
-        return value;
-    }
+					Value<RoleType> roleType = role.getRoleType();
+
+					newRoleType.setRoleType(roleType.content(true));
+
+					Value<Boolean> autoCreate = role.getAutoCreate();
+
+					if (autoCreate.content() != null) {
+						newRoleType.setAutoCreate(autoCreate.content());
+					}
+				}
+
+				break;
+
+			case SCRIPTED_ASSIGNMENT:
+
+				Scriptable scriptable = scripteAssignment.content(true);
+
+				Scriptable impliedScriptable = op.getImpliedScriptable();
+
+				Value<ScriptLanguageType> scriptLanguageType = impliedScriptable.getScriptLanguage();
+
+				scriptable.setScriptLanguage(scriptLanguageType.content(true));
+
+				scriptable.setScript("/*specify script assignment */");
+
+				break;
+
+			case RESOURCE_ACTIONS:
+				for (ResourceAction ra : op.getResourceActions()) {
+					ResourceAction newResourceAction = resourceAction.insert();
+
+					newResourceAction.copy(ra);
+				}
+
+				break;
+		}
+	}
+
+	public static String getDefaultValue(Element modelElement, QualifiedName key, Enum<?> defaultValue) {
+		String value = null;
+
+		IFile definitionFile = null;
+
+		WorkflowDefinition workflowDefinition = modelElement.nearest(WorkflowDefinition.class);
+
+		if (workflowDefinition == null) {
+			workflowDefinition = modelElement.adapt(WorkflowDefinition.class);
+		}
+
+		if (workflowDefinition != null) {
+			definitionFile = workflowDefinition.adapt(IFile.class);
+		}
+
+		if (definitionFile != null) {
+			try {
+				value = definitionFile.getPersistentProperty(key);
+			}
+			catch (CoreException ce) {
+			}
+		}
+
+		if (value == null) {
+			value = getEnumSerializationAnnotation(defaultValue);
+		}
+
+		return value;
+	}
+
+	public static String getEnumSerializationAnnotation(Enum<?> type) {
+		try {
+			Class<?> typeClass = type.getClass();
+
+			Field field = typeClass.getField(type.name());
+
+			EnumSerialization enumAnnotation = field.getAnnotation(EnumSerialization.class);
+
+			return enumAnnotation.primary();
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
 
 }

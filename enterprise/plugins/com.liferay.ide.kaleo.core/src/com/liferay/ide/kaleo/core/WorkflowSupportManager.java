@@ -1,19 +1,25 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay IDE ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -26,128 +32,136 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 
 /**
  * @author Gregory Amerson
- *
  */
-public class WorkflowSupportManager
-{
+public class WorkflowSupportManager {
 
-    public static final String SUPPORT_PROJECT_NAME = "Kaleo Designer Support";
-    private IServer currentServer;
+	public static final String SUPPORT_PROJECT_NAME = "Kaleo Designer Support";
 
-    public WorkflowSupportManager()
-    {
-    }
+	public WorkflowSupportManager() {
+	}
 
-    public IJavaProject getSupportProject()
-    {
-        try
-        {
-            checkForSupportProject();
+	public IProject createSupportProject(IProgressMonitor monitor) throws CoreException {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
-            IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-            IProject project = root.getProject( SUPPORT_PROJECT_NAME );
+		IWorkspaceRoot root = workspace.getRoot();
 
-            if( project.exists() && project.isOpen() && project.hasNature( JavaCore.NATURE_ID ) )
-            {
-                return JavaCore.create( project );
-            }
+		IProject project = root.getProject(SUPPORT_PROJECT_NAME);
 
-        }
-        catch( CoreException e )
-        {
-        }
+		if (FileUtil.exists(project)) {
+			if (!project.isOpen()) {
+				project.open(monitor);
+			}
 
-        return null;
-    }
+			return project;
+		}
 
-    public void setCurrentServer(IServer server)
-    {
-        this.currentServer = server;
-    }
+		project.create(CoreUtil.newSubMonitor(monitor, 1));
+		project.open(CoreUtil.newSubMonitor(monitor, 1));
 
-    private void checkForSupportProject()
-    {
-        try
-        {
-            IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-            IProject project = root.getProject( SUPPORT_PROJECT_NAME );
+		CoreUtil.makeFolders(project.getFolder("src"));
 
-            if( !project.exists() || !project.isOpen())
-            {
-                createSupportProject( new NullProgressMonitor() );
-            }
+		String[] natureID = {JavaCore.NATURE_ID};
 
-            computeClasspath( JavaCore.create( project ), new NullProgressMonitor() );
-        }
-        catch( CoreException e )
-        {
-        }
-    }
+		CoreUtil.addNaturesToProject(project, natureID, CoreUtil.newSubMonitor(monitor, 1));
 
-    public IProject createSupportProject( IProgressMonitor monitor ) throws CoreException
-    {
-        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-        IProject project = root.getProject( SUPPORT_PROJECT_NAME );
+		IJavaProject jProject = JavaCore.create(project);
 
-        if( project.exists() )
-        {
-            if( !project.isOpen() )
-            {
-                project.open( monitor );
-            }
+		IPath fullPath = project.getFullPath();
 
-            return project;
-        }
+		jProject.setOutputLocation(fullPath.append("bin"), CoreUtil.newSubMonitor(monitor, 1));
 
-        project.create( CoreUtil.newSubMonitor(monitor,1) );
-        project.open( CoreUtil.newSubMonitor(monitor,1) );
+		_computeClasspath(jProject, CoreUtil.newSubMonitor(monitor, 1));
 
-        CoreUtil.makeFolders( project.getFolder( "src" ) );
+		return project;
+	}
 
-        CoreUtil.addNaturesToProject( project, new String[] { JavaCore.NATURE_ID }, CoreUtil.newSubMonitor(monitor,1) );
+	public IJavaProject getSupportProject() {
+		try {
+			_checkForSupportProject();
 
-        IJavaProject jProject = JavaCore.create( project );
-        jProject.setOutputLocation( project.getFullPath().append( "bin" ), CoreUtil.newSubMonitor(monitor,1) );
-        computeClasspath( jProject, CoreUtil.newSubMonitor(monitor,1) );
+			IWorkspace workSpace = ResourcesPlugin.getWorkspace();
 
-        return project;
-    }
+			IWorkspaceRoot root = workSpace.getRoot();
 
-    private void computeClasspath( IJavaProject project, IProgressMonitor monitor )
-    {
-        int numEntries = 2;
-        IPath runtimeContainerPath = null;
+			IProject project = root.getProject(SUPPORT_PROJECT_NAME);
 
-        try
-        {
-            String id = this.currentServer.getRuntime().getId();
-            runtimeContainerPath = new Path("org.eclipse.jst.server.core.container/com.liferay.ide.eclipse.server.tomcat.runtimeClasspathProvider/" + id);
-            numEntries++;
-        }
-        catch (Throwable t)
-        {
-           // do nothing
-        }
+			if (FileUtil.exists(project) && project.isOpen() && project.hasNature(JavaCore.NATURE_ID)) {
+				return JavaCore.create(project);
+			}
+		}
+		catch (CoreException ce) {
+		}
 
-        IClasspathEntry[] classpath = new IClasspathEntry[numEntries];
-        classpath[0] = JavaCore.newContainerEntry( JavaRuntime.newDefaultJREContainerPath() );
-        classpath[1] = JavaCore.newSourceEntry( project.getProject().getFolder( "src" ).getFullPath() );
+		return null;
+	}
 
-        if (runtimeContainerPath != null)
-        {
-            classpath[2] = JavaCore.newContainerEntry( runtimeContainerPath );
-        }
+	public void setCurrentServer(IServer server) {
+		_currentServer = server;
+	}
 
-        try
-        {
-            project.setRawClasspath( classpath, monitor );
-        }
-        catch( JavaModelException e )
-        {
-        }
-    }
+	private void _checkForSupportProject() {
+		try {
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+			IWorkspaceRoot root = workspace.getRoot();
+
+			IProject project = root.getProject(SUPPORT_PROJECT_NAME);
+
+			if (!FileUtil.exists(project) || !project.isOpen()) {
+				createSupportProject(new NullProgressMonitor());
+			}
+
+			_computeClasspath(JavaCore.create(project), new NullProgressMonitor());
+		}
+		catch (CoreException ce) {
+		}
+	}
+
+	private void _computeClasspath(IJavaProject project, IProgressMonitor monitor) {
+		int numEntries = 2;
+		IPath runtimeContainerPath = null;
+
+		try {
+			IRuntime runtime = _currentServer.getRuntime();
+
+			String id = runtime.getId();
+
+			String runtimeClasspathProvider =
+				"org.eclipse.jst.server.core.container/com.liferay.ide.eclipse.server.tomcat.runtimeClasspathProvider/";
+
+			runtimeContainerPath = new Path(runtimeClasspathProvider + id);
+
+			numEntries++;
+		}
+		catch (Throwable t) {
+		}
+
+		IClasspathEntry[] classpath = new IClasspathEntry[numEntries];
+
+		classpath[0] = JavaCore.newContainerEntry(JavaRuntime.newDefaultJREContainerPath());
+
+		IProject javaProject = project.getProject();
+
+		IFolder folder = javaProject.getFolder("src");
+
+		classpath[1] = JavaCore.newSourceEntry(folder.getFullPath());
+
+		if (FileUtil.exists(runtimeContainerPath)) {
+			classpath[2] = JavaCore.newContainerEntry(runtimeContainerPath);
+		}
+
+		try {
+			project.setRawClasspath(classpath, monitor);
+		}
+		catch (JavaModelException jme) {
+		}
+	}
+
+	private IServer _currentServer;
+
 }

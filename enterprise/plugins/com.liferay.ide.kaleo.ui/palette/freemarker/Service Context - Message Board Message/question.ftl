@@ -1,1 +1,1 @@
-<#assign question = serviceContext.getAttribute("question")!"">
+<#assign question = serviceContext.getAttribute("question")!"" />

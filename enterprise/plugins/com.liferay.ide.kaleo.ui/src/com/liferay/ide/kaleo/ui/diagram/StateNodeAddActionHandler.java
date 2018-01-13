@@ -1,12 +1,15 @@
 /**
- * Copyright (c) 2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the End User License
- * Agreement for Liferay Developer Studio ("License"). You may not use this file
- * except in compliance with the License. You can obtain a copy of the License
- * by contacting Liferay, Inc. See the License for the specific language
- * governing permissions and limitations under the License, including but not
- * limited to distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.ide.kaleo.ui.diagram;
@@ -39,96 +42,83 @@ import org.eclipse.sapphire.ui.diagram.editor.DiagramNodeTemplate;
 /**
  * @author Gregory Amerson
  */
-public class StateNodeAddActionHandler extends NewNodeAddActionHandler
-{
+public class StateNodeAddActionHandler extends NewNodeAddActionHandler {
 
-    private static final String WIZARD_ID = "newStateNodeWizard";
+	public StateNodeAddActionHandler(DiagramNodeTemplate nodeTemplate) {
+		super(nodeTemplate);
+	}
 
-    public StateNodeAddActionHandler( DiagramNodeTemplate nodeTemplate )
-    {
-        super( nodeTemplate );
-    }
+	@Override
+	public void postDiagramNodePartAdded(NewNodeOp op, CanTransition newNodeFromWizard, CanTransition newNode) {
+		NewStateNodeOp newStateNodeOp = op.nearest(NewStateNodeOp.class);
 
-    @Override
-    protected NewNodeOp createOp( Presentation context )
-    {
-        return NewStateNodeOp.TYPE.instantiate();
-    }
+		NewStateNode newStateNode = newNodeFromWizard.nearest(NewStateNode.class);
 
-    @Override
-    protected String getWizardId()
-    {
-        return WIZARD_ID;
-    }
+		State state = newNode.nearest(State.class);
 
-    @Override
-    public void postDiagramNodePartAdded( NewNodeOp op, CanTransition newNodeFromWizard, CanTransition newNode )
-    {
-        NewStateNodeOp newStateNodeOp = op.nearest( NewStateNodeOp.class );
+		if ((newStateNode != null) && (state != null)) {
+			state.setName(newStateNode.getName().content());
 
-        NewStateNode newStateNode = newNodeFromWizard.nearest( NewStateNode.class );
+			NewStateType newStateType = newStateNodeOp.getType().content();
 
-        State state = newNode.nearest( State.class );
+			if (newStateType.equals(NewStateType.START)) {
+				state.setInitial(true);
+			}
+			else if (newStateType.equals(NewStateType.END)) {
+				state.setEnd(true);
+			}
 
-        if( newStateNode != null && state != null )
-        {
-            state.setName( newStateNode.getName().content() );
+			String workflowStatus = newStateNodeOp.getWorkflowStatus().content(false);
 
-            final NewStateType newStateType = newStateNodeOp.getType().content();
+			if (!empty(workflowStatus)) {
+				Action newAction = state.getActions().insert();
 
-            if( newStateType.equals( NewStateType.START ) )
-            {
-                state.setInitial( true );
-            }
-            else if( newStateType.equals( NewStateType.END ) )
-            {
-                state.setEnd( true );
-            }
+				newAction.setName(state.getName().content());
+				newAction.setScriptLanguage(
+					KaleoModelUtil.getDefaultValue(
+						state, KaleoCore.DEFAULT_SCRIPT_LANGUAGE_KEY, ScriptLanguageType.GROOVY));
+				newAction.setExecutionType(Executable.DEFAULT_EXECUTION_TYPE);
 
-            String workflowStatus = newStateNodeOp.getWorkflowStatus().content( false );
+				IKaleoEditorHelper editorHelper = KaleoUI.getKaleoEditorHelper(newAction.getScriptLanguage().text());
 
-            if( !empty( workflowStatus ) )
-            {
-                final Action newAction = state.getActions().insert();
-                newAction.setName( state.getName().content() );
-                newAction.setScriptLanguage( KaleoModelUtil.getDefaultValue(
-                    state, KaleoCore.DEFAULT_SCRIPT_LANGUAGE_KEY, ScriptLanguageType.GROOVY ) );
-                newAction.setExecutionType( Executable.DEFAULT_EXECUTION_TYPE );
+				if (editorHelper != null) {
+					try {
+						File statusUpdatesFolder = new File(
+							FileLocator.toFileURL(
+								Platform.getBundle(editorHelper.getContributorName()).getEntry("palette/Status Updates")
+							).getFile());
 
-                final IKaleoEditorHelper editorHelper =
-                    KaleoUI.getKaleoEditorHelper( newAction.getScriptLanguage().text() );
+						File statusSnippet = new File(
+							statusUpdatesFolder, workflowStatus + "." + editorHelper.getFileExtension());
 
-                if( editorHelper != null )
-                {
-                    try
-                    {
-                        File statusUpdatesFolder =
-                            new File( FileLocator.toFileURL(
-                                Platform.getBundle( editorHelper.getContributorName() ).getEntry(
-                                    "palette/Status Updates" ) ).getFile() );
+						if (FileUtil.exists(statusSnippet)) {
+							newAction.setScript(FileUtil.readContents(statusSnippet, true));
+						}
+					}
+					catch (Exception e) {
+					}
+				}
+			}
 
-                        File statusSnippet =
-                            new File( statusUpdatesFolder, workflowStatus + "." + editorHelper.getFileExtension() );
+			if (!newStateType.equals(NewStateType.END) && (newStateNodeOp.getExitTransitionName().content() != null)) {
+				Transition newTransition = state.getTransitions().insert();
 
-                        if( statusSnippet.exists() )
-                        {
-                            newAction.setScript( FileUtil.readContents( statusSnippet, true ) );
-                        }
-                    }
-                    catch( Exception e )
-                    {
-                        // ignore
-                    }
-                }
-            }
+				newTransition.setTarget(newStateNodeOp.getExitTransitionName().content());
+				newTransition.setName(newStateNodeOp.getExitTransitionName().content());
+			}
+		}
+	}
 
-            if( !newStateType.equals( NewStateType.END ) && newStateNodeOp.getExitTransitionName().content() != null )
-            {
-                Transition newTransition = state.getTransitions().insert();
-                newTransition.setTarget( newStateNodeOp.getExitTransitionName().content() );
-                newTransition.setName( newStateNodeOp.getExitTransitionName().content() );
-            }
-        }
-    }
+	@Override
+	protected NewNodeOp createOp(Presentation context) {
+		return NewStateNodeOp.TYPE.instantiate();
+	}
+
+	@Override
+	protected String getWizardId() {
+		return _WIZARD_ID;
+	}
+
+	private static final String _WIZARD_ID = "newStateNodeWizard";
 
 }
