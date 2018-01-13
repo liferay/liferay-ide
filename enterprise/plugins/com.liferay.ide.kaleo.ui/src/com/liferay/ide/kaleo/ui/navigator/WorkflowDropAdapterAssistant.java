@@ -51,7 +51,7 @@ public class WorkflowDropAdapterAssistant extends CommonDropAdapterAssistant {
 			TransferData transferData = aDropTargetEvent.currentDataType;
 
 			if (LocalSelectionTransfer.getTransfer().isSupportedType(transferData)) {
-				Object dropData = LocalSelectionTransfer.getTransfer().nativeToJava(transferData);
+				Object dropData = LocalSelectionTransfer.getTransfer().getSelection();
 
 				if (dropData instanceof IStructuredSelection) {
 					IStructuredSelection selection = (IStructuredSelection)dropData;
