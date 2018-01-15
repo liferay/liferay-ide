@@ -166,7 +166,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 				for (Version version : versions) {
 					String val = version.toString();
 
-					if (!"6.2.0".equals(val)) {
+					if (!"6.2.0".equals(val) && !val.contains("7.0.0")) {
 						possibleVersions.add(type.cast(val));
 					}
 				}
