@@ -57,6 +57,7 @@
       <feature id="org.eclipse.tm.terminal.control.feature" />
       <feature id="org.eclipse.tm.terminal.view.feature" />
       <feature id="com.ianbrandt.tools.m2e.mdp.feature" />
+      <feature id="org.eclipse.m2e.sdk.feature" />
    </features>
 
    <configurations>
