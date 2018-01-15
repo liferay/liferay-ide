@@ -250,6 +250,10 @@ public class WizardAction extends UIAction {
 			}
 		}
 
+		public void prepareBundleUrl(String bundleUrl) {
+			_importLiferayWorkspaceProjectWizard.getBundleUrl().setText(bundleUrl);
+		}
+
 		private final ImportLiferayWorkspaceWizard _importLiferayWorkspaceProjectWizard =
 			new ImportLiferayWorkspaceWizard(bot);
 
