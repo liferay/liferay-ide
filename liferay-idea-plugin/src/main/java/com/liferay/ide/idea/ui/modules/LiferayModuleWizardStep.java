@@ -59,7 +59,7 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 		_typesTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
 		_typesTree.getSelectionModel().addTreeSelectionListener(
-			(event) -> {
+			event -> {
 				TreePath treePath = event.getNewLeadSelectionPath();
 
 				String type = treePath.getLastPathComponent().toString();
