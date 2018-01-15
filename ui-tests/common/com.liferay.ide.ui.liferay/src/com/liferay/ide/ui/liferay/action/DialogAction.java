@@ -74,12 +74,18 @@ public class DialogAction extends UIAction {
 	}
 
 	public void openPreferencesDialog() {
+		_jobAction.waitForShellAppeared(ide.getLabel());
+
 		if (CoreUtil.isMac()) {
-			_keyboradAction.pressKeysPreferencesDialogMac();
+			ide.getQuickAccess().setText("Preferences Preferences");
+
+			ide.getQuickAccess().setFocus();
+
+			ide.sleep();
+
+			_keyboradAction.pressKeyEnter();
 		}
 		else {
-			_jobAction.waitForShellAppeared(ide.getLabel());
-
 			ide.getPreferencesMenu().click();
 		}
 	}

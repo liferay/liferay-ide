@@ -29,9 +29,6 @@ import org.junit.Test;
  */
 public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
-	@Rule
-	public TimestampSupport timestamp = new TimestampSupport(bot);
-
 	@Test
 	public void createLiferayWorkspace() {
 		String workspaceName = timestamp.getName("test-liferay-workspace-maven");
@@ -172,5 +169,8 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		// dialogAction.preferences.confirm();
 
 	}
+
+	@Rule
+	public TimestampSupport timestamp = new TimestampSupport(bot);
 
 }

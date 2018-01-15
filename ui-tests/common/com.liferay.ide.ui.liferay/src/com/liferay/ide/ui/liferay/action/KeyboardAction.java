@@ -17,6 +17,7 @@ package com.liferay.ide.ui.liferay.action;
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.swtbot.Keys;
 
+import org.eclipse.jface.bindings.keys.KeyStroke;
 import org.eclipse.swt.SWT;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
@@ -31,6 +32,10 @@ public class KeyboardAction extends UIAction implements Keys {
 		}
 
 		return _keyboardAction;
+	}
+
+	public void pressKeyEnter() {
+		keyPress.pressShortcut(KeyStroke.getInstance(SWT.CR));
 	}
 
 	public void pressKeysPreferencesDialogMac() {
