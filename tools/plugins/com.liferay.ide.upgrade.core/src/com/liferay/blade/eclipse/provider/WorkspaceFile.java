@@ -32,7 +32,7 @@ import org.eclipse.core.runtime.CoreException;
 public class WorkspaceFile implements SourceFile {
 
 	@Override
-	public IFile getIFile(File file) {
+	public synchronized IFile getIFile(File file) {
 		IFile retval = null;
 
 		// first try to find this file in the current workspace
@@ -76,7 +76,7 @@ public class WorkspaceFile implements SourceFile {
 	}
 
 	@Override
-	public void setFile(File file) {
+	public synchronized void setFile(File file) {
 		this.file = file;
 	}
 

@@ -122,6 +122,7 @@ public class PropertiesFileChecker {
 							case '8':
 							case '9':
 								value = (value << 4) + aChar - '0';
+
 								break;
 							case 'a':
 							case 'b':
@@ -130,6 +131,7 @@ public class PropertiesFileChecker {
 							case 'e':
 							case 'f':
 								value = (value << 4) + 10 + aChar - 'a';
+
 								break;
 							case 'A':
 							case 'B':
@@ -138,6 +140,7 @@ public class PropertiesFileChecker {
 							case 'E':
 							case 'F':
 								value = (value << 4) + 10 + aChar - 'A';
+
 								break;
 							default:
 								throw new IllegalArgumentException("Malformed \\uxxxx encoding.");
@@ -204,10 +207,12 @@ public class PropertiesFileChecker {
 				if (((c == '=') || (c == ':')) && !precedingBackslash) {
 					valueStart = keyLen + 1;
 					hasSep = true;
+
 					break;
 				}
 				else if (((c == ' ') || (c == '\t') || (c == '\f')) && !precedingBackslash) {
 					valueStart = keyLen + 1;
+
 					break;
 				}
 

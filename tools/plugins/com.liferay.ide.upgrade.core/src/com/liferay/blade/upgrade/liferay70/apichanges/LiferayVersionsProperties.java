@@ -112,7 +112,9 @@ public class LiferayVersionsProperties extends PropertiesFileMigrator implements
 				}
 			}
 
-			propertiesFile.setContents(new ByteArrayInputStream(contents.getBytes()), IResource.FORCE, null);
+			try (ByteArrayInputStream bos = new ByteArrayInputStream(contents.getBytes())) {
+				propertiesFile.setContents(bos, IResource.FORCE, null);
+			}
 
 			return problemsFixed;
 		}

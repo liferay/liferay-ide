@@ -19,6 +19,8 @@ import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.project.core.upgrade.BreakingChangeSelectedProject;
+import com.liferay.ide.project.core.upgrade.BreakingChangeSimpleProject;
 import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.ProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
@@ -26,10 +28,9 @@ import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.project.core.upgrade.BreakingChangeSelectedProject;
-import com.liferay.ide.project.core.upgrade.BreakingChangeSimpleProject;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -47,6 +48,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IViewPart;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -82,9 +84,13 @@ public class AutoCorrectAllAction extends Action {
 									Set<String> fixed = new HashSet<>();
 
 									for (Problem problem : problems) {
+										if (problem.getStatus() == Problem.STATUS_IGNORE) {
+											continue;
+										}
+
 										final IResource file = MigrationUtil.getIResourceFromProblem(problem);
 
-										if ( FileUtil.notExists(file) ) {
+										if (FileUtil.notExists(file)) {
 											continue;
 										}
 
@@ -167,6 +173,7 @@ public class AutoCorrectAllAction extends Action {
 									ProjectUI.logError(ioe);
 								}
 							}
+
 						});
 				}
 				catch (AutoMigrateException | CoreException | InvalidSyntaxException e) {
@@ -175,6 +182,7 @@ public class AutoCorrectAllAction extends Action {
 
 				return retval;
 			}
+
 		};
 
 		job.schedule();
