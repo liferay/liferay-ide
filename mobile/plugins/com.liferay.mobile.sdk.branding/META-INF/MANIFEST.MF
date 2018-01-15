@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: %bundle.name
-Bundle-SymbolicName: com.liferay.mobile.sdk.branding
-Bundle-Version: 3.2.0.qualifier
-Bundle-Vendor: %bundle.vendor
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
