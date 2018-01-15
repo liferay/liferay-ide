@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- ******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.lfportlet.model;
 
@@ -19,9 +19,8 @@ import org.eclipse.sapphire.ElementType;
 /**
  * @author Simon Jiang
  */
-public interface ICronTrigger extends ITrigger
-{
+public interface ICronTrigger extends ITrigger {
 
-    ElementType TYPE = new ElementType( ICronTrigger.class );
+	public ElementType TYPE = new ElementType(ICronTrigger.class);
 
 }

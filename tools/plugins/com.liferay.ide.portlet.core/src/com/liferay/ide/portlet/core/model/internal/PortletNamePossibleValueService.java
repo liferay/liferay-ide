@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Kamesh Sampath - initial implementation
- *      Gregory Amerson - initial implementation review and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model.internal;
 
@@ -32,6 +28,7 @@ import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -40,66 +37,62 @@ import org.w3c.dom.NodeList;
  * @author Gregory Amerson
  * @author Tao Tao
  */
-@SuppressWarnings( "restriction" )
-public class PortletNamePossibleValueService extends PossibleValuesService
-{
+@SuppressWarnings("restriction")
+public class PortletNamePossibleValueService extends PossibleValuesService {
 
-    private static final String PORTLET_NAME_ELEMENT = "portlet-name";
-    private String[] localPortletNames;
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.
+	 *      util.SortedSet)
+	 */
+	@Override
+	protected void compute(Set<String> values) {
+		IFile displayXmlFile = context(Element.class).resource().adapt(IFile.class);
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
-     */
-    @Override
-    protected void compute( Set<String> values )
-    {
-        final IFile displayXmlFile = context( Element.class ).resource().adapt( IFile.class );
-        final IFolder resourceFolder = (IFolder) displayXmlFile.getParent();
+		IFolder resourceFolder = (IFolder)displayXmlFile.getParent();
 
-        final IFile portletXml = resourceFolder.getFile( "portlet.xml" );
+		IFile portletXml = resourceFolder.getFile("portlet.xml");
 
-        IDOMModel portletModel = null;
+		IDOMModel portletModel = null;
 
-        try
-        {
-            portletModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( portletXml );
+		try {
+			portletModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(portletXml);
 
-            IDOMDocument portletDocument = portletModel.getDocument();
+			IDOMDocument portletDocument = portletModel.getDocument();
 
-            NodeList elements = portletDocument.getElementsByTagName( PORTLET_NAME_ELEMENT );
+			NodeList elements = portletDocument.getElementsByTagName(PORTLET_NAME_ELEMENT);
 
-            List<String> portletNameList = new LinkedList<String>();
+			List<String> portletNameList = new LinkedList<>();
 
-            for( int i = 0; i < elements.getLength(); i++ )
-            {
-                Node portletElement = elements.item( i );
+			for (int i = 0; i < elements.getLength(); i++) {
+				Node portletElement = elements.item(i);
 
-                if( portletElement != null )
-                {
-                    String portletName = portletElement.getTextContent();
-                    portletNameList.add( portletName );
-                }
-            }
+				if (portletElement != null) {
+					String portletName = portletElement.getTextContent();
 
-            this.localPortletNames = portletNameList.toArray( new String[0] );
-        }
-        catch( Exception e )
-        {
-            LiferayCore.logError( e );
-        }
-        finally
-        {
-            if( portletModel != null )
-            {
-                portletModel.releaseFromRead();
-            }
-        }
+					portletNameList.add(portletName);
+				}
+			}
 
-        if( this.localPortletNames != null )
-        {
-            Collections.addAll( values, this.localPortletNames );
-        }
-    }
+			this.localPortletNames = portletNameList.toArray(new String[0]);
+		}
+		catch (Exception e) {
+			LiferayCore.logError(e);
+		}
+		finally {
+			if (portletModel != null) {
+				portletModel.releaseFromRead();
+			}
+		}
+
+		if (this.localPortletNames != null) {
+			Collections.addAll(values, this.localPortletNames);
+		}
+	}
+
+	private static final String PORTLET_NAME_ELEMENT = "portlet-name";
+
+	private String[] localPortletNames;
 
 }

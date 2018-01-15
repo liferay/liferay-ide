@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- ******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.lfportlet.model;
 
@@ -24,20 +24,19 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Simon Jiang
  */
-public interface PropertySimpleTrigger extends ISimpleTrigger
-{
+public interface PropertySimpleTrigger extends ISimpleTrigger {
 
-    ElementType TYPE = new ElementType( PropertySimpleTrigger.class );
+	public ElementType TYPE = new ElementType(PropertySimpleTrigger.class);
 
+	// *** Property Key ***
 
-    // *** Property Key ***
+	@Label(standard = "Property Key")
+	@Required
+	@XmlBinding(path = "")
+	public ValueProperty PROP_PROPERTY_KEY = new ValueProperty(TYPE, "PropertyKey");
 
-    @Label( standard = "Property Key" )
-    @Required
-    @XmlBinding( path = "" )
-    ValueProperty PROP_PROPERTY_KEY = new ValueProperty( TYPE, "PropertyKey" ); //$NON-NLS-1$
+	public Value<String> getPropertyKey();
 
-    Value<String> getPropertyKey();
-    void setPropertyKey( String value );
+	public void setPropertyKey(String value);
 
 }

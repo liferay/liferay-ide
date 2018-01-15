@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.portlet.ui.editor;
 
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
@@ -25,60 +25,50 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 
-
 /**
  * @author Gregory Amerson
  */
-public class MessageKeyHyperlink implements IHyperlink
-{
+public class MessageKeyHyperlink implements IHyperlink {
 
-    private final IFile file;
-    private final String key;
-    private final int length;
-    private final int offset;
-    private final IRegion region;
+	public MessageKeyHyperlink(IRegion region, IFile file, String key, int offset, int length) {
+		_region = region;
+		_file = file;
+		_key = key;
+		_offset = offset;
+		_length = length;
+	}
 
-    public MessageKeyHyperlink( IRegion region, IFile file, String key, int offset, int length )
-    {
-        this.region = region;
-        this.file = file;
-        this.key = key;
-        this.offset = offset;
-        this.length = length;
-    }
+	public IRegion getHyperlinkRegion() {
+		return _region;
+	}
 
-    public IRegion getHyperlinkRegion()
-    {
-        return this.region;
-    }
+	public String getHyperlinkText() {
+		return "Open '" + _key + "' in " + this._file.getName();
+	}
 
-    public String getHyperlinkText()
-    {
-        return "Open '" + this.key + "' in " + this.file.getName();
-    }
+	public String getTypeLabel() {
+		return null;
+	}
 
-    public String getTypeLabel()
-    {
-        return null;
-    }
+	public void open() {
+		try {
+			IEditorPart editorPart = IDE.openEditor(UIUtil.getActivePage(), _file, true);
 
-    public void open()
-    {
-        try
-        {
-            final IEditorPart editorPart = IDE.openEditor( UIUtil.getActivePage(), this.file, true );
+			if (editorPart instanceof AbstractTextEditor) {
+				AbstractTextEditor editor = (AbstractTextEditor)editorPart;
 
-            if( editorPart instanceof AbstractTextEditor )
-            {
-                AbstractTextEditor editor = (AbstractTextEditor) editorPart;
+				editor.selectAndReveal(_offset, _length);
+			}
+		}
+		catch (PartInitException pie) {
+			PortletUIPlugin.logError("Could not open properties file " + this._file.getName(), pie);
+		}
+	}
 
-                editor.selectAndReveal( this.offset, this.length );
-            }
-        }
-        catch( PartInitException e )
-        {
-            PortletUIPlugin.logError( "Could not open properties file " + this.file.getName(), e );
-        }
-    }
+	private IFile _file;
+	private String _key;
+	private int _length;
+	private int _offset;
+	private IRegion _region;
 
 }

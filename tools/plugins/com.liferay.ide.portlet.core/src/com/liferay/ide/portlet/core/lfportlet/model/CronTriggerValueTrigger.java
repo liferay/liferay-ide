@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- ******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.lfportlet.model;
 
@@ -27,28 +27,23 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Simon Jiang
  */
-public interface CronTriggerValueTrigger extends ICronTrigger
-{
+public interface CronTriggerValueTrigger extends ICronTrigger {
 
-    ElementType TYPE = new ElementType( CronTriggerValueTrigger.class );
+	public ElementType TYPE = new ElementType(CronTriggerValueTrigger.class);
 
-    // *** Cron Trigger Value ***
+	// *** Cron Trigger Value ***
 
-    @Label( standard = "Cron Trigger Value" )
-    @Required
-    @Service
-    (
-        impl = NumberValueValidationService.class,
-        params =
-        {
-            @Service.Param( name = "min", value = "1" ),
-            @Service.Param( name = "max", value = "" ),
-        }
-    )
-    @XmlBinding( path = "" )
-    ValueProperty PROP_CRON_TRIGGER_VALUE = new ValueProperty( TYPE, "CronTriggerValue" );
+	@Label(standard = "Cron Trigger Value")
+	@Required
+	@Service(impl = NumberValueValidationService.class, params = {
+		@Service.Param(name = "min", value = "1"), @Service.Param(name = "max", value = "")
 
-    Value<String> getCronTriggerValue();
-    void setCronTriggerValue( String value );
+	})
+	@XmlBinding(path = "")
+	public ValueProperty PROP_CRON_TRIGGER_VALUE = new ValueProperty(TYPE, "CronTriggerValue");
+
+	public Value<String> getCronTriggerValue();
+
+	public void setCronTriggerValue(String value);
 
 }

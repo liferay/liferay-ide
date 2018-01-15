@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui;
 
@@ -20,6 +19,7 @@ import com.liferay.ide.portlet.ui.template.PortletTemplateContextTypeIds;
 
 import java.io.IOException;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -28,6 +28,7 @@ import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.ui.editors.text.templates.ContributionContextTypeRegistry;
 import org.eclipse.ui.editors.text.templates.ContributionTemplateStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+
 import org.osgi.framework.BundleContext;
 
 /**
@@ -36,122 +37,118 @@ import org.osgi.framework.BundleContext;
  * @author Greg Amerson
  * @author Kamesh Sampath [IDE-405] updated the ImageRegistry
  */
-public class PortletUIPlugin extends AbstractUIPlugin
-{
+public class PortletUIPlugin extends AbstractUIPlugin {
 
-    // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.portlet.ui"; //$NON-NLS-1$
+	// The plugin ID
 
-    // The shared instance
-    private static PortletUIPlugin plugin;
+	public static final String PLUGIN_ID = "com.liferay.ide.portlet.ui";
 
-    // Image KEYS
+	// The shared instance
 
-    public static IStatus createErrorStatus( Exception e )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e );
-    }
+	public static IStatus createErrorStatus(Exception e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e);
+	}
 
-    public static IStatus createErrorStatus( String string )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, string );
-    }
+	// Image KEYS
 
-    /**
-     * Returns the shared instance
-     *
-     * @return the shared instance
-     */
-    public static PortletUIPlugin getDefault()
-    {
-        return plugin;
-    }
+	public static IStatus createErrorStatus(String string) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, string);
+	}
 
-    public static void logError( Exception e )
-    {
-        logError( e.getMessage(), e );
-    }
+	/**
+	 * Returns the shared instance
+	 *
+	 * @return the shared instance
+	 */
+	public static PortletUIPlugin getDefault() {
+		return _plugin;
+	}
 
-    public static void logError( String msg, Exception e )
-    {
-        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, msg, e ) );
-    }
+	public static void logError(Exception e) {
+		logError(e.getMessage(), e);
+	}
 
-    private ContributionContextTypeRegistry fContextTypeRegistry;
+	public static void logError(String msg, Exception e) {
+		ILog log = getDefault().getLog();
 
-    private ContributionTemplateStore fTemplateStore;
+		log.log(new Status(IStatus.ERROR, PLUGIN_ID, msg, e));
+	}
 
-    /**
-     * The constructor
-     */
-    public PortletUIPlugin()
-    {
-    }
+	/**
+	 * The constructor
+	 */
+	public PortletUIPlugin() {
+	}
 
-    public ContextTypeRegistry getTemplateContextRegistry()
-    {
-        if( fContextTypeRegistry == null )
-        {
-            ContributionContextTypeRegistry registry = new ContributionContextTypeRegistry();
+	public ContextTypeRegistry getTemplateContextRegistry() {
+		if (_fContextTypeRegistry == null) {
+			ContributionContextTypeRegistry registry = new ContributionContextTypeRegistry();
 
-            registry.addContextType( PortletTemplateContextTypeIds.NEW );
-            registry.addContextType( JSFPortletTemplateContextTypeIds.NEW );
+			registry.addContextType(PortletTemplateContextTypeIds.NEW);
+			registry.addContextType(JSFPortletTemplateContextTypeIds.NEW);
 
-            fContextTypeRegistry = registry;
-        }
+			_fContextTypeRegistry = registry;
+		}
 
-        return fContextTypeRegistry;
-    }
+		return _fContextTypeRegistry;
+	}
 
-    public TemplateStore getTemplateStore()
-    {
-        if( fTemplateStore == null )
-        {
-            fTemplateStore =
-                new ContributionTemplateStore(
-                    getTemplateContextRegistry(), getPreferenceStore(), "com.liferay.ide.portlet.ui.custom_templates" );
+	public TemplateStore getTemplateStore() {
+		if (_fTemplateStore == null) {
+			_fTemplateStore = new ContributionTemplateStore(
+				getTemplateContextRegistry(), getPreferenceStore(), "com.liferay.ide.portlet.ui.custom_templates");
 
-            try
-            {
-                fTemplateStore.load();
-            }
-            catch( IOException e )
-            {
-                logError( e );
-            }
-        }
+			try {
+				_fTemplateStore.load();
+			}
+			catch (IOException ioe) {
+				logError(ioe);
+			}
+		}
 
-        return fTemplateStore;
-    }
+		return _fTemplateStore;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#initializeImageRegistry(org.eclipse.jface.resource.ImageRegistry)
-     */
-    @Override
-    protected void initializeImageRegistry( ImageRegistry imageRegistry )
-    {
-    }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * AbstractUIPlugin#start(BundleContext
+	 * )
+	 */
+	@Override
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		_plugin = this;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
-     */
-    @Override
-    public void start( BundleContext context ) throws Exception
-    {
-        super.start( context );
-        plugin = this;
-    }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * AbstractUIPlugin#stop(BundleContext
+	 * )
+	 */
+	@Override
+	public void stop(BundleContext context) throws Exception {
+		_plugin = null;
+		super.stop(context);
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
-     */
-    @Override
-    public void stop( BundleContext context ) throws Exception
-    {
-        plugin = null;
-        super.stop( context );
-    }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * AbstractUIPlugin#initializeImageRegistry(org.eclipse.
+	 * jface.resource.ImageRegistry)
+	 */
+	@Override
+	protected void initializeImageRegistry(ImageRegistry imageRegistry) {
+	}
+
+	private static PortletUIPlugin _plugin;
+
+	private ContributionContextTypeRegistry _fContextTypeRegistry;
+	private ContributionTemplateStore _fTemplateStore;
+
 }

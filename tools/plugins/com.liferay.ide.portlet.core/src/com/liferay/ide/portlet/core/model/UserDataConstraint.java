@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -31,26 +28,24 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-public interface UserDataConstraint extends Element, Identifiable, Describeable
-{
+public interface UserDataConstraint extends Element, Identifiable, Describeable {
 
-    ElementType TYPE = new ElementType( UserDataConstraint.class );
+	public ElementType TYPE = new ElementType(UserDataConstraint.class);
 
-    /*
-     * Transport Gurantee
-     */
+	/**
+	 * Transport Gurantee
+	 */
+	@Type(base = TransportGuarantee.class)
+	@Label(standard = "Transport Guarantee")
+	@Unique
+	@Required
+	@XmlBinding(path = "transport-guarantee")
+	@InitialValue(text = "NONE")
+	public ValueProperty PROP_TRANSPORT_GUARANTEE = new ValueProperty(TYPE, "TransportGuarantee");
 
-    @Type( base = TransportGuarantee.class )
-    @Label( standard = "Transport Guarantee" )
-    @Unique
-    @Required
-    @XmlBinding( path = "transport-guarantee" )
-    @InitialValue( text = "NONE" )
-    ValueProperty PROP_TRANSPORT_GUARANTEE = new ValueProperty( TYPE, "TransportGuarantee" ); //$NON-NLS-1$
+	public Value<TransportGuarantee> getTransportGuarantee();
 
-    Value<TransportGuarantee> getTransportGuarantee();
+	public void setTransportGuarantee(TransportGuarantee version);
 
-    void setTransportGuarantee( TransportGuarantee version );
-
-    void setTransportGuarantee( String version );
+	public void setTransportGuarantee(String version);
 }

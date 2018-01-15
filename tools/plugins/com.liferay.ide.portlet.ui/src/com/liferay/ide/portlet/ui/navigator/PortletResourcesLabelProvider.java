@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Kamesh Sampath - initial implementation
- *      Gregory Amerson - initial implementation review and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.navigator;
 
@@ -29,80 +25,71 @@ import org.eclipse.swt.graphics.Image;
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  * @author Gregory Amerson
  */
-public class PortletResourcesLabelProvider extends AbstractLabelProvider
-{
+public class PortletResourcesLabelProvider extends AbstractLabelProvider {
 
-    private final static String PORTLETS = "PORTLETS"; //$NON-NLS-1$
-    private final static String PORTLET = "PORTLET"; //$NON-NLS-1$
-    private final static String MODULES = "MODULES"; //$NON-NLS-1$
+	public PortletResourcesLabelProvider() {
+	}
 
-    public PortletResourcesLabelProvider()
-    {
-        super();
-    }
-    
-    @Override
-    protected void initalizeImageRegistry( ImageRegistry imageRegistry )
-    {
-        imageRegistry.put(
-            PORTLETS,
-            PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "icons/e16/portlets_16x16.png" ) ); //$NON-NLS-1$
-        imageRegistry.put(
-            PORTLET,
-            PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "icons/e16/portlet_16x16.png" ) ); //$NON-NLS-1$
-        imageRegistry.put(
-            MODULES,
-            PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "icons/liferay_logo_16.png" ) ); //$NON-NLS-1$
-    }
+	@Override
+	public Image getImage(Object element) {
+		if (element instanceof PortletResourcesRootNode) {
+			return getImageRegistry().get(_MODULES);
+		}
+		else if (element instanceof PortletsNode) {
+			return getImageRegistry().get(_PORTLETS);
+		}
+		else if (element instanceof PortletNode) {
+			return getImageRegistry().get(_PORTLET);
+		}
 
-    @Override
-    public Image getImage( Object element )
-    {
-        if( element instanceof PortletResourcesRootNode )
-        {
-            return getImageRegistry().get( MODULES );
-        }
-        else if( element instanceof PortletsNode )
-        {
-            return this.getImageRegistry().get( PORTLETS );
-        }
-        else if( element instanceof PortletNode )
-        {
-            return this.getImageRegistry().get( PORTLET );
-        }
+		return null;
+	}
 
-        return null;
-    }
+	@Override
+	public String getText(Object element) {
+		if (element instanceof PortletResourcesRootNode) {
+			return Msgs.liferayPortletResources;
+		}
+		else if (element instanceof PortletsNode) {
+			return Msgs.portlets;
+		}
+		else if (element instanceof PortletNode) {
+			PortletNode portletNode = (PortletNode)element;
 
-    @Override
-    public String getText( Object element )
-    {
-        if( element instanceof PortletResourcesRootNode )
-        {
-            return Msgs.liferayPortletResources;
-        }
-        else if( element instanceof PortletsNode )
-        {
-            return Msgs.portlets;
-        }
-        else if( element instanceof PortletNode )
-        {
-            PortletNode portletNode = (PortletNode) element;
+			return portletNode.getName();
+		}
 
-            return portletNode.getName();
-        }
+		return null;
+	}
 
-        return null;
-    }
+	@Override
+	protected void initalizeImageRegistry(ImageRegistry imageRegistry) {
+		imageRegistry.put(
+			_PORTLETS,
+			PortletUIPlugin.imageDescriptorFromPlugin(PortletUIPlugin.PLUGIN_ID, "icons/e16/portlets_16x16.png"));
+		imageRegistry.put(
+			_PORTLET,
+			PortletUIPlugin.imageDescriptorFromPlugin(PortletUIPlugin.PLUGIN_ID, "icons/e16/portlet_16x16.png"));
+		imageRegistry.put(
+			_MODULES,
+			PortletUIPlugin.imageDescriptorFromPlugin(PortletUIPlugin.PLUGIN_ID, "icons/liferay_logo_16.png"));
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String liferayPortletResources;
-        public static String portlets;
+	private static final String _MODULES = "MODULES";
 
-        static
-        {
-            initializeMessages( PortletResourcesLabelProvider.class.getName(), Msgs.class );
-        }
-    }
+	private static final String _PORTLET = "PORTLET";
+
+	private static final String _PORTLETS = "PORTLETS";
+
+	private static class Msgs extends NLS {
+
+		public static String liferayPortletResources;
+		public static String portlets;
+
+		static {
+			initializeMessages(PortletResourcesLabelProvider.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

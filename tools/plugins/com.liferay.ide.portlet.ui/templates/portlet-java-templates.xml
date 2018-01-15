@@ -2,42 +2,42 @@
 
 <templates>
 
-<template name="http-session" description="Grabs the current session from portletRequest" id="portlet.Session" context="java-statements" enabled="true">
+	<template context="java-statements" description="Grabs the current session from portletRequest" enabled="true" id="portlet.Session" name="http-session">
 HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(${request:var('javax.portlet.PortletRequest')});
 HttpSession session = httpRequest.getSession();
 ${:import(com.liferay.portal.util.PortalUtil,javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpSession)}
 ${cursor}
-</template>
+	</template>
 
-<template name="eventhandler-jsr" autoinsert="true" context="java-members" id="portlet.eventhandler" deleted="false" description="Portlet IPC Event Handler built with JSR-286 annotation" enabled="true" >
+	<template autoinsert="true" context="java-members" deleted="false" description="Portlet IPC Event Handler built with JSR-286 annotation" enabled="true" id="portlet.eventhandler" name="eventhandler-jsr" >
 @ProcessEvent(qname = "{http://${eventNamespace}}${eventName}")
 public void ${handleEvent}(EventRequest ${eventRequest}, EventResponse ${eventResponse}) {
-    Event event = ${eventRequest}.getEvent();
-    ${PayloadType} ${payload} = (${PayloadType}) event.getValue();
-    ${cursor}
+	Event event = ${eventRequest}.getEvent();
+	${PayloadType} ${payload} = (${PayloadType}) event.getValue();
+	${cursor}
 }
 ${:import(javax.portlet.Event,javax.portlet.EventRequest,javax.portlet.EventResponse,javax.portlet.ProcessEvent)}
-</template>
+	</template>
 
-<template name="permissioncheck" autoinsert="true" context="java-statements" id="portlet.permissioncheck" deleted="false" description="utilizes the permission checker from themeDisplay for checking permissions" enabled="true">
+	<template autoinsert="true" context="java-statements" deleted="false" description="utilizes the permission checker from themeDisplay for checking permissions" enabled="true" id="portlet.permissioncheck" name="permissioncheck">
 // e.g. get the group id you're interested in like this:
 // long groupId = ${themeDisplay:var(com.liferay.portal.theme.ThemeDisplay)}.getScopeGroupId();
 
 if (${themeDisplay}.getPermissionChecker()
-    .hasPermission(${groupId}, ${classOrPackageNameAsString},
-        ${primaryKey}, ${permissionNameAsString})) {
-    ${cursor}
+	.hasPermission(${groupId}, ${classOrPackageNameAsString},
+		${primaryKey}, ${permissionNameAsString})) {
+	${cursor}
 }
-</template>
+	</template>
 
-<template name="processaction" autoinsert="true" context="java-members" id="portlet.processaction" deleted="false" description="renamable action handler for portlets" enabled="true" >
+	<template autoinsert="true" context="java-members" deleted="false" description="renamable action handler for portlets" enabled="true" id="portlet.processaction" name="processaction" >
 public void ${doSomething}(ActionRequest ${actionRequest}, ActionResponse ${actionResponse}) {
-    ${cursor}
+	${cursor}
 }
 ${:import(javax.portlet.ActionRequest,javax.portlet.ActionResponse)}
-</template>
+	</template>
 
-<template name="themedisplay" autoinsert="true" context="java-statements" id="portlet.themeDisplay" deleted="false" description="access ThemeDisplay object from a scope that has a PortletRequest available" enabled="true">
+	<template autoinsert="true" context="java-statements" deleted="false" description="access ThemeDisplay object from a scope that has a PortletRequest available" enabled="true" id="portlet.themeDisplay" name="themedisplay">
 ThemeDisplay ${themeDisplay} = (ThemeDisplay) ${request:var(javax.portlet.PortletRequest)}.getAttribute(WebKeys.THEME_DISPLAY);
 
 long groupId = ${themeDisplay}.getScopeGroupId();
@@ -47,36 +47,36 @@ long groupId = ${themeDisplay}.getScopeGroupId();
 ${cursor}
 
 ${:import(com.liferay.portal.theme.ThemeDisplay,com.liferay.portal.kernel.util.WebKeys,com.liferay.portal.kernel.util.ParamUtil)}
-</template>
+	</template>
 
-<template name="getboolean" autoinsert="true" context="java-statements" id="param.getBoolean" deleted="false" description="ParamUtil get boolean" enabled="true">
+	<template autoinsert="true" context="java-statements" deleted="false" description="ParamUtil get boolean" enabled="true" id="param.getBoolean" name="getboolean">
 boolean ${param} = ParamUtil.getBoolean(${request:var('javax.portlet.PortletRequest')}, "${param}");
 ${:import(com.liferay.portal.kernel.util.ParamUtil)}
-</template>
+	</template>
 
-<template name="getcompanyid" autoinsert="true" context="java-statements" id="param.getCompanyId" deleted="false" description="ParamUtil get date" enabled="true">
+	<template autoinsert="true" context="java-statements" deleted="false" description="ParamUtil get date" enabled="true" id="param.getCompanyId" name="getcompanyid">
 long ${companyId} = PortalUtil.getCompanyId(${request:var('javax.servlet.HttpServletRequest')});
 ${:import(com.liferay.portal.kernel.util.PortalUtil)}
-</template>
+	</template>
 
-<template name="getdate" autoinsert="true" context="java-statements" id="param.getDate" deleted="false" description="ParamUtil get date" enabled="true">
+	<template autoinsert="true" context="java-statements" deleted="false" description="ParamUtil get date" enabled="true" id="param.getDate" name="getdate">
 Date ${param} = ParamUtil.getDate(${request:var('javax.portlet.PortletRequest')}, "${param}", new SimpleDateFormat());
 ${:import(java.util.Date,com.liferay.portal.kernel.util.ParamUtil,java.text.SimpleDateFormat)}
-</template>
+	</template>
 
-<template name="getinteger" autoinsert="true" context="java-statements" id="param.getInteger" deleted="false" description="ParamUtil get integer" enabled="true">
+	<template autoinsert="true" context="java-statements" deleted="false" description="ParamUtil get integer" enabled="true" id="param.getInteger" name="getinteger">
 int ${param} = ParamUtil.getInteger(${request:var('javax.portlet.PortletRequest')}, "${param}");
 ${:import(com.liferay.portal.kernel.util.ParamUtil)}
-</template>
+	</template>
 
-<template name="getlong" autoinsert="true" context="java-statements" id="param.getLong" deleted="false" description="ParamUtil get long" enabled="true">
+	<template autoinsert="true" context="java-statements" deleted="false" description="ParamUtil get long" enabled="true" id="param.getLong" name="getlong">
 long ${param} = ParamUtil.getLong(${request:var('javax.portlet.PortletRequest')}, "${param}");
 ${:import(com.liferay.portal.kernel.util.ParamUtil)}
-</template>
+	</template>
 
-<template name="getstring" autoinsert="true" context="java-statements" id="param.getString" deleted="false" description="ParamUtil get string" enabled="true">
+	<template autoinsert="true" context="java-statements" deleted="false" description="ParamUtil get string" enabled="true" id="param.getString" name="getstring">
 String ${param} = ParamUtil.getString(${request:var('javax.portlet.PortletRequest')}, "${param}");
 ${:import(com.liferay.portal.kernel.util.ParamUtil)}
-</template>
+	</template>
 
 </templates>

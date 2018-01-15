@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.portlet.ui.editor;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -31,94 +31,88 @@ import org.eclipse.jface.text.hyperlink.AbstractHyperlinkDetector;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.search.core.util.DOMUtils;
-import org.w3c.dom.Node;
 
+import org.w3c.dom.Node;
 
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class MessageKeyHyperlinkDetector extends AbstractHyperlinkDetector
-{
-    private long lastModStamp;
-    private IFile lastFile;
-    private IRegion lastNodeRegion;
-    private MessageKey[] lastMessageKeys;
+@SuppressWarnings("restriction")
+public class MessageKeyHyperlinkDetector extends AbstractHyperlinkDetector {
 
-    public MessageKeyHyperlinkDetector()
-    {
-        super();
-    }
+	public MessageKeyHyperlinkDetector() {
+	}
 
-    public IHyperlink[] detectHyperlinks( ITextViewer textViewer, IRegion region, boolean canShowMultipleHyperlinks )
-    {
-        IHyperlink[] retval = null;
+	public IHyperlink[] detectHyperlinks(ITextViewer textViewer, IRegion region, boolean canShowMultipleHyperlinks) {
+		IHyperlink[] retval = null;
 
-        if( shouldDetectHyperlinks( textViewer, region ) )
-        {
-            final IDocument document = textViewer.getDocument();
-            final int offset = region.getOffset();
-            final IDOMNode currentNode = DOMUtils.getNodeByOffset( document, offset );
-            final Node keyNode = NodeUtils.getMessageKey( currentNode );
+		if (_shouldDetectHyperlinks(textViewer, region)) {
+			IDocument document = textViewer.getDocument();
+			int offset = region.getOffset();
 
-            if( keyNode != null )
-            {
-                final IRegion nodeRegion =
-                    new Region( currentNode.getStartOffset(), currentNode.getEndOffset() - currentNode.getStartOffset() );
-                final long modStamp = ( (IDocumentExtension4) document ).getModificationStamp();
-                final IFile file = DOMUtils.getFile( document );
+			IDOMNode currentNode = DOMUtils.getNodeByOffset(document, offset);
 
-                MessageKey[] messageKeys = null;
+			Node keyNode = NodeUtils.getMessageKey(currentNode);
 
-                if( file.equals( this.lastFile ) && modStamp == this.lastModStamp &&
-                    nodeRegion.equals( this.lastNodeRegion ) )
-                {
-                    messageKeys = this.lastMessageKeys;
-                }
-                else
-                {
-                    final String key = keyNode.getNodeValue();
+			if (keyNode != null) {
+				IRegion nodeRegion = new Region(
+					currentNode.getStartOffset(), currentNode.getEndOffset() - currentNode.getStartOffset());
+				long modStamp = ((IDocumentExtension4)document).getModificationStamp();
+				IFile file = DOMUtils.getFile(document);
 
-                    // search for message key in content/Langauge.properties
-                    messageKeys = NodeUtils.findMessageKeys( document, key, false );
+				MessageKey[] messageKeys = null;
 
-                    this.lastModStamp = modStamp;
-                    this.lastFile = file;
-                    this.lastNodeRegion = nodeRegion;
-                    this.lastMessageKeys = messageKeys;
-                }
+				if (file.equals(_lastFile) && (modStamp == _lastModStamp) && nodeRegion.equals(_lastNodeRegion)) {
+					messageKeys = _lastMessageKeys;
+				}
+				else {
+					String key = keyNode.getNodeValue();
 
-                if( ! CoreUtil.isNullOrEmpty( messageKeys ) )
-                {
-                    final List<IHyperlink> links = new ArrayList<IHyperlink>();
+					// search for message key in content/Langauge.properties
 
-                    for( MessageKey messageKey : messageKeys )
-                    {
-                        links.add( new MessageKeyHyperlink(
-                            nodeRegion, messageKey.file, messageKey.key, messageKey.offset, messageKey.length ) );
-                    }
+					messageKeys = NodeUtils.findMessageKeys(document, key, false);
 
-                    if( links.size() != 0 )
-                    {
-                        if( canShowMultipleHyperlinks )
-                        {
-                            retval = links.toArray( new IHyperlink[0] );
-                        }
-                        else
-                        {
-                            retval = new IHyperlink[] { links.get( 0 ) };
-                        }
-                    }
-                }
-            }
-        }
+					_lastModStamp = modStamp;
+					_lastFile = file;
+					_lastNodeRegion = nodeRegion;
+					_lastMessageKeys = messageKeys;
+				}
 
-        return retval;
-    }
+				if (!CoreUtil.isNullOrEmpty(messageKeys)) {
+					List<IHyperlink> links = new ArrayList<>();
 
-    private boolean shouldDetectHyperlinks( ITextViewer textViewer, IRegion region )
-    {
-        return region != null && textViewer != null;
-    }
+					for (MessageKey messageKey : messageKeys) {
+						links.add(
+							new MessageKeyHyperlink(
+								nodeRegion, messageKey.file, messageKey.key, messageKey.offset, messageKey.length));
+					}
+
+					if (links.isEmpty()) {
+						if (canShowMultipleHyperlinks) {
+							retval = links.toArray(new IHyperlink[0]);
+						}
+						else {
+							retval = new IHyperlink[] {links.get(0)};
+						}
+					}
+				}
+			}
+		}
+
+		return retval;
+	}
+
+	private boolean _shouldDetectHyperlinks(ITextViewer textViewer, IRegion region) {
+		if ((region != null) && (textViewer != null)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private IFile _lastFile;
+	private MessageKey[] _lastMessageKeys;
+	private long _lastModStamp;
+	private IRegion _lastNodeRegion;
 
 }

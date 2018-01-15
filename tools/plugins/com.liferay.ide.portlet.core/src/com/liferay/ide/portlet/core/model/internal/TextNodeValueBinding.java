@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model.internal;
 
@@ -27,89 +24,85 @@ import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 /**
  * @author Kamesh Sampath
  */
-public final class TextNodeValueBinding extends XmlValueBindingImpl
-{
+public class TextNodeValueBinding extends XmlValueBindingImpl {
 
-    private XmlPath path;
-    private String[] params;
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.sapphire.modeling.xml.XmlValuePropertyBinding#getXmlNode()
+	 */
+	@Override
+	public XmlNode getXmlNode() {
+		XmlElement element = xml(false);
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.PropertyBinding#init(org.eclipse.sapphire.modeling.Element,
-     * org.eclipse.sapphire.modeling.Property, java.lang.String[])
-     */
-    @Override
-    public void init( final Property property )
-    {
-        super.init( property );
+		if (element != null) {
+			return element.getChildNode(this.path, false);
+		}
 
-        this.params = property.definition().getAnnotation( CustomXmlValueBinding.class ).params();
-        this.path = new XmlPath( params[0], resource().getXmlNamespaceResolver() );
-    }
+		return null;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#read()
-     */
-    @Override
-    public String read()
-    {
-        String value = null;
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.sapphire.modeling.PropertyBinding#init(org.eclipse.sapphire.
+	 *      modeling.Element, org.eclipse.sapphire.modeling.Property,
+	 *      java.lang.String[])
+	 */
+	@Override
+	public void init(Property property) {
+		super.init(property);
 
-        final XmlElement element = xml( false );
+		this.params = property.definition().getAnnotation(CustomXmlValueBinding.class).params();
+		this.path = new XmlPath(params[0], resource().getXmlNamespaceResolver());
+	}
 
-        if( element != null )
-        {
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#read()
+	 */
+	@Override
+	public String read() {
+		String value = null;
 
-            value = xml( true ).getText();
+		XmlElement element = xml(false);
 
-            // System.out.println( "Reading VALUE ___________________ " + value );
+		if (element != null) {
+			value = xml(true).getText();
 
-            if( value != null )
-            {
-                value = value.trim();
-            }
-        }
+			// System.out.println( "Reading VALUE ___________________ " + value );
 
-        return value;
-    }
+			if (value != null) {
+				value = value.trim();
+			}
+		}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#write(java.lang.String)
-     */
-    @Override
-    public void write( final String value )
-    {
-        String val = value;
+		return value;
+	}
 
-        // System.out.println( "VALUE ___________________ " + val );
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#write(java.lang.String)
+	 */
+	@Override
+	public void write(String value) {
+		String val = value;
 
-        if( val != null )
-        {
-            val = value.trim();
-        }
+		// System.out.println( "VALUE ___________________ " + val );
 
-        // System.out.println( "TextNodeValueBinding.write() - Parent " + xml( true ).getParent() );
+		if (val != null) {
+			val = value.trim();
+		}
 
-        xml( true ).setText( val );
-    }
+		// System.out.println( "TextNodeValueBinding.write() - Parent " + xml( true
+		// ).getParent() );
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.xml.XmlValuePropertyBinding#getXmlNode()
-     */
-    @Override
-    public XmlNode getXmlNode()
-    {
-        final XmlElement element = xml( false );
+		xml(true).setText(val);
+	}
 
-        if( element != null )
-        {
-            return element.getChildNode( this.path, false );
-        }
-
-        return null;
-    }
+	private String[] params;
+	private XmlPath path;
 
 }

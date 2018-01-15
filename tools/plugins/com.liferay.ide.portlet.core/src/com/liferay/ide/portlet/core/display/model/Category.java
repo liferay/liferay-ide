@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.display.model;
 
@@ -34,39 +31,39 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Kamesh Sampath
  */
-@Image( path = "images/elcl16/category_16x16.gif" )
-public interface Category extends Element
-{
-    ElementType TYPE = new ElementType( Category.class );
+@Image(path = "images/elcl16/category_16x16.gif")
+public interface Category extends Element {
 
-    // *** Name ***
+	public ElementType TYPE = new ElementType(Category.class);
 
-    @Label( standard = "Name" )
-    @Required
-    @Unique
-    @XmlBinding( path = "@name" )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
+	// *** Name ***
 
-    Value<String> getName();
+	@Label(standard = "Name")
+	@Required
+	@Unique
+	@XmlBinding(path = "@name")
+	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
 
-    void setName( String name );
+	public Value<String> getName();
 
-    // *** Categories ***
+	public void setName(String name);
 
-    @Type( base = Category.class )
-    @Label( standard = "Categories" )
-    @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "category", type = Category.class ) } )
-    ListProperty PROP_CATEGORIES = new ListProperty( TYPE, "Categories" ); //$NON-NLS-1$
+	// *** Categories ***
 
-    ElementList<Category> getCategories();
+	@Type(base = Category.class)
+	@Label(standard = "Categories")
+	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "category", type = Category.class)})
+	public ListProperty PROP_CATEGORIES = new ListProperty(TYPE, "Categories");
 
-    // *** Portlets ***
+	public ElementList<Category> getCategories();
 
-    @Type( base = DisplayPortlet.class )
-    @Label( standard = "Portlets" )
-    @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "portlet", type = DisplayPortlet.class ) } )
-    ListProperty PROP_PORTLETS = new ListProperty( TYPE, "Portlets" ); //$NON-NLS-1$
+	// *** Portlets ***
 
-    ElementList<DisplayPortlet> getPortlets();
+	@Type(base = DisplayPortlet.class)
+	@Label(standard = "Portlets")
+	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "portlet", type = DisplayPortlet.class)})
+	public ListProperty PROP_PORTLETS = new ListProperty(TYPE, "Portlets");
+
+	public ElementList<DisplayPortlet> getPortlets();
 
 }

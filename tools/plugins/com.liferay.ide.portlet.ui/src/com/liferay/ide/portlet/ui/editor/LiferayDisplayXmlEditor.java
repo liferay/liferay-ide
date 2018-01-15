@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Kamesh Sampath - initial implementation
- *      Gregory Amerson - initial implementation review and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.editor;
 
@@ -27,18 +23,15 @@ import org.eclipse.ui.PartInitException;
  * @author Kamesh Sampath
  * @author Gregory Amerson
  */
-public class LiferayDisplayXmlEditor extends SapphireEditorForXml
-{
+public class LiferayDisplayXmlEditor extends SapphireEditorForXml {
 
-    public LiferayDisplayXmlEditor()
-    {
-        super( Display6xx.TYPE, null );
-    }
+	public LiferayDisplayXmlEditor() {
+		super(Display6xx.TYPE, null);
+	}
 
-    @Override
-    protected void createFormPages() throws PartInitException
-    {
-        addDeferredPage( 1, "Overview", "DetailsPage" );
-    }
+	@Override
+	protected void createFormPages() throws PartInitException {
+		addDeferredPage(1, "Overview", "DetailsPage");
+	}
 
 }

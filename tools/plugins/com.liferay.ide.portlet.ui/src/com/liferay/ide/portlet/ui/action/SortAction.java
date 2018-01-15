@@ -1,13 +1,16 @@
-/*******************************************************************************
- *  Copyright (c) 2006, 2008 IBM Corporation and others.
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Eclipse Public License v1.0
- *  which accompanies this distribution, and is available at
- *  http://www.eclipse.org/legal/epl-v10.html
- * 
- *  Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.portlet.ui.action;
 
@@ -20,92 +23,109 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 
-public class SortAction extends Action
-{
+import org.osgi.framework.Bundle;
 
-    private boolean fSorted;
+/**
+ * @author Greg Amerson
+ */
+public class SortAction extends Action {
 
-    private StructuredViewer fViewer;
+	/**
+	 * @param viewer
+	 * @param tooltipText
+	 * @param sorter
+	 * @param defaultSorter
+	 * @param listener
+	 * @param useMiniImage
+	 */
+	public SortAction(
+		StructuredViewer viewer, String tooltipText, ViewerComparator sorter, ViewerComparator defaultSorter,
+		IPropertyChangeListener listener) {
 
-    private ViewerComparator fComparator;
+		super(tooltipText, IAction.AS_CHECK_BOX);
 
-    private ViewerComparator fDefaultComparator;
+		// Set the tooltip
 
-    /**
-     * @param viewer
-     * @param tooltipText
-     * @param sorter
-     * @param defaultSorter
-     * @param listener
-     * @param useMiniImage
-     */
-    public SortAction(
-        StructuredViewer viewer, String tooltipText, ViewerComparator sorter, ViewerComparator defaultSorter,
-        IPropertyChangeListener listener )
-    {
+		setToolTipText(tooltipText);
 
-        super( tooltipText, IAction.AS_CHECK_BOX );
-        // Set the tooltip
-        setToolTipText( tooltipText );
-        // Set the image
-        setImageDescriptor( ImageDescriptor.createFromURL( PortletUIPlugin.getDefault().getBundle().getEntry(
-            "/icons/e16/alphab_sort_co.gif" ) ) ); //$NON-NLS-1$
-        // Set the default comparator
-        fDefaultComparator = defaultSorter;
-        // Set the viewer
-        fViewer = viewer;
-        // Set the comparator
-        // If one was not specified, use the default
-        if( sorter == null )
-        {
-            fComparator = new ViewerComparator();
-        }
-        else
-        {
-            fComparator = sorter;
-        }
-        // Determine if the viewer is already sorted
-        // Note: Most likely the default comparator is null
-        if( viewer.getComparator() == fDefaultComparator )
-        {
-            fSorted = false;
-        }
-        else
-        {
-            fSorted = true;
-        }
-        // Set the status of this action depending on whether it is sorted or
-        // not
-        setChecked( fSorted );
-        // If a listener was specified, use it
-        if( listener != null )
-        {
-            addListenerObject( listener );
-        }
-    }
+		// Set the image
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.jface.action.Action#run()
-     */
-    public void run()
-    {
-        // Toggle sorting on/off
-        if( fSorted )
-        {
-            // Sorting is on
-            // Turn it off
-            fViewer.setComparator( fDefaultComparator );
-            fSorted = false;
-        }
-        else
-        {
-            // Sorting is off
-            // Turn it on
-            fViewer.setComparator( fComparator );
-            fSorted = true;
-        }
-        notifyResult( true );
-    }
+		Bundle bundle = PortletUIPlugin.getDefault().getBundle();
+
+		setImageDescriptor(ImageDescriptor.createFromURL(bundle.getEntry("/icons/e16/alphab_sort_co.gif")));
+
+		// Set the default comparator
+
+		_fDefaultComparator = defaultSorter;
+
+		// Set the viewer
+
+		_fViewer = viewer;
+
+		// Set the comparator
+		// If one was not specified, use the default
+
+		if (sorter == null) {
+			_fComparator = new ViewerComparator();
+		}
+		else {
+			_fComparator = sorter;
+		}
+
+		// Determine if the viewer is already sorted
+		// Note: Most likely the default comparator is null
+
+		if (viewer.getComparator() == _fDefaultComparator) {
+			_fSorted = false;
+		}
+		else {
+			_fSorted = true;
+		}
+
+		// Set the status of this action depending on whether it is sorted or
+		// not
+
+		setChecked(_fSorted);
+
+		// If a listener was specified, use it
+
+		if (listener != null) {
+			addListenerObject(listener);
+		}
+	}
+
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see Action#run()
+	 */
+	public void run() {
+
+		// Toggle sorting on/off
+
+		if (_fSorted) {
+
+			// Sorting is on
+			// Turn it off
+
+			_fViewer.setComparator(_fDefaultComparator);
+			_fSorted = false;
+		}
+		else {
+
+			// Sorting is off
+			// Turn it on
+
+			_fViewer.setComparator(_fComparator);
+			_fSorted = true;
+		}
+
+		notifyResult(true);
+	}
+
+	private ViewerComparator _fComparator;
+	private ViewerComparator _fDefaultComparator;
+	private boolean _fSorted;
+	private StructuredViewer _fViewer;
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model.internal;
 
@@ -31,86 +28,82 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Kamesh Sampath
  */
-public class NameOrQnameValidationService extends ValidationService
-{
+public class NameOrQnameValidationService extends ValidationService {
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.PropertyValidationService#validate()
-     */
-    private Listener listener;
+	@Override
+	public Status compute() {
+		Element element = context(Element.class);
 
-    @Override
-    public Status compute()
-    {
-        Element element = context( Element.class );
+		String elementLabel = element.type().getLabel(false, CapitalizationType.FIRST_WORD_ONLY, false);
 
-        final String elementLabel = element.type().getLabel( false, CapitalizationType.FIRST_WORD_ONLY, false );
-        QName iqName = null;
-        String name = null;
-        String nsURI = null;
-        String localPart = null;
-        if( element instanceof QName )
-        {
-            iqName = (QName) element;
-            nsURI = iqName.getNamespaceURI().text( false );
-            localPart = iqName.getLocalPart().text( false );
-        }
+		QName iqName = null;
+		String name = null;
+		String nsURI = null;
+		String localPart = null;
 
-        if( isEmptyOrNull( name ) && isEmptyOrNull( nsURI ) && isEmptyOrNull( localPart ) )
-        {
-            return Status.createErrorStatus( Resources.bind( Resources.message, elementLabel ) );
-        }
-        else if( isEmptyOrNull( name ) && ( isEmptyOrNull( nsURI ) || isEmptyOrNull( localPart ) ) )
-        {
-            return Status.createErrorStatus( Resources.bind( Resources.invalidQname, elementLabel ) );
-        }
+		if (element instanceof QName) {
+			iqName = (QName)element;
 
-        return Status.createOkStatus();
-    }
+			nsURI = iqName.getNamespaceURI().text(false);
+			localPart = iqName.getLocalPart().text(false);
+		}
 
-    /**
-     * @param text
-     * @return
-     */
+		if (isEmptyOrNull(name) && isEmptyOrNull(nsURI) && isEmptyOrNull(localPart)) {
+			return Status.createErrorStatus(Resources.bind(Resources.message, elementLabel));
+		}
+		else if (isEmptyOrNull(name) && (isEmptyOrNull(nsURI) || isEmptyOrNull(localPart))) {
+			return Status.createErrorStatus(Resources.bind(Resources.invalidQname, elementLabel));
+		}
 
-    @Override
-    protected void initValidationService()
-    {
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
-            protected void handleTypedEvent( final PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
+		return Status.createOkStatus();
+	}
 
-        op().getLocalPart().attach( this.listener );
-        op().getNamespaceURI().attach( this.listener );
-    }
+	/**
+	 * @param text
+	 * @return
+	 */
+	@Override
+	protected void initValidationService() {
+		this.listener = new FilteredListener<PropertyContentEvent>() {
 
-    private boolean isEmptyOrNull( String text )
-    {
-        if( text == null || text.trim().length() == 0 )
-        {
-            return true;
-        }
-        return false;
-    }
+			protected void handleTypedEvent(PropertyContentEvent event) {
+				refresh();
+			}
 
-    private static final class Resources extends NLS
-    {
-        public static String message;
-        public static String invalidQname;
+		};
 
-        static
-        {
-            initializeMessages( NameOrQnameValidationService.class.getName(), Resources.class );
-        }
-    }
+		op().getLocalPart().attach(this.listener);
+		op().getNamespaceURI().attach(this.listener);
+	}
 
-    private QName op()
-    {
-        return context( QName.class );
-    }
+	private boolean isEmptyOrNull(String text) {
+		if (text == null || text.trim().length() == 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private QName op() {
+		return context(QName.class);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.sapphire.modeling.PropertyValidationService#validate()
+	 */
+	private Listener listener;
+
+	private static final class Resources extends NLS {
+
+		public static String invalidQname;
+		public static String message;
+
+		static {
+			initializeMessages(NameOrQnameValidationService.class.getName(), Resources.class);
+		}
+
+	}
+
 }

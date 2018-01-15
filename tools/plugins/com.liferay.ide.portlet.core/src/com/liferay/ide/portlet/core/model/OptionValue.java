@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -27,19 +24,18 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-public interface OptionValue extends Element
-{
+public interface OptionValue extends Element {
 
-    ElementType TYPE = new ElementType( OptionValue.class );
+	public ElementType TYPE = new ElementType(OptionValue.class);
 
-    // *** RuntimeOptionValue ***
+	// *** RuntimeOptionValue ***
 
-    @Label( standard = "Option Value" )
-    @XmlBinding( path = "" )
-    ValueProperty PROP_OPTION_VALUE = new ValueProperty( TYPE, "OptionValue" ); //$NON-NLS-1$
+	@Label(standard = "Option Value")
+	@XmlBinding(path = "")
+	public ValueProperty PROP_OPTION_VALUE = new ValueProperty(TYPE, "OptionValue");
 
-    Value<String> getOptionValue();
+	public Value<String> getOptionValue();
 
-    void setOptionValue( String value );
+	public void setOptionValue(String value);
 
 }
