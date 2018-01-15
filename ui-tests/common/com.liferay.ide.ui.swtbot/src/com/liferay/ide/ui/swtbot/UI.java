@@ -81,6 +81,8 @@ public interface UI {
 
 	public final String AUTHOR = "Author";
 
+	public final String AUTOMATICALLY_CORRECT_PROBLEMS = "Automatically Correct Problems";
+
 	public final String AVAILABLE_SOFTWARE_SITES = "Available Software Sites";
 
 	public final String BACK_WITH_LEFT_BRACKET = "< Back";
@@ -96,6 +98,8 @@ public interface UI {
 	public final String BUILD_SERVICES = "Build Services";
 
 	public final String BUILD_TYPE = "Build type:";
+
+	public final String BUILD_WITH_DOT = "Build...";
 
 	public final String BUILD_WSDD = "Build WSDD";
 
@@ -119,7 +123,11 @@ public interface UI {
 
 	public final String CLEAR_LOG_VIEWER = "Clear Log Viewer";
 
+	public final String CLEAR_RESULTS = "Clear Results";
+
 	public final String CLOSE_PROJECT = "Close Project";
+
+	public final String COLLAPSE_ALL = "Collapse All";
 
 	public final String COMPONENT_CLASS_NAME = "Component Class Name:";
 
@@ -144,6 +152,8 @@ public interface UI {
 	public final String CONTINUE = "Continue";
 
 	public final String CONTROL_MENU_ENTRY = "control-menu-entry";
+
+	public final String CONVERTED_PROJECT_LOCATION = "Converted Project Location:";
 
 	public final String CREATE = "Create";
 
@@ -248,6 +258,8 @@ public interface UI {
 
 	public final String EVENT = "Event:";
 
+	public final String EXPAND_ALL = "Expand All";
+
 	public final String EXT = "Ext";
 
 	public final String FARMEWORK_TYPE = "Theme framework:";
@@ -255,6 +267,8 @@ public interface UI {
 	public final String FILE = "File";
 
 	public final String FINAL = "final";
+
+	public final String FIND_BREAKING_CHANGES = "Find Breaking Changes";
 
 	public final String FIND_LIFERAY_7_BREAKING_API_CHANGES = "Find Liferay 7 breaking API changes...";
 
@@ -520,6 +534,8 @@ public interface UI {
 
 	public final String OPEN = "Open";
 
+	public final String OPEN_IGNORED_LIST = "Open Ignored List";
+
 	public final String OPEN_LIFERAY_HOME_FOLDER = "Open Liferay Home Folder";
 
 	public final String OPEN_LIFERAY_PORTAL_HOME = "Open Liferay Portal Home";
@@ -610,6 +626,8 @@ public interface UI {
 
 	public final String REFRESH = "Refresh";
 
+	public final String REFRESH_RESULTS = "Refresh Results";
+
 	public final String REMOVE = "Remove";
 
 	public final String REMOVE_ALL = "<< Remove All";
@@ -657,6 +675,8 @@ public interface UI {
 	public final String SELECT_MIGRATE_LAYOUT = "Select Migrate Layout:";
 
 	public final String SELECT_MODEL_CLASS = "Select Model Class:";
+
+	public final String SELECT_PROJECTS = "Select Projects";
 
 	public final String SELECT_SERVICE_NAME = "Select Service Name:";
 
@@ -785,6 +805,8 @@ public interface UI {
 	public final String UPGRADE_TO_LIFERAY_PLUGINS_SDK_7 = "Upgrade to Liferay Plugins SDK 7";
 
 	public final String UPGRADE_TO_LIFERAY_WORKSPACE = "Upgrade to Liferay Workspace";
+
+	public final String UPGRADE_WITH_DOT = "Upgrade...";
 
 	public final String USE_DEFAULT_LOCATION = "Use default location";
 
