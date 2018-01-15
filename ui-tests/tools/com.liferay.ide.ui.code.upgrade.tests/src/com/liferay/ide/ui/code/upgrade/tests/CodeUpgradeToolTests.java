@@ -94,7 +94,7 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 
 	@Test
 	public void testFindBreakingChanges() {
-		viewAction.codeUpgrade .switchGear(3);
+		viewAction.codeUpgrade.switchGear(3);
 
 		Assert.assertTrue(_codeUpgradeView.getFindBreakingChangesBtn().isEnabled());
 
