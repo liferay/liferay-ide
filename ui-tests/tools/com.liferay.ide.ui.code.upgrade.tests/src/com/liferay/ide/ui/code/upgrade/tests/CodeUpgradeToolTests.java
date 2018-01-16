@@ -65,6 +65,7 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 		Assert.assertTrue(_codeUpgradeView.getBuildBtn().isEnabled());
 	}
 
+	@Ignore("ignore as unstable and need more research")
 	@Test
 	public void testBuildServices() {
 		viewAction.codeUpgrade.switchGear(5);
