@@ -15,12 +15,11 @@
 package com.liferay.ide.ui.liferay.page.view;
 
 import com.liferay.ide.ui.swtbot.page.Button;
-import com.liferay.ide.ui.swtbot.page.TooltipButton;
 import com.liferay.ide.ui.swtbot.page.Canvas;
 import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.ComboBox;
 import com.liferay.ide.ui.swtbot.page.Text;
-import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
+import com.liferay.ide.ui.swtbot.page.TooltipButton;
 import com.liferay.ide.ui.swtbot.page.View;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -38,56 +37,64 @@ public class CodeUpgradeView extends View {
 		_gear = new Gear(bot);
 	}
 
+	public void clickRestartUpgradeBtn() {
+		clickToolBarWithTooltipButton(RESTART_UPGRADE);
+	}
+
+	public void clickShowAllPagesBtn() {
+		clickToolBarWithTooltipButton(SHOW_ALL_PAGES);
+	}
+
 	public Button getAddServerBtn() {
-		return new Button(bot, ADD_SERVER_WITH_DOT);
+		return new Button(getPart().bot(), ADD_SERVER_WITH_DOT);
 	}
 
 	public TooltipButton getAutomaticallyCorrectProblemsBtn() {
-		return new TooltipButton(bot, AUTOMATICALLY_CORRECT_PROBLEMS);
+		return new TooltipButton(getPart().bot(), AUTOMATICALLY_CORRECT_PROBLEMS);
 	}
 
 	public Button getBrowseBtn() {
-		return new Button(bot, BROWSE_WITH_DOT);
+		return new Button(getPart().bot(), BROWSE_WITH_DOT);
 	}
 
 	public Button getBuildBtn() {
-		return new Button(bot, BUILD_WITH_DOT);
+		return new Button(getPart().bot(), BUILD_WITH_DOT);
 	}
 
 	public Button getBuildServicesBtn() {
-		return new Button(bot, BUILD_SERVICES);
+		return new Button(getPart().bot(), BUILD_SERVICES);
 	}
 
 	public Text getBundleUrl() {
-		return new Text(bot, BUNDLE_URL_UPCASE);
+		return new Text(getPart().bot(), BUNDLE_URL_UPCASE);
 	}
 
 	public Button getClearResultsBtn() {
-		return new Button(bot, CLEAR_RESULTS);
+		return new Button(getPart().bot(), CLEAR_RESULTS);
 	}
 
 	public TooltipButton getCollapseAllBtn() {
-		return new TooltipButton(bot, COLLAPSE_ALL);
+		return new TooltipButton(getPart().bot(), COLLAPSE_ALL);
 	}
 
 	public Text getConvertedProjectLocation() {
-		return new Text(bot, CONVERTED_PROJECT_LOCATION);
+		return new Text(getPart().bot(), CONVERTED_PROJECT_LOCATION);
 	}
 
 	public Button getDeselectAllBtn() {
-		return new Button(bot, DESELECT_ALL);
+		return new Button(getPart().bot(), DESELECT_ALL);
 	}
 
 	public CheckBox getDownloadLiferayBundleRecommended() {
-		return new CheckBox(bot, DOWNLOAD_LIFERAY_BUNDLE_RECOMMENDED);
+		return new CheckBox(getPart().bot(), DOWNLOAD_LIFERAY_BUNDLE_RECOMMENDED);
 	}
 
 	public TooltipButton getExpandAllBtn() {
-		return new TooltipButton(bot, EXPAND_ALL);
+		return new TooltipButton(getPart().bot(), EXPAND_ALL);
 	}
 
 	public TooltipButton getFindBreakingChangesBtn() {
-		return new TooltipButton(bot, FIND_BREAKING_CHANGES);
+		return new TooltipButton(getPart().bot(), FIND_BREAKING_CHANGES);
 	}
 
 	public Gear getGear() {
@@ -95,55 +102,47 @@ public class CodeUpgradeView extends View {
 	}
 
 	public Button getImportProjectsBtn() {
-		return new Button(bot, IMPORT_PROJECTS);
+		return new Button(getPart().bot(), IMPORT_PROJECTS);
 	}
 
 	public ComboBox getLiferayServerName() {
-		return new ComboBox(bot, LIFERAY_SERVER_NAME);
+		return new ComboBox(getPart().bot(), LIFERAY_SERVER_NAME);
 	}
 
 	public TooltipButton getOpenIgnoredListBtn() {
-		return new TooltipButton(bot, OPEN_IGNORED_LIST);
+		return new TooltipButton(getPart().bot(), OPEN_IGNORED_LIST);
 	}
 
 	public Text getPluginsSdkOrMavenProjectRootLocation() {
-		return new Text(bot, PLUGINS_SDK_OR_MAVEN_PROJECT_ROOT_LOCATION);
+		return new Text(getPart().bot(), PLUGINS_SDK_OR_MAVEN_PROJECT_ROOT_LOCATION);
 	}
 
 	public Button getRefreshResultsBtn() {
-		return new Button(bot, REFRESH_RESULTS);
-	}
-
-	public ToolbarButtonWithTooltip getRestartUpgradeBtn() {
-		return new ToolbarButtonWithTooltip(bot, RESTART_UPGRADE);
+		return new Button(getPart().bot(), REFRESH_RESULTS);
 	}
 
 	public Button getSelectAllBtn() {
-		return new Button(bot, SELECT_ALL);
+		return new Button(getPart().bot(), SELECT_ALL);
 	}
 
 	public ComboBox getSelectMigrateLayouts() {
-		return new ComboBox(bot, SELECT_MIGRATE_LAYOUT);
+		return new ComboBox(getPart().bot(), SELECT_MIGRATE_LAYOUT);
 	}
 
 	public Button getSelectProjectsBtn() {
-		return new Button(bot, SELECT_PROJECTS);
+		return new Button(getPart().bot(), SELECT_PROJECTS);
 	}
 
 	public Text getServerName() {
-		return new Text(bot, SERVER_NAME_UPCASE);
-	}
-
-	public ToolbarButtonWithTooltip getShowAllPagesBtn() {
-		return new ToolbarButtonWithTooltip(bot, SHOW_ALL_PAGES);
+		return new Text(getPart().bot(), SERVER_NAME_UPCASE);
 	}
 
 	public Button getUpgradeBtn() {
-		return new Button(bot, UPGRADE_WITH_DOT);
+		return new Button(getPart().bot(), UPGRADE_WITH_DOT);
 	}
 
 	public Button getUpgradeSelectedBtn() {
-		return new Button(bot, UPGRADE_SELECTED);
+		return new Button(getPart().bot(), UPGRADE_SELECTED);
 	}
 
 	public class Gear extends Canvas {

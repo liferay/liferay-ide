@@ -71,11 +71,11 @@ public class ViewAction extends UIAction {
 		}
 
 		public void restartUpgrade() {
-			_codeUpgradeView.getRestartUpgradeBtn().click();
+			_codeUpgradeView.clickRestartUpgradeBtn();
 		}
 
 		public void showAllPages() {
-			_codeUpgradeView.getShowAllPagesBtn().click();
+			_codeUpgradeView.clickShowAllPagesBtn();
 		}
 
 		public void switchGear(int index) {

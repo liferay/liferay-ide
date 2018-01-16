@@ -23,7 +23,6 @@ import org.eclipse.core.runtime.Platform;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -65,7 +64,6 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 		Assert.assertTrue(_codeUpgradeView.getBuildBtn().isEnabled());
 	}
 
-	@Ignore("ignore as unstable and need more research")
 	@Test
 	public void testBuildServices() {
 		viewAction.codeUpgrade.switchGear(5);
@@ -73,7 +71,6 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 		Assert.assertTrue(_codeUpgradeView.getBuildServicesBtn().isEnabled());
 	}
 
-	@Ignore("ignore as unstable and need more research")
 	@Test
 	public void testCustomJsp() {
 		viewAction.codeUpgrade.switchGear(7);
@@ -135,7 +132,7 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 
 	@Test
 	public void testLayoutTemplate() {
-		viewAction.codeUpgrade .switchGear(6);
+		viewAction.codeUpgrade.switchGear(6);
 
 		Assert.assertTrue(_codeUpgradeView.getUpgradeBtn().isEnabled());
 	}
@@ -169,7 +166,7 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 
 	@Test
 	public void testUpdateDescriptorFiles() {
-		viewAction.codeUpgrade .switchGear(4);
+		viewAction.codeUpgrade.switchGear(4);
 
 		Assert.assertTrue(_codeUpgradeView.getUpgradeBtn().isEnabled());
 	}

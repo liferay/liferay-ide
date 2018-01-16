@@ -32,6 +32,10 @@ public class View extends AbstractPart {
 		toolbarBtn(btnLabel).click();
 	}
 
+	public void clickToolBarWithTooltipButton(String btnLabel) {
+		toolbarBtn(btnLabel).click();
+	}
+
 	public String getLabel() {
 		return label;
 	}
