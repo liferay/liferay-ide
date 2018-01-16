@@ -20,6 +20,8 @@ import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.AbstractPortalBundle;
+import com.liferay.ide.server.core.portal.PortalServerBehavior;
+import com.liferay.ide.server.util.PingThread;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,6 +41,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.wst.server.core.IServer;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -335,6 +338,12 @@ public class PortalTomcatBundle extends AbstractPortalBundle
         {
             LiferayServerCore.logError( e );
         }
+    }
+
+    @Override
+    public PingThread createPingThread(IServer server, String url, PortalServerBehavior behaviour)
+    {
+        return new PingThread( server, url, behaviour );
     }
 
 }

@@ -47,6 +47,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  * @author Ashley Yuan
  * @author Lily Li
  * @author Rui Wang
+ * @author Simon Jiang
  */
 public class WizardAction extends UIAction {
 
@@ -692,6 +693,18 @@ public class WizardAction extends UIAction {
 
 			_newServerWizard.getServerTypes().selectTreeItem(LIFERAY_INC, LIFERAY_7_X);
 		}
+		
+		public void prepare(String serverName, String runtimeType) {
+			ide.sleep(500);
+
+			_newServerWizard.getServerName().setText(serverName);
+
+			ide.sleep(500);
+
+			_newServerWizard.getServerTypes().selectTreeItem(LIFERAY_INC, LIFERAY_7_X);
+
+			_newServerWizard.getServerRuntimeTypes().setSelection(runtimeType);
+		}		
 
 		public void prepare62(String serverName) {
 			ide.sleep(500);

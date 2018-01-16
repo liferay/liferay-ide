@@ -16,8 +16,10 @@
 package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.ILiferayPortal;
+import com.liferay.ide.server.util.PingThread;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.wst.server.core.IServer;
 
 /**
  * @author Gregory Amerson
@@ -65,5 +67,7 @@ public interface PortalBundle extends ILiferayPortal
     String getHttpPort();
 
     void setHttpPort( String port );
+
+    PingThread createPingThread( IServer server, String url, PortalServerBehavior behaviour );
 
 }

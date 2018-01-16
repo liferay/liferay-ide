@@ -31,6 +31,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 /**
  * @author Terry Jia
  * @author Ying Xu
+ * @author Simon Jiang
  */
 public class ViewAction extends UIAction {
 
@@ -284,9 +285,7 @@ public class ViewAction extends UIAction {
 		public void stop(String serverLabel) {
 			ide.sleep(2000);
 
-			_serversView.getServers().select(serverLabel);
-
-			_serversView.clickStopBtn();
+			_serversView.getServers().contextMenu(STOP, serverLabel);
 		}
 
 		public boolean visibleModuleTry(String serverLabel, String projectName) {

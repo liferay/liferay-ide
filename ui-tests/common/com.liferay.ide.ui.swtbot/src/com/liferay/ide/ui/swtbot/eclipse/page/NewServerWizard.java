@@ -14,15 +14,17 @@
 
 package com.liferay.ide.ui.swtbot.eclipse.page;
 
+import org.eclipse.swtbot.swt.finder.SWTBot;
+
+import com.liferay.ide.ui.swtbot.page.ComboBox;
 import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.Tree;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
 /**
  * @author Vicky Wang
  * @author Ying Xu
+ * @author Simon Jiang
  */
 public class NewServerWizard extends Wizard {
 
@@ -42,4 +44,7 @@ public class NewServerWizard extends Wizard {
 		return new Tree(getShell().bot());
 	}
 
+	public ComboBox getServerRuntimeTypes() {
+		return new ComboBox(getShell().bot(), SERVER_RUNTIEME_ENVIRONMENT);
+	}
 }
