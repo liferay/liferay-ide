@@ -510,6 +510,10 @@ public class WizardAction extends UIAction {
 			_newModuleInfoWizard.getPackageName().setText(packageName);
 		}
 
+		public void preparePackageName(String packageName) {
+			_newModuleInfoWizard.getPackageName().setText(packageName);
+		}
+
 		public void prepareProperties(String propertiesName, String propertiesValue) {
 			_newModuleInfoWizard.getAddPropertyKeyBtn().click();
 			_newModuleInfoWizard.getProperties().setText(2, propertiesName);
