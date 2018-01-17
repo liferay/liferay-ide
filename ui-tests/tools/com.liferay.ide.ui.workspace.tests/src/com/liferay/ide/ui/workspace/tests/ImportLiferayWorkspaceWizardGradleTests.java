@@ -52,6 +52,8 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		ide.sleepLinux(10000);
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(workspaceProjectName, "bundles"));
 
 		viewAction.project.closeAndDelete(workspaceProjectName);
@@ -89,6 +91,8 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		wizardAction.importLiferayWorkspace.prepareBundleUrl(bundleUrl);
 
 		wizardAction.finish();
+
+		ide.sleepLinux(10000);
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(workspaceProjectName, "bundles"));
 		Assert.assertTrue(viewAction.project.visibleFileTry(workspaceProjectName, "configs"));
@@ -179,6 +183,7 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(workspaceProjectName);
 	}
 
+	//@Ignore("Need more time to deal with bundle on Linux, will add bundle test back")
 	@Test
 	public void importLiferayWorkspaceWithPluginsSdkDownloadBundle() throws IOException {
 		if (!envAction.internal()) {
@@ -205,6 +210,8 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 		wizardAction.importLiferayWorkspace.prepareBundleUrl(bundleUrl);
 
 		wizardAction.finish();
+
+		ide.sleepLinux(10000);
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(workspaceProjectName, "plugins-sdk"));
 		Assert.assertTrue(viewAction.project.visibleFileTry(workspaceProjectName, "bundles"));

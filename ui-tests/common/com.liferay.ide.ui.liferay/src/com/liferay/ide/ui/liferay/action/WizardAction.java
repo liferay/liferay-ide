@@ -71,7 +71,7 @@ public class WizardAction extends UIAction {
 
 		_jobAction.waitForShellClosed(title);
 
-		ide.sleep(2000);
+		ide.sleepLinux(2000);
 	}
 
 	public Button getFinishBtn() {

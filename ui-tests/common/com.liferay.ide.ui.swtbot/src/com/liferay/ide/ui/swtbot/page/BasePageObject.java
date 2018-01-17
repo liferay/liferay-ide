@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.swtbot.page;
 
 import com.liferay.ide.ui.swtbot.UI;
+import com.liferay.ide.ui.swtbot.util.CoreUtil;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
 import org.apache.log4j.Logger;
@@ -60,6 +61,12 @@ public abstract class BasePageObject implements UI {
 
 	public void sleep(long millis) {
 		bot.sleep(millis);
+	}
+
+	public void sleepLinux(long millis) {
+		if (CoreUtil.isLinux()) {
+			bot.sleep(millis);
+		}
 	}
 
 	protected boolean hasIndex() {
