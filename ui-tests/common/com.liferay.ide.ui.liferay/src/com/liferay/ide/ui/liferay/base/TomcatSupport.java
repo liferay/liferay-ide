@@ -14,10 +14,11 @@
 
 package com.liferay.ide.ui.liferay.base;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.junit.Assert;
-
 import com.liferay.ide.ui.swtbot.page.Table;
+
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+
+import org.junit.Assert;
 
 /**
  * @author Terry Jia

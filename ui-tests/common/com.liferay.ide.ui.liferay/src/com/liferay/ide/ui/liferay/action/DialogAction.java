@@ -184,12 +184,12 @@ public class DialogAction extends UIAction {
 
 	public class ServerRuntimeEnvironmentsDialogAction {
 
-		public void deleteRuntimeTryConfirm(String runtimeName) {
+		public void deleteRuntimeTryConfirm(int row) {
 			assertTitle(_getDialog(), _serverRuntimeEnvironmentsDialog);
 
 			ide.sleep(2000);
 
-			_serverRuntimeEnvironmentsDialog.getRuntimes().click(runtimeName);
+			_serverRuntimeEnvironmentsDialog.getRuntimes().click(row);
 
 			ide.sleep(2000);
 
@@ -208,12 +208,12 @@ public class DialogAction extends UIAction {
 			SWTBotPreferences.TIMEOUT = origin;
 		}
 
-		public void deleteRuntimeTryConfirm(int row) {
+		public void deleteRuntimeTryConfirm(String runtimeName) {
 			assertTitle(_getDialog(), _serverRuntimeEnvironmentsDialog);
 
 			ide.sleep(2000);
 
-			_serverRuntimeEnvironmentsDialog.getRuntimes().click(row);
+			_serverRuntimeEnvironmentsDialog.getRuntimes().click(runtimeName);
 
 			ide.sleep(2000);
 
