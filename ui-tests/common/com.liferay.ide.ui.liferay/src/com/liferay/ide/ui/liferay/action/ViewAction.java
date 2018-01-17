@@ -185,11 +185,25 @@ public class ViewAction extends UIAction {
 		}
 
 		public void runBuildServices(String... projectNames) {
-			_getProjects().contextMenu(BUILD_SERVICES, projectNames);
+			try {
+				_getProjects().contextMenu(BUILD_SERVICES, projectNames);
+			}
+			catch (Exception e) {
+				ide.sleep(2000);
+
+				_getProjects().contextMenu(BUILD_SERVICES, projectNames);
+			}
 		}
 
 		public void runBuildWSDD(String... projectNames) {
-			_getProjects().contextMenu(BUILD_WSDD, projectNames);
+			try {
+				_getProjects().contextMenu(BUILD_WSDD, projectNames);
+			}
+			catch (Exception e) {
+				ide.sleep(2000);
+
+				_getProjects().contextMenu(BUILD_WSDD, projectNames);
+			}
 		}
 
 		public boolean visibleFileTry(String... files) {
