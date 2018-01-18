@@ -15,7 +15,13 @@
 package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
+import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignActionWizard;
+import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignRoleByIdWizard;
+import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignRoleTypeWizard;
+import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignScriptWizard;
+import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignUserWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewFragmentFilesWizard;
+import com.liferay.ide.ui.liferay.page.wizard.NewKaleoWorkflowWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewLiferayComponentWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewRuntime62Wizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewRuntime7Wizard;
@@ -206,9 +212,15 @@ public class WizardAction extends UIAction {
 
 	public ImportLiferayWorkspaceWizardAction importLiferayWorkspace = new ImportLiferayWorkspaceWizardAction();
 	public ImportProjectWizardAction importProject = new ImportProjectWizardAction();
+	public MakeTaskAssignActionWizardAction makeTaskAssignAction = new MakeTaskAssignActionWizardAction();
+	public MakeTaskAssignRoleByIdWizardAction makeTaskAssignRoleById = new MakeTaskAssignRoleByIdWizardAction();
+	public MakeTaskAssignRoleTypeWizardAction makeTaskAssignRoleType = new MakeTaskAssignRoleTypeWizardAction();
+	public MakeTaskAssignScriptWizardAction makeTaskAssignScript = new MakeTaskAssignScriptWizardAction();
+	public MakeTaskAssignUserWizardAction makeTaskAssignUser = new MakeTaskAssignUserWizardAction();
 	public NewFragmentWizardAction newFragment = new NewFragmentWizardAction();
 	public NewFragmentFilesWizardAction newFragmentFiles = new NewFragmentFilesWizardAction();
 	public NewFragmentInfoWizardAction newFragmentInfo = new NewFragmentInfoWizardAction();
+	public NewKaleoWorkflowWizardAction newKaleoWorkflow = new NewKaleoWorkflowWizardAction();
 	public NewLiferayComponentWizardAction newLiferayComponent = new NewLiferayComponentWizardAction();
 	public NewLiferayJsfWizardAction newLiferayJsf = new NewLiferayJsfWizardAction();
 	public NewLiferayWorkspaceWizardAction newLiferayWorkspace = new NewLiferayWorkspaceWizardAction();
@@ -274,6 +286,71 @@ public class WizardAction extends UIAction {
 		}
 
 		private final ImportProjectWizard _importProjectWizard = new ImportProjectWizard(bot);
+
+	}
+
+	public class MakeTaskAssignActionWizardAction {
+
+		public void addResourceAction(String resourceAction) {
+			_makeTaskAssignActionWizard.getAddResourceActionBtn().click();
+			_makeTaskAssignActionWizard.getResourceAction().setText(resourceAction);
+		}
+
+		private final MakeTaskAssignActionWizard _makeTaskAssignActionWizard = new MakeTaskAssignActionWizard(bot);
+
+	}
+
+	public class MakeTaskAssignRoleByIdWizardAction {
+
+		public void prepareRoleId(String roleId) {
+			_makeTaskAssignRoleByIdWizard.getRoleId().setText(roleId);
+		}
+
+		private final MakeTaskAssignRoleByIdWizard _makeTaskAssignRoleByIdWizard = new MakeTaskAssignRoleByIdWizard(
+			bot);
+
+	}
+
+	public class MakeTaskAssignRoleTypeWizardAction {
+
+		public void addRole() {
+			_makeTaskAssignRoleTypeWizard.getAddRoleBtn().click();
+		}
+
+		public void deleteRole() {
+			_makeTaskAssignRoleTypeWizard.getDeleteRoleBtn().click();
+		}
+
+		private final MakeTaskAssignRoleTypeWizard _makeTaskAssignRoleTypeWizard = new MakeTaskAssignRoleTypeWizard(
+			bot);
+
+	}
+
+	public class MakeTaskAssignScriptWizardAction {
+
+		public void prepareScriptLanguage(String scriptLanguage) {
+			_makeTaskAssignScriptWizard.getScriptLanguage().setSelection(scriptLanguage);
+		}
+
+		private final MakeTaskAssignScriptWizard _makeTaskAssignScriptWizard = new MakeTaskAssignScriptWizard(bot);
+
+	}
+
+	public class MakeTaskAssignUserWizardAction {
+
+		public void prepareEmailAddress(String emailAddress) {
+			_makeTaskAssignUserWizard.getEmailAddress().setText(emailAddress);
+		}
+
+		public void prepareSreenName(String screenName) {
+			_makeTaskAssignUserWizard.getScreenName().setText(screenName);
+		}
+
+		public void prepareUserId(String userId) {
+			_makeTaskAssignUserWizard.getUserId().setText(userId);
+		}
+
+		private final MakeTaskAssignUserWizard _makeTaskAssignUserWizard = new MakeTaskAssignUserWizard(bot);
 
 	}
 
@@ -348,6 +425,36 @@ public class WizardAction extends UIAction {
 		}
 
 		private final NewFragmentWizard _newFragmentWizard = new NewFragmentWizard(bot);
+
+	}
+
+	public class NewKaleoWorkflowWizardAction {
+
+		public void selectAssignCreator() {
+			_newKaleoWorkflowWizard.getAssignCreator().click();
+		}
+
+		public void selectAssignResourceActions() {
+			_newKaleoWorkflowWizard.getAssignResourceActions().click();
+		}
+
+		public void selectAssignRoleById() {
+			_newKaleoWorkflowWizard.getAssignRoleById().click();
+		}
+
+		public void selectAssignRoleType() {
+			_newKaleoWorkflowWizard.getAssignRoleType().click();
+		}
+
+		public void selectAssignScriptedAssignment() {
+			_newKaleoWorkflowWizard.getAssignScriptedAssignment().click();
+		}
+
+		public void selectAssignUser() {
+			_newKaleoWorkflowWizard.getAssignUser().click();
+		}
+
+		private final NewKaleoWorkflowWizard _newKaleoWorkflowWizard = new NewKaleoWorkflowWizard(bot);
 
 	}
 

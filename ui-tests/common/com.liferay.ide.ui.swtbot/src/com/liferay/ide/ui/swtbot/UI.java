@@ -47,6 +47,10 @@ public interface UI {
 
 	public final String ADD_PROPERTY_OVERRIDE = "Add Property Override";
 
+	public final String ADD_RESOURCE_ACTION = "Add Resource Action";
+
+	public final String ADD_ROLE = "Add Role";
+
 	public final String ADD_SERVER_WITH_DOT = "Add Server...";
 
 	public final String ADD_SERVICE = "Add Service";
@@ -245,6 +249,8 @@ public interface UI {
 	public final String EDIT_GUEST = "Edit Guest";
 
 	public final String EDIT_WITH_DOT = "Edit...";
+
+	public final String EMAIL_ADDRESS = "Email address:";
 
 	public final String ENTRY_CATEGORY = "Entry Category:";
 
@@ -648,9 +654,15 @@ public interface UI {
 
 	public final String RICHFACES = "RichFaces";
 
+	public final String ROLE_ID = "Role-id:";
+
 	public final String RUNTIME_ENVIRONMENTS = "Runtime Environments";
 
 	public final String SAVE = "Save (Ctrl+S)";
+
+	public final String SCREEN_NAME = "Screen name:";
+
+	public final String SCRIPT_LANGUAGE = "Script language:";
 
 	public final String SDK = "SDK";
 
@@ -811,6 +823,8 @@ public interface UI {
 	public final String USE_DEFAULT_LOCATION = "Use default location";
 
 	public final String USE_DEFAULT_PORTLET_MVCPORTLET = "Use default portlet (MVCPortlet)";
+
+	public final String USER_ID = "User-id:";
 
 	public final String VAADIN = "Vaadin";
 
