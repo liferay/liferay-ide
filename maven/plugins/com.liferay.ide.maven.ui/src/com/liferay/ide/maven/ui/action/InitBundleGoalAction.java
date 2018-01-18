@@ -14,13 +14,11 @@
 
 package com.liferay.ide.maven.ui.action;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
+import com.liferay.ide.maven.core.MavenGoalUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
@@ -30,16 +28,7 @@ public class InitBundleGoalAction extends MavenGoalAction {
 
 	@Override
 	protected String getMavenGoals() {
-		if (plugin == null) {
-			return "init-bundle";
-		}
-
-		if (CoreUtil.compareVersions(new Version(plugin.getVersion()), new Version("2.0.2")) >= 0) {
-			return "bundle-support:init";
-		}
-		else {
-			return "liferay:init-bundle";
-		}
+		return MavenGoalUtil.getMavenInitBundleGoal(plugin);
 	}
 
 	@Override

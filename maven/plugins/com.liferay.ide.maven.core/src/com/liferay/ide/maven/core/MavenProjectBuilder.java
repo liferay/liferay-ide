@@ -259,7 +259,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 	public IStatus initBundle(IProject project, String bundleUrl, IProgressMonitor monitor) throws CoreException {
 		IMavenProjectFacade facade = MavenUtil.getProjectFacade(project, monitor);
 
-		if (_execMavenLaunch(project, "liferay:init-bundle", facade, monitor)) {
+		if (_execMavenLaunch(project, MavenGoalUtil.getMavenInitBundleGoal(project), facade, monitor)) {
 			return Status.OK_STATUS;
 		}
 
