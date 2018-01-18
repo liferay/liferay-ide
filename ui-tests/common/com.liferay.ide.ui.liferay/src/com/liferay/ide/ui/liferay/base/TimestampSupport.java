@@ -18,6 +18,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
+ * @author Ying Xu
  */
 public class TimestampSupport extends SupportBase {
 
@@ -33,6 +34,10 @@ public class TimestampSupport extends SupportBase {
 	@Override
 	public void before() {
 		_timestamp = System.currentTimeMillis();
+	}
+
+	public String getName() {
+		return "test-" + _timestamp;
 	}
 
 	public String getName(String name) {

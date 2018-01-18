@@ -497,6 +497,10 @@ public class WizardAction extends UIAction {
 			_newModuleInfoWizard.getBrowseBtn().click();
 		}
 
+		public void prepare(String packageName) {
+			_newModuleInfoWizard.getPackageName().setText(packageName);
+		}
+
 		public void prepare(String className, String packageName) {
 			_newModuleInfoWizard.getComponentClassName().setText(className);
 			_newModuleInfoWizard.getPackageName().setText(packageName);
