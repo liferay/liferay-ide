@@ -35,6 +35,7 @@ import org.eclipse.ui.navigator.CommonViewer;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class WorkflowDropAdapterAssistant extends CommonDropAdapterAssistant {
 
@@ -98,7 +99,7 @@ public class WorkflowDropAdapterAssistant extends CommonDropAdapterAssistant {
 		try {
 			if (target instanceof WorkflowDefinitionsFolder) {
 				if (LocalSelectionTransfer.getTransfer().isSupportedType(data)) {
-					Object dropData = LocalSelectionTransfer.getTransfer().nativeToJava(data);
+					Object dropData = LocalSelectionTransfer.getTransfer().getSelection();
 
 					if (dropData instanceof IStructuredSelection) {
 						IStructuredSelection selection = (IStructuredSelection)dropData;
