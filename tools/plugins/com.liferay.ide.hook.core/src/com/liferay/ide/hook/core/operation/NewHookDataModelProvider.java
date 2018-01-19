@@ -55,6 +55,7 @@ import org.osgi.framework.Version;
  * @author Greg Amerson
  * @author Terry Jia
  * @author Simon Jiang
+ * @author Charles Wu
  */
 @SuppressWarnings({"restriction", "unchecked", "rawtypes"})
 public class NewHookDataModelProvider
@@ -294,6 +295,26 @@ public class NewHookDataModelProvider
 			if (CoreUtil.isNullOrEmpty(portalPropertiesFile)) {
 				return HookCore.createErrorStatus(Msgs.portalPropertiesFileNotConfigured);
 			}
+
+			IPath portalPropertiesPath = Path.fromPortableString(portalPropertiesFile);
+			IProject targetProject = getTargetProject();
+
+			List<IFolder> sources = CoreUtil.getSourceFolders(JavaCore.create(targetProject));
+
+			if (portalPropertiesFile.startsWith("/")) {
+				for (IFolder sourceFolder : sources) {
+					IPath sourceFolderPath = sourceFolder.getFullPath();
+
+					if (sourceFolderPath.isPrefixOf(portalPropertiesPath)) {
+						return Status.OK_STATUS;
+					}
+				}
+
+				return HookCore.createErrorStatus(Msgs.pathUnderSourceFolder);
+			}
+			else {
+				return HookCore.createWarnStatus(Msgs.appendedToDefaultLocation);
+			}
 		}
 		else if (PORTAL_PROPERTIES_ACTION_ITEMS.equals(propertyName) && getBooleanProperty(CREATE_PORTAL_PROPERTIES)) {
 
@@ -326,6 +347,25 @@ public class NewHookDataModelProvider
 
 			if (CoreUtil.isNullOrEmpty(contentFolder)) {
 				return HookCore.createErrorStatus(Msgs.contentFolderNotConfigured);
+			}
+			IPath contentPath = Path.fromPortableString(contentFolder);
+			IProject targetProject = getTargetProject();
+
+			List<IFolder> sources = CoreUtil.getSourceFolders(JavaCore.create(targetProject));
+
+			if (contentFolder.startsWith("/")) {
+				for (IFolder sourceFolder : sources) {
+
+					IPath sourcePath = sourceFolder.getFullPath();
+
+					if (sourcePath.isPrefixOf(contentPath)) {
+						return Status.OK_STATUS;
+					}
+				}
+				return HookCore.createErrorStatus(Msgs.pathUnderSourceFolder);
+			}
+			else {
+				return HookCore.createWarnStatus(Msgs.appendedToDefaultLocation);
 			}
 		}
 		else if (LANGUAGE_PROPERTIES_ITEMS.equals(propertyName) && getBooleanProperty(CREATE_LANGUAGE_PROPERTIES)) {
@@ -446,9 +486,11 @@ public class NewHookDataModelProvider
 
 	private static class Msgs extends NLS {
 
+		public static String appendedToDefaultLocation;
 		public static String contentFolderNotConfigured;
 		public static String customJSPsFolderNotConfigured;
 		public static String noSupportInSDK70;
+		public static String pathUnderSourceFolder;
 		public static String portalPropertiesFileNotConfigured;
 		public static String specifyOneEventActionProperty;
 		public static String specifyOneItem;
