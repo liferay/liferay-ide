@@ -14,7 +14,9 @@ Require-Bundle: org.junit,
  com.liferay.ide.xml.search.ui,
  com.liferay.ide.project.core,
  org.eclipse.wst.sse.ui,
- com.liferay.ide.ui.tests
+ com.liferay.ide.ui.tests,
+ com.liferay.ide.core,
+ org.apache.commons.lang;bundle-version="2.6.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.xml.search.ui.tests

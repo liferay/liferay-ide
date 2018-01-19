@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core.tests;
 
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -29,7 +30,6 @@ import org.junit.Test;
  * @author Gregory Amerson
  * @author Kuo Zhang
  */
-@SuppressWarnings( "restriction" )
 public class JSFPortletProjectTests extends LiferayMavenProjectTestCase
 {
 
@@ -138,7 +138,9 @@ public class JSFPortletProjectTests extends LiferayMavenProjectTestCase
 
         assertNotNull( newProject );
 
-        final IFile descriptorFile = LiferayCore.create( newProject ).getDescriptorFile( "liferay-portlet.xml" );
+        IWebProject webProject = LiferayCore.create(IWebProject.class, newProject );
+
+		final IFile descriptorFile = webProject.getDescriptorFile( "liferay-portlet.xml" );
 
         assertNotNull( descriptorFile );
         assertTrue( descriptorFile.exists() );

@@ -172,7 +172,8 @@ public class GradleProjectProvider
 			IProject project = (IProject)adaptable;
 
 			try {
-				if (LiferayNature.hasNature(project) && GradleProjectNature.isPresentOn(project)) {
+				if (!LiferayWorkspaceUtil.isValidWorkspace(project) &&
+						LiferayNature.hasNature(project) && GradleProjectNature.isPresentOn(project)) {
 					if (ProjectUtil.isFacetedGradleBundleProject(project)) {
 						return new FacetedGradleBundleProject(project);
 					}

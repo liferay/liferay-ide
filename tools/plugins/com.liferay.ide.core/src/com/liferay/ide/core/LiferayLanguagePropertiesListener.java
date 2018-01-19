@@ -50,6 +50,7 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
 		}.schedule();
 	}
 
+	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
 		if (event == null) {
 			return;
@@ -62,6 +63,7 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
 		}
 	}
 
+	@Override
 	public boolean visit(IResourceDelta delta) throws CoreException {
 		switch (delta.getResource().getType()) {
 			case IResource.ROOT:
@@ -92,10 +94,10 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
 		String filename = file.getName();
 
 		if (filename.equals(ILiferayConstants.PORTLET_XML_FILE)) {
-			ILiferayProject lrproject = LiferayCore.create(CoreUtil.getLiferayProject(file));
+			IWebProject webProject = LiferayCore.create(IWebProject.class, CoreUtil.getLiferayProject(file));
 
-			if (lrproject != null) {
-				IFile portletXml = lrproject.getDescriptorFile(ILiferayConstants.PORTLET_XML_FILE);
+			if (webProject != null) {
+				IFile portletXml = webProject.getDescriptorFile(ILiferayConstants.PORTLET_XML_FILE);
 
 				if ((portletXml != null) && file.equals(portletXml)) {
 					IFile[] files = PropertiesUtil.getLanguagePropertiesFromPortletXml(portletXml);
@@ -108,10 +110,10 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
 		}
 
 		if (filename.equals(ILiferayConstants.LIFERAY_HOOK_XML_FILE)) {
-			ILiferayProject lrproject = LiferayCore.create(CoreUtil.getLiferayProject(file));
+			IWebProject webProject = LiferayCore.create(IWebProject.class, CoreUtil.getLiferayProject(file));
 
-			if (lrproject != null) {
-				IFile liferayHookXml = lrproject.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE);
+			if (webProject != null) {
+				IFile liferayHookXml = webProject.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE);
 
 				if (file.equals(liferayHookXml)) {
 					IFile[] files = PropertiesUtil.getLanguagePropertiesFromLiferayHookXml(liferayHookXml);

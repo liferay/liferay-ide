@@ -24,7 +24,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
@@ -239,6 +238,7 @@ public class LiferayCore extends Plugin {
 	public LiferayCore() {
 	}
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
@@ -254,6 +254,7 @@ public class LiferayCore extends Plugin {
 			_liferayLanguagePropertiesListener, IResourceChangeEvent.POST_CHANGE);
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		_plugin = null;
 

@@ -62,6 +62,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 		super(project);
 	}
 
+	@Override
 	public <T> T adapt(Class<T> adapterType) {
 		T adapter = super.adapt(adapterType);
 
@@ -95,16 +96,6 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 	@Override
 	public List<IFile> getDefaultLanguageProperties() {
 		return PropertiesUtil.getDefaultLanguagePropertiesFromModuleProject(getProject());
-	}
-
-	@Override
-	public IFile getDescriptorFile(String name) {
-		return getProject().getFile(name);
-	}
-
-	@Override
-	public IPath getLibraryPath(String filename) {
-		return null;
 	}
 
 	@Override
@@ -298,6 +289,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 		return retval;
 	}
 
+	@Override
 	public boolean isFragmentBundle() {
 		IFile bndFile = getProject().getFile("bnd.bnd");
 

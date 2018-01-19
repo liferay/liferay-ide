@@ -14,10 +14,8 @@
 
 package com.liferay.ide.core;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Gregory Amerson
@@ -25,10 +23,6 @@ import org.eclipse.core.runtime.IPath;
 public interface ILiferayProject {
 
 	public <T> T adapt(Class<T> adapterType);
-
-	public IFile getDescriptorFile(String name);
-
-	public IPath getLibraryPath(String filename);
 
 	public IProject getProject();
 

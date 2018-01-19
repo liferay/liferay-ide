@@ -12,24 +12,17 @@
  * details.
  */
 
-package com.liferay.ide.core.adapter;
+package com.liferay.ide.core;
 
-import com.liferay.ide.core.BaseLiferayProject;
+import java.util.List;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Gregory Amerson
  */
-public class NoopLiferayProject extends BaseLiferayProject {
+public interface IWorkspaceProject extends ILiferayProject {
 
-	public NoopLiferayProject(IProject project) {
-		super(project);
-	}
-
-	@Override
-	public String getProperty(String key, String defaultValue) {
-		return null;
-	}
+	List<IPath> getTargetPlatformArtifacts();
 
 }

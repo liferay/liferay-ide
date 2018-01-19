@@ -57,16 +57,6 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
 	}
 
 	@Override
-	public IFile getDescriptorFile(String name) {
-		return null;
-	}
-
-	@Override
-	public IPath getLibraryPath(String filename) {
-		return null;
-	}
-
-	@Override
 	public IPath getOutputBundle(boolean cleanBuild, IProgressMonitor monitor) throws CoreException {
 		IPath retval = null;
 

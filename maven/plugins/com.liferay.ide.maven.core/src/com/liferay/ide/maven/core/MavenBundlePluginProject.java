@@ -49,6 +49,7 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 		super(project);
 	}
 
+	@Override
 	public <T> T adapt(Class<T> adapterType) {
 		T adapter = super.adapt(adapterType);
 
@@ -89,11 +90,6 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 	@Override
 	public String getBundleShape() {
 		return "jar";
-	}
-
-	@Override
-	public IFile getDescriptorFile(String name) {
-		return getProject().getFile(name);
 	}
 
 	@Override

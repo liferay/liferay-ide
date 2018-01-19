@@ -14,6 +14,7 @@
 
 package com.liferay.ide.core;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
@@ -22,6 +23,8 @@ import org.eclipse.core.runtime.IPath;
  * @author Gregory Amerson
  */
 public interface IWebProject extends ILiferayProject {
+
+	public IFile getDescriptorFile(String name);
 
 	public IResource findDocrootResource(IPath path);
 

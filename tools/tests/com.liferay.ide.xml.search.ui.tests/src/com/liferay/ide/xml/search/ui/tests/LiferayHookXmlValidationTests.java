@@ -22,6 +22,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
 import com.liferay.ide.xml.search.ui.validators.LiferayHookDescriptorValidator;
@@ -50,7 +51,7 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
 
     protected IFile getDescriptorFile() throws Exception
     {
-        return descriptorFile != null ? descriptorFile : LiferayCore.create( getProject() ).getDescriptorFile(
+        return descriptorFile != null ? descriptorFile : LiferayCore.create(IWebProject.class, getProject() ).getDescriptorFile(
             ILiferayConstants.LIFERAY_HOOK_XML_FILE );
     }
 
