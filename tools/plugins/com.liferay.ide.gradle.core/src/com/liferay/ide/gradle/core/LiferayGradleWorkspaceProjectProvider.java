@@ -16,6 +16,8 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWorkspaceProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
@@ -24,9 +26,11 @@ import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.Optional;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -38,6 +42,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.sapphire.platform.PathBridge;
+import org.eclipse.wst.server.core.IServer;
 
 /**
  * @author Andy Wu
@@ -47,7 +52,7 @@ public class LiferayGradleWorkspaceProjectProvider
 	extends AbstractLiferayProjectProvider implements NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> {
 
 	public LiferayGradleWorkspaceProjectProvider() {
-		super(new Class<?>[] {IProject.class});
+		super(new Class<?>[] {IProject.class, IServer.class});
 	}
 
 	@Override
@@ -123,8 +128,6 @@ public class LiferayGradleWorkspaceProjectProvider
 
 	@Override
 	public synchronized ILiferayProject provide(Object adaptable) {
-		ILiferayProject retval = null;
-
 		if (adaptable instanceof IProject) {
 			final IProject project = (IProject)adaptable;
 
@@ -133,7 +136,37 @@ public class LiferayGradleWorkspaceProjectProvider
 			}
 		}
 
-		return retval;
+		return Optional.ofNullable(
+			adaptable
+		).filter(
+			i -> i instanceof IServer
+		).map(
+			IServer.class::cast
+		).map(
+			ServerUtil::getLiferayRuntime
+		).map(
+			liferayRuntime -> liferayRuntime.getLiferayHome()
+		).map(
+			LiferayGradleWorkspaceProjectProvider::getWorkspaceProjectFromLiferayHome
+		).orElse(
+			null
+		);
+	}
+
+	private static IWorkspaceProject getWorkspaceProjectFromLiferayHome(final IPath liferayHome) {
+		return Optional.ofNullable(
+			LiferayWorkspaceUtil.getWorkspaceProject()
+		).filter(
+			workspaceProject -> {
+				IPath workspaceLocation = workspaceProject.getRawLocation();
+
+				return workspaceLocation.isPrefixOf(liferayHome);
+			}
+		).map(
+			workspaceProject -> LiferayCore.create(IWorkspaceProject.class, workspaceProject)
+		).orElse(
+			null
+		);
 	}
 
 	@Override
