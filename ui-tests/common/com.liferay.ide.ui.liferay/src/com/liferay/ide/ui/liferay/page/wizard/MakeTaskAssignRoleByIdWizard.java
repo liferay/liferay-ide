@@ -12,38 +12,24 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay.base;
+package com.liferay.ide.ui.liferay.page.wizard;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import com.liferay.ide.ui.swtbot.page.Text;
+import com.liferay.ide.ui.swtbot.page.Wizard;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
- * @author Terry Jia
- * @author Ying Xu
+ * @author Haoyi Sun
  */
-public class TimestampSupport extends SupportBase {
+public class MakeTaskAssignRoleByIdWizard extends Wizard {
 
-	public TimestampSupport(SWTWorkbenchBot bot) {
+	public MakeTaskAssignRoleByIdWizard(SWTBot bot) {
 		super(bot);
 	}
 
-	@Override
-	public void after() {
-		_timestamp = 0;
+	public Text getRoleId() {
+		return new Text(getShell().bot(), ROLE_ID);
 	}
-
-	@Override
-	public void before() {
-		_timestamp = System.currentTimeMillis();
-	}
-
-	public String getName() {
-		return "test-" + _timestamp;
-	}
-
-	public String getName(String name) {
-		return name + "-" + _timestamp;
-	}
-
-	private long _timestamp = 0;
 
 }

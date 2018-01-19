@@ -19,6 +19,7 @@ import com.liferay.ide.ui.swtbot.page.BasePageObject;
 import com.liferay.ide.ui.swtbot.page.Editor;
 import com.liferay.ide.ui.swtbot.page.Menu;
 import com.liferay.ide.ui.swtbot.page.Shell;
+import com.liferay.ide.ui.swtbot.page.Text;
 import com.liferay.ide.ui.swtbot.page.View;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -67,6 +68,10 @@ public class Eclipse extends BasePageObject {
 		String[] preferencesLabel = {WINDOW, PREFERENCES};
 
 		return new Menu(bot.shell(label).bot(), preferencesLabel);
+	}
+
+	public Text getQuickAccess() {
+		return new Text(bot, "Quick Access", true);
 	}
 
 	public Shell getShell() {

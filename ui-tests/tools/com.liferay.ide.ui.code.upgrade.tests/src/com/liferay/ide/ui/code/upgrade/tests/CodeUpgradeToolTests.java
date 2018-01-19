@@ -18,6 +18,8 @@ import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.page.view.CodeUpgradeView;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
+import org.eclipse.core.runtime.Platform;
+
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -56,6 +58,56 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 	}
 
 	@Test
+	public void testBuild() {
+		viewAction.codeUpgrade.switchGear(8);
+
+		Assert.assertTrue(_codeUpgradeView.getBuildBtn().isEnabled());
+	}
+
+	@Test
+	public void testBuildServices() {
+		viewAction.codeUpgrade.switchGear(5);
+
+		Assert.assertTrue(_codeUpgradeView.getBuildServicesBtn().isEnabled());
+	}
+
+	@Test
+	public void testCustomJsp() {
+		viewAction.codeUpgrade.switchGear(7);
+
+		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
+
+		if (Platform.getOS().equals("win32")) {
+			workspacePath = workspacePath.replaceAll("\\\\", "/");
+		}
+
+		Assert.assertEquals(workspacePath, _codeUpgradeView.getConvertedProjectLocation().getText());
+
+		Assert.assertTrue(_codeUpgradeView.getBrowseBtn().isEnabled());
+
+		Assert.assertTrue(_codeUpgradeView.getSelectProjectsBtn().isEnabled());
+
+		Assert.assertTrue(_codeUpgradeView.getRefreshResultsBtn().isEnabled());
+
+		Assert.assertTrue(_codeUpgradeView.getClearResultsBtn().isEnabled());
+	}
+
+	@Test
+	public void testFindBreakingChanges() {
+		viewAction.codeUpgrade.switchGear(3);
+
+		Assert.assertTrue(_codeUpgradeView.getFindBreakingChangesBtn().isEnabled());
+
+		Assert.assertFalse(_codeUpgradeView.getAutomaticallyCorrectProblemsBtn().isEnabled());
+
+		Assert.assertTrue(_codeUpgradeView.getExpandAllBtn().isEnabled());
+
+		Assert.assertTrue(_codeUpgradeView.getCollapseAllBtn().isEnabled());
+
+		Assert.assertTrue(_codeUpgradeView.getOpenIgnoredListBtn().isEnabled());
+	}
+
+	@Test
 	public void testGear() {
 		viewAction.codeUpgrade.switchGear(0);
 
@@ -76,6 +128,13 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 		viewAction.codeUpgrade.switchGear(8);
 
 		viewAction.codeUpgrade.switchGear(9);
+	}
+
+	@Test
+	public void testLayoutTemplate() {
+		viewAction.codeUpgrade.switchGear(6);
+
+		Assert.assertTrue(_codeUpgradeView.getUpgradeBtn().isEnabled());
 	}
 
 	@Test
@@ -103,6 +162,13 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 		Assert.assertEquals(StringPool.BLANK, _codeUpgradeView.getLiferayServerName().getText());
 
 		Assert.assertTrue(_codeUpgradeView.getAddServerBtn().isEnabled());
+	}
+
+	@Test
+	public void testUpdateDescriptorFiles() {
+		viewAction.codeUpgrade.switchGear(4);
+
+		Assert.assertTrue(_codeUpgradeView.getUpgradeBtn().isEnabled());
 	}
 
 	@Test

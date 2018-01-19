@@ -15,8 +15,10 @@
 package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.TimestampSupport;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -27,13 +29,27 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createActivator() {
-		String projectName = "test-activator-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, ACTIVATOR);
 
+		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
+
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
@@ -42,13 +58,27 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createApi() {
-		String projectName = "test-api-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, API);
 
+		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
+
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
@@ -57,13 +87,27 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createContentTargetingReport() {
-		String projectName = "test-content-targeting-report-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, CONTENT_TARGETING_REPORT);
 
+		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
+
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
@@ -72,13 +116,27 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createContentTargetingRule() {
-		String projectName = "test-content-targeting-rule-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, CONTENT_TARGETING_RULE);
 
+		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
+
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
@@ -87,13 +145,27 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createContentTargetingTrackingAction() {
-		String projectName = "test-content-targeting-tracking-action-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, CONTENT_TARGETING_TRACKING_ACTION);
 
+		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
+
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
@@ -102,13 +174,27 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createControlMenuEntry() {
-		String projectName = "test-control-menu-entry-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, CONTROL_MENU_ENTRY);
 
+		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
+
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
@@ -117,13 +203,27 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createFormField() {
-		String projectName = "test-form-field-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, FORM_FIELD);
 
+		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
+
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
@@ -132,13 +232,27 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createPanelApp() {
-		String projectName = "test-panel-app-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, PANEL_APP);
 
+		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
+
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
@@ -147,13 +261,27 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createPortletConfigurationIcon() {
-		String projectName = "test-portlet-configuration-icon-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, PORTLET_CONFIGURATION_ICON);
 
+		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
+
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
@@ -162,13 +290,27 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createPortletProvider() {
-		String projectName = "test-portlet-provider-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, PORTLET_PROVIDER);
 
+		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
+
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
@@ -177,13 +319,27 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createPortletToolbarContributor() {
-		String projectName = "test-portlet-toolbar-contributor-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, PORTLET_TOOLBAR_CONTRIBUTOR);
 
+		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
+
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
@@ -192,13 +348,27 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createRest() {
-		String projectName = "test-rest-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, REST);
 
+		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
+
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
@@ -207,13 +377,17 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createService() {
-		String projectName = "test-service-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, SERVICE);
 
 		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.newModuleInfo.openSelectServiceDialog();
 
@@ -223,6 +397,14 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
 		viewAction.project.closeAndDelete(projectName);
@@ -230,13 +412,17 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createServiceWrapper() {
-		String projectName = "test-service-wrapper-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, SERVICE_WRAPPER);
 
 		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.newModuleInfo.openSelectServiceDialog();
 
@@ -246,6 +432,14 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
 		viewAction.project.closeAndDelete(projectName);
@@ -253,13 +447,27 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createSimulationPanelEntry() {
-		String projectName = "test-simulation-panel-entry-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, SIMULATION_PANEL_ENTRY);
 
+		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
+
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
@@ -268,13 +476,27 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createTemplateContextContributor() {
-		String projectName = "test-template-context-contributor-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR);
 
+		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
+
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
@@ -283,13 +505,21 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createThemeContributor() {
-		String projectName = "test-theme-contributor-maven";
+		String projectName = timestamp.getName();
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, THEME_CONTRIBUTOR);
 
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
@@ -298,13 +528,27 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createWarHook() {
-		String projectName = "test-war-hook-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, WAR_HOOK);
 
+		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
+
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
@@ -313,17 +557,34 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createWarMvcPortlet() {
-		String projectName = "test-war-mvc-portlet-maven";
+		String projectName = timestamp.getName();
+
+		String packageName = "com.liferay.ide.test";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, WAR_MVC_PORTLET);
 
+		wizardAction.next();
+
+		wizardAction.newModuleInfo.prepare(packageName);
+
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(projectName);
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
 
 		viewAction.project.closeAndDelete(projectName);
 	}
+
+	@Rule
+	public TimestampSupport timestamp = new TimestampSupport(bot);
 
 }

@@ -74,12 +74,18 @@ public class DialogAction extends UIAction {
 	}
 
 	public void openPreferencesDialog() {
+		_jobAction.waitForShellAppeared(ide.getLabel());
+
 		if (CoreUtil.isMac()) {
-			_keyboradAction.pressKeysPreferencesDialogMac();
+			ide.getQuickAccess().setText("Preferences Preferences");
+
+			ide.getQuickAccess().setFocus();
+
+			ide.sleep();
+
+			_keyboradAction.pressKeyEnter();
 		}
 		else {
-			_jobAction.waitForShellAppeared(ide.getLabel());
-
 			ide.getPreferencesMenu().click();
 		}
 	}
@@ -178,14 +184,38 @@ public class DialogAction extends UIAction {
 
 	public class ServerRuntimeEnvironmentsDialogAction {
 
+		public void deleteRuntimeTryConfirm(int row) {
+			assertTitle(_getDialog(), _serverRuntimeEnvironmentsDialog);
+
+			ide.sleep(2000);
+
+			_serverRuntimeEnvironmentsDialog.getRuntimes().click(row);
+
+			ide.sleep(2000);
+
+			_serverRuntimeEnvironmentsDialog.getRemoveBtn().click();
+
+			long origin = SWTBotPreferences.TIMEOUT;
+
+			SWTBotPreferences.TIMEOUT = 500;
+
+			try {
+				confirm();
+			}
+			catch (Exception e) {
+			}
+
+			SWTBotPreferences.TIMEOUT = origin;
+		}
+
 		public void deleteRuntimeTryConfirm(String runtimeName) {
 			assertTitle(_getDialog(), _serverRuntimeEnvironmentsDialog);
 
-			ide.sleep(3000);
+			ide.sleep(2000);
 
 			_serverRuntimeEnvironmentsDialog.getRuntimes().click(runtimeName);
 
-			ide.sleep(3000);
+			ide.sleep(2000);
 
 			_serverRuntimeEnvironmentsDialog.getRemoveBtn().click();
 

@@ -35,6 +35,12 @@ public class Text extends AbstractWidget {
 		super(bot, label);
 	}
 
+	public Text(SWTBot bot, String label, boolean message) {
+		super(bot, label);
+
+		_message = message;
+	}
+
 	public Text(SWTBot bot, String label, int index) {
 		super(bot, label, index);
 	}
@@ -52,11 +58,18 @@ public class Text extends AbstractWidget {
 			return bot.text(index);
 		}
 		else if (!isLabelNull() && !hasIndex()) {
-			return bot.textWithLabel(label);
+			if (_message) {
+				return bot.textWithMessage(label);
+			}
+			else {
+				return bot.textWithLabel(label);
+			}
 		}
 		else {
 			return bot.text();
 		}
 	}
+
+	private boolean _message = false;
 
 }

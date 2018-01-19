@@ -12,38 +12,29 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay.base;
+package com.liferay.ide.ui.swtbot.page;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
 
 /**
- * @author Terry Jia
  * @author Ying Xu
  */
-public class TimestampSupport extends SupportBase {
+public class TooltipButton extends AbstractWidget {
 
-	public TimestampSupport(SWTWorkbenchBot bot) {
-		super(bot);
+	public TooltipButton(SWTBot bot, String label) {
+		super(bot, label);
+	}
+
+	public void click() {
+		getWidget().click();
 	}
 
 	@Override
-	public void after() {
-		_timestamp = 0;
-	}
+	protected SWTBotButton getWidget() {
+		assert !isLabelNull();
 
-	@Override
-	public void before() {
-		_timestamp = System.currentTimeMillis();
+		return bot.buttonWithTooltip(label);
 	}
-
-	public String getName() {
-		return "test-" + _timestamp;
-	}
-
-	public String getName(String name) {
-		return name + "-" + _timestamp;
-	}
-
-	private long _timestamp = 0;
 
 }

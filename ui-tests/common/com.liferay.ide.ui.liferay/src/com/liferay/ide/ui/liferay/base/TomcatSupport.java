@@ -14,7 +14,11 @@
 
 package com.liferay.ide.ui.liferay.base;
 
+import com.liferay.ide.ui.swtbot.page.Table;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+
+import org.junit.Assert;
 
 /**
  * @author Terry Jia
@@ -52,6 +56,16 @@ public class TomcatSupport extends SupportBase implements ServerSupport {
 
 		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
+		Table runtimes = dialogAction.serverRuntimeEnvironments.getRuntimes();
+
+		for (int i = runtimes.size() - 1; i >= 0; i--) {
+			dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(i);
+		}
+
+		runtimes = dialogAction.serverRuntimeEnvironments.getRuntimes();
+
+		Assert.assertTrue("Expect there is no runtimes now having " + runtimes.size(), runtimes.size() == 0);
+
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
 		wizardAction.newRuntime.prepare7();
@@ -61,6 +75,10 @@ public class TomcatSupport extends SupportBase implements ServerSupport {
 		wizardAction.newRuntime7.prepare(getServerName(), envAction.getServerFullDir().toOSString());
 
 		wizardAction.finish();
+
+		runtimes = dialogAction.serverRuntimeEnvironments.getRuntimes();
+
+		Assert.assertTrue("Expect runtime number is 1 but now having " + runtimes.size(), runtimes.size() == 1);
 
 		dialogAction.preferences.confirm();
 

@@ -30,9 +30,6 @@ import org.junit.Test;
  */
 public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
-	@Rule
-	public TimestampSupport timestamp = new TimestampSupport(bot);
-
 	@Test
 	public void createLiferayWorkspace() {
 		String workspaceName = timestamp.getName("test-liferay-workspace-gradle");
@@ -233,5 +230,8 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		dialogAction.preferences.confirm();
 	}
+
+	@Rule
+	public TimestampSupport timestamp = new TimestampSupport(bot);
 
 }

@@ -54,6 +54,7 @@ import org.junit.Assert;
 /**
  * @author Terry Jia
  * @author Ashley Yuan
+ * @author Lily Li
  */
 public class EnvAction extends UIAction {
 
@@ -63,6 +64,20 @@ public class EnvAction extends UIAction {
 		}
 
 		return _envAction;
+	}
+
+	public IPath getBundlesProjectDir(String workspaceProjectName) {
+		IPath serverDir = _getBundlesPath().append("bundles");
+
+		IPath bundlesProjectPath = serverDir.append(workspaceProjectName);
+
+		return bundlesProjectPath;
+	}
+
+	public IPath getBundlesProjectFileDir(String workspaceProjectName, String file) {
+		IPath bundlesProjectFilePath = getBundlesProjectDir(workspaceProjectName).append(file);
+
+		return bundlesProjectFilePath;
 	}
 
 	public IPath getEclipseWorkspacePath() {
@@ -274,6 +289,18 @@ public class EnvAction extends UIAction {
 		return !internal();
 	}
 
+	public File prepareBundlesProject(File source) throws IOException {
+		IPath serverDir = _getBundlesPath().append("bundles");
+
+		File dist = new File(serverDir.toFile(), source.getName() + "-" + getTimestamp());
+
+		FileUtil.copyDirectiory(source.getPath(), dist.getPath());
+
+		resetTimestamp();
+
+		return dist;
+	}
+
 	public void prepareGeoFile() {
 		String filename = "com.liferay.ip.geocoder.internal.IPGeocoderConfiguration.cfg";
 
@@ -468,6 +495,50 @@ public class EnvAction extends UIAction {
 		}
 	}
 
+	public void unzipPluginsSdkToProject(String workspaceProjectName) {
+		try {
+			File sdkDir = getBundlesProjectFileDir(workspaceProjectName, "plugins-sdk").toFile();
+
+			File sdkZipFile = _getSdkZip().toFile();
+
+			sdkDir.mkdirs();
+
+			ZipUtil.unzip(sdkZipFile, getSdkName(), sdkDir, new NullProgressMonitor());
+
+			Assert.assertEquals(true, sdkDir.exists());
+
+			String username = _getUsername();
+
+			File userBuildFile = new File(sdkDir, "build." + username + ".properties");
+
+			userBuildFile.createNewFile();
+
+			unzipServer();
+
+			File serverDir = getServerDir().toFile();
+
+			String appServerParentDir = "app.server.parent.dir=" + serverDir.getPath().replace("\\", "/");
+
+			FileWriter writer = new FileWriter(userBuildFile.getPath(), true);
+
+			writer.write(appServerParentDir);
+
+			writer.close();
+
+			if (internal()) {
+				IPath bundlesPath = _getBundlesPath();
+
+				IPath source = bundlesPath.append("internal").append("ivy-settings.xml");
+
+				IPath dest = getBundlesProjectDir(workspaceProjectName).append("ivy-settings.xml");
+
+				FileUtil.copyFile(source.toFile(), dest.toFile());
+			}
+		}
+		catch (Exception e) {
+		}
+	}
+
 	public void unzipServer() {
 		FileUtil.deleteDir(getServerDir().toFile(), true);
 
@@ -517,6 +588,23 @@ public class EnvAction extends UIAction {
 
 		ZipUtil.unzip(
 			liferayServerZipFile62, liferayServerZipFolder62, liferayServerDirFile62, new NullProgressMonitor());
+	}
+
+	public void unzipServerToProject(String workspaceProjectName) {
+		File liferayServerZipFile = _getServerZip().toFile();
+
+		File liferayServerDirFile = getBundlesProjectFileDir(workspaceProjectName, "bundles").toFile();
+
+		liferayServerDirFile.mkdirs();
+
+		String liferayServerZipFolder = _getServerZipFolder();
+
+		try {
+			ZipUtil.unzip(
+				liferayServerZipFile, liferayServerZipFolder, liferayServerDirFile, new NullProgressMonitor());
+		}
+		catch (IOException ioe) {
+		}
 	}
 
 	public final String test_in_the_internal_net =

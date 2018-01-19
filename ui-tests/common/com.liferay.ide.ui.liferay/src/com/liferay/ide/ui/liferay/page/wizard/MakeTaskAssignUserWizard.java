@@ -12,38 +12,32 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay.base;
+package com.liferay.ide.ui.liferay.page.wizard;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import com.liferay.ide.ui.swtbot.page.Text;
+import com.liferay.ide.ui.swtbot.page.Wizard;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
- * @author Terry Jia
- * @author Ying Xu
+ * @author Haoyi Sun
  */
-public class TimestampSupport extends SupportBase {
+public class MakeTaskAssignUserWizard extends Wizard {
 
-	public TimestampSupport(SWTWorkbenchBot bot) {
+	public MakeTaskAssignUserWizard(SWTBot bot) {
 		super(bot);
 	}
 
-	@Override
-	public void after() {
-		_timestamp = 0;
+	public Text getEmailAddress() {
+		return new Text(getShell().bot(), EMAIL_ADDRESS);
 	}
 
-	@Override
-	public void before() {
-		_timestamp = System.currentTimeMillis();
+	public Text getScreenName() {
+		return new Text(getShell().bot(), SCREEN_NAME);
 	}
 
-	public String getName() {
-		return "test-" + _timestamp;
+	public Text getUserId() {
+		return new Text(getShell().bot(), USER_ID);
 	}
-
-	public String getName(String name) {
-		return name + "-" + _timestamp;
-	}
-
-	private long _timestamp = 0;
 
 }
