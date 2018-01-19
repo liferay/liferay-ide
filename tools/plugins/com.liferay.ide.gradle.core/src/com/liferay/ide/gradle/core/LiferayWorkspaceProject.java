@@ -16,19 +16,24 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.ILiferayPortal;
+import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Andy Wu
  */
-public class LiferayWorkspaceProject extends BaseLiferayProject {
+public class LiferayWorkspaceProject extends BaseLiferayProject implements IWorkspaceProject {
 
 	public LiferayWorkspaceProject(IProject project) {
 		super(project);
@@ -71,8 +76,9 @@ public class LiferayWorkspaceProject extends BaseLiferayProject {
 	}
 
 	@Override
-	public IFolder[] getSourceFolders() {
-		return null;
+	public List<IPath> getTargetPlatformArtifacts() {
+		return Collections.emptyList();
 	}
+
 
 }

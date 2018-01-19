@@ -14,7 +14,7 @@
 
 package com.liferay.ide.hook.ui.wizard;
 
-import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWorkspaceProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
@@ -24,6 +24,7 @@ import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSection;
 import com.liferay.ide.ui.dialog.FilteredTypesSelectionDialogEx;
 
 import java.io.File;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
@@ -207,7 +208,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 						public void widgetSelected(SelectionEvent e) {
 							handleArrayDialogButtonSelected(index, lbl, text);
 						}
-	
+
 					});
 			}
 
@@ -312,14 +313,13 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 
 			IProject project = ProjectUtil.getProject(model);
 
-			ILiferayProject liferayProject = LiferayCore.create(project);
+			IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, project);
 
-			IPath serviceJarPathService = liferayProject.getLibraryPath("portal-service");
+			List<IPath> targetPlatformArtifacts = workspaceProject.getTargetPlatformArtifacts();
 
-			IPath serviceJarPathKernel = liferayProject.getLibraryPath("portal-kernel");
+			IPath[] jarPaths = targetPlatformArtifacts.toArray(new IPath[0]);
 
-			scope.setEnclosingJarPaths(
-				new IPath[] {serviceJarPathService != null ? serviceJarPathService : serviceJarPathKernel});
+			scope.setEnclosingJarPaths(jarPaths);
 
 			FilteredTypesSelectionDialog dialog = new FilteredTypesSelectionDialogEx(
 				getShell(), false, null, scope, IJavaSearchConstants.INTERFACE);
