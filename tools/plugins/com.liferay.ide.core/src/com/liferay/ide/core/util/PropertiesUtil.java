@@ -17,6 +17,7 @@ package com.liferay.ide.core.util;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IResourceBundleProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 
 import java.io.ByteArrayInputStream;
@@ -181,13 +182,17 @@ public class PropertiesUtil {
 			project = CoreUtil.getLiferayProject(project);
 		}
 
-		ILiferayProject lrproject = LiferayCore.create(project);
+		IWebProject webProject = LiferayCore.create(IWebProject.class, project);
+
+		if (webProject == null) {
+			return new IFile[0];
+		}
 
 		IFile[] resourceFiles = getLanguagePropertiesFromPortletXml(
-			lrproject.getDescriptorFile(ILiferayConstants.PORTLET_XML_FILE));
+			webProject.getDescriptorFile(ILiferayConstants.PORTLET_XML_FILE));
 
 		IFile[] languageFiles = getLanguagePropertiesFromLiferayHookXml(
-			lrproject.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE));
+			webProject.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE));
 
 		if (resourceFiles.length > 0) {
 			Collections.addAll(retval, resourceFiles);
@@ -459,10 +464,14 @@ public class PropertiesUtil {
 		}
 
 		try {
-			ILiferayProject liferayProject = LiferayCore.create(project);
+			IWebProject webProject = LiferayCore.create(IWebProject.class, project);
+
+			if (webProject == null) {
+				return false;
+			}
 
 			IFile[] resourceFiles = getLanguagePropertiesFromPortletXml(
-				liferayProject.getDescriptorFile(ILiferayConstants.PORTLET_XML_FILE));
+				webProject.getDescriptorFile(ILiferayConstants.PORTLET_XML_FILE));
 
 			for (IFile file : resourceFiles) {
 				if (!ILiferayConstants.LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET.equals(file.getCharset())) {
@@ -471,7 +480,7 @@ public class PropertiesUtil {
 			}
 
 			IFile[] languageFiles = getLanguagePropertiesFromLiferayHookXml(
-				liferayProject.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE));
+				webProject.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE));
 
 			for (IFile file : languageFiles) {
 				if (!ILiferayConstants.LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET.equals(file.getCharset())) {
@@ -500,11 +509,15 @@ public class PropertiesUtil {
 			return false;
 		}
 
-		ILiferayProject liferayProject = LiferayCore.create(project);
+		IWebProject webProject = LiferayCore.create(IWebProject.class, project);
 
-		IFile portletXml = liferayProject.getDescriptorFile(ILiferayConstants.PORTLET_XML_FILE);
-		IFile liferayHookXml = liferayProject.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE);
-		IFolder[] srcFolders = liferayProject.getSourceFolders();
+		if (webProject == null) {
+			return false;
+		}
+
+		IFile portletXml = webProject.getDescriptorFile(ILiferayConstants.PORTLET_XML_FILE);
+		IFile liferayHookXml = webProject.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE);
+		IFolder[] srcFolders = webProject.getSourceFolders();
 
 		IPath targetFileLocation = targetFile.getLocation();
 
@@ -623,6 +636,7 @@ public class PropertiesUtil {
 			try {
 				DefaultHandler handler = new DefaultHandler() {
 
+					@Override
 					public void characters(char[] ch, int start, int length) throws SAXException {
 						if (!_langPropElem) {
 							return;
@@ -642,12 +656,14 @@ public class PropertiesUtil {
 						}
 					}
 
+					@Override
 					public void endElement(String uri, String localName, String qName) throws SAXException {
 						if (qName.equals(ELEMENT_LANGUAGE_PROPERTIES)) {
 							_langPropElem = false;
 						}
 					}
 
+					@Override
 					public void startElement(String uri, String localName, String qName, Attributes attributes)
 						throws SAXException {
 
@@ -692,6 +708,7 @@ public class PropertiesUtil {
 			try {
 				DefaultHandler handler = new DefaultHandler() {
 
+					@Override
 					public void characters(char[] ch, int start, int length) throws SAXException {
 						if (_supportedLocaleElem) {
 							_supportedLocaleValues.add(new String(ch, start, length));
@@ -702,6 +719,7 @@ public class PropertiesUtil {
 						}
 					}
 
+					@Override
 					public void endElement(String uri, String localName, String qName) throws SAXException {
 						if (qName.equals(ELEMENT_RESOURCE_BUNDLE)) {
 							_resourceBundleElem = false;
@@ -750,6 +768,7 @@ public class PropertiesUtil {
 						}
 					}
 
+					@Override
 					public void startElement(String uri, String localName, String qName, Attributes attributes)
 						throws SAXException {
 
@@ -842,6 +861,7 @@ public class PropertiesUtil {
 
 	private static class PropertiesVisitor implements IResourceProxyVisitor {
 
+		@Override
 		public boolean visit(IResourceProxy resourceProxy) {
 			if ((resourceProxy.getType() != IResource.FILE) ||
 				!resourceProxy.getName().endsWith(PROPERTIES_FILE_SUFFIX)) {

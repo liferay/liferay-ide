@@ -27,6 +27,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 
 import java.text.MessageFormat;
@@ -55,7 +56,7 @@ public class ServiceXmlTests extends XmlSearchTestsBase
 
     protected IFile getDescriptorFile() throws Exception
     {
-        return descriptorFile != null ? descriptorFile : LiferayCore.create( getProject() ).getDescriptorFile(
+        return descriptorFile != null ? descriptorFile : LiferayCore.create(IWebProject.class, getProject() ).getDescriptorFile(
             ILiferayConstants.SERVICE_XML_FILE );
     }
 
@@ -144,7 +145,7 @@ public class ServiceXmlTests extends XmlSearchTestsBase
         markerMessage = "Invalid Java package name: A package name must not be empty";
         assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
     }
-    
+
     @Test
     public void testServiceXMLTemplates() throws Exception
     {
@@ -163,17 +164,17 @@ public class ServiceXmlTests extends XmlSearchTestsBase
         {
             assertTrue( "can't get proposal at :" + expectedProposalString, containsProposal( proposals, expectedProposalString, true ) );
         }
-        
+
         //test on IDE-1683
-        descriptorFile = LiferayCore.create( project ).getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+        descriptorFile = LiferayCore.create( IWebProject.class, project ).getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
         proposals = getProposalsForText( descriptorFile, "portlet" );
-        
+
         for( String expectedProposalString : expectedProposalStrings )
         {
             assertFalse( "service builder proposal at :" + descriptorFile, containsProposal( proposals, expectedProposalString, true ) );
         }
-        
-        descriptorFile = LiferayCore.create( project ).getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
+
+        descriptorFile = LiferayCore.create( IWebProject.class, project ).getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
         proposals = getProposalsForText( descriptorFile, "portlet" );
 
         for( String expectedProposalString : expectedProposalStrings )

@@ -17,6 +17,7 @@ package com.liferay.ide.ui.editor;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.properties.PortalPropertiesConfiguration;
 import com.liferay.ide.server.core.ILiferayRuntime;
@@ -153,9 +154,11 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 		return _assitant;
 	}
 
+	@Override
 	public IInformationControlCreator getInformationControlCreator(ISourceViewer sourceViewer) {
 		return new IInformationControlCreator() {
 
+			@Override
 			public IInformationControl createInformationControl(Shell parent) {
 				return new DefaultInformationControl(parent, new HTMLTextPresenter(true));
 			}
@@ -166,7 +169,7 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 	private IPath _getAppServerPortalDir(IEditorInput input) {
 		IPath retval = null;
 
-		IFile ifile = (IFile)input.getAdapter(IFile.class);
+		IFile ifile = input.getAdapter(IFile.class);
 
 		if (ifile != null) {
 			ILiferayProject project = LiferayCore.create(ifile.getProject());
@@ -180,7 +183,7 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 			}
 		}
 		else {
-			File file = (File)input.getAdapter(File.class);
+			File file = input.getAdapter(File.class);
 
 			if ((file == null) && input instanceof FileStoreEditorInput) {
 				FileStoreEditorInput fInput = (FileStoreEditorInput)input;
@@ -227,9 +230,10 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 	}
 
 	private boolean _isHookProject(IProject project) {
-		ILiferayProject lr = LiferayCore.create(project);
+		IWebProject webProject = LiferayCore.create(IWebProject.class, project);
 
-		if ((lr != null) && (lr.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE) != null)) {
+		if ((webProject != null) &&
+				(webProject.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE) != null)) {
 			return true;
 		}
 
@@ -262,6 +266,7 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 			parsedKeys,
 			new Comparator<PropKey>() {
 
+				@Override
 				public int compare(PropKey o1, PropKey o2) {
 					return o1.getKey().compareTo(o2.getKey());
 				}

@@ -22,10 +22,8 @@ import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Andy Wu
@@ -63,17 +61,12 @@ public class LiferayWorkspaceProject extends BaseLiferayProject {
 	}
 
 	@Override
-	public IFile getDescriptorFile(String name) {
-		return null;
-	}
-
-	@Override
-	public IPath getLibraryPath(String filename) {
-		return null;
-	}
-
-	@Override
 	public String getProperty(String key, String defaultValue) {
+		return null;
+	}
+
+	@Override
+	public IFolder[] getSourceFolders() {
 		return null;
 	}
 

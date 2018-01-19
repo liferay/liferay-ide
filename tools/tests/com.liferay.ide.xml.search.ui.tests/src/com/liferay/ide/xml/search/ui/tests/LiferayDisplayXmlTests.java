@@ -29,6 +29,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.xml.search.ui.editor.LiferayCustomXmlViewerConfiguration;
 import com.liferay.ide.xml.search.ui.markerResolutions.DecreaseInstanceScopeXmlValidationLevel;
@@ -55,7 +56,7 @@ public class LiferayDisplayXmlTests extends XmlSearchTestsBase
 
     protected IFile getDescriptorFile() throws Exception
     {
-        return descriptorFile != null ? descriptorFile : LiferayCore.create( getProject() ).getDescriptorFile(
+        return descriptorFile != null ? descriptorFile : LiferayCore.create(IWebProject.class, getProject() ).getDescriptorFile(
             ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
     }
 

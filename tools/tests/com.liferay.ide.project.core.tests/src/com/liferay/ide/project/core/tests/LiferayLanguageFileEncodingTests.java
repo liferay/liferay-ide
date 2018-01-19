@@ -49,8 +49,8 @@ import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.junit.AfterClass;
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -227,8 +227,9 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
         // remove the reference line, the marker will disappear.
         assertEquals( true, hasEncodingMarker( removeThisLineTest ) );
 
-        final IFile liferayHookXml =
-            LiferayCore.create( hookProject ).getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+        IWebProject webProject = LiferayCore.create(IWebProject.class, hookProject);
+
+		final IFile liferayHookXml = webProject.getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
 
         assertNotNull( liferayHookXml );
 

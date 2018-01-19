@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.descriptor;
 
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -147,6 +148,7 @@ public abstract class LiferayDescriptorHelper {
 			}
 		}
 
+		@Override
 		public IStatus execute() {
 			IStatus retval = null;
 
@@ -228,7 +230,13 @@ public abstract class LiferayDescriptorHelper {
 			return null;
 		}
 
-		return LiferayCore.create(project).getDescriptorFile(fileName);
+		IWebProject webProject = LiferayCore.create(IWebProject.class, project);
+
+		if (webProject == null) {
+			return null;
+		}
+
+		return webProject.getDescriptorFile(fileName);
 	}
 
 	protected String getDescriptorVersion() {
@@ -288,6 +296,7 @@ public abstract class LiferayDescriptorHelper {
 			super(descriptorFile);
 		}
 
+		@Override
 		public IStatus execute() {
 			IStatus retval = null;
 

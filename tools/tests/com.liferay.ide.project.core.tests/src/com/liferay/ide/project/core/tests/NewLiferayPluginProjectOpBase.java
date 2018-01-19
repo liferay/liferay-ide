@@ -20,7 +20,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -797,11 +796,11 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         IProject project = createAntProject( op );
 
-        ILiferayProject lr = LiferayCore.create( project );
+        IWebProject webProject = LiferayCore.create(IWebProject.class, project);
 
-        IFile portletXml = lr.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
-        IFile liferayPortletXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
-        IFile liferayDisplayXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
+        IFile portletXml = webProject.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+        IFile liferayPortletXml = webProject.getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
+        IFile liferayDisplayXml = webProject.getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
 
         assertNotNull( portletXml );
         assertNotNull( liferayPortletXml );
@@ -824,12 +823,12 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         op.setPluginType( PluginType.servicebuilder );
 
         IProject project = createAntProject( op );
-        ILiferayProject lr = LiferayCore.create( project );
+        IWebProject webProject = LiferayCore.create(IWebProject.class, project);
 
-        IFile portletXml = lr.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
-        IFile liferayPortletXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
-        IFile liferayDisplayXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
-        IFile serviceXml = lr.getDescriptorFile( ILiferayConstants.SERVICE_XML_FILE );
+        IFile portletXml = webProject.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+        IFile liferayPortletXml = webProject.getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
+        IFile liferayDisplayXml = webProject.getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
+        IFile serviceXml = webProject.getDescriptorFile( ILiferayConstants.SERVICE_XML_FILE );
 
         assertNotNull( portletXml );
         assertNotNull( liferayPortletXml );
@@ -855,10 +854,11 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         IProject project = createAntProject( op );
 
-        ILiferayProject lr = LiferayCore.create( project );
-        IFile portletXml = lr.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
-        IFile liferayPortletXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
-        IFile liferayDisplayXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
+        IWebProject webProject = LiferayCore.create(IWebProject.class, project);
+
+        IFile portletXml = webProject.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+        IFile liferayPortletXml = webProject.getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
+        IFile liferayDisplayXml = webProject.getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
 
         assertNotNull( portletXml );
         assertNotNull( liferayPortletXml );
@@ -882,11 +882,12 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         IProject project = createAntProject( op );
 
-        ILiferayProject lr = LiferayCore.create( project );
-        IFile portletXml = lr.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
-        IFile liferayPortletXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
-        IFile liferayDisplayXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
-        IFile serviceXml = lr.getDescriptorFile( ILiferayConstants.SERVICE_XML_FILE );
+        IWebProject webProject = LiferayCore.create(IWebProject.class, project);
+
+        IFile portletXml = webProject.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+        IFile liferayPortletXml = webProject.getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
+        IFile liferayDisplayXml = webProject.getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
+        IFile serviceXml = webProject.getDescriptorFile( ILiferayConstants.SERVICE_XML_FILE );
 
         assertNotNull( portletXml );
         assertNotNull( liferayPortletXml );

@@ -51,11 +51,6 @@ public class FacetedMavenProject extends LiferayMavenProject implements IWebProj
 		_flexibleProject = new FlexibleProject(project) {
 
 			@Override
-			public IPath getLibraryPath(String filename) {
-				return null;
-			}
-
-			@Override
 			public String getProperty(String key, String defaultValue) {
 				return null;
 			}
@@ -63,6 +58,7 @@ public class FacetedMavenProject extends LiferayMavenProject implements IWebProj
 		};
 	}
 
+	@Override
 	public <T> T adapt(Class<T> adapterType) {
 		T adapter = super.adapt(adapterType);
 

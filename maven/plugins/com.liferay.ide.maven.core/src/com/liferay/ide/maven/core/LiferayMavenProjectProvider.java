@@ -259,12 +259,6 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider 
 						// return dummy maven project that can't lookup docroot resources
 
 						return new LiferayMavenProject(project) {
-
-							@Override
-							public IFile getDescriptorFile(String name) {
-								return null;
-							}
-
 							@Override
 							public IFolder[] getSourceFolders() {
 								return null;

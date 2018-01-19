@@ -16,9 +16,7 @@ package com.liferay.ide.core.adapter;
 
 import com.liferay.ide.core.BaseLiferayProject;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Gregory Amerson
@@ -27,16 +25,6 @@ public class NoopLiferayProject extends BaseLiferayProject {
 
 	public NoopLiferayProject(IProject project) {
 		super(project);
-	}
-
-	@Override
-	public IFile getDescriptorFile(String name) {
-		return null;
-	}
-
-	@Override
-	public IPath getLibraryPath(String filename) {
-		return null;
 	}
 
 	@Override
