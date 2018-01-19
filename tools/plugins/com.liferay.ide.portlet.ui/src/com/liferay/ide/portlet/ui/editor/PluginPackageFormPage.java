@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.editor;
 
@@ -32,95 +31,103 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 /**
  * @author Greg Amerson
  */
-public class PluginPackageFormPage extends IDEFormPage
-{
+public class PluginPackageFormPage extends IDEFormPage {
 
-    protected ScrolledForm form;
+	public PluginPackageFormPage(PluginPackageEditor editor) {
+		super(editor, "pluginPackage", Msgs.properties);
+	}
 
-    protected FormToolkit toolkit;
+	@Override
+	public void dispose() {
+		super.dispose();
+	}
 
-    public PluginPackageFormPage( PluginPackageEditor editor )
-    {
-        super( editor, "pluginPackage", Msgs.properties ); //$NON-NLS-1$
-    }
+	@Override
+	protected void createFormContent(IManagedForm managedForm) {
+		super.createFormContent(managedForm);
 
-    @Override
-    public void dispose()
-    {
-        super.dispose();
-    }
+		form = managedForm.getForm();
 
-    @Override
-    protected void createFormContent( IManagedForm managedForm )
-    {
-        super.createFormContent( managedForm );
+		FormToolkit toolkit = managedForm.getToolkit();
 
-        form = managedForm.getForm();
+		toolkit.decorateFormHeading(form.getForm());
 
-        FormToolkit toolkit = managedForm.getToolkit();
-        toolkit.decorateFormHeading( form.getForm() );
+		form.setText(Msgs.liferayPluginPackageProperties);
+		form.setImage(
+			PortletUIPlugin.imageDescriptorFromPlugin(
+				PortletUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png").createImage());
 
-        form.setText( Msgs.liferayPluginPackageProperties );
-        form.setImage( PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png" ).createImage() ); //$NON-NLS-1$
+		toolkit = managedForm.getToolkit();
 
-        toolkit = managedForm.getToolkit();
+		Composite body = form.getBody();
 
-        Composite body = form.getBody();
-        body.setLayout( FormLayoutFactory.createFormGridLayout( true, 2 ) );
+		body.setLayout(FormLayoutFactory.createFormGridLayout(true, 2));
 
-        Composite left, right;
-        toolkit = managedForm.getToolkit();
-        left = toolkit.createComposite( body, SWT.NONE );
-        left.setLayout( FormLayoutFactory.createFormPaneGridLayout( false, 1 ) );
-        left.setLayoutData( new GridData( GridData.FILL_BOTH ) );
-        right = toolkit.createComposite( body, SWT.NONE );
-        right.setLayout( FormLayoutFactory.createFormPaneGridLayout( false, 1 ) );
-        right.setLayoutData( new GridData( GridData.FILL_BOTH ) );
+		Composite left;
+		Composite right;
+		toolkit = managedForm.getToolkit();
 
-        PluginPackageGeneralSection generalSection = new PluginPackageGeneralSection( this, left );
-        managedForm.addPart( generalSection );
+		left = toolkit.createComposite(body, SWT.NONE);
 
-        IProject project = getFormEditor().getCommonProject();
+		left.setLayout(FormLayoutFactory.createFormPaneGridLayout(false, 1));
+		left.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-        if( SDKUtil.isSDKProject( project ) )
-        {
-            PortalJarsSection jarsSection = new PortalJarsSection( this, right, getPortalSectionLabels() );
-            managedForm.addPart( jarsSection );
+		right = toolkit.createComposite(body, SWT.NONE);
 
-            PortalDeployExcludesSection excludesSection = new PortalDeployExcludesSection( this, right, getPortalSectionLabels() );
-            managedForm.addPart( excludesSection );
+		right.setLayout(FormLayoutFactory.createFormPaneGridLayout(false, 1));
+		right.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-            PortalTldsSection tldsSection = new PortalTldsSection( this, right, getPortalSectionLabels() );
-            managedForm.addPart( tldsSection );
+		PluginPackageGeneralSection generalSection = new PluginPackageGeneralSection(this, left);
 
-            RequiredDeploymentContextsSection contextsSection =
-                new RequiredDeploymentContextsSection( this, right, getContextsSectionLabels() );
-            managedForm.addPart( contextsSection );
-        }
-    }
+		managedForm.addPart(generalSection);
 
-    private String[] getContextsSectionLabels()
-    {
-        return new String[] { Msgs.add, Msgs.remove, Msgs.up, Msgs.down };
-    }
+		IProject project = getFormEditor().getCommonProject();
 
-    private String[] getPortalSectionLabels()
-    {
-        return new String[] { Msgs.add, Msgs.remove };
-    }
+		if (SDKUtil.isSDKProject(project)) {
+			PortalJarsSection jarsSection = new PortalJarsSection(this, right, _getPortalSectionLabels());
 
-    private static class Msgs extends NLS
-    {
-        public static String add;
-        public static String down;
-        public static String liferayPluginPackageProperties;
-        public static String properties;
-        public static String remove;
-        public static String up;
+			managedForm.addPart(jarsSection);
 
-        static
-        {
-            initializeMessages( PluginPackageFormPage.class.getName(), Msgs.class );
-        }
-    }
+			PortalDeployExcludesSection excludesSection = new PortalDeployExcludesSection(
+				this, right, _getPortalSectionLabels());
+
+			managedForm.addPart(excludesSection);
+
+			PortalTldsSection tldsSection = new PortalTldsSection(this, right, _getPortalSectionLabels());
+
+			managedForm.addPart(tldsSection);
+
+			RequiredDeploymentContextsSection contextsSection = new RequiredDeploymentContextsSection(
+				this, right, _getContextsSectionLabels());
+
+			managedForm.addPart(contextsSection);
+		}
+	}
+
+	protected ScrolledForm form;
+	protected FormToolkit toolkit;
+
+	private String[] _getContextsSectionLabels() {
+		return new String[] {Msgs.add, Msgs.remove, Msgs.up, Msgs.down};
+	}
+
+	private String[] _getPortalSectionLabels() {
+		return new String[] {Msgs.add, Msgs.remove};
+	}
+
+	private static class Msgs extends NLS {
+
+		public static String add;
+		public static String down;
+		public static String liferayPluginPackageProperties;
+		public static String properties;
+		public static String remove;
+		public static String up;
+
+		static {
+			initializeMessages(PluginPackageFormPage.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

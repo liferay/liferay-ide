@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.navigator.actions;
 
@@ -27,66 +26,67 @@ import org.eclipse.ui.navigator.ICommonMenuConstants;
 /**
  * @author Kamesh Sampath
  */
-public class NewPortletActionProvider extends CommonActionProvider
-{
+public class NewPortletActionProvider extends CommonActionProvider {
 
-    private NewPortletAction newPortletAction;
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.eclipse.ui.actions.ActionGroup#fillActionBars(IActionBars)
+	 */
+	@Override
+	public void fillActionBars(IActionBars actionBars) {
+		if (this._newPortletAction.isEnabled()) {
+			actionBars.setGlobalActionHandler(IWorkbenchActionConstants.NEW_GROUP, _newPortletAction);
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.navigator.CommonActionProvider#init(org.eclipse.ui.navigator.ICommonActionExtensionSite)
-     */
-    @Override
-    public void init( ICommonActionExtensionSite aSite )
-    {
-        newPortletAction = new NewPortletAction();
-    }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.eclipse.ui.actions.ActionGroup#fillContextMenu(IMenuManager)
+	 */
+	@Override
+	public void fillContextMenu(IMenuManager menuManager) {
+		ActionContext context = getContext();
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.actions.ActionGroup#setContext(org.eclipse.ui.actions.ActionContext)
-     */
-    @Override
-    public void setContext( ActionContext context )
-    {
-        if( ( context != null ) && ( context.getSelection() instanceof IStructuredSelection ) )
-        {
-            IStructuredSelection selection = (IStructuredSelection) context.getSelection();
-            this.newPortletAction.selectionChanged( selection );
-        }
-        super.setContext( context );
-    }
+		if ((context == null) || context.getSelection().isEmpty()) {
+			return;
+		}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.actions.ActionGroup#fillContextMenu(org.eclipse.jface.action.IMenuManager)
-     */
-    @Override
-    public void fillContextMenu( IMenuManager menuManager )
-    {
-        ActionContext context = this.getContext();
-        if( ( context == null ) || context.getSelection().isEmpty() )
-        {
-            return;
-        }
+		if (this._newPortletAction.isEnabled()) {
+			menuManager.insertAfter(ICommonMenuConstants.GROUP_NEW, _newPortletAction);
+		}
+	}
 
-        if( this.newPortletAction.isEnabled() )
-        {
-            menuManager.insertAfter( ICommonMenuConstants.GROUP_NEW, this.newPortletAction );
-        }
-    }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * CommonActionProvider#init(ICommonActionExtensionSite)
+	 */
+	@Override
+	public void init(ICommonActionExtensionSite aSite) {
+		_newPortletAction = new NewPortletAction();
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.actions.ActionGroup#fillActionBars(org.eclipse.ui.IActionBars)
-     */
-    @Override
-    public void fillActionBars( IActionBars actionBars )
-    {
-        if( this.newPortletAction.isEnabled() )
-        {
-            actionBars.setGlobalActionHandler( IWorkbenchActionConstants.NEW_GROUP, this.newPortletAction );
-        }
-    }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.ui.actions.ActionGroup#setContext(ActionContext)
+	 */
+	@Override
+	public void setContext(ActionContext context) {
+		if ((context != null) && (context.getSelection() instanceof IStructuredSelection)) {
+			IStructuredSelection selection = (IStructuredSelection)context.getSelection();
+
+			this._newPortletAction.selectionChanged(selection);
+		}
+
+		super.setContext(context);
+	}
+
+	private NewPortletAction _newPortletAction;
 
 }

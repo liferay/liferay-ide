@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *               Kamesh Sampath - initial implementation
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.model;
 
@@ -43,184 +40,155 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author Kamesh Sampath
  * @author Simon Jiang
  */
-@Image( path = "images/elcl16/portlet_16x16.png" )
-public interface Portlet extends ResourceBundle, Identifiable, Describeable, Displayable
-{
+@Image(path = "images/elcl16/portlet_16x16.png")
+public interface Portlet extends ResourceBundle, Identifiable, Describeable, Displayable {
 
-    ElementType TYPE = new ElementType( Portlet.class );
+	public ElementType TYPE = new ElementType(Portlet.class);
 
-    // *** Portlet Name ***
+	// *** Portlet Name ***
 
-    @Label( standard = "Portlet name" )
-    @Required
-    @Unique
-    @MustExist
-    @XmlBinding( path = "portlet-name" )
-    ValueProperty PROP_PORTLET_NAME = new ValueProperty( TYPE, "PortletName" ); //$NON-NLS-1$
+	@Label(standard = "Portlet name")
+	@Required
+	@Unique
+	@MustExist
+	@XmlBinding(path = "portlet-name")
+	public 	ValueProperty PROP_PORTLET_NAME = new ValueProperty(TYPE, "PortletName");
 
-    Value<String> getPortletName();
+	public 	Value<String> getPortletName();
 
-    void setPortletName( String portletName );
+	public void setPortletName(String portletName);
 
-    // *** Portlet Class ***
+	// *** Portlet Class ***
 
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = { "javax.portlet.GenericPortlet" } )
-    @Label( standard = "Portlet class" )
-    @MustExist
-    @Required
-    @XmlBinding( path = "portlet-class" )
-    ValueProperty PROP_PORTLET_CLASS = new ValueProperty( TYPE, "PortletClass" ); //$NON-NLS-1$
+	@Type(base = JavaTypeName.class)
+	@Reference(target = JavaType.class)
+	@JavaTypeConstraint(kind = JavaTypeKind.CLASS, type = {"javax.portlet.GenericPortlet"})
+	@Label(standard = "Portlet class")
+	@MustExist
+	@Required
+	@XmlBinding(path = "portlet-class")
+	public ValueProperty PROP_PORTLET_CLASS = new ValueProperty(TYPE, "PortletClass");
 
-    ReferenceValue<JavaTypeName, JavaType> getPortletClass();
+	public ReferenceValue<JavaTypeName, JavaType> getPortletClass();
 
-    void setPortletClass( String portletClass );
+	public void setPortletClass(String portletClass);
 
-    void setPortletClass( JavaTypeName portletClass );
+	public void setPortletClass(JavaTypeName portletClass);
 
-    // *** ExpirationCache ***
+	// *** ExpirationCache ***
 
-    @Type( base = Integer.class )
-    @Label( standard = "Expiration Cache" )
-    @Length( min = 0, max = 1 )
-    @XmlBinding( path = "expiration-cache" )
-    ValueProperty PROP_EXPIRATION_CACHE = new ValueProperty( TYPE, "ExpirationCache" ); //$NON-NLS-1$
+	@Type(base = Integer.class)
+	@Label(standard = "Expiration Cache")
+	@Length(min = 0, max = 1)
+	@XmlBinding(path = "expiration-cache")
+	public 	ValueProperty PROP_EXPIRATION_CACHE = new ValueProperty(TYPE, "ExpirationCache");
 
-    Value<Integer> getExpirationCache();
+	public Value<Integer> getExpirationCache();
 
-    void setExpirationCache( String value );
+	public void setExpirationCache(String value);
 
-    void setExpirationCache( Integer value );
+	public void setExpirationCache(Integer value);
 
-    // *** CacheScope ***
+	// *** CacheScope ***
 
-    @Label( standard = "Cache scope" )
-    @XmlBinding( path = "cache-scope" )
-    @Length( min = 0, max = 1 )
-    ValueProperty PROP_CACHE_SCOPE = new ValueProperty( TYPE, "CacheScope" ); //$NON-NLS-1$
+	@Label(standard = "Cache scope")
+	@XmlBinding(path = "cache-scope")
+	@Length(min = 0, max = 1)
+	ValueProperty PROP_CACHE_SCOPE = new ValueProperty(TYPE, "CacheScope");
 
-    Value<String> getCacheScope();
+	Value<String> getCacheScope();
 
-    void setCacheScope( String value );
+	void setCacheScope(String value);
 
-    // *** Supports ***
+	// *** Supports ***
 
-    @Type( base = Supports.class )
-    @Label( standard = "Supports" )
-    @Required
-    @XmlBinding( path = "supports" )
-    ImpliedElementProperty PROP_SUPPORTS = new ImpliedElementProperty( TYPE, "Supports" ); //$NON-NLS-1$
+	@Type(base = Supports.class)
+	@Label(standard = "Supports")
+	@Required
+	@XmlBinding(path = "supports")
+	ImpliedElementProperty PROP_SUPPORTS = new ImpliedElementProperty(TYPE, "Supports");
 
-    Supports getSupports();
+	Supports getSupports();
 
-    // *** SupportedLocales ***
+	// *** SupportedLocales ***
 
-    @Type( base = SupportedLocales.class )
-    @Label( standard = "Supported Locales" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "supported-locale", type = SupportedLocales.class ) )
-    ListProperty PROP_SUPPORTED_LOCALES = new ListProperty( TYPE, "SupportedLocales" ); //$NON-NLS-1$
+	@Type(base = SupportedLocales.class)
+	@Label(standard = "Supported Locales")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "supported-locale", type = SupportedLocales.class))
+	ListProperty PROP_SUPPORTED_LOCALES = new ListProperty(TYPE, "SupportedLocales");
 
-    ElementList<SupportedLocales> getSupportedLocales();
+	ElementList<SupportedLocales> getSupportedLocales();
 
-    // *** PortletInfo ***
+	// *** PortletInfo ***
 
-    @Type( base = PortletInfo.class )
-    @Label( standard = "Portlet Information" )
-    @XmlBinding( path = "portlet-info" )
-    ImpliedElementProperty PROP_PORTLET_INFO = new ImpliedElementProperty( TYPE, "PortletInfo" ); //$NON-NLS-1$
+	@Type(base = PortletInfo.class)
+	@Label(standard = "Portlet Information")
+	@XmlBinding(path = "portlet-info")
+	ImpliedElementProperty PROP_PORTLET_INFO = new ImpliedElementProperty(TYPE, "PortletInfo");
 
-    PortletInfo getPortletInfo();
+	PortletInfo getPortletInfo();
 
-    // *** PortletPreference ***
+	// *** PortletPreference ***
 
-    @Type( base = PortletPreference.class )
-    @Length( min = 0, max = 1 )
-    @Label( standard = "label" )
-    @XmlBinding( path = "portlet-preferences" )
-    ImpliedElementProperty PROP_PORTLET_PREFERENCE = new ImpliedElementProperty( TYPE, "PortletPreference" ); //$NON-NLS-1$
+	@Type(base = PortletPreference.class)
+	@Length(min = 0, max = 1)
+	@Label(standard = "label")
+	@XmlBinding(path = "portlet-preferences")
+	ImpliedElementProperty PROP_PORTLET_PREFERENCE = new ImpliedElementProperty(TYPE, "PortletPreference");
 
-    PortletPreference getPortletPreference();
+	PortletPreference getPortletPreference();
 
-    // *** Init Params ***
+	// *** Init Params ***
 
-    @Type( base = Param.class )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "init-param", type = Param.class ) )
-    ListProperty PROP_INIT_PARAMS = new ListProperty( TYPE, "InitParams" ); //$NON-NLS-1$
+	@Type(base = Param.class)
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "init-param", type = Param.class))
+	ListProperty PROP_INIT_PARAMS = new ListProperty(TYPE, "InitParams");
 
-    ElementList<Param> getInitParams();
+	ElementList<Param> getInitParams();
 
-    // *** SecurityRoleRefs ***
+	// *** SecurityRoleRefs ***
 
-    @Type( base = SecurityRoleRef.class )
-    @Label( standard = "Security Role Ref" )
-    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "security-role-ref", type = SecurityRoleRef.class ) )
-    ListProperty PROP_SECURITY_ROLE_REFS = new ListProperty( TYPE, "SecurityRoleRefs" ); //$NON-NLS-1$
+	@Type(base = SecurityRoleRef.class)
+	@Label(standard = "Security Role Ref")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "security-role-ref", type = SecurityRoleRef.class))
+	ListProperty PROP_SECURITY_ROLE_REFS = new ListProperty(TYPE, "SecurityRoleRefs");
 
-    ElementList<SecurityRoleRef> getSecurityRoleRefs();
+	ElementList<SecurityRoleRef> getSecurityRoleRefs();
 
-    // *** SupportedProcessingEvents ***
+	// *** SupportedProcessingEvents ***
 
-    @Type( base = EventDefinitionRef.class )
-    @Label( standard = "Supported Processing Events" )
-    @XmlListBinding
-    (
-        mappings = @XmlListBinding.Mapping
-        (
-            element = "supported-processing-event",
-            type = EventDefinitionRef.class
-        )
-    )
-    ListProperty PROP_SUPPORTED_PROCESSING_EVENTS = new ListProperty( TYPE, "SupportedProcessingEvents" ); //$NON-NLS-1$
+	@Type(base = EventDefinitionRef.class)
+	@Label(standard = "Supported Processing Events")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "supported-processing-event", type = EventDefinitionRef.class))
+	ListProperty PROP_SUPPORTED_PROCESSING_EVENTS = new ListProperty(TYPE, "SupportedProcessingEvents");
 
-    ElementList<EventDefinitionRef> getSupportedProcessingEvents();
+	ElementList<EventDefinitionRef> getSupportedProcessingEvents();
 
-    // *** Supported Publishing Events ***
+	// *** Supported Publishing Events ***
 
-    @Type( base = EventDefinitionRef.class )
-    @Label( standard = "Supported Publishing Events" )
-    @XmlListBinding
-    (
-        mappings = @XmlListBinding.Mapping
-        (
-            element = "supported-publishing-event",
-            type = EventDefinitionRef.class
-        )
-    )
-    ListProperty PROP_SUPPORTED_PUBLISHING_EVENTS = new ListProperty( TYPE, "SupportedPublishingEvents" ); //$NON-NLS-1$
+	@Type(base = EventDefinitionRef.class)
+	@Label(standard = "Supported Publishing Events")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "supported-publishing-event", type = EventDefinitionRef.class))
+	ListProperty PROP_SUPPORTED_PUBLISHING_EVENTS = new ListProperty(TYPE, "SupportedPublishingEvents");
 
-    ElementList<EventDefinitionRef> getSupportedPublishingEvents();
+	ElementList<EventDefinitionRef> getSupportedPublishingEvents();
 
-    // *** SupportedPublicRenderParameters ***
+	// *** SupportedPublicRenderParameters ***
 
-    @Type( base = SupportedPublicRenderParameter.class )
-    @Label( standard = "Public Render Parameters" )
-    @XmlListBinding
-    (
-        mappings = @XmlListBinding.Mapping
-        (
-            element = "supported-public-render-parameter",
-            type = SupportedPublicRenderParameter.class
-        )
-    )
-    ListProperty PROP_SUPPORTED_PUBLIC_RENDER_PARAMETERS = new ListProperty( TYPE, "SupportedPublicRenderParameters" ); //$NON-NLS-1$
+	@Type(base = SupportedPublicRenderParameter.class)
+	@Label(standard = "Public Render Parameters")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "supported-public-render-parameter", type = SupportedPublicRenderParameter.class))
+	ListProperty PROP_SUPPORTED_PUBLIC_RENDER_PARAMETERS = new ListProperty(TYPE, "SupportedPublicRenderParameters");
 
-    ElementList<SupportedPublicRenderParameter> getSupportedPublicRenderParameters();
+	ElementList<SupportedPublicRenderParameter> getSupportedPublicRenderParameters();
 
-    // *** ContainerRuntimeOptions ***
+	// *** ContainerRuntimeOptions ***
 
-    @Type( base = ContainerRuntimeOption.class )
-    @Label( standard = "Container Runtime Options" )
-    @XmlListBinding
-    (
-        mappings = @XmlListBinding.Mapping
-        (
-            element = "container-runtime-option",
-            type = ContainerRuntimeOption.class
-        )
-    )
-    ListProperty PROP_CONTAINER_RUNTIME_OPTIONS = new ListProperty( TYPE, "ContainerRuntimeOptions" ); //$NON-NLS-1$
+	@Type(base = ContainerRuntimeOption.class)
+	@Label(standard = "Container Runtime Options")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "container-runtime-option", type = ContainerRuntimeOption.class))
+	ListProperty PROP_CONTAINER_RUNTIME_OPTIONS = new ListProperty(TYPE, "ContainerRuntimeOptions");
 
-    ElementList<ContainerRuntimeOption> getContainerRuntimeOptions();
+	ElementList<ContainerRuntimeOption> getContainerRuntimeOptions();
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.editor;
 
@@ -29,62 +28,61 @@ import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 /**
  * @author Greg Amerson
  */
-public class PluginPackageEditorActionBarContributor extends IDEFormEditorContributor
-{
+public class PluginPackageEditorActionBarContributor extends IDEFormEditorContributor {
 
-    protected IEditorPart activeEditorPart;
+	public PluginPackageEditorActionBarContributor() {
+		super(StringPool.EMPTY);
+	}
 
-    public PluginPackageEditorActionBarContributor()
-    {
-        super( StringPool.EMPTY );
-    }
+	@Override
+	public void setActivePage(IEditorPart part) {
+		if (activeEditorPart == part) {
+			return;
+		}
 
-    @Override
-    public void setActivePage( IEditorPart part )
-    {
+		activeEditorPart = part;
 
-        if( activeEditorPart == part )
-            return;
+		IActionBars actionBars = getActionBars();
 
-        activeEditorPart = part;
+		if (actionBars != null) {
+			ITextEditor editor = (part instanceof ITextEditor) ? (ITextEditor)part : null;
 
-        IActionBars actionBars = getActionBars();
+			actionBars.setGlobalActionHandler(
+				ActionFactory.DELETE.getId(), getAction(editor, ITextEditorActionConstants.DELETE));
+			actionBars.setGlobalActionHandler(
+				ActionFactory.UNDO.getId(), getAction(editor, ITextEditorActionConstants.UNDO));
+			actionBars.setGlobalActionHandler(
+				ActionFactory.REDO.getId(), getAction(editor, ITextEditorActionConstants.REDO));
+			actionBars.setGlobalActionHandler(
+				ActionFactory.CUT.getId(), getAction(editor, ITextEditorActionConstants.CUT));
+			actionBars.setGlobalActionHandler(
+				ActionFactory.COPY.getId(), getAction(editor, ITextEditorActionConstants.COPY));
+			actionBars.setGlobalActionHandler(
+				ActionFactory.PASTE.getId(), getAction(editor, ITextEditorActionConstants.PASTE));
+			actionBars.setGlobalActionHandler(
+				ActionFactory.SELECT_ALL.getId(), getAction(editor, ITextEditorActionConstants.SELECT_ALL));
+			actionBars.setGlobalActionHandler(
+				ActionFactory.FIND.getId(), getAction(editor, ITextEditorActionConstants.FIND));
+			actionBars.setGlobalActionHandler(
+				IDEActionFactory.BOOKMARK.getId(), getAction(editor, IDEActionFactory.BOOKMARK.getId()));
 
-        if( actionBars != null )
-        {
+			actionBars.updateActionBars();
+		}
+	}
 
-            ITextEditor editor = ( part instanceof ITextEditor ) ? (ITextEditor) part : null;
+	/**
+	 * Returns the action registed with the given text editor.
+	 *
+	 * @return IAction or null if editor is null.
+	 */
+	protected IAction getAction(ITextEditor editor, String actionID) {
+		if (editor == null) {
+			return null;
+		}
 
-            actionBars.setGlobalActionHandler(
-                ActionFactory.DELETE.getId(), getAction( editor, ITextEditorActionConstants.DELETE ) );
-            actionBars.setGlobalActionHandler(
-                ActionFactory.UNDO.getId(), getAction( editor, ITextEditorActionConstants.UNDO ) );
-            actionBars.setGlobalActionHandler(
-                ActionFactory.REDO.getId(), getAction( editor, ITextEditorActionConstants.REDO ) );
-            actionBars.setGlobalActionHandler(
-                ActionFactory.CUT.getId(), getAction( editor, ITextEditorActionConstants.CUT ) );
-            actionBars.setGlobalActionHandler(
-                ActionFactory.COPY.getId(), getAction( editor, ITextEditorActionConstants.COPY ) );
-            actionBars.setGlobalActionHandler(
-                ActionFactory.PASTE.getId(), getAction( editor, ITextEditorActionConstants.PASTE ) );
-            actionBars.setGlobalActionHandler(
-                ActionFactory.SELECT_ALL.getId(), getAction( editor, ITextEditorActionConstants.SELECT_ALL ) );
-            actionBars.setGlobalActionHandler(
-                ActionFactory.FIND.getId(), getAction( editor, ITextEditorActionConstants.FIND ) );
-            actionBars.setGlobalActionHandler(
-                IDEActionFactory.BOOKMARK.getId(), getAction( editor, IDEActionFactory.BOOKMARK.getId() ) );
-            actionBars.updateActionBars();
-        }
-    }
+		return editor.getAction(actionID);
+	}
 
-    /**
-     * Returns the action registed with the given text editor.
-     * 
-     * @return IAction or null if editor is null.
-     */
-    protected IAction getAction( ITextEditor editor, String actionID )
-    {
-        return( editor == null ? null : editor.getAction( actionID ) );
-    }
+	protected IEditorPart activeEditorPart;
 
 }

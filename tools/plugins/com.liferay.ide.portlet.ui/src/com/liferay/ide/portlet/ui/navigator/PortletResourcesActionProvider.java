@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.navigator;
 
@@ -29,63 +28,63 @@ import org.eclipse.ui.navigator.ICommonMenuConstants;
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-public class PortletResourcesActionProvider extends CommonActionProvider
-{
+public class PortletResourcesActionProvider extends CommonActionProvider {
 
-    private OpenPortletResourceAction openAction;
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * org.eclipse.ui.actions.ActionGroup#fillActionBars(IActionBars)
+	 */
+	@Override
+	public void fillActionBars(IActionBars actionBars) {
+		if (this._openAction.isEnabled()) {
+			actionBars.setGlobalActionHandler(ICommonActionConstants.OPEN, _openAction);
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.navigator.CommonActionProvider#init(org.eclipse.ui.navigator.ICommonActionExtensionSite)
-     */
-    @Override
-    public void init( ICommonActionExtensionSite aSite )
-    {
-        openAction = new OpenPortletResourceAction();
-    }
+	@Override
+	public void fillContextMenu(IMenuManager menuManager) {
+		ActionContext context = getContext();
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.actions.ActionGroup#setContext(org.eclipse.ui.actions.ActionContext)
-     */
-    @Override
-    public void setContext( ActionContext context )
-    {
-        if( ( context != null ) && ( context.getSelection() instanceof IStructuredSelection ) )
-        {
-            IStructuredSelection selection = (IStructuredSelection) context.getSelection();
-            this.openAction.selectionChanged( selection );
-        }
-        
-        super.setContext( context );
-    }
+		if ((context == null) || context.getSelection().isEmpty()) {
+			return;
+		}
 
-    @Override
-    public void fillContextMenu( IMenuManager menuManager )
-    {
-        ActionContext context = this.getContext();
-        if( ( context == null ) || context.getSelection().isEmpty() )
-        {
-            return;
-        }
+		if (_openAction.isEnabled()) {
+			menuManager.insertAfter(ICommonMenuConstants.GROUP_OPEN, _openAction);
+		}
+	}
 
-        if( this.openAction.isEnabled() )
-        {
-            menuManager.insertAfter( ICommonMenuConstants.GROUP_OPEN, this.openAction );
-        }
-    }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * CommonActionProvider#init(org.eclipse.ui.navigator.
+	 * ICommonActionExtensionSite)
+	 */
+	@Override
+	public void init(ICommonActionExtensionSite aSite) {
+		_openAction = new OpenPortletResourceAction();
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.actions.ActionGroup#fillActionBars(org.eclipse.ui.IActionBars)
-     */
-    @Override
-    public void fillActionBars( IActionBars actionBars )
-    {
-        if( this.openAction.isEnabled() )
-        {
-            actionBars.setGlobalActionHandler( ICommonActionConstants.OPEN, this.openAction );
-        }
-    }
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see org.eclipse.ui.actions.ActionGroup#setContext(org.eclipse.ui.actions.
+	 * ActionContext)
+	 */
+	@Override
+	public void setContext(ActionContext context) {
+		if ((context != null) && (context.getSelection() instanceof IStructuredSelection)) {
+			IStructuredSelection selection = (IStructuredSelection)context.getSelection();
+
+			this._openAction.selectionChanged(selection);
+		}
+
+		super.setContext(context);
+	}
+
+	private OpenPortletResourceAction _openAction;
 
 }

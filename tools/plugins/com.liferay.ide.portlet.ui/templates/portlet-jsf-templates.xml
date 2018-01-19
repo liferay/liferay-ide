@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates>
 
-<template name="%Templates.portlet.jsf.editxhtml.name" description="%Templates.portlet.jsf.editxhtml.desc"
-            id="com.liferay.ide.templates.portlet.jsf.edit" context="jsf_portlet_new"
-            enabled="true">%Templates.portlet.jsf.edit.content</template>
+	<template name="%Templates.portlet.jsf.editxhtml.name" description="%Templates.portlet.jsf.editxhtml.desc"
+			id="com.liferay.ide.templates.portlet.jsf.edit" context="jsf_portlet_new"
+			enabled="true">%Templates.portlet.jsf.edit.content</template>
 
-<template name="%Templates.portlet.jsf.helpxhtml.name" description="%Templates.portlet.jsf.helpxhtml.desc"
-            id="com.liferay.ide.templates.portlet.jsf.help" context="jsf_portlet_new"
-            enabled="true">%Templates.portlet.jsf.help.content</template>
+	<template name="%Templates.portlet.jsf.helpxhtml.name" description="%Templates.portlet.jsf.helpxhtml.desc"
+			id="com.liferay.ide.templates.portlet.jsf.help" context="jsf_portlet_new"
+			enabled="true">%Templates.portlet.jsf.help.content</template>
 
-<template name="%Templates.portlet.jsf.viewxhtml.name" description="%Templates.portlet.jsf.viewxhtml.desc"
-            id="com.liferay.ide.templates.portlet.jsf.view" context="jsf_portlet_new"
-            enabled="true">%Templates.portlet.jsf.view.content</template>
+	<template name="%Templates.portlet.jsf.viewxhtml.name" description="%Templates.portlet.jsf.viewxhtml.desc"
+			id="com.liferay.ide.templates.portlet.jsf.view" context="jsf_portlet_new"
+			enabled="true">%Templates.portlet.jsf.view.content</template>
 
 </templates>

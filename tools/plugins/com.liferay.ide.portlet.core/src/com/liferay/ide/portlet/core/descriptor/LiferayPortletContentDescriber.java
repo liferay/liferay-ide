@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.descriptor;
 
@@ -21,16 +20,13 @@ import com.liferay.ide.core.AbstractDefaultHandler;
 /**
  * @author Greg Amerson
  */
-public class LiferayPortletContentDescriber extends AbstractContentDescriber
-{
+public class LiferayPortletContentDescriber extends AbstractContentDescriber {
 
-    public LiferayPortletContentDescriber()
-    {
-        super();
-    }
+	public LiferayPortletContentDescriber() {
+	}
 
-    protected AbstractDefaultHandler createDefaultHandler()
-    {
-        return new LiferayPortletContentHandler();
-    }
+	protected AbstractDefaultHandler createDefaultHandler() {
+		return new LiferayPortletContentHandler();
+	}
+
 }

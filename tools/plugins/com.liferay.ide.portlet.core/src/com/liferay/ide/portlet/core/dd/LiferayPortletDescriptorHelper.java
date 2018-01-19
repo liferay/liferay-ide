@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.dd;
 
@@ -32,6 +31,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -42,234 +42,223 @@ import org.w3c.dom.NodeList;
  * @author Simon Jiang
  * @author Kuo Zhang
  */
-@SuppressWarnings( "restriction" )
-public class LiferayPortletDescriptorHelper extends LiferayDescriptorHelper
-                                            implements INewPortletClassDataModelProperties
-{
-    public static final String DESCRIPTOR_FILE = ILiferayConstants.LIFERAY_PORTLET_XML_FILE;
+@SuppressWarnings("restriction")
+public class LiferayPortletDescriptorHelper
+	extends LiferayDescriptorHelper implements INewPortletClassDataModelProperties {
 
-    private static final String DESCRIPTOR_TEMPLATE =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE liferay-portlet-app PUBLIC \"-//Liferay//" //$NON-NLS-1$
-        + "DTD Portlet Application {0}//EN\" \"http://www.liferay.com/dtd/liferay-portlet-app_{1}.dtd" //$NON-NLS-1$
-        + "\">\n\n<liferay-portlet-app>\n\u0009<role-mapper>\n\u0009\u0009<role-name>administrator</role-" //$NON-NLS-1$
-        + "name>\n\u0009\u0009<role-link>Administrator</role-link>\n\u0009</role-mapper>\n\u0009<role-" //$NON-NLS-1$
-        + "mapper>\n\u0009\u0009<role-name>guest</role-name>\n\u0009\u0009<role-link>Guest</role-link>\n" //$NON-NLS-1$
-        + "\u0009</role-mapper>\n\u0009<role-mapper>\n\u0009\u0009<role-name>power-user</role-name>\n" //$NON-NLS-1$
-        + "\u0009\u0009<role-link>Power User</role-link>\n\u0009</role-mapper>\n\u0009<role-mapper>\n" //$NON-NLS-1$
-        + "\u0009\u0009<role-name>user</role-name>\n\u0009\u0009<role-link>User</role-link>\n\u0009</" //$NON-NLS-1$
-        + "role-mapper>\n</liferay-portlet-app>"; //$NON-NLS-1$
+	public static final String DESCRIPTOR_FILE = ILiferayConstants.LIFERAY_PORTLET_XML_FILE;
 
-    public LiferayPortletDescriptorHelper()
-    {
-        super();
-    }
+	public LiferayPortletDescriptorHelper() {
+	}
 
-    public LiferayPortletDescriptorHelper( IProject project )
-    {
-        super( project );
-    }
+	public LiferayPortletDescriptorHelper(IProject project) {
+		super(project);
+	}
 
-    @Override
-    protected void addDescriptorOperations()
-    {
-        addDescriptorOperation
-        (
-            new AddNewPortletOperation()
-            {
-                @Override
-                public IStatus addNewPortlet( final IDataModel model )
-                {
-                    IStatus status = Status.OK_STATUS;
+	public IStatus configureLiferayPortletXml(String newPortletName) {
+		IStatus status = Status.OK_STATUS;
 
-                    if( canAddNewPortlet( model ) )
-                    {
-                        final IFile descriptorFile = getDescriptorFile();
+		IFile descriptorFile = getDescriptorFile();
 
-                        if( descriptorFile != null )
-                        {
-                            final DOMModelEditOperation domModelOperation = new DOMModelEditOperation( descriptorFile )
-                            {
-                                protected void createDefaultFile()
-                                {
-                                    createDefaultDescriptor( DESCRIPTOR_TEMPLATE , getDescriptorVersion() );
-                                }
+		if (descriptorFile != null) {
+			DOMModelEditOperation operation = new DOMModelEditOperation(descriptorFile) {
 
-                                protected IStatus doExecute( IDOMDocument document )
-                                {
-                                    return doAddNewPortlet( document, model );
-                                }
-                            };
+				protected IStatus doExecute(IDOMDocument document) {
+					Element rootElement = document.getDocumentElement();
 
-                            status = domModelOperation.execute();
-                        }
-                    }
+					NodeList portletNodes = rootElement.getElementsByTagName("portlet");
 
-                    return status;
-                }
-            }
-        );
+					if (portletNodes.getLength() > 0) {
+						Element lastPortletElement = (Element)portletNodes.item(portletNodes.getLength() - 1);
 
-        addDescriptorOperation
-        (
-            new RemoveAllPortletsOperation()
-            {
-                @Override
-                public IStatus removeAllPortlets()
-                {
-                    return doRemoveAllPortlets();
-                }
-            }
-        );
+						Element portletName = NodeUtil.findChildElement(lastPortletElement, "portlet-name");
 
-        addDescriptorOperation
-        (
-            new RemoveSampleElementsOperation()
-            {
-                @Override
-                public IStatus removeSampleElements()
-                {
-                    return doRemoveAllPortlets();
-                }
-            }
-        );
-    }
+						portletName.replaceChild(document.createTextNode(newPortletName), portletName.getFirstChild());
+					}
 
-    protected boolean canAddNewPortlet( IDataModel model )
-    {
-        return model.getID().contains( "NewPortlet" );
-    }
+					return Status.OK_STATUS;
+				}
 
-    public IStatus configureLiferayPortletXml( final String newPortletName )
-    {
-        IStatus status = Status.OK_STATUS;
+			};
 
-        final IFile descriptorFile = getDescriptorFile();
+			status = operation.execute();
+		}
 
-        if( descriptorFile != null )
-        {
-            final DOMModelEditOperation operation = new DOMModelEditOperation( descriptorFile )
-            {
-                protected IStatus doExecute( IDOMDocument document )
-                {
-                    final Element rootElement = document.getDocumentElement();
+		return status;
+	}
 
-                    final NodeList portletNodes = rootElement.getElementsByTagName( "portlet" );
+	public IFile getDescriptorFile() {
+		return super.getDescriptorFile(DESCRIPTOR_FILE);
+	}
 
-                    if( portletNodes.getLength() > 0 )
-                    {
-                        final Element lastPortletElement = (Element) portletNodes.item( portletNodes.getLength() - 1 );
-                        final Element portletName = NodeUtil.findChildElement( lastPortletElement, "portlet-name" );
-                        portletName.replaceChild( document.createTextNode( newPortletName ), portletName.getFirstChild() );
-                    }
+	@Override
+	protected void addDescriptorOperations() {
+		AddNewPortletOperation apOperation = new AddNewPortletOperation() {
 
-                    return Status.OK_STATUS;
-                }
-            };
+			@Override
+			public IStatus addNewPortlet(IDataModel model) {
+				IStatus status = Status.OK_STATUS;
 
-            status = operation.execute();
-        }
+				if (canAddNewPortlet(model)) {
+					IFile descriptorFile = getDescriptorFile();
 
-        return status;
-    }
+					if (descriptorFile != null) {
+						DOMModelEditOperation domModelOperation = new DOMModelEditOperation(descriptorFile) {
 
-    protected IStatus doAddNewPortlet( IDOMDocument document, final IDataModel model )
-    {
-        // <liferay-portlet-app> element
-        Element rootElement = document.getDocumentElement();
+							protected void createDefaultFile() {
+								createDefaultDescriptor(_DESCRIPTOR_TEMPLATE, getDescriptorVersion());
+							}
 
-        // new <portlet> element
-        Element newPortletElement = document.createElement( "portlet" ); //$NON-NLS-1$
+							protected IStatus doExecute(IDOMDocument document) {
+								return doAddNewPortlet(document, model);
+							}
 
-        NodeUtil.appendChildElement( newPortletElement, "portlet-name", model.getStringProperty( LIFERAY_PORTLET_NAME ) ); //$NON-NLS-1$
+						};
 
-        NodeUtil.appendChildElement( newPortletElement, "icon", model.getStringProperty( ICON_FILE ) ); //$NON-NLS-1$
+						status = domModelOperation.execute();
+					}
+				}
 
-        if( model.getBooleanProperty( ADD_TO_CONTROL_PANEL ) )
-        {
-            String entryCategory = model.getStringProperty( ENTRY_CATEGORY ).replaceAll( "^category\\.", StringPool.EMPTY ); //$NON-NLS-1$
-            NodeUtil.appendChildElement( newPortletElement, "control-panel-entry-category", entryCategory ); //$NON-NLS-1$
-            NodeUtil.appendChildElement( newPortletElement, "control-panel-entry-weight", model.getStringProperty( ENTRY_WEIGHT ) ); //$NON-NLS-1$
+				return status;
+			}
 
-            String javaPackage = model.getStringProperty( JAVA_PACKAGE );
+		};
 
-            if( ! CoreUtil.isNullOrEmpty( javaPackage ) )
-            {
-                javaPackage = javaPackage + StringPool.PERIOD;
-            }
+		addDescriptorOperation(apOperation);
 
-            if( model.getBooleanProperty( CREATE_ENTRY_CLASS ) )
-            {
-                NodeUtil.appendChildElement( newPortletElement, "control-panel-entry-class", javaPackage + //$NON-NLS-1$ //$NON-NLS-2$
-                    model.getStringProperty( ENTRY_CLASS_NAME ) );
-            }
-        }
+		RemoveAllPortletsOperation rapOperation = new RemoveAllPortletsOperation() {
 
-        if( model.getBooleanProperty( ALLOW_MULTIPLE ) )
-        {
-            NodeUtil.appendChildElement(
-                newPortletElement, "instanceable", Boolean.toString( model.getBooleanProperty( ALLOW_MULTIPLE ) ) ); //$NON-NLS-1$
-        }
+			@Override
+			public IStatus removeAllPortlets() {
+				return doRemoveAllPortlets();
+			}
 
-        NodeUtil.appendChildElement( newPortletElement, "header-portlet-css", model.getStringProperty( CSS_FILE ) ); //$NON-NLS-1$
+		};
 
-        NodeUtil.appendChildElement( newPortletElement, "footer-portlet-javascript", model.getStringProperty( JAVASCRIPT_FILE ) ); //$NON-NLS-1$
+		addDescriptorOperation(rapOperation);
 
-        NodeUtil.appendChildElement( newPortletElement, "css-class-wrapper", model.getStringProperty( CSS_CLASS_WRAPPER ) ); //$NON-NLS-1$
+		RemoveSampleElementsOperation rseOperation = new RemoveSampleElementsOperation() {
 
-        // must append this before any role-mapper elements
-        Element firstRoleMapper = null;
+			@Override
+			public IStatus removeSampleElements() {
+				return doRemoveAllPortlets();
+			}
 
-        for( Element child : getChildElements( rootElement ) )
-        {
-            if( child.getNodeName().equals( "role-mapper" ) ) //$NON-NLS-1$
-            {
-                firstRoleMapper = child;
+		};
 
-                break;
-            }
-        }
-        Node newline = document.createTextNode( System.getProperty( "line.separator" ) ); //$NON-NLS-1$
+		addDescriptorOperation(rseOperation);
+	}
 
-        if( firstRoleMapper != null )
-        {
-            rootElement.insertBefore( newPortletElement, firstRoleMapper );
+	protected boolean canAddNewPortlet(IDataModel model) {
+		return model.getID().contains("NewPortlet");
+	}
 
-            rootElement.insertBefore( newline, firstRoleMapper );
-        }
-        else
-        {
-            rootElement.appendChild( newPortletElement );
+	protected IStatus doAddNewPortlet(IDOMDocument document, IDataModel model) {
 
-            rootElement.appendChild( newline );
-        }
+		// <liferay-portlet-app> element
 
-        // format the new node added to the model;
-        FormatProcessorXML processor = new FormatProcessorXML();
+		Element rootElement = document.getDocumentElement();
 
-        processor.formatNode( newPortletElement );
+		// new <portlet> element
 
-        return Status.OK_STATUS;
-    }
+		Element newPortletElement = document.createElement("portlet");
 
-    protected IStatus doRemoveAllPortlets()
-    {
-        final String portletTagName = "portlet";
+		NodeUtil.appendChildElement(newPortletElement, "portlet-name", model.getStringProperty(LIFERAY_PORTLET_NAME));
 
-        DOMModelEditOperation domModelOperation = new DOMModelEditOperation( getDescriptorFile() )
-        {
-            protected IStatus doExecute( IDOMDocument document )
-            {
-                return removeAllElements( document, portletTagName );
-            }
-        };
+		NodeUtil.appendChildElement(newPortletElement, "icon", model.getStringProperty(ICON_FILE));
 
-        IStatus status = domModelOperation.execute();
+		if (model.getBooleanProperty(ADD_TO_CONTROL_PANEL)) {
+			String entryCategory = model.getStringProperty(ENTRY_CATEGORY).replaceAll("^category\\.", StringPool.EMPTY);
 
-        return status;
-    }
+			NodeUtil.appendChildElement(newPortletElement, "control-panel-entry-category", entryCategory);
 
-    public IFile getDescriptorFile()
-    {
-        return super.getDescriptorFile( DESCRIPTOR_FILE );
-    }
+			NodeUtil.appendChildElement(
+				newPortletElement, "control-panel-entry-weight", model.getStringProperty(ENTRY_WEIGHT));
+
+			String javaPackage = model.getStringProperty(JAVA_PACKAGE);
+
+			if (!CoreUtil.isNullOrEmpty(javaPackage)) {
+				javaPackage = javaPackage + StringPool.PERIOD;
+			}
+
+			if (model.getBooleanProperty(CREATE_ENTRY_CLASS)) {
+				NodeUtil.appendChildElement(
+					newPortletElement, "control-panel-entry-class",
+					javaPackage + model.getStringProperty(ENTRY_CLASS_NAME));
+			}
+		}
+
+		if (model.getBooleanProperty(ALLOW_MULTIPLE)) {
+			NodeUtil.appendChildElement(
+				newPortletElement, "instanceable", Boolean.toString(model.getBooleanProperty(ALLOW_MULTIPLE)));
+		}
+
+		NodeUtil.appendChildElement(newPortletElement, "header-portlet-css", model.getStringProperty(CSS_FILE));
+
+		NodeUtil.appendChildElement(
+			newPortletElement, "footer-portlet-javascript", model.getStringProperty(JAVASCRIPT_FILE));
+
+		NodeUtil.appendChildElement(newPortletElement, "css-class-wrapper", model.getStringProperty(CSS_CLASS_WRAPPER));
+
+		// must append this before any role-mapper elements
+
+		Element firstRoleMapper = null;
+
+		for (Element child : getChildElements(rootElement)) {
+			if (child.getNodeName().equals("role-mapper")) {
+				firstRoleMapper = child;
+
+				break;
+			}
+		}
+
+		Node newline = document.createTextNode(System.getProperty("line.separator"));
+
+		if (firstRoleMapper != null) {
+			rootElement.insertBefore(newPortletElement, firstRoleMapper);
+
+			rootElement.insertBefore(newline, firstRoleMapper);
+		}
+		else {
+			rootElement.appendChild(newPortletElement);
+
+			rootElement.appendChild(newline);
+		}
+
+		// format the new node added to the model;
+
+		FormatProcessorXML processor = new FormatProcessorXML();
+
+		processor.formatNode(newPortletElement);
+
+		return Status.OK_STATUS;
+	}
+
+	protected IStatus doRemoveAllPortlets() {
+		String portletTagName = "portlet";
+
+		DOMModelEditOperation domModelOperation = new DOMModelEditOperation(getDescriptorFile()) {
+
+			protected IStatus doExecute(IDOMDocument document) {
+				return removeAllElements(document, portletTagName);
+			}
+
+		};
+
+		IStatus status = domModelOperation.execute();
+
+		return status;
+	}
+
+	private static final String _DESCRIPTOR_TEMPLATE =
+		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE liferay-portlet-app PUBLIC \"-//Liferay//" +
+			"DTD Portlet Application {0}//EN\" \"http://www.liferay.com/dtd/liferay-portlet-app_{1}.dtd" +
+				"\">\n\n<liferay-portlet-app>\n\u0009<role-mapper>\n\u0009\u0009<role-name>administrator</role-" +
+					"name>\n\u0009\u0009<role-link>Administrator</role-link>\n\u0009</role-mapper>\n\u0009<role-" +
+						"mapper>\n\u0009\u0009<role-name>guest</role-name>\n\u0009\u0009<role-link>Guest</role-link>\n" +
+							"\u0009</role-mapper>\n\u0009<role-mapper>\n\u0009\u0009<role-name>power-user</role-name>\n" +
+								"\u0009\u0009<role-link>Power User</role-link>\n\u0009</role-mapper>\n\u0009<role-mapper>\n" +
+									"\u0009\u0009<role-name>user</role-name>\n\u0009\u0009<role-link>User</role-link>\n\u0009</" +
+										"role-mapper>\n</liferay-portlet-app>";
+
 }

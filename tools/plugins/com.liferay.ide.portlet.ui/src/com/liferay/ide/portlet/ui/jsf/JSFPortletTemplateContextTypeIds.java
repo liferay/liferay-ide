@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,56 +10,49 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.jsf;
 
 /**
  * @author Greg Amerson
  */
-public class JSFPortletTemplateContextTypeIds
-{
+public class JSFPortletTemplateContextTypeIds {
 
-    public static final String ALL = getAll();
+	public static final String ALL = _getAll();
 
-    public static final String ATTRIBUTE = getAttribute();
+	public static final String ATTRIBUTE = _getAttribute();
 
-    public static final String ATTRIBUTE_VALUE = getAttributeValue();
+	public static final String ATTRIBUTE_VALUE = _getAttributeValue();
 
-    public static final String NEW = getNew();
+	public static final String NEW = _getNew();
 
-    public static final String NEW_TAG = "tag_new"; //$NON-NLS-1$
+	public static final String NEW_TAG = "tag_new";
 
-    public static final String TAG = getTag();
+	public static final String TAG = _getTag();
 
-    private static String getAll()
-    {
-        return getPrefix() + "_all"; //$NON-NLS-1$
-    }
+	private static String _getAll() {
+		return _getPrefix() + "_all";
+	}
 
-    private static String getAttribute()
-    {
-        return getPrefix() + "_attribute"; //$NON-NLS-1$
-    }
+	private static String _getAttribute() {
+		return _getPrefix() + "_attribute";
+	}
 
-    private static String getAttributeValue()
-    {
-        return getPrefix() + "_attribute_value"; //$NON-NLS-1$
-    }
+	private static String _getAttributeValue() {
+		return _getPrefix() + "_attribute_value";
+	}
 
-    private static String getNew()
-    {
-        return getPrefix() + "_new"; //$NON-NLS-1$
-    }
+	private static String _getNew() {
+		return _getPrefix() + "_new";
+	}
 
-    private static String getPrefix()
-    {
-        return "jsf_portlet"; //$NON-NLS-1$
-    }
+	private static String _getPrefix() {
+		return "jsf_portlet";
+	}
 
-    private static String getTag()
-    {
-        return getPrefix() + "_tag"; //$NON-NLS-1$
-    }
+	private static String _getTag() {
+		return _getPrefix() + "_tag";
+	}
+
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.jsf;
 
@@ -35,127 +34,131 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
  * @author Greg Amerson
  * @author Terry Jia
  */
-@SuppressWarnings( "restriction" )
-public class NewJSFPortletOptionsWizardPage extends NewPortletOptionsWizardPage
-    implements INewJSFPortletClassDataModelProperties
-{
+@SuppressWarnings("restriction")
+public class NewJSFPortletOptionsWizardPage
+	extends NewPortletOptionsWizardPage implements INewJSFPortletClassDataModelProperties {
 
-    protected Button iceFacesRadio;
-    protected Button liferayFacesAlloyRadio;
-    protected Button primeFacesRadio;
-    protected Button richFacesRadio;
-    protected Button standardJSFRadio;
+	public NewJSFPortletOptionsWizardPage(
+		IDataModel dataModel, String pageName, String desc, String title, boolean fragment) {
 
-    public NewJSFPortletOptionsWizardPage(
-        IDataModel dataModel, String pageName, String desc, String title, boolean fragment )
-    {
-        super( dataModel, pageName, desc, title, fragment );
-    }
+		super(dataModel, pageName, desc, title, fragment);
+	}
 
-    @Override
-    protected void createJSPsField( Composite parent )
-    {
-        super.createJSPsField( parent );
+	@Override
+	protected void createJSPsField(Composite parent) {
+		super.createJSPsField(parent);
 
-        createJspsButton.setText( Msgs.createViewFiles );
-        jspLabel.setText( Msgs.viewFolder );
+		createJspsButton.setText(Msgs.createViewFiles);
+		jspLabel.setText(Msgs.viewFolder);
 
-        createJspsButton.addSelectionListener
-        (
-            new SelectionAdapter()
-            {
-                public void widgetSelected( SelectionEvent e )
-                {
-                    final boolean selection = createJspsButton.getSelection();
+		SelectionAdapter adapter = new SelectionAdapter() {
 
-                    standardJSFRadio.setEnabled( selection );
-                    iceFacesRadio.setEnabled( selection );
-                    liferayFacesAlloyRadio.setEnabled( selection );
-                    primeFacesRadio.setEnabled( selection );
-                    richFacesRadio.setEnabled( selection );
-                }
-            }
-        );
-    }
+			public void widgetSelected(SelectionEvent e) {
+				boolean selection = createJspsButton.getSelection();
 
-    @Override
-    protected void createLiferayPortletModesGroup( Composite composite )
-    {
-        // don't create liferay portlet modes section
-    }
+				standardJSFRadio.setEnabled(selection);
+				iceFacesRadio.setEnabled(selection);
+				liferayFacesAlloyRadio.setEnabled(selection);
+				primeFacesRadio.setEnabled(selection);
+				richFacesRadio.setEnabled(selection);
+			}
 
-    @Override
-    protected void createResourceBundleField( Composite parent )
-    {
-        // don't create resource bundle field section
-    }
+		};
 
-    @Override
-    protected Composite createTopLevelComposite( Composite parent )
-    {
-        Composite top = super.createTopLevelComposite( parent );
+		createJspsButton.addSelectionListener(adapter);
+	}
 
-        this.synchHelper.getDataModel().addListener( new IDataModelListener()
-        {
+	@Override
+	protected void createLiferayPortletModesGroup(Composite composite) {
 
-            public void propertyChanged( DataModelEvent event )
-            {
-                if( PORTLET_NAME.equals( event.getPropertyName() ) )
-                {
-                    synchHelper.synchAllUIWithModel();
-                }
-            }
-        } );
+		// don't create liferay portlet modes section
 
-        return top;
-    }
+	}
 
-    @Override
-    protected void createViewTemplateGroup( Composite composite )
-    {
-        final Group group = SWTUtil.createGroup( composite, Msgs.viewTemplate, 1 );
+	@Override
+	protected void createResourceBundleField(Composite parent) {
 
-        GridData gd = new GridData( GridData.FILL_HORIZONTAL );
-        gd.horizontalSpan = 3;
+		// don't create resource bundle field section
 
-        group.setLayoutData( gd );
+	}
 
-        standardJSFRadio = new Button( group, SWT.RADIO );
-        standardJSFRadio.setText( Msgs.standardJSF );
+	@Override
+	protected Composite createTopLevelComposite(Composite parent) {
+		Composite top = super.createTopLevelComposite(parent);
 
-        iceFacesRadio = new Button( group, SWT.RADIO );
-        iceFacesRadio.setText( Msgs.iceFaces );
+		IDataModelListener listener = new IDataModelListener() {
 
-        liferayFacesAlloyRadio = new Button( group, SWT.RADIO );
-        liferayFacesAlloyRadio.setText( Msgs.liferayFacesAlloy );
+			public void propertyChanged(DataModelEvent event) {
+				if (PORTLET_NAME.equals(event.getPropertyName())) {
+					synchHelper.synchAllUIWithModel();
+				}
+			}
 
-        primeFacesRadio = new Button( group, SWT.RADIO );
-        primeFacesRadio.setText( Msgs.primeFaces );
+		};
 
-        richFacesRadio = new Button( group, SWT.RADIO );
-        richFacesRadio.setText( Msgs.richFaces );
+		this.synchHelper.getDataModel().addListener(listener);
 
-        synchHelper.synchRadio( standardJSFRadio, STANDARD_JSF, null );
-        synchHelper.synchRadio( iceFacesRadio, ICE_FACES, null );
-        synchHelper.synchRadio( liferayFacesAlloyRadio, LIFERAY_FACES_ALLOY, null );
-        synchHelper.synchRadio( primeFacesRadio, PRIME_FACES, null );
-        synchHelper.synchRadio( richFacesRadio, RICH_FACES, null );
-    }
+		return top;
+	}
 
-    private static class Msgs extends NLS
-    {
-        public static String createViewFiles;
-        public static String iceFaces;
-        public static String liferayFacesAlloy;
-        public static String primeFaces;
-        public static String richFaces;
-        public static String standardJSF;
-        public static String viewTemplate;
-        public static String viewFolder;
+	@Override
+	protected void createViewTemplateGroup(Composite composite) {
+		Group group = SWTUtil.createGroup(composite, Msgs.viewTemplate, 1);
 
-        static
-        {
-            initializeMessages( NewJSFPortletOptionsWizardPage.class.getName(), Msgs.class );
-        }
-    }
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+
+		gd.horizontalSpan = 3;
+
+		group.setLayoutData(gd);
+
+		standardJSFRadio = new Button(group, SWT.RADIO);
+
+		standardJSFRadio.setText(Msgs.standardJSF);
+
+		iceFacesRadio = new Button(group, SWT.RADIO);
+
+		iceFacesRadio.setText(Msgs.iceFaces);
+
+		liferayFacesAlloyRadio = new Button(group, SWT.RADIO);
+
+		liferayFacesAlloyRadio.setText(Msgs.liferayFacesAlloy);
+
+		primeFacesRadio = new Button(group, SWT.RADIO);
+
+		primeFacesRadio.setText(Msgs.primeFaces);
+
+		richFacesRadio = new Button(group, SWT.RADIO);
+
+		richFacesRadio.setText(Msgs.richFaces);
+
+		synchHelper.synchRadio(standardJSFRadio, STANDARD_JSF, null);
+		synchHelper.synchRadio(iceFacesRadio, ICE_FACES, null);
+		synchHelper.synchRadio(liferayFacesAlloyRadio, LIFERAY_FACES_ALLOY, null);
+		synchHelper.synchRadio(primeFacesRadio, PRIME_FACES, null);
+		synchHelper.synchRadio(richFacesRadio, RICH_FACES, null);
+	}
+
+	protected Button iceFacesRadio;
+	protected Button liferayFacesAlloyRadio;
+	protected Button primeFacesRadio;
+	protected Button richFacesRadio;
+	protected Button standardJSFRadio;
+
+	private static class Msgs extends NLS {
+
+		public static String createViewFiles;
+		public static String iceFaces;
+		public static String liferayFacesAlloy;
+		public static String primeFaces;
+		public static String richFaces;
+		public static String standardJSF;
+		public static String viewFolder;
+		public static String viewTemplate;
+
+		static {
+			initializeMessages(NewJSFPortletOptionsWizardPage.class.getName(), Msgs.class);
+		}
+
+	}
+
 }

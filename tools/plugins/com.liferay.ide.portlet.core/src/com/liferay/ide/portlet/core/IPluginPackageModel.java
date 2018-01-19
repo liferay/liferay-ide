@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core;
 
@@ -21,39 +20,38 @@ import com.liferay.ide.core.model.IModelChangeProvider;
 /**
  * @author Greg Amerson
  */
-public interface IPluginPackageModel extends IModel, IModelChangeProvider
-{
+public interface IPluginPackageModel extends IModel, IModelChangeProvider {
 
-    String PROPERTY_AUTHOR = "author"; //$NON-NLS-1$
+	public String PROPERTY_AUTHOR = "author";
 
-    String PROPERTY_CHANGE_LOG = "change-log"; //$NON-NLS-1$
+	public String PROPERTY_CHANGE_LOG = "change-log";
 
-    String PROPERTY_DEPLOY_EXCLUDE = "deploy-excludes"; //$NON-NLS-1$
+	public String PROPERTY_DEPLOY_EXCLUDE = "deploy-excludes";
 
-    String PROPERTY_LICENSES = "licenses"; //$NON-NLS-1$
+	public String PROPERTY_LICENSES = "licenses";
 
-    String PROPERTY_LIFERAY_VERSIONS = "liferay-versions"; //$NON-NLS-1$
+	public String PROPERTY_LIFERAY_VERSIONS = "liferay-versions";
 
-    String PROPERTY_LONG_DESCRIPTION = "long-description"; //$NON-NLS-1$
+	public String PROPERTY_LONG_DESCRIPTION = "long-description";
 
-    String PROPERTY_MODULE_GROUP_ID = "module-group-id"; //$NON-NLS-1$
+	public String PROPERTY_MODULE_GROUP_ID = "module-group-id";
 
-    String PROPERTY_MODULE_INCREMENTAL_VERSION = "module-incremental-version"; //$NON-NLS-1$
+	public String PROPERTY_MODULE_INCREMENTAL_VERSION = "module-incremental-version";
 
-    String PROPERTY_NAME = "name"; //$NON-NLS-1$
+	public String PROPERTY_NAME = "name";
 
-    String PROPERTY_PAGE_URL = "page-url"; //$NON-NLS-1$
+	public String PROPERTY_PAGE_URL = "page-url";
 
-    String PROPERTY_PORTAL_DEPENDENCY_JARS = "portal-dependency-jars"; //$NON-NLS-1$
+	public String PROPERTY_PORTAL_DEPENDENCY_JARS = "portal-dependency-jars";
 
-    String PROPERTY_PORTAL_DEPENDENCY_TLDS = "portal-dependency-tlds"; //$NON-NLS-1$
+	public String PROPERTY_PORTAL_DEPENDENCY_TLDS = "portal-dependency-tlds";
 
-    String PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS = "required-deployment-contexts"; //$NON-NLS-1$
+	public String PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS = "required-deployment-contexts";
 
-    String PROPERTY_SHORT_DESCRIPTION = "short-description"; //$NON-NLS-1$
+	public String PROPERTY_SHORT_DESCRIPTION = "short-description";
 
-    String PROPERTY_SPEED_FILTERS_ENABLED = "speed-filters-enabled"; //$NON-NLS-1$
+	public String PROPERTY_SPEED_FILTERS_ENABLED = "speed-filters-enabled";
 
-    String PROPERTY_TAGS = "tags"; //$NON-NLS-1$
+	public String PROPERTY_TAGS = "tags";
 
 }

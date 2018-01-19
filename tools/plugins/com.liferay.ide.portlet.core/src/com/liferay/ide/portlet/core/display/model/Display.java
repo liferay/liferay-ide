@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Kamesh Sampath - initial implementation
- *      Gregory Amerson - initial implementation review and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.core.display.model;
 
@@ -30,17 +26,17 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author Kamesh Sampath
  * @author Gregory Amerson
  */
-public interface Display extends Element
-{
-    ElementType TYPE = new ElementType( Display.class );
+public interface Display extends Element {
 
-    // *** Categories ***
+	public ElementType TYPE = new ElementType(Display.class);
 
-    @Type( base = Category.class )
-    @Label( standard = "Categories" )
-    @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "category", type = Category.class ) } )
-    ListProperty PROP_CATEGORIES = new ListProperty( TYPE, "Categories" ); //$NON-NLS-1$
+	// *** Categories ***
 
-    ElementList<Category> getCategories();
+	@Type(base = Category.class)
+	@Label(standard = "Categories")
+	@XmlListBinding(mappings = {@XmlListBinding.Mapping(element = "category", type = Category.class)})
+	public ListProperty PROP_CATEGORIES = new ListProperty(TYPE, "Categories");
+
+	public ElementList<Category> getCategories();
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,11 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *      Kamesh Sampath - initial implementation
- *      Gregory Amerson - initial implementation review and ongoing maintenance
- *******************************************************************************/
+ */
 
 package com.liferay.ide.portlet.ui.editor.internal;
 
@@ -36,57 +32,65 @@ import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
  * @author Kamesh Sampath
  * @author Gregory Amerson
  */
-public class CreatePortletActionHandler extends SapphireActionHandler
-{
+public class CreatePortletActionHandler extends SapphireActionHandler {
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
-     */
-    @Override
-    protected Object run( Presentation context )
-    {
-        PortletApp rootModel = (PortletApp) context.part().getModelElement();
-        Portlet portlet = rootModel.getPortlets().insert();
-        // Open the dialog to capture the mandatory properties
-        final SapphireDialog dialog =
-            new SapphireDialog( ( (SwtPresentation) context ).shell(), portlet, DefinitionLoader.sdef(
-                PortletXmlEditor.class ).dialog() );
+	/**
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * SapphireActionHandler#run(org.eclipse.sapphire.ui.
+	 * SapphireRenderingContext)
+	 */
+	@Override
+	protected Object run(Presentation context) {
+		PortletApp rootModel = (PortletApp)context.part().getModelElement();
 
-        if( dialog != null && Dialog.OK == dialog.open() )
-        {
-            // Select the node
-            final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
-            final MasterDetailsContentNodePart root = page.outline().getRoot();
-            final MasterDetailsContentNodePart node = root.findNode( portlet );
-            if( node != null )
-            {
-                node.select();
-            }
-            try
-            {
-                rootModel.resource().save();
-            }
-            catch( ResourceStoreException e )
-            {
-                // Log it in PorletUI Plugin
-            }
-            return portlet;
-        }
-        else
-        {
-            rootModel.getPortlets().remove( portlet );
-            portlet = null;
-            try
-            {
-                rootModel.resource().save();
-            }
-            catch( ResourceStoreException e )
-            {
-                // Log it in PorletUI Plugin
-            }
-            return null;
-        }
+		Portlet portlet = rootModel.getPortlets().insert();
 
-    }
+		// Open the dialog to capture the mandatory properties
+
+		SapphireDialog dialog = new SapphireDialog(
+			((SwtPresentation)context).shell(), portlet, DefinitionLoader.sdef(PortletXmlEditor.class).dialog());
+
+		if ((dialog != null) && (Dialog.OK == dialog.open())) {
+
+			// Select the node
+
+			MasterDetailsEditorPagePart page = getPart().nearest(MasterDetailsEditorPagePart.class);
+
+			MasterDetailsContentNodePart root = page.outline().getRoot();
+
+			MasterDetailsContentNodePart node = root.findNode(portlet);
+
+			if (node != null) {
+				node.select();
+			}
+
+			try {
+				rootModel.resource().save();
+			}
+			catch (ResourceStoreException rse) {
+
+				// Log it in PorletUI Plugin
+
+			}
+
+			return portlet;
+		}
+		else {
+			rootModel.getPortlets().remove(portlet);
+			portlet = null;
+			try {
+				rootModel.resource().save();
+			}
+			catch (ResourceStoreException rse) {
+
+				// Log it in PorletUI Plugin
+
+			}
+
+			return null;
+		}
+	}
+
 }
