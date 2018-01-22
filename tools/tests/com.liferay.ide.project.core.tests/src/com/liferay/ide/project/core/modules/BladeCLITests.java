@@ -78,9 +78,9 @@ public class BladeCLITests
 
         Domain domain = Domain.domain( bladeFile );
 
-        assertTrue( domain.getBundleVersion().startsWith( "2" ) );
+        assertTrue( domain.getBundleVersion().startsWith( "3" ) );
 
-        assertFalse( domain.getBundleVersion().startsWith( "3" ) );
+        assertFalse( domain.getBundleVersion().startsWith( "2" ) );
     }
 
     @Test
@@ -160,6 +160,7 @@ public class BladeCLITests
     }
 
     @Test
+    @Ignore("will add it back when blade help command back")
     public void bladeCLIExecute() throws Exception
     {
         String[] output = BladeCLI.execute( "help" );

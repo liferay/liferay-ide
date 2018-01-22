@@ -67,12 +67,6 @@ public class MavenArchetypePreferenceInitializer extends AbstractPreferenceIniti
 			LiferayMavenCore.PREF_ARCHETYPE_GAV_VAADIN, "com.vaadin:vaadin-archetype-liferay-portlet:7.4.0.alpha2");
 		defaultPrefs.put(
 			LiferayMavenCore.PREF_ARCHETYPE_GAV_WEB, "com.liferay.maven.archetypes:liferay-web-archetype:6.2.5");
-
-		// new project template archetypes
-
-		defaultPrefs.put(
-			LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_WORKSPACE,
-			"com.liferay:com.liferay.project.templates.workspace:1.0.7");
 	}
 
 }

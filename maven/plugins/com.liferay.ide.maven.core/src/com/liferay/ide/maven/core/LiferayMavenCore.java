@@ -73,8 +73,6 @@ public class LiferayMavenCore extends Plugin {
 
 	public static final String PREF_ARCHETYPE_GAV_WEB = "archetype-gav-web";
 
-	public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_WORKSPACE = "archetype-project-template-workspace";
-
 	public static final String PREF_DISABLE_CUSTOM_JSP_VALIDATION = "disable-custom-jsp-validation";
 
 	// The key of disable customJspValidation checking

@@ -14,20 +14,13 @@
 
 package com.liferay.ide.maven.core;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.BladeCLI;
+import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import org.apache.maven.archetype.catalog.Archetype;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -35,105 +28,44 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.project.IProjectConfigurationManager;
-import org.eclipse.m2e.core.project.ProjectImportConfiguration;
-import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.sapphire.platform.PathBridge;
 
 /**
  * @author Joye Luo
  * @author Andy Wu
  */
-@SuppressWarnings("restriction")
 public class LiferayMavenWorkspaceProjectProvider
 	extends LiferayMavenProjectProvider implements NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> {
 
 	@Override
 	public IStatus createNewProject(NewLiferayWorkspaceOp op, IProgressMonitor monitor) throws CoreException {
-		IStatus retval = Status.OK_STATUS;
-
-		IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
-
 		IPath location = PathBridge.create(op.getLocation().content());
+		String wsName = op.getWorkspaceName().toString();
 
-		String projectName = op.getWorkspaceName().content();
+		IPath wsLocation = location.append(wsName);
 
-		String groupId = projectName;
-		String artifactId = projectName;
+		StringBuilder sb = new StringBuilder();
 
-		String version = "1.0.0-SNAPSHOT";
-		String javaPackage = "";
+		sb.append("-b ");
+		sb.append("\"");
+		sb.append(wsLocation.toFile().getAbsolutePath());
+		sb.append("\" ");
+		sb.append("init ");
+		sb.append("-b ");
+		sb.append("maven");
 
-		String archetypeArtifactId = getData("archetypeGAV", String.class, "").get(0);
-		Archetype archetype = new Archetype();
-		String[] gav = archetypeArtifactId.split(":");
-
-		String archetypeVersion = gav[gav.length - 1];
-
-		archetype.setGroupId(gav[0]);
-		archetype.setArtifactId(gav[1]);
-
-		archetype.setVersion(archetypeVersion);
-
-		Properties properties = new Properties();
-
-		ResolverConfiguration resolverConfig = new ResolverConfiguration();
-
-		ProjectImportConfiguration configuration = new ProjectImportConfiguration(resolverConfig);
-
-		List<IProject> newProjects = projectConfigurationManager.createArchetypeProjects(
-			location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor);
-
-		if ((newProjects == null) || newProjects.isEmpty()) {
-			retval = LiferayMavenCore.createErrorStatus("Unable to create liferay workspace project from archetype.");
+		try {
+			BladeCLI.execute(sb.toString());
 		}
-		else {
-			for (IProject newProject : newProjects) {
-				String[] gradleFiles = {"build.gradle", "settings.gradle", "gradle.properties"};
-
-				for (String path : gradleFiles) {
-					IFile gradleFile = newProject.getFile(path);
-
-					if (FileUtil.exists(gradleFile)) {
-						gradleFile.delete(true, monitor);
-					}
-				}
-			}
+		catch (BladeCLIException bclie) {
+			return ProjectCore.createErrorStatus(bclie);
 		}
 
+		String workspaceLocation = location.append(wsName).toPortableString();
 		boolean initBundle = op.getProvisionLiferayBundle().content();
+		String bundleUrl = op.getBundleUrl().content(false);
 
-		if (retval.isOK() && initBundle) {
-			IProject workspaceProject = ProjectUtil.getProject(projectName);
-			String bundleUrl = op.getBundleUrl().content();
-
-			MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder(workspaceProject);
-
-			mavenProjectBuilder.initBundle(workspaceProject, bundleUrl, monitor);
-		}
-
-		return retval;
-	}
-
-	@Override
-	public <T> List<T> getData(String key, Class<T> type, Object... params) {
-		if ("archetypeGAV".equals(key) && type.equals(String.class)) {
-			List<T> retval = new ArrayList<>();
-
-			String gav = LiferayMavenCore.getPreferenceString(
-				LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_WORKSPACE, "");
-
-			if (CoreUtil.empty(gav)) {
-				gav = "com.liferay:com.liferay.project.templates.workspace:1.0.2";
-			}
-
-			retval.add(type.cast(gav));
-
-			return retval;
-		}
-
-		return super.getData(key, type, params);
+		return importProject(workspaceLocation, monitor, initBundle, bundleUrl);
 	}
 
 	@Override
