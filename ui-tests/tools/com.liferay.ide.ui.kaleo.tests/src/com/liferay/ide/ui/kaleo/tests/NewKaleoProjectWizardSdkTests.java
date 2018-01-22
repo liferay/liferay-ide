@@ -48,6 +48,12 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayKaleoWorkflowWizard();
 
+		wizardAction.newKaleoWorkflow.openSelectProjectDialog();
+
+		dialogAction.prepareText(projectName);
+
+		dialogAction.confirm();
+
 		wizardAction.next();
 
 		wizardAction.next();
@@ -77,9 +83,15 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayKaleoWorkflowWizard();
 
+		wizardAction.newKaleoWorkflow.openSelectProjectDialog();
+
+		dialogAction.prepareText(projectName);
+
+		dialogAction.confirm();
+
 		wizardAction.next();
 
-		wizardAction.newKaleoWorkflow.selectAssignResourceActions();
+		wizardAction.chooseAssignmentType.selectAssignResourceActions();
 
 		wizardAction.next();
 
@@ -110,9 +122,15 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayKaleoWorkflowWizard();
 
+		wizardAction.newKaleoWorkflow.openSelectProjectDialog();
+
+		dialogAction.prepareText(projectName);
+
+		dialogAction.confirm();
+
 		wizardAction.next();
 
-		wizardAction.newKaleoWorkflow.selectAssignRoleById();
+		wizardAction.chooseAssignmentType.selectAssignRoleById();
 
 		wizardAction.next();
 
@@ -143,9 +161,15 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayKaleoWorkflowWizard();
 
+		wizardAction.newKaleoWorkflow.openSelectProjectDialog();
+
+		dialogAction.prepareText(projectName);
+
+		dialogAction.confirm();
+
 		wizardAction.next();
 
-		wizardAction.newKaleoWorkflow.selectAssignRoleType();
+		wizardAction.chooseAssignmentType.selectAssignRoleType();
 
 		wizardAction.next();
 
@@ -178,9 +202,15 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayKaleoWorkflowWizard();
 
+		wizardAction.newKaleoWorkflow.openSelectProjectDialog();
+
+		dialogAction.prepareText(projectName);
+
+		dialogAction.confirm();
+
 		wizardAction.next();
 
-		wizardAction.newKaleoWorkflow.selectAssignScriptedAssignment();
+		wizardAction.chooseAssignmentType.selectAssignScriptedAssignment();
 
 		wizardAction.next();
 
@@ -211,9 +241,15 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayKaleoWorkflowWizard();
 
+		wizardAction.newKaleoWorkflow.openSelectProjectDialog();
+
+		dialogAction.prepareText(projectName);
+
+		dialogAction.confirm();
+
 		wizardAction.next();
 
-		wizardAction.newKaleoWorkflow.selectAssignUser();
+		wizardAction.chooseAssignmentType.selectAssignUser();
 
 		wizardAction.next();
 
@@ -243,6 +279,12 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 		viewAction.switchKaleoDesignerPerspective();
 
 		wizardAction.openNewLiferayKaleoWorkflowWizard();
+
+		wizardAction.newKaleoWorkflow.openSelectProjectDialog();
+
+		dialogAction.prepareText(projectName);
+
+		dialogAction.confirm();
 
 		wizardAction.finish();
 

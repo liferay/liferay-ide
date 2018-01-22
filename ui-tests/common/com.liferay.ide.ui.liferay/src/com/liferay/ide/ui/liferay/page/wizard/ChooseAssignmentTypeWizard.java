@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.liferay.page.wizard;
 
-import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
+import com.liferay.ide.ui.swtbot.page.Radio;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
@@ -22,14 +22,34 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 /**
  * @author Haoyi Sun
  */
-public class NewKaleoWorkflowWizard extends Wizard {
+public class ChooseAssignmentTypeWizard extends Wizard {
 
-	public NewKaleoWorkflowWizard(SWTBot bot) {
+	public ChooseAssignmentTypeWizard(SWTBot bot) {
 		super(bot);
 	}
 
-	public ToolbarButtonWithTooltip getBrowseBtn() {
-		return new ToolbarButtonWithTooltip(getShell().bot(), BROWSE);
+	public Radio getAssignCreator() {
+		return new Radio(getShell().bot(), 0);
+	}
+
+	public Radio getAssignResourceActions() {
+		return new Radio(getShell().bot(), 5);
+	}
+
+	public Radio getAssignRoleById() {
+		return new Radio(getShell().bot(), 2);
+	}
+
+	public Radio getAssignRoleType() {
+		return new Radio(getShell().bot(), 1);
+	}
+
+	public Radio getAssignScriptedAssignment() {
+		return new Radio(getShell().bot(), 3);
+	}
+
+	public Radio getAssignUser() {
+		return new Radio(getShell().bot(), 4);
 	}
 
 }

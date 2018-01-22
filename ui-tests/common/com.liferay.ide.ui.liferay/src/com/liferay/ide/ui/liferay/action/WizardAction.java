@@ -21,6 +21,7 @@ import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignRoleTypeWizard;
 import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignScriptWizard;
 import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignUserWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewFragmentFilesWizard;
+import com.liferay.ide.ui.liferay.page.wizard.ChooseAssignmentTypeWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewKaleoWorkflowWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewLiferayComponentWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewRuntime62Wizard;
@@ -220,6 +221,7 @@ public class WizardAction extends UIAction {
 	public NewFragmentWizardAction newFragment = new NewFragmentWizardAction();
 	public NewFragmentFilesWizardAction newFragmentFiles = new NewFragmentFilesWizardAction();
 	public NewFragmentInfoWizardAction newFragmentInfo = new NewFragmentInfoWizardAction();
+	public ChooseAssignmentTypeWizardAction chooseAssignmentType = new ChooseAssignmentTypeWizardAction();
 	public NewKaleoWorkflowWizardAction newKaleoWorkflow = new NewKaleoWorkflowWizardAction();
 	public NewLiferayComponentWizardAction newLiferayComponent = new NewLiferayComponentWizardAction();
 	public NewLiferayJsfWizardAction newLiferayJsf = new NewLiferayJsfWizardAction();
@@ -233,6 +235,36 @@ public class WizardAction extends UIAction {
 	public NewRuntime62WizardAction newRuntime62 = new NewRuntime62WizardAction();
 	public NewServerWizardAction newServer = new NewServerWizardAction();
 	public SetSdkLocationWizardAction setSdkLocation = new SetSdkLocationWizardAction();
+
+	public class ChooseAssignmentTypeWizardAction {
+
+		public void selectAssignCreator() {
+			_chooseAssignmentTypeWizard.getAssignCreator().click();
+		}
+
+		public void selectAssignResourceActions() {
+			_chooseAssignmentTypeWizard.getAssignResourceActions().click();
+		}
+
+		public void selectAssignRoleById() {
+			_chooseAssignmentTypeWizard.getAssignRoleById().click();
+		}
+
+		public void selectAssignRoleType() {
+			_chooseAssignmentTypeWizard.getAssignRoleType().click();
+		}
+
+		public void selectAssignScriptedAssignment() {
+			_chooseAssignmentTypeWizard.getAssignScriptedAssignment().click();
+		}
+
+		public void selectAssignUser() {
+			_chooseAssignmentTypeWizard.getAssignUser().click();
+		}
+
+		private final ChooseAssignmentTypeWizard _chooseAssignmentTypeWizard = new ChooseAssignmentTypeWizard(bot);
+
+	}
 
 	public class ImportLiferayWorkspaceWizardAction {
 
@@ -430,28 +462,8 @@ public class WizardAction extends UIAction {
 
 	public class NewKaleoWorkflowWizardAction {
 
-		public void selectAssignCreator() {
-			_newKaleoWorkflowWizard.getAssignCreator().click();
-		}
-
-		public void selectAssignResourceActions() {
-			_newKaleoWorkflowWizard.getAssignResourceActions().click();
-		}
-
-		public void selectAssignRoleById() {
-			_newKaleoWorkflowWizard.getAssignRoleById().click();
-		}
-
-		public void selectAssignRoleType() {
-			_newKaleoWorkflowWizard.getAssignRoleType().click();
-		}
-
-		public void selectAssignScriptedAssignment() {
-			_newKaleoWorkflowWizard.getAssignScriptedAssignment().click();
-		}
-
-		public void selectAssignUser() {
-			_newKaleoWorkflowWizard.getAssignUser().click();
+		public void openSelectProjectDialog() {
+			_newKaleoWorkflowWizard.getBrowseBtn().click();
 		}
 
 		private final NewKaleoWorkflowWizard _newKaleoWorkflowWizard = new NewKaleoWorkflowWizard(bot);

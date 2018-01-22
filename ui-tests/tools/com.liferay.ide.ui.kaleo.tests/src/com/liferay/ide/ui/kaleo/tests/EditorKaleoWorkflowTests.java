@@ -50,6 +50,12 @@ public class EditorKaleoWorkflowTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayKaleoWorkflowWizard();
 
+		wizardAction.newKaleoWorkflow.openSelectProjectDialog();
+
+		dialogAction.prepareText(projectName);
+
+		dialogAction.confirm();
+
 		wizardAction.finish();
 
 		editorAction.kaleoWorkflow.switchTabSource();
