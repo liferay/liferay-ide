@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.Platform;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -71,6 +72,7 @@ public class CodeUpgradeToolTests extends SwtbotBase {
 		Assert.assertTrue(_codeUpgradeView.getBuildServicesBtn().isEnabled());
 	}
 
+	@Ignore("unstable need more research")
 	@Test
 	public void testCustomJsp() {
 		viewAction.codeUpgrade.switchGear(7);
