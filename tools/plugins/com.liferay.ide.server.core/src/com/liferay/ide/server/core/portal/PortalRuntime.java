@@ -20,6 +20,7 @@ import com.liferay.ide.server.core.LiferayServerCore;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -391,7 +392,14 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
                 }
             }
         }
-
+        if( getVMInstall().getInstallLocation().list()!=null )
+        {
+            String[] fileInRoot = getVMInstall().getInstallLocation().list();
+            if( !Arrays.asList( fileInRoot ).contains( "jre" ) )
+            {
+                return new Status( IStatus.WARNING, LiferayServerCore.PLUGIN_ID, 0, Msgs.warningjre, null );
+            }
+        }
         return Status.OK_STATUS;
     }
 
@@ -401,6 +409,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
         public static String errorJRE70;
         public static String errorPortalVersion70;
         public static String errorPortalNotExisted;
+        public static String warningjre;
 
         static
         {
