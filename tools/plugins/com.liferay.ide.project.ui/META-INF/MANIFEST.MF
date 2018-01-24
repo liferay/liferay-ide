@@ -68,7 +68,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.sapphire.platform;bundle-version="[9,10)",
  org.eclipse.jdt.ui,
  org.eclipse.ltk.core.refactoring,
- biz.aQute.bndlib;bundle-version="[4,5)",
+ biz.aQute.bndlib;bundle-version="[3.4,4.0)",
  org.eclipse.wst.xml.core,
  org.eclipse.wst.ws
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
