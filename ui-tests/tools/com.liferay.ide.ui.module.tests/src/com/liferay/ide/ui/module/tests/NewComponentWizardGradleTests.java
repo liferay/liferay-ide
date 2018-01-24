@@ -83,6 +83,8 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 			viewAction.project.visibleFileTry(
 				firstProjectName, "src/main/java", "content", "FirstComponentGradlePortlet.java"));
 
+		editorAction.close();
+
 		wizardAction.openNewLiferayComponentClassWizard();
 
 		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
@@ -178,6 +180,8 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 			viewAction.project.visibleFileTry(
 				projectName, "src/main/java", "content", "ShortcutComponentGradleMVCPortlet.java"));
 
+		editorAction.close();
+
 		viewAction.project.openComponentClassWizard(projectName);
 
 		wizardAction.newLiferayComponent.prepare(REST_UPCASE);
@@ -187,6 +191,8 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		Assert.assertTrue(
 			viewAction.project.visibleFileTry(
 				projectName, "src/main/java", "content", "ShortcutComponentGradleRestService.java"));
+
+		editorAction.close();
 
 		wizardAction.openNewBtnLiferayComponentClassWizard();
 

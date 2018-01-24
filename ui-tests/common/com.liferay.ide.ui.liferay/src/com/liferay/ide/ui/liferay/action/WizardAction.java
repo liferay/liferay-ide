@@ -15,13 +15,13 @@
 package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
+import com.liferay.ide.ui.liferay.page.wizard.ChooseAssignmentTypeWizard;
 import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignActionWizard;
 import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignRoleByIdWizard;
 import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignRoleTypeWizard;
 import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignScriptWizard;
 import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignUserWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewFragmentFilesWizard;
-import com.liferay.ide.ui.liferay.page.wizard.ChooseAssignmentTypeWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewKaleoWorkflowWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewLiferayComponentWizard;
 import com.liferay.ide.ui.liferay.page.wizard.NewRuntime62Wizard;
@@ -211,6 +211,7 @@ public class WizardAction extends UIAction {
 		menu.click();
 	}
 
+	public ChooseAssignmentTypeWizardAction chooseAssignmentType = new ChooseAssignmentTypeWizardAction();
 	public ImportLiferayWorkspaceWizardAction importLiferayWorkspace = new ImportLiferayWorkspaceWizardAction();
 	public ImportProjectWizardAction importProject = new ImportProjectWizardAction();
 	public MakeTaskAssignActionWizardAction makeTaskAssignAction = new MakeTaskAssignActionWizardAction();
@@ -221,7 +222,6 @@ public class WizardAction extends UIAction {
 	public NewFragmentWizardAction newFragment = new NewFragmentWizardAction();
 	public NewFragmentFilesWizardAction newFragmentFiles = new NewFragmentFilesWizardAction();
 	public NewFragmentInfoWizardAction newFragmentInfo = new NewFragmentInfoWizardAction();
-	public ChooseAssignmentTypeWizardAction chooseAssignmentType = new ChooseAssignmentTypeWizardAction();
 	public NewKaleoWorkflowWizardAction newKaleoWorkflow = new NewKaleoWorkflowWizardAction();
 	public NewLiferayComponentWizardAction newLiferayComponent = new NewLiferayComponentWizardAction();
 	public NewLiferayJsfWizardAction newLiferayJsf = new NewLiferayJsfWizardAction();
@@ -618,10 +618,6 @@ public class WizardAction extends UIAction {
 
 		public void openSelectServiceDialog() {
 			_newModuleInfoWizard.getBrowseBtn().click();
-		}
-
-		public void prepare(String packageName) {
-			_newModuleInfoWizard.getPackageName().setText(packageName);
 		}
 
 		public void prepare(String className, String packageName) {
