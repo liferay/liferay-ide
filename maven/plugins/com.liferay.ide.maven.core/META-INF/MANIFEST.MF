@@ -26,7 +26,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.debug.core,
  org.eclipse.jdt.launching,
  com.liferay.ide.server.core,
- biz.aQute.bndlib;bundle-version="[4,5)",
+ biz.aQute.bndlib;bundle-version="[3.4,4.0)",
  com.liferay.ide.project.core,
  org.json
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
