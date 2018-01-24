@@ -17,7 +17,6 @@ package com.liferay.ide.server.tomcat.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.AbstractPortalBundle;
 
@@ -26,8 +25,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -77,35 +74,6 @@ public class PortalTomcatBundle extends AbstractPortalBundle
     public IPath getAppServerLibGlobalDir()
     {
         return getAppServerDir().append( "/lib/ext" );
-    }
-
-    @Override
-    protected int getDefaultJMXRemotePort()
-    {
-        int retval = 8099;
-
-        final IPath setenv = this.bundlePath.append( "bin/setenv." + getShellExtension() );
-        final String contents = FileUtil.readContents( setenv.toFile() );
-        String port = null;
-
-        if( contents != null )
-        {
-            final Matcher matcher =
-                Pattern.compile( ".*-Dcom.sun.management.jmxremote.port(\\s*)=(\\s*)([0-9]+).*" ).matcher(
-                    contents );
-
-            if( matcher.matches() )
-            {
-                port = matcher.group( 3 );
-            }
-        }
-
-        if( port != null )
-        {
-            retval = Integer.parseInt( port );
-        }
-
-        return retval;
     }
 
     @Override
@@ -209,10 +177,6 @@ public class PortalTomcatBundle extends AbstractPortalBundle
         args.add( "-Dcatalina.base=" + "\"" + this.bundlePath.toPortableString() + "\"" );
         args.add( "-Dcatalina.home=" + "\"" + this.bundlePath.toPortableString() + "\"" );
         // TODO use dynamic attach API
-        args.add( "-Dcom.sun.management.jmxremote" );
-        args.add( "-Dcom.sun.management.jmxremote.authenticate=false" );
-        args.add( "-Dcom.sun.management.jmxremote.port=" + getJmxRemotePort() );
-        args.add( "-Dcom.sun.management.jmxremote.ssl=false" );
         args.add( "-Dfile.encoding=UTF8" );
         args.add( "-Djava.endorsed.dirs=" + "\"" + this.bundlePath.append( "endorsed" ).toPortableString() + "\"" );
         args.add( "-Djava.io.tmpdir=" + "\"" + this.bundlePath.append( "temp" ).toPortableString() + "\"" );

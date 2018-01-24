@@ -19,8 +19,8 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.gogo.GogoBundleHelper;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -180,33 +180,16 @@ public class PortalPublishTask extends PublishTaskDelegate
 
     private boolean isDeployed(IServer server , PortalServerBehavior serverBehavior , String bsn )
     {
-        BundleSupervisor supervisor = null;
-
         boolean isDeployed = false;
 
         if( server.getServerState() == IServer.STATE_STARTED )
         {
             try
             {
-                supervisor = serverBehavior.createBundleSupervisor();
-
-                isDeployed = supervisor.getBundleId( bsn ) > 0 ? true: false;
+                isDeployed = new GogoBundleHelper().getBundleId( bsn ) > 0;
             }
             catch( Exception e )
             {
-            }
-            finally
-            {
-                if( supervisor != null )
-                {
-                    try
-                    {
-                        supervisor.close();
-                    }
-                    catch( IOException e )
-                    {
-                    }
-                }
             }
         }
 

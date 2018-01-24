@@ -19,8 +19,6 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.server.core.LiferayServerCore;
 
-import java.io.IOException;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -34,6 +32,7 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Gregory Amerson
  * @author Andy Wu
+ * @author Terry Jia
  */
 public class BundlePublishFullRemove extends BundlePublishOperation
 {
@@ -120,19 +119,6 @@ public class BundlePublishFullRemove extends BundlePublishOperation
         catch( Exception e )
         {
             retval = LiferayServerCore.error( "Unable to uninstall bundle " + symbolicName, e );
-        }
-        finally
-        {
-            if( bundleSupervisor != null )
-            {
-                try
-                {
-                    bundleSupervisor.close();
-                }
-                catch( IOException e )
-                {
-                }
-            }
         }
 
         if( retval == null )

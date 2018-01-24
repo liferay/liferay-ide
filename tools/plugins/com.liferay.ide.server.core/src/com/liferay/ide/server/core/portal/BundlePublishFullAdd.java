@@ -110,9 +110,9 @@ public class BundlePublishFullAdd extends BundlePublishOperation
                 {
                     IPath outputJar = bundleProject.getOutputBundle( cleanBuildNeeded(), monitor );
 
-                    if( outputJar != null && outputJar.toFile().exists() )
+                    if( FileUtil.exists(outputJar) )
                     {
-                        if( this.server.getServerState() == IServer.STATE_STARTED )
+                        if( server.getServerState() == IServer.STATE_STARTED )
                         {
                             monitor.subTask(
                                 "Remotely deploying " + module.getName() + " to Liferay module framework..." );
@@ -180,7 +180,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
     {
         IStatus retval = null;
 
-        if( output != null && output.toFile().exists() )
+        if( FileUtil.exists(output) )
         {
             BundleSupervisor bundleSupervisor = null;
 
@@ -206,19 +206,6 @@ public class BundlePublishFullAdd extends BundlePublishOperation
             {
                 retval = LiferayServerCore.error( "Unable to deploy bundle remotely " +
                     output.toPortableString(), e );
-            }
-            finally
-            {
-                if( bundleSupervisor != null )
-                {
-                    try
-                    {
-                        bundleSupervisor.close();
-                    }
-                    catch( IOException e1 )
-                    {
-                    }
-                }
             }
         }
         else

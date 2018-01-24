@@ -14,8 +14,6 @@
 
 package com.liferay.ide.project.core.modules;
 
-import aQute.remote.api.Agent;
-
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
 import com.liferay.ide.server.core.portal.BundleSupervisor;
 import com.liferay.ide.server.core.portal.PortalServerBehavior;
@@ -58,36 +56,24 @@ public class ServiceCommand {
 			return _getServiceFromTargetPlatform();
 		}
 
-		try {
-			PortalServerBehavior serverBehavior = (PortalServerBehavior)_server.loadAdapter(
-				PortalServerBehavior.class, null);
+		PortalServerBehavior serverBehavior = (PortalServerBehavior)_server.loadAdapter(
+			PortalServerBehavior.class, null);
 
-			supervisor = serverBehavior.createBundleSupervisor();
+		supervisor = serverBehavior.createBundleSupervisor();
 
-			if (supervisor == null) {
-				return _getServiceFromTargetPlatform();
-			}
-
-			if (!supervisor.getAgent().redirect(Agent.COMMAND_SESSION)) {
-				return _getServiceFromTargetPlatform();
-			}
-
-			if (_serviceName == null) {
-				String[] services = _getServices(supervisor);
-
-				result = new ServiceContainer(Arrays.asList(services));
-			}
-			else {
-				String[] serviceBundle = _getServiceBundle(_serviceName, supervisor);
-
-				result = new ServiceContainer(serviceBundle[0], serviceBundle[1], serviceBundle[2]);
-			}
+		if (supervisor == null) {
+			return _getServiceFromTargetPlatform();
 		}
-		finally {
-			if (supervisor != null) {
-				supervisor.getAgent().redirect(Agent.NONE);
-				supervisor.close();
-			}
+
+		if (_serviceName == null) {
+			String[] services = _getServices(supervisor);
+
+			result = new ServiceContainer(Arrays.asList(services));
+		}
+		else {
+			String[] serviceBundle = _getServiceBundle(_serviceName, supervisor);
+
+			result = new ServiceContainer(serviceBundle[0], serviceBundle[1], serviceBundle[2]);
 		}
 
 		return result;
@@ -99,15 +85,17 @@ public class ServiceCommand {
 		String bundleName;
 		String bundleVersion;
 
-		supervisor.getAgent().stdin("packages " + serviceName.substring(0, serviceName.lastIndexOf(".")));
+		// String result  = supervisor.packages("packages " + serviceName.substring(0, serviceName.lastIndexOf(".")));
+		String result = "";
 
-		if (supervisor.getOutInfo().startsWith("No exported packages")) {
-			supervisor.getAgent().stdin("services (objectClass=" + serviceName + ") | grep \"Registered by bundle:\" ");
+		if (result.startsWith("No exported packages")) {
+			//result = supervisor.run("services (objectClass=" + serviceName + ") | grep \"Registered by bundle:\" ");
+			result = "";
 
-			serviceBundleInfo = _parseRegisteredBundle(supervisor.getOutInfo());
+			serviceBundleInfo = _parseRegisteredBundle(result);
 		}
 		else {
-			serviceBundleInfo = _parseSymbolicName(supervisor.getOutInfo());
+			serviceBundleInfo = _parseSymbolicName(result);
 		}
 
 		bundleName = serviceBundleInfo[0];
@@ -151,9 +139,7 @@ public class ServiceCommand {
 	}
 
 	private String[] _getServices(BundleSupervisor supervisor) throws Exception {
-		supervisor.getAgent().stdin("services");
-
-		return _parseService(supervisor.getOutInfo());
+		return _parseService("");
 	}
 
 	private String[] _parseRegisteredBundle(String serviceName) {

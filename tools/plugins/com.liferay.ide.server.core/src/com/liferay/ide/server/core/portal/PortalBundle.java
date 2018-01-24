@@ -33,8 +33,6 @@ public interface PortalBundle extends ILiferayPortal
 
     IPath getAppServerLibGlobalDir();
 
-    int getJmxRemotePort();
-
     IPath getLiferayHome();
 
     IPath getAppServerDir();

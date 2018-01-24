@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.modules;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.core.portal.PortalServer;
 
+import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.sapphire.FilteredListener;
@@ -73,9 +74,13 @@ public class ServicePossibleValuesService extends PossibleValuesService {
 			}
 
 			try {
-				ServiceContainer serviceWrapperList = new ServiceWrapperCommand(runningServer).execute();
+				// TODO use target platform instead soon
 
-				values.addAll(serviceWrapperList.getServiceList());
+				// ServiceContainer serviceWrapperList = new ServiceWrapperCommand(runningServer).execute();
+
+				// values.addAll(serviceWrapperList.getServiceList());
+
+				values.addAll(Collections.emptySet());
 			}
 			catch (Exception e) {
 				ProjectCore.logError("Get service wrapper list error.", e);
@@ -93,11 +98,15 @@ public class ServicePossibleValuesService extends PossibleValuesService {
 			}
 
 			try {
-				ServiceCommand serviceCommand = new ServiceCommand(runningServer);
+				// TODO use target platform instead soon
 
-				ServiceContainer allServices = serviceCommand.execute();
+				// ServiceCommand serviceCommand = new ServiceCommand(runningServer);
 
-				values.addAll(allServices.getServiceList());
+				// ServiceContainer allServices = serviceCommand.execute();
+
+				// values.addAll(allServices.getServiceList());
+
+				values.addAll(Collections.emptySet());
 			}
 			catch (Exception e) {
 				ProjectCore.logError("Get services list error. ", e);

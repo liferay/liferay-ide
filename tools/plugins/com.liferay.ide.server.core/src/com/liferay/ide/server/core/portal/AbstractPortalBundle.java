@@ -130,8 +130,6 @@ public abstract class AbstractPortalBundle implements PortalBundle
 
     protected abstract IPath getAppServerLibDir();
 
-    protected abstract int getDefaultJMXRemotePort();
-
     @Override
     public String[] getHookSupportedProperties()
     {
@@ -183,12 +181,6 @@ public abstract class AbstractPortalBundle implements PortalBundle
         }
 
         return null;
-    }
-
-    @Override
-    public int getJmxRemotePort()
-    {
-        return getDefaultJMXRemotePort();
     }
 
     @Override
