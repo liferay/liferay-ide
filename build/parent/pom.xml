@@ -43,7 +43,7 @@
         <eclipse-xml-search-site>https://dl.bintray.com/gamerson/eclipse-wtp-xml-search/</eclipse-xml-search-site>
         <tern-site>http://oss.opensagres.fr/tern.repository/1.2.1/</tern-site>
         <bndtools-site>https://bndtools.ci.cloudbees.com/job/bndtools.master/lastSuccessfulBuild/artifact/build/generated/p2/</bndtools-site>
-        <gradle-site>http://download.eclipse.org/buildship/updates/e46/releases/2.x/2.2.0.v20171211-1401/</gradle-site>
+        <gradle-site>http://download.eclipse.org/buildship/updates/e46/snapshots/2.x/2.2.1.v20180123-2310-s/</gradle-site>
         <tycho-m2e-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.9.0/N/0.9.0.201412222151/</tycho-m2e-site>
         <swtbot-site>http://download.eclipse.org/technology/swtbot/releases/2.6.0/</swtbot-site>
         <sapphire-site>http://download.eclipse.org/sapphire/9.1/repository/</sapphire-site>
