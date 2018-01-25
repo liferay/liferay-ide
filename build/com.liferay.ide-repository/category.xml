@@ -15,15 +15,6 @@
     <feature id="org.eclipse.buildship" version="0.0.0">
         <category name="liferay-ide" />
     </feature>
-    <feature id="org.eclipse.m2e.feature" version="0.0.0">
-        <category name="liferay-ide" />
-    </feature>
-    <feature id="org.eclipse.m2e.wtp.feature" version="0.0.0">
-        <category name="liferay-ide" />
-    </feature>
-    <feature id="org.eclipse.m2e.wtp.jsf.feature" version="0.0.0">
-        <category name="liferay-ide" />
-    </feature>
 
     <category-def name="liferay-ide" label="Liferay IDE">
         <description>

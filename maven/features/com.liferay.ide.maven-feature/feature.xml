@@ -35,7 +35,7 @@
    <requires>
       <import feature="org.eclipse.m2e.wtp.feature" version="1.3.2" match="greaterOrEqual"/>
       <import feature="org.eclipse.m2e.wtp.jsf.feature" version="1.3.2" match="greaterOrEqual"/>
-      <import feature="org.eclipse.m2e.feature" version="1.9.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.m2e.feature" version="1.8.0" match="greaterOrEqual"/>
       <import feature="org.sonatype.m2e.mavenarchiver.feature" version="0.17" match="greaterOrEqual"/>
       <import feature="com.liferay.ide.eclipse.tools" version="3.0.0" match="greaterOrEqual"/>
       <import feature="org.sonatype.tycho.m2e.feature" version="0.8.0" match="greaterOrEqual"/>
