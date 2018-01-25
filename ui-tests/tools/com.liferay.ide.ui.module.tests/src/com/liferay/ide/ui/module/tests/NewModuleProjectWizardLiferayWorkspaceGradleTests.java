@@ -16,11 +16,9 @@ package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.LiferayWorkspaceGradleSupport;
-import com.liferay.ide.ui.liferay.base.TimestampSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -35,17 +33,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createActivator() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-activator-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, ACTIVATOR);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -58,17 +50,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createApi() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-api-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, API);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -81,17 +67,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createContentTargetingReport() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-content-targeting-report-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, CONTENT_TARGETING_REPORT);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -104,17 +84,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createContentTargetingRule() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-content-targeting-rule-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, CONTENT_TARGETING_RULE);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -127,17 +101,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createContentTargetingTrackingAction() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-content-targeting-tracking-action-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, CONTENT_TARGETING_TRACKING_ACTION);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -150,17 +118,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createControlMenuEntry() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-control-menu-entry-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, CONTROL_MENU_ENTRY);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -173,17 +135,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createFormField() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-form-field-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, FORM_FIELD);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -196,17 +152,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createPanelApp() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-panel-app-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, PANEL_APP);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -219,17 +169,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createPortletConfigurationIcon() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-portlet-configuration-icon-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, PORTLET_CONFIGURATION_ICON);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -242,17 +186,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createPortletProvider() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-portlet-provider-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, PORTLET_PROVIDER);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -265,17 +203,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createPortletToolbarContributor() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-portlet-toolbar-contributor-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, PORTLET_TOOLBAR_CONTRIBUTOR);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -288,17 +220,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createRest() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-rest-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, REST);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -311,17 +237,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createService() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-service-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, SERVICE);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -334,17 +254,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createServiceWrapper() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-service-wrapper-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, SERVICE_WRAPPER);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -357,17 +271,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createSimulationPanelEntry() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-simulation-panel-entry-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, SIMULATION_PANEL_ENTRY);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -380,17 +288,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createTemplateContextContributor() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-template-context-contributor-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -403,7 +305,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createThemeContributor() {
-		String projectName = timestamp.getName();
+		String projectName = "test-theme-contributor-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -420,17 +322,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createWarHook() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-war-hook-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, WAR_HOOK);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -443,17 +339,11 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 	@Test
 	public void createWarMvcPortlet() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-war-mvc-portlet-in-lrws-gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareGradle(projectName, WAR_MVC_PORTLET);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -463,8 +353,5 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 
 		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
-
-	@Rule
-	public TimestampSupport timestamp = new TimestampSupport(bot);
 
 }

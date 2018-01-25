@@ -16,11 +16,10 @@ package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.LiferayWorkspaceMavenSupport;
-import com.liferay.ide.ui.liferay.base.TimestampSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
-import org.junit.Rule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -34,17 +33,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createActivator() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-activator-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, ACTIVATOR);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -66,17 +59,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createApi() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-api-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, API);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -98,17 +85,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createContentTargetingReport() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-content-targeting-report-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, CONTENT_TARGETING_REPORT);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -130,17 +111,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createContentTargetingRule() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-content-targeting-rule-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, CONTENT_TARGETING_RULE);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -162,17 +137,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createContentTargetingTrackingAction() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-content-targeting-tracking-action-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, CONTENT_TARGETING_TRACKING_ACTION);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -194,17 +163,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createControlMenuEntry() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-control-menu-entry-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, CONTROL_MENU_ENTRY);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -226,17 +189,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createFormField() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-form-field-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, FORM_FIELD);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -258,17 +215,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createPanelApp() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-panel-app-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, PANEL_APP);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -290,17 +241,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createPortletConfigurationIcon() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-portlet-configuration-icon-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, PORTLET_CONFIGURATION_ICON);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -322,17 +267,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createPortletProvider() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-portlet-provider-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, PORTLET_PROVIDER);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -354,17 +293,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createPortletToolbarContributor() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-portlet-toolbar-contributor-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, PORTLET_TOOLBAR_CONTRIBUTOR);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -386,17 +319,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createRest() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-rest-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, REST);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -418,17 +345,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createService() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-service-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, SERVICE);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -450,17 +371,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createServiceWrapper() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-service-wrapper-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, SERVICE_WRAPPER);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -482,17 +397,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createSimulationPanelEntry() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-simulation-panel-entry-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, SIMULATION_PANEL_ENTRY);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -514,17 +423,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createTemplateContextContributor() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-template-context-contributor-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -544,9 +447,10 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
 
+	@Ignore
 	@Test
 	public void createThemeContributor() {
-		String projectName = timestamp.getName();
+		String projectName = "test-theme-contributor-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -572,17 +476,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createWarHook() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-war-hook-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, WAR_HOOK);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -604,17 +502,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createWarMvcPortlet() {
-		String projectName = timestamp.getName();
-
-		String packageName = "com.liferay.ide.test";
+		String projectName = "test-war-mvc-portlet-in-lrws-maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
 		wizardAction.newModule.prepareMaven(projectName, WAR_MVC_PORTLET);
-
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.prepare(packageName);
 
 		wizardAction.finish();
 
@@ -633,8 +525,5 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
-
-	@Rule
-	public TimestampSupport timestamp = new TimestampSupport(bot);
 
 }
