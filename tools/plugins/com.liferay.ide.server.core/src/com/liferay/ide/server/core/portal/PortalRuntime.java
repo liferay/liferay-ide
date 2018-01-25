@@ -14,11 +14,9 @@
  *******************************************************************************/
 package com.liferay.ide.server.core.portal;
 
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.core.LiferayServerCore;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -37,6 +35,10 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.model.RuntimeDelegate;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 /**
  * @author Gregory Amerson
@@ -377,7 +379,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
             return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorJRE, null );
         }
 
-        if( portalBundle.getVersion().startsWith( "7" ) )
+        if( portalBundle.getVersion().startsWith( "8" ) )
         {
             IVMInstall vmInstall = getVMInstall();
 
@@ -387,8 +389,29 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 
                 if( javaVersion != null && !isVMMinimumVersion( javaVersion, 107 ) )
                 {
-                    return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorJRE70, null );
+                    return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorJRE80, null );
                 }
+            }
+        }
+
+        File jdkInstallLocation = getVMInstall().getInstallLocation();
+        if( jdkInstallLocation != null )
+        {
+
+            String rootPath = jdkInstallLocation.getAbsolutePath();
+            String javacPath = null;
+            if( CoreUtil.isWindows() )
+            {
+                javacPath = rootPath + File.separator + "bin" + File.separator + "javac.exe";
+            }
+            if( CoreUtil.isLinux() || CoreUtil.isMac() )
+            {
+                javacPath = rootPath + File.separator + "bin" + File.separator + "javac";
+            }
+            File javac = new File( javacPath );
+            if( !FileUtil.exists( javac ) )
+            {
+                return new Status( IStatus.WARNING, LiferayServerCore.PLUGIN_ID, 0, Msgs.warningjre, null );
             }
         }
 
@@ -398,9 +421,10 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
     private static class Msgs extends NLS
     {
         public static String errorJRE;
-        public static String errorJRE70;
+        public static String errorJRE80;
         public static String errorPortalVersion70;
         public static String errorPortalNotExisted;
+        public static String warningjre;
 
         static
         {
