@@ -14,6 +14,11 @@
  *******************************************************************************/
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.core.LiferayServerCore;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -34,11 +39,6 @@ import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.model.RuntimeDelegate;
-
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.core.LiferayServerCore;
 
 /**
  * @author Gregory Amerson
@@ -379,7 +379,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
             return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorJRE, null );
         }
 
-        if( portalBundle.getVersion().startsWith( "8" ) )
+        if( portalBundle.getVersion().startsWith( "7" ) )
         {
             IVMInstall vmInstall = getVMInstall();
 
@@ -387,7 +387,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
             {
                 String javaVersion = ( (IVMInstall2) vmInstall ).getJavaVersion();
 
-                if( javaVersion != null && !isVMMinimumVersion( javaVersion, 107 ) )
+                if( javaVersion != null && !isVMMinimumVersion( javaVersion, 108 ) )
                 {
                     return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorJRE80, null );
                 }
@@ -395,20 +395,24 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
         }
 
         File jdkInstallLocation = getVMInstall().getInstallLocation();
+
         if( jdkInstallLocation != null )
         {
-
             String rootPath = jdkInstallLocation.getAbsolutePath();
-            String javacPath = null;
+            StringBuilder javacPath = new StringBuilder();
+            javacPath.append( rootPath ).append( File.separator ).append( "bin" ).append( File.separator );
+
             if( CoreUtil.isWindows() )
             {
-                javacPath = rootPath + File.separator + "bin" + File.separator + "javac.exe";
+                javacPath.append( "javac.exe" );
             }
+
             if( CoreUtil.isLinux() || CoreUtil.isMac() )
             {
-                javacPath = rootPath + File.separator + "bin" + File.separator + "javac";
+                javacPath.append( "javac" );
             }
-            File javac = new File( javacPath );
+            File javac = new File( javacPath.toString() );
+
             if( !FileUtil.exists( javac ) )
             {
                 return new Status( IStatus.WARNING, LiferayServerCore.PLUGIN_ID, 0, Msgs.warningjre, null );
