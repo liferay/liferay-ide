@@ -30,14 +30,14 @@
         <tycho-packaging-format>yyyyMMddHHmm'-m1'</tycho-packaging-format>
         <tycho-version>1.0.0</tycho-version>
         <tycho-extras-version>1.0.0</tycho-extras-version>
-        <eclipse-site>http://download.eclipse.org/releases/photon/</eclipse-site>
+        <eclipse-site>http://download.eclipse.org/releases/oxygen/</eclipse-site>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20170919201930/repository/</orbit-site>
         <tm-site>http://download.eclipse.org/tm/terminal/updates/4.2/</tm-site>
         <liferay-ide-swtbot-testing-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
         <osgi-bundles-site>https://repos-ide.wedeploy.io/liferay-ide-osgi-deps/</osgi-bundles-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
-        <m2e-site>https://repos-ide.wedeploy.io/m2e/1.9.0.20180110-1815/</m2e-site>
+        <m2e-site>http://download.eclipse.org/technology/m2e/releases/</m2e-site>
         <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/releases/oxygen/1.3/1.3.2.20170517-2015/</m2e-wtp-site>
         <m2e-archiver-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.2/N/0.17.2.201606141937/</m2e-archiver-site>
         <eclipse-xml-search-site>https://dl.bintray.com/gamerson/eclipse-wtp-xml-search/</eclipse-xml-search-site>
