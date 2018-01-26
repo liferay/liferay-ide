@@ -44,6 +44,10 @@ public class NewPortletProjectSdkTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
+		wizardAction.openNewLiferayPortletWizard();
+
+		wizardAction.finish();
+
 		viewAction.project.closeAndDelete(projectName);
 	}
 
