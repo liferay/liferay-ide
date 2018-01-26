@@ -358,13 +358,13 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 	@Override
 	public void createSpecialDescriptor(Composite parent, int style) {
 		final StringBuilder descriptorBuilder = new StringBuilder(
-			"This step will help you to find breaking changes for Java, JSP, XML, and properties files. ");
+			"This step will help you find breaking changes for Java, JSP, XML, and properties files. ");
 
 		descriptorBuilder.append(
-			"It will not support to find the front-end codes( e.g., javascript, css).\n For service builder, you ");
+			"It does not support front-end code (e.g., JavaScript, CSS).\n For service builder, you ");
 		descriptorBuilder.append(
-			"just need to modify the changes on xxxServiceImp.java, xxxFinder.java, xxxModel.java. ");
-		descriptorBuilder.append("Others will be resovled in the Build Service step.");
+			"just need to modify changes in *ServiceImp.java, *Finder.java, and *Model.java classes. ");
+		descriptorBuilder.append("Others will be resolved in the Build Service step.");
 
 		String url = "";
 

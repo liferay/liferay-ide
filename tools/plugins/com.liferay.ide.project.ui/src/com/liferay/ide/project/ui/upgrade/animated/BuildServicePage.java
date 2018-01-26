@@ -197,11 +197,11 @@ public class BuildServicePage extends Page {
 
 	public void createSpecialDescriptor(Composite parent, int style) {
 		final StringBuilder descriptorBuilder = new StringBuilder(
-			"In this step, we will delete some legacy servicebuilder related files");
+			"In this step, we will delete some legacy service builder related files");
 
-		descriptorBuilder.append(" and re-run build-service on servicebuilder projects.\n");
+		descriptorBuilder.append(" and re-run build-service on service builder projects.\n");
 		descriptorBuilder.append(
-			"Note: Please make sure the default installed jre is JDK 8 (Preferences-Java-Installed JREs).");
+			"Note: Please make sure the default installed JRE is JDK 8 (Preferences -> Java -> Installed JREs).");
 
 		String url = "";
 

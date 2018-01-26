@@ -251,14 +251,14 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 			"The first step will help you convert a Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace.\n"
 		);
 
-		extensionDecBuilder.append("Click the \"import\" button to import your project into Eclipse workspace");
-		extensionDecBuilder.append("(this process maybe need 5-10 mins for bundle init).\n");
+		extensionDecBuilder.append("Click the \"Import Projects\" button to import your project into the Eclipse workspace ");
+		extensionDecBuilder.append("(this process maybe need 5-10 minutes for bundle initialization).\n");
 		extensionDecBuilder.append("Note:\n");
 		extensionDecBuilder.append(
-			"       In order to save time, downloading 7.0 ivy cache locally could be a good choice to upgrade to liferay plugins sdk 7. \n"
+			"       To save time, downloading the 7.0 ivy cache locally could be a good choice when upgrading to Liferay Plugins SDK 7. \n"
 		);
 		extensionDecBuilder.append(
-			"       Theme and ext projects will be ignored for that we do not support to upgrade them in this tool currently. \n"
+			"       Theme and Ext projects will be ignored since this tool does not support them currently. \n"
 		);
 
 		Label image = new Label(fillLayoutComposite, SWT.WRAP);
