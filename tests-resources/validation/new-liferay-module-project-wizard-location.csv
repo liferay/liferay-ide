@@ -1,0 +1,18 @@
+.,"." is not an absolute path.,linux
+..,".." is not an absolute path.,linux
+##,"##" is not an absolute path.,linux
+*,"*" is not an absolute path.,linux
+,Location must be specified.,linux
+workspace,"workspace" is not an absolute path.,linux
+Z:\workspace,"Z:\workspace" is not an absolute path.,linux
+D:\,"D:\" is not an absolute path.,linux
+123:,"123:" is not an absolute path.,linux
+.,"." is not an absolute path.,win32
+..,".." is not an absolute path.,win32
+##,"##" is not an absolute path.,win32
+*,"*" is not a valid path,win32
+,Location must be specified.,win32
+workspace,"workspace" is not an absolute path.,win32
+Z:\workspace,Cannot create project content at "Z:\workspace",win32
+D:\,Enter a name and choose a template to use for a new Liferay module.,win32
+123:,"123:" is not an absolute path.,win32
