@@ -304,7 +304,7 @@ public class CustomJspPage extends Page {
 
 	public void createSpecialDescriptor(Composite parent, int style) {
 		final String descriptor =
-			"This step will help you to convert projects with custom jsp hooks to modules or fragments.";
+			"This step will help you to convert projects with custom JSP hooks to modules or fragments.";
 		String url = "";
 
 		Link link = SWTUtil.createHyperLink(this, style, descriptor, 1, url);

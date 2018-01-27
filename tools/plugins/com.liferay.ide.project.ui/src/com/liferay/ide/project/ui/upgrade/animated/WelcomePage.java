@@ -35,7 +35,7 @@ public class WelcomePage extends Page {
 
 	public void createSpecialDescriptor(Composite parent, int style) {
 		final StringBuilder desriptors = new StringBuilder(
-			"The Liferay code upgrade tool will help you to upgrade Liferay 6.2 plugin ");
+			"The Liferay Code Upgrade Tool helps you upgrade Liferay 6.2 plugin ");
 
 		desriptors.append("projects into Liferay 7.0 projects.\n\n");
 		desriptors.append("The key functions are described below:\n");
@@ -46,15 +46,15 @@ public class WelcomePage extends Page {
 		desriptors.append("       4. Update Layout Template files from 6.2 to 7.0 format\n");
 		desriptors.append("       5. Automatically Convert Custom JSP Hooks to OSGi modules\n\n");
 		desriptors.append("Note:\n");
-		desriptors.append("       It is highly recommended that you back-up copies of your original plugin");
+		desriptors.append("       It is highly recommended that you back-up copies of your original plugin ");
 		desriptors.append("files before continuing.\n");
 		desriptors.append("       Ext projects are not supported to upgrade in this tool currently.\n");
 		desriptors.append("       For more details, please see <a>From Liferay 6 to Liferay 7</a>.\n\n");
 		desriptors.append("How to use this tool:\n");
 		desriptors.append("       In order to move through various upgrade steps,\n");
 		desriptors.append(
-			"       use left, right, 鉁�, X and clicking on each gear to move between the upgrade steps.\n");
-		desriptors.append("       When you are finished with an upgrade step, mark it done by selecting 鉁� button,\n");
+			"       use left, right, ✓, X and clicking on each gear to move between the upgrade steps.\n");
+		desriptors.append("       When you are finished with an upgrade step, mark it done by selecting ✓ button,\n");
 		desriptors.append("       or, if it is not complete or you want to come back to it later, mark it with an X.");
 
 		String url = "https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/from-liferay-6-to-liferay-7";
