@@ -40,13 +40,13 @@ public class DeployModuleGradleTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.servers.openAddAndRemoveDialog(tomcat.getServerStartedLabel());
+		viewAction.servers.openAddAndRemoveDialog(tomcat.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(projectName);
 
 		dialogAction.confirm(FINISH);
 
-		viewAction.servers.visibleModuleTry(tomcat.getServerStartedLabel(), projectName);
+		viewAction.servers.visibleModuleTry(tomcat.getStartedLabel(), projectName);
 
 		jobAction.waitForConsoleContent(
 			tomcat.getServerName(), "STARTED " + projectName.replace('-', '.') + "_", 20 * 1000);

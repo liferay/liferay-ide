@@ -440,6 +440,12 @@ public class WizardAction extends UIAction {
 			_newFragmentWizard.getNewRuntimeBtn().click();
 		}
 
+		public void prepare(String projectName) {
+			_prepare(projectName);
+
+			ide.sleep();
+		}
+
 		public void prepareGradle(String projectName) {
 			_prepare(projectName, StringPool.BLANK, GRADLE);
 
@@ -452,6 +458,10 @@ public class WizardAction extends UIAction {
 
 		public void prepareMaven(String projectName) {
 			_prepare(projectName, StringPool.BLANK, MAVEN);
+		}
+
+		private void _prepare(String projectName) {
+			_newFragmentWizard.getProjectName().setText(projectName);
 		}
 
 		private void _prepare(String projectName, String location, String buildType) {

@@ -93,11 +93,11 @@ public class TomcatSupport extends SupportBase implements ServerSupport {
 		return "tomcat-support";
 	}
 
-	public String getServerStartedLabel() {
+	public String getStartedLabel() {
 		return getServerName() + STARTED_LABEL;
 	}
 
-	public String getServerStoppedLabel() {
+	public String getStoppedLabel() {
 		return getServerName() + STOPPED_LABEL;
 	}
 
