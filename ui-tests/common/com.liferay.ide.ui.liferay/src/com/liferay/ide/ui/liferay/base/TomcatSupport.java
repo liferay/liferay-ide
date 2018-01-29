@@ -23,7 +23,7 @@ import org.junit.Assert;
 /**
  * @author Terry Jia
  */
-public class TomcatSupport extends SupportBase implements ServerSupport {
+public class TomcatSupport extends ServerSupport {
 
 	public TomcatSupport(SWTWorkbenchBot bot) {
 		super(bot);
@@ -38,6 +38,8 @@ public class TomcatSupport extends SupportBase implements ServerSupport {
 		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(getServerName());
 
 		dialogAction.preferences.confirm();
+
+		super.after();
 	}
 
 	@Override
@@ -87,18 +89,6 @@ public class TomcatSupport extends SupportBase implements ServerSupport {
 		wizardAction.newServer.prepare(getServerName());
 
 		wizardAction.finish();
-	}
-
-	public String getServerName() {
-		return "tomcat-support";
-	}
-
-	public String getStartedLabel() {
-		return getServerName() + STARTED_LABEL;
-	}
-
-	public String getStoppedLabel() {
-		return getServerName() + STOPPED_LABEL;
 	}
 
 }

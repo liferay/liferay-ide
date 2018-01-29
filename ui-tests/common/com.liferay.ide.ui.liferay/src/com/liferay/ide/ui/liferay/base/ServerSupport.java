@@ -14,13 +14,41 @@
 
 package com.liferay.ide.ui.liferay.base;
 
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+
 /**
  * @author Terry Jia
  */
-public interface ServerSupport {
+public class ServerSupport extends SupportBase {
 
-	public static final String STARTED_LABEL = "  [Started]";
+	public ServerSupport(SWTWorkbenchBot bot) {
+		super(bot);
+	}
 
-	public static final String STOPPED_LABEL = "  [Stopped]";
+	@Override
+	public void after() {
+		_timestamp = 0;
+	}
+
+	@Override
+	public void before() {
+		super.before();
+
+		_timestamp = System.currentTimeMillis();
+	}
+
+	public String getServerName() {
+		return "tomcat" + _timestamp;
+	}
+
+	public String getStartedLabel() {
+		return getServerName() + "  [Started]";
+	}
+
+	public String getStoppedLabel() {
+		return getServerName() + "  [Stopped]";
+	}
+
+	private long _timestamp = 0;
 
 }
