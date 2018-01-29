@@ -15,6 +15,7 @@
 
 package com.liferay.ide.maven.core.tests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -29,9 +30,48 @@ import org.junit.Test;
 
 /**
  * @author Andy Wu
+ * @author Joye Luo
  */
 public class NewMavenLiferayWorkspaceOpTests
 {
+
+    @Test
+    public void testNewMavenLiferayWorkspaceInitBundle() throws Exception
+    {
+        NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
+
+        String projectName = "test-liferay-workspace";
+
+        IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
+
+        op.setWorkspaceName( projectName );
+        op.setUseDefaultLocation( false );
+        op.setLocation( workspaceLocation.toPortableString() );
+        op.setProjectProvider( "maven-liferay-workspace" );
+        op.setProvisionLiferayBundle( true );
+
+        String bundleUrl = op.getBundleUrl().content( true );
+
+        assertEquals(
+            "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip",
+            bundleUrl );
+
+        op.execute( new ProgressMonitor() );
+
+        String projectLocation = workspaceLocation.append( projectName ).toPortableString();
+
+        File pomFile = new File( projectLocation, "pom.xml" );
+
+        assertTrue( pomFile.exists() );
+
+        File bundleDir = new File( projectLocation, "bundles" );
+
+        assertTrue( bundleDir.exists() );
+
+        String content = FileUtil.readContents( pomFile );
+
+        assertTrue( content.contains("com.liferay.portal.tools.bundle.support") );
+    }
 
     @Test
     public void testNewMavenLiferayWorkspaceOp() throws Exception

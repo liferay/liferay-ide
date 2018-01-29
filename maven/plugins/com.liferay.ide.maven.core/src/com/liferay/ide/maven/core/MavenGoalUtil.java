@@ -109,4 +109,42 @@ public class MavenGoalUtil {
 		return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_WSDD;
 	}
 
+	public static String getMavenInitBundleGoal(IProject project) {
+		try {
+			String pluginKey =
+				ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_GROUP_ID + ":" +
+					ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_ARTIFACT_ID;
+
+			Plugin plugin = MavenUtil.getPlugin(
+				MavenUtil.getProjectFacade(project), pluginKey, new NullProgressMonitor());
+
+			if (plugin == null) {
+				pluginKey =
+					ILiferayMavenConstants.NEW_LIFERAY_MAVEN_PLUGINS_GROUP_ID + ":" +
+						ILiferayMavenConstants.LIFERAY_MAVEN_PLUGINS_BUNDLE_SUPPORT_KEY;
+
+				plugin = MavenUtil.getPlugin(MavenUtil.getProjectFacade(project), pluginKey, new NullProgressMonitor());
+			}
+
+			return getMavenInitBundleGoal(plugin);
+		}
+		catch (CoreException ce) {
+			LiferayMavenCore.logError(ce);
+		}
+
+		return ILiferayMavenConstants.PLUGIN_GOAL_INIT_BUNDLE;
+	}
+
+	public static String getMavenInitBundleGoal(Plugin plugin) {
+		if (plugin == null) {
+			return "init-bundle";
+		}
+
+		if (CoreUtil.compareVersions(new Version(plugin.getVersion()), new Version("2.0.2")) >= 0) {
+			return "bundle-support:init";
+		}
+
+		return ILiferayMavenConstants.PLUGIN_GOAL_INIT_BUNDLE;
+	}
+
 }

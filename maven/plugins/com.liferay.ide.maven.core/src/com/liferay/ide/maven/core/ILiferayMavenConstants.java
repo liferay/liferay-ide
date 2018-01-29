@@ -109,6 +109,8 @@ public interface ILiferayMavenConstants {
 
 	public String PLUGIN_GOAL_DIRECT_DEPLOY = LIFERAY_MOJO_PREFIX + "direct-deploy";
 
+	public String PLUGIN_GOAL_INIT_BUNDLE = LIFERAY_MOJO_PREFIX + "init-bundle";
+
 	public String PLUGIN_GOAL_THEME_MERGE = LIFERAY_MOJO_PREFIX + "theme-merge";
 
 	public String PORTLET_PLUGIN_TYPE = DEFAULT_PLUGIN_TYPE;
