@@ -288,6 +288,7 @@ public class ValidationComponentTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(projectName2);
 	}
 
+	@Ignore("ignore to wait target platform way")
 	@Test
 	public void checkServiceWrapperTemplate() {
 		String projectName = "test-service-wrapper-template";

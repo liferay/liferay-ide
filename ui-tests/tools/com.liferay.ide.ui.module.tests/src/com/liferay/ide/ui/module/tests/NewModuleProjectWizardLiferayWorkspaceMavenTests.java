@@ -344,6 +344,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
 
+	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createService() {
 		String projectName = "test-service-in-lrws-maven";
@@ -370,6 +371,7 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
 
+	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createServiceWrapper() {
 		String projectName = "test-service-wrapper-in-lrws-maven";

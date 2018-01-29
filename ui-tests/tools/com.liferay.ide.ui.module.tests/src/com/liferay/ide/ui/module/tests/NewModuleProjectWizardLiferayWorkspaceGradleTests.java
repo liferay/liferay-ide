@@ -19,6 +19,7 @@ import com.liferay.ide.ui.liferay.base.LiferayWorkspaceGradleSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -235,6 +236,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
 
+	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createService() {
 		String projectName = "test-service-in-lrws-gradle";
@@ -252,6 +254,7 @@ public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBas
 		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
 
+	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createServiceWrapper() {
 		String projectName = "test-service-wrapper-in-lrws-gradle";
