@@ -238,16 +238,18 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 		String targetProject = model.getStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
 
-		String elementName = packageFragment.getJavaProject().getElementName();
+		if ((packageFragment != null) && packageFragment.exists()) {
+			String elementName = packageFragment.getJavaProject().getElementName();
 
-		if ((packageFragment != null) && packageFragment.exists() && elementName.equals(targetProject)) {
-			IPackageFragmentRoot root = getPackageFragmentRoot(packageFragment);
+			if (elementName.equals(targetProject)) {
+				IPackageFragmentRoot root = getPackageFragmentRoot(packageFragment);
 
-			if (root != null) {
-				folderText.setText(root.getPath().toString());
+				if (root != null) {
+					folderText.setText(root.getPath().toString());
+				}
+
+				model.setProperty(INewJavaClassDataModelProperties.JAVA_PACKAGE, packageFragment.getElementName());
 			}
-
-			model.setProperty(INewJavaClassDataModelProperties.JAVA_PACKAGE, packageFragment.getElementName());
 		}
 
 		if (fragment) {
@@ -729,9 +731,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 		List<String> items = new ArrayList<>();
 
-		for (int i = 0; i < workspaceProjects.length; i++) {
-			IProject project = workspaceProjects[i];
-
+		for (IProject project : workspaceProjects) {
 			if (isProjectValid(project)) {
 				items.add(project.getName());
 			}

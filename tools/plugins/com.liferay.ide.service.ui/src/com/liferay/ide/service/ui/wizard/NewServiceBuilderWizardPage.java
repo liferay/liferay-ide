@@ -91,10 +91,12 @@ public class NewServiceBuilderWizardPage
 
 		String targetProject = model.getStringProperty(PROJECT_NAME);
 
-		String packageFragmentName = packageFragment.getJavaProject().getElementName();
+		if ((packageFragment != null) && packageFragment.exists()) {
+			String packageFragmentName = packageFragment.getJavaProject().getElementName();
 
-		if ((packageFragment != null) && packageFragment.exists() && packageFragmentName.equals(targetProject)) {
-			model.setProperty(PACKAGE_PATH, packageFragment.getElementName());
+			if (packageFragmentName.equals(targetProject)) {
+				model.setProperty(PACKAGE_PATH, packageFragment.getElementName());
+			}
 		}
 
 		packageButton = new Button(group, SWT.PUSH);

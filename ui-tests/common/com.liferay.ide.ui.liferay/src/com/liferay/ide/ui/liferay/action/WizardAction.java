@@ -195,6 +195,14 @@ public class WizardAction extends UIAction {
 		menu.click();
 	}
 
+	public void openNewLiferayPortletWizard() {
+		assertTitleStartBy(_getWizard(), ide.getShell());
+
+		MenuItem menu = ide.getCreateLiferayProjectToolbar().getNewLiferayPortlet();
+
+		menu.click();
+	}
+
 	public void openNewLiferayServerWizard() {
 		assertTitleStartBy(_getWizard(), ide.getShell());
 
