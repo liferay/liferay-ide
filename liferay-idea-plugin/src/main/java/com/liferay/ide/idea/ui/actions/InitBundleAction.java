@@ -36,7 +36,9 @@ public class InitBundleAction extends AbstractLiferayGradleTaskAction {
 
 		VirtualFile baseDir = project.getBaseDir();
 
-		if (baseDir.equals(getVirtualFile(event))) {
+		VirtualFile gradleFile = baseDir.findChild("build.gradle");
+
+		if (baseDir.equals(getVirtualFile(event)) && (gradleFile != null)) {
 			return true;
 		}
 

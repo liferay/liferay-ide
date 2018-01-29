@@ -45,12 +45,12 @@ public class BladeCLI {
 
 		File temp = new File(properties.getProperty("user.home"), ".liferay-ide");
 
-		File bladeJar = new File(temp, "com.liferay.blade.cli.jar");
+		File bladeJar = new File(temp, "blade.jar");
 
 		if (!bladeJar.exists()) {
 			ClassLoader bladeClassLoader = BladeCLI.class.getClassLoader();
 
-			try (InputStream in = bladeClassLoader.getResourceAsStream("/libs/com.liferay.blade.cli.jar")) {
+			try (InputStream in = bladeClassLoader.getResourceAsStream("/libs/blade.jar")) {
 				FileUtil.writeFile(bladeJar, in);
 			}
 			catch (IOException ioe) {
