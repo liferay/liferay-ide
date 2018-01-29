@@ -18,7 +18,7 @@
                     <platforms>all</platforms>
                     <distributionFileList>
                         <distributionFile>
-                            <origin>../shared/libs/biz.aQute.jpm.run.jar</origin>
+                            <origin>../shared/download/biz.aQute.jpm.run.jar</origin>
                         </distributionFile>
                         <distributionFile>
                             <origin>../shared/download/blade.jar</origin>

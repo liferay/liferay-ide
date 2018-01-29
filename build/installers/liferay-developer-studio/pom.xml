@@ -127,6 +127,20 @@
                             <checkSignature>true</checkSignature>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>download-jpmcli</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>${jpmcli-latest-download-url}</url>
+                            <outputDirectory>../shared/download/</outputDirectory>
+                            <outputFileName>biz.aQute.jpm.run.jar</outputFileName>
+                            <md5>${jpmcli-latest-md5}</md5>
+                            <checkSignature>true</checkSignature>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
