@@ -31,7 +31,7 @@
     <name>Liferay IDE Developer Studio Installer</name>
 
     <properties>
-        <studio-installer-version>3.1.1-ga2</studio-installer-version>
+        <studio-installer-version>3.2.0-m1</studio-installer-version>
     </properties>
 
     <build>
