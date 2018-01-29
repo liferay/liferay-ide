@@ -1,7 +1,7 @@
 <project>
     <shortName>LiferayWorkspace</shortName>
     <fullName>Liferay Workspace</fullName>
-    <version>1.7.1</version>
+    <version>1.8.0</version>
     <logoImage>../shared/images/liferay_logo_large.png</logoImage>
     <componentList>
         <component>
@@ -18,7 +18,7 @@
                     <platforms>all</platforms>
                     <distributionFileList>
                         <distributionFile>
-                            <origin>../shared/libs/biz.aQute.jpm.run.jar</origin>
+                            <origin>../shared/download/biz.aQute.jpm.run.jar</origin>
                         </distributionFile>
                         <distributionFile>
                             <origin>../shared/download/blade.jar</origin>

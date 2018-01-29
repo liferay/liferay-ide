@@ -31,7 +31,7 @@
     <name>Liferay IDE Developer Studio Installer</name>
 
     <properties>
-        <studio-installer-version>3.1.1-ga2</studio-installer-version>
+        <studio-installer-version>3.2.0-m1</studio-installer-version>
     </properties>
 
     <build>
@@ -124,6 +124,20 @@
                             <outputDirectory>../shared/download/</outputDirectory>
                             <outputFileName>com.liferay.portal.tools.bundle.support.jar</outputFileName>
                             <md5>${bundle-support-md5}</md5>
+                            <checkSignature>true</checkSignature>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>download-jpmcli</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>${jpmcli-latest-download-url}</url>
+                            <outputDirectory>../shared/download/</outputDirectory>
+                            <outputFileName>biz.aQute.jpm.run.jar</outputFileName>
+                            <md5>${jpmcli-latest-md5}</md5>
                             <checkSignature>true</checkSignature>
                         </configuration>
                     </execution>
