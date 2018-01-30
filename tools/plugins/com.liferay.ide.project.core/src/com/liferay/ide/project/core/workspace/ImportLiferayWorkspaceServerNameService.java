@@ -15,15 +15,19 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.portal.PortalBundle;
 
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
+import org.eclipse.sapphire.platform.PathBridge;
 
 /**
  * @author Andy Wu
+ * @author Charles Wu
  */
 public class ImportLiferayWorkspaceServerNameService extends DefaultValueService {
 
@@ -47,6 +51,12 @@ public class ImportLiferayWorkspaceServerNameService extends DefaultValueService
 		}
 
 		String serverName = path.lastSegment() + " server";
+
+		PortalBundle bundle = LiferayServerCore.newPortalBundle(PathBridge.create(path).append("bundles"));
+
+		if (bundle != null) {
+			serverName = bundle.getServerReleaseInfo();
+		}
 
 		return serverName;
 	}

@@ -17,8 +17,10 @@ package com.liferay.ide.server.core.portal;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.util.JavaUtil;
 import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -32,9 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -49,6 +48,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * @author Simon Jiang
+ * @author Charles Wu
  */
 public abstract class AbstractPortalBundle implements PortalBundle
 {
@@ -216,6 +216,12 @@ public abstract class AbstractPortalBundle implements PortalBundle
     }
 
     @Override
+    public String getServerReleaseInfo()
+    {
+        return getConfigInfoFromManifest( CONFIG_TYPE_SERVER, getAppServerPortalDir() );
+    }
+
+    @Override
     public IPath getOSGiBundlesDir()
     {
         IPath retval = null;
@@ -327,27 +333,16 @@ public abstract class AbstractPortalBundle implements PortalBundle
         String version = null;
         String serverInfo = null;
 
-        if( implJar.exists() )
+        if( FileUtil.exists( implJar ) )
         {
-            try ( JarFile jar = new JarFile( implJar ) )
-            {
-                Manifest manifest = jar.getManifest();
-
-                Attributes attributes = manifest.getMainAttributes();
-
-                version = attributes.getValue( "Liferay-Portal-Version" );
-                serverInfo = attributes.getValue( "Liferay-Portal-Server-Info" );
+            version = JavaUtil.getJarProperty( implJar, "Liferay-Portal-Version" );
+            serverInfo = JavaUtil.getJarProperty( implJar, "Liferay-Portal-Release-Info" );
 
                 if( CoreUtil.compareVersions( Version.parseVersion( version ), MANIFEST_VERSION_REQUIRED ) < 0 )
                 {
                     version = null;
                     serverInfo = null;
                 }
-            }
-            catch( IOException e )
-            {
-                LiferayServerCore.logError( e );
-            }
         }
 
         if( configType.equals( CONFIG_TYPE_VERSION ) )
@@ -357,6 +352,8 @@ public abstract class AbstractPortalBundle implements PortalBundle
 
         if( configType.equals( CONFIG_TYPE_SERVER ) )
         {
+            serverInfo = serverInfo.substring( 0, serverInfo.indexOf( "(" ) ).trim();
+
             return serverInfo;
         }
 

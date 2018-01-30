@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.Path;
 
 /**
  * @author Simon Jiang
+ * @author Charles Wu
  */
 public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory
 {
@@ -65,7 +66,10 @@ public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory
             {
                 return true;
             }
-
+            else
+            {
+                return super.detectBundleDir( path );
+            }
         }
 
         return false;
