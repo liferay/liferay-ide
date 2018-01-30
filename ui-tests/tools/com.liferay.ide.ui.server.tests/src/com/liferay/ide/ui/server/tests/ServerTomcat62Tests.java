@@ -61,7 +61,7 @@ public class ServerTomcat62Tests extends SwtbotBase {
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.newServer.prepare(serverName);
+		wizardAction.newServer.prepare62(serverName);
 
 		wizardAction.finish();
 
