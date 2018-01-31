@@ -282,6 +282,10 @@ public class ProjectCore extends Plugin {
 		log.log(new Status(IStatus.ERROR, PLUGIN_ID, t.getMessage(), t));
 	}
 
+	public static void logWarning(String msg) {
+		logError(createWarningStatus(msg));
+	}
+
 	public static IStatus operate(IProject project, Class<? extends IDescriptorOperation> type, Object... params) {
 		IStatus status = Status.OK_STATUS;
 

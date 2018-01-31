@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.runtime.IPath;
@@ -75,8 +76,15 @@ public class NewLiferayWorkspaceOpMethods {
 					bundlesLocation = new Path(location).append("bundles");
 				}
 
-				if (FileUtil.exists(bundlesLocation)) {
-					ServerUtil.addPortalRuntimeAndServer(serverRuntimeName, bundlesLocation, monitor);
+
+				if (FileUtil.exists(bundlesLocation) &&
+					LiferayServerCore.isPortalBundlePath(bundlesLocation)) {
+
+					ServerUtil.addPortalRuntimeAndServer(
+						serverRuntimeName, bundlesLocation, monitor);
+				}
+				else {
+					ProjectCore.logWarning("bundles init failed");
 				}
 			}
 		}
