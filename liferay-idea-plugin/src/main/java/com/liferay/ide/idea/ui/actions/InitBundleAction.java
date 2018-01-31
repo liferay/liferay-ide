@@ -17,6 +17,7 @@ package com.liferay.ide.idea.ui.actions;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
 
@@ -33,7 +34,9 @@ public class InitBundleAction extends AbstractLiferayGradleTaskAction {
 	public boolean isEnabledAndVisible(AnActionEvent event) {
 		Project project = event.getProject();
 
-		if (project.getBaseDir().equals(getVirtualFile(event))) {
+		VirtualFile baseDir = project.getBaseDir();
+
+		if (baseDir.equals(getVirtualFile(event))) {
 			return true;
 		}
 

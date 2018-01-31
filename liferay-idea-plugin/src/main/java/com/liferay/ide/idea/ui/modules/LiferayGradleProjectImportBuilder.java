@@ -53,6 +53,7 @@ import javax.swing.Icon;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.plugins.gradle.settings.GradleProjectSettings;
 import org.jetbrains.plugins.gradle.settings.GradleSettings;
 import org.jetbrains.plugins.gradle.util.GradleBundle;
 import org.jetbrains.plugins.gradle.util.GradleConstants;
@@ -120,7 +121,10 @@ public class LiferayGradleProjectImportBuilder
 			return;
 		}
 
-		LanguageLevel externalLanguageLevel = javaProjectNode.getData().getLanguageLevel();
+		JavaProjectData javaProjectData = javaProjectNode.getData();
+
+		LanguageLevel externalLanguageLevel = javaProjectData.getLanguageLevel();
+
 		LanguageLevelProjectExtension languageLevelExtension = LanguageLevelProjectExtension.getInstance(project);
 
 		if (externalLanguageLevel != languageLevelExtension.getLanguageLevel()) {
@@ -158,8 +162,9 @@ public class LiferayGradleProjectImportBuilder
 					}
 				};
 
-				Runnable importTask = () -> ServiceManager.getService(
-					ProjectDataManager.class).importData(externalProject, project, false);
+				ProjectDataManager projectDataManager = ServiceManager.getService(ProjectDataManager.class);
+
+				Runnable importTask = () -> projectDataManager.importData(externalProject, project, false);
 
 				GradleSettings gradleProjectSettings = GradleSettings.getInstance(project);
 
@@ -185,11 +190,14 @@ public class LiferayGradleProjectImportBuilder
 	@Override
 	protected void doPrepare(@NotNull WizardContext context) {
 		String pathToUse = getFileToImport();
+		LocalFileSystem localFileSystem = LocalFileSystem.getInstance();
 
-		VirtualFile file = LocalFileSystem.getInstance().refreshAndFindFileByPath(pathToUse);
+		VirtualFile file = localFileSystem.refreshAndFindFileByPath(pathToUse);
 
-		if ((file != null) && !file.isDirectory() && (file.getParent() != null)) {
-			pathToUse = file.getParent().getPath();
+		VirtualFile parent = file.getParent();
+
+		if ((file != null) && !file.isDirectory() && (parent != null)) {
+			pathToUse = parent.getPath();
 		}
 
 		LiferayImportFromGradleControl importFromGradleControl = getControl(context.getProject());
@@ -199,7 +207,9 @@ public class LiferayGradleProjectImportBuilder
 		Pair<String, Sdk> sdkPair = ExternalSystemJdkUtil.getAvailableJdk(context.getProject());
 
 		if ((sdkPair != null) && !ExternalSystemJdkUtil.USE_INTERNAL_JAVA.equals(sdkPair.first)) {
-			importFromGradleControl.getProjectSettings().setGradleJvm(sdkPair.first);
+			GradleProjectSettings gradleProjectSettings = importFromGradleControl.getProjectSettings();
+
+			gradleProjectSettings.setGradleJvm(sdkPair.first);
 		}
 	}
 
@@ -217,7 +227,9 @@ public class LiferayGradleProjectImportBuilder
 	private static Sdk _findJdk(@NotNull JavaSdkVersion version) {
 		JavaSdk javaSdk = JavaSdk.getInstance();
 
-		List<Sdk> javaSdks = ProjectJdkTable.getInstance().getSdksOfType(javaSdk);
+		ProjectJdkTable projectJdkTable = ProjectJdkTable.getInstance();
+
+		List<Sdk> javaSdks = projectJdkTable.getSdksOfType(javaSdk);
 
 		Stream<Sdk> stream = javaSdks.stream();
 

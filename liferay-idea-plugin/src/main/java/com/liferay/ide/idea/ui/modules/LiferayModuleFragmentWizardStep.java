@@ -14,6 +14,8 @@
 
 package com.liferay.ide.idea.ui.modules;
 
+import static java.util.Collections.list;
+
 import aQute.bnd.osgi.Domain;
 
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
@@ -64,7 +66,10 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 		_jspsTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
 		_jspsTree.setRootVisible(false);
 		_jspsTree.setShowsRootHandles(true);
-		_jspsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+
+		TreeSelectionModel treeSelectionModel = _jspsTree.getSelectionModel();
+
+		treeSelectionModel.setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
 		JScrollPane typesScrollPane = ScrollPaneFactory.createScrollPane(_jspsTree);
 
@@ -93,7 +98,9 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 
 		List<String> bundles = ServerUtil.getModuleFileListFrom70Server(liferayHomeDir);
 
-		bundles.stream().forEach(b -> _fragmentHost.addItem(b));
+		Stream<String> steam = bundles.stream();
+
+		steam.forEach(b -> _fragmentHost.addItem(b));
 
 		_fragmentHost.addActionListener(
 			new ActionListener() {
@@ -102,12 +109,16 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 				public void actionPerformed(ActionEvent event) {
 					DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
 
+					Object selectedFragment = _fragmentHost.getSelectedItem();
+
 					File currentOsgiBundle = ServerUtil.getModuleFileFrom70Server(
-						liferayHomeDir, _fragmentHost.getSelectedItem().toString(), LiferayIdeaUI.USER_BUNDLES_DIR);
+						liferayHomeDir, selectedFragment.toString(), LiferayIdeaUI.USER_BUNDLES_DIR);
 
 					if (currentOsgiBundle.exists()) {
 						try (JarFile jar = new JarFile(currentOsgiBundle)) {
-							Stream<JarEntry> stream = Collections.list(jar.entries()).stream();
+							List jarEntries = Collections.list(jar.entries());
+
+							Stream<JarEntry> stream = jarEntries.stream();
 
 							stream.map(
 								entry -> entry.getName()
@@ -134,7 +145,9 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 	}
 
 	public String getFragmentHost() {
-		return _fragmentHost.getSelectedItem().toString();
+		Object selectedFragment = _fragmentHost.getSelectedItem();
+
+		return selectedFragment.toString();
 	}
 
 	public String[] getSelectedJsps() {
@@ -147,7 +160,9 @@ public class LiferayModuleFragmentWizardStep extends ModuleWizardStep {
 		String[] jsps = new String[paths.length];
 
 		for (int i = 0; i < paths.length; i++) {
-			jsps[i] = paths[i].getLastPathComponent().toString();
+			Object lastPathComponent = paths[i].getLastPathComponent();
+
+			jsps[i] = lastPathComponent.toString();
 		}
 
 		return jsps;

@@ -49,7 +49,11 @@ public class LiferayServerConfigurable extends SettingsEditor<LiferayServerConfi
 	public void applyEditorTo(@NotNull LiferayServerConfiguration configuration) throws ConfigurationException {
 		configuration.setAlternativeJrePath(_jrePath.getJrePathOrName());
 		configuration.setAlternativeJrePathEnabled(_jrePath.isAlternativeJreSelected());
-		configuration.setModule(_modules.getComponent().getSelectedModule());
+
+		ModulesComboBox modulesComboBox = _modules.getComponent();
+
+		configuration.setModule(modulesComboBox.getSelectedModule());
+
 		configuration.setLiferayBundle(_liferayServer.getText());
 		configuration.setVMParameters(_vmParams.getText());
 	}
@@ -68,7 +72,10 @@ public class LiferayServerConfigurable extends SettingsEditor<LiferayServerConfi
 		_vmParams.setText(configuration.getVMParameters());
 		_liferayServer.setText(configuration.getLiferayBundle());
 		_jrePath.setPathOrName(configuration.getAlternativeJrePath(), configuration.isAlternativeJrePathEnabled());
-		_modules.getComponent().setSelectedModule(configuration.getModule());
+
+		ModulesComboBox modulesComboBox = _modules.getComponent();
+
+		modulesComboBox.setSelectedModule(configuration.getModule());
 	}
 
 	@Override

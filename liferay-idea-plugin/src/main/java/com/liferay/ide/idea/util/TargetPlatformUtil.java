@@ -25,6 +25,7 @@ import java.nio.file.Paths;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -62,7 +63,9 @@ public class TargetPlatformUtil {
 
 		Map<String, String[]> map = mapper.readValue(tpFile, Map.class);
 
-		String[] services = map.keySet().toArray(new String[0]);
+		Set<String> keySet = map.keySet();
+
+		String[] services = keySet.toArray(new String[0]);
 
 		return new ServiceContainer(Arrays.asList(services));
 	}
@@ -75,7 +78,9 @@ public class TargetPlatformUtil {
 		File file = path.toFile();
 
 		if (!file.exists()) {
-			try (InputStream in = BladeCLI.class.getClassLoader().getResourceAsStream(
+			ClassLoader bladeClassLoader = BladeCLI.class.getClassLoader();
+
+			try (InputStream in = bladeClassLoader.getResourceAsStream(
 					"/target-platform/" + currentVersion + "/" + currentVersion + "-" + type + ".json")) {
 
 				FileUtil.writeFile(file, in);

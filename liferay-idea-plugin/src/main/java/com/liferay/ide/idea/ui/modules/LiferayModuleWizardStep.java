@@ -29,6 +29,7 @@ import com.liferay.ide.idea.util.ServiceContainer;
 import com.liferay.ide.idea.util.TargetPlatformUtil;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -56,13 +57,18 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 		_typesTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
 		_typesTree.setRootVisible(false);
 		_typesTree.setShowsRootHandles(true);
-		_typesTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-		_typesTree.getSelectionModel().addTreeSelectionListener(
+		TreeSelectionModel treeSelectionModel = _typesTree.getSelectionModel();
+
+		treeSelectionModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+
+		treeSelectionModel.addTreeSelectionListener(
 			event -> {
 				TreePath treePath = event.getNewLeadSelectionPath();
 
-				String type = treePath.getLastPathComponent().toString();
+				Object lastPathComponent = treePath.getLastPathComponent();
+
+				String type = lastPathComponent.toString();
 
 				if ("theme-contributor".equals(type) || "theme".equals(type) || "layout-template".equals(type)) {
 					_packageName.setEditable(false);
@@ -95,7 +101,9 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 
 						List<String> services = serviceContainer.getServiceList();
 
-						services.stream().forEach(b -> _servcieName.addItem(b));
+						Stream<String> steam = services.stream();
+
+						steam.forEach(b -> _servcieName.addItem(b));
 					}
 					catch (Exception e) {
 						_servcieName.addItem("Unable to get services");
@@ -114,7 +122,9 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 
 						List<String> services = serviceContainer.getServiceList();
 
-						services.stream().forEach(b -> _servcieName.addItem(b));
+						Stream<String> steam = services.stream();
+
+						steam.forEach(b -> _servcieName.addItem(b));
 					}
 					catch (Exception e) {
 						_servcieName.addItem("Unable to get services");
@@ -187,7 +197,9 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 	}
 
 	public String getServiceName() {
-		return _servcieName.getSelectedItem().toString();
+		Object selectedServiceName = _servcieName.getSelectedItem();
+
+		return selectedServiceName.toString();
 	}
 
 	@Override
@@ -209,20 +221,20 @@ public class LiferayModuleWizardStep extends ModuleWizardStep {
 			throw new ConfigurationException("Please click one of the items to select a template", validationTitle);
 		}
 
-		Project workspaceProject = ProjectManager.getInstance().getOpenProjects()[0];
+		ProjectManager projectManager = ProjectManager.getInstance();
+
+		Project workspaceProject = projectManager.getOpenProjects()[0];
 
 		String packageNameValue = getPackageName();
 		String classNameValue = getClassName();
+		PsiDirectoryFactory psiDirectoryFactory = PsiDirectoryFactory.getInstance(workspaceProject);
+		PsiNameHelper psiNameHelper = PsiNameHelper.getInstance(workspaceProject);
 
-		if (!CoreUtil.isNullOrEmpty(packageNameValue) &&
-			!PsiDirectoryFactory.getInstance(workspaceProject).isValidPackageName(packageNameValue)) {
-
+		if (!CoreUtil.isNullOrEmpty(packageNameValue) && !psiDirectoryFactory.isValidPackageName(packageNameValue)) {
 			throw new ConfigurationException(packageNameValue + " is not a valid package name", validationTitle);
 		}
 
-		if (!CoreUtil.isNullOrEmpty(classNameValue) &&
-			!PsiNameHelper.getInstance(workspaceProject).isQualifiedName(classNameValue)) {
-
+		if (!CoreUtil.isNullOrEmpty(classNameValue) && !psiNameHelper.isQualifiedName(classNameValue)) {
 			throw new ConfigurationException(classNameValue + " is not a valid java class name", validationTitle);
 		}
 

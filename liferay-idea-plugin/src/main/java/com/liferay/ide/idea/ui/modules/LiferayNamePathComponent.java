@@ -78,7 +78,10 @@ public class LiferayNamePathComponent extends JPanel {
 
 		component.setPath(projectName == null ? (baseDir + File.separator + initialProjectName) : baseDir);
 		component.setNameValue(initialProjectName);
-		component.getNameComponent().select(0, initialProjectName.length());
+
+		JTextField jTextField = component.getNameComponent();
+
+		jTextField.select(0, initialProjectName.length());
 
 		return component;
 	}
@@ -102,7 +105,9 @@ public class LiferayNamePathComponent extends JPanel {
 		_nameLabel = new JLabel(nameLabelText);
 
 		if (bold) {
-			_nameLabel.setFont(UIUtil.getLabelFont().deriveFont(Font.BOLD));
+			Font font = UIUtil.getLabelFont();
+
+			_nameLabel.setFont(font.deriveFont(Font.BOLD));
 		}
 
 		_nameLabel.setLabelFor(_name);
@@ -143,7 +148,9 @@ public class LiferayNamePathComponent extends JPanel {
 		_pathLabel.setLabelFor(_path);
 
 		if (bold) {
-			_pathLabel.setFont(UIUtil.getLabelFont().deriveFont(Font.BOLD));
+			Font font = UIUtil.getLabelFont();
+
+			_pathLabel.setFont(font.deriveFont(Font.BOLD));
 		}
 
 		insets = JBUI.insets(0, 0, 5, 4);
@@ -170,11 +177,15 @@ public class LiferayNamePathComponent extends JPanel {
 	}
 
 	public String getNameValue() {
-		return _name.getText().trim();
+		String name = _name.getText();
+
+		return name.trim();
 	}
 
 	public String getPath() {
-		return FileUtil.expandUserHome(FileUtil.toSystemIndependentName(_path.getText().trim()));
+		String path = _path.getText();
+
+		return FileUtil.expandUserHome(FileUtil.toSystemIndependentName(path.trim()));
 	}
 
 	public JTextField getPathComponent() {
@@ -227,10 +238,11 @@ public class LiferayNamePathComponent extends JPanel {
 		String name = getNameValue();
 
 		if (StringUtil.isEmptyOrSpaces(name)) {
+			ApplicationInfo applicationInfo = ApplicationInfo.getInstance();
+
 			throw new ConfigurationException(
 				IdeBundle.message(
-					"prompt.new.project.file.name", ApplicationInfo.getInstance().getVersionName(),
-					context.getPresentationName()));
+					"prompt.new.project.file.name", applicationInfo.getVersionName(), context.getPresentationName()));
 		}
 
 		String projectDirectory = getPath();
@@ -261,7 +273,9 @@ public class LiferayNamePathComponent extends JPanel {
 			throw new ConfigurationException(msg);
 		}
 
-		for (Project project : ProjectManager.getInstance().getOpenProjects()) {
+		ProjectManager projectManager = ProjectManager.getInstance();
+
+		for (Project project : projectManager.getOpenProjects()) {
 			if (ProjectUtil.isSameProject(projectDirectory, project)) {
 				String msg = String.format(
 					"Directory '%s' is already taken by the project '%s'. Please consider another location.",
@@ -363,7 +377,9 @@ public class LiferayNamePathComponent extends JPanel {
 					_setPathNameSyncEnabled(false);
 
 					String name = getText(0, getLength());
-					String path = _path.getText().trim();
+					String path = _path.getText();
+
+					path = path.trim();
 
 					int lastSeparatorIndex = path.lastIndexOf(File.separator);
 

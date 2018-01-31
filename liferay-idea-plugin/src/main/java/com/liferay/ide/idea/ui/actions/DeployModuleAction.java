@@ -18,7 +18,9 @@ import com.intellij.ide.projectView.impl.ProjectRootsUtil;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 
@@ -38,9 +40,9 @@ public class DeployModuleAction extends AbstractLiferayGradleTaskAction {
 		Project project = event.getProject();
 		VirtualFile file = getVirtualFile(event);
 
-		if ((file != null) && ProjectRootsUtil.isModuleContentRoot(file, project) &&
-			!project.getBaseDir().equals(file)) {
+		VirtualFile baseDir = project.getBaseDir();
 
+		if ((file != null) && ProjectRootsUtil.isModuleContentRoot(file, project) && !baseDir.equals(file)) {
 			return true;
 		}
 
@@ -53,11 +55,15 @@ public class DeployModuleAction extends AbstractLiferayGradleTaskAction {
 
 		ProjectRootManager projectRootManager = ProjectRootManager.getInstance(event.getProject());
 
-		Module module = projectRootManager.getFileIndex().getModuleForFile(virtualFile);
+		ProjectFileIndex projectFileIndex = projectRootManager.getFileIndex();
+
+		Module module = projectFileIndex.getModuleForFile(virtualFile);
 
 		ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
 
-		VirtualFile[] roots = moduleRootManager.getModifiableModel().getContentRoots();
+		ModifiableRootModel modifiableRootModel = moduleRootManager.getModifiableModel();
+
+		VirtualFile[] roots = modifiableRootModel.getContentRoots();
 
 		assert roots != null && roots[0] != null;
 

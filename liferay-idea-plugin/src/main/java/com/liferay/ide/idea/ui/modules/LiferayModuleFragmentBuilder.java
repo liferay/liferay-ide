@@ -34,6 +34,7 @@ import com.liferay.ide.idea.util.SwitchConsumer.SwitchConsumerBuilder;
 
 import java.io.File;
 
+import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
@@ -133,7 +134,9 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 	}
 
 	private void _copyOtherResource(VirtualFile projectRoot, File fragmentFile) {
-		String parent = fragmentFile.getParentFile().getPath();
+		File parentDir = fragmentFile.getParentFile();
+
+		String parent = parentDir.getPath();
 
 		parent = parent.replaceAll("\\\\", "/");
 
@@ -167,7 +170,9 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
 		file.mkdirs();
 
-		return LocalFileSystem.getInstance().refreshAndFindFileByPath(path);
+		LocalFileSystem localFileSystem = LocalFileSystem.getInstance();
+
+		return localFileSystem.refreshAndFindFileByPath(path);
 	}
 
 	private void _createDefaultExtXmlFile(VirtualFile projectRoot, File f) {
@@ -193,10 +198,11 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
 	private void _createProject(VirtualFile projectRoot) {
 		StringBuilder sb = new StringBuilder();
+		VirtualFile parentDir = projectRoot.getParent();
 
 		sb.append("create ");
 		sb.append("-d \"");
-		sb.append(projectRoot.getParent().getPath());
+		sb.append(parentDir.getPath());
 		sb.append("\" ");
 		sb.append("-t fragment ");
 
@@ -220,7 +226,9 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 	}
 
 	private File _getProjectFile(VirtualFile projectRoot, String path) {
-		Path finalPath = FileSystems.getDefault().getPath(projectRoot.getPath(), path);
+		FileSystem fileSystem = FileSystems.getDefault();
+
+		Path finalPath = fileSystem.getPath(projectRoot.getPath(), path);
 
 		return finalPath.toFile();
 	}

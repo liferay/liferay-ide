@@ -17,6 +17,7 @@ package com.liferay.ide.idea.util;
 import java.io.File;
 
 import java.util.Properties;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -47,7 +48,9 @@ public class LiferayWorkspaceUtil {
 
 		String settingsContent = FileUtil.readContents(settingsGradle, true);
 
-		if ((settingsContent != null) && _PATTERN_WORKSPACE_PLUGIN.matcher(settingsContent).matches()) {
+		Matcher matcher = _patternWorkspacePlugin.matcher(settingsContent);
+
+		if ((settingsContent != null) && matcher.matches()) {
 			return true;
 		}
 
@@ -70,9 +73,9 @@ public class LiferayWorkspaceUtil {
 
 	private static final String _GRADLE_PROPERTIES_FILE_NAME = "gradle.properties";
 
-	private static final Pattern _PATTERN_WORKSPACE_PLUGIN = Pattern.compile(
-		".*apply.*plugin.*:.*[\'\"]com\\.liferay\\.workspace[\'\"].*", Pattern.MULTILINE | Pattern.DOTALL);
-
 	private static final String _SETTINGS_GRADLE_FILE_NAME = "settings.gradle";
+
+	private static final Pattern _patternWorkspacePlugin = Pattern.compile(
+		".*apply.*plugin.*:.*[\'\"]com\\.liferay\\.workspace[\'\"].*", Pattern.MULTILINE | Pattern.DOTALL);
 
 }

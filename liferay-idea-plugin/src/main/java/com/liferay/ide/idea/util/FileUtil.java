@@ -164,7 +164,9 @@ public class FileUtil {
 			}
 		}
 		else {
-			f.getParentFile().mkdirs();
+			File parentFile = f.getParentFile();
+
+			parentFile.mkdirs();
 		}
 
 		if (f.exists() && !f.canWrite()) {
