@@ -17,6 +17,7 @@ package com.liferay.ide.ui.module.tests;
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -205,6 +206,7 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(projectName);
 	}
 
+	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createService() {
 		String projectName = "test-service-gradle";
@@ -228,6 +230,7 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(projectName);
 	}
 
+	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createServiceWrapper() {
 		String projectName = "test-service-wrapper-gradle";

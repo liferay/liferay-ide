@@ -20,11 +20,13 @@ import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Lily Li
  */
+@Ignore("ignore as the problem of deleting Liferay workspace")
 public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@ClassRule

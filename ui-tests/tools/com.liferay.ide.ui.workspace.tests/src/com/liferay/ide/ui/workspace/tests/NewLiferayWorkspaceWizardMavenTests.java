@@ -15,7 +15,7 @@
 package com.liferay.ide.ui.workspace.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.TimestampSupport;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -31,7 +31,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorkspace() {
-		String workspaceName = timestamp.getName("test-liferay-workspace-maven");
+		String workspaceName = project.getName("test-liferay-workspace-maven");
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -64,7 +64,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorkspaceChangeLocation() {
-		String workspaceName = timestamp.getName("test-liferay-workspace-maven");
+		String workspaceName = project.getName("test-liferay-workspace-maven");
 
 		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
 
@@ -94,7 +94,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 	@Ignore("Ignore forever and test the download bundle in createLiferayWorkspaceWithDownloadBundleChangeBundleUrl")
 	@Test
 	public void createLiferayWorkspaceWithDownloadBundle() {
-		String workspaceName = timestamp.getName("test-liferay-workspace-maven");
+		String workspaceName = project.getName("test-liferay-workspace-maven");
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -130,7 +130,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 			return;
 		}
 
-		String workspaceName = timestamp.getName("test-liferay-workspace-maven");
+		String workspaceName = project.getName("test-liferay-workspace-maven");
 
 		// Use the internal server instead of the public server and also need to append the internal host
 
@@ -171,6 +171,6 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 	}
 
 	@Rule
-	public TimestampSupport timestamp = new TimestampSupport(bot);
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

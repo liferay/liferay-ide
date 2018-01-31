@@ -29,7 +29,7 @@ public class TomcatRunningSupport extends TomcatSupport {
 
 	@Override
 	public void after() {
-		viewAction.servers.stop(getServerStartedLabel());
+		viewAction.servers.stop(getStartedLabel());
 
 		jobAction.waitForServerStopped(getServerName());
 
@@ -44,7 +44,7 @@ public class TomcatRunningSupport extends TomcatSupport {
 
 		Assert.assertFalse("http://localhost:8080 still running", envAction.localConnected());
 
-		viewAction.servers.start(getServerStoppedLabel());
+		viewAction.servers.start(getStoppedLabel());
 
 		jobAction.waitForServerStarted(getServerName());
 

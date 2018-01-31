@@ -17,6 +17,7 @@ package com.liferay.ide.ui.module.tests;
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -128,6 +129,7 @@ public class NewComponentWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(projectName);
 	}
 
+	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createComponentServiceWrapper() {
 		String projectName = "test-component-service-wrapper-gradle";

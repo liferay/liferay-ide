@@ -359,7 +359,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		Assert.assertFalse(_newFragmentWizard.nextBtn().isEnabled());
 
-		Assert.assertEquals(LIFERAY_RUNTIME_MUST_BE_CONFIGURED, _newFragmentWizard.getValidationMsg(2));
+		Assert.assertEquals(LIFERAY_RUNTIME_MUST_BE_CONFIGURED, wizardAction.getValidationMsg(2));
 
 		wizardAction.cancel();
 	}

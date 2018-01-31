@@ -287,6 +287,10 @@ public class ViewAction extends UIAction {
 			_jobAction.waitForBrowserLoaded();
 		}
 
+		public void removeModule(String serverLabel, String projectName) {
+			_serversView.getServers().contextMenu("Remove", serverLabel, projectName);
+		}
+
 		public void start(String serverLabel) {
 			ide.sleep(5000);
 

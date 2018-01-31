@@ -50,13 +50,13 @@ public class DeployModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
 
-		viewAction.servers.openAddAndRemoveDialog(tomcat.getServerStartedLabel());
+		viewAction.servers.openAddAndRemoveDialog(tomcat.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(projectName);
 
 		dialogAction.confirm(FINISH);
 
-		viewAction.servers.visibleModuleTry(tomcat.getServerStartedLabel(), projectName);
+		viewAction.servers.visibleModuleTry(tomcat.getStartedLabel(), projectName);
 
 		jobAction.waitForConsoleContent(
 			tomcat.getServerName(), "STARTED " + projectName.replace('-', '.') + "_", 20 * 1000);

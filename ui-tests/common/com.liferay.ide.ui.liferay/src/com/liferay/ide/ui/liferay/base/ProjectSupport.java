@@ -20,9 +20,9 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  * @author Terry Jia
  * @author Ying Xu
  */
-public class TimestampSupport extends SupportBase {
+public class ProjectSupport extends SupportBase {
 
-	public TimestampSupport(SWTWorkbenchBot bot) {
+	public ProjectSupport(SWTWorkbenchBot bot) {
 		super(bot);
 	}
 
@@ -37,11 +37,15 @@ public class TimestampSupport extends SupportBase {
 	}
 
 	public String getName() {
-		return "test-" + _timestamp;
+		return "test" + _timestamp;
 	}
 
 	public String getName(String name) {
-		return name + "-" + _timestamp;
+		return name + _timestamp;
+	}
+
+	public String getStartedLabel() {
+		return getName() + "  [Started, Synchronized] (" + getName() + ")";
 	}
 
 	private long _timestamp = 0;

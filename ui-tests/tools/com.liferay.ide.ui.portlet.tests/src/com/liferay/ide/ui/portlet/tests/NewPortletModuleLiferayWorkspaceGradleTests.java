@@ -16,7 +16,7 @@ package com.liferay.ide.ui.portlet.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.LiferayWorkspaceGradleSupport;
-import com.liferay.ide.ui.liferay.base.TimestampSupport;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -34,7 +34,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createFreemarkerPortlet() {
-		String projectName = timestamp.getName("test-freemarker-portlet-gradle");
+		String projectName = project.getName("test-freemarker-portlet-gradle");
 		String packageName = "test.freemarker.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -56,7 +56,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createMvcPortlet() {
-		String projectName = timestamp.getName("test-mvc-portlet-gradle");
+		String projectName = project.getName("test-mvc-portlet-gradle");
 		String packageName = "test.mvc.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -80,7 +80,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createNpmAngularPortlet() {
-		String projectName = timestamp.getName("test-npm-angular-portlet-gradle");
+		String projectName = project.getName("test-npm-angular-portlet-gradle");
 		String packageName = "test.npm.angular.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -102,7 +102,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createNpmBillboardjsPortlet() {
-		String projectName = timestamp.getName("test-npm-billboardjs-portlet-gradle");
+		String projectName = project.getName("test-npm-billboardjs-portlet-gradle");
 		String packageName = "test.npm.billboardjs.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -124,7 +124,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createNpmIsomorphicPortlet() {
-		String projectName = timestamp.getName("test-npm-isomorphic-portlet-gradle");
+		String projectName = project.getName("test-npm-isomorphic-portlet-gradle");
 		String packageName = "test.npm.isomorphic.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -146,7 +146,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createNpmJqueryPortlet() {
-		String projectName = timestamp.getName("test-npm-jquery-portlet-gradle");
+		String projectName = project.getName("test-npm-jquery-portlet-gradle");
 		String packageName = "test.npm.jquery.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -168,7 +168,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createNpmMetaljsPortletGradle() {
-		String projectName = timestamp.getName("test-npm-metaljs-portlet-gradle");
+		String projectName = project.getName("test-npm-metaljs-portlet-gradle");
 		String packageName = "test.npm.metaljs.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -190,7 +190,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createNpmPortlet() {
-		String projectName = timestamp.getName("test-npm-portlet-gradle");
+		String projectName = project.getName("test-npm-portlet-gradle");
 		String packageName = "test.npm.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -212,7 +212,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createNpmReactPortlet() {
-		String projectName = timestamp.getName("test-npm-react-portlet-gradle");
+		String projectName = project.getName("test-npm-react-portlet-gradle");
 		String packageName = "test.npm.react.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -234,7 +234,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createNpmVuejsPortlet() {
-		String projectName = timestamp.getName("test-npm-vuejs-portlet-gradle");
+		String projectName = project.getName("test-npm-vuejs-portlet-gradle");
 		String packageName = "test.npm.vuejs.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -256,7 +256,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createPortlet() {
-		String projectName = timestamp.getName("test-npm-angular-portlet-gradle");
+		String projectName = project.getName("test-npm-angular-portlet-gradle");
 		String packageName = "test.npm.angular.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -279,7 +279,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 	@Ignore("ignore to wait IDE-3579 as it will take too long unexpected")
 	@Test
 	public void createSoyPortlet() {
-		String projectName = timestamp.getName("test-soy-portlet-gradle");
+		String projectName = project.getName("test-soy-portlet-gradle");
 		String packageName = "test.soy.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -302,7 +302,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 	@Ignore("Ignore to make it run ok on Jenkins temporary")
 	@Test
 	public void createSpringMvcPortlet() {
-		String projectName = timestamp.getName("test-spring-mvc-portlet-gradle");
+		String projectName = project.getName("test-spring-mvc-portlet-gradle");
 		String packageName = "test.spring.mvc.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -323,6 +323,6 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 	}
 
 	@Rule
-	public TimestampSupport timestamp = new TimestampSupport(bot);
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

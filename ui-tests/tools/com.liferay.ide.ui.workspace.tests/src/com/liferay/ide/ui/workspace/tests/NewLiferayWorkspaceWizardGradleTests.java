@@ -15,7 +15,7 @@
 package com.liferay.ide.ui.workspace.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.TimestampSupport;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -32,7 +32,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorkspace() {
-		String workspaceName = timestamp.getName("test-liferay-workspace-gradle");
+		String workspaceName = project.getName("test-liferay-workspace-gradle");
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -57,7 +57,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorkspaceChangeLocation() {
-		String workspaceName = timestamp.getName("test-liferay-workspace-gradle");
+		String workspaceName = project.getName("test-liferay-workspace-gradle");
 
 		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
 
@@ -78,7 +78,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorkspaceChangeModulesDir() {
-		String workspaceName = timestamp.getName("test-liferay-workspace-gradle");
+		String workspaceName = project.getName("test-liferay-workspace-gradle");
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -125,7 +125,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorkspaceChangeWarsDir() {
-		String workspaceName = timestamp.getName("test-liferay-workspace-gradle");
+		String workspaceName = project.getName("test-liferay-workspace-gradle");
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -173,7 +173,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 	@Ignore("Ignore forever and test the download bundle in createLiferayWorkspaceWithDownloadBundleChangeBundleUrl")
 	@Test
 	public void createLiferayWorkspaceWithDownloadBundle() {
-		String workspaceName = timestamp.getName("test-liferay-workspace-gradle");
+		String workspaceName = project.getName("test-liferay-workspace-gradle");
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
@@ -201,7 +201,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 			return;
 		}
 
-		String workspaceName = timestamp.getName("test-liferay-workspace-gradle");
+		String workspaceName = project.getName("test-liferay-workspace-gradle");
 
 		// Use the internal server instead of the public server and also need to append the internal host
 
@@ -232,6 +232,6 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 	}
 
 	@Rule
-	public TimestampSupport timestamp = new TimestampSupport(bot);
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

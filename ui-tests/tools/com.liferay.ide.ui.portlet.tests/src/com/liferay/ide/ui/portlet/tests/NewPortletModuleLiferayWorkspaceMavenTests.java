@@ -16,7 +16,7 @@ package com.liferay.ide.ui.portlet.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.LiferayWorkspaceMavenSupport;
-import com.liferay.ide.ui.liferay.base.TimestampSupport;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
@@ -27,6 +27,7 @@ import org.junit.Test;
 /**
  * @author Rui Wang
  */
+@Ignore("ignore as the problem of deleting Liferay workspace")
 public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@ClassRule
@@ -34,7 +35,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createFreemarkerPortlet() {
-		String projectName = timestamp.getName("test-freemarker-portlet-maven");
+		String projectName = project.getName("test-freemarker-portlet-maven");
 		String packageName = "test.freemarker.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -65,7 +66,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createMvcPortlet() {
-		String projectName = timestamp.getName("test-mvc-portlet-maven");
+		String projectName = project.getName("test-mvc-portlet-maven");
 		String packageName = "test.mvc.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -98,7 +99,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createNpmAngularPortlet() {
-		String projectName = timestamp.getName("test-npm-angular-portlet-maven");
+		String projectName = project.getName("test-npm-angular-portlet-maven");
 		String packageName = "test.npm.angular.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -129,7 +130,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createNpmBillboardjsPortlet() {
-		String projectName = timestamp.getName("test-npm-billboardjs-portlet-maven");
+		String projectName = project.getName("test-npm-billboardjs-portlet-maven");
 		String packageName = "test.npm.billboardjs.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -160,7 +161,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createNpmIsomorphicPortlet() {
-		String projectName = timestamp.getName("test-npm-isomorphic-portlet-maven");
+		String projectName = project.getName("test-npm-isomorphic-portlet-maven");
 		String packageName = "test.npm.isomorphic.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -191,7 +192,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createNpmJqueryPortlet() {
-		String projectName = timestamp.getName("test-npm-jquery-portlet-maven");
+		String projectName = project.getName("test-npm-jquery-portlet-maven");
 		String packageName = "test.npm.jquery.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -222,7 +223,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createNpmMetaljsPortletMaven() {
-		String projectName = timestamp.getName("test-npm-metaljs-portlet-maven");
+		String projectName = project.getName("test-npm-metaljs-portlet-maven");
 		String packageName = "test.npm.metaljs.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -253,7 +254,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createNpmPortlet() {
-		String projectName = timestamp.getName("test-npm-portlet-maven");
+		String projectName = project.getName("test-npm-portlet-maven");
 		String packageName = "test.npm.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -284,7 +285,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createNpmReactPortlet() {
-		String projectName = timestamp.getName("test-npm-react-portlet-maven");
+		String projectName = project.getName("test-npm-react-portlet-maven");
 		String packageName = "test.npm.react.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -315,7 +316,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createNpmVuejsPortlet() {
-		String projectName = timestamp.getName("test-npm-vuejs-portlet-maven");
+		String projectName = project.getName("test-npm-vuejs-portlet-maven");
 		String packageName = "test.npm.vuejs.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -346,7 +347,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createPortlet() {
-		String projectName = timestamp.getName("test-portlet-maven");
+		String projectName = project.getName("test-portlet-maven");
 		String packageName = "test.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -378,7 +379,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 	@Ignore("ignore to wait IDE-3579 as it will take too long unexpected")
 	@Test
 	public void createSoyPortlet() {
-		String projectName = timestamp.getName("test-soy-portlet-maven");
+		String projectName = project.getName("test-soy-portlet-maven");
 		String packageName = "test.soy.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -406,7 +407,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createSpringMvcPortlet() {
-		String projectName = timestamp.getName("test-spring-mvc-portlet");
+		String projectName = project.getName("test-spring-mvc-portlet");
 		String packageName = "test.spring.mvc.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
@@ -436,6 +437,6 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 	}
 
 	@Rule
-	public TimestampSupport timestamp = new TimestampSupport(bot);
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }
