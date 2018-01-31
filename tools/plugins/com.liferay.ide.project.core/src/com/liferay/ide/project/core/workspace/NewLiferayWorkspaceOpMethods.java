@@ -73,6 +73,11 @@ public class NewLiferayWorkspaceOpMethods {
 				else {
 					bundlesLocation = new Path(location).append("bundles");
 				}
+                
+				if(bundlesLocation==null) {
+				    String msg = "bundles not exist";
+				    return Status.createErrorStatus( msg );
+				}
 
 				if (bundlesLocation.toFile().exists()) {
 					ServerUtil.addPortalRuntimeAndServer(serverRuntimeName, bundlesLocation, monitor);
