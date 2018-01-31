@@ -14,10 +14,13 @@
 
 package com.liferay.ide.kaleo.core.model;
 
+import com.liferay.ide.kaleo.core.model.internal.NodeNameListener;
+
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -33,6 +36,7 @@ public interface Node extends Describable {
 	public void setName(String value);
 
 	@Label(standard = "&name")
+	@Listeners(value = NodeNameListener.class)
 	@Required
 	@XmlBinding(path = "name")
 	public ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
