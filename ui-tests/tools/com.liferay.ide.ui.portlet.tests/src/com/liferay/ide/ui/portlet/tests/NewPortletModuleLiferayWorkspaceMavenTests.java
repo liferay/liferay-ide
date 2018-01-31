@@ -27,6 +27,7 @@ import org.junit.Test;
 /**
  * @author Rui Wang
  */
+@Ignore("ignore as the problem of deleting Liferay workspace")
 public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@ClassRule
