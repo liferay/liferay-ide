@@ -24,6 +24,7 @@ import java.util.HashMap;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
@@ -76,7 +77,10 @@ public class KaleoCore extends Plugin {
 				}
 
 				public void serverRemoved(IServer s) {
-					if (liferayServer.equals(s)) {
+					ILiferayServer server = (ILiferayServer)s.loadAdapter(
+						ILiferayServer.class, new NullProgressMonitor());
+
+					if (liferayServer.equals(server)) {
 						IKaleoConnection service = _kaleoConnections.get(liferayServer.getId());
 
 						if (service != null) {
