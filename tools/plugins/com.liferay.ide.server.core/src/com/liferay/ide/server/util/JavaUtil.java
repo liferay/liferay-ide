@@ -21,7 +21,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
@@ -32,6 +31,7 @@ import org.eclipse.jdt.launching.IVMInstallType;
 /**
  * @author Greg Amerson
  * @author Simon Jiang
+ * @author Charles Wu
  */
 public class JavaUtil
 {
@@ -58,11 +58,11 @@ public class JavaUtil
             {
                 ZipEntry manifest = jar.getEntry( "META-INF/MANIFEST.MF" );//$NON-NLS-1$
 
-                Properties props = new Properties();
-                props.load( jar.getInputStream( manifest ) );
-                String value = (String) props.get( propertyName );
+                Manifest mf = new Manifest( jar.getInputStream( manifest ) );
 
-                return value;
+                Attributes a = mf.getMainAttributes();
+
+                return a.getValue( propertyName );
             }
             catch( IOException e )
             {

@@ -62,7 +62,7 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(workspaceProjectName + " server");
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay Community Edition Portal 7.0.3 GA4");
 
 		dialogAction.preferences.confirm();
 	}

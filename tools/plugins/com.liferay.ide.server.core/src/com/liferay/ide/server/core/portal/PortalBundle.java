@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IPath;
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Charles Wu
  */
 public interface PortalBundle extends ILiferayPortal
 {
@@ -63,6 +64,8 @@ public interface PortalBundle extends ILiferayPortal
     IPath[] getUserLibs();
 
     String getHttpPort();
+
+    String getServerReleaseInfo();
 
     void setHttpPort( String port );
 

@@ -20,6 +20,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.core.portal.PortalServer;
 
@@ -186,6 +188,19 @@ public class PortalBundleTests extends ServerCoreBase
         assertNotNull( portalRuntime );
 
         assertNull( portalRuntime.getPortalBundle() );
+    }
+
+    @Test
+    public void testPortalBundleReleaseName() throws Exception
+    {
+        if( shouldSkipBundleTests() )
+            return;
+
+        PortalBundle bundle = LiferayServerCore.newPortalBundle( getLiferayRuntimeDir() );
+
+        assertNotNull( bundle );
+
+        assertEquals( "Liferay Community Edition Portal 7.0.4 GA5", bundle.getServerReleaseInfo() );
     }
 
     @Test

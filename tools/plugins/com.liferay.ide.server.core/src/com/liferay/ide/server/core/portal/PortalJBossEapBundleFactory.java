@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.Path;
 
 /**
  * @author Simon Jiang
+ * @author Charles Wu
  */
 public class PortalJBossEapBundleFactory extends PortalJBossBundleFactory
 {
@@ -57,7 +58,15 @@ public class PortalJBossEapBundleFactory extends PortalJBossBundleFactory
               && path.append( "bin" ).toFile().exists() )
         {
             String eapVersion = getEAPVersion( path.toFile(), EAP_DIR_META_INF, new String[] {"6.", "7."}, "eap", "EAP" );
-            return eapVersion != null;
+           
+            if( eapVersion != null )
+            {
+                return true;
+            }
+            else
+            {
+                return super.detectBundleDir( path );
+            }
         }
 
         return false;
