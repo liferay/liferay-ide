@@ -36,6 +36,7 @@ import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -47,6 +48,7 @@ import java.util.Set;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.expressions.EvaluationContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -68,14 +70,13 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -92,6 +93,9 @@ public class MigrateProjectHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
+		EvaluationContext applicationContext = (EvaluationContext)event.getApplicationContext();
+
+		_combineExistedProblem = (Boolean)applicationContext.getVariable("CombineExistedProblem");
 
 		if (selection instanceof IStructuredSelection) {
 			Object element = null;
@@ -119,16 +123,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 			}
 
 			if (project != null) {
-				if (_shouldShowMessageDialog(project)) {
-					final boolean shouldContinue = _showMessageDialog();
-
-					if (!shouldContinue) {
-						return null;
-					}
-
-					MarkerUtil.clearMarkers(project, MigrationConstants.MARKER_TYPE, null);
-				}
-
+				MarkerUtil.clearMarkers(project, MigrationConstants.MARKER_TYPE, null);
 				_setButtonState(false);
 				final IPath location = project.getLocation();
 
@@ -137,20 +132,9 @@ public class MigrateProjectHandler extends AbstractHandler {
 			else if (projects != null) {
 				final List<IPath> locations = new ArrayList<>();
 				final List<String> projectNames = new ArrayList<>();
-				boolean shouldContinue = false;
 
 				for (IProject iProject : projects) {
-					if ((shouldContinue == false) && _shouldShowMessageDialog(iProject)) {
-						shouldContinue = _showMessageDialog();
-
-						if (!shouldContinue) {
-							return null;
-						}
-					}
-
-					if (shouldContinue && _shouldShowMessageDialog(iProject)) {
-						MarkerUtil.clearMarkers(iProject, MigrationConstants.MARKER_TYPE, null);
-					}
+					MarkerUtil.clearMarkers(iProject, MigrationConstants.MARKER_TYPE, null);
 
 					locations.add(iProject.getLocation());
 					projectNames.add(iProject.getName());
@@ -219,6 +203,32 @@ public class MigrateProjectHandler extends AbstractHandler {
 						singleFile = true;
 					}
 
+					MigrationProblemsContainer container = null;
+
+					if (_combineExistedProblem == true) {
+						container = UpgradeAssistantSettingsUtil.getObjectFromStore(MigrationProblemsContainer.class);
+					}
+
+					MigrationProblems[] migrationProblemsArray = null;
+
+					List<MigrationProblems> migrationProblemsList = new ArrayList<>();
+
+					if (container == null) {
+						container = new MigrationProblemsContainer();
+					}
+
+					if (container.getProblemsArray() != null) {
+						migrationProblemsArray = container.getProblemsArray();
+					}
+
+					if (migrationProblemsArray != null) {
+						List<MigrationProblems> mpList = Arrays.asList(migrationProblemsArray);
+
+						for (MigrationProblems mp : mpList) {
+							migrationProblemsList.add(mp);
+						}
+					}
+
 					for (int j = 0; j < locations.length; j++) {
 						allProblems = new ArrayList<>();
 
@@ -242,30 +252,6 @@ public class MigrateProjectHandler extends AbstractHandler {
 								if (_shouldAdd(problem)) {
 									allProblems.add(problem);
 								}
-							}
-						}
-
-						MigrationProblemsContainer container = null;
-
-						container = UpgradeAssistantSettingsUtil.getObjectFromStore(MigrationProblemsContainer.class);
-
-						MigrationProblems[] migrationProblemsArray = null;
-
-						List<MigrationProblems> migrationProblemsList = new ArrayList<>();
-
-						if (container == null) {
-							container = new MigrationProblemsContainer();
-						}
-
-						if (container.getProblemsArray() != null) {
-							migrationProblemsArray = container.getProblemsArray();
-						}
-
-						if (migrationProblemsArray != null) {
-							List<MigrationProblems> mpList = Arrays.asList(migrationProblemsArray);
-
-							for (MigrationProblems mp : mpList) {
-								migrationProblemsList.add(mp);
 							}
 						}
 
@@ -344,14 +330,14 @@ public class MigrateProjectHandler extends AbstractHandler {
 								}
 							}
 						}
+					}
 
-						if (!migrationProblemsList.isEmpty()) {
-							container.setProblemsArray(migrationProblemsList.toArray(new MigrationProblems[0]));
-							UpgradeAssistantSettingsUtil.setObjectToStore(MigrationProblemsContainer.class, container);
-						}
-						else {
-							UpgradeAssistantSettingsUtil.setObjectToStore(MigrationProblemsContainer.class, null);
-						}
+					if (!migrationProblemsList.isEmpty()) {
+						container.setProblemsArray(migrationProblemsList.toArray(new MigrationProblems[0]));
+						UpgradeAssistantSettingsUtil.setObjectToStore(MigrationProblemsContainer.class, container);
+					}
+					else {
+						UpgradeAssistantSettingsUtil.setObjectToStore(MigrationProblemsContainer.class, null);
 					}
 
 					if (singleFile) {
@@ -647,27 +633,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 		return true;
 	}
 
-	private boolean _shouldShowMessageDialog(IProject project) {
-		final IMarker[] markers = MarkerUtil.findMarkers(project, MigrationConstants.MARKER_TYPE, null);
-
-		if ((markers != null) && (markers.length > 0)) {
-			return true;
-		}
-
-		return false;
-	}
-
-	private boolean _showMessageDialog() {
-		final Display display = Display.getDefault();
-
-		final Shell shell = display.getActiveShell();
-
-		return MessageDialog.openConfirm(
-			shell, "Migrate Liferay Plugin",
-			"This project already contains migration problem markers. All existing markers will be deleted. Do you " +
-				"want to continue to run migration tool?");
-	}
-
+	private Boolean _combineExistedProblem = true;
 	private String[] _ignoreSuperClasses = {
 		"com.liferay.portal.service.BaseLocalServiceImpl", "com.liferay.portal.model.CacheModel",
 		"com.liferay.portal.model.impl.BaseModelImpl", "com.liferay.portal.service.BaseServiceImpl",

@@ -14,44 +14,13 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
-import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.ILiferayProjectImporter;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.IOUtil;
-import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.modules.BladeCLI;
-import com.liferay.ide.project.core.modules.BladeCLIException;
-import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.util.ProjectImportUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.project.core.util.SearchFilesVisitor;
-import com.liferay.ide.project.ui.IvyUtil;
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
-import com.liferay.ide.sdk.core.ISDKConstants;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.util.ServerUtil;
-import com.liferay.ide.ui.util.SWTUtil;
-import com.liferay.ide.ui.util.UIUtil;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import java.lang.reflect.InvocationTargetException;
-
 import java.net.URL;
-
 import java.nio.file.Files;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -111,20 +80,50 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerLifecycleListener;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.ui.ServerUIUtil;
-
+import org.eclipse.wst.validation.Validator;
+import org.eclipse.wst.validation.internal.ValManager;
+import org.eclipse.wst.validation.internal.ValPrefManagerProject;
+import org.eclipse.wst.validation.internal.ValidatorMutable;
+import org.eclipse.wst.validation.internal.model.ProjectPreferences;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
-
 import org.osgi.framework.Version;
+
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.ILiferayProjectImporter;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.IOUtil;
+import com.liferay.ide.core.util.ZipUtil;
+import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.BladeCLI;
+import com.liferay.ide.project.core.modules.BladeCLIException;
+import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.util.ProjectImportUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.util.SearchFilesVisitor;
+import com.liferay.ide.project.ui.IvyUtil;
+import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
+import com.liferay.ide.sdk.core.ISDKConstants;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 /**
  * @author Simon Jiang
  * @author Terry Jia
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "restriction", "deprecation" })
 public class InitConfigureProjectPage extends Page implements IServerLifecycleListener, SelectionChangedListener {
 
 	public InitConfigureProjectPage(final Composite parent, int style, LiferayUpgradeDataModel dataModel) {
@@ -605,6 +604,30 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		}
 	}
 
+	private boolean _configureProjectValidationExclude(IProject project, boolean disableValidation) {
+		boolean retval = false;
+
+		try {
+			Validator[] vals = ValManager.getDefault().getValidators(project, true);
+
+			ValidatorMutable[] validators = new ValidatorMutable[vals.length];
+
+			for (int i = 0; i < vals.length; i++) {
+				validators[i] = new ValidatorMutable(vals[i]);
+			}
+
+			ProjectPreferences pp = new ProjectPreferences(project, true, disableValidation, null);
+
+			ValPrefManagerProject vpm = new ValPrefManagerProject(project);
+
+			vpm.savePreferences(pp, validators);
+		}
+		catch (Exception e) {
+		}
+
+		return retval;
+	}
+	
 	private void _copyNewSDK(IPath targetSDKLocation, IProgressMonitor monitor) throws CoreException {
 		SubMonitor progress = SubMonitor.convert(monitor, 100);
 
@@ -1124,7 +1147,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 						importProject.delete(false, true, monitor);
 					}
 
-					checkAndConfigureIvy(importProject);
+					_configureProjectValidationExclude(importProject, true);
 				}
 				catch (CoreException ce) {
 				}
@@ -1147,7 +1170,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 						importProject.delete(false, true, monitor);
 					}
 
-					checkAndConfigureIvy(importProject);
+					_configureProjectValidationExclude(importProject, true);
 				}
 				catch (CoreException ce) {
 				}
