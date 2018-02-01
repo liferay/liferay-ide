@@ -258,7 +258,7 @@
         <delete dir="${eclipse.dir}" failonerror="true" includeemptydirs="true" />
     </target>
 
-    <target name="install-feature"  depends="uninstall-feature">
+    <target name="install-features"  depends="uninstall-features">
         <exec executable="${builder.exe}" outputproperty="output" failonerror="true" dir="${target.dir}">
             <arg value="-nosplash" />
             <arg value="-application" />
@@ -285,7 +285,7 @@
         </exec>
     </target>
 
-    <target name="uninstall-feature">
+    <target name="uninstall-features">
         <if>
             <not>
                 <equals arg1="${update.features}" arg2="" />
@@ -296,7 +296,7 @@
                     <arg value="-application" />
                     <arg value="org.eclipse.equinox.p2.director" />
                     <arg value="-uninstallIU" />
-                    <arg value="${update.features}" />
+                    <arg value="${uninstall.features}" />
                     <arg value="-destination" />
                     <arg value="${eclipse.dir}" />
                     <arg value="-profile" />
@@ -333,7 +333,7 @@
             </else>
         </if>
 
-        <antcallback target="install-feature" return="output">
+        <antcallback target="install-features" return="output">
             <param name="featureId" value="${all.features}" />
         </antcallback>
 
