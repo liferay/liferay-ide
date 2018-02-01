@@ -19,7 +19,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.gogo.GogoBundleHelper;
+import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -186,7 +186,7 @@ public class PortalPublishTask extends PublishTaskDelegate
         {
             try
             {
-                isDeployed = new GogoBundleHelper().getBundleId( bsn ) > 0;
+                isDeployed = new GogoBundleDeployer().getBundleId( bsn ) > 0;
             }
             catch( Exception e )
             {

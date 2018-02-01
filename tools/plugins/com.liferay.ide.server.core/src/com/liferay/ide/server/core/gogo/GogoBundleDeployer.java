@@ -24,7 +24,7 @@ import org.osgi.framework.dto.BundleDTO;
 /**
  * @author Terry Jia
  */
-public class GogoBundleHelper {
+public class GogoBundleDeployer {
 
 	private static int _getState(String state) {
 		if ("Active".equals(state)) {
@@ -111,12 +111,12 @@ public class GogoBundleHelper {
 
 	private int _port;
 
-	public GogoBundleHelper() {
+	public GogoBundleDeployer() {
 		_host = "localhost";
 		_port = 11311;
 	}
 
-	public GogoBundleHelper(String host, int port) {
+	public GogoBundleDeployer(String host, int port) {
 		_host = host;
 		_port = port;
 	}

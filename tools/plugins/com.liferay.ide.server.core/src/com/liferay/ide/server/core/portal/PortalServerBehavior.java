@@ -23,7 +23,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.gogo.GogoBundleHelper;
+import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 import com.liferay.ide.server.util.PingThread;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -91,7 +91,8 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
         processListener = new IDebugEventSetListener()
         {
-            public void handleDebugEvents( DebugEvent[] events )
+            @Override
+			public void handleDebugEvents( DebugEvent[] events )
             {
                 if( events != null )
                 {
@@ -306,12 +307,12 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         final List<String> retval = new ArrayList<>();
 
         final String[] memoryArgs = getPortalServer().getMemoryArgs();
-        
+
         if( memoryArgs != null )
         {
             Collections.addAll( retval, memoryArgs );
         }
-        
+
         Collections.addAll( retval, getPortalRuntime().getPortalBundle().getRuntimeStopVMArgs() );
 
         return retval.toArray( new String[0] );
@@ -574,7 +575,8 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
         IAdaptable info = new IAdaptable()
         {
-            @SuppressWarnings( "unchecked" )
+            @Override
+			@SuppressWarnings( "unchecked" )
             public Object getAdapter( Class adapter )
             {
                 if( String.class.equals( adapter ) )
@@ -767,7 +769,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
                 {
                     final String symbolicName = bundleProject.getSymbolicName();
 
-                    GogoBundleHelper helper = new GogoBundleHelper();
+                    GogoBundleDeployer helper = new GogoBundleDeployer();
 
                     long bundleId = helper.getBundleId( symbolicName );
 
@@ -912,4 +914,11 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         return ServerUtil.createBundleSupervisor( getPortalRuntime(), getServer() );
     }
 
+    private static final String[] JMX_EXCLUDE_ARGS = new String []
+    	{
+        "-Dcom.sun.management.jmxremote",
+        "-Dcom.sun.management.jmxremote.port=",
+        "-Dcom.sun.management.jmxremote.ssl=",
+        "-Dcom.sun.management.jmxremote.authenticate="
+    };
 }

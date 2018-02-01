@@ -23,7 +23,7 @@ import org.osgi.framework.dto.BundleDTO;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.server.core.gogo.GogoBundleHelper;
+import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 import com.liferay.ide.server.util.ServerUtil;
 
 /**
@@ -34,14 +34,14 @@ import com.liferay.ide.server.util.ServerUtil;
 public class BundleSupervisor
 {
 
-    private GogoBundleHelper helper;
+    private GogoBundleDeployer helper;
 
     public BundleSupervisor() {
-        helper = new GogoBundleHelper();
+        helper = new GogoBundleDeployer();
     }
 
     public BundleSupervisor( String host, int port ) {
-        helper = new GogoBundleHelper(host, port);
+        helper = new GogoBundleDeployer(host, port);
     }
 
     public BundleDTO deploy( final String bsn, final File bundleFile, final String bundleUrl ) throws Exception
