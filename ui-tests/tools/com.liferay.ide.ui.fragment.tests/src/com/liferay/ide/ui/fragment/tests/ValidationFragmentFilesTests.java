@@ -15,7 +15,6 @@
 package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.page.wizard.NewFragmentFilesWizard;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
 import java.io.IOException;
@@ -41,17 +40,17 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 
 		Assert.assertEquals(PROJECT_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(2));
 
-		Assert.assertEquals(StringPool.BLANK, _newFragmentFilesWizard.getProjectName().getText());
+		Assert.assertEquals(StringPool.BLANK, wizardAction.newFragmentFiles.projectName().getText());
 
-		Assert.assertEquals("<None>", _newFragmentFilesWizard.getLiferyRuntimes().getText());
+		Assert.assertEquals("<None>", wizardAction.newFragmentFiles.runtimeName().getText());
 
-		Assert.assertTrue(_newFragmentFilesWizard.getNewRuntimeBtn().isEnabled());
+		Assert.assertTrue(wizardAction.newFragmentFiles.newRuntimeBtn().isEnabled());
 
-		Assert.assertEquals(StringPool.BLANK, _newFragmentFilesWizard.getHostOsgiBundle().getText());
+		Assert.assertEquals(StringPool.BLANK, wizardAction.newFragmentFiles.hostOsgiBundle().getText());
 
-		Assert.assertFalse(_newFragmentFilesWizard.getAddOverrideFilesBtn().isEnabled());
+		Assert.assertFalse(wizardAction.newFragmentFiles.addOverrideFilesBtn().isEnabled());
 
-		Assert.assertFalse(_newFragmentFilesWizard.getDeleteBtn().isEnabled());
+		Assert.assertFalse(wizardAction.newFragmentFiles.deleteBtn().isEnabled());
 
 		Assert.assertFalse(wizardAction.getNextBtn().isEnabled());
 
@@ -238,9 +237,7 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 
 		Assert.assertEquals(PROJECT_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(2));
 
-		Assert.assertFalse(_newFragmentFilesWizard.getAddOverrideFilesBtn().isEnabled());
-
-		Assert.assertFalse(_newFragmentFilesWizard.getDeleteBtn().isEnabled());
+		Assert.assertFalse(wizardAction.newFragmentFiles.addOverrideFilesBtn().isEnabled());
 
 		Assert.assertFalse(wizardAction.getNextBtn().isEnabled());
 
@@ -250,7 +247,5 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 
 		viewAction.project.closeAndDelete(projectName);
 	}
-
-	private static final NewFragmentFilesWizard _newFragmentFilesWizard = new NewFragmentFilesWizard(bot);
 
 }

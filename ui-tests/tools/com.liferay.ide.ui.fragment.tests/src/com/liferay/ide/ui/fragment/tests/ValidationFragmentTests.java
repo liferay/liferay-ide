@@ -15,8 +15,6 @@
 package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.page.wizard.project.NewFragmentInfoWizard;
-import com.liferay.ide.ui.liferay.page.wizard.project.NewFragmentWizard;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
@@ -38,7 +36,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 		wizardAction.openNewFragmentWizard();
 
 		String[] expectedBuildTypes = {GRADLE, MAVEN};
-		String[] buildTypes = _newFragmentWizard.getBuildTypes().items();
+		String[] buildTypes = wizardAction.newFragment.buildType().items();
 
 		int expectedLength = expectedBuildTypes.length;
 		int length = buildTypes.length;
@@ -117,15 +115,15 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		wizardAction.next();
 
-		Assert.assertEquals(StringPool.BLANK, _newFragmentInfoWizard.getHostOsgiBundle().getText());
+		Assert.assertEquals(StringPool.BLANK, wizardAction.newFragmentInfo.hostOsgiBundle().getText());
 
-		Assert.assertTrue(_newFragmentInfoWizard.getBrowseOsgiBtn().isEnabled());
+		Assert.assertTrue(wizardAction.newFragmentInfo.browseOsgiBtn().isEnabled());
 
-		Assert.assertEquals(HOST_OSGI_BUNDLE_MUST_BE_SPECIFIED, _newFragmentInfoWizard.getValidationMsg(1));
+		Assert.assertEquals(HOST_OSGI_BUNDLE_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(1));
 
-		Assert.assertFalse(_newFragmentInfoWizard.getAddOverrideFilesBtn().isEnabled());
+		Assert.assertFalse(wizardAction.newFragmentInfo.addOverrideFilesBtn().isEnabled());
 
-		Assert.assertFalse(_newFragmentInfoWizard.getDeleteBtn().isEnabled());
+		Assert.assertFalse(wizardAction.newFragmentInfo.deleteBtn().isEnabled());
 
 		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
 
@@ -144,11 +142,11 @@ public class ValidationFragmentTests extends SwtbotBase {
 	public void checkInitialState() {
 		wizardAction.openNewFragmentWizard();
 
-		Assert.assertEquals(StringPool.BLANK, _newFragmentWizard.getProjectName().getText());
+		Assert.assertEquals(StringPool.BLANK, wizardAction.newFragment.projectName().getText());
 
-		Assert.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, _newFragmentWizard.getValidationMsg(2));
+		Assert.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, wizardAction.getValidationMsg(2));
 
-		Assert.assertTrue(_newFragmentWizard.getUseDefaultLocation().isChecked());
+		Assert.assertTrue(wizardAction.newFragmentInfo.useDefaultLocation().isChecked());
 
 		wizardAction.newProject.deselectUseDefaultLocation();
 
@@ -158,7 +156,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 			workspacePath = workspacePath.replaceAll("\\\\", "/");
 		}
 
-		Assert.assertEquals(workspacePath, _newFragmentWizard.getLocation().getText());
+		Assert.assertEquals(workspacePath, wizardAction.newFragmentInfo.location().getText());
 
 		Assert.assertFalse(wizardAction.getNextBtn().isEnabled());
 
@@ -175,9 +173,9 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		wizardAction.newFragment.prepareGradle(projectName);
 
-		Assert.assertFalse(_newFragmentWizard.nextBtn().isEnabled());
+		Assert.assertFalse(wizardAction.getNextBtn().isEnabled());
 
-		Assert.assertEquals(LIFERAY_RUNTIME_MUST_BE_CONFIGURED, _newFragmentWizard.getValidationMsg(2));
+		Assert.assertEquals(LIFERAY_RUNTIME_MUST_BE_CONFIGURED, wizardAction.getValidationMsg(2));
 
 		wizardAction.newFragment.openNewRuntimeWizard();
 
@@ -187,11 +185,10 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		Assert.assertTrue(_newFragmentWizard.nextBtn().isEnabled());
+		Assert.assertTrue(wizardAction.getNextBtn().isEnabled());
 
 		Assert.assertEquals(
-			CREATE_A_NEW_PROJECT_CONFIGURED_AS_A_LIFERAY_MODULE_PROJECT_FRAGMENT,
-			_newFragmentWizard.getValidationMsg(2));
+			CREATE_A_NEW_PROJECT_CONFIGURED_AS_A_LIFERAY_MODULE_PROJECT_FRAGMENT, wizardAction.getValidationMsg(2));
 
 		wizardAction.cancel();
 
@@ -228,7 +225,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 			workspacePath = workspacePath.replaceAll("\\\\", "/");
 		}
 
-		Assert.assertEquals(workspacePath, _newFragmentWizard.getLocation().getText());
+		Assert.assertEquals(workspacePath, wizardAction.newFragmentInfo.location().getText());
 
 		for (ValidationMsg msg :
 				envAction.getValidationMsgs(
@@ -238,7 +235,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 				continue;
 			}
 
-			wizardAction.newFragment.setLocation(msg.getInput());
+			wizardAction.newFragment.location().setText(msg.getInput());
 
 			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
@@ -341,7 +338,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 				continue;
 			}
 
-			wizardAction.newFragment.setProjectName(msg.getInput());
+			wizardAction.newFragment.projectName().setText(msg.getInput());
 
 			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
@@ -357,7 +354,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		wizardAction.newFragment.prepareGradle(projectName);
 
-		Assert.assertFalse(_newFragmentWizard.nextBtn().isEnabled());
+		Assert.assertFalse(wizardAction.getNextBtn().isEnabled());
 
 		Assert.assertEquals(LIFERAY_RUNTIME_MUST_BE_CONFIGURED, wizardAction.getValidationMsg(2));
 
@@ -367,8 +364,5 @@ public class ValidationFragmentTests extends SwtbotBase {
 	@Test
 	public void createFragmentWithoutRuntimeLiferayWorkspace() {
 	}
-
-	private static final NewFragmentInfoWizard _newFragmentInfoWizard = new NewFragmentInfoWizard(bot);
-	private static final NewFragmentWizard _newFragmentWizard = new NewFragmentWizard(bot);
 
 }
