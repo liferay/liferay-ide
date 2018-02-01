@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
-import com.liferay.ide.server.core.portal.BundleSupervisor;
+import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 import com.liferay.ide.server.core.portal.PortalServerBehavior;
 
 import java.util.ArrayList;
@@ -29,7 +29,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.wst.server.core.IServer;
 
 /**
@@ -49,7 +48,7 @@ public class ServiceCommand {
 	}
 
 	public ServiceContainer execute() throws Exception {
-		BundleSupervisor supervisor = null;
+		GogoBundleDeployer bundleDeployer = null;
 		ServiceContainer result;
 
 		if (_server == null) {
@@ -59,19 +58,19 @@ public class ServiceCommand {
 		PortalServerBehavior serverBehavior = (PortalServerBehavior)_server.loadAdapter(
 			PortalServerBehavior.class, null);
 
-		supervisor = serverBehavior.createBundleSupervisor();
+		bundleDeployer = serverBehavior.createBundleDeployer();
 
-		if (supervisor == null) {
+		if (bundleDeployer == null) {
 			return _getServiceFromTargetPlatform();
 		}
 
 		if (_serviceName == null) {
-			String[] services = _getServices(supervisor);
+			String[] services = _getServices(bundleDeployer);
 
 			result = new ServiceContainer(Arrays.asList(services));
 		}
 		else {
-			String[] serviceBundle = _getServiceBundle(_serviceName, supervisor);
+			String[] serviceBundle = _getServiceBundle(_serviceName, bundleDeployer);
 
 			result = new ServiceContainer(serviceBundle[0], serviceBundle[1], serviceBundle[2]);
 		}
@@ -79,7 +78,7 @@ public class ServiceCommand {
 		return result;
 	}
 
-	private String[] _getServiceBundle(String serviceName, BundleSupervisor supervisor) throws Exception {
+	private String[] _getServiceBundle(String serviceName, GogoBundleDeployer bundleDeployer) throws Exception {
 		String[] serviceBundleInfo;
 		String bundleGroup = "";
 		String bundleName;
@@ -138,7 +137,7 @@ public class ServiceCommand {
 		return result;
 	}
 
-	private String[] _getServices(BundleSupervisor supervisor) throws Exception {
+	private String[] _getServices(GogoBundleDeployer bundleDeployer) throws Exception {
 		return _parseService("");
 	}
 

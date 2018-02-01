@@ -27,7 +27,7 @@ import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.portal.BundleSupervisor;
+import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
 import com.liferay.ide.server.core.portal.PortalRuntime;
@@ -119,10 +119,10 @@ public class ServerUtil
         }
     }
 
-    public static BundleSupervisor createBundleSupervisor( PortalRuntime portalRuntime, IServer server )
+    public static GogoBundleDeployer createBundleDeployer( PortalRuntime portalRuntime, IServer server )
         throws Exception
     {
-        return new BundleSupervisor(server.getHost(), 11311);
+        return new GogoBundleDeployer(server.getHost(), 11311);
     }
 
     public static IStatus createErrorStatus( String msg )

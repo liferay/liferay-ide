@@ -19,6 +19,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 
 import java.io.File;
 import java.io.IOException;
@@ -182,13 +183,13 @@ public class BundlePublishFullAdd extends BundlePublishOperation
 
         if( FileUtil.exists(output) )
         {
-            BundleSupervisor bundleSupervisor = null;
+            GogoBundleDeployer bundleDeployer = null;
 
             try
             {
-                bundleSupervisor = createBundleSupervisor();
+                bundleDeployer = createBundleDeployer();
 
-                BundleDTO deployed = bundleSupervisor.deploy(
+                BundleDTO deployed = bundleDeployer.deploy(
                     bsn, output.toFile(), getBundleUrl( output.toFile(), bsn ) );
 
                 if( deployed instanceof BundleDTOWithStatus )

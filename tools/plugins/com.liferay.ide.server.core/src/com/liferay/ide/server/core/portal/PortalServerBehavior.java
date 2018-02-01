@@ -918,9 +918,9 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         return buf.toString();
     }
 
-    public BundleSupervisor createBundleSupervisor() throws Exception
+    public GogoBundleDeployer createBundleDeployer() throws Exception
     {
-        return ServerUtil.createBundleSupervisor( getPortalRuntime(), getServer() );
+        return ServerUtil.createBundleDeployer( getPortalRuntime(), getServer() );
     }
 
     private static final String[] JMX_EXCLUDE_ARGS = new String []

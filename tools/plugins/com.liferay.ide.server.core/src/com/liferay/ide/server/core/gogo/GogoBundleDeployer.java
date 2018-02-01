@@ -14,10 +14,16 @@
 
 package com.liferay.ide.server.core.gogo;
 
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.server.core.portal.BundleDTOWithStatus;
+import com.liferay.ide.server.util.ServerUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import org.eclipse.core.runtime.IPath;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.dto.BundleDTO;
 
@@ -237,4 +243,119 @@ public class GogoBundleDeployer {
 	public String update(long id, String url) throws IOException {
 		return run("update " + id + " " + url, true);
 	}
+
+	public BundleDTO deploy( final String bsn, final File bundleFile, final String bundleUrl ) throws Exception
+    {
+        BundleDTO retval = null;
+
+        boolean isFragment = false;
+        String fragmentHostName = null;
+
+        if( !bundleUrl.contains( "webbundle:" ) )
+        {
+            fragmentHostName = ServerUtil.getFragemtHostName( bundleFile );
+
+            isFragment = ( fragmentHostName != null );
+        }
+
+        long bundleId = getBundleId( bsn );
+
+        if( bundleId > 0 )
+        {
+            if( !isFragment )
+            {
+                stop( bundleId );
+            }
+
+            if( bundleUrl.contains( "webbundle:" ) )
+            {
+                update( bundleId, bundleUrl );
+            }
+            else
+            {
+                update( bundleId, bundleFile );
+            }
+
+            if( !isFragment )
+            {
+                String startStatus = start( bundleId );
+
+                if( startStatus != null )
+                {
+                    retval = new BundleDTO();
+
+                    retval.id = bundleId;
+
+                    retval = new BundleDTOWithStatus( retval, startStatus );
+                }
+            }
+
+            if( retval == null )
+            {
+                retval = new BundleDTO();
+
+                retval.id = bundleId;
+            }
+        }
+        else
+        {
+            if( bundleUrl.contains( "webbundle:" ) )
+            {
+                retval = install( bundleUrl );
+            }
+            else
+            {
+                retval = install( bundleFile );
+            }
+
+            if( !isFragment )
+            {
+                String startStatus = start( retval.id );
+
+                if( startStatus != null )
+                {
+                    retval = new BundleDTOWithStatus( retval, startStatus );
+                }
+            }
+            else
+            {
+                refresh( fragmentHostName );
+            }
+        }
+
+        return retval;
+    }
+
+    public String uninstall( IBundleProject bundleProject, IPath outputJar ) throws Exception
+    {
+        if (FileUtil.notExists(outputJar))
+        {
+            return null;
+        }
+
+        String retVal = null;
+
+        String fragmentHostName = ServerUtil.getFragemtHostName( outputJar.toFile() );
+
+        boolean isFragment = ( fragmentHostName != null );
+
+        final String symbolicName = bundleProject.getSymbolicName();
+
+        if( symbolicName != null )
+        {
+            long bundleId = getBundleId( symbolicName );
+
+            if( bundleId > 0 )
+            {
+                retVal = uninstall( bundleId );
+
+                if( isFragment )
+                {
+                    	refresh( fragmentHostName );
+                }
+            }
+        }
+
+        return retVal;
+    }
 }

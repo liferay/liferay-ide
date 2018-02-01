@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
@@ -70,7 +71,8 @@ public class BundlePublishOperation extends PublishOperation
     {
     }
 
-    public int getKind()
+    @Override
+	public int getKind()
     {
         return REQUIRED;
     }
@@ -81,9 +83,9 @@ public class BundlePublishOperation extends PublishOperation
         return 0;
     }
 
-    protected BundleSupervisor createBundleSupervisor() throws Exception
+    protected GogoBundleDeployer createBundleDeployer() throws Exception
     {
-        return ServerUtil.createBundleSupervisor( portalRuntime, server );
+        return ServerUtil.createBundleDeployer( portalRuntime, server );
     }
 
 }
