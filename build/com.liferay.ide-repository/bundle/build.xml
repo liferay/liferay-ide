@@ -258,7 +258,7 @@
         <delete dir="${eclipse.dir}" failonerror="true" includeemptydirs="true" />
     </target>
 
-    <target name="install-feature">
+    <target name="install-feature"  depends="uninstall-feature">
         <exec executable="${builder.exe}" outputproperty="output" failonerror="true" dir="${target.dir}">
             <arg value="-nosplash" />
             <arg value="-application" />
@@ -283,6 +283,36 @@
             <arg value="${arch}" />
             <arg value="-roaming" />
         </exec>
+    </target>
+
+    <target name="uninstall-feature">
+        <if>
+            <not>
+                <equals arg1="${update.features}" arg2="" />
+            </not>
+            <then>
+                <exec executable="${builder.exe}" outputproperty="output" failonerror="true" dir="${target.dir}">
+                    <arg value="-nosplash" />
+                    <arg value="-application" />
+                    <arg value="org.eclipse.equinox.p2.director" />
+                    <arg value="-uninstallIU" />
+                    <arg value="${update.features}" />
+                    <arg value="-destination" />
+                    <arg value="${eclipse.dir}" />
+                    <arg value="-profile" />
+                    <arg value="epp.package.jee" />
+                    <arg value="-bundlepool" />
+                    <arg value="${eclipse.dir}" />
+                    <arg value="-p2.os" />
+                    <arg value="${os}" />
+                    <arg value="-p2.ws" />
+                    <arg value="${ws}" />
+                    <arg value="-p2.arch" />
+                    <arg value="${arch}" />
+                    <arg value="-roaming" />
+                </exec>
+            </then>
+        </if>
     </target>
 
     <target name="install-all-features" depends="setup-builder">
