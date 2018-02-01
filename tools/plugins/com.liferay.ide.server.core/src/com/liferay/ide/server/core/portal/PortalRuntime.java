@@ -14,11 +14,14 @@
  *******************************************************************************/
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -37,10 +40,10 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.model.RuntimeDelegate;
 
-
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Yuqiang Wang
  */
 public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, PropertyChangeListener
 {
@@ -259,7 +262,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
         return getVMInstallTypeId() == null;
     }
 
-    private boolean isVMMinimumVersion( String javaVersion, int minimumVersion )
+    private boolean isVMRequireVersion( String javaVersion, int requireVersion )
     {
         Integer version = null;
         int index = javaVersion.indexOf( '.' );
@@ -284,8 +287,8 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
             }
         }
 
-        // If we have a version, and it's less than the minimum, fail the check
-        if( version != null && version.intValue() < minimumVersion )
+        // If we have a version, and it isn't equal to the required version, fail the check
+        if( version != null && version.intValue() != requireVersion )
         {
             return false;
         }
@@ -385,10 +388,35 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
             {
                 String javaVersion = ( (IVMInstall2) vmInstall ).getJavaVersion();
 
-                if( javaVersion != null && !isVMMinimumVersion( javaVersion, 107 ) )
+                if( javaVersion != null && !isVMRequireVersion( javaVersion, 108 ) )
                 {
-                    return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorJRE70, null );
+                    return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorJRE80, null );
                 }
+            }
+        }
+
+        File jdkInstallLocation = getVMInstall().getInstallLocation();
+
+        if( jdkInstallLocation != null )
+        {
+            String rootPath = jdkInstallLocation.getAbsolutePath();
+
+            StringBuilder javacPath = new StringBuilder(rootPath);
+
+            javacPath.append( File.separator ).append( "bin" ).append( File.separator );
+
+            if( CoreUtil.isWindows() )
+            {
+                javacPath.append( "javac.exe" );
+            }
+            else if( CoreUtil.isLinux() || CoreUtil.isMac() )
+            {
+                javacPath.append( "javac" );
+            }
+
+            if( FileUtil.notExists( new File( javacPath.toString() ) ) )
+            {
+                return new Status( IStatus.WARNING, LiferayServerCore.PLUGIN_ID, 0, Msgs.warningjre, null );
             }
         }
 
@@ -398,9 +426,10 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
     private static class Msgs extends NLS
     {
         public static String errorJRE;
-        public static String errorJRE70;
+        public static String errorJRE80;
         public static String errorPortalVersion70;
         public static String errorPortalNotExisted;
+        public static String warningjre;
 
         static
         {
