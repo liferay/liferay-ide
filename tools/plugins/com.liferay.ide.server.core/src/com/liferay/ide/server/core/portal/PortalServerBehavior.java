@@ -850,9 +850,18 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
             final String existingVMArgs =
                 wc.getAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, (String) null );
 
-            wc.setAttribute(
-                IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS,
-                mergeArguments( existingVMArgs, getRuntimeStopVMArguments(), null, true ) );
+            if( existingVMArgs.indexOf( JMX_EXCLUDE_ARGS[0] ) >= 0 )
+            {
+                wc.setAttribute(
+                    IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS,
+                    mergeArguments( existingVMArgs, getRuntimeStopVMArguments(), JMX_EXCLUDE_ARGS, false ) );
+            }
+            else
+            {
+                wc.setAttribute(
+                    IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS,
+                    mergeArguments( existingVMArgs, getRuntimeStopVMArguments(), null, true ) );
+            }
 
             wc.setAttribute( IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, args );
             wc.setAttribute( "org.eclipse.debug.ui.private", true );

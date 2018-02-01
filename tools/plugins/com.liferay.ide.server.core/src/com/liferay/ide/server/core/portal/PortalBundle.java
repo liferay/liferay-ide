@@ -37,6 +37,8 @@ public interface PortalBundle extends ILiferayPortal
 
     IPath getAppServerDir();
 
+    int getJmxRemotePort();
+
     String getMainClass();
 
     IPath getModulesPath();

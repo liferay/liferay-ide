@@ -45,6 +45,8 @@ import org.w3c.dom.NodeList;
  */
 public class PortalJBossBundle extends AbstractPortalBundle
 {
+	public static final int DEFAULT_JMX_PORT = 2099;
+
     public PortalJBossBundle( IPath path )
     {
        super(path);
@@ -71,6 +73,12 @@ public class PortalJBossBundle extends AbstractPortalBundle
     protected IPath getAppServerLibDir()
     {
         return getAppServerDir().append( "modules" ); //$NON-NLS-1$
+    }
+
+    @Override
+    protected int getDefaultJMXRemotePort()
+    {
+        return DEFAULT_JMX_PORT;
     }
 
     @Override
@@ -199,6 +207,10 @@ public class PortalJBossBundle extends AbstractPortalBundle
     {
         final List<String> args = new ArrayList<String>();
 
+        args.add( "-Dcom.sun.management.jmxremote" );
+        args.add( "-Dcom.sun.management.jmxremote.authenticate=false" );
+        args.add( "-Dcom.sun.management.jmxremote.port=" + getJmxRemotePort() );
+        args.add( "-Dcom.sun.management.jmxremote.ssl=false" );
         args.add( "-Dorg.jboss.resolver.warning=true" );
         args.add( "-Djava.net.preferIPv4Stack=true" );
         args.add( "-Dsun.rmi.dgc.client.gcInterval=3600000" );
