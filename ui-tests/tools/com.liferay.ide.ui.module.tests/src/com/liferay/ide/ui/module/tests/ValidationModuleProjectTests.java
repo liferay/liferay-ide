@@ -25,6 +25,7 @@ import java.io.File;
 import org.eclipse.core.runtime.Platform;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -90,6 +91,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		_newModuleProjectWizard.cancel();
 	}
 
+	@Ignore
 	@Test
 	public void validateLoaction() {
 		String projectName = "test-location";
