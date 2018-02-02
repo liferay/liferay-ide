@@ -15,13 +15,13 @@
 package com.liferay.ide.ui.sdk.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.page.wizard.LiferayProjectFromExistSourceWizard;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
+ * @author Ashley Yuan
  */
 public class ValidationPluginProjectTests extends SwtbotBase {
 
@@ -29,24 +29,21 @@ public class ValidationPluginProjectTests extends SwtbotBase {
 	public void testDefaults() {
 		wizardAction.openNewLiferayPluginProjectsFromExistingSourceWizard();
 
-		Assert.assertEquals(PLEASE_SELECT_AT_LEAST_ONE_PROJECT_TO_IMPORT, _pluginFromSourceWizard.getValidationMsg());
+		Assert.assertEquals(PLEASE_SELECT_AT_LEAST_ONE_PROJECT_TO_IMPORT, wizardAction.getValidationMsg());
 
-		Assert.assertTrue(_pluginFromSourceWizard.getSdkDirectory().isEnabled());
-		Assert.assertTrue(_pluginFromSourceWizard.getBrowseSdkDirectoryBtn().isEnabled());
-		Assert.assertTrue(_pluginFromSourceWizard.getSdkVersion().isEnabled());
+		Assert.assertTrue(wizardAction.projectFromExistSource.sdkDirectory().isEnabled());
+		Assert.assertTrue(wizardAction.projectFromExistSource.browseSdkDirectoryBtn().isEnabled());
+		Assert.assertTrue(wizardAction.projectFromExistSource.sdkVersion().isEnabled());
 
-		Assert.assertTrue(_pluginFromSourceWizard.getSdkDirectory().isActive());
-		Assert.assertFalse(_pluginFromSourceWizard.getBrowseSdkDirectoryBtn().isActive());
-		Assert.assertFalse(_pluginFromSourceWizard.getSdkVersion().isActive());
+		Assert.assertTrue(wizardAction.projectFromExistSource.sdkDirectory().isActive());
+		Assert.assertFalse(wizardAction.projectFromExistSource.browseSdkDirectoryBtn().isActive());
+		Assert.assertFalse(wizardAction.projectFromExistSource.sdkVersion().isActive());
 
-		Assert.assertTrue(_pluginFromSourceWizard.getSelectAllBtn().isEnabled());
-		Assert.assertTrue(_pluginFromSourceWizard.getDeselectAllBtn().isEnabled());
-		Assert.assertTrue(_pluginFromSourceWizard.getRefreshBtn().isEnabled());
+		Assert.assertTrue(wizardAction.projectFromExistSource.selectAllBtn().isEnabled());
+		Assert.assertTrue(wizardAction.projectFromExistSource.deselectAllBtn().isEnabled());
+		Assert.assertTrue(wizardAction.projectFromExistSource.refreshBtn().isEnabled());
 
 		wizardAction.cancel();
 	}
-
-	private static final LiferayProjectFromExistSourceWizard _pluginFromSourceWizard =
-		new LiferayProjectFromExistSourceWizard(bot);
 
 }

@@ -48,7 +48,7 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
-		wizardAction.importLiferayWorkspace.prepare(workspaceProject.getPath());
+		wizardAction.importLiferayWorkspace.prepareLocation(workspaceProject.getPath());
 
 		wizardAction.finish();
 
@@ -119,7 +119,7 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
-		wizardAction.importLiferayWorkspace.prepare(workspaceProject.getPath());
+		wizardAction.importLiferayWorkspace.prepareLocation(workspaceProject.getPath());
 
 		wizardAction.finish();
 
@@ -157,7 +157,7 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
-		wizardAction.importLiferayWorkspace.prepare(workspaceProject.getPath());
+		wizardAction.importLiferayWorkspace.prepareLocation(workspaceProject.getPath());
 
 		wizardAction.finish();
 

@@ -15,7 +15,6 @@
 package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.page.wizard.NewLiferayComponentWizard;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
@@ -28,6 +27,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
+ * @author Ashley Yuan
  * @author Lily Li
  */
 public class ValidationComponentTests extends SwtbotBase {
@@ -88,7 +88,7 @@ public class ValidationComponentTests extends SwtbotBase {
 				continue;
 			}
 
-			_newComponentWizard.getComponentClassName().setText(msg.getInput());
+			wizardAction.newLiferayComponent.componentClassName().setText(msg.getInput());
 
 			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
@@ -117,7 +117,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
-		Assert.assertArrayEquals(templates, _newComponentWizard.getComponentClassTemplates().items());
+		Assert.assertArrayEquals(templates, wizardAction.newLiferayComponent.componentClassTemplate().items());
 
 		wizardAction.cancel();
 
@@ -138,9 +138,9 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		Assert.assertEquals(CREATE_A_NEW_LIEFRAY_COMPONENT_CLASS, wizardAction.getValidationMsg(2));
 
-		Assert.assertEquals(projectName, _newComponentWizard.getProjectNames().getText());
+		Assert.assertEquals(projectName, wizardAction.newLiferayComponent.projectName().getText());
 
-		Assert.assertTrue(_newComponentWizard.getPackageBrowseBtn().isEnabled());
+		Assert.assertTrue(wizardAction.newLiferayComponent.browsePackageBtn().isEnabled());
 
 		Assert.assertTrue(wizardAction.getFinishBtn().isEnabled());
 
@@ -155,13 +155,13 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		//Assert.assertEquals(NO_SUITABLE_LIFERAY_MODULE_PROJECT, wizardAction.getValidationMsg(2));
 
-		Assert.assertEquals(StringPool.BLANK, _newComponentWizard.getProjectNames().getText());
+		Assert.assertEquals(StringPool.BLANK, wizardAction.newLiferayComponent.projectName().getText());
 
-		Assert.assertEquals(StringPool.BLANK, _newComponentWizard.getPackageName().getText());
+		Assert.assertEquals(StringPool.BLANK, wizardAction.newLiferayComponent.packageName().getText());
 
-		Assert.assertEquals(StringPool.BLANK, _newComponentWizard.getComponentClassName().getText());
+		Assert.assertEquals(StringPool.BLANK, wizardAction.newLiferayComponent.componentClassName().getText());
 
-		Assert.assertEquals(PORTLET_UPCASE, _newComponentWizard.getComponentClassTemplates().getText());
+		Assert.assertEquals(PORTLET_UPCASE, wizardAction.newLiferayComponent.componentClassTemplate().getText());
 
 		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
 
@@ -237,7 +237,7 @@ public class ValidationComponentTests extends SwtbotBase {
 				continue;
 			}
 
-			_newComponentWizard.getPackageName().setText(msg.getInput());
+			wizardAction.newLiferayComponent.packageName().setText(msg.getInput());
 
 			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
@@ -271,7 +271,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayComponentClassWizard();
 
-		Assert.assertArrayEquals(projectNames, _newComponentWizard.getProjectNames().items());
+		Assert.assertArrayEquals(projectNames, wizardAction.newLiferayComponent.projectName().items());
 
 		wizardAction.newLiferayComponent.prepare(projectName2, packageName);
 
@@ -337,7 +337,5 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		viewAction.project.closeAndDelete(projectName);
 	}
-
-	private static final NewLiferayComponentWizard _newComponentWizard = new NewLiferayComponentWizard(bot);
 
 }

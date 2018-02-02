@@ -72,7 +72,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		String newFolderName = "changeLocation";
 
-		wizardAction.newLiferayWorkspace.setLocation(workspacePath + "/" + newFolderName);
+		wizardAction.newLiferayWorkspace.location().setText(workspacePath + "/" + newFolderName);
 
 		wizardAction.finish();
 
