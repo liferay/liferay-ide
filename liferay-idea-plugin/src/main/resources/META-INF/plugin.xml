@@ -16,8 +16,10 @@
 
 		<group id="LiferayActionGroup" class="com.liferay.ide.idea.ui.actions.LiferayActionGroup" popup="true" text="Liferay" icon="/icons/liferay.png">
 			<add-to-group group-id="ProjectViewPopupMenu" />
-			<action class="com.liferay.ide.idea.ui.actions.DeployModuleAction" id="DeployLiferayModule"/>
-			<action class="com.liferay.ide.idea.ui.actions.InitBundleAction" id="InitBundle"/>
+			<action class="com.liferay.ide.idea.ui.actions.DeployGradleModuleAction" id="DeployLiferayGradleModule"/>
+			<action class="com.liferay.ide.idea.ui.actions.DeployMavenModuleAction" id="DeployLiferayMavenModule"/>
+			<action class="com.liferay.ide.idea.ui.actions.InitBundleGradleAction" id="GradleInitBundle"/>
+            <action class="com.liferay.ide.idea.ui.actions.InitBundleMavenAction" id="MavenInitBundle"/>
 		</group>
 	</actions>
 

@@ -29,9 +29,9 @@ import com.liferay.ide.idea.ui.LiferayIdeaUI;
 /**
  * @author Andy Wu
  */
-public class DeployModuleAction extends AbstractLiferayGradleTaskAction {
+public class DeployGradleModuleAction extends AbstractLiferayGradleTaskAction {
 
-	public DeployModuleAction() {
+	public DeployGradleModuleAction() {
 		super("Deploy", "Run deploy task", LiferayIdeaUI.LIFERAY_ICON, "deploy");
 	}
 
@@ -42,7 +42,11 @@ public class DeployModuleAction extends AbstractLiferayGradleTaskAction {
 
 		VirtualFile baseDir = project.getBaseDir();
 
-		if ((file != null) && ProjectRootsUtil.isModuleContentRoot(file, project) && !baseDir.equals(file)) {
+		VirtualFile gradleFile = baseDir.findChild("build.gradle");
+
+		if ((file != null) && (gradleFile != null) && ProjectRootsUtil.isModuleContentRoot(file, project) &&
+			!baseDir.equals(file)) {
+
 			return true;
 		}
 

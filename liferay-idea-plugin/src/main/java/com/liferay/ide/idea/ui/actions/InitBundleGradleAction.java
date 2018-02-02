@@ -24,9 +24,9 @@ import com.liferay.ide.idea.ui.LiferayIdeaUI;
 /**
  * @author Andy Wu
  */
-public class InitBundleAction extends AbstractLiferayGradleTaskAction {
+public class InitBundleGradleAction extends AbstractLiferayGradleTaskAction {
 
-	public InitBundleAction() {
+	public InitBundleGradleAction() {
 		super("InitBundle", "Run initBundle task", LiferayIdeaUI.LIFERAY_ICON, "initBundle");
 	}
 
