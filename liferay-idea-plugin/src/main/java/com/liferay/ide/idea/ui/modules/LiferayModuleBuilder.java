@@ -98,11 +98,13 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 	public void setupRootModel(ModifiableRootModel rootModel) throws ConfigurationException {
 		VirtualFile moduleDir = _createAndGetContentEntry();
 
+		VirtualFile moduleParentDir = moduleDir.getParent();
+
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("create ");
 		sb.append("-d \"");
-		sb.append(moduleDir.getParent().getPath());
+		sb.append(moduleParentDir.getPath());
 		sb.append("\" ");
 		sb.append("-t ");
 		sb.append(_type);
@@ -147,7 +149,9 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 
 		new File(path).mkdirs();
 
-		return LocalFileSystem.getInstance().refreshAndFindFileByPath(path);
+		LocalFileSystem localFileSystem = LocalFileSystem.getInstance();
+
+		return localFileSystem.refreshAndFindFileByPath(path);
 	}
 
 	private static final String _LIFERAY_MODULES = "Liferay Modules";

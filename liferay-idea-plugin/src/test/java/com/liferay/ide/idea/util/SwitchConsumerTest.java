@@ -33,7 +33,7 @@ public class SwitchConsumerTest {
 
 		SwitchConsumerBuilder<String> switch_ = SwitchConsumer.newBuilder();
 
-		Stream<String> stream = Stream.of(_strings);
+		Stream<String> stream = Stream.of(_STRINGS);
 
 		SwitchConsumer<String> switchConsumer = switch_.addCase(
 			s -> s.equals("foo"), s -> output.append("case1 " + s + "\n")
@@ -49,14 +49,14 @@ public class SwitchConsumerTest {
 			switchConsumer
 		);
 
-		Assert.assertEquals(_expected, output.toString());
+		Assert.assertEquals(_EXPECTED, output.toString());
 	}
 
 	@Test
 	public void testTraditionalIfElseStatement() throws Exception {
 		StringBuilder output = new StringBuilder();
 
-		for (String s : _strings) {
+		for (String s : _STRINGS) {
 			if (s != null) {
 				if (s.equals("foo")) {
 					output.append("case1 " + s + "\n");
@@ -70,10 +70,11 @@ public class SwitchConsumerTest {
 			}
 		}
 
-		Assert.assertEquals(_expected, output.toString());
+		Assert.assertEquals(_EXPECTED, output.toString());
 	}
 
-	private static final String _expected = "case1 foo\ncase2 bar\ndefault baz\ndefault quux\n";
-	private static final String[] _strings = {"foo", "bar", "baz", "quux"};
+	private static final String _EXPECTED = "case1 foo\ncase2 bar\ndefault baz\ndefault quux\n";
+
+	private static final String[] _STRINGS = {"foo", "bar", "baz", "quux"};
 
 }

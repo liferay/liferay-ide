@@ -20,6 +20,7 @@ import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.externalSystem.model.execution.ExternalSystemTaskExecutionSettings;
 import com.intellij.openapi.externalSystem.model.execution.ExternalTaskExecutionInfo;
 import com.intellij.openapi.externalSystem.service.notification.ExternalSystemNotificationManager;
@@ -109,7 +110,9 @@ public abstract class AbstractLiferayGradleTaskAction extends AnAction {
 	public void update(AnActionEvent event) {
 		super.update(event);
 
-		event.getPresentation().setEnabledAndVisible(isEnabledAndVisible(event));
+		Presentation eventPresentation = event.getPresentation();
+
+		eventPresentation.setEnabledAndVisible(isEnabledAndVisible(event));
 	}
 
 	protected VirtualFile getVirtualFile(AnActionEvent event) {
@@ -175,8 +178,10 @@ public abstract class AbstractLiferayGradleTaskAction extends AnAction {
 
 			notificationData.setBalloonNotification(true);
 
-			ExternalSystemNotificationManager.getInstance(
-				project).showNotification(GradleConstants.SYSTEM_ID, notificationData);
+			ExternalSystemNotificationManager externalSystemNotificationManager =
+				ExternalSystemNotificationManager.getInstance(project);
+
+			externalSystemNotificationManager.showNotification(GradleConstants.SYSTEM_ID, notificationData);
 
 			return null;
 		}

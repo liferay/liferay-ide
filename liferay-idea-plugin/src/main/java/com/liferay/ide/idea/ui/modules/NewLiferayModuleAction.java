@@ -20,6 +20,7 @@ import com.intellij.ide.util.projectWizard.ProjectBuilder;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
@@ -114,7 +115,9 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
 	public void update(AnActionEvent event) {
 		super.update(event);
 
-		event.getPresentation().setEnabled(_isValidWorkspaceLocation(getEventProject(event)));
+		Presentation eventPresentation = event.getPresentation();
+
+		eventPresentation.setEnabled(_isValidWorkspaceLocation(getEventProject(event)));
 	}
 
 	private boolean _isValidWorkspaceLocation(Project project) {

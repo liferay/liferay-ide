@@ -24,6 +24,7 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ui.configuration.ProjectStructureConfigurable;
+import com.intellij.openapi.roots.ui.configuration.projectRoot.ModuleStructureConfigurable;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.io.FileUtil;
@@ -54,7 +55,9 @@ public class LiferayModuleNameLocationComponent {
 	}
 
 	public void bindModuleSettings(LiferayNamePathComponent namePathComponent) {
-		Document nameDocument = namePathComponent.getNameComponent().getDocument();
+		JTextField nameComponent = namePathComponent.getNameComponent();
+
+		Document nameDocument = nameComponent.getDocument();
 
 		nameDocument.addDocumentListener(
 			new DocumentAdapter() {
@@ -67,7 +70,9 @@ public class LiferayModuleNameLocationComponent {
 
 			});
 
-		Document pathDocument = namePathComponent.getPathComponent().getDocument();
+		JTextField pathComponent = namePathComponent.getPathComponent();
+
+		Document pathDocument = pathComponent.getDocument();
 
 		pathDocument.addDocumentListener(
 			new DocumentAdapter() {
@@ -80,7 +85,9 @@ public class LiferayModuleNameLocationComponent {
 
 			});
 
-		_moduleName.getDocument().addDocumentListener(
+		Document document = _moduleName.getDocument();
+
+		document.addDocumentListener(
 			new DocumentAdapter() {
 
 				protected void textChanged(DocumentEvent event) {
@@ -156,7 +163,9 @@ public class LiferayModuleNameLocationComponent {
 
 			});
 
-		Document namePathDocument = namePathComponent.getPathComponent().getDocument();
+		JTextField jTextField = namePathComponent.getPathComponent();
+
+		Document namePathDocument = jTextField.getDocument();
 
 		namePathDocument.addDocumentListener(
 			new DocumentAdapter() {
@@ -269,7 +278,9 @@ public class LiferayModuleNameLocationComponent {
 	}
 
 	private String _getModuleName() {
-		return _moduleName.getText().trim();
+		String moduleName = _moduleName.getText();
+
+		return moduleName.trim();
 	}
 
 	private String _getTargetFolderName() {
@@ -321,10 +332,14 @@ public class LiferayModuleNameLocationComponent {
 		ProjectStructureConfigurable fromConfigurable = ProjectStructureConfigurable.getInstance(project);
 
 		if (fromConfigurable != null) {
-			module = fromConfigurable.getModulesConfig().getModule(moduleName);
+			ModuleStructureConfigurable moduleStructureConfigurable = fromConfigurable.getModulesConfig();
+
+			module = moduleStructureConfigurable.getModule(moduleName);
 		}
 		else {
-			module = ModuleManager.getInstance(project).findModuleByName(moduleName);
+			ModuleManager moduleManager = ModuleManager.getInstance(project);
+
+			module = moduleManager.findModuleByName(moduleName);
 		}
 
 		if (module != null) {

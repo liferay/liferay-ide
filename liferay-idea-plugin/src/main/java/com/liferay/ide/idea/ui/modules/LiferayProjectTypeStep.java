@@ -23,6 +23,7 @@ import com.intellij.ide.util.frameworkSupport.FrameworkSupportUtil;
 import com.intellij.ide.util.newProjectWizard.AddSupportForFrameworksPanel;
 import com.intellij.ide.util.newProjectWizard.FrameworkSupportNode;
 import com.intellij.ide.util.newProjectWizard.FrameworkSupportNodeBase;
+import com.intellij.ide.util.newProjectWizard.StepSequence;
 import com.intellij.ide.util.newProjectWizard.TemplatesGroup;
 import com.intellij.ide.util.newProjectWizard.WizardDelegate;
 import com.intellij.ide.util.newProjectWizard.impl.FrameworkSupportModelBase;
@@ -87,6 +88,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -248,7 +250,9 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 
 		};
 
-		_projectTypeList.getSelectionModel().addListSelectionListener(
+		ListSelectionModel listSelectionModel = _projectTypeList.getSelectionModel();
+
+		listSelectionModel.addListSelectionListener(
 			new ListSelectionListener() {
 
 				@Override
@@ -280,7 +284,9 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 			builder -> _wizard.getSequence().addStepsForBuilder(builder, context, modulesProvider)
 		);
 
-		String groupId = PropertiesComponent.getInstance().getValue(_PROJECT_WIZARD_GROUP);
+		PropertiesComponent propertiesComponent = PropertiesComponent.getInstance();
+
+		String groupId = propertiesComponent.getValue(_PROJECT_WIZARD_GROUP);
 
 		if (groupId != null) {
 			TemplatesGroup group = ContainerUtil.find(groups, group1 -> groupId.equals(group1.getId()));
@@ -395,7 +401,9 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 
 		_lastSelectedGroup = group;
 
-		PropertiesComponent.getInstance().setValue(_PROJECT_WIZARD_GROUP, group.getId());
+		PropertiesComponent propertiesComponent = PropertiesComponent.getInstance();
+
+		propertiesComponent.setValue(_PROJECT_WIZARD_GROUP, group.getId());
 
 		ModuleBuilder groupModuleBuilder = group.getModuleBuilder();
 
@@ -472,7 +480,9 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 	public void updateDataModel() {
 		ModuleBuilder builder = _getSelectedBuilder();
 
-		_wizard.getSequence().addStepsForBuilder(builder, _context, _modulesProvider);
+		StepSequence stepSequence = _wizard.getSequence();
+
+		stepSequence.addStepsForBuilder(builder, _context, _modulesProvider);
 
 		ModuleWizardStep step = _getCustomStep();
 
@@ -629,7 +639,9 @@ public class LiferayProjectTypeStep extends ModuleWizardStep implements Settings
 		_context.setProjectBuilder(builder);
 
 		if (builder != null) {
-			_wizard.getSequence().setType(builder.getBuilderId());
+			StepSequence stepSequence = _wizard.getSequence();
+
+			stepSequence.setType(builder.getBuilderId());
 		}
 
 		_wizard.setDelegate(builder instanceof WizardDelegate ? (WizardDelegate)builder : null);

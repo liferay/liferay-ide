@@ -48,6 +48,7 @@ import com.liferay.ide.idea.util.LiferayWorkspaceUtil;
 
 import java.io.File;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import java.util.LinkedHashMap;
@@ -68,8 +69,11 @@ public class LiferayServerConfiguration
 		super(project, factory, name);
 
 		_configurationModule = new JavaRunConfigurationModule(project, true);
-		_config.liferayBundle = Paths.get(
-			project.getBasePath(), LiferayWorkspaceUtil.getHomeDir(project.getBasePath())).toString();
+
+		Path path = Paths.get(project.getBasePath(), LiferayWorkspaceUtil.getHomeDir(project.getBasePath()));
+
+		_config.liferayBundle = path.toString();
+
 		_config.vmParameters = "-Xmx1024m";
 	}
 
@@ -122,7 +126,10 @@ public class LiferayServerConfiguration
 
 		group.addEditor(title, new LiferayServerConfigurable(getProject()));
 
-		JavaRunConfigurationExtensionManager.getInstance().appendEditors(this, group);
+		JavaRunConfigurationExtensionManager javaRunConfigurationExtensionManager =
+			JavaRunConfigurationExtensionManager.getInstance();
+
+		javaRunConfigurationExtensionManager.appendEditors(this, group);
 
 		group.addEditor(ExecutionBundle.message("logs.tab.title"), new LogConfigurationPanel<>());
 
@@ -211,7 +218,11 @@ public class LiferayServerConfiguration
 	public void readExternal(Element element) throws InvalidDataException {
 		super.readExternal(element);
 
-		JavaRunConfigurationExtensionManager.getInstance().readExternal(this, element);
+		JavaRunConfigurationExtensionManager javaRunConfigurationExtensionManager =
+			JavaRunConfigurationExtensionManager.getInstance();
+
+		javaRunConfigurationExtensionManager.readExternal(this, element);
+
 		XmlSerializer.deserializeInto(_config, element);
 		EnvironmentVariablesComponent.readExternal(element, getEnvs());
 
@@ -272,7 +283,11 @@ public class LiferayServerConfiguration
 	public void writeExternal(Element element) throws WriteExternalException {
 		super.writeExternal(element);
 
-		JavaRunConfigurationExtensionManager.getInstance().writeExternal(this, element);
+		JavaRunConfigurationExtensionManager javaRunConfigurationExtensionManager =
+			JavaRunConfigurationExtensionManager.getInstance();
+
+		javaRunConfigurationExtensionManager.writeExternal(this, element);
+
 		XmlSerializer.serializeInto(_config, element, new SkipDefaultValuesSerializationFilters());
 		EnvironmentVariablesComponent.writeExternal(element, getEnvs());
 

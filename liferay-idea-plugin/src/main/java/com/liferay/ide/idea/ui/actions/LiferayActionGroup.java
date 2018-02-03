@@ -19,6 +19,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.actionSystem.Presentation;
 
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -31,7 +32,9 @@ public class LiferayActionGroup extends DefaultActionGroup {
 
 		AnAction[] actions = getChildren(event);
 
-		Stream<AnAction> stream = Stream.of(actions);
+		Supplier<Stream<AnAction>> streamSupplier = () -> Stream.of(actions);
+
+		Stream<AnAction> stream = streamSupplier.get();
 
 		long count = stream.filter(
 			action -> action instanceof AbstractLiferayGradleTaskAction
@@ -40,6 +43,18 @@ public class LiferayActionGroup extends DefaultActionGroup {
 		).filter(
 			action -> action.isEnabledAndVisible(event)
 		).count();
+
+		if (count <= 0) {
+			stream = streamSupplier.get();
+
+			count = stream.filter(
+				action -> action instanceof AbstractLiferayMavenGoalAction
+			).map(
+				action -> (AbstractLiferayMavenGoalAction)action
+			).filter(
+				action -> action.isEnabledAndVisible(event)
+			).count();
+		}
 
 		presentation.setEnabledAndVisible(count > 0);
 	}

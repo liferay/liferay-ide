@@ -14,7 +14,7 @@ buildscript {
 }
 
 plugins {
-	id "org.jetbrains.intellij" version "0.2.17"
+	id "org.jetbrains.intellij" version "0.2.18"
 }
 
 apply plugin: 'com.liferay.source.formatter'
@@ -39,7 +39,7 @@ formatSource {
 
 intellij {
 	version "2017.3"
-	plugins 'gradle'
+	plugins 'gradle', 'maven'
 }
 
 patchPluginXml {

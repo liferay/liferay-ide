@@ -38,6 +38,7 @@ import javax.swing.Icon;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -91,7 +92,9 @@ public class LiferayProjectTemplateList extends JPanel {
 
 		_templateList.setCellRenderer(renderer);
 
-		_templateList.getSelectionModel().addListSelectionListener(
+		ListSelectionModel listSelectionModel = _templateList.getSelectionModel();
+
+		listSelectionModel.addListSelectionListener(
 			new ListSelectionListener() {
 
 				@Override
@@ -114,7 +117,9 @@ public class LiferayProjectTemplateList extends JPanel {
 	}
 
 	public void restoreSelection() {
-		String templateName = PropertiesComponent.getInstance().getValue(_PROJECT_WIZARD_TEMPLATE);
+		PropertiesComponent propertiesComponent = PropertiesComponent.getInstance();
+
+		String templateName = propertiesComponent.getValue(_PROJECT_WIZARD_TEMPLATE);
 
 		if ((templateName != null) && (_templateList.getModel() instanceof CollectionListModel)) {
 			List<ProjectTemplate> list = ((CollectionListModel<ProjectTemplate>)_templateList.getModel()).toList();
@@ -126,7 +131,9 @@ public class LiferayProjectTemplateList extends JPanel {
 			}
 		}
 
-		_templateList.getSelectionModel().addListSelectionListener(
+		ListSelectionModel listSelectionModel = _templateList.getSelectionModel();
+
+		listSelectionModel.addListSelectionListener(
 			new ListSelectionListener() {
 
 				@Override
@@ -134,7 +141,9 @@ public class LiferayProjectTemplateList extends JPanel {
 					ProjectTemplate template = getSelectedTemplate();
 
 					if (template != null) {
-						PropertiesComponent.getInstance().setValue(_PROJECT_WIZARD_TEMPLATE, template.getName());
+						PropertiesComponent propertiesComponent = PropertiesComponent.getInstance();
+
+						propertiesComponent.setValue(_PROJECT_WIZARD_TEMPLATE, template.getName());
 					}
 				}
 

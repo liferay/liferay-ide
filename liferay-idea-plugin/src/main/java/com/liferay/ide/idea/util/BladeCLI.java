@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 import org.apache.tools.ant.DefaultLogger;
@@ -39,14 +41,16 @@ public class BladeCLI {
 		javaTask.setFork(true);
 		javaTask.setFailonerror(true);
 
-		File temp = new File(System.getProperties().getProperty("user.home"), ".liferay-ide");
+		Properties properties = System.getProperties();
 
-		File bladeJar = new File(temp, "com.liferay.blade.cli.jar");
+		File temp = new File(properties.getProperty("user.home"), ".liferay-ide");
+
+		File bladeJar = new File(temp, "blade.jar");
 
 		if (!bladeJar.exists()) {
-			try (InputStream in = BladeCLI.class.getClassLoader().getResourceAsStream(
-					"/libs/com.liferay.blade.cli.jar")) {
+			ClassLoader bladeClassLoader = BladeCLI.class.getClassLoader();
 
+			try (InputStream in = bladeClassLoader.getResourceAsStream("/libs/blade.jar")) {
 				FileUtil.writeFile(bladeJar, in);
 			}
 			catch (IOException ioe) {
@@ -68,11 +72,13 @@ public class BladeCLI {
 
 		javaTask.executeJava();
 
-		java.util.List<String> lines = new ArrayList<>();
+		List<String> lines = new ArrayList<>();
 		Scanner scanner = new Scanner(out.toString());
 
 		while (scanner.hasNextLine()) {
-			lines.add(scanner.nextLine().replaceAll(".*\\[null\\] ", ""));
+			String nextLine = scanner.nextLine();
+
+			lines.add(nextLine.replaceAll(".*\\[null\\] ", ""));
 		}
 
 		scanner.close();
@@ -94,12 +100,14 @@ public class BladeCLI {
 	}
 
 	public static synchronized String[] getProjectTemplates() {
-		java.util.List<String> templateNames = new ArrayList<>();
+		List<String> templateNames = new ArrayList<>();
 
 		String[] executeResult = execute("create -l");
 
 		for (String name : executeResult) {
-			if (name.trim().indexOf(" ") != -1) {
+			String trimmedName = name.trim();
+
+			if (trimmedName.indexOf(" ") != -1) {
 				templateNames.add(name.substring(0, name.indexOf(" ")));
 			}
 			else {

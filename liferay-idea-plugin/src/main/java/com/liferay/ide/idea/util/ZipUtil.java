@@ -76,7 +76,9 @@ public class ZipUtil {
 					entryName = entry.getName();
 				}
 				else {
-					entryName = entry.getName().replaceFirst(entryToStart, ""); //$NON-NLS-1$
+					String name = entry.getName();
+
+					entryName = name.replaceFirst(entryToStart, "");
 				}
 
 				if (entry.isDirectory()) {

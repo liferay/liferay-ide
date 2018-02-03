@@ -6,6 +6,7 @@
 	<change-notes/>
 
 	<depends>org.jetbrains.plugins.gradle</depends>
+	<depends>org.jetbrains.idea.maven</depends>
 
 	<actions>
 		<action id="NewLiferayModule" class="com.liferay.ide.idea.ui.modules.NewLiferayModuleAction"
@@ -15,13 +16,15 @@
 
 		<group id="LiferayActionGroup" class="com.liferay.ide.idea.ui.actions.LiferayActionGroup" popup="true" text="Liferay" icon="/icons/liferay.png">
 			<add-to-group group-id="ProjectViewPopupMenu" />
-			<action class="com.liferay.ide.idea.ui.actions.DeployModuleAction" id="DeployLiferayModule"/>
-			<action class="com.liferay.ide.idea.ui.actions.InitBundleAction" id="InitBundle"/>
+			<action class="com.liferay.ide.idea.ui.actions.DeployGradleModuleAction" id="DeployLiferayGradleModule"/>
+			<action class="com.liferay.ide.idea.ui.actions.DeployMavenModuleAction" id="DeployLiferayMavenModule"/>
+			<action class="com.liferay.ide.idea.ui.actions.InitBundleGradleAction" id="GradleInitBundle"/>
+            <action class="com.liferay.ide.idea.ui.actions.InitBundleMavenAction" id="MavenInitBundle"/>
 		</group>
 	</actions>
 
 	<extensions defaultExtensionNs="com.intellij">
-		<moduleBuilder builderClass="com.liferay.ide.idea.ui.modules.LiferayWorkspaceBuilder" />
+		<projectTemplatesFactory implementation="com.liferay.ide.idea.ui.modules.LiferayWorkspaceTemplatesFactory"/>
 		<configurationType implementation="com.liferay.ide.idea.server.LiferayServerConfigurationType" />
 		<programRunner id="Run" implementation="com.liferay.ide.idea.server.LiferayServerRunner" />
 		<programRunner id="Debug" implementation="com.liferay.ide.idea.server.LiferayServerDebugger" />
