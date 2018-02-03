@@ -32,38 +32,34 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorkspace() {
-		String workspaceName = project.getName("test-liferay-workspace-gradle");
-
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
 
 		wizardAction.finish();
 
-		String[] moduleNames = {workspaceName, "modules"};
+		String[] moduleNames = {project.getName(), "modules"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(moduleNames));
 
-		String[] themeNames = {workspaceName, "themes"};
+		String[] themeNames = {project.getName(), "themes"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(themeNames));
 
-		String[] warNames = {workspaceName, "wars"};
+		String[] warNames = {project.getName(), "wars"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(warNames));
 
-		viewAction.project.closeAndDelete(workspaceName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createLiferayWorkspaceChangeLocation() {
-		String workspaceName = project.getName("test-liferay-workspace-gradle");
-
 		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
 
 		wizardAction.newLiferayWorkspace.deselectUseDefaultLocation();
 
@@ -73,20 +69,18 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(workspaceName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createLiferayWorkspaceChangeModulesDir() {
-		String workspaceName = project.getName("test-liferay-workspace-gradle");
-
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
 
 		wizardAction.finish();
 
-		viewAction.project.openFile(workspaceName, "gradle.properties");
+		viewAction.project.openFile(project.getName(), "gradle.properties");
 
 		StringBuffer sb = new StringBuffer();
 
@@ -110,30 +104,28 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {workspaceName, newModulesFolderName, projectName};
+		String[] projectNames = {project.getName(), newModulesFolderName, projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
 		viewAction.project.closeAndDelete(projectNames);
 
-		String[] newModuleNames = {workspaceName, newModulesFolderName};
+		String[] newModuleNames = {project.getName(), newModulesFolderName};
 
 		viewAction.project.closeAndDelete(newModuleNames);
 
-		viewAction.project.closeAndDelete(workspaceName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createLiferayWorkspaceChangeWarsDir() {
-		String workspaceName = project.getName("test-liferay-workspace-gradle");
-
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
 
 		wizardAction.finish();
 
-		viewAction.project.openFile(workspaceName, "gradle.properties");
+		viewAction.project.openFile(project.getName(), "gradle.properties");
 
 		StringBuffer sb = new StringBuffer();
 
@@ -157,33 +149,31 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {workspaceName, newWarsFolderName, projectName};
+		String[] projectNames = {project.getName(), newWarsFolderName, projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
 		viewAction.project.closeAndDelete(projectNames);
 
-		String[] newModuleNames = {workspaceName, newWarsFolderName};
+		String[] newModuleNames = {project.getName(), newWarsFolderName};
 
 		viewAction.project.closeAndDelete(newModuleNames);
 
-		viewAction.project.closeAndDelete(workspaceName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Ignore("Ignore forever and test the download bundle in createLiferayWorkspaceWithDownloadBundleChangeBundleUrl")
 	@Test
 	public void createLiferayWorkspaceWithDownloadBundle() {
-		String workspaceName = project.getName("test-liferay-workspace-gradle");
-
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
 
 		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(workspaceName);
+		viewAction.project.closeAndDelete(project.getName());
 
 		dialogAction.openPreferencesDialog();
 
@@ -201,8 +191,6 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 			return;
 		}
 
-		String workspaceName = project.getName("test-liferay-workspace-gradle");
-
 		// Use the internal server instead of the public server and also need to append the internal host
 
 		String bundleUrl =
@@ -210,7 +198,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareGradle(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareGradle(project.getName());
 
 		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
 
@@ -220,7 +208,7 @@ public class NewLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(workspaceName);
+		viewAction.project.closeAndDelete(project.getName());
 
 		dialogAction.openPreferencesDialog();
 

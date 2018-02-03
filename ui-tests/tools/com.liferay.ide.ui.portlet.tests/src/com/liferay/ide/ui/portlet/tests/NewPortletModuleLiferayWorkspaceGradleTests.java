@@ -34,12 +34,11 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createFreemarkerPortlet() {
-		String projectName = project.getName("test-freemarker-portlet-gradle");
 		String packageName = "test.freemarker.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, FREEMARKER_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), FREEMARKER_PORTLET);
 
 		wizardAction.next();
 
@@ -47,7 +46,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -56,12 +55,11 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createMvcPortlet() {
-		String projectName = project.getName("test-mvc-portlet-gradle");
 		String packageName = "test.mvc.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, MVC_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), MVC_PORTLET);
 
 		wizardAction.next();
 
@@ -69,23 +67,22 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		jobAction.waitForValidate(projectName);
+		jobAction.waitForValidate(project.getName());
 
 		viewAction.project.closeAndDeleteFromDisk(projectNames);
 	}
 
 	@Test
 	public void createNpmAngularPortlet() {
-		String projectName = project.getName("test-npm-angular-portlet-gradle");
 		String packageName = "test.npm.angular.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, NPM_ANGULAR_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), NPM_ANGULAR_PORTLET);
 
 		wizardAction.next();
 
@@ -93,7 +90,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -102,12 +99,11 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createNpmBillboardjsPortlet() {
-		String projectName = project.getName("test-npm-billboardjs-portlet-gradle");
 		String packageName = "test.npm.billboardjs.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, NPM_BILLBOARDJS_PORLET);
+		wizardAction.newModule.prepareGradle(project.getName(), NPM_BILLBOARDJS_PORLET);
 
 		wizardAction.next();
 
@@ -115,7 +111,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -124,12 +120,11 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createNpmIsomorphicPortlet() {
-		String projectName = project.getName("test-npm-isomorphic-portlet-gradle");
 		String packageName = "test.npm.isomorphic.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, NPM_ISOMORPHIC_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), NPM_ISOMORPHIC_PORTLET);
 
 		wizardAction.next();
 
@@ -137,7 +132,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -146,12 +141,11 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createNpmJqueryPortlet() {
-		String projectName = project.getName("test-npm-jquery-portlet-gradle");
 		String packageName = "test.npm.jquery.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, NPM_JQUERY_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), NPM_JQUERY_PORTLET);
 
 		wizardAction.next();
 
@@ -159,7 +153,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -168,12 +162,11 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createNpmMetaljsPortletGradle() {
-		String projectName = project.getName("test-npm-metaljs-portlet-gradle");
 		String packageName = "test.npm.metaljs.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, NPM_METALJS_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), NPM_METALJS_PORTLET);
 
 		wizardAction.next();
 
@@ -181,7 +174,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -190,12 +183,11 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createNpmPortlet() {
-		String projectName = project.getName("test-npm-portlet-gradle");
 		String packageName = "test.npm.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, NPM_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), NPM_PORTLET);
 
 		wizardAction.next();
 
@@ -203,7 +195,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -212,12 +204,11 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createNpmReactPortlet() {
-		String projectName = project.getName("test-npm-react-portlet-gradle");
 		String packageName = "test.npm.react.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, NPM_REACT_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), NPM_REACT_PORTLET);
 
 		wizardAction.next();
 
@@ -225,7 +216,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -234,12 +225,11 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createNpmVuejsPortlet() {
-		String projectName = project.getName("test-npm-vuejs-portlet-gradle");
 		String packageName = "test.npm.vuejs.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, NPM_VUEJS_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), NPM_VUEJS_PORTLET);
 
 		wizardAction.next();
 
@@ -247,7 +237,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -256,12 +246,11 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createPortlet() {
-		String projectName = project.getName("test-npm-angular-portlet-gradle");
 		String packageName = "test.npm.angular.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), PORTLET);
 
 		wizardAction.next();
 
@@ -269,7 +258,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -279,12 +268,11 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 	@Ignore("ignore to wait IDE-3579 as it will take too long unexpected")
 	@Test
 	public void createSoyPortlet() {
-		String projectName = project.getName("test-soy-portlet-gradle");
 		String packageName = "test.soy.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, SOY_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), SOY_PORTLET);
 
 		wizardAction.next();
 
@@ -292,7 +280,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -302,12 +290,11 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 	@Ignore("Ignore to make it run ok on Jenkins temporary")
 	@Test
 	public void createSpringMvcPortlet() {
-		String projectName = project.getName("test-spring-mvc-portlet-gradle");
 		String packageName = "test.spring.mvc.portlet.gradle";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, SPRING_MVC_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), SPRING_MVC_PORTLET);
 
 		wizardAction.next();
 
@@ -315,7 +302,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "wars", projectName};
+		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "wars", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 

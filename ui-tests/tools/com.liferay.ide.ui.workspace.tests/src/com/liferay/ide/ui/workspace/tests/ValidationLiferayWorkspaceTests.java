@@ -120,7 +120,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		for (ValidationMsg msg :
 				envAction.getValidationMsgs(
-					new File(envAction.getValidationFolder(), "new-liferay-workspace-wizard-location.csv"))) {
+					new File(envAction.getValidationDir(), "new-liferay-workspace-wizard-location.csv"))) {
 
 			if (!msg.getOs().equals(Platform.getOS())) {
 				continue;
@@ -140,7 +140,7 @@ public class ValidationLiferayWorkspaceTests extends SwtbotBase {
 
 		for (ValidationMsg msg :
 				envAction.getValidationMsgs(
-					new File(envAction.getValidationFolder(), "new-liferay-workspace-wizard-project-name.csv"))) {
+					new File(envAction.getValidationDir(), "new-liferay-workspace-wizard-project-name.csv"))) {
 
 			if (!msg.getOs().equals(Platform.getOS())) {
 				continue;

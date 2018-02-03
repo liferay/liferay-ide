@@ -16,10 +16,12 @@ package com.liferay.ide.ui.service.builder.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.Sdk62Support;
+import com.liferay.ide.ui.liferay.base.Tomcat62Support;
 
 import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 
 /**
  * @author Joye Luo
@@ -28,8 +30,10 @@ import org.junit.Test;
 @Ignore("there are a few sub process still running after Refresh server adapter, need more research")
 public class NewServiceBuilderPortletSdk62Tests extends SwtbotBase {
 
+	public static Tomcat62Support tomcat62 = new Tomcat62Support(bot);
+
 	@ClassRule
-	public static Sdk62Support sdk62 = new Sdk62Support(bot);
+	public static RuleChain chain = RuleChain.outerRule(tomcat62).around(new Sdk62Support(bot, tomcat62));
 
 	@Ignore("ignore as service builder in sdk62 is only able run in java 7")
 	@Test

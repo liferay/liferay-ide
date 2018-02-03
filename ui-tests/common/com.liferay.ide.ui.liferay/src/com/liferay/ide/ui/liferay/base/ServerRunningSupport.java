@@ -21,17 +21,19 @@ import org.junit.Assert;
 /**
  * @author Terry Jia
  */
-public class TomcatRunningSupport extends TomcatSupport {
+public class ServerRunningSupport extends SupportBase {
 
-	public TomcatRunningSupport(SWTWorkbenchBot bot) {
+	public ServerRunningSupport(SWTWorkbenchBot bot, ServerSupport server) {
 		super(bot);
+
+		_server = server;
 	}
 
 	@Override
 	public void after() {
-		viewAction.servers.stop(getStartedLabel());
+		viewAction.servers.stop(_server.getStartedLabel());
 
-		jobAction.waitForServerStopped(getServerName());
+		jobAction.waitForServerStopped(_server.getServerName());
 
 		Assert.assertFalse("http://localhost:8080 still running", envAction.localConnected());
 
@@ -44,11 +46,13 @@ public class TomcatRunningSupport extends TomcatSupport {
 
 		Assert.assertFalse("http://localhost:8080 still running", envAction.localConnected());
 
-		viewAction.servers.start(getStoppedLabel());
+		viewAction.servers.start(_server.getStoppedLabel());
 
-		jobAction.waitForServerStarted(getServerName());
+		jobAction.waitForServerStarted(_server.getServerName());
 
 		Assert.assertTrue("Could not connent to http://localhost:8080", envAction.localConnected());
 	}
+
+	private ServerSupport _server;
 
 }

@@ -69,7 +69,7 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay Community Edition Portal 7.0.3 GA4");
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay Community Edition Portal 7.0.4 GA5");
 
 		dialogAction.preferences.confirm();
 	}

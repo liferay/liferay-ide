@@ -232,7 +232,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		for (ValidationMsg msg :
 				envAction.getValidationMsgs(
-					new File(envAction.getValidationFolder(), "new-fragment-wizard-project-location.csv"))) {
+					new File(envAction.getValidationDir(), "new-fragment-wizard-project-location.csv"))) {
 
 			if (!msg.getOs().equals(Platform.getOS())) {
 				continue;
@@ -335,7 +335,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		for (ValidationMsg msg :
 				envAction.getValidationMsgs(
-					new File(envAction.getValidationFolder(), "new-fragment-wizard-project-name.csv"))) {
+					new File(envAction.getValidationDir(), "new-fragment-wizard-project-name.csv"))) {
 
 			if (!msg.getOs().equals(Platform.getOS())) {
 				continue;

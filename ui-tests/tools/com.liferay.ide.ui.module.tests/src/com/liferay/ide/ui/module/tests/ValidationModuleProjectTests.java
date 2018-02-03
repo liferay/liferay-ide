@@ -113,7 +113,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 
 		for (ValidationMsg msg :
 				envAction.getValidationMsgs(
-					new File(envAction.getValidationFolder(), "new-liferay-module-project-wizard-location.csv"))) {
+					new File(envAction.getValidationDir(), "new-liferay-module-project-wizard-location.csv"))) {
 
 			if (!msg.getOs().equals(Platform.getOS())) {
 				continue;
@@ -159,7 +159,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 
 		for (ValidationMsg msg :
 				envAction.getValidationMsgs(
-					new File(envAction.getValidationFolder(), "new-liferay-module-project-wizard-project-name.csv"))) {
+					new File(envAction.getValidationDir(), "new-liferay-module-project-wizard-project-name.csv"))) {
 
 			_newModuleProjectWizard.getProjectName().setText(msg.getInput());
 

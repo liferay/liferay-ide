@@ -56,7 +56,7 @@ public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 
 		for (ValidationMsg msg :
 				envAction.getValidationMsgs(
-					new File(envAction.getValidationFolder(), "import-liferay-workspace-wizard-location.csv"))) {
+					new File(envAction.getValidationDir(), "import-liferay-workspace-wizard-location.csv"))) {
 
 			if (!msg.getOs().equals(Platform.getOS())) {
 				continue;

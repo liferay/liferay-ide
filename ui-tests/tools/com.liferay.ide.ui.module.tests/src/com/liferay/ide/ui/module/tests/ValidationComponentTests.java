@@ -82,7 +82,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		for (ValidationMsg msg :
 				envAction.getValidationMsgs(
-					new File(envAction.getValidationFolder(), "new-component-wizard-class-name.csv"))) {
+					new File(envAction.getValidationDir(), "new-component-wizard-class-name.csv"))) {
 
 			if (!msg.getOs().equals(Platform.getOS())) {
 				continue;
@@ -231,7 +231,7 @@ public class ValidationComponentTests extends SwtbotBase {
 
 		for (ValidationMsg msg :
 				envAction.getValidationMsgs(
-					new File(envAction.getValidationFolder(), "new-component-wizard-package-name.csv"))) {
+					new File(envAction.getValidationDir(), "new-component-wizard-package-name.csv"))) {
 
 			if (!msg.getOs().equals(Platform.getOS())) {
 				continue;

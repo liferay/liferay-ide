@@ -46,6 +46,13 @@ public class SupportBase extends ExternalResource {
 		browserAction = BrowserAction.getInstance(bot);
 	}
 
+	@Override
+	public void after() {
+		super.after();
+
+		timestamp = 0;
+	}
+
 	public void before() {
 		try {
 			long origin = SWTBotPreferences.TIMEOUT;
@@ -67,6 +74,8 @@ public class SupportBase extends ExternalResource {
 		System.setProperty(SWTBotPreferenceConstants.KEY_DEFAULT_POLL_DELAY, "5000");
 
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
+
+		timestamp = System.currentTimeMillis();
 	}
 
 	public BrowserAction browserAction;
@@ -77,5 +86,7 @@ public class SupportBase extends ExternalResource {
 	public JobAction jobAction;
 	public ViewAction viewAction;
 	public WizardAction wizardAction;
+
+	protected long timestamp = 0;
 
 }
