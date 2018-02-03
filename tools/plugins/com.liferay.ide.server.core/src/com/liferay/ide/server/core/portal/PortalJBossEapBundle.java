@@ -46,7 +46,6 @@ public class PortalJBossEapBundle extends PortalJBossBundle
         args.add( "-Dcom.sun.management.jmxremote.authenticate=false" );
         args.add( "-Dcom.sun.management.jmxremote.port=" + getJmxRemotePort() );
         args.add( "-Dcom.sun.management.jmxremote.ssl=false" );
-
         args.add( "-Dorg.jboss.resolver.warning=true" );
         args.add( "-Djava.net.preferIPv4Stack=true" );
         args.add( "-Dsun.rmi.dgc.client.gcInterval=3600000" );

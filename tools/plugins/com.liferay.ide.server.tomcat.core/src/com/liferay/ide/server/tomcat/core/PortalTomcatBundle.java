@@ -80,35 +80,6 @@ public class PortalTomcatBundle extends AbstractPortalBundle
     }
 
     @Override
-    protected int getDefaultJMXRemotePort()
-    {
-        int retval = 8099;
-
-        final IPath setenv = this.bundlePath.append( "bin/setenv." + getShellExtension() );
-        final String contents = FileUtil.readContents( setenv.toFile() );
-        String port = null;
-
-        if( contents != null )
-        {
-            final Matcher matcher =
-                Pattern.compile( ".*-Dcom.sun.management.jmxremote.port(\\s*)=(\\s*)([0-9]+).*" ).matcher(
-                    contents );
-
-            if( matcher.matches() )
-            {
-                port = matcher.group( 3 );
-            }
-        }
-
-        if( port != null )
-        {
-            retval = Integer.parseInt( port );
-        }
-
-        return retval;
-    }
-
-    @Override
     public String getHttpPort()
     {
         String retVal = "8080";
@@ -208,7 +179,6 @@ public class PortalTomcatBundle extends AbstractPortalBundle
 
         args.add( "-Dcatalina.base=" + "\"" + this.bundlePath.toPortableString() + "\"" );
         args.add( "-Dcatalina.home=" + "\"" + this.bundlePath.toPortableString() + "\"" );
-        // TODO use dynamic attach API
         args.add( "-Dcom.sun.management.jmxremote" );
         args.add( "-Dcom.sun.management.jmxremote.authenticate=false" );
         args.add( "-Dcom.sun.management.jmxremote.port=" + getJmxRemotePort() );
@@ -337,4 +307,32 @@ public class PortalTomcatBundle extends AbstractPortalBundle
         }
     }
 
+    @Override
+    protected int getDefaultJMXRemotePort()
+    {
+        int retval = 8099;
+
+        final IPath setenv = this.bundlePath.append( "bin/setenv." + getShellExtension() );
+        final String contents = FileUtil.readContents( setenv.toFile() );
+        String port = null;
+
+        if( contents != null )
+        {
+            final Matcher matcher =
+            Pattern.compile( ".*-Dcom.sun.management.jmxremote.port(\\s*)=(\\s*)([0-9]+).*" ).matcher(
+                contents );
+
+            if( matcher.matches() )
+            {
+                port = matcher.group( 3 );
+            }
+        }
+
+        if( port != null )
+        {
+            retval = Integer.parseInt( port );
+        }
+
+        return retval;
+    }
 }

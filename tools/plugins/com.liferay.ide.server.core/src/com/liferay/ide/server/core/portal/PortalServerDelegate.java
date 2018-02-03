@@ -15,11 +15,8 @@
 
 package com.liferay.ide.server.core.portal;
 
-import aQute.remote.api.Agent;
-
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.net.MalformedURLException;
@@ -224,7 +221,6 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
     public void setDefaults( IProgressMonitor monitor )
     {
         setAttribute( Server.PROP_AUTO_PUBLISH_TIME, getAutoPublishTime() );
-        setAttribute( ILiferayServerBehavior.AGENT_PORT, Agent.DEFAULT_PORT );
         ServerUtil.setServerDefaultName(getServerWorkingCopy());
     }
 

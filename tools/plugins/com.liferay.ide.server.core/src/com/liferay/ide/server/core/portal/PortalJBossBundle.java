@@ -45,7 +45,7 @@ import org.w3c.dom.NodeList;
  */
 public class PortalJBossBundle extends AbstractPortalBundle
 {
-    public static final int DEFAULT_JMX_PORT = 2099;
+	public static final int DEFAULT_JMX_PORT = 2099;
 
     public PortalJBossBundle( IPath path )
     {

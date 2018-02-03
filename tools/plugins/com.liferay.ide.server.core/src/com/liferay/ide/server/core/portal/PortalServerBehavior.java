@@ -15,8 +15,6 @@
 
 package com.liferay.ide.server.core.portal;
 
-import aQute.remote.api.Agent;
-
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayRuntimeClasspathEntry;
@@ -25,6 +23,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 import com.liferay.ide.server.util.PingThread;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -32,17 +31,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -66,7 +61,6 @@ import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.internal.Server;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
-import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
@@ -78,14 +72,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     implements ILiferayServerBehavior, IJavaLaunchConfigurationConstants
 {
     public static final String ATTR_STOP = "stop-server";
-
-    private static final String[] JMX_EXCLUDE_ARGS = new String []
-    {
-        "-Dcom.sun.management.jmxremote",
-        "-Dcom.sun.management.jmxremote.port=",
-        "-Dcom.sun.management.jmxremote.ssl=",
-        "-Dcom.sun.management.jmxremote.authenticate="
-    };
 
     private IAdaptable info;
     private transient PingThread ping = null;
@@ -105,7 +91,8 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
         processListener = new IDebugEventSetListener()
         {
-            public void handleDebugEvents( DebugEvent[] events )
+            @Override
+			public void handleDebugEvents( DebugEvent[] events )
             {
                 if( events != null )
                 {
@@ -307,10 +294,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
         Collections.addAll( retval, getPortalRuntime().getPortalBundle().getRuntimeStartVMArgs() );
 
-        int agentPort = getServer().getAttribute( AGENT_PORT, Agent.DEFAULT_PORT );
-
-        retval.add( "-D" + Agent.AGENT_SERVER_PORT_KEY + "=" + agentPort );
-
         return retval.toArray( new String[0] );
     }
 
@@ -324,12 +307,12 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         final List<String> retval = new ArrayList<>();
 
         final String[] memoryArgs = getPortalServer().getMemoryArgs();
-        
+
         if( memoryArgs != null )
         {
             Collections.addAll( retval, memoryArgs );
         }
-        
+
         Collections.addAll( retval, getPortalRuntime().getPortalBundle().getRuntimeStopVMArgs() );
 
         return retval.toArray( new String[0] );
@@ -592,7 +575,8 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
         IAdaptable info = new IAdaptable()
         {
-            @SuppressWarnings( "unchecked" )
+            @Override
+			@SuppressWarnings( "unchecked" )
             public Object getAdapter( Class adapter )
             {
                 if( String.class.equals( adapter ) )
@@ -752,230 +736,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
         launch.setAttribute( ATTR_CLASSPATH, cp );
         launch.setAttribute( ATTR_DEFAULT_CLASSPATH, false );
-
-        setupAgent();
-
-        setupAriesJmxBundles();
-    }
-
-    private void setupAgent()
-    {
-        // make sure that agent is either installed or will be installed in modules folder
-
-        // delete legacy jar in static folder cause update the same jar in static will cause portal fail to start
-        final IPath staticPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/static" );
-
-        if( staticPath.append( "biz.aQute.remote.agent.jar" ).toFile().exists() )
-        {
-            try
-            {
-                Files.delete( Paths.get( staticPath.append( "biz.aQute.remote.agent.jar" ).toOSString() ) );
-            }
-            catch( IOException e )
-            {
-                LiferayServerCore.logError( "Unable to remove old remote agent bundle", e );
-            }
-        }
-
-        // check current version of agent and delete old jar and copy latest
-        final IPath modulesPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/modules" );
-        final IPath agentInstalledPath = modulesPath.append( "biz.aQute.remote.agent.jar" );
-
-        File modulesDir = modulesPath.toFile();
-
-        if( !modulesDir.exists() )
-        {
-            modulesDir.mkdirs();
-        }
-
-        File agentFile = agentInstalledPath.toFile();
-
-        File embeddedAgentFile = null;
-        String embeddedAgentVersion = null;
-
-        try
-        {
-            embeddedAgentFile = new File(
-                FileLocator.toFileURL( LiferayServerCore.getDefault().getBundle().getEntry(
-                    "bundles/biz.aQute.remote.agent.jar" ) ).getFile() );
-        }
-        catch( IOException e )
-        {
-            LiferayServerCore.logError( "Unable to get embedded biz.aQute.remote.agent.jar", e );
-        }
-
-        try(JarFile embededJarFile = new JarFile( embeddedAgentFile ))
-        {
-            embeddedAgentVersion = embededJarFile.getManifest().getMainAttributes().getValue( "Bundle-Version" );
-        }
-        catch( IOException e )
-        {
-        }
-
-        if( agentFile.exists() )
-        {
-            boolean shouldDelete = true;
-
-            try(JarFile jarFile = new JarFile( agentFile ))
-            {
-                String bundleVersion = jarFile.getManifest().getMainAttributes().getValue( "Bundle-Version" );
-
-                if( !CoreUtil.empty( bundleVersion ) )
-                {
-                    Version atLeastVersion = new Version( embeddedAgentVersion );
-                    Version version = new Version( bundleVersion );
-
-                    if( version.compareTo( atLeastVersion ) >= 0 )
-                    {
-                        shouldDelete = false;
-                    }
-                }
-            }
-            catch( IOException e )
-            {
-            }
-
-            if( shouldDelete )
-            {
-                try
-                {
-                    Files.delete( agentFile.toPath() );
-                }
-                catch( IOException e )
-                {
-                    LiferayServerCore.logError( "Unable to remove old remote agent bundle", e );
-                }
-            }
-        }
-
-        if( !agentFile.exists() )
-        {
-            FileUtil.copyFile( embeddedAgentFile, agentFile );
-        }
-    }
-
-    private void setupAriesJmxBundles()
-    {
-        String[] ariesJmxBundleNames = new String[] { "org.apache.aries.jmx.api.jar", "org.apache.aries.jmx.core.jar",
-            "org.apache.aries.util.jar" };
-
-        String[] ariesJxmBundleFullNames = new String[] { "org.apache.aries.jmx.api-1.1.5.jar",
-            "org.apache.aries.jmx.core-1.1.7.jar", "org.apache.aries.util-1.1.3.jar" };
-
-        // delelte legacy jmx bundles in osgi/static
-        final IPath staticPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/static" );
-
-        for( String bundleName : ariesJmxBundleNames )
-        {
-            File bundleFile = staticPath.append( bundleName ).toFile();
-
-            if( bundleFile.exists() )
-            {
-                try
-                {
-                    Files.delete( bundleFile.toPath() );
-                }
-                catch( IOException e )
-                {
-                    LiferayServerCore.logError( "Unable to remove " + bundleName + " in liferay home osgi/static", e );
-                }
-            }
-        }
-
-        if( !shouldSetUpAriesJmxBundles() )
-        {
-            return;
-        }
-
-        final IPath modulesPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/modules" );
-
-        File modulesDir = modulesPath.toFile();
-
-        if( !modulesDir.exists() )
-        {
-            modulesDir.mkdirs();
-        }
-
-        for( int i = 0; i < ariesJmxBundleNames.length; i++ )
-        {
-            final IPath agentInstalledPath = modulesPath.append( ariesJmxBundleNames[i] );
-
-            File bundleFile = agentInstalledPath.toFile();
-
-            if( !bundleFile.exists() )
-            {
-                try
-                {
-                    final File file = new File(
-                        FileLocator.toFileURL( LiferayServerCore.getDefault().getBundle().getEntry(
-                            "bundles/" + ariesJxmBundleFullNames[i] ) ).getFile() );
-
-                    FileUtil.copyFile( file, bundleFile );
-                }
-                catch( IOException e )
-                {
-                }
-            }
-        }
-    }
-
-    private boolean shouldSetUpAriesJmxBundles()
-    {
-        File portalImplFile =
-            getPortalRuntime().getAppServerPortalDir().append( "WEB-INF/lib/portal-impl.jar" ).toFile();
-
-        if( !portalImplFile.exists() )
-        {
-            return true;
-        }
-
-        try(JarFile jarFile = new JarFile( portalImplFile ))
-        {
-            Attributes manifest = jarFile.getManifest().getMainAttributes();
-
-            String buildNumber = manifest.getValue( "Liferay-Portal-Build-Number" ).trim();
-
-            String patchAttr = manifest.getValue( "Liferay-Portal-Installed-Patches" );
-
-            // dxp version
-            if( buildNumber.equals( "7010" ) )
-            {
-                if( CoreUtil.empty( patchAttr ) )
-                {
-                    // dxp-ga1
-                    return false;
-                }
-                else
-                {
-                    String[] result = patchAttr.trim().split( "-" );
-
-                    if( result == null || result.length < 3 )
-                    {
-                        return false;
-                    }
-
-                    int patchVersion = Integer.parseInt( result[1] );
-
-                    // from dxp fix pack 9 (de-9-7010), the aries jmx bundles are removed
-                    return patchVersion >= 9;
-                }
-            }
-            else if( buildNumber.startsWith( "700" ) )
-            {
-                // ce version
-                Version lp70ga3 = new Version( "7002" );
-                Version currentCEVersion = new Version( buildNumber );
-
-                // from ce-ga4, the aries jmx bundles are removed
-                return currentCEVersion.compareTo( lp70ga3 ) > 0;
-            }
-        }
-        catch( Exception e )
-        {
-            LiferayServerCore.logError( "get portal version and patch info error", e );
-        }
-
-        return true;
     }
 
     @Override
@@ -1005,21 +765,19 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
             if( bundleProject != null )
             {
-                BundleSupervisor supervisor = null;
-
                 try
                 {
                     final String symbolicName = bundleProject.getSymbolicName();
 
-                    supervisor = createBundleSupervisor();
+                    GogoBundleDeployer helper = new GogoBundleDeployer();
 
-                    long bundleId = supervisor.getBundleId( symbolicName );
+                    long bundleId = helper.getBundleId( symbolicName );
 
                     if( bundleId > 0 )
                     {
                         if( action.equals( "start" ) )
                         {
-                            String error = supervisor.getAgent().start( bundleId );
+                            String error = helper.start( bundleId );
 
                             if( error == null )
                             {
@@ -1032,7 +790,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
                         }
                         else if( action.equals( "stop" ) )
                         {
-                            String error = supervisor.getAgent().stop( bundleId );
+                            String error = helper.stop( bundleId );
 
                             if( error == null )
                             {
@@ -1048,19 +806,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
                 catch( Exception e )
                 {
                     LiferayServerCore.logError( "Unable to " + action + " module", e );
-                }
-                finally
-                {
-                    if( supervisor != null )
-                    {
-                        try
-                        {
-                            supervisor.close();
-                        }
-                        catch( IOException e )
-                        {
-                        }
-                    }
                 }
             }
         }
@@ -1099,7 +844,9 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
             final ILaunchConfigurationWorkingCopy wc = launchConfig.getWorkingCopy();
 
             final String args = renderCommandLine( getRuntimeStopProgArgs(), " " );
+
             // Remove JMX arguments if present
+
             final String existingVMArgs =
                 wc.getAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, (String) null );
 
@@ -1171,9 +918,16 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         return buf.toString();
     }
 
-    public BundleSupervisor createBundleSupervisor() throws Exception
+    public GogoBundleDeployer createBundleDeployer() throws Exception
     {
-        return ServerUtil.createBundleSupervisor( getPortalRuntime(), getServer() );
+        return ServerUtil.createBundleDeployer( getPortalRuntime(), getServer() );
     }
 
+    private static final String[] JMX_EXCLUDE_ARGS = new String []
+    	{
+        "-Dcom.sun.management.jmxremote",
+        "-Dcom.sun.management.jmxremote.port=",
+        "-Dcom.sun.management.jmxremote.ssl=",
+        "-Dcom.sun.management.jmxremote.authenticate="
+    };
 }

@@ -33,6 +33,7 @@ Require-Bundle: org.eclipse.wst.server.core;visibility:=reexport,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.server.core,
+ com.liferay.ide.server.core.gogo,
  com.liferay.ide.server.core.portal,
  com.liferay.ide.server.core.proxy,
  com.liferay.ide.server.remote,

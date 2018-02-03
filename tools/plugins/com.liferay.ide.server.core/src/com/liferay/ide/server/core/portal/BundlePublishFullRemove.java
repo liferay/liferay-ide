@@ -18,8 +18,7 @@ package com.liferay.ide.server.core.portal;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.server.core.LiferayServerCore;
-
-import java.io.IOException;
+import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -34,6 +33,7 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Gregory Amerson
  * @author Andy Wu
+ * @author Terry Jia
  */
 public class BundlePublishFullRemove extends BundlePublishOperation
 {
@@ -99,13 +99,13 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
         IPath outputJar = bundleProject.getOutputBundlePath();
 
-        BundleSupervisor bundleSupervisor = null;
+        GogoBundleDeployer bundleDeployer = null;
 
         try
         {
-            bundleSupervisor = createBundleSupervisor();
+            bundleDeployer = createBundleDeployer();
 
-            String error = bundleSupervisor.uninstall( bundleProject, outputJar );
+            String error = bundleDeployer.uninstall( bundleProject, outputJar );
 
             if( error == null )
             {
@@ -120,19 +120,6 @@ public class BundlePublishFullRemove extends BundlePublishOperation
         catch( Exception e )
         {
             retval = LiferayServerCore.error( "Unable to uninstall bundle " + symbolicName, e );
-        }
-        finally
-        {
-            if( bundleSupervisor != null )
-            {
-                try
-                {
-                    bundleSupervisor.close();
-                }
-                catch( IOException e )
-                {
-                }
-            }
         }
 
         if( retval == null )

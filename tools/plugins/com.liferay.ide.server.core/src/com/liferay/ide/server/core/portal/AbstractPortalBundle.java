@@ -186,15 +186,15 @@ public abstract class AbstractPortalBundle implements PortalBundle
     }
 
     @Override
-    public int getJmxRemotePort()
-    {
-        return getDefaultJMXRemotePort();
-    }
-
-    @Override
     public IPath getAutoDeployPath()
     {
         return this.autoDeployPath;
+    }
+
+    @Override
+    public int getJmxRemotePort()
+    {
+        return getDefaultJMXRemotePort();
     }
 
     @Override

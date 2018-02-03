@@ -19,6 +19,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 
 import java.io.File;
 import java.io.IOException;
@@ -110,9 +111,9 @@ public class BundlePublishFullAdd extends BundlePublishOperation
                 {
                     IPath outputJar = bundleProject.getOutputBundle( cleanBuildNeeded(), monitor );
 
-                    if( outputJar != null && outputJar.toFile().exists() )
+                    if( FileUtil.exists(outputJar) )
                     {
-                        if( this.server.getServerState() == IServer.STATE_STARTED )
+                        if( server.getServerState() == IServer.STATE_STARTED )
                         {
                             monitor.subTask(
                                 "Remotely deploying " + module.getName() + " to Liferay module framework..." );
@@ -180,15 +181,15 @@ public class BundlePublishFullAdd extends BundlePublishOperation
     {
         IStatus retval = null;
 
-        if( output != null && output.toFile().exists() )
+        if( FileUtil.exists(output) )
         {
-            BundleSupervisor bundleSupervisor = null;
+            GogoBundleDeployer bundleDeployer = null;
 
             try
             {
-                bundleSupervisor = createBundleSupervisor();
+                bundleDeployer = createBundleDeployer();
 
-                BundleDTO deployed = bundleSupervisor.deploy(
+                BundleDTO deployed = bundleDeployer.deploy(
                     bsn, output.toFile(), getBundleUrl( output.toFile(), bsn ) );
 
                 if( deployed instanceof BundleDTOWithStatus )
@@ -206,19 +207,6 @@ public class BundlePublishFullAdd extends BundlePublishOperation
             {
                 retval = LiferayServerCore.error( "Unable to deploy bundle remotely " +
                     output.toPortableString(), e );
-            }
-            finally
-            {
-                if( bundleSupervisor != null )
-                {
-                    try
-                    {
-                        bundleSupervisor.close();
-                    }
-                    catch( IOException e1 )
-                    {
-                    }
-                }
             }
         }
         else
