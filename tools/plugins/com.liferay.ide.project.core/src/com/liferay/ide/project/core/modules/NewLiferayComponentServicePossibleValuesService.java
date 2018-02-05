@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.server.core.portal.PortalServer;
+import com.liferay.ide.project.core.util.TargetPlatformUtil;
 
 import java.util.Set;
 
@@ -25,8 +25,6 @@ import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Simon Jiang
@@ -60,45 +58,21 @@ public class NewLiferayComponentServicePossibleValuesService extends PossibleVal
 
 		String template = componentTemplate.getShortName();
 
-		IServer runningServer = null;
-
-		IServer[] servers = ServerCore.getServers();
-
 		if (template.equals("ServiceHook")) {
-			for (IServer server : servers) {
-				String serverId = server.getServerType().getId();
-
-				if (serverId.equals(PortalServer.ID)) {
-					runningServer = server;
-
-					break;
-				}
-			}
 
 			try {
-				ServiceContainer serviceWrapperList = new ServiceWrapperCommand(runningServer).execute();
+				ServiceContainer allServicesWrapper = TargetPlatformUtil.getServiceWrapperList();;
 
-				values.addAll(serviceWrapperList.getServiceList());
+				values.addAll(allServicesWrapper.getServiceList());
 			}
 			catch (Exception e) {
 				ProjectCore.logError("Get service wrapper list error.", e);
 			}
 		}
 		else if (template.equals("service")) {
-			for (IServer server : servers) {
-				String serverId = server.getServerType().getId();
-
-				if ((server.getServerState() == IServer.STATE_STARTED) && serverId.equals(PortalServer.ID)) {
-					runningServer = server;
-
-					break;
-				}
-			}
 
 			try {
-				ServiceCommand serviceCommand = new ServiceCommand(runningServer);
-
-				ServiceContainer allServices = serviceCommand.execute();
+				ServiceContainer allServices = TargetPlatformUtil.getServicesList();
 
 				values.addAll(allServices.getServiceList());
 			}
