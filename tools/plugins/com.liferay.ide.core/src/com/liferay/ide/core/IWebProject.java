@@ -30,4 +30,5 @@ public interface IWebProject extends ILiferayProject {
 
 	public IFolder getDefaultDocrootFolder();
 
+	public IPath getLibraryPath(String filename);
 }

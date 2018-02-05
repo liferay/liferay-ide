@@ -69,4 +69,10 @@ public class FacetedGradleBundleProject extends LiferayGradleProject implements 
 		return null;
 	}
 
+	@Override
+	public IPath getLibraryPath(String filename) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

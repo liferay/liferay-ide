@@ -104,6 +104,7 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
 		return "war";
 	}
 
+	@Override
 	public IPath getLibraryPath(String filename) {
 		IPath[] libs = getUserLibs();
 
