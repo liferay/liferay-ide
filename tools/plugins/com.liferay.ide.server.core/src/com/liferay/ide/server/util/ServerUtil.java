@@ -49,11 +49,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
+import java.util.stream.Stream;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -1122,6 +1124,19 @@ public class ServerUtil
     public static boolean isLiferayRuntime( IServer server )
     {
         return getLiferayRuntime( server ) != null;
+    }
+
+    public static boolean isValidLiferayRuntime( IPath budnleLocationPath )
+    {
+
+        final IPath bundlePath = budnleLocationPath;
+
+        PortalBundleFactory[] portalBundleFactories = LiferayServerCore.getPortalBundleFactories();
+
+        Optional<PortalBundleFactory> findFirst = Stream.of( portalBundleFactories ).filter(
+            factory -> factory.canCreateFromPath( bundlePath ) != null ).findFirst();
+
+        return findFirst.isPresent();
     }
 
     public static boolean isValidPropertiesFile( File file )
