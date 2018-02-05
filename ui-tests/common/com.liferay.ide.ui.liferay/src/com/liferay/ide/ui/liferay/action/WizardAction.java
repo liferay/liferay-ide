@@ -490,6 +490,22 @@ public class WizardAction extends UIAction {
 			_newFragmentInfoWizard.getFiles().click(file);
 		}
 
+		public Text getHostOsgiBundle() {
+			return _newFragmentInfoWizard.getHostOsgiBundle();
+		}
+
+		public ToolbarButtonWithTooltip getBrowseOsgiBtn() {
+			return _newFragmentInfoWizard.getBrowseOsgiBtn();
+		}
+
+		public ToolbarButtonWithTooltip getAddOverrideFilesBtn() {
+			return _newFragmentInfoWizard.getAddOverrideFilesBtn();
+		}
+
+		public ToolbarButtonWithTooltip getDeleteBtn() {
+			return _newFragmentInfoWizard.getDeleteBtn();
+		}
+
 		private final NewFragmentInfoWizard _newFragmentInfoWizard = new NewFragmentInfoWizard(bot);
 
 	}
@@ -874,6 +890,10 @@ public class WizardAction extends UIAction {
 
 		public CheckBox useDefaultLocation() {
 			return _newProjectWizard.getUseDefaultLocation();
+		}
+
+		public ComboBox getBuildTypes() {
+			return _newProjectWizard.getBuildTypes();
 		}
 
 		private final NewProjectWizard _newProjectWizard = new NewProjectWizard(bot);

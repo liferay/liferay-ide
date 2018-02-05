@@ -15,14 +15,17 @@
 package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
+import com.liferay.ide.ui.liferay.base.TomcatSupport;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
 import java.io.File;
 
 import org.eclipse.core.runtime.Platform;
-
-import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -31,40 +34,28 @@ import org.junit.Test;
  */
 public class ValidationFragmentTests extends SwtbotBase {
 
+	@ClassRule
+	public static TomcatSupport tomcat = new TomcatSupport(bot);
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
+
 	@Test
 	public void checkBuildType() {
 		wizardAction.openNewFragmentWizard();
 
 		String[] expectedBuildTypes = {GRADLE, MAVEN};
-		String[] buildTypes = wizardAction.newFragment.buildType().items();
 
-		int expectedLength = expectedBuildTypes.length;
-		int length = buildTypes.length;
-
-		Assert.assertEquals(expectedLength, length);
-
-		for (int i = 0; i < buildTypes.length; i++) {
-			Assert.assertTrue(buildTypes[i].equals(expectedBuildTypes[i]));
-		}
+		validationAction.assertEquals(expectedBuildTypes, wizardAction.newProject.getBuildTypes());
 
 		wizardAction.cancel();
 	}
 
 	@Test
 	public void checkHostOsgiBundle() {
-		String projectName = "test-fragment";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
-
-		wizardAction.newFragment.openNewRuntimeWizard();
-
-		wizardAction.next();
-
-		wizardAction.newRuntime7.prepare(envAction.getServerDir().toOSString());
-
-		wizardAction.finish();
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -72,7 +63,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		dialogAction.prepareText("gg");
 
-		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
+		validationAction.assertEnabledFalse(dialogAction.getConfirmBtn());
 
 		dialogAction.prepareText("*blogs");
 
@@ -82,71 +73,45 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		dialogAction.selectTableItem("com.liferay.microblogs.web-2.0.15.jar");
 
-		Assert.assertTrue(dialogAction.getConfirmBtn().isEnabled());
+		validationAction.assertEnabledTrue(dialogAction.getConfirmBtn());
 
 		dialogAction.cancel();
 
 		wizardAction.cancel();
-
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(LIFERAY_7_X);
-
-		dialogAction.preferences.confirm();
 	}
 
 	@Test
 	public void checkInfoInitialState() {
-		String projectName = "test-fragment";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
-
-		wizardAction.newFragment.openNewRuntimeWizard();
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
-		wizardAction.newRuntime7.prepare(envAction.getServerDir().toOSString());
+		validationAction.assertEquals(StringPool.BLANK, wizardAction.newFragmentInfo.getHostOsgiBundle());
 
-		wizardAction.finish();
+		validationAction.assertEnabledTrue(wizardAction.newFragmentInfo.getBrowseOsgiBtn());
 
-		wizardAction.next();
+		validationAction.assertEquals(HOST_OSGI_BUNDLE_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(1));
 
-		Assert.assertEquals(StringPool.BLANK, wizardAction.newFragmentInfo.hostOsgiBundle().getText());
+		validationAction.assertEnabledFalse(wizardAction.newFragmentInfo.getAddOverrideFilesBtn());
 
-		Assert.assertTrue(wizardAction.newFragmentInfo.browseOsgiBtn().isEnabled());
+		validationAction.assertEnabledFalse(wizardAction.newFragmentInfo.getDeleteBtn());
 
-		Assert.assertEquals(HOST_OSGI_BUNDLE_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(1));
-
-		Assert.assertFalse(wizardAction.newFragmentInfo.addOverrideFilesBtn().isEnabled());
-
-		Assert.assertFalse(wizardAction.newFragmentInfo.deleteBtn().isEnabled());
-
-		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
+		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
 
 		wizardAction.cancel();
-
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(LIFERAY_7_X);
-
-		dialogAction.preferences.confirm();
 	}
 
 	@Test
 	public void checkInitialState() {
 		wizardAction.openNewFragmentWizard();
 
-		Assert.assertEquals(StringPool.BLANK, wizardAction.newFragment.projectName().getText());
+		validationAction.assertEquals(StringPool.BLANK, wizardAction.newProject.projectName());
 
-		Assert.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, wizardAction.getValidationMsg(2));
+		validationAction.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, wizardAction.getValidationMsg(2));
 
-		Assert.assertTrue(wizardAction.newFragmentInfo.useDefaultLocation().isChecked());
+		validationAction.assertCheckedTrue(wizardAction.newProject.useDefaultLocation());
 
 		wizardAction.newProject.deselectUseDefaultLocation();
 
@@ -156,66 +121,40 @@ public class ValidationFragmentTests extends SwtbotBase {
 			workspacePath = workspacePath.replaceAll("\\\\", "/");
 		}
 
-		Assert.assertEquals(workspacePath, wizardAction.newFragmentInfo.location().getText());
+		validationAction.assertEquals(workspacePath, wizardAction.newProject.location());
 
-		Assert.assertFalse(wizardAction.getNextBtn().isEnabled());
+		validationAction.assertEnabledFalse(wizardAction.getNextBtn());
 
-		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
+		validationAction.assertEnabledFalse(wizardAction.getFinishBtn());
 
 		wizardAction.cancel();
 	}
 
+	@Ignore("we should open a new test file to test without runtimes")
 	@Test
 	public void checkLiferayRuntime() {
-		String projectName = "test-fragment";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
-		Assert.assertFalse(wizardAction.getNextBtn().isEnabled());
+		validationAction.assertEnabledFalse(wizardAction.getNextBtn());
 
-		Assert.assertEquals(LIFERAY_RUNTIME_MUST_BE_CONFIGURED, wizardAction.getValidationMsg(2));
+		validationAction.assertEquals(LIFERAY_RUNTIME_MUST_BE_CONFIGURED, wizardAction.getValidationMsg(2));
 
-		wizardAction.newFragment.openNewRuntimeWizard();
+		validationAction.assertEnabledTrue(wizardAction.getNextBtn());
 
-		wizardAction.next();
-
-		wizardAction.newRuntime7.prepare(envAction.getServerDir().toOSString());
-
-		wizardAction.finish();
-
-		Assert.assertTrue(wizardAction.getNextBtn().isEnabled());
-
-		Assert.assertEquals(
-			CREATE_A_NEW_PROJECT_CONFIGURED_AS_A_LIFERAY_MODULE_PROJECT_FRAGMENT, wizardAction.getValidationMsg(2));
+		validationAction.assertEquals(
+			CREATE_A_NEW_PROJECT_CONFIGURED_AS_A_LIFERAY_MODULE_PROJECT_FRAGMENT,
+			wizardAction.getValidationMsg(2));
 
 		wizardAction.cancel();
-
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(LIFERAY_7_X);
-
-		dialogAction.preferences.confirm();
 	}
 
 	@Test
 	public void checkLocation() {
-		String projectName = "test-fragment";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
-
-		wizardAction.newFragment.openNewRuntimeWizard();
-
-		wizardAction.next();
-
-		wizardAction.newRuntime7.prepare(envAction.getServerDir().toOSString());
-
-		wizardAction.finish();
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.newFragment.deselectUseDefaultLocation();
 
@@ -225,7 +164,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 			workspacePath = workspacePath.replaceAll("\\\\", "/");
 		}
 
-		Assert.assertEquals(workspacePath, wizardAction.newFragmentInfo.location().getText());
+		validationAction.assertEquals(workspacePath, wizardAction.newProject.location());
 
 		for (ValidationMsg msg :
 				envAction.getValidationMsgs(
@@ -237,10 +176,10 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 			wizardAction.newFragment.location().setText(msg.getInput());
 
-			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
+			validationAction.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
 
-		wizardAction.newFragment.prepareGradle(projectName, workspacePath + "/testLocation");
+		wizardAction.newFragment.prepareGradle(project.getName(), workspacePath + "/testLocation");
 
 		wizardAction.next();
 
@@ -252,32 +191,14 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(projectName);
-
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(LIFERAY_7_X);
-
-		dialogAction.preferences.confirm();
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void checkOverridenFiles() {
-		String projectName = "test-fragment";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
-
-		wizardAction.newFragment.openNewRuntimeWizard();
-
-		wizardAction.next();
-
-		wizardAction.newRuntime7.prepare(envAction.getServerDir().toOSString());
-
-		wizardAction.finish();
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -295,7 +216,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
-		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
+		validationAction.assertEnabledFalse(dialogAction.getConfirmBtn());
 
 		dialogAction.cancel();
 
@@ -316,14 +237,6 @@ public class ValidationFragmentTests extends SwtbotBase {
 		wizardAction.newFragmentInfo.deleteFile();
 
 		wizardAction.cancel();
-
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(LIFERAY_7_X);
-
-		dialogAction.preferences.confirm();
 	}
 
 	@Test
@@ -340,23 +253,22 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 			wizardAction.newFragment.projectName().setText(msg.getInput());
 
-			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
+			validationAction.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
 
 		wizardAction.cancel();
 	}
 
+	@Ignore("we should open a new test file to test without runtimes")
 	@Test
 	public void createFragmentWithoutRuntime() {
-		String projectName = "test-fragment";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
-		Assert.assertFalse(wizardAction.getNextBtn().isEnabled());
+		validationAction.assertEnabledFalse(wizardAction.getNextBtn());
 
-		Assert.assertEquals(LIFERAY_RUNTIME_MUST_BE_CONFIGURED, wizardAction.getValidationMsg(2));
+		validationAction.assertEquals(LIFERAY_RUNTIME_MUST_BE_CONFIGURED, wizardAction.getValidationMsg(2));
 
 		wizardAction.cancel();
 	}
