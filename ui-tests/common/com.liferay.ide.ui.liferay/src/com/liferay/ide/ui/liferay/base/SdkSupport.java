@@ -19,17 +19,19 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  */
-public class SdkSupport extends SupportBase {
+public class SdkSupport extends SdkSupportBase {
 
-	public SdkSupport(SWTWorkbenchBot bot) {
-		super(bot);
+	public SdkSupport(SWTWorkbenchBot bot, ServerSupport server) {
+		super(bot, "1.0.16", server);
+	}
+
+	public SdkSupport(SWTWorkbenchBot bot, String version, ServerSupport server) {
+		super(bot, version, server);
 	}
 
 	@Override
 	public void after() {
 		jobAction.waitForIvy();
-
-		String sdkName = envAction.getSdkName() + "-" + envAction.getTimestamp();
 
 		// In fact we need to wait our jobs done
 
@@ -37,16 +39,16 @@ public class SdkSupport extends SupportBase {
 
 		// viewAction.project.closeAndDeleteWithNoRunningJobs(sdkName);
 
-		viewAction.project.closeAndDelete(sdkName);
+		viewAction.project.closeAndDelete(getSdkDirName());
 
 		envAction.resetTimestamp();
+
+		super.after();
 	}
 
 	@Override
 	public void before() {
 		super.before();
-
-		envAction.unzipPluginsSdk();
 
 		viewAction.switchLiferayPerspective();
 
@@ -60,9 +62,7 @@ public class SdkSupport extends SupportBase {
 
 		wizardAction.next();
 
-		String location = envAction.getSdkDir().toOSString();
-
-		wizardAction.setSdkLocation.prepare(location);
+		wizardAction.setSdkLocation.prepare(getFullSdkDir());
 
 		wizardAction.finish();
 

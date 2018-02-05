@@ -19,28 +19,10 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  */
-public class Sdk62Support extends SdkSupport {
+public class PureTomcat62Support extends ServerSupport {
 
-	public Sdk62Support(SWTWorkbenchBot bot, ServerSupport server) {
-		super(bot, "6.2-ce-ga6", server);
-	}
-
-	@Override
-	public void after() {
-		if (!envAction.internal()) {
-			return;
-		}
-
-		super.after();
-	}
-
-	@Override
-	public void before() {
-		if (!envAction.internal()) {
-			return;
-		}
-
-		super.before();
+	public PureTomcat62Support(SWTWorkbenchBot bot) {
+		super(bot, "tomcat", "6.2-ga6");
 	}
 
 }

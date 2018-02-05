@@ -16,9 +16,11 @@ package com.liferay.ide.ui.service.builder.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.SdkSupport;
+import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 
 /**
  * @author Joye Luo
@@ -26,8 +28,10 @@ import org.junit.Test;
  */
 public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 
+	public static TomcatSupport tomcat = new TomcatSupport(bot);
+
 	@ClassRule
-	public static SdkSupport sdk = new SdkSupport(bot);
+	public static RuleChain chain = RuleChain.outerRule(tomcat).around(new SdkSupport(bot, tomcat));
 
 	@Test
 	public void buildServiceOnProject() {

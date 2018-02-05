@@ -16,10 +16,12 @@ package com.liferay.ide.ui.hook.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.Sdk62Support;
+import com.liferay.ide.ui.liferay.base.Tomcat62Support;
 
 import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 
 /**
  * @author Terry Jia
@@ -27,8 +29,10 @@ import org.junit.Test;
 @Ignore("ignore as it may fails but unstable happen and need more research")
 public class NewHookProjectSdk62Tests extends SwtbotBase {
 
+	public static Tomcat62Support tomcat62 = new Tomcat62Support(bot);
+
 	@ClassRule
-	public static Sdk62Support sdk62 = new Sdk62Support(bot);
+	public static RuleChain chain = RuleChain.outerRule(tomcat62).around(new Sdk62Support(bot, tomcat62));
 
 	@Test
 	public void createSampleProject() {

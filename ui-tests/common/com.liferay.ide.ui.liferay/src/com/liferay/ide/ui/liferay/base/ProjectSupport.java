@@ -26,28 +26,32 @@ public class ProjectSupport extends SupportBase {
 		super(bot);
 	}
 
-	@Override
-	public void after() {
-		_timestamp = 0;
-	}
-
-	@Override
-	public void before() {
-		_timestamp = System.currentTimeMillis();
-	}
-
 	public String getName() {
-		return "test" + _timestamp;
+		return "test" + timestamp;
 	}
 
-	public String getName(String name) {
-		return name + _timestamp;
+	public String getName(String suffix) {
+		return "test" + timestamp + suffix;
+	}
+
+	public String getNamePortlet() {
+		return "test" + timestamp + "-portlet";
 	}
 
 	public String getStartedLabel() {
 		return getName() + "  [Started, Synchronized] (" + getName() + ")";
 	}
 
-	private long _timestamp = 0;
+	public String getStartedLabel(String suffix) {
+		return getName() + "  [Started, Synchronized] (" + getName(suffix) + ")";
+	}
+
+	public String getStartedLabelPortlet() {
+		return getNamePortlet() + "  [Started, Synchronized] (" + getName() + ")";
+	}
+
+	public String getStartedLabelPortlet(String suffix) {
+		return getNamePortlet() + "  [Started, Synchronized] (" + getName(suffix) + ")";
+	}
 
 }

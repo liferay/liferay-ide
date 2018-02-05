@@ -31,27 +31,25 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 	@Test
 	public void createLiferayWorkspace() {
-		String workspaceName = project.getName("test-liferay-workspace-maven");
-
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareMaven(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareMaven(project.getName());
 
 		wizardAction.finish();
 
-		String[] moduleNames = {workspaceName, workspaceName + "-modules (in modules)"};
+		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(moduleNames));
 
-		String[] themeNames = {workspaceName, workspaceName + "-themes (in themes)"};
+		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(themeNames));
 
-		String[] warNames = {workspaceName, workspaceName + "-wars (in wars)"};
+		String[] warNames = {project.getName(), project.getName() + "-wars (in wars)"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(warNames));
 
-		String[] pomfile = {workspaceName, "pom.xml"};
+		String[] pomfile = {project.getName(), "pom.xml"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(pomfile));
 
@@ -59,18 +57,16 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(themeNames);
 		viewAction.project.closeAndDelete(warNames);
 
-		viewAction.project.closeAndDelete(workspaceName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createLiferayWorkspaceChangeLocation() {
-		String workspaceName = project.getName("test-liferay-workspace-maven");
-
 		String workspacePath = envAction.getEclipseWorkspacePath().toOSString();
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareMaven(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareMaven(project.getName());
 
 		wizardAction.newLiferayWorkspace.deselectUseDefaultLocation();
 
@@ -80,39 +76,37 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] moduleNames = {workspaceName, workspaceName + "-modules (in modules)"};
-		String[] themeNames = {workspaceName, workspaceName + "-themes (in themes)"};
-		String[] warNames = {workspaceName, workspaceName + "-wars (in wars)"};
+		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
+		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
+		String[] warNames = {project.getName(), project.getName() + "-wars (in wars)"};
 
 		viewAction.project.closeAndDelete(moduleNames);
 		viewAction.project.closeAndDelete(themeNames);
 		viewAction.project.closeAndDelete(warNames);
 
-		viewAction.project.closeAndDelete(workspaceName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Ignore("Ignore forever and test the download bundle in createLiferayWorkspaceWithDownloadBundleChangeBundleUrl")
 	@Test
 	public void createLiferayWorkspaceWithDownloadBundle() {
-		String workspaceName = project.getName("test-liferay-workspace-maven");
-
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareMaven(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareMaven(project.getName());
 
 		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
 
 		wizardAction.finish();
 
-		String[] moduleNames = {workspaceName, workspaceName + "-modules (in modules)"};
-		String[] themeNames = {workspaceName, workspaceName + "-themes (in themes)"};
-		String[] warNames = {workspaceName, workspaceName + "-wars (in wars)"};
+		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
+		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
+		String[] warNames = {project.getName(), project.getName() + "-wars (in wars)"};
 
 		viewAction.project.closeAndDelete(moduleNames);
 		viewAction.project.closeAndDelete(themeNames);
 		viewAction.project.closeAndDelete(warNames);
 
-		viewAction.project.closeAndDelete(workspaceName);
+		viewAction.project.closeAndDelete(project.getName());
 
 		dialogAction.openPreferencesDialog();
 
@@ -130,8 +124,6 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 			return;
 		}
 
-		String workspaceName = project.getName("test-liferay-workspace-maven");
-
 		// Use the internal server instead of the public server and also need to append the internal host
 
 		String bundleUrl =
@@ -139,7 +131,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareMaven(workspaceName);
+		wizardAction.newLiferayWorkspace.prepareMaven(project.getName());
 
 		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
 
@@ -149,15 +141,15 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] moduleNames = {workspaceName, workspaceName + "-modules (in modules)"};
-		String[] themeNames = {workspaceName, workspaceName + "-themes (in themes)"};
-		String[] warNames = {workspaceName, workspaceName + "-wars (in wars)"};
+		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
+		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
+		String[] warNames = {project.getName(), project.getName() + "-wars (in wars)"};
 
 		viewAction.project.closeAndDelete(moduleNames);
 		viewAction.project.closeAndDelete(themeNames);
 		viewAction.project.closeAndDelete(warNames);
 
-		viewAction.project.closeAndDelete(workspaceName);
+		viewAction.project.closeAndDelete(project.getName());
 
 		// wait for IDE-3595 fixed
 		// dialogAction.openPreferencesDialog();

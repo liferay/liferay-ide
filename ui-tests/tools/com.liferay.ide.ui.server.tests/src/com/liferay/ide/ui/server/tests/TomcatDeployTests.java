@@ -16,20 +16,26 @@ package com.liferay.ide.ui.server.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.ProjectSupport;
-import com.liferay.ide.ui.liferay.base.TomcatRunningSupport;
+import com.liferay.ide.ui.liferay.base.SdkSupport;
+import com.liferay.ide.ui.liferay.base.ServerRunningSupport;
+import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 
 /**
  * @author Terry Jia
  */
 public class TomcatDeployTests extends SwtbotBase {
 
+	public static TomcatSupport tomcat = new TomcatSupport(bot);
+
 	@ClassRule
-	public static TomcatRunningSupport tomcat = new TomcatRunningSupport(bot);
+	public static RuleChain chain = RuleChain.outerRule(
+		tomcat).around(new SdkSupport(bot, tomcat)).around(new ServerRunningSupport(bot, tomcat));
 
 	@Test
 	public void deployFragment() {
@@ -95,6 +101,31 @@ public class TomcatDeployTests extends SwtbotBase {
 		jobAction.waitForConsoleContent(tomcat.getServerName(), "STOPPED " + project.getName() + "_", 20 * 1000);
 
 		viewAction.project.closeAndDelete(project.getName());
+	}
+
+	@Test
+	public void deployPluginPortlet() {
+		viewAction.switchLiferayPerspective();
+
+		wizardAction.openNewLiferayPluginProjectWizard();
+
+		String projectName = project.getName("-portlet");
+
+		wizardAction.newPlugin.prepareSdk(projectName);
+
+		wizardAction.finish();
+
+		jobAction.waitForIvy();
+
+		jobAction.waitForValidate(projectName);
+
+		viewAction.servers.openAddAndRemoveDialog(tomcat.getStartedLabel());
+
+		dialogAction.addAndRemove.addModule(projectName);
+
+		dialogAction.confirm(FINISH);
+
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test

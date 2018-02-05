@@ -35,12 +35,11 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createFreemarkerPortlet() {
-		String projectName = project.getName("test-freemarker-portlet-maven");
 		String packageName = "test.freemarker.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, FREEMARKER_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), FREEMARKER_PORTLET);
 
 		wizardAction.next();
 
@@ -57,7 +56,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -66,12 +65,11 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createMvcPortlet() {
-		String projectName = project.getName("test-mvc-portlet-maven");
 		String packageName = "test.mvc.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, MVC_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), MVC_PORTLET);
 
 		wizardAction.next();
 
@@ -88,23 +86,22 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		jobAction.waitForValidate(projectName);
+		jobAction.waitForValidate(project.getName());
 
 		viewAction.project.closeAndDelete(projectNames);
 	}
 
 	@Test
 	public void createNpmAngularPortlet() {
-		String projectName = project.getName("test-npm-angular-portlet-maven");
 		String packageName = "test.npm.angular.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, NPM_ANGULAR_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), NPM_ANGULAR_PORTLET);
 
 		wizardAction.next();
 
@@ -121,7 +118,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -130,12 +127,11 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createNpmBillboardjsPortlet() {
-		String projectName = project.getName("test-npm-billboardjs-portlet-maven");
 		String packageName = "test.npm.billboardjs.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, NPM_BILLBOARDJS_PORLET);
+		wizardAction.newModule.prepareMaven(project.getName(), NPM_BILLBOARDJS_PORLET);
 
 		wizardAction.next();
 
@@ -152,7 +148,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -161,12 +157,11 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createNpmIsomorphicPortlet() {
-		String projectName = project.getName("test-npm-isomorphic-portlet-maven");
 		String packageName = "test.npm.isomorphic.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, NPM_ISOMORPHIC_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), NPM_ISOMORPHIC_PORTLET);
 
 		wizardAction.next();
 
@@ -183,7 +178,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -192,12 +187,11 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createNpmJqueryPortlet() {
-		String projectName = project.getName("test-npm-jquery-portlet-maven");
 		String packageName = "test.npm.jquery.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, NPM_JQUERY_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), NPM_JQUERY_PORTLET);
 
 		wizardAction.next();
 
@@ -214,7 +208,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -223,12 +217,11 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createNpmMetaljsPortletMaven() {
-		String projectName = project.getName("test-npm-metaljs-portlet-maven");
 		String packageName = "test.npm.metaljs.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, NPM_METALJS_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), NPM_METALJS_PORTLET);
 
 		wizardAction.next();
 
@@ -245,7 +238,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -254,12 +247,11 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createNpmPortlet() {
-		String projectName = project.getName("test-npm-portlet-maven");
 		String packageName = "test.npm.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, NPM_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), NPM_PORTLET);
 
 		wizardAction.next();
 
@@ -276,7 +268,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -285,12 +277,11 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createNpmReactPortlet() {
-		String projectName = project.getName("test-npm-react-portlet-maven");
 		String packageName = "test.npm.react.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, NPM_REACT_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), NPM_REACT_PORTLET);
 
 		wizardAction.next();
 
@@ -307,7 +298,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -316,12 +307,11 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createNpmVuejsPortlet() {
-		String projectName = project.getName("test-npm-vuejs-portlet-maven");
 		String packageName = "test.npm.vuejs.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, NPM_VUEJS_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), NPM_VUEJS_PORTLET);
 
 		wizardAction.next();
 
@@ -338,7 +328,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -347,12 +337,11 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createPortlet() {
-		String projectName = project.getName("test-portlet-maven");
 		String packageName = "test.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), PORTLET);
 
 		wizardAction.next();
 
@@ -369,7 +358,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -379,12 +368,11 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 	@Ignore("ignore to wait IDE-3579 as it will take too long unexpected")
 	@Test
 	public void createSoyPortlet() {
-		String projectName = project.getName("test-soy-portlet-maven");
 		String packageName = "test.soy.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, SOY_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), SOY_PORTLET);
 
 		wizardAction.next();
 
@@ -400,19 +388,18 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createSpringMvcPortlet() {
-		String projectName = project.getName("test-spring-mvc-portlet");
 		String packageName = "test.spring.mvc.portlet.maven";
 
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, SPRING_MVC_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), SPRING_MVC_PORTLET);
 
 		wizardAction.next();
 
@@ -429,7 +416,7 @@ public class NewPortletModuleLiferayWorkspaceMavenTests extends SwtbotBase {
 		jobAction.waitForUpdateMavenProject();
 
 		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getWarsDirName(), projectName};
+			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getWarsDirName(), project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 

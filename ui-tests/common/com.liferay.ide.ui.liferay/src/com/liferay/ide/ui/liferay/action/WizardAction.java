@@ -817,7 +817,7 @@ public class WizardAction extends UIAction {
 		}
 
 		private void _prepare(String category, String type) {
-			ide.sleep(5000);
+			ide.sleep(3000);
 
 			_newRuntimeWizard.getServerTypes().selectTreeItem(category, type);
 		}

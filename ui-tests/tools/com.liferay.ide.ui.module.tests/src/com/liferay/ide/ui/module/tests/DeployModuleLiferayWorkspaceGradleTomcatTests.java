@@ -16,11 +16,13 @@ package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.LiferayWorkspaceGradleSupport;
-import com.liferay.ide.ui.liferay.base.TomcatRunningSupport;
+import com.liferay.ide.ui.liferay.base.ServerRunningSupport;
+import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 
 /**
  * @author Terry Jia
@@ -28,11 +30,13 @@ import org.junit.Test;
 @Ignore("ignore for more research")
 public class DeployModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
-	@ClassRule
-	public static LiferayWorkspaceGradleSupport liferayWorkspace = new LiferayWorkspaceGradleSupport(bot);
+	public static TomcatSupport tomcat = new TomcatSupport(bot);
 
 	@ClassRule
-	public static TomcatRunningSupport tomcat = new TomcatRunningSupport(bot);
+	public static RuleChain chain = RuleChain.outerRule(tomcat).around(new ServerRunningSupport(bot, tomcat));
+
+	@ClassRule
+	public static LiferayWorkspaceGradleSupport liferayWorkspace = new LiferayWorkspaceGradleSupport(bot);
 
 	@Test
 	public void deployActivator() {

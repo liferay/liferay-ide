@@ -14,31 +14,72 @@
 
 package com.liferay.ide.ui.liferay.base;
 
+import com.liferay.ide.ui.liferay.util.BundleInfo;
+import com.liferay.ide.ui.liferay.util.FileUtil;
+import com.liferay.ide.ui.liferay.util.ZipUtil;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+
+import org.junit.Assert;
 
 /**
  * @author Terry Jia
  */
 public class ServerSupport extends SupportBase {
 
-	public ServerSupport(SWTWorkbenchBot bot) {
+	public ServerSupport(SWTWorkbenchBot bot, String type, String version) {
 		super(bot);
-	}
 
-	@Override
-	public void after() {
-		_timestamp = 0;
+		BundleInfo[] infos = envAction.getBundleInfos();
+
+		for (BundleInfo info : infos) {
+			if (info.getType().equals(type) && info.getVersion().equals(version)) {
+				_bundle = info;
+
+				break;
+			}
+		}
+
+		Assert.assertNotNull(
+			"Unable to get bundle info from bundles.csv by using " + type + " and " + version, _bundle);
 	}
 
 	@Override
 	public void before() {
 		super.before();
 
-		_timestamp = System.currentTimeMillis();
+		File zipFile = envAction.getBundleSubfile(_bundle.getBundleZip());
+
+		File serverDir = new File(envAction.getTempDir(), getServerDirName());
+
+		serverDir.mkdirs();
+
+		try {
+			ZipUtil.unzip(zipFile, _bundle.getBundleDir(), serverDir, new NullProgressMonitor());
+		}
+		catch (IOException ioe) {
+		}
+
+		_preparePortalExtFile(serverDir);
+
+		_preparePortalSetupWizardFile(serverDir);
+	}
+
+	public String getFullServerDir() {
+		return new File(envAction.getTempDir(), getServerDirName()).getAbsolutePath();
+	}
+
+	public String getServerDirName() {
+		return _bundle.getBundleDir() + timestamp;
 	}
 
 	public String getServerName() {
-		return "tomcat" + _timestamp;
+		return _bundle.getType() + timestamp;
 	}
 
 	public String getStartedLabel() {
@@ -49,6 +90,40 @@ public class ServerSupport extends SupportBase {
 		return getServerName() + "  [Stopped]";
 	}
 
-	private long _timestamp = 0;
+	private void _preparePortalExtFile(File serverDir) {
+		String filename = "portal-ext.properties";
+
+		IPath sourcePortalExtPath = envAction.getBundlesPath().append(filename);
+
+		File source = sourcePortalExtPath.toFile();
+
+		File dest = new File(serverDir, filename);
+
+		try {
+			FileUtil.copyFile(source, dest);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void _preparePortalSetupWizardFile(File serverDir) {
+		String filename = "portal-setup-wizard.properties";
+
+		IPath sourcePortalSetupWizardPath = envAction.getBundlesPath().append(filename);
+
+		File source = sourcePortalSetupWizardPath.toFile();
+
+		File dest = new File(serverDir, filename);
+
+		try {
+			FileUtil.copyFile(source, dest);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private BundleInfo _bundle;
 
 }
