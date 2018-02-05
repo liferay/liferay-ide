@@ -6,3 +6,4 @@
 build/
 *.iml
 out/
+src/main/resources/libs/blade.jar
