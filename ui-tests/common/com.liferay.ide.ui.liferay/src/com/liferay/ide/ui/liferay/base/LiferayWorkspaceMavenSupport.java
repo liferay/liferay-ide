@@ -53,7 +53,7 @@ public class LiferayWorkspaceMavenSupport extends SupportBase {
 
 		String[] names = viewAction.project.getProjectNames();
 
-		Assert.assertFalse("Expect there is no projects but still having" + names.length, names.length == 0);
+		Assert.assertTrue("Expect there is no projects but still having " + names.length, names.length == 0);
 	}
 
 	@Override

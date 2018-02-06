@@ -29,7 +29,7 @@ public class ValidationPluginProjectTests extends SwtbotBase {
 	public void testDefaults() {
 		wizardAction.openNewLiferayPluginProjectsFromExistingSourceWizard();
 
-		Assert.assertEquals(PLEASE_SELECT_AT_LEAST_ONE_PROJECT_TO_IMPORT, wizardAction.getValidationMsg());
+		Assert.assertEquals(PLEASE_SELECT_AT_LEAST_ONE_PROJECT_TO_IMPORT, wizardAction.getValidationMsg(2));
 
 		Assert.assertTrue(wizardAction.projectFromExistSource.sdkDirectory().isEnabled());
 		Assert.assertTrue(wizardAction.projectFromExistSource.browseSdkDirectoryBtn().isEnabled());
