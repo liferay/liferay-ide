@@ -15,8 +15,6 @@
 package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayModuleInfoWizard;
-import com.liferay.ide.ui.liferay.page.wizard.project.NewLiferayModuleWizard;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
@@ -40,12 +38,14 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 	public void checkInitialState() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		Assert.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, _newModuleProjectWizard.getValidationMsg());
-		Assert.assertEquals(StringPool.BLANK, _newModuleProjectWizard.getProjectName().getText());
+		Assert.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, wizardAction.getValidationMsg(2));
 
-		Assert.assertTrue(_newModuleProjectWizard.getUseDefaultLocation().isChecked());
-		Assert.assertFalse(_newModuleInfoWizard.finishBtn().isEnabled());
-		Assert.assertTrue(_newModuleInfoWizard.cancelBtn().isEnabled());
+		Assert.assertEquals(StringPool.BLANK, wizardAction.newModule.projectName().getText());
+
+		Assert.assertTrue(wizardAction.newModule.useDefaultLocation().isChecked());
+		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
+
+		Assert.assertTrue(wizardAction.getCancelBtn().isEnabled());
 
 		wizardAction.cancel();
 	}
@@ -55,7 +55,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		wizardAction.openNewLiferayModuleWizard();
 
 		String[] expectedBuildTypes = {GRADLE, MAVEN};
-		String[] buildTypes = _newModuleProjectWizard.getBuildTypes().items();
+		String[] buildTypes = wizardAction.newModule.buildType().items();
 
 		int expectedLength = expectedBuildTypes.length;
 		int length = buildTypes.length;
@@ -79,7 +79,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 
 		wizardAction.next();
 
-		Assert.assertTrue(_newModuleInfoWizard.finishBtn().isEnabled());
+		Assert.assertTrue(wizardAction.getFinishBtn().isEnabled());
 		Assert.assertEquals(CONFIGURE_COMPONENT_CLASS, wizardAction.getValidationMsg(2));
 
 		wizardAction.newModuleInfo.prepare(projectName, StringPool.BLANK);
@@ -88,7 +88,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		wizardAction.newModuleInfo.prepare(StringPool.BLANK, "!!");
 		Assert.assertEquals(INVALID_PACKAGE_NAME, wizardAction.getValidationMsg(2));
 
-		_newModuleProjectWizard.cancel();
+		wizardAction.cancel();
 	}
 
 	@Ignore
@@ -103,7 +103,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		wizardAction.newModule.deselectUseDefaultLocation();
 
 		String exceptLocation = envAction.getEclipseWorkspacePath().toOSString();
-		String actualLocation = _newModuleProjectWizard.getLocation().getText();
+		String actualLocation = wizardAction.newModule.location().getText();
 
 		if (Platform.getOS().equals("win32")) {
 			exceptLocation = exceptLocation.replaceAll("\\\\", "/");
@@ -119,7 +119,7 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 				continue;
 			}
 
-			wizardAction.newModule.setLocation(msg.getInput());
+			wizardAction.newModule.location().setText(msg.getInput());
 
 			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
@@ -144,8 +144,8 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 
 		wizardAction.newModule.prepareGradle(projectName);
 
-		Assert.assertEquals(MVC_PORTLET, _newModuleProjectWizard.getProjectTemplates().getText());
-		Assert.assertArrayEquals(templates, _newModuleProjectWizard.getProjectTemplates().items());
+		Assert.assertEquals(MVC_PORTLET, wizardAction.newModule.projectTemplateName().getText());
+		Assert.assertArrayEquals(templates, wizardAction.newModule.projectTemplateName().items());
 
 		wizardAction.cancel();
 	}
@@ -154,19 +154,19 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 	public void validateProjectName() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		Assert.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, _newModuleProjectWizard.getValidationMsg(2));
-		Assert.assertFalse(_newModuleProjectWizard.finishBtn().isEnabled());
+		Assert.assertEquals(PLEASE_ENTER_A_PROJECT_NAME, wizardAction.getValidationMsg(2));
+		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
 
 		for (ValidationMsg msg :
 				envAction.getValidationMsgs(
 					new File(envAction.getValidationDir(), "new-liferay-module-project-wizard-project-name.csv"))) {
 
-			_newModuleProjectWizard.getProjectName().setText(msg.getInput());
+			wizardAction.newModule.projectName().setText(msg.getInput());
 
 			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
 
-		_newModuleProjectWizard.cancel();
+		wizardAction.cancel();
 	}
 
 	@Test
@@ -183,25 +183,25 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 
 		Assert.assertEquals(NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(2));
 
-		_newModuleInfoWizard.getDeleteBtn().click();
+		wizardAction.newModuleInfo.deleteBtn().click();
 
 		wizardAction.newModuleInfo.prepareProperties(StringPool.BLANK, projectName);
 
 		Assert.assertEquals(NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(2));
 
-		_newModuleInfoWizard.getDeleteBtn().click();
+		wizardAction.newModuleInfo.deleteBtn().click();
 
 		wizardAction.newModuleInfo.prepareProperties(projectName, StringPool.BLANK);
 
 		Assert.assertEquals(VALUE_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(2));
 
-		_newModuleInfoWizard.getDeleteBtn().click();
+		wizardAction.newModuleInfo.deleteBtn().click();
 
 		wizardAction.newModuleInfo.prepareProperties(projectName, projectName);
 
 		Assert.assertEquals(CONFIGURE_COMPONENT_CLASS, wizardAction.getValidationMsg(2));
 
-		Assert.assertTrue(_newModuleInfoWizard.finishBtn().isEnabled());
+		Assert.assertTrue(wizardAction.getFinishBtn().isEnabled());
 
 		wizardAction.cancel();
 	}
@@ -217,13 +217,10 @@ public class ValidationModuleProjectTests extends SwtbotBase {
 		wizardAction.next();
 
 		Assert.assertEquals(CONFIGURE_COMPONENT_CLASS, wizardAction.getValidationMsg(2));
-		Assert.assertEquals(StringPool.BLANK, _newModuleInfoWizard.getComponentClassName().getText());
-		Assert.assertEquals(StringPool.BLANK, _newModuleInfoWizard.getPackageName().getText());
+		Assert.assertEquals(StringPool.BLANK, wizardAction.newModuleInfo.componentClassName().getText());
+		Assert.assertEquals(StringPool.BLANK, wizardAction.newModuleInfo.packageName().getText());
 
 		wizardAction.cancel();
 	}
-
-	private static final NewLiferayModuleInfoWizard _newModuleInfoWizard = new NewLiferayModuleInfoWizard(bot);
-	private static final NewLiferayModuleWizard _newModuleProjectWizard = new NewLiferayModuleWizard(bot);
 
 }

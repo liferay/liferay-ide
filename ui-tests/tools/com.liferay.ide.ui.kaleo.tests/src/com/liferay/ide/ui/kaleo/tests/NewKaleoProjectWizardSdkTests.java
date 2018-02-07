@@ -19,14 +19,14 @@ import com.liferay.ide.ui.liferay.base.SdkSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.ClassRule;
-import org.junit.Ignore;
+
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
  * @author Haoyi Sun
  */
-@Ignore("unstable need more research")
+
 public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 	public static TomcatSupport tomcat = new TomcatSupport(bot);

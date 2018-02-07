@@ -15,7 +15,6 @@
 package com.liferay.ide.ui.workspace.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.page.wizard.project.ImportLiferayWorkspaceWizard;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
@@ -29,6 +28,7 @@ import org.junit.Test;
 /**
  * @author Vicky Wang
  * @author Ying Xu
+ * @author Ashley Yuan
  */
 public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 
@@ -36,16 +36,16 @@ public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 	public void checkInitialState() {
 		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
-		Assert.assertEquals(PLEASE_SELECT_THE_WORKSPACE_LOCATION, _importLiferayWorkspace.getValidationMsg());
+		Assert.assertEquals(PLEASE_SELECT_THE_WORKSPACE_LOCATION, wizardAction.getValidationMsg(2));
 
-		Assert.assertEquals(StringPool.BLANK, _importLiferayWorkspace.getWorkspaceLocation().getText());
-		Assert.assertEquals(StringPool.BLANK, _importLiferayWorkspace.getBuildTypeText().getText());
-		Assert.assertFalse(_importLiferayWorkspace.getAddProjectToWorkingSet().isChecked());
+		Assert.assertEquals(StringPool.BLANK, wizardAction.importLiferayWorkspace.workspaceLocation().getText());
+		Assert.assertEquals(StringPool.BLANK, wizardAction.importLiferayWorkspace.buildType().getText());
+		Assert.assertFalse(wizardAction.importLiferayWorkspace.addProjectToWorkingSet().isChecked());
 
-		Assert.assertTrue(_importLiferayWorkspace.backBtn().isEnabled());
-		Assert.assertFalse(_importLiferayWorkspace.nextBtn().isEnabled());
-		Assert.assertFalse(_importLiferayWorkspace.finishBtn().isEnabled());
-		Assert.assertTrue(_importLiferayWorkspace.cancelBtn().isEnabled());
+		Assert.assertTrue(wizardAction.getBackBtn().isEnabled());
+		Assert.assertFalse(wizardAction.getNextBtn().isEnabled());
+		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
+		Assert.assertTrue(wizardAction.getCancelBtn().isEnabled());
 
 		wizardAction.cancel();
 	}
@@ -62,14 +62,12 @@ public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 				continue;
 			}
 
-			_importLiferayWorkspace.getWorkspaceLocation().setText(msg.getInput());
+			wizardAction.importLiferayWorkspace.prepareLocation(msg.getInput());
 
 			Assert.assertEquals(msg.getExpect(), wizardAction.getValidationMsg(2));
 		}
 
 		wizardAction.cancel();
 	}
-
-	private ImportLiferayWorkspaceWizard _importLiferayWorkspace = new ImportLiferayWorkspaceWizard(bot);
 
 }

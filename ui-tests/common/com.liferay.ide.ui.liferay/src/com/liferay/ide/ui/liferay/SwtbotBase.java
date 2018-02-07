@@ -19,6 +19,7 @@ import com.liferay.ide.ui.liferay.action.DialogAction;
 import com.liferay.ide.ui.liferay.action.EditorAction;
 import com.liferay.ide.ui.liferay.action.EnvAction;
 import com.liferay.ide.ui.liferay.action.JobAction;
+import com.liferay.ide.ui.liferay.action.ValidationAction;
 import com.liferay.ide.ui.liferay.action.ViewAction;
 import com.liferay.ide.ui.liferay.action.WizardAction;
 import com.liferay.ide.ui.liferay.page.LiferayIDE;
@@ -29,7 +30,6 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
@@ -52,6 +52,7 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 	public static JobAction jobAction;
 	public static ViewAction viewAction;
 	public static WizardAction wizardAction;
+	public static ValidationAction validationAction;
 
 	@AfterClass
 	public static void afterClass() {
@@ -90,6 +91,7 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 		viewAction = ViewAction.getInstance(bot);
 		jobAction = JobAction.getInstance(bot);
 		browserAction = BrowserAction.getInstance(bot);
+		validationAction = ValidationAction.getInstance(bot);
 
 		try {
 			long origin = SWTBotPreferences.TIMEOUT;

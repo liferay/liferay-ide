@@ -16,6 +16,7 @@ package com.liferay.ide.ui.liferay.action;
 
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.liferay.page.wizard.ChooseAssignmentTypeWizard;
+import com.liferay.ide.ui.liferay.page.wizard.LiferayProjectFromExistSourceWizard;
 import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignActionWizard;
 import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignRoleByIdWizard;
 import com.liferay.ide.ui.liferay.page.wizard.MakeTaskAssignRoleTypeWizard;
@@ -41,8 +42,10 @@ import com.liferay.ide.ui.swtbot.eclipse.page.NewRuntimeWizard;
 import com.liferay.ide.ui.swtbot.eclipse.page.NewServerWizard;
 import com.liferay.ide.ui.swtbot.page.Button;
 import com.liferay.ide.ui.swtbot.page.CheckBox;
+import com.liferay.ide.ui.swtbot.page.ComboBox;
 import com.liferay.ide.ui.swtbot.page.MenuItem;
 import com.liferay.ide.ui.swtbot.page.Text;
+import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
@@ -79,6 +82,14 @@ public class WizardAction extends UIAction {
 		_jobAction.waitForShellClosed(title);
 
 		ide.sleepLinux(2000);
+	}
+
+	public Button getBackBtn() {
+		return _getWizard().backBtn();
+	}
+
+	public Button getCancelBtn() {
+		return _getWizard().cancelBtn();
 	}
 
 	public Button getFinishBtn() {
@@ -242,6 +253,7 @@ public class WizardAction extends UIAction {
 	public NewRuntime7WizardAction newRuntime7 = new NewRuntime7WizardAction();
 	public NewRuntime62WizardAction newRuntime62 = new NewRuntime62WizardAction();
 	public NewServerWizardAction newServer = new NewServerWizardAction();
+	public ProjectFromExistSourceWizardAction projectFromExistSource = new ProjectFromExistSourceWizardAction();
 	public SetSdkLocationWizardAction setSdkLocation = new SetSdkLocationWizardAction();
 
 	public class ChooseAssignmentTypeWizardAction {
@@ -276,8 +288,12 @@ public class WizardAction extends UIAction {
 
 	public class ImportLiferayWorkspaceWizardAction {
 
-		public void prepare(String location) {
-			_importLiferayWorkspaceProjectWizard.getWorkspaceLocation().setText(location);
+		public CheckBox addProjectToWorkingSet() {
+			return _importLiferayWorkspaceProjectWizard.getAddProjectToWorkingSet();
+		}
+
+		public Text buildType() {
+			return _importLiferayWorkspaceProjectWizard.getBuildTypeText();
 		}
 
 		public void prepare(String location, boolean downloadLiferayBundle) {
@@ -304,6 +320,14 @@ public class WizardAction extends UIAction {
 
 		public void prepareBundleUrl(String bundleUrl) {
 			_importLiferayWorkspaceProjectWizard.getBundleUrl().setText(bundleUrl);
+		}
+
+		public void prepareLocation(String location) {
+			workspaceLocation().setText(location);
+		}
+
+		public Text workspaceLocation() {
+			return _importLiferayWorkspaceProjectWizard.getWorkspaceLocation();
 		}
 
 		private final ImportLiferayWorkspaceWizard _importLiferayWorkspaceProjectWizard =
@@ -394,14 +418,34 @@ public class WizardAction extends UIAction {
 
 	}
 
-	public class NewFragmentFilesWizardAction {
+	public class NewFragmentFilesWizardAction extends NewProjectWizardAction {
+
+		public ToolbarButtonWithTooltip addOverrideFilesBtn() {
+			return _newFragmentFilesWizard.getAddOverrideFilesBtn();
+		}
+
+		public ToolbarButtonWithTooltip deleteBtn() {
+			return _newFragmentFilesWizard.getDeleteBtn();
+		}
 
 		public void deleteFile() {
-			_newFragmentFilesWizard.getDeleteBtn().click();
+			deleteBtn().click();
+		}
+
+		public Text hostOsgiBundle() {
+			return _newFragmentFilesWizard.getHostOsgiBundle();
+		}
+
+		public ToolbarButtonWithTooltip newRuntimeBtn() {
+			return _newFragmentFilesWizard.getNewRuntimeBtn();
 		}
 
 		public void openAddOverrideFilesDialog() {
-			_newFragmentFilesWizard.getAddOverrideFilesBtn().click();
+			addOverrideFilesBtn().click();
+		}
+
+		public ComboBox runtimeName() {
+			return _newFragmentFilesWizard.getLiferyRuntimes();
 		}
 
 		public void selectFile(String file) {
@@ -412,10 +456,26 @@ public class WizardAction extends UIAction {
 
 	}
 
-	public class NewFragmentInfoWizardAction {
+	public class NewFragmentInfoWizardAction extends NewProjectWizardAction {
+
+		public ToolbarButtonWithTooltip addOverrideFilesBtn() {
+			return _newFragmentInfoWizard.getAddOverrideFilesBtn();
+		}
+
+		public ToolbarButtonWithTooltip browseOsgiBtn() {
+			return _newFragmentInfoWizard.getBrowseOsgiBtn();
+		}
+
+		public ToolbarButtonWithTooltip deleteBtn() {
+			return _newFragmentInfoWizard.getDeleteBtn();
+		}
 
 		public void deleteFile() {
 			_newFragmentInfoWizard.getDeleteBtn().click();
+		}
+
+		public Text hostOsgiBundle() {
+			return _newFragmentInfoWizard.getHostOsgiBundle();
 		}
 
 		public void openAddOverrideFilesDialog() {
@@ -423,11 +483,27 @@ public class WizardAction extends UIAction {
 		}
 
 		public void openBrowseOsgiBundleDialog() {
-			_newFragmentInfoWizard.getBrowseOsgiBtn().click();
+			browseOsgiBtn().click();
 		}
 
 		public void selectFile(String file) {
 			_newFragmentInfoWizard.getFiles().click(file);
+		}
+
+		public Text getHostOsgiBundle() {
+			return _newFragmentInfoWizard.getHostOsgiBundle();
+		}
+
+		public ToolbarButtonWithTooltip getBrowseOsgiBtn() {
+			return _newFragmentInfoWizard.getBrowseOsgiBtn();
+		}
+
+		public ToolbarButtonWithTooltip getAddOverrideFilesBtn() {
+			return _newFragmentInfoWizard.getAddOverrideFilesBtn();
+		}
+
+		public ToolbarButtonWithTooltip getDeleteBtn() {
+			return _newFragmentInfoWizard.getDeleteBtn();
 		}
 
 		private final NewFragmentInfoWizard _newFragmentInfoWizard = new NewFragmentInfoWizard(bot);
@@ -490,6 +566,18 @@ public class WizardAction extends UIAction {
 
 	public class NewLiferayComponentWizardAction {
 
+		public ToolbarButtonWithTooltip browsePackageBtn() {
+			return _newLiferayComponentWizard.getPackageBrowseBtn();
+		}
+
+		public Text componentClassName() {
+			return _newLiferayComponentWizard.getComponentClassName();
+		}
+
+		public ComboBox componentClassTemplate() {
+			return _newLiferayComponentWizard.getComponentClassTemplates();
+		}
+
 		public void openSelectModelClassAndServiceDialog() {
 			_newLiferayComponentWizard.getBrowseBtn().click();
 		}
@@ -498,24 +586,28 @@ public class WizardAction extends UIAction {
 			_newLiferayComponentWizard.getPackageBrowseBtn().click();
 		}
 
+		public Text packageName() {
+			return _newLiferayComponentWizard.getPackageName();
+		}
+
 		public void prepare(String template) {
-			_newLiferayComponentWizard.getComponentClassTemplates().setSelection(template);
+			componentClassTemplate().setSelection(template);
 
 			ide.sleep();
 		}
 
 		public void prepare(String projectName, String packageName) {
-			_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
+			projectName().setSelection(projectName);
 
 			ide.sleep();
 
-			_newLiferayComponentWizard.getPackageName().setText(packageName);
+			packageName().setText(packageName);
 
 			ide.sleep();
 		}
 
 		public void prepare(String projectName, String template, String className, String packageName) {
-			_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
+			projectName().setSelection(projectName);
 
 			ide.sleep();
 
@@ -523,11 +615,11 @@ public class WizardAction extends UIAction {
 
 			ide.sleep();
 
-			_newLiferayComponentWizard.getComponentClassName().setText(className);
+			componentClassName().setText(className);
 
 			ide.sleep();
 
-			_newLiferayComponentWizard.getPackageName().setText(packageName);
+			packageName().setText(packageName);
 
 			ide.sleep();
 		}
@@ -539,7 +631,7 @@ public class WizardAction extends UIAction {
 		}
 
 		public void prepareProjectName(String projectName) {
-			_newLiferayComponentWizard.getProjectNames().setSelection(projectName);
+			projectName().setSelection(projectName);
 
 			ide.sleep();
 		}
@@ -548,6 +640,10 @@ public class WizardAction extends UIAction {
 			_newLiferayComponentWizard.getServiceName().setText(serviceName);
 
 			ide.sleep();
+		}
+
+		public ComboBox projectName() {
+			return _newLiferayComponentWizard.getProjectNames();
 		}
 
 		private final NewLiferayComponentWizard _newLiferayComponentWizard = new NewLiferayComponentWizard(bot);
@@ -576,6 +672,10 @@ public class WizardAction extends UIAction {
 
 	public class NewLiferayWorkspaceWizardAction extends NewProjectWizardAction {
 
+		public CheckBox downloadLiferayBundle() {
+			return _newLiferayWorkspaceWizard.getDownloadLiferayBundle();
+		}
+
 		public void prepareGradle(String projectName) {
 			_prepare(projectName, GRADLE);
 		}
@@ -592,7 +692,7 @@ public class WizardAction extends UIAction {
 		}
 
 		public void selectDownloadLiferayBundle() {
-			_newLiferayWorkspaceWizard.getDownloadLiferayBundle().select();
+			downloadLiferayBundle().select();
 		}
 
 		public void setBundleUrl(String bundleUrl) {
@@ -615,7 +715,7 @@ public class WizardAction extends UIAction {
 			_prepare(projectName, buildType);
 
 			if (downloadLiferayBundle) {
-				_newLiferayWorkspaceWizard.getDownloadLiferayBundle().select();
+				downloadLiferayBundle().select();
 
 				_newLiferayWorkspaceWizard.getServerName().setText(serverName);
 
@@ -624,7 +724,7 @@ public class WizardAction extends UIAction {
 				}
 			}
 			else {
-				_newLiferayWorkspaceWizard.getDownloadLiferayBundle().deselect();
+				downloadLiferayBundle().deselect();
 			}
 		}
 
@@ -634,17 +734,29 @@ public class WizardAction extends UIAction {
 
 	public class NewModuleInfoWizardAction {
 
+		public Text componentClassName() {
+			return _newModuleInfoWizard.getComponentClassName();
+		}
+
+		public ToolbarButtonWithTooltip deleteBtn() {
+			return _newModuleInfoWizard.getDeleteBtn();
+		}
+
 		public void openSelectServiceDialog() {
 			_newModuleInfoWizard.getBrowseBtn().click();
 		}
 
+		public Text packageName() {
+			return _newModuleInfoWizard.getPackageName();
+		}
+
 		public void prepare(String className, String packageName) {
-			_newModuleInfoWizard.getComponentClassName().setText(className);
-			_newModuleInfoWizard.getPackageName().setText(packageName);
+			componentClassName().setText(className);
+			packageName().setText(packageName);
 		}
 
 		public void preparePackageName(String packageName) {
-			_newModuleInfoWizard.getPackageName().setText(packageName);
+			packageName().setText(packageName);
 		}
 
 		public void prepareProperties(String propertiesName, String propertiesValue) {
@@ -700,10 +812,14 @@ public class WizardAction extends UIAction {
 			_prepare(projectName, MAVEN, template);
 		}
 
+		public ComboBox projectTemplateName() {
+			return _newModuleWizard.getProjectTemplates();
+		}
+
 		private void _prepare(String projectName, String buildType, String template) {
 			_newModuleWizard.getProjectName().setText(projectName);
 			_newModuleWizard.getBuildTypes().setSelection(buildType);
-			_newModuleWizard.getProjectTemplates().setSelection(template);
+			projectTemplateName().setSelection(template);
 		}
 
 		private final NewLiferayModuleWizard _newModuleWizard = new NewLiferayModuleWizard(bot);
@@ -756,24 +872,28 @@ public class WizardAction extends UIAction {
 
 	public class NewProjectWizardAction {
 
-		public void deselectUseDefaultLocation() {
-			_newProjectWizard.getUseDefaultLocation().deselect();
+		public ComboBox buildType() {
+			return _newProjectWizard.getBuildTypes();
 		}
 
-		public Text getLocation() {
+		public void deselectUseDefaultLocation() {
+			useDefaultLocation().deselect();
+		}
+
+		public Text location() {
 			return _newProjectWizard.getLocation();
 		}
 
-		public CheckBox getUseDefaultLocation() {
+		public Text projectName() {
+			return _newProjectWizard.getProjectName();
+		}
+
+		public CheckBox useDefaultLocation() {
 			return _newProjectWizard.getUseDefaultLocation();
 		}
 
-		public void setLocation(String location) {
-			_newProjectWizard.getLocation().setText(location);
-		}
-
-		public void setProjectName(String projectName) {
-			_newProjectWizard.getProjectName().setText(projectName);
+		public ComboBox getBuildTypes() {
+			return _newProjectWizard.getBuildTypes();
 		}
 
 		private final NewProjectWizard _newProjectWizard = new NewProjectWizard(bot);
@@ -849,6 +969,37 @@ public class WizardAction extends UIAction {
 		}
 
 		private final NewServerWizard _newServerWizard = new NewServerWizard(bot);
+
+	}
+
+	public class ProjectFromExistSourceWizardAction {
+
+		public ToolbarButtonWithTooltip browseSdkDirectoryBtn() {
+			return _projectFromExistSourceWizard.getBrowseSdkDirectoryBtn();
+		}
+
+		public Button deselectAllBtn() {
+			return _projectFromExistSourceWizard.getDeselectAllBtn();
+		}
+
+		public Button refreshBtn() {
+			return _projectFromExistSourceWizard.getRefreshBtn();
+		}
+
+		public Text sdkDirectory() {
+			return _projectFromExistSourceWizard.getSdkDirectory();
+		}
+
+		public Text sdkVersion() {
+			return _projectFromExistSourceWizard.getSdkVersion();
+		}
+
+		public Button selectAllBtn() {
+			return _projectFromExistSourceWizard.getSelectAllBtn();
+		}
+
+		private final LiferayProjectFromExistSourceWizard _projectFromExistSourceWizard =
+			new LiferayProjectFromExistSourceWizard(bot);
 
 	}
 

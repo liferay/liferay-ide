@@ -47,7 +47,7 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
-		wizardAction.importLiferayWorkspace.prepare(workspaceProject.getPath());
+		wizardAction.importLiferayWorkspace.prepareLocation(workspaceProject.getPath());
 
 		wizardAction.finish();
 
@@ -134,7 +134,7 @@ public class ImportLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
-		wizardAction.importLiferayWorkspace.prepare(workspaceProject.getPath());
+		wizardAction.importLiferayWorkspace.prepareLocation(workspaceProject.getPath());
 
 		wizardAction.finish();
 

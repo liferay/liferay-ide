@@ -35,6 +35,14 @@ public class LiferayWorkspaceMavenSupport extends SupportBase {
 
 		String[] warsFolderNames = {getLiferayWorkspaceName(), getWarsDirName()};
 
+		viewAction.project.openUpdateMavenProjectDialog(getLiferayWorkspaceName());
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		viewAction.project.closeAndDeleteFromDisk(modulesFolderNames);
 
 		viewAction.project.closeAndDeleteFromDisk(themesFolderNames);
@@ -42,6 +50,10 @@ public class LiferayWorkspaceMavenSupport extends SupportBase {
 		viewAction.project.closeAndDeleteFromDisk(warsFolderNames);
 
 		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspaceName());
+
+		String[] names = viewAction.project.getProjectNames();
+
+		Assert.assertTrue("Expect there is no projects but still having " + names.length, names.length == 0);
 	}
 
 	@Override
