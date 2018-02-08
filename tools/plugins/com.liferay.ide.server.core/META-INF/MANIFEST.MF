@@ -7,7 +7,7 @@ Bundle-Activator: com.liferay.ide.server.core.LiferayServerCore
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: org.eclipse.wst.server.core;visibility:=reexport,
  org.eclipse.jst.server.core;visibility:=reexport,
- org.eclipse.debug.core,
+ org.eclipse.debug.core;visibility:=reexport,
  org.eclipse.jdt.launching,
  com.liferay.ide.core,
  org.eclipse.jdt.core,

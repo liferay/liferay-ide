@@ -32,7 +32,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -43,6 +45,7 @@ import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Charles Wu
  */
 @SuppressWarnings("restriction")
 public abstract class MavenGoalAction extends AbstractObjectAction {
@@ -122,12 +125,24 @@ public abstract class MavenGoalAction extends AbstractObjectAction {
 
 				};
 
+				job.addJobChangeListener(
+					new JobChangeAdapter() {
+
+						public void done(IJobChangeEvent event) {
+							afterGoal();
+						}
+
+					});
+
 				job.schedule();
 			}
 		}
 	}
 
 	public Plugin plugin = null;
+
+	protected void afterGoal() {
+	}
 
 	protected String getGroupId() {
 		return ILiferayMavenConstants.NEW_LIFERAY_MAVEN_PLUGINS_GROUP_ID;
