@@ -48,7 +48,7 @@ public class DeployModuleLiferayWorkspaceMavenTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -56,8 +56,7 @@ public class DeployModuleLiferayWorkspaceMavenTomcatTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		String[] projectNames = {liferayWorkspace.getName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		viewAction.servers.openAddAndRemoveDialog(tomcat.getStartedLabel());
 

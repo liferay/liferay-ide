@@ -184,6 +184,14 @@ public class ViewAction extends UIAction {
 			_getProjects().contextMenu("Update Project...", projectName);
 		}
 
+		public void refreshGradleProject(String projectName) {
+			_getProjects().contextMenu("Refresh Gradle Project", projectName);
+
+			// should use job way instead
+
+			ide.sleep(2000);
+		}
+
 		public void runBuildServices(String... projectNames) {
 			try {
 				_getProjects().contextMenu(BUILD_SERVICES, projectNames);

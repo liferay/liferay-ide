@@ -52,7 +52,7 @@ public class DeployModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 
 		ide.sleep(5000);
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
+		String[] projectNames = {liferayWorkspace.getName(), "modules", projectName};
 
 		viewAction.servers.openAddAndRemoveDialog(tomcat.getStartedLabel());
 

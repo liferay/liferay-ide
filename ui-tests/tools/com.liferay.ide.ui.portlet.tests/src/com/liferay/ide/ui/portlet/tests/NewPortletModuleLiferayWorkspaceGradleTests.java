@@ -46,7 +46,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
+		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -67,7 +67,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
+		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -90,7 +90,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
+		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -111,7 +111,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
+		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -132,7 +132,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
+		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -153,7 +153,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
+		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -174,7 +174,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
+		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -195,7 +195,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
+		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -216,7 +216,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
+		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -237,7 +237,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
+		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -258,7 +258,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
+		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -280,7 +280,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", project.getName()};
+		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
@@ -302,7 +302,7 @@ public class NewPortletModuleLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "wars", project.getName()};
+		String[] projectNames = {liferayWorkspace.getName(), "wars", project.getName()};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 

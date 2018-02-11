@@ -474,6 +474,22 @@ public class WizardAction extends UIAction {
 			_newFragmentInfoWizard.getDeleteBtn().click();
 		}
 
+		public ToolbarButtonWithTooltip getAddOverrideFilesBtn() {
+			return _newFragmentInfoWizard.getAddOverrideFilesBtn();
+		}
+
+		public ToolbarButtonWithTooltip getBrowseOsgiBtn() {
+			return _newFragmentInfoWizard.getBrowseOsgiBtn();
+		}
+
+		public ToolbarButtonWithTooltip getDeleteBtn() {
+			return _newFragmentInfoWizard.getDeleteBtn();
+		}
+
+		public Text getHostOsgiBundle() {
+			return _newFragmentInfoWizard.getHostOsgiBundle();
+		}
+
 		public Text hostOsgiBundle() {
 			return _newFragmentInfoWizard.getHostOsgiBundle();
 		}
@@ -488,22 +504,6 @@ public class WizardAction extends UIAction {
 
 		public void selectFile(String file) {
 			_newFragmentInfoWizard.getFiles().click(file);
-		}
-
-		public Text getHostOsgiBundle() {
-			return _newFragmentInfoWizard.getHostOsgiBundle();
-		}
-
-		public ToolbarButtonWithTooltip getBrowseOsgiBtn() {
-			return _newFragmentInfoWizard.getBrowseOsgiBtn();
-		}
-
-		public ToolbarButtonWithTooltip getAddOverrideFilesBtn() {
-			return _newFragmentInfoWizard.getAddOverrideFilesBtn();
-		}
-
-		public ToolbarButtonWithTooltip getDeleteBtn() {
-			return _newFragmentInfoWizard.getDeleteBtn();
 		}
 
 		private final NewFragmentInfoWizard _newFragmentInfoWizard = new NewFragmentInfoWizard(bot);
@@ -880,6 +880,10 @@ public class WizardAction extends UIAction {
 			useDefaultLocation().deselect();
 		}
 
+		public ComboBox getBuildTypes() {
+			return _newProjectWizard.getBuildTypes();
+		}
+
 		public Text location() {
 			return _newProjectWizard.getLocation();
 		}
@@ -890,10 +894,6 @@ public class WizardAction extends UIAction {
 
 		public CheckBox useDefaultLocation() {
 			return _newProjectWizard.getUseDefaultLocation();
-		}
-
-		public ComboBox getBuildTypes() {
-			return _newProjectWizard.getBuildTypes();
 		}
 
 		private final NewProjectWizard _newProjectWizard = new NewProjectWizard(bot);

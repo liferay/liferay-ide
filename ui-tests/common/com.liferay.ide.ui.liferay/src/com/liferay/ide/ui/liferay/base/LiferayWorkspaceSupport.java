@@ -16,28 +16,22 @@ package com.liferay.ide.ui.liferay.base;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
-import org.junit.Assert;
-
 /**
  * @author Terry Jia
  */
-public class LiferayWorkspaceGradleSupport extends LiferayWorkspaceSupport {
+public class LiferayWorkspaceSupport extends SupportBase {
 
-	public LiferayWorkspaceGradleSupport(SWTWorkbenchBot bot) {
+	public LiferayWorkspaceSupport(SWTWorkbenchBot bot) {
 		super(bot);
 	}
 
 	@Override
-	public void before() {
-		super.before();
+	public void after() {
+		viewAction.project.closeAndDeleteFromDisk(getName());
+	}
 
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		wizardAction.newLiferayWorkspace.prepareGradle(getName());
-
-		wizardAction.finish();
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(getName()));
+	public String getName() {
+		return "workspace" + timestamp;
 	}
 
 }

@@ -43,28 +43,23 @@ public class NewServiceBuilderModuleLiferayWorkspaceMavenTest extends SwtbotBase
 
 		wizardAction.finish();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		String[] projectNames = {liferayWorkspace.getName(), liferayWorkspace.getModulesDirName(), projectName};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
 
-		String[] serviceNames = {
-			liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName,
-			projectName + "-service"
-		};
+		String[] serviceNames =
+			{liferayWorkspace.getName(), liferayWorkspace.getModulesDirName(), projectName, projectName + "-service"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(serviceNames));
 
-		String[] apiNames = {
-			liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName,
-			projectName + "-api"
-		};
+		String[] apiNames =
+			{liferayWorkspace.getName(), liferayWorkspace.getModulesDirName(), projectName, projectName + "-api"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(apiNames));
 
 		String[] serviceXmlNames = {
-			liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName,
-			projectName + "-service", "service.xml"
+			liferayWorkspace.getName(), liferayWorkspace.getModulesDirName(), projectName, projectName + "-service",
+			"service.xml"
 		};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(serviceXmlNames));

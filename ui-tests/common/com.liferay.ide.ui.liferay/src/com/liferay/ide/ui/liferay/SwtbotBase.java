@@ -30,6 +30,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
@@ -50,9 +51,9 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 	public static EnvAction envAction;
 	public static LiferayIDE ide;
 	public static JobAction jobAction;
+	public static ValidationAction validationAction;
 	public static ViewAction viewAction;
 	public static WizardAction wizardAction;
-	public static ValidationAction validationAction;
 
 	@AfterClass
 	public static void afterClass() {
