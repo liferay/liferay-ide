@@ -33,9 +33,6 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 	@ClassRule
 	public static TomcatSupport tomcat = new TomcatSupport(bot);
 
-	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
-
 	@Test
 	public void addFragmentFilesShortcuts() {
 		wizardAction.openNewFragmentWizard();
@@ -62,7 +59,8 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] buttonjspFile = {project.getName(), "src", "main", "resources", "META-INF", "resources", "add_button.jsp"};
+		String[] buttonjspFile =
+			{project.getName(), "src", "main", "resources", "META-INF", "resources", "add_button.jsp"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(buttonjspFile));
 
@@ -224,7 +222,8 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] resourceActionFile = {project.getName(), "src", "main", "resources", "resource-actions", "default-ext.xml"};
+		String[] resourceActionFile =
+			{project.getName(), "src", "main", "resources", "resource-actions", "default-ext.xml"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(resourceActionFile));
 
@@ -286,5 +285,8 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

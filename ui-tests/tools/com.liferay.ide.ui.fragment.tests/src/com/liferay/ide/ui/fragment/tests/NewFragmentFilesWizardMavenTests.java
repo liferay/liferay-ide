@@ -33,9 +33,6 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 	@ClassRule
 	public static TomcatSupport tomcat = new TomcatSupport(bot);
 
-	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
-
 	@Test
 	public void addFragmentFilesShortcuts() {
 		wizardAction.openNewFragmentWizard();
@@ -224,7 +221,8 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] resourceActionFile = {project.getName(), "src", "main", "resources", "resource-actions", "default-ext.xml"};
+		String[] resourceActionFile =
+			{project.getName(), "src", "main", "resources", "resource-actions", "default-ext.xml"};
 
 		String[] portletPropertiesFile = {project.getName(), "src", "main", "resources", "portlet-ext.properties"};
 
@@ -290,5 +288,8 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

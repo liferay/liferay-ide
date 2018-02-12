@@ -45,27 +45,17 @@ public class NewServiceBuilderModuleLiferayWorkspaceGradleTest extends SwtbotBas
 
 		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
-		String[] projectNames = {liferayWorkspace.getName(), "modules", project.getName()};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-service")));
 
-		String[] serviceNames =
-			{liferayWorkspace.getName(), "modules", project.getName(), project.getName() + "-service"};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-api")));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(serviceNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-service", "service.xml")));
 
-		String[] apiNames = {liferayWorkspace.getName(), "modules", project.getName(), project.getName() + "-api"};
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(apiNames));
-
-		String[] serviceXmlNames =
-			{liferayWorkspace.getName(), "modules", project.getName(), project.getName() + "-service", "service.xml"};
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(serviceXmlNames));
-
-		viewAction.project.closeAndDelete(apiNames);
-		viewAction.project.closeAndDelete(serviceNames);
-		viewAction.project.closeAndDelete(projectNames);
+		viewAction.project.closeAndDelete(liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-api"));
+		viewAction.project.closeAndDelete(liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-service"));
+		viewAction.project.closeAndDelete(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Rule

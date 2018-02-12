@@ -33,9 +33,6 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 	@ClassRule
 	public static TomcatSupport tomcat = new TomcatSupport(bot);
 
-	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
-
 	@Test
 	public void createFragmentWithJsp() {
 		wizardAction.openNewFragmentWizard();
@@ -213,5 +210,8 @@ public class NewFragmentWizardMavenTests extends SwtbotBase {
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

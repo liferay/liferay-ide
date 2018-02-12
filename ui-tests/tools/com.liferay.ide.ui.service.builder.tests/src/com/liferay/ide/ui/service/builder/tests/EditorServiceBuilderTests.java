@@ -15,10 +15,12 @@
 package com.liferay.ide.ui.service.builder.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 import com.liferay.ide.ui.liferay.base.SdkSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -46,17 +48,15 @@ public class EditorServiceBuilderTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-sb-portlet";
-
-		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(projectName);
+		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(project.getName());
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
-		jobAction.waitForValidate(projectName);
+		jobAction.waitForValidate(project.getName());
 
-		viewAction.project.openFile(projectName, "docroot", "WEB-INF", "service.xml");
+		viewAction.project.openFile(project.getName(), "docroot", "WEB-INF", "service.xml");
 
 		editorAction.serviceXml.switchTabDiagram();
 
@@ -64,7 +64,10 @@ public class EditorServiceBuilderTests extends SwtbotBase {
 
 		editorAction.serviceXml.switchTabSource();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

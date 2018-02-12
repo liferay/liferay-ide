@@ -37,9 +37,6 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 	@ClassRule
 	public static TomcatSupport tomcat = new TomcatSupport(bot);
 
-	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
-
 	@Test
 	public void createFragmentWithJsp() {
 		wizardAction.openNewFragmentWizard();
@@ -62,9 +59,9 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleProjectNames(project.getName())));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleProjectNames(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -89,9 +86,9 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleProjectNames(project.getName())));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleProjectNames(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -116,9 +113,9 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleProjectNames(project.getName())));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleProjectNames(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -145,9 +142,9 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleProjectNames(project.getName())));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleProjectNames(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -172,9 +169,9 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleProjectNames(project.getName())));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleProjectNames(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -220,9 +217,12 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleProjectNames(project.getName())));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleProjectNames(project.getName()));
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

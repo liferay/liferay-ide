@@ -15,8 +15,10 @@
 package com.liferay.ide.ui.service.builder.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -26,31 +28,32 @@ public class NewServiceBuilderModuleMavenTest extends SwtbotBase {
 
 	@Test
 	public void createServiceBuilder() {
-		String projectName = "test-sb-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, SERVICE_BUILDER);
+		wizardAction.newModule.prepareMaven(project.getName(), SERVICE_BUILDER);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		String[] serviceNames = {projectName, projectName + "-service"};
+		String[] serviceNames = {project.getName(), project.getName() + "-service"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(serviceNames));
 
-		String[] apiNames = {projectName, projectName + "-api"};
+		String[] apiNames = {project.getName(), project.getName() + "-api"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(apiNames));
 
-		String[] serviceXmlNames = {projectName, projectName + "-service", "service.xml"};
+		String[] serviceXmlNames = {project.getName(), project.getName() + "-service", "service.xml"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(serviceXmlNames));
 
 		viewAction.project.closeAndDelete(apiNames);
 		viewAction.project.closeAndDelete(serviceNames);
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

@@ -36,9 +36,6 @@ public class NewHookProjectSdk62Tests extends SwtbotBase {
 	@ClassRule
 	public static RuleChain chain = RuleChain.outerRule(tomcat62).around(new Sdk62Support(bot, tomcat62));
 
-	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
-
 	@Test
 	public void createSampleProject() {
 		if (envAction.notInternal()) {
@@ -59,5 +56,8 @@ public class NewHookProjectSdk62Tests extends SwtbotBase {
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

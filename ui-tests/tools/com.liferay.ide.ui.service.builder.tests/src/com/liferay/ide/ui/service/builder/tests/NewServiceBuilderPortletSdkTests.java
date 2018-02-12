@@ -15,10 +15,12 @@
 package com.liferay.ide.ui.service.builder.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 import com.liferay.ide.ui.liferay.base.SdkSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -39,42 +41,41 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-sb-build-services-portlet";
-
-		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(projectName);
+		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(project.getName());
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
-		jobAction.waitForValidate(projectName);
+		jobAction.waitForValidate(project.getName());
 
-		viewAction.project.runBuildServices(projectName);
+		viewAction.project.runBuildServices(project.getName());
 
 		jobAction.waitForConsoleContent("build.xml", "BUILD SUCCESSFUL", 30 * 1000);
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void buildWSDDOnProject() {
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-sb-build-wsdd-portlet";
-
-		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(projectName);
+		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(project.getName());
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
-		jobAction.waitForValidate(projectName);
+		jobAction.waitForValidate(project.getName());
 
-		viewAction.project.runBuildWSDD(projectName);
+		viewAction.project.runBuildWSDD(project.getName());
 
 		jobAction.waitForConsoleContent("build.xml", "BUILD SUCCESSFUL", 300 * 1000);
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

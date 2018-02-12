@@ -15,8 +15,10 @@
 package com.liferay.ide.ui.jsf.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -98,5 +100,8 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 
 		viewAction.project.closeAndDelete(projectName);
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

@@ -34,9 +34,6 @@ public class NewHookConfigTests extends SwtbotBase {
 	@ClassRule
 	public static RuleChain chain = RuleChain.outerRule(tomcat).around(new SdkSupport(bot, tomcat));
 
-	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
-
 	@Test
 	public void createSampleProject() {
 		viewAction.switchLiferayPerspective();
@@ -53,5 +50,8 @@ public class NewHookConfigTests extends SwtbotBase {
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

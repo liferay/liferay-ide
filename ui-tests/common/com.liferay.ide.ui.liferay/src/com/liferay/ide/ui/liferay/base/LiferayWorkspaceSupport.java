@@ -30,21 +30,27 @@ public abstract class LiferayWorkspaceSupport extends SupportBase {
 		viewAction.project.closeAndDeleteFromDisk(getName());
 	}
 
+	public String[] getModuleFiles(String... files) {
+		String[] projectNames = new String[files.length + 2];
+
+		projectNames[0] = getName();
+		projectNames[1] = getModulesDirName();
+
+		for (int i = 0; i < files.length; i++) {
+			projectNames[i + 2] = files[i];
+		}
+
+		return projectNames;
+	}
+
+	public abstract String getModulesDirName();
+
 	public String getName() {
 		return "workspace" + timestamp;
 	}
 
-	public abstract String getModulesDirName();
 	public abstract String getThemesDirName();
+
 	public abstract String getWarsDirName();
 
-	public String[] getModuleProjectNames(String projectName) {
-		String[] projectNames = new String[3];
-
-		projectNames[0] = getName();
-		projectNames[1] = getModulesDirName();
-		projectNames[2] = projectName;
-
-		return projectNames;
-	}
 }

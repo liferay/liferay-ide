@@ -15,7 +15,9 @@
 package com.liferay.ide.ui.jsf.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -29,5 +31,8 @@ public class NewJsfProjectWizardSdk62Tests extends SwtbotBase {
 			return;
 		}
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }
