@@ -15,9 +15,11 @@
 package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 
 import org.junit.Assert;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -28,192 +30,166 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createActivator() {
-		String projectName = "test-activator-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, ACTIVATOR);
+		wizardAction.newModule.prepareGradle(project.getName(), ACTIVATOR);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createApi() {
-		String projectName = "test-api-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, API);
+		wizardAction.newModule.prepareGradle(project.getName(), API);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createContentTargetingReport() {
-		String projectName = "test-content-targeting-report-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, CONTENT_TARGETING_REPORT);
+		wizardAction.newModule.prepareGradle(project.getName(), CONTENT_TARGETING_REPORT);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createContentTargetingRule() {
-		String projectName = "test-content-targeting-rule-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, CONTENT_TARGETING_RULE);
+		wizardAction.newModule.prepareGradle(project.getName(), CONTENT_TARGETING_RULE);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createContentTargetingTrackingAction() {
-		String projectName = "test-content-targeting-tracking-action-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, CONTENT_TARGETING_TRACKING_ACTION);
+		wizardAction.newModule.prepareGradle(project.getName(), CONTENT_TARGETING_TRACKING_ACTION);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createControlMenuEntry() {
-		String projectName = "test-control-menu-entry-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, CONTROL_MENU_ENTRY);
+		wizardAction.newModule.prepareGradle(project.getName(), CONTROL_MENU_ENTRY);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createFormField() {
-		String projectName = "test-form-field-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, FORM_FIELD);
+		wizardAction.newModule.prepareGradle(project.getName(), FORM_FIELD);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createPanelApp() {
-		String projectName = "test-panel-app-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, PANEL_APP);
+		wizardAction.newModule.prepareGradle(project.getName(), PANEL_APP);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createPortletConfigurationIcon() {
-		String projectName = "test-portlet-configuration-icon-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, PORTLET_CONFIGURATION_ICON);
+		wizardAction.newModule.prepareGradle(project.getName(), PORTLET_CONFIGURATION_ICON);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createPortletProvider() {
-		String projectName = "test-portlet-provider-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, PORTLET_PROVIDER);
+		wizardAction.newModule.prepareGradle(project.getName(), PORTLET_PROVIDER);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createPortletToolbarContributor() {
-		String projectName = "test-portlet-toolbar-contributor-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, PORTLET_TOOLBAR_CONTRIBUTOR);
+		wizardAction.newModule.prepareGradle(project.getName(), PORTLET_TOOLBAR_CONTRIBUTOR);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createRest() {
-		String projectName = "test-rest-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, REST);
+		wizardAction.newModule.prepareGradle(project.getName(), REST);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createService() {
-		String projectName = "test-service-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, SERVICE);
+		wizardAction.newModule.prepareGradle(project.getName(), SERVICE);
 
 		wizardAction.next();
 
@@ -225,19 +201,17 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createServiceWrapper() {
-		String projectName = "test-service-wrapper-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, SERVICE_WRAPPER);
+		wizardAction.newModule.prepareGradle(project.getName(), SERVICE_WRAPPER);
 
 		wizardAction.next();
 
@@ -249,84 +223,77 @@ public class NewModuleProjectWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createSimulationPanelEntry() {
-		String projectName = "test-simulation-panel-entry-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, SIMULATION_PANEL_ENTRY);
+		wizardAction.newModule.prepareGradle(project.getName(), SIMULATION_PANEL_ENTRY);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createTemplateContextContributor() {
-		String projectName = "test-template-context-contributor-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR);
+		wizardAction.newModule.prepareGradle(project.getName(), TEMPLATE_CONTEXT_CONCONTRIBUTOR);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createThemeContributor() {
-		String projectName = "test-theme-contributor-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, THEME_CONTRIBUTOR);
+		wizardAction.newModule.prepareGradle(project.getName(), THEME_CONTRIBUTOR);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createWarHook() {
-		String projectName = "test-war-hook-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, WAR_HOOK);
+		wizardAction.newModule.prepareGradle(project.getName(), WAR_HOOK);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createWarMvcPortlet() {
-		String projectName = "test-war-mvc-portlet-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, WAR_MVC_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), WAR_MVC_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

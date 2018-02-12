@@ -45,14 +45,22 @@ public class NewServiceBuilderModuleLiferayWorkspaceMavenTest extends SwtbotBase
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-service")));
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-service")));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-api")));
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-api")));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-service", "service.xml")));
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-service", "service.xml")));
 
-		viewAction.project.closeAndDelete(liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-api"));
-		viewAction.project.closeAndDelete(liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-service"));
+		viewAction.project.closeAndDelete(
+			liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-api"));
+		viewAction.project.closeAndDelete(
+			liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-service"));
 		viewAction.project.closeAndDelete(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 

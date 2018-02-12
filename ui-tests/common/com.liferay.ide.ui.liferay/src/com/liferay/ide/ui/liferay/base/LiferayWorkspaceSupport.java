@@ -31,16 +31,7 @@ public abstract class LiferayWorkspaceSupport extends SupportBase {
 	}
 
 	public String[] getModuleFiles(String... files) {
-		String[] projectNames = new String[files.length + 2];
-
-		projectNames[0] = getName();
-		projectNames[1] = getModulesDirName();
-
-		for (int i = 0; i < files.length; i++) {
-			projectNames[i + 2] = files[i];
-		}
-
-		return projectNames;
+		return _getFiles(getModulesDirName(), files);
 	}
 
 	public abstract String getModulesDirName();
@@ -51,6 +42,23 @@ public abstract class LiferayWorkspaceSupport extends SupportBase {
 
 	public abstract String getThemesDirName();
 
+	public String[] getWarFiles(String... files) {
+		return _getFiles(getWarsDirName(), files);
+	}
+
 	public abstract String getWarsDirName();
+
+	private String[] _getFiles(String dirName, String... files) {
+		String[] fileNames = new String[files.length + 2];
+
+		fileNames[0] = getName();
+		fileNames[1] = dirName;
+
+		for (int i = 0; i < files.length; i++) {
+			fileNames[i + 2] = files[i];
+		}
+
+		return fileNames;
+	}
 
 }
