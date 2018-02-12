@@ -18,28 +18,35 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
- * @author Ying Xu
  */
-public class ProjectSupport extends SupportBase {
+public class SdkProjectSupport extends ProjectSupport {
 
-	public ProjectSupport(SWTWorkbenchBot bot) {
+	public SdkProjectSupport(SWTWorkbenchBot bot) {
 		super(bot);
 	}
 
-	public String getName() {
-		return "test" + timestamp;
+	public String getNameHook() {
+		return "test" + timestamp + "-hook";
 	}
 
-	public String getName(String suffix) {
-		return "test" + timestamp + suffix;
+	public String getNameLayout() {
+		return "test" + timestamp + "-layouttpl";
 	}
 
-	public String getStartedLabel() {
-		return getName() + "  [Started, Synchronized] (" + getName() + ")";
+	public String getNamePortlet() {
+		return "test" + timestamp + "-portlet";
 	}
 
-	public String getStartedLabel(String suffix) {
-		return getName() + "  [Started, Synchronized] (" + getName(suffix) + ")";
+	public String getNameTheme() {
+		return "test" + timestamp + "-theme";
+	}
+
+	public String getStartedLabelPortlet() {
+		return getNamePortlet() + "  [Started, Synchronized] (" + getName() + ")";
+	}
+
+	public String getStartedLabelPortlet(String suffix) {
+		return getNamePortlet() + "  [Started, Synchronized] (" + getName(suffix) + ")";
 	}
 
 }

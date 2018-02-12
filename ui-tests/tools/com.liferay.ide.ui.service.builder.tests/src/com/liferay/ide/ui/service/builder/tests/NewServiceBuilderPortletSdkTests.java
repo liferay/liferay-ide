@@ -15,7 +15,7 @@
 package com.liferay.ide.ui.service.builder.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.ProjectSupport;
+import com.liferay.ide.ui.liferay.base.SdkProjectSupport;
 import com.liferay.ide.ui.liferay.base.SdkSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
@@ -41,41 +41,41 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(project.getName());
+		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(project.getNamePortlet());
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
-		jobAction.waitForValidate(project.getName());
+		jobAction.waitForValidate(project.getNamePortlet());
 
-		viewAction.project.runBuildServices(project.getName());
+		viewAction.project.runBuildServices(project.getNamePortlet());
 
 		jobAction.waitForConsoleContent("build.xml", "BUILD SUCCESSFUL", 30 * 1000);
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDelete(project.getNamePortlet());
 	}
 
 	@Test
 	public void buildWSDDOnProject() {
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(project.getName());
+		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(project.getNamePortlet());
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
-		jobAction.waitForValidate(project.getName());
+		jobAction.waitForValidate(project.getNamePortlet());
 
-		viewAction.project.runBuildWSDD(project.getName());
+		viewAction.project.runBuildWSDD(project.getNamePortlet());
 
 		jobAction.waitForConsoleContent("build.xml", "BUILD SUCCESSFUL", 300 * 1000);
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDelete(project.getNamePortlet());
 	}
 
 	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
+	public SdkProjectSupport project = new SdkProjectSupport(bot);
 
 }

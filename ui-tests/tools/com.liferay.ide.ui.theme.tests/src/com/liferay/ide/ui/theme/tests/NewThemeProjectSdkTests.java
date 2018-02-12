@@ -15,7 +15,7 @@
 package com.liferay.ide.ui.theme.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.ProjectSupport;
+import com.liferay.ide.ui.liferay.base.SdkProjectSupport;
 import com.liferay.ide.ui.liferay.base.SdkSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
@@ -42,18 +42,18 @@ public class NewThemeProjectSdkTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		wizardAction.newPlugin.prepareThemeSdk(project.getName());
+		wizardAction.newPlugin.prepareThemeSdk(project.getNameTheme());
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
-		jobAction.waitForValidate(project.getName());
+		jobAction.waitForValidate(project.getNameTheme());
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDelete(project.getNameTheme());
 	}
 
 	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
+	public SdkProjectSupport project = new SdkProjectSupport(bot);
 
 }

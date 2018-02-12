@@ -15,7 +15,7 @@
 package com.liferay.ide.ui.hook.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.ProjectSupport;
+import com.liferay.ide.ui.liferay.base.SdkProjectSupport;
 import com.liferay.ide.ui.liferay.base.SdkSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
@@ -40,18 +40,18 @@ public class NewHookConfigTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		wizardAction.newPlugin.prepareHookSdk(project.getName());
+		wizardAction.newPlugin.prepareHookSdk(project.getNameHook());
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
-		jobAction.waitForValidate(project.getName());
+		jobAction.waitForValidate(project.getNameHook());
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDelete(project.getNameHook());
 	}
 
 	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
+	public SdkProjectSupport project = new SdkProjectSupport(bot);
 
 }

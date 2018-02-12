@@ -15,7 +15,7 @@
 package com.liferay.ide.ui.sdk.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.ProjectSupport;
+import com.liferay.ide.ui.liferay.base.SdkProjectSupport;
 import com.liferay.ide.ui.liferay.base.SdkSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
@@ -40,18 +40,18 @@ public class NewPluginProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		wizardAction.newPlugin.prepareSdk(project.getName());
+		wizardAction.newPlugin.prepareSdk(project.getNamePortlet());
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
-		jobAction.waitForValidate(project.getName());
+		jobAction.waitForValidate(project.getNamePortlet());
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDelete(project.getNamePortlet());
 	}
 
 	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
+	public SdkProjectSupport project = new SdkProjectSupport(bot);
 
 }

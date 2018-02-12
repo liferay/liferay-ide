@@ -15,7 +15,7 @@
 package com.liferay.ide.ui.service.builder.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.ProjectSupport;
+import com.liferay.ide.ui.liferay.base.SdkProjectSupport;
 import com.liferay.ide.ui.liferay.base.SdkSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
@@ -48,15 +48,15 @@ public class EditorServiceBuilderTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(project.getName());
+		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(project.getNamePortlet());
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
-		jobAction.waitForValidate(project.getName());
+		jobAction.waitForValidate(project.getNamePortlet());
 
-		viewAction.project.openFile(project.getName(), "docroot", "WEB-INF", "service.xml");
+		viewAction.project.openFile(project.getNamePortlet(), "docroot", "WEB-INF", "service.xml");
 
 		editorAction.serviceXml.switchTabDiagram();
 
@@ -64,10 +64,10 @@ public class EditorServiceBuilderTests extends SwtbotBase {
 
 		editorAction.serviceXml.switchTabSource();
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDelete(project.getNamePortlet());
 	}
 
 	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
+	public SdkProjectSupport project = new SdkProjectSupport(bot);
 
 }
