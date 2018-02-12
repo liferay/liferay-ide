@@ -40,4 +40,16 @@ public class LiferayWorkspaceGradleSupport extends LiferayWorkspaceSupport {
 		Assert.assertTrue(viewAction.project.visibleFileTry(getName()));
 	}
 
+	public String getModulesDirName() {
+		return "modules";
+	}
+
+	public String getThemesDirName() {
+		return "themes";
+	}
+
+	public String getWarsDirName() {
+		return "wars";
+	}
+
 }

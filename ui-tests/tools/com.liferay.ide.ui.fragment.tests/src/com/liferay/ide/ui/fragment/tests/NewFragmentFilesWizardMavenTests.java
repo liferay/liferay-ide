@@ -15,10 +15,12 @@
 package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -31,13 +33,14 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 	@ClassRule
 	public static TomcatSupport tomcat = new TomcatSupport(bot);
 
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
+
 	@Test
 	public void addFragmentFilesShortcuts() {
-		String projectName = "test-fragment-files-shortcuts-maven";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(projectName);
+		wizardAction.newFragment.prepareMaven(project.getName());
 
 		wizardAction.next();
 
@@ -59,7 +62,7 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] jspFile = {projectName, "src", "main", "resources", "META-INF", "resources", "add_button.jsp"};
+		String[] jspFile = {project.getName(), "src", "main", "resources", "META-INF", "resources", "add_button.jsp"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspFile));
 
@@ -74,7 +77,7 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 		wizardAction.finish();
 
 		String[] jspfFile =
-			{projectName, "src", "main", "resources", "META-INF", "resources", "article_vertical_card.jspf"};
+			{project.getName(), "src", "main", "resources", "META-INF", "resources", "article_vertical_card.jspf"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspfFile));
 
@@ -88,20 +91,18 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] portletPropertiesFile = {projectName, "src", "main", "java", "portlet-ext.properties"};
+		String[] portletPropertiesFile = {project.getName(), "src", "main", "java", "portlet-ext.properties"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(portletPropertiesFile));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void addFragmentJspfFiles() {
-		String projectName = "test-fragment-jspf-files-maven";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(projectName);
+		wizardAction.newFragment.prepareMaven(project.getName());
 
 		wizardAction.next();
 
@@ -124,20 +125,18 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 		wizardAction.finish();
 
 		String[] jspfFile =
-			{projectName, "src", "main", "resources", "META-INF", "resources", "user", "search_columns.jspf"};
+			{project.getName(), "src", "main", "resources", "META-INF", "resources", "user", "search_columns.jspf"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspfFile));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void addFragmentJspFiles() {
-		String projectName = "test-fragment-jsp-files-maven";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(projectName);
+		wizardAction.newFragment.prepareMaven(project.getName());
 
 		wizardAction.next();
 
@@ -159,20 +158,18 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] jspFile = {projectName, "src", "main", "resources", "META-INF", "resources", "view_comment.jsp"};
+		String[] jspFile = {project.getName(), "src", "main", "resources", "META-INF", "resources", "view_comment.jsp"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspFile));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void addFragmentPortletPropertiesFiles() {
-		String projectName = "test-fragment-portlet-properties-files-maven";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(projectName);
+		wizardAction.newFragment.prepareMaven(project.getName());
 
 		wizardAction.next();
 
@@ -194,20 +191,18 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] portletPropertiesFile = {projectName, "src", "main", "java", "portlet-ext.properties"};
+		String[] portletPropertiesFile = {project.getName(), "src", "main", "java", "portlet-ext.properties"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(portletPropertiesFile));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void addFragmentResourceActionFiles() {
-		String projectName = "test-fragment-resource-action-files-maven";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(projectName);
+		wizardAction.newFragment.prepareMaven(project.getName());
 
 		wizardAction.next();
 
@@ -229,24 +224,22 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] resourceActionFile = {projectName, "src", "main", "resources", "resource-actions", "default-ext.xml"};
+		String[] resourceActionFile = {project.getName(), "src", "main", "resources", "resource-actions", "default-ext.xml"};
 
-		String[] portletPropertiesFile = {projectName, "src", "main", "resources", "portlet-ext.properties"};
+		String[] portletPropertiesFile = {project.getName(), "src", "main", "resources", "portlet-ext.properties"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(resourceActionFile));
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(portletPropertiesFile));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void testFragmentFilesWithDeleteButton() {
-		String projectName = "test-fragment-files-delete-maven";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(projectName);
+		wizardAction.newFragment.prepareMaven(project.getName());
 
 		wizardAction.next();
 
@@ -287,15 +280,15 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] initJspFile = {projectName, "src", "main", "resources", "META-INF", "resources", "init.jsp"};
+		String[] initJspFile = {project.getName(), "src", "main", "resources", "META-INF", "resources", "init.jsp"};
 
-		String[] viewJspFile = {projectName, "src", "main", "resources", "META-INF", "resources", "view.jsp"};
+		String[] viewJspFile = {project.getName(), "src", "main", "resources", "META-INF", "resources", "view.jsp"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(initJspFile));
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(viewJspFile));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 }

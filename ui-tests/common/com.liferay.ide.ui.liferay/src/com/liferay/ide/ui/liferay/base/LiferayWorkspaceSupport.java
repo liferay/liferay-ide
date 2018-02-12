@@ -19,7 +19,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  */
-public class LiferayWorkspaceSupport extends SupportBase {
+public abstract class LiferayWorkspaceSupport extends SupportBase {
 
 	public LiferayWorkspaceSupport(SWTWorkbenchBot bot) {
 		super(bot);
@@ -34,4 +34,17 @@ public class LiferayWorkspaceSupport extends SupportBase {
 		return "workspace" + timestamp;
 	}
 
+	public abstract String getModulesDirName();
+	public abstract String getThemesDirName();
+	public abstract String getWarsDirName();
+
+	public String[] getModuleProjectNames(String projectName) {
+		String[] projectNames = new String[3];
+
+		projectNames[0] = getName();
+		projectNames[1] = getModulesDirName();
+		projectNames[2] = projectName;
+
+		return projectNames;
+	}
 }

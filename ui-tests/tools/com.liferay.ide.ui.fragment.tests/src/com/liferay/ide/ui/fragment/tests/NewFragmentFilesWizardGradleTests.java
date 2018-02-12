@@ -15,10 +15,12 @@
 package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -31,13 +33,14 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 	@ClassRule
 	public static TomcatSupport tomcat = new TomcatSupport(bot);
 
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
+
 	@Test
 	public void addFragmentFilesShortcuts() {
-		String projectName = "test-fragment-files-shortcuts-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -59,7 +62,7 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] buttonjspFile = {projectName, "src", "main", "resources", "META-INF", "resources", "add_button.jsp"};
+		String[] buttonjspFile = {project.getName(), "src", "main", "resources", "META-INF", "resources", "add_button.jsp"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(buttonjspFile));
 
@@ -74,7 +77,7 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 		wizardAction.finish();
 
 		String[] pageFile =
-			{projectName, "src", "main", "resources", "META-INF", "resources", "article", "display_page.jsp"};
+			{project.getName(), "src", "main", "resources", "META-INF", "resources", "article", "display_page.jsp"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(pageFile));
 
@@ -88,20 +91,18 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] propertiesFile = {projectName, "src", "main", "java", "portlet-ext.properties"};
+		String[] propertiesFile = {project.getName(), "src", "main", "java", "portlet-ext.properties"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(propertiesFile));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void addFragmentJspfFiles() {
-		String projectName = "test-fragment-jspf-files-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -124,20 +125,18 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 		wizardAction.finish();
 
 		String[] jspfFile =
-			{projectName, "src", "main", "resources", "META-INF", "resources", "edit_vocabulary_settings.jspf"};
+			{project.getName(), "src", "main", "resources", "META-INF", "resources", "edit_vocabulary_settings.jspf"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspfFile));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void addFragmentJspFiles() {
-		String projectName = "test-fragment-jsp-files-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -159,20 +158,18 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] jspFile = {projectName, "src", "main", "resources", "META-INF", "resources", "init-ext.jsp"};
+		String[] jspFile = {project.getName(), "src", "main", "resources", "META-INF", "resources", "init-ext.jsp"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(jspFile));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void addFragmentPortletPropertiesFiles() {
-		String projectName = "test-fragment-portlet-files-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -194,20 +191,18 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] protletFile = {projectName, "src", "main", "java", "portlet-ext.properties"};
+		String[] protletFile = {project.getName(), "src", "main", "java", "portlet-ext.properties"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(protletFile));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void addFragmentResourceActionFiles() {
-		String projectName = "test-fragment-resource-files-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -229,20 +224,18 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] resourceActionFile = {projectName, "src", "main", "resources", "resource-actions", "default-ext.xml"};
+		String[] resourceActionFile = {project.getName(), "src", "main", "resources", "resource-actions", "default-ext.xml"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(resourceActionFile));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void testFragmentFilesWithDeleteFuction() {
-		String projectName = "test-fragment-files-delete-fuction-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -283,15 +276,15 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] viewjspFile = {projectName, "src", "main", "resources", "META-INF", "resources", "view.jsp"};
+		String[] viewjspFile = {project.getName(), "src", "main", "resources", "META-INF", "resources", "view.jsp"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(viewjspFile));
 
-		String[] initFile = {projectName, "src", "main", "resources", "META-INF", "resources", "init.jsp"};
+		String[] initFile = {project.getName(), "src", "main", "resources", "META-INF", "resources", "init.jsp"};
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(initFile));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 }

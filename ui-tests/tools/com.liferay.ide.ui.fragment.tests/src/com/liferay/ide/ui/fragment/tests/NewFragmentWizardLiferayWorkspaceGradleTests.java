@@ -16,10 +16,12 @@ package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.LiferayWorkspaceGradleSupport;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -32,6 +34,9 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@ClassRule
 	public static TomcatSupport tomcat = new TomcatSupport(bot);
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 	@Test
 	public void createFragmentChangeModulesDir() {
@@ -51,11 +56,9 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		editorAction.close();
 
-		String projectName = "test-fragment-change-modules-dir";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -78,7 +81,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getName(), newModulesFolderName, projectName};
+		String[] projectNames = {liferayWorkspace.getName(), newModulesFolderName, project.getName()};
 
 		String[] newModulesFolderNames = {liferayWorkspace.getName(), newModulesFolderName};
 
@@ -102,11 +105,9 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void createFragmentWithJsp() {
-		String projectName = "test-fragment-jsp-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -124,20 +125,16 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getName(), "modules", projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleProjectNames(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleProjectNames(project.getName()));
 	}
 
 	@Test
 	public void createFragmentWithJspf() {
-		String projectName = "test-fragment-jspf-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -155,20 +152,16 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getName(), "modules", projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleProjectNames(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleProjectNames(project.getName()));
 	}
 
 	@Test
 	public void createFragmentWithoutFiles() {
-		String projectName = "test-fragment-without-files-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -186,20 +179,16 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getName(), "modules", projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleProjectNames(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleProjectNames(project.getName()));
 	}
 
 	@Test
 	public void createFragmentWithPortletProperites() {
-		String projectName = "test-fragment-portlet-properties-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -222,20 +211,16 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getName(), "modules", projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleProjectNames(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleProjectNames(project.getName()));
 	}
 
 	@Test
 	public void createFragmentWithResourceAction() {
-		String projectName = "test-fragment-resource-action-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -253,20 +238,16 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getName(), "modules", projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleProjectNames(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleProjectNames(project.getName()));
 	}
 
 	@Test
 	public void createFragmentWithWholeFiles() {
-		String projectName = "test-fragment-whole-files-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -305,11 +286,9 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getName(), "modules", projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleProjectNames(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleProjectNames(project.getName()));
 	}
 
 }
