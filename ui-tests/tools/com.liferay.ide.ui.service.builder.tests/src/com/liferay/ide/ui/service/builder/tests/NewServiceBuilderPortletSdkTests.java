@@ -58,6 +58,8 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 
 	@Test
 	public void buildWSDDOnProject() {
+		viewAction.switchLiferayPerspective();
+
 		wizardAction.openNewLiferayPluginProjectWizard();
 
 		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(project.getNamePortlet());
