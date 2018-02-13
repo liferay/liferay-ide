@@ -72,7 +72,7 @@ public class CurrentAssignmentsDerviedValueService extends DerivedValueService {
 			}
 		}
 
-		if (roles.isEmpty()) {
+		if (!roles.isEmpty()) {
 			data.append("Roles: ");
 
 			for (Role role : roles) {
@@ -99,7 +99,7 @@ public class CurrentAssignmentsDerviedValueService extends DerivedValueService {
 			}
 		}
 
-		if (resourceActions.isEmpty()) {
+		if (!resourceActions.isEmpty()) {
 			data.append("Resource actions: ");
 
 			for (ResourceAction resourceAction : resourceActions) {

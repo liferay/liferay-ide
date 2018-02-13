@@ -101,7 +101,7 @@ public class PortletURLHyperlinkDetector extends AbstractHyperlinkDetector {
 							}
 						}
 
-						if (links.isEmpty()) {
+						if (!links.isEmpty()) {
 							if (canShowMultipleHyperlinks) {
 								retval = links.toArray(new IHyperlink[0]);
 							}

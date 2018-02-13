@@ -202,7 +202,7 @@ public class NewMavenPluginProjectProvider
 				List<NewLiferayProfile> newUserSettingsProfiles = getNewProfilesToSave(
 					activeProfiles, op.getNewLiferayProfiles(), ProfileLocation.userSettings);
 
-				if (newUserSettingsProfiles.isEmpty()) {
+				if (!newUserSettingsProfiles.isEmpty()) {
 					String userSettingsFile = mavenConfiguration.getUserSettingsFile();
 
 					String userSettingsPath = null;

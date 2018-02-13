@@ -599,7 +599,7 @@ public class WorkflowDefinitionLayoutPersistenceService extends DiagramLayoutPer
 
 						List<ConnectionBendpoint> bendpoints = transitionMetadata.getBendpoints();
 
-						if (bendpoints.isEmpty()) {
+						if (!bendpoints.isEmpty()) {
 							int index = 0;
 
 							for (ConnectionBendpoint bendpoint : bendpoints) {

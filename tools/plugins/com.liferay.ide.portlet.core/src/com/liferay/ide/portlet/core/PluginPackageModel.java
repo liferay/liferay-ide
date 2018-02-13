@@ -271,7 +271,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 			}
 		}
 
-		if (updatedValues.isEmpty()) {
+		if (!updatedValues.isEmpty()) {
 			pluginPackageProperties.setProperty(propertyName, StringPool.EMPTY);
 
 			for (String updatedValue : updatedValues) {

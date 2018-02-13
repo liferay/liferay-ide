@@ -1032,7 +1032,7 @@ public class NewPortletClassDataModelProvider
 		if (folder.getFolder(new Path(folderValue)).exists()) {
 			List<IFile> viewJspFiles = new SearchFilesVisitor().searchFiles(folder, "view.jsp");
 
-			if ((viewJspFiles != null) && viewJspFiles.isEmpty()) {
+			if ((viewJspFiles != null) && !viewJspFiles.isEmpty()) {
 				return LiferayCore.createWarningStatus(Msgs.viewJspAlreadyExists);
 			}
 		}

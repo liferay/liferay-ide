@@ -126,7 +126,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 		MavenProject mavenProject = request.getMavenProject();
 		List<MavenProblemInfo> errors = _findLiferayMavenPluginProblems(request, monitor);
 
-		if (errors.isEmpty()) {
+		if (!errors.isEmpty()) {
 			try {
 				this.markerManager.addErrorMarkers(
 					pomFile, ILiferayMavenConstants.LIFERAY_MAVEN_MARKER_CONFIGURATION_WARNING_ID, errors);

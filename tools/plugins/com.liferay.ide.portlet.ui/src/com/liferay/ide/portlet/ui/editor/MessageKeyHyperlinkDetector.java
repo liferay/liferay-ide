@@ -87,7 +87,7 @@ public class MessageKeyHyperlinkDetector extends AbstractHyperlinkDetector {
 								nodeRegion, messageKey.file, messageKey.key, messageKey.offset, messageKey.length));
 					}
 
-					if (links.isEmpty()) {
+					if (!links.isEmpty()) {
 						if (canShowMultipleHyperlinks) {
 							retval = links.toArray(new IHyperlink[0]);
 						}

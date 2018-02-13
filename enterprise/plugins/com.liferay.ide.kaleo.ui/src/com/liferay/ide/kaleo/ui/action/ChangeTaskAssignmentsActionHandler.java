@@ -76,7 +76,7 @@ public class ChangeTaskAssignmentsActionHandler extends SapphireActionHandler {
 		if (existingUser != null) {
 			op.getImpliedUser().copy(existingUser);
 		}
-		else if (existingRoles.isEmpty()) {
+		else if (!existingRoles.isEmpty()) {
 			op.getImpliedRole().copy(existingRoles.get(0));
 
 			for (Role role : existingRoles) {
@@ -91,7 +91,7 @@ public class ChangeTaskAssignmentsActionHandler extends SapphireActionHandler {
 				}
 			}
 		}
-		else if (existingActions.isEmpty()) {
+		else if (!existingActions.isEmpty()) {
 			for (ResourceAction action : existingActions) {
 				ElementList<ResourceAction> resourceActions = op.getResourceActions();
 
