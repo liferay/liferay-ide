@@ -15,40 +15,23 @@
 package com.liferay.ide.ui.kaleo.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.SdkSupport;
-import com.liferay.ide.ui.liferay.base.TomcatSupport;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 
-import org.junit.ClassRule;
-
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.RuleChain;
 
 /**
  * @author Haoyi Sun
  */
-
 public class EditorKaleoWorkflowTests extends SwtbotBase {
-
-	public static TomcatSupport tomcat = new TomcatSupport(bot);
-
-	@ClassRule
-	public static RuleChain chain = RuleChain.outerRule(tomcat).around(new SdkSupport(bot, tomcat));
 
 	@Test
 	public void createKaleoWorkflow() {
-		viewAction.switchLiferayPerspective();
+		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		String projectName = "test-kaleo-workflow-portlet";
-
-		wizardAction.newPlugin.preparePortletSdk(projectName);
+		wizardAction.newModule.prepare(project.getName());
 
 		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(projectName);
 
 		viewAction.switchKaleoDesignerPerspective();
 
@@ -56,7 +39,7 @@ public class EditorKaleoWorkflowTests extends SwtbotBase {
 
 		wizardAction.newKaleoWorkflow.openSelectProjectDialog();
 
-		dialogAction.prepareText(projectName);
+		dialogAction.prepareText(project.getName());
 
 		dialogAction.confirm();
 
@@ -68,7 +51,10 @@ public class EditorKaleoWorkflowTests extends SwtbotBase {
 
 		editorAction.close();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

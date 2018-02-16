@@ -15,10 +15,12 @@
 package com.liferay.ide.ui.sdk.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.SdkProjectSupport;
 import com.liferay.ide.ui.liferay.base.SdkSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -38,17 +40,18 @@ public class NewPluginProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-mvc-portlet";
-
-		wizardAction.newPlugin.prepareSdk(projectName);
+		wizardAction.newPlugin.prepareSdk(project.getNamePortlet());
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
-		jobAction.waitForValidate(projectName);
+		jobAction.waitForValidate(project.getNamePortlet());
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getNamePortlet());
 	}
+
+	@Rule
+	public SdkProjectSupport project = new SdkProjectSupport(bot);
 
 }

@@ -15,40 +15,23 @@
 package com.liferay.ide.ui.kaleo.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.SdkSupport;
-import com.liferay.ide.ui.liferay.base.TomcatSupport;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 
-import org.junit.ClassRule;
-
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.RuleChain;
 
 /**
  * @author Haoyi Sun
  */
-
 public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
-
-	public static TomcatSupport tomcat = new TomcatSupport(bot);
-
-	@ClassRule
-	public static RuleChain chain = RuleChain.outerRule(tomcat).around(new SdkSupport(bot, tomcat));
 
 	@Test
 	public void createKaleoWorkflowAssignCreatorOnProject() {
-		viewAction.switchLiferayPerspective();
+		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		String projectName = "test-kaleo-assign-creator-portlet";
-
-		wizardAction.newPlugin.preparePortletSdk(projectName);
+		wizardAction.newModule.prepare(project.getName());
 
 		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(projectName);
 
 		viewAction.switchKaleoDesignerPerspective();
 
@@ -56,7 +39,7 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.newKaleoWorkflow.openSelectProjectDialog();
 
-		dialogAction.prepareText(projectName);
+		dialogAction.prepareText(project.getName());
 
 		dialogAction.confirm();
 
@@ -66,24 +49,16 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createKaleoWorkflowAssignResourceActionOnProject() {
-		viewAction.switchLiferayPerspective();
+		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		String projectName = "test-kaleo-assign-resource-action-portlet";
-
-		wizardAction.newPlugin.preparePortletSdk(projectName);
+		wizardAction.newModule.prepare(project.getName());
 
 		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(projectName);
 
 		viewAction.switchKaleoDesignerPerspective();
 
@@ -91,7 +66,7 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.newKaleoWorkflow.openSelectProjectDialog();
 
-		dialogAction.prepareText(projectName);
+		dialogAction.prepareText(project.getName());
 
 		dialogAction.confirm();
 
@@ -105,24 +80,16 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createKaleoWorkflowAssignRoleByIdOnProject() {
-		viewAction.switchLiferayPerspective();
+		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		String projectName = "test-kaleo-assign-role-by-id-portlet";
-
-		wizardAction.newPlugin.preparePortletSdk(projectName);
+		wizardAction.newModule.prepare(project.getName());
 
 		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(projectName);
 
 		viewAction.switchKaleoDesignerPerspective();
 
@@ -130,7 +97,7 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.newKaleoWorkflow.openSelectProjectDialog();
 
-		dialogAction.prepareText(projectName);
+		dialogAction.prepareText(project.getName());
 
 		dialogAction.confirm();
 
@@ -144,24 +111,16 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createKaleoWorkflowAssignRoleTypeOnProject() {
-		viewAction.switchLiferayPerspective();
+		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		String projectName = "test-kaleo-assign-role-type-portlet";
-
-		wizardAction.newPlugin.preparePortletSdk(projectName);
+		wizardAction.newModule.prepare(project.getName());
 
 		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(projectName);
 
 		viewAction.switchKaleoDesignerPerspective();
 
@@ -169,7 +128,7 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.newKaleoWorkflow.openSelectProjectDialog();
 
-		dialogAction.prepareText(projectName);
+		dialogAction.prepareText(project.getName());
 
 		dialogAction.confirm();
 
@@ -185,24 +144,16 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createKaleoWorkflowAssignScriptOnProject() {
-		viewAction.switchLiferayPerspective();
+		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		String projectName = "test-kaleo-assign-script-portlet";
-
-		wizardAction.newPlugin.preparePortletSdk(projectName);
+		wizardAction.newModule.prepare(project.getName());
 
 		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(projectName);
 
 		viewAction.switchKaleoDesignerPerspective();
 
@@ -210,7 +161,7 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.newKaleoWorkflow.openSelectProjectDialog();
 
-		dialogAction.prepareText(projectName);
+		dialogAction.prepareText(project.getName());
 
 		dialogAction.confirm();
 
@@ -224,24 +175,16 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createKaleoWorkflowAssignUserOnProject() {
-		viewAction.switchLiferayPerspective();
+		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		String projectName = "test-kaleo-assign-user-portlet";
-
-		wizardAction.newPlugin.preparePortletSdk(projectName);
+		wizardAction.newModule.prepare(project.getName());
 
 		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(projectName);
 
 		viewAction.switchKaleoDesignerPerspective();
 
@@ -249,7 +192,7 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.newKaleoWorkflow.openSelectProjectDialog();
 
-		dialogAction.prepareText(projectName);
+		dialogAction.prepareText(project.getName());
 
 		dialogAction.confirm();
 
@@ -263,24 +206,16 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createKaleoWorkflowOnProject() {
-		viewAction.switchLiferayPerspective();
+		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		String projectName = "test-kaleo-workflow-portlet";
-
-		wizardAction.newPlugin.preparePortletSdk(projectName);
+		wizardAction.newModule.prepare(project.getName());
 
 		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(projectName);
 
 		viewAction.switchKaleoDesignerPerspective();
 
@@ -288,13 +223,16 @@ public class NewKaleoProjectWizardSdkTests extends SwtbotBase {
 
 		wizardAction.newKaleoWorkflow.openSelectProjectDialog();
 
-		dialogAction.prepareText(projectName);
+		dialogAction.prepareText(project.getName());
 
 		dialogAction.confirm();
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

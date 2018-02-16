@@ -15,10 +15,12 @@
 package com.liferay.ide.ui.service.builder.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.SdkProjectSupport;
 import com.liferay.ide.ui.liferay.base.SdkSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -39,42 +41,43 @@ public class NewServiceBuilderPortletSdkTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-sb-build-services-portlet";
-
-		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(projectName);
+		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(project.getNamePortlet());
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
-		jobAction.waitForValidate(projectName);
+		jobAction.waitForValidate(project.getNamePortlet());
 
-		viewAction.project.runBuildServices(projectName);
+		viewAction.project.runBuildServices(project.getNamePortlet());
 
 		jobAction.waitForConsoleContent("build.xml", "BUILD SUCCESSFUL", 30 * 1000);
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getNamePortlet());
 	}
 
 	@Test
 	public void buildWSDDOnProject() {
+		viewAction.switchLiferayPerspective();
+
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-sb-build-wsdd-portlet";
-
-		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(projectName);
+		wizardAction.newPlugin.prepareServiceBuilderPortletSdk(project.getNamePortlet());
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
-		jobAction.waitForValidate(projectName);
+		jobAction.waitForValidate(project.getNamePortlet());
 
-		viewAction.project.runBuildWSDD(projectName);
+		viewAction.project.runBuildWSDD(project.getNamePortlet());
 
 		jobAction.waitForConsoleContent("build.xml", "BUILD SUCCESSFUL", 300 * 1000);
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getNamePortlet());
 	}
+
+	@Rule
+	public SdkProjectSupport project = new SdkProjectSupport(bot);
 
 }

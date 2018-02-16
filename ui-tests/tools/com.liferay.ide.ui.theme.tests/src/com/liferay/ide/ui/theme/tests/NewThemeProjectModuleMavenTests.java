@@ -15,9 +15,11 @@
 package com.liferay.ide.ui.theme.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 
 import org.junit.Assert;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -28,19 +30,20 @@ public class NewThemeProjectModuleMavenTests extends SwtbotBase {
 	@Ignore
 	@Test
 	public void createTheme() {
-		String projectName = "test-theme-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, THEME);
+		wizardAction.newModule.prepareMaven(project.getName(), THEME);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		jobAction.waitForValidate(projectName);
+		jobAction.waitForValidate(project.getName());
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

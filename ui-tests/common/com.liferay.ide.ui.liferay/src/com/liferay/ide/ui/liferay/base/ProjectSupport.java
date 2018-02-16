@@ -34,24 +34,12 @@ public class ProjectSupport extends SupportBase {
 		return "test" + timestamp + suffix;
 	}
 
-	public String getNamePortlet() {
-		return "test" + timestamp + "-portlet";
-	}
-
 	public String getStartedLabel() {
 		return getName() + "  [Started, Synchronized] (" + getName() + ")";
 	}
 
 	public String getStartedLabel(String suffix) {
 		return getName() + "  [Started, Synchronized] (" + getName(suffix) + ")";
-	}
-
-	public String getStartedLabelPortlet() {
-		return getNamePortlet() + "  [Started, Synchronized] (" + getName() + ")";
-	}
-
-	public String getStartedLabelPortlet(String suffix) {
-		return getNamePortlet() + "  [Started, Synchronized] (" + getName(suffix) + ")";
 	}
 
 }

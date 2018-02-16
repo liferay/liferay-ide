@@ -23,6 +23,7 @@ import com.liferay.ide.ui.swtbot.util.StringPool;
 import java.io.File;
 
 import org.eclipse.core.runtime.Platform;
+
 import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -36,9 +37,6 @@ public class ValidationFragmentTests extends SwtbotBase {
 
 	@ClassRule
 	public static TomcatSupport tomcat = new TomcatSupport(bot);
-
-	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
 
 	@Test
 	public void checkBuildType() {
@@ -144,8 +142,7 @@ public class ValidationFragmentTests extends SwtbotBase {
 		validationAction.assertEnabledTrue(wizardAction.getNextBtn());
 
 		validationAction.assertEquals(
-			CREATE_A_NEW_PROJECT_CONFIGURED_AS_A_LIFERAY_MODULE_PROJECT_FRAGMENT,
-			wizardAction.getValidationMsg(2));
+			CREATE_A_NEW_PROJECT_CONFIGURED_AS_A_LIFERAY_MODULE_PROJECT_FRAGMENT, wizardAction.getValidationMsg(2));
 
 		wizardAction.cancel();
 	}
@@ -276,5 +273,8 @@ public class ValidationFragmentTests extends SwtbotBase {
 	@Test
 	public void createFragmentWithoutRuntimeLiferayWorkspace() {
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

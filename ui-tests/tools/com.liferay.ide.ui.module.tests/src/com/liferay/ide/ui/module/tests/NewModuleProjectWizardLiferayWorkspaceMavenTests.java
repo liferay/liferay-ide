@@ -16,10 +16,12 @@ package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.LiferayWorkspaceMavenSupport;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -34,15 +36,13 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 	@Test
 	public void createActivator() {
-		String projectName = "test-activator-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, ACTIVATOR);
+		wizardAction.newModule.prepareMaven(project.getName(), ACTIVATOR);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -50,25 +50,20 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createApi() {
-		String projectName = "test-api-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, API);
+		wizardAction.newModule.prepareMaven(project.getName(), API);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -76,25 +71,20 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createContentTargetingReport() {
-		String projectName = "test-content-targeting-report-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, CONTENT_TARGETING_REPORT);
+		wizardAction.newModule.prepareMaven(project.getName(), CONTENT_TARGETING_REPORT);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -102,25 +92,20 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createContentTargetingRule() {
-		String projectName = "test-content-targeting-rule-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, CONTENT_TARGETING_RULE);
+		wizardAction.newModule.prepareMaven(project.getName(), CONTENT_TARGETING_RULE);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -128,25 +113,20 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createContentTargetingTrackingAction() {
-		String projectName = "test-content-targeting-tracking-action-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, CONTENT_TARGETING_TRACKING_ACTION);
+		wizardAction.newModule.prepareMaven(project.getName(), CONTENT_TARGETING_TRACKING_ACTION);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -154,25 +134,20 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createControlMenuEntry() {
-		String projectName = "test-control-menu-entry-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, CONTROL_MENU_ENTRY);
+		wizardAction.newModule.prepareMaven(project.getName(), CONTROL_MENU_ENTRY);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -180,25 +155,20 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createFormField() {
-		String projectName = "test-form-field-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, FORM_FIELD);
+		wizardAction.newModule.prepareMaven(project.getName(), FORM_FIELD);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -206,25 +176,20 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createPanelApp() {
-		String projectName = "test-panel-app-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, PANEL_APP);
+		wizardAction.newModule.prepareMaven(project.getName(), PANEL_APP);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -232,25 +197,20 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createPortletConfigurationIcon() {
-		String projectName = "test-portlet-configuration-icon-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, PORTLET_CONFIGURATION_ICON);
+		wizardAction.newModule.prepareMaven(project.getName(), PORTLET_CONFIGURATION_ICON);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -258,25 +218,20 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createPortletProvider() {
-		String projectName = "test-portlet-provider-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, PORTLET_PROVIDER);
+		wizardAction.newModule.prepareMaven(project.getName(), PORTLET_PROVIDER);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -284,25 +239,20 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createPortletToolbarContributor() {
-		String projectName = "test-portlet-toolbar-contributor-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, PORTLET_TOOLBAR_CONTRIBUTOR);
+		wizardAction.newModule.prepareMaven(project.getName(), PORTLET_TOOLBAR_CONTRIBUTOR);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -310,25 +260,20 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createRest() {
-		String projectName = "test-rest-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, REST);
+		wizardAction.newModule.prepareMaven(project.getName(), REST);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -336,26 +281,21 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createService() {
-		String projectName = "test-service-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, SERVICE);
+		wizardAction.newModule.prepareMaven(project.getName(), SERVICE);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -363,26 +303,21 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createServiceWrapper() {
-		String projectName = "test-service-wrapper-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, SERVICE_WRAPPER);
+		wizardAction.newModule.prepareMaven(project.getName(), SERVICE_WRAPPER);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -390,25 +325,20 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createSimulationPanelEntry() {
-		String projectName = "test-simulation-panel-entry-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, SIMULATION_PANEL_ENTRY);
+		wizardAction.newModule.prepareMaven(project.getName(), SIMULATION_PANEL_ENTRY);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -416,25 +346,20 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createTemplateContextContributor() {
-		String projectName = "test-template-context-contributor-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, TEMPLATE_CONTEXT_CONCONTRIBUTOR);
+		wizardAction.newModule.prepareMaven(project.getName(), TEMPLATE_CONTEXT_CONCONTRIBUTOR);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -442,26 +367,21 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Ignore
 	@Test
 	public void createThemeContributor() {
-		String projectName = "test-theme-contributor-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, THEME_CONTRIBUTOR);
+		wizardAction.newModule.prepareMaven(project.getName(), THEME_CONTRIBUTOR);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -469,25 +389,20 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createWarHook() {
-		String projectName = "test-war-hook-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, WAR_HOOK);
+		wizardAction.newModule.prepareMaven(project.getName(), WAR_HOOK);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -495,25 +410,20 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getWarsDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getWarFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
 	}
 
 	@Test
 	public void createWarMvcPortlet() {
-		String projectName = "test-war-mvc-portlet-in-lrws-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, WAR_MVC_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), WAR_MVC_PORTLET);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -521,12 +431,12 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 
 		jobAction.waitForUpdateMavenProject();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getWarsDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getWarFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDeleteFromDisk(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

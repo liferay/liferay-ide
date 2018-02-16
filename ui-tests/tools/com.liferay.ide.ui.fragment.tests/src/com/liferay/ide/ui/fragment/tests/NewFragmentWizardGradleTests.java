@@ -15,10 +15,12 @@
 package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -34,11 +36,9 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createFragmentWithJsp() {
-		String projectName = "test-fragment-jsp-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -56,16 +56,14 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createFragmentWithJspf() {
-		String projectName = "test-fragment-jspf-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -83,16 +81,14 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createFragmentWithoutFiles() {
-		String projectName = "test-fragment-without-files-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -110,16 +106,14 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createFragmentWithPortletProperites() {
-		String projectName = "test-fragment-portlet-properties-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -143,16 +137,14 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createFragmentWithResourceAction() {
-		String projectName = "test-fragment-resource-action-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -170,16 +162,14 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createFragmentWithWholeFiles() {
-		String projectName = "test-fragment-whole-files-gradle";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareGradle(projectName);
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -218,7 +208,10 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

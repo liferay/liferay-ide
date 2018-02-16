@@ -21,7 +21,7 @@ import org.junit.Assert;
 /**
  * @author Terry Jia
  */
-public class LiferayWorkspaceMavenSupport extends SupportBase {
+public class LiferayWorkspaceMavenSupport extends LiferayWorkspaceSupport {
 
 	public LiferayWorkspaceMavenSupport(SWTWorkbenchBot bot) {
 		super(bot);
@@ -29,13 +29,13 @@ public class LiferayWorkspaceMavenSupport extends SupportBase {
 
 	@Override
 	public void after() {
-		String[] modulesFolderNames = {getLiferayWorkspaceName(), getModulesDirName()};
+		String[] modulesFolderNames = {getName(), getModulesDirName()};
 
-		String[] themesFolderNames = {getLiferayWorkspaceName(), getThemesDirName()};
+		String[] themesFolderNames = {getName(), getThemesDirName()};
 
-		String[] warsFolderNames = {getLiferayWorkspaceName(), getWarsDirName()};
+		String[] warsFolderNames = {getName(), getWarsDirName()};
 
-		viewAction.project.openUpdateMavenProjectDialog(getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -49,11 +49,7 @@ public class LiferayWorkspaceMavenSupport extends SupportBase {
 
 		viewAction.project.closeAndDeleteFromDisk(warsFolderNames);
 
-		viewAction.project.closeAndDeleteFromDisk(getLiferayWorkspaceName());
-
-		String[] names = viewAction.project.getProjectNames();
-
-		Assert.assertTrue("Expect there is no projects but still having " + names.length, names.length == 0);
+		super.after();
 	}
 
 	@Override
@@ -62,11 +58,11 @@ public class LiferayWorkspaceMavenSupport extends SupportBase {
 
 		wizardAction.openNewLiferayWorkspaceWizard();
 
-		wizardAction.newLiferayWorkspace.prepareMaven(getLiferayWorkspaceName());
+		wizardAction.newLiferayWorkspace.prepareMaven(getName());
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(getLiferayWorkspaceName());
+		viewAction.project.openUpdateMavenProjectDialog(getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -74,23 +70,19 @@ public class LiferayWorkspaceMavenSupport extends SupportBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(getLiferayWorkspaceName()));
-	}
-
-	public String getLiferayWorkspaceName() {
-		return "liferay-workspace-maven-support";
+		Assert.assertTrue(viewAction.project.visibleFileTry(getName()));
 	}
 
 	public String getModulesDirName() {
-		return getLiferayWorkspaceName() + "-modules (in modules)";
+		return getName() + "-modules (in modules)";
 	}
 
 	public String getThemesDirName() {
-		return getLiferayWorkspaceName() + "-themes (in themes)";
+		return getName() + "-themes (in themes)";
 	}
 
 	public String getWarsDirName() {
-		return getLiferayWorkspaceName() + "-wars (in wars)";
+		return getName() + "-wars (in wars)";
 	}
 
 }

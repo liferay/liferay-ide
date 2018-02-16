@@ -15,11 +15,13 @@
 package com.liferay.ide.ui.layouttpl.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 import com.liferay.ide.ui.liferay.base.Sdk62Support;
 import com.liferay.ide.ui.liferay.base.Tomcat62Support;
 
 import org.junit.ClassRule;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -44,15 +46,13 @@ public class NewLayouttplProjectSdk62Tests extends SwtbotBase {
 
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-template-layouttpl";
-
-		wizardAction.newPlugin.prepareLayoutTemplateSdk(projectName);
+		wizardAction.newPlugin.prepareLayoutTemplateSdk(project.getName());
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
-		jobAction.waitForValidate(projectName);
+		jobAction.waitForValidate(project.getName());
 
 		wizardAction.openNewLiferayLayoutTemplate();
 
@@ -60,17 +60,17 @@ public class NewLayouttplProjectSdk62Tests extends SwtbotBase {
 
 		String layoutTpl = "test_template.tpl";
 
-		viewAction.project.openFile(projectName, "docroot", layoutTpl);
+		viewAction.project.openFile(project.getName(), "docroot", layoutTpl);
 
 		editorAction.close();
 
 		String layoutWapTpl = "test_template.wap.tpl";
 
-		viewAction.project.openFile(projectName, "docroot", layoutWapTpl);
+		viewAction.project.openFile(project.getName(), "docroot", layoutWapTpl);
 
 		editorAction.close();
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
@@ -83,17 +83,18 @@ public class NewLayouttplProjectSdk62Tests extends SwtbotBase {
 
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-layouttpl";
-
-		wizardAction.newPlugin.prepareLayoutTemplateSdk(projectName);
+		wizardAction.newPlugin.prepareLayoutTemplateSdk(project.getName());
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
-		jobAction.waitForValidate(projectName);
+		jobAction.waitForValidate(project.getName());
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

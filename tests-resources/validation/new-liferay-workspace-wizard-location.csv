@@ -15,4 +15,4 @@ D:\,"D:\" is not an absolute path.,linux
 workspace,"workspace" is not an absolute path.,win32
 Z:\workspace,Cannot create project content at "Z:\workspace".,win32
 /homehome,"\homehome" is not an absolute path.,win32
-D:\,Create a new liferay workspace,win32
+C:\,Create a new liferay workspace,win32

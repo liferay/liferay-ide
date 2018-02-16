@@ -15,11 +15,13 @@
 package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 import com.liferay.ide.ui.liferay.base.ServerRunningSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.ClassRule;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -36,26 +38,26 @@ public class DeployModuleGradleTomcatTests extends SwtbotBase {
 
 	@Test
 	public void deployActivator() {
-		String projectName = "deploy-activator-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, ACTIVATOR);
+		wizardAction.newModule.prepareGradle(project.getName(), ACTIVATOR);
 
 		wizardAction.finish();
 
 		viewAction.servers.openAddAndRemoveDialog(tomcat.getStartedLabel());
 
-		dialogAction.addAndRemove.addModule(projectName);
+		dialogAction.addAndRemove.addModule(project.getName());
 
 		dialogAction.confirm(FINISH);
 
-		viewAction.servers.visibleModuleTry(tomcat.getStartedLabel(), projectName);
+		viewAction.servers.visibleModuleTry(tomcat.getStartedLabel(), project.getName());
 
-		jobAction.waitForConsoleContent(
-			tomcat.getServerName(), "STARTED " + projectName.replace('-', '.') + "_", 20 * 1000);
+		jobAction.waitForConsoleContent(tomcat.getServerName(), "STARTED " + project.getName() + "_", 20 * 1000);
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

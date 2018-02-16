@@ -32,9 +32,6 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 	@ClassRule
 	public static TomcatSupport tomcat = new TomcatSupport(bot);
 
-	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
-
 	@Test
 	public void checkInitialState() {
 		wizardAction.openFileMenuFragmentFilesWizard();
@@ -192,5 +189,8 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

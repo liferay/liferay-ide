@@ -15,10 +15,12 @@
 package com.liferay.ide.ui.hook.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.SdkProjectSupport;
 import com.liferay.ide.ui.liferay.base.SdkSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -38,17 +40,18 @@ public class NewHookConfigTests extends SwtbotBase {
 
 		wizardAction.openNewLiferayPluginProjectWizard();
 
-		String projectName = "test-hook";
-
-		wizardAction.newPlugin.prepareHookSdk(projectName);
+		wizardAction.newPlugin.prepareHookSdk(project.getNameHook());
 
 		wizardAction.finish();
 
 		jobAction.waitForIvy();
 
-		jobAction.waitForValidate(projectName);
+		jobAction.waitForValidate(project.getNameHook());
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getNameHook());
 	}
+
+	@Rule
+	public SdkProjectSupport project = new SdkProjectSupport(bot);
 
 }

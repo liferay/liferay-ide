@@ -16,11 +16,13 @@ package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.LiferayWorkspaceMavenSupport;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -37,11 +39,9 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
 	public void createFragmentWithJsp() {
-		String projectName = "test-fragment-jsp-maven";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(projectName);
+		wizardAction.newFragment.prepareMaven(project.getName());
 
 		wizardAction.next();
 
@@ -59,21 +59,16 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDelete(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createFragmentWithJspf() {
-		String projectName = "test-fragment-jspf-maven";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(projectName);
+		wizardAction.newFragment.prepareMaven(project.getName());
 
 		wizardAction.next();
 
@@ -91,21 +86,16 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDelete(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createFragmentWithoutFiles() {
-		String projectName = "test-fragment-without-files-maven";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(projectName);
+		wizardAction.newFragment.prepareMaven(project.getName());
 
 		wizardAction.next();
 
@@ -123,21 +113,16 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDelete(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createFragmentWithPortletProperites() {
-		String projectName = "test-fragment-portlet-properties-maven";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(projectName);
+		wizardAction.newFragment.prepareMaven(project.getName());
 
 		wizardAction.next();
 
@@ -157,21 +142,16 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDelete(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createFragmentWithResourceAction() {
-		String projectName = "test-fragment-resource-action-maven";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(projectName);
+		wizardAction.newFragment.prepareMaven(project.getName());
 
 		wizardAction.next();
 
@@ -189,21 +169,16 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDelete(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
 	public void createFragmentWithWholeFiles() {
-		String projectName = "test-fragment-whole-files-maven";
-
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(projectName);
+		wizardAction.newFragment.prepareMaven(project.getName());
 
 		wizardAction.next();
 
@@ -242,12 +217,12 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		String[] projectNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), liferayWorkspace.getModulesDirName(), projectName};
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
-
-		viewAction.project.closeAndDelete(projectNames);
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

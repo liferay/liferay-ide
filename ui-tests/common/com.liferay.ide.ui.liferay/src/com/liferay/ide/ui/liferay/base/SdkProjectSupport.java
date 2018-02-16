@@ -16,40 +16,37 @@ package com.liferay.ide.ui.liferay.base;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
-import org.junit.Assert;
-
 /**
  * @author Terry Jia
  */
-public class LiferayWorkspaceGradleSupport extends LiferayWorkspaceSupport {
+public class SdkProjectSupport extends ProjectSupport {
 
-	public LiferayWorkspaceGradleSupport(SWTWorkbenchBot bot) {
+	public SdkProjectSupport(SWTWorkbenchBot bot) {
 		super(bot);
 	}
 
-	@Override
-	public void before() {
-		super.before();
-
-		wizardAction.openNewLiferayWorkspaceWizard();
-
-		wizardAction.newLiferayWorkspace.prepareGradle(getName());
-
-		wizardAction.finish();
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(getName()));
+	public String getNameHook() {
+		return "test" + timestamp + "-hook";
 	}
 
-	public String getModulesDirName() {
-		return "modules";
+	public String getNameLayout() {
+		return "test" + timestamp + "-layouttpl";
 	}
 
-	public String getThemesDirName() {
-		return "themes";
+	public String getNamePortlet() {
+		return "test" + timestamp + "-portlet";
 	}
 
-	public String getWarsDirName() {
-		return "wars";
+	public String getNameTheme() {
+		return "test" + timestamp + "-theme";
+	}
+
+	public String getStartedLabelPortlet() {
+		return getNamePortlet() + "  [Started, Synchronized] (" + getName() + ")";
+	}
+
+	public String getStartedLabelPortlet(String suffix) {
+		return getNamePortlet() + "  [Started, Synchronized] (" + getName(suffix) + ")";
 	}
 
 }

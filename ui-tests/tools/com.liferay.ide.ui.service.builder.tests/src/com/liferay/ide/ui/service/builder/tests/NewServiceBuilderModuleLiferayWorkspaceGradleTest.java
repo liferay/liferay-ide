@@ -16,10 +16,12 @@ package com.liferay.ide.ui.service.builder.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.base.LiferayWorkspaceGradleSupport;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -35,36 +37,36 @@ public class NewServiceBuilderModuleLiferayWorkspaceGradleTest extends SwtbotBas
 
 	@Test
 	public void createServiceBuilder() {
-		String projectName = "test-sb-in-lrws-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, SERVICE_BUILDER);
+		wizardAction.newModule.prepareGradle(project.getName(), SERVICE_BUILDER);
 
 		wizardAction.finish();
 
-		String[] projectNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName};
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		String[] serviceNames =
-			{liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName, projectName + "-service"};
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-service")));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(serviceNames));
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-api")));
 
-		String[] apiNames = {liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName, projectName + "-api"};
+		Assert.assertTrue(
+			viewAction.project.visibleFileTry(
+				liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-service", "service.xml")));
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(apiNames));
-
-		String[] serviceXmlNames = {
-			liferayWorkspace.getLiferayWorkspaceName(), "modules", projectName, projectName + "-service", "service.xml"
-		};
-
-		Assert.assertTrue(viewAction.project.visibleFileTry(serviceXmlNames));
-
-		viewAction.project.closeAndDelete(apiNames);
-		viewAction.project.closeAndDelete(serviceNames);
-		viewAction.project.closeAndDelete(projectNames);
+		viewAction.project.closeAndDelete(
+			liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-api"));
+		viewAction.project.closeAndDelete(
+			liferayWorkspace.getModuleFiles(project.getName(), project.getName() + "-service"));
+		viewAction.project.closeAndDelete(liferayWorkspace.getModuleFiles(project.getName()));
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }
