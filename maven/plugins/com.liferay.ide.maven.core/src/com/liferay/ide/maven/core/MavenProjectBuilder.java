@@ -16,12 +16,15 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.core.util.MultiStatusBuilder;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.OutputStream;
 
 import java.nio.file.Files;
@@ -31,9 +34,12 @@ import java.util.List;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
+import org.apache.maven.model.Build;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 
@@ -70,6 +76,7 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Gregory Amerson
+ * @author Charles Wu
  */
 @SuppressWarnings("restriction")
 public class MavenProjectBuilder extends AbstractProjectBuilder implements IWorkspaceProjectBuilder {
@@ -257,6 +264,42 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 	}
 
 	public IStatus initBundle(IProject project, String bundleUrl, IProgressMonitor monitor) throws CoreException {
+		if (bundleUrl != null) {
+			File pomFile = FileUtil.getFile(project.getFile("pom.xml"));
+
+			MavenXpp3Reader mavenReader = new MavenXpp3Reader();
+			MavenXpp3Writer mavenWriter = new MavenXpp3Writer();
+
+			try (FileReader reader = new FileReader(pomFile)) {
+				Model model = mavenReader.read(reader);
+
+				if (model != null) {
+					Build build = model.getBuild();
+
+					Plugin plugin = build.getPluginsAsMap().get("com.liferay:com.liferay.portal.tools.bundle.support");
+
+					if (plugin != null) {
+						try (FileWriter fileWriter = new FileWriter(pomFile)) {
+							Xpp3Dom origin = (Xpp3Dom)plugin.getConfiguration();
+							Xpp3Dom newConfiguration = new Xpp3Dom("configuration");
+							Xpp3Dom url = new Xpp3Dom("url");
+
+							url.setValue(bundleUrl);
+
+							newConfiguration.addChild(url);
+
+							plugin.setConfiguration(Xpp3Dom.mergeXpp3Dom(newConfiguration, origin));
+
+							mavenWriter.write(fileWriter, model);
+						}
+					}
+				}
+			}
+			catch (Exception e) {
+				LiferayMavenCore.logError("Could not write file in" + pomFile, e);
+			}
+		}
+
 		IMavenProjectFacade facade = MavenUtil.getProjectFacade(project, monitor);
 
 		if (_execMavenLaunch(project, MavenGoalUtil.getMavenInitBundleGoal(project), facade, monitor)) {
