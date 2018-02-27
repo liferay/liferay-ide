@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.workspace;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
@@ -74,7 +75,7 @@ public class NewLiferayWorkspaceOpMethods {
 					bundlesLocation = new Path(location).append("bundles");
 				}
 
-				if (bundlesLocation.toFile().exists()) {
+				if (FileUtil.exists(bundlesLocation)) {
 					ServerUtil.addPortalRuntimeAndServer(serverRuntimeName, bundlesLocation, monitor);
 				}
 			}
