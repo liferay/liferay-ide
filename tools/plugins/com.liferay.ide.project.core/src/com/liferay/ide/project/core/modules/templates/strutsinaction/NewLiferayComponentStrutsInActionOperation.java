@@ -58,7 +58,7 @@ public class NewLiferayComponentStrutsInActionOperation extends AbstractLiferayC
 			if (FileUtil.notExists(viewJsp)) {
 				createSampleFile(
 					viewJsp, "strutsinaction/strutsinaction-blade.jsp", "/html/init.jsp",
-					componentClassName.toLowerCase() + "/html/init.jsp");
+					"/" + componentClassName.toLowerCase() + "/html/init.jsp");
 			}
 		}
 		catch (Exception e) {
@@ -123,6 +123,7 @@ public class NewLiferayComponentStrutsInActionOperation extends AbstractLiferayC
 		Map<String, Object> root = super.getTemplateMap();
 
 		root.put("simplecomponent", componentNameWithoutTemplateName.toLowerCase());
+		root.put("bundlesymbolicname", getBundleSymbolicName());
 
 		return root;
 	}

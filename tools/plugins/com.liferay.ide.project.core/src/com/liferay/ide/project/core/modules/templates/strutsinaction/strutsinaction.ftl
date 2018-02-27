@@ -13,14 +13,14 @@ public class ${classname} extends ${supperclass} {
 		}
 
 		RequestDispatcher requestDispatcher =
-			_servletContext.getRequestDispatcher("${componentfolder}/html/portal/${simplecomponent}.jsp");
+			_servletContext.getRequestDispatcher("/${componentfolder}/html/portal/${simplecomponent}.jsp");
 
 		requestDispatcher.forward(request, response);
 
 		return null;
 	}
 
-	@Reference(target = "(osgi.web.symbolicname=${simplecomponent}.strutsaction)")
+	@Reference(target = "(osgi.web.symbolicname=${bundlesymbolicname})")
 	protected void setServletContext(ServletContext servletContext) {
 		_servletContext = servletContext;
 	}
