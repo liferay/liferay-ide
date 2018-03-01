@@ -25,13 +25,17 @@ import com.liferay.ide.ui.liferay.action.WizardAction;
 import com.liferay.ide.ui.liferay.page.LiferayIDE;
 import com.liferay.ide.ui.swtbot.Keys;
 import com.liferay.ide.ui.swtbot.UI;
+import com.liferay.ide.ui.swtbot.page.Shell;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 
+import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
@@ -118,6 +122,40 @@ public class SwtbotBase implements UI, Keys, Messages, FileConstants {
 		//ide.showErrorLogView();
 
 		//viewAction.checkErrorLog();
+	}
+
+	@Before
+	public void checkShell() {
+		Shell shell = new Shell(bot);
+
+		String title = shell.getLabel();
+
+		Assert.assertEquals("Now under " + title + " but expect " + ide.getLabel(), ide.getLabel(), title);
+	}
+
+	@After
+	public void closeFailsShell() {
+		Shell shell = new Shell(bot);
+
+		if (!shell.getLabel().equals(ide.getLabel())) {
+			_closeShell();
+		}
+	}
+
+	private void _closeShell() {
+		Shell shell = new Shell(bot);
+
+		String title = shell.getLabel();
+
+		dialogAction.cancel();
+
+		String currentTitle = new Shell(bot).getLabel();
+
+		Assert.assertNotEquals("Unable to close the shell " + title, title, currentTitle);
+
+		if (!currentTitle.equals(ide.getLabel())) {
+			_closeShell();
+		}
 	}
 
 }

@@ -14,40 +14,42 @@
 
 package com.liferay.ide.ui.liferay.base;
 
+import com.liferay.ide.ui.liferay.util.FileUtil;
+
+import java.io.File;
+import java.io.IOException;
+
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
- * @author Ying Xu
  */
-public class ProjectSupport extends SupportBase {
+public class ImportProjectSupport extends ProjectSupport {
 
-	public ProjectSupport(SWTWorkbenchBot bot) {
-		super(bot);
+	public ImportProjectSupport(SWTWorkbenchBot bot, String name) {
+		super(bot, name);
 	}
 
-	public ProjectSupport(SWTWorkbenchBot bot, String name) {
-		super(bot);
+	public void before() {
+		super.before();
 
-		this.name = name;
+		try {
+			File source = new File(envAction.getProjectsDir(), name);
+
+			File dist = new File(envAction.getTempDir(), source.getName() + timestamp);
+
+			FileUtil.copyDirectiory(source.getPath(), dist.getPath());
+
+			_project = dist;
+		}
+		catch (IOException ioe) {
+		}
 	}
 
-	public String getName() {
-		return name + timestamp;
+	public String getPath() {
+		return _project.getPath();
 	}
 
-	public String getName(String suffix) {
-		return name + timestamp + suffix;
-	}
-
-	public String getStartedLabel() {
-		return getName() + "  [Started, Synchronized] (" + getName() + ")";
-	}
-
-	public String getStartedLabel(String suffix) {
-		return getName() + "  [Started, Synchronized] (" + getName(suffix) + ")";
-	}
-
-	protected String name = "test";
+	private File _project;
 
 }

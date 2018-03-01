@@ -41,8 +41,6 @@ public class SdkSupport extends SdkSupportBase {
 
 		viewAction.project.closeAndDelete(getSdkDirName());
 
-		envAction.resetTimestamp();
-
 		super.after();
 	}
 
