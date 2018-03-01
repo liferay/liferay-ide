@@ -15,16 +15,45 @@
 package com.liferay.ide.ui.theme.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.LiferayWorkspaceMavenSupport;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 
+import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
+ * @author Rui Wang
  */
 public class NewThemeProjectModuleWorkspaceMavenTests extends SwtbotBase {
 
+	@ClassRule
+	public static LiferayWorkspaceMavenSupport liferayWorkspace = new LiferayWorkspaceMavenSupport(bot);
+
 	@Test
 	public void createTheme() {
+		wizardAction.openNewLiferayModuleWizard();
+
+		wizardAction.newModule.prepareMaven(project.getName(), THEME);
+
+		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getWarFiles(project.getName())));
+
+		viewAction.project.closeAndDelete(liferayWorkspace.getWarFiles(project.getName()));
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }
