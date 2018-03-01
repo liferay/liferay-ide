@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.tests.modules;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
@@ -40,7 +41,7 @@ import org.junit.Test;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class NewLiferayComponentOpTests
+public class NewLiferayComponentOpTests extends BaseTests
 {
 
     @Test
@@ -250,5 +251,40 @@ public class NewLiferayComponentOpTests
         String jspFileContent = FileUtil.readContents( jspFile.getLocation().toFile(), true );
 
         assertTrue( jspFileContent.contains("/testgradlestrutsactioncomponentstrutsaction/html/init.jsp" ) );
+    }
+
+    @Test
+    public void testNewLiferayComponentProjectValidation() throws Exception
+    {
+        deleteAllWorkspaceProjects();
+
+        NewLiferayComponentOp cop = NewLiferayComponentOp.TYPE.instantiate();
+
+        Status projectValidationStatus = cop.getProjectName().validation();
+
+        assertEquals( "No suitable Liferay module project.", projectValidationStatus.message() );
+
+        NewLiferayModuleProjectOp pop = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        pop.setProjectName( "testProjectValidation" );
+        pop.setProjectTemplateName( "portlet" );
+        pop.setProjectProvider( "gradle-module" );
+
+        Status moduleProjectStatus = NewLiferayModuleProjectOpMethods.execute( pop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        assertTrue( moduleProjectStatus.ok() );
+
+        IProject modProject = CoreUtil.getProject( pop.getProjectName().content() );
+        modProject.open( new NullProgressMonitor() );
+
+        IFile bndFile = modProject.getFile( "bnd.bnd" );
+
+        bndFile.delete( true, true, new NullProgressMonitor() );
+
+        cop.setProjectName( pop.getProjectName().content() );
+
+        projectValidationStatus = cop.getProjectName().validation();
+
+        assertEquals( "Can't find bnd.bnd file in the project.", projectValidationStatus.message() );
     }
 }

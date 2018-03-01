@@ -18,6 +18,7 @@ package com.liferay.ide.core.tests;
 import static org.junit.Assert.fail;
 
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 
 import java.io.ByteArrayInputStream;
@@ -34,6 +35,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 /**
  * @author Gregory Amerson
@@ -138,6 +140,15 @@ public class BaseTests
         }
 
         return null;
+    }
+
+    protected static void deleteAllWorkspaceProjects() throws Exception
+    {
+        for( IProject project : CoreUtil.getAllProjects())
+        {
+            project.close( new NullProgressMonitor() );
+            project.delete( true, new NullProgressMonitor() );
+        }
     }
 
     protected final void deleteProject( final String name ) throws Exception

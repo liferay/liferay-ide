@@ -99,6 +99,7 @@ public interface NewLiferayComponentOp extends ExecutableElement {
 	@Required
 	@Service(impl = NewLiferayComponentProjectNameDefaultValueService.class)
 	@Service(impl = NewLiferayComponentProjectNamePossibleService.class)
+	@Service(impl = NewLiferayComponentProjectValidationService.class)
 	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, "ProjectName");
 
 	@Label(standard = "Properties")

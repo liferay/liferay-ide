@@ -14,10 +14,8 @@
 
 package com.liferay.ide.project.core.modules;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
@@ -45,16 +43,7 @@ public class NewLiferayComponentOpMethods {
 		Status retval = Status.createOkStatus();
 
 		try {
-			String projectName = op.getProjectName().content(true);
-
-			IProject project = CoreUtil.getProject(projectName);
-
-			if (project != null) {
-				createNewComponent(op, monitor);
-			}
-			else {
-				return Status.createErrorStatus(" Can't find valid project.");
-			}
+			createNewComponent(op, monitor);
 		}
 		catch (Exception e) {
 			String msg = "Error creating Liferay component.";

@@ -17,6 +17,7 @@ package com.liferay.ide.maven.core.tests;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentFilesOp;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOpMethods;
 import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
@@ -71,6 +72,73 @@ public class MavenModuleFragmentProjectTests extends ServerCoreBase
             return;
 
         extractRuntime( getLiferayRuntimeZip(), getLiferayRuntimeDir() );
+    }
+
+    @Test
+    public void testNewModuleFragmentFileProjectValidation() throws Exception
+    {
+        deleteAllWorkspaceProjects();
+
+        NewModuleFragmentFilesOp fop = NewModuleFragmentFilesOp.TYPE.instantiate();
+
+        Status projectValidationStatus = fop.getProjectName().validation();
+
+        assertEquals("No suitable Liferay fragment project.", projectValidationStatus.message() );
+
+        NewModuleFragmentOp op = NewModuleFragmentOp.TYPE.instantiate();
+        final String runtimeName = "liferay-portal-7.0";
+        final NullProgressMonitor npm = new NullProgressMonitor();
+
+        IRuntime runtime = ServerCore.findRuntime( runtimeName );
+
+        if( runtime == null )
+        {
+            final IRuntimeWorkingCopy runtimeWC =
+                ServerCore.findRuntimeType( getRuntimeId() ).createRuntime( runtimeName, npm );
+
+            runtimeWC.setName( runtimeName );
+            runtimeWC.setLocation( getLiferayRuntimeDir() );
+
+            runtime = runtimeWC.save( true, npm );
+        }
+
+        assertNotNull( runtime );
+
+        List<String> bundles = ServerUtil.getModuleFileListFrom70Server( runtime );
+
+        assertNotNull( bundles );
+
+        for( String hostOsgiBundle : bundles )
+        {
+            if( hostOsgiBundle.contains( "com.liferay.asset.display.web" ) )
+            {
+                op.setProjectName( "test-project-validation" );
+                op.setProjectProvider( "gradle-module-fragment" );
+                op.setLiferayRuntimeName( runtimeName );
+                op.setHostOsgiBundle( hostOsgiBundle );
+                OverrideFilePath overrideFilePath = op.getOverrideFiles().insert();
+                overrideFilePath.setValue( "META-INF/resources/view.jsp" );
+
+                Status gradleExeStatus =
+                    NewModuleFragmentOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+                assertTrue( gradleExeStatus.ok() );
+
+                IProject existedGradleProject = CoreUtil.getProject( op.getProjectName().content() );
+
+                assertNotNull( existedGradleProject );
+
+                IFile bndFile = existedGradleProject.getFile( "bnd.bnd" );
+
+                bndFile.delete( true, true, new NullProgressMonitor() );
+
+                fop.setProjectName( op.getProjectName().content() );
+
+                projectValidationStatus = fop.getProjectName().validation();
+
+                assertEquals( "Can't find bnd.bnd file in the project.", projectValidationStatus.message() );
+            }
+        }
     }
 
     @Test
