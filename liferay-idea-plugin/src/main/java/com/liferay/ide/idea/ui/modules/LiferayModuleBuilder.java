@@ -21,11 +21,14 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.StdModuleTypes;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectType;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 
+import com.liferay.ide.idea.core.LiferayProjectTypeService;
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.util.BladeCLI;
 import com.liferay.ide.idea.util.CoreUtil;
@@ -36,6 +39,7 @@ import javax.swing.Icon;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class LiferayModuleBuilder extends ModuleBuilder {
 
@@ -96,6 +100,10 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 
 	@Override
 	public void setupRootModel(ModifiableRootModel rootModel) throws ConfigurationException {
+		Project project = rootModel.getProject();
+
+		ProjectType liferayProjectType = LiferayProjectTypeService.getProjectType(project);
+
 		VirtualFile moduleDir = _createAndGetContentEntry();
 
 		VirtualFile moduleParentDir = moduleDir.getParent();
@@ -106,6 +114,14 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 		sb.append("-d \"");
 		sb.append(moduleParentDir.getPath());
 		sb.append("\" ");
+
+		String typeId = liferayProjectType.getId();
+
+		if ((liferayProjectType != null) && typeId.equals(LiferayProjectType.LIFERAY_MAVEN_WORKSPACE)) {
+			sb.append("-b ");
+			sb.append("maven ");
+		}
+
 		sb.append("-t ");
 		sb.append(_type);
 		sb.append(" ");

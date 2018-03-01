@@ -38,6 +38,7 @@ public class LiferayGradleWorkspaceBuilder extends LiferayWorkspaceBuilder {
 
 	public LiferayGradleWorkspaceBuilder() {
 		super(LiferayProjectType.LIFERAY_GRADLE_WORKSPACE);
+
 		addListener(new LiferayGradleWorkpaceBuilderListener());
 	}
 

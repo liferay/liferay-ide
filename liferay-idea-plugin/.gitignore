@@ -4,5 +4,5 @@
 .project
 .settings/
 build/
-intellij.iml
+*.iml
 out/

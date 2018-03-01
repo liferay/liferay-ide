@@ -59,6 +59,7 @@ public abstract class AbstractLiferayGradleTaskAction extends AnAction {
 		@Nullable String text, @Nullable String description, @Nullable Icon icon, String taskName) {
 
 		super(text, description, icon);
+
 		_taskName = taskName;
 	}
 

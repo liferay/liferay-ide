@@ -38,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class NewLiferayModuleAction extends AnAction implements DumbAware {
 
@@ -121,7 +122,10 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
 	}
 
 	private boolean _isValidWorkspaceLocation(Project project) {
-		if ((project != null) && LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(project.getBasePath())) {
+		if ((project != null) &&
+			(LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(project.getBasePath()) ||
+			 LiferayWorkspaceUtil.isValidMavenWorkspaceLocation(project))) {
+
 			return true;
 		}
 

@@ -21,11 +21,14 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.StdModuleTypes;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectType;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.util.io.FileUtilRt;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 
+import com.liferay.ide.idea.core.LiferayProjectTypeService;
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
 import com.liferay.ide.idea.util.BladeCLI;
 import com.liferay.ide.idea.util.FileUtil;
@@ -44,6 +47,7 @@ import javax.swing.Icon;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 
@@ -94,7 +98,11 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 	public void setupRootModel(ModifiableRootModel rootModel) throws ConfigurationException {
 		VirtualFile projectRoot = _createAndGetContentEntry();
 
-		_createProject(projectRoot);
+		Project project = rootModel.getProject();
+
+		ProjectType liferayProjectType = LiferayProjectTypeService.getProjectType(project);
+
+		_createProject(projectRoot, liferayProjectType.getId());
 
 		File hostBundle = new File(
 			LiferayIdeaUI.USER_BUNDLES_DIR, _fragmentHost.substring(0, _fragmentHost.lastIndexOf(".jar")));
@@ -196,7 +204,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		}
 	}
 
-	private void _createProject(VirtualFile projectRoot) {
+	private void _createProject(VirtualFile projectRoot, String projectTypeId) {
 		StringBuilder sb = new StringBuilder();
 		VirtualFile parentDir = projectRoot.getParent();
 
@@ -204,6 +212,12 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		sb.append("-d \"");
 		sb.append(parentDir.getPath());
 		sb.append("\" ");
+
+		if ((projectTypeId != null) && projectTypeId.equals(LiferayProjectType.LIFERAY_MAVEN_WORKSPACE)) {
+			sb.append("-b ");
+			sb.append("maven ");
+		}
+
 		sb.append("-t fragment ");
 
 		if (!_bsn.equals("")) {

@@ -3,6 +3,7 @@
 	<name>Liferay Idea Plugin</name>
 	<vendor url="https://www.liferay.com">Liferay Inc.</vendor>
 	<description>Liferay Plugin for IntelliJ IDEA</description>
+	<version>0.1.1</version>
 	<change-notes/>
 
 	<depends>org.jetbrains.plugins.gradle</depends>
@@ -19,7 +20,7 @@
 			<action class="com.liferay.ide.idea.ui.actions.DeployGradleModuleAction" id="DeployLiferayGradleModule"/>
 			<action class="com.liferay.ide.idea.ui.actions.DeployMavenModuleAction" id="DeployLiferayMavenModule"/>
 			<action class="com.liferay.ide.idea.ui.actions.InitBundleGradleAction" id="GradleInitBundle"/>
-            <action class="com.liferay.ide.idea.ui.actions.InitBundleMavenAction" id="MavenInitBundle"/>
+			<action class="com.liferay.ide.idea.ui.actions.InitBundleMavenAction" id="MavenInitBundle"/>
 		</group>
 	</actions>
 
@@ -28,5 +29,7 @@
 		<configurationType implementation="com.liferay.ide.idea.server.LiferayServerConfigurationType" />
 		<programRunner id="Run" implementation="com.liferay.ide.idea.server.LiferayServerRunner" />
 		<programRunner id="Debug" implementation="com.liferay.ide.idea.server.LiferayServerDebugger" />
+		<projectService serviceImplementation="com.liferay.ide.idea.core.LiferayProjectTypeService" />
 	</extensions>
+
 </idea-plugin>
