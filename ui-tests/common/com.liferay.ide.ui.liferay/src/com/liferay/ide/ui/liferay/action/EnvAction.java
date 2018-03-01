@@ -17,15 +17,12 @@ package com.liferay.ide.ui.liferay.action;
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.liferay.util.BundleInfo;
 import com.liferay.ide.ui.liferay.util.CSVReader;
-import com.liferay.ide.ui.liferay.util.FileUtil;
 import com.liferay.ide.ui.liferay.util.SdkInfo;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
-import com.liferay.ide.ui.liferay.util.ZipUtil;
 import com.liferay.ide.ui.swtbot.util.CoreUtil;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import java.net.InetAddress;
@@ -38,7 +35,6 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -58,6 +54,12 @@ public class EnvAction extends UIAction {
 		}
 
 		return _envAction;
+	}
+
+	public File getBundleFile(String fileName) {
+		IPath path = getBundlesPath().append(fileName);
+
+		return path.toFile();
 	}
 
 	public BundleInfo[] getBundleInfos() {
@@ -94,70 +96,26 @@ public class EnvAction extends UIAction {
 		return _bundlesPath;
 	}
 
-	public IPath getBundlesProjectDir(String workspaceProjectName) {
-		IPath serverDir = getBundlesPath().append("bundles");
-
-		IPath bundlesProjectPath = serverDir.append(workspaceProjectName);
-
-		return bundlesProjectPath;
-	}
-
-	public IPath getBundlesProjectFileDir(String workspaceProjectName, String file) {
-		IPath bundlesProjectFilePath = getBundlesProjectDir(workspaceProjectName).append(file);
-
-		return bundlesProjectFilePath;
-	}
-
-	public File getBundleSubfile(String fileName) {
-		IPath path = getBundlesPath().append(fileName);
-
-		return path.toFile();
-	}
-
 	public IPath getEclipseWorkspacePath() {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
 		return root.getLocation();
 	}
 
-	public IPath getProjectsFolder() {
-		return getBundlesPath().append("projects");
-	}
+	public File getProjectsDir() {
+		IPath path = getBundlesPath().append("projects");
 
-	public File getProjectZip(String bundleId, String projectName) throws IOException {
-		URL projectZipUrl = Platform.getBundle(bundleId).getEntry("projects/" + projectName + ".zip");
-
-		File projectZipFile = new File(FileLocator.toFileURL(projectZipUrl).getFile());
-
-		return projectZipFile;
+		return path.toFile();
 	}
 
 	public SdkInfo[] getSdkInfos() {
 		return _sdkInfos;
 	}
 
-	public String getSdkName() {
-		return _sdkInfos[0].getSdkDir();
-	}
-
-	public IPath getServerDir() {
-		IPath bundlesPath = getBundlesPath().append("bundles");
-
-		return bundlesPath.append(_bundleInfos[0].getBundleDir());
-	}
-
 	public File getTempDir() {
-		IPath temp = getBundlesPath().append("bundles");
+		IPath path = getBundlesPath().append("bundles");
 
-		return temp.toFile();
-	}
-
-	public long getTimestamp() {
-		if (_timestamp == 0) {
-			_timestamp = System.currentTimeMillis();
-		}
-
-		return _timestamp;
+		return path.toFile();
 	}
 
 	public String getUsername() {
@@ -265,118 +223,6 @@ public class EnvAction extends UIAction {
 		return !internal();
 	}
 
-	public File prepareBundlesProject(File source) throws IOException {
-		IPath serverDir = getBundlesPath().append("bundles");
-
-		File dist = new File(serverDir.toFile(), source.getName() + "-" + getTimestamp());
-
-		FileUtil.copyDirectiory(source.getPath(), dist.getPath());
-
-		resetTimestamp();
-
-		return dist;
-	}
-
-	public File prepareTempProject(File source) throws IOException {
-		File dist = new File(getTempDir(), source.getName());
-
-		FileUtil.copyDirectiory(source.getPath(), dist.getPath());
-
-		return dist;
-	}
-
-	public void resetTimestamp() {
-		_timestamp = 0;
-	}
-
-	public void unzipPluginsSdkToProject(String workspaceProjectName) {
-		try {
-			File sdkDir = getBundlesProjectFileDir(workspaceProjectName, "plugins-sdk").toFile();
-
-			File sdkZipFile = _getSdkZip().toFile();
-
-			sdkDir.mkdirs();
-
-			ZipUtil.unzip(sdkZipFile, getSdkName(), sdkDir, new NullProgressMonitor());
-
-			Assert.assertEquals(true, sdkDir.exists());
-
-			String username = getUsername();
-
-			File userBuildFile = new File(sdkDir, "build." + username + ".properties");
-
-			userBuildFile.createNewFile();
-
-			unzipServer();
-
-			File serverDir = getServerDir().toFile();
-
-			String appServerParentDir = "app.server.parent.dir=" + serverDir.getPath().replace("\\", "/");
-
-			FileWriter writer = new FileWriter(userBuildFile.getPath(), true);
-
-			writer.write(appServerParentDir);
-
-			writer.close();
-
-			if (internal()) {
-				IPath bundlesPath = getBundlesPath();
-
-				IPath source = bundlesPath.append("internal").append("ivy-settings.xml");
-
-				IPath dest = getBundlesProjectDir(workspaceProjectName).append("ivy-settings.xml");
-
-				FileUtil.copyFile(source.toFile(), dest.toFile());
-			}
-		}
-		catch (Exception e) {
-		}
-	}
-
-	public void unzipServer() {
-		FileUtil.deleteDir(getServerDir().toFile(), true);
-
-		File serverDir = getServerDir().toFile();
-
-		Assert.assertEquals(
-			"Expected file to be not exist:" + getServerDir().toPortableString(), false, serverDir.exists());
-
-		File liferayServerZipFile = _getServerZip().toFile();
-
-		Assert.assertEquals(
-			"Expected file to exist: " + liferayServerZipFile.getAbsolutePath(), true, liferayServerZipFile.exists());
-
-		File liferayServerDirFile = getServerDir().toFile();
-
-		liferayServerDirFile.mkdirs();
-
-		String liferayServerZipFolder = _getServerZipFolder();
-
-		try {
-			ZipUtil.unzip(
-				liferayServerZipFile, liferayServerZipFolder, liferayServerDirFile, new NullProgressMonitor());
-		}
-		catch (IOException ioe) {
-		}
-	}
-
-	public void unzipServerToProject(String workspaceProjectName) {
-		File liferayServerZipFile = _getServerZip().toFile();
-
-		File liferayServerDirFile = getBundlesProjectFileDir(workspaceProjectName, "bundles").toFile();
-
-		liferayServerDirFile.mkdirs();
-
-		String liferayServerZipFolder = _getServerZipFolder();
-
-		try {
-			ZipUtil.unzip(
-				liferayServerZipFile, liferayServerZipFolder, liferayServerDirFile, new NullProgressMonitor());
-		}
-		catch (IOException ioe) {
-		}
-	}
-
 	public final String test_in_the_internal_net =
 		"Only do this test in the internal net, add -Dinternal=\"false\" if you are out of the China office.";
 
@@ -389,18 +235,6 @@ public class EnvAction extends UIAction {
 		_sdkInfos = _parseSdkInfos();
 
 		log = Logger.getLogger(getClass());
-	}
-
-	private IPath _getSdkZip() {
-		return getBundlesPath().append(_sdkInfos[0].getSdkZip());
-	}
-
-	private IPath _getServerZip() {
-		return getBundlesPath().append(_bundleInfos[0].getBundleZip());
-	}
-
-	private String _getServerZipFolder() {
-		return _bundleInfos[0].getBundleDir();
 	}
 
 	private BundleInfo[] _parseBundleInfos() {
@@ -485,6 +319,5 @@ public class EnvAction extends UIAction {
 	private String _internal = System.getProperty("internal");
 	private byte[] _internalServerIp = {(byte)192, (byte)168, (byte)130, 84};
 	private final SdkInfo[] _sdkInfos;
-	private long _timestamp = 0;
 
 }

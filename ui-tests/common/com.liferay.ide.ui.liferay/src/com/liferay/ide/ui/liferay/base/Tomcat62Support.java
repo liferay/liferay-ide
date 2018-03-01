@@ -31,13 +31,7 @@ public class Tomcat62Support extends PureTomcat62Support {
 
 	@Override
 	public void after() {
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(getServerName());
-
-		dialogAction.preferences.confirm();
+		dialogAction.deleteRuntimFromPreferences(getServerName());
 
 		super.after();
 	}

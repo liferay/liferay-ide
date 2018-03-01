@@ -55,7 +55,7 @@ public class SdkSupportBase extends SupportBase {
 	public void before() {
 		super.before();
 
-		File zipFile = envAction.getBundleSubfile(_sdk.getSdkZip());
+		File zipFile = envAction.getBundleFile(_sdk.getSdkZip());
 
 		File sdkDir = new File(envAction.getTempDir(), getSdkDirName());
 

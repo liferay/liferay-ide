@@ -45,11 +45,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		dialogAction.preferences.confirm();
 
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(tomcat.getServerName());
-
-		dialogAction.preferences.confirm();
+		dialogAction.deleteRuntimFromPreferences(tomcat.getServerName());
 	}
 
 	@Test
@@ -76,11 +72,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(tomcat.getServerName());
-
-		dialogAction.preferences.confirm();
+		dialogAction.deleteRuntimFromPreferences(tomcat.getServerName());
 	}
 
 	@Test
@@ -125,11 +117,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		editorAction.close();
 
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(tomcat.getServerName());
-
-		dialogAction.preferences.confirm();
+		dialogAction.deleteRuntimFromPreferences(tomcat.getServerName());
 	}
 
 	@Test
@@ -184,11 +172,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		editorAction.close();
 
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(tomcat.getServerName());
-
-		dialogAction.preferences.confirm();
+		dialogAction.deleteRuntimFromPreferences(tomcat.getServerName());
 	}
 
 	@Ignore("To wait for IDE-3343")
@@ -319,11 +303,7 @@ public class ServerTomcatTests extends SwtbotBase {
 
 		// jobAction.waitForServerStopped(serverName);
 
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(tomcat.getServerName());
-
-		dialogAction.preferences.confirm();
+		dialogAction.deleteRuntimFromPreferences(tomcat.getServerName());
 	}
 
 	@Rule

@@ -305,7 +305,7 @@ public class WizardAction extends UIAction {
 		}
 
 		public void prepare(String location, boolean downloadLiferayBundle, String serverName) {
-			_importLiferayWorkspaceProjectWizard.getWorkspaceLocation().setText(location);
+			workspaceLocation().setText(location);
 
 			if (!downloadLiferayBundle) {
 				return;
@@ -324,6 +324,10 @@ public class WizardAction extends UIAction {
 
 		public void prepareLocation(String location) {
 			workspaceLocation().setText(location);
+		}
+
+		public void prepareServerName(String serverName) {
+			_importLiferayWorkspaceProjectWizard.getServerName().setText(serverName);
 		}
 
 		public Text workspaceLocation() {

@@ -53,7 +53,7 @@ public class ServerSupport extends SupportBase {
 	public void before() {
 		super.before();
 
-		File zipFile = envAction.getBundleSubfile(_bundle.getBundleZip());
+		File zipFile = envAction.getBundleFile(_bundle.getBundleZip());
 
 		File serverDir = new File(envAction.getTempDir(), getServerDirName());
 

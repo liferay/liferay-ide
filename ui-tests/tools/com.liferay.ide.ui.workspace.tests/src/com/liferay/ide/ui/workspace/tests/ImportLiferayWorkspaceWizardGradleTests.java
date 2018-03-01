@@ -15,15 +15,14 @@
 package com.liferay.ide.ui.workspace.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.swtbot.util.StringPool;
+import com.liferay.ide.ui.liferay.base.ImportLiferayWorkspaceProjectSupport;
 
-import java.io.File;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.swtbot.swt.finder.SWTBotAssert;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
@@ -36,35 +35,27 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void importLiferayWorkspaceWithBundle() throws IOException {
-		String liferayWorkspaceName = "test-liferay-workspace-gradle";
-
-		IPath testProject = envAction.getProjectsFolder().append(liferayWorkspaceName);
-
-		File workspaceProject = envAction.prepareBundlesProject(testProject.toFile());
-
-		String workspaceProjectName = workspaceProject.getName();
-
-		envAction.unzipServerToProject(workspaceProjectName);
+		project.prepareServer();
 
 		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
-		wizardAction.importLiferayWorkspace.prepareLocation(workspaceProject.getPath());
+		wizardAction.importLiferayWorkspace.prepareLocation(project.getPath());
+
+		wizardAction.importLiferayWorkspace.prepareServerName(project.getName());
 
 		wizardAction.finish();
 
 		ide.sleepLinux(10000);
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(workspaceProjectName, "bundles"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "bundles"));
 
-		viewAction.project.closeAndDelete(workspaceProjectName);
+		viewAction.project.closeAndDelete(project.getName());
 
-		dialogAction.openPreferencesDialog();
+		// TODO need to check with Charles
 
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
+		// dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay Community Edition Portal 7.0.4 GA5");
 
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm("Liferay Community Edition Portal 7.0.4 GA5");
-
-		dialogAction.preferences.confirm();
+		dialogAction.deleteRuntimFromPreferences(project.getName());
 	}
 
 	@Test
@@ -73,17 +64,9 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 			return;
 		}
 
-		String liferayWorkspaceName = "test-liferay-workspace-gradle";
-
-		IPath testProject = envAction.getProjectsFolder().append(liferayWorkspaceName);
-
-		File workspaceProject = envAction.prepareBundlesProject(testProject.toFile());
-
-		String workspaceProjectName = workspaceProject.getName();
-
 		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
-		wizardAction.importLiferayWorkspace.prepare(workspaceProject.getPath(), true, StringPool.EMPTY);
+		wizardAction.importLiferayWorkspace.prepare(project.getPath(), true, project.getName());
 
 		String bundleUrl =
 			"http://ide-resources-site/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
@@ -94,93 +77,79 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		ide.sleepLinux(10000);
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(workspaceProjectName, "bundles"));
-		Assert.assertTrue(viewAction.project.visibleFileTry(workspaceProjectName, "configs"));
-		Assert.assertTrue(viewAction.project.visibleFileTry(workspaceProjectName, "gradle"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "bundles"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "configs"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "gradle"));
 
-		viewAction.project.closeAndDelete(workspaceProjectName);
+		viewAction.project.closeAndDelete(project.getName());
 
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(workspaceProjectName + " server");
-
-		dialogAction.preferences.confirm();
+		dialogAction.deleteRuntimFromPreferences(project.getName());
 	}
 
 	@Test
 	public void importLiferayWorkspaceWithoutBundle() throws IOException {
-		String liferayWorkspaceName = "test-liferay-workspace-gradle";
-
-		IPath testProject = envAction.getProjectsFolder().append(liferayWorkspaceName);
-
-		File workspaceProject = envAction.prepareTempProject(testProject.toFile());
+		String projectName = project.getName();
 
 		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
-		wizardAction.importLiferayWorkspace.prepareLocation(workspaceProject.getPath());
+		wizardAction.importLiferayWorkspace.prepareLocation(project.getPath());
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspaceName, "configs"));
-		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspaceName, "gradle"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName, "configs"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName, "gradle"));
 
-		viewAction.project.openFile(liferayWorkspaceName, GRADLE_PROPERTIES);
+		viewAction.project.openFile(projectName, GRADLE_PROPERTIES);
 
 		SWTBotAssert.assertContains("liferay.workspace.modules.dir", editorAction.getContent());
 		SWTBotAssert.assertContains("liferay.workspace.home.dir", editorAction.getContent());
 
 		editorAction.close();
 
-		viewAction.project.openFile(liferayWorkspaceName, SETTINGS_GRADLE);
+		viewAction.project.openFile(projectName, SETTINGS_GRADLE);
 
 		SWTBotAssert.assertContains("buildscript", editorAction.getContent());
 		SWTBotAssert.assertContains("repositories", editorAction.getContent());
 
 		editorAction.close();
 
-		viewAction.project.closeAndDelete(liferayWorkspaceName);
+		viewAction.project.closeAndDelete(projectName);
 	}
 
 	@Test
 	public void importLiferayWorkspaceWithPluginsSdk() throws IOException {
-		String liferayWorkspaceName = "test-liferay-workspace-gradle";
-
-		IPath testProject = envAction.getProjectsFolder().append(liferayWorkspaceName);
-
-		File workspaceProject = envAction.prepareBundlesProject(testProject.toFile());
-
-		String workspaceProjectName = workspaceProject.getName();
-
-		envAction.unzipPluginsSdkToProject(workspaceProjectName);
+		project.prepareSdk();
 
 		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
-		wizardAction.importLiferayWorkspace.prepareLocation(workspaceProject.getPath());
+		wizardAction.importLiferayWorkspace.prepareLocation(project.getPath());
+
+		wizardAction.importLiferayWorkspace.prepareServerName(project.getName());
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(workspaceProjectName, "plugins-sdk"));
-		Assert.assertTrue(viewAction.project.visibleFileTry(workspaceProjectName, "configs"));
-		Assert.assertTrue(viewAction.project.visibleFileTry(workspaceProjectName, "gradle"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "plugins-sdk"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "configs"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "gradle"));
 
-		viewAction.project.openFile(workspaceProjectName, GRADLE_PROPERTIES);
+		viewAction.project.openFile(project.getName(), GRADLE_PROPERTIES);
 
 		SWTBotAssert.assertContains("liferay.workspace.modules.dir", editorAction.getContent());
 		SWTBotAssert.assertContains("liferay.workspace.home.dir", editorAction.getContent());
 
 		editorAction.close();
 
-		viewAction.project.openFile(workspaceProjectName, SETTINGS_GRADLE);
+		viewAction.project.openFile(project.getName(), SETTINGS_GRADLE);
 
 		SWTBotAssert.assertContains("buildscript", editorAction.getContent());
 		SWTBotAssert.assertContains("repositories", editorAction.getContent());
 
 		editorAction.close();
 
-		viewAction.project.closeAndDelete(workspaceProjectName, "plugins-sdk");
-		viewAction.project.closeAndDelete(workspaceProjectName);
+		viewAction.project.closeAndDelete(project.getName(), "plugins-sdk");
+		viewAction.project.closeAndDelete(project.getName());
+
+		dialogAction.deleteRuntimFromPreferences(project.getName());
 	}
 
 	//@Ignore("Need more time to deal with bundle on Linux, will add bundle test back")
@@ -190,19 +159,11 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 			return;
 		}
 
-		String liferayWorkspaceName = "test-liferay-workspace-gradle";
-
-		IPath testProject = envAction.getProjectsFolder().append(liferayWorkspaceName);
-
-		File workspaceProject = envAction.prepareBundlesProject(testProject.toFile());
-
-		String workspaceProjectName = workspaceProject.getName();
-
-		envAction.unzipPluginsSdkToProject(workspaceProjectName);
+		project.prepareSdkOnly();
 
 		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
-		wizardAction.importLiferayWorkspace.prepare(workspaceProject.getPath(), true, StringPool.EMPTY);
+		wizardAction.importLiferayWorkspace.prepare(project.getPath(), true, project.getName());
 
 		String bundleUrl =
 			"http://ide-resources-site/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
@@ -213,35 +174,33 @@ public class ImportLiferayWorkspaceWizardGradleTests extends SwtbotBase {
 
 		ide.sleepLinux(10000);
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(workspaceProjectName, "plugins-sdk"));
-		Assert.assertTrue(viewAction.project.visibleFileTry(workspaceProjectName, "bundles"));
-		Assert.assertTrue(viewAction.project.visibleFileTry(workspaceProjectName, "configs"));
-		Assert.assertTrue(viewAction.project.visibleFileTry(workspaceProjectName, "gradle"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "plugins-sdk"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "bundles"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "configs"));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName(), "gradle"));
 
-		viewAction.project.openFile(workspaceProjectName, GRADLE_PROPERTIES);
+		viewAction.project.openFile(project.getName(), GRADLE_PROPERTIES);
 
 		SWTBotAssert.assertContains("liferay.workspace.modules.dir", editorAction.getContent());
 		SWTBotAssert.assertContains("liferay.workspace.home.dir", editorAction.getContent());
 
 		editorAction.close();
 
-		viewAction.project.openFile(workspaceProjectName, SETTINGS_GRADLE);
+		viewAction.project.openFile(project.getName(), SETTINGS_GRADLE);
 
 		SWTBotAssert.assertContains("buildscript", editorAction.getContent());
 		SWTBotAssert.assertContains("repositories", editorAction.getContent());
 
 		editorAction.close();
 
-		viewAction.project.closeAndDelete(workspaceProjectName, "plugins-sdk");
-		viewAction.project.closeAndDelete(workspaceProjectName);
+		viewAction.project.closeAndDelete(project.getName(), "plugins-sdk");
+		viewAction.project.closeAndDelete(project.getName());
 
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(workspaceProjectName + " server");
-
-		dialogAction.preferences.confirm();
+		dialogAction.deleteRuntimFromPreferences(project.getName());
 	}
+
+	@Rule
+	public ImportLiferayWorkspaceProjectSupport project = new ImportLiferayWorkspaceProjectSupport(
+		bot, "test-liferay-workspace-gradle");
 
 }
