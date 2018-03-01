@@ -28,77 +28,67 @@ public class NewJsfProjectWizardGradleTests extends SwtbotBase {
 
 	@Test
 	public void createICEFaces() {
-		String projectName = "test-ice-faces-gradle";
-
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.newLiferayJsf.prepareGradle(projectName, ICEFACES);
+		wizardAction.newLiferayJsf.prepareGradle(project.getName(), ICEFACES);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createJSFStandard() {
-		String projectName = "test-jsf-standard-gradle";
-
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.newLiferayJsf.prepareGradle(projectName, JSF_STANDARD);
+		wizardAction.newLiferayJsf.prepareGradle(project.getName(), JSF_STANDARD);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createLiferayFacesAlloy() {
-		String projectName = "test-liferay-faces-alloy-gradle";
-
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.newLiferayJsf.prepareGradle(projectName, LIFERAY_FACES_ALLOY);
+		wizardAction.newLiferayJsf.prepareGradle(project.getName(), LIFERAY_FACES_ALLOY);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createPrimeFaces() {
-		String projectName = "test-prime-faces-gradle";
-
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.newLiferayJsf.prepareGradle(projectName, PRIMEFACES);
+		wizardAction.newLiferayJsf.prepareGradle(project.getName(), PRIMEFACES);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createRichFaces() {
-		String projectName = "test-rich-faces-gradle";
-
 		wizardAction.openNewLiferayJsfProjectWizard();
 
-		wizardAction.newLiferayJsf.prepareGradle(projectName, RICHFACES);
+		wizardAction.newLiferayJsf.prepareGradle(project.getName(), RICHFACES);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Rule
