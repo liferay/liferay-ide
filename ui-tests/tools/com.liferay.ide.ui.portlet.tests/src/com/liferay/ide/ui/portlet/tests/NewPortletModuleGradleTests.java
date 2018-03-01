@@ -15,215 +15,195 @@
 package com.liferay.ide.ui.portlet.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 
 import org.junit.Assert;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
  * @author Rui Wang
+ * @author Ying Xu
  */
 public class NewPortletModuleGradleTests extends SwtbotBase {
 
 	@Test
 	public void createFreemarkerPortlet() {
-		String projectName = "test-freemarker-portlet-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, FREEMARKER_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), FREEMARKER_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createMvcPortlet() {
-		String projectName = "test-mvc-portlet-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, MVC_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		jobAction.waitForValidate(projectName);
+		jobAction.waitForValidate(project.getName());
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createNpmAngularPortlet() {
-		String projectName = "test-npm-angular-portlet-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, NPM_ANGULAR_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), NPM_ANGULAR_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createNpmBillboardjsPortlet() {
-		String projectName = "test-npm-billboardjs-portlet-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, NPM_BILLBOARDJS_PORLET);
+		wizardAction.newModule.prepareGradle(project.getName(), NPM_BILLBOARDJS_PORLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createNpmIsomorphicPortlet() {
-		String projectName = "test-npm-isomorphic-portlet-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, NPM_ISOMORPHIC_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), NPM_ISOMORPHIC_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createNpmJqueryPortlet() {
-		String projectName = "test-npm-jquery-portlet-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, NPM_JQUERY_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), NPM_JQUERY_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createNpmMetaljsPortletGradle() {
-		String projectName = "test-npm-metaljs-portlet-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, NPM_METALJS_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), NPM_METALJS_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createNpmPortlet() {
-		String projectName = "test-npm-portlet-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, NPM_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), NPM_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createNpmReactPortlet() {
-		String projectName = "test-npm-react-portlet-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, NPM_REACT_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), NPM_REACT_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createNpmVuejsPortlet() {
-		String projectName = "test-npm-vuejs-portlet-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, NPM_VUEJS_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), NPM_VUEJS_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createPortlet() {
-		String projectName = "test-portlet-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		jobAction.waitForValidate(projectName);
+		jobAction.waitForValidate(project.getName());
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Ignore("ignore to wait IDE-3579 as it will take too long unexpected")
 	@Test
 	public void createSoyPortlet() {
-		String projectName = "test-soy-portlet-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, SOY_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), SOY_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createSpringMvcPortlet() {
-		String projectName = "test-spring-mvc-portlet-gradle";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(projectName, SPRING_MVC_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), SPRING_MVC_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }

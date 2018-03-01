@@ -15,210 +15,191 @@
 package com.liferay.ide.ui.portlet.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.ProjectSupport;
 
 import org.junit.Assert;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
  * @author Terry Jia
+ * @author Rui Wang
+ * @author Ying Xu
  */
 public class NewPortletModuleMavenTests extends SwtbotBase {
 
 	@Test
 	public void createFreemarkerPortlet() {
-		String projectName = "test-freemarker-portlet-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, FREEMARKER_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), FREEMARKER_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createMvcPortlet() {
-		String projectName = "test-mvc-portlet-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, MVC_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), MVC_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createNpmAngularPortlet() {
-		String projectName = "test-npm-angular-portlet-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, NPM_ANGULAR_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), NPM_ANGULAR_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createNpmBillboardjsPortlet() {
-		String projectName = "test-npm-billboardjs-portlet-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, NPM_BILLBOARDJS_PORLET);
+		wizardAction.newModule.prepareMaven(project.getName(), NPM_BILLBOARDJS_PORLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createNpmIsomorphicPortlet() {
-		String projectName = "test-npm-isomorphic-portlet-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, NPM_ISOMORPHIC_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), NPM_ISOMORPHIC_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createNpmJqueryPortlet() {
-		String projectName = "test-npm-jquery-portlet-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, NPM_JQUERY_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), NPM_JQUERY_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createNpmMetaljsPortletGradle() {
-		String projectName = "test-npm-metaljs-portlet-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, NPM_METALJS_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), NPM_METALJS_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createNpmPortlet() {
-		String projectName = "test-npm-portlet-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, NPM_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), NPM_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createNpmReactPortlet() {
-		String projectName = "test-npm-react-portlet-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, NPM_REACT_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), NPM_REACT_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createNpmVuejsPortlet() {
-		String projectName = "test-npm-vuejs-portlet-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, NPM_VUEJS_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), NPM_VUEJS_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createPortlet() {
-		String projectName = "test-portlet-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Ignore("ignore to wait IDE-3579 as it will take too long unexpected")
 	@Test
 	public void createSoyPortlet() {
-		String projectName = "test-soy-portlet-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, SOY_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), SOY_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Test
 	public void createSpringMvcPortlet() {
-		String projectName = "test-spring-mvc-portlet-maven";
-
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(projectName, SPRING_MVC_PORTLET);
+		wizardAction.newModule.prepareMaven(project.getName(), SPRING_MVC_PORTLET);
 
 		wizardAction.finish();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(projectName));
+		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
 
-		viewAction.project.closeAndDelete(projectName);
+		viewAction.project.closeAndDelete(project.getName());
 	}
+
+	@Rule
+	public ProjectSupport project = new ProjectSupport(bot);
 
 }
