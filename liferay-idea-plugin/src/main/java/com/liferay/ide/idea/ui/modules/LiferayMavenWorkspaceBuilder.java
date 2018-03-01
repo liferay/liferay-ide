@@ -37,6 +37,7 @@ public class LiferayMavenWorkspaceBuilder extends LiferayWorkspaceBuilder {
 
 	public LiferayMavenWorkspaceBuilder() {
 		super(LiferayProjectType.LIFERAY_MAVEN_WORKSPACE);
+
 		addListener(new LiferayMavenWorkspaceBuilderListener());
 	}
 

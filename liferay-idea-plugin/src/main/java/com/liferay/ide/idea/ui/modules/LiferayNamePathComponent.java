@@ -138,6 +138,7 @@ public class LiferayNamePathComponent extends JPanel {
 
 				public void actionPerformed(ActionEvent event) {
 					super.actionPerformed(event);
+
 					_pathChangedByUser = true;
 				}
 

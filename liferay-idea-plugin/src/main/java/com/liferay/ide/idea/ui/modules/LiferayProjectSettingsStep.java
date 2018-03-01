@@ -68,6 +68,7 @@ public class LiferayProjectSettingsStep extends ModuleWizardStep implements Sett
 
 	public LiferayProjectSettingsStep(WizardContext context) {
 		_context = context;
+
 		_formatPanel = new ProjectFormatPanel();
 		_namePathComponent = LiferayNamePathComponent.initNamePathComponent(context);
 

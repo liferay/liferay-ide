@@ -24,8 +24,6 @@ import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectType;
-import com.intellij.openapi.project.ProjectTypeService;
 import com.intellij.openapi.roots.ui.configuration.DefaultModulesProvider;
 import com.intellij.openapi.roots.ui.configuration.ModulesConfigurator;
 import com.intellij.openapi.ui.Messages;
@@ -37,11 +35,6 @@ import com.liferay.ide.idea.util.LiferayWorkspaceUtil;
 import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.idea.maven.model.MavenPlugin;
-import org.jetbrains.idea.maven.project.MavenProject;
-import org.jetbrains.idea.maven.utils.MavenUIUtil;
-import org.jetbrains.idea.maven.utils.actions.MavenAction;
-import org.jetbrains.idea.maven.utils.actions.MavenActionUtil;
 
 /**
  * @author Terry Jia
@@ -129,11 +122,14 @@ public class NewLiferayModuleAction extends AnAction implements DumbAware {
 	}
 
 	private boolean _isValidWorkspaceLocation(Project project) {
-		if ((project != null) && (LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(project.getBasePath())||
-				LiferayWorkspaceUtil.isValidMavenWorkspaceLocation(project))) {
+		if ((project != null) &&
+			(LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(project.getBasePath()) ||
+			 LiferayWorkspaceUtil.isValidMavenWorkspaceLocation(project))) {
+
 			return true;
 		}
 
 		return false;
 	}
+
 }

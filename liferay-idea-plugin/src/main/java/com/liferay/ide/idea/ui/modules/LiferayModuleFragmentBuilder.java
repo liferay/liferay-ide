@@ -23,7 +23,6 @@ import com.intellij.openapi.module.StdModuleTypes;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectType;
-import com.intellij.openapi.project.ProjectTypeService;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.util.io.FileUtilRt;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -100,8 +99,8 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		VirtualFile projectRoot = _createAndGetContentEntry();
 
 		Project project = rootModel.getProject();
+
 		ProjectType liferayProjectType = LiferayProjectTypeService.getProjectType(project);
-		String projectTypeId = liferayProjectType!=null?liferayProjectType.getId():null;
 
 		_createProject(projectRoot, liferayProjectType.getId());
 
@@ -214,7 +213,7 @@ public class LiferayModuleFragmentBuilder extends ModuleBuilder {
 		sb.append(parentDir.getPath());
 		sb.append("\" ");
 
-		if ( projectTypeId != null && projectTypeId.equals(LiferayProjectType.LIFERAY_MAVEN_WORKSPACE)){
+		if ((projectTypeId != null) && projectTypeId.equals(LiferayProjectType.LIFERAY_MAVEN_WORKSPACE)) {
 			sb.append("-b ");
 			sb.append("maven ");
 		}

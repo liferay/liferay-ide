@@ -17,16 +17,17 @@ package com.liferay.ide.idea.util;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+
+import java.io.File;
+
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.jetbrains.idea.maven.model.MavenPlugin;
 import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.project.MavenProjectsManager;
 import org.jetbrains.idea.maven.utils.MavenUtil;
-
-import java.io.File;
-import java.util.List;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author Terry Jia
@@ -42,39 +43,6 @@ public class LiferayWorkspaceUtil {
 		}
 
 		return result;
-	}
-
-	public static boolean isValidMavenWorkspaceLocation(Project project) {
-
-		File pomFile = new File(project.getBasePath(), _BUILD_MAVEN_FILE_NAME);
-
-		if (!pomFile.exists()) {
-			return false;
-		}
-
-		VirtualFile virtualPom = LocalFileSystem.getInstance().findFileByPath(pomFile.getPath() );
-
-		if ( virtualPom.exists() ){
-			boolean isPom = MavenUtil.isPomFile(project, virtualPom );
-			if ( !isPom ){
-				return false;
-			}
-		}
-		try{
-			MavenProjectsManager mavenProjectsManager = MavenProjectsManager.getInstance(project);
-			MavenProject mavenWorkspaceProject = mavenProjectsManager.findProject(virtualPom);
-			MavenPlugin liferayWorkspacePlugin = mavenWorkspaceProject.
-					findPlugin("com.liferay", "com.liferay.portal.tools.bundle.support");
-			if ( liferayWorkspacePlugin!= null){
-				return true;
-			}
-		}
-		catch ( Exception e ){
-			return false;
-		}
-
-
-		return false;
 	}
 
 	public static boolean isValidGradleWorkspaceLocation(String location) {
@@ -94,6 +62,44 @@ public class LiferayWorkspaceUtil {
 
 		if ((settingsContent != null) && matcher.matches()) {
 			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean isValidMavenWorkspaceLocation(Project project) {
+		File pomFile = new File(project.getBasePath(), _BUILD_MAVEN_FILE_NAME);
+
+		if (!pomFile.exists()) {
+			return false;
+		}
+
+		LocalFileSystem fileSystem = LocalFileSystem.getInstance();
+
+		VirtualFile virtualPom = fileSystem.findFileByPath(pomFile.getPath());
+
+		if (virtualPom.exists()) {
+			boolean pom = MavenUtil.isPomFile(project, virtualPom);
+
+			if (!pom) {
+				return false;
+			}
+		}
+
+		try {
+			MavenProjectsManager mavenProjectsManager = MavenProjectsManager.getInstance(project);
+
+			MavenProject mavenWorkspaceProject = mavenProjectsManager.findProject(virtualPom);
+
+			MavenPlugin liferayWorkspacePlugin = mavenWorkspaceProject.findPlugin(
+				"com.liferay", "com.liferay.portal.tools.bundle.support");
+
+			if (liferayWorkspacePlugin != null) {
+				return true;
+			}
+		}
+		catch (Exception e) {
+			return false;
 		}
 
 		return false;

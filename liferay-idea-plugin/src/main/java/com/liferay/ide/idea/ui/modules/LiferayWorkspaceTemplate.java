@@ -26,6 +26,7 @@ public class LiferayWorkspaceTemplate extends BuilderBasedTemplate {
 
 	public LiferayWorkspaceTemplate(String name, String description, LiferayWorkspaceBuilder builder) {
 		super(builder);
+
 		_name = name;
 		_description = description;
 	}

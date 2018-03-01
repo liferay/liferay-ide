@@ -14,63 +14,73 @@
 
 package com.liferay.ide.idea.core;
 
-import com.intellij.openapi.components.*;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.project.DefaultProjectTypeEP;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectType;
+
 import com.liferay.ide.idea.ui.modules.LiferayProjectType;
 import com.liferay.ide.idea.util.LiferayWorkspaceUtil;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Simon Jiang
  */
-
-@State(name = "ProjectType", storages = @Storage(file=StoragePathMacros.PROJECT_FILE))
+@State(name = "ProjectType", storages = @Storage(file = StoragePathMacros.PROJECT_FILE))
 public class LiferayProjectTypeService implements PersistentStateComponent<ProjectType> {
 
-    private ProjectType myProjectType;
+	public static LiferayProjectTypeService getInstance(@NotNull Project project) {
+		return ServiceManager.getService(project, LiferayProjectTypeService.class);
+	}
 
-    @Nullable
-    public static ProjectType getProjectType(@Nullable Project project) {
-        ProjectType projectType;
-        if (project != null) {
-            projectType = getInstance(project).myProjectType;
-            if (projectType != null) return projectType;
-        }
+	@Nullable
+	public static ProjectType getProjectType(@Nullable Project project) {
+		ProjectType projectType;
 
-        boolean isLiferayGradleProject = LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(project.getBasePath());
+		if (project != null) {
+			projectType = getInstance(project)._projectType;
 
-        if ( isLiferayGradleProject == true ) {
-            return new ProjectType(LiferayProjectType.LIFERAY_GRADLE_WORKSPACE);
-        }
+			if (projectType != null) {
+				return projectType;
+			}
+		}
 
-        boolean isLiferayMavenProject = LiferayWorkspaceUtil.isValidMavenWorkspaceLocation(project);
+		boolean liferayGradleProject = LiferayWorkspaceUtil.isValidGradleWorkspaceLocation(project.getBasePath());
 
-        if ( isLiferayMavenProject == true ){
-            return new ProjectType(LiferayProjectType.LIFERAY_MAVEN_WORKSPACE);
-        }
+		if (liferayGradleProject == true) {
+			return new ProjectType(LiferayProjectType.LIFERAY_GRADLE_WORKSPACE);
+		}
 
-        return DefaultProjectTypeEP.getDefaultProjectType();
-    }
+		boolean liferayMavenProject = LiferayWorkspaceUtil.isValidMavenWorkspaceLocation(project);
 
-    public static void setProjectType(@NotNull Project project, @Nullable ProjectType projectType) {
-        getInstance(project).loadState(projectType);
-    }
+		if (liferayMavenProject == true) {
+			return new ProjectType(LiferayProjectType.LIFERAY_MAVEN_WORKSPACE);
+		}
 
-    private static LiferayProjectTypeService getInstance(@NotNull Project project) {
-        return ServiceManager.getService(project, LiferayProjectTypeService.class);
-    }
+		return DefaultProjectTypeEP.getDefaultProjectType();
+	}
 
-    @Nullable
-    @Override
-    public ProjectType getState() {
-        return myProjectType;
-    }
+	public static void setProjectType(@NotNull Project project, @Nullable ProjectType projectType) {
+		getInstance(project).loadState(projectType);
+	}
 
-    @Override
-    public void loadState(ProjectType state) {
-        myProjectType = state;
-    }
+	@Nullable
+	@Override
+	public ProjectType getState() {
+		return _projectType;
+	}
+
+	@Override
+	public void loadState(ProjectType state) {
+		_projectType = state;
+	}
+
+	private ProjectType _projectType;
+
 }

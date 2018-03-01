@@ -100,8 +100,8 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 
 	@Override
 	public void setupRootModel(ModifiableRootModel rootModel) throws ConfigurationException {
-
 		Project project = rootModel.getProject();
+
 		ProjectType liferayProjectType = LiferayProjectTypeService.getProjectType(project);
 
 		VirtualFile moduleDir = _createAndGetContentEntry();
@@ -115,7 +115,9 @@ public class LiferayModuleBuilder extends ModuleBuilder {
 		sb.append(moduleParentDir.getPath());
 		sb.append("\" ");
 
-		if ( liferayProjectType != null && liferayProjectType.getId().equals(LiferayProjectType.LIFERAY_MAVEN_WORKSPACE)){
+		String typeId = liferayProjectType.getId();
+
+		if ((liferayProjectType != null) && typeId.equals(LiferayProjectType.LIFERAY_MAVEN_WORKSPACE)) {
 			sb.append("-b ");
 			sb.append("maven ");
 		}
