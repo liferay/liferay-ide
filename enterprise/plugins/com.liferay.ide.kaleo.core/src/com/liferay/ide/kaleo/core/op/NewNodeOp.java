@@ -37,6 +37,7 @@ import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
@@ -135,6 +136,7 @@ public interface NewNodeOp extends ExecutableElement {
 	public ListProperty PROP_CONNECTED_NODES = new ListProperty(TYPE, "ConnectedNodes");
 
 	@Label(standard = "Use Add wizards on drop from palette")
+	@DefaultValue(text = "true")
 	@Type(base = Boolean.class)
 	public ValueProperty PROP_USE_NODE_WIZARDS = new ValueProperty(TYPE, "UseNodeWizards");
 
