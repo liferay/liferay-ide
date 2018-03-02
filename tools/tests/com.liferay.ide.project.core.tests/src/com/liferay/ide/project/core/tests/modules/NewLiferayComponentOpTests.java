@@ -193,5 +193,62 @@ public class NewLiferayComponentOpTests
         buildgrade = modPorject.getFile( "build.gradle" );
         buildgradeContent = FileUtil.readContents( buildgrade.getLocation().toFile() ,true);
         assertTrue( buildgradeContent.contains( "compile group: \"org.apache.shiro\", name:\"shiro-core\", version:\"1.1.0\"" ) );
+
+        NewLiferayComponentOp copStruts = NewLiferayComponentOp.TYPE.instantiate();
+        copStruts.setProjectName( pop.getProjectName().content() );
+        copStruts.setComponentClassTemplateName( "StrutsAction" );
+
+        NewLiferayComponentOpMethods.execute( copStruts, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        bgd = modPorject.getFile( "bnd.bnd" );
+        bndcontent = FileUtil.readContents( bgd.getLocation().toFile(), true );
+
+        bndConfig = "Web-ContextPath: /TestgradlemodulecomponentbndStrutsAction";
+
+        assertTrue( bndcontent.contains( bndConfig ) );
+    }
+
+    @Test
+    public void testNewLiferayComponentStrutsAction() throws Exception{
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "testGradleStrutsActionComponent" );
+        op.setProjectTemplateName( "portlet" );
+        op.setProjectProvider( "gradle-module" );
+
+        Status modulePorjectStatus = NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        assertTrue( modulePorjectStatus.ok() );
+
+        IProject modProject = CoreUtil.getProject( op.getProjectName().content() );
+
+        modProject.open( new NullProgressMonitor() );
+
+        NewLiferayComponentOp cop = NewLiferayComponentOp.TYPE.instantiate();
+
+        cop.setProjectName( op.getProjectName().content() );
+        cop.setComponentClassTemplateName( "StrutsAction" );
+
+        Status status = NewLiferayComponentOpMethods.execute( cop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        assertEquals( Status.createOkStatus(),status );
+
+        IFile javaFile = modProject.getFile( "/src/main/java/testGradleStrutsActionComponent" +
+            "/portlet/TestgradlestrutsactioncomponentStrutsAction.java" );
+
+        assertTrue(javaFile.exists());
+
+        String javaFileContent = FileUtil.readContents( javaFile.getLocation().toFile(), true );
+
+        assertTrue(javaFileContent.contains( "osgi.web.symbolicname=testGradleStrutsActionComponent" ) );
+
+        IFile jspFile = modProject.getFile( "/src/main/resources/META-INF/resources" +
+            "/testgradlestrutsactioncomponentstrutsaction/html/portal/testgradlestrutsactioncomponent.jsp" );
+
+        assertTrue( jspFile.exists() );
+
+        String jspFileContent = FileUtil.readContents( jspFile.getLocation().toFile(), true );
+
+        assertTrue( jspFileContent.contains("/testgradlestrutsactioncomponentstrutsaction/html/init.jsp" ) );
     }
 }

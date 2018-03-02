@@ -105,6 +105,12 @@ public class BndProperties extends Properties {
 		}
 	}
 
+	public String getPropertyValue(String key) {
+		BndPropertiesValue bndPropertiesValue = (BndPropertiesValue)get(key);
+
+		return bndPropertiesValue.getFormatedValue();
+	}
+
 	public String getReader(Reader a) throws IOException {
 		StringWriter sw = new StringWriter();
 
@@ -228,6 +234,7 @@ public class BndProperties extends Properties {
 								break;
 							default:
 								key.append(c);
+
 								break;
 						}
 					}
@@ -357,6 +364,7 @@ public class BndProperties extends Properties {
 								break;
 							default:
 								element.append(c);
+
 								break;
 						}
 					}
@@ -438,19 +446,24 @@ public class BndProperties extends Properties {
 			switch (c) {
 				case '\n':
 					buffer.append("\\n");
+
 					break;
 				case '\r':
 					buffer.append("\\r");
+
 					break;
 				case '\t':
 					buffer.append("\\t");
+
 					break;
 				case ' ':
 					buffer.append(head ? "\\ " : " ");
+
 					break;
 				case '!':
 				case '#':
 					buffer.append('\\').append(c);
+
 					break;
 				default:
 					if ((c < ' ') || (c > '~')) {

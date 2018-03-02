@@ -315,6 +315,18 @@ public abstract class AbstractLiferayComponentTemplate
 		}
 	}
 
+	protected String getBundleSymbolicName() {
+		BndProperties bndProperty = new BndProperties();
+
+		IFile file = project.getFile("bnd.bnd");
+
+		File bndFile = FileUtil.getFile(file);
+
+		initBndProperties(bndFile, bndProperty);
+
+		return bndProperty.getPropertyValue("Bundle-SymbolicName");
+	}
+
 	protected List<String[]> getComponentDependency() throws CoreException {
 		List<String[]> dependencyList = new ArrayList<>();
 
