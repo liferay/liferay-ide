@@ -11,7 +11,7 @@
 
 package com.liferay.ide.server.ui.wizard;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.ILiferayRuntimeStub;
@@ -283,7 +283,7 @@ public class LiferayRuntimeStubComposite extends Composite
     {
         ILiferayRuntimeStub[] stubs = LiferayServerCore.getRuntimeStubs();
 
-        if( CoreUtil.isNullOrEmpty( stubs ) )
+        if( ListUtil.isEmpty(stubs) )
         {
             return;
         }

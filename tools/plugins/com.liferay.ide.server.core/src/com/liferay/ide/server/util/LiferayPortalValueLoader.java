@@ -15,7 +15,8 @@
 
 package com.liferay.ide.server.util;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
@@ -54,9 +55,9 @@ public class LiferayPortalValueLoader
 
     private void addLibs( File libDir, List<URL> libUrlList ) throws MalformedURLException
     {
-        if( libDir.exists() )
+        if( FileUtil.exists(libDir) )
         {
-            final File[] libs = libDir.listFiles
+            File[] libs = libDir.listFiles
             (
                 new FilenameFilter()
                 {
@@ -68,7 +69,7 @@ public class LiferayPortalValueLoader
                 }
             );
 
-            if( ! CoreUtil.isNullOrEmpty( libs ) )
+            if( ListUtil.isNotEmpty(libs) )
             {
                 for( File portaLib : libs )
                 {
@@ -127,7 +128,7 @@ public class LiferayPortalValueLoader
             addLibs( libDir, libUrlList );
         }
 
-        if( ! CoreUtil.isNullOrEmpty( userLibs ) )
+        if( ListUtil.isNotEmpty(userLibs) )
         {
             for( IPath url : userLibs )
             {

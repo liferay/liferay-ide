@@ -14,6 +14,8 @@
 
 package com.liferay.ide.ui.wizard;
 
+import com.liferay.ide.core.util.ListUtil;
+
 import java.io.File;
 
 import org.eclipse.core.runtime.IStatus;
@@ -90,11 +92,7 @@ public class ExternalFileSelectionDialog extends FilteredElementTreeSelectionDia
 		}
 
 		public boolean hasChildren(Object element) {
-			if (getChildren(element).length > 0) {
-				return true;
-			}
-
-			return false;
+			return ListUtil.isNotEmpty(getChildren(element));
 		}
 
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {

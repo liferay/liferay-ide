@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
@@ -477,7 +478,7 @@ public class SDKPluginFacetUtil {
 
 		List<IPath> srcFolders = javaConfig.getSourceFolders();
 
-		if (!CoreUtil.isNullOrEmpty(srcFolders)) {
+		if (ListUtil.isNotEmpty(srcFolders)) {
 			for (IPath srcFolder : srcFolders) {
 				javaConfig.removeSourceFolder(srcFolder);
 			}

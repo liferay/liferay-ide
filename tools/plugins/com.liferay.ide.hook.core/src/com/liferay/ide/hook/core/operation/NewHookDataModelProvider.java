@@ -23,6 +23,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
 import com.liferay.ide.sdk.core.SDK;
@@ -125,7 +126,7 @@ public class NewHookDataModelProvider
 
 			List<IFolder> sources = CoreUtil.getSourceFolders(JavaCore.create(targetProject));
 
-			if ((targetProject != null) && !sources.isEmpty()) {
+			if ((targetProject != null) && ListUtil.isNotEmpty(sources)) {
 				IPath sourcePath = sources.get(0).getFullPath();
 
 				return sourcePath.append("portal.properties").toPortableString();
@@ -374,7 +375,7 @@ public class NewHookDataModelProvider
 			if (propertiesItems instanceof List) {
 				List jsps = (List)propertiesItems;
 
-				if (!jsps.isEmpty()) {
+				if (ListUtil.isNotEmpty(jsps)) {
 					return Status.OK_STATUS;
 				}
 			}
@@ -400,7 +401,7 @@ public class NewHookDataModelProvider
 
 		// Try and return the first source folder
 
-		if (sources.length > 0) {
+		if (ListUtil.isNotEmpty(sources)) {
 			try {
 				return (IFolder)sources[0].getCorrespondingResource();
 			}
@@ -447,7 +448,7 @@ public class NewHookDataModelProvider
 
 		// Ensure there is valid source folder(s)
 
-		if ((sources == null) || (sources.length == 0)) {
+		if (ListUtil.isEmpty(sources)) {
 			return null;
 		}
 
@@ -476,7 +477,7 @@ public class NewHookDataModelProvider
 		if (items instanceof List) {
 			List itemsList = (List)items;
 
-			if (!itemsList.isEmpty()) {
+			if (ListUtil.isNotEmpty(itemsList)) {
 				return Status.OK_STATUS;
 			}
 		}

@@ -18,6 +18,7 @@ import com.liferay.ide.core.model.IBaseModel;
 import com.liferay.ide.core.model.IModelChangedEvent;
 import com.liferay.ide.core.model.IModelChangedListener;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.IPluginPackageModel;
 import com.liferay.ide.portlet.core.PluginPackageModel;
@@ -645,7 +646,7 @@ public class PortalDeployExcludesSection
 
 		boolean hasSelection = false;
 
-		if (selection.length > 0) {
+		if (ListUtil.isNotEmpty(selection)) {
 			hasSelection = true;
 		}
 
@@ -674,7 +675,7 @@ public class PortalDeployExcludesSection
 
 		boolean hasSelection = false;
 
-		if (selection.length > 0) {
+		if (ListUtil.isNotEmpty(selection)) {
 			hasSelection = true;
 		}
 

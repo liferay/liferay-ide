@@ -22,6 +22,7 @@ import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.gdvfill;
 import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.glayout;
 import static org.eclipse.sapphire.ui.forms.swt.GridLayoutUtil.glspacing;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.kaleo.ui.IKaleoEditorHelper;
 import com.liferay.ide.kaleo.ui.KaleoUI;
 
@@ -173,7 +174,7 @@ public class ScriptPropertyEditorRenderer extends PropertyEditorPresentation {
 			PropertyEditorDef.HINT_LISTENERS, Collections.<Class<?>>emptyList());
 		List<ValuePropertyEditorListener> listeners = new ArrayList<>();
 
-		if (!listenerClasses.isEmpty()) {
+		if (ListUtil.isNotEmpty(listenerClasses)) {
 			for (Class<?> cl : listenerClasses) {
 				try {
 					ValuePropertyEditorListener listener = (ValuePropertyEditorListener)cl.newInstance();
@@ -210,7 +211,7 @@ public class ScriptPropertyEditorRenderer extends PropertyEditorPresentation {
 
 				elementProperty.write(event.getDocument().get());
 
-				if (!listeners.isEmpty()) {
+				if (ListUtil.isNotEmpty(listeners)) {
 					for (ValuePropertyEditorListener listener : listeners) {
 						try {
 							listener.handleValueChanged();

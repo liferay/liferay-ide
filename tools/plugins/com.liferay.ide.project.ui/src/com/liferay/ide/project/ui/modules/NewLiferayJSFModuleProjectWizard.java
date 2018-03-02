@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp;
 import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.ui.ProjectUI;
@@ -62,8 +63,8 @@ public class NewLiferayJSFModuleProjectWizard extends BaseProjectWizard<NewLifer
 			}
 		}
 
-		if (!projects.isEmpty()) {
-			final IProject finalProject = projects.get(0);
+		if (ListUtil.isNotEmpty(projects)) {
+			IProject finalProject = projects.get(0);
 
 			openLiferayPerspective(finalProject);
 		}

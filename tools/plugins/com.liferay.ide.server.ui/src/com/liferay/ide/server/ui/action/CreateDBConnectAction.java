@@ -16,6 +16,7 @@
 package com.liferay.ide.server.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.ui.LiferayServerUI;
@@ -172,7 +173,7 @@ public class CreateDBConnectAction extends AbstractServerRunningAction
         final IPath[] extraLibs = liferayRuntime.getUserLibs();
         final List<URL> libUrlList = new ArrayList<URL>();
 
-        if( !CoreUtil.isNullOrEmpty( extraLibs ) )
+        if( ListUtil.isNotEmpty(extraLibs) )
         {
             for( IPath url : extraLibs )
             {

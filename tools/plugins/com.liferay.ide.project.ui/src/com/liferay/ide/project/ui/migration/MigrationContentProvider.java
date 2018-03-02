@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.upgrade.MigrationProblemsContainer;
 import com.liferay.ide.project.core.upgrade.ProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
@@ -81,7 +82,7 @@ public class MigrationContentProvider implements ITreeContentProvider {
 			UpgradeProblems[] upgradeProblemsArray = problemsContainer.getProblemsArray();
 
 			if (upgradeProblemsArray.length == 1) {
-				if (problemsContainer.getProblemsArray()[0].getProblems().length > 0) {
+				if (ListUtil.isNotEmpty(problemsContainer.getProblemsArray()[0].getProblems())) {
 					return true;
 				}
 
@@ -92,7 +93,7 @@ public class MigrationContentProvider implements ITreeContentProvider {
 			}
 		}
 		else if (element instanceof UpgradeProblems) {
-			if (((UpgradeProblems)element).getProblems().length > 0) {
+			if (ListUtil.isNotEmpty(((UpgradeProblems)element).getProblems())) {
 				return true;
 			}
 

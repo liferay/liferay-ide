@@ -16,6 +16,7 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.server.core.ILiferayRuntime;
@@ -633,7 +634,7 @@ public class MavenUtil {
 
 			Collection<MavenProjectInfo> children = info.getProjects();
 
-			if (!children.isEmpty()) {
+			if (ListUtil.isNotEmpty(children)) {
 				_findChildMavenProjects(results, children);
 			}
 		}

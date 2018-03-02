@@ -12,7 +12,7 @@
 
 package com.liferay.ide.server.tomcat.core;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
@@ -318,7 +318,7 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
 
         super.setupLaunchConfiguration( workingCopy, monitor );
 
-        workingCopy.setAttribute( DebugPlugin.ATTR_CONSOLE_ENCODING, "UTF-8" ); //$NON-NLS-1$
+        workingCopy.setAttribute( DebugPlugin.ATTR_CONSOLE_ENCODING, "UTF-8" );
 
         String existingVMArgs =
             workingCopy.getAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, (String) null );
@@ -329,11 +329,11 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
 
             List<String> memoryArgs = new ArrayList<String>();
 
-            if( !CoreUtil.isNullOrEmpty( parsedVMArgs ) )
+            if( ListUtil.isNotEmpty(parsedVMArgs) )
             {
                 for( String pArg : parsedVMArgs )
                 {
-                    if( pArg.startsWith( "-Xm" ) || pArg.startsWith( "-XX:" ) ) //$NON-NLS-1$ //$NON-NLS-2$
+                    if( pArg.startsWith( "-Xm" ) || pArg.startsWith( "-XX:" ) )
                     {
                         memoryArgs.add( pArg );
                     }

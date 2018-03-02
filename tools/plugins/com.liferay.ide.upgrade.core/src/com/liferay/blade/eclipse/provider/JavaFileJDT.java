@@ -22,6 +22,7 @@ import com.liferay.blade.api.CUCache;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
 import com.liferay.blade.util.FileHelper;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -121,7 +122,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 					if (node.resolveBinding() != null) {
 						superInterfaces = node.resolveBinding().getInterfaces();
 
-						if ((superInterfaces != null) && (superInterfaces.length > 0)) {
+						if (ListUtil.isNotEmpty(superInterfaces)) {
 							String searchContext = superInterfaces[0].getName();
 
 							if (searchContext.equals(interfaceName)) {
@@ -173,7 +174,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 			});
 
-		if (!searchResults.isEmpty()) {
+		if (ListUtil.isNotEmpty(searchResults)) {
 			return searchResults.get(0);
 		}
 
@@ -508,7 +509,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 			});
 
-		if (!searchResults.isEmpty()) {
+		if (ListUtil.isNotEmpty(searchResults)) {
 			return searchResults.get(0);
 		}
 

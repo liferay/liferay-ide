@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.util;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.BinaryProjectRecord;
 import com.liferay.ide.project.core.IPortletFramework;
@@ -258,7 +259,7 @@ public class ProjectImportUtil {
 
 		monitor.beginTask(Msgs.creatingSDKWorkspaceProjects, projects.length);
 
-		if ((projects != null) && (projects.length > 0)) {
+		if (ListUtil.isNotEmpty(projects)) {
 			SDK sdk = SDKManager.getInstance().getSDK(new Path(sdkLocation));
 
 			// need to add the SDK to workspace if not already available.

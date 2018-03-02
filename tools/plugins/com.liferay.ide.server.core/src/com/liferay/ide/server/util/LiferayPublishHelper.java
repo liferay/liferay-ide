@@ -15,6 +15,7 @@
 
 package com.liferay.ide.server.util;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.IPluginPublisher;
 import com.liferay.ide.server.core.LiferayServerCore;
 
@@ -39,7 +40,7 @@ public class LiferayPublishHelper
     {
         boolean retval = true;
 
-        if( moduleTree != null && moduleTree.length > 0 && moduleTree[0].getProject() != null )
+        if( ListUtil.isNotEmpty(moduleTree) && moduleTree[0].getProject() != null )
         {
             IProject project = moduleTree[0].getProject();
 

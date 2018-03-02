@@ -14,7 +14,7 @@
 
 package com.liferay.ide.portlet.ui.editor;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +92,7 @@ public class PortletURLHyperlinkDetector extends AbstractHyperlinkDetector {
 						_lastActionUrlMethods = actionUrlMethods;
 					}
 
-					if (!CoreUtil.isNullOrEmpty(actionUrlMethods)) {
+					if (ListUtil.isNotEmpty(actionUrlMethods)) {
 						List<IHyperlink> links = new ArrayList<>();
 
 						for (IMethod method : actionUrlMethods) {
@@ -101,7 +101,7 @@ public class PortletURLHyperlinkDetector extends AbstractHyperlinkDetector {
 							}
 						}
 
-						if (links.isEmpty()) {
+						if (ListUtil.isNotEmpty(links)) {
 							if (canShowMultipleHyperlinks) {
 								retval = links.toArray(new IHyperlink[0]);
 							}

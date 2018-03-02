@@ -17,8 +17,8 @@ package com.liferay.ide.project.core;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.IWebProject;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
@@ -107,7 +107,7 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
 	public IPath getLibraryPath(String filename) {
 		IPath[] libs = getUserLibs();
 
-		if (!CoreUtil.isNullOrEmpty(libs)) {
+		if (ListUtil.isNotEmpty(libs)) {
 			for (IPath lib : libs) {
 				if (lib.lastSegment().startsWith(filename)) {
 					return lib;

@@ -18,6 +18,7 @@ import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.SearchResult;
 import com.liferay.blade.api.SourceFile;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
 
@@ -95,7 +96,7 @@ public abstract class AbstractFileMigrator<T extends SourceFile> implements File
 			Collection<ServiceReference<T>> refs = context.getServiceReferences(
 				type, "(file.extension=" + fileExtension + ")");
 
-			if ((refs != null) && !refs.isEmpty()) {
+			if (ListUtil.isNotEmpty(refs)) {
 				T service = context.getService(refs.iterator().next());
 
 				T fileCheckerFile = type.cast(service);

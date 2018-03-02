@@ -21,6 +21,7 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.service.core.AddServiceBuilderOperation;
 import com.liferay.ide.service.core.ServiceCore;
 import com.liferay.ide.service.core.util.ServiceUtil;
@@ -185,7 +186,7 @@ public class NewServiceBuilderDataModelProvider
 
 		// Try and return the first source folder
 
-		if (sources.length > 0) {
+		if (ListUtil.isNotEmpty(sources)) {
 			try {
 				return (IFolder)sources[0].getCorrespondingResource();
 			}
@@ -223,7 +224,7 @@ public class NewServiceBuilderDataModelProvider
 
 		// Ensure there is valid source folder(s)
 
-		if ((sources == null) || (sources.length == 0)) {
+		if (ListUtil.isEmpty(sources)) {
 			return null;
 		}
 
@@ -275,7 +276,7 @@ public class NewServiceBuilderDataModelProvider
 		if (items instanceof List) {
 			List itemsList = (List)items;
 
-			if (itemsList.isEmpty()) {
+			if (ListUtil.isEmpty(itemsList)) {
 				return Status.OK_STATUS;
 			}
 		}

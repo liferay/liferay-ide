@@ -15,6 +15,7 @@
 package com.liferay.ide.hook.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -143,7 +144,7 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
 		return new ISelectionStatusValidator() {
 
 			public IStatus validate(Object[] selection) {
-				if ((selection != null) && (selection.length > 0) && (selection[0] != null) &&
+				if (ListUtil.isNotEmpty(selection) && (selection[0] != null) &&
 					!(selection[0] instanceof IProject) && !(selection[0] instanceof IFile)) {
 
 					return Status.OK_STATUS;
@@ -229,7 +230,7 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
 
 					List<IFolder> sources = CoreUtil.getSourceFolders(JavaCore.create(project));
 
-					if (!sources.isEmpty() && folder.equals(sources.get(0))) {
+					if (ListUtil.isNotEmpty(sources) && folder.equals(sources.get(0))) {
 						folder = folder.getFolder("content");
 					}
 

@@ -65,21 +65,6 @@ public abstract class StructuredViewerSection extends IDESection {
 	 * dnd.Clipboard)
 	 */
 	public boolean canPaste(Clipboard clipboard) {
-
-		// ISelection selection = getViewerSelection();
-		// IStructuredSelection ssel = (IStructuredSelection) selection;
-		// if (ssel.size() > 1)
-		// return false;
-
-		//
-
-		// Object target = ssel.getFirstElement();
-		// ModelDataTransfer modelTransfer = ModelDataTransfer.getInstance();
-		// Object[] objects = (Object[]) clipboard.getContents(modelTransfer);
-		// if (objects != null && objects.length > 0) {
-		// return canPaste(target, objects);
-		// }
-
 		return false;
 	}
 

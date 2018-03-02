@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.project.core.ProjectRecord;
@@ -98,7 +99,7 @@ public class SDKProjectConvertWizardPage
 
 			projectsList.setCheckedElements(selectedProjects);
 
-			setPageComplete(projectsList.getCheckedElements().length > 0);
+			setPageComplete(ListUtil.isNotEmpty(projectsList.getCheckedElements()));
 
 			lastPath = path;
 
@@ -163,11 +164,11 @@ public class SDKProjectConvertWizardPage
 
 		projectsList.refresh(true);
 
-		if (!CoreUtil.isNullOrEmpty(selectedProjects)) {
+		if (ListUtil.isNotEmpty(selectedProjects)) {
 			projectsList.setChecked(selectedProjects[0], true);
 		}
 
-		setPageComplete(projectsList.getCheckedElements().length > 0);
+		setPageComplete(ListUtil.isNotEmpty(projectsList.getCheckedElements()));
 
 		if (selectedProjects.length == 0) {
 			setMessage(Msgs.noProjectsToImport, WARNING);
@@ -175,7 +176,7 @@ public class SDKProjectConvertWizardPage
 
 		Object[] checkedProjects = projectsList.getCheckedElements();
 
-		if ((checkedProjects != null) && (checkedProjects.length > 0)) {
+		if (ListUtil.isNotEmpty(checkedProjects)) {
 			selectedProjects = new ProjectRecord[checkedProjects.length];
 
 			for (int i = 0; i < checkedProjects.length; i++) {
@@ -354,7 +355,7 @@ public class SDKProjectConvertWizardPage
 
 					getDataModel().setProperty(SELECTED_PROJECTS, projectsList.getCheckedElements());
 
-					setPageComplete(projectsList.getCheckedElements().length > 0);
+					setPageComplete(ListUtil.isNotEmpty(projectsList.getCheckedElements()));
 				}
 
 			});

@@ -22,6 +22,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.IResourceBundleProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -179,7 +180,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
 				Set<File> outputFiles = model.getOutputFiles();
 
-				if (!outputFiles.isEmpty()) {
+				if (ListUtil.isNotEmpty(outputFiles)) {
 
 					// first check to see if there are any outputfiles that are wars, if so use that
 					// one.

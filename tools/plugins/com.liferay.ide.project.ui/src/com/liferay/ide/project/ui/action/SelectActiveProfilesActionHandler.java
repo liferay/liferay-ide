@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.Profile;
@@ -55,7 +56,7 @@ public class SelectActiveProfilesActionHandler extends PropertyEditorActionHandl
 			if (!CoreUtil.isNullOrEmpty(activeProfiles)) {
 				final String[] profileIds = activeProfiles.split(",");
 
-				if (!CoreUtil.isNullOrEmpty(profileIds)) {
+				if (ListUtil.isNotEmpty(profileIds)) {
 					for (String profileId : profileIds) {
 						if (!CoreUtil.isNullOrEmpty(profileId)) {
 							boolean foundExistingProfile = false;

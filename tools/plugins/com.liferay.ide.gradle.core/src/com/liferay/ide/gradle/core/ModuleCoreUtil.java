@@ -15,6 +15,7 @@
 package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.File;
@@ -152,7 +153,7 @@ public class ModuleCoreUtil {
 		catch (Exception e) {
 		}
 
-		return !list.isEmpty();
+		return ListUtil.isNotEmpty(list);
 	}
 
 	private static boolean _hasNature(IProject project, String natureId) {

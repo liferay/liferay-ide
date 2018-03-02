@@ -14,6 +14,7 @@
 
 package com.liferay.ide.xml.search.ui.editor;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.xml.search.ui.TempMarker;
 
 import java.util.ArrayList;
@@ -199,7 +200,7 @@ public class LiferayCustomXmlHoverControl
 
 					IMarkerResolution[] resolutions = IDE.getMarkerHelpRegistry().getResolutions(marker);
 
-					if (resolutions.length > 0) {
+					if (ListUtil.isNotEmpty(resolutions)) {
 						_createResolutionsControl(composite, marker, resolutions);
 
 						// createSeparator( composite );
@@ -214,7 +215,7 @@ public class LiferayCustomXmlHoverControl
 
 					IMarkerResolution[] resolutions = IDE.getMarkerHelpRegistry().getResolutions(marker);
 
-					if (resolutions.length > 0) {
+					if (ListUtil.isNotEmpty(resolutions)) {
 						_createResolutionsControl(composite, marker, resolutions);
 					}
 				}

@@ -19,6 +19,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.IResourceBundleProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 
 import java.util.ArrayList;
@@ -125,7 +126,7 @@ public abstract class FlexibleProject extends BaseLiferayProject implements IWeb
 
 		List<IContainer> sourceFolders = JavaLiteUtilities.getJavaSourceContainers(JavaCoreLite.create(getProject()));
 
-		if ((sourceFolders != null) && !sourceFolders.isEmpty()) {
+		if (ListUtil.isNotEmpty(sourceFolders)) {
 			for (IContainer sourceFolder : sourceFolders) {
 				if (sourceFolder instanceof IFolder) {
 					retval.add((IFolder)sourceFolder);

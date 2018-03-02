@@ -14,6 +14,7 @@
 
 package com.liferay.ide.hook.ui.wizard;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.hook.core.operation.NewHookDataModelProvider;
 import com.liferay.ide.hook.ui.HookUI;
@@ -224,13 +225,13 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 
 		Set<IFile> jspFiles = (Set<IFile>)getDataModel().getProperty(CUSTOM_JSPS_FILES_CREATED);
 
-		if ((jspFiles != null) && !jspFiles.isEmpty()) {
+		if (ListUtil.isNotEmpty(jspFiles)) {
 			openWebFile(jspFiles.iterator().next()); // just open the first one
 		}
 
 		Set<IFile> languagePropertiesFiles = (Set<IFile>)getDataModel().getProperty(LANGUAGE_PROPERTIES_FILES_CREATED);
 
-		if ((languagePropertiesFiles != null) && !languagePropertiesFiles.isEmpty()) {
+		if (ListUtil.isNotEmpty(languagePropertiesFiles)) {
 			openWebFile(languagePropertiesFiles.iterator().next()); // just
 
 			// openthe

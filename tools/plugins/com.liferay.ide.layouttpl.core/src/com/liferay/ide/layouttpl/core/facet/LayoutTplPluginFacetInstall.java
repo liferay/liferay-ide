@@ -14,8 +14,8 @@
 
 package com.liferay.ide.layouttpl.core.facet;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.layouttpl.core.LayoutTplCore;
 import com.liferay.ide.project.core.PluginsSDKBundleProject;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
@@ -82,7 +82,7 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall {
 
 				IResource[] libFiles = libFolder.members(true);
 
-				if (CoreUtil.isNullOrEmpty(libFiles)) {
+				if (ListUtil.isEmpty(libFiles)) {
 					libRes.delete(true, monitor);
 				}
 			}

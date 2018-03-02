@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.ui.action;
 
+import com.liferay.ide.core.util.ListUtil;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -74,7 +76,7 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 	public Action getDefaultAction() {
 		Action[] actions = getActionFromDescriptors(getTypeAttribute());
 
-		if (actions.length > 0) {
+		if (ListUtil.isNotEmpty(actions)) {
 			for (Action action : actions) {
 				if ((action instanceof NewWizardAction) && action.getId().equals(DEFAULT_WIZARD_ID)) {
 					return action;
@@ -158,7 +160,7 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 	private boolean _isLiferayArtifactWizard(IConfigurationElement element, String typeAttribute) {
 		IConfigurationElement[] classElements = element.getChildren(TAG_CLASS);
 
-		if (classElements.length > 0) {
+		if (ListUtil.isNotEmpty(classElements)) {
 			for (IConfigurationElement classElement : classElements) {
 				IConfigurationElement[] paramElements = classElement.getChildren(TAG_PARAMETER);
 

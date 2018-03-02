@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -686,7 +687,7 @@ public class LiferayTomcatUtil
                 {
                     properties.load( fileInput );
                 }
-                catch( FileNotFoundException e )
+                catch( NoSuchFileException e )
                 {
                     // ignore filenotfound we likely just haven't had a file written yet.
                 }

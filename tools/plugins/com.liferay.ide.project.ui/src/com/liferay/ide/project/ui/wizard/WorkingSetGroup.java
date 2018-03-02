@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.ui.wizard;
 
+import com.liferay.ide.core.util.ListUtil;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -72,7 +74,7 @@ public class WorkingSetGroup {
 
 		_workingsetComboViewer.setInput(defaultSets);
 
-		if (!workingSets.isEmpty()) {
+		if (ListUtil.isNotEmpty(workingSets)) {
 			if (workingSets.size() == 1) {
 				IWorkingSet workingSet = workingSets.get(0);
 

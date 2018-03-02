@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 
@@ -102,7 +103,7 @@ public class ServiceWrapperCommand {
 
 			libFiles.add(portalkernelJar);
 
-			if (!libFiles.isEmpty()) {
+			if (ListUtil.isNotEmpty(libFiles)) {
 				for (File lib : libFiles) {
 					if (lib.getName().endsWith(".lpkg")) {
 						try (JarFile jar = new JarFile(lib)) {

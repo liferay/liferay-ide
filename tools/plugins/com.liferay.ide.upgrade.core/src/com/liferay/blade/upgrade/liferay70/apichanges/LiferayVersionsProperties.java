@@ -22,6 +22,7 @@ import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.SearchResult;
 import com.liferay.blade.upgrade.liferay70.PropertiesFileChecker;
 import com.liferay.blade.upgrade.liferay70.PropertiesFileChecker.KeyInfo;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -58,7 +59,7 @@ public class LiferayVersionsProperties extends PropertiesFileMigrator implements
 
 			List<KeyInfo> keys = propertiesFileChecker.getInfos("liferay-versions");
 
-			if ((keys != null) && !keys.isEmpty()) {
+			if (ListUtil.isNotEmpty(keys)) {
 				String versions = keys.get(0).value;
 
 				if (!versions.matches(".*7\\.[0-9]\\.[0-9].*")) {

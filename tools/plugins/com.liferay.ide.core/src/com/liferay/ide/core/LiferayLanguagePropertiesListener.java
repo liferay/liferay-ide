@@ -16,6 +16,7 @@ package com.liferay.ide.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 
 import org.eclipse.core.resources.IFile;
@@ -131,7 +132,7 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
 
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-				if ((files != null) && (files.length > 0)) {
+				if (ListUtil.isNotEmpty(files)) {
 					for (IFile file : files) {
 						LiferayLanguagePropertiesValidator.getValidator(file).validateEncoding();
 					}

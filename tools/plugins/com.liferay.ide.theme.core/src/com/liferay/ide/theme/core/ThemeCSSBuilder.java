@@ -20,6 +20,7 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.sdk.core.ISDKConstants;
@@ -186,7 +187,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 					restorePaths.add(themesPath.append(IPluginProjectDataModelProperties.THEME_PARENTS[i]));
 				}
 				else {
-					if (!restorePaths.isEmpty()) {
+					if (ListUtil.isNotEmpty(restorePaths)) {
 						restorePaths.add(themesPath.append(IPluginProjectDataModelProperties.THEME_PARENTS[i]));
 					}
 				}
@@ -328,7 +329,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 				if ((diffs != null) && diffs.exists()) {
 					IResource[] diffMembers = diffs.members();
 
-					if (!CoreUtil.isNullOrEmpty(diffMembers)) {
+					if (ListUtil.isNotEmpty(diffMembers)) {
 						return true;
 					}
 				}

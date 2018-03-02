@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.facet;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
@@ -105,7 +106,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 
 			IFile[] wsFiles = wsroot.findFilesForLocationURI(path.toFile().toURI());
 
-			if (!CoreUtil.isNullOrEmpty(wsFiles)) {
+			if (ListUtil.isNotEmpty(wsFiles)) {
 				for (IFile wsFile : wsFiles) {
 					IContainer container = wsFile.getParent().getParent();
 

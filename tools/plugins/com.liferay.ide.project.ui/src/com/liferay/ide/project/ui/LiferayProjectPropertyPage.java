@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.model.LiferayPluginSDKOp;
@@ -263,7 +264,7 @@ public class LiferayProjectPropertyPage
 						}
 					}
 
-					if (runtimeNames.isEmpty()) {
+					if (ListUtil.isEmpty(runtimeNames)) {
 						runtimeNames.add("No Liferay runtimes available.");
 					}
 

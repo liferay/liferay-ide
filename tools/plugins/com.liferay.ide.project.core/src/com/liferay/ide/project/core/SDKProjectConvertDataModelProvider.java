@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -183,7 +184,7 @@ public class SDKProjectConvertDataModelProvider
 			if (val instanceof Object[]) {
 				Object[] selectedProjects = (Object[])val;
 
-				if (selectedProjects.length > 0) {
+				if (ListUtil.isNotEmpty(selectedProjects)) {
 					return Status.OK_STATUS;
 				}
 			}

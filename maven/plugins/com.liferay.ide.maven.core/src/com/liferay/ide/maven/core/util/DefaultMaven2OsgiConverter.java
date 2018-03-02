@@ -18,6 +18,7 @@ import aQute.bnd.header.Attrs;
 import aQute.bnd.osgi.Analyzer;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -313,7 +314,7 @@ public class DefaultMaven2OsgiConverter {
 				}
 			}
 
-			if ((groupIdSections == null) || (groupIdSections.length == 0)) {
+			if (ListUtil.isEmpty(groupIdSections)) {
 				return null;
 			}
 

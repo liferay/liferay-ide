@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.upgrade.service;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.util.Set;
@@ -64,7 +64,7 @@ public class LiferayServerNamePossibleValuesService extends PossibleValuesServic
 	protected void compute(Set<String> values) {
 		IServer[] servers = ServerCore.getServers();
 
-		if (!CoreUtil.isNullOrEmpty(servers)) {
+		if (ListUtil.isNotEmpty(servers)) {
 			for (IServer server : servers) {
 				if (LiferayServerCore.newPortalBundle(server.getRuntime().getLocation()) != null) {
 					values.add(server.getName());

@@ -20,6 +20,7 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.dd.LiferayDisplayDescriptorHelper;
@@ -809,7 +810,7 @@ public class NewPortletClassDataModelProvider
 
 						String[] portletCategories = liferayDisplayDH.getAllPortletCategories();
 
-						if (portletCategories.length > 0) {
+						if (ListUtil.isNotEmpty(portletCategories)) {
 							for (String portletCategory : portletCategories) {
 								if (_findExistingCategory(portletCategory) == null) {
 									categories.put(portletCategory, portletCategory);
@@ -1032,7 +1033,7 @@ public class NewPortletClassDataModelProvider
 		if (folder.getFolder(new Path(folderValue)).exists()) {
 			List<IFile> viewJspFiles = new SearchFilesVisitor().searchFiles(folder, "view.jsp");
 
-			if ((viewJspFiles != null) && viewJspFiles.isEmpty()) {
+			if (ListUtil.isNotEmpty(viewJspFiles)) {
 				return LiferayCore.createWarningStatus(Msgs.viewJspAlreadyExists);
 			}
 		}

@@ -17,6 +17,7 @@ package com.liferay.ide.project.ui.migration;
 import com.liferay.blade.api.MigrationConstants;
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.IgnoredProblemsContainer;
 import com.liferay.ide.project.core.upgrade.MigrationProblems;
@@ -462,7 +463,7 @@ public class MigrationUtil {
 			}
 
 			try {
-				if (!problems.isEmpty()) {
+				if (ListUtil.isNotEmpty(problems)) {
 					container.setProblemsArray(problems.toArray(new MigrationProblems[0]));
 					UpgradeAssistantSettingsUtil.setObjectToStore(MigrationProblemsContainer.class, container);
 				}

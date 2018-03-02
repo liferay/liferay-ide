@@ -15,6 +15,7 @@
 package com.liferay.ide.kaleo.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.kaleo.core.KaleoCore;
 import com.liferay.ide.project.core.BaseValidator;
 import com.liferay.ide.project.core.ProjectCore;
@@ -140,7 +141,7 @@ public class WorkflowDefinitionValidator extends BaseValidator {
 					result.add(message);
 				}
 
-				if (problems.length > 0) {
+				if (ListUtil.isNotEmpty(problems)) {
 					IResource[] resources = {workflowDefinitionXml};
 
 					result.setDependsOn(resources);

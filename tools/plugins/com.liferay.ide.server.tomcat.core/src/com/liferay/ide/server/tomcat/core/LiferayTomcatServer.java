@@ -14,6 +14,7 @@ package com.liferay.ide.server.tomcat.core;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
@@ -313,7 +314,7 @@ public class LiferayTomcatServer extends TomcatServer
         boolean addingExt = false;
         boolean removingExt = false;
 
-        if( !CoreUtil.isNullOrEmpty( add ) )
+        if( ListUtil.isNotEmpty(add) )
         {
             for( IModule m : add )
             {
@@ -324,7 +325,7 @@ public class LiferayTomcatServer extends TomcatServer
                 }
             }
         }
-        else if( !CoreUtil.isNullOrEmpty( remove ) )
+        else if( ListUtil.isNotEmpty(remove) )
         {
             for( IModule m : remove )
             {

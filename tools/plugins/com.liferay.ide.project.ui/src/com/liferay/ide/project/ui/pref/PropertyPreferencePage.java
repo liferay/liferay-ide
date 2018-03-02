@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.ui.pref;
 
+import com.liferay.ide.core.util.ListUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -302,7 +304,7 @@ public abstract class PropertyPreferencePage extends PropertyPage implements IWo
 		if (dialog.open() == Window.OK) {
 			Object[] result = dialog.getResult();
 
-			if (result.length > 0) {
+			if (ListUtil.isNotEmpty(result)) {
 				IProject project = (IProject)dialog.getResult()[0];
 				Map data = new HashMap();
 

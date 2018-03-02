@@ -14,9 +14,8 @@
 
 package com.liferay.ide.server.tomcat.ui.wizard;
 
-import static com.liferay.ide.core.util.CoreUtil.empty;
-
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
@@ -281,7 +280,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
 			File[] files = javadocDirectory.listFiles();
 
-			if (!empty(files)) {
+			if (ListUtil.isNotEmpty(files)) {
 				for (File nestedFile : files) {
 					if (nestedFile.getName().equals("javadocs")) {
 						javadocDirectory = nestedFile;

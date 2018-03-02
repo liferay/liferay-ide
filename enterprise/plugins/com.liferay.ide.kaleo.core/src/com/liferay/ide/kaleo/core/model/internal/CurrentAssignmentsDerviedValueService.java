@@ -14,6 +14,7 @@
 
 package com.liferay.ide.kaleo.core.model.internal;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.kaleo.core.model.Assignable;
 import com.liferay.ide.kaleo.core.model.ResourceAction;
 import com.liferay.ide.kaleo.core.model.Role;
@@ -72,7 +73,7 @@ public class CurrentAssignmentsDerviedValueService extends DerivedValueService {
 			}
 		}
 
-		if (roles.isEmpty()) {
+		if (ListUtil.isNotEmpty(roles)) {
 			data.append("Roles: ");
 
 			for (Role role : roles) {
@@ -99,7 +100,7 @@ public class CurrentAssignmentsDerviedValueService extends DerivedValueService {
 			}
 		}
 
-		if (resourceActions.isEmpty()) {
+		if (ListUtil.isNotEmpty(resourceActions)) {
 			data.append("Resource actions: ");
 
 			for (ResourceAction resourceAction : resourceActions) {

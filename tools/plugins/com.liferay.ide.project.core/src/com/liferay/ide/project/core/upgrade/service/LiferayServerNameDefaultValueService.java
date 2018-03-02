@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.upgrade.service;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import org.eclipse.sapphire.DefaultValueService;
@@ -55,7 +55,7 @@ public class LiferayServerNameDefaultValueService extends DefaultValueService im
 
 		String value = _NONE;
 
-		if (!CoreUtil.isNullOrEmpty(servers)) {
+		if (ListUtil.isNotEmpty(servers)) {
 			for (IServer server : servers) {
 				if (LiferayServerCore.newPortalBundle(server.getRuntime().getLocation()) != null) {
 					value = server.getName();

@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Set;
@@ -62,7 +62,7 @@ public class RuntimeNamePossibleValuesService extends PossibleValuesService impl
 	protected void compute(Set<String> values) {
 		IRuntime[] runtimes = ServerCore.getRuntimes();
 
-		if (CoreUtil.isNullOrEmpty(runtimes)) {
+		if (ListUtil.isEmpty(runtimes)) {
 			return;
 		}
 

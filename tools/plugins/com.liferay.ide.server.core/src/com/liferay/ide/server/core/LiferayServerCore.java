@@ -17,6 +17,7 @@ package com.liferay.ide.server.core;
 
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.core.ISDKListener;
 import com.liferay.ide.sdk.core.SDKManager;
@@ -157,7 +158,7 @@ public class LiferayServerCore extends Plugin
         IPluginPublisher retval = null;
         IPluginPublisher[] publishers = getPluginPublishers();
 
-        if( publishers != null && publishers.length > 0 )
+        if( ListUtil.isNotEmpty(publishers) )
         {
             for( IPluginPublisher publisher : publishers )
             {
@@ -432,7 +433,7 @@ public class LiferayServerCore extends Plugin
 
         ILiferayRuntimeStub[] stubs = getRuntimeStubs();
 
-        if( !CoreUtil.isNullOrEmpty( stubs ) )
+        if( ListUtil.isNotEmpty(stubs) )
         {
             for( ILiferayRuntimeStub stub : stubs )
             {
@@ -454,7 +455,7 @@ public class LiferayServerCore extends Plugin
             IConfigurationElement[] elements =
                 Platform.getExtensionRegistry().getConfigurationElementsFor( ILiferayRuntimeStub.EXTENSION_ID );
 
-            if( !CoreUtil.isNullOrEmpty( elements ) )
+            if( ListUtil.isNotEmpty(elements) )
             {
                 List<ILiferayRuntimeStub> stubs = new ArrayList<ILiferayRuntimeStub>();
 
@@ -570,7 +571,7 @@ public class LiferayServerCore extends Plugin
 
         IRuntimeDelegateValidator[] validators = getRuntimeDelegateValidators();
 
-        if( !CoreUtil.isNullOrEmpty( validators ) )
+        if( ListUtil.isNotEmpty(validators) )
         {
             for( IRuntimeDelegateValidator validator : validators )
             {
@@ -683,14 +684,14 @@ public class LiferayServerCore extends Plugin
                     try
                     {
                         try (InputStream newInputStream = Files.newInputStream( runtimesGlobalFile.toPath() )) {
-                            final IMemento existingMemento =
+                            IMemento existingMemento =
                                 XMLMemento.loadMemento( newInputStream );
 
                             if( existingMemento != null )
                             {
-                                final IMemento[] children = existingMemento.getChildren( "runtime" );
+                                IMemento[] children = existingMemento.getChildren( "runtime" );
 
-                                if( ! CoreUtil.isNullOrEmpty( children ) )
+                                if( ListUtil.isNotEmpty(children) )
                                 {
                                     for( IMemento child : children )
                                     {
@@ -769,13 +770,13 @@ public class LiferayServerCore extends Plugin
                     try
                     {
                         try (InputStream newInputStream = Files.newInputStream( globalServersFile.toPath() )) {
-                            final IMemento existingMemento = XMLMemento.loadMemento( newInputStream );
+                            IMemento existingMemento = XMLMemento.loadMemento( newInputStream );
 
                             if( existingMemento != null )
                             {
-                                final IMemento[] children = existingMemento.getChildren( "server" );
+                                IMemento[] children = existingMemento.getChildren( "server" );
 
-                                if( ! CoreUtil.isNullOrEmpty( children ) )
+                                if(  ListUtil.isNotEmpty(children) )
                                 {
                                     for( IMemento child : children )
                                     {

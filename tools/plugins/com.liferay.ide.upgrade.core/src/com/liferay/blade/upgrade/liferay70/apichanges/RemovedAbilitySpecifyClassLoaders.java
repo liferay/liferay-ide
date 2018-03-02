@@ -18,6 +18,7 @@ import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
 import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
 
@@ -44,7 +45,7 @@ public class RemovedAbilitySpecifyClassLoaders extends JavaFileMigrator {
 
 		List<SearchResult> findImplementsInterfaces = javaFileChecker.findImplementsInterface("ScriptingExecutor");
 
-		if (!findImplementsInterfaces.isEmpty()) {
+		if (ListUtil.isNotEmpty(findImplementsInterfaces)) {
 			result.addAll(findImplementsInterfaces);
 		}
 

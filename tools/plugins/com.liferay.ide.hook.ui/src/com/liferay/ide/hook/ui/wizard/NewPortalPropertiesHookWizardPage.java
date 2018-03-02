@@ -15,6 +15,7 @@
 package com.liferay.ide.hook.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -171,7 +172,7 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
 		return new ISelectionStatusValidator() {
 
 			public IStatus validate(Object[] selection) {
-				if ((selection != null) && (selection.length > 0) && (selection[0] != null) &&
+				if (ListUtil.isNotEmpty(selection) && (selection[0] != null) &&
 					!(selection[0] instanceof IProject)) {
 
 					return Status.OK_STATUS;

@@ -17,7 +17,7 @@ package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 
@@ -76,12 +76,12 @@ public class PortalPublishTask extends PublishTaskDelegate
     @SuppressWarnings( "rawtypes" )
     public PublishOperation[] getTasks( IServer server, int kind, List modules, List kindList )
     {
-        final List<BundlePublishOperation> tasks = new ArrayList<BundlePublishOperation>();
+        List<BundlePublishOperation> tasks = new ArrayList<BundlePublishOperation>();
 
-        final PortalServerBehavior serverBehavior =
+        PortalServerBehavior serverBehavior =
             (PortalServerBehavior) server.loadAdapter( PortalServerBehavior.class, null );
 
-        if( !CoreUtil.isNullOrEmpty( modules ) )
+        if( ListUtil.isNotEmpty(modules) )
         {
             final int size = modules.size();
 

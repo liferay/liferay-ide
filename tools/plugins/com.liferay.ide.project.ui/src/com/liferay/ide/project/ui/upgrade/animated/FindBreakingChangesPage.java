@@ -17,6 +17,7 @@ package com.liferay.ide.project.ui.upgrade.animated;
 import com.liferay.blade.api.MigrationConstants;
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.MigrationProblemsContainer;
@@ -171,7 +172,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 
 					_problemsViewer.setInput(problems.toArray());
 
-					if ((problems != null) && !problems.isEmpty()) {
+					if (ListUtil.isNotEmpty(problems)) {
 						_problemsViewer.setSelection(new StructuredSelection(problems.get(0)));
 					}
 

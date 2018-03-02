@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.util.List;
 
@@ -50,14 +51,14 @@ public class JavaPackageNameDefaultValueService extends DefaultValueService {
 
 			IPackageFragmentRoot[] roots = project.getAllPackageFragmentRoots();
 
-			if (CoreUtil.isNullOrEmpty(roots)) {
+			if (ListUtil.isEmpty(roots)) {
 				return retval;
 			}
 
 			for (IPackageFragmentRoot root : roots) {
 				IJavaElement[] packages = root.getChildren();
 
-				if (!CoreUtil.isNullOrEmpty(packages)) {
+				if (ListUtil.isNotEmpty(packages)) {
 					for (IJavaElement element : packages) {
 						if (element instanceof IPackageFragment) {
 							IPackageFragment fragment = (IPackageFragment)element;

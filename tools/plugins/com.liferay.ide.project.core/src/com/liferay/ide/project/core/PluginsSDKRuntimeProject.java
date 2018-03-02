@@ -16,8 +16,8 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.IWebProject;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
@@ -90,7 +90,7 @@ public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebPro
 	public IPath getLibraryPath(String filename) {
 		IPath[] libs = getUserLibs();
 
-		if (CoreUtil.isNullOrEmpty(libs)) {
+		if (ListUtil.isEmpty(libs)) {
 			return null;
 		}
 

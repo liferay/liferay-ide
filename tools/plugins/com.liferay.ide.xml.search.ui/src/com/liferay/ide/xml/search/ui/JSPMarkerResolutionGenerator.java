@@ -14,7 +14,7 @@
 
 package com.liferay.ide.xml.search.ui;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.project.core.ValidationPreferences;
@@ -143,10 +143,10 @@ public class JSPMarkerResolutionGenerator implements IMarkerResolutionGenerator2
 
 		List<IFile> files = PropertiesUtil.getDefaultLanguagePropertiesFromProject(project);
 
-		if (CoreUtil.isNullOrEmpty(files)) {
+		if (ListUtil.isEmpty(files)) {
 			String[] portletNames = new PortletDescriptorHelper(project).getAllPortletNames();
 
-			if (!CoreUtil.isNullOrEmpty(portletNames)) {
+			if (ListUtil.isNotEmpty(portletNames)) {
 				for (String portletName : portletNames) {
 					resolutions.add(new AddResourceBundleFileMarkerResolution(marker, portletName));
 				}

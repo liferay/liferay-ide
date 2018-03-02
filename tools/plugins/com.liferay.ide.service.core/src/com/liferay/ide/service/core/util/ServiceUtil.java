@@ -15,6 +15,7 @@
 package com.liferay.ide.service.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class ServiceUtil {
 				if (jp != null) {
 					List<IFile> serviceXmls = new SearchFilesVisitor().searchFiles(project, "service.xml");
 
-					if (serviceXmls.isEmpty()) {
+					if (ListUtil.isNotEmpty(serviceXmls)) {
 						serviceProjects.add(jp);
 					}
 				}

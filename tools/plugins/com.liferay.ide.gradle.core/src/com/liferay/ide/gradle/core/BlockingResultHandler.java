@@ -14,6 +14,8 @@
 
 package com.liferay.ide.gradle.core;
 
+import com.liferay.ide.core.util.ListUtil;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -72,7 +74,7 @@ public class BlockingResultHandler<T> implements ResultHandler<T> {
 
 		List<StackTraceElement> currentThreadStack = Arrays.asList(Thread.currentThread().getStackTrace());
 
-		if (!currentThreadStack.isEmpty()) {
+		if (ListUtil.isNotEmpty(currentThreadStack)) {
 			adjusted.addAll(currentThreadStack.subList(2, currentThreadStack.size()));
 		}
 

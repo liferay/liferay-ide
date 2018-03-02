@@ -14,7 +14,7 @@
 
 package com.liferay.ide.core.templates;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import freemarker.template.Configuration;
 
@@ -52,7 +52,7 @@ public class TemplateModel {
 	}
 
 	public String[] getRequiredVarNames() {
-		if (CoreUtil.isNullOrEmpty(_vars)) {
+		if (ListUtil.isEmpty(_vars)) {
 			return new String[0];
 		}
 

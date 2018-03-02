@@ -15,6 +15,7 @@
 package com.liferay.ide.gradle.action;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.gradle.core.GradleUtil;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class BuildServiceTaskAction extends GradleTaskAction {
 		for (IProject project : projects) {
 			List<IFolder> folders = CoreUtil.getSourceFolders(JavaCore.create(project));
 
-			if (folders.isEmpty()) {
+			if (ListUtil.isEmpty(folders)) {
 				refresh = true;
 			}
 			else {
@@ -54,7 +55,7 @@ public class BuildServiceTaskAction extends GradleTaskAction {
 
 		List<IFolder> folders = CoreUtil.getSourceFolders(JavaCore.create(project));
 
-		if (folders.isEmpty() || refresh) {
+		if (ListUtil.isEmpty(folders) || refresh) {
 
 			// refresh this project will also transmit to refresh -api project
 

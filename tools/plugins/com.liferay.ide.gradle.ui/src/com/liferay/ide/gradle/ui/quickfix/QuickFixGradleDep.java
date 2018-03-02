@@ -15,6 +15,7 @@
 package com.liferay.ide.gradle.ui.quickfix;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.parser.GradleDependency;
@@ -64,7 +65,7 @@ public class QuickFixGradleDep implements IQuickFixProcessor {
 
 	@Override
 	public IJavaCompletionProposal[] getCorrections(IInvocationContext context, IProblemLocation[] locations) {
-		if ((locations == null) || (locations.length == 0)) {
+		if (ListUtil.isEmpty(locations)) {
 			return null;
 		}
 

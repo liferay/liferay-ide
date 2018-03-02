@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
@@ -458,7 +459,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 		// Try and return the first source folder
 
-		if (sources.length > 0) {
+		if (ListUtil.isNotEmpty(sources)) {
 			try {
 				return (IFolder)sources[0].getCorrespondingResource();
 			}
@@ -737,7 +738,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 			}
 		}
 
-		if (items.isEmpty()) {
+		if (ListUtil.isEmpty(items)) {
 			return;
 		}
 
@@ -785,7 +786,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 		}
 
-		if ((projectName == null) && (names.length > 0)) {
+		if ((projectName == null) && ListUtil.isNotEmpty(names)) {
 			projectName = names[0];
 		}
 

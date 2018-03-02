@@ -21,6 +21,7 @@ import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.ProgressMonitor;
 import com.liferay.blade.api.Reporter;
 import com.liferay.blade.util.FileHelper;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -122,16 +123,16 @@ public class ProjectMigrationService implements Migration {
 		Reporter reporter = null;
 
 		try {
-			Collection<ServiceReference<Reporter>> references = this._context.getServiceReferences(
+			Collection<ServiceReference<Reporter>> references = _context.getServiceReferences(
 				Reporter.class, "(format=" + format + ")");
 
-			if (!references.isEmpty()) {
-				reporter = this._context.getService(references.iterator().next());
+			if (ListUtil.isNotEmpty(references)) {
+				reporter = _context.getService(references.iterator().next());
 			}
 			else {
-				ServiceReference<Reporter> sr = this._context.getServiceReference(Reporter.class);
+				ServiceReference<Reporter> sr = _context.getServiceReference(Reporter.class);
 
-				reporter = this._context.getService(sr);
+				reporter = _context.getService(sr);
 			}
 		}
 		catch (InvalidSyntaxException ise) {
@@ -140,7 +141,7 @@ public class ProjectMigrationService implements Migration {
 
 		OutputStream fos = null;
 
-		if ((args != null) && (args.length > 0)) {
+		if (ListUtil.isNotEmpty(args)) {
 			if (args[0] instanceof File) {
 				File outputFile = (File)args[0];
 
@@ -158,7 +159,7 @@ public class ProjectMigrationService implements Migration {
 			}
 		}
 
-		if (!problems.isEmpty()) {
+		if (ListUtil.isNotEmpty(problems)) {
 			reporter.beginReporting(detail, fos);
 
 			for (Problem problem : problems) {
@@ -191,7 +192,7 @@ public class ProjectMigrationService implements Migration {
 
 		ServiceReference<FileMigrator>[] fileMigrators = _fileMigratorTracker.getServiceReferences();
 
-		if ((fileMigrators != null) && (fileMigrators.length > 0)) {
+		if (ListUtil.isNotEmpty(fileMigrators)) {
 			for (ServiceReference<FileMigrator> fm : fileMigrators) {
 				if (monitor.isCanceled()) {
 					return FileVisitResult.TERMINATE;
@@ -205,7 +206,7 @@ public class ProjectMigrationService implements Migration {
 					try {
 						List<Problem> fileProblems = fmigrator.analyze(file);
 
-						if ((fileProblems != null) && !fileProblems.isEmpty()) {
+						if (ListUtil.isNotEmpty(fileProblems)) {
 							problems.addAll(fileProblems);
 						}
 					}
@@ -257,7 +258,7 @@ public class ProjectMigrationService implements Migration {
 	}
 
 	private void _updateListeners(List<Problem> problems) {
-		if (!problems.isEmpty()) {
+		if (ListUtil.isNotEmpty(problems)) {
 			MigrationListener[] listeners = _migrationListenerTracker.getServices(new MigrationListener[0]);
 
 			for (MigrationListener listener : listeners) {

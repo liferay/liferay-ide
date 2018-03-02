@@ -20,6 +20,7 @@ import com.liferay.blade.api.CUCache;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.SearchResult;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -84,7 +85,7 @@ public abstract class ImportStatementMigrator extends AbstractFileMigrator<JavaF
 			}
 		}
 
-		if (!importsToRewrite.isEmpty()) {
+		if (ListUtil.isNotEmpty(importsToRewrite)) {
 			try (InputStream inputStream = Files.newInputStream(file.toPath())) {
 				String[] lines = _readLines(inputStream);
 

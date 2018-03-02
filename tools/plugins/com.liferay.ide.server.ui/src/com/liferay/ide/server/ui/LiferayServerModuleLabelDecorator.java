@@ -15,6 +15,7 @@
 
 package com.liferay.ide.server.ui;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import org.eclipse.core.resources.IMarker;
@@ -81,7 +82,7 @@ public class LiferayServerModuleLabelDecorator extends ModuleLabelDecorator
 
             IMarker[] markers = project.findMarkers( LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE, false, 0 );
 
-            if( markers != null && markers.length > 0 )
+            if( ListUtil.isNotEmpty(markers) )
             {
                 bundleImage = BundlesImages.IMG_BUNDLE_ERROR;
             }

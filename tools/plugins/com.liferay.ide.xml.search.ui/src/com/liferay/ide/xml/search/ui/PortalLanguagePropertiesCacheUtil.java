@@ -16,7 +16,7 @@ package com.liferay.ide.xml.search.ui;
 
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 
@@ -54,7 +54,7 @@ public class PortalLanguagePropertiesCacheUtil {
 			if (portal == null) {
 				IRuntime[] runtimes = ServerCore.getRuntimes();
 
-				if (!CoreUtil.isNullOrEmpty(runtimes)) {
+				if (ListUtil.isNotEmpty(runtimes)) {
 					for (IRuntime runtime : runtimes) {
 						PortalBundle portalBundle = LiferayServerCore.newPortalBundle(runtime.getLocation());
 

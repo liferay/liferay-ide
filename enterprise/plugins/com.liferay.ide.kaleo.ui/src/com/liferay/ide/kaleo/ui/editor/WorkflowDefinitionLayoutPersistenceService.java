@@ -18,6 +18,7 @@ import static com.liferay.ide.kaleo.core.util.KaleoModelUtil.DEFAULT_POINT;
 
 import static java.lang.Math.min;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.kaleo.core.model.CanTransition;
 import com.liferay.ide.kaleo.core.model.ConnectionBendpoint;
 import com.liferay.ide.kaleo.core.model.Position;
@@ -599,7 +600,7 @@ public class WorkflowDefinitionLayoutPersistenceService extends DiagramLayoutPer
 
 						List<ConnectionBendpoint> bendpoints = transitionMetadata.getBendpoints();
 
-						if (bendpoints.isEmpty()) {
+						if (ListUtil.isNotEmpty(bendpoints)) {
 							int index = 0;
 
 							for (ConnectionBendpoint bendpoint : bendpoints) {

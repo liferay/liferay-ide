@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.util;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.ITargetPlatformConstant;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.ServiceContainer;
@@ -103,7 +104,7 @@ public class TargetPlatformUtil {
 
 		List<String> serviceBundle = map.get(serviceName);
 
-		if ((serviceBundle != null) && !serviceBundle.isEmpty()) {
+		if (ListUtil.isNotEmpty(serviceBundle)) {
 			return new ServiceContainer(serviceBundle.get(0), serviceBundle.get(1), serviceBundle.get(2));
 		}
 
@@ -130,7 +131,7 @@ public class TargetPlatformUtil {
 
 		List<String> serviceBundle = map.get(serviceName);
 
-		if ((serviceBundle != null) && !serviceBundle.isEmpty()) {
+		if (ListUtil.isNotEmpty(serviceBundle)) {
 			return new ServiceContainer(serviceBundle.get(0), serviceBundle.get(1), serviceBundle.get(2));
 		}
 

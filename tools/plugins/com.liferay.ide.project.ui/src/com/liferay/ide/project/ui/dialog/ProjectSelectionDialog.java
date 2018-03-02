@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.ui.dialog;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.ui.LiferayUIPlugin;
 
@@ -126,7 +127,7 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog {
 		super.create();
 		Object[] checkedElements = fTableViewer.getCheckedElements();
 
-		if ( (checkedElements == null) || (checkedElements.length == 0)) {
+		if (ListUtil.isEmpty(checkedElements)) {
 			getOkButton().setEnabled(false);
 		}
 	}

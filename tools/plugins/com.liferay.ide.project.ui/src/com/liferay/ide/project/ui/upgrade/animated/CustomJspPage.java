@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.upgrade.animated;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.ui.dialog.CustomProjectSelectionDialog;
 import com.liferay.ide.server.util.ServerUtil;
@@ -626,7 +627,7 @@ public class CustomJspPage extends Page {
 			}
 		}
 
-		if (!list.isEmpty()) {
+		if (ListUtil.isNotEmpty(list)) {
 			return list.toArray(new File[0]);
 		}
 		else {
@@ -746,7 +747,7 @@ public class CustomJspPage extends Page {
 			}
 		}
 
-		if (!list.isEmpty()) {
+		if (ListUtil.isNotEmpty(list)) {
 			return list.toArray(new File[0]);
 		}
 		else {

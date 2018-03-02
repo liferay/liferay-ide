@@ -18,6 +18,7 @@ import com.liferay.ide.core.model.AbstractEditingModel;
 import com.liferay.ide.core.model.IModelChangedEvent;
 import com.liferay.ide.core.model.ModelChangedEvent;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 
 import java.io.InputStream;
@@ -271,7 +272,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 			}
 		}
 
-		if (updatedValues.isEmpty()) {
+		if (ListUtil.isNotEmpty(updatedValues)) {
 			pluginPackageProperties.setProperty(propertyName, StringPool.EMPTY);
 
 			for (String updatedValue : updatedValues) {

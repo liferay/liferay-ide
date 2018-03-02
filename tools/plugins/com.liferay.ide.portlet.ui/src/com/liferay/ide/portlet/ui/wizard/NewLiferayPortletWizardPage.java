@@ -14,6 +14,7 @@
 
 package com.liferay.ide.portlet.ui.wizard;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
@@ -305,7 +306,7 @@ public class NewLiferayPortletWizardPage
 		return new ISelectionStatusValidator() {
 
 			public IStatus validate(Object[] selection) {
-				if ((selection != null) && (selection.length > 0) && (selection[0] != null) &&
+				if (ListUtil.isNotEmpty(selection) && (selection[0] != null) &&
 					 !(selection[0] instanceof IProject) && !(selection[0] instanceof IFolder)) {
 
 					return Status.OK_STATUS;

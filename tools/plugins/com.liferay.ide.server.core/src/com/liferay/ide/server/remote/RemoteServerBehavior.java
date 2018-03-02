@@ -21,6 +21,7 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.remote.APIException;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.LiferayPublishHelper;
@@ -722,7 +723,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
             public Object getAdapter( Class adapter )
             {
                 if( String.class.equals( adapter ) )
-                    return "user"; //$NON-NLS-1$
+                    return "user";
                 return null;
             }
         };
@@ -847,7 +848,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     {
         boolean retval = false;
 
-        if( !CoreUtil.isNullOrEmpty( deltas ) )
+        if( ListUtil.isNotEmpty(deltas) )
         {
             for( IModuleResourceDelta delta : deltas )
             {
@@ -962,7 +963,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         // check modules
         IModule[] modules = getServer().getModules();
 
-        if( !CoreUtil.isNullOrEmpty( modules ) )
+        if( ListUtil.isNotEmpty(modules) )
         {
             List<String> plugins = getServerManagerConnection().getLiferayPlugins();
 

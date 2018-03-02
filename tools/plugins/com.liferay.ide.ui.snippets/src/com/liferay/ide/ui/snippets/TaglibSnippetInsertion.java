@@ -14,6 +14,8 @@
 
 package com.liferay.ide.ui.snippets;
 
+import com.liferay.ide.core.util.ListUtil;
+
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wst.common.snippets.internal.util.StringUtils;
 
@@ -34,7 +36,7 @@ public class TaglibSnippetInsertion extends AbstractSnippetInsertion {
 	protected String getResolvedString(Shell host) {
 		String insertString = null;
 
-		if (fItem.getVariables().length > 0) {
+		if (ListUtil.isNotEmpty(fItem.getVariables())) {
 			insertString = TaglibVariableItemHelper.getInsertString(host, fEditorPart, fItem);
 		}
 		else {

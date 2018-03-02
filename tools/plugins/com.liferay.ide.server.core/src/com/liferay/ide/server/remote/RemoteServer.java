@@ -16,6 +16,7 @@
 package com.liferay.ide.server.remote;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.server.util.SocketUtil;
@@ -104,7 +105,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
     public IStatus canModifyModules( IModule[] add, IModule[] remove )
     {
         // check to see if we can add this to remote server
-        if( !( CoreUtil.isNullOrEmpty( add ) ) )
+        if( ListUtil.isNotEmpty(add) )
         {
             for( IModule addModule : add )
             {
@@ -130,7 +131,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
             }
 
         }
-        else if( !( CoreUtil.isNullOrEmpty( remove ) ) )
+        else if( ListUtil.isNotEmpty(remove) )
         {
             for( IModule removeModule : remove )
             {
@@ -168,7 +169,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
     @Override
     public IModule[] getChildModules( IModule[] module )
     {
-        if( CoreUtil.isNullOrEmpty( module ) )
+        if( ListUtil.isEmpty(module) )
         {
             return null;
         }
@@ -186,7 +187,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
                 {
                     IModule[] webModules = webModule.getModules();
 
-                    if( !( CoreUtil.isNullOrEmpty( webModules ) ) )
+                    if( ListUtil.isNotEmpty(webModules) )
                     {
                         for( IModule childWebModule : webModules )
                         {
@@ -318,7 +319,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
     {
         List<String> moduleIds = (List<String>) this.getAttribute( getModuleListAttr(), (List<String>) null );
 
-        if( !( CoreUtil.isNullOrEmpty( add ) ) )
+        if( ListUtil.isNotEmpty(add) )
         {
             if( moduleIds == null )
             {
@@ -334,7 +335,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
             }
         }
 
-        if( !( CoreUtil.isNullOrEmpty( remove ) ) && !( CoreUtil.isNullOrEmpty( moduleIds ) ) )
+        if( ListUtil.isNotEmpty(remove) && ListUtil.isNotEmpty(moduleIds) )
         {
             for( IModule removeModule : remove )
             {

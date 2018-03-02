@@ -16,6 +16,7 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.descriptor.IDescriptorOperation;
 import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 import com.liferay.ide.project.core.modules.IComponentTemplate;
@@ -176,7 +177,7 @@ public class ProjectCore extends Plugin {
 		IConfigurationElement[] elements =
 			Platform.getExtensionRegistry().getConfigurationElementsFor(IPortletFramework.EXTENSION_ID);
 
-		if (CoreUtil.isNullOrEmpty(elements)) {
+		if (ListUtil.isEmpty(elements)) {
 			return _portletFrameworks;
 		}
 

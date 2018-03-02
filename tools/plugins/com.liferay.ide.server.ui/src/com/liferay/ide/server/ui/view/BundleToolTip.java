@@ -16,6 +16,7 @@
 package com.liferay.ide.server.ui.view;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.ui.LiferayServerUI;
 
@@ -51,7 +52,7 @@ public class BundleToolTip implements IServerToolTip
                     IMarker[] markers =
                         project.findMarkers( LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE, false, 0 );
 
-                    if( markers.length > 0 )
+                    if( ListUtil.isNotEmpty(markers) )
                     {
                         sb.append( "Error \"Could not create output jar\" happened on " + project.getName() + "\n" );
                     }

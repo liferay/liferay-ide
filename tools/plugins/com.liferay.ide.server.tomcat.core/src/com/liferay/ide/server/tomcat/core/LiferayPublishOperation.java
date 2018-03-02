@@ -12,6 +12,7 @@ package com.liferay.ide.server.tomcat.core;
 
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.util.ComponentUtil;
 import com.liferay.ide.server.util.ServerUtil;
@@ -375,8 +376,10 @@ public class LiferayPublishOperation extends PublishOperation {
 		if (!moving && kind != IServer.PUBLISH_CLEAN && kind != IServer.PUBLISH_FULL) {
 			// avoid changes if no changes to module since last publish
 			IModuleResourceDelta[] delta = server.getPublishedResourceDelta(module);
-			if (delta == null || delta.length == 0)
+
+			if (ListUtil.isEmpty(delta)) {
 				return;
+			}
 		}
 
 		// make directory if it doesn't exist
@@ -429,7 +432,7 @@ public class LiferayPublishOperation extends PublishOperation {
 		if (!moving && kind != IServer.PUBLISH_CLEAN && kind != IServer.PUBLISH_FULL) {
 			// avoid changes if no changes to module since last publish
 			IModuleResourceDelta[] delta = server.getPublishedResourceDelta(module);
-			if (delta == null || delta.length == 0)
+			if (ListUtil.isEmpty(delta))
 				return;
 		}
 
@@ -466,12 +469,15 @@ public class LiferayPublishOperation extends PublishOperation {
 	}
 
 	protected static void addArrayToList(List list, IStatus[] a) {
-		if (list == null || a == null || a.length == 0)
+		if (list == null || ListUtil.isEmpty(a)) {
 			return;
+		}
 
 		int size = a.length;
-		for (int i = 0; i < size; i++)
+
+		for (int i = 0; i < size; i++) {
 			list.add(a[i]);
+		}
 	}
 
     private static class Msgs extends NLS

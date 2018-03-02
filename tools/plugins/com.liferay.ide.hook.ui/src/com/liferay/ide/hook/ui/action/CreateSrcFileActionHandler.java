@@ -15,6 +15,7 @@
 package com.liferay.ide.hook.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.hook.ui.HookUI;
 
@@ -134,7 +135,7 @@ public class CreateSrcFileActionHandler extends PropertyEditorActionHandler {
 
 		List<IFolder> folders = CoreUtil.getSourceFolders(JavaCore.create(project));
 
-		if (!CoreUtil.isNullOrEmpty(folders)) {
+		if (ListUtil.isNotEmpty(folders)) {
 			return folders.get(0).getFullPath();
 		}
 

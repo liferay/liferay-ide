@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 
@@ -65,12 +66,11 @@ public class NewLiferayModuleProjectOpMethods {
 
 	@SuppressWarnings("unchecked")
 	public static boolean addProperties(File dest, List<String> properties) throws Exception {
-		if ((properties == null) || properties.isEmpty()) {
+		if (ListUtil.isEmpty(properties)) {
 			return false;
 		}
 
 		try {
-			@SuppressWarnings("deprecation")
 			ASTParser parser = ASTParser.newParser(AST.JLS8);
 
 			String readContents = FileUtil.readContents(dest, true);
@@ -127,7 +127,7 @@ public class NewLiferayModuleProjectOpMethods {
 
 												stringLiteral.setLiteralValue(properties.get(i));
 
-												if (!expressions.isEmpty()) {
+												if (ListUtil.isNotEmpty(expressions)) {
 													propertyNode = expressions.get(expressions.size() - 1);
 
 													lrw.insertAfter(stringLiteral, propertyNode, null);
@@ -198,7 +198,6 @@ public class NewLiferayModuleProjectOpMethods {
 
 	public static boolean checkComponentAnnotation(File dest) throws Exception {
 		try {
-			@SuppressWarnings("deprecation")
 			ASTParser parser = ASTParser.newParser(AST.JLS8);
 
 			String readContents = FileUtil.readContents(dest, true);
@@ -299,10 +298,10 @@ public class NewLiferayModuleProjectOpMethods {
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
 		if (locationStatus.isOK() && FileUtil.hasChildren(parentProjectDir)) {
-			List<String> groupId = provider.getData("parentGroupId", String.class, parentProjectDir);
+			List<String> groupIds = provider.getData("parentGroupId", String.class, parentProjectDir);
 
-			if (!CoreUtil.isNullOrEmpty(groupId)) {
-				retval = groupId.get(0);
+			if (ListUtil.isNotEmpty(groupIds)) {
+				retval = groupIds.get(0);
 			}
 		}
 
@@ -319,10 +318,10 @@ public class NewLiferayModuleProjectOpMethods {
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
 		if (locationStatus.isOK() && FileUtil.hasChildren(parentProjectDir)) {
-			List<String> version = provider.getData("parentVersion", String.class, parentProjectDir);
+			List<String> versions = provider.getData("parentVersion", String.class, parentProjectDir);
 
-			if (!CoreUtil.isNullOrEmpty(version)) {
-				retval = version.get(0);
+			if (ListUtil.isNotEmpty(versions)) {
+				retval = versions.get(0);
 			}
 		}
 
@@ -332,7 +331,7 @@ public class NewLiferayModuleProjectOpMethods {
 	private static void _getClassFile(File packageRoot, List<IPath> classFiles) {
 		File[] children = packageRoot.listFiles();
 
-		if ((children != null) && (children.length > 0)) {
+		if (ListUtil.isNotEmpty(children)) {
 			for (File child : children) {
 				if (child.isDirectory()) {
 					_getClassFile(child, classFiles);

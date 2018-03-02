@@ -17,7 +17,7 @@ package com.liferay.ide.hook.core.model.internal;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -94,7 +94,7 @@ public class CustomJspPossibleValuesService extends PossibleValuesService {
 	}
 
 	private void _findJSPFiles(File[] files, List<File> fileValues) {
-		if (!CoreUtil.isNullOrEmpty(files)) {
+		if (ListUtil.isNotEmpty(files)) {
 			for (File file : files) {
 				if (file.isDirectory()) {
 					_findJSPFiles(file.listFiles(_jspfilter), fileValues);

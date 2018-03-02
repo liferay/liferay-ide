@@ -14,6 +14,7 @@
 
 package com.liferay.ide.theme.core.util;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.theme.core.ThemeCore;
 
 import java.io.File;
@@ -104,7 +105,7 @@ public class BuildHelper {
 					monitor.subTask(NLS.bind(Messages.deletingTask, new String[] {current.getAbsolutePath()}));
 					IStatus[] stat = deleteDirectory(current, ProgressUtil.getSubMonitorFor(monitor, 10));
 
-					if ((stat != null) && (stat.length > 0)) {
+					if (ListUtil.isNotEmpty(stat)) {
 						deleteCurrent = false;
 						_addArrayToList(status, stat);
 					}
@@ -581,7 +582,7 @@ public class BuildHelper {
 						}
 					}
 
-					if (!ignoreChildPaths.isEmpty()) {
+					if (ListUtil.isNotEmpty(ignoreChildPaths)) {
 						ignoreChildren = ignoreChildPaths.toArray(new Path[ignoreChildPaths.size()]);
 					}
 				}
@@ -643,7 +644,7 @@ public class BuildHelper {
 	 * @return a possibly-empty array of error and warning status
 	 */
 	public IStatus[] publishToPath(IResource[] resources, IPath path, IProgressMonitor monitor) {
-		if ((resources == null) || (resources.length == 0)) {
+		if (ListUtil.isEmpty(resources)) {
 
 			// should also check if resources consists of all empty directories
 
@@ -685,7 +686,7 @@ public class BuildHelper {
 	}
 
 	private static void _addArrayToList(List<IStatus> list, IStatus[] a) {
-		if ((list == null) || (a == null) || (a.length == 0)) {
+		if ((list == null) || ListUtil.isEmpty(a)) {
 			return;
 		}
 

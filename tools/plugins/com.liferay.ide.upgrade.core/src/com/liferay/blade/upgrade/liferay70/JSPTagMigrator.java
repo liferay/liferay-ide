@@ -19,6 +19,7 @@ import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.JSPFile;
 import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.SearchResult;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
 import java.io.InputStream;
@@ -103,7 +104,7 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 
 		IFile jspFile = getJSPFile(file);
 
-		if (!autoCorrectTagOffsets.isEmpty()) {
+		if (ListUtil.isNotEmpty(autoCorrectTagOffsets)) {
 			IDOMModel domModel = null;
 
 			try {
@@ -138,7 +139,7 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 
 						corrected++;
 					}
-					else if (_newTagNames.length > 0) {
+					else if (ListUtil.isNotEmpty(_newTagNames)) {
 						String tagName = element.getTagName();
 						NamedNodeMap attributes = element.getAttributes();
 						NodeList childNodes = element.getChildNodes();
@@ -223,22 +224,22 @@ public abstract class JSPTagMigrator extends AbstractFileMigrator<JSPFile> imple
 		for (String tagName : _tagNames) {
 			List<SearchResult> jspTagResults = new ArrayList<>();
 
-			if ((_tagNames.length > 0) && (_attrNames.length == 0) && (_attrValues.length == 0)) {
+			if (ListUtil.isNotEmpty(_tagNames) && (_attrNames.length == 0) && (_attrValues.length == 0)) {
 				jspTagResults = jspFileChecker.findJSPTags(tagName);
 			}
-			else if ((_tagNames.length > 0) && (_attrNames.length > 0) && (_attrValues.length == 0)) {
+			else if (ListUtil.isNotEmpty(_tagNames) && ListUtil.isNotEmpty(_attrNames) && (_attrValues.length == 0)) {
 				jspTagResults = jspFileChecker.findJSPTags(tagName, _attrNames);
 			}
-			else if ((_tagNames.length > 0) && (_attrNames.length > 0) && (_attrValues.length > 0)) {
+			else if (ListUtil.isNotEmpty(_tagNames) && ListUtil.isNotEmpty(_attrNames) && ListUtil.isNotEmpty(_attrValues)) {
 				jspTagResults = jspFileChecker.findJSPTags(tagName, _attrNames, _attrValues);
 			}
 
-			if (!jspTagResults.isEmpty()) {
+			if (ListUtil.isNotEmpty(jspTagResults)) {
 				searchResults.addAll(jspTagResults);
 			}
 		}
 
-		if ((_newAttrNames.length > 0) || (_newAttrValues.length > 0) || (_newTagNames.length > 0)) {
+		if (ListUtil.isNotEmpty(_newAttrNames) || ListUtil.isNotEmpty(_newAttrValues) || ListUtil.isNotEmpty(_newTagNames)) {
 			for (SearchResult searchResult : searchResults) {
 				Class<? extends JSPTagMigrator> class1 = getClass();
 

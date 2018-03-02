@@ -19,6 +19,7 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
@@ -137,10 +138,10 @@ public class NewLiferayPluginProjectOpMethods {
 
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
-		if (locationStatus.isOK() && FileUtil.exists(parentProjectDir) && (parentProjectDir.list().length > 0)) {
+		if (locationStatus.isOK() && FileUtil.hasChildren(parentProjectDir)) {
 			List<String> groupId = provider.getData("parentGroupId", String.class, parentProjectDir);
 
-			if (!groupId.isEmpty()) {
+			if (ListUtil.isNotEmpty(groupId)) {
 				retval = groupId.get(0);
 			}
 		}
@@ -157,10 +158,10 @@ public class NewLiferayPluginProjectOpMethods {
 
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
-		if (locationStatus.isOK() && FileUtil.exists(parentProjectDir) && (parentProjectDir.list().length > 0)) {
+		if (locationStatus.isOK() && FileUtil.hasChildren(parentProjectDir)) {
 			List<String> version = provider.getData("parentVersion", String.class, parentProjectDir);
 
-			if (!version.isEmpty()) {
+			if (ListUtil.isNotEmpty(version)) {
 				retval = version.get(0);
 			}
 		}
@@ -214,7 +215,7 @@ public class NewLiferayPluginProjectOpMethods {
 		if (!CoreUtil.isNullOrEmpty(activeProfilesValue)) {
 			String[] vals = activeProfilesValue.split(",");
 
-			if (!CoreUtil.isNullOrEmpty(vals)) {
+			if (ListUtil.isNotEmpty(vals)) {
 				for (String val : vals) {
 					if (!possibleProfileIds.contains(val) && !val.contains(StringPool.SPACE)) {
 						possibleProfileIds.add(val);
@@ -223,7 +224,7 @@ public class NewLiferayPluginProjectOpMethods {
 			}
 		}
 
-		if (!CoreUtil.isNullOrEmpty(systemProfileIds)) {
+		if (ListUtil.isNotEmpty(systemProfileIds)) {
 			for (Object systemProfileId : systemProfileIds) {
 				if (systemProfileId != null) {
 					String val = systemProfileId.toString();
@@ -334,7 +335,7 @@ public class NewLiferayPluginProjectOpMethods {
 	public static void updateActiveProfilesValue(NewLiferayPluginProjectOp op, ElementList<Profile> profiles) {
 		StringBuilder sb = new StringBuilder();
 
-		if (!profiles.isEmpty()) {
+		if (ListUtil.isNotEmpty(profiles)) {
 			for (Profile profile : profiles) {
 				if (!profile.getId().empty()) {
 					sb.append(profile.getId().content());

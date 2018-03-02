@@ -17,6 +17,7 @@ package com.liferay.ide.portlet.ui.wizard;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.portlet.core.operation.NewEntryClassOperation;
@@ -155,7 +156,7 @@ public class AddPortletOperation
 	protected void createEmptyFileInDefaultSourceFolder(String filePath) throws CoreException {
 		List<IFolder> sourceFolders = CoreUtil.getSourceFolders(JavaCore.create(getTargetProject()));
 
-		if (!sourceFolders.isEmpty()) {
+		if (ListUtil.isNotEmpty(sourceFolders)) {
 			IFile projectFile = sourceFolders.get(0).getFile(filePath);
 
 			if (!projectFile.exists()) {

@@ -19,6 +19,7 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.ValidationUtil;
@@ -238,7 +239,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 			}
 		}
 
-		if (tldFilesToCopy.isEmpty()) {
+		if (ListUtil.isEmpty(tldFilesToCopy)) {
 			return;
 		}
 
@@ -372,7 +373,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 		if (requiredDeploymenContexts != null) {
 			String[] contexts = requiredDeploymenContexts.split(StringPool.COMMA);
 
-			if (!CoreUtil.isNullOrEmpty(contexts)) {
+			if (ListUtil.isNotEmpty(contexts)) {
 				for (String context : contexts) {
 					IVirtualReference ref = processContext(rootComponent, context);
 

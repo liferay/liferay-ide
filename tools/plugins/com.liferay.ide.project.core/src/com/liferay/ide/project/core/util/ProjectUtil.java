@@ -21,6 +21,7 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFramework;
@@ -1558,7 +1559,7 @@ public class ProjectUtil {
 
 					IClasspathAttribute[] attrs = entry.getExtraAttributes();
 
-					if (!CoreUtil.isNullOrEmpty(attrs)) {
+					if (ListUtil.isNotEmpty(attrs)) {
 						for (IClasspathAttribute attr : attrs) {
 							IClasspathAttribute newAttr = null;
 

@@ -21,6 +21,7 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -621,7 +622,7 @@ public class ServerUtil
                             }
                         } );
 
-                        if( files != null && files.length > 0 )
+                        if( ListUtil.isNotEmpty(files) )
                         {
                             for( File file : files )
                             {
@@ -931,7 +932,7 @@ public class ServerUtil
         {
             IServer[] servers = ServerCore.getServers();
 
-            if( !CoreUtil.isNullOrEmpty( servers ) )
+            if( ListUtil.isNotEmpty(servers) )
             {
                 for( IServer server : servers )
                 {
