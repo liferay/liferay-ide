@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.server.core.portal;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
@@ -97,7 +97,7 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 
         final String[] bootpath = getBootpath( config );
 
-        if( ! CoreUtil.isNullOrEmpty( bootpath ) )
+        if( ListUtil.isNotEmpty(bootpath) )
         {
             runConfig.setBootClassPath( bootpath );
         }

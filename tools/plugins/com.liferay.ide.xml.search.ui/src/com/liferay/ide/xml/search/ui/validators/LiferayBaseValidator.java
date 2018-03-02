@@ -14,6 +14,7 @@
 
 package com.liferay.ide.xml.search.ui.validators;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
@@ -285,7 +286,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
 				if ((referenceTo != null) && (referenceTo.getType() == IXMLReferenceTo.ToType.JAVA) && (file != null)) {
 					IType[] superTypes = ((IXMLReferenceToJava)referenceTo).getExtends(node, file);
 
-					if ((superTypes != null) && (superTypes.length > 0)) {
+					if (ListUtil.isNotEmpty(superTypes)) {
 						StringBuilder sb = new StringBuilder();
 
 						for (IType type : superTypes) {

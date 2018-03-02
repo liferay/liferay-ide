@@ -14,8 +14,8 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
@@ -220,11 +220,11 @@ public class NewModuleFragmentOpMethods {
 
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
-		if (locationStatus.isOK() && FileUtil.exists(parentProjectDir) && (parentProjectDir.list().length > 0)) {
-			List<String> groupId = provider.getData("parentGroupId", String.class, parentProjectDir);
+		if (locationStatus.isOK() && FileUtil.hasChildren(parentProjectDir)) {
+			List<String> groupIds = provider.getData("parentGroupId", String.class, parentProjectDir);
 
-			if (!CoreUtil.isNullOrEmpty(groupId)) {
-				retval = groupId.get(0);
+			if (ListUtil.isNotEmpty(groupIds)) {
+				retval = groupIds.get(0);
 			}
 		}
 
@@ -240,11 +240,11 @@ public class NewModuleFragmentOpMethods {
 
 		IStatus locationStatus = provider.validateProjectLocation(projectName, path);
 
-		if (locationStatus.isOK() && FileUtil.exists(parentProjectDir) && (parentProjectDir.list().length > 0)) {
-			List<String> version = provider.getData("parentVersion", String.class, parentProjectDir);
+		if (locationStatus.isOK() && FileUtil.hasChildren(parentProjectDir)) {
+			List<String> versions = provider.getData("parentVersion", String.class, parentProjectDir);
 
-			if (!CoreUtil.isNullOrEmpty(version)) {
-				retval = version.get(0);
+			if (ListUtil.isNotEmpty(versions)) {
+				retval = versions.get(0);
 			}
 		}
 

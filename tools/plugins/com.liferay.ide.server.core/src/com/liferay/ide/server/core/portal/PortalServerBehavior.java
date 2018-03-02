@@ -21,6 +21,7 @@ import com.liferay.ide.core.LiferayRuntimeClasspathEntry;
 import com.liferay.ide.core.properties.PortalPropertiesConfiguration;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
@@ -357,7 +358,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     {
         String retval = null;
 
-        if( CoreUtil.isNullOrEmpty( newArgs ) && CoreUtil.isNullOrEmpty( excludeArgs ) )
+        if( ListUtil.isEmpty(newArgs) && ListUtil.isEmpty(excludeArgs) )
         {
             retval = orgArgsString;
         }
@@ -414,7 +415,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
             }
 
             // remove excluded arguments
-            if( excludeArgs != null && excludeArgs.length > 0 )
+            if( ListUtil.isNotEmpty(excludeArgs) )
             {
                 for( int i = 0; i < excludeArgs.length; i++ )
                 {

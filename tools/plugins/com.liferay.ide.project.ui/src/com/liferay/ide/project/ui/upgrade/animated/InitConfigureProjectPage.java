@@ -98,6 +98,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.IOUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.IWorkspaceProjectBuilder;
 import com.liferay.ide.project.core.ProjectCore;
@@ -559,7 +560,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 		List<IFile> searchFiles = new SearchFilesVisitor().searchFiles(project, "service.xml");
 
-		if (!searchFiles.isEmpty()) {
+		if (ListUtil.isNotEmpty(searchFiles)) {
 			dataModel.setHasServiceBuilder(true);
 		}
 
@@ -1002,7 +1003,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 		IServer[] servers = ServerCore.getServers();
 		List<String> serverNames = new ArrayList<>();
 
-		if (!CoreUtil.isNullOrEmpty(servers)) {
+		if (ListUtil.isNotEmpty(servers)) {
 			for (IServer server : servers) {
 				if (LiferayServerCore.newPortalBundle(server.getRuntime().getLocation()) != null) {
 					serverNames.add(server.getName());

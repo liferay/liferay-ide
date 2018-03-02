@@ -16,6 +16,7 @@ package com.liferay.ide.portlet.ui.editor.internal;
 
 import com.liferay.ide.core.model.internal.GenericResourceBundlePathService;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.util.PortletUtil;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
@@ -98,7 +99,7 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
 	protected void createFiles(
 		Presentation context, IProject project, String packageName, List<IFile> rbFiles, StringBuilder rbFileBuffer) {
 
-		if (!rbFiles.isEmpty()) {
+		if (ListUtil.isNotEmpty(rbFiles)) {
 			int workUnit = rbFiles.size() + 2;
 
 			IRunnableWithProgress rbCreationProc = new IRunnableWithProgress() {

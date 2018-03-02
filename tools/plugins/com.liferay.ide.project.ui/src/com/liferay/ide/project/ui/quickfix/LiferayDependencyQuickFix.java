@@ -16,6 +16,7 @@ package com.liferay.ide.project.ui.quickfix;
 
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.ServiceContainer;
@@ -55,7 +56,7 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 	public IJavaCompletionProposal[] getCorrections(IInvocationContext context, IProblemLocation[] locations)
 		throws CoreException {
 
-		if ((locations == null) || (locations.length == 0)) {
+		if (ListUtil.isEmpty(locations)) {
 			return null;
 		}
 

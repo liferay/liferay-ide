@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.ui.wizard;
 
+import com.liferay.ide.core.util.ListUtil;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -701,7 +703,7 @@ public class StringArrayTableWizardSection extends Composite {
 		public String getText(Object element) {
 			String[] array = (String[])element;
 
-			if (array.length > 0) {
+			if (ListUtil.isNotEmpty(array)) {
 				return array[0];
 			}
 			else {

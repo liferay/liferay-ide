@@ -18,6 +18,7 @@ import com.liferay.blade.api.CUCache;
 import com.liferay.blade.api.JSPFile;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,7 +83,7 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 
 	@Override
 	public List<SearchResult> findJSPTags(String tagName, String[] attrNames) {
-		if ((tagName == null) || tagName.isEmpty() || (attrNames == null) || (attrNames.length == 0)) {
+		if ((tagName == null) || tagName.isEmpty() || ListUtil.isEmpty(attrNames)) {
 			throw new IllegalArgumentException("tagName can not be null or empty");
 		}
 
@@ -115,9 +116,7 @@ public class JSPFileWTP extends JavaFileJDT implements JSPFile {
 
 	@Override
 	public List<SearchResult> findJSPTags(String tagName, String[] attrNames, String[] attrValues) {
-		if ((tagName == null) || tagName.isEmpty() || (attrNames == null) || (attrNames.length == 0) ||
-			(attrValues == null) || (attrValues.length == 0)) {
-
+		if ((tagName == null) || tagName.isEmpty() || ListUtil.isEmpty(attrNames) || ListUtil.isEmpty(attrValues)) {
 			throw new IllegalArgumentException("tagName can not be null or empty");
 		}
 

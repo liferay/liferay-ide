@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.server.ui.navigator;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.remote.IRemoteServer;
@@ -90,7 +90,7 @@ public class PropertiesContentProvider extends AbstractNavigatorContentProvider
 
             PropertiesFile[] propertiesFiles = this.propertiesFilesMap.get( server.getId() );
 
-            if( CoreUtil.isNullOrEmpty( propertiesFiles ) )
+            if( ListUtil.isEmpty(propertiesFiles) )
             {
                 final ILiferayRuntime runtime = ServerUtil.getLiferayRuntime( server );
 
@@ -110,7 +110,7 @@ public class PropertiesContentProvider extends AbstractNavigatorContentProvider
                 }
             }
 
-            if( ! CoreUtil.isNullOrEmpty( propertiesFiles ) )
+            if( ListUtil.isNotEmpty(propertiesFiles) )
             {
                 for( PropertiesFile propertiesFile : propertiesFiles )
                 {
@@ -135,7 +135,7 @@ public class PropertiesContentProvider extends AbstractNavigatorContentProvider
             {
                 File[] files = getExtPropertiesFiles( liferayRuntime );
 
-                return files.length > 0;
+                return ListUtil.isNotEmpty(files);
             }
         }
 

@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -240,7 +241,7 @@ public class PluginPropertiesConfigurationLayout extends PropertiesConfiguration
 		}
 
 		private String _makeSingleLineValue(List values) {
-			if (!values.isEmpty()) {
+			if (ListUtil.isNotEmpty(values)) {
 				Iterator it = values.iterator();
 
 				String lastValue = _escapeValue(it.next());

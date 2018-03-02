@@ -17,6 +17,7 @@ package com.liferay.ide.theme.core.facet;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.PluginsSDKBundleProject;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.PluginFacetInstall;
@@ -119,12 +120,12 @@ public class ThemePluginFacetInstall extends PluginFacetInstall {
 
 		IResource libRes = lrproject.findDocrootResource(new Path("WEB-INF/lib"));
 
-		if ((libRes != null) && libRes.exists()) {
+		if (FileUtil.exists(libRes)) {
 			IFolder libFolder = (IFolder)libRes;
 
 			IResource[] libFiles = libFolder.members(true);
 
-			if (CoreUtil.isNullOrEmpty(libFiles)) {
+			if (ListUtil.isEmpty(libFiles)) {
 				libRes.delete(true, monitor);
 			}
 		}

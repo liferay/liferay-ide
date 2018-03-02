@@ -16,6 +16,7 @@ package com.liferay.ide.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public abstract class BaseLiferayProject implements ILiferayProject {
 	public <T> T adapt(Class<T> adapterType) {
 		ILiferayProjectAdapter[] adapters = LiferayCore.getProjectAdapters();
 
-		if (CoreUtil.isNullOrEmpty(adapters)) {
+		if (ListUtil.isEmpty(adapters)) {
 			return null;
 		}
 
@@ -61,7 +62,7 @@ public abstract class BaseLiferayProject implements ILiferayProject {
 	public IFolder getSourceFolder(String classification) {
 		List<IFolder> folders = CoreUtil.getSourceFolders(JavaCore.create(_project));
 
-		if (CoreUtil.isNullOrEmpty(folders)) {
+		if (ListUtil.isEmpty(folders)) {
 			return null;
 		}
 

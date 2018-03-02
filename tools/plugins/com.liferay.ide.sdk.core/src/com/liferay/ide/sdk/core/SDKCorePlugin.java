@@ -15,8 +15,8 @@
 package com.liferay.ide.sdk.core;
 
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
 import java.io.InputStream;
@@ -156,7 +156,7 @@ public class SDKCorePlugin extends Plugin {
 						if (existingMemento != null) {
 							IMemento[] children = existingMemento.getChildren("sdk");
 
-							if (!CoreUtil.isNullOrEmpty(children)) {
+							if (ListUtil.isNotEmpty(children)) {
 								for (IMemento child : children) {
 									IPath loc = Path.fromPortableString(child.getString("location"));
 

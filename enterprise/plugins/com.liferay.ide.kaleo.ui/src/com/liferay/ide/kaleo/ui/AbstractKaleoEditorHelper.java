@@ -18,6 +18,7 @@ import static com.liferay.ide.core.util.CoreUtil.empty;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.kaleo.core.KaleoCore;
 import com.liferay.ide.kaleo.core.model.Node;
 import com.liferay.ide.kaleo.ui.editor.HiddenFileEditorInput;
@@ -273,7 +274,7 @@ public abstract class AbstractKaleoEditorHelper implements IKaleoEditorHelper {
 		if ((project != null) && (tempPath != null)) {
 			IFolder[] folders = CoreUtil.getSourceFolders(JavaCore.create(project)).toArray(new IFolder[0]);
 
-			if (!empty(folders)) {
+			if (ListUtil.isNotEmpty(folders)) {
 				folder = folders[0];
 			}
 			else {

@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.tomcat.core;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,7 +71,7 @@ public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspat
 
                         newExtraAttrs.add( javadocAttr );
 
-                        if( !CoreUtil.isNullOrEmpty( extraAttrs ) )
+                        if( ListUtil.isNotEmpty(extraAttrs) )
                         {
                             for( IClasspathAttribute attr : extraAttrs )
                             {

@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.editor;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ public class LiferayPropertiesContentAssistProcessor implements IContentAssistPr
 	public LiferayPropertiesContentAssistProcessor(PropKey[] propKeys, String contentType) {
 		_propKeys = propKeys;
 
-		if (CoreUtil.isNullOrEmpty(propKeys)) {
+		if (ListUtil.isEmpty(propKeys)) {
 			throw new IllegalArgumentException("propKeys can not be empty");
 		}
 	}

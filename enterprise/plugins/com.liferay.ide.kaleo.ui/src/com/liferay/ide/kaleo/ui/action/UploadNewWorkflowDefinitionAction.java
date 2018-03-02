@@ -16,6 +16,7 @@ package com.liferay.ide.kaleo.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.kaleo.core.IKaleoConnection;
 import com.liferay.ide.kaleo.core.KaleoCore;
 import com.liferay.ide.kaleo.ui.KaleoUI;
@@ -108,7 +109,7 @@ public class UploadNewWorkflowDefinitionAction extends AbstractWorkflowDefinitio
 		return new ISelectionStatusValidator() {
 
 			public IStatus validate(Object[] selection) {
-				if ((selection != null) && (selection.length > 0) && (selection[0] != null) &&
+				if (ListUtil.isNotEmpty(selection) && (selection[0] != null) &&
 					 !(selection[0] instanceof IProject) && !(selection[0] instanceof IFolder)) {
 
 					return Status.OK_STATUS;

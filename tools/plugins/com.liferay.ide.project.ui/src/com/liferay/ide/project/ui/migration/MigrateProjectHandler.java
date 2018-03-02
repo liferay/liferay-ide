@@ -20,6 +20,7 @@ import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.ProgressMonitor;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.FileProblemsUtil;
@@ -255,7 +256,7 @@ public class MigrateProjectHandler extends AbstractHandler {
 							}
 						}
 
-						if (!allProblems.isEmpty()) {
+						if (ListUtil.isNotEmpty(allProblems)) {
 							_addMarkers(allProblems);
 
 							MigrationProblems migrationProblems = new MigrationProblems();
@@ -332,8 +333,9 @@ public class MigrateProjectHandler extends AbstractHandler {
 						}
 					}
 
-					if (!migrationProblemsList.isEmpty()) {
+					if (ListUtil.isNotEmpty(migrationProblemsList)) {
 						container.setProblemsArray(migrationProblemsList.toArray(new MigrationProblems[0]));
+
 						UpgradeAssistantSettingsUtil.setObjectToStore(MigrationProblemsContainer.class, container);
 					}
 					else {
@@ -423,27 +425,27 @@ public class MigrateProjectHandler extends AbstractHandler {
 	}
 
 	private void _addMarkers(List<Problem> problems) {
-		final IWorkspaceRoot ws = ResourcesPlugin.getWorkspace().getRoot();
+		IWorkspaceRoot ws = CoreUtil.getWorkspaceRoot();
 
 		for (Problem problem : problems) {
 			IResource workspaceResource = null;
 
-			final File file = problem.file;
+			File file = problem.file;
 
-			final IResource[] containers = ws.findContainersForLocationURI(file.toURI());
+			IResource[] containers = ws.findContainersForLocationURI(file.toURI());
 
-			if ((containers != null) && (containers.length > 0)) {
+			if (ListUtil.isNotEmpty(containers)) {
 
 				// prefer project containers
 
 				for (IResource container : containers) {
-					if (container.exists()) {
+					if (FileUtil.exists(container)) {
 						if (container.getType() == IResource.PROJECT) {
 							workspaceResource = container;
 							break;
 						}
 						else {
-							final IProject project = container.getProject();
+							IProject project = container.getProject();
 
 							if (CoreUtil.isLiferayProject(project)) {
 								workspaceResource = container;

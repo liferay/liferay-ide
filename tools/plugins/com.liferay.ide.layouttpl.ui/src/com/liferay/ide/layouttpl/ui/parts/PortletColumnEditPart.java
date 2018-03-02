@@ -14,6 +14,7 @@
 
 package com.liferay.ide.layouttpl.ui.parts;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
 import com.liferay.ide.layouttpl.ui.draw2d.ColumnFigure;
 
@@ -72,7 +73,7 @@ public class PortletColumnEditPart extends PortletRowLayoutEditPart {
 	protected IFigure createFigure() {
 		IFigure f;
 
-		if (getModelChildren().isEmpty()) {
+		if (ListUtil.isEmpty(getModelChildren())) {
 			f = createFigureForModel();
 
 			f.setOpaque(true);

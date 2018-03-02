@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.ui.handlers;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.wizard.UpgradeLiferayProjectsWizard;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -66,7 +67,7 @@ public class UpgradeLiferayProjectsHandler extends AbstractHandler {
 
 	@Override
 	public boolean isEnabled() {
-		if (ProjectUtil.getAllPluginsSDKProjects().length > 0) {
+		if (ListUtil.isNotEmpty(ProjectUtil.getAllPluginsSDKProjects())) {
 			return true;
 		}
 

@@ -15,6 +15,7 @@
 package com.liferay.ide.hook.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -146,7 +147,7 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 			}
 		}
 
-		if (items.isEmpty()) {
+		if (ListUtil.isEmpty(items)) {
 			return;
 		}
 
@@ -194,7 +195,7 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 
 		}
 
-		if ((projectName == null) && (names.length > 0)) {
+		if ((projectName == null) && ListUtil.isNotEmpty(names)) {
 			projectName = names[0];
 		}
 

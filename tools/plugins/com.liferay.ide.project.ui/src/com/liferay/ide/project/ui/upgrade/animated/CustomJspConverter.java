@@ -16,6 +16,7 @@ package com.liferay.ide.project.ui.upgrade.animated;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
@@ -113,7 +114,7 @@ public class CustomJspConverter {
 
 		Properties resultProp = PropertiesUtil.loadProperties(resultFile);
 
-		if ((resultProp == null) || resultProp.keySet().isEmpty()) {
+		if ((resultProp == null) || ListUtil.isEmpty(resultProp.keySet())) {
 			return null;
 		}
 
@@ -237,7 +238,7 @@ public class CustomJspConverter {
 
 					String[] projectPaths = getConvertResult(resultPrefix);
 
-					if ((projectPaths != null) && (projectPaths.length > 0)) {
+					if (ListUtil.isNotEmpty(projectPaths)) {
 						for (String path : projectPaths) {
 							ImportLiferayModuleProjectOp importOp = ImportLiferayModuleProjectOp.TYPE.instantiate();
 

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
@@ -89,7 +90,7 @@ public class LiferayVersionDefaultValueService extends DefaultValueService {
 					}
 
 					if (data == null) {
-						if (filteredVals.isEmpty()) {
+						if (ListUtil.isEmpty(filteredVals)) {
 							data = _checkForSnapshots(_possibleValues.toArray(new String[0]));
 						}
 						else {

@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
 import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
 import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
@@ -107,7 +108,7 @@ public class BaseProjectWizard<T extends Element> extends SapphireWizard<T> impl
 
 					final IWorkingSet[] workingSets = workingSetPart.getWorkingSets();
 
-					if (!CoreUtil.isNullOrEmpty(workingSets)) {
+					if (ListUtil.isNotEmpty(workingSets)) {
 						IWorkingSetManager workingSetManager = PlatformUI.getWorkbench().getWorkingSetManager();
 
 						workingSetManager.addToWorkingSets(newProject, workingSets);

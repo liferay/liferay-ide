@@ -14,6 +14,7 @@
 
 package com.liferay.ide.ui.util;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.ui.LiferayUIPlugin;
 
 import java.net.URL;
@@ -464,7 +465,7 @@ public class SWTUtil {
 
 		String[] items = combo.getItems();
 
-		if ((items != null) && (items.length > 0)) {
+		if (ListUtil.isNotEmpty(items)) {
 			for (int i = 0; i < items.length; i++) {
 				if (item.equals(items[i])) {
 					combo.select(i);

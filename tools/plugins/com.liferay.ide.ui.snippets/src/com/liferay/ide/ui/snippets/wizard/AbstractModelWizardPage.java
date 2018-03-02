@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.snippets.wizard;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.ui.util.SWTUtil;
 
@@ -242,7 +242,7 @@ public class AbstractModelWizardPage extends NewTypeWizardPage {
 
 		Object[] props = getTypeProperties(type);
 
-		if (!CoreUtil.isNullOrEmpty(props)) {
+		if (ListUtil.isNotEmpty(props)) {
 			Collections.addAll(propNames, props);
 		}
 
@@ -250,13 +250,13 @@ public class AbstractModelWizardPage extends NewTypeWizardPage {
 			if (type.isInterface()) {
 				String[] superInterfaces = type.getSuperInterfaceNames();
 
-				if (!CoreUtil.isNullOrEmpty(superInterfaces)) {
+				if (ListUtil.isNotEmpty(superInterfaces)) {
 					for (String superInterface : superInterfaces) {
 						IType superInterfaceType = type.getJavaProject().findType(superInterface);
 
 						Object[] superInterfaceProps = getTypeProperties(superInterfaceType);
 
-						if (!CoreUtil.isNullOrEmpty(superInterfaceProps)) {
+						if (ListUtil.isNotEmpty(superInterfaceProps)) {
 							Collections.addAll(propNames, superInterfaceProps);
 						}
 					}
@@ -267,7 +267,7 @@ public class AbstractModelWizardPage extends NewTypeWizardPage {
 
 				Object[] superTypeProps = getTypeProperties(superType);
 
-				if (!CoreUtil.isNullOrEmpty(superTypeProps)) {
+				if (ListUtil.isNotEmpty(superTypeProps)) {
 					Collections.addAll(propNames, superTypeProps);
 				}
 			}

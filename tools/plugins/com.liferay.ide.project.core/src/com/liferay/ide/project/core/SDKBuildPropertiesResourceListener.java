@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.project.core.util.ClasspathUtil;
 import com.liferay.ide.sdk.core.SDK;
@@ -162,7 +163,7 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
 		IStatus sdkStatus = sdk.validate(true);
 
 		if (sdkStatus.isOK()) {
-			if ((problemMarkers != null) && (problemMarkers.length > 0)) {
+			if (ListUtil.isNotEmpty(problemMarkers)) {
 				MarkerUtil.clearMarkers(deltaFile.getProject(), IMarker.PROBLEM, _MARKER_ID_SDK_PROPERTIES_INVALID);
 			}
 
@@ -237,7 +238,7 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
 					existProject, IMarker.PROBLEM, _ID_WORKSPACE_SDK_INVALID);
 
 				if (findSDK == false) {
-					if ((problemMarkers != null) && (problemMarkers.length > 0)) {
+					if (ListUtil.isNotEmpty(problemMarkers)) {
 						MarkerUtil.clearMarkers(existProject, IMarker.PROBLEM, _ID_WORKSPACE_SDK_INVALID);
 					}
 

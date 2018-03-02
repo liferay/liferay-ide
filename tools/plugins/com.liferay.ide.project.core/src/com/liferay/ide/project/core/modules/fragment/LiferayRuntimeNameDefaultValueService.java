@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import org.eclipse.sapphire.DefaultValueService;
@@ -50,7 +50,7 @@ public class LiferayRuntimeNameDefaultValueService extends DefaultValueService i
 	protected String compute() {
 		IRuntime[] runtimes = ServerCore.getRuntimes();
 
-		if (CoreUtil.isNullOrEmpty(runtimes)) {
+		if (ListUtil.isEmpty(runtimes)) {
 			return _NONE;
 		}
 

@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.util.Locale;
 
@@ -33,7 +34,6 @@ import org.eclipse.jdt.core.JavaModelException;
  * @author Greg Amerson
  * @author Kamesh Sampath
  */
-@SuppressWarnings("restriction")
 public class PortletUtil {
 
 	/**
@@ -121,7 +121,7 @@ public class PortletUtil {
 
 		// Attach extension
 
-		if ((locales != null) && (locales.length > 0)) {
+		if (ListUtil.isNotEmpty(locales)) {
 			strFileName = strFileName + "_" + locales[0];
 		}
 

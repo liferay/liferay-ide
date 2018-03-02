@@ -16,6 +16,7 @@ package com.liferay.ide.layouttpl.core.model;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.layouttpl.core.LayoutTplCore;
 import com.liferay.ide.layouttpl.core.util.LayoutTplUtil;
 
@@ -54,7 +55,7 @@ public class LayoutTplElementsFactory {
 		IDOMElement[] portletLayoutDOMElements = LayoutTplUtil.findChildElementsByClassName(
 			domElement, "div", "portlet-layout");
 
-		if (!CoreUtil.isNullOrEmpty(portletLayoutDOMElements)) {
+		if (ListUtil.isNotEmpty(portletLayoutDOMElements)) {
 			for (IDOMElement portletLayoutDOMElement : portletLayoutDOMElements) {
 				PortletLayoutElement portletLayout = portletColumn.getPortletLayouts().insert();
 
@@ -132,7 +133,7 @@ public class LayoutTplElementsFactory {
 			IDOMElement[] portletLayoutElements = LayoutTplUtil.findChildElementsByClassName(
 				mainContentElement, "div", "portlet-layout");
 
-			if (!CoreUtil.isNullOrEmpty(portletLayoutElements)) {
+			if (ListUtil.isNotEmpty(portletLayoutElements)) {
 				for (IDOMElement portletLayoutElement : portletLayoutElements) {
 					PortletLayoutElement portletLayout = layoutTpl.getPortletLayouts().insert();
 

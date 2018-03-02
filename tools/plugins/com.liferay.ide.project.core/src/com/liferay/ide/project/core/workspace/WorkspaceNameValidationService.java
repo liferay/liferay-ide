@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ValidationUtil;
 
@@ -118,7 +119,7 @@ public class WorkspaceNameValidationService extends ValidationService {
 		if (location != null) {
 			File targetDir = location.append(projectName).toFile();
 
-			if (targetDir.exists() && (targetDir.list().length > 0)) {
+			if (FileUtil.hasChildren(targetDir)) {
 				return true;
 			}
 		}

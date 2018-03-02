@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
@@ -44,7 +45,7 @@ public class NewLiferayProfileIdValidationService extends ValidationService {
 			retval = Status.createErrorStatus("No spaces are allowed in profile id.");
 		}
 
-		if (_existingValues.isEmpty()) {
+		if (ListUtil.isEmpty(_existingValues)) {
 			return retval;
 		}
 

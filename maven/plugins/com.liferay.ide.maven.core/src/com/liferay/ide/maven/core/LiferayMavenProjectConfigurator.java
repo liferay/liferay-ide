@@ -20,6 +20,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
 import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
@@ -126,9 +127,9 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 		MavenProject mavenProject = request.getMavenProject();
 		List<MavenProblemInfo> errors = _findLiferayMavenPluginProblems(request, monitor);
 
-		if (!errors.isEmpty()) {
+		if (ListUtil.isNotEmpty(errors)) {
 			try {
-				this.markerManager.addErrorMarkers(
+				markerManager.addErrorMarkers(
 					pomFile, ILiferayMavenConstants.LIFERAY_MAVEN_MARKER_CONFIGURATION_WARNING_ID, errors);
 			}
 			catch (CoreException ce) {
@@ -601,7 +602,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
 			String[] liferayProjectFiles = dirScanner.getIncludedFiles();
 
-			configureAsLiferayPlugin = liferayProjectFiles != null && liferayProjectFiles.length > 0;
+			configureAsLiferayPlugin = ListUtil.isNotEmpty(liferayProjectFiles);
 		}
 
 		return configureAsLiferayPlugin;
@@ -623,7 +624,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 		if (warPluginConfiguration != null) {
 			Xpp3Dom[] warSourceDirs = warPluginConfiguration.getChildren("warSourceDirectory");
 
-			if ((warSourceDirs != null) && (warSourceDirs.length > 0)) {
+			if (ListUtil.isNotEmpty(warSourceDirs)) {
 				String resourceLocation = warSourceDirs[0].getValue();
 
 				retval = project.getFolder(resourceLocation);

@@ -14,6 +14,8 @@
 
 package com.liferay.ide.kaleo.ui.xml;
 
+import com.liferay.ide.core.util.ListUtil;
+
 import java.io.IOException;
 
 import java.util.ArrayList;
@@ -378,7 +380,7 @@ public class KaleoEdits {
 		Element toFormat = null;
 		Element toRet = null;
 
-		if (names.length == 0) {
+		if (ListUtil.isEmpty(names)) {
 			throw new IllegalArgumentException("At least one child name has to be specified");
 		}
 

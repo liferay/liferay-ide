@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.ui.wizard;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSection.StringArrayDialogCallback;
 
 import org.eclipse.swt.widgets.Text;
@@ -45,7 +46,7 @@ public class StringArrayTableWizardSectionCallback implements StringArrayDialogC
 	 * The first text field should not be empty.
 	 */
 	public boolean validate(Text[] texts) {
-		if (texts.length > 0) {
+		if (ListUtil.isNotEmpty(texts)) {
 			String text = texts[0].getText().trim();
 
 			if (text.length() > 0) {

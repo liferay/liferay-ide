@@ -14,7 +14,7 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.util.Set;
@@ -62,7 +62,7 @@ public class LiferayRuntimeNamePossibleValuesService
 	protected void compute(Set<String> values) {
 		IRuntime[] runtimes = ServerCore.getRuntimes();
 
-		if (!CoreUtil.isNullOrEmpty(runtimes)) {
+		if (ListUtil.isNotEmpty(runtimes)) {
 			for (IRuntime runtime : runtimes) {
 				if (LiferayServerCore.newPortalBundle(runtime.getLocation()) != null) {
 					values.add(runtime.getName());

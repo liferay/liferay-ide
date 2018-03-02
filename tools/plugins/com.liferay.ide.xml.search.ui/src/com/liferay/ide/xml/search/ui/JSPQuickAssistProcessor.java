@@ -14,7 +14,7 @@
 
 package com.liferay.ide.xml.search.ui;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
 
 import java.util.ArrayList;
@@ -63,7 +63,6 @@ public class JSPQuickAssistProcessor implements IQuickAssistProcessor {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public ICompletionProposal[] computeQuickAssistProposals(IQuickAssistInvocationContext context) {
 		ICompletionProposal[] retval = null;
 
@@ -88,7 +87,7 @@ public class JSPQuickAssistProcessor implements IQuickAssistProcessor {
 					if (marker.getAttribute(LiferayBaseValidator.MARKER_QUERY_ID, null) != null) {
 						ICompletionProposal[] resolutions = _createFromMarkerResolutions(marker);
 
-						if (!CoreUtil.isNullOrEmpty(resolutions)) {
+						if (ListUtil.isNotEmpty(resolutions)) {
 							Collections.addAll(proposals, resolutions);
 
 							if (annotation instanceof IQuickFixableAnnotation) {
@@ -105,7 +104,7 @@ public class JSPQuickAssistProcessor implements IQuickAssistProcessor {
 			}
 		}
 
-		if (!proposals.isEmpty()) {
+		if (ListUtil.isNotEmpty(proposals)) {
 			retval = proposals.toArray(new ICompletionProposal[0]);
 		}
 

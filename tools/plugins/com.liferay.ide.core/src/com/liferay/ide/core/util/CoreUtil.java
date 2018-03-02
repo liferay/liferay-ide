@@ -133,7 +133,7 @@ public class CoreUtil {
 	}
 
 	public static boolean containsNullElement(Object[] array) {
-		if (isNullOrEmpty(array)) {
+		if (ListUtil.isEmpty(array)) {
 			return true;
 		}
 
@@ -191,10 +191,6 @@ public class CoreUtil {
 		}
 
 		resource.delete(true, null);
-	}
-
-	public static boolean empty(Object[] array) {
-		return isNullOrEmpty(array);
 	}
 
 	public static boolean empty(String val) {
@@ -458,26 +454,6 @@ public class CoreUtil {
 
 	public static boolean isMac() {
 		return Platform.OS_MACOSX.equals(Platform.getOS());
-	}
-
-	public static boolean isNotNullOrEmpty(Object[] array) {
-		return !isNullOrEmpty(array);
-	}
-
-	public static boolean isNullOrEmpty(List<?> list) {
-		if ((list == null) || list.isEmpty()) {
-			return true;
-		}
-
-		return false;
-	}
-
-	public static boolean isNullOrEmpty(Object[] array) {
-		if ((array == null) || (array.length == 0)) {
-			return true;
-		}
-
-		return false;
 	}
 
 	public static boolean isNullOrEmpty(String val) {

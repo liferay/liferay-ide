@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.BinaryProjectRecord;
 import com.liferay.ide.project.core.ISDKProjectsImportDataModelProperties;
@@ -111,7 +112,7 @@ public class BinaryProjectsImportWizardPage
 
 			projectsList.setCheckedElements(selectedProjects);
 
-			setPageComplete(projectsList.getCheckedElements().length > 0);
+			setPageComplete(ListUtil.isNotEmpty(projectsList.getCheckedElements()));
 
 			lastPath = path;
 
@@ -211,7 +212,7 @@ public class BinaryProjectsImportWizardPage
 
 		projectsList.refresh(true);
 
-		setPageComplete(projectsList.getCheckedElements().length > 0);
+		setPageComplete(ListUtil.isNotEmpty(projectsList.getCheckedElements()));
 
 		if (selectedProjects.length == 0) {
 			setMessage(StringPool.EMPTY, WARNING);
@@ -219,7 +220,7 @@ public class BinaryProjectsImportWizardPage
 
 		Object[] checkedBinaries = projectsList.getCheckedElements();
 
-		if ((checkedBinaries != null) && (checkedBinaries.length > 0)) {
+		if (ListUtil.isNotEmpty(checkedBinaries)) {
 			selectedProjects = new BinaryProjectRecord[checkedBinaries.length];
 
 			for (int i = 0; i < checkedBinaries.length; i++) {
@@ -327,7 +328,7 @@ public class BinaryProjectsImportWizardPage
 	protected void handleCheckStateChangedEvent(CheckStateChangedEvent event) {
 		getDataModel().setProperty(SELECTED_PROJECTS, projectsList.getCheckedElements());
 
-		setPageComplete(projectsList.getCheckedElements().length > 0);
+		setPageComplete(ListUtil.isNotEmpty(projectsList.getCheckedElements()));
 	}
 
 	@Override

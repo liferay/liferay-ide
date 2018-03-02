@@ -14,7 +14,7 @@
 
 package com.liferay.ide.portlet.ui.editor;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.portlet.ui.util.MessageKey;
 import com.liferay.ide.portlet.ui.util.NodeUtils;
 
@@ -78,7 +78,7 @@ public class MessageKeyHyperlinkDetector extends AbstractHyperlinkDetector {
 					_lastMessageKeys = messageKeys;
 				}
 
-				if (!CoreUtil.isNullOrEmpty(messageKeys)) {
+				if (ListUtil.isNotEmpty(messageKeys)) {
 					List<IHyperlink> links = new ArrayList<>();
 
 					for (MessageKey messageKey : messageKeys) {
@@ -87,7 +87,7 @@ public class MessageKeyHyperlinkDetector extends AbstractHyperlinkDetector {
 								nodeRegion, messageKey.file, messageKey.key, messageKey.offset, messageKey.length));
 					}
 
-					if (!links.isEmpty()) {
+					if (ListUtil.isNotEmpty(links)) {
 						if (canShowMultipleHyperlinks) {
 							retval = links.toArray(new IHyperlink[0]);
 						}

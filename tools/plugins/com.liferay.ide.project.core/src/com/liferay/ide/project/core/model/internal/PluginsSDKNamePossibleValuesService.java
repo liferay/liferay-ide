@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.sdk.core.ISDKListener;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
@@ -69,7 +70,7 @@ public class PluginsSDKNamePossibleValuesService extends PossibleValuesService i
 	protected void compute(Set<String> values) {
 		SDK[] validSDKs = SDKManager.getInstance().getSDKs();
 
-		if (validSDKs.length > 0) {
+		if (ListUtil.isNotEmpty(validSDKs)) {
 			for (SDK validSDK : validSDKs) {
 				values.add(validSDK.getName());
 			}

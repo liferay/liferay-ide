@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.migration;
 
 import com.liferay.blade.api.Problem;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.ProblemsContainer;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
@@ -74,20 +75,20 @@ public class MigrationDecorator extends BaseLabelProvider implements ILightweigh
 			}
 		}
 
-		if ((problems != null) && !problems.isEmpty()) {
-			final StringBuilder sb = new StringBuilder();
+		if (ListUtil.isNotEmpty(problems)) {
+			StringBuilder sb = new StringBuilder();
 
 			sb.append("[");
 
 			sb.append(problems.size()).append(" total");
 
-			if (!resolvedProblems.isEmpty()) {
+			if (ListUtil.isNotEmpty(resolvedProblems)) {
 				sb.append(", ");
 				sb.append(resolvedProblems.size());
 				sb.append(" resolved");
 			}
 
-			if (!ignoreProblems.isEmpty()) {
+			if (ListUtil.isNotEmpty(ignoreProblems)) {
 				sb.append(", ");
 				sb.append(ignoreProblems.size());
 				sb.append(" ignored");

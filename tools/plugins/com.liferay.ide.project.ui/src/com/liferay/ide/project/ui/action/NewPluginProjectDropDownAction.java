@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,7 +77,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 	public static Action getWizardAction(final String wizardId) {
 		Action[] actions = getNewProjectActions();
 
-		if (actions.length > 0) {
+		if (ListUtil.isNotEmpty(actions)) {
 			for (Action action : actions) {
 				if (action instanceof NewWizardAction && action.getId().equals(wizardId)) {
 					return action;
@@ -290,7 +291,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 	private static boolean _isProjectWizard(IConfigurationElement element, String typeAttribute) {
 		IConfigurationElement[] classElements = element.getChildren(TAG_CLASS);
 
-		if (!CoreUtil.isNullOrEmpty(typeAttribute) && (classElements.length > 0)) {
+		if (!CoreUtil.isNullOrEmpty(typeAttribute) && ListUtil.isNotEmpty(classElements)) {
 			for (IConfigurationElement classElement : classElements) {
 				IConfigurationElement[] paramElements = classElement.getChildren(TAG_PARAMETER);
 
@@ -314,7 +315,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 	private boolean _isLiferayArtifactWizard(IConfigurationElement element, String typeAttribute) {
 		IConfigurationElement[] classElements = element.getChildren(TAG_CLASS);
 
-		if (classElements.length > 0) {
+		if (ListUtil.isNotEmpty(classElements)) {
 			for (IConfigurationElement classElement : classElements) {
 				IConfigurationElement[] paramElements = classElement.getChildren(TAG_PARAMETER);
 
@@ -336,30 +337,5 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 
 		return false;
 	}
-
-	// private String[] getTypes(IConfigurationElement element) {
-	// IConfigurationElement[] classElements = element.getChildren(TAG_CLASS);
-
-	//
-
-	// if (classElements.length > 0) {
-	// for (IConfigurationElement classElement : classElements) {
-	// IConfigurationElement[] paramElements =
-	// classElement.getChildren(TAG_PARAMETER);
-
-	//
-
-	// for (IConfigurationElement paramElement : paramElements) {
-	// if ("types".equals(paramElement.getAttribute(TAG_NAME))) {
-	// return paramElement.getAttribute(TAG_VALUE).split(",");
-	// }
-	// }
-	// }
-	// }
-
-	//
-
-	// return new String[0];
-	// }
 
 }

@@ -15,7 +15,7 @@
 package com.liferay.ide.core.templates;
 
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import freemarker.template.Template;
 
@@ -43,7 +43,7 @@ public class TemplateOperation implements ITemplateOperation {
 
 			String[] names = model.getRequiredVarNames();
 
-			if (CoreUtil.isNullOrEmpty(names)) {
+			if (ListUtil.isEmpty(names)) {
 				return true;
 			}
 

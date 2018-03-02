@@ -14,6 +14,8 @@
 
 package com.liferay.ide.ui.dialog;
 
+import com.liferay.ide.core.util.ListUtil;
+
 import java.io.File;
 
 import java.util.Collection;
@@ -154,7 +156,7 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog {
 				workbench.getHelpSystem().setHelp(button, helpId);
 			}
 
-			if ((enabledSettings != null) && (enabledSettings.length > 0)) {
+			if (ListUtil.isNotEmpty(enabledSettings)) {
 				String id = settings[i].getAttribute(_ATT_ID);
 
 				for (int j = 0; j < enabledSettings.length; j++) {
@@ -183,7 +185,7 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog {
 				});
 		}
 
-		if ((enabledSettings != null) && (enabledSettings.length > 0)) {
+		if (ListUtil.isNotEmpty(enabledSettings)) {
 			return true;
 		}
 

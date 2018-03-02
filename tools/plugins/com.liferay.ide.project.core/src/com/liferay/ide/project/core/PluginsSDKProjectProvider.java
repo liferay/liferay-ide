@@ -348,7 +348,7 @@ public class PluginsSDKProjectProvider
 		else {
 			File pathFile = path.toFile();
 
-			if (pathFile.exists() && pathFile.isDirectory() && (pathFile.listFiles().length > 0)) {
+			if (FileUtil.hasChildren(pathFile)) {
 				retval = ProjectCore.createErrorStatus(
 					"\"" + path + "\" is not valid because it already contains files.");
 			}

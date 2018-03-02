@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.snippets;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.ui.snippets.wizard.AbstractModelWizard;
 import com.liferay.ide.ui.snippets.wizard.LiferayUISearchContainerWizard;
@@ -44,7 +45,7 @@ public class SearchContainerSnippetInsertion extends ModelSnippetInsertion {
 		StringBuffer columns = new StringBuffer();
 		String[] propColumns = wizard.getPropertyColumns();
 
-		if (!CoreUtil.isNullOrEmpty(propColumns)) {
+		if (ListUtil.isNotEmpty(propColumns)) {
 			for (String prop : propColumns) {
 				columns.append("<liferay-ui:search-container-column-text property=\"");
 				columns.append(prop);

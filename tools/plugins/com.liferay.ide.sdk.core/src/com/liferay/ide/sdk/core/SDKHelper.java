@@ -15,8 +15,8 @@
 package com.liferay.ide.sdk.core;
 
 import com.liferay.ide.core.LiferayRuntimeClasspathEntry;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.LaunchHelper;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.RuntimeClasspathModel;
 import com.liferay.ide.core.util.StringPool;
 
@@ -187,7 +187,7 @@ public class SDKHelper extends LaunchHelper {
 	private String _getVMArgumentsAttr() {
 		StringBuffer args = new StringBuffer("-Xmx768m");
 
-		if (!CoreUtil.isNullOrEmpty(_additionalVMArgs)) {
+		if (ListUtil.isNotEmpty(_additionalVMArgs)) {
 			for (String vmArg : _additionalVMArgs) {
 				args.append(StringPool.SPACE + vmArg);
 			}

@@ -15,6 +15,7 @@
 package com.liferay.ide.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -66,7 +67,7 @@ public class LiferayCore extends Plugin {
 
 		ILiferayProjectProvider[] providers = getProviders(adaptable.getClass());
 
-		if (CoreUtil.isNullOrEmpty(providers)) {
+		if (ListUtil.isEmpty(providers)) {
 			return null;
 		}
 

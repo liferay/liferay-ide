@@ -14,7 +14,7 @@
 
 package com.liferay.ide.xml.search.ui.quickassist;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.xml.search.ui.LiferayXMLSearchUI;
 import com.liferay.ide.xml.search.ui.MarkerResolutionProposal;
 
@@ -42,7 +42,6 @@ import org.eclipse.ui.ide.IDE;
 public abstract class AbstractQuickAssistProcessorFromMarkerResolution implements IQuickAssistProcessor {
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public ICompletionProposal[] computeQuickAssistProposals(IQuickAssistInvocationContext context) {
 		ICompletionProposal[] retval = null;
 
@@ -66,7 +65,7 @@ public abstract class AbstractQuickAssistProcessorFromMarkerResolution implement
 				if ((marker != null) && (currentLineNum == lineNum)) {
 					ICompletionProposal[] resolutions = createFromMarkerResolutions(marker);
 
-					if (!CoreUtil.isNullOrEmpty(resolutions)) {
+					if (ListUtil.isNotEmpty(resolutions)) {
 						Collections.addAll(proposals, resolutions);
 
 						if (annotation instanceof IQuickFixableAnnotation) {
@@ -82,7 +81,7 @@ public abstract class AbstractQuickAssistProcessorFromMarkerResolution implement
 			}
 		}
 
-		if (!proposals.isEmpty()) {
+		if (ListUtil.isNotEmpty(proposals)) {
 			retval = proposals.toArray(new ICompletionProposal[0]);
 		}
 

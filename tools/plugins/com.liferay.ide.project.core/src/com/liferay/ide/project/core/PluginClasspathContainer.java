@@ -19,6 +19,7 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
@@ -144,7 +145,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		}
 
 		if (javadocURL != null) {
-			if (CoreUtil.empty(attrs)) {
+			if (ListUtil.isEmpty(attrs)) {
 				attrs = new IClasspathAttribute[] {newJavadocAttr(javadocURL)};
 			}
 			else {
@@ -249,7 +250,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		// compare jarPath to an existing entry
 
 		if ((jarPath != null) && !CoreUtil.isNullOrEmpty(jarPath.toString()) &&
-			!CoreUtil.isNullOrEmpty(suggestedEntries)) {
+				ListUtil.isNotEmpty(suggestedEntries)) {
 
 			int matchLength = jarPath.segmentCount();
 
@@ -304,7 +305,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 
 			String[] split = deps.split(StringPool.COMMA);
 
-			if ((split.length > 0) && !CoreUtil.isNullOrEmpty(split[0])) {
+			if (ListUtil.isNotEmpty(split) && !CoreUtil.isNullOrEmpty(split[0])) {
 				for (int i = 0; i < split.length; i++) {
 					split[i] = split[i].trim();
 				}
@@ -362,7 +363,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 
 			String[] split = context.split(StringPool.COMMA);
 
-			if ((split.length > 0) && !CoreUtil.isNullOrEmpty(split[0])) {
+			if (ListUtil.isNotEmpty(split) && !CoreUtil.isNullOrEmpty(split[0])) {
 				return split;
 			}
 		}

@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.migration;
 
 import com.liferay.blade.api.Problem;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.FindBreakingChangesPage;
 import com.liferay.ide.project.ui.upgrade.animated.Page;
@@ -142,7 +143,7 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
 						}
 					}
 
-					if ((problems != null) && !problems.isEmpty()) {
+					if (ListUtil.isNotEmpty(problems)) {
 						problemsViewer.setInput(problems.toArray());
 						problemsViewer.setSelection(new StructuredSelection(problems.get(0)));
 					}

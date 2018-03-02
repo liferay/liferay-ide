@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.snippets;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.ui.snippets.wizard.AbstractModelWizard;
 import com.liferay.ide.ui.snippets.wizard.AddModelEntityWizard;
@@ -43,7 +44,7 @@ public class AddModelEntitySnippetInsertion extends ModelSnippetInsertion {
 		String[] propColumns = wizard.getPropertyColumns();
 		String var = wizard.getVarName();
 
-		if (!CoreUtil.isNullOrEmpty(propColumns)) {
+		if (ListUtil.isNotEmpty(propColumns)) {
 			for (String prop : propColumns) {
 				fields.append(var + ".set" + StringUtils.capitalize(prop) + "(" + prop + ");\n");
 			}

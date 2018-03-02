@@ -19,6 +19,7 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSectionCallback;
@@ -205,7 +206,7 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 		return new ISelectionStatusValidator() {
 
 			public IStatus validate(Object[] selection) {
-				if ((selection != null) && (selection.length > 0) && (selection[0] != null) &&
+				if (ListUtil.isNotEmpty(selection) && (selection[0] != null) &&
 					!(selection[0] instanceof IProject) && !(selection[0] instanceof IFile)) {
 
 					return Status.OK_STATUS;

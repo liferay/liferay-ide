@@ -16,7 +16,7 @@
 package com.liferay.ide.server.ui;
 
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 
@@ -142,7 +142,7 @@ public class ServerStartup implements IStartup
                 }
             });
 
-            return settings != null && settings.length > 0;
+            return ListUtil.isNotEmpty(settings);
         }
 
         return false;
@@ -160,7 +160,7 @@ public class ServerStartup implements IStartup
 
                 final IMemento[] mementos = runtimesMemento.getChildren( "runtime" );
 
-                if( ! CoreUtil.isNullOrEmpty( mementos ) )
+                if( ListUtil.isNotEmpty(mementos) )
                 {
                     for( IMemento memento : mementos )
                     {
@@ -214,7 +214,7 @@ public class ServerStartup implements IStartup
             {
                 final IMemento[] sdks = sdksMemento.getChildren( "sdk" );
 
-                if( ! CoreUtil.isNullOrEmpty( sdks ) )
+                if( ListUtil.isNotEmpty(sdks) )
                 {
                     for( IMemento sdkMemento : sdks )
                     {
@@ -250,7 +250,7 @@ public class ServerStartup implements IStartup
 
                 final IMemento[] mementos = serversMemento.getChildren( "server" );
 
-                if( ! CoreUtil.isNullOrEmpty( mementos ) )
+                if( ListUtil.isNotEmpty(mementos) )
                 {
                     for( IMemento memento : mementos )
                     {

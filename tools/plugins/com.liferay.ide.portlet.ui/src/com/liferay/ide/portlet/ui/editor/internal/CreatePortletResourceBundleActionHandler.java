@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.ui.editor.internal;
 
 import com.liferay.ide.core.model.internal.GenericResourceBundlePathService;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.portlet.core.model.Portlet;
 import com.liferay.ide.portlet.core.model.PortletInfo;
 import com.liferay.ide.portlet.core.model.SupportedLocales;
@@ -116,7 +117,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 				}
 			}
 
-			if ((portlet.getSupportedLocales() != null) && !portlet.getSupportedLocales().isEmpty()) {
+			if (ListUtil.isNotEmpty(portlet.getSupportedLocales())) {
 				for (SupportedLocales sl : portlet.getSupportedLocales()) {
 					/*
 					 * By now, the error means the locale is not unique or not among possible values

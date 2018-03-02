@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.ui.action;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.server.util.WebServicesHelper;
@@ -89,7 +89,7 @@ public class TestWebServicesAction extends AbstractServerRunningAction
             helper = new WebServicesHelper( webServicesListURL );
             names = helper.getWebServiceNames();
 
-            if( CoreUtil.empty( names ) )
+            if( ListUtil.isEmpty(names) )
             {
                 try
                 {

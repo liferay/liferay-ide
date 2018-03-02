@@ -18,8 +18,8 @@ import aQute.bnd.build.Project;
 
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.IBundleProject;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
 
@@ -67,7 +67,7 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
 
 			File[] buildFiles = _bndProject.getBuildFiles(true);
 
-			if (!CoreUtil.isNullOrEmpty(buildFiles)) {
+			if (ListUtil.isNotEmpty(buildFiles)) {
 				File buildFile = buildFiles[0];
 
 				if (FileUtil.exists(buildFile)) {
@@ -89,7 +89,7 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
 		try {
 			File[] buildFiles = _bndProject.getBuildFiles(false);
 
-			if (!CoreUtil.isNullOrEmpty(buildFiles)) {
+			if (ListUtil.isNotEmpty(buildFiles)) {
 				File buildFile = buildFiles[0];
 
 				if (FileUtil.exists(buildFile)) {

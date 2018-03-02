@@ -16,6 +16,7 @@ package com.liferay.ide.kaleo.ui.action;
 
 import static com.liferay.ide.core.util.CoreUtil.isNullOrEmpty;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.kaleo.core.model.Assignable;
 import com.liferay.ide.kaleo.core.model.ResourceAction;
 import com.liferay.ide.kaleo.core.model.Role;
@@ -76,7 +77,7 @@ public class ChangeTaskAssignmentsActionHandler extends SapphireActionHandler {
 		if (existingUser != null) {
 			op.getImpliedUser().copy(existingUser);
 		}
-		else if (!existingRoles.isEmpty()) {
+		else if (ListUtil.isNotEmpty(existingRoles)) {
 			op.getImpliedRole().copy(existingRoles.get(0));
 
 			for (Role role : existingRoles) {
@@ -91,7 +92,7 @@ public class ChangeTaskAssignmentsActionHandler extends SapphireActionHandler {
 				}
 			}
 		}
-		else if (!existingActions.isEmpty()) {
+		else if (ListUtil.isNotEmpty(existingActions)) {
 			for (ResourceAction action : existingActions) {
 				ElementList<ResourceAction> resourceActions = op.getResourceActions();
 

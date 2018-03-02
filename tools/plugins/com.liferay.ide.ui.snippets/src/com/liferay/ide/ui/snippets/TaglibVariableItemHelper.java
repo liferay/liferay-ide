@@ -14,6 +14,8 @@
 
 package com.liferay.ide.ui.snippets;
 
+import com.liferay.ide.core.util.ListUtil;
+
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -41,7 +43,7 @@ public class TaglibVariableItemHelper {
 
 		String insertString = null;
 
-		if (item.getVariables().length > 0) {
+		if (ListUtil.isNotEmpty(item.getVariables())) {
 			VariableInsertionDialog dialog = new TaglibVariableInsertionDialog(host, editor, clearModality);
 
 			dialog.setItem(item);

@@ -17,6 +17,7 @@ package com.liferay.ide.sdk.core;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
@@ -87,7 +88,7 @@ public final class SDKManager {
 	}
 
 	public boolean containsSDK(SDK theSDK) {
-		if ((theSDK != null) && (getSDKs().length > 0)) {
+		if ((theSDK != null) && ListUtil.isNotEmpty(getSDKs())) {
 			for (SDK sdk : getSDKs()) {
 				if (theSDK.getName().equals(sdk.getName()) && theSDK.getLocation().equals(sdk.getLocation())) {
 					return true;
@@ -149,7 +150,7 @@ public final class SDKManager {
 	}
 
 	public synchronized void setSDKs(SDK[] sdks) {
-		if (CoreUtil.isNullOrEmpty(sdks)) {
+		if (ListUtil.isEmpty(sdks)) {
 			throw new IllegalArgumentException("sdk array cannot be null or empty");
 		}
 

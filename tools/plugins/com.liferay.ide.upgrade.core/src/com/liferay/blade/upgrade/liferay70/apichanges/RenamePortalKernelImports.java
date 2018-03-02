@@ -19,6 +19,7 @@ import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
 import com.liferay.blade.upgrade.liferay70.ImportStatementMigrator;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -171,7 +172,7 @@ public class RenamePortalKernelImports extends ImportStatementMigrator {
 
 		List<SearchResult> importResult = javaFile.findImports(imports.keySet().toArray(new String[0]));
 
-		if (!importResult.isEmpty()) {
+		if (ListUtil.isNotEmpty(importResult)) {
 			for (SearchResult result : importResult) {
 
 				// make sure that our import is not in list of fixed imports

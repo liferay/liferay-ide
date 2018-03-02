@@ -15,6 +15,7 @@
 
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.util.JavaUtil;
 import com.liferay.ide.server.util.LayeredModulePathFactory;
 
@@ -84,7 +85,7 @@ public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory
         {
             IPath[] manifests = getFilesForModule( layeredRoots[i], moduleId, slot, manifestFilter() );
 
-            if( manifests.length > 0 )
+            if( ListUtil.isNotEmpty(manifests) )
             {
                 String value = JavaUtil.getManifestProperty( manifests[0].toFile(), property );
 

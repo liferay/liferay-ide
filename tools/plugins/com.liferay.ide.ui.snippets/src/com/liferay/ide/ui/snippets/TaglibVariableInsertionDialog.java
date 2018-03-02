@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.snippets;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 
 import java.util.regex.Matcher;
@@ -94,7 +95,7 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog {
 			return;
 		}
 
-		if ((parent.getChildren() == null) || (parent.getChildren().length == 0)) {
+		if (ListUtil.isEmpty(parent.getChildren())) {
 			return;
 		}
 

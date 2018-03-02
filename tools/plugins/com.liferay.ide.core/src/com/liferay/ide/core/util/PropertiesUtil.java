@@ -194,11 +194,11 @@ public class PropertiesUtil {
 		IFile[] languageFiles = getLanguagePropertiesFromLiferayHookXml(
 			webProject.getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE));
 
-		if (resourceFiles.length > 0) {
+		if (ListUtil.isNotEmpty(resourceFiles)) {
 			Collections.addAll(retval, resourceFiles);
 		}
 
-		if (languageFiles.length > 0) {
+		if (ListUtil.isNotEmpty(languageFiles)) {
 			Collections.addAll(retval, languageFiles);
 		}
 
@@ -332,7 +332,7 @@ public class PropertiesUtil {
 
 		Set<String> resourceBundles = resourceNodeInfo.getResourceBundles();
 
-		if ((resourceBundles == null) || resourceBundles.isEmpty()) {
+		if (ListUtil.isEmpty(resourceBundles)) {
 			return Collections.emptyList();
 		}
 
@@ -376,7 +376,7 @@ public class PropertiesUtil {
 
 		IFolder[] srcFolders = lrproject.getSourceFolders();
 
-		if (CoreUtil.isNullOrEmpty(srcFolders)) {
+		if (ListUtil.isEmpty(srcFolders)) {
 			return new IFile[0];
 		}
 
@@ -394,7 +394,7 @@ public class PropertiesUtil {
 
 				IFile[] languagePropertiesFiles = visitPropertiesFiles(srcFolder, languagePropertiesVal);
 
-				if ((languagePropertiesFiles != null) && (languagePropertiesFiles.length > 0)) {
+				if (ListUtil.isNotEmpty(languagePropertiesFiles)) {
 					Collections.addAll(retval, languagePropertiesFiles);
 				}
 			}
@@ -419,7 +419,7 @@ public class PropertiesUtil {
 
 		IFolder[] srcFolders = lrproject.getSourceFolders();
 
-		if (CoreUtil.isNullOrEmpty(srcFolders)) {
+		if (ListUtil.isEmpty(srcFolders)) {
 			return new IFile[0];
 		}
 
@@ -437,7 +437,7 @@ public class PropertiesUtil {
 			for (String resourceBundleValue : resourceNodeInfo.getResourceBundlePatterns()) {
 				IFile[] resourceBundleFiles = visitPropertiesFiles(srcFolder, resourceBundleValue);
 
-				if ((resourceBundleFiles != null) && (resourceBundleFiles.length > 0)) {
+				if (ListUtil.isNotEmpty(resourceBundleFiles)) {
 					Collections.addAll(retval, resourceBundleFiles);
 				}
 			}
@@ -445,7 +445,7 @@ public class PropertiesUtil {
 			for (String supportedLocaleValue : resourceNodeInfo.getSupportedLocalePatterns()) {
 				IFile[] supportedLocaleFiles = visitPropertiesFiles(srcFolder, supportedLocaleValue);
 
-				if ((supportedLocaleFiles != null) && (supportedLocaleFiles.length > 0)) {
+				if (ListUtil.isNotEmpty(supportedLocaleFiles)) {
 					Collections.addAll(retval, supportedLocaleFiles);
 				}
 			}
@@ -740,7 +740,7 @@ public class PropertiesUtil {
 									}
 								}
 
-								if (!_supportedLocaleValues.isEmpty() && (resourceBundlesPatterns.length > 0)) {
+								if (ListUtil.isNotEmpty(_supportedLocaleValues) && ListUtil.isNotEmpty(resourceBundlesPatterns)) {
 									String resourceBundleValueBase = resourceBundlesPatterns[0];
 
 									for (String supportedLocaleValue : _supportedLocaleValues) {

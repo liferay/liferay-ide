@@ -15,6 +15,7 @@
 package com.liferay.ide.studio.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.ui.snippets.util.SnippetsUtil;
 
 import java.io.File;
@@ -208,7 +209,7 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 
 						});
 
-					if (!CoreUtil.isNullOrEmpty(snippetFiles)) {
+					if (ListUtil.isNotEmpty(snippetFiles)) {
 						for (File snippetFile : snippetFiles) {
 							if (_shouldImportFile(snippetFile)) {
 								try {
@@ -245,7 +246,7 @@ public class StudioPlugin extends AbstractUIPlugin implements IStartup {
 		if (!CoreUtil.isNullOrEmpty(importedSnippetFiles)) {
 			String[] fileNames = importedSnippetFiles.split(",");
 
-			if (!CoreUtil.isNullOrEmpty(fileNames)) {
+			if (ListUtil.isNotEmpty(fileNames)) {
 				for (String fileName : fileNames) {
 					if (fileName.equals(importFile.getName())) {
 						return false;

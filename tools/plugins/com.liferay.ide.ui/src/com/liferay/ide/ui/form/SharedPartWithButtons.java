@@ -14,6 +14,8 @@
 
 package com.liferay.ide.ui.form;
 
+import com.liferay.ide.core.util.ListUtil;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -100,7 +102,7 @@ public abstract class SharedPartWithButtons extends SharedPart {
 	}
 
 	protected void createButtons(Composite parent, FormToolkit toolkit) {
-		if ((_fButtonLabels != null) && (_fButtonLabels.length > 0)) {
+		if (ListUtil.isNotEmpty(_fButtonLabels)) {
 			fButtonContainer = createComposite(parent, toolkit);
 			GridData gd = new GridData(GridData.FILL_VERTICAL);
 

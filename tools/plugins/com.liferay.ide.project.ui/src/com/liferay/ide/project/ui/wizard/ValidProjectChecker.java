@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.action.NewPluginProjectDropDownAction;
@@ -139,7 +140,7 @@ public class ValidProjectChecker {
 	private String _getValidProjectTypesFromConfig(IConfigurationElement config) {
 		IConfigurationElement[] classElements = config.getChildren();
 
-		if (classElements.length > 0) {
+		if (ListUtil.isNotEmpty(classElements)) {
 			for (IConfigurationElement classElement : classElements) {
 				IConfigurationElement[] paramElements = classElement.getChildren(_tag_parameter);
 

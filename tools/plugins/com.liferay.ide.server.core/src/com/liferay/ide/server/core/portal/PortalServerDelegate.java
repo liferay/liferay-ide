@@ -16,6 +16,7 @@
 package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCore;
 
@@ -56,7 +57,7 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
     {
         IStatus retval = Status.OK_STATUS;
 
-        if( !CoreUtil.isNullOrEmpty( add ) )
+        if( ListUtil.isNotEmpty(add) )
         {
             for( IModule module : add )
             {

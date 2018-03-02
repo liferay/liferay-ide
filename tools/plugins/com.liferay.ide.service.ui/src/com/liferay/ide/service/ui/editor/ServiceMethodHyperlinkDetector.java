@@ -14,7 +14,7 @@
 
 package com.liferay.ide.service.ui.editor;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.service.core.util.ServiceUtil;
 
 import java.util.ArrayList;
@@ -115,7 +115,7 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 						}
 					}
 
-					if (!links.isEmpty()) {
+					if (ListUtil.isNotEmpty(links)) {
 						if (canShowMultipleHyperlinks) {
 							retval = links.toArray(new IHyperlink[0]);
 						}
@@ -210,14 +210,14 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 				if (implType != null) {
 					IMethod[] methods = implType.findMethods(method);
 
-					if (CoreUtil.isNullOrEmpty(methods)) {
+					if (ListUtil.isEmpty(methods)) {
 						ITypeHierarchy hierarchy = implType.newSupertypeHierarchy(new NullProgressMonitor());
 						IType currentType = implType;
 
 						while ((retval == null) && (currentType != null)) {
 							methods = currentType.findMethods(method);
 
-							if (!CoreUtil.isNullOrEmpty(methods)) {
+							if (ListUtil.isNotEmpty(methods)) {
 								retval = methods[0];
 							}
 							else {
@@ -260,7 +260,7 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector {
 				if (wrapperType != null) {
 					IMethod[] wrapperBaseMethods = wrapperType.findMethods(method);
 
-					if (!CoreUtil.isNullOrEmpty(wrapperBaseMethods)) {
+					if (ListUtil.isNotEmpty(wrapperBaseMethods)) {
 
 						// look for classes that implement this wrapper
 

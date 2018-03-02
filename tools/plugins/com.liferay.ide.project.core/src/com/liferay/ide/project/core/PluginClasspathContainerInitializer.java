@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.ServerUtil;
@@ -115,7 +116,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 			IPath srcrootpath = entry.getSourceAttachmentRootPath();
 			IClasspathAttribute[] attrs = entry.getExtraAttributes();
 
-			if ((srcpath != null) || (attrs.length > 0)) {
+			if ((srcpath != null) || ListUtil.isNotEmpty(attrs)) {
 				String eid = entry.getPath().toString();
 
 				ClasspathDecorations dec = new ClasspathDecorations();

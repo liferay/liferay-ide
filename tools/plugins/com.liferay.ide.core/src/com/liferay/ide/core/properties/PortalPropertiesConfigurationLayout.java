@@ -15,6 +15,7 @@
 package com.liferay.ide.core.properties;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 
 import java.io.IOException;
@@ -235,7 +236,7 @@ public class PortalPropertiesConfigurationLayout extends PropertiesConfiguration
 		}
 
 		private String _makeSingleLineValue(List values) {
-			if (values.isEmpty()) {
+			if (ListUtil.isEmpty(values)) {
 				return null;
 			}
 

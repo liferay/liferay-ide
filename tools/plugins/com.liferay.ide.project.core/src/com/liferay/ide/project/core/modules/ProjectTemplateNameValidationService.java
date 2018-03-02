@@ -14,6 +14,8 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.ListUtil;
+
 import java.util.Set;
 
 import org.eclipse.sapphire.Event;
@@ -43,7 +45,7 @@ public class ProjectTemplateNameValidationService extends ValidationService {
 
 		Set<String> templateNames = pvs.values();
 
-		if (!templateNames.isEmpty()) {
+		if (ListUtil.isNotEmpty(templateNames)) {
 			_templateNameStatus = Status.createOkStatus();
 		}
 		else {

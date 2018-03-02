@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.portal.PortalBundle;
@@ -106,7 +107,7 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
 
 			IClasspathAttribute[] attrs = entry.getExtraAttributes();
 
-			if ((srcpath != null) || (attrs.length > 0)) {
+			if ((srcpath != null) || ListUtil.isNotEmpty(attrs)) {
 				String eid = entry.getPath().toString();
 
 				ClasspathDecorations dec = new ClasspathDecorations();

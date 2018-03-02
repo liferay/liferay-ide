@@ -16,6 +16,7 @@ package com.liferay.blade.eclipse.provider;
 
 import com.liferay.blade.api.MigrationConstants;
 import com.liferay.blade.api.SourceFile;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class WorkspaceFile implements SourceFile {
 		if ((files != null) && (files.length == 1)) {
 			retval = files[0];
 		}
-		else if ((files != null) && (files.length > 0)) {
+		else if (ListUtil.isNotEmpty(files)) {
 			for (IFile ifile : files) {
 				if (retval == null) {
 					retval = ifile;

@@ -14,7 +14,7 @@
 
 package com.liferay.ide.portlet.ui.editor;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.portlet.ui.util.MessageKey;
 import com.liferay.ide.portlet.ui.util.NodeUtils;
 
@@ -40,7 +40,7 @@ public class MessageKeyHover extends AbstractHoverProcessor {
 	public String getHoverInfo(ITextViewer textViewer, IRegion hoverRegion) {
 		String retval = null;
 
-		if ((hoverRegion != null) && hoverRegion.equals(_foundRegion) && !CoreUtil.isNullOrEmpty(_messageKeys)) {
+		if ((hoverRegion != null) && hoverRegion.equals(_foundRegion) && ListUtil.isNotEmpty(_messageKeys)) {
 			retval = _messageKeys[0].value;
 		}
 
@@ -60,7 +60,7 @@ public class MessageKeyHover extends AbstractHoverProcessor {
 			if (keyNode != null) {
 				MessageKey[] messageKeys = NodeUtils.findMessageKeys(document, keyNode.getNodeValue(), true);
 
-				if (!CoreUtil.isNullOrEmpty(messageKeys)) {
+				if (ListUtil.isNotEmpty(messageKeys)) {
 					IDOMNode regionNode = node;
 
 					// check if this is an attr hover and return attribute region

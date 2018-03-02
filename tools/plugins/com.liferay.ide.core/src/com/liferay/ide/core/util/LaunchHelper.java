@@ -82,7 +82,7 @@ public class LaunchHelper implements IDebugEventSetListener {
 			launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, getMainClass());
 		}
 
-		if ((launchArgs != null) && (launchArgs.length > 0)) {
+		if (ListUtil.isNotEmpty(launchArgs)) {
 			StringBuilder sb = new StringBuilder();
 
 			for (int i = 0; i < launchArgs.length; i++) {
@@ -150,7 +150,7 @@ public class LaunchHelper implements IDebugEventSetListener {
 
 		IProcess[] processes = runningLaunch.getProcesses();
 
-		if (CoreUtil.empty(processes)) {
+		if (ListUtil.isEmpty(processes)) {
 			return false;
 		}
 

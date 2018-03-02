@@ -14,6 +14,7 @@
 
 package com.liferay.ide.alloy.ui.editor;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.xml.search.ui.editor.LiferayCustomXmlHover;
 
 import java.util.List;
@@ -59,7 +60,7 @@ public class PortletJSPSourceViewerConfiguration extends JSDTStructuredTextViewe
 				else if (TextHoverManager.DOCUMENTATION_HOVER.equalsIgnoreCase(hoverType)) {
 					ITextHover[] hovers = createDocumentationHovers(contentType);
 
-					if ((hovers != null) && (hovers.length > 0)) {
+					if (ListUtil.isNotEmpty(hovers)) {
 						textHover = hovers[0];
 					}
 				}

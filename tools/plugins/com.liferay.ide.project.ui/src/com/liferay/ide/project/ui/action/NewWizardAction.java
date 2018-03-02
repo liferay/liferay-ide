@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.ui.action;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.LiferayUIPlugin;
@@ -195,7 +196,7 @@ public class NewWizardAction extends Action implements Comparable {
 	private int _getMenuIndexFromConfig(IConfigurationElement config) {
 		IConfigurationElement[] classElements = config.getChildren(TAG_CLASS);
 
-		if (classElements.length > 0) {
+		if (ListUtil.isNotEmpty(classElements)) {
 			for (IConfigurationElement classElement : classElements) {
 				IConfigurationElement[] paramElements = classElement.getChildren(TAG_PARAMETER);
 

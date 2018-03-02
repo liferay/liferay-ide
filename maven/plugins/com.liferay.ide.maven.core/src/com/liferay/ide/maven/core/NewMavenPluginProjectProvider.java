@@ -16,6 +16,7 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -139,7 +140,7 @@ public class NewMavenPluginProjectProvider
 		try {
 			List<?> archProps = archetypeManager.getRequiredProperties(archetype, remoteArchetypeRepository, monitor);
 
-			if (!CoreUtil.isNullOrEmpty(archProps)) {
+			if (ListUtil.isNotEmpty(archProps)) {
 				for (Object prop : archProps) {
 					if (prop instanceof RequiredProperty) {
 						RequiredProperty rProp = (RequiredProperty)prop;
@@ -178,7 +179,7 @@ public class NewMavenPluginProjectProvider
 		List<IProject> newProjects = projectConfigurationManager.createArchetypeProjects(
 			location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor);
 
-		if (!CoreUtil.isNullOrEmpty(newProjects)) {
+		if (ListUtil.isNotEmpty(newProjects)) {
 			op.setImportProjectStatus(true);
 
 			for (IProject project : newProjects) {
@@ -186,7 +187,7 @@ public class NewMavenPluginProjectProvider
 			}
 		}
 
-		if (CoreUtil.isNullOrEmpty(newProjects)) {
+		if (ListUtil.isEmpty(newProjects)) {
 			retval = LiferayMavenCore.createErrorStatus("New project was not created due to unknown error");
 		}
 		else {
@@ -202,7 +203,7 @@ public class NewMavenPluginProjectProvider
 				List<NewLiferayProfile> newUserSettingsProfiles = getNewProfilesToSave(
 					activeProfiles, op.getNewLiferayProfiles(), ProfileLocation.userSettings);
 
-				if (!newUserSettingsProfiles.isEmpty()) {
+				if (ListUtil.isNotEmpty(newUserSettingsProfiles)) {
 					String userSettingsFile = mavenConfiguration.getUserSettingsFile();
 
 					String userSettingsPath = null;
@@ -370,7 +371,7 @@ public class NewMavenPluginProjectProvider
 		else {
 			File[] files = dir.listFiles();
 
-			if (files.length > 0) {
+			if (ListUtil.isNotEmpty(files)) {
 				retval = LiferayMavenCore.createErrorStatus("Project location is not empty or a parent pom.");
 			}
 		}

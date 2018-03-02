@@ -18,6 +18,7 @@ import com.liferay.blade.api.FileMigrator;
 import com.liferay.blade.api.JavaFile;
 import com.liferay.blade.api.SearchResult;
 import com.liferay.blade.upgrade.liferay70.JavaFileMigrator;
+import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
 
@@ -48,7 +49,7 @@ public class IndexerThreeMethodsChange extends JavaFileMigrator {
 		List<SearchResult> declarations = new ArrayList<>();
 		List<SearchResult> interfaceSearch = javaFileChecker.findImplementsInterface("RelatedEntryIndexer");
 
-		if (interfaceSearch.isEmpty()) {
+		if (ListUtil.isEmpty(interfaceSearch)) {
 			declarations = javaFileChecker.findMethodDeclaration(
 				"addRelatedEntryFields", new String[] {"Document", "Object"}, null);
 
@@ -57,7 +58,7 @@ public class IndexerThreeMethodsChange extends JavaFileMigrator {
 
 		interfaceSearch = javaFileChecker.findImplementsInterface("DDMStructureIndexer");
 
-		if (interfaceSearch.isEmpty()) {
+		if (ListUtil.isEmpty(interfaceSearch)) {
 			declarations = javaFileChecker.findMethodDeclaration(
 				"reindexDDMStructures", new String[] {"List<Long>"}, null);
 

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.model.HasLiferayRuntime;
 
 import java.util.Arrays;
@@ -66,7 +67,7 @@ public class RuntimeNameDefaultValueService extends DefaultValueService implemen
 
 		service.compute(values);
 
-		if (values.isEmpty()) {
+		if (ListUtil.isEmpty(values)) {
 			return NONE;
 		}
 
