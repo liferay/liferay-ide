@@ -17,6 +17,7 @@ package com.liferay.ide.hook.ui.action;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.hook.core.model.CustomJspDir;
 import com.liferay.ide.hook.ui.HookUI;
 
@@ -147,7 +148,7 @@ public class CreateDirectoryActionHandler extends PropertyEditorActionHandler {
 
 			Path absolutePath = service.convertToAbsolute(customJspDirValue);
 
-			if (!absolutePath.toFile().exists()) {
+			if (FileUtil.notExists(absolutePath)) {
 				IWebProject webproject = LiferayCore.create(IWebProject.class, project);
 
 				if ((webproject != null) && (webproject.getDefaultDocrootFolder() != null)) {

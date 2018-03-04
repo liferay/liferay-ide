@@ -17,6 +17,7 @@ package com.liferay.ide.hook.core.model.internal;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.hook.core.model.CustomJsp;
 import com.liferay.ide.hook.core.util.HookUtil;
 
@@ -129,7 +130,7 @@ public class CustomJspsBindingImpl extends HookListBindingImpl {
 	}
 
 	private void _findJspFiles(IFolder folder, List<IFile> jspFiles) throws CoreException {
-		if ((folder == null) || !folder.exists()) {
+		if (FileUtil.notExists(folder)) {
 			return;
 		}
 

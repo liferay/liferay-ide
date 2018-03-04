@@ -417,6 +417,14 @@ public class FileUtil {
 		return false;
 	}
 
+	public static boolean notExists(org.eclipse.sapphire.modeling.Path path) {
+		if ((path == null) || !path.toFile().exists()) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public static String readContents(File file) {
 		return readContents(file, false);
 	}

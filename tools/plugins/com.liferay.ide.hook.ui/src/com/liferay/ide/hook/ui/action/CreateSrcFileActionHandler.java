@@ -15,6 +15,7 @@
 package com.liferay.ide.hook.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.hook.ui.HookUI;
@@ -122,7 +123,7 @@ public class CreateSrcFileActionHandler extends PropertyEditorActionHandler {
 
 			IFile srcFile = _getSrcFile();
 
-			if ((srcFile != null) && srcFile.exists()) {
+			if (FileUtil.exists(srcFile)) {
 				enabled = false;
 			}
 		}

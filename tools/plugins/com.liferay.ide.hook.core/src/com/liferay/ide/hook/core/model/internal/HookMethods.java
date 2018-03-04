@@ -15,6 +15,7 @@
 package com.liferay.ide.hook.core.model.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.PortalPropertiesFile;
 
@@ -47,7 +48,7 @@ public class HookMethods {
 						IFile file = folder.getFile(filePath.toPortableString());
 
 						if (onlyIfExists) {
-							if (file.exists()) {
+							if (FileUtil.exists(file)) {
 								retval = file;
 							}
 						}
