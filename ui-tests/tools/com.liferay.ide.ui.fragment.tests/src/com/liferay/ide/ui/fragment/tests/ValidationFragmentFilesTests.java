@@ -36,7 +36,7 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 	public void checkInitialState() {
 		wizardAction.openFileMenuFragmentFilesWizard();
 
-		validationAction.assertEquals(PROJECT_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(2));
+		validationAction.assertEquals(NO_SUITABLE_LIFERAY_FRAGMENT_PROJECT, wizardAction.getValidationMsg(1));
 
 		validationAction.assertEquals(StringPool.BLANK, wizardAction.newFragmentFiles.projectName());
 
@@ -177,7 +177,7 @@ public class ValidationFragmentFilesTests extends SwtbotBase {
 
 		wizardAction.openFileMenuFragmentFilesWizard();
 
-		validationAction.assertEquals(PROJECT_NAME_MUST_BE_SPECIFIED, wizardAction.getValidationMsg(2));
+		validationAction.assertEquals(NO_SUITABLE_LIFERAY_FRAGMENT_PROJECT, wizardAction.getValidationMsg(1));
 
 		validationAction.assertEnabledFalse(wizardAction.newFragmentFiles.addOverrideFilesBtn());
 

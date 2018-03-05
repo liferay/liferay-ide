@@ -37,6 +37,7 @@
                         <name>read.only</name>
                         <value>true</value>
                     </hint>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                 </property-editor>
                 <spacer/>
                 <property-editor>

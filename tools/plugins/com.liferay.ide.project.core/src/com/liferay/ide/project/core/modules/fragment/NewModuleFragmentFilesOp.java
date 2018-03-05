@@ -52,6 +52,7 @@ public interface NewModuleFragmentFilesOp extends NewModuleFragmentOp {
 	@Required
 	@Service(impl = NewModuleFragmentProjectNameDefaultValueService.class)
 	@Service(impl = NewModuleFragmentProjectNamePossibleService.class)
+	@Service(impl = NewModuleFragmentProjectValidationService.class)
 	public ValueProperty PROP_PROJECT_NAME = new ValueProperty(TYPE, "ProjectName");
 
 }
