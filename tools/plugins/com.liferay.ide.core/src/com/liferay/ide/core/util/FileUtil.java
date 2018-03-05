@@ -36,6 +36,10 @@ import java.nio.file.Files;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -69,6 +73,7 @@ import org.xml.sax.ErrorHandler;
  * @author Cindy Li
  * @author Simon Jiang
  * @author Terry Jia
+ * @author Charles Wu
  */
 public class FileUtil {
 
@@ -554,6 +559,31 @@ public class FileUtil {
 		}
 
 		return lines.toArray(new String[lines.size()]);
+	}
+
+	public static String[] readMainFestProsFromJar(File systemJarFile, String... names) {
+		if (systemJarFile.canRead()) {
+			String[] strs = new String[names.length];
+
+			try (ZipFile jar = new ZipFile(systemJarFile)) {
+				ZipEntry manifest = jar.getEntry("META-INF/MANIFEST.MF");
+
+				Manifest mf = new Manifest(jar.getInputStream(manifest));
+
+				Attributes a = mf.getMainAttributes();
+
+				for (int i = 0; i < names.length; i++) {
+					strs[i] = a.getValue(names[i]);
+				}
+
+				return strs;
+			}
+			catch (IOException e) {
+				return null;
+			}
+		}
+
+		return null;
 	}
 
 	public static Document readXML(InputStream inputStream, EntityResolver resolver, ErrorHandler error) {

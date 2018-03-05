@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.ZipUtil;
@@ -43,16 +44,11 @@ import org.eclipse.wst.server.core.IRuntime;
 
 /**
  * @author Terry Jia
+ * @author Charles Wu
  */
 public class NewModuleFragmentOpMethods {
 
 	public static void copyOverrideFiles(NewModuleFragmentOp op) {
-		String hostBundleName = op.getHostOsgiBundle().content();
-
-		IPath projectCoreLocation = ProjectCore.getDefault().getStateLocation();
-
-		IPath temp = projectCoreLocation.append(hostBundleName.substring(0, hostBundleName.lastIndexOf(".jar")));
-
 		String projectName = op.getProjectName().content();
 
 		IPath location = PathBridge.create(op.getLocation().content());
@@ -60,7 +56,7 @@ public class NewModuleFragmentOpMethods {
 		ElementList<OverrideFilePath> files = op.getOverrideFiles();
 
 		for (OverrideFilePath file : files) {
-			File fragmentFile = temp.append(file.getValue().content()).toFile();
+			File fragmentFile = new File(_hostBundleDir, file.getValue().content());
 
 			if (FileUtil.notExists(fragmentFile)) {
 				continue;
@@ -171,44 +167,36 @@ public class NewModuleFragmentOpMethods {
 
 		IPath tempLocation = ProjectCore.getDefault().getStateLocation();
 
-		IPath hostBundle = tempLocation.append(hostBundleName.substring(0, hostBundleName.lastIndexOf(".jar")));
+		File hostBundleJar = FileUtil.getFile(tempLocation.append(hostBundleName));
 
-		if (FileUtil.notExists(hostBundle)) {
+		if (FileUtil.notExists(hostBundleJar)) {
 			IRuntime runtime = ServerUtil.getRuntime(op.getLiferayRuntimeName().content());
 
 			ServerUtil.getModuleFileFrom70Server(runtime, hostBundleName, tempLocation);
+		}
 
-			IPath hostBundleJar = tempLocation.append(hostBundleName);
+		String[] bsnAndVersion =
+			FileUtil.readMainFestProsFromJar(hostBundleJar, "Bundle-SymbolicName", "Bundle-Version");
 
+		try {
+			_hostBundleDir = LiferayCore.GLOBAL_USER_DIR.append(bsnAndVersion[0] + "-" + bsnAndVersion[1]).toFile();
+		}
+		catch (NullPointerException npe) {
+			throw new CoreException(
+				ProjectCore.createErrorStatus("'" + hostBundleName + "' is not a valid osgi bundle")
+			);
+		}
+
+		if (FileUtil.notExists(_hostBundleDir)) {
 			try {
-				ZipUtil.unzip(hostBundleJar.toFile(), hostBundle.toFile());
+				ZipUtil.unzip(hostBundleJar, _hostBundleDir);
 			}
 			catch (IOException ioe) {
 				throw new CoreException(ProjectCore.createErrorStatus(ioe));
 			}
 		}
 
-		String bundleSymbolicName = "";
-		String version = "";
-
-		if (FileUtil.exists(hostBundle)) {
-			File file = hostBundle.append("META-INF/MANIFEST.MF").toFile();
-
-			String[] contents = FileUtil.readLinesFromFile(file);
-
-			for (String content : contents) {
-				if (content.contains("Bundle-SymbolicName:")) {
-					bundleSymbolicName = content.substring(
-						content.indexOf("Bundle-SymbolicName:") + "Bundle-SymbolicName:".length());
-				}
-
-				if (content.contains("Bundle-Version:")) {
-					version = content.substring(content.indexOf("Bundle-Version:") + "Bundle-Version:".length()).trim();
-				}
-			}
-		}
-
-		return new String[] {bundleSymbolicName, version};
+		return bsnAndVersion;
 	}
 
 	public static String getMavenParentPomGroupId(NewModuleFragmentOp op, String projectName, IPath path) {
@@ -267,4 +255,5 @@ public class NewModuleFragmentOpMethods {
 		}
 	}
 
+	private static File _hostBundleDir = null;
 }

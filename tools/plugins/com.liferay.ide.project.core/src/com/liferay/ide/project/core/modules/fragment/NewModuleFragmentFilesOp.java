@@ -20,6 +20,7 @@ import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
+import org.eclipse.sapphire.modeling.annotations.Derived;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
@@ -43,6 +44,7 @@ public interface NewModuleFragmentFilesOp extends NewModuleFragmentOp {
 
 	public void setProjectName(String value);
 
+	@Derived
 	@Label(standard = "Host OSGi Bundle")
 	@Required
 	@Service(impl = HostOSGiBundleDefaultValueService.class)

@@ -14,6 +14,7 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ZipUtil;
@@ -36,6 +37,7 @@ import org.eclipse.wst.server.core.IRuntime;
 
 /**
  * @author Terry Jia
+ * @author Charles Wu
  */
 public class NewModuleFragmentFilesOpMethods {
 
@@ -55,19 +57,19 @@ public class NewModuleFragmentFilesOpMethods {
 
 			IPath projectCoreLocation = ProjectCore.getDefault().getStateLocation();
 
-			IPath temp = projectCoreLocation.append(hostBundleName);
+			IPath tempJarDir = LiferayCore.GLOBAL_USER_DIR.append(hostBundleName);
 
-			if (FileUtil.notExists(temp)) {
+			if (FileUtil.notExists(tempJarDir)) {
 				IRuntime runtime = ServerUtil.getRuntime(op.getLiferayRuntimeName().content());
 
 				String hostOsgiJar = hostBundleName + ".jar";
 
 				ServerUtil.getModuleFileFrom70Server(runtime, hostOsgiJar, projectCoreLocation);
 
-				IPath tempJarPath = projectCoreLocation.append(hostOsgiJar);
+				IPath tempJarFile = projectCoreLocation.append(hostOsgiJar);
 
 				try {
-					ZipUtil.unzip(tempJarPath.toFile(), temp.toFile());
+					ZipUtil.unzip(tempJarFile.toFile(), tempJarDir.toFile());
 				}
 				catch (IOException ioe) {
 					throw new CoreException(ProjectCore.createErrorStatus(ioe));
@@ -77,7 +79,7 @@ public class NewModuleFragmentFilesOpMethods {
 			ElementList<OverrideFilePath> files = op.getOverrideFiles();
 
 			for (OverrideFilePath file : files) {
-				File fragmentFile = temp.append(file.getValue().content()).toFile();
+				File fragmentFile = tempJarDir.append(file.getValue().content()).toFile();
 
 				if (FileUtil.exists(fragmentFile)) {
 					File folder = null;
@@ -162,5 +164,4 @@ public class NewModuleFragmentFilesOpMethods {
 
 		return retval;
 	}
-
 }
