@@ -16,6 +16,7 @@ package com.liferay.ide.ui.liferay.page.wizard.project;
 
 import com.liferay.ide.ui.swtbot.page.CheckBox;
 import com.liferay.ide.ui.swtbot.page.Text;
+import com.liferay.ide.ui.swtbot.page.ToolbarButtonWithTooltip;
 import com.liferay.ide.ui.swtbot.page.Wizard;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
@@ -31,6 +32,10 @@ public class ImportLiferayWorkspaceWizard extends Wizard {
 
 	public CheckBox getAddProjectToWorkingSet() {
 		return new CheckBox(getShell().bot(), ADD_PROJECT_TO_WORKING_SET);
+	}
+
+	public ToolbarButtonWithTooltip getBrowseLocationBtn() {
+		return new ToolbarButtonWithTooltip(getShell().bot(), BROWSE);
 	}
 
 	public Text getBuildTypeText() {
