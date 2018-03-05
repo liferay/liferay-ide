@@ -15,6 +15,7 @@
 package com.liferay.ide.hook.ui.wizard;
 
 import com.liferay.ide.core.util.FileListing;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSection;
 import com.liferay.ide.ui.wizard.ExternalFileSelectionDialog;
 
@@ -85,7 +86,7 @@ public class CustomJSPsTableWizardSection extends StringArrayTableWizardSection 
 	}
 
 	protected void handleAddFromPortalButtonSelected() {
-		if ((portalDir == null) || !portalDir.exists()) {
+		if (FileUtil.notExists(portalDir)) {
 			MessageDialog.openWarning(getShell(), Msgs.addJSP, Msgs.couldNotFindPortalRoot);
 
 			return;
@@ -127,7 +128,7 @@ public class CustomJSPsTableWizardSection extends StringArrayTableWizardSection 
 			for (int i = 0; i < roots.length; i++) {
 				File fileRoot = new File(base, roots[i]);
 
-				if (fileRoot.exists()) {
+				if (FileUtil.exists(fileRoot)) {
 					validRoots[i] = new Path(fileRoot.getPath());
 				}
 			}

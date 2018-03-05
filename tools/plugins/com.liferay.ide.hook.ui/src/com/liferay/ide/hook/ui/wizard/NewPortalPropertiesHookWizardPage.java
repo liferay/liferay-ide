@@ -15,6 +15,7 @@
 package com.liferay.ide.hook.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.hook.ui.HookUI;
@@ -218,7 +219,7 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
 				else if (element instanceof IFile) {
 					IFile file = (IFile)element;
 
-					if (file.exists() && file.getName().equals("portal.properties")) {
+					if (FileUtil.exists(file) && file.getName().equals("portal.properties")) {
 						return true;
 					}
 

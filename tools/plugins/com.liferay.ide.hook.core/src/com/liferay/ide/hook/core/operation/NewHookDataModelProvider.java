@@ -23,6 +23,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
@@ -165,7 +166,7 @@ public class NewHookDataModelProvider
 		else if (propertyName.equals(SOURCE_FOLDER)) {
 			IFolder sourceFolder = getDefaultJavaSourceFolder();
 
-			if ((sourceFolder != null) && sourceFolder.exists()) {
+			if (FileUtil.exists(sourceFolder)) {
 				return sourceFolder.getFullPath().toPortableString();
 			}
 		}

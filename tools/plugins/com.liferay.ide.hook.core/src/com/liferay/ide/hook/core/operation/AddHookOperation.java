@@ -21,6 +21,7 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.StringBufferOutputStream;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
@@ -28,7 +29,6 @@ import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -129,7 +129,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
 		IFile hookDescriptorFile = webappRoot.getFile(path);
 
-		if (!hookDescriptorFile.exists()) {
+		if (FileUtil.notExists(hookDescriptorFile)) {
 			try {
 				createDefaultHookDescriptorFile(hookDescriptorFile);
 			}
@@ -150,10 +150,8 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
 		CoreUtil.prepareFolder((IFolder)newJspFile.getParent());
 
-		File file = newJspFile.getLocation().toFile();
-
-		if (!file.exists()) {
-			if (originalPortalJspPath.toFile().exists()) {
+		if (FileUtil.notExists(newJspFile)) {
+			if (FileUtil.exists(originalPortalJspPath)) {
 				try (InputStream fis = Files.newInputStream(originalPortalJspPath.toFile().toPath())) {
 					if (newJspFile.exists()) {
 						newJspFile.setContents(fis, IResource.FORCE, null);
@@ -342,7 +340,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
 		Properties properties = new Properties();
 
-		if (propertiesFile.exists()) {
+		if (FileUtil.exists(propertiesFile)) {
 			try {
 				properties.load(propertiesFile.getContents());
 			}
@@ -377,7 +375,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 		}
 
 		try {
-			ByteArrayInputStream bis = new ByteArrayInputStream(buffer.toString().getBytes("UTF-8")); //$NON-NLS-1$
+			ByteArrayInputStream bis = new ByteArrayInputStream(buffer.toString().getBytes("UTF-8"));
 
 			if (propertiesFile.exists()) {
 				propertiesFile.setContents(bis, IResource.FORCE, null);

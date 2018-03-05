@@ -17,6 +17,7 @@ package com.liferay.ide.hook.core.dd;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
@@ -184,7 +185,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
 
 		IFile descriptorFile = getDescriptorFile();
 
-		if ((descriptorFile == null) || !descriptorFile.exists()) {
+		if (FileUtil.notExists(descriptorFile)) {
 			return null;
 		}
 

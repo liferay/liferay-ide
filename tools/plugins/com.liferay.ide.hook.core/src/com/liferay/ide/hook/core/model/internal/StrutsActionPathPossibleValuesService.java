@@ -19,6 +19,7 @@ import static com.liferay.ide.core.util.CoreUtil.empty;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.StrutsAction;
 
@@ -37,7 +38,7 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
 
 	@Override
 	protected void compute(Set<String> values) {
-		if ((_portalDir != null) && _portalDir.toFile().exists()) {
+		if (FileUtil.exists(_portalDir)) {
 			if (_possibleValues == null) {
 				IPath strutsConfigPath = _portalDir.append("WEB-INF/struts-config.xml");
 

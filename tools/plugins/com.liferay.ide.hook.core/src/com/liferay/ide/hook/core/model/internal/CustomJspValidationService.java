@@ -17,6 +17,7 @@ package com.liferay.ide.hook.core.model.internal;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.util.HookUtil;
@@ -101,7 +102,7 @@ public class CustomJspValidationService extends ValidationService {
 
 		IPath customJspPath = _getPortalDir().append(customJsp);
 
-		if ((customJspPath != null) && customJspPath.toFile().exists()) {
+		if (FileUtil.exists(customJspPath)) {
 			return true;
 		}
 
@@ -113,10 +114,10 @@ public class CustomJspValidationService extends ValidationService {
 
 		IFolder customFolder = HookUtil.getCustomJspFolder(hook(), project());
 
-		if ((customFolder != null) && customFolder.exists()) {
+		if (FileUtil.exists(customFolder)) {
 			IFile customJspFile = customFolder.getFile(customJsp);
 
-			if (customJspFile.exists()) {
+			if (FileUtil.exists(customJspFile)) {
 				return true;
 			}
 		}

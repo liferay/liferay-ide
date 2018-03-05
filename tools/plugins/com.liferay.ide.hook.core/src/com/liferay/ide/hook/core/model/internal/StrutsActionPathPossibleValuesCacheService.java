@@ -14,6 +14,7 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.hook.core.HookCore;
 
 import java.io.File;
@@ -42,7 +43,7 @@ public class StrutsActionPathPossibleValuesCacheService extends Service {
 		if (retval == null) {
 			File strutsConfigFile = strutsConfigPath.toFile();
 
-			if (strutsConfigFile.exists()) {
+			if (FileUtil.exists(strutsConfigFile)) {
 				TreeSet<String> possibleValues = new TreeSet<>();
 
 				try {
