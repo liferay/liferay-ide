@@ -14,7 +14,9 @@
 
 package com.liferay.ide.project.ui;
 
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
@@ -24,6 +26,7 @@ import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKCorePlugin;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
@@ -67,6 +70,7 @@ import org.eclipse.wst.common.project.facet.core.runtime.RuntimeManager;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.ServerCore;
 
+import org.osgi.framework.Version;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
@@ -232,46 +236,50 @@ public class LiferayProjectPropertyPage
 							});
 					}
 
-					new Label(parent, SWT.LEFT).setText(Msgs.liferayRuntimeLabel);
+					if (CoreUtil.compareVersions(new Version(projectSdk.getVersion()), ILiferayConstants.V700) < 0) {
+						new Label(parent, SWT.LEFT).setText(Msgs.liferayRuntimeLabel);
 
-					_runtimeCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
+						_runtimeCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
 
-					_runtimeCombo.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
+						_runtimeCombo.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
 
-					String currentRuntimeName = null;
+						String currentRuntimeName = null;
 
-					try {
-						ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(getProject());
+						try {
+							ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(getProject());
 
-						if (liferayRuntime != null) {
-							currentRuntimeName = liferayRuntime.getRuntime().getName();
-						}
-					}
-					catch (Exception e) {
-						ProjectUI.logError("Could not determine liferay runtime", e);
-					}
-
-					final List<String> runtimeNames = new ArrayList<>();
-					int selectionIndex = -1;
-
-					for (IRuntime runtime : ServerCore.getRuntimes()) {
-						if (ServerUtil.isLiferayRuntime(runtime)) {
-							runtimeNames.add(runtime.getName());
-
-							if (runtime.getName().equals(currentRuntimeName)) {
-								selectionIndex = runtimeNames.size() - 1;
+							if (liferayRuntime != null) {
+								currentRuntimeName = liferayRuntime.getRuntime().getName();
 							}
 						}
-					}
+						catch (Exception e) {
+							ProjectUI.logError("Could not determine liferay runtime", e);
+						}
 
-					if (ListUtil.isEmpty(runtimeNames)) {
-						runtimeNames.add("No Liferay runtimes available.");
-					}
+						List<String> runtimeNames = new ArrayList<>();
 
-					this._runtimeCombo.setItems(runtimeNames.toArray(new String[0]));
+						int selectionIndex = -1;
 
-					if (selectionIndex > -1) {
-						this._runtimeCombo.select(selectionIndex);
+						for (IRuntime runtime : ServerCore.getRuntimes()) {
+							if (ServerUtil.isLiferayRuntime(runtime) && FileUtil.exists(runtime.getLocation()) &&
+								(LiferayServerCore.newPortalBundle(runtime.getLocation()) == null)) {
+								runtimeNames.add(runtime.getName());
+
+								if (runtime.getName().equals(currentRuntimeName)) {
+									selectionIndex = runtimeNames.size() - 1;
+								}
+							}
+						}
+
+						if (ListUtil.isEmpty(runtimeNames)) {
+							runtimeNames.add("No Liferay runtimes available.");
+						}
+
+						_runtimeCombo.setItems(runtimeNames.toArray(new String[0]));
+
+						if (selectionIndex > -1) {
+							_runtimeCombo.select(selectionIndex);
+						}
 					}
 				}
 			}
