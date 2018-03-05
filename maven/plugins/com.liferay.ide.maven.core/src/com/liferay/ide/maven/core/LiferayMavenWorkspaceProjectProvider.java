@@ -22,6 +22,7 @@ import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -85,6 +86,8 @@ public class LiferayMavenWorkspaceProjectProvider
 				MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder(workspaceProject);
 
 				mavenProjectBuilder.initBundle(workspaceProject, bundleUrl, monitor);
+
+				workspaceProject.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 			}
 		}
 		catch (Exception e) {
