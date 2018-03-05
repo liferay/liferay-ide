@@ -15,16 +15,10 @@
 package com.liferay.ide.project.ui.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp;
-import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.ui.ProjectUI;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.resources.IProject;
-import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 
 /**
@@ -40,34 +34,18 @@ public class NewLiferayJSFModuleProjectWizard extends BaseProjectWizard<NewLifer
 	protected void performPostFinish() {
 		super.performPostFinish();
 
-		final List<IProject> projects = new ArrayList<>();
+		NewLiferayJSFModuleProjectOp op = element().nearest(NewLiferayJSFModuleProjectOp.class);
 
-		final NewLiferayJSFModuleProjectOp op = element().nearest(NewLiferayJSFModuleProjectOp.class);
+		IProject project = CoreUtil.getProject(op.getProjectName().content());
 
-		ElementList<ProjectName> projectNames = op.getProjectNames();
-
-		for (ProjectName projectName : projectNames) {
-			final IProject newProject = CoreUtil.getProject(projectName.getName().content());
-
-			if (newProject != null) {
-				projects.add(newProject);
-			}
+		try {
+			addToWorkingSets(project);
+		}
+		catch (Exception ex) {
+			ProjectUI.logError("Unable to add project to working set", ex);
 		}
 
-		for (final IProject project : projects) {
-			try {
-				addToWorkingSets(project);
-			}
-			catch (Exception ex) {
-				ProjectUI.logError("Unable to add project to working set", ex);
-			}
-		}
-
-		if (ListUtil.isNotEmpty(projects)) {
-			IProject finalProject = projects.get(0);
-
-			openLiferayPerspective(finalProject);
-		}
+		openLiferayPerspective(project);
 	}
 
 	private static NewLiferayJSFModuleProjectOp _createDefaultOp() {
