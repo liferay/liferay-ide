@@ -62,7 +62,7 @@ public abstract class LiferayWorkspaceBuilder extends ModuleBuilder {
 	protected void initWorkspace(Project project) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("-b ");
+		sb.append("--base ");
 		sb.append("\"");
 		sb.append(project.getBasePath());
 		sb.append("\" ");

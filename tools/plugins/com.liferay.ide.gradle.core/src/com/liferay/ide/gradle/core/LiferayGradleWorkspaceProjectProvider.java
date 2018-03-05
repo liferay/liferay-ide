@@ -64,7 +64,7 @@ public class LiferayGradleWorkspaceProjectProvider
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("-b ");
+		sb.append("--base ");
 		sb.append("\"");
 		sb.append(wsLocation.toFile().getAbsolutePath());
 		sb.append("\" ");
