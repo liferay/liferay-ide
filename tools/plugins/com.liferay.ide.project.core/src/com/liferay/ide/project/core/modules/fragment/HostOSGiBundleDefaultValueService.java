@@ -19,13 +19,13 @@ import com.liferay.ide.core.util.FileUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.sapphire.DefaultValueService;
+import org.eclipse.sapphire.DerivedValueService;
 
 /**
  * @author Terry Jia
  * @author Andy Wu
  */
-public class HostOSGiBundleDefaultValueService extends DefaultValueService {
+public class HostOSGiBundleDefaultValueService extends DerivedValueService {
 
 	@Override
 	protected String compute() {
