@@ -87,6 +87,7 @@ public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebPro
 		return null;
 	}
 
+	@Override
 	public IPath getLibraryPath(String filename) {
 		IPath[] libs = getUserLibs();
 

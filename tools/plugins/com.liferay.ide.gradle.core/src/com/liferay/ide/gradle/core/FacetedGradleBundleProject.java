@@ -69,4 +69,9 @@ public class FacetedGradleBundleProject extends LiferayGradleProject implements 
 		return null;
 	}
 
+	@Override
+	public IPath getLibraryPath(String filename) {
+		return null;
+	}
+
 }
