@@ -8,8 +8,10 @@ C:/Users,"C:/Users" is not an absolute path.,macosx
 ,Workspace location must be specified,linux
 C://non-exist-dir,"C:/non-exist-dir" is not an absolute path.,linux
 C:/Users,"C:/Users" is not an absolute path.,linux
+/homehome,Directory doesn't exist.,linux
 ..,".." is not an absolute path.,win32
 1.*,"1.*" is not a valid path,win32
 ,Workspace location must be specified,win32
 C://non-exist-dir,Directory doesn't exist.,win32
 C:/Users,Invalid Liferay Workspace,win32
+/homehome,"\homehome" is not an absolute path.,win32

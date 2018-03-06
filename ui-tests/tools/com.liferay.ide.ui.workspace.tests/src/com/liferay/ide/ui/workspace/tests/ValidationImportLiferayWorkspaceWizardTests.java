@@ -15,6 +15,7 @@
 package com.liferay.ide.ui.workspace.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.base.ImportLiferayWorkspaceProjectSupport;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
@@ -23,14 +24,34 @@ import java.io.File;
 import org.eclipse.core.runtime.Platform;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
  * @author Vicky Wang
  * @author Ying Xu
  * @author Ashley Yuan
+ * @author Lily Li
  */
 public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
+
+	@Test
+	public void checkExistingWorkspace() {
+		wizardAction.importProject.openImportLiferayWorkspaceWizard();
+
+		wizardAction.importLiferayWorkspace.prepareLocation(project.getPath());
+
+		wizardAction.finish();
+
+		wizardAction.importProject.openImportLiferayWorkspaceWizard();
+
+		Assert.assertEquals(A_LIFERAY_WORKSPACE_PROJECT_ALREADY_EXISTS, wizardAction.getValidationMsg(2));
+		Assert.assertFalse(wizardAction.getFinishBtn().isEnabled());
+
+		wizardAction.cancel();
+
+		viewAction.project.closeAndDelete(project.getName());
+	}
 
 	@Test
 	public void checkInitialState() {
@@ -39,6 +60,7 @@ public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 		Assert.assertEquals(PLEASE_SELECT_THE_WORKSPACE_LOCATION, wizardAction.getValidationMsg(2));
 
 		Assert.assertEquals(StringPool.BLANK, wizardAction.importLiferayWorkspace.workspaceLocation().getText());
+		Assert.assertTrue(wizardAction.importLiferayWorkspace.browseLocationBtn().isEnabled());
 		Assert.assertEquals(StringPool.BLANK, wizardAction.importLiferayWorkspace.buildType().getText());
 		Assert.assertFalse(wizardAction.importLiferayWorkspace.addProjectToWorkingSet().isChecked());
 
@@ -51,7 +73,48 @@ public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 	}
 
 	@Test
-	public void checkProjectName() {
+	public void checkWithBundleInfoInitialState() {
+		project.prepareServer();
+
+		wizardAction.importProject.openImportLiferayWorkspaceWizard();
+
+		wizardAction.importLiferayWorkspace.prepareLocation(project.getPath());
+
+		Assert.assertTrue(wizardAction.importLiferayWorkspace.workspaceLocation().isActive());
+		Assert.assertFalse(wizardAction.importLiferayWorkspace.serverName().isActive());
+
+		Assert.assertEquals(SELECT_LOCATION_OF_LIFERAY_WORKSPACE_PARENT_DIRECTORY, wizardAction.getValidationMsg(3));
+
+		Assert.assertEquals("gradle-liferay-workspace", wizardAction.importLiferayWorkspace.buildType().getText());
+
+		Assert.assertTrue(wizardAction.getFinishBtn().isEnabled());
+
+		wizardAction.cancel();
+	}
+
+	@Test
+	public void checkWithoutBundleInfoInitialState() {
+		wizardAction.importProject.openImportLiferayWorkspaceWizard();
+
+		wizardAction.importLiferayWorkspace.prepareLocation(project.getPath());
+
+		Assert.assertEquals(SELECT_LOCATION_OF_LIFERAY_WORKSPACE_PARENT_DIRECTORY, wizardAction.getValidationMsg(2));
+
+		Assert.assertEquals("gradle-liferay-workspace", wizardAction.importLiferayWorkspace.buildType().getText());
+
+		Assert.assertFalse(wizardAction.importLiferayWorkspace.downloadLiferayBundle().isChecked());
+
+		Assert.assertTrue(wizardAction.getFinishBtn().isEnabled());
+
+		wizardAction.importLiferayWorkspace.downloadLiferayBundle().select();
+		Assert.assertTrue(wizardAction.getFinishBtn().isEnabled());
+		wizardAction.importLiferayWorkspace.downloadLiferayBundle().deselect();
+
+		wizardAction.cancel();
+	}
+
+	@Test
+	public void checkWorkspaceLocation() {
 		wizardAction.importProject.openImportLiferayWorkspaceWizard();
 
 		for (ValidationMsg msg :
@@ -69,5 +132,9 @@ public class ValidationImportLiferayWorkspaceWizardTests extends SwtbotBase {
 
 		wizardAction.cancel();
 	}
+
+	@Rule
+	public ImportLiferayWorkspaceProjectSupport project = new ImportLiferayWorkspaceProjectSupport(
+		bot, "test-liferay-workspace-gradle");
 
 }

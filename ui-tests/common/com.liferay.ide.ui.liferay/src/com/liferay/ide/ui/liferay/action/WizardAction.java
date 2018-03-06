@@ -292,12 +292,20 @@ public class WizardAction extends UIAction {
 			return _importLiferayWorkspaceProjectWizard.getAddProjectToWorkingSet();
 		}
 
+		public ToolbarButtonWithTooltip browseLocationBtn() {
+			return _importLiferayWorkspaceProjectWizard.getBrowseLocationBtn();
+		}
+
 		public Text buildType() {
 			return _importLiferayWorkspaceProjectWizard.getBuildTypeText();
 		}
 
+		public CheckBox downloadLiferayBundle() {
+			return _importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle();
+		}
+
 		public void prepare(String location, boolean downloadLiferayBundle) {
-			_importLiferayWorkspaceProjectWizard.getWorkspaceLocation().setText(location);
+			workspaceLocation().setText(location);
 
 			if (downloadLiferayBundle) {
 				_importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle().select();
@@ -314,7 +322,7 @@ public class WizardAction extends UIAction {
 			_importLiferayWorkspaceProjectWizard.getDownloadLiferaybundle().select();
 
 			if (!serverName.equals(StringPool.EMPTY)) {
-				_importLiferayWorkspaceProjectWizard.getServerName().setText(serverName);
+				serverName().setText(serverName);
 			}
 		}
 
@@ -327,7 +335,11 @@ public class WizardAction extends UIAction {
 		}
 
 		public void prepareServerName(String serverName) {
-			_importLiferayWorkspaceProjectWizard.getServerName().setText(serverName);
+			serverName().setText(serverName);
+		}
+
+		public Text serverName() {
+			return _importLiferayWorkspaceProjectWizard.getServerName();
 		}
 
 		public Text workspaceLocation() {
