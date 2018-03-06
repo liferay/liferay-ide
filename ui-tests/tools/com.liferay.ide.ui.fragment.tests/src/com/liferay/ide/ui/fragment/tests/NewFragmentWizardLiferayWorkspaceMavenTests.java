@@ -59,6 +59,14 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
@@ -86,6 +94,14 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
@@ -112,6 +128,14 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 		dialogAction.cancel();
 
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -142,6 +166,14 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
@@ -168,6 +200,14 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 		dialogAction.confirm();
 
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -216,6 +256,14 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 		dialogAction.confirm();
 
 		wizardAction.finish();
+
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
+
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 

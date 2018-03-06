@@ -78,6 +78,8 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
+
 		String[] projectNames = {liferayWorkspace.getName(), newModulesFolderName, project.getName()};
 
 		String[] newModulesFolderNames = {liferayWorkspace.getName(), newModulesFolderName};
@@ -122,6 +124,8 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
@@ -149,6 +153,8 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 		wizardAction.finish();
 
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
+
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
@@ -175,6 +181,8 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 		dialogAction.cancel();
 
 		wizardAction.finish();
+
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -207,6 +215,8 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 		dialogAction.confirm();
 
 		wizardAction.finish();
+
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
