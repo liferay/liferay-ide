@@ -14,7 +14,6 @@
 
 package com.liferay.ide.hook.ui.wizard;
 
-import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -208,7 +207,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 						public void widgetSelected(SelectionEvent e) {
 							handleArrayDialogButtonSelected(index, lbl, text);
 						}
-	
+
 					});
 			}
 
