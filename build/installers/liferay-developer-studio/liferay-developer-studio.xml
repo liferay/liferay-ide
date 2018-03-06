@@ -142,6 +142,20 @@
             </shouldPackRuleList>
         </component>
     </componentList>
+    <preInstallationActionList>
+        <autodetectJava>
+            <promptUser>1</promptUser>
+            <validVersionList>
+                <validVersion>
+                    <bitness>64</bitness>
+                    <maxVersion>1.8</maxVersion>
+                    <minVersion>1.8</minVersion>
+                    <requireJDK>1</requireJDK>
+                    <vendor></vendor>
+                </validVersion>
+            </validVersionList>
+        </autodetectJava>
+    </preInstallationActionList>
     <postInstallationActionList>
         <createDirectory>
             <path>${user_home_directory}${platform_path_separator}.liferay</path>
@@ -156,7 +170,7 @@
                 </writeFile>
                 <runProgram>
                     <customErrorMessage>Could not create DXP download token. Make sure you type correct email address and password and are connected to the internet.</customErrorMessage>
-                    <program>java</program>
+                    <program>${java_executable}</program>
                     <programArguments>-jar "${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar" createToken --force --email "${email}" --password-file "${installdir}${platform_path_separator}pwd"</programArguments>
                     <onErrorActionList>
                         <deleteFile>
@@ -279,7 +293,7 @@
             </ruleList>
         </copyFile>
         <runProgram>
-            <program>java</program>
+            <program>${java_executable}</program>
             <programArguments>-jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" -u init</programArguments>
         </runProgram>
         <if>
