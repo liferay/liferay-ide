@@ -18,6 +18,7 @@ import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.PluginType;
@@ -184,6 +185,18 @@ public class PluginsSDKProjectProvider
 						projectName, displayName, separateJRE, workingDir, null, monitor);
 				}
 
+				IProject layoutProject = ProjectUtil.getProject(projectName);
+
+				if (!LiferayDescriptorHelper.getDescriptorVersion(layoutProject).equals("6.2.0")) {
+					IPath projectPath = newSDKProjectPath.append(projectName + pluginTypeSuffix);
+
+					IPath fileWap = projectPath.append("docroot").append("blank_columns.wap.tpl");
+
+					if (FileUtil.exists(fileWap)) {
+						fileWap.toFile().delete();
+					}
+				}
+
 				break;
 
 			case theme:
@@ -230,8 +243,7 @@ public class PluginsSDKProjectProvider
 
 			if (FileUtil.notExists(newSDKProjectPath)) {
 				return ProjectCore.createErrorStatus(
-					"Error create project due to '" + newSDKProjectPath + "' does not exist."
-				);
+					"Error create project due to '" + newSDKProjectPath + "' does not exist.");
 			}
 
 			File newSDKProjectDir = newSDKProjectPath.toFile();
@@ -280,6 +292,7 @@ public class PluginsSDKProjectProvider
 
 				break;
 			default:
+
 				break;
 		}
 
@@ -426,8 +439,7 @@ public class PluginsSDKProjectProvider
 				contents = contents.replace("${sdk.dir}/ivy.xml", "../../ivy.xml");
 
 				ivyFile.setContents(
-					new ByteArrayInputStream(contents.toString().getBytes("UTF-8")), IResource.FORCE,
-					new NullProgressMonitor());
+					new ByteArrayInputStream(contents.getBytes("UTF-8")), IResource.FORCE, new NullProgressMonitor());
 			}
 			catch (Exception e) {
 				ProjectCore.logError(e);

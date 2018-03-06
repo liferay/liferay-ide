@@ -104,7 +104,11 @@ public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implement
 		String thumbnailPath = model.getStringProperty(LAYOUT_THUMBNAIL_FILE);
 
 		NodeUtil.appendChildElement(layoutTemplateElement, "template-path", templatePath);
-		NodeUtil.appendChildElement(layoutTemplateElement, "wap-template-path", wapTemplatePath);
+
+		if (getDescriptorVersion().equals("6.2.0")) {
+			NodeUtil.appendChildElement(layoutTemplateElement, "wap-template-path", wapTemplatePath);
+		}
+
 		NodeUtil.appendChildElement(layoutTemplateElement, "thumbnail-path", thumbnailPath);
 
 		// format the new node added to the model;
@@ -140,6 +144,7 @@ public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implement
 
 						if (templateId.equals(layoutTemplate.getAttribute("id"))) {
 							retval[0] = true;
+
 							break;
 						}
 					}
