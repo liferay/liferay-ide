@@ -73,10 +73,14 @@ public class NewLiferayWorkspaceOpMethods {
 				else {
 					bundlesLocation = new Path(location).append("bundles");
 				}
-
-				if (bundlesLocation.toFile().exists()) {
-					ServerUtil.addPortalRuntimeAndServer(serverRuntimeName, bundlesLocation, monitor);
-				}
+                
+			    if(bundlesLocation != null && bundlesLocation.toFile().exists() && ServerUtil.isValidLiferayRuntime(bundlesLocation)) {
+			        ServerUtil.addPortalRuntimeAndServer(serverRuntimeName, bundlesLocation, monitor);
+			    }
+			    else {
+			        String msg = "bundles download failed";
+			        ProjectCore.logWarning( msg );
+			    }
 			}
 		}
 		catch (Exception e) {
