@@ -31,6 +31,14 @@ public class LiferayWorkspaceGradleSupport extends LiferayWorkspaceSupport {
 	public void before() {
 		super.before();
 
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.preferences.openGradleTry();
+
+		dialogAction.gradle.checkAutomaticSync();
+
+		dialogAction.preferences.confirm();
+
 		wizardAction.openNewLiferayWorkspaceWizard();
 
 		wizardAction.newLiferayWorkspace.prepareGradle(getName());
