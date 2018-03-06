@@ -17,6 +17,7 @@ package com.liferay.ide.ui.liferay.action;
 import com.liferay.ide.ui.liferay.UIAction;
 import com.liferay.ide.ui.swtbot.eclipse.page.AddAndRemoveDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.AvailableSoftwareSitesPreferencesDialog;
+import com.liferay.ide.ui.swtbot.eclipse.page.GradlePreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.PreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.ServerRuntimeEnvironmentsPreferencesDialog;
 import com.liferay.ide.ui.swtbot.eclipse.page.TextDialog;
@@ -116,6 +117,7 @@ public class DialogAction extends UIAction {
 
 	public AddAndRemoveDialogAction addAndRemove = new AddAndRemoveDialogAction();
 	public AvailableSoftwareSitesDialogAction availableSoftwareSites = new AvailableSoftwareSitesDialogAction();
+	public GradleDialogAction gradle = new GradleDialogAction();
 	public PreferencesDialogAction preferences = new PreferencesDialogAction();
 	public ServerRuntimeEnvironmentsDialogAction serverRuntimeEnvironments =
 		new ServerRuntimeEnvironmentsDialogAction();
@@ -154,6 +156,16 @@ public class DialogAction extends UIAction {
 
 	}
 
+	public class GradleDialogAction {
+
+		public void checkAutomaticSync() {
+			_gradleDialog.getAutomaticSync().select();
+		}
+
+		private final GradlePreferencesDialog _gradleDialog = new GradlePreferencesDialog(bot);
+
+	}
+
 	public class PreferencesDialogAction {
 
 		public void confirm() {
@@ -166,6 +178,22 @@ public class DialogAction extends UIAction {
 			assertTitle(_getDialog(), _preferencesDialog);
 
 			_openPreferenceType(INSTALL_UPDATE, AVAILABLE_SOFTWARE_SITES);
+		}
+
+		public void openGradleTry() {
+			assertTitle(_getDialog(), _preferencesDialog);
+
+			long origin = SWTBotPreferences.TIMEOUT;
+
+			SWTBotPreferences.TIMEOUT = 500;
+
+			try {
+				_openPreferenceType("Gradle");
+			}
+			catch (Exception e) {
+			}
+
+			SWTBotPreferences.TIMEOUT = origin;
 		}
 
 		public void openServerRuntimeEnvironmentsTry() {
@@ -182,6 +210,10 @@ public class DialogAction extends UIAction {
 			}
 
 			SWTBotPreferences.TIMEOUT = origin;
+		}
+
+		private void _openPreferenceType(String categroy) {
+			_preferencesDialog.getPreferencesTypes().selectTreeItem(categroy);
 		}
 
 		private void _openPreferenceType(String categroy, String type) {
