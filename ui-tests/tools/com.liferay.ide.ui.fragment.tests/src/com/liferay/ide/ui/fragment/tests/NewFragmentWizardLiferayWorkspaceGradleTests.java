@@ -21,6 +21,7 @@ import com.liferay.ide.ui.liferay.base.TomcatSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -223,6 +224,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
+	@Ignore("ignore as unstable, need more research")
 	@Test
 	public void createFragmentWithResourceAction() {
 		wizardAction.openNewFragmentWizard();
