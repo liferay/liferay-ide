@@ -522,17 +522,31 @@ public class ServerUtil
 
         String[] dirs = new String[] { "core", "modules", "portal", "static" };
 
-        File moduleOsgiBundle = null;
-
         for( String dir : dirs )
         {
-            moduleOsgiBundle = portalBundle.getOSGiBundlesDir().append( dir ).append( hostOsgiBundle ).toFile();
+            File portalModuleDir = portalBundle.getOSGiBundlesDir().append( dir ).toFile();
+
+            File moduleOsgiBundle = new File( portalModuleDir, hostOsgiBundle );
 
             if( moduleOsgiBundle.exists() )
             {
-                FileUtil.copyFileToDir( moduleOsgiBundle, temp.toFile() );
+                return copyModuleBundleJar( moduleOsgiBundle, temp );
+            }
+            else
+            {
+                int index = hostOsgiBundle.indexOf( "-" );
 
-                return moduleOsgiBundle;
+                if( index > 0 )
+                {
+                    String hostOsgiBundleWithoutVersion = hostOsgiBundle.substring( 0, index ) + ".jar";
+
+                    File moduleOsgiBundleWithoutVersion = new File( portalModuleDir, hostOsgiBundleWithoutVersion );
+
+                    if( moduleOsgiBundleWithoutVersion.exists() )
+                    {
+                        return copyModuleBundleJar( moduleOsgiBundleWithoutVersion, temp );
+                    }
+                }
             }
         }
 
@@ -1122,5 +1136,24 @@ public class ServerUtil
         }
 
         return false;
+    }
+
+    private static File copyModuleBundleJar(File moduleOsgiBundle,IPath temp)
+    {
+        String[] bsnAndVersion =
+            FileUtil.readMainFestProsFromJar( moduleOsgiBundle, "Bundle-SymbolicName", "Bundle-Version" );
+
+        String bsnAndVersionName = bsnAndVersion[0] + "-" + bsnAndVersion[1] + ".jar";
+
+        File tempJar = new File( temp.toFile(), bsnAndVersionName );
+
+        if( !tempJar.exists() )
+        {
+            FileUtil.copyFileToDir( moduleOsgiBundle, bsnAndVersionName, temp.toFile() );
+
+            return tempJar;
+        }
+
+        return moduleOsgiBundle;
     }
 }

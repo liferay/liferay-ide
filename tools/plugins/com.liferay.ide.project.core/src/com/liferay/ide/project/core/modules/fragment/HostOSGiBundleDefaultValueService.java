@@ -16,6 +16,12 @@ package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.templates.BndProperties;
+import com.liferay.ide.project.core.modules.templates.BndPropertiesValue;
+
+import java.io.IOException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -44,34 +50,29 @@ public class HostOSGiBundleDefaultValueService extends DerivedValueService {
 		if (FileUtil.notExists(bndFile)) {
 			return null;
 		}
+		try {
+			BndProperties bnd = new BndProperties();
+			bnd.load(bndFile.getLocation().toFile());
 
-		String fragmentFlag = "Fragment-Host:";
+			BndPropertiesValue fragmentHost = (BndPropertiesValue) bnd.get("Fragment-Host");
 
-		String[] lines = FileUtil.readLinesFromFile(bndFile.getLocation().toFile());
+			if (fragmentHost != null) {
+				String fragmentHostValue = fragmentHost.getOriginalValue();
 
-		for (String line : lines) {
-			if (line.startsWith(fragmentFlag)) {
-				String[] s = line.split(":");
+				String[] b = fragmentHostValue.split(";");
+				if (ListUtil.isNotEmpty(b) && (b.length > 1)) {
+					String[] f = b[1].split("=");
 
-				if (!s[1].contains(";")) {
-					return s[1];
-				}
-				else {
-					String[] f = s[1].split(";");
+					String version = f[1].substring(1, f[1].length() - 1);
 
-					String hostName = f[0];
-
-					String bundleVersion = f[1];
-
-					String[] b = bundleVersion.split("=");
-
-					String version = b[1].substring(1, b[1].length() - 1);
-
-					return hostName + "-" + version;
+					return b[0] + "-" + version;
 				}
 			}
+			return null;
 		}
-
+		catch (IOException e) {
+			ProjectCore.logError("Failed to parsed bnd.bnd for project " + project.getName(), e);
+		}
 		return null;
 	}
 

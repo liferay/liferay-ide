@@ -96,9 +96,11 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 
 			IPath tempLocation = ProjectCore.getDefault().getStateLocation();
 
-			ServerUtil.getModuleFileFrom70Server(runtime, hostOSGiBundle, tempLocation);
-
 			File module = tempLocation.append(hostOSGiBundle).toFile();
+
+			if (FileUtil.notExists(module)) {
+				module = ServerUtil.getModuleFileFrom70Server(runtime, hostOSGiBundle, tempLocation);
+			}
 
 			if (FileUtil.exists(module)) {
 				try (JarFile jar = new JarFile(module)) {
