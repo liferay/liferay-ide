@@ -46,8 +46,8 @@
         <plugin-sdk-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk</plugin-sdk-download-base>
         <plugin-sdk-zip-name>com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</plugin-sdk-zip-name>
         <plugin-sdk-version>1.0.16</plugin-sdk-version>
-        <jpmcli-latest-download-url>https://oss.sonatype.org/content/repositories/snapshots/biz/aQute/bnd/biz.aQute.jpm.run/4.0.0-SNAPSHOT/biz.aQute.jpm.run-4.0.0-20171205.052440-1.jar</jpmcli-latest-download-url>
-        <jpmcli-latest-md5>534fc2d7f92ce9e20a8935f65a3c4669</jpmcli-latest-md5>
+        <jpmcli-latest-download-url>https://oss.sonatype.org/content/repositories/snapshots/biz/aQute/bnd/biz.aQute.jpm.run/4.0.0-SNAPSHOT/biz.aQute.jpm.run-4.0.0-20180307.045202-5.jar</jpmcli-latest-download-url>
+        <jpmcli-latest-md5>9e85875c0903d986e11f1eea624325fe</jpmcli-latest-md5>
     </properties>
 
     <modules>
