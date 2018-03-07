@@ -24,8 +24,11 @@ import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 
 import java.io.File;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -34,6 +37,52 @@ import org.junit.Test;
  */
 public class NewMavenLiferayWorkspaceOpTests
 {
+
+    @Before
+    public void clearWorkspace() throws Exception
+    {
+        for( IProject project : CoreUtil.getAllProjects() )
+        {
+            project.delete( true, new NullProgressMonitor() );
+        }
+    }
+
+    @Test
+    public void testNewMavenLiferayWorkspaceSetUrl() throws Exception
+    {
+        NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
+
+        String projectName = "test-liferay-workspace-url";
+
+        String bundleUrl =
+            "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
+
+        IPath workspaceLocation = CoreUtil.getWorkspaceRoot().getLocation();
+
+        op.setWorkspaceName( projectName );
+        op.setUseDefaultLocation( false );
+        op.setLocation( workspaceLocation.toPortableString() );
+        op.setProjectProvider( "maven-liferay-workspace" );
+        op.setProvisionLiferayBundle( true );
+        op.setBundleUrl( bundleUrl );
+
+        op.execute( new ProgressMonitor() );
+
+        String projectLocation = workspaceLocation.append( projectName ).toPortableString();
+
+        File pomFile = new File( projectLocation, "pom.xml" );
+
+        assertTrue( pomFile.exists() );
+
+        File bundleDir = new File( projectLocation, "bundles" );
+
+        assertTrue( bundleDir.exists() );
+
+        String content = FileUtil.readContents( pomFile );
+
+        assertEquals( content.contains( bundleUrl ), true );
+
+    }
 
     @Test
     public void testNewMavenLiferayWorkspaceInitBundle() throws Exception
