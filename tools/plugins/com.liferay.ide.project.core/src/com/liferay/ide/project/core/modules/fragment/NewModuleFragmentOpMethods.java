@@ -167,12 +167,12 @@ public class NewModuleFragmentOpMethods {
 
 		IPath tempLocation = ProjectCore.getDefault().getStateLocation();
 
-		File hostBundleJar = FileUtil.getFile(tempLocation.append(hostBundleName));
+		File hostBundleJar = tempLocation.append(hostBundleName).toFile();
 
 		if (FileUtil.notExists(hostBundleJar)) {
 			IRuntime runtime = ServerUtil.getRuntime(op.getLiferayRuntimeName().content());
 
-			ServerUtil.getModuleFileFrom70Server(runtime, hostBundleName, tempLocation);
+			hostBundleJar = ServerUtil.getModuleFileFrom70Server(runtime, hostBundleName, tempLocation);
 		}
 
 		String[] bsnAndVersion =
