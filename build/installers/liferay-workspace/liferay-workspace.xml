@@ -232,6 +232,71 @@
                         </compareValues>
                     </ruleList>
                 </propertiesFileSet>
+                <if>
+                    <actionList>
+                        <createDirectory>
+                            <path>${user_home_directory}${platform_path_separator}.gradle</path>
+                        </createDirectory>
+                        <if>
+                            <actionList>
+                                <propertiesFileSet>
+                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                                    <key>systemProp.https.proxyHost</key>
+                                    <value>${proxyhost}</value>
+                                </propertiesFileSet>
+                                <propertiesFileSet>
+                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                                    <key>systemProp.https.proxyPort</key>
+                                    <value>${proxyport}</value>
+                                </propertiesFileSet>
+                                <propertiesFileSet>
+                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                                    <key>systemProp.https.proxyUser</key>
+                                    <value>${proxyusername}</value>
+                                </propertiesFileSet>
+                                <propertiesFileSet>
+                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                                    <key>systemProp.https.proxyPassword</key>
+                                    <value>${proxypassword}</value>
+                                </propertiesFileSet>
+                            </actionList>
+                            <conditionRuleList>
+                                <isTrue>
+                                    <value>${proxyhttps}</value>
+                                </isTrue>
+                            </conditionRuleList>
+                            <elseActionList>
+                                <propertiesFileSet>
+                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                                    <key>systemProp.http.proxyHost</key>
+                                    <value>${proxyhost}</value>
+                                </propertiesFileSet>
+                                <propertiesFileSet>
+                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                                    <key>systemProp.http.proxyPort</key>
+                                    <value>${proxyport}</value>
+                                </propertiesFileSet>
+                                <propertiesFileSet>
+                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                                    <key>systemProp.http.proxyUser</key>
+                                    <value>${proxyusername}</value>
+                                </propertiesFileSet>
+                                <propertiesFileSet>
+                                    <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
+                                    <key>systemProp.http.proxyPassword</key>
+                                    <value>${proxypassword}</value>
+                                </propertiesFileSet>
+                            </elseActionList>
+                        </if>
+                    </actionList>
+                    <ruleList>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${proxy}</value1>
+                            <value2>proxysetting</value2>
+                        </compareValues>
+                    </ruleList>
+                </if>
             </actionList>
             <conditionRuleList>
                 <compareValues>
@@ -420,6 +485,94 @@
                     <condition>not_exists</condition>
                     <path>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}token</path>
                 </fileTest>
+            </ruleList>
+        </parameterGroup>
+        <choiceParameterGroup>
+            <name>proxy</name>
+            <description>Proxy Config</description>
+            <explanation></explanation>
+            <value></value>
+            <default>skipproxysetting</default>
+            <parameterList>
+                <labelParameter>
+                    <name>skipproxysetting</name>
+                    <description>Skip proxy setting</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
+                <labelParameter>
+                    <name>proxysetting</name>
+                    <description>Config proxy setting</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
+            </parameterList>
+            <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${initlrws}</value1>
+                    <value2>lrws</value2>
+                </compareValues>
+            </ruleList>
+        </choiceParameterGroup>
+        <parameterGroup>
+            <name>proxyinfo</name>
+            <title>Proxy Information</title>
+            <explanation></explanation>
+            <value></value>
+            <default></default>
+            <parameterList>
+                <stringParameter>
+                    <name>proxyhost</name>
+                    <description>proxy host</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <width>30</width>
+                </stringParameter>
+                <stringParameter>
+                    <name>proxyport</name>
+                    <description>proxy port</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <width>30</width>
+                </stringParameter>
+                <stringParameter>
+                    <name>proxyusername</name>
+                    <description>proxy username</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <width>30</width>
+                </stringParameter>
+                <stringParameter>
+                    <name>proxypassword</name>
+                    <description>proxy password</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <allowEmptyValue>1</allowEmptyValue>
+                    <width>30</width>
+                </stringParameter>
+                <booleanParameter>
+                    <name>proxyhttps</name>
+                    <description>proxy requires https</description>
+                    <explanation></explanation>
+                    <value></value>
+                    <default></default>
+                    <displayStyle>checkbox-right</displayStyle>
+                </booleanParameter>
+            </parameterList>
+            <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${proxy}</value1>
+                    <value2>proxysetting</value2>
+                </compareValues>
             </ruleList>
         </parameterGroup>
     </parameterList>
