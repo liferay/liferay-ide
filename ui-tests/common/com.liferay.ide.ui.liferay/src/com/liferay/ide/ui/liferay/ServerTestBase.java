@@ -12,35 +12,15 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay.base;
+package com.liferay.ide.ui.liferay;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import com.liferay.ide.ui.liferay.support.server.ServerSupport;
 
 /**
  * @author Terry Jia
  */
-public class Sdk62Support extends SdkSupport {
+public class ServerTestBase extends SwtbotBase {
 
-	public Sdk62Support(SWTWorkbenchBot bot, ServerSupport server) {
-		super(bot, "6.2-ce-ga6", server);
-	}
-
-	@Override
-	public void after() {
-		if (!envAction.internal()) {
-			return;
-		}
-
-		super.after();
-	}
-
-	@Override
-	public void before() {
-		if (!envAction.internal()) {
-			return;
-		}
-
-		super.before();
-	}
+	public static ServerSupport server;
 
 }

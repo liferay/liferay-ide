@@ -12,27 +12,17 @@
  * details.
  */
 
-package com.liferay.ide.ui.jsf.tests;
+package com.liferay.ide.ui.liferay.support.server;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
-
-import org.junit.Rule;
-import org.junit.Test;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  */
-public class NewJsfProjectWizardSdk62Tests extends SwtbotBase {
+public class PureTomcat62Support extends ServerSupport {
 
-	@Test
-	public void createJsfStandard() {
-		if (envAction.notInternal()) {
-			return;
-		}
+	public PureTomcat62Support(SWTWorkbenchBot bot) {
+		super(bot, "tomcat", "6.2-ga6");
 	}
-
-	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
 
 }

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay.base;
+package com.liferay.ide.ui.liferay.support;
 
 import com.liferay.ide.ui.liferay.action.BrowserAction;
 import com.liferay.ide.ui.liferay.action.DialogAction;

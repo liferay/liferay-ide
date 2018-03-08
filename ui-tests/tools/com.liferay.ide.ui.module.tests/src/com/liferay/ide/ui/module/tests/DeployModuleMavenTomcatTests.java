@@ -15,9 +15,11 @@
 package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.ProjectSupport;
-import com.liferay.ide.ui.liferay.base.ServerRunningSupport;
-import com.liferay.ide.ui.liferay.base.TomcatSupport;
+import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
+import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
+import com.liferay.ide.ui.liferay.support.server.ServerRunningSupport;
+import com.liferay.ide.ui.liferay.support.server.Tomcat7xSupport;
+import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
 import org.junit.Ignore;
@@ -31,10 +33,11 @@ import org.junit.rules.RuleChain;
 @Ignore("ignore for more research")
 public class DeployModuleMavenTomcatTests extends SwtbotBase {
 
-	public static TomcatSupport tomcat = new TomcatSupport(bot);
+	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
 
 	@ClassRule
-	public static RuleChain chain = RuleChain.outerRule(tomcat).around(new ServerRunningSupport(bot, tomcat));
+	public static RuleChain chain = RuleUtil.getRuleChain(
+		tomcat, new Tomcat7xSupport(bot, tomcat), new ServerRunningSupport(bot, tomcat));
 
 	@Test
 	public void deployActivator() {

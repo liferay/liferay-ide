@@ -15,7 +15,7 @@
 package com.liferay.ide.ui.server.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.PureTomcatSupport;
+import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
 
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -27,7 +27,7 @@ import org.junit.Test;
  * @author Ashley Yuan
  * @author Ying Xu
  */
-public class ServerTomcatTests extends SwtbotBase {
+public class ServerTomcat70Tests extends SwtbotBase {
 
 	@Test
 	public void addLiferay7RuntimeFromPreferences() {
@@ -307,6 +307,6 @@ public class ServerTomcatTests extends SwtbotBase {
 	}
 
 	@Rule
-	public PureTomcatSupport tomcat = new PureTomcatSupport(bot);
+	public PureTomcat70Support tomcat = new PureTomcat70Support(bot);
 
 }

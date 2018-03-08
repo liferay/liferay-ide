@@ -15,15 +15,18 @@
 package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.LiferayWorkspaceMavenSupport;
-import com.liferay.ide.ui.liferay.base.ProjectSupport;
-import com.liferay.ide.ui.liferay.base.TomcatSupport;
+import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
+import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
+import com.liferay.ide.ui.liferay.support.server.Tomcat7xSupport;
+import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceMavenSupport;
+import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 
 /**
  * @author Lily Li
@@ -31,11 +34,13 @@ import org.junit.Test;
 @Ignore("ignore as the problem of deleting Liferay workspace")
 public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 
-	@ClassRule
-	public static LiferayWorkspaceMavenSupport liferayWorkspace = new LiferayWorkspaceMavenSupport(bot);
+	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
 
 	@ClassRule
-	public static TomcatSupport tomcat = new TomcatSupport(bot);
+	public static RuleChain chain = RuleUtil.getRuleChain(tomcat, new Tomcat7xSupport(bot, tomcat));
+
+	@ClassRule
+	public static LiferayWorkspaceMavenSupport liferayWorkspace = new LiferayWorkspaceMavenSupport(bot);
 
 	@Test
 	public void createFragmentWithJsp() {

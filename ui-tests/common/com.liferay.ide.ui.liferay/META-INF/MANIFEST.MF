@@ -16,7 +16,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.ui.liferay,
  com.liferay.ide.ui.liferay.action,
- com.liferay.ide.ui.liferay.base,
  com.liferay.ide.ui.liferay.page,
  com.liferay.ide.ui.liferay.page.button,
  com.liferay.ide.ui.liferay.page.dialog,
@@ -24,4 +23,9 @@ Export-Package: com.liferay.ide.ui.liferay,
  com.liferay.ide.ui.liferay.page.view,
  com.liferay.ide.ui.liferay.page.wizard,
  com.liferay.ide.ui.liferay.page.wizard.project,
+ com.liferay.ide.ui.liferay.support,
+ com.liferay.ide.ui.liferay.support.server,
+ com.liferay.ide.ui.liferay.support.project,
+ com.liferay.ide.ui.liferay.support.workspace,
+ com.liferay.ide.ui.liferay.support.sdk,
  com.liferay.ide.ui.liferay.util

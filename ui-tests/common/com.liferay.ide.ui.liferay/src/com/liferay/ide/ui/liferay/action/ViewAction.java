@@ -181,7 +181,11 @@ public class ViewAction extends UIAction {
 		}
 
 		public void openUpdateMavenProjectDialog(String projectName) {
-			_getProjects().contextMenu("Update Project...", projectName);
+			try {
+				_getProjects().contextMenu("Update Project...", projectName);
+			}
+			catch (Exception e) {
+			}
 		}
 
 		public void refreshGradleProject(String projectName) {

@@ -12,17 +12,17 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay.base;
+package com.liferay.ide.ui.liferay.support.server;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  */
-public class PureTomcat62Support extends ServerSupport {
+public class PureTomcat70Support extends ServerSupport {
 
-	public PureTomcat62Support(SWTWorkbenchBot bot) {
-		super(bot, "tomcat", "6.2-ga6");
+	public PureTomcat70Support(SWTWorkbenchBot bot) {
+		super(bot, "tomcat", "7.0-ga5");
 	}
 
 }

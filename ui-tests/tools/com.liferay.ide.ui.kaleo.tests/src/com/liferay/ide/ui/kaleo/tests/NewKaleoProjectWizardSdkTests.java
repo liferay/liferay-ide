@@ -15,7 +15,7 @@
 package com.liferay.ide.ui.kaleo.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.ProjectSupport;
+import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
 
 import org.junit.Rule;
 import org.junit.Test;

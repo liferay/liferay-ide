@@ -15,8 +15,8 @@
 package com.liferay.ide.ui.theme.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.LiferayWorkspaceMavenSupport;
-import com.liferay.ide.ui.liferay.base.ProjectSupport;
+import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
+import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceMavenSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;

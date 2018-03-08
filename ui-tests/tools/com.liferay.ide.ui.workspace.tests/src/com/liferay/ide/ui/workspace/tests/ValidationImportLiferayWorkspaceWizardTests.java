@@ -15,7 +15,7 @@
 package com.liferay.ide.ui.workspace.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.ImportLiferayWorkspaceProjectSupport;
+import com.liferay.ide.ui.liferay.support.project.ImportLiferayWorkspaceProjectSupport;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 

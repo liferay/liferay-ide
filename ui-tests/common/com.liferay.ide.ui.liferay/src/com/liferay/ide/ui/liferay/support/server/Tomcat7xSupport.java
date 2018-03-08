@@ -12,8 +12,9 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay.base;
+package com.liferay.ide.ui.liferay.support.server;
 
+import com.liferay.ide.ui.liferay.support.SupportBase;
 import com.liferay.ide.ui.swtbot.page.Table;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -23,15 +24,17 @@ import org.junit.Assert;
 /**
  * @author Terry Jia
  */
-public class Tomcat62Support extends PureTomcat62Support {
+public class Tomcat7xSupport extends SupportBase {
 
-	public Tomcat62Support(SWTWorkbenchBot bot) {
+	public Tomcat7xSupport(SWTWorkbenchBot bot, ServerSupport server) {
 		super(bot);
+
+		_server = server;
 	}
 
 	@Override
 	public void after() {
-		dialogAction.deleteRuntimFromPreferences(getServerName());
+		dialogAction.deleteRuntimFromPreferences(_server.getServerName());
 
 		super.after();
 	}
@@ -56,11 +59,11 @@ public class Tomcat62Support extends PureTomcat62Support {
 
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.newRuntime.prepare62();
+		wizardAction.newRuntime.prepare7();
 
 		wizardAction.next();
 
-		wizardAction.newRuntime62.prepare(getServerName(), getFullServerDir());
+		wizardAction.newRuntime7.prepare(_server.getServerName(), _server.getFullServerDir());
 
 		wizardAction.finish();
 
@@ -72,9 +75,15 @@ public class Tomcat62Support extends PureTomcat62Support {
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.newServer.prepare62(getServerName());
+		wizardAction.newServer.prepare(_server.getServerName());
 
 		wizardAction.finish();
 	}
+
+	public ServerSupport getServer() {
+		return _server;
+	}
+
+	private ServerSupport _server;
 
 }

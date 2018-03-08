@@ -14,30 +14,17 @@
 
 package com.liferay.ide.ui.server.tests;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.ProjectSupport;
-import com.liferay.ide.ui.liferay.base.SdkSupport;
-import com.liferay.ide.ui.liferay.base.ServerRunningSupport;
-import com.liferay.ide.ui.liferay.base.TomcatSupport;
+import com.liferay.ide.ui.liferay.ServerTestBase;
+import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
 import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.RuleChain;
 
 /**
  * @author Terry Jia
  */
-public class TomcatDeployTests extends SwtbotBase {
+public class TomcatDeployBase extends ServerTestBase {
 
-	public static TomcatSupport tomcat = new TomcatSupport(bot);
-
-	@ClassRule
-	public static RuleChain chain = RuleChain.outerRule(
-		tomcat).around(new SdkSupport(bot, tomcat)).around(new ServerRunningSupport(bot, tomcat));
-
-	@Test
 	public void deployFragment() {
 		wizardAction.openNewFragmentWizard();
 
@@ -59,24 +46,23 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.servers.openAddAndRemoveDialog(tomcat.getStartedLabel());
+		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());
 
 		dialogAction.confirm(FINISH);
 
-		jobAction.waitForConsoleContent(tomcat.getServerName(), "STOPPED com.liferay.blogs.web", 20 * 1000);
+		jobAction.waitForConsoleContent(server.getServerName(), "STOPPED com.liferay.blogs.web", 20 * 1000);
 
-		jobAction.waitForConsoleContent(tomcat.getServerName(), "STARTED com.liferay.blogs.web", 20 * 1000);
+		jobAction.waitForConsoleContent(server.getServerName(), "STARTED com.liferay.blogs.web", 20 * 1000);
 
-		viewAction.servers.removeModule(tomcat.getStartedLabel(), project.getStartedLabel());
+		viewAction.servers.removeModule(server.getStartedLabel(), project.getStartedLabel());
 
 		dialogAction.confirm();
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void deployModule() {
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -84,26 +70,25 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.servers.openAddAndRemoveDialog(tomcat.getStartedLabel());
+		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());
 
 		dialogAction.confirm(FINISH);
 
-		Assert.assertTrue(viewAction.servers.visibleModuleTry(tomcat.getStartedLabel(), project.getName()));
+		Assert.assertTrue(viewAction.servers.visibleModuleTry(server.getStartedLabel(), project.getName()));
 
-		jobAction.waitForConsoleContent(tomcat.getServerName(), "STARTED " + project.getName() + "_", 20 * 1000);
+		jobAction.waitForConsoleContent(server.getServerName(), "STARTED " + project.getName() + "_", 20 * 1000);
 
-		viewAction.servers.removeModule(tomcat.getStartedLabel(), project.getStartedLabel());
+		viewAction.servers.removeModule(server.getStartedLabel(), project.getStartedLabel());
 
 		dialogAction.confirm();
 
-		jobAction.waitForConsoleContent(tomcat.getServerName(), "STOPPED " + project.getName() + "_", 20 * 1000);
+		jobAction.waitForConsoleContent(server.getServerName(), "STOPPED " + project.getName() + "_", 20 * 1000);
 
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void deployPluginPortlet() {
 		viewAction.switchLiferayPerspective();
 
@@ -119,7 +104,7 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		jobAction.waitForValidate(projectName);
 
-		viewAction.servers.openAddAndRemoveDialog(tomcat.getStartedLabel());
+		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(projectName);
 
@@ -128,7 +113,6 @@ public class TomcatDeployTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(projectName);
 	}
 
-	@Test
 	public void deployWar() {
 		wizardAction.openNewLiferayModuleWizard();
 
@@ -136,22 +120,22 @@ public class TomcatDeployTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.servers.openAddAndRemoveDialog(tomcat.getStartedLabel());
+		viewAction.servers.openAddAndRemoveDialog(server.getStartedLabel());
 
 		dialogAction.addAndRemove.addModule(project.getName());
 
 		dialogAction.confirm(FINISH);
 
-		Assert.assertTrue(viewAction.servers.visibleModuleTry(tomcat.getStartedLabel(), project.getName()));
+		Assert.assertTrue(viewAction.servers.visibleModuleTry(server.getStartedLabel(), project.getName()));
 
 		jobAction.waitForConsoleContent(
-			tomcat.getServerName(), "1 portlet for " + project.getName() + " is available for use", 20 * 1000);
+			server.getServerName(), "1 portlet for " + project.getName() + " is available for use", 20 * 1000);
 
-		viewAction.servers.removeModule(tomcat.getStartedLabel(), project.getStartedLabel());
+		viewAction.servers.removeModule(server.getStartedLabel(), project.getStartedLabel());
 
 		dialogAction.confirm();
 
-		jobAction.waitForConsoleContent(tomcat.getServerName(), "STOPPED " + project.getName() + "_", 20 * 1000);
+		jobAction.waitForConsoleContent(server.getServerName(), "STOPPED " + project.getName() + "_", 20 * 1000);
 
 		viewAction.project.closeAndDelete(project.getName());
 	}

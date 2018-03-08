@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay.base;
+package com.liferay.ide.ui.liferay.support.server;
 
 import com.liferay.ide.ui.swtbot.page.Table;
 
@@ -23,9 +23,9 @@ import org.junit.Assert;
 /**
  * @author Terry Jia
  */
-public class TomcatSupport extends PureTomcatSupport {
+public class Tomcat62Support extends PureTomcat62Support {
 
-	public TomcatSupport(SWTWorkbenchBot bot) {
+	public Tomcat62Support(SWTWorkbenchBot bot) {
 		super(bot);
 	}
 
@@ -56,11 +56,11 @@ public class TomcatSupport extends PureTomcatSupport {
 
 		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
 
-		wizardAction.newRuntime.prepare7();
+		wizardAction.newRuntime.prepare62();
 
 		wizardAction.next();
 
-		wizardAction.newRuntime7.prepare(getServerName(), getFullServerDir());
+		wizardAction.newRuntime62.prepare(getServerName(), getFullServerDir());
 
 		wizardAction.finish();
 
@@ -72,7 +72,7 @@ public class TomcatSupport extends PureTomcatSupport {
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.newServer.prepare(getServerName());
+		wizardAction.newServer.prepare62(getServerName());
 
 		wizardAction.finish();
 	}

@@ -15,9 +15,11 @@
 package com.liferay.ide.ui.hook.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.SdkProjectSupport;
-import com.liferay.ide.ui.liferay.base.SdkSupport;
-import com.liferay.ide.ui.liferay.base.TomcatSupport;
+import com.liferay.ide.ui.liferay.support.project.SdkProjectSupport;
+import com.liferay.ide.ui.liferay.support.sdk.SdkSupport;
+import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
+import com.liferay.ide.ui.liferay.support.server.Tomcat7xSupport;
+import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -29,10 +31,11 @@ import org.junit.rules.RuleChain;
  */
 public class NewHookConfigTests extends SwtbotBase {
 
-	public static TomcatSupport tomcat = new TomcatSupport(bot);
+	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
 
 	@ClassRule
-	public static RuleChain chain = RuleChain.outerRule(tomcat).around(new SdkSupport(bot, tomcat));
+	public static RuleChain chain = RuleUtil.getRuleChain(
+		tomcat, new Tomcat7xSupport(bot, tomcat), new SdkSupport(bot, tomcat));
 
 	@Test
 	public void createSampleProject() {
