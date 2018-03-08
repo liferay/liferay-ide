@@ -12,19 +12,13 @@
  * details.
  */
 
-package com.liferay.ide.ui.fragment.tests;
+package com.liferay.ide.ui.fragment.tests.base;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
-import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
-import com.liferay.ide.ui.liferay.support.server.Tomcat7xSupport;
-import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
 import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.RuleChain;
 
 /**
  * @author Vicky Wang
@@ -32,14 +26,8 @@ import org.junit.rules.RuleChain;
  * @author Lily Li
  * @author Ying Xu
  */
-public class NewFragmentWizardGradleTests extends SwtbotBase {
+public class NewFragmentWizardGradleBase extends SwtbotBase {
 
-	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
-
-	@ClassRule
-	public static RuleChain chain = RuleUtil.getRuleChain(tomcat, new Tomcat7xSupport(bot, tomcat));
-
-	@Test
 	public void createFragmentWithJsp() {
 		wizardAction.openNewFragmentWizard();
 
@@ -64,7 +52,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void createFragmentWithJspf() {
 		wizardAction.openNewFragmentWizard();
 
@@ -89,7 +76,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void createFragmentWithoutFiles() {
 		wizardAction.openNewFragmentWizard();
 
@@ -114,7 +100,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void createFragmentWithPortletProperites() {
 		wizardAction.openNewFragmentWizard();
 
@@ -145,7 +130,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void createFragmentWithResourceAction() {
 		wizardAction.openNewFragmentWizard();
 
@@ -170,7 +154,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void createFragmentWithWholeFiles() {
 		wizardAction.openNewFragmentWizard();
 
