@@ -12,8 +12,9 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay.base;
+package com.liferay.ide.ui.liferay.support.server;
 
+import com.liferay.ide.ui.liferay.support.SupportBase;
 import com.liferay.ide.ui.liferay.util.BundleInfo;
 import com.liferay.ide.ui.liferay.util.FileUtil;
 import com.liferay.ide.ui.liferay.util.ZipUtil;

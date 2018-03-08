@@ -12,27 +12,26 @@
  * details.
  */
 
-package com.liferay.ide.ui.jsf.tests;
+package com.liferay.ide.ui.liferay.util;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
-
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.rules.RuleChain;
+import org.junit.rules.TestRule;
 
 /**
  * @author Terry Jia
  */
-public class NewJsfProjectWizardSdk62Tests extends SwtbotBase {
+public class RuleUtil {
 
-	@Test
-	public void createJsfStandard() {
-		if (envAction.notInternal()) {
-			return;
+	public static RuleChain getRuleChain(TestRule... rules) {
+		RuleChain chain = RuleChain.outerRule(rules[0]);
+
+		if (rules.length > 1) {
+			for (int i = 1; i < rules.length; i++) {
+				chain = chain.around(rules[i]);
+			}
 		}
-	}
 
-	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
+		return chain;
+	}
 
 }

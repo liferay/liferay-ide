@@ -15,7 +15,7 @@
 package com.liferay.ide.ui.workspace.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.ImportLiferayWorkspaceProjectSupport;
+import com.liferay.ide.ui.liferay.support.project.ImportLiferayWorkspaceProjectSupport;
 
 import java.io.IOException;
 

@@ -12,49 +12,55 @@
  * details.
  */
 
-package com.liferay.ide.ui.sdk.tests;
+package com.liferay.ide.ui.server.tests;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.support.project.SdkProjectSupport;
 import com.liferay.ide.ui.liferay.support.sdk.SdkSupport;
-import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
+import com.liferay.ide.ui.liferay.support.server.PureTomcat71Support;
+import com.liferay.ide.ui.liferay.support.server.ServerRunningSupport;
+import com.liferay.ide.ui.liferay.support.server.ServerSupport;
 import com.liferay.ide.ui.liferay.support.server.Tomcat7xSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
  * @author Terry Jia
  */
-public class NewPluginProjectWizardSdkTests extends SwtbotBase {
-
-	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
+public class Tomcat71DeployTests extends TomcatDeployBase {
 
 	@ClassRule
 	public static RuleChain chain = RuleUtil.getRuleChain(
-		tomcat, new Tomcat7xSupport(bot, tomcat), new SdkSupport(bot, tomcat));
+		getServer(), new Tomcat7xSupport(bot, getServer()), new SdkSupport(bot, getServer()),
+		new ServerRunningSupport(bot, getServer()));
 
-	@Test
-	public void createSampleProject() {
-		viewAction.switchLiferayPerspective();
+	public static ServerSupport getServer() {
+		if ((server == null) || !(server instanceof PureTomcat71Support)) {
+			server = new PureTomcat71Support(bot);
+		}
 
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		wizardAction.newPlugin.prepareSdk(project.getNamePortlet());
-
-		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(project.getNamePortlet());
-
-		viewAction.project.closeAndDelete(project.getNamePortlet());
+		return server;
 	}
 
-	@Rule
-	public SdkProjectSupport project = new SdkProjectSupport(bot);
+	@Test
+	public void deployFragment() {
+		super.deployFragment();
+	}
+
+	@Test
+	public void deployModule() {
+		super.deployModule();
+	}
+
+	@Test
+	public void deployPluginPortlet() {
+		super.deployPluginPortlet();
+	}
+
+	@Test
+	public void deployWar() {
+		super.deployWar();
+	}
 
 }

@@ -15,13 +15,16 @@
 package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.ProjectSupport;
-import com.liferay.ide.ui.liferay.base.TomcatSupport;
+import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
+import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
+import com.liferay.ide.ui.liferay.support.server.Tomcat7xSupport;
+import com.liferay.ide.ui.liferay.util.RuleUtil;
 import com.liferay.ide.ui.swtbot.util.StringPool;
 
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 
 /**
  * @author Ashley Yuan
@@ -29,8 +32,10 @@ import org.junit.Test;
  */
 public class ValidationFragmentFilesTests extends SwtbotBase {
 
+	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
+
 	@ClassRule
-	public static TomcatSupport tomcat = new TomcatSupport(bot);
+	public static RuleChain chain = RuleUtil.getRuleChain(tomcat, new Tomcat7xSupport(bot, tomcat));
 
 	@Test
 	public void checkInitialState() {

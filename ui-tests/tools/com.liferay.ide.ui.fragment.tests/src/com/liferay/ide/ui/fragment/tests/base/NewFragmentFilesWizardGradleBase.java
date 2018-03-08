@@ -12,14 +12,12 @@
  * details.
  */
 
-package com.liferay.ide.ui.fragment.tests;
+package com.liferay.ide.ui.fragment.tests.base;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.ProjectSupport;
-import com.liferay.ide.ui.liferay.base.TomcatSupport;
+import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -28,12 +26,8 @@ import org.junit.Test;
  * @author Sunny Shi
  * @author Rui Wang
  */
-public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
+public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 
-	@ClassRule
-	public static TomcatSupport tomcat = new TomcatSupport(bot);
-
-	@Test
 	public void addFragmentFilesShortcuts() {
 		wizardAction.openNewFragmentWizard();
 
@@ -96,7 +90,6 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void addFragmentJspfFiles() {
 		wizardAction.openNewFragmentWizard();
 
@@ -163,7 +156,6 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void addFragmentPortletPropertiesFiles() {
 		wizardAction.openNewFragmentWizard();
 
@@ -230,7 +222,6 @@ public class NewFragmentFilesWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void testFragmentFilesWithDeleteFuction() {
 		wizardAction.openNewFragmentWizard();
 

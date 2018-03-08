@@ -12,16 +12,13 @@
  * details.
  */
 
-package com.liferay.ide.ui.fragment.tests;
+package com.liferay.ide.ui.fragment.tests.base;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.ProjectSupport;
-import com.liferay.ide.ui.liferay.base.TomcatSupport;
+import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
 import org.junit.Rule;
-import org.junit.Test;
 
 /**
  * @author Vicky Wang
@@ -29,12 +26,8 @@ import org.junit.Test;
  * @author Lily Li
  * @author Ying Xu
  */
-public class NewFragmentWizardGradleTests extends SwtbotBase {
+public class NewFragmentWizardGradleBase extends SwtbotBase {
 
-	@ClassRule
-	public static TomcatSupport tomcat = new TomcatSupport(bot);
-
-	@Test
 	public void createFragmentWithJsp() {
 		wizardAction.openNewFragmentWizard();
 
@@ -59,7 +52,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void createFragmentWithJspf() {
 		wizardAction.openNewFragmentWizard();
 
@@ -84,7 +76,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void createFragmentWithoutFiles() {
 		wizardAction.openNewFragmentWizard();
 
@@ -109,7 +100,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void createFragmentWithPortletProperites() {
 		wizardAction.openNewFragmentWizard();
 
@@ -140,7 +130,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void createFragmentWithResourceAction() {
 		wizardAction.openNewFragmentWizard();
 
@@ -165,7 +154,6 @@ public class NewFragmentWizardGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void createFragmentWithWholeFiles() {
 		wizardAction.openNewFragmentWizard();
 

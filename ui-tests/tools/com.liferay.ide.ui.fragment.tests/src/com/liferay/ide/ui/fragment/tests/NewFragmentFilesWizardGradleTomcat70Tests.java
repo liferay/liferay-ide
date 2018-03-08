@@ -12,49 +12,57 @@
  * details.
  */
 
-package com.liferay.ide.ui.sdk.tests;
+package com.liferay.ide.ui.fragment.tests;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.support.project.SdkProjectSupport;
-import com.liferay.ide.ui.liferay.support.sdk.SdkSupport;
+import com.liferay.ide.ui.fragment.tests.base.NewFragmentFilesWizardGradleBase;
 import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
 import com.liferay.ide.ui.liferay.support.server.Tomcat7xSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
- * @author Terry Jia
+ * @author Vicky Wang
+ * @author Sunny Shi
+ * @author Rui Wang
  */
-public class NewPluginProjectWizardSdkTests extends SwtbotBase {
+public class NewFragmentFilesWizardGradleTomcat70Tests extends NewFragmentFilesWizardGradleBase {
 
 	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
 
 	@ClassRule
-	public static RuleChain chain = RuleUtil.getRuleChain(
-		tomcat, new Tomcat7xSupport(bot, tomcat), new SdkSupport(bot, tomcat));
+	public static RuleChain chain = RuleUtil.getRuleChain(tomcat, new Tomcat7xSupport(bot, tomcat));
 
 	@Test
-	public void createSampleProject() {
-		viewAction.switchLiferayPerspective();
-
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		wizardAction.newPlugin.prepareSdk(project.getNamePortlet());
-
-		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(project.getNamePortlet());
-
-		viewAction.project.closeAndDelete(project.getNamePortlet());
+	public void addFragmentFilesShortcuts() {
+		super.addFragmentFilesShortcuts();
 	}
 
-	@Rule
-	public SdkProjectSupport project = new SdkProjectSupport(bot);
+	@Test
+	public void addFragmentJspfFiles() {
+		super.addFragmentJspfFiles();
+	}
+
+	@Test
+	public void addFragmentJspFiles() {
+		super.addFragmentJspFiles();
+	}
+
+	@Test
+	public void addFragmentPortletPropertiesFiles() {
+		super.addFragmentPortletPropertiesFiles();
+	}
+
+	@Test
+	public void addFragmentResourceActionFiles() {
+		super.addFragmentResourceActionFiles();
+	}
+
+	@Test
+	public void testFragmentFilesWithDeleteFuction() {
+		super.addFragmentFilesShortcuts();
+	}
 
 }

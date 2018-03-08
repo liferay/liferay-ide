@@ -15,7 +15,7 @@
 package com.liferay.ide.ui.server.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.base.PureTomcat62Support;
+import com.liferay.ide.ui.liferay.support.server.PureTomcat62Support;
 
 import org.junit.Rule;
 import org.junit.Test;

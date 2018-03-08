@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.ui.liferay.base;
+package com.liferay.ide.ui.liferay.support.workspace;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 

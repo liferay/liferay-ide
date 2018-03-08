@@ -12,27 +12,37 @@
  * details.
  */
 
-package com.liferay.ide.ui.jsf.tests;
+package com.liferay.ide.ui.liferay.support.sdk;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
+import com.liferay.ide.ui.liferay.support.server.ServerSupport;
 
-import org.junit.Rule;
-import org.junit.Test;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  */
-public class NewJsfProjectWizardSdk62Tests extends SwtbotBase {
+public class Sdk62Support extends SdkSupport {
 
-	@Test
-	public void createJsfStandard() {
-		if (envAction.notInternal()) {
-			return;
-		}
+	public Sdk62Support(SWTWorkbenchBot bot, ServerSupport server) {
+		super(bot, "6.2-ce-ga6", server);
 	}
 
-	@Rule
-	public ProjectSupport project = new ProjectSupport(bot);
+	@Override
+	public void after() {
+		if (!envAction.internal()) {
+			return;
+		}
+
+		super.after();
+	}
+
+	@Override
+	public void before() {
+		if (!envAction.internal()) {
+			return;
+		}
+
+		super.before();
+	}
 
 }

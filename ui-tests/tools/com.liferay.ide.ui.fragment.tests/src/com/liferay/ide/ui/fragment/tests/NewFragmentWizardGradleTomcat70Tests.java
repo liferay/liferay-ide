@@ -12,49 +12,58 @@
  * details.
  */
 
-package com.liferay.ide.ui.sdk.tests;
+package com.liferay.ide.ui.fragment.tests;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
-import com.liferay.ide.ui.liferay.support.project.SdkProjectSupport;
-import com.liferay.ide.ui.liferay.support.sdk.SdkSupport;
+import com.liferay.ide.ui.fragment.tests.base.NewFragmentWizardGradleBase;
 import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
 import com.liferay.ide.ui.liferay.support.server.Tomcat7xSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
- * @author Terry Jia
+ * @author Vicky Wang
+ * @author Sunny Shi
+ * @author Lily Li
+ * @author Ying Xu
  */
-public class NewPluginProjectWizardSdkTests extends SwtbotBase {
+public class NewFragmentWizardGradleTomcat70Tests extends NewFragmentWizardGradleBase {
 
 	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
 
 	@ClassRule
-	public static RuleChain chain = RuleUtil.getRuleChain(
-		tomcat, new Tomcat7xSupport(bot, tomcat), new SdkSupport(bot, tomcat));
+	public static RuleChain chain = RuleUtil.getRuleChain(tomcat, new Tomcat7xSupport(bot, tomcat));
 
 	@Test
-	public void createSampleProject() {
-		viewAction.switchLiferayPerspective();
-
-		wizardAction.openNewLiferayPluginProjectWizard();
-
-		wizardAction.newPlugin.prepareSdk(project.getNamePortlet());
-
-		wizardAction.finish();
-
-		jobAction.waitForIvy();
-
-		jobAction.waitForValidate(project.getNamePortlet());
-
-		viewAction.project.closeAndDelete(project.getNamePortlet());
+	public void createFragmentWithJsp() {
+		super.createFragmentWithJsp();
 	}
 
-	@Rule
-	public SdkProjectSupport project = new SdkProjectSupport(bot);
+	@Test
+	public void createFragmentWithJspf() {
+		super.createFragmentWithJspf();
+	}
+
+	@Test
+	public void createFragmentWithoutFiles() {
+		super.createFragmentWithoutFiles();
+	}
+
+	@Test
+	public void createFragmentWithPortletProperites() {
+		super.createFragmentWithPortletProperites();
+	}
+
+	@Test
+	public void createFragmentWithResourceAction() {
+		super.createFragmentWithResourceAction();
+	}
+
+	@Test
+	public void createFragmentWithWholeFiles() {
+		super.createFragmentWithWholeFiles();
+	}
 
 }
