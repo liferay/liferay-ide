@@ -117,9 +117,11 @@ public class AddFilesFromOSGiBundleAction extends PropertyEditorActionHandler {
 			currentOSGiBundle = currentOSGiBundle + ".jar";
 		}
 
-		ServerUtil.getModuleFileFrom70Server(runtime, currentOSGiBundle, tempLocation);
-
 		File module = tempLocation.append(currentOSGiBundle).toFile();
+
+		if (FileUtil.notExists(module)) {
+			module = ServerUtil.getModuleFileFrom70Server(runtime, currentOSGiBundle, tempLocation);
+		}
 
 		if(FileUtil.exists(module)) {
 			dialog.setInput(module);
