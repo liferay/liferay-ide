@@ -151,6 +151,11 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
 
 		if (warStatus.isOK()) {
 			try {
+				if(distFiles == null) {
+					ProjectCore.logError("folder dist not exists in SDK root");
+					
+					return retval;
+				}
 				retval = new Path(distFiles[0].getCanonicalPath());
 			}
 			catch (IOException ioe) {
