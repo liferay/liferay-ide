@@ -33,10 +33,6 @@
       <feature id="com.liferay.ide.hidden" />
       <feature id="org.apache.ivyde.feature" />
       <feature id="org.apache.ivy.feature" />
-      <feature id="org.eclipse.m2e.feature" />
-      <feature id="org.eclipse.m2e.logback.feature" />
-      <feature id="org.eclipse.m2e.wtp.feature" />
-      <feature id="org.eclipse.m2e.wtp.jsf.feature" />
       <feature id="org.eclipse.sapphire" />
       <feature id="org.eclipse.sapphire.java" />
       <feature id="org.eclipse.sapphire.java.jdt" />
