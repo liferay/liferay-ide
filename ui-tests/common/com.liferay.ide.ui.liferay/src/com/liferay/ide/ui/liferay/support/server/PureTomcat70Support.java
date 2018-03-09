@@ -21,6 +21,14 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
  */
 public class PureTomcat70Support extends ServerSupport {
 
+	public static boolean isNot(ServerSupport server) {
+		if ((server == null) || !(server instanceof PureTomcat70Support)) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public PureTomcat70Support(SWTWorkbenchBot bot) {
 		super(bot, "tomcat", "7.0-ga5");
 	}

@@ -9,6 +9,5 @@ Require-Bundle: org.junit,
  com.liferay.ide.ui.liferay,
  org.eclipse.swtbot.go,
  org.eclipse.swtbot.swt.finder
-Export-Package: com.liferay.ide.ui.server.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

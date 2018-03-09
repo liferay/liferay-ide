@@ -47,16 +47,24 @@
 	<modules>
 		<module>com.liferay.ide.ui.code.upgrade.tests</module>
 		<module>com.liferay.ide.ui.fragment.tests</module>
+		<module>com.liferay.ide.ui.fragment.deploy.tests</module>
 		<module>com.liferay.ide.ui.theme.tests</module>
+		<module>com.liferay.ide.ui.theme.deploy.tests</module>
 		<module>com.liferay.ide.ui.hook.tests</module>
 		<module>com.liferay.ide.ui.jsf.tests</module>
+		<module>com.liferay.ide.ui.jsf.deploy.tests</module>
 		<module>com.liferay.ide.ui.layouttpl.tests</module>
+		<module>com.liferay.ide.ui.layouttpl.deploy.tests</module>
 		<module>com.liferay.ide.ui.portlet.tests</module>
+		<module>com.liferay.ide.ui.portlet.deploy.tests</module>
 		<module>com.liferay.ide.ui.module.tests</module>
+		<module>com.liferay.ide.ui.module.deploy.tests</module>
 		<module>com.liferay.ide.ui.sdk.tests</module>
 		<module>com.liferay.ide.ui.server.tests</module>
+		<module>com.liferay.ide.ui.server.deploy.tests</module>
 		<module>com.liferay.ide.ui.workspace.tests</module>
 		<module>com.liferay.ide.ui.service.builder.tests</module>
+		<module>com.liferay.ide.ui.service.builder.deploy.tests</module>
 		<module>com.liferay.ide.ui.kaleo.tests</module>
 		<module>com.liferay.ide.ui.preference.tests</module>
 	</modules>

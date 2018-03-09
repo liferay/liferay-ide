@@ -16,11 +16,9 @@ package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.fragment.tests.base.NewFragmentFilesWizardGradleBase;
 import com.liferay.ide.ui.liferay.support.server.PureTomcat71Support;
-import com.liferay.ide.ui.liferay.support.server.Tomcat7xSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -34,39 +32,33 @@ public class NewFragmentFilesWizardGradleTomcat71Tests extends NewFragmentFilesW
 	public static PureTomcat71Support tomcat = new PureTomcat71Support(bot);
 
 	@ClassRule
-	public static RuleChain chain = RuleUtil.getRuleChain(tomcat, new Tomcat7xSupport(bot, tomcat));
+	public static RuleChain chain = RuleUtil.getTomcat7xRuleChain(bot, tomcat);
 
-	@Ignore("need to wait IDE-3891")
 	@Test
 	public void addFragmentFilesShortcuts() {
 		super.addFragmentFilesShortcuts();
 	}
 
-	@Ignore("need to wait IDE-3891")
 	@Test
 	public void addFragmentJspfFiles() {
 		super.addFragmentJspfFiles();
 	}
 
-	@Ignore("need to wait IDE-3891")
 	@Test
 	public void addFragmentJspFiles() {
 		super.addFragmentJspFiles();
 	}
 
-	@Ignore("need to wait IDE-3891")
 	@Test
 	public void addFragmentPortletPropertiesFiles() {
 		super.addFragmentPortletPropertiesFiles();
 	}
 
-	@Ignore("need to wait IDE-3891")
 	@Test
 	public void addFragmentResourceActionFiles() {
 		super.addFragmentResourceActionFiles();
 	}
 
-	@Ignore("need to wait IDE-3891")
 	@Test
 	public void testFragmentFilesWithDeleteFuction() {
 		super.addFragmentFilesShortcuts();
