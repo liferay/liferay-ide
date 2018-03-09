@@ -44,6 +44,7 @@ import org.eclipse.wst.server.core.model.RuntimeDelegate;
  * @author Gregory Amerson
  * @author Simon Jiang
  * @author Yuqiang Wang
+ * @author Charles Wu
  */
 public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, PropertyChangeListener
 {
@@ -370,7 +371,14 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
             return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorPortalNotExisted, null );
         }
 
-        if( !portalBundle.getVersion().startsWith( "7" ) )
+        String version = portalBundle.getVersion();
+
+        if( version == null )
+        {
+            return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorPortalVersion, null );
+        }
+
+        if( !version.startsWith( "7" ) )
         {
             return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorPortalVersion70, null );
         }
@@ -380,7 +388,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
             return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorJRE, null );
         }
 
-        if( portalBundle.getVersion().startsWith( "7" ) )
+        if( version.startsWith( "7" ) )
         {
             IVMInstall vmInstall = getVMInstall();
 
@@ -427,6 +435,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
     {
         public static String errorJRE;
         public static String errorJRE80;
+        public static String errorPortalVersion;
         public static String errorPortalVersion70;
         public static String errorPortalNotExisted;
         public static String warningjre;

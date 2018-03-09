@@ -18,6 +18,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.JavaUtil;
@@ -108,16 +109,21 @@ public abstract class AbstractPortalBundle implements PortalBundle
     public IPath[] getBundleDependencyJars()
     {
         List<IPath> libs = new ArrayList<IPath>();
-        IPath bundleLibPath =  getAppServerLibDir();
+
+        File bundleLibPath =  new File( getAppServerLibDir().toOSString());
+
         List<File> libFiles;
         try
         {
-            libFiles = FileListing.getFileListing( new File( bundleLibPath.toOSString() ) );
-            for( File lib : libFiles )
+            if( FileUtil.exists( bundleLibPath ) )
             {
-                if( lib.exists() && lib.getName().endsWith( ".jar" ) ) //$NON-NLS-1$
+                libFiles = FileListing.getFileListing( bundleLibPath );
+                for( File lib : libFiles )
                 {
-                    libs.add( new Path( lib.getPath() ) );
+                    if( lib.exists() && lib.getName().endsWith( ".jar" ) ) //$NON-NLS-1$
+                    {
+                        libs.add( new Path( lib.getPath() ) );
+                    }
                 }
             }
         }
@@ -299,6 +305,11 @@ public abstract class AbstractPortalBundle implements PortalBundle
 
     private String getPortalVersion( IPath portalDir, IPath[] extraLib)
     {
+        if( FileUtil.notExists( portalDir ) || ListUtil.isEmpty( extraLib ) )
+        {
+            return null;
+        }
+
         String version = getConfigInfoFromCache( CONFIG_TYPE_VERSION, portalDir );
 
         if( version == null )
