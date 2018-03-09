@@ -141,6 +141,20 @@
                             <checkSignature>true</checkSignature>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>download-bnd</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>${bnd-latest-download-url}</url>
+                            <outputDirectory>../shared/download/</outputDirectory>
+                            <outputFileName>biz.aQute.bnd.jar</outputFileName>
+                            <md5>${bnd-latest-md5}</md5>
+                            <checkSignature>true</checkSignature>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>

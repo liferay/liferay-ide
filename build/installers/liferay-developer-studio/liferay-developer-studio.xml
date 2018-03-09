@@ -35,6 +35,9 @@
                         <distributionFile>
                             <origin>../shared/download/com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</origin>
                         </distributionFile>
+                        <distributionFile>
+                            <origin>../shared/download/biz.aQute.bnd.jar</origin>
+                        </distributionFile>
                     </distributionFileList>
                 </folder>
                 <folder>
@@ -347,6 +350,10 @@
             <name>gwFilePath</name>
             <value>${installdir}${platform_path_separator}gw.jar</value>
         </setInstallerVariable>
+        <setInstallerVariable>
+            <name>bndFilePath</name>
+            <value>${installdir}${platform_path_separator}biz.aQute.bnd.jar</value>
+        </setInstallerVariable>
         <runProgram>
             <program>${jpmFilePath}</program>
             <programArguments>install -fl "${bladeFilePath}"</programArguments>
@@ -354,6 +361,10 @@
         <runProgram>
             <program>${jpmFilePath}</program>
             <programArguments>install -fl "${gwFilePath}"</programArguments>
+        </runProgram>
+        <runProgram>
+            <program>${jpmFilePath}</program>
+            <programArguments>install -fl "${bndFilePath}"</programArguments>
         </runProgram>
         <runProgram>
             <program>chown</program>
@@ -558,6 +569,9 @@
         </deleteFile>
         <deleteFile>
             <path>${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar</path>
+        </deleteFile>
+        <deleteFile>
+            <path>${installdir}${platform_path_separator}biz.aQute.bnd.jar</path>
         </deleteFile>
         <deleteFile>
             <path>${studioZipPath}</path>

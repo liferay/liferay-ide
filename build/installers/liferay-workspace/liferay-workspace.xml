@@ -26,6 +26,9 @@
                         <distributionFile>
                             <origin>../shared/download/com.liferay.portal.tools.bundle.support.jar</origin>
                         </distributionFile>
+                        <distributionFile>
+                            <origin>../shared/download/biz.aQute.bnd.jar</origin>
+                        </distributionFile>
                     </distributionFileList>
                 </folder>
                 <folder>
@@ -160,6 +163,14 @@
         <runProgram>
             <program>${jpmFilePath}</program>
             <programArguments>install -fl "${bladeFilePath}"</programArguments>
+        </runProgram>
+        <setInstallerVariable>
+            <name>bndFilePath</name>
+            <value>${installdir}${platform_path_separator}biz.aQute.bnd.jar</value>
+        </setInstallerVariable>
+        <runProgram>
+            <program>${jpmFilePath}</program>
+            <programArguments>install -fl "${bndFilePath}"</programArguments>
         </runProgram>
         <runProgram>
             <program>chown</program>
