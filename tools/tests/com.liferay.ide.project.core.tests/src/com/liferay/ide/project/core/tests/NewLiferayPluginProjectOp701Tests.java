@@ -15,15 +15,28 @@
 
 package com.liferay.ide.project.core.tests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
+import com.liferay.ide.core.IWebProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.layouttpl.core.operation.INewLayoutTplDataModelProperties;
+import com.liferay.ide.layouttpl.core.operation.LayoutTplDescriptorHelper;
+import com.liferay.ide.layouttpl.core.operation.NewLayoutTplDataModelProvider;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.PluginType;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
+import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -101,9 +114,41 @@ public class NewLiferayPluginProjectOp701Tests extends NewLiferayPluginProjectOp
 
     @Override
     @Test
-    @Ignore
     public void testNewLayoutAntProject() throws Exception
     {
+        String projectName = "test-layouttpl-project-sdk";
+        NewLiferayPluginProjectOp op = newProjectOp( projectName );
+        op.setPluginType( PluginType.layouttpl );
+
+        IProject layouttplProject = createAntProject( op );
+
+        IFolder webappRoot = LiferayCore.create( IWebProject.class, layouttplProject ).getDefaultDocrootFolder();
+
+        assertNotNull( webappRoot );
+
+        IFile layoutXml = webappRoot.getFile( "WEB-INF/liferay-layout-templates.xml" );
+
+        assertEquals( true, layoutXml.exists() );
+
+        IFile wapTpl = webappRoot.getFile("test_layouttpl_project_sdk_7.0.2.wap.tpl");
+
+        assertFalse(wapTpl.exists());
+
+        IDataModel model = DataModelFactory.createDataModel( new NewLayoutTplDataModelProvider() );
+
+        model.setProperty(INewLayoutTplDataModelProperties.LAYOUT_TEMPLATE_ID, "newtemplate");
+        model.setProperty(INewLayoutTplDataModelProperties.LAYOUT_TEMPLATE_NAME, "New Template");
+        model.setProperty(INewLayoutTplDataModelProperties.LAYOUT_THUMBNAIL_FILE, "/newtemplate.png");
+        model.setProperty(INewLayoutTplDataModelProperties.LAYOUT_WAP_TEMPLATE_FILE, "/newtemplate.wap.tpl");
+        model.setProperty(INewLayoutTplDataModelProperties.LAYOUT_TEMPLATE_FILE, "/newtemplate.tpl");
+
+        LayoutTplDescriptorHelper layoutHelper = new LayoutTplDescriptorHelper(layouttplProject);
+
+        layoutHelper.addNewLayoutTemplate(model);
+
+        String contents = CoreUtil.readStreamToString( layoutXml.getContents( true ) );
+
+        assertFalse(contents.contains("<wap-template-path>"));
     }
 
     @Test
