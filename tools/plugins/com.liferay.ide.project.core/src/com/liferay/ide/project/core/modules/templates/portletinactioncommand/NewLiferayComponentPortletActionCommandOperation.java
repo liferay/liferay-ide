@@ -186,9 +186,11 @@ public class NewLiferayComponentPortletActionCommandOperation extends AbstractLi
 
 	private List<String> _getPortletActionCommandProperties() {
 		List<String> properties = new ArrayList<>();
+		String properPackageName = packageName.toString().replace(".", "_");
 
-		properties.add("javax.portlet.name=blade_portlet_" + componentNameWithoutTemplateName + "Portlet");
-		properties.add("mvc.command.name=" + componentNameWithoutTemplateName.toLowerCase());
+		properties.add("javax.portlet.name=" + properPackageName + "_" + componentNameWithoutTemplateName + "Portlet");
+
+		properties.add("mvc.command.name=greet");
 
 		return properties;
 	}

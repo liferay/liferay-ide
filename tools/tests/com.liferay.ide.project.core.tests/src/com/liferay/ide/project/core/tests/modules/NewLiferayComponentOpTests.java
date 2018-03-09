@@ -210,6 +210,49 @@ public class NewLiferayComponentOpTests extends BaseTests
     }
 
     @Test
+    public void testNewLiferayComponentActionCommandPortlet()  throws Exception{
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "action-command-test" );
+        op.setProjectTemplateName( "activator" );
+        op.setProjectProvider( "gradle-module" );
+
+        Status modulePorjectStatus = NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        assertTrue( modulePorjectStatus.ok() );
+
+        IProject modProject = CoreUtil.getProject( op.getProjectName().content() );
+
+        modProject.open( new NullProgressMonitor() );
+
+        NewLiferayComponentOp cop = NewLiferayComponentOp.TYPE.instantiate();
+
+        cop.setProjectName( op.getProjectName().content() );
+        cop.setComponentClassTemplateName( "PortletActionCommand" );
+
+        Status status = NewLiferayComponentOpMethods.execute( cop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        assertEquals( Status.createOkStatus(),status );
+
+        IFile javaFile = modProject.getFile( "/src/main/java/action/command/test/ActionCommandTestActionCommand.java" );
+
+        assertTrue(javaFile.exists());
+
+        String javaFileContent = FileUtil.readContents( javaFile.getLocation().toFile(), true );
+
+        assertTrue( javaFileContent.contains( "javax.portlet.name=action_command_test_ActionCommandTestPortlet" ) );
+        assertTrue( javaFileContent.contains( "mvc.command.name=greet" ) );
+
+        IFile initFile = modProject.getFile( "/src/main/resources/META-INF/resources/actioncommandtestportletactioncommand/init.ftl" );
+
+        assertTrue( initFile.exists() );
+
+        IFile viewFile = modProject.getFile( "/src/main/resources/META-INF/resources/actioncommandtestportletactioncommand/view.ftl" );
+
+        assertTrue( viewFile.exists() );
+    }
+
+    @Test
     public void testNewLiferayComponentStrutsAction() throws Exception{
         NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
