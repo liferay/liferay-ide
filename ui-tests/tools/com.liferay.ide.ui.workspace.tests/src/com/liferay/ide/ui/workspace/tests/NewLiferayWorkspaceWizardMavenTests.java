@@ -16,6 +16,7 @@ package com.liferay.ide.ui.workspace.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
+import com.liferay.ide.ui.swtbot.page.Table;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -85,6 +86,56 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(warNames);
 
 		viewAction.project.closeAndDelete(project.getName());
+	}
+
+	@Test
+	public void createLiferayWorkspaceInitBundle() {
+		wizardAction.openNewLiferayWorkspaceWizard();
+
+		String projectName = project.getName();
+
+		wizardAction.newLiferayWorkspace.prepareMaven(projectName);
+
+		wizardAction.newLiferayWorkspace.selectDownloadLiferayBundle();
+
+		wizardAction.newLiferayWorkspace.setServerName(projectName);
+
+		wizardAction.newLiferayWorkspace.setBundleUrl(
+			"http://ide-resources-site/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip");
+
+		wizardAction.finish();
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectName, "bundles"));
+
+		viewAction.switchLiferayPerspective();
+
+		ide.sleep(5000);
+
+		viewAction.project.runMavenInitBundle(projectName);
+
+		jobAction.waitForNoRunningJobs();
+
+		if (!viewAction.servers.visibleServer(LIFERAY_PORTAL_BUNDLE)) {
+			ide.sleep(5000);
+
+			viewAction.project.runMavenInitBundle(projectName);
+
+			jobAction.waitForNoRunningJobs();
+		}
+
+		Assert.assertTrue(viewAction.servers.visibleServer(LIFERAY_PORTAL_BUNDLE));
+
+		dialogAction.openPreferencesDialog();
+
+		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
+
+		Table runtimes = dialogAction.serverRuntimeEnvironments.getRuntimes();
+
+		for (int i = runtimes.size() - 1; i >= 0; i--) {
+			dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(i);
+		}
+
+		viewAction.project.closeAndDeleteFromDisk(project.getName());
 	}
 
 	@Ignore("Ignore forever and test the download bundle in createLiferayWorkspaceWithDownloadBundleChangeBundleUrl")

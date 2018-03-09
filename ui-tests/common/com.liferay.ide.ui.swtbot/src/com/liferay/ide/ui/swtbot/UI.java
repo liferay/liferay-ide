@@ -337,6 +337,8 @@ public interface UI {
 
 	public final String INIT = "init";
 
+	public final String INIT_BUNDLE = "init-bundle";
+
 	public final String INITIALIZE_SERVER_BUNDLE = "Initialize Server Bundle";
 
 	public final String INSTALL_UPDATE = "Install/Update";
@@ -410,6 +412,8 @@ public interface UI {
 	public final String LIFERAY_PLUGIN_PROJECT = "Liferay Plugin Project";
 
 	public final String LIFERAY_PLUGINS = "Liferay Plugins";
+
+	public final String LIFERAY_PORTAL_BUNDLE = "Liferay Community Edition Portal 7.0.4 GA5";
 
 	public final String LIFERAY_PORTAL_BUNDLE_DIRECTORY = "Liferay Portal Bundle Directory";
 
