@@ -908,7 +908,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 			StringBuilder sb = new StringBuilder();
 
-			sb.append("-b ");
+			sb.append("--base ");
 			sb.append("\"" + targetSDKLocation.toFile().getAbsolutePath() + "\" ");
 			sb.append("init -u");
 
@@ -1099,7 +1099,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 	private void _getLiferayBundle(IPath targetSDKLocation) throws BladeCLIException {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("-b ");
+		sb.append("--base ");
 		sb.append("\"" + targetSDKLocation.toFile().getAbsolutePath() + "\" ");
 		sb.append("init");
 
