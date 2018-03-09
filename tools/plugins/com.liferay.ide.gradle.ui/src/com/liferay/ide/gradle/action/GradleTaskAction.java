@@ -26,14 +26,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 /**
  * @author Lovett Li
  * @author Terry Jia
+ * @author Charles Wu
  */
 public abstract class GradleTaskAction extends AbstractObjectAction {
 
@@ -87,35 +88,13 @@ public abstract class GradleTaskAction extends AbstractObjectAction {
 
 			};
 
-			job.addJobChangeListener(
-				new IJobChangeListener() {
+			job.addJobChangeListener(new JobChangeAdapter() {
 
-					@Override
-					public void aboutToRun(IJobChangeEvent event) {
-					}
-
-					@Override
-					public void awake(IJobChangeEvent event) {
-					}
-
-					@Override
-					public void done(IJobChangeEvent event) {
-						afterTask();
-					}
-
-					@Override
-					public void running(IJobChangeEvent event) {
-					}
-
-					@Override
-					public void scheduled(IJobChangeEvent event) {
-					}
-
-					@Override
-					public void sleeping(IJobChangeEvent event) {
-					}
-
-				});
+				@Override
+				public void done(IJobChangeEvent event) {
+					afterTask();
+				}
+			});
 
 			job.schedule();
 		}

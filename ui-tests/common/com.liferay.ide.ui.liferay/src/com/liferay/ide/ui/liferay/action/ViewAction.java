@@ -224,6 +224,28 @@ public class ViewAction extends UIAction {
 			}
 		}
 
+		public void runGradleInitBundle(String... projectNames) {
+			try {
+				_getProjects().contextMenu(INITIALIZE_SERVER_BUNDLE, projectNames);
+			}
+			catch (Exception e) {
+				ide.sleep(2000);
+
+				_getProjects().contextMenu(INITIALIZE_SERVER_BUNDLE, projectNames);
+			}
+		}
+
+		public void runMavenInitBundle(String... projectNames) {
+			try {
+				_getProjects().contextMenu(INIT_BUNDLE, projectNames);
+			}
+			catch (Exception e) {
+				ide.sleep(2000);
+
+				_getProjects().contextMenu(INIT_BUNDLE, projectNames);
+			}
+		}
+
 		public boolean visibleFileTry(String... files) {
 			try {
 				return _getProjects().isVisible(files);
@@ -338,6 +360,10 @@ public class ViewAction extends UIAction {
 
 				return _serversView.getServers().isVisibleStartsBy(serverLabel, projectName);
 			}
+		}
+		
+		public boolean visibleServer(String serverName) {
+			return _serversView.getServers().isVisibleStartsBy(serverName);
 		}
 
 		private final ServersView _serversView = new ServersView(bot);

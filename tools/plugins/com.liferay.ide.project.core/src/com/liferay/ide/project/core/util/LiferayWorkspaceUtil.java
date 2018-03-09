@@ -18,6 +18,11 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.portal.PortalBundle;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,12 +33,15 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
 /**
  * @author Andy Wu
+ * @author Charles Wu
  */
 public class LiferayWorkspaceUtil {
 
@@ -345,6 +353,42 @@ public class LiferayWorkspaceUtil {
 		}
 
 		return false;
+	}
+
+	public static void addPortalRuntime() {
+		IProject project = getWorkspaceProject();
+
+		IPath bundlesLocation = getHomeLocation(project);
+
+		try {
+			if (FileUtil.exists(bundlesLocation)) {
+				PortalBundle bundle = LiferayServerCore.newPortalBundle(bundlesLocation);
+
+				if (bundle == null) {
+					ProjectCore.logError("Can not create bundle from location :" + bundlesLocation);
+					return;
+				}
+
+				String serverName = bundle.getServerReleaseInfo();
+
+				ServerUtil.addPortalRuntimeAndServer(serverName, bundlesLocation, new NullProgressMonitor());
+
+				IProject pluginsSDK = CoreUtil.getProject(
+					LiferayWorkspaceUtil.getPluginsSDKDir(project.getLocation().toPortableString()));
+
+				if (FileUtil.exists(pluginsSDK)) {
+					SDK sdk = SDKUtil.createSDKFromLocation(pluginsSDK.getLocation());
+
+					sdk.addOrUpdateServerProperties(
+						ServerUtil.getLiferayRuntime(ServerUtil.getServer(serverName)).getLiferayHome());
+
+					pluginsSDK.refreshLocal(IResource.DEPTH_INFINITE, null);
+				}
+			}
+		}
+		catch (Exception e) {
+			ProjectCore.logError("Add Liferay server failed", e);
+		}
 	}
 
 	public static boolean isValidGradleWorkspaceLocation(String location) {
