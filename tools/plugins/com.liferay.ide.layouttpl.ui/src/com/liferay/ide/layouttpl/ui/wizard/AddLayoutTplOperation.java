@@ -89,7 +89,7 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 
 			diagramModel.setClassName(diagramClassName + ".wap");
 
-			if (!CoreUtil.isNullOrEmpty(wapTemplateFileName)) {
+			if (!CoreUtil.isNullOrEmpty(wapTemplateFileName) && _is62()) {
 				createTemplateFile(wapTemplateFileName, diagramModel);
 			}
 

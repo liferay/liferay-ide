@@ -18,6 +18,8 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.layouttpl.core.operation.INewLayoutTplDataModelProperties;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
 import com.liferay.ide.layouttpl.ui.util.LayoutTplUIUtil;
+import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.wizard.LiferayDataModelWizardPage;
 import com.liferay.ide.ui.util.SWTUtil;
 
@@ -111,25 +113,31 @@ public class NewLayoutTplWizardPage extends LiferayDataModelWizardPage implement
 
 			});
 
-		SWTUtil.createLabel(parent, SWT.RIGHT, Msgs.wapTemplateFile, 1);
+		IProject layoutProject = ProjectUtil.getProject(projectName);
 
-		wapTemplateFile = SWTUtil.createText(parent, 1);
+		String pluginVersion = LiferayDescriptorHelper.getDescriptorVersion(layoutProject);
 
-		this.synchHelper.synchText(wapTemplateFile, LAYOUT_WAP_TEMPLATE_FILE, null);
+		if (pluginVersion.equals("6.2.0")) {
+			SWTUtil.createLabel(parent, SWT.RIGHT, Msgs.wapTemplateFile, 1);
 
-		Button wapTemplateFileBrowse = SWTUtil.createPushButton(parent, Msgs.browse, null);
+			wapTemplateFile = SWTUtil.createText(parent, 1);
 
-		wapTemplateFileBrowse.addSelectionListener(
-			new SelectionAdapter() {
+			this.synchHelper.synchText(wapTemplateFile, LAYOUT_WAP_TEMPLATE_FILE, null);
 
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					handleFileBrowseButton(
-						NewLayoutTplWizardPage.this.wapTemplateFile, Msgs.wapTemplateFileSelection,
-						Msgs.chooseWAPTemplateFile);
-				}
+			Button wapTemplateFileBrowse = SWTUtil.createPushButton(parent, Msgs.browse, null);
 
-			});
+			wapTemplateFileBrowse.addSelectionListener(
+				new SelectionAdapter() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						handleFileBrowseButton(
+							NewLayoutTplWizardPage.this.wapTemplateFile, Msgs.wapTemplateFileSelection,
+							Msgs.chooseWAPTemplateFile);
+					}
+
+				});
+		}
 
 		SWTUtil.createLabel(parent, SWT.RIGHT, Msgs.thumbnailFile, 1);
 
