@@ -482,7 +482,7 @@ public class CustomJspPage extends Page {
 					}
 					else {
 						MessageDialog.openInformation(
-							Display.getDefault().getActiveShell(), "file not found", "there is no such file in liferay 7");
+							Display.getDefault().getActiveShell(), "file not found", "There is no such file in liferay 7");
 					}
 				}
 	
