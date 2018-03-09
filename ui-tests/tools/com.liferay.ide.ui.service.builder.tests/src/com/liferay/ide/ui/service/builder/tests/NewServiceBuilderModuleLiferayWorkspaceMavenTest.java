@@ -17,7 +17,6 @@ package com.liferay.ide.ui.service.builder.tests;
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
 import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
-import com.liferay.ide.ui.liferay.support.server.Tomcat7xSupport;
 import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceMavenSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
@@ -35,7 +34,7 @@ public class NewServiceBuilderModuleLiferayWorkspaceMavenTest extends SwtbotBase
 	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
 
 	@ClassRule
-	public static RuleChain chain = RuleUtil.getRuleChain(tomcat, new Tomcat7xSupport(bot, tomcat));
+	public static RuleChain chain = RuleUtil.getTomcat7xRuleChain(bot, tomcat);
 
 	@ClassRule
 	public static LiferayWorkspaceMavenSupport liferayWorkspace = new LiferayWorkspaceMavenSupport(bot);

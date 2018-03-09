@@ -16,7 +16,6 @@ package com.liferay.ide.ui.fragment.tests;
 
 import com.liferay.ide.ui.fragment.tests.base.NewFragmentWizardGradleBase;
 import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
-import com.liferay.ide.ui.liferay.support.server.Tomcat7xSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
@@ -34,7 +33,7 @@ public class NewFragmentWizardGradleTomcat70Tests extends NewFragmentWizardGradl
 	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
 
 	@ClassRule
-	public static RuleChain chain = RuleUtil.getRuleChain(tomcat, new Tomcat7xSupport(bot, tomcat));
+	public static RuleChain chain = RuleUtil.getTomcat7xRuleChain(bot, tomcat);
 
 	@Test
 	public void createFragmentWithJsp() {

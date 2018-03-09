@@ -14,8 +14,9 @@
 
 package com.liferay.ide.ui.server.tests;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
+import com.liferay.ide.ui.liferay.support.server.ServerSupport;
+import com.liferay.ide.ui.server.tests.base.ServerTomcat7xBase;
 
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -27,286 +28,55 @@ import org.junit.Test;
  * @author Ashley Yuan
  * @author Ying Xu
  */
-public class ServerTomcat70Tests extends SwtbotBase {
+public class ServerTomcat70Tests extends ServerTomcat7xBase {
 
 	@Test
 	public void addLiferay7RuntimeFromPreferences() {
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
-
-		wizardAction.newRuntime.prepare7();
-
-		wizardAction.next();
-
-		wizardAction.newRuntime7.prepare(tomcat.getServerName(), tomcat.getFullServerDir());
-
-		wizardAction.finish();
-
-		dialogAction.preferences.confirm();
-
-		dialogAction.deleteRuntimFromPreferences(tomcat.getServerName());
+		super.addLiferay7RuntimeFromPreferences();
 	}
 
 	@Test
 	public void addLiferay7ServerFromMenu() {
-		dialogAction.openPreferencesDialog();
+		super.addLiferay7ServerFromMenu();
+	}
 
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
+	@Override
+	public ServerSupport getTestServer() {
+		if ((testServer == null) || !(testServer instanceof PureTomcat70Support)) {
+			testServer = new PureTomcat70Support(bot);
+		}
 
-		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
-
-		wizardAction.newRuntime.prepare7();
-
-		wizardAction.next();
-
-		wizardAction.newRuntime7.prepare(tomcat.getServerName(), tomcat.getFullServerDir());
-
-		wizardAction.finish();
-
-		dialogAction.preferences.confirm();
-
-		wizardAction.openNewLiferayServerWizard();
-
-		wizardAction.newServer.prepare(tomcat.getServerName());
-
-		wizardAction.finish();
-
-		dialogAction.deleteRuntimFromPreferences(tomcat.getServerName());
+		return testServer;
 	}
 
 	@Test
 	public void serverEditorCustomLaunchSettingsChange() {
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
-
-		wizardAction.newRuntime.prepare7();
-
-		wizardAction.next();
-
-		wizardAction.newRuntime7.prepare(tomcat.getServerName(), tomcat.getFullServerDir());
-
-		wizardAction.finish();
-
-		dialogAction.preferences.confirm();
-
-		wizardAction.openNewLiferayServerWizard();
-
-		wizardAction.newServer.prepare(tomcat.getServerName());
-
-		wizardAction.finish();
-
-		viewAction.servers.openEditor(tomcat.getStoppedLabel());
-
-		editorAction.server.selectCustomLaunchSettings();
-
-		editorAction.server.selectUseDeveloperMode();
-
-		editorAction.save();
-
-		editorAction.close();
-
-		viewAction.servers.openEditor(tomcat.getStoppedLabel());
-
-		editorAction.server.selectDefaultLaunchSettings();
-
-		editorAction.save();
-
-		editorAction.close();
-
-		dialogAction.deleteRuntimFromPreferences(tomcat.getServerName());
+		super.serverEditorCustomLaunchSettingsChange();
 	}
 
 	@Test
 	public void serverEditorCustomLaunchSettingsChangeAndStart() {
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
-
-		wizardAction.newRuntime.prepare7();
-
-		wizardAction.next();
-
-		wizardAction.newRuntime7.prepare(tomcat.getServerName(), tomcat.getFullServerDir());
-
-		wizardAction.finish();
-
-		dialogAction.preferences.confirm();
-
-		wizardAction.openNewLiferayServerWizard();
-
-		wizardAction.newServer.prepare(tomcat.getServerName());
-
-		wizardAction.finish();
-
-		viewAction.servers.openEditor(tomcat.getStoppedLabel());
-
-		editorAction.server.selectCustomLaunchSettings();
-
-		editorAction.server.selectUseDeveloperMode();
-
-		editorAction.save();
-
-		editorAction.close();
-
-		// viewAction.servers.start(serverStoppedLabel);
-
-		// jobAction.waitForServerStarted(serverName);
-
-		// String serverStartedLabel = serverName + "  [Started]";
-
-		// viewAction.servers.stop(serverStartedLabel);
-
-		// jobAction.waitForServerStopped(serverName);
-
-		viewAction.servers.openEditor(tomcat.getStoppedLabel());
-
-		editorAction.server.selectDefaultLaunchSettings();
-
-		editorAction.save();
-
-		editorAction.close();
-
-		dialogAction.deleteRuntimFromPreferences(tomcat.getServerName());
+		super.serverEditorCustomLaunchSettingsChangeAndStart();
 	}
 
 	@Ignore("To wait for IDE-3343")
 	@Test
 	public void serverEditorPortsChange() {
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
-
-		wizardAction.newRuntime.prepare7();
-
-		wizardAction.next();
-
-		wizardAction.newRuntime7.prepare(tomcat.getServerName(), tomcat.getFullServerDir());
-
-		wizardAction.finish();
-
-		dialogAction.preferences.confirm();
-
-		wizardAction.openNewLiferayServerWizard();
-
-		wizardAction.newServer.prepare(tomcat.getServerName());
-
-		wizardAction.finish();
-
-		viewAction.servers.openEditor(tomcat.getStoppedLabel());
-
-		editorAction.server.setHttpPort("8081");
-
-		editorAction.save();
-
-		editorAction.close();
-
-		viewAction.servers.openEditor(tomcat.getStoppedLabel());
-
-		editorAction.server.setHttpPort("8080");
-
-		editorAction.save();
-
-		editorAction.close();
+		super.serverEditorPortsChange();
 	}
 
 	@Ignore("To wait for IDE-3343")
 	@Test
 	public void serverEditorPortsChangeAndStart() {
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
-
-		wizardAction.newRuntime.prepare7();
-
-		wizardAction.next();
-
-		wizardAction.newRuntime7.prepare(tomcat.getServerName(), tomcat.getFullServerDir());
-
-		wizardAction.finish();
-
-		dialogAction.preferences.confirm();
-
-		wizardAction.openNewLiferayServerWizard();
-
-		wizardAction.newServer.prepare(tomcat.getServerName());
-
-		wizardAction.finish();
-
-		viewAction.servers.openEditor(tomcat.getStoppedLabel());
-
-		editorAction.server.setHttpPort("8082");
-
-		editorAction.save();
-
-		editorAction.close();
-
-		viewAction.servers.start(tomcat.getStoppedLabel());
-
-		jobAction.waitForServerStarted(tomcat.getServerName());
-
-		viewAction.servers.stop(tomcat.getStartedLabel());
-
-		jobAction.waitForServerStopped(tomcat.getServerName());
-
-		viewAction.servers.openEditor(tomcat.getStoppedLabel());
-
-		editorAction.server.setHttpPort("8080");
-
-		editorAction.save();
-
-		editorAction.close();
+		super.serverEditorPortsChangeAndStart();
 	}
 
 	@Test
 	public void testLiferay7ServerDebug() {
-		dialogAction.openPreferencesDialog();
-
-		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
-
-		dialogAction.serverRuntimeEnvironments.openNewRuntimeWizard();
-
-		wizardAction.newRuntime.prepare7();
-
-		wizardAction.next();
-
-		wizardAction.newRuntime7.prepare(tomcat.getServerName(), tomcat.getFullServerDir());
-
-		wizardAction.finish();
-
-		dialogAction.preferences.confirm();
-
-		wizardAction.openNewLiferayServerWizard();
-
-		wizardAction.newServer.prepare(tomcat.getServerName());
-
-		wizardAction.finish();
-
-		// String serverStoppedLabel = serverName + "  [Stopped]";
-
-		// viewAction.servers.debug(serverStoppedLabel);
-
-		// jobAction.waitForServerStarted(serverName);
-
-		// String serverDebuggingLabel = serverName + "  [Debugging]";
-
-		// viewAction.servers.stop(serverDebuggingLabel);
-
-		// jobAction.waitForServerStopped(serverName);
-
-		dialogAction.deleteRuntimFromPreferences(tomcat.getServerName());
+		super.testLiferay7ServerDebug();
 	}
 
 	@Rule
-	public PureTomcat70Support tomcat = new PureTomcat70Support(bot);
+	public ServerSupport tomcat = getTestServer();
 
 }

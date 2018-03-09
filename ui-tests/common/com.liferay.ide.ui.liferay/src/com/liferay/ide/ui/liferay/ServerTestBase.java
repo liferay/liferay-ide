@@ -22,5 +22,14 @@ import com.liferay.ide.ui.liferay.support.server.ServerSupport;
 public class ServerTestBase extends SwtbotBase {
 
 	public static ServerSupport server;
+	public static ServerSupport testServer;
+
+	public ServerSupport getTestServer() {
+		return null;
+	}
+
+	public void resetTestServer() {
+		testServer = null;
+	}
 
 }
