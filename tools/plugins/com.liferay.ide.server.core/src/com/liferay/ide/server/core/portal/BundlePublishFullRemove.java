@@ -23,7 +23,6 @@ import com.liferay.ide.server.core.gogo.GogoBundleDeployer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -97,15 +96,13 @@ public class BundlePublishFullRemove extends BundlePublishOperation
         //TODO we should get bsn first and try use the bsn to uninstall
         IStatus retval = null;
 
-        IPath outputJar = bundleProject.getOutputBundlePath();
-
         GogoBundleDeployer bundleDeployer = null;
 
         try
         {
             bundleDeployer = createBundleDeployer();
 
-            String error = bundleDeployer.uninstall( bundleProject, outputJar );
+            String error = bundleDeployer.uninstall( bundleProject );
 
             if( error == null )
             {
