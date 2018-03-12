@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.modules;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 
@@ -24,9 +25,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.nio.file.Files;
-
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
@@ -38,7 +37,6 @@ import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.server.core.IServer;
 
@@ -76,7 +74,7 @@ public class ServiceWrapperCommand {
 		return result;
 	}
 
-	private Map<String, String[]> _getDynamicServiceWrapper() throws IOException {
+	private Map<String, String[]> _getDynamicServiceWrapper() throws Exception {
 		PortalRuntime portalRuntime = (PortalRuntime)_server.getRuntime().loadAdapter(PortalRuntime.class, null);
 
 		IPath bundleLibPath = portalRuntime.getAppServerLibGlobalDir();
@@ -98,9 +96,17 @@ public class ServiceWrapperCommand {
 					break;
 				}
 			}
+			
+			File osgi = new File(bundleServerPath.append("../osgi").toOSString());
+			
+			if(FileUtil.notExists(osgi)) {	
+				
+			ProjectCore.logError("Folder osgi not exists in bundle root");
+			throw new Exception("Folder osgi not exists in bundle root");
+			}
 
-			libFiles = FileListing.getFileListing(new File(bundleServerPath.append("../osgi").toOSString()));
-
+			libFiles = FileListing.getFileListing(osgi);
+			
 			libFiles.add(portalkernelJar);
 
 			if (ListUtil.isNotEmpty(libFiles)) {
