@@ -51,6 +51,7 @@
 		<module>com.liferay.ide.ui.theme.tests</module>
 		<module>com.liferay.ide.ui.theme.deploy.tests</module>
 		<module>com.liferay.ide.ui.hook.tests</module>
+		<module>com.liferay.ide.ui.hook.deploy.tests</module>
 		<module>com.liferay.ide.ui.jsf.tests</module>
 		<module>com.liferay.ide.ui.jsf.deploy.tests</module>
 		<module>com.liferay.ide.ui.layouttpl.tests</module>
@@ -66,6 +67,7 @@
 		<module>com.liferay.ide.ui.service.builder.tests</module>
 		<module>com.liferay.ide.ui.service.builder.deploy.tests</module>
 		<module>com.liferay.ide.ui.kaleo.tests</module>
+		<module>com.liferay.ide.ui.kaleo.deploy.tests</module>
 		<module>com.liferay.ide.ui.preference.tests</module>
 	</modules>
 </project>

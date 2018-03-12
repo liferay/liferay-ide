@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.ui.fragment.deploy.tests;
+package com.liferay.ide.ui.layouttpl.deploy.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 
@@ -21,10 +21,10 @@ import org.junit.Test;
 /**
  * @author Terry Jia
  */
-public class DeployFragmentMavenTests extends SwtbotBase {
+public class DeployLayouttplTests extends SwtbotBase {
 
 	@Test
-	public void deployFragmentWithJsp() {
+	public void deployLayoutTemplate() {
 	}
 
 }

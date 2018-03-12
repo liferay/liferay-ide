@@ -12,35 +12,24 @@
  * details.
  */
 
-package com.liferay.ide.ui.fragment.tests;
+package com.liferay.ide.ui.fragment.tests.base;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
-import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
 import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceGradleSupport;
-import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.RuleChain;
 
 /**
  * @author Lily Li
  */
-public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
-
-	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
-
-	@ClassRule
-	public static RuleChain chain = RuleUtil.getTomcat7xRuleChain(bot, tomcat);
+public class NewFragmentWizardLiferayWorkspaceGradleBase extends SwtbotBase {
 
 	@ClassRule
 	public static LiferayWorkspaceGradleSupport liferayWorkspace = new LiferayWorkspaceGradleSupport(bot);
 
-	@Test
 	public void createFragmentChangeModulesDir() {
 		viewAction.project.openFile(liferayWorkspace.getName(), "gradle.properties");
 
@@ -107,7 +96,6 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 		editorAction.close();
 	}
 
-	@Test
 	public void createFragmentWithJsp() {
 		wizardAction.openNewFragmentWizard();
 
@@ -136,7 +124,6 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
-	@Test
 	public void createFragmentWithJspf() {
 		wizardAction.openNewFragmentWizard();
 
@@ -165,7 +152,6 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
-	@Test
 	public void createFragmentWithoutFiles() {
 		wizardAction.openNewFragmentWizard();
 
@@ -194,7 +180,6 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
-	@Test
 	public void createFragmentWithPortletProperites() {
 		wizardAction.openNewFragmentWizard();
 
@@ -228,8 +213,6 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
-	@Ignore("ignore as unstable, need more research")
-	@Test
 	public void createFragmentWithResourceAction() {
 		wizardAction.openNewFragmentWizard();
 
@@ -256,7 +239,6 @@ public class NewFragmentWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
-	@Test
 	public void createFragmentWithWholeFiles() {
 		wizardAction.openNewFragmentWizard();
 
