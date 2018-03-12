@@ -55,6 +55,7 @@
 		<module>com.liferay.ide.ui.jsf.tests</module>
 		<module>com.liferay.ide.ui.jsf.deploy.tests</module>
 		<module>com.liferay.ide.ui.layouttpl.tests</module>
+		<module>com.liferay.ide.ui.layouttpl.deploy.tests</module>
 		<module>com.liferay.ide.ui.portlet.tests</module>
 		<module>com.liferay.ide.ui.portlet.deploy.tests</module>
 		<module>com.liferay.ide.ui.module.tests</module>
