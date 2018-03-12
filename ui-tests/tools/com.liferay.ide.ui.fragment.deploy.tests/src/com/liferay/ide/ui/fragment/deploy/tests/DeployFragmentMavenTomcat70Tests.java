@@ -14,17 +14,34 @@
 
 package com.liferay.ide.ui.fragment.deploy.tests;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.fragment.deploy.tests.base.FragmentTomcat7xMavenDeployBase;
+import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
+import com.liferay.ide.ui.liferay.support.server.ServerSupport;
+import com.liferay.ide.ui.liferay.util.RuleUtil;
 
+import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 
 /**
  * @author Terry Jia
  */
-public class DeployFragmentGradleTests extends SwtbotBase {
+public class DeployFragmentMavenTomcat70Tests extends FragmentTomcat7xMavenDeployBase {
+
+	@ClassRule
+	public static RuleChain chain = RuleUtil.getTomcat7xRunningRuleChain(bot, getServer());
+
+	public static ServerSupport getServer() {
+		if ((server == null) || !(server instanceof PureTomcat70Support)) {
+			server = new PureTomcat70Support(bot);
+		}
+
+		return server;
+	}
 
 	@Test
 	public void deployFragmentWithJsp() {
+		super.deployFragmentWithJsp();
 	}
 
 }
