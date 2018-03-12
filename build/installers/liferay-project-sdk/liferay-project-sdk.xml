@@ -1,7 +1,7 @@
 <project>
-    <shortName>LiferayWorkspace</shortName>
-    <fullName>Liferay Workspace</fullName>
-    <version>1.8.0</version>
+    <shortName>LiferayProjectSDK</shortName>
+    <fullName>Liferay Project SDK</fullName>
+    <version>2018.3.12</version>
     <logoImage>../shared/images/liferay_logo_large.png</logoImage>
     <componentList>
         <component>
@@ -28,6 +28,9 @@
                         </distributionFile>
                         <distributionFile>
                             <origin>../shared/download/biz.aQute.bnd.jar</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>../shared/download/gw.jar</origin>
                         </distributionFile>
                     </distributionFileList>
                 </folder>
@@ -165,12 +168,20 @@
             <programArguments>install -fl "${bladeFilePath}"</programArguments>
         </runProgram>
         <setInstallerVariable>
+            <name>gwFilePath</name>
+            <value>${installdir}${platform_path_separator}gw.jar</value>
+        </setInstallerVariable>
+        <setInstallerVariable>
             <name>bndFilePath</name>
             <value>${installdir}${platform_path_separator}biz.aQute.bnd.jar</value>
         </setInstallerVariable>
         <runProgram>
             <program>${jpmFilePath}</program>
             <programArguments>install -fl "${bndFilePath}"</programArguments>
+        </runProgram>
+        <runProgram>
+            <program>${jpmFilePath}</program>
+            <programArguments>install -fl "${gwFilePath}"</programArguments>
         </runProgram>
         <runProgram>
             <program>chown</program>
@@ -321,7 +332,7 @@
             <path>${installdir}</path>
         </deleteFile>
         <deleteFile>
-            <path>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Liferay Workspace</path>
+            <path>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Liferay Project SDK</path>
             <ruleList>
                 <compareText>
                     <logic>contains</logic>

@@ -25,13 +25,13 @@
         <version>3.2.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>liferay.developer.studio.installer</artifactId>
+    <artifactId>liferay.project.sdk.installer</artifactId>
     <packaging>pom</packaging>
 
-    <name>Liferay IDE Developer Studio Installer</name>
+    <name>Liferay Project SDK Installer</name>
 
     <properties>
-        <studio-installer-version>3.2.0-m1</studio-installer-version>
+        <workspace-installer-version>2018.3.12</workspace-installer-version>
     </properties>
 
     <build>
@@ -63,28 +63,6 @@
                 <artifactId>download-maven-plugin</artifactId>
                 <version>1.3.0</version>
                 <executions>
-                    <execution>
-                        <id>download-dxp-bundle</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>${portal-download-base}/${portal-version}/${portal-zip-name}</url>
-                            <outputDirectory>../shared/download/</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>download-plugin-sdk</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>${plugin-sdk-download-base}/${plugin-sdk-version}/${plugin-sdk-zip-name}</url>
-                            <outputDirectory>../shared/download/</outputDirectory>
-                        </configuration>
-                    </execution>
                     <execution>
                         <id>download-blade</id>
                         <phase>package</phase>
@@ -172,7 +150,7 @@
                             <executable>${install-builder-executable}</executable>
                             <arguments>
                                 <argument>build</argument>
-                                <argument>./liferay-developer-studio.xml</argument>
+                                <argument>./liferay-project-sdk.xml</argument>
                                 <argument>linux-x64</argument>
                             </arguments>
                         </configuration>
@@ -187,7 +165,7 @@
                             <executable>${install-builder-executable}</executable>
                             <arguments>
                                 <argument>build</argument>
-                                <argument>./liferay-developer-studio.xml</argument>
+                                <argument>./liferay-project-sdk.xml</argument>
                                 <argument>windows</argument>
                             </arguments>
                         </configuration>
@@ -202,7 +180,7 @@
                             <executable>${install-builder-executable}</executable>
                             <arguments>
                                 <argument>build</argument>
-                                <argument>./liferay-developer-studio.xml</argument>
+                                <argument>./liferay-project-sdk.xml</argument>
                                 <argument>osx</argument>
                             </arguments>
                         </configuration>
@@ -224,13 +202,11 @@
                 </executions>
                 <configuration>
                     <properties>
-                        <appPath>${pom.basedir}/../outputs/LiferayDeveloperStudio-${studio-installer-version}-osx-installer.app</appPath>
+                        <appPath>${pom.basedir}/../outputs/LiferayProjectSDK-${workspace-installer-version}-osx-installer.app</appPath>
                         <signingServerURL>${signingServerURL}</signingServerURL>
                         <signApps>${signApps}</signApps>
                         <certificate>Developer+ID+Application%3A+Liferay%2C+Inc.+%287H3SPU5TB9%29</certificate>
                         <createDmg>true</createDmg>
-                        <signingServerSearchPath>${signingServerSearchPath}</signingServerSearchPath>
-                        <signingServerReplacePath>${signingServerReplacePath}</signingServerReplacePath>
                     </properties>
                     <source>${pom.basedir}/../shared/scripts/SignApp.groovy</source>
                 </configuration>
@@ -245,7 +221,7 @@
                         <phase>package</phase>
                         <configuration>
                             <target>
-                                <delete dir="../outputs/LiferayDeveloperStudio-${studio-installer-version}-osx-installer.app"/>
+                                <delete dir="../outputs/LiferayProjectSDK-${workspace-installer-version}-osx-installer.app"/>
                             </target>
                         </configuration>
                         <goals>

@@ -1,7 +1,7 @@
 <project>
-    <shortName>LiferayDeveloperStudio</shortName>
-    <fullName>Liferay Developer Studio</fullName>
-    <version>3.2.0-m1</version>
+    <shortName>LiferayProjectSDKwithDevStudioCommunityEdition</shortName>
+    <fullName>Liferay Project SDK with DevStudio - Community Edition</fullName>
+    <version>2018.3.12</version>
     <logoImage>../shared/images/studio_logo.png</logoImage>
     <componentList>
         <component>
@@ -30,7 +30,7 @@
                             <origin>../shared/download/com.liferay.portal.tools.bundle.support.jar</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../shared/download/liferay-dxp-digital-enterprise-tomcat-7.0-sp6-20171010144253003.zip</origin>
+                            <origin>../shared/download/liferay-ce-portal-tomcat-7.1-m1-20180223151209360.zip</origin>
                         </distributionFile>
                         <distributionFile>
                             <origin>../shared/download/com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</origin>
@@ -165,39 +165,6 @@
             <progressText>Creating directory...</progressText>
         </createDirectory>
         <if>
-            <actionList>
-                <writeFile>
-                    <encoding>utf-8</encoding>
-                    <path>${installdir}${platform_path_separator}pwd</path>
-                    <text>${password.password}</text>
-                </writeFile>
-                <runProgram>
-                    <customErrorMessage>Could not create DXP download token. Make sure you type correct email address and password and are connected to the internet.</customErrorMessage>
-                    <program>${java_executable}</program>
-                    <programArguments>-jar "${installdir}${platform_path_separator}com.liferay.portal.tools.bundle.support.jar" createToken --force --email "${email}" --password-file "${installdir}${platform_path_separator}pwd"</programArguments>
-                    <onErrorActionList>
-                        <deleteFile>
-                            <path>${installdir}</path>
-                        </deleteFile>
-                    </onErrorActionList>
-                </runProgram>
-                <deleteFile>
-                    <path>${installdir}${platform_path_separator}pwd</path>
-                </deleteFile>
-            </actionList>
-            <conditionRuleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-                <fileTest>
-                    <condition>not_exists</condition>
-                    <path>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}token</path>
-                </fileTest>
-            </conditionRuleList>
-        </if>
-        <if>
             <explanation>is linux</explanation>
             <actionList>
                 <setInstallerVariable>
@@ -274,26 +241,12 @@
             <progressText>Creating directory...</progressText>
         </createDirectory>
         <copyFile>
-            <destination>${liferayBundlesPath}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp6-20171010144253003.zip</destination>
-            <origin>${installdir}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp6-20171010144253003.zip</origin>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-            </ruleList>
+            <destination>${liferayBundlesPath}${platform_path_separator}liferay-ce-portal-tomcat-7.1-m1-20180223151209360.zip</destination>
+            <origin>${installdir}${platform_path_separator}liferay-ce-portal-tomcat-7.1-m1-20180223151209360.zip</origin>
         </copyFile>
         <copyFile>
             <destination>${liferayBundlesPath}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</destination>
             <origin>${installdir}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</origin>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-            </ruleList>
         </copyFile>
         <runProgram>
             <program>${java_executable}</program>
@@ -419,60 +372,12 @@
                     <text>${platform_name}</text>
                     <value>win</value>
                 </compareText>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
             </ruleList>
         </runProgram>
         <runProgram>
             <program>${bladeCommandPath}</program>
             <programArguments>--base "${lrws}" init</programArguments>
         </runProgram>
-        <propertiesFileSet>
-            <file>${lrws}${platform_path_separator}gradle.properties</file>
-            <key>liferay.workspace.bundle.token.download</key>
-            <value>true</value>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-            </ruleList>
-        </propertiesFileSet>
-        <propertiesFileSet>
-            <file>${lrws}${platform_path_separator}gradle.properties</file>
-            <key>liferay.workspace.bundle.url</key>
-            <value>https://api.liferay.com/downloads/portal/7.0.10.6/liferay-dxp-digital-enterprise-tomcat-7.0-sp6-20171010144253003.zip</value>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-            </ruleList>
-        </propertiesFileSet>
-        <createDirectory>
-            <path>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy</path>
-            <ruleList>
-                <fileTest>
-                    <condition>exists</condition>
-                    <path>${activationKey}</path>
-                </fileTest>
-            </ruleList>
-        </createDirectory>
-        <copyFile>
-            <destination>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy${platform_path_separator}activation_key.xml</destination>
-            <origin>${activationKey}</origin>
-            <ruleList>
-                <fileTest>
-                    <condition>exists</condition>
-                    <path>${activationKey}</path>
-                </fileTest>
-            </ruleList>
-        </copyFile>
         <createDirectory>
             <path>${user_home_directory}${platform_path_separator}.gradle</path>
         </createDirectory>
@@ -553,7 +458,7 @@
             </ruleList>
         </runProgram>
         <deleteFile>
-            <path>${installdir}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp6-20171010144253003.zip</path>
+            <path>${installdir}${platform_path_separator}liferay-ce-portal-tomcat-7.1-m1-20180223151209360.zip</path>
         </deleteFile>
         <deleteFile>
             <path>${installdir}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</path>
@@ -584,6 +489,7 @@
     <enableRollback>1</enableRollback>
     <enableTimestamp>1</enableTimestamp>
     <outputDirectory>../outputs</outputDirectory>
+    <showFileUnpackingProgress>0</showFileUnpackingProgress>
     <startMenuGroupName></startMenuGroupName>
     <vendor>Liferay, Inc</vendor>
     <parameterList>
@@ -642,91 +548,6 @@
             <mustExist>0</mustExist>
             <width>30</width>
         </directoryParameter>
-        <choiceParameterGroup>
-            <name>isdxp</name>
-            <title>Configure Liferay Workspace Server Bundle</title>
-            <description></description>
-            <explanation>When initializing a new Liferay Workspace, Liferay Customers can use Liferay DXP Bundle. Community members should choose Liferay Portal Community Edition.</explanation>
-            <value></value>
-            <default></default>
-            <parameterList>
-                <labelParameter>
-                    <name>dxp</name>
-                    <title>dxp</title>
-                    <description>Liferay DXP Bundle</description>
-                    <explanation></explanation>
-                    <image></image>
-                </labelParameter>
-                <labelParameter>
-                    <name>ce</name>
-                    <title>ce</title>
-                    <description>Community Edition Bundle</description>
-                    <explanation></explanation>
-                    <image></image>
-                </labelParameter>
-            </parameterList>
-        </choiceParameterGroup>
-        <parameterGroup>
-            <name>dxpinfo</name>
-            <title>Download Liferay DXP Bundle</title>
-            <explanation>Email address and password are used for generating a download token. Your password will not be saved locally.</explanation>
-            <value></value>
-            <default></default>
-            <parameterList>
-                <stringParameter>
-                    <name>email</name>
-                    <title>liferay.com email address</title>
-                    <description>liferay.com Email Address:</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>0</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
-                <passwordParameter>
-                    <name>password</name>
-                    <title>Password</title>
-                    <description>liferay.com Email Password:</description>
-                    <explanation></explanation>
-                    <value></value>
-                    <default></default>
-                    <allowEmptyValue>0</allowEmptyValue>
-                    <askForConfirmation>0</askForConfirmation>
-                    <descriptionRetype></descriptionRetype>
-                    <width>20</width>
-                </passwordParameter>
-            </parameterList>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-                <fileTest>
-                    <condition>not_exists</condition>
-                    <path>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}token</path>
-                </fileTest>
-            </ruleList>
-        </parameterGroup>
-        <fileParameter>
-            <name>activationKey</name>
-            <title>DXP Activation Key (Optional)</title>
-            <description>activation key file</description>
-            <explanation>Please select the activation key file for Liferay DXP. If you skip this step, you can add the activation key into auto-deploy folder later.</explanation>
-            <value></value>
-            <default></default>
-            <allowEmptyValue>1</allowEmptyValue>
-            <mustBeWritable>0</mustBeWritable>
-            <mustExist>1</mustExist>
-            <width>30</width>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-            </ruleList>
-        </fileParameter>
         <choiceParameterGroup>
             <name>proxy</name>
             <description>Proxy Config</description>
@@ -809,6 +630,5 @@
             </ruleList>
         </parameterGroup>
     </parameterList>
-    <showFileUnpackingProgress>0</showFileUnpackingProgress>
 </project>
 
