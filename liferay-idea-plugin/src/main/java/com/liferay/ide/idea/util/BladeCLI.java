@@ -19,10 +19,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 
+import java.net.JarURLConnection;
+import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.jar.JarEntry;
 
 import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
@@ -43,18 +47,40 @@ public class BladeCLI {
 
 		Properties properties = System.getProperties();
 
+		boolean needToCopy = true;
+
 		File temp = new File(properties.getProperty("user.home"), ".liferay-ide");
 
 		File bladeJar = new File(temp, "blade.jar");
 
-		if (!bladeJar.exists()) {
-			ClassLoader bladeClassLoader = BladeCLI.class.getClassLoader();
+		ClassLoader bladeClassLoader = BladeCLI.class.getClassLoader();
 
-			try (InputStream in = bladeClassLoader.getResourceAsStream("/libs/blade.jar")) {
+		URL url = bladeClassLoader.getResource("/libs/blade.jar");
+
+		try (InputStream in = bladeClassLoader.getResourceAsStream("/libs/blade.jar")) {
+			JarURLConnection jarUrlConnection = (JarURLConnection)url.openConnection();
+
+			JarEntry jarEntry = jarUrlConnection.getJarEntry();
+
+			Long bladeJarTimestamp = jarEntry.getTime();
+
+			if (bladeJar.exists()) {
+				Long destTimestamp = bladeJar.lastModified();
+
+				if (destTimestamp < bladeJarTimestamp) {
+					bladeJar.delete();
+				}
+				else {
+					needToCopy = false;
+				}
+			}
+
+			if (needToCopy) {
 				FileUtil.writeFile(bladeJar, in);
+				bladeJar.setLastModified(bladeJarTimestamp);
 			}
-			catch (IOException ioe) {
-			}
+		}
+		catch (IOException ioe) {
 		}
 
 		javaTask.setJar(bladeJar);
