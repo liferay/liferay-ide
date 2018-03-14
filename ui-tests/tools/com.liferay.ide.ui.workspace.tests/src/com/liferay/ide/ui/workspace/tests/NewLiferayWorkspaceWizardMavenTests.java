@@ -16,7 +16,6 @@ package com.liferay.ide.ui.workspace.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
-import com.liferay.ide.ui.swtbot.page.Table;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -107,21 +106,9 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(projectName, "bundles"));
 
-		viewAction.switchLiferayPerspective();
-
-		ide.sleep(5000);
-
 		viewAction.project.runMavenInitBundle(projectName);
 
 		jobAction.waitForNoRunningJobs();
-
-		if (!viewAction.servers.visibleServer(LIFERAY_PORTAL_BUNDLE)) {
-			ide.sleep(5000);
-
-			viewAction.project.runMavenInitBundle(projectName);
-
-			jobAction.waitForNoRunningJobs();
-		}
 
 		Assert.assertTrue(viewAction.servers.visibleServer(LIFERAY_PORTAL_BUNDLE));
 
@@ -129,13 +116,21 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 
 		dialogAction.preferences.openServerRuntimeEnvironmentsTry();
 
-		Table runtimes = dialogAction.serverRuntimeEnvironments.getRuntimes();
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(LIFERAY_PORTAL_BUNDLE);
 
-		for (int i = runtimes.size() - 1; i >= 0; i--) {
-			dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(i);
-		}
+		dialogAction.serverRuntimeEnvironments.deleteRuntimeTryConfirm(projectName);
 
-		viewAction.project.closeAndDeleteFromDisk(project.getName());
+		dialogAction.preferences.confirm();
+
+		String[] moduleNames = {project.getName(), project.getName() + "-modules (in modules)"};
+		String[] themeNames = {project.getName(), project.getName() + "-themes (in themes)"};
+		String[] warNames = {project.getName(), project.getName() + "-wars (in wars)"};
+
+		viewAction.project.closeAndDelete(moduleNames);
+		viewAction.project.closeAndDelete(themeNames);
+		viewAction.project.closeAndDelete(warNames);
+
+		viewAction.project.closeAndDelete(project.getName());
 	}
 
 	@Ignore("Ignore forever and test the download bundle in createLiferayWorkspaceWithDownloadBundleChangeBundleUrl")
