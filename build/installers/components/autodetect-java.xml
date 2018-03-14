@@ -1,0 +1,12 @@
+<autodetectJava>
+    <promptUser>1</promptUser>
+    <validVersionList>
+        <validVersion>
+            <bitness>64</bitness>
+            <maxVersion>1.8</maxVersion>
+            <minVersion>1.8</minVersion>
+            <requireJDK>1</requireJDK>
+            <vendor></vendor>
+        </validVersion>
+    </validVersionList>
+</autodetectJava>

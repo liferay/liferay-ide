@@ -60,104 +60,12 @@
                 </folder>
             </folderList>
         </component>
-        <component>
-            <name>linuxcomponent</name>
-            <description>linuxComponent</description>
-            <canBeEdited>0</canBeEdited>
-            <selected>1</selected>
-            <show>1</show>
-            <folderList>
-                <folder>
-                    <description>Program Files</description>
-                    <destination>${installdir}</destination>
-                    <name>programfiles</name>
-                    <platforms>all</platforms>
-                    <distributionFileList>
-                        <distributionFile>
-                            <origin>../../com.liferay.ide-repository/target/products/com.liferay.ide.studio-linux.gtk.x86_64.zip</origin>
-                        </distributionFile>
-                    </distributionFileList>
-                </folder>
-            </folderList>
-            <shouldPackRuleList>
-                <compareText>
-                    <logic>contains</logic>
-                    <nocase>1</nocase>
-                    <text>${platform_name}</text>
-                    <value>linux</value>
-                </compareText>
-            </shouldPackRuleList>
-        </component>
-        <component>
-            <name>wincomponent</name>
-            <description>winComponent</description>
-            <canBeEdited>0</canBeEdited>
-            <selected>1</selected>
-            <show>1</show>
-            <folderList>
-                <folder>
-                    <description>Program Files</description>
-                    <destination>${installdir}</destination>
-                    <name>programfiles</name>
-                    <platforms>all</platforms>
-                    <distributionFileList>
-                        <distributionFile>
-                            <origin>../../com.liferay.ide-repository/target/products/com.liferay.ide.studio-win32.win32.x86_64.zip</origin>
-                        </distributionFile>
-                    </distributionFileList>
-                </folder>
-            </folderList>
-            <shouldPackRuleList>
-                <compareText>
-                    <logic>contains</logic>
-                    <nocase>1</nocase>
-                    <text>${platform_name}</text>
-                    <value>win</value>
-                </compareText>
-            </shouldPackRuleList>
-        </component>
-        <component>
-            <name>osxcomponent</name>
-            <description>osxComponent</description>
-            <canBeEdited>0</canBeEdited>
-            <selected>1</selected>
-            <show>1</show>
-            <folderList>
-                <folder>
-                    <description>Program Files</description>
-                    <destination>${installdir}</destination>
-                    <name>programfiles</name>
-                    <platforms>all</platforms>
-                    <distributionFileList>
-                        <distributionFile>
-                            <origin>../../com.liferay.ide-repository/target/products/com.liferay.ide.studio-macosx.cocoa.x86_64.zip</origin>
-                        </distributionFile>
-                    </distributionFileList>
-                </folder>
-            </folderList>
-            <shouldPackRuleList>
-                <compareText>
-                    <logic>contains</logic>
-                    <nocase>1</nocase>
-                    <text>${platform_name}</text>
-                    <value>osx</value>
-                </compareText>
-            </shouldPackRuleList>
-        </component>
+        <include file="../components/devstudio-linuxcomponent.xml" />
+        <include file="../components/devstudio-osxcomponent.xml" />
+        <include file="../components/devstudio-wincomponent.xml" />
     </componentList>
     <preInstallationActionList>
-        <autodetectJava>
-            <promptUser>1</promptUser>
-            <validVersionList>
-                <validVersion>
-                    <bitness>64</bitness>
-                    <maxVersion>1.8</maxVersion>
-                    <minVersion>1.8</minVersion>
-                    <requireJDK>1</requireJDK>
-                    <vendor></vendor>
-                </validVersion>
-            </validVersionList>
-        </autodetectJava>
+        <include file="../components/autodetect-java.xml" />
     </preInstallationActionList>
     <postInstallationActionList>
         <createDirectory>
@@ -295,10 +203,7 @@
                 </compareValues>
             </ruleList>
         </copyFile>
-        <runProgram>
-            <program>${java_executable}</program>
-            <programArguments>-jar "${installdir}${platform_path_separator}biz.aQute.jpm.run.jar" -u init</programArguments>
-        </runProgram>
+        <include file="../components/run-java-jpm.xml" />
         <if>
             <explanation>is linux</explanation>
             <actionList>
@@ -341,31 +246,13 @@
             <insertAt>end</insertAt>
             <path>${jpmSystemPath}</path>
         </addDirectoryToPath>
-        <setInstallerVariable name="jpmFilePath" value="${jpmSystemPath}${platform_path_separator}jpm"/>
-        <setInstallerVariable>
-            <name>bladeFilePath</name>
-            <value>${installdir}${platform_path_separator}blade.jar</value>
-        </setInstallerVariable>
-        <setInstallerVariable>
-            <name>gwFilePath</name>
-            <value>${installdir}${platform_path_separator}gw.jar</value>
-        </setInstallerVariable>
-        <setInstallerVariable>
-            <name>bndFilePath</name>
-            <value>${installdir}${platform_path_separator}biz.aQute.bnd.jar</value>
-        </setInstallerVariable>
-        <runProgram>
-            <program>${jpmFilePath}</program>
-            <programArguments>install -fl "${bladeFilePath}"</programArguments>
-        </runProgram>
-        <runProgram>
-            <program>${jpmFilePath}</program>
-            <programArguments>install -fl "${gwFilePath}"</programArguments>
-        </runProgram>
-        <runProgram>
-            <program>${jpmFilePath}</program>
-            <programArguments>install -fl "${bndFilePath}"</programArguments>
-        </runProgram>
+        <include file="../components/set-installer-variable-jpm.xml" />
+        <include file="../components/set-installer-variable-blade.xml" />
+        <include file="../components/set-installer-variable-gw.xml" />
+        <include file="../components/set-installer-variable-bnd.xml" />
+        <include file="../components/run-jpm-install-blade.xml" />
+        <include file="../components/run-jpm-install-gw.xml" />
+        <include file="../components/run-jpm-install-bnd.xml" />
         <runProgram>
             <program>chown</program>
             <programArguments>-R ${env(SUDO_USER)} "${user_home_directory}/jpm"</programArguments>

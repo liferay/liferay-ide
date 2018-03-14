@@ -1,0 +1,1 @@
+<setInstallerVariable name="jpmFilePath" value="${jpmSystemPath}${platform_path_separator}jpm"/>

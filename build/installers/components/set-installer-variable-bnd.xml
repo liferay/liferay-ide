@@ -1,0 +1,4 @@
+<setInstallerVariable>
+    <name>bndFilePath</name>
+    <value>${installdir}${platform_path_separator}biz.aQute.bnd.jar</value>
+</setInstallerVariable>

@@ -1,0 +1,4 @@
+<runProgram>
+    <program>${jpmFilePath}</program>
+    <programArguments>install -fl "${gwFilePath}"</programArguments>
+</runProgram>
