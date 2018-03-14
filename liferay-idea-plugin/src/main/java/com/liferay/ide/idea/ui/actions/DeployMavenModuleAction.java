@@ -14,12 +14,9 @@
 
 package com.liferay.ide.idea.ui.actions;
 
-import com.intellij.ide.projectView.impl.ProjectRootsUtil;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
+
+import java.util.Arrays;
 
 /**
  * @author Joye Luo
@@ -27,25 +24,9 @@ import com.liferay.ide.idea.ui.LiferayIdeaUI;
 public class DeployMavenModuleAction extends AbstractLiferayMavenGoalAction {
 
 	public DeployMavenModuleAction() {
-		super("Deploy", "Run deploy goal", LiferayIdeaUI.LIFERAY_ICON, "bundle-support:deploy");
-	}
+		super("Deploy", "Run deploy goal", LiferayIdeaUI.LIFERAY_ICON);
 
-	@Override
-	public boolean isEnabledAndVisible(AnActionEvent event) {
-		Project project = event.getProject();
-		VirtualFile file = getVirtualFile(event);
-
-		VirtualFile baseDir = project.getBaseDir();
-
-		VirtualFile mavenFile = baseDir.findChild("pom.xml");
-
-		if ((file != null) && (mavenFile != null) && ProjectRootsUtil.isModuleContentRoot(file, project) &&
-			!baseDir.equals(file)) {
-
-			return true;
-		}
-
-		return false;
+		goals = Arrays.asList("clean", "package", "bundle-support:deploy");
 	}
 
 }

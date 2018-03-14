@@ -14,13 +14,9 @@
 
 package com.liferay.ide.idea.ui.actions;
 
-import static com.intellij.ide.actions.SearchEverywhereClassifier.EP_Manager.getVirtualFile;
-
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-
 import com.liferay.ide.idea.ui.LiferayIdeaUI;
+
+import java.util.Arrays;
 
 /**
  * @author Joye Luo
@@ -28,22 +24,9 @@ import com.liferay.ide.idea.ui.LiferayIdeaUI;
 public class InitBundleMavenAction extends AbstractLiferayMavenGoalAction {
 
 	public InitBundleMavenAction() {
-		super("InitBundle", "Run initBundle goal", LiferayIdeaUI.LIFERAY_ICON, "bundle-support:init");
-	}
+		super("InitBundle", "Run initBundle goal", LiferayIdeaUI.LIFERAY_ICON);
 
-	@Override
-	public boolean isEnabledAndVisible(AnActionEvent event) {
-		Project project = event.getProject();
-
-		VirtualFile baseDir = project.getBaseDir();
-
-		VirtualFile mavenFile = baseDir.findChild("pom.xml");
-
-		if (baseDir.equals(getVirtualFile(event)) && (mavenFile != null)) {
-			return true;
-		}
-
-		return false;
+		goals = Arrays.asList("bundle-support:init");
 	}
 
 }

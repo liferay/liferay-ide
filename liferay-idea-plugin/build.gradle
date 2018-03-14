@@ -62,7 +62,7 @@ task downloadBlade(type: Download) {
 	def bladeLatestUrl = new URL(project.properties.'blade-latest-download-url'.toString())
 
 	src bladeLatestUrl
-	dest 'src/main/resources/libs'
+	dest 'src/main/resources/libs/blade.jar'
 	onlyIfModified true
 }
 
