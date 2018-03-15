@@ -19,7 +19,6 @@ import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
 
 import org.junit.Assert;
 import org.junit.Rule;
-import org.junit.Test;
 
 /**
  * @author Vicky Wang
@@ -123,7 +122,6 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void addFragmentJspFiles() {
 		wizardAction.openNewFragmentWizard();
 
@@ -188,7 +186,6 @@ public class NewFragmentFilesWizardGradleBase extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void addFragmentResourceActionFiles() {
 		wizardAction.openNewFragmentWizard();
 
