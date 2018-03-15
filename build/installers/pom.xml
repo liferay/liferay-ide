@@ -59,6 +59,7 @@
         <module>liferay-project-sdk</module>
         <module>liferay-project-sdk-with-devstudio-ce</module>
         <module>liferay-project-sdk-with-devstudio-dxp</module>
+        <module>installer-tests</module>
     </modules>
 
     <build>

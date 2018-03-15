@@ -1,0 +1,4 @@
+*.backup
+.settings
+.project
+.classpath
