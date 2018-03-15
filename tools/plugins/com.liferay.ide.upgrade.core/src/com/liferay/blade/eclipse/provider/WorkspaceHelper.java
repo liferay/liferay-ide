@@ -41,9 +41,9 @@ public class WorkspaceHelper {
 	public IFile createIFile(String projectName, File file) throws CoreException, IOException {
 		IJavaProject project = _getJavaProject(projectName);
 
-		IFile projectFile = project.getProject().getFile("/temp/" + file.getName());
-
 		IProgressMonitor npm = new NullProgressMonitor();
+
+		IFile projectFile = project.getProject().getFile("/temp/" + file.getName());
 
 		if (projectFile.exists()) {
 			try {
@@ -64,7 +64,9 @@ public class WorkspaceHelper {
 
 		byte[] bytes = Files.readAllBytes(file.toPath());
 
-		projectFile.create(new ByteArrayInputStream(bytes), IFile.FORCE, npm);
+		try (ByteArrayInputStream bos = new ByteArrayInputStream(bytes)) {
+			projectFile.create(bos, IFile.FORCE, npm);
+		}
 
 		return projectFile;
 	}

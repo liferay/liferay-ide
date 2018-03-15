@@ -263,6 +263,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 							if (!(params[i].trim().equals(x.toString().substring(0, params[i].trim().length())))) {
 								sameParmSize = false;
+
 								break;
 							}
 						}
@@ -398,6 +399,7 @@ public class JavaFileJDT extends WorkspaceFile implements JavaFile {
 
 											possibleMatch = false;
 											typeMatched = false;
+
 											break;
 										}
 									}

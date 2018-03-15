@@ -16,41 +16,33 @@ package com.liferay.ide.project.core.upgrade;
 
 import com.liferay.blade.api.Problem;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class FileProblemsUtil {
 
-	public static List<FileProblems> newFileProblemsListFrom(Problem[] problems) {
-		List<FileProblems> fileProblemsList = new ArrayList<>();
+	public static FileProblems[] newFileProblemsListFrom(Problem[] problems) {
+		Map<File, FileProblems> fileProblemsMap = new HashMap<>();
 
 		for (Problem problem : problems) {
-			boolean added = false;
+			FileProblems fileProblem = fileProblemsMap.get(problem.getFile());
 
-			for (FileProblems fileProblems : fileProblemsList) {
-				String path = fileProblems.getFile().getPath();
-
-				if (path.equals(problem.getFile().getPath())) {
-					fileProblems.addProblem(problem);
-
-					added = true;
-					break;
-				}
+			if (fileProblem == null) {
+				fileProblem = new FileProblems();
 			}
 
-			if (!added) {
-				FileProblems fileProblems = new FileProblems();
-
-				fileProblems.addProblem(problem);
-				fileProblems.setFile(problem.getFile());
-				fileProblemsList.add(fileProblems);
-			}
+			fileProblem.addProblem(problem);
+			fileProblem.setFile(problem.getFile());
+			fileProblemsMap.put(problem.getFile(), fileProblem);
 		}
 
-		return fileProblemsList;
+		return fileProblemsMap.values().toArray(new FileProblems[0]);
 	}
 
 }

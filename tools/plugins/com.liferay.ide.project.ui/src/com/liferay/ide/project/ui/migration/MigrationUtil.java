@@ -149,12 +149,14 @@ public class MigrationUtil {
 				}
 			}
 			else {
-				IPath path = file.getFullPath();
+				if (retval == null) {
+					IPath path = file.getFullPath();
 
-				IProject project = CoreUtil.getProject(path.segment(path.segmentCount() - 1));
+					IProject project = CoreUtil.getProject(path.segment(path.segmentCount() - 1));
 
-				if (project.exists()) {
-					retval = project;
+					if (project.exists()) {
+						retval = project;
+					}
 				}
 			}
 		}
