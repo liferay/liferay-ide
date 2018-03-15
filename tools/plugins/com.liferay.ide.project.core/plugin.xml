@@ -612,6 +612,14 @@
 			type="java.lang.Object"
 		>
 		</propertyTester>
+		<propertyTester
+			class="com.liferay.ide.project.core.workspace.LiferayWorkspaceProjectPropertyTester"
+			id="com.liferay.ide.project.core.isLiferayWorkspaceProject"
+			namespace="com.liferay.ide.project.core"
+			properties="isLiferayWorkspaceProject"
+			type="org.eclipse.core.resources.IProject"
+		>
+		</propertyTester>
 	</extension>
 
 	<extension
@@ -849,5 +857,25 @@
 			shortName="MVCPortlet"
 		>
 		</liferayComponentTemplate>
+	</extension>
+	<extension
+		point="org.eclipse.ltk.core.refactoring.deleteParticipants"
+	>
+		<deleteParticipant
+			class="com.liferay.ide.project.core.workspace.LiferayWorkspaceProjectDeleteParticipant"
+			id="com.liferay.ide.project.core.workspace.liferayWorkspaceProjectDeleteParticipant"
+			name="liferayWorkspaceProjectDeleteParticipant"
+		>
+			<enablement>
+				<adapt
+					type="org.eclipse.core.resources.IProject"
+				>
+					<test
+						property="com.liferay.ide.project.core.isLiferayWorkspaceProject"
+					>
+					</test>
+				</adapt>
+			</enablement>
+		</deleteParticipant>
 	</extension>
 </plugin>
