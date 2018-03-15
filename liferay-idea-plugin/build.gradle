@@ -15,6 +15,7 @@ buildscript {
 
 plugins {
 	id "org.jetbrains.intellij" version "0.2.18"
+	id "de.undercouch.download" version "3.4.2"
 }
 
 apply plugin: 'com.liferay.source.formatter'
@@ -51,6 +52,34 @@ repositories {
 	maven {
 		url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
 	}
+}
+
+task downloadBlade(type: Download) {
+	def pomFile = new File("../build/parent/pom.xml")
+
+	def project = new XmlSlurper().parse(pomFile)
+
+	def bladeLatestUrl = new URL(project.properties.'blade-latest-download-url'.toString())
+
+	src bladeLatestUrl
+	dest 'src/main/resources/libs'
+	onlyIfModified true
+}
+
+task verifyBlade(type: Verify, dependsOn: downloadBlade) {
+	def pomFile = new File("../build/parent/pom.xml")
+
+	def project = new XmlSlurper().parse(pomFile)
+
+	def bladeLatestMd5 = project.properties.'blade-latest-md5'.toString()
+
+	src 'src/main/resources/libs/blade.jar'
+	algorithm 'MD5'
+	checksum bladeLatestMd5
+}
+
+compileJava {
+	dependsOn verifyBlade
 }
 
 version = '0.1.1'
