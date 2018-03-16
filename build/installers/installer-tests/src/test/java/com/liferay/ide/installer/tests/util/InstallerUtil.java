@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.installer.tests;
+package com.liferay.ide.installer.tests.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,47 +44,47 @@ public class InstallerUtil extends Constants {
 		return _installerInfo;
 	}
 
-	private static String _getProjectSdkFullNameWin() {
+	public static String getProjectSdkFullNameWin() {
 		return _getInfo().getProperty("project.sdk.name") + DASH + _getInfo().getProperty("version") + DASH + WINDOWS
 				+ DASH + INSTALLER + WINDOWS_SUFFIX;
 	}
 
-	private static String _getProjectSdkFullNameLinux() {
+	public static String getProjectSdkFullNameLinux() {
 		return _getInfo().getProperty("project.sdk.name") + DASH + _getInfo().getProperty("version") + DASH + LINUX_X64
 				+ DASH + INSTALLER + LINUX_SUFFIX;
 	}
 
-	private static String _getProjectSdkFullNameMacos() {
+	public static String getProjectSdkFullNameMacos() {
 		return _getInfo().getProperty("project.sdk.name") + DASH + _getInfo().getProperty("version") + DASH + OSX
 				+ DASH + INSTALLER + OSX_SUFFIX;
 	}
 
-	private static String _getDevStudioCEFullNameWin() {
+	public static String getDevStudioCEFullNameWin() {
 		return _getInfo().getProperty("dev.studio.ce.name") + DASH + _getInfo().getProperty("version") + DASH + WINDOWS
 				+ DASH + INSTALLER + WINDOWS_SUFFIX;
 	}
 
-	private static String _getDevStudioCEFullNameLinux() {
+	public static String getDevStudioCEFullNameLinux() {
 		return _getInfo().getProperty("dev.studio.ce.name") + DASH + _getInfo().getProperty("version") + DASH + LINUX_X64
 				+ DASH + INSTALLER + LINUX_SUFFIX;
 	}
 
-	private static String _getDevStudioCEFullNameMacos() {
+	public static String getDevStudioCEFullNameMacos() {
 		return _getInfo().getProperty("dev.studio.ce.name") + DASH + _getInfo().getProperty("version") + DASH + OSX
 				+ DASH + INSTALLER + OSX_SUFFIX;
 	}
 
-	private static String _getDevStudioDXPFullNameWin() {
+	public static String getDevStudioDXPFullNameWin() {
 		return _getInfo().getProperty("dev.studio.dxp.name") + DASH + _getInfo().getProperty("version") + DASH + WINDOWS
 				+ DASH + INSTALLER + WINDOWS_SUFFIX;
 	}
 
-	private static String _getDevStudioDXPFullNameLinux() {
+	public static String getDevStudioDXPFullNameLinux() {
 		return _getInfo().getProperty("dev.studio.dxp.name") + DASH + _getInfo().getProperty("version") + DASH + LINUX_X64
 				+ DASH + INSTALLER + LINUX_SUFFIX;
 	}
 
-	private static String _getDevStudioDXPFullNameMacos() {
+	public static String getDevStudioDXPFullNameMacos() {
 		return _getInfo().getProperty("dev.studio.dxp.name") + DASH + _getInfo().getProperty("version") + DASH + OSX
 				+ DASH + INSTALLER + OSX_SUFFIX;
 	}
@@ -101,38 +101,38 @@ public class InstallerUtil extends Constants {
 	}
 
 	public static File getProjectSdkWinFile() {
-		return new File(_getOutputDir(), _getProjectSdkFullNameWin());
+		return new File(_getOutputDir(), getProjectSdkFullNameWin());
 	}
 
 	public static File getProjectSdkLinuxFile() {
-		return new File(_getOutputDir(), _getProjectSdkFullNameLinux());
+		return new File(_getOutputDir(), getProjectSdkFullNameLinux());
 	}
 
 	public static File getProjectSdkMacosFile() {
-		return new File(_getOutputDir(), _getProjectSdkFullNameMacos());
+		return new File(_getOutputDir(), getProjectSdkFullNameMacos());
 	}
 
 	public static File getDevStudioCEWinFile() {
-		return new File(_getOutputDir(), _getDevStudioCEFullNameWin());
+		return new File(_getOutputDir(), getDevStudioCEFullNameWin());
 	}
 
 	public static File getDevStudioCELinuxFile() {
-		return new File(_getOutputDir(), _getDevStudioCEFullNameLinux());
+		return new File(_getOutputDir(), getDevStudioCEFullNameLinux());
 	}
 
 	public static File getDevStudioCEMacosFile() {
-		return new File(_getOutputDir(), _getDevStudioCEFullNameMacos());
+		return new File(_getOutputDir(), getDevStudioCEFullNameMacos());
 	}
 
 	public static File getDevStudioDXPWinFile() {
-		return new File(_getOutputDir(), _getDevStudioDXPFullNameWin());
+		return new File(_getOutputDir(), getDevStudioDXPFullNameWin());
 	}
 
 	public static File getDevStudioDXPLinuxFile() {
-		return new File(_getOutputDir(), _getDevStudioDXPFullNameLinux());
+		return new File(_getOutputDir(), getDevStudioDXPFullNameLinux());
 	}
 
 	public static File getDevStudioDXPMacosFile() {
-		return new File(_getOutputDir(), _getDevStudioDXPFullNameMacos());
+		return new File(_getOutputDir(), getDevStudioDXPFullNameMacos());
 	}
 }

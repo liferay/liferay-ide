@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.installer.tests;
+package com.liferay.ide.installer.tests.util;
 
 /**
  * @author Terry Jia

@@ -17,6 +17,8 @@ package com.liferay.ide.installer.tests;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import com.liferay.ide.installer.tests.util.InstallerUtil;
+
 /**
  * @author Terry Jia
  */
