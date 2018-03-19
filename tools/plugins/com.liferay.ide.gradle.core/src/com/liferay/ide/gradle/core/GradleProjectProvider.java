@@ -64,6 +64,8 @@ public class GradleProjectProvider
 
 		String className = op.getComponentName().content();
 
+		String liferayVersion = op.getLiferayVersion().content();
+
 		String serviceName = op.getServiceName().content();
 
 		String packageName = op.getPackageName().content();
@@ -88,6 +90,9 @@ public class GradleProjectProvider
 		sb.append("-d \"");
 		sb.append(targetDir.getAbsolutePath());
 		sb.append("\" ");
+		sb.append("-v ");
+		sb.append(liferayVersion);
+		sb.append(" ");
 		sb.append("-t ");
 		sb.append(projectTemplateName);
 		sb.append(" ");

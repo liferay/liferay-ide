@@ -40,6 +40,10 @@
                     <property>ProjectProvider</property>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                 </property-editor>
+                <property-editor>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                    <property>LiferayVersion</property>
+                </property-editor>
                 <spacer/>
                 <property-editor>
                     <property>ProjectTemplateName</property>

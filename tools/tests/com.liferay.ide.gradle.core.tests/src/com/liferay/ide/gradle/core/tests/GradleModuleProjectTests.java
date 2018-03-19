@@ -17,6 +17,7 @@ package com.liferay.ide.gradle.core.tests;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 
 import static org.junit.Assert.assertEquals;
@@ -143,6 +144,7 @@ public class GradleModuleProjectTests {
 
         op.setProjectName( "form-field-test" );
         op.setProjectProvider( "gradle-module" );
+        op.setProjectTemplateName( "form-field" );
 
         createAndBuild(op);
     }
@@ -269,6 +271,118 @@ public class GradleModuleProjectTests {
         op.setProjectTemplateName( "npm-vuejs-portlet" );
 
         createAndBuild(op);
+    }
+
+    @Test
+    public void testProjectTemplateNpmAngularPortlet71() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "npm-angular-portlet-test-v71" );
+        op.setProjectProvider( "gradle-module" );
+        op.setProjectTemplateName( "npm-angular-portlet" );
+        op.setLiferayVersion( "7.1" );
+
+        createAndBuild( op );
+        verifyNpmPortletV71( op );
+    }
+
+    @Test
+    public void testProjectTemplateNpmBillboardjsPortlet71() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "npm-billboardjs-portlet-test-v71" );
+        op.setProjectProvider( "gradle-module" );
+        op.setProjectTemplateName( "npm-billboardjs-portlet" );
+        op.setLiferayVersion( "7.1" );
+
+        createAndBuild( op );
+        verifyNpmPortletV71( op );
+    }
+
+    @Test
+    public void testProjectTemplateNpmIsomorphicPortlet71() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "npm-isomorphic-portlet-test-v71" );
+        op.setProjectProvider( "gradle-module" );
+        op.setProjectTemplateName( "npm-isomorphic-portlet" );
+        op.setLiferayVersion( "7.1" );
+
+        createAndBuild( op );
+        verifyNpmPortletV71( op );
+    }
+
+    @Test
+    public void testProjectTemplateNpmJqueryPortlet71() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "npm-jquery-portlet-test-v71" );
+        op.setProjectProvider( "gradle-module" );
+        op.setProjectTemplateName( "npm-jquery-portlet" );
+        op.setLiferayVersion( "7.1" );
+
+        createAndBuild( op );
+        verifyNpmPortletV71( op );
+    }
+
+    @Test
+    public void testProjectTemplateNpmMetaljsPortlet71() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "npm-metaljs-portlet-test-v71" );
+        op.setProjectProvider( "gradle-module" );
+        op.setProjectTemplateName( "npm-metaljs-portlet" );
+        op.setLiferayVersion( "7.1" );
+
+        createAndBuild( op );
+        verifyNpmPortletV71( op );
+    }
+
+    @Test
+    public void testProjectTemplateNpmPortlet71() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "npm-portlet-test-v71" );
+        op.setProjectProvider( "gradle-module" );
+        op.setProjectTemplateName( "npm-portlet" );
+        op.setLiferayVersion( "7.1" );
+
+        createAndBuild( op );
+        verifyNpmPortletV71( op );
+    }
+
+    @Test
+    public void testProjectTemplateNpmReactPortlet71() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "npm-react-portlet-test-v71" );
+        op.setProjectProvider( "gradle-module" );
+        op.setProjectTemplateName( "npm-react-portlet" );
+        op.setLiferayVersion( "7.1" );
+
+        createAndBuild( op );
+        verifyNpmPortletV71( op );
+    }
+
+    @Test
+    public void testProjectTemplateNpmVuejsPortlet71() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "npm-vuejs-portlet-test-v71" );
+        op.setProjectProvider( "gradle-module" );
+        op.setProjectTemplateName( "npm-vuejs-portlet" );
+        op.setLiferayVersion( "7.1" );
+
+        createAndBuild( op );
+        verifyNpmPortletV71( op );
     }
 
     @Test
@@ -549,7 +663,22 @@ public class GradleModuleProjectTests {
         assertTrue( project.getFile( "build/libs/war-mvc-portlet-test.war" ).exists() );
     }
 
-    private void verifyProject(IProject project ) throws Exception
+    private void verifyNpmPortletV71( NewLiferayModuleProjectOp op ) {
+
+        IProject project = CoreUtil.getProject( op.getProjectName().content() );
+
+        assertNotNull( project );
+
+        IFile viewFile = project.getFile( "src/main/resources/META-INF/resources/view.jsp" );
+
+        assertTrue( viewFile.exists() );
+
+        String viewFileContent = FileUtil.readContents( viewFile.getLocation().toFile() );
+
+        assertTrue( viewFileContent.contains( "<aui:script require=\"<%= bootstrapRequire %>\">" ) );
+    }
+
+    private void verifyProject( IProject project ) throws Exception
     {
         assertNotNull( project );
         assertTrue( project.exists() );

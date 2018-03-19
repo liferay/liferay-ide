@@ -38,29 +38,21 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp {
 
 	public ElementType TYPE = new ElementType(NewLiferayModuleProjectOp.class);
 
-	// *** ProjectName ***
-
 	@DelegateImplementation(NewLiferayModuleProjectOpMethods.class)
 	@Override
 	public Status execute(ProgressMonitor monitor);
 
-	// *** ProjectLocation ***
-
 	public Value<String> getArchetype();
 
-	// *** UseDefaultLocation ***
-
 	public Value<String> getArtifactVersion();
-
-	// *** Archetype ***
 
 	public Value<String> getComponentName();
 
 	public Value<String> getGroupId();
 
-	public Value<String> getPackageName();
+	public Value<String> getLiferayVersion();
 
-	// *** Project Template ***
+	public Value<String> getPackageName();
 
 	public Value<String> getProjectTemplateName();
 
@@ -68,26 +60,19 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp {
 
 	public Value<String> getServiceName();
 
-	// *** Maven settings ***
-	// *** ArtifactVersion ***
-
 	public void setArchetype(String value);
 
 	public void setArtifactVersion(String value);
 
 	public void setComponentName(String value);
 
-	// *** GroupId ***
-
 	public void setGroupId(String value);
+
+	public void setLiferayVersion(String value);
 
 	public void setPackageName(String value);
 
 	public void setProjectTemplateName(String value);
-
-	// *** FinalProjectName ***
-
-	// *** ComponentName ***
 
 	public void setServiceName(String value);
 
@@ -97,8 +82,6 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp {
 	@Label(standard = "artifact version")
 	@Service(impl = ModuleProjectArtifactVersionDefaultValueService.class)
 	public ValueProperty PROP_ARTIFACT_VERSION = new ValueProperty(TYPE, "ArtifactVersion");
-
-	// *** ServiceName ***
 
 	@Label(standard = "Component Class Name")
 	@Service(impl = ComponentNameDefaultValueService.class)
@@ -111,11 +94,14 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp {
 	@Whitespace(trim = false)
 	public ValueProperty PROP_GROUP_ID = new ValueProperty(TYPE, "GroupId");
 
+	@Label(standard = "liferay version")
+	@Service(impl = TargetLiferayVersionDefaultValueService.class)
+	@Service(impl = TargetLiferayVersionPossibleValuesService.class)
+	public ValueProperty PROP_LIFERAY_VERSION = new ValueProperty(TYPE, "LiferayVersion");
+
 	@Service(impl = CommonProjectLocationInitialValueService.class)
 	@Service(impl = ModuleProjectLocationValidationService.class)
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, BaseModuleOp.PROP_LOCATION);
-
-	// *** PackageeName ***
 
 	@Label(standard = "Package name")
 	@Service(impl = PackageNameDefaultValueService.class)
@@ -132,8 +118,6 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp {
 	@Service(impl = ModuleProjectProviderPossibleValuesService.class)
 	public ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty(TYPE, BaseModuleOp.PROP_PROJECT_PROVIDER);
 
-	// *** PropertyKeys ***
-
 	@DefaultValue(text = "mvc-portlet")
 	@Label(standard = "Project Template Name")
 	@Listeners(ModuleProjectNameListener.class)
@@ -144,15 +128,11 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp {
 	@Type(base = PropertyKey.class)
 	public ListProperty PROP_PROPERTYKEYS = new ListProperty(TYPE, "PropertyKeys");
 
-	// *** ProjectProvider ***
-
 	@Label(standard = "Service Name")
 	@Service(impl = ServiceDefaultValuesService.class)
 	@Service(impl = ServiceNameValidataionService.class)
 	@Service(impl = ServicePossibleValuesService.class)
 	public ValueProperty PROP_SERVICE_NAME = new ValueProperty(TYPE, "ServiceName");
-
-	// *** Method: execute ***
 
 	@Listeners(ModuleProjectUseDefaultLocationListener.class)
 	public ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty(TYPE, BaseModuleOp.PROP_USE_DEFAULT_LOCATION);

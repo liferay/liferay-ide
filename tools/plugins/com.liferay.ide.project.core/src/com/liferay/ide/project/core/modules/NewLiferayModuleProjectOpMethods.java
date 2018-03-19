@@ -274,7 +274,7 @@ public class NewLiferayModuleProjectOpMethods {
 			}
 
 			if (retval.ok()) {
-				_updateBuildPrefs(op);
+				_updateBuildAndVersionPrefs(op);
 			}
 		}
 		catch (Exception e) {
@@ -364,16 +364,17 @@ public class NewLiferayModuleProjectOpMethods {
 		return classFiles;
 	}
 
-	private static void _updateBuildPrefs(NewLiferayModuleProjectOp op) {
+	private static void _updateBuildAndVersionPrefs(NewLiferayModuleProjectOp op) {
 		try {
 			IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(ProjectCore.PLUGIN_ID);
 
+			prefs.put(ProjectCore.PRE_DEFAULT_MODULE_PROJECT_LIFERAY_VERSION_OPTION, op.getLiferayVersion().text());
 			prefs.put(ProjectCore.PREF_DEFAULT_MODULE_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text());
 
 			prefs.flush();
 		}
 		catch (Exception e) {
-			String msg = "Error updating default project build type.";
+			String msg = "Error updating default project build type or version.";
 
 			ProjectCore.logError(msg, e);
 		}
