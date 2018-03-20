@@ -66,6 +66,10 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 			IProblemLocation curr = locations[i];
 
 			List<IJavaCompletionProposal> newProposals = _process(context, curr);
+			
+			if(newProposals == null) {
+				return null;
+			}
 
 			for (IJavaCompletionProposal newProposal : newProposals) {
 				boolean existed = false;
@@ -227,6 +231,9 @@ public class LiferayDependencyQuickFix implements IQuickFixProcessor {
 			Name node = (Name)selectedNode;
 
 			fullyQualifiedName = node.getFullyQualifiedName();
+		}
+		else {
+			return null;
 		}
 
 		List<String> serviceWrapperList;
