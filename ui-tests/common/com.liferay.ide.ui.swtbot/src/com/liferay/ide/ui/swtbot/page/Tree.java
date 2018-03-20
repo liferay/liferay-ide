@@ -21,6 +21,7 @@ import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
+
 import org.junit.Assert;
 
 /**
@@ -46,7 +47,7 @@ public class Tree extends AbstractWidget {
 		long current = System.currentTimeMillis();
 
 		while (true) {
-			if (System.currentTimeMillis() > current + timeout) {
+			if (System.currentTimeMillis() > (current + timeout)) {
 				break;
 			}
 
@@ -60,11 +61,11 @@ public class Tree extends AbstractWidget {
 					item = getWidget().getTreeItem(items[0]);
 				}
 			}
-			catch(Exception e) {
+			catch (Exception e) {
 			}
 		}
 
-		Assert.assertNotNull("Could not find " + items[items.length -1] + " after " + timeout, item);
+		Assert.assertNotNull("Could not find " + items[items.length - 1] + " after " + timeout, item);
 
 		SWTBotMenu botMenu = item.contextMenu(menu);
 

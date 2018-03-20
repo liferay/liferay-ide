@@ -361,7 +361,7 @@ public class ViewAction extends UIAction {
 				return _serversView.getServers().isVisibleStartsBy(serverLabel, projectName);
 			}
 		}
-		
+
 		public boolean visibleServer(String serverName) {
 			return _serversView.getServers().isVisibleStartsBy(serverName);
 		}

@@ -43,10 +43,6 @@ public class RuleUtil {
 		return chain;
 	}
 
-	public static RuleChain getTomcat62SdkRuleChain(SWTWorkbenchBot bot, ServerSupport server) {
-		return getRuleChain(server, new Tomcat62Support(bot, server), new Sdk62Support(bot, server));
-	}
-
 	public static RuleChain getTomcat7xRuleChain(SWTWorkbenchBot bot, ServerSupport server) {
 		return getRuleChain(server, new Tomcat7xSupport(bot, server));
 	}
@@ -63,6 +59,10 @@ public class RuleUtil {
 
 	public static RuleChain getTomcat7xSdkRuleChain(SWTWorkbenchBot bot, ServerSupport server) {
 		return getRuleChain(server, new Tomcat7xSupport(bot, server), new SdkSupport(bot, server));
+	}
+
+	public static RuleChain getTomcat62SdkRuleChain(SWTWorkbenchBot bot, ServerSupport server) {
+		return getRuleChain(server, new Tomcat62Support(bot, server), new Sdk62Support(bot, server));
 	}
 
 }
