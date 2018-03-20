@@ -438,7 +438,7 @@
         <choiceParameterGroup>
             <name>proxy</name>
             <description>Proxy Config</description>
-            <explanation></explanation>
+            <explanation>The proxy is for gradle, and the config will be saved at .gradle/gradle.properties file in user's home directory.</explanation>
             <value></value>
             <default>skipproxysetting</default>
             <parameterList>
