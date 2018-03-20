@@ -16,13 +16,10 @@ package com.liferay.ide.idea.ui.actions;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,25 +38,29 @@ import org.jetbrains.idea.maven.utils.actions.MavenActionUtil;
  */
 public abstract class AbstractLiferayMavenGoalAction extends AnAction {
 
-	public AbstractLiferayMavenGoalAction(
-		@Nullable String text, @Nullable String description, @Nullable Icon icon, String goalName) {
-
+	public AbstractLiferayMavenGoalAction(@Nullable String text, @Nullable String description, @Nullable Icon icon) {
 		super(text, description, icon);
-
-		_goalName = goalName;
 	}
 
 	@Override
 	public void actionPerformed(AnActionEvent e) {
-		DataContext context = e.getDataContext();
+		checkOrPerform(e.getDataContext(), true);
+	}
 
+	public boolean checkOrPerform(DataContext context, boolean perform) {
 		Project project = MavenActionUtil.getProject(context);
 
 		MavenProject mavenProject = MavenActionUtil.getMavenProject(context);
 
-		String projectDir = mavenProject.getDirectory();
+		if ((project == null) || (mavenProject == null)) {
+			return false;
+		}
 
-		List<String> goals = Arrays.asList(_goalName);
+		if (!perform) {
+			return true;
+		}
+
+		String projectDir = mavenProject.getDirectory();
 
 		MavenProjectsManager mavenProjectsManager = MavenActionUtil.getProjectsManager(context);
 
@@ -72,10 +73,12 @@ public abstract class AbstractLiferayMavenGoalAction extends AnAction {
 			true, projectDir, goals, enabledProfiles, disabledProfiles);
 
 		MavenRunConfigurationType.runConfiguration(project, params, null);
+
+		return true;
 	}
 
-	public boolean isEnabledAndVisible(AnActionEvent event) {
-		return true;
+	public boolean isEnabledAndVisible(AnActionEvent e) {
+		return checkOrPerform(e.getDataContext(), false);
 	}
 
 	@Override
@@ -87,16 +90,6 @@ public abstract class AbstractLiferayMavenGoalAction extends AnAction {
 		eventPresentation.setEnabledAndVisible(isEnabledAndVisible(event));
 	}
 
-	protected VirtualFile getVirtualFile(AnActionEvent event) {
-		Object virtualFileObject = event.getData(CommonDataKeys.VIRTUAL_FILE);
-
-		if ((virtualFileObject != null) && (virtualFileObject instanceof VirtualFile)) {
-			return (VirtualFile)virtualFileObject;
-		}
-
-		return null;
-	}
-
-	private String _goalName;
+	protected List<String> goals;
 
 }
