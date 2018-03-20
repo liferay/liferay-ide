@@ -23,17 +23,10 @@ import org.junit.Assert;
 /**
  * @author Terry Jia
  */
-public class Tomcat62Support extends PureTomcat62Support {
+public class Tomcat62Support extends IdeServerSupport {
 
-	public Tomcat62Support(SWTWorkbenchBot bot) {
-		super(bot);
-	}
-
-	@Override
-	public void after() {
-		dialogAction.deleteRuntimFromPreferences(getServerName());
-
-		super.after();
+	public Tomcat62Support(SWTWorkbenchBot bot, ServerSupport server) {
+		super(bot, server);
 	}
 
 	@Override
@@ -60,7 +53,7 @@ public class Tomcat62Support extends PureTomcat62Support {
 
 		wizardAction.next();
 
-		wizardAction.newRuntime62.prepare(getServerName(), getFullServerDir());
+		wizardAction.newRuntime62.prepare(server.getServerName(), server.getFullServerDir());
 
 		wizardAction.finish();
 
@@ -72,7 +65,7 @@ public class Tomcat62Support extends PureTomcat62Support {
 
 		wizardAction.openNewLiferayServerWizard();
 
-		wizardAction.newServer.prepare62(getServerName());
+		wizardAction.newServer.prepare62(server.getServerName());
 
 		wizardAction.finish();
 	}

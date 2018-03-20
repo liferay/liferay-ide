@@ -22,7 +22,7 @@ import org.junit.Rule;
 /**
  * @author Terry Jia
  */
-public class FragmentTomcat7xGradleDeployBase extends ServerTestBase{
+public class FragmentTomcat7xGradleDeployBase extends ServerTestBase {
 
 	public void deployFragmentWithJsp() {
 		wizardAction.openNewFragmentWizard();

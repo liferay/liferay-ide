@@ -12,19 +12,30 @@
  * details.
  */
 
-package com.liferay.ide.ui.theme.deploy.tests;
+package com.liferay.ide.ui.liferay.support.server;
 
-import com.liferay.ide.ui.liferay.SwtbotBase;
+import com.liferay.ide.ui.liferay.support.SupportBase;
 
-import org.junit.Test;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
  */
-public class DeployThemeModuleGradleTests extends SwtbotBase {
+public class IdeServerSupport extends SupportBase {
 
-	@Test
-	public void deployTheme() {
+	public IdeServerSupport(SWTWorkbenchBot bot, ServerSupport server) {
+		super(bot);
+
+		this.server = server;
 	}
+
+	@Override
+	public void after() {
+		dialogAction.deleteRuntimFromPreferences(server.getServerName());
+
+		super.after();
+	}
+
+	protected ServerSupport server;
 
 }

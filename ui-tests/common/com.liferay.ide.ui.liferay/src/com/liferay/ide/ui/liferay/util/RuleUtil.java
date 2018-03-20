@@ -14,9 +14,11 @@
 
 package com.liferay.ide.ui.liferay.util;
 
+import com.liferay.ide.ui.liferay.support.sdk.Sdk62Support;
 import com.liferay.ide.ui.liferay.support.sdk.SdkSupport;
 import com.liferay.ide.ui.liferay.support.server.ServerRunningSupport;
 import com.liferay.ide.ui.liferay.support.server.ServerSupport;
+import com.liferay.ide.ui.liferay.support.server.Tomcat62Support;
 import com.liferay.ide.ui.liferay.support.server.Tomcat7xSupport;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
@@ -57,6 +59,10 @@ public class RuleUtil {
 
 	public static RuleChain getTomcat7xSdkRuleChain(SWTWorkbenchBot bot, ServerSupport server) {
 		return getRuleChain(server, new Tomcat7xSupport(bot, server), new SdkSupport(bot, server));
+	}
+
+	public static RuleChain getTomcat62SdkRuleChain(SWTWorkbenchBot bot, ServerSupport server) {
+		return getRuleChain(server, new Tomcat62Support(bot, server), new Sdk62Support(bot, server));
 	}
 
 }
