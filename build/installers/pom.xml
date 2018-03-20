@@ -41,8 +41,8 @@
         <gw-latest-download-url>https://github.com/david-truong/gw/releases/download/v1.0.1/gw.jar</gw-latest-download-url>
         <gw-latest-md5>488ddaed413c0f7ea67df049175380eb</gw-latest-md5>
         <portal-download-base>http://mirrors/files.liferay.com/private/ee/portal</portal-download-base>
-        <portal-version>7.0.10.6</portal-version>
-        <portal-zip-name>liferay-dxp-digital-enterprise-tomcat-7.0-sp6-20171010144253003.zip</portal-zip-name>
+        <portal-version>7.0.10.7</portal-version>
+        <portal-zip-name>liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip</portal-zip-name>
         <portal-ce-download-base>http://mirrors/releases.liferay.com/portal</portal-ce-download-base>
         <portal-ce-version>7.1.0-m1</portal-ce-version>
         <portal-ce-zip-name>liferay-ce-portal-tomcat-7.1-m1-20180223151209360.zip</portal-ce-zip-name>
