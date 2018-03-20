@@ -16,8 +16,7 @@ package com.liferay.ide.ui.layouttpl.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
-import com.liferay.ide.ui.liferay.support.sdk.Sdk62Support;
-import com.liferay.ide.ui.liferay.support.server.Tomcat62Support;
+import com.liferay.ide.ui.liferay.support.server.PureTomcat62Support;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
@@ -32,10 +31,10 @@ import org.junit.rules.RuleChain;
 @Ignore("ignore for more research")
 public class NewLayouttplProjectSdk62Tests extends SwtbotBase {
 
-	public static Tomcat62Support tomcat62 = new Tomcat62Support(bot);
+	public static PureTomcat62Support tomcat62 = new PureTomcat62Support(bot);
 
 	@ClassRule
-	public static RuleChain chain = RuleUtil.getRuleChain(tomcat62, new Sdk62Support(bot, tomcat62));
+	public static RuleChain chain = RuleUtil.getTomcat62SdkRuleChain(bot, tomcat62);
 
 	@Test
 	public void createLayoutTemplate() {
