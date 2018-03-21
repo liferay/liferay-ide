@@ -28,9 +28,13 @@ public class CoreUtil {
 	}
 
 	public static boolean isNullOrEmpty(String val) {
+		if (val == null) {
+			return true;
+		}
+
 		String trimmedVal = val.trim();
 
-		if ((val == null) || val.equals(StringPool.EMPTY) || trimmedVal.equals(StringPool.EMPTY)) {
+		if (val.equals(StringPool.EMPTY) || trimmedVal.equals(StringPool.EMPTY)) {
 			return true;
 		}
 
