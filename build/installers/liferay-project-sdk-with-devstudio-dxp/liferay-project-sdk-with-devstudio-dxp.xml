@@ -94,11 +94,6 @@
                 </deleteFile>
             </actionList>
             <conditionRuleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
                 <fileTest>
                     <condition>not_exists</condition>
                     <path>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}token</path>
@@ -184,24 +179,10 @@
         <copyFile>
             <destination>${liferayBundlesPath}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip</destination>
             <origin>${installdir}${platform_path_separator}liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip</origin>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-            </ruleList>
         </copyFile>
         <copyFile>
             <destination>${liferayBundlesPath}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</destination>
             <origin>${installdir}${platform_path_separator}com.liferay.portal.plugins.sdk-1.0.16-withdependencies.zip</origin>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-            </ruleList>
         </copyFile>
         <include file="../components/run-java-jpm.xml" />
         <if>
@@ -306,11 +287,6 @@
                     <text>${platform_name}</text>
                     <value>win</value>
                 </compareText>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
             </ruleList>
         </runProgram>
         <runProgram>
@@ -321,25 +297,11 @@
             <file>${lrws}${platform_path_separator}gradle.properties</file>
             <key>liferay.workspace.bundle.token.download</key>
             <value>true</value>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-            </ruleList>
         </propertiesFileSet>
         <propertiesFileSet>
             <file>${lrws}${platform_path_separator}gradle.properties</file>
             <key>liferay.workspace.bundle.url</key>
             <value>https://api.liferay.com/downloads/portal/7.0.10.7/liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip</value>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-            </ruleList>
         </propertiesFileSet>
         <createDirectory>
             <path>${lrws}${platform_path_separator}configs${platform_path_separator}common${platform_path_separator}deploy</path>
@@ -529,30 +491,6 @@
             <mustExist>0</mustExist>
             <width>30</width>
         </directoryParameter>
-        <choiceParameterGroup>
-            <name>isdxp</name>
-            <title>Configure Liferay Workspace Server Bundle</title>
-            <description></description>
-            <explanation>When initializing a new Liferay Workspace, Liferay Customers can use Liferay DXP Bundle. Community members should choose Liferay Portal Community Edition.</explanation>
-            <value></value>
-            <default></default>
-            <parameterList>
-                <labelParameter>
-                    <name>dxp</name>
-                    <title>dxp</title>
-                    <description>Liferay DXP Bundle</description>
-                    <explanation></explanation>
-                    <image></image>
-                </labelParameter>
-                <labelParameter>
-                    <name>ce</name>
-                    <title>ce</title>
-                    <description>Community Edition Bundle</description>
-                    <explanation></explanation>
-                    <image></image>
-                </labelParameter>
-            </parameterList>
-        </choiceParameterGroup>
         <parameterGroup>
             <name>dxpinfo</name>
             <title>Download Liferay DXP Bundle</title>
@@ -584,11 +522,6 @@
                 </passwordParameter>
             </parameterList>
             <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
                 <fileTest>
                     <condition>not_exists</condition>
                     <path>${user_home_directory}${platform_path_separator}.liferay${platform_path_separator}token</path>
@@ -606,13 +539,6 @@
             <mustBeWritable>0</mustBeWritable>
             <mustExist>1</mustExist>
             <width>30</width>
-            <ruleList>
-                <compareValues>
-                    <logic>equals</logic>
-                    <value1>${isdxp}</value1>
-                    <value2>dxp</value2>
-                </compareValues>
-            </ruleList>
         </fileParameter>
         <choiceParameterGroup>
             <name>proxy</name>
