@@ -48,6 +48,10 @@ public class ServerSupport extends SupportBase {
 
 		Assert.assertNotNull(
 			"Unable to get bundle info from bundles.csv by using " + type + " and " + version, _bundle);
+
+		Assert.assertTrue(
+			"Bundle zip " + _bundle.getBundleZip() + " doesn't exist in " + envAction.getBundlesPath(),
+			envAction.getBundleFile(_bundle.getBundleZip()).exists());
 	}
 
 	@Override
