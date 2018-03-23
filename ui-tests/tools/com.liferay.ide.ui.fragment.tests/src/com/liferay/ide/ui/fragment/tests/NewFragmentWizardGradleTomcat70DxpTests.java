@@ -19,7 +19,6 @@ import com.liferay.ide.ui.liferay.support.server.PureTomcat70DxpSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -33,7 +32,6 @@ public class NewFragmentWizardGradleTomcat70DxpTests extends NewFragmentWizardGr
 	@ClassRule
 	public static RuleChain chain = RuleUtil.getTomcat7xRuleChain(bot, tomcat);
 
-	@Ignore("ignore as the failed on DXP SP7, need to fix")
 	@Test
 	public void createFragmentWithJsp() {
 		super.createFragmentWithJsp();
