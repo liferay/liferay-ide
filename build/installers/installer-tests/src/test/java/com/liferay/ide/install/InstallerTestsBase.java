@@ -11,34 +11,18 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
-package com.liferay.ide.installer.tests.util;
+package com.liferay.ide.install;
 
 /**
+ * @author Ashley Yuan
  * @author Terry Jia
  */
-public class LiferayProjectSdk extends Installer {
+public class InstallerTestsBase implements Values, Constants, FileConstants {
+	public CommandHelper commandHelper = new CommandHelper();
+	public ProcessHelper processHelper = new ProcessHelper();
+	
+	public FileChecker fileChecker = new FileChecker();
+	public AppChecker appChecker = new AppChecker();
+	
 
-	public LiferayProjectSdk(String type) {
-		super(type);
-	}
-
-	@Override
-	public String command() {
-		String command = "";
-
-		if (isWindow()) {
-			command = InstallerUtil.getProjectSdkFullNameWin();
-		}
-		else if (isLinux()) {
-			command = InstallerUtil.getProjectSdkFullNameLinux();
-		}
-		else if (isMacos()) {
-			// need more research to how to run installer on command line of Macos
-		}
-
-		command = command + " --mode unattended";
-
-		return command;
-	}
 }

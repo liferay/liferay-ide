@@ -11,34 +11,26 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
-package com.liferay.ide.installer.tests.util;
+package com.liferay.ide.install;
 
 /**
+ * @author Ashley Yuan
  * @author Terry Jia
  */
-public class LiferayProjectSdk extends Installer {
+public interface FileConstants {
+	public static String BLADE = "blade";
 
-	public LiferayProjectSdk(String type) {
-		super(type);
-	}
+	public static String JPM = "jpm";
 
-	@Override
-	public String command() {
-		String command = "";
+	public static String BND = "bnd";
 
-		if (isWindow()) {
-			command = InstallerUtil.getProjectSdkFullNameWin();
-		}
-		else if (isLinux()) {
-			command = InstallerUtil.getProjectSdkFullNameLinux();
-		}
-		else if (isMacos()) {
-			// need more research to how to run installer on command line of Macos
-		}
+	public static String GW = "gw";
 
-		command = command + " --mode unattended";
+	public static String LIFERAY_WORKSPACE = "liferay-workspace";
 
-		return command;
-	}
+	public static String LIFERAY_DEVELOPER_STUDIO = "liferay-developer-studio";
+	
+	public static String LIFERAY_PORTAL = "";
+	
+	public static String LIFERAY_DXP = "";
 }

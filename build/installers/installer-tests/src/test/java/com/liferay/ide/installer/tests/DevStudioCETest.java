@@ -19,15 +19,36 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
+import com.liferay.ide.install.InstallerTestsBase;
+import com.liferay.ide.installer.tests.util.InstallerUtil;
+
 /**
  * @author Terry Jia
  */
-public class DevStudioCETest {
+public class DevStudioCETest extends InstallerTestsBase{
 
 	@EnabledOnOs(OS.WINDOWS)
 	@Test
-	public void quickInstallOnWindows() {
-		Assertions.assertTrue(true);
+	public void quickInstallOnWindows() throws Exception{
+
+		String cmd = InstallerUtil.getDevStudioCEWinFile().getPath() + " --mode unattended --proxyhttps jj";
+
+		String processName = InstallerUtil.getDevStudioCEFullNameWin();
+
+		commandHelper.exec(cmd);
+
+		Assertions.assertTrue(processHelper.checkProcessWin(processName));
+		
+		Assertions.assertTrue(processHelper.waitProcessWin(processName));
+		
+		Thread.sleep(1000);
+
+		Assertions.assertTrue(fileChecker.isTokenExistsWin());
+		
+		Assertions.assertTrue(appChecker.isAppInstalled("jpm version", JPM_VERSION));	
+		Assertions.assertTrue(appChecker.isAppInstalled("blade version", BLADE_VERSION));
+		Assertions.assertTrue(appChecker.isAppInstalled("bnd version", BND_VERSION));
+		Assertions.assertTrue(appChecker.isAppInstalled("gw",GW_OUTPUT));
 	}
 
 	@EnabledOnOs(OS.LINUX)

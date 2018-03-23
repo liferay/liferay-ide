@@ -11,34 +11,23 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
-package com.liferay.ide.installer.tests.util;
+package com.liferay.ide.install;
 
 /**
+ * @author Ashley Yuan
  * @author Terry Jia
  */
-public class LiferayProjectSdk extends Installer {
+public interface Values {
 
-	public LiferayProjectSdk(String type) {
-		super(type);
-	}
+	public static final String JPM_VERSION = "4.0.0.201803070452";
 
-	@Override
-	public String command() {
-		String command = "";
+	public static final String BND_VERSION = "3.5.0.201709291849";
 
-		if (isWindow()) {
-			command = InstallerUtil.getProjectSdkFullNameWin();
-		}
-		else if (isLinux()) {
-			command = InstallerUtil.getProjectSdkFullNameLinux();
-		}
-		else if (isMacos()) {
-			// need more research to how to run installer on command line of Macos
-		}
+	public static final String BLADE_VERSION = "3.0.0.201803070356";
 
-		command = command + " --mode unattended";
-
-		return command;
-	}
+	public static final String GW_OUTPUT = "Error executing gradle wrapper";
+	
+	public static final String JPM_DIR = ".jpm";
+	
+	public static final String LIFERAY_DIR = ".liferay";
 }

@@ -14,25 +14,27 @@
 
 package com.liferay.ide.installer.tests.util;
 
+import com.liferay.ide.install.Constants;
+
 /**
  * @author Terry Jia
  */
-public abstract class Installer {
+public abstract class Installer implements Constants{
 
 	public Installer(String type) {
 		_type = type;
 	}
 
 	public boolean isWindow() {
-		return _type.equals(Constants.WINDOWS);
+		return _type.equals(WINDOWS);
 	}
 
 	public boolean isLinux() {
-		return _type.equals(Constants.LINUX_X64);
+		return _type.equals(LINUX_X64);
 	}
 
-	public boolean isMacox() {
-		return _type.equals(Constants.OSX);
+	public boolean isMacos() {
+		return _type.equals(OSX);
 	}
 
 	private String _type;

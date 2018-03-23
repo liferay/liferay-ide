@@ -19,10 +19,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import com.liferay.ide.install.Constants;
+
 /**
  * @author Terry Jia
  */
-public class InstallerUtil extends Constants {
+public class InstallerUtil implements Constants {
 
 	private static Properties _installerInfo = null;
 
@@ -88,7 +90,8 @@ public class InstallerUtil extends Constants {
 		return _getInfo().getProperty("dev.studio.dxp.name") + DASH + _getInfo().getProperty("version") + DASH + OSX
 				+ DASH + INSTALLER + OSX_SUFFIX;
 	}
-	private static File _getOutputDir() {
+
+	public static File getOutputDir() {
 		Class<?> clazz = InstallerUtil.class;
 
 		ClassLoader classLoader = clazz.getClassLoader();
@@ -101,38 +104,39 @@ public class InstallerUtil extends Constants {
 	}
 
 	public static File getProjectSdkWinFile() {
-		return new File(_getOutputDir(), getProjectSdkFullNameWin());
+		return new File(getOutputDir(), getProjectSdkFullNameWin());
 	}
 
 	public static File getProjectSdkLinuxFile() {
-		return new File(_getOutputDir(), getProjectSdkFullNameLinux());
+		return new File(getOutputDir(), getProjectSdkFullNameLinux());
 	}
 
 	public static File getProjectSdkMacosFile() {
-		return new File(_getOutputDir(), getProjectSdkFullNameMacos());
+		return new File(getOutputDir(), getProjectSdkFullNameMacos());
 	}
 
 	public static File getDevStudioCEWinFile() {
-		return new File(_getOutputDir(), getDevStudioCEFullNameWin());
+		return new File(getOutputDir(), getDevStudioCEFullNameWin());
 	}
 
 	public static File getDevStudioCELinuxFile() {
-		return new File(_getOutputDir(), getDevStudioCEFullNameLinux());
+		
+		return new File(getOutputDir(), getDevStudioCEFullNameLinux());
 	}
 
 	public static File getDevStudioCEMacosFile() {
-		return new File(_getOutputDir(), getDevStudioCEFullNameMacos());
+		return new File(getOutputDir(), getDevStudioCEFullNameMacos());
 	}
 
 	public static File getDevStudioDXPWinFile() {
-		return new File(_getOutputDir(), getDevStudioDXPFullNameWin());
+		return new File(getOutputDir(), getDevStudioDXPFullNameWin());
 	}
 
 	public static File getDevStudioDXPLinuxFile() {
-		return new File(_getOutputDir(), getDevStudioDXPFullNameLinux());
+		return new File(getOutputDir(), getDevStudioDXPFullNameLinux());
 	}
 
 	public static File getDevStudioDXPMacosFile() {
-		return new File(_getOutputDir(), getDevStudioDXPFullNameMacos());
+		return new File(getOutputDir(), getDevStudioDXPFullNameMacos());
 	}
 }

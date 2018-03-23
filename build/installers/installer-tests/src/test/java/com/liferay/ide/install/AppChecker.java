@@ -11,34 +11,22 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+package com.liferay.ide.install;
 
-package com.liferay.ide.installer.tests.util;
+import java.io.IOException;
 
 /**
+ * @author Ashley Yuan
  * @author Terry Jia
  */
-public class LiferayProjectSdk extends Installer {
+public class AppChecker {
 
-	public LiferayProjectSdk(String type) {
-		super(type);
-	}
-
-	@Override
-	public String command() {
-		String command = "";
-
-		if (isWindow()) {
-			command = InstallerUtil.getProjectSdkFullNameWin();
-		}
-		else if (isLinux()) {
-			command = InstallerUtil.getProjectSdkFullNameLinux();
-		}
-		else if (isMacos()) {
-			// need more research to how to run installer on command line of Macos
-		}
-
-		command = command + " --mode unattended";
-
-		return command;
+	public boolean isAppInstalled(String appCmd, String exceptResult) throws IOException {
+		CommandHelper helper = new CommandHelper();
+		
+		boolean execOutput = helper.execWithResult(appCmd).contains(exceptResult);
+		boolean execResult = helper.execWithResult(appCmd, true).contains(exceptResult);
+		
+		return (execOutput || execResult);
 	}
 }
