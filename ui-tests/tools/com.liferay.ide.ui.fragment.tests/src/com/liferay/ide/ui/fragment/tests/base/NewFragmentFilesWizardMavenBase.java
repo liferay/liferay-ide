@@ -12,32 +12,22 @@
  * details.
  */
 
-package com.liferay.ide.ui.fragment.tests;
+package com.liferay.ide.ui.fragment.tests.base;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
-import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
-import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
 import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.RuleChain;
 
 /**
  * @author Vicky Wang
  * @author Sunny Shi
- * @author Lily Li
+ * @author Rui Wang
+ * @author Ying Xu
  */
-public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
+public class NewFragmentFilesWizardMavenBase extends SwtbotBase {
 
-	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
-
-	@ClassRule
-	public static RuleChain chain = RuleUtil.getTomcat7xRuleChain(bot, tomcat);
-
-	@Test
 	public void addFragmentFilesShortcuts() {
 		wizardAction.openNewFragmentWizard();
 
@@ -99,7 +89,6 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void addFragmentJspfFiles() {
 		wizardAction.openNewFragmentWizard();
 
@@ -133,7 +122,6 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void addFragmentJspFiles() {
 		wizardAction.openNewFragmentWizard();
 
@@ -166,7 +154,6 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void addFragmentPortletPropertiesFiles() {
 		wizardAction.openNewFragmentWizard();
 
@@ -199,7 +186,6 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void addFragmentResourceActionFiles() {
 		wizardAction.openNewFragmentWizard();
 
@@ -237,7 +223,6 @@ public class NewFragmentFilesWizardMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
-	@Test
 	public void testFragmentFilesWithDeleteButton() {
 		wizardAction.openNewFragmentWizard();
 
