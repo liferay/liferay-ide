@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.module.deploy.tests;
 
-import com.liferay.ide.ui.liferay.support.server.PureTomcat71Support;
+import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
 import com.liferay.ide.ui.liferay.support.server.ServerSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 import com.liferay.ide.ui.module.deploy.tests.base.DeployModuleGradleTomcat7xBase;
@@ -28,14 +28,14 @@ import org.junit.rules.RuleChain;
  * @author Terry Jia
  * @author Lily Li
  */
-public class DeployModuleGradleTomcat71Tests extends DeployModuleGradleTomcat7xBase {
+public class DeployModuleGradleTomcat70DxpTests extends DeployModuleGradleTomcat7xBase {
 
 	@ClassRule
 	public static RuleChain chain = RuleUtil.getTomcat7xRunningRuleChain(bot, getServer());
 
 	public static ServerSupport getServer() {
-		if (PureTomcat71Support.isNot(server)) {
-			server = new PureTomcat71Support(bot);
+		if (PureTomcat70Support.isNot(server)) {
+			server = new PureTomcat70Support(bot);
 		}
 
 		return server;
