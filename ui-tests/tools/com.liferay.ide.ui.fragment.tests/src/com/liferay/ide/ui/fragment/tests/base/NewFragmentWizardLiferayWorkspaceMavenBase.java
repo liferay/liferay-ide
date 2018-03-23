@@ -12,36 +12,24 @@
  * details.
  */
 
-package com.liferay.ide.ui.fragment.tests;
+package com.liferay.ide.ui.fragment.tests.base;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
-import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
 import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceMavenSupport;
-import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.RuleChain;
 
 /**
- * @author Lily Li
+ * @author Ashley Yuan
  */
-@Ignore("ignore as the problem of deleting Liferay workspace")
-public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
-
-	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
-
-	@ClassRule
-	public static RuleChain chain = RuleUtil.getTomcat7xRuleChain(bot, tomcat);
+public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 
 	@ClassRule
 	public static LiferayWorkspaceMavenSupport liferayWorkspace = new LiferayWorkspaceMavenSupport(bot);
 
-	@Test
 	public void createFragmentWithJsp() {
 		wizardAction.openNewFragmentWizard();
 
@@ -76,7 +64,6 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
-	@Test
 	public void createFragmentWithJspf() {
 		wizardAction.openNewFragmentWizard();
 
@@ -111,7 +98,6 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
-	@Test
 	public void createFragmentWithoutFiles() {
 		wizardAction.openNewFragmentWizard();
 
@@ -146,7 +132,6 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
-	@Test
 	public void createFragmentWithPortletProperites() {
 		wizardAction.openNewFragmentWizard();
 
@@ -183,7 +168,6 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
-	@Test
 	public void createFragmentWithResourceAction() {
 		wizardAction.openNewFragmentWizard();
 
@@ -218,7 +202,6 @@ public class NewFragmentWizardLiferayWorkspaceMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
-	@Test
 	public void createFragmentWithWholeFiles() {
 		wizardAction.openNewFragmentWizard();
 
