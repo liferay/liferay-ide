@@ -77,6 +77,8 @@ public class NewLiferayComponentPortletFilterOperation extends AbstractLiferayCo
 					project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 				}
 			}
+
+			doMergeDependencyOperation();
 		}
 		catch (Exception e) {
 			throw new CoreException(ProjectCore.createErrorStatus(e));
