@@ -19,7 +19,6 @@ import com.liferay.ide.ui.liferay.support.server.PureTomcat71Support;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
@@ -27,7 +26,6 @@ import org.junit.rules.RuleChain;
  * @author Lily Li
  * @author Ashley Yuan
  */
-@Ignore("ignore as the problem of deleting Liferay workspace")
 public class NewFragmentWizardLiferayWorkspaceMavenTomcat71Tests extends NewFragmentWizardLiferayWorkspaceMavenBase {
 
 	public static PureTomcat71Support tomcat = new PureTomcat71Support(bot);
