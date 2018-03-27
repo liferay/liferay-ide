@@ -20,11 +20,13 @@ import com.liferay.ide.ui.liferay.util.RuleUtil;
 import com.liferay.ide.ui.module.deploy.tests.base.DeployModuleGradleTomcat7xBase;
 
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
  * @author Terry Jia
+ * @author Lily Li
  */
 public class DeployModuleGradleTomcat70Tests extends DeployModuleGradleTomcat7xBase {
 
@@ -42,6 +44,83 @@ public class DeployModuleGradleTomcat70Tests extends DeployModuleGradleTomcat7xB
 	@Test
 	public void deployActivator() {
 		super.deployActivator();
+	}
+
+	@Test
+	public void deployApi() {
+		super.deployApi();
+	}
+
+	@Test
+	public void deployControlMenuEntry() {
+		super.deployControlMenuEntry();
+	}
+
+	@Test
+	public void deployFormField() {
+		super.deployFormField();
+	}
+
+	@Test
+	public void deployPanelApp() {
+		super.deployPanelApp();
+	}
+
+	@Test
+	public void deployPortletConfigurationIcon() {
+		super.deployPortletConfigurationIcon();
+	}
+
+	@Test
+	public void deployPortletProvider() {
+		super.deployPortletProvider();
+	}
+
+	@Test
+	public void deployPortletToolbarContributor() {
+		super.deployPortletToolbarContributor();
+	}
+
+	@Test
+	public void deployRest() {
+		super.deployRest();
+	}
+
+	@Ignore("ignore to wait target platform way")
+	@Test
+	public void deployService() {
+		super.deployService();
+	}
+
+	@Ignore("ignore to wait target platform way")
+	@Test
+	public void deployServiceWrapper() {
+		super.deployServiceWrapper();
+	}
+
+	@Test
+	public void deploySimulationPanelEntry() {
+		super.deploySimulationPanelEntry();
+	}
+
+	@Test
+	public void deployTemplateContextContributor() {
+		super.deployTemplateContextContributor();
+	}
+
+	@Test
+	public void deployThemeContributor() {
+		super.deployThemeContributor();
+	}
+
+	@Test
+	public void deployWarHook() {
+		super.deployWarHook();
+	}
+
+	@Test
+	public void deployWarMvcPortlet() {
+		super.deployWarMvcPortlet();
 	}
 
 }
