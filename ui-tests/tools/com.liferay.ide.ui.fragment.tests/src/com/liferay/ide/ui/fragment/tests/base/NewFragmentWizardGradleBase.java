@@ -37,13 +37,13 @@ public class NewFragmentWizardGradleBase extends SwtbotBase {
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.announcements.");
+		dialogAction.prepareText("com.liferay.announcements.web");
 
 		dialogAction.confirm();
 
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
-		dialogAction.selectItems("META-INF/resources/configuration.jsp");
+		dialogAction.selectItems("META-INF/resources/init.jsp");
 
 		dialogAction.confirm();
 
