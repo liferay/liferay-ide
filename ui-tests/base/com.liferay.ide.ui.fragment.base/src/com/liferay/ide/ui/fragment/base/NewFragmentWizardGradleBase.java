@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.ui.fragment.tests.base;
+package com.liferay.ide.ui.fragment.base;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
@@ -21,26 +21,29 @@ import org.junit.Assert;
 import org.junit.Rule;
 
 /**
- * @author Ashley Yuan
+ * @author Vicky Wang
+ * @author Sunny Shi
+ * @author Lily Li
+ * @author Ying Xu
  */
-public class NewFragmentWizardMavenBase extends SwtbotBase {
+public class NewFragmentWizardGradleBase extends SwtbotBase {
 
 	public void createFragmentWithJsp() {
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(project.getName());
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.blogs.web");
+		dialogAction.prepareText("com.liferay.announcements.web");
 
 		dialogAction.confirm();
 
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
-		dialogAction.selectItems("META-INF/resources/blogs_admin/configuration.jsp");
+		dialogAction.selectItems("META-INF/resources/init.jsp");
 
 		dialogAction.confirm();
 
@@ -52,24 +55,19 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 	public void createFragmentWithJspf() {
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(project.getName());
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.blogs.web");
+		dialogAction.prepareText("com.liferay.document.library.web");
 
 		dialogAction.confirm();
 
-		String[] files = {
-			"META-INF/resources/blogs_admin/entry_search_columns.jspf",
-			"META-INF/resources/blogs_aggregator/view_entry_content.jspf"
-		};
-
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
-		dialogAction.selectItems(files);
+		dialogAction.selectItems("META-INF/resources/document_library/cast_result.jspf");
 
 		dialogAction.confirm();
 
@@ -81,13 +79,13 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 	public void createFragmentWithoutFiles() {
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(project.getName());
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.application.list.api");
+		dialogAction.prepareText("com.liferay.hello.world.web");
 
 		dialogAction.confirm();
 
@@ -105,7 +103,7 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 	public void createFragmentWithPortletProperites() {
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(project.getName());
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -115,7 +113,11 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		String[] files = {"META-INF/resources/blogs_admin/configuration.jsp", "portlet.properties"};
+		String[] files = {
+			"META-INF/resources/blogs_admin/configuration.jsp", "META-INF/resources/blogs_aggregator/init.jsp",
+			"META-INF/resources/blogs/asset/abstract.jsp", "META-INF/resources/blogs/edit_entry.jsp",
+			"portlet.properties"
+		};
 
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
@@ -131,13 +133,13 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 	public void createFragmentWithResourceAction() {
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(project.getName());
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.blogs.web");
+		dialogAction.prepareText("com.liferay.bookmarks.web");
 
 		dialogAction.confirm();
 
@@ -155,13 +157,13 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 	public void createFragmentWithWholeFiles() {
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(project.getName());
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.asset.categories.navigation.web");
+		dialogAction.prepareText("com.liferay.asset.tags.navigation.web");
 
 		dialogAction.confirm();
 
@@ -176,19 +178,19 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 
 		dialogAction.confirm();
 
-		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
 		Assert.assertFalse(dialogAction.getConfirmBtn().isEnabled());
 
 		dialogAction.cancel();
 
-		wizardAction.newFragmentInfo.selectFile("portlet.properties");
+		wizardAction.newFragmentInfo.selectFile("META-INF/resources/configuration.jsp");
 
 		wizardAction.newFragmentInfo.deleteFile();
 
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
-		dialogAction.selectItems("portlet.properties");
+		dialogAction.selectItems("META-INF/resources/configuration.jsp");
 
 		dialogAction.confirm();
 

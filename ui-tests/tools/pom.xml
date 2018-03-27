@@ -33,7 +33,7 @@
 	<name>Liferay IDE UI Tools Tests</name>
 
 	<properties>
-		<liferay-ide-swtbot-testing-site>file:/${basedir}/../../com.liferay.ide.ui.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
+		<liferay-ide-swtbot-testing-site>file:/${basedir}/../../../../com.liferay.ide.ui.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
 	</properties>
 
 	<repositories>
@@ -46,7 +46,7 @@
 
 	<modules>
 		<module>com.liferay.ide.ui.code.upgrade.tests</module>
-		<module>com.liferay.ide.ui.fragment.tests</module>
+		<module>com.liferay.ide.ui.fragment</module>
 		<module>com.liferay.ide.ui.fragment.deploy.tests</module>
 		<module>com.liferay.ide.ui.theme.tests</module>
 		<module>com.liferay.ide.ui.theme.deploy.tests</module>

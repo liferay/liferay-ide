@@ -12,52 +12,112 @@
  * details.
  */
 
-package com.liferay.ide.ui.fragment.tests.base;
+package com.liferay.ide.ui.fragment.base;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
-import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceMavenSupport;
+import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceGradleSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;
 
 /**
- * @author Ashley Yuan
+ * @author Lily Li
  */
-public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
+public class NewFragmentWizardLiferayWorkspaceGradleBase extends SwtbotBase {
 
 	@ClassRule
-	public static LiferayWorkspaceMavenSupport liferayWorkspace = new LiferayWorkspaceMavenSupport(bot);
+	public static LiferayWorkspaceGradleSupport liferayWorkspace = new LiferayWorkspaceGradleSupport(bot);
 
-	public void createFragmentWithJsp() {
+	public void createFragmentChangeModulesDir() {
+		viewAction.project.openFile(liferayWorkspace.getName(), "gradle.properties");
+
+		StringBuffer sb = new StringBuffer();
+
+		String newModulesFolderName = "modulesTest";
+
+		sb.append("liferay.workspace.modules.dir");
+		sb.append("=");
+		sb.append(newModulesFolderName);
+
+		editorAction.setText(sb.toString());
+
+		editorAction.save();
+
+		editorAction.close();
+
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(project.getName());
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.iframe.web");
+		dialogAction.prepareText("com.liferay.site.navigation.site.map.web");
 
 		dialogAction.confirm();
 
+		String[] files = {
+			"META-INF/resources/configuration.jsp", "META-INF/resources/init-ext.jsp", "META-INF/resources/init.jsp",
+			"META-INF/resources/view.jsp", "portlet.properties", "resource-actions/default.xml"
+		};
+
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
-		dialogAction.selectItems("META-INF/resources/proxy.jsp");
+		dialogAction.selectItems(files);
 
 		dialogAction.confirm();
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
-		dialogAction.updateMavenProject.selectAll();
+		String[] projectNames = {liferayWorkspace.getName(), newModulesFolderName, project.getName()};
+
+		String[] newModulesFolderNames = {liferayWorkspace.getName(), newModulesFolderName};
+
+		Assert.assertTrue(viewAction.project.visibleFileTry(projectNames));
+
+		viewAction.project.closeAndDeleteFromDisk(projectNames);
+
+		viewAction.project.closeAndDeleteFromDisk(newModulesFolderNames);
+
+		viewAction.project.openFile(liferayWorkspace.getName(), "gradle.properties");
+
+		sb.delete(0, sb.length());
+		sb.append("liferay.workspace.modules.dir=modules");
+
+		editorAction.setText(sb.toString());
+
+		editorAction.save();
+
+		editorAction.close();
+	}
+
+	public void createFragmentWithJsp() {
+		wizardAction.openNewFragmentWizard();
+
+		wizardAction.newFragment.prepareGradle(project.getName());
+
+		wizardAction.next();
+
+		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
+
+		dialogAction.prepareText("com.liferay.layout.admin.web");
 
 		dialogAction.confirm();
 
-		jobAction.waitForUpdateMavenProject();
+		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
+
+		dialogAction.selectItems("META-INF/resources/add_layout.jsp");
+
+		dialogAction.confirm();
+
+		wizardAction.finish();
+
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -67,7 +127,7 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 	public void createFragmentWithJspf() {
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(project.getName());
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
@@ -85,13 +145,7 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -101,13 +155,13 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 	public void createFragmentWithoutFiles() {
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(project.getName());
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.frontend.image.editor.web");
+		dialogAction.prepareText("com.liferay.asset.web");
 
 		dialogAction.confirm();
 
@@ -119,13 +173,7 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -135,17 +183,20 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 	public void createFragmentWithPortletProperites() {
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(project.getName());
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.item.selector.web");
+		dialogAction.prepareText("com.liferay.dynamic.data.mapping.web");
 
 		dialogAction.confirm();
 
-		String[] files = {"META-INF/resources/init.jsp", "META-INF/resources/view.jsp", "portlet.properties"};
+		String[] files = {
+			"META-INF/resources/template_add_buttons.jsp", "META-INF/resources/error.jsp",
+			"META-INF/resources/init.jsp", "portlet.properties"
+		};
 
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
@@ -155,13 +206,7 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -171,13 +216,13 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 	public void createFragmentWithResourceAction() {
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(project.getName());
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.asset.categories.admin.web");
+		dialogAction.prepareText("com.liferay.login.web");
 
 		dialogAction.confirm();
 
@@ -189,14 +234,6 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
-
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
@@ -205,13 +242,13 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 	public void createFragmentWithWholeFiles() {
 		wizardAction.openNewFragmentWizard();
 
-		wizardAction.newFragment.prepareMaven(project.getName());
+		wizardAction.newFragment.prepareGradle(project.getName());
 
 		wizardAction.next();
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.site.navigation.language.web");
+		dialogAction.prepareText("com.liferay.xsl.content.web");
 
 		dialogAction.confirm();
 
@@ -243,14 +280,6 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 		dialogAction.confirm();
 
 		wizardAction.finish();
-
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 

@@ -3,4 +3,5 @@
 <site>
 	<bundle id="com.liferay.ide.ui.liferay" version="0.0.0" />
 	<bundle id="com.liferay.ide.ui.swtbot" version="0.0.0" />
+	<bundle id="com.liferay.ide.ui.fragment.base" version="0.0.0" />
 </site>
