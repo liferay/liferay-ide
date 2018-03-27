@@ -177,7 +177,7 @@ public class NewFragmentWizardLiferayWorkspaceMavenBase extends SwtbotBase {
 
 		wizardAction.newFragmentInfo.openBrowseOsgiBundleDialog();
 
-		dialogAction.prepareText("com.liferay.layout.admin.web");
+		dialogAction.prepareText("com.liferay.asset.categories.admin.web");
 
 		dialogAction.confirm();
 

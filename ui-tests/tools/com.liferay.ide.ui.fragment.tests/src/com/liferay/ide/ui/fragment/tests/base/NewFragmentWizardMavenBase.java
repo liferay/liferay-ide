@@ -64,7 +64,7 @@ public class NewFragmentWizardMavenBase extends SwtbotBase {
 
 		String[] files = {
 			"META-INF/resources/blogs_admin/entry_search_columns.jspf",
-			"META-INF/resources/blogs_admin/entry_search_results.jspf"
+			"META-INF/resources/blogs_aggregator/view_entry_content.jspf"
 		};
 
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
