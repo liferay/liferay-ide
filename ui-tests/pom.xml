@@ -54,6 +54,7 @@
 			<modules>
 				<module>com.liferay.ide.ui.testing-repository</module>
 				<module>common</module>
+				<module>base</module>
 			</modules>
 			<build>
 				<pluginManagement>
