@@ -32,6 +32,9 @@
 	<name>Liferay IDE UI Fragment Tomcat</name>
 
 	<modules>
+		<module>com.liferay.ide.ui.fragment.deploy.tomcat.70</module>
+		<module>com.liferay.ide.ui.fragment.deploy.tomcat.71</module>
+		<module>com.liferay.ide.ui.fragment.deploy.tomcat.dxp</module>
 		<module>com.liferay.ide.ui.fragment.tomcat.70</module>
 		<module>com.liferay.ide.ui.fragment.tomcat.71</module>
 		<module>com.liferay.ide.ui.fragment.tomcat.dxp</module>
