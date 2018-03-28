@@ -32,7 +32,7 @@
 	<name>Liferay IDE UI Module</name>
 
 	<modules>
-		<module>com.liferay.ide.ui.module.tomcat</module>
+		<module>com.liferay.ide.ui.module.deploy</module>
 		<module>com.liferay.ide.ui.module.wizard</module>
 	</modules>
 </project>

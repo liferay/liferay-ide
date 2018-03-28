@@ -20,13 +20,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.ui.tests.module.tomcat</groupId>
-		<artifactId>module-tomcat-tests</artifactId>
+		<groupId>com.liferay.ide.ui.tests.module.deploy</groupId>
+		<artifactId>module-deploy-tests</artifactId>
 		<version>3.2.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.liferay.ide.ui.module.deploy.tomcat.70.tests</artifactId>
+	<artifactId>com.liferay.ide.ui.module.deploy.tomcat.dxp.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 
-	<name>Liferay IDE UI Module Deploy Tomcat 70 Tests</name>
+	<name>Liferay IDE UI Module Deploy Tomcat dxp Tests</name>
 </project>
