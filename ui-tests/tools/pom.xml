@@ -60,8 +60,7 @@
 		<module>com.liferay.ide.ui.portlet.deploy.tests</module>
 		<module>com.liferay.ide.ui.module</module>
 		<module>com.liferay.ide.ui.sdk.tests</module>
-		<module>com.liferay.ide.ui.server.tests</module>
-		<module>com.liferay.ide.ui.server.deploy.tests</module>
+		<module>com.liferay.ide.ui.server</module>
 		<module>com.liferay.ide.ui.workspace.tests</module>
 		<module>com.liferay.ide.ui.service.builder.tests</module>
 		<module>com.liferay.ide.ui.service.builder.deploy.tests</module>
