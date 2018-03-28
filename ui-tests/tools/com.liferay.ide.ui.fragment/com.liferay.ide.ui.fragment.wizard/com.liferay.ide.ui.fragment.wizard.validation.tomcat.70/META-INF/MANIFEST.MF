@@ -8,6 +8,6 @@ Require-Bundle: com.liferay.ide.ui.swtbot,
  com.liferay.ide.ui.liferay,
  org.eclipse.swtbot.go,
  org.junit,
- com.liferay.ide.ui.fragment.base
+ com.liferay.ide.ui.fragment.wizard.base
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

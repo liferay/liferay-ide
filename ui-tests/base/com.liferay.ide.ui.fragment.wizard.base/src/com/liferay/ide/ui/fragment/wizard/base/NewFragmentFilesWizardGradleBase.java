@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.ui.fragment.base;
+package com.liferay.ide.ui.fragment.wizard.base;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;

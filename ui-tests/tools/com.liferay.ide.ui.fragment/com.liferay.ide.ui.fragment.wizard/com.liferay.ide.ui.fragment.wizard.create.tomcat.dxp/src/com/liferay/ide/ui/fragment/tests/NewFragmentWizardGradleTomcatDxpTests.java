@@ -14,7 +14,7 @@
 
 package com.liferay.ide.ui.fragment.tests;
 
-import com.liferay.ide.ui.fragment.base.NewFragmentWizardGradleBase;
+import com.liferay.ide.ui.fragment.wizard.base.NewFragmentWizardGradleBase;
 import com.liferay.ide.ui.liferay.support.server.PureTomcat70DxpSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 

@@ -33,7 +33,7 @@
 	<name>Liferay IDE UI Base</name>
 
 	<modules>
-		<module>com.liferay.ide.ui.fragment.base</module>
+		<module>com.liferay.ide.ui.fragment.wizard.base</module>
 		<module>com.liferay.ide.ui.fragment.deploy.base</module>
 		<module>com.liferay.ide.ui.module.deploy.base</module>
 		<module>com.liferay.ide.ui.server.deploy.base</module>
