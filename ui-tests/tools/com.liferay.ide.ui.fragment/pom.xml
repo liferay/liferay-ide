@@ -32,6 +32,7 @@
 	<name>Liferay IDE UI Fragment</name>
 
 	<modules>
-		<module>com.liferay.ide.ui.fragment.tomcat</module>
+		<module>com.liferay.ide.ui.fragment.deploy</module>
+		<module>com.liferay.ide.ui.fragment.wizard</module>
 	</modules>
 </project>

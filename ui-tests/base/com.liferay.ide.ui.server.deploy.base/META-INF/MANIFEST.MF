@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE UI Server Deploy Base
+Bundle-SymbolicName: com.liferay.ide.ui.server.deploy.base
+Bundle-Version: 3.2.0.qualifier
+Bundle-Vendor: Liferay
+Require-Bundle: org.junit,
+ com.liferay.ide.ui.swtbot,
+ com.liferay.ide.ui.liferay,
+ org.eclipse.swtbot.go,
+ org.eclipse.swtbot.swt.finder
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.ui.server.deploy.base
