@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.ui.module.deploy.tomcat70.tests;
+package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
 import com.liferay.ide.ui.liferay.support.server.ServerSupport;

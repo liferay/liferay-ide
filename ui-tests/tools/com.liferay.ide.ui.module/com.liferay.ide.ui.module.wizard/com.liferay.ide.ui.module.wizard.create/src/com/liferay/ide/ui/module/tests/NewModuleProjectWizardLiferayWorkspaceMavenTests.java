@@ -12,21 +12,27 @@
  * details.
  */
 
-package com.liferay.ide.ui.module.wizard.create.tests;
+package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
+import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceMavenSupport;
 
 import org.junit.Assert;
+import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * @author Sunny Shi
+ * @author Terry Jia
  * @author Ying Xu
  */
-public class NewModuleProjectWizardMavenTests extends SwtbotBase {
+@Ignore("ignore as the problem of deleting Liferay workspace")
+public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase {
+
+	@ClassRule
+	public static LiferayWorkspaceMavenSupport liferayWorkspace = new LiferayWorkspaceMavenSupport(bot);
 
 	@Test
 	public void createActivator() {
@@ -36,7 +42,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -44,9 +50,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -57,7 +63,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -65,9 +71,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -78,7 +84,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -86,9 +92,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -99,7 +105,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -107,9 +113,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -120,7 +126,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -128,9 +134,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -141,7 +147,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -149,9 +155,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -162,7 +168,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -170,9 +176,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -183,7 +189,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -191,9 +197,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -204,7 +210,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -212,9 +218,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -225,7 +231,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -233,9 +239,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -246,7 +252,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -254,9 +260,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -267,7 +273,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -275,9 +281,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Ignore("ignore to wait target platform way")
@@ -287,17 +293,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.newModule.prepareMaven(project.getName(), SERVICE);
 
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.openSelectServiceDialog();
-
-		dialogAction.prepareText("*lifecycleAction");
-
-		dialogAction.confirm();
-
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -305,9 +303,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Ignore("ignore to wait target platform way")
@@ -317,17 +315,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.newModule.prepareMaven(project.getName(), SERVICE_WRAPPER);
 
-		wizardAction.next();
-
-		wizardAction.newModuleInfo.openSelectServiceDialog();
-
-		dialogAction.prepareText("*bookmarksEntryServiceWrapper");
-
-		dialogAction.confirm();
-
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -335,9 +325,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -348,7 +338,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -356,9 +346,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -369,7 +359,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -377,11 +367,12 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
+	@Ignore
 	@Test
 	public void createThemeContributor() {
 		wizardAction.openNewLiferayModuleWizard();
@@ -390,7 +381,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -398,9 +389,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
 	@Test
@@ -411,7 +402,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -419,9 +410,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getWarFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
 	}
 
 	@Test
@@ -432,7 +423,7 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(project.getName());
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
 		dialogAction.updateMavenProject.selectAll();
 
@@ -440,9 +431,9 @@ public class NewModuleProjectWizardMavenTests extends SwtbotBase {
 
 		jobAction.waitForUpdateMavenProject();
 
-		Assert.assertTrue(viewAction.project.visibleFileTry(project.getName()));
+		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getWarFiles(project.getName())));
 
-		viewAction.project.closeAndDelete(project.getName());
+		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getWarFiles(project.getName()));
 	}
 
 	@Rule

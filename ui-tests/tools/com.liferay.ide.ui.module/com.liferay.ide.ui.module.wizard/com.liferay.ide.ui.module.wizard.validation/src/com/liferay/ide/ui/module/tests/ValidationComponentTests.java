@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.ide.ui.module.validation.tests;
+package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.util.ValidationMsg;

@@ -12,12 +12,12 @@
  * details.
  */
 
-package com.liferay.ide.ui.module.deploy.tomcat70.tests;
+package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
 import com.liferay.ide.ui.liferay.support.server.PureTomcat70Support;
-import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceGradleSupport;
+import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceMavenSupport;
 import com.liferay.ide.ui.liferay.util.RuleUtil;
 
 import org.junit.ClassRule;
@@ -30,7 +30,7 @@ import org.junit.rules.RuleChain;
  * @author Terry Jia
  */
 @Ignore("ignore for more research")
-public class DeployModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
+public class DeployModuleLiferayWorkspaceMavenTomcatTests extends SwtbotBase {
 
 	public static PureTomcat70Support tomcat = new PureTomcat70Support(bot);
 
@@ -38,19 +38,23 @@ public class DeployModuleLiferayWorkspaceGradleTomcatTests extends SwtbotBase {
 	public static RuleChain chain = RuleUtil.getTomcat7xRunningRuleChain(bot, tomcat);
 
 	@ClassRule
-	public static LiferayWorkspaceGradleSupport liferayWorkspace = new LiferayWorkspaceGradleSupport(bot);
+	public static LiferayWorkspaceMavenSupport liferayWorkspace = new LiferayWorkspaceMavenSupport(bot);
 
 	@Test
 	public void deployActivator() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareGradle(project.getName(), ACTIVATOR);
+		wizardAction.newModule.prepareMaven(project.getName(), ACTIVATOR);
 
 		wizardAction.finish();
 
-		// need to use job instead
+		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
 
-		ide.sleep(5000);
+		dialogAction.updateMavenProject.selectAll();
+
+		dialogAction.confirm();
+
+		jobAction.waitForUpdateMavenProject();
 
 		viewAction.servers.openAddAndRemoveDialog(tomcat.getStartedLabel());
 

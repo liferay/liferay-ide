@@ -12,43 +12,36 @@
  * details.
  */
 
-package com.liferay.ide.ui.module.wizard.create.tests;
+package com.liferay.ide.ui.module.tests;
 
 import com.liferay.ide.ui.liferay.SwtbotBase;
 import com.liferay.ide.ui.liferay.support.project.ProjectSupport;
-import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceMavenSupport;
+import com.liferay.ide.ui.liferay.support.workspace.LiferayWorkspaceGradleSupport;
 
 import org.junit.Assert;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * @author Terry Jia
  * @author Ying Xu
+ * @author Ashley Yuan
+ * @author Sunny Shi
  */
-@Ignore("ignore as the problem of deleting Liferay workspace")
-public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase {
+public class NewModuleProjectWizardLiferayWorkspaceGradleTests extends SwtbotBase {
 
 	@ClassRule
-	public static LiferayWorkspaceMavenSupport liferayWorkspace = new LiferayWorkspaceMavenSupport(bot);
+	public static LiferayWorkspaceGradleSupport liferayWorkspace = new LiferayWorkspaceGradleSupport(bot);
 
 	@Test
 	public void createActivator() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), ACTIVATOR);
+		wizardAction.newModule.prepareGradle(project.getName(), ACTIVATOR);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -59,17 +52,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	public void createApi() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), API);
+		wizardAction.newModule.prepareGradle(project.getName(), API);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -80,17 +67,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	public void createContentTargetingReport() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), CONTENT_TARGETING_REPORT);
+		wizardAction.newModule.prepareGradle(project.getName(), CONTENT_TARGETING_REPORT);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -101,17 +82,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	public void createContentTargetingRule() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), CONTENT_TARGETING_RULE);
+		wizardAction.newModule.prepareGradle(project.getName(), CONTENT_TARGETING_RULE);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -122,17 +97,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	public void createContentTargetingTrackingAction() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), CONTENT_TARGETING_TRACKING_ACTION);
+		wizardAction.newModule.prepareGradle(project.getName(), CONTENT_TARGETING_TRACKING_ACTION);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -143,17 +112,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	public void createControlMenuEntry() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), CONTROL_MENU_ENTRY);
+		wizardAction.newModule.prepareGradle(project.getName(), CONTROL_MENU_ENTRY);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -164,17 +127,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	public void createFormField() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), FORM_FIELD);
+		wizardAction.newModule.prepareGradle(project.getName(), FORM_FIELD);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -185,17 +142,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	public void createPanelApp() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), PANEL_APP);
+		wizardAction.newModule.prepareGradle(project.getName(), PANEL_APP);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -206,17 +157,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	public void createPortletConfigurationIcon() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), PORTLET_CONFIGURATION_ICON);
+		wizardAction.newModule.prepareGradle(project.getName(), PORTLET_CONFIGURATION_ICON);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -227,17 +172,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	public void createPortletProvider() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), PORTLET_PROVIDER);
+		wizardAction.newModule.prepareGradle(project.getName(), PORTLET_PROVIDER);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -248,17 +187,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	public void createPortletToolbarContributor() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), PORTLET_TOOLBAR_CONTRIBUTOR);
+		wizardAction.newModule.prepareGradle(project.getName(), PORTLET_TOOLBAR_CONTRIBUTOR);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -269,61 +202,41 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	public void createRest() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), REST);
+		wizardAction.newModule.prepareGradle(project.getName(), REST);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
-	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createService() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), SERVICE);
+		wizardAction.newModule.prepareGradle(project.getName(), SERVICE);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
-	@Ignore("ignore to wait target platform way")
 	@Test
 	public void createServiceWrapper() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), SERVICE_WRAPPER);
+		wizardAction.newModule.prepareGradle(project.getName(), SERVICE_WRAPPER);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -334,17 +247,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	public void createSimulationPanelEntry() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), SIMULATION_PANEL_ENTRY);
+		wizardAction.newModule.prepareGradle(project.getName(), SIMULATION_PANEL_ENTRY);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -355,39 +262,26 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	public void createTemplateContextContributor() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), TEMPLATE_CONTEXT_CONCONTRIBUTOR);
+		wizardAction.newModule.prepareGradle(project.getName(), TEMPLATE_CONTEXT_CONCONTRIBUTOR);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
 		viewAction.project.closeAndDeleteFromDisk(liferayWorkspace.getModuleFiles(project.getName()));
 	}
 
-	@Ignore
 	@Test
 	public void createThemeContributor() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), THEME_CONTRIBUTOR);
+		wizardAction.newModule.prepareGradle(project.getName(), THEME_CONTRIBUTOR);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getModuleFiles(project.getName())));
 
@@ -398,17 +292,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	public void createWarHook() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), WAR_HOOK);
+		wizardAction.newModule.prepareGradle(project.getName(), WAR_HOOK);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getWarFiles(project.getName())));
 
@@ -419,17 +307,11 @@ public class NewModuleProjectWizardLiferayWorkspaceMavenTests extends SwtbotBase
 	public void createWarMvcPortlet() {
 		wizardAction.openNewLiferayModuleWizard();
 
-		wizardAction.newModule.prepareMaven(project.getName(), WAR_MVC_PORTLET);
+		wizardAction.newModule.prepareGradle(project.getName(), WAR_MVC_PORTLET);
 
 		wizardAction.finish();
 
-		viewAction.project.openUpdateMavenProjectDialog(liferayWorkspace.getName());
-
-		dialogAction.updateMavenProject.selectAll();
-
-		dialogAction.confirm();
-
-		jobAction.waitForUpdateMavenProject();
+		viewAction.project.refreshGradleProject(liferayWorkspace.getName());
 
 		Assert.assertTrue(viewAction.project.visibleFileTry(liferayWorkspace.getWarFiles(project.getName())));
 
