@@ -75,7 +75,9 @@ public class SupportBase extends ExternalResource {
 
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
 
-		timestamp = System.currentTimeMillis();
+		String tt = String.valueOf(System.currentTimeMillis());
+
+		timestamp = Long.parseLong(tt.substring(6));
 	}
 
 	public BrowserAction browserAction;
