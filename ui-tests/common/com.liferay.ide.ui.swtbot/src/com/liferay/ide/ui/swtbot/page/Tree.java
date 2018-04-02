@@ -54,6 +54,8 @@ public class Tree extends AbstractWidget {
 			sleep();
 
 			try {
+				getWidget().setFocus();
+
 				if (items.length > 1) {
 					item = getWidget().expandNode(items);
 				}
@@ -65,7 +67,20 @@ public class Tree extends AbstractWidget {
 			}
 		}
 
-		Assert.assertNotNull("Could not find " + items[items.length - 1] + " after " + timeout, item);
+		StringBuffer sb = new StringBuffer();
+
+		sb.append("Could not find expected tree node ");
+		sb.append(items[items.length - 1]);
+		sb.append(" after ");
+		sb.append(timeout);
+		sb.append(" millis, and the current tree is: ");
+
+		for (SWTBotTreeItem treeItem : getWidget().getAllItems()) {
+			sb.append(treeItem.getText());
+			sb.append(" ");
+		}
+
+		Assert.assertNotNull(sb.toString(), item);
 
 		SWTBotMenu botMenu = item.contextMenu(menu);
 
