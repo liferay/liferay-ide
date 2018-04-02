@@ -47,7 +47,7 @@ public class Tree extends AbstractWidget {
 		long current = System.currentTimeMillis();
 
 		while (true) {
-			if (System.currentTimeMillis() > (current + timeout)) {
+			if ((item != null) || System.currentTimeMillis() > (current + timeout)) {
 				break;
 			}
 
