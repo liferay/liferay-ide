@@ -464,6 +464,10 @@ public class CoreUtil {
 		return false;
 	}
 
+	public static boolean isNotNullOrEmpty(String val) {
+		return !isNullOrEmpty(val);
+	}
+
 	public static boolean isNumeric(String str) {
 		try {
 			Double.parseDouble(str);
