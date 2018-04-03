@@ -159,9 +159,13 @@ public class LiferayGradleWorkspaceProjectProvider
 			LiferayWorkspaceUtil.getWorkspaceProject()
 		).filter(
 			workspaceProject -> {
-				IPath workspaceLocation = workspaceProject.getRawLocation();
+				IPath workspaceProjectLocation = workspaceProject.getRawLocation();
 
-				return workspaceLocation.isPrefixOf(liferayHome);
+				if (workspaceProjectLocation == null) {
+					return false;
+				}
+
+				return workspaceProjectLocation.isPrefixOf(liferayHome);
 			}
 		).map(
 			workspaceProject -> LiferayCore.create(IWorkspaceProject.class, workspaceProject)
