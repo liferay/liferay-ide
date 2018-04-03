@@ -37,7 +37,7 @@ public class BundleUrlValidationService extends ValidationService {
 				UrlValidator.ALLOW_LOCAL_URLS | UrlValidator.ALLOW_ALL_SCHEMES);
 
 		if ((bundleUrl!= null) && !urlValidator.isValid(bundleUrl)) {
-			retval = Status.createErrorStatus("The bundle URL should be a vaild URL.");
+			retval = Status.createWarningStatus("The bundle URL may not be a vaild URL.");
 		}
 
 		return retval;
