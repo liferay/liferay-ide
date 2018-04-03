@@ -297,6 +297,38 @@ public class NewLiferayComponentOpTests extends BaseTests
     }
 
     @Test
+    public void testNewLiferayComponentPortletFilter() throws Exception {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "testGradlePortletFilterComponent" );
+        op.setProjectTemplateName( "api" );
+        op.setProjectProvider( "gradle-module" );
+
+        Status modulePorjectStatus = NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        assertTrue( modulePorjectStatus.ok() );
+
+        IProject modProject = CoreUtil.getProject( op.getProjectName().content() );
+
+        modProject.open( new NullProgressMonitor() );
+
+        NewLiferayComponentOp cop = NewLiferayComponentOp.TYPE.instantiate();
+
+        cop.setProjectName( op.getProjectName().content() );
+        cop.setComponentClassTemplateName( "PortletFilter" );
+
+        Status status = NewLiferayComponentOpMethods.execute( cop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        assertEquals( Status.createOkStatus(),status );
+
+        IFile gradleFile = modProject.getFile( "build.gradle" );
+
+        String gradleFileContent = FileUtil.readContents( gradleFile.getLocation().toFile() ,true );
+
+        assertTrue( gradleFileContent.contains( "compile group: \"javax.portlet\", name:\"portlet-api\", version:\"2.0\"" ) );
+    }
+
+    @Test
     public void testNewLiferayComponentProjectValidation() throws Exception
     {
         deleteAllWorkspaceProjects();
