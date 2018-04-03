@@ -14,15 +14,17 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.server.core.portal.PortalServer;
+import com.liferay.ide.project.core.util.TargetPlatformUtil;
+
+import java.util.List;
 
 import org.eclipse.sapphire.DefaultValueService;
-import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class ServiceDefaultValuesService extends DefaultValueService {
 
@@ -32,49 +34,31 @@ public class ServiceDefaultValuesService extends DefaultValueService {
 
 		String template = op.getProjectTemplateName().content(true);
 
-		IServer runningServer = null;
-
-		IServer[] servers = ServerCore.getServers();
-
 		String retVal = "";
 
 		if (template.equals("service-wrapper")) {
-			for (IServer server : servers) {
-				String serverId = server.getServerType().getId();
-
-				if (serverId.equals(PortalServer.ID)) {
-					runningServer = server;
-
-					break;
-				}
-			}
-
 			try {
-				ServiceContainer serviceWrapperList = new ServiceWrapperCommand(runningServer).execute();
+				ServiceContainer allServicesWrapper = TargetPlatformUtil.getServiceWrapperList();
 
-				retVal = serviceWrapperList.getServiceList().get(0);
+				List<String> serviceWrapperList = allServicesWrapper.getServiceList();
+
+				if (ListUtil.isNotEmpty(serviceWrapperList)) {
+					retVal = serviceWrapperList.get(0);
+				}
 			}
 			catch (Exception e) {
 				ProjectCore.logError("Get service wrapper list error.", e);
 			}
 		}
 		else if (template.equals("service")) {
-			for (IServer server : servers) {
-				String serverId = server.getServerType().getId();
-
-				if ((server.getServerState() == IServer.STATE_STARTED) && serverId.equals(PortalServer.ID)) {
-					runningServer = server;
-
-					break;
-				}
-			}
-
 			try {
-				ServiceCommand serviceCommand = new ServiceCommand(runningServer);
+				ServiceContainer allServices = TargetPlatformUtil.getServicesList();
 
-				ServiceContainer allServices = serviceCommand.execute();
+				List<String> serviceList = allServices.getServiceList();
 
-				retVal = allServices.getServiceList().get(0);
+				if (ListUtil.isNotEmpty(serviceList)) {
+					retVal = serviceList.get(0);
+				}
 			}
 			catch (Exception e) {
 				ProjectCore.logError("Get services list error. ", e);

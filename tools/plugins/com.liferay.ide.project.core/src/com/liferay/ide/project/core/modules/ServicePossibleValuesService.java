@@ -59,7 +59,7 @@ public class ServicePossibleValuesService extends PossibleValuesService {
 		if (template.equals("service-wrapper")) {
 
 			try {
-				ServiceContainer allServicesWrapper = TargetPlatformUtil.getServiceWrapperList();;
+				ServiceContainer allServicesWrapper = TargetPlatformUtil.getServiceWrapperList();
 
 				values.addAll(allServicesWrapper.getServiceList());
 			}
