@@ -358,9 +358,13 @@ public class LiferayWorkspaceUtil {
 	public static void addPortalRuntime() {
 		IProject project = getWorkspaceProject();
 
-		IPath bundlesLocation = getHomeLocation(project);
-
 		try {
+			if (project == null) {
+				throw new CoreException(ProjectCore.createErrorStatus("Cann't get a valid Liferay Workspace project."));
+			}
+
+			IPath bundlesLocation = getHomeLocation(project);
+
 			if (FileUtil.exists(bundlesLocation)) {
 				PortalBundle bundle = LiferayServerCore.newPortalBundle(bundlesLocation);
 
