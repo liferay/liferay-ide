@@ -39,7 +39,7 @@ public class MarkerUtil {
 
 			for (IMarker marker : markers) {
 				try {
-					if ((sourceId == null) || 
+					if ((sourceId == null) ||
 						((sourceId != null) && sourceId.equals(marker.getAttribute(IMarker.SOURCE_ID)))) {
 						marker.delete();
 					}
