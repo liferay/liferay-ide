@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.core.JavaProject;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectValidator;
@@ -63,13 +64,15 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
 		if (SDKUtil.isSDKProject(fproj.getProject())) {
 			IJavaProject javaProject = JavaCore.create(project);
 
-			for (IClasspathEntry entry : javaProject.getRawClasspath()) {
-				String segment = entry.getPath().segment(0);
+			if(JavaProject.hasJavaNature(project)) {
+				for (IClasspathEntry entry : javaProject.getRawClasspath()) {
+					String segment = entry.getPath().segment(0);
 
-				if ((entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) &&
-					segment.equals(SDKClasspathContainer.ID)) {
+					if ((entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) &&
+						segment.equals(SDKClasspathContainer.ID)) {
 
-					return;
+						return;
+					}
 				}
 			}
 
