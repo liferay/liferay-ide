@@ -35,9 +35,9 @@
     <properties>
         <install-builder-executable>${install-builder-home}/bin/builder</install-builder-executable>
         <bundle-support-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/com.liferay.portal.tools.bundle.support</bundle-support-download-base>
-        <bundle-support-name>com.liferay.portal.tools.bundle.support-3.2.1.jar</bundle-support-name>
-        <bundle-support-version>3.2.1</bundle-support-version>
-        <bundle-support-md5>58deec5190ba130289521d4fbe615ed0</bundle-support-md5>
+        <bundle-support-name>com.liferay.portal.tools.bundle.support-3.2.2.jar</bundle-support-name>
+        <bundle-support-version>3.2.2</bundle-support-version>
+        <bundle-support-md5>ee67fb9d9051c32e62ef2fbabc0cd505</bundle-support-md5>
         <gw-latest-download-url>https://github.com/david-truong/gw/releases/download/v1.0.1/gw.jar</gw-latest-download-url>
         <gw-latest-md5>488ddaed413c0f7ea67df049175380eb</gw-latest-md5>
         <portal-download-base>http://mirrors/files.liferay.com/private/ee/portal</portal-download-base>
