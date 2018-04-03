@@ -30,8 +30,8 @@
         <tycho-packaging-format>yyyyMMddHHmm'-m1'</tycho-packaging-format>
         <tycho-version>1.0.0</tycho-version>
         <tycho-extras-version>1.0.0</tycho-extras-version>
-        <eclipse-site>http://download.eclipse.org/releases/oxygen/201712201001/</eclipse-site>
-        <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20170919201930/repository/</orbit-site>
+        <eclipse-site>http://download.eclipse.org/releases/oxygen/201803211000/</eclipse-site>
+        <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20180206163158/repository/</orbit-site>
         <tm-site>http://download.eclipse.org/tm/terminal/updates/4.2/</tm-site>
         <liferay-ide-swtbot-testing-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide.testing-repository/target/repository/</liferay-ide-swtbot-testing-site>
         <osgi-bundles-site>https://repos-ide.wedeploy.io/liferay-ide-osgi-deps/</osgi-bundles-site>
