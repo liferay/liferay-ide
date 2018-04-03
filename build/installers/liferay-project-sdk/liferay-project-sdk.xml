@@ -190,13 +190,28 @@
         <if>
             <explanation>need to install liferay workspace</explanation>
             <actionList>
+                <if>
+                    <actionList>
+                        <setInstallerVariable name="selectbundleversion" value="7.1"/>
+                    </actionList>
+                    <conditionRuleList>
+                        <compareText>
+                            <logic>contains</logic>
+                            <text>${bundleversion}</text>
+                            <value>7_1</value>
+                        </compareText>
+                    </conditionRuleList>
+                    <elseActionList>
+                            <setInstallerVariable name="selectbundleversion" value="7.0"/>
+                    </elseActionList>
+                </if>
                 <setInstallerVariable>
                     <name>bladeCommondPath</name>
                     <value>${jpmSystemPath}${platform_path_separator}blade</value>
                 </setInstallerVariable>
                 <runProgram>
                     <program>${bladeCommondPath}</program>
-                    <programArguments>--base "${lrws}" init</programArguments>
+                    <programArguments>--base "${lrws}" init -v "${selectbundleversion}"</programArguments>
                 </runProgram>
                 <propertiesFileSet>
                     <file>${lrws}${platform_path_separator}gradle.properties</file>
@@ -428,6 +443,42 @@
                 </labelParameter>
             </parameterList>
             <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${initlrws}</value1>
+                    <value2>lrws</value2>
+                </compareValues>
+            </ruleList>
+        </choiceParameterGroup>
+        <choiceParameterGroup>
+            <name>bundleversion</name>
+            <title>Select Bundle Version</title>
+            <description></description>
+            <explanation>Specify initialized liferay bundle version.</explanation>
+            <value></value>
+            <default></default>
+            <parameterList>
+                <labelParameter>
+                    <name>7_0</name>
+                    <title>7.0</title>
+                    <description>Liferay Bundle 7.0</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
+                <labelParameter>
+                    <name>7_1</name>
+                    <title>7.1</title>
+                    <description>Liferay Bundle 7.1</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
+            </parameterList>
+            <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${isdxp}</value1>
+                    <value2>ce</value2>
+                </compareValues>
                 <compareValues>
                     <logic>equals</logic>
                     <value1>${initlrws}</value1>
