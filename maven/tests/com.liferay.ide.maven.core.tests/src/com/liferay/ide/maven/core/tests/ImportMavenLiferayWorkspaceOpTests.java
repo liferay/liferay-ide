@@ -142,6 +142,11 @@ public class ImportMavenLiferayWorkspaceOpTests
 
         op.setWorkspaceLocation( wsFolder.getAbsolutePath() );
         op.setProvisionLiferayBundle( true );
+
+        String defaultUrl = op.getBundleUrl().content( true );
+
+        assertEquals( existUrl, defaultUrl );
+
         op.setBundleUrl( bundleUrl );
 
         op.execute( new ProgressMonitor() );
