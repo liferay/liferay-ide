@@ -274,6 +274,11 @@ public class GogoBundleDeployer {
             else
             {
                 update( bundleId, bundleFile );
+
+                if( isFragment )
+                {
+                    refresh( bundleId );
+                }
             }
 
             if( !isFragment )
