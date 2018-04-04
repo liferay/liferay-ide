@@ -32,6 +32,8 @@ import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.sourcelookup.ISourceContainer;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.sourcelookup.containers.JavaSourcePathComputer;
 import org.eclipse.wst.server.core.IServer;
@@ -59,7 +61,17 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer {
 		IWorkspaceProject workspaceProject = LiferayCore.create(IWorkspaceProject.class, server);
 
 		if (workspaceProject != null) {
-			addSourceContainers(configuration, monitor, sourceContainers, workspaceProject.getProject());
+			IProject project = workspaceProject.getProject();
+
+			try {
+				IJavaProject javaProject = JavaCore.create(project);
+
+				if (javaProject != null) {
+					addSourceContainers(configuration, monitor, sourceContainers, workspaceProject.getProject());
+				}
+			}
+			catch (Exception e) {
+			}
 		}
 
 		Stream.of(
