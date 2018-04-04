@@ -87,6 +87,7 @@ public class NewLiferayWorkspaceWizardMavenTests extends SwtbotBase {
 		viewAction.project.closeAndDelete(project.getName());
 	}
 
+	@Ignore
 	@Test
 	public void createLiferayWorkspaceInitBundle() {
 		wizardAction.openNewLiferayWorkspaceWizard();
