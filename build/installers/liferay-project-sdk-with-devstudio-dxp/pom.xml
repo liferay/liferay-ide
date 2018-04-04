@@ -31,7 +31,7 @@
     <name>Liferay Project SDK with DevStudio DXP Installer</name>
 
     <properties>
-        <studio-installer-version>2018.3.12</studio-installer-version>
+        <studio-installer-version>2018.4.4</studio-installer-version>
     </properties>
 
     <build>

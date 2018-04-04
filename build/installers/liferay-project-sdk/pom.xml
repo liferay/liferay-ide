@@ -31,7 +31,7 @@
     <name>Liferay Project SDK Installer</name>
 
     <properties>
-        <workspace-installer-version>2018.3.12</workspace-installer-version>
+        <workspace-installer-version>2018.4.4</workspace-installer-version>
     </properties>
 
     <build>
