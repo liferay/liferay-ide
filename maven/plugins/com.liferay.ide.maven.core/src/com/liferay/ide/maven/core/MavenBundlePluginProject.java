@@ -17,6 +17,7 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.maven.core.util.DefaultMaven2OsgiConverter;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -26,9 +27,9 @@ import java.io.File;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.project.MavenProject;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -38,11 +39,13 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.internal.core.builder.JavaBuilder;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 
 /**
  * @author Gregory Amerson
  */
+@SuppressWarnings("restriction")
 public class MavenBundlePluginProject extends LiferayMavenProject implements IBundleProject {
 
 	public MavenBundlePluginProject(IProject project) {
@@ -114,6 +117,12 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 		}
 		else {
 			getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+		}
+
+		IMarker[] buildProblems = JavaBuilder.getProblemsFor(getProject());
+
+		if (ListUtil.isNotEmpty(buildProblems)) {
+			return outputJar;
 		}
 
 		mavenProjectBuilder.execJarMojo(projectFacade, monitor);
