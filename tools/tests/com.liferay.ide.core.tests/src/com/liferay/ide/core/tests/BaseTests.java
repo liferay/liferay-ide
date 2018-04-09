@@ -172,4 +172,20 @@ public class BaseTests {
 		return value.replaceAll("\r", "");
 	}
 
+	protected void assertFileExists(File file) {
+		Assert.assertTrue(FileUtil.exists(file));
+	}
+
+	protected void assertFileExists(IFile file) {
+		Assert.assertTrue(FileUtil.exists(file));
+	}
+
+	protected void assertFileExists(IPath path) {
+		Assert.assertTrue(FileUtil.exists(path));
+	}
+
+	protected void assertProjectExists(IProject project) {
+		Assert.assertTrue(FileUtil.exists(project));
+	}
+
 }

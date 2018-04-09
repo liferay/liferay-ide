@@ -16,13 +16,10 @@ package com.liferay.ide.gradle.core.tests;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 
@@ -33,677 +30,623 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author Joye Luo
  */
-public class GradleModuleProjectTests {
+public class GradleModuleProjectTests extends BaseTests {
 
-    private IProject create( NewLiferayModuleProjectOp op ) throws Exception
-    {
-        Status status = op.execute( ProgressMonitorBridge.create( _monitor ) );
+	@Test
+	public void testProjectTemplateActivator() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        assertNotNull( status );
-        assertTrue( status.message(), status.ok() );
+		op.setProjectName("activator-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("activator");
 
-        Util.waitForBuildAndValidation();
+		_createAndBuild(op);
+	}
 
-        return CoreUtil.getProject( op.getProjectName().content() );
-    }
+	@Test
+	public void testProjectTemplateApi() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-    private IProject createAndBuild( NewLiferayModuleProjectOp op ) throws Exception
-    {
-        assertTrue( op.validation().message(), op.validation().ok() );
+		op.setProjectName("api-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("api");
 
-        IProject project = create( op );
+		_createAndBuild(op);
+	}
 
-        verifyProject( project );
+	@Test
+	public void testProjectTemplateContentTargetingReport() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        return project;
-    }
+		op.setProjectName("content-targeting-report-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("content-targeting-report");
 
-    @Test
-    public void testProjectTemplateActivator() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+	}
 
-        op.setProjectName( "activator-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "activator" );
+	@Test
+	public void testProjectTemplateContentTargetingRule() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        createAndBuild(op);
-    }
+		op.setProjectName("content-targeting-rule-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("content-targeting-rule");
 
-    @Test
-    public void testProjectTemplateApi() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+	}
 
-        op.setProjectName( "api-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "api" );
+	@Test
+	public void testProjectTemplateContentTargetingTrackingAction() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        createAndBuild( op );
-    }
+		op.setProjectName("content-targeting-tracking-action-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("content-targeting-tracking-action");
 
-    @Test
-    public void testProjectTemplateContentTargetingReport() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+	}
 
-        op.setProjectName( "content-targeting-report-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "content-targeting-report" );
+	@Test
+	public void testProjectTemplateControlMenuEntry() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        createAndBuild(op);
-    }
+		op.setProjectName("control-menu-entry-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("control-menu-entry");
 
-    @Test
-    public void testProjectTemplateContentTargetingRule() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+	}
 
-        op.setProjectName( "content-targeting-rule-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "content-targeting-rule" );
+	@Test
+	public void testProjectTemplateFormField() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        createAndBuild(op);
-    }
+		op.setProjectName("form-field-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("form-field");
 
-    @Test
-    public void testProjectTemplateContentTargetingTrackingAction() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+	}
 
-        op.setProjectName( "content-targeting-tracking-action-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "content-targeting-tracking-action" );
+	@Test
+	public void testProjectTemplateLayoutTemplate() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        createAndBuild(op);
-    }
+		op.setProjectName("layout-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("layout-template");
 
-    @Test
-    public void testProjectTemplateControlMenuEntry() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		IProject project = _createAndBuild(op);
 
-        op.setProjectName( "control-menu-entry-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "control-menu-entry" );
+		assertFileExists(project.getFile("build/libs/layout-test.war"));
+	}
 
-        createAndBuild(op);
-    }
+	@Test
+	public void testProjectTemplateMvcPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-    @Test
-    public void testProjectTemplateFormField() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setProjectName("mvc-portlet-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("mvc-portlet");
 
-        op.setProjectName( "form-field-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "form-field" );
+		_createAndBuild(op);
+	}
+
+	@Test
+	public void testProjectTemplateNpmAngularPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName("npm-angular-portlet-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("npm-angular-portlet");
 
-        createAndBuild(op);
-    }
+		_createAndBuild(op);
+	}
+
+	@Test
+	public void testProjectTemplateNpmAngularPortlet71() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName("npm-angular-portlet-test-v71");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("npm-angular-portlet");
+		op.setLiferayVersion("7.1");
+
+		_createAndBuild(op);
+		_verifyNpmPortletV71(op);
+	}
+
+	@Test
+	public void testProjectTemplateNpmBillboardjsPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName("npm-billboardjs-portlet-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("npm-billboardjs-portlet");
 
-    @Test
-    public void testProjectTemplateLayoutTemplate() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+	}
+
+	@Test
+	public void testProjectTemplateNpmBillboardjsPortlet71() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName("npm-billboardjs-portlet-test-v71");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("npm-billboardjs-portlet");
+		op.setLiferayVersion("7.1");
+
+		_createAndBuild(op);
+		_verifyNpmPortletV71(op);
+	}
+
+	@Test
+	public void testProjectTemplateNpmIsomorphicPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName("npm-isomorphic-portlet-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("npm-isomorphic-portlet");
 
-        op.setProjectName( "layout-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "layout-template" );
+		_createAndBuild(op);
+	}
+
+	@Test
+	public void testProjectTemplateNpmIsomorphicPortlet71() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName("npm-isomorphic-portlet-test-v71");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("npm-isomorphic-portlet");
+		op.setLiferayVersion("7.1");
+
+		_createAndBuild(op);
+		_verifyNpmPortletV71(op);
+	}
+
+	@Test
+	public void testProjectTemplateNpmJqueryPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName("npm-jquery-portlet-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("npm-jquery-portlet");
 
-        IProject project = createAndBuild(op);
+		_createAndBuild(op);
+	}
+
+	@Test
+	public void testProjectTemplateNpmJqueryPortlet71() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName("npm-jquery-portlet-test-v71");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("npm-jquery-portlet");
+		op.setLiferayVersion("7.1");
+
+		_createAndBuild(op);
+		_verifyNpmPortletV71(op);
+	}
+
+	@Test
+	public void testProjectTemplateNpmMetaljsPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName("npm-metaljs-portlet-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("npm-metaljs-portlet");
 
-        project.refreshLocal( IResource.DEPTH_INFINITE, _monitor );
+		_createAndBuild(op);
+	}
+
+	@Test
+	public void testProjectTemplateNpmMetaljsPortlet71() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+		op.setProjectName("npm-metaljs-portlet-test-v71");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("npm-metaljs-portlet");
+		op.setLiferayVersion("7.1");
 
-        assertTrue( project.getFile( "build/libs/layout-test.war" ).exists() );
-    }
+		_createAndBuild(op);
+		_verifyNpmPortletV71(op);
+	}
 
-    @Test
-    public void testProjectTemplateMvcPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+	@Test
+	public void testProjectTemplateNpmPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "mvc-portlet-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "mvc-portlet" );
+		op.setProjectName("npm-portlet-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("npm-portlet");
 
-        createAndBuild(op);
-    }
+		_createAndBuild(op);
+	}
 
-    @Test
-    public void testProjectTemplateNpmAngularPortlet () throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+	@Test
+	public void testProjectTemplateNpmPortlet71() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "npm-angular-portlet-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "npm-angular-portlet" );
+		op.setProjectName("npm-portlet-test-v71");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("npm-portlet");
+		op.setLiferayVersion("7.1");
 
-        createAndBuild(op);
-    }
+		_createAndBuild(op);
+		_verifyNpmPortletV71(op);
+	}
 
-    @Test
-    public void testProjectTemplateNpmBillboardjsPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+	@Test
+	public void testProjectTemplateNpmReactPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "npm-billboardjs-portlet-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "npm-billboardjs-portlet" );
+		op.setProjectName("npm-react-portlet-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("npm-react-portlet");
 
-        createAndBuild(op);
-    }
+		_createAndBuild(op);
+	}
 
-    @Test
-    public void testProjectTemplateNpmIsomorphicPortlet () throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "npm-isomorphic-portlet-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "npm-isomorphic-portlet" );
-
-        createAndBuild(op);
-    }
+	@Test
+	public void testProjectTemplateNpmReactPortlet71() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-    @Test
-    public void testProjectTemplateNpmJqueryPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "npm-jquery-portlet-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "npm-jquery-portlet" );
-
-        createAndBuild(op);
-    }
-
-    @Test
-    public void testProjectTemplateNpmMetaljsPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "npm-metaljs-portlet-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "npm-metaljs-portlet" );
-
-        createAndBuild(op);
-    }
-
-    @Test
-    public void testProjectTemplateNpmPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "npm-portlet-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "npm-portlet" );
-
-        createAndBuild(op);
-    }
-
-    @Test
-    public void testProjectTemplateNpmReactPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "npm-react-portlet-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "npm-react-portlet" );
-
-        createAndBuild(op);
-    }
-
-    @Test
-    public void testProjectTemplateNpmVuejsPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "npm-vuejs-portlet-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "npm-vuejs-portlet" );
-
-        createAndBuild(op);
-    }
-
-    @Test
-    public void testProjectTemplateNpmAngularPortlet71() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "npm-angular-portlet-test-v71" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "npm-angular-portlet" );
-        op.setLiferayVersion( "7.1" );
-
-        createAndBuild( op );
-        verifyNpmPortletV71( op );
-    }
-
-    @Test
-    public void testProjectTemplateNpmBillboardjsPortlet71() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "npm-billboardjs-portlet-test-v71" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "npm-billboardjs-portlet" );
-        op.setLiferayVersion( "7.1" );
-
-        createAndBuild( op );
-        verifyNpmPortletV71( op );
-    }
-
-    @Test
-    public void testProjectTemplateNpmIsomorphicPortlet71() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "npm-isomorphic-portlet-test-v71" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "npm-isomorphic-portlet" );
-        op.setLiferayVersion( "7.1" );
-
-        createAndBuild( op );
-        verifyNpmPortletV71( op );
-    }
-
-    @Test
-    public void testProjectTemplateNpmJqueryPortlet71() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "npm-jquery-portlet-test-v71" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "npm-jquery-portlet" );
-        op.setLiferayVersion( "7.1" );
-
-        createAndBuild( op );
-        verifyNpmPortletV71( op );
-    }
-
-    @Test
-    public void testProjectTemplateNpmMetaljsPortlet71() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "npm-metaljs-portlet-test-v71" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "npm-metaljs-portlet" );
-        op.setLiferayVersion( "7.1" );
-
-        createAndBuild( op );
-        verifyNpmPortletV71( op );
-    }
-
-    @Test
-    public void testProjectTemplateNpmPortlet71() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "npm-portlet-test-v71" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "npm-portlet" );
-        op.setLiferayVersion( "7.1" );
-
-        createAndBuild( op );
-        verifyNpmPortletV71( op );
-    }
-
-    @Test
-    public void testProjectTemplateNpmReactPortlet71() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "npm-react-portlet-test-v71" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "npm-react-portlet" );
-        op.setLiferayVersion( "7.1" );
-
-        createAndBuild( op );
-        verifyNpmPortletV71( op );
-    }
-
-    @Test
-    public void testProjectTemplateNpmVuejsPortlet71() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "npm-vuejs-portlet-test-v71" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "npm-vuejs-portlet" );
-        op.setLiferayVersion( "7.1" );
-
-        createAndBuild( op );
-        verifyNpmPortletV71( op );
-    }
-
-    @Test
-    public void testProjectTemplatePanelApp() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "panel-app-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "panel-app" );
-
-        createAndBuild(op);
-    }
-
-    @Test
-    public void testProjectTemplatePortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "portlet-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "portlet" );
-
-        createAndBuild(op);
-    }
-
-    @Test
-    public void testProjectTemplatePortletConfigurationIcon() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "portlet-configuration-icon-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "portlet-configuration-icon" );
-
-        createAndBuild(op);
-    }
+		op.setProjectName("npm-react-portlet-test-v71");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("npm-react-portlet");
+		op.setLiferayVersion("7.1");
 
-    @Test
-    public void testProjectTemplatePortletProvider() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+		_verifyNpmPortletV71(op);
+	}
 
-        op.setProjectName( "portlet-provider-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "portlet-provider" );
+	@Test
+	public void testProjectTemplateNpmVuejsPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        createAndBuild(op);
-    }
+		op.setProjectName("npm-vuejs-portlet-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("npm-vuejs-portlet");
 
-    @Test
-    public void testProjectTemplatePortletToolbarContributor() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+	}
 
-        op.setProjectName( "portlet-toolbar-contributor-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "portlet-toolbar-contributor" );
+	@Test
+	public void testProjectTemplateNpmVuejsPortlet71() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        createAndBuild(op);
-    }
+		op.setProjectName("npm-vuejs-portlet-test-v71");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("npm-vuejs-portlet");
+		op.setLiferayVersion("7.1");
 
-    @Test
-    public void testProjectTemplateRest() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+		_verifyNpmPortletV71(op);
+	}
 
-        op.setProjectName( "rest-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "rest" );
+	@Test
+	public void testProjectTemplatePanelApp() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        createAndBuild(op);
-    }
+		op.setProjectName("panel-app-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("panel-app");
 
-    @Test
-    public void testProjectTemplateService() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		_createAndBuild(op);
+	}
 
-        op.setProjectName( "service-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "service" );
-        op.setServiceName( "com.liferay.portal.kernel.events.LifecycleAction" );
+	@Test
+	public void testProjectTemplatePortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        IProject project = create( op );
+		op.setProjectName("portlet-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("portlet");
 
-        IFile serviceFile = project.getFile( "src/main/java/service/test/ServiceTest.java" );
+		_createAndBuild(op);
+	}
 
-        assertTrue( serviceFile.exists() );
+	@Test
+	public void testProjectTemplatePortletConfigurationIcon() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        String contents =
-            "package service.test;\n" +
-            "import com.liferay.portal.kernel.events.ActionException;\n" +
-            "import com.liferay.portal.kernel.events.LifecycleAction;\n" +
-            "import com.liferay.portal.kernel.events.LifecycleEvent;\n" +
-            "import org.osgi.service.component.annotations.Component;\n" +
-            "@Component(\n" +
-                "immediate = true, property = {\"key=login.events.pre\"},\n" +
-                "service = LifecycleAction.class\n" +
-            ")\n" +
-            "public class ServiceTest implements LifecycleAction {\n" +
-                "@Override public void processLifecycleEvent(LifecycleEvent lifecycleEvent) throws ActionException { }\n" +
-            "}";
+		op.setProjectName("portlet-configuration-icon-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("portlet-configuration-icon");
 
-        serviceFile.setContents( new ByteArrayInputStream( contents.getBytes() ), IResource.FORCE, _monitor );
+		_createAndBuild(op);
+	}
 
-        verifyProject( project );
-    }
+	@Test
+	public void testProjectTemplatePortletProvider() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-    @Test
-    public void testProjectTemplateServiceBuilder() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setProjectName("portlet-provider-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("portlet-provider");
 
-        op.setProjectName( "service-builder-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "service-builder" );
-        op.setPackageName( "com.liferay.test" );
+		_createAndBuild(op);
+	}
 
-        IProject parent = create( op );
+	@Test
+	public void testProjectTemplatePortletToolbarContributor() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        assertTrue( parent != null && parent.exists() );
+		op.setProjectName("portlet-toolbar-contributor-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("portlet-toolbar-contributor");
 
-        IProject api = CoreUtil.getProject( "service-builder-test-api" );
+		_createAndBuild(op);
+	}
 
-        assertTrue( api != null && api.exists() );
+	@Test
+	public void testProjectTemplateRest() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        IProject service = CoreUtil.getProject( "service-builder-test-service" );
+		op.setProjectName("rest-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("rest");
 
-        assertTrue( service != null && service.exists() );
+		_createAndBuild(op);
+	}
 
-        api.build( IncrementalProjectBuilder.FULL_BUILD, _monitor );
+	@Test
+	public void testProjectTemplateService() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        service.build( IncrementalProjectBuilder.FULL_BUILD, _monitor );
+		op.setProjectName("service-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("service");
+		op.setServiceName("com.liferay.portal.kernel.events.LifecycleAction");
 
-        IBundleProject apiBundle = LiferayCore.create( IBundleProject.class, api );
+		IProject project = _create(op);
 
-        assertNotNull( apiBundle );
+		IFile serviceFile = project.getFile("src/main/java/service/test/ServiceTest.java");
 
-        IPath apiOutput = apiBundle.getOutputBundle( true, _monitor );
+		assertFileExists(serviceFile);
 
-        assertNotNull( apiOutput );
+		String contents =
+			"package service.test;\n" + "import com.liferay.portal.kernel.events.ActionException;\n" +
+			"import com.liferay.portal.kernel.events.LifecycleAction;\n" +
+			"import com.liferay.portal.kernel.events.LifecycleEvent;\n" +
+			"import org.osgi.service.component.annotations.Component;\n" + "@Component(\n" +
+			"immediate = true, property = {\"key=login.events.pre\"},\n" + "service = LifecycleAction.class\n" + ")\n" +
+			"public class ServiceTest implements LifecycleAction {\n" +
+			"@Override public void processLifecycleEvent(LifecycleEvent lifecycleEvent) throws ActionException { }\n" +
+			"}";
 
-        assertTrue( apiOutput.toFile().exists() );
+		serviceFile.setContents(new ByteArrayInputStream(contents.getBytes()), IResource.FORCE, _monitor);
 
-        assertEquals( "com.liferay.test.api-1.0.0.jar", apiOutput.lastSegment() );
+		_verifyProject(project);
+	}
 
-        IBundleProject serviceBundle = LiferayCore.create( IBundleProject.class, service );
+	@Test
+	public void testProjectTemplateServiceBuilder() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        IPath serviceOutput = serviceBundle.getOutputBundle( true, _monitor );
+		op.setProjectName("service-builder-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("service-builder");
+		op.setPackageName("com.liferay.test");
 
-        assertNotNull( serviceOutput );
+		IProject parent = _create(op);
 
-        assertTrue( serviceOutput.toFile().exists() );
+		assertProjectExists(parent);
 
-        assertEquals( "com.liferay.test.service-1.0.0.jar", serviceOutput.lastSegment() );
-    }
+		IProject api = CoreUtil.getProject("service-builder-test-api");
 
-    @Test
-    public void testProjectTemplateServiceWrapper() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		assertProjectExists(api);
 
-        op.setProjectName( "service-wrapper-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "service-wrapper" );
-        op.setServiceName( "com.liferay.portal.kernel.service.UserLocalServiceWrapper" );
-        op.setComponentName( "MyServiceWrapper" );
+		IProject service = CoreUtil.getProject("service-builder-test-service");
 
-        createAndBuild(op);
-    }
+		assertProjectExists(service);
 
-    @Test
-    public void testProjectTemplateSimulationPanelEntry() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		api.build(IncrementalProjectBuilder.FULL_BUILD, _monitor);
 
-        op.setProjectName( "simulation-panel-entry-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "simulation-panel-entry" );
+		service.build(IncrementalProjectBuilder.FULL_BUILD, _monitor);
 
-        createAndBuild(op);
-    }
+		IBundleProject apiBundle = LiferayCore.create(IBundleProject.class, api);
 
-    @Test
-    public void testProjectTemplateSoyPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		Assert.assertNotNull(apiBundle);
 
-        op.setProjectName( "soy-portlet-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "soy-portlet" );
+		IPath apiOutput = apiBundle.getOutputBundle(true, _monitor);
 
-        createAndBuild(op);
-    }
+		assertFileExists(apiOutput);
 
-    @Test
-    public void testProjectTemplateSpringMvcPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		Assert.assertEquals("com.liferay.test.api-1.0.0.jar", apiOutput.lastSegment());
 
-        op.setProjectName( "spring-mvc-portlet-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "spring-mvc-portlet" );
+		IBundleProject serviceBundle = LiferayCore.create(IBundleProject.class, service);
 
-        IProject project = createAndBuild(op);
+		IPath serviceOutput = serviceBundle.getOutputBundle(true, _monitor);
 
-        project.refreshLocal( IResource.DEPTH_INFINITE, _monitor );
+		assertFileExists(serviceOutput);
 
-        assertTrue( project.getFile( "build/libs/spring-mvc-portlet-test.war" ).exists() );
-    }
+		Assert.assertEquals("com.liferay.test.service-1.0.0.jar", serviceOutput.lastSegment());
+	}
 
-    @Test
-    public void testProjectTemplateTemplateContextContributor() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+	@Test
+	public void testProjectTemplateServiceWrapper() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "template-context-contributor-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "template-context-contributor" );
+		op.setProjectName("service-wrapper-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("service-wrapper");
+		op.setServiceName("com.liferay.portal.kernel.service.UserLocalServiceWrapper");
+		op.setComponentName("MyServiceWrapper");
 
-        createAndBuild(op);
-    }
+		_createAndBuild(op);
+	}
 
-    @Test
-    public void testProjectTemplateTheme() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+	@Test
+	public void testProjectTemplateSimulationPanelEntry() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "theme-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "theme" );
+		op.setProjectName("simulation-panel-entry-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("simulation-panel-entry");
 
-        createAndBuild(op);
-    }
+		_createAndBuild(op);
+	}
 
-    @Test
-    public void testProjectTemplateThemeContributor() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+	@Test
+	public void testProjectTemplateSoyPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "theme-contributor-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "theme-contributor" );
+		op.setProjectName("soy-portlet-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("soy-portlet");
 
-        createAndBuild(op);
-    }
+		_createAndBuild(op);
+	}
 
-    @Test
-    public void testProjectTemplateWarHook() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+	@Test
+	public void testProjectTemplateSpringMvcPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        op.setProjectName( "war-hook-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "war-hook" );
+		op.setProjectName("spring-mvc-portlet-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("spring-mvc-portlet");
 
-        IProject project = createAndBuild(op);
+		IProject project = _createAndBuild(op);
 
-        project.refreshLocal( IResource.DEPTH_INFINITE, _monitor );
+		assertFileExists(project.getFile("build/libs/spring-mvc-portlet-test.war"));
+	}
 
-        assertTrue( project.getFile( "build/libs/war-hook-test.war" ).exists() );
-    }
+	@Test
+	public void testProjectTemplateTemplateContextContributor() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-    @Test
-    public void testProjectTemplateWarMvcPortlet() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+		op.setProjectName("template-context-contributor-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("template-context-contributor");
 
-        op.setProjectName( "war-mvc-portlet-test" );
-        op.setProjectProvider( "gradle-module" );
-        op.setProjectTemplateName( "war-mvc-portlet" );
+		_createAndBuild(op);
+	}
 
-        IProject project = createAndBuild(op);
+	@Test
+	public void testProjectTemplateTheme() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        project.refreshLocal( IResource.DEPTH_INFINITE, _monitor );
+		op.setProjectName("theme-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("theme");
 
-        assertTrue( project.getFile( "build/libs/war-mvc-portlet-test.war" ).exists() );
-    }
+		_createAndBuild(op);
+	}
 
-    private void verifyNpmPortletV71( NewLiferayModuleProjectOp op ) {
+	@Test
+	public void testProjectTemplateThemeContributor() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        IProject project = CoreUtil.getProject( op.getProjectName().content() );
+		op.setProjectName("theme-contributor-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("theme-contributor");
 
-        assertNotNull( project );
+		_createAndBuild(op);
+	}
 
-        IFile viewFile = project.getFile( "src/main/resources/META-INF/resources/view.jsp" );
+	@Test
+	public void testProjectTemplateWarHook() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        assertTrue( viewFile.exists() );
+		op.setProjectName("war-hook-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("war-hook");
 
-        String viewFileContent = FileUtil.readContents( viewFile.getLocation().toFile() );
+		IProject project = _createAndBuild(op);
 
-        assertTrue( viewFileContent.contains( "<aui:script require=\"<%= bootstrapRequire %>\">" ) );
-    }
+		assertFileExists(project.getFile("build/libs/war-hook-test.war"));
+	}
 
-    private void verifyProject( IProject project ) throws Exception
-    {
-        assertNotNull( project );
-        assertTrue( project.exists() );
+	@Test
+	public void testProjectTemplateWarMvcPortlet() throws Exception {
+		NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
-        assertTrue(project.getFile( "build.gradle" ).exists());
+		op.setProjectName("war-mvc-portlet-test");
+		op.setProjectProvider("gradle-module");
+		op.setProjectTemplateName("war-mvc-portlet");
 
-        project.build( IncrementalProjectBuilder.CLEAN_BUILD, _monitor );
+		IProject project = _createAndBuild(op);
 
-        Util.waitForBuildAndValidation();
+		assertFileExists(project.getFile("build/libs/war-mvc-portlet-test.war"));
+	}
 
-        project.build( IncrementalProjectBuilder.FULL_BUILD, _monitor );
+	private IProject _create(NewLiferayModuleProjectOp op) throws Exception {
+		Status status = op.execute(ProgressMonitorBridge.create(_monitor));
 
-        Util.waitForBuildAndValidation();
+		Assert.assertNotNull(status);
+		Assert.assertTrue(status.message(), status.ok());
 
-        IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+		Util.waitForBuildAndValidation();
 
-        assertNotNull( bundleProject );
+		Value<String> projectNameValue = op.getProjectName();
 
-        IPath outputBundle = bundleProject.getOutputBundle( true,_monitor );
+		return CoreUtil.getProject(projectNameValue.content());
+	}
 
-        assertNotNull( outputBundle );
+	private IProject _createAndBuild(NewLiferayModuleProjectOp op) throws Exception {
+		Status status = op.validation();
 
-        assertTrue( outputBundle.toFile().exists() );
-    }
+		Assert.assertTrue(status.message(), status.ok());
 
-    private IProgressMonitor _monitor = new NullProgressMonitor();
+		IProject project = _create(op);
+
+		_verifyProject(project);
+
+		project.refreshLocal(IResource.DEPTH_INFINITE, _monitor);
+
+		return project;
+	}
+
+	private void _verifyNpmPortletV71(NewLiferayModuleProjectOp op) {
+		Value<String> projectNameValue = op.getProjectName();
+
+		IProject project = CoreUtil.getProject(projectNameValue.content());
+
+		Assert.assertNotNull(project);
+
+		IFile viewFile = project.getFile("src/main/resources/META-INF/resources/view.jsp");
+
+		assertFileExists(viewFile);
+
+		String viewFileContent = FileUtil.readContents(viewFile);
+
+		Assert.assertTrue(viewFileContent.contains("<aui:script require=\"<%= bootstrapRequire %>\">"));
+	}
+
+	private void _verifyProject(IProject project) throws Exception {
+		Assert.assertTrue(FileUtil.exists(project));
+
+		Assert.assertTrue(FileUtil.exists(project.getFile("build.gradle")));
+
+		project.build(IncrementalProjectBuilder.CLEAN_BUILD, _monitor);
+
+		Util.waitForBuildAndValidation();
+
+		project.build(IncrementalProjectBuilder.FULL_BUILD, _monitor);
+
+		Util.waitForBuildAndValidation();
+
+		IBundleProject bundleProject = LiferayCore.create(IBundleProject.class, project);
+
+		Assert.assertNotNull(bundleProject);
+
+		IPath outputBundle = bundleProject.getOutputBundle(true, _monitor);
+
+		assertFileExists(outputBundle);
+	}
+
+	private IProgressMonitor _monitor = new NullProgressMonitor();
 
 }
