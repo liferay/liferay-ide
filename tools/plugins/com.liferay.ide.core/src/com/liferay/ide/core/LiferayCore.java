@@ -137,6 +137,10 @@ public class LiferayCore extends Plugin {
 		return _plugin;
 	}
 
+	public static IPath getDefaultStateLocation() {
+		return getDefault().getStateLocation();
+	}
+
 	public static synchronized ILiferayProjectImporter getImporter(String buildType) {
 		if (_importerReader == null) {
 			_importerReader = new LiferayProjectImporterReader();
