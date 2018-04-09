@@ -56,14 +56,17 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 
         if( server != null )
         {
-//            if( server.shouldPublish() && ServerCore.isAutoPublishing() )
-//            {
-//                server.publish( IServer.PUBLISH_INCREMENTAL, monitor );
-//            }
-
             IRuntime runtime = server.getRuntime();
 
+            if ( runtime == null) {
+                throw new CoreException( LiferayServerCore.createErrorStatus("Server's runtime is invalid.") );
+            }
+
             PortalRuntime portalRuntime = (PortalRuntime) runtime.loadAdapter( PortalRuntime.class, monitor );
+
+            if ( portalRuntime == null) {
+                throw new CoreException( LiferayServerCore.createErrorStatus("Server's portal runtime is invalid.") );
+            }
 
             IStatus status = portalRuntime.validate();
 

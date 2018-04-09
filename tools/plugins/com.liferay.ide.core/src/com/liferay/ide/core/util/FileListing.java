@@ -19,8 +19,13 @@ import java.io.FileNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.apache.commons.io.FileUtils;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -55,6 +60,10 @@ public class FileListing {
 		List<File> result = new ArrayList<>();
 
 		File[] filesAndDirs = aStartingDir.listFiles();
+
+		if ( ListUtil.isEmpty(filesAndDirs)) {
+			return Collections.emptyList();
+		}
 
 		List<File> filesDirs = Arrays.asList(filesAndDirs);
 
@@ -94,6 +103,22 @@ public class FileListing {
 		}
 
 		return result;
+	}
+
+	public static List<IPath> getFileListing(File aStartingDir, String fileType) {
+		Collection<File> listFilesCollection = FileUtils.listFiles(aStartingDir, new String[] {fileType}, true);
+
+		Stream<File> libStream = listFilesCollection.stream();
+
+		List<IPath> retVal = libStream.filter(
+			file -> file.exists()
+		).map(
+			file -> new Path(file.getPath())
+		).collect(
+			Collectors.toList()
+		);
+
+		return retVal;
 	}
 
 	/**

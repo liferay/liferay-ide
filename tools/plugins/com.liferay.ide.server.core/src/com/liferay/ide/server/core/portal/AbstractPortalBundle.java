@@ -18,7 +18,6 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.JavaUtil;
@@ -26,7 +25,6 @@ import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -112,26 +110,12 @@ public abstract class AbstractPortalBundle implements PortalBundle
 
         File bundleLibPath =  new File( getAppServerLibDir().toOSString());
 
-        List<File> libFiles;
-        try
+        if( FileUtil.exists( bundleLibPath ) )
         {
-            if( FileUtil.exists( bundleLibPath ) )
-            {
-                libFiles = FileListing.getFileListing( bundleLibPath );
-                for( File lib : libFiles )
-                {
-                    if( lib.exists() && lib.getName().endsWith( ".jar" ) ) //$NON-NLS-1$
-                    {
-                        libs.add( new Path( lib.getPath() ) );
-                    }
-                }
-            }
-        }
-        catch( FileNotFoundException e )
-        {
+            libs = FileListing.getFileListing(bundleLibPath, "jar");
         }
 
-        return libs.toArray( new IPath[libs.size()] );
+        return libs.toArray(new IPath[libs.size()]);
     }
 
     protected abstract IPath getAppServerLibDir();
@@ -305,9 +289,9 @@ public abstract class AbstractPortalBundle implements PortalBundle
 
     private String getPortalVersion( IPath portalDir, IPath[] extraLib)
     {
-        if( FileUtil.notExists( portalDir ) || ListUtil.isEmpty( extraLib ) )
+        if( FileUtil.notExists( portalDir ) )
         {
-            return null;
+            return Version.emptyVersion.toString();
         }
 
         String version = getConfigInfoFromCache( CONFIG_TYPE_VERSION, portalDir );
