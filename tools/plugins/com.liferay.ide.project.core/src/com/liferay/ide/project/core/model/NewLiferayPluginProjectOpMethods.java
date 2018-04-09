@@ -440,14 +440,6 @@ public class NewLiferayPluginProjectOpMethods {
 			return;
 		}
 
-		String lastSegment = baseLocation.lastSegment();
-
-		if ((baseLocation != null) && (baseLocation.segmentCount() > 0)) {
-			if (lastSegment.equals(projectName)) {
-				return;
-			}
-		}
-
 		Path newLocation = baseLocation.append(projectName);
 
 		op.setLocation(newLocation);
