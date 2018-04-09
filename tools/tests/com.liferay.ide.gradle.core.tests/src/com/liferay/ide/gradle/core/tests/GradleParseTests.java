@@ -1,8 +1,18 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package com.liferay.ide.gradle.core.tests;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.gradle.core.parser.FindDependenciesVisitor;
@@ -11,204 +21,193 @@ import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * @author Lovett Li
  */
-public class GradleParseTests
-{
+public class GradleParseTests {
 
-    private static final File outputfile = new File( "generated/test/testbuild.gradle" );
+	@Test
+	public void addDependenceInClosureLine() throws IOException {
+		File inputFile = new File("projects/testParseInput/testParse5.gradle");
 
-    @Before
-    public void setUp() throws IOException
-    {
-        if( outputfile.exists() )
-        {
-            assertTrue( outputfile.delete() );
-        }
+		GradleDependencyUpdater updater = new GradleDependencyUpdater(inputFile);
 
-        outputfile.getParentFile().mkdirs();
+		FindDependenciesVisitor visitor = updater.insertDependency(
+			"\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"");
 
-        assertTrue( outputfile.createNewFile() );
-    }
+		int dependenceLineNum = visitor.getDependenceLineNum();
 
-    @Test
-    public void addDependenceSkipComment() throws IOException
-    {
-        final File inputFile = new File( "projects/testParseInput/testParse.gradle" );
+		Assert.assertEquals(24, dependenceLineNum);
 
-        GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
+		Files.write(_outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8);
 
-        FindDependenciesVisitor visitor = updater.insertDependency(
-            "\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"" );
+		File expectedOutputFile = new File("projects/testParseOutput/testParse5.gradle");
 
-        int dependenceLineNum = visitor.getDependenceLineNum();
+		Assert.assertEquals(
+			_encoding(CoreUtil.readStreamToString(Files.newInputStream(expectedOutputFile.toPath()))),
+			_encoding(CoreUtil.readStreamToString(Files.newInputStream(_outputfile.toPath()))));
+	}
 
-        assertEquals( 27, dependenceLineNum );
+	@Test
+	public void addDependenceInSameLine() throws IOException {
+		File inputFile = new File("projects/testParseInput/testParse4.gradle");
 
-        Files.write( outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8 );
+		GradleDependencyUpdater updater = new GradleDependencyUpdater(inputFile);
 
-        final File expectedOutputFile = new File( "projects/testParseOutput/testParse.gradle" );
+		FindDependenciesVisitor visitor = updater.insertDependency(
+			"\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"");
 
-        assertEquals(
-            encoding( CoreUtil.readStreamToString( Files.newInputStream( expectedOutputFile.toPath() ) ) ),
-            encoding( CoreUtil.readStreamToString( Files.newInputStream( outputfile.toPath() ) ) ) );
-    }
+		int dependenceLineNum = visitor.getDependenceLineNum();
 
-    @Test
-    public void addDependenceIntoEmptyBlock() throws IOException
-    {
-        final File inputFile = new File( "projects/testParseInput/testParse2.gradle" );
+		Assert.assertEquals(23, dependenceLineNum);
 
-        GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
+		Files.write(_outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8);
 
-        FindDependenciesVisitor visitor = updater.insertDependency(
-            "\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"" );
+		File expectedOutputFile = new File("projects/testParseOutput/testParse4.gradle");
 
-        int dependenceLineNum = visitor.getDependenceLineNum();
+		Assert.assertEquals(
+			_encoding(CoreUtil.readStreamToString(Files.newInputStream(expectedOutputFile.toPath()))),
+			_encoding(CoreUtil.readStreamToString(Files.newInputStream(_outputfile.toPath()))));
+	}
 
-        assertEquals( 24, dependenceLineNum );
+	@Test
+	public void addDependenceIntoEmptyBlock() throws IOException {
+		File inputFile = new File("projects/testParseInput/testParse2.gradle");
 
-        Files.write( outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8 );
+		GradleDependencyUpdater updater = new GradleDependencyUpdater(inputFile);
 
-        final File expectedOutputFile = new File( "projects/testParseOutput/testParse2.gradle" );
+		FindDependenciesVisitor visitor = updater.insertDependency(
+			"\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"");
 
-        assertEquals(
-            encoding( CoreUtil.readStreamToString( Files.newInputStream( expectedOutputFile.toPath() ) ) ),
-            encoding( CoreUtil.readStreamToString( Files.newInputStream( outputfile.toPath() ) ) ) );
-    }
+		int dependenceLineNum = visitor.getDependenceLineNum();
 
-    @Test
-    public void addDependenceWithoutDendendenceBlock() throws IOException
-    {
-        final File inputFile = new File( "projects/testParseInput/testParse3.gradle" );
+		Assert.assertEquals(24, dependenceLineNum);
 
-        GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
+		Files.write(_outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8);
 
-        FindDependenciesVisitor visitor = updater.insertDependency(
-            "\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"" );
+		File expectedOutputFile = new File("projects/testParseOutput/testParse2.gradle");
 
-        int dependenceLineNum = visitor.getDependenceLineNum();
+		Assert.assertEquals(
+			_encoding(CoreUtil.readStreamToString(Files.newInputStream(expectedOutputFile.toPath()))),
+			_encoding(CoreUtil.readStreamToString(Files.newInputStream(_outputfile.toPath()))));
+	}
 
-        assertEquals( -1, dependenceLineNum );
+	@Test
+	public void addDependenceSkipComment() throws IOException {
+		File inputFile = new File("projects/testParseInput/testParse.gradle");
 
-        Files.write( outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8 );
+		GradleDependencyUpdater updater = new GradleDependencyUpdater(inputFile);
 
-        final File expectedOutputFile = new File( "projects/testParseOutput/testParse3.gradle" );
+		FindDependenciesVisitor visitor = updater.insertDependency(
+			"\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"");
 
-        assertEquals(
-        	encoding( CoreUtil.readStreamToString( Files.newInputStream( expectedOutputFile.toPath() ) ) ),
-            encoding( CoreUtil.readStreamToString( Files.newInputStream( outputfile.toPath() ) ) ) );
-    }
+		int dependenceLineNum = visitor.getDependenceLineNum();
 
-    @Test
-    public void addDependenceInSameLine() throws IOException
-    {
-        final File inputFile = new File( "projects/testParseInput/testParse4.gradle" );
+		Assert.assertEquals(27, dependenceLineNum);
 
-        GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
+		Files.write(_outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8);
 
-        FindDependenciesVisitor visitor = updater.insertDependency(
-            "\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"" );
+		File expectedOutputFile = new File("projects/testParseOutput/testParse.gradle");
 
-        int dependenceLineNum = visitor.getDependenceLineNum();
+		Assert.assertEquals(
+			_encoding(CoreUtil.readStreamToString(Files.newInputStream(expectedOutputFile.toPath()))),
+			_encoding(CoreUtil.readStreamToString(Files.newInputStream(_outputfile.toPath()))));
+	}
 
-        assertEquals( 23, dependenceLineNum );
+	@Test
+	public void addDependenceWithoutDendendenceBlock() throws IOException {
+		File inputFile = new File("projects/testParseInput/testParse3.gradle");
 
-        Files.write( outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8 );
+		GradleDependencyUpdater updater = new GradleDependencyUpdater(inputFile);
 
-        final File expectedOutputFile = new File( "projects/testParseOutput/testParse4.gradle" );
+		FindDependenciesVisitor visitor = updater.insertDependency(
+			"\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"");
 
-        assertEquals(
-        	encoding( CoreUtil.readStreamToString( Files.newInputStream( expectedOutputFile.toPath() ) ) ),
-            encoding( CoreUtil.readStreamToString( Files.newInputStream( outputfile.toPath() ) ) ) );
-    }
+		int dependenceLineNum = visitor.getDependenceLineNum();
 
-    @Test
-    public void addDependenceInClosureLine() throws IOException
-    {
-        final File inputFile = new File( "projects/testParseInput/testParse5.gradle" );
+		Assert.assertEquals(-1, dependenceLineNum);
 
-        GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
+		Files.write(_outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8);
 
-        FindDependenciesVisitor visitor = updater.insertDependency(
-            "\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"" );
+		File expectedOutputFile = new File("projects/testParseOutput/testParse3.gradle");
 
-        int dependenceLineNum = visitor.getDependenceLineNum();
+		Assert.assertEquals(
+			_encoding(CoreUtil.readStreamToString(Files.newInputStream(expectedOutputFile.toPath()))),
+			_encoding(CoreUtil.readStreamToString(Files.newInputStream(_outputfile.toPath()))));
+	}
 
-        assertEquals( 24, dependenceLineNum );
+	@Test
+	public void getAllDependencies() throws IOException {
+		File inputFile = new File("projects/testParseInput/testDependencies.gradle");
 
-        Files.write( outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8 );
+		GradleDependencyUpdater updater = new GradleDependencyUpdater(inputFile);
 
-        final File expectedOutputFile = new File( "projects/testParseOutput/testParse5.gradle" );
+		List<GradleDependency> allDependence = updater.getAllDependencies();
 
-        assertEquals(
-        	encoding( CoreUtil.readStreamToString( Files.newInputStream( expectedOutputFile.toPath() ) ) ),
-            encoding( CoreUtil.readStreamToString( Files.newInputStream( outputfile.toPath() ) ) ) );
-    }
+		Assert.assertEquals("", 3, allDependence.size());
+	}
 
-    @Test
-    public void getAllDependencies() throws IOException
-    {
-        final File inputFile = new File( "projects/testParseInput/testDependencies.gradle" );
+	@Test
+	public void getAllDependenciesShortFormat() throws IOException {
+		File inputFile = new File("projects/testParseInput/testDependenciesShortFormat.gradle");
 
-        GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
+		GradleDependencyUpdater updater = new GradleDependencyUpdater(inputFile);
 
-        List<GradleDependency> allDependence = updater.getAllDependencies();
+		List<GradleDependency> allDependencies = updater.getAllDependencies();
 
-        assertEquals( 3, allDependence.size() );
-    }
+		Assert.assertEquals("", 3, allDependencies.size());
+	}
 
-    @Test
-    public void getAllDependenciesShortFormat() throws IOException
-    {
-        final File inputFile = new File( "projects/testParseInput/testDependenciesShortFormat.gradle" );
+	@Test
+	public void getAllDependenciesShortFormatAndLongFormat() throws IOException {
+		File inputFile = new File("projects/testParseInput/testDependenciesShortFormatAndLongFormat.gradle");
 
-        GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
+		GradleDependencyUpdater updater = new GradleDependencyUpdater(inputFile);
 
-        List<GradleDependency> allDependencies = updater.getAllDependencies();
+		List<GradleDependency> allDependencies = updater.getAllDependencies();
 
-        assertEquals( 3, allDependencies.size() );
-    }
+		Assert.assertEquals("", 3, allDependencies.size());
+	}
 
-    @Test
-    public void getAllDependenciesShortFormatAndLongFormat() throws IOException
-    {
-        final File inputFile = new File( "projects/testParseInput/testDependenciesShortFormatAndLongFormat.gradle" );
+	@Before
+	public void setUp() throws IOException {
+		if (_outputfile.exists()) {
+			Assert.assertTrue(_outputfile.delete());
+		}
 
-        GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
+		File parentFile = _outputfile.getParentFile();
 
-        List<GradleDependency> allDependencies = updater.getAllDependencies();
+		parentFile.mkdirs();
 
-        assertEquals( 3, allDependencies.size() );
-    }
+		Assert.assertTrue(_outputfile.createNewFile());
+	}
 
-    private String encoding( String contents )
-    {
+	private String _encoding(String contents) {
+		if (CoreUtil.isWindows()) {
+			contents = contents.replace("\r\n", "\n");
 
-        if( CoreUtil.isWindows() )
-        {
-            contents = contents.replace( "\r\n", "\n" );
+			return contents;
+		}
+		else if (CoreUtil.isMac()) {
+			contents = contents.replace("\r", "\n");
 
-            return contents;
-        }
-        else if( CoreUtil.isMac() )
-        {
-            contents = contents.replace( "\r", "\n" );
+			return contents;
+		}
+		else {
+			return contents;
+		}
+	}
 
-            return contents;
-        }
-        else
-        {
-            return contents;
-        }
-    }
+	private static final File _outputfile = new File("generated/test/testbuild.gradle");
 
 }

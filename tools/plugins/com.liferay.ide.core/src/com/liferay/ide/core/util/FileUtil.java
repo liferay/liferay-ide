@@ -430,6 +430,10 @@ public class FileUtil {
 		return false;
 	}
 
+	public static String readContents(IFile file) {
+		return readContents(getFile(file), false);
+	}
+
 	public static String readContents(File file) {
 		return readContents(file, false);
 	}

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,15 +10,9 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.gradle.core.tests;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
@@ -29,190 +23,194 @@ import com.liferay.ide.gradle.core.LiferayGradleProject;
 import com.liferay.ide.project.core.workspace.ImportLiferayWorkspaceOp;
 
 import java.io.File;
+
 import java.nio.file.Files;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * @author Gregory Amerson
  */
-public class ImportWorkspaceProjectTests
-{
-    @Before
-    public void clearWorkspace() throws Exception
-    {
-        Util.deleteAllWorkspaceProjects();
-    }
+public class ImportWorkspaceProjectTests {
 
-    @Test
-    public void testImportLiferayWorkspace() throws Exception
-    {
-        LiferayGradleProject rootProject = Util.fullImportGradleProject( "projects/testWorkspace" );
+	@Before
+	public void clearWorkspace() throws Exception {
+		Util.deleteAllWorkspaceProjects();
+	}
 
-        assertNotNull( rootProject );
+	@Test
+	public void testImportLiferayWorkspace() throws Exception {
+		LiferayGradleProject rootProject = Util.fullImportGradleProject("projects/testWorkspace");
 
-        Util.waitForBuildAndValidation();
+		Assert.assertNotNull(rootProject);
 
-        assertLiferayProject( "jstl.test" );
-        assertLiferayProject( "roster-api" );
-        assertLiferayProject( "roster-service" );
-        assertLiferayProject( "roster-web" );
-        assertLiferayProject( "sample-portlet" );
-        assertLiferayProject( "sample-model-listener" );
-        assertLiferayProject( "sample-theme" );
-        assertSourceFolders( "sample-theme", "src" );
-    }
+		Util.waitForBuildAndValidation();
 
-    @Test
-    public void testImportLiferayWorkspaceEE() throws Exception
-    {
-        LiferayGradleProject eeProject = Util.fullImportGradleProject( "projects/liferay-workspace-ee" );
+		_assertLiferayProject("jstl.test");
+		_assertLiferayProject("roster-api");
+		_assertLiferayProject("roster-service");
+		_assertLiferayProject("roster-web");
+		_assertLiferayProject("sample-portlet");
+		_assertLiferayProject("sample-model-listener");
+		_assertLiferayProject("sample-theme");
+		_assertSourceFolders("sample-theme", "src");
+	}
 
-        assertNotNull( eeProject );
+	@Test
+	public void testImportLiferayWorkspaceCustomBundleURL() throws Exception {
+		File src = new File("projects/testWorkspaceCustomBundleUrl");
 
-        Util.waitForBuildAndValidation();
+		IPath location = CoreUtil.getWorkspaceRootLocation();
 
-        assertNotLiferayProject("liferay-workspace-ee");
-        assertNotLiferayProject("aws");
-        assertNotLiferayProject("docker");
-        assertNotLiferayProject("jenkins");
-    }
+		File dst = new File(location.toFile(), src.getName());
 
-    @Test
-    public void testImportLiferayWorkspaceDontOverrideGradleProperties() throws Exception
-    {
-        IWorkspace ws = ResourcesPlugin.getWorkspace();
-        IWorkspaceRoot root = ws.getRoot();
+		TestUtil.copyDir(src, dst);
 
-        File src = new File( "projects/testWorkspace" );
-        File dst = new File( root.getLocation().toFile(), src.getName() );
+		ImportLiferayWorkspaceOp op = ImportLiferayWorkspaceOp.TYPE.instantiate();
 
-        TestUtil.copyDir( src, dst );
+		op.setWorkspaceLocation(dst.getAbsolutePath());
 
-        ImportLiferayWorkspaceOp op = ImportLiferayWorkspaceOp.TYPE.instantiate();
+		Value<String> bundleUrlValue = op.getBundleUrl();
 
-        op.setWorkspaceLocation( dst.getAbsolutePath() );
-        op.setProvisionLiferayBundle( true );
+		String bundleUrl = bundleUrlValue.content(true);
 
-        op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+		Assert.assertEquals(
+			"https://api.liferay.com/downloads/portal/7.0.10.6/liferay-dxp-digital-enterprise-tomcat-7.0-sp6-20171010144253003.zip",
+			bundleUrl);
+	}
 
-        IProject eeProject = CoreUtil.getProject( "testWorkspace" );
+	@Test
+	public void testImportLiferayWorkspaceDontOverrideGradleProperties() throws Exception {
+		File src = new File("projects/testWorkspace");
 
-        assertNotNull( eeProject );
+		IPath location = CoreUtil.getWorkspaceRootLocation();
 
-        Util.waitForBuildAndValidation();
+		File dst = new File(location.toFile(), src.getName());
 
-        assertNotLiferayProject("testWorkspace");
-        assertLiferayProject( "sample-portlet" );
+		TestUtil.copyDir(src, dst);
 
-        File originalProperities = new File( "projects/testWorkspace/gradle.properties" );
-        File importedProperties = eeProject.getFile( "gradle.properties" ).getLocation().toFile();
+		ImportLiferayWorkspaceOp op = ImportLiferayWorkspaceOp.TYPE.instantiate();
 
-        String originalContent = CoreUtil.readStreamToString( Files.newInputStream( originalProperities.toPath() ) );
-        String importedContent = CoreUtil.readStreamToString( Files.newInputStream( importedProperties.toPath() ) );
+		op.setWorkspaceLocation(dst.getAbsolutePath());
+		op.setProvisionLiferayBundle(true);
 
-        originalContent = originalContent.replaceAll( "\r", "" );
-        importedContent = importedContent.replaceAll( "\r", "" );
+		op.execute(ProgressMonitorBridge.create(new NullProgressMonitor()));
 
-        assertEquals( importedContent, originalContent, importedContent );
-    }
+		IProject eeProject = CoreUtil.getProject("testWorkspace");
 
-    @Test
-    public void testImportLiferayWorkspaceInitBundle() throws Exception
-    {
-        IWorkspace ws = ResourcesPlugin.getWorkspace();
-        IWorkspaceRoot root = ws.getRoot();
+		Assert.assertNotNull(eeProject);
 
-        File src = new File( "projects/testWorkspace" );
-        File dst = new File( root.getLocation().toFile(), src.getName() );
+		Util.waitForBuildAndValidation();
 
-        TestUtil.copyDir( src, dst );
+		_assertNotLiferayProject("testWorkspace");
+		_assertLiferayProject("sample-portlet");
 
-        ImportLiferayWorkspaceOp op = ImportLiferayWorkspaceOp.TYPE.instantiate();
+		File originalProperities = new File("projects/testWorkspace/gradle.properties");
 
-        op.setWorkspaceLocation( dst.getAbsolutePath() );
-        op.setProvisionLiferayBundle( true );
+		IFile file = eeProject.getFile("gradle.properties");
 
-        String bundleUrl = op.getBundleUrl().content( true );
+		IPath gradleLocation = file.getLocation();
 
-        assertEquals(
-            "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip",
-            bundleUrl );
+		File importedProperties = gradleLocation.toFile();
 
-        final NullProgressMonitor monitor = new NullProgressMonitor();
+		String originalContent = CoreUtil.readStreamToString(Files.newInputStream(originalProperities.toPath()));
+		String importedContent = CoreUtil.readStreamToString(Files.newInputStream(importedProperties.toPath()));
 
-        op.execute( ProgressMonitorBridge.create( monitor ) );
+		originalContent = originalContent.replaceAll("\r", "");
+		importedContent = importedContent.replaceAll("\r", "");
 
-        IProject eeProject = CoreUtil.getProject( "testWorkspace" );
+		Assert.assertEquals(importedContent, originalContent, importedContent);
+	}
 
-        assertNotNull( eeProject );
+	@Test
+	public void testImportLiferayWorkspaceEE() throws Exception {
+		LiferayGradleProject eeProject = Util.fullImportGradleProject("projects/liferay-workspace-ee");
 
-        Util.waitForBuildAndValidation();
+		Assert.assertNotNull(eeProject);
 
-        eeProject.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+		Util.waitForBuildAndValidation();
 
-        final IFolder bundlesFolder = eeProject.getFolder( "bundles" );
+		_assertNotLiferayProject("liferay-workspace-ee");
+		_assertNotLiferayProject("aws");
+		_assertNotLiferayProject("docker");
+		_assertNotLiferayProject("jenkins");
+	}
 
-        assertTrue( bundlesFolder.exists() );
-    }
+	@Test
+	public void testImportLiferayWorkspaceInitBundle() throws Exception {
+		File src = new File("projects/testWorkspace");
 
-    @Test
-    public void testImportLiferayWorkspaceCustomBundleURL() throws Exception
-    {
-        IWorkspace ws = ResourcesPlugin.getWorkspace();
-        IWorkspaceRoot root = ws.getRoot();
+		IPath location = CoreUtil.getWorkspaceRootLocation();
 
-        File src = new File( "projects/testWorkspaceCustomBundleUrl" );
-        File dst = new File( root.getLocation().toFile(), src.getName() );
+		File dst = new File(location.toFile(), src.getName());
 
-        TestUtil.copyDir( src, dst );
+		TestUtil.copyDir(src, dst);
 
-        ImportLiferayWorkspaceOp op = ImportLiferayWorkspaceOp.TYPE.instantiate();
+		ImportLiferayWorkspaceOp op = ImportLiferayWorkspaceOp.TYPE.instantiate();
 
-        op.setWorkspaceLocation( dst.getAbsolutePath() );
+		op.setWorkspaceLocation(dst.getAbsolutePath());
+		op.setProvisionLiferayBundle(true);
 
-        String bundleUrl = op.getBundleUrl().content( true );
+		Value<String> bundleUrlValue = op.getBundleUrl();
 
-        assertEquals(
-            "https://api.liferay.com/downloads/portal/7.0.10.6/liferay-dxp-digital-enterprise-tomcat-7.0-sp6-20171010144253003.zip",
-            bundleUrl );
-    }
+		String bundleUrl = bundleUrlValue.content(true);
 
-    private void assertSourceFolders( String projectName, String expectedSourceFolderName )
-    {
-        IProject project = CoreUtil.getProject( projectName );
+		Assert.assertEquals(
+			"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip",
+			bundleUrl);
 
-        assertTrue( "Project " + projectName + " doesn't exist.", project.exists() );
+		NullProgressMonitor monitor = new NullProgressMonitor();
 
-        ILiferayProject liferayProject = LiferayCore.create( project );
-        IFolder[] srcFolders = liferayProject.getSourceFolders();
+		op.execute(ProgressMonitorBridge.create(monitor));
 
-        assertEquals( expectedSourceFolderName, srcFolders[0].getName() );
-    }
+		IProject eeProject = CoreUtil.getProject("testWorkspace");
 
-    private void assertLiferayProject( String projectName )
-    {
-        IProject project = CoreUtil.getProject( projectName );
+		Assert.assertNotNull(eeProject);
 
-        assertTrue( "Project " + projectName + " doesn't exist.", project.exists() );
-        assertTrue( "Project " + projectName + " doesn't haven liferay nature", LiferayNature.hasNature( project ) );
-    }
+		Util.waitForBuildAndValidation();
 
-    private void assertNotLiferayProject( String projectName )
-    {
-        IProject project = CoreUtil.getProject( projectName );
+		eeProject.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 
-        assertTrue( "Project " + projectName + " doesn't exist.", project.exists() );
-        assertFalse( "Project " + projectName + " has a liferay nature", LiferayNature.hasNature( project ) );
-    }
+		IFolder bundlesFolder = eeProject.getFolder("bundles");
+
+		Assert.assertTrue(bundlesFolder.exists());
+	}
+
+	private void _assertLiferayProject(String projectName) {
+		IProject project = CoreUtil.getProject(projectName);
+
+		Assert.assertTrue("Project " + projectName + " doesn't exist.", project.exists());
+		Assert.assertTrue("Project " + projectName + " doesn't haven liferay nature", LiferayNature.hasNature(project));
+	}
+
+	private void _assertNotLiferayProject(String projectName) {
+		IProject project = CoreUtil.getProject(projectName);
+
+		Assert.assertTrue("Project " + projectName + " doesn't exist.", project.exists());
+		Assert.assertFalse("Project " + projectName + " has a liferay nature", LiferayNature.hasNature(project));
+	}
+
+	private void _assertSourceFolders(String projectName, String expectedSourceFolderName) {
+		IProject project = CoreUtil.getProject(projectName);
+
+		Assert.assertTrue("Project " + projectName + " doesn't exist.", project.exists());
+
+		ILiferayProject liferayProject = LiferayCore.create(project);
+
+		IFolder[] srcFolders = liferayProject.getSourceFolders();
+
+		Assert.assertEquals(expectedSourceFolderName, srcFolders[0].getName());
+	}
 
 }

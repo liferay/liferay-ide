@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,8 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
+
 package com.liferay.ide.core.tests;
 
 import com.liferay.ide.core.util.FileUtil;
@@ -22,125 +22,114 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
 import java.nio.file.Files;
 
+import junit.framework.TestCase;
+
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.wst.validation.internal.operations.ValidatorManager;
-
-import junit.framework.TestCase;
-
 
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class TestUtil
-{
+@SuppressWarnings("restriction")
+public class TestUtil {
 
-    public static void copyDir( File src, File dst ) throws IOException
-    {
-        copyDir( src, dst, true );
-    }
+	public static void copyDir(File src, File dst) throws IOException {
+		_copyDir(src, dst, true);
+	}
 
-    private static void copyDir( File src, File dst, boolean deleteDst ) throws IOException
-    {
-        if( !src.isDirectory() )
-        {
-            throw new IllegalArgumentException( "Not a directory:" + src.getAbsolutePath() );
-        }
+	public static void failTest(Exception e) {
+		StringWriter s = new StringWriter();
 
-        if( deleteDst )
-        {
-            FileUtil.deleteDir( dst, true );
-        }
+		e.printStackTrace(new PrintWriter(s));
 
-        dst.mkdirs();
+		TestCase.fail(s.toString());
+	}
 
-        File[] files = src.listFiles();
+	public static void waitForBuildAndValidation() throws Exception {
+		IWorkspaceRoot root = null;
 
-        if( files != null )
-        {
-            for( int i = 0; i < files.length; i++ )
-            {
-                File file = files[i];
+		IJobManager manager = Job.getJobManager();
 
-                if( file.canRead() )
-                {
-                    File dstChild = new File( dst, file.getName() );
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
-                    if( file.isDirectory() )
-                    {
-                        copyDir( file, dstChild, false );
-                    }
-                    else
-                    {
-                        copyFile( file, dstChild );
-                    }
-                }
-            }
-        }
-    }
+		try {
+			workspace.checkpoint(true);
 
-    private static void copyFile( File src, File dst ) throws IOException
-    {
-        BufferedInputStream in = new BufferedInputStream( Files.newInputStream( src.toPath() ) );
-        BufferedOutputStream out = new BufferedOutputStream( Files.newOutputStream( dst.toPath() ) );
+			manager.join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
+			manager.join(ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor());
+			manager.join(ValidatorManager.VALIDATOR_JOB_FAMILY, new NullProgressMonitor());
+			manager.join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
+			Thread.sleep(200);
+			manager.beginRule(root = workspace.getRoot(), null);
+		}
+		catch (InterruptedException ie) {
+			failTest(ie);
+		}
+		catch (IllegalArgumentException iae) {
+			failTest(iae);
+		}
+		catch (OperationCanceledException oce) {
+			failTest(oce);
+		}
+		finally {
+			if (root != null) {
+				manager.endRule(root);
+			}
+		}
+	}
 
-        byte[] buf = new byte[10240];
-        int len;
-        while( ( len = in.read( buf ) ) != -1 )
-        {
-            out.write( buf, 0, len );
-        }
+	private static void _copyDir(File src, File dst, boolean deleteDst) throws IOException {
+		if (!src.isDirectory()) {
+			throw new IllegalArgumentException("Not a directory:" + src.getAbsolutePath());
+		}
 
-        out.close();
-        in.close();
-    }
+		if (deleteDst) {
+			FileUtil.deleteDir(dst, true);
+		}
 
-    public static void waitForBuildAndValidation() throws Exception
-    {
-        IWorkspaceRoot root = null;
+		dst.mkdirs();
 
-        try
-        {
-            ResourcesPlugin.getWorkspace().checkpoint( true );
-            Job.getJobManager().join( ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor() );
-            Job.getJobManager().join( ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor() );
-            Job.getJobManager().join( ValidatorManager.VALIDATOR_JOB_FAMILY, new NullProgressMonitor() );
-            Job.getJobManager().join( ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor() );
-            Thread.sleep( 200 );
-            Job.getJobManager().beginRule( root = ResourcesPlugin.getWorkspace().getRoot(), null );
-        }
-        catch( InterruptedException e )
-        {
-            failTest( e );
-        }
-        catch( IllegalArgumentException e )
-        {
-            failTest( e );
-        }
-        catch( OperationCanceledException e )
-        {
-            failTest( e );
-        }
-        finally
-        {
-            if( root != null )
-            {
-                Job.getJobManager().endRule( root );
-            }
-        }
-    }
+		File[] files = src.listFiles();
 
-    public static void failTest( Exception e )
-    {
-        StringWriter s = new StringWriter();
-        e.printStackTrace( new PrintWriter( s ) );
-        TestCase.fail( s.toString() );
-    }
+		if (files != null) {
+			for (File file : files) {
+				if (file.canRead()) {
+					File dstChild = new File(dst, file.getName());
+
+					if (file.isDirectory()) {
+						_copyDir(file, dstChild, false);
+					}
+					else {
+						_copyFile(file, dstChild);
+					}
+				}
+			}
+		}
+	}
+
+	private static void _copyFile(File src, File dst) throws IOException {
+		BufferedInputStream in = new BufferedInputStream(Files.newInputStream(src.toPath()));
+		BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(dst.toPath()));
+
+		byte[] buf = new byte[10240];
+
+		int len;
+
+		while ((len = in.read(buf)) != -1) {
+			out.write(buf, 0, len);
+		}
+
+		out.close();
+		in.close();
+	}
 
 }

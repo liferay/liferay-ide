@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,30 +10,26 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
+ */
 
 package com.liferay.ide.core.tests;
-
-import static org.junit.Assert.assertEquals;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author Gregory Amerson
  */
-public class CoreUtilTests extends BaseTests
-{
+public class CoreUtilTests extends BaseTests {
 
-    @Test
-    public void compareVersions() throws Exception
-    {
-        assertEquals( 0, CoreUtil.compareVersions( ILiferayConstants.V601, ILiferayConstants.V601 ) );
-        assertEquals( 1, CoreUtil.compareVersions( ILiferayConstants.V620, ILiferayConstants.V610 ) );
-        assertEquals( -1, CoreUtil.compareVersions( ILiferayConstants.V610, ILiferayConstants.V620 ) );
-    }
+	@Test
+	public void compareVersions() throws Exception {
+		Assert.assertEquals(0, CoreUtil.compareVersions(ILiferayConstants.V601, ILiferayConstants.V601));
+		Assert.assertEquals(1, CoreUtil.compareVersions(ILiferayConstants.V620, ILiferayConstants.V610));
+		Assert.assertEquals(-1, CoreUtil.compareVersions(ILiferayConstants.V610, ILiferayConstants.V620));
+	}
 
 }
