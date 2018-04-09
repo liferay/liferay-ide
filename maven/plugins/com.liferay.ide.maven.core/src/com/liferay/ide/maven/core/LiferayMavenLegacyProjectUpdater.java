@@ -345,11 +345,7 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 
 				String tempArtifactId = artifactIdNode.getTextContent();
 
-				Node versionNode = dependency.getElementsByTagName("version").item(0);
-
-				String tempVersion = versionNode.getTextContent();
-
-				if (groupId.equals(tempGroupId) && artifactId.equals(tempArtifactId) && version.equals(tempVersion)) {
+				if (groupId.equals(tempGroupId) && artifactId.equals(tempArtifactId)) {
 					exist = true;
 				}
 			}
