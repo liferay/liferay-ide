@@ -20,12 +20,12 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import java.nio.file.Files;
-
-import junit.framework.TestCase;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -35,6 +35,8 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.wst.validation.internal.operations.ValidatorManager;
+
+import junit.framework.TestCase;
 
 /**
  * @author Gregory Amerson
@@ -117,19 +119,18 @@ public class TestUtil {
 	}
 
 	private static void _copyFile(File src, File dst) throws IOException {
-		BufferedInputStream in = new BufferedInputStream(Files.newInputStream(src.toPath()));
-		BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(dst.toPath()));
+		try(InputStream inputStream = Files.newInputStream(src.toPath());
+				BufferedInputStream in = new BufferedInputStream(inputStream);
+				OutputStream outputStream = Files.newOutputStream(dst.toPath());
+				BufferedOutputStream out = new BufferedOutputStream(outputStream)){
+			byte[] buf = new byte[10240];
 
-		byte[] buf = new byte[10240];
+			int len;
 
-		int len;
-
-		while ((len = in.read(buf)) != -1) {
-			out.write(buf, 0, len);
+			while ((len = in.read(buf)) != -1) {
+				out.write(buf, 0, len);
+			}
 		}
-
-		out.close();
-		in.close();
 	}
 
 }

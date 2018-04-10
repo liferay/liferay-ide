@@ -175,87 +175,91 @@ public class PropertiesFileChecker {
 	}
 
 	private Map<String, List<KeyInfo>> _parse(InputStream input) throws IOException {
-		LineReader lr = new LineReader(new InputStreamReader(input));
 		Map<String, List<KeyInfo>> keyInfos = new HashMap<>();
-		char[] convtBuf = new char[1024];
-		int[] limit;
-		int keyLen;
-		int valueStart;
-		char c;
-		boolean hasSep;
-		boolean precedingBackslash;
-		int lineNumber = 0;
 
-		while ((limit = lr.readLine())[0] >= 0) {
-			lineNumber++;
-			lineNumber += limit[2];
-			c = 0;
-			keyLen = 0;
-			valueStart = limit[0];
-			hasSep = false;
+		try(InputStreamReader inputReader = new InputStreamReader(input)){
+			LineReader lr = new LineReader(inputReader);
 
-			// System.out.println("line=<" + new String(lineBuf, 0, limit) +
-			// ">");
+			char[] convtBuf = new char[1024];
+			int[] limit;
+			int keyLen;
+			int valueStart;
+			char c;
+			boolean hasSep;
+			boolean precedingBackslash;
+			int lineNumber = 0;
 
-			precedingBackslash = false;
+			while ((limit = lr.readLine())[0] >= 0) {
+				lineNumber++;
+				lineNumber += limit[2];
+				c = 0;
+				keyLen = 0;
+				valueStart = limit[0];
+				hasSep = false;
 
-			while (keyLen < limit[0]) {
-				c = lr._lineBuf[keyLen];
+				// System.out.println("line=<" + new String(lineBuf, 0, limit) +
+				// ">");
 
-				// need check if escaped.
+				precedingBackslash = false;
 
-				if (((c == '=') || (c == ':')) && !precedingBackslash) {
-					valueStart = keyLen + 1;
-					hasSep = true;
+				while (keyLen < limit[0]) {
+					c = lr._lineBuf[keyLen];
 
-					break;
-				}
-				else if (((c == ' ') || (c == '\t') || (c == '\f')) && !precedingBackslash) {
-					valueStart = keyLen + 1;
+					// need check if escaped.
 
-					break;
-				}
-
-				if (c == '\\') {
-					precedingBackslash = !precedingBackslash;
-				}
-				else {
-					precedingBackslash = false;
-				}
-
-				keyLen++;
-			}
-			while (valueStart < limit[0]) {
-				c = lr._lineBuf[valueStart];
-
-				if ((c != ' ') && (c != '\t') && (c != '\f')) {
-					if (!hasSep && ((c == '=') || (c == ':'))) {
+					if (((c == '=') || (c == ':')) && !precedingBackslash) {
+						valueStart = keyLen + 1;
 						hasSep = true;
-					}
-					else {
+
 						break;
 					}
+					else if (((c == ' ') || (c == '\t') || (c == '\f')) && !precedingBackslash) {
+						valueStart = keyLen + 1;
+
+						break;
+					}
+
+					if (c == '\\') {
+						precedingBackslash = !precedingBackslash;
+					}
+					else {
+						precedingBackslash = false;
+					}
+
+					keyLen++;
+				}
+				while (valueStart < limit[0]) {
+					c = lr._lineBuf[valueStart];
+
+					if ((c != ' ') && (c != '\t') && (c != '\f')) {
+						if (!hasSep && ((c == '=') || (c == ':'))) {
+							hasSep = true;
+						}
+						else {
+							break;
+						}
+					}
+
+					valueStart++;
 				}
 
-				valueStart++;
-			}
+				String key = _loadConvert(lr._lineBuf, 0, keyLen, convtBuf);
+				KeyInfo info = new KeyInfo(limit[1] - limit[0] - 1, keyLen, lineNumber);
 
-			String key = _loadConvert(lr._lineBuf, 0, keyLen, convtBuf);
-			KeyInfo info = new KeyInfo(limit[1] - limit[0] - 1, keyLen, lineNumber);
+				info.value = _loadConvert(lr._lineBuf, valueStart, limit[0] - valueStart, convtBuf);
 
-			info.value = _loadConvert(lr._lineBuf, valueStart, limit[0] - valueStart, convtBuf);
+				List<KeyInfo> infos = keyInfos.get(key);
 
-			List<KeyInfo> infos = keyInfos.get(key);
+				if (infos != null) {
+					infos.add(info);
+				}
+				else {
+					infos = new ArrayList<>();
 
-			if (infos != null) {
-				infos.add(info);
-			}
-			else {
-				infos = new ArrayList<>();
+					infos.add(info);
 
-				infos.add(info);
-
-				keyInfos.put(key, infos);
+					keyInfos.put(key, infos);
+				}
 			}
 		}
 

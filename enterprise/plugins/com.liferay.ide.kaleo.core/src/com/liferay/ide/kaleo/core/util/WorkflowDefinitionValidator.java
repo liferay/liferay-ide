@@ -21,6 +21,7 @@ import com.liferay.ide.project.core.BaseValidator;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.util.ServerUtil;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -75,11 +76,11 @@ public class WorkflowDefinitionValidator extends BaseValidator {
 			if ((model != null) && model instanceof IDOMModel) {
 				IDOMDocument document = ((IDOMModel)model).getDocument();
 
-				try {
+				try (InputStream inputStream = workflowDefinitionXml.getContents()){
 					IWorkflowValidation workflowValidation = KaleoCore.getWorkflowValidation(
 						ServerUtil.getRuntime(workflowDefinitionXml.getProject()));
 
-					Exception error = workflowValidation.validate(workflowDefinitionXml.getContents());
+					Exception error = workflowValidation.validate(inputStream);
 
 					if ((error != null) && !CoreUtil.isNullOrEmpty(error.getMessage())) {
 						Map<String, Object> problem = createMarkerValues(

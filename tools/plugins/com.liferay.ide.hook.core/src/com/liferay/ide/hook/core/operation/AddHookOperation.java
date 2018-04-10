@@ -29,7 +29,6 @@ import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
@@ -341,7 +340,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 		Properties properties = new Properties();
 
 		if (FileUtil.exists(propertiesFile)) {
-			try {
+			try(InputStream inputStream = propertiesFile.getContents()) {
 				properties.load(propertiesFile.getContents());
 			}
 			catch (Exception e) {
@@ -365,17 +364,10 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 			}
 		}
 
-		StringBufferOutputStream buffer = new StringBufferOutputStream();
+		try(StringBufferOutputStream buffer = new StringBufferOutputStream();
+				ByteArrayInputStream bis = new ByteArrayInputStream(buffer.toString().getBytes("UTF-8"))){
 
-		try {
 			properties.store(buffer, StringPool.EMPTY);
-		}
-		catch (IOException ioe) {
-			return HookCore.createErrorStatus(ioe);
-		}
-
-		try {
-			ByteArrayInputStream bis = new ByteArrayInputStream(buffer.toString().getBytes("UTF-8"));
 
 			if (propertiesFile.exists()) {
 				propertiesFile.setContents(bis, IResource.FORCE, null);

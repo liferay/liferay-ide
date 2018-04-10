@@ -222,13 +222,16 @@ public class RemoteLogStream extends BufferedInputStream {
 	private boolean _urlPeek(URL url) throws IOException {
 		byte[] buf = new byte[256];
 
-		int bufRead = new BufferedInputStream(openInputStream(connection, url), 256).read(buf);
+		try (BufferedInputStream buffer = new BufferedInputStream(openInputStream(connection, url), 256)) {
 
-		if (bufRead != -1) {
-			String peek = new String(buf);
+			int bufRead = buffer.read(buf);
 
-			if ((peek != null) && !peek.contains("Error 416: Invalid Range values.")) {
-				return true;
+			if (bufRead != -1) {
+				String peek = new String(buf);
+
+				if (peek != null && (!peek.contains("Error 416: Invalid Range values."))) {
+					return true;
+				}
 			}
 		}
 

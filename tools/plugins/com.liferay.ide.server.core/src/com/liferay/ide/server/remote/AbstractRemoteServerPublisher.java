@@ -37,8 +37,6 @@ import java.util.TimeZone;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.commons.io.IOUtils;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -138,28 +136,21 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
 
 				zip.putNextEntry(zipEntry);
 
-				InputStream contents = ((IFile)resource).getContents();
+				try(InputStream inputStream = ( (IFile) resource ).getContents()){
+					if (adjustGMTOffset) {
+						TimeZone currentTimeZone = TimeZone.getDefault();
 
-				if (adjustGMTOffset) {
-					TimeZone currentTimeZone = TimeZone.getDefault();
+						Calendar currentDt = new GregorianCalendar(currentTimeZone, Locale.getDefault());
 
-					Calendar currentDt = new GregorianCalendar(currentTimeZone, Locale.getDefault());
+						// Get the Offset from GMT taking current TZ into account
 
-					// Get the Offset from GMT taking current TZ into account
+						int gmtOffset = currentTimeZone.getOffset(
+							currentDt.get(Calendar.ERA), currentDt.get(Calendar.YEAR), currentDt.get(Calendar.MONTH),
+							currentDt.get(Calendar.DAY_OF_MONTH), currentDt.get(Calendar.DAY_OF_WEEK),
+							currentDt.get(Calendar.MILLISECOND));
 
-					int gmtOffset = currentTimeZone.getOffset(
-						currentDt.get(Calendar.ERA), currentDt.get(Calendar.YEAR), currentDt.get(Calendar.MONTH),
-						currentDt.get(Calendar.DAY_OF_MONTH), currentDt.get(Calendar.DAY_OF_WEEK),
-						currentDt.get(Calendar.MILLISECOND));
-
-					zipEntry.setTime(System.currentTimeMillis() + (gmtOffset * -1));
-				}
-
-				try {
-					IOUtils.copy(contents, zip);
-				}
-				finally {
-					contents.close();
+						zipEntry.setTime(System.currentTimeMillis() + (gmtOffset * -1));
+					}
 				}
 
 				break;

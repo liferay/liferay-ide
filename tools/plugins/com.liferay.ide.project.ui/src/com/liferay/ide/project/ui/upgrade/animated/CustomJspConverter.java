@@ -156,8 +156,9 @@ public class CustomJspConverter {
 						throws IOException, SAXException {
 
 						// don't connect internet to fetch dtd for validation
-
-						return new InputSource(new ByteArrayInputStream(new String("").getBytes()));
+						try(InputStream inputStream = new ByteArrayInputStream(new String("").getBytes())){
+							return new InputSource(inputStream);
+						}
 					}
 
 				});
@@ -438,19 +439,17 @@ public class CustomJspConverter {
 	private void _copy70JspFile(String portlet, File targetJspDir, String mappedJsp) throws Exception {
 		File module = _getModuleFile(portlet);
 
-		JarFile jarFile = new JarFile(module);
+		try(JarFile jarFile = new JarFile(module)){
+			JarEntry entry = (JarEntry)jarFile.getEntry("META-INF/resources/" + mappedJsp);
 
-		JarEntry entry = (JarEntry)jarFile.getEntry("META-INF/resources/" + mappedJsp);
+			try(InputStream ins = jarFile.getInputStream(entry)){
+				File targetFile = new File(targetJspDir, mappedJsp);
 
-		InputStream ins = jarFile.getInputStream(entry);
+				_makeParentDir(targetFile);
 
-		File targetFile = new File(targetJspDir, mappedJsp);
-
-		_makeParentDir(targetFile);
-
-		FileUtil.writeFile(targetFile, ins);
-
-		jarFile.close();
+				FileUtil.writeFile(targetFile, ins);
+			}
+		}
 	}
 
 	// convert common, portal, taglib folders to 7.x CustomJspBag

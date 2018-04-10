@@ -20,6 +20,7 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.properties.PortalPropertiesConfiguration;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.LiferayUIPlugin;
@@ -92,17 +93,18 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 			PropKey[] keys = null;
 
 			if ((appServerPortalDir != null) && appServerPortalDir.toFile().exists()) {
-				try {
-					JarFile jar = new JarFile(appServerPortalDir.append("WEB-INF/lib/portal-impl.jar").toFile());
+				IPath portalImplPath = appServerPortalDir.append("WEB-INF/lib/portal-impl.jar");
 
-					ZipEntry lang = jar.getEntry(propertiesEntry);
+				if (FileUtil.exists(portalImplPath)) {
+					try(JarFile jar = new JarFile(portalImplPath.toFile())) {
 
-					keys = _parseKeys(jar.getInputStream(lang));
+						ZipEntry lang = jar.getEntry(propertiesEntry);
 
-					jar.close();
-				}
-				catch (Exception e) {
-					LiferayUIPlugin.logError("Unable to get portal properties file", e);
+						keys = _parseKeys(jar.getInputStream(lang));
+					}
+					catch (Exception e) {
+						LiferayUIPlugin.logError("Unable to get portal properties file", e);
+					}
 				}
 			}
 			else {
@@ -245,9 +247,12 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 
 		PortalPropertiesConfiguration config = new PortalPropertiesConfiguration();
 
-		config.load(inputStream);
-
-		inputStream.close();
+		try{
+			config.load(inputStream);
+		}
+		finally {
+			inputStream.close();
+		}
 
 		Iterator<?> keys = config.getKeys();
 		PropertiesConfigurationLayout layout = config.getLayout();

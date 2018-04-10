@@ -20,6 +20,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 import java.net.URL;
 
@@ -99,8 +100,9 @@ public class AddResourceBundleFileMarkerResolution extends AbstractResourceBundl
 
 				CoreUtil.prepareFolder(parent);
 
-				resourceBundle.create(
-					new ByteArrayInputStream(resourcePropertyLine.getBytes("UTF-8")), IResource.FORCE, null);
+				try(InputStream inputStream = new ByteArrayInputStream(resourcePropertyLine.getBytes("UTF-8"))){
+					resourceBundle.create(inputStream, IResource.FORCE, null);
+				}
 
 				contentOffset = resourcePropertyLineOffset;
 			}
@@ -118,7 +120,9 @@ public class AddResourceBundleFileMarkerResolution extends AbstractResourceBundl
 
 				contentOffset = bytes.length;
 
-				resourceBundle.setContents(new ByteArrayInputStream(bytes), IResource.FORCE, new NullProgressMonitor());
+				try(InputStream inputStream = new ByteArrayInputStream(bytes)){
+					resourceBundle.setContents(inputStream, IResource.FORCE, new NullProgressMonitor());
+				}
 			}
 
 			openEditor(resourceBundle, contentOffset - resourcePropertyLineOffset, contentOffset - 1);

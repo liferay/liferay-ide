@@ -150,8 +150,12 @@ public class CoreUtil {
 		if (newFile.getParent() instanceof IFolder) {
 			prepareFolder((IFolder)newFile.getParent());
 		}
-
-		newFile.create(new ByteArrayInputStream(new byte[0]), true, null);
+		try(InputStream inputStream = new ByteArrayInputStream(new byte[0])){
+			newFile.create(inputStream, true, null);	
+		}
+		catch(Exception e) {
+			throw new CoreException(LiferayCore.createErrorStatus(e));
+		}
 	}
 
 	public static IStatus createErrorStatus(String msg) {
@@ -542,22 +546,22 @@ public class CoreUtil {
 
 		StringBuilder out = new StringBuilder();
 
-		Reader in = new InputStreamReader(contents, "UTF-8");
+		try(Reader in = new InputStreamReader(contents, "UTF-8")){
+			int read;
 
-		int read;
+			do {
+				read = in.read(buffer, 0, buffer.length);
 
-		do {
-			read = in.read(buffer, 0, buffer.length);
-
-			if (read > 0) {
-				out.append(buffer, 0, read);
+				if (read > 0) {
+					out.append(buffer, 0, read);
+				}
 			}
+			while (read >= 0);
 		}
-		while (read >= 0);
 
 		if (closeStream) {
 			contents.close();
-		}
+		}		
 
 		return out.toString();
 	}
@@ -598,26 +602,21 @@ public class CoreUtil {
 
 		char[] buffer = new char[0x10000];
 
-		Reader in = new InputStreamReader(new ByteArrayInputStream(contents.getBytes("UTF-8")));
+		try(InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"));
+				Reader in = new InputStreamReader(inputStream);
+				Writer out = new OutputStreamWriter(outputStream, "UTF-8")) {
 
-		Writer out = new OutputStreamWriter(outputStream, "UTF-8");
+			int read;
 
-		int read;
+			do {
+				read = in.read(buffer, 0, buffer.length);
 
-		do {
-			read = in.read(buffer, 0, buffer.length);
-
-			if (read > 0) {
-				out.write(buffer, 0, read);
+				if (read > 0) {
+					out.write(buffer, 0, read);
+				}
 			}
+			while (read >= 0);	
 		}
-		while (read >= 0);
-
-		in.close();
-
-		out.flush();
-
-		out.close();
 	}
 
 }

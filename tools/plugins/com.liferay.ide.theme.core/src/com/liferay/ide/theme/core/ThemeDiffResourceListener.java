@@ -28,6 +28,7 @@ import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.theme.core.operation.ThemeDescriptorHelper;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import java.util.Properties;
 
@@ -144,8 +145,9 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 					if (propsRes instanceof IFile && propsRes.exists()) {
 						Properties props = new Properties();
 
-						try {
-							props.load(((IFile)propsRes).getContents());
+						try(InputStream inputStream = ((IFile)propsRes).getContents()) {
+
+							props.load(inputStream);
 							String nameValue = props.getProperty("name");
 
 							if (!CoreUtil.isNullOrEmpty(nameValue)) {

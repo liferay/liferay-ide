@@ -21,6 +21,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ListUtil;
 import com.liferay.ide.core.util.StringPool;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 
@@ -45,12 +46,9 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 	public PluginPackageModel(IFile file, IDocument document, boolean reconciling) {
 		super(document, reconciling);
 
-		try {
+		try(InputStream is = file.getContents()) {
 			pluginPackageProperties = new PluginPropertiesConfiguration();
-			InputStream is = file.getContents();
-
 			pluginPackageProperties.load(is);
-			is.close();
 		}
 		catch (Exception e) {
 			PortletCore.logError(e);
@@ -410,14 +408,12 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 	public PropertiesConfiguration pluginPackageProperties;
 
 	protected void flushProperties() {
-		StringWriter output = new StringWriter();
+		try(StringWriter output = new StringWriter();) {
 
-		try {
 			pluginPackageProperties.save(output);
-
 			getDocument().set(output.toString());
 		}
-		catch (ConfigurationException ce) {
+		catch (ConfigurationException | IOException ce) {
 		}
 	}
 

@@ -192,10 +192,9 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 
 		try {
 			if (FileUtil.exists(bundleExtFile)) {
-				InputStream extInputStream = Files.newInputStream(bundleExtFile.toPath());
-
-				pluginPackageProperties.load(extInputStream);
-				extInputStream.close();
+				try (InputStream extInputStream = Files.newInputStream(bundleExtPath.toFile().toPath())) {
+					pluginPackageProperties.load(extInputStream);
+				}
 
 				String driverName = (String)pluginPackageProperties.getProperty(_JDBC_DRIVER_CLASS_NAME);
 
@@ -205,10 +204,9 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 					File setupWizardFile = setupWizardPath.toFile();
 
 					if (FileUtil.exists(setupWizardFile)) {
-						InputStream setupInputStream = Files.newInputStream(setupWizardFile.toPath());
-
-						pluginPackageProperties.load(setupInputStream);
-						setupInputStream.close();
+                        try(InputStream setupInputStream = Files.newInputStream( setupWizardPath.toFile().toPath() )){
+							pluginPackageProperties.load(setupInputStream);
+                        }
 					}
 				}
 			}
@@ -218,10 +216,9 @@ public class CreateDBConnectAction extends AbstractServerRunningAction {
 				File setupWizardFile = setupWizardPath.toFile();
 
 				if (FileUtil.exists(setupWizardFile)) {
-					InputStream setupInputStream = Files.newInputStream(setupWizardFile.toPath());
-
-					pluginPackageProperties.load(setupInputStream);
-					setupInputStream.close();
+                    try(InputStream setupInputStream = Files.newInputStream( setupWizardPath.toFile().toPath() )){
+						pluginPackageProperties.load(setupInputStream);
+                    }
 				}
 			}
 		}

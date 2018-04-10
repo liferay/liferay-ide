@@ -29,6 +29,7 @@ import com.liferay.ide.server.remote.IRemoteServerPublisher;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -176,10 +177,11 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
 		String retval = defaultValue;
 
 		if (("theme.type".equals(key) || "theme.parent".equals(key)) && ProjectUtil.isThemeProject(getProject())) {
-			try {
-				IFile buildXml = getProject().getFile("build.xml");
+			IFile buildXml = getProject().getFile("build.xml");
 
-				Document buildXmlDoc = FileUtil.readXML(buildXml.getContents(), null, null);
+			try(InputStream inputStream = buildXml.getContents()) {
+
+				Document buildXmlDoc = FileUtil.readXML(inputStream, null, null);
 
 				NodeList properties = buildXmlDoc.getElementsByTagName("property");
 
@@ -197,7 +199,7 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
 					}
 				}
 			}
-			catch (CoreException ce) {
+			catch (CoreException | IOException ce) {
 				ProjectCore.logError("Unable to get property " + key, ce);
 			}
 		}

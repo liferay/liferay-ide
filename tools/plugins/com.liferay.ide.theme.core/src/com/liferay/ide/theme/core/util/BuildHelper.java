@@ -897,7 +897,14 @@ public class BuildHelper {
 		IFile file = (IFile)mf.getAdapter(IFile.class);
 
 		if (file != null) {
-			_copyFile(file.getContents(), path, file.getLocalTimeStamp());
+			try(InputStream inputStream = file.getContents()){
+				_copyFile(inputStream, path, file.getLocalTimeStamp());
+			} catch (IOException e) {
+				throw new CoreException(
+						new Status(
+							IStatus.ERROR, ThemeCore.PLUGIN_ID, 0, NLS.bind(Messages.errorReading, file.getLocation()),
+							e));
+			}
 		}
 		else {
 			File file2 = (File)mf.getAdapter(File.class);

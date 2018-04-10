@@ -110,8 +110,6 @@ public class ServiceWrapperCommand {
 							Enumeration<JarEntry> enu = jar.entries();
 
 							while (enu.hasMoreElements()) {
-								JarInputStream jarInputStream = null;
-
 								try {
 									JarEntry entry = enu.nextElement();
 
@@ -120,34 +118,28 @@ public class ServiceWrapperCommand {
 									if (name.contains(".api-")) {
 										JarEntry jarentry = jar.getJarEntry(name);
 
-										InputStream inputStream = jar.getInputStream(jarentry);
+										try(InputStream inputStream = jar.getInputStream(jarentry);
+												JarInputStream jarInputStream = new JarInputStream(inputStream)){
+											JarEntry nextJarEntry;
 
-										jarInputStream = new JarInputStream(inputStream);
+											while ((nextJarEntry = jarInputStream.getNextJarEntry()) != null) {
+												String entryName = nextJarEntry.getName();
 
-										JarEntry nextJarEntry;
-
-										while ((nextJarEntry = jarInputStream.getNextJarEntry()) != null) {
-											String entryName = nextJarEntry.getName();
-
-											_getServiceWrapperList(map, entryName, jarInputStream);
+												_getServiceWrapperList(map, entryName, jarInputStream);
+											}
 										}
 									}
 								}
 								catch (Exception e) {
 								}
-								finally {
-									if (jarInputStream != null) {
-										jarInputStream.close();
-									}
-								}
 							}
 						}
 					}
 					else if (lib.getName().endsWith("api.jar") || lib.getName().equals("portal-kernel.jar")) {
-						JarInputStream jarinput = null;
 
-						try (JarFile jar = new JarFile(lib)) {
-							jarinput = new JarInputStream(Files.newInputStream(lib.toPath()));
+						try (JarFile jar = new JarFile(lib);
+								InputStream inputStream = Files.newInputStream(lib.toPath());
+								JarInputStream jarinput = new JarInputStream(inputStream)) {
 
 							Enumeration<JarEntry> enu = jar.entries();
 
@@ -160,11 +152,6 @@ public class ServiceWrapperCommand {
 							}
 						}
 						catch (IOException ioe) {
-						}
-						finally {
-							if (jarinput != null) {
-								jarinput.close();
-							}
 						}
 					}
 				}

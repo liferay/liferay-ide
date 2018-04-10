@@ -19,12 +19,13 @@ import com.liferay.ide.core.properties.PropertiesFileLookup.KeyInfo;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 
+import java.io.InputStream;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.text.IDocument;
@@ -55,15 +56,15 @@ public class NodeUtils {
 						IFile[] props = PropertiesUtil.visitPropertiesFiles(src, ".*");
 
 						for (IFile prop : props) {
-							try {
+							try (InputStream inputStream = prop.getContents()){
 								KeyInfo info = new PropertiesFileLookup(
-									prop.getContents(), key, loadValues).getKeyInfo(key);
+										inputStream, key, loadValues).getKeyInfo(key);
 
 								if ((info != null) && (info.offset >= 0)) {
 									keys.add(new MessageKey(prop, key, info.offset, info.length, info.value));
 								}
 							}
-							catch (CoreException ce) {
+							catch (Exception ce) {
 							}
 						}
 					}

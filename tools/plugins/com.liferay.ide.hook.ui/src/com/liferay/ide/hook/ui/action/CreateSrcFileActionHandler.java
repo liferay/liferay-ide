@@ -55,9 +55,8 @@ public class CreateSrcFileActionHandler extends PropertyEditorActionHandler {
 	public Object run(Presentation context) {
 		IFile file = _getSrcFile();
 
-		try {
+		try (InputStream defaultContentStream = new ByteArrayInputStream(StringPool.EMPTY.getBytes())){
 			if (!file.exists()) {
-				InputStream defaultContentStream = new ByteArrayInputStream(StringPool.EMPTY.getBytes());
 
 				file.create(defaultContentStream, true, null);
 

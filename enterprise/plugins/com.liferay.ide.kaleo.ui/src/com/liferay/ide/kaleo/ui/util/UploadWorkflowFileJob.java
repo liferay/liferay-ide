@@ -20,6 +20,8 @@ import com.liferay.ide.kaleo.core.model.WorkflowDefinition;
 import com.liferay.ide.kaleo.ui.KaleoUI;
 import com.liferay.ide.ui.util.UIUtil;
 
+import java.io.InputStream;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -74,72 +76,75 @@ public class UploadWorkflowFileJob extends Job {
 
 			long userId = _kaleoConnection.getUserByEmailAddress().getLong("userId");
 
-			RootXmlResource rootXmlResource = new RootXmlResource(new XmlResourceStore(_workflowFile.getContents()));
-
-			WorkflowDefinition workflowDefinition = WorkflowDefinition.TYPE.instantiate(
-				rootXmlResource).nearest(WorkflowDefinition.class);
-
-			String portalLocale = "en_US";
-
-			try {
-				portalLocale = _kaleoConnection.getPortalLocale(userId);
-			}
-			catch (Exception e) {
-			}
-
-			String name = workflowDefinition.getName().content();
-
-			String titleMap = KaleoUtil.createJSONTitleMap(name, portalLocale);
-
 			String content = CoreUtil.readStreamToString(_workflowFile.getContents());
 
-			JSONArray drafts = _kaleoConnection.getKaleoDraftWorkflowDefinitions();
+			try(InputStream inputStream =_workflowFile.getContents()){
+				RootXmlResource rootXmlResource = new RootXmlResource(new XmlResourceStore(inputStream));
 
-			/*
-			 * go through to see if the file that is being uploaded has any
-			 * existing drafts
-			 */
-			JSONObject existingDraft = null;
+				WorkflowDefinition workflowDefinition = WorkflowDefinition.TYPE.instantiate(
+					rootXmlResource).nearest(WorkflowDefinition.class);
 
-			if ((drafts != null) && (drafts.length() > 0)) {
-				for (int i = 0; i < drafts.length(); i++) {
-					JSONObject draft = drafts.getJSONObject(i);
+				String portalLocale = "en_US";
 
-					String draftName = draft.getString("name");
+				try {
+					portalLocale = _kaleoConnection.getPortalLocale(userId);
+				}
+				catch (Exception e) {
+				}
 
-					if ((name != null) && name.equals(draftName)) {
-						if (existingDraft == null) {
-							existingDraft = draft;
-						}
-						else {
-							boolean draftVersion = false;
+				String name = workflowDefinition.getName().content();
 
-							if (draft.getInt("draftVersion") > existingDraft.getInt("draftVersion")) {
-								draftVersion = true;
-							}
+				String titleMap = KaleoUtil.createJSONTitleMap(name, portalLocale);
 
-							boolean version = false;
+				JSONArray drafts = _kaleoConnection.getKaleoDraftWorkflowDefinitions();
 
-							if (draft.getInt("version") > existingDraft.getInt("version")) {
-								version = true;
-							}
+				/*
+				 * go through to see if the file that is being uploaded has any
+				 * existing drafts
+				 */
+				JSONObject existingDraft = null;
 
-							if (draftVersion || version) {
+				if ((drafts != null) && (drafts.length() > 0)) {
+					for (int i = 0; i < drafts.length(); i++) {
+						JSONObject draft = drafts.getJSONObject(i);
+
+						String draftName = draft.getString("name");
+
+						if ((name != null) && name.equals(draftName)) {
+							if (existingDraft == null) {
 								existingDraft = draft;
+							}
+							else {
+								boolean draftVersion = false;
+
+								if (draft.getInt("draftVersion") > existingDraft.getInt("draftVersion")) {
+									draftVersion = true;
+								}
+
+								boolean version = false;
+
+								if (draft.getInt("version") > existingDraft.getInt("version")) {
+									version = true;
+								}
+
+								if (draftVersion || version) {
+									existingDraft = draft;
+								}
 							}
 						}
 					}
 				}
+
+				if (existingDraft != null) {
+					_kaleoConnection.updateKaleoDraftDefinition(
+						name, titleMap, content, existingDraft.getInt("version"), existingDraft.getInt("draftVersion"),
+						companyId, userId);
+				}
+
+				_kaleoConnection.publishKaleoDraftDefinition(
+					name, titleMap, content, companyId + "", userId + "", groupId + "");
 			}
 
-			if (existingDraft != null) {
-				_kaleoConnection.updateKaleoDraftDefinition(
-					name, titleMap, content, existingDraft.getInt("version"), existingDraft.getInt("draftVersion"),
-					companyId, userId);
-			}
-
-			_kaleoConnection.publishKaleoDraftDefinition(
-				name, titleMap, content, companyId + "", userId + "", groupId + "");
 		}
 		catch (Exception e) {
 			return KaleoUI.createErrorStatus("Error uploading new kaleo workflow file.", e);

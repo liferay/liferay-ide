@@ -21,6 +21,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -57,7 +58,7 @@ public class WizardUtil {
 		context.put("namespace", namespace);
 		context.put("author", author);
 
-		try {
+		try{
 			StringBuffer sb = new StringBuffer();
 
 			templateOp.setOutputBuffer(sb);
@@ -66,7 +67,9 @@ public class WizardUtil {
 
 			CoreUtil.prepareFolder((IFolder)serviceBuilderFile.getParent());
 
-			serviceBuilderFile.create(new ByteArrayInputStream(sb.toString().getBytes("UTF-8")), IResource.FORCE, null);
+			try(InputStream inputStream = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"))){
+				serviceBuilderFile.create(inputStream, IResource.FORCE, null);	
+			}
 
 			FormatProcessorXML processor = new FormatProcessorXML();
 

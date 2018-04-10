@@ -27,6 +27,8 @@ import com.liferay.ide.ui.editor.PluginPackageInputContextManager;
 import com.liferay.ide.ui.form.IDEFormEditor;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -271,16 +273,16 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 
 			String props = doc.get();
 
-			try {
+			try (InputStream inputStream = new ByteArrayInputStream(props.getBytes())){
 				ignoreModelChanges = true;
 
 				if (getLastDirtyState()) {
-					((PluginPackageModel)getModel()).load(new ByteArrayInputStream(props.getBytes()), false);
+					((PluginPackageModel)getModel()).load(inputStream, false);
 				}
 
 				ignoreModelChanges = false;
 			}
-			catch (CoreException ce) {
+			catch (CoreException | IOException ce) {
 				PortletUIPlugin.logError(ce);
 			}
 		}

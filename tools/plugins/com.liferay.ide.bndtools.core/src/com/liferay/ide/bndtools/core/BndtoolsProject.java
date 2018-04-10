@@ -22,7 +22,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ListUtil;
 
 import java.io.File;
-
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -135,8 +135,8 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
 		IFile bndFile = getProject().getFile("bnd.bnd");
 
 		if (FileUtil.exists(bndFile)) {
-			try {
-				String content = FileUtil.readContents(bndFile.getContents());
+			try(InputStream inputStream = bndFile.getContents()) {
+				String content = FileUtil.readContents(inputStream);
 
 				if (content.contains("Fragment-Host")) {
 					return true;

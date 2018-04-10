@@ -105,16 +105,15 @@ public class SDKProjectRemoteServerPublisher extends AbstractRemoteServerPublish
 				IResource propsRes = webproject.findDocrootResource(pluginPropertiesPath);
 
 				if (propsRes instanceof IFile && propsRes.exists()) {
-					try {
-						PropertiesConfiguration pluginPackageProperties = new PropertiesConfiguration();
 
-						InputStream is = ((IFile)propsRes).getContents();
+					try(InputStream is = ((IFile)propsRes).getContents()) {
+
+						PropertiesConfiguration pluginPackageProperties = new PropertiesConfiguration();
 
 						pluginPackageProperties.load(is);
 
 						pluginVersion = pluginPackageProperties.getString("module-incremental-version");
 
-						is.close();
 					}
 					catch (Exception e) {
 						LiferayCore.logError("error reading module-incremtnal-version. ", e);

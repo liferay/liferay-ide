@@ -140,278 +140,279 @@ public class BndProperties extends Properties {
 
 		// The spec says that the file must be encoded using ISO-8859-1.
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(inStream, "ISO-8859-1"));
+		try(InputStreamReader inputReader = new InputStreamReader(inStream, "ISO-8859-1");
+				BufferedReader reader = new BufferedReader(inputReader)){
+			String buffer;
 
-		String buffer;
+			while ((buffer = reader.readLine()) != null) {
+				String line = _convert(buffer.getBytes(), _utf8);
 
-		while ((buffer = reader.readLine()) != null) {
-			String line = _convert(buffer.getBytes(), _utf8);
+				BndPropertiesValue bnd = new BndPropertiesValue();
 
-			BndPropertiesValue bnd = new BndPropertiesValue();
+				char c = 0;
 
-			char c = 0;
+				int pos = 0;
 
-			int pos = 0;
-
-			// Leading whitespaces must be deleted first.
-
-			while ((pos < line.length()) && Character.isWhitespace(c = line.charAt(pos))) {
-				pos++;
-			}
-
-			// If empty line or begins with a comment character, skip this line.
-
-			if (((line.length() - pos) == 0) || (line.charAt(pos) == '#') || (line.charAt(pos) == '!')) {
-				continue;
-			}
-
-			/*
-			 *  The characters up to the next Whitespace, ':', or '=' describe the key.
-			 *  But look for escape sequences. Try to short-circuit when there is no escape char.
-			 */
-			int start = pos;
-
-			boolean needsEscape = false;
-
-			if (line.indexOf('\\', pos) != -1) {
-				needsEscape = true;
-			}
-
-			StringBuilder key = needsEscape ? new StringBuilder() : null;
-
-			while ((pos < line.length()) && !Character.isWhitespace(c = line.charAt(pos++)) && (c != '=') &&
-				   (c != ':')) {
-
-				if (needsEscape && (c == '\\')) {
-					if (pos == line.length()) {
-
-						/*
-						 * The line continues on the next line.
-						 * If there is no next line, just treat it as a key with an empty value.
-						 */
-						line = reader.readLine();
-
-						if (line == null) {
-							line = "";
-						}
-
-						pos = 0;
-
-						while ((pos < line.length()) && Character.isWhitespace(c = line.charAt(pos))) {
-							pos++;
-						}
-					}
-					else {
-						c = line.charAt(pos++);
-
-						switch (c) {
-							case 'n':
-								key.append('\n');
-
-								break;
-							case 't':
-								key.append('\t');
-
-								break;
-							case 'r':
-								key.append('\r');
-
-								break;
-							case 'u':
-								if ((pos + 4) <= line.length()) {
-									char uni = (char)Integer.parseInt(line.substring(pos, pos + 4), 16);
-
-									key.append(uni);
-
-									pos += 4;
-								}
-								else {
-
-									// throw exception?
-
-								}
-
-								break;
-							default:
-								key.append(c);
-
-								break;
-						}
-					}
-				}
-				else if (needsEscape) {
-					key.append(c);
-				}
-			}
-
-			boolean delim = false;
-
-			if ((c == ':') || (c == '=')) {
-				delim = true;
-			}
-
-			String keyString;
-
-			if (needsEscape) {
-				keyString = key.toString();
-			}
-			else if (delim || Character.isWhitespace(c)) {
-				keyString = line.substring(start, pos - 1);
-			}
-			else {
-				keyString = line.substring(start, pos);
-			}
-
-			while ((pos < line.length()) && Character.isWhitespace(c = line.charAt(pos))) {
-				pos++;
-			}
-
-			if (!delim && ((c == ':') || (c == '='))) {
-				pos++;
+				// Leading whitespaces must be deleted first.
 
 				while ((pos < line.length()) && Character.isWhitespace(c = line.charAt(pos))) {
 					pos++;
 				}
-			}
 
-			// Short-circuit if no escape chars found.
+				// If empty line or begins with a comment character, skip this line.
 
-			if (!needsEscape) {
-				bnd.setOriginalValue(line.substring(pos));
+				if (((line.length() - pos) == 0) || (line.charAt(pos) == '#') || (line.charAt(pos) == '!')) {
+					continue;
+				}
 
-				bnd.setFormatedValue(line.substring(pos));
+				/*
+				 *  The characters up to the next Whitespace, ':', or '=' describe the key.
+				 *  But look for escape sequences. Try to short-circuit when there is no escape char.
+				 */
+				int start = pos;
 
-				addKeyList(keyString);
+				boolean needsEscape = false;
 
-				put(keyString, bnd);
+				if (line.indexOf('\\', pos) != -1) {
+					needsEscape = true;
+				}
 
-				continue;
-			}
+				StringBuilder key = needsEscape ? new StringBuilder() : null;
 
-			// Escape char found so iterate through the rest of the line.
+				while ((pos < line.length()) && !Character.isWhitespace(c = line.charAt(pos++)) && (c != '=') &&
+					   (c != ':')) {
 
-			StringBuilder element = new StringBuilder(line.length() - pos);
-			StringBuilder formatedElement = new StringBuilder(line.substring(pos));
+					if (needsEscape && (c == '\\')) {
+						if (pos == line.length()) {
 
-			// formatedElement.append( line );
+							/*
+							 * The line continues on the next line.
+							 * If there is no next line, just treat it as a key with an empty value.
+							 */
+							line = reader.readLine();
 
-			while (pos < line.length()) {
-				c = line.charAt(pos++);
+							if (line == null) {
+								line = "";
+							}
 
-				if (c == '\\') {
-					if (pos == line.length()) {
-						bnd.setMultiLine(true);
-						formatedElement.append(System.getProperty("line.separator"));
+							pos = 0;
 
-						// The line continues on the next line.
-
-						line = reader.readLine();
-
-						formatedElement.append(line);
-
-						/*
-						 *  We might have seen a backslash at the end of the file.
-						 *  The JDK ignores the backslash in this case, so we follow for compatibility.
-						 */
-						if (line == null) {
-							break;
+							while ((pos < line.length()) && Character.isWhitespace(c = line.charAt(pos))) {
+								pos++;
+							}
 						}
+						else {
+							c = line.charAt(pos++);
 
-						pos = 0;
+							switch (c) {
+								case 'n':
+									key.append('\n');
 
-						while ((pos < line.length()) && Character.isWhitespace(c = line.charAt(pos))) {
-							pos++;
-						}
+									break;
+								case 't':
+									key.append('\t');
 
-						element.ensureCapacity(line.length() - pos + element.length());
-					}
-					else {
-						c = line.charAt(pos++);
+									break;
+								case 'r':
+									key.append('\r');
 
-						switch (c) {
-							case 'n':
-								element.append('\n');
+									break;
+								case 'u':
+									if ((pos + 4) <= line.length()) {
+										char uni = (char)Integer.parseInt(line.substring(pos, pos + 4), 16);
 
-								formatedElement.append('\n');
+										key.append(uni);
 
-								break;
-							case 't':
-								element.append('\t');
+										pos += 4;
+									}
+									else {
 
-								formatedElement.append('\t');
+										// throw exception?
 
-								break;
-							case 'r':
-								element.append('\r');
+									}
 
-								formatedElement.append('\r');
+									break;
+								default:
+									key.append(c);
 
-								break;
-							case 'u':
-								if ((pos + 4) <= line.length()) {
-									char uni = (char)Integer.parseInt(line.substring(pos, pos + 4), 16);
-
-									element.append(uni);
-
-									pos += 4;
-								}
-								else {
-
-									// throw exception?
-
-								}
-
-								break;
-							default:
-								element.append(c);
-
-								break;
+									break;
+							}
 						}
 					}
+					else if (needsEscape) {
+						key.append(c);
+					}
+				}
+
+				boolean delim = false;
+
+				if ((c == ':') || (c == '=')) {
+					delim = true;
+				}
+
+				String keyString;
+
+				if (needsEscape) {
+					keyString = key.toString();
+				}
+				else if (delim || Character.isWhitespace(c)) {
+					keyString = line.substring(start, pos - 1);
 				}
 				else {
-					element.append(c);
+					keyString = line.substring(start, pos);
 				}
-			}
 
-			bnd.setOriginalValue(element.toString());
-			bnd.setFormatedValue(formatedElement.toString());
-			addKeyList(keyString);
-			put(keyString, bnd);
+				while ((pos < line.length()) && Character.isWhitespace(c = line.charAt(pos))) {
+					pos++;
+				}
+
+				if (!delim && ((c == ':') || (c == '='))) {
+					pos++;
+
+					while ((pos < line.length()) && Character.isWhitespace(c = line.charAt(pos))) {
+						pos++;
+					}
+				}
+
+				// Short-circuit if no escape chars found.
+
+				if (!needsEscape) {
+					bnd.setOriginalValue(line.substring(pos));
+
+					bnd.setFormatedValue(line.substring(pos));
+
+					addKeyList(keyString);
+
+					put(keyString, bnd);
+
+					continue;
+				}
+
+				// Escape char found so iterate through the rest of the line.
+
+				StringBuilder element = new StringBuilder(line.length() - pos);
+				StringBuilder formatedElement = new StringBuilder(line.substring(pos));
+
+				// formatedElement.append( line );
+
+				while (pos < line.length()) {
+					c = line.charAt(pos++);
+
+					if (c == '\\') {
+						if (pos == line.length()) {
+							bnd.setMultiLine(true);
+							formatedElement.append(System.getProperty("line.separator"));
+
+							// The line continues on the next line.
+
+							line = reader.readLine();
+
+							formatedElement.append(line);
+
+							/*
+							 *  We might have seen a backslash at the end of the file.
+							 *  The JDK ignores the backslash in this case, so we follow for compatibility.
+							 */
+							if (line == null) {
+								break;
+							}
+
+							pos = 0;
+
+							while ((pos < line.length()) && Character.isWhitespace(c = line.charAt(pos))) {
+								pos++;
+							}
+
+							element.ensureCapacity(line.length() - pos + element.length());
+						}
+						else {
+							c = line.charAt(pos++);
+
+							switch (c) {
+								case 'n':
+									element.append('\n');
+
+									formatedElement.append('\n');
+
+									break;
+								case 't':
+									element.append('\t');
+
+									formatedElement.append('\t');
+
+									break;
+								case 'r':
+									element.append('\r');
+
+									formatedElement.append('\r');
+
+									break;
+								case 'u':
+									if ((pos + 4) <= line.length()) {
+										char uni = (char)Integer.parseInt(line.substring(pos, pos + 4), 16);
+
+										element.append(uni);
+
+										pos += 4;
+									}
+									else {
+
+										// throw exception?
+
+									}
+
+									break;
+								default:
+									element.append(c);
+
+									break;
+							}
+						}
+					}
+					else {
+						element.append(c);
+					}
+				}
+
+				bnd.setOriginalValue(element.toString());
+				bnd.setFormatedValue(formatedElement.toString());
+				addKeyList(keyString);
+				put(keyString, bnd);
+			}
 		}
 	}
 
 	@Override
 	public void store(OutputStream out, String header) throws IOException {
-		PrintWriter writer = new PrintWriter(new OutputStreamWriter(out));
-
-		if (header != null) {
-			writer.println("#" + header);
-			writer.println("#" + Calendar.getInstance().getTime());
-		}
-
-		// Reuse the same buffer.
-
-		StringBuilder s = new StringBuilder();
-
-		for (String keyString : _keyList) {
-			_formatForOutput((String)keyString, s, true);
-			s.append(": ");
-
-			Object value = get(keyString);
-
-			if (value instanceof BndPropertiesValue) {
-				BndPropertiesValue bndValue = (BndPropertiesValue)value;
-
-				writer.println(s.append(bndValue.getFormatedValue()));
+		try(PrintWriter writer = new PrintWriter(new OutputStreamWriter(out));){
+			if (header != null) {
+				writer.println("#" + header);
+				writer.println("#" + Calendar.getInstance().getTime());
 			}
-			else {
-				_formatForOutput((String)value, s, false);
-				writer.println(s);
-			}
-		}
 
-		writer.flush();
+			// Reuse the same buffer.
+
+			StringBuilder s = new StringBuilder();
+
+			for (String keyString : _keyList) {
+				_formatForOutput((String)keyString, s, true);
+				s.append(": ");
+
+				Object value = get(keyString);
+
+				if (value instanceof BndPropertiesValue) {
+					BndPropertiesValue bndValue = (BndPropertiesValue)value;
+
+					writer.println(s.append(bndValue.getFormatedValue()));
+				}
+				else {
+					_formatForOutput((String)value, s, false);
+					writer.println(s);
+				}
+			}
+
+			writer.flush();
+		}
 	}
 
 	private String _convert(byte[] buffer, Charset charset) throws IOException {

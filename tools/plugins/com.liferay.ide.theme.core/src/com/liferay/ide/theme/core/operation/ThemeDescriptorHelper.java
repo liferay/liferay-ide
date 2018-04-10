@@ -22,6 +22,7 @@ import com.liferay.ide.theme.core.ThemeCore;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import java.text.MessageFormat;
 
@@ -77,15 +78,16 @@ public class ThemeDescriptorHelper extends LiferayDescriptorHelper {
 			contents = contents.replaceAll("__ID__", id);
 			contents = contents.replaceAll("__NAME__", name);
 
-			lookAndFeelFile.create(new ByteArrayInputStream(contents.getBytes()), true, null);
+			try(InputStream inputStream = new ByteArrayInputStream(contents.getBytes())) {
 
-			if (!themeType.equals("vm")) {
-				setTemplateExtension(lookAndFeelFile, themeType);
-			}
+				lookAndFeelFile.create(inputStream, true, null);
 
-			FormatProcessorXML processor = new FormatProcessorXML();
+				if (!themeType.equals("vm")) {
+					setTemplateExtension(lookAndFeelFile, themeType);
+				}
 
-			try {
+				FormatProcessorXML processor = new FormatProcessorXML();
+
 				processor.formatFile(lookAndFeelFile);
 			}
 			catch (IOException ioe) {

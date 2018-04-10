@@ -25,6 +25,9 @@ import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -128,10 +131,11 @@ public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebPro
 		}
 
 		if ("theme.type".equals(key) || "theme.parent".equals(key)) {
-			try {
-				IFile buildXmlFile = getProject().getFile("build.xml");
+			IFile buildXmlFile = getProject().getFile("build.xml");
 
-				Document buildXmlDoc = FileUtil.readXML(buildXmlFile.getContents(), null, null);
+			try(InputStream inputStream = buildXmlFile.getContents()) {
+
+				Document buildXmlDoc = FileUtil.readXML(inputStream, null, null);
 
 				NodeList properties = buildXmlDoc.getElementsByTagName("property");
 
@@ -147,7 +151,7 @@ public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebPro
 					}
 				}
 			}
-			catch (CoreException ce) {
+			catch (CoreException | IOException ce) {
 				ProjectCore.logError("Unable to get property " + key, ce);
 			}
 		}

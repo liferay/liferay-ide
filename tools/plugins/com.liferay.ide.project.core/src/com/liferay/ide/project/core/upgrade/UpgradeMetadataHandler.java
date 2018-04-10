@@ -155,15 +155,9 @@ public class UpgradeMetadataHandler extends AbstractUpgradeProjectHandler {
 		pluginPackageProperties.load(osfile);
 		pluginPackageProperties.setProperty(propertyName, propertiesValue);
 
-		FileWriter output = new FileWriter(osfile);
-
-		try {
+		try(FileWriter output = new FileWriter(osfile)) {
 			pluginPackageProperties.save(output);
 		}
-		finally {
-			output.close();
-		}
-
 		file.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
 	}
 

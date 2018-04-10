@@ -324,30 +324,14 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 	protected String getPropertyValue(String key, IFile propertiesFile) {
 		String retval = null;
 
-		InputStream contents = null;
-
-		try {
+		try (InputStream inputStream = getPluginPackageFile().getContents()){
 			Properties props = new Properties();
 
-			contents = getPluginPackageFile().getContents();
-
-			props.load(contents);
+			props.load(inputStream);
 
 			retval = props.getProperty(key, StringPool.EMPTY);
 		}
 		catch (Exception e) {
-		}
-		finally {
-			if (contents != null) {
-				try {
-					contents.close();
-				}
-				catch (Exception e) {
-
-					// best effort
-
-				}
-			}
 		}
 
 		return retval;

@@ -232,27 +232,29 @@ public class ServerUtil {
 		File implJar = implJarPath.toFile();
 
 		if (FileUtil.exists(implJar)) {
-			try {
-				JarFile jar = new JarFile(implJar);
+			try(JarFile jar = new JarFile(implJar);) {
+
 				Properties categories = new Properties();
 				Properties props = new Properties();
 
-				props.load(jar.getInputStream(jar.getEntry("content/Language.properties")));
-				Enumeration<?> names = props.propertyNames();
+				try(InputStream input = jar.getInputStream(jar.getEntry("content/Language.properties"))){
 
-				while (names.hasMoreElements()) {
-					Object element = names.nextElement();
+					props.load(input);
+					Enumeration<?> names = props.propertyNames();
 
-					String name = element.toString();
+					while (names.hasMoreElements()) {
+						Object element = names.nextElement();
 
-					if (name.startsWith("category."))
-					{
-						categories.put(name, props.getProperty(name));
+						String name = element.toString();
+
+						if (name.startsWith("category."))
+						{
+							categories.put(name, props.getProperty(name));
+						}
 					}
-				}
 
-				retval = categories;
-				jar.close();
+					retval = categories;
+				}
 			}
 			catch (IOException ioe) {
 				LiferayServerCore.logError(ioe);
@@ -396,7 +398,9 @@ public class ServerUtil {
 	public static String getFragemtHostName(File bundleFile) {
 		String fragmentHostName = null;
 
-		try (JarInputStream jarStream = new JarInputStream(Files.newInputStream(bundleFile.toPath()))) {
+		try (InputStream input = Files.newInputStream( bundleFile.toPath() );
+				JarInputStream jarStream = new JarInputStream( input )) {
+
 			Manifest manifest = jarStream.getManifest();
 
 			Attributes manifestAttrib = manifest.getMainAttributes();
@@ -562,10 +566,13 @@ public class ServerUtil {
 			boolean found = false;
 
 			for (File file : files) {
+
 				try (JarFile jar = new JarFile(file)) {
+
 					Enumeration<JarEntry> enu = jar.entries();
 
 					while (enu.hasMoreElements()) {
+
 						JarEntry entry = enu.nextElement();
 
 						String name = entry.getName();

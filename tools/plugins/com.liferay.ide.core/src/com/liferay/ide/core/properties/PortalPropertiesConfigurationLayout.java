@@ -61,80 +61,79 @@ public class PortalPropertiesConfigurationLayout extends PropertiesConfiguration
 			char delimiter =
 				getConfiguration().isDelimiterParsingDisabled() ? 0 : getConfiguration().getListDelimiter();
 
-			PluginPropertiesWriter writer = new PluginPropertiesWriter(out, delimiter);
-
-			if (getHeaderComment() != null) {
-				writer.writeln(getCanonicalHeaderComment(true));
-				writer.writeln(null);
-			}
-
-			List<Object> keyList = Arrays.asList(getKeys().toArray());
-
-			Collections.sort(
-				keyList,
-				new Comparator<Object>() {
-
-					public int compare(Object o1, Object o2) {
-						int index1 = Integer.MAX_VALUE;
-						int index2 = Integer.MAX_VALUE;
-
-						for (int i = 0; i < sortedKeys.length; i++) {
-							if (sortedKeys[i].equals(o1)) {
-								index1 = i;
-							}
-
-							if (sortedKeys[i].equals(o2)) {
-								index2 = i;
-							}
-						}
-
-						if (index1 < index2) {
-							return -1;
-						}
-						else if (index1 > index2) {
-							return 1;
-						}
-
-						return 0;
-					}
-
-				});
-
-			for (Iterator it = keyList.iterator(); it.hasNext();) {
-				String key = (String)it.next();
-
-				if (getConfiguration().containsKey(key)) {
-
-					// Output blank lines before property
-
-					for (int i = 0; i < getBlancLinesBefore(key); i++) {
-						writer.writeln(null);
-					}
-
-					// Output the comment
-
-					if (getComment(key) != null) {
-						writer.writeln(getCanonicalComment(key, true));
-					}
-
-					// Output the property and its value
-
-					boolean singleLine = false;
-
-					if ((isForceSingleLine() || isSingleLine(key)) &&
-						!getConfiguration().isDelimiterParsingDisabled()) {
-
-						singleLine = true;
-					}
-
-					boolean wrappedProperty = isWrappedProperty(key);
-
-					writer.writeProperty(key, getConfiguration().getProperty(key), singleLine, wrappedProperty);
+			try(PluginPropertiesWriter writer = new PluginPropertiesWriter(out, delimiter)){
+				if (getHeaderComment() != null) {
+					writer.writeln(getCanonicalHeaderComment(true));
+					writer.writeln(null);
 				}
-			}
 
-			writer.flush();
-			writer.close();
+				List<Object> keyList = Arrays.asList(getKeys().toArray());
+
+				Collections.sort(
+					keyList,
+					new Comparator<Object>() {
+
+						public int compare(Object o1, Object o2) {
+							int index1 = Integer.MAX_VALUE;
+							int index2 = Integer.MAX_VALUE;
+
+							for (int i = 0; i < sortedKeys.length; i++) {
+								if (sortedKeys[i].equals(o1)) {
+									index1 = i;
+								}
+
+								if (sortedKeys[i].equals(o2)) {
+									index2 = i;
+								}
+							}
+
+							if (index1 < index2) {
+								return -1;
+							}
+							else if (index1 > index2) {
+								return 1;
+							}
+
+							return 0;
+						}
+
+					});
+
+				for (Iterator it = keyList.iterator(); it.hasNext();) {
+					String key = (String)it.next();
+
+					if (getConfiguration().containsKey(key)) {
+
+						// Output blank lines before property
+
+						for (int i = 0; i < getBlancLinesBefore(key); i++) {
+							writer.writeln(null);
+						}
+
+						// Output the comment
+
+						if (getComment(key) != null) {
+							writer.writeln(getCanonicalComment(key, true));
+						}
+
+						// Output the property and its value
+
+						boolean singleLine = false;
+
+						if ((isForceSingleLine() || isSingleLine(key)) &&
+							!getConfiguration().isDelimiterParsingDisabled()) {
+
+							singleLine = true;
+						}
+
+						boolean wrappedProperty = isWrappedProperty(key);
+
+						writer.writeProperty(key, getConfiguration().getProperty(key), singleLine, wrappedProperty);
+					}
+				}
+
+				writer.flush();
+			}
 		}
 		catch (IOException ioe) {
 			throw new ConfigurationException(ioe);

@@ -438,7 +438,6 @@ public class MavenProjectBuilder extends AbstractProjectBuilder implements IWork
 			try (OutputStream out = Files.newOutputStream(pomFile.toPath())) {
 				maven.writeModel(model, out);
 				out.flush();
-				out.close();
 
 				WorkspaceJob job = new WorkspaceJob("Updating project " + project.getName()) {
 

@@ -197,9 +197,9 @@ public class SDKCorePlugin extends Plugin {
 				_addSDKToMemento(sdk, memento);
 			}
 
-			OutputStream fos = Files.newOutputStream(sdkGlobalFile.toPath());
-
-			sdkMementos.save(fos);
+			try(OutputStream fos = Files.newOutputStream(sdkGlobalFile.toPath())){
+				sdkMementos.save(fos);
+			}
 		}
 		catch (Exception e) {
 			logError("Unable to save global sdk settings", e);

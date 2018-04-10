@@ -76,7 +76,9 @@ public class BaseTests {
 	}
 
 	protected final IFile createFile(IProject project, String path, byte[] content) throws Exception {
-		return createFile(project, path, new ByteArrayInputStream(content));
+		try(InputStream inputSream = new ByteArrayInputStream(content)){
+			return createFile(project, path, inputSream);	
+		}
 	}
 
 	protected final IFile createFile(IProject project, String path, InputStream content) throws Exception {

@@ -95,13 +95,8 @@ public class VaadinPluginPackageDescriptorHelper extends PluginPackagesDescripto
 
 			pluginPackageProperties.setProperty(propertyName, newPortalDeps);
 
-			FileWriter output = new FileWriter(osfile);
-
-			try {
+			try(FileWriter output = new FileWriter(osfile)) {
 				pluginPackageProperties.save(output);
-			}
-			finally {
-				output.close();
 			}
 
 			// refresh file

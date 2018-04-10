@@ -284,7 +284,12 @@ public class ProjectUtil {
 			return emptyFile;
 		}
 
-		emptyFile.create(new ByteArrayInputStream(StringPool.EMPTY.getBytes()), true, null);
+		try(InputStream inputStream = new ByteArrayInputStream(StringPool.EMPTY.getBytes())){
+			emptyFile.create(inputStream, true, null);
+		}
+		catch (IOException e) {
+			throw new CoreException(ProjectCore.createErrorStatus(e));
+		}
 
 		return emptyFile;
 	}
@@ -1198,7 +1203,9 @@ public class ProjectUtil {
 		IFile bndfile = project.getFile("bnd.bnd");
 
 		if (bndfile.exists()) {
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(bndfile.getContents()))) {
+			try (InputStream inputStream = bndfile.getContents();
+					InputStreamReader inputReader = new InputStreamReader(inputStream);
+					BufferedReader reader = new BufferedReader(inputReader)) {
 				String fragName;
 
 				while ((fragName = reader.readLine()) != null) {

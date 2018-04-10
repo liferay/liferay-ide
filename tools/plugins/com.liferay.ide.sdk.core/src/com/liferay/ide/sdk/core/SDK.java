@@ -451,9 +451,8 @@ public class SDK {
 			if (originalCreateConetent.contains("DisplayName=\\\"$2\\\"")) {
 				String createContent = originalCreateConetent.replace("DisplayName=\\\"$2\\\"", "DisplayName=\"$2\"");
 
-				try {
-					FileUtil.writeFile(
-						createFile, new ByteArrayInputStream(createContent.toString().getBytes("UTF-8")), null);
+				try(InputStream input = new ByteArrayInputStream(createContent.toString().getBytes("UTF-8"))) {
+					FileUtil.writeFile(createFile, input, null);
 				}
 				catch (Exception e) {
 					SDKCorePlugin.logError(e);
@@ -468,9 +467,8 @@ public class SDK {
 		}
 
 		if (!CoreUtil.isNullOrEmpty(originalCreateConetent)) {
-			try {
-				FileUtil.writeFile(
-					createFile, new ByteArrayInputStream(originalCreateConetent.toString().getBytes("UTF-8")), null);
+			try(InputStream input = new ByteArrayInputStream(originalCreateConetent.toString().getBytes("UTF-8"))) {
+				FileUtil.writeFile(createFile, input, null);
 			}
 			catch (Exception e) {
 				SDKCorePlugin.logError(e);

@@ -24,16 +24,13 @@ import com.liferay.ide.project.core.modules.IComponentTemplate;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.PropertyKey;
 
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateExceptionHandler;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+
 import java.io.Writer;
 
 import java.net.URL;
@@ -64,6 +61,11 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.java.JavaPackageName;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
 
 /**
  * @author Simon Jiang
@@ -96,8 +98,9 @@ public abstract class AbstractLiferayComponentTemplate
 			if (newFile.getParent() instanceof IFolder) {
 				CoreUtil.prepareFolder((IFolder)newFile.getParent());
 			}
-
-			newFile.create(new ByteArrayInputStream(sampleContent.getBytes()), true, null);
+			try(InputStream input = new ByteArrayInputStream(sampleContent.getBytes())){
+				newFile.create(input, true, null);
+			}
 		}
 		catch (IOException ioe) {
 			throw new CoreException(ProjectCore.createErrorStatus(ioe));
@@ -121,8 +124,9 @@ public abstract class AbstractLiferayComponentTemplate
 			if (newFile.getParent() instanceof IFolder) {
 				CoreUtil.prepareFolder((IFolder)newFile.getParent());
 			}
-
-			newFile.create(new ByteArrayInputStream(newCoentent.getBytes()), true, null);
+			try(InputStream input = new ByteArrayInputStream(newCoentent.getBytes())){
+				newFile.create(input, true, null);
+			}
 		}
 		catch (IOException ioe) {
 			throw new CoreException(ProjectCore.createErrorStatus(ioe));
@@ -188,8 +192,12 @@ public abstract class AbstractLiferayComponentTemplate
 		if (newFile.getParent() instanceof IFolder) {
 			CoreUtil.prepareFolder((IFolder)newFile.getParent());
 		}
-
-		newFile.create(new ByteArrayInputStream(input), true, null);
+		try(InputStream inputStream = new ByteArrayInputStream(input)){
+			newFile.create(inputStream, true, null);
+		}
+		catch( IOException e) {
+			throw new CoreException(ProjectCore.createErrorStatus(e));
+		}
 	}
 
 	protected void createFileInResouceFolder(IFolder sourceFolder, String filePath, File resourceFile)
@@ -299,12 +307,12 @@ public abstract class AbstractLiferayComponentTemplate
 	protected void doSourceCodeOperation(IFile srcFile) throws CoreException {
 		File file = srcFile.getLocation().toFile();
 
-		try (OutputStream fos = Files.newOutputStream(file.toPath())) {
+		try (OutputStream fos = Files.newOutputStream(file.toPath());
+				Writer out = new OutputStreamWriter(fos)) {
+
 			Template temp = cfg.getTemplate(getTemplateFile());
 
 			Map<String, Object> root = getTemplateMap();
-
-			Writer out = new OutputStreamWriter(fos);
 
 			temp.process(root, out);
 

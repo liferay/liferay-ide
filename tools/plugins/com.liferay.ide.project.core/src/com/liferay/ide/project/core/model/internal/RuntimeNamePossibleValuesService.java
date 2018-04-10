@@ -69,10 +69,12 @@ public class RuntimeNamePossibleValuesService extends PossibleValuesService impl
 		for (IRuntime runtime : runtimes) {
 			String runtimeId = runtime.getRuntimeType().getId();
 
-			if (runtime.validate(new NullProgressMonitor()).isOK() && ServerUtil.isLiferayRuntime(runtime) &&
-				!runtimeId.equals("com.liferay.ide.server.portal.runtime")) {
+			if (!runtimeId.equals("com.liferay.ide.server.portal.runtime") && 
+					ServerUtil.isLiferayRuntime(runtime)) {
 
-				values.add(runtime.getName());
+				if (runtime.validate(new NullProgressMonitor()).isOK()){
+					values.add(runtime.getName());	
+				}
 			}
 		}
 	}
