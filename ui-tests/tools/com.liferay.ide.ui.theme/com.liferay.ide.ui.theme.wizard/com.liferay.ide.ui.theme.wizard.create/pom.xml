@@ -20,13 +20,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.liferay.ide.ui.tests</groupId>
-		<artifactId>tools-tests</artifactId>
+		<groupId>com.liferay.ide.ui.tests.theme.wizard</groupId>
+		<artifactId>theme-wizard-tests</artifactId>
 		<version>3.2.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.liferay.ide.ui.theme.deploy.tests</artifactId>
+	<artifactId>com.liferay.ide.ui.theme.wizard.create.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 
-	<name>Liferay IDE UI Theme Deploy Tests</name>
+	<name>Liferay IDE UI Theme Wizard Create Tests</name>
 </project>

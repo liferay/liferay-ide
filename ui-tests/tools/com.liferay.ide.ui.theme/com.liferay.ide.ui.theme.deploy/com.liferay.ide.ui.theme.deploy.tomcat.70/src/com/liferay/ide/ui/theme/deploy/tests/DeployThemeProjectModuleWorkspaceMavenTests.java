@@ -24,7 +24,7 @@ import org.junit.Test;
 public class DeployThemeProjectModuleWorkspaceMavenTests extends SwtbotBase {
 
 	@Test
-	public void createTheme() {
+	public void deployTheme() {
 	}
 
 }

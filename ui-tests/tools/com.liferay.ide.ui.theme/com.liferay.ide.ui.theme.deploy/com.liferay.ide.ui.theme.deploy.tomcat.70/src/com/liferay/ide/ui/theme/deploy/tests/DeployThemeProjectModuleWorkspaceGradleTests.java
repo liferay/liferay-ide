@@ -21,7 +21,7 @@ import org.junit.Test;
 /**
  * @author Terry Jia
  */
-public class DeployThemeModuleGradleTests extends SwtbotBase {
+public class DeployThemeProjectModuleWorkspaceGradleTests extends SwtbotBase {
 
 	@Test
 	public void deployTheme() {
