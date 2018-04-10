@@ -124,7 +124,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 			addPage(Page.upgradePomPageId);
 		}
 
-		if (hasPortlet || hasHook || hasServiceBuilder) {
+		if (hasPortlet || hasHook || hasServiceBuilder || hasMavenProject) {
 			addPage(Page.findbreackingchangesPageId);
 		}
 
@@ -148,7 +148,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 		 * if( hasExt || hasTheme || hasWorkspace ) { addPage( Page.EXTANDTHEME_PAGE_ID
 		 * ); }
 		 */
-		if (hasPortlet || hasHook || hasServiceBuilder || hasLayout) {
+		if (hasPortlet || hasHook || hasServiceBuilder || hasLayout || hasMavenProject) {
 			addPage(Page.buildPageId);
 			addPage(Page.summaryPageId);
 		}
@@ -187,7 +187,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 
 		PageNavigateEvent event = new PageNavigateEvent();
 
-		event.setTargetPage(2);
+		event.setTargetPage(0);
 
 		StackLayout stackLayout = (StackLayout)_pagesSwitchControler.getLayout();
 
@@ -285,34 +285,40 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 
 		upgradePomPage.setIndex(pageIndex++);
 		upgradePomPage.setTitle("Upgrade POM Files");
+		upgradePomPage.addPageNavigateListener(gear);
 		upgradePomPage.addPageValidationListener(gear);
 
 		Page findBreakingChangesPage = new FindBreakingChangesPage(_pagesSwitchControler, SWT.NONE, _dataModel);
 
 		findBreakingChangesPage.setIndex(pageIndex++);
 		findBreakingChangesPage.setTitle("Find Breaking Changes");
+		findBreakingChangesPage.addPageNavigateListener(gear);
 
 		Page descriptorsPage = new DescriptorsPage(_pagesSwitchControler, SWT.NONE, _dataModel);
 
 		descriptorsPage.setIndex(pageIndex++);
 		descriptorsPage.setTitle("Update Descriptor Files");
+		descriptorsPage.addPageNavigateListener(gear);
 		descriptorsPage.addPageValidationListener(gear);
 
 		Page buildServicePage = new BuildServicePage(_pagesSwitchControler, SWT.NONE, _dataModel);
 
 		buildServicePage.setIndex(pageIndex++);
 		buildServicePage.setTitle("Build Services");
+		buildServicePage.addPageNavigateListener(gear);
 
 		Page layoutTemplatePage = new LayoutTemplatePage(_pagesSwitchControler, SWT.NONE, _dataModel);
 
 		layoutTemplatePage.setIndex(pageIndex++);
 		layoutTemplatePage.setTitle("Layout Templates");
+		layoutTemplatePage.addPageNavigateListener(gear);
 		layoutTemplatePage.addPageValidationListener(gear);
 
 		Page customJspPage = new CustomJspPage(_pagesSwitchControler, SWT.NONE, _dataModel);
 
 		customJspPage.setIndex(pageIndex++);
 		customJspPage.setTitle("Custom Jsp");
+		customJspPage.addPageNavigateListener(gear);
 		customJspPage.addPageValidationListener(gear);
 
 		// Page extAndThemePage = new ExtAndThemePage( pagesSwitchControler, SWT.NONE,
@@ -324,6 +330,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener {
 
 		buildPage.setIndex(pageIndex++);
 		buildPage.setTitle("Build");
+		buildPage.addPageNavigateListener(gear);
 
 		Page summaryPage = new SummaryPage(_pagesSwitchControler, SWT.NONE, _dataModel);
 
