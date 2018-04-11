@@ -1,0 +1,6 @@
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.liferay.roster.exception,\
+	com.liferay.roster.model,\
+	com.liferay.roster.service,\
+	com.liferay.roster.service.persistence

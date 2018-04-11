@@ -1,0 +1,224 @@
+// This file contains any useful changes made to the tasks / settings created by
+// the Liferay Workspace Plugin (CE); shoudl be included from liferay-workspace-ee.gradle
+
+buildscript {
+    repositories {
+        jcenter()
+
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+
+    dependencies {
+        // Add dependency for build script, so we can access Git from our build script.
+        classpath 'org.ajoberstar:grgit:1.7.1'
+
+        // https://plugins.gradle.org/plugin/net.saliman.properties
+        classpath 'net.saliman:gradle-properties-plugin:1.4.6'
+    }
+}
+
+// we will need the 'requiredProperty', but on tasks added by Workspace Plugin
+// into root project
+
+rootProject.apply plugin: net.saliman.gradle.plugin.properties.PropertiesPlugin
+
+//
+// Enhance the distBundleTar + distBundleZip tasks
+//
+
+def git
+def gitException
+
+try {
+    // based on: https://mrhaki.blogspot.cz/2015/04/gradle-goodness-use-git-commit-id-in.html
+
+    // Open the Git repository in the current directory.
+    // looks up the .git dir in the specified directory or any parent until / is
+    // reached - in such exception is thrown
+    git = org.ajoberstar.grgit.Grgit.open(currentDir: rootProject.file('.'))
+
+} catch (Exception e) {
+    gitException = e
+}
+
+ext {
+    // Get commit id of HEAD.
+    revisionId      = git?.head()?.id
+    branch          = git?.branch?.current
+    remotes         = git?.remote?.list()
+}
+
+task generateReleaseInfo {
+    description 'Generates release info file for currently built bundle.'
+    group 'Liferay Workspace EE'
+
+    ext.file = file("${rootProject.buildDir}/release-info.txt")
+
+    doLast {
+        file.parentFile.mkdirs()
+
+        def now = java.time.ZonedDateTime.now()
+                .truncatedTo(java.time.temporal.ChronoUnit.SECONDS)
+                .format(java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME)
+
+        file.text = """\
+                    # Built by Liferay Workspace EE on ${now}                
+
+                    # Workspace build details
+
+                    project:        ${rootProject.name}
+                    environment:    ${gradle.liferayWorkspace.environment}
+                    projectVersion: ${gradle.liferayWorkspaceEe.projectVersion}
+                    releaseNumber:  ${gradle.liferayWorkspaceEe.releaseNumber}
+                           
+                    """.stripIndent()
+        if (git) {
+            file << """\
+                    # Git SCM information
+                    
+                    revisionId:     ${revisionId}
+                    branch:         ${branch?.name ?: 'none - detached HEAD'}
+                    trackingBranch: ${branch?.trackingBranch?.name ?: 'no tracked branch'}
+                    remotes:
+                    """.stripIndent()
+
+            remotes?.each {
+                file << """\
+                        |  - name: ${it.name}
+                        |    url:  ${it.url}
+                        |""".stripMargin()
+            }
+        }
+        else {
+            file << """
+                    # Git SCM information could not be loaded: 
+                    # ${gitException}
+                    """.stripIndent().trim()
+        }
+    }
+}
+
+// update ':distBundleZip' and ':distBundleTar':
+// (1) include environment, version and release number in the archive's file name
+// (2) place release info into the archives
+
+[
+        gradle.liferayWorkspaceEe.distBundleZipTask,
+        gradle.liferayWorkspaceEe.distBundleTarTask
+].each { distTask ->
+    distTask.with {
+        dependsOn generateReleaseInfo
+
+        // follow the .deb naming pattern and always attach the environment,
+        // version and release number at the end of .zip / .tar.gz file name
+
+        baseName += ".${gradle.liferayWorkspace.getEnvironment()}"
+        baseName += "_${gradle.liferayWorkspaceEe.projectVersion}"
+        baseName += "-${gradle.liferayWorkspaceEe.releaseNumber}"
+
+        // put as simple release info into the bundle, so when extracted (from
+        // .zip / .tar.gz), it's clear from where the bundle files are originating
+
+        from(generateReleaseInfo.file.absolutePath)
+
+        doLast {
+            logger.quiet "Assembled Liferay bundle archive '${project.rootProject.relativePath(getArchivePath())}'"
+        }
+    }
+}
+
+
+//
+// Enhance and optimize the ':downloadBundle' task used for fetching the bundle
+//
+
+def downloadBundleTask = gradle.liferayWorkspaceEe.downloadBundleTask
+
+// (1) allow user to pass in credentials, for any bundle URL
+
+downloadBundleTask.with {
+    username findProperty('downloadBundleUserName')
+    password findProperty('downloadBundlePassword')
+
+    // TODO compute SHA256 checksums of the common bundles (7.0 ce ga1, 7.0 ce ga3, DXP ga1, sp1...) and
+    // verify checksum of files downloaded into cache
+
+    // download URL -> expected checksum
+}
+
+boolean downloadedBundleLocatedOnFilesDotLiferayDotCom = gradle.liferayWorkspace.bundleUrl.with {
+    // TODO add any other domain which will host DXP (EE) bundles
+
+    startsWith('http://files.liferay.com') || startsWith('https://files.liferay.com')
+}
+
+if (downloadedBundleLocatedOnFilesDotLiferayDotCom) {
+
+    // (2) we're fetching bundle from 'files.liferay.com', most likely a DXP (EE)
+    // bundle => require credentials
+
+    def downloadBundleUrlDomain = new URL(gradle.liferayWorkspace.bundleUrl).host
+
+
+    def bundleFileName = gradle.liferayWorkspace.bundleUrl.with {
+        substring(lastIndexOf('/')) // the last part of the URL will be the file name
+    }
+
+    // 'dest' is a standard property of the 'downloadBundle' task
+    def cachedBundleFile = new File(downloadBundleTask.dest, bundleFileName)
+
+    // we know this domain requires auth (HTTP Basic) for fetching, so provide
+    // a note in case of download's failure, hinting at possible auth error
+
+    task downloadBundleNote() {
+        doLast {
+            if (downloadBundleTask.state.failure) {
+
+                // Make sure to give a hint to user if 'downloadBundle' fails. This task
+                // is finalizing 'downloadBundle', so it will run even on the failure
+                // of 'downloadBundle'
+
+                println """\
+                        |
+                        |NOTE: Make sure to provide valid '${downloadBundleUrlDomain}' credentials to Gradle -
+                        |  'downloadBundleUserName' and 'downloadBundlePassword' - using e.g. init script file 
+                        |  (see sample-ee-init-script.gradle), otherwise the needed bundle could not be downloaded. 
+                        |
+                        |  You can also download the bundle manually: 
+                        |       ${gradle.liferayWorkspace.bundleUrl} 
+                        |  and place it into your local cache:
+                        |       ${cachedBundleFile.parentFile.absolutePath}                         
+                        |  to make it available to this workspace build.
+                        |""".stripMargin()
+            }
+        }
+    }
+
+    downloadBundleTask.with {
+        finalizedBy downloadBundleNote
+
+        // Once we got the file (downloaded it in the past), we don't need to check
+        // whether it was updated on the server (check headers like Last-Modified
+        // against local file). We want to re-fetch only when the file name in the URL
+        // ('liferay.workspace.bundle.url' in gradle.properties) changes.
+
+        // When we change the URL but keep the file name part the same (e.g. we
+        // move the file to other location on the server), the task will be still
+        // up-to-date. It's a limitation we can live with - if the file's name did not
+        // change, we can assume it's still the same file, even through in different
+        // server directory.
+
+        overwrite false
+
+        // We fill be downloading from files.liferay.com (see downloadedBundleLocatedOnFilesDotLiferayDotCom),
+        // which always requires Basic Auth in every HTTP request; but only require
+        // the credentials if HTTP request will be actually made
+
+        if (overwrite || !cachedBundleFile.exists()) {
+            requiredProperty 'downloadBundleUserName'
+            requiredProperty 'downloadBundlePassword'
+        }
+    }
+}

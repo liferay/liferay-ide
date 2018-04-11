@@ -1,0 +1,20 @@
+dependencies {
+	compile 'biz.aQute.bnd:biz.aQute.bndlib:3.1.0'
+	compile 'com.liferay:com.liferay.portal.spring.extender:2.0.1'
+	compile 'com.liferay:com.liferay.osgi.util:3.0.0'
+
+	compile project(':modules:apps:roster:roster-api')
+
+	testCompile 'com.liferay.portal:com.liferay.portal.test:1.0.0'
+	testCompile 'com.liferay.portal:com.liferay.portal.test.integration:1.0.0'
+	testCompile 'com.liferay:com.liferay.arquillian.extension.junit.bridge:1.0.5'
+}
+
+buildService {
+	apiDir = "../roster-api/src/main/java"
+	testDir = "src/main/test"
+	osgiModule = true
+	propsUtil = "com.liferay.roster.service.util.PropsUtil"
+}
+
+version = '1.0.0'

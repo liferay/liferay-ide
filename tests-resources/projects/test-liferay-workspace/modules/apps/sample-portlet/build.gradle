@@ -1,0 +1,44 @@
+repositories {
+	mavenCentral()
+
+	maven {
+		url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+	}
+
+	maven {
+		url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+	}
+}
+
+configurations {
+	portalTest
+}
+
+dependencies {
+	compile 'com.liferay.portal:com.liferay.portal.kernel:2.0.0'
+	compile 'javax.portlet:portlet-api:2.0'
+	compile 'org.osgi:org.osgi.compendium:5.0.0'
+
+	testCompile 'com.liferay.portal:com.liferay.portal.test:1.0.0'
+	testCompile 'com.liferay.portal:com.liferay.portal.test.integration:1.0.0'
+
+	testCompile 'junit:junit:4.4'
+
+	testIntegrationCompile 'com.liferay:com.liferay.arquillian.extension.junit.bridge:1.0.5'
+}
+
+sourceSets {
+	testIntegration {
+		compileClasspath = configurations.portal + compileClasspath + configurations.portalTest
+		runtimeClasspath = configurations.portal + runtimeClasspath + configurations.portalTest
+	}
+}
+
+poshiRunner {
+	if (project.hasProperty("poshiRunnerExtProperties")) {
+		poshiPropertiesFile = new File(projectDir.parentFile, project.properties["poshiRunnerExtProperties"])
+	}
+
+	version = "1.0.38"
+}
+

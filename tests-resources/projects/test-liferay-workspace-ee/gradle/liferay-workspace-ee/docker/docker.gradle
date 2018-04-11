@@ -1,0 +1,258 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+apply plugin: 'base'
+
+def ospackageProjectPath = ':liferay-workspace-ee:ospackage'
+
+def ospackageProject = project(ospackageProjectPath)
+
+def distBundleDebTaskPath = "${ospackageProjectPath}:distBundleDeb"
+//def distBundleTarTaskPath = ":distBundleTar"
+
+def dockerBuildDir = "${rootProject.buildDir}"
+
+// make sure to add & configure the tasks from 'ospackage' first, then evaluate this module
+evaluationDependsOn(ospackageProjectPath)
+
+def packerExecutable = gradle.liferayWorkspaceEe.externalExecutables.packer.executable
+
+ext {
+
+    distBundleDebTask = rootProject.tasks.getByPath(distBundleDebTaskPath)
+//    distBundleTarTask = rootProject.tasks.getByPath(distBundleTarTaskPath)
+    liferayBundleDebFile = distBundleDebTask?.outputs.files.find {
+        it.name.endsWith('.deb')
+    }
+//    liferayBundleTarFile = distBundleTarTask?.archivePath
+
+    dockerLiferayStartupScriptDestination = '/usr/bin/liferay-tomcat'
+
+    // The name of DockerHub image to base our image on. Has to be Ubuntu, since we are installing .deb
+    dockerFrom = 'ubuntu:16.04'
+
+    // The repo name to use when committing Docker image
+    dockerContainerRepository = "${gradle.liferayWorkspaceEe.dockerRepositoryCompany}/${ospackageProject.ospackage.packageName}"
+
+    // The tag to use when committing Docker image; only used in samples
+    dockerTag = "${ospackageProject.ospackage.version}-${ospackageProject.ospackage.release}"
+
+    // The tag to use when committing raw Docker image built by Packer
+    dockerTagPacker = "${dockerTag}_raw"
+
+    // the context where packer can find files for the use inside template
+    packerContextDir = "${buildDir}/packer-context"
+}
+
+assert distBundleDebTask != null, "Cannot find task which produces the DEB file (checked '${distBundleDebTaskPath}')"
+//assert distBundleTarTask != null, "Cannot find task which produces the TAR file (checked '${distBundleTarTaskPath}')"
+assert liferayBundleDebFile, "Task '${distBundleDebTask}' does not produce any .deb file."
+//assert liferayBundleTarFile, "Task '${distBundleTarTask}' does not produce any .tar.gz file."
+
+task createPackerContextFiles(type: Copy) {
+
+    dependsOn ospackageProject.checkBundleType
+
+    into packerContextDir
+
+    // since the processed files are all shell scripts (full of $ shell variable references),
+    // rather not use 'expand', which would also try to replace all these $... variables.
+    // We would need to escape all shell variable references as \$...
+
+    from('packer_files/cleanup-image-tomcat.sh') {
+        filter(
+                ReplaceTokens,
+                tokens: [
+                        UTILS_FILE_CONTENT          : ospackageProject.generatePkgFilesFromTemplates.utilsFileContent,
+                        JAVA_HOME                   : ospackageProject.javaHome,
+                        LIFERAY_HOME                : ospackageProject.liferayHome,
+                        LIFERAY_HOME_TOMCAT_DIR_NAME: gradle.liferayWorkspaceEe.bundleAppServerDirectoryName
+            ]
+        )
+    }
+
+    from('packer_files/liferay-tomcat.sh') {
+
+        filter(
+                ReplaceTokens,
+                tokens: [
+                        UTILS_FILE_CONTENT          : ospackageProject.generatePkgFilesFromTemplates.utilsFileContent,
+                        JAVA_HOME                   : ospackageProject.javaHome,
+                        LIFERAY_HOME                : ospackageProject.liferayHome,
+                        LIFERAY_HOME_TOMCAT_DIR_NAME: gradle.liferayWorkspaceEe.bundleAppServerDirectoryName
+                ]
+        )
+    }
+}
+
+clean {
+    // in 'createPackerContextFiles' we are copying some files in execution phase, which don't get cleaned up
+    delete buildDir
+}
+
+task runPackerBuild(type: DockerPackerExec) {
+
+    description "Builds & commits raw Docker image with JDK and Liferay installed."
+
+    dependsOn distBundleDebTask, createPackerContextFiles
+    dependsOn 'runPackerValidate'
+
+    ext.packerUserVariables = [
+            liferay_user                             : ospackageProject.liferayUser,
+            liferay_group                            : ospackageProject.liferayGroup,
+            liferay_service_name                     : ospackageProject.liferayServiceName,
+
+            liferay_bundle_deb_source                : liferayBundleDebFile,
+            liferay_bundle_deb_name                  : liferayBundleDebFile.name,
+
+            cleanup_script_source                    : "${packerContextDir}/cleanup-image-tomcat.sh",
+
+            docker_liferay_startup_script_source     : "${packerContextDir}/liferay-tomcat.sh",
+            docker_liferay_startup_script_destination: dockerLiferayStartupScriptDestination,
+
+            docker_from                              : dockerFrom,
+            docker_container_repository              : dockerContainerRepository,
+            docker_tag                               : dockerTagPacker
+    ]
+
+    packerCommand(
+            packerExecutable,
+            file('packer-template.json'),
+            'build',
+            packerUserVariables,
+            [:],
+            false)
+
+    doLast {
+        println "Raw Docker image with Liferay bundle and Oracle JDK was " +
+                "committed and tagged as '${dockerContainerRepository}:${dockerTagPacker}'"
+    }
+}
+
+task runPackerValidate (type: DockerPackerExec) {
+    dependsOn distBundleDebTask, createPackerContextFiles
+
+    Map packerUserVariables = runPackerBuild.packerUserVariables
+
+    packerCommand(
+            packerExecutable,
+            file('packer-template.json'),
+            'validate',
+            packerUserVariables)
+
+    doFirst {
+        println "Used Packer user variables:"
+
+        packerUserVariables.each { key, value ->
+            println "  ${key} = ${value}"
+        }
+    }
+}
+
+task distBundleDockerfile(type: Copy) {
+    description "Builds Dockerfile describing how to run Liferay FROM raw Docker image built by Packer."
+    group "Liferay Workspace EE - Docker"
+
+    dependsOn runPackerBuild
+
+    into dockerBuildDir
+
+    from('docker_files/.dockerignore')
+
+    from('docker_files/docker-sample-commands.txt.template') {
+        rename 'docker-sample-commands.txt.template', "docker-sample-commands.txt"
+
+        expand([
+                DOCKER_CONTAINER_REPOSITORY: dockerContainerRepository,
+                DOCKER_TAG                 : dockerTag
+        ])
+    }
+
+    from('docker_files/Dockerfile.template') {
+        rename 'Dockerfile.template', 'Dockerfile'
+
+        expand([
+                DOCKER_LIFERAY_USER          : ospackageProject.liferayUser,
+                DOCKER_LIFERAY_STARTUP_SCRIPT: dockerLiferayStartupScriptDestination,
+
+                DOCKER_FROM                  : "${dockerContainerRepository}:${dockerTagPacker}",
+                DOCKER_MAINTAINER            : gradle.liferayWorkspaceEe.dockerMaintainer,
+                DOCKER_EXPOSE                : gradle.liferayWorkspaceEe.dockerExpose
+        ])
+    }
+
+    doLast {
+        println "Dockerfile was written as '${rootProject.relativePath(dockerBuildDir)}/Dockerfile. " +
+                "Check '${rootProject.relativePath(dockerBuildDir)}/docker-sample-commands.txt' for guidelines."
+    }
+}
+
+task distBundleDockerImageLocal(type: Exec) {
+    description "Builds & tags the Docker image locally, based on built Dockerfile."
+    group "Liferay Workspace EE - Docker"
+
+    dependsOn distBundleDockerfile
+
+    workingDir dockerBuildDir
+
+    executable gradle.liferayWorkspaceEe.externalExecutables.docker.executable
+
+    args 'build', '-t', "${dockerContainerRepository}:${dockerTag}", '.'
+
+    doFirst {
+        println "Removing the previous Docker image with the tag " +
+                "'${dockerContainerRepository}:${dockerTag}', if it exists locally"
+
+        exec {
+            executable gradle.liferayWorkspaceEe.externalExecutables.docker.executable
+
+            args 'rmi', "${dockerContainerRepository}:${dockerTag}"
+
+            // image may be already associated with a container, which is fine;
+            // we don't want to force the removal, so jsut ignore any errors
+            ignoreExitValue true
+        }
+    }
+
+    doLast {
+        println "Docker image with metadata was committed and tagged as '${dockerContainerRepository}:${dockerTag}'. " +
+                "Check 'docker images' to see it in local Docker process."
+    }
+}
+
+/**
+ * Executes Packer (https://www.packer) 'build' command with given JSON config and
+ * given set of user variables. The result is the same as if you run e.g.:
+ *
+ *      $ packer build \
+ *          -var 'aws_access_key=YOUR ACCESS KEY' \
+ *          -var 'aws_secret_key=YOUR SECRET KEY' \
+ *          packer-template.json
+ */
+class DockerPackerExec extends Exec {
+
+    void packerCommand(
+            String packerExecutable, File packerTemplate, String packerCommand,
+            Map packerUserVariables, Map packerEnvironmentVariables = [:],
+            boolean showExtraPackerLogging = false) {
+
+        // use environment variables, so that the values are not visible in process'
+        // command line; environment variables are explicitly used in the Packer template
+        environment(packerEnvironmentVariables)
+
+        if (showExtraPackerLogging) {
+            environment([PACKER_LOG: 1])
+        }
+
+        def packerArguments = [packerCommand]
+
+        packerUserVariables.each { key, value ->
+            packerArguments.add '-var'
+            packerArguments.add "${key}=${value}"
+        }
+
+        packerArguments.add packerTemplate
+
+        executable packerExecutable
+        args packerArguments
+    }
+}

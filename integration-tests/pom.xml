@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*******************************************************************************
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
+-->
+
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.liferay.ide</groupId>
+	<artifactId>integration-tests</artifactId>
+	<version>3.2.0-SNAPSHOT</version>
+
+	<name>Liferay IDE Integration Tests</name>
+
+	<packaging>pom</packaging>
+
+	<properties>
+		<eclipse-site>http://download.eclipse.org/releases/oxygen/201712201001/</eclipse-site>
+		<tycho-packaging-format>'m1'</tycho-packaging-format>
+		<tycho-version>1.0.0</tycho-version>
+		<liferay-ide-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide-repository/target/repository/</liferay-ide-site>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>liferay-ide</id>
+			<layout>p2</layout>
+			<url>${liferay-ide-site}</url>
+		</repository>
+		<repository>
+			<id>eclipse</id>
+			<layout>p2</layout>
+			<url>${eclipse-site}</url>
+		</repository>
+	</repositories>
+
+	<profiles>
+		<profile>
+			<id>tests-repo</id>
+			<modules>
+				<module>com.liferay.ide.integration.tests-repository</module>
+				<module>common</module>
+			</modules>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.eclipse.tycho</groupId>
+							<artifactId>target-platform-configuration</artifactId>
+							<version>${tycho-version}</version>
+							<configuration>
+								<dependency-resolution>
+									<extraRequirements>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.eclipse.tools</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.alloy</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.enterprise</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.maven</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+									</extraRequirements>
+								</dependency-resolution>
+								<resolver>p2</resolver>
+								<ignoreTychoRepositories>true</ignoreTychoRepositories>
+								<allowConflictingDependencies>true</allowConflictingDependencies>
+								<environments>
+									<environment>
+										<os>win32</os>
+										<ws>win32</ws>
+										<arch>x86_64</arch>
+									</environment>
+									<environment>
+										<os>macosx</os>
+										<ws>cocoa</ws>
+										<arch>x86_64</arch>
+									</environment>
+									<environment>
+										<os>linux</os>
+										<ws>gtk</ws>
+										<arch>x86_64</arch>
+									</environment>
+								</environments>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+		<profile>
+			<id>integration-tests</id>
+			<modules>
+				<module>tools</module>
+			</modules>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.eclipse.tycho</groupId>
+							<artifactId>target-platform-configuration</artifactId>
+							<version>${tycho-version}</version>
+							<configuration>
+								<dependency-resolution>
+									<extraRequirements>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.eclipse.tools</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.alloy</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.enterprise</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+										<requirement>
+											<type>eclipse-feature</type>
+											<id>com.liferay.ide.maven</id>
+											<versionRange>0.0.0</versionRange>
+										</requirement>
+									</extraRequirements>
+								</dependency-resolution>
+								<resolver>p2</resolver>
+								<ignoreTychoRepositories>true</ignoreTychoRepositories>
+								<allowConflictingDependencies>true</allowConflictingDependencies>
+								<environments>
+									<environment>
+										<os>win32</os>
+										<ws>win32</ws>
+										<arch>x86_64</arch>
+									</environment>
+									<environment>
+										<os>macosx</os>
+										<ws>cocoa</ws>
+										<arch>x86_64</arch>
+									</environment>
+									<environment>
+										<os>linux</os>
+										<ws>gtk</ws>
+										<arch>x86_64</arch>
+									</environment>
+								</environments>
+							</configuration>
+						</plugin>
+						<plugin>
+							<groupId>org.eclipse.tycho</groupId>
+							<artifactId>tycho-surefire-plugin</artifactId>
+							<version>${tycho-version}</version>
+							<configuration>
+								<useUIHarness>false</useUIHarness>
+								<useUIThread>false</useUIThread>
+								<failIfNoTests>false</failIfNoTests>
+								<runOrder>filesystem</runOrder>
+								<includes>
+									<include>**/*Test*.class</include>
+								</includes>
+								<argLine>-Xmx1024m -XX:MaxMetaspaceSize=1024m</argLine>
+								<dependencies>
+									<dependency>
+										<type>eclipse-feature</type>
+										<artifactId>org.eclipse.platform</artifactId>
+										<version>0.0.0</version>
+									</dependency>
+								</dependencies>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-versions-plugin</artifactId>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-maven-plugin</artifactId>
+					<version>${tycho-version}</version>
+					<extensions>true</extensions>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-compiler-plugin</artifactId>
+					<version>${tycho-version}</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-versions-plugin</artifactId>
+					<version>${tycho-version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>

@@ -1,0 +1,340 @@
+// This script sets default values of Liferay Workspace EE properties, based on '[root]/gradle-ee-default.properties'
+//
+// This script should be the parent project of all other EE projects, see 'settings-ee.gradle'
+//
+
+loadEePropertiesDefaults(rootProject.file("gradle-ee-default.properties"))
+
+// Create global extension for EE features, listing all properties being used by the EE scrips;
+// project-wide properties, typically same for all the project users, are listed in 'gradle-ee-default.properties'
+// which is also loaded above
+
+gradle.ext.liferayWorkspaceEe = [
+
+    // The tasks added by Workspace Plugin which we depend on
+    // Based on:
+    // https://github.com/liferay/liferay-portal/blob/master/modules/sdk/gradle-plugins-workspace/src/main/java/com/liferay/gradle/plugins/workspace/internal/configurators/RootProjectConfigurator.java
+
+    distBundleZipTask: tasks.findByPath(':distBundleZip'),
+    distBundleTarTask: tasks.findByPath(':distBundleTar'),
+    downloadBundleTask: tasks.findByPath(':downloadBundle'),
+
+    // 'version' of any Gradle project defaults to String 'unspecified' when
+    // not set in any '*.gradle' file, so provide a better default.
+    //
+    // 'project.version' should be se in root project's 'build.gradle' file.
+    projectVersion: (
+            (rootProject.version.isEmpty() || rootProject.version == 'unspecified') ?
+                    '0.0.0' :
+                    rootProject.version
+        ) as String,
+
+    // The incremental build number, used to to build DEB / RPM packages and AMIs to distinguish
+    // artifacts when same version but newer build is being produced.
+    // This will typically be passed to Gradle as '-PreleaseNumber=$BUILD_NUMBER' in Jenkins build.
+
+    releaseNumber: (
+            projectProperty(
+                'releaseNumber',
+                { assert "${it}".isInteger(), "'releaseNumber' has to be an integer" }
+            ) ?: '1'
+        ).toInteger() as int,
+
+    // The command-line tool which Gradle needs to use to build the EE artifacts.
+
+    externalExecutables: [
+            packer: [
+                    // test Packer with 'packer version', which returns 0 as expected. 'packer -version' returns 1
+                    name               : 'packer',
+                    executable         : (projectProperty('packerExecutable') ?: 'packer') as String,
+                    validationArguments: ['version'],
+                    downloadUrl        : 'https://www.packer.io',
+                    configPropertyName : 'packerExecutable'
+            ],
+            docker: [
+                    name               : 'docker',
+                    executable         : (projectProperty('dockerExecutable') ?: 'docker') as String,
+                    validationArguments: ['version'],
+                    downloadUrl        : 'https://www.docker.com',
+                    configPropertyName : 'dockerExecutable'
+            ]
+    ],
+
+    // The type of bundle, typically the name of app server being used, which was
+    // provided to the liferay-workspace, using 'liferay.workspace.bundle.url'.
+
+    bundleType: (projectProperty('liferay.workspace.ee.bundle.type') ?: '') as String,
+    bundleAppServerDirectoryName: (projectProperty('liferay.workspace.ee.bundle.app.server.directory.name') ?: '') as String,
+
+    //
+    // Properties for 'jenkins' module
+    //
+
+    // Following Jenkins credentials should be set only using Gradle init script
+
+    // default to '', that way Jenkins plugin will not fail before running any task and we can do our own validation
+    jenkinsUserName: (projectProperty('jenkinsUserName') ?: '') as String,
+    jenkinsPassword: (projectProperty('jenkinsPassword') ?: '') as String,
+
+    // Following Jenkins properties are project-wide and should be set using 'gradle.properties'
+
+    jenkinsServerUrl: (
+            projectProperty(
+                'liferay.workspace.ee.jenkins.server.url',
+                { assert it.startsWith('http://') || it.startsWith('https://'),
+                    "'liferay.workspace.ee.jenkins.server.url' has to contain a valid HTTP(S) protocol"}
+            ) ?: ''
+        ) as String,
+
+    // make sure to convert the boolean property when set: https://issues.gradle.org/browse/GRADLE-2306
+    jenkinsServerSecure: (
+            projectProperty(
+                'liferay.workspace.ee.jenkins.server.secure',
+                { assert it == 'false' || it == 'true',
+                        "'liferay.workspace.ee.jenkins.server.secure' has to be a valid boolean value" }
+            ) ?: true
+        ).toBoolean() as boolean,
+
+    jenkinsItemsDir: (
+            projectProperty(
+                    'liferay.workspace.ee.jenkins.items.dir',
+                    { assert !new File(it).isAbsolute(),
+                            "'liferay.workspace.ee.jenkins.items.dir' cannot be an absolute path, please use a relative one" }
+            ) ?: ''
+        ) as String,
+
+    jenkinsInitialJobsExcludeEnvironments: (
+            projectProperty(
+                    'liferay.workspace.ee.jenkins.initial.jobs.exclude.environments')?.split(',[\\s]*').findAll { it.trim() } ?: []
+        ) as List,
+
+    jenkinsInitialJobsExtraDumpedJobNames: (
+            projectProperty(
+                    'liferay.workspace.ee.jenkins.initial.jobs.extra.dumped.job.names')?.split(',[\\s]*').findAll { it.trim() } ?: []
+        ) as List,
+
+    //
+    // Properties for 'aws' module
+    //
+
+    // Following AWS credentials should be set only using Gradle init script
+
+    awsAccessKey: (projectProperty('awsAccessKey') ?: '') as String,
+    awsSecretKey: (projectProperty('awsSecretKey') ?: '') as String,
+
+    // Following AWS properties are project-wide and should be set using 'gradle.properties'
+
+    awsAmiPrimaryRegion: (projectProperty('liferay.workspace.ee.aws.ami.primary.region') ?: '') as String,
+
+    awsAmiBaseAmiId: (projectProperty('liferay.workspace.ee.aws.ami.base.ami.id') ?: '') as String,
+
+    awsAmiBaseAmiLinuxPackagesFormat: (
+            projectProperty('liferay.workspace.ee.aws.ami.base.ami.linux.packages.format') ?: ''
+        ) as String,
+
+    awsAmiBaseAmiSshUserName: (projectProperty('liferay.workspace.ee.aws.ami.base.ami.ssh.user.name') ?: '') as String,
+
+    awsAmiBuildEc2InstanceType: (projectProperty('liferay.workspace.ee.aws.ami.build.ec2.instance.type') ?: '') as String,
+
+    awsAmiBuildEc2InstanceVpcId: (projectProperty('liferay.workspace.ee.aws.ami.build.ec2.vpc.id') ?: '') as String,
+
+    awsAmiBuildEc2SubnetId: (projectProperty('liferay.workspace.ee.aws.ami.build.ec2.subnet.id') ?: '') as String,
+
+    awsAmiPlatformKey: (projectProperty('liferay.workspace.ee.aws.ami.platform.key') ?: '') as String,
+
+    awsAmiCopyToRegions: (projectProperty('liferay.workspace.ee.aws.ami.copy.to.regions') ?: '') as String,
+
+    // Properties for 'docker' module
+
+    dockerRepositoryCompany: (projectProperty('liferay.workspace.ee.docker.repository.company') ?: '') as String,
+
+    dockerMaintainer: (projectProperty('liferay.workspace.ee.docker.maintainer') ?: '') as String,
+
+    // TODO validate it's a space-delimited list of valid port numbers?
+    dockerExpose: (projectProperty('liferay.workspace.ee.docker.expose') ?: '') as String
+]
+
+// check that the tasks we depend on actually were added by Workspace Plugin into the root project
+
+assert gradle.liferayWorkspaceEe.distBundleZipTask, ":distBundleZip not found, did Workspace Plugin change the path of the task?"
+assert gradle.liferayWorkspaceEe.distBundleTarTask, ":distBundleTar not found, did Workspace Plugin change the path of the task?"
+assert gradle.liferayWorkspaceEe.downloadBundleTask, ":downloadBundle not found, did Workspace Plugin change the path of the task?"
+
+apply from: 'liferay-workspace-ce-updates.gradle'
+
+
+// Checks to be done when graph of tasks is ready and first task is about to be started
+
+gradle.taskGraph.whenReady { taskGraph ->
+
+    // make sure that we require AWS credentials to be specified when building AMI
+    if (taskGraph.hasTask(':liferay-workspace-ee:aws:distBundleAmi')) {
+        def missingAwsProperties = ["awsAccessKey", "awsSecretKey"].findAll { !projectProperty(it) }
+
+        if (!missingAwsProperties.isEmpty()) {
+            throw new InvalidUserDataException("Following project properties were not found: " +
+                    "${missingAwsProperties}. Make sure you provide " +
+                    "these to Gradle when building AMI in AWS, either using Gradle init script " +
+                    "(see 'sample-ee-init-script.gradle') or on command line ('-P...')")
+        }
+
+        checkCommandExecutable(gradle.liferayWorkspaceEe.externalExecutables.packer)
+    }
+
+
+    if (gradle.liferayWorkspaceEe.jenkinsServerSecure) {
+        def jenkinsTasksPaths = [':liferay-workspace-ee:jenkins:installJenkinsPlugins']
+
+        ['delete', 'dump', 'dumpRemote', 'retire', 'update', 'validate'].each { jenkinsCommand ->
+            jenkinsTasksPaths.add ":liferay-workspace-ee:jenkins:${jenkinsCommand}JenkinsJobs"
+            jenkinsTasksPaths.add ":liferay-workspace-ee:jenkins:${jenkinsCommand}JenkinsItems"
+        }
+
+        boolean hasJenkinsTask = taskGraph.allTasks.find { task ->
+            jenkinsTasksPaths.find { jenkinsTasksPath -> jenkinsTasksPath == task.path}
+        }
+
+        if (hasJenkinsTask) {
+            // make sure that we require Jenkins credentials if it is secured and one of Jenkins tasks is invoked
+            def missingJenkinsProperties = ["jenkinsUserName", "jenkinsPassword"].findAll {
+                !projectProperty(it)
+            }
+
+            if (!missingJenkinsProperties.empty) {
+                throw new InvalidUserDataException("Jenkins server is expected to be 'secure' " +
+                        "('liferay.workspace.ee.jenkins.server.secure' in 'gradle.properties' or " +
+                        "EE defaults in 'gradle-ee-default.properties'), but following project " +
+                        "properties were not found: ${missingJenkinsProperties}. Make sure you provide " +
+                        "these to Gradle when invoking Jenkins tasks, either using Gradle init script " +
+                        "(see 'sample-ee-init-script.gradle') or on command line ('-P...')")
+            }
+        }
+    }
+
+    // make sure that Tomcat is used as the base bundle, since LWE only supports Tomcat for now
+    if (taskGraph.hasTask(':liferay-workspace-ee:ospackage:distBundleDeb') ||
+            taskGraph.hasTask(':liferay-workspace-ee:ospackage:distBundleDebNoJdk') ||
+            taskGraph.hasTask(':liferay-workspace-ee:ospackage:distBundleRpm') ||
+            taskGraph.hasTask(':liferay-workspace-ee:ospackage:distBundleRpmNoJdk')) {
+
+        // developer note: adding new supported bundle types means at least:
+        //  * adding the key to list of supported bundles in this file
+        //  * adding appropriate bundle type file with file to check in ospackage/bundle-types.gradle
+        //      * new SupportedBundleType enum value, its name matching the new key
+        //  * adding support for new bundle type throughout ospackage/ospackage.gradle
+        //      * tasks + versions of all OS scripts (most effort)
+        def supportedBundleTypes = [ 'tomcat' ]
+
+        def bundleType = gradle.liferayWorkspaceEe.bundleType
+
+        if (!(bundleType in supportedBundleTypes)) {
+            throw new InvalidUserDataException("Only Tomcat-based bundles are supported " +
+                    "for OS packages / AMIs / Docker images being built by Liferay Workspace EE, " +
+                    "but you've configured '${bundleType}' for this project. Please make " +
+                    "sure that your 'liferay.workspace.ee.bundle.type' is equal to 'tomcat'.")
+        }
+    }
+
+    if (taskGraph.hasTask(':liferay-workspace-ee:docker:distBundleDockerfile')) {
+        checkCommandExecutable(gradle.liferayWorkspaceEe.externalExecutables.packer)
+        checkCommandExecutable(gradle.liferayWorkspaceEe.externalExecutables.docker)
+    }
+}
+
+/**
+ * Loads given properties file and sets each key as a new 'ext' property of 'rootProject' if
+ * such property does not exist already on this object.
+ *
+ * @param eePropertiesDefaultsFile
+ * @return
+ */
+def loadEePropertiesDefaults(File eePropertiesDefaultsFile) {
+    def eeProperties= new Properties()
+
+    logger.info "[LWE] Loading defaults for EE properties from '${eePropertiesDefaultsFile.absolutePath}'"
+
+    assert eePropertiesDefaultsFile.exists()
+
+    eePropertiesDefaultsFile.withInputStream { stream ->
+        eeProperties.load(stream)
+    }
+
+    logger.info "[LWE] Loaded ${eeProperties.size()} EE properties"
+
+    eeProperties.keySet().each { key ->
+        def value = eeProperties.getProperty(key)
+
+        // it's enough to se the property only on rootProject, then both 'project.getProperty()' and
+        // 'rootProject.getProperty()' will be able to find it ('project.getProperty()' by default also
+        // checks all parent projects if property is not found on project itself)
+
+        if(!rootProject.hasProperty(key)) {
+            rootProject.ext[key] = value
+
+            logger.debug "[LWE] EE property '${key}' created and set to default value '${rootProject.getProperty(key)}'"
+        }
+        else {
+            logger.debug "[LWE] EE property '${key}' already exists and has value '${rootProject.getProperty(key)}'"
+        }
+    }
+}
+
+/**
+ * Makes sure given command is executable from Gradle as external process.
+ * Useful to check before running the command with real arguments to see if
+ * the dependency is available in user's OS.
+ *
+ * @param commandDefinition the definition of the command, example:
+ * <pre>
+ *  [
+ *      name               : 'packer',
+ *      executable         : (projectProperty('packerExecutable') ?: 'packer') as String,
+ *      validationArguments: ['version'],
+ *      downloadUrl        : 'https://www.packer.io',
+ *      configPropertyName : 'packerExecutable'
+ *  ]
+ * </pre>
+ *
+ * @throws InvalidUserDataException if given executable with given arguments cannot run or
+ *                                      if it does not return 0
+ */
+def checkCommandExecutable(Map commandDefinition) {
+    assert commandDefinition, "Cannot check command, passed definition is null"
+
+    def cd = commandDefinition
+
+    def commandToString = "${cd.executable} ${cd.validationArguments.join(' ')}"
+
+    try {
+        logger.quiet "[LWE] Validating configured executable for '${cd.name}', running '${commandToString}' in command line..."
+
+        exec {
+            executable cd.executable
+            args cd.validationArguments
+        }
+    } catch (e) {
+        throw new InvalidUserDataException("Running command '${commandToString}' failed, do you have " +
+                "'${cd.name}' from ${cd.downloadUrl} installed on your machine? Make sure you can run '${commandToString}' " +
+                "in your command line, you can configure the path to the command with project property '${cd.configPropertyName}'. " +
+                "Make sure to restart Gradle daemon ('gradle --stop') if you changed your PATH recently.", e)
+    }
+}
+
+/**
+ * If property exist on current project, then returns its value, otherwise returns null.
+ *
+ * @param propertyName the property name (key)
+ * @param validationFn validation function called on the value (of found on the project)
+ * @return the value (if property exists on the project) or null
+ */
+def projectProperty(String propertyName, Closure validationFn = { Object value -> }) {
+    if (project.hasProperty(propertyName)) {
+        def value = project.getProperty(propertyName)
+
+        validationFn(value)
+
+        return value
+    } else {
+        return null
+    }
+}

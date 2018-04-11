@@ -1,0 +1,45 @@
+<Context path="" crossContext="true">
+
+    <!-- If you prefer setting your DB connection and pool in Tomcat as opposed to portal-ext.env.properties
+            you can do it. Don't forget to set 'jdbc.default.jndi.name=jdbc/LiferayPool'
+            in the right portal-ext.env.properties.
+
+            Use Tomcat pool for best performance.
+            * https://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html
+            * https://tomcat.apache.org/tomcat-7.0-doc/jndi-resources-howto.html
+            * https://dev.mysql.com/doc/connector-j/en/connector-j-reference-configuration-properties.html
+
+         TODO if you want to set the connection pool in Tomcat, do not forget to include
+            the appropriate JDBC driver .jar in [tomcat]/lib/ext,
+            e.g. get 'mysql-connector-java-5.1.38-bin.jar' from https://dev.mysql.com/downloads/connector/j/
+    -->
+
+    <!--<Resource-->
+        <!--auth="Container"-->
+        <!--name="jdbc/LiferayPool"-->
+        <!--description="Liferay Portal DB Connection"-->
+
+        <!--driverClassName="com.mysql.jdbc.Driver"-->
+        <!--factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"-->
+        <!--type="javax.sql.DataSource"-->
+
+        <!--maxActive="75"-->
+        <!--minIdle="10"-->
+
+        <!--username="TODO_YOUR_DB_USERNAME"-->
+        <!--password="TODO_YOUR_DB_PASSWORD"-->
+        <!--url="jdbc:mysql://TODO_YOUR_DB_HOST/lportal?useUnicode=true&amp;characterEncoding=UTF-8&amp;useFastDateParsing=false"-->
+
+        <!--jdbcInterceptors="org.apache.tomcat.jdbc.pool.interceptor.ConnectionState"-->
+        <!--jmxEnabled="true"-->
+        <!--validationQuery="SELECT 1"-->
+        <!--testWhileIdle="true"-->
+        <!--timeBetweenEvictionRunsMillis="30000"-->
+        <!--logAbandoned="true"-->
+        <!--removeAbandoned="true"-->
+        <!--removeAbandonedTimeout="3600"-->
+    <!--/>-->
+
+    <!--fairQueue="true"-->
+    <!--useEquals="false"-->
+</Context>
