@@ -16,6 +16,9 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
 
+import java.util.List;
+
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaConventions;
@@ -38,15 +41,23 @@ public class JavaPackageNameValidationService extends ValidationService {
 
 		NewLiferayComponentOp op = _op();
 
-		String projectName = op.getProjectName().text(false);
+		String projectName = op.getProjectName().text(true); 
 
 		if (projectName != null) {
-			IJavaProject javaproject = JavaCore.create(CoreUtil.getProject(op.getProjectName().text(false)));
+			IJavaProject javaproject = JavaCore.create(CoreUtil.getProject(projectName));
 
-			if (CoreUtil.getSourceFolders(javaproject).size() == 0) {
-				retval = Status.createErrorStatus("Unable to find any source folders.");
+			List<IFolder> sourceFolders = CoreUtil.getSourceFolders(javaproject);
 
-				return retval;
+			boolean sourceFolder = false;
+
+			for (IFolder folder : sourceFolders) {
+				if (folder.exists()) {
+					sourceFolder = true;
+				}
+			}
+
+			if (!sourceFolder) {
+				return Status.createErrorStatus("Unable to find any source folders.");
 			}
 		}
 
