@@ -150,6 +150,8 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 
 				IFolder resourceFolder = project.getFolder("src/main/resources");
 
+				IFolder resourceActionFolder = resourceFolder.getFolder("resource-actions");
+
 				Iterator<String> it = possibleValuesSet.iterator();
 
 				while (it.hasNext()) {
@@ -160,6 +162,12 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 					}
 
 					if (FileUtil.exists(javaFolder.getFile("portlet-ext.properties")) && v.equals("portlet.properties")) {
+						it.remove();
+					}
+
+					if (FileUtil.exists(resourceActionFolder) &&
+						FileUtil.exists(resourceActionFolder.getFile("default-ext.xml")) && v.contains("default.xml")) {
+
 						it.remove();
 					}
 				}
