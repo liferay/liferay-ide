@@ -14,6 +14,7 @@
 
 package com.liferay.ide.layouttpl.ui.wizard;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.layouttpl.core.operation.INewLayoutTplDataModelProperties;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
@@ -113,30 +114,32 @@ public class NewLayoutTplWizardPage extends LiferayDataModelWizardPage implement
 
 			});
 
-		IProject layoutProject = ProjectUtil.getProject(projectName);
+		if (CoreUtil.isNotNullOrEmpty(projectName)) {
+			IProject layoutProject = ProjectUtil.getProject(projectName);
 
-		String pluginVersion = LiferayDescriptorHelper.getDescriptorVersion(layoutProject);
+			String pluginVersion = LiferayDescriptorHelper.getDescriptorVersion(layoutProject);
 
-		if (pluginVersion.equals("6.2.0")) {
-			SWTUtil.createLabel(parent, SWT.RIGHT, Msgs.wapTemplateFile, 1);
+			if (pluginVersion.equals("6.2.0")) {
+				SWTUtil.createLabel(parent, SWT.RIGHT, Msgs.wapTemplateFile, 1);
 
-			wapTemplateFile = SWTUtil.createText(parent, 1);
+				wapTemplateFile = SWTUtil.createText(parent, 1);
 
-			this.synchHelper.synchText(wapTemplateFile, LAYOUT_WAP_TEMPLATE_FILE, null);
+				this.synchHelper.synchText(wapTemplateFile, LAYOUT_WAP_TEMPLATE_FILE, null);
 
-			Button wapTemplateFileBrowse = SWTUtil.createPushButton(parent, Msgs.browse, null);
+				Button wapTemplateFileBrowse = SWTUtil.createPushButton(parent, Msgs.browse, null);
 
-			wapTemplateFileBrowse.addSelectionListener(
-				new SelectionAdapter() {
+				wapTemplateFileBrowse.addSelectionListener(
+					new SelectionAdapter() {
 
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						handleFileBrowseButton(
-							NewLayoutTplWizardPage.this.wapTemplateFile, Msgs.wapTemplateFileSelection,
-							Msgs.chooseWAPTemplateFile);
-					}
+						@Override
+						public void widgetSelected(SelectionEvent e) {
+							handleFileBrowseButton(
+								NewLayoutTplWizardPage.this.wapTemplateFile, Msgs.wapTemplateFileSelection,
+								Msgs.chooseWAPTemplateFile);
+						}
 
-				});
+					});
+			}
 		}
 
 		SWTUtil.createLabel(parent, SWT.RIGHT, Msgs.thumbnailFile, 1);
