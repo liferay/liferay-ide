@@ -111,7 +111,7 @@ public class NewFragmentWizardLiferayWorkspaceGradleBase extends SwtbotBase {
 
 		wizardAction.newFragmentInfo.openAddOverrideFilesDialog();
 
-		dialogAction.selectItems("META-INF/resources/add_layout.jsp");
+		dialogAction.selectItems("META-INF/resources/edit_layout.jsp");
 
 		dialogAction.confirm();
 

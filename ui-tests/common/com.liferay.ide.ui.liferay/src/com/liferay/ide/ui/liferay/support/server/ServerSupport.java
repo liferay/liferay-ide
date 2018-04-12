@@ -95,6 +95,13 @@ public class ServerSupport extends SupportBase {
 		return _bundle.getBundleDir() + timestamp;
 	}
 
+	/**
+	 * @return tomcat-9.0.6 etc...
+	 */
+	public String getServerDir() {
+		return _bundle.getServerDir();
+	}
+
 	public String getServerName() {
 		return _bundle.getType() + timestamp;
 	}
