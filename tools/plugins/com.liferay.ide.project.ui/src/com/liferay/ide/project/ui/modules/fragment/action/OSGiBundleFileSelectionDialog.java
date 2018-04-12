@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.modules.fragment.action;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
 
 import java.io.File;
@@ -106,6 +107,8 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog {
 
 				IFolder resourceFolder = project.getFolder("src/main/resources");
 
+				IFolder resourceActionFolder = resourceFolder.getFolder("resource-actions");
+
 				Iterator<String> it = possibleValues.iterator();
 
 				while (it.hasNext()) {
@@ -116,6 +119,12 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog {
 					}
 
 					if (javaFolder.getFile("portlet-ext.properties").exists() && v.equals("portlet.properties")) {
+						it.remove();
+					}
+
+					if (FileUtil.exists(resourceActionFolder) &&
+						FileUtil.exists(resourceActionFolder.getFile("default-ext.xml")) && v.contains("default.xml")) {
+
 						it.remove();
 					}
 				}
